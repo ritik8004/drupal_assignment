@@ -162,6 +162,7 @@ class SendOtpPopup extends React.Component {
                 numInputs={6}
                 hasErrored={hasErrored}
                 separator={<span />}
+                shouldAutoFocus
               />
               <label id="input-otp-error" className="error" />
             </div>
