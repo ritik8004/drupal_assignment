@@ -2,7 +2,6 @@ import React from 'react';
 import AvailableSelectOptions from '../available-select-options';
 import DefaultSelectOptions from '../default-select-options';
 import SizeGuide from '../size-guide';
-import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const NonGroupSelectOption = ({
   handleSelectionChanged, configurables, code,
@@ -32,17 +31,20 @@ const NonGroupSelectOption = ({
         <div className="non-group-option-wrapper">
           <ul id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
             {configurables.values && Object.keys(configurables.values).map((key) => {
-              let attr = configurables.values[key].value_id;
-              let value = configurables.values[key].label;
-              if (hasValue(configurables.values[key])[0]) {
+              let attr;
+              let value;
+              const valueId = Object.keys(configurables.values[key]);
+              if (valueId.length === 1) {
                 // Check if the values object is multidimensional
                 // use the first key to get respected value.
                 // This might be possible for size attribute.
-                const valueId = Object.keys(configurables.values[key])[0];
-                attr = configurables.values[key][valueId].value_id;
-                value = configurables.values[key][valueId].label;
+                attr = configurables.values[key][valueId[0]].value_id;
+                value = configurables.values[key][valueId[0]].label;
+              } else {
+                attr = configurables.values[key].value_id;
+                value = configurables.values[key].label;
               }
-              // If the currennt attribute matches the
+              // If the current attribute matches the
               // attribute code of the available values.
               if (code === nextCode) {
                 return (
