@@ -26,4 +26,4 @@ product_carousel_utility:
 carousel.accordion:
   version: 1.x
   js:
-    templates/alshaya-rcs-carousel-accordion.handlebars: {}
+    handlebars/alshaya-rcs-carousel-accordion.handlebars: {}
