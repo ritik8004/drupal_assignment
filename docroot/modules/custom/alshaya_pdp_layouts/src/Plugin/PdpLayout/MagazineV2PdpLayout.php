@@ -254,6 +254,10 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
       $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'] = $product_tree['configurables'];
 
       // Prepare group and swatch attributes.
+      $size_attributes = $this->configFactory
+        ->get('alshaya_acm_product.pdp_modal_links')
+        ->get('size_guide_attributes');
+      $size_attributes = explode(',', $size_attributes);
       foreach ($product_tree['configurables'] as $key => $configurable) {
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = FALSE;
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isSwatch'] = FALSE;
@@ -297,9 +301,10 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           }
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $values;
         }
-        elseif (($key == 'size')) {
+        // Check for the non-grouped valid size attributes.
+        elseif (in_array($key, $size_attributes)) {
           $size_values = [];
-          foreach ($configurable['values'] as $size_key => $size_value) {
+          foreach ($configurable['values'] as $size_value) {
             $size_values[][$size_value['value_id']] = $size_value;
           }
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $size_values;
