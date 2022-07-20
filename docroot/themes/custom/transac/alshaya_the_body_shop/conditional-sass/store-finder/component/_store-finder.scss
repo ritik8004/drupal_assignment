@@ -50,7 +50,13 @@
 .nodetype--store {
   .geolocation-google-map {
     [aria-hidden='true'] {
+      color: $store_finder_map_marker_text !important;
+      font-weight: bold;
       padding-bottom: 0;
+
+      html[lang='ar'] & {
+        padding-right: rem(1);
+      }
     }
   }
 }
