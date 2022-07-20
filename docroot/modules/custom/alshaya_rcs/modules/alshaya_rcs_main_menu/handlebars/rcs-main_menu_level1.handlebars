@@ -24,6 +24,13 @@
   </div>
   <ul class="menu__list menu--one__list">
     <div class="menu-backdrop"></div>
+
+    {{#if aura_enabled }}
+      <div class="no--desktop">
+        <div id="aura-mobile-header-shop"></div>
+      </div>
+    {{/if}}
+
     {{#if (or
           (eq menu_type 'default')
           (eq menu_type 'menu_dynamic_display')) }}
@@ -32,12 +39,6 @@
       {{/each}}
     {{else if (eq menu_type 'menu_inline_display') }}
       {{'// @todo implement menu_inline_display'}}
-    {{/if}}
-
-    {{#if aura_enabled }}
-      <div class="no--desktop">
-        <div id="aura-mobile-header-shop"></div>
-      </div>
     {{/if}}
   </ul>
 </div>
