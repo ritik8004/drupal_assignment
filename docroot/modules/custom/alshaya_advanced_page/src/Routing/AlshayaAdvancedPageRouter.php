@@ -21,7 +21,7 @@ class AlshayaAdvancedPageRouter extends Router {
   /**
    * {@inheritdoc}
    */
-  public function match($pathinfo) {
+  public function match($pathinfo): array {
     $static = &drupal_static('alshaya_advanced_page_router_match', []);
 
     if (!isset($static[$pathinfo])) {

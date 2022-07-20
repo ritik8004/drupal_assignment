@@ -6,7 +6,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_promotion\Event\PromotionMappingUpdatedEvent;
 use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -80,7 +80,7 @@ class AcqPromotionsManager {
   /**
    * Database connection service.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\mysql\Driver\Database\mysql\Connection
    */
   protected $connection;
 
@@ -122,7 +122,7 @@ class AcqPromotionsManager {
    *   Queue factory service.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Config factory service.
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $connection
    *   Database connection service.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.

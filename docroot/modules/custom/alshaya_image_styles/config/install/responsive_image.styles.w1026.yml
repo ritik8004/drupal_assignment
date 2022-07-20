@@ -5,8 +5,6 @@ dependencies:
     - image.style.w1026
     - image.style.w304
     - image.style.w720
-  theme:
-    - whitelabel
 id: w1026
 label: w1026
 image_style_mappings:
