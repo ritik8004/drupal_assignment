@@ -11,6 +11,31 @@ window.commerceBackend = window.commerceBackend || {};
   };
 
   /**
+   * Get the cloned object of the statically stored product object.
+   *
+   * @param {string} sku
+   *   SKU value.
+   *
+   * @returns {Object|null}
+   *   Cloned product object.
+   */
+  function getClonedStaticProductData(sku) {
+    if (Drupal.hasValue(staticDataStore.processedProduct[sku])) {
+      try {
+        // We clone the product object in order to prevent modification to the
+        // object stored in the static cache.
+        return JSON.parse(JSON.stringify(staticDataStore.processedProduct[sku]));
+      } catch (error) {
+        Drupal.alshayaLogger('error', 'Failed to parse stored products data for main sku @sku', {
+          '@sku': sku,
+        });
+      }
+    }
+
+    return null;
+  }
+
+  /**
    * Return product info from backend.
    *
    * @param {string} sku
@@ -22,11 +47,11 @@ window.commerceBackend = window.commerceBackend || {};
    *   The product info object.
    */
   window.commerceBackend.getProductDataAddToBagListing = async function (sku, styleCode) {
-    if (Drupal.hasValue(staticDataStore.processedProduct[sku])) {
-      return staticDataStore.processedProduct[sku];
+    var product = getClonedStaticProductData(sku);
+    if (product) {
+      return product;
     }
 
-    var product = null;
     if (Drupal.hasValue(styleCode)
       && Drupal.hasValue(window.commerceBackend.getProductsInStyle)
     ) {
@@ -53,7 +78,7 @@ window.commerceBackend = window.commerceBackend || {};
     }
 
     staticDataStore.processedProduct[sku] = productInfo;
-    return productInfo;
+    return getClonedStaticProductData(sku);
   };
 
   /**
@@ -172,7 +197,7 @@ window.commerceBackend = window.commerceBackend || {};
 
     // Set configurable attributes.
     var configurableCombinations = window.commerceBackend.getConfigurableCombinations(product.sku);
-    productInfo.configurable_attributes = [];
+    productInfo.configurable_attributes = {};
     product.configurable_options.forEach(function (option) {
       var attribute_id = parseInt(atob(option.attribute_uid), 10);
       var optionValues = [];
@@ -191,7 +216,7 @@ window.commerceBackend = window.commerceBackend || {};
         });
       });
       productInfo.configurable_attributes[option.attribute_code] = {
-        id: attribute_id,
+        id: attribute_id.toString(),
         label: option.label,
         position: option.position,
         is_swatch: false,

@@ -76,6 +76,16 @@ class EgiftCardHelper {
   }
 
   /**
+   * Helper to check if link card for faster payment option for top-up is enabled.
+   *
+   * @return bool
+   *   TRUE/FALSE
+   */
+  public function isLinkCardForTopupEnabled() {
+    return $this->configFactory->get('alshaya_egift_card.settings')->get('link_card_for_topup');
+  }
+
+  /**
    * Helper to get list of not supported payment methods for eGift card.
    *
    * @return array
@@ -261,8 +271,19 @@ class EgiftCardHelper {
     }
 
     // Update Payment method name for hps payment.
-    if ($orderDetails["#order_details"]["payment_method"] === 'hps_payment') {
+    if ($orderDetails["#order_details"]["payment_method_code"] === 'hps_payment') {
       $orderDetails["#order_details"]["payment_method"] = t('eGift Card', [], ['context' => 'egift']);
+      $egift_data = [
+        'card_type' => t('eGift Card', [], ['context' => 'egift']),
+        'card_number' => substr($order['extension']['hps_redemption_card_number'], -4),
+        'payment_type' => 'egift',
+        'weight' => -2,
+      ];
+      $orderDetails['#order_details']['paymentDetails']['egift'] = $egift_data;
+      // Unset the `hps_payment` payment key if exists.
+      if (isset($orderDetails['#order_details']['paymentDetails']['hps_payment'])) {
+        unset($orderDetails['#order_details']['paymentDetails']['hps_payment']);
+      }
     }
 
     // For multiple payment and if some amount is paid via egift then add eGift Card payment.

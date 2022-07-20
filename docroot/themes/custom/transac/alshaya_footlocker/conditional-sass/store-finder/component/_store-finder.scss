@@ -76,12 +76,18 @@
     }
   }
 
-  .get--directions a::after {
-    width: 1.875rem;
-    height: 1.875rem;
-    background-size: contain;
-    top: 0.25rem;
-    #{$right}: 0.625rem;
+  .get--directions {
+    a {
+      position: relative;
+
+      &::after {
+        width: rem(30);
+        height: rem(30);
+        background-size: contain;
+        top: rem(4);
+        #{$right}: rem(8);
+      }
+    }
   }
 
   .input--wrapper {

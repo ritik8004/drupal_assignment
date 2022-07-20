@@ -119,6 +119,16 @@ body[class*="return-confirmation"] {
         .refund {
           width: rem(118);
         }
+
+        html[lang=ar] & {
+          .packitem {
+            width: rem(56);
+          }
+
+          .refund {
+            width: rem(76);
+          }
+        }
       }
 
       .title {
@@ -138,7 +148,7 @@ body[class*="return-confirmation"] {
         }
 
         @include breakpoint($tablet) {
-          width: 26.25rem;
+          width: rem(480);
         }
       }
     }

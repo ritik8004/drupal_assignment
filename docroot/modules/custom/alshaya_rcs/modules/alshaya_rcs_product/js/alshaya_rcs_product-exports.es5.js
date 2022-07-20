@@ -12,35 +12,6 @@ function isProductBuyable(entity) {
 }
 
 /**
- * Check if the product is in stock.
- *
- * @param {object} entity
- *   The product entity.
- *
- * @returns {Boolean}
- *   True if product is in stock, else false.
- */
-function isProductInStock(entity) {
-  if (entity.stock_status === 'OUT_OF_STOCK') {
-    return false;
-  }
-
-  // @todo Check for free gifts when checking the variants.
-  // For configurable product, if all variants are OOS, then we consider the
-  // product to be OOS.
-  if (entity.type_id === 'configurable') {
-    const isAnyVariantInStock = entity.variants.some((variant) =>
-      variant.product.stock_status === 'IN_STOCK'
-    );
-    if (!isAnyVariantInStock) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-/**
  * Create short text with ellipsis and Read more button.
  *
  * @param {string} value
@@ -108,42 +79,35 @@ function getAdditionalPdpDescription() {
 }
 
 /**
- * Replace placeholders and get related products.
+ * Get data for product recommendations.
  *
  * @param {object} products
- *   The product object.
+ *   Products to be displayed.
  * @param {string} sectionTitle
  *   The translated title for related, upsell.
  *
- * @returns {*}
- *   Html with placeholders replaced.
+ * @returns {object}
+ *   Data to use for rendering product recommendations.
  */
 function getProductRecommendation(products, sectionTitle) {
-  // Create the containers for carousel.
-  const related = jQuery('<div />');
-  related.append(jQuery('.rcs-templates--related-product-wrapper').html());
-  related.find('.subtitle').html(sectionTitle);
+  const data = {
+    products: [],
+    subtitle: sectionTitle,
+  };
 
-  // Get Product teaser template with tokens.
-  const productTeaser = jQuery('.rcs-templates--product-teaser').html();
-
-  // Replace tokens and add teaser to the container.
-  let finalMarkup = '';
-  products.forEach((product, index) => {
-    related.find('.owl-carousel').append('<div id="row' + index + '" class="views-row"/>');
-    related.find('#row' + index).append(productTeaser);
-    const attributes = globalThis.rcsPhGetSetting('placeholderAttributes');
-    finalMarkup = related.html();
-    rcsPhReplaceEntityPh(finalMarkup, 'product_teaser', product, drupalSettings.path.currentLanguage)
-      .forEach(function eachReplacement(r) {
-        const fieldPh = r[0];
-        const entityFieldValue = r[1];
-        finalMarkup = globalThis.rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
-      });
-    related.html(finalMarkup);
+  products.forEach((product) => {
+    data.products.push({
+      sku: product.sku,
+      url: `${product.url_key}.html`,
+      name: product.name,
+      image: window.commerceBackend.getTeaserImage(product),
+      price_details: window.commerceBackend.getPriceForRender(product),
+      cleanSku: Drupal.cleanCssIdentifier(product.sku),
+      gtm: product.gtm_attributes,
+    });
   });
 
-  return related.html();
+  return data;
 }
 
 /**
@@ -322,7 +286,8 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(upsell_products, Drupal.t('You may also like', {}, { context: 'alshaya_static_text|pdp_upsell_title' }));
+      const upsellProducts = getProductRecommendation(upsell_products, Drupal.t('You may also like', {}, { context: 'alshaya_static_text|pdp_upsell_title' }));
+      html += handlebarsRenderer.render('product.recommended_products_block', upsellProducts);
       break;
 
     case 'mobile-related-products':
@@ -333,7 +298,8 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(related_products, Drupal.t('Related', {}, { context : 'alshaya_static_text|pdp_related_title' }));
+      const relatedProducts = getProductRecommendation(related_products, Drupal.t('Related', {}, { context : 'alshaya_static_text|pdp_related_title' }));
+      html += handlebarsRenderer.render('product.recommended_products_block', relatedProducts);
       break;
 
     case 'mobile-crosssell-products':
@@ -344,7 +310,8 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(crosssell_products, Drupal.t('Customers also bought', {}, { context: 'alshaya_static_text|pdp_crosssell_title' }));
+      const crossselProducts = getProductRecommendation(crosssell_products, Drupal.t('Customers also bought', {}, { context: 'alshaya_static_text|pdp_crosssell_title' }));
+      html += handlebarsRenderer.render('product.recommended_products_block', crossselProducts);
       break;
 
     case 'classic-gallery':
@@ -548,7 +515,7 @@ exports.computePhFilters = function (input, filter) {
         break;
       }
 
-      if (!isProductInStock(input)) {
+      if (!window.commerceBackend.isProductInStock(input)) {
         value = handlebarsRenderer.render(`product.sku_base_form_oos`, {text: Drupal.t('Out of stock')});
         break;
       }

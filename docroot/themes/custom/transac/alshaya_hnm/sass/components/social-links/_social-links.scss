@@ -64,3 +64,19 @@
     }
   }
 }
+
+.c-user-register {
+  .block-alshaya-social-login {
+    padding-top: rem(32);
+  }
+
+  &.user-page {
+    main {
+      .block-system-main-block {
+        @include breakpoint($tablet) {
+          margin-top: rem(32);
+        }
+      }
+    }
+  }
+}

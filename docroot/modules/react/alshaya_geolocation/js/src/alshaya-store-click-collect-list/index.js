@@ -112,7 +112,7 @@ export class StoreClickCollectList extends React.PureComponent {
                                 <div>
                                   <AutocompleteSearch
                                     placeholder={Drupal.t('Enter your area')}
-                                    searchStores={(place) => this.searchStores(place)}
+                                    searchStores={this.searchStores}
                                   />
                                   <button className="search-stores-button" type="button">{Drupal.t('search stores')}</button>
                                 </div>

@@ -23,7 +23,7 @@ class MagentoApiRequestHelper {
       'id' => $customer['customer_id'] ?? NULL,
     ];
 
-    foreach (['email', 'firstname', 'lastname', 'dob'] as $field) {
+    foreach (['email', 'firstname', 'lastname', 'dob', 'extension_attributes'] as $field) {
       if (!empty($customer[$field])) {
         $query['customer'][$field] = $customer[$field];
       }

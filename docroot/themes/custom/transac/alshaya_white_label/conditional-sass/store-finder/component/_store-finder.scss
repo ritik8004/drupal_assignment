@@ -66,6 +66,16 @@
     }
   }
 
+  .geolocation-google-map {
+    [aria-hidden='true'] {
+      padding-bottom: rem(18);
+
+      html[lang='en'] & {
+        padding-right: rem(2);
+      }
+    }
+  }
+
   .pager__item {
     list-style: none;
   }
@@ -1099,7 +1109,7 @@
     display: inline-block;
     position: absolute;
     background: url('../../../imgs/icons/ic-directions.svg');
-    #{$right}: 1rem;
+    #{$right}: rem(32);
     width: 18px;
     height: 18px;
 

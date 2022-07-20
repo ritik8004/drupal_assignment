@@ -318,11 +318,11 @@
       .refund-detail-label {
         background: $online-return-refund-label-inactive-bg;
         cursor: unset;
-        color: $order_detail_td_dark_content;
+        color: $online-return-disabled-txt;
 
         .refund-detail-header {
           &::before {
-            color: $order_detail_td_dark_content;
+            color: $online-return-disabled-txt;
           }
         }
       }
