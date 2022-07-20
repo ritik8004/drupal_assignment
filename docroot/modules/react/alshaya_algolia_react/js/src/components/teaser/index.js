@@ -15,12 +15,14 @@ import {
   isProductTitleTrimEnabled,
   isPromotionFrameEnabled,
   productListIndexStatus,
+  hasPriceRange,
 } from '../../utils/indexUtils';
 import Promotions from '../promotions';
 import { checkExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ExpressDeliveryLabel from './ExpressDeliveryLabel';
+import PriceRangeElement from '../price/PriceRangeElement';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo,
@@ -162,6 +164,16 @@ const Teaser = ({
     ({ indexName } = drupalSettings.algoliaSearch.listing);
   }
 
+  // Check if price is a range or single value.
+  let renderPrice = '';
+  if (!hasPriceRange(attribute.alshaya_price_range)) {
+    renderPrice = hasValue(attribute.rendered_price)
+      ? Parser(attribute.rendered_price)
+      : <Price price={attribute.original_price} final_price={attribute.final_price} />;
+  } else {
+    renderPrice = <PriceRangeElement priceRange={attribute.alshaya_price_range} />;
+  }
+
   return (
     <div className={teaserClass}>
       <article
@@ -261,9 +273,8 @@ const Teaser = ({
                 )
               </div>
             </ConditionalView>
-            {attribute.rendered_price
-              ? Parser(attribute.rendered_price)
-              : <Price price={attribute.original_price} finalPrice={attribute.final_price} />}
+            {/* Render price based on range/single price conditionals */}
+            {renderPrice}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>
