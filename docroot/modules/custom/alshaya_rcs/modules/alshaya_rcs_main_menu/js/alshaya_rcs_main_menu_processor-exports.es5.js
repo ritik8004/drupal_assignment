@@ -160,11 +160,11 @@ function splitIntoCols(data, maxCols = 6, maxRows = 10) {
           }
 
           // Push L3 items into column.
-          columns[col].push(child); //@todo move menu item inside col-N folder
+          columns[col].push(child);
           col_total += l2_cost;
-          // console.log(columns);
         }
       } while (reprocess || col >= adjustableMaxRows);
+      // Replace child items.
       data[key]['children'] = columns;
       // Children are moved into columns and can be deleted now.
       delete (data[key].columns);

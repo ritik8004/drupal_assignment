@@ -258,7 +258,6 @@ function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
  */
 function alshaya_rcs_main_rcs_handlebars_templates(EntityInterface $entity) {
   // Libraries to attach.
-  // @todo Decide how to add the main_menu libraries for each layout.
   $libraries = [
     'main_menu_level1' => 'alshaya_rcs_product',
     'main_menu_level2_partial' => 'alshaya_rcs_product',

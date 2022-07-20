@@ -22,8 +22,8 @@ exports.render = function render(
 
     case "shop_by_block":
       // Process shop by block renderer, if available.
-      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
-        html += globalThis.renderRcsNavigationMenu.render(
+      if (typeof globalThis.renderRcsShopByMenu !== 'undefined') {
+        html += globalThis.renderRcsShopByMenu.render(
           settings,
           inputs,
           innerHtml,
