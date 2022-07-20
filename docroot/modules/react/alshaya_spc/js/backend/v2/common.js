@@ -676,6 +676,14 @@ const getCart = async (force = false) => {
   // Format data.
   response.data = formatCart(response.data);
 
+  if (!isUserAuthenticated()) {
+    // Set guest cart details in local storage to use with merge guest cart API.
+    Drupal.addItemInLocalStorage('guestCartForMerge', {
+      active_quote: (typeof response.data.cart !== 'undefined') ? response.data.cart.id : null,
+      store_id: (typeof response.data.cart !== 'undefined') ? response.data.cart.store_id : null,
+    });
+  }
+
   // Store the formatted data.
   window.commerceBackend.setRawCartDataInStorage(response.data);
 
@@ -718,6 +726,63 @@ const associateCartToCustomer = async (guestCartId) => {
   logger.notice('Guest Cart @guestCartId associated to customer @customerId.', {
     '@customerId': window.drupalSettings.userDetails.customerId,
     '@guestCartId': guestCartId,
+  });
+
+  // Clear local storage.
+  removeCartIdFromStorage();
+  StaticStorage.clear();
+
+  // Reload cart.
+  await getCart(true);
+};
+
+/**
+ * Merge guest cart to customer.
+ *
+ * @returns {Promise<object/boolean>}
+ *   Returns the updated cart or false.
+ */
+const mergeGuestCartToCustomer = async () => {
+  // Get guest cart details.
+  const guestCartData = Drupal.getItemFromLocalStorage('guestCartForMerge');
+
+  if (typeof guestCartData === 'undefined' || guestCartData === null) {
+    return;
+  }
+
+  const endPointParams = {
+    customerId: drupalSettings.userDetails.customerId,
+    activeQuote: guestCartData.active_quote,
+    storeId: guestCartData.store_id,
+  };
+
+  // Merge guest cart to customer.
+  const response = await callMagentoApi(getApiEndpoint('mergeGuestCart', endPointParams), 'PUT');
+
+  // It's possible that page got reloaded quickly after login.
+  // For example on social login.
+  if (response.message === 'Request aborted') {
+    return;
+  }
+
+  if (response.status !== 200) {
+    logger.warning('Error while merging guest cart: @cartId to customer: @customerId having store: @storeId. Response: @response.', {
+      '@cartId': endPointParams.activeQuote,
+      '@customerId': endPointParams.customerId,
+      '@storeId': endPointParams.storeId,
+      '@response': JSON.stringify(response),
+    });
+
+    // Clear local storage and let the customer continue without association.
+    removeCartIdFromStorage();
+    StaticStorage.clear();
+    return;
+  }
+
+  logger.notice('Guest Cart @guestCartId merged to customer @customerId. having store id: @storeId', {
+    '@customerId': window.drupalSettings.userDetails.customerId,
+    '@guestCartId': endPointParams.activeQuote,
+    '@storeId': endPointParams.storeId,
   });
 
   // Clear local storage.
@@ -1315,4 +1380,5 @@ export {
   getLocations,
   getProductShippingMethods,
   clearProductStatusStaticCache,
+  mergeGuestCartToCustomer,
 };
