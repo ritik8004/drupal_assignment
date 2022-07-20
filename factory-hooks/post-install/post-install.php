@@ -74,4 +74,4 @@ if (file_exists($post_install_override_file)) {
   }
 }
 
-exec(dirname(__FILE__) . '/../../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $_SERVER['HTTP_HOST'] . '" "' . $site_code . '" "' . $country_code . '"');
+exec(dirname(__FILE__) . '/../../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "https://' . $_SERVER['HTTP_HOST'] . '" "' . $site_code . '" "' . $country_code . '"');
