@@ -47,9 +47,18 @@ const getHiddenFormAttributes = () => (typeof drupalSettings.lpn !== 'undefined'
  * @returns object
  *   Filterd product attribute object.
  */
-const getFilteredProductAttributes = (product) => Object.fromEntries(
-  Object.entries(product.attributes).filter(([key]) => !key.includes(getHiddenFormAttributes())),
-);
+const getFilteredProductAttributes = (product) => {
+  const hiddenAttirbutes = getHiddenFormAttributes();
+  if (hiddenAttirbutes.length > 0) {
+    return (
+      Object.fromEntries(Object.entries(product.attributes).filter(
+        ([key]) => !key.includes(hiddenAttirbutes),
+      ))
+    );
+  }
+
+  return product.attributes;
+};
 
 /**
  * Returns the allowed values for quantity for the quantity dropdown.
