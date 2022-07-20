@@ -145,6 +145,24 @@ window.commerceBackend = window.commerceBackend || {};
   };
 
   /**
+   * Parse swatch image tag and return swatch image url.
+   * 
+   * @param {string} markup
+   *   Swatch image tag.
+   *  
+   * @returns {string}
+   *   Swatch image url.
+   */
+  function parseImageUrl(markup) {
+    var url = '';
+    var ele = document.createElement('div');
+    ele.innerHTML = markup;
+    var img = ele.getElementsByTagName('img');
+    url = img[0].getAttribute("src"); ;
+    return url;
+  }
+
+  /**
    * Creates product info object from product.
    *
    * @param {object} product
@@ -233,10 +251,14 @@ window.commerceBackend = window.commerceBackend || {};
               swatchType = 'text';
               break;
           }
+          var swatch_data = (swatchType === 'image') 
+            ? parseImageUrl(colorOption.display_value)
+            : colorOption.display_value;
+          
           optionValues.push({
             label: option_value.store_label,
             value: option_value.value_index.toString(),
-            data: colorOption.display_value,
+            data: swatch_data,
             type: swatchType,
           });
         }
