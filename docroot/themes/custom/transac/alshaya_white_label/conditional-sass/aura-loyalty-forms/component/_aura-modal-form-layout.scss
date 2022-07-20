@@ -328,7 +328,6 @@
         .spc-aura-unlink-card-form-content {
           display: flex;
           align-items: flex-end;
-          justify-content: space-between;
           text-align: $left;
 
           @include breakpoint($only-mobile) {
@@ -363,6 +362,7 @@
               display: inline-block;
               font-size: rem(10);
               color: $aura-loyalty-dark-text;
+              padding-#{$left}: rem(22);
             }
           }
 
