@@ -29,7 +29,7 @@ example.libraries.yml
 article.block.foo:
   version: 1.x
   js:
-    templates/article-block-foo.handlebars: { }
+    handlebars/article-block-foo.handlebars: { }
 ```
 
 The next step is to call the renderer, passing the path to the object and data i.e.
