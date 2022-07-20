@@ -31,14 +31,24 @@
       </div>
     {{/if}}
 
-    {{#if (or
-          (eq menu_type 'default')
-          (eq menu_type 'menu_dynamic_display')) }}
-      {{#each menu_items as |item|}}
-        {{> main_menu_level1_items_partial menu_item=item menu_type=../menu_type promopanel_class=../promopanel_class }}
-      {{/each}}
-    {{else if (eq menu_type 'menu_inline_display') }}
-      {{'// @todo implement menu_inline_display'}}
-    {{/if}}
+    {{#each menu_items as |menu_item|}}
+      <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }}">
+        <div class="menu__link-wrapper menu-two__link-wrapper">
+          {{'// @todo implement style'}}
+          {{set 'style' ''}}
+          {{#if menu_item.icon }}
+            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">
+              <span class="icon"><img src="{{ menu_item.icon.url }}" alt="{{ menu_item.name }}"/></span>
+              {{ menu_item.name }}
+            </{{@root.tag}}>
+          {{else}}
+            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
+          {{/if}}
+        </div>
+        {{#if menu_item.children }}
+          {{> main_menu_level2_partial name=menu_item.name menu_items=menu_item.children level_class=level_class }}
+        {{/if}}
+      </li>
+    {{/each}}
   </ul>
 </div>

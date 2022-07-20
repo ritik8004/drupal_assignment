@@ -275,7 +275,6 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         'library' => [
           'alshaya_rcs_main_menu/renderer',
           'alshaya_rcs_main_menu/main_menu_level1',
-          'alshaya_rcs_main_menu/main_menu_level1_items_partial',
           'alshaya_rcs_main_menu/main_menu_level2_partial',
           'alshaya_rcs_main_menu/main_menu_level3_partial',
           'alshaya_rcs_main_menu/main_menu_level4_partial',

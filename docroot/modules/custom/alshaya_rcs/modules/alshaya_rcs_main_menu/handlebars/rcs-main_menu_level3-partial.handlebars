@@ -8,7 +8,7 @@
           <{{@root.tag}} class="menu__link menu--three__link {{ level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
         </div>
         {{#if menu_item.children }}
-          {{> main_menu_level4_partial name=name items=item.children level_class=level_class }}
+          {{> main_menu_level4_partial name=name items=menu_item.children level_class=level_class }}
         {{/if}}
       </li>
     {{/each}}

@@ -19,8 +19,17 @@ exports.prepareData = function prepareData(settings, inputs) {
   ];
   inputs = filterAllowedValues(inputs, allowedKeys);
 
-  // Distribute L3 items into columns.
-  inputs = splitIntoCols(inputs, maxNbCol, idealMaxColLength);
+  switch (menuLayout) {
+    case 'menu_inline_display':
+      break;
+
+    case 'menu_dynamic_display':
+    case 'default':
+    default:
+      // Distribute L3 items into columns.
+      inputs = splitIntoCols(inputs, maxNbCol, idealMaxColLength);
+  }
+
 
   // Filter category menu items if include_in_menu flag true.
   // @todo fix this
@@ -156,9 +165,9 @@ function splitIntoCols(data, maxCols = 6, maxRows = 10) {
           // console.log(columns);
         }
       } while (reprocess || col >= adjustableMaxRows);
-      data[key]['columns'] = columns;
+      data[key]['children'] = columns;
       // Children are moved into columns and can be deleted now.
-      delete (data[key].children);
+      delete (data[key].columns);
     }
   }
   return data;
