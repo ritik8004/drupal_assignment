@@ -46,8 +46,8 @@ class AlshayaStoreUtility {
     $translatedConfig = $this->languageManager->getLanguageConfigOverride($langCode, 'alshaya_stores_finder.settings');
     $config = $this->configFactory->getEditable('alshaya_stores_finder.settings');
     $labels['search_proximity_radius'] = $config->get('search_proximity_radius');
-    $labels['store_list_label'] = $config->get('store_list_label');
-    $labels['search_placeholder'] = $translatedConfig->get('store_search_placeholder');
+    $labels['store_list_label'] = $translatedConfig->get('store_list_label') ?? $config->get('store_list_label');
+    $labels['search_placeholder'] = $translatedConfig->get('store_search_placeholder') ?? $config->get('store_search_placeholder');
     $labels['load_more_item_limit'] = $config->get('load_more_item_limit');
 
     $labels['apiUrl'] = "/$langCode/alshaya-locations/stores-list";

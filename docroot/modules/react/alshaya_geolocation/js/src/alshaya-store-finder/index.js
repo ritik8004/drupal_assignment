@@ -103,7 +103,7 @@ export class StoreFinder extends React.PureComponent {
       const nearbyStores = nearByStores(stores, currentLocation);
       const prevState = this.state;
       this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-      window.location.href = `store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+      window.location.href = `store-finder/list?location=${place.formatted_address}&latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
     }
   }
 
@@ -121,7 +121,8 @@ export class StoreFinder extends React.PureComponent {
     if (nearbyStores.length > 0) {
       const prevState = this.state;
       this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-      window.location.href = `/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+      const { currentLanguage } = drupalSettings.path;
+      window.location.href = `/${currentLanguage}/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
     }
   }
 
@@ -192,7 +193,7 @@ export class StoreFinder extends React.PureComponent {
                         <div className="input--wrapper block-store-finder-form__input__wrapper">
                           <div className="form-item-geolocation-geocoder-google-places-api input__inner-container">
                             <AutocompleteSearch
-                              searchStores={(place) => this.searchStores(place)}
+                              searchStores={this.searchStores}
                               placeholder={drupalSettings.storeLabels.search_placeholder}
                             />
                             <div className="c-input__bar" />
@@ -216,7 +217,7 @@ export class StoreFinder extends React.PureComponent {
                         <div className="input--wrapper block-store-finder-form__input__wrapper">
                           <div className="form-item-geolocation-geocoder-google-places-api input__inner-container">
                             <AutocompleteSearch
-                              searchStores={(place) => this.searchStores(place)}
+                              searchStores={this.searchStores}
                               placeholder={drupalSettings.storeLabels.search_placeholder}
                             />
                             <div className="c-input__bar" />
