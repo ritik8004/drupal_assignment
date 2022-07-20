@@ -2,3 +2,5 @@ name: Alshaya COS Transac RCS
 description: Enables RCS for COS.
 type: module
 core_version_requirement: ^9
+dependencies:
+  - alshaya_cos:alshaya_cos_transac
