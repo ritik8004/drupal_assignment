@@ -33,7 +33,7 @@
     e.detail.result.short_description = short_description;
   });
 
-  RcsEventManager.addListener('alshayaRcsAlterPdpSwatch', function (e) {
+  RcsEventManager.addListener('alshayaRcsAlterSwatch', function (e) {
     const rawProductData = window.commerceBackend.getProductData(e.detail.sku, false, false);
     rawProductData.variants.forEach(function (variant) {
       if (variant.product.sku === e.detail.variantSku) {

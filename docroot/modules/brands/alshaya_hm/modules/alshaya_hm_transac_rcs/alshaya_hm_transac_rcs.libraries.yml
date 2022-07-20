@@ -20,3 +20,10 @@ product.block.short_description.pdp-magazine:
   version: 1.x
   js:
     templates/rcs-product-short-description-full-magazine-block.handlebars: { }
+
+plp:
+  version: 1.x
+  js:
+    js/alshaya_hm_transac_rcs_plp.js: {}
+  dependencies:
+    - rcs_placeholders/helpers

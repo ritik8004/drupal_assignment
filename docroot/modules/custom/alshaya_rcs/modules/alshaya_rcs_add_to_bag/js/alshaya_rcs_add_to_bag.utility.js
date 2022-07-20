@@ -145,39 +145,6 @@ window.commerceBackend = window.commerceBackend || {};
   };
 
   /**
-   * Get the swatch image url for the provided sku.
-   *
-   * @param {object} product
-   *   Main product.
-   * @param {string} childSku
-   *   The SKU value.
-   *
-   * @returns {string}
-   *   The swatch image url.
-   */
-  function getPdpSwatchImageUrl(product, childSku) {
-    var swatchImageUrl = null;
-    var variants = product.variants.filter(function (variant) {
-      if (variant.product.sku == childSku) {
-        return true;
-      }
-    });
-
-    if (Drupal.hasValue(variants) && variants.length > 0) {
-      try {
-        var data = JSON.parse(variants[0].product.assets_swatch);
-        swatchImageUrl = data[0].styles.pdp_gallery_thumbnail;
-      } catch (error) {
-        Drupal.alshayaLogger('error', 'Failed to parse swatch images for child sku @sku', {
-          '@sku': childSku,
-        });
-      }
-    }
-
-    return swatchImageUrl;
-  }
-
-  /**
    * Creates product info object from product.
    *
    * @param {object} product
@@ -234,6 +201,7 @@ window.commerceBackend = window.commerceBackend || {};
 
     // Get color attribute config.
     var configColorAttribute = drupalSettings.alshayaRcs.colorAttributeConfig.configurable_color_attribute;
+    var configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(product.sku);
     product.configurable_options.forEach(function (option) {
       var isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
       var attribute_id = parseInt(atob(option.attribute_uid), 10);
@@ -250,11 +218,26 @@ window.commerceBackend = window.commerceBackend || {};
         // Populate images for color swatch.
         if (isOptionSwatch && option.attribute_code === configColorAttribute) {
           const childSku = window.commerceBackend.getChildSkuFromAttribute(product.sku, option.attribute_code, option_value.value_index.toString());
+          let colorOption = configurableColorDetails.sku_configurable_options_color[option_value.value_index.toString()];
+          let swatchType = '';
+          switch (colorOption.swatch_type) {
+            case 'RGB':
+              swatchType = 'color';
+              break;
+
+            case 'Fabricswatch':
+              swatchType = 'image';
+              break;
+
+            default:
+              swatchType = 'text';
+              break;
+          }
           optionValues.push({
             label: option_value.store_label,
             value: option_value.value_index.toString(),
-            data: getPdpSwatchImageUrl(product, childSku),
-            type: 'image',
+            data: colorOption.display_value,
+            type: swatchType,
           });
         }
         else {

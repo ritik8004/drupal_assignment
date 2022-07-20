@@ -744,7 +744,7 @@ window.commerceBackend = window.commerceBackend || {};
 
               // The behavior is same as
               // hook_alshaya_acm_product_pdp_swath_type_alter().
-              RcsEventManager.fire('alshayaRcsAlterPdpSwatch', {
+              RcsEventManager.fire('alshayaRcsAlterSwatch', {
                 detail: {
                   sku,
                   colorOptionsList,

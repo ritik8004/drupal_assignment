@@ -49,3 +49,17 @@ function alshaya_hm_transac_rcs_node_view(array &$build, EntityInterface $entity
     $build['#attached']['library'][] = 'alshaya_hm_transac_rcs/product';
   }
 }
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_hm_transac_rcs_preprocess_page(&$variables) {
+  // Attach swatch library on PLP.
+  $routematch = \Drupal::routeMatch();
+  if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $routematch->getParameter('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $variables['#attached']['library'][] = 'alshaya_cos_transac_rcs/plp';
+    }
+  }
+}
