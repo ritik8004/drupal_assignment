@@ -4,7 +4,7 @@ rcs_product_images:
     js/alshaya_media_assets.rcs_product_images.js: {}
   dependencies:
     - core/jquery
-    - rcs_placeholders/helpers
+    - alshaya_rcs_product/rcs_product_process_images
 
 media_images:
   css:

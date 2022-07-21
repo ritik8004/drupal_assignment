@@ -1058,10 +1058,9 @@ window.commerceBackend = window.commerceBackend || {};
    *   The media item url.
    */
    window.commerceBackend.getTeaserImage = function (product) {
-    const galleryProduct = getSkuForGallery(product);
-    return galleryProduct.media_teaser;
-  };
-
+     const galleryProduct = getSkuForGallery(product);
+     return galleryProduct.media_teaser;
+   };
 
   /**
    * Get the prices from product entity.
@@ -1071,16 +1070,15 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {boolean} formatted
    *   if we need to return formatted price.
    *
-   * @return {array}
-   *   The price array.
+   * @return {object}
+   *   The price object.
    */
   window.commerceBackend.getPrices = function (product, formatted) {
-    var prices = {
+    return {
       price : formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value) : product.price_range.maximum_price.regular_price.value,
       finalPrice: formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value) : product.price_range.maximum_price.final_price.value,
       percent_off: product.price_range.maximum_price.discount.percent_off,
     };
-    return prices;
   };
 
   /**
