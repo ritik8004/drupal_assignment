@@ -1,0 +1,62 @@
+<article
+  data-sku='{{ sku }}'
+  role='article'
+  about='{{ url }}'
+  data-vmode='teaser'
+  class='entity--type-node'
+  gtm-type='gtm-product-link'
+  gtm-category='{{ category }}'
+  gtm-container='not defined'
+  gtm-view-mode='teaser'
+  gtm-cart-value=''
+  gtm-main-sku='{{ sku }}'
+  gtm-name='{{ name }}'
+  gtm-product-sku='{{ sku }}'
+  gtm-product-sku-class-identifier='{{ id }}'
+  gtm-sku-type={{ dimension2 }}
+  gtm-brand='{{ brand }}'
+  gtm-dimension4='{{ dimension4 }}'
+  gtm-price='{{ price }}'
+  gtm-dimension3='{{ dimension3 }}'
+  gtm-stock=''
+>
+  <a class="above-mobile-block open-modal-pdp" href="{{ url }}" data-dialog-type="modal" data-dialog-options="{'width':'auto'}" tabindex="0">
+    <div class="image-label-wrapper">
+      {{#if image }}
+        <img src="{{ image }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image">
+      {{/if}}
+      <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}"></div>
+    </div>
+    <h2 class="c-products__item__label">
+      <span>{{ name }}</span>
+    </h2>
+    <div class="price-block price-block-{{ cleanSku }}">
+      {{{ render 'product.block.price' price_details }}}
+    </div>
+  </a>
+  <table class="mobile--only--sell no-cart-form">
+    <tbody>
+      <tr>
+        <td class="sell--image">
+          {{#if image }}
+            <a href="{{ url }}" rel="bookmark" tabindex="0">
+              <img src="{{ image }}" alt="{{ name }}" title="{{ name }}" typeof="foaf:Image" loading="lazy" data-src="#rcs.product_teaser._self|teaser_image#">
+            </a>
+          {{/if}}
+          <div class="labels-wrapper" data-type="plp" data-sku="{{ sku }}" data-main-sku="{{ sku }}">
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="sell--description">
+          <h2 class="c-products__item__label">
+            <a href="{{ url }}" rel="bookmark" tabindex="0"><span>{{ name }}</span></a>
+          </h2>
+          <div class="price-block price-block-{{ cleanSku }}">
+            {{{render 'product.block.price' price_details }}}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</article>

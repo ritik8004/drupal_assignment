@@ -1,6 +1,8 @@
 import React from 'react';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import setupAccordionHeight from '../../../../utilities';
+import EarnedPointsInfo from '../earned-points-info';
+import EarnedPointsItem from '../earned-points-item';
 
 export default class PointsInfoSummary extends React.PureComponent {
   constructor(props) {
@@ -57,54 +59,41 @@ export default class PointsInfoSummary extends React.PureComponent {
         </div>
         <div className="content">
           <div className="points-earned-block">
-            <div className="earned-items">
-              <div className="item">{getStringMessage('purchase')}</div>
-              <div className="points">
-                {getStringMessage('earned_points',
-                  { '@points': pointsEarned.purchase })}
-              </div>
-            </div>
-            <div className="earned-items">
-              <div className="item">{getStringMessage('submit_review')}</div>
-              <div className="points">
-                {getStringMessage('earned_points',
-                  { '@points': pointsEarned.rating_review })}
-              </div>
-            </div>
-            <div className="earned-items">
-              <div className="item">{getStringMessage('profile_complete')}</div>
-              <div className="points">
-                {getStringMessage('earned_points',
-                  { '@points': pointsEarned.profile_complete })}
-              </div>
-            </div>
+            <EarnedPointsItem
+              itemTitle={getStringMessage('purchase')}
+              itemPoints={getStringMessage('earned_points',
+                { '@points': pointsEarned.purchase })}
+            />
+            <EarnedPointsItem
+              itemTitle={getStringMessage('submit_review')}
+              itemPoints={getStringMessage('earned_points',
+                { '@points': pointsEarned.rating_review })}
+            />
+            <EarnedPointsItem
+              itemTitle={getStringMessage('profile_complete')}
+              itemPoints={getStringMessage('earned_points',
+                { '@points': pointsEarned.profile_complete })}
+            />
           </div>
           <div className="earned-points-info">
-            <div className="info-items">
-              <p className="info-item-title">{getStringMessage('purchase')}</p>
-              <p className="info-item-subtitle">
-                {getStringMessage('purchanse_message',
-                  {
-                    '@currency_value': pointsSummary.conversion.currency_value,
-                    '@currency_code': pointsSummary.conversion.currency_code,
-                    '@points_value': pointsSummary.conversion.points_value,
-                  })}
-              </p>
-            </div>
-            <div className="info-items">
-              <p className="info-item-title">{getStringMessage('submit_review')}</p>
-              <p className="info-item-subtitle">
-                {getStringMessage('write_review_message',
-                  { '@review_points': pointsSummary.rating_review })}
-              </p>
-            </div>
-            <div className="info-items">
-              <p className="info-item-title">{getStringMessage('profile_complete')}</p>
-              <p className="info-item-subtitle">
-                {getStringMessage('profile_complete_message',
-                  { '@profile_completion_value': pointsSummary.profile_complete })}
-              </p>
-            </div>
+            <EarnedPointsInfo
+              infoTitle={getStringMessage('purchase')}
+              infoSubtitle={getStringMessage('purchanse_message',
+                {
+                  '@currency_value': pointsSummary.conversion.currency_value,
+                  '@currency_code': pointsSummary.conversion.currency_code,
+                  '@points_value': pointsSummary.conversion.points_value,
+                })}
+            />
+            <EarnedPointsInfo
+              infoTitle={getStringMessage('submit_review')}
+              infoSubtitle={getStringMessage('write_review_message', { '@review_points': pointsSummary.rating_review })}
+            />
+            <EarnedPointsInfo
+              infoTitle={getStringMessage('profile_complete')}
+              infoSubtitle={getStringMessage('profile_complete_message',
+                { '@profile_completion_value': pointsSummary.profile_complete })}
+            />
           </div>
         </div>
       </div>

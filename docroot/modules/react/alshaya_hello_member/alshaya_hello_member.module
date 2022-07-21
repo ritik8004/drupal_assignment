@@ -28,32 +28,20 @@ function alshaya_hello_member_module_implements_alter(&$implementations, $hook) 
  */
 function alshaya_hello_member_page_attachments_alter(array &$page) {
   /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
-  $hello_member_helper = \Drupal::service('alshaya_hello_member.hello_member_helper');
-  $settings = [
-    'enabled' => $hello_member_helper->isHelloMemberEnabled(),
-    'aura_integration_enabled' => $hello_member_helper->isAuraIntegrationEnabled(),
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+
+  $hello_member_settings = [
+    'status' => $helloMemberHelper->isHelloMemberEnabled(),
+    'auraIntegrationStatus' => $helloMemberHelper->isAuraIntegrationEnabled(),
   ];
-  $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_hello_member.settings')->getCacheTags());
+  $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
 
   // Do not proceed if hello member is not enabled.
-  if ($settings['enabled'] !== TRUE) {
+  if ($hello_member_settings['status'] !== TRUE) {
     return;
   }
 
-  $current_route = \Drupal::routeMatch();
-  $current_route_name = $current_route->getRouteName();
-
-  if ($current_route_name === 'entity.node.canonical'
-    && in_array($current_route->getParameter('node')->bundle(), [
-      'rcs_product',
-      'acq_product',
-    ])
-  ) {
-    $page['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_pdp';
-    $page['#attached']['library'][] = 'alshaya_white_label/hello-member-pdp';
-  }
-
-  $page['#attached']['drupalSettings']['hello_member'] = $settings;
+  $page['#attached']['drupalSettings']['helloMember'] = $hello_member_settings;
 }
 
 /**
@@ -96,12 +84,12 @@ function alshaya_hello_member_theme() {
  */
 function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
-  $hello_member_helper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
   // Only add if hello member enabled.
-  if (!$hello_member_helper->isHelloMemberEnabled()) {
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
     // For user registration form if we have the field, we remove it.
-    if (isset($form['field_date_of_birth'])) {
-      $form['field_date_of_birth']['#access'] = FALSE;
+    if (isset($form['field_birth_date'])) {
+      $form['field_birth_date']['#access'] = FALSE;
     }
     if (isset($form['field_gender'])) {
       $form['field_gender']['#access'] = FALSE;
@@ -126,10 +114,10 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
       '#prefix' => '<div class="hello-member-accordion-wrapper">',
       '#weight' => 9,
     ];
-    $form['hello_member']['field_date_of_birth'] = $form['field_date_of_birth'];
-    $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
-    $form['hello_member']['field_date_of_birth']['#weight'] = 10;
-    unset($form['field_date_of_birth']);
+    $form['hello_member']['field_birth_date'] = $form['field_birth_date'];
+    $form['hello_member']['field_birth_date']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
+    $form['hello_member']['field_birth_date']['#weight'] = 10;
+    unset($form['field_birth_date']);
     $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
     unset($form['field_gender']['widget']['#options']['_none']);
     $form['hello_member']['field_gender'] = $form['field_gender'];
@@ -201,7 +189,7 @@ function alshaya_hello_member_element_info_alter(array &$types) {
  * Custom function to alter HTML 5 date fields.
  */
 function alshaya_hello_member_datetime_set_startdate($element) {
-  if ($element['#parents'][0] == 'field_date_of_birth') {
+  if ($element['#parents'][0] == 'field_birth_date') {
     // Get the minimum age config value.
     $config = \Drupal::config('alshaya_hello_member.settings');
     $start_date = strtotime($config->get('minimum_age') . ' years ago');
@@ -216,12 +204,19 @@ function alshaya_hello_member_datetime_set_startdate($element) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
-  $hello_member_helper = \Drupal::service('alshaya_hello_member.hello_member_helper');
-  // Only add if hello member enabled and is Edit profile form.
-  if (!$hello_member_helper->isHelloMemberEnabled() || $form_id !== 'user_form') {
+  // Do nothing if it is not Edit profile form.
+  if ($form_id !== 'user_form') {
     return;
   }
+
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+
+  // Only add if hello member enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
   $form['#title'] = t('My Details', [], ['context' => 'hello_member']);
   $form['hello_member'] = [
     '#type' => 'details',
@@ -234,14 +229,14 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
     '#markup' => t('Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?', [], ['context' => 'hello_member']),
     '#prefix' => '<div class="hello-member-accordion-wrapper">',
   ];
-  $form['hello_member']['field_date_of_birth'] = $form['field_date_of_birth'];
-  $form['hello_member']['field_date_of_birth']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
-  $form['hello_member']['field_date_of_birth']['#weight'] = 10;
+  $form['hello_member']['field_birth_date'] = $form['field_birth_date'];
+  $form['hello_member']['field_birth_date']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
+  $form['hello_member']['field_birth_date']['#weight'] = 10;
   // Disallow user to edit date of birth on edit profile form.
-  if ($form['field_date_of_birth']['widget'][0]['value']['#default_value']) {
-    $form['hello_member']['field_date_of_birth']['#disabled'] = TRUE;
+  if ($form['field_birth_date']['widget'][0]['value']['#default_value']) {
+    $form['hello_member']['field_birth_date']['#disabled'] = TRUE;
   }
-  unset($form['field_date_of_birth']);
+  unset($form['field_birth_date']);
   $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
   unset($form['field_gender']['widget']['#options']['_none']);
   $form['hello_member']['field_gender'] = $form['field_gender'];
@@ -295,7 +290,7 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
     /** @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($request_options['json']['customer']['email']);
     if (!empty($user)) {
-      $user_date_of_birth = $user->get('field_date_of_birth')->getString();
+      $user_date_of_birth = $user->get('field_birth_date')->getString();
       if (!empty($user_date_of_birth)) {
         $request_options['json']['customer']['dob'] = $user_date_of_birth;
       }
@@ -362,7 +357,9 @@ function alshaya_hello_member_preprocess_html(&$variables) {
  */
 function alshaya_hello_member_preprocess_node(&$variables) {
   if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
-    $variables['hello_member_enabled'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
+    $variables['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_pdp';
+    $variables['#attached']['library'][] = 'alshaya_white_label/hello-member-pdp';
+    $variables['hello_member_status'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
   }
 }
 
@@ -412,9 +409,11 @@ function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterfa
  * Implements hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter().
  */
 function alshaya_hello_member_alshaya_acm_customer_alshaya_user_recent_orders_build_alter(array &$build) {
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_hello_member.settings')->getCacheTags());
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
   // Do not proceed if Alshaya Hello member is not enabled.
-  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
     return;
   }
 
@@ -432,6 +431,6 @@ function alshaya_hello_member_alshaya_acm_customer_alshaya_user_recent_orders_bu
  */
 function alshaya_hello_member_preprocess_user(&$variables) {
   // If hello_member_enabled to add edit button above Account details.
-  $variables['hello_member_enabled'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
+  $variables['hello_member_status'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
   $variables['user_edit_url'] = Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]);
 }

@@ -13,9 +13,7 @@ const MembershipExpiryInfo = ({
   return (
     <div className="member-expiry-block">
       <p className="expiry-point">
-        {pointTotal}
-        {' '}
-        {getStringMessage('points_label')}
+        {Drupal.t('@point_total @points_label', { '@point_total': pointTotal, '@points_label': getStringMessage('points_label') }, { context: 'hello_member' })}
       </p>
       <p>{getStringMessage('membership_renew_message', { '@expiry_date': expiryDate })}</p>
     </div>

@@ -20,7 +20,7 @@ class HelloMemberPDP extends React.Component {
       this.setState({
         dictionaryData: response.data,
       }, () => {
-        this.getInitialProductPoints();
+        this.setInitialProductPoints();
       });
     } else {
       // If coupon details API is returning Error.
@@ -38,9 +38,9 @@ class HelloMemberPDP extends React.Component {
   }
 
   /**
-   * Utility function to get hello member product points for current product.
+   * Utility function to set hello member product points for current product.
    */
-  getInitialProductPoints = () => {
+  setInitialProductPoints = () => {
     const { dictionaryData } = this.state;
     // If above details are not there in props, proceed with usual approach to
     // get the data from price amount HTML text block.

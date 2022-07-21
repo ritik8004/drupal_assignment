@@ -25,7 +25,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
     // and accrual ratio provided by dictonary api.
     // For registered user, we get hello member points earned from the api.
     if (!isUserAuthenticated()) {
-      this.getHelloMemberPoints();
+      this.updateHelloMemberPoints();
     } else {
       const hmCustomerData = getHelloMemberCustomerData();
       if (hmCustomerData instanceof Promise) {
@@ -36,7 +36,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
             this.setState({
               identifierNo: response.data.apc_identifier_number,
             }, () => {
-              this.getHelloMemberPoints(response.data.apc_identifier_number);
+              this.updateHelloMemberPoints(response.data.apc_identifier_number);
             });
           } else if (hasValue(response.error)) {
             logger.error('Error while trying to get hello member customer data. Data: @data.', {
@@ -54,7 +54,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
    * @param {string} identifierNo
    *  Customer identifier number.
    */
-  getHelloMemberPoints = (identifierNo) => {
+  updateHelloMemberPoints = (identifierNo) => {
     const {
       cart: { cart: { items } },
     } = this.props;

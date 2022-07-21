@@ -170,7 +170,7 @@ class TicketBookingManager {
       $this->setTicketBookingCachedData($parks, 'getParkData');
       return $parks;
     }
-    catch (\ SoapFault $fault) {
+    catch (\SoapFault $fault) {
       $this->logger->warning('API Error in getting parks - %faultcode: %message', [
         '%faultcode' => $fault->faultcode,
         '%message' => $fault->faultstring,
@@ -208,7 +208,7 @@ class TicketBookingManager {
       );
       return $shifts;
     }
-    catch (\ SoapFault $fault) {
+    catch (\SoapFault $fault) {
       $this->logger->warning('API Error in getting shifts - %faultcode: %message', [
         '%faultcode' => $fault->faultcode,
         '%message' => $fault->faultstring,
@@ -298,7 +298,7 @@ class TicketBookingManager {
       $this->setTicketBookingCachedData($getSexes, 'getSexesData');
       return $getSexes;
     }
-    catch (\ SoapFault $fault) {
+    catch (\SoapFault $fault) {
       $this->logger->warning('API Error in getting sexes - %faultcode: %message', [
         '%faultcode' => $fault->faultcode,
         '%message' => $fault->faultstring,

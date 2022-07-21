@@ -27,23 +27,7 @@
       item['url'] = url.toString().substring(url.origin.length);
 
       // Prepare price item.
-      // @todo Get from/to prices from Graphql for non-simple prods.
-      item['price_details'] = {
-        display_mode: 'simple',
-      };
-      item['price_details']['discount'] = item.price_range.maximum_price.discount;
-      item['price_details']['regular_price'] = {
-        value: item.price_range.maximum_price.regular_price.value,
-        currency_code: currencyConfig.currency_code,
-        currency_code_position: currencyConfig.currency_code_position,
-        decimal_points: currencyConfig.decimal_points,
-      };
-      item['price_details']['final_price'] = {
-        value: item.price_range.maximum_price.final_price.value,
-        currency_code: currencyConfig.currency_code,
-        currency_code_position: currencyConfig.currency_code_position,
-        decimal_points: currencyConfig.decimal_points,
-      };
+      item['price_details'] = window.commerceBackend.getPriceForRender(item);
 
       // Prepare Assets.
       item['image'] = window.commerceBackend.getTeaserImage(item);
