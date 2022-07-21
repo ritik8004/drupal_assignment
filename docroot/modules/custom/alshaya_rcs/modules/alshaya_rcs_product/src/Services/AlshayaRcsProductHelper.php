@@ -187,14 +187,44 @@ class AlshayaRcsProductHelper {
       'media_gallery' => [
         'url',
         'label',
-        '... on ProductVideo' => [
-          'video_content' => [
-            'media_type',
-            'video_provider',
-            'video_url',
-            'video_title',
-            'video_description',
-            'video_metadata',
+        'styles',
+        '... on ProductImage' => [
+          'url',
+          'label',
+        ],
+      ],
+      '... on ConfigurableProduct' => [
+        'variants' => [
+          'product' => [
+            'id',
+            'sku',
+            'stock_status',
+            'price_range' => [
+              'maximum_price' => [
+                'regular_price' => [
+                  'value',
+                ],
+                'final_price' => [
+                  'value',
+                ],
+                'discount' => [
+                  'percent_off',
+                ],
+              ],
+            ],
+            'stock_data' => [
+              'qty',
+              'max_sale_qty',
+            ],
+            'media_gallery' => [
+              'url',
+              'label',
+              'styles',
+              '... on ProductImage' => [
+                'url',
+                'label',
+              ],
+            ],
           ],
         ],
       ],
