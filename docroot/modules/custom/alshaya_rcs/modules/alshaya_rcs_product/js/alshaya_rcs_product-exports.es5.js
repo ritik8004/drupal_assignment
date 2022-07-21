@@ -139,40 +139,6 @@ function getFormattedAmount(priceAmount) {
 exports.getFormattedAmount = getFormattedAmount;
 
 /**
- * Get SKU based on attribute option id.
- *
- * @param {string} $sku
- *   The parent sku value.
- * @param {string} attribute
- *   Attribute to search for.
- * @param {Number} option_id
- *   Option id for selected attribute.
- *
- * @return {string}
- *   SKU value matching the attribute option id.
- */
-function getChildSkuFromAttribute(sku, attribute, option_id) {
-  const combinations = window.commerceBackend.getConfigurableCombinations(sku);
-
-  if (!Drupal.hasValue(combinations.attribute_sku) ) {
-    Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
-      '@sku': sku
-    });
-    return null;
-  }
-  if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
-    Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
-      '@attribute': attribute,
-      '@option_id': option_id,
-      '@sku': sku
-    });
-    return null;
-  }
-
-  return combinations.attribute_sku[attribute][option_id][0];
-}
-
-/**
  * Get the swatch image url for the provided sku.
  *
  * @param {string} sku
@@ -569,7 +535,7 @@ exports.computePhFilters = function (input, filter) {
             let selectOption = { value: value.value_index, text: label };
 
             if (isOptionSwatch) {
-              const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
+              const childSku = window.commerceBackend.getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
               // If configurableColorDetails has value, then we process the
               // swatch data in
               // Drupal.alshaya_color_images_generate_swatch_markup().
