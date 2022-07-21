@@ -178,13 +178,19 @@ rcs_product_dynamic_yield:
   dependencies:
     - rcs_magento_placeholders/rcs_magento_placeholders
 
+rcs_product_process_images:
+  js:
+    js/alshaya_rcs_product.rcs_product_process_images.js: {}
+  dependencies:
+    - rcs_placeholders/helpers
+
 rcs_product_images:
   version: 1.x
   js:
     js/alshaya_rcs_product.rcs_product_images.js: {}
   dependencies:
     - core/jquery
-    - rcs_placeholders/helpers
+    - alshaya_rcs_product/rcs_product_process_images
 
 attribute.brand.logo:
   version: 1.x
