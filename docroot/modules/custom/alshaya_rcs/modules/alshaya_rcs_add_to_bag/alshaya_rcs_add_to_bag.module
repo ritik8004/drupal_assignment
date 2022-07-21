@@ -27,6 +27,8 @@ function alshaya_rcs_add_to_bag_library_info_alter(&$libraries, $extension) {
       if (\Drupal::service('module_handler')->moduleExists('alshaya_rcs_color_split')) {
         $libraries['add_to_bag_utility']['dependencies'][] = 'alshaya_rcs_color_split/rcs_grouped_products';
       }
+      // Alter add to bag libary.
+      \Drupal::moduleHandler()->alter('add_to_bag_library', $libraries);
     }
   }
 }
@@ -60,5 +62,7 @@ function alshaya_rcs_add_to_bag_page_attachments_alter(array &$page) {
       $page['#attached']['drupalSettings']['alshayaColorSplit']['colorAttribute'] = AlshayaColorSplitConfig::get('attribute_code_color_id');
       $page['#attached']['drupalSettings']['alshayaColorSplit']['colorLabel'] = AlshayaColorSplitConfig::get('color_label_cart_form');
     }
+    $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+    $page['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
   }
 }
