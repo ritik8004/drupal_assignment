@@ -73,7 +73,8 @@ class AlshayaLocationsTransac extends ControllerBase {
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('store_search'),
     ];
-    $endpoint = ltrim($this->configFactory->get('alshaya_stores_finder.settings')->get('filter_path'), '/');
+    $config = $this->configFactory->get('alshaya_stores_finder.settings');
+    $endpoint = ltrim($config->get('filter_path'), '/');
     $result = $this->alshayaApi->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
     $response = new CacheableJsonResponse(json_decode($result), 200);
@@ -83,10 +84,7 @@ class AlshayaLocationsTransac extends ControllerBase {
     $cacheMetadata = new CacheableMetadata();
 
     // Adding cache tags.
-    $cacheMetadata->addCacheTags([
-      'config:alshaya_stores_finder.settings',
-      'node_list:store',
-    ]);
+    $cacheMetadata->addCacheTags($config->getCacheTags());
     $response->addCacheableDependency($cacheMetadata);
 
     return $response;

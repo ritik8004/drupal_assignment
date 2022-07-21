@@ -53,9 +53,11 @@ class AlshayaStoreFinderController extends ControllerBase {
    */
   public function store() {
     $labels = $this->storeUtility->storeLabels();
+    $cacheTags = $this->config('alshaya_stores_finder.settings')->getCacheTags();
     // Site specific libraries.
     if ($this->installProfile == 'alshaya_non_transac') {
       $libraries = $this->storeUtility->storeLibraries(FALSE);
+      $cacheTags = array_merge($cacheTags, ['node_list:store']);
     }
     else {
       $libraries = $this->storeUtility->storeLibraries();
@@ -71,10 +73,7 @@ class AlshayaStoreFinderController extends ControllerBase {
         ],
       ],
       '#cache' => [
-        'tags' => [
-          'config:alshaya_stores_finder.settings',
-          'node_list:store',
-        ],
+        'tags' => $cacheTags,
       ],
     ];
   }
@@ -84,9 +83,11 @@ class AlshayaStoreFinderController extends ControllerBase {
    */
   public function storeList() {
     $labels = $this->storeUtility->storeLabels();
+    $cacheTags = $this->config('alshaya_stores_finder.settings')->getCacheTags();
     // Site specific libraries.
     if ($this->installProfile == 'alshaya_non_transac') {
       $libraries = $this->storeUtility->storeLibraries(FALSE);
+      $cacheTags = array_merge($cacheTags, ['node_list:store']);
     }
     else {
       $libraries = $this->storeUtility->storeLibraries();
@@ -102,10 +103,7 @@ class AlshayaStoreFinderController extends ControllerBase {
         ],
       ],
       '#cache' => [
-        'tags' => [
-          'config:alshaya_stores_finder.settings',
-          'node_list:store',
-        ],
+        'tags' => $cacheTags,
       ],
     ];
   }

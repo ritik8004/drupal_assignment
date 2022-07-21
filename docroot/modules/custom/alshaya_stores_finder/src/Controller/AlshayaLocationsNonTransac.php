@@ -124,12 +124,10 @@ class AlshayaLocationsNonTransac extends ControllerBase {
     // Adding cacheability metadata, so whenever, cache invalidates, this
     // url's cached response also gets invalidate.
     $cacheMetadata = new CacheableMetadata();
-
+    $cacheTags = $this->config('alshaya_stores_finder.settings')->getCacheTags();
+    $cacheTags = array_merge($cacheTags, ['node_list:store']);
     // Adding cache tags.
-    $cacheMetadata->addCacheTags([
-      'config:alshaya_stores_finder.settings',
-      'node_list:store',
-    ]);
+    $cacheMetadata->addCacheTags($cacheTags);
     $response->addCacheableDependency($cacheMetadata);
 
     return $response;
