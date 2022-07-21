@@ -145,6 +145,24 @@ window.commerceBackend = window.commerceBackend || {};
   };
 
   /**
+   * Parse swatch image tag and return swatch image url.
+   * 
+   * @param {string} markup
+   *   Swatch image tag.
+   *  
+   * @returns {string}
+   *   Swatch image url.
+   */
+  function parseImageUrl(markup) {
+    var url = '';
+    var ele = document.createElement('div');
+    ele.innerHTML = markup;
+    var img = ele.getElementsByTagName('img');
+    url = img[0].getAttribute("src"); ;
+    return url;
+  }
+
+  /**
    * Creates product info object from product.
    *
    * @param {object} product
@@ -198,7 +216,12 @@ window.commerceBackend = window.commerceBackend || {};
     // Set configurable attributes.
     var configurableCombinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     productInfo.configurable_attributes = {};
+
+    // Get color attribute config.
+    var configColorAttribute = drupalSettings.alshayaRcs.colorAttributeConfig.configurable_color_attribute;
+    var configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(product.sku);
     product.configurable_options.forEach(function (option) {
+      var isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
       var attribute_id = parseInt(atob(option.attribute_uid), 10);
       var optionValues = [];
       // Filter and process the option values.
@@ -210,19 +233,53 @@ window.commerceBackend = window.commerceBackend || {};
           return false;
         }
 
-        optionValues.push({
-          label: option_value.store_label,
-          value: option_value.value_index.toString(),
-        });
+        // Populate images for color swatch.
+        if (isOptionSwatch && option.attribute_code === configColorAttribute) {
+          const childSku = window.commerceBackend.getChildSkuFromAttribute(product.sku, option.attribute_code, option_value.value_index.toString());
+          let colorOption = configurableColorDetails.sku_configurable_options_color[option_value.value_index.toString()];
+          let swatchType = '';
+          switch (colorOption.swatch_type) {
+            case 'RGB':
+              swatchType = 'color';
+              break;
+
+            case 'Fabricswatch':
+              swatchType = 'image';
+              break;
+
+            default:
+              swatchType = 'text';
+              break;
+          }
+          var swatch_data = (swatchType === 'image') 
+            ? parseImageUrl(colorOption.display_value)
+            : colorOption.display_value;
+          
+          optionValues.push({
+            label: option_value.store_label,
+            value: option_value.value_index.toString(),
+            data: swatch_data,
+            type: swatchType,
+          });
+        }
+        else {
+          optionValues.push({
+            label: option_value.store_label,
+            value: option_value.value_index.toString(),
+          });
+        }
       });
       productInfo.configurable_attributes[option.attribute_code] = {
         id: attribute_id.toString(),
         label: option.label,
         position: option.position,
-        is_swatch: false,
+        is_swatch: isOptionSwatch,
         is_pseudo_attribute: (attribute_id === drupalSettings.psudo_attribute),
         values: optionValues,
       };
+      if (isOptionSwatch) {
+        productInfo.configurable_attributes[option.attribute_code].swatches = optionValues;
+      }
     });
 
     // Set configurable combinations.
