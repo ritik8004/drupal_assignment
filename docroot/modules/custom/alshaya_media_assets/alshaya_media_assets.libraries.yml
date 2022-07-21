@@ -1,11 +1,3 @@
-rcs_product_images:
-  version: 1.x
-  js:
-    js/alshaya_media_assets.rcs_product_images.js: {}
-  dependencies:
-    - core/jquery
-    - alshaya_rcs_product/rcs_product_process_images
-
 media_images:
   css:
     theme:
