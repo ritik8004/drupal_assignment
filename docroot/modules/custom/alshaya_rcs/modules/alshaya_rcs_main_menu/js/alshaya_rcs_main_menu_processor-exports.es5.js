@@ -1,5 +1,4 @@
 exports.prepareData = function prepareData(settings, inputs) {
-  // @todo use menuMaxDepth;
   const {
     idealMaxColLength,
     menuLayout,
@@ -8,16 +7,8 @@ exports.prepareData = function prepareData(settings, inputs) {
     highlightTiming,
   } = settings;
 
-  // List of keys that we will use to render Handlebars templates.
-  const allowedKeys = [
-    'name',
-    'meta_title',
-    'url_path',
-    'level',
-    'include_in_menu',
-    'children',
-  ];
-  inputs = filterAllowedValues(inputs, allowedKeys);
+  // Clean up data.
+  inputs = filterValues(inputs, menuMaxDepth);
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -29,11 +20,6 @@ exports.prepareData = function prepareData(settings, inputs) {
       // Distribute L3 items into columns.
       inputs = splitIntoCols(inputs, maxNbCol, idealMaxColLength);
   }
-
-
-  // Filter category menu items if include_in_menu flag true.
-  // @todo fix this
-  // inputs = filterAvailableItems(inputs);
 
   return {
     'menu_type': menuLayout,
@@ -49,66 +35,119 @@ exports.prepareData = function prepareData(settings, inputs) {
 }
 
 /**
- * Filters items to include in menu.
+ * Clean up api data.
  *
- * @param {array} catArray
- *
- * @returns Filtered array with items for which the value of
- *  include_in_menu property is true.
- */
-const filterAvailableItems = function (catArray) {
-  return catArray.filter(
-    innerCatArray => (innerCatArray.include_in_menu === 1)
-  );
-};
-
-/**
- * Clean up api data, keeping only keys that we will use to render the template.
- *
- * @param object data
+ * @param {object} data
  *   The category data.
  *
- * @param array allowedKeys
- *   The list of keys to keep.
+ * @param {integer} maxLevel
+ *   The max depth of menus.
+ *
+ *  @return object data
+ *   The cleaned data.
  */
-const filterAllowedValues = function (data, allowedKeys) {
+const filterValues = function (data, maxLevel) {
+  /**
+   * Checks if data is scalar.
+   *
+   * @param {mixed} data
+   *   The data
+   *
+   * @return {boolean}
+   *   True if it is scalar, or false.
+   */
+  function isScalar(data) {
+    return (/boolean|number|string/).test(typeof data)
+  }
+
+  /**
+   * Remove unwanted items from the data array.
+   *
+   * @param {array} data
+   *   The data.
+   *
+   * @param {string/integer} key
+   *   The key.
+   */
+  function removeUnwantedItem(data, key) {
+    // Keep numeric values.
+    if (parseInt(key) >= 0) {
+      return;
+    }
+
+    // List of keys that we want to keep.
+    const allowedKeys = [
+      'name',
+      'meta_title',
+      'url_path',
+      'level',
+      'include_in_menu',
+      'children',
+    ];
+    if (allowedKeys.includes(key)) {
+      return;
+    }
+
+    // Delete item.
+    delete(data[key]);
+  }
+
+  /**
+   * Iterate and remove unwanted data.
+   *
+   * @param {object/array} data
+   *   The data.
+   *
+   * @return {object}
+   *   The clean data.
+   */
   function iterate(data) {
     // Convert arrays to objects;
     data = Object.assign({}, data);
+
     // Loop object;
     for (const [key, value] of Object.entries(data)) {
-      // Keep numeric values and allowed values.
-      if (allowedKeys.includes(key) || parseInt(key) >= 0) {
-        // Keep item.
+      // Check if we have an array or object.
+      if (!isScalar(value)) {
+        // Check if the item should be included in the menu.
+        if (typeof data[key].include_in_menu !== 'undefined'
+          && !data[key].include_in_menu) {
+          delete (data[key]);
+        }
+        // Check if we reached max level.
+        else if (typeof data[key].level !== 'undefined'
+          && data[key].level - 1 > maxLevel) {
+          delete (data[key]);
+        }
+        // Go oe level deeper into the data.
+        else {
+          data[key] = iterate(value);
+        }
       }
-      else {
-        // Delete item.
-        delete(data[key]);
-        continue;
-      }
-      // Go deeper into arrays and objects.
-      if (value.constructor === Array || value.constructor === Object) {
-        data[key] = iterate(value);
-      }
+
+      // Remove unwanted data.
+      removeUnwantedItem(data, key);
     }
+
     return data;
   }
+
   return iterate(data);
 }
 
 /**
  * Moves children into separate columns to evenly distribute menu items.
  *
- * @param object data
+ * @param {object} data
  *   The menu data.
  *
- * @param integer maxCols
+ * @param {integer} maxCols
  *   Max number of columns.
  *
- * @param integer maxRows
+ * @param {integer} maxRows
  *   Max number of rows.
  *
- * @return object
+ * @return {object}
  *   The menu data distributed into columns.
  */
 function splitIntoCols(data, maxCols = 6, maxRows = 10) {
