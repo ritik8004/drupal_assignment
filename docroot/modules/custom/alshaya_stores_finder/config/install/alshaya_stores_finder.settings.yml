@@ -1,4 +1,4 @@
-filter_path: 'storeLocator/search?searchCriteria[filter_groups][0][filters][0][field]=status&searchCriteria[filter_groups][0][filters][0][value]=1'
+filter_path: 'storeLocator/search?searchCriteria[filter_groups][0][filters][0][field]=status&searchCriteria[filter_groups][0][filters][0][value]=1&searchCriteria[filter_groups][1][filters][0][field]=pudo_service&searchCriteria[filter_groups][1][filters][0][value]=0'
 stores_finder_page_status: 1
 enable_disable_store_finder_search: 1
 load_more_item_limit: 10
