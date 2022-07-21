@@ -141,6 +141,7 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
   if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
     return;
   }
+  $nid = NULL;
   $config = \Drupal::config('alshaya_hello_member.settings');
   if ($config->get('membership_info_content_node')) {
     // Get the node ID from config.
