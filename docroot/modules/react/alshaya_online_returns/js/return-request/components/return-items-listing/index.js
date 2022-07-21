@@ -19,6 +19,7 @@ class ReturnItemsListing extends React.Component {
       discountedRuleId: null,
       itemNotEligibleForReturn: false,
     };
+    this.productsListRef = React.createRef();
     this.handleSelectedReason = this.handleSelectedReason.bind(this);
     this.processSelectedItems = this.processSelectedItems.bind(this);
   }
@@ -276,26 +277,22 @@ class ReturnItemsListing extends React.Component {
     // When user clicks continue button, disable the item
     // details accordion and enable refund accordion.
     this.updateRefundAccordion(open);
-    this.scrollToRefundDetails();
+    this.scrollToProductsList();
   }
 
   /**
    * Scroll to the refund details step of accordion.
    */
-  scrollToRefundDetails = () => {
-    const { returnRefundDetailsRef } = this.props;
-    const refundDetails = returnRefundDetailsRef.current;
+  scrollToProductsList = () => {
+    const productsList = this.productsListRef.current;
     const headerOffset = isMobile() ? 64 : 32;
+    const productsListPosition = productsList.getBoundingClientRect().top;
+    const offsetPosition = productsListPosition + window.pageYOffset - headerOffset;
 
-    setTimeout(() => {
-      const refundDetailsPosition = refundDetails.getBoundingClientRect().top;
-      const offsetPosition = refundDetailsPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-    }, 500);
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    });
   }
 
   /**
@@ -320,7 +317,7 @@ class ReturnItemsListing extends React.Component {
     // If no item is selected, button remains disabled.
     const btnState = !!((itemsSelected.length === 0 || btnDisabled));
     return (
-      <div className="products-list-wrapper">
+      <div className="products-list-wrapper" ref={this.productsListRef}>
         <Collapsible
           trigger={this.itemListHeader(products)}
           open={open}
