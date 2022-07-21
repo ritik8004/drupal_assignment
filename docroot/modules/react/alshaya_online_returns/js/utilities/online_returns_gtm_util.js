@@ -117,7 +117,10 @@ function getPreparedOrderGtm(eventType, returnInfo) {
   // Get delivery address info.
   const deliveryInfo = getDeliveryAddress(orderDetails);
   // Get the payment details.
-  const paymentDetails = getPaymentDetails(orderDetails);
+  let paymentDetails = getPaymentDetails(orderDetails);
+  // Sort the payment details based on the weight in ascending order.
+  paymentDetails = Object.values(paymentDetails).sort((p1, p2) => p1.weight - p2.weight);
+
   // Combine all the payment methods.
   const paymentMethods = [];
   if (Object.keys(paymentDetails).length > 0) {
