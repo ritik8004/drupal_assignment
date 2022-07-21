@@ -57,12 +57,6 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_hello_member.settings');
-    $target_bundles = ['static_html', 'advanced_page'];
-    $node = NULL;
-    if ($config->get('membership_info_content_node')) {
-      $node_storage = $this->entityTypeManager->getStorage('node');
-      $node = $node_storage->load($config->get('membership_info_content_node'));
-    }
     $form['hello_member_configuration'] = [
       '#type' => 'details',
       '#title' => $this->t('Configuration'),
@@ -98,8 +92,11 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       '#type' => 'entity_autocomplete',
       '#title' => $this->t('Membership info content node'),
       '#target_type' => 'node',
-      '#selection_setttings' => ['target_bundles' => $target_bundles],
-      '#default_value' => $node,
+      '#selection_setttings' => [
+        'target_bundles' => ['static_html', 'advanced_page'],
+      ],
+      '#default_value' => $config->get('membership_info_content_node') ?
+      $this->entityTypeManager->getStorage('node')->load($config->get('membership_info_content_node')) : NULL,
       '#size' => '60',
       '#maxlength' => '60',
       '#description' => $this->t('Please select the node which will be redirect on click of membership info link.'),
