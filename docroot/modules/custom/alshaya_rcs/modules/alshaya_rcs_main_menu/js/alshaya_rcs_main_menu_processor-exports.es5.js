@@ -48,51 +48,6 @@ exports.prepareData = function prepareData(settings, inputs) {
  */
 const filterValues = function (data, maxLevel) {
   /**
-   * Checks if data is scalar.
-   *
-   * @param {mixed} data
-   *   The data
-   *
-   * @return {boolean}
-   *   True if it is scalar, or false.
-   */
-  function isScalar(data) {
-    return (/boolean|number|string/).test(typeof data)
-  }
-
-  /**
-   * Remove unwanted items from the data array.
-   *
-   * @param {array} data
-   *   The data.
-   *
-   * @param {string/integer} key
-   *   The key.
-   */
-  function removeUnwantedItem(data, key) {
-    // Keep numeric values.
-    if (parseInt(key) >= 0) {
-      return;
-    }
-
-    // List of keys that we want to keep.
-    const allowedKeys = [
-      'name',
-      'meta_title',
-      'url_path',
-      'level',
-      'include_in_menu',
-      'children',
-    ];
-    if (allowedKeys.includes(key)) {
-      return;
-    }
-
-    // Delete item.
-    delete(data[key]);
-  }
-
-  /**
    * Iterate and remove unwanted data.
    *
    * @param {object/array} data
@@ -108,7 +63,7 @@ const filterValues = function (data, maxLevel) {
     // Loop object;
     for (const [key, value] of Object.entries(data)) {
       // Check if we have an array or object.
-      if (!isScalar(value)) {
+      if ((/array|object/).test(typeof value)) {
         // Check if the item should be included in the menu.
         if (typeof data[key].include_in_menu !== 'undefined'
           && !data[key].include_in_menu) {
@@ -119,14 +74,11 @@ const filterValues = function (data, maxLevel) {
           && data[key].level - 1 > maxLevel) {
           delete (data[key]);
         }
-        // Go oe level deeper into the data.
+        // Go one level deeper into the data.
         else {
           data[key] = iterate(value);
         }
       }
-
-      // Remove unwanted data.
-      removeUnwantedItem(data, key);
     }
 
     return data;
