@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -34,6 +35,7 @@ use Drupal\redirect\RedirectRepository;
 use Drupal\Core\Database\Connection;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Mobile App Utility Class.
@@ -205,6 +207,13 @@ class MobileAppUtility {
   protected $pathValidator;
 
   /**
+   * Product Category Page service.
+   *
+   * @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage
+   */
+  protected $productCategoryPage;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -243,6 +252,8 @@ class MobileAppUtility {
    *   The super category manager service.
    * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
    *   Path Validator service object.
+   * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page
+   *   Product Category Page service.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -261,7 +272,8 @@ class MobileAppUtility {
                               SkuInfoHelper $sku_info_helper,
                               Connection $database,
                               AlshayaSuperCategoryManager $super_category_manager,
-                              PathValidatorInterface $path_validator) {
+                              PathValidatorInterface $path_validator,
+                              ProductCategoryPage $product_category_page) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -282,6 +294,7 @@ class MobileAppUtility {
     $this->database = $database;
     $this->superCategoryManager = $super_category_manager;
     $this->pathValidator = $path_validator;
+    $this->productCategoryPage = $product_category_page;
   }
 
   /**
@@ -1150,6 +1163,42 @@ class MobileAppUtility {
     $response['success'] = FALSE;
     $response['message'] = $message;
     return (new ResourceResponse($response));
+  }
+
+  /**
+   * Helper method to get the algolia filter data.
+   *
+   * @param string $tid
+   *   Term ID.
+   * @param string $langcode
+   *   The language code.
+   *
+   * @return array
+   *   An array containing algolia data.
+   */
+  public function getAlgoliaData($tid, $langcode) {
+    // Get term details in current language for filters.
+    $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
+      $langcode,
+      $tid
+    );
+
+    $filter_field = $term_details['category_field'];
+    if (Settings::get('mobile_app_plp_index_new', FALSE)) {
+      // Append 'en' in 'filter_field' of 'algolia_data'.
+      // for ex:
+      // 'field_category_name.lvl1' will be 'field_category_name.en.lvl1'.
+      $category_field = explode('.', $term_details['category_field']);
+      $category_field_temp[] = $category_field[0] . '.' . $langcode . '.';
+      array_shift($category_field);
+      $filter_field = implode(array_merge($category_field_temp, $category_field));
+    }
+
+    return [
+      'filter_field' => $filter_field,
+      'filter_value' => $term_details['hierarchy'],
+      'rule_contexts' => $term_details['ruleContext'],
+    ];
   }
 
 }

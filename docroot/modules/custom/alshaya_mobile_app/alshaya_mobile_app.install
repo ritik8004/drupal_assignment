@@ -15,6 +15,21 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Add algolia category carousel settings.
+ */
+function alshaya_mobile_app_update_8083() {
+  // Import config to set "trigger_algolia_category_carousel" key.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['alshaya_mobile_app.settings'],
+    'alshaya_mobile_app',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new Deeplink V3 and Magazine Detail V3 APIs.
  */
 function alshaya_mobile_app_update_8082() {

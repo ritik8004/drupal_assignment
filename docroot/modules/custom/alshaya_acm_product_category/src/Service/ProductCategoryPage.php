@@ -205,7 +205,9 @@ class ProductCategoryPage {
 
       $hierarchy_list[] = $term->label();
 
-      $context_list[] = $this->algoliaReactHelper->formatCleanRuleContext($term_en->label());
+      if ($this->algoliaReactHelper instanceof AlshayaAlgoliaReactHelper) {
+        $context_list[] = $this->algoliaReactHelper->formatCleanRuleContext($term_en->label());
+      }
 
       // Merge term name for to use multiple contexts for category pages.
       $contexts[] = implode('__', $context_list);
