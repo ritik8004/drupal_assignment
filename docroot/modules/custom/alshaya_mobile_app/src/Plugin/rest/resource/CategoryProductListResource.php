@@ -374,27 +374,12 @@ class CategoryProductListResource extends ResourceBase {
         $langcode = 'en';
       }
 
+      $response['algolia_data'] = $this->mobileAppUtility->getAlgoliaData($tid, $langcode);
       // Get term details in current language for filters.
       $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
         $langcode,
         $tid
       );
-
-      $filter_field = $term_details['category_field'];
-      if (Settings::get('mobile_app_plp_index_new', FALSE)) {
-        // Append 'en' in 'filter_field' of 'algolia_data'.
-        // for ex:
-        // 'field_category_name.lvl1' will be 'field_category_name.en.lvl1'.
-        $category_field = explode('.', $term_details['category_field']);
-        $category_field_temp[] = $category_field[0] . '.' . $langcode . '.';
-        array_shift($category_field);
-        $filter_field = implode(array_merge($category_field_temp, $category_field));
-      }
-      $response['algolia_data'] = [
-        'filter_field' => $filter_field,
-        'filter_value' => $term_details['hierarchy'],
-        'rule_contexts' => $term_details['ruleContext'],
-      ];
       // Return only algolia data if the config value is set to false.
       if ($respond_ignore_algolia_data) {
         return $response;
