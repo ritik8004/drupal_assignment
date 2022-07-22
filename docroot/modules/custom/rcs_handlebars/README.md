@@ -44,6 +44,25 @@ let html = handlebarsRenderer.render('article.block.foo', data);
 
 The templates need to have the Handlebars syntax, see https://handlebarsjs.com/guide/
 
+### Partials
+It is possible to render other Handlebars templates using Handlebars partials, see
+Docs https://handlebarsjs.com/api-reference/runtime.html#handlebars-registerpartial-name-partial.
+
+RCS Handlebars will register partials automatically when the library name contains the string 'partial'
+and can be used inside templates:
+
+i.e. hello_world.handlebars
+```
+<div>
+  Hello {{> my_partial value='World' }}
+</div>
+```
+
+i.e. my_partial.handlebars
+```
+<span>{{ value }}</span>
+```
+
 # Troubleshooting
 - How do I know what variables are available to use in a Handlebars template?
   - You can use `{{log this }}` to list all variables in the Console.
