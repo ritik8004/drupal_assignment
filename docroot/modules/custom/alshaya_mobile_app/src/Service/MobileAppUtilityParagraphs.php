@@ -896,8 +896,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       // metadata leak issue.
       // @See https://www.drupal.org/project/drupal/issues/2450993
       // Execute this only if the config is set to get data from Algolia.
-      $trigger_algolia_category_carousel = $this->configFactory->get('alshaya_mobile_app.settings')->get('trigger_algolia_category_carousel');
-      if ($trigger_algolia_category_carousel) {
+      $category_carousel_return_products = $this->configFactory->get('alshaya_mobile_app.settings')->get('category_carousel_return_products');
+      if ($category_carousel_return_products) {
         $nodes = $this->renderer->executeInRenderContext(
           new RenderContext(),
           function () use ($entity, $category_id) {

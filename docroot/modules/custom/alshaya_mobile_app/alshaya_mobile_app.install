@@ -18,7 +18,7 @@ use Drupal\user\Entity\Role;
  * Add algolia category carousel settings.
  */
 function alshaya_mobile_app_update_8083() {
-  // Import config to set "trigger_algolia_category_carousel" key.
+  // Import config to set "category_carousel_return_products" key.
   \Drupal::service('alshaya_config.manager')->updateConfigs(
     ['alshaya_mobile_app.settings'],
     'alshaya_mobile_app',

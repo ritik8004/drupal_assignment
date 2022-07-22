@@ -14,6 +14,6 @@ alshaya_mobile_app.settings:
     listing_ignore_algolia_data:
       type: boolean
       label: 'Dont respond product if config is true.'
-    trigger_algolia_category_carousel:
+    category_carousel_return_products:
       type: boolean
       label: 'Call algolia for category carousel if config is true.'
