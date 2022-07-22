@@ -21,7 +21,6 @@ class ReturnRequest extends React.Component {
       orderDetails: getOrderDetails(),
       wait: true,
     };
-    this.returnRefundDetailsRef = React.createRef();
   }
 
   componentDidMount() {
@@ -114,14 +113,12 @@ class ReturnRequest extends React.Component {
           products={orderDetails['#products']}
           handleSelectedItems={this.handleSelectedItems}
           itemsSelected={itemsSelected}
-          returnRefundDetailsRef={this.returnRefundDetailsRef}
         />
         <ReturnRefundDetails
           orderDetails={orderDetails}
           handleReturnRequestSubmit={this.handleReturnRequestSubmit}
           itemsSelected={itemsSelected}
           handleErrorMessage={this.handleErrorMessage}
-          returnRefundDetailsRef={this.returnRefundDetailsRef}
         />
         <div className="return-request-bottom-page-link">
           <span>{ Drupal.t("Don't want to return?", {}, { context: 'online_returns' }) }</span>
