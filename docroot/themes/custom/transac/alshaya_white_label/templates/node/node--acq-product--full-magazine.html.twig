@@ -18,6 +18,9 @@
   <div class="content-sidebar-wrapper">
     {% block titleBlock %}
       <div class="content__title_wrapper">
+        {% block bnpBlock %}
+        {% endblock %}
+
         {% if hello_member_status is defined and hello_member_status %}
           <div id="hello-member-pdp"></div>
         {% endif %}
