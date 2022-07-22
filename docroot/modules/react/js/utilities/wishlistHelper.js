@@ -132,7 +132,7 @@ export const getWishListStorageKey = () => (isAnonymousUser()
 /**
  * Return the current wishlist info if available.
  *
- * @returns {object}
+ * @returns {null|Object}
  *  An object of wishlist information.
  */
 export const getWishListData = (strgKey) => {

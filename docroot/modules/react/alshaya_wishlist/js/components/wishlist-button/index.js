@@ -149,11 +149,12 @@ class WishlistButton extends React.Component {
           // Get existing wishlist data from storage.
           const wishListItems = getWishListData();
 
-          // Remove the entry for given product sku from existing storage data.
-          wishListItems.splice(skuIndex, 1);
-
-          // Save back to storage.
-          addWishListInfoInStorage(wishListItems);
+          if (wishListItems) {
+            // Remove the entry for given product sku from existing storage data.
+            wishListItems.splice(skuIndex, 1);
+            // Save back to storage.
+            addWishListInfoInStorage(wishListItems);
+          }
 
           // Push product values to GTM for removeFromWishlist event.
           pushWishlistSeoGtmData({
@@ -346,11 +347,12 @@ class WishlistButton extends React.Component {
             // Get existing wishlist data from storage.
             const wishListItems = getWishListData();
 
-            // Remove the entry for given product sku from existing storage data.
-            wishListItems.splice(skuIndex, 1);
-
-            // Save back to storage.
-            addWishListInfoInStorage(wishListItems);
+            if (wishListItems) {
+              // Remove the entry for given product sku from existing storage data.
+              wishListItems.splice(skuIndex, 1);
+              // Save back to storage.
+              addWishListInfoInStorage(wishListItems);
+            }
           }
         }
         productInfo.sku = productSku;
