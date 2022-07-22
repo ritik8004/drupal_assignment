@@ -5,6 +5,7 @@ global_styles:
   js:
     js/form.js: {}
     js/custom_overrides.js: {}
+    /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
