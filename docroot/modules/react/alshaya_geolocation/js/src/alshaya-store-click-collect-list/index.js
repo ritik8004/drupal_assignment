@@ -14,11 +14,7 @@ export class StoreClickCollectList extends React.PureComponent {
       count: 1,
       showListingView: false,
       specificPlace: {},
-      center: {},
-      newCenter: {},
-      zoom: 10,
       active: false,
-      open: false,
       showAutomcomplete: true,
       area: '',
       isModalOpen: false,
@@ -40,7 +36,6 @@ export class StoreClickCollectList extends React.PureComponent {
             stores: stores.items,
             results: stores.items,
             count: stores.total_count,
-            center: { lat: stores.items[0].latitude, lng: stores.items[0].longitude },
           },
         );
       }
