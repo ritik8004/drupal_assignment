@@ -1,6 +1,5 @@
 (function main(Drupal, RcsEventManager) {
   // Event listener to add the View All link in L3 menus.
-  // @todo do this via template if possible
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Only when placeholder is navigation_menu.
     if (Drupal.hasValue(e.detail.placeholder)

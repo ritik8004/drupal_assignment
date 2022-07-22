@@ -8,7 +8,7 @@ exports.prepareData = function prepareData(settings, inputs) {
   } = settings;
 
   // Clean up data.
-  inputs = filterValues(inputs, menuMaxDepth);
+  inputs = processData(inputs, menuMaxDepth);
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -46,7 +46,8 @@ exports.prepareData = function prepareData(settings, inputs) {
  *  @return object data
  *   The cleaned data.
  */
-const filterValues = function (data, maxLevel) {
+const processData = function (data, maxLevel) {
+
   /**
    * Iterate and remove unwanted data.
    *

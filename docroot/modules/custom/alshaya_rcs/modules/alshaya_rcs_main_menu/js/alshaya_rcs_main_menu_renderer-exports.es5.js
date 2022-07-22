@@ -4,7 +4,7 @@ exports.render = function render(
   innerHtml,
   navigationType
 ) {
-  // @todo Replace this implementation with Handlebars templates.
+  // @todo CORE-43611: Use handlebars for RCS Shop by block.
   if (navigationType !== 'shop_by_block') {
     return;
   }
