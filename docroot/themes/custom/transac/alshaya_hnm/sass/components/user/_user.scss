@@ -175,6 +175,30 @@
   }
 }
 
+.c-content {
+  .c-content__region {
+    .user-login-form {
+      p {
+        font-size: rem(11);
+        color: $login_terms_cond;
+        margin-top: rem(26);
+
+        a {
+          color: $login_terms_cond;
+          font-family: $hnm-regular;
+          text-decoration: underline;
+          font-weight: normal;
+
+          &:hover {
+            color: $login_terms_hover;
+          }
+        }
+
+      }
+    }
+  }
+}
+
 #block-youllbeableto,
 #block-jointheclub {
   a {
