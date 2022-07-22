@@ -8,18 +8,24 @@ function getReturnReasons() {
   const returnReasons = [
     { value: 0, label: Drupal.t('Choose a reason', {}, { context: 'online_returns' }) },
   ];
+  let reasonsList = [];
   if (hasValue(drupalSettings.returnInfo)
     && hasValue(drupalSettings.returnInfo.returnConfig)
     && hasValue(drupalSettings.returnInfo.returnConfig.return_reasons)) {
     // Populate reasons values from return reasons api call.
-    const reasonsList = drupalSettings.returnInfo.returnConfig.return_reasons;
-    Object.keys(reasonsList).forEach((key) => {
-      returnReasons.push({
-        value: reasonsList[key].id,
-        label: reasonsList[key].label,
-      });
-    });
+    reasonsList = drupalSettings.returnInfo.returnConfig.return_reasons;
+  } else if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.return_config)
+    && hasValue(drupalSettings.onlineReturns.return_config.return_reasons)) {
+    reasonsList = drupalSettings.onlineReturns.return_config.return_reasons;
   }
+
+  Object.keys(reasonsList).forEach((key) => {
+    returnReasons.push({
+      value: reasonsList[key].id,
+      label: reasonsList[key].label,
+    });
+  });
 
   return returnReasons;
 }
