@@ -232,7 +232,6 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart',
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
-          'alshaya_spc/dynamic_promotion_label',
           'alshaya_acm_promotion/basket_labels_manager',
           'alshaya_white_label/free_gifts',
         ],
@@ -625,7 +624,6 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/commerce_backend.checkout.v' . $backend_version,
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
-          'alshaya_spc/dynamic_promotion_label',
         ],
         'drupalSettings' => [
           'cnc_enabled' => $cnc_enabled,
