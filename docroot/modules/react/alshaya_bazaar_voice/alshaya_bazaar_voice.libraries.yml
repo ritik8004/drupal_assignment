@@ -5,7 +5,6 @@ rating:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice
     - alshaya_bazaar_voice/utility
-    - alshaya_acm_product/acq_product_info
 
 reviews:
   js:
@@ -14,7 +13,6 @@ reviews:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice
     - alshaya_bazaar_voice/utility
-    - alshaya_acm_product/acq_product_info
 
 myorders:
   js:
@@ -23,7 +21,6 @@ myorders:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice
     - alshaya_bazaar_voice/utility
-    - alshaya_acm_product/acq_product_info
     - alshaya_white_label/myaccount-reviews
 
 myaccount:
@@ -33,7 +30,6 @@ myaccount:
     - alshaya_react/react
     - bazaar_voice/bazaar_voice
     - alshaya_bazaar_voice/utility
-    - alshaya_acm_product/acq_product_info
 
 bvpixel_tracking:
   js:
@@ -58,7 +54,6 @@ reviewsV2:
     - alshaya_acm_product/rcs_product_info
     - bazaar_voice/bazaar_voice
     - alshaya_bazaar_voice/utility
-    - alshaya_acm_product/acq_product_info
 
 ratingV2:
   js:
@@ -71,7 +66,6 @@ ratingV2:
     - alshaya_acm_product/rcs_product_info
     - bazaar_voice/bazaar_voice
     - alshaya_bazaar_voice/utility
-    - alshaya_acm_product/acq_product_info
 
 pie_write_review:
   css:
@@ -85,3 +79,4 @@ utility:
     js/assets/alshaya_bazaar_voice.utility.js: {}
   dependencies:
     - core/drupalSettings
+    - alshaya_acm_product/product_utility
