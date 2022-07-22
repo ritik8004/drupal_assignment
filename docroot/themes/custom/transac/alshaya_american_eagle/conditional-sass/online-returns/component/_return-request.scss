@@ -1,0 +1,26 @@
+.return-requests-wrapper {
+  .products-list-wrapper,
+  .refund-details-wrapper {
+    .refund-detail-label,
+    .select-items-label {
+      .select-items-header,
+      .refund-detail-header {
+        &::before {
+          font-size: rem(32);
+        }
+      }
+    }
+  }
+
+  .promotions-warning-modal-wrapper {
+    color: $online-return-dark-txt;
+
+    .close {
+      padding: 0;
+
+      &::before {
+        font-size: rem(32);
+      }
+    }
+  }
+}
