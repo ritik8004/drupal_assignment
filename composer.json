@@ -6,6 +6,7 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.4",
+        "ext-dom": "*",
         "acquia/acsf-tools": "^10.1",
         "acquia/blt": "^13.2",
         "acquia/blt-acsf": "^1.0",
@@ -19,6 +20,7 @@
         "ckeditor/font": "^4.9",
         "claviska/jquery-minicolors": "^2.2",
         "composer/composer": "^2.0",
+        "cweagans/composer-patches": "^1.7",
         "drupal/acquia_connector": "^3.0",
         "drupal/acquia_purge": "^1.1",
         "drupal/acquia_search": "^3.0",
@@ -42,8 +44,8 @@
         "drupal/conditional_fields": "^4.0@alpha",
         "drupal/config_rewrite": "^1.4",
         "drupal/config_update": "^1.7",
-        "drupal/core": "9.2.16",
-        "drupal/core-composer-scaffold": "9.2.16",
+        "drupal/core": "~9.4.3",
+        "drupal/core-composer-scaffold": "~9.4.3",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
         "drupal/default_content": "^2.0@alpha",
@@ -58,6 +60,7 @@
         "drupal/google_tag": "1.x-dev",
         "drupal/image_style_quality": "1.x-dev",
         "drupal/imagemagick": "^3.2",
+        "drupal/inline_entity_form": "^1.0-rc7",
         "drupal/jquery_minicolors": "^1.2",
         "drupal/jquery_ui_accordion": "^1.1",
         "drupal/jquery_ui_datepicker": "^1.2",
@@ -66,6 +69,11 @@
         "drupal/kashmir": "^1.11",
         "drupal/key_value_field": "^1.2",
         "drupal/libraries": "^3.0@beta",
+        "drupal/lightning_api": "^4.6",
+        "drupal/lightning_core": "^5.8",
+        "drupal/lightning_layout": "^2.10",
+        "drupal/lightning_media": "^4.6",
+        "drupal/lightning_workflow": "^3.16",
         "drupal/link_attributes": "^1.11",
         "drupal/mailsystem": "^4.1",
         "drupal/memcache": "^2.3",
@@ -81,12 +89,16 @@
         "drupal/mimemail": "^1.0@alpha",
         "drupal/mobile_app_links": "^1.3",
         "drupal/mobile_number": "^2.0@alpha",
+        "drupal/page_manager": "^4.0-beta6",
+        "drupal/panelizer": "^5.0-beta3",
         "drupal/paragraphs": "^1.6",
         "drupal/password_policy": "3.0.0",
         "drupal/path_redirect_import": "^1.0@beta",
         "drupal/pathauto": "^1.6",
         "drupal/pcb": "^2.3",
+        "drupal/pendo": "^1@alpha",
         "drupal/profile": "^1.3",
+        "drupal/profile_switcher": "^1.0-alpha5",
         "drupal/queue_unique": "^2.0",
         "drupal/r4032login": "^2.1",
         "drupal/recaptcha": "^3.0",
@@ -98,6 +110,7 @@
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.2",
         "drupal/s3fs": "^3.0@beta",
+        "drupal/search_api": "^1.17",
         "drupal/search_api_algolia": "^3.0@beta",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr_multilingual": "^3",
@@ -142,7 +155,7 @@
         "acquia/blt-phpcs": "^1.0",
         "acquia/drupal-spec-tool": "^4.1",
         "drupal/console": "^1.8",
-        "drupal/core-dev": "9.2.16",
+        "drupal/core-dev": "~9.4.3",
         "drupal/devel": "^4.1",
         "geerlingguy/drupal-vm": "^5.2.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
@@ -238,7 +251,7 @@
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                 "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
                 "Cacheable Ajax response": "https://www.drupal.org/files/issues/2701085-16-cacheable_ajax_response-D83.patch",
-                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2020-09-26/3059836-21.patch",
+                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2022-07-21/3059836-25.patch",
                 "Argument 2 passed to Drupal\\jsonapi\\Routing\\Routes must be an instance of ResourceType": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch",
                 "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
                 "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
@@ -260,19 +273,19 @@
                 "Add cache buster to aggregated JS files": "https://git.drupalcode.org/issue/drupal-3243296/-/merge_requests/1.patch?v=1",
                 "Add getoriginal method for languageConfigOverride": "https://www.drupal.org/files/issues/2021-11-10/getOriginal-method-for-languageConfigOverride-3248728-3.patch",
                 "Allow having separate CSS files for RTL": "patches/core/rtl_styles.patch",
-                "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/2021-01-18/956186-128.patch",
-                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/2021-08-11/multiple-ajax-submissions-2876197-28.patch",
+                "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/2022-07-11/956186-141.patch",
+                "Custom Patch for CORE issues #2500313 and #2876197": "patches/core/combined-custom-patch-for-core-Issue-2500313-and-2876197-as-involes-double-patching-in-same-file.patch",
                 "Verify that the configured service exists before calling it in CacheFactory": "https://www.drupal.org/files/issues/2021-12-09/2429321-85.patch",
                 "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2021-01-06/3007424-108.patch",
                 "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2021-07-01/3063118-10.patch",
                 "CORE-26181 - Drupal alters SVG fill path with broken base url and breaks SVG CSS": "https://www.drupal.org/files/issues/2021-11-04/drupal-9.3.x-fix_broken_svg-2362643-81.patch",
-                "Issue 2685749: Add a Machine Name widget to core": "https://www.drupal.org/files/issues/2022-02-08/2685749-103.patch",
-                "Add views render caching on views ajax requests": "https://www.drupal.org/files/issues/2021-01-19/views-render_caching_ajax_requests-2500313-70-92x.patch",
+                "Issue 2685749: Add a Machine Name widget to core": "https://www.drupal.org/files/issues/2022-02-14/2685749-106.patch",
                 "Disable CSRF token check for non-CSRF vulnerable authentication providers": "https://www.drupal.org/files/issues/2019-05-17/core-X-CSRF-Token_request_header_check-3055260-3-8.7.1.patch",
                 "jQuery UI library order is incorrect": "https://www.drupal.org/files/issues/2021-07-19/3222107-jquery_ui_weight_fix-11.diff",
-                "Allow fixing corrupt CSS / JS issues without waiting for Browser cache to expire": "https://git.drupalcode.org/project/drupal/-/merge_requests/2377.patch",
+                "Allow fixing corrupt CSS / JS issues without waiting for Browser cache to expire": "https://git.drupalcode.org/project/drupal/-/merge_requests/2376.patch",
                 "Use Mailhelper to make site name RFC complaint": "patches/core/CORE-42856-use-mailhelper-to-make-rfc-2822-complaint.patch",
-                "Cannot use a / in route parameter": "https://www.drupal.org/files/issues/2021-02-11/2741939-31.patch"
+                "Cannot use a / in route parameter": "https://www.drupal.org/files/issues/2021-02-11/2741939-31.patch",
+                "Allow profiles to define a base/parent profile": "https://www.drupal.org/files/issues/2022-06-17/1356276-688_0.patch"
             },
             "drupal/mobile_number": {
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
@@ -428,7 +441,22 @@
                 }
             }
         },
-        "composer-exit-on-patch-failure": true
+        "composer-exit-on-patch-failure": true,
+        "patches-ignore": {
+            "drupal/lightning_core": {
+                "drupal/core": {
+                    "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch"
+                }
+            },
+            "acquia/lightning": {
+                "drupal/core": {
+                    "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch",
+                    "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2021-05-20/3143958-14-subprofile-support-9.2.x.patch",
+                    "REMOVE: 2031261 - Fix SQLite variable limit": "https://www.drupal.org/files/issues/2021-02-07/2031261-137.patch",
+                    "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch"
+                }
+            }
+        }
     },
     "scripts": {
         "blt-alias": "blt blt:init:shell-alias -y --ansi",

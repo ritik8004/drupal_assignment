@@ -17,7 +17,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -88,7 +88,7 @@ class SkuManager {
   /**
    * The database service.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\mysql\Driver\Database\mysql\Connection
    */
   protected $connection;
 
@@ -276,7 +276,7 @@ class SkuManager {
   /**
    * SkuManager constructor.
    *
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $connection
    *   Database service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
