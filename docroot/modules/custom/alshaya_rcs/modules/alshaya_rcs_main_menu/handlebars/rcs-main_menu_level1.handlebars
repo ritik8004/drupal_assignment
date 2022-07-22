@@ -24,13 +24,6 @@
   </div>
   <ul class="menu__list menu--one__list">
     <div class="menu-backdrop"></div>
-
-    {{#if aura_enabled }}
-      <div class="no--desktop">
-        <div id="aura-mobile-header-shop"></div>
-      </div>
-    {{/if}}
-
     {{#each menu_items as |menu_item|}}
       <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
@@ -50,5 +43,10 @@
         {{/if}}
       </li>
     {{/each}}
+    {{#if aura_enabled }}
+      <div class="no--desktop">
+        <div id="aura-mobile-header-shop"></div>
+      </div>
+    {{/if}}
   </ul>
 </div>
