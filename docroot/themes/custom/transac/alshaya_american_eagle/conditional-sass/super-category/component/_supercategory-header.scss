@@ -1,0 +1,9 @@
+.super-category-enabled {
+  header {
+    #mini-cart-wrapper {
+      @include breakpoint($desktop) {
+        height: rem(24);
+      }
+    }
+  }
+}

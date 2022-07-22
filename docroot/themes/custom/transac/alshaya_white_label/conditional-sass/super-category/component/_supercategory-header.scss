@@ -73,7 +73,7 @@
       }
 
       @include breakpoint($desktop) {
-        height: 2.25rem;
+        height: rem(24);
       }
     }
   }
