@@ -258,6 +258,54 @@ const helloMemberCustomerPhoneSearch = async (phoneNumber) => {
     });
 };
 
+/**
+ * Get hello member dictionary data.
+ *
+ * @param {string} phoneNumber
+ *   Customer phone number.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object which contains the response or
+ * the error object.
+ */
+const getHelloMemberDictionaryData = async (requestData) => {
+  return callHelloMemberApi('helloMemberGetDictionaryData', 'GET', requestData)
+    .then((response) => {
+      if (response.status !== 200) {
+        const message = hasValue(response.data.error_message) ? response.data.error_message : '';
+        logger.error('Error while trying to call customer phonesearch Api for hello member @params, Message: @message', {
+          '@message': message,
+          '@params': requestData,
+        });
+      }
+      return response;
+    });
+};
+
+/**
+ * Get hello member customer data by idenntifier id.
+ *
+ * @param {string} identifierNo
+ *   Customer phone number.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object which contains the response or
+ * the error object.
+ */
+const getHelloMemberCustomerInfoByIdentifier = async (identifierNo) => {
+  return callHelloMemberApi('helloMemberCustomerInfoByIdentifier', 'GET', { identifierNo })
+    .then((response) => {
+      if (response.status !== 200) {
+        const message = hasValue(response.data.error_message) ? response.data.error_message : '';
+        logger.error('Error while trying to call customer data by identifier id for hello member @params, Message: @message', {
+          '@message': message,
+          '@params': identifierNo,
+        });
+      }
+      return response;
+    });
+};
+
 export {
   getHelloMemberCustomerData,
   getHelloMemberTierProgressData,
@@ -265,4 +313,6 @@ export {
   getHelloMemberPointsToEarn,
   setHelloMemberLoyaltyCard,
   helloMemberCustomerPhoneSearch,
+  getHelloMemberDictionaryData,
+  getHelloMemberCustomerInfoByIdentifier,
 };

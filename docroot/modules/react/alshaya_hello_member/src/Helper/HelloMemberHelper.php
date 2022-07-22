@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_hello_member\Helper;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\mobile_number\MobileNumberUtilInterface;
 
 /**
  * Helper class for Hello Member.
@@ -19,15 +20,26 @@ class HelloMemberHelper {
   protected $configFactory;
 
   /**
+   * Mobile utility.
+   *
+   * @var \Drupal\mobile_number\MobileNumberUtilInterface
+   */
+  protected $mobileUtil;
+
+  /**
    * Hello Member constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
+   *   Mobile utility.
    */
   public function __construct(
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    MobileNumberUtilInterface $mobile_util
   ) {
     $this->configFactory = $config_factory;
+    $this->mobileUtil = $mobile_util;
   }
 
   /**
@@ -58,6 +70,27 @@ class HelloMemberHelper {
    */
   public function getCacheTags() {
     return $this->getConfig()->getCacheTags();
+  }
+
+  /**
+   * Get aura config.
+   *
+   * @return array
+   *   AURA related config.
+   */
+  public function getAuraConfig() {
+    $country_code = _alshaya_custom_get_site_level_country_code();
+    $alshaya_aura_config = $this->configFactory->get('alshaya_aura_react.settings');
+    $country_mobile_code = $this->mobileUtil->getCountryCode($country_code);
+
+    $config = [
+      'siteName' => $this->configFactory->get('system.site')->get('name'),
+      'country_mobile_code' => $country_mobile_code,
+      'mobile_maxlength' => $this->configFactory->get('alshaya_master.mobile_number_settings')->get('maxlength'),
+      'isoCurrencyCode' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
+    ];
+
+    return $config;
   }
 
   /**

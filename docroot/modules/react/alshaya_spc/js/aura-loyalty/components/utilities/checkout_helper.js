@@ -57,6 +57,7 @@ function processCheckoutCart(data) {
     : data.value;
 
   const apiData = window.auraBackend.updateLoyaltyCard(data.action, data.type, value);
+  console.log(apiData);
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
