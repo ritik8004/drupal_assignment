@@ -1,7 +1,7 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getOrderDetails } from './online_returns_util';
 import { getReturnedItems } from './return_confirmation_util';
-import { getDeliveryAddress, getPaymentDetails } from './return_request_util';
+import { getDeliveryAddress, getPaymentDetails, getReturnReasons } from './return_request_util';
 
 /**
  * Utility function to get order GTM info.
@@ -26,6 +26,29 @@ function getOrderGtmInfo() {
 }
 
 /**
+ * Util function to get the product return reason text.
+ *
+ * @param {string} returnReasonCode
+ *   The return reason code.
+ *
+ * @return {string}
+ *   The return reason text.
+ */
+function getReturnReasonText(returnReasonCode) {
+  const returnReasons = getReturnReasons();
+  // if return reason is not empty.
+  if (returnReasons.length > 0) {
+    // Filter out the object which has been selected by the user.
+    const selectedReturnReason = returnReasons.filter((item) => item.value === returnReasonCode);
+    if (selectedReturnReason) {
+      return selectedReturnReason[0].label;
+    }
+  }
+
+  return '';
+}
+
+/**
  * Get the product array of all the selected items.
  *
  * @param {array} itemsSelected
@@ -42,10 +65,10 @@ function getProductGtmInfo(itemsSelected) {
     if (gtmInfo && hasValue(gtmInfo.products) && hasValue(gtmInfo.products[item.sku])) {
       // Push the return reason and qty returned for individual item.
       if (hasValue(item.reason)) {
-        gtmInfo.products[item.sku].reason = item.reason;
+        gtmInfo.products[item.sku].reason = getReturnReasonText(item.reason);
       } else if (hasValue(item.returnData)
         && hasValue(item.returnData.reason)) {
-        gtmInfo.products[item.sku].reason = item.returnData.reason;
+        gtmInfo.products[item.sku].reason = getReturnReasonText(Number(item.returnData.reason));
       }
 
       if (hasValue(item.qty_requested)) {
@@ -179,4 +202,5 @@ export {
   getOrderGtmInfo,
   getPreparedOrderGtm,
   getProductGtmInfo,
+  getReturnReasonText,
 };
