@@ -7,7 +7,7 @@ class MembershipPopup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModelOpen: false,
+      isModelOpen: true,
     };
   }
 
@@ -47,8 +47,7 @@ class MembershipPopup extends React.Component {
           closeOnEscape={false}
         >
           <div className="hello-member-popup-form">
-            <a className="close-modal" onClick={(e) => this.closeModal(e)} />
-            <MembershipInfo />
+            <MembershipInfo close={this.closeModal.bind(this)}/>
           </div>
         </Popup>
       </>
