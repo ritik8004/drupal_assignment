@@ -18,6 +18,15 @@ export const isAuraIntegrationEnabled = () => isHelloMemberEnabled()
   && hasValue(drupalSettings.helloMember.auraIntegrationStatus);
 
 /**
+ * Helper function to check if aura integration with hello member is enabled.
+ */
+export const getAuraConfig = () =>  {
+  if (hasValue(drupalSettings.helloMember.auraConfig)) {
+    return drupalSettings.helloMember.auraConfig;
+  }
+}
+
+/**
  * Helper function to get the customer info from user session.
  */
 export const getHelloMemberCustomerInfo = () => {
@@ -77,7 +86,7 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       endpoint = '/V1/customers/apcTransactions'; // endpoint to get hello member points history.
       break;
     case 'helloMemberGetDictionaryData':
-      endpoint = '/V1/customers/apcDicData/HM_ACCRUAL_RATIO'; // endpoint to get hello member dictonary data.
+      endpoint = `/V1/customers/apcDicData/${endPointParams.type}`; // endpoint to get hello member dictonary data.
       break;
     case 'helloMemberGetPointsEarned':
       endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member points earned data.
@@ -87,6 +96,9 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       break;
     case 'helloMemberCustomerPhoneSearch':
       endpoint = `/V1/customers/apc-search/phone/${endPointParams.phoneNumber}`; // endpoint to search hello member by phone number.
+      break;
+    case 'helloMemberCustomerInfoByIdentifier':
+      endpoint = `/V2/customers/apc-points-balance/identifierNo/${endPointParams.identifierNo}`; // endpoint to search hello member by phone number.
       break;
 
     default:
