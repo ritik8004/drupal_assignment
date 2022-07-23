@@ -18,7 +18,7 @@
         &title {
           font-size: rem(32);
           margin-bottom: rem(24);
-          line-height: rem(32);
+          line-height: 1;
           color: $hm-membership-success-popup-title;
         }
 
@@ -38,7 +38,7 @@
           .hello-membership-terms {
             font-size: rem(12);
             margin-top: 0;
-            text-align: #{$left};
+            text-align: $left;
 
             @include breakpoint($upto-desktop) {
               font-size: rem(11);
@@ -47,7 +47,7 @@
 
           .hello-membership-continue {
             text-align: center;
-            padding: rem(36) 0 rem(36) 0;
+            padding: rem(36) 0;
 
             a {
               @extend %button-wide;
