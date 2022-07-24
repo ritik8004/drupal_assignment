@@ -48,12 +48,11 @@ class HelloMemberCartOffersVouchers extends React.Component {
             <a className="close-modal" onClick={() => this.togglePopup(false)}> close </a>
             <Tabs>
               <TabList>
-                <Tab>Title 1</Tab>
-                <Tab>Title 2</Tab>
+                <Tab>Bonus Vouchers</Tab>
+                <Tab>Member Offers</Tab>
               </TabList>
 
               <TabPanel>
-                <h2>Any content 1</h2>
                 <form
                   className="egift-validate-form"
                   method="post"
@@ -74,7 +73,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
 
               </TabPanel>
               <TabPanel>
-                <h2>Any content 2</h2>
                 <form
                   className="egift-validate-2-form"
                   method="post"
