@@ -41,7 +41,6 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
     return;
   }
 
-  $page['#attached']['library'][] = 'alshaya_white_label/hello-member-promotion';
   $page['#attached']['drupalSettings']['helloMember'] = $hello_member_settings;
 }
 
@@ -435,4 +434,18 @@ function alshaya_hello_member_preprocess_user(&$variables) {
   // If hello_member_enabled to add edit button above Account details.
   $variables['hello_member_status'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
   $variables['user_edit_url'] = Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]);
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_hello_member_alshaya_spc_cart_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  // Do not proceed if hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+  $build['#attached']['library'][] = 'alshaya_white_label/hello-member-promotion';
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
 }
