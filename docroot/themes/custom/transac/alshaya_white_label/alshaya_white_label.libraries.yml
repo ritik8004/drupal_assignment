@@ -818,6 +818,11 @@ hello-member-otp:
     theme:
       css/conditional-sass/hello-member-otp/hello-member-otp.ltr.css: {}
 
+hello-member-promotion:
+  css:
+    theme:
+      css/conditional-sass/hello-member-promotion/hello-member-promotion.ltr.css: {}
+
 cls-initial-layout-common:
   css:
     theme:

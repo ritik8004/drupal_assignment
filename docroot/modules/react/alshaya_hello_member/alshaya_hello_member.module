@@ -41,6 +41,7 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
     return;
   }
 
+  $page['#attached']['library'][] = 'alshaya_white_label/hello-member-promotion';
   $page['#attached']['drupalSettings']['helloMember'] = $hello_member_settings;
 }
 
