@@ -352,6 +352,8 @@ const getProcessedCartData = async (cartData) => {
       items: cartData.totals.items,
       allExcludedForAdcard: cartData.totals.extension_attributes.is_all_items_excluded_for_adv_card,
     },
+    loyalty_card: (typeof cartData.cart.extension_attributes.loyalty_card !== 'undefined') ? cartData.cart.extension_attributes.loyalty_card : '',
+    loyalty_type: (typeof cartData.cart.extension_attributes.loyalty_type !== 'undefined') ? cartData.cart.extension_attributes.loyalty_type : '',
     items: [],
     ...(collectionPointsEnabled() && hasValue(cartData.shipping))
     && { collection_charge: cartData.shipping.price_amount || '' },

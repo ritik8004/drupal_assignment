@@ -258,6 +258,28 @@ const helloMemberCustomerPhoneSearch = async (phoneNumber) => {
     });
 };
 
+/**
+ * Get hello member dictionary data.
+ *
+ * @param {string} phoneNumber
+ *   Customer phone number.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object which contains the response or
+ * the error object.
+ */
+const getHelloMemberDictionaryData = async (requestData) => callHelloMemberApi('helloMemberGetDictionaryData', 'GET', requestData)
+  .then((response) => {
+    if (response.status !== 200) {
+      const message = hasValue(response.data.error_message) ? response.data.error_message : '';
+      logger.error('Error while trying to call hello meber dictionary data Api @params, Message: @message', {
+        '@message': message,
+        '@params': requestData,
+      });
+    }
+    return response;
+  });
+
 export {
   getHelloMemberCustomerData,
   getHelloMemberTierProgressData,
@@ -265,4 +287,5 @@ export {
   getHelloMemberPointsToEarn,
   setHelloMemberLoyaltyCard,
   helloMemberCustomerPhoneSearch,
+  getHelloMemberDictionaryData,
 };

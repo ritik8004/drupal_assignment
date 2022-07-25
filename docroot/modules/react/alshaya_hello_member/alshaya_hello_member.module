@@ -33,6 +33,7 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   $hello_member_settings = [
     'status' => $helloMemberHelper->isHelloMemberEnabled(),
     'auraIntegrationStatus' => $helloMemberHelper->isAuraIntegrationEnabled(),
+    'auraFormConfig' => $helloMemberHelper->getAuraFormConfig(),
   ];
   $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
 
@@ -415,4 +416,36 @@ function alshaya_hello_member_preprocess_user(&$variables) {
   // If hello_member_enabled to add edit button above Account details.
   $variables['hello_member_status'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
   $variables['user_edit_url'] = Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]);
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ */
+function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
+  // Do not proceed if Alshaya Hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
+  $auraModuleExists = \Drupal::moduleHandler()->moduleExists('alshaya_aura_react');
+
+  // Do not proceed if Alshaya aura module is not enabled.
+  // Also, do not procees if alshaya aura module is enabled
+  // and aura setting is also enabled. // For hello member, aura settings has
+  // to be disabled and we need to attach aura library but
+  // don't want to use aura feature as a whole.
+  if (!($auraModuleExists) ||
+    ($auraModuleExists && \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() === TRUE)) {
+    return;
+  }
+
+  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  // Attach the library for Aura backend based on the commerce backend version.
+  $build['#attached']['library'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
+  $build['#strings'] = _alshaya_hello_member_aura_static_strings();
 }
