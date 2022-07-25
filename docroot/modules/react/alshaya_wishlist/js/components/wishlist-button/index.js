@@ -145,16 +145,15 @@ class WishlistButton extends React.Component {
         // return -1. We need to remove product from the local storage if
         // skuIndex is greater than -1.
         const skuIndex = getWishListDataIndexForSku(sku);
-        if (skuIndex > -1) {
+        if (skuIndex !== null && skuIndex > -1) {
           // Get existing wishlist data from storage.
           const wishListItems = getWishListData();
 
-          if (wishListItems) {
-            // Remove the entry for given product sku from existing storage data.
-            wishListItems.splice(skuIndex, 1);
-            // Save back to storage.
-            addWishListInfoInStorage(wishListItems);
-          }
+          // Remove the entry for given product sku from existing storage data.
+          wishListItems.splice(skuIndex, 1);
+
+          // Save back to storage.
+          addWishListInfoInStorage(wishListItems);
 
           // Push product values to GTM for removeFromWishlist event.
           pushWishlistSeoGtmData({
@@ -343,16 +342,15 @@ class WishlistButton extends React.Component {
         if (isAnonymousUser()) {
           // Remove product from wishlist.
           const skuIndex = getWishListDataIndexForSku(productSku);
-          if (skuIndex > -1) {
+          if (skuIndex !== null && skuIndex > -1) {
             // Get existing wishlist data from storage.
             const wishListItems = getWishListData();
 
-            if (wishListItems) {
-              // Remove the entry for given product sku from existing storage data.
-              wishListItems.splice(skuIndex, 1);
-              // Save back to storage.
-              addWishListInfoInStorage(wishListItems);
-            }
+            // Remove the entry for given product sku from existing storage data.
+            wishListItems.splice(skuIndex, 1);
+
+            // Save back to storage.
+            addWishListInfoInStorage(wishListItems);
           }
         }
         productInfo.sku = productSku;
