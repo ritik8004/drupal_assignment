@@ -7,8 +7,10 @@ exports.prepareData = function prepareData(settings, inputs) {
     highlightTiming,
   } = settings;
 
+  // Clone the input data.
+  let inputsClone = JSON.parse(JSON.stringify(inputs));
   // Clean up data.
-  inputs = processData(inputs, menuMaxDepth);
+  inputsClone = processData(inputsClone, menuMaxDepth);
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -18,12 +20,12 @@ exports.prepareData = function prepareData(settings, inputs) {
     case 'default':
     default:
       // Distribute L3 items into columns.
-      inputs = splitIntoCols(inputs, maxNbCol, idealMaxColLength);
+      inputsClone = splitIntoCols(inputsClone, maxNbCol, idealMaxColLength);
   }
 
   return {
     'menu_type': menuLayout,
-    'menu_items': inputs,
+    'menu_items': inputsClone,
     'user_logged_in': drupalSettings.user.uid > 1,
     'path_prefix': drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix,
     'aura_enabled': drupalSettings.aura.enabled,
