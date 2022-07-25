@@ -1,0 +1,19 @@
+.hello-member-promo-section {
+  .hm-promo-modal-content {
+    .react-tabs__tab-panel {
+      .hm-promo-tab-content-list {
+        .hm-promo-tab-cont-item {
+          .item-title {
+            font-family: $hnm-demibold;
+          }
+        }
+      }
+
+      .hm-promo-tab-cont-action {
+        input {
+          font-family: $hnm-demibold;
+        }
+      }
+    }
+  }
+}

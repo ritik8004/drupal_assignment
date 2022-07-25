@@ -1,3 +1,73 @@
-.hello-member-promotion {
-    font-family: $alshaya-thin;
+.hello-member-promo-section {
+  @include breakpoint($only-mobile) {
+    order: 3;
+    text-align: center;
+    background-color: $primary_bg;
+    padding-bottom: rem(16);
+  }
+
+  .hm-promo-pop-link {
+    float: $right;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: rem(14);
+
+    @include breakpoint($only-mobile) {
+      float: none;
+    }
+  }
+
+  .popup-container {
+    .popup-content {
+      width: rem(488) !important;
+      padding: 0 !important;
+    }
+
+    .hm-promo-modal-title {
+      background-color: $primary_bg;
+      color: $hm-promo-pop-txt;
+      font-size: rem(20);
+      font-family: $alshaya-bold;
+      text-align: center;
+      padding: rem(15) 0;
+      box-shadow: 0 0.5px 0 0 $hm-promo-sel-tab-border;
+    }
+
+    .close-modal {
+      @include icon(close, after) {
+        font-weight: bold;
+      }
+
+      position: relative;
+      float: $right;
+      top: rem(7);
+      font-size: rem(16);
+      padding: rem(8) rem(12);
+      cursor: pointer;
+    }
+
+    .hm-promo-modal-content {
+      padding: rem(14) rem(30);
+      padding-#{$right}: rem(46);
+      padding-#{$left}: rem(36);
+
+      @include breakpoint($only-mobile) {
+        padding-#{$right}: rem(20);
+        padding-#{$left}: rem(20);
+      }
+
+      .error-info-section {
+        display: none;
+        margin: rem(30) 0;
+        background-color: $hm-promo-err-sec-bg;
+        color: $hm-promo-btn-bg;
+        font-size: rem(12);
+        font-family: $alshaya-bold;
+        letter-spacing: 0.6px;
+        padding: rem(6) rem(8);
+      }
+    }
+  }
 }
