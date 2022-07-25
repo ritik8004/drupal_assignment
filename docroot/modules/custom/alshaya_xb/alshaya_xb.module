@@ -11,8 +11,7 @@ use Drupal\Core\Render\Markup;
  * Implements hook_page_attachments().
  */
 function alshaya_xb_page_attachments(array &$attachments) {
-  $is_xb_route = \Drupal::service('alshaya_xb.xb_route_check')->isCrossBorderRoute();
-  if ($is_xb_route) {
+  if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
     $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_cross_border';
   }
 }
@@ -21,7 +20,7 @@ function alshaya_xb_page_attachments(array &$attachments) {
  * Implements hook_page_bottom().
  */
 function alshaya_xb_page_bottom(array &$page_bottom) {
-  if (!\Drupal::service('alshaya_xb.xb_route_check')->isCrossBorderRoute()) {
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
     return;
   }
 
