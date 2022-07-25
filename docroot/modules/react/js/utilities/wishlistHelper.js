@@ -132,7 +132,7 @@ export const getWishListStorageKey = () => (isAnonymousUser()
 /**
  * Return the current wishlist info if available.
  *
- * @returns {object}
+ * @returns {null|Object}
  *  An object of wishlist information.
  */
 export const getWishListData = (strgKey) => {
@@ -554,7 +554,7 @@ export const removeDiffFromWishlist = (productsObj) => {
             // return -1. We need to remove product from the local storage if
             // skuIndex is greater than -1.
             const skuIndex = getWishListDataIndexForSku(item.sku);
-            if (skuIndex > -1) {
+            if (skuIndex !== null && skuIndex > -1) {
               // Remove the entry for given product sku from existing storage data.
               wishListItems.splice(skuIndex, 1);
 
