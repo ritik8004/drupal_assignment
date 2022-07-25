@@ -51,6 +51,9 @@ function alshaya_rcs_color_split_page_attachments(array &$attachments) {
     'alshaya_spc.checkout',
     'alshaya_spc.checkout.confirmation',
     'alshaya_algolia_react.search',
+    'alshaya_master.home',
+    'alshaya_wishlist.users_wishlist',
+    'alshaya_wishlist.user_account_wishlist',
   ])) {
     return;
   }
