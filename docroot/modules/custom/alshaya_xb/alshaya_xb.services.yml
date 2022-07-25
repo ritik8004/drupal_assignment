@@ -8,3 +8,8 @@ services:
     arguments: ['@request_stack']
     tags:
       - { name: event_subscriber }
+
+  alshaya_xb.route_subscriber:
+    class: Drupal\alshaya_xb\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
