@@ -231,6 +231,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'verified AR',
         'context' => 'hello_member',
       ],
+      'View all Benefits' => [
+        'ar' => 'عرض كل الفوائد',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
