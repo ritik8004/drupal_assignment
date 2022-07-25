@@ -451,11 +451,11 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
 
   $auraModuleExists = \Drupal::moduleHandler()->moduleExists('alshaya_aura_react');
 
-  // Do not proceed if Alshaya aura module is not enabled.
-  // Also, do not procees if alshaya aura module is enabled
-  // and aura setting is also enabled. // For hello member, aura settings has
-  // to be disabled and we need to attach aura library but
-  // don't want to use aura feature as a whole.
+  // Do not proceed if Alshaya aura module is disabled.
+  // Or module is enabled and aura setting is also enabled.
+  // For hello member, aura settings has to be disabled and
+  // we need to attach aura library but don't want to
+  // use aura existing feature as a whole.
   if (!($auraModuleExists) ||
     ($auraModuleExists && \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() === TRUE)) {
     return;

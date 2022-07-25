@@ -261,9 +261,6 @@ const helloMemberCustomerPhoneSearch = async (phoneNumber) => {
 /**
  * Get hello member dictionary data.
  *
- * @param {string} phoneNumber
- *   Customer phone number.
- *
  * @returns {Promise}
  *   Promise that resolves to an object which contains the response or
  * the error object.
