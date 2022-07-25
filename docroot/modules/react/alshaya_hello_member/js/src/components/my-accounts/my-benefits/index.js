@@ -52,12 +52,19 @@ class MyBenefits extends React.Component {
           '@message': offerResponse.data.message,
         });
       }
+    } else {
+      // Set wait to true, and remove loader.
+      this.setState({
+        wait: true,
+      });
+      removeFullScreenLoader();
     }
   }
 
   render() {
     const { wait, myOffersList, myCouponsList } = this.state;
-
+    // Show Block title.
+    document.querySelector('#my-accounts-hello-member').closest('.block').classList.remove('no-benefits');
     if (!wait) {
       return (
         <div className="my-benefit-wrapper" style={{ animationDelay: '0.4s' }}>
@@ -67,6 +74,8 @@ class MyBenefits extends React.Component {
     }
 
     if (myCouponsList === null && myOffersList === null) {
+      // Hide Block title.
+      document.querySelector('#my-accounts-hello-member').closest('.block').classList.add('no-benefits');
       return null;
     }
 
