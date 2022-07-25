@@ -47,45 +47,39 @@ exports.prepareData = function prepareData(settings, inputs) {
  *   The cleaned data.
  */
 const processData = function (data, maxLevel) {
+  // Convert arrays to objects;
+  data = Object.assign({}, data);
 
-  /**
-   * Iterate and remove unwanted data.
-   *
-   * @param {object/array} data
-   *   The data.
-   *
-   * @return {object}
-   *   The clean data.
-   */
-  function iterate(data) {
-    // Convert arrays to objects;
-    data = Object.assign({}, data);
-
-    // Loop object;
-    for (const [key, value] of Object.entries(data)) {
-      // Check if we have an array or object.
-      if ((/array|object/).test(typeof value)) {
-        // Check if the item should be included in the menu.
-        if (typeof data[key].include_in_menu !== 'undefined'
-          && !data[key].include_in_menu) {
-          delete (data[key]);
-        }
-        // Check if we reached max level.
-        else if (typeof data[key].level !== 'undefined'
-          && data[key].level - 1 > maxLevel) {
-          delete (data[key]);
-        }
-        // Go one level deeper into the data.
-        else {
-          data[key] = iterate(value);
-        }
+  // Loop object;
+  for (const [key, value] of Object.entries(data)) {
+    // Check children.
+    if (typeof data[key].children !== 'undefined'
+      && Object.values(data[key].children).length < 1) {
+      // When the menus don't have children, we set to false. This is required
+      // because Handlebars doesn't check empty objects in the same way it does
+      // for arrays, see https://handlebarsjs.com/guide/builtin-helpers.html#if.
+      data[key].children = false;
+    }
+    // Check if we have an array or object.
+    if ((/array|object/).test(typeof value)) {
+      // Check if the item should be included in the menu.
+      if (typeof data[key].include_in_menu !== 'undefined'
+        && !data[key].include_in_menu) {
+        delete (data[key]);
+      }
+      // Check if we reached max level.
+      else if (typeof data[key].level !== 'undefined'
+        && data[key].level - 1 > maxLevel) {
+        delete (data[key]);
+      }
+      // Go one level deeper into the data.
+      else {
+        data[key] = processData(value, maxLevel);
       }
     }
-
-    return data;
   }
 
-  return iterate(data);
+  return data;
 }
 
 /**
