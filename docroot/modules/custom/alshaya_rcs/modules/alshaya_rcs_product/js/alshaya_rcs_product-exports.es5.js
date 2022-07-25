@@ -79,42 +79,35 @@ function getAdditionalPdpDescription() {
 }
 
 /**
- * Replace placeholders and get related products.
+ * Get data for product recommendations.
  *
  * @param {object} products
- *   The product object.
+ *   Products to be displayed.
  * @param {string} sectionTitle
  *   The translated title for related, upsell.
  *
- * @returns {*}
- *   Html with placeholders replaced.
+ * @returns {object}
+ *   Data to use for rendering product recommendations.
  */
 function getProductRecommendation(products, sectionTitle) {
-  // Create the containers for carousel.
-  const related = jQuery('<div />');
-  related.append(jQuery('.rcs-templates--related-product-wrapper').html());
-  related.find('.subtitle').html(sectionTitle);
+  const data = {
+    products: [],
+    subtitle: sectionTitle,
+  };
 
-  // Get Product teaser template with tokens.
-  const productTeaser = jQuery('.rcs-templates--product-teaser').html();
-
-  // Replace tokens and add teaser to the container.
-  let finalMarkup = '';
-  products.forEach((product, index) => {
-    related.find('.owl-carousel').append('<div id="row' + index + '" class="views-row"/>');
-    related.find('#row' + index).append(productTeaser);
-    const attributes = globalThis.rcsPhGetSetting('placeholderAttributes');
-    finalMarkup = related.html();
-    rcsPhReplaceEntityPh(finalMarkup, 'product_teaser', product, drupalSettings.path.currentLanguage)
-      .forEach(function eachReplacement(r) {
-        const fieldPh = r[0];
-        const entityFieldValue = r[1];
-        finalMarkup = globalThis.rcsReplaceAll(finalMarkup, fieldPh, entityFieldValue);
-      });
-    related.html(finalMarkup);
+  products.forEach((product) => {
+    data.products.push({
+      sku: product.sku,
+      url: `${product.url_key}.html`,
+      name: product.name,
+      image: window.commerceBackend.getTeaserImage(product),
+      price_details: window.commerceBackend.getPriceForRender(product),
+      cleanSku: Drupal.cleanCssIdentifier(product.sku),
+      gtm: product.gtm_attributes,
+    });
   });
 
-  return related.html();
+  return data;
 }
 
 /**
@@ -137,40 +130,6 @@ function getFormattedAmount(priceAmount) {
   return amount.toFixed(drupalSettings.alshaya_spc.currency_config.decimal_points);
 };
 exports.getFormattedAmount = getFormattedAmount;
-
-/**
- * Get SKU based on attribute option id.
- *
- * @param {string} $sku
- *   The parent sku value.
- * @param {string} attribute
- *   Attribute to search for.
- * @param {Number} option_id
- *   Option id for selected attribute.
- *
- * @return {string}
- *   SKU value matching the attribute option id.
- */
-function getChildSkuFromAttribute(sku, attribute, option_id) {
-  const combinations = window.commerceBackend.getConfigurableCombinations(sku);
-
-  if (!Drupal.hasValue(combinations.attribute_sku) ) {
-    Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
-      '@sku': sku
-    });
-    return null;
-  }
-  if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
-    Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
-      '@attribute': attribute,
-      '@option_id': option_id,
-      '@sku': sku
-    });
-    return null;
-  }
-
-  return combinations.attribute_sku[attribute][option_id][0];
-}
 
 /**
  * Get the swatch image url for the provided sku.
@@ -293,7 +252,8 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(upsell_products, Drupal.t('You may also like', {}, { context: 'alshaya_static_text|pdp_upsell_title' }));
+      const upsellProducts = getProductRecommendation(upsell_products, Drupal.t('You may also like', {}, { context: 'alshaya_static_text|pdp_upsell_title' }));
+      html += handlebarsRenderer.render('product.recommended_products_block', upsellProducts);
       break;
 
     case 'mobile-related-products':
@@ -304,7 +264,8 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(related_products, Drupal.t('Related', {}, { context : 'alshaya_static_text|pdp_related_title' }));
+      const relatedProducts = getProductRecommendation(related_products, Drupal.t('Related', {}, { context : 'alshaya_static_text|pdp_related_title' }));
+      html += handlebarsRenderer.render('product.recommended_products_block', relatedProducts);
       break;
 
     case 'mobile-crosssell-products':
@@ -315,7 +276,8 @@ exports.render = function render(
         break;
       }
 
-      html = getProductRecommendation(crosssell_products, Drupal.t('Customers also bought', {}, { context: 'alshaya_static_text|pdp_crosssell_title' }));
+      const crossselProducts = getProductRecommendation(crosssell_products, Drupal.t('Customers also bought', {}, { context: 'alshaya_static_text|pdp_crosssell_title' }));
+      html += handlebarsRenderer.render('product.recommended_products_block', crossselProducts);
       break;
 
     case 'classic-gallery':
@@ -572,7 +534,7 @@ exports.computePhFilters = function (input, filter) {
             let selectOption = { value: value.value_index, text: label };
 
             if (isOptionSwatch) {
-              const childSku = getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
+              const childSku = window.commerceBackend.getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
               // If configurableColorDetails has value, then we process the
               // swatch data in
               // Drupal.alshaya_color_images_generate_swatch_markup().

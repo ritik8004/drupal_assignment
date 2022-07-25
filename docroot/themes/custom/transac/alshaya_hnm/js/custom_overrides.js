@@ -36,6 +36,19 @@
       $('.path--user #details-privilege-card-wrapper').each(function () {
         $(this).find('.details-privilege-card-wrapper-inside').css('height', 'auto');
       });
+
+      if (window.MobileDetect) {
+        var md = new window.MobileDetect(window.navigator.userAgent);
+        if (md.mobile()) {
+          var $pdpBNPCtaDiv = $('.acq-content-product .basic-details-wrapper .mobile-only-show', context);
+          $pdpBNPCtaDiv.toggle();
+          $('#pay-promo-mobile-comp', context).once('toggle-cta').click(function () {
+            $pdpBNPCtaDiv.toggle();
+            $('.pay-emi-lbl', this).toggleClass('ui-state-hide');
+            $(this).toggleClass('lbl-open');
+          });
+        }
+      }
     }
   };
 

@@ -1,13 +1,46 @@
 import React from 'react';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
-const PriceElement = ({ amount }) => {
+/**
+ * Render max amount element.
+ */
+const MaxPriceItem = ({ maxAmount }) => {
+  if (!hasValue(maxAmount)) {
+    return (null);
+  }
+  const { decimalPoints } = drupalSettings.reactTeaserView.price;
+  return (
+    <>
+      <span className="min-max-separator">-</span>
+      {Number(maxAmount).toFixed(decimalPoints)}
+    </>
+  );
+};
+
+/**
+ * Render price item element.
+ */
+const PriceItem = ({ amount, maxAmount }) => {
+  const { decimalPoints } = drupalSettings.reactTeaserView.price;
+
+  return (
+    <span key="amount" className="price-amount">
+      {Number(amount).toFixed(decimalPoints)}
+      <MaxPriceItem maxAmount={maxAmount} />
+    </span>
+  );
+};
+
+const PriceElement = ({ amount, maxAmount }) => {
   if (typeof amount === 'undefined') {
     return (null);
   }
 
   const priceParts = [
-    (<span key="currency" className="price-currency suffix">{drupalSettings.reactTeaserView.price.currency}</span>),
-    (<span key="amount" className="price-amount">{amount.toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}</span>),
+    (
+      <span key="currency" className="price-currency suffix">{drupalSettings.reactTeaserView.price.currency}</span>
+    ),
+    (<PriceItem key="price-item" amount={amount} maxAmount={maxAmount} />),
   ];
 
   return (

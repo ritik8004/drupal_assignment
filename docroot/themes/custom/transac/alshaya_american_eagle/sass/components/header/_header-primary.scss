@@ -251,8 +251,8 @@ header.c-header {
       }
 
       @include breakpoint($desktop) {
-        top: 0.0625rem;
-        height: 1.875rem;
+        top: 0;
+        height: rem(24);
         width: 1.6875rem;
         #{$left}: 0.3125rem;
 
@@ -425,7 +425,7 @@ header {
 
       @include breakpoint($tablet) {
         width: 1.4375rem;
-        height: 1.875rem;
+        height: rem(18);
         bottom: 0;
       }
     }
@@ -1073,5 +1073,13 @@ body {
     .branding__menu {
       z-index: 14;
     }
+  }
+}
+
+.block-cart-mini-block,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  .cart-link {
+    height: rem(24);
   }
 }

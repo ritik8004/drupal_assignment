@@ -195,6 +195,11 @@ class OnlineReturnController extends ControllerBase {
     // Adding address fields configuration to display user address details.
     $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
 
+    // Get return configurations.
+    $returnConfiguration = $this->onlineReturnsApiHelper->getReturnsApiConfig(
+      $this->languageManager()->getCurrentLanguage()->getId(),
+    );
+
     // Attach library for return page react component.
     $build['#markup'] = '<div id="alshaya-return-confirmation"></div>';
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_confirmation';
@@ -205,6 +210,7 @@ class OnlineReturnController extends ControllerBase {
       'returnConfirmationStrings' => $returnConfig->get('rows'),
       'dateFormat' => $returnConfig->get('return_date_format'),
       'timeZone' => date_default_timezone_get(),
+      'returnConfig' => $returnConfiguration,
       'helperBlock' => $this->getHelperBlock(),
     ];
     return $build;

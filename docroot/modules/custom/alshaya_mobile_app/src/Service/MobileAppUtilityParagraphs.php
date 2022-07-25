@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
+use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
@@ -139,6 +140,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Super Category Manager.
    * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
    *   Path Validator service object.
+   * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page
+   *   Product Category Page service.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -162,9 +165,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     BlockManagerInterface $block_plugin_manager,
     Connection $database,
     AlshayaSuperCategoryManager $super_category_manager,
-    PathValidatorInterface $path_validator
+    PathValidatorInterface $path_validator,
+    ProductCategoryPage $product_category_page
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper, $database, $super_category_manager, $path_validator);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper, $database, $super_category_manager, $path_validator, $product_category_page);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
@@ -891,21 +895,28 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       // Invoke views display in executeInRenderContext to avoid cached
       // metadata leak issue.
       // @See https://www.drupal.org/project/drupal/issues/2450993
-      $nodes = $this->renderer->executeInRenderContext(
-        new RenderContext(),
-        function () use ($entity, $category_id) {
-          $carousel_product_limit = (int) $entity->get('field_category_carousel_limit')->getString();
-          return _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $carousel_product_limit);
-        }
-      );
+      // Execute this only if the config is set to get data from Algolia.
+      $category_carousel_return_products = $this->configFactory->get('alshaya_mobile_app.settings')->get('category_carousel_return_products');
+      if ($category_carousel_return_products) {
+        $nodes = $this->renderer->executeInRenderContext(
+          new RenderContext(),
+          function () use ($entity, $category_id) {
+            $carousel_product_limit = (int) $entity->get('field_category_carousel_limit')->getString();
+            return _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $carousel_product_limit);
+          }
+        );
 
-      if (!empty($nodes)) {
-        $data['items'] = array_map(function ($node) {
-          $this->cacheableEntities[] = $node;
-          return $this->skuManager->getSkuForNode($node);
-        }, $nodes);
+        if (!empty($nodes)) {
+          $data['items'] = array_map(function ($node) {
+            $this->cacheableEntities[] = $node;
+            return $this->skuManager->getSkuForNode($node);
+          }, $nodes);
+        }
       }
+      // Add the required algolia data.
+      $data['algolia_data'] = $this->getAlgoliaData($category_id, $this->currentLanguage);
     }
+
     return $data;
   }
 

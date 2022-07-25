@@ -1,0 +1,5 @@
+alshaya_hello_member.hello_member_config:
+  route_name: alshaya_hello_member.hello_member_config
+  title: 'Alshaya Hello Member settings'
+  description: 'Configure Alshaya Hello Member settings.'
+  parent: alshaya_master.alshaya_admin

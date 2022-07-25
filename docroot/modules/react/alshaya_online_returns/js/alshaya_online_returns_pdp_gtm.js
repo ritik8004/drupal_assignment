@@ -25,6 +25,7 @@
       // Now check if variant information is available or not. If available
       // then use return eligiblity from variant else from parent.
       if (Drupal.hasValue(product.variant)
+        && Drupal.hasValue(parentProduct.variants)
         && Drupal.hasValue(parentProduct.variants[product.variant])) {
         product.returnEligibility = parentProduct.variants[product.variant].eligibleForReturn ? 'yes' : 'no';
       } else {
