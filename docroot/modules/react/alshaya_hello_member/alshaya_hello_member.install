@@ -29,7 +29,7 @@ function alshaya_hello_member_install() {
 
   // Set the Hello member header block
   // to appear just above the mini cart block.
-  $my_account_links = (int) $config_factory->get('block.block.alshayawishlistheaderblock')->get('weight');
+  $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
   $config_factory->getEditable('block.block.hellomemberheaderblock')->set('weight', $my_account_links - 2)->save();
 
   // Enable points history link in the menu.
