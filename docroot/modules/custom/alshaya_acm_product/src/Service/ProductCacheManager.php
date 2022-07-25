@@ -14,6 +14,13 @@ use Drupal\Core\Cache\CacheBackendInterface;
 class ProductCacheManager {
 
   /**
+   * Variable to if data should be used from cache or not.
+   *
+   * @var bool
+   */
+  public static $useCache = TRUE;
+
+  /**
    * Cache backend for product_processed_data cache.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -42,6 +49,11 @@ class ProductCacheManager {
    *   Value from cache if found.
    */
   public function get(SKU $sku, string $key) {
+    // Return from here is useCache is set as false.
+    if (!self::$useCache) {
+      return NULL;
+    }
+
     $cid = $this->getSkuCacheId($sku, $key);
 
     $static = &drupal_static('alshaya_product_processed_cached', []);
@@ -69,8 +81,6 @@ class ProductCacheManager {
   public function set(SKU $sku, string $key, $data, ?array $tags = []) {
     $cid = $this->getSkuCacheId($sku, $key);
 
-    $sku_tags = self::getAlshayaProductTags($sku);
-    $tags = is_array($tags) ? Cache::mergeTags($tags, $sku_tags) : $sku_tags;
     $this->cache->set($cid, $data, Cache::PERMANENT, $tags);
 
     $static = &drupal_static('alshaya_product_processed_cached', []);

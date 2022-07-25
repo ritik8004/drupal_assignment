@@ -214,11 +214,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
     }
 
-    // Invalidate our custom cache tags.
-    $cache_tags = Cache::mergeTags(
-      $cache_tags,
-      ProductCacheManager::getAlshayaProductTags($entity)
-    );
+    ProductCacheManager::$useCache = FALSE;
 
     $this->cacheTagsInvalidator->invalidateTags($cache_tags);
 
