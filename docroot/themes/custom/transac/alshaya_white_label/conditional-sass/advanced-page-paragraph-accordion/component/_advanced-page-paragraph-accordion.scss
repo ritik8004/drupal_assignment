@@ -1,4 +1,4 @@
-.egift-landing-page {
+.nodetype--advanced_page {
   .c-accordion-delivery-option-parent {
     display: block;
 
@@ -27,7 +27,7 @@
     .c-accordion__title,
     .c-accordion_content {
       border: none;
-      background-color: $egift-accordion-bg;
+      background-color: $advanced-page-accordion-bg;
       text-align: $left;
     }
 
@@ -36,7 +36,7 @@
       margin-top: 1rem;
       font-size: 0.813rem;
       text-transform: none;
-      color: $egift-accordion-title;
+      color: $advanced-page-accordion-title;
       height: auto;
       line-height: 1.25rem;
       letter-spacing: 0.65px;
@@ -55,7 +55,7 @@
         #{$right}: 1.5rem;
         top: 1.5rem;
         font-size: 1.5rem;
-        color: $egift-accordion-title;
+        color: $advanced-page-accordion-title;
       }
 
       &::after {
@@ -66,11 +66,11 @@
 
       &.ui-state-active {
         margin-bottom: 0;
-        color: $egift-accordion-active-title;
+        color: $advanced-page-accordion-active-title;
 
         &::after {
           transform: rotate(180deg);
-          color: $egift-accordion-active-title;
+          color: $advanced-page-accordion-active-title;
           position: absolute;
           top: 0.6rem;
 
@@ -102,7 +102,7 @@
 
       p {
         margin-bottom: 0;
-        color: $egift-accordion-content;
+        color: $advanced-page-accordion-content;
         font-size: 0.813rem;
       }
     }

@@ -153,7 +153,7 @@ $egift-titamium-white: #e4e4e4;
 $egift-gray: #979797;
 $cyan-blue: #387fcb;
 $prussian_blue: #063971;
-$egift-button-hover: rgba(51, 51, 51, 0.1);
+$button-hover: rgba(51, 51, 51, 0.1);
 $speech-red: #c00;
 $red-orange: #e6591b;
 
@@ -2166,17 +2166,12 @@ $egift-landing-page-sub-block-title: $mothercare-black;
 $egift-landing-page-sub-block-subtitle: $black-two;
 $egift-landing-page-one-row-two-col-box-bg: $egift-titamium-white;
 $egift-button-border: $_gray_222;
-$egift-accordion-title: $mothercare-black;
-$egift-accordion-active-title: $mothercare-black;
-$egift-accordion-content: $black-two;
-$egift-banner-bg: $_algolia_suggestion_list_bg;
 $egift-breadcrumb-border: $_gray;
-$egift-accordion-bg: $white-four;
 $egift-banner-title: $_gray_222;
 $egift-myaccount-button: $prussian_blue;
 $egift-myaccount-topup-button: $prussian_blue;
 $egift-landing-page-button: $_gray_222;
-$egift-landing-page-button-hover: $egift-button-hover;
+$egift-landing-page-button-hover: $button-hover;
 
 // Wishlist
 $wishlist-header-notification-border: $pumpkin-orange;
@@ -2323,3 +2318,13 @@ $hello-member-loyalty-options-border: $white-smoke-light;
 $hello-member-loyalty-aura-form-btn: $_aura-disabled;
 $hello-member-loyalty-aura-form-btn-bg: $white-five;
 $hello-member-loyalty-aura-disable-select-bg: $greyish;
+
+// Advanced Page components.
+$advanced-page-accordion-active-title: $mothercare-black;
+$advanced-page-accordion-bg: $white-four;
+$advanced-page-accordion-title: $mothercare-black;
+$advanced-page-accordion-content: $black-two;
+$advanced-page-banner-bg: $_algolia_suggestion_list_bg;
+$advanced-page-banner-title: $_gray_222;
+$advanced-page-button: $_gray_222;
+$advanced-page-button-hover: $button-hover;
