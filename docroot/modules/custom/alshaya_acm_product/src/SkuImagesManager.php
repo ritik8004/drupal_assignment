@@ -1573,4 +1573,27 @@ class SkuImagesManager {
     return $media;
   }
 
+  /**
+   * Helper function to get swatch image url.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return false|string
+   *   Swatch image url or false.
+   */
+  public function getSwatchImageUrl(SKUInterface $sku) {
+    // Let's never download images here, we should always download when
+    // preparing gallery which is done before this.
+    $swatch_product_image = $sku->getThumbnail(FALSE);
+
+    // If we have image for the product.
+    if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+      $url = file_create_url($swatch_product_image['file']->getFileUri());
+      return $url;
+    }
+
+    return FALSE;
+  }
+
 }

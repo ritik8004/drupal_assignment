@@ -24,7 +24,6 @@ use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\Core\Config\ConfigFactory;
-use Drupal\file\FileInterface;
 use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Language\LanguageManager;
@@ -879,14 +878,9 @@ class AlshayaAlgoliaIndexHelper {
       if ($index_product_image_url && !empty($swatch['image_url'])) {
         $child = SKU::loadFromSku($swatch['child_sku_code']);
 
-        // Let's never download images here, we should always download when
-        // preparing gallery which is done before this.
-        $swatch_product_image = $child->getThumbnail(FALSE);
-
-        // If we have image for the product.
-        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
-          $url = file_create_url($swatch_product_image['file']->getFileUri());
-          $swatch['product_image_url'] = $url;
+        $swatchUrl = $this->skuImagesManager->getSwatchImageUrl($child);
+        if ($swatchUrl) {
+          $swatch['product_image_url'] = $swatchUrl;
         }
 
         $swatch_data['swatches'][$key] = $swatch;
