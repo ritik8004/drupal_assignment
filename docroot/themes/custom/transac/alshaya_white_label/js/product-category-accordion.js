@@ -32,7 +32,7 @@
         }
         // Add class on parent of c-accordion-delivery-options so we can hide
         // the paragraph with margin in desktop.
-        $(this).parents('.c-promo__item').addClass('c-accordion-delivery-option-parent');
+        $(this).parents('.c-promo__item').addClass('c-accordion-delivery-option-parent carousel-category-accordion');
       });
     }
   };
