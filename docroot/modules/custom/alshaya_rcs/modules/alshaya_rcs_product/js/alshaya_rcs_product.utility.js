@@ -770,7 +770,7 @@ window.commerceBackend = window.commerceBackend || {};
 
               // The behavior is same as
               // hook_alshaya_acm_product_pdp_swath_type_alter().
-              RcsEventManager.fire('alshayaRcsAlterPdpSwatch', {
+              RcsEventManager.fire('alshayaRcsAlterSwatch', {
                 detail: {
                   sku,
                   colorOptionsList,
@@ -1058,10 +1058,9 @@ window.commerceBackend = window.commerceBackend || {};
    *   The media item url.
    */
    window.commerceBackend.getTeaserImage = function (product) {
-    const galleryProduct = getSkuForGallery(product);
-    return galleryProduct.media_teaser;
-  };
-
+     const galleryProduct = getSkuForGallery(product);
+     return galleryProduct.media_teaser;
+   };
 
   /**
    * Get the prices from product entity.
@@ -1071,16 +1070,15 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {boolean} formatted
    *   if we need to return formatted price.
    *
-   * @return {array}
-   *   The price array.
+   * @return {object}
+   *   The price object.
    */
   window.commerceBackend.getPrices = function (product, formatted) {
-    var prices = {
+    return {
       price : formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value) : product.price_range.maximum_price.regular_price.value,
       finalPrice: formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value) : product.price_range.maximum_price.final_price.value,
       percent_off: product.price_range.maximum_price.discount.percent_off,
     };
-    return prices;
   };
 
   /**
@@ -1407,6 +1405,40 @@ window.commerceBackend = window.commerceBackend || {};
 
     return true;
   }
+
+/**
+ * Get SKU based on attribute option id.
+ *
+ * @param {string} $sku
+ *   The parent sku value.
+ * @param {string} attribute
+ *   Attribute to search for.
+ * @param {Number} option_id
+ *   Option id for selected attribute.
+ *
+ * @return {string}
+ *   SKU value matching the attribute option id.
+ */
+window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttribute(sku, attribute, option_id) {
+  const combinations = window.commerceBackend.getConfigurableCombinations(sku);
+
+  if (!Drupal.hasValue(combinations.attribute_sku) ) {
+    Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
+      '@sku': sku
+    });
+    return null;
+  }
+  if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
+    Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
+      '@attribute': attribute,
+      '@option_id': option_id,
+      '@sku': sku
+    });
+    return null;
+  }
+
+  return combinations.attribute_sku[attribute][option_id][0];
+}
 
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {

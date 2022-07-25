@@ -4,7 +4,7 @@
 # It will take care of the branding, creating the default users and
 # synchronize the content with MDC.
 #
-# ./scripts/setup/setup-fresh-site.sh "01dev" "hmkw-dev.factory.alshaya.com" "hm" "kw"
+# ./scripts/setup/setup-fresh-site.sh "01dev" "https://hmkw-dev.factory.alshaya.com" "hm" "kw"
 #
 
 target_env="$1"

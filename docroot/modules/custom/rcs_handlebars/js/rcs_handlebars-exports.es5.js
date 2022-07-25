@@ -24,6 +24,14 @@ function handlebarsRender(id, data) {
     throw new Error("No handlebars templates found on the page.");
   }
 
+  // Register templates as Handlebars partials.
+  Object.keys(rcsHandlebarsTemplates).forEach(function setPartial(id, content) {
+    // Check if the template id contains the word 'partial'.
+    if (id.indexOf('partial') > -1) {
+      Handlebars.registerPartial(id, rcsHandlebarsTemplates[id]);
+    }
+  });
+
   // Get the source template.
   const source = templates[id];
 
@@ -129,4 +137,14 @@ Handlebars.registerHelper('cleanCssIdentifier', (identifier) => {
   cleanedIdentifier = cleanedIdentifier.replace(/^[0-9]/, '_').replace(/^(-[0-9])|^(--)/, '__');
 
   return cleanedIdentifier.toLowerCase();
+});
+
+/**
+ * Creates variables on the fly.
+ * Usage:
+ *  - First set foo with value bar: {{set 'foo' 'bar'}}
+ *  - Then you can print foo: {{@root.foo}}
+ */
+Handlebars.registerHelper('set', function(name, val, globals) {
+  globals.data.root[name] = val;
 });

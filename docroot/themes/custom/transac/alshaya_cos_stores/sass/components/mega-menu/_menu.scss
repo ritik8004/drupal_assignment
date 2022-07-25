@@ -3,7 +3,7 @@
   margin-#{$right}: 0;
   padding-#{$left}: 0.625rem;
   padding-#{$right}: 0.625rem;
-  text-transform: uppercase;
+  text-transform: none;
 
   .menu--two__list & {
     padding-#{$left}: 0;
@@ -99,12 +99,6 @@
     span {
       background-size: inherit;
       height: 1.4375rem;
-    }
-  }
-
-  .main--menu {
-    .menu__link {
-      text-transform: uppercase;
     }
   }
 

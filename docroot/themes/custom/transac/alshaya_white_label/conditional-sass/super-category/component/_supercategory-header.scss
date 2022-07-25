@@ -73,7 +73,7 @@
       }
 
       @include breakpoint($desktop) {
-        height: 2.25rem;
+        height: rem(24);
       }
     }
   }
@@ -373,7 +373,11 @@
   .c-menu-primary {
     .mobile--menu {
       @include breakpoint($upto-desktop) {
-        top: 1.5rem;
+        top: rem(24);
+      }
+
+      @include breakpoint($only-tablet) {
+        top: rem(19);
       }
     }
   }
