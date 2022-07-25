@@ -76,18 +76,15 @@ class HelloMemberHelper {
    * Get aura config.
    *
    * @return array
-   *   AURA related config.
+   *   AURA form related config.
    */
-  public function getAuraConfig() {
+  public function getAuraFormConfig() {
     $country_code = _alshaya_custom_get_site_level_country_code();
-    $alshaya_aura_config = $this->configFactory->get('alshaya_aura_react.settings');
     $country_mobile_code = $this->mobileUtil->getCountryCode($country_code);
 
     $config = [
-      'siteName' => $this->configFactory->get('system.site')->get('name'),
       'country_mobile_code' => $country_mobile_code,
       'mobile_maxlength' => $this->configFactory->get('alshaya_master.mobile_number_settings')->get('maxlength'),
-      'isoCurrencyCode' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
     ];
 
     return $config;

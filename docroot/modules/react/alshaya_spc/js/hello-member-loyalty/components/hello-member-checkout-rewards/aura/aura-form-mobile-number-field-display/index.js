@@ -5,6 +5,7 @@ import TextField from '../../../../../utilities/textfield';
 import { getHelloMemberDictionaryData } from '../../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
+import logger from '../../../../../../../js/utilities/logger';
 
 class AuraMobileNumberFieldDisplay extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class AuraMobileNumberFieldDisplay extends React.Component {
       setCountryCode(countryMobileCode);
     }
 
-    const helloMemberDictionaryData = getHelloMemberDictionaryData({ type:'EXT_PHONE_PREFIX' });
+    const helloMemberDictionaryData = getHelloMemberDictionaryData({ type: 'EXT_PHONE_PREFIX' });
     if (helloMemberDictionaryData instanceof Promise) {
       helloMemberDictionaryData.then((response) => {
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)
@@ -43,7 +44,7 @@ class AuraMobileNumberFieldDisplay extends React.Component {
           });
           this.setState({
             options: processedCountryCodes,
-          })
+          });
         } else if (hasValue(response.error)) {
           logger.error('Error while trying to get hello member dictionary data. Data: @data.', {
             '@data': JSON.stringify(response),
@@ -52,8 +53,6 @@ class AuraMobileNumberFieldDisplay extends React.Component {
         removeFullScreenLoader();
       });
     }
-
-    
   }
 
   onMenuOpen = () => {
@@ -97,7 +96,7 @@ class AuraMobileNumberFieldDisplay extends React.Component {
 
     const {
       userCountryCode,
-      options
+      options,
     } = this.state;
 
     if (!hasValue(options)) {

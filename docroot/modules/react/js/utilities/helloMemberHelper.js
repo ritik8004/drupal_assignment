@@ -18,13 +18,14 @@ export const isAuraIntegrationEnabled = () => isHelloMemberEnabled()
   && hasValue(drupalSettings.helloMember.auraIntegrationStatus);
 
 /**
- * Helper function to check if aura integration with hello member is enabled.
+ * Helper function to get aura related config for hello memeber.
  */
-export const getAuraConfig = () =>  {
-  if (hasValue(drupalSettings.helloMember.auraConfig)) {
-    return drupalSettings.helloMember.auraConfig;
+export const getAuraFormConfig = () => {
+  if (hasValue(drupalSettings.helloMember.auraFormConfig)) {
+    return drupalSettings.helloMember.auraFormConfig;
   }
-}
+  return null;
+};
 
 /**
  * Helper function to get the customer info from user session.

@@ -33,7 +33,7 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   $hello_member_settings = [
     'status' => $helloMemberHelper->isHelloMemberEnabled(),
     'auraIntegrationStatus' => $helloMemberHelper->isAuraIntegrationEnabled(),
-    'auraConfig' => $helloMemberHelper->getAuraConfig(),
+    'auraFormConfig' => $helloMemberHelper->getAuraFormConfig(),
   ];
   $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
 
@@ -66,6 +66,11 @@ function alshaya_hello_member_theme() {
       ],
     ],
     'hello_member_benefits_page' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'hello_member_header_block' => [
       'variables' => [
         'strings' => [],
       ],
@@ -137,7 +142,12 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
   if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
     return;
   }
-
+  $nid = NULL;
+  $config = \Drupal::config('alshaya_hello_member.settings');
+  if ($config->get('membership_info_content_node')) {
+    // Get the node ID from config.
+    $nid = $config->get('membership_info_content_node');
+  }
   // Add Points history link.
   $links['hello_member_points_history'] = [
     'text' => t('Points History', [], ['context' => 'hello_member']),
@@ -148,6 +158,15 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
     'text' => t('My Details', [], ['context' => 'hello_member']),
     'route' => 'entity.user.edit_form',
     'weight' => 30,
+  ];
+  // Add Membership info link.
+  $links['membership_info'] = [
+    'text' => t('Membership Info', [], ['context' => 'hello_member']),
+    'route' => 'entity.node.canonical',
+    'options' => [
+      'node' => $nid,
+    ],
+    'weight' => 100,
   ];
 }
 
@@ -430,10 +449,22 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
     return;
   }
 
+  $auraModuleExists = \Drupal::moduleHandler()->moduleExists('alshaya_aura_react');
+
+  // Do not proceed if Alshaya aura module is disabled.
+  // Or module is enabled and aura setting is also enabled.
+  // For hello member, aura settings has to be disabled and
+  // we need to attach aura library but don't want to
+  // use aura existing feature as a whole.
+  if (!($auraModuleExists) ||
+    ($auraModuleExists && \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() === TRUE)) {
+    return;
+  }
+
   $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
   // Attach the library for Aura backend based on the commerce backend version.
   $build['#attached']['library'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
 
-  \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.aura_static_strings');
+  \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
   $build['#strings'] = _alshaya_hello_member_aura_static_strings();
 }

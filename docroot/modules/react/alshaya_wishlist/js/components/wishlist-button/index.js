@@ -145,7 +145,7 @@ class WishlistButton extends React.Component {
         // return -1. We need to remove product from the local storage if
         // skuIndex is greater than -1.
         const skuIndex = getWishListDataIndexForSku(sku);
-        if (skuIndex > -1) {
+        if (skuIndex !== null && skuIndex > -1) {
           // Get existing wishlist data from storage.
           const wishListItems = getWishListData();
 
@@ -342,7 +342,7 @@ class WishlistButton extends React.Component {
         if (isAnonymousUser()) {
           // Remove product from wishlist.
           const skuIndex = getWishListDataIndexForSku(productSku);
-          if (skuIndex > -1) {
+          if (skuIndex !== null && skuIndex > -1) {
             // Get existing wishlist data from storage.
             const wishListItems = getWishListData();
 

@@ -12,8 +12,15 @@ import { setHelloMemberLoyaltyCard } from '../../../../../../alshaya_hello_membe
 class RegisteredUserLoyalty extends React.Component {
   constructor(props) {
     super(props);
+    const {
+      cart: {
+        cart: {
+          loyalty_type: loyaltyType,
+        },
+      },
+    } = props;
     this.state = {
-      currentOption: 'hello_member_loyalty',
+      currentOption: hasValue(loyaltyType) ? loyaltyType : 'hello_member',
       selectedOption: null,
       showLoyaltyPopup: false,
     };
@@ -21,7 +28,7 @@ class RegisteredUserLoyalty extends React.Component {
 
   componentDidMount() {
     // For registered user, we set loyalty card for the default option selected.
-    // Currently, default option is hello_member_loyalty
+    // Currently, default option is hello_member
     // @todo: Update default option if cart has been updated.
     const { cart, identifierNo } = this.props;
     const cartId = cart.cart.cart_id;
@@ -59,12 +66,12 @@ class RegisteredUserLoyalty extends React.Component {
   changeLoyaltyOption = (method) => {
     // @todo: Trigger a pop-up to confirm the loyalty option.
     // @todo: Refresh cart with the selected value.
-    if (method === 'hello_member_loyalty') {
+    if (method === 'hello_member') {
       const { cart, identifierNo } = this.props;
       const cartId = cart.cart.cart_id;
       setHelloMemberLoyaltyCard(identifierNo, cartId);
       // @todo: Handle update cart event on setting hello member loyalty.
-    } else if (method === 'aura_loyalty') {
+    } else if (method === 'aura') {
       // @todo: Refresh cart with the selected value.
       // @todo: Open aura loyalty form and set aura loyalty after aura sign in validation.
     }
@@ -75,8 +82,13 @@ class RegisteredUserLoyalty extends React.Component {
   }
 
   render() {
-    const { animationDelay, helloMemberPoints } = this.props;
+    const { animationDelay, helloMemberPoints, cart } = this.props;
     const { currentOption, selectedOption, showLoyaltyPopup } = this.state;
+    const {
+      cart: {
+        loyalty_card: loyaltyCard,
+      },
+    } = cart;
 
     if (!hasValue(helloMemberPoints)) {
       return null;
@@ -97,16 +109,19 @@ class RegisteredUserLoyalty extends React.Component {
         </ConditionalView>
         <ConditionalView condition={isAuraIntegrationEnabled()}>
           <LoyaltySelectOption
+            cart={cart}
+            loyaltyCard={loyaltyCard}
             currentOption={currentOption}
             animationDelay={animationDelay}
-            optionName="hello_member_loyalty"
+            optionName="hello_member"
             showLoyaltyPopup={this.showLoyaltyPopup}
             helloMemberPoints={helloMemberPoints}
           />
           <LoyaltySelectOption
+            cart={cart}
             currentOption={currentOption}
             animationDelay={animationDelay}
-            optionName="aura_loyalty"
+            optionName="aura"
             showLoyaltyPopup={this.showLoyaltyPopup}
             helloMemberPoints={helloMemberPoints}
           />

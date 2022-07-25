@@ -78,6 +78,7 @@
     margin-top: rem(44);
 
     h3 {
+      letter-spacing: 0.9px;
       font-size: rem(18);
       color: $hm-benefit-description-heading-txt;
     }
@@ -91,6 +92,19 @@
         margin-bottom: 0;
       }
     }
+
+    div {
+      background: $hm-benefit-description-bg !important;
+      color: $hm-benefit-description-txt !important;
+      line-height: 1.6;
+    }
+
+    @include breakpoint($upto-desktop) {
+      body,
+      html[lang=ar] & body {
+        margin-top: 0 !important;
+      }
+    }
   }
 
   .expire-on {
@@ -102,6 +116,7 @@
       margin: 0;
       color: $hm-benefit-description-heading-txt;
       font-size: rem(16);
+      letter-spacing: 0.8px;
 
       html[lang=ar] & {
         margin-bottom: rem(8);

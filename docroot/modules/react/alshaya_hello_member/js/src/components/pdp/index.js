@@ -1,6 +1,5 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { callHelloMemberApi } from '../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../js/utilities/logger';
 import { getHelloMemberDictionaryData } from '../../hello_member_api_helper';
 import { getPriceToHelloMemberPoint } from '../../utilities';

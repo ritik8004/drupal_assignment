@@ -3,14 +3,12 @@ import AuraFormFieldOptions from '../aura-form-field-options';
 import AuraFormEmailField from '../aura-form-email-field';
 import AuraFormCardField from '../aura-form-card-field';
 import AuraFormMobileNumberField from '../aura-form-mobile-number-field';
-import { getAuraCheckoutLocalStorageKey, getAuraDetailsDefaultState } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
-import { getUserInput, processCheckoutCart } from '../../../../../aura-loyalty/components/utilities/checkout_helper';
+import { getUserInput, processCheckoutCart } from '../../utilities/loyalty_helper';
 import { showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import PointsString from '../../../../../aura-loyalty/components/utilities/points-string';
 import PointsExpiryMessage from '../../../../../aura-loyalty/components/utilities/points-expiry-message';
-import logger from '../../../../../../../js/utilities/logger';
 import ToolTip from '../../../../../utilities/tooltip';
 
 class AuraLoyaltyForm extends React.Component {
@@ -18,12 +16,11 @@ class AuraLoyaltyForm extends React.Component {
     super(props);
     this.state = {
       linkCardOption: 'cardNumber',
-      isOTPModalOpen: false,
       loyaltyCardLinkedToCart: false,
-      cardNumber: '',
+      cardNumber: hasValue(props.loyaltyCard) ? props.loyaltyCard : '',
       email: '',
       mobile: '',
-      loyaltyStatus: 0,
+      isFullyEnrolled: false,
       points: 0,
       expiringPoints: 0,
       expiryDate: '',
@@ -32,8 +29,8 @@ class AuraLoyaltyForm extends React.Component {
 
   componentDidMount() {
     document.addEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
-    //document.addEventListener('loyaltyCardRemovedFromCart', this.handleLoyaltyCardUnset, false);
-    // document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
+    document.addEventListener('loyaltyCardRemovedFromCart', this.handleLoyaltyCardUnset, false);
+    document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
 
     // Get data from localStorage.
     const localStorageValues = Drupal.getItemFromLocalStorage('aura_checkout_data');
@@ -41,34 +38,24 @@ class AuraLoyaltyForm extends React.Component {
     if (localStorageValues === null) {
       return;
     }
+    const { cart } = this.props;
 
-    const { cartId } = this.props;
+    const {
+      cart: {
+        cart_id: cartId,
+      },
+    } = cart;
 
     if (cartId === localStorageValues.cartId) {
-      let { key } = localStorageValues;
-
       if (localStorageValues.type === 'apcNumber') {
-        key = 'cardNumber';
-      } else if (localStorageValues.type === 'phone') {
-        key = 'mobile';
+        showFullScreenLoader();
+        processCheckoutCart(localStorageValues);
       }
-
-      const data = {
-        detail: {
-          stateValues: {
-            linkCardOption: key,
-            [key]: localStorageValues.value,
-          },
-        },
-      };
-      this.handleSearchEvent(data);
     }
   }
 
   handleSearchEvent = (data) => {
     const { stateValues, searchData } = data.detail;
-    console.log(stateValues);
-    console.log(searchData);
 
     if (stateValues.error) {
       this.setState({
@@ -76,7 +63,6 @@ class AuraLoyaltyForm extends React.Component {
         cardNumber: '',
         email: '',
         mobile: '',
-        loyaltyStatus: 0,
         points: 0,
         expiringPoints: 0,
         expiryDate: '',
@@ -89,85 +75,63 @@ class AuraLoyaltyForm extends React.Component {
       return;
     }
 
-    if (hasValue(stateValues) && parseInt(stateValues.loyaltyStatus, 10) !== 2) {
+    if (hasValue(stateValues) && !stateValues.isFullyEnrolled) {
       this.showResponse({
         type: 'failure',
         message: getStringMessage('aura_partially_enrolled_message'),
       });
-      return;
+    } else if (stateValues.isFullyEnrolled) {
+      this.showResponse({
+        type: 'success',
+        message: '',
+      });
+      this.setState({
+        isFullyEnrolled: true,
+      });
     }
 
-    this.showResponse({
-      type: 'success',
-      message: '',
-    });
-
     if (searchData) {
-      const { cartId } = this.props;
+      const { cart } = this.props;
+      const {
+        cart: {
+          cart_id: cartId,
+        },
+      } = cart;
       const dataForStorage = { cartId, ...searchData };
 
       Drupal.addItemInLocalStorage(
-        getAuraCheckoutLocalStorageKey(),
+        'aura_checkout_data',
         dataForStorage,
       );
     }
 
-    const { customerId } = drupalSettings.userDetails;
-    const { uid } = drupalSettings.user;
-
-    if (!hasValue(customerId) || !hasValue(uid)) {
-      logger.warning('Error while trying to fetch loyalty points for customer. No customer available in session. Customer Id: @customerId, User Id: @uid', {
-        '@customerId': customerId,
-        '@uid': uid,
-      });
-  
-      return getErrorResponse('No user in session', 404);
-    }
+    // @todo: After magento gives the point balance api, we will call api
+    // to fetch expiry points and expiry date.
     this.setState({
-      expiringPoints: '700',
-      expiryDate: '2022-09-30',
-    })
-
-    // const customerPoints = getHelloMemberCustomerInfoByIdentifier(stateValues.cardNumber);
-
-    // if (customerPoints instanceof Promise) {
-    //   customerPoints.then((response) => {
-    //     if (hasValue(response) && !hasValue(response.error)) {
-    //       this.setState({
-    //         expiringPoints: response.auraPointsToExpire,
-    //         expiryDate: response.auraPointsExpiryDate,
-    //       })
-    //     } else if (hasValue(response.error)) {
-    //       logger.error('Error while trying to fetch customer information for user with customer id @customerId. Message: @message', {
-    //         '@customerId': customerId,
-    //         '@message': customerPoints.error_message || '',
-    //       });
-    //     }
-    //   });
-    // }
+      expiringPoints: '200',
+      expiryDate: '2-12-2024',
+    });
 
     this.setState({
       ...stateValues,
       loyaltyCardLinkedToCart: true,
     });
-    // Set state in parent to show link card component.
-    //enableShowLinkCardMessage();
   };
 
-//   handleLoyaltyCardUnset = (data) => {
-//     this.resetStorage();
+  handleLoyaltyCardUnset = (data) => {
+    this.resetStorage();
 
-//     const { stateValues } = data.detail;
+    const { stateValues } = data.detail;
 
-//     this.setState({
-//       ...stateValues,
-//       loyaltyCardLinkedToCart: false,
-//     });
-//   };
+    this.setState({
+      ...stateValues,
+      loyaltyCardLinkedToCart: false,
+    });
+  };
 
-//   handlePlaceOrderEvent = () => {
-//     Drupal.removeItemFromLocalStorage(getAuraCheckoutLocalStorageKey());
-//   };
+  handlePlaceOrderEvent = () => {
+    Drupal.removeItemFromLocalStorage('aura_checkout_data');
+  };
 
   showResponse = (data) => {
     const element = document.querySelector('.spc-aura-link-card-form .spc-aura-link-api-response-message');
@@ -187,18 +151,6 @@ class AuraLoyaltyForm extends React.Component {
       element.classList.add('error');
     }
   };
-
-//   openOTPModal = () => {
-//     this.setState({
-//       isOTPModalOpen: true,
-//     });
-//   };
-
-//   closeOTPModal = () => {
-//     this.setState({
-//       isOTPModalOpen: false,
-//     });
-//   };
 
   setChosenCountryCode = (code) => {
     this.setState({
@@ -232,21 +184,20 @@ class AuraLoyaltyForm extends React.Component {
       if (type === 'phone') {
         data.countryCode = chosenCountryCode;
       }
-      processCheckoutCart(data, 'hello_member');
+      processCheckoutCart(data);
     }
   };
 
-//   removeCard = () => {
-//     showFullScreenLoader();
-//     // Remove card from state.
-//     processCheckoutCart({ action: 'remove' });
-//     // We clear input values from the form.
-//     const input = document.querySelector('.spc-aura-link-card-wrapper .form-items input:not(:read-only)');
-//     input.value = '';
-//   };
+  removeCard = () => {
+    showFullScreenLoader();
+    // Remove card from state.
+    processCheckoutCart({ action: 'remove' });
+    // We clear input values from the form.
+    const input = document.querySelector('.spc-aura-link-card-wrapper .form-items input:not(:read-only)');
+    input.value = '';
+  };
 
   selectOption = (option) => {
-    console.log(option);
     this.showResponse({
       type: 'failure',
       message: '',
@@ -257,10 +208,6 @@ class AuraLoyaltyForm extends React.Component {
     });
   };
 
-  redeemPoints = () => {
-    console.log("redeem");
-  }
-
   render() {
     const {
       linkCardOption,
@@ -268,81 +215,76 @@ class AuraLoyaltyForm extends React.Component {
       cardNumber,
       email,
       mobile,
-      loyaltyStatus,
+      isFullyEnrolled,
       points,
       expiringPoints,
-      expiryDate
+      expiryDate,
     } = this.state;
     return (
       <>
-        {parseInt(loyaltyStatus) !== 2 &&
-          <>
-            <div className="label">
-              {getStringMessage('enter_aura_details')}
-              <ToolTip enable>{getStringMessage('aura_details_tooltip')}</ToolTip>
-            </div>
-            <AuraFormFieldOptions
-              selectedOption={linkCardOption}
-              selectOptionCallback={this.selectOption}
-              cardNumber={cardNumber}
-            />
-            <div className={'spc-aura-link-card-form-content active'}>
-              <div className="spc-aura-link-card-wrapper">
-                <div className="form-items">
-                  {(linkCardOption === 'email') &&
-                    <AuraFormEmailField email={email} />
-                  }
-                  {(linkCardOption === 'cardNumber') &&
-                    <AuraFormCardField cardNumber={cardNumber} />
-                  }
-                  {(linkCardOption === 'mobile') &&
+        {!isFullyEnrolled
+          && (
+            <>
+              <div className="label">
+                {getStringMessage('enter_aura_details')}
+                <ToolTip enable>{getStringMessage('aura_details_tooltip')}</ToolTip>
+              </div>
+              <AuraFormFieldOptions
+                selectedOption={linkCardOption}
+                selectOptionCallback={this.selectOption}
+                cardNumber={cardNumber}
+              />
+              <div className="spc-aura-link-card-form-content active">
+                <div className="spc-aura-link-card-wrapper">
+                  <div className="form-items">
+                    {(linkCardOption === 'email')
+                    && <AuraFormEmailField email={email} />}
+                    {(linkCardOption === 'cardNumber')
+                    && <AuraFormCardField cardNumber={cardNumber} />}
+                    {(linkCardOption === 'mobile')
+                    && (
                     <AuraFormMobileNumberField
                       setChosenCountryCode={this.setChosenCountryCode}
                       mobile={mobile}
                     />
-                  }
-                  <button
-                    type="submit"
-                    className="spc-aura-link-card-submit spc-aura-button"
-                    disabled={false}
-                    onClick={() => this.addCard()}
-                  >
-                    { Drupal.t('Submit') }
-                  </button>
+                    )}
+                    <button
+                      type="submit"
+                      className="spc-aura-link-card-submit spc-aura-button"
+                      disabled={false}
+                      onClick={() => this.addCard()}
+                    >
+                      { Drupal.t('Submit') }
+                    </button>
+                  </div>
                 </div>
+                {window.innerWidth >= 768
+                && <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />}
               </div>
-              {window.innerWidth >= 768 && 
-                <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
-              }
-            </div>
-          </>
-        }
-        {parseInt(loyaltyStatus) === 2 &&
-          <>
-            <div className="customer-points">
-              <div className="title">
-                <div className="subtitle-1">
-                  { getStringMessage('checkout_you_have') }
-                  <PointsString points={points} />
-                </div>
-                <div className="spc-aura-checkout-messages">
-                  <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
-                </div>
+              <div className="sub-text">
+                {loyaltyCardLinkedToCart
+                && (
+                <a onClick={() => this.removeCard()}>
+                  {getStringMessage('not_you_question')}
+                </a>
+                )}
               </div>
-              <div className="redeem-points">
-              { getStringMessage('redeem_points_message') }
-              <button
-                type="submit"
-                className="spc-aura-link-card-submit spc-aura-button"
-                disabled={false}
-                onClick={() => this.redeemPoints()}
-              >
-                { getStringMessage('redeem_points_button') }
-              </button>
+            </>
+          )}
+        {isFullyEnrolled
+          && (
+          <div className="customer-points">
+            <div className="title">
+              <div className="subtitle-1">
+                { getStringMessage('checkout_you_have') }
+                <PointsString points={points} />
+              </div>
+              <div className="spc-aura-checkout-messages">
+                <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
               </div>
             </div>
-          </>
-        }
+          </div>
+          )}
       </>
     );
   }
