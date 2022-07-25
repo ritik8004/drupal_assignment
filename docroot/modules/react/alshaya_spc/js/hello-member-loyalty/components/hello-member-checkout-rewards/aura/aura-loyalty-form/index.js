@@ -4,7 +4,7 @@ import AuraFormEmailField from '../aura-form-email-field';
 import AuraFormCardField from '../aura-form-card-field';
 import AuraFormMobileNumberField from '../aura-form-mobile-number-field';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
-import { getUserInput, processCheckoutCart } from '../../utilities/loyalty_helper';
+import { getUserInput, processCheckoutCart, getHelloMemberAuraStorageKey } from '../../utilities/loyalty_helper';
 import { showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import PointsString from '../../../../../aura-loyalty/components/utilities/points-string';
@@ -33,7 +33,7 @@ class AuraLoyaltyForm extends React.Component {
     document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
 
     // Get data from localStorage.
-    const localStorageValues = Drupal.getItemFromLocalStorage('aura_checkout_data');
+    const localStorageValues = Drupal.getItemFromLocalStorage(getHelloMemberAuraStorageKey());
 
     if (localStorageValues === null) {
       return;
@@ -100,7 +100,7 @@ class AuraLoyaltyForm extends React.Component {
       const dataForStorage = { cartId, ...searchData };
 
       Drupal.addItemInLocalStorage(
-        'aura_checkout_data',
+        getHelloMemberAuraStorageKey(),
         dataForStorage,
       );
     }
@@ -130,7 +130,7 @@ class AuraLoyaltyForm extends React.Component {
   };
 
   handlePlaceOrderEvent = () => {
-    Drupal.removeItemFromLocalStorage('aura_checkout_data');
+    Drupal.removeItemFromLocalStorage(getHelloMemberAuraStorageKey());
   };
 
   showResponse = (data) => {
@@ -163,7 +163,7 @@ class AuraLoyaltyForm extends React.Component {
       type: 'failure',
       message: '',
     });
-    Drupal.removeItemFromLocalStorage('aura_checkout_data');
+    Drupal.removeItemFromLocalStorage(getHelloMemberAuraStorageKey());
   };
 
   addCard = () => {
