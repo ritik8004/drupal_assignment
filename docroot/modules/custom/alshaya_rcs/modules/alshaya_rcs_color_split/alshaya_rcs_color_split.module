@@ -41,20 +41,8 @@ function alshaya_rcs_color_split_alshaya_rcs_product_order_build_alter(array &$b
  * Implements hook_page_attachments().
  */
 function alshaya_rcs_color_split_page_attachments(array &$attachments) {
-  $route_match = \Drupal::routeMatch();
-  $route_name = $route_match->getRouteName();
-
-  if (!in_array($route_name, [
-    'entity.node.canonical',
-    'entity.taxonomy_term.canonical',
-    'acq_cart.cart',
-    'alshaya_spc.checkout',
-    'alshaya_spc.checkout.confirmation',
-    'alshaya_algolia_react.search',
-    'alshaya_master.home',
-    'alshaya_wishlist.users_wishlist',
-    'alshaya_wishlist.user_account_wishlist',
-  ])) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
     return;
   }
 
