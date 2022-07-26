@@ -25,7 +25,7 @@
   <ul class="menu__list menu--one__list">
     <div class="menu-backdrop"></div>
     {{#each menu_items as |menu_item|}}
-      <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }}">
+      <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }} {{ menu_item.include_in_desktop }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
           {{'// @todo implement style'}}
           {{set 'style' ''}}

@@ -73,6 +73,15 @@ const processData = function (data, maxLevel) {
   for (const [key, value] of Object.entries(data)) {
     processEnrichment(data[key]);
 
+    if (typeof data[key].include_in_desktop !== 'undefined') {
+      if (!data[key].include_in_desktop) {
+        data[key].include_in_desktop = 'hide-on-desktop';
+      }
+      else {
+        data[key].include_in_desktop = '';
+      }
+    }
+
     // Check if we have an array or object.
     if ((/array|object/).test(typeof value)) {
       // Check if the item should be included in the menu.
