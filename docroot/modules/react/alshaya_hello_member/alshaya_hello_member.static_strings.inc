@@ -294,5 +294,9 @@ function _alshaya_hello_member_aura_static_strings() {
       'key' => 'enter_otp',
       'value' => t('Enter OTP'),
     ],
+    [
+      'key' => 'aura_points_earn_message',
+      'value' => t('You will earn @points Aura points with this purchase.'),
+    ],
   ];
 }

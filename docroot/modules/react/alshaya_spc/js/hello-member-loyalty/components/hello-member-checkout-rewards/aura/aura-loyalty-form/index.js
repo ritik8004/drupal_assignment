@@ -12,6 +12,7 @@ import PointsExpiryMessage from '../../../../../aura-loyalty/components/utilitie
 import ToolTip from '../../../../../utilities/tooltip';
 import AuraRedeemPoints from '../aura-redeem-points';
 import { getUserInput } from '../../../../../aura-loyalty/components/utilities/checkout_helper';
+import dispatchCustomEvent from '../../../../../../../js/utilities/events';
 
 class AuraLoyaltyForm extends React.Component {
   constructor(props) {
@@ -76,6 +77,8 @@ class AuraLoyaltyForm extends React.Component {
       });
       return;
     }
+
+    dispatchCustomEvent('onLinkCardSuccessful', stateValues.cardNumber);
 
     if (hasValue(stateValues) && !stateValues.isFullyEnrolled) {
       this.showResponse({

@@ -5,6 +5,7 @@ import { renderToString } from 'react-dom/server';
 import HelloMemberSvg from '../../../../svg-component/hello-member-svg';
 import AuraHeaderIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
 import AuraLoyaltyForm from '../aura/aura-loyalty-form';
+import AuraPointsToEarn from '../aura/aura-points-to-earn';
 
 const getLoyaltySelectText = (optionName, helloMemberPoints) => {
   if (optionName === 'hello_member') {
@@ -38,12 +39,13 @@ const LoyaltySelectOption = ({
   loyaltyCard,
   cart,
 }) => (
-  <div className={`loyalty-option ${optionName} fadeInUp`} style={{ animationDelay }} onClick={() => showLoyaltyPopup(optionName)}>
-    <input id={`loyalty-option-${optionName}`} defaultChecked={currentOption === optionName} value={optionName} name="loyalty-option" type="radio" />
-    <label className="radio-sim radio-label">
-      {(currentOption !== 'aura' || optionName === 'hello_member')
+  <>
+    <div className={`loyalty-option ${optionName} fadeInUp`} style={{ animationDelay }} onClick={() => showLoyaltyPopup(optionName)}>
+      <input id={`loyalty-option-${optionName}`} defaultChecked={currentOption === optionName} value={optionName} name="loyalty-option" type="radio" />
+      <label className="radio-sim radio-label">
+        {(currentOption !== 'aura' || optionName === 'hello_member')
         && <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>}
-      {(currentOption === 'aura' && optionName === 'aura')
+        {(currentOption === 'aura' && optionName === 'aura')
           && (
           <Collapsible
             trigger={auraLoyaltyHeader(optionName, helloMemberPoints)}
@@ -57,8 +59,15 @@ const LoyaltySelectOption = ({
             </div>
           </Collapsible>
           )}
-    </label>
-  </div>
+      </label>
+    </div>
+    {(currentOption === 'aura' && optionName === 'aura')
+    && (
+    <div className="aura-earned-points">
+      <AuraPointsToEarn cart={cart} />
+    </div>
+    )}
+  </>
 );
 
 export default LoyaltySelectOption;

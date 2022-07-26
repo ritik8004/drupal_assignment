@@ -85,6 +85,7 @@ class HelloMemberHelper {
     $config = [
       'country_mobile_code' => $country_mobile_code,
       'mobile_maxlength' => $this->configFactory->get('alshaya_master.mobile_number_settings')->get('maxlength'),
+      'currency_code' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
     ];
 
     return $config;
