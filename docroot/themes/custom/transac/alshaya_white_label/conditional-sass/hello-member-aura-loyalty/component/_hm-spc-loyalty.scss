@@ -57,8 +57,8 @@
 
       .linking-option {
         input[type=radio] {
-          &~.radio-sim:before,
-          &:checked~.radio-sim:before {
+          & ~ .radio-sim::before,
+          &:checked ~ .radio-sim::before {
             @include breakpoint($only-mobile) {
               top: 50%;
             }
@@ -111,8 +111,8 @@
   .loyalty-option {
     &.aura {
       input[type=radio] {
-        &~.radio-sim:before,
-        &:checked~.radio-sim:before {
+        & ~ .radio-sim::before,
+        &:checked ~ .radio-sim::before {
           top: rem(31);
 
           @include breakpoint($only-mobile) {
