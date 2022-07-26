@@ -559,7 +559,7 @@ function alshaya_user_link_alter(&$variables) {
   }
   elseif ($url->isRouted() && $url->getRouteName() == 'user.logout') {
     // Getting raw uri as categories and products are not saved in V3.
-    $variables['options']['query']['destination'] = \Drupal::request()->getRequestUri();
+    $variables['options']['query']['destination'] = Url::fromRoute('<current>')->toString();
   }
 }
 
