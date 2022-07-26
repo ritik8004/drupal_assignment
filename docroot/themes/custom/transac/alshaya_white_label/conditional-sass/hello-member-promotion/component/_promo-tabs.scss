@@ -1,0 +1,30 @@
+.hello-member-promo-section {
+  .popup-container {
+    .hm-promo-modal-content {
+      .react-tabs__tab-list {
+        display: flex;
+        border-bottom: 1px solid $hm-promo-tab-border;
+        padding: 0;
+
+        .react-tabs__tab {
+          font-family: $alshaya-thin;
+          font-size: rem(16);
+          padding: rem(16) 0;
+          color: $hm-promo-tab-title;
+          letter-spacing: 0.8px;
+          list-style: none;
+          flex: auto;
+          cursor: pointer;
+          outline: none;
+          text-align: center;
+
+          &--selected {
+            color: $hm-promo-tab-title;
+            border-bottom: 1px solid $hm-promo-pop-txt;
+            font-family: $alshaya-bold;
+          }
+        }
+      }
+    }
+  }
+}
