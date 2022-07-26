@@ -60,6 +60,7 @@ function processCheckoutCart(data) {
               cardNumber: '',
               email: '',
               mobile: '',
+              isFullyEnrolled: false,
             };
 
             dispatchCustomEvent('loyaltyCardRemovedFromCart', { stateValues });
@@ -73,12 +74,8 @@ function processCheckoutCart(data) {
             points: result.data.data.apc_points || 0,
             cardNumber: result.data.data.apc_identifier_number || '',
             email: result.data.data.email || '',
+            mobile: result.data.data.mobile || '',
           };
-
-          if (data.type === 'phone') {
-            stateValues.mobile = data.value;
-            stateValues.userCountryCode = data.countryCode;
-          }
         }
       } else {
         stateValues = result.data;

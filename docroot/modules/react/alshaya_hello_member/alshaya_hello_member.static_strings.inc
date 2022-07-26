@@ -232,7 +232,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'link_card_empty_card_number',
-      'value' => t('A card number is required to link your card. Please enter your details to proceed.', [], ['context' => 'aura']),
+      'value' => t('A card number is required to link your card. Please enter your details to proceed.'),
     ],
     [
       'key' => 'mobile_not_registered',
@@ -245,6 +245,50 @@ function _alshaya_hello_member_aura_static_strings() {
     [
       'key' => 'invalid_card_number',
       'value' => t('Incorrect Aura card number. Please re-enter a valid Aura card number.'),
+    ],
+    [
+      'key' => 'form_error_invalid_otp',
+      'value' => t('Incorrect OTP. Please enter a valid OTP.'),
+    ],
+    [
+      'key' => 'form_error_send_otp_failed_message',
+      'value' => t('Error in sending OTP. Please try again.'),
+    ],
+    [
+      'key' => 'otp_label',
+      'value' => t('One Time Pin', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'aura_otp_sent_to_mobile',
+      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile',),
+    ],
+    [
+      'key' => 'otp_label',
+      'value' => t('One Time Pin', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'resend_code',
+      'value' => t('Resend code'),
+    ],
+    [
+      'key' => 'aura_otp_sent_to_mobile',
+      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile'),
+    ],
+    [
+      'key' => 'otp_send_message',
+      'value' => t('We’ve sent the one time PIN to your mobile number.'),
+    ],
+    [
+      'key' => 'didnt_receive_otp_message',
+      'value' => t('Didn’t receive your one time PIN?'),
+    ],
+    [
+      'key' => 'send_otp_helptext',
+      'value' => t('We’ll send a one time PIN to your mobile number.'),
+    ],
+    [
+      'key' => 'enter_otp',
+      'value' => t('Enter OTP'),
     ],
   ];
 }

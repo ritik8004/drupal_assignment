@@ -10,6 +10,7 @@ import getStringMessage from '../../../../../../../js/utilities/strings';
 import PointsString from '../../../../../aura-loyalty/components/utilities/points-string';
 import PointsExpiryMessage from '../../../../../aura-loyalty/components/utilities/points-expiry-message';
 import ToolTip from '../../../../../utilities/tooltip';
+import AuraRedeemPoints from '../aura-redeem-points';
 
 class AuraLoyaltyForm extends React.Component {
   constructor(props) {
@@ -282,6 +283,9 @@ class AuraLoyaltyForm extends React.Component {
               <div className="spc-aura-checkout-messages">
                 <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
               </div>
+              <AuraRedeemPoints
+                mobile={mobile}
+              />
             </div>
           </div>
           )}
