@@ -7,7 +7,7 @@ class MembershipPopup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModelOpen: true,
+      isModelOpen: false,
     };
   }
 
