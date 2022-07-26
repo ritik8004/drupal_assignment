@@ -17,6 +17,19 @@
     @include breakpoint($only-mobile) {
       float: none;
     }
+
+    .promo-notification {
+      display: none;
+      height: rem(8);
+      width: rem(8);
+      border-radius: 50%;
+      background-color: $hm-promo-available-notification-icon;
+      margin: rem(4);
+    }
+
+    .promo-notification.show-note {
+      display: inline-flex;
+    }
   }
 
   .popup-container {
