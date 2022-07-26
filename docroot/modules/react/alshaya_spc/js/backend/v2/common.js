@@ -23,6 +23,7 @@ import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -421,6 +422,27 @@ const getProcessedCartData = async (cartData) => {
     }
     if (hasValue(cartData.totals.extension_attributes.hps_current_balance)) {
       data.totals.egiftCurrentBalance = cartData.totals.extension_attributes.hps_current_balance;
+    }
+  }
+
+  // Check if the hello member feature is enabled and add below hello member
+  //  extension_attributes to the totals for display info under order summary
+  // block on cart, checkout and order confirmation pages.
+  // - applied_hm_voucher_codes
+  // - hm_voucher_discount
+  // - applied_hm_offer_code
+  if (isHelloMemberEnabled() && hasValue(cartData.cart.extension_attributes)) {
+    // Add applied_hm_voucher_codes and hm_voucher_discount to totals.
+    if (hasValue(cartData.cart.extension_attributes.applied_hm_voucher_codes)
+      && hasValue(cartData.cart.extension_attributes.hm_voucher_discount)) {
+      // eslint-disable-next-line max-len
+      data.totals.hmAppliedVoucherCodes = cartData.cart.extension_attributes.applied_hm_voucher_codes;
+      data.totals.hmVoucherDiscount = cartData.cart.extension_attributes.hm_voucher_discount;
+    }
+
+    // Add applied_hm_voucher_codes and hm_voucher_discount to totals.
+    if (hasValue(cartData.cart.extension_attributes.applied_hm_offer_code)) {
+      data.totals.hmOfferCode = cartData.cart.extension_attributes.applied_hm_offer_code;
     }
   }
 

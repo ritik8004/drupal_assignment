@@ -57,7 +57,14 @@ class TotalLineItems extends React.Component {
    * Get the content of discount tooltip.
    */
   discountToolTipContent = (cartPromo) => {
+    const { totals } = this.props;
     let promoData = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
+
+    // Change the discount title if hello member offer code exists on cart.
+    if (hasValue(totals.hmOfferCode)) {
+      promoData = `<div class="applied-hm-discounts-title">${Drupal.t('Member Discount', {}, { context: 'hello_member' })}</div>`;
+    }
+
     if (cartPromo !== null
       && cartPromo !== undefined
       && Object.keys(cartPromo).length > 0) {
@@ -72,7 +79,6 @@ class TotalLineItems extends React.Component {
       });
     }
     if (Advantagecard.isAdvantagecardEnabled()) {
-      const { totals } = this.props;
       // IF advantageCardApplied add promotion label of Advantage card in Discount Tool tip.
       if ((hasValue(totals.items) && Advantagecard.isAdvantageCardApplied(totals.items))
         || (hasValue(totals.advatage_card))) {
