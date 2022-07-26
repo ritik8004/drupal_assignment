@@ -427,7 +427,7 @@ const getProcessedCartData = async (cartData) => {
 
   // Check if the hello member feature is enabled and add below hello member
   //  extension_attributes to the totals for display info under order summary
-  // block on cart, checkout and order confirmation pages.
+  // block on cart, checkout pages.
   // - applied_hm_voucher_codes
   // - hm_voucher_discount
   // - applied_hm_offer_code
