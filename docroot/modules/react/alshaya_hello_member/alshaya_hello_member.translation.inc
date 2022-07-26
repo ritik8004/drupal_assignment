@@ -235,6 +235,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عرض كل الفوائد',
         'context' => 'hello_member',
       ],
+      'Continue' => [
+        'ar' => 'يكمل',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

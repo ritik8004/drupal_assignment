@@ -55,7 +55,7 @@ class MembershipPopup extends React.Component {
               <div className="hello-membership-details">
                 {parse(popupTextAbove)}
                 <div className="hello-membership-continue">
-                  <a onClick={(e) => this.closeModal(e)}>Continue</a>
+                  <a onClick={(e) => this.closeModal(e)}>{Drupal.t('Continue', {}, { context: 'hello_member' })}</a>
                 </div>
                 {parse(popupTextBelow)}
               </div>
