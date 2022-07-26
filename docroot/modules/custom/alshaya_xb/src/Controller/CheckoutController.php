@@ -10,12 +10,14 @@ use Drupal\Core\Controller\ControllerBase;
 class CheckoutController extends ControllerBase {
 
   /**
-   * Returns an empty page.
+   * Returns the checkout page.
    *
    * @return array
    *   Markup for checkout page.
    */
-  public function emptyPage() {
+  public function checkoutPage() {
+    // Return an empty page. Global-e will add the markup for international
+    // checkout with Javascript.
     return [
       '#markup' => '',
     ];

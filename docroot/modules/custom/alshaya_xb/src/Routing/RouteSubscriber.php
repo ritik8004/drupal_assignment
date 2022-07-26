@@ -19,7 +19,7 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     // Return empty checkout page.
     if ($route = $collection->get('alshaya_spc.checkout')) {
-      $route->setDefault('_controller', '\Drupal\alshaya_xb\Controller\CheckoutController::emptyPage');
+      $route->setDefault('_controller', '\Drupal\alshaya_xb\Controller\CheckoutController::checkoutPage');
     }
   }
 
