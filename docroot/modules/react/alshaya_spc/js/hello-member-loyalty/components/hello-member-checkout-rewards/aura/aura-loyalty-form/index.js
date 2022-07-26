@@ -225,7 +225,7 @@ class AuraLoyaltyForm extends React.Component {
         {!isFullyEnrolled
           && (
             <>
-              <div className="label">
+              <div className="aura-details">
                 {getStringMessage('enter_aura_details')}
                 <ToolTip enable>{getStringMessage('aura_details_tooltip')}</ToolTip>
               </div>
@@ -258,8 +258,7 @@ class AuraLoyaltyForm extends React.Component {
                     </button>
                   </div>
                 </div>
-                {window.innerWidth >= 768
-                && <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />}
+                <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
               </div>
               <div className="sub-text">
                 {loyaltyCardLinkedToCart

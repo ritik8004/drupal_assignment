@@ -26,9 +26,7 @@ const getLoyaltySelectText = (optionName, helloMemberPoints) => {
  * On click of this component, aura loyalty form div will open.
  */
 const auraLoyaltyHeader = (optionName, helloMemberPoints) => (
-  <label className="radio-sim radio-label">
-    <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>
-  </label>
+  <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>
 );
 
 const LoyaltySelectOption = ({
@@ -45,21 +43,21 @@ const LoyaltySelectOption = ({
     <label className="radio-sim radio-label">
       {(currentOption !== 'aura' || optionName === 'hello_member')
         && <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>}
+      {(currentOption === 'aura' && optionName === 'aura')
+          && (
+          <Collapsible
+            trigger={auraLoyaltyHeader(optionName, helloMemberPoints)}
+            open={!!(currentOption === 'aura' && optionName === 'aura')}
+          >
+            <div className="spc-aura-link-card-form active">
+              <AuraLoyaltyForm
+                cart={cart}
+                loyaltyCard={loyaltyCard}
+              />
+            </div>
+          </Collapsible>
+          )}
     </label>
-    {(currentOption === 'aura' && optionName === 'aura')
-        && (
-        <Collapsible
-          trigger={auraLoyaltyHeader(optionName, helloMemberPoints)}
-          open={!!(currentOption === 'aura' && optionName === 'aura')}
-        >
-          <div className="spc-aura-link-card-form active">
-            <AuraLoyaltyForm
-              cart={cart}
-              loyaltyCard={loyaltyCard}
-            />
-          </div>
-        </Collapsible>
-        )}
   </div>
 );
 
