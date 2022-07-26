@@ -1,0 +1,12 @@
+{{ log menuItems }}
+
+<div class="cols-6 clearfix">
+  <div class="c-footer-menu">
+    {{#each menuItems as |menuItem|}}
+    <div class="c-footer-menu__tab">
+      {{ '// @todo Add category enrichments for shop by block' }}
+      <a class="menu__link menu--one__link c-footer-menu__link" href="{{ menuItem.url_path }}">{{ menuItem.name }}</a>
+    </div>
+    {{/each}}
+  </div>
+</div>
