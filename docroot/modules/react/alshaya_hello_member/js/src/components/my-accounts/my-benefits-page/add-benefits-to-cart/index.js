@@ -79,7 +79,7 @@ class AddBenefitsToCart extends React.Component {
               appliedAlready: true,
             });
             if (response.data) {
-              document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.');
+              document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
               document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
             }
             removeFullScreenLoader();
@@ -132,12 +132,12 @@ class AddBenefitsToCart extends React.Component {
       <>
         <ConditionalView condition={!appliedAlready && isEmptyCart}>
           <div className="benefit-status">
-            {Drupal.t('Your cart is empty.')}
+            {Drupal.t('Your cart is empty.', { context: 'hello_member' })}
           </div>
         </ConditionalView>
         <ConditionalView condition={appliedAlready}>
           <div className="benefit-status">
-            {Drupal.t('This offer has been added to your bag.')}
+            {Drupal.t('This offer has been added to your bag.', { context: 'hello_member' })}
           </div>
           <div>
             <div id="status-msg" />
