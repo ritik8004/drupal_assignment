@@ -12,7 +12,21 @@
 };
 
 /**
- * Process category menu.
+ * Process rcs category menu items.
+ *
+ * @param {object} catItem
+ *   Rcs Category menu item.
+ * @param {string} level
+ *   Depth of the menu item.
+ * @param {object} settings
+ *   The drupal settings object.
+ * @param {object} enrichmentData
+ *   Enriched data object for the current item.
+ * @param {boolean} isSuperCategoryEnabled
+ *   Current item is the first item of the super category menu or not.
+ *
+ * @returns {object}
+ *   Processed menu item.
  */
 function processCategory(catItem, level, settings, enrichmentData, isSuperCategoryEnabled) {
   // We support max depth by L4.
@@ -39,7 +53,7 @@ function processCategory(catItem, level, settings, enrichmentData, isSuperCatego
 
     // Exclude terms with overridden target link.
     if (typeof enrichedDataObj.path !== 'undefined') {
-      return '';
+      return {};
     }
   }
 
