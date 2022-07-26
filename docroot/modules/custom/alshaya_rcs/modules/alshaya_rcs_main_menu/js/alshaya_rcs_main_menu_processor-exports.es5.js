@@ -37,6 +37,23 @@ exports.prepareData = function prepareData(settings, inputs) {
 }
 
 /**
+ * Process and add the enrichments to the menu item.
+ *
+ * @param {Object} menuItem
+ *   Individual menu item object.
+ */
+function processEnrichment(menuItem) {
+  var enrichmentData = globalThis.rcsGetEnrichedCategories();
+  var enrichedMenuItem = enrichmentData[menuItem.url_path];
+
+  if (!Drupal.hasValue(enrichedMenuItem)) {
+    return;
+  }
+
+  menuItem = Object.assign(menuItem, enrichedMenuItem);
+}
+
+/**
  * Clean up api data.
  *
  * @param {object} data
@@ -54,6 +71,7 @@ const processData = function (data, maxLevel) {
 
   // Loop object;
   for (const [key, value] of Object.entries(data)) {
+    processEnrichment(data[key]);
     // Check children.
     if (typeof data[key].children !== 'undefined'
       && Object.values(data[key].children).length < 1) {
