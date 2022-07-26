@@ -29,10 +29,7 @@
  *   Processed menu item.
  */
 function processCategory(catItem, level, settings, enrichmentData, isSuperCategoryEnabled) {
-  // We support max depth by L4.
-  if (level > parseInt(drupalSettings.alshayaRcs.navigationMenu.menuMaxDepth)) {
-    return;
-  }
+
   const level_url_path = catItem.url_path;
   // Append category prefix in L2 if super category is enabled.
   if (isSuperCategoryEnabled) {
@@ -60,6 +57,16 @@ function processCategory(catItem, level, settings, enrichmentData, isSuperCatego
   return catItem;
 }
 
+/**
+ * Processes mdc categories for rendering.
+ *
+ * @param {object} settings
+ *   The drupal settings object.
+ * @param {object} inputs
+ *   Mdc Categories.
+ * @returns {object}
+ *   Returns prepared categories to be displayed.
+ */
 exports.prepareData = function prepareData(settings, inputs) {
   let enrichmentData = globalThis.rcsGetEnrichedCategories();
   var catItems = filterAvailableItems(inputs);
@@ -67,7 +74,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     return parseInt(a.position) - parseInt(b.position);
   });
   // Get the active super category.
-  const isSuperCategoryEnabled = (typeof settings.superCategory) != "undefined";
+  const isSuperCategoryEnabled = !!settings.superCategory;
    // Proceed only if superCategory is enabled.
    if (isSuperCategoryEnabled) {
     let activeSuperCategory = globalThis.rcsWindowLocation().pathname.split('/')[2];
