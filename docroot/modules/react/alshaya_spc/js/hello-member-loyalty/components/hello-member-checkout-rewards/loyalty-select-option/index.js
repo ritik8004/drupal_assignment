@@ -43,7 +43,7 @@ const LoyaltySelectOption = ({
     <label className="radio-sim radio-label">
       {(currentOption !== 'aura' || optionName === 'hello_member')
         && <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>}
-        {(currentOption === 'aura' && optionName === 'aura')
+      {(currentOption === 'aura' && optionName === 'aura')
           && (
           <Collapsible
             trigger={auraLoyaltyHeader(optionName, helloMemberPoints)}
@@ -56,7 +56,7 @@ const LoyaltySelectOption = ({
               />
             </div>
           </Collapsible>
-        )}
+          )}
     </label>
   </div>
 );
