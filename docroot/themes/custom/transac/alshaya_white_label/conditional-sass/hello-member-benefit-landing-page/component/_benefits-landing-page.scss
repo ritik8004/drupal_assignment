@@ -1,6 +1,6 @@
 %benefit-details {
-  background: $hm-benefit-description-bg;
-  color: $hm-benefit-description-txt;
+  background: $hello-member-benefit-description-bg;
+  color: $hello-member-benefit-description-txt;
   font-size: rem(14);
   letter-spacing: 0.7px;
   padding: rem(52) rem(125);
@@ -36,7 +36,7 @@
 
     .expiry {
       font-size: rem(14);
-      color: $hm-benefit-expiry-txt;
+      color: $hello-member-benefit-expiry-txt;
       letter-spacing: 0.7px;
     }
   }
@@ -80,7 +80,7 @@
     h3 {
       letter-spacing: 0.9px;
       font-size: rem(18);
-      color: $hm-benefit-description-heading-txt;
+      color: $hello-member-benefit-description-heading-txt;
     }
 
     ul {
@@ -94,8 +94,8 @@
     }
 
     div {
-      background: $hm-benefit-description-bg !important;
-      color: $hm-benefit-description-txt !important;
+      background: $hello-member-benefit-description-bg !important;
+      color: $hello-member-benefit-description-txt !important;
       line-height: 1.6;
     }
 
@@ -114,7 +114,7 @@
 
     h3 {
       margin: 0;
-      color: $hm-benefit-description-heading-txt;
+      color: $hello-member-benefit-description-heading-txt;
       font-size: rem(16);
       letter-spacing: 0.8px;
 
@@ -127,7 +127,7 @@
   .benefit-Tnc {
     padding: rem(52) rem(125);
     text-align: center;
-    color: $hm-benefit-Tnc-txt;
+    color: $hello-member-benefit-Tnc-txt;
 
     @include breakpoint($only-mobile) {
       padding: rem(52) rem(24);
