@@ -72,14 +72,7 @@ const processData = function (data, maxLevel) {
   // Loop object;
   for (const [key, value] of Object.entries(data)) {
     processEnrichment(data[key]);
-    // Check children.
-    if (typeof data[key].children !== 'undefined'
-      && Object.values(data[key].children).length < 1) {
-      // When the menus don't have children, we set to false. This is required
-      // because Handlebars doesn't check empty objects in the same way it does
-      // for arrays, see https://handlebarsjs.com/guide/builtin-helpers.html#if.
-      data[key].children = false;
-    }
+
     // Check if we have an array or object.
     if ((/array|object/).test(typeof value)) {
       // Check if the item should be included in the menu.
@@ -92,9 +85,17 @@ const processData = function (data, maxLevel) {
         && data[key].level - 1 > maxLevel) {
         delete (data[key]);
       }
-      // Go one level deeper into the data.
+    }
+    // Check children.
+    if (typeof data[key].children !== 'undefined') {
+      if (Object.values(data[key].children).length < 1) {
+        // When the menus don't have children, we set to false. This is required
+        // because Handlebars doesn't check empty objects in the same way it does
+        // for arrays, see https://handlebarsjs.com/guide/builtin-helpers.html#if.
+        data[key].children = false;
+      }
       else {
-        data[key] = processData(value, maxLevel);
+        processData(data[key].children, maxLevel);
       }
     }
   }
