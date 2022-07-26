@@ -6,7 +6,7 @@
   .my-offers-vouchers-details {
     text-align: center;
     font-family: $alshaya-bold;
-    background: $hm-my-offers-bg;
+    background: $hello-member-my-offers-bg;
     min-height: rem(366);
 
     @include breakpoint($tablet) {
@@ -47,7 +47,7 @@
       letter-spacing: 0.6px;
       margin-top: rem(16);
       margin-bottom: rem(40);
-      color: $hm-my-offers-expiry-txt;
+      color: $hello-member-my-offers-expiry-txt;
     }
 
     .voucher-wrapper {

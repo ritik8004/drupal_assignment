@@ -44,7 +44,7 @@
     .Collapsible {
       &::before {
         content: '';
-        border-top: rem(1) solid $hm-loyalty-options-border;
+        border-top: rem(1) solid $hello-member-loyalty-options-border;
         width: 100%;
         position: absolute;
         #{$left}: 0;
@@ -90,7 +90,7 @@
         margin-#{$left}: rem(4);
 
         &::before {
-          color: $hm-loyalty-aura-icon;
+          color: $hello-member-loyalty-aura-icon;
           font-size: rem(16);
           position: relative;
           top: rem(3);
@@ -180,7 +180,7 @@
 
       .loyalty-question {
         font-size: rem(14);
-        color: $hm-loyalty-labels-txt;
+        color: $hello-member-loyalty-labels-txt;
         padding: rem(24) rem(48);
 
         @include breakpoint($only-mobile) {
