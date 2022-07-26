@@ -1,7 +1,6 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import { callHelloMemberApi } from '../../../js/utilities/helloMemberHelper';
-import { isUserAuthenticated } from '../../../js/utilities/helper';
 import logger from '../../../js/utilities/logger';
 import { getPriceToHelloMemberPoint } from './utilities';
 
@@ -160,7 +159,7 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode, con
 
   // For guest user, there is no identifier number
   // calculate points to earn using dictionary API ratio.
-  if (!(isUserAuthenticated()) && !hasValue(identifierNo)) {
+  if (!hasValue(identifierNo)) {
     let totalPrice = 0;
     Object.entries(items).forEach(([, item]) => {
       totalPrice += (item.qty * item.price);
