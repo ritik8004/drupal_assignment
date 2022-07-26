@@ -135,10 +135,28 @@ class TotalLineItems extends React.Component {
       );
     }
 
+    // Check if hello member voucher codes are applied and set a flag to show
+    // a voucher discount line items separately in summary.
+    // - hmAppliedVoucherCodes is a comma separated string containing all
+    // voucher codes.
+    const showHmVoucherDiscount = (hasValue(totals.hmAppliedVoucherCodes)
+      && totals.hmAppliedVoucherCodes !== '');
+
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
         <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
+        {showHmVoucherDiscount && (
+          <TotalLineItem
+            name="hm-voucher-discount"
+            title={Drupal.t(
+              '@count Bonus Voucher',
+              { '@count': totals.hmAppliedVoucherCodes.split(',').length },
+              { context: 'hello_member' },
+            )}
+            value={totals.hmVoucherDiscount}
+          />
+        )}
 
         <ConditionalView condition={shippingAmount !== null}>
           <TotalLineItem

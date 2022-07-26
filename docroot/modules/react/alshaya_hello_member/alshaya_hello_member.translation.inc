@@ -239,6 +239,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'خصم الأعضاء',
         'context' => 'hello_member',
       ],
+      '@count Bonus Voucher' => [
+        'ar' => 'قسيمة مكافأة @count',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
