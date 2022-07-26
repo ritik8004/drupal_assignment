@@ -105,8 +105,8 @@ class AddBenefitsToCart extends React.Component {
             }
             removeFullScreenLoader();
           } else {
-            // If coupon details API is returning Error.
-            logger.error('Error while calling the apply coupon Api @params, @message', {
+            // If member offers API is returning Error.
+            logger.error('Error while calling the apply member offers Api @params, @message', {
               '@params': params,
               '@message': response.data.message,
             });
