@@ -91,7 +91,6 @@ class AuraMobileNumberFieldDisplay extends React.Component {
       maxLength,
       countryMobileCode,
       defaultValue,
-      onlyMobileFieldPlaceholder,
     } = this.props;
 
     const {
@@ -134,7 +133,6 @@ class AuraMobileNumberFieldDisplay extends React.Component {
             name={`${name}-mobile-number`}
             defaultValue={defaultValue}
             label={getStringMessage('mobile_label')}
-            placeholder={onlyMobileFieldPlaceholder}
           />
         </div>
         <div id={`${name}-aura-mobile-field-error`} className="error" />
