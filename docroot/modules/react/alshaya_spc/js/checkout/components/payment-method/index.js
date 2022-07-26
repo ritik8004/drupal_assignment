@@ -30,6 +30,9 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import PaymentMethodTabby from '../payment-method-tabby';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
+import PaymentMethodCodMobileVerification
+  from '../payment-method-cod-mobile-verification';
+import { isCodMobileVerifyEnabled } from '../../../utilities/cod_utilities';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -41,6 +44,7 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodPostpay = React.createRef();
     this.paymentMethodTabby = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
+    this.paymentMethodCod = React.createRef();
   }
 
   componentDidMount() {
@@ -72,6 +76,10 @@ export default class PaymentMethod extends React.Component {
 
     if (method.code === 'checkout_com_upapi_applepay') {
       return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
+    }
+
+    if (method.code === 'cashondelivery' && isCodMobileVerifyEnabled()) {
+      return this.paymentMethodCod.current.validateBeforePlaceOrder();
     }
 
     // Now update the payment method data in the cart.
@@ -217,6 +225,13 @@ export default class PaymentMethod extends React.Component {
       ? `${additionalClasses} in-active`
       : additionalClasses;
 
+    // Get shipping mobile number for COD mobile verification.
+    let mobileNumber = null;
+    if (typeof cart !== 'undefined' && typeof cart.cart.shipping !== 'undefined') {
+      const { address } = cart.cart.shipping;
+      mobileNumber = (typeof address.telephone !== 'undefined') ? address.telephone : null;
+    }
+
     return (
       <>
         <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
@@ -275,6 +290,12 @@ export default class PaymentMethod extends React.Component {
                   messageKey="cod_surcharge_description"
                 />
               </div>
+              <ConditionalView condition={isCodMobileVerifyEnabled()}>
+                <PaymentMethodCodMobileVerification
+                  ref={this.paymentMethodCod}
+                  shippingMobileNumber={mobileNumber}
+                />
+              </ConditionalView>
             </div>
           </ConditionalView>
 
