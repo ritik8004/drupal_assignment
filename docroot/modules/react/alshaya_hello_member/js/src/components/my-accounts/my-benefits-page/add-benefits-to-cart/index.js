@@ -100,7 +100,7 @@ class AddBenefitsToCart extends React.Component {
               appliedAlready: true,
             });
             if (response.data) {
-              document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.');
+              document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
               document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
             }
             removeFullScreenLoader();
