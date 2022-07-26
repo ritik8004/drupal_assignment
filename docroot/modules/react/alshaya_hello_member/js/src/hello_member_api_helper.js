@@ -269,7 +269,7 @@ const getHelloMemberDictionaryData = async (requestData) => callHelloMemberApi('
   .then((response) => {
     if (response.status !== 200) {
       const message = hasValue(response.data.error_message) ? response.data.error_message : '';
-      logger.error('Error while trying to call hello meber dictionary data Api @params, Message: @message', {
+      logger.error('Error while trying to call hello member dictionary data Api @params, Message: @message', {
         '@message': message,
         '@params': requestData,
       });

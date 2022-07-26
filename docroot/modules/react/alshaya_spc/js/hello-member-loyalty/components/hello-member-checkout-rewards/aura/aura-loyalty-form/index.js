@@ -4,12 +4,13 @@ import AuraFormEmailField from '../aura-form-email-field';
 import AuraFormCardField from '../aura-form-card-field';
 import AuraFormMobileNumberField from '../aura-form-mobile-number-field';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
-import { getUserInput, processCheckoutCart, getHelloMemberAuraStorageKey } from '../../utilities/loyalty_helper';
+import { processCheckoutCart, getHelloMemberAuraStorageKey } from '../../utilities/loyalty_helper';
 import { showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import PointsString from '../../../../../aura-loyalty/components/utilities/points-string';
 import PointsExpiryMessage from '../../../../../aura-loyalty/components/utilities/points-expiry-message';
 import ToolTip from '../../../../../utilities/tooltip';
+import { getUserInput } from '../../../../../aura-loyalty/components/utilities/checkout_helper';
 
 class AuraLoyaltyForm extends React.Component {
   constructor(props) {

@@ -34,6 +34,7 @@ class AuraMobileNumberFieldDisplay extends React.Component {
       setCountryCode(countryMobileCode);
     }
 
+    // Get list of country prefixes from the dictionary api.
     const helloMemberDictionaryData = getHelloMemberDictionaryData({ type: 'EXT_PHONE_PREFIX' });
     if (helloMemberDictionaryData instanceof Promise) {
       helloMemberDictionaryData.then((response) => {

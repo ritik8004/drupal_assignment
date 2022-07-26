@@ -1,41 +1,5 @@
-import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { removeFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
-import { getElementValueByType } from '../../../../aura-loyalty/components/utilities/link_card_sign_up_modal_helper';
-import { validateElementValueByType } from '../../../../aura-loyalty/components/utilities/validation_helper';
-
-/**
- * Utility function to get user input value.
- */
-function getUserInput(linkCardOption, chosenCountryCode) {
-  if (!validateElementValueByType(linkCardOption)) {
-    return {};
-  }
-
-  const element = {
-    key: linkCardOption,
-    type: linkCardOption,
-    value: getElementValueByType(linkCardOption),
-  };
-
-  if (linkCardOption === 'mobile' || linkCardOption === 'mobileCheckout') {
-    element.type = 'phone';
-    element.value = hasValue(chosenCountryCode)
-      ? chosenCountryCode + element.value
-      : element.value;
-  }
-
-  if (linkCardOption === 'emailCheckout') {
-    element.key = 'email';
-    element.type = 'email';
-  }
-
-  if (linkCardOption === 'cardNumber' || linkCardOption === 'cardNumberCheckout') {
-    element.type = 'apcNumber';
-  }
-
-  return element;
-}
 
 /**
  * Helper function to search loyalty details based on
@@ -98,6 +62,5 @@ function getHelloMemberAuraStorageKey() {
 
 export {
   processCheckoutCart,
-  getUserInput,
   getHelloMemberAuraStorageKey,
 };

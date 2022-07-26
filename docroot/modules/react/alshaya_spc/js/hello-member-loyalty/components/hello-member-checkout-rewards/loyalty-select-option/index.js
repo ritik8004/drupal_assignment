@@ -47,7 +47,7 @@ const LoyaltySelectOption = ({
           && (
           <Collapsible
             trigger={auraLoyaltyHeader(optionName, helloMemberPoints)}
-            open={!!(currentOption === 'aura' && optionName === 'aura')}
+            open
           >
             <div className="spc-aura-link-card-form active">
               <AuraLoyaltyForm
