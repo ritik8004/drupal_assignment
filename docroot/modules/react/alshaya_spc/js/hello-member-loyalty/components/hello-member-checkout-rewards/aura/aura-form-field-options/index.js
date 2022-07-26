@@ -18,7 +18,7 @@ class AuraFormFieldOptions extends React.Component {
           selectOptionCallback={selectOptionCallback}
           fieldKey="mobile"
           fieldValue="mobile"
-          fieldText={Drupal.t('Mobile Number')}
+          fieldText={getStringMessage('mobile_number')}
         />
         <AuraFormFieldItem
           selectedOption={selectedOption}
@@ -32,7 +32,7 @@ class AuraFormFieldOptions extends React.Component {
           selectOptionCallback={selectOptionCallback}
           fieldKey="email"
           fieldValue="email"
-          fieldText={Drupal.t('Email address')}
+          fieldText={getStringMessage('email_address')}
         />
       </div>
     );

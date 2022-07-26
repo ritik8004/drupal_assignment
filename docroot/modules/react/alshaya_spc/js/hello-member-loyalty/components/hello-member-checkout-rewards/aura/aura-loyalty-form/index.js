@@ -255,7 +255,7 @@ class AuraLoyaltyForm extends React.Component {
                       disabled={false}
                       onClick={() => this.addCard()}
                     >
-                      { Drupal.t('Submit') }
+                      { getStringMessage('card_submit') }
                     </button>
                   </div>
                 </div>

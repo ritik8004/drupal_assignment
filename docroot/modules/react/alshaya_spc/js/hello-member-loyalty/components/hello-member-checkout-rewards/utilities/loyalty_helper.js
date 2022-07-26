@@ -2,6 +2,8 @@ import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { removeFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 
 /**
+ * This is duplicate of aura utility in
+ * aura-loyalty/components/utilities/checkout_helper.js
  * Helper function to search loyalty details based on
  * user input and add/remove the card from cart.
  */
