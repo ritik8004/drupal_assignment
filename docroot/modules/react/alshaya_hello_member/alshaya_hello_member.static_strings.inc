@@ -134,6 +134,10 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'benefit_expire_no_date',
       'value' => t('Expires on', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'view_all_benefits',
+      'value' => t('View all Benefits', [], ['context' => 'hello_member']),
+    ],
   ];
 }
 

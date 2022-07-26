@@ -4,13 +4,14 @@ import AuraFormEmailField from '../aura-form-email-field';
 import AuraFormCardField from '../aura-form-card-field';
 import AuraFormMobileNumberField from '../aura-form-mobile-number-field';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
-import { getUserInput, processCheckoutCart, getHelloMemberAuraStorageKey } from '../../utilities/loyalty_helper';
+import { processCheckoutCart, getHelloMemberAuraStorageKey } from '../../utilities/loyalty_helper';
 import { showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import PointsString from '../../../../../aura-loyalty/components/utilities/points-string';
 import PointsExpiryMessage from '../../../../../aura-loyalty/components/utilities/points-expiry-message';
 import ToolTip from '../../../../../utilities/tooltip';
 import AuraRedeemPoints from '../aura-redeem-points';
+import { getUserInput } from '../../../../../aura-loyalty/components/utilities/checkout_helper';
 
 class AuraLoyaltyForm extends React.Component {
   constructor(props) {
@@ -226,7 +227,7 @@ class AuraLoyaltyForm extends React.Component {
         {!isFullyEnrolled
           && (
             <>
-              <div className="label">
+              <div className="aura-details">
                 {getStringMessage('enter_aura_details')}
                 <ToolTip enable>{getStringMessage('aura_details_tooltip')}</ToolTip>
               </div>
@@ -259,8 +260,7 @@ class AuraLoyaltyForm extends React.Component {
                     </button>
                   </div>
                 </div>
-                {window.innerWidth >= 768
-                && <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />}
+                <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
               </div>
               <div className="sub-text">
                 {loyaltyCardLinkedToCart

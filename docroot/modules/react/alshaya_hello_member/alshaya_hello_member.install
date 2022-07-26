@@ -30,7 +30,7 @@ function alshaya_hello_member_install() {
   // Set the Hello member header block
   // to appear just above the mini cart block.
   $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
-  $config_factory->getEditable('block.block.hellomemberheaderblock')->set('weight', $my_account_links - 1)->save();
+  $config_factory->getEditable('block.block.hellomemberheaderblock')->set('weight', $my_account_links - 2)->save();
 
   // Enable points history link in the menu.
   $config = $config_factory->getEditable('alshaya_user.settings');
@@ -38,6 +38,11 @@ function alshaya_hello_member_install() {
   $alshaya_hello_member = unserialize($config->get('my_account_enabled_links'));
   $alshaya_hello_member['hello_member_points_history'] = 'hello_member_points_history';
   $config->set('my_account_enabled_links', serialize($alshaya_hello_member));
+  $config->save();
+
+  // Disable aura module as we need to disable original aura feature.
+  $config = $config_factory->getEditable('alshaya_aura_react.settings');
+  $config->set('aura_enabled', FALSE);
   $config->save();
 
   // Add translations.

@@ -822,3 +822,8 @@ cls-initial-layout-common:
   css:
     theme:
       css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: {}
+
+hello-member-aura-loyalty:
+  css:
+    theme:
+      css/conditional-sass/hello-member-aura-loyalty/hello-member-aura-loyalty.ltr.css: {}
