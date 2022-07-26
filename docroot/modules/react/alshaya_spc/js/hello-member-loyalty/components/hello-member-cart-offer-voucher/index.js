@@ -39,7 +39,10 @@ class HelloMemberCartOffersVouchers extends React.Component {
     return (
       <>
         <div className="hello-member-promo-section">
-          <a className="hm-promo-pop-link" onClick={() => this.togglePopup(true)}> Discounts & Vouchers </a>
+          <a className="hm-promo-pop-link" onClick={() => this.togglePopup(true)}>
+            Discounts & Vouchers
+            <span className="promo-notification" />
+          </a>
           <div className="popup-container">
             <Popup
               open={openModal}
