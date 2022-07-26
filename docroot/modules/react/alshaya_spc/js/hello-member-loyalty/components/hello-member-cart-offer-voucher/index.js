@@ -40,7 +40,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       <>
         <div className="hello-member-promo-section">
           <a className="hm-promo-pop-link" onClick={() => this.togglePopup(true)}>
-            Discounts & Vouchers
+            {Drupal.t('Discounts & Vouchers')}
             <span className="promo-notification" />
           </a>
           <div className="popup-container">
@@ -50,20 +50,20 @@ class HelloMemberCartOffersVouchers extends React.Component {
               closeOnEscape={false}
             >
               <a className="close-modal" onClick={() => this.togglePopup(false)} />
-              <div className="hm-promo-modal-title">Discount</div>
+              <div className="hm-promo-modal-title">{Drupal.t('Discount')}</div>
               <div className="hm-promo-modal-content">
                 <div className="error-info-section">&nbsp;</div>
                 <Tabs>
                   <TabList>
-                    <Tab>Bonus Vouchers</Tab>
-                    <Tab>Member Offers</Tab>
+                    <Tab>{Drupal.t('Bonus Vouchers')}</Tab>
+                    <Tab>{Drupal.t('Member Offers')}</Tab>
                   </TabList>
 
                   <TabPanel>
                     <form
-                      className="egift-validate-form"
+                      className="hm-promo-vouchers-validate-form"
                       method="post"
-                      id="egift-val-form"
+                      id="hm-promo-vouchers-val-form"
                       onSubmit={this.handleSubmit}
                     >
                       <div className="hm-promo-tab-content-list">
@@ -105,16 +105,16 @@ class HelloMemberCartOffersVouchers extends React.Component {
                         </div>
                       </div>
                       <div className="hm-promo-tab-cont-action">
-                        <input type="submit" value="apply vouchers" />
-                        <a href="" className="clear-btn">{Drupal.t('clear all')}</a>
+                        <input type="submit" value="APPLY VOUCHERS" />
+                        <a href="" className="clear-btn">{Drupal.t('CLEAR ALL')}</a>
                       </div>
                     </form>
                   </TabPanel>
                   <TabPanel>
                     <form
-                      className="egift-validate-2-form"
+                      className="hm-promo-offers-validate-form"
                       method="post"
-                      id="egift-val-form-2"
+                      id="hm-promo-offers-val-form"
                       onSubmit={this.handleSubmit}
                     >
                       <div className="hm-promo-tab-content-list radio-btn-list">
@@ -156,8 +156,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
                         </div>
                       </div>
                       <div className="hm-promo-tab-cont-action">
-                        <input type="submit" value="apply offers" />
-                        <a href="" className="clear-btn">{Drupal.t('clear all')}</a>
+                        <input type="submit" value="APPLY OFFERS" />
+                        <a href="" className="clear-btn">{Drupal.t('CLEAR ALL')}</a>
                       </div>
                     </form>
                   </TabPanel>

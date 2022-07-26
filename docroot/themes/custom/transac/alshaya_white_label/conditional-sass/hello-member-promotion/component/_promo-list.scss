@@ -9,7 +9,7 @@
 
         .hm-promo-tab-cont-item {
           background-color: $hm-promo-tab-items-bg;
-          border: 1px solid $hm-promo-tab-items-border;
+          border: rem(1) solid $hm-promo-tab-items-border;
           height: rem(71);
           padding: rem(20) rem(16);
           margin-bottom: rem(10);
@@ -64,21 +64,9 @@
             }
           }
 
-          &:checked + label {
-            font-weight: bold;
-            font-size: rem(14);
-          }
-
           & ~ label::before {
             padding-#{$right}: rem(12);
-            color: $hm-my-offers-expiry-txt;
             cursor: pointer;
-          }
-
-          &:checked {
-            ~label {
-              font-weight: bold;
-            }
           }
         }
       }
@@ -92,16 +80,13 @@
       .hm-promo-tab-cont-action {
         margin-top: rem(20);
         padding-#{$right}: rem(10);
-        text-transform: uppercase;
-        font-weight: bold;
+        font-family: $alshaya-bold;
         font-size: rem(16);
 
         input {
           @extend %button-wide;
 
           font-family: $alshaya-bold;
-          text-transform: uppercase;
-          font-weight: bold;
           width: 100%;
           background-color: $hm-promo-btn-bg;
           color: $hm-my-offers-bg;
@@ -109,7 +94,6 @@
         }
 
         .clear-btn {
-          text-align: center;
           color: $hm-promo-btn-bg;
           padding: rem(40) 0 rem(26);
           display: inline-flex;
