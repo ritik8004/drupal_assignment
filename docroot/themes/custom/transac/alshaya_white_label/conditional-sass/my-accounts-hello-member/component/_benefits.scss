@@ -6,7 +6,7 @@
   .my-offers-vouchers-details {
     text-align: center;
     font-family: $alshaya-bold;
-    background: $hm-my-offers-bg;
+    background: $hello-member-my-offers-bg;
     min-height: rem(366);
 
     @include breakpoint($tablet) {
@@ -67,7 +67,7 @@
       margin-top: rem(20);
       margin-bottom: rem(27);
       font-family: $alshaya-bold;
-      color: $hm-my-offers-expiry-txt;
+      color: $hello-member-my-offers-expiry-txt;
 
       @include breakpoint($tablet) {
         margin-top: rem(16);

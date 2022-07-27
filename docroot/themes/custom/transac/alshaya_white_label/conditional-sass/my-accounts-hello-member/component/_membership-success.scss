@@ -1,6 +1,6 @@
 #my-accounts-hello-member {
   .hello-member-popup-form {
-    background: $hm-membership-success-popup-bg;
+    background: $hello-member-membership-success-popup-bg;
     text-align: center;
 
     .hello-membership-info {
@@ -19,7 +19,7 @@
           font-size: rem(32);
           margin-bottom: rem(24);
           line-height: 1;
-          color: $hm-membership-success-popup-title;
+          color: $hello-member-membership-success-popup-title;
         }
 
         &details {
@@ -63,7 +63,7 @@
             }
 
             a:hover {
-              background-color: $hm-btn-hover;
+              background-color: $hello-member-btn-hover;
             }
           }
         }
