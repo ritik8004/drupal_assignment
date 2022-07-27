@@ -1,11 +1,6 @@
-topup_terms_conditions_text:
-  value: '<ol><li>يمكن إجراء تعبئة الرصيد لبطاقات الهدايا الإلكترونية النشطة فقط</li><li>الحد الأدنى لمبلغ التعبئة هو 5 [alshaya_seo:currency]</li><li>ستعمل زيادة الرصيد على تمديد صلاحيتك لمدة 3 أشهر إضافية</li></ol>'
-  format: rich_text
 membership_popup_text_above:
   value: '<p classname="hello-membership-sub-title">تجربتك أصبحت أفضل! مع الشروط المحدثة وأمبير. الشروط أنت الآن عضو ويمكنك الاستمتاع بمجموعة واسعة من المزايا والميزات الجديدة. تعال واحصل على توصيل مجاني وخصم 20٪ على مشترياتك التالية!</p>'
   format: full_text
-membership_popup_text_above:
-  value: '<p classname="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</p>
-<p classname="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</p>
-<p classname="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</a></p>'
+membership_popup_text_below:
+  value: '<p classname="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</p><p classname="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</p><p classname="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</a></p>'
   format: full_text
