@@ -18,16 +18,6 @@ export const isAuraIntegrationEnabled = () => isHelloMemberEnabled()
   && hasValue(drupalSettings.helloMember.auraIntegrationStatus);
 
 /**
- * Helper function to get aura related config for hello memeber.
- */
-export const getAuraFormConfig = () => {
-  if (hasValue(drupalSettings.helloMember.auraFormConfig)) {
-    return drupalSettings.helloMember.auraFormConfig;
-  }
-  return null;
-};
-
-/**
  * Helper function to get the customer info from user session.
  */
 export const getHelloMemberCustomerInfo = () => {
@@ -97,6 +87,15 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       break;
     case 'helloMemberCustomerPhoneSearch':
       endpoint = `/V1/customers/apc-search/phone/${endPointParams.phoneNumber}`; // endpoint to search hello member by phone number.
+      break;
+    case 'addBonusVouchersToCart':
+      endpoint = '/V1/hello-member/carts/mine/bonusVouchers';
+      break;
+    case 'addMemberOffersToCart':
+      endpoint = '/V1/hello-member/carts/mine/memberOffers';
+      break;
+    case 'getCartData':
+      endpoint = '/V1/carts/mine/getCart';
       break;
 
     default:

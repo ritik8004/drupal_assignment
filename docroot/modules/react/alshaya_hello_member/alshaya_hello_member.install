@@ -40,11 +40,6 @@ function alshaya_hello_member_install() {
   $config->set('my_account_enabled_links', serialize($alshaya_hello_member));
   $config->save();
 
-  // Disable aura module as we need to disable original aura feature.
-  $config = $config_factory->getEditable('alshaya_aura_react.settings');
-  $config->set('aura_enabled', FALSE);
-  $config->save();
-
   // Add translations.
   module_load_include('inc', 'alshaya_hello_member', 'alshaya_hello_member.translation');
   if ($translations = _alshaya_hello_member_get_translations()) {

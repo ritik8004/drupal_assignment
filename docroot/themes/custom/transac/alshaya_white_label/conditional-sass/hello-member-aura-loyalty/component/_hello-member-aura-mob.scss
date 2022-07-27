@@ -15,7 +15,7 @@
 
     .spc-type-textfield {
       margin-#{$left}: rem(20);
-      width: calc(100% - 1.25rem - 5.625rem);
+      width: calc(100% - 6.875rem);
       margin-bottom: 0;
     }
 
@@ -88,7 +88,7 @@
           &.spcAuraSelect__option--is-disabled {
             pointer-events: none;
             opacity: 0.5;
-            background: $hm-loyalty-aura-disable-select-bg !important;
+            background: $hello-member-loyalty-aura-disable-select-bg !important;
           }
         }
       }
@@ -99,7 +99,7 @@
 
       @include icon('chevrondown') {
         font-size: rem(8);
-        color: $hm-loyalty-aura-icon;
+        color: $hello-member-loyalty-aura-icon;
         transition: transform 0.3s ease-in-out;
         width: rem(8);
         height: rem(8);

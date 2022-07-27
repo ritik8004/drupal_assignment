@@ -1,4 +1,5 @@
 import React from 'react';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const AuraFormEmailField = (props) => {
   const { email } = props;
@@ -9,7 +10,7 @@ const AuraFormEmailField = (props) => {
       id="spc-aura-link-card-input-email"
       name="spc-aura-link-card-input-email"
       className="spc-aura-link-card-input-email spc-aura-link-card-input"
-      placeholder={Drupal.t('Email address')}
+      placeholder={getStringMessage('email_address')}
       defaultValue={email}
     />
   );

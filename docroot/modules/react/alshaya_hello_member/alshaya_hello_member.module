@@ -33,7 +33,6 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   $hello_member_settings = [
     'status' => $helloMemberHelper->isHelloMemberEnabled(),
     'auraIntegrationStatus' => $helloMemberHelper->isAuraIntegrationEnabled(),
-    'auraFormConfig' => $helloMemberHelper->getAuraFormConfig(),
   ];
   $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
 
@@ -462,5 +461,5 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
   $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
 
   \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
-  $build['#strings'] = _alshaya_hello_member_aura_static_strings();
+  $build['#strings'] = array_merge($build['#strings'], _alshaya_hello_member_aura_static_strings());
 }

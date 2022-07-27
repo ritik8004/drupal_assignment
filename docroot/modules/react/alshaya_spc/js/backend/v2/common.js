@@ -23,6 +23,7 @@ import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -352,12 +353,16 @@ const getProcessedCartData = async (cartData) => {
       items: cartData.totals.items,
       allExcludedForAdcard: cartData.totals.extension_attributes.is_all_items_excluded_for_adv_card,
     },
-    loyalty_card: (typeof cartData.cart.extension_attributes.loyalty_card !== 'undefined') ? cartData.cart.extension_attributes.loyalty_card : '',
-    loyalty_type: (typeof cartData.cart.extension_attributes.loyalty_type !== 'undefined') ? cartData.cart.extension_attributes.loyalty_type : '',
     items: [],
     ...(collectionPointsEnabled() && hasValue(cartData.shipping))
     && { collection_charge: cartData.shipping.price_amount || '' },
   };
+
+  // Add loyalty card and loyalty type for hello member loyalty.
+  if (isHelloMemberEnabled()) {
+    data.loyalty_card = cartData.cart.extension_attributes.loyalty_card || '';
+    data.loyalty_type = cartData.cart.extension_attributes.loyalty_type || '';
+  }
 
   // Totals.
   if (typeof cartData.totals.base_grand_total !== 'undefined') {

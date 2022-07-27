@@ -112,7 +112,7 @@ class AuraMobileNumberFieldDisplay extends React.Component {
       <div className={`spc-aura-mobile-number ${name}-aura-mobile-field`}>
         <div className="field-wrapper">
           <div className="spc-aura-mobile-number-country-code">
-            <label>{Drupal.t('Country Code')}</label>
+            <label>{getStringMessage('country_code')}</label>
             <Select
               ref={this.selectRef}
               classNamePrefix="spcAuraSelect"
