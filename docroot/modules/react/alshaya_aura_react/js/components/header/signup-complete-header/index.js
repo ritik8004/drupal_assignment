@@ -46,8 +46,8 @@ class SignUpCompleteHeader extends React.Component {
     document.removeEventListener('loyaltyStatusUpdated', this.updateState, false);
     // Remove aura-header-modal-open class from the main menu,
     // This class will have no usage once component is unmounted.
-    if (document.getElementById('block-alshayamainmenu')) {
-      document.getElementById('block-alshayamainmenu').classList.remove('aura-header-modal-open');
+    if (document.querySelector('.block-alshaya-main-menu')) {
+      document.querySelector('.block-alshaya-main-menu').classList.remove('aura-header-modal-open');
     }
   }
 
@@ -130,11 +130,11 @@ class SignUpCompleteHeader extends React.Component {
       openLinkCardModal,
     } = this.state;
 
-    if (document.getElementById('block-alshayamainmenu')) {
+    if (document.querySelector('.block-alshaya-main-menu')) {
       if (openLinkOldCardModal || openOtpModal || openNewUserModal || openLinkCardModal) {
-        document.getElementById('block-alshayamainmenu').classList.add('aura-header-modal-open');
+        document.querySelector('.block-alshaya-main-menu').classList.add('aura-header-modal-open');
       } else {
-        document.getElementById('block-alshayamainmenu').classList.remove('aura-header-modal-open');
+        document.querySelector('.block-alshaya-main-menu').classList.remove('aura-header-modal-open');
       }
     }
   };
