@@ -70,7 +70,26 @@ const processData = function (data, maxLevel) {
 
   // Loop object;
   for (const [key, value] of Object.entries(data)) {
+    // Check if we have an array or object.
+    if (!((/array|object/).test(typeof value))) {
+      continue;
+    }
+
+    // Check if the item should be included in the menu.
+    if (typeof data[key].include_in_menu !== 'undefined'
+      && !data[key].include_in_menu) {
+      delete (data[key]);
+      continue;
+    }
+
     processEnrichment(data[key]);
+
+    // Check if we reached max level.
+    if (typeof data[key].level !== 'undefined'
+      && data[key].level - 1 > maxLevel) {
+      delete (data[key]);
+      continue;
+    }
 
     if (typeof data[key].include_in_desktop !== 'undefined') {
       if (!data[key].include_in_desktop) {
@@ -94,19 +113,6 @@ const processData = function (data, maxLevel) {
       data[key].move_to_right = 'move-to-right';
     }
 
-    // Check if we have an array or object.
-    if ((/array|object/).test(typeof value)) {
-      // Check if the item should be included in the menu.
-      if (typeof data[key].include_in_menu !== 'undefined'
-        && !data[key].include_in_menu) {
-        delete (data[key]);
-      }
-      // Check if we reached max level.
-      else if (typeof data[key].level !== 'undefined'
-        && data[key].level - 1 > maxLevel) {
-        delete (data[key]);
-      }
-    }
     // Check children.
     if (typeof data[key].children !== 'undefined') {
       if (Object.values(data[key].children).length < 1) {
