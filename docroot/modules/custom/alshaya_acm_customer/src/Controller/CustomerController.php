@@ -8,6 +8,7 @@ use Drupal\Core\Render\Renderer;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Drupal\Core\Access\AccessResult;
@@ -59,6 +60,13 @@ class CustomerController extends ControllerBase {
   protected $dateFormatter;
 
   /**
+   * Orders manager service object.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -67,7 +75,8 @@ class CustomerController extends ControllerBase {
       $container->get('renderer'),
       $container->get('alshaya_api.api'),
       $container->get('datetime.time'),
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('alshaya_acm_customer.orders_manager')
     );
   }
 
@@ -84,17 +93,21 @@ class CustomerController extends ControllerBase {
    *   Current time service.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   Date formatter service.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders manager service object.
    */
   public function __construct(Request $current_request,
                               Renderer $renderer,
                               AlshayaApiWrapper $api_wrapper,
                               TimeInterface $current_time,
-                              DateFormatterInterface $date_formatter) {
+                              DateFormatterInterface $date_formatter,
+                              OrdersManager $orders_manager) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
     $this->apiWrapper = $api_wrapper;
     $this->currentTime = $current_time;
     $this->dateFormatter = $date_formatter;
+    $this->ordersManager = $orders_manager;
 
   }
 
@@ -271,17 +284,7 @@ class CustomerController extends ControllerBase {
   public function orderDetail(UserInterface $user, $order_id) {
     $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
-    // Get the orders to display for current user and filter applied.
-    $customer_id = (int) $user->get('acq_customer_id')->getString();
-    $orders = alshaya_acm_customer_get_user_orders($customer_id);
-
-    $order_index = array_search($order_id, array_column($orders, 'increment_id'));
-
-    if ($order_index === FALSE) {
-      throw new NotFoundHttpException();
-    }
-
-    $order = $orders[$order_index];
+    $order = $this->ordersManager->getOrderByIncrementId($order_id);
 
     $build = alshaya_acm_customer_build_order_detail($order);
     $build['order'] = $order;

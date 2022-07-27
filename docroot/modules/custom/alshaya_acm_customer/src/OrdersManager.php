@@ -6,6 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_customer\HelperTrait\Orders;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\Cache;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -217,22 +218,15 @@ class OrdersManager {
    *
    * @param int $customer_id
    *   Customer Commerce ID.
+   * @param int $page_size
+   *   Page size for the order API.
    *
    * @return array
    *   Orders.
    */
-  public function getOrders(int $customer_id) {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-    $cid = 'orders_list_' . $langcode . '_' . $customer_id;
-
-    if ($cache = $this->cache->get($cid)) {
-      return $cache->data;
-    }
-
+  public function getOrders(int $customer_id, int $page_size = 3) {
     try {
       $query = $this->getOrdersQuery('customer_id', $customer_id);
-      $page_size = 100;
 
       // Query page size.
       $query['searchCriteria']['pageSize'] = $page_size;
@@ -242,7 +236,14 @@ class OrdersManager {
         'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
       ];
 
-      $result = $this->apiWrapper->invokeApiWithPageLimit($endpoint, $request_options, $page_size, [], $query);
+      if ($page_size > 0) {
+        $result = $this->apiWrapper->invokeApi($endpoint, $query, 'GET', FALSE, $request_options);
+        // Decode the json string to get the order item.
+        $result = Json::decode($result);
+      }
+      else {
+        $result = $this->apiWrapper->invokeApiWithPageLimit($endpoint, $request_options, $page_size, [], $query);
+      }
 
       $orders = $result['items'] ?? [];
       foreach ($orders as $key => $order) {
@@ -260,20 +261,6 @@ class OrdersManager {
     usort($orders, function ($a, $b) {
       return $b['created_at'] > $a['created_at'];
     });
-
-    // Get the cache expiration time based on config value.
-    $cacheTimeLimit = $this->config->get('cache_time_limit');
-
-    // We can disable caching via config by setting it to zero.
-    if ($cacheTimeLimit > 0) {
-      $expire = strtotime('+' . $cacheTimeLimit . ' seconds');
-
-      // Store in cache.
-      $this->cache->set($cid, $orders, $expire);
-    }
-
-    // Re-set count again.
-    $this->countCache->set('orders_count_' . $customer_id, count($orders));
 
     return $orders;
   }
@@ -310,6 +297,33 @@ class OrdersManager {
     $this->countCache->set($cid, $count);
 
     return $count;
+  }
+
+  /**
+   * Helper function to get specific order.
+   *
+   * @param string $increment_id
+   *   Increment ID to get order for.
+   *
+   * @return array
+   *   Order array if found.
+   */
+  public function getOrderByIncrementId(string $increment_id) {
+    $query = $this->getOrdersQuery('increment_id', $increment_id);
+
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
+    ];
+
+    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
+    $result = json_decode($response ?? [], TRUE);
+    $count = $result['total_count'] ?? 0;
+    if (empty($count)) {
+      return NULL;
+    }
+
+    $order = reset($result['items']);
+    return $this->cleanupOrder($order);
   }
 
   /**
