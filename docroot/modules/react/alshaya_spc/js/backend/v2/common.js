@@ -392,6 +392,14 @@ const getProcessedCartData = async (cartData) => {
         data.totals.paidWithAura = element.value;
       }
     }
+
+    // if the hello member feature is enabled, add hm_voucher_discount from
+    // total segments to hmVoucherDiscount for showing in order summary block
+    // on cart and checkout pages. This will be visible in order summary only if
+    // extension_attributes.applied_hm_voucher_codes does have value(s).
+    if (isHelloMemberEnabled() && element.code === 'voucher_discount') {
+      data.totals.hmVoucherDiscount = element.value;
+    }
   });
 
   if (isAuraEnabled()) {
@@ -428,6 +436,24 @@ const getProcessedCartData = async (cartData) => {
     }
     if (hasValue(cartData.totals.extension_attributes.hps_current_balance)) {
       data.totals.egiftCurrentBalance = cartData.totals.extension_attributes.hps_current_balance;
+    }
+  }
+
+  // Check if the hello member feature is enabled and add below hello member
+  // extension_attributes to the totals for display info under order summary
+  // block on cart, checkout pages.
+  // - applied_hm_voucher_codes
+  // - applied_hm_offer_code
+  if (isHelloMemberEnabled() && hasValue(cartData.cart.extension_attributes)) {
+    // Add applied_hm_voucher_codes and hm_voucher_discount to totals.
+    if (hasValue(cartData.cart.extension_attributes.applied_hm_voucher_codes)) {
+      // eslint-disable-next-line max-len
+      data.totals.hmAppliedVoucherCodes = cartData.cart.extension_attributes.applied_hm_voucher_codes;
+    }
+
+    // Add applied_hm_voucher_codes and hm_voucher_discount to totals.
+    if (hasValue(cartData.cart.extension_attributes.applied_hm_offer_code)) {
+      data.totals.hmOfferCode = cartData.cart.extension_attributes.applied_hm_offer_code;
     }
   }
 

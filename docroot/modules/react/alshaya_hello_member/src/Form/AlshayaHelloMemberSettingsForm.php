@@ -102,6 +102,22 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Please select the node which will be redirect on click of membership info link.'),
     ];
 
+    $form['hello_member_configuration']['membership_popup_text_above'] = [
+      '#type' => 'text_format',
+      '#format' => 'full_text',
+      '#allowed_formats' => ['full_text'],
+      '#title' => $this->t('Membership popup text above continue button'),
+      '#default_value' => $config->get('membership_popup_text_above.value') ?? '',
+    ];
+
+    $form['hello_member_configuration']['membership_popup_text_below'] = [
+      '#type' => 'text_format',
+      '#format' => 'full_text',
+      '#allowed_formats' => ['full_text'],
+      '#title' => $this->t('Membership popup text below continue button'),
+      '#default_value' => $config->get('membership_popup_text_below.value') ?? '',
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -115,6 +131,8 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       ->set('points_history_page_size', $form_state->getValue('points_history_page_size'))
       ->set('minimum_age', $form_state->getValue('minimum_age'))
       ->set('membership_info_content_node', $form_state->getValue('membership_info_content_node'))
+      ->set('membership_popup_text_above', $form_state->getValue('membership_popup_text_above'))
+      ->set('membership_popup_text_below', $form_state->getValue('membership_popup_text_below'))
       ->save();
 
     parent::submitForm($form, $form_state);
