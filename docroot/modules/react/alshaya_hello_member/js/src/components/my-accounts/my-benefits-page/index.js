@@ -5,9 +5,9 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
-import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import Loading from '../../../../../../js/utilities/loading';
+import AddBenefitsToCart from './add-benefits-to-cart';
 
 class MyBenefitsPage extends React.Component {
   constructor(props) {
@@ -16,6 +16,7 @@ class MyBenefitsPage extends React.Component {
       wait: false,
       myBenefit: null,
       codeId: null,
+      voucherType: null,
     };
   }
 
@@ -33,6 +34,7 @@ class MyBenefitsPage extends React.Component {
             myBenefit: response.data.coupons[0],
             wait: true,
             codeId: response.data.coupons[0].code,
+            voucherType: response.data.coupons[0].type,
           });
           removeFullScreenLoader();
         } else {
@@ -64,7 +66,7 @@ class MyBenefitsPage extends React.Component {
 
   render() {
     const {
-      wait, myBenefit, codeId,
+      wait, myBenefit, codeId, voucherType,
     } = this.state;
 
     if (!wait) {
@@ -101,13 +103,14 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          <QrCodeDisplay
+          <AddBenefitsToCart
+            title={myBenefit.description}
+            codeId={codeId}
+            voucherType={voucherType}
             memberId={myBenefit.member_identifier}
             qrCodeTitle={qrCodeTitle}
-            codeId={codeId}
             width={79}
           />
-          <div className="button-wide">{getStringMessage('benefit_add_to_bag')}</div>
         </div>
         <div className="benefit-description">
           {(myBenefit.applied_conditions !== null) ? HTMLReactParser(myBenefit.applied_conditions) : ''}

@@ -98,6 +98,15 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
     case 'helloMemberCustomerPhoneSearch':
       endpoint = `/V1/customers/apc-search/phone/${endPointParams.phoneNumber}`; // endpoint to search hello member by phone number.
       break;
+    case 'addBonusVouchersToCart':
+      endpoint = '/V1/hello-member/carts/mine/bonusVouchers';
+      break;
+    case 'addMemberOffersToCart':
+      endpoint = '/V1/hello-member/carts/mine/memberOffers';
+      break;
+    case 'getCartData':
+      endpoint = '/V1/carts/mine/getCart';
+      break;
 
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
