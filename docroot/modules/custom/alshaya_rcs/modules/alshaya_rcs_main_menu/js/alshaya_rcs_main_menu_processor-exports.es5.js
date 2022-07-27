@@ -75,19 +75,19 @@ const processData = function (data, maxLevel) {
 
     if (typeof data[key].include_in_desktop !== 'undefined') {
       if (!data[key].include_in_desktop) {
-        data[key].include_in_desktop = 'hide-on-desktop';
+        data[key].hide_in_desktop = 'hide-on-desktop';
       }
       else {
-        data[key].include_in_desktop = '';
+        data[key].hide_in_desktop = '';
       }
     }
 
     if (typeof data[key].include_in_mobile_tablet !== 'undefined') {
       if (!data[key].include_in_mobile_tablet) {
-        data[key].include_in_mobile_tablet = 'hide-on-mobile';
+        data[key].hide_in_mobile_tablet = 'hide-on-mobile';
       }
       else {
-        data[key].include_in_mobile_tablet = '';
+        data[key].hide_in_mobile_tablet = '';
       }
     }
 
