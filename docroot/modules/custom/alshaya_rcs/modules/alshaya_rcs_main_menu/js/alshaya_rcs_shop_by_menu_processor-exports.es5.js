@@ -16,8 +16,6 @@
  *
  * @param {object} catItem
  *   Rcs Category menu item.
- * @param {string} level
- *   Depth of the menu item.
  * @param {object} settings
  *   The drupal settings object.
  * @param {object} enrichmentData
@@ -28,7 +26,7 @@
  * @returns {object}
  *   Processed menu item.
  */
-function processCategory(catItem, level, settings, enrichmentData, isSuperCategoryEnabled) {
+function processCategory(catItem, settings, enrichmentData, isSuperCategoryEnabled) {
 
   const level_url_path = catItem.url_path;
   // Append category prefix in L2 if super category is enabled.
@@ -42,7 +40,7 @@ function processCategory(catItem, level, settings, enrichmentData, isSuperCatego
     catItem.url_path = level_url_path.replace(/\/+$/, '/');
   }
 
-  // Apply enrichments .
+  // Apply enrichments.
   if (enrichmentData && enrichmentData[level_url_path]) {
     enrichedDataObj = enrichmentData[level_url_path];
     // Override label from Drupal.
@@ -69,7 +67,7 @@ function processCategory(catItem, level, settings, enrichmentData, isSuperCatego
  */
 exports.prepareData = function prepareData(settings, inputs) {
   let enrichmentData = globalThis.rcsGetEnrichedCategories();
-  var catItems = filterAvailableItems(inputs);
+  let catItems = filterAvailableItems(inputs);
   catItems.sort(function (a, b) {
     return parseInt(a.position) - parseInt(b.position);
   });
@@ -97,13 +95,12 @@ exports.prepareData = function prepareData(settings, inputs) {
     }
   }
 
-  var menuItems = [];
+  let menuItems = [];
   catItems.forEach(function eachCategory(catItem) {
-    menuItems.push(processCategory(catItem, 1, settings, enrichmentData, isSuperCategoryEnabled));
+    menuItems.push(processCategory(catItem, settings, enrichmentData, isSuperCategoryEnabled));
   });
 
-  var menuData = {
+  return {
     menuItems: menuItems,
   };
-  return menuData;
 }
