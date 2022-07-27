@@ -42,3 +42,8 @@ main_menu_level4_partial:
   version: 1.x
   js:
     handlebars/rcs-main_menu_level4-partial.handlebars: {}
+
+shop_by_menu:
+  version: 1.x
+  js:
+    handlebars/rcs-shop_by_menu.handlebars: {}
