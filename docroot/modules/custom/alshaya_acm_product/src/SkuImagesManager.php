@@ -1474,7 +1474,7 @@ class SkuImagesManager {
       }
     }
 
-    $this->productCacheManager->set($sku, 'swatches', $swatches);
+    $this->productCacheManager->set($sku, 'swatches', $swatches, $sku->getCacheTags() ?? []);
   }
 
   /**
