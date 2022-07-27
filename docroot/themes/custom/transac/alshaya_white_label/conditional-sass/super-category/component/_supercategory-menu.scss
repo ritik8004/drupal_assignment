@@ -627,7 +627,7 @@
     }
   }
 
-  &.alias--shop-aerie {
+  &.super-category-home {
     .mobile--search {
       @include breakpoint($upto-desktop) {
         display: none !important;
