@@ -266,3 +266,17 @@ function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
 
   return $query_fields;
 }
+
+/**
+ * Implements hook_rcs_handlebars_templates().
+ */
+function alshaya_rcs_main_menu_rcs_handlebars_templates(EntityInterface $entity) {
+  // Libraries to attach.
+  return [
+    'main_menu_level1' => 'alshaya_rcs_product',
+    'main_menu_level2_partial' => 'alshaya_rcs_product',
+    'main_menu_level3_partial' => 'alshaya_rcs_product',
+    'main_menu_level4_partial' => 'alshaya_rcs_product',
+    'shop_by_menu' => 'alshaya_rcs_product',
+  ];
+}

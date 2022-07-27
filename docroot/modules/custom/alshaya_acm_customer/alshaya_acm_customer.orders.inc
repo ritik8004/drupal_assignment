@@ -299,13 +299,6 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
     $shipping_address = $order['shipping']['address'];
 
-    // Loading address from address book if customer_address_id is available.
-    if (!empty($shipping_address['customer_address_id'])) {
-      if ($entity = $address_book_manager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
-        $shipping_address = $address_book_manager->getAddressFromEntity($entity);
-      }
-    }
-
     $shipping_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address);
     $shipping_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
 
@@ -530,7 +523,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       // Check if we can find a parent SKU for this to get proper name.
       if (alshaya_acm_product_get_parent_sku_by_sku($sku)) {
         // Try to find attributes to display for this product.
-        $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
+        $product['attributes'] = \Drupal::service('alshaya_acm_product.skumanager')->getConfigurableValues($sku);
       }
 
       // If attribute value available for grouping attribute.

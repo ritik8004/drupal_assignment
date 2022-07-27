@@ -50,6 +50,7 @@ function alshaya_hm_transac_rcs_node_view(array &$build, EntityInterface $entity
     return;
   }
   $build['#attached']['library'][] = 'alshaya_hm_transac_rcs/product';
+  $build['#attached']['library'][] = 'alshaya_pims_assets/swatch';
   // Attach library to display product attributes in overlay.
   $build['#attached']['library'][] = 'alshaya_hm_transac_rcs/product_overlay';
   $product_attribute_helper = \Drupal::service('alshaya_hm_transac_rcs.product_attribute_helper');
@@ -90,4 +91,12 @@ function alshaya_hm_transac_rcs_alshaya_rcs_product_additional_attributes_query_
   $hm_attributes = array_keys($hm_attributes);
   $attributes = array_merge($attributes, $hm_attributes);
   return $attributes;
+}
+
+/**
+ * Implements hook_add_to_bag_library_alter().
+ */
+function alshaya_hm_transac_rcs_add_to_bag_library_alter(array &$libraries) {
+  // Alter swatch images for hm.
+  $libraries['add_to_bag_utility']['dependencies'][] = 'alshaya_pims_assets/swatch';
 }

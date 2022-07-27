@@ -310,7 +310,11 @@
 
         .store {
           #{$right}: 2rem;
-          top: 1.2rem;
+          top: rem(19);
+
+          @include breakpoint($only-tablet) {
+            top: rem(11);
+          }
         }
       }
 
@@ -443,19 +447,36 @@
     }
 
     .c-menu-primary {
-      .mobile--menu,
+      .mobile--menu {
+        @include breakpoint($upto-desktop) {
+          top: rem(32);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(19);
+        }
+      }
+
       .mobile--search {
         @include breakpoint($upto-desktop) {
-          top: 2rem;
+          top: rem(29);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(16);
         }
       }
 
       .store {
-        top: 4.5rem;
+        top: rem(72);
         z-index: 12;
 
         @include breakpoint($upto-desktop) {
-          top: 1.5rem;
+          top: rem(24);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(16);
         }
       }
     }
@@ -606,7 +627,7 @@
     }
   }
 
-  &.alias--shop-aerie {
+  &.super-category-home {
     .mobile--search {
       @include breakpoint($upto-desktop) {
         display: none !important;

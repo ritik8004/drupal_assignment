@@ -10,6 +10,9 @@
 
         // Display loader.
         if (typeof Drupal.cartNotification.spinner_start === 'function') {
+          document.querySelector('body').scrollIntoView({
+            behavior: 'smooth',
+          });
           Drupal.cartNotification.spinner_start();
         }
 

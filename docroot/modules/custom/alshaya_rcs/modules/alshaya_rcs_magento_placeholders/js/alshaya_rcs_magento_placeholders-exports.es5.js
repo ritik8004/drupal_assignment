@@ -11,27 +11,23 @@ exports.render = function render(
 
   switch (placeholder) {
     case "navigation_menu":
-      // Process rcs navigation renderer, if available.
-      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
-        html += globalThis.renderRcsNavigationMenu.render(
-          settings,
-          inputs,
-          innerHtml,
-          'navigation_menu'
-        );
+      if (typeof globalThis.mainMenuProcessor !== 'undefined') {
+        const menuData = globalThis.mainMenuProcessor.prepareData(
+          drupalSettings.alshayaRcs.navigationMenu,
+          inputs
+        )
+        html = handlebarsRenderer.render('main_menu_level1', menuData);
       }
       break;
 
     case "shop_by_block":
-      // Process shop by block renderer, if available.
-      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
-        html += globalThis.renderRcsNavigationMenu.render(
-          settings,
-          inputs,
-          innerHtml,
-          'shop_by_block'
-        );
-      }
+      // Process and render shop by block menu.
+      const menuData = globalThis.shopByMenuProcessor.prepareData(
+        settings,
+        inputs
+      );
+      html = handlebarsRenderer.render('shop_by_menu', menuData);
+
       break;
 
     case 'product_category_list':

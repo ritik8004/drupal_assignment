@@ -1,0 +1,52 @@
+{{! @see docroot/modules/custom/alshaya_main_menu/templates/alshaya-main-menu-level1.html.twig }}
+<div class="main--menu" data-menu-timing="{{ highlight_timing }}">
+  <div class="toggle--sign no--desktop">
+    <div class="shop one active">{{t 'shop'}}</div>
+    {{#if user_logged_in }}
+      {{#if aura_enabled }}
+        <div class="account--logged_in one" id="username-points-wrapper-mobile-menu"></div>
+      {{else}}
+        <div class="account--logged_in one">{{t 'my account' }}</div>
+      {{/if}}
+    {{else}}
+      {{#if aura_enabled }}
+        <div class="account one">
+          {{t 'sign in' }} / {{t 'register' }}
+          <span id="points-wrapper-mobile-menu"></span>
+        </div>
+      {{else}}
+        <div class="account one">{{t 'sign in' }} / {{t 'register' }}</div>
+      {{/if}}
+    {{/if}}
+  </div>
+  <div class="mobile--close no--desktop">
+    <span></span>
+  </div>
+  <ul class="menu__list menu--one__list">
+    <div class="menu-backdrop"></div>
+    {{#each menu_items as |menu_item|}}
+      <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }}">
+        <div class="menu__link-wrapper menu-two__link-wrapper">
+          {{'// @todo implement style'}}
+          {{set 'style' ''}}
+          {{#if menu_item.icon }}
+            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">
+              <span class="icon"><img src="{{ menu_item.icon.url }}" alt="{{ menu_item.name }}"/></span>
+              {{ menu_item.name }}
+            </{{@root.tag}}>
+          {{else}}
+            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
+          {{/if}}
+        </div>
+        {{#if menu_item.children }}
+          {{> main_menu_level2_partial name=menu_item.name menu_items=menu_item.children level_class=level_class }}
+        {{/if}}
+      </li>
+    {{/each}}
+    {{#if aura_enabled }}
+      <div class="no--desktop">
+        <div id="aura-mobile-header-shop"></div>
+      </div>
+    {{/if}}
+  </ul>
+</div>

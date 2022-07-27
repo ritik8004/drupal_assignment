@@ -18,22 +18,9 @@ class AlshayaRcsShopByBlock extends AlshayaShopByBlock {
    * {@inheritdoc}
    */
   public function build() {
-    // Prepare a static term array with placeholders
-    // for all the possible combinations.
-    $term_data = [
-      '1' => [
-        // 1st Level item with clickable and enabled for both mobile an desktop.
-        'id' => '1',
-        'label' => '#rcs.shopbymenuItem.name#',
-        'path' => '#rcs.shopbymenuItem.url_path#',
-        'depth' => 1,
-      ],
-    ];
 
-    // Return render array with all block elements.
+    // Return rcs shop by container.
     return [
-      '#theme' => 'alshaya_shop_by',
-      '#term_tree' => $term_data,
       '#theme_wrappers' => [
         'container' => [
           '#attributes' => [
@@ -47,6 +34,7 @@ class AlshayaRcsShopByBlock extends AlshayaShopByBlock {
       '#attached' => [
         'library' => [
           'alshaya_white_label/rcs-shop-by-block',
+          'alshaya_rcs_main_menu/shop_by_menu',
         ],
       ]
     ];

@@ -17,7 +17,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -88,7 +88,7 @@ class SkuManager {
   /**
    * The database service.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\mysql\Driver\Database\mysql\Connection
    */
   protected $connection;
 
@@ -276,7 +276,7 @@ class SkuManager {
   /**
    * SkuManager constructor.
    *
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $connection
    *   Database service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
@@ -507,18 +507,16 @@ class SkuManager {
    *   SKU Entity.
    * @param string $color
    *   Color value to limit the scope of skus to get price.
-   * @param bool $reset
-   *   Flag to reset cache value.
    *
    * @return array
    *   Minimum final price and associated initial price.
    */
-  public function getMinPrices(SKU $sku_entity, string $color = '', $reset = FALSE) {
+  public function getMinPrices(SKU $sku_entity, string $color = '') {
     $cache_key = implode(':', array_filter(['product_price', $color]));
-    $cache = $reset ? NULL : $this->productCacheManager->get($sku_entity, $cache_key);
+    $cache = $this->productCacheManager->get($sku_entity, $cache_key);
 
     // Do not process the same thing again and again.
-    if ($cache && is_array($cache)) {
+    if (is_array($cache)) {
       return $cache;
     }
 
@@ -1622,10 +1620,6 @@ class SkuManager {
     $out = '';
     $materials = [];
 
-    if ($list) {
-      $out = "<ul>";
-    }
-
     foreach ($array as $key => $elem) {
       if (!is_array($elem)) {
         $materials[] = "$key $elem%";
@@ -1647,11 +1641,17 @@ class SkuManager {
       }
     }
 
-    if ($list) {
-      $out .= "</ul>";
-    }
-    elseif (!empty($materials)) {
+    if (!empty($materials)) {
       $out = implode('; ', $materials);
+    }
+
+    // Create the ul tags if there is an output.
+    if ($list && $out) {
+      // Add li tag for 1-D array.
+      if (!empty($materials)) {
+        $out = "<li>" . $out . "</li>";
+      }
+      $out = "<ul>" . $out . "</ul>";
     }
 
     return $out;

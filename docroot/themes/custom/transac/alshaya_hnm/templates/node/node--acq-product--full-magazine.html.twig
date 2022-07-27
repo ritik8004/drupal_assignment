@@ -1,0 +1,8 @@
+{% extends '@alshaya_white_label/node/node--acq-product--full-magazine.html.twig' %}
+{% block bnpBlock %}
+  {% if (content.postpay or content.tabby) %}
+    <div class="pay-promo-mobile-collapse mobile-only-show" id="pay-promo-mobile-comp">
+      <span class="pay-emi-lbl">Interest-Free Installments</span>
+    </div>
+  {% endif %}
+{% endblock %}

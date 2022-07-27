@@ -10,6 +10,7 @@ import {
   getNextAllowedPaymentMethodCode,
   showFullScreenLoader,
   removeFullScreenLoader,
+  getPaymentMethodsData,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import dispatchCustomEvent from '../../../utilities/events';
@@ -47,6 +48,7 @@ export default class PaymentMethods extends React.Component {
 
   componentDidMount = () => {
     this.selectDefault();
+    const paymentMethodsInfo = getPaymentMethodsData();
 
     // We want this to be executed once all other JS execution is finished.
     // For this we use setTimeout with 1 ms.
@@ -95,7 +97,7 @@ export default class PaymentMethods extends React.Component {
 
       // Push error to GA.
       Drupal.logJavascriptError(
-        'payment-error',
+        `payment-error | ${paymentMethodsInfo.[paymentErrorInfo.payment_method]}`,
         paymentErrorInfo,
         GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
       );
@@ -289,6 +291,7 @@ export default class PaymentMethods extends React.Component {
 
   changePaymentMethod = (method) => {
     const { cart, refreshCart } = this.props;
+    const paymentMethodsInfo = getPaymentMethodsData();
 
     if (!this.isActive()) {
       return;
@@ -350,7 +353,7 @@ export default class PaymentMethods extends React.Component {
 
         this.processPostPaymentSelection(method);
       }).catch((error) => {
-        Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        Drupal.logJavascriptError(`change payment method | ${paymentMethodsInfo.[method]}`, error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       });
     }
   };

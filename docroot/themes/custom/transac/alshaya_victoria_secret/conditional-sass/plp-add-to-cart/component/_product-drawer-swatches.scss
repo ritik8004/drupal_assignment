@@ -1,0 +1,18 @@
+.swatch-list {
+  .li-swatch-text {
+    a {
+      font-size: rem(12);
+      font-family: $vs-bentonsans-medium;
+      background: $plp-quick-view-product-size-bg-border;
+      border: rem(1) solid $plp-quick-view-product-size-bg-border;
+
+      &.disabled {
+        text-decoration: line-through;
+        font-family: $alshaya-thin;
+        background: $plp-quick-view-product-size-bg-border;
+        color: $plp-quick-view-product-size-text;
+        border: rem(1) solid $plp-quick-view-product-size-bg-border;
+      }
+    }
+  }
+}
