@@ -82,6 +82,15 @@ const processData = function (data, maxLevel) {
       }
     }
 
+    if (typeof data[key].include_in_mobile_tablet !== 'undefined') {
+      if (!data[key].include_in_mobile_tablet) {
+        data[key].include_in_mobile_tablet = 'hide-on-mobile';
+      }
+      else {
+        data[key].include_in_mobile_tablet = '';
+      }
+    }
+
     // Check if we have an array or object.
     if ((/array|object/).test(typeof value)) {
       // Check if the item should be included in the menu.
