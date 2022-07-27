@@ -7,7 +7,6 @@ import logger from '../../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { findArrayElement } from '../../../../utilities';
-import QrCodeDisplay from '../../my-membership/qr-code-display';
 
 class AddBenefitsToCart extends React.Component {
   constructor(props) {
@@ -118,7 +117,6 @@ class AddBenefitsToCart extends React.Component {
 
   render() {
     const { appliedAlready, wait, isEmptyCart } = this.state;
-    const { memberId, codeId, qrCodeTitle } = this.props;
 
     if (!wait) {
       return (
@@ -131,13 +129,13 @@ class AddBenefitsToCart extends React.Component {
     return (
       <>
         <ConditionalView condition={!appliedAlready && isEmptyCart}>
-          <div className="benefit-status">
-            {Drupal.t('Your cart is empty.', { context: 'hello_member' })}
+          <div className="button-wide inactive">
+            {Drupal.t('Your cart is empty', { context: 'hello_member' })}
           </div>
         </ConditionalView>
         <ConditionalView condition={appliedAlready}>
-          <div className="benefit-status">
-            {Drupal.t('This offer has been added to your bag.', { context: 'hello_member' })}
+          <div className="button-wide inactive">
+            {Drupal.t('This offer has been added to your bag', { context: 'hello_member' })}
           </div>
           <div>
             <div id="status-msg" />
@@ -145,12 +143,6 @@ class AddBenefitsToCart extends React.Component {
           </div>
         </ConditionalView>
         <ConditionalView condition={!appliedAlready && !isEmptyCart}>
-          <QrCodeDisplay
-            memberId={memberId}
-            qrCodeTitle={qrCodeTitle}
-            codeId={codeId}
-            width={79}
-          />
           <div className="button-wide" onClick={() => this.handleClick()}>
             {getStringMessage('benefit_add_to_bag')}
           </div>
