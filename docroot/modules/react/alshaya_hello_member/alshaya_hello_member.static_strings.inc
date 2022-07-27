@@ -268,51 +268,63 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'form_error_invalid_otp',
-      'value' => t('Incorrect OTP. Please enter a valid OTP.'),
+      'value' => t('Incorrect OTP. Please enter a valid OTP.', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'form_error_send_otp_failed_message',
-      'value' => t('Error in sending OTP. Please try again.'),
+      'value' => t('Error in sending OTP. Please try again.', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'otp_label',
-      'value' => t('One Time Pin', [], ['context' => 'aura']),
+      'value' => t('One Time Pin', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'aura_otp_sent_to_mobile',
-      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile',),
+      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'otp_label',
-      'value' => t('One Time Pin', [], ['context' => 'aura']),
+      'value' => t('One Time Pin', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'resend_code',
-      'value' => t('Resend code'),
+      'value' => t('Resend code', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'aura_otp_sent_to_mobile',
-      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile'),
+      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'otp_send_message',
-      'value' => t('We’ve sent the one time PIN to your mobile number.'),
+      'value' => t('We’ve sent the one time PIN to your mobile number.', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'didnt_receive_otp_message',
-      'value' => t('Didn’t receive your one time PIN?'),
+      'value' => t('Didn’t receive your one time PIN?', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'send_otp_helptext',
-      'value' => t('We’ll send a one time PIN to your mobile number.'),
+      'value' => t('We’ll send a one time PIN to your mobile number.', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'enter_otp',
-      'value' => t('Enter OTP'),
+      'value' => t('Enter OTP', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'aura_points_earn_message',
-      'value' => t('You will earn @points Aura points with this purchase.'),
+      'value' => t('You will earn @points Aura points with this purchase.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'checkout_check_your_points_value',
+      'value' => t('Check your points value:', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'checkout_use_points',
+      'value' => t('Use points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'remove',
+      'value' => t('Remove', [], ['context' => 'hello_member']),
     ],
   ];
 }
