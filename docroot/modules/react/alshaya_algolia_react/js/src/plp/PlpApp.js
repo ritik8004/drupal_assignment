@@ -22,7 +22,7 @@ import PLPHierarchicalMenu from '../components/algolia/widgets/PLPHierarchicalMe
 import PLPNoResults from '../components/algolia/PLPNoResults';
 import SubCategoryContent from '../components/subcategory';
 import ConditionalView from '../../common/components/conditional-view';
-import BecomeHelloMember from '../../../../alshaya_hello_member/js/src/components/become-a-member';
+import BecomeHelloMember from '../../../../alshaya_hello_member/js/src/components/become-hello-member';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;

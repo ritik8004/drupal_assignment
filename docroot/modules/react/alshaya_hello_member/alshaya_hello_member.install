@@ -32,7 +32,8 @@ function alshaya_hello_member_install() {
   $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
   $config_factory->getEditable('block.block.hellomemberheaderblock')->set('weight', $my_account_links - 2)->save();
 
-  // Place become a member block before plp product listing.
+  // Place become hello member block before plp product listing.
+  // Disable becomeamemberblock_plp block if plp product list block is disabled.
   $product_list_plp_block_weight = (int) $config_factory->get('block.block.views_block__alshaya_product_list_block_1')->get('weight');
   $product_list_plp_block_status = $config_factory->get('block.block.views_block__alshaya_product_list_block_1')->get('status');
   $config_factory->getEditable('block.block.becomeamemberblock_plp')
@@ -40,7 +41,9 @@ function alshaya_hello_member_install() {
     ->set('status', $product_list_plp_block_status)
     ->save();
 
-  // Place become a member block before promo product listing.
+  // Place become hello member block before promo product listing.
+  // Disable becomeamemberblock_promo block
+  // If promo product list block is disabled.
   $product_list_promo_block_weight = (int) $config_factory->get('block.block.views_block__alshaya_product_list_block_2')->get('weight');
   $product_list_promo_block_status = $config_factory->get('block.block.views_block__alshaya_product_list_block_2')->get('status');
   $config_factory->getEditable('block.block.becomeamemberblock_promo')

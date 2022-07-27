@@ -33,7 +33,7 @@ import {
 } from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
 import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHelper';
-import BecomeHelloMember from '../../../../../alshaya_hello_member/js/src/components/become-a-member';
+import BecomeHelloMember from '../../../../../alshaya_hello_member/js/src/components/become-hello-member';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 /**

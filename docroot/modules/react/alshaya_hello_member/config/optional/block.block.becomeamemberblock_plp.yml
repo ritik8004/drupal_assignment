@@ -10,10 +10,10 @@ theme: alshaya_white_label
 region: content
 weight: 16
 provider: null
-plugin: become_a_member_block
+plugin: become_hello_member_block
 settings:
-  id: become_a_member_block
-  label: 'Become a Member block - PLP'
+  id: become_hello_member_block
+  label: 'Become Hello Member block - PLP'
   label_display: '0'
   provider: alshaya_hello_member
 visibility:
