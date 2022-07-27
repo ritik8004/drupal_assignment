@@ -1,8 +1,11 @@
 /**
  * Filter available menu items.
- * @param {array} catArray
  *
- * @returns Filtered array with items for which the value of
+ * @param {array} catArray
+ *   Mdc categories.
+ *
+ * @returns {array}
+ *   Filtered array with items for which the value of
  *  include_in_menu property is true.
  */
  const filterAvailableItems = function (catArray) {
@@ -62,6 +65,7 @@ function processCategory(catItem, settings, enrichmentData, isSuperCategoryEnabl
  *   The drupal settings object.
  * @param {object} inputs
  *   Mdc Categories.
+ *
  * @returns {object}
  *   Returns prepared categories to be displayed.
  */

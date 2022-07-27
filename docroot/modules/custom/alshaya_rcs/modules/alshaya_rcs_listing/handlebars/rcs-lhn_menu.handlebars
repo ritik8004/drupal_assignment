@@ -1,0 +1,6 @@
+{{log menuItems}}
+{{log this}}
+<div class="label">{{menuItems.label}}</div>
+{{#if menuItems.child}}
+  {{{render 'lhn_menu' menuItems.child}}}
+{{/if}}
