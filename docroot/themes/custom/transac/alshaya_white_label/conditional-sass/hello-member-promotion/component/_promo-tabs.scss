@@ -3,7 +3,7 @@
     .hm-promo-modal-content {
       .react-tabs__tab-list {
         display: flex;
-        border-bottom: 1px solid $hm-promo-tab-border;
+        border-bottom: rem(1) solid $hm-promo-tab-border;
         padding: 0;
 
         .react-tabs__tab {
@@ -20,7 +20,7 @@
 
           &--selected {
             color: $hm-promo-tab-title;
-            border-bottom: 1px solid $hm-promo-pop-txt;
+            border-bottom: rem(1) solid $hm-promo-pop-txt;
             font-family: $alshaya-bold;
           }
         }

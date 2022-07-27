@@ -316,7 +316,6 @@ $white-six: #f9f9f9;
 $light-green: #39b54a;
 $dark-green: #007522;
 $_online-booking-change-delivery-schedule: #4a7fc5;
-$hm-promo-available-notification: #e50011;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -2307,6 +2306,7 @@ $hm-promo-sel-tab-border: rgba(0, 0, 0, 0.24);
 $hm-promo-available-notification-icon: $hm-promo-available-notification;
 $hello-member-my-offers-bg: $white-three;
 $hello-member-my-offers-expiry-txt: $grey-light;
+$hm-promo-available-notification-icon: $error-red;
 
 // Hello member history point
 $hello-member-history-points-light-title: $greyish;
