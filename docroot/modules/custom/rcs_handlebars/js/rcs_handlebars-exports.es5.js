@@ -159,3 +159,19 @@ Handlebars.registerHelper('set', function(name, val, globals) {
 Handlebars.registerHelper('concat_with_root', function (rootVar, b, globals) {
   globals.data.root[rootVar] = globals.data.root[rootVar] + b;
 })
+
+/**
+ * Helps to prepare class value.
+ * Usage:
+ *  - First set foo with value '': {{set 'foo' ''}}
+ *  - {{ setClass 'foo' 'hide' }}
+ *  - {{ setClass 'foo' 'baz' }}
+ *  - Now {{ foo }} will print 'hide baz'.
+ */
+Handlebars.registerHelper('setClass', function (classVar, b, globals) {
+  if (typeof globals.data.root[classVar] === 'undefined') {
+    globals.data.root[classVar] = '';
+  }
+
+  globals.data.root[classVar] = globals.data.root[classVar] === '' ? b : ' ' + b;
+});
