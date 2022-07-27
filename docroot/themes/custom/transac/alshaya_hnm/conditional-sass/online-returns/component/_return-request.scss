@@ -51,6 +51,13 @@
     .refund-detail-label,
     .select-items-label {
       text-transform: uppercase;
+
+      .refund-detail-header,
+      .select-items-header {
+        &::before {
+          font-size: rem(14);
+        }
+      }
     }
   }
 
@@ -58,6 +65,15 @@
     button {
       span {
         font-family: $hnm-demibold;
+      }
+    }
+  }
+
+  .confirm-return-button-wrapper,
+  .continue-button-wrapper {
+    button {
+      span {
+        text-transform: uppercase;
       }
     }
   }

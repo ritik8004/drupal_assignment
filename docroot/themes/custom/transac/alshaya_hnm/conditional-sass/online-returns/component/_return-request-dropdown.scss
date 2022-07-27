@@ -11,6 +11,13 @@
       }
     }
 
+    .return-qty-row,
+    .return-reasons-row {
+      .return-reason-label {
+        font-family: $hnm-demibold;
+      }
+    }
+
     .reasonsSelect__menu,
     .qtySelect__menu {
       z-index: 5;
