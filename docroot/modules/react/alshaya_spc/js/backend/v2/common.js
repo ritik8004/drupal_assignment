@@ -23,6 +23,7 @@ import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -356,6 +357,12 @@ const getProcessedCartData = async (cartData) => {
     ...(collectionPointsEnabled() && hasValue(cartData.shipping))
     && { collection_charge: cartData.shipping.price_amount || '' },
   };
+
+  // Add loyalty card and loyalty type for hello member loyalty.
+  if (isHelloMemberEnabled()) {
+    data.loyalty_card = cartData.cart.extension_attributes.loyalty_card || '';
+    data.loyalty_type = cartData.cart.extension_attributes.loyalty_type || '';
+  }
 
   // Totals.
   if (typeof cartData.totals.base_grand_total !== 'undefined') {

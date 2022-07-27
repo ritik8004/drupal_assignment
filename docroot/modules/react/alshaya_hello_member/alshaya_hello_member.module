@@ -435,3 +435,31 @@ function alshaya_hello_member_preprocess_user(&$variables) {
   $variables['hello_member_status'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
   $variables['user_edit_url'] = Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]);
 }
+
+/**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ */
+function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
+  // Do not proceed if Alshaya Hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
+  // For hello member, aura settings has to be disabled and
+  // we need to attach aura library but don't want to
+  // use aura existing feature as a whole.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() === TRUE) {
+    return;
+  }
+
+  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  // Attach the library for Aura backend based on the commerce backend version.
+  $build['#attached']['library'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
+  $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
+  $build['#strings'] = array_merge($build['#strings'], _alshaya_hello_member_aura_static_strings());
+}
