@@ -148,7 +148,7 @@ class HmImagesHelper {
       }
     }
 
-    $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids);
+    $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids, $child_sku_entity->getCacheTags() ?? []);
 
     return $article_castor_ids;
   }
