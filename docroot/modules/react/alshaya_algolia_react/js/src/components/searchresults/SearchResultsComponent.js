@@ -33,6 +33,8 @@ import {
 } from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
 import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHelper';
+import BecomeMember from '../../../../../alshaya_hello_member/js/src/components/become-a-member';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -187,6 +189,14 @@ const SearchResultsComponent = ({
             <CurrentRefinements callback={(callerProps) => callback(callerProps)} />
           )}
         </SelectedFilters>
+        {/* Show Become member popup if drupalSettings.helloMember.showBecomeMemberOnSrp is true */}
+        <ConditionalView condition={
+          typeof (drupalSettings.helloMember) !== 'undefined'
+          && drupalSettings.helloMember.showBecomeMemberOnSrp
+        }
+        >
+          <BecomeMember />
+        </ConditionalView>
         <div id="hits" className="c-products-list product-small view-search">
           <SearchResultInfiniteHits
             defaultpageRender={defaultpageRender}

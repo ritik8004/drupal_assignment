@@ -9,6 +9,7 @@ var config = {
     my_accounts_points_history: './js/src/my-accounts-points-history.js',
     pdp: './js/src/pdp.js',
     send_otp: './js/src/send-otp.js',
+    become_a_member: './js/src/become-a-member.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

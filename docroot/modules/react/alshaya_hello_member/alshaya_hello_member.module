@@ -33,6 +33,7 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   $hello_member_settings = [
     'status' => $helloMemberHelper->isHelloMemberEnabled(),
     'auraIntegrationStatus' => $helloMemberHelper->isAuraIntegrationEnabled(),
+    'showBecomeMemberOnSrp' => $helloMemberHelper->showBecomeMemberOnSrp(),
   ];
   $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
 
@@ -84,6 +85,11 @@ function alshaya_hello_member_theme() {
       ],
     ],
     'hello_member_header_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'become_a_member_block' => [
       'variables' => [
         'strings' => [],
       ],

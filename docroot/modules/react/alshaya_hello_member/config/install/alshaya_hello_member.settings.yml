@@ -8,3 +8,4 @@ membership_popup_text_above:
 membership_popup_text_below:
   value: '<p classname="hello-membership-terms">Please <a href="/">Click here</a> to read more about Hello Member programme.</p><p classname="hello-membership-terms">Read the updated <a href="/">Terms and Conditions</a> and <a href="/">Privacy Policy</a></p><p classname="hello-membership-terms">If you do not want to be part of the programme, <a href="/">contact us.</a></p>'
   format: full_text
+become_member_on_search_page: true # Show Become a member block on search page.

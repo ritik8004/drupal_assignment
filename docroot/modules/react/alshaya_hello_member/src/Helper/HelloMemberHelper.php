@@ -51,6 +51,16 @@ class HelloMemberHelper {
   }
 
   /**
+   * Helper to check if Become member block is getting shown on SRP.
+   *
+   * @return bool
+   *   TRUE/FALSE
+   */
+  public function showBecomeMemberOnSrp() {
+    return $this->getConfig()->get('become_member_on_search_page');
+  }
+
+  /**
    * Helper to get Cache Tags for Hello member Config.
    *
    * @return string[]

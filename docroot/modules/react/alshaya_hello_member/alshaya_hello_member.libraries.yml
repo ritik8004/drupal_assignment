@@ -34,3 +34,8 @@ alshaya_hello_member_profile_info:
   dependencies:
     - core/drupal
     - core/jquery
+alshaya_become_a_member:
+  js:
+    dist/become_a_member.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

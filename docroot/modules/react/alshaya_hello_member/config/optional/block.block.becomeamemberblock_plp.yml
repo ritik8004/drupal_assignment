@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_hello_member
+  theme:
+    - alshaya_white_label
+id: becomeamemberblock_plp
+theme: alshaya_white_label
+region: content
+weight: 16
+provider: null
+plugin: become_a_member_block
+settings:
+  id: become_a_member_block
+  label: 'Become a Member block - PLP'
+  label_display: '0'
+  provider: alshaya_hello_member
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/taxonomy/term/*'

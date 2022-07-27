@@ -32,6 +32,14 @@ function alshaya_hello_member_install() {
   $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
   $config_factory->getEditable('block.block.hellomemberheaderblock')->set('weight', $my_account_links - 2)->save();
 
+  // Place become a member block before plp product listing.
+  $product_list_plp_block_weight = (int) $config_factory->get('block.block.views_block__alshaya_product_list_block_1')->get('weight');
+  $config_factory->getEditable('block.block.becomeamemberblock_plp')->set('weight', $product_list_plp_block_weight - 1)->save();
+
+  // Place become a member block before promo product listing.
+  $product_list_promo_block_weight = (int) $config_factory->get('block.block.views_block__alshaya_product_list_block_2')->get('weight');
+  $config_factory->getEditable('block.block.becomeamemberblock_promo')->set('weight', $product_list_promo_block_weight - 1)->save();
+
   // Enable points history link in the menu.
   $config = $config_factory->getEditable('alshaya_user.settings');
   // @codingStandardsIgnoreLine
