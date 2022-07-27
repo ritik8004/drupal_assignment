@@ -174,10 +174,6 @@ sites:
     module: alshaya_aeo
     type: alshaya_transac
     country: ae
-  aeoom:
-    module: alshaya_aeo
-    type: alshaya_transac
-    country: ae
   aeoeg:
     module: alshaya_aeo
     type: alshaya_transac
