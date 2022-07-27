@@ -33,7 +33,7 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   $hello_member_settings = [
     'status' => $helloMemberHelper->isHelloMemberEnabled(),
     'auraIntegrationStatus' => $helloMemberHelper->isAuraIntegrationEnabled(),
-    'showBecomeMemberOnSrp' => $helloMemberHelper->showBecomeMemberOnSrp(),
+    'showOnListingPages' => $helloMemberHelper->showOnListingPages(),
   ];
   $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
 

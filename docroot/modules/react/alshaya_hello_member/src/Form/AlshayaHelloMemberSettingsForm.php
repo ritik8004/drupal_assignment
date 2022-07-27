@@ -88,11 +88,11 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
         customer can choose to redeem aura points.'),
     ];
 
-    $form['hello_member_configuration']['become_member_on_search_page'] = [
+    $form['hello_member_configuration']['become_member_on_listing_pages'] = [
       '#type' => 'checkbox',
-      '#default_value' => $config->get('become_member_on_search_page'),
-      '#title' => $this->t('Show Become a Member Block on search page.'),
-      '#description' => $this->t('Show Become a Member Block on search page for anonymous users which will have sign in and sign up links.'),
+      '#default_value' => $config->get('become_member_on_listing_pages'),
+      '#title' => $this->t('Show Become a Member Block on Listing pages.'),
+      '#description' => $this->t('Show Become a Member Block on listing pages for anonymous users which will have sign in and sign up links.'),
     ];
 
     $form['hello_member_configuration']['membership_info_content_node'] = [
@@ -140,7 +140,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       ->set('membership_info_content_node', $form_state->getValue('membership_info_content_node'))
       ->set('membership_popup_text_above', $form_state->getValue('membership_popup_text_above'))
       ->set('membership_popup_text_below', $form_state->getValue('membership_popup_text_below'))
-      ->set('become_member_on_search_page', $form_state->getValue('become_member_on_search_page'))
+      ->set('become_member_on_listing_pages', $form_state->getValue('become_member_on_listing_pages'))
       ->save();
 
     parent::submitForm($form, $form_state);

@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import { isMobile } from '../../../../../js/utilities/display';
 
-class BecomeMember extends React.Component {
+class BecomeHelloMember extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,4 +52,4 @@ class BecomeMember extends React.Component {
   }
 }
 
-export default BecomeMember;
+export default BecomeHelloMember;

@@ -51,13 +51,13 @@ class HelloMemberHelper {
   }
 
   /**
-   * Helper to check if Become member block is getting shown on SRP.
+   * Helper to check if Become member block is getting shown on Listing pages.
    *
    * @return bool
    *   TRUE/FALSE
    */
-  public function showBecomeMemberOnSrp() {
-    return $this->getConfig()->get('become_member_on_search_page');
+  public function showOnListingPages() {
+    return $this->getConfig()->get('become_member_on_listing_pages');
   }
 
   /**

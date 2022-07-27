@@ -80,10 +80,9 @@ class BecomeMemberBlock extends BlockBase implements ContainerFactoryPluginInter
     $this->moduleHandler->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
     return [
       '#theme' => 'become_a_member_block',
-      '#strings' => _alshaya_hello_member_static_strings(),
       '#attached' => [
         'library' => [
-          'alshaya_hello_member/alshaya_become_a_member',
+          'alshaya_hello_member/alshaya_hello_member_become_a_member',
         ],
       ],
     ];
