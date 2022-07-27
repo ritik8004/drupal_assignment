@@ -243,6 +243,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'قسيمة مكافأة @count',
         'context' => 'hello_member',
       ],
+      'Continue' => [
+        'ar' => 'يكمل',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

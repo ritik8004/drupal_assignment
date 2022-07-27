@@ -358,6 +358,12 @@ const getProcessedCartData = async (cartData) => {
     && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
+  // Add loyalty card and loyalty type for hello member loyalty.
+  if (isHelloMemberEnabled()) {
+    data.loyalty_card = cartData.cart.extension_attributes.loyalty_card || '';
+    data.loyalty_type = cartData.cart.extension_attributes.loyalty_type || '';
+  }
+
   // Totals.
   if (typeof cartData.totals.base_grand_total !== 'undefined') {
     data.cart_total = cartData.totals.base_grand_total;

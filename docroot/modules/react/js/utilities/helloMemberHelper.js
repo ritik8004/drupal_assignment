@@ -77,7 +77,7 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       endpoint = '/V1/customers/apcTransactions'; // endpoint to get hello member points history.
       break;
     case 'helloMemberGetDictionaryData':
-      endpoint = '/V1/customers/apcDicData/HM_ACCRUAL_RATIO'; // endpoint to get hello member dictonary data.
+      endpoint = `/V1/customers/apcDicData/${endPointParams.type}`; // endpoint to get hello member dictonary data.
       break;
     case 'helloMemberGetPointsEarned':
       endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member points earned data.

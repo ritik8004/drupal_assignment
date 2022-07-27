@@ -140,3 +140,131 @@ function _alshaya_hello_member_static_strings() {
     ],
   ];
 }
+
+/**
+ * Hello Member aura static strings.
+ */
+function _alshaya_hello_member_aura_static_strings() {
+  return [
+    [
+      'key' => 'enter_aura_details',
+      'value' => t('Enter Aura Details', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_details_tooltip',
+      'value' => t('Add your mobile number, Aura account number or email address below to link this purchase.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_accout_number',
+      'value' => t('Aura account number', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'signup_empty_mobile',
+      'value' => t('A phone number is required to sign-up. Please enter your details to proceed.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'link_card_empty_mobile',
+      'value' => t('A phone number is required to link your card. Please enter your details to proceed.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'form_error_mobile_number',
+      'value' => t('Please enter phone number.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'link_card_empty_email',
+      'value' => t('An email address is required to link your card. Please enter your details to proceed.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'form_error_email',
+      'value' => t('Please enter email.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'signup_empty_email',
+      'value' => t('An email address is required to sign-up. Please enter your details to proceed.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'link_card_empty_card_number',
+      'value' => t('A card number is required to link your card. Please enter your details to proceed.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'form_error_empty_card',
+      'value' => t('Please enter card number.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'something_went_wrong',
+      'value' => t('Your request couldn’t be processed. Please try again shortly.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'form_error_full_name',
+      'value' => t('Your full name is required to sign-up. Please enter your details to proceed.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'mobile_label',
+      'value' => t('Mobile Number', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'checkout_points_to_be_credited_message',
+      'value' => t('Your points for this purchase will be added to your account.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'not_you_question',
+      'value' => t('Not you?', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_partially_enrolled_message',
+      'value' => t('To redeem points compelete the full enrollment.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'checkout_you_have',
+      'value' => t('You have', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'redeem_points_message',
+      'value' => t('Do you want to redeem Aura points?', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'redeem_points_button',
+      'value' => t('Redeem Points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'link_card_empty_mobile',
+      'value' => t('A phone number is required to link your card. Please enter your details to proceed.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'link_card_empty_email',
+      'value' => t('An email address is required to link your card. Please enter your details to proceed.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'link_card_empty_card_number',
+      'value' => t('A card number is required to link your card. Please enter your details to proceed.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'mobile_not_registered',
+      'value' => t('This phone number isn’t registered.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'email_not_registered',
+      'value' => t('This email address isn’t registered.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'invalid_card_number',
+      'value' => t('Incorrect Aura card number. Please re-enter a valid Aura card number.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'mobile_number',
+      'value' => t('Mobile Number', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'email_address',
+      'value' => t('E-mail address', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'country_code',
+      'value' => t('Country code', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'card_submit',
+      'value' => t('Submit', [], ['context' => 'hello_member']),
+    ],
+  ];
+}

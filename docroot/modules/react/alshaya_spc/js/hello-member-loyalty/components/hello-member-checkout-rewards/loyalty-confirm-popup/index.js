@@ -29,9 +29,9 @@ export default class LoyaltyConfirmPopup extends React.Component {
    * Utility function to get hello member points for given price.
    */
   getLoyaltyOptionText = (option) => {
-    if (option === 'hello_member_loyalty') {
+    if (option === 'hello_member') {
       return Drupal.t('H&M membership', {}, { context: 'hello_member' });
-    } if (option === 'aura_loyalty') {
+    } if (option === 'aura') {
       return Drupal.t('Aura', {}, { context: 'hello_member' });
     }
     return null;

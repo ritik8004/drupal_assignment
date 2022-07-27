@@ -21,15 +21,13 @@ exports.render = function render(
       break;
 
     case "shop_by_block":
-      // Process shop by block renderer, if available.
-      if (typeof globalThis.renderRcsShopByMenu !== 'undefined') {
-        html += globalThis.renderRcsShopByMenu.render(
-          settings,
-          inputs,
-          innerHtml,
-          'shop_by_block'
-        );
-      }
+      // Process and render shop by block menu.
+      const menuData = globalThis.shopByMenuProcessor.prepareData(
+        settings,
+        inputs
+      );
+      html = handlebarsRenderer.render('shop_by_menu', menuData);
+
       break;
 
     case 'product_category_list':
