@@ -837,3 +837,8 @@ advanced-page-paragraph-banner:
   css:
     theme:
       css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css: {}
+
+hello-member-info-page:
+  css:
+    theme:
+      css/conditional-sass/hello-member-info-page/hello-member-info-page.ltr.css: {}

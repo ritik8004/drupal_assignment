@@ -82,6 +82,7 @@ $white-linen: #f1ebdf;
 $nickel: #6d7278;
 $gainsboro: #d8d8d8;
 $silver-chalice: #afacac;
+$_hm_global_red: #e50010;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -870,3 +871,7 @@ $hello-member-menu-link-txt: $hnm-black-two;
 // Advanced Page components.
 $advanced-page-accordion-active-title: $venetian_red;
 $advanced-page-accordion-bg: $primary_bg;
+
+// Hello Member Info Page
+$hello-member-components-bg: $white-linen;
+$hello-member-highlight-text: $_hm_global_red;
