@@ -77,7 +77,7 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       endpoint = '/V1/customers/apcTransactions'; // endpoint to get hello member points history.
       break;
     case 'helloMemberGetDictionaryData':
-      endpoint = '/V1/customers/apcDicData/HM_ACCRUAL_RATIO'; // endpoint to get hello member dictonary data.
+      endpoint = `/V1/customers/apcDicData/${endPointParams.type}`; // endpoint to get hello member dictonary data.
       break;
     case 'helloMemberGetPointsEarned':
       endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member points earned data.
@@ -87,6 +87,15 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       break;
     case 'helloMemberCustomerPhoneSearch':
       endpoint = `/V1/customers/apc-search/phone/${endPointParams.phoneNumber}`; // endpoint to search hello member by phone number.
+      break;
+    case 'addBonusVouchersToCart':
+      endpoint = '/V1/hello-member/carts/mine/bonusVouchers';
+      break;
+    case 'addMemberOffersToCart':
+      endpoint = '/V1/hello-member/carts/mine/memberOffers';
+      break;
+    case 'getCartData':
+      endpoint = '/V1/carts/mine/getCart';
       break;
 
     default:

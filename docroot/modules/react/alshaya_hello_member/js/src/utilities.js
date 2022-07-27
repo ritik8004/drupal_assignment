@@ -10,8 +10,6 @@ const setupAccordionHeight = (ref) => {
   }
 };
 
-export default setupAccordionHeight;
-
 /**
  * Update the memberId with required format (4343 6443 6554 2322).
  */
@@ -35,8 +33,16 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
   return null;
 };
 
+/**
+ * Search for specified element from array.
+ */
+// eslint-disable-next-line
+const findArrayElement = (array, code) => array.find((element) => element.code === code && element.value === 1);
+
 export {
   getFormatedMemberId,
   getPointstHistoryPageSize,
   getPriceToHelloMemberPoint,
+  findArrayElement,
+  setupAccordionHeight,
 };

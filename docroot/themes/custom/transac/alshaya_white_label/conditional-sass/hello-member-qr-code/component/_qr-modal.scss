@@ -36,12 +36,12 @@
 
     .qr-redeem {
       padding: rem(24) rem(38);
-      color: $hm-qr-code-redeem-txt;
+      color: $hello-member-qr-code-redeem-txt;
       font-size: rem(14);
     }
 
     .img-container {
-      background: $hm-qr-code-bg;
+      background: $hello-member-qr-code-bg;
       margin: 0 auto;
     }
   }
@@ -64,7 +64,7 @@
 
 .my-membership-id {
   font-size: rem(11);
-  color: $hm-points-block-light-txt;
+  color: $hello-member-points-block-light-txt;
   text-align: center;
   margin-top: rem(10);
   letter-spacing: 1.5px;

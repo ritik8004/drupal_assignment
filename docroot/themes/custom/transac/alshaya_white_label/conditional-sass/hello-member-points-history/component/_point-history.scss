@@ -30,7 +30,7 @@
 
       .history-light-title {
         font-size: rem(12);
-        color: $hm-history-points-light-title;
+        color: $hello-member-history-points-light-title;
       }
 
       .history-dark-title {
@@ -92,7 +92,7 @@
 }
 
 .expiry-accordion {
-  background-color: $hm-points-expiry-accordion-bg;
+  background-color: $hello-member-points-expiry-accordion-bg;
   margin-bottom: rem(50);
   transition: max-height 0.1s ease-in-out;
 
@@ -108,7 +108,7 @@
     padding: rem(32) rem(62);
     display: flex;
     align-items: center;
-    color: $hm-points-expiry-accordion-title;
+    color: $hello-member-points-expiry-accordion-title;
     font-family: $alshaya-bold;
 
     @include breakpoint($only-mobile) {
@@ -217,7 +217,7 @@
       cursor: pointer;
       transition: transform 0.3s ease-in-out;
       display: inline-block;
-      color: $hm-points-expiry-accordion-icon;
+      color: $hello-member-points-expiry-accordion-icon;
       position: relative;
       #{$right}: rem(-10);
     }
