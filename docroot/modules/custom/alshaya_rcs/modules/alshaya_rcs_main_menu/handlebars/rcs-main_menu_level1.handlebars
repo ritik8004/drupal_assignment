@@ -30,6 +30,12 @@
       {{#if background_color }}
         {{ set 'level1_style' 'background-color: ' }}
         {{ concat_with_root 'level1_style' background_color }}
+        {{ concat_with_root 'level1_style' ';' }}
+        {{ set 'level1_class' 'has-bg-color' }}
+      {{/if}}
+      {{#if font_color }}
+        {{ concat_with_root 'level1_style' 'color: ' }}
+        {{ concat_with_root 'level1_style' font_color }}
         {{ set 'level1_class' 'has-bg-color' }}
       {{/if}}
       <li class="menu__list-item menu--one__list-item {{ @root.level1_class }} {{ promopanel_class }} {{ menu_item.hide_in_desktop }} {{ menu_item.hide_in_mobile_tablet }}">
