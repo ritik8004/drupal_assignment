@@ -235,6 +235,14 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عرض كل الفوائد',
         'context' => 'hello_member',
       ],
+      'Member Discount' => [
+        'ar' => 'خصم الأعضاء',
+        'context' => 'hello_member',
+      ],
+      '@count Bonus Voucher' => [
+        'ar' => 'قسيمة مكافأة @count',
+        'context' => 'hello_member',
+      ],
       'Continue' => [
         'ar' => 'يكمل',
         'context' => 'hello_member',
