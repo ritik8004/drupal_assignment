@@ -17,3 +17,4 @@ dependencies:
   - queue_unique:queue_unique
   - alshaya_seo:alshaya_seo
   - alshaya_brand:alshaya_brand
+  - alshaya_hm_images:alshaya_hm_images
