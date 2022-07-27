@@ -31,8 +31,8 @@ class SignUpHeader extends React.Component {
       isOTPModalOpen: true,
     });
 
-    if (document.getElementById('block-alshayamainmenu')) {
-      document.getElementById('block-alshayamainmenu').classList.add('aura-header-modal-open');
+    if (document.querySelector('.block-alshaya-main-menu')) {
+      document.querySelector('.block-alshaya-main-menu').classList.add('aura-header-modal-open');
     }
   };
 
@@ -41,8 +41,8 @@ class SignUpHeader extends React.Component {
       isOTPModalOpen: false,
     });
 
-    if (document.getElementById('block-alshayamainmenu')) {
-      document.getElementById('block-alshayamainmenu').classList.remove('aura-header-modal-open');
+    if (document.querySelector('.block-alshaya-main-menu')) {
+      document.querySelector('.block-alshaya-main-menu').classList.remove('aura-header-modal-open');
     }
   };
 

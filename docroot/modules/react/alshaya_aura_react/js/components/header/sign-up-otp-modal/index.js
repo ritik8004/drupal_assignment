@@ -35,8 +35,8 @@ class SignUpOtpModal extends React.Component {
       isNewUserModalOpen: true,
     });
 
-    if (document.getElementById('block-alshayamainmenu')) {
-      document.getElementById('block-alshayamainmenu').classList.add('aura-header-modal-open');
+    if (document.querySelector('.block-alshaya-main-menu')) {
+      document.querySelector('.block-alshaya-main-menu').classList.add('aura-header-modal-open');
     }
   };
 
@@ -45,8 +45,8 @@ class SignUpOtpModal extends React.Component {
       isNewUserModalOpen: false,
     });
 
-    if (document.getElementById('block-alshayamainmenu')) {
-      document.getElementById('block-alshayamainmenu').classList.remove('aura-header-modal-open');
+    if (document.querySelector('.block-alshaya-main-menu')) {
+      document.querySelector('.block-alshaya-main-menu').classList.remove('aura-header-modal-open');
     }
   };
 
