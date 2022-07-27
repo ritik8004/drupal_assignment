@@ -44,14 +44,17 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   $page['#attached']['drupalSettings']['helloMember'] = $hello_member_settings;
 
   // Get the text to show in popup.
-  $config = \Drupal::config('alshaya_hello_member.settings');
-  $membership_popup_text_above = $config->get('membership_popup_text_above.value');
-  if (!empty($membership_popup_text_above)) {
-    $page['#attached']['drupalSettings']['popup_text_above'] = $membership_popup_text_above;
-  }
-  $membership_popup_text_below = $config->get('membership_popup_text_below.value');
-  if (!empty($membership_popup_text_below)) {
-    $page['#attached']['drupalSettings']['popup_text_below'] = $membership_popup_text_below;
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'entity.user.canonical') {
+    $config = \Drupal::config('alshaya_hello_member.settings');
+    $membership_popup_text_above = $config->get('membership_popup_text_above.value');
+    if (!empty($membership_popup_text_above)) {
+      $page['#attached']['drupalSettings']['popup_text_above'] = $membership_popup_text_above;
+    }
+    $membership_popup_text_below = $config->get('membership_popup_text_below.value');
+    if (!empty($membership_popup_text_below)) {
+      $page['#attached']['drupalSettings']['popup_text_below'] = $membership_popup_text_below;
+    }
   }
 }
 
