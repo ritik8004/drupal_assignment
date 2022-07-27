@@ -91,6 +91,10 @@ const processData = function (data, maxLevel) {
       }
     }
 
+    if (Drupal.hasValue(data[key].move_to_right)) {
+      data[key].move_to_right = 'move-to-right';
+    }
+
     // Check if we have an array or object.
     if ((/array|object/).test(typeof value)) {
       // Check if the item should be included in the menu.
