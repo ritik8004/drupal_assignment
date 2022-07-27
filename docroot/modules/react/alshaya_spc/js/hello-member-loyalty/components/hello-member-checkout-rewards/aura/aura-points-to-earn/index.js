@@ -5,6 +5,7 @@ import { getAuraFormConfig } from '../../../../../../../js/utilities/helloMember
 import logger from '../../../../../../../js/utilities/logger';
 import { showFullScreenLoader, removeFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import parse from 'html-react-parser';
 
 class AuraPointsToEarn extends React.Component {
   constructor(props) {
@@ -70,9 +71,9 @@ class AuraPointsToEarn extends React.Component {
 
     return (
       <div className="points-earned-message">
-        {getStringMessage('aura_points_earn_message', {
+        {parse(getStringMessage('aura_points_earn_message', {
           '@points': auraPointsToEarn,
-        })}
+        }))}
       </div>
     );
   }

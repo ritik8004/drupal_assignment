@@ -43,8 +43,8 @@ class AuraRedeemPoints extends React.Component {
         <div className="aura-redeem-points">
           {!redeemPoints
             && (
-            <div className="aura-redeem-button">
-              { getStringMessage('redeem_points_message') }
+            <>
+              <div className="redeem-msg">{ getStringMessage('redeem_points_message') }</div>
               <button
                 type="submit"
                 className="spc-aura-redeem-card spc-aura-button"
@@ -52,7 +52,7 @@ class AuraRedeemPoints extends React.Component {
               >
                 { getStringMessage('redeem_points_button') }
               </button>
-            </div>
+            </>
             )}
           {redeemPoints
             && (

@@ -85,32 +85,30 @@ class AuraSendOTP extends React.Component {
                 name="otp"
                 label={getStringMessage('otp_label')}
               />
-            </div>
-            <div className="aura-form-messages-container">
-              <AuraFormModalMessage
-                messageType={messageType}
-                messageContent={messageContent}
+              <AuraVerifyOTP
+                mobile={mobile}
               />
-            </div>
-          </div>
-          <div className="aura-modal-form-actions">
-            <AuraVerifyOTP
-              mobile={mobile}
-            />
-            <div className="aura-otp-submit-description">
-              <span
-                className="resend-otp"
-                onClick={this.sendOtp}
-              >
-                {getStringMessage('resend_code')}
-              </span>
-            </div>
-            <div className="otp-sent-to-mobile-label">
-              <span>
-                {getStringMessage('aura_otp_sent_to_mobile', {
-                  '@mobile': mobile,
-                })}
-              </span>
+              <div className="aura-otp-submit-description">
+                <span
+                  className="resend-otp"
+                  onClick={this.sendOtp}
+                >
+                  {getStringMessage('resend_code')}
+                </span>
+              </div>
+              <div className="aura-form-messages-container">
+                <AuraFormModalMessage
+                  messageType={messageType}
+                  messageContent={messageContent}
+                />
+              </div>
+              <div className="otp-sent-to-mobile-label">
+                <span>
+                  {getStringMessage('aura_otp_sent_to_mobile', {
+                    '@mobile': mobile,
+                  })}
+                </span>
+              </div>
             </div>
           </div>
         </div>

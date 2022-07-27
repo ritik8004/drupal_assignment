@@ -120,6 +120,14 @@
           }
         }
       }
+
+      .Collapsible {
+        width: 96%;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+      }
     }
   }
 
