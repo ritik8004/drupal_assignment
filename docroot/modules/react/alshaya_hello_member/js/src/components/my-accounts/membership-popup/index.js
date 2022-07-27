@@ -1,5 +1,6 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import parse from 'html-react-parser';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 class MembershipPopup extends React.Component {
@@ -36,7 +37,8 @@ class MembershipPopup extends React.Component {
 
   render() {
     const { isModelOpen } = this.state;
-
+    const { popup_text_above: popupTextAbove } = drupalSettings;
+    const { popup_text_below: popupTextBelow } = drupalSettings;
     return (
       <>
         <Popup
@@ -51,28 +53,11 @@ class MembershipPopup extends React.Component {
                 {Drupal.t('Hello Member', {}, { context: 'hello_member' })}
               </div>
               <div className="hello-membership-details">
-                <p className="hello-membership-sub-title">
-                  {Drupal.t('Your experience just got better! With the updated ', {}, { context: 'hello_member' })}
-                  <a href="@hm-terms-url">{Drupal.t('Terms & Conditions', {}, { context: 'hello_member' })}</a>
-                  {Drupal.t(', you\'re now a Member and can enjoy a wide range of benefits and new features. Come and get free delivery and 20% off your next purchase!', {}, { context: 'hello_member' })}
-                </p>
+                {parse(popupTextAbove)}
                 <div className="hello-membership-continue">
-                  <a onClick={(e) => this.closeModal(e)}>Continue</a>
+                  <a onClick={(e) => this.closeModal(e)}>{Drupal.t('Continue', {}, { context: 'hello_member' })}</a>
                 </div>
-                <p className="hello-membership-terms">
-                  <a href="@hm-terms-url">{Drupal.t('Click here', {}, { context: 'hello_member' })}</a>
-                  {Drupal.t(' to read more about Hello Member programme.', {}, { context: 'hello_member' })}
-                </p>
-                <p className="hello-membership-terms">
-                  {Drupal.t('Read the updated ', {}, { context: 'hello_member' })}
-                  <a href="@hm-terms-url">{Drupal.t('Terms & Conditions', {}, { context: 'hello_member' })}</a>
-                  {Drupal.t(' and ', {}, { context: 'hello_member' })}
-                  <a href="@hm-privacy-policy">{Drupal.t('Privacy Policy.', {}, { context: 'hello_member' })}</a>
-                </p>
-                <p className="hello-membership-terms">
-                  {Drupal.t('If you don\'t want to be part of the programme, ', {}, { context: 'hello_member' })}
-                  <a href="@hm-contact-us">{Drupal.t('contact us.', {}, { context: 'hello_member' })}</a>
-                </p>
+                {parse(popupTextBelow)}
               </div>
             </div>
           </div>
