@@ -5,6 +5,7 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import Loading from '../../../../../../js/utilities/loading';
 import AddBenefitsToCart from './add-benefits-to-cart';
@@ -103,13 +104,16 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
+          <QrCodeDisplay
+            memberId={myBenefit.member_identifier}
+            qrCodeTitle={qrCodeTitle}
+            codeId={codeId}
+            width={79}
+          />
           <AddBenefitsToCart
             title={myBenefit.description}
             codeId={codeId}
             voucherType={voucherType}
-            memberId={myBenefit.member_identifier}
-            qrCodeTitle={qrCodeTitle}
-            width={79}
           />
         </div>
         <div className="benefit-description">
