@@ -148,3 +148,14 @@ Handlebars.registerHelper('cleanCssIdentifier', (identifier) => {
 Handlebars.registerHelper('set', function(name, val, globals) {
   globals.data.root[name] = val;
 });
+
+/**
+ * Concats with root variable set on the template.
+ * Usage:
+ *  - First set foo with value bar: {{set 'foo' 'bar'}}
+ *  - {{ concat_with_root 'foo' ' baz' }}
+ *  - Now {{ foo }} will print 'bar baz'.
+ */
+Handlebars.registerHelper('concat_with_root', function (rootVar, b, globals) {
+  globals.data.root[rootVar] = globals.data.root[rootVar] + b;
+})

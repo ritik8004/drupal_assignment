@@ -25,17 +25,22 @@
   <ul class="menu__list menu--one__list">
     <div class="menu-backdrop"></div>
     {{#each menu_items as |menu_item|}}
-      <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }} {{ menu_item.hide_in_desktop }} {{ menu_item.hide_in_mobile_tablet }}">
+      {{ set 'level1_style' '' }}
+      {{ set 'level1_class' '' }}
+      {{#if background_color }}
+        {{ set 'level1_style' 'background-color: ' }}
+        {{ concat_with_root 'level1_style' background_color }}
+        {{ set 'level1_class' 'has-bg-color' }}
+      {{/if}}
+      <li class="menu__list-item menu--one__list-item {{ @root.level1_class }} {{ promopanel_class }} {{ menu_item.hide_in_desktop }} {{ menu_item.hide_in_mobile_tablet }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
-          {{'// @todo implement style'}}
-          {{set 'style' ''}}
           {{#if menu_item.icon }}
-            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">
+            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">
               <span class="icon"><img src="{{ menu_item.icon.icon_url }}" alt="{{ menu_item.name }}"/></span>
               {{ menu_item.name }}
             </{{@root.tag}}>
           {{else}}
-            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
+            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
           {{/if}}
         </div>
         {{#if menu_item.children }}

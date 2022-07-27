@@ -30,7 +30,6 @@ exports.prepareData = function prepareData(settings, inputs) {
     'path_prefix': drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix,
     'aura_enabled': drupalSettings.aura.enabled,
     'highlight_timing': highlightTiming,
-    'level_class': '', // @todo Implement level_class class.
     'promopanel_class': '', // @todo Implement promo panel block class.
     'tag': 'a',
   };
