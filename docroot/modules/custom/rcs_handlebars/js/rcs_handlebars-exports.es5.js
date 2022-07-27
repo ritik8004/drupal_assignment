@@ -150,17 +150,6 @@ Handlebars.registerHelper('set', function(name, val, globals) {
 });
 
 /**
- * Concats with root variable set on the template.
- * Usage:
- *  - First set foo with value bar: {{set 'foo' 'bar'}}
- *  - {{ concat_with_root 'foo' ' baz' }}
- *  - Now {{ foo }} will print 'bar baz'.
- */
-Handlebars.registerHelper('concat_with_root', function (rootVar, b, globals) {
-  globals.data.root[rootVar] = globals.data.root[rootVar] + b;
-})
-
-/**
  * Helps to prepare class value.
  * Usage:
  *  - First set foo with value '': {{set 'foo' ''}}
@@ -174,4 +163,31 @@ Handlebars.registerHelper('setClass', function (classVar, b, globals) {
   }
 
   globals.data.root[classVar] = globals.data.root[classVar] === '' ? b : ' ' + b;
+});
+
+/**
+ * Helps to prepare style value.
+ * Usage:
+ *  - {{ setStyle 'foo' '' }}
+ *  - Now {{ @root.foo }} will print '';
+ *  - {{ setStyle 'foo' 'color' 'red'}}
+ *  - Now {{ @root.foo }} will print 'color:red;'.
+ */
+Handlebars.registerHelper('setStyle', function () {
+  var args = [].concat.apply([], arguments);
+  var styleVar = args[0];
+  var globals = args.pop();
+
+  // Set the style variable if it is not yet defined.
+  if (typeof globals.data.root[styleVar] === 'undefined') {
+    globals.data.root[styleVar] = '';
+  }
+
+  if (arguments[1] === '') {
+    globals.data.root[styleVar] = '';
+  } else if (typeof arguments[2] !== 'undefined') {
+    globals.data.root[styleVar] = globals.data.root[styleVar] + arguments[1] + ':' + arguments[2] + ';';
+  } else {
+    globals.data.root[styleVar] = globals.data.root[styleVar] + arguments[1];
+  }
 });
