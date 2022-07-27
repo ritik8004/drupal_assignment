@@ -221,6 +221,12 @@
           cursor: pointer;
         }
       }
+
+      .loyalty-options-guest {
+        .loyalty-option {
+          padding-#{$left}: rem(20);
+        }
+      }
     }
   }
 }
