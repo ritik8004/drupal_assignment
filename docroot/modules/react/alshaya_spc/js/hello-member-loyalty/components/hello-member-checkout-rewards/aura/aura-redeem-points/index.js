@@ -43,16 +43,16 @@ class AuraRedeemPoints extends React.Component {
         <div className="aura-redeem-points">
           {!redeemPoints
             && (
-            <>
-              <div className="redeem-msg">{ getStringMessage('redeem_points_message') }</div>
-              <button
-                type="submit"
-                className="spc-aura-redeem-card spc-aura-button"
-                onClick={() => this.redeemPoints()}
-              >
-                { getStringMessage('redeem_points_button') }
-              </button>
-            </>
+              <>
+                <div className="redeem-msg">{ getStringMessage('redeem_points_message') }</div>
+                <button
+                  type="submit"
+                  className="spc-aura-redeem-card spc-aura-button"
+                  onClick={() => this.redeemPoints()}
+                >
+                  { getStringMessage('redeem_points_button') }
+                </button>
+              </>
             )}
           {redeemPoints
             && (
