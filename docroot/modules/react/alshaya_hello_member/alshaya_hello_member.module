@@ -392,6 +392,22 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
   if (isset($order['extension']['hm_accrued_points'])) {
     $settings['order_details']['hmAccuredPoints'] = $order['extension']['hm_accrued_points'] ?? 0;
   }
+
+  // Add below hello member extension_attributes to the totals for display info
+  // under order summary block on order confirmation and print order
+  // confirmation pages.
+  // - applied_hm_voucher_codes
+  // - hm_voucher_discount
+  // - applied_hm_offer_code.
+  if (isset($order['extension']['applied_hm_voucher_codes'])
+    && isset($order['extension']['hm_voucher_discount'])) {
+    $settings['order_details']['totals']['hmAppliedVoucherCodes'] = $order['extension']['applied_hm_voucher_codes'];
+    $settings['order_details']['totals']['hmVoucherDiscount'] = $order['extension']['hm_voucher_discount'];
+  }
+
+  if (isset($order['extension']['applied_hm_offer_code'])) {
+    $settings['order_details']['totals']['hmOfferCode'] = $order['extension']['applied_hm_offer_code'];
+  }
 }
 
 /**
