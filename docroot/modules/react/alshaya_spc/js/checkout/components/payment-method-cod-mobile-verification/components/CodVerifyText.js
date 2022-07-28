@@ -8,9 +8,7 @@ const CodVerifyText = ({ mobileNumber, otpLength }) => (
         '@otpLength': otpLength,
       }, { context: 'cod_mobile_verification' })}
     </span>
-    <button
-      type="button"
-    >
+    <button type="button">
       {Drupal.t('change', {}, { context: 'cod_mobile_verification' })}
     </button>
   </div>
