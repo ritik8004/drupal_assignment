@@ -123,6 +123,20 @@ class OrderDetails extends React.Component {
             </div>
           )}
 
+          {hasValue(order.order_details.voucher_discount) && (
+            <div className="voucher-discount-row collapse-row">
+              <div className="desktop-only">&nbsp;</div>
+              <div className="above-mobile">&nbsp;</div>
+              <div className="right--align">
+                {order.order_details.voucher_discount_label}
+              </div>
+              <div className="blend">
+                {parse(order.order_details.voucher_discount)}
+              </div>
+              <div className="above-mobile empty--cell">&nbsp;</div>
+            </div>
+          )}
+
           { hasValue(order.order_details.delivery_charge) && (
             <div className="delivery-charge-row">
               <div className="desktop-only">&nbsp;</div>
