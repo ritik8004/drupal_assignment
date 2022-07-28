@@ -131,7 +131,6 @@
 .spc-aura-link-api-response-message:not(:empty) {
   color: $aura-spc-response-message;
   padding-top: rem(7);
-  padding-#{$left}: rem(13);
   font-size: rem(12);
 
   &.error {
