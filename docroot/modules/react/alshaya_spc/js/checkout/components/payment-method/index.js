@@ -32,10 +32,6 @@ import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import PaymentMethodCodMobileVerification
   from '../payment-method-cod-mobile-verification';
-import {
-  getOtpLength,
-  isCodMobileVerifyEnabled,
-} from '../../../utilities/cod_utilities';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -61,6 +57,16 @@ export default class PaymentMethod extends React.Component {
     }
   }
 
+  /**
+   * Helper function to check if cod mobile verification is enabled.
+   */
+  isCodMobileVerifyEnabled = () => drupalSettings.codMobileVerification || true;
+
+  /**
+   * Gets OTP length for COD mobile verification.
+   */
+  getOtpLength = () => 4;
+
   validateBeforePlaceOrder = async () => {
     const { method } = this.props;
 
@@ -81,7 +87,7 @@ export default class PaymentMethod extends React.Component {
       return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
     }
 
-    if (method.code === 'cashondelivery' && isCodMobileVerifyEnabled()) {
+    if (method.code === 'cashondelivery' && this.isCodMobileVerifyEnabled()) {
       return this.paymentMethodCod.current.validateBeforePlaceOrder();
     }
 
@@ -293,12 +299,12 @@ export default class PaymentMethod extends React.Component {
                   messageKey="cod_surcharge_description"
                 />
               </div>
-              { isCodMobileVerifyEnabled()
+              { this.isCodMobileVerifyEnabled()
               && (
               <PaymentMethodCodMobileVerification
                 ref={this.paymentMethodCod}
                 shippingMobileNumber={mobileNumber}
-                otpLength={getOtpLength()}
+                otpLength={this.getOtpLength()}
               />
               )}
             </div>
