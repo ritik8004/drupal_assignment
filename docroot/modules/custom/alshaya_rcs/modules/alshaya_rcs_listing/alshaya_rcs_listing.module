@@ -12,12 +12,6 @@ use Drupal\Core\Entity\EntityInterface;
  */
 function alshaya_rcs_listing_theme($existing, $type, $theme, $path) {
   return [
-    'alshaya_rcs_lhn_tree' => [
-      'template' => 'alshaya-rcs-lhn',
-      'variables' => [
-        'lhn_cat_tree' => NULL,
-      ],
-    ],
     'alshaya_rcs_promotional_banner' => [
       'template' => 'alshaya-rcs-promotional-banner',
       'variables' => [

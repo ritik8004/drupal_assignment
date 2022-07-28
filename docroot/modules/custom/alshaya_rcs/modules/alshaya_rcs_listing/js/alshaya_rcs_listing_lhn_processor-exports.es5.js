@@ -65,7 +65,7 @@ function processLhnMenu(item, settings, enrichmentData) {
  *   Returns menu obj to be rendered.
  */
 exports.prepareData = function prepareData(settings, inputs) {
-
+  // @todo Handle special base where we separate URL by - instead of /.
   const firstLevelTermUrl = globalThis.rcsWindowLocation().pathname.match(`\/${settings.path.currentLanguage}\/(.*?)\/(.*?)$`);
   let menuItems = [];
   if (firstLevelTermUrl) {
