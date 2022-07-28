@@ -259,6 +259,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'تسجيل الدخول',
         'context' => 'hello_member',
       ],
+      'AVAIL IT' => [
+        'ar' => 'توفرها',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
