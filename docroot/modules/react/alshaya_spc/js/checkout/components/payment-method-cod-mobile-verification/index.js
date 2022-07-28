@@ -1,16 +1,7 @@
 import React from 'react';
 import CodVerifyText from './components/CodVerifyText';
-import dispatchCustomEvent from '../../../utilities/events';
 
 class PaymentMethodCodMobileVerification extends React.Component {
-  componentDidMount() {
-    dispatchCustomEvent('refreshCompletePurchaseSection', {});
-  }
-
-  componentDidUpdate() {
-    dispatchCustomEvent('refreshCompletePurchaseSection', {});
-  }
-
   /**
    * Validate COD mobile verification before enalbing complete purchase button.
    *
