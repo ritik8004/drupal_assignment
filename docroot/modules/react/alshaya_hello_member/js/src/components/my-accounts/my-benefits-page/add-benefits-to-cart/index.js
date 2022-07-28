@@ -79,7 +79,9 @@ class AddBenefitsToCart extends React.Component {
             });
             if (response.data) {
               document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
-              document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              if (hasValue(title)) {
+                document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              }
               document.getElementById('hm-benefit-status-info').classList.toggle('hm-benefit-status-info-active');
               setTimeout(() => {
                 document.getElementById('hm-benefit-status-info').classList.remove('hm-benefit-status-info-active');
@@ -104,7 +106,7 @@ class AddBenefitsToCart extends React.Component {
             });
             if (response.data) {
               document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
-              if (title) {
+              if (hasValue(title)) {
                 document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
               }
               document.getElementById('hm-benefit-status-info').classList.toggle('hm-benefit-status-info-active');
