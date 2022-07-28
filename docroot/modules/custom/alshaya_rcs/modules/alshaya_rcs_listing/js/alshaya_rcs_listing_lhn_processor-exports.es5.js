@@ -70,7 +70,7 @@ exports.prepareData = function prepareData(settings, inputs) {
   let menuItems = [];
   if (firstLevelTermUrl) {
     let catItems = inputs.filter(function filterCat(input) {
-      return input.url_path == firstLevelTermUrl[1];
+      return input.url_path === firstLevelTermUrl[1];
     });
     if (catItems.length > 0 && !!catItems[0].children) {
       // Get the enrichment data.
