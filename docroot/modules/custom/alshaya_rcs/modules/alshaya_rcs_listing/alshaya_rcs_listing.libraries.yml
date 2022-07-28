@@ -27,3 +27,8 @@ carousel.accordion:
   version: 1.x
   js:
     handlebars/alshaya-rcs-carousel-accordion.handlebars: {}
+
+lhn_menu:
+  version: 1.x
+  js:
+    handlebars/rcs-lhn_menu.handlebars: {}
