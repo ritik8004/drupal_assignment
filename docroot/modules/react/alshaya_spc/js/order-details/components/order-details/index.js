@@ -124,7 +124,7 @@ class OrderDetails extends React.Component {
           )}
 
           {hasValue(order.order_details.voucher_discount) && (
-            <div className="voucher-discount-row collapse-row">
+            <div className="discount-row collapse-row hm-voucher-discount">
               <div className="desktop-only">&nbsp;</div>
               <div className="above-mobile">&nbsp;</div>
               <div className="right--align">
