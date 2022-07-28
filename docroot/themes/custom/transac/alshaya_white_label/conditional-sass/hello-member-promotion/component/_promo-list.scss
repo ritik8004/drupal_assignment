@@ -8,8 +8,8 @@
         position: relative;
 
         .hm-promo-tab-cont-item {
-          background-color: $hm-promo-tab-items-bg;
-          border: rem(1) solid $hm-promo-tab-items-border;
+          background-color: $hello-member-promo-tab-items-bg;
+          border: rem(1) solid $hello-member-promo-tab-items-border;
           height: rem(71);
           padding: rem(20) rem(16);
           margin-bottom: rem(10);
@@ -20,7 +20,7 @@
           .item-title {
             display: flex;
             flex-flow: wrap;
-            color: $hm-promo-btn-bg;
+            color: $hello-member-promo-btn-bg;
             line-height: 1;
             cursor: pointer;
 
@@ -34,7 +34,7 @@
             .item-sub-title {
               font-size: rem(10);
               letter-spacing: 0.5px;
-              color: $hm-my-offers-expiry-txt;
+              color: $hello-member-my-offers-expiry-txt;
             }
           }
         }
@@ -88,13 +88,13 @@
 
           font-family: $alshaya-bold;
           width: 100%;
-          background-color: $hm-promo-btn-bg;
-          color: $hm-my-offers-bg;
+          background-color: $hello-member-promo-btn-bg;
+          color: $hello-member-my-offers-bg;
           font-size: rem(16);
         }
 
         .clear-btn {
-          color: $hm-promo-btn-bg;
+          color: $hello-member-promo-btn-bg;
           padding: rem(40) 0 rem(26);
           display: inline-flex;
           justify-content: center;

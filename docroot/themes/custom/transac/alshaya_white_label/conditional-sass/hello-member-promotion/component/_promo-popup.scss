@@ -24,7 +24,7 @@
       height: rem(8);
       width: rem(8);
       border-radius: 50%;
-      background-color: $hm-promo-available-notification-icon;
+      background-color: $hello-member-promo-available-notification-icon;
       margin: rem(4);
     }
 
@@ -44,12 +44,12 @@
 
     .hm-promo-modal-title {
       background-color: $primary_bg;
-      color: $hm-promo-pop-txt;
+      color: $hello-member-promo-pop-txt;
       font-size: rem(20);
       font-family: $alshaya-bold;
       text-align: center;
       padding: rem(15) 0;
-      box-shadow: 0 rem(1) 0 0 $hm-promo-sel-tab-border;
+      box-shadow: 0 rem(1) 0 0 $hello-member-promo-sel-tab-border;
     }
 
     .close-modal {
@@ -78,12 +78,16 @@
       .error-info-section {
         display: none;
         margin: rem(30) 0;
-        background-color: $hm-promo-err-sec-bg;
-        color: $hm-promo-btn-bg;
+        background-color: $hello-member-promo-err-sec-bg;
+        color: $hello-member-promo-btn-bg;
         font-size: rem(12);
         font-family: $alshaya-bold;
         letter-spacing: 0.6px;
         padding: rem(6) rem(8);
+      }
+
+      .error {
+        display: block;
       }
     }
   }

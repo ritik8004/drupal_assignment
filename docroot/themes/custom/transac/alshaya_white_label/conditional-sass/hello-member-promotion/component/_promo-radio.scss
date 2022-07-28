@@ -17,7 +17,7 @@ input[type=radio] {
     cursor: pointer;
 
     @include icon(radio-empty, before) {
-      color: $hm-promo-radio-btn;
+      color: $hello-member-promo-radio-btn;
     }
   }
 
@@ -26,7 +26,7 @@ input[type=radio] {
 
     ~.radio-sim {
       @include icon(radio-filled, before) {
-        color: $hm-promo-radio-btn;
+        color: $hello-member-promo-radio-btn;
       }
     }
   }
@@ -34,6 +34,6 @@ input[type=radio] {
   ~.radio-label {
     font-size: rem(14);
     font-family: $alshaya-thin;
-    color: $hm-promo-radio-btn;
+    color: $hello-member-promo-radio-btn;
   }
 }
