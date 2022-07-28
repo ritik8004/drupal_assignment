@@ -82,6 +82,7 @@ $white-linen: #f1ebdf;
 $nickel: #6d7278;
 $gainsboro: #d8d8d8;
 $silver-chalice: #afacac;
+$_hm_global_red: #e50010;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -832,10 +833,6 @@ $my-wishlist-share-modal-header: $hnm-black-three;
 $country-switcher-label: $hnm-black-three;
 $country-switcher-label-mobile: $hnm-black-three;
 
-// eGift landing page.
-$egift-accordion-active-title: $venetian_red;
-$egift-accordion-bg: $primary_bg;
-
 // Online Returns
 $online-return-eligibility-button-txt: $hnm-black-three;
 $online-return-dark-txt: $hnm-black-three;
@@ -870,3 +867,11 @@ $hello-member-accured-points-txt: $hnm-red;
 
 //hello member header block
 $hello-member-menu-link-txt: $hnm-black-two;
+
+// Advanced Page components.
+$advanced-page-accordion-active-title: $venetian_red;
+$advanced-page-accordion-bg: $primary_bg;
+
+// Hello Member Info Page
+$hello-member-components-bg: $white-linen;
+$hello-member-highlight-text: $_hm_global_red;
