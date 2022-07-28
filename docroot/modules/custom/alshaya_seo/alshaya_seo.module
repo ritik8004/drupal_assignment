@@ -370,7 +370,7 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
       $term = $term->getTranslation($langcode);
     }
     $variables['output'] = $term->get('field_display_as_clickable_link')->getString()
-      ? $term->toLink($term->getName(), '', $options)->toString()
+      ? $term->toLink($term->getName(), 'canonical', $options)->toString()
       : $term->getName();
   }
 }
