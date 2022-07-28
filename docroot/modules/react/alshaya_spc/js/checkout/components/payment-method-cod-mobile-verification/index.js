@@ -11,6 +11,11 @@ class PaymentMethodCodMobileVerification extends React.Component {
     dispatchCustomEvent('refreshCompletePurchaseSection', {});
   }
 
+  /**
+   * Validate COD mobile verification before enalbing complete purchase button.
+   *
+   * // @todo Update for cod otp container.
+   */
   validateBeforePlaceOrder = () => false
 
   render() {
