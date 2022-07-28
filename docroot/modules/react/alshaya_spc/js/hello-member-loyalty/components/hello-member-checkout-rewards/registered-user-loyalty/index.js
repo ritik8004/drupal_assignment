@@ -31,8 +31,17 @@ class RegisteredUserLoyalty extends React.Component {
     // Currently, default option is hello_member
     // @todo: Update default option if cart has been updated.
     const { cart, identifierNo } = this.props;
-    const cartId = cart.cart.cart_id;
-    setHelloMemberLoyaltyCard(identifierNo, cartId);
+    const {
+      cart: {
+        cart_id: cartId,
+        loyalty_type: loyaltyType,
+        loyalty_card: loyaltyCard,
+      },
+    } = cart;
+    // Do not set loyalty card for hello member if already set in cart.
+    if (!hasValue(loyaltyCard) && loyaltyType === 'hello_member') {
+      setHelloMemberLoyaltyCard(identifierNo, cartId);
+    }
     // @todo: Handle update cart event on setting hello member loyalty.
   }
 
@@ -84,11 +93,6 @@ class RegisteredUserLoyalty extends React.Component {
   render() {
     const { animationDelay, helloMemberPoints, cart } = this.props;
     const { currentOption, selectedOption, showLoyaltyPopup } = this.state;
-    const {
-      cart: {
-        loyalty_card: loyaltyCard,
-      },
-    } = cart;
 
     if (!hasValue(helloMemberPoints)) {
       return null;
@@ -110,7 +114,6 @@ class RegisteredUserLoyalty extends React.Component {
         <ConditionalView condition={isAuraIntegrationEnabled()}>
           <LoyaltySelectOption
             cart={cart}
-            loyaltyCard={loyaltyCard}
             currentOption={currentOption}
             animationDelay={animationDelay}
             optionName="hello_member"

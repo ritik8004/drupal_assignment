@@ -1,5 +1,6 @@
 import React from 'react';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import AuraFormRedeemPoints from '../../../../../aura-loyalty/components/aura-forms/aura-redeem-points';
 import AuraSendOTP from '../aura-send-otp';
 
 class AuraRedeemPoints extends React.Component {
@@ -34,7 +35,9 @@ class AuraRedeemPoints extends React.Component {
       redeemPoints, customerVerified,
     } = this.state;
 
-    const { mobile } = this.props;
+    const {
+      mobile, pointsInAccount, cardNumber, formActive, cart,
+    } = this.props;
 
     return (
       <>
@@ -64,7 +67,15 @@ class AuraRedeemPoints extends React.Component {
         )}
         {/* @todo Work on aura redeeem form later. */}
         {customerVerified
-        && <div className="aura-redeem-form" />}
+          && (
+          <AuraFormRedeemPoints
+            pointsInAccount={pointsInAccount}
+            cardNumber={cardNumber}
+            totals={cart.cart.totals}
+            paymentMethodInCart={cart.cart.payment.method || ''}
+            formActive={formActive}
+          />
+          )}
       </>
     );
   }

@@ -2,7 +2,6 @@ import React from 'react';
 import AuraFormFieldOptions from '../aura-form-field-options';
 import AuraFormEmailField from '../aura-form-email-field';
 import AuraFormCardField from '../aura-form-card-field';
-import AuraFormMobileNumberField from '../aura-form-mobile-number-field';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import { processCheckoutCart, getHelloMemberAuraStorageKey } from '../../utilities/loyalty_helper';
 import { showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
@@ -13,14 +12,25 @@ import ToolTip from '../../../../../utilities/tooltip';
 import AuraRedeemPoints from '../aura-redeem-points';
 import { getUserInput } from '../../../../../aura-loyalty/components/utilities/checkout_helper';
 import dispatchCustomEvent from '../../../../../../../js/utilities/events';
+import { cartContainsAnyVirtualProduct } from '../../../../../utilities/egift_util';
+import { isEgiftCardEnabled } from '../../../../../../../js/utilities/util';
+import LinkCardOptionMobile from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-mobile';
 
 class AuraLoyaltyForm extends React.Component {
   constructor(props) {
     super(props);
+    const {
+      cart: {
+        cart: {
+          loyalty_card: loyaltyCard,
+          loyalty_type: loyaltyType,
+        },
+      },
+    } = props;
     this.state = {
       linkCardOption: 'cardNumber',
       loyaltyCardLinkedToCart: false,
-      cardNumber: hasValue(props.loyaltyCard) ? props.loyaltyCard : '',
+      cardNumber: hasValue(loyaltyCard) && (loyaltyType === 'aura') ? loyaltyCard : '',
       email: '',
       mobile: '',
       isFullyEnrolled: false,
@@ -225,6 +235,11 @@ class AuraLoyaltyForm extends React.Component {
       expiringPoints,
       expiryDate,
     } = this.state;
+
+    const { cart } = this.props;
+
+    // Disable AURA guest user link card form if cart contains virtual products.
+    const formActive = !(isEgiftCardEnabled() && cartContainsAnyVirtualProduct(cart.cart));
     return (
       <>
         {!isFullyEnrolled
@@ -248,7 +263,7 @@ class AuraLoyaltyForm extends React.Component {
                     && <AuraFormCardField cardNumber={cardNumber} />}
                     {(linkCardOption === 'mobile')
                     && (
-                    <AuraFormMobileNumberField
+                    <LinkCardOptionMobile
                       setChosenCountryCode={this.setChosenCountryCode}
                       mobile={mobile}
                     />
@@ -288,6 +303,10 @@ class AuraLoyaltyForm extends React.Component {
               </div>
               <AuraRedeemPoints
                 mobile={mobile}
+                pointsInAccount={points}
+                cardNumber={cardNumber}
+                formActive={formActive}
+                cart={cart}
               />
             </div>
           </div>

@@ -6,7 +6,7 @@ import AuraEarnOrderSummaryItem
   from '../../../aura-loyalty/components/aura-earn-order-summary-item';
 import AuraRedeemOrderSummaryItem
   from '../../../aura-loyalty/components/aura-redeem-order-summary-item';
-import isAuraEnabled from '../../../../../js/utilities/helper';
+import isAuraEnabled, { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import OrderSummaryFawryBanner from './order-summary-fawry-banner';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import getStringMessage from '../../../utilities/strings';
@@ -280,7 +280,7 @@ const OrderSummary = (props) => {
               <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
             </ConditionalView>
           </ConditionalView>
-          <ConditionalView condition={isHelloMemberEnabled()}>
+          <ConditionalView condition={isHelloMemberEnabled() && !isUserAuthenticated()}>
             <OrderSummaryItem
               context={context}
               type="hello_member"

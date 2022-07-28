@@ -1,15 +1,17 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import parse from 'html-react-parser';
-import AuraHeaderIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
 import HelloMemberSvg from '../../../../svg-component/hello-member-svg';
 import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { isAuraIntegrationEnabled } from '../../../../../../js/utilities/helloMemberHelper';
+import AuraLoyalty from '../aura/aura-loyalty';
 
 const GuestUserLoyalty = ({
   helloMemberPoints,
   animationDelay,
+  loyaltyCard,
+  cart,
 }) => {
   if (!hasValue(helloMemberPoints)) {
     return null;
@@ -28,9 +30,12 @@ const GuestUserLoyalty = ({
       <ConditionalView condition={isAuraIntegrationEnabled()}>
         <div className="loyalty-option aura-loyalty fadeInUp" style={{ animationDelay }}>
           <div className="loaylty-option-text">
-            {parse(parse(Drupal.t('Earn/Redeem @aura_icon Points', {
-              '@aura_icon': `<span class="hello-member-aura">${renderToString(<AuraHeaderIcon />)}</span>`,
-            })))}
+            <AuraLoyalty
+              optionName="aura"
+              open={false}
+              loyaltyCard={loyaltyCard}
+              cart={cart}
+            />
           </div>
         </div>
       </ConditionalView>

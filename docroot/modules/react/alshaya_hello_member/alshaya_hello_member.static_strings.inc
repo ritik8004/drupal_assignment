@@ -315,8 +315,8 @@ function _alshaya_hello_member_aura_static_strings() {
       'value' => t('You will earn @points Aura points with this purchase.', [], ['context' => 'hello_member']),
     ],
     [
-      'key' => 'checkout_check_your_points_value',
-      'value' => t('Check your points value:', [], ['context' => 'hello_member']),
+      'key' => 'use_your_points_text',
+      'value' => t('Use your points', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'checkout_use_points',
@@ -325,6 +325,26 @@ function _alshaya_hello_member_aura_static_strings() {
     [
       'key' => 'remove',
       'value' => t('Remove', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_points_redeemed_successfully_msg',
+      'value' => t('<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'points_exceed_order_total',
+      'value' => t('The number of points exceeds your order total. Please re-enter the number of points you’d like to redeem.'),
+    ],
+    [
+      'key' => 'you_can_redeem_maximum',
+      'value' => t('You can redeem maximum'),
+    ],
+    [
+      'key' => 'points',
+      'value' => t('points'),
+    ],
+    [
+      'key' => 'form_error_empty_points',
+      'value' => t('Please enter points.'),
     ],
   ];
 }
