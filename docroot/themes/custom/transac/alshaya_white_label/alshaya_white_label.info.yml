@@ -3,7 +3,7 @@ type: theme
 description: 'Transac base theme for Alshaya brands.'
 core: 8.x
 core_version_requirement: ^8 || ^9
-base theme: cog
+base theme: stable
 alshaya_theme_type: transac
 
 regions:

@@ -33,6 +33,7 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   $hello_member_settings = [
     'status' => $helloMemberHelper->isHelloMemberEnabled(),
     'auraIntegrationStatus' => $helloMemberHelper->isAuraIntegrationEnabled(),
+    'showOnListingPages' => $helloMemberHelper->showOnListingPages(),
   ];
   $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
 
@@ -84,6 +85,11 @@ function alshaya_hello_member_theme() {
       ],
     ],
     'hello_member_header_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'become_hello_member_block' => [
       'variables' => [
         'strings' => [],
       ],
@@ -371,10 +377,14 @@ function alshaya_hello_member_preprocess_html(&$variables) {
  * Implements hook_preprocess_node().
  */
 function alshaya_hello_member_preprocess_node(&$variables) {
-  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
+  $node_bundle = $variables['node']->bundle();
+  if (in_array($node_bundle, ['acq_product', 'rcs_product'])) {
     $variables['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_pdp';
     $variables['#attached']['library'][] = 'alshaya_white_label/hello-member-pdp';
     $variables['hello_member_status'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
+  }
+  elseif ($node_bundle === 'advanced_page') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/hello-member-info-page';
   }
 }
 
