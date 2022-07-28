@@ -15,7 +15,7 @@ import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import EgiftOrderSummaryItem from '../../../egift-card/components/egift-order-summary-item';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
+import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -291,7 +291,7 @@ const OrderSummary = (props) => {
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>
-      <ConditionalView condition={isAuraEnabled()}>
+      <ConditionalView condition={isAuraEnabled() || isAuraIntegrationEnabled()}>
         <AuraEarnOrderSummaryItem
           pointsEarned={accruedPoints}
           animationDelay="0.8s"
