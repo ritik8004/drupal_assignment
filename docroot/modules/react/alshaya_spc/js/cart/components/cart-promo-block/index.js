@@ -249,7 +249,7 @@ export default class CartPromoBlock extends React.Component {
       buttonText,
     } = this.state;
 
-    const { inStock, dynamicPromoLabelsCart } = this.props;
+    const { inStock, dynamicPromoLabelsCart, totals } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
     let disabledState = false;
     // Disable the promo field if out of stock or disabled.
@@ -290,7 +290,9 @@ export default class CartPromoBlock extends React.Component {
       <div className="spc-promo-code-block fadeInUp" style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         {isHelloMemberEnabled() && (
-          <HelloMemberCartOffersVouchers />
+          <HelloMemberCartOffersVouchers
+            totals={totals}
+          />
         )}
         <div className="block-content">
           <input

@@ -6,6 +6,11 @@ import {
   TabList,
   TabPanel,
 } from 'react-tabs';
+import { callHelloMemberApi } from '../../../../../js/utilities/helloMemberHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import logger from '../../../../../js/utilities/logger';
+import HelloMemberCartPopupBonusVouchersList from './hello-member-cart-popup-bonus-voucher-list';
+import HelloMemberCartPopupMemberOfferList from './hello-member-cart-popup-member-offer-list';
 
 
 class HelloMemberCartOffersVouchers extends React.Component {
@@ -13,158 +18,120 @@ class HelloMemberCartOffersVouchers extends React.Component {
     super(props);
     this.state = {
       openModal: false,
+      vouchers: [],
+      Offers: [],
     };
   }
 
-  // Toggle to set state for popup.
-  // getOffersVouchers = () => {
-  //   const params = getHelloMemberCustomerInfo();
-  //   // Get coupons list.
-  //   //const couponResponse = callHelloMemberApi('helloMemberCouponsList', 'GET', params);
-  //   // Get offers list.
-  //   //const offerResponse = callHelloMemberApi('helloMemberOffersList', 'GET', params);
-  // };
+  /**
+   * Helper function to get the customer offers and voucher.
+   */
+  getCustomerOffersAndVouchers = async () => {
+    const { vouchers, Offers } = this.state;
 
-  // Toggle to set state for popup.
-  togglePopup = (openModal) => {
+    // Get coupons list.
+    const couponResponse = await callHelloMemberApi('helloMemberCouponsList', 'GET');
+    if (hasValue(couponResponse.data) && !hasValue(couponResponse.data.error)) {
+      couponResponse.data.coupons.forEach((coupon) => {
+        if (coupon.type === 'BONUS_VOUCHER') {
+          vouchers.push(coupon);
+        } else {
+          Offers.push(coupon);
+        }
+      });
+    } else {
+      vouchers.push({ error_message: couponResponse.data.message });
+      // If coupons API is returning Error.
+      logger.error('Error while calling the coupons Api  @message', {
+        '@message': couponResponse.data.message,
+      });
+    }
+
+    // Get offers list.
+    const offerResponse = await callHelloMemberApi('helloMemberOffersList', 'GET');
+    if (hasValue(offerResponse.data) && !hasValue(offerResponse.data.error)) {
+      Offers.push(...offerResponse.data.offers);
+    } else {
+      Offers.push({ error_message: offerResponse.data.message });
+      // If offers API is returning Error.
+      logger.error('Error while calling the offers Api @message', {
+        '@message': offerResponse.data.message,
+      });
+    }
+    this.setState({
+      vouchers,
+      Offers,
+    });
+  }
+
+
+  // On click link call offer and voucher api and open popup.
+  onClickOpenPopup = async (openModal) => {
+    await this.getCustomerOffersAndVouchers();
     this.setState({
       openModal,
+    });
+  };
+
+  // on click close symbol close the popup.
+  onClickClosePopup = async (openModal) => {
+    this.setState({
+      openModal,
+      vouchers: [],
+      Offers: [],
     });
   };
 
   render() {
     const {
       openModal,
+      vouchers,
+      Offers,
     } = this.state;
+    const { totals } = this.props;
+    const forceRenderTabPanel = true;
+
     return (
       <>
         <div className="hello-member-promo-section">
-          <a className="hm-promo-pop-link" onClick={() => this.togglePopup(true)}>
+          <a className="hm-promo-pop-link" onClick={() => this.onClickOpenPopup(true)}>
             {Drupal.t('Discounts & Vouchers')}
-            <span className="promo-notification" />
+            <span className="promo-notification"> Hello World </span>
           </a>
-          <div className="popup-container">
-            <Popup
-              open={openModal}
-              closeOnDocumentClick={false}
-              closeOnEscape={false}
-            >
-              <a className="close-modal" onClick={() => this.togglePopup(false)} />
-              <div className="hm-promo-modal-title">{Drupal.t('Discount')}</div>
-              <div className="hm-promo-modal-content">
-                <div className="error-info-section">&nbsp;</div>
-                <Tabs>
-                  <TabList>
-                    <Tab>{Drupal.t('Bonus Vouchers')}</Tab>
-                    <Tab>{Drupal.t('Member Offers')}</Tab>
-                  </TabList>
-
-                  <TabPanel>
-                    <form
-                      className="hm-promo-vouchers-validate-form"
-                      method="post"
-                      id="hm-promo-vouchers-val-form"
-                      onSubmit={this.handleSubmit}
-                    >
-                      <div className="hm-promo-tab-content-list">
-                        <div className="hm-promo-tab-cont-item">
-                          <input type="checkbox" id="vehicle1" value="Bike" />
-                          <label htmlFor="vehicle1" className="checkbox-sim checkbox-label">
-                            <div className="item-title">
-                              <span className="title-text">{Drupal.t(' I have a bike')}</span>
-                              <span className="item-sub-title">Expires</span>
-                            </div>
-                          </label>
-                        </div>
-                        <div className="hm-promo-tab-cont-item">
-                          <input type="checkbox" id="vehicle2" value="Car" />
-                          <label htmlFor="vehicle2" className="checkbox-sim checkbox-label">
-                            <div className="item-title">
-                              <span className="title-text">{Drupal.t(' I have a car')}</span>
-                              <span className="item-sub-title">Expires</span>
-                            </div>
-                          </label>
-                        </div>
-                        <div className="hm-promo-tab-cont-item">
-                          <input type="checkbox" id="vehicle3" value="Boat" />
-                          <label htmlFor="vehicle3" className="checkbox-sim checkbox-label">
-                            <div className="item-title">
-                              <span className="title-text">{Drupal.t(' I have a boat')}</span>
-                              <span className="item-sub-title">Expires</span>
-                            </div>
-                          </label>
-                        </div>
-                        <div className="hm-promo-tab-cont-item">
-                          <input type="checkbox" id="vehicle4" value="Boat" />
-                          <label htmlFor="vehicle4" className="checkbox-sim checkbox-label">
-                            <div className="item-title">
-                              <span className="title-text">{Drupal.t(' I have a flight')}</span>
-                              <span className="item-sub-title">Expires</span>
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="hm-promo-tab-cont-action">
-                        <input type="submit" value="APPLY VOUCHERS" />
-                        <a href="" className="clear-btn">{Drupal.t('CLEAR ALL')}</a>
-                      </div>
-                    </form>
-                  </TabPanel>
-                  <TabPanel>
-                    <form
-                      className="hm-promo-offers-validate-form"
-                      method="post"
-                      id="hm-promo-offers-val-form"
-                      onSubmit={this.handleSubmit}
-                    >
-                      <div className="hm-promo-tab-content-list radio-btn-list">
-                        <div className="hm-promo-tab-cont-item">
-                          <input type="radio" id="html" name="fav_language" value="HTML" />
-                          <label htmlFor="html" className="radio-sim radio-label">
-                            <div className="item-title">
-                              <span className="title-text">{Drupal.t('HTML')}</span>
-                              <span className="item-sub-title">Expires</span>
-                            </div>
-                          </label>
-                        </div>
-                        <div className="hm-promo-tab-cont-item">
-                          <input type="radio" id="css" name="fav_language" value="CSS" />
-                          <label htmlFor="css" className="radio-sim radio-label">
-                            <div className="item-title">
-                              <span className="title-text">{Drupal.t('CSS')}</span>
-                              <span className="item-sub-title">Expires</span>
-                            </div>
-                          </label>
-                        </div>
-                        <div className="hm-promo-tab-cont-item">
-                          <input type="radio" id="javascript" name="fav_language" value="JavaScript" />
-                          <label htmlFor="javascript" className="radio-sim radio-label">
-                            <div className="item-title">
-                              <span className="title-text">{Drupal.t('Javascript')}</span>
-                              <span className="item-sub-title">Expires</span>
-                            </div>
-                          </label>
-                        </div>
-                        <div className="hm-promo-tab-cont-item">
-                          <input type="radio" id="react" name="fav_language" value="React" />
-                          <label htmlFor="react" className="radio-sim radio-label">
-                            <div className="item-title">
-                              <span className="title-text">{Drupal.t('React')}</span>
-                              <span className="item-sub-title">Expires</span>
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="hm-promo-tab-cont-action">
-                        <input type="submit" value="APPLY OFFERS" />
-                        <a href="" className="clear-btn">{Drupal.t('CLEAR ALL')}</a>
-                      </div>
-                    </form>
-                  </TabPanel>
-                </Tabs>
-              </div>
-            </Popup>
-          </div>
+          {openModal
+          && (
+            <div className="popup-container">
+              <Popup
+                open={openModal}
+                closeOnDocumentClick={false}
+                closeOnEscape={false}
+              >
+                <a className="close-modal" onClick={() => this.onClickClosePopup(false)} />
+                <div className="hm-promo-modal-title">{Drupal.t('Discount')}</div>
+                <div className="hm-promo-modal-content">
+                  <div className="error-info-section">&nbsp;</div>
+                  <Tabs forceRenderTabPanel={forceRenderTabPanel}>
+                    <TabList>
+                      <Tab>{Drupal.t('Bonus Vouchers')}</Tab>
+                      <Tab>{Drupal.t('Member Offers')}</Tab>
+                    </TabList>
+                    <TabPanel>
+                      <HelloMemberCartPopupBonusVouchersList
+                        vouchers={vouchers}
+                        totals={totals}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <HelloMemberCartPopupMemberOfferList
+                        offers={Offers}
+                        totals={totals}
+                      />
+                    </TabPanel>
+                  </Tabs>
+                </div>
+              </Popup>
+            </div>
+          )}
         </div>
       </>
     );
