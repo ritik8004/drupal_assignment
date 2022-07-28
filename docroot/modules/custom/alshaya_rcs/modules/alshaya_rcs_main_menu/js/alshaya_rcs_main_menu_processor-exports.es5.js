@@ -48,6 +48,16 @@ function processEnrichment(menuItem) {
     return;
   }
 
+  if (Drupal.hasValue(enrichedMenuItem.url_path)
+    && menuItem.url_path !== enrichedMenuItem.url_path
+  ) {
+    menuItem.overridden_path = true;
+  }
+
+  if (!Drupal.hasValue(enrichedMenuItem)) {
+    return;
+  }
+
   menuItem = Object.assign(menuItem, enrichedMenuItem);
 }
 

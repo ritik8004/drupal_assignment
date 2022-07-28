@@ -23,12 +23,16 @@
 </ul>
 
 {{#*inline "menuItem"}}
-  <li class="menu__list-item menu--two__list-item {{ level_class }} {{ move_to_right }}">
+  {{ addClass 'level2_class' '' }}
+  {{#if this.overridden_path}}
+    {{ addClass 'level2_class' 'overridden-link' }}
+  {{/if}}
+  <li class="menu__list-item menu--two__list-item {{ @root.level2_class }} {{ move_to_right }}">
     <div class="menu__link-wrapper menu-two__link-wrapper">
-      <{{ this.tag }} class="menu__link menu-two__link {{ level_class }} sub-nav-{{cleanCssIdentifier @root.sub_nav_name }}" gtm-menu-title="{{ this.name }}" {{{ this.tag_attr }}}>{{ this.name }}</{{ this.tag }}>
+      <{{ this.tag }} class="menu__link menu-two__link {{ @root.level2_class }} sub-nav-{{cleanCssIdentifier @root.sub_nav_name }}" gtm-menu-title="{{ this.name }}" {{{ this.tag_attr }}}>{{ this.name }}</{{ this.tag }}>
     </div>
     {{#if this.children }}
-      {{> main_menu_level3_partial name=name items=this.children level_class=level_class }}
+      {{> main_menu_level3_partial name=name items=this.children }}
     {{/if}}
   </li>
 {{/inline}}

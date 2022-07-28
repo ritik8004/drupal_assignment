@@ -31,6 +31,9 @@
         {{ addStyle 'level1_style' 'background-color' background_color }}
         {{ addClass 'level1_class' 'has-bg-color' }}
       {{/if}}
+      {{#if overridden_path}}
+        {{ addClass 'level1_class' 'overridden-link' }}
+      {{/if}}
       {{#if font_color }}
         {{ addStyle 'level1_style' 'color' font_color }}
       {{/if}}
