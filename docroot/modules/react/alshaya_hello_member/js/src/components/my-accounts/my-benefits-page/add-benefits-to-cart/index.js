@@ -33,7 +33,7 @@ class AddBenefitsToCart extends React.Component {
         if (voucherType === 'BONUS_VOUCHER'
           && hasValue(voucherCode)
           && voucherCode === codeId
-          && voucherDiscount.value === 1) {
+          && voucherDiscount.value > 0) {
           this.setState({
             appliedAlready: true,
           });
@@ -79,7 +79,13 @@ class AddBenefitsToCart extends React.Component {
             });
             if (response.data) {
               document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
-              document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              if (hasValue(title)) {
+                document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              }
+              document.getElementById('hm-benefit-status-info').classList.toggle('hm-benefit-status-info-active');
+              setTimeout(() => {
+                document.getElementById('hm-benefit-status-info').classList.remove('hm-benefit-status-info-active');
+              }, 5000);
             }
             removeFullScreenLoader();
           } else {
@@ -100,7 +106,13 @@ class AddBenefitsToCart extends React.Component {
             });
             if (response.data) {
               document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
-              document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              if (hasValue(title)) {
+                document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              }
+              document.getElementById('hm-benefit-status-info').classList.toggle('hm-benefit-status-info-active');
+              setTimeout(() => {
+                document.getElementById('hm-benefit-status-info').classList.remove('hm-benefit-status-info-active');
+              }, 5000);
             }
             removeFullScreenLoader();
           } else {
@@ -137,9 +149,10 @@ class AddBenefitsToCart extends React.Component {
           <div className="button-wide inactive">
             {Drupal.t('This offer has been added to your bag', { context: 'hello_member' })}
           </div>
-          <div>
+          <div className="hm-benefit-status-info" id="hm-benefit-status-info">
             <div id="status-msg" />
             <div id="disc-title" />
+            <div className="status-icon" />
           </div>
         </ConditionalView>
         <ConditionalView condition={!appliedAlready && !isEmptyCart}>

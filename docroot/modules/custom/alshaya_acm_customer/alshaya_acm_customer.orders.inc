@@ -331,6 +331,14 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
   $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
 
+  // Add hello member information if available.
+  if (isset($order['voucher_discount']) && isset($order['voucher_codes_count'])) {
+    // Pass voucher discount amount is available.
+    $orderDetails['voucher_discount'] = (float) $order['voucher_discount'] != 0 ? alshaya_acm_price_format($order['voucher_discount']) : NULL;
+    // Prepare and pass the voucher discount label.
+    $orderDetails['voucher_discount_label'] = t('@count Bonus Voucher', ['@count' => $order['voucher_codes_count']], ['context' => 'hello_member']);
+  }
+
   if ($order['totals']['surcharge'] > 0) {
     // If surcharge is enabled, only then show.
     if (\Drupal::service('alshaya_acm_checkout.checkout_helper')->isSurchargeEnabled()) {
