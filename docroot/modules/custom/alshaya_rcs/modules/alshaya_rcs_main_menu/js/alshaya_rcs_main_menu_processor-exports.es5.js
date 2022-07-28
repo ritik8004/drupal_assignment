@@ -116,6 +116,11 @@ const processData = function (data, maxLevel) {
       ? 'div'
       : 'a';
 
+    data[key].tag_attr = null;
+    if (data[key].tag === 'a') {
+      data[key].tag_attr = `href="${data[key].url_path}"`;
+    }
+
     // Check children.
     if (typeof data[key].children !== 'undefined') {
       if (Object.values(data[key].children).length < 1) {
