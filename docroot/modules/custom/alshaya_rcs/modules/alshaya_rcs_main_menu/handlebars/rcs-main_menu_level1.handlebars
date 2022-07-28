@@ -37,12 +37,12 @@
       <li class="menu__list-item menu--one__list-item {{ @root.level1_class }} {{ promopanel_class }} {{ menu_item.hide_in_desktop }} {{ menu_item.hide_in_mobile_tablet }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
           {{#if menu_item.icon }}
-            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">
+            <{{@menu_item.tag}} class="menu__link menu--one__link {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">
               <span class="icon"><img src="{{ menu_item.icon.icon_url }}" alt="{{ menu_item.name }}"/></span>
               {{ menu_item.name }}
-            </{{@root.tag}}>
+            </{{@menu_item.tag}}>
           {{else}}
-            <{{@root.tag}} class="menu__link menu--one__link {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@root.tag}}>
+            <{{@menu_item.tag}} class="menu__link menu--one__link {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="{{ @root.path_prefix }}{{ menu_item.url_path }}">{{ menu_item.name }}</{{@menu_item.tag}}>
           {{/if}}
         </div>
         {{#if menu_item.children }}

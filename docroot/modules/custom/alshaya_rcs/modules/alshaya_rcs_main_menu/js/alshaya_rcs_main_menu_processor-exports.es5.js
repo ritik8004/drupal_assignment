@@ -31,7 +31,6 @@ exports.prepareData = function prepareData(settings, inputs) {
     'aura_enabled': drupalSettings.aura.enabled,
     'highlight_timing': highlightTiming,
     'promopanel_class': '', // @todo Implement promo panel block class.
-    'tag': 'a',
   };
 }
 
@@ -112,6 +111,10 @@ const processData = function (data, maxLevel) {
     if (Drupal.hasValue(data[key].move_to_right)) {
       data[key].move_to_right = 'move-to-right';
     }
+
+    data[key].tag = typeof data[key].item_clickable !== 'undefined' && !data[key].item_clickable
+      ? 'div'
+      : 'a';
 
     // Check children.
     if (typeof data[key].children !== 'undefined') {
