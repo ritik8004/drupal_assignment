@@ -4,7 +4,7 @@
     &:nth-of-type(5) {
       .field--name-field-1-row-2-col.field__items {
         & > .field__item {
-          padding: 1rem;
+          padding: rem(16);
           border-radius: rem(8);
           background-color: $hello-member-components-bg;
 
