@@ -7,7 +7,6 @@ import logger from '../../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { findArrayElement } from '../../../../utilities';
-import QrCodeDisplay from '../../my-membership/qr-code-display';
 
 class AddBenefitsToCart extends React.Component {
   constructor(props) {
@@ -34,7 +33,7 @@ class AddBenefitsToCart extends React.Component {
         if (voucherType === 'BONUS_VOUCHER'
           && hasValue(voucherCode)
           && voucherCode === codeId
-          && voucherDiscount.value === 1) {
+          && voucherDiscount.value > 0) {
           this.setState({
             appliedAlready: true,
           });
@@ -80,7 +79,13 @@ class AddBenefitsToCart extends React.Component {
             });
             if (response.data) {
               document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
-              document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              if (hasValue(title)) {
+                document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              }
+              document.getElementById('hm-benefit-status-info').classList.toggle('hm-benefit-status-info-active');
+              setTimeout(() => {
+                document.getElementById('hm-benefit-status-info').classList.remove('hm-benefit-status-info-active');
+              }, 5000);
             }
             removeFullScreenLoader();
           } else {
@@ -101,7 +106,13 @@ class AddBenefitsToCart extends React.Component {
             });
             if (response.data) {
               document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
-              document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              if (hasValue(title)) {
+                document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+              }
+              document.getElementById('hm-benefit-status-info').classList.toggle('hm-benefit-status-info-active');
+              setTimeout(() => {
+                document.getElementById('hm-benefit-status-info').classList.remove('hm-benefit-status-info-active');
+              }, 5000);
             }
             removeFullScreenLoader();
           } else {
@@ -118,7 +129,6 @@ class AddBenefitsToCart extends React.Component {
 
   render() {
     const { appliedAlready, wait, isEmptyCart } = this.state;
-    const { memberId, codeId, qrCodeTitle } = this.props;
 
     if (!wait) {
       return (
@@ -131,26 +141,21 @@ class AddBenefitsToCart extends React.Component {
     return (
       <>
         <ConditionalView condition={!appliedAlready && isEmptyCart}>
-          <div className="benefit-status">
-            {Drupal.t('Your cart is empty.', { context: 'hello_member' })}
+          <div className="button-wide inactive">
+            {Drupal.t('Your cart is empty', { context: 'hello_member' })}
           </div>
         </ConditionalView>
         <ConditionalView condition={appliedAlready}>
-          <div className="benefit-status">
-            {Drupal.t('This offer has been added to your bag.', { context: 'hello_member' })}
+          <div className="button-wide inactive">
+            {Drupal.t('This offer has been added to your bag', { context: 'hello_member' })}
           </div>
-          <div>
+          <div className="hm-benefit-status-info" id="hm-benefit-status-info">
             <div id="status-msg" />
             <div id="disc-title" />
+            <div className="status-icon" />
           </div>
         </ConditionalView>
         <ConditionalView condition={!appliedAlready && !isEmptyCart}>
-          <QrCodeDisplay
-            memberId={memberId}
-            qrCodeTitle={qrCodeTitle}
-            codeId={codeId}
-            width={79}
-          />
           <div className="button-wide" onClick={() => this.handleClick()}>
             {getStringMessage('benefit_add_to_bag')}
           </div>

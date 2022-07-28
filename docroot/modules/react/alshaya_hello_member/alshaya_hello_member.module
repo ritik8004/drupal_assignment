@@ -42,6 +42,20 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   }
 
   $page['#attached']['drupalSettings']['helloMember'] = $hello_member_settings;
+
+  // Get the text to show in popup.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'entity.user.canonical') {
+    $config = \Drupal::config('alshaya_hello_member.settings');
+    $membership_popup_text_above = $config->get('membership_popup_text_above.value');
+    if (!empty($membership_popup_text_above)) {
+      $page['#attached']['drupalSettings']['popup_text_above'] = $membership_popup_text_above;
+    }
+    $membership_popup_text_below = $config->get('membership_popup_text_below.value');
+    if (!empty($membership_popup_text_below)) {
+      $page['#attached']['drupalSettings']['popup_text_below'] = $membership_popup_text_below;
+    }
+  }
 }
 
 /**
@@ -391,6 +405,22 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
   // Add hello member points for order confirmation.
   if (isset($order['extension']['hm_accrued_points'])) {
     $settings['order_details']['hmAccuredPoints'] = $order['extension']['hm_accrued_points'] ?? 0;
+  }
+
+  // Add below hello member extension_attributes to the totals for display info
+  // under order summary block on order confirmation and print order
+  // confirmation pages.
+  // - applied_hm_voucher_codes
+  // - hm_voucher_discount
+  // - applied_hm_offer_code.
+  if (isset($order['extension']['applied_hm_voucher_codes'])
+    && isset($order['extension']['hm_voucher_discount'])) {
+    $settings['order_details']['totals']['hmAppliedVoucherCodes'] = $order['extension']['applied_hm_voucher_codes'];
+    $settings['order_details']['totals']['hmVoucherDiscount'] = $order['extension']['hm_voucher_discount'];
+  }
+
+  if (isset($order['extension']['applied_hm_offer_code'])) {
+    $settings['order_details']['totals']['hmOfferCode'] = $order['extension']['applied_hm_offer_code'];
   }
 
   // Do not proceed if aura itegration with hello member is disabled.

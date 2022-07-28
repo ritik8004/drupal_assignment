@@ -271,6 +271,20 @@
       </tr>
 		{% endif %}
 
+    {% if order_details.voucher_discount is not empty %}
+      <tr class="sub-total-row">
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td class="right--align">
+          {{ order_details.voucher_discount_label }}
+        </td>
+        <td class="blend">
+					{{ order_details.voucher_discount }}
+        </td>
+        <td class="empty--cell">&nbsp;</td>
+      </tr>
+		{% endif %}
+
     <tr class="delivery-charge-row">
       <td>&nbsp;</td>
       <td>&nbsp;</td>

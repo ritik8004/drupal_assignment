@@ -126,7 +126,9 @@ function alshaya_acm_product_category_views_pre_view(ViewExecutable $view, $disp
  */
 function template_preprocess_alshaya_shop_by(&$variables) {
   // Split/Chunk the array into two parts.
-  $variables['term_tree'] = array_chunk($variables['term_tree'], ceil(count($variables['term_tree']) / 2));
+  if ($variables['term_tree']) {
+    $variables['term_tree'] = array_chunk($variables['term_tree'], ceil(count($variables['term_tree']) / 2));
+  }
 }
 
 /**

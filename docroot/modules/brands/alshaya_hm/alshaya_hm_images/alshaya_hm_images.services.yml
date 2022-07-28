@@ -26,3 +26,10 @@ services:
       - { name: 'event_subscriber' }
     calls:
       - [setSkuAssetManager, ['@?alshaya_media_assets.skuassetsmanager']]
+
+  alshaya_hm_images.product_updated_event:
+    class: Drupal\alshaya_hm_images\EventSubscriber\ProductUpdatedEventSubscriber
+    arguments:
+      - '@alshaya_hm_images.images_helper'
+    tags:
+      - { name: 'event_subscriber' }

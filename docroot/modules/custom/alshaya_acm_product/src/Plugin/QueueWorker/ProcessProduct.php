@@ -214,11 +214,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
     }
 
-    // Invalidate our custom cache tags.
-    $cache_tags = Cache::mergeTags(
-      $cache_tags,
-      ProductCacheManager::getAlshayaProductTags($entity)
-    );
+    ProductCacheManager::$useCache = FALSE;
 
     $this->cacheTagsInvalidator->invalidateTags($cache_tags);
 
@@ -249,6 +245,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       // Download product images for product and warm up caches.
       $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
       $this->imagesManager->getProductMedia($translation, 'pdp', FALSE);
+      // Prepare the swatches and store the same in the cache.
+      $this->imagesManager->getSwatches($translation);
       if ($node) {
         // Mark the product as processed now.
         $this->productProcessedManager->markProductProcessed($translation->getSku());

@@ -1,0 +1,13 @@
+{{! @see docroot/modules/custom/alshaya_acm_product_category/templates/alshaya-shop-by.html.twig }}
+<div class="cols-6 clearfix">
+  <div class="c-footer-menu">
+    {{#each menuItems as |menuItem|}}
+      {{#if menuItem.name }}
+        <div class="c-footer-menu__tab">
+          {{ '// @todo Add category enrichments for shop by block' }}
+          <a class="menu__link menu--one__link c-footer-menu__link" href="{{ menuItem.url_path }}">{{ menuItem.name }}</a>
+        </div>
+      {{/if}}
+    {{/each}}
+  </div>
+</div>

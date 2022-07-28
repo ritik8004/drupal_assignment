@@ -36,11 +36,11 @@
           })
           $('.secondary--main--menu').show();
         } else {
-          let megamenu = $('#block-alshayamainmenu ul.menu--one__list');
+          let megamenu = $('.block-alshaya-main-menu ul.menu--one__list');
           megamenu.append($('.promo-wrapper'));
           megamenu.append($('#block-alshayasecondarymainmenu .secondary--main--menu'));
           $('.secondary--main--menu').once('alshayaSecondaryMainMenu').prepend('<li class="secondary-main-menu-header closed">' + Drupal.t('More') + ' </li>')
-          $('#block-alshayamainmenu .secondary--main--menu').show();
+          $('.block-alshaya-main-menu .secondary--main--menu').show();
           $('.main--menu .promo-wrapper').show();
           $('.secondary-main-menu-header').on('click', function () {
             $('.secondary-main-menu-header').toggleClass('closed');
