@@ -120,6 +120,14 @@
           }
         }
       }
+
+      .Collapsible {
+        width: 96%;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+      }
     }
   }
 
@@ -211,6 +219,12 @@
           font-size: rem(13);
           min-width: rem(150);
           cursor: pointer;
+        }
+      }
+
+      .loyalty-options-guest {
+        .loyalty-option {
+          padding-#{$left}: rem(20);
         }
       }
     }

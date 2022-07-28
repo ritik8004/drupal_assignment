@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import { getHelloMemberPointsToEarn } from '../../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import { getAuraFormConfig } from '../../../../../../../js/utilities/helloMemberHelper';
@@ -70,9 +71,9 @@ class AuraPointsToEarn extends React.Component {
 
     return (
       <div className="points-earned-message">
-        {getStringMessage('aura_points_earn_message', {
+        {parse(getStringMessage('aura_points_earn_message', {
           '@points': auraPointsToEarn,
-        })}
+        }))}
       </div>
     );
   }

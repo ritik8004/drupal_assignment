@@ -1,0 +1,74 @@
+.spc-hello-member-checkout-rewards-block {
+  .spc-aura-link-card-form {
+    color: $aura-spc-checkout-text-content;
+
+    .customer-points {
+      .aura-points-info {
+        border-radius: rem(10);
+        background: $aura-gradient-21;
+        padding: rem(14) rem(20);
+        font-family: $aura-regular;
+
+        html[lang=ar] & {
+          background: $aura-gradient-21-ar;
+        }
+      }
+
+      .spc-aura-highlight,
+      .spc-aura-points-expiry-item b {
+        font-family: $aura-bold;
+        font-weight: normal;
+        padding: 0 rem(4);
+        color: $aura-highlight;
+      }
+    }
+
+    .aura-redeem-points {
+      font-family: $aura-bold;
+      display: flex;
+      align-items: center;
+      margin-top: rem(30);
+      justify-content: space-between;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: rem(3);
+      }
+
+      .spc-aura-button {
+        border: rem(1) solid $aura-spc-button-text;
+        background: $aura-spc-button-bg;
+        color: $aura-spc-button-text;
+        font-size: rem(13);
+        border-radius: rem(4);
+        height: rem(36);
+        min-width: rem(171);
+      }
+    }
+  }
+
+  .aura-earned-points {
+    padding-#{$left}: rem(48);
+    margin-top: rem(10);
+
+    .points-earned-message {
+      font-size: rem(12);
+      color: $aura-cart-points;
+      font-family: $aura-regular;
+
+      &::before {
+        content: '!';
+        color: $aura-spc-checkout-block-bg;
+        background-color: $aura-cart-points;
+        border-radius: 50%;
+        padding: 0 rem(6);
+        font-size: rem(12);
+        display: inline-flex;
+        margin-#{$right}: rem(8);
+      }
+
+      b {
+        font-family: $aura-bold;
+      }
+    }
+  }
+}

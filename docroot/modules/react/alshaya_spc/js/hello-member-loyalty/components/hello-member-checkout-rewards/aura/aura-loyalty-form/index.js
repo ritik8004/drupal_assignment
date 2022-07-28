@@ -293,22 +293,22 @@ class AuraLoyaltyForm extends React.Component {
         {isFullyEnrolled
           && (
           <div className="customer-points">
-            <div className="title">
-              <div className="subtitle-1">
+            <div className="aura-points-info">
+              <div className="total-points">
                 { getStringMessage('checkout_you_have') }
                 <PointsString points={points} />
               </div>
               <div className="spc-aura-checkout-messages">
                 <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
               </div>
-              <AuraRedeemPoints
-                mobile={mobile}
-                pointsInAccount={points}
-                cardNumber={cardNumber}
-                formActive={formActive}
-                cart={cart}
-              />
             </div>
+            <AuraRedeemPoints
+              mobile={mobile}
+              pointsInAccount={points}
+              cardNumber={cardNumber}
+              formActive={formActive}
+              cart={cart}
+            />
           </div>
           )}
       </>

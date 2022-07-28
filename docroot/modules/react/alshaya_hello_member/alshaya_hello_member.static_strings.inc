@@ -312,7 +312,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'aura_points_earn_message',
-      'value' => t('You will earn @points Aura points with this purchase.', [], ['context' => 'hello_member']),
+      'value' => t('You will earn <b>@points</b> Aura points with this purchase.', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'use_your_points_text',
