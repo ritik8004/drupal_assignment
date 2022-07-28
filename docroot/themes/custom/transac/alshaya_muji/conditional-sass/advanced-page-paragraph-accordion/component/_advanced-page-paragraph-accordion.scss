@@ -1,0 +1,20 @@
+.nodetype--advanced_page {
+  .c-accordion-delivery-option-parent {
+    .c-accordion__title {
+      &::after {
+        content: '';
+        top: 1.1rem;
+        #{$right}: 1.1125rem;
+      }
+
+      &.ui-state-active {
+        &::after {
+          transform: rotate(270deg);
+          top: 1.1rem;
+          #{$right}: 1.1125rem;
+          border-color: transparent transparent transparent $advanced-page-accordion-active-title;
+        }
+      }
+    }
+  }
+}

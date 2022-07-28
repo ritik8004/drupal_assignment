@@ -1,0 +1,97 @@
+.alias--membership-info.nodetype--advanced_page {
+  .c-promo__item {
+    &:nth-of-type(2) {
+      .paragraph--type--section-divider {
+        @include breakpoint($only-mobile) {
+          display: none;
+        }
+
+        &::before {
+          content: none;
+        }
+
+        display: block;
+        text-align: $left;
+
+        .field--name-field-section-divider-text {
+          font-size: rem(40);
+          font-family: $alshaya-bold;
+          color: $hello-member-highlight-text;
+          background: none;
+          padding: 0;
+        }
+      }
+    }
+
+    &:nth-of-type(3) {
+      .field--name-field-1-row-4-col.field__items {
+        & > .field__item {
+          .paragraph--type--image-title-subtitle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+
+            .field--name-field-banner {
+              order: 2;
+
+              @include breakpoint($only-mobile) {
+                width: 65%;
+              }
+            }
+
+            .field--name-field-title {
+              order: 0;
+              width: 100%;
+              font-family: $alshaya-bold;
+              font-size: rem(20);
+              color: $hello-member-highlight-text;
+              text-align: $left;
+              margin-bottom: rem(8);
+
+              @include breakpoint($tablet) {
+                height: 10%;
+              }
+            }
+
+            .field--name-field-description {
+              order: 1;
+              width: 100%;
+              font-size: rem(16);
+              line-height: normal;
+              text-align: $left;
+              margin-bottom: rem(16);
+
+              @include breakpoint($tablet) {
+                height: 40%;
+              }
+            }
+
+            .field--name-field-button-link {
+              display: none;
+            }
+          }
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+            margin-bottom: rem(32);
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          flex-direction: column;
+          align-items: center;
+          padding: 0 rem(16);
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: rem(24);
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: rem(128);
+      }
+    }
+  }
+}

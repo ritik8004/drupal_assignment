@@ -832,3 +832,18 @@ hello-member-aura-loyalty:
   css:
     theme:
       css/conditional-sass/hello-member-aura-loyalty/hello-member-aura-loyalty.ltr.css: {}
+
+advanced-page-paragraph-accordion:
+  css:
+    theme:
+      css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css: {}
+
+advanced-page-paragraph-banner:
+  css:
+    theme:
+      css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css: {}
+
+hello-member-info-page:
+  css:
+    theme:
+      css/conditional-sass/hello-member-info-page/hello-member-info-page.ltr.css: {}

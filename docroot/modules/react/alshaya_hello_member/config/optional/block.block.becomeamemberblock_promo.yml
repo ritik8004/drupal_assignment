@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_hello_member
+    - node
+    - system
+  theme:
+    - alshaya_white_label
+id: becomeamemberblock_promo
+theme: alshaya_white_label
+region: content
+weight: 18
+provider: null
+plugin: become_hello_member_block
+settings:
+  id: become_hello_member_block
+  label: 'Become Hello Member block - Promo'
+  label_display: '0'
+  provider: alshaya_hello_member
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      acq_promotion: acq_promotion
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/node/*'

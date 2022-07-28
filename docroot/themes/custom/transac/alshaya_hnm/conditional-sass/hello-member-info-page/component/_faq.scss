@@ -1,0 +1,11 @@
+.alias--membership-info.nodetype--advanced_page {
+  .c-promo__item {
+    &:nth-of-type(6) {
+      .paragraph--type--section-divider {
+        .field--name-field-section-divider-text {
+          font-family: $hnm-demibold;
+        }
+      }
+    }
+  }
+}
