@@ -45,14 +45,26 @@ class HelloMemberPDP extends React.Component {
    * Utility function to set hello member product points for current product.
    */
   setInitialProductPoints = () => {
-    const { dictionaryData } = this.state;
-    // If above details are not there in props, proceed with usual approach to
-    // get the data from price amount HTML text block.
-    const selector = document.querySelector('.content__title_wrapper .special--price .price-amount') || document.querySelector('.content__title_wrapper .price-amount');
-    // Fetch Product price using selector.
-    const productPrice = (selector !== null) ? selector.innerText.replace(/,/g, '') : 0;
+    // Get the product SKU fom the form tag.
+    const productSku = document.querySelector('.sku-base-form').dataset.sku;
+
+    // Get product data from the drupal settings for the given SKU.
+    const productData = window.commerceBackend.getProductData(productSku);
+    if (!productData) {
+      return;
+    }
+
+    // Get the current selected product variant in form.
+    const selectedVariant = document.getElementsByName('selected_variant_sku')[0].value;
+    if (!selectedVariant) {
+      return;
+    }
+
+    // Get selected variant price from the product data.
+    const productPrice = productData.variants[selectedVariant].finalPrice || 0;
 
     // Return price as hello member points.
+    const { dictionaryData } = this.state;
     this.setState({
       productPoints: getPriceToHelloMemberPoint(productPrice, dictionaryData),
     });
