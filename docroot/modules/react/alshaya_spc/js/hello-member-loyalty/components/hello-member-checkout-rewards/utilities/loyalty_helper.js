@@ -1,4 +1,8 @@
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { getErrorResponse } from '../../../../../../js/utilities/error';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHelper';
+import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 
 /**
@@ -53,6 +57,36 @@ function processCheckoutCart(data) {
 }
 
 /**
+ * Get Customer Points.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object containing customer data in case of
+ *   success or an error object in case of failure.
+ */
+function getAuraCustomerPoints(identifierNo) {
+  return callHelloMemberApi('getAuraCustomerPoints', 'GET', { identifierNo }, {}, false)
+    .then((response) => {
+      if (hasValue(response.data.error)) {
+        const message = hasValue(response.data.message) ? response.data.message : '';
+        logger.error('Error while trying to fetch loyalty points for user with customer id @customerId. Endpoint: @endpoint. Message: @message', {
+          '@customerId': identifierNo,
+          '@message': message,
+        });
+        return getErrorResponse(message, 500);
+      }
+
+      const responseData = {
+        cardNumber: hasValue(response.data.apc_identifier_number) ? response.data.apc_identifier_number : '',
+        auraPoints: hasValue(response.data.apc_points) ? response.data.apc_points : '',
+        auraPointsToExpire: hasValue(response.data.apc_points_to_expire) ? response.data.apc_points_to_expire : '',
+        auraOnHoldPoints: hasValue(response.data.apc_on_hold_points) ? response.data.apc_on_hold_points : '',
+        auraPointsExpiryDate: hasValue(response.data.apc_points_expiry_date) ? response.data.apc_points_expiry_date : '',
+      };
+      return responseData;
+    });
+}
+
+/**
  * Utility function to get aura localStorage key for checkout.
  */
 function getHelloMemberAuraStorageKey() {
@@ -62,4 +96,5 @@ function getHelloMemberAuraStorageKey() {
 export {
   processCheckoutCart,
   getHelloMemberAuraStorageKey,
+  getAuraCustomerPoints,
 };

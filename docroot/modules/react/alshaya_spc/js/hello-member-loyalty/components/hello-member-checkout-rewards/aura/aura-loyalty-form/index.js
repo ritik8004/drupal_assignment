@@ -3,8 +3,8 @@ import AuraFormFieldOptions from '../aura-form-field-options';
 import AuraFormEmailField from '../aura-form-email-field';
 import AuraFormCardField from '../aura-form-card-field';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
-import { processCheckoutCart, getHelloMemberAuraStorageKey } from '../../utilities/loyalty_helper';
-import { showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
+import { processCheckoutCart, getHelloMemberAuraStorageKey, getAuraCustomerPoints } from '../../utilities/loyalty_helper';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import PointsString from '../../../../../aura-loyalty/components/utilities/points-string';
 import PointsExpiryMessage from '../../../../../aura-loyalty/components/utilities/points-expiry-message';
@@ -15,6 +15,7 @@ import dispatchCustomEvent from '../../../../../../../js/utilities/events';
 import { cartContainsAnyVirtualProduct } from '../../../../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../../../../js/utilities/util';
 import LinkCardOptionMobile from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-mobile';
+import logger from '../../../../../../../js/utilities/logger';
 
 class AuraLoyaltyForm extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class AuraLoyaltyForm extends React.Component {
       isFullyEnrolled: false,
       points: 0,
       expiringPoints: 0,
-      expiryDate: '',
+      expiryDate: null,
     };
   }
 
@@ -120,11 +121,23 @@ class AuraLoyaltyForm extends React.Component {
       );
     }
 
-    // @todo: After magento gives the point balance api, we will call api
-    // to fetch expiry points and expiry date.
-    this.setState({
-      expiringPoints: '200',
-      expiryDate: '2-12-2024',
+    // If user is fully enrolled, we get all his apc points details.
+    const customerPoints = getAuraCustomerPoints(stateValues.cardNumber);
+    showFullScreenLoader();
+    customerPoints.then((result) => {
+      if (hasValue(result.error)) {
+        logger.error('Error while trying to fetch customer information for user with customer id @customerId. Message: @message', {
+          '@customerId': stateValues.cardNumber,
+          '@message': result.error_message || '',
+        });
+      } else {
+        this.setState({
+          points: result.auraPoints,
+          expiringPoints: result.auraPointsToExpire,
+          expiryDate: result.auraPointsExpiryDate,
+        });
+      }
+      removeFullScreenLoader();
     });
 
     this.setState({
@@ -298,9 +311,12 @@ class AuraLoyaltyForm extends React.Component {
                 { getStringMessage('checkout_you_have') }
                 <PointsString points={points} />
               </div>
-              <div className="spc-aura-checkout-messages">
-                <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
-              </div>
+              {hasValue(expiringPoints) && hasValue(expiryDate)
+                && (
+                <div className="spc-aura-checkout-messages">
+                  <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
+                </div>
+                )}
             </div>
             <AuraRedeemPoints
               mobile={mobile}

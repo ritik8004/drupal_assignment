@@ -1,5 +1,6 @@
 import { hasValue } from './conditionsUtility';
 import { getErrorResponse } from './error';
+import { isUserAuthenticated } from './helper';
 import logger from './logger';
 import { callMagentoApi } from './requestHelper';
 
@@ -106,6 +107,14 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       break;
     case 'getCartData':
       endpoint = '/V1/carts/mine/getCart';
+      break;
+    case 'unsetLoyaltyCard':
+      endpoint = isUserAuthenticated()
+        ? '/V1/customers/mine/unset-loyalty-card'
+        : '/V1/apc/unset-loyalty-card';
+      break;
+    case 'getAuraCustomerPoints':
+      endpoint = `/V1/guest/apc-points-balance/identifierNo/${endPointParams.identifierNo}`;
       break;
 
     default:
