@@ -34,6 +34,7 @@ import {
 import { isDesktop } from '../../utils/QueryStringUtils';
 import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHelper';
 import BecomeHelloMember from '../../../../../alshaya_hello_member/js/src/components/become-hello-member';
+import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 /**
@@ -191,7 +192,7 @@ const SearchResultsComponent = ({
         </SelectedFilters>
         {/* Show Become member popup if helloMember.showOnListingPages is true */}
         <ConditionalView condition={
-          typeof (drupalSettings.helloMember) !== 'undefined'
+          isHelloMemberEnabled()
           && drupalSettings.helloMember.showOnListingPages
           && drupalSettings.user.uid === 0
         }

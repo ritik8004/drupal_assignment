@@ -23,6 +23,7 @@ import PLPNoResults from '../components/algolia/PLPNoResults';
 import SubCategoryContent from '../components/subcategory';
 import ConditionalView from '../../common/components/conditional-view';
 import BecomeHelloMember from '../../../../alshaya_hello_member/js/src/components/become-hello-member';
+import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -242,7 +243,7 @@ const PlpApp = ({
       </SelectedFilters>
       {/* Show Become member popup if helloMember.showOnListingPages is true */}
       <ConditionalView condition={
-        typeof (drupalSettings.helloMember) !== 'undefined'
+        isHelloMemberEnabled()
         && drupalSettings.helloMember.showOnListingPages
         && drupalSettings.user.uid === 0
       }
