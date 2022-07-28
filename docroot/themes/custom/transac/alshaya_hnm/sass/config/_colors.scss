@@ -55,6 +55,7 @@ $hnm-black-two: #000;
 $hnm-black-two-50: rgba(0, 0, 0, 0.05);
 $hnm-black-three: #222;
 $hnm-black-four: #1a1a1a;
+$hnm-black-333: #333;
 $hnm-grey: #f3f3f3;
 $returned: #797979;
 $whisper-light-59: rgba(235, 235, 235, 0.59);
@@ -868,10 +869,12 @@ $hello-member-accured-points-txt: $hnm-red;
 //hello member header block
 $hello-member-menu-link-txt: $hnm-black-two;
 
-// Advanced Page components.
+// Advanced Page components
 $advanced-page-accordion-active-title: $venetian_red;
 $advanced-page-accordion-bg: $primary_bg;
 
-// Hello Member Info Page
+// Hello Member components
 $hello-member-components-bg: $white-linen;
 $hello-member-highlight-text: $_hm_global_red;
+$hello-member-highlight-text-2: $hnm-red;
+$hello-member-text-2: $hnm-black-333;

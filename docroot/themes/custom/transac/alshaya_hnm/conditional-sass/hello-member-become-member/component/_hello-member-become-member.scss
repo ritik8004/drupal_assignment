@@ -1,0 +1,25 @@
+.become-hello-member {
+  &__header {
+    @include breakpoint($only-mobile) {
+      span {
+        &:first-child {
+          font-family: $hnm-demibold;
+        }
+      }
+    }
+
+    @include breakpoint($tablet) {
+      span {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+
+  &__actions {
+    &-link {
+      &--secondary {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}
