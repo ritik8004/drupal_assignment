@@ -3,9 +3,9 @@ import React from 'react';
 const CodVerifyText = ({ mobileNumber, otpLength }) => (
   <div className="cod-mobile-verify-text">
     <span>
-      {Drupal.t('Enter the @otpLength-digit OTP code sent to @mobileNumber', {
+      {Drupal.t('Enter the @otp_length-digit OTP code sent to @mobileNumber', {
         '@mobileNumber': mobileNumber,
-        '@otpLength': otpLength,
+        '@otp_length': otpLength,
       }, { context: 'cod_mobile_verification' })}
     </span>
     <button type="button">
