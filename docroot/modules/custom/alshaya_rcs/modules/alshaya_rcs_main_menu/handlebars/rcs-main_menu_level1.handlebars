@@ -37,6 +37,9 @@
       {{#if font_color }}
         {{ addStyle 'level1_style' 'color' font_color }}
       {{/if}}
+      {{#if menu_item.icon}}
+        {{ addClass 'level1_class' 'with-icon' }}
+      {{/if}}
       <li class="menu__list-item menu--one__list-item {{ @root.level1_class }} {{ promopanel_class }} {{ menu_item.hide_in_desktop }} {{ menu_item.hide_in_mobile_tablet }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
           {{#if menu_item.icon }}
