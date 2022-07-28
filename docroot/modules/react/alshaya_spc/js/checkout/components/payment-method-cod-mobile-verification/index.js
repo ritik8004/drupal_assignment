@@ -14,7 +14,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
   validateBeforePlaceOrder = () => false
 
   render() {
-    const { shippingMobileNumber } = this.props;
+    const { shippingMobileNumber, otpLength } = this.props;
 
     if (shippingMobileNumber === null) {
       return (null);
@@ -24,6 +24,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
       <div className="cod-mobile-verify-wrapper">
         <CodVerifyText
           mobileNumber={shippingMobileNumber}
+          otpLength={otpLength}
         />
       </div>
     );

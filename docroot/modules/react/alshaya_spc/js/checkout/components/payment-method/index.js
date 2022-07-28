@@ -32,7 +32,10 @@ import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import PaymentMethodCodMobileVerification
   from '../payment-method-cod-mobile-verification';
-import { isCodMobileVerifyEnabled } from '../../../utilities/cod_utilities';
+import {
+  getOtpLength,
+  isCodMobileVerifyEnabled,
+} from '../../../utilities/cod_utilities';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -229,7 +232,7 @@ export default class PaymentMethod extends React.Component {
     let mobileNumber = null;
     if (typeof cart !== 'undefined' && typeof cart.cart.shipping !== 'undefined') {
       const { address } = cart.cart.shipping;
-      mobileNumber = (typeof address.telephone !== 'undefined') ? address.telephone : null;
+      mobileNumber = (address !== null) ? address.telephone : null;
     }
 
     return (
@@ -294,6 +297,7 @@ export default class PaymentMethod extends React.Component {
                 <PaymentMethodCodMobileVerification
                   ref={this.paymentMethodCod}
                   shippingMobileNumber={mobileNumber}
+                  otpLength={getOtpLength()}
                 />
               </ConditionalView>
             </div>

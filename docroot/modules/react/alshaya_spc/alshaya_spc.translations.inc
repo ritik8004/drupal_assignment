@@ -583,6 +583,20 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to COD mobile verification.
+  $strings['v16'] = [
+    'Enter the @otpLength-digit OTP code sent to @mobileNumber' => [
+      // @todo Arabic translation to be updated.
+      'ar' => 'Enter the @otpLength-digit OTP code sent to @mobileNumber',
+      'context' => 'cod_mobile_verification',
+    ],
+    'change' => [
+      // @todo Arabic translation to be updated.
+      'ar' => 'change',
+      'context' => 'cod_mobile_verification',
+    ],
+  ];
+
   return $strings;
 }
 
