@@ -1606,9 +1606,6 @@ $magentos = [
     'xb' => [
       'store_id' => ['en' => 15, 'ar' => 16],
     ],
-    'om' => [
-      'store_id' => ['en' => 15, 'ar' => 16],
-    ],
     'sa' => [
       'store_id' => ['en' => 2, 'ar' => 3],
     ],
@@ -2062,12 +2059,6 @@ $magentos = [
       ],
     ],
     'xb' => [
-      'magento_lang_prefix' => [
-        'en' => 'row_en',
-        'ar' => 'row_ar',
-      ],
-    ],
-    'om' => [
       'magento_lang_prefix' => [
         'en' => 'row_en',
         'ar' => 'row_ar',
