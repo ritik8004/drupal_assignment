@@ -148,3 +148,51 @@ Handlebars.registerHelper('cleanCssIdentifier', (identifier) => {
 Handlebars.registerHelper('set', function(name, val, globals) {
   globals.data.root[name] = val;
 });
+
+/**
+ * Helps to prepare class value.
+ * Usage:
+ *  - {{ addClass 'foo' 'hide' }}
+ *  - {{ addClass 'foo' 'baz' }}
+ *  - Now {{ @root.foo }} will print 'hide baz'.
+ */
+Handlebars.registerHelper('addClass', function () {
+  var args = [].concat.apply([], arguments);
+  var classVar = args[0];
+  var globals = args.pop();
+
+  if (typeof globals.data.root[classVar] === 'undefined') {
+    globals.data.root[classVar] = '';
+  }
+
+  globals.data.root[classVar] = globals.data.root[classVar] === ''
+    ? args[1]
+    : ' ' + args[1];
+});
+
+/**
+ * Helps to prepare style value.
+ * Usage:
+ *  - {{ addStyle 'foo' '' }}
+ *  - Now {{ @root.foo }} will print '';
+ *  - {{ addStyle 'foo' 'color' 'red'}}
+ *  - Now {{ @root.foo }} will print 'color:red;'.
+ */
+Handlebars.registerHelper('addStyle', function () {
+  var args = [].concat.apply([], arguments);
+  var styleVar = args[0];
+  var globals = args.pop();
+
+  // Set the style variable if it is not yet defined.
+  if (typeof globals.data.root[styleVar] === 'undefined') {
+    globals.data.root[styleVar] = '';
+  }
+
+  if (arguments[1] === '') {
+    globals.data.root[styleVar] = '';
+  } else if (typeof arguments[2] !== 'undefined') {
+    globals.data.root[styleVar] = globals.data.root[styleVar] + arguments[1] + ':' + arguments[2] + ';';
+  } else {
+    globals.data.root[styleVar] = globals.data.root[styleVar] + arguments[1];
+  }
+});
