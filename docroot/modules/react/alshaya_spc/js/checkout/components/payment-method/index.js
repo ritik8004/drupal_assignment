@@ -293,13 +293,14 @@ export default class PaymentMethod extends React.Component {
                   messageKey="cod_surcharge_description"
                 />
               </div>
-              <ConditionalView condition={isCodMobileVerifyEnabled()}>
-                <PaymentMethodCodMobileVerification
-                  ref={this.paymentMethodCod}
-                  shippingMobileNumber={mobileNumber}
-                  otpLength={getOtpLength()}
-                />
-              </ConditionalView>
+              { isCodMobileVerifyEnabled()
+              && (
+              <PaymentMethodCodMobileVerification
+                ref={this.paymentMethodCod}
+                shippingMobileNumber={mobileNumber}
+                otpLength={getOtpLength()}
+              />
+              )}
             </div>
           </ConditionalView>
 
