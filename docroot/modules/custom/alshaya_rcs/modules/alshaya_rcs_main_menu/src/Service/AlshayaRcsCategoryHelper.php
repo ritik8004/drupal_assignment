@@ -174,7 +174,7 @@ class AlshayaRcsCategoryHelper {
         'font_color' => $term->get('field_term_font_color')->getString(),
         'background_color' => $term->get('field_term_background_color')->getString(),
         'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
-        'item_clickable' => (int) $term->get('field_display_as_clickable_link')->getString(),
+        'item_clickable' => (bool) $term->get('field_display_as_clickable_link')->getString(),
         'deeplink' => $this->getDeepLink($term),
       ];
 
@@ -185,7 +185,9 @@ class AlshayaRcsCategoryHelper {
         $path = UrlHelper::isExternal($field_target_link_uri)
           ? $field_target_link_uri
           : Url::fromUri($field_target_link_uri)->toString(TRUE)->getGeneratedUrl();
-        $record['path'] = $path;
+        // Remove langcode prefix if it exists as that will be added via FE.
+        $path = preg_replace('/^\/' . $this->languageManager->getCurrentLanguage()->getId() . '\//', '', $path);
+        $record['url_path'] = $path;
       }
 
       // If highlights entities available.
