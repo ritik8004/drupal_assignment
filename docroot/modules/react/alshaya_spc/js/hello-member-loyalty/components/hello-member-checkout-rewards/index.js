@@ -34,7 +34,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
     // Skip get customer data api if identifier number already available in cart.
     let identifierNo = null;
     if (isUserAuthenticated()) {
-      if (hasValue(loyaltyType) && loyaltyType === 'hello_member') {
+      if (hasValue(loyaltyType) && hasValue(loyaltyCard) && loyaltyType === 'hello_member') {
         identifierNo = loyaltyCard;
       } else {
         const response = await getHelloMemberCustomerData();

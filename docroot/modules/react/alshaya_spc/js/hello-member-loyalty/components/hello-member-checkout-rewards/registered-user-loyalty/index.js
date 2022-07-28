@@ -46,10 +46,9 @@ class RegisteredUserLoyalty extends React.Component {
       },
     } = cart;
     // Do not set loyalty card for hello member if already set in cart.
-    if (!hasValue(loyaltyCard) && loyaltyType === 'hello_member') {
+    if (!hasValue(loyaltyCard) && loyaltyType !== 'hello_member') {
       setHelloMemberLoyaltyCard(identifierNo, cartId);
     }
-    // @todo: Handle update cart event on setting hello member loyalty.
   }
 
   /**
@@ -86,12 +85,10 @@ class RegisteredUserLoyalty extends React.Component {
     const {
       cart: {
         cart_id: cartId,
-        card_id_int: cardIdInt,
-        loyalty_type: loyaltyType,
+        cart_id_int: cardIdInt,
         loyalty_card: loyaltyCard,
       },
     } = cart;
-
     // Unset the old loyalty card if customer switches loyalty options.s
     let requestData = {
       masked_quote_id: cartId,
@@ -102,8 +99,8 @@ class RegisteredUserLoyalty extends React.Component {
         quoteId: cardIdInt,
       };
     }
-    requestData.programCode = loyaltyType;
     if (selectedMethod === 'hello_member') {
+      requestData.programCode = 'aura';
       // Call API to undo redeem aura points.
       const data = {
         action: 'remove points',
@@ -121,32 +118,33 @@ class RegisteredUserLoyalty extends React.Component {
         }
       });
     }
-    const response = callHelloMemberApi('unsetLoyaltyCard', 'POST', requestData);
-    // Fetch updated cart and remove the member discount from checkout summary.
-    showFullScreenLoader();
-    response.then((result) => {
-      if (result.status === 200) {
-        if (result.data) {
-          // Remove hello member discount if selected method is aura.
-          const cartData = fetchCartData();
-          if (cartData instanceof Promise) {
-            cartData.then((cartResult) => {
-              if (typeof cartResult.error === 'undefined') {
-                if (selectedMethod === 'aura') {
+    if (selectedMethod === 'aura') {
+      requestData.programCode = 'hello_member';
+      const response = callHelloMemberApi('unsetLoyaltyCard', 'POST', requestData);
+      // Fetch updated cart and remove the member discount from checkout summary.
+      showFullScreenLoader();
+      response.then((result) => {
+        if (result.status === 200) {
+          if (result.data) {
+            // Remove hello member discount if selected method is aura.
+            const cartData = fetchCartData();
+            if (cartData instanceof Promise) {
+              cartData.then((cartResult) => {
+                if (typeof cartResult.error === 'undefined') {
                   window.dynamicPromotion.apply(cartResult);
                 }
-              }
-            });
+              });
+            }
           }
+        } else {
+          logger.error('Error while calling trying to unset hello member loyalty card cartId: @cartId', {
+            '@cartId': cartId,
+            '@response': result.data.error_message,
+          });
         }
-      } else {
-        logger.error('Error while calling trying to unset hello member loyalty card cartId: @cartId', {
-          '@cartId': cartId,
-          '@response': result.data.error_message,
-        });
-      }
-      removeFullScreenLoader();
-    });
+        removeFullScreenLoader();
+      });
+    }
 
     // If selected method is hello member, then remove aura from storage.
     // And set hello member loyalty card.

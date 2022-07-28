@@ -35,24 +35,15 @@ class AuraPointsToEarn extends React.Component {
 
   setAuraPointsToEarn = (items, cardNumber = null) => {
     showFullScreenLoader();
-    const auraConfig = getAuraFormConfig();
-    if (!hasValue(auraConfig)) {
-      return;
-    }
-    const {
-      iso_currency_code: isoCurrencyCode,
-    } = auraConfig;
-    const apiData = getHelloMemberPointsToEarn(items, cardNumber, isoCurrencyCode, 'aura');
+    const apiData = window.auraBackend.getAuraPointsToEarn(items, cardNumber);
+
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         removeFullScreenLoader();
         if (result.data !== undefined && result.data.error === undefined) {
-          this.setState({
-            auraPointsToEarn: result.data.apc_points,
-          });
-          if (result.data.error) {
-            logger.notice('Error while trying to get aura points to earn. Message: @message', {
-              '@message': result.data.error_message,
+          if (result.data.status) {
+            this.setState({
+              auraPointsToEarn: result.data.data.apc_points,
             });
           }
         }
