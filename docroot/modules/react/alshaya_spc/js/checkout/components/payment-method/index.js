@@ -228,7 +228,7 @@ export default class PaymentMethod extends React.Component {
       ? `${additionalClasses} in-active`
       : additionalClasses;
 
-    // Get shipping mobile number for COD mobile verification.
+    // Get mobile number from shipping address for the COD mobile verification.
     let mobileNumber = null;
     if (typeof cart !== 'undefined' && typeof cart.cart.shipping !== 'undefined') {
       const { address } = cart.cart.shipping;
