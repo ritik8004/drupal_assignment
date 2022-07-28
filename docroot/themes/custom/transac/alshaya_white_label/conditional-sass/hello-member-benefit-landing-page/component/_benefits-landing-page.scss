@@ -60,6 +60,11 @@
       @include breakpoint($only-mobile) {
         min-width: 100%;
       }
+
+      &.inactive {
+        cursor: not-allowed;
+        background-color: $hello-member-benefit-btn-inact-bg;
+      }
     }
 
     .qr-code-button {
@@ -74,7 +79,7 @@
       position: fixed;
       #{$right}: 0;
       top: 40%;
-      background-color: $hm-benefit-cart-icon;
+      background-color: $hello-member-benefit-cart-icon;
       transition: transform 300ms cubic-bezier(0.4, 0, 1, 1);
       transform: translateX(100%);
       display: flex;
