@@ -73,7 +73,7 @@
     .hm-benefit-status-info {
       position: fixed;
       #{$right}: 0;
-      top: 50%;
+      top: 40%;
       background-color: $hm-benefit-cart-icon;
       transition: transform 300ms cubic-bezier(0.4, 0, 1, 1);
       transform: translateX(100%);
@@ -115,12 +115,11 @@
       }
 
       .status-icon {
-        &::before {
+        @include icon(check) {
+          color: $hello-member-opt-success;
+          position: relative;
           font-size: rem(32);
           padding-#{$right}: rem(8);
-          content: "\e905";
-          font-family: $alshaya-icons !important;
-          color: $hello-member-opt-success;
         }
       }
     }
