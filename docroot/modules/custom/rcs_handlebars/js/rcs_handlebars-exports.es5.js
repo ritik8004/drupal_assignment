@@ -152,11 +152,11 @@ Handlebars.registerHelper('set', function(name, val, globals) {
 /**
  * Helps to prepare class value.
  * Usage:
- *  - {{ setClass 'foo' 'hide' }}
- *  - {{ setClass 'foo' 'baz' }}
+ *  - {{ addClass 'foo' 'hide' }}
+ *  - {{ addClass 'foo' 'baz' }}
  *  - Now {{ @root.foo }} will print 'hide baz'.
  */
-Handlebars.registerHelper('setClass', function () {
+Handlebars.registerHelper('addClass', function () {
   var args = [].concat.apply([], arguments);
   var classVar = args[0];
   var globals = args.pop();
@@ -173,12 +173,12 @@ Handlebars.registerHelper('setClass', function () {
 /**
  * Helps to prepare style value.
  * Usage:
- *  - {{ setStyle 'foo' '' }}
+ *  - {{ addStyle 'foo' '' }}
  *  - Now {{ @root.foo }} will print '';
- *  - {{ setStyle 'foo' 'color' 'red'}}
+ *  - {{ addStyle 'foo' 'color' 'red'}}
  *  - Now {{ @root.foo }} will print 'color:red;'.
  */
-Handlebars.registerHelper('setStyle', function () {
+Handlebars.registerHelper('addStyle', function () {
   var args = [].concat.apply([], arguments);
   var styleVar = args[0];
   var globals = args.pop();

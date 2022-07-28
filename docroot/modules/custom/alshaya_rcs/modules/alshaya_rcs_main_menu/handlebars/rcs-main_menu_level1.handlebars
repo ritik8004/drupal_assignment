@@ -25,14 +25,14 @@
   <ul class="menu__list menu--one__list">
     <div class="menu-backdrop"></div>
     {{#each menu_items as |menu_item|}}
-      {{ setStyle 'level1_style' '' }}
-      {{ setClass 'level1_class' '' }}
+      {{ addStyle 'level1_style' '' }}
+      {{ addClass 'level1_class' '' }}
       {{#if background_color }}
-        {{ setStyle 'level1_style' 'background-color' background_color }}
-        {{ setClass 'level1_class' 'has-bg-color' }}
+        {{ addStyle 'level1_style' 'background-color' background_color }}
+        {{ addClass 'level1_class' 'has-bg-color' }}
       {{/if}}
       {{#if font_color }}
-        {{ setStyle 'level1_style' 'color' font_color }}
+        {{ addStyle 'level1_style' 'color' font_color }}
       {{/if}}
       <li class="menu__list-item menu--one__list-item {{ @root.level1_class }} {{ promopanel_class }} {{ menu_item.hide_in_desktop }} {{ menu_item.hide_in_mobile_tablet }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
