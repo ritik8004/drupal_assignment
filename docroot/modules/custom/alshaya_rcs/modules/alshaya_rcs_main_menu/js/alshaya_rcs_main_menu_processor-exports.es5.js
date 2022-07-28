@@ -7,8 +7,10 @@ exports.prepareData = function prepareData(settings, inputs) {
     highlightTiming,
   } = settings;
 
+  // Clone the input data.
+  let inputsClone = JSON.parse(JSON.stringify(inputs));
   // Clean up data.
-  inputs = processData(inputs, menuMaxDepth);
+  inputsClone = processData(inputsClone, menuMaxDepth);
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -18,20 +20,45 @@ exports.prepareData = function prepareData(settings, inputs) {
     case 'default':
     default:
       // Distribute L3 items into columns.
-      inputs = splitIntoCols(inputs, maxNbCol, idealMaxColLength);
+      inputsClone = splitIntoCols(inputsClone, maxNbCol, idealMaxColLength);
   }
 
   return {
     'menu_type': menuLayout,
-    'menu_items': inputs,
+    'menu_items': inputsClone,
     'user_logged_in': drupalSettings.user.uid > 1,
     'path_prefix': drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix,
     'aura_enabled': drupalSettings.aura.enabled,
     'highlight_timing': highlightTiming,
-    'level_class': '', // @todo Implement level_class class.
     'promopanel_class': '', // @todo Implement promo panel block class.
-    'tag': 'a',
   };
+}
+
+/**
+ * Process and add the enrichments to the menu item.
+ *
+ * @param {Object} menuItem
+ *   Individual menu item object.
+ */
+function processEnrichment(menuItem) {
+  var enrichmentData = globalThis.rcsGetEnrichedCategories();
+  var enrichedMenuItem = enrichmentData[menuItem.url_path];
+
+  if (!Drupal.hasValue(enrichedMenuItem)) {
+    return;
+  }
+
+  if (Drupal.hasValue(enrichedMenuItem.url_path)
+    && menuItem.url_path !== enrichedMenuItem.url_path
+  ) {
+    menuItem.overridden_path = true;
+  }
+
+  if (!Drupal.hasValue(enrichedMenuItem)) {
+    return;
+  }
+
+  menuItem = Object.assign(menuItem, enrichedMenuItem);
 }
 
 /**
@@ -52,29 +79,68 @@ const processData = function (data, maxLevel) {
 
   // Loop object;
   for (const [key, value] of Object.entries(data)) {
-    // Check children.
-    if (typeof data[key].children !== 'undefined'
-      && Object.values(data[key].children).length < 1) {
-      // When the menus don't have children, we set to false. This is required
-      // because Handlebars doesn't check empty objects in the same way it does
-      // for arrays, see https://handlebarsjs.com/guide/builtin-helpers.html#if.
-      data[key].children = false;
-    }
     // Check if we have an array or object.
-    if ((/array|object/).test(typeof value)) {
-      // Check if the item should be included in the menu.
-      if (typeof data[key].include_in_menu !== 'undefined'
-        && !data[key].include_in_menu) {
-        delete (data[key]);
+    if (!((/array|object/).test(typeof value))) {
+      continue;
+    }
+
+    // Check if the item should be included in the menu.
+    if (typeof data[key].include_in_menu !== 'undefined'
+      && !data[key].include_in_menu) {
+      delete (data[key]);
+      continue;
+    }
+
+    processEnrichment(data[key]);
+
+    // Check if we reached max level.
+    if (typeof data[key].level !== 'undefined'
+      && data[key].level - 1 > maxLevel) {
+      delete (data[key]);
+      continue;
+    }
+
+    if (typeof data[key].include_in_desktop !== 'undefined') {
+      if (!data[key].include_in_desktop) {
+        data[key].hide_in_desktop = 'hide-on-desktop';
       }
-      // Check if we reached max level.
-      else if (typeof data[key].level !== 'undefined'
-        && data[key].level - 1 > maxLevel) {
-        delete (data[key]);
-      }
-      // Go one level deeper into the data.
       else {
-        data[key] = processData(value, maxLevel);
+        data[key].hide_in_desktop = '';
+      }
+    }
+
+    if (typeof data[key].include_in_mobile_tablet !== 'undefined') {
+      if (!data[key].include_in_mobile_tablet) {
+        data[key].hide_in_mobile_tablet = 'hide-on-mobile';
+      }
+      else {
+        data[key].hide_in_mobile_tablet = '';
+      }
+    }
+
+    if (Drupal.hasValue(data[key].move_to_right)) {
+      data[key].move_to_right = 'move-to-right';
+    }
+
+    data[key].tag = typeof data[key].item_clickable !== 'undefined' && !data[key].item_clickable
+      ? 'div'
+      : 'a';
+
+    data[key].tag_attr = null;
+    if (data[key].tag === 'a') {
+      data[key].tag_attr = `href="${data[key].url_path}"`;
+    }
+
+    // Check children.
+    if (typeof data[key].children !== 'undefined') {
+      if (Object.values(data[key].children).length < 1) {
+        // When the menus don't have children, we set to false. This is required
+        // because Handlebars doesn't check empty objects in the same way it does
+        // for arrays, see https://handlebarsjs.com/guide/builtin-helpers.html#if.
+        data[key].children = false;
+      }
+      else {
+        processData(data[key].children, maxLevel);
       }
     }
   }
