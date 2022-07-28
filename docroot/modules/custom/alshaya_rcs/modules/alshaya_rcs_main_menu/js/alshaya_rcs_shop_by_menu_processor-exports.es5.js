@@ -48,11 +48,7 @@ function processCategory(catItem, settings, enrichmentData, isSuperCategoryEnabl
     enrichedDataObj = enrichmentData[level_url_path];
     // Override label from Drupal.
     catItem.name = enrichedDataObj.name;
-
-    // Exclude terms with overridden target link.
-    if (typeof enrichedDataObj.path !== 'undefined') {
-      return {};
-    }
+    catItem.url_path = enrichedDataObj.url_path;
   }
 
   return catItem;
