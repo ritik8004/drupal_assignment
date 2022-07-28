@@ -60,12 +60,7 @@ export default class PaymentMethod extends React.Component {
   /**
    * Helper function to check if cod mobile verification is enabled.
    */
-  isCodMobileVerifyEnabled = () => drupalSettings.codMobileVerification || true;
-
-  /**
-   * Gets OTP length for COD mobile verification.
-   */
-  getOtpLength = () => 4;
+  isCodMobileVerifyEnabled = () => drupalSettings.codMobileVerification || false;
 
   validateBeforePlaceOrder = async () => {
     const { method } = this.props;
@@ -304,7 +299,7 @@ export default class PaymentMethod extends React.Component {
               <PaymentMethodCodMobileVerification
                 ref={this.paymentMethodCod}
                 shippingMobileNumber={mobileNumber}
-                otpLength={this.getOtpLength()}
+                otpLength="4"
               />
               )}
             </div>
