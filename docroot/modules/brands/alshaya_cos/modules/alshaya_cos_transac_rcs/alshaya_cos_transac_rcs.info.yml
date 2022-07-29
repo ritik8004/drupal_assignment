@@ -4,4 +4,3 @@ type: module
 core_version_requirement: ^9
 dependencies:
   - alshaya_cos:alshaya_cos_transac
-  - alshaya_pims_assets:alshaya_pims_assets
