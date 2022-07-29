@@ -64,7 +64,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
     });
   }
 
-
   // On click link call offer and voucher api and open popup.
   onClickOpenPopup = async (openModal) => {
     await this.getCustomerOffersAndVouchers();
