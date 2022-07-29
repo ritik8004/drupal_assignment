@@ -8,6 +8,8 @@ variables:
   promotional_filter: ''
   size_filter: 'Size'
   filters: ''
+  spc_search_byname: 'AE'
+  spc_search_byID: 'AESA'
   language_collection_filter: ''
   language_sort_filter: 'رتب حسب'
   language_price_filter: 'السعر'
