@@ -45,14 +45,17 @@ class HelloMemberPDP extends React.Component {
    * Utility function to set hello member product points for current product.
    */
   setInitialProductPoints = () => {
-    const { dictionaryData } = this.state;
-    // If above details are not there in props, proceed with usual approach to
-    // get the data from price amount HTML text block.
-    const selector = document.querySelector('.content__title_wrapper .special--price .price-amount') || document.querySelector('.content__title_wrapper .price-amount');
-    // Fetch Product price using selector.
-    const productPrice = (selector !== null) ? selector.innerText.replace(/,/g, '') : 0;
+    // Get the product information from the DOM element.
+    const productData = document.querySelector('[gtm-type="gtm-product-link"][gtm-view-mode="full"]');
+    if (!productData) {
+      return;
+    }
+
+    // Get the price from gtm-price tag attribute on page load.
+    const productPrice = productData.getAttribute('gtm-price') || 0;
 
     // Return price as hello member points.
+    const { dictionaryData } = this.state;
     this.setState({
       productPoints: getPriceToHelloMemberPoint(productPrice, dictionaryData),
     });
