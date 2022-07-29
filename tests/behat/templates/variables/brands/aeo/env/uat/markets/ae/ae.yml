@@ -1,7 +1,7 @@
 variables:
-  spc_product_listing_page: '/american-eagle/shop-oms/'
-  spc_basket_page: '/american-eagle/shop-oms/'
-  product_listing_page_url: "/american-eagle/shop-oms/"
-  np_plp_page: '/american-eagle/shop-oms/'
+  spc_product_listing_page: '/shop-end-season/#query=jeans/'
+  spc_basket_page: '/shop-end-season/#query=jeans/'
+  product_listing_page_url: "/shop-end-season/#query=jeans/"
+  np_plp_page: '/shop-end-season/#query=jeans/'
   np_plp_product_page: '/buy-ae-oxford-button-down-classic-fit-shirt-white.html/'
   spc_pdp_page: '/buy-ae-oxford-button-down-classic-fit-shirt-white.html/'
