@@ -67,6 +67,28 @@ header {
           min-width: 2rem;
           padding-top: 0.125rem;
         }
+
+        a {
+          @include breakpoint($only-mobile) {
+            html[lang='ar'] & {
+              text-align: center;
+              margin-top: 0;
+            }
+          }
+
+          img {
+            html[lang='ar'] & {
+              width: rem(53);
+              height: rem(29);
+
+              @include breakpoint($tablet) {
+                margin-top: 0;
+                width: unset;
+                height: rem(38);
+              }
+            }
+          }
+        }
       }
     }
   }
