@@ -1,27 +1,23 @@
-@javascript @auth @Tabby @homeDelivery @pbsauat @hmsauat @bpaeuat @pbksauat
+@javascript @auth @Tabby @homeDelivery @pbsauat @hmsauat @bpaeuat @pbksauat @flaeuat
 Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait 10 seconds
     Then I should be on "/user" page
-    When I am on "{spc_basket_page}"
+    When I am on "{spc_pdp_page}"
     And I wait for the page to load
 
   @hd @tabby
   Scenario: As an Authenticated user, I should be able to checkout using Tabby payment method
-    When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
-    And the element "div.tabby #tabby-promo-pdp-main" should exist
-    And the element "div.tabby #tabby-promo-pdp-main span.tabby-promo-snippet__text" should exist
+    And the element "div.tabby #tabby-promo-pdp" should exist
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And the element "div.tabby-promo-snippet" should exist
+    And the element "div#tabby-promo-cart" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
@@ -48,18 +44,14 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
-    And the element "div.tabby #tabby-promo-pdp-main" should exist
-    And the element "div.tabby #tabby-promo-pdp-main span.tabby-promo-snippet__text" should exist
+    And the element "div.tabby #tabby-promo-pdp" should exist
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And the element "div.tabby-promo-snippet" should exist
+    And the element "div#tabby-promo-cart" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
