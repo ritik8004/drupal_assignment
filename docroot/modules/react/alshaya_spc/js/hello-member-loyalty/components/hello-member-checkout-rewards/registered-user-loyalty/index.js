@@ -15,6 +15,7 @@ import { getHelloMemberAuraStorageKey } from '../utilities/loyalty_helper';
 import { redeemAuraPoints } from '../../../../aura-loyalty/components/utilities/checkout_helper';
 import { getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import logger from '../../../../../../js/utilities/logger';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 class RegisteredUserLoyalty extends React.Component {
   constructor(props) {
@@ -42,11 +43,10 @@ class RegisteredUserLoyalty extends React.Component {
       cart: {
         cart_id: cartId,
         loyalty_type: loyaltyType,
-        loyalty_card: loyaltyCard,
       },
     } = cart;
-    // Do not set loyalty card for hello member if already set in cart.
-    if (!hasValue(loyaltyCard) && loyaltyType !== 'hello_member') {
+    // Set hello member loyalty when no loyalty is set in cart.
+    if (!hasValue(loyaltyType) && hasValue(identifierNo)) {
       setHelloMemberLoyaltyCard(identifierNo, cartId);
     }
   }
@@ -126,12 +126,20 @@ class RegisteredUserLoyalty extends React.Component {
       response.then((result) => {
         if (result.status === 200) {
           if (result.data) {
+            window.commerceBackend.removeCartDataFromStorage();
             // Remove hello member discount if selected method is aura.
             const cartData = fetchCartData();
             if (cartData instanceof Promise) {
               cartData.then((cartResult) => {
+                if (cartResult === 'Request aborted') {
+                  return;
+                }
+                // Store info in storage.
+                window.commerceBackend.setCartDataInStorage({ cart: cartResult });
                 if (typeof cartResult.error === 'undefined') {
                   window.dynamicPromotion.apply(cartResult);
+                  // Dispatch an event to update totals in cart object.
+                  dispatchCustomEvent('updateTotalsInCart', { totals: cartResult.totals });
                 }
               });
             }
