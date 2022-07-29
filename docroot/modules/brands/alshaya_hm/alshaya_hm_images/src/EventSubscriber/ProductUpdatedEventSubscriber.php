@@ -50,7 +50,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    */
   public function onProductProcessed(ProductUpdatedEvent $event) {
     // Get the color skus and store the same in cache.
-    $this->imageHelper->getColorsForSku($event->getSku());
+    $this->imagesHelper->getColorsForSku($event->getSku());
   }
 
 }

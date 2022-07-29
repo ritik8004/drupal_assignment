@@ -117,7 +117,7 @@ class MyBenefitsPage extends React.Component {
           />
         </div>
         <div className="benefit-description">
-          {(myBenefit.applied_conditions !== null) ? HTMLReactParser(myBenefit.applied_conditions) : ''}
+          {(hasValue(myBenefit.applied_conditions)) ? HTMLReactParser(myBenefit.applied_conditions) : ''}
         </div>
         <div className="expire-on">
           <h3>

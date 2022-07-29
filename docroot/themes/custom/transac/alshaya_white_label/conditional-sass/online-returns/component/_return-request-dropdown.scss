@@ -36,6 +36,8 @@
       font-size: 0.875rem;
       line-height: 1.125rem;
       padding-bottom: 0.625rem;
+      font-family: $alshaya-bold;
+      font-weight: normal;
     }
   }
 
@@ -49,6 +51,8 @@
 
   .return-reasons-select,
   .return-qty-select {
+    font-family: $alshaya-thin;
+
     .reasonsSelect__control,
     .qtySelect__control {
       border: 1px solid $spc-select-border;
@@ -65,7 +69,7 @@
 
       .reasonsSelect__single-value,
       .qtySelect__single-value {
-        color: inherit;
+        color: initial;
       }
 
       > div:nth-child(2) {
@@ -123,7 +127,7 @@
         border-top-width: 0;
 
         > div {
-          color: inherit;
+          color: initial;
           border-top: 1px solid $spc-select-border-separator;
           font-size: 0.75rem;
           letter-spacing: 1px;
