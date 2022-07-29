@@ -52,13 +52,12 @@ exports.render = function render(
 
     case 'lhn_block':
       // Render lhn based block.
-      if (typeof globalThis.renderRcsLhn !== 'undefined') {
-        html += globalThis.renderRcsLhn.render(
-          settings,
-          inputs,
-          innerHtml
-        );
-      }
+      const menuData = globalThis.lhnProcessor.prepareData(
+        settings,
+        inputs
+      );
+
+      html = handlebarsRenderer.render('lhn_menu', menuData);
       break;
 
     case 'super_category':
