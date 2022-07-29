@@ -1,9 +1,5 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import { getHelloMemberPointsToEarn } from '../../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
-import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
-import { getAuraFormConfig } from '../../../../../../../js/utilities/helloMemberHelper';
-import logger from '../../../../../../../js/utilities/logger';
 import { showFullScreenLoader, removeFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 
