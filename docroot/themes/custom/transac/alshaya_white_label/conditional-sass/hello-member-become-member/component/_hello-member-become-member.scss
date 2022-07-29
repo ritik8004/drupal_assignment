@@ -35,7 +35,6 @@
           font-family: $alshaya-bold;
           font-size: rem(28);
           line-height: 1.14;
-          text-transform: capitalize;
           color: $hello-member-highlight-text-2;
         }
 
@@ -44,10 +43,6 @@
           font-size: rem(14);
           line-height: 1.57;
           color: $hello-member-text-1;
-
-          &::first-letter {
-            text-transform: capitalize;
-          }
         }
       }
     }
@@ -93,7 +88,6 @@
       font-size: rem(16);
       line-height: 1.13;
       letter-spacing: rem(1.14);
-      text-transform: uppercase;
 
       @include breakpoint($only-mobile) {
         display: block;
