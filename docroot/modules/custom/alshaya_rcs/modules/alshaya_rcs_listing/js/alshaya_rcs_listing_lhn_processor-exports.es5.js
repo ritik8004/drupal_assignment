@@ -42,7 +42,7 @@ function processLhnMenu(item, settings, enrichmentData) {
     : '';
 
   // Prepare lhn menu obj.
-  let lhnMenu = {
+  return {
     name: item.name,
     url: urlPath,
     level: (item.level - 1),
@@ -50,7 +50,6 @@ function processLhnMenu(item, settings, enrichmentData) {
     child: childItems,
     clickable,
   };
-  return lhnMenu;
 }
 
 /**

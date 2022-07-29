@@ -203,8 +203,10 @@ function alshaya_rcs_listing_library_info_alter(&$libraries, $extension) {
  */
 function alshaya_rcs_listing_rcs_handlebars_templates(EntityInterface $entity) {
   // Libraries to attach to all pages node/term.
-  $libraries = ['carousel.accordion' => 'alshaya_rcs_listing'];
-  $libraries = ['lhn_menu' => 'alshaya_rcs_listing'];
+  $libraries = [
+    'carousel.accordion' => 'alshaya_rcs_listing',
+    'lhn_menu' => 'alshaya_rcs_listing',
+  ];
 
   return $libraries;
 }
