@@ -509,6 +509,7 @@ export default class Cart extends React.Component {
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
               items={items}
+              totals={totals}
             />
             <ConditionalView condition={isAuraEnabled()}>
               <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
