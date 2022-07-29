@@ -200,6 +200,7 @@ $raining-clouds: #858585;
 $_aura-light-blue: #fffbfe;
 $_aura-very-light-pink: rgba(179, 32, 125, 0.1);
 $_light-border-bottom: rgba(255, 255, 255, 0.12);
+$popup-title-red: #e50011;
 
 // Aura Gradients.
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
@@ -2335,3 +2336,9 @@ $advanced-page-button-hover: $button-hover;
 $link-borders: $_gray_222;
 $hello-member-components-bg: $grey-shade;
 $hello-member-highlight-text: $primary_text;
+
+//Hello Member Birthday Popup
+$hello-member-bd-title: $popup-title-red;
+$hello-member-bd-sub-title: $mothercare-black;
+$hello-member-bd-exp-text: $grey-light;
+$hello-member-bd-close-icon: $white-five;
