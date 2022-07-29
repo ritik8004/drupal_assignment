@@ -69,6 +69,7 @@ class BecomeHelloMemberBlock extends BlockBase implements ContainerFactoryPlugin
       '#attached' => [
         'library' => [
           'alshaya_hello_member/alshaya_hello_member_become_hello_member',
+          'alshaya_white_label/hello-member-become-member',
         ],
       ],
     ];
