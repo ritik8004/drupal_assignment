@@ -146,10 +146,10 @@ window.commerceBackend = window.commerceBackend || {};
 
   /**
    * Parse swatch image tag and return swatch image url.
-   * 
+   *
    * @param {string} markup
    *   Swatch image tag.
-   *  
+   *
    * @returns {string}
    *   Swatch image url.
    */
@@ -218,8 +218,10 @@ window.commerceBackend = window.commerceBackend || {};
     productInfo.configurable_attributes = {};
 
     // Get color attribute config.
-    var configColorAttribute = drupalSettings.alshayaRcs.colorAttributeConfig.configurable_color_attribute;
-    var configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(product.sku);
+    if (Drupal.hasValue(drupalSettings.alshayaRcs.colorAttributeConfig)) {
+      var configColorAttribute = drupalSettings.alshayaRcs.colorAttributeConfig.configurable_color_attribute;
+      var configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(product.sku);
+    }
     product.configurable_options.forEach(function (option) {
       var isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
       var attribute_id = parseInt(atob(option.attribute_uid), 10);
@@ -234,7 +236,7 @@ window.commerceBackend = window.commerceBackend || {};
         }
 
         // Populate images for color swatch.
-        if (isOptionSwatch && option.attribute_code === configColorAttribute) {
+        if (isOptionSwatch && Drupal.hasValue(configColorAttribute) && option.attribute_code === configColorAttribute) {
           const childSku = window.commerceBackend.getChildSkuFromAttribute(product.sku, option.attribute_code, option_value.value_index.toString());
           let colorOption = configurableColorDetails.sku_configurable_options_color[option_value.value_index.toString()];
           let swatchType = '';
@@ -251,10 +253,10 @@ window.commerceBackend = window.commerceBackend || {};
               swatchType = 'text';
               break;
           }
-          var swatch_data = (swatchType === 'image') 
+          var swatch_data = (swatchType === 'image')
             ? parseImageUrl(colorOption.display_value)
             : colorOption.display_value;
-          
+
           optionValues.push({
             label: option_value.store_label,
             value: option_value.value_index.toString(),
