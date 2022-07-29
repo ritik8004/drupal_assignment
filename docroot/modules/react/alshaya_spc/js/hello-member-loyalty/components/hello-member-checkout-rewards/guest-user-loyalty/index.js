@@ -13,9 +13,23 @@ const GuestUserLoyalty = ({
   loyaltyCard,
   cart,
 }) => {
+  let open = false;
   if (!hasValue(helloMemberPoints)) {
     return null;
   }
+  // Get loyalty card data from cart.
+  const {
+    cart: {
+      loyalty_card: cardNumber,
+      loyalty_type: loyaltyType,
+    },
+  } = cart;
+
+  if (hasValue(loyaltyType) && hasValue(cardNumber)
+    && loyaltyType === 'aura') {
+    open = true;
+  }
+
   return (
     <div className="loyalty-options-guest">
       <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
@@ -32,7 +46,7 @@ const GuestUserLoyalty = ({
           <div className="loaylty-option-text">
             <AuraLoyalty
               optionName="aura"
-              open={false}
+              open={open}
               loyaltyCard={loyaltyCard}
               cart={cart}
             />

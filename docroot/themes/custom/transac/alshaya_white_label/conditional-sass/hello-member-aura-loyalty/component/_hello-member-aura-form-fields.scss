@@ -126,6 +126,33 @@
     color: $hello-member-loyalty-aura-form-btn;
     background: $hello-member-loyalty-aura-form-btn-bg;
   }
+
+  .sub-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-#{$left}: rem(20);
+    width: rem(82);
+    line-height: rem(34);
+    a {
+      color: $aura-spc-checkout-highlight;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(20);
+      margin-#{$left}: 0;
+      width: 100%;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    @include breakpoint($only-mobile) {
+      a {
+        margin-#{$left}: rem(10);
+      }
+    }
+  }
 }
 
 .spc-aura-link-api-response-message:not(:empty) {

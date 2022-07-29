@@ -11,7 +11,6 @@ import { setHelloMemberLoyaltyCard } from '../../../../../../alshaya_hello_membe
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import { fetchCartData } from '../../../../utilities/api/requests';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
-import { getHelloMemberAuraStorageKey } from '../utilities/loyalty_helper';
 import { redeemAuraPoints } from '../../../../aura-loyalty/components/utilities/checkout_helper';
 import { getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import logger from '../../../../../../js/utilities/logger';
@@ -152,12 +151,6 @@ class RegisteredUserLoyalty extends React.Component {
         }
         removeFullScreenLoader();
       });
-    }
-
-    // If selected method is hello member, then remove aura from storage.
-    // And set hello member loyalty card.
-    if (selectedMethod === 'hello_member') {
-      Drupal.removeItemFromLocalStorage(getHelloMemberAuraStorageKey());
     }
 
     this.setState({

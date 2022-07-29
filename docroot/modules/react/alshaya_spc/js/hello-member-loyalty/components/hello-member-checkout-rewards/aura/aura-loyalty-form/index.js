@@ -1,9 +1,7 @@
 import React from 'react';
 import AuraFormFieldOptions from '../aura-form-field-options';
-import AuraFormEmailField from '../aura-form-email-field';
-import AuraFormCardField from '../aura-form-card-field';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
-import { processCheckoutCart, getHelloMemberAuraStorageKey, getAuraCustomerPoints } from '../../utilities/loyalty_helper';
+import { processCheckoutCart, getAuraCustomerPoints } from '../../utilities/loyalty_helper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import PointsString from '../../../../../aura-loyalty/components/utilities/points-string';
@@ -16,6 +14,10 @@ import { cartContainsAnyVirtualProduct } from '../../../../../utilities/egift_ut
 import { isEgiftCardEnabled } from '../../../../../../../js/utilities/util';
 import LinkCardOptionMobile from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-mobile';
 import logger from '../../../../../../../js/utilities/logger';
+import LinkCardOptionEmail from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-email';
+import LinkCardOptionCard from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-card';
+import Loading from '../../../../../../../js/utilities/loading';
+import { getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 
 class AuraLoyaltyForm extends React.Component {
   constructor(props) {
@@ -38,38 +40,45 @@ class AuraLoyaltyForm extends React.Component {
       points: 0,
       expiringPoints: 0,
       expiryDate: null,
+      wait: false,
     };
   }
 
   componentDidMount() {
     document.addEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
     document.addEventListener('loyaltyCardRemovedFromCart', this.handleLoyaltyCardUnset, false);
-    document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
 
-    // Get data from localStorage.
-    const localStorageValues = Drupal.getItemFromLocalStorage(getHelloMemberAuraStorageKey());
-
-    if (localStorageValues === null) {
-      return;
-    }
+    // Get loyalty card data from cart.
     const { cart } = this.props;
 
     const {
       cart: {
-        cart_id: cartId,
+        loyalty_card: loyaltyCard,
+        loyalty_type: loyaltyType,
       },
     } = cart;
 
-    if (cartId === localStorageValues.cartId) {
-      if (localStorageValues.type === 'apcNumber') {
-        showFullScreenLoader();
-        processCheckoutCart(localStorageValues);
-      }
+    if (!hasValue(loyaltyType) || !hasValue(loyaltyCard)
+      || (hasValue(loyaltyType) && loyaltyType !== 'aura')) {
+      return;
     }
+
+    this.setState({
+      wait: true,
+    });
+
+    const data = {
+      key: 'cardNumber',
+      type: 'cardNumber',
+      value: loyaltyCard,
+      action: 'add',
+    };
+    showFullScreenLoader();
+    processCheckoutCart(data);
   }
 
   handleSearchEvent = (data) => {
-    const { stateValues, searchData } = data.detail;
+    const { stateValues } = data.detail;
 
     if (stateValues.error) {
       this.setState({
@@ -106,24 +115,9 @@ class AuraLoyaltyForm extends React.Component {
       });
     }
 
-    if (searchData) {
-      const { cart } = this.props;
-      const {
-        cart: {
-          cart_id: cartId,
-        },
-      } = cart;
-      const dataForStorage = { cartId, ...searchData };
-
-      Drupal.addItemInLocalStorage(
-        getHelloMemberAuraStorageKey(),
-        dataForStorage,
-      );
-    }
-
+    showFullScreenLoader();
     // If user is fully enrolled, we get all his apc points details.
     const customerPoints = getAuraCustomerPoints(stateValues.cardNumber);
-    showFullScreenLoader();
     customerPoints.then((result) => {
       if (hasValue(result.error)) {
         logger.error('Error while trying to fetch customer information for user with customer id @customerId. Message: @message', {
@@ -143,6 +137,7 @@ class AuraLoyaltyForm extends React.Component {
     this.setState({
       ...stateValues,
       loyaltyCardLinkedToCart: true,
+      wait: false,
     });
   };
 
@@ -155,10 +150,6 @@ class AuraLoyaltyForm extends React.Component {
       ...stateValues,
       loyaltyCardLinkedToCart: false,
     });
-  };
-
-  handlePlaceOrderEvent = () => {
-    Drupal.removeItemFromLocalStorage(getHelloMemberAuraStorageKey());
   };
 
   showResponse = (data) => {
@@ -191,7 +182,6 @@ class AuraLoyaltyForm extends React.Component {
       type: 'failure',
       message: '',
     });
-    Drupal.removeItemFromLocalStorage(getHelloMemberAuraStorageKey());
   };
 
   addCard = () => {
@@ -247,9 +237,18 @@ class AuraLoyaltyForm extends React.Component {
       points,
       expiringPoints,
       expiryDate,
+      wait,
     } = this.state;
 
     const { cart } = this.props;
+
+    if (wait) {
+      return (
+        <div className="spc-hello-member-checkout-rewards-block fadeInUp">
+          <Loading />
+        </div>
+      );
+    }
 
     // Disable AURA guest user link card form if cart contains virtual products.
     const formActive = !(isEgiftCardEnabled() && cartContainsAnyVirtualProduct(cart.cart));
@@ -271,9 +270,9 @@ class AuraLoyaltyForm extends React.Component {
                 <div className="spc-aura-link-card-wrapper">
                   <div className="form-items">
                     {(linkCardOption === 'email')
-                    && <AuraFormEmailField email={email} />}
+                    && <LinkCardOptionEmail email={email} />}
                     {(linkCardOption === 'cardNumber')
-                    && <AuraFormCardField cardNumber={cardNumber} />}
+                    && <LinkCardOptionCard cardNumber={cardNumber} />}
                     {(linkCardOption === 'mobile')
                     && (
                     <LinkCardOptionMobile
@@ -289,21 +288,21 @@ class AuraLoyaltyForm extends React.Component {
                     >
                       { getStringMessage('card_submit') }
                     </button>
+                    {loyaltyCardLinkedToCart
+                      && (
+                        <div className="sub-text">
+                          <a onClick={() => this.removeCard()}>
+                            {getStringMessage('not_you_question')}
+                          </a>
+                        </div>
+                      )}
                   </div>
                 </div>
                 <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
               </div>
-              <div className="sub-text">
-                {loyaltyCardLinkedToCart
-                && (
-                <a onClick={() => this.removeCard()}>
-                  {getStringMessage('not_you_question')}
-                </a>
-                )}
-              </div>
             </>
           )}
-        {isFullyEnrolled
+        {isFullyEnrolled && hasValue(points)
           && (
           <div className="customer-points">
             <div className="aura-points-info">
@@ -315,6 +314,7 @@ class AuraLoyaltyForm extends React.Component {
                 && (
                 <div className="spc-aura-checkout-messages">
                   <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
+                  <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
                 </div>
                 )}
             </div>

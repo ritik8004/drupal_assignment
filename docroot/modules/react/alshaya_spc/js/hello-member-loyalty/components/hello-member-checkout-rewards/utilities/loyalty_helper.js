@@ -86,15 +86,7 @@ function getAuraCustomerPoints(identifierNo) {
     });
 }
 
-/**
- * Utility function to get aura localStorage key for checkout.
- */
-function getHelloMemberAuraStorageKey() {
-  return 'aura_hello_member_data';
-}
-
 export {
   processCheckoutCart,
-  getHelloMemberAuraStorageKey,
   getAuraCustomerPoints,
 };

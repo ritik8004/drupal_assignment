@@ -170,7 +170,9 @@ class AuraFormRedeemPoints extends React.Component {
     removeError('spc-aura-link-api-response-message');
     const { isoCurrencyCode } = getAuraConfig();
     const { points, money } = this.state;
-    const { cardNumber, totals, pointsInAccount } = this.props;
+    const {
+      cardNumber, totals, pointsInAccount, context,
+    } = this.props;
 
     if (points === null) {
       showError('spc-aura-link-api-response-message', getStringMessage('form_error_empty_points'));
@@ -219,12 +221,12 @@ class AuraFormRedeemPoints extends React.Component {
       cardNumber,
     };
     showFullScreenLoader();
-    redeemAuraPoints(data);
+    redeemAuraPoints(data, context);
   };
 
   undoRedeemPoints = () => {
     removeError('spc-aura-link-api-response-message');
-    const { cardNumber } = this.props;
+    const { cardNumber, context } = this.props;
     // Call API to undo redeem aura points.
     const data = {
       action: 'remove points',
@@ -232,7 +234,7 @@ class AuraFormRedeemPoints extends React.Component {
       cardNumber,
     };
     showFullScreenLoader();
-    redeemAuraPoints(data);
+    redeemAuraPoints(data, context);
   }
 
   // Reset redemption input fields to initial value.

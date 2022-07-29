@@ -1,4 +1,5 @@
 import React from 'react';
+import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import AuraFormRedeemPoints from '../../../../../aura-loyalty/components/aura-forms/aura-redeem-points';
 import AuraSendOTP from '../aura-send-otp';
@@ -14,6 +15,18 @@ class AuraRedeemPoints extends React.Component {
 
   componentDidMount() {
     document.addEventListener('onCustomerVerification', this.updateRedeemFormStatus, false);
+    const { cart } = this.props;
+    const { totals } = cart.cart;
+
+    // If amount paid with aura is undefined or null, we calculate and
+    // refill redemption input elements and return.
+    if (!hasValue(totals.paidWithAura)) {
+      return;
+    }
+
+    this.setState({
+      customerVerified: true,
+    });
   }
 
   updateRedeemFormStatus = (e) => {
@@ -65,10 +78,10 @@ class AuraRedeemPoints extends React.Component {
             )}
         </div>
         )}
-        {/* @todo Work on aura redeeem form later. */}
         {customerVerified
           && (
           <AuraFormRedeemPoints
+            context="hello_member"
             pointsInAccount={pointsInAccount}
             cardNumber={cardNumber}
             totals={cart.cart.totals}
