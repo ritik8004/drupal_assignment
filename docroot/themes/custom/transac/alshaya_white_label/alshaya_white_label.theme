@@ -40,6 +40,12 @@ function alshaya_white_label_preprocess_html(&$variables) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('body-sidebars-none');
   }
 
+  $page_path = explode('/', $path)[1];
+  if (!empty($page_path)) {
+    // Adding class based on page type in body.
+    $variables['attributes']['class'][] = Html::cleanCssIdentifier('path--' . $page_path);
+  }
+
   $sub_brand_logo = _alshaya_master_get_subbrand_logo_image_link();
   // If both sub brand logo image and link available.
   if (!empty($sub_brand_logo)) {

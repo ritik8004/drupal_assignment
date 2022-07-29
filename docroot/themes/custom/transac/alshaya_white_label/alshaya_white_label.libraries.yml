@@ -847,3 +847,8 @@ hello-member-info-page:
   css:
     theme:
       css/conditional-sass/hello-member-info-page/hello-member-info-page.ltr.css: {}
+
+hello-member-become-member:
+  css:
+    theme:
+      css/conditional-sass/hello-member-become-member/hello-member-become-member.ltr.css: {}

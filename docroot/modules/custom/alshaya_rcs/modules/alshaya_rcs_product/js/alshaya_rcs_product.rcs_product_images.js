@@ -127,7 +127,7 @@ window.commerceBackend = window.commerceBackend || {};
     }
 
     product.variants.forEach(function eachVariant(variant) {
-      setProductMediaSimple(variant);
+      setProductMediaSimple(variant.product);
     });
   }
 

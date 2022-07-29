@@ -247,8 +247,8 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'يكمل',
         'context' => 'hello_member',
       ],
-      'Members get <span>free delivery and 10% off on your first purchase.</span>' => [
-        'ar' => 'يحصل الأعضاء <span>توصيل مجاني وخصم 10٪ على أول عملية شراء.</span>',
+      '<span>Members get</span> <span>free delivery and 10% off on your first purchase.</span>' => [
+        'ar' => '<span>يحصل الأعضاء </span><span>توصيل مجاني وخصم 10٪ على أول عملية شراء.</span>',
         'context' => 'hello_member',
       ],
       'Not a member yet? Join now, it’s free!' => [
