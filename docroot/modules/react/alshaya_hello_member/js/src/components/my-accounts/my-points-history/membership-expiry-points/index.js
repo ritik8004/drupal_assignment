@@ -1,6 +1,6 @@
 import React from 'react';
 import getStringMessage from '../../../../../../../js/utilities/strings';
-import setupAccordionHeight from '../../../../utilities';
+import { setupAccordionHeight } from '../../../../utilities';
 import EarnedPointsInfo from '../earned-points-info';
 import EarnedPointsItem from '../earned-points-item';
 
