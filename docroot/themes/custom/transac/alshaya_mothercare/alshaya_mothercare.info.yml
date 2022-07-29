@@ -133,6 +133,11 @@ libraries-override:
       theme:
         css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css
 
+  alshaya_white_label/online-returns:
+    css:
+      theme:
+        css/conditional-sass/online-returns/online-returns.ltr.css: css/conditional-sass/online-returns/online-returns.ltr.css
+
   alshaya_white_label/advanced-page-paragraph-accordion:
     css:
       theme:
