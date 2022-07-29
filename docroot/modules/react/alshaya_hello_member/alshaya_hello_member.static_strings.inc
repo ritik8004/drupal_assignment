@@ -332,19 +332,19 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'points_exceed_order_total',
-      'value' => t('The number of points exceeds your order total. Please re-enter the number of points you’d like to redeem.'),
+      'value' => t('The number of points exceeds your order total. Please re-enter the number of points you’d like to redeem.', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'you_can_redeem_maximum',
-      'value' => t('You can redeem maximum'),
+      'value' => t('You can redeem maximum', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'points',
-      'value' => t('points'),
+      'value' => t('points', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'form_error_empty_points',
-      'value' => t('Please enter points.'),
+      'value' => t('Please enter points.', [], ['context' => 'hello_member']),
     ],
   ];
 }
