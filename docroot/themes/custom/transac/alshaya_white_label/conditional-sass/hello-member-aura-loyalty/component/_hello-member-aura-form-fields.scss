@@ -141,6 +141,7 @@
       text-decoration: underline;
       cursor: pointer;
     }
+
     @include breakpoint($upto-desktop) {
       margin-top: rem(20);
       margin-#{$left}: 0;
@@ -148,6 +149,7 @@
       flex-direction: row;
       justify-content: flex-start;
     }
+
     @include breakpoint($only-mobile) {
       a {
         margin-#{$left}: rem(10);
