@@ -23,4 +23,13 @@
       }
     }
   }
+
+  .confirm-return-button-wrapper,
+  .continue-button-wrapper {
+    button {
+      span {
+        text-transform: uppercase;
+      }
+    }
+  }
 }
