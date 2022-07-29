@@ -19,7 +19,17 @@
       {{/each}}
     {{/if}}
   </div>
-  {{'// @todo CORE-43557: Implement Category image and menu highlights'}}
+  {{#if (or
+          (eq @root.menu_type 'default')
+          (eq @root.menu_type 'menu_dynamic_display')) }}
+    {{#if level1_highlights.text_link_para}}
+      <div class="term-image__wrapper text-link-para">
+    {{else}}
+      <div class="term-image__wrapper">
+    {{/if}}
+      {{{ level1_highlights.markup }}}
+    </div>
+  {{/if}}
 </ul>
 
 {{#*inline "menuItem"}}

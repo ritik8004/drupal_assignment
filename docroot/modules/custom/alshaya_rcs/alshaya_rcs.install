@@ -32,6 +32,7 @@ function alshaya_rcs_install() {
     'alshaya_rcs_main_menu',
     'alshaya_rcs_seo',
     'alshaya_rcs_geolocation',
+    'alshaya_pims',
   ];
   $module_installer->install($modules);
   \Drupal::logger('alshaya_rcs')->notice('Installed RCS modules: @modules', [

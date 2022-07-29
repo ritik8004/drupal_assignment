@@ -17,12 +17,11 @@
     top: 0;
     #{$right}: 0;
     font-size: 0;
-    padding: rem(8);
     background: $online-return-dark-bg;
     cursor: pointer;
 
     @include icon(close, before) {
-      font-size: rem(16);
+      font-size: rem(32);
       color: $online-return-label-txt;
     }
   }

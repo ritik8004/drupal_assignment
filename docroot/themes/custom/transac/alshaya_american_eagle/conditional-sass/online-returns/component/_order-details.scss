@@ -16,12 +16,6 @@
       }
     }
 
-    .return-initiated-item {
-      .return-status-wrapper {
-        background-color: $online-return-light-bg;
-      }
-    }
-
     .return-initiated-item,
     .returned-items-row {
       .return-status-id-container,
@@ -32,20 +26,7 @@
       }
     }
 
-    .order-item-row {
-      &.delivered-items,
-      &.cancelled-items {
-        background-color: $online-return-light-bg;
-      }
-    }
-
     .returned-items {
-      .title-wrapper,
-      .return-status-wrapper,
-      .return-id {
-        background-color: $online-return-light-bg;
-      }
-
       .title-wrapper {
         text-transform: capitalize;
         color: $online-return-dark-txt;
