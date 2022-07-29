@@ -46,7 +46,7 @@ class HelloMemberPDP extends React.Component {
    */
   setInitialProductPoints = () => {
     // Get the product information from the DOM element.
-    const productData = document.querySelector('[gtm-type="gtm-product-link"]');
+    const productData = document.querySelector('[gtm-type="gtm-product-link"][gtm-view-mode="full"]');
     if (!productData) {
       return;
     }
