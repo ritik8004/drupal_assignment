@@ -53,7 +53,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
         className="hm-promo-vouchers-validate-form"
         method="post"
         id="hm-promo-vouchers-val-form"
-        onSubmit={(e) => handleSubmit(e, props)}
+        onSubmit={(e) => handleSubmit(e)}
       >
         <div className="hm-promo-tab-content-list">
           {vouchers.map((voucher, index) => (
@@ -67,15 +67,21 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
               <label htmlFor={`voucher${index}`} className="checkbox-sim checkbox-label">
                 <div className="item-title">
                   <span className="title-text">{voucher.description}</span>
-                  <span className="item-sub-title">expiry</span>
+                  <span className="item-sub-title">
+                    {Drupal.t(
+                      'Expires on @expiryDate',
+                      { '@expiryDate': voucher.expiry_date },
+                      { context: 'hello_member' },
+                    )}
+                  </span>
                 </div>
               </label>
             </div>
           ))}
         </div>
         <div className="hm-promo-tab-cont-action">
-          <input type="submit" value="APPLY VOUCHERS" />
-          <a href="" className="clear-btn">{Drupal.t('CLEAR ALL')}</a>
+          <input type="submit" value={Drupal.t('APPLY VOUCHERS', {}, { context: 'hello_member' })} />
+          <a href="" className="clear-btn">{Drupal.t('CLEAR ALL', {}, { context: 'hello_member' })}</a>
         </div>
       </form>
     </>

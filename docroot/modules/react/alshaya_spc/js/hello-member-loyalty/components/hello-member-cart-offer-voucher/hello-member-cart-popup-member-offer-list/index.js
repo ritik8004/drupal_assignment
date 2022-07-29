@@ -71,16 +71,22 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
               />
               <label htmlFor={`offer${index}`} className="radio-sim radio-label">
                 <div className="item-title">
-                  <span className="title-text">{offer.category_name}</span>
-                  <span className="item-sub-title">expires</span>
+                  <span className="title-text">{offer.description}</span>
+                  <span className="item-sub-title">
+                    {Drupal.t(
+                      'Expires on @expiryDate',
+                      { '@expiryDate': typeof offer.end_date !== 'undefined' ? offer.end_date : offer.expiry_date },
+                      { context: 'hello_member' },
+                    )}
+                  </span>
                 </div>
               </label>
             </div>
           ))}
         </div>
         <div className="hm-promo-tab-cont-action">
-          <input type="submit" value="APPLY OFFERS" />
-          <a href="" className="clear-btn">{Drupal.t('CLEAR ALL')}</a>
+          <input type="submit" value={Drupal.t('APPLY OFFERS', {}, { context: 'hello_member' })} />
+          <a href="" className="clear-btn">{Drupal.t('CLEAR ALL', {}, { context: 'hello_member' })}</a>
         </div>
       </form>
     </>

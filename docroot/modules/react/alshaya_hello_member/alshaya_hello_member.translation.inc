@@ -259,6 +259,38 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'تسجيل الدخول',
         'context' => 'hello_member',
       ],
+      'Discounts & Vouchers' => [
+        'ar' => 'Discounts & Vouchers AR',
+        'context' => 'hello_member',
+      ],
+      'Discount' => [
+        'ar' => 'Discount AR',
+        'context' => 'hello_member',
+      ],
+      'Bonus Vouchers' => [
+        'ar' => 'Bonus Vouchers AR',
+        'context' => 'hello_member',
+      ],
+      'Member Offers' => [
+        'ar' => 'Member Offers AR',
+        'context' => 'hello_member',
+      ],
+      'Expires on @expiryDate' => [
+        'ar' => 'Expires on @expiryDate',
+        'context' => 'hello_member',
+      ],
+      'CLEAR ALL' => [
+        'ar' => 'CLEAR ALL AR',
+        'context' => 'hello_member',
+      ],
+      'APPLY VOUCHERS' => [
+        'ar' => 'APPLY VOUCHERS AR',
+        'context' => 'hello_member',
+      ],
+      'APPLY OFFERS' => [
+        'ar' => 'APPLY OFFERS AR',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

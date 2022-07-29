@@ -95,8 +95,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
       <>
         <div className="hello-member-promo-section">
           <a className="hm-promo-pop-link" onClick={() => this.onClickOpenPopup(true)}>
-            {Drupal.t('Discounts & Vouchers')}
-            <span className="promo-notification"> Hello World </span>
+            {Drupal.t('Discounts & Vouchers', {}, { context: 'hello_member' })}
+            <span className="promo-notification" />
           </a>
           {openModal
           && (
@@ -107,13 +107,13 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 closeOnEscape={false}
               >
                 <a className="close-modal" onClick={() => this.onClickClosePopup(false)} />
-                <div className="hm-promo-modal-title">{Drupal.t('Discount')}</div>
+                <div className="hm-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
                 <div className="hm-promo-modal-content">
                   <div className="error-info-section">&nbsp;</div>
                   <Tabs forceRenderTabPanel={forceRenderTabPanel}>
                     <TabList>
-                      <Tab>{Drupal.t('Bonus Vouchers')}</Tab>
-                      <Tab>{Drupal.t('Member Offers')}</Tab>
+                      <Tab>{Drupal.t('Bonus Vouchers', {}, { context: 'hello_member' })}</Tab>
+                      <Tab>{Drupal.t('Member Offers', {}, { context: 'hello_member' })}</Tab>
                     </TabList>
                     <TabPanel>
                       <HelloMemberCartPopupBonusVouchersList
