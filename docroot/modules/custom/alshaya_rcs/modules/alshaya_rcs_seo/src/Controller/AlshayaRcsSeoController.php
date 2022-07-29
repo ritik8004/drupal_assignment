@@ -42,6 +42,11 @@ class AlshayaRcsSeoController extends ControllerBase {
    */
   public function siteMap() {
     return [
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/sitemap',
+        ],
+      ],
       '#cache' => [
         'tags' => [
           // Discard cache for the page once a term gets updated.
