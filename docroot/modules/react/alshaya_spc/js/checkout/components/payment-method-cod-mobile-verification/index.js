@@ -29,6 +29,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
             <OtpInput
               numInputs={otpLength}
               separator={<span>&nbsp;</span>}
+              isInputNum
             />
             <div className="cod-otp-lower-wrapper">
               <OtpTimer />
