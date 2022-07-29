@@ -43,9 +43,12 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
       Object.keys(hits).forEach((index) => {
         const level = categoryField.split('.')[1];
         const field = categoryField.split('.')[0];
-        const hierarchies = hits[index][field][level];
-        if (hierarchies.includes(hierarchy)) {
-          items[key].push(hits[index]);
+        if (typeof hits[index][field][drupalSettings.path.currentLanguage] !== 'undefined') {
+          const hierarchies = hits[index][field][drupalSettings.path.currentLanguage][level];
+
+          if (hierarchies.includes(hierarchy)) {
+            items[key].push(hits[index]);
+          }
         }
       });
 
