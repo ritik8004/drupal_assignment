@@ -5,6 +5,7 @@
  * Module file for RCS Seo.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Site\Settings;
 
 /**
@@ -86,4 +87,14 @@ function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_vari
       }
     }
   }
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates().
+ */
+function alshaya_rcs_seo_rcs_handlebars_templates(EntityInterface $entity) {
+  // Libraries to attach.
+  return [
+    'sitemap' => 'alshaya_rcs_seo',
+  ];
 }

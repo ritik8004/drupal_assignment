@@ -15,3 +15,8 @@ alshaya_rcs_product_seo:
   dependencies:
     - core/drupal
     - alshaya_acm_product/product_utility
+
+sitemap:
+  version: 1x
+  js:
+    handlebars/alshaya-rcs-sitemap.handlebars: {}

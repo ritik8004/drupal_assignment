@@ -1,0 +1,32 @@
+<div class="sitemap">
+  {{#if term_tree}}
+      {{#for term_tree as |level1|}}
+        <div class="level--1">
+              <div class="level--1__meta">
+                  <a href="{{ level1.path }}" class="level--1__label">{{ level1.label }}</a>
+                  {{#if level1.description}}
+                      <div class="level--1__description">{{{ level1.description }}}</div>
+                  {{/if}}
+              </div>
+              {{#if level1.child}}
+                  <div class="level--1__children">
+                      {{#each level1.child as |level2|}}
+                          <div class="level--2">
+                            <div class="level--2__meta">
+                                <a href="{{ level2.path }}" class="level--2__label">{{ level2.label }}</a>
+                            </div>
+                            {{#if level2.child}}
+                                <div class="level--2__children">
+                                    {{#each level2.child as |level3|}}
+                                        <a href="{{ level3.path }}" class="level--3__label">{{ level3.label }}</a>
+                                    {{/each}}
+                                </div>
+                            {{/if}}
+                          </div>
+                      {{/each}}
+                  </div>
+              {{/if}}
+        </div>
+      {{/each}}
+  {{/if}}
+</div>
