@@ -31,15 +31,15 @@ function processLhnMenu(item, settings, enrichmentData) {
     }
   }
 
+  // Add active class based on current path.
+  let activeClass = globalThis.rcsWindowLocation().pathname === Drupal.url(`${item.url_path}/`)
+    ? 'active'
+    : '';
+
   // Check enrichments for path.
   let urlPath = typeof enrichmentDataObj.path !== 'undefined'
     ? enrichmentDataObj.path
     : Drupal.url(`${item.url_path}/`);
-
-  // Add active class based on current path.
-  let activeClass = globalThis.rcsWindowLocation().pathname == urlPath
-    ? 'active'
-    : '';
 
   // Prepare lhn menu obj.
   return {
