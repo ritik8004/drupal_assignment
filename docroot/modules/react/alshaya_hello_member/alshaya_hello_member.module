@@ -432,6 +432,26 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
   if (isset($order['extension']['applied_hm_offer_code'])) {
     $settings['order_details']['totals']['hmOfferCode'] = $order['extension']['applied_hm_offer_code'];
   }
+
+  // Do not proceed if aura itegration with hello member is disabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isAuraIntegrationEnabled()) {
+    return;
+  }
+
+  if (isset($order['extension']['apc_accrued_points'])) {
+    $settings['order_details']['accruedPoints'] = $order['extension']['apc_accrued_points'] ?? 0;
+  }
+
+  if (isset($order['extension']['apc_redeemed_points'])) {
+    $settings['order_details']['redeemedPoints'] = $order['extension']['apc_redeemed_points'] ?? 0;
+  }
+
+  // Add `paidWithAura` and `balancePayable` in totals to show
+  // with order summary for order confirmation page.
+  if (isset($order['extension']['aura_payment_value'])) {
+    $settings['order_details']['totals']['paidWithAura'] = $order['extension']['aura_payment_value'] ?? 0;
+    $settings['order_details']['totals']['balancePayable'] = $order['base_grand_total'] - $order['extension']['aura_payment_value'];
+  }
 }
 
 /**
@@ -500,8 +520,39 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
   $build['#attached']['library'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
   $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
 
+  $build['#attached']['drupalSettings']['helloMember']['auraFormConfig'] = $helloMemberHelper->getAuraFormConfig();
+
+  // Preaparing aura settings required for hello member integration.
+  $settings['config'] = \Drupal::service('alshaya_aura_react.aura_helper')->getAuraConfig();
+  $settings['userDetails']['id'] = \Drupal::currentUser()->id();
+  $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
+
+  $build['#attached']['drupalSettings']['aura'] = $settings;
+
   \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
   $build['#strings'] = array_merge($build['#strings'], _alshaya_hello_member_aura_static_strings());
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build().
+ */
+function alshaya_hello_member_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
+  // Do not proceed if Alshaya Hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
+  // For hello member, aura settings has to be disabled and
+  // we need to attach aura library but don't want to
+  // use aura existing feature as a whole.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() === TRUE) {
+    return;
+  }
+
+  $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
 }
 
 /**
