@@ -11,7 +11,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import logger from '../../../../../js/utilities/logger';
 import HelloMemberCartPopupBonusVouchersList from './hello-member-cart-popup-bonus-voucher-list';
 import HelloMemberCartPopupMemberOfferList from './hello-member-cart-popup-member-offer-list';
-
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class HelloMemberCartOffersVouchers extends React.Component {
   constructor(props) {
@@ -66,10 +66,12 @@ class HelloMemberCartOffersVouchers extends React.Component {
 
   // On click link call offer and voucher api and open popup.
   onClickOpenPopup = async (openModal) => {
+    showFullScreenLoader();
     await this.getCustomerOffersAndVouchers();
     this.setState({
       openModal,
     });
+    removeFullScreenLoader();
   };
 
   // on click close symbol close the popup.
@@ -95,7 +97,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
         <div className="hello-member-promo-section">
           <a className="hm-promo-pop-link" onClick={() => this.onClickOpenPopup(true)}>
             {Drupal.t('Discounts & Vouchers', {}, { context: 'hello_member' })}
-            <span className="promo-notification" />
+            <span className="promo-notification show-note" />
           </a>
           {openModal
           && (

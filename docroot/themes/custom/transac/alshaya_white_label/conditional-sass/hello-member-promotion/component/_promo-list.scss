@@ -1,6 +1,12 @@
 .hello-member-promo-section {
   .hm-promo-modal-content {
     .react-tabs__tab-panel {
+      display: none;
+
+      &.react-tabs__tab-panel--selected {
+        display: block;
+      }
+
       .hm-promo-tab-content-list {
         height: rem(256);
         max-height: rem(256);

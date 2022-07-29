@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHelper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
@@ -70,7 +71,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
                   <span className="item-sub-title">
                     {Drupal.t(
                       'Expires on @expiryDate',
-                      { '@expiryDate': voucher.expiry_date },
+                      { '@expiryDate': moment(new Date(voucher.expiry_date)).format('DD MMMM YYYY') },
                       { context: 'hello_member' },
                     )}
                   </span>

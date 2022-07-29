@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHelper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
@@ -75,7 +76,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
                   <span className="item-sub-title">
                     {Drupal.t(
                       'Expires on @expiryDate',
-                      { '@expiryDate': typeof offer.end_date !== 'undefined' ? offer.end_date : offer.expiry_date },
+                      { '@expiryDate': moment(new Date(typeof offer.end_date !== 'undefined' ? offer.end_date : offer.expiry_date)).format('DD MMMM YYYY') },
                       { context: 'hello_member' },
                     )}
                   </span>
