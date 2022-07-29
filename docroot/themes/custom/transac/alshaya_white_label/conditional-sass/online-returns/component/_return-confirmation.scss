@@ -31,7 +31,6 @@ body[class*="return-confirmation"] {
       font-size: 0.875rem;
       line-height: 1.125rem;
       font-family: $alshaya-bold;
-      text-transform: uppercase;
       color: $online-return-label-txt;
     }
   }
@@ -158,7 +157,7 @@ body[class*="return-confirmation"] {
     margin: 2.375rem 0;
 
     .return-confirmation-detail-wrapper {
-      padding: 1.5rem 1.5625rem 0.875rem;
+      padding: rem(24) 0;
       font-size: 0.875rem;
       line-height: 1.125rem;
       border-bottom: 1px solid $online-return-confirmation-border;
@@ -166,6 +165,7 @@ body[class*="return-confirmation"] {
       @include breakpoint($tablet) {
         display: grid;
         grid-template: "a b c d" auto/ 10.8125rem 9.8125rem 8.4375rem auto;
+        padding: rem(24) rem(25) rem(14);
       }
 
       @include breakpoint($desktop) {
@@ -204,10 +204,14 @@ body[class*="return-confirmation"] {
     }
 
     .return-note-label {
-      margin: 1rem 1.5625rem;
+      margin: rem(16) 0;
       font-size: 0.875rem;
       line-height: 1.125rem;
       color: $online-return-confirmation-note-txt;
+
+      @include breakpoint($tablet) {
+        margin: rem(16) rem(25);
+      }
     }
   }
 
@@ -228,7 +232,7 @@ body[class*="return-confirmation"] {
 
       @include breakpoint($desktop) {
         font-size: 0.875rem;
-        padding: 1.5rem 1.625rem 3.125rem;
+        padding: rem(24) rem(26);
         grid-template: "a b c" auto/ 9.75rem auto 12.4375rem;
       }
 

@@ -52,7 +52,7 @@
           {{/if}}
         </div>
         {{#if menu_item.children }}
-          {{> main_menu_level2_partial name=menu_item.name menu_items=menu_item.children level_class=level_class }}
+          {{> main_menu_level2_partial name=menu_item.name menu_items=menu_item.children level_class=level_class level1_highlights=menu_item.highlight_paragraphs}}
         {{/if}}
       </li>
     {{/each}}

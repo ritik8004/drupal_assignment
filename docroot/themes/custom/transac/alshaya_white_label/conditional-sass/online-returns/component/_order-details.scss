@@ -52,6 +52,7 @@
         color: $online-return-refund-grey-txt;
         padding: rem(4) 0 rem(8);
         border-bottom: rem(1) solid $online-return-order-detail-border;
+        font-family: $alshaya-thin;
       }
 
       .item-list-wrapper {
@@ -119,6 +120,10 @@
           grid-area: c;
           background: $order_detail_total_tr_row_price_td;
 
+          @include breakpoint($tablet) {
+            background: $order_detail_total_tr_row_price_td_tablet;
+          }
+
           @include breakpoint($only-mobile) {
             padding: 0;
             margin-top: rem(29);
@@ -176,6 +181,11 @@
           }
         }
       }
+
+      .return-status-wrapper {
+        font-family: $alshaya-thin;
+        background-color: $online-return-light-bg;
+      }
     }
 
     .returned-items {
@@ -204,6 +214,12 @@
         @include breakpoint($tablet) {
           padding-top: rem(24);
         }
+      }
+
+      .title-wrapper,
+      .return-status-wrapper,
+      .return-id {
+        background-color: $online-return-light-bg;
       }
     }
 
@@ -417,6 +433,13 @@
         color: $online-return-cancellation-reason;
         font-family: $alshaya-bold;
         margin-#{$right}: rem(4);
+      }
+    }
+
+    .order-item-row {
+      &.delivered-items,
+      &.cancelled-items {
+        background-color: $online-return-light-bg;
       }
     }
   }
