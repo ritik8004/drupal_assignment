@@ -86,23 +86,18 @@
       }
 
       .tooltip-anchor {
-        position: unset;
         margin-#{$left}: rem(4);
 
         &::before {
           color: $hello-member-loyalty-aura-icon;
           font-size: rem(16);
-          position: relative;
           top: rem(3);
+          position: relative;
         }
 
         .tooltip-box {
-          bottom: rem(158);
-          #{$left}: rem(95);
-
-          @include breakpoint($only-mobile) {
-            bottom: 69%;
-          }
+          bottom: rem(24);
+          #{$left}: rem(-82);
         }
       }
     }
@@ -126,6 +121,20 @@
 
         @include breakpoint($only-mobile) {
           width: 100%;
+        }
+
+        .Collapsible__trigger {
+          &.is-closed {
+            ~ .Collapsible__contentOuter {
+              overflow: hidden !important;
+            }
+          }
+
+          &.is-open {
+            ~ .Collapsible__contentOuter {
+              overflow: visible !important;
+            }
+          }
         }
       }
     }

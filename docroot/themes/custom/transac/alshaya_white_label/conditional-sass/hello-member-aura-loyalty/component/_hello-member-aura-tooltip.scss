@@ -19,6 +19,10 @@
         transform: translateX(50%);
       }
 
+      @include breakpoint($only-mobile) {
+        #{$left}: calc(50% - 4rem);
+      }
+
       @include breakpoint($only-tablet) {
         #{$left}: -50%;
       }
@@ -55,6 +59,10 @@
       color: $aura-order-confirmation-points-question-txt;
     }
   }
+}
+
+.spc-aura-checkout-messages {
+  display: inline-flex;
 }
 
 #spc-checkout-confirmation {
