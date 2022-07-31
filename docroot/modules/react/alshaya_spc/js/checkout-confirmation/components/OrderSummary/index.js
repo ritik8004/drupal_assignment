@@ -280,7 +280,7 @@ const OrderSummary = (props) => {
               <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
             </ConditionalView>
           </ConditionalView>
-          <ConditionalView condition={isHelloMemberEnabled() && !isUserAuthenticated()}>
+          <ConditionalView condition={isHelloMemberEnabled() && isUserAuthenticated()}>
             <OrderSummaryItem
               context={context}
               type="hello_member"

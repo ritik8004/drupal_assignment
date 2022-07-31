@@ -16,7 +16,6 @@ import LinkCardOptionMobile from '../../../../../aura-loyalty/components/aura-fo
 import logger from '../../../../../../../js/utilities/logger';
 import LinkCardOptionEmail from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-email';
 import LinkCardOptionCard from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-card';
-import Loading from '../../../../../../../js/utilities/loading';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 
 class AuraLoyaltyForm extends React.Component {
@@ -40,7 +39,6 @@ class AuraLoyaltyForm extends React.Component {
       points: 0,
       expiringPoints: 0,
       expiryDate: null,
-      wait: false,
     };
   }
 
@@ -62,10 +60,6 @@ class AuraLoyaltyForm extends React.Component {
       || (hasValue(loyaltyType) && loyaltyType !== 'aura')) {
       return;
     }
-
-    this.setState({
-      wait: true,
-    });
 
     const data = {
       key: 'cardNumber',
@@ -137,7 +131,6 @@ class AuraLoyaltyForm extends React.Component {
     this.setState({
       ...stateValues,
       loyaltyCardLinkedToCart: true,
-      wait: false,
     });
   };
 
@@ -237,18 +230,9 @@ class AuraLoyaltyForm extends React.Component {
       points,
       expiringPoints,
       expiryDate,
-      wait,
     } = this.state;
 
     const { cart } = this.props;
-
-    if (wait) {
-      return (
-        <div className="spc-hello-member-checkout-rewards-block fadeInUp">
-          <Loading />
-        </div>
-      );
-    }
 
     // Disable AURA guest user link card form if cart contains virtual products.
     const formActive = !(isEgiftCardEnabled() && cartContainsAnyVirtualProduct(cart.cart));
