@@ -23,6 +23,11 @@ class HelloMemberCartOffersVouchers extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // Event listener on removing of vouchers and offers.
+    document.addEventListener('clearAllPromotions', this.onClickClosePopup);
+  }
+
   /**
    * Helper function to get the customer offers and voucher.
    */
@@ -75,9 +80,9 @@ class HelloMemberCartOffersVouchers extends React.Component {
   };
 
   // on click close symbol close the popup.
-  onClickClosePopup = async (openModal) => {
+  onClickClosePopup = async () => {
     this.setState({
-      openModal,
+      openModal: false,
       vouchers: [],
       Offers: [],
     });
@@ -107,7 +112,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 closeOnDocumentClick={false}
                 closeOnEscape={false}
               >
-                <a className="close-modal" onClick={() => this.onClickClosePopup(false)} />
+                <a className="close-modal" onClick={() => this.onClickClosePopup()} />
                 <div className="hm-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
                 <div className="hm-promo-modal-content">
                   <div className="error-info-section">&nbsp;</div>
