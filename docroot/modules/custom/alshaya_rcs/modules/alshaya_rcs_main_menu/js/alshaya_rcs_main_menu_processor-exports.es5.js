@@ -128,7 +128,7 @@ const processData = function (data, maxLevel) {
 
     data[key].tag_attr = null;
     if (data[key].tag === 'a') {
-      data[key].tag_attr = `href="${data[key].url_path}"`;
+      data[key].tag_attr = `href="${Drupal.url(data[key].url_path)}"`;
     }
 
     // Check children.
