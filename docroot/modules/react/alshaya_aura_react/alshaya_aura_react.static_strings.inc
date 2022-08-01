@@ -288,7 +288,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'aura_checkout_reward_points_to_earn_guest',
-      'value' => t('Earn @pts points with @aura_icon on this purchase.', [], ['context' => 'aura']),
+      'value' => t('Earn @pts points with @aura_icon', [], ['context' => 'aura']),
     ],
     [
       'key' => 'checkout_you_have_pts',
