@@ -70,11 +70,11 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
     $menu_layout = $main_menu_settings->get('desktop_main_menu_layout');
 
     // Get the alshaya mobile main menu config object.
-    $mobile_menu_settings = $this->configFactory('alshaya_main_menu.settings');
+    $mobile_menu_settings = $this->configFactory->get('alshaya_main_menu.settings');
     $mobile_menu_max_depth = $mobile_menu_settings->get('mobile_main_menu_max_depth');
 
     // Get Super category status.
-    $super_category_status = (boolean) $this->configFactory('alshaya_super_category.settings')->get('status');
+    $super_category_status = (boolean) $this->configFactory->get('alshaya_super_category.settings')->get('status');
     if ($super_category_status) {
       // Increase the mobile max depth.
       $mobile_menu_max_depth++;
