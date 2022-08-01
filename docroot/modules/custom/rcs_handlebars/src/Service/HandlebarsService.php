@@ -227,7 +227,7 @@ class HandlebarsService {
       }
       if ($is_handlebars_library) {
         $library['dependencies'] = empty($library['dependencies'])
-          ? array_merge([], ['rcs_handlebars/main'])
+          ? ['rcs_handlebars/main']
           : array_merge($library['dependencies'], ['rcs_handlebars/main']);
       }
     }
