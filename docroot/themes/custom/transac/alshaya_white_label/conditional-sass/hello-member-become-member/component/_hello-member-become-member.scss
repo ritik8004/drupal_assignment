@@ -1,6 +1,8 @@
 .become-hello-member {
   padding: rem(43) rem(39);
   margin: rem(22) 0;
+  position: relative;
+  clear: both;
   background-color: $hello-member-components-bg;
   text-align: center;
 
