@@ -22,11 +22,11 @@ exports.render = function render(
 
     case "shop_by_block":
       // Process and render shop by block menu.
-      const menuData = globalThis.shopByMenuProcessor.prepareData(
+      const shopByMenuData = globalThis.shopByMenuProcessor.prepareData(
         settings,
         inputs
       );
-      html = handlebarsRenderer.render('shop_by_menu', menuData);
+      html = handlebarsRenderer.render('shop_by_menu', shopByMenuData);
 
       break;
 
@@ -52,13 +52,12 @@ exports.render = function render(
 
     case 'lhn_block':
       // Render lhn based block.
-      if (typeof globalThis.renderRcsLhn !== 'undefined') {
-        html += globalThis.renderRcsLhn.render(
-          settings,
-          inputs,
-          innerHtml
-        );
-      }
+      const lhnData = globalThis.lhnProcessor.prepareData(
+        settings,
+        inputs
+      );
+
+      html = handlebarsRenderer.render('lhn_menu', lhnData);
       break;
 
     case 'super_category':
