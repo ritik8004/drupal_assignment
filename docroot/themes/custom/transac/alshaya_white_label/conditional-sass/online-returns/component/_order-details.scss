@@ -139,8 +139,8 @@
         }
 
         .status-label {
-          font-size: rem(18);
-          line-height: rem(22);
+          font-size: rem(16);
+          line-height: rem(20);
           font-family: $alshaya-bold;
 
           @include breakpoint($only-mobile) {
@@ -196,7 +196,6 @@
       .title-wrapper {
         font-size: rem(18);
         line-height: rem(22);
-        text-transform: uppercase;
         font-family: $alshaya-bold;
         padding: rem(38) 0 rem(8);
         border-bottom: rem(1) solid $online-return-order-detail-border;
