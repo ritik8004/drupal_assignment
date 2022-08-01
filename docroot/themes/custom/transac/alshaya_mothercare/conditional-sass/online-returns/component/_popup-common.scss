@@ -11,4 +11,11 @@
   .continue-button {
     background: $online-return-button-bg;
   }
+
+  .cancel-return-options,
+  .cta-wrapper {
+    button {
+      text-transform: none;
+    }
+  }
 }

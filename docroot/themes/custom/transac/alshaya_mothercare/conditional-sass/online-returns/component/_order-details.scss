@@ -14,7 +14,7 @@
           font-size: rem(40);
           position: absolute;
           #{$left}: rem(100);
-          top: rem(-1);
+          top: 0;
 
           @include breakpoint($tablet) {
             #{$left}: 0;
