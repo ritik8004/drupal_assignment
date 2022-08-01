@@ -148,10 +148,23 @@ class CustomerController extends ControllerBase {
     $searchForm['form_id']['#printed'] = TRUE;
     $searchForm['form_build_id']['#printed'] = TRUE;
 
+    // Get current page number.
+    $currentPageNumber = (int) $this->currentRequest->query->get('page');
+
+    // Get the offset to start displaying orders from.
+    $offset = $currentPageNumber * $itemsPerPage;
+
     try {
       // Get the orders to display for current user and filter applied.
       $customer_id = (int) $user->get('acq_customer_id')->getString();
-      $orders = alshaya_acm_customer_get_user_orders($customer_id, 'search', 'filter');
+      $page_size = $offset + $itemsPerPage;
+      // If user is something, then set the page_size as 0 to get all the
+      // products.
+      if ($this->currentRequest->query->get('search')
+        || $this->currentRequest->query->get('filter')) {
+        $page_size = 0;
+      }
+      $orders = $this->ordersManager->getOrders($customer_id, $page_size, 'search', 'filter');
 
       if (empty($orders)) {
         // @todo Check the empty result message.
@@ -164,16 +177,9 @@ class CustomerController extends ControllerBase {
         }
       }
       else {
-        // Get current page number.
-        $currentPageNumber = (int) $this->currentRequest->query->get('page');
-
-        // Get the offset to start displaying orders from.
-        $offset = $currentPageNumber * $itemsPerPage;
-
         // Get the orders to display for current page.
         $ordersPaged = array_slice($orders, $offset, $itemsPerPage, TRUE);
-
-        if (count($orders) > $offset + $itemsPerPage) {
+        if ($this->ordersManager->getOrdersCount($customer_id) > $offset + $itemsPerPage) {
           // Get all the query parameters we currently have.
           $query = $this->currentRequest->query->all();
           $query['page'] = $currentPageNumber + 1;
@@ -514,7 +520,7 @@ class CustomerController extends ControllerBase {
 
     // Get all orders of the current user.
     $customer_id = (int) $user->get('acq_customer_id')->getString();
-    $user_orders = alshaya_acm_customer_get_user_orders($customer_id);
+    $user_orders = $this->orderManager->getOrders($customer_id, 100);
     foreach ($user_orders as $order) {
       // If order belongs to the current user and invoice is available for
       // download.
