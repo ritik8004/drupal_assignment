@@ -132,8 +132,6 @@ class HandlebarsService {
     // Allow other modules to alter libraries.
     $this->moduleHandler->alter('rcs_handlebars_templates', $rcs_handlebars_libraries, $entity);
 
-    // Attach all libraries.
-    $build['#attached']['library'][] = 'rcs_handlebars/main';
     foreach ($rcs_handlebars_libraries as $library => $module) {
       $build['#attached']['library'][] = "$module/$library";
     }
@@ -205,17 +203,18 @@ class HandlebarsService {
    *   The module name.
    */
   public function libraryInfoAlter(array &$libraries, $extension) {
-    foreach ($libraries as $id => $library) {
+    foreach ($libraries as $id => &$library) {
       if (empty($library['js'])) {
         continue;
       }
-
+      // Mark if the current library contains handlebars templates.
+      $is_handlebars_library = NULL;
       foreach ($library['js'] as $path => $details) {
         // Check if this is a Handlebars template.
         if (!$this->endsWith($path, '.handlebars')) {
           continue;
         }
-
+        $is_handlebars_library = $is_handlebars_library ?? TRUE;
         // Make sure that folder structure is created.
         $dir = $this->prepareDirectories("$extension/$id");
         $uri = $dir . '/' . basename($path) . '.js';
@@ -225,6 +224,11 @@ class HandlebarsService {
         // Replace the library path.
         $libraries[$id]['js'][$this->getRelativePath($uri)] = $details;
         unset($libraries[$id]['js'][$path]);
+      }
+      if ($is_handlebars_library) {
+        $library['dependencies'] = empty($library['dependencies'])
+          ? array_merge([], ['rcs_handlebars/main'])
+          : array_merge($library['dependencies'], ['rcs_handlebars/main']);
       }
     }
   }
