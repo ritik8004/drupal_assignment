@@ -15,6 +15,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import ConditionalView from '../../../common/components/conditional-view';
 import BecomeHelloMember from '../../../../../alshaya_hello_member/js/src/components/become-hello-member';
+import { fetchCartData } from '../../../utilities/api/requests';
 
 class HelloMemberCartOffersVouchers extends React.Component {
   constructor(props) {
@@ -98,6 +99,38 @@ class HelloMemberCartOffersVouchers extends React.Component {
     });
   };
 
+  // On click clear all offers applied.
+  removeAppliedPromotions = async (promotionType) => {
+    showFullScreenLoader();
+    // Remove applied offers from customer.
+    const response = await callHelloMemberApi(promotionType, 'DELETE');
+    if (hasValue(response.data) && !hasValue(response.data.error)) {
+      window.commerceBackend.removeCartDataFromStorage();
+      const cartData = fetchCartData();
+      if (cartData instanceof Promise) {
+        cartData.then((result) => {
+          if (result === 'Request aborted') {
+            return;
+          }
+          // Store info in storage.
+          window.commerceBackend.setCartDataInStorage({ cart: result });
+          // Trigger event so that data can be passed to other components.
+          const event = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
+          document.dispatchEvent(event);
+          // Trigger event to close the popup.
+          const clearEvent = new CustomEvent('clearAllPromotions', { bubbles: true, detail: true });
+          document.dispatchEvent(clearEvent);
+        });
+      }
+    } else {
+      // If coupon details API is returning Error.
+      logger.error('Error while calling the apply coupon Api @message', {
+        '@message': response.data.message,
+      });
+    }
+    removeFullScreenLoader();
+  };
+
   render() {
     const {
       openModal,
@@ -140,12 +173,14 @@ class HelloMemberCartOffersVouchers extends React.Component {
                         <HelloMemberCartPopupBonusVouchersList
                           vouchers={vouchers}
                           totals={totals}
+                          promotionType={this.removeAppliedPromotions}
                         />
                       </TabPanel>
                       <TabPanel>
                         <HelloMemberCartPopupMemberOfferList
                           offers={Offers}
                           totals={totals}
+                          promotionType={this.removeAppliedPromotions}
                         />
                       </TabPanel>
                     </Tabs>
