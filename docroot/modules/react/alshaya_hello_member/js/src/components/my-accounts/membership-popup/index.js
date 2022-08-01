@@ -37,8 +37,8 @@ class MembershipPopup extends React.Component {
 
   render() {
     const { isModelOpen } = this.state;
-    const { popup_text_above: popupTextAbove } = drupalSettings;
-    const { popup_text_below: popupTextBelow } = drupalSettings;
+    const { popupTextAbove, popupTextBelow } = drupalSettings.helloMember;
+
     return (
       <>
         <Popup
@@ -53,11 +53,11 @@ class MembershipPopup extends React.Component {
                 {Drupal.t('Hello Member', {}, { context: 'hello_member' })}
               </div>
               <div className="hello-membership-details">
-                {parse(popupTextAbove)}
+                {hasValue(popupTextAbove) ? parse(popupTextAbove) : ''}
                 <div className="hello-membership-continue">
                   <a onClick={(e) => this.closeModal(e)}>{Drupal.t('Continue', {}, { context: 'hello_member' })}</a>
                 </div>
-                {parse(popupTextBelow)}
+                {hasValue(popupTextBelow) ? parse(popupTextBelow) : ''}
               </div>
             </div>
           </div>
