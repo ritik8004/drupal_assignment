@@ -453,10 +453,6 @@ function _alshaya_aura_react_translations() {
         'ar' => 'هل أنت عضو بالفعل؟',
         'context' => 'aura',
       ],
-      'Earn @pts points with @aura_icon on this purchase.' => [
-        'ar' => 'اكسب @pts نقاط مع @aura_icon عند إتمام عملية الشراء.',
-        'context' => 'aura',
-      ],
       'You will earn @pts Aura points with this purchase.' => [
         'ar' => 'سوف تفوز @pts بنقاط أورا عند إتمام عملية الشراء.',
         'context' => 'aura',
@@ -599,6 +595,12 @@ function _alshaya_aura_react_translations() {
     'v6' => [
       'Aura Loyalty Card' => [
         'ar' => 'بطاقة الولاء من أورا',
+        'context' => 'aura',
+      ],
+    ],
+    'v7' => [
+      'Earn @pts points with @aura_icon' => [
+        'ar' => 'اكسب @pts نقاط مع @aura_icon',
         'context' => 'aura',
       ],
     ],
