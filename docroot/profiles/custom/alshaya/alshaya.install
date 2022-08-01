@@ -10,6 +10,17 @@ use Drupal\Core\File\FileSystemInterface;
 /**
  * Implements hook_update_N().
  *
+ * Enables mysql module if not enabled already.
+ */
+function alshaya_update_9400() {
+  if (!(\Drupal::moduleHandler()->moduleExists('mysql'))) {
+    \Drupal::service('module_installer')->install(['mysql']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Uninstalls lightning and related modules.
  */
 function alshaya_update_8017() {
