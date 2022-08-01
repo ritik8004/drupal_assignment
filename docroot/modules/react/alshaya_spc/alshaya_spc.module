@@ -305,6 +305,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
     'dev2',
     'dev3',
     'qa2',
+    'test',
   ]);
 
   // Use proxy on only specific environments.
