@@ -2,6 +2,7 @@
   .order-details-button-wrapper {
     a {
       font-family: $hnm-demibold;
+      text-transform: uppercase;
     }
   }
 
@@ -19,12 +20,18 @@
 
   .return-details-section {
     .return-confirmation-detail-wrapper {
+      padding: rem(24) rem(25) rem(14);
+
       .return-request-date {
         html[lang='ar'] & {
           direction: ltr;
           text-align: right;
         }
       }
+    }
+
+    .return-note-label {
+      margin: rem(16) rem(25);
     }
   }
 }

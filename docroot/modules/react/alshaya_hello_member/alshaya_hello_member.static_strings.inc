@@ -266,5 +266,85 @@ function _alshaya_hello_member_aura_static_strings() {
       'key' => 'card_submit',
       'value' => t('Submit', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'form_error_invalid_otp',
+      'value' => t('Incorrect OTP. Please enter a valid OTP.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'form_error_send_otp_failed_message',
+      'value' => t('Error in sending OTP. Please try again.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'otp_label',
+      'value' => t('One Time Pin', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_otp_sent_to_mobile',
+      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'otp_label',
+      'value' => t('One Time Pin', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'resend_code',
+      'value' => t('Resend code', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_otp_sent_to_mobile',
+      'value' => t('A One Time Password (OTP) has been sent to your mobile number @mobile', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'otp_send_message',
+      'value' => t('We’ve sent the one time PIN to your mobile number.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'didnt_receive_otp_message',
+      'value' => t('Didn’t receive your one time PIN?', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'send_otp_helptext',
+      'value' => t('We’ll send a one time PIN to your mobile number.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'enter_otp',
+      'value' => t('Enter OTP', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_points_earn_message',
+      'value' => t('You will earn <b>@points</b> Aura points with this purchase.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'use_your_points_text',
+      'value' => t('Use your points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'checkout_use_points',
+      'value' => t('Use points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'remove',
+      'value' => t('Remove', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_points_redeemed_successfully_msg',
+      'value' => t('<b>@points points</b> worth <b>@currencyCode @money</b> have been successfully redeemed for this purchase', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'points_exceed_order_total',
+      'value' => t('The number of points exceeds your order total. Please re-enter the number of points you’d like to redeem.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'you_can_redeem_maximum',
+      'value' => t('You can redeem maximum', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'points',
+      'value' => t('points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'form_error_empty_points',
+      'value' => t('Please enter points.', [], ['context' => 'hello_member']),
+    ],
   ];
 }

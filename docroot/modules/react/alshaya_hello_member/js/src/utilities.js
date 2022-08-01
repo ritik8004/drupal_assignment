@@ -1,3 +1,8 @@
+import React from 'react';
+import parse from 'html-react-parser';
+import { renderToString } from 'react-dom/server';
+import AuraHeaderIcon from '../../../alshaya_aura_react/js/svg-component/aura-header-icon';
+import HelloMemberSvg from '../../../alshaya_spc/js/svg-component/hello-member-svg';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
@@ -39,10 +44,26 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
 // eslint-disable-next-line
 const findArrayElement = (array, code) => array.find((element) => element.code === code && element.value === 1);
 
+const getLoyaltySelectText = (optionName, helloMemberPoints) => {
+  if (optionName === 'hello_member') {
+    return parse(parse(Drupal.t('@hm_icon Member earns @points points', {
+      '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
+      '@points': helloMemberPoints,
+    })));
+  }
+  if (optionName === 'aura') {
+    return parse(parse(Drupal.t('Earn/Redeem @aura_icon Points', {
+      '@aura_icon': `<span class="hello-member-aura">${renderToString(<AuraHeaderIcon />)}</span>`,
+    })));
+  }
+  return null;
+};
+
 export {
   getFormatedMemberId,
   getPointstHistoryPageSize,
   getPriceToHelloMemberPoint,
   findArrayElement,
   setupAccordionHeight,
+  getLoyaltySelectText,
 };

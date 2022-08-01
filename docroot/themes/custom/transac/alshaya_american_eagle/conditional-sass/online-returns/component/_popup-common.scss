@@ -1,0 +1,11 @@
+.promotions-warning-modal-overlay,
+.cancel-return-popup-container {
+  .close,
+  .close-modal {
+    padding: rem(8);
+
+    @include icon(close, before) {
+      font-size: rem(16);
+    }
+  }
+}

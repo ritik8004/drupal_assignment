@@ -1,13 +1,20 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { renderToString } from 'react-dom/server';
-import { isAuraIntegrationEnabled } from '../../../../../../js/utilities/helloMemberHelper';
+import { callHelloMemberApi, isAuraIntegrationEnabled } from '../../../../../../js/utilities/helloMemberHelper';
 import HelloMemberSvg from '../../../../svg-component/hello-member-svg';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 import LoyaltySelectOption from '../loyalty-select-option';
 import LoyaltyConfirmPopup from '../loyalty-confirm-popup';
 import { setHelloMemberLoyaltyCard } from '../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
+import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import { fetchCartData } from '../../../../utilities/api/requests';
+import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
+import { redeemAuraPoints } from '../../../../aura-loyalty/components/utilities/checkout_helper';
+import { getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import logger from '../../../../../../js/utilities/logger';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 class RegisteredUserLoyalty extends React.Component {
   constructor(props) {
@@ -31,9 +38,16 @@ class RegisteredUserLoyalty extends React.Component {
     // Currently, default option is hello_member
     // @todo: Update default option if cart has been updated.
     const { cart, identifierNo } = this.props;
-    const cartId = cart.cart.cart_id;
-    setHelloMemberLoyaltyCard(identifierNo, cartId);
-    // @todo: Handle update cart event on setting hello member loyalty.
+    const {
+      cart: {
+        cart_id: cartId,
+        loyalty_type: loyaltyType,
+      },
+    } = cart;
+    // Set hello member loyalty when no loyalty is set in cart.
+    if (!hasValue(loyaltyType) && hasValue(identifierNo)) {
+      setHelloMemberLoyaltyCard(identifierNo, cartId);
+    }
   }
 
   /**
@@ -60,23 +74,87 @@ class RegisteredUserLoyalty extends React.Component {
   /**
    * Handle change in loyalty options by customer.
    *
-   * @param {string} method
+   * @param {string} selectedMethod
    *  Selected method by customer.
    */
-  changeLoyaltyOption = (method) => {
+  changeLoyaltyOption = (selectedMethod) => {
     // @todo: Trigger a pop-up to confirm the loyalty option.
     // @todo: Refresh cart with the selected value.
-    if (method === 'hello_member') {
-      const { cart, identifierNo } = this.props;
-      const cartId = cart.cart.cart_id;
-      setHelloMemberLoyaltyCard(identifierNo, cartId);
-      // @todo: Handle update cart event on setting hello member loyalty.
-    } else if (method === 'aura') {
-      // @todo: Refresh cart with the selected value.
-      // @todo: Open aura loyalty form and set aura loyalty after aura sign in validation.
+    const { cart } = this.props;
+    const {
+      cart: {
+        cart_id: cartId,
+        cart_id_int: cardIdInt,
+        loyalty_card: loyaltyCard,
+      },
+    } = cart;
+    // Unset the old loyalty card if customer switches loyalty options.s
+    let requestData = {
+      masked_quote_id: cartId,
+    };
+    // Change payload if authenticated user.
+    if (isUserAuthenticated()) {
+      requestData = {
+        quoteId: cardIdInt,
+      };
     }
+    if (selectedMethod === 'hello_member') {
+      requestData.programCode = 'aura';
+      // Call API to undo redeem aura points.
+      const data = {
+        action: 'remove points',
+        userId: getUserDetails().id || 0,
+        cardNumber: loyaltyCard,
+      };
+      redeemAuraPoints(data);
+      const response = callHelloMemberApi('unsetLoyaltyCard', 'POST', requestData);
+      response.then((result) => {
+        if (result.status === 200) {
+          if (result.data) {
+            // Redirect to cart page.
+            window.location.href = Drupal.url('cart');
+          }
+        }
+      });
+    }
+    if (selectedMethod === 'aura') {
+      requestData.programCode = 'hello_member';
+      const response = callHelloMemberApi('unsetLoyaltyCard', 'POST', requestData);
+      // Fetch updated cart and remove the member discount from checkout summary.
+      showFullScreenLoader();
+      response.then((result) => {
+        if (result.status === 200) {
+          if (result.data) {
+            window.commerceBackend.removeCartDataFromStorage();
+            // Remove hello member discount if selected method is aura.
+            const cartData = fetchCartData();
+            if (cartData instanceof Promise) {
+              cartData.then((cartResult) => {
+                if (cartResult === 'Request aborted') {
+                  return;
+                }
+                // Store info in storage.
+                window.commerceBackend.setCartDataInStorage({ cart: cartResult });
+                if (typeof cartResult.error === 'undefined') {
+                  window.dynamicPromotion.apply(cartResult);
+                  // Dispatch an event to update totals in cart object.
+                  dispatchCustomEvent('updateTotalsInCart', { totals: cartResult.totals });
+                }
+              });
+            }
+          }
+        } else {
+          logger.error('Error while calling trying to unset hello member loyalty card cartId: @cartId', {
+            '@cartId': cartId,
+            '@response': result.data.error_message,
+          });
+        }
+        removeFullScreenLoader();
+      });
+    }
+
     this.setState({
-      currentOption: method,
+      currentOption: selectedMethod,
     });
     this.resetPopupStatus(false);
   }
@@ -84,11 +162,6 @@ class RegisteredUserLoyalty extends React.Component {
   render() {
     const { animationDelay, helloMemberPoints, cart } = this.props;
     const { currentOption, selectedOption, showLoyaltyPopup } = this.state;
-    const {
-      cart: {
-        loyalty_card: loyaltyCard,
-      },
-    } = cart;
 
     if (!hasValue(helloMemberPoints)) {
       return null;
@@ -110,7 +183,6 @@ class RegisteredUserLoyalty extends React.Component {
         <ConditionalView condition={isAuraIntegrationEnabled()}>
           <LoyaltySelectOption
             cart={cart}
-            loyaltyCard={loyaltyCard}
             currentOption={currentOption}
             animationDelay={animationDelay}
             optionName="hello_member"

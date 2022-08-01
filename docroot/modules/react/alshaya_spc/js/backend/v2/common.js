@@ -23,7 +23,7 @@ import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
-import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
+import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -379,7 +379,7 @@ const getProcessedCartData = async (cartData) => {
     }
     // If Aura enabled, add aura related details.
     // If Egift card is enabled get balance_payable.
-    if (isAuraEnabled() || isEgiftCardEnabled()) {
+    if (isAuraEnabled() || isEgiftCardEnabled() || isAuraIntegrationEnabled()) {
       if (element.code === 'balance_payable') {
         data.totals.balancePayable = element.value;
         // Adding an extra total balance payable attribute, so that we can use

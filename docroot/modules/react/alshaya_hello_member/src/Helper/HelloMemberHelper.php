@@ -71,6 +71,23 @@ class HelloMemberHelper {
   }
 
   /**
+   * Get aura config.
+   *
+   * @return array
+   *   AURA form related config.
+   */
+  public function getAuraFormConfig() {
+    $alshaya_aura_config = $this->configFactory->get('alshaya_aura_react.settings');
+
+    $config = [
+      'currency_code' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
+      'auraUnsupportedPaymentMethods' => $alshaya_aura_config->get('aura_unsupported_payment_methods'),
+    ];
+
+    return $config;
+  }
+
+  /**
    * Wrapper function to get Hello member Config.
    *
    * @return \Drupal\Core\Config\ImmutableConfig

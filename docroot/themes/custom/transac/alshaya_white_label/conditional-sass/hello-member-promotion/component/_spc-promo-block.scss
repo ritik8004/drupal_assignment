@@ -1,0 +1,19 @@
+.spc-promo-code-block {
+  @include breakpoint($only-mobile) {
+    display: flex;
+    flex-flow: column;
+  }
+
+  .block-content {
+    order: 2;
+  }
+
+  .spc-checkout-section-title {
+    float: $left;
+
+    @include breakpoint($only-mobile) {
+      order: 1;
+      float: none;
+    }
+  }
+}
