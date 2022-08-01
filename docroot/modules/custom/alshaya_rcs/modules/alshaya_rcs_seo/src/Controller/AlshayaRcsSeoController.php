@@ -42,9 +42,11 @@ class AlshayaRcsSeoController extends ControllerBase {
    */
   public function siteMap() {
     return [
+      '#markup' => '<div id="rcs-ph-sitemap"></div>',
       '#attached' => [
         'library' => [
           'alshaya_white_label/sitemap',
+          'alshaya_rcs_seo/sitemap'
         ],
       ],
       '#cache' => [
