@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { isMobile } from '../../../../../js/utilities/display';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class BecomeHelloMember extends React.Component {
   constructor(props) {
@@ -19,6 +20,8 @@ class BecomeHelloMember extends React.Component {
   render() {
     const { isBlockVisible } = this.state;
     const mobileDeviceClass = isMobile() ? 'mobile-device' : '';
+    const { destination } = this.props;
+    const redirectURL = (hasValue(destination)) ? `?destination=${destination}` : '';
     return (
       <>
         {
@@ -36,7 +39,7 @@ class BecomeHelloMember extends React.Component {
                 {Drupal.t('Not a member yet? Join now, it’s free!', {}, { context: 'hello_member' })}
               </div>
               <div className="become-hello-member__actions">
-                <a className="become-hello-member__actions-link become-hello-member__actions-link--secondary" href={`${Drupal.url('user/login')}`}>
+                <a className="become-hello-member__actions-link become-hello-member__actions-link--secondary" href={`${Drupal.url(`user/login${redirectURL}`)}`}>
                   {Drupal.t('SIGN IN', {}, { context: 'hello_member' })}
                 </a>
                 <a className="become-hello-member__actions-link become-hello-member__actions-link--primary" href={`${Drupal.url('user/register')}`}>
