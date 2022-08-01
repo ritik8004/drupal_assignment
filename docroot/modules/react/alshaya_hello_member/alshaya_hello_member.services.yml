@@ -4,3 +4,10 @@ services:
     arguments:
       - '@config.factory'
       - '@mobile_number.util'
+  alshaya_hello_member.breadcrumb:
+    class: Drupal\alshaya_hello_member\Breadcrumb\AlshayaHelloMemberBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }
+    arguments:
+      - '@current_user'
+      - '@request_stack'
