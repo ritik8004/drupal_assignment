@@ -173,6 +173,7 @@ exports.render = function render(
           innerHtml
         );
       }
+      break;
 
     default:
       Drupal.alshayaLogger('debug', 'Placeholder @placeholder not supported for render.', {
