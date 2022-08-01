@@ -77,7 +77,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
-    And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
+    And I select "بنك اختبار كي نت [KNET1]" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
     And I select date and month in the form for arabic
@@ -115,7 +115,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
-    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I select "بنك اختبار كي نت [KNET1]" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
     And I select date and month in the form
