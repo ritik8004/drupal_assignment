@@ -203,17 +203,9 @@ class SkuImagesManager {
       $skuForGallery = $check_parent_child ? $this->getSkuForGallery($sku, $check_parent_child) : $sku;
       $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? NULL;
 
-      if (!isset($data['media_items']['images']) || empty($data['media_items']['images'])) {
-        $this->getLogger('SkuImagesManager')->notice('No images found for SKU: @sku, context: @context.', [
-          '@sku' => $skuForGallery->getSku(),
-          '@context' => $context,
-        ]);
-      }
-      else {
-        foreach ($data['media_items']['images'] as $key => $item) {
-          if (empty($item['label'])) {
-            $data['media_items']['images'][$key]['label'] = (string) $sku->label();
-          }
+      foreach ($data['media_items']['images'] ?? [] as $key => $item) {
+        if (empty($item['label'])) {
+          $data['media_items']['images'][$key]['label'] = (string) $sku->label();
         }
       }
 
