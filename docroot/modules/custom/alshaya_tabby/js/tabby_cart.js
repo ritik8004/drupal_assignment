@@ -2,7 +2,8 @@
   document.addEventListener('refreshCart', (e) => {
     let amount;
     try {
-      amount = e.detail.data().totals.base_grand_total;
+      let payment_detail = e.detail.data().totals;
+      amount = typeof payment_detail.totalBalancePayable !== "undefined" ? payment_detail.totalBalancePayable : payment_detail.base_grand_total;
     }
     catch (e) {
       amount = null;
