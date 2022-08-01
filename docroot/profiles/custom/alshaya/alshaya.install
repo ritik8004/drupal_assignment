@@ -13,7 +13,9 @@ use Drupal\Core\File\FileSystemInterface;
  * Enables mysql module if not enabled already.
  */
 function alshaya_update_9400() {
-  \Drupal::service('module_installer')->install(['mysql']);
+  if (!(\Drupal::moduleHandler()->moduleExists('mysql'))) {
+    \Drupal::service('module_installer')->install(['mysql']);
+  }
 }
 
 /**
