@@ -42,6 +42,10 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
     return;
   }
 
+  if ($hello_member_settings['showOnListingPages']) {
+    $page['#attached']['library'][] = 'alshaya_white_label/hello-member-become-member';
+  }
+
   $page['#attached']['drupalSettings']['helloMember'] = $hello_member_settings;
 
   // Get the text to show in popup.
