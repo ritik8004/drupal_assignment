@@ -169,7 +169,7 @@ exports.render = function render(
       if (typeof global.sitemapPageRenderer !== 'undefined') {
         html += global.sitemapPageRenderer.render(
           settings,
-          entity,
+          inputs,
           innerHtml
         );
       }

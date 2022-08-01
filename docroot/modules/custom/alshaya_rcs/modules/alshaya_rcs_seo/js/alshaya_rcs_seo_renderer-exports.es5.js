@@ -1,6 +1,6 @@
 exports.render = function render(
   settings,
-  entity,
+  inputs,
   innerHtml
 ) {
 
