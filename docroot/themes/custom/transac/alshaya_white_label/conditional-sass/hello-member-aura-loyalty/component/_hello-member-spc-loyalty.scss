@@ -138,6 +138,22 @@
         }
       }
     }
+
+    input[type=radio] {
+      &:checked ~ .radio-sim {
+        @include icon(radio-empty, before) {
+          color: $spc-checkout-radio-empty;
+        }
+      }
+
+      &.loyalty-option-selected {
+        ~ .radio-sim {
+          @include icon(radio-filled, before) {
+            color: $spc-checkout-radio-filled;
+          }
+        }
+      }
+    }
   }
 
   .linking-option {
