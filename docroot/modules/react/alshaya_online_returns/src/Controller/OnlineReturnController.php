@@ -245,14 +245,6 @@ class OnlineReturnController extends ControllerBase {
 
     // Get all the orders of logged in user.
     $customer_id = (int) $user->get('acq_customer_id')->getString();
-    $orders = $this->ordersManager->getOrders($customer_id, 100);
-
-    // Get the current order detail to build return page.
-    $order_index = array_search($order_id, array_column($orders, 'increment_id'));
-
-    if ($order_index === FALSE) {
-      throw new NotFoundHttpException();
-    }
 
     $order = $this->ordersManager->getOrderByIncrementId($order_id);
 

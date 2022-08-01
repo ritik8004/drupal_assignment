@@ -277,25 +277,37 @@ class OrdersManager {
         'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
       ];
 
-      if ($page_size > 0) {
-        $result = $this->apiWrapper->invokeApi($endpoint, $query, 'GET', FALSE, $request_options);
-        // Decode the json string to get the order item.
-        $result = Json::decode($result);
-      }
-      else {
-        $query['searchCriteria']['pageSize'] = 100;
-        $result = $this->apiWrapper->invokeApiWithPageLimit($endpoint, $request_options, $query['searchCriteria']['pageSize'], [], $query);
-      }
+      // Prepare a cache id to store the data in static cache.
+      $cid = implode('_', [
+        'static',
+        $customer_id,
+        $page_size,
+        $search_key,
+        $filter_key,
+      ]);
+      $result = &drupal_static($cid);
 
-      $orders = $result['items'] ?? [];
-      foreach ($orders as $key => $order) {
-        // Allow other modules to alter order details.
-        $this->moduleHandler->alter('alshaya_acm_customer_order_details', $order);
-        $orders[$key] = $this->cleanupOrder($order);
-      }
-      // Update the order count cache.
-      if (isset($result['total_count'])) {
-        $this->countCache->set('orders_count_' . $customer_id, $result['total_count']);
+      if (empty($result)) {
+        if ($page_size > 0) {
+          $result = $this->apiWrapper->invokeApi($endpoint, $query, 'GET', FALSE, $request_options);
+          // Decode the json string to get the order item.
+          $result = Json::decode($result);
+        }
+        else {
+          $query['searchCriteria']['pageSize'] = 100;
+          $result = $this->apiWrapper->invokeApiWithPageLimit($endpoint, $request_options, $query['searchCriteria']['pageSize'], [], $query);
+        }
+
+        $orders = $result['items'] ?? [];
+        foreach ($orders as $key => $order) {
+          // Allow other modules to alter order details.
+          $this->moduleHandler->alter('alshaya_acm_customer_order_details', $order);
+          $orders[$key] = $this->cleanupOrder($order);
+        }
+        // Update the order count cache.
+        if (isset($result['total_count'])) {
+          $this->countCache->set('orders_count_' . $customer_id, $result['total_count']);
+        }
       }
     }
     catch (\Exception $e) {
@@ -417,12 +429,17 @@ class OrdersManager {
     $request_options = [
       'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
     ];
+    // This cid is to store the data in static cache.
+    $cid = implode('_', [__FUNCTION__, $increment_id]);
+    $result = &drupal_static($cid);
 
-    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
-    $count = $result['total_count'] ?? 0;
-    if (empty($count)) {
-      return NULL;
+    if (empty($result)) {
+      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
+      $result = json_decode($response ?? [], TRUE);
+      $count = $result['total_count'] ?? 0;
+      if (empty($count)) {
+        return NULL;
+      }
     }
 
     $order = reset($result['items']);

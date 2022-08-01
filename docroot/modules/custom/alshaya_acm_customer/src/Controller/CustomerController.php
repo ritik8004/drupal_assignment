@@ -520,15 +520,10 @@ class CustomerController extends ControllerBase {
 
     // Get all orders of the current user.
     $customer_id = (int) $user->get('acq_customer_id')->getString();
-    $user_orders = $this->orderManager->getOrders($customer_id, 100);
-    foreach ($user_orders as $order) {
-      // If order belongs to the current user and invoice is available for
-      // download.
-      if ($order['increment_id'] == $order_id) {
-        $download_invoice = !empty($order['extension']['invoice_path']);
-        break;
-      }
-    }
+    $user_order = $this->orderManager->getOrderByIncrementId($order_id);
+    // If order belongs to the current user and invoice is available for
+    // download.
+    $download_invoice = !empty($order['extension']['invoice_path']);
 
     return AccessResult::allowedIf($download_invoice);
   }
