@@ -48,6 +48,12 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
     removeFullScreenLoader();
   };
 
+  // On click clear all vouchers applied.
+  const onClickClearAll = async () => {
+    const { promotionType } = props;
+    await promotionType('helloMemberRemovebonusVouchers');
+  };
+
   return (
     <>
       <form
@@ -82,7 +88,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
         </div>
         <div className="hm-promo-tab-cont-action">
           <input type="submit" value={Drupal.t('APPLY VOUCHERS', {}, { context: 'hello_member' })} />
-          <a href="" className="clear-btn">{Drupal.t('CLEAR ALL', {}, { context: 'hello_member' })}</a>
+          <a className="clear-btn" onClick={() => onClickClearAll()}>{Drupal.t('CLEAR ALL', {}, { context: 'hello_member' })}</a>
         </div>
       </form>
     </>

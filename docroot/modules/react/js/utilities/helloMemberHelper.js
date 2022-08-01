@@ -116,6 +116,12 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
     case 'getAuraCustomerPoints':
       endpoint = `/V1/guest/apc-points-balance/identifierNo/${endPointParams.identifierNo}`;
       break;
+    case 'helloMemberRemoveOffers':
+      endpoint = '/V1/hello-member/carts/mine/memberOffers';
+      break;
+    case 'helloMemberRemovebonusVouchers':
+      endpoint = '/V1/hello-member/carts/mine/bonusVouchers';
+      break;
 
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
