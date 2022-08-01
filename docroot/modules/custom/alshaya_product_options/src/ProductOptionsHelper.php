@@ -22,7 +22,7 @@ use Drupal\acq_sku\Entity\SKU;
  */
 class ProductOptionsHelper {
 
-  const CID_SIZE_GROUP = 'alshaya_size_group';
+  public const CID_SIZE_GROUP = 'alshaya_size_group';
 
   /**
    * SKU Fields Manager.
@@ -169,9 +169,7 @@ class ProductOptionsHelper {
     $fields = $this->skuFieldsManager->getFieldAdditions();
 
     // We only want to sync attributes.
-    $fields = array_filter($fields, function ($field) {
-      return ($field['parent'] == 'attributes');
-    });
+    $fields = array_filter($fields, fn($field) => $field['parent'] == 'attributes');
 
     // For existing live sites we might have source empty.
     array_walk($fields, function (&$field, $field_code) {
@@ -221,7 +219,7 @@ class ProductOptionsHelper {
         if ($sku = SKU::loadFromSku($sku_id)) {
           foreach ($sku->getTranslationLanguages() as $language) {
             $sku = $sku->getTranslation($language->getId());
-            $attribute_values = $sku->{$field_key}->getValue() ? $sku->{$field_key}->getValue() : [];
+            $attribute_values = $sku->{$field_key}->getValue() ?: [];
             if ($term->hasTranslation($language->getId())) {
               $term = $term->getTranslation($language->getId());
             }
@@ -276,9 +274,9 @@ class ProductOptionsHelper {
     try {
       // First get attribute info.
       $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
-      $attribute = json_decode($attribute, TRUE);
+      $attribute = json_decode($attribute, TRUE, 512, JSON_THROW_ON_ERROR);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // For now we have many fields in sku_base_fields which are not
       // available in all brands.
       return;

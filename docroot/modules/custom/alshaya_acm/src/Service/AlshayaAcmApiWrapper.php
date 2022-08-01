@@ -209,7 +209,7 @@ class AlshayaAcmApiWrapper extends APIWrapper {
     try {
       // First invalidate so even if we get exception, all blocks are updated.
       Cache::invalidateTags(['cart:' . $cart_id]);
-      $this->alshayaApi->updateCart($cart_id, Json::decode(Json::encode($cart), TRUE));
+      $this->alshayaApi->updateCart($cart_id, Json::decode(Json::encode($cart)));
     }
     catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
@@ -300,7 +300,7 @@ class AlshayaAcmApiWrapper extends APIWrapper {
       return NULL;
     }
 
-    $response = json_decode($response, TRUE);
+    $response = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
     // Add sku to message to allow processing it the same way as stock push.
     $response['sku'] = $sku;
 

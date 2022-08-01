@@ -15,6 +15,7 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
    * {@inheritdoc}
    */
   protected function getRoutesByPath($path) {
+    $exploded_path = [];
     $collection = parent::getRoutesByPath($path);
     // If collection has term view route.
     if (!empty($collection) && $collection->get('entity.taxonomy_term.canonical')) {

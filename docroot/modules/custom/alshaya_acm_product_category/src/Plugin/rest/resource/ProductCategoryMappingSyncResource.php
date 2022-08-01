@@ -105,7 +105,7 @@ class ProductCategoryMappingSyncResource extends ResourceBase {
     foreach ($data as $row) {
       if (empty($row['sku'])) {
         $this->logger->warning('Invalid data received for a row @data', [
-          '@data' => json_encode($row),
+          '@data' => json_encode($row, JSON_THROW_ON_ERROR),
         ]);
 
         continue;

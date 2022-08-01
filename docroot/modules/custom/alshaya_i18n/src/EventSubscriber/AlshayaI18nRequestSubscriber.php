@@ -110,6 +110,7 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::REQUEST][] = ['onKernelRequestRedirect', 100];
     return $events;
   }

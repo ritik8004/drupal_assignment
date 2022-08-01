@@ -91,6 +91,8 @@ class MigrateSymmetricToAsymmetric {
    *   Node/Term/Block entity to migrate.
    */
   public function migrateEntity(EntityInterface $entity) {
+    $entities = [];
+    $defaultLangcode = NULL;
     /** @var \Drupal\node\NodeInterface $entity */
     // Hard coded languages here, if we ever get three languages anything
     // below won't work.
@@ -145,7 +147,7 @@ class MigrateSymmetricToAsymmetric {
         $defaultValues = $original->get($field)->getValue();
         $translatedValues = $translation->get($field)->getValue();
 
-        if (count($defaultValues) !== count($translatedValues)) {
+        if ((is_countable($defaultValues) ? count($defaultValues) : 0) !== (is_countable($translatedValues) ? count($translatedValues) : 0)) {
           $this->logger->error('Content structure do not match for @type id: @id', [
             '@id' => $original->id(),
             '@type' => $original->getEntityTypeId(),
@@ -176,7 +178,7 @@ class MigrateSymmetricToAsymmetric {
             unset($newTranslatedParagraph->original);
 
             $this->logger->info('New Translated value: @value', [
-              '@value' => json_encode($newTranslatedValues),
+              '@value' => json_encode($newTranslatedValues, JSON_THROW_ON_ERROR),
             ]);
 
             try {
@@ -184,7 +186,7 @@ class MigrateSymmetricToAsymmetric {
             }
             catch (\Exception $e) {
               $this->logger->error('Error occurred while saving new translation for paragraph: @row. Message: @message', [
-                '@row' => json_encode($newTranslatedValues),
+                '@row' => json_encode($newTranslatedValues, JSON_THROW_ON_ERROR),
                 '@message' => $e->getMessage(),
               ]);
             }

@@ -71,7 +71,7 @@ function invoke_api($endpoint, $method = 'GET', array $data = []) {
     return new stdClass();
   }
 
-  $data = json_decode($result->getBody());
+  $data = json_decode($result->getBody(), null, 512, JSON_THROW_ON_ERROR);
 
   return $data;
 }

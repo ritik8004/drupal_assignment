@@ -146,7 +146,7 @@ class ApiHelper {
 
     $cache_id = 'sm_' . $this->langcode . '_';
     $cache_id .= $this->cart->id() . '_';
-    $cache_id .= md5(json_encode($address));
+    $cache_id .= md5(json_encode($address, JSON_THROW_ON_ERROR));
 
     if ($cache = $this->cache->get($cache_id)) {
       return $cache->data;

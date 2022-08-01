@@ -159,7 +159,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
 
       return TRUE;
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       return FALSE;
     }
   }
@@ -183,7 +183,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     try {
       $carts[$cart_id] = $this->api->getCart($cart_id);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // If Cart not found or APIs not working, return empty array.
       return [];
     }
@@ -206,7 +206,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
       $this->logger->warning('Error occurred while getting cart id @cart_id: @message, k-net data: @data', [
         '@cart_id' => $response['quote_id'],
         '@message' => $e->getMessage(),
-        '@data' => json_encode($response),
+        '@data' => json_encode($response, JSON_THROW_ON_ERROR),
       ]);
 
       throw new AccessDeniedHttpException();
@@ -223,8 +223,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
       || $state_data['payment_id'] != $response['payment_id']
     ) {
       $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>Cart: @cart<br>State: @state', [
-        '@message' => json_encode($message_data),
-        '@state' => json_encode($state_data),
+        '@message' => json_encode($message_data, JSON_THROW_ON_ERROR),
+        '@state' => json_encode($state_data, JSON_THROW_ON_ERROR),
         '@cart' => $cartToLog,
       ]);
       throw new AccessDeniedHttpException();
@@ -232,8 +232,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $totals = $cart['totals'];
     if ($state_data['amount'] != $totals['grand']) {
       $this->logger->error('Amount currently in cart dont match amount in state variable.<br>POST: @message<br>Cart: @cart<br>State: @state', [
-        '@message' => json_encode($message_data),
-        '@state' => json_encode($state_data),
+        '@message' => json_encode($message_data, JSON_THROW_ON_ERROR),
+        '@state' => json_encode($state_data, JSON_THROW_ON_ERROR),
         '@cart' => $cartToLog,
       ]);
       throw new AccessDeniedHttpException();
@@ -263,8 +263,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $this->logger->info('KNET update for @quote_id: Redirect: @result_url Response: @message Cart: @cart State: @state', [
       '@quote_id' => $response['quote_id'],
       '@result_url' => $result_url,
-      '@message' => json_encode($response),
-      '@state' => json_encode($state_data),
+      '@message' => json_encode($response, JSON_THROW_ON_ERROR),
+      '@state' => json_encode($state_data, JSON_THROW_ON_ERROR),
       '@cart' => $cartToLog,
     ]);
 
@@ -290,7 +290,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
         if ($this->cartStorage->restoreCart($data['quote_id'])) {
           $this->logger->warning('Cart not found in session but since payment was completed for @quote_id we restored it from Magento.', [
             '@quote_id' => $data['quote_id'],
-            '@message' => json_encode($data),
+            '@message' => json_encode($data, JSON_THROW_ON_ERROR),
           ]);
 
           $cart = $this->cartStorage->getCart(FALSE);
@@ -303,14 +303,14 @@ class AlshayaAcmKnetHelper extends KnetHelper {
 
         $this->logger->warning('Cart not found in session but since payment was completed we tried to restore but that failed too for cart_id @quote_id, data: @message.', [
           '@quote_id' => $data['quote_id'],
-          '@message' => json_encode($data),
+          '@message' => json_encode($data, JSON_THROW_ON_ERROR),
         ]);
       }
 
       if (empty($cart) || $cart->id() != $data['quote_id']) {
         $this->logger->warning('KNET success page requested with valid state_key: @state_key but cart not found. State Data: @data', [
           '@state_key' => $state_key,
-          '@data' => json_encode($data),
+          '@data' => json_encode($data, JSON_THROW_ON_ERROR),
         ]);
 
         throw new AccessDeniedHttpException();
@@ -326,7 +326,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
 
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
       '@quote_id' => $data['quote_id'],
-      '@message' => json_encode($data),
+      '@message' => json_encode($data, JSON_THROW_ON_ERROR),
     ]);
 
     try {
@@ -441,7 +441,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
       'order_id' => $cart->getExtension('real_reserved_order_id'),
     ];
 
-    $state_key = md5(json_encode($state_data));
+    $state_key = md5(json_encode($state_data, JSON_THROW_ON_ERROR));
     $data = $this->tempStore->get($state_key);
 
     // @todo Confirm message.

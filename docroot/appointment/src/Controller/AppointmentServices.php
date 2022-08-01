@@ -144,7 +144,7 @@ class AppointmentServices {
       if (empty($selected_date) || empty($program) || empty($activity) || empty($location)) {
         $message = 'Required parameters missing to get time slots.';
         $this->logger->error($message . ' Data: @request_data', [
-          '@request_data' => json_encode($params),
+          '@request_data' => json_encode($params, JSON_THROW_ON_ERROR),
         ]);
         throw new \Exception($message);
       }
@@ -172,7 +172,7 @@ class AppointmentServices {
    *   Booking Id.
    */
   public function bookAppointment(Request $request) {
-    $request_content = json_decode($request->getContent(), TRUE);
+    $request_content = json_decode($request->getContent(), TRUE, 512, JSON_THROW_ON_ERROR);
 
     $appointmentId = $request_content['appointment'] ?? '';
     $userId = $request_content['user'] ?? '';
@@ -199,7 +199,7 @@ class AppointmentServices {
         if (empty($request_content['activity']) || empty($request_content['duration']) || empty($request_content['location']) || empty($request_content['attendees']) || empty($request_content['program']) || empty($request_content['channel']) || empty($request_content['start_date_time']) || empty($param['clientExternalId'])) {
           $message = 'Required parameters missing to book appointment.';
           $this->logger->error($message . ' Data: @request_data', [
-            '@request_data' => json_encode($request_content),
+            '@request_data' => json_encode($request_content, JSON_THROW_ON_ERROR),
           ]);
           throw new \Exception($message);
         }
@@ -246,7 +246,7 @@ class AppointmentServices {
 
         // Log appointment booked.
         $this->logger->info('Appointment booked successfully. Appointment:@appointment, User:@userid, Data:@params,', [
-          '@params' => json_encode($request_content),
+          '@params' => json_encode($request_content, JSON_THROW_ON_ERROR),
           '@appointment' => $bookingId,
           '@userid' => $userId,
         ]);
@@ -303,7 +303,7 @@ class AppointmentServices {
 
       // Log appointment re-booked.
       $this->logger->info('Appointment re-booked successfully. Appointment:@appointment, User:@userid, Data:@params,', [
-        '@params' => json_encode($request_content),
+        '@params' => json_encode($request_content, JSON_THROW_ON_ERROR),
         '@appointment' => $request_content['appointment'],
         '@userid' => $userId,
       ]);
@@ -313,7 +313,7 @@ class AppointmentServices {
     catch (\Exception $e) {
       $this->logger->error('Error occurred while booking appointment. Message: @message , Data: @params', [
         '@message' => $e->getMessage(),
-        '@params' => json_encode($request_content),
+        '@params' => json_encode($request_content, JSON_THROW_ON_ERROR),
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());
 
@@ -505,7 +505,8 @@ class AppointmentServices {
    * Cancel an appointment.
    */
   public function cancelAppointment(Request $request) {
-    $request_content = json_decode($request->getContent(), TRUE);
+    $clientExternalId = NULL;
+    $request_content = json_decode($request->getContent(), TRUE, 512, JSON_THROW_ON_ERROR);
     $appointmentId = $request_content['appointment'];
     $userId = $request_content['id'];
 

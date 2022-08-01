@@ -39,7 +39,7 @@ class ErrorMessagesSettingsForm extends BazaarVoiceConfigValueBase {
       '#title' => $this->t('Bazaar voice error messages'),
       '#default_value' => $this->arrayValuesToString($error_messages),
       '#rows' => 10,
-      '#element_validate' => [[get_class($this), 'validateLabelValues']],
+      '#element_validate' => [[$this::class, 'validateLabelValues']],
       '#description' => $this->allowedValuesDescription(),
     ];
 

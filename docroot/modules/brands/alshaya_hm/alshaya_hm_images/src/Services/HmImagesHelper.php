@@ -19,7 +19,7 @@ class HmImagesHelper {
   /**
    * Constant for default swatch display type.
    */
-  const LP_SWATCH_DEFAULT = 'RGB';
+  public const LP_SWATCH_DEFAULT = 'RGB';
 
   /**
    * Sku Manager service.
@@ -112,6 +112,7 @@ class HmImagesHelper {
    *   Array of RGB color values keyed by article_castor_id.
    */
   public function getColorsForSku(SKU $sku) {
+    $child_sku_entity = NULL;
     if ($sku->bundle() != 'configurable') {
       return [];
     }

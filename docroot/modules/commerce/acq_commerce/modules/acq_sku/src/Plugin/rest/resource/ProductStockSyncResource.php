@@ -85,7 +85,7 @@ class ProductStockSyncResource extends ResourceBase {
    */
   public function post(array $data) {
     $this->logger->debug('Stock message received. @message', [
-      '@message' => json_encode($data),
+      '@message' => json_encode($data, JSON_THROW_ON_ERROR),
     ]);
 
     // Work with single message and array of messages.
@@ -95,15 +95,9 @@ class ProductStockSyncResource extends ResourceBase {
       try {
         $this->stockManager->processStockMessage($stock);
       }
-      catch (\Exception $e) {
+      catch (\Exception | \Throwable $e) {
         $this->logger->error('Failed to process stock message: @message, exception: @exception', [
-          '@message' => json_encode($stock),
-          '@exception' => $e->getMessage(),
-        ]);
-      }
-      catch (\Throwable $e) {
-        $this->logger->error('Failed to process stock message: @message, exception: @exception', [
-          '@message' => json_encode($stock),
+          '@message' => json_encode($stock, JSON_THROW_ON_ERROR),
           '@exception' => $e->getMessage(),
         ]);
       }

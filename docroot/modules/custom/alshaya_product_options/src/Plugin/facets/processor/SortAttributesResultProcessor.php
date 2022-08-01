@@ -90,8 +90,8 @@ class SortAttributesResultProcessor extends ProcessorPluginBase implements Build
     usort($results, function ($a, $b) use ($order) {
       // If it is simply an ID for which we don't have taxonomy term
       // lets display that in bottom.
-      $order_a = $order[$a->getRawValue()] ?? 9999999;
-      $order_b = $order[$b->getRawValue()] ?? 9999999;
+      $order_a = $order[$a->getRawValue()] ?? 9_999_999;
+      $order_b = $order[$b->getRawValue()] ?? 9_999_999;
       return ($order_a < $order_b) ? -1 : 1;
     });
 

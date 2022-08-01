@@ -35,7 +35,7 @@ $env_map = [
 $env = $env_map[$env] ?? $env;
 
 foreach ($conductors as $key => $value) {
-  list($country_brand, $base_env) = explode('_', $key);
+  [$country_brand, $base_env] = explode('_', $key);
   if ($base_env !== $env) {
     continue;
   }
@@ -68,10 +68,10 @@ foreach ($conductors as $key => $value) {
 }
 
 function update_queue_status_call($status_txt, $site_id, $status, $args = []) {
-  echo PHP_EOL . '=> ' . $status_txt . ' queue for site_id ==> ' . $site_id . ' ==> (' . json_encode($args) .')';
+  echo PHP_EOL . '=> ' . $status_txt . ' queue for site_id ==> ' . $site_id . ' ==> (' . json_encode($args, JSON_THROW_ON_ERROR) .')';
   $data = update_queue_status($site_id, $status);
   if (get_object_vars($data)) {
-    echo PHP_EOL .  '==> ' . json_encode($data);
+    echo PHP_EOL .  '==> ' . json_encode($data, JSON_THROW_ON_ERROR);
   }
   echo PHP_EOL;
 }

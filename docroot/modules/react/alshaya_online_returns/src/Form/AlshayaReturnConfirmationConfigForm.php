@@ -104,6 +104,7 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $rows = [];
     $config = $this->config('alshaya_online_returns.return_confirmation');
     // Fetch row labels for config field rows.
     $row_labels = $this->getRows();

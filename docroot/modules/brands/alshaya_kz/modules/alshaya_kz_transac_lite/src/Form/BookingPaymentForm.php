@@ -179,7 +179,7 @@ class BookingPaymentForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $visitor_types = '';
-    $final_visitor_list = json_decode($form_state->getValue('booking_info'));
+    $final_visitor_list = json_decode($form_state->getValue('booking_info'), NULL, 512, JSON_THROW_ON_ERROR);
     if (isset($final_visitor_list)) {
       foreach ($final_visitor_list->data as $value) {
         $visitor_types .= $value->Description . '-' . $value->Ticket->count . ',';

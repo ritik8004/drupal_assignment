@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_checkout\Plugin\CheckoutFlow;
 
+use Drupal\Component\Utility\SortArray;
 use Drupal\acq_checkout\CheckoutPaneManager;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
@@ -93,20 +94,16 @@ abstract class CheckoutFlowWithPanesBase extends CheckoutFlowBase implements Che
       }
       // Sort the panes and flatten the array.
       uasort($this->panes, [
-        '\Drupal\Component\Utility\SortArray',
+        SortArray::class,
         'sortByWeightElement',
       ]);
-      $this->panes = array_map(function ($pane_data) {
-        return $pane_data['pane'];
-      }, $this->panes);
+      $this->panes = array_map(fn($pane_data) => $pane_data['pane'], $this->panes);
     }
 
     $panes = $this->panes;
     if ($step_id) {
-      $panes = array_filter($panes, function ($pane) use ($step_id) {
-        /** @var \Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface $pane */
-        return $pane->getStepId() == $step_id;
-      });
+      $panes = array_filter($panes, fn($pane) => /** @var \Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface $pane */
+      $pane->getStepId() == $step_id);
     }
 
     return $panes;

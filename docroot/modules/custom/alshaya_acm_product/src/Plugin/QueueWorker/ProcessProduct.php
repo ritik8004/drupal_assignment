@@ -36,7 +36,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   /**
    * Queue Name.
    */
-  const QUEUE_NAME = 'alshaya_process_product';
+  public const QUEUE_NAME = 'alshaya_process_product';
 
   /**
    * Flag to indicate if processing item currently.

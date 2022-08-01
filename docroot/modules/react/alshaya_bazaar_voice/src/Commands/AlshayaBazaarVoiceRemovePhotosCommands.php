@@ -53,7 +53,7 @@ class AlshayaBazaarVoiceRemovePhotosCommands extends DrushCommands {
   public function removeUploadedPhotos(array $options = ['batch-size' => NULL]) {
     $batch_size = $options['batch-size'] ?? 50;
     $batch = [
-      'finished' => [__CLASS__, 'batchFinish'],
+      'finished' => [self::class, 'batchFinish'],
       'title' => dt('Fetching list of photos'),
       'init_message' => dt('Starting to delete photos...'),
       'progress_message' => dt('Completed @current step of @total.'),
@@ -63,10 +63,10 @@ class AlshayaBazaarVoiceRemovePhotosCommands extends DrushCommands {
     // Fetch all photo urls from <review_photo_temp_upload> folder.
     $photos = $this->alshayaBazaarVoice->getUploadedPhotos();
 
-    $batch['operations'][] = [[__CLASS__, 'batchStart'], [count($photos)]];
+    $batch['operations'][] = [[self::class, 'batchStart'], [count($photos)]];
     foreach (array_chunk($photos, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'batchProcess'],
+        [self::class, 'batchProcess'],
         [$chunk],
       ];
     }

@@ -83,14 +83,14 @@ class AlshayaAuraCommands extends DrushCommands {
 
     foreach ($langcode_list as $langcode) {
       $this->drupalLogger->info('Aura config sync started for configs @configs and language @langcode.', [
-        '@configs' => json_encode($options['configs']),
+        '@configs' => json_encode($options['configs'], JSON_THROW_ON_ERROR),
         '@langcode' => $langcode,
       ]);
       $this->apiHelper->getAuraApiConfig($configs, $langcode, $options['reset']);
     }
 
     $this->drupalLogger->info('Aura API config synced. Configs: @configs.', [
-      '@configs' => json_encode($options['configs']),
+      '@configs' => json_encode($options['configs'], JSON_THROW_ON_ERROR),
     ]);
   }
 

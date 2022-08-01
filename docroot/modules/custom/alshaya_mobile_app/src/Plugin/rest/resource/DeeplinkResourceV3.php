@@ -170,7 +170,7 @@ class DeeplinkResourceV3 extends DeeplinkResource {
     // Remove the base url from the alias.
     $alias = str_replace($this->baseUrl, '', $alias);
     // Append .html in the end if it is a product url without .html.
-    if (strpos($alias, 'buy-') !== FALSE && strpos($alias, '.html') === FALSE) {
+    if (str_contains($alias, 'buy-') && !str_contains($alias, '.html')) {
       $alias = "$alias.html";
     }
   }

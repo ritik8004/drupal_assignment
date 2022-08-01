@@ -46,7 +46,7 @@ foreach ($envs as $env) {
           continue;
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         // Do nothing.
       }
 
@@ -65,7 +65,7 @@ foreach ($envs as $env) {
       ];
 
       print 'Creating query suggestion for: ' . $name . PHP_EOL;
-      algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query));
+      algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query, JSON_THROW_ON_ERROR));
       print PHP_EOL . PHP_EOL;
     }
   }

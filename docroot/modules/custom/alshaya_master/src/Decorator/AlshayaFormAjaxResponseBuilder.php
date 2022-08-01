@@ -41,7 +41,7 @@ class AlshayaFormAjaxResponseBuilder extends FormAjaxResponseBuilder {
 
           if (Settings::get('alshaya_form_ajax_callback_error_log_request_data', 1)) {
             $logger->error('Full data @data', [
-              '@data' => json_encode($form_state->getUserInput()),
+              '@data' => json_encode($form_state->getUserInput(), JSON_THROW_ON_ERROR),
             ]);
           }
         }

@@ -43,6 +43,7 @@ class AlshayaAcmSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::REQUEST][] = ['checkAcmConfig'];
     return $events;
   }

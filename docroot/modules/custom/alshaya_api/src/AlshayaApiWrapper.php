@@ -591,7 +591,7 @@ class AlshayaApiWrapper {
         $response = $this->invokeApi($endpoint . http_build_query($query), [], 'GET');
 
         if ($response && is_string($response)) {
-          if ($decode_response = json_decode($response, TRUE)) {
+          if ($decode_response = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR)) {
             if (!empty($decode_response['items'])) {
               $current_page_skus = array_column($decode_response['items'], 'sku');
 
@@ -654,7 +654,7 @@ class AlshayaApiWrapper {
     $stores = [];
 
     if ($response && is_string($response)) {
-      $stores = json_decode($response, TRUE);
+      $stores = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
     }
 
     return $stores;
@@ -685,7 +685,7 @@ class AlshayaApiWrapper {
     $stores = [];
 
     if ($response && is_string($response)) {
-      $stores = json_decode($response, TRUE);
+      $stores = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
     }
 
     return $stores;
@@ -752,6 +752,7 @@ class AlshayaApiWrapper {
    *   Array of items from API.
    */
   public function invokeApiWithPageLimit(string $endpoint, array $request_options, int $page_size, array $filters = [], array $data = []) {
+    $response_array = [];
     $current_page = 1;
     $all_items = [];
 
@@ -770,14 +771,14 @@ class AlshayaApiWrapper {
       $response = $this->invokeApi($endpoint, $data, 'GET', FALSE, $request_options);
 
       if ($response && is_string($response)) {
-        $response_array = json_decode($response, TRUE);
+        $response_array = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
 
         // Merging response items from all the pages of the API call.
         if ($response_array && is_array($response_array) && !empty($response_array['items'])) {
           $all_items['items'] = array_merge($all_items['items'] ?? [], $response_array['items']);
         }
       }
-      $no_of_pages = $no_of_pages ?? ceil($response_array['total_count'] / $page_size);
+      $no_of_pages ??= ceil($response_array['total_count'] / $page_size);
 
     } while ($current_page <= $no_of_pages);
 
@@ -801,7 +802,7 @@ class AlshayaApiWrapper {
     $response = $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
     if ($response && is_string($response)) {
-      $form = json_decode($response, TRUE);
+      $form = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
 
       if ($form && is_array($form)) {
         return $form;
@@ -890,7 +891,7 @@ class AlshayaApiWrapper {
       return '';
     }
 
-    $response = json_decode($response, TRUE);
+    $response = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
     return $response['method'] ?? '';
   }
 
@@ -916,7 +917,7 @@ class AlshayaApiWrapper {
       return 0;
     }
 
-    $response = json_decode($response, TRUE);
+    $response = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
     return $response['qty'] ?? 0;
   }
 
@@ -938,7 +939,7 @@ class AlshayaApiWrapper {
 
     $response = $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
-    $response = json_decode($response, TRUE);
+    $response = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
 
     return (!empty($response) && isset($response['message'])) ? [] : $response;
   }
@@ -952,7 +953,7 @@ class AlshayaApiWrapper {
   public function getSkusData() : array {
     $endpoint = 'sanity-check-data';
     $response = $this->invokeApi($endpoint, [], 'GET');
-    $response = json_decode($response, TRUE) ?? [];
+    $response = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR) ?? [];
 
     $skus = [];
     foreach ($response as $data) {
@@ -1057,7 +1058,7 @@ class AlshayaApiWrapper {
         $request_options
       );
 
-      $token = json_decode($token);
+      $token = json_decode($token, NULL, 512, JSON_THROW_ON_ERROR);
       // If token could not be decoded, store NULL.
       $token = $token === FALSE ? NULL : $token;
     }
@@ -1176,6 +1177,7 @@ class AlshayaApiWrapper {
    * @throws \Exception
    */
   public function updateCustomer(array $customer, array $options = []) {
+    $opt = [];
     $endpoint = 'customers';
 
     $opt['json']['customer'] = $customer;
@@ -1210,7 +1212,7 @@ class AlshayaApiWrapper {
         $logger_data['password'] = 'XXXXXXXXXXXX';
       }
       $this->logger->notice('Updating customer on Magento from Drupal. Data: @data Method: @method Endpoint: @endpoint', [
-        '@data' => json_encode($logger_data),
+        '@data' => json_encode($logger_data, JSON_THROW_ON_ERROR),
         '@method' => $method,
         '@endpoint' => $endpoint,
       ]);
@@ -1235,7 +1237,7 @@ class AlshayaApiWrapper {
           // If we reach here, it means we get the response from MDC which
           // is not as per required format/array. So we pass that info to
           // the exception so this can be logged.
-          $log_string = is_string($response) ? $response : json_encode($response);
+          $log_string = is_string($response) ? $response : json_encode($response, JSON_THROW_ON_ERROR);
           throw new \Exception($log_string);
         }
       }
@@ -1346,7 +1348,7 @@ class AlshayaApiWrapper {
 
     $categories = NULL;
     if ($response && is_string($response)) {
-      $categories = json_decode($response, TRUE);
+      $categories = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
     }
 
     return $categories;
@@ -1375,7 +1377,7 @@ class AlshayaApiWrapper {
     );
 
     if ($response && is_string($response)) {
-      return json_decode($response, TRUE);
+      return json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
     }
 
     return $response;
@@ -1444,9 +1446,9 @@ class AlshayaApiWrapper {
       ];
 
       $status = $this->invokeApi('newsletter/subscribe', ['email' => $email], 'JSON', TRUE, $request_options);
-      return json_decode($status, TRUE);
+      return json_decode($status, TRUE, 512, JSON_THROW_ON_ERROR);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       $this->logger->error('Error while calling newsletter subscribe API.');
       return ['status' => 0];
     }

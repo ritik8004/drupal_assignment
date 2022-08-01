@@ -85,7 +85,7 @@ class TicketBookingManager {
     if (!isset($static) && $cache = $this->cache->get($cid)) {
       $static = $cache->data;
     }
-    return json_decode($static);
+    return json_decode($static, NULL, 512, JSON_THROW_ON_ERROR);
   }
 
   /**
@@ -98,7 +98,7 @@ class TicketBookingManager {
    */
   public function setTicketBookingCachedData($data, $key) {
     $cid = $this->getTicketBookingCachedId($key);
-    $data = json_encode($data);
+    $data = json_encode($data, JSON_THROW_ON_ERROR);
     $this->cache->set($cid, $data, Cache::PERMANENT, ['alshaya_kz_transac_lite:kidsoft']);
 
     // Update data in static cache too.
@@ -232,7 +232,7 @@ class TicketBookingManager {
     if (isset($this->getTicketBookingCachedData('getVisitorTypesData')->getVisitorTypesResult)) {
       return $this->getTicketBookingCachedData('getVisitorTypesData');
     }
-    $shifts = json_decode($shifts);
+    $shifts = json_decode($shifts, NULL, 512, JSON_THROW_ON_ERROR);
     try {
       $visitorTypes = $this->soapClient->__soapCall('getVisitorTypes',
         [
@@ -395,7 +395,7 @@ class TicketBookingManager {
    *   return a boolean value or null.
    */
   public function saveTicket(array $visitor_list, array $book_ticket, $ticket_number, $shifts, $sales_number, $visit_date) {
-    $shifts = json_decode($shifts);
+    $shifts = json_decode($shifts, NULL, 512, JSON_THROW_ON_ERROR);
     try {
       $saveTicket = $this->soapClient->__soapCall('saveTicket',
         [

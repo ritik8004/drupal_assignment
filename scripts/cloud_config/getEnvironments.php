@@ -18,12 +18,12 @@ $url = "applications/$app/environments";
 try {
   $res = invokeApi($url);
 }
-catch (\Exception $e) {
+catch (\Exception) {
   print 'Failed to get environments.';
   exit;
 }
 
-$res = json_decode($res, TRUE);
+$res = json_decode($res, TRUE, 512, JSON_THROW_ON_ERROR);
 foreach ($res['_embedded']['items'] as $env) {
   echo $env['id'] . ' ' . $env['name'] . '
 ';

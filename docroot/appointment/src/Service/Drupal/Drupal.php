@@ -101,7 +101,7 @@ class Drupal {
     };
 
     $request_options['headers']['Host'] = $this->drupalInfo->getDrupalBaseUrl();
-    $request_options['timeout'] = $request_options['timeout'] ?? $this->drupalInfo->getPhpTimeout('default');
+    $request_options['timeout'] ??= $this->drupalInfo->getPhpTimeout('default');
 
     return $client->request($method, $url, $request_options);
   }
@@ -139,7 +139,7 @@ class Drupal {
     $url = '/get/userinfo';
     $response = $this->invokeApiWithSession('GET', $url);
     $result = $response->getBody()->getContents();
-    $user = json_decode($result, TRUE);
+    $user = json_decode($result, TRUE, 512, JSON_THROW_ON_ERROR);
 
     return $user;
   }

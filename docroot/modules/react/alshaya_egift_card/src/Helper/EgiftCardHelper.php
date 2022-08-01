@@ -162,7 +162,7 @@ class EgiftCardHelper {
     if (array_key_exists('payment_additional_info', $order['extension'])) {
       foreach ($order['extension']['payment_additional_info'] as $payment_item) {
         if ($payment_item['key'] == 'hps_redemption') {
-          $payment_info = json_decode($payment_item['value'], TRUE);
+          $payment_info = json_decode($payment_item['value'], TRUE, 512, JSON_THROW_ON_ERROR);
           break;
         }
       }
@@ -315,7 +315,7 @@ class EgiftCardHelper {
         ];
 
         // Get product options and add them to attributes.
-        $product_options = json_decode($product['extension_attributes']['product_options'][0], TRUE);
+        $product_options = json_decode($product['extension_attributes']['product_options'][0], TRUE, 512, JSON_THROW_ON_ERROR);
         $product['attributes'][0] = [
           'label' => t('Style', [], ['context' => 'egift']),
           'value' => $style,

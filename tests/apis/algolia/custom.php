@@ -32,7 +32,7 @@ function algolia_get_query_suggestions($app_id, $app_secret_admin, $index) {
     curl_close($ch);
   }
 
-  $queries = array_filter(json_decode($result[$app_id], TRUE),
+  $queries = array_filter(json_decode($result[$app_id], TRUE, 512, JSON_THROW_ON_ERROR),
     function ($a) use ($index) {
       $sources = array_column($a['sourceIndices'], 'indexName');
       return in_array($index, $sources);
@@ -135,7 +135,7 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
       ],
     ],
   ];
-  algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query));
+  algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query, JSON_THROW_ON_ERROR));
 
   foreach ($sorts as $sort) {
     $replica = $name . '_' . implode('_', $sort);
@@ -196,7 +196,7 @@ function algolia_get_synonyms(\Algolia\AlgoliaSearch\SearchIndex $index) {
   $synonyms = [];
 
   do {
-    $synonymsPage = $index->searchSynonyms(NULL, [], $page, 500);
+    $synonymsPage = $index->searchSynonyms(NULL, []);
 
     if (empty($synonymsPage['hits'])) {
       break;

@@ -75,7 +75,7 @@ class ShortenUrlApiAdapter {
       $response = $this->client->request('GET', $api_base_url . '/' . $api_version, ['query' => $query]);
       $response_content = $response->getBody()->getContents();
 
-      $result = json_decode($response_content, TRUE);
+      $result = json_decode($response_content, TRUE, 512, JSON_THROW_ON_ERROR);
       if ($result['status']) {
         return $result['txtly'];
       }

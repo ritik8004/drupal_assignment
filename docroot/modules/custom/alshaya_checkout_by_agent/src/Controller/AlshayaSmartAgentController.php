@@ -69,7 +69,7 @@ class AlshayaSmartAgentController extends ControllerBase {
     // Redirect to cart page if cart id or smart agent details is empty.
     if (empty($data) || empty($data['success'])) {
       $this->getLogger('AlshayaSmartAgentController')->warning('Error occurred while trying to decrypt the data, Response: @response.', [
-        '@response' => json_encode($data),
+        '@response' => json_encode($data, JSON_THROW_ON_ERROR),
       ]);
 
       return $redirect;
@@ -90,7 +90,10 @@ class AlshayaSmartAgentController extends ControllerBase {
     else {
       // For guest users, set the guest cart id in cookie, we will read from
       // there in JS to resume the cart.
-      setrawcookie('resume_cart_id', $data['masked_quote_id'], strtotime('+1 year'), '/');
+      setrawcookie('resume_cart_id', $data['masked_quote_id'], [
+        'expires' => strtotime('+1 year'),
+        'path' => '/',
+      ]);
     }
 
     return $redirect;

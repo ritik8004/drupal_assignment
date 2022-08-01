@@ -95,7 +95,7 @@ class AlshayaSpcCommands extends DrushCommands {
       $type = $data['payment_type'] ?? '';
       if (empty($type)) {
         $type = 'knet';
-        if (strpos($payment['unique_id'], 'pay_tok_') !== FALSE) {
+        if (str_contains($payment['unique_id'], 'pay_tok_')) {
           $type = 'checkout_com';
         }
       }
@@ -112,7 +112,7 @@ class AlshayaSpcCommands extends DrushCommands {
           throw new \Exception('Cart no longer available', 404);
         }
 
-        $cart = json_decode($cart, TRUE);
+        $cart = json_decode($cart, TRUE, 512, JSON_THROW_ON_ERROR);
       }
       catch (\Exception $e) {
         $message = 'Not able to get cart for id @cart_id, exception: @code @message, payment data: @data';
@@ -153,7 +153,7 @@ class AlshayaSpcCommands extends DrushCommands {
               $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment is complete, but amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
                 '@data' => $payment['data'],
                 '@cart_id' => $payment['cart_id'],
-                '@info' => json_encode($payment_info),
+                '@info' => json_encode($payment_info, JSON_THROW_ON_ERROR),
                 '@total' => $cart['totals']['grand_total'],
               ]);
 
@@ -185,14 +185,14 @@ class AlshayaSpcCommands extends DrushCommands {
               $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment successful, order placed. Cart id: @cart_id, Data: @data, CheckoutCom response: @info', [
                 '@data' => $payment['data'],
                 '@cart_id' => $payment['cart_id'],
-                '@info' => json_encode($payment_info),
+                '@info' => json_encode($payment_info, JSON_THROW_ON_ERROR),
               ]);
             }
             catch (\Exception $e) {
               $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment successful, order failed. Cart id: @cart_id, Data: @data, Checkoutcom response: @info, Exception: @exception', [
                 '@data' => $payment['data'],
                 '@cart_id' => $payment['cart_id'],
-                '@info' => json_encode($payment_info),
+                '@info' => json_encode($payment_info, JSON_THROW_ON_ERROR),
                 '@exception' => $e->getMessage(),
               ]);
             }
@@ -203,7 +203,7 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment failed. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
-              '@info' => json_encode($payment_info),
+              '@info' => json_encode($payment_info, JSON_THROW_ON_ERROR),
             ]);
 
             $this->deletePaymentDataByCartId($payment['cart_id']);
@@ -212,7 +212,7 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment callback requested with empty token. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
-              '@info' => json_encode($payment_info),
+              '@info' => json_encode($payment_info, JSON_THROW_ON_ERROR),
               '@total' => $cart['totals']['grand_total'],
             ]);
 
@@ -222,7 +222,7 @@ class AlshayaSpcCommands extends DrushCommands {
             $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment not complete or info not available, not deleting entry to retry later. Cart id: @cart_id, Data: @data, Checkoutcom response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
-              '@info' => json_encode($payment_info),
+              '@info' => json_encode($payment_info, JSON_THROW_ON_ERROR),
             ]);
           }
       }
@@ -274,6 +274,7 @@ class AlshayaSpcCommands extends DrushCommands {
    * @throws \Exception
    */
   protected function placeOrder(array $update, string $cart_id, $langcode) {
+    $request_options = [];
     $request_options['query']['lang'] = $langcode;
 
     // Add a custom header to ensure Middleware allows this request
@@ -283,7 +284,7 @@ class AlshayaSpcCommands extends DrushCommands {
     $request_options['headers']['alshaya-middleware'] = md5(Settings::get('middleware_auth'));
     $endpoint = 'middleware/public/cart/place-order-system';
     $response = $this->createClient()->post($endpoint, $request_options);
-    $result = json_decode($response->getBody()->getContents(), TRUE);
+    $result = json_decode($response->getBody()->getContents(), TRUE, 512, JSON_THROW_ON_ERROR);
     if (empty($result['success'])) {
       throw new \Exception($result['error_message'] ?? 'Unknown error');
     }

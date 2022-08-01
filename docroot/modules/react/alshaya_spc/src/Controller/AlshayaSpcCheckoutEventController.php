@@ -162,7 +162,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
 
         // While debugging we log the whole cart object.
         $this->logger->debug('Placed order for cart: @cart', [
-          '@cart' => json_encode($cart),
+          '@cart' => json_encode($cart, JSON_THROW_ON_ERROR),
         ]);
         $response['status'] = TRUE;
 
@@ -176,7 +176,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
             'data' => $data,
           ];
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           // Do nothing.
         }
         break;

@@ -62,7 +62,7 @@ function get_token(string $domain) {
 
   $token_info = post($url, http_build_query($token_data));
   if ($token_info) {
-    $token_info = json_decode($token_info, true);
+    $token_info = json_decode($token_info, true, 512, JSON_THROW_ON_ERROR);
 
     if (!is_array($token_info) || empty($token_info)) {
       print 'Error: Not able to get token' . PHP_EOL;

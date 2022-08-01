@@ -199,7 +199,7 @@ class CartHelper {
     unset($cartData['shipping']);
     $cartData['shipping']['extension'] = $shipping['extension'];
 
-    return json_encode($cartData);
+    return json_encode($cartData, JSON_THROW_ON_ERROR);
   }
 
   /**
@@ -252,7 +252,7 @@ class CartHelper {
     try {
       $this->updateCartWrapper(__METHOD__);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Try to remove again (only once) after removing OOS items.
       if ($this->removeOutOfStockItemsFromCart()) {
         $cart = $this->cartStorage->getCart(FALSE);

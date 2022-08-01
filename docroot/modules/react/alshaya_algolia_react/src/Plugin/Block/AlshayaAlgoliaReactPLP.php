@@ -25,8 +25,8 @@ use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
  */
 class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
 
-  const PAGE_TYPE = 'listing';
-  const PAGE_SUB_TYPE = 'plp';
+  public const PAGE_TYPE = 'listing';
+  public const PAGE_SUB_TYPE = 'plp';
 
   /**
    * Entity type manager service.

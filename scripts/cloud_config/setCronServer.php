@@ -16,7 +16,7 @@ if (empty($target_env) || empty($server_id)) {
 }
 
 $target_url = 'environments/' . $target_env . '/crons';
-$target_crons = json_decode(invokeApi($target_url), TRUE);
+$target_crons = json_decode(invokeApi($target_url), TRUE, 512, JSON_THROW_ON_ERROR);
 
 foreach ($target_crons['_embedded']['items'] ?? [] as $cron) {
   if (empty($cron['label'])) {
@@ -40,7 +40,7 @@ foreach ($target_crons['_embedded']['items'] ?? [] as $cron) {
       ]),
       'label' => $cron['label'],
       'server_id' => $server_id,
-    ]),
+    ], JSON_THROW_ON_ERROR),
   ];
 
   try {

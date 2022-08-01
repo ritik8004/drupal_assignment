@@ -24,12 +24,12 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
   /**
    * Value to set in cookie when payment is declined.
    */
-  const PAYMENT_DECLINED_VALUE = 'declined';
+  public const PAYMENT_DECLINED_VALUE = 'declined';
 
   /*
    * Magento method, to append for UAPAPI vault (tokenized card) transaction.
    */
-  const CHECKOUT_COM_UPAPI_VAULT_METHOD = 'checkout_com_upapi_vault';
+  public const CHECKOUT_COM_UPAPI_VAULT_METHOD = 'checkout_com_upapi_vault';
 
   /**
    * Orders Manager.
@@ -134,7 +134,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     if (!$payment_method) {
       $this->logger->error('User trying to access success url directly. Payment method is not set on cart. OrderId: @order_id, Order: @order.', [
         '@order_id' => $order_id,
-        '@order' => json_encode($order),
+        '@order' => json_encode($order, JSON_THROW_ON_ERROR),
       ]);
 
       return $redirect;
@@ -154,7 +154,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
       $this->processPostPlaceOrder($order, $payment_method);
 
       $order['secure_order_id'] = SecureText::encrypt(
-        json_encode(['order_id' => $order_id, 'email' => $email]),
+        json_encode(['order_id' => $order_id, 'email' => $email], JSON_THROW_ON_ERROR),
         Settings::get('alshaya_api.settings')['consumer_secret']
       );
 
@@ -169,7 +169,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
       $redirect->headers->setCookie(CookieHelper::create('middleware_order_placed', 1, strtotime('+1 year')));
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // If any error/exception encountered while order was placed from
       // magento side, we redirect to cart page.
       $this->logger->error('Error while order post processing. Payment Method: @payment_method OrderId: @order_id', [
@@ -231,7 +231,12 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     }
 
     // Using the same way as used by user_cookie_save() in CORE.
-    setrawcookie('middleware_payment_error', rawurlencode(json_encode($payment_data)), strtotime('+1 year'), '/');
+    setrawcookie(
+      'middleware_payment_error',
+      rawurlencode(json_encode($payment_data, JSON_THROW_ON_ERROR)), [
+        'expires' => strtotime('+1 year'),
+        'path' => '/',
+      ]);
 
     return $response;
   }
@@ -245,6 +250,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
    *   Processed payment method.
    */
   protected function processPostPlaceOrder(array $order, string $payment_method) {
+    $account_id = NULL;
     $customer = user_load_by_mail($order['email']);
 
     // Add success message in logs.

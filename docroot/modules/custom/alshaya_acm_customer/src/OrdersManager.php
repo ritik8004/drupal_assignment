@@ -251,15 +251,13 @@ class OrdersManager {
         $orders[$key] = $this->cleanupOrder($order);
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Exception message is already added to log in APIWrapper.
       $orders = [];
     }
 
     // Sort them by default by date.
-    usort($orders, function ($a, $b) {
-      return $b['created_at'] > $a['created_at'];
-    });
+    usort($orders, fn($a, $b) => $b['created_at'] > $a['created_at']);
 
     // Get the cache expiration time based on config value.
     $cacheTimeLimit = $this->config->get('cache_time_limit');
@@ -273,7 +271,7 @@ class OrdersManager {
     }
 
     // Re-set count again.
-    $this->countCache->set('orders_count_' . $customer_id, count($orders));
+    $this->countCache->set('orders_count_' . $customer_id, is_countable($orders) ? count($orders) : 0);
 
     return $orders;
   }
@@ -305,7 +303,7 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
+    $result = json_decode($response ?? [], TRUE, 512, JSON_THROW_ON_ERROR);
     $count = $result['total_count'] ?? 0;
     $this->countCache->set($cid, $count);
 
@@ -329,7 +327,7 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
+    $result = json_decode($response ?? [], TRUE, 512, JSON_THROW_ON_ERROR);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
       return NULL;
@@ -357,7 +355,7 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
+    $result = json_decode($response ?? [], TRUE, 512, JSON_THROW_ON_ERROR);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
       return NULL;
@@ -409,7 +407,7 @@ class OrdersManager {
     $query['searchCriteria']['pageSize'] = 1;
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
 
-    $result = json_decode($response ?? [], TRUE);
+    $result = json_decode($response ?? [], TRUE, 512, JSON_THROW_ON_ERROR);
 
     return $result['total_count'] ?? 0;
   }

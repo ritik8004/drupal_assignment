@@ -11,12 +11,12 @@ $url = 'applications';
 try {
   $res = invokeApi($url);
 }
-catch (\Exception $e) {
+catch (\Exception) {
   print 'Failed to get applications';
   exit;
 }
 
-$res = json_decode($res, TRUE);
+$res = json_decode($res, TRUE, 512, JSON_THROW_ON_ERROR);
 foreach ($res['_embedded']['items'] as $app) {
   echo $app['uuid'] . ' ' . $app['name'] . '
 ';

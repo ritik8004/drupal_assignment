@@ -235,7 +235,7 @@ class ShareCart extends ResourceBase {
       throw new AccessDeniedHttpException();
     }
 
-    $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE);
+    $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE, 512, JSON_THROW_ON_ERROR);
     /** @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($smart_agent_details_array['email']);
     if (!$user || $user->isBlocked() || !$user->hasRole('smartagent')) {
@@ -310,7 +310,7 @@ class ShareCart extends ResourceBase {
     ];
 
     $key = Settings::get('alshaya_api.settings');
-    $encryptedData = SecureText::encrypt(json_encode($data), $key['consumer_secret']);
+    $encryptedData = SecureText::encrypt(json_encode($data, JSON_THROW_ON_ERROR), $key['consumer_secret']);
 
     if ($this->spcHelper->getCommerceBackendVersion() == 2) {
       $cart_url = Url::fromRoute('alshaya_checkout_by_agent.resume', [], ['absolute' => TRUE])->toString();
@@ -393,7 +393,7 @@ class ShareCart extends ResourceBase {
     $this->logger->notice('Basket is shared by smart agent with the customer. Sharing type: @sharing_type. Value: @value. Agent Details: @smart_agent.', [
       '@sharing_type' => $context,
       '@value' => $to,
-      '@smart_agent' => json_encode($data),
+      '@smart_agent' => json_encode($data, JSON_THROW_ON_ERROR),
     ]);
 
     $json_response = new JsonResponse($responseData);
@@ -401,7 +401,7 @@ class ShareCart extends ResourceBase {
     if ($updated) {
       $cookie = new Cookie(
         'smart_agent_cookie',
-        base64_encode(json_encode($smart_agent_details_array)), 0, '/', NULL, TRUE, FALSE);
+        base64_encode(json_encode($smart_agent_details_array, JSON_THROW_ON_ERROR)), 0, '/', NULL, TRUE, FALSE);
       $json_response->headers->setCookie($cookie);
     }
 
@@ -423,7 +423,7 @@ class ShareCart extends ResourceBase {
     $country_code = _alshaya_custom_get_site_level_country_code();
     $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
-    if (strpos($value, $country_mobile_code) === FALSE) {
+    if (!str_contains($value, $country_mobile_code)) {
       $value = $country_mobile_code . $value;
     }
 

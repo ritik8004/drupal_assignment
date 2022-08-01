@@ -41,6 +41,7 @@ class UpdateCartErrorEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[UpdateCartErrorEvent::SUBMIT][] = ['onUpdateCartError', 800];
     return $events;
   }

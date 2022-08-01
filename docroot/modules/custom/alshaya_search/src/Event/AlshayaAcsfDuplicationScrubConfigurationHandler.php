@@ -13,7 +13,7 @@ class AlshayaAcsfDuplicationScrubConfigurationHandler extends AcsfEventHandler {
    * Implements AcsfEventHandler::handle().
    */
   public function handle() {
-    $this->consoleLog(dt('Entered @class', ['@class' => get_class($this)]));
+    $this->consoleLog(dt('Entered @class', ['@class' => $this::class]));
 
     $config = \Drupal::configFactory()->getEditable('search_api_solr.settings');
 

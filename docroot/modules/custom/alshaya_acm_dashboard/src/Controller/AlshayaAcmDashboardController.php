@@ -94,6 +94,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
    * Render the queue count for Magento & ACM queues.
    */
   public function queuesStatuses() {
+    $build = [];
     $acm_dashboard_settings = $this->config('alshaya_acm_dashboard.settings');
     $mdc_queues = $acm_dashboard_settings->get('queues');
     $mdc_queue_stats = [];
@@ -104,7 +105,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
         continue;
       }
 
-      $mdc_queue_stats[$queue_machine_name]['stats'] = json_decode($mdc_queue_result);
+      $mdc_queue_stats[$queue_machine_name]['stats'] = json_decode($mdc_queue_result, null, 512, JSON_THROW_ON_ERROR);
       $mdc_queue_stats[$queue_machine_name]['label'] = $label;
     }
 

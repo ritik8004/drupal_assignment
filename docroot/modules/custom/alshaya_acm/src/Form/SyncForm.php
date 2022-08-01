@@ -206,9 +206,7 @@ class SyncForm extends FormBase {
         break;
 
       case $this->t('Synchronize ALL products'):
-        if (empty(array_filter($form_state->getValue('products_full_languages'), function ($v, $k) {
-          return !empty($v);
-        }, ARRAY_FILTER_USE_BOTH))) {
+        if (empty(array_filter($form_state->getValue('products_full_languages'), fn($v, $k) => !empty($v), ARRAY_FILTER_USE_BOTH))) {
           // @todo Check why placing the error on checkboxes does not work.
           $form_state->setErrorByName('products_full_fieldset', $this->t('Please select at least one language.'));
         }
@@ -237,12 +235,10 @@ class SyncForm extends FormBase {
             $this->moduleHandler->alter('acq_sku_sync_categories_delete', $to_be_delete_orphans_terms);
 
             // If there are orphans which we not deleting (due to alter hook).
-            if (count($all_orphan_terms) != count($to_be_delete_orphans_terms)) {
+            if ((is_countable($all_orphan_terms) ? count($all_orphan_terms) : 0) != (is_countable($to_be_delete_orphans_terms) ? count($to_be_delete_orphans_terms) : 0)) {
               // Get orphans which are not deleted.
               $orphan_diff = array_diff($all_orphan_terms, $to_be_delete_orphans_terms);
-              $not_deleted_orphans = array_map(function ($orphan) {
-                return $orphan['name'];
-              }, $orphan_diff);
+              $not_deleted_orphans = array_map(fn($orphan) => $orphan['name'], $orphan_diff);
             }
 
             foreach (array_keys($to_be_delete_orphans_terms) as $tid) {

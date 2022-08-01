@@ -104,9 +104,7 @@ class AlshayaSocialHelper {
   public function getSocialNetworks() {
     $auth = $this->configFactory->get('social_auth.settings')->get('auth');
     $enable_networks = array_keys($this->getEnabledNetworks());
-    return array_filter($auth, function ($key) use ($enable_networks) {
-      return in_array($key, $enable_networks);
-    }, ARRAY_FILTER_USE_KEY);
+    return array_filter($auth, fn($key) => in_array($key, $enable_networks), ARRAY_FILTER_USE_KEY);
   }
 
   /**
@@ -148,7 +146,7 @@ class AlshayaSocialHelper {
 
       if (empty($fields['field_first_name']) && empty($fields['field_last_name'])) {
         $this->logger->warning('First and last name both are empty for social user, rejecting. Data @data', [
-          '@data' => json_encode($fields),
+          '@data' => json_encode($fields, JSON_THROW_ON_ERROR),
         ]);
 
         throw new \UnexpectedValueException('We need at-least one name to create the account');

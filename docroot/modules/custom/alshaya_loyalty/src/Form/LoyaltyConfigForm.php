@@ -43,14 +43,14 @@ class LoyaltyConfigForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Max. Length'),
       '#description' => $this->t("Field's value length will not be acceptable longer then the entered value here."),
-      '#default_value' => $config->get('apcn_max_length') ? $config->get('apcn_max_length') : '16',
+      '#default_value' => $config->get('apcn_max_length') ?: '16',
     ];
     // Add validation for the value.
     $form['string_validation']['value_starts_with'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Value starts with'),
       '#description' => $this->t("Enter a specific value that you want this field's value should start with."),
-      '#default_value' => $config->get('apcn_value_starts_with') ? $config->get('apcn_value_starts_with') : '6362544',
+      '#default_value' => $config->get('apcn_value_starts_with') ?: '6362544',
     ];
 
     $form['loyalty_configuration'] = [
@@ -62,7 +62,7 @@ class LoyaltyConfigForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('PRIVILEGES CLUB card earn text'),
       '#description' => $this->t('PRIVILEGES CLUB card earn text'),
-      '#default_value' => $config->get('privilege_card_earn_text') ? $config->get('privilege_card_earn_text') : '',
+      '#default_value' => $config->get('privilege_card_earn_text') ?: '',
     ];
 
     // Loyalty on/off feature.

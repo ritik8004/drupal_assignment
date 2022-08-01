@@ -81,7 +81,7 @@ class AlshayaFeedCommands extends DrushCommands {
   public function generateFeed(array $options = ['batch-size' => NULL]) {
     $batch_size = $options['batch-size'] ?? $this->configFactory->get('batch_size');
     $batch = [
-      'finished' => [__CLASS__, 'batchFinish'],
+      'finished' => [self::class, 'batchFinish'],
       'title' => dt('Generating product feed'),
       'init_message' => dt('Starting feed creation...'),
       'progress_message' => dt('Completed @current step of @total.'),
@@ -91,14 +91,17 @@ class AlshayaFeedCommands extends DrushCommands {
     $query = $this->alshayaFeed->getNodesQuery();
     $nids = $query->execute();
 
-    $batch['operations'][] = [[__CLASS__, 'batchStart'], [count($nids)]];
+    $batch['operations'][] = [
+      [self::class, 'batchStart'],
+      [is_countable($nids) ? count($nids) : 0],
+    ];
     foreach (array_chunk($nids, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'batchProcess'],
+        [self::class, 'batchProcess'],
         [$chunk],
       ];
     }
-    $batch['operations'][] = [[__CLASS__, 'batchGenerate'], []];
+    $batch['operations'][] = [[self::class, 'batchGenerate'], []];
     batch_set($batch);
     drush_backend_batch_process();
   }
@@ -190,11 +193,11 @@ class AlshayaFeedCommands extends DrushCommands {
       \Drupal::service('messenger')
         ->addMessage(t('An error occurred while processing @operation with arguments : @args'), [
           '@operation' => $error_operation[0],
-          '@args' => json_encode($error_operation[1]),
+          '@args' => json_encode($error_operation[1], JSON_THROW_ON_ERROR),
         ]);
       $logger->error('An error occurred while processing @operation with arguments : @args', [
         '@operation' => $error_operation[0],
-        '@args' => json_encode($error_operation[1]),
+        '@args' => json_encode($error_operation[1], JSON_THROW_ON_ERROR),
       ]);
 
     }

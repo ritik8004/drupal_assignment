@@ -1,14 +1,17 @@
 <?php
 
 /**
- * Utility code to be invoked by a shell script to find an ACSF site ID in a
- * JSON returned by ACSF API GET /v1/sites. This is complex to browse a JSON
- * in bash so this php script make is simpler.
+ * @file
+ * Utility code to be invoked by a shell script.
  *
- * php get-site-id-from-name.php "<json-string>" "<site-name>"
+ * This script is used to find an ACSF site ID in a JSON returned by
+ * ACSF API GET /v1/sites. This is complex to browse a JSON in bash
+ * so this php script make is simpler.
+ *
+ * Run: php get-site-id-from-name.php "<json-string>" "<site-name>".
  */
 
-$json = json_decode($argv[1]);
+$json = json_decode($argv[1], NULL, 512, JSON_THROW_ON_ERROR);
 $name = $argv[2];
 
 foreach ($json->sites as $site) {

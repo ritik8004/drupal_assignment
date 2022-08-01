@@ -94,7 +94,7 @@ class AddToCartFormHelper {
     $key = $configurable['#code'];
     $configurable['#attributes']['data-configurable-code'] = $key;
 
-    $configurable['#options_attributes'] = $configurable['#options_attributes'] ?? [];
+    $configurable['#options_attributes'] ??= [];
     if (isset($configurable['#type']) && $configurable['#type'] == 'select') {
       $overridden_label = $this->fieldsHelper->getOverriddenAttributeLabel($key);
 
@@ -156,7 +156,7 @@ class AddToCartFormHelper {
             }
           }
 
-          $configurable['#options_attributes'][$value]['group-data'] = json_encode($group_data);
+          $configurable['#options_attributes'][$value]['group-data'] = json_encode($group_data, JSON_THROW_ON_ERROR);
         }
       }
       else {

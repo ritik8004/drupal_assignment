@@ -215,7 +215,7 @@ class AlshayaApiCommands extends DrushCommands {
     static $already_requested = [];
 
     // Initialise.
-    $already_requested[$langcode] = $already_requested[$langcode] ?? [];
+    $already_requested[$langcode] ??= [];
 
     $skus = array_diff($skus, $already_requested[$langcode]);
     $already_requested[$langcode] = array_merge($already_requested[$langcode], $skus);
@@ -381,9 +381,7 @@ class AlshayaApiCommands extends DrushCommands {
       $mids = explode(',', $row['category_ids'] ?? '');
       $dids = $dskus[$sku]['category_ids'] ?? [];
 
-      $mids = array_filter($mids, function ($a) use ($skip_cats) {
-        return !empty($a) && !(in_array($a, $skip_cats));
-      });
+      $mids = array_filter($mids, fn($a) => !empty($a) && !(in_array($a, $skip_cats)));
 
       $dids = array_filter($dids);
 
@@ -565,7 +563,7 @@ class AlshayaApiCommands extends DrushCommands {
 
         $this->logMessage(
           'Updated stock for SKU: @sku, data: @data.',
-          ['@sku' => $sku, '@data' => json_encode($mdata)],
+          ['@sku' => $sku, '@data' => json_encode($mdata, JSON_THROW_ON_ERROR)],
           $verbose
         );
       }
@@ -780,7 +778,7 @@ class AlshayaApiCommands extends DrushCommands {
               $node->delete();
             }
           }
-          catch (\Exception $e) {
+          catch (\Exception) {
             // Not doing anything, we might not have node for the sku.
           }
 
@@ -874,7 +872,7 @@ class AlshayaApiCommands extends DrushCommands {
       foreach ($types as $type) {
         $this->output()->writeln(dt("@type SKUs (@count) from Magento:\n@skus", [
           '@type' => $type,
-          '@count' => count($mskus[$type]),
+          '@count' => is_countable($mskus[$type]) ? count($mskus[$type]) : 0,
           '@skus' => "'" . implode("','", array_keys($mskus[$type])) . "'",
         ]));
       }
@@ -997,23 +995,15 @@ class AlshayaApiCommands extends DrushCommands {
             $dskus_data = $dskus[$type][$lang->getId()];
 
             // Check if stock diff.
-            $total_live_check_api_call_stock[] = array_filter($dskus_data, function ($sku_data) use ($mskus_data) {
-              return (
-                !empty($mskus_data[$sku_data['sku']])
-                && $sku_data['quantity'] != $mskus_data[$sku_data['sku']]['qty']
-              );
-            });
+            $total_live_check_api_call_stock[] = array_filter($dskus_data, fn($sku_data) => !empty($mskus_data[$sku_data['sku']])
+            && $sku_data['quantity'] != $mskus_data[$sku_data['sku']]['qty']);
 
             // Check if price diff.
-            $total_live_check_api_call_price[] = array_filter($dskus_data, function ($sku_data) use ($mskus_data) {
-              return (
-                !empty($mskus_data[$sku_data['sku']])
-                && (
-                  $sku_data['price'] != $mskus_data[$sku_data['sku']]['price']
-                  || $sku_data['special_price'] != $mskus_data[$sku_data['sku']]['special_price']
-                )
-              );
-            });
+            $total_live_check_api_call_price[] = array_filter($dskus_data, fn($sku_data) => !empty($mskus_data[$sku_data['sku']])
+            && (
+              $sku_data['price'] != $mskus_data[$sku_data['sku']]['price']
+              || $sku_data['special_price'] != $mskus_data[$sku_data['sku']]['special_price']
+            ));
           }
 
           if (!empty($total_live_check_api_call_stock) || !empty($total_live_check_api_call_price)) {
@@ -1309,7 +1299,7 @@ class AlshayaApiCommands extends DrushCommands {
                   $node->delete();
                 }
               }
-              catch (\Exception $e) {
+              catch (\Exception) {
                 // Not doing anything, we might not have node for the sku.
               }
 
@@ -1400,12 +1390,12 @@ class AlshayaApiCommands extends DrushCommands {
     $nids = $query->execute()->fetchAllKeyed(0, 0);
 
     $this->output()->writeln(dt('@count product nodes are related to SKUs which are not supposed to be visible individually!nids', [
-      '@count' => count($nids),
+      '@count' => is_countable($nids) ? count($nids) : 0,
       '!nids' => $verbose ? ":\n'" . implode("','", $nids) . "'" : '.',
     ]));
 
     if (!empty($nids) && $this->io()->confirm(dt('Do you want to delete the @count product nodes?', [
-      '@count' => count($nids),
+      '@count' => is_countable($nids) ? count($nids) : 0,
     ]))) {
       $count = 1;
       foreach ($nids as $nid) {
@@ -1417,7 +1407,7 @@ class AlshayaApiCommands extends DrushCommands {
             if ($count % 100 == 0) {
               $this->output()->writeln(dt("Delete @count/@total...", [
                 '@count' => $count,
-                '@total' => count($nids),
+                '@total' => is_countable($nids) ? count($nids) : 0,
               ]));
             }
             $count++;

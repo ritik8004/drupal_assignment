@@ -80,6 +80,7 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
    * {@inheritdoc}
    */
   public function getTermIdsFromCommerceIds(array $commerce_ids) {
+    $return = [];
     $commerce_ids = array_filter($commerce_ids);
 
     if (empty($commerce_ids)) {

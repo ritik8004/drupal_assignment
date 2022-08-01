@@ -236,6 +236,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   The response containing delivery methods data.
    */
   public function get(string $sku) {
+    $node = NULL;
     $skuEntity = SKU::loadFromSku($sku);
 
     if (!($skuEntity instanceof SKUInterface)) {

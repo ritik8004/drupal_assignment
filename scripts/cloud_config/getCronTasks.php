@@ -18,12 +18,12 @@ $url = "environments/$env/crons";
 try {
   $res = invokeApi($url);
 }
-catch (\Exception $e) {
+catch (\Exception) {
   print 'Failed to get crons.';
   exit;
 }
 
-$res = json_decode($res, TRUE);
+$res = json_decode($res, TRUE, 512, JSON_THROW_ON_ERROR);
 foreach ($res['_embedded']['items'] as $cron) {
   print_r($cron);
 }

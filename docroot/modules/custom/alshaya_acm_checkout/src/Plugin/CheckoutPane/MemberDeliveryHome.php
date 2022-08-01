@@ -271,8 +271,8 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       else {
         \Drupal::logger('alshaya_acm_checkout')->error('Address in address book is not available for the user @user having address info @address_info for cart @cart', [
           '@user' => \Drupal::currentUser()->id(),
-          '@address_info' => json_encode($address_info),
-          '@cart' => json_encode((array) $cart->getShipping()),
+          '@address_info' => json_encode($address_info, JSON_THROW_ON_ERROR),
+          '@cart' => json_encode((array) $cart->getShipping(), JSON_THROW_ON_ERROR),
         ]);
       }
     }
@@ -336,7 +336,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
         $cart->setShipping($update);
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Something might go wrong while updating cart.
       // We set temporary flag here which we use in ajax callback and
       // if there is an error we will just reload the page, code in page load
@@ -371,11 +371,12 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       ]));
       return $response;
     }
+    $getPluginId = $this->getPluginId();
 
     \Drupal::moduleHandler()->alter(
       'home_delivery_save_address',
       $response,
-      $this->getPluginId()
+      $getPluginId
     );
     $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AddToCartFormSubmitEvent extends Event {
 
-  const EVENT_NAME = 'add_to_cart_form_submit';
+  public const EVENT_NAME = 'add_to_cart_form_submit';
 
   /**
    * SKU Entity.

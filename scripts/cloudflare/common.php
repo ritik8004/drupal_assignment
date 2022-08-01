@@ -14,7 +14,7 @@ function invoke_api(string $api_url, string $method = 'GET', array $data = NULL)
     print_r([
       $api_url,
       $method,
-      json_encode($data),
+      json_encode($data, JSON_THROW_ON_ERROR),
     ]);
 //  }
 
@@ -24,11 +24,11 @@ function invoke_api(string $api_url, string $method = 'GET', array $data = NULL)
 
   if ($method === 'PATCH') {
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_THROW_ON_ERROR));
   }
   elseif ($method !== 'GET' && !empty($data)) {
     curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_THROW_ON_ERROR));
   }
   elseif ($method === 'PUT') {
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
@@ -51,7 +51,7 @@ function invoke_api(string $api_url, string $method = 'GET', array $data = NULL)
 
   curl_close($ch);
 
-  $response = json_decode($result, TRUE);
+  $response = json_decode($result, TRUE, 512, JSON_THROW_ON_ERROR);
   if (!is_array($response)) {
     print 'Invalid JSON response.' . PHP_EOL;
     print_r($result);
@@ -158,7 +158,7 @@ function create_firewall_rule(string $domain, string $name, string $expression, 
 }
 
 function get_firewall_rules_for_domain(string $domain, string $zone = NULL) {
-  $zone = $zone ?? get_zone_for_domain($domain);
+  $zone ??= get_zone_for_domain($domain);
 
   if (empty($zone)) {
     return NULL;

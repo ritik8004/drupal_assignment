@@ -663,7 +663,7 @@ class Cart implements CartInterface {
     unset($cartData['shipping']);
     $cartData['shipping']['extension'] = $shipping['extension'];
 
-    return json_encode($cartData);
+    return json_encode($cartData, JSON_THROW_ON_ERROR);
   }
 
   /**

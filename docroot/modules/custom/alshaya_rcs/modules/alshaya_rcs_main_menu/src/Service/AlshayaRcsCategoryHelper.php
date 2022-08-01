@@ -20,12 +20,12 @@ use Drupal\Core\Database\Connection;
  */
 class AlshayaRcsCategoryHelper {
 
-  const VOCABULARY_ID = 'rcs_category';
+  public const VOCABULARY_ID = 'rcs_category';
 
   /**
    * Prefix used for the endpoint.
    */
-  const ENDPOINT_PREFIX_V1 = '/rest/v1/';
+  public const ENDPOINT_PREFIX_V1 = '/rest/v1/';
 
   /**
    * The entity type manager service.

@@ -25,7 +25,7 @@ use Drupal\Core\File\FileSystemInterface;
  */
 class AlshayaBazaarVoice {
 
-  const ALSHAYA_BAZAARVOICE_FORM_ID = 'alshaya_bv_write_review';
+  public const ALSHAYA_BAZAARVOICE_FORM_ID = 'alshaya_bv_write_review';
 
   /**
    * Config Factory.
@@ -177,6 +177,7 @@ class AlshayaBazaarVoice {
    *   BV attributes data to be indexed in algolia.
    */
   public function getDataFromBvReviewFeeds(array $skus, $limit) {
+    $request_options = [];
     $config = $this->configFactory->get('bazaar_voice.settings');
     $featured_reviews_limit = $config->get('featured_reviews_limit');
     $locations = $this->getPdpFilterOptions();
@@ -218,11 +219,11 @@ class AlshayaBazaarVoice {
           if (!empty($result['Includes']) && isset($result['Includes']['Reviews'])) {
             foreach ($result['Includes']['Reviews'] as $review) {
               if ($review['ProductId'] === $value['Id']) {
-                if (strpos($review['ContentLocale'], 'en') !== FALSE
+                if (str_contains($review['ContentLocale'], 'en')
                   && empty($bv_featured_reviews['en'])) {
                   $bv_featured_reviews['en'] = $review['Title'];
                 }
-                if (strpos($review['ContentLocale'], 'ar') !== FALSE
+                if (str_contains($review['ContentLocale'], 'ar')
                   && empty($bv_featured_reviews['ar'])) {
                   $bv_featured_reviews['ar'] = $review['Title'];
                 }
@@ -306,9 +307,7 @@ class AlshayaBazaarVoice {
       return NULL;
     }
 
-    usort($rating, function ($rating_value1, $rating_value2) {
-      return $rating_value2['RatingValue'] <=> $rating_value1['RatingValue'];
-    });
+    usort($rating, fn($rating_value1, $rating_value2) => $rating_value2['RatingValue'] <=> $rating_value1['RatingValue']);
 
     $rating_range = [];
     // Rating stars and histogram data.
@@ -328,6 +327,7 @@ class AlshayaBazaarVoice {
    *   array|NULL.
    */
   public function syncFieldsFromBvSubmissionForm($product_id) {
+    $request_options = [];
     $extra_params = [
       'ProductId' => $product_id,
       'action' => '',
@@ -390,7 +390,7 @@ class AlshayaBazaarVoice {
       $webform = reset($webforms);
       $form_fields = [];
       foreach ($fields as $key => $value) {
-        if (strpos($key, 'photo') !== FALSE) {
+        if (str_contains($key, 'photo')) {
           continue;
         }
         $key = strtolower(preg_replace("/[^A-Za-z0-9-]/", '_', $key));
@@ -862,6 +862,7 @@ class AlshayaBazaarVoice {
    *   returns product review status and rating.
    */
   public function getProductReviewForCurrentUser($sku_id) {
+    $request_options = [];
     // Get sanitized sku.
     $sanitized_sku = $this->skuManager->getSanitizedSku($sku_id);
     $config = $this->configFactory->get('bazaar_voice.settings');
@@ -905,6 +906,8 @@ class AlshayaBazaarVoice {
    *   returns product review statistics and rating.
    */
   public function getProductReviewStatistics(string $product_id) {
+    $static = [];
+    $request_options = [];
     static $response = [];
     $config = $this->configFactory->get('bazaar_voice.settings');
     $pdp_reviews_seo_limit = $config->get('pdp_reviews_seo_limit');

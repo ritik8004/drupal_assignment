@@ -18,12 +18,12 @@ $url = "environments/$env/servers";
 try {
   $res = invokeApi($url);
 }
-catch (\Exception $e) {
+catch (\Exception) {
   print 'Failed to get web servers.';
   exit;
 }
 
-$res = json_decode($res, TRUE);
+$res = json_decode($res, TRUE, 512, JSON_THROW_ON_ERROR);
 foreach ($res['_embedded']['items'] as $server) {
   // Only web servers.
   if (!in_array('web', $server['roles'])) {

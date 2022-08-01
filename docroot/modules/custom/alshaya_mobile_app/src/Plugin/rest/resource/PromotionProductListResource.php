@@ -35,27 +35,27 @@ class PromotionProductListResource extends ResourceBase {
   /**
    * Query parse mode.
    */
-  const PARSE_MODE = 'direct';
+  public const PARSE_MODE = 'direct';
 
   /**
    * Parse mode conjunction.
    */
-  const PARSE_MODE_CONJUNCTION = 'OR';
+  public const PARSE_MODE_CONJUNCTION = 'OR';
 
   /**
    * Promotion node bundle.
    */
-  const NODE_BUNDLE = 'acq_promotion';
+  public const NODE_BUNDLE = 'acq_promotion';
 
   /**
    * Page Type.
    */
-  const PAGE_TYPE = 'listing';
+  public const PAGE_TYPE = 'listing';
 
   /**
    * Facet source ID.
    */
-  const FACET_SOURCE_ID = 'search_api:views_block__alshaya_product_list__block_2';
+  public const FACET_SOURCE_ID = 'search_api:views_block__alshaya_product_list__block_2';
 
   /**
    * Entity type manager.
@@ -253,6 +253,7 @@ class PromotionProductListResource extends ResourceBase {
    *   Result set after query execution.
    */
   public function prepareAndExecuteQuery(int $rule_id) {
+    $response = [];
     $storage = $this->entityTypeManager->getStorage('search_api_index');
 
     if (AlshayaSearchApiHelper::isIndexEnabled('product')) {

@@ -149,7 +149,7 @@ class UserResetPassword extends ResourceBase {
       || empty($data['timestamp'])
       || empty($data['user_id'])
       || empty($new_password)) {
-      $this->logger->warning('Data missing for reset password api call. Data received: @data', ['@data' => json_encode($data)]);
+      $this->logger->warning('Data missing for reset password api call. Data received: @data', ['@data' => json_encode($data, JSON_THROW_ON_ERROR)]);
       return $this->mobileAppUtility->sendStatusResponse($this->t('Information missing for required details.'));
     }
 

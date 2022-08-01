@@ -101,7 +101,7 @@ class CartSessionStorage implements CartStorageInterface {
    */
   public function restoreCart($cart_id) {
     try {
-      // @TODO: Need to rethink about this and get it done in single API call.
+      // @todo Need to rethink about this and get it done in single API call.
       $cart = (object) $this->apiWrapper->getCart($cart_id);
 
       if ($cart) {
@@ -263,6 +263,7 @@ class CartSessionStorage implements CartStorageInterface {
    * {@inheritdoc}
    */
   public function pushCart() {
+    $update = NULL;
     $cart = $this->session->get(self::STORAGE_KEY);
 
     // If cart exists, derive update array and update cookie.
@@ -288,7 +289,7 @@ class CartSessionStorage implements CartStorageInterface {
   public function createCart() {
     $customer_id = NULL;
 
-    // @TODO: It seems this customer_id is never used by Magento.
+    // @todo It seems this customer_id is never used by Magento.
     // We may need to edit Magento code to associate the cart if customer_id is
     // given or use the associate endpoint.
     if (!$this->currentUser->isAnonymous()) {

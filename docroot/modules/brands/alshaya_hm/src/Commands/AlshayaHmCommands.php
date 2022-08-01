@@ -18,7 +18,7 @@ use Drupal\node\NodeInterface;
  */
 class AlshayaHmCommands extends DrushCommands {
 
-  const TEMP_ALIAS_COLOR_MAPPING_STATE_KEY = 'temp_alias_color_mapping';
+  public const TEMP_ALIAS_COLOR_MAPPING_STATE_KEY = 'temp_alias_color_mapping';
 
   /**
    * Alshaya config Manager.
@@ -102,7 +102,7 @@ class AlshayaHmCommands extends DrushCommands {
       'progress_message' => 'Processed @current out of @total.',
       'error_message' => 'Error occurred while processing SKUs, please check logs.',
       'operations' => [
-        [[__CLASS__, 'storeAliasFirstChildSkuMapping'], []],
+        [[self::class, 'storeAliasFirstChildSkuMapping'], []],
       ],
     ];
 
@@ -204,7 +204,7 @@ class AlshayaHmCommands extends DrushCommands {
       'progress_message' => 'Processed @current out of @total.',
       'error_message' => 'Error occurred while adding redirects, please check logs.',
       'operations' => [
-        [[__CLASS__, 'addRedirectsFromTempstore'], []],
+        [[self::class, 'addRedirectsFromTempstore'], []],
       ],
     ];
 
@@ -285,11 +285,11 @@ class AlshayaHmCommands extends DrushCommands {
             $redirect->setRedirect('/node/' . $node->id());
             $redirect->save();
 
-            $logger->notice('Redirect successfully added for @map', ['@map' => json_encode($map)]);
+            $logger->notice('Redirect successfully added for @map', ['@map' => json_encode($map, JSON_THROW_ON_ERROR)]);
           }
           catch (\Exception $e) {
             $logger->alert('Failed to create redirect for @map, message @message.', [
-              '@map' => json_encode($map),
+              '@map' => json_encode($map, JSON_THROW_ON_ERROR),
               '@message' => $e->getMessage(),
             ]);
           }

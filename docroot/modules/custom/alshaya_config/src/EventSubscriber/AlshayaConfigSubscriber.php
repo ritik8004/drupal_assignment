@@ -122,6 +122,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[ConfigEvents::SAVE] = ['onConfigSave'];
     $events[LanguageConfigOverrideEvents::SAVE_OVERRIDE] = ['onLanguageConfigOverrideSave'];
 
@@ -161,7 +162,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     $this->moduleHandler->alter('alshaya_config_save', $data, $config_name);
 
     // Do nothing if original and new configs are same.
-    if (json_encode($original_data) != json_encode($data)) {
+    if (json_encode($original_data, JSON_THROW_ON_ERROR) != json_encode($data, JSON_THROW_ON_ERROR)) {
       // Re-write the config to make sure the overrides are not lost.
       $this->configStorage->write($config->getName(), $data);
       Cache::invalidateTags($config->getCacheTags());
@@ -169,7 +170,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     }
 
     // Log the config changes.
-    if (json_encode($data) != json_encode($original_config)) {
+    if (json_encode($data, JSON_THROW_ON_ERROR) != json_encode($original_config, JSON_THROW_ON_ERROR)) {
       $this->logConfigChanges($config_name, $original_config, $data);
     }
   }
@@ -210,7 +211,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
         $new_data = $config->get();
 
         // Do nothing if original and new configs are same.
-        if (json_encode($original_data) == json_encode($new_data)) {
+        if (json_encode($original_data, JSON_THROW_ON_ERROR) == json_encode($new_data, JSON_THROW_ON_ERROR)) {
           return;
         }
 
@@ -240,7 +241,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     }
 
     // Log the config changes.
-    if ($data_modified || json_encode($original_config) != json_encode($new_config)) {
+    if ($data_modified || json_encode($original_config, JSON_THROW_ON_ERROR) != json_encode($new_config, JSON_THROW_ON_ERROR)) {
       $this->logConfigChanges($config_name, $original_config, $new_config);
     }
 
@@ -342,8 +343,8 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
       $this->log('info', 'Config: @config updated by @user. Old config: @old. New config: @new', [
         '@config' => $config_name,
         '@user' => $current_user_mail,
-        '@old' => json_encode($old_config),
-        '@new' => json_encode($new_config),
+        '@old' => json_encode($old_config, JSON_THROW_ON_ERROR),
+        '@new' => json_encode($new_config, JSON_THROW_ON_ERROR),
       ]);
       $config_logged[$config_name] = $config_name;
     }
@@ -377,7 +378,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     try {
       $this->logger->log($severity, $message, $args);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Do nothing.
     }
   }

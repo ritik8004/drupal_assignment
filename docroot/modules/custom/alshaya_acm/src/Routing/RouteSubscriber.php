@@ -24,7 +24,7 @@ class RouteSubscriber extends RouteSubscriberBase {
 
     // Allow some rest apis to work in maintenance mode.
     foreach ($collection->all() as $key => $route) {
-      if (strpos($key, 'rest.acq_') === 0 || in_array($key, $rest_apis_to_allow)) {
+      if (str_starts_with($key, 'rest.acq_') || in_array($key, $rest_apis_to_allow)) {
         $route->setOption('_maintenance_access', TRUE);
       }
     }
