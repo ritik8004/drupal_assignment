@@ -33,7 +33,7 @@ class AddBenefitsToCart extends React.Component {
         if (voucherType === 'BONUS_VOUCHER'
           && hasValue(voucherCode)
           && voucherCode === codeId
-          && voucherDiscount.value > 0) {
+          && hasValue(voucherDiscount) && voucherDiscount.value > 0) {
           this.setState({
             appliedAlready: true,
           });
