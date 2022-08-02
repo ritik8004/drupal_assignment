@@ -595,6 +595,16 @@ function _alshaya_spc_translations() {
       'ar' => 'change',
       'context' => 'cod_mobile_verification',
     ],
+    'verify' => [
+      // @todo Arabic translation to be updated.
+      'ar' => 'verify',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Didn\'t receive the code?' => [
+      // @todo Arabic translation to be updated.
+      'ar' => 'Didn\'t receive the code?',
+      'context' => 'cod_mobile_verification',
+    ],
   ];
 
   return $strings;
