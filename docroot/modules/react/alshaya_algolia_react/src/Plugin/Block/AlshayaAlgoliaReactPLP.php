@@ -197,7 +197,8 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
           }
 
           // Get category level informartion.
-          $data['category'] = $this->productCategoryPage->getCurrentSelectedCategory($lang, $subcategory->id());
+          // We use only EN lang-code for the category filters.
+          $data['category'] = $this->productCategoryPage->getCurrentSelectedCategory('en', $subcategory->id());
 
           $subcategories[$subcategory->id()] = $data;
         }

@@ -1,4 +1,4 @@
-@javascript @guest @Wishlist @homeDelivery @tbskwuat @mujikwuat
+@javascript @guest @Wishlist @homeDelivery @tbskwuat
 Feature: SPC Checkout Wishlist feature for Guest user
 
   Background:

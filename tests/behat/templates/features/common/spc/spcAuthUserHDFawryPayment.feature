@@ -1,4 +1,4 @@
-@javascript @auth @checkoutPayment @homeDelivery @fawry @hmeguat
+@javascript @auth @checkoutPayment @homeDelivery @fawry @hmeguat @tbseguat
 Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
 
   Background:
@@ -49,7 +49,6 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
     And I should save the order details in the file
     And the element ".order-summary-banner-fawry" should exist
     Then I should see "Reference number:"
@@ -67,10 +66,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{subtotal}"
     Then I should see "{order_total}"
-    And I should see "{vat}"
-    And I should see "{continue_shopping_text}"
 
   @hd @language @desktop @fawry
   Scenario: As an Authenticated user, I should be able to checkout using Fawry Payment in second language
@@ -104,7 +100,6 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/" page
     And I should save the order details in the file
     And the element ".order-summary-banner-fawry" should exist
     Then I click jQuery "#spc-detail-open" element on page
@@ -120,10 +115,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{language_subtotal}"
     Then I should see "{language_order_total}"
-    And I should see "{language_vat}"
-    And I should see "{language_continue_shopping_text}"
 
   @hd @language @mobile @fawry
   Scenario: As an Authenticated user, I should be able to checkout using Fawry payment (mobile) in second language
@@ -155,9 +147,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And the element "input[name=fawry-mobile-number]" should exist
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 50 seconds
-    And I wait for AJAX to finish
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/" page
     And I should save the order details in the file
     And the element ".order-summary-banner-fawry" should exist
     Then I click jQuery "#spc-detail-open" element on page
@@ -173,7 +163,4 @@ Feature: SPC Checkout Home Delivery using Fawry payment for Authenticated user
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{language_subtotal}"
     Then I should see "{language_order_total}"
-    And I should see "{language_vat}"
-    And I should see "{language_continue_shopping_text}"

@@ -7,9 +7,9 @@
       {{#if menu_item.overridden_path}}
         {{ addClass 'level3_class' 'overridden-link' }}
       {{/if}}
-      <li class="menu__list-item menu--three__list-item {{ @root.level3_class }}">
+      <li class="menu__list-item menu--three__list-item {{ class }} {{ @root.level3_class }}">
         <div class="menu__link-wrapper menu-two__link-wrapper">
-          <{{@menu_item.tag}} class="menu__link menu--three__link {{ @root.level3_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" {{{ menu_item.tag_attr }}}>{{ menu_item.name }}</{{@menu_item.tag}}>
+          <{{@menu_item.tag}} class="menu__link menu--three__link {{ class }} {{ @root.level3_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" {{{ menu_item.tag_attr }}}>{{ menu_item.name }}</{{@menu_item.tag}}>
         </div>
         {{#if menu_item.children }}
           {{> main_menu_level4_partial name=name items=menu_item.children }}
