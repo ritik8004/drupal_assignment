@@ -1,5 +1,6 @@
 import { hasValue } from './conditionsUtility';
 import { getErrorResponse } from './error';
+import { isUserAuthenticated } from './helper';
 import logger from './logger';
 import { callMagentoApi } from './requestHelper';
 
@@ -16,6 +17,16 @@ export default function isHelloMemberEnabled() {
  */
 export const isAuraIntegrationEnabled = () => isHelloMemberEnabled()
   && hasValue(drupalSettings.helloMember.auraIntegrationStatus);
+
+/**
+ * Helper function to get aura related config for hello memeber.
+ */
+export const getAuraFormConfig = () => {
+  if (hasValue(drupalSettings.helloMember.auraFormConfig)) {
+    return drupalSettings.helloMember.auraFormConfig;
+  }
+  return null;
+};
 
 /**
  * Helper function to get the customer info from user session.
@@ -96,6 +107,20 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       break;
     case 'getCartData':
       endpoint = '/V1/carts/mine/getCart';
+      break;
+    case 'unsetLoyaltyCard':
+      endpoint = isUserAuthenticated()
+        ? '/V1/customers/mine/unset-loyalty-card'
+        : '/V1/apc/unset-loyalty-card';
+      break;
+    case 'getAuraCustomerPoints':
+      endpoint = `/V1/guest/apc-points-balance/identifierNo/${endPointParams.identifierNo}`;
+      break;
+    case 'helloMemberRemoveOffers':
+      endpoint = '/V1/hello-member/carts/mine/memberOffers';
+      break;
+    case 'helloMemberRemovebonusVouchers':
+      endpoint = '/V1/hello-member/carts/mine/bonusVouchers';
       break;
 
     default:

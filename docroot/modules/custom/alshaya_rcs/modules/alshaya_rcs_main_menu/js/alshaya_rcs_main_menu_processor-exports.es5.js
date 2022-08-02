@@ -4,13 +4,14 @@ exports.prepareData = function prepareData(settings, inputs) {
     menuLayout,
     maxNbCol,
     menuMaxDepth,
+    mobileMenuMaxDepth,
     highlightTiming,
   } = settings;
 
   // Clone the input data.
   let inputsClone = JSON.parse(JSON.stringify(inputs));
   // Clean up data.
-  inputsClone = processData(inputsClone, menuMaxDepth);
+  inputsClone = processData(inputsClone, menuMaxDepth, mobileMenuMaxDepth);
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -62,7 +63,7 @@ function processEnrichment(menuItem) {
 }
 
 /**
- * Clean up api data.
+ * Clean up api data, add enrichment and classes.
  *
  * @param {object} data
  *   The category data.
@@ -70,10 +71,16 @@ function processEnrichment(menuItem) {
  * @param {integer} maxLevel
  *   The max depth of menus.
  *
+ * @param {integer} maxLevel
+ *   The max depth of menus.
+ *
+ * @param {integer} mobileMenuMaxDepth
+ *   The max depth for mobile menu.
+ *
  *  @return object data
  *   The cleaned data.
  */
-const processData = function (data, maxLevel) {
+const processData = function (data, maxLevel, mobileMenuMaxDepth) {
   // Convert arrays to objects;
   data = Object.assign({}, data);
 
@@ -92,6 +99,16 @@ const processData = function (data, maxLevel) {
     }
 
     processEnrichment(data[key]);
+
+    // Add max level class for mobile menu.
+    if (mobileMenuMaxDepth > 0) {
+      if (data[key].level === mobileMenuMaxDepth + 1) {
+        if (!Drupal.hasValue(data[key].class)) {
+          data[key].class = [];
+        }
+        data[key].class.push('max-depth');
+      }
+    }
 
     // Check if we reached max level.
     if (typeof data[key].level !== 'undefined'
@@ -128,7 +145,7 @@ const processData = function (data, maxLevel) {
 
     data[key].tag_attr = null;
     if (data[key].tag === 'a') {
-      data[key].tag_attr = `href="${data[key].url_path}"`;
+      data[key].tag_attr = `href="${Drupal.url(data[key].url_path)}"`;
     }
 
     // Check children.
@@ -140,7 +157,7 @@ const processData = function (data, maxLevel) {
         data[key].children = false;
       }
       else {
-        processData(data[key].children, maxLevel);
+        processData(data[key].children, maxLevel, mobileMenuMaxDepth);
       }
     }
   }

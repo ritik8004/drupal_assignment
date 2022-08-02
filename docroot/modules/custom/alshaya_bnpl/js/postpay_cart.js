@@ -9,7 +9,8 @@
 
   document.addEventListener('refreshCart', (e) => {
     try {
-      var cart_total = e.detail.data().totals.base_grand_total;
+      var payment_detail = e.detail.data().totals;
+      var cart_total = typeof payment_detail.totalBalancePayable !== "undefined" ? payment_detail.totalBalancePayable : payment_detail.base_grand_total;
     }
     catch (e) {
       cart_total = 0;

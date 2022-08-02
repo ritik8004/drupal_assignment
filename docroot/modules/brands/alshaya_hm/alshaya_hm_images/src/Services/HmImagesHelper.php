@@ -126,6 +126,7 @@ class HmImagesHelper {
     }
 
     $article_castor_ids = [];
+    $child_sku_cache_tag = [];
     foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $skus) {
       $child_sku_entity = NULL;
       $color_attributes = [];
@@ -137,6 +138,8 @@ class HmImagesHelper {
 
         if ($child_sku_entity instanceof SKUInterface && $this->skuManager->isProductInStock($child_sku_entity)) {
           $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
+          // Get the cache tags of the child sku.
+          $child_sku_cache_tag = $child_sku_entity->getCacheTags() ?? [];
           if ($color_attributes) {
             break;
           }
@@ -148,7 +151,7 @@ class HmImagesHelper {
       }
     }
 
-    $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids, $child_sku_entity->getCacheTags() ?? []);
+    $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids, $child_sku_cache_tag);
 
     return $article_castor_ids;
   }

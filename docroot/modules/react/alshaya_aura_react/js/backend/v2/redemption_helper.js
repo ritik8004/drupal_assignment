@@ -1,5 +1,6 @@
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../../js/utilities/error';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
 /**
@@ -20,18 +21,20 @@ const prepareRedeemPointsData = (data, cartId) => {
     return getErrorResponse('Action value is required.', 404);
   }
 
+  const cartIdKey = isUserAuthenticated() ? 'quote_id' : 'masked_quote_id';
+
   if (data.action === 'remove points') {
     processedData = {
       redeemPoints: {
         action: 'remove points',
-        quote_id: hasValue(cartId) ? cartId : '',
+        [cartIdKey]: hasValue(cartId) ? cartId : '',
       },
     };
   } else if (data.action === 'set points') {
     processedData = {
       redeemPoints: {
         action: 'set points',
-        quote_id: hasValue(cartId) ? cartId : '',
+        [cartIdKey]: hasValue(cartId) ? cartId : '',
         redeem_points: hasValue(data.redeemPoints) ? data.redeemPoints : '',
         converted_money_value: hasValue(data.moneyValue) ? data.moneyValue : '',
         currencyCode: hasValue(data.currencyCode) ? data.currencyCode : '',
@@ -58,6 +61,13 @@ const prepareRedeemPointsData = (data, cartId) => {
   return processedData;
 };
 
+const getRedeemEndPoint = (cardNumber) => {
+  if (isUserAuthenticated()) {
+    return `/V1/apc/${cardNumber}/redeem-points`;
+  }
+  return `/V1/guest/${cardNumber}/redeem-points`;
+};
+
 /**
  * Redeem points.
  *
@@ -69,7 +79,7 @@ const prepareRedeemPointsData = (data, cartId) => {
  * @returns {Object}
  *   Points and other data in case of success or error in case of failure.
  */
-const redeemPoints = (cardNumber, data) => callMagentoApi(`/V1/apc/${cardNumber}/redeem-points`, 'POST', data).then((response) => {
+const redeemPoints = (cardNumber, data) => callMagentoApi(getRedeemEndPoint(cardNumber), 'POST', data).then((response) => {
   if (hasValue(response.data.error)) {
     return response.data;
   }
@@ -120,4 +130,5 @@ const redeemPoints = (cardNumber, data) => callMagentoApi(`/V1/apc/${cardNumber}
 export {
   prepareRedeemPointsData,
   redeemPoints,
+  getRedeemEndPoint,
 };

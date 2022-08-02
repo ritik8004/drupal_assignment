@@ -836,6 +836,14 @@ $country-switcher-label-mobile: $hnm-black-three;
 // Online Returns
 $online-return-eligibility-button-txt: $hnm-black-three;
 $online-return-dark-txt: $hnm-black-three;
+$online-return-dark-bg: $hnm-black-three;
+$online-return-button-bg: $hnm-black-three;
+$online-return-refund-grey-txt: $grey11;
+$online-return-refund-blue-txt: $_tooltip_blue;
+$online-return-confirmation-note-txt: $grey11;
+$online-return-confirmation-border: $hnm-black-three;
+$online-return-light-bg: $_white-four;
+$online-return-cancel-button-border: $grey4;
 
 // Hello Member membership success popup
 $hello-member-membership-success-popup-bg: $white-linen;
@@ -868,6 +876,9 @@ $hello-member-accured-points-txt: $hnm-red;
 //hello member header block
 $hello-member-menu-link-txt: $hnm-black-two;
 
+//Hello member promotion
+$hello-member-promo-notification-icon: $hnm-red;
+
 // Advanced Page components
 $advanced-page-accordion-active-title: $venetian_red;
 $advanced-page-accordion-bg: $primary_bg;
@@ -877,3 +888,6 @@ $hello-member-components-bg: $white-linen;
 $hello-member-highlight-text: $_hm_global_red;
 $hello-member-highlight-text-2: $hnm-red;
 $hello-member-text-2: $hnm-black-three;
+
+//hello member birthday popup
+$hello-member-bd-pop-title: $_hm_global_red;

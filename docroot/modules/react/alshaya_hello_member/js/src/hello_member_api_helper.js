@@ -1,7 +1,6 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import { callHelloMemberApi } from '../../../js/utilities/helloMemberHelper';
-import { isUserAuthenticated } from '../../../js/utilities/helper';
 import logger from '../../../js/utilities/logger';
 import { getPriceToHelloMemberPoint } from './utilities';
 
@@ -44,6 +43,25 @@ const getHelloMemberCustomerData = async () => {
       return response;
     });
 };
+
+/**
+ * Get hello member dictionary data.
+ *
+ * @returns {Promise}
+ *   Promise that resolves to an object which contains the response or
+ * the error object.
+ */
+const getHelloMemberDictionaryData = async (requestData) => callHelloMemberApi('helloMemberGetDictionaryData', 'GET', requestData)
+  .then((response) => {
+    if (response.status !== 200) {
+      const message = hasValue(response.data.error_message) ? response.data.error_message : '';
+      logger.error('Error while trying to call hello member dictionary data Api @params, Message: @message', {
+        '@message': message,
+        '@params': requestData,
+      });
+    }
+    return response;
+  });
 
 /**
  * Get tier tracking data for hello member customer.
@@ -133,21 +151,26 @@ const getHelloMemberPointsHistory = async (firstResult, pageSize) => {
  * @returns {Object}
  *   Return hello member points to earn.
  */
-const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode) => {
+const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode, context = 'hello_member') => {
   if (!hasValue(items)) {
     logger.warning('Error while trying to get hello member points to earn. Product details is required.');
     return getErrorResponse('Product details is required.', 404);
   }
 
   // For guest user, there is no identifier number
-  // calculate hm points to earn using dictionary API ratio.
-  if (!(isUserAuthenticated()) && !hasValue(identifierNo)) {
+  // calculate points to earn using dictionary API ratio.
+  if (!hasValue(identifierNo)) {
     let totalPrice = 0;
     Object.entries(items).forEach(([, item]) => {
       totalPrice += (item.qty * item.price);
     });
 
-    const response = await callHelloMemberApi('helloMemberGetDictionaryData', 'GET', { programCode: 'hello_member' });
+    // If dictionary data does not exists in storage, we do api call.
+    const requestData = {
+      type: context === 'hello_member' ? 'HM_ACCRUAL_RATIO' : 'APC_CASHBACK_ACCRUAL_RATIO',
+      programCode: context,
+    };
+    const response = await getHelloMemberDictionaryData(requestData);
     if (hasValue(response.data.error)) {
       const message = hasValue(response.data.message) ? response.data.message : '';
       logger.error('Error while trying to get hello member dictionary data. Message: @message', {
@@ -156,8 +179,9 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode) => 
       return getErrorResponse(message, 500);
     }
     if (hasValue(response.data) && !hasValue(response.data.error)) {
+      const key = context === 'hello_member' ? 'hm_points' : 'apc_points';
       return {
-        data: { hm_points: getPriceToHelloMemberPoint(totalPrice, response.data) },
+        data: { [key]: getPriceToHelloMemberPoint(totalPrice, response.data) },
       };
     }
   }
@@ -179,7 +203,7 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode) => 
       currencyCode,
       products,
     },
-    programCode: 'hello_member',
+    programCode: context,
   };
 
   return callHelloMemberApi('helloMemberGetPointsEarned', 'POST', requestData, { identifierNo })
@@ -257,25 +281,6 @@ const helloMemberCustomerPhoneSearch = async (phoneNumber) => {
       return response;
     });
 };
-
-/**
- * Get hello member dictionary data.
- *
- * @returns {Promise}
- *   Promise that resolves to an object which contains the response or
- * the error object.
- */
-const getHelloMemberDictionaryData = async (requestData) => callHelloMemberApi('helloMemberGetDictionaryData', 'GET', requestData)
-  .then((response) => {
-    if (response.status !== 200) {
-      const message = hasValue(response.data.error_message) ? response.data.error_message : '';
-      logger.error('Error while trying to call hello member dictionary data Api @params, Message: @message', {
-        '@message': message,
-        '@params': requestData,
-      });
-    }
-    return response;
-  });
 
 export {
   getHelloMemberCustomerData,

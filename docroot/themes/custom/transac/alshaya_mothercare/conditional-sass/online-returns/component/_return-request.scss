@@ -1,0 +1,59 @@
+body[class*="-return"] {
+  .order-detail {
+    .block-page-title-block {
+      h1.c-page-title {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.return-requests-wrapper {
+  .products-list-wrapper {
+    .items-table {
+      .order-item-row {
+        .order-item-checkbox {
+          .return_item_checkbox {
+            &.is-checked {
+              &::before {
+                color: $online-return-dark-bg;
+              }
+            }
+
+            &::before {
+              color: $online-return-dark-bg;
+            }
+          }
+        }
+
+        .item-total-price {
+          @include breakpoint($desktop) {
+            padding-right: rem(48);
+            padding-left: rem(48);
+          }
+        }
+      }
+    }
+  }
+
+  .products-list-wrapper,
+  .refund-details-wrapper {
+    .refund-detail-label,
+    .select-items-label {
+      font-family: $alshaya-bold;
+    }
+  }
+
+  .return-qty-row {
+    @include breakpoint($desktop) {
+      padding-right: rem(48);
+      padding-left: rem(48);
+    }
+  }
+
+  .refund-details-wrapper {
+    div[class$="-title"] {
+      font-family: $alshaya-bold;
+    }
+  }
+}

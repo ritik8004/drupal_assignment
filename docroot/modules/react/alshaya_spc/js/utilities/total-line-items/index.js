@@ -15,6 +15,7 @@ import Tabby from '../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../js/tabby/components';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import EgiftCheckoutOrderSummary from '../../egift-card/components/egift-checkout-order-summary';
+import { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -214,7 +215,7 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
-          <ConditionalView condition={isAuraEnabled()}>
+          <ConditionalView condition={isAuraEnabled() || (isAuraIntegrationEnabled() && context !== 'cart')}>
             <AuraCheckoutOrderSummary
               totals={totals}
               dontShowVatText={dontShowVatText}

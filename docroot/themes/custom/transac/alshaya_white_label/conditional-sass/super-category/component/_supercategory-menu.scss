@@ -626,27 +626,4 @@
       }
     }
   }
-
-  &.super-category-home {
-    .mobile--search {
-      @include breakpoint($upto-desktop) {
-        display: none !important;
-      }
-    }
-
-    .block-alshaya-algolia-react-autocomplete {
-      @include breakpoint($upto-desktop) {
-        visibility: visible !important;
-        top: 7.125rem !important;
-      }
-
-      &.focused {
-        .algolia-search-back-icon {
-          @include breakpoint($upto-desktop) {
-            visibility: visible;
-          }
-        }
-      }
-    }
-  }
 }
