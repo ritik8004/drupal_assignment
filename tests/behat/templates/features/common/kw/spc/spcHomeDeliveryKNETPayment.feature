@@ -124,8 +124,6 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I press "proceedConfirm"
     And I wait 5 seconds
     And I wait for the page to load
-    And I wait 5 seconds
-    Then I should be on "/{language_short}/checkout/confirmation" page
     And I should save the order details in the file
 
   @cc @hd @language @mobile @Knet
@@ -170,6 +168,4 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I press "proceedConfirm"
     And I wait 5 seconds
     And I wait for the page to load
-    And I wait 5 seconds
-    Then I should be on "/{language_short}/checkout/confirmation" page
     And I should save the order details in the file

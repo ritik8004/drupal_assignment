@@ -59,9 +59,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
-    Then I should see "{delivery_type_text}"
-    Then I should see "{cnc_delivery_type}"
-    Then I should see "{payment_type_text}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -75,10 +72,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{subtotal}"
     Then I should see "{order_total}"
-    And I should see "{vat}"
-    And I should see "{continue_shopping_text}"
 
   @cc @hd @language @desktop @checkout_com @visa @mada
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (VISA Card)
@@ -126,17 +120,11 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait 10 seconds
     And I wait for the page to load
     And I should save the order details in the file
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_returning_user_email}"
-    Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
-    Then I should see "{language_delivery_type_text}"
-    Then I should see "{language_cnc_delivery_type}"
-    Then I should see "{language_payment_type_text}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -150,10 +138,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{language_subtotal}"
     Then I should see "{language_order_total}"
-    And I should see "{language_vat}"
-    And I should see "{language_continue_shopping_text}"
 
   @cc @hd @language @mobile @checkout_com @visa @mada
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (VISA Card)
@@ -200,7 +185,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
     And I should save the order details in the file
 
   @cc @hd @checkout_com @mastercard @mada
@@ -245,21 +229,12 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     And I should save the order details in the file
-    Then I should see "{order_confirm_text}"
-    Then I should see "{spc_returning_user_email}"
-    Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
-    Then I should see "{delivery_type_text}"
-    Then I should see "{cnc_delivery_type}"
-    Then I should see "{payment_type_text}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -273,10 +248,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{subtotal}"
     Then I should see "{order_total}"
-    And I should see "{vat}"
-    And I should see "{continue_shopping_text}"
 
   @cc @hd @language @desktop @checkout_com @mastercard @mada
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (Mastercard Card)
@@ -324,21 +296,12 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
     And I should save the order details in the file
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_returning_user_email}"
-    Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
-    Then I should see "{language_delivery_type_text}"
-    Then I should see "{language_cnc_delivery_type}"
-    Then I should see "{language_payment_type_text}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -352,10 +315,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{language_subtotal}"
     Then I should see "{language_order_total}"
-    And I should see "{language_vat}"
-    And I should see "{language_continue_shopping_text}"
 
   @cc @hd @language @mobile @checkout_com @mastercard @mada
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (Mastercard Card)
@@ -402,5 +362,4 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     Then I press "txtButton"
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
     And I should save the order details in the file

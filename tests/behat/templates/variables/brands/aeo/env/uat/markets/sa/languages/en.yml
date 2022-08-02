@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://aeosa3-uat.factory.alshaya.com/en/'
+  url_base_uri: 'https://aeosa3-uat.factory.alshaya.com/en'
   collection_filter: ''
   sort_filter: 'sort by'
   rice_filter: 'Price'

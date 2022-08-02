@@ -21,9 +21,6 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
-    And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
-    And I wait 15 seconds
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
@@ -55,9 +52,6 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
-    And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
-    And I wait 15 seconds
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
