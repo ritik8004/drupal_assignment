@@ -7,7 +7,7 @@ import React from 'react';
  */
 const OtpTimer = () => (
   <div className="cod-otp-timmer-wrapper">
-    <spn>{Drupal.t('Didn\'t receive the code?', {}, { context: 'cod_mobile_verification' })}</spn>
+    <span>{Drupal.t('Didn\'t receive the code?', {}, { context: 'cod_mobile_verification' })}</span>
     <span>00.60</span>
   </div>
 );
