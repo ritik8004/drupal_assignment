@@ -155,10 +155,10 @@ class HelloMemberCartOffersVouchers extends React.Component {
     const { totals } = this.props;
     const forceRenderTabPanel = true;
     // Add class to show applied voucher and offer message in popup.
-    const additionalClasses = typeof totals.hmOfferCode !== 'undefined' || typeof totals.hmAppliedVoucherCodes !== 'undefined' ? 'error' : '';
+    const additionalClasses = hasValue(totals.hmOfferCode) || hasValue(totals.hmAppliedVoucherCodes) ? 'error' : '';
     let appliedVouchers = '';
     // Applied voucher codes message in popup.
-    if (typeof totals.hmAppliedVoucherCodes !== 'undefined') {
+    if (hasValue(totals.hmAppliedVoucherCodes)) {
       appliedVouchers = (
         <span>
           {Drupal.t(
@@ -172,7 +172,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
 
     // Applied offer codes message in popup.
     let appliedOffers = '';
-    if (typeof totals.hmOfferCode !== 'undefined') {
+    if (hasValue(totals.hmOfferCode)) {
       appliedOffers = (
         <span>
           {Drupal.t(
