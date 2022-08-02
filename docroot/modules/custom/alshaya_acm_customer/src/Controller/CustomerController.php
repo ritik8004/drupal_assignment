@@ -8,6 +8,7 @@ use Drupal\Core\Render\Renderer;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Drupal\Core\Access\AccessResult;
@@ -59,6 +60,13 @@ class CustomerController extends ControllerBase {
   protected $dateFormatter;
 
   /**
+   * Orders manager service object.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -67,7 +75,8 @@ class CustomerController extends ControllerBase {
       $container->get('renderer'),
       $container->get('alshaya_api.api'),
       $container->get('datetime.time'),
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('alshaya_acm_customer.orders_manager')
     );
   }
 
@@ -84,17 +93,21 @@ class CustomerController extends ControllerBase {
    *   Current time service.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   Date formatter service.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders manager service object.
    */
   public function __construct(Request $current_request,
                               Renderer $renderer,
                               AlshayaApiWrapper $api_wrapper,
                               TimeInterface $current_time,
-                              DateFormatterInterface $date_formatter) {
+                              DateFormatterInterface $date_formatter,
+                              OrdersManager $orders_manager) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
     $this->apiWrapper = $api_wrapper;
     $this->currentTime = $current_time;
     $this->dateFormatter = $date_formatter;
+    $this->ordersManager = $orders_manager;
 
   }
 
@@ -135,10 +148,23 @@ class CustomerController extends ControllerBase {
     $searchForm['form_id']['#printed'] = TRUE;
     $searchForm['form_build_id']['#printed'] = TRUE;
 
+    // Get current page number.
+    $currentPageNumber = (int) $this->currentRequest->query->get('page');
+
+    // Get the offset to start displaying orders from.
+    $offset = $currentPageNumber * $itemsPerPage;
+
     try {
       // Get the orders to display for current user and filter applied.
       $customer_id = (int) $user->get('acq_customer_id')->getString();
-      $orders = alshaya_acm_customer_get_user_orders($customer_id, 'search', 'filter');
+      $page_size = $offset + $itemsPerPage;
+      // If user is something, then set the page_size as 0 to get all the
+      // products.
+      if ($this->currentRequest->query->get('search')
+        || $this->currentRequest->query->get('filter')) {
+        $page_size = 0;
+      }
+      $orders = $this->ordersManager->getOrders($customer_id, $page_size, 'search', 'filter');
 
       if (empty($orders)) {
         // @todo Check the empty result message.
@@ -151,16 +177,9 @@ class CustomerController extends ControllerBase {
         }
       }
       else {
-        // Get current page number.
-        $currentPageNumber = (int) $this->currentRequest->query->get('page');
-
-        // Get the offset to start displaying orders from.
-        $offset = $currentPageNumber * $itemsPerPage;
-
         // Get the orders to display for current page.
         $ordersPaged = array_slice($orders, $offset, $itemsPerPage, TRUE);
-
-        if (count($orders) > $offset + $itemsPerPage) {
+        if ($this->ordersManager->getOrdersCount($customer_id) > $offset + $itemsPerPage) {
           // Get all the query parameters we currently have.
           $query = $this->currentRequest->query->all();
           $query['page'] = $currentPageNumber + 1;
@@ -271,17 +290,7 @@ class CustomerController extends ControllerBase {
   public function orderDetail(UserInterface $user, $order_id) {
     $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
-    // Get the orders to display for current user and filter applied.
-    $customer_id = (int) $user->get('acq_customer_id')->getString();
-    $orders = alshaya_acm_customer_get_user_orders($customer_id);
-
-    $order_index = array_search($order_id, array_column($orders, 'increment_id'));
-
-    if ($order_index === FALSE) {
-      throw new NotFoundHttpException();
-    }
-
-    $order = $orders[$order_index];
+    $order = $this->ordersManager->getOrderByIncrementId($order_id);
 
     $build = alshaya_acm_customer_build_order_detail($order);
     $build['order'] = $order;
@@ -511,15 +520,10 @@ class CustomerController extends ControllerBase {
 
     // Get all orders of the current user.
     $customer_id = (int) $user->get('acq_customer_id')->getString();
-    $user_orders = alshaya_acm_customer_get_user_orders($customer_id);
-    foreach ($user_orders as $order) {
-      // If order belongs to the current user and invoice is available for
-      // download.
-      if ($order['increment_id'] == $order_id) {
-        $download_invoice = !empty($order['extension']['invoice_path']);
-        break;
-      }
-    }
+    $user_order = $this->orderManager->getOrderByIncrementId($order_id);
+    // If order belongs to the current user and invoice is available for
+    // download.
+    $download_invoice = !empty($order['extension']['invoice_path']);
 
     return AccessResult::allowedIf($download_invoice);
   }
