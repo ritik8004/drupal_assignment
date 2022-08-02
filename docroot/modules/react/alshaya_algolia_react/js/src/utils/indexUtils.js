@@ -410,5 +410,6 @@ export const getBackToPlpPageIndex = () => {
 export function hasPriceRange(alshayaPriceRange) {
   return drupalSettings.reactTeaserView.isPriceModeFromTo
     && hasValue(alshayaPriceRange)
-    && (alshayaPriceRange.to.min !== alshayaPriceRange.to.max);
+    && (alshayaPriceRange.to.min !== alshayaPriceRange.to.max)
+    && (alshayaPriceRange.to.min !== 0 || alshayaPriceRange.to.max !== 0);
 }
