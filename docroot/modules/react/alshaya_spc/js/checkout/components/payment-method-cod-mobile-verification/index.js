@@ -1,7 +1,7 @@
 import React from 'react';
 import OtpInput from 'react-otp-input';
+import OtpTimer from 'otp-timer';
 import CodVerifyText from './components/CodVerifyText';
-import OtpTimer from './components/OtpTimer';
 
 class PaymentMethodCodMobileVerification extends React.Component {
   constructor(props) {
@@ -22,6 +22,16 @@ class PaymentMethodCodMobileVerification extends React.Component {
    * Handle user input for otp field.
    */
   handleChange = (otp) => this.setState({ otp });
+
+  /**
+   * Handle otp resend action.
+   *
+   * @todo Implement resend otp API endpoint.
+   */
+  handleResendOtp = () => {
+    // eslint-disable-next-line no-console
+    console.log('Resend otp');
+  }
 
   render() {
     const { otp } = this.state;
@@ -48,7 +58,16 @@ class PaymentMethodCodMobileVerification extends React.Component {
               isInputNum
             />
             <div className="cod-otp-lower-wrapper">
-              <OtpTimer />
+              <span className="resend-otp-text">
+                {Drupal.t('Didn\'t receive the code?', {}, { context: 'cod_mobile_verification' })}
+              </span>
+              <OtpTimer
+                seconds={60}
+                minutes={0}
+                resend={this.handleResendOtp}
+                text=" "
+                ButtonText={Drupal.t('Resend', {}, { context: 'cod_mobile_verification' })}
+              />
               <button type="submit">{Drupal.t('verify', {}, { context: 'cod_mobile_verification' })}</button>
             </div>
           </form>
