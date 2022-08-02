@@ -92,11 +92,11 @@ Feature: Test the My Account functionality
     And I click on "button#edit-submit-orders" element
     And I wait 10 seconds
     And I wait for the page to load
-    Then I click on "ul.order-items li.order-item a" element
+    Then I click on "ul.order-items li:first-child" element
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see an ".order-summary-row" element
-    Then I should see an "td.order-transaction" element
+    Then I should see an "div.order-transaction" element
 
   @cancel
   Scenario: As an authenticated user, I should be able to perform Cancel action on add/edit address pages
