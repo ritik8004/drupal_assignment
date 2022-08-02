@@ -286,7 +286,7 @@ class OnlineReturnController extends ControllerBase {
    */
   public function getReturnPrintLabel(UserInterface $user, $order_id, $return_id) {
     // Decode the return id.
-    $decoded_return_id = json_decode(base64_decode($return_id), TRUE, 512, JSON_THROW_ON_ERROR)['return_id'] ?? NULL;
+    $decoded_return_id = json_decode(base64_decode($return_id), TRUE)['return_id'] ?? NULL;
     if ($decoded_return_id) {
       // Get the return request first.
       $endpoint = "rma/returns/$decoded_return_id";
@@ -299,7 +299,7 @@ class OnlineReturnController extends ControllerBase {
 
       if ($return_item_response) {
         // Decode the response and get the increment return id.
-        $decoded_return_item = json_decode($return_item_response, TRUE, 512, JSON_THROW_ON_ERROR);
+        $decoded_return_item = json_decode($return_item_response, TRUE);
 
         // Do the validation before getting return item label PDF.
         if ($this->isValidReturnRequest($user, $decoded_return_item)) {
@@ -312,7 +312,7 @@ class OnlineReturnController extends ControllerBase {
           // If json_decode is not successful, means we have actual file
           // response. Otherwise we have error message which can be decoded by
           // json.
-          if (!json_decode($return_print_response, NULL, 512, JSON_THROW_ON_ERROR)) {
+          if (!json_decode($return_print_response, NULL)) {
             $response = new Response($return_print_response);
             $disposition = $response->headers->makeDisposition(
               ResponseHeaderBag::DISPOSITION_ATTACHMENT,

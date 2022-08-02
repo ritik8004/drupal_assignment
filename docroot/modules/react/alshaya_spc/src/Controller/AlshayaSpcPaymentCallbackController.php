@@ -134,7 +134,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     if (!$payment_method) {
       $this->logger->error('User trying to access success url directly. Payment method is not set on cart. OrderId: @order_id, Order: @order.', [
         '@order_id' => $order_id,
-        '@order' => json_encode($order, JSON_THROW_ON_ERROR),
+        '@order' => json_encode($order),
       ]);
 
       return $redirect;
@@ -154,7 +154,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
       $this->processPostPlaceOrder($order, $payment_method);
 
       $order['secure_order_id'] = SecureText::encrypt(
-        json_encode(['order_id' => $order_id, 'email' => $email], JSON_THROW_ON_ERROR),
+        json_encode(['order_id' => $order_id, 'email' => $email]),
         Settings::get('alshaya_api.settings')['consumer_secret']
       );
 
@@ -233,7 +233,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     // Using the same way as used by user_cookie_save() in CORE.
     setrawcookie(
       'middleware_payment_error',
-      rawurlencode(json_encode($payment_data, JSON_THROW_ON_ERROR)), [
+      rawurlencode(json_encode($payment_data)), [
         'expires' => strtotime('+1 year'),
         'path' => '/',
       ]);

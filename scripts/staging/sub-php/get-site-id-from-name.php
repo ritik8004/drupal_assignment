@@ -11,7 +11,7 @@
  * Run: php get-site-id-from-name.php "<json-string>" "<site-name>".
  */
 
-$json = json_decode($argv[1], NULL, 512, JSON_THROW_ON_ERROR);
+$json = json_decode($argv[1], NULL);
 $name = $argv[2];
 
 foreach ($json->sites as $site) {

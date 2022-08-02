@@ -2591,7 +2591,7 @@ JS;
             value = 1255557111;
         }
         jQuery("input[name=\"mobile\"]").val(value);
-        
+
 JS;
       $this->getSession()->executeScript($script);
       if ($page->find('css', 'input[name="email"]')) {
@@ -2613,7 +2613,7 @@ JS;
       $this->selectOptionAddress($field_name, $val);
     }
   }
-  
+
   /**
    * @Then /^I select the home delivery address$/
    */
@@ -2824,7 +2824,7 @@ JS;
     $filename = 'order_details.json';
     $orders = [];
     if (file_exists($filename)) {
-      $orders = (array) json_decode(file_get_contents($filename), null, 512, JSON_THROW_ON_ERROR);
+      $orders = (array) json_decode(file_get_contents($filename), null);
     }
     array_push($orders, $order_detail);
     file_put_contents($filename, json_encode($orders, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

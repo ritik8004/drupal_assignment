@@ -100,15 +100,15 @@ class TicketBookingKnetHelper extends KnetHelper {
       || $state_data['payment_id'] != $response['payment_id']
     ) {
       $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>State: @state', [
-        '@message' => json_encode($message_data, JSON_THROW_ON_ERROR),
-        '@state' => json_encode($state_data, JSON_THROW_ON_ERROR),
+        '@message' => json_encode($message_data),
+        '@state' => json_encode($state_data),
       ]);
       throw new \Exception();
     }
     if ($state_data['amount'] != $booking['order_total']) {
       $this->logger->error('Currently, amount dont match amount in state variable.<br>POST: @message<br>State: @state', [
-        '@message' => json_encode($message_data, JSON_THROW_ON_ERROR),
-        '@state' => json_encode($state_data, JSON_THROW_ON_ERROR),
+        '@message' => json_encode($message_data),
+        '@state' => json_encode($state_data),
       ]);
       throw new \Exception();
     }
@@ -131,8 +131,8 @@ class TicketBookingKnetHelper extends KnetHelper {
     $result_url .= $redirect_url;
 
     $this->logger->info('KNET update for Response: @message State: @state', [
-      '@message' => json_encode($response, JSON_THROW_ON_ERROR),
-      '@state' => json_encode($state_data, JSON_THROW_ON_ERROR),
+      '@message' => json_encode($response),
+      '@state' => json_encode($state_data),
     ]);
 
     // For new K-Net toolkit, we need to redirect.
@@ -168,7 +168,7 @@ class TicketBookingKnetHelper extends KnetHelper {
     }
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
       '@quote_id' => $data['quote_id'],
-      '@message' => json_encode($data, JSON_THROW_ON_ERROR),
+      '@message' => json_encode($data),
     ]);
     $url = Url::fromRoute('alshaya_kz_transac_lite.payemnt_status', ['ref_number' => $data['quote_id']])->toString();
     return new RedirectResponse($url);

@@ -51,7 +51,7 @@ function invoke_api(string $api_url, string $method = 'GET', array $data = NULL)
 
   curl_close($ch);
 
-  $response = json_decode($result, TRUE, 512, JSON_THROW_ON_ERROR);
+  $response = json_decode($result, TRUE);
   if (!is_array($response)) {
     print 'Invalid JSON response.' . PHP_EOL;
     print_r($result);

@@ -376,7 +376,7 @@ class AlshayaSpcCustomerHelper {
   public function loadCustomerTokenForSocialAccount($mail) {
     $token = $this->getCustomerToken();
     if (empty($token) || !is_string($token)) {
-      $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail), NULL, 512, JSON_THROW_ON_ERROR);
+      $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail), NULL);
       if ($token === FALSE) {
         $token = NULL;
       }

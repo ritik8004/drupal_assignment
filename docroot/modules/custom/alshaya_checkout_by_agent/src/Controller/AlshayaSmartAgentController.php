@@ -69,7 +69,7 @@ class AlshayaSmartAgentController extends ControllerBase {
     // Redirect to cart page if cart id or smart agent details is empty.
     if (empty($data) || empty($data['success'])) {
       $this->getLogger('AlshayaSmartAgentController')->warning('Error occurred while trying to decrypt the data, Response: @response.', [
-        '@response' => json_encode($data, JSON_THROW_ON_ERROR),
+        '@response' => json_encode($data),
       ]);
 
       return $redirect;

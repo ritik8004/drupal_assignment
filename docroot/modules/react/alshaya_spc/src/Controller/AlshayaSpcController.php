@@ -903,7 +903,7 @@ class AlshayaSpcController extends ControllerBase {
   public function validateInfo(Request $request) {
     $data = $request->getContent();
     if (!empty($data)) {
-      $data = json_decode($data, TRUE, 512, JSON_THROW_ON_ERROR);
+      $data = json_decode($data, TRUE);
     }
 
     if (empty($data)) {

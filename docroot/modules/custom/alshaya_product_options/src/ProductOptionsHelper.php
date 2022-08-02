@@ -274,7 +274,7 @@ class ProductOptionsHelper {
     try {
       // First get attribute info.
       $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
-      $attribute = json_decode($attribute, TRUE, 512, JSON_THROW_ON_ERROR);
+      $attribute = json_decode($attribute, TRUE);
     }
     catch (\Exception) {
       // For now we have many fields in sku_base_fields which are not

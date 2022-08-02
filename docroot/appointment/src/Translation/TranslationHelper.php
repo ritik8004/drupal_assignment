@@ -42,7 +42,7 @@ class TranslationHelper extends APIHelper {
         APIServicesUrls::TRANSLATION_SERVICE_URL_ALL,
         $options
       );
-      $data = json_decode($response->getBody()->getContents(), NULL, 512, JSON_THROW_ON_ERROR);
+      $data = json_decode($response->getBody()->getContents(), NULL);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting translation. Message: @message', [

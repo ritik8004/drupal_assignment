@@ -162,7 +162,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     $this->moduleHandler->alter('alshaya_config_save', $data, $config_name);
 
     // Do nothing if original and new configs are same.
-    if (json_encode($original_data, JSON_THROW_ON_ERROR) != json_encode($data, JSON_THROW_ON_ERROR)) {
+    if (json_encode($original_data) != json_encode($data)) {
       // Re-write the config to make sure the overrides are not lost.
       $this->configStorage->write($config->getName(), $data);
       Cache::invalidateTags($config->getCacheTags());
@@ -170,7 +170,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     }
 
     // Log the config changes.
-    if (json_encode($data, JSON_THROW_ON_ERROR) != json_encode($original_config, JSON_THROW_ON_ERROR)) {
+    if (json_encode($data) != json_encode($original_config)) {
       $this->logConfigChanges($config_name, $original_config, $data);
     }
   }
@@ -211,7 +211,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
         $new_data = $config->get();
 
         // Do nothing if original and new configs are same.
-        if (json_encode($original_data, JSON_THROW_ON_ERROR) == json_encode($new_data, JSON_THROW_ON_ERROR)) {
+        if (json_encode($original_data) == json_encode($new_data)) {
           return;
         }
 
@@ -241,7 +241,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     }
 
     // Log the config changes.
-    if ($data_modified || json_encode($original_config, JSON_THROW_ON_ERROR) != json_encode($new_config, JSON_THROW_ON_ERROR)) {
+    if ($data_modified || json_encode($original_config) != json_encode($new_config)) {
       $this->logConfigChanges($config_name, $original_config, $new_config);
     }
 
@@ -343,8 +343,8 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
       $this->log('info', 'Config: @config updated by @user. Old config: @old. New config: @new', [
         '@config' => $config_name,
         '@user' => $current_user_mail,
-        '@old' => json_encode($old_config, JSON_THROW_ON_ERROR),
-        '@new' => json_encode($new_config, JSON_THROW_ON_ERROR),
+        '@old' => json_encode($old_config),
+        '@new' => json_encode($new_config),
       ]);
       $config_logged[$config_name] = $config_name;
     }

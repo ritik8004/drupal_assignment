@@ -73,7 +73,7 @@ class AlshayaMdcQueueManager {
 
     $rabbitmq_directory = $mdc_config->get('rabbitmq_credentials_directory');
 
-    $rabbitmq_creds = json_decode(file_get_contents($rabbitmq_directory . '/credentials.json'), null, 512, JSON_THROW_ON_ERROR);
+    $rabbitmq_creds = json_decode(file_get_contents($rabbitmq_directory . '/credentials.json'), null);
     $clientConfig = [
       'base_uri' => $rabbitmq_creds->base_uri,
       'timeout'  => 5,

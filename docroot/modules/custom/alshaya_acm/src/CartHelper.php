@@ -199,7 +199,7 @@ class CartHelper {
     unset($cartData['shipping']);
     $cartData['shipping']['extension'] = $shipping['extension'];
 
-    return json_encode($cartData, JSON_THROW_ON_ERROR);
+    return json_encode($cartData);
   }
 
   /**

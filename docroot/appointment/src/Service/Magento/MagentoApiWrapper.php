@@ -87,7 +87,7 @@ class MagentoApiWrapper {
       $result = $response->getBody()->getContents();
 
       $result = is_string($result) && !empty($result)
-        ? json_decode($result, TRUE, 512, JSON_THROW_ON_ERROR)
+        ? json_decode($result, TRUE)
         : $result;
 
       if ($response->getStatusCode() !== 200) {

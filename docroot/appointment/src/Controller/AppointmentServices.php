@@ -172,7 +172,7 @@ class AppointmentServices {
    *   Booking Id.
    */
   public function bookAppointment(Request $request) {
-    $request_content = json_decode($request->getContent(), TRUE, 512, JSON_THROW_ON_ERROR);
+    $request_content = json_decode($request->getContent(), TRUE);
 
     $appointmentId = $request_content['appointment'] ?? '';
     $userId = $request_content['user'] ?? '';
@@ -506,7 +506,7 @@ class AppointmentServices {
    */
   public function cancelAppointment(Request $request) {
     $clientExternalId = NULL;
-    $request_content = json_decode($request->getContent(), TRUE, 512, JSON_THROW_ON_ERROR);
+    $request_content = json_decode($request->getContent(), TRUE);
     $appointmentId = $request_content['appointment'];
     $userId = $request_content['id'];
 

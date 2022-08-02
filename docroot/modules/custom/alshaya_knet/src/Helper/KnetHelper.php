@@ -127,7 +127,7 @@ class KnetHelper {
     ];
 
     // This is just to have the key unique for state data.
-    $state_key = md5(json_encode($state_data, JSON_THROW_ON_ERROR));
+    $state_key = md5(json_encode($state_data));
 
     $knetSettings = $this->configFactory->get('alshaya_knet.settings');
 
@@ -359,8 +359,8 @@ class KnetHelper {
     $this->logger->info('KNET update for @quote_id: Redirect: @result_url Response: @message State: @state', [
       '@quote_id' => $response['quote_id'],
       '@result_url' => $result_url,
-      '@message' => json_encode($response, JSON_THROW_ON_ERROR),
-      '@state' => json_encode($state_data, JSON_THROW_ON_ERROR),
+      '@message' => json_encode($response),
+      '@state' => json_encode($state_data),
     ]);
   }
 
@@ -382,7 +382,7 @@ class KnetHelper {
 
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
       '@quote_id' => $data['quote_id'],
-      '@message' => json_encode($data, JSON_THROW_ON_ERROR),
+      '@message' => json_encode($data),
     ]);
   }
 
@@ -509,7 +509,7 @@ class KnetHelper {
     // If error is available.
     if (!empty($input['ErrorText']) || !empty($input['Error'])) {
       $this->logger->error('K-Net response contains Error: @error', [
-        '@error' => json_encode($input, JSON_THROW_ON_ERROR),
+        '@error' => json_encode($input),
       ]);
       return $input;
     }

@@ -71,5 +71,5 @@ function invoke_api($api, $method = 'GET', array $data = [], $store_id = 1) {
     $result = $client->get($endpoint, $options);
   }
 
-  print_r(json_decode($result->getBody(), NULL, 512, JSON_THROW_ON_ERROR));
+  print_r(json_decode($result->getBody(), NULL));
 }

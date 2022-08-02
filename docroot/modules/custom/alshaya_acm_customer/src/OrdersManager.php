@@ -303,7 +303,7 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE, 512, JSON_THROW_ON_ERROR);
+    $result = json_decode($response ?? [], TRUE);
     $count = $result['total_count'] ?? 0;
     $this->countCache->set($cid, $count);
 
@@ -327,7 +327,7 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE, 512, JSON_THROW_ON_ERROR);
+    $result = json_decode($response ?? [], TRUE);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
       return NULL;
@@ -355,7 +355,7 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE, 512, JSON_THROW_ON_ERROR);
+    $result = json_decode($response ?? [], TRUE);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
       return NULL;
@@ -407,7 +407,7 @@ class OrdersManager {
     $query['searchCriteria']['pageSize'] = 1;
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
 
-    $result = json_decode($response ?? [], TRUE, 512, JSON_THROW_ON_ERROR);
+    $result = json_decode($response ?? [], TRUE);
 
     return $result['total_count'] ?? 0;
   }

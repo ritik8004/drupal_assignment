@@ -46,7 +46,7 @@ class ConductorResultException extends ConnectorException {
 
       if (strpos($mesg, $prefix)) {
         $responseString = substr($mesg, strpos($mesg, $prefix) + strlen($prefix));
-        $response = json_decode($responseString, TRUE, 512, JSON_THROW_ON_ERROR);
+        $response = json_decode($responseString, TRUE);
         if (is_array($response) && isset($response['message'])) {
           $mesg = $response['message'];
 

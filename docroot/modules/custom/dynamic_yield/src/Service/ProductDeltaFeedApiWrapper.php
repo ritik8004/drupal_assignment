@@ -132,7 +132,7 @@ class ProductDeltaFeedApiWrapper {
         return NULL;
       }
 
-      $decoded_result = json_decode($result, TRUE, 512, JSON_THROW_ON_ERROR);
+      $decoded_result = json_decode($result, TRUE);
 
       if (!empty($decoded_result['success'])) {
         $this->logger->info('Invoked DY product feed API @api. Transaction Id: @transaction_id.', [
@@ -208,7 +208,7 @@ class ProductDeltaFeedApiWrapper {
         '@apiKey' => $apiKey,
         '@feedId' => $feedId,
         '@itemId' => $itemId,
-        '@data' => json_encode($data, JSON_THROW_ON_ERROR),
+        '@data' => json_encode($data),
       ]);
       return NULL;
     }
@@ -218,7 +218,7 @@ class ProductDeltaFeedApiWrapper {
       'headers' => [
         'DY-API-key' => $apiKey,
       ],
-      'body' => json_encode($data, JSON_THROW_ON_ERROR),
+      'body' => json_encode($data),
     ];
     $response = $this->invokeProductFeedApi($url, 'POST', $options);
 
@@ -248,7 +248,7 @@ class ProductDeltaFeedApiWrapper {
         '@apiKey' => $apiKey,
         '@feedId' => $feedId,
         '@itemId' => $itemId,
-        '@data' => json_encode($data, JSON_THROW_ON_ERROR),
+        '@data' => json_encode($data),
       ]);
       return NULL;
     }
@@ -258,7 +258,7 @@ class ProductDeltaFeedApiWrapper {
       'headers' => [
         'DY-API-key' => $apiKey,
       ],
-      'body' => json_encode($data, JSON_THROW_ON_ERROR),
+      'body' => json_encode($data),
     ];
     $response = $this->invokeProductFeedApi($url, 'PUT', $options);
 

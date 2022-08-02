@@ -105,7 +105,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
         continue;
       }
 
-      $mdc_queue_stats[$queue_machine_name]['stats'] = json_decode($mdc_queue_result, null, 512, JSON_THROW_ON_ERROR);
+      $mdc_queue_stats[$queue_machine_name]['stats'] = json_decode($mdc_queue_result, null);
       $mdc_queue_stats[$queue_machine_name]['label'] = $label;
     }
 

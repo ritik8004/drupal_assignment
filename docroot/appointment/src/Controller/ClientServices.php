@@ -73,7 +73,7 @@ class ClientServices {
    *   Client external Id.
    */
   public function updateInsertClient(Request $request) {
-    $request_content = json_decode($request->getContent(), TRUE, 512, JSON_THROW_ON_ERROR);
+    $request_content = json_decode($request->getContent(), TRUE);
 
     try {
       $param = [

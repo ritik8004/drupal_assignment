@@ -112,7 +112,6 @@ class HmImagesHelper {
    *   Array of RGB color values keyed by article_castor_id.
    */
   public function getColorsForSku(SKU $sku) {
-    $child_sku_entity = NULL;
     if ($sku->bundle() != 'configurable') {
       return [];
     }
@@ -126,6 +125,7 @@ class HmImagesHelper {
       return [];
     }
 
+    $child_sku_entity = NULL;
     $article_castor_ids = [];
     foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $skus) {
       $child_sku_entity = NULL;

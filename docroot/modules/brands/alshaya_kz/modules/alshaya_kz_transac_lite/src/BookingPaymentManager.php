@@ -111,7 +111,7 @@ class BookingPaymentManager {
         'visitor_types' => $booking['visitor_types'],
         'visit_date' => $booking['visit_date'],
         'order_total' => $booking['order_total'],
-        'ticket_info' => json_encode($booking['ticket_info'], JSON_THROW_ON_ERROR),
+        'ticket_info' => json_encode($booking['ticket_info']),
       ]);
 
       return $ticket->save();
@@ -195,7 +195,7 @@ class BookingPaymentManager {
         '#uri' => Url::fromRoute('endroid_qr_code.qr.generator', ['content' => $booking_info['sales_number']])->toString(),
         '#attributes' => ['class' => 'qr-code-image'],
       ];
-      $ticket_info = json_decode($booking_info['ticket_info'], NULL, 512, JSON_THROW_ON_ERROR);
+      $ticket_info = json_decode($booking_info['ticket_info'], NULL);
       $ticket_count = 0;
       foreach ($ticket_info as $value) {
         $ticket_count += $value->Ticket->count;

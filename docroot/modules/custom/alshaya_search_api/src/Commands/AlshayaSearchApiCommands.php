@@ -359,7 +359,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $item_ids = array_map(fn($a) => str_replace('entity:node/', '', $a), $item_ids);
 
     $this->drupalLogger->warning(dt('Deleting items from index @items', [
-      '@items' => json_encode($item_ids, JSON_THROW_ON_ERROR),
+      '@items' => json_encode($item_ids),
     ]));
 
     foreach ($indexes as $index_id) {
@@ -382,7 +382,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     }
 
     $this->drupalLogger->warning(dt('Indexing items @items', [
-      '@items' => json_encode($item_ids, JSON_THROW_ON_ERROR),
+      '@items' => json_encode($item_ids),
     ]));
 
     foreach ($indexes as $index_id) {
@@ -405,7 +405,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     }
 
     self::$loggerStatic->warning(dt('Re-indexing items @items', [
-      '@items' => json_encode($item_ids, JSON_THROW_ON_ERROR),
+      '@items' => json_encode($item_ids),
     ]));
 
     foreach ($indexes as $index_id) {
@@ -428,7 +428,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     }
 
     self::$loggerStatic->notice(dt('Indexing specified items @items', [
-      '@items' => json_encode($item_ids['skus'], JSON_THROW_ON_ERROR),
+      '@items' => json_encode($item_ids['skus']),
     ]));
 
     $index = Index::load($index_id);
@@ -450,7 +450,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     }
 
     $this->drupalLogger->warning(dt('Adding entries for search_api_item for items @items', [
-      '@items' => json_encode($item_ids, JSON_THROW_ON_ERROR),
+      '@items' => json_encode($item_ids),
     ]));
 
     foreach ($item_ids as $item_id) {

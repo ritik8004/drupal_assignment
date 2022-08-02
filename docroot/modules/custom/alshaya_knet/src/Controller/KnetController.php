@@ -93,7 +93,7 @@ class KnetController extends ControllerBase {
       }
       catch (\Exception) {
         $this->logger->error('K-Net is not configured properly<br>POST: @message', [
-          '@message' => json_encode($data, JSON_THROW_ON_ERROR),
+          '@message' => json_encode($data),
         ]);
         throw new AccessDeniedHttpException();
       }
@@ -107,7 +107,7 @@ class KnetController extends ControllerBase {
     }
     catch (\Exception) {
       $this->logger->error('Invalid KNET response call found.<br>POST: @message', [
-        '@message' => json_encode($data, JSON_THROW_ON_ERROR),
+        '@message' => json_encode($data),
       ]);
       throw new AccessDeniedHttpException();
     }

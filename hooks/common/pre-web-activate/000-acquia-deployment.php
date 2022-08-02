@@ -301,7 +301,7 @@ function get_lockfile($site, $env) {
  *   An environment name.
  */
 function get_live_env($registry_path) {
-  $data = json_decode(file_get_contents($registry_path), NULL, 512, JSON_THROW_ON_ERROR);
+  $data = json_decode(file_get_contents($registry_path), NULL);
   if (empty($data->cloud->env)) {
     throw new \Exception('Unable to locate live environment for registry path ' . $registry_path);
   }
@@ -525,7 +525,7 @@ class SimpleRestMessage {
     // If we are sending parameters, set the query string or POST fields here.
     $query_string = '';
     if ($method != 'GET' && !empty($parameters)) {
-      $data_string = json_encode($parameters, JSON_THROW_ON_ERROR);
+      $data_string = json_encode($parameters);
       curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
       curl_setopt($curl, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
@@ -551,7 +551,7 @@ class SimpleRestMessage {
       throw new Exception(sprintf('Error reaching url "%s" with method "%s." Returned error "%s."', $full_url, $method, $error));
     }
 
-    $response_body = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
+    $response_body = json_decode($response, TRUE);
     $response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
     if (!is_array($response_body)) {

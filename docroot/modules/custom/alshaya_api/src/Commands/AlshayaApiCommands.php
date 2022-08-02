@@ -563,7 +563,7 @@ class AlshayaApiCommands extends DrushCommands {
 
         $this->logMessage(
           'Updated stock for SKU: @sku, data: @data.',
-          ['@sku' => $sku, '@data' => json_encode($mdata, JSON_THROW_ON_ERROR)],
+          ['@sku' => $sku, '@data' => json_encode($mdata)],
           $verbose
         );
       }

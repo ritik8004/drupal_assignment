@@ -78,7 +78,7 @@ class AlshayaSpcCustomerController extends ControllerBase {
    */
   public function addEditCustomerAddress(Request $request) {
     $response = [];
-    $data = json_decode($request->getContent(), TRUE, 512, JSON_THROW_ON_ERROR);
+    $data = json_decode($request->getContent(), TRUE);
     $request->request->replace(is_array($data) ? $data : []);
     $uid = $this->currentUser()->getAccount()->id();
     if ($address_id = $this->spcCustomerHelper->addEditCustomerAddress($data['address'], $uid, $data['isDefault'])) {

@@ -92,13 +92,13 @@ class AlshayaBazaarVoiceApiHelper {
       $result = $response->getBody()->getContents();
 
       $result = is_string($result) && !empty($result)
-        ? json_decode($result, TRUE, 512, JSON_THROW_ON_ERROR)
+        ? json_decode($result, TRUE)
         : $result;
 
       if ($result['HasErrors']) {
         // Log the error message.
         $this->logger->error('Error while doing BV api call. Error message: @message, Response code: @response_code.', [
-          '@message' => json_encode($result['Errors'], JSON_THROW_ON_ERROR),
+          '@message' => json_encode($result['Errors']),
           '@response_code' => $response->getStatusCode(),
         ]);
       }

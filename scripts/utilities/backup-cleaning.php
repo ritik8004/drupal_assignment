@@ -47,7 +47,7 @@ function invokeAPI($url, $data = [], $method = 'GET') {
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
   curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 
-  $result = json_decode(curl_exec($ch), NULL, 512, JSON_THROW_ON_ERROR);
+  $result = json_decode(curl_exec($ch), NULL);
   curl_close($ch);
 
   return $result;

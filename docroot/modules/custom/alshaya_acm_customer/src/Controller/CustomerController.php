@@ -254,7 +254,7 @@ class CustomerController extends ControllerBase {
 
     $response['next_page_button'] = $this->renderer->render($fullBuild['#next_page_button']);
 
-    print json_encode($response, JSON_THROW_ON_ERROR);
+    print json_encode($response);
     exit;
   }
 
@@ -471,7 +471,7 @@ class CustomerController extends ControllerBase {
 
     // If json_decode is not successful, means we have actual file response.
     // Otherwise we have error message which can be decoded by json.
-    if (!json_decode($invoice_response, NULL, 512, JSON_THROW_ON_ERROR)) {
+    if (!json_decode($invoice_response, NULL)) {
       $response = new Response($invoice_response);
       // Get time format in 'YYYYMMDDHHMM'.
       $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymdhi');

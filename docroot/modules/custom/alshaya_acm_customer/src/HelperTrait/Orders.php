@@ -168,7 +168,7 @@ trait Orders {
    */
   private function getCancelledItemsQuantity(array $item) {
     if (isset($item['extension_attributes']['qty_adjustments'])) {
-      $adjustments = json_decode($item['extension_attributes']['qty_adjustments'], TRUE, 512, JSON_THROW_ON_ERROR);
+      $adjustments = json_decode($item['extension_attributes']['qty_adjustments'], TRUE);
       return isset($adjustments['qty_stock_shortage']) ? (int) $adjustments['qty_stock_shortage'] : 0;
     }
 

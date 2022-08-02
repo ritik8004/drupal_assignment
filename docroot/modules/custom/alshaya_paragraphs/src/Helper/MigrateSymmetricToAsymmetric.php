@@ -178,7 +178,7 @@ class MigrateSymmetricToAsymmetric {
             unset($newTranslatedParagraph->original);
 
             $this->logger->info('New Translated value: @value', [
-              '@value' => json_encode($newTranslatedValues, JSON_THROW_ON_ERROR),
+              '@value' => json_encode($newTranslatedValues),
             ]);
 
             try {
@@ -186,7 +186,7 @@ class MigrateSymmetricToAsymmetric {
             }
             catch (\Exception $e) {
               $this->logger->error('Error occurred while saving new translation for paragraph: @row. Message: @message', [
-                '@row' => json_encode($newTranslatedValues, JSON_THROW_ON_ERROR),
+                '@row' => json_encode($newTranslatedValues),
                 '@message' => $e->getMessage(),
               ]);
             }

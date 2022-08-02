@@ -156,7 +156,7 @@ class ProductOptionsManager {
           'option_id' => $option_id,
           'attribute_id' => $attribute_id,
           'attribute_code' => $attribute_code,
-        ], JSON_THROW_ON_ERROR),
+        ]),
       ]);
 
       return NULL;

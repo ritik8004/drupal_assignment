@@ -68,10 +68,10 @@ foreach ($conductors as $key => $value) {
 }
 
 function update_queue_status_call($status_txt, $site_id, $status, $args = []) {
-  echo PHP_EOL . '=> ' . $status_txt . ' queue for site_id ==> ' . $site_id . ' ==> (' . json_encode($args, JSON_THROW_ON_ERROR) .')';
+  echo PHP_EOL . '=> ' . $status_txt . ' queue for site_id ==> ' . $site_id . ' ==> (' . json_encode($args) .')';
   $data = update_queue_status($site_id, $status);
   if (get_object_vars($data)) {
-    echo PHP_EOL .  '==> ' . json_encode($data, JSON_THROW_ON_ERROR);
+    echo PHP_EOL .  '==> ' . json_encode($data);
   }
   echo PHP_EOL;
 }

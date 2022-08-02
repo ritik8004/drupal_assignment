@@ -146,7 +146,7 @@ class AlshayaSocialHelper {
 
       if (empty($fields['field_first_name']) && empty($fields['field_last_name'])) {
         $this->logger->warning('First and last name both are empty for social user, rejecting. Data @data', [
-          '@data' => json_encode($fields, JSON_THROW_ON_ERROR),
+          '@data' => json_encode($fields),
         ]);
 
         throw new \UnexpectedValueException('We need at-least one name to create the account');

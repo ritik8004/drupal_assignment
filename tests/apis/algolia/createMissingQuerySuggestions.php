@@ -65,7 +65,7 @@ foreach ($envs as $env) {
       ];
 
       print 'Creating query suggestion for: ' . $name . PHP_EOL;
-      algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query, JSON_THROW_ON_ERROR));
+      algolia_add_query_suggestion($app_id, $app_secret_admin, json_encode($query));
       print PHP_EOL . PHP_EOL;
     }
   }

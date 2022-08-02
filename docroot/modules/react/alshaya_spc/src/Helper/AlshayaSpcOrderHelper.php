@@ -311,13 +311,13 @@ class AlshayaSpcOrderHelper {
       $data = json_decode(SecureText::decrypt(
         $id,
         Settings::get('alshaya_api.settings')['consumer_secret']
-      ), TRUE, 512, JSON_THROW_ON_ERROR);
+      ), TRUE);
     }
 
     // Parameter used for V2 from browser.
     $oid = $this->request->query->get('oid');
     if (!empty($oid)) {
-      $data = (array) json_decode(base64_decode($oid), NULL, 512, JSON_THROW_ON_ERROR);
+      $data = (array) json_decode(base64_decode($oid), NULL);
     }
 
     if (empty($data)) {
@@ -360,7 +360,7 @@ class AlshayaSpcOrderHelper {
     if ($item['is_virtual']) {
       $data['isEgiftCard'] = $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_enabled');
       $data['media'] = $item['extension_attributes']['product_media'][0]['file'];
-      $data['egiftOptions'] = json_decode($item['extension_attributes']['product_options'][0], TRUE, 512, JSON_THROW_ON_ERROR);
+      $data['egiftOptions'] = json_decode($item['extension_attributes']['product_options'][0], TRUE);
       $data['price'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
     }
   }

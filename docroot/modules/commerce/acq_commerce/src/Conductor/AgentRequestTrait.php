@@ -136,7 +136,7 @@ trait AgentRequestTrait {
 
     // This code means we must always return valid JSON for every HTTP status.
     // Is that what we want to enforce? Probably yes.
-    $response = json_decode($result->getBody(), TRUE, 512, JSON_THROW_ON_ERROR);
+    $response = json_decode($result->getBody(), TRUE);
     if (($response === NULL) || ($this->apiVersion === 'v1' && !isset($response['success']))) {
       $mesg = sprintf(
         '%s: Invalid / Unrecognized Conductor response: %s',
@@ -196,7 +196,7 @@ trait AgentRequestTrait {
       $errors = [];
       if (preg_match('/response:(.*)/i', $result->getBody(), $errors)) {
         if (isset($errors[1])) {
-          $error = json_decode(strtolower($errors[1]), TRUE, 512, JSON_THROW_ON_ERROR);
+          $error = json_decode(strtolower($errors[1]), TRUE);
 
           if (isset($error['status'])) {
             $error_code = (int) $error['status'];

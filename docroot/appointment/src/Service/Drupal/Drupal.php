@@ -139,7 +139,7 @@ class Drupal {
     $url = '/get/userinfo';
     $response = $this->invokeApiWithSession('GET', $url);
     $result = $response->getBody()->getContents();
-    $user = json_decode($result, TRUE, 512, JSON_THROW_ON_ERROR);
+    $user = json_decode($result, TRUE);
 
     return $user;
   }

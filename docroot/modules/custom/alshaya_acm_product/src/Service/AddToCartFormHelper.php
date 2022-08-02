@@ -156,7 +156,7 @@ class AddToCartFormHelper {
             }
           }
 
-          $configurable['#options_attributes'][$value]['group-data'] = json_encode($group_data, JSON_THROW_ON_ERROR);
+          $configurable['#options_attributes'][$value]['group-data'] = json_encode($group_data);
         }
       }
       else {

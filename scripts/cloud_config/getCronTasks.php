@@ -23,7 +23,7 @@ catch (\Exception) {
   exit;
 }
 
-$res = json_decode($res, TRUE, 512, JSON_THROW_ON_ERROR);
+$res = json_decode($res, TRUE);
 foreach ($res['_embedded']['items'] as $cron) {
   print_r($cron);
 }

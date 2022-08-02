@@ -285,11 +285,11 @@ class AlshayaHmCommands extends DrushCommands {
             $redirect->setRedirect('/node/' . $node->id());
             $redirect->save();
 
-            $logger->notice('Redirect successfully added for @map', ['@map' => json_encode($map, JSON_THROW_ON_ERROR)]);
+            $logger->notice('Redirect successfully added for @map', ['@map' => json_encode($map)]);
           }
           catch (\Exception $e) {
             $logger->alert('Failed to create redirect for @map, message @message.', [
-              '@map' => json_encode($map, JSON_THROW_ON_ERROR),
+              '@map' => json_encode($map),
               '@message' => $e->getMessage(),
             ]);
           }

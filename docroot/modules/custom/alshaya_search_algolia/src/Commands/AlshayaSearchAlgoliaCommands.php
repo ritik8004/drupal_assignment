@@ -222,7 +222,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
       $context['results']['faulty'] += count(array_values($products));
 
       // Encode each result to dump.
-      $records = array_map(fn($item) => json_encode($item, JSON_THROW_ON_ERROR), array_values($products));
+      $records = array_map(fn($item) => json_encode($item), array_values($products));
 
       $context['message'] = implode(PHP_EOL, $records);
     }

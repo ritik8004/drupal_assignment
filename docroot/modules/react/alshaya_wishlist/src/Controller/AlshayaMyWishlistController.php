@@ -125,7 +125,7 @@ class AlshayaMyWishlistController extends ControllerBase {
     // If context is 'share' wishlist then pass query string data to settings.
     if ($context == 'share') {
       // Get the sharing code if available with query string.
-      $data = json_decode(base64_decode($request->query->get('data')), NULL, 512, JSON_THROW_ON_ERROR);
+      $data = json_decode(base64_decode($request->query->get('data')), NULL);
       $settings['sharedCode'] = $data->sharedCode ?? '';
     }
 
@@ -161,7 +161,7 @@ class AlshayaMyWishlistController extends ControllerBase {
     // If context is 'share' wishlist then get the username from query string.
     if ($context == 'share') {
       // Get the user's name if available with query string.
-      $data = json_decode(base64_decode($request->query->get('data')), NULL, 512, JSON_THROW_ON_ERROR);
+      $data = json_decode(base64_decode($request->query->get('data')), NULL);
       $userName = isset($data->sharedUserName) ? ($data->sharedUserName . "'s") : "";
 
       return $this->t('@userName @wishlist_label', [

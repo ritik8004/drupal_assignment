@@ -86,7 +86,7 @@ class VatCertificateManager {
           return $vat_data;
         }
 
-        $output = json_decode($result, TRUE, 512, JSON_THROW_ON_ERROR);
+        $output = json_decode($result, TRUE);
         $language_code = $this->languageManager->getCurrentLanguage()->getId();
         $vat_text_url = $output['vat_certificate']['text'][$language_code];
         $vat_text_url_split = explode('@', $vat_text_url);

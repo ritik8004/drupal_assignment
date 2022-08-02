@@ -124,8 +124,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    *   Return array of description and short description.
    */
   private function getDescription(SKU $sku_entity) {
-    $return = [];
-    $description = [];
     $static = &drupal_static(__METHOD__, []);
 
     if (!empty($static[$sku_entity->language()->getId()][$sku_entity->getSku()])) {
@@ -133,11 +131,12 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $node = $this->skuManager->getDisplayNode($sku_entity);
-
+    $return = [];
     $return['description'] = [];
     if ($node) {
       $body = $node->get('body')->getValue();
       if ($body) {
+        $description = [];
         $description['value'] = [
           '#markup' => $body[0]['value'],
         ];

@@ -300,7 +300,7 @@ class AlshayaAcmApiWrapper extends APIWrapper {
       return NULL;
     }
 
-    $response = json_decode($response, TRUE, 512, JSON_THROW_ON_ERROR);
+    $response = json_decode($response, TRUE);
     // Add sku to message to allow processing it the same way as stock push.
     $response['sku'] = $sku;
 
