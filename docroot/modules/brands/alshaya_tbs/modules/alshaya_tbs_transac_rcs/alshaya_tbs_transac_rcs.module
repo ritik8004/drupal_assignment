@@ -21,13 +21,6 @@ function alshaya_tbs_transac_rcs_module_implements_alter(&$implementations, $hoo
 }
 
 /**
- * Implements hook_alshaya_rcs_product_query_fields_alter().
- */
-function alshaya_tbs_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
-  array_push($fields['items']['... on ConfigurableProduct']['variants']['product'], 'size');
-}
-
-/**
  * Implements hook_rcs_handlebars_templates_alter().
  */
 function alshaya_tbs_transac_rcs_rcs_handlebars_templates_alter(&$templates, $entity) {
@@ -39,6 +32,7 @@ function alshaya_tbs_transac_rcs_rcs_handlebars_templates_alter(&$templates, $en
 
   $templates['product.block.description'] = 'alshaya_tbs_transac_rcs';
   $templates['product.block.description_details'] = 'alshaya_tbs_transac_rcs';
+  $templates['product.block.name'] = 'alshaya_tbs_transac_rcs';
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -49,18 +43,24 @@ function alshaya_tbs_transac_rcs_rcs_handlebars_templates_alter(&$templates, $en
 }
 
 /**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_tbs_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
+  array_push(
+    $fields['items'],
+    'top_three_attributes_1',
+    'top_three_attributes_2',
+    'top_three_attributes_3',
+    'color',
+    'bullet_points'
+  );
+}
+
+/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_tbs_transac_rcs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'rcs_product') {
     $build['#attached']['library'][] = 'alshaya_tbs_transac_rcs/product';
   }
-}
-
-/**
- * Implements hook_alshaya_rcs_product_product_options_to_query().
- */
-function alshaya_tbs_transac_rcs_alshaya_rcs_product_product_options_to_query(array $options) {
-  array_push($options, ['attribute_code' => 'size', 'entity_type' => '4']);
-  return $options;
 }

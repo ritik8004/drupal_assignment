@@ -42,7 +42,7 @@
         {% block productBrand %}
         {% endblock %}
 
-        <h1><span>#rcs.product.name#</span></h1>
+        <h1>#rcs.product._self|name#</h1>
 
         {% block pricePrefix %}
         {% endblock %}
@@ -123,13 +123,16 @@
           {% if quantity_limit_enabled == true %}
             <div class="order-quantity-limit-message"></div>
           {% endif %}
-          {% if aura_enabled is defined and aura_enabled %}
-            {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
-            <div id="aura-pdp"></div>
-          {% endif %}
         </div>
       </div>
     {% endblock %}
+
+    <div class="aura-pdp--desktop">
+      {% if aura_enabled is defined and aura_enabled %}
+        {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+        <div id="aura-pdp" class="mobile-only-hide"></div>
+      {% endif %}
+    </div>
 
     {% block pdpSidebar %}
       <div class="content__sidebar">
@@ -152,6 +155,13 @@
 
           <div id="rcs-ph-delivery-options"></div>
           <div id="pdp-store-click-collect-list"></div>
+        </div>
+
+        <div class="aura-pdp--mobile">
+          {% if aura_enabled is defined and aura_enabled %}
+            {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+            <div id="aura-pdp-mobile" class="mobile-only-show"></div>
+          {% endif %}
         </div>
 
         {% include '@alshaya_rcs_product/mobile-product-related.html.twig' %}

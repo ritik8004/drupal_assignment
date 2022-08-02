@@ -2,9 +2,15 @@ import React from 'react';
 import parse from 'html-react-parser';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import RecentOrders from '../../../../../alshaya_bazaar_voice/js/src/myaccount/components/orders/recent-orders';
+import { getFilteredProductAttributes } from '../../../../../js/utilities/display';
 
 const OrderItems = (props) => {
   const { products, cancelled } = props;
+
+  // Remove the lpn attribute from the product attribute.
+  products.forEach((product, index) => {
+    products[index].attributes = getFilteredProductAttributes(product);
+  });
 
   return (
     <>
@@ -34,7 +40,7 @@ const OrderItems = (props) => {
                   <div className="light attr-wrapper" key={`${attribute.label}_${attribute.value}`}>
                     {attribute.label}
                     :
-                    {attribute.value}
+                    {` ${attribute.value}`}
                   </div>
                 ))}
               </>

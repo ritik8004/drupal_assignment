@@ -40,25 +40,23 @@ if [[ -z "$target_site" ]]; then
 fi
 
 echo
-source_alias=`drush sa | grep "$source_env\$"`
+source_alias=`drush sa | grep "$source_env" | grep "parent:" | head -1 | awk '{print $2}' | tr -d "'"`
 if [[ -z "$source_alias" ]]; then
   echo "Invalid source env $source_env"
   exit
 fi
-
-target_alias=`drush sa | grep "$target_env\$"`
+target_alias=`drush sa | grep "$target_env" | grep "parent:" | head -1 | awk '{print $2}' | tr -d "'"`
 if [[ -z "$target_alias" ]]; then
   echo "Invalid target env $target_env"
   exit
 fi
-
-source_root=`drush sa $source_alias | grep root | head -1 | cut -d"'" -f4`
-target_root=`drush sa $target_alias | grep root | head -1 | cut -d"'" -f4`
-target_remote_user=`drush sa $target_alias | grep remote-user | cut -d"'" -f4`
-target_remote_host=`drush sa $target_alias | grep remote-host | cut -d"'" -f4`
+source_root=`drush sa $source_alias | grep root | head -1 | awk '{print $2}'`
+target_root=`drush sa $target_alias | grep root | head -1 | awk '{print $2}'`
+target_remote_user=`drush sa $target_alias | grep user | awk '{print $2}'`
+target_remote_host=`drush sa $target_alias | grep host | awk '{print $2}'`
 target="$target_remote_user@$target_remote_host"
-target_stack=`drush sa $target_alias | grep ac-site | cut -d"'" -f4`
-target_env=`drush sa $target_alias | grep ac-env | cut -d"'" -f4`
+target_stack=`drush sa $target_alias | grep ac-site | awk '{print $2}'`
+target_env=`drush sa $target_alias | grep ac-env | awk '{print $2}'`
 
 cd $source_root
 

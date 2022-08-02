@@ -214,3 +214,13 @@ function _alshaya_search_algolia_sort_settings_submit(&$form, FormStateInterface
     $algolia_search_helper->updateReplicaIndex($sort_fields);
   }
 }
+
+/**
+ * Implements hook_alshaya_reset_config_configs_to_reset().
+ */
+function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  $index_source = \Drupal::service('module_handler')->moduleExists('alshaya_rcs')
+    ? 'mdc'
+    : 'drupal';
+  \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix($index_source);
+}

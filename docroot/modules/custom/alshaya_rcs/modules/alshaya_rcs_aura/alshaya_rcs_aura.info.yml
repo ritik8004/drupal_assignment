@@ -1,0 +1,4 @@
+name: Alshaya Aura React RCS
+description: Alshaya RCS implementation of the Aura feature.
+type: module
+core_version_requirement: ^8 || ^9

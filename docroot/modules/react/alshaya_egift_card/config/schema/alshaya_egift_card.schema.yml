@@ -5,6 +5,9 @@ alshaya_egift_card.settings:
     egift_card_enabled:
       type: boolean
       label: 'Config to enable/disable egift card'
+    link_card_for_topup:
+      type: boolean
+      label: 'Link card for faster payment for Top-up'
     payment_methods_not_supported:
       label: 'Not supported payment methods for eGift cards.'
       type: sequence

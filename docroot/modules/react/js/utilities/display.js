@@ -39,6 +39,28 @@ const getHiddenFormAttributes = () => (typeof drupalSettings.lpn !== 'undefined'
   : []);
 
 /**
+ * Returns the filtered product attribute object.
+ *
+ * @param {object} product
+ *   The individual product object.
+ *
+ * @returns object
+ *   Filterd product attribute object.
+ */
+const getFilteredProductAttributes = (product) => {
+  const hiddenAttirbutes = getHiddenFormAttributes();
+  if (hiddenAttirbutes.length > 0) {
+    return (
+      Object.fromEntries(Object.entries(product.attributes).filter(
+        ([key]) => !key.includes(hiddenAttirbutes),
+      ))
+    );
+  }
+
+  return product.attributes;
+};
+
+/**
  * Returns the allowed values for quantity for the quantity dropdown.
  *
  * @returns array
@@ -97,4 +119,5 @@ export {
   isMaxSaleQtyEnabled,
   isDesktop,
   isMobile,
+  getFilteredProductAttributes,
 };

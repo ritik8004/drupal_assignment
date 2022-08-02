@@ -199,8 +199,14 @@ window.commerceBackend = window.commerceBackend || {};
 
     var configurables = {};
     product.configurable_options.forEach(function (option) {
+      var attribute_id = atob(option.attribute_uid);
+      // We let the pseudo attribute remain as an integer.
+      attribute_id = (attribute_id == drupalSettings.psudo_attribute)
+        ? parseInt(attribute_id, 10)
+        : attribute_id;
+
       configurables[option.attribute_code] = {
-        attribute_id: parseInt(atob(option.attribute_uid), 10),
+        attribute_id,
         code: option.attribute_code,
         label: option.label,
         position: option.position,
@@ -234,9 +240,13 @@ window.commerceBackend = window.commerceBackend || {};
     const variantConfigurableOptions = [];
 
     Object.keys(productConfigurables).forEach(function (attributeCode) {
+      const optionId = productConfigurables[attributeCode].attribute_id;
+      const optionValue = variant.product[attributeCode];
       variantConfigurableOptions.push({
         attribute_id: `attr_${attributeCode}`,
         label: productConfigurables[attributeCode].label,
+        option_id: optionId,
+        option_value: optionValue,
         value: window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
         value_id: variant.product[attributeCode],
       });
@@ -611,7 +621,7 @@ window.commerceBackend = window.commerceBackend || {};
         combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'
           ? combinations.by_sku[variantSku]
           : {};
-        combinations.by_sku[variantSku][configurableCodes[i]] = attributeVal;
+        combinations.by_sku[variantSku][configurableCodes[i]] = attributeVal.toString();
 
         combinations.attribute_sku[configurableCodes[i]] = typeof combinations.attribute_sku[configurableCodes[i]] !== 'undefined'
           ? combinations.attribute_sku[configurableCodes[i]]
@@ -624,7 +634,10 @@ window.commerceBackend = window.commerceBackend || {};
       }
     });
 
-    if (Drupal.hasValue(combinations.attribute_sku)) {
+    combinations.firstChild = rawProductData.firstChild;
+    if (!(Drupal.hasValue(combinations.firstChild))
+      && Drupal.hasValue(combinations.attribute_sku)
+    ) {
       var firstChild = Object.entries(combinations.attribute_sku)[0];
       firstChild = Object.entries(firstChild[1]);
       combinations.firstChild = firstChild[0][1][0];
@@ -731,7 +744,7 @@ window.commerceBackend = window.commerceBackend || {};
 
               // The behavior is same as
               // hook_alshaya_acm_product_pdp_swath_type_alter().
-              RcsEventManager.fire('alshayaRcsAlterPdpSwatch', {
+              RcsEventManager.fire('alshayaRcsAlterSwatch', {
                 detail: {
                   sku,
                   colorOptionsList,
@@ -1245,6 +1258,69 @@ window.commerceBackend = window.commerceBackend || {};
     staticDataStore.labels = {};
   }
 
+  /**
+   * Check if the product is in stock.
+   *
+   * @param {object} entity
+   *   The product entity.
+   *
+   * @returns {Boolean}
+   *   True if product is in stock, else false.
+   */
+  window.commerceBackend.isProductInStock = function isProductInStock(entity) {
+    if (entity.stock_status === 'OUT_OF_STOCK') {
+      return false;
+    }
+
+    // @todo Check for free gifts when checking the variants.
+    // For configurable product, if all variants are OOS, then we consider the
+    // product to be OOS.
+    if (entity.type_id === 'configurable') {
+      const isAnyVariantInStock = entity.variants.some((variant) =>
+        variant.product.stock_status === 'IN_STOCK'
+      );
+      if (!isAnyVariantInStock) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+/**
+ * Get SKU based on attribute option id.
+ *
+ * @param {string} $sku
+ *   The parent sku value.
+ * @param {string} attribute
+ *   Attribute to search for.
+ * @param {Number} option_id
+ *   Option id for selected attribute.
+ *
+ * @return {string}
+ *   SKU value matching the attribute option id.
+ */
+window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttribute(sku, attribute, option_id) {
+  const combinations = window.commerceBackend.getConfigurableCombinations(sku);
+
+  if (!Drupal.hasValue(combinations.attribute_sku) ) {
+    Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
+      '@sku': sku
+    });
+    return null;
+  }
+  if (!Drupal.hasValue(combinations.attribute_sku[attribute][option_id])) {
+    Drupal.alshayaLogger('warning', 'No combination available for attribute @attribute and option @option_id for SKU @sku', {
+      '@attribute': attribute,
+      '@option_id': option_id,
+      '@sku': sku
+    });
+    return null;
+  }
+
+  return combinations.attribute_sku[attribute][option_id][0];
+}
+
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty or event data is not for product.
@@ -1257,7 +1333,7 @@ window.commerceBackend = window.commerceBackend || {};
     var product = e.detail.result;
     if (product.type_id === 'configurable') {
       product.variants.forEach(function eachVariant(variant) {
-        variant.parent_sku = product.sku;
+        variant.product.parent_sku = product.sku;
       });
     }
 

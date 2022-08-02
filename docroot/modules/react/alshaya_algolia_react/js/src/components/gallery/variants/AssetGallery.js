@@ -5,7 +5,7 @@ import Lozenges from '../../../../common/components/lozenges';
 const AssetGallery = ({
   media, title, labels, sku,
 }) => {
-  if (typeof media === 'undefined') {
+  if (!media) {
     return (null);
   }
   // Clone media items, so that .shift() deletes items from
@@ -13,11 +13,16 @@ const AssetGallery = ({
   const images = [...media];
   const mainImage = images.length > 0 ? images.shift() : {};
   const hoverImage = images.length > 0 ? images.shift() : {};
-  const mainImageUrl = typeof mainImage.url !== 'undefined' ? mainImage.url : '';
+  const mainImageUrl = mainImage.url || '';
+
+  let galleryClass = 'alshaya_search_gallery';
+  if (hoverImage.url) {
+    galleryClass += ' lazy-hover';
+  }
 
   return (
-    <div className="alshaya_search_gallery">
-      <div className="alshaya_search_mainimage" data-sku-image={`${mainImageUrl}`}>
+    <div className={galleryClass}>
+      <div className="alshaya_search_mainimage" data-sku-image={mainImageUrl}>
         <ImageElement
           src={mainImageUrl}
           title={title}
@@ -25,13 +30,13 @@ const AssetGallery = ({
         />
       </div>
       {
-        typeof hoverImage.url !== 'undefined'
+        hoverImage.url
           ? (
             <div className="alshaya_search_hoverimage">
               <ImageElement
-                src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
+                src={hoverImage.url || ''}
                 title={title}
-                className="lazy"
+                loading="lazy"
               />
             </div>
           )

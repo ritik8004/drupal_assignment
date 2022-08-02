@@ -149,6 +149,18 @@ const Teaser = ({
   // icon in teaser when product is added to wishlist from drawer.
   const ref = React.createRef();
 
+  // Index name is required for algolia analytics.
+  // Set index name from search settings and pass in data attributes in teaser.
+  let { indexName } = drupalSettings.algoliaSearch.search;
+  if (isWishlistPage(extraInfo)) {
+    // If user has visited wish-list page then get index name
+    // from wishlist settings.
+    ({ indexName } = drupalSettings.wishlist);
+  } else if (pageType === 'plp' && productListIndexStatus()) {
+    // If user has visited plp then get index name from listing.
+    ({ indexName } = drupalSettings.algoliaSearch.listing);
+  }
+
   return (
     <div className={teaserClass}>
       <article
@@ -162,6 +174,7 @@ const Teaser = ({
         data-insights-position={hit.__position}
         // eslint-disable-next-line no-underscore-dangle
         data-insights-query-id={hit.__queryID}
+        data-insights-index={indexName}
         gtm-type="gtm-product-link"
         {...overridenGtm}
         onMouseEnter={() => {
@@ -249,7 +262,7 @@ const Teaser = ({
             </ConditionalView>
             {attribute.rendered_price
               ? Parser(attribute.rendered_price)
-              : <Price price={attribute.original_price} final_price={attribute.final_price} />}
+              : <Price price={attribute.original_price} finalPrice={attribute.final_price} />}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>
@@ -293,6 +306,7 @@ const Teaser = ({
             // Pass extra information to the component for update the behaviour.
             extraInfo={extraInfo}
             wishListButtonRef={ref}
+            styleCode={hit.attr_style_code ? hit.attr_style_code : null}
           />
         </ConditionalView>
         {/* Render OOS message on wishlist page if product is OOS. */}

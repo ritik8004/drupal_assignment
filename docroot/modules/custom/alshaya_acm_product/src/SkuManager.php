@@ -17,7 +17,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\mysql\Driver\Database\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -88,7 +88,7 @@ class SkuManager {
   /**
    * The database service.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\mysql\Driver\Database\mysql\Connection
    */
   protected $connection;
 
@@ -276,7 +276,7 @@ class SkuManager {
   /**
    * SkuManager constructor.
    *
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $connection
    *   Database service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
@@ -459,16 +459,22 @@ class SkuManager {
    *   Price value.
    * @param float|string $final_price
    *   Final price value.
+   * @param string $langcode
+   *   Language code used.
    *
    * @return string
    *   Price markup.
    */
-  public function getDiscountedPriceMarkup($price, $final_price):string {
+  public function getDiscountedPriceMarkup($price, $final_price, $langcode = ''):string {
     $discount = $this->getDiscountedPercent($price, $final_price);
 
-    return $discount > 0
-      ? (string) $this->t('Save @discount%', ['@discount' => $discount])
-      : '';
+    if ($discount > 0) {
+      $options = $langcode ? ['langcode' => $langcode] : [];
+
+      return (string) $this->t('Save @discount%', ['@discount' => $discount], $options);
+    }
+
+    return '';
   }
 
   /**

@@ -252,7 +252,7 @@
       }
 
       @include breakpoint($desktop) {
-        grid-template: "a b c d e" auto/ rem(184) auto rem(166) rem(169) rem(180);
+        grid-template: "a b c d e" auto/ rem(200) auto rem(166) rem(169) rem(180);
       }
     }
 
@@ -539,6 +539,11 @@
     .attr-wrapper {
       display: inline-block;
       direction: ltr;
+      width: 100%;
+
+      html[lang=ar] & {
+        text-align: right;
+      }
     }
 
     .blend {
@@ -578,10 +583,6 @@
     > div {
       background: $order_detail_order_summary_row_bg;
       padding: 1.313rem 1rem;
-
-      @include breakpoint($tablet) {
-        padding: rem(22) rem(24);
-      }
 
       @include breakpoint($desktop) {
         vertical-align: middle;
@@ -1185,8 +1186,8 @@
         padding: rem(38) 0 rem(8) !important;
         font-size: rem(18);
         line-height: rem(22);
-        text-transform: uppercase;
         font-family: $alshaya-bold;
+        color: $page_title;
 
         div {
           margin-bottom: 0;

@@ -801,6 +801,10 @@ class SkuImagesManager {
           ];
 
           if ($search_hover_image) {
+            if (empty($search_hover_image['#attributes'])) {
+              $search_hover_image['#attributes'] = [];
+            }
+            $search_hover_image['#attributes']['loading'] = 'lazy';
             $gallery['#hoverImage'] = $search_hover_image;
           }
         }

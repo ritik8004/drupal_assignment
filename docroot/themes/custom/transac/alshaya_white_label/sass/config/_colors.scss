@@ -1063,6 +1063,10 @@ $_online-booking-delivery-detail: $cyan-blue;
 $_online-booking-primary-text: $white-five;
 $_online-booking-black-text: $mothercare-black;
 
+// Intercountry Transfer
+$inter-country-transfer-black-text: $mothercare-black;
+$inter-country-transfer-border: $warm-grey-two;
+
 // Address form.
 $address_form_country_disabled: $ladda-disabled;
 $address_form_radio: $windows-blue;
@@ -2246,3 +2250,9 @@ $online-return-status-red-label: $speech-red;
 $online-return-print-button-bg: $white-five;
 $online-return-status-green-label: $light-green;
 $online-return-status-orange-label: $red-orange;
+$online-return-cancellation-reason: $error-red;
+$online-return-disabled-txt: $white-five;
+$online-return-dark-txt: $brownish-grey;
+$online-return-disable-button-bg: $white;
+$online-return-confirmation-note-txt: $greyish;
+$online-return-confirmation-border: $_gray_222;

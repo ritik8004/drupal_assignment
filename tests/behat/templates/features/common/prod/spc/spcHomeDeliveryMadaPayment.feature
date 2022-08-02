@@ -1,4 +1,4 @@
-@javascript @guest @madaPayment @homeDelivery @pbksapprod @westelmsapprod @vskwpprod @pbkaeprod @pbksaprod @pbkkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmaeprod @westelmsaprod @vssaprod @pbsaprod @bbwsaprod @hmkwprod @hmsaprod @flsaprod @mcsaprod @vssapprod @pbsapprod @bbwsapprod @hmsapprod @flsapprod @mcsapprod
+@javascript @guest @madaPayment @homeDelivery @coskwprod @cosaeprod @cossaprod @pbksapprod @westelmsapprod @vskwpprod @pbkaeprod @pbksaprod @pbkkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @westelmaeprod @westelmsaprod @vssaprod @pbsaprod @bbwsaprod @hmkwprod @hmsaprod @flsaprod @mcsaprod @vssapprod @pbsapprod @bbwsapprod @hmsapprod @flsapprod @mcsapprod
 Feature: SPC Checkout Home Delivery MADA Card Payment
 
   Background:
@@ -24,7 +24,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
@@ -67,7 +67,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
@@ -110,7 +110,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
@@ -150,7 +150,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
@@ -193,7 +193,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address
@@ -236,7 +236,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I select the home delivery address

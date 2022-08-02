@@ -26,7 +26,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 20 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -69,7 +69,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -110,7 +110,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
     And I select the home delivery address

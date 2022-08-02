@@ -1,4 +1,7 @@
 (function (Drupal) {
+  // Initial a variable with page load timestamp to identify the actual time.
+  // This time will remain unchanged within the context of window.
+  window.pageLoadTime = window.pageLoadTime || new Date().getTime();
 
   Drupal.logViaDataDog = function (severity, message, context) {
     try {
@@ -10,6 +13,10 @@
       context = context || {};
 
       context.logSource = 'drupal_module';
+
+      // Pass the actual page load time upon user request to Datadog log for
+      // better monitoring.
+      context.pageLoadTime = window.pageLoadTime;
 
       // Let other modules alter contexts.
       document.dispatchEvent(new CustomEvent('dataDogContextAlter', {

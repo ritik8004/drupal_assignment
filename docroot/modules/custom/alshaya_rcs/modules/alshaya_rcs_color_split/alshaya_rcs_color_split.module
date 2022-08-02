@@ -41,17 +41,8 @@ function alshaya_rcs_color_split_alshaya_rcs_product_order_build_alter(array &$b
  * Implements hook_page_attachments().
  */
 function alshaya_rcs_color_split_page_attachments(array &$attachments) {
-  $route_match = \Drupal::routeMatch();
-  $route_name = $route_match->getRouteName();
-
-  if (!in_array($route_name, [
-    'entity.node.canonical',
-    'entity.taxonomy_term.canonical',
-    'acq_cart.cart',
-    'alshaya_spc.checkout',
-    'alshaya_spc.checkout.confirmation',
-    'alshaya_algolia_react.search',
-  ])) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
     return;
   }
 
@@ -146,12 +137,8 @@ function alshaya_rcs_color_split_node_view(array &$build, EntityInterface $entit
 /**
  * Implements hook_alshaya_rcs_product_product_options_to_query().
  */
-function alshaya_rcs_color_split_alshaya_rcs_product_product_options_to_query(array $options) {
+function alshaya_rcs_color_split_alshaya_rcs_product_product_options_to_query() {
   $color_attribute = \Drupal::config('alshaya_acm_product.display_settings')
     ->get('color_attribute_config')['configurable_color_attribute'];
-  array_push($options, [
-    "attribute_code" => $color_attribute,
-    "entity_type" => "4",
-  ]);
-  return $options;
+  return [$color_attribute];
 }

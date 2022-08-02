@@ -298,7 +298,7 @@
 
       &[disabled] {
         span {
-          background: $content_pagetitle_border;
+          background: $online-return-disable-button-bg;
         }
       }
     }
@@ -318,11 +318,11 @@
       .refund-detail-label {
         background: $online-return-refund-label-inactive-bg;
         cursor: unset;
-        color: $order_detail_td_dark_content;
+        color: $online-return-disabled-txt;
 
         .refund-detail-header {
           &::before {
-            color: $order_detail_td_dark_content;
+            color: $online-return-disabled-txt;
           }
         }
       }
@@ -422,6 +422,7 @@
 
     .Collapsible__contentInner {
       line-height: 1.125rem;
+      color: $online-return-dark-txt;
 
       > div:first-child {
         margin-top: 0.3125rem;
@@ -466,7 +467,6 @@
     .select-items-label,
     .refund-detail-label {
       font-size: 1rem;
-      text-transform: uppercase;
       padding: 0.875rem 2rem;
       background: $online-return-dark-bg;
       color: $online-return-label-txt;
@@ -530,10 +530,12 @@
     margin-top: 1.5rem;
     margin-#{$left}: 1.125rem;
     font-size: 0.875rem;
+    color: $online-return-dark-bg;
 
     a {
       text-decoration: underline;
       margin-#{$left}: 1.125rem;
+      color: $online-return-dark-bg;
     }
   }
 

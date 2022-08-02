@@ -46,6 +46,14 @@
     }
   }
 
+  .products-list-wrapper,
+  .refund-details-wrapper {
+    .refund-detail-label,
+    .select-items-label {
+      text-transform: uppercase;
+    }
+  }
+
   .continue-button-wrapper {
     button {
       span {

@@ -27,5 +27,43 @@
         }
       }
     }
+
+    .item-price,
+    .item-total-price {
+      .dark {
+        div {
+          margin-bottom: 0 !important;
+        }
+      }
+    }
+
+    .order-summary-row {
+      .order-name {
+        > div.dark {
+          margin-bottom: 0;
+        }
+      }
+
+      .button {
+        @include breakpoint($upto-desktop) {
+          line-height: rem(30);
+        }
+      }
+    }
+  }
+}
+
+.order-detail,
+.block-alshaya-user-recent-orders {
+  .user__order--detail {
+    div.order-item-row.delivered-items,
+    tr.order-item-row.delivered-items,
+    div.order-item-row.cancelled-items,
+    tr.order-item-row.cancelled-items {
+      > div,
+      td {
+        text-transform: capitalize;
+      }
+    }
   }
 }

@@ -40,7 +40,7 @@ body[class*="return-confirmation"] {
     line-height: 1.125rem;
     font-size: 0.875rem;
     padding: 1rem;
-    background: $spc-checkout-success-message-background;
+    background: $online-return-status-green-label;
     color: $online-return-label-txt;
     font-family: $alshaya-bold;
 
@@ -67,7 +67,7 @@ body[class*="return-confirmation"] {
       font-size: 1.125rem;
       line-height: 1.375rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid $online-return-dark-bg;
+      border-bottom: 1px solid $online-return-confirmation-border;
       margin-top: 1.0625rem;
 
       @include breakpoint($tablet) {
@@ -111,9 +111,23 @@ body[class*="return-confirmation"] {
         }
       }
 
-      .refund {
-        @include breakpoint($only-mobile) {
-          width: 7.375rem;
+      @include breakpoint($only-mobile) {
+        .packitem {
+          width: rem(72);
+        }
+
+        .refund {
+          width: rem(118);
+        }
+
+        html[lang=ar] & {
+          .packitem {
+            width: rem(56);
+          }
+
+          .refund {
+            width: rem(76);
+          }
         }
       }
 
@@ -134,7 +148,7 @@ body[class*="return-confirmation"] {
         }
 
         @include breakpoint($tablet) {
-          width: 26.25rem;
+          width: rem(480);
         }
       }
     }
@@ -147,7 +161,7 @@ body[class*="return-confirmation"] {
       padding: 1.5rem 1.5625rem 0.875rem;
       font-size: 0.875rem;
       line-height: 1.125rem;
-      border-bottom: 1px solid $online-return-dark-bg;
+      border-bottom: 1px solid $online-return-confirmation-border;
 
       @include breakpoint($tablet) {
         display: grid;
@@ -193,7 +207,7 @@ body[class*="return-confirmation"] {
       margin: 1rem 1.5625rem;
       font-size: 0.875rem;
       line-height: 1.125rem;
-      color: $order_detail_td_light_content;
+      color: $online-return-confirmation-note-txt;
     }
   }
 
@@ -203,7 +217,7 @@ body[class*="return-confirmation"] {
       display: grid;
       grid-template: "a b" auto/ 10rem auto;
       padding: 1.5rem;
-      border-bottom: 1px solid $online-return-dark-bg;
+      border-bottom: 1px solid $online-return-confirmation-border;
       word-break: break-word;
 
       @include breakpoint($tablet) {
@@ -307,7 +321,7 @@ body[class*="return-confirmation"] {
       font-size: 1.125rem;
       line-height: 1.375rem;
       padding-bottom: 0.3125rem;
-      border-bottom: 1px solid $online-return-dark-bg;
+      border-bottom: 1px solid $online-return-confirmation-border;
     }
   }
 }

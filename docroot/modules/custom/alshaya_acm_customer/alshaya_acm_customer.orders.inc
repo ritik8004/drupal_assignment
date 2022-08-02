@@ -530,7 +530,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       // Check if we can find a parent SKU for this to get proper name.
       if (alshaya_acm_product_get_parent_sku_by_sku($sku)) {
         // Try to find attributes to display for this product.
-        $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
+        $product['attributes'] = \Drupal::service('alshaya_acm_product.skumanager')->getConfigurableValues($sku);
       }
 
       // If attribute value available for grouping attribute.
@@ -670,6 +670,25 @@ function alshaya_acm_customer_build_order_detail(array $order) {
         $build['#online_booking_notice']['booking_error'] = t('There was some error while booking. Please contact to customer care.', [], ['context' => 'online_booking']);
       }
     }
+  }
+
+  // Inter country transfer.
+  // Check if the delivery date is available in extension_attributes
+  // pass it for further processing.
+  if (!empty($order['extension']['oms_lead_time'])) {
+    $build['#order_details']['ict']['date'] = \Drupal::service('date.formatter')->format(
+      strtotime($order['extension']['oms_lead_time']),
+      'ict',
+      'dS M Y',
+    );
+    // Format labels to display.
+    if ($build['#order_details']['type'] === 'cc') {
+      $build['#order_details']['ict']['label'] = t('Available in store from', [], ['context' => 'ict']);
+    }
+    else {
+      $build['#order_details']['ict']['label'] = t('Expected Delivery by', [], ['context' => 'ict']);
+    }
+    $build['#attached']['library'][] = 'alshaya_white_label/inter-country-transfer';
   }
 
   return $build;

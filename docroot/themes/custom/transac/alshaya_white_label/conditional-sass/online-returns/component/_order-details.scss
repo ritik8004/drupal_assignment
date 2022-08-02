@@ -64,7 +64,7 @@
         }
 
         @include breakpoint($desktop) {
-          grid-template: "a b c d" auto/rem(184) auto rem(169) rem(180);
+          grid-template: "a b c d" auto/rem(200) auto rem(169) rem(180);
         }
 
         .order-item-image {
@@ -190,10 +190,6 @@
         font-family: $alshaya-bold;
         padding: rem(38) 0 rem(8);
         border-bottom: rem(1) solid $online-return-order-detail-border;
-
-        span.rejected {
-          color: $online-return-status-orange-label;
-        }
       }
 
       .return-items-wrapper {
@@ -283,13 +279,14 @@
         }
       }
 
-      span {
+      .cancel-button-text {
         display: flex;
         align-items: center;
         text-transform: uppercase;
         justify-content: center;
         font-size: rem(14);
         line-height: rem(18);
+        margin-bottom: 0;
 
         @include icon(close, before) {
           font-size: rem(16);
@@ -385,6 +382,41 @@
         div {
           margin-bottom: 0;
         }
+      }
+    }
+
+    .cancellation-reason {
+      padding-top: rem(16);
+      margin-bottom: 0;
+      line-height: rem(18);
+      font-size: rem(12);
+      grid-area: d;
+
+      @include breakpoint($tablet) {
+        padding: rem(22) rem(10);
+      }
+
+      @include breakpoint($desktop) {
+        font-size: rem(14);
+      }
+
+      > div:nth-child(2) {
+        margin-bottom: 0;
+      }
+
+      .reason-wrapper {
+        display: flex;
+
+        > div {
+          padding-#{$right}: rem(3);
+          margin-bottom: 0;
+        }
+      }
+
+      .reason-label {
+        color: $online-return-cancellation-reason;
+        font-family: $alshaya-bold;
+        margin-#{$right}: rem(4);
       }
     }
   }

@@ -54,7 +54,7 @@ const handleMatchBackLoad = () => {
 };
 
 // Render wishlist button once sku base form is loaded.
-document.addEventListener('onSkuBaseFormLoad', () => {
+document.addEventListener('onSkuBaseFormPreLoad', () => {
   // Check if the wishlist element on PDP exists and
   // data-sku is present, then render the wishlist button.
   renderWishListButton('wishlist-pdp-full', 'pdp');

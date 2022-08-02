@@ -3,7 +3,21 @@
 script_name=$0
 script_full_path=$(dirname "$0")
 
-deployed_branches=$($script_full_path/get-deployed-branches.sh | cut -d' ' -f6)
+echo "Fetching deployed branches. Please wait..."
+branches_str=$($script_full_path/get-deployed-branches.sh)
+
+# Avoid further processing if we can't fetch the list of deployed branches.
+if [ $? -eq 1 ] ; then
+  echo "Impossible to fetch deployed branches using Acquia Cloud API."
+  exit
+fi
+
+# Find the branch names from the script's response (Stack %d - Env %s: %s).
+deployed_branches=$(echo "$branches_str" | cut -d' ' -f6)
+echo "$deployed_branches"
+
+# Hardcode some branches for security. These branches are supposed to always be deployed at least on one env/stack.
+deployed_branches+=" develop-build qa-build uat-build"
 echo "Deployed branches:"
 echo $deployed_branches
 echo
@@ -46,6 +60,8 @@ for repo in $repos ; do
         echo "Deleting $b"
         git push $repo  :refs/heads/$b
       done
+
+      git remote prune $repo
     else
       echo "Nothing deleted"
     fi

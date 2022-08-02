@@ -19,6 +19,9 @@ module.exports = function (gulp, plugins, options) {
         grid: true,
         cascade: false
       })]))
+      .pipe(plugins.cleanCss({
+        level: 2
+      }))
       .pipe(plugins.sourcemaps.write())
       .pipe(gulp.dest(options.sass.destination));
   });
@@ -35,6 +38,9 @@ module.exports = function (gulp, plugins, options) {
         grid: true,
         cascade: false
       })]))
+      .pipe(plugins.cleanCss({
+        level: 2
+      }))
       .pipe(plugins.sourcemaps.write())
       .pipe(gulp.dest(options.sass.destination));
   });
@@ -51,6 +57,9 @@ module.exports = function (gulp, plugins, options) {
       grid: true,
       cascade: false
     })]))
+    .pipe(plugins.cleanCss({
+      level: 2
+    }))
     .pipe(plugins.rename({
       suffix: '.ltr'
     }))
@@ -70,6 +79,9 @@ module.exports = function (gulp, plugins, options) {
         grid: true,
         cascade: false
       })]))
+      .pipe(plugins.cleanCss({
+        level: 2
+      }))
       .pipe(plugins.rename({
         suffix: '.ltr'
       }))
@@ -90,6 +102,9 @@ module.exports = function (gulp, plugins, options) {
       grid: true,
       cascade: false
     })]))
+    .pipe(plugins.cleanCss({
+      level: 2
+    }))
     .pipe(plugins.rename({
       suffix: '.rtl'
     }))
@@ -110,6 +125,9 @@ module.exports = function (gulp, plugins, options) {
         grid: true,
         cascade: false
       })]))
+      .pipe(plugins.cleanCss({
+        level: 2
+      }))
       .pipe(plugins.rename({
         suffix: '.rtl'
       }))

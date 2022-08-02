@@ -237,6 +237,7 @@
         .otp-sent-to-mobile-label {
           position: relative;
           margin-bottom: rem(30);
+          line-height: rem(22);
         }
       }
 
@@ -327,7 +328,6 @@
         .spc-aura-unlink-card-form-content {
           display: flex;
           align-items: flex-end;
-          justify-content: space-between;
           text-align: $left;
 
           @include breakpoint($only-mobile) {
@@ -362,7 +362,7 @@
               display: inline-block;
               font-size: rem(10);
               color: $aura-loyalty-dark-text;
-              padding: rem(8) 0 0;
+              padding-#{$left}: rem(22);
             }
           }
 
