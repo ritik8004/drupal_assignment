@@ -38,9 +38,9 @@
   {{#if this.overridden_path}}
     {{ addClass 'level2_class' 'overridden-link' }}
   {{/if}}
-  <li class="menu__list-item menu--two__list-item {{ @root.level2_class }} {{ move_to_right }}">
+  <li class="menu__list-item menu--two__list-item {{ class }} {{ @root.level2_class }} {{ move_to_right }}">
     <div class="menu__link-wrapper menu-two__link-wrapper">
-      <{{ this.tag }} class="menu__link menu-two__link {{ @root.level2_class }} sub-nav-{{cleanCssIdentifier @root.sub_nav_name }}" gtm-menu-title="{{ this.name }}" {{{ this.tag_attr }}}>{{ this.name }}</{{ this.tag }}>
+      <{{ this.tag }} class="menu__link menu-two__link {{ class }} {{ @root.level2_class }} sub-nav-{{cleanCssIdentifier @root.sub_nav_name }}" gtm-menu-title="{{ this.name }}" {{{ this.tag_attr }}}>{{ this.name }}</{{ this.tag }}>
     </div>
     {{#if this.children }}
       {{> main_menu_level3_partial name=name items=this.children }}
