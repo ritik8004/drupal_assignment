@@ -24,34 +24,34 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Add More & Get More' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'أضف المزيد واحصل على المزيد',
         'context' => 'hello_member',
       ],
       'Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'هل تعلم أنك إذا أضفت بعض المعلومات أدناه، فستكسب المزيد من النقاط وستحصل على تجربة تسوق كما تحب؟ رائع، أليس كذلك؟',
         'context' => 'hello_member',
       ],
       'Date of Birth' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'تاريخ الميلاد',
       ],
       'H&M wants to give you special treat on your birthday' => [
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
       'Gender' => [
-        'ar' => 'العضوية',
+        'ar' => 'الجنس',
       ],
-      '- Select Gender -' => [
-        'ar' => 'معلومات العضوية',
+      'Select Gender -' => [
+        'ar' => 'حدد الجنس',
       ],
       'Male' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'ذكر',
       ],
       'Female' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'أنثى',
       ],
       'Prefer not to say' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'أفضل عدم التصريح',
       ],
       'My Details' => [
         'ar' => 'معلومات العضوية',
