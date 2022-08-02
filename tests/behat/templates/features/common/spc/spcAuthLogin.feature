@@ -1,8 +1,9 @@
-@javascript @hmkwdev @mckwuat @pbkkwuat @pbksauat @pbkaeuat
-Feature: Test Sign in and Forgot password features from common
+@javascript @createaccount @smoke @auth @mujikwuat @coskwuat @mujisauat @cosaeuat @coskwuat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @bpaeuat @tbseguat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @bpaeqa @tbskwuat @bbwsauat @mcsaqa @flsauat @hmaeuat @vskwqa @vsaeqa @flkwuat @hmkwqa @mckwuat @vsaeuat @vssauat @bbwkwuat @bbwaeuat @hmkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
+Feature: Create new user account on the site
 
   Background:
     When I am on "{url_register}{behat_secret_key}"
+    And I wait 10 seconds
     And I wait for the page to load
 
   Scenario: As an authenticated user, I should be able to sign in after providing valid credentials

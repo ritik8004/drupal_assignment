@@ -162,7 +162,7 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode, con
   if (!hasValue(identifierNo)) {
     let totalPrice = 0;
     Object.entries(items).forEach(([, item]) => {
-      totalPrice += (item.qty * item.price);
+      totalPrice += (item.qty * item.finalPrice);
     });
 
     // If dictionary data does not exists in storage, we do api call.
@@ -193,7 +193,7 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode, con
     const itemDetails = {
       code: item.sku,
       quantity: item.qty,
-      amount: item.qty * item.price,
+      amount: item.qty * item.finalPrice,
     };
     products.push(itemDetails);
   });

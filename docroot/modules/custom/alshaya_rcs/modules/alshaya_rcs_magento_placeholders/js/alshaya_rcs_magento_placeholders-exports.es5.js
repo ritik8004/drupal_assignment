@@ -164,6 +164,17 @@ exports.render = function render(
         );
       }
 
+    case 'sitemap':
+      // Render the sitemap page block.
+      if (typeof global.sitemapPageRenderer !== 'undefined') {
+        html += global.sitemapPageRenderer.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
+
     default:
       Drupal.alshayaLogger('debug', 'Placeholder @placeholder not supported for render.', {
         '@placeholder': placeholder
