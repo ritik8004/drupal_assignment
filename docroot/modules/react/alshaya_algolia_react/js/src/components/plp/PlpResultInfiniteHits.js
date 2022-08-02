@@ -34,6 +34,7 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
   const { subCategories } = drupalSettings.algoliaSearch;
   if (typeof subCategories !== 'undefined' && Object.keys(subCategories).length > 0) {
     groupEnabled = true;
+    const langcode = 'en';
     Object.keys(subCategories).forEach((key) => {
       const categoryField = subCategories[key].category.category_field;
       const { hierarchy } = subCategories[key].category;
@@ -43,8 +44,9 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
       Object.keys(hits).forEach((index) => {
         const level = categoryField.split('.')[1];
         const field = categoryField.split('.')[0];
-        if (typeof hits[index][field][drupalSettings.path.currentLanguage] !== 'undefined') {
-          const hierarchies = hits[index][field][drupalSettings.path.currentLanguage][level];
+        // We are fetching EN values only to compare the items correctly with sub-categories.
+        if (typeof hits[index][field][langcode] !== 'undefined') {
+          const hierarchies = hits[index][field][langcode][level];
 
           if (hierarchies.includes(hierarchy)) {
             items[key].push(hits[index]);
