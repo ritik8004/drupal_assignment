@@ -310,6 +310,33 @@ class OrdersManager {
             $this->countCache->set('orders_count_' . $customer_id, $result['total_count']);
           }
         }
+
+        // Sort them by default by date.
+        usort($orders, function ($a, $b) {
+          return $b['created_at'] > $a['created_at'];
+        });
+
+        // Update order items to have unique records only.
+        // For configurable products we get it twice (once for parent and once
+        // for selected variant).
+        foreach ($orders as &$order) {
+          $order_items = [];
+          foreach ($order['items'] as $item) {
+            // If product is virtual then use item_id instead of sku as key.
+            if (!isset($order_items[$item['sku']]) && !$item['is_virtual']) {
+              $order_items[$item['sku']] = $item;
+            }
+            else {
+              $order_items[$item['item_id']] = $item;
+            }
+            $sku_entity = SKU::loadFromSku(alshaya_acm_customer_clean_sku($item['sku']));
+            if ($sku_entity instanceof SKUInterface) {
+              $order_items[$item['sku']]['name'] = $this->productInfoHelper->getTitle($sku_entity, 'basket');
+            }
+
+          }
+          $order['items'] = $order_items;
+        }
       }
     }
     catch (\Exception $e) {
@@ -317,37 +344,11 @@ class OrdersManager {
       $orders = [];
     }
 
-    // Sort them by default by date.
-    usort($orders, function ($a, $b) {
-      return $b['created_at'] > $a['created_at'];
-    });
-
-    // Update order items to have unique records only.
-    // For configurable products we get it twice (once for parent and once for
-    // selected variant).
-    foreach ($orders as &$order) {
-      $order_items = [];
-      foreach ($order['items'] as $item) {
-        // If product is virtual then use item_id instead of sku as key.
-        if (!isset($order_items[$item['sku']]) && !$item['is_virtual']) {
-          $order_items[$item['sku']] = $item;
-        }
-        else {
-          $order_items[$item['item_id']] = $item;
-        }
-        $sku_entity = SKU::loadFromSku(alshaya_acm_customer_clean_sku($item['sku']));
-        if ($sku_entity instanceof SKUInterface) {
-          $order_items[$item['sku']]['name'] = $this->productInfoHelper->getTitle($sku_entity, 'basket');
-        }
-
-      }
-      $order['items'] = $order_items;
-    }
-
+    $filtered_orders = $orders;
     // Search by Order ID, SKU, Name.
     $search = $search_key ? $this->currentRequest->query->get($search_key) : NULL;
     if ($search) {
-      $orders = array_filter($orders, function ($order) use ($search) {
+      $filtered_orders = array_filter($orders, function ($order) use ($search) {
         // Search by Order ID.
         if (stripos($order['increment_id'], $search) > -1) {
           return TRUE;
@@ -371,7 +372,7 @@ class OrdersManager {
     // Filter order by status.
     $filter = $filter_key ? $this->currentRequest->get($filter_key) : NULL;
     if ($filter) {
-      $orders = array_filter($orders, function ($order, $orderId) use ($filter) {
+      $filtered_orders = array_filter($orders, function ($order, $orderId) use ($filter) {
         $status = alshaya_acm_customer_get_order_status($order);
         if ($status['text'] == $filter) {
           return TRUE;
@@ -381,7 +382,7 @@ class OrdersManager {
       }, ARRAY_FILTER_USE_BOTH);
     }
 
-    return $orders;
+    return $filtered_orders;
   }
 
   /**
