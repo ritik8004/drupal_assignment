@@ -154,6 +154,35 @@ class HelloMemberCartOffersVouchers extends React.Component {
     } = this.state;
     const { totals } = this.props;
     const forceRenderTabPanel = true;
+    // Add class to show applied voucher and offer message in popup.
+    const additionalClasses = typeof totals.hmOfferCode !== 'undefined' || typeof totals.hmAppliedVoucherCodes !== 'undefined' ? 'error' : '';
+    let appliedVouchers = '';
+    // Applied voucher codes message in popup.
+    if (typeof totals.hmAppliedVoucherCodes !== 'undefined') {
+      appliedVouchers = (
+        <span>
+          {Drupal.t(
+            '@hmVoucherCount vouchers are applied',
+            { '@hmVoucherCount': totals.hmAppliedVoucherCodes.split(',').length },
+            { context: 'hello_member' },
+          )}
+        </span>
+      );
+    }
+
+    // Applied offer codes message in popup.
+    let appliedOffers = '';
+    if (typeof totals.hmOfferCode !== 'undefined') {
+      appliedOffers = (
+        <span>
+          {Drupal.t(
+            '@hmOfferCount offers are applied',
+            { '@hmOfferCount': totals.hmOfferCode.split(',').length },
+            { context: 'hello_member' },
+          )}
+        </span>
+      );
+    }
 
     return (
       <>
@@ -177,7 +206,10 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 <ConditionalView condition={!isAnonymous}>
                   <div className="hm-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
                   <div className="hm-promo-modal-content">
-                    <div className="error-info-section">&nbsp;</div>
+                    <div className={`error-info-section ${additionalClasses}`}>
+                      {appliedOffers}
+                      {appliedVouchers}
+                    </div>
                     <Tabs forceRenderTabPanel={forceRenderTabPanel}>
                       <TabList>
                         <Tab>{Drupal.t('Bonus Vouchers', {}, { context: 'hello_member' })}</Tab>
