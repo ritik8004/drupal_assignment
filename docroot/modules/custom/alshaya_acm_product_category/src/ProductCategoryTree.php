@@ -33,6 +33,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
   const CACHE_ID = 'product_category_tree';
 
+  const CATEGORY_CACHE_ID = 'category_tree';
+
   const VOCABULARY_ID = 'acq_product_category';
 
   const CACHE_TAG = 'taxonomy_term:acq_product_category';
@@ -45,6 +47,20 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @var bool
    */
   protected $excludeNotInMenu = TRUE;
+
+  /**
+   * The cache name.
+   *
+   * @var string
+   */
+  protected $cacheName;
+
+  /**
+   * Flag to indicate whether to use cached data or not.
+   *
+   * @var bool
+   */
+  protected static $useCategoryCache = TRUE;
 
   /**
    * Term storage object.
@@ -619,60 +635,81 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   (optional) If the result should contain items excluded from menu.
    * @param bool $mobile_only
    *   (optional) If the result should have items only for mobile.
-   * @param string $vid
-   *   (optional) Vocabulary id.
    *
    * @return array
    *   Child term array.
    */
-  public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $mobile_only = FALSE, $vid = NULL) {
-    $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
-    $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name', 'description__value', 'depth_level'])
-      ->fields('ttdcl', ['field_display_as_clickable_link_value'])
-      ->fields('target_link', ['field_target_link_uri'])
-      ->fields('override_target', ['field_override_target_link_value']);
-    $query->addField('ttim', 'field_category_include_menu_value', 'include_in_menu');
-    $query->addField('in_desktop', 'field_include_in_desktop_value', 'display_in_desktop');
-    $query->addField('in_mobile', 'field_include_in_mobile_tablet_value', 'display_in_mobile');
-    $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id = tfd.tid');
-    $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
-    $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
-    $query->leftJoin('taxonomy_term__field_include_in_desktop', 'in_desktop', 'in_desktop.entity_id = tfd.tid');
-    $query->leftJoin('taxonomy_term__field_include_in_mobile_tablet', 'in_mobile', 'in_mobile.entity_id = tfd.tid');
-    $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
-    $query->leftJoin('taxonomy_term__field_target_link', 'target_link', 'target_link.entity_id = tfd.tid');
-    $query->leftJoin('taxonomy_term__field_override_target_link', 'override_target', 'override_target.entity_id = tfd.tid');
-    if ($exclude_not_in_menu) {
-      $query->condition('ttim.field_category_include_menu_value', 1);
-    }
-    if ($mobile_only) {
+  public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $mobile_only = FALSE) {
+    $cid = self::CATEGORY_CACHE_ID . '_' . $langcode . '_' . self::VOCABULARY_ID;
+
+    $cache = self::$useCategoryCache ? $this->cache->get($cid) : NULL;
+    $results = $cache ? $cache->data : NULL;
+
+    if (empty($results)) {
+      $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
+      $query->fields('tfd', ['tid', 'name', 'description__value', 'depth_level'])
+        ->fields('ttdcl', ['field_display_as_clickable_link_value'])
+        ->fields('target_link', ['field_target_link_uri'])
+        ->fields('override_target', ['field_override_target_link_value'])
+        ->fields('tth', ['parent_target_id'])
+        ->fields('ttim', ['field_category_include_menu_value'])
+        ->fields('ttmo', ['field_mobile_only_dpt_page_link_value']);
+      $query->addField('ttim', 'field_category_include_menu_value', 'include_in_menu');
+      $query->addField('in_desktop', 'field_include_in_desktop_value', 'display_in_desktop');
+      $query->addField('in_mobile', 'field_include_in_mobile_tablet_value', 'display_in_mobile');
+      $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id = tfd.tid');
+      $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
+      $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
+      $query->leftJoin('taxonomy_term__field_include_in_desktop', 'in_desktop', 'in_desktop.entity_id = tfd.tid');
+      $query->leftJoin('taxonomy_term__field_include_in_mobile_tablet', 'in_mobile', 'in_mobile.entity_id = tfd.tid');
+      $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
+      $query->leftJoin('taxonomy_term__field_target_link', 'target_link', 'target_link.entity_id = tfd.tid');
+      $query->leftJoin('taxonomy_term__field_override_target_link', 'override_target', 'override_target.entity_id = tfd.tid');
       $query->innerJoin('taxonomy_term__field_mobile_only_dpt_page_link', 'ttmo', 'ttmo.entity_id = tfd.tid');
-      $query->condition('ttmo.field_mobile_only_dpt_page_link_value', 1);
+
+      // For the lhn.
+      $query->leftJoin('taxonomy_term__field_show_in_lhn', 'tlhn', 'tlhn.entity_id = tfd.tid');
+      $query->fields('tlhn', ['field_show_in_lhn_value']);
+
+      // For the `move to right`.
+      $query->leftJoin('taxonomy_term__field_move_to_right', 'mtr', 'mtr.entity_id = tfd.tid');
+      $query->fields('mtr', ['field_move_to_right_value']);
+
+      // For the `app navigation links`.
+      $query->leftJoin('taxonomy_term__field_show_in_app_navigation', 'mln', 'mln.entity_id = tfd.tid');
+      $query->fields('mln', ['field_show_in_app_navigation_value']);
+
+      $query->condition('ttcs.field_commerce_status_value', 1);
+      $query->condition('tfd.langcode', $langcode);
+      $query->condition('tfd.vid', self::VOCABULARY_ID);
+      $query->orderBy('tfd.weight', 'ASC');
+
+      // Allow other modules to alter the query.
+      $query->addTag('product_category_child_terms');
+
+      $results = $query->execute()->fetchAll();
+
+      $this->cache->set($cid, $results, Cache::PERMANENT, ['taxonomy_term:' . self::VOCABULARY_ID]);
     }
 
-    // For the lhn.
-    $query->leftJoin('taxonomy_term__field_show_in_lhn', 'tlhn', 'tlhn.entity_id = tfd.tid');
-    $query->fields('tlhn', ['field_show_in_lhn_value']);
+    // Filter the results.
+    if (!empty($results)) {
+      $results = array_filter($results, function ($result) use ($parent_tid) {
+        return $result->parent_target_id == $parent_tid;
+      });
+      if ($exclude_not_in_menu) {
+        $results = array_filter($results, function ($result) {
+          return $result->field_category_include_menu_value == 1;
+        });
+      }
+      if ($mobile_only) {
+        $results = array_filter($results, function ($result) {
+          return $result->field_mobile_only_dpt_page_link_value == 1;
+        });
+      }
+    }
 
-    // For the `move to right`.
-    $query->leftJoin('taxonomy_term__field_move_to_right', 'mtr', 'mtr.entity_id = tfd.tid');
-    $query->fields('mtr', ['field_move_to_right_value']);
-
-    // For the `app navigation links`.
-    $query->leftJoin('taxonomy_term__field_show_in_app_navigation', 'mln', 'mln.entity_id = tfd.tid');
-    $query->fields('mln', ['field_show_in_app_navigation_value']);
-
-    $query->condition('ttcs.field_commerce_status_value', 1);
-    $query->condition('tth.parent_target_id', $parent_tid);
-    $query->condition('tfd.langcode', $langcode);
-    $query->condition('tfd.vid', $vid);
-    $query->orderBy('tfd.weight', 'ASC');
-
-    // Allow other modules to alter the query.
-    $query->addTag('product_category_child_terms');
-
-    return $query->execute()->fetchAll();
+    return $results;
   }
 
   /**
@@ -1085,6 +1122,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function refreshCategoryTreeCache() {
     $parents = [];
+    self::$useCategoryCache = FALSE;
 
     // If the L1 depth level is greater than one, invalidate cache for all the
     // parents for that level. This is mainly used for super category feature.
