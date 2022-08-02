@@ -87,3 +87,15 @@ function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_vari
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_rcs_category_query_fields_alter().
+ */
+function alshaya_rcs_seo_alshaya_rcs_category_query_fields_alter(&$fields) {
+  /** @var \Drupal\Core\Path\CurrentPathStack $current_path */
+  $current_path = \Drupal::service('path.current');
+
+  if ($current_path->getPath() === '/sitemap') {
+    $fields[] = 'description';
+  }
+}
