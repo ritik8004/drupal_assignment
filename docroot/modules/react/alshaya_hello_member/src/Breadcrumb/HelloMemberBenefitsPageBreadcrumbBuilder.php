@@ -11,9 +11,9 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class Alshaya hello member Breadcrumb Builder.
+ * Class Alshaya hello member Benefit page breadcrumb Builder.
  */
-class AlshayaHelloMemberBreadcrumbBuilder implements BreadcrumbBuilderInterface {
+class HelloMemberBenefitsPageBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
   use StringTranslationTrait;
 
@@ -32,7 +32,7 @@ class AlshayaHelloMemberBreadcrumbBuilder implements BreadcrumbBuilderInterface 
   protected $currentRequest;
 
   /**
-   * AlshayaHelloMemberBreadcrumbBuilder constructor.
+   * HelloMemberBenefitsPageBreadcrumbBuilder constructor.
    *
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current account object.

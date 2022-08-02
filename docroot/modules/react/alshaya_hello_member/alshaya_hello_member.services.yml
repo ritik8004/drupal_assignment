@@ -5,7 +5,7 @@ services:
       - '@config.factory'
       - '@mobile_number.util'
   alshaya_hello_member.breadcrumb:
-    class: Drupal\alshaya_hello_member\Breadcrumb\AlshayaHelloMemberBreadcrumbBuilder
+    class: Drupal\alshaya_hello_member\Breadcrumb\HelloMemberBenefitsPageBreadcrumbBuilder
     tags:
       - { name: breadcrumb_builder, priority: 100 }
     arguments:
