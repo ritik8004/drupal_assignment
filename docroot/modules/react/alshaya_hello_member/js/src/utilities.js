@@ -33,7 +33,7 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
   if (hasValue(dictionaryData) && hasValue(dictionaryData.items)) {
     const accrualRatio = dictionaryData.items[0];
     const points = accrualRatio.value ? (price * parseFloat(accrualRatio.value)) : 0;
-    return Math.round(points);
+    return Math.floor(points);
   }
   return null;
 };
