@@ -15,7 +15,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import ConditionalView from '../../../common/components/conditional-view';
 import BecomeHelloMember from '../../../../../alshaya_hello_member/js/src/components/become-hello-member';
-import dispatchCustomEvent from '../../../utilities/events';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 
 class HelloMemberCartOffersVouchers extends React.Component {

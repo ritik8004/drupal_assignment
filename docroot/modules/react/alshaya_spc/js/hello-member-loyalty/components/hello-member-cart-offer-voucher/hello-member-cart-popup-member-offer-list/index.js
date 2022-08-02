@@ -4,7 +4,7 @@ import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHe
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import logger from '../../../../../../js/utilities/logger';
-import dispatchCustomEvent from '../../../../utilities/events';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { getDefaultErrorMessage } from '../../../../../../js/utilities/error';
 
 const HelloMemberCartPopupMemberOfferList = (props) => {
