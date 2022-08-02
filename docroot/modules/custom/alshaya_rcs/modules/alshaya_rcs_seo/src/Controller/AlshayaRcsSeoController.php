@@ -71,12 +71,6 @@ class AlshayaRcsSeoController extends ControllerBase {
           'alshaya_rcs_seo/sitemap'
         ],
       ],
-      '#cache' => [
-        'tags' => [
-          // Discard cache for the page once a term gets updated.
-          ProductCategoryTree::CACHE_TAG,
-        ],
-      ],
     ];
   }
 }
