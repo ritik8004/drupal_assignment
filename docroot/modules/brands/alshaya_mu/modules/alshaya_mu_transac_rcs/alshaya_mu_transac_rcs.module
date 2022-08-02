@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Module file with hooks specific to Muji brand.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_mu_transac_rcs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'rcs_product') {
+    $build['#attached']['library'][] = 'alshaya_mu_transac_rcs/product';
+  }
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_mu_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
+  array_push(
+    $fields['items'],
+    'rkj_division',
+    'sel_depa',
+    'sel_class',
+    'article_code_overseas',
+    'short_description1',
+    'short_description2',
+    'spec_en',
+    'country_of_origin_en',
+    'direction_en',
+    'material_en',
+    'country_important_point',
+    'gender',
+    'p_depth',
+    'p_width',
+    'p_height',
+    'p_weight',
+    'white_glove_delivery',
+    'season',
+  );
+}
