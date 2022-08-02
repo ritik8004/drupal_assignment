@@ -7,7 +7,7 @@ use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -20,26 +20,26 @@ class AlshayaHelloMemberBreadcrumbBuilder implements BreadcrumbBuilderInterface 
   /**
    * The current user service object.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentUser;
 
   /**
-   * Request stock service object.
+   * Request stack service object.
    *
-   * @var null|\Symfony\Component\HttpFoundation\Request
+   * @var \Symfony\Component\HttpFoundation\Request
    */
   protected $currentRequest;
 
   /**
    * AlshayaHelloMemberBreadcrumbBuilder constructor.
    *
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current account object.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   Request stock service object.
+   *   Request stack service object.
    */
-  public function __construct(AccountInterface $current_user, RequestStack $request_stack) {
+  public function __construct(AccountProxyInterface $current_user, RequestStack $request_stack) {
     $this->currentUser = $current_user;
     $this->currentRequest = $request_stack->getCurrentRequest();
   }
