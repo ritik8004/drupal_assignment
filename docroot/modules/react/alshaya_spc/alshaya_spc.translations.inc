@@ -605,6 +605,11 @@ function _alshaya_spc_translations() {
       'ar' => 'Didn\'t receive the code?',
       'context' => 'cod_mobile_verification',
     ],
+    'Resend' => [
+      // @todo Arabic translation to be updated.
+      'ar' => 'Resend',
+      'context' => 'cod_mobile_verification',
+    ],
   ];
 
   return $strings;
