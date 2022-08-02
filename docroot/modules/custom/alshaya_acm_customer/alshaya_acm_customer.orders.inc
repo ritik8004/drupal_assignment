@@ -353,11 +353,8 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
   try {
     // Get all the orders for the user.
     $customer_id = (int) $user->get('acq_customer_id')->getString();
-    $orders = &drupal_static(__FUNCTION__);
-    // If orders is empty then get the list of orders.
-    if (empty($orders)) {
-      $orders = \Drupal::service('alshaya_acm_customer.orders_manager')->getOrders($customer_id, 0);
-    }
+    // Get the required orders for the user.
+    $orders = \Drupal::service('alshaya_acm_customer.orders_manager')->getOrders($customer_id, 0);
   }
   catch (\Exception $e) {
     return [];

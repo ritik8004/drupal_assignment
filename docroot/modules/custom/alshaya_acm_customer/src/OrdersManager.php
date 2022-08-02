@@ -345,7 +345,8 @@ class OrdersManager {
     }
 
     // Search by Order ID, SKU, Name.
-    if ($search_key && $search = $this->currentRequest->query->get($search_key)) {
+    $search = $search_key ? $this->currentRequest->query->get($search_key) : NULL;
+    if ($search) {
       $orders = array_filter($orders, function ($order) use ($search) {
         // Search by Order ID.
         if (stripos($order['increment_id'], $search) > -1) {
@@ -368,7 +369,8 @@ class OrdersManager {
     }
 
     // Filter order by status.
-    if ($filter_key && $filter = $this->currentRequest->get($filter_key)) {
+    $filter = $filter_key ? $this->currentRequest->get($filter_key) : NULL;
+    if ($filter) {
       $orders = array_filter($orders, function ($order, $orderId) use ($filter) {
         $status = alshaya_acm_customer_get_order_status($order);
         if ($status['text'] == $filter) {
@@ -435,16 +437,16 @@ class OrdersManager {
     $cid = implode('_', [__FUNCTION__, $increment_id]);
     $result = &drupal_static($cid);
 
+    if (empty($result)) {
+      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
+      $result = json_decode($response ?? [], TRUE);
+    }
+
     if (!empty($result)) {
       $count = $result['total_count'] ?? 0;
       if (empty($count)) {
         return NULL;
       }
-    }
-
-    if (empty($result)) {
-      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-      $result = json_decode($response ?? [], TRUE);
     }
 
     $order = reset($result['items']);
