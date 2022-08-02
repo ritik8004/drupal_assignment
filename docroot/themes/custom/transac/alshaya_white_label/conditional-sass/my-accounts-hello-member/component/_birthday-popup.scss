@@ -50,7 +50,6 @@
           letter-spacing: 0.9px;
           padding: rem(48) 0 rem(10);
           color: $hello-member-bd-title;
-          text-transform: uppercase;
 
           @include breakpoint($only-mobile) {
             font-size: rem(28);
