@@ -34,7 +34,6 @@
       font-size: rem(16);
       letter-spacing: 0.8px;
       margin-top: rem(20);
-      text-transform: uppercase;
 
       @include breakpoint($tablet) {
         margin-top: rem(24);
@@ -120,12 +119,10 @@
     letter-spacing: rem(1);
     text-align: center;
     padding-top: rem(18);
-    text-transform: uppercase;
 
     @include breakpoint($tablet) {
       font-size: rem(20);
       padding-bottom: rem(16);
-      text-transform: none;
     }
   }
 

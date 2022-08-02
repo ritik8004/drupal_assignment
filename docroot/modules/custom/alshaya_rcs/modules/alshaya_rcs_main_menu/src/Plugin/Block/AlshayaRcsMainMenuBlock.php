@@ -69,6 +69,17 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
     $ideal_max_col_length = (int) $main_menu_settings->get('ideal_max_col_length');
     $menu_layout = $main_menu_settings->get('desktop_main_menu_layout');
 
+    // Get the alshaya mobile main menu config object.
+    $mobile_menu_settings = $this->configFactory('alshaya_main_menu.settings');
+    $mobile_menu_max_depth = $mobile_menu_settings->get('mobile_main_menu_max_depth');
+
+    // Get Super category status.
+    $super_category_status = (boolean) $this->configFactory('alshaya_super_category.settings')->get('status');
+    if ($super_category_status) {
+      // Increase the mobile max depth.
+      $mobile_menu_max_depth++;
+    }
+
     $build = [
       '#attributes' => [
         'class' => [
@@ -89,6 +100,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           'alshayaRcs' => [
             'navigationMenu' => [
               'menuMaxDepth' => $max_depth,
+              'mobileMenuMaxDepth' => $mobile_menu_max_depth,
               'maxNbCol' => $max_nb_col > 0 ? $max_nb_col : 6,
               'idealMaxColLength' => $ideal_max_col_length > 0 ? $ideal_max_col_length : 10,
               'menuLayout' => $menu_layout,
