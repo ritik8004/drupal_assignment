@@ -285,9 +285,9 @@ class OrdersManager {
         $search_key,
         $filter_key,
       ]);
-      $result = &drupal_static($cid);
+      $orders = &drupal_static($cid);
 
-      if (empty($result)) {
+      if (empty($orders)) {
         if ($page_size > 0) {
           $result = $this->apiWrapper->invokeApi($endpoint, $query, 'GET', FALSE, $request_options);
           // Decode the json string to get the order item.
@@ -299,14 +299,16 @@ class OrdersManager {
         }
 
         $orders = $result['items'] ?? [];
-        foreach ($orders as $key => $order) {
-          // Allow other modules to alter order details.
-          $this->moduleHandler->alter('alshaya_acm_customer_order_details', $order);
-          $orders[$key] = $this->cleanupOrder($order);
-        }
-        // Update the order count cache.
-        if (isset($result['total_count'])) {
-          $this->countCache->set('orders_count_' . $customer_id, $result['total_count']);
+        if ($orders) {
+          foreach ($orders as $key => $order) {
+            // Allow other modules to alter order details.
+            $this->moduleHandler->alter('alshaya_acm_customer_order_details', $order);
+            $orders[$key] = $this->cleanupOrder($order);
+          }
+          // Update the order count cache.
+          if (isset($result['total_count'])) {
+            $this->countCache->set('orders_count_' . $customer_id, $result['total_count']);
+          }
         }
       }
     }
@@ -433,13 +435,16 @@ class OrdersManager {
     $cid = implode('_', [__FUNCTION__, $increment_id]);
     $result = &drupal_static($cid);
 
-    if (empty($result)) {
-      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-      $result = json_decode($response ?? [], TRUE);
+    if (!empty($result)) {
       $count = $result['total_count'] ?? 0;
       if (empty($count)) {
         return NULL;
       }
+    }
+
+    if (empty($result)) {
+      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
+      $result = json_decode($response ?? [], TRUE);
     }
 
     $order = reset($result['items']);
