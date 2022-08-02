@@ -54,10 +54,6 @@ function processEnrichment(menuItem) {
     menuItem.overridden_path = true;
   }
 
-  if (!Drupal.hasValue(enrichedMenuItem)) {
-    return;
-  }
-
   menuItem = Object.assign(menuItem, enrichedMenuItem);
 }
 
