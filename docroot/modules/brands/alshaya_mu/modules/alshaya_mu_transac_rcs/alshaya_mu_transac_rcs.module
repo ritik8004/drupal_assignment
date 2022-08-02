@@ -21,6 +21,25 @@ function alshaya_mu_transac_rcs_node_view(array &$build, EntityInterface $entity
  * Implements hook_alshaya_rcs_product_query_fields_alter().
  */
 function alshaya_mu_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
-  $product_attributes = \Drupal::config('alshaya_mu_transac_rcs.settings')->get('product_attributes');
-  array_push($fields['items'], ...$product_attributes);
+  array_push(
+    $fields['items'],
+    'rkj_division',
+    'sel_depa',
+    'sel_class',
+    'article_code_overseas',
+    'short_description1',
+    'short_description2',
+    'spec_en',
+    'country_of_origin_en',
+    'direction_en',
+    'material_en',
+    'country_important_point',
+    'gender',
+    'p_depth',
+    'p_width',
+    'p_height',
+    'p_weight',
+    'white_glove_delivery',
+    'season',
+  );
 }
