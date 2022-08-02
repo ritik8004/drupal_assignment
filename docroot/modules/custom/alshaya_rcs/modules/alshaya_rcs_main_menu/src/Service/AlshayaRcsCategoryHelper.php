@@ -494,6 +494,7 @@ class AlshayaRcsCategoryHelper {
         'position',
         'is_anchor',
         'display_view_all',
+        'description',
       ],
     ];
     if ($depth > 0) {
