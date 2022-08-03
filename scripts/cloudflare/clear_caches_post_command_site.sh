@@ -7,7 +7,7 @@ command="$2"
 sleep="$3"
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-slack_file="${script_dir}/../post_to_slack.sh"
+slack_file="${script_dir}/../deployment/post_to_slack.sh"
 docroot="/var/www/html/$AH_SITE_NAME/docroot"
 
 echo ""
