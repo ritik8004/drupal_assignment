@@ -19,7 +19,7 @@ use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
  */
 class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
 
-  const PAGE_TYPE = 'search';
+  public const PAGE_TYPE = 'search';
 
   /**
    * The config factory service.

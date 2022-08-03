@@ -263,6 +263,7 @@ class CustomerController extends ControllerBase {
    *   User for which the orders are to be displayed.
    */
   public function listOrdersAjax(UserInterface $user = NULL) {
+    $response = [];
     $fullBuild = $this->listOrders($user);
 
     $response['orders_list'] = '';
@@ -479,7 +480,7 @@ class CustomerController extends ControllerBase {
 
     // If json_decode is not successful, means we have actual file response.
     // Otherwise we have error message which can be decoded by json.
-    if (!json_decode($invoice_response)) {
+    if (!json_decode($invoice_response, NULL)) {
       $response = new Response($invoice_response);
       // Get time format in 'YYYYMMDDHHMM'.
       $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymdhi');

@@ -109,7 +109,7 @@ class PromotionsDynamicLabelsResource extends ResourceBase {
       $get = $request->query->all();
       $cart = CartData::createFromArray($get);
     }
-    catch (\InvalidArgumentException $e) {
+    catch (\InvalidArgumentException) {
       $response = new CacheableJsonResponse([]);
       $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
       return $response;

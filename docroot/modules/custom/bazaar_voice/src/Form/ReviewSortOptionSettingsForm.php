@@ -39,7 +39,7 @@ class ReviewSortOptionSettingsForm extends BazaarVoiceConfigValueBase {
       '#title' => $this->t('Review sort options'),
       '#default_value' => $this->arrayValuesToString($sort_options),
       '#rows' => 10,
-      '#element_validate' => [[get_class($this), 'validateLabelValues']],
+      '#element_validate' => [[$this::class, 'validateLabelValues']],
       '#description' => $this->allowedValuesDescription(),
     ];
 

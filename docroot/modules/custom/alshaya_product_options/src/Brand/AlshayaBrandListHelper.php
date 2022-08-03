@@ -13,12 +13,12 @@ class AlshayaBrandListHelper {
   /**
    * Brand cache tag.
    */
-  const BRAND_CACHETAG = 'alshaya-brand-list';
+  public const BRAND_CACHETAG = 'alshaya-brand-list';
 
   /**
    * Taxonomy used for product brand.
    */
-  const BRAND_VID = 'sku_product_option';
+  public const BRAND_VID = 'sku_product_option';
 
   /**
    * Database Connection.

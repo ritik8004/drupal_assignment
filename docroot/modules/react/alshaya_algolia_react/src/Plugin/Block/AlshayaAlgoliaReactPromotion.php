@@ -21,8 +21,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
  */
 class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
 
-  const PAGE_TYPE = 'listing';
-  const PAGE_SUB_TYPE = 'promotion';
+  public const PAGE_TYPE = 'listing';
+  public const PAGE_SUB_TYPE = 'promotion';
 
   /**
    * Entity type manager service.

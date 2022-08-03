@@ -99,7 +99,7 @@ class AlshayaImageSitemapController extends ControllerBase {
     $this->generator->getSitemapReady();
     $batch = [
       'operations' => [],
-      'finished' => [__CLASS__, 'batchFinishedCallback'],
+      'finished' => [self::class, 'batchFinishedCallback'],
       'title' => $this->t('Create Image Sitemap'),
       'init_message' => $this->t('Starting sitemap creation.....'),
       'progress_message' => $this->t('Completed @current step of @total.'),
@@ -111,7 +111,7 @@ class AlshayaImageSitemapController extends ControllerBase {
     $nid_chunks = array_chunk($nids, $batch_size);
     foreach ($nid_chunks as $nid_chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'batchStartCallback'],
+        [self::class, 'batchStartCallback'],
         [$nid_chunk],
       ];
     }

@@ -121,7 +121,7 @@ class HideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildProcesso
 
         // Loop over all results.
         foreach ($results as $i => $result) {
-          $term_info = isset($terms_info[$ids[$i]]) ? $terms_info[$ids[$i]] : NULL;
+          $term_info = $terms_info[$ids[$i]] ?? NULL;
 
           if (empty($term_info) || empty($term_info->status) || empty($term_info->include)) {
             // Remove from results if either term load failed or not included

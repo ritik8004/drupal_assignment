@@ -46,7 +46,7 @@ foreach ($envs as $env) {
           continue;
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         // Do nothing.
       }
 

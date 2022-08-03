@@ -8,7 +8,7 @@ use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Connection as DoctrineConnection;
 
 /**
- * Class Connection.
+ * Helper class for doctrine connections.
  *
  * @package App\Service\Config\Database
  */
@@ -35,6 +35,7 @@ class Connection extends DoctrineConnection {
 
     $env = alshaya_get_site_environment();
     if ($env === 'local' || $env === 'travis') {
+      // @codingStandardsIgnoreLine
       global $host_site_code;
 
       // @todo Configure acsf database, same as configured for drupal.
@@ -66,7 +67,7 @@ class Connection extends DoctrineConnection {
         while (!feof($fn)) {
           $result = fgets($fn);
           foreach ($db_con_info as $key => $val) {
-            if (strpos($result, $key) !== FALSE) {
+            if (str_contains($result, $key)) {
               $result = trim(str_replace(['"', ','], ['', ''], $result));
               $info = explode('=>', $result);
               $db_con_info[$key] = trim($info[1]);

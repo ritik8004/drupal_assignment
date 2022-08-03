@@ -317,7 +317,7 @@ class AlshayaSpcOrderHelper {
     // Parameter used for V2 from browser.
     $oid = $this->request->query->get('oid');
     if (!empty($oid)) {
-      $data = (array) json_decode(base64_decode($oid));
+      $data = (array) json_decode(base64_decode($oid), NULL);
     }
 
     if (empty($data)) {
@@ -377,6 +377,7 @@ class AlshayaSpcOrderHelper {
    *   The response containing delivery methods data.
    */
   public function getSkuDetails(array $item) {
+    $data = [];
     // We will use this as flag in React to avoid reading from local storage
     // and also avoid doing API call.
     $data['prepared'] = TRUE;
@@ -459,6 +460,7 @@ class AlshayaSpcOrderHelper {
    *   Order details array.
    */
   public function getOrderDetails(array $order) {
+    $payment_info = [];
     $orderDetails = [];
     if (in_array('address', $order['shipping'])) {
       $orderDetails['contact_no'] = $this->getFormattedMobileNumber($order['shipping']['address']['telephone']);
@@ -693,7 +695,7 @@ class AlshayaSpcOrderHelper {
     try {
       return $this->mobileUtil->getFormattedMobileNumber($number);
     }
-    catch (\Throwable $e) {
+    catch (\Throwable) {
       return $number;
     }
   }

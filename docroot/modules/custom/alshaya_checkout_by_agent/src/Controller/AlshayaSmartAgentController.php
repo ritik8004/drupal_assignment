@@ -90,7 +90,10 @@ class AlshayaSmartAgentController extends ControllerBase {
     else {
       // For guest users, set the guest cart id in cookie, we will read from
       // there in JS to resume the cart.
-      setrawcookie('resume_cart_id', $data['masked_quote_id'], strtotime('+1 year'), '/');
+      setrawcookie('resume_cart_id', $data['masked_quote_id'], [
+        'expires' => strtotime('+1 year'),
+        'path' => '/',
+      ]);
     }
 
     return $redirect;

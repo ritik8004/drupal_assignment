@@ -14,12 +14,12 @@ class DynamicYieldService {
   /**
    * Dynamic yield dynamic base code.
    */
-  const DYNAMIC_YEILD_DYNAMIC_SCRIPT_CODE = '//cdn-eu.dynamicyield.com/api/{{section_id}}/api_dynamic.js';
+  public const DYNAMIC_YEILD_DYNAMIC_SCRIPT_CODE = '//cdn-eu.dynamicyield.com/api/{{section_id}}/api_dynamic.js';
 
   /**
    * Dynamic yield static base code.
    */
-  const DYNAMIC_YEILD_STATIC_SCRIPT_CODE = '//cdn-eu.dynamicyield.com/api/{{section_id}}/api_static.js';
+  public const DYNAMIC_YEILD_STATIC_SCRIPT_CODE = '//cdn-eu.dynamicyield.com/api/{{section_id}}/api_static.js';
 
   /**
    * The config factory.

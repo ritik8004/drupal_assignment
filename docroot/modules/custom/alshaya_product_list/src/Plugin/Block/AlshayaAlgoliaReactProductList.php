@@ -19,8 +19,8 @@ use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
  */
 class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
 
-  const PAGE_TYPE = 'listing';
-  const PAGE_SUB_TYPE = 'product_option_list';
+  public const PAGE_TYPE = 'listing';
+  public const PAGE_SUB_TYPE = 'product_option_list';
 
   /**
    * Entity type manager service.

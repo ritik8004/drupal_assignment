@@ -50,6 +50,7 @@ class AlshayaRcsPromotionMigrationCommands extends DrushCommands {
    *   Number of nodes to delete.
    */
   public static function deleteAcqPromotionNodes(array $nids, $count) {
+    $context = [];
     // Initialized node count to zero.
     if (empty($context['sandbox'])) {
       $context['sandbox']['progress'] = 0;
@@ -102,7 +103,7 @@ class AlshayaRcsPromotionMigrationCommands extends DrushCommands {
       ->condition('type', 'acq_promotion')
       ->execute();
     // Delete all promotion nodes from the system.
-    $nodes_to_delete = count($acq_promotion_nids);
+    $nodes_to_delete = is_countable($acq_promotion_nids) ? count($acq_promotion_nids) : 0;
 
     if (!$nodes_to_delete) {
       $this->drupalLogger->notice('There are no promotion nodes to delete! Exiting!');
@@ -116,14 +117,17 @@ class AlshayaRcsPromotionMigrationCommands extends DrushCommands {
 
     $batch = [
       'title' => 'Delete acq promotion nodes',
-      'finished' => [__CLASS__, 'acqPromotionNodesDeletionFinished'],
+      'finished' => [self::class, 'acqPromotionNodesDeletionFinished'],
     ];
 
     $batch_size = $options['batch-size'] ?? 20;
     foreach (array_chunk($acq_promotion_nids, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'deleteAcqPromotionNodes'],
-        [$chunk, count($acq_promotion_nids)],
+        [self::class, 'deleteAcqPromotionNodes'],
+        [
+          $chunk,
+          is_countable($acq_promotion_nids) ? count($acq_promotion_nids) : 0,
+        ],
       ];
     }
 

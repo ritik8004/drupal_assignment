@@ -26,7 +26,7 @@ class BazaarVoiceConfigResource extends ResourceBase {
   /**
    * Node bundle machine name.
    */
-  const NODE_TYPE = 'advanced_page';
+  public const NODE_TYPE = 'advanced_page';
 
   /**
    * Alshaya BazaarVoice Service.
@@ -98,6 +98,7 @@ class BazaarVoiceConfigResource extends ResourceBase {
    *   The response containing BazaarVoice configurations.
    */
   public function get() {
+    $data = [];
     if (empty($this->alshayaBazaarVoice->getBasicConfigurations('mapp'))) {
       $this->mobileAppUtility->throwException();
     }

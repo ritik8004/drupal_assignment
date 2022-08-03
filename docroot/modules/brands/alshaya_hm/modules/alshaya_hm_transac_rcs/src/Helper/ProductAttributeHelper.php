@@ -62,12 +62,10 @@ class ProductAttributeHelper {
    */
   public function getAttributesVariable() {
     $attributes = $this->getAttributes();
-    $attributes_variables = array_map(function ($attribute) {
-      return [
-        'attribute_code' => $attribute,
-        'entity_type' => 4,
-      ];
-    }, array_keys($attributes));
+    $attributes_variables = array_map(fn($attribute) => [
+      'attribute_code' => $attribute,
+      'entity_type' => 4,
+    ], array_keys($attributes));
     return $attributes_variables;
   }
 

@@ -16,7 +16,7 @@ class AlshayaMsclarityConfigForm extends ConfigFormBase {
    *
    * @var string
    */
-  const SETTINGS = 'alshaya_msclarity.settings';
+  public const SETTINGS = 'alshaya_msclarity.settings';
 
   /**
    * Config factory service.

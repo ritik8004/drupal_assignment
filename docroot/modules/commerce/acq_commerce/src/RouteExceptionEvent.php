@@ -12,7 +12,7 @@ use Drupal\acq_commerce\Conductor\RouteException;
  */
 class RouteExceptionEvent extends Event {
 
-  const SUBMIT = 'acq_commerce.conductor.route_exception';
+  public const SUBMIT = 'acq_commerce.conductor.route_exception';
 
   /**
    * The PHP exception we throw from the API wrapper.

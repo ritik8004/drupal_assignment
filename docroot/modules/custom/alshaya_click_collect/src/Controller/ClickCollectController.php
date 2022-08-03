@@ -179,6 +179,7 @@ class ClickCollectController extends ControllerBase {
    *   Return Ajax response with commands.
    */
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
+    $build = [];
     // @todo replace this with:
     // Drupal\alshaya_click_collect\Service\AlshayaClickCollect::getCartStores
     $stores = $this->getCartStores($cart_id, $lat, $lon);
@@ -187,10 +188,10 @@ class ClickCollectController extends ControllerBase {
     SortUtility::sortByMultipleKey($stores, 'rnc_available', 'desc', 'distance', 'asc');
 
     $build['store_list'] = $build['map_info_window'] = '<span class="empty">' . $this->t('Sorry, No store found for your location.') . '</span>';
-    if (count($stores) > 0) {
+    if ((is_countable($stores) ? count($stores) : 0) > 0) {
       $build['store_list'] = [
         '#theme' => 'click_collect_stores_list',
-        '#title' => $this->t('Available at @count stores near', ['@count' => count($stores)]),
+        '#title' => $this->t('Available at @count stores near', ['@count' => is_countable($stores) ? count($stores) : 0]),
         '#stores' => $stores,
       ];
 
@@ -208,7 +209,7 @@ class ClickCollectController extends ControllerBase {
     $response->addCommand(new ClickCollectStoresCommand(['raw' => $stores]));
 
     // If there are no stores, hide 'list view' and 'map view'.
-    if (count($stores) == 0) {
+    if ((is_countable($stores) ? count($stores) : 0) == 0) {
       $response->addCommand(new InvokeCommand('.stores-list-view', 'addClass', ['hidden-important']));
       $response->addCommand(new InvokeCommand('.stores-map-view', 'addClass', ['hidden-important']));
     }
@@ -227,6 +228,7 @@ class ClickCollectController extends ControllerBase {
    *   Return Ajax response with commands.
    */
   public function selectedStore() {
+    $build = [];
     // Get all the post data, which contains store information passed in ajax.
     $store = $this->currentRequest->request->all();
 
@@ -274,6 +276,7 @@ class ClickCollectController extends ControllerBase {
    *   Return Ajax response with commands.
    */
   public function storeMapView() {
+    $build = [];
     // Get all the post data, which contains store information passed in ajax.
     $store = $this->currentRequest->request->all();
     $build['map_info_window'] = [
@@ -417,6 +420,7 @@ class ClickCollectController extends ControllerBase {
    *   Return Ajax response with commands.
    */
   public function getProductStoresJson($sku, $lat, $lon) {
+    $settings = [];
     $sku = base64_decode($sku);
     $data = $this->getProductStores($sku, $lat, $lon);
     // Condition to get only Json response

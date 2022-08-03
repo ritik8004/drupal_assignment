@@ -26,35 +26,35 @@ class CheckoutComAPIWrapper {
   use StringTranslationTrait;
 
   // Key that contains redirect url.
-  const REDIRECT_URL = 'redirectUrl';
+  public const REDIRECT_URL = 'redirectUrl';
 
   // Authorize payment endpoint.
-  const ENDPOINT_AUTHORIZE_PAYMENT = 'charges/token';
+  public const ENDPOINT_AUTHORIZE_PAYMENT = 'charges/token';
 
   // Saved card payment endpoint.
-  const ENDPOINT_CARD_PAYMENT = 'charges/card';
+  public const ENDPOINT_CARD_PAYMENT = 'charges/card';
 
   // Get charges info from payment token.
-  const ENDPOINT_CHARGES_INFO = 'charges/{payment_token}';
+  public const ENDPOINT_CHARGES_INFO = 'charges/{payment_token}';
 
   // 3D secure charge mode.
-  const VERIFY_3DSECURE = '2';
+  public const VERIFY_3DSECURE = '2';
 
   // Auto capture yes.
-  const AUTOCAPTURE_YES = 'Y';
+  public const AUTOCAPTURE_YES = 'Y';
 
   // Auto capture no.
-  const AUTOCAPTURE_NO = 'N';
+  public const AUTOCAPTURE_NO = 'N';
 
   // API response success code.
-  const SUCCESS = '10000';
+  public const SUCCESS = '10000';
 
   // The option that determines whether the payment method associated with
   // the successful transaction should be stored in the Vault.
-  const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
+  public const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
 
   // Set udf value for tokenised card.
-  const CARD_ID_CHARGE = 'cardIdCharge';
+  public const CARD_ID_CHARGE = 'cardIdCharge';
 
   /**
    * Currencies where charge amount is full.
@@ -62,7 +62,7 @@ class CheckoutComAPIWrapper {
    * @var array
    * @ref https://github.com/checkout/checkout-magento2-plugin/blob/1.0.44/Model/Adapter/ChargeAmountAdapter.php#L32
    */
-  const FULL_VALUE_CURRENCIES = [
+  public const FULL_VALUE_CURRENCIES = [
     'BYR', 'BIF', 'DJF', 'GNF', 'KMF',
     'XAF', 'CLF', 'XPF', 'JPY', 'PYG',
     'RWF', 'KRW', 'VUV', 'VND', 'XOF',
@@ -74,13 +74,13 @@ class CheckoutComAPIWrapper {
    * @var array
    * @ref https://github.com/checkout/checkout-magento2-plugin/blob/1.0.44/Model/Adapter/ChargeAmountAdapter.php#L39
    */
-  const DIV_1000_VALUE_CURRENCIES = ['BHD', 'KWD', 'OMR', 'JOD'];
+  public const DIV_1000_VALUE_CURRENCIES = ['BHD', 'KWD', 'OMR', 'JOD'];
 
   // @ref https://github.com/checkout/checkout-magento2-plugin/blob/1.0.44/Model/Adapter/ChargeAmountAdapter.php#L41
-  const DIV_1000 = 1000;
+  public const DIV_1000 = 1000;
 
   // @ref https://github.com/checkout/checkout-magento2-plugin/blob/1.0.44/Model/Adapter/ChargeAmountAdapter.php#L43
-  const DIV_100 = 100;
+  public const DIV_100 = 100;
 
   /**
    * API Helper service object.
@@ -321,7 +321,7 @@ class CheckoutComAPIWrapper {
           return $param;
         }
       }, $params);
-      $params['@cart_id'] = $params['@cart_id'] ?? $this->getCart()->id();
+      $params['@cart_id'] ??= $this->getCart()->id();
       $this->logger->info($message, $params);
     }
   }
@@ -424,7 +424,7 @@ class CheckoutComAPIWrapper {
         '@action: @class during request: (@code) - @message',
         [
           '@action' => $action,
-          '@class' => get_class($e),
+          '@class' => $e::class,
           '@code' => $e->getCode(),
           '@message' => $e->getMessage(),
         ]
@@ -558,9 +558,7 @@ class CheckoutComAPIWrapper {
    */
   public function getChargesInfo($payment_token) {
     $endpoint = strtr(self::ENDPOINT_CHARGES_INFO, ['{payment_token}' => $payment_token]);
-    $doReq = function ($client, $req_param) use ($endpoint) {
-      return ($client->get($endpoint, []));
-    };
+    $doReq = fn($client, $req_param) => $client->get($endpoint, []);
 
     $this->logInfo('checkout.com: received payment token: @payment_token', [
       '@payment_token' => $payment_token,

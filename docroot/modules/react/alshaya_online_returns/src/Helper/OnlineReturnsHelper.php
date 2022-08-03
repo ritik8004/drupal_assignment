@@ -118,9 +118,7 @@ class OnlineReturnsHelper {
   public function prepareOrderData(array $order) {
     $paymentMethodDetails = array_filter(
       $order['extension']['payment_additional_info'],
-      function ($method) {
-        return $method['key'] === 'method_title';
-      }
+      fn($method) => $method['key'] === 'method_title'
     );
     $paymentMethod = reset($paymentMethodDetails);
 

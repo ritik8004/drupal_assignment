@@ -152,14 +152,14 @@ class StoresFinderUtility {
     $ids = $query->execute();
 
     // No stores found.
-    if (count($ids) === 0) {
+    if ((is_countable($ids) ? count($ids) : 0) === 0) {
       if ($log_not_found) {
         $this->logger->error('No store node found for store code: @store_code.', ['@store_code' => $store_code]);
       }
       return NULL;
     }
     // Some issue in DATA.
-    elseif (count($ids) > 1) {
+    elseif ((is_countable($ids) ? count($ids) : 0) > 1) {
       $this->logger->error('Multiple store nodes found for store code: @store_code.', ['@store_code' => $store_code]);
     }
 
@@ -280,9 +280,7 @@ class StoresFinderUtility {
       $this->cache->set($cid, $db_stores, CACHE::PERMANENT, ['node_type:store']);
     }
 
-    return array_filter($db_stores, function ($store) use ($store_codes) {
-      return in_array($store['field_store_locator_id_value'], $store_codes);
-    });
+    return array_filter($db_stores, fn($store) => in_array($store['field_store_locator_id_value'], $store_codes));
   }
 
   /**
@@ -481,7 +479,7 @@ class StoresFinderUtility {
           // Delete the node.
           $node->delete();
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           // If something goes wrong.
           $this->logger->error('Unable to delete the @bundle node with id @nid', [
             '@bundle' => $node->bundle(),

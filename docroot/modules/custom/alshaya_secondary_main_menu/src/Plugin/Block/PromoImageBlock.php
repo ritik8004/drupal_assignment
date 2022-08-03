@@ -23,7 +23,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
  * )
  */
 class PromoImageBlock extends BlockBase implements ContainerFactoryPluginInterface {
-  const MENU_NAME = 'promo-menu';
+  public const MENU_NAME = 'promo-menu';
   /**
    * Stores the configuration factory.
    *

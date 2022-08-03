@@ -12,13 +12,13 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class ProductUpdatedEvent extends Event {
 
-  const EVENT_NAME = 'product_updated';
-  const EVENT_INSERT = 'insert';
-  const EVENT_UPDATE = 'update';
-  const EVENT_DELETE = 'delete';
+  public const EVENT_NAME = 'product_updated';
+  public const EVENT_INSERT = 'insert';
+  public const EVENT_UPDATE = 'update';
+  public const EVENT_DELETE = 'delete';
 
-  const PRODUCT_PROCESSED = 'processed';
-  const PRODUCT_PROCESSED_EVENT = 'product_processed_event';
+  public const PRODUCT_PROCESSED = 'processed';
+  public const PRODUCT_PROCESSED_EVENT = 'product_processed_event';
 
   /**
    * SKU Entity.

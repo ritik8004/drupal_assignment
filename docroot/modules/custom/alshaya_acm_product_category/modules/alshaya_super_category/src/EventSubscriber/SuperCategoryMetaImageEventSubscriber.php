@@ -69,6 +69,7 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[MetaImageRenderEvent::EVENT_NAME][] = [
       'setSuperCategoryLogoMetaImage',
       150,
@@ -83,6 +84,7 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
    *   The dispatch event.
    */
   public function setSuperCategoryLogoMetaImage(MetaImageRenderEvent $event) {
+    $parent = NULL;
     if (empty($this->configFactory->get('alshaya_super_category.settings')->get('status'))) {
       return;
     }

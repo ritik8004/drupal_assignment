@@ -161,7 +161,7 @@ class CheckoutOptionsManager {
       $this->logger->critical('New shipping method created for code @code. Please confirm the values asap.', ['@code' => $code]);
     }
     else {
-      if (count($result) > 1) {
+      if ((is_countable($result) ? count($result) : 0) > 1) {
         $this->logger->error('Duplicate shipping method terms found for code @code.', ['@code' => $code]);
       }
 
@@ -344,7 +344,7 @@ class CheckoutOptionsManager {
       $this->logger->critical('New payment method created for code @code. Please save the description asap.', ['@code' => $code]);
     }
     else {
-      if (count($result) > 1) {
+      if ((is_countable($result) ? count($result) : 0) > 1) {
         $this->logger->error('Duplicate payment method terms found for code @code.', ['@code' => $code]);
       }
 

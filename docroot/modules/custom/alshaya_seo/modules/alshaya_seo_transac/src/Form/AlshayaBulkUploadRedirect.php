@@ -135,7 +135,7 @@ class AlshayaBulkUploadRedirect extends FormBase {
                 // Both column have data.
                 if (!empty($row[0]) && !empty($row[1])) {
                   // If url contains no space in between.
-                  if (strpos($row[1], ' ') === FALSE) {
+                  if (!str_contains($row[1], ' ')) {
                     // If duplicate sku in csv.
                     if (!in_array($row[0], $this->skus)) {
                       $this->skus[] = $row[0];
@@ -256,7 +256,7 @@ class AlshayaBulkUploadRedirect extends FormBase {
           $new_redirect = Redirect::create($redirect_entity);
           $new_redirect->save();
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           // If any exception.
           \Drupal::messenger()->addMessage(t('There was some problem in adding redirect for the url @url. Please check if redirect already exists or not.', ['@url' => $redirect[1]]));
         }

@@ -146,7 +146,7 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
       try {
         Yaml::decode($form_state->getValue($field));
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         $form_state->setErrorByName($field, $this->t('Invalid YAML data on %field', ['%field' => $attributes['label']]));
       }
     }

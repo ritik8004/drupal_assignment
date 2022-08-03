@@ -36,35 +36,35 @@ class GoogleKnowledgeGraphConfigForm extends ConfigFormBase {
       '#type' => 'textarea',
       '#title' => $this->t('Same As'),
       '#description' => $this->t('Enter one link per line if you have multiple links.'),
-      '#default_value' => $config->get('same_as') ? $config->get('same_as') : '',
+      '#default_value' => $config->get('same_as') ?: '',
     ];
 
     $form['contact_telephone'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Contact Telephone'),
       '#description' => $this->t('This will be used as is in JSON output.'),
-      '#default_value' => $config->get('contact_telephone') ? $config->get('contact_telephone') : '',
+      '#default_value' => $config->get('contact_telephone') ?: '',
     ];
 
     $form['contact_type'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Contact Type'),
       '#description' => $this->t('For instance: Customer Support'),
-      '#default_value' => $config->get('contact_type') ? $config->get('contact_type') : '',
+      '#default_value' => $config->get('contact_type') ?: '',
     ];
 
     $form['contact_areaserved'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Contact Area Served'),
       '#description' => $this->t('For instance: KW'),
-      '#default_value' => $config->get('contact_areaserved') ? $config->get('contact_areaserved') : '',
+      '#default_value' => $config->get('contact_areaserved') ?: '',
     ];
 
     $form['contact_option'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Contact Option'),
       '#description' => $this->t('For instance: TollFree'),
-      '#default_value' => $config->get('contact_option') ? $config->get('contact_option') : '',
+      '#default_value' => $config->get('contact_option') ?: '',
     ];
 
     return $form;

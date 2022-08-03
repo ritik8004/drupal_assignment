@@ -23,7 +23,7 @@ require_once __DIR__ . '/common.php';
 require_once __DIR__ . '/variables.php';
 require_once __DIR__ . '/../../../factory-hooks/environments/conductor.php';
 
-if (count($argv) < 5) {
+if ((is_countable($argv) ? count($argv) : 0) < 5) {
   echo '=> Please enter all the arguments required.';
   echo PHP_EOL . '=> {env} {brand / all} {country / all} {status: pause / resume}';
   echo PHP_EOL;
@@ -50,7 +50,7 @@ $env_map = [
 ];
 
 foreach ($conductors as $key => $value) {
-  list($country_brand, $base_env) = explode('_', $key);
+  [$country_brand, $base_env] = explode('_', $key);
   $base_env = $env_map[$base_env] ?? $base_env;
 
   if ($env !== $base_env || empty($value['site_id'])) {

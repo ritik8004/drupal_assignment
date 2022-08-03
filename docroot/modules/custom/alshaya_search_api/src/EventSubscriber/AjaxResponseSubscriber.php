@@ -95,6 +95,7 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
    *   The response event, which contains the possible AjaxResponse object.
    */
   public function onResponse(FilterResponseEvent $event) {
+    $query_string = [];
     // Do nothing if back to list is disabled.
     if (!$this->backToListEnabled) {
       return;
@@ -165,7 +166,7 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
       $view_url .= (substr($view_url, -1) == '/' ? '' : '/');
       $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($view_url)]));
 
-      if (strpos($view_url, "/--") !== FALSE) {
+      if (str_contains($view_url, "/--")) {
         $pretty_filters = substr($view_url, strpos($view_url, "/--"));
       }
     }

@@ -155,7 +155,7 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
         );
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
     }
     return $card_with_required_keys;
   }

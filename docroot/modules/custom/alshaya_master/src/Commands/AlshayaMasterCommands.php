@@ -294,7 +294,7 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
       $user = $this->entityTypeManager->getStorage('user')->load($id);
       $roles = $user->getRoles();
 
-      $num_roles = count($roles);
+      $num_roles = is_countable($roles) ? count($roles) : 0;
 
       // Only if a user has just a single role of authenticated user,
       // we will delete them.

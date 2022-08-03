@@ -19,6 +19,7 @@ class MagentoApiRequestHelper {
    *   Return processed array.
    */
   public static function prepareCustomerDataForApi(array $customer) {
+    $query = [];
     $query['customer'] = [
       'id' => $customer['customer_id'] ?? NULL,
     ];
@@ -45,7 +46,7 @@ class MagentoApiRequestHelper {
       }
     }
 
-    if (($customAttrs = $customer['extension']) && count($customAttrs)) {
+    if (($customAttrs = $customer['extension']) && (is_countable($customAttrs) ? count($customAttrs) : 0)) {
       $attrData = [];
       foreach ($customAttrs as $key => $value) {
         $attrData[] = [

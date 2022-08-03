@@ -30,6 +30,7 @@ class DefaultSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[DyPageType::DY_SET_CONTEXT][] = ['setContextHomepage', 300];
     $events[DyPageType::DY_SET_CONTEXT][] = ['setContextOthers', 100];
     return $events;

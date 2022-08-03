@@ -48,7 +48,7 @@ class MobileAppUtility {
   /**
    * Prefix used for the endpoint.
    */
-  const ENDPOINT_PREFIX = '/rest/v1/';
+  public const ENDPOINT_PREFIX = '/rest/v1/';
 
   /**
    * Array of term urls for dependencies.
@@ -595,6 +595,7 @@ class MobileAppUtility {
    *   HTTP Response.
    */
   public function sendStatusResponse(string $message = '', $status = FALSE) {
+    $response = [];
     // If status is false, throw a 404 exception.
     if (!$status) {
       return $this->throwException($message);
@@ -931,7 +932,7 @@ class MobileAppUtility {
     }
 
     // If langcode exists in the url string.
-    if ($langcode && strpos($url, '/' . $langcode . '/') !== FALSE) {
+    if ($langcode && str_contains($url, '/' . $langcode . '/')) {
       $url = str_replace('/' . $langcode . '/', '', $url);
 
       // Checking if redirects already available or not. If yes, then use or
@@ -987,7 +988,7 @@ class MobileAppUtility {
 
     if ($type === 'product_list') {
       $redirect_path = $this->getRedirectUrl("/$this->currentLanguage" . $internal_path);
-      if (!strpos($internal_path, $redirect_path)) {
+      if (!strpos($internal_path, (string) $redirect_path)) {
         // Although $redirect_path is an alias, we still get the proper url
         // object here.
         $url = Url::fromUri("internal:/$redirect_path");
@@ -1023,6 +1024,7 @@ class MobileAppUtility {
    *   Status of LHN.
    */
   public function getProductListLhnStatus($url, $langcode) {
+    $product_list_lhn_value = NULL;
     $url_object = $this->pathValidator->getUrlIfValid($url);
     $route_parameters = $url_object->getrouteParameters();
     if (!$route_parameters['node']) {
@@ -1140,7 +1142,7 @@ class MobileAppUtility {
           }
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         $this->getLogger('MobileAppUtility')->warning('Internal path looks invalid, please check @internal_path for term id @id', [
           '@id' => $tid,
           '@internal_path' => $internal_path,
@@ -1160,6 +1162,7 @@ class MobileAppUtility {
    *   HTTP Response.
    */
   public function sendErrorResponse(string $message) {
+    $response = [];
     $response['success'] = FALSE;
     $response['message'] = $message;
     return (new ResourceResponse($response));
@@ -1177,6 +1180,7 @@ class MobileAppUtility {
    *   An array containing algolia data.
    */
   public function getAlgoliaData($tid, $langcode) {
+    $category_field_temp = [];
     // Get term details in current language for filters.
     $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
       $langcode,

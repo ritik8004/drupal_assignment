@@ -13,7 +13,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class ToggleAlgoliaProductListEvent extends Event {
 
-  const EVENT_NAME = 'toggle_algolia_product_list';
+  public const EVENT_NAME = 'toggle_algolia_product_list';
 
   /**
    * Operation performed - enable, disable.

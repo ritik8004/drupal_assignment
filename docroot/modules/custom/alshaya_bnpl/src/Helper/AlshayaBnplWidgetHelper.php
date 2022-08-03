@@ -77,6 +77,7 @@ class AlshayaBnplWidgetHelper {
    *   Return array of keys.
    */
   private function getBnplWidgetInfo($page_type = 'pdp') {
+    $info = [];
     $currency_config = $this->configFactory->get('acq_commerce.currency');
     $country_code = $this->configFactory->get('system.date')->get('country.default');
     $info['class'] = 'postpay-widget';
@@ -184,7 +185,7 @@ class AlshayaBnplWidgetHelper {
     }
 
     $currency_config = $this->configFactory->get('acq_commerce.currency');
-    $build['#attached']['drupalSettings']['postpay']['currency_multiplier'] = pow(10, (int) $currency_config->get('decimal_points'));
+    $build['#attached']['drupalSettings']['postpay']['currency_multiplier'] = 10 ** ((int) $currency_config->get('decimal_points'));
   }
 
 }

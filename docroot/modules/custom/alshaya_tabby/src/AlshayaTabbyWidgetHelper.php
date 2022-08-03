@@ -74,20 +74,13 @@ class AlshayaTabbyWidgetHelper {
    *   Return array of keys.
    */
   private function getTabbyWidgetInfo($page_type = 'pdp') {
+    $info = [];
     $info['class'] = 'tabby-widget';
-    switch ($page_type) {
-      case 'cart':
-        $id = 'tabby-promo-cart';
-        break;
-
-      case 'checkout':
-        $id = 'tabby-card-checkout';
-        break;
-
-      default:
-        $id = 'tabby-promo-pdp';
-        break;
-    }
+    $id = match ($page_type) {
+      'cart' => 'tabby-promo-cart',
+        'checkout' => 'tabby-card-checkout',
+        default => 'tabby-promo-pdp',
+    };
     $info['id'] = Html::getUniqueId($id);
     return $info;
   }

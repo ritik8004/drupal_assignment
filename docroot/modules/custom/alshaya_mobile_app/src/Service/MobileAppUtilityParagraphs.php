@@ -435,7 +435,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $data = FALSE;
     $entity = $this->skuInfoHelper->getEntityTranslation($entity, $this->currentLanguage);
     $this->cacheableEntities[] = $entity;
-    if (!empty($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
+    if (!empty($bundle_info = static::getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
       $data = call_user_func_array(
         [
           $this,
@@ -485,7 +485,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     }
     // Return empty array, if $data contains only 'type' key.
     return !empty($data['type'])
-    ? count($data) > 1 ? $data : []
+    ? (is_countable($data) ? count($data) : 0) > 1 ? $data : []
     : $data;
   }
 
@@ -794,9 +794,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       elseif ($entity->hasField($field) && !empty($entity->get($field)->getString())) {
         // Check cardinality of given field.
         $data[$field_info['label']] = $entity->get($field)->getFieldDefinition()->getFieldStorageDefinition()->isMultiple()
-        ? array_map(function ($value) {
-          return $value['value'];
-        }, $entity->get($field)->getValue())
+        ? array_map(fn($value) => $value['value'], $entity->get($field)->getValue())
         : $entity->get($field)->getString();
       }
     }

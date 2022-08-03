@@ -12,7 +12,7 @@ class AcqSkuValidateEvent extends Event {
   /**
    * Acq sku validate.
    */
-  const ACQ_SKU_VALIDATE = 'acq_sku.validate';
+  public const ACQ_SKU_VALIDATE = 'acq_sku.validate';
 
   /**
    * Product data.

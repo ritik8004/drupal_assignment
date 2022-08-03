@@ -39,17 +39,17 @@ class CategoryProductListResource extends ResourceBase {
   /**
    * Query parse mode.
    */
-  const PARSE_MODE = 'direct';
+  public const PARSE_MODE = 'direct';
 
   /**
    * Parse mode conjunction.
    */
-  const PARSE_MODE_CONJUNCTION = 'OR';
+  public const PARSE_MODE_CONJUNCTION = 'OR';
 
   /**
    * Page Type.
    */
-  const PAGE_TYPE = 'listing';
+  public const PAGE_TYPE = 'listing';
 
   /**
    * Entity type manager.

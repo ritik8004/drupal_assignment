@@ -339,7 +339,7 @@ class OrdersManager {
         }
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Exception message is already added to log in APIWrapper.
       $orders = [];
     }

@@ -72,7 +72,7 @@ class AlshayaCheckoutSubscriber implements EventSubscriberInterface {
       if ($featureStatus === 'disabled') {
         try {
           $path = $config->get('checkout_disabled_page') ?? '/';
-          $path = $path ? $path : '/';
+          $path = $path ?: '/';
           $url = Url::fromUserInput($path);
           $redirect = $url->toString();
         }
@@ -98,6 +98,7 @@ class AlshayaCheckoutSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::REQUEST][] = ['handleCheckoutStatusRedirects'];
     return $events;
   }

@@ -116,7 +116,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
 
     // Check path alter status to display message and trigger bulk alias
     // generate.
-    $path_alter = (!$options['exclude_path_alter']) ? $config->get('product_path_alter', TRUE) : FALSE;
+    $path_alter = (!$options['exclude_path_alter']) ? $config->get('product_path_alter') : FALSE;
     if ($path_alter && 'enable' == $action) {
       $msg = dt('Are you sure you want to !action super category feature and do bulk update on product aliases', ['!action' => $action]);
     }

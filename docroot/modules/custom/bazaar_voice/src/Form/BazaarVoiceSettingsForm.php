@@ -85,7 +85,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
 
     $form['basic_settings']['locale'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Locale'),
+      '#title' => $this->t('@locale', ['@locale' => \Locale::class]),
       '#default_value' => $config->get('locale'),
       '#description' => $this->t('Locale to display Labels, Configuration, Product Attributes and Category Attributes in. The default value is the locale defined in the display associated with the API key.'),
     ];

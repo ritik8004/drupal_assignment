@@ -124,7 +124,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     if (!empty($allvalues['blocks'])) {
       $default_blocks = array_filter($allvalues['blocks']);
     }
-    elseif (count($promo_panel_blocks) > 0) {
+    elseif ((is_countable($promo_panel_blocks) ? count($promo_panel_blocks) : 0) > 0) {
       $default_blocks = array_keys($promo_panel_blocks);
     }
 
@@ -180,7 +180,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
       $block_load = $this->blockStorage->loadByProperties(['id' => $machine_name]);
       if ($block = reset($block_load)) {
         $promo_panel_blocks[$machine_name] = [
-          'mobile_path' => substr($link, 0, 1) !== '/' ? '/' . $link : $link,
+          'mobile_path' => !str_starts_with($link, '/') ? '/' . $link : $link,
           'plugin_id' => $block->getPluginId(),
         ];
       }

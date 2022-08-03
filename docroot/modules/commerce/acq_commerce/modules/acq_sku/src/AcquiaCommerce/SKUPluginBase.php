@@ -55,7 +55,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
     $sku = $build_info['args'][0];
 
-    if (get_class($sku) == 'Drupal\acq_sku\Entity\SKU') {
+    if ($sku::class == 'Drupal\acq_sku\Entity\SKU') {
       return $this->addToCartForm($form, $form_state, $build_info['args'][0]);
     }
 

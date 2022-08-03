@@ -200,8 +200,9 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     ];
 
     \Drupal::moduleHandler()->alter('alshaya_my_account_links', $links);
+    $arrayColumn = array_column($links, 'weight');
 
-    array_multisort(array_column($links, 'weight'), SORT_ASC, $links);
+    array_multisort($arrayColumn, SORT_ASC, $links);
 
     return $links;
   }

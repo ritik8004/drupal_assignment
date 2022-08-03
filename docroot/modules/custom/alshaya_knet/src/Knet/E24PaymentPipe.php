@@ -525,7 +525,7 @@ class E24PaymentPipe {
     try {
       $s = $this->readZip();
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Zip file seems not available, try to create it and read again.
       if (!$this->createReadableZip()) {
         throw new \RuntimeException('Cannot create readable zip file.');
@@ -653,13 +653,14 @@ class E24PaymentPipe {
    *   Processed output.
    */
   protected function simplexor($abyte0) {
+    $abyte2 = [];
     $key = 'Those who profess to favour freedom and yet depreciate agitation are men who want rain without thunder and lightning';
     $abyte1 = $this->getBytes($key);
 
-    for ($i = 0; $i < count($abyte0);) {
+    for ($i = 0; $i < (is_countable($abyte0) ? count($abyte0) : 0);) {
       for ($j = 0; $j < count($abyte1); $j++) {
         $abyte2[$i] = ($abyte0[$i] ^ $abyte1[$j]);
-        if (++$i == count($abyte0)) {
+        if (++$i == (is_countable($abyte0) ? count($abyte0) : 0)) {
           break;
         }
       }
@@ -716,7 +717,7 @@ class E24PaymentPipe {
    */
   protected function startsWith($haystack, $needle) {
     // Recommended version, using strpos.
-    return strpos($haystack, $needle) === 0;
+    return str_starts_with($haystack, $needle);
   }
 
   /**

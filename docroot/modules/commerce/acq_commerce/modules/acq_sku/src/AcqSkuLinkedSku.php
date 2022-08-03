@@ -19,22 +19,22 @@ class AcqSkuLinkedSku {
   /**
    * For the all.
    */
-  const LINKED_SKU_TYPE_ALL = 'all';
+  public const LINKED_SKU_TYPE_ALL = 'all';
 
   /**
    * For the upsell.
    */
-  const LINKED_SKU_TYPE_UPSELL = 'upsell';
+  public const LINKED_SKU_TYPE_UPSELL = 'upsell';
 
   /**
    * For the cross_sell.
    */
-  const LINKED_SKU_TYPE_CROSSSELL = 'crosssell';
+  public const LINKED_SKU_TYPE_CROSSSELL = 'crosssell';
 
   /**
    * For the related.
    */
-  const LINKED_SKU_TYPE_RELATED = 'related';
+  public const LINKED_SKU_TYPE_RELATED = 'related';
 
 
   /**
@@ -42,7 +42,7 @@ class AcqSkuLinkedSku {
    *
    * @var array
    */
-  const LINKED_SKU_TYPES = [
+  public const LINKED_SKU_TYPES = [
     self::LINKED_SKU_TYPE_RELATED,
     self::LINKED_SKU_TYPE_UPSELL,
     self::LINKED_SKU_TYPE_CROSSSELL,
