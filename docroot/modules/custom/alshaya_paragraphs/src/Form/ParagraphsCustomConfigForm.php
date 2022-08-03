@@ -39,7 +39,7 @@ class ParagraphsCustomConfigForm extends ConfigFormBase {
         1 => $this->t('Image and button is clickable'),
         2 => $this->t('Only button is clickable'),
       ],
-      '#default_value' => $config->get('promo_block_display') ? $config->get('promo_block_display') : '',
+      '#default_value' => $config->get('promo_block_display') ?: '',
     ];
 
     return $form;

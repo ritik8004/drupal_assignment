@@ -101,6 +101,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
    *   Number of terms to delete.
    */
   public static function deleteAcqProductCategoryTerms(array $tids, $count) {
+    $context = [];
     // Initialized term count to zero.
     if (empty($context['sandbox'])) {
       $context['sandbox']['progress'] = 0;
@@ -151,7 +152,7 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
     $acq_product_category_tids = $this->entityQuery
       ->condition('vid', 'acq_product_category')
       ->execute();
-    $terms_to_delete = count($acq_product_category_tids);
+    $terms_to_delete = is_countable($acq_product_category_tids) ? count($acq_product_category_tids) : 0;
 
     if (!$terms_to_delete) {
       $this->drupalLogger->notice('There are no terms to delete! Exiting!');
@@ -165,14 +166,17 @@ class AlshayaRcsCategoryMigrationCommands extends DrushCommands {
 
     $batch = [
       'title' => 'Delete product category terms',
-      'finished' => [__CLASS__, 'acqProductCategoryTermsDeletionFinished'],
+      'finished' => [self::class, 'acqProductCategoryTermsDeletionFinished'],
     ];
 
     $batch_size = $options['batch-size'] ?? 20;
     foreach (array_chunk($acq_product_category_tids, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'deleteAcqProductCategoryTerms'],
-        [$chunk, count($acq_product_category_tids)],
+        [self::class, 'deleteAcqProductCategoryTerms'],
+        [
+          $chunk,
+          is_countable($acq_product_category_tids) ? count($acq_product_category_tids) : 0,
+        ],
       ];
     }
 

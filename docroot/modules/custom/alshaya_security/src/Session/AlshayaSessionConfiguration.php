@@ -59,7 +59,7 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
 
     $cookies = $request->cookies->all();
     foreach ($cookies as $name => $value) {
-      if (strpos($name, AlshayaSessionManager::LEGACY_SUFFIX) !== FALSE) {
+      if (str_contains($name, AlshayaSessionManager::LEGACY_SUFFIX)) {
         $expected = str_replace(AlshayaSessionManager::LEGACY_SUFFIX, '', $name);
         if (empty($cookies[$expected])) {
           $request->cookies->set($expected, $value);
@@ -87,7 +87,13 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
             ]);
           }
           else {
-            setcookie($expected, $value, $expire, $params['path'], $options['cookie_domain'] . '; SameSite=None', TRUE, $params['httponly']);
+            setcookie($expected, $value, [
+              'expires' => $expire,
+              'path' => $params['path'],
+              'domain' => $options['cookie_domain'] . '; SameSite=None',
+              'secure' => TRUE,
+              'httponly' => $params['httponly'],
+            ]);
           }
         }
       }

@@ -29,22 +29,22 @@ class SwatchesHelper {
   /**
    * Constant for identifying textual swatch type.
    */
-  const SWATCH_TYPE_TEXTUAL = '0';
+  public const SWATCH_TYPE_TEXTUAL = '0';
 
   /**
    * Constant for identifying visual swatch type with color number value.
    */
-  const SWATCH_TYPE_VISUAL_COLOR = '1';
+  public const SWATCH_TYPE_VISUAL_COLOR = '1';
 
   /**
    * Constant for identifying visual swatch type with color number value.
    */
-  const SWATCH_TYPE_VISUAL_IMAGE = '2';
+  public const SWATCH_TYPE_VISUAL_IMAGE = '2';
 
   /**
    * Constant for identifying empty swatch type.
    */
-  const SWATCH_TYPE_EMPTY = '3';
+  public const SWATCH_TYPE_EMPTY = '3';
 
   /**
    * Entity Type Manager.
@@ -461,9 +461,7 @@ class SwatchesHelper {
     if (empty($this->skuBaseFieldDefination)) {
       $this->skuBaseFieldDefination = $this->skuFieldsManager->getFieldAdditions();
       // Filter attributes fields.
-      $this->skuBaseFieldDefination = array_filter($this->skuBaseFieldDefination, function ($field) {
-        return ($field['parent'] == 'attributes');
-      });
+      $this->skuBaseFieldDefination = array_filter($this->skuBaseFieldDefination, fn($field) => $field['parent'] == 'attributes');
     }
 
     $field_code = str_replace('attr_', '', $facet->getFieldIdentifier());

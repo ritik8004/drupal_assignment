@@ -23,12 +23,12 @@ class AlshayaRcsProductHelper {
   /**
    * RCS Content type id.
    */
-  const RCS_CONTENT_TYPE_ID = 'rcs_product';
+  public const RCS_CONTENT_TYPE_ID = 'rcs_product';
 
   /**
    * Source Content type.
    */
-  const SOURCE_CONTENT_TYPE_ID = 'acq_product';
+  public const SOURCE_CONTENT_TYPE_ID = 'acq_product';
 
   /**
    * Route match service.
@@ -531,9 +531,10 @@ class AlshayaRcsProductHelper {
       // Reindex the array.
       $options = array_values($options);
       // Process data to required format.
-      $options = array_map(function ($option) {
-        return ['attribute_code' => $option , 'entity_type' => 4];
-      }, $options);
+      $options = array_map(fn($option) => [
+        'attribute_code' => $option,
+        'entity_type' => 4,
+      ], $options);
     }
 
     return $options;

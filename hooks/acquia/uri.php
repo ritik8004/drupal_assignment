@@ -10,7 +10,7 @@ $env = $argv[2];
 $db_role = $argv[3];
 
 // Get the db connection.
-require dirname(__FILE__) . '/../acquia/db_connect.php';
+require __DIR__ . '/../acquia/db_connect.php';
 $connection = get_db($site, $env, $db_role);
 // Get the site name from the database.
 $result = execute_query($connection, 'SELECT value FROM acsf_variables WHERE name = "acsf_site_info"');
@@ -19,6 +19,7 @@ if ($result === FALSE || !isset($result[0]['value'])) {
   error('Could not retrieve the site standard_domain from the database.');
 }
 else {
+  // @codingStandardsIgnoreLine
   $site_data = unserialize($result[0]['value']);
   $standard_domain = $site_data['standard_domain'];
   echo "$standard_domain";

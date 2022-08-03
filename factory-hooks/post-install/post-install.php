@@ -51,7 +51,7 @@ if (file_exists($post_install_override_file)) {
 
   $fh = fopen($post_install_override_file,'r');
   while ($line = fgets($fh)) {
-    list($key, $value) = array_map('trim', explode(':', $line));
+    [$key, $value] = array_map('trim', explode(':', $line));
     switch ($key) {
       case 'action':
         $action = ($value == ACTION_DISABLE) ? ACTION_DISABLE : ACTION_OVERRIDE;
@@ -74,4 +74,4 @@ if (file_exists($post_install_override_file)) {
   }
 }
 
-exec(dirname(__FILE__) . '/../../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "https://' . $_SERVER['HTTP_HOST'] . '" "' . $site_code . '" "' . $country_code . '"');
+exec(__DIR__ . '/../../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "https://' . $_SERVER['HTTP_HOST'] . '" "' . $site_code . '" "' . $country_code . '"');

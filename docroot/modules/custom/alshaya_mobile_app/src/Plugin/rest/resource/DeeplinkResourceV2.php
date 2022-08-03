@@ -20,7 +20,7 @@ class DeeplinkResourceV2 extends DeeplinkResource {
   /**
    * Prefix used for the v2 endpoint.
    */
-  const V2_ENDPOINT_PREFIX = '/rest/v2/';
+  public const V2_ENDPOINT_PREFIX = '/rest/v2/';
 
   /**
    * Responds to GET requests.
@@ -32,7 +32,7 @@ class DeeplinkResourceV2 extends DeeplinkResource {
     $alias = $this->requestStack->query->get('url');
     $url = parent::getDeeplink($alias);
     // Check if sku is encoded.
-    if (strpos($url, 'product-exclude-linked') !== FALSE) {
+    if (str_contains($url, 'product-exclude-linked')) {
       $url_array = explode('product-exclude-linked', $url);
       $sku = $url_array[1];
       $encoded_sku = base64_encode(str_replace('/', '', $sku));

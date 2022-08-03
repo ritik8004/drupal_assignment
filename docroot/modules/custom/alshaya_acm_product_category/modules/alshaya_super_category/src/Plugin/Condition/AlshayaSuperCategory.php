@@ -101,7 +101,7 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
       '#title' => $this->t('Categories'),
       '#description' => $this->t('Please select categories for which you want to show this block.'),
       '#options' => $options,
-      '#default_value' => $this->configuration['categories'] ? $this->configuration['categories'] : array_keys($options),
+      '#default_value' => $this->configuration['categories'] ?: array_keys($options),
       '#states' => [
         'visible' => [
           ':input[name="visibility[alshaya_super_category][use_super_category]"]' => ['checked' => TRUE],
@@ -142,7 +142,7 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function summary() {
-    if (count($this->configuration['categories']) > 1) {
+    if ((is_countable($this->configuration['categories']) ? count($this->configuration['categories']) : 0) > 1) {
       return $this->t('There are multiple categories selected');
     }
     $category = reset($this->configuration['categories']);
@@ -161,7 +161,7 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
     // @todo check why this context is not working in block.
     // $term = $this->getContextValue('taxonomy_term');
     $parent = $this->productCategoryTree->getCategoryTermRequired();
-    if (count($parent) > 0) {
+    if ((is_countable($parent) ? count($parent) : 0) > 0) {
       return in_array($parent['id'], $this->configuration['categories']);
     }
     return FALSE;

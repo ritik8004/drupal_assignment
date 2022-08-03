@@ -71,7 +71,7 @@ class AlshayaSearchGranular extends SearchApiGranular {
         if ($filter % $granularity === 0) {
           // We decrease it by 1 decimal point to ensure it is shown in 4 to 6
           // instead of 6 to 8 (by making it 5.999).
-          $new_value = $filter - (1 / pow(10, self::getDecimals()));
+          $new_value = $filter - (1 / 10 ** self::getDecimals());
           $this->results[$key]['filter'] = '"' . $new_value . '"';
         }
       }
@@ -162,7 +162,7 @@ class AlshayaSearchGranular extends SearchApiGranular {
       // Add the filter to the query if there are active values.
       $active_items = $this->facet->getActiveItems();
       $filter = $query->createConditionGroup($operator, ['facet:' . $field_identifier]);
-      if (count($active_items)) {
+      if (is_countable($active_items) ? count($active_items) : 0) {
         foreach ($active_items as $value) {
           $range = $this->calculateRange($value);
 

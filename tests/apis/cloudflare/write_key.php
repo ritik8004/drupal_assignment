@@ -24,7 +24,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
 curl_setopt($ch, CURLOPT_POSTFIELDS, $value);
 
-$headers = array();
+$headers = [];
 $headers[] = 'X-Auth-Email: ' . $email;
 $headers[] = 'X-Auth-Key: ' . $key;
 $headers[] = 'Content-Type: text/plain';

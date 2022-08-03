@@ -138,6 +138,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   Ajax processing for exposed forms on search & PLP pages.
    */
   public function ajaxFacetBlockView(Request $request) {
+    $facet_fields = [];
     // Decode the url once to support special characters like 1½.
     $params = $request->getMethod() == 'GET' ? $request->query : $request->request;
     $params->set('facet_link', urldecode($params->get('facet_link')));

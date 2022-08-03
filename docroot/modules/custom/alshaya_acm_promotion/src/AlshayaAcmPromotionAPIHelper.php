@@ -86,7 +86,7 @@ class AlshayaAcmPromotionAPIHelper {
 
     // Set status to false by default if not set already
     // as that is the default value.
-    $status = $status ?? FALSE;
+    $status ??= FALSE;
 
     // Try to get response from API as either value is not set in cache
     // or we are asked to reset.

@@ -63,6 +63,7 @@ class AlshayaAdvancedPageEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::REQUEST][] = ['onRequest', 30];
     return $events;
   }

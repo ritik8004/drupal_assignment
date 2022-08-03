@@ -202,7 +202,7 @@ class ProductSyncResource extends ResourceBase {
         // First check, product needs to have SKU.
         if (!isset($product['sku']) || !strlen($product['sku'])) {
           $this->logger->warning('Invalid or empty product SKU.');
-          $ignored_sku = isset($product['sku']) ? json_encode($product['sku']) : '';
+          $ignored_sku = isset($product['sku']) ? json_encode($product['sku'], JSON_THROW_ON_ERROR) : '';
           $ignored_skus[] = $ignored_sku . ' (No sku in data or invalid)';
           $ignored++;
           continue;
@@ -406,7 +406,7 @@ class ProductSyncResource extends ResourceBase {
         $sku->final_price->value = $product['final_price'];
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
         $sku->get('attr_description')->setValue([
-          'value' => (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '',
+          'value' => $product['attributes']['description'] ?? '',
           'format' => 'rich_text',
         ]);
 
@@ -470,13 +470,13 @@ class ProductSyncResource extends ResourceBase {
 
           $node->get('title')->setValue(html_entity_decode($product['name']));
 
-          $description = (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '';
+          $description = $product['attributes']['description'] ?? '';
           $node->get('body')->setValue([
             'value' => $description,
             'format' => 'rich_text',
           ]);
 
-          $categories = (isset($product['categories'])) ? $product['categories'] : [];
+          $categories = $product['categories'] ?? [];
           $categories = $this->formatCategories($categories);
           $node->field_category = array_values($categories);
 
@@ -531,13 +531,7 @@ class ProductSyncResource extends ResourceBase {
           }
         }
       }
-      catch (\Exception $e) {
-        // We consider this as failure as it failed for an unknown reason.
-        // (not taken care of above).
-        $failed_skus[] = $this->formatErrorMessage($e, $product);
-        $failed++;
-      }
-      catch (\Throwable $e) {
+      catch (\Exception | \Throwable $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
         $failed_skus[] = $this->formatErrorMessage($e, $product);
@@ -739,9 +733,7 @@ class ProductSyncResource extends ResourceBase {
     $additionalFields = $this->skuFieldsManager->getFieldAdditions();
 
     // Filter fields for the parent requested.
-    $additionalFields = array_filter($additionalFields, function ($field) use ($parent) {
-      return ($field['parent'] == $parent);
-    });
+    $additionalFields = array_filter($additionalFields, fn($field) => $field['parent'] == $parent);
 
     // Loop through all the fields we want to read from product data.
     foreach ($additionalFields as $key => $field) {
@@ -777,11 +769,12 @@ class ProductSyncResource extends ResourceBase {
                     'sku' => $sku->sku->value,
                     'attribute_code' => $source,
                     'option_id' => $val,
-                    'field_key' => $field_key
+                    'field_key' => $field_key,
                   ])
                   ->execute();
               }
-              catch(IntegrityConstraintViolationException $e) {}
+              catch (IntegrityConstraintViolationException) {
+              }
             }
           }
 
@@ -826,7 +819,7 @@ class ProductSyncResource extends ResourceBase {
         $image = $product['attributes']['image'];
 
         foreach ($media as &$data) {
-          if (substr_compare($data['file'], $image, -strlen($image)) === 0) {
+          if (str_ends_with($data['file'], $image)) {
             $data['position'] = -1;
             break;
           }
@@ -837,12 +830,7 @@ class ProductSyncResource extends ResourceBase {
       usort($media, function ($a, $b) {
         $position1 = (int) $a['position'];
         $position2 = (int) $b['position'];
-
-        if ($position1 == $position2) {
-          return 0;
-        }
-
-        return ($position1 < $position2) ? -1 : 1;
+        return $position1 <=> $position2;
       });
     }
 
@@ -895,7 +883,7 @@ class ProductSyncResource extends ResourceBase {
    */
   public static function getArrayDiff(array $array1, array $array2): string {
     $differ = new ArrayDiff();
-    return json_encode($differ->diff($array1, $array2));
+    return json_encode($differ->diff($array1, $array2), JSON_THROW_ON_ERROR);
   }
 
   /**

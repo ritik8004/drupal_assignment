@@ -23,12 +23,12 @@ class AlshayaColorSplitManager {
   /**
    * Constant to hold attribute id for the pseudo attribute for product split.
    */
-  const PSEUDO_COLOR_ATTRIBUTE_CODE = 99999;
+  public const PSEUDO_COLOR_ATTRIBUTE_CODE = 99999;
 
   /**
    * Constant for RGB swatch display type.
    */
-  const PDP_SWATCH_RGB = 'RGB';
+  public const PDP_SWATCH_RGB = 'RGB';
 
   /**
    * SKU Manager.

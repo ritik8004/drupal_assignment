@@ -50,6 +50,7 @@ class AlshayaAcmRedirectToSpcCart implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::REQUEST][] = ['onRequest'];
     return $events;
   }

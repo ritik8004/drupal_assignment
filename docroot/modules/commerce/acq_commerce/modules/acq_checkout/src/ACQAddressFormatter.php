@@ -22,7 +22,7 @@ class ACQAddressFormatter {
       '#prefix' => '<p class="address" translate="no">',
       '#suffix' => '</p>',
       '#post_render' => [
-        [get_class($this), 'postRender'],
+        [$this::class, 'postRender'],
       ],
       '#cache' => [
         'contexts' => [
@@ -104,17 +104,17 @@ class ACQAddressFormatter {
    */
   protected function getValues($address, $country_code, AddressFormat $address_format) {
     $values = [];
-    $values['givenName'] = isset($address->first_name) ? $address->first_name : '';
-    $values['additionalName'] = isset($address->additional_name) ? $address->additional_name : '';
-    $values['familyName'] = isset($address->last_name) ? $address->last_name : '';
-    $values['organization'] = isset($address->organization) ? $address->organization : '';
-    $values['addressLine1'] = isset($address->street) ? $address->street : '';
-    $values['addressLine2'] = isset($address->street2) ? $address->street2 : '';
-    $values['postalCode'] = isset($address->postcode) ? $address->postcode : '';
-    $values['sortingCode'] = isset($address->sortcode) ? $address->sortcode : '';
-    $values['administrativeArea'] = isset($address->state) ? $address->state : '';
-    $values['locality'] = isset($address->city) ? $address->city : '';
-    $values['dependentLocality'] = isset($address->dependent_locality) ? $address->dependent_locality : '';
+    $values['givenName'] = $address->first_name ?? '';
+    $values['additionalName'] = $address->additional_name ?? '';
+    $values['familyName'] = $address->last_name ?? '';
+    $values['organization'] = $address->organization ?? '';
+    $values['addressLine1'] = $address->street ?? '';
+    $values['addressLine2'] = $address->street2 ?? '';
+    $values['postalCode'] = $address->postcode ?? '';
+    $values['sortingCode'] = $address->sortcode ?? '';
+    $values['administrativeArea'] = $address->state ?? '';
+    $values['locality'] = $address->city ?? '';
+    $values['dependentLocality'] = $address->dependent_locality ?? '';
 
     $original_values = [];
     $subdivision_fields = $address_format->getUsedSubdivisionFields();

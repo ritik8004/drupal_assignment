@@ -161,7 +161,7 @@ class StockQuantityField extends ProcessorPluginBase {
     try {
       $entity = $item->getOriginalObject()->getValue();
     }
-    catch (SearchApiException $e) {
+    catch (SearchApiException) {
       return;
     }
 
@@ -198,9 +198,7 @@ class StockQuantityField extends ProcessorPluginBase {
     switch ($sku->bundle()) {
       case 'configurable':
         $configured_skus = $sku->get('field_configured_skus')->getValue();
-        $child_skus = array_map(function ($item) {
-          return $item['value'];
-        }, $configured_skus);
+        $child_skus = array_map(fn($item) => $item['value'], $configured_skus);
 
         $query = $this->getDatabase()->select('acq_sku_stock', 'stock');
         $query->addExpression('SUM(stock.quantity)', 'final_quantity');

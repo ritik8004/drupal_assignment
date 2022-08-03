@@ -131,9 +131,7 @@ class ProductCategoryHelper {
       return [];
     }
 
-    $lhn_tree = array_filter($lhn_tree, function ($tree_term) {
-      return $tree_term['lhn'];
-    });
+    $lhn_tree = array_filter($lhn_tree, fn($tree_term) => $tree_term['lhn']);
 
     $language = $this->languageManager->getLanguage($langcode);
     $uri_options = ['language' => $language];

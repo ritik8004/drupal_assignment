@@ -76,7 +76,7 @@ class MagentoApiWrapper {
       ));
     };
 
-    $request_options['timeout'] = $request_options['timeout'] ?? $this->magentoInfo->getPhpTimeout('default');
+    $request_options['timeout'] ??= $this->magentoInfo->getPhpTimeout('default');
     try {
       $response = $this->magentoInfo->getMagentoApiClient()->request(
         $method,
@@ -91,7 +91,7 @@ class MagentoApiWrapper {
         : $result;
 
       if ($response->getStatusCode() !== 200) {
-        $message = 'Error occurred while calling: ' . $url . ' result: ' . json_encode($result);
+        $message = 'Error occurred while calling: ' . $url . ' result: ' . json_encode($result, JSON_THROW_ON_ERROR);
         $this->logger->error($message);
         return [
           'error' => TRUE,

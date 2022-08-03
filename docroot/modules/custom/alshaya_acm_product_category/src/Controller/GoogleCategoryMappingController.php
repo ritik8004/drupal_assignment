@@ -20,7 +20,7 @@ class GoogleCategoryMappingController extends ControllerBase {
   /**
    * Category vid.
    */
-  const CATEGORY_VID = 'acq_product_category';
+  public const CATEGORY_VID = 'acq_product_category';
 
   /**
    * The database service.

@@ -92,7 +92,7 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
     $result = $query->execute()->fetchAllKeyed();
 
     // Incase if any of the arguments don't have raw value.
-    if (count($result) < 2) {
+    if ((is_countable($result) ? count($result) : 0) < 2) {
       return 0;
     }
 

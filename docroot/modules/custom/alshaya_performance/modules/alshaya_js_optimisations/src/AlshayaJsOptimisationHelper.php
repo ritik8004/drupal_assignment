@@ -284,7 +284,7 @@ class AlshayaJsOptimisationHelper {
               $resolved_data[$extension][$library]['attributes'],
               $js_category[$category]['attributes']
             );
-            $resolved_data[$extension][$library]['weight'] = $set_weight ? $set_weight : $js_category[$category]['weight'];
+            $resolved_data[$extension][$library]['weight'] = $set_weight ?: $js_category[$category]['weight'];
 
             // Preserve existing 'defer' on scripts.
             if ($defer) {
@@ -302,9 +302,7 @@ class AlshayaJsOptimisationHelper {
    * Prefix library name with extension.
    */
   private function prefixLibrary(array $items, $prefix) {
-    return array_map(function ($item) use ($prefix) {
-      return $prefix . $item;
-    }, $items);
+    return array_map(fn($item) => $prefix . $item, $items);
   }
 
   /**
@@ -317,11 +315,11 @@ class AlshayaJsOptimisationHelper {
         $libraries = (array) $libraries;
         $libraries = $this->prefixLibrary($libraries, $extension . '/');
         $library_list = $libraries;
-  
+
         if ($category === 'critical' || $category === 'sitewide_1' || $category === 'sitewide_2') {
           $library_list = $this->depedencyResolver->getLibrariesWithDependencies($libraries);
         }
-  
+
         $included_dependecies = array_merge($included_dependecies, $library_list);
       }
     }

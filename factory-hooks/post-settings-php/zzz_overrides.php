@@ -53,7 +53,7 @@ if (file_exists($brand_file)) {
   include_once $brand_file;
 }
 
-$settings = $settings ?? [];
+$settings ??= [];
 $settings['acsf_site_code'] = $acsf_site_code;
 $settings['settings_override_yaml_file_path'] = $settings_path;
 // Allow overriding settings and config to set secret info directly from

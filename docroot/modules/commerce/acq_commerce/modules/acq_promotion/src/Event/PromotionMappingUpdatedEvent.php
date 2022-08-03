@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class PromotionMappingUpdatedEvent extends Event {
 
-  const EVENT_NAME = 'acq_promotion.promotion_mapping_updated';
+  public const EVENT_NAME = 'acq_promotion.promotion_mapping_updated';
 
   /**
    * SKUs.

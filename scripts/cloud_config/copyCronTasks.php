@@ -41,7 +41,7 @@ foreach ($source_crons['_embedded']['items'] ?? [] as $cron) {
       ]),
       'label' => $cron['label'],
       'server_id' => NULL,
-    ]),
+    ], JSON_THROW_ON_ERROR),
   ];
 
   try {

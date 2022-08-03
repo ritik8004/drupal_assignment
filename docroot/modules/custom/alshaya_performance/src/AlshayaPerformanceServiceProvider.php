@@ -30,7 +30,7 @@ class AlshayaPerformanceServiceProvider extends ServiceProviderBase implements S
         $purge_late_runtime->setClass(AlshayaLateRuntimeProcessor::class);
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Do nothing, system might still be installing or module might
       // be disabled.
     }

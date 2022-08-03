@@ -197,9 +197,7 @@ class CategoryProductsHelper {
         $query->setOption('algolia_options', ['ruleContexts' => $term_details['ruleContext']]);
         $results = $query->execute()->getResultItems();
 
-        $nids = array_map(function ($result) {
-          return $result->getField('nid')->getValues()[0];
-        }, $results);
+        $nids = array_map(fn($result) => $result->getField('nid')->getValues()[0], $results);
       }
       catch (\Exception $e) {
         $this->getLogger('CategoryProductsHelper')->warning('Could not fetch data for carousel from Algolia because of reason: @message', [
