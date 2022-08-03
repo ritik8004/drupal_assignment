@@ -42,7 +42,7 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
  * Search for specified element from array.
  */
 // eslint-disable-next-line
-const findArrayElement = (array, code) => array.find((element) => element.code === code && element.value === 1);
+const findArrayElement = (array, code) => array.find((element) => element.code === code);
 
 const getLoyaltySelectText = (optionName, helloMemberPoints) => {
   if (optionName === 'hello_member') {
