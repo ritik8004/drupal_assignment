@@ -34,7 +34,7 @@ class MyBenefitsPage extends React.Component {
           this.setState({
             myBenefit: response.data.coupons[0],
             wait: true,
-            codeId: response.data.coupons[0].code,
+            codeId: `${response.data.coupons[0].type}|${response.data.coupons[0].code}`,
             voucherType: response.data.coupons[0].type,
           });
           removeFullScreenLoader();
