@@ -62,6 +62,12 @@ export default class ParentAreaSelect extends React.Component {
    * Whether filter list component need to shown or not.
    */
   toggleFilterList = () => {
+    const { enableFields } = this.props;
+
+    if (enableFields.length > 0 && enableFields.indexOf('parent_area_select') === -1) {
+      return;
+    }
+
     const { showFilterList } = this.state;
     this.setState({
       showFilterList: !showFilterList,

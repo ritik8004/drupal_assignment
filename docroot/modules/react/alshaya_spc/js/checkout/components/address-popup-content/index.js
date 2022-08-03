@@ -17,6 +17,7 @@ const AddressContent = (props) => {
     areaUpdated,
     isExpressDeliveryAvailable,
     fillDefaultValue,
+    enableFields,
   } = props;
 
   // For users who are logged in and have saved an address.
@@ -49,6 +50,7 @@ const AddressContent = (props) => {
       shippingAsBilling={shippingAsBilling}
       isExpressDeliveryAvailable={isExpressDeliveryAvailable}
       fillDefaultValue={fillDefaultValue}
+      enableFields={enableFields}
     />
   );
 };

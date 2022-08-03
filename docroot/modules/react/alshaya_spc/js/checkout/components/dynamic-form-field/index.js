@@ -6,7 +6,7 @@ import TextField from '../../../utilities/textfield';
 
 const DynamicFormField = (props) => {
   let defaultVal = '';
-  const { default_val: defVal } = props;
+  const { default_val: defVal, enableFields } = props;
   if (defVal.length !== 0
     && defVal.length !== 'undefined') {
     defaultVal = defVal;
@@ -26,6 +26,7 @@ const DynamicFormField = (props) => {
         area_list={areaList}
         field_key={fieldKey}
         field={field}
+        enableFields={enableFields}
       />
     );
   }
@@ -36,12 +37,13 @@ const DynamicFormField = (props) => {
         field_key={fieldKey}
         field={field}
         areasUpdate={areasUpdate}
+        enableFields={enableFields}
       />
     );
   }
 
   return (
-    <TextField isAddressField required={field.required} id={fieldKey} type="text" label={field.label} name={fieldKey} defaultValue={defaultVal !== '' ? defaultVal[field.key] : ''} maxLength={field.maxLength} />
+    <TextField isAddressField required={field.required} id={fieldKey} type="text" label={field.label} name={fieldKey} defaultValue={defaultVal !== '' ? defaultVal[field.key] : ''} maxLength={field.maxLength} disabled={(enableFields.length > 0 && enableFields.indexOf(fieldKey) === -1) ? 'disabled' : undefined} />
   );
 };
 

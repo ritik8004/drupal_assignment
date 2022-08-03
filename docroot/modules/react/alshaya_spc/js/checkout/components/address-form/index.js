@@ -197,6 +197,7 @@ export default class AddressForm extends React.Component {
       // if fillDefaultValue is true,
       // Default value will be always be available to form.
       fillDefaultValue,
+      enableFields,
     } = this.props;
 
     const {
@@ -227,6 +228,7 @@ export default class AddressForm extends React.Component {
             cityChanged={cityChanged}
             field_key={key}
             field={field}
+            enableFields={enableFields}
           />,
         );
       },
@@ -265,6 +267,7 @@ export default class AddressForm extends React.Component {
                   showEmail={showEmail}
                   defaultVal={defaultAddressVal}
                   type="hd"
+                  enableFields={enableFields}
                 />
                 <div className="delivery-address-fields">
                   {' '}
