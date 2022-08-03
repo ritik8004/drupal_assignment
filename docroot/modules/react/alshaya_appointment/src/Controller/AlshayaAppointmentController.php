@@ -258,6 +258,7 @@ class AlshayaAppointmentController extends ControllerBase {
    *   Return array of markup with react lib attached.
    */
   public function viewAppointments() {
+    $settings = [];
     $cache_tags = [];
 
     $settings['alshaya_appointment'] = [

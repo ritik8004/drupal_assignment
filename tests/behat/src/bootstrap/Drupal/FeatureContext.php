@@ -153,7 +153,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iEnterAValidEmailID($field)
   {
-    $randomString = 'randemail' . rand(2, getrandmax());
+    $randomString = 'randemail' . random_int(2, mt_getrandmax());
     $email_id = $randomString . '@gmail.com';
     $this->getSession()->getPage()->fillField($field, $email_id);
   }
@@ -265,7 +265,7 @@ class FeatureContext extends CustomMinkContext
       $total_sizes = count($all_sizes);
       foreach ($all_sizes as $size) {
         $check_li = $size->find('css', 'li')->getText();
-        $size_status = count($size->find('css', '.disabled'));
+        $size_status = $size->find('css', '.disabled') === null ? 0 : count($size->find('css', '.disabled'));
         if ($size_status || !$check_li) {
           $total_sizes--;
           if (!$total_sizes) {
@@ -391,7 +391,7 @@ class FeatureContext extends CustomMinkContext
     try {
       $this->getSession()
         ->executeScript("(function(){window.scrollTo($arg1, $arg2);})();");
-    } catch (\Exception $e) {
+    } catch (\Exception) {
       throw new \Exception("ScrollIntoView failed");
     }
   }
@@ -486,7 +486,7 @@ class FeatureContext extends CustomMinkContext
   public function is_array_ordered($array, $sort_order)
   {
     $i = 0;
-    $total_elements = count($array);
+    $total_elements = is_countable($array) ? count($array) : 0;
 
     if ($sort_order == ORDER_ASC) {
       //Check for ascending order
@@ -522,6 +522,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function theListShouldBeSortedInAlphabeticalOrder()
   {
+    $actual_values = [];
     $page = $this->getSession()->getPage();
     $elements = $page->findAll('css', '.views-field.views-field-title');
     if ($elements == NULL) {
@@ -575,7 +576,7 @@ class FeatureContext extends CustomMinkContext
     } else {
       throw new \Exception('Store search did not work on Click and collect');
     }
-    if (strpos($actual_text, $count) === FALSE) {
+    if (!str_contains($actual_text, $count)) {
       throw new \Exception('Count is incorrect');
     }
   }
@@ -719,7 +720,7 @@ class FeatureContext extends CustomMinkContext
       $actual_count = count($results);
       $count = (string)$actual_count;
       $actual_text = $page->find('css', '.view-header')->getText();
-      if (strpos($actual_text, $count) === FALSE) {
+      if (!str_contains($actual_text, $count)) {
         throw new \Exception('Count is incorrect');
       }
     } else {
@@ -782,7 +783,7 @@ class FeatureContext extends CustomMinkContext
   public function theOrderStatusShouldBeVisibleForAllProducts()
   {
     $page = $this->getSession()->getPage();
-    $status_codes = array("Processing", "Cancelled", "Confirmed", "Dispatched", "المعالجة", "تم الإلغاء", "قيد التوصيل");
+    $status_codes = ["Processing", "Cancelled", "Confirmed", "Dispatched", "المعالجة", "تم الإلغاء", "قيد التوصيل"];
     $status_codes_length = count($status_codes);
 
     $all_rows = $page->findAll('css', '.order-summary-row');
@@ -851,7 +852,7 @@ class FeatureContext extends CustomMinkContext
     $actual_count = count($all_pointers);
     $count = (string)$actual_count;
     $actual_text = $page->find('css', '.view-header')->getText();
-    if (strpos($actual_text, $count) === FALSE) {
+    if (!str_contains($actual_text, $count)) {
       throw new \Exception('Count displayed for number of stores is incorrect on Map view');
     }
   }
@@ -861,6 +862,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iShouldSeeResultsSortedInAscendingOrder()
   {
+    $actual_values = [];
     $page = $this->getSession()->getPage();
     $elements = $page->findAll('css', '#hits h2.field--name-name');
     if ($elements == NULL) {
@@ -884,6 +886,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iShouldSeeResultsSortedInDescendingOrder()
   {
+    $actual_values = [];
     $page = $this->getSession()->getPage();
     $elements = $page->findAll('css', '#hits h2.field--name-name');
     if ($elements == NULL) {
@@ -912,7 +915,7 @@ class FeatureContext extends CustomMinkContext
     foreach ($all_orders as $order) {
       $title = $order->find('css', 'a div.second-third.wrapper > div.second > div.dark.order-name')
         ->getText();
-      if (stripos($title, $arg1) === false) {
+      if (stripos($title, (string) $arg1) === false) {
         throw new Exception('Filter by name is not working on Orders tab in my account section');
       }
     }
@@ -951,7 +954,7 @@ class FeatureContext extends CustomMinkContext
     foreach ($all_orders as $order) {
       $order_id = $order->find('css', '.dark.order-id')->getText();
       $actual_order_id = substr($order_id, 0, 7);
-      if (stripos($actual_order_id, $arg1) === false) {
+      if (stripos($actual_order_id, (string) $arg1) === false) {
         throw new \Exception('Filter for Order ID is not working');
       }
     }
@@ -962,6 +965,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iShouldSeeAllOrdersListedOnOrdersTab($arg1)
   {
+    $status_name = null;
     $page = $this->getSession()->getPage();
     $all_statuses = $page->findAll('css', '.order-item');
     foreach ($all_statuses as $status) {
@@ -1118,9 +1122,9 @@ class FeatureContext extends CustomMinkContext
       throw new \Exception('Price not displayed on PDP');
     }
     $english = $parent->find('css', '.content--item-code > span.field__label')
-      ->find('named', array('content', 'Item Code:'));
+      ->find('named', ['content', 'Item Code:']);
     $arabic = $parent->find('css', '.content--item-code > span.field__label')
-      ->find('named', array('content', 'رمز القطعة:'));
+      ->find('named', ['content', 'رمز القطعة:']);
     if (!($english or $arabic)) {
       throw new \Exception('Item code not displayed on PDP');
     }
@@ -1151,6 +1155,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iShouldSeeResultsSortedInDescendingPriceOrder()
   {
+    $actual_values = [];
     $page = $this->getSession()->getPage();
     $elements = $page->findAll('css', 'div.product-plp-detail-wrapper');
     if ($elements == NULL) {
@@ -1219,6 +1224,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iShouldSeeResultsSortedInAscendingPriceOrder()
   {
+    $actual_values = [];
     $page = $this->getSession()->getPage();
     $elements = $page->findAll('css', 'div.product-plp-detail-wrapper');
     if ($elements == NULL) {
@@ -1308,12 +1314,12 @@ class FeatureContext extends CustomMinkContext
     } else {
       throw new \Exception('Social media did not open in a new window');
     }
-    $text = $this->getSession()->getPage()->find('named', array('content', $text));
+    $text = $this->getSession()->getPage()->find('named', ['content', $text]);
     if (!$text) {
       throw new \Exception($text . ' was not found anywhere on the new window');
     }
     $current_window = $this->getSession()->getWindowName();
-    $this->getSession()->stop($current_window);
+    $this->getSession()->stop();
   }
 
   /**
@@ -1488,7 +1494,7 @@ class FeatureContext extends CustomMinkContext
   {
     $page = $this->getSession()->getPage();
     $page->find('css', '.select2-selection__arrow')->click();
-    $status = $page->find('named', array('content', $arg1));
+    $status = $page->find('named', ['content', $arg1]);
     if ($status !== null) {
       $status->click();
     } else {
@@ -1504,7 +1510,7 @@ class FeatureContext extends CustomMinkContext
     $page = $this->getSession()->getPage();
     $region = $page->find('css', $region);
     if ($region !== null) {
-      $region->find('named', array($type, $element))->click();
+      $region->find('named', [$type, $element])->click();
     } else {
       throw new Exception('Breadcrumbs not displayed');
     }
@@ -1552,7 +1558,7 @@ class FeatureContext extends CustomMinkContext
       throw new Exception('Search passed, but search results were empty');
     }
     foreach ($all_products as $item) {
-      $item_status = count($item->find('css', 'div.out-of-stock span'));
+      $item_status = $item->find('css', 'div.out-of-stock span') === null ? 0 : count($item->find('css', 'div.out-of-stock span'));
       if ($item_status) {
         $total_products--;
         if (!$total_products) {
@@ -1897,7 +1903,7 @@ class FeatureContext extends CustomMinkContext
     $expected = preg_replace('/^\/[^\.\/]+\.php\//', '/', $path) . $fragment;
     $actual = $this->getSession()->getCurrentUrl();
 
-    if (strpos($actual, $expected) === FALSE) {
+    if (!str_contains($actual, $expected)) {
       throw new \Exception(sprintf('Current page is "%s", but "%s" expected.', $actual, $expected));
     }
   }
@@ -1956,6 +1962,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iSelectTheValueFromTheDropdown($value, $dropdown)
   {
+    $xpath = null;
     if (!empty($value)) {
       $driver = $this->getSession()->getDriver();
       $page = $this->getSession()->getPage();
@@ -2269,7 +2276,7 @@ class FeatureContext extends CustomMinkContext
   {
     $element = $this->getSession()->getPage()->find('css', $selector);
     $Selectelement = $element->getAttribute($attribute);
-    if (strpos($Selectelement, $contains) === False) {
+    if (!str_contains($Selectelement, $contains)) {
       throw new \Exception(sprintf('Element %s does not contain attribute %s with %s.', $selector, $attribute, $contains));
     }
   }
@@ -2399,7 +2406,7 @@ JS;
     else {
       $addCartButton = $addCart;
     }
-    $button = $page->find('named', array('button', $addCartButton));
+    $button = $page->find('named', ['button', $addCartButton]);
     if (null === $button) {
       throw new ElementNotFoundException($this->getDriver(), 'button', 'id|name|title|alt|value', $addCartButton);
     }
@@ -2584,7 +2591,7 @@ JS;
             value = 1255557111;
         }
         jQuery("input[name=\"mobile\"]").val(value);
-        
+
 JS;
       $this->getSession()->executeScript($script);
       if ($page->find('css', 'input[name="email"]')) {
@@ -2606,7 +2613,7 @@ JS;
       $this->selectOptionAddress($field_name, $val);
     }
   }
-  
+
   /**
    * @Then /^I select the home delivery address$/
    */
@@ -2787,7 +2794,7 @@ JS;
     $characters = 'abcdefghijklmnopqrstuvwxyz';
     $randstring = '';
     for ($i = 0; $i < $length; $i++) {
-      $randstring .= $characters[rand(0, strlen($characters) - 1)];
+      $randstring .= $characters[random_int(0, strlen($characters) - 1)];
     }
     return $randstring;
   }
@@ -2817,7 +2824,7 @@ JS;
     $filename = 'order_details.json';
     $orders = [];
     if (file_exists($filename)) {
-      $orders = (array) json_decode(file_get_contents($filename));
+      $orders = (array) json_decode(file_get_contents($filename), null);
     }
     array_push($orders, $order_detail);
     file_put_contents($filename, json_encode($orders, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

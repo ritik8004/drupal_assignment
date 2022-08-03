@@ -18,7 +18,7 @@ $url = "environments/$env/crons";
 try {
   $res = invokeApi($url);
 }
-catch (\Exception $e) {
+catch (\Exception) {
   print 'Failed to get crons.';
   exit;
 }

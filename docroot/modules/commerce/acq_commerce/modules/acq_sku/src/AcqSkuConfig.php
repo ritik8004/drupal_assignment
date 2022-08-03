@@ -18,7 +18,7 @@ class AcqSkuConfig {
   /**
    * Config name constant.
    */
-  const CONFIG_NAME = 'acq_sku.settings';
+  public const CONFIG_NAME = 'acq_sku.settings';
 
   /**
    * Get value for specific key from config.

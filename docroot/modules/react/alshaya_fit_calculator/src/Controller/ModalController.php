@@ -16,6 +16,7 @@ class ModalController extends ControllerBase {
    * Callback for modal content.
    */
   public function getModalLinkView(NodeInterface $node) {
+    $build = [];
     $content = NULL;
     if ($node instanceof NodeInterface) {
       $content = $this->entityTypeManager()->getViewBuilder('node')->view($node, 'full');

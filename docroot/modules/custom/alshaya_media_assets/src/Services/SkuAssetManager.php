@@ -31,12 +31,12 @@ class SkuAssetManager {
   /**
    * Constant to denote that the current asset has no angle data associated.
    */
-  const LP_DEFAULT_ANGLE = 'NO_ANGLE';
+  public const LP_DEFAULT_ANGLE = 'NO_ANGLE';
 
   /**
    * Constant for RGB swatch display type.
    */
-  const LP_SWATCH_RGB = 'RGB';
+  public const LP_SWATCH_RGB = 'RGB';
 
   /**
    * The Config factory service.
@@ -288,9 +288,7 @@ class SkuAssetManager {
       ]);
     }
 
-    return array_filter($assets, function ($row) {
-      return !empty($row['fid']);
-    });
+    return array_filter($assets, fn($row) => !empty($row['fid']));
   }
 
   /**
@@ -307,6 +305,7 @@ class SkuAssetManager {
    *   File entity if image download successful.
    */
   private function downloadPimsAsset(array &$data, string $sku, string $asset_type) {
+    $file_data = NULL;
     $non_cli_image_download = AcqSkuConfig::get('non_cli_image_download');
     // Return if it is non CLI request AND if the config value for it is
     // disabled.
@@ -381,7 +380,7 @@ class SkuAssetManager {
         '@url' => $url,
         '@sku' => $sku,
         '@remote_id' => $data['filename'],
-        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), JSON_THROW_ON_ERROR),
       ]);
 
       return 'blacklisted';
@@ -424,6 +423,7 @@ class SkuAssetManager {
    *   File entity download successful.
    */
   private function downloadLiquidPixelImage(array &$asset, string $sku) {
+    $file_data = NULL;
     // If image is blacklisted, block download.
     if (isset($asset['blacklist_expiry']) && time() < $asset['blacklist_expiry']) {
       return NULL;
@@ -483,7 +483,7 @@ class SkuAssetManager {
         '@url' => $url,
         '@sku' => $sku,
         '@remote_id' => $asset['Data']['AssetId'],
-        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), JSON_THROW_ON_ERROR),
       ]);
       return 'blacklisted';
     }
@@ -679,6 +679,7 @@ class SkuAssetManager {
    *   Query string.
    */
   private function getAssetQueryString(array $set, string $image_location_identifier): array {
+    $query_options = [];
     // Prepare query options for image url.
     if (isset($set['url'])) {
       $url_parts = parse_url(urldecode($set['url']));
@@ -711,6 +712,7 @@ class SkuAssetManager {
    *   Array of asset attributes.
    */
   private function getAssetAttributes(array $asset, $location_image) {
+    $set = [];
     $image_settings = $this->getImageSettings();
     $image_location_identifier = $image_settings->get('style_identifiers')[$location_image];
 
@@ -949,7 +951,7 @@ class SkuAssetManager {
    *   Asset type (video/image).
    */
   public function getAssetType(array $asset) {
-    return (strpos($asset['Data']['AssetType'], 'MovingMedia') !== FALSE)
+    return (str_contains($asset['Data']['AssetType'], 'MovingMedia'))
       ? 'video'
       : 'image';
   }

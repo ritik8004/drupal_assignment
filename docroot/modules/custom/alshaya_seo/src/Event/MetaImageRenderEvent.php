@@ -10,7 +10,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
  */
 class MetaImageRenderEvent extends Event {
 
-  const EVENT_NAME = 'meta_image_render';
+  public const EVENT_NAME = 'meta_image_render';
 
   /**
    * Meta image path.

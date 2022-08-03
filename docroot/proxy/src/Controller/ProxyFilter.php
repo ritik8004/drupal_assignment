@@ -46,14 +46,14 @@ class ProxyFilter implements FilterInterface {
    *
    * @inheritdoc
    */
-  public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next) {
+  public function __invoke(RequestInterface $request, callable $next = NULL) : ResponseInterface {
     // Get magento urls from settings.
     $magento_urls = $this->settings->getAllMagentoUrls();
 
-    // Check if url received by proxy has magento host,
+    // Check if url received by proxy has magento host.
     $has_magento_host = FALSE;
     foreach ($magento_urls as $magento_url) {
-      if (substr($this->url, 0, strlen($magento_url)) === $magento_url) {
+      if (str_starts_with($this->url, (string) $magento_url)) {
         $has_magento_host = TRUE;
         break;
       }
@@ -61,6 +61,7 @@ class ProxyFilter implements FilterInterface {
 
     // If url does not have magento host then return response with 404 code.
     if (!$has_magento_host) {
+      $response = $next($request);
       return $response->withStatus(404, 'Page not found');
     }
 
@@ -75,9 +76,8 @@ class ProxyFilter implements FilterInterface {
 
     // Do the request.
     $request = $request->withUri(new Uri($uri));
-    $response = $next($request, $response);
 
-    return $response;
+    return $next($request);
   }
 
 }

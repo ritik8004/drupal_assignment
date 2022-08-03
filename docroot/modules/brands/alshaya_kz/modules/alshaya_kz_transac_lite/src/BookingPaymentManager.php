@@ -195,7 +195,7 @@ class BookingPaymentManager {
         '#uri' => Url::fromRoute('endroid_qr_code.qr.generator', ['content' => $booking_info['sales_number']])->toString(),
         '#attributes' => ['class' => 'qr-code-image'],
       ];
-      $ticket_info = json_decode($booking_info['ticket_info']);
+      $ticket_info = json_decode($booking_info['ticket_info'], NULL);
       $ticket_count = 0;
       foreach ($ticket_info as $value) {
         $ticket_count += $value->Ticket->count;

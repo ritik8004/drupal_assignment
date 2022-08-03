@@ -24,8 +24,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class AlshayaAlgoliaReactCommands extends DrushCommands {
 
-  const FACET_SOURCE_PLP = 'search_api:views_block__alshaya_product_list__block_1';
-  const FACET_SOURCE_PROMOTION = 'search_api:views_block__alshaya_product_list__block_2';
+  public const FACET_SOURCE_PLP = 'search_api:views_block__alshaya_product_list__block_1';
+  public const FACET_SOURCE_PROMOTION = 'search_api:views_block__alshaya_product_list__block_2';
 
   /**
    * The logger channel.

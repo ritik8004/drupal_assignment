@@ -40,7 +40,7 @@ class AcqSkuDrushCommands extends DrushCommands {
    */
   protected $drupalLogger;
 
-  const DELETE_BATCH_COUNT = 200;
+  public const DELETE_BATCH_COUNT = 200;
 
   /**
    * Api Wrapper service.
@@ -454,7 +454,7 @@ class AcqSkuDrushCommands extends DrushCommands {
           // Break the loop if only one left now, we might not have any products
           // added yet and categories are synced which means there will be no
           // nodes for any term.
-          if (count($tids) == 1) {
+          if ((is_countable($tids) ? count($tids) : 0) == 1) {
             break;
           }
         }
@@ -462,7 +462,7 @@ class AcqSkuDrushCommands extends DrushCommands {
           $this->output->writeln(dt('@count nodes found for tid: @tid for commerce id: @commerce_id. Not Deleting', [
             '@commerce_id' => $commerce_id,
             '@tid' => $tid,
-            '@count' => count($nodes),
+            '@count' => is_countable($nodes) ? count($nodes) : 0,
           ]));
         }
       }
@@ -689,7 +689,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context_results);
       $context['sandbox']['progress'] = 0;
       $context['sandbox']['current_id'] = 0;
-      $context['sandbox']['max'] = count($context['sandbox']['results']);
+      $context['sandbox']['max'] = is_countable($context['sandbox']['results']) ? count($context['sandbox']['results']) : 0;
     }
 
     $results = [];
@@ -697,7 +697,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       $results = $context['sandbox']['results'];
     }
 
-    $results = array_slice($results, isset($context['sandbox']['current']) ? $context['sandbox']['current'] : 0, self::DELETE_BATCH_COUNT);
+    $results = array_slice($results, $context['sandbox']['current'] ?? 0, self::DELETE_BATCH_COUNT);
 
     $delete = [];
 
@@ -850,7 +850,7 @@ class AcqSkuDrushCommands extends DrushCommands {
 
     foreach (array_chunk($skus, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'correctCorruptMediaChunk'],
+        [self::class, 'correctCorruptMediaChunk'],
         [$chunk, $field, $check_file_exists, $dry_run, $verbose],
       ];
     }
@@ -889,6 +889,7 @@ class AcqSkuDrushCommands extends DrushCommands {
         continue;
       }
 
+      // @codingStandardsIgnoreLine
       $media = unserialize($sku->get($field)->getString());
 
       $resave = FALSE;
@@ -925,7 +926,7 @@ class AcqSkuDrushCommands extends DrushCommands {
           $logger->error('Removing fid from media item from @sku, for @reason. @item.', [
             '@sku' => $sku->getSku(),
             '@reason' => $redownload,
-            '@item' => $verbose ? json_encode($item) : '',
+            '@item' => $verbose ? json_encode($item, JSON_THROW_ON_ERROR) : '',
           ]);
 
           $resave = TRUE;
@@ -991,7 +992,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     $result = $this->connection->query("select nid as entity_id, 'node' as type from node where type in ('acq_product', 'acq_promotion', 'store') union select id as entity_id, 'acq_sku' as type from acq_sku union select tid as entity_id, 'taxonomy_term' as type from taxonomy_term_data where vid='acq_product_category'");
     $data = $result->fetchAll(\PDO::FETCH_ASSOC);
     $this->moduleHandler->alter('acq_sku_clean_synced_data', $data);
-    print count($data);
+    print is_countable($data) ? count($data) : 0;
   }
 
 }

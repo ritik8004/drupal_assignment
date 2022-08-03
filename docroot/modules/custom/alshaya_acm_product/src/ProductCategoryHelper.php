@@ -245,6 +245,7 @@ class ProductCategoryHelper {
    *   The string of terms hierarchy.
    */
   protected function getProductCategoryHierarchy(TermInterface $term, $lang = NULL) {
+    $sourceTerm = [];
     $static = &drupal_static('alshaya_acm_product_get_product_category_hierarchy', []);
     $tid = $term->id();
 

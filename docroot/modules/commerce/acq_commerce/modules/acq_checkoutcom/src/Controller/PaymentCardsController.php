@@ -125,6 +125,7 @@ class PaymentCardsController extends ControllerBase {
    *   Build array.
    */
   public function listCards(UserInterface $user) {
+    $build = [];
     $list_class = ['saved-paymentcard-list'];
     $existing_cards = $this->apiHelper->getCustomerCards($user);
 

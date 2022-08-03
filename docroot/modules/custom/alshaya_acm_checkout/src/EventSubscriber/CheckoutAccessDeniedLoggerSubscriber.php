@@ -91,7 +91,7 @@ class CheckoutAccessDeniedLoggerSubscriber extends HttpExceptionSubscriberBase {
     catch (\Throwable $e) {
       $this->getLogger('CheckoutLogger')->warning('@error error was thrown and failed to get line and file for type: @type. Message: @message', [
         '@error' => $error,
-        '@type' => get_class($exception),
+        '@type' => $exception::class,
         '@message' => $e->getMessage(),
       ]);
     }

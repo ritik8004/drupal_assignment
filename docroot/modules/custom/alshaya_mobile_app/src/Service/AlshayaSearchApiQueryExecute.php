@@ -31,7 +31,7 @@ class AlshayaSearchApiQueryExecute {
 
   use StringTranslationTrait;
 
-  const ALGOLIA_SORT_KEY_MAPPING = [
+  public const ALGOLIA_SORT_KEY_MAPPING = [
     'name_1' => 'title',
     'nid' => 'search_api_relevance',
   ];
@@ -39,34 +39,34 @@ class AlshayaSearchApiQueryExecute {
   /**
    * Filter query string key.
    */
-  const FILTER_KEY = 'f';
+  public const FILTER_KEY = 'f';
 
   /**
    * Sort query string key.
    */
-  const SORT_KEY = 'sort';
+  public const SORT_KEY = 'sort';
 
   /**
    * Pager key.
    */
-  const PAGER_KEY = 'limit';
+  public const PAGER_KEY = 'limit';
 
   /**
    * Page limit.
    *
    * Default pager limit when not provided.
    */
-  const PAGER_DEFAULT_LIMIT = 12;
+  public const PAGER_DEFAULT_LIMIT = 12;
 
   /**
    * Filter key and value separator.
    */
-  const SEPARATOR = ':';
+  public const SEPARATOR = ':';
 
   /**
    * Separator for the sort between field and sort order.
    */
-  const SORT_SEPARATOR = ' ';
+  public const SORT_SEPARATOR = ' ';
 
   /**
    * Facet source id.
@@ -941,10 +941,10 @@ class AlshayaSearchApiQueryExecute {
       $asc_key = 0;
       $desc_key = 0;
       foreach ($lines as $line_key => $line_val) {
-        if (isset($sort_config_labels[$key . ' ASC']) && strpos($line_val, $sort_config_labels[$key . ' ASC']) !== FALSE) {
+        if (isset($sort_config_labels[$key . ' ASC']) && str_contains($line_val, $sort_config_labels[$key . ' ASC'])) {
           $asc_key = $line_key;
         }
-        if (isset($sort_config_labels[$key . ' DESC']) && strpos($line_val, $sort_config_labels[$key . ' DESC']) !== FALSE) {
+        if (isset($sort_config_labels[$key . ' DESC']) && str_contains($line_val, $sort_config_labels[$key . ' DESC'])) {
           $desc_key = $line_key;
         }
       }

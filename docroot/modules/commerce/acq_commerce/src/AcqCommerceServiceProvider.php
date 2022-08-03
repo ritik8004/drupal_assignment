@@ -21,7 +21,7 @@ class AcqCommerceServiceProvider extends ServiceProviderBase implements ServiceM
       $renderer['auto_placeholder_conditions']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
       $container->setParameter('renderer.config', $renderer);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Do nothing, system might still be installing.
     }
   }

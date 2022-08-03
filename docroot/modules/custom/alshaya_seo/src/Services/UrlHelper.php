@@ -14,7 +14,7 @@ class UrlHelper {
    *
    * @var array
    */
-  const SPECIAL_CHARACTERS_MAP = [
+  public const SPECIAL_CHARACTERS_MAP = [
     '&amp;' => 'and',
     '@' => 'at',
     '©' => 'c',

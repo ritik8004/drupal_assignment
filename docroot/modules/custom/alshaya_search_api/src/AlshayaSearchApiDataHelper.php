@@ -60,7 +60,7 @@ class AlshayaSearchApiDataHelper {
       $query->condition('item_id', $item_id);
       $values = $query->execute()->fetchAllKeyed(0, 0);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Do nothing, we may have disabled indexes temporarily.
       $values = [];
     }

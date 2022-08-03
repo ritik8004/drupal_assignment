@@ -18,17 +18,12 @@ class SKUAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
-    switch ($operation) {
-      case 'view':
-        return AccessResult::allowedIfHasPermission($account, 'view sku entity');
-
-      case 'edit':
-        return AccessResult::allowedIfHasPermission($account, 'edit sku entity');
-
-      case 'delete':
-        return AccessResult::allowedIfHasPermission($account, 'delete sku entity');
-    }
-    return AccessResult::allowed();
+    return match ($operation) {
+      'view' => AccessResult::allowedIfHasPermission($account, 'view sku entity'),
+          'edit' => AccessResult::allowedIfHasPermission($account, 'edit sku entity'),
+          'delete' => AccessResult::allowedIfHasPermission($account, 'delete sku entity'),
+          default => AccessResult::allowed(),
+    };
   }
 
   /**

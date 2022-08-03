@@ -28,39 +28,39 @@ class AlshayaConfigManager {
   /**
    * Replace whole config.
    */
-  const MODE_REPLACE = 'replace';
+  public const MODE_REPLACE = 'replace';
 
   /**
    * Add only the values missing from config.
    */
-  const MODE_ADD_MISSING = 'missing';
+  public const MODE_ADD_MISSING = 'missing';
 
   /**
    * Add missing values recursively from config.
    */
-  const MODE_ADD_MISSING_RECURSIVE = 'missing_recursive';
+  public const MODE_ADD_MISSING_RECURSIVE = 'missing_recursive';
 
   /**
    * Merge configs - deep merge.
    */
-  const MODE_MERGE = 'merge';
+  public const MODE_MERGE = 'merge';
 
   /**
    * Replace a particular key in config.
    */
-  const MODE_REPLACE_KEY = 'replace_key';
+  public const MODE_REPLACE_KEY = 'replace_key';
 
   /**
    * Just resave existing config and let overrides get applied.
    *
    * This is mainly used for overriding config from CORE or Contrib.
    */
-  const MODE_RESAVE = 'resave';
+  public const MODE_RESAVE = 'resave';
 
   /**
    * If there is a replace, we replace the complete configuration.
    */
-  const USE_FROM_REPLACE = 'use_from_replace';
+  public const USE_FROM_REPLACE = 'use_from_replace';
 
   /**
    * Config Storage service.
@@ -183,12 +183,12 @@ class AlshayaConfigManager {
       $data = $this->getDataFromCode($config_id, $module_name, $path);
 
       // If block config, replace the theme name with current active theme.
-      if (strpos($config_id, 'block.block.') === 0) {
+      if (str_starts_with($config_id, 'block.block.')) {
         $data['theme'] = $this->themeManager->getActiveTheme()->getName();
       }
 
       // If field config.
-      if (strpos($config_id, 'field.field.') === 0) {
+      if (str_starts_with($config_id, 'field.field.')) {
         $field = FieldConfig::loadByName(
           $data['entity_type'], $data['bundle'], $data['field_name']
         );
@@ -208,7 +208,7 @@ class AlshayaConfigManager {
         }
       }
       // If field storage.
-      elseif (strpos($config_id, 'field.storage.') === 0) {
+      elseif (str_starts_with($config_id, 'field.storage.')) {
         $field_storage = FieldStorageConfig::loadByName($data['entity_type'], $data['field_name']);
         if ($field_storage instanceof FieldStorageConfig) {
           $config->setData($data)->save();
@@ -246,7 +246,7 @@ class AlshayaConfigManager {
       }
 
       // Flush image cache for style we updated.
-      if (strpos($config_id, 'image.style.') === 0) {
+      if (str_starts_with($config_id, 'image.style.')) {
         $style_id = str_replace('image.style.', '', $config_id);
 
         /** @var \Drupal\image\Entity\ImageStyle $style */
@@ -268,7 +268,7 @@ class AlshayaConfigManager {
           ]);
         }
       }
-      elseif (strpos($config_id, 'search_api.index.') === 0) {
+      elseif (str_starts_with($config_id, 'search_api.index.')) {
         $index_name = str_replace('search_api.index.', '', $config_id);
         try {
           $index = Index::load($index_name);
