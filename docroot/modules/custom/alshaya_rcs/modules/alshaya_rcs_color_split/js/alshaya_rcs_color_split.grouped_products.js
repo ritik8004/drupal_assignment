@@ -222,7 +222,7 @@ window.commerceBackend = window.commerceBackend || {};
     // Return if result is empty.
     if (!Drupal.hasValue(product)
       || !Drupal.hasValue(product.style_code)) {
-      return;
+      return product;
     }
     // Get the products with the same style.
     var styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: product.style_code });

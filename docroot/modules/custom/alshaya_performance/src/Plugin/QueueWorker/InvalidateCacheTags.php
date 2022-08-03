@@ -25,7 +25,7 @@ class InvalidateCacheTags extends QueueWorkerBase implements ContainerFactoryPlu
   /**
    * Queue Name.
    */
-  const QUEUE_NAME = 'alshaya_invalidate_cache_tags';
+  public const QUEUE_NAME = 'alshaya_invalidate_cache_tags';
 
   /**
    * Cache Tags Invalidator.

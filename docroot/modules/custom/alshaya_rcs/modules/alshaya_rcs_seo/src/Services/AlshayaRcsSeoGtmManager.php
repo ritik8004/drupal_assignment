@@ -18,6 +18,7 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
    * {@inheritDoc}
    */
   public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL, $parentSku = NULL) {
+    $attributes = [];
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $attributes['gtm-name'] = '#rcs.product.gtmAttributes.name#';
@@ -45,7 +46,7 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
     // @todo This is supposed to stay blank here?
     $attributes['gtm-stock'] = '';
     $attributes['gtm-category'] = '#rcs.product.gtmAttributes.category#';
-    $attributes['gtm-main-sku'] = $parentSku ? $parentSku : $skuId;
+    $attributes['gtm-main-sku'] = $parentSku ?: $skuId;
     // Add these temporary values so these can be used in front end to make
     // API calls.
     $attributes['gtm-temp-sku'] = $skuId;
@@ -79,6 +80,7 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
    *   Array of attributes to be exposed to GTM.
    */
   public function fetchProductGtmAttributes(Node $rcs_product, $view_mode, SKUInterface $child = NULL) {
+    $attributes = [];
     static $gtm_container = NULL;
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 

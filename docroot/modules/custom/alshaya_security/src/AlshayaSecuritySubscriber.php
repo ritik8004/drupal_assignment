@@ -57,6 +57,7 @@ class AlshayaSecuritySubscriber implements EventSubscriberInterface {
    *   An array of event listener definitions.
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::RESPONSE][] = ['onRespond'];
     return $events;
   }

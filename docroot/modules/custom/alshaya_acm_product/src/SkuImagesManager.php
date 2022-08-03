@@ -26,11 +26,11 @@ class SkuImagesManager {
 
   use LoggerChannelTrait;
 
-  const BASE_IMAGE_ROLE = 'image';
-  const SWATCH_IMAGE_ROLE = 'swatch_image';
+  public const BASE_IMAGE_ROLE = 'image';
+  public const SWATCH_IMAGE_ROLE = 'swatch_image';
 
   // Cache key used for product media.
-  const PRODUCT_MEDIA_CACHE_KEY = 'product_media';
+  public const PRODUCT_MEDIA_CACHE_KEY = 'product_media';
 
   /**
    * Module Handler service object.
@@ -211,7 +211,7 @@ class SkuImagesManager {
 
       $this->productCacheManager->set($sku, $cache_key, $data);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       $data = [];
     }
 
@@ -437,7 +437,7 @@ class SkuImagesManager {
     try {
       $sku = $this->getSkuForGallery($sku);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       return [];
     }
 
@@ -504,7 +504,7 @@ class SkuImagesManager {
       try {
         return $this->getSkuForGallery($sku);
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
       }
 
       return NULL;
@@ -850,7 +850,7 @@ class SkuImagesManager {
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
             ->get($config_name);
 
-          $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+          $pager_flag = (is_countable($thumbnails) ? count($thumbnails) : 0) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
           $gallery = [
             '#type' => 'container',
@@ -906,7 +906,7 @@ class SkuImagesManager {
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
             ->get($config_name);
 
-          $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+          $pager_flag = (is_countable($thumbnails) ? count($thumbnails) : 0) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
           $gallery = [
             '#type' => 'container',
@@ -1293,6 +1293,7 @@ class SkuImagesManager {
    *   Thumbnails.
    */
   public function getThumbnailsFromMedia(array $media, $get_main_image = FALSE) {
+    $return = [];
     $thumbnails = $media['thumbs'] ?? [];
 
     $main_image = $media['main'] ?? [];

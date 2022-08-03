@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class AlshayaAcmUpdateCartFailedEvent extends Event {
 
-  const EVENT_NAME = 'alshaya_acm.update_cart_failed';
+  public const EVENT_NAME = 'alshaya_acm.update_cart_failed';
 
   /**
    * Failure reason / message.

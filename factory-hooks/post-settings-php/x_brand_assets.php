@@ -30,23 +30,11 @@ if (substr($env, 0, 1) == '0') {
   $env = substr($env, 2);
 }
 
-switch ($env) {
-  case 'uat':
-    $bucket = 'als-ecom-drupal-stopgap-uat-s3';
-    break;
-
-  case 'dev':
-  case 'dev2':
-  case 'dev3':
-  case 'qa2':
-  case 'test':
-  case 'local':
-    $bucket = 'als-ecom-drupal-stopgap-dev-s3';
-    break;
-
-  default:
-    $bucket = '';
-}
+$bucket = match ($env) {
+    'uat' => 'als-ecom-drupal-stopgap-uat-s3',
+    'dev', 'dev2', 'dev3', 'qa2', 'test', 'local' => 'als-ecom-drupal-stopgap-dev-s3',
+    default => '',
+};
 
 // Setting s3fs bucket and root folder.
 $settings['s3fs.settings']['bucket'] = $bucket;

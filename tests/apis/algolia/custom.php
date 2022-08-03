@@ -196,7 +196,7 @@ function algolia_get_synonyms(\Algolia\AlgoliaSearch\SearchIndex $index) {
   $synonyms = [];
 
   do {
-    $synonymsPage = $index->searchSynonyms(NULL, [], $page, 500);
+    $synonymsPage = $index->searchSynonyms(NULL, []);
 
     if (empty($synonymsPage['hits'])) {
       break;

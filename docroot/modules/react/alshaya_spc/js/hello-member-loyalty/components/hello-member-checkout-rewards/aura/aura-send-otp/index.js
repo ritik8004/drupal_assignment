@@ -23,6 +23,13 @@ class AuraSendOTP extends React.Component {
     this.sendOtp();
   }
 
+  resetModalMessages = (messageType, messageContent) => {
+    this.setState({
+      messageType,
+      messageContent,
+    });
+  }
+
   sendOtp = () => {
     const { mobile } = this.props;
     showFullScreenLoader();
@@ -87,6 +94,7 @@ class AuraSendOTP extends React.Component {
               />
               <AuraVerifyOTP
                 mobile={mobile}
+                resetModalMessages={this.resetModalMessages}
               />
               <div className="aura-otp-submit-description">
                 <span

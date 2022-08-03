@@ -120,6 +120,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    *   Return array of description and short description.
    */
   private function getDescription(SKU $sku_entity) {
+    $return = [];
     $static = &drupal_static(__METHOD__, []);
 
     if (!empty($static[$sku_entity->language()->getId()][$sku_entity->getSku()])) {

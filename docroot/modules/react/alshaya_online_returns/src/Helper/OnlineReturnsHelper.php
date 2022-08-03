@@ -5,6 +5,7 @@ namespace Drupal\alshaya_online_returns\Helper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
@@ -29,19 +30,30 @@ class OnlineReturnsHelper {
   protected $entityTypeManager;
 
   /**
+   * Checkout Options Manager service object.
+   *
+   * @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager
+   */
+  protected $checkoutOptionsManager;
+
+  /**
    * OnlineReturnsHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
+   * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
+   *   Checkout Options Manager service object.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    CheckoutOptionsManager $checkout_options_manager
   ) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
+    $this->checkoutOptionsManager = $checkout_options_manager;
   }
 
   /**
@@ -106,9 +118,7 @@ class OnlineReturnsHelper {
   public function prepareOrderData(array $order) {
     $paymentMethodDetails = array_filter(
       $order['extension']['payment_additional_info'],
-      function ($method) {
-        return $method['key'] === 'method_title';
-      }
+      fn($method) => $method['key'] === 'method_title'
     );
     $paymentMethod = reset($paymentMethodDetails);
 
@@ -117,9 +127,11 @@ class OnlineReturnsHelper {
     if (array_key_exists('is_return_eligible', $order['extension'])) {
       $return_eligible = $order['extension']['is_return_eligible'];
     }
-    $order_type = $order['shipping']['extension_attributes']['click_and_collect_type'] ?? '';
-    if ($order_type == 'ship_to_store') {
+    $order_type = $order['shipping']['method'] ?? '';
+    if ($order_type == $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
       $return_eligible = FALSE;
+      // Change the order type to cc, so that we can compare it in FE.
+      $order_type = 'cc';
     }
 
     return [
@@ -200,8 +212,8 @@ class OnlineReturnsHelper {
    *   True if the return request is valid else false.
    */
   public function validateReturnRequest(array $order_details) {
-    // Return from here if order type is ship_to_store.
-    if ($order_details['#order']['orderType'] == 'ship_to_store') {
+    // Return from here if order type is `cc`.
+    if ($order_details['#order']['orderType'] == 'cc') {
       return FALSE;
     }
 

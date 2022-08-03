@@ -126,8 +126,12 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
  */
 function alshaya_rcs_color_split_alshaya_rcs_product_query_fields_alter(array &$fields) {
   $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $color_attribute_config = $display_settings->get('color_attribute_config');
+  if (!$color_attribute_config['support_multiple_attributes']) {
+    return;
+  }
   // Get hex value of color.
-  $color_code_attribute = $display_settings->get('color_attribute_config')['configurable_color_code_attribute'];
+  $color_code_attribute = $color_attribute_config['configurable_color_code_attribute'];
   // Remove the "attr_" prefix.
   $color_code_attribute = str_replace('attr_', '', $color_code_attribute);
 
@@ -157,7 +161,11 @@ function alshaya_rcs_color_split_node_view(array &$build, EntityInterface $entit
  * Implements hook_alshaya_rcs_product_product_options_to_query().
  */
 function alshaya_rcs_color_split_alshaya_rcs_product_product_options_to_query() {
-  $color_attribute = \Drupal::config('alshaya_acm_product.display_settings')
-    ->get('color_attribute_config')['configurable_color_attribute'];
+  $color_attribute_config = \Drupal::config('alshaya_acm_product.display_settings')
+    ->get('color_attribute_config');
+  if (!$color_attribute_config['support_multiple_attributes']) {
+    return;
+  }
+  $color_attribute = $color_attribute_config['configurable_color_attribute'];
   return [$color_attribute];
 }

@@ -43,7 +43,7 @@ class PathProcessorImageStyles implements InboundPathProcessorInterface {
   public function processInbound($path, Request $request) {
     $directory_path = $this->streamWrapperManager->getViaScheme('brand')->getDirectoryPath();
 
-    if (strpos($path, '/' . $directory_path . '/styles/') === 0) {
+    if (str_starts_with($path, '/' . $directory_path . '/styles/')) {
       $path_prefix = '/' . $directory_path . '/styles/';
 
       // Strip out path prefix.

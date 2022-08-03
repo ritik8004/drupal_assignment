@@ -34,6 +34,7 @@ class AddressFormatSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[AddressEvents::ADDRESS_FORMAT][] = ['onGetDefinition', 0];
     return $events;
   }

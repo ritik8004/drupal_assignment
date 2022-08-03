@@ -423,7 +423,7 @@ class ShareCart extends ResourceBase {
     $country_code = _alshaya_custom_get_site_level_country_code();
     $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
-    if (strpos($value, $country_mobile_code) === FALSE) {
+    if (!str_contains($value, $country_mobile_code)) {
       $value = $country_mobile_code . $value;
     }
 

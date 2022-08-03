@@ -34,6 +34,7 @@ class ProductListingSettingsSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[ConfigEvents::SAVE][] = ['onSave'];
     return $events;
   }

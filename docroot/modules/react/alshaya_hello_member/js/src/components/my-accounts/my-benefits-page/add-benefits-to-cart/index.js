@@ -15,6 +15,7 @@ class AddBenefitsToCart extends React.Component {
       wait: false,
       appliedAlready: false,
       isEmptyCart: false,
+      voucherCodes: '',
     };
   }
 
@@ -27,13 +28,19 @@ class AddBenefitsToCart extends React.Component {
       const responseData = await callHelloMemberApi('getCartData', 'GET', params);
       if (hasValue(responseData.data) && !hasValue(responseData.data.error)) {
         const { codeId, voucherType } = this.props;
-        const voucherCode = responseData.data.cart.extension_attributes.applied_hm_voucher_codes;
+        let isVoucherCodeAdded = false;
+        let voucherCodes = responseData.data.cart.extension_attributes.applied_hm_voucher_codes;
+        if (hasValue(voucherCodes)) {
+          voucherCodes = voucherCodes.split(',');
+          isVoucherCodeAdded = voucherCodes.find((element) => (element === codeId));
+          this.setState({ voucherCodes });
+        }
         const appliedOfferCode = responseData.data.cart.extension_attributes.applied_hm_offer_code;
         const voucherDiscount = findArrayElement(responseData.data.totals.total_segments, 'voucher_discount');
+
         if (voucherType === 'BONUS_VOUCHER'
-          && hasValue(voucherCode)
-          && voucherCode === codeId
-          && hasValue(voucherDiscount) && voucherDiscount.value > 0) {
+          && hasValue(isVoucherCodeAdded)
+          && hasValue(voucherDiscount)) {
           this.setState({
             appliedAlready: true,
           });
@@ -70,7 +77,13 @@ class AddBenefitsToCart extends React.Component {
         showFullScreenLoader();
         const { title, codeId, voucherType } = this.props;
         if (voucherType === 'BONUS_VOUCHER') {
-          params.voucherCodes = [codeId];
+          const { voucherCodes } = this.state;
+          if (voucherCodes !== '') {
+            params.voucherCodes = voucherCodes;
+            params.voucherCodes.push(codeId);
+          } else {
+            params.voucherCodes = [codeId];
+          }
           const response = await callHelloMemberApi('addBonusVouchersToCart', 'POST', params);
           if (hasValue(response.data) && !hasValue(response.data.error)) {
             this.setState({
@@ -82,9 +95,9 @@ class AddBenefitsToCart extends React.Component {
               if (hasValue(title)) {
                 document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
               }
-              document.getElementById('hm-benefit-status-info').classList.toggle('hm-benefit-status-info-active');
+              document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
               setTimeout(() => {
-                document.getElementById('hm-benefit-status-info').classList.remove('hm-benefit-status-info-active');
+                document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
               }, 5000);
             }
             removeFullScreenLoader();
@@ -109,9 +122,9 @@ class AddBenefitsToCart extends React.Component {
               if (hasValue(title)) {
                 document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
               }
-              document.getElementById('hm-benefit-status-info').classList.toggle('hm-benefit-status-info-active');
+              document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
               setTimeout(() => {
-                document.getElementById('hm-benefit-status-info').classList.remove('hm-benefit-status-info-active');
+                document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
               }, 5000);
             }
             removeFullScreenLoader();
@@ -149,7 +162,7 @@ class AddBenefitsToCart extends React.Component {
           <div className="button-wide inactive">
             {Drupal.t('This offer has been added to your bag', { context: 'hello_member' })}
           </div>
-          <div className="hm-benefit-status-info" id="hm-benefit-status-info">
+          <div className="hello-member-benefit-status-info" id="hello-member-benefit-status-info">
             <div id="status-msg" />
             <div id="disc-title" />
             <div className="status-icon" />

@@ -89,6 +89,7 @@ class StockResource extends ResourceBase {
    *   The response containing stock data.
    */
   public function get(string $sku) {
+    $data = [];
     $skuEntity = SKU::loadFromSku($sku);
 
     if (!($skuEntity instanceof SKUInterface)) {

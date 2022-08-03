@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class AddToCartErrorEvent extends Event {
 
-  const SUBMIT = 'addToCart.submit.error';
+  public const SUBMIT = 'addToCart.submit.error';
 
   /**
    * The PHP exception we throw from SKU add to cart forms.

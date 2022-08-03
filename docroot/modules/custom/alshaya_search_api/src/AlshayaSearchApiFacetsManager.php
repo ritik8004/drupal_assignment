@@ -113,7 +113,7 @@ class AlshayaSearchApiFacetsManager {
 
     $data['id'] = $id;
     $data['facet_source_id'] = $facet_source_id;
-    $data['field_identifier'] = $data['field_identifier'] ?? 'attr_' . $field_key;
+    $data['field_identifier'] ??= 'attr_' . $field_key;
     $data = array_replace_recursive($data, $overrides);
     $data['url_alias'] = strtolower(str_replace(' ', '_', $data['name']));
 
@@ -278,7 +278,7 @@ class AlshayaSearchApiFacetsManager {
     if (file_exists($path . $template_id . '.yml')) {
       $content = file_get_contents($path . $template_id . '.yml');
     }
-    elseif (strpos($template_id, 'facets.facet') === 0) {
+    elseif (str_starts_with($template_id, 'facets.facet')) {
       $content = file_get_contents($path . 'facets.facet.default.yml');
     }
 
@@ -343,12 +343,7 @@ class AlshayaSearchApiFacetsManager {
   public function sortBlocksByWeight(BlockInterface $a, BlockInterface $b) {
     $a_weight = $a->getWeight();
     $b_weight = $b->getWeight();
-
-    if ($a_weight == $b_weight) {
-      return 0;
-    }
-
-    return ($a_weight < $b_weight) ? -1 : 1;
+    return $a_weight <=> $b_weight;
   }
 
 }

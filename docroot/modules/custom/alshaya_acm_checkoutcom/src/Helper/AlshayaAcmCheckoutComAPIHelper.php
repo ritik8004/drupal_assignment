@@ -221,9 +221,7 @@ class AlshayaAcmCheckoutComAPIHelper {
     $response = is_string($response) ? Json::decode($response) : $response;
 
     $items = $response['items'] ?? [];
-    uasort($items, function ($a, $b) {
-      return (strtotime($a['created_at']) > strtotime($b['created_at'])) ? -1 : 1;
-    });
+    uasort($items, fn($a, $b) => (strtotime($a['created_at']) > strtotime($b['created_at'])) ? -1 : 1);
 
     foreach ($items as $item) {
       $saved_card = Json::decode($item['token_details']);

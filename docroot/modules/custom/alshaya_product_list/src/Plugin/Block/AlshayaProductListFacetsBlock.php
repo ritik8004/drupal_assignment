@@ -22,12 +22,12 @@ class AlshayaProductListFacetsBlock extends BlockBase implements ContainerFactor
   /**
    * Facet source.
    */
-  const FACET_SOURCE = 'search_api:views_block__alshaya_product_list__block_3';
+  public const FACET_SOURCE = 'search_api:views_block__alshaya_product_list__block_3';
 
   /**
    * Exposed sort block.
    */
-  const PLP_EXPOSED_SORT_BLOCK = 'exposedformalshaya_product_listblock_3';
+  public const PLP_EXPOSED_SORT_BLOCK = 'exposedformalshaya_product_listblock_3';
 
   /**
    * Alshaya facet manager.

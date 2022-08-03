@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\Event;
  * @package Drupal\dynamic_yield\Event
  */
 class DyPageType extends Event {
-  const DY_SET_CONTEXT = 'dy.set.context';
+  public const DY_SET_CONTEXT = 'dy.set.context';
 
   /**
    * Dynamic yield Context.

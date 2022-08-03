@@ -67,7 +67,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
   public function indexBvAttrValuesInAlgolia(array $options = ['batch-size' => NULL]) {
     $batch_size = $options['batch-size'] ?? 50;
     $batch = [
-      'finished' => [__CLASS__, 'batchFinish'],
+      'finished' => [self::class, 'batchFinish'],
       'title' => dt('Indexing BV att value in algolia'),
       'init_message' => dt('Starting attrbute indexing...'),
       'progress_message' => dt('Completed @current step of @total.'),
@@ -77,10 +77,13 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
     $query = $this->alshayaEntityHelper->getNodesQuery();
     $nids = $query->execute();
 
-    $batch['operations'][] = [[__CLASS__, 'batchStart'], [count($nids)]];
+    $batch['operations'][] = [
+      [self::class, 'batchStart'],
+      [is_countable($nids) ? count($nids) : 0],
+    ];
     foreach (array_chunk($nids, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'batchProcess'],
+        [self::class, 'batchProcess'],
         [$chunk],
       ];
     }
@@ -158,9 +161,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
 
           // Create object ids from node id and language to fetch results from
           // algolia.
-          $objectIDs = array_map(function ($nid) use ($language) {
-            return "entity:node/{$nid}:{$language->getId()}";
-          }, $nids);
+          $objectIDs = array_map(fn($nid) => "entity:node/{$nid}:{$language->getId()}", $nids);
 
           try {
             $objects = $index->getObjects($objectIDs);
@@ -182,7 +183,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
             // Save and update objects with BazaarVoice attributes in algolia.
             $index->saveObjects($bv_objects['results']);
           }
-          catch (\Exception $e) {
+          catch (\Exception) {
             continue;
           }
         }
@@ -244,7 +245,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
           // Save and update objects with BazaarVoice attributes in algolia.
           $index->saveObjects($bv_objects['results']);
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           continue;
         }
       }

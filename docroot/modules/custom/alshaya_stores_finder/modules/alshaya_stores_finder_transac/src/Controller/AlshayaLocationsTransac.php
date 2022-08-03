@@ -77,7 +77,7 @@ class AlshayaLocationsTransac extends ControllerBase {
     $endpoint = ltrim($config->get('filter_path'), '/');
     $result = $this->alshayaApi->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
-    $response = new CacheableJsonResponse(json_decode($result), 200);
+    $response = new CacheableJsonResponse(json_decode($result, NULL), 200);
 
     // Adding cacheability metadata, so whenever, cache invalidates, this
     // url's cached response also gets invalidate.

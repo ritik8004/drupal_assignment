@@ -11,8 +11,8 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class CacheTagInvalidatedEvent extends Event {
 
-  const PRE_INVALIDATION = 'pre_cache_tag_invalidate';
-  const POST_INVALIDATION = 'post_cache_tag_invalidate';
+  public const PRE_INVALIDATION = 'pre_cache_tag_invalidate';
+  public const POST_INVALIDATION = 'post_cache_tag_invalidate';
 
   /**
    * Tag that is invalidated.

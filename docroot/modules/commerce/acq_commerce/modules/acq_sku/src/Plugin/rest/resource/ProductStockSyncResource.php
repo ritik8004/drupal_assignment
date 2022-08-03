@@ -95,13 +95,7 @@ class ProductStockSyncResource extends ResourceBase {
       try {
         $this->stockManager->processStockMessage($stock);
       }
-      catch (\Exception $e) {
-        $this->logger->error('Failed to process stock message: @message, exception: @exception', [
-          '@message' => json_encode($stock),
-          '@exception' => $e->getMessage(),
-        ]);
-      }
-      catch (\Throwable $e) {
+      catch (\Exception | \Throwable $e) {
         $this->logger->error('Failed to process stock message: @message, exception: @exception', [
           '@message' => json_encode($stock),
           '@exception' => $e->getMessage(),

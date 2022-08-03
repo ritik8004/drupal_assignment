@@ -64,6 +64,7 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
     int $count,
     string $entity_type
   ) {
+    $context = [];
     // Initialized node count to zero.
     if (empty($context['sandbox'])) {
       $context['sandbox']['progress'] = 0;
@@ -115,7 +116,7 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
       ->condition('type', 'acq_product')
       ->execute();
     // Delete all product nodes from the system.
-    $nodes_to_delete = count($acq_product_nids);
+    $nodes_to_delete = is_countable($acq_product_nids) ? count($acq_product_nids) : 0;
 
     if (!$nodes_to_delete) {
       $this->drupalLogger->notice('There are no product nodes to delete! Exiting!');
@@ -128,14 +129,17 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
 
     $batch = [
       'title' => 'Delete acq product nodes',
-      'finished' => [__CLASS__, 'deleteEntitiesFinished'],
+      'finished' => [self::class, 'deleteEntitiesFinished'],
     ];
 
     $batch_size = $options['batch-size'] ?? 20;
     foreach (array_chunk($acq_product_nids, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'deleteEntities'],
-        [$chunk, count($acq_product_nids), 'node'],
+        [self::class, 'deleteEntities'],
+        [
+          $chunk,
+          is_countable($acq_product_nids) ? count($acq_product_nids) : 0, 'node',
+        ],
       ];
     }
 
@@ -159,7 +163,7 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
     // Delete all acq_sku nodes from the system.
     $acq_sku_ids = $this->skuQuery->execute();
     // Delete all product nodes from the system.
-    $skus_to_delete = count($acq_sku_ids);
+    $skus_to_delete = is_countable($acq_sku_ids) ? count($acq_sku_ids) : 0;
 
     if (!$skus_to_delete) {
       $this->drupalLogger->notice('There are no sku entities to delete! Exiting!');
@@ -172,14 +176,17 @@ class AlshayaRcsProductMigrationCommands extends DrushCommands {
 
     $batch = [
       'title' => 'Delete acq sku entities',
-      'finished' => [__CLASS__, 'deleteEntitiesFinished'],
+      'finished' => [self::class, 'deleteEntitiesFinished'],
     ];
 
     $batch_size = $options['batch-size'] ?? 20;
     foreach (array_chunk($acq_sku_ids, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'deleteEntities'],
-        [$chunk, count($acq_sku_ids), 'acq_sku'],
+        [self::class, 'deleteEntities'],
+        [
+          $chunk,
+          is_countable($acq_sku_ids) ? count($acq_sku_ids) : 0, 'acq_sku',
+        ],
       ];
     }
 

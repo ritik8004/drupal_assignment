@@ -4,7 +4,8 @@ import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHe
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import logger from '../../../../../../js/utilities/logger';
-import { fetchCartData } from '../../../../utilities/api/requests';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { getDefaultErrorMessage } from '../../../../../../js/utilities/error';
 
 const HelloMemberCartPopupMemberOfferList = (props) => {
   const { offers, totals } = props;
@@ -33,18 +34,27 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
         '@message': response.data.message,
       });
     } else {
-      window.commerceBackend.removeCartDataFromStorage();
-      const cartData = fetchCartData();
+      const cartData = window.commerceBackend.getCart(true);
       if (cartData instanceof Promise) {
         cartData.then((result) => {
-          if (result === 'Request aborted') {
-            return;
+          if (result.status !== 200
+            && result.data === undefined
+            && result.data.error !== undefined) {
+            dispatchCustomEvent('spcCartMessageUpdate', {
+              type: 'error',
+              message: getDefaultErrorMessage(),
+            });
+          } else {
+            // Calling refresh mini cart event so that storage is updated.
+            dispatchCustomEvent('refreshMiniCart', {
+              data: () => result.data,
+            });
+            // Calling refresh cart event so that cart components
+            // are refreshed.
+            dispatchCustomEvent('refreshCart', {
+              data: () => result.data,
+            });
           }
-          // Store info in storage.
-          window.commerceBackend.setCartDataInStorage({ cart: result });
-          // Trigger event so that data can be passed to other components.
-          const event = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
-          document.dispatchEvent(event);
         });
       }
     }

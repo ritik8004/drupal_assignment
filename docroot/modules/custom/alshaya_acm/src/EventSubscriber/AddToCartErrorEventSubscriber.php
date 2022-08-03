@@ -65,6 +65,7 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[AddToCartErrorEvent::SUBMIT][] = ['onAddToCartError', 800];
     return $events;
   }
@@ -148,7 +149,7 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
           // for user to know about the updates user didn't ask for.
           $message = $this->t('Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.');
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           // Do nothing after second try to update cart.
         }
       }

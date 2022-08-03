@@ -336,7 +336,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
         $cart->setShipping($update);
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Something might go wrong while updating cart.
       // We set temporary flag here which we use in ajax callback and
       // if there is an error we will just reload the page, code in page load
@@ -371,11 +371,12 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       ]));
       return $response;
     }
+    $getPluginId = $this->getPluginId();
 
     \Drupal::moduleHandler()->alter(
       'home_delivery_save_address',
       $response,
-      $this->getPluginId()
+      $getPluginId
     );
     $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));

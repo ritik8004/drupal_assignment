@@ -145,7 +145,7 @@ class AlshayaAcmConfigCheck {
     $env = Settings::get('env') ?: 'local';
 
     // We don't do anything on update envs like 01uatup.
-    if (substr($env, -2) === 'up') {
+    if (str_ends_with($env, 'up')) {
       return FALSE;
     }
 

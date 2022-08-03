@@ -21,7 +21,7 @@ class ProductOptionsManager {
    *
    * @const CONDUCTOR_API_CATEGORY
    */
-  const PRODUCT_OPTIONS_VOCABULARY = 'sku_product_option';
+  public const PRODUCT_OPTIONS_VOCABULARY = 'sku_product_option';
 
   /**
    * Taxonomy Term Entity Storage.
@@ -98,7 +98,7 @@ class ProductOptionsManager {
     $tids = $query->execute();
 
     // We won't log no term found error during sync.
-    if (count($tids) === 0) {
+    if ((is_countable($tids) ? count($tids) : 0) === 0) {
       if ($log_error) {
         $this->logger->error('No term found for option_id: @option_id having attribute_code @attribute_code.', [
           '@option_id' => $option_id,
@@ -107,7 +107,7 @@ class ProductOptionsManager {
       }
       return NULL;
     }
-    elseif (count($tids) > 1) {
+    elseif ((is_countable($tids) ? count($tids) : 0) > 1) {
       $this->logger->critical('Multiple terms found for option_id: @option_id having attribute_code @attribute_code.', [
         '@option_id' => $option_id,
         '@attribute_code' => $attribute_code,

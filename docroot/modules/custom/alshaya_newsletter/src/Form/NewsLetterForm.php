@@ -92,6 +92,7 @@ class NewsLetterForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitFormAjax(array &$form, FormStateInterface $form_state) {
+    $data = [];
     if (!$form_state->hasAnyErrors() && !empty($form_state->getValue('email'))) {
       try {
         $subscription = $this->apiWrapper->subscribeNewsletter($form_state->getValue('email'));

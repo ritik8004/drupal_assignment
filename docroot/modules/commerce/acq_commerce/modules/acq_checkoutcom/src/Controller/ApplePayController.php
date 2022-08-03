@@ -117,7 +117,7 @@ class ApplePayController implements ContainerInjectionInterface {
       $return['curlError'] = curl_error($ch);
     }
     else {
-      $return = json_decode($response);
+      $return = json_decode($response, NULL);
     }
 
     curl_close($ch);

@@ -335,6 +335,14 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'اربح/ استخدم نقاط @aura_icon',
         'context' => 'hello_member',
       ],
+      '@hmOfferCount offers are applied' => [
+        'ar' => '@hmOfferCount offers are applied AR',
+        'context' => 'hello_member',
+      ],
+      '@hmOfferCount vouchers are applied' => [
+        'ar' => '@hmOfferCount vouchers are applied AR',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

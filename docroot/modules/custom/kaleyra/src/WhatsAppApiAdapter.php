@@ -66,6 +66,7 @@ class WhatsAppApiAdapter {
    *   Dynamic part for button url.
    */
   public function sendUsingTemplate(string $to, string $template, array $body_params, string $button_url = '') {
+    $request_options = [];
     $kaleyra_settings = $this->configFactory->get('kaleyra.settings');
 
     $sid = $kaleyra_settings->get('whatsapp_sid');

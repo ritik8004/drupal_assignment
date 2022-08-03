@@ -201,7 +201,7 @@ class AlshayaImageSitemapGenerator {
     $node_storage = $this->entityTypeManager->getStorage('node');
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
 
-    if (count($nids) > 0) {
+    if ((is_countable($nids) ? count($nids) : 0) > 0) {
       foreach ($nids as $nid) {
         // Fetch list of media files for each nid.
         // Load product from id.
@@ -232,13 +232,13 @@ class AlshayaImageSitemapGenerator {
                 // are to be shown after selection of all children and there are
                 // more than one configuration for this product.
                 if ($display_settings->get('show_child_images_after_selecting') !== 'all'
-                  || count($combinations['attribute_sku']) === 1) {
+                  || (is_countable($combinations['attribute_sku']) ? count($combinations['attribute_sku']) : 0) === 1) {
 
                   // Try to load images first for child to be displayed.
                   try {
                     $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, TRUE, 'fallback');
                   }
-                  catch (\Exception $e) {
+                  catch (\Exception) {
                     // Do nothing.
                   }
                 }
