@@ -67,14 +67,13 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
   return (
     <>
       <form
-        className="hm-promo-vouchers-validate-form"
+        className="hello-member-promo-vouchers-validate-form"
         method="post"
-        id="hm-promo-vouchers-val-form"
         onSubmit={(e) => handleSubmit(e)}
       >
-        <div className="hm-promo-tab-content-list">
+        <div className="hello-member-promo-tab-content-list">
           {vouchers.map((voucher, index) => (
-            <div key={voucher.code} className="hm-promo-tab-cont-item">
+            <div key={voucher.code} className="hello-member-promo-tab-cont-item">
               <input
                 type="checkbox"
                 id={`voucher${index}`}
@@ -96,7 +95,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
             </div>
           ))}
         </div>
-        <div className="hm-promo-tab-cont-action">
+        <div className="hello-member-promo-tab-cont-action">
           <input type="submit" value={Drupal.t('APPLY VOUCHERS', {}, { context: 'hello_member' })} />
           <a className="clear-btn" onClick={() => onClickClearAll()}>{Drupal.t('CLEAR ALL', {}, { context: 'hello_member' })}</a>
         </div>
