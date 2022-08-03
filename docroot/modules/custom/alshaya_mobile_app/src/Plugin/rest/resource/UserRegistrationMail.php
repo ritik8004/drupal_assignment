@@ -96,6 +96,7 @@ class UserRegistrationMail extends ResourceBase {
    *   HTTP Response.
    */
   public function post(array $data) {
+    $params = [];
     $email = $data['email'] ?? FALSE;
 
     if (empty($email)) {

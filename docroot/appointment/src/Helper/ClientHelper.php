@@ -61,6 +61,7 @@ class ClientHelper {
    *   clientExternalId.
    */
   public function updateInsertClient(array $clientData) {
+    $message = NULL;
     try {
       $param = [
         'client' => [
@@ -85,7 +86,7 @@ class ClientHelper {
       if (empty($clientData['firstName']) || empty($clientData['lastName']) || empty($clientData['dob']) || empty($clientData['mobile']) || empty($clientData['email'])) {
         $message = 'Required parameters missing to create a client.';
         $this->logger->error($message . ' Data: @request_data', [
-          '@request_data' => json_encode($clientData),
+          '@request_data' => json_encode($clientData, JSON_THROW_ON_ERROR),
         ]);
         throw new \Exception($message);
       }
@@ -113,7 +114,7 @@ class ClientHelper {
 
       // Log on client update/insert.
       $this->logger->info('Client @operation successfully. Data: @params', [
-        '@params' => json_encode($clientData),
+        '@params' => json_encode($clientData, JSON_THROW_ON_ERROR),
         '@operation' => $param['client']['clientExternalId'] ? 'updated' : 'inserted',
       ]);
 

@@ -68,7 +68,7 @@ class PaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // @TODO: After the payment details are entered, prevent this form from
+    // @todo After the payment details are entered, prevent this form from
     // showing again if a user navigates back to this step or present an option
     // for the user to cancel the last payment method and enter a new one.
     $cart = $this->getCart();
@@ -143,7 +143,7 @@ class PaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterface {
    */
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $values = $form_state->getValue($pane_form['#parents']);
-    $payment_method = isset($values['payment_options']) ? $values['payment_options'] : NULL;
+    $payment_method = $values['payment_options'] ?? NULL;
     if ($payment_method) {
       // Setting the payment method in the ajax callback is too late, but
       // validation runs before the ajax method is called, so we can get the

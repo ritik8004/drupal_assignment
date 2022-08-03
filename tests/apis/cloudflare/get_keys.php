@@ -14,7 +14,7 @@ curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
-$headers = array();
+$headers = [];
 $headers[] = 'X-Auth-Email: ' . $email;
 $headers[] = 'X-Auth-Key: ' . $key;
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);

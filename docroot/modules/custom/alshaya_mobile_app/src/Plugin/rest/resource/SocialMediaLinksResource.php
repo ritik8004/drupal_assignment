@@ -34,12 +34,12 @@ class SocialMediaLinksResource extends ResourceBase {
   /**
    * Menu name.
    */
-  const MENU_NAME = 'social-links';
+  public const MENU_NAME = 'social-links';
 
   /**
    * Menu class pattern that needs to be replaced.
    */
-  const MENU_CLASS_PATTERN = 'c-social-links--';
+  public const MENU_CLASS_PATTERN = 'c-social-links--';
 
   /**
    * Menu link tree.

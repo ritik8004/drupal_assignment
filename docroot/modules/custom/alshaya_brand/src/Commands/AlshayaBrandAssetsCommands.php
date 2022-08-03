@@ -112,7 +112,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
 
     foreach (array_chunk($unused_assets, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'deleteUnusedUnavailableFileEntitiesChunk'],
+        [self::class, 'deleteUnusedUnavailableFileEntitiesChunk'],
         [$chunk, $dry_run],
       ];
     }
@@ -261,7 +261,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
 
       // Batch operation to clean up unused file entities.
       $batch_operation_clean_up_unused_file_entities[] = [
-        [__CLASS__, 'deleteUnusedUnavailableFileEntitiesForDomain'],
+        [self::class, 'deleteUnusedUnavailableFileEntitiesForDomain'],
         [$current_domain],
       ];
     }
@@ -286,20 +286,20 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     $unused_brand_assets_common = call_user_func_array('array_intersect', $unused_brand_assets);
 
     $this->drupalLogger->notice('Count of common un-used brand assets: @count.', [
-      '@count' => count($unused_brand_assets_common),
+      '@count' => is_countable($unused_brand_assets_common) ? count($unused_brand_assets_common) : 0,
     ]);
 
     // First delete the files which are marked as unused for all the domains.
     foreach (array_chunk($unused_brand_assets_common, $batch_size, TRUE) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'deleteUnusedBrandAssetsAllMarketsChunk'],
+        [self::class, 'deleteUnusedBrandAssetsAllMarketsChunk'],
         [$chunk, $dry_run],
       ];
     }
 
     // If we have too many changes, we can start by just removing
     // the common un-used files.
-    if ($common_only && count($unused_brand_assets_common) > 0) {
+    if ($common_only && (is_countable($unused_brand_assets_common) ? count($unused_brand_assets_common) : 0) > 0) {
       batch_set($batch);
       drush_backend_batch_process();
       return;
@@ -339,7 +339,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
 
         // Batch operation to check if brand asset entity exists.
         $batch['operations'][] = [
-          [__CLASS__, 'checkBrandAssetFileForDomain'],
+          [self::class, 'checkBrandAssetFileForDomain'],
           [$domain, $uris],
         ];
       }
@@ -350,7 +350,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     // deleteUnusedBrandAssetsAllMarketsChunk to not remove if file is in use.
     foreach (array_chunk($unused_brand_assets_diff, $batch_size, TRUE) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'deleteUnusedBrandAssetsAllMarketsChunk'],
+        [self::class, 'deleteUnusedBrandAssetsAllMarketsChunk'],
         [$chunk, $dry_run],
       ];
     }
@@ -392,7 +392,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
 
       if (!$dry_run) {
         try {
-          if (strpos($uri, 's3://') !== FALSE) {
+          if (str_contains($uri, 's3://')) {
             // @todo use stream_wrapper.s3fs service and unlink.
             $logger->notice('Not deleting S3 file as of now as pending dev. URI: @uri.', [
               '@uri' => $uri,
@@ -403,7 +403,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
 
           $file_system->delete($uri);
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           $logger->warning('Failed to delete the file with uri: @uri, exception: @message.', [
             '@uri' => $uri,
           ]);
@@ -452,13 +452,13 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     $yaml_data = '';
     $start_reading = FALSE;
     foreach ($data as $line) {
-      if ((strpos($line, $acsf_site_code) > -1) && (strpos($line, ' ') !== 0)) {
+      if ((strpos($line, (string) $acsf_site_code) > -1) && (!str_starts_with($line, ' '))) {
         $start_reading = TRUE;
         $yaml_data .= $line . ':' . PHP_EOL;
         continue;
       }
       if ($start_reading) {
-        if (strpos($line, ' ') !== 0) {
+        if (!str_starts_with($line, ' ')) {
           break;
         }
         if (strpos($line, 'domains') > -1) {

@@ -38,7 +38,7 @@ class AlshayaResetFacetsProcessor extends ResetFacetsProcessor {
 
     // Remove all pretty facets.
     $uri = $request->getRequestUri();
-    if (strpos($uri, '/--') !== FALSE) {
+    if (str_contains($uri, '/--')) {
       $uri = substr($uri, 0, strrpos($uri, '/--'));
     }
     $url = Url::fromUserInput($uri);

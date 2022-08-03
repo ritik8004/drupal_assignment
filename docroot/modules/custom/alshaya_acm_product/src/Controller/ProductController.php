@@ -238,6 +238,7 @@ class ProductController extends ControllerBase {
    * Page callback for modal content.
    */
   public function pdpModalLinkView($type = 'size-guide') {
+    $build = [];
     // Type mapping.
     $types = [
       'size-guide' => 'size_guide_modal_content_node',
@@ -390,6 +391,7 @@ class ProductController extends ControllerBase {
    *   Related products data.
    */
   public function getRelatedProductsJson(array $related_skus, array $data) {
+    $related_products = [];
     foreach ($related_skus as $related_sku => $value) {
       $related_sku_entity = SKU::loadFromSku($related_sku);
       if ($related_sku_entity instanceof SKU) {

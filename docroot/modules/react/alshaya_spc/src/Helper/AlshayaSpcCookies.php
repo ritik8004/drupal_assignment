@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class AlshayaSpcCookies {
 
   // Middleware session key to get from db.
-  const MIDDLEWARE_SESSION_KEY = 'middleware_cart_id';
+  public const MIDDLEWARE_SESSION_KEY = 'middleware_cart_id';
 
   // Session cookie key to check.
-  const MIDDLEWARE_COOKIE_KEY = 'PHPSESSID';
+  public const MIDDLEWARE_COOKIE_KEY = 'PHPSESSID';
 
   /**
    * Array to store all cookies.
@@ -129,10 +129,10 @@ class AlshayaSpcCookies {
     }
 
     // Get the middleware session key from the record.
-    $session_data = array_map(function ($data) {
-      // phpcs:ignore
-      return @unserialize($data);
-    }, explode('|', $this->spcSession));
+    // phpcs:disable
+    $session_data = array_map(fn($data) =>
+    @unserialize($data), explode('|', $this->spcSession));
+    // phpcs:enable
 
     foreach ($session_data as $session_item) {
       if (isset($session_item[self::MIDDLEWARE_SESSION_KEY])) {

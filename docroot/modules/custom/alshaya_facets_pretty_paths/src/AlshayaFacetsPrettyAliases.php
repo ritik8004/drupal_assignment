@@ -14,7 +14,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
  */
 class AlshayaFacetsPrettyAliases {
 
-  const ALIAS_TABLE = 'facets_pretty_path';
+  public const ALIAS_TABLE = 'facets_pretty_path';
 
   /**
    * Database Connection.

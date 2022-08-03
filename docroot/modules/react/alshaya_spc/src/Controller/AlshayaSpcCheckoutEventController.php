@@ -176,7 +176,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
             'data' => $data,
           ];
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           // Do nothing.
         }
         break;

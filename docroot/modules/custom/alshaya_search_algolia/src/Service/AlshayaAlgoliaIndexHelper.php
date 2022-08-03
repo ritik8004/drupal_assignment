@@ -41,12 +41,12 @@ class AlshayaAlgoliaIndexHelper {
 
   use StringTranslationTrait;
 
-  const FACET_SOURCE = 'search_api:views_page__search__page';
+  public const FACET_SOURCE = 'search_api:views_page__search__page';
 
   /**
    * Index name for product list on PLP, promo, brand listing.
    */
-  const PRODUCT_LIST_INDEX = 'alshaya_algolia_product_list_index';
+  public const PRODUCT_LIST_INDEX = 'alshaya_algolia_product_list_index';
 
   /**
    * SKU Manager service object.
@@ -370,9 +370,7 @@ class AlshayaAlgoliaIndexHelper {
 
     if ($sku->bundle() == 'configurable') {
       $configured_skus = $sku->get('field_configured_skus')->getValue();
-      $object['field_configured_skus'] = array_map(function ($item) {
-        return $item['value'];
-      }, $configured_skus);
+      $object['field_configured_skus'] = array_map(fn($item) => $item['value'], $configured_skus);
     }
     // Add value to dummy dummy field attr_delivery_ways.
     // It is depend on status of attr_express_delivery,attr_same_day_delivery.
@@ -525,7 +523,7 @@ class AlshayaAlgoliaIndexHelper {
       }
 
       // Prepare the field name to get the field alias.
-      $field_name = strpos($key, 'attr') !== FALSE || isset($field_map[$key])
+      $field_name = str_contains($key, 'attr') || isset($field_map[$key])
         ? $key
         : NULL;
 
@@ -631,7 +629,7 @@ class AlshayaAlgoliaIndexHelper {
     foreach ($item as $field_key => $field_val) {
       // Only unset/remove of attribute fields or this will remove the
       // SKU from the indexing on default listing (without any filter).
-      if (strpos($field_key, 'attr_') !== FALSE) {
+      if (str_contains($field_key, 'attr_')) {
         unset($item[$field_key]);
       }
     }
@@ -1170,6 +1168,7 @@ class AlshayaAlgoliaIndexHelper {
    * Helps to return list of Index names.
    */
   public function getAlgoliaIndexNames() {
+    $index_name = [];
     $index_name[] = 'alshaya_algolia_index';
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
       $index_name[] = 'alshaya_algolia_product_list_index';
@@ -1209,6 +1208,7 @@ class AlshayaAlgoliaIndexHelper {
    *   Type of index to be set drupal/mdc.
    */
   public function setAlgoliaIndexPrefix($index_source = 'drupal') {
+    $index_prefix = NULL;
     $search_settings = $this->configFactory->getEditable('alshaya_search_algolia.settings');
 
     // Get brand and country.

@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class StockUpdatedEvent extends Event {
 
-  const EVENT_NAME = 'stock_updated';
+  public const EVENT_NAME = 'stock_updated';
 
   /**
    * SKU Entity.

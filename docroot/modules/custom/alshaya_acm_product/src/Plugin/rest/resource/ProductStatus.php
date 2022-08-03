@@ -96,6 +96,7 @@ class ProductStatus extends ResourceBase {
    *   The response containing stock data.
    */
   public function get(string $sku) {
+    $data = [];
     $sku = base64_decode($sku);
     $skuEntity = SKU::loadFromSku($sku);
 

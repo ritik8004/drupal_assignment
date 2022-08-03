@@ -30,7 +30,7 @@ class ShippingInformation extends AddressFormBase {
    * {@inheritdoc}
    */
   public function isVisible() {
-    // @TODO: Uncomment once cart sets if items are shippable or not.
+    // @todo Uncomment once cart sets if items are shippable or not.
     // $cart = $this->getCart();
     // return $cart->getShippable();
     return TRUE;
@@ -136,11 +136,11 @@ class ShippingInformation extends AddressFormBase {
     ];
 
     foreach ($field_names as $field_key => $field_name) {
-      $address_fields[$field_key]['#value'] = isset($address->{$field_name}) ? $address->{$field_name} : '';
+      $address_fields[$field_key]['#value'] = $address->{$field_name} ?? '';
     }
 
     foreach ($dynamic_field_names as $field_name) {
-      $address_fields['dynamic_parts'][$field_name]['#value'] = isset($address->{$field_name}) ? $address->{$field_name} : '';
+      $address_fields['dynamic_parts'][$field_name]['#value'] = $address->{$field_name} ?? '';
     }
 
     if (empty($use_billing_address)) {
@@ -204,7 +204,7 @@ class ShippingInformation extends AddressFormBase {
         [
           '@carrier' => $method['carrier_title'],
           '@method' => $method['method_title'],
-          '@price' => $method['amount'] ? $method['amount'] : t('Free'),
+          '@price' => $method['amount'] ?: t('Free'),
         ]
       );
 
@@ -245,7 +245,7 @@ class ShippingInformation extends AddressFormBase {
       return;
     }
 
-    list($carrier, $method) = explode(',', $shipping_method);
+    [$carrier, $method] = explode(',', $shipping_method);
 
     $cart->setShippingMethod($carrier, $method);
   }

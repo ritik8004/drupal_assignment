@@ -13,7 +13,7 @@ use Symfony\Component\Config\Definition\Processor;
  */
 class AlshayaYamlProcess {
 
-  const PROFILE_COLLECTION = 'profiles/collection.yml';
+  public const PROFILE_COLLECTION = 'profiles/collection.yml';
 
   protected $parser;
 
@@ -185,7 +185,7 @@ class AlshayaYamlProcess {
         function ($profile) use ($specific_site) {
           $return = FALSE;
           foreach ($specific_site as $site) {
-            if (strpos($profile, $site) !== FALSE) {
+            if (str_contains($profile, $site)) {
               $return = TRUE;
               break;
             }
@@ -305,7 +305,7 @@ class AlshayaYamlProcess {
     // Convert url variables to full url.
     if (!empty($final_yaml['variables']['url_base_uri'])) {
       array_walk($final_yaml['variables'], function (&$item, $key, $prefix) {
-        if ($item !== $prefix && substr($key, 0, 4) === 'url_') {
+        if ($item !== $prefix && str_starts_with($key, 'url_')) {
           $item = $prefix . DIRECTORY_SEPARATOR . ltrim($item, '/');
         }
 
@@ -314,9 +314,7 @@ class AlshayaYamlProcess {
 
     // Moves 'tags' inside variables with '@tags' key.
     $final_yaml['variables']['@tags'] = array_map(
-      function ($tag) {
-        return '@' . $tag;
-      },
+      fn($tag) => '@' . $tag,
       $final_yaml['tags']
     );
     unset($final_yaml['tags']);
@@ -356,7 +354,7 @@ class AlshayaYamlProcess {
    * @return array|mixed
    *   Return the array generated from behat template file.
    */
-  public function prepareBehatYaml($behat_template_file, array $variables, $profile = NULL , $viewport) {
+  public function prepareBehatYaml($behat_template_file, array $variables , $viewport, $profile = NULL) {
     $yaml = $this->getParsedContent($behat_template_file);
     $yaml['suites']['default']['paths'] = ["%paths.base%/build/features/$profile"];
     $brand = explode('-', $profile);
@@ -377,11 +375,11 @@ class AlshayaYamlProcess {
     // Running tags on test executions
     $tags = '';
     if ($viewport == 'mobile') {
-      $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = array("--window-size=375,667");
+      $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = ["--window-size=375,667"];
       $tags = "~@desktop";
     }
     else {
-      $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = array("--window-size=1440,960");
+      $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = ["--window-size=1440,960"];
       $tags = "~@mobile";
     }
 

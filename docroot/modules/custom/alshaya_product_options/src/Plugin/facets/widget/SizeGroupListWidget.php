@@ -33,7 +33,7 @@ class SizeGroupListWidget extends LinksWidget {
     $sizeGroups = [];
     foreach ($items as $item) {
       if (isset($item['#title'], $item['#title']['#value'])) {
-        if (strpos($item['#title']['#value'], SkuManager::SIZE_GROUP_SEPARATOR) !== FALSE) {
+        if (str_contains($item['#title']['#value'], SkuManager::SIZE_GROUP_SEPARATOR)) {
           $sizeGroupArr = explode(SkuManager::SIZE_GROUP_SEPARATOR, $item['#title']['#value']);
           $item['#title']['#value'] = $sizeGroupArr[1];
           $sizeGroups[$sizeGroupArr[0]][] = $item;

@@ -53,23 +53,23 @@ class SkuManager {
 
   use StringTranslationTrait;
 
-  const FREE_GIFT_PRICE = 0.01;
+  public const FREE_GIFT_PRICE = 0.01;
 
-  const PDP_LAYOUT_INHERIT_KEY = 'inherit';
+  public const PDP_LAYOUT_INHERIT_KEY = 'inherit';
 
-  const PDP_LAYOUT_MAGAZINE = 'pdp-magazine';
+  public const PDP_LAYOUT_MAGAZINE = 'pdp-magazine';
 
-  const PDP_LAYOUT_MAGAZINE_V2 = 'pdp-magazine_v2';
+  public const PDP_LAYOUT_MAGAZINE_V2 = 'pdp-magazine_v2';
 
-  const AGGREGATED_LISTING = 'aggregated';
+  public const AGGREGATED_LISTING = 'aggregated';
 
-  const NON_AGGREGATED_LISTING = 'non_aggregated';
+  public const NON_AGGREGATED_LISTING = 'non_aggregated';
 
-  const FREE_GIFT_SUB_TYPE_ALL_SKUS = 0;
+  public const FREE_GIFT_SUB_TYPE_ALL_SKUS = 0;
 
-  const FREE_GIFT_SUB_TYPE_ONE_SKU = 1;
+  public const FREE_GIFT_SUB_TYPE_ONE_SKU = 1;
 
-  const SIZE_GROUP_SEPARATOR = '|';
+  public const SIZE_GROUP_SEPARATOR = '|';
 
   /**
    * Flag to allow merge children in alshaya_color_split.
@@ -599,7 +599,7 @@ class SkuManager {
           }
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         // Child SKU might be deleted or translation not available.
         // Log messages are already set in previous functions.
       }
@@ -664,6 +664,7 @@ class SkuManager {
    *   Calculated cart item price.
    */
   public function buildCartItemPrice(SKU $sku_entity, $item_price) {
+    $sku_cart_price = [];
     $sku_cart_price['price'] = (float) $sku_entity->get('price')->getString();
     $final_price = (float) $item_price;
 
@@ -767,7 +768,7 @@ class SkuManager {
 
         $child_skus[] = $child_sku_entity;
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         continue;
       }
     }
@@ -884,6 +885,7 @@ class SkuManager {
     'cart',
     'category',
   ], $context = '') {
+    $promotion_cache_tags = [];
     // Get promotions for the product.
     $cache_key = 'promotion_ids_' . implode('-', $types) . '_' . $context;
     $promotion_nids = $this->productCacheManager->get($sku, $cache_key);
@@ -963,9 +965,7 @@ class SkuManager {
     $query->distinct();
     $full_catalog_promo_nids = $query->execute()->fetchCol();
 
-    $promotion_cache_tags = array_map(function ($nid) {
-      return "node:$nid";
-    }, $full_catalog_promo_nids);
+    $promotion_cache_tags = array_map(fn($nid) => "node:$nid", $full_catalog_promo_nids);
 
     // Adding list cache tag considering addition/deletion of promotion
     // nodes.
@@ -1774,7 +1774,7 @@ class SkuManager {
         $linked_skus_requested = array_merge($linked_skus_requested, $linked_skus_from_product);
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Do nothing.
     }
 
@@ -1844,7 +1844,7 @@ class SkuManager {
           $related[$sku] = $node->id();
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         // Do nothing.
       }
 
@@ -1944,7 +1944,7 @@ class SkuManager {
         $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
           '@sku' => $sku_code,
           '@langcode' => $langcode,
-          '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+          '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), JSON_THROW_ON_ERROR),
           '@page' => $this->currentRequest->getRequestUri(),
         ]));
       }
@@ -2175,7 +2175,7 @@ class SkuManager {
    */
   public function getListingDisplayMode() {
     static $value = NULL;
-    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('listing_display_mode');
+    $value ??= $this->getConfig('alshaya_acm_product.display_settings')->get('listing_display_mode');
     return $value;
   }
 
@@ -2187,7 +2187,7 @@ class SkuManager {
    */
   public function isPriceModeFromTo() {
     static $value = NULL;
-    $value = $value ?? ($this->getConfig('alshaya_acm_product.display_settings')->get('price_display_mode') === SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO);
+    $value ??= $this->getConfig('alshaya_acm_product.display_settings')->get('price_display_mode') === SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO;
     return $value;
   }
 
@@ -2209,7 +2209,7 @@ class SkuManager {
    */
   public function getProductListingSwatchAttributes() {
     static $value = NULL;
-    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('swatches')['plp'] ?? ['actual_color_label_code'];
+    $value ??= $this->getConfig('alshaya_acm_product.display_settings')->get('swatches')['plp'] ?? ['actual_color_label_code'];
     return $value;
   }
 
@@ -2221,7 +2221,7 @@ class SkuManager {
    */
   public function getPdpSwatchAttributes() {
     static $value = NULL;
-    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('swatches')['pdp'] ?? ['color'];
+    $value ??= $this->getConfig('alshaya_acm_product.display_settings')->get('swatches')['pdp'] ?? ['color'];
     return $value;
   }
 
@@ -2233,7 +2233,7 @@ class SkuManager {
    */
   public function getSwatchAttributesToExcludeOnPlp() {
     static $value = NULL;
-    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('exclude_swatches_on_plp') ?? [];
+    $value ??= $this->getConfig('alshaya_acm_product.display_settings')->get('exclude_swatches_on_plp') ?? [];
     return $value;
   }
 
@@ -2382,9 +2382,7 @@ class SkuManager {
     }
 
     $fields = $this->skuFieldsManager->getFieldAdditions();
-    $configurableFieldReplacements = array_filter($fields, function ($field) {
-      return !empty($field['display_configurable_for']);
-    });
+    $configurableFieldReplacements = array_filter($fields, fn($field) => !empty($field['display_configurable_for']));
 
     // For some fields we display from different attribute.
     // For instance for article_castor_id we display from color_label.
@@ -2484,7 +2482,7 @@ class SkuManager {
    */
   public function isNotRequiredOptionsToBeRemoved() {
     static $value = NULL;
-    $value = $value ?? (bool) $this->getConfig('alshaya_acm_product.display_settings')->get('hide_not_required_option');
+    $value ??= (bool) $this->getConfig('alshaya_acm_product.display_settings')->get('hide_not_required_option');
     return $value;
   }
 
@@ -2496,7 +2494,7 @@ class SkuManager {
    */
   public function showImagesFromChildrenAfterAllOptionsSelected(): bool {
     static $value = NULL;
-    $value = $value ?? ($this->getConfig('alshaya_acm_product.display_settings')->get('show_child_images_after_selecting') == 'all');
+    $value ??= $this->getConfig('alshaya_acm_product.display_settings')->get('show_child_images_after_selecting') == 'all';
     return $value;
   }
 
@@ -2829,7 +2827,7 @@ class SkuManager {
     $combinations = $this->getConfigurableCombinations($sku);
 
     // If there is only one child, we select that by default.
-    if (count($combinations['by_sku']) === 1) {
+    if ((is_countable($combinations['by_sku']) ? count($combinations['by_sku']) : 0) === 1) {
       $child_skus = array_keys($combinations['by_sku']);
       $child_sku = reset($child_skus);
       if ($child = SKU::loadFromSku($child_sku, $sku->language()->getId())) {
@@ -2849,21 +2847,21 @@ class SkuManager {
       // if there is one value in that specific attribute.
       // Here we say not to select variant from query ?selected=xxx if there
       // is any attribute (except the first one) which has more then one value.
-      if (count($combinations['attribute_sku']) > 1) {
+      if ((is_countable($combinations['attribute_sku']) ? count($combinations['attribute_sku']) : 0) > 1) {
         foreach ($combinations['attribute_sku'] as $values) {
           // Get the SKUs attached with first option of attribute.
           $first_attribute_index = key($values);
           // If only one sku is attached with the first option of the first
           // attribute, it means only one sku will be available for that
           // combination and thus that will also be selected as well.
-          if (count($values[$first_attribute_index]) == 1) {
+          if ((is_countable($values[$first_attribute_index]) ? count($values[$first_attribute_index]) : 0) == 1) {
             break;
           }
 
           // If more than one options for the attribute available or more than
           // one skus attached with the first option of first attribute, means
           // full selection of attributes is not made.
-          if (count($values) > 1 || count($values[$first_attribute_index]) > 1) {
+          if ((is_countable($values) ? count($values) : 0) > 1 || (is_countable($values[$first_attribute_index]) ? count($values[$first_attribute_index]) : 0) > 1) {
             $select_from_query = FALSE;
             break;
           }
@@ -3399,7 +3397,7 @@ class SkuManager {
       foreach ($fields as $field_key => $field_val) {
         // Only unset/remove of attribute fields or this will remove the
         // SKU from the indexing on default listing (without any filter).
-        if (strpos($field_key, 'attr_') !== FALSE) {
+        if (str_contains($field_key, 'attr_')) {
           $item->getField($field_key)->setValues([]);
         }
       }
@@ -3591,9 +3589,7 @@ class SkuManager {
     }
 
     $fields = $this->skuFieldsManager->getFieldAdditions();
-    $indexFields = array_filter($fields, function ($field) {
-      return !empty($field['index']);
-    });
+    $indexFields = array_filter($fields, fn($field) => !empty($field['index']));
 
     return $indexFields;
   }

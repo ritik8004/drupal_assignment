@@ -98,7 +98,7 @@ class DrupalInfo {
     // alshaya@staging-1509:/var/www/html/alshaya.01uat/docroot$ curl -I \
     // > mckw-uat.factory.alshaya.com
     // curl: (6) Could not resolve host: mckw-uat.factory.alshaya.com.
-    if (strpos($host, 'factory.alshaya.com') !== FALSE) {
+    if (str_contains($host, 'factory.alshaya.com')) {
       $options['curl'] = [
         CURLOPT_RESOLVE => [
           // @todo Make this IP a setting.

@@ -252,7 +252,7 @@ class CartHelper {
     try {
       $this->updateCartWrapper(__METHOD__);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Try to remove again (only once) after removing OOS items.
       if ($this->removeOutOfStockItemsFromCart()) {
         $cart = $this->cartStorage->getCart(FALSE);

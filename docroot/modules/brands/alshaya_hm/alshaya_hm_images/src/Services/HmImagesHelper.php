@@ -19,7 +19,7 @@ class HmImagesHelper {
   /**
    * Constant for default swatch display type.
    */
-  const LP_SWATCH_DEFAULT = 'RGB';
+  public const LP_SWATCH_DEFAULT = 'RGB';
 
   /**
    * Sku Manager service.
@@ -125,6 +125,7 @@ class HmImagesHelper {
       return [];
     }
 
+    $child_sku_entity = NULL;
     $article_castor_ids = [];
     $child_sku_cache_tag = [];
     foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $skus) {

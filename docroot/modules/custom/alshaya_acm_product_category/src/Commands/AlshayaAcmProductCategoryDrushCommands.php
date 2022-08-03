@@ -80,14 +80,14 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *
    * @var string
    */
-  const PATH = 'public://exports/v2/';
+  public const PATH = 'public://exports/v2/';
 
   /**
    * The filename prefix for the output file.
    *
    * @var string
    */
-  const FILE_NAME_PREFIX = 'product-category-data';
+  public const FILE_NAME_PREFIX = 'product-category-data';
 
   /**
    * AlshayaAcmProductCategoryDrushCommands constructor.
@@ -201,7 +201,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $batch = [
       'title' => 'Export Product Category Data',
       'init' => 'Starting product category data export process..',
-      'finished' => [__CLASS__, 'batchFinished'],
+      'finished' => [self::class, 'batchFinished'],
     ];
 
     foreach (array_chunk($tids, $options['limit']) as $tid_batch) {
@@ -260,7 +260,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
         }
         $context['results']['terms']++;
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         $context['results']['failed_tids'][] = $tid;
       }
     }
@@ -291,7 +291,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
 
     if (!empty($results['failed_tids'])) {
       $drupalLogger->warning('Could not successfully process @count items. Items: @items', [
-        '@count' => count($results['failed_tids']),
+        '@count' => is_countable($results['failed_tids']) ? count($results['failed_tids']) : 0,
         '@items' => implode(',', $results['failed_tids']),
       ]);
     }

@@ -123,7 +123,7 @@ class AlshayaAcmProductAcqSkuValidateEventSubscriber implements EventSubscriberI
     }
 
     foreach ($product['extension']['configurable_product_options'] as $options) {
-      if (count($options['values']) == 0) {
+      if ((is_countable($options['values']) ? count($options['values']) : 0) == 0) {
         $this->logger->warning('Data received for configurable sku @sku has corrupt data in configurable_product_options.', [
           '@sku' => $product['sku'],
         ]);

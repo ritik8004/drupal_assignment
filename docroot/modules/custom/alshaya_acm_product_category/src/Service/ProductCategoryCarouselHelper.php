@@ -146,6 +146,7 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
    *   The render array for carousel accordion.
    */
   private function getCarouselAccordion() {
+    $carousel = [];
     $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($this->categoryId);
     // If given category not available.
     if (!$term instanceof TermInterface) {
@@ -202,6 +203,7 @@ class ProductCategoryCarouselHelper implements ProductCategoryCarouselHelperInte
    * {@inheritdoc}
    */
   public function getCarousel(ContentEntityInterface $entity) {
+    $carousel = [];
     $this->setEntity($entity);
     $this->loadCategoryId();
     // By default we don't show any carousel content.

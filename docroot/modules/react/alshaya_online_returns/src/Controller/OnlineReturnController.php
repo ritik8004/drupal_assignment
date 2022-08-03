@@ -317,7 +317,7 @@ class OnlineReturnController extends ControllerBase {
           // If json_decode is not successful, means we have actual file
           // response. Otherwise we have error message which can be decoded by
           // json.
-          if (!json_decode($return_print_response)) {
+          if (!json_decode($return_print_response, NULL)) {
             $response = new Response($return_print_response);
             $disposition = $response->headers->makeDisposition(
               ResponseHeaderBag::DISPOSITION_ATTACHMENT,

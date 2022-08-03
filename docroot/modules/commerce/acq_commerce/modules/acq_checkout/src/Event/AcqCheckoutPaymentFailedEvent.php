@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class AcqCheckoutPaymentFailedEvent extends Event {
 
-  const EVENT_NAME = 'acq_checkout.payment_failed';
+  public const EVENT_NAME = 'acq_checkout.payment_failed';
 
   /**
    * Payment Method code.

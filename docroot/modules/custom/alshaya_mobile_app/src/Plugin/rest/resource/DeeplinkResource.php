@@ -146,7 +146,7 @@ class DeeplinkResource extends ResourceBase {
       return $this->mobileAppUtility->throwException();
     }
 
-    if (strpos($alias, 'search') !== FALSE) {
+    if (str_contains($alias, 'search')) {
       $query_string_array = $this->requestStack->query->all();
       // Search url may have url like,
       // rest/v1/deeplink?url=search?keywords=dress&f[0]=category
@@ -171,7 +171,7 @@ class DeeplinkResource extends ResourceBase {
       if (strpos($internal_path, 'taxonomy/term')) {
         $redirect_url = $this->mobileAppUtility->getRedirectUrl("/{$langcode}" . $internal_path);
         // Append '/' if it does not exist.
-        $redirect_url = (substr($redirect_url, 0, 1) !== '/') ? ('/' . $redirect_url) : $redirect_url;
+        $redirect_url = (!str_starts_with($redirect_url, '/')) ? ('/' . $redirect_url) : $redirect_url;
         if ($redirect_url !== $internal_path) {
           $internal_path = $this->aliasManager->getPathByAlias(
             rtrim(str_replace("/{$langcode}", '', $redirect_url), '/'),

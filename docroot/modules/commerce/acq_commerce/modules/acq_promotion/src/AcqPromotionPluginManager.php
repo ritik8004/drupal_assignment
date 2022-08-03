@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_promotion;
 
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Component\Plugin\Factory\DefaultFactory;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -44,7 +45,7 @@ class AcqPromotionPluginManager extends DefaultPluginManager {
     $plugin_definition = $this->getDefinition($plugin_id);
     $plugin_class = DefaultFactory::getPluginClass($plugin_id, $plugin_definition);
     // If the plugin provides a factory method, pass the container to it.
-    if (is_subclass_of($plugin_class, 'Drupal\Core\Plugin\ContainerFactoryPluginInterface')) {
+    if (is_subclass_of($plugin_class, ContainerFactoryPluginInterface::class)) {
       $plugin = $plugin_class::create(\Drupal::getContainer(), $configuration, $plugin_id, $plugin_definition, $promotionNode);
     }
     else {

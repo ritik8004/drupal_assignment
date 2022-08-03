@@ -23,9 +23,7 @@ class MagentoApiResponseHelper {
   public static function customerFromSearchResult(array $customer) {
     $mage_addresses = ($customer['addresses'] ?? []);
     $addresses = array_map(
-      function ($mage_address) {
-        return self::addressFromSearchResult($mage_address);
-      },
+      fn($mage_address) => self::addressFromSearchResult($mage_address),
       $mage_addresses
     );
     $extension = [];

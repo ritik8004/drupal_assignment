@@ -60,6 +60,7 @@ class AlshayaSpcLoginController extends ControllerBase {
    * Cart login page.
    */
   public function checkoutLogin() {
+    $build = [];
     if ($this->currentUser()->isAuthenticated()) {
       $response = new RedirectResponse(Url::fromRoute('alshaya_spc.checkout')->toString(), 302);
       $response->send();

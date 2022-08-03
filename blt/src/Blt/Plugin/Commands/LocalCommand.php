@@ -371,7 +371,7 @@ class LocalCommand extends BltTasks {
       }
 
       if ($start_reading) {
-        if (strpos($line, ' ') !== 0) {
+        if (!str_starts_with($line, ' ')) {
           break;
         }
 

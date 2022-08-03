@@ -151,7 +151,7 @@ class AlshayaFrontendCommand extends BltTasks {
     foreach (new \DirectoryIterator($dir) as $subDir) {
       if ($subDir->isDir()
         && !$subDir->isDot()
-        && !(strpos($subDir->getBasename(), '.') === 0)
+        && !(str_starts_with($subDir->getBasename(), '.'))
         && !in_array($subDir->getBasename(), $ignoredDirs)
         && file_exists($subDir->getRealPath() . '/gulpfile.js')) {
         $themes[$subDir->getBasename()] = $subDir->getRealPath();
@@ -505,7 +505,7 @@ class AlshayaFrontendCommand extends BltTasks {
 
     foreach (new \DirectoryIterator($dir) as $theme) {
       if ($theme->isDot()
-        || (strpos($theme->getBasename(), '.') === 0)
+        || (str_starts_with($theme->getBasename(), '.'))
         || in_array($theme->getBasename(), self::$themeIgnoredDirs)
         || !file_exists($theme->getRealPath() . '/gulpfile.js')) {
         continue;
@@ -563,7 +563,7 @@ class AlshayaFrontendCommand extends BltTasks {
 
     foreach (new \DirectoryIterator($reactDir) as $subDir) {
       if ($subDir->isDir()
-        && strpos($subDir->getBasename(), '.') === FALSE
+        && !str_contains($subDir->getBasename(), '.')
         && !in_array($subDir->getBasename(), self::$reactIgnoredDirs)) {
         $pattern = $reactDir . '/' . $subDir->getBasename() . '/js';
 

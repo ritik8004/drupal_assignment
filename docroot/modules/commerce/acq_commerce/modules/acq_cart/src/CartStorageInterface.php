@@ -10,7 +10,7 @@ namespace Drupal\acq_cart;
 interface CartStorageInterface {
 
   // The cart storage key.
-  const STORAGE_KEY = 'acq_cart';
+  public const STORAGE_KEY = 'acq_cart';
 
   /**
    * Restores the cart to what is available in Magento.

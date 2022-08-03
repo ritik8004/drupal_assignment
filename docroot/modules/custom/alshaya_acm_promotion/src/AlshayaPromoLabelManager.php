@@ -27,7 +27,7 @@ class AlshayaPromoLabelManager {
 
   use StringTranslationTrait;
 
-  const DYNAMIC_PROMOTION_ELIGIBLE_ACTIONS = [
+  public const DYNAMIC_PROMOTION_ELIGIBLE_ACTIONS = [
     'buy_x_get_y_cheapest_free',
     'groupn',
     'groupn_fixdisc',
@@ -35,8 +35,8 @@ class AlshayaPromoLabelManager {
     'ampromo_cart',
     'ampromo_items',
   ];
-  const ALSHAYA_PROMOTIONS_STATIC_PROMO = 0;
-  const ALSHAYA_PROMOTIONS_DYNAMIC_PROMO = 1;
+  public const ALSHAYA_PROMOTIONS_STATIC_PROMO = 0;
+  public const ALSHAYA_PROMOTIONS_DYNAMIC_PROMO = 1;
 
   /**
    * Entity Type Manager.
@@ -581,6 +581,7 @@ class AlshayaPromoLabelManager {
    *   Promotion render data (generic/dynamic/free).
    */
   public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode, $context = '') {
+    $build = [];
     // Get promotions for the product.
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart'], $context);
     $displayMode = $view_mode === 'api' ? 'api' : 'links';
@@ -693,7 +694,7 @@ class AlshayaPromoLabelManager {
 
         case 'modal':
           // Directly add dynamic promotion labels.
-          $promoDynamicLabels = $this->getSkuPromoDynamicLabel($sku, $promotion_nodes);
+          $promoDynamicLabels = $this->getSkuPromoDynamicLabel($sku);
           if (!empty($promoDynamicLabels)) {
             $build['promotions']['dynamic_label'] = [
               '#type' => 'html_tag',

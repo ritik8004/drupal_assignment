@@ -3,7 +3,7 @@
 namespace App\Helper;
 
 /**
- * Class Helper.
+ * Helper class for handling appointments.
  *
  * @package App\Helper
  */
@@ -104,8 +104,8 @@ class Helper {
       $latDelta = $latTo - $latFrom;
       $lonDelta = $lonTo - $lonFrom;
 
-      $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
-        cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+      $angle = 2 * asin(sqrt(sin($latDelta / 2) ** 2 +
+        cos($latFrom) * cos($latTo) * sin($lonDelta / 2) ** 2));
       $distance = $angle * 3959;
 
       if ($unit === "kilometers") {
