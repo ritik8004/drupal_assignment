@@ -204,7 +204,7 @@ class RegisteredUserLoyalty extends React.Component {
               {parse(parse(Drupal.t('@hm_icon Member earns @points points', {
                 '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
                 '@points': helloMemberPoints,
-              })))}
+              }, { context: 'hello_member' })))}
             </div>
           </div>
         </ConditionalView>

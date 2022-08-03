@@ -8,7 +8,6 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 import GuestUserLoyalty from './guest-user-loyalty';
 import RegisteredUserLoyalty from './registered-user-loyalty';
 import logger from '../../../../../js/utilities/logger';
-import getCurrencyCode from '../../../../../js/utilities/util';
 
 class HelloMemberLoyaltyOptions extends React.Component {
   constructor(props) {
@@ -68,23 +67,20 @@ class HelloMemberLoyaltyOptions extends React.Component {
       cart: { cart: { items } },
     } = this.props;
     let hmPoints = null;
-    const currencyCode = getCurrencyCode();
-    if (hasValue(currencyCode)) {
-      const response = await getHelloMemberPointsToEarn(items, identifierNo, currencyCode);
-      if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
-        if (hasValue(response.data.hm_points)) {
-          hmPoints = response.data.hm_points;
-        }
-      } else if (hasValue(response.error)) {
-        logger.error('Error while trying to get hello member points data. Data: @data.', {
-          '@data': JSON.stringify(response),
-        });
+    const response = await getHelloMemberPointsToEarn(items, identifierNo);
+    if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
+      if (hasValue(response.data.hm_points)) {
+        hmPoints = response.data.hm_points;
       }
-      this.setState({
-        hmPoints,
-        wait: false,
+    } else if (hasValue(response.error)) {
+      logger.error('Error while trying to get hello member points data. Data: @data.', {
+        '@data': JSON.stringify(response),
       });
     }
+    this.setState({
+      hmPoints,
+      wait: false,
+    });
   }
 
   render() {
@@ -105,7 +101,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
 
     return (
       <div className="spc-hello-member-checkout-rewards-block fadeInUp">
-        <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('Loyalty')}</SectionTitle>
+        <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('Loyalty', {}, { context: 'hello_member' })}</SectionTitle>
         <ConditionalView condition={!isUserAuthenticated()}>
           <GuestUserLoyalty
             animationDelay={animationDelay}
