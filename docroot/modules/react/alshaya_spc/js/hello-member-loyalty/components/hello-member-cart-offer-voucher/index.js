@@ -187,7 +187,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
     return (
       <>
         <div className="hello-member-promo-section">
-          <a className="hm-promo-pop-link" onClick={() => this.onClickOpenPopup(true)}>
+          <a className="hello-member-promo-pop-link" onClick={() => this.onClickOpenPopup(true)}>
             {Drupal.t('Discounts & Vouchers', {}, { context: 'hello_member' })}
             <span className="promo-notification show-note" />
           </a>
@@ -204,8 +204,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
                   <BecomeHelloMember destination="cart" />
                 </ConditionalView>
                 <ConditionalView condition={!isAnonymous}>
-                  <div className="hm-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
-                  <div className="hm-promo-modal-content">
+                  <div className="hello-member-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
+                  <div className="hello-member-promo-modal-content">
                     <div className={`error-info-section ${additionalClasses}`}>
                       {appliedOffers}
                       {appliedVouchers}

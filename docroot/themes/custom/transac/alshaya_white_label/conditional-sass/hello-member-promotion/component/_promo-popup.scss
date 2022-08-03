@@ -5,7 +5,7 @@
     padding-bottom: rem(16);
   }
 
-  .hm-promo-pop-link {
+  .hello-member-promo-pop-link {
     float: $right;
     position: relative;
     z-index: 1;
@@ -47,7 +47,7 @@
       border: 0 !important;
     }
 
-    .hm-promo-modal-title {
+    .hello-member-promo-modal-title {
       background-color: $primary_bg;
       color: $hello-member-promo-pop-txt;
       font-size: rem(20);
@@ -70,7 +70,7 @@
       cursor: pointer;
     }
 
-    .hm-promo-modal-content {
+    .hello-member-promo-modal-content {
       padding: rem(14) 0;
       padding-#{$right}: rem(46);
       padding-#{$left}: rem(36);
