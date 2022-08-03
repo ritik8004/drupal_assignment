@@ -43,35 +43,33 @@ class PaymentMethodCodMobileVerification extends React.Component {
     }
 
     return (
-      <div className="cod-mobile-verify-wrapper">
+      <div className="cod-mobile-verification">
         <CodVerifyText
           mobileNumber={shippingMobileNumber}
           otpLength={otpLength}
         />
-        <div className="cod-otp-form-wrapper">
-          <form>
-            <OtpInput
-              value={otp}
-              onChange={this.handleChange}
-              numInputs={otpLength}
-              separator={<span>&nbsp;</span>}
-              isInputNum
+        <form className="cod-mobile-verification__form">
+          <OtpInput
+            value={otp}
+            onChange={this.handleChange}
+            numInputs={otpLength}
+            separator={<span>&nbsp;</span>}
+            isInputNum
+          />
+          <div className="cod-mobile-verification__otp-controls">
+            <span className="cod-mobile-verification__txt-resend">
+              {Drupal.t('Didn\'t receive the code?', {}, { context: 'cod_mobile_verification' })}
+            </span>
+            <OtpTimer
+              seconds={60}
+              minutes={0}
+              resend={this.handleResendOtp}
+              text=" "
+              ButtonText={Drupal.t('Resend', {}, { context: 'cod_mobile_verification' })}
             />
-            <div className="cod-otp-lower-wrapper">
-              <span className="resend-otp-text">
-                {Drupal.t('Didn\'t receive the code?', {}, { context: 'cod_mobile_verification' })}
-              </span>
-              <OtpTimer
-                seconds={60}
-                minutes={0}
-                resend={this.handleResendOtp}
-                text=" "
-                ButtonText={Drupal.t('Resend', {}, { context: 'cod_mobile_verification' })}
-              />
-              <button type="submit">{Drupal.t('verify', {}, { context: 'cod_mobile_verification' })}</button>
-            </div>
-          </form>
-        </div>
+            <button type="submit" className="cod-mobile-verification__btn-submit">{Drupal.t('verify', {}, { context: 'cod_mobile_verification' })}</button>
+          </div>
+        </form>
       </div>
     );
   }
