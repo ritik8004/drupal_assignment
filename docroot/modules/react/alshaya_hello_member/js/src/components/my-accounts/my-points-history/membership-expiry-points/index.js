@@ -9,13 +9,14 @@ export default class PointsInfoSummary extends React.PureComponent {
     super(props);
     this.expandRef = React.createRef();
     this.state = {
-      open: true,
+      open: false,
     };
   }
 
   componentDidMount() {
     // Accordion setup.
     setupAccordionHeight(this.expandRef);
+    this.expandRef.current.classList.add('close-expiry-accordion');
   }
 
   showExpiryContent = () => {
