@@ -6,6 +6,7 @@ import getStringMessage from '../../../../../js/utilities/strings';
 import { helloMemberCustomerPhoneSearch } from '../../hello_member_api_helper';
 import { validateInfo } from '../../../../../alshaya_spc/js/utilities/checkout_util';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
+import { showFullScreenLoader, removeFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class SendOtpPopup extends React.Component {
   constructor(props) {
@@ -70,8 +71,8 @@ class SendOtpPopup extends React.Component {
 
   // unset error message for phone number field
   unsetErrorMsgforPhone = () => {
-    document.getElementById('mobile-number-error').innerHTML = '';
     if (document.querySelector('#mobile-number-error').classList.contains('error')) {
+      document.getElementById('mobile-number-error').innerHTML = '';
       document.getElementById('mobile-number-error').classList.remove('error');
     }
   };
@@ -81,6 +82,7 @@ class SendOtpPopup extends React.Component {
   callSendOtpApi = () => {
     const phoneNumber = `${drupalSettings.alshaya_mobile_prefix.slice(1)}${document.getElementById('edit-field-mobile-number-0-mobile').value}`;
     // Check the entered phone number is already in use by another customer.
+    showFullScreenLoader();
     const phoneSearchResponse = helloMemberCustomerPhoneSearch(phoneNumber);
     if (phoneSearchResponse instanceof Promise) {
       phoneSearchResponse.then((phoneResult) => {
@@ -108,7 +110,6 @@ class SendOtpPopup extends React.Component {
               this.setState({
                 otp: '',
                 hasErrored: false,
-                otpVerified: true,
               });
               this.toggleSendOtpPopup(true);
               document.getElementById('hello-member-modal-form-verify').classList.add('in-active');
@@ -118,11 +119,13 @@ class SendOtpPopup extends React.Component {
         }
       });
     }
+    removeFullScreenLoader();
   };
 
   // Verify OTP
   onClickVerify = () => {
     const { otp } = this.state;
+    showFullScreenLoader();
     const responseData = verifyOtp(
       `${document.getElementById('edit-field-mobile-number-0-mobile').value}`,
       otp,
@@ -138,14 +141,17 @@ class SendOtpPopup extends React.Component {
           this.setState({
             hasErrored: true,
           });
+          removeFullScreenLoader();
           return;
         }
+        this.setState({ otpVerified: true });
         this.toggleSendOtpPopup(false);
         // If successfully verified make the otp verified update otp_verified.
         document.querySelector('input[name="otp_verified"]').value = 1;
         document.getElementById('edit-submit').classList.remove('in-active');
       });
     }
+    removeFullScreenLoader();
   };
 
   render() {
