@@ -28,7 +28,6 @@ class AuraVerifyOTP extends React.Component {
     showFullScreenLoader();
     callMagentoApi(`/V1/verifyotp/phonenumber/${mobile.replace('+', '')}/otp/${otp}/type/link`, 'GET')
       .then((response) => {
-        console.log(response);
         if (response.data) {
           this.setState({
             otpVerified: response.data,
