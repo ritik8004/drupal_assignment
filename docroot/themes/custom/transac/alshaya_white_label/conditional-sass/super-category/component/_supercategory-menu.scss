@@ -626,4 +626,64 @@
       }
     }
   }
+
+  &.super-category-home {
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(144);
+    }
+
+    &:not(.frontpage) {
+      &.hide-header {
+        @include breakpoint($upto-desktop) {
+          margin-top: rem(162);
+        }
+      }
+    }
+
+    &.hide-minimalistic-header {
+      .block-alshaya-algolia-react-autocomplete {
+        @include breakpoint($upto-desktop) {
+          top: 0 !important;
+        }
+      }
+
+      &:not(.frontpage) {
+        &.hide-header {
+          @include breakpoint($upto-desktop) {
+            margin-top: rem(50);
+          }
+        }
+
+        .c-menu-primary {
+          .mobile--menu,
+          .mobile--search {
+            @include breakpoint($upto-desktop) {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    .mobile--search {
+      @include breakpoint($upto-desktop) {
+        display: none !important;
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($upto-desktop) {
+        visibility: visible !important;
+        top: rem(114) !important;
+      }
+
+      &.focused {
+        .algolia-search-back-icon {
+          @include breakpoint($upto-desktop) {
+            visibility: visible;
+          }
+        }
+      }
+    }
+  }
 }
