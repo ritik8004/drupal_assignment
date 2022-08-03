@@ -4,6 +4,8 @@ import OtpInput from 'react-otp-input';
 import { sendOtp, verifyOtp } from '../../../../../js/utilities/otp_helper';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { helloMemberCustomerPhoneSearch } from '../../hello_member_api_helper';
+import { validateInfo } from '../../../../../alshaya_spc/js/utilities/checkout_util';
+import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 
 class SendOtpPopup extends React.Component {
   constructor(props) {
@@ -29,8 +31,28 @@ class SendOtpPopup extends React.Component {
 
   // Open Modal.
   onClickSendOtp = (e) => {
-    this.callSendOtpApi();
+    this.validatePhoneNumber();
     e.preventDefault();
+  };
+
+  validatePhoneNumber = () => {
+    // Validate the phone number
+    const validationData = {
+      mobile: document.getElementById('edit-field-mobile-number-0-mobile').value,
+    };
+    validateInfo(validationData).then((response) => {
+      if (!response || response.data.status === undefined || !response.data.status) {
+        this.setErrorMsgforPhone(getDefaultErrorMessage());
+      }
+      // If invalid mobile number.
+      if (response.data.mobile === false) {
+        this.setErrorMsgforPhone(Drupal.t('Please enter valid mobile number.', {}, { context: 'hello_member' }));
+      } else {
+        this.unsetErrorMsgforPhone();
+        // if valid phone number call send otp api.
+        this.callSendOtpApi();
+      }
+    });
   };
 
   // Toggle to set state for popup.
@@ -44,6 +66,14 @@ class SendOtpPopup extends React.Component {
   setErrorMsgforPhone = (errMsg) => {
     document.getElementById('mobile-number-error').innerHTML = errMsg;
     document.getElementById('mobile-number-error').classList.add('error');
+  };
+
+  // unset error message for phone number field
+  unsetErrorMsgforPhone = () => {
+    document.getElementById('mobile-number-error').innerHTML = '';
+    if (document.querySelector('#mobile-number-error').classList.contains('error')) {
+      document.getElementById('mobile-number-error').classList.remove('error');
+    }
   };
 
 

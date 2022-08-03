@@ -311,6 +311,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => '@hmOfferCount vouchers are applied AR',
         'context' => 'hello_member',
       ],
+      'Please enter valid mobile number.' => [
+        'ar' => 'يرجى إدخال رقم الجوال صحيح.',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
