@@ -9,6 +9,8 @@ import ConditionalView from '../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getProductReviewStats } from '../../../utilities/user_util';
 import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
+import { hasValue }
+  from '../../../../../../js/utilities/conditionsUtility';
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -71,7 +73,7 @@ export default class Rating extends React.Component {
     const isInline = true;
 
     // Reviews data is emtpy.
-    if (reviewsData === '') {
+    if (!hasValue(reviewsData) || reviewsData === '') {
       return null;
     }
 
