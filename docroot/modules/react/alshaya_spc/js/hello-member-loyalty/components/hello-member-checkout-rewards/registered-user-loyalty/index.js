@@ -4,7 +4,6 @@ import { renderToString } from 'react-dom/server';
 import { callHelloMemberApi, isAuraIntegrationEnabled } from '../../../../../../js/utilities/helloMemberHelper';
 import HelloMemberSvg from '../../../../svg-component/hello-member-svg';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
-import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 import LoyaltySelectOption from '../loyalty-select-option';
 import LoyaltyConfirmPopup from '../loyalty-confirm-popup';
 import { setHelloMemberLoyaltyCard } from '../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
@@ -169,9 +168,9 @@ class RegisteredUserLoyalty extends React.Component {
 
     return (
       <div className="loyalty-options-registered">
-        <ConditionalView condition={showLoyaltyPopup
-          && hasValue(selectedOption) && currentOption !== selectedOption}
-        >
+        {showLoyaltyPopup && hasValue(selectedOption)
+          && currentOption !== selectedOption
+          && (
           <LoyaltyConfirmPopup
             showLoyaltyPopup={showLoyaltyPopup}
             currentOption={currentOption}
@@ -179,26 +178,30 @@ class RegisteredUserLoyalty extends React.Component {
             changeLoyaltyOption={this.changeLoyaltyOption}
             resetPopupStatus={this.resetPopupStatus}
           />
-        </ConditionalView>
-        <ConditionalView condition={isAuraIntegrationEnabled()}>
-          <LoyaltySelectOption
-            cart={cart}
-            currentOption={currentOption}
-            animationDelay={animationDelay}
-            optionName="hello_member"
-            showLoyaltyPopup={this.showLoyaltyPopup}
-            helloMemberPoints={helloMemberPoints}
-          />
-          <LoyaltySelectOption
-            cart={cart}
-            currentOption={currentOption}
-            animationDelay={animationDelay}
-            optionName="aura"
-            showLoyaltyPopup={this.showLoyaltyPopup}
-            helloMemberPoints={helloMemberPoints}
-          />
-        </ConditionalView>
-        <ConditionalView condition={!isAuraIntegrationEnabled()}>
+          )}
+        {isAuraIntegrationEnabled()
+          && (
+            <>
+              <LoyaltySelectOption
+                cart={cart}
+                currentOption={currentOption}
+                animationDelay={animationDelay}
+                optionName="hello_member"
+                showLoyaltyPopup={this.showLoyaltyPopup}
+                helloMemberPoints={helloMemberPoints}
+              />
+              <LoyaltySelectOption
+                cart={cart}
+                currentOption={currentOption}
+                animationDelay={animationDelay}
+                optionName="aura"
+                showLoyaltyPopup={this.showLoyaltyPopup}
+                helloMemberPoints={helloMemberPoints}
+              />
+            </>
+          )}
+        {!isAuraIntegrationEnabled()
+          && (
           <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
             <div className="loaylty-option-text">
               {parse(parse(Drupal.t('@hm_icon Member earns @points points', {
@@ -207,7 +210,7 @@ class RegisteredUserLoyalty extends React.Component {
               }, { context: 'hello_member' })))}
             </div>
           </div>
-        </ConditionalView>
+          )}
       </div>
     );
   }

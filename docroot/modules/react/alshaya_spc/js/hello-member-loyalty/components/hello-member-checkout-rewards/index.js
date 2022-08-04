@@ -4,7 +4,6 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import Loading from '../../../../../js/utilities/loading';
 import SectionTitle from '../../../utilities/section-title';
-import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import GuestUserLoyalty from './guest-user-loyalty';
 import RegisteredUserLoyalty from './registered-user-loyalty';
 import logger from '../../../../../js/utilities/logger';
@@ -102,21 +101,23 @@ class HelloMemberLoyaltyOptions extends React.Component {
     return (
       <div className="spc-hello-member-checkout-rewards-block fadeInUp">
         <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('Loyalty', {}, { context: 'hello_member' })}</SectionTitle>
-        <ConditionalView condition={!isUserAuthenticated()}>
+        {!isUserAuthenticated()
+          && (
           <GuestUserLoyalty
             animationDelay={animationDelay}
             helloMemberPoints={hmPoints}
             cart={cart}
           />
-        </ConditionalView>
-        <ConditionalView condition={isUserAuthenticated()}>
+          )}
+        {isUserAuthenticated()
+          && (
           <RegisteredUserLoyalty
             identifierNo={identifierNo}
             cart={cart}
             animationDelay={animationDelay}
             helloMemberPoints={hmPoints}
           />
-        </ConditionalView>
+          )}
       </div>
     );
   }
