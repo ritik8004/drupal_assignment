@@ -14,16 +14,6 @@ function alshaya_xb_page_attachments(array &$attachments) {
   if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
     $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_cross_border';
   }
-
-  // Add required libraries depending on the page.
-  $route_name = \Drupal::routeMatch()->getRouteName();
-  switch ($route_name) {
-    case 'alshaya_spc.checkout':
-      $attachments['#attached']['library'][] = 'alshaya_react/react';
-      $attachments['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v2';
-      break;
-  }
-
 }
 
 /**

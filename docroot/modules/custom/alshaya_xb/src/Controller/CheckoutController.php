@@ -16,10 +16,16 @@ class CheckoutController extends ControllerBase {
    *   Markup for checkout page.
    */
   public function checkoutPage() {
-    // Return an empty page. Global-e will add the markup for international
-    // checkout with Javascript.
+    // Return an empty page with required scripts.
+    // Global-e will add the markup for international checkout with Javascript.
     return [
       '#markup' => '',
+      '#attached' => [
+        'library' => [
+          'alshaya_react/react',
+          'alshaya_spc/commerce_backend.cart.v2',
+        ],
+      ],
     ];
   }
 
