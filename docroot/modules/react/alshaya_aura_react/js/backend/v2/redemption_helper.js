@@ -72,65 +72,54 @@ const prepareRedeemPointsData = (data, cartId) => {
  * @returns {Object}
  *   Points and other data in case of success or error in case of failure.
  */
-const redeemPoints = (cardNumber, data) => {
-  let endPoint = '';
-  // For hello membee aura integration, we are allowing guest user to redeem points.
-  // For guest user we have a different api call.
-  if (isUserAuthenticated()) {
-    endPoint = `/V1/apc/${cardNumber}/redeem-points`;
-  } else {
-    endPoint = `/V1/guest/${cardNumber}/redeem-points`;
+const redeemPoints = (cardNumber, data) => callMagentoApi(isUserAuthenticated() ? `/V1/apc/${cardNumber}/redeem-points` : `/V1/guest/${cardNumber}/redeem-points`, 'POST', data).then((response) => {
+  if (hasValue(response.data.error)) {
+    return response.data;
   }
-  return callMagentoApi(endPoint, 'POST', data)
-    .then((response) => {
-      if (hasValue(response.data.error)) {
-        return response.data;
-      }
 
-      const responseData = {
-        status: true,
-        data: {
-          paidWithAura: 0,
-          balancePayable: 0,
-          balancePoints: 0,
-          // Adding an extra total balance payable attribute, so that we can use this
-          // in egift.
-          // Doing this because while removing AURA points, we remove the Balance
-          // Payable attribute from cart total.
-          totalBalancePayable: 0,
-        },
-      };
-
-      if (hasValue(response.data.redeem_response)) {
-        const redeemResponse = response.data.redeem_response;
-        responseData.data.paidWithAura = hasValue(redeemResponse.cashback_deducted_value)
-          ? redeemResponse.cashback_deducted_value
-          : responseData.data.paidWithAura;
-
-        responseData.data.balancePayable = hasValue(redeemResponse.balance_payable)
-          ? redeemResponse.balance_payable
-          : responseData.data.balancePayable;
-
-        responseData.data.balancePoints = hasValue(redeemResponse.house_hold_balance)
-          ? redeemResponse.house_hold_balance
-          : responseData.data.balancePoints;
-      }
-
+  const responseData = {
+    status: true,
+    data: {
+      paidWithAura: 0,
+      balancePayable: 0,
+      balancePoints: 0,
       // Adding an extra total balance payable attribute, so that we can use this
       // in egift.
       // Doing this because while removing AURA points, we remove the Balance
       // Payable attribute from cart total.
-      if (hasValue(response.data.totals)) {
-        response.data.totals.total_segments.forEach((element) => {
-          if (element.code === 'balance_payable') {
-            responseData.data.totalBalancePayable = element.value;
-          }
-        });
-      }
+      totalBalancePayable: 0,
+    },
+  };
 
-      return responseData;
+  if (hasValue(response.data.redeem_response)) {
+    const redeemResponseData = response.data.redeem_response;
+    responseData.data.paidWithAura = hasValue(redeemResponseData.cashback_deducted_value)
+      ? redeemResponseData.cashback_deducted_value
+      : responseData.data.paidWithAura;
+
+    responseData.data.balancePayable = hasValue(redeemResponseData.balance_payable)
+      ? redeemResponseData.balance_payable
+      : responseData.data.balancePayable;
+
+    responseData.data.balancePoints = hasValue(redeemResponseData.house_hold_balance)
+      ? redeemResponseData.house_hold_balance
+      : responseData.data.balancePoints;
+  }
+
+  // Adding an extra total balance payable attribute, so that we can use this
+  // in egift.
+  // Doing this because while removing AURA points, we remove the Balance
+  // Payable attribute from cart total.
+  if (hasValue(response.data.totals)) {
+    response.data.totals.total_segments.forEach((element) => {
+      if (element.code === 'balance_payable') {
+        responseData.data.totalBalancePayable = element.value;
+      }
     });
-};
+  }
+
+  return responseData;
+});
 
 export {
   prepareRedeemPointsData,
