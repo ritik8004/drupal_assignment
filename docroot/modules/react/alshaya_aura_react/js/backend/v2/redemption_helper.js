@@ -74,7 +74,8 @@ const prepareRedeemPointsData = (data, cartId) => {
  */
 const redeemPoints = (cardNumber, data) => {
   let endPoint = '';
-  // For hello membee aura, we are allowing guest user to redeem points.
+  // For hello membee aura integration, we are allowing guest user to redeem points.
+  // For guest user we have a different api call.
   if (isUserAuthenticated()) {
     endPoint = `/V1/apc/${cardNumber}/redeem-points`;
   } else {

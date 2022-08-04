@@ -215,6 +215,7 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
+          {/* If aura or hm aura integration enabled we need to display aura checkout balance. */}
           <ConditionalView condition={isAuraEnabled() || (isAuraIntegrationEnabled() && context !== 'cart')}>
             <AuraCheckoutOrderSummary
               totals={totals}
