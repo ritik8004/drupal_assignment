@@ -1,15 +1,7 @@
 .cod-mobile-otp {
-  @include breakpoint($only-mobile) {
-    margin-#{$right}: rem(28);
-  }
-
   &__text-wrapper {
     margin-top: rem(20);
     font-size: rem(14);
-
-    @include breakpoint($tablet) {
-      margin-top: rem(21);
-    }
   }
 
   &__text {
@@ -31,16 +23,6 @@
   }
 
   &__field {
-    @include breakpoint($only-mobile) {
-      &:not(:last-child) {
-        margin-#{$right}: rem(10);
-      }
-    }
-
-    @include breakpoint($tablet) {
-      margin-#{$right}: rem(15);
-    }
-
     & > input[type="tel"] {
       border-color: $spc-checkout-cod-otp-secondary !important;
       padding: rem(5) 0 !important;
@@ -49,27 +31,12 @@
       &:focus {
         border-color: $spc-checkout-cod-otp-primary !important;
       }
-
-      @include breakpoint($tablet) {
-        padding: rem(6) 0 !important;
-        font-size: rem(20);
-      }
     }
   }
 
   &__controls {
     margin: rem(32) auto rem(20);
     display: flex;
-
-    @include breakpoint($only-mobile) {
-      flex-direction: column;
-    }
-
-    @include breakpoint($tablet) {
-      margin: rem(70) auto rem(12);
-      flex-direction: row;
-      justify-content: space-between;
-    }
   }
 
   &__submit {
@@ -86,13 +53,48 @@
       opacity: 0.2;
       pointer-events: none;
     }
+  }
 
-    @include breakpoint($only-mobile) {
+  @include breakpoint($only-mobile) {
+    margin-#{$right}: rem(28);
+
+    &__field {
+      &:not(:last-child) {
+        margin-#{$right}: rem(10);
+      }
+    }
+
+    &__controls {
+      flex-direction: column;
+    }
+
+    &__submit {
       margin-top: rem(26);
       padding: rem(14);
     }
+  }
 
-    @include breakpoint($tablet) {
+  @include breakpoint($tablet) {
+    &__text-wrapper {
+      margin-top: rem(21);
+    }
+
+    &__field {
+      margin-#{$right}: rem(15);
+
+      & > input[type="tel"] {
+        padding: rem(6) 0 !important;
+        font-size: rem(20);
+      }
+    }
+
+    &__controls {
+      margin: rem(70) auto rem(12);
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    &__submit {
       padding: rem(12);
       width: rem(162);
     }
