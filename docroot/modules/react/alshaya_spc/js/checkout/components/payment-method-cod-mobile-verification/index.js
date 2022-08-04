@@ -37,37 +37,41 @@ class PaymentMethodCodMobileVerification extends React.Component {
     const { otp } = this.state;
 
     const { shippingMobileNumber, otpLength } = this.props;
+    const inputStyle = {
+      width: '100%',
+    };
 
     if (shippingMobileNumber === null) {
       return (null);
     }
 
     return (
-      <div className="cod-mobile-verification">
+      <div className="cod-mobile-otp">
         <CodVerifyText
           mobileNumber={shippingMobileNumber}
           otpLength={otpLength}
         />
-        <form className="cod-mobile-verification__form">
+        <form className="cod-mobile-otp__form">
           <OtpInput
             value={otp}
             onChange={this.handleChange}
             numInputs={otpLength}
-            separator={<span>&nbsp;</span>}
             isInputNum
+            className="cod-mobile-otp__field"
+            inputStyle={inputStyle}
           />
-          <div className="cod-mobile-verification__otp-controls">
-            <span className="cod-mobile-verification__txt-resend">
+          <div className="cod-mobile-otp__controls">
+            <span className="cod-mobile-otp__resend">
               {Drupal.t('Didn\'t receive the code?', {}, { context: 'cod_mobile_verification' })}
+              <OtpTimer
+                seconds={60}
+                minutes={0}
+                resend={this.handleResendOtp}
+                text=" "
+                ButtonText={Drupal.t('Resend', {}, { context: 'cod_mobile_verification' })}
+              />
             </span>
-            <OtpTimer
-              seconds={60}
-              minutes={0}
-              resend={this.handleResendOtp}
-              text=" "
-              ButtonText={Drupal.t('Resend', {}, { context: 'cod_mobile_verification' })}
-            />
-            <button type="submit" className="cod-mobile-verification__btn-submit">{Drupal.t('verify', {}, { context: 'cod_mobile_verification' })}</button>
+            <button type="submit" className="cod-mobile-otp__submit">{Drupal.t('verify', {}, { context: 'cod_mobile_verification' })}</button>
           </div>
         </form>
       </div>
