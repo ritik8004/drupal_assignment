@@ -157,6 +157,10 @@ export default class PaymentMethod extends React.Component {
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;
+        // To add the custom event for the checkout step 4.
+        dispatchCustomEvent('orderValidated', {
+          cart: cart.cart,
+        });
         placeOrder(cart.cart.payment.method);
         Drupal.removeItemFromLocalStorage('spc_selected_card');
         Drupal.removeItemFromLocalStorage('billing_shipping_same');
@@ -165,6 +169,11 @@ export default class PaymentMethod extends React.Component {
         Drupal.logJavascriptError(`3d flow finalise payment | ${paymentMethodsInfo.[method.code]}`, result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
+        const { cart } = this.props;
+        // To add the custom event for the checkout step 4.
+        dispatchCustomEvent('orderValidated', {
+          cart: cart.cart,
+        });
         Drupal.removeItemFromLocalStorage('spc_selected_card');
         Drupal.removeItemFromLocalStorage('billing_shipping_same');
         window.location = result.redirectUrl;
