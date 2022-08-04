@@ -13,9 +13,9 @@ import HelloMemberCartPopupBonusVouchersList from './hello-member-cart-popup-bon
 import HelloMemberCartPopupMemberOfferList from './hello-member-cart-popup-member-offer-list';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
-import ConditionalView from '../../../common/components/conditional-view';
 import BecomeHelloMember from '../../../../../alshaya_hello_member/js/src/components/become-hello-member';
-import { fetchCartData } from '../../../utilities/api/requests';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
+import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 
 class HelloMemberCartOffersVouchers extends React.Component {
   constructor(props) {
@@ -105,27 +105,40 @@ class HelloMemberCartOffersVouchers extends React.Component {
     // Remove applied offers from customer.
     const response = await callHelloMemberApi(promotionType, 'DELETE');
     if (hasValue(response.data) && !hasValue(response.data.error)) {
-      window.commerceBackend.removeCartDataFromStorage();
-      const cartData = fetchCartData();
+      const cartData = window.commerceBackend.getCart(true);
       if (cartData instanceof Promise) {
         cartData.then((result) => {
-          if (result === 'Request aborted') {
-            return;
+          if (result.status !== 200
+            && result.data === undefined
+            && result.data.error !== undefined) {
+            dispatchCustomEvent('spcCartMessageUpdate', {
+              type: 'error',
+              message: getDefaultErrorMessage(),
+            });
+          } else {
+            // Calling refresh mini cart event so that storage is updated.
+            dispatchCustomEvent('refreshMiniCart', {
+              data: () => result.data,
+            });
+            // Calling refresh cart event so that cart components
+            // are refreshed.
+            dispatchCustomEvent('refreshCart', {
+              data: () => result.data,
+            });
+
+            // Calling clear all promotion event to remove promotions from cart components.
+            dispatchCustomEvent('clearAllPromotions', true);
           }
-          // Store info in storage.
-          window.commerceBackend.setCartDataInStorage({ cart: result });
-          // Trigger event so that data can be passed to other components.
-          const event = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
-          document.dispatchEvent(event);
-          // Trigger event to close the popup.
-          const clearEvent = new CustomEvent('clearAllPromotions', { bubbles: true, detail: true });
-          document.dispatchEvent(clearEvent);
         });
       }
     } else {
-      // If coupon details API is returning Error.
+      // If promotion delete API is returning Error.
       logger.error('Error while calling the apply coupon Api @message', {
         '@message': response.data.message,
+      });
+      dispatchCustomEvent('spcCartMessageUpdate', {
+        type: 'error',
+        message: getDefaultErrorMessage(),
       });
     }
     removeFullScreenLoader();
@@ -140,11 +153,40 @@ class HelloMemberCartOffersVouchers extends React.Component {
     } = this.state;
     const { totals } = this.props;
     const forceRenderTabPanel = true;
+    // Add class to show applied voucher and offer message in popup.
+    const additionalClasses = hasValue(totals.hmOfferCode) || hasValue(totals.hmAppliedVoucherCodes) ? 'error' : '';
+    let appliedVouchers = '';
+    // Applied voucher codes message in popup.
+    if (hasValue(totals.hmAppliedVoucherCodes)) {
+      appliedVouchers = (
+        <span>
+          {Drupal.t(
+            '@hmVoucherCount vouchers are applied',
+            { '@hmVoucherCount': totals.hmAppliedVoucherCodes.split(',').length },
+            { context: 'hello_member' },
+          )}
+        </span>
+      );
+    }
+
+    // Applied offer codes message in popup.
+    let appliedOffers = '';
+    if (hasValue(totals.hmOfferCode)) {
+      appliedOffers = (
+        <span>
+          {Drupal.t(
+            '@hmOfferCount offers are applied',
+            { '@hmOfferCount': totals.hmOfferCode.split(',').length },
+            { context: 'hello_member' },
+          )}
+        </span>
+      );
+    }
 
     return (
       <>
         <div className="hello-member-promo-section">
-          <a className="hm-promo-pop-link" onClick={() => this.onClickOpenPopup(true)}>
+          <a className="hello-member-promo-pop-link" onClick={() => this.onClickOpenPopup(true)}>
             {Drupal.t('Discounts & Vouchers', {}, { context: 'hello_member' })}
             <span className="promo-notification show-note" />
           </a>
@@ -157,35 +199,42 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 closeOnEscape={false}
               >
                 <a className="close-modal" onClick={() => this.onClickClosePopup()} />
-                <ConditionalView condition={isAnonymous}>
+                {isAnonymous
+                && (
                   <BecomeHelloMember destination="cart" />
-                </ConditionalView>
-                <ConditionalView condition={!isAnonymous}>
-                  <div className="hm-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
-                  <div className="hm-promo-modal-content">
-                    <div className="error-info-section">&nbsp;</div>
-                    <Tabs forceRenderTabPanel={forceRenderTabPanel}>
-                      <TabList>
-                        <Tab>{Drupal.t('Bonus Vouchers', {}, { context: 'hello_member' })}</Tab>
-                        <Tab>{Drupal.t('Member Offers', {}, { context: 'hello_member' })}</Tab>
-                      </TabList>
-                      <TabPanel>
-                        <HelloMemberCartPopupBonusVouchersList
-                          vouchers={vouchers}
-                          totals={totals}
-                          promotionType={this.removeAppliedPromotions}
-                        />
-                      </TabPanel>
-                      <TabPanel>
-                        <HelloMemberCartPopupMemberOfferList
-                          offers={Offers}
-                          totals={totals}
-                          promotionType={this.removeAppliedPromotions}
-                        />
-                      </TabPanel>
-                    </Tabs>
-                  </div>
-                </ConditionalView>
+                )}
+                {!isAnonymous
+                && (
+                  <span>
+                    <div className="hello-member-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
+                    <div className="hello-member-promo-modal-content">
+                      <div className={`error-info-section ${additionalClasses}`}>
+                        {appliedOffers}
+                        {appliedVouchers}
+                      </div>
+                      <Tabs forceRenderTabPanel={forceRenderTabPanel}>
+                        <TabList>
+                          <Tab>{Drupal.t('Bonus Vouchers', {}, { context: 'hello_member' })}</Tab>
+                          <Tab>{Drupal.t('Member Offers', {}, { context: 'hello_member' })}</Tab>
+                        </TabList>
+                        <TabPanel>
+                          <HelloMemberCartPopupBonusVouchersList
+                            vouchers={vouchers}
+                            totals={totals}
+                            promotionType={this.removeAppliedPromotions}
+                          />
+                        </TabPanel>
+                        <TabPanel>
+                          <HelloMemberCartPopupMemberOfferList
+                            offers={Offers}
+                            totals={totals}
+                            promotionType={this.removeAppliedPromotions}
+                          />
+                        </TabPanel>
+                      </Tabs>
+                    </div>
+                  </span>
+                )}
               </Popup>
             </div>
           )}

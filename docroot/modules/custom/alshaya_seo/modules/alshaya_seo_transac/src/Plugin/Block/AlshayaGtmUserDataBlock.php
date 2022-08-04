@@ -89,6 +89,7 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function build() {
+    $build = [];
     if (_alshaya_seo_process_gtm()) {
       $current_user = NULL;
       $current_user_id = $this->currentUser->id();

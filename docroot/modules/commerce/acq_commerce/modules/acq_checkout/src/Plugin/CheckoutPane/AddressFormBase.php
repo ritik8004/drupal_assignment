@@ -15,7 +15,7 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $address = $form_state->getTemporaryValue('address');
-    $country = isset($address->country_id) ? $address->country_id : 'US';
+    $country = $address->country_id ?? 'US';
     $countryRepository = \Drupal::service('address.country_repository');
     $subdivisionRepository = \Drupal::service('address.subdivision_repository');
     $addressFormatRepository = \Drupal::service('address.address_format_repository');
@@ -33,35 +33,35 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
     $pane_form['address']['first_name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('First Name'),
-      '#default_value' => isset($address->firstname) ? $address->firstname : '',
+      '#default_value' => $address->firstname ?? '',
       '#required' => TRUE,
       '#placeholder' => $this->t('First Name*'),
     ];
     $pane_form['address']['last_name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Last Name'),
-      '#default_value' => isset($address->lastname) ? $address->lastname : '',
+      '#default_value' => $address->lastname ?? '',
       '#required' => TRUE,
       '#placeholder' => $this->t('Last Name*'),
     ];
     $pane_form['address']['street'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Address Line 1'),
-      '#default_value' => isset($address->street) ? $address->street : '',
+      '#default_value' => $address->street ?? '',
       '#required' => TRUE,
       '#placeholder' => $this->t('Address Line 1*'),
     ];
     $pane_form['address']['telephone'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Telephone'),
-      '#default_value' => isset($address->telephone) ? $address->telephone : '',
+      '#default_value' => $address->telephone ?? '',
       '#required' => TRUE,
       '#placeholder' => $this->t('Telephone'),
     ];
     $pane_form['address']['street2'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Address Line 2'),
-      '#default_value' => isset($address->street2) ? $address->street2 : '',
+      '#default_value' => $address->street2 ?? '',
       '#required' => FALSE,
       '#placeholder' => $this->t('Address Line 2'),
     ];
@@ -74,7 +74,7 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
     $pane_form['address']['dynamic_parts']['city'] = [
       '#type' => 'textfield',
       '#title' => $labels['locality'],
-      '#default_value' => isset($address->city) ? $address->city : '',
+      '#default_value' => $address->city ?? '',
       '#required' => TRUE,
       '#placeholder' => $labels['locality'],
     ];
@@ -85,12 +85,12 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
       '#empty_option' => '- ' . $labels['administrativeArea'] . ' -',
       '#required' => TRUE,
       '#validated' => TRUE,
-      '#default_value' => isset($address->region) ? $address->region : '',
+      '#default_value' => $address->region ?? '',
     ];
     $pane_form['address']['dynamic_parts']['postcode'] = [
       '#type' => 'textfield',
       '#title' => $labels['postalCode'],
-      '#default_value' => isset($address->postcode) ? $address->postcode : '',
+      '#default_value' => $address->postcode ?? '',
       '#required' => TRUE,
       '#placeholder' => $labels['postalCode'],
     ];

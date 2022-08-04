@@ -33,7 +33,7 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
   if (hasValue(dictionaryData) && hasValue(dictionaryData.items)) {
     const accrualRatio = dictionaryData.items[0];
     const points = accrualRatio.value ? (price * parseFloat(accrualRatio.value)) : 0;
-    return Math.round(points);
+    return Math.floor(points);
   }
   return null;
 };
@@ -42,7 +42,7 @@ const getPriceToHelloMemberPoint = (price, dictionaryData) => {
  * Search for specified element from array.
  */
 // eslint-disable-next-line
-const findArrayElement = (array, code) => array.find((element) => element.code === code && element.value === 1);
+const findArrayElement = (array, code) => array.find((element) => element.code === code);
 
 const getLoyaltySelectText = (optionName, helloMemberPoints) => {
   if (optionName === 'hello_member') {

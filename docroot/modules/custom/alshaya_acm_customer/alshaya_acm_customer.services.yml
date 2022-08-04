@@ -13,6 +13,9 @@ services:
       - '@language_manager'
       - '@logger.factory'
       - '@cache.orders_count'
+      - '@acq_sku.product_info_helper'
+      - '@request_stack'
+      - '@module_handler'
 
   alshaya_acm_customer.helper:
     class: Drupal\alshaya_acm_customer\CustomerHelper

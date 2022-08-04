@@ -1,5 +1,5 @@
 .hello-member-promo-section {
-  .hm-promo-modal-content {
+  .hello-member-promo-modal-content {
     .react-tabs__tab-panel {
       display: none;
 
@@ -7,13 +7,13 @@
         display: block;
       }
 
-      .hm-promo-tab-content-list {
+      .hello-member-promo-tab-content-list {
         height: rem(256);
         max-height: rem(256);
         overflow-y: auto;
         position: relative;
 
-        .hm-promo-tab-cont-item {
+        .hello-member-promo-tab-cont-item {
           background-color: $hello-member-promo-tab-items-bg;
           border: rem(1) solid $hello-member-promo-tab-items-border;
           height: rem(71);
@@ -78,12 +78,12 @@
       }
 
       .radio-btn-list {
-        .hm-promo-tab-cont-item {
+        .hello-member-promo-tab-cont-item {
           padding-#{$left}: 3rem;
         }
       }
 
-      .hm-promo-tab-cont-action {
+      .hello-member-promo-tab-cont-action {
         margin-top: rem(20);
         padding-#{$right}: rem(10);
         font-family: $alshaya-bold;
@@ -105,6 +105,7 @@
           display: inline-flex;
           justify-content: center;
           width: 100%;
+          cursor: pointer;
 
           @include breakpoint($only-mobile) {
             padding: rem(30) 0 rem(26);

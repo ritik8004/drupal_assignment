@@ -24,7 +24,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
   /**
    * Config to enable/disable the lhn category tree.
    */
-  const ENABLE_DISABLE_CONFIG_KEY = 'alshaya_acm_product_category.settings';
+  public const ENABLE_DISABLE_CONFIG_KEY = 'alshaya_acm_product_category.settings';
 
   /**
    * Stores the configuration factory.

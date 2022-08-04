@@ -17,8 +17,8 @@ use Drupal\taxonomy\TermInterface;
 class AlshayaRcsCategoryDataMigration {
 
   // Source and Target Vocabulary.
-  const TARGET_VOCABULARY_ID = 'rcs_category';
-  const SOURCE_VOCABULARY_ID = 'acq_product_category';
+  public const TARGET_VOCABULARY_ID = 'rcs_category';
+  public const SOURCE_VOCABULARY_ID = 'acq_product_category';
 
   /**
    * The entity type manager service.
@@ -160,7 +160,7 @@ class AlshayaRcsCategoryDataMigration {
       $operations = [];
       foreach (array_chunk($tids, $batch_size) as $tid_chunk) {
         $operations[] = [
-          [__CLASS__, 'batchProcess'],
+          [self::class, 'batchProcess'],
           [$tid_chunk, $batch_size, self::TARGET_VOCABULARY_ID],
         ];
       }
@@ -169,7 +169,7 @@ class AlshayaRcsCategoryDataMigration {
         'init_message' => dt('Starting processing rcs category...'),
         'operations' => $operations,
         'error_message' => dt('Unexpected error while migrating enriched ACM Categories.'),
-        'finished' => [__CLASS__, 'batchFinished'],
+        'finished' => [self::class, 'batchFinished'],
       ];
       batch_set($batch);
       drush_backend_batch_process();
@@ -284,19 +284,24 @@ class AlshayaRcsCategoryDataMigration {
    *
    * @param int $tid
    *   Source category term id.
-   * @param array|null $results
-   *   Batch Context results.
-   * @param int $term_count
-   *   Migrated Term count.
    * @param string $langcode
    *   Default language code.
    * @param string $vid
    *   Vocabulary Id for the term migrated.
+   * @param array|null $results
+   *   Batch Context results.
+   * @param int|null $term_count
+   *   Migrated Term count.
    *
    * @return string
    *   Returns migrated parent term id.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  private static function createParentCategory(int $tid, array &$results = NULL, int &$term_count = NULL, string $langcode, string $vid) {
+  private static function createParentCategory(int $tid, string $langcode, string $vid, array &$results = NULL, int &$term_count = NULL) {
+    $pid = NULL;
     // Already saved so return parent category tid.
     if (!empty($results['acq_term_mapping'][$tid])) {
       return $results['acq_term_mapping'][$tid];
@@ -502,7 +507,7 @@ class AlshayaRcsCategoryDataMigration {
       $operations = [];
       foreach (array_chunk($tids, $batch_size) as $tid_chunk) {
         $operations[] = [
-          [__CLASS__, 'batchProcess'],
+          [self::class, 'batchProcess'],
           [$tid_chunk, $batch_size, self::SOURCE_VOCABULARY_ID],
         ];
       }
@@ -511,7 +516,7 @@ class AlshayaRcsCategoryDataMigration {
         'init_message' => dt('Starting processing acq category...'),
         'operations' => $operations,
         'error_message' => dt('Unexpected error while rollback of enriched ACM Categories.'),
-        'finished' => [__CLASS__, 'batchFinished'],
+        'finished' => [self::class, 'batchFinished'],
       ];
       batch_set($batch);
       drush_backend_batch_process();

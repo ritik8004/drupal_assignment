@@ -11,7 +11,7 @@ fields:
     index: 1
     facet: 1
     swatch: 1
-  rkj_division:  
+  rkj_division:
     label: 'Rkj Division'
     cardinality: -1    
     index: 1    

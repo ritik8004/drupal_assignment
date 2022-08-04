@@ -20,7 +20,6 @@ class MyOffersAndVouchers extends React.Component {
     const { currentPath } = drupalSettings.path;
     const { uid } = drupalSettings.user;
     const { myBenefitsList } = this.props;
-    const { expanded } = this.state;
 
     if (currentPath === 'home') {
       return (
@@ -30,6 +29,7 @@ class MyOffersAndVouchers extends React.Component {
       );
     }
     if (myBenefitsList.length > showMoreLimit) {
+      const { expanded } = this.state;
       return (
         <a onClick={() => this.setState({
           expanded: !expanded,

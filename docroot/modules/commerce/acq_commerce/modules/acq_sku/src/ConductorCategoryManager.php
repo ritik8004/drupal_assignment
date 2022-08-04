@@ -189,7 +189,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
     $tids = $query->execute();
 
-    if (count($tids)) {
+    if (is_countable($tids) ? count($tids) : 0) {
       $tid = array_shift($tids);
       $parents = $this->termStorage->loadParents($tid);
       $parent = array_shift($parents);
@@ -208,7 +208,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
         $tids = $query->execute();
         // If term with given commerce id exists.
-        if (count($tids)) {
+        if (is_countable($tids) ? count($tids) : 0) {
           $tid = array_shift($tids);
           $parent = $this->termStorage->load($tid);
         }
@@ -336,14 +336,14 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
       $tids = $query->execute();
 
-      if (count($tids) > 1) {
+      if ((is_countable($tids) ? count($tids) : 0) > 1) {
         $this->logger->error('Multiple terms found for category id @cid', ['@cid' => $category['category_id']]);
       }
 
       $existingTermData = [];
 
       // Always use the first term and continue.
-      if (count($tids) > 0) {
+      if ((is_countable($tids) ? count($tids) : 0) > 0) {
         // Load and update the term entity.
         /** @var \Drupal\taxonomy\Entity\Term $term */
         $term = $this->getTranslatedTerm(array_shift($tids), $langcode);
@@ -356,7 +356,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
         // Break child relationships.
         $children = $this->termStorage->loadChildren($term->id(), $this->vocabulary->id());
-        if (count($children)) {
+        if (is_countable($children) ? count($children) : 0) {
           $child_ids = array_map(function ($child) use ($category) {
             // If term having commerce id, means its sync from magento and
             // thus we process. Term not having commerce id means its created
@@ -418,7 +418,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           $this->logger->info('Updated category @magento_id for @langcode: @diff.', [
             '@langcode' => $langcode,
             '@magento_id' => $category['category_id'],
-            '@diff' => json_encode($diff),
+            '@diff' => json_encode($diff, JSON_THROW_ON_ERROR),
           ]);
         }
         else {
@@ -428,7 +428,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           ]);
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         $this->logger->warning('Failed saving category term @name [@magento_id] for @langcode', [
           '@name' => $category['name'],
           '@langcode' => $langcode,
@@ -445,7 +445,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $lock->release($lock_key);
 
       // Recurse to children categories.
-      $childCats = (isset($category['children'])) ? $category['children'] : [];
+      $childCats = $category['children'] ?? [];
       $this->syncCategory($childCats, $term);
     }
   }
@@ -502,9 +502,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
     $affected_terms = array_unique(array_merge($sync_categories['created'], $sync_categories['updated']));
     // Filter terms which are not in sync response.
-    return $result = array_filter($result, function ($val) use ($affected_terms) {
-      return !in_array($val['field_commerce_id_value'], $affected_terms);
-    });
+    return $result = array_filter($result, fn($val) => !in_array($val['field_commerce_id_value'], $affected_terms));
   }
 
 }

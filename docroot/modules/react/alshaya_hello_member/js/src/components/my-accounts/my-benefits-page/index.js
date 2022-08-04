@@ -17,6 +17,7 @@ class MyBenefitsPage extends React.Component {
       wait: false,
       myBenefit: null,
       codeId: null,
+      couponId: null,
       voucherType: null,
     };
   }
@@ -35,6 +36,7 @@ class MyBenefitsPage extends React.Component {
             myBenefit: response.data.coupons[0],
             wait: true,
             codeId: response.data.coupons[0].code,
+            couponId: `${response.data.coupons[0].type}|${response.data.coupons[0].code}`,
             voucherType: response.data.coupons[0].type,
           });
           removeFullScreenLoader();
@@ -67,7 +69,7 @@ class MyBenefitsPage extends React.Component {
 
   render() {
     const {
-      wait, myBenefit, codeId, voucherType,
+      wait, myBenefit, codeId, couponId, voucherType,
     } = this.state;
 
     if (!wait) {
@@ -107,7 +109,7 @@ class MyBenefitsPage extends React.Component {
           <QrCodeDisplay
             memberId={myBenefit.member_identifier}
             qrCodeTitle={qrCodeTitle}
-            codeId={codeId}
+            codeId={couponId || codeId}
             width={79}
           />
           <AddBenefitsToCart

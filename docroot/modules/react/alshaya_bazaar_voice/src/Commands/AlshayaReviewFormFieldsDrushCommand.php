@@ -46,14 +46,14 @@ class AlshayaReviewFormFieldsDrushCommand extends DrushCommands {
    *
    * @var string
    */
-  const PATH = 'public://exports/v2/';
+  public const PATH = 'public://exports/v2/';
 
   /**
    * The filename prefix for the output file.
    *
    * @var string
    */
-  const FILE_NAME_PREFIX = 'review-fields-config-data';
+  public const FILE_NAME_PREFIX = 'review-fields-config-data';
 
   /**
    * AlshayaReviewFormFieldsDrushCommand constructor.

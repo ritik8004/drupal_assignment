@@ -1,4 +1,4 @@
-@javascript @auth @Wishlist @homeDelivery @tbskwuat @mujikwuat
+@javascript @auth @Wishlist @homeDelivery @tbskwuat
 Feature: SPC Checkout Wishlist feature for Authenticated user
 
   Background:

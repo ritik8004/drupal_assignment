@@ -30,7 +30,7 @@ class AlshayaOptionsListHelper {
   /**
    * Options page cache tag.
    */
-  const OPTIONS_PAGE_CACHETAG = 'alshaya-options-page';
+  public const OPTIONS_PAGE_CACHETAG = 'alshaya-options-page';
 
   /**
    * Database connection service object.
@@ -357,7 +357,7 @@ class AlshayaOptionsListHelper {
       $attribute_code_key = $attribute_code;
       // Remove 'attr_' from facet result key
       // to match the attribute code we get from terms.
-      if (!in_array($attribute_code, $attribute_codes) && strpos($attribute_code, 'attr_') !== FALSE) {
+      if (!in_array($attribute_code, $attribute_codes) && str_contains($attribute_code, 'attr_')) {
         $attribute_code_key = str_replace('attr_', '', $attribute_code);
       }
       foreach ($results as $filter) {

@@ -72,6 +72,7 @@ class ProductHelper {
    *   HTML Markup.
    */
   public function updateShortDescription(array &$build, $html) {
+    $short_desc = [];
     $short_desc['label'] = [
       '#markup' => $this->t('Short Description'),
     ];

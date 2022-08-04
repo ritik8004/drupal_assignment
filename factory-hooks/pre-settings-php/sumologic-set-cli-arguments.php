@@ -21,10 +21,10 @@ if (!function_exists('alshaya_get_cli_request_id')) {
 
     if (is_null($request_id)) {
       $request_id = date('Ymd') . '-' . sprintf('%05d-%05d-%05d-%05d',
-          mt_rand(0, 99999),
-          mt_rand(0, 99999),
-          mt_rand(0, 99999),
-          mt_rand(0, 99999)
+          random_int(0, 99999),
+          random_int(0, 99999),
+          random_int(0, 99999),
+          random_int(0, 99999)
         );
     }
 

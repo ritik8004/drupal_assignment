@@ -33,12 +33,12 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
       'parameters' => [],
       'services' => [
         'database' => [
-          'class' => 'Drupal\Core\Database\Connection',
+          'class' => \Drupal\Core\Database\Connection::class,
           'factory' => 'Drupal\Core\Database\Database::getConnection',
           'arguments' => ['default'],
         ],
         'settings' => [
-          'class' => 'Drupal\Core\Site\Settings',
+          'class' => \Drupal\Core\Site\Settings::class,
           'factory' => 'Drupal\Core\Site\Settings::getInstance',
         ],
         'memcache.settings' => [
@@ -64,7 +64,7 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
           'arguments' => ['@memcache.factory', 'memcache_bin_timestamps', 0.001],
         ],
         'cache_tags_provider.container' => [
-          'class' => 'Drupal\Core\Cache\DatabaseCacheTagsChecksum',
+          'class' => \Drupal\Core\Cache\DatabaseCacheTagsChecksum::class,
           'arguments' => ['@database'],
         ],
         'cache.container' => [

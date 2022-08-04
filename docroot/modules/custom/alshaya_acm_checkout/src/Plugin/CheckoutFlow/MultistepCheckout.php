@@ -247,6 +247,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    * {@inheritdoc}
    */
   protected function actions(array $form, FormStateInterface $form_state) {
+    $checkout_next_link_options = [];
     // We don't want any actions to display for login step.
     if ($this->getStepId() == 'login') {
       return [];

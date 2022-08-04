@@ -9,8 +9,8 @@ $domain = 'bbwae-uat.factory.alshaya.com';
 
 $data = [
   'reset_token' => 'QcBPAkXuxNEplKQ8x89jCj2eIgCijImbYULQfOgMUIo',
-  'timestamp' => 1641891870,
-  'user_id' => 2241391,
+  'timestamp' => 1_641_891_870,
+  'user_id' => 2_241_391,
   'new_password' => 'Alshaya@2023',
 ];
 

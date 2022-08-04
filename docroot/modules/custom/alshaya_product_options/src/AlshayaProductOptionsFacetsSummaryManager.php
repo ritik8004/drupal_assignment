@@ -95,9 +95,7 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
     $facets_config = $facets_summary->getFacets();
     // Exclude facets which were not selected for this summary.
     $facets = array_filter($facets,
-      function ($item) use ($facets_config) {
-        return (isset($facets_config[$item->id()]));
-      }
+      fn($item) => isset($facets_config[$item->id()])
     );
 
     foreach ($facets as $facet) {
@@ -157,7 +155,7 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
 
         // Change the size label if size grouping is enabled.
         if ($facet->getFieldIdentifier() == 'attr_size'
-          && strpos($value, SkuManager::SIZE_GROUP_SEPARATOR) !== FALSE
+          && str_contains($value, SkuManager::SIZE_GROUP_SEPARATOR)
           && $this->isSizeGroupEnabled()) {
           $sizeGroupArr = explode(SkuManager::SIZE_GROUP_SEPARATOR, $value);
           $value = $sizeGroupArr[1];

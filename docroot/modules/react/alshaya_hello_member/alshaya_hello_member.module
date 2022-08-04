@@ -117,7 +117,7 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
       '#weight' => -12,
-      '#markup' => '<div class="hm-benefit-subtitle">' . t('Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.', [], ['context' => 'hello_member']) . '</div>',
+      '#markup' => '<div class="hello-member-benefit-subtitle">' . t('Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.', [], ['context' => 'hello_member']) . '</div>',
     ];
     $form['hello_member'] = [
       '#type' => 'details',
@@ -265,7 +265,7 @@ function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $f
   $form['hello_member']['field_gender']['#weight'] = 11;
   $form['hello_member']['field_mobile_number'] = $form['field_mobile_number'];
   $form['hello_member']['field_mobile_number']['#prefix'] = '<div class="mobile-otp-wrapper">';
-  $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div><div id="mobile-number-error"></div></div>';
+  $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div></div>';
   $form['hello_member']['field_mobile_number']['#weight'] = 12;
   // Virtual input to temporary maintain otp verified status.
   $form['otp_verified'] = [

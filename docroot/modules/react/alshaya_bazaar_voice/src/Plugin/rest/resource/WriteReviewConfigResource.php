@@ -109,6 +109,7 @@ class WriteReviewConfigResource extends ResourceBase {
    *   The response containing BazaarVoice write review configurations.
    */
   public function get($main_sku = NULL) {
+    $data = [];
     if (empty($main_sku)) {
       $this->mobileAppUtility->throwException();
     }

@@ -85,7 +85,7 @@ class TicketBookingManager {
     if (!isset($static) && $cache = $this->cache->get($cid)) {
       $static = $cache->data;
     }
-    return json_decode($static);
+    return json_decode($static, NULL);
   }
 
   /**
@@ -232,7 +232,7 @@ class TicketBookingManager {
     if (isset($this->getTicketBookingCachedData('getVisitorTypesData')->getVisitorTypesResult)) {
       return $this->getTicketBookingCachedData('getVisitorTypesData');
     }
-    $shifts = json_decode($shifts);
+    $shifts = json_decode($shifts, NULL);
     try {
       $visitorTypes = $this->soapClient->__soapCall('getVisitorTypes',
         [
@@ -395,7 +395,7 @@ class TicketBookingManager {
    *   return a boolean value or null.
    */
   public function saveTicket(array $visitor_list, array $book_ticket, $ticket_number, $shifts, $sales_number, $visit_date) {
-    $shifts = json_decode($shifts);
+    $shifts = json_decode($shifts, NULL);
     try {
       $saveTicket = $this->soapClient->__soapCall('saveTicket',
         [

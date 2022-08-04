@@ -4,7 +4,8 @@ import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHe
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import logger from '../../../../../../js/utilities/logger';
-import { fetchCartData } from '../../../../utilities/api/requests';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { getDefaultErrorMessage } from '../../../../../../js/utilities/error';
 
 const HelloMemberCartPopupMemberOfferList = (props) => {
   const { offers, totals } = props;
@@ -33,18 +34,27 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
         '@message': response.data.message,
       });
     } else {
-      window.commerceBackend.removeCartDataFromStorage();
-      const cartData = fetchCartData();
+      const cartData = window.commerceBackend.getCart(true);
       if (cartData instanceof Promise) {
         cartData.then((result) => {
-          if (result === 'Request aborted') {
-            return;
+          if (result.status !== 200
+            && result.data === undefined
+            && result.data.error !== undefined) {
+            dispatchCustomEvent('spcCartMessageUpdate', {
+              type: 'error',
+              message: getDefaultErrorMessage(),
+            });
+          } else {
+            // Calling refresh mini cart event so that storage is updated.
+            dispatchCustomEvent('refreshMiniCart', {
+              data: () => result.data,
+            });
+            // Calling refresh cart event so that cart components
+            // are refreshed.
+            dispatchCustomEvent('refreshCart', {
+              data: () => result.data,
+            });
           }
-          // Store info in storage.
-          window.commerceBackend.setCartDataInStorage({ cart: result });
-          // Trigger event so that data can be passed to other components.
-          const event = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
-          document.dispatchEvent(event);
         });
       }
     }
@@ -60,14 +70,13 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
   return (
     <>
       <form
-        className="hm-promo-offers-validate-form"
+        className="hello-member-promo-offers-validate-form"
         method="post"
-        id="hm-promo-offers-val-form"
         onSubmit={(e) => handleSubmit(e, props)}
       >
-        <div className="hm-promo-tab-content-list radio-btn-list">
+        <div className="hello-member-promo-tab-content-list radio-btn-list">
           {offers.map((offer, index) => (
-            <div key={offer.code} className="hm-promo-tab-cont-item">
+            <div key={offer.code} className="hello-member-promo-tab-cont-item">
               <input
                 type="radio"
                 id={`offer${index}`}
@@ -91,7 +100,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
             </div>
           ))}
         </div>
-        <div className="hm-promo-tab-cont-action">
+        <div className="hello-member-promo-tab-cont-action">
           <input type="submit" value={Drupal.t('APPLY OFFERS', {}, { context: 'hello_member' })} />
           <a className="clear-btn" onClick={() => onClickClearAll()}>{Drupal.t('CLEAR ALL', {}, { context: 'hello_member' })}</a>
         </div>

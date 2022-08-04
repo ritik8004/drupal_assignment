@@ -19,7 +19,6 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Guest user
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    Then I should be on "/cart/login" page
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load

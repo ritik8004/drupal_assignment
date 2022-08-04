@@ -87,7 +87,7 @@ class SmsHelper {
         '%error' => $result->getErrorMessage(),
       ]);
     }
-    elseif ($report_count = count($result->getReports())) {
+    elseif ($report_count = is_countable($result->getReports()) ? count($result->getReports()) : 0) {
       $this->logger->info('Message was processed, @count delivery reports were generated - Recipients: @recipients', [
         '@count' => $report_count,
         '@recipients' => implode(',', $recipients),

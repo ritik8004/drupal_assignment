@@ -12,9 +12,9 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
  */
 class KnetApiWrapper {
 
-  const ACTION_INQUIRE = 8;
+  public const ACTION_INQUIRE = 8;
 
-  const ENDPOINT_INQUIRE = '/kpg/tranPipe.htm';
+  public const ENDPOINT_INQUIRE = '/kpg/tranPipe.htm';
 
   /**
    * KNET Url.

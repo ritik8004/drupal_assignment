@@ -249,7 +249,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
               $product_url .= '?selected=' . $sku_for_gallery->id();
             }
           }
-          catch (\Exception $e) {
+          catch (\Exception) {
             $sku_gallery = [];
           }
         }

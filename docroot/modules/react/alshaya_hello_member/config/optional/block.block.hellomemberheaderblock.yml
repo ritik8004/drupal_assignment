@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_hello_member
   theme:
-    - alshaya_hnm
+    - alshaya_white_label
 id: hellomemberheaderblock
-theme: alshaya_hnm
+theme: alshaya_white_label
 region: header
 weight: -30
 provider: null

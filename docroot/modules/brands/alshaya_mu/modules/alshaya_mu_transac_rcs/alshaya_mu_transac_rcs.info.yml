@@ -1,0 +1,6 @@
+name: Alshaya Muji Transac RCS
+description: Enables RCS for Muji.
+type: module
+core_version_requirement: ^9
+dependencies:
+  - alshaya_mu:alshaya_mu_transac

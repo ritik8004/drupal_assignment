@@ -141,13 +141,14 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
+    $menu_type = NULL;
     $defaults = $this->defaultConfiguration();
     $form['menu_levels'] = [
       '#type' => 'details',
       '#title' => $this->t('Menu levels'),
       // Open if not set to defaults.
       '#open' => $defaults['level'] !== $this->configuration['level'] || $defaults['depth'] !== $this->configuration['depth'],
-      '#process' => [[get_class(), 'processMenuLevelParents']],
+      '#process' => [[self::class, 'processMenuLevelParents']],
     ];
 
     $options = range(0, $this->menuTree->maxDepth());
@@ -368,7 +369,7 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
         /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
         $link = $element->link;
         $active_link = $link->getUrlObject()->toString();
-        if (strpos($active_link, $current_path_alias['alias']) !== 0) {
+        if (!str_starts_with($active_link, $current_path_alias['alias'])) {
           return TRUE;
         }
       }

@@ -323,7 +323,7 @@ class ApiHelper {
       $token_details = Json::decode($card['token_details']);
 
       $card['paymentMethod'] = $this->getCardType($token_details['type']);
-      // @todo: Remove if we are already receiving mada:true/false.
+      // @todo Remove if we are already receiving mada:true/false.
       $token_details['mada'] = isset($token_details['mada']) && $token_details['mada'] == 'Y';
       // Encode public hash.
       // https://github.com/acquia-pso/alshaya/pull/13267#discussion_r311886591.
@@ -369,9 +369,7 @@ class ApiHelper {
    *   Return sorted array of cards.
    */
   protected function sortCardsByDate(array $cards): array {
-    uasort($cards, function ($a, $b) {
-      return (strtotime($a['created_at']) > strtotime($b['created_at'])) ? -1 : 1;
-    });
+    uasort($cards, fn($a, $b) => (strtotime($a['created_at']) > strtotime($b['created_at'])) ? -1 : 1);
     return $cards;
   }
 

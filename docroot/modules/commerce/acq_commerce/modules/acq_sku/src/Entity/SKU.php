@@ -175,11 +175,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
 
     // Initialise with empty array to avoid null.
-    $this->mediaData[$langcode] = $this->mediaData[$langcode] ?? [];
+    $this->mediaData[$langcode] ??= [];
 
     if ($media_data = $this->get('media')->getString()) {
       $update_sku = FALSE;
 
+      // @codingStandardsIgnoreLine
       $media_data = unserialize($media_data);
 
       if (empty($media_data)) {
@@ -218,9 +219,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
     }
 
-    return array_filter($this->mediaData[$langcode], function ($row) {
-      return !empty($row['fid']);
-    });
+    return array_filter($this->mediaData[$langcode], fn($row) => !empty($row['fid']));
   }
 
   /**
@@ -252,7 +251,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
             '@fid' => $data['fid'],
             '@sku' => $this->getSku(),
             '@langcode' => $this->language()->getId(),
-            '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+            '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), JSON_THROW_ON_ERROR),
           ]);
 
           unset($data['fid']);
@@ -305,6 +304,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @throws \Exception
    */
   protected function downloadMediaImage(array &$data) {
+    $file_data = NULL;
     $lock_key = '';
     $non_cli_image_download = AcqSkuConfig::get('non_cli_image_download');
     // Return if it is non CLI request AND if the config value for it is
@@ -396,7 +396,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         '@url' => $data['file'],
         '@sku' => $this->getSku(),
         '@remote_id' => $data['value_id'],
-        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), JSON_THROW_ON_ERROR),
       ]);
       return 'blacklisted';
     }
@@ -535,7 +535,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       // Simply log for debugging later on why this function is called
       // with empty sku.
       \Drupal::logger('acq_sku')->error('SKU::loadFromSku invoked with empty sku string: @trace.', [
-        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), JSON_THROW_ON_ERROR),
       ]);
 
       return NULL;
@@ -566,7 +566,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       // If we find more than one, raise a log.
-      if (!empty($sku_records) && count($sku_records) > 1) {
+      if (!empty($sku_records) && (is_countable($sku_records) ? count($sku_records) : 0) > 1) {
         \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku & lang code: @langcode.', [
           '@sku' => $sku,
           '@langcode' => $langcode,
@@ -890,6 +890,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Delete media files.
     foreach ($entities as $entity) {
       $media_data = $entity->get('media')->getString();
+      // @codingStandardsIgnoreLine
       $media_data = unserialize($media_data);
       foreach ($media_data as $data) {
         if (isset($data['fid'])) {

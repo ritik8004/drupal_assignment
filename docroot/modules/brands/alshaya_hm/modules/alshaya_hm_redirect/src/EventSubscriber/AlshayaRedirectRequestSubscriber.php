@@ -18,12 +18,12 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
   /**
    * Constant to hold the cookie name set by HM entrance gate.
    */
-  const HMCORP_COOKIE_NAME = 'HMCORP_locale';
+  public const HMCORP_COOKIE_NAME = 'HMCORP_locale';
 
   /**
    * Constant to identify redirected urls from HM entrance gate.
    */
-  const HM_REDIRECT_URL_IDENTIFIER = '/^\/forwarded\/(\w*)(\/(\w|\W)*)*$/';
+  public const HM_REDIRECT_URL_IDENTIFIER = '/^\/forwarded\/(\w*)(\/(\w|\W)*)*$/';
 
   /**
    * Language Manager service.
@@ -68,6 +68,7 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events['kernel.request'] = ['onRequest'];
 
     return $events;

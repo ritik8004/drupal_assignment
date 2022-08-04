@@ -1,4 +1,4 @@
-@javascript @checkoutPayment @auth @clickCollect @fawry @hmeguat
+@javascript @checkoutPayment @auth @clickCollect @fawry @hmeguat @tbseguat
 Feature: SPC Checkout using Click & Collect store for Guest user using Fawry payment method
 
   Background:
@@ -20,7 +20,6 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    Then I should be on "/cart/login" page
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -56,10 +55,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{subtotal}"
     Then I should see "{order_total}"
-    And I should see "{vat}"
-    And I should see "{continue_shopping_text}"
 
   @cnc @language @desktop @fawry
   Scenario: As a Guest user, I should be able to checkout using click and collect with Fawry payment in second language
@@ -100,7 +96,6 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And I wait for AJAX to finish
     And I wait 90 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/" page
     And I should save the order details in the file
     And the element ".order-summary-banner-fawry" should exist
     Then I click jQuery "#spc-detail-open" element on page
@@ -116,9 +111,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{language_subtotal}"
     Then I should see "{language_order_total}"
-    And I should see "{language_continue_shopping_text}"
 
   @cnc @language @mobile @fawry
   Scenario: As a Guest user, I should be able to checkout using click and collect with Fawry payment
@@ -137,7 +130,6 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -159,6 +151,5 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And I wait for AJAX to finish
     And I wait 90 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/" page
     And I should save the order details in the file
     Then the element ".order-summary-banner-fawry" should exist

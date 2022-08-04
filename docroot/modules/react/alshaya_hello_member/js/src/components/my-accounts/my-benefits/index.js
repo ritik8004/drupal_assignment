@@ -6,7 +6,6 @@ import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import MyOffersAndVouchers from './my-offers-vouchers';
 import HappyBirthdayPopup from '../happy-birthday-popup';
-import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 
 class MyBenefits extends React.Component {
   constructor(props) {
@@ -91,9 +90,9 @@ class MyBenefits extends React.Component {
 
     return (
       <>
-        <ConditionalView condition={currentPath.includes('user/')}>
+        {currentPath.includes('user/') && (
           <HappyBirthdayPopup myBenefitsList={myBenefitsList} />
-        </ConditionalView>
+        )}
         <MyOffersAndVouchers myBenefitsList={myBenefitsList} />
       </>
     );
