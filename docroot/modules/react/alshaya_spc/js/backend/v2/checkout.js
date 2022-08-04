@@ -2333,7 +2333,7 @@ window.commerceBackend.placeOrder = async (data) => {
           }
         } else {
           // Check if the order is already placed.
-          const orderPlaced = await validateOrder(cart.data.cart.id);
+          const orderPlaced = await validateOrder(params.cartId);
           if (hasValue(orderPlaced)
             && hasValue(orderPlaced.quote_id)) {
             orderId = orderPlaced.order_id;
