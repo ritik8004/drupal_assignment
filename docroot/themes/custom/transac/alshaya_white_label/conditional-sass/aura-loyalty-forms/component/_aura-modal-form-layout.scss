@@ -226,18 +226,19 @@
 
         .linkingoptions-label,
         .otp-sent-to-mobile-label {
-          font-family: $aura-bold;
-
           span {
             display: inline-block;
-            font-family: $aura-bold;
           }
         }
 
         .otp-sent-to-mobile-label {
           position: relative;
-          margin-bottom: rem(30);
+          margin-bottom: rem(61);
           line-height: rem(22);
+
+          @include breakpoint($only-mobile) {
+            margin-bottom: rem(44);
+          }
         }
       }
 
