@@ -35,6 +35,7 @@ const AddressContent = (props) => {
         formContext={formContext}
         areaUpdated={areaUpdated}
         isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+        enableFields={enableFields}
       />
     );
   }

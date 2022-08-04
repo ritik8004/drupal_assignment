@@ -107,6 +107,7 @@ export default class AddressList extends React.Component {
       formContext,
       areaUpdated,
       isExpressDeliveryAvailable,
+      enableFields,
     } = this.props;
 
     const processNewAddressForAddressChange = isExpressDeliveryEnabled() && areaUpdated;
@@ -147,6 +148,7 @@ export default class AddressList extends React.Component {
           showEditButton={showEditButton}
           refreshAddressList={this.refreshAddressList}
           areaUpdated={areaUpdated}
+          enableFields={enableFields}
         />,
       );
     });

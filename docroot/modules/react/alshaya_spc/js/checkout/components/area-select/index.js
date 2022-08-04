@@ -93,7 +93,7 @@ export default class AreaSelect extends React.Component {
   toggleFilterList = () => {
     const { enableFields } = this.props;
 
-    if (enableFields.length > 0 && enableFields.indexOf('area_select') === -1) {
+    if (enableFields && enableFields.length > 0 && enableFields.indexOf('area_select') === -1) {
       // If enabled fields are provide in props then check if area select
       // is present in enabledFields array if not then disable the list.
       return;

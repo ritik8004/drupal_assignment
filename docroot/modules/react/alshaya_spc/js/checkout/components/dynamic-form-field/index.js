@@ -43,7 +43,7 @@ const DynamicFormField = (props) => {
   }
 
   return (
-    <TextField isAddressField required={field.required} id={fieldKey} type="text" label={field.label} name={fieldKey} defaultValue={defaultVal !== '' ? defaultVal[field.key] : ''} maxLength={field.maxLength} disabled={(enableFields.length > 0 && enableFields.indexOf(fieldKey) === -1) ? 'disabled' : undefined} />
+    <TextField isAddressField required={field.required} id={fieldKey} type="text" label={field.label} name={fieldKey} defaultValue={defaultVal !== '' ? defaultVal[field.key] : ''} maxLength={field.maxLength} disabled={(enableFields && enableFields.length > 0 && enableFields.indexOf(fieldKey) === -1) ? 'disabled' : undefined} />
   );
 };
 

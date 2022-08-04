@@ -64,7 +64,7 @@ export default class ParentAreaSelect extends React.Component {
   toggleFilterList = () => {
     const { enableFields } = this.props;
 
-    if (enableFields.length > 0 && enableFields.indexOf('parent_area_select') === -1) {
+    if (enableFields && enableFields.length > 0 && enableFields.indexOf('parent_area_select') === -1) {
       return;
     }
 

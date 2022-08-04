@@ -47,7 +47,7 @@ const FixedFields = ({
             defaultValue={defaultValue !== '' ? defaultValue.fullname : ''}
             className={defaultValue !== '' && defaultValue.fullname !== '' ? 'focus' : ''}
             label={getStringMessage('ci_full_name')}
-            disabled={(enableFields.length > 0 && enableFields.indexOf('fullname') === -1) ? 'disabled' : undefined}
+            disabled={(enableFields && enableFields.length > 0 && enableFields.indexOf('fullname') === -1) ? 'disabled' : undefined}
           />
         </ConditionalView>
         <ConditionalView condition={showEmail}>
@@ -57,7 +57,7 @@ const FixedFields = ({
             defaultValue={defaultValue !== '' ? defaultValue.email : ''}
             className={defaultValue !== '' && defaultValue.email !== '' ? 'focus' : ''}
             label={getStringMessage('ci_email')}
-            disabled={(enableFields.length > 0 && enableFields.indexOf('email') === -1) ? 'disabled' : undefined}
+            disabled={(enableFields && enableFields.length > 0 && enableFields.indexOf('email') === -1) ? 'disabled' : undefined}
           />
         </ConditionalView>
         <TextField
@@ -66,7 +66,7 @@ const FixedFields = ({
           defaultValue={defaultValue !== '' ? cleanMobileNumber(defaultValue.telephone) : ''}
           className={defaultValue !== '' && defaultValue.telephone !== '' ? 'focus' : ''}
           label={getStringMessage('ci_mobile_number')}
-          disabled={(enableFields.length > 0 && enableFields.indexOf('mobile') === -1) ? 'disabled' : undefined}
+          disabled={(enableFields && enableFields.length > 0 && enableFields.indexOf('mobile') === -1) ? 'disabled' : undefined}
         />
         <input type="hidden" name="address_id" value={defaultValue !== '' && defaultValue.address_id !== null ? defaultValue.address_id : 0} />
       </div>
