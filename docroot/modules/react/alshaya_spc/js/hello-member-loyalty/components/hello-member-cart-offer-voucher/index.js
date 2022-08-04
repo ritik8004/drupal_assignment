@@ -13,7 +13,6 @@ import HelloMemberCartPopupBonusVouchersList from './hello-member-cart-popup-bon
 import HelloMemberCartPopupMemberOfferList from './hello-member-cart-popup-member-offer-list';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
-import ConditionalView from '../../../common/components/conditional-view';
 import BecomeHelloMember from '../../../../../alshaya_hello_member/js/src/components/become-hello-member';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
@@ -200,38 +199,42 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 closeOnEscape={false}
               >
                 <a className="close-modal" onClick={() => this.onClickClosePopup()} />
-                <ConditionalView condition={isAnonymous}>
+                {isAnonymous
+                && (
                   <BecomeHelloMember destination="cart" />
-                </ConditionalView>
-                <ConditionalView condition={!isAnonymous}>
-                  <div className="hello-member-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
-                  <div className="hello-member-promo-modal-content">
-                    <div className={`error-info-section ${additionalClasses}`}>
-                      {appliedOffers}
-                      {appliedVouchers}
+                )}
+                {!isAnonymous
+                && (
+                  <span>
+                    <div className="hello-member-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
+                    <div className="hello-member-promo-modal-content">
+                      <div className={`error-info-section ${additionalClasses}`}>
+                        {appliedOffers}
+                        {appliedVouchers}
+                      </div>
+                      <Tabs forceRenderTabPanel={forceRenderTabPanel}>
+                        <TabList>
+                          <Tab>{Drupal.t('Bonus Vouchers', {}, { context: 'hello_member' })}</Tab>
+                          <Tab>{Drupal.t('Member Offers', {}, { context: 'hello_member' })}</Tab>
+                        </TabList>
+                        <TabPanel>
+                          <HelloMemberCartPopupBonusVouchersList
+                            vouchers={vouchers}
+                            totals={totals}
+                            promotionType={this.removeAppliedPromotions}
+                          />
+                        </TabPanel>
+                        <TabPanel>
+                          <HelloMemberCartPopupMemberOfferList
+                            offers={Offers}
+                            totals={totals}
+                            promotionType={this.removeAppliedPromotions}
+                          />
+                        </TabPanel>
+                      </Tabs>
                     </div>
-                    <Tabs forceRenderTabPanel={forceRenderTabPanel}>
-                      <TabList>
-                        <Tab>{Drupal.t('Bonus Vouchers', {}, { context: 'hello_member' })}</Tab>
-                        <Tab>{Drupal.t('Member Offers', {}, { context: 'hello_member' })}</Tab>
-                      </TabList>
-                      <TabPanel>
-                        <HelloMemberCartPopupBonusVouchersList
-                          vouchers={vouchers}
-                          totals={totals}
-                          promotionType={this.removeAppliedPromotions}
-                        />
-                      </TabPanel>
-                      <TabPanel>
-                        <HelloMemberCartPopupMemberOfferList
-                          offers={Offers}
-                          totals={totals}
-                          promotionType={this.removeAppliedPromotions}
-                        />
-                      </TabPanel>
-                    </Tabs>
-                  </div>
-                </ConditionalView>
+                  </span>
+                )}
               </Popup>
             </div>
           )}
