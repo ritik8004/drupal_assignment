@@ -175,6 +175,7 @@ class SendOtpPopup extends React.Component {
         <div className="btn-wrapper in-active">
           <button onClick={(e) => this.onClickSendOtp(e)} type="button">{getStringMessage('send_otp_label')}</button>
         </div>
+        <div id="mobile-number-error" />
         <div className="mb-verifier">
           {phoneNumberMsg}
         </div>
