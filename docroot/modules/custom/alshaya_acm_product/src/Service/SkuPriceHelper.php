@@ -224,7 +224,7 @@ class SkuPriceHelper {
       || count(array_unique(array_filter($child_prices))) == 1
       || count(array_unique($selling_prices)) == 1)) {
 
-      return $this->buildPriceBlockSimple($sku, $langcode);
+      return $this->buildPriceBlockSimple($sku, $color, $langcode);
     }
 
     if (count(array_filter($child_prices)) == count(array_filter($child_final_prices))) {
