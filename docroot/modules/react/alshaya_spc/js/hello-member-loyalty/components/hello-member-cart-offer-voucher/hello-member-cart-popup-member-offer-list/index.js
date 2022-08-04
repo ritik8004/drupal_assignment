@@ -70,14 +70,13 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
   return (
     <>
       <form
-        className="hm-promo-offers-validate-form"
+        className="hello-member-promo-offers-validate-form"
         method="post"
-        id="hm-promo-offers-val-form"
         onSubmit={(e) => handleSubmit(e, props)}
       >
-        <div className="hm-promo-tab-content-list radio-btn-list">
+        <div className="hello-member-promo-tab-content-list radio-btn-list">
           {offers.map((offer, index) => (
-            <div key={offer.code} className="hm-promo-tab-cont-item">
+            <div key={offer.code} className="hello-member-promo-tab-cont-item">
               <input
                 type="radio"
                 id={`offer${index}`}
@@ -101,7 +100,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
             </div>
           ))}
         </div>
-        <div className="hm-promo-tab-cont-action">
+        <div className="hello-member-promo-tab-cont-action">
           <input type="submit" value={Drupal.t('APPLY OFFERS', {}, { context: 'hello_member' })} />
           <a className="clear-btn" onClick={() => onClickClearAll()}>{Drupal.t('CLEAR ALL', {}, { context: 'hello_member' })}</a>
         </div>
