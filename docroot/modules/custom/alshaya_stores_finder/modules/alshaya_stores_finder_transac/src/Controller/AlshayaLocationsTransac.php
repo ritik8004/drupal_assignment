@@ -2,9 +2,8 @@
 
 namespace Drupal\alshaya_stores_finder_transac\Controller;
 
-use Drupal\Core\Cache\CacheableJsonResponse;
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
@@ -77,17 +76,7 @@ class AlshayaLocationsTransac extends ControllerBase {
     $endpoint = ltrim($config->get('filter_path'), '/');
     $result = $this->alshayaApi->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
-    $response = new CacheableJsonResponse(json_decode($result, NULL), 200);
-
-    // Adding cacheability metadata, so whenever, cache invalidates, this
-    // url's cached response also gets invalidate.
-    $cacheMetadata = new CacheableMetadata();
-
-    // Adding cache tags.
-    $cacheMetadata->addCacheTags($config->getCacheTags());
-    $response->addCacheableDependency($cacheMetadata);
-
-    return $response;
+    return new JsonResponse(json_decode($result));
   }
 
 }
