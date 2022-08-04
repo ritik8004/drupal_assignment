@@ -3,11 +3,11 @@ import { setStorageInfo, getStorageInfo, removeStorageInfo } from './storage';
 import { convertHex2aString } from './write_review_util';
 
 export const getUasToken = (productId) => {
-  let requestUrl = '/get-uas-token';
+  let requestUrl = 'get-uas-token';
   if (productId !== undefined) {
     requestUrl += `?product=${productId}`;
   }
-  const request = doRequest(requestUrl);
+  const request = doRequest(Drupal.url(requestUrl));
   if (request instanceof Promise) {
     return request
       .then((result) => {
@@ -22,7 +22,7 @@ export const getUasToken = (productId) => {
 };
 
 export const getProductReviewStats = (productId) => {
-  const requestUrl = `/get-product-review-stats/${productId}`;
+  const requestUrl = Drupal.url(`get-product-review-stats/${productId}`);
   const request = doRequest(requestUrl);
   if (request instanceof Promise) {
     return request
