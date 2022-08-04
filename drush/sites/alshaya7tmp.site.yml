@@ -11,7 +11,7 @@
   host: alshaya7tmp07dev.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07dev
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07dev2'.
@@ -27,7 +27,7 @@
   host: alshaya7tmp07dev2.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07dev2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07dev2up'.
@@ -43,7 +43,7 @@
   host: alshaya7tmp07dev2up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07dev2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07dev3'.
@@ -59,7 +59,7 @@
   host: alshaya7tmp07dev3.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07dev3
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07dev3up'.
@@ -75,7 +75,7 @@
   host: alshaya7tmp07dev3up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07dev3up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07devup'.
@@ -91,7 +91,7 @@
   host: alshaya7tmp07devup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07devup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07live'.
@@ -107,7 +107,7 @@
   host: alshaya7tmp07live.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07live
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07lt'.
@@ -123,7 +123,7 @@
   host: alshaya7tmp07lt.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07lt
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07ltup'.
@@ -139,7 +139,7 @@
   host: alshaya7tmp07ltup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07ltup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07pprod'.
@@ -155,7 +155,7 @@
   host: alshaya7tmp07pprod.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07pprod
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07pprodup'.
@@ -171,7 +171,7 @@
   host: alshaya7tmp07pprodup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07pprodup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07qa2'.
@@ -187,7 +187,7 @@
   host: alshaya7tmp07qa2.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07qa2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07qa2up'.
@@ -203,7 +203,7 @@
   host: alshaya7tmp07qa2up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07qa2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07test'.
@@ -219,7 +219,7 @@
   host: alshaya7tmp07test.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07test
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07testup'.
@@ -235,7 +235,7 @@
   host: alshaya7tmp07testup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07testup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07uat'.
@@ -251,7 +251,7 @@
   host: alshaya7tmp07uat.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07uat
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07uatup'.
@@ -267,7 +267,7 @@
   host: alshaya7tmp07uatup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07uatup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment '07update'.
@@ -283,7 +283,7 @@
   host: alshaya7tmp07update.ssh.enterprise-g1.acquia-sites.com
   user: alshaya7tmp.07update
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment 'dev'.
@@ -299,7 +299,7 @@ dev:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment 'dev2'.
@@ -315,7 +315,7 @@ dev2:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment 'dev3'.
@@ -331,7 +331,7 @@ dev3:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment 'pprod'.
@@ -347,7 +347,7 @@ pprod:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment 'prod'.
@@ -363,7 +363,7 @@ prod:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment 'qa2'.
@@ -379,7 +379,7 @@ qa2:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment 'test'.
@@ -395,7 +395,7 @@ test:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya7tmp', environment 'uat'.
@@ -411,4 +411,4 @@ uat:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
