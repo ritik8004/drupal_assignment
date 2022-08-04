@@ -52,31 +52,11 @@
               {% endfor %}
             </div>
           {% endif %}
-        <div class="content__title_wrapper_description">
-          {% if product_title %}
-            <h1>{{ product_title }}</h1>
-          {% endif %}
 
-          <div class="info-wrapper">
-            {% if price_block_identifier %}
-            <div class="price-block {{ price_block_identifier }}">
-              {{ price_block }}
-            </div>
-            {% endif %}
+        {# Render details before description block. #}
+        {% block beforeDescription %}
+        {% endblock %}
 
-            {% if postpay %}
-              {{ attach_library('alshaya_white_label/postpay-pdp') }}
-              <div class="postpay mobile-only-show">
-                {{ postpay }}
-              </div>
-            {% endif %}
-            {% if tabby %}
-              <div class="tabby mobile-only-show">
-                <div class="tabby-widget" id="tabby-promo-pdp-mobile-gallery"></div>
-              </div>
-            {% endif %}
-          </div>
-        </div>
         <div class="magazine-desc-wrapper">
           {% if product_attribute_labels %}
             <ul class="collection-labels">
