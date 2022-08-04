@@ -10,7 +10,10 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_hello_member\Helper\HelloMemberHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Provides Hello member header block.
@@ -115,25 +118,28 @@ class HelloMemberHeaderBlock extends BlockBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function build() {
-    $build = [];
-    // Build block only if hello member is enabled.
-    if (!($this->helloMemberHelper->isHelloMemberEnabled())) {
-      return $build;
-    }
+    $link = '';
     $config = $this->configFactory->get('alshaya_hello_member.settings');
     if ($config->get('membership_info_content_node')) {
-      // Get the URL for that node.
+      // Get the URL for hello member info page.
       $options = ['absolute' => TRUE];
       $url = Url::fromRoute('entity.node.canonical', ['node' => $config->get('membership_info_content_node')], $options);
+      $link = Link::fromTextAndUrl($this->t('Membership Info', [], ['context' => 'hello_member']), $url)->toString();
     }
-    $build = [
-      '#theme' => 'hello_member_header_block',
-      '#strings' => [
-        'value' => $url,
-      ],
-    ];
 
-    return $build;
+    return [
+      '#markup' => '<div class="membership-info-link">' . $link . '</div>',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function blockAccess(AccountInterface $account) {
+    // Show block only on my accounts page if hello member is enabled.
+    return AccessResult::allowedIf(
+      $this->helloMemberHelper->isHelloMemberEnabled()
+    );
   }
 
 }
