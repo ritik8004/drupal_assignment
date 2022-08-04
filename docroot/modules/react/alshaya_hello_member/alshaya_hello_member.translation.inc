@@ -304,15 +304,35 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       '@hmOfferCount offers are applied' => [
-        'ar' => '@hmOfferCount offers are applied AR',
+        'ar' => '@hmOfferCount تم تطبيق الخصومات',
         'context' => 'hello_member',
       ],
       '@hmOfferCount vouchers are applied' => [
-        'ar' => '@hmOfferCount vouchers are applied AR',
+        'ar' => '@hmOfferCount تم تطبيق القسائم',
         'context' => 'hello_member',
       ],
       'Please enter valid mobile number.' => [
         'ar' => 'يرجى إدخال رقم الجوال صحيح.',
+        'context' => 'hello_member',
+      ],
+      'This offer has been added to your bag' => [
+        'ar' => 'تم إضافة هذا العرض إلى حقيبة التسوق',
+        'context' => 'hello_member',
+      ],
+      'Your cart is empty' => [
+        'ar' => 'سلة التسوق فارغة',
+        'context' => 'hello_member',
+      ],
+      'Add to Bag' => [
+        'ar' => 'أضف إلى حقيبة التسوق',
+        'context' => 'hello_member',
+      ],
+      'Added to your bag' => [
+        'ar' => 'تم الإضافة إلى حقيبة التسوق',
+        'context' => 'hello_member',
+      ],
+      'H&M wants to give you special treat on your birthday' => [
+        'ar' => 'اتش آند ام يعطيك هدية خاصة في يوم ميلادك',
         'context' => 'hello_member',
       ],
     ],
