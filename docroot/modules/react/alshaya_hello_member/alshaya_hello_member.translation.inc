@@ -24,34 +24,34 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Add More & Get More' => [
-        'ar' => 'أضف المزيد واحصل على المزيد',
+        'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
       'Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?' => [
-        'ar' => 'هل تعلم أنك إذا أضفت بعض المعلومات أدناه، فستكسب المزيد من النقاط وستحصل على تجربة تسوق كما تحب؟ رائع، أليس كذلك؟',
+        'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
       'Date of Birth' => [
-        'ar' => 'تاريخ الميلاد',
+        'ar' => 'معلومات العضوية',
       ],
       'H&M wants to give you special treat on your birthday' => [
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
       'Gender' => [
-        'ar' => 'الجنس',
+        'ar' => 'العضوية',
       ],
-      'Select Gender -' => [
-        'ar' => 'حدد الجنس',
+      '- Select Gender -' => [
+        'ar' => 'معلومات العضوية',
       ],
       'Male' => [
-        'ar' => 'ذكر',
+        'ar' => 'معلومات العضوية',
       ],
       'Female' => [
-        'ar' => 'أنثى',
+        'ar' => 'معلومات العضوية',
       ],
       'Prefer not to say' => [
-        'ar' => 'أفضل عدم التصريح',
+        'ar' => 'معلومات العضوية',
       ],
       'My Details' => [
         'ar' => 'معلومات العضوية',
@@ -203,8 +203,16 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'رمز QR الكوبون',
         'context' => 'hello_member',
       ],
+      'Coupon' => [
+        'ar' => 'رالكوبون',
+        'context' => 'hello_member',
+      ],
       'Offer QR Code' => [
         'ar' => 'رمز QR العرض',
+        'context' => 'hello_member',
+      ],
+      'Offer' => [
+        'ar' => 'العرض',
         'context' => 'hello_member',
       ],
       'Membership Id QR Code' => [
@@ -260,39 +268,51 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Discounts & Vouchers' => [
-        'ar' => 'Discounts & Vouchers AR',
+        'ar' => 'خصومات وقسائم',
         'context' => 'hello_member',
       ],
       'Discount' => [
-        'ar' => 'Discount AR',
+        'ar' => 'خصم',
         'context' => 'hello_member',
       ],
       'Bonus Vouchers' => [
-        'ar' => 'Bonus Vouchers AR',
+        'ar' => 'رصيد القسائم',
         'context' => 'hello_member',
       ],
       'Member Offers' => [
-        'ar' => 'Member Offers AR',
+        'ar' => 'عروض العضو',
         'context' => 'hello_member',
       ],
       'Expires on @expiryDate' => [
-        'ar' => 'Expires on @expiryDate',
+        'ar' => 'ينتهي في @expiryDate',
         'context' => 'hello_member',
       ],
       'CLEAR ALL' => [
-        'ar' => 'CLEAR ALL AR',
+        'ar' => 'مسح الكل',
         'context' => 'hello_member',
       ],
       'APPLY VOUCHERS' => [
-        'ar' => 'APPLY VOUCHERS AR',
+        'ar' => 'تطبيق القسائم',
         'context' => 'hello_member',
       ],
       'APPLY OFFERS' => [
-        'ar' => 'APPLY OFFERS AR',
+        'ar' => 'تطبيق العروض',
         'context' => 'hello_member',
       ],
       'AVAIL IT' => [
         'ar' => 'توفرها',
+        'context' => 'hello_member',
+      ],
+      '@hmOfferCount offers are applied' => [
+        'ar' => '@hmOfferCount offers are applied AR',
+        'context' => 'hello_member',
+      ],
+      '@hmOfferCount vouchers are applied' => [
+        'ar' => '@hmOfferCount vouchers are applied AR',
+        'context' => 'hello_member',
+      ],
+      'Please enter valid mobile number.' => [
+        'ar' => 'يرجى إدخال رقم الجوال صحيح.',
         'context' => 'hello_member',
       ],
     ],
