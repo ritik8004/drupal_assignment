@@ -2,6 +2,7 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import { callHelloMemberApi } from '../../../js/utilities/helloMemberHelper';
 import logger from '../../../js/utilities/logger';
+import getCurrencyCode from '../../../js/utilities/util';
 import { getPriceToHelloMemberPoint } from './utilities';
 
 /**
@@ -151,7 +152,8 @@ const getHelloMemberPointsHistory = async (firstResult, pageSize) => {
  * @returns {Object}
  *   Return hello member points to earn.
  */
-const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode, context = 'hello_member') => {
+const getHelloMemberPointsToEarn = async (items, identifierNo) => {
+  const currencyCode = getCurrencyCode();
   if (!hasValue(items)) {
     logger.warning('Error while trying to get hello member points to earn. Product details is required.');
     return getErrorResponse('Product details is required.', 404);
@@ -167,8 +169,8 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode, con
 
     // If dictionary data does not exists in storage, we do api call.
     const requestData = {
-      type: context === 'hello_member' ? 'HM_ACCRUAL_RATIO' : 'APC_CASHBACK_ACCRUAL_RATIO',
-      programCode: context,
+      type: 'HM_ACCRUAL_RATIO',
+      programCode: 'hello_member',
     };
     const response = await getHelloMemberDictionaryData(requestData);
     if (hasValue(response.data.error)) {
@@ -179,9 +181,8 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode, con
       return getErrorResponse(message, 500);
     }
     if (hasValue(response.data) && !hasValue(response.data.error)) {
-      const key = context === 'hello_member' ? 'hm_points' : 'apc_points';
       return {
-        data: { [key]: getPriceToHelloMemberPoint(totalPrice, response.data) },
+        data: { hm_points: getPriceToHelloMemberPoint(totalPrice, response.data) },
       };
     }
   }
@@ -203,7 +204,7 @@ const getHelloMemberPointsToEarn = async (items, identifierNo, currencyCode, con
       currencyCode,
       products,
     },
-    programCode: context,
+    programCode: 'hello_member',
   };
 
   return callHelloMemberApi('helloMemberGetPointsEarned', 'POST', requestData, { identifierNo })

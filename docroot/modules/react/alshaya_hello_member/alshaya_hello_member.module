@@ -422,10 +422,12 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
     return;
   }
 
+  // Add aura earn points for order confirmation.
   if (isset($order['extension']['apc_accrued_points'])) {
     $settings['order_details']['accruedPoints'] = $order['extension']['apc_accrued_points'] ?? 0;
   }
 
+  // Add aura redeemed points for order confirmation.
   if (isset($order['extension']['apc_redeemed_points'])) {
     $settings['order_details']['redeemedPoints'] = $order['extension']['apc_redeemed_points'] ?? 0;
   }
@@ -492,19 +494,19 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
     return;
   }
 
+  $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
+
   // For hello member, aura settings has to be disabled and
   // we need to attach aura library but don't want to
   // use aura existing feature as a whole.
-  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() === TRUE) {
+  // Do not proceed if aura itegration with hello member is disabled.
+  if (!$helloMemberHelper->isAuraIntegrationEnabled() || \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled()) {
     return;
   }
 
   $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
   // Attach the library for Aura backend based on the commerce backend version.
   $build['#attached']['library'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
-  $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
-
-  $build['#attached']['drupalSettings']['helloMember']['auraFormConfig'] = $helloMemberHelper->getAuraFormConfig();
 
   // Preaparing aura settings required for hello member integration.
   $settings['config'] = \Drupal::service('alshaya_aura_react.aura_helper')->getAuraConfig();
@@ -515,6 +517,10 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
 
   \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
   $build['#strings'] = array_merge($build['#strings'], _alshaya_hello_member_aura_static_strings());
+
+  // Add aura related strings.
+  \Drupal::moduleHandler()->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
+  $build['#strings'] = array_merge($build['#strings'], _alshaya_aura_static_strings());
 }
 
 /**

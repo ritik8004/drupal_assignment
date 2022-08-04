@@ -303,6 +303,38 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'توفرها',
         'context' => 'hello_member',
       ],
+      '@hm_icon @login_link or Become a member to earn @points points' => [
+        'ar' => '@hm_icon @login_link أو سجّل كعضو للربح بالنقاط @points',
+        'context' => 'hello_member',
+      ],
+      'Confirm the Loyalty' => [
+        'ar' => 'تأكيد الولاء',
+        'context' => 'hello_member',
+      ],
+      'Do you want to remove all the benefits of @current_option and choose @selected_option benefits?' => [
+        'ar' => 'هل ترغب في إزالة جميع مزايا @current_option واختيار مزايا@selected_option',
+        'context' => 'hello_member',
+      ],
+      'Sign In' => [
+        'ar' => 'تسجيل الدخول',
+        'context' => 'hello_member',
+      ],
+      'H&M membership' => [
+        'ar' => 'عضوية اتش آند ام',
+        'context' => 'hello_member',
+      ],
+      'Verify' => [
+        'ar' => 'تأكيد',
+        'context' => 'hello_member',
+      ],
+      '@hm_icon Member earns @points points' => [
+        'ar' => 'عضو @hm_icon سيربح نقاط @points',
+        'context' => 'hello_member',
+      ],
+      'Earn/Redeem @aura_icon Points' => [
+        'ar' => 'اربح/ استخدم نقاط @aura_icon',
+        'context' => 'hello_member',
+      ],
       '@hmOfferCount offers are applied' => [
         'ar' => '@hmOfferCount offers are applied AR',
         'context' => 'hello_member',

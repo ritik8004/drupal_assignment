@@ -18,14 +18,14 @@ class AuraFormFieldOptions extends React.Component {
           selectOptionCallback={selectOptionCallback}
           fieldKey="mobile"
           fieldValue="mobile"
-          fieldText={getStringMessage('mobile_number')}
+          fieldText={getStringMessage('mobile_label')}
         />
         <AuraFormFieldItem
           selectedOption={selectedOption}
           selectOptionCallback={selectOptionCallback}
           fieldKey="card"
           fieldValue="cardNumber"
-          fieldText={getStringMessage('aura_accout_number')}
+          fieldText={getStringMessage('aura_account_number_label')}
         />
         <AuraFormFieldItem
           selectedOption={selectedOption}

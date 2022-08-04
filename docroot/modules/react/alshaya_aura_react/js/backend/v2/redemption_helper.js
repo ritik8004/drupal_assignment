@@ -61,13 +61,6 @@ const prepareRedeemPointsData = (data, cartId) => {
   return processedData;
 };
 
-const getRedeemEndPoint = (cardNumber) => {
-  if (isUserAuthenticated()) {
-    return `/V1/apc/${cardNumber}/redeem-points`;
-  }
-  return `/V1/guest/${cardNumber}/redeem-points`;
-};
-
 /**
  * Redeem points.
  *
@@ -79,7 +72,7 @@ const getRedeemEndPoint = (cardNumber) => {
  * @returns {Object}
  *   Points and other data in case of success or error in case of failure.
  */
-const redeemPoints = (cardNumber, data) => callMagentoApi(getRedeemEndPoint(cardNumber), 'POST', data).then((response) => {
+const redeemPoints = (cardNumber, data) => callMagentoApi(isUserAuthenticated() ? `/V1/apc/${cardNumber}/redeem-points` : `/V1/guest/${cardNumber}/redeem-points`, 'POST', data).then((response) => {
   if (hasValue(response.data.error)) {
     return response.data;
   }
@@ -99,16 +92,17 @@ const redeemPoints = (cardNumber, data) => callMagentoApi(getRedeemEndPoint(card
   };
 
   if (hasValue(response.data.redeem_response)) {
-    responseData.data.paidWithAura = hasValue(response.data.redeem_response.cashback_deducted_value)
-      ? response.data.redeem_response.cashback_deducted_value
+    const redeemResponseData = response.data.redeem_response;
+    responseData.data.paidWithAura = hasValue(redeemResponseData.cashback_deducted_value)
+      ? redeemResponseData.cashback_deducted_value
       : responseData.data.paidWithAura;
 
-    responseData.data.balancePayable = hasValue(response.data.redeem_response.balance_payable)
-      ? response.data.redeem_response.balance_payable
+    responseData.data.balancePayable = hasValue(redeemResponseData.balance_payable)
+      ? redeemResponseData.balance_payable
       : responseData.data.balancePayable;
 
-    responseData.data.balancePoints = hasValue(response.data.redeem_response.house_hold_balance)
-      ? response.data.redeem_response.house_hold_balance
+    responseData.data.balancePoints = hasValue(redeemResponseData.house_hold_balance)
+      ? redeemResponseData.house_hold_balance
       : responseData.data.balancePoints;
   }
 
@@ -130,5 +124,4 @@ const redeemPoints = (cardNumber, data) => callMagentoApi(getRedeemEndPoint(card
 export {
   prepareRedeemPointsData,
   redeemPoints,
-  getRedeemEndPoint,
 };

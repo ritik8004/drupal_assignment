@@ -49,12 +49,12 @@ const getLoyaltySelectText = (optionName, helloMemberPoints) => {
     return parse(parse(Drupal.t('@hm_icon Member earns @points points', {
       '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
       '@points': helloMemberPoints,
-    })));
+    }, { context: 'hello_member' })));
   }
   if (optionName === 'aura') {
     return parse(parse(Drupal.t('Earn/Redeem @aura_icon Points', {
       '@aura_icon': `<span class="hello-member-aura">${renderToString(<AuraHeaderIcon />)}</span>`,
-    })));
+    }, { context: 'hello_member' })));
   }
   return null;
 };

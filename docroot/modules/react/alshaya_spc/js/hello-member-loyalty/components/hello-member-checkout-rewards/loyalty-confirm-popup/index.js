@@ -54,7 +54,7 @@ export default class LoyaltyConfirmPopup extends React.Component {
               <a className="close-modal" onClick={() => this.closeModal()} />
             </div>
             <div className="loyalty-question">
-              {Drupal.t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits??', { '@current_option': this.getLoyaltyOptionText(currentOption), '@selected_option': this.getLoyaltyOptionText(selectedOption) }, { context: 'loyalty' })}
+              {Drupal.t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits?', { '@current_option': this.getLoyaltyOptionText(currentOption), '@selected_option': this.getLoyaltyOptionText(selectedOption) }, { context: 'hello_member' })}
             </div>
             <div className="loyalty-options">
               <button
@@ -63,7 +63,7 @@ export default class LoyaltyConfirmPopup extends React.Component {
                 type="button"
                 onClick={() => this.closeModal()}
               >
-                {Drupal.t('Cancel', {}, { context: 'hello_member' })}
+                {Drupal.t('Cancel')}
               </button>
               <button
                 className="loyalty-yes"
@@ -71,7 +71,7 @@ export default class LoyaltyConfirmPopup extends React.Component {
                 type="button"
                 onClick={() => this.confirmLoyalty(selectedOption)}
               >
-                {Drupal.t('Yes', {}, { context: 'hello_member' })}
+                {Drupal.t('Yes')}
               </button>
             </div>
           </div>
