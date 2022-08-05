@@ -15,21 +15,6 @@ use AcquiaCloudApi\Endpoints\Servers;
 class CloudTasksCommand extends BltTasks {
 
   /**
-   * Mapping between live env and it's Cloud ID.
-   *
-   * @var string[]
-   */
-  protected static $environments = [
-    'alshaya.01live' => '1244-f8ab35c4-f119-4acd-b080-d3014358e5b8',
-    'alshaya2.02live' => '3925-e46a138c-b31a-4c42-8856-f22dc2d85811',
-    'alshaya3bis.01live' => '4166-ebc04ed7-2045-4339-97d9-a56b3eb19e2a',
-    'alshaya4.04live' => '5215-06063c00-aa9e-4b90-bba3-20b9fe0b1913',
-    'alshaya5.05live' => '5710-0c01027c-f4b9-4b97-9ed8-44ecfb08a53a',
-    'alshaya7tmp.07live' => '6573-1758f631-f134-49d2-b732-a3be7f0ec083',
-    'alshayadc1.02live' => '5074-62a68bcf-ef9c-4cda-b6f8-2369a932ef3b',
-  ];
-
-  /**
    * Check if cloud task is still in progress.
    *
    * @param string $identifier
@@ -130,7 +115,11 @@ class CloudTasksCommand extends BltTasks {
       $environment = getenv('AH_SITE_GROUP') . '.' . getenv('AH_SITE_ENVIRONMENT');
     }
 
-    $environment_id = self::$environments[$environment] ?? '';
+    $environments = $this->getConfigValue('cloud_prod_environments', []);
+    if ($environments) {
+      $environments = array_column($environments, 'uuid', 'env');
+      $environment_id = $environments[$environment] ?? '';
+    }
 
     if (empty($environment_id)) {
       throw new \Exception('Argument validation failed, please check and try again.');
