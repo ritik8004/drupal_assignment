@@ -822,3 +822,8 @@ cls-initial-layout-common:
   css:
     theme:
       css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: {}
+
+checkout-cod-mobile-verification:
+  css:
+    theme:
+      css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: {}

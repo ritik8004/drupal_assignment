@@ -314,3 +314,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css
+
+  alshaya_white_label/checkout-cod-mobile-verification:
+    css:
+      theme:
+        css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css

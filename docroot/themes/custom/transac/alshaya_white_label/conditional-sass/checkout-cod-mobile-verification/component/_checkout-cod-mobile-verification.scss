@@ -1,0 +1,101 @@
+.cod-mobile-otp {
+  &__text-wrapper {
+    margin-top: rem(20);
+    font-size: rem(14);
+  }
+
+  &__text {
+    color: $spc-checkout-cod-otp-secondary;
+  }
+
+  &__btn-link {
+    text-decoration: underline;
+    color: $spc-checkout-cod-otp-primary;
+    background: none;
+    border: none;
+    margin-#{$left}: rem(8);
+    padding: 0;
+  }
+
+  &__form {
+    margin-top: rem(52);
+  }
+
+  &__field {
+    & > input[type="tel"] {
+      width: 100% !important;
+      border-color: $spc-checkout-cod-otp-secondary !important;
+      padding: rem(5) 0 !important;
+      font-size: rem(18);
+
+      &:focus {
+        border-color: $spc-checkout-cod-otp-primary !important;
+      }
+    }
+  }
+
+  &__controls {
+    margin: rem(32) auto rem(20);
+    display: flex;
+  }
+
+  &__submit {
+    border: none;
+    background: $spc-checkout-cod-otp-primary;
+    color: $primary_btn_text;
+    font-family: $alshaya-bold;
+    font-size: rem(16);
+    line-height: 1.13;
+    letter-spacing: rem(1.14);
+
+    &:disabled {
+      opacity: 0.2;
+      pointer-events: none;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-#{$right}: rem(28);
+
+    &__field {
+      &:not(:last-child) {
+        margin-#{$right}: rem(10);
+      }
+    }
+
+    &__controls {
+      flex-direction: column;
+    }
+
+    &__submit {
+      margin-top: rem(26);
+      padding: rem(14);
+    }
+  }
+
+  @include breakpoint($tablet) {
+    &__text-wrapper {
+      margin-top: rem(21);
+    }
+
+    &__field {
+      margin-#{$right}: rem(15);
+
+      & > input[type="tel"] {
+        padding: rem(6) 0 !important;
+        font-size: rem(20);
+      }
+    }
+
+    &__controls {
+      margin: rem(70) auto rem(12);
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    &__submit {
+      padding: rem(12);
+      width: rem(162);
+    }
+  }
+}
