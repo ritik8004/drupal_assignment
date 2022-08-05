@@ -2945,7 +2945,7 @@ JS;
   public function iClickOnTheWishlistIcon()
   {
     $session = $this->getSession();
-    $session->executeScript('jQuery(\'.wishlist-button-wrapper .wishlist-icon\').first().click()');
+    $session->executeScript('jQuery(\'.c-products__item.views-row:first-child .wishlist-button-wrapper .wishlist-icon\').first().click()');
     $this->iWaitSeconds('5');
 
     // Check if wishlist icon is active by checking the class "in-wishlist".
