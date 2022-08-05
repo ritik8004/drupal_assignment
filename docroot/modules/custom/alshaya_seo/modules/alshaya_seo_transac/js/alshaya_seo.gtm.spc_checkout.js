@@ -131,7 +131,10 @@
 
     if (cartData.payment.method && data.deliveryOption) {
       var step_data = JSON.parse(JSON.stringify(data));
-      step_data.ecommerce.checkout.actionField.step = (step === 4) ? 4 : 3;
+      step_data.ecommerce.checkout.actionField.step = step;
+      if (step === 4) {
+        step_data.paymentOption = cartData.payment.method;
+      }
       step_data.pageType = checkoutPaymentPage;
       dataLayer.push(step_data);
     }
