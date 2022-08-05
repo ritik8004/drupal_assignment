@@ -268,6 +268,45 @@ const getLastOrder = async (customerId, force = false) => {
 };
 
 /**
+ * Validate if the order exists with the given cart id.
+ *
+ * @param {string} cartId
+ *   Masked cart id.
+ *
+ * @returns {object}
+ *   Object containing order response.
+ */
+const validateOrder = async (cartId) => {
+  // Return if the cart id is not available.
+  if (!cartId) {
+    return {};
+  }
+
+  try {
+    const order = await callMagentoApi(getApiEndpoint('validateOrder', { cartId }), 'GET', {});
+    if (!hasValue(order.data) || hasValue(order.data.error)) {
+      logger.warning('Error while validating the order. CartId: @cartId, Response: @response.', {
+        '@response': JSON.stringify(order),
+        '@cartId': cartId,
+      });
+
+      return {};
+    }
+
+    const processedOrder = processLastOrder(order.data);
+
+    return processedOrder;
+  } catch (error) {
+    logger.error('Error while validating the order. CartId: @cartId, Message: @message.', {
+      '@message': error.message,
+      '@cartId': cartId,
+    });
+  }
+
+  return {};
+};
+
+/**
  * Get payment method from last order.
  *
  * @param {object} order
@@ -2272,23 +2311,39 @@ window.commerceBackend.placeOrder = async (data) => {
       if (hasValue(response.data.error)
         && response.data.error_code >= 500
         && getCartSettings('doubleCheckEnabled')
-        && isUserAuthenticated()
         && !isPostpayPaymentMethod(data.data.paymentMethod.method)
         && !isUpapiPaymentMethod(data.data.paymentMethod.method)
       ) {
-        // Get quote_id from last order to compare with cart id.
-        const lastOrder = await getLastOrder(drupalSettings.userDetails.customerId, true);
-        if (hasValue(lastOrder)
-          && hasValue(lastOrder.quote_id)
-          && lastOrder.quote_id === cart.data.cart.id
-        ) {
-          orderId = lastOrder.order_id;
-          // We were able to match the last order id with the cart submitted.
-          logger.warning('Place order failed but order was placed, we will move forward. Message: @message. Reserved order id: @reservedOrderId. Cart id: @cartId', {
-            '@cartId': cart.data.cart.id,
-            '@message': (hasValue(response.data.error_message)) ? response.data.error_message : '',
-            '@reservedOrderId': (hasValue(cart.data.cart.reserved_order_id)) ? cart.data.cart.reserved_order_id : '',
-          });
+        // For authenticated user, we have a different approach to validate the
+        // order.
+        if (isUserAuthenticated()) {
+          // Get quote_id from last order to compare with cart id.
+          const lastOrder = await getLastOrder(drupalSettings.userDetails.customerId, true);
+          if (hasValue(lastOrder)
+            && hasValue(lastOrder.quote_id)
+            && lastOrder.quote_id === cart.data.cart.id
+          ) {
+            orderId = lastOrder.order_id;
+            // We were able to match the last order id with the cart submitted.
+            logger.warning('Place order failed but order was placed, we will move forward. Message: @message. Reserved order id: @reservedOrderId. Cart id: @cartId', {
+              '@cartId': cart.data.cart.id,
+              '@message': (hasValue(response.data.error_message)) ? response.data.error_message : '',
+              '@reservedOrderId': (hasValue(cart.data.cart.reserved_order_id)) ? cart.data.cart.reserved_order_id : '',
+            });
+          }
+        } else {
+          // Check if the order is already placed.
+          const orderPlaced = await validateOrder(params.cartId);
+          if (hasValue(orderPlaced)
+            && hasValue(orderPlaced.quote_id)) {
+            orderId = orderPlaced.order_id;
+            // We were able to match the last order id with the cart submitted.
+            logger.warning('Place order failed but order was placed, we will move forward. Message: @message. Reserved order id: @reservedOrderId. Cart id: @cartId', {
+              '@cartId': cart.data.cart.id,
+              '@message': (hasValue(response.data.error_message)) ? response.data.error_message : '',
+              '@reservedOrderId': (hasValue(cart.data.cart.reserved_order_id)) ? cart.data.cart.reserved_order_id : '',
+            });
+          }
         }
       }
 
