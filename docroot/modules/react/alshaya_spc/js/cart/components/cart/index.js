@@ -63,6 +63,10 @@ export default class Cart extends React.Component {
       // if set to true, execution will check/recheck
       // DeliveryAreaSelect availability on cart page.
       checkShowAreaAvailabilityStatus: true,
+      // Flag to not show the dynamic promotions on cart page, if exclusive promo/coupon
+      // is applied the i.e. if this exclusive promo is applied on the basket,
+      // the flag value will be true, and we don't render the dynamic promos.
+      hasExclusiveCoupon: null,
     };
   }
 
@@ -88,6 +92,7 @@ export default class Cart extends React.Component {
           wait: false,
           couponCode: data.coupon_code,
           inStock: data.in_stock,
+          hasExclusiveCoupon: data.has_exclusive_coupon,
           ...collectionPointsEnabled() && { collectionCharge: data.collection_charge || '' },
         }));
 
@@ -384,6 +389,7 @@ export default class Cart extends React.Component {
       collectionCharge,
       auraDetails,
       showAreaAvailabilityStatusOnCart,
+      hasExclusiveCoupon,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -496,6 +502,7 @@ export default class Cart extends React.Component {
             <DeliveryInOnlyCity />
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
+              hasExclusiveCoupon={hasExclusiveCoupon}
               items={items}
               couponCode={couponCode}
               selectFreeGift={this.selectFreeGift}
