@@ -1542,8 +1542,6 @@ $spc-delivery-area-popup-border: $mothercare-black;
 $spc-delivery-area-popup-text: $mothercare-black;
 $spc-delivery-area-popup-bg: $white-five;
 $spc-cart-product-attribute-input: transparent;
-$spc-checkout-cod-otp-primary: $mothercare-black;
-$spc-checkout-cod-otp-secondary: $grey-light;
 
 // Order QTY Limit.
 $order_qty_limit_bg: $_dynamic_promo_text_bg;
@@ -2317,3 +2315,7 @@ $hm-opt-success: $_spc-radio-filled;
 
 // Hello member loyalty SPC
 $hm-loyalty-labels-txt: $grey-light;
+
+// Checkout OTP mobile verification.
+$spc-checkout-cod-otp-primary: $mothercare-black;
+$spc-checkout-cod-otp-secondary: $grey-light;

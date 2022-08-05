@@ -35,11 +35,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
   render() {
     const { otp } = this.state;
-
     const { shippingMobileNumber, otpLength } = this.props;
-    const inputStyle = {
-      width: '100%',
-    };
 
     if (shippingMobileNumber === null) {
       return (null);
@@ -58,7 +54,6 @@ class PaymentMethodCodMobileVerification extends React.Component {
             numInputs={otpLength}
             isInputNum
             className="cod-mobile-otp__field"
-            inputStyle={inputStyle}
           />
           <div className="cod-mobile-otp__controls">
             <span className="cod-mobile-otp__resend">

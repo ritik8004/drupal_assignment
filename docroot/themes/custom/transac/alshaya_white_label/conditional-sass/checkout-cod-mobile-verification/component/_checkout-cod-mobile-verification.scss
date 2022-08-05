@@ -9,6 +9,7 @@
   }
 
   &__btn-link {
+    text-decoration: underline;
     color: $spc-checkout-cod-otp-primary;
     background: none;
     border: none;
@@ -22,6 +23,7 @@
 
   &__field {
     & > input[type="tel"] {
+      width: 100% !important;
       border-color: $spc-checkout-cod-otp-secondary !important;
       padding: rem(5) 0 !important;
       font-size: rem(18);
