@@ -165,6 +165,12 @@ const getApiEndpoint = (action, params = {}) => {
         : '';
       break;
 
+    case 'validateOrder':
+      endpoint = !isUserAuthenticated()
+        ? `/V1/guest-carts/${endPointParams.cartId}/order`
+        : '';
+      break;
+
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
