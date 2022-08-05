@@ -10,15 +10,19 @@
         if (variant.product.swatch_data.swatch_type === 'image') {
           try {
             const data = JSON.parse(variant.product.assets_swatch);
-            const uri = variant.product.media[0].thumbnails;
+            if (!Drupal.hasValue(data[0].url)) {
+              throw new Error('Empty url.');
+            }
+
             e.detail.colorOptionsList = Object.assign(e.detail.colorOptionsList, {
-              display_value: '<img src="' + uri + '">',
+              display_value: '<img src="' + data[0].url + '">',
               swatch_type: data[0].image_type,
             });
           }
           catch (e) {
-            Drupal.alshayaLogger('warning', 'Invalid swatch asset data for sku @sku', {
+            Drupal.alshayaLogger('warning', 'Invalid swatch asset data for sku @sku. @message', {
               '@sku': variant.product.sku,
+              '@message': e.message,
             });
           }
         }
