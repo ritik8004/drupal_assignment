@@ -10,11 +10,12 @@
         if (variant.product.swatch_data.swatch_type === 'image') {
           try {
             const data = JSON.parse(variant.product.assets_swatch);
-            const uri = variant.product.media[0].thumbnails;
-            e.detail.colorOptionsList = Object.assign(e.detail.colorOptionsList, {
-              display_value: '<img src="' + uri + '">',
-              swatch_type: data[0].image_type,
-            });
+            if (Drupal.hasValue(data[0].url)) {
+              e.detail.colorOptionsList = Object.assign(e.detail.colorOptionsList, {
+                display_value: '<img src="' + data[0].url + '">',
+                swatch_type: data[0].image_type,
+              });
+            }
           }
           catch (e) {
             Drupal.alshayaLogger('warning', 'Invalid swatch asset data for sku @sku', {
