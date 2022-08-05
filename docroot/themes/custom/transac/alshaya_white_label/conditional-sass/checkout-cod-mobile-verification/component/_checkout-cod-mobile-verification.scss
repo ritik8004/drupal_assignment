@@ -9,8 +9,6 @@
   }
 
   &__btn-link {
-    text-decoration: underline;
-    text-transform: capitalize;
     color: $spc-checkout-cod-otp-primary;
     background: none;
     border: none;
@@ -47,7 +45,6 @@
     font-size: rem(16);
     line-height: 1.13;
     letter-spacing: rem(1.14);
-    text-transform: uppercase;
 
     &:disabled {
       opacity: 0.2;
