@@ -327,8 +327,8 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'أضف إلى حقيبة التسوق',
         'context' => 'hello_member',
       ],
-      'Added to your bag' => [
-        'ar' => 'تم الإضافة إلى حقيبة التسوق',
+      'Added to your bag.' => [
+        'ar' => '.تم الإضافة إلى حقيبة التسوق',
         'context' => 'hello_member',
       ],
       'H&M wants to give you special treat on your birthday' => [
