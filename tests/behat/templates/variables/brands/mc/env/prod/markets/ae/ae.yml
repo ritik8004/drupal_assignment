@@ -1,9 +1,9 @@
 variables:
-  spc_product_listing_page: '/shop-toys/building-sets-blocks/outdoor-toys/'
-  spc_basket_page: '/shop-toys/building-sets-blocks/outdoor-toys/'
-  product_listing_page_url: '/shop-toys/building-sets-blocks/outdoor-toys/'
+  spc_product_listing_page: '/shop-bathing/changing/changing-bags/'
+  spc_basket_page: '/shop-bathing/changing/changing-bags/'
+  product_listing_page_url: '/shop-bathing/family-health-care/wipes-cotton-buds/'
   spc_promotion_listing_page: '/buy-shark-t-shirts-3-pack.html/'
   np_plp_product_page: '/buy-mummy-and-daddy-bear-romper.html/'
-  np_plp_page: '/shop-toys/building-sets-blocks/outdoor-toys/'
-  spc_pdp_page: '/buy-shark-t-shirts-3-pack.html/'
+  np_plp_page: '/shop-bathing/family-health-care/wipes-cotton-buds/'
+  spc_pdp_page: '/buy-mothercare-camberley-cot-bed-white.html/'
   new_pdp_enabled: TRUE
