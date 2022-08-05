@@ -16,10 +16,14 @@
                 swatch_type: data[0].image_type,
               });
             }
+            else {
+              throw new Error('Empty url.');
+            }
           }
           catch (e) {
-            Drupal.alshayaLogger('warning', 'Invalid swatch asset data for sku @sku', {
+            Drupal.alshayaLogger('warning', 'Invalid swatch asset data for sku @sku. @message', {
               '@sku': variant.product.sku,
+              '@message': e.message,
             });
           }
         }
