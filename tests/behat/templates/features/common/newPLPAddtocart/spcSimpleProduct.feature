@@ -1,4 +1,4 @@
-@javascript @plp-addtocart @smoke @guest
+@javascript @plp-addtocart @smoke @guest @tbskwprod @tbsegprod @vssaprod @vskwprod @bbwsaprod @bbwkwprod @bbwaeprod @bpaeprod @bpkwprod @bpsaprod
 Feature: Testing new PLP-Add to cart functionality for Guest user on simple product
 
   @desktop @plp-addtocart
