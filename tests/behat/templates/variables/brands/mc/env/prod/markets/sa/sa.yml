@@ -1,9 +1,9 @@
 variables:
   url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  spc_product_listing_page: '/shop-boys-clothing/bottoms/denim/'
-  spc_basket_page: '/shop-boys-clothing/bottoms/denim/'
+  spc_product_listing_page: '/shop-boys-clothing/tops/tee-polo/'
+  spc_basket_page: '/shop-girls-clothing/accessories/jewelry/'
   product_listing_page_url: '/shop-boys-clothing/bottoms/denim/'
-  np_plp_product_page: '/buy-sunshine-and-rainbows-t-shirts-2-pack.html/'
-  spc_pdp_page: '/buy-sunshine-and-rainbows-t-shirts-2-pack.html'
-  np_plp_page: '/shop-boys-clothing/bottoms/denim/'
+  np_plp_product_page: '/buy-justice-swiss-embroidery-jumpsuit.html/'
+  spc_pdp_page: '/buy-justice-swiss-embroidery-jumpsuit.html/'
+  np_plp_page: '/shop-girls-clothing/sets/sets/'
   new_pdp_enabled: TRUE
