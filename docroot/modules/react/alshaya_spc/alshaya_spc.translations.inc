@@ -610,6 +610,11 @@ function _alshaya_spc_translations() {
       'ar' => 'Resend',
       'context' => 'cod_mobile_verification',
     ],
+    'Please update mobile number' => [
+      // @todo Arabic translation to be updated.
+      'ar' => 'Please update mobile number',
+      'context' => 'cod_mobile_verification',
+    ],
   ];
 
   return $strings;

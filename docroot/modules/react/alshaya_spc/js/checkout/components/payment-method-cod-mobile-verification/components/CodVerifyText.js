@@ -1,4 +1,5 @@
 import React from 'react';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 const CodVerifyText = ({ mobileNumber, otpLength }) => (
   <div className="cod-mobile-verify-text">
@@ -8,7 +9,14 @@ const CodVerifyText = ({ mobileNumber, otpLength }) => (
         '@otp_length': otpLength,
       }, { context: 'cod_mobile_verification' })}
     </span>
-    <button type="button">
+    <button
+      type="button"
+      onClick={() => dispatchCustomEvent('openAddressContentPopup', {
+        enabledFieldsWithMessages: {
+          mobile: Drupal.t('Please update mobile number', {}, { context: 'cod_mobile_verification' }),
+        },
+      }, {})}
+    >
       {Drupal.t('change', {}, { context: 'cod_mobile_verification' })}
     </button>
   </div>
