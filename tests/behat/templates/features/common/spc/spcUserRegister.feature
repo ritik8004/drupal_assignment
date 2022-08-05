@@ -1,5 +1,5 @@
 @javascript @smoke @pbkkwuat @mujikwuat @coskwuat @cosaeuat @mujisauat @mujiaeuat @pbksauat @pbkaeuat @tbseguat @bpaeuat @bpkwuat @bpsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @bbwsauat @mcsauat @mcaeuat @hmkwuat @flsauat @hmsauat @flaeuat @tbskwuat @bbwaeuat @vsaeuat @pbaeuat @pbkwuat
-Feature: Test the User Registeration functionality
+Feature: Test the User Registration functionality
 
   Background:
     Given I am on "user/register"
