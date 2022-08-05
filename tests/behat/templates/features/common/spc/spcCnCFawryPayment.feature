@@ -31,7 +31,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    And the element "div.fawry-prefix-description" should exist
+    And the element ".payment-form-wrapper div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
     And I add the billing address on checkout page
@@ -86,7 +86,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    And the element "div.fawry-prefix-description" should exist
+    And the element ".payment-form-wrapper div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
     And I add the billing address on checkout page
@@ -141,7 +141,7 @@ Feature: SPC Checkout using Click & Collect store for Guest user using Fawry pay
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    And the element "div.fawry-prefix-description" should exist
+    And the element ".payment-form-wrapper div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
     And I add the billing address on checkout page
