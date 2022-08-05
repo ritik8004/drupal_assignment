@@ -74,7 +74,10 @@ export default class WithModal extends React.Component {
     if (modalKey && this.key === modalKey) {
       return;
     }
-    this.setState({ [this.key]: false });
+    this.setState({
+      [this.key]: false,
+      enabledFieldsWithMessages: {},
+    });
   }
 
   goBackInHistory = (e) => {

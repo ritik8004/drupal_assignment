@@ -120,7 +120,7 @@ export default class HomeDeliveryInfo extends React.Component {
       <div className="delivery-information-preview">
         <WithModal modalStatusKey="hdInfo" areaUpdated={areaUpdated}>
           {({
-            triggerOpenModal, triggerCloseModal, isModalOpen, enableFields,
+            triggerOpenModal, triggerCloseModal, isModalOpen, enabledFieldsWithMessages,
           }) => (
             <>
               <div className="spc-delivery-customer-info">
@@ -159,7 +159,7 @@ export default class HomeDeliveryInfo extends React.Component {
                     areaUpdated={areaUpdated}
                     isExpressDeliveryAvailable={isExpressDeliveryAvailable}
                     fillDefaultValue
-                    enableFields={enableFields}
+                    enabledFieldsWithMessages={enabledFieldsWithMessages}
                   />
                 </React.Suspense>
               </Popup>
