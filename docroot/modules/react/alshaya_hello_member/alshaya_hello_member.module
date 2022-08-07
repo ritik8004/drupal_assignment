@@ -183,7 +183,7 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
       'options' => [
         'node' => $nid,
       ],
-      'weight' => 100,
+      'weight' => 42,
     ];
   }
 }
