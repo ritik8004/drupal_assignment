@@ -34,7 +34,7 @@
         margin: 0;
       }
 
-      >* {
+      > * {
         text-align: #{$left};
 
         @include breakpoint($desktop-wide) {
@@ -46,27 +46,6 @@
 
       div[class*="value"] {
         color: $gray44;
-      }
-    }
-
-    @include breakpoint($only-mobile) {
-      .content__title_wrapper_description {
-        text-align: left;
-        padding: rem(16) 0 rem(26);
-
-        h1 {
-          font-size: rem(16);
-        }
-
-        .info-wrapper {
-          font-size: rem(14);
-
-          .price-block {
-            border-bottom: rem(1) solid $pdp_price_block_div;
-            padding-bottom: rem(10);
-            margin-bottom: rem(18);
-          }
-        }
       }
     }
   }
@@ -127,7 +106,7 @@
 }
 
 .description-details {
-  >div {
+  > div {
     display: block;
     margin-bottom: 0.5rem !important;
     line-height: 1rem;
