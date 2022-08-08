@@ -832,8 +832,7 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
  */
 function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array &$build) {
   // Store parent and item skus.
-  $parentSkus = [];
-  $itemSkus = [];
+  $child_parent_mapping = [];
   // Updated recent order build array.
   if (array_key_exists('recent_order', $build)) {
     $orders = $build['recent_order'];
@@ -841,8 +840,7 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
       // Iterate over each order item.
       foreach ($order['#order']['items'] as $key => $item) {
         $build['recent_order'][$id]['#order']['items'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
-        array_push($parentSkus, $item['extension_attributes']['parent_product_sku']);
-        array_push($itemSkus, $item['sku']);
+        $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'];
       }
     }
 
@@ -851,8 +849,7 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
         '#attributes' => [
           'id' => 'rcs-ph-order_teaser',
           'class' => ['block-alshaya-acm-customer'],
-          'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
-          'data-param-item-skus' => Json::encode(array_unique($itemSkus)),
+          'data-param-skus' => Json::encode($child_parent_mapping),
         ],
       ],
     ];

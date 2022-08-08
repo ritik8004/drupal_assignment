@@ -811,8 +811,11 @@ window.commerceBackend = window.commerceBackend || {};
    */
   window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null, loadStyles = true) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
-    if (Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU])) {
-      return staticDataStore.productDataFromBackend[mainSKU];
+    staticDataStore.productDataFromBackend[mainSKU] = Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU])
+      ? staticDataStore.productDataFromBackend[mainSKU]
+      : {};
+    if (Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU][sku])) {
+      return staticDataStore.productDataFromBackend[mainSKU][sku];
     }
     // Get the product data.
     // The product will be fetched and saved in static storage.
@@ -824,7 +827,7 @@ window.commerceBackend = window.commerceBackend || {};
       window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
     });
 
-    return staticDataStore.productDataFromBackend[mainSKU];
+    return staticDataStore.productDataFromBackend[mainSKU][sku];
   };
 
   /**
