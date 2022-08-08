@@ -5,14 +5,12 @@
     // the section.
     if (e.extraData.placeholder === 'order_teaser'
       && Drupal.hasValue(e.extraData.params)
-      && Drupal.hasValue(e.extraData.params['parent-skus'])
-      && Drupal.hasValue(e.extraData.params['item-skus'])
+      && Drupal.hasValue(e.extraData.params['skus'])
     ) {
       // Get the product data based on sku.
-      var parentSkus = JSON.parse(e.extraData.params['parent-skus']);
-      var itemSkus = JSON.parse(e.extraData.params['item-skus']);
-      parentSkus.map(function eachSku(sku, key) {
-        e.promises.push(Drupal.alshayaSpc.getProductDataV2(itemSkus[key], sku));
+      var skus = JSON.parse(e.extraData.params['skus']);
+      Object.entries(skus).forEach(function eachSku([child, parent]) {
+        e.promises.push(Drupal.alshayaSpc.getProductDataV2(child, parent));
       });
     }
   });
