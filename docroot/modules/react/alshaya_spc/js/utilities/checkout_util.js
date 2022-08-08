@@ -772,7 +772,7 @@ export const getPayable = (value) => {
 };
 
 /**
- * Checks fieldname is enalbled or disabled.
+ * Checks if fieldname is enalbled or disabled.
  *
  * @param fieldsConfig
  *   Object having fieldnames and message to show on field name.
@@ -813,7 +813,7 @@ export const isFieldDisabled = (fieldsConfig, fieldName) => {
  *   Empty or field message.
  */
 export const getDefaultFieldMessage = (fieldsConfig, fieldName) => {
-  if (hasValue(fieldsConfig)) {
+  if (!hasValue(fieldsConfig)) {
     return '';
   }
 

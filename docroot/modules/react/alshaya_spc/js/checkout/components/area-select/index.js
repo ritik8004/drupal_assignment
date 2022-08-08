@@ -94,8 +94,8 @@ export default class AreaSelect extends React.Component {
   toggleFilterList = () => {
     const { enabledFieldsWithMessages } = this.props;
     if (isFieldDisabled(enabledFieldsWithMessages, 'locality')) {
-      // If enabled fields are provide in props then check if locality
-      // is present in enabledFieldsWithMessages object if not then disable
+      // If enabled fields are provided in props then check if locality
+      // is present in enabledFieldsWithMessages object. If not then disable
       // the list.
       return;
     }
