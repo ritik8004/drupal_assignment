@@ -161,7 +161,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       appliedVouchers = (
         <span>
           {Drupal.t(
-            '@hmVoucherCount vouchers are applied',
+            'Bonus Voucher Applied (@hmVoucherCount)',
             { '@hmVoucherCount': totals.hmAppliedVoucherCodes.split(',').length },
             { context: 'hello_member' },
           )}
@@ -175,7 +175,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       appliedOffers = (
         <span>
           {Drupal.t(
-            '@hmOfferCount offers are applied',
+            'Member Offers Applied (@hmOfferCount)',
             { '@hmOfferCount': totals.hmOfferCode.split(',').length },
             { context: 'hello_member' },
           )}
