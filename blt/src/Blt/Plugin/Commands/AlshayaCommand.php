@@ -19,7 +19,7 @@ class AlshayaCommand extends BltTasks {
     $arguments = $commandData->arguments();
     if (!empty($arguments['changed_files'])) {
       $this->invokeCommand('tests:yaml:lint:files:paragraph', ['file_list' => $arguments['changed_files']]);
-      $this->invokeCommand('tests:php:features', ['file_list' => $arguments['changed_files']]);
+      $this->invokeCommand('tests:rector:validate', ['file_list' => $arguments['changed_files']]);
       $this->invokeCommand('validate:phpcs:files', ['file_list' => $arguments['changed_files']]);
     }
 

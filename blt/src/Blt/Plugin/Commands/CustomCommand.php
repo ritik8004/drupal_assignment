@@ -452,7 +452,7 @@ class CustomCommand extends BltTasks {
    * @param string $file_list
    *   A list of files to scan, separated by \n.
    *
-   * @command tests:php:features
+   * @command tests:rector:validate
    *
    * @throws \Exception
    */
