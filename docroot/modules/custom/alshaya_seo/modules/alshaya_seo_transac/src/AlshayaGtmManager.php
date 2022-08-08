@@ -531,12 +531,16 @@ class AlshayaGtmManager {
       && ($final_price < $original_price)) {
 
       $product_type = 'Discounted Product';
+      $attributes['gtm-old-price'] = _alshaya_acm_format_price_with_decimal((float) $original_price, '.', '');
     }
 
     $attributes['gtm-dimension3'] = $product_type;
 
-    // @todo This is supposed to stay blank here?
-    $attributes['gtm-stock'] = '';
+    $attributes['gtm-stock'] = $this->skuManager->isProductInStock($sku)
+      ? 'in stock'
+      : 'out of stock';
+
+    $attributes['gtm-magento-product-id'] = $sku->get('product_id')->getString();
 
     // Override values from parent if parent sku available.
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId, 'en')) {
