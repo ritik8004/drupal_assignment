@@ -2,6 +2,7 @@ fields:
   style_code:
     label: 'Style Code'
     type: 'string'
+    index: 1
   grouping_attributes:
     label: 'Grouping Attribute'
     type: 'string'
