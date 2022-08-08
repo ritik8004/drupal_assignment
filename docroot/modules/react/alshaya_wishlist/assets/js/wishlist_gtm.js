@@ -23,19 +23,6 @@
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
-    const productData = {
-      event: 'addToWishlist',
-      ecommerce: {
-        currencyCode: drupalSettings.gtm.currency,
-        wishlist: {
-          products: [
-            product,
-          ],
-        },
-      },
-    };
-
-    dataLayer.push(productData);
     const cart = Drupal.alshayaSpc.getCartData();
     const sku = product.id;
     let productSelector = document.querySelectorAll(`[data-sku="${sku}"]`);

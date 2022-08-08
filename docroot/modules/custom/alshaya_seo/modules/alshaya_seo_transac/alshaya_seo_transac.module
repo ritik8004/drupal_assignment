@@ -640,13 +640,13 @@ function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, I
 
     // Add GTM data.
     $product_gtm_attributes = $gtmManager->fetchProductGtmAttributes($node, 'search_result');
-    $product_node = Drupal::service('entity.repository')->getTranslationFromContext($node, 'en');
+    $product_node = \Drupal::service('entity.repository')->getTranslationFromContext($node, 'en');
     $term_list = $product_node->get('field_category')->getValue();
-    $parents = Drupal::service('alshaya_acm_product.category_helper')->getBreadcrumbTermList($term_list);
+    $parents = \Drupal::service('alshaya_acm_product.category_helper')->getBreadcrumbTermList($term_list);
     $terms = [];
     foreach ($parents ?? [] as $parent) {
       // For GTM we always want English data.
-      $parent = Drupal::service('entity.repository')->getTranslationFromContext($parent, 'en');
+      $parent = \Drupal::service('entity.repository')->getTranslationFromContext($parent, 'en');
       $terms[$parent->id()] = trim($parent->getName());
     }
     $product_gtm_attributes['gtm-department-name'] = $terms ? implode('|', $terms) : '';
