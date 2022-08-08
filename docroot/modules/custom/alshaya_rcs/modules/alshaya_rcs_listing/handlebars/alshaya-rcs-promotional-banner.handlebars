@@ -1,0 +1,20 @@
+{{#if (or
+  promotion_banner
+  promotion_banner_mobile) }}
+
+  {{#unless promo_banner_for_mobile }}
+    {{set 'class' 'hide-on-mobile' }}
+  {{/unless}}
+
+  <div class="picture-tag {{ @root.class }}">
+    <picture>
+      {{#if promotion_banner_mobile }}
+        <source media="(max-width: 767px)" srcset="{{ promotion_banner_mobile }}">
+      {{/if}}
+      {{#if promotion_banner }}
+        <source media="(min-width: 768px)" srcset="{{ promotion_banner }}">
+        <img loading="lazy" src="{{ promotion_banner }}"/>
+      {{/if}}
+    </picture>
+  </div>
+{{/if}}
