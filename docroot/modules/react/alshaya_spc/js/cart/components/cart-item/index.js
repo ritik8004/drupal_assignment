@@ -341,6 +341,7 @@ export default class CartItem extends React.Component {
         className={`spc-cart-item fadeInUp ${qtyLimitClass}`}
         style={{ animationDelay: animationDelayValue }}
         data-sku={sku}
+        gtm-old-price={price}
       >
         <div className="spc-product-tile">
           <div className="spc-product-image">
