@@ -770,3 +770,56 @@ export const getPayable = (value) => {
     : value.cart.totals.base_grand_total;
   return amount;
 };
+
+/**
+ * Checks if fieldname is enalbled or disabled.
+ *
+ * @param fieldsConfig
+ *   Object having fieldnames and message to show on field name.
+ * @param fieldName
+ *   Field name.
+ *
+ * @returns {boolean}
+ *   True if disabled and false is not disabled.
+ */
+export const isFieldDisabled = (fieldsConfig, fieldName) => {
+  if (!hasValue(fieldsConfig)) {
+    // If fieldsConfig is undefined or empty means the all the fields should
+    // be enabled by default, hence we return false for disabled attribute
+    // on text field.
+    return false;
+  }
+
+  if (Object.keys(fieldsConfig).indexOf(fieldName) > -1) {
+    // If fieldsConfig has values and the field name is present then we keep it
+    // enabled, hence we return false for disabled attribute on text field.
+    return false;
+  }
+
+  // If fieldsConfig has value and fieldname is not present then we disable it
+  // by return true for disabled attribute on text field.
+  return true;
+};
+
+/**
+ * Get default message for field from field config.
+ *
+ * @param fieldsConfig
+ *   Object with field config.
+ * @param fieldName
+ *   Field name.
+ *
+ * @returns {string|*}
+ *   Empty or field message.
+ */
+export const getDefaultFieldMessage = (fieldsConfig, fieldName) => {
+  if (!hasValue(fieldsConfig)) {
+    return '';
+  }
+
+  if (Object.keys(fieldsConfig).indexOf(fieldName) > -1) {
+    return fieldsConfig[fieldName];
+  }
+
+  return '';
+};

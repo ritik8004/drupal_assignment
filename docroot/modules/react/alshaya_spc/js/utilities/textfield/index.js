@@ -1,4 +1,5 @@
 import React from 'react';
+import { getDefaultFieldMessage } from '../checkout_util';
 
 class TextField extends React.Component {
   handleEvent = (e, handler) => {
@@ -22,6 +23,7 @@ class TextField extends React.Component {
       disabled,
       maxLength,
       placeholder,
+      enabledFieldsWithMessages,
     } = this.props;
     let focusClass = '';
     if (defaultValue !== undefined && defaultValue !== '') {
@@ -61,7 +63,9 @@ class TextField extends React.Component {
             />
           </div>
           <div className="c-input__bar" />
-          <div id={`${name}-error`} className="error" />
+          <div id={`${name}-error`} className="error">
+            {getDefaultFieldMessage(enabledFieldsWithMessages, name)}
+          </div>
         </div>
       );
     }
