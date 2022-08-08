@@ -298,18 +298,8 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // without any language suffix so HTTP_HOST is enough.
   $page['#attached']['drupalSettings']['cart']['url'] = 'https://' . $_SERVER['HTTP_HOST'];
 
-  // List of environments to use proxy in from Settings.
-  $environments_to_use_proxy = Settings::get('environments_to_use_proxy', [
-    'local',
-    'dev',
-    'dev2',
-    'dev3',
-    'qa2',
-    'test',
-  ]);
-
   // Use proxy on only specific environments.
-  if (in_array(Settings::get('env_name'), $environments_to_use_proxy)) {
+  if (Settings::get('alshaya_use_proxy', FALSE)) {
     $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];
   }
 
