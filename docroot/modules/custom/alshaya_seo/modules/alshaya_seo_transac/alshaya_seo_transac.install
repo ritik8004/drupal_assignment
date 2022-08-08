@@ -12,6 +12,15 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Adds products to reindex queue as we have to add some extra data with index.
+ */
+function alshaya_seo_transac_update_9401() {
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adds products to queue after alshaya_seo_update_8016() has run.
  * Non-transac sites do not have the Queue utility service, so we queue here.
  */
