@@ -4,7 +4,8 @@ import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { isMobile } from '../../../../../../../js/utilities/display';
 
-const showMoreLimit = 3;
+const { showMoreLimit } = drupalSettings.helloMember;
+console.log('test');
 class MyOffersAndVouchers extends React.Component {
   constructor(props) {
     super(props);
