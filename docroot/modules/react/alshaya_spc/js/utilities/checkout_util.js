@@ -805,7 +805,7 @@ export const isFieldDisabled = (fieldsConfig, fieldName) => {
  * Get default message for field from field config.
  *
  * @param fieldsConfig
- *   Objecct with field config.
+ *   Object with field config.
  * @param fieldName
  *   Field name.
  *
