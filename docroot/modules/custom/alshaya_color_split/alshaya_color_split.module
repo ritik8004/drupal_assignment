@@ -464,3 +464,14 @@ function alshaya_color_split_pathauto_alias_alter(&$alias, array $context) {
     $alias = str_replace('-.html', '.html', $alias);
   }
 }
+
+/**
+ * Implements hook_alshaya_search_algolia_object_alter().
+ */
+function alshaya_color_split_alshaya_search_algolia_object_alter(array &$object) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+  $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
+  /** @var \Drupal\alshaya_color_split\AlshayaColorSplitManager $manager */
+  $manager = \Drupal::service('alshaya_color_split.manager');
+  $object['attr_style_code'] = $manager->fetchStyleCode($sku);
+}
