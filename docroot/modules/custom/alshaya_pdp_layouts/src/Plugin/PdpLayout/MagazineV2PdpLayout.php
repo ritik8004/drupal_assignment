@@ -279,6 +279,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = TRUE;
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['alternates'] = $alternates;
           $combinations = $this->skuManager->getConfigurableCombinations($sku_entity);
+          $index = 0;
           foreach ($configurable['values'] as $value => $label) {
             $value_id = $label['value_id'];
             foreach ($combinations['attribute_sku'][$key][$value_id] ?? [] as $child_sku_code) {
@@ -288,11 +289,11 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
                 continue;
               }
 
-              $values[$value][$value_id] = $this->getAlternativeValues($alternates, $child_sku);
+              $values[$index][$value_id] = $this->getAlternativeValues($alternates, $child_sku);
               $this->getProductLabels($child_sku_code, $child_sku, $vars);
 
             }
-
+            $index++;
           }
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $values;
         }
