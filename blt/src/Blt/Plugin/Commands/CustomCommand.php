@@ -466,6 +466,7 @@ class CustomCommand extends BltTasks {
       || str_ends_with($value, '.module')
       || str_ends_with($value, '.install')
       || str_ends_with($value, '.inc')
+      || str_ends_with($value, '.theme')
     );
     if ($files) {
       $output = $this->_exec('cd ' . $this->getConfigValue('repo.root') . '; vendor/bin/rector process ' . implode(' ', $files) . ' --dry-run');

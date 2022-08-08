@@ -34,6 +34,7 @@ return static function (RectorConfig $rectorConfig): void {
     'install',
     'module',
     'inc',
+    'theme',
   ]);
   // Define any specific rules you would like to ignore.
   // These changes are generally added to keep code consistency
