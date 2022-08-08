@@ -774,29 +774,29 @@ export const getPayable = (value) => {
 /**
  * Checks fieldname is enalbled or disabled.
  *
- * @param enabledFields
+ * @param fieldsConfig
  *   Object having fieldnames and message to show on field name.
  * @param fieldName
  *   Field name.
  *
- * @returns {boolean|undefined}
- *   Value for disabled attribute on text field.
+ * @returns {boolean}
+ *   True if disabled and false is not disabled.
  */
-export const isFieldEnabled = (enabledFields, fieldName) => {
-  if (typeof enabledFields === 'undefined' || Object.keys(enabledFields).length === 0) {
-    // If enabledFields is undefined or empty means the all the fields should
-    // be enabled by default, hence we return undefined for disabled attribute
+export const isFieldDisabled = (fieldsConfig, fieldName) => {
+  if (!hasValue(fieldsConfig)) {
+    // If fieldsConfig is undefined or empty means the all the fields should
+    // be enabled by default, hence we return false for disabled attribute
     // on text field.
-    return undefined;
+    return false;
   }
 
-  if (Object.keys(enabledFields).indexOf(fieldName) > -1) {
-    // If enabledFields has values and the field name is present then we keep it
-    // enabled, hence we send undefined for disabled attribute on text field.
-    return undefined;
+  if (Object.keys(fieldsConfig).indexOf(fieldName) > -1) {
+    // If fieldsConfig has values and the field name is present then we keep it
+    // enabled, hence we return false for disabled attribute on text field.
+    return false;
   }
 
-  // If enabledFields has value and fieldname is not present then we disable it
+  // If fieldsConfig has value and fieldname is not present then we disable it
   // by return true for disabled attribute on text field.
   return true;
 };
@@ -813,7 +813,7 @@ export const isFieldEnabled = (enabledFields, fieldName) => {
  *   Empty or field message.
  */
 export const getDefaultFieldMessage = (fieldsConfig, fieldName) => {
-  if (typeof fieldsConfig === 'undefined' || Object.keys(fieldsConfig).length === 0) {
+  if (hasValue(fieldsConfig)) {
     return '';
   }
 

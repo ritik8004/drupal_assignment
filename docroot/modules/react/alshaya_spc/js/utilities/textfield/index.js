@@ -57,7 +57,7 @@ class TextField extends React.Component {
             <input
               maxLength={countryMobileCodeMaxLength}
               type="tel"
-              disabled={disabled}
+              disabled={disabled ? 'disabled' : undefined}
               name={name}
               defaultValue={defaultValue}
             />

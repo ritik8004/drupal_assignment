@@ -7,7 +7,7 @@ import {
 } from '../../../utilities/address_util';
 import getStringMessage from '../../../utilities/strings';
 import ConditionalView from '../../../common/components/conditional-view';
-import { isFieldEnabled } from '../../../utilities/checkout_util';
+import { isFieldDisabled } from '../../../utilities/checkout_util';
 
 export default class AreaSelect extends React.Component {
   isComponentMounted = true;
@@ -93,7 +93,7 @@ export default class AreaSelect extends React.Component {
    */
   toggleFilterList = () => {
     const { enabledFieldsWithMessages } = this.props;
-    if (isFieldEnabled(enabledFieldsWithMessages, 'locality') !== undefined) {
+    if (isFieldDisabled(enabledFieldsWithMessages, 'locality')) {
       // If enabled fields are provide in props then check if locality
       // is present in enabledFieldsWithMessages object if not then disable
       // the list.

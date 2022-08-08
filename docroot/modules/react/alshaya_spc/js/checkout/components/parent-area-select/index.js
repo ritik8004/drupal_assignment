@@ -7,7 +7,7 @@ import {
 } from '../../../utilities/address_util';
 import getStringMessage from '../../../utilities/strings';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
-import { isFieldEnabled } from '../../../utilities/checkout_util';
+import { isFieldDisabled } from '../../../utilities/checkout_util';
 
 export default class ParentAreaSelect extends React.Component {
   isComponentMounted = true;
@@ -64,7 +64,7 @@ export default class ParentAreaSelect extends React.Component {
    */
   toggleFilterList = () => {
     const { enabledFieldsWithMessages } = this.props;
-    if (isFieldEnabled(enabledFieldsWithMessages, 'parent_area_select') !== undefined) {
+    if (isFieldDisabled(enabledFieldsWithMessages, 'parent_area_select')) {
       // If enabled fields are provide in props then check if locality
       // is present in enabledFieldsWithMessages object if not then disable
       // the list.

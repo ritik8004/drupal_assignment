@@ -3,7 +3,7 @@ import React from 'react';
 import AreaSelect from '../area-select';
 import ParentAreaSelect from '../parent-area-select';
 import TextField from '../../../utilities/textfield';
-import { isFieldEnabled } from '../../../utilities/checkout_util';
+import { isFieldDisabled } from '../../../utilities/checkout_util';
 
 const DynamicFormField = (props) => {
   let defaultVal = '';
@@ -44,7 +44,7 @@ const DynamicFormField = (props) => {
   }
 
   return (
-    <TextField isAddressField required={field.required} id={fieldKey} type="text" label={field.label} name={fieldKey} defaultValue={defaultVal !== '' ? defaultVal[field.key] : ''} maxLength={field.maxLength} disabled={isFieldEnabled(enabledFieldsWithMessages, fieldKey)} />
+    <TextField isAddressField required={field.required} id={fieldKey} type="text" label={field.label} name={fieldKey} defaultValue={defaultVal !== '' ? defaultVal[field.key] : ''} maxLength={field.maxLength} disabled={isFieldDisabled(enabledFieldsWithMessages, fieldKey)} />
   );
 };
 

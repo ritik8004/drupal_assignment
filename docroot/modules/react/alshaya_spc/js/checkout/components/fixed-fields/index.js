@@ -5,7 +5,7 @@ import TextField from '../../../utilities/textfield';
 import ConditionalView from '../../../common/components/conditional-view';
 import {
   cleanMobileNumber,
-  isFieldEnabled,
+  isFieldDisabled,
 } from '../../../utilities/checkout_util';
 import getStringMessage from '../../../utilities/strings';
 import collectionPointsEnabled from '../../../../../js/utilities/pudoAramaxCollection';
@@ -50,7 +50,7 @@ const FixedFields = ({
             defaultValue={defaultValue !== '' ? defaultValue.fullname : ''}
             className={defaultValue !== '' && defaultValue.fullname !== '' ? 'focus' : ''}
             label={getStringMessage('ci_full_name')}
-            disabled={isFieldEnabled(enabledFieldsWithMessages, 'fullname')}
+            disabled={isFieldDisabled(enabledFieldsWithMessages, 'fullname')}
           />
         </ConditionalView>
         <ConditionalView condition={showEmail}>
@@ -60,7 +60,7 @@ const FixedFields = ({
             defaultValue={defaultValue !== '' ? defaultValue.email : ''}
             className={defaultValue !== '' && defaultValue.email !== '' ? 'focus' : ''}
             label={getStringMessage('ci_email')}
-            disabled={isFieldEnabled(enabledFieldsWithMessages, 'email')}
+            disabled={isFieldDisabled(enabledFieldsWithMessages, 'email')}
           />
         </ConditionalView>
         <TextField
@@ -69,7 +69,7 @@ const FixedFields = ({
           defaultValue={defaultValue !== '' ? cleanMobileNumber(defaultValue.telephone) : ''}
           className={defaultValue !== '' && defaultValue.telephone !== '' ? 'focus' : ''}
           label={getStringMessage('ci_mobile_number')}
-          disabled={isFieldEnabled(enabledFieldsWithMessages, 'mobile')}
+          disabled={isFieldDisabled(enabledFieldsWithMessages, 'mobile')}
           enabledFieldsWithMessages={enabledFieldsWithMessages}
         />
         <input type="hidden" name="address_id" value={defaultValue !== '' && defaultValue.address_id !== null ? defaultValue.address_id : 0} />
