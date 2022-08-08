@@ -21,9 +21,7 @@ class Review extends CheckoutPaneBase implements CheckoutPaneInterface {
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     /** @var \Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface[] $enabled_panes */
-    $enabled_panes = array_filter($this->checkoutFlow->getPanes(), function ($pane) {
-      return $pane->getStepId() != '_disabled';
-    });
+    $enabled_panes = array_filter($this->checkoutFlow->getPanes(), fn($pane) => $pane->getStepId() != '_disabled');
 
     foreach ($enabled_panes as $pane_id => $pane) {
       if (!$pane->isVisible()) {

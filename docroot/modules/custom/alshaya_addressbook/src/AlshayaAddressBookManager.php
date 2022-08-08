@@ -28,7 +28,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
   use StringTranslationTrait;
 
-  const INVISIBLE_CHARACTER = '&#8203;';
+  public const INVISIBLE_CHARACTER = '&#8203;';
 
   /**
    * Entity Repository object.
@@ -284,7 +284,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
     unset($customer['extension']);
 
-    if (count($customer['addresses']) == 0) {
+    if ((is_countable($customer['addresses']) ? count($customer['addresses']) : 0) == 0) {
       // If user has no address, then we make this
       // as primary one by default.
       $set_default = TRUE;
@@ -680,7 +680,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Magento address array with empty values.
    */
   public function getAddressStructureWithEmptyValues($empty_value = NULL) {
-    $empty_value = $empty_value ?? self::INVISIBLE_CHARACTER;
+    $empty_value ??= self::INVISIBLE_CHARACTER;
 
     $magento_address = [];
 
@@ -926,10 +926,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         return [];
       }
 
-      $magento_form = array_filter($magento_form, function ($form_item) {
-        return ($form_item['visible'] && $form_item['status'])
-          || ($form_item['used_for_shipping_rate']);
-      });
+      $magento_form = array_filter($magento_form, fn($form_item) => ($form_item['visible'] && $form_item['status'])
+        || ($form_item['used_for_shipping_rate']));
 
       $mapping = array_flip($this->getMagentoFieldMappings());
       $sort_order = $this->getFieldSortOrder();
@@ -955,15 +953,10 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
 
       // Array keys based on sort_order.
-      uasort($magento_form, function ($a, $b) {
-        if ($a['sort_order'] == $b['sort_order']) {
-          return 0;
-        }
-        return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
-      });
+      uasort($magento_form, fn($a, $b) => $a['sort_order'] <=> $b['sort_order']);
       $this->cache->set($cid, $magento_form);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       $magento_form = [];
     }
 
@@ -1028,6 +1021,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Mapping Address field <-> Magento form field.
    */
   public function getMagentoUnmappedFields() {
+    $fields_mapped = [];
     static $field_unmapped = NULL;
 
     if (!is_array($field_unmapped)) {
@@ -1081,9 +1075,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
     $magento_form = $this->getMagentoFormFields();
 
-    $magento_form = array_filter($magento_form, function ($form_item) {
-      return (bool) $form_item['user_defined'];
-    });
+    $magento_form = array_filter($magento_form, fn($form_item) => (bool) $form_item['user_defined']);
 
     foreach ($magento_form as $field) {
       if ($field['user_defined']) {
@@ -1212,9 +1204,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     // Rearrange mapping array according to $form_fields.
     $mapping = array_merge(array_flip(array_keys($form_fields)), array_flip($mapping));
     // Remove any additional keys, which are associated as index id.
-    $mapping = array_filter($mapping, function ($value) use ($address) {
-      return (!is_numeric($value) && in_array($value, array_keys($address))) || strpos($value, 'country') !== FALSE;
-    });
+    $mapping = array_filter($mapping, fn($value) => (!is_numeric($value) && in_array($value, array_keys($address))) || str_contains($value, 'country'));
 
     // Reverse the string for rtl language.
     $language = $this->languageManager->getCurrentLanguage();

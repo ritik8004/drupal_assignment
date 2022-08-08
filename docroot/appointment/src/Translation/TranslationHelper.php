@@ -7,7 +7,7 @@ use App\Helper\APIServicesUrls;
 use GuzzleHttp\Client;
 
 /**
- * Class TranslationHelper.
+ * Helper class for handling Translations.
  *
  * @package App\Helper
  */
@@ -42,7 +42,7 @@ class TranslationHelper extends APIHelper {
         APIServicesUrls::TRANSLATION_SERVICE_URL_ALL,
         $options
       );
-      $data = json_decode($response->getBody()->getContents());
+      $data = json_decode($response->getBody()->getContents(), NULL);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting translation. Message: @message', [

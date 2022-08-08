@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -34,6 +35,7 @@ use Drupal\redirect\RedirectRepository;
 use Drupal\Core\Database\Connection;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Mobile App Utility Class.
@@ -46,7 +48,7 @@ class MobileAppUtility {
   /**
    * Prefix used for the endpoint.
    */
-  const ENDPOINT_PREFIX = '/rest/v1/';
+  public const ENDPOINT_PREFIX = '/rest/v1/';
 
   /**
    * Array of term urls for dependencies.
@@ -205,6 +207,13 @@ class MobileAppUtility {
   protected $pathValidator;
 
   /**
+   * Product Category Page service.
+   *
+   * @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage
+   */
+  protected $productCategoryPage;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -243,6 +252,8 @@ class MobileAppUtility {
    *   The super category manager service.
    * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
    *   Path Validator service object.
+   * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page
+   *   Product Category Page service.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -261,7 +272,8 @@ class MobileAppUtility {
                               SkuInfoHelper $sku_info_helper,
                               Connection $database,
                               AlshayaSuperCategoryManager $super_category_manager,
-                              PathValidatorInterface $path_validator) {
+                              PathValidatorInterface $path_validator,
+                              ProductCategoryPage $product_category_page) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -282,6 +294,7 @@ class MobileAppUtility {
     $this->database = $database;
     $this->superCategoryManager = $super_category_manager;
     $this->pathValidator = $path_validator;
+    $this->productCategoryPage = $product_category_page;
   }
 
   /**
@@ -582,6 +595,7 @@ class MobileAppUtility {
    *   HTTP Response.
    */
   public function sendStatusResponse(string $message = '', $status = FALSE) {
+    $response = [];
     // If status is false, throw a 404 exception.
     if (!$status) {
       return $this->throwException($message);
@@ -918,7 +932,7 @@ class MobileAppUtility {
     }
 
     // If langcode exists in the url string.
-    if ($langcode && strpos($url, '/' . $langcode . '/') !== FALSE) {
+    if ($langcode && str_contains($url, '/' . $langcode . '/')) {
       $url = str_replace('/' . $langcode . '/', '', $url);
 
       // Checking if redirects already available or not. If yes, then use or
@@ -974,7 +988,7 @@ class MobileAppUtility {
 
     if ($type === 'product_list') {
       $redirect_path = $this->getRedirectUrl("/$this->currentLanguage" . $internal_path);
-      if (!strpos($internal_path, $redirect_path)) {
+      if (!strpos($internal_path, (string) $redirect_path)) {
         // Although $redirect_path is an alias, we still get the proper url
         // object here.
         $url = Url::fromUri("internal:/$redirect_path");
@@ -1010,6 +1024,7 @@ class MobileAppUtility {
    *   Status of LHN.
    */
   public function getProductListLhnStatus($url, $langcode) {
+    $product_list_lhn_value = NULL;
     $url_object = $this->pathValidator->getUrlIfValid($url);
     $route_parameters = $url_object->getrouteParameters();
     if (!$route_parameters['node']) {
@@ -1127,7 +1142,7 @@ class MobileAppUtility {
           }
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         $this->getLogger('MobileAppUtility')->warning('Internal path looks invalid, please check @internal_path for term id @id', [
           '@id' => $tid,
           '@internal_path' => $internal_path,
@@ -1147,9 +1162,47 @@ class MobileAppUtility {
    *   HTTP Response.
    */
   public function sendErrorResponse(string $message) {
+    $response = [];
     $response['success'] = FALSE;
     $response['message'] = $message;
     return (new ResourceResponse($response));
+  }
+
+  /**
+   * Helper method to get the algolia filter data.
+   *
+   * @param string $tid
+   *   Term ID.
+   * @param string $langcode
+   *   The language code.
+   *
+   * @return array
+   *   An array containing algolia data.
+   */
+  public function getAlgoliaData($tid, $langcode) {
+    $category_field_temp = [];
+    // Get term details in current language for filters.
+    $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
+      $langcode,
+      $tid
+    );
+
+    $filter_field = $term_details['category_field'];
+    if (Settings::get('mobile_app_plp_index_new', FALSE)) {
+      // Append 'en' in 'filter_field' of 'algolia_data'.
+      // for ex:
+      // 'field_category_name.lvl1' will be 'field_category_name.en.lvl1'.
+      $category_field = explode('.', $term_details['category_field']);
+      $category_field_temp[] = $category_field[0] . '.' . $langcode . '.';
+      array_shift($category_field);
+      $filter_field = implode(array_merge($category_field_temp, $category_field));
+    }
+
+    return [
+      'filter_field' => $filter_field,
+      'filter_value' => $term_details['hierarchy'],
+      'rule_contexts' => $term_details['ruleContext'],
+    ];
   }
 
 }

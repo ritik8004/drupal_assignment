@@ -249,7 +249,7 @@ class AcqPromotionsManager {
     }
     else {
       // Log a message for admin to check errors in data.
-      if (count($nids) > 1) {
+      if ((is_countable($nids) ? count($nids) : 0) > 1) {
         $this->logger->critical('Multiple nodes found for rule id @rule_id', ['@rule_id' => $rule_id]);
       }
 
@@ -481,8 +481,8 @@ class AcqPromotionsManager {
           if ($is_promotion_context_changed) {
             $this->logger->notice('Deleting existing rule @rule_id due to promotion context change. Existing: @existing_context New: @new_context', [
               '@rule_id' => $promotion['rule_id'],
-              '@existing_context' => json_encode($promotion_context_existing),
-              '@new_context' => json_encode($promotion_context),
+              '@existing_context' => json_encode($promotion_context_existing, JSON_THROW_ON_ERROR),
+              '@new_context' => json_encode($promotion_context, JSON_THROW_ON_ERROR),
             ]);
             $this->deleteCartPromotionMappings($promotion['rule_id'], $attached);
           }

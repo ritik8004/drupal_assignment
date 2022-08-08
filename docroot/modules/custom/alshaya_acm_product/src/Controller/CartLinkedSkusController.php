@@ -146,7 +146,7 @@ class CartLinkedSkusController extends ControllerBase {
 
       return $response;
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       return new ModifiedResourceResponse(['error' => TRUE]);
     }
   }

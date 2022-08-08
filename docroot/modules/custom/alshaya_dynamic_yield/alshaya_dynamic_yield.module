@@ -26,3 +26,29 @@ function alshaya_dynamic_yield_acq_sku_commerce_category_alter(TermInterface $te
     $term->get('field_dy_category')->setValue($category['custom_attributes']['dy_categories']['value']);
   }
 }
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_dynamic_yield_preprocess_node(&$variables) {
+  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
+    $variables['#cache']['tags'] = array_merge($variables['#cache']['tags'] ?? [], \Drupal::config('alshaya_dynamic_yield.settings')->getCacheTags());
+    $dynamicYieldConfigs = \Drupal::service('alshaya_dynamic_yield.dynamic_yield_helper')->getDynamicYieldConfig();
+    if ($dynamicYieldConfigs['pdpDivPlaceholderCount']) {
+      $variables['dynamicYieldPdpDivs'] = $dynamicYieldConfigs['pdpDivPlaceholderCount'];
+      $variables['#attached']['drupalSettings']['pdpDyamicYieldDivsCount'] = $dynamicYieldConfigs['pdpDivPlaceholderCount'];
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_dynamic_yield_alshaya_spc_cart_build_alter(array &$build) {
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], \Drupal::config('alshaya_dynamic_yield.settings')->getCacheTags());
+
+  $dynamicYieldConfigs = \Drupal::service('alshaya_dynamic_yield.dynamic_yield_helper')->getDynamicYieldConfig();
+  if ($dynamicYieldConfigs['cartDivPlaceholderCount']) {
+    $build['#attached']['drupalSettings']['cartDyamicYieldDivsCount'] = $dynamicYieldConfigs['cartDivPlaceholderCount'];
+  }
+}

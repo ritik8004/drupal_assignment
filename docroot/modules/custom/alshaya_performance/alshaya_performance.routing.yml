@@ -1,0 +1,7 @@
+alshaya_performance.all_settings:
+  path: '/admin/config/alshaya/performance-settings'
+  defaults:
+    _form: '\Drupal\alshaya_performance\Form\AlshayaPerformanceSettingsForm'
+    _title: 'Alshaya Performance Settings (EXPERIMENTAL)'
+  requirements:
+    _permission: 'administer site configuration'

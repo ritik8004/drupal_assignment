@@ -17,7 +17,7 @@ class ConductorCategorySyncHelper {
   /**
    * The database table name.
    */
-  const TABLE_NAME = 'category_sync_process';
+  public const TABLE_NAME = 'category_sync_process';
 
   /**
    * Contains category list from DB which need to process.
@@ -101,7 +101,7 @@ class ConductorCategorySyncHelper {
       $query->execute();
       return TRUE;
     }
-    catch (IntegrityConstraintViolationException $e) {
+    catch (IntegrityConstraintViolationException) {
       $this->logger->notice('Not pushed cat: @cat_id in DB as already exists.', [
         '@cat_id' => $category_id,
       ]);
@@ -167,7 +167,7 @@ class ConductorCategorySyncHelper {
     }
     catch (\Exception $e) {
       $this->logger->error('Error while syncing categories for pull mode for categories: @cat_acm_ids Message: @message', [
-        '@cat_acm_ids' => json_encode($this->catsToProcess),
+        '@cat_acm_ids' => json_encode($this->catsToProcess, JSON_THROW_ON_ERROR),
         '@message' => $e->getMessage(),
       ]);
     }

@@ -131,7 +131,7 @@ class RcsPhProductListBlock extends BlockBase implements ContainerFactoryPluginI
         throw new \Exception('Unable to load view display');
       }
     }
-    catch (\Throwable $e) {
+    catch (\Throwable) {
       $form_state->setErrorByName('view_id', 'Unable to load view or view display, please check and try again.');
     }
   }

@@ -48,6 +48,7 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[ExternalHreflangGetCurrentUrlEvent::EVENT_NAME][] = [
       'onGetCurrentUrlEvent',
       100,

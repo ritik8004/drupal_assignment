@@ -5,14 +5,14 @@ namespace App\Logger\Formatter;
 use Monolog\Formatter\FormatterInterface;
 
 /**
- * Class MiddlewareLogFormatter.
+ * Helper class for formatting Middleware Logs.
  */
 class MiddlewareLogFormatter implements FormatterInterface {
 
   /**
    * Logger format similar to Drupal.
    */
-  const LOGGER_FORMAT = '!base_url|!timestamp|!type|!ip|!request_uri|!referer|!uid|!link|!message';
+  public const LOGGER_FORMAT = '!base_url|!timestamp|!type|!ip|!request_uri|!referer|!uid|!link|!message';
 
   /**
    * {@inheritdoc}

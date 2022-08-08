@@ -10,6 +10,6 @@ interface AlshayaAddressBookManagerInterface {
   /**
    * Area vocabulary name.
    */
-  const AREA_VOCAB = 'area_list';
+  public const AREA_VOCAB = 'area_list';
 
 }

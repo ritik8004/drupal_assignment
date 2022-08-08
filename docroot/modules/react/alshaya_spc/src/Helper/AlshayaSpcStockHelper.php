@@ -89,7 +89,7 @@ class AlshayaSpcStockHelper {
           // Invalidate cache tags for the SKU.
           StockEventSubscriber::setSkusForCacheInvalidation($sku);
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           // Do nothing.
         }
       }
@@ -111,6 +111,7 @@ class AlshayaSpcStockHelper {
    *   Exception is thrown if there is problem connecting with MDC API.
    */
   private function refreshStock(SKUInterface $sku_entity) {
+    $stock_status = [];
     static $processed_parents = [];
     $parent = $sku_entity->getPluginInstance()->getParentSku($sku_entity);
 

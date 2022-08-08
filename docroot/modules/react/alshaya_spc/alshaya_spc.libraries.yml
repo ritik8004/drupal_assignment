@@ -27,6 +27,7 @@ cart:
     - alshaya_product_zoom/cloud_zoom_pdp_gallery
     - alshaya_spc/cart_utilities
     - alshaya_master/common_functions
+    - alshaya_spc/dynamic_promotion_label
 
 checkout:
   version: 1.x
@@ -36,6 +37,7 @@ checkout:
     - core/underscore
     - alshaya_react/react
     - alshaya_spc/cart_utilities
+    - alshaya_spc/dynamic_promotion_label
 
 order_details:
   version: 1.x
@@ -129,3 +131,13 @@ express_delivery:
 dynamic_promotion_label:
   js:
     dist/dynamic_promotion_label.bundle.js: {}
+
+# Library for PDP express-delivery labels react component.
+# This component show SDD (same day delivery) / ED (express delivery) labels on all PDP layouts below sku price.
+pdp_express_delivery_labels:
+  version: 1.0.0
+  js:
+    dist/pdp_sdd_ed_labels.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+    - core/drupalSettings

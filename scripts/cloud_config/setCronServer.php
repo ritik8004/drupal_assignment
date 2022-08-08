@@ -40,7 +40,7 @@ foreach ($target_crons['_embedded']['items'] ?? [] as $cron) {
       ]),
       'label' => $cron['label'],
       'server_id' => $server_id,
-    ]),
+    ], JSON_THROW_ON_ERROR),
   ];
 
   try {

@@ -546,6 +546,12 @@
   }
 }
 
+.geolocation-google-map {
+  [aria-hidden='true'] {
+    padding-top: rem(5);
+  }
+}
+
 .views-field-field-store-open-hours {
   .hours--wrapper .hours--label,
   .hours--wrapper .open--hours {

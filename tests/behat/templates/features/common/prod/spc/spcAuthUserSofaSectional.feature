@@ -1,4 +1,4 @@
-@javascript @auth @sofa-sectional @homeDelivery @westelmkwuat
+@javascript @auth @sofa-sectional @homeDelivery @westelmkwprod @westelmaeprod @westelmsaprod
 Feature: SPC Checkout Home Delivery on Sofa-sectional feature for Authenticated user
 
   Background:

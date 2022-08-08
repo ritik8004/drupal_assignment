@@ -5,6 +5,4 @@
  * Filter to support dummy without in the Pattern Lab.
  */
 
-$filter = new Twig_SimpleFilter('without', function ($string) {
-  return $string;
-});
+$filter = new Twig_SimpleFilter('without', fn($string) => $string);

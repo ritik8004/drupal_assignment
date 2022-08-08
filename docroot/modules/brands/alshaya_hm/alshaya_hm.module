@@ -559,3 +559,21 @@ function alshaya_hm_alshaya_performance_preload_alter(array &$preload) {
     $preload = array_merge($site_preloads[$language], $preload);
   }
 }
+
+/**
+ * Implements hook_alshaya_search_algolia_object_alter().
+ */
+function alshaya_hm_alshaya_search_algolia_object_alter(array &$object) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+  $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
+  $children = $sku_manager->getAvailableChildren($sku);
+  $object['swatches'] = [];
+
+  foreach ($children as $sku => $child) {
+    $object['swatches'][] = [
+      'child_sku_code' => $sku,
+      'rgb_color' => $child->get('attr_rgb_color')->getString(),
+    ];
+  }
+}

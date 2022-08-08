@@ -1,0 +1,5 @@
+alshaya_performance.all_settings:
+  route_name: alshaya_performance.all_settings
+  title: 'Alshaya Performance Settings (EXPERIMENTAL)'
+  description: 'Configure Alshaya Performance Settings from here.'
+  parent: alshaya_master.alshaya_admin

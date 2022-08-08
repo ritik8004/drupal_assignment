@@ -131,11 +131,12 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $node = $this->skuManager->getDisplayNode($sku_entity);
-
+    $return = [];
     $return['description'] = [];
     if ($node) {
       $body = $node->get('body')->getValue();
       if ($body) {
+        $description = [];
         $description['value'] = [
           '#markup' => $body[0]['value'],
         ];

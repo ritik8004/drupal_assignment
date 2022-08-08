@@ -42,7 +42,7 @@ class AlshayaFeatureProcess {
     $this->viewport = $parameters['viewport'];
     // Adding test templates for functionalities likes new checkout, new pdp, spc, boots etc. based on sites/region/environment
     $environment = explode('-', $parameters['site']);
-    $this->suiteLocators = array();
+    $this->suiteLocators = [];
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPLPAddtocart';
     if (isset($parameters['variables']['new_pdp_enabled'])) {
       $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPDP';
@@ -242,9 +242,7 @@ class AlshayaFeatureProcess {
    *   Return true if multidimensional else false.
    */
   protected function isMultiDimensional(array $array) {
-    return !empty(array_filter($array, function ($e) {
-      return is_array($e);
-    }));
+    return !empty(array_filter($array, fn($e) => is_array($e)));
   }
 
   /**
@@ -257,7 +255,7 @@ class AlshayaFeatureProcess {
    *   Return true if given value is tag variable.
    */
   protected function isTagVariable($var) {
-    return strpos($var, '@') !== FALSE;
+    return str_contains($var, '@');
   }
 
   /**
@@ -277,7 +275,7 @@ class AlshayaFeatureProcess {
     }
 
     if (is_file($absolutePath)) {
-      return array($absolutePath);
+      return [$absolutePath];
     }
 
     $collect_files = [];

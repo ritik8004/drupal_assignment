@@ -185,7 +185,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
       $filters_current_result_array = array_filter($filters_current_result_array);
 
-      if (strpos($current_path, "/--") !== FALSE) {
+      if (str_contains($current_path, "/--")) {
         $current_path = substr($current_path, 0, strpos($current_path, '/--'));
       }
 
@@ -198,7 +198,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
             // one value in URL for sizegroup filter (for instance/--size-XL/)
             // we will ignore/remove that filter.
             if ($key == 'size'
-              && strpos($value, SkuManager::SIZE_GROUP_SEPARATOR) === FALSE
+              && !str_contains($value, SkuManager::SIZE_GROUP_SEPARATOR)
               && $this->alshayaPrettyPathHelper->isSizeGroupEnabled()) {
               continue;
             }

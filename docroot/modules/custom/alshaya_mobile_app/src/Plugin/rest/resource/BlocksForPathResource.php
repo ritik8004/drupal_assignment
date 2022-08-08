@@ -217,7 +217,7 @@ class BlocksForPathResource extends ResourceBase {
       foreach ($blocks as $block) {
         if ($block instanceof Block) {
           $plugin_id = $block->getPluginId();
-          if (strpos($plugin_id, 'block_content:') === FALSE) {
+          if (!str_contains($plugin_id, 'block_content:')) {
             continue;
           }
 

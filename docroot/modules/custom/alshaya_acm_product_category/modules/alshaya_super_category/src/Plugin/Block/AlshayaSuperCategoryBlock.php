@@ -207,7 +207,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       $brand_icons = $this->productCategoryTree->getBrandIcons($term_id);
       if ((isset($brand_icons['active_image']) && !empty($brand_icons['active_image']))
       && (isset($brand_icons['inactive_image']) && !empty($brand_icons['inactive_image']))) {
-        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE)
+        $term_info['imgPath'] = (str_contains($term_info['class'], 'active'))
         ? $brand_icons['active_image']
         : $brand_icons['inactive_image'];
         $term_info['inactive_path'] = $brand_icons['active_image'];

@@ -18,7 +18,7 @@ $url = "applications/$app/environments";
 try {
   $res = invokeApi($url);
 }
-catch (\Exception $e) {
+catch (\Exception) {
   print 'Failed to get environments.';
   exit;
 }

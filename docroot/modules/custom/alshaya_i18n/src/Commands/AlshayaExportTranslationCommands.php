@@ -21,14 +21,14 @@ class AlshayaExportTranslationCommands extends DrushCommands {
    *
    * @var string
    */
-  const PATH = 'public://exports/v3/translations/';
+  public const PATH = 'public://exports/v3/translations/';
 
   /**
    * The filename prefix for the output file.
    *
    * @var string
    */
-  const FILE_NAME_PREFIX = 'translation-data';
+  public const FILE_NAME_PREFIX = 'translation-data';
 
   /**
    * File system service.
@@ -127,7 +127,7 @@ class AlshayaExportTranslationCommands extends DrushCommands {
     try {
       $this->fileSystem->deleteRecursive($path);
     }
-    catch (FileException $e) {
+    catch (FileException) {
       $this->logger->notice('Files not deleted as directory may not exists.');
     }
 
@@ -150,7 +150,7 @@ class AlshayaExportTranslationCommands extends DrushCommands {
         $this->output->writeln(dt('Successfully exported translations into csv: @csv_url', ['@csv_url' => $csv_url]));
       }
     }
-    catch (FileException $e) {
+    catch (FileException) {
       $this->logger->error('Could not create the  translation csv file.');
     }
   }

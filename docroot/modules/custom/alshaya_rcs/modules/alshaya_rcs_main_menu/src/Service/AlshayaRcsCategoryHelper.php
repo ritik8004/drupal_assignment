@@ -14,18 +14,19 @@ use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Service provides helper functions for the rcs category taxonomy.
  */
 class AlshayaRcsCategoryHelper {
 
-  const VOCABULARY_ID = 'rcs_category';
+  public const VOCABULARY_ID = 'rcs_category';
 
   /**
    * Prefix used for the endpoint.
    */
-  const ENDPOINT_PREFIX_V1 = '/rest/v1/';
+  public const ENDPOINT_PREFIX_V1 = '/rest/v1/';
 
   /**
    * The entity type manager service.
@@ -84,6 +85,13 @@ class AlshayaRcsCategoryHelper {
   protected $connection;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a new AlshayaRcsCategoryHelper instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -100,6 +108,8 @@ class AlshayaRcsCategoryHelper {
    *   Cache backend object.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
@@ -107,7 +117,9 @@ class AlshayaRcsCategoryHelper {
                               LanguageManagerInterface $language_manager,
                               AliasManagerInterface $alias_manager,
                               CacheBackendInterface $cache,
-                              Connection $connection) {
+                              Connection $connection,
+                              ModuleHandlerInterface $module_handler
+                              ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->renderer = $renderer;
@@ -115,6 +127,7 @@ class AlshayaRcsCategoryHelper {
     $this->aliasManager = $alias_manager;
     $this->cache = $cache;
     $this->connection = $connection;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -174,7 +187,7 @@ class AlshayaRcsCategoryHelper {
         'font_color' => $term->get('field_term_font_color')->getString(),
         'background_color' => $term->get('field_term_background_color')->getString(),
         'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
-        'item_clickable' => (int) $term->get('field_display_as_clickable_link')->getString(),
+        'item_clickable' => (bool) $term->get('field_display_as_clickable_link')->getString(),
         'deeplink' => $this->getDeepLink($term),
       ];
 
@@ -185,7 +198,9 @@ class AlshayaRcsCategoryHelper {
         $path = UrlHelper::isExternal($field_target_link_uri)
           ? $field_target_link_uri
           : Url::fromUri($field_target_link_uri)->toString(TRUE)->getGeneratedUrl();
-        $record['path'] = $path;
+        // Remove langcode prefix if it exists as that will be added via FE.
+        $path = preg_replace('/^\/' . $this->languageManager->getCurrentLanguage()->getId() . '\//', '', $path);
+        $record['url_path'] = $path;
       }
 
       // If highlights entities available.
@@ -477,22 +492,26 @@ class AlshayaRcsCategoryHelper {
    */
   public function getRcsCategoryMenuQuery($depth = 0, $is_root_level = TRUE) {
     $item_key = $is_root_level ? 'items' : 'children';
+    $category_fields = [
+      'id',
+      'level',
+      'name',
+      'meta_title',
+      'include_in_menu',
+      'url_path',
+      'url_key',
+      'show_on_dpt',
+      'show_in_lhn',
+      'show_in_app_navigation',
+      'position',
+      'is_anchor',
+      'display_view_all',
+    ];
+
+    $this->moduleHandler->alter('alshaya_rcs_category_query_fields', $category_fields);
+
     $query = [
-      $item_key => [
-        'id',
-        'level',
-        'name',
-        'meta_title',
-        'include_in_menu',
-        'url_path',
-        'url_key',
-        'show_on_dpt',
-        'show_in_lhn',
-        'show_in_app_navigation',
-        'position',
-        'is_anchor',
-        'display_view_all',
-      ],
+      $item_key => $category_fields,
     ];
     if ($depth > 0) {
       $query[$item_key] = array_merge($query[$item_key], $this->getRcsCategoryMenuQuery($depth - 1, FALSE));

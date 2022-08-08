@@ -9,6 +9,7 @@ import {
   removeFullScreenLoader,
   setUpapiApplePayCofig,
   getPayable,
+  getPaymentMethodsData,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
@@ -93,6 +94,8 @@ export default class PaymentMethod extends React.Component {
   };
 
   finalisePayment = (paymentData) => {
+    const { method } = this.props;
+    const paymentMethodsInfo = getPaymentMethodsData();
     addPaymentMethodInCart(cartActions.cartPaymentFinalise, paymentData).then((result) => {
       if (!result) {
         // If validation fails, addPaymentMethodInCart(), returns null.
@@ -153,14 +156,23 @@ export default class PaymentMethod extends React.Component {
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
         const { cart } = this.props;
+        // To add the custom event for the checkout step 4.
+        dispatchCustomEvent('orderValidated', {
+          cart: cart.cart,
+        });
         placeOrder(cart.cart.payment.method);
         Drupal.removeItemFromLocalStorage('spc_selected_card');
         Drupal.removeItemFromLocalStorage('billing_shipping_same');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
-        Drupal.logJavascriptError('3d flow finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        Drupal.logJavascriptError(`3d flow finalise payment | ${paymentMethodsInfo.[method.code]}`, result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
+        const { cart } = this.props;
+        // To add the custom event for the checkout step 4.
+        dispatchCustomEvent('orderValidated', {
+          cart: cart.cart,
+        });
         Drupal.removeItemFromLocalStorage('spc_selected_card');
         Drupal.removeItemFromLocalStorage('billing_shipping_same');
         window.location = result.redirectUrl;
@@ -174,7 +186,7 @@ export default class PaymentMethod extends React.Component {
       }
     }).catch((error) => {
       removeFullScreenLoader();
-      Drupal.logJavascriptError('add payment method in cart', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+      Drupal.logJavascriptError(`add payment method in cart | ${paymentMethodsInfo.[method.code]}`, error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
     });
   };
 

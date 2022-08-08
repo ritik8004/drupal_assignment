@@ -21,7 +21,7 @@ class AlshayaSessionManager extends SessionManager {
   /**
    * Suffix to use for legacy cookie name.
    */
-  const LEGACY_SUFFIX = '-legacy';
+  public const LEGACY_SUFFIX = '-legacy';
 
   /**
    * {@inheritdoc}

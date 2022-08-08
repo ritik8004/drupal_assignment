@@ -3,7 +3,7 @@
  * Event Listener to alter datalayer.
  */
 
-(function (drupalSettings) {
+(function (Drupal) {
   'use strict';
 
   // Load product details into initial Data layer.
@@ -105,4 +105,4 @@
 
     return categories;
   }
-})(drupalSettings);
+})(Drupal);

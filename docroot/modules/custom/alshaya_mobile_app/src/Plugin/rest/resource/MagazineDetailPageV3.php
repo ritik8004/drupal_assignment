@@ -27,10 +27,9 @@ class MagazineDetailPageV3 extends MagazineDetailPage {
    *   Returns product skus for shop the story.
    */
   protected function getShopTheStory(NodeInterface $node) {
+    $shop_the_story = [];
     $skus = $node->get('field_magazine_shop_the_story')->getValue();
-    $shop_the_story['skus'] = array_map(function ($value) {
-      return $value['value'];
-    }, $skus);
+    $shop_the_story['skus'] = array_map(fn($value) => $value['value'], $skus);
 
     return $shop_the_story;
   }

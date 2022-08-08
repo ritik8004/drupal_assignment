@@ -25,12 +25,12 @@ class AlshayaStaticTexts extends ResourceBase {
   /**
    * Static text context to look for.
    */
-  const CONTEXT_STATIC_TEXTS = 'alshaya_static_text';
+  public const CONTEXT_STATIC_TEXTS = 'alshaya_static_text';
 
   /**
    * Context and key separator used in table.
    */
-  const CONTEXT_KEY_SEPARATOR = '|';
+  public const CONTEXT_KEY_SEPARATOR = '|';
 
   /**
    * The language manager.

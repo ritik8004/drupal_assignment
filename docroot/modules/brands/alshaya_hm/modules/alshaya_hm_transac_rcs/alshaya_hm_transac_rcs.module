@@ -37,7 +37,8 @@ function alshaya_hm_transac_rcs_rcs_handlebars_templates_alter(&$templates, $ent
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
   if ($sku_manager->getPdpLayout($entity) == 'pdp-magazine') {
-    $templates['product.block.short_description.pdp-magazine'] = "alshaya_hm_transac_rcs";
+    $templates['product.block.short_description.pdp-magazine'] = 'alshaya_hm_transac_rcs';
+    $templates['gallery.product.product_gallery_magazine'] = 'alshaya_hm_transac_rcs';
   }
 }
 
@@ -45,10 +46,51 @@ function alshaya_hm_transac_rcs_rcs_handlebars_templates_alter(&$templates, $ent
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_hm_transac_rcs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() == 'rcs_product') {
-    $build['#attached']['library'][] = 'alshaya_hm_transac_rcs/product';
-    $build['#attached']['library'][] = 'alshaya_pims_assets/swatch';
+  if ($entity->bundle() !== 'rcs_product') {
+    return;
   }
+  $build['#attached']['library'][] = 'alshaya_hm_transac_rcs/product';
+  $build['#attached']['library'][] = 'alshaya_pims_assets/swatch';
+  // Attach library to display product attributes in overlay.
+  $build['#attached']['library'][] = 'alshaya_hm_transac_rcs/product_overlay';
+  $product_attribute_helper = \Drupal::service('alshaya_hm_transac_rcs.product_attribute_helper');
+  $build['#attached']['drupalSettings']['alshayaRcs']['additionalProductAttributes'] = $product_attribute_helper->getAttributes();
+  $build['#attached']['drupalSettings']['alshayaRcs']['additionalAttributesVariable'] = $product_attribute_helper->getAttributesVariable();
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_hm_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
+  array_push($fields['items'],
+    'title_name',
+    'fit',
+    'article_warning',
+    'article_description'
+  );
+  array_push($fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'color_label',
+  );
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_product_options_to_query().
+ */
+function alshaya_hm_transac_rcs_alshaya_rcs_product_product_options_to_query() {
+  return [
+    'fit',
+    'article_description',
+  ];
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_additional_attributes_query_fields().
+ */
+function alshaya_hm_transac_rcs_alshaya_rcs_product_additional_attributes_query_fields(array $attributes) {
+  $hm_attributes = \Drupal::service('alshaya_hm_transac_rcs.product_attribute_helper')->getAttributes();
+  $hm_attributes = array_keys($hm_attributes);
+  $attributes = array_merge($attributes, $hm_attributes);
+  return $attributes;
 }
 
 /**

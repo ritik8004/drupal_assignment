@@ -13,7 +13,7 @@ use Drupal\Core\Entity\EntityRepository;
  */
 class AlshayaUserInfo {
 
-  const INVISIBLE_CHARACTER = '&#8203;';
+  public const INVISIBLE_CHARACTER = '&#8203;';
 
   /**
    * The current user service object.

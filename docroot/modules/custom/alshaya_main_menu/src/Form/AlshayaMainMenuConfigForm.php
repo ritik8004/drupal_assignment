@@ -15,17 +15,17 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
   /**
    * Default main menu layout.
    */
-  const MAIN_MENU_DEFAULT_LAYOUT = 'default';
+  public const MAIN_MENU_DEFAULT_LAYOUT = 'default';
 
   /**
    * Inline main menu layout.
    */
-  const MAIN_MENU_INLINE_LAYOUT = 'menu_inline_display';
+  public const MAIN_MENU_INLINE_LAYOUT = 'menu_inline_display';
 
   /**
    * Dynamic width main menu layout.
    */
-  const MAIN_MENU_DYNAMIC_LAYOUT = 'menu_dynamic_display';
+  public const MAIN_MENU_DYNAMIC_LAYOUT = 'menu_dynamic_display';
 
   /**
    * {@inheritdoc}

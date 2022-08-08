@@ -22,12 +22,12 @@ class AlshayaSearchFacetsBlock extends BlockBase implements ContainerFactoryPlug
   /**
    * Facet source.
    */
-  const FACET_SOURCE = 'search_api:views_page__search__page';
+  public const FACET_SOURCE = 'search_api:views_page__search__page';
 
   /**
    * Exposed sort block.
    */
-  const PLP_EXPOSED_SORT_BLOCK = 'exposedformsearchpage_3';
+  public const PLP_EXPOSED_SORT_BLOCK = 'exposedformsearchpage_3';
 
   /**
    * Alshaya facet manager.

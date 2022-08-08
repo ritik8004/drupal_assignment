@@ -24,6 +24,14 @@ function handlebarsRender(id, data) {
     throw new Error("No handlebars templates found on the page.");
   }
 
+  // Register templates as Handlebars partials.
+  Object.keys(rcsHandlebarsTemplates).forEach(function setPartial(id, content) {
+    // Check if the template id contains the word 'partial'.
+    if (id.indexOf('partial') > -1) {
+      Handlebars.registerPartial(id, rcsHandlebarsTemplates[id]);
+    }
+  });
+
   // Get the source template.
   const source = templates[id];
 
@@ -94,5 +102,97 @@ Handlebars.registerHelper({
   },
   or() {
     return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
+  }
+});
+
+/**
+ * Prepares a string for use as a CSS identifier (element, class, or ID name).
+ * This is a copy of Drupal.cleanCssIdentifier();
+ */
+Handlebars.registerHelper('cleanCssIdentifier', (identifier) => {
+  let cleanedIdentifier = identifier;
+
+  // In order to keep '__' to stay '__' we first replace it with a different
+  // placeholder after checking that it is not defined as a filter.
+  cleanedIdentifier = cleanedIdentifier
+    .replaceAll('__', '##')
+    .replaceAll(' ', '-')
+    .replaceAll('_', '-')
+    .replaceAll('/', '-')
+    .replaceAll('[', '-')
+    .replaceAll(']', '')
+    .replaceAll('##', '__');
+
+  // Valid characters in a CSS identifier are:
+  // - the hyphen (U+002D)
+  // - a-z (U+0030 - U+0039)
+  // - A-Z (U+0041 - U+005A)
+  // - the underscore (U+005F)
+  // - 0-9 (U+0061 - U+007A)
+  // - ISO 10646 characters U+00A1 and higher
+  // We strip out any character not in the above list.
+  cleanedIdentifier = cleanedIdentifier.replaceAll(/[^\u{002D}\u{0030}-\u{0039}\u{0041}-\u{005A}\u{005F}\u{0061}-\u{007A}\u{00A1}-\u{FFFF}]/gu, '');
+
+  // Identifiers cannot start with a digit, two hyphens, or a hyphen followed by a digit.
+  cleanedIdentifier = cleanedIdentifier.replace(/^[0-9]/, '_').replace(/^(-[0-9])|^(--)/, '__');
+
+  return cleanedIdentifier.toLowerCase();
+});
+
+/**
+ * Creates variables on the fly.
+ * Usage:
+ *  - First set foo with value bar: {{set 'foo' 'bar'}}
+ *  - Then you can print foo: {{@root.foo}}
+ */
+Handlebars.registerHelper('set', function(name, val, globals) {
+  globals.data.root[name] = val;
+});
+
+/**
+ * Helps to prepare class value.
+ * Usage:
+ *  - {{ addClass 'foo' 'hide' }}
+ *  - {{ addClass 'foo' 'baz' }}
+ *  - Now {{ @root.foo }} will print 'hide baz'.
+ */
+Handlebars.registerHelper('addClass', function () {
+  var args = [].concat.apply([], arguments);
+  var classVar = args[0];
+  var globals = args.pop();
+
+  if (typeof globals.data.root[classVar] === 'undefined') {
+    globals.data.root[classVar] = '';
+  }
+
+  globals.data.root[classVar] = globals.data.root[classVar] === ''
+    ? args[1]
+    : ' ' + args[1];
+});
+
+/**
+ * Helps to prepare style value.
+ * Usage:
+ *  - {{ addStyle 'foo' '' }}
+ *  - Now {{ @root.foo }} will print '';
+ *  - {{ addStyle 'foo' 'color' 'red'}}
+ *  - Now {{ @root.foo }} will print 'color:red;'.
+ */
+Handlebars.registerHelper('addStyle', function () {
+  var args = [].concat.apply([], arguments);
+  var styleVar = args[0];
+  var globals = args.pop();
+
+  // Set the style variable if it is not yet defined.
+  if (typeof globals.data.root[styleVar] === 'undefined') {
+    globals.data.root[styleVar] = '';
+  }
+
+  if (arguments[1] === '') {
+    globals.data.root[styleVar] = '';
+  } else if (typeof arguments[2] !== 'undefined') {
+    globals.data.root[styleVar] = globals.data.root[styleVar] + arguments[1] + ':' + arguments[2] + ';';
+  } else {
+    globals.data.root[styleVar] = globals.data.root[styleVar] + arguments[1];
   }
 });

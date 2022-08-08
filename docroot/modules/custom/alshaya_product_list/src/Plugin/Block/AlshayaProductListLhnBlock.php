@@ -25,7 +25,7 @@ use Drupal\alshaya_product_list\Service\AlshayaProductListHelper;
  */
 class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  const CONTENT_TYPE = 'product_list';
+  public const CONTENT_TYPE = 'product_list';
 
   /**
    * Stores the configuration factory.

@@ -1,6 +1,6 @@
 variables:
-  spc_product_listing_page: '/shop-fashion-sneakers/'
-  spc_basket_page: '/shop-fashion-sneakers/'
+  spc_product_listing_page: '/shop-fashion-boxers-briefs/'
+  spc_basket_page: '/shop-fashion-boxers-briefs/'
   spc_pdp_page: '/buy-polyester-2-way-foldable-easy-close-umbrella-53-cm-black-black.html/'
   product_listing_page_url: "/shop-fashion-sneakers/"
   spc_plp_add_to_cart_single: '/shop-fashion-sneakers/'

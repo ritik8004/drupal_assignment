@@ -18,7 +18,7 @@ use Drupal\node\NodeInterface;
  */
 class AlshayaColorSplitCommands extends DrushCommands {
 
-  const TEMP_ALIAS_COLOR_MAPPING_STATE_KEY = 'temp_alias_color_mapping';
+  public const TEMP_ALIAS_COLOR_MAPPING_STATE_KEY = 'temp_alias_color_mapping';
 
   /**
    * Alshaya config Manager.
@@ -75,7 +75,7 @@ class AlshayaColorSplitCommands extends DrushCommands {
       'progress_message' => 'Processed @current out of @total.',
       'error_message' => 'Error occurred while processing SKUs, please check logs.',
       'operations' => [
-        [[__CLASS__, 'storeAliasFirstChildSkuMapping'], []],
+        [[self::class, 'storeAliasFirstChildSkuMapping'], []],
       ],
     ];
 
@@ -180,7 +180,7 @@ class AlshayaColorSplitCommands extends DrushCommands {
       'progress_message' => 'Processed @current out of @total.',
       'error_message' => 'Error occurred while adding redirects, please check logs.',
       'operations' => [
-        [[__CLASS__, 'addRedirectsFromTempstore'], []],
+        [[self::class, 'addRedirectsFromTempstore'], []],
       ],
     ];
 

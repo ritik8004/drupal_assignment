@@ -75,7 +75,7 @@ class AlshayaCloudPurger extends AcquiaCloudPurger {
     // as space is the only character Drupal core explicitely forbids in tags.
     foreach ($invalidations as $invalidation) {
       $tag = $invalidation->getExpression();
-      if (strpos($tag, ' ') !== FALSE) {
+      if (str_contains($tag, ' ')) {
         $invalidation->setState(InvalidationInterface::FAILED);
         $this->logger->error(
           "Tag '%tag' contains a space, this is forbidden.", ['%tag' => $tag]
@@ -141,7 +141,7 @@ class AlshayaCloudPurger extends AcquiaCloudPurger {
 
     // Triage the results and set all invalidation states correspondingly.
     foreach ($groups as $group_id => $group) {
-      if ((!isset($results[$group_id])) || (!count($results[$group_id]))) {
+      if ((!isset($results[$group_id])) || (!(is_countable($results[$group_id]) ? count($results[$group_id]) : 0))) {
         foreach ($group['objects'] as $invalidation) {
           $invalidation->setState(InvalidationInterface::FAILED);
         }

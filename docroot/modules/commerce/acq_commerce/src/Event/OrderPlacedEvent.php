@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class OrderPlacedEvent extends Event {
 
-  const EVENT_NAME = 'order_placed';
+  public const EVENT_NAME = 'order_placed';
 
   /**
    * API Response.

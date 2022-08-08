@@ -15,6 +15,9 @@ const removeCartIdFromStorage = () => {
   // to-do at right place.
   Drupal.removeItemFromLocalStorage('cart_data');
 
+  // Remove guest Cart for merge from storage.
+  Drupal.removeItemFromLocalStorage('guestCartForMerge');
+
   if (isUserAuthenticated()) {
     Drupal.addItemInLocalStorage('cart_id', window.authenticatedUserCartId);
     return;
@@ -154,6 +157,18 @@ const getApiEndpoint = (action, params = {}) => {
       endpoint = isUserAuthenticated()
         ? '/V1/carts/mine/tabby-available-products'
         : `/V1/guest-carts/${endPointParams.cartId}/tabby-available-products`;
+      break;
+
+    case 'mergeGuestCart':
+      endpoint = isUserAuthenticated()
+        ? `/V1/cart-merge/customer-id/${endPointParams.customerId}/active-quote/${endPointParams.activeQuote}/store-id/${endPointParams.storeId}`
+        : '';
+      break;
+
+    case 'validateOrder':
+      endpoint = !isUserAuthenticated()
+        ? `/V1/guest-carts/${endPointParams.cartId}/order`
+        : '';
       break;
 
     default:

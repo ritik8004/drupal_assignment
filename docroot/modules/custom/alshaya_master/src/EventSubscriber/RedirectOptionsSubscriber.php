@@ -19,6 +19,7 @@ class RedirectOptionsSubscriber implements EventSubscriberInterface {
    *   The event names to listen to
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[RedirectEvent::EVENT_NAME] = ['onRedirect', 100];
 
     return $events;
