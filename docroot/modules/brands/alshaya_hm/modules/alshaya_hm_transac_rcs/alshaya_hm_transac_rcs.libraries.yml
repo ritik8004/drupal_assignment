@@ -38,3 +38,9 @@ product_overlay:
     - core/jquery
     - rcs_placeholders/helpers
     - alshaya_acm_cart_notification/cart_notification_js
+
+swatch:
+  js:
+    js/alshaya_assets_swatch.js: {}
+  dependencies:
+    - alshaya_pims_assets/swatch

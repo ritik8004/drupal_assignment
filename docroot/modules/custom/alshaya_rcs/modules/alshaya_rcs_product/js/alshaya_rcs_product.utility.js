@@ -775,6 +775,7 @@ window.commerceBackend = window.commerceBackend || {};
                   sku,
                   colorOptionsList,
                   variantSku,
+                  variant: variants[variantSku],
                 }
               });
 
