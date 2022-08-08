@@ -3,6 +3,8 @@
     width: rem(653) !important;
     padding: 0 !important;
     border: 0 !important;
+    overflow: auto;
+    height: 100%;
 
     @include breakpoint($only-tablet) {
       width: 70% !important;
