@@ -15,6 +15,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
  * Implements hook_entity_base_field_info().
  */
 function acq_customer_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
   if ($entity_type->id() === 'user') {
     $fields['acq_customer_id'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Customer ID'))

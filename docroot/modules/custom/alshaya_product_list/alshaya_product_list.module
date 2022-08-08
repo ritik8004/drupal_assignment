@@ -188,6 +188,8 @@ function alshaya_product_list_node_view(array &$build, EntityInterface $entity, 
  * alshaya options list settings on sync-options.
  */
 function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
+  $attributeCodes = NULL;
+  $node = NULL;
   // Check term vocabulory.
   if ($term->bundle() != 'sku_product_option') {
     return;

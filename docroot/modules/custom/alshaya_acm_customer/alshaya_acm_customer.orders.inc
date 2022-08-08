@@ -135,6 +135,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
  *   Processed order detail array.
  */
 function alshaya_acm_customer_get_processed_order_details(array $order) {
+  $payment_info = [];
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
@@ -356,7 +357,7 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
     // Get the required orders for the user.
     $orders = \Drupal::service('alshaya_acm_customer.orders_manager')->getOrders($customer_id, 0);
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     return [];
   }
 

@@ -38,7 +38,7 @@ class mujiContext extends DrupalSubContextBase implements DrupalSubContextInterf
   public function gatherContexts(BeforeScenarioScope $scope) {
     $environment = $scope->getEnvironment();
 
-    $this->drupalContext = $environment->getContext('Drupal\DrupalExtension\Context\DrupalContext');
-    $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
+    $this->drupalContext = $environment->getContext(\Drupal\DrupalExtension\Context\DrupalContext::class);
+    $this->minkContext = $environment->getContext(\Drupal\DrupalExtension\Context\MinkContext::class);
   }
 }

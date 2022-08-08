@@ -57,6 +57,7 @@ function alshaya_fl_transac_node_view(array &$build, EntityInterface $entity, En
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_fl_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  $description = [];
   if ($view_mode == 'modal') {
     /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
     $productHelper = \Drupal::service('alshaya_acm_product.helper');

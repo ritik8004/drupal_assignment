@@ -72,6 +72,7 @@ function _alshaya_seo_process_gtm() {
  * Implements hook_page_attachments().
  */
 function alshaya_seo_page_attachments(array &$attachments) {
+  $contact = [];
   // Add script for sitelink searchbox.
   if (\Drupal::service('path.matcher')->isFrontPage()) {
     if (_alshaya_seo_process_sitelink_searchbox()) {
@@ -354,7 +355,7 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
 
     /** @var \Drupal\taxonomy\Entity\Term $term */
     $term = $variables['row']->_entity;
-    $term_class_name = str_replace(' ', '-', strtolower(preg_replace('/[^A-Za-z0-9-\s]/', '', $term->getName())));
+    $term_class_name = str_replace(' ', '-', strtolower(preg_replace('/[^A-Za-z0-9\-\s]/', '', $term->getName())));
     $term_classes[] = 'left-nav-' . $term_class_name;
     // Add class 'active' in LHN which match category coming from route.
     if ($tid === $term->id()) {
@@ -396,7 +397,7 @@ function alshaya_seo_user_presave(EntityInterface $entity) {
       }
     }
   }
-  catch (Exception $e) {
+  catch (Exception) {
     \Drupal::logger('alshaya_seo')->critical('Field subscribe newsletter not found.');
   }
 }

@@ -44,6 +44,14 @@ function alshaya_mu_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
  * Get product description from SKU.
  */
 function _alshaya_mu_transac_get_product_description($sku_entity) {
+  $description = [];
+  $attr_short_description1_desc = [];
+  $attr_short_description2_desc = [];
+  $attr_country_important_point_desc = [];
+  $attr_country_of_origin_en_desc = [];
+  $attr_direction_en_desc = [];
+  $attr_material_en_desc = [];
+  $specifications = [];
   $return = [];
 
   $productHelper = \Drupal::service('alshaya_acm_product.helper');

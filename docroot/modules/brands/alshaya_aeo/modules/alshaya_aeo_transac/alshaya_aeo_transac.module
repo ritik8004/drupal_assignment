@@ -44,6 +44,9 @@ function alshaya_aeo_transac_acq_sku_view(array &$build, EntityInterface $sku_en
  * Get product description from SKU.
  */
 function _alshaya_aeo_transac_get_product_description($sku_entity) {
+  $details = [];
+  $materials_care = [];
+  $size_fit = [];
   $return = [];
 
   if ($body = $sku_entity->get('attr_description')->getString()) {

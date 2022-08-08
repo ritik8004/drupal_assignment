@@ -757,6 +757,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
                                           array $cart_rules = [],
                                           $is_free_sku_item = FALSE,
                                           $coupon_applied_on_cart = '') {
+  $free_gift_label = [];
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $sku_cart_data_cid = 'sku_cart_data:' . $langcode . ':' . $sku_entity->id();
   // If sku entity data exists in cache.
@@ -1063,7 +1064,7 @@ function _alshaya_acm_is_out_of_stock_exception(\Exception $e) {
   ];
 
   foreach ($oos_messages as $message) {
-    if (strpos($e->getMessage(), $message) !== FALSE) {
+    if (str_contains($e->getMessage(), $message)) {
       return TRUE;
     }
   }
@@ -1142,7 +1143,7 @@ function _alshaya_acm_is_order_limit_exceeded_exception(\Exception $e) {
   ];
 
   foreach ($ole_messages as $message) {
-    if (strpos($e->getMessage(), $message) !== FALSE) {
+    if (str_contains($e->getMessage(), $message)) {
       return TRUE;
     }
   }

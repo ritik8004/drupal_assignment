@@ -169,6 +169,7 @@ function alshaya_vs_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
  * Get product description from SKU.
  */
 function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
+  $description = [];
   $return = [];
   $description_value = '';
   $short_desc = [];

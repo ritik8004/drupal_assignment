@@ -79,6 +79,10 @@ function alshaya_tbs_transac_acq_sku_view(array &$build, EntityInterface $sku_en
  * Get product description from SKU.
  */
 function _alshaya_tbs_transac_get_product_description($sku_entity) {
+  $at_glance = [];
+  $description = [];
+  $specifications = [];
+  $whats_in_box = [];
   $product_description = [];
   // Prepare $at_glance variable.
   $at_glance['label'] = [
@@ -257,10 +261,10 @@ function _alshaya_tbs_transac_get_product_ingredients(SKU $sku, array &$build) {
           $value[0]['value'] . '</div></div></div></div>';
         continue;
       }
-      if (strpos($ingredients_field, '_name') !== FALSE) {
+      if (str_contains($ingredients_field, '_name')) {
         $ingredients_content .= $label . $value[0]['value'] . '</h4>';
       }
-      if (strpos($ingredients_field, '_description') !== FALSE) {
+      if (str_contains($ingredients_field, '_description')) {
         $ingredients_content .= $description_div . $value[0]['value'] . '</div>';
       }
     }

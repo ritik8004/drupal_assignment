@@ -64,6 +64,10 @@ function alshaya_mc_acq_sku_view(array &$build, EntityInterface $sku_entity, Ent
  * Get product description from SKU.
  */
 function _alshaya_mc_get_product_description($sku_entity) {
+  $at_glance = [];
+  $description = [];
+  $specifications = [];
+  $whats_in_box = [];
   $return = [];
   // Prepare $at_glance variable.
   $at_glance['label'] = [

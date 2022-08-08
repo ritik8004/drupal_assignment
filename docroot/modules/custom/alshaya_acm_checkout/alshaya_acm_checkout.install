@@ -68,6 +68,7 @@ function alshaya_acm_checkout_update_8012() {
  * Update checkout config to include bin validation config and add translations.
  */
 function alshaya_acm_checkout_update_8011() {
+  $strings = [];
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(

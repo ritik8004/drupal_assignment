@@ -180,6 +180,7 @@ function _alshaya_loyalty_field_privilege_card_number_element_validate(&$form, F
  * Element validate callback.
  */
 function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $form_state, &$complete_form) {
+  $element_raw_value = NULL;
   // Get current field.
   $field = end($element['#array_parents']);
 
@@ -219,6 +220,7 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
  * Set privilege card number value for register form.
  */
 function alshaya_loyalty_register_user_set_privilege_card_number(array &$form, FormStateInterface $form_state) {
+  $value = NULL;
   if ($apc_number = $form_state->getValue('privilege_card_number')) {
     $value = $apc_number;
   }
@@ -440,7 +442,7 @@ function _alshaya_loyalty_form_attachements(&$form, FormStateInterface $form_sta
  */
 function alshaya_loyalty_preprocess_input(&$variables) {
   // Attach library for privilege card input field.
-  if (isset($variables['element'], $variables['element']['#name']) && strpos($variables['element']['#name'], 'privilege_card_number') !== FALSE) {
+  if (isset($variables['element'], $variables['element']['#name']) && str_contains($variables['element']['#name'], 'privilege_card_number')) {
     $variables['attributes']['class'][] = 'c-input__privilege-card ';
     $variables['#attached']['library'][] = 'alshaya_loyalty/privilege_card_number';
   }

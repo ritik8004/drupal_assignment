@@ -38,6 +38,7 @@ function alshaya_bp_transac_node_view(array &$build, EntityInterface $entity, En
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_bp_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  $description = [];
   if ($view_mode == 'modal') {
     /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
     $productHelper = \Drupal::service('alshaya_acm_product.helper');
@@ -57,6 +58,7 @@ function alshaya_bp_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
  * Get product description from SKU.
  */
 function _alshaya_bp_transac_get_product_description($sku_entity) {
+  $description = [];
   /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
   $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
@@ -219,7 +221,7 @@ function alshaya_bp_transac_pathauto_alias_alter(&$alias, array $context) {
     return;
   }
   // Remove shop-department- from url alias.
-  if (strpos($alias, 'shop-department-') !== FALSE) {
+  if (str_contains($alias, 'shop-department-')) {
     $alias = str_replace('shop-department-', '', $alias);
   }
 }
