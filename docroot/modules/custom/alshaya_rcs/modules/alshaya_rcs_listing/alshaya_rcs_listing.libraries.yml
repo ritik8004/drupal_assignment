@@ -32,3 +32,11 @@ lhn_menu:
   version: 1.x
   js:
     handlebars/rcs-lhn_menu.handlebars: {}
+
+promotional_banner:
+  version: 1.x
+  js:
+    handlebars/alshaya-rcs-promotional-banner.handlebars: {}
+  dependencies:
+    - alshaya_white_label/promo-blocks
+    - alshaya_white_label/rcs-ph-promotional-banner

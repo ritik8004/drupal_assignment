@@ -134,13 +134,7 @@ exports.render = function render(
 
     case 'promotional_banner':
       // Render promotional banner block.
-      if (typeof globalThis.renderRcsPromotionalBanner !== 'undefined') {
-        html += globalThis.renderRcsPromotionalBanner.render(
-          settings,
-          entity,
-          innerHtml
-        );
-      }
+      html = handlebarsRenderer.render('promotional_banner', entity);
       break;
 
     case 'app_navigation':
