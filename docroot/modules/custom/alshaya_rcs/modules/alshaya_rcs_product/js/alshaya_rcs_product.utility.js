@@ -783,12 +783,15 @@ window.commerceBackend = window.commerceBackend || {};
    */
   window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
-    if (Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU])) {
-      return staticDataStore.productDataFromBackend[mainSKU];
+    staticDataStore.productDataFromBackend[mainSKU] = Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU])
+      ? staticDataStore.productDataFromBackend[mainSKU]
+      : {};
+    if (Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU][sku])) {
+      return staticDataStore.productDataFromBackend[mainSKU][sku];
     }
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
+    staticDataStore.productDataFromBackend[mainSKU][sku] = globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
       if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
         await window.commerceBackend.getProductsInStyle(response.data.products.items[0]);
       }
@@ -796,7 +799,7 @@ window.commerceBackend = window.commerceBackend || {};
       window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
     });
 
-    return staticDataStore.productDataFromBackend[mainSKU];
+    return staticDataStore.productDataFromBackend[mainSKU][sku];
   };
 
   /**
