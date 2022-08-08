@@ -37,14 +37,13 @@ class PaymentMethodCodMobileVerification extends React.Component {
   handleOtpSubmit = (e) => {
     e.preventDefault();
 
+    // Get otp from state.
     const { otp } = this.state;
 
-    if (!hasValue(otp) || otp.length !== 4) {
-      // Return false otp is not valid.
-      return false;
-    }
+    // Get allowed otp length from props.
+    const { otpLength } = this.props;
 
-    return true;
+    return !(!hasValue(otp) || otp.length !== otpLength);
   };
 
   render() {
