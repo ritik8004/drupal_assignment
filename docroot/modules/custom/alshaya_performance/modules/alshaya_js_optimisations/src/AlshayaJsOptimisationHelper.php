@@ -68,7 +68,7 @@ class AlshayaJsOptimisationHelper {
    */
   public static $jsCategories = [
     'ie_only' => [
-      'weight' => -31,
+      'weight' => -33,
       'attributes' => [
         'nomodule' => TRUE,
         'data-group' => ['ie-only'],
@@ -76,11 +76,31 @@ class AlshayaJsOptimisationHelper {
       'dependencies' => [],
     ],
     'site_libraries' => [
-      'weight' => -30,
+      'weight' => -32,
       'attributes' => [
         'data-group' => ['site-library'],
       ],
       'dependencies' => [
+        'ie-only',
+      ],
+    ],
+    'handlebars' => [
+      'weight' => -30,
+      'attributes' => [
+        'data-group' => ['handlebars'],
+      ],
+      'dependencies' => [
+        'site-library',
+        'ie-only',
+      ],
+    ],
+    'rcs_listeners' => [
+      'weight' => -29,
+      'attributes' => [
+        'data-group' => ['rcs-listeners'],
+      ],
+      'dependencies' => [
+        'site-library',
         'ie-only',
       ],
     ],
@@ -90,6 +110,8 @@ class AlshayaJsOptimisationHelper {
         'data-group' => ['critical'],
       ],
       'dependencies' => [
+        'handlebars',
+        'rcs-listeners',
         'site-library',
         'ie-only',
       ],
@@ -100,6 +122,8 @@ class AlshayaJsOptimisationHelper {
         'data-group' => ['sitewide-1'],
       ],
       'dependencies' => [
+        'handlebars',
+        'rcs-listeners',
         'site-library',
         'ie-only',
       ],
@@ -110,6 +134,8 @@ class AlshayaJsOptimisationHelper {
         'data-group' => ['sitewide-2'],
       ],
       'dependencies' => [
+        'handlebars',
+        'rcs-listeners',
         'site-library',
         'ie-only',
         'sitewide-1',
@@ -138,6 +164,14 @@ class AlshayaJsOptimisationHelper {
         'site_libraries' => [
           'label' => t('Site Libraries'),
           'description' => t('Priority library scripts loaded for all pages throughout the site.'),
+        ],
+        'handlebars' => [
+          'label' => t('Handlebar Templates'),
+          'description' => t('Handlebar template asset libraries are loaded with high priority to ensure they are present when Handlebar processor scripts run.'),
+        ],
+        'rcs_listeners' => [
+          'label' => t('RCS Event Listeners'),
+          'description' => t('RCS Event Listeners asset libraries are loaded with high priority to ensure listeners are registered before their events are triggered.'),
         ],
         'critical' => [
           'label' => t('Critical Scripts'),
