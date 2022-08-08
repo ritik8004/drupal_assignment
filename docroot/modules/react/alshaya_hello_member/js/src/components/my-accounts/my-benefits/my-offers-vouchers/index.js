@@ -5,7 +5,6 @@ import getStringMessage from '../../../../../../../js/utilities/strings';
 import { isMobile } from '../../../../../../../js/utilities/display';
 
 const { showMoreLimit } = drupalSettings.helloMember;
-console.log('test');
 class MyOffersAndVouchers extends React.Component {
   constructor(props) {
     super(props);
