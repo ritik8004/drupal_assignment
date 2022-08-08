@@ -82,7 +82,6 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
  * Implements hook_views_pre_view().
  */
 function alshaya_acm_product_category_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
-  $handler = [];
   $config = \Drupal::config('alshaya_acm_product_category.settings');
   if (!$config->get('all_categories_department_page')) {
     return;
@@ -90,6 +89,7 @@ function alshaya_acm_product_category_views_pre_view(ViewExecutable $view, $disp
 
   if ($view->id() === 'product_category_level_3') {
     // We want to allow creation creation of page upto 3 level.
+    $handler = [];
     if ($display_id === 'entity_reference_1') {
       $handler = $view->getHandler($display_id, 'filter', 'depth_level');
       $handler['operator'] = '<=';

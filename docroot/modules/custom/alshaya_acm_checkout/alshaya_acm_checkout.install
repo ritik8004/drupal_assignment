@@ -68,7 +68,6 @@ function alshaya_acm_checkout_update_8012() {
  * Update checkout config to include bin validation config and add translations.
  */
 function alshaya_acm_checkout_update_8011() {
-  $strings = [];
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -79,6 +78,7 @@ function alshaya_acm_checkout_update_8011() {
   );
 
   // Add string for tranlsation of bin validation error.
+  $strings = [];
   $strings['Your card details are valid for NAPS Debit Card. Please select NAPS Debit Card as a payment method or enter different credit/debit card details to proceed.'] = [
     'ar' => 'بيانات بطاقتك صالحة للدفع باستخدام بطاقات السحب الآلي NAPS. يُرجى اختيار بطاقات السحب الآلي NAPS كطريقة دفع أو إدخال تفاصيل بطاقة ائتمان / سحب آلي مختلفة للمتابعة.',
     'context' => 'qpay',

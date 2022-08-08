@@ -169,12 +169,9 @@ function alshaya_vs_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
  * Get product description from SKU.
  */
 function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
-  $description = [];
-  $return = [];
   $description_value = '';
   $short_desc = [];
   $read_more_link = FALSE;
-
   $body = $sku_entity->get('attr_description')->getValue();
   if (is_array($body) && !empty($body[0]['value'])) {
     $description_value = $body[0]['value'];
@@ -206,7 +203,7 @@ function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
       }
     }
   }
-
+  $description = [];
   $description['value'] = [
     '#markup' => $description_value,
   ];
@@ -215,6 +212,7 @@ function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
   // which they should be displayed.
   // $build['short_desc'] contains the description that should be
   // displayed before 'Read More'.
+  $return = [];
   $return['short_desc'] = $short_desc;
   $return['description'][] = $description;
   $return['read_more'] = $read_more_link;

@@ -32,7 +32,6 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
  * Implements hook_alshaya_acm_product_add_to_cart_submit_ajax_response_alter().
  */
 function alshaya_acm_cart_notification_alshaya_acm_product_add_to_cart_submit_ajax_response_alter(AjaxResponse $response, SKU $sku, array $data) {
-  $cart_items = [];
   $current_url = \Drupal::request()->server->get('HTTP_REFERER');
   $url = Url::fromRoute('acq_cart.cart', [], ['absolute' => TRUE])->toString();
 
@@ -77,6 +76,7 @@ function alshaya_acm_cart_notification_alshaya_acm_product_add_to_cart_submit_aj
 
   $sku_css_id = strtolower(HTML::cleanCssIdentifier($sku->getSku()));
   // Get cart items by sku.
+  $cart_items = [];
   $cart_items['cart_items'] = alshaya_acm_get_cart_items_by_sku();
 
   $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));

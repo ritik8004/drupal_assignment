@@ -44,9 +44,6 @@ function alshaya_aeo_transac_acq_sku_view(array &$build, EntityInterface $sku_en
  * Get product description from SKU.
  */
 function _alshaya_aeo_transac_get_product_description($sku_entity) {
-  $details = [];
-  $materials_care = [];
-  $size_fit = [];
   $return = [];
 
   if ($body = $sku_entity->get('attr_description')->getString()) {
@@ -55,6 +52,7 @@ function _alshaya_aeo_transac_get_product_description($sku_entity) {
     ];
   }
 
+  $details = [];
   $details['label'] = [
     '#markup' => t('Details'),
   ];
@@ -86,6 +84,7 @@ function _alshaya_aeo_transac_get_product_description($sku_entity) {
     $return['description'][] = $details;
   }
 
+  $materials_care = [];
   $materials_care['label'] = [
     '#markup' => t('Materials & Care'),
   ];
@@ -111,6 +110,7 @@ function _alshaya_aeo_transac_get_product_description($sku_entity) {
     $return['description'][] = $materials_care;
   }
 
+  $size_fit = [];
   $size_fit['label'] = [
     '#markup' => t('Size & fit'),
   ];

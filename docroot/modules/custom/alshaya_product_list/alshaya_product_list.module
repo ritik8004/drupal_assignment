@@ -188,8 +188,6 @@ function alshaya_product_list_node_view(array &$build, EntityInterface $entity, 
  * alshaya options list settings on sync-options.
  */
 function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
-  $attributeCodes = NULL;
-  $node = NULL;
   // Check term vocabulory.
   if ($term->bundle() != 'sku_product_option') {
     return;
@@ -198,6 +196,7 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
   // Get alshaya_options_list settings for attribute codes.
   $pages = \Drupal::config('alshaya_options_list.settings')
     ->get('alshaya_options_pages');
+  $attributeCodes = NULL;
   foreach ($pages as $page) {
     $attribute_options = \Drupal::config('alshaya_options_list.settings')->get('alshaya_options_pages');
     $attributeCodes = array_filter($attribute_options[$page['url']]['attributes']);
@@ -212,6 +211,7 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
     $attribute = 'attr_' . $term_attribute_code;
     $attribute_value = $term->getName();
     try {
+      $node = NULL;
       // Check if node exists with attribute value or its translation.
       foreach ($term->getTranslationLanguages() as $language) {
         $term_translation = $term->getTranslation($language->getId());

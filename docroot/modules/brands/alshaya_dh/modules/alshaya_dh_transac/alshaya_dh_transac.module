@@ -49,7 +49,6 @@ function alshaya_dh_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
  * Get product description from SKU.
  */
 function _alshaya_dh_transac_get_product_description($sku_entity) {
-  $description = [];
   $return = [];
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
@@ -97,7 +96,7 @@ function _alshaya_dh_transac_get_product_description($sku_entity) {
     $description_value .= $details_and_care_value;
     $description_value .= \Drupal::service('renderer')->renderPlain($details_and_care);
   }
-
+  $description = [];
   $description['value'] = [
     '#markup' => $description_value,
   ];

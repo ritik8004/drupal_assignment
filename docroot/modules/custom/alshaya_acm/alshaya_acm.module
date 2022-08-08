@@ -757,7 +757,6 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
                                           array $cart_rules = [],
                                           $is_free_sku_item = FALSE,
                                           $coupon_applied_on_cart = '') {
-  $free_gift_label = [];
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $sku_cart_data_cid = 'sku_cart_data:' . $langcode . ':' . $sku_entity->id();
   // If sku entity data exists in cache.
@@ -881,6 +880,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
   }
 
   // If line item's price is 0, its a free item & set the label for it.
+  $free_gift_label = [];
   if ($is_free_sku_item &&
     isset($total_price['#final_price']) && $total_price['#final_price'] == 0) {
     $total_price = '';

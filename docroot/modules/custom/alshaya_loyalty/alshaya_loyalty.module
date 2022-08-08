@@ -180,7 +180,6 @@ function _alshaya_loyalty_field_privilege_card_number_element_validate(&$form, F
  * Element validate callback.
  */
 function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $form_state, &$complete_form) {
-  $element_raw_value = NULL;
   // Get current field.
   $field = end($element['#array_parents']);
 
@@ -196,6 +195,7 @@ function _alshaya_loyalty_validate_field_value(&$element, FormStateInterface $fo
   // user form.
   //
   // Check if the value is string.
+  $element_raw_value = NULL;
   if (is_string($field_val)) {
     $element_raw_value = $field_val;
   }

@@ -135,7 +135,6 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
  *   Processed order detail array.
  */
 function alshaya_acm_customer_get_processed_order_details(array $order) {
-  $payment_info = [];
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
@@ -268,6 +267,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   // Add transaction & payment details to confirmation data in case of KNET.
+  $payment_info = [];
   foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
     $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
   }

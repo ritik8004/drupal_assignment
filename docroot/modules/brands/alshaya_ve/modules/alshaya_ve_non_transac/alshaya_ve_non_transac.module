@@ -63,7 +63,6 @@ function _alshaya_ve_non_transac_mobile_number_process(array &$element, FormStat
  * Implements hook_form_alter().
  */
 function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
-  $countryName = NULL;
   if ($form_id == 'webform_submission_alshaya_contact_add_form') {
     $form['actions']['submit']['#value'] = t('Send');
   }
@@ -89,6 +88,7 @@ function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $for
     if ($form['#id'] === 'views-exposed-form-stores-finder-page-2') {
       $form['country']['#options']['All'] = t('Middle East');
       $current_path = \Drupal::service('path.current')->getPath();
+      $countryName = NULL;
       if (str_contains($current_path, '/store-finder')) {
         $countryFieldValues = FieldStorageConfig::loadByName('node', 'field_store_country')->getSetting('allowed_values');
         $filterCountry = \Drupal::request()->get('country');

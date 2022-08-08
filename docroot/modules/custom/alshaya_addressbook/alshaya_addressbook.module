@@ -463,7 +463,6 @@ function _alshaya_addressbook_form_alter(array &$form, FormStateInterface $form_
  * Process the mobile number during validation check.
  */
 function _alshaya_addressbook_mobile_process_validate($form, FormStateInterface $form_state) {
-  $value = [];
   // If no error.
   if (!$form_state->getErrors()) {
     $mobile = $form_state->getValue('field_address')[0]['address']['mobile_number'];
@@ -477,7 +476,7 @@ function _alshaya_addressbook_mobile_process_validate($form, FormStateInterface 
     $mobile['mobile'] = str_replace($mobile_country_code, '', $mobile['mobile']);
 
     $mobile_number = $util->getMobileNumber($mobile['mobile'], $mobile['country-code']);
-
+    $value = [];
     $value[] = [
       'country' => $mobile['country-code'],
       'local_number' => $mobile['mobile'],

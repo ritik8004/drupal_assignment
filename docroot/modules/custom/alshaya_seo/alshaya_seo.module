@@ -72,7 +72,6 @@ function _alshaya_seo_process_gtm() {
  * Implements hook_page_attachments().
  */
 function alshaya_seo_page_attachments(array &$attachments) {
-  $contact = [];
   // Add script for sitelink searchbox.
   if (\Drupal::service('path.matcher')->isFrontPage()) {
     if (_alshaya_seo_process_sitelink_searchbox()) {
@@ -132,6 +131,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
   // Add all contact options. Basic check added to have contact_type set in
   // config to show the whole object.
   if ($gkg_config->get('contact_telephone') && $content_type != 'acq_product') {
+    $contact = [];
     $contact['@type'] = 'ContactPoint';
     $contact['telephone'] = $gkg_config->get('contact_telephone');
     $contact['contactType'] = $gkg_config->get('contact_type');
