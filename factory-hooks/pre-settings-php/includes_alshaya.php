@@ -212,6 +212,9 @@ $config['system.performance']['cache']['page']['max_age'] = 14400;
 switch ($env_name) {
   case 'local':
   case 'travis':
+    // Use PROXY for backend calls in local.
+    $settings['alshaya_use_proxy'] = TRUE;
+
     // Requests from local are slow, we can to wait for some more time
     // while loading linked skus.
     $settings['linked_skus_timeout'] = 5;
@@ -233,6 +236,10 @@ switch ($env_name) {
   case 'dev2':
   case 'dev3':
   case 'test':
+  case 'qa2':
+    // Use PROXY for backend calls in lower non-prod environments.
+    $settings['alshaya_use_proxy'] = TRUE;
+
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
