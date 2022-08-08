@@ -2,6 +2,7 @@ import React from 'react';
 import OtpInput from 'react-otp-input';
 import OtpTimer from 'otp-timer';
 import CodVerifyText from './components/CodVerifyText';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class PaymentMethodCodMobileVerification extends React.Component {
   constructor(props) {
@@ -32,6 +33,18 @@ class PaymentMethodCodMobileVerification extends React.Component {
     // eslint-disable-next-line no-console
     console.log('Resend otp');
   }
+
+  handleOtpSubmit = (e) => {
+    e.preventDefault();
+
+    // Get otp from state.
+    const { otp } = this.state;
+
+    // Get allowed otp length from props.
+    const { otpLength } = this.props;
+
+    return !(!hasValue(otp) || otp.length !== otpLength);
+  };
 
   render() {
     const { otp } = this.state;
@@ -66,7 +79,14 @@ class PaymentMethodCodMobileVerification extends React.Component {
                 ButtonText={Drupal.t('Resend', {}, { context: 'cod_mobile_verification' })}
               />
             </span>
-            <button type="submit" className="cod-mobile-otp__submit">{Drupal.t('verify', {}, { context: 'cod_mobile_verification' })}</button>
+            <button
+              type="submit"
+              className="cod-mobile-otp__submit"
+              onClick={this.handleOtpSubmit}
+              disabled={otp.length !== parseInt(otpLength, 10)}
+            >
+              {Drupal.t('verify', {}, { context: 'cod_mobile_verification' })}
+            </button>
           </div>
         </form>
       </div>
