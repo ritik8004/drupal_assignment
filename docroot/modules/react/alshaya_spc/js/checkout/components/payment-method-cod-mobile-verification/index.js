@@ -43,6 +43,8 @@ class PaymentMethodCodMobileVerification extends React.Component {
       // Return false otp is not valid.
       return false;
     }
+
+    return true;
   };
 
   render() {
