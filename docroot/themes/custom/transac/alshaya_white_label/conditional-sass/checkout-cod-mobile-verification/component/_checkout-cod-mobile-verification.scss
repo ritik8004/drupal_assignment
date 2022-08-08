@@ -39,6 +39,38 @@
     display: flex;
   }
 
+  &__resend {
+    text-align: center;
+    font-size: rem(14);
+    color: $spc-checkout-cod-otp-secondary;
+
+    & > div {
+      display: inline-block;
+      margin-#{$left}: rem(8);
+      font-family: $alshaya-thin !important;
+      font-size: rem(14) !important;
+      line-height: normal !important;
+      color: $spc-checkout-cod-otp-primary !important;
+      text-decoration: underline;
+
+      & > span {
+        & > span {
+          display: none;
+        }
+      }
+
+      & > button {
+        text-decoration: underline;
+        font-size: rem(14) !important;
+        line-height: normal !important;
+        color: $spc-checkout-cod-otp-primary !important;
+        background: none !important;
+        border: none !important;
+        padding: 0;
+      }
+    }
+  }
+
   &__submit {
     border: none;
     background: $spc-checkout-cod-otp-primary;
@@ -67,6 +99,13 @@
       flex-direction: column;
     }
 
+    &__resend {
+      & > div {
+        width: rem(50);
+        text-align: $left;
+      }
+    }
+
     &__submit {
       margin-top: rem(26);
       padding: rem(14);
@@ -91,6 +130,7 @@
       margin: rem(70) auto rem(12);
       flex-direction: row;
       justify-content: space-between;
+      align-items: center;
     }
 
     &__submit {
