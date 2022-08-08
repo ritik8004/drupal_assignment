@@ -23,10 +23,10 @@ settings:
   div_id: '2'
   dynamic_product_id: ''
 visibility:
-  node_type:
-    id: node_type
-    bundles:
-      rcs_product: rcs_product
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
     negate: false
     context_mapping:
       node: '@node.node_route_context:node'
+    bundles:
+      rcs_product: rcs_product
