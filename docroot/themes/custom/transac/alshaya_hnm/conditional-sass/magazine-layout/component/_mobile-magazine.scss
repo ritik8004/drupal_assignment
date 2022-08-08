@@ -1,0 +1,11 @@
+.magazine-layout-node {
+  .content-sidebar-wrapper {
+    .content__title_wrapper {
+      #hello-member-pdp {
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
