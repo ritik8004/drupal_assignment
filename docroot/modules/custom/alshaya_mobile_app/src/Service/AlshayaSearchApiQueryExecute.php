@@ -368,7 +368,7 @@ class AlshayaSearchApiQueryExecute {
         }
 
         // Get available sort options.
-        $available_sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
+        $available_sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId(), $page_type);
         $valid_key = FALSE;
 
         $sort_key = strtolower(implode(' ', $sort_option));
@@ -793,7 +793,9 @@ class AlshayaSearchApiQueryExecute {
       // format - 'entity:node/1234:en' and we need to get 1234.
       $exploded_id = explode(':', $item->getId());
       $nid = explode('/', $exploded_id[1])[1];
-      $product_data[] = $this->mobileAppUtility->getLightProductFromNid($nid, $exploded_id[2]);
+      if ($nid) {
+        $product_data[] = $this->mobileAppUtility->getLightProductFromNid($nid, $exploded_id[2]);
+      }
     }
 
     return $product_data;
