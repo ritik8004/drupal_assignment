@@ -16,57 +16,57 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Become a Member' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'سجل عضويتك',
         'context' => 'hello_member',
       ],
       'Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'سجل عضويتك - لا تفّوت فرصة الحصول على العروض، والخصومات، وحتى قسائم الربح.',
         'context' => 'hello_member',
       ],
       'Add More & Get More' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'أضف المزيد واحصل على المزيد',
         'context' => 'hello_member',
       ],
       'Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'هل تعلم أنك إذا أضفت المزيد من المعلومات أدناه، فستربح المزيد من النقاط وستحصل على تجربة أكثر تخصيصاً؟',
         'context' => 'hello_member',
       ],
       'Date of Birth' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'تاريخ الميلاد',
       ],
       'H&M wants to give you special treat on your birthday' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'نرغب في اتش آند ام أن نمنحك هدية خاصة في عيد ميلادك',
         'context' => 'hello_member',
       ],
       'Gender' => [
-        'ar' => 'العضوية',
+        'ar' => 'الجنس',
       ],
       '- Select Gender -' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'اختر نوع الجنس',
       ],
       'Male' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'ذكر',
       ],
       'Female' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'أنثى',
       ],
       'Prefer not to say' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'أُفضل عدم القول',
       ],
       'My Details' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'معلوماتي',
         'context' => 'hello_member',
       ],
       'Points' => [
-        'ar' => 'نقاط',
+        'ar' => 'النقاط',
         'context' => 'hello_member',
       ],
       'Hi' => [
-        'ar' => 'أهلاً',
+        'ar' => 'مرحبا',
         'context' => 'hello_member',
       ],
       'SHOW LESS' => [
-        'ar' => 'تظهر أقل',
+        'ar' => 'عرض أقل',
         'context' => 'hello_member',
       ],
       'SHOW ALL' => [
@@ -74,7 +74,7 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Benefits' => [
-        'ar' => 'فوائد',
+        'ar' => 'المزايا',
         'context' => 'hello_member',
       ],
       'Your memership will be renewed on @expiry_date and points will be reset every year.' => [
@@ -85,15 +85,15 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Points earned' => [
-        'ar' => 'النقاط التي أحرزتها',
+        'ar' => 'النقاط المكتسبة',
         'context' => 'hello_member',
       ],
       'Purchase' => [
-        'ar' => 'عملية الشراء',
+        'ar' => 'الشراء',
         'context' => 'hello_member',
       ],
       'Submit Rating and Review' => [
-        'ar' => 'إرسال التقييم والمراجعة',
+        'ar' => 'التقييم والمراجعة',
         'context' => 'hello_member',
       ],
       'Complete your profile' => [
@@ -101,31 +101,31 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Please enter the OTP sent to' => [
-        'ar' => 'أكمل ملفك الشخصي',
+        'ar' => 'يرجى إدخال رمز الـ OTP المرسل  إلى',
         'context' => 'hello_member',
       ],
       'Not recieved the code?' => [
-        'ar' => 'أكمل ملفك الشخصي',
+        'ar' => 'لم يصلك الرمز؟',
         'context' => 'hello_member',
       ],
       'Resend Code' => [
-        'ar' => 'أكمل ملفك الشخصي',
+        'ar' => 'إرسال الرمز مرة أخرى',
         'context' => 'hello_member',
       ],
       'Verify' => [
-        'ar' => 'أكمل ملفك الشخصي',
+        'ar' => 'التحقق من',
         'context' => 'hello_member',
       ],
       'Send OTP' => [
-        'ar' => 'أكمل ملفك الشخصي',
+        'ar' => 'إرسال OTP',
         'context' => 'hello_member',
       ],
       'Please enter valid OTP' => [
-        'ar' => 'أكمل ملفك الشخصي',
+        'ar' => 'يرجى إدخال رمز OTP صالح',
         'context' => 'hello_member',
       ],
       'Something went wrong please try again later' => [
-        'ar' => 'أكمل ملفك الشخصي',
+        'ar' => 'حدث خطأ ما يرجى المحاولة مرة أخرى',
         'context' => 'hello_member',
       ],
       'Member earn' => [
@@ -147,7 +147,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عضوية اتش اند ام',
         'context' => 'hello_member',
       ],
-      'Membership info' => [
+      'Membership Info' => [
         'ar' => 'معلومات العضوية',
         'context' => 'hello_member',
       ],
@@ -181,10 +181,6 @@ function _alshaya_hello_member_react_translations() {
       ],
       'Submit Rating and Review' => [
         'ar' => 'تقديم التقييم والمراجعة',
-        'context' => 'hello_member',
-      ],
-      'Complete your profile' => [
-        'ar' => 'اكمل ملفك',
         'context' => 'hello_member',
       ],
       'Expires on' => [
@@ -224,19 +220,19 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Yes, email me offers, style updates, and special invites to sales and events.' => [
-        'ar' => 'رمز لهوية العضوية',
+        'ar' => 'نعم، أرسل لي عبر البريد الإلكتروني أحدث العروض والتصاميم والدعوات الخاصة للتنزيلات والفعاليات.',
         'context' => 'hello_member',
       ],
       'The value in Date has to be less than' => [
-        'ar' => 'يجب أن تكون القيمة في "التاريخ',
+        'ar' => 'يجب أن يكون التاريخ أقل من',
         'context' => 'hello_member',
       ],
       'Membership info content node' => [
-        'ar' => 'معلومات العضوية',
+        'ar' => 'محتوى معلومات العضوية',
         'context' => 'hello_member',
       ],
       'Verified' => [
-        'ar' => 'verified AR',
+        'ar' => 'موثق',
         'context' => 'hello_member',
       ],
       'View all Benefits' => [
@@ -365,6 +361,22 @@ function _alshaya_hello_member_react_translations() {
       ],
       'H&M wants to give you special treat on your birthday' => [
         'ar' => 'اتش آند ام يعطيك هدية خاصة في يوم ميلادك',
+        'context' => 'hello_member',
+      ],
+      'Every time you shop online or in store, you will earn points. @currency_value @currency_code = @points_value points.' => [
+        'ar' => 'في كل مرة تتسوق فيها أونلاين أو في المحلات، ستحصل على المزيد من النقاط. %currency_value %currency_value = %points_value النقاط.',
+        'context' => 'hello_member',
+      ],
+      'Review your latest online purchase and earn @review_points points.' => [
+        'ar' => 'قم بمراجعة آخر عملية شراء أونلاين واحصل على %review_points نقطة.',
+        'context' => 'hello_member',
+      ],
+      'Add your date of birth, Gender, Mobile Number to earn @profile_completion_value points.' => [
+        'ar' => 'أضف تاريخ الميلاد، والجنس، ورقم الهاتف المحمول، واحصل على %profile_completion_value نقطة.',
+        'context' => 'hello_member',
+      ],
+      'Members Earn @pointValue points.' => [
+        'ar' => 'يكسب الأعضاء @pointValue النقاط.',
         'context' => 'hello_member',
       ],
     ],
