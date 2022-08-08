@@ -51,7 +51,7 @@
 
     @include breakpoint($only-mobile) {
       .content__title_wrapper_description {
-        text-align: left;
+        text-align: $left;
         padding: rem(16) 0 rem(26);
 
         h1 {
