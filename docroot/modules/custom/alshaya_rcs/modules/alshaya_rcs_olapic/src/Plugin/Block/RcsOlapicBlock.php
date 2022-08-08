@@ -33,8 +33,7 @@ class RcsOlapicBlock extends OlapicBlock {
       'lang' => $data_lang,
     ];
 
-    $olapic_config = $this->configFactory->get('alshaya_olapic.settings');
-    $olapic_external_script_url = $olapic_config->get('olapic_external_script_url');
+    $olapic_external_script_url = $this->configFactory->get('alshaya_olapic.settings')->get('olapic_external_script_url');
 
     return [
       '#type' => 'container',

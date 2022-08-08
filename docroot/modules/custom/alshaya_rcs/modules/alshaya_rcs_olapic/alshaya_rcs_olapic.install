@@ -5,9 +5,6 @@
  * Install, uninstall, update function for alshaya_rcs_olapic.
  */
 
-use Drupal\block\Entity\Block;
-use Drupal\block\BlockInterface;
-
 /**
  * Implements hook_install().
  */
@@ -21,25 +18,8 @@ function alshaya_rcs_olapic_install() {
   $blocks = [
     'alshayaolapicwidget_2' => 'rcsalshayaolapicwidget_2',
   ];
-  foreach ($blocks as $prev_block_id => $new_block_id) {
-    $existing_block_weight = NULL;
-    $prev_block = Block::load($prev_block_id);
-    if ($prev_block instanceof BlockInterface) {
-      // Change the RCS block weight based on the V1 block weight.
-      $existing_block_weight = $prev_block->getWeight();
-      $prev_block->disable()->save();
-      // Load the RCS Block and Change the weight.
-      if ($new_block_id) {
-        $new_block = Block::load($new_block_id);
-        if ($new_block instanceof BlockInterface) {
-          $new_block->setWeight($existing_block_weight);
-          // Update the block region based on the previous block.
-          $new_block->setRegion($prev_block->getRegion());
-          $new_block->save();
-        }
-      }
-    }
-  }
+  \Drupal::moduleHandler()->loadInclude('alshaya_block', 'inc', 'alshaya_block.utility');
+  alshaya_block_switch_block_config($blocks);
 }
 
 /**
@@ -50,10 +30,6 @@ function alshaya_rcs_olapic_uninstall() {
   $blocks = [
     'alshayaolapicwidget_2' => 'rcsalshayaolapicwidget_2',
   ];
-  foreach ($blocks as $prev_block_id => $new_block_id) {
-    $block = Block::load($prev_block_id);
-    if ($block instanceof BlockInterface) {
-      $block->enable()->save();
-    }
-  }
+  \Drupal::moduleHandler()->loadInclude('alshaya_block', 'inc', 'alshaya_block.utility');
+  alshaya_block_revert_block_config($blocks);
 }
