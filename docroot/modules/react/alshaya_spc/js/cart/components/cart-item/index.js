@@ -355,7 +355,13 @@ export default class CartItem extends React.Component {
                   : <a href={url}>{title}</a>}
               </div>
               <div className="spc-product-price">
-                <SpecialPrice price={price} freeItem={freeItem} finalPrice={finalPrice} />
+                <SpecialPrice
+                  price={price}
+                  freeItem={freeItem}
+                  /* If the exclusive promo/coupon is applied no other discount will
+                  get applied and the original price value will be assigned as the final price. */
+                  finalPrice={hasExclusiveCoupon !== true ? finalPrice : price}
+                />
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
