@@ -88,8 +88,8 @@ function alshaya_cos_transac_acq_sku_view(array &$build, EntityInterface $sku_en
  * Get product description from SKU.
  */
 function _alshaya_cos_transac_get_product_description($sku_entity) {
-  $warning_markup = NULL;
-  $description = [];
+
+
   $return = [];
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
@@ -124,6 +124,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   // Render the wrapper div for article warning always so that the same
   // can be filled with data on variant selection.
   $warning = $skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
+  $warning_markup = NULL;
   if (!empty($warning)) {
     $warning_markup = [
       '#theme' => 'product_article_warning_markup',
@@ -144,7 +145,7 @@ function _alshaya_cos_transac_get_product_description($sku_entity) {
   ];
 
   $description_value .= $renderer->renderPlain($item_code);
-
+  $description = [];
   $description['value'] = [
     '#markup' => $description_value,
   ];

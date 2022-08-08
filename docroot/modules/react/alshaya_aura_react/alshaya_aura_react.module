@@ -43,12 +43,23 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $settings['allAuraStatus'] = AuraStatus::ALL_AURA_STATUS;
   $current_route = \Drupal::routeMatch();
   $current_route_name = $current_route->getRouteName();
-  $page['#attached']['library'][] = match ($current_route_name) {
-    'alshaya_aura_react.my_loyalty_club' => 'alshaya_aura_react/aura_header_library_loyalty_club',
-    'entity.user.canonical' => 'alshaya_aura_react/aura_header_library_user',
-    'acq_cart.cart' => 'alshaya_aura_react/aura_header_library_cart',
-    default => 'alshaya_aura_react/aura_header_library',
-  };
+  // Add library dependencies on header library based on routes.
+  switch ($current_route_name) {
+    case 'alshaya_aura_react.my_loyalty_club':
+      $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library_loyalty_club';
+      break;
+
+    case 'entity.user.canonical':
+      $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library_user';
+      break;
+
+    case 'acq_cart.cart':
+      $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library_cart';
+      break;
+
+    default:
+      $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';
+  }
   $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-global';
 
   // Attach aura library on cart/checkout page.
