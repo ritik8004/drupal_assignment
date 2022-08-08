@@ -40,8 +40,8 @@ if ($ah_env && $ah_env !== 'ide' && PHP_SAPI === 'cli') {
   // Set the `domain`.
   putenv('HTTP_HOST=' . $_SERVER['HTTP_HOST']);
 
-  if (function_exists('drush_get_context')) {
-    $cli_args = drush_get_context('argv');
+  if (array_key_exists('argv', $_SERVER)) {
+    $cli_args = $_SERVER['argv'];
     $cli_args[0] = 'drush';
 
     // Ensure each argument is wrapped in quotes.
