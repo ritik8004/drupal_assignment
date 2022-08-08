@@ -773,7 +773,7 @@ class MobileAppUtility {
   public function getLightProductFromNid(int $nid, string $langcode = 'en') {
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
 
-    if (!$node instanceof NodeInterface) {
+    if (!$node instanceof NodeInterface || $node->bundle() != 'acq_product') {
       return [];
     }
     // Get translated node.
