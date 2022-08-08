@@ -36,7 +36,7 @@ class TextField extends React.Component {
           <input
             type="email"
             name={name}
-            disabled={disabled ? 'disabled' : undefined}
+            disabled={disabled}
             defaultValue={defaultValue}
             onBlur={(e) => this.handleEvent(e, 'blur')}
             className={focusClass}
@@ -57,7 +57,7 @@ class TextField extends React.Component {
             <input
               maxLength={countryMobileCodeMaxLength}
               type="tel"
-              disabled={disabled ? 'disabled' : undefined}
+              disabled={disabled}
               name={name}
               defaultValue={defaultValue}
             />
@@ -76,7 +76,7 @@ class TextField extends React.Component {
           type="text"
           id={name}
           name={name}
-          disabled={disabled ? 'disabled' : undefined}
+          disabled={disabled}
           defaultValue={defaultValue}
           onBlur={(e) => this.handleEvent(e, 'blur')}
           className={focusClass}
