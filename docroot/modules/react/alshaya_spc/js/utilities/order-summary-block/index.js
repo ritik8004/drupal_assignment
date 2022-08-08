@@ -63,6 +63,7 @@ const OrderSummaryBlock = ({
   context,
   couponCode,
   collectionCharge,
+  hasExclusiveCoupon,
 }) => {
   const orderSummaryTitle = Drupal.t('Order Summary');
   const continueCheckoutLink = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
@@ -96,7 +97,12 @@ const OrderSummaryBlock = ({
       {!showCheckoutButton
         && (
         <div className={`product-content product-count-${Object.keys(items).length}`}>
-          <CheckoutCartItems items={items} couponCode={couponCode} context={context} />
+          <CheckoutCartItems
+            items={items}
+            couponCode={couponCode}
+            context={context}
+            hasExclusiveCoupon={hasExclusiveCoupon}
+          />
         </div>
         )}
       <div className="block-content">
