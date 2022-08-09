@@ -72,6 +72,7 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[MetaImageRenderEvent::EVENT_NAME][] = ['setProductMetaImage', 200];
     return $events;
   }

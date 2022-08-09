@@ -1,0 +1,10 @@
+.return-requests-wrapper {
+  .return-qty-row,
+  .return-reasons-row {
+    .return-reason-label {
+      @include breakpoint($only-tablet) {
+        font-size: rem(13);
+      }
+    }
+  }
+}

@@ -289,8 +289,6 @@ function alshaya_acm_checkout_block_access(Block $block, $operation, AccountInte
 function alshaya_acm_checkout_alshaya_acm_checkout_payment_methods_list_alter(array &$payment_methods) {
   if ($checkout_settings = \Drupal::config('alshaya_acm_checkout.settings')->get('exclude_payment_methods')) {
     $method_codes = array_filter($checkout_settings);
-    $payment_methods = array_filter($payment_methods, function ($payment_method) use ($method_codes) {
-      return !in_array($payment_method['id'], $method_codes);
-    });
+    $payment_methods = array_filter($payment_methods, fn($payment_method) => !in_array($payment_method['id'], $method_codes));
   }
 }

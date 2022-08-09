@@ -3,3 +3,5 @@ description: Enables RCS for Debenhams.
 type: module
 core: 8.x
 core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_dh:alshaya_dh_transac

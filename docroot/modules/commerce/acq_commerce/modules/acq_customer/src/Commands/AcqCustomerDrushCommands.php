@@ -11,7 +11,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
  */
 class AcqCustomerDrushCommands extends DrushCommands {
 
-  const BATCH_SIZE = 20;
+  public const BATCH_SIZE = 20;
 
   /**
    * Database Connection.
@@ -82,7 +82,7 @@ class AcqCustomerDrushCommands extends DrushCommands {
 
     foreach (array_chunk($customers, self::BATCH_SIZE) as $customers_batch) {
       $batch['operations'][] = [
-        [__CLASS__, 'pushCustomerDataInBatch'],
+        [self::class, 'pushCustomerDataInBatch'],
         [$customers_batch],
       ];
     }

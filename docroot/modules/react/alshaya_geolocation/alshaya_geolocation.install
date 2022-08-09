@@ -78,6 +78,7 @@ function alshaya_geolocation_update_8004() {
  */
 function alshaya_geolocation_update_dependencies() {
 
+  $dependencies = [];
   // Run after the empty config delete.
   $dependencies['geolocation'][8201] = [
     'alshaya_geolocation' => 8002,

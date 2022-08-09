@@ -229,6 +229,9 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
+    $line1 = [];
+    $line2 = [];
+    $line3 = [];
     // Load the CheckoutFlow plugin.
     $config = $this->configFactory->get('acq_checkout.settings');
 

@@ -23,7 +23,7 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
   /**
    * Request parameter to indicate that a request is a Drupal Ajax request.
    */
-  const AJAX_REQUEST_PARAMETER = '_drupal_ajax';
+  public const AJAX_REQUEST_PARAMETER = '_drupal_ajax';
 
   /**
    * Constructs a AlshayaSeoRequestSubscriber object.
@@ -70,6 +70,7 @@ class AlshayaSeoRequestSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     // If priority is made higher than this, then the route match object returns
     // null.
     $events[KernelEvents::REQUEST][] = ['onKernelRequestRedirect', 32];

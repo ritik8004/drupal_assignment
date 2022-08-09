@@ -42,7 +42,7 @@ class AlshayaFacetsPrettyPathsKernelEventsSubscriber implements EventSubscriberI
         foreach ($bad_bot_agents as $bad_bot_agent) {
           // Add only "Googlebot" for instance to block all user agents with
           // this string.
-          if (strpos($user_agent, $bad_bot_agent) !== FALSE) {
+          if (str_contains($user_agent, $bad_bot_agent)) {
             $event->stopPropagation();
 
             $response = new Response();
@@ -60,6 +60,7 @@ class AlshayaFacetsPrettyPathsKernelEventsSubscriber implements EventSubscriberI
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::REQUEST][] = ['filterBadBotRequests', 999];
     return $events;
   }

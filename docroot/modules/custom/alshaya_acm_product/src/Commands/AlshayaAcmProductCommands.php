@@ -32,7 +32,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
   /**
    * Event dispatched after each drush commmand.
    */
-  const POST_DRUSH_COMMAND_EVENT = 'alshaya_acm_product.post_drush_command';
+  public const POST_DRUSH_COMMAND_EVENT = 'alshaya_acm_product.post_drush_command';
 
   /**
    * Config Factory.
@@ -178,7 +178,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       'progress_message' => 'Processed @current out of @total.',
       'error_message' => 'Error occurred while deleting color nodes, please check logs.',
       'operations' => [
-        [[__CLASS__, 'deleteColorNodes'], []],
+        [[self::class, 'deleteColorNodes'], []],
       ],
     ];
 
@@ -231,7 +231,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       'progress_message' => 'Processed @current out of @total.',
       'error_message' => 'Error occurred while creating color nodes, please check logs.',
       'operations' => [
-        [[__CLASS__, 'createColorNodes'], []],
+        [[self::class, 'createColorNodes'], []],
       ],
     ];
 
@@ -615,7 +615,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     foreach (array_chunk($skus, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'addMediaFilesUsageChunk'],
+        [self::class, 'addMediaFilesUsageChunk'],
         [$chunk, $field],
       ];
     }
@@ -723,7 +723,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     foreach (array_chunk($result, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'deleteUnusedMediaFilesChunk'],
+        [self::class, 'deleteUnusedMediaFilesChunk'],
         [$chunk, $dry_run],
       ];
     }
@@ -802,9 +802,9 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $query->condition('n.nid', $nids, 'NOT IN');
     $nids = $query->execute()->fetchCol();
 
-    $this->output()->writeln('Total number of nodes for which url alias is not generated: ' . count($nids));
+    $this->output()->writeln('Total number of nodes for which url alias is not generated: ' . (is_countable($nids) ? count($nids) : 0));
     if (!empty($nids)) {
-      $this->output()->writeln('The nids are: ' . json_encode($nids));
+      $this->output()->writeln('The nids are: ' . json_encode($nids, JSON_THROW_ON_ERROR));
     }
 
     if ($options['fix']) {
@@ -870,7 +870,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     foreach (array_chunk($skus, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'fixMissingFilesForSkus'],
+        [self::class, 'fixMissingFilesForSkus'],
         [$chunk],
       ];
     }
@@ -1012,7 +1012,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       return;
     }
 
-    $count = count($result);
+    $count = is_countable($result) ? count($result) : 0;
     $this->drupalLogger->info('The number of the products having only one translation are @count.', ['@count' => $count]);
 
     $default_count = Settings::get('single_translation_product_process_limit', 100);

@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class PreprocessMagazineEvent extends Event {
 
-  const EVENT_NAME = 'preprocess_alshaya_magazine';
+  public const EVENT_NAME = 'preprocess_alshaya_magazine';
 
   /**
    * Variables array.

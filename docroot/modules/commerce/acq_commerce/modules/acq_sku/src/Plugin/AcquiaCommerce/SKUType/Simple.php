@@ -139,7 +139,7 @@ class Simple extends SKUPluginBase {
     $query->condition('child_sku.field_configured_skus_value', $sku);
     $parents = $query->execute()->fetchAllKeyed();
 
-    if (count($parents) > 1) {
+    if ((is_countable($parents) ? count($parents) : 0) > 1) {
       \Drupal::logger('acq_sku')->warning(
         'Multiple parents found for SKU: @sku, parents: @parents',
         [

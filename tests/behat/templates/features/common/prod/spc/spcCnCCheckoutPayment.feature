@@ -36,10 +36,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
     And I add the billing address on checkout page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -80,10 +76,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
     And I add the billing address on checkout page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -127,10 +119,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
     And I add the billing address on checkout page
     And I wait for AJAX to finish
     And I wait 10 seconds
@@ -174,10 +162,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
     And I add the billing address on checkout page
     And I wait for AJAX to finish
     And I wait 10 seconds

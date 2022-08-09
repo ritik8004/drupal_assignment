@@ -232,7 +232,6 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart',
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
-          'alshaya_spc/dynamic_promotion_label',
           'alshaya_acm_promotion/basket_labels_manager',
           'alshaya_white_label/free_gifts',
         ],
@@ -625,7 +624,6 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/commerce_backend.checkout.v' . $backend_version,
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
-          'alshaya_spc/dynamic_promotion_label',
         ],
         'drupalSettings' => [
           'cnc_enabled' => $cnc_enabled,
@@ -697,8 +695,9 @@ class AlshayaSpcController extends ControllerBase {
         ? -999
         : (int) $payment_method_term->getWeight();
     }
+    $arrayColumn = array_column($payment_methods, 'weight');
 
-    array_multisort(array_column($payment_methods, 'weight'), SORT_ASC, $payment_methods);
+    array_multisort($arrayColumn, SORT_ASC, $payment_methods);
     $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
     $build = $this->addCheckoutConfigSettings($build);
@@ -933,7 +932,7 @@ class AlshayaSpcController extends ControllerBase {
           }
 
           $raw_number = $value;
-          if (strpos($value, $country_mobile_code) === FALSE) {
+          if (!str_contains($value, $country_mobile_code)) {
             $value = $country_mobile_code . $value;
           }
 
@@ -950,7 +949,7 @@ class AlshayaSpcController extends ControllerBase {
               $status[$key] = TRUE;
             }
           }
-          catch (\Exception $e) {
+          catch (\Exception) {
             $status[$key] = FALSE;
           }
 
@@ -1018,7 +1017,7 @@ class AlshayaSpcController extends ControllerBase {
                 }
               }
             }
-            catch (\Exception $e) {
+            catch (\Exception) {
               $status[$key] = FALSE;
               break;
             }

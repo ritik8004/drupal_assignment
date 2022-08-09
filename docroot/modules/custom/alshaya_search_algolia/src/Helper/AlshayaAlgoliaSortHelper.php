@@ -29,9 +29,7 @@ class AlshayaAlgoliaSortHelper {
     if ($page_type === 'search') {
       $position = \Drupal::configFactory()->get('alshaya_search.settings');
 
-      $enabled_sorts = array_filter($position->get('sort_options'), function ($item) {
-        return ($item != '');
-      });
+      $enabled_sorts = array_filter($position->get('sort_options'), fn($item) => $item != '');
 
       $labels = AlshayaDynamicConfigValueBase::schemaArrayToKeyValue(
         (array) $position->get('sort_options_labels')

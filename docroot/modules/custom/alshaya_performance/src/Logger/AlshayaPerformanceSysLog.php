@@ -12,7 +12,7 @@ use Drupal\syslog\Logger\SysLog;
  */
 class AlshayaPerformanceSysLog extends SysLog {
 
-  const ALSHAYA_PERFORMANCE_PRODUCTION_MODE = 'production';
+  public const ALSHAYA_PERFORMANCE_PRODUCTION_MODE = 'production';
 
   /**
    * A configuration object containing custom alshaya_performance settings.

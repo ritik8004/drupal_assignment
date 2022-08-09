@@ -39,6 +39,7 @@ class SKUFieldType extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
+    $properties = [];
     // Prevent early t() calls by using the TranslatableMarkup.
     $properties['value'] = DataDefinition::create('string')
       ->setLabel(new TranslatableMarkup('Text value'))
@@ -110,8 +111,9 @@ class SKUFieldType extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
+    $values = [];
     $random = new Random();
-    $values['value'] = $random->word(mt_rand(1, $field_definition->getSetting('max_length')));
+    $values['value'] = $random->word(random_int(1, $field_definition->getSetting('max_length')));
     return $values;
   }
 

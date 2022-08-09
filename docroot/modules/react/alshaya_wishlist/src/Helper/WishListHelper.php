@@ -160,7 +160,7 @@ class WishListHelper {
     $current_path = $this->currentPath->getPath();
 
     // Check if the wishlist path exist in the current path.
-    if (strpos($current_path, '/wishlist') !== FALSE) {
+    if (str_contains($current_path, '/wishlist')) {
       return TRUE;
     }
 

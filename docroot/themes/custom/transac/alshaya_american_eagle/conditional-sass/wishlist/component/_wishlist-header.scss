@@ -42,4 +42,39 @@ body.wishlist-enabled {
       }
     }
   }
+
+  .wishlist-icon {
+    background-size: 104%;
+    background-position: center;
+  }
+
+  #wishlist-header-wrapper {
+    .wishlist-header {
+      padding-bottom: 0;
+    }
+  }
+
+  header {
+    .region__header {
+      .block-alshaya-react-mini-cart {
+        @include breakpoint($desktop) {
+          height: rem(24);
+        }
+      }
+    }
+  }
+
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .wishlist-minicart-sticky-wrapper {
+        #static-minicart-section {
+          height: rem(24);
+
+          @include breakpoint($upto-desktop) {
+            margin-top: rem(12);
+          }
+        }
+      }
+    }
+  }
 }

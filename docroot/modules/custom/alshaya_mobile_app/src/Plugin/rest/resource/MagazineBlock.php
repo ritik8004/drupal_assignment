@@ -31,7 +31,7 @@ class MagazineBlock extends ResourceBase {
   /**
    * Prefix used for the endpoint.
    */
-  const ENDPOINT_PREFIX = '/rest/v1/';
+  public const ENDPOINT_PREFIX = '/rest/v1/';
 
   /**
    * The mobile app utility service.
@@ -154,7 +154,7 @@ class MagazineBlock extends ResourceBase {
       BubbleableMetadata::createFromObject($result)
         ->merge($bubbleable_metadata);
     }
-    if (isset($result['view_result']) && count($result['view_result']) < 1) {
+    if (isset($result['view_result']) && (is_countable($result['view_result']) ? count($result['view_result']) : 0) < 1) {
       $this->mobileAppUtility->throwException();
     }
 

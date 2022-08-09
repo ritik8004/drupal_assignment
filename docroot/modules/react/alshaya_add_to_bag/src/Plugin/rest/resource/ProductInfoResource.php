@@ -187,6 +187,7 @@ class ProductInfoResource extends ResourceBase {
    *   The response containing checkout settings.
    */
   public function get(string $sku) {
+    $configurable_attributes = [];
     $sku = base64_decode($sku);
 
     try {
@@ -307,16 +308,14 @@ class ProductInfoResource extends ResourceBase {
 
           // Set product labels data.
           $labels_data = $this->skuManager->getLabelsData($child, 'pdp');
-          $child_data['product_labels'] = array_map(function ($label_data) {
-            return [
-              'image' => [
-                'url' => $label_data['image']['url'],
-                'title' => $label_data['image']['title'],
-                'alt' => $label_data['image']['alt'],
-              ],
-              'position' => $label_data['position'],
-            ];
-          }, $labels_data);
+          $child_data['product_labels'] = array_map(fn($label_data) => [
+            'image' => [
+              'url' => $label_data['image']['url'],
+              'title' => $label_data['image']['title'],
+              'alt' => $label_data['image']['alt'],
+            ],
+            'position' => $label_data['position'],
+          ], $labels_data);
 
           // Set prices.
           $child_data['original_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']);
@@ -376,12 +375,10 @@ class ProductInfoResource extends ResourceBase {
         $data['title'] = $this->productInfoHelper->getTitle($sku, 'modal');
 
         // Set the promotions for the product.
-        $data['promotions'] = array_map(function ($promotion) {
-          return [
-            'label' => $promotion['text'],
-            'url' => $promotion['promo_web_url'],
-          ];
-        }, $this->skuManager->getPromotions($sku));
+        $data['promotions'] = array_map(fn($promotion) => [
+          'label' => $promotion['text'],
+          'url' => $promotion['promo_web_url'],
+        ], $this->skuManager->getPromotions($sku));
 
         // Set the size guide data.
         $category = NULL;

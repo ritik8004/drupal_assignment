@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "A minimal Symfony project recommended to create bare bones applications",
     "require": {
-        "php": ">=7.4",
+        "php": "^8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "^1.10",
@@ -26,6 +26,9 @@
         "sort-packages": true,
         "allow-plugins": {
             "symfony/flex": true
+        },
+        "platform": {
+            "php": "8.0"
         }
     },
     "autoload": {
@@ -64,7 +67,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "4.3.*"
+            "require": "4.4.*"
         }
     }
 }

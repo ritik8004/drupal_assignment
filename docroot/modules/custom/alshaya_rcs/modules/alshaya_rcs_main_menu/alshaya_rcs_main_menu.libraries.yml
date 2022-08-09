@@ -4,10 +4,46 @@ category_enrichment:
   dependencies:
     - rcs_placeholders/helpers
 
+view_all:
+  version: 1.x
+  js:
+    js/alshaya_rcs_view_all.js: {}
+  dependencies:
+    - core/drupal
+    - rcs_placeholders/helpers
+
 renderer:
   js:
     dist/alshaya_rcs_main_menu_renderer.bundle.js: {}
   dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
     - alshaya_rcs_magento_placeholders/main
     - rcs_magento_placeholders/rcs_magento_placeholders
     - alshaya_rcs_main_menu/category_enrichment
+
+main_menu_level1:
+  version: 1.x
+  js:
+    handlebars/rcs-main_menu_level1.handlebars: {}
+
+main_menu_level2_partial:
+  version: 1.x
+  js:
+    handlebars/rcs-main_menu_level2-partial.handlebars: {}
+
+main_menu_level3_partial:
+  version: 1.x
+  js:
+    handlebars/rcs-main_menu_level3-partial.handlebars: {}
+
+main_menu_level4_partial:
+  version: 1.x
+  js:
+    handlebars/rcs-main_menu_level4-partial.handlebars: {}
+
+shop_by_menu:
+  version: 1.x
+  js:
+    handlebars/rcs-shop_by_menu.handlebars: {}

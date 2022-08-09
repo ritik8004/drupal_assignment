@@ -11,7 +11,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
  */
 class HandlebarsService {
 
-  const HANDLEBARS_JS_DIR = 'public://rcs_handlebars';
+  public const HANDLEBARS_JS_DIR = 'public://rcs_handlebars';
 
   /**
    * The file system.
@@ -114,7 +114,7 @@ class HandlebarsService {
    *   TRUE/FALSE.
    */
   protected function endsWith($haystack, $needle) {
-    return substr($haystack, -strlen($needle)) === $needle;
+    return str_ends_with($haystack, $needle);
   }
 
   /**
@@ -214,7 +214,7 @@ class HandlebarsService {
         if (!$this->endsWith($path, '.handlebars')) {
           continue;
         }
-        $is_handlebars_library = $is_handlebars_library ?? TRUE;
+        $is_handlebars_library ??= TRUE;
         // Make sure that folder structure is created.
         $dir = $this->prepareDirectories("$extension/$id");
         $uri = $dir . '/' . basename($path) . '.js';

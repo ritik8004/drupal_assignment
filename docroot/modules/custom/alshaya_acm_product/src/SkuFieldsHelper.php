@@ -17,7 +17,7 @@ class SkuFieldsHelper {
    *
    * @see alshaya_acm_product.fields_labels_n_error.yml in alshaya_pb_transac.
    */
-  const CONFIG_FIELD_LABELS_N_ERROR = 'alshaya_acm_product.fields_labels_n_error';
+  public const CONFIG_FIELD_LABELS_N_ERROR = 'alshaya_acm_product.fields_labels_n_error';
 
   /**
    * Read-only Config data for alshaya_acm_product.fields_labels_n_error.

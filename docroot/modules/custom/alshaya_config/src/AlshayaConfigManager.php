@@ -28,39 +28,39 @@ class AlshayaConfigManager {
   /**
    * Replace whole config.
    */
-  const MODE_REPLACE = 'replace';
+  public const MODE_REPLACE = 'replace';
 
   /**
    * Add only the values missing from config.
    */
-  const MODE_ADD_MISSING = 'missing';
+  public const MODE_ADD_MISSING = 'missing';
 
   /**
    * Add missing values recursively from config.
    */
-  const MODE_ADD_MISSING_RECURSIVE = 'missing_recursive';
+  public const MODE_ADD_MISSING_RECURSIVE = 'missing_recursive';
 
   /**
    * Merge configs - deep merge.
    */
-  const MODE_MERGE = 'merge';
+  public const MODE_MERGE = 'merge';
 
   /**
    * Replace a particular key in config.
    */
-  const MODE_REPLACE_KEY = 'replace_key';
+  public const MODE_REPLACE_KEY = 'replace_key';
 
   /**
    * Just resave existing config and let overrides get applied.
    *
    * This is mainly used for overriding config from CORE or Contrib.
    */
-  const MODE_RESAVE = 'resave';
+  public const MODE_RESAVE = 'resave';
 
   /**
    * If there is a replace, we replace the complete configuration.
    */
-  const USE_FROM_REPLACE = 'use_from_replace';
+  public const USE_FROM_REPLACE = 'use_from_replace';
 
   /**
    * Config Storage service.
@@ -183,12 +183,12 @@ class AlshayaConfigManager {
       $data = $this->getDataFromCode($config_id, $module_name, $path);
 
       // If block config, replace the theme name with current active theme.
-      if (strpos($config_id, 'block.block.') === 0) {
+      if (str_starts_with($config_id, 'block.block.')) {
         $data['theme'] = $this->themeManager->getActiveTheme()->getName();
       }
 
       // If field config.
-      if (strpos($config_id, 'field.field.') === 0) {
+      if (str_starts_with($config_id, 'field.field.')) {
         $field = FieldConfig::loadByName(
           $data['entity_type'], $data['bundle'], $data['field_name']
         );
@@ -208,7 +208,7 @@ class AlshayaConfigManager {
         }
       }
       // If field storage.
-      elseif (strpos($config_id, 'field.storage.') === 0) {
+      elseif (str_starts_with($config_id, 'field.storage.')) {
         $field_storage = FieldStorageConfig::loadByName($data['entity_type'], $data['field_name']);
         if ($field_storage instanceof FieldStorageConfig) {
           $config->setData($data)->save();
@@ -246,7 +246,7 @@ class AlshayaConfigManager {
       }
 
       // Flush image cache for style we updated.
-      if (strpos($config_id, 'image.style.') === 0) {
+      if (str_starts_with($config_id, 'image.style.')) {
         $style_id = str_replace('image.style.', '', $config_id);
 
         /** @var \Drupal\image\Entity\ImageStyle $style */
@@ -268,7 +268,7 @@ class AlshayaConfigManager {
           ]);
         }
       }
-      elseif (strpos($config_id, 'search_api.index.') === 0) {
+      elseif (str_starts_with($config_id, 'search_api.index.')) {
         $index_name = str_replace('search_api.index.', '', $config_id);
         try {
           $index = Index::load($index_name);
@@ -337,7 +337,13 @@ class AlshayaConfigManager {
 
       case self::MODE_REPLACE_KEY:
         foreach ($options['replace_keys'] as $replace_key) {
-          $existing[$replace_key] = $data[$replace_key];
+          $data_replace_source = $data;
+          $data_replace_target = &$existing;
+          foreach (explode('.', $replace_key) as $key) {
+            $data_replace_source = $data_replace_source[$key];
+            $data_replace_target = &$data_replace_target[$key];
+          }
+          $data_replace_target = $data_replace_source;
         }
         $data = $existing;
         break;
@@ -483,40 +489,41 @@ class AlshayaConfigManager {
     // Include overrides.
     $acsf_site_code = mb_strtolower(Settings::get('acsf_site_code'));
     $country_code = mb_strtolower(Settings::get('country_code'));
-    $env = mb_strtolower(Settings::get('env'));
     $settings_path = Settings::get('settings_override_yaml_file_path');
-
-    if (empty($mdc)) {
-      if (!$mdc) {
-        if ($env === 'local') {
-          $mdc = $acsf_site_code . '_qa';
-        }
-        else {
-          $mdc = $acsf_site_code . '_' . $env;
-        }
-      }
-    }
-
-    // phpcs:ignore
-    global $magentos;
-
-    $settings = [];
-    $settings['algolia_env'] = $magentos[$mdc]['algolia_env'] ?? $mdc;
-    $settings['alshaya_api.settings']['magento_host'] = $magentos[$mdc]['url'];
 
     $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
 
     if ($reset) {
       if (file_exists($settings_file)) {
         unlink($settings_file);
-        $this->logger->notice('Magento settings reset to default value');
-        return 1;
+        $this->logger->notice('Magento settings override file @file removed.', [
+          '@file' => $settings_file,
+        ]);
+      }
+
+      return 1;
+    }
+
+    if (empty($mdc)) {
+      $env = mb_strtolower(Settings::get('env_name'));
+      if ($env === 'local') {
+        $mdc = $acsf_site_code . '_qa';
       }
       else {
-        $this->logger->notice('Failed resetting magento settings.');
-        return 0;
+        $mdc = $acsf_site_code . '_' . $env;
       }
     }
+
+    // @codingStandardsIgnoreLine
+    global $magentos;
+
+    if (empty($magentos[$mdc])) {
+      throw new \Exception("MDC code $mdc unknown.");
+    }
+
+    $settings = [];
+    $settings['algolia_env'] = $magentos[$mdc]['algolia_env'] ?? $mdc;
+    $settings['alshaya_api.settings']['magento_host'] = $magentos[$mdc]['url'];
 
     foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
       $settings['alshaya_api.settings'][$key] = $value;

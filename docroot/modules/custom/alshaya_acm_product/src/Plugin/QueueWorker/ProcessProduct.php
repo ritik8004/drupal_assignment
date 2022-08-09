@@ -36,7 +36,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   /**
    * Queue Name.
    */
-  const QUEUE_NAME = 'alshaya_process_product';
+  public const QUEUE_NAME = 'alshaya_process_product';
 
   /**
    * Flag to indicate if processing item currently.
@@ -214,11 +214,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
     }
 
-    // Invalidate our custom cache tags.
-    $cache_tags = Cache::mergeTags(
-      $cache_tags,
-      ProductCacheManager::getAlshayaProductTags($entity)
-    );
+    ProductCacheManager::$useCache = FALSE;
 
     $this->cacheTagsInvalidator->invalidateTags($cache_tags);
 
@@ -232,13 +228,21 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
 
     foreach ($translation_languages as $language) {
       $translation = SKU::loadFromSku($entity->getSku(), $language->getId());
+      $variant_sku_without_image = [];
+      $translation_sku_without_image = '';
 
       foreach ($variants as $variant) {
         $variant_sku = SKU::loadFromSku($variant, $language->getId(), FALSE);
         if ($variant_sku instanceof SKU) {
           // Download product images for all the variants of the product.
-          $this->imagesManager->getProductMedia($variant_sku, 'pdp', TRUE);
+          $variant_data = $this->imagesManager->getProductMedia($variant_sku, 'pdp', TRUE);
           $this->imagesManager->getProductMedia($variant_sku, 'pdp', FALSE);
+
+          // Collect the child SKUs without any images.
+          if (!isset($variant_data['media_items']['images']) || empty($variant_data['media_items']['images'])) {
+            $variant_sku_without_image[] = $variant_sku->getSku();
+          }
+
           if ($node) {
             // Mark the variant as processed now.
             $this->productProcessedManager->markProductProcessed($variant_sku->getSku());
@@ -247,8 +251,16 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       }
 
       // Download product images for product and warm up caches.
-      $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
+      $translation_data = $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
       $this->imagesManager->getProductMedia($translation, 'pdp', FALSE);
+
+      // Store the parent SKU without any images.
+      if (!isset($translation_data['media_items']['images']) || empty($translation_data['media_items']['images'])) {
+        $translation_sku_without_image = $translation->getSku();
+      }
+
+      // Prepare the swatches and store the same in the cache.
+      $this->imagesManager->getSwatches($translation);
       if ($node) {
         // Mark the product as processed now.
         $this->productProcessedManager->markProductProcessed($translation->getSku());
@@ -257,6 +269,20 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         $event = new ProductUpdatedEvent($translation, ProductUpdatedEvent::PRODUCT_PROCESSED);
         $this->dispatcher->dispatch(ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT, $event);
       }
+    }
+
+    // Log the parent & child SKUs if both have no images.
+    if ($entity->bundle() === 'configurable' && !empty($variant_sku_without_image) && !empty($translation_sku_without_image)) {
+      $this->getLogger('ProcessProduct')->notice('No images found for SKUs during product sync. Parent SKU: @sku, Child SKUs: @child_skus', [
+        '@sku' => $translation_sku_without_image,
+        '@child_skus' => implode(', ', $variant_sku_without_image),
+      ]);
+    }
+    // Log the SKU (that are not configurable) without any image.
+    elseif ($entity->bundle() === 'simple' && !empty($translation_sku_without_image)) {
+      $this->getLogger('ProcessProduct')->notice('No images found for SKU during product sync. SKU: @sku', [
+        '@sku' => $translation_sku_without_image,
+      ]);
     }
 
     $this->getLogger('ProcessProduct')->notice('Processed product with sku: @sku', [

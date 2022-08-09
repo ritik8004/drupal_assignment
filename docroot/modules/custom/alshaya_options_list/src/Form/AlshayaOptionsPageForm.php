@@ -225,6 +225,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
    * Formset of displaying options settings for attributes.
    */
   public function attributeOptionsFields($attribute_data) {
+    $form = [];
     $form['title'] = [
       '#type' => 'textfield',
       '#default_value' => $attribute_data['title'] ?? '',

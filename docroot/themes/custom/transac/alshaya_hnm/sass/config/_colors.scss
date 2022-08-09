@@ -78,6 +78,10 @@ $tropical_green: #007b5f;
 $mariner: #283d5a;
 $sky_blue: #93cdff;
 $_plp_secondary_cta_hover: rgba(34, 34, 34, 0.1);
+$white-linen: #f1ebdf;
+$nickel: #6d7278;
+$gainsboro: #d8d8d8;
+$silver-chalice: #afacac;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -404,6 +408,10 @@ $pdp_sell_title: $hnm-black-three;
 $pdp_mobile_wrapper: $default_background_color;
 $pdp_slick_dots_background: rgba(255, 255, 255, 0.3);
 $pdp_slick_dots_box_shadow: rgba(0, 0, 0, 0.3);
+$pdp_bnpl_open_lbl_background: $white-five;
+$pdp_bnpl_hide_lbl_text: $hnm-black-three;
+$pdp_bnpl_hide_lbl_background: $light_orange;
+$pdp_bnpl_grey_shadow: $hnm-black-two-50;
 
 // additional attribute
 $pdp_additional_attribute_text: $hnm-black-three;
@@ -420,6 +428,8 @@ $privilege_card_title: $hnm-black-three;
 $login_form_text: $black-two;
 $newsletter_subscribe_label: $grey-ash;
 $myaccountneedhelp_text: $white-five;
+$login_tnc_link_hover: $hnm-black-three;
+$user_field_link: $gray44;
 
 //block-youllbeableto
 $user_block_title: $black-three;
@@ -829,3 +839,39 @@ $egift-accordion-bg: $primary_bg;
 // Online Returns
 $online-return-eligibility-button-txt: $hnm-black-three;
 $online-return-dark-txt: $hnm-black-three;
+$online-return-dark-bg: $hnm-black-three;
+$online-return-button-bg: $hnm-black-three;
+$online-return-refund-grey-txt: $grey11;
+$online-return-refund-blue-txt: $_tooltip_blue;
+$online-return-confirmation-note-txt: $grey11;
+$online-return-confirmation-border: $hnm-black-three;
+$online-return-light-bg: $_white-four;
+$online-return-cancel-button-border: $grey4;
+
+// Hello Member membership success popup
+$hm-membership-success-popup-bg: $white-linen;
+
+// Hello Member registration
+$hm-registration-accordion-bg: $grey9;
+$hm-registration-fields-bg: $grey9;
+
+// Hello Member points block
+$hm-points-block-bg: $white-linen;
+$hm-points-block-light-txt: $nickel;
+$hm-points-block-tier-progress: $gainsboro;
+$hm-points-block-tier-progress-active: $hnm-red;
+
+// Hello Member benefit block
+$hm-my-offers-bg: $_grey_11;
+$hm-my-offers-expiry-txt: $grey-light;
+$hm-history-points-light-title: $silver-chalice;
+
+// Hello member history point
+$hm-points-expiry-accordion-title: $hnm-red;
+$hm-points-expiry-accordion-icon: $hnm-red;
+$hm-benefit-Tnc-txt: $silver-chalice;
+
+// hello member pdp
+$hm-pdp-points-earned-txt: $venetian_red;
+// hello member SPC
+$hm-accured-points-txt: $hnm-red;

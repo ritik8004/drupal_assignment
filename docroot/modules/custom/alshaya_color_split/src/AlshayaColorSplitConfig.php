@@ -18,7 +18,7 @@ class AlshayaColorSplitConfig {
   /**
    * Config name constant.
    */
-  const CONFIG_NAME = 'alshaya_color_split.settings';
+  public const CONFIG_NAME = 'alshaya_color_split.settings';
 
   /**
    * Get value for specific key from config.

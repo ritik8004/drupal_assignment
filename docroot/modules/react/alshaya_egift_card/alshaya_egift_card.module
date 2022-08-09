@@ -20,9 +20,7 @@ function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {
   $build['#attached']['drupalSettings']['egiftCard'] = [
     'enabled' => $egiftCard_settings->isEgiftCardEnabled(),
     'topUpLinkCardEnabled' => $egiftCard_settings->isLinkCardForTopupEnabled(),
-    'notSupportedPaymentMethods' => array_filter($egiftCard_settings->getNotSupportedPaymentMethods(), function($method) {
-      return $method !== '0';
-    }),
+    'notSupportedPaymentMethods' => array_filter($egiftCard_settings->getNotSupportedPaymentMethods(), fn($method) => $method !== '0'),
     'allowSavedCreditCardForTopup' => $egiftCard_settings->getAllowSavedCCForTopUp(),
   ];
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());

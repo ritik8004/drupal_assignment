@@ -60,6 +60,7 @@ class ProductCategoryDyPageTypeEventSubscriber implements EventSubscriberInterfa
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events['dy.set.context'][] = ['setContextCategory', 200];
     return $events;
   }

@@ -1,6 +1,7 @@
 // Ref: https://github.com/algolia/react-instantsearch/blob/v5.7.0/packages/react-instantsearch-core/src/core/indexUtils.js
 import _objectSpread from '@babel/runtime/helpers/esm/objectSpread';
 import omit from 'lodash/omit';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 /**
 * As we have copied the file from algolia repo and modified it for our need
@@ -402,3 +403,13 @@ export const getBackToPlpPageIndex = () => {
   }
   return window.algoliaPlpSortIndex || null;
 };
+
+/**
+ * Check if we need to display price range.
+ */
+export function hasPriceRange(alshayaPriceRange) {
+  return drupalSettings.reactTeaserView.isPriceModeFromTo
+    && hasValue(alshayaPriceRange)
+    && (alshayaPriceRange.to.min !== alshayaPriceRange.to.max)
+    && (alshayaPriceRange.to.min !== 0 || alshayaPriceRange.to.max !== 0);
+}

@@ -77,6 +77,7 @@ class CheckoutSettings extends ResourceBase {
    *   The response containing checkout settings.
    */
   public function get() {
+    $data = [];
     $settings = $this->configFactory->get('alshaya_click_collect.settings');
     $data['cnc_subtitle_available'] = $settings->get('checkout_click_collect_available');
     $data['cnc_subtitle_unavailable'] = $settings->get('checkout_click_collect_unavailable');

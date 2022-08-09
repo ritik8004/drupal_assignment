@@ -109,7 +109,7 @@ class AlshayaProductListDrushCommands extends DrushCommands {
 
       $context['sandbox']['progress'] = 0;
       $context['sandbox']['current_id'] = 0;
-      $context['sandbox']['max'] = count($context['sandbox']['results']);
+      $context['sandbox']['max'] = is_countable($context['sandbox']['results']) ? count($context['sandbox']['results']) : 0;
     }
 
     $results = [];

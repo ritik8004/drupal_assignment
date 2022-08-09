@@ -48,7 +48,7 @@ foreach ($balancers as $balancer) {
   curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'BAN');
 
 
-  $headers = array();
+  $headers = [];
   $headers[] = 'X-Acquia-Purge: alshaya';
   $headers[] = 'Host: ' . $domain;
   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);

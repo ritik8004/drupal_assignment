@@ -202,7 +202,7 @@ class AlshayaSpcCustomerHelper {
         }
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       $return = FALSE;
     }
 
@@ -243,7 +243,7 @@ class AlshayaSpcCustomerHelper {
         $return = FALSE;
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       $return = FALSE;
     }
 
@@ -305,7 +305,7 @@ class AlshayaSpcCustomerHelper {
 
       return $this->addressBookManager->pushUserAddressToApi($profile, $isDefault);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       return FALSE;
     }
   }
@@ -376,7 +376,7 @@ class AlshayaSpcCustomerHelper {
   public function loadCustomerTokenForSocialAccount($mail) {
     $token = $this->getCustomerToken();
     if (empty($token) || !is_string($token)) {
-      $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail));
+      $token = json_decode($this->apiWrapper->getCustomerTokenBySocialDetail($mail), NULL);
       if ($token === FALSE) {
         $token = NULL;
       }

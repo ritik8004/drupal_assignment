@@ -32,7 +32,7 @@ class SimplePageResource extends ResourceBase {
   /**
    * Node bundle machine name.
    */
-  const NODE_TYPE = 'static_html';
+  public const NODE_TYPE = 'static_html';
 
   /**
    * The language manager.

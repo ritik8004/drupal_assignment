@@ -31,6 +31,7 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     'size' => 100,
     'process_multipack' => FALSE,
   ]) {
+    $chunk = NULL;
     $batch_size = $options['size'];
     $count_descriptive = 0;
 
@@ -60,13 +61,13 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
       $count_descriptive = $query->execute()->fetchField();
     }
 
-    $total = count($entity_list) + $count_descriptive;
+    $total = (is_countable($entity_list) ? count($entity_list) : 0) + $count_descriptive;
 
     $chunks = array_chunk($entity_list, $batch_size);
     $progress = 0;
 
     // Calculate size of Array & allocate space for it.
-    $array_size = ceil(count($entity_list) / $batch_size) + ceil($count_descriptive / $batch_size);
+    $array_size = ceil((is_countable($entity_list) ? count($entity_list) : 0) / $batch_size) + ceil($count_descriptive / $batch_size);
     $operations = new \SplFixedArray($array_size);
     $counter = 0;
 
@@ -92,7 +93,7 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     // Process multipack case if passed via options.
     if ($options['process_multipack']) {
       for ($i = 0; $i < $count_descriptive; $i += $batch_size) {
-        $progress += count($chunk);
+        $progress += count((array) $chunk);
 
         // Keeping this light since the loop might run for a huge number of
         // SKUs. Passing only start & end range to the chunks & load items to be

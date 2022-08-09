@@ -1,0 +1,74 @@
+.my-benefits-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: rem(36);
+
+  .my-offers-vouchers-details {
+    text-align: center;
+    font-family: $alshaya-bold;
+    background: $hm-my-offers-bg;
+    min-height: rem(366);
+
+    @include breakpoint($tablet) {
+      width: calc(100% / 3 - 2% + 2% / 3 - 0.01px);
+      margin-bottom: 5%;
+      margin-#{$left}: 2%;
+
+      &:nth-of-type(3n+1) {
+        margin-#{$left}: 0;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      flex: 0 0 100%;
+      margin-bottom: rem(20);
+    }
+
+    .image-container {
+      img {
+        width: 100%;
+      }
+    }
+
+    .title {
+      font-size: rem(16);
+      letter-spacing: 0.8px;
+      margin-top: rem(24);
+    }
+
+    .info {
+      font-size: rem(14);
+      letter-spacing: 0.7px;
+      margin-top: rem(24);
+    }
+
+    .expiry {
+      font-size: rem(12);
+      letter-spacing: 0.6px;
+      margin-top: rem(16);
+      margin-bottom: rem(40);
+      color: $hm-my-offers-expiry-txt;
+    }
+
+    .voucher-wrapper {
+      padding: 0 rem(34);
+    }
+  }
+
+  .btn-wrapper {
+    text-align: center;
+    width: 100%;
+    margin-bottom: rem(42);
+
+    a {
+      @extend %button-brand;
+
+      cursor: pointer;
+      padding: rem(8) rem(33);
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+}

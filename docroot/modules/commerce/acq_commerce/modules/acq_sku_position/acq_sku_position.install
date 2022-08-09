@@ -9,6 +9,7 @@
  * Implements hook_schema().
  */
 function acq_sku_position_schema() {
+  $schema = [];
   $schema['acq_sku_position'] = [
     'description' => 'Stores sku product position.',
     'fields' => [

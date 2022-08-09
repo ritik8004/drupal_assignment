@@ -116,6 +116,14 @@ exports.getEntity = async function getEntity(langcode) {
       response = await rcsCommerceBackend.invokeApi(request);
       if (response && response.data.categories.total_count) {
         result = response.data.categories.items[0];
+        var currentPath = window.location.href;
+        // The condition "currentPath.indexOf('/view-all')" is to ensure that
+        // this should execute only for view all page,
+        // "result.display_view_all !== 1" this one is to check whether we have
+        // the view_all field set to true or not.
+        if ((currentPath.indexOf('/view-all') != -1) && (result.display_view_all !== 1)) {
+          await handleNoItemsInResponse(request, urlKey);
+        }
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -346,6 +354,14 @@ exports.getData = async function getData(
       request.data = prepareQuery(rcsPhGraphqlQuery.crosssell_products.query, crosselListVariables);
       response = await rcsCommerceBackend.invokeApi(request);
       result = response.data.products.items;
+      break;
+
+    case 'product_additional_attributes':
+      let additionalAttributesVariables = rcsPhGraphqlQuery.product_additional_attributes.variables;
+      additionalAttributesVariables.sku = params.sku;
+      additionalAttributesVariables.attributes = params.attributes;
+      request.data = prepareQuery(rcsPhGraphqlQuery.product_additional_attributes.query, additionalAttributesVariables);
+      result = rcsCommerceBackend.invokeApi(request);
       break;
 
     default:

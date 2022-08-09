@@ -201,10 +201,3 @@ function _alshaya_product_lpn_compare_season_codes(array $season_codes, $code_id
 
   return $flag;
 }
-
-/**
- * Implements hook_alshaya_rcs_product_product_options_to_query().
- */
-function alshaya_product_lpn_alshaya_rcs_product_product_options_to_query() {
-  return ['season_code'];
-}

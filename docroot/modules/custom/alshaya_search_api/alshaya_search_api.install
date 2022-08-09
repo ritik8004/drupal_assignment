@@ -8,6 +8,21 @@
 /**
  * Implements hook_update_N().
  *
+ * Updated config to enable OOS product filtering.
+ */
+function alshaya_search_api_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_search_api.listing_settings'],
+    'alshaya_search_api',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable the alshaya facets pretty paths module.
  */
 function alshaya_search_api_update_8007() {

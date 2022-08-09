@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper;
 use Drupal\alshaya_online_returns\Helper\OnlineReturnsApiHelper;
 use Drupal\address\Repository\CountryRepository;
@@ -67,6 +68,13 @@ class OnlineReturnController extends ControllerBase {
   protected $gtmManager;
 
   /**
+   * Orders Manager service.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * ReturnRequestController constructor.
    *
    * @param \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $online_returns_helper
@@ -81,19 +89,23 @@ class OnlineReturnController extends ControllerBase {
    *   Renderer service object.
    * @param \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager
    *   Gtm Manager object.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders Manager service.
    */
   public function __construct(OnlineReturnsHelper $online_returns_helper,
                               OnlineReturnsApiHelper $online_returns_api_helper,
                               CountryRepository $address_country_repository,
                               AlshayaApiWrapper $api_wrapper,
                               Renderer $renderer,
-                              AlshayaGtmManager $gtm_manager) {
+                              AlshayaGtmManager $gtm_manager,
+                              OrdersManager $orders_manager) {
     $this->onlineReturnsHelper = $online_returns_helper;
     $this->onlineReturnsApiHelper = $online_returns_api_helper;
     $this->addressCountryRepository = $address_country_repository;
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
     $this->gtmManager = $gtm_manager;
+    $this->ordersManager = $orders_manager;
   }
 
   /**
@@ -107,6 +119,7 @@ class OnlineReturnController extends ControllerBase {
       $container->get('alshaya_api.api'),
       $container->get('renderer'),
       $container->get('alshaya_seo_transac.gtm_manager'),
+      $container->get('alshaya_acm_customer.orders_manager')
     );
   }
 
@@ -232,20 +245,12 @@ class OnlineReturnController extends ControllerBase {
 
     // Get all the orders of logged in user.
     $customer_id = (int) $user->get('acq_customer_id')->getString();
-    $orders = alshaya_acm_customer_get_user_orders($customer_id);
 
-    if (empty($orders)) {
+    $order = $this->ordersManager->getOrderByIncrementId($order_id);
+
+    if (empty($order)) {
       throw new NotFoundHttpException();
     }
-
-    // Get the current order detail to build return page.
-    $order_index = array_search($order_id, array_column($orders, 'increment_id'));
-
-    if ($order_index === FALSE) {
-      throw new NotFoundHttpException();
-    }
-
-    $order = $orders[$order_index];
     $orderDetails = alshaya_acm_customer_build_order_detail($order);
 
     // Allow other modules to update order details build.
@@ -312,7 +317,7 @@ class OnlineReturnController extends ControllerBase {
           // If json_decode is not successful, means we have actual file
           // response. Otherwise we have error message which can be decoded by
           // json.
-          if (!json_decode($return_print_response)) {
+          if (!json_decode($return_print_response, NULL)) {
             $response = new Response($return_print_response);
             $disposition = $response->headers->makeDisposition(
               ResponseHeaderBag::DISPOSITION_ATTACHMENT,

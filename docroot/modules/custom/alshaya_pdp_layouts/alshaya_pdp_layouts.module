@@ -62,6 +62,7 @@ function alshaya_pdp_layouts_form_alter(&$form, $form_state, $form_id) {
  * Add pdp_layout options from plugin definitions.
  */
 function alshaya_pdp_layouts_pdp_layout_values() {
+  $pdp_layout_options = [];
   $pdp_layout_options['inherit'] = 'Inherit Site Config';
   $config = \Drupal::config('alshaya_acm_product.settings');
   // Prepare PDP layout select options.

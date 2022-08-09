@@ -57,7 +57,7 @@ class AlshayaOembedFormatter extends OEmbedFormatter {
         $resource_url = $this->urlResolver->getResourceUrl($value, $width, $height);
         $resource = $this->resourceFetcher->fetchResource($resource_url);
       }
-      catch (ResourceException $exception) {
+      catch (ResourceException) {
         $this->logger->error("Could not retrieve the remote URL (@url).", ['@url' => $value]);
         continue;
       }
@@ -172,6 +172,7 @@ class AlshayaOembedFormatter extends OEmbedFormatter {
    * {@inheritdoc}
    */
   public function settingsSummary() {
+    $summary = [];
     $dimensions = $this->getSetting('responsive') ?
     $this->t('Responsive') :
     $this->t('@widthx@height', [

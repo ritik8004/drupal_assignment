@@ -66,9 +66,6 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     'product_gallery_mobile' => [
       'variables' => [],
     ],
-    'rcs_product_teaser' => [
-      'variables' => [],
-    ],
     'rcs_related_products_wrapper' => [
       'variables' => [],
     ],
@@ -327,6 +324,11 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
   $build['#attached']['drupalSettings']['country_code'] = $country_code;
 
+  // Expose error messages for field labels.
+  $field_label_errors = \Drupal::config('alshaya_acm_product.fields_labels_n_error');
+  $build['#attached']['drupalSettings']['alshayaRcs']['fieldLabelErrorMessages'] = $field_label_errors->get();
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $field_label_errors->getCacheTags());
+
   // Invoke hook_alshaya_rcs_product_build_alter.
   $entity_info = [
     'entity' => $entity,
@@ -426,20 +428,6 @@ function alshaya_rcs_product_preprocess_html(array &$variables) {
     '#attributes' => [
       'class' => 'rcs-templates--product_schema_data',
       'data-product-schema' => json_encode($product_schema_data),
-    ],
-  ];
-
-  // @todo Remove this theme and rcs-product-teaser.html.twig temlate.
-  // @todo Use handlebars with rcs-product-teaser.handlebars template.
-  $product_teaser = [
-    '#theme' => 'rcs_product_teaser',
-  ];
-  $variables['rcs_templates']['product_teaser'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#value' => render($product_teaser),
-    '#attributes' => [
-      'class' => 'rcs-templates--product-teaser',
     ],
   ];
 
@@ -668,6 +656,23 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ];
   }
 
+  // Fetch additional product attributes.
+  $attributes_fields = $rcs_product_helper->getProductAdditionalAttributesQueryFields();
+  if (!empty($attributes_fields['items'])) {
+    $query_fields['product_additional_attributes'] = [
+      'query' => [
+        'query($sku: String, $attributes: [AttributeInput!]!)' => [
+          'products(filter: {sku: {eq: $sku}})' => $attributes_fields,
+          'customAttributeMetadata(attributes: $attributes)' => $product_options_query_fields,
+        ],
+      ],
+      'variables' => [
+        'sku' => NULL,
+        'attributes' => NULL,
+      ],
+    ];
+  }
+
   // We have two variations of the cart query, one for anonymous and one for
   // authenticated users. So we vary by this context.
   $query_fields['#cache']['contexts'][] = 'user.roles:anonymous';
@@ -722,6 +727,9 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'gallery.product.block.product_zoom_modal_gallery' => 'alshaya_rcs_product',
     'gallery.product.block.product_zoom_magazine_gallery' => 'alshaya_rcs_product',
     'attribute.brand.logo' => 'alshaya_rcs_product',
+    'product.overlay_attributes' => 'alshaya_rcs_product',
+    'product.recommended_products_teaser' => 'alshaya_rcs_product',
+    'product.recommended_products_block' => 'alshaya_rcs_product',
   ];
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
@@ -788,6 +796,8 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     $self_module_path = drupal_get_path('module', 'alshaya_rcs_product');
     $libraries['order_print']['js']["/$self_module_path/js/alshaya_rcs_order_print.js"] = $options;
     $libraries['order_print']['dependencies'] = [
+      'core/jquery',
+      'core/drupal',
       'rcs_magento_placeholders/rcs_magento_placeholders',
     ];
   }
@@ -972,6 +982,7 @@ function _alshaya_rcs_product_get_cnc_config(array &$build) {
  * Implements hook_product_attribute_options_alter().
  */
 function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) {
+  $current_language = NULL;
   // Return from here if input type is not textarea or text.
   if ($attribute && !in_array($attribute['frontend_input'], ['text', 'textarea'])) {
     return;
@@ -979,9 +990,7 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
 
   $skuBaseFieldDefination = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   // Filter attributes fields having facets set as 1.
-  $skuBaseFieldDefination = array_filter($skuBaseFieldDefination, function ($field) {
-    return ($field['parent'] == 'attributes' && in_array('facet', $field) && $field['facet'] == 1);
-  });
+  $skuBaseFieldDefination = array_filter($skuBaseFieldDefination, fn($field) => $field['parent'] == 'attributes' && in_array('facet', $field) && $field['facet'] == 1);
   $attributes_used_as_facets = array_keys($skuBaseFieldDefination);
 
   // Return from here if attribute code is other than sku base fields which are

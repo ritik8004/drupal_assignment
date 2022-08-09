@@ -22,7 +22,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
  * )
  */
 class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactoryPluginInterface {
-  const MENU_NAME = 'secondary-main-menu';
+  public const MENU_NAME = 'secondary-main-menu';
   /**
    * Stores the configuration factory.
    *
@@ -86,7 +86,7 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
     $desktop_config = $this->configFactory->get('alshaya_secondary_main_menu.settings');
     $desktop_secondary_main_menu_layout = $desktop_config->get('desktop_secondary_main_menu_layout');
     $desktop_secondary_main_menu_highlight_timing = (int) $desktop_config->get('desktop_secondary_main_menu_highlight_timing');
-    $subtree = $this->getSubTree(self::MENU_NAME);
+    $subtree = $this->getSubTree();
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
@@ -181,7 +181,7 @@ class AlshayaSecondaryMainMenuBlock extends BlockBase implements ContainerFactor
         $col_total = 0;
         $reprocess = FALSE;
         // 2 below means L2 item + one blank line for spacing.
-        $l2_cost = 2 + count($l2s['below']);
+        $l2_cost = 2 + (is_countable($l2s['below']) ? count($l2s['below']) : 0);
         // If we are detecting a longer column than the expected size
         // we iterate with new max.
         if ($l2_cost > $ideal_max_col_length) {

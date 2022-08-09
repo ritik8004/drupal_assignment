@@ -1,0 +1,49 @@
+{{! @see docroot/modules/custom/alshaya_main_menu/templates/alshaya-main-menu-level2.html.twig }}
+<ul class="menu__list menu--two__list">
+  <div class="menu__links__wrapper">
+    <span class="back--link"><span class="menu__back"></span> <span>{{ name }}</span></span>
+    {{set 'sub_nav_name' name }}
+    {{#if (or
+          (eq @root.menu_type 'default')
+          (eq @root.menu_type 'menu_dynamic_display')) }}
+      {{#each menu_items as |column col|}}
+        <div class="column {{ col }}">
+          {{#each column as |menu_item|}}
+            {{> menuItem }}
+          {{/each}}
+        </div>
+      {{/each}}
+    {{else if (eq @root.menu_type 'menu_inline_display') }}
+      {{#each menu_items as |menu_item|}}
+        {{> menuItem }}
+      {{/each}}
+    {{/if}}
+  </div>
+  {{#if (or
+          (eq @root.menu_type 'default')
+          (eq @root.menu_type 'menu_dynamic_display')
+          (eq @root.menu_type 'menu_inline_display')) }}
+    {{#if level1_highlights.text_link_para}}
+      <div class="term-image__wrapper text-link-para">
+    {{else}}
+      <div class="term-image__wrapper">
+    {{/if}}
+      {{{ level1_highlights.markup }}}
+    </div>
+  {{/if}}
+</ul>
+
+{{#*inline "menuItem"}}
+  {{ addClass 'level2_class' '' }}
+  {{#if this.overridden_path}}
+    {{ addClass 'level2_class' 'overridden-link' }}
+  {{/if}}
+  <li class="menu__list-item menu--two__list-item {{ class }} {{ @root.level2_class }} {{ move_to_right }}">
+    <div class="menu__link-wrapper menu-two__link-wrapper">
+      <{{ this.tag }} class="menu__link menu-two__link {{ class }} {{ @root.level2_class }} sub-nav-{{cleanCssIdentifier @root.sub_nav_name }}" gtm-menu-title="{{ this.name }}" {{{ this.tag_attr }}}>{{ this.name }}</{{ this.tag }}>
+    </div>
+    {{#if this.children }}
+      {{> main_menu_level3_partial name=name items=this.children }}
+    {{/if}}
+  </li>
+{{/inline}}

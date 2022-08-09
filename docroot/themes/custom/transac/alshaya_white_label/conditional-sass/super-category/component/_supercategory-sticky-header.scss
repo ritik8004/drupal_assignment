@@ -73,10 +73,6 @@
 
       li {
         a {
-          display: flex;
-          margin: 0 auto;
-          position: static;
-
           &.mobile--menu {
             margin-left: rem(13);
           }

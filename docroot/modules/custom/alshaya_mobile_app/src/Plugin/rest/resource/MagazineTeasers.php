@@ -173,7 +173,7 @@ class MagazineTeasers extends ResourceBase {
       $magazine_listing_page->setItemsPerPage($this->requestStack->query->get('limit'));
       $magazine_listing_page->execute();
       $magazine_listing_page_result = $magazine_listing_page->result;
-      $magazine_listing_current_page_count = (int) count($magazine_listing_page_result);
+      $magazine_listing_current_page_count = (int) (is_countable($magazine_listing_page_result) ? count($magazine_listing_page_result) : 0);
 
       return [
         'mag_page_view_total_count' => $mag_page_view_total_count,

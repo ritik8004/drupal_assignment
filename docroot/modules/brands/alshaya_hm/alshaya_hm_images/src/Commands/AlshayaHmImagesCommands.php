@@ -80,7 +80,7 @@ class AlshayaHmImagesCommands extends DrushCommands {
 
     foreach (array_chunk($skus, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'generateImageReportChunk'],
+        [self::class, 'generateImageReportChunk'],
         [$chunk, $filename, $check_faults, $faulty_size],
       ];
     }

@@ -502,30 +502,33 @@ window.auraBackend.updateUserAuraStatus = async (inputData) => {
     return { data: responseData };
   }
 
-  let customerData = {};
-  const searchResponse = await search('apcNumber', data.statusUpdate.apcIdentifierId);
-  if (hasValue(searchResponse.error)) {
-    return { data: searchResponse };
+  // Do not fetch custom data from apcNumber if,
+  // it is an update is for not you(unlinking aura).
+  if (data.statusUpdate.link !== 'N') {
+    let customerData = {};
+    const searchResponse = await search('apcNumber', data.statusUpdate.apcIdentifierId);
+    if (hasValue(searchResponse.error)) {
+      return { data: searchResponse };
+    }
+
+    if (hasValue(searchResponse.data.is_fully_enrolled)) {
+      const customerInfo = getCustomerInfo(customerId);
+      const customerPoints = getCustomerPoints(customerId);
+      const customerTier = getCustomerTier(customerId);
+
+      const values = await Promise.all([customerInfo, customerPoints, customerTier]);
+      values.forEach((value) => {
+        // If an API call throws error, ignore it.
+        if (!hasValue(value.error)) {
+          customerData = Object.assign(customerData, value);
+        }
+      });
+    }
+
+    responseData.data = hasValue(customerData)
+      ? customerData
+      : { auraStatus: searchResponse.data.apc_link };
   }
-
-  if (hasValue(searchResponse.data.is_fully_enrolled)) {
-    const customerInfo = getCustomerInfo(customerId);
-    const customerPoints = getCustomerPoints(customerId);
-    const customerTier = getCustomerTier(customerId);
-
-    const values = await Promise.all([customerInfo, customerPoints, customerTier]);
-    values.forEach((value) => {
-      // If an API call throws error, ignore it.
-      if (!hasValue(value.error)) {
-        customerData = Object.assign(customerData, value);
-      }
-    });
-  }
-
-  responseData.data = hasValue(customerData)
-    ? customerData
-    : { auraStatus: searchResponse.data.apc_link };
-
   return { data: responseData };
 };
 

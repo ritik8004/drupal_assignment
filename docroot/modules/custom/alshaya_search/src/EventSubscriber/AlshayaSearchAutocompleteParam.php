@@ -33,6 +33,7 @@ class AlshayaSearchAutocompleteParam implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[Events::PRE_EXECUTE][] = ['onPreExecute'];
     return $events;
   }

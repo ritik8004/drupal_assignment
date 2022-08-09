@@ -88,11 +88,11 @@ class BillingInformation extends AddressFormBase {
     ];
 
     foreach ($field_names as $field_name) {
-      $address_fields[$field_name]['#value'] = isset($address->{$field_name}) ? $address->{$field_name} : '';
+      $address_fields[$field_name]['#value'] = $address->{$field_name} ?? '';
     }
 
     foreach ($dynamic_field_names as $field_name) {
-      $address_fields['dynamic_parts'][$field_name]['#value'] = isset($address->{$field_name}) ? $address->{$field_name} : '';
+      $address_fields['dynamic_parts'][$field_name]['#value'] = $address->{$field_name} ?? '';
     }
 
     return $address_fields;
@@ -102,7 +102,7 @@ class BillingInformation extends AddressFormBase {
    * {@inheritdoc}
    */
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // @TODO: Add field validation.
+    // @todo Add field validation.
     $values = $form_state->getValue($pane_form['#parents']);
 
     if (!isset($values['email'])) {
@@ -143,7 +143,7 @@ class BillingInformation extends AddressFormBase {
     $account = NULL;
 
     if (\Drupal::currentUser()->isAnonymous()) {
-      $name = $values['address']['first_name'] . $values['address']['last_name'] . rand(100, 999);
+      $name = $values['address']['first_name'] . $values['address']['last_name'] . random_int(100, 999);
 
       $account = User::create(
         [

@@ -752,6 +752,7 @@ class AlshayaApiWrapper {
    *   Array of items from API.
    */
   public function invokeApiWithPageLimit(string $endpoint, array $request_options, int $page_size, array $filters = [], array $data = []) {
+    $response_array = [];
     $current_page = 1;
     $all_items = [];
 
@@ -777,7 +778,7 @@ class AlshayaApiWrapper {
           $all_items['items'] = array_merge($all_items['items'] ?? [], $response_array['items']);
         }
       }
-      $no_of_pages = $no_of_pages ?? ceil($response_array['total_count'] / $page_size);
+      $no_of_pages ??= ceil($response_array['total_count'] / $page_size);
 
     } while ($current_page <= $no_of_pages);
 
@@ -1057,7 +1058,7 @@ class AlshayaApiWrapper {
         $request_options
       );
 
-      $token = json_decode($token);
+      $token = json_decode($token, NULL);
       // If token could not be decoded, store NULL.
       $token = $token === FALSE ? NULL : $token;
     }
@@ -1176,6 +1177,7 @@ class AlshayaApiWrapper {
    * @throws \Exception
    */
   public function updateCustomer(array $customer, array $options = []) {
+    $opt = [];
     $endpoint = 'customers';
 
     $opt['json']['customer'] = $customer;
@@ -1446,7 +1448,7 @@ class AlshayaApiWrapper {
       $status = $this->invokeApi('newsletter/subscribe', ['email' => $email], 'JSON', TRUE, $request_options);
       return json_decode($status, TRUE);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       $this->logger->error('Error while calling newsletter subscribe API.');
       return ['status' => 0];
     }

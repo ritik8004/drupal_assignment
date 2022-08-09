@@ -23,7 +23,7 @@ class AlshayaMobileNumberValidator extends MobileNumberValidator {
     $violations = $this->context->getViolations();
     // Check if any violation available.
     if (!empty($violations)) {
-      for ($i = 0; $i < count($violations); $i++) {
+      for ($i = 0; $i < (is_countable($violations) ? count($violations) : 0); $i++) {
         $violation = $violations->get($i);
         $parameters = $violation->getParameters();
         $message_template = $violation->getMessageTemplate();

@@ -28,8 +28,8 @@ class Braintree extends PaymentMethodBase implements PaymentMethodInterface {
     $cart = $this->getCart();
     $payment_method = $cart->getPaymentMethod();
     $payment_method_name = $payment_method['method'];
-    $payment_data = isset($payment_method['additional_data']) ? $payment_method['additional_data'] : [];
-    $nonce = isset($payment_data['payment_method_nonce']) ? $payment_data['payment_method_nonce'] : NULL;
+    $payment_data = $payment_method['additional_data'] ?? [];
+    $nonce = $payment_data['payment_method_nonce'] ?? NULL;
 
     // If payment details have already been filled out, don't show the form.
     if ($payment_method_name == $this->getId() && isset($nonce)) {

@@ -11,7 +11,7 @@ use Drupal\Core\Database\Connection;
  */
 class ProductProcessedManager {
 
-  const TABLE_NAME = 'product_processed';
+  public const TABLE_NAME = 'product_processed';
 
   /**
    * Database Connection.
@@ -55,7 +55,7 @@ class ProductProcessedManager {
     $query->addField(self::TABLE_NAME, 'sku');
     $query->condition('sku', $sku);
     $result = $query->execute()->fetchCol();
-    self::$processed[$sku] = (count($result) > 0);
+    self::$processed[$sku] = ((is_countable($result) ? count($result) : 0) > 0);
     return self::$processed[$sku];
   }
 

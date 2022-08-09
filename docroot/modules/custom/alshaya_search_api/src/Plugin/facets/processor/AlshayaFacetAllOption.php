@@ -28,9 +28,7 @@ class AlshayaFacetAllOption extends ProcessorPluginBase implements BuildProcesso
     // If there are results in the facet.
     if (!empty($results)) {
       // Get total count from all items in this facet.
-      $max_items = array_sum(array_map(function ($item) {
-        return $item->getCount();
-      }, $results));
+      $max_items = array_sum(array_map(fn($item) => $item->getCount(), $results));
 
       // Prepare `All` result facet item.
       $all_result_item = new Result($facet, 0, $this->t('All'), $max_items);
@@ -49,7 +47,7 @@ class AlshayaFacetAllOption extends ProcessorPluginBase implements BuildProcesso
 
           // Remove the facet selections for current facet.
           foreach ($query['f'] as $key => $value) {
-            if (strpos($value, $facet->getUrlAlias()) === 0) {
+            if (str_starts_with($value, $facet->getUrlAlias())) {
               unset($query['f'][$key]);
             }
           }

@@ -22,7 +22,7 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
   /**
    * Prefix for custom cache tag on listing pages.
    */
-  const CACHE_TAG_PREFIX = 'search_api_list:term:';
+  public const CACHE_TAG_PREFIX = 'search_api_list:term:';
 
   /**
    * SKU Manager.
