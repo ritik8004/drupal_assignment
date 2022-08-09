@@ -649,6 +649,8 @@ function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, I
       $parent = \Drupal::service('entity.repository')->getTranslationFromContext($parent, 'en');
       $terms[$parent->id()] = trim($parent->getName());
     }
+    // Add department id and name to index.
+    $terms = array_reverse($terms, TRUE);
     $product_gtm_attributes['gtm-department-name'] = $terms ? implode('|', $terms) : '';
     $product_gtm_attributes['gtm-department-id'] = $terms ? current(array_keys($terms)) : '';
     $object['gtm'] = $product_gtm_attributes;
