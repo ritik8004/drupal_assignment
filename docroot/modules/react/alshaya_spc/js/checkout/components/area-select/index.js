@@ -92,14 +92,6 @@ export default class AreaSelect extends React.Component {
    * Whether filter list component need to shown or not.
    */
   toggleFilterList = () => {
-    const { enabledFieldsWithMessages } = this.props;
-    if (isFieldDisabled(enabledFieldsWithMessages, 'locality')) {
-      // If enabled fields are provided in props then check if locality
-      // is present in enabledFieldsWithMessages object. If not then disable
-      // the list.
-      return;
-    }
-
     const { showFilterList } = this.state;
     this.setState({
       showFilterList: !showFilterList,
@@ -166,10 +158,22 @@ export default class AreaSelect extends React.Component {
       area_list: areaList,
       field,
       field_key: fieldKey,
+      enabledFieldsWithMessages,
     } = this.props;
     let options = areas;
     if (areaList !== null) {
       options = areaList;
+    }
+
+    const isDisabled = isFieldDisabled(enabledFieldsWithMessages, 'locality');
+    const selectProps = {
+      id: 'spc-area-select-selected',
+      className: 'spc-area-select-selected',
+    };
+    if (isDisabled) {
+      selectProps.className += ' disabled';
+    } else {
+      selectProps.onClick = this.toggleFilterList;
     }
 
     const panelTitle = getStringMessage('address_select', { '@label': field.label });
@@ -189,7 +193,7 @@ export default class AreaSelect extends React.Component {
       <div className={`spc-type-select area-options-count-${options.length}`}>
         <label>{field.label}</label>
 
-        <div id="spc-area-select-selected" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
+        <div {...selectProps}>
           { (areaLabel.length > 0) ? areaLabel : panelTitle }
         </div>
 

@@ -49,6 +49,12 @@ class TextField extends React.Component {
       );
     }
     if (type === 'tel') {
+      const errorMessage = getDefaultFieldMessage(enabledFieldsWithMessages, name);
+      let inputClass = 'spc-type-tel__input';
+      if (errorMessage) {
+        inputClass += ' invalid';
+      }
+
       return (
         <div className="spc-type-tel">
           <label>{label}</label>
@@ -60,11 +66,12 @@ class TextField extends React.Component {
               disabled={disabled}
               name={name}
               defaultValue={defaultValue}
+              className={inputClass}
             />
           </div>
           <div className="c-input__bar" />
-          <div id={`${name}-error`} className="error">
-            {getDefaultFieldMessage(enabledFieldsWithMessages, name)}
+          <div id={`${name}-error`} className="spc-type-tel__message error">
+            {errorMessage}
           </div>
         </div>
       );
