@@ -1218,6 +1218,10 @@ window.commerceBackend = window.commerceBackend || {};
    */
   window.commerceBackend.getProductLabelsData = async function getProductLabelsData(mainSku, skuForLabel) {
     await processAllLabels(mainSku);
+    // Check if its simple product.
+    if (!Drupal.hasValue(skuForLabel)) {
+      return staticDataStore.labels[mainSku];
+    }
     // If it is a child product not having any label, we display the labels
     // from the parent.
     var parentSku = getParentSkuBySku(mainSku, skuForLabel);

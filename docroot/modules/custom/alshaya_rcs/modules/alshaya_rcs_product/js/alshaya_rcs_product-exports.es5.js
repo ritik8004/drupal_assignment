@@ -358,7 +358,6 @@ exports.render = function render(
     case 'product-labels':
       // Remove the wrapper div if no labels are to be rendered.
       if (!Drupal.hasValue(params.labelsData)) {
-        jQuery('.product-labels', params.product).remove();
         return;
       }
 
