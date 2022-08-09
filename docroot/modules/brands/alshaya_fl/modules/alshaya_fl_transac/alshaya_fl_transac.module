@@ -63,6 +63,7 @@ function alshaya_fl_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
 
     $body = $sku_entity->get('attr_description')->getValue();
     if ($body) {
+      $description = [];
       $description['value'] = [
         '#markup' => $body[0]['value'],
       ];

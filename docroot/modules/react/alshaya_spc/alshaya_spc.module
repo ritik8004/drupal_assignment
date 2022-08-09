@@ -265,8 +265,14 @@ function alshaya_spc_user_logout(AccountInterface $account) {
   // existing cart related info.
   if (isset($cookies['PHPSESSID'])) {
     $requestTime = \Drupal::time()->getRequestTime();
-    setrawcookie('PHPSESSID', '', $requestTime - 3600, '/');
-    setrawcookie('PHPSESSID-legacy', '', $requestTime - 3600, '/');
+    setrawcookie('PHPSESSID', '', [
+      'expires' => $requestTime - 3600,
+      'path' => '/',
+    ]);
+    setrawcookie('PHPSESSID-legacy', '', [
+      'expires' => $requestTime - 3600,
+      'path' => '/',
+    ]);
   }
 }
 
