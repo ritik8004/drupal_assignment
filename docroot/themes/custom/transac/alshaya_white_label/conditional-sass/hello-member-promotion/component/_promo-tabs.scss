@@ -5,6 +5,7 @@
         display: flex;
         border-bottom: rem(1) solid $hello-member-promo-tab-border;
         padding: 0;
+        margin-top: rem(4);
 
         .react-tabs__tab {
           font-family: $alshaya-thin;

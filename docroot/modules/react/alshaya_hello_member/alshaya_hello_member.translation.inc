@@ -379,6 +379,14 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'يكسب الأعضاء @pointValue النقاط.',
         'context' => 'hello_member',
       ],
+      'Bonus Voucher Applied (@hmVoucherCount)' => [
+        'ar' => '(@hmOfferCount)  تم تفعيل رصيد القسيمة',
+        'context' => 'hello_member',
+      ],
+      'Member Offers Applied (@hmOfferCount)' => [
+        'ar' => '(@hmOfferCount) تم تفعيل العرض الخاص بالأعضاء',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
