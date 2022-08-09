@@ -60,9 +60,13 @@
     .spcAuraSelect__menu {
       margin: 0;
       box-shadow: none;
-      width: 83%;
+      width: calc(100% - 4.875rem);
       top: calc(100% - 2rem);
       #{$left}: rem(48);
+
+      @include breakpoint($only-mobile) {
+        width: calc(100% - 3.875rem);
+      }
 
       .spcAuraSelect__menu-list {
         padding: 0;
