@@ -1168,7 +1168,7 @@ window.commerceBackend = window.commerceBackend || {};
   async function processAllLabels(mainSku) {
     // If labels have already been fetched for mainSku, they will be available
     // in static storage. Hence no need to process them again.
-    if (typeof staticDataStore.labels[mainSku] !== 'undefined') {
+    if (Drupal.hasValue(staticDataStore.labels[mainSku])) {
       return;
     }
 
