@@ -226,7 +226,7 @@ class AlshayaRcsCategoryDataMigration {
         $migrate_term = self::createCategory($source_term, $langcode, $vid);
         // Create parent terms.
         if (!empty($source_term->parent->getString())) {
-          $pid = self::createParentCategory($source_term->parent->getString(), $context['results'], $context['sandbox']['term_count'], $langcode, $vid);
+          $pid = self::createParentCategory($source_term->parent->getString(), $langcode, $vid, $context['results'], $context['sandbox']['term_count']);
           if ($pid) {
             $migrate_term->set('parent', $pid);
           }
@@ -313,7 +313,7 @@ class AlshayaRcsCategoryDataMigration {
 
     // Recursively create parent term.
     if (!empty($source_parent_term->parent->getString())) {
-      $pid = self::createParentCategory($source_parent_term->parent->getString(), $results, $term_count, $langcode, $vid);
+      $pid = self::createParentCategory($source_parent_term->parent->getString(), $langcode, $vid, $results, $term_count);
     }
 
     $migrate_parent_term = self::createCategory($source_parent_term, $langcode, $vid);
