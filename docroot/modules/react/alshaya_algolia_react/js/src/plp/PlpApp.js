@@ -22,8 +22,9 @@ import PLPHierarchicalMenu from '../components/algolia/widgets/PLPHierarchicalMe
 import PLPNoResults from '../components/algolia/PLPNoResults';
 import SubCategoryContent from '../components/subcategory';
 import ConditionalView from '../../common/components/conditional-view';
-import BecomeHelloMember from '../../../../alshaya_hello_member/js/src/components/become-hello-member';
 import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
+import BecomeHelloMember from '../../../../js/utilities/components/become-hello-member';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -241,15 +242,12 @@ const PlpApp = ({
           />
         )}
       </SelectedFilters>
-      {/* Show Become member popup if helloMember.showOnListingPages is true */}
-      <ConditionalView condition={
-        isHelloMemberEnabled()
-        && drupalSettings.helloMember.showOnListingPages
-        && drupalSettings.user.uid === 0
-      }
-      >
+      {/* Show Become member content if helloMember is enabled and is guest user. */}
+      { isHelloMemberEnabled()
+      && !isUserAuthenticated()
+      && (
         <BecomeHelloMember />
-      </ConditionalView>
+      )}
       <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
         <PlpResultInfiniteHits
           defaultpageRender={defaultpageRender || false}

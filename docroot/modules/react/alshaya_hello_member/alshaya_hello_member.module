@@ -33,7 +33,6 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
   $hello_member_settings = [
     'status' => $helloMemberHelper->isHelloMemberEnabled(),
     'auraIntegrationStatus' => $helloMemberHelper->isAuraIntegrationEnabled(),
-    'showOnListingPages' => $helloMemberHelper->showOnListingPages(),
   ];
   $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
 
@@ -42,9 +41,8 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
     return;
   }
 
-  if ($hello_member_settings['showOnListingPages']) {
-    $page['#attached']['library'][] = 'alshaya_white_label/hello-member-become-member';
-  }
+  $page['#attached']['library'][] = 'alshaya_white_label/hello-member-become-member';
+
 
   // Get the text to show in popup.
   $route_name = \Drupal::routeMatch()->getRouteName();
@@ -84,11 +82,6 @@ function alshaya_hello_member_theme() {
       ],
     ],
     'hello_member_header_block' => [
-      'variables' => [
-        'strings' => [],
-      ],
-    ],
-    'become_hello_member_block' => [
       'variables' => [
         'strings' => [],
       ],

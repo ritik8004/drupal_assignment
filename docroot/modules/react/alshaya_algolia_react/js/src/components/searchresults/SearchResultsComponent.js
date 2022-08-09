@@ -33,9 +33,9 @@ import {
 } from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
 import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHelper';
-import BecomeHelloMember from '../../../../../alshaya_hello_member/js/src/components/become-hello-member';
 import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
-import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -190,15 +190,12 @@ const SearchResultsComponent = ({
             <CurrentRefinements callback={(callerProps) => callback(callerProps)} />
           )}
         </SelectedFilters>
-        {/* Show Become member popup if helloMember.showOnListingPages is true */}
-        <ConditionalView condition={
-          isHelloMemberEnabled()
-          && drupalSettings.helloMember.showOnListingPages
-          && drupalSettings.user.uid === 0
-        }
-        >
+        {/* Show Become member content if helloMember is enabled and is guest user. */}
+        { isHelloMemberEnabled()
+        && !isUserAuthenticated()
+        && (
           <BecomeHelloMember />
-        </ConditionalView>
+        )}
         <div id="hits" className="c-products-list product-small view-search">
           <SearchResultInfiniteHits
             defaultpageRender={defaultpageRender}
