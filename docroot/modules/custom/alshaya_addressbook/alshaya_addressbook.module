@@ -476,7 +476,7 @@ function _alshaya_addressbook_mobile_process_validate($form, FormStateInterface 
     $mobile['mobile'] = str_replace($mobile_country_code, '', $mobile['mobile']);
 
     $mobile_number = $util->getMobileNumber($mobile['mobile'], $mobile['country-code']);
-
+    $value = [];
     $value[] = [
       'country' => $mobile['country-code'],
       'local_number' => $mobile['mobile'],

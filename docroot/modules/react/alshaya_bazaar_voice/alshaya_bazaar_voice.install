@@ -44,6 +44,7 @@ function alshaya_bazaar_voice_update_8005() {
  * Add translations.
  */
 function alshaya_bazaar_voice_update_8004() {
+  $new_options = [];
   // Add configs for Google translations feature.
   $config = \Drupal::configFactory()->getEditable('bazaar_voice.settings');
   $config->set('translate_chars_limit', 6000);

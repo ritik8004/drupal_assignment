@@ -377,6 +377,7 @@ function alshaya_pb_transac_install() {
  * Implements hook_update_dependencies().
  */
 function alshaya_pb_transac_update_dependencies() {
+  $dependencies = [];
   $dependencies['alshaya_pb_transac'][8004] = [
     'alshaya_search' => 8023,
   ];

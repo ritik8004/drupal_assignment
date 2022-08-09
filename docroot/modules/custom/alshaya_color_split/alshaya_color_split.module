@@ -460,7 +460,7 @@ function alshaya_color_split_pathauto_alias_alter(&$alias, array $context) {
   }
 
   // Remove - appering before .html in pdp url.
-  if (strpos($alias, '-.html') !== FALSE) {
+  if (str_contains($alias, '-.html')) {
     $alias = str_replace('-.html', '.html', $alias);
   }
 }
