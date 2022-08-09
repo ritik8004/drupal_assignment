@@ -171,6 +171,10 @@ const getApiEndpoint = (action, params = {}) => {
         : '';
       break;
 
+    case 'codMobileVerificationSendOtp':
+      endpoint = `/V1/send/${endPointParams.cartId}/mobile/${endPointParams.mobileNumber}`;
+      break;
+
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,

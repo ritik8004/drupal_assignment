@@ -3,14 +3,60 @@ import OtpInput from 'react-otp-input';
 import OtpTimer from 'otp-timer';
 import CodVerifyText from './components/CodVerifyText';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
+import { getApiEndpoint } from '../../../backend/v2/utility';
+import logger from '../../../../../js/utilities/logger';
+import Loading from '../../../../../js/utilities/loading';
 
 class PaymentMethodCodMobileVerification extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       otp: '',
+      // Flag used to show loader on send otp request.
+      wait: true,
     };
   }
+
+  componentDidMount = () => {
+    // Send OTP to mobile number from shipping address.
+    this.SendOtpToShippingMobileNumber();
+  }
+
+  /**
+   * Sennd OTP to mobile number from shipping address.
+   */
+  SendOtpToShippingMobileNumber = () => {
+    // Get Cart Id.
+    const cartId = window.commerceBackend.getCartId();
+
+    // Get shipping address mobile number.
+    const { shippingMobileNumber } = this.props;
+
+    // Prepare params.
+    const params = {
+      cartId,
+      mobileNumber: shippingMobileNumber,
+    };
+
+    return callMagentoApi(getApiEndpoint('codMobileVerificationSendOtp', params), 'GET')
+      .then((response) => {
+        if (hasValue(response.data.error) || !response.data) {
+          logger.error('Error while sending otp for COD payment mobile verification. Response: @response', {
+            '@response': JSON.stringify(response.data),
+          });
+        }
+        this.setState({
+          wait: false,
+        });
+      })
+      .catch((response) => {
+        logger.error('Error while sending otp for COD payment mobile verification. Error message: @message, Code: @errorCode', {
+          '@message': response.error.message,
+          '@errorCode': response.error.error_code,
+        });
+      });
+  };
 
   /**
    * Validate COD mobile verification before enalbing complete purchase button.
@@ -47,11 +93,19 @@ class PaymentMethodCodMobileVerification extends React.Component {
   };
 
   render() {
-    const { otp } = this.state;
+    const { otp, wait } = this.state;
     const { shippingMobileNumber, otpLength } = this.props;
 
     if (shippingMobileNumber === null) {
       return (null);
+    }
+
+    if (wait) {
+      return (
+        <div className="cod-mobile-otp-waiting-wrapper">
+          <Loading />
+        </div>
+      );
     }
 
     return (
