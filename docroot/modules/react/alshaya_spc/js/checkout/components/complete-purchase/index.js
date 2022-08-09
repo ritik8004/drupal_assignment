@@ -143,6 +143,7 @@ export default class CompletePurchase extends React.Component {
       // To add the custom event for the checkout step 4.
       dispatchCustomEvent('orderValidated', {
         cart: cart.cart,
+        cartPaymentMethod,
       });
 
       // If full payment is done by egift or egift + AURA then change the

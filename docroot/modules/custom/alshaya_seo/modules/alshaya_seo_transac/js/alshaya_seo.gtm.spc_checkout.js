@@ -88,7 +88,7 @@
     dataLayer.push(data);
   };
 
-  Drupal.alshayaSeoSpc.checkoutEvent = function (cartData, step) {
+  Drupal.alshayaSeoSpc.checkoutEvent = function (cartData, step, paymentMethod = '') {
     var checkoutPaymentPage = 'checkout payment page';
     var data = {
       language: drupalSettings.gtm.language,
@@ -129,16 +129,35 @@
       }
     }
 
-    if (cartData.payment.method && data.deliveryOption) {
-      var step_data = JSON.parse(JSON.stringify(data));
-      step_data.ecommerce.checkout.actionField.step = step;
+    // 1st condition is triggered when we refresh checkout page with payment
+    // method selected. Next conditions are specifically for step 3 and 4.
+    if ((cartData.payment.method && step === 2) || step === 3 || step === 4) {
+      var stepData = JSON.parse(JSON.stringify(data));
+      stepData.ecommerce.checkout.actionField.step = (step === 4) ? 4 : 3;
       if (step === 4) {
-        step_data.paymentOption = cartData.payment.method;
+        var totals = window.spcStaticStorage.cart_raw.totals;
+        // When full payment is done using egift.
+        if (paymentMethod === 'hps_payment') {
+          stepData.paymentOption = 'egiftcard';
+        }
+        // When combination of payments involved.
+        else if (totals && totals.extension_attributes.hps_redeemed_amount > 0) {
+          var gtmName = drupalSettings.payment_methods[cartData.payment.method] ?
+            drupalSettings.payment_methods[cartData.payment.method].gtm_name
+            : '';
+          stepData.paymentOption = [gtmName, 'egiftcard'].join('_');
+        }
+        // When completely non-pseudo payment used.
+        else {
+          stepData.paymentOption = drupalSettings.payment_methods[cartData.payment.method] ?
+            drupalSettings.payment_methods[cartData.payment.method].gtm_name
+            : '';
+        }
       }
-      step_data.pageType = checkoutPaymentPage;
-      dataLayer.push(step_data);
+      stepData.pageType = checkoutPaymentPage;
+      dataLayer.push(stepData);
     }
-  }
+  };
 
   document.addEventListener('checkoutCartUpdate', function (e) {
     var step = Drupal.alshayaSeoSpc.getStepFromContainer();
@@ -191,7 +210,8 @@
   // Add checkout event step 4 for the click on complete purchase button.
   document.addEventListener('orderValidated', function (e) {
     if (e.detail.cart) {
-      Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, 4);
+      var paymentMethod = e.detail.cartPaymentMethod ? e.detail.cartPaymentMethod : '';
+      Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, 4, paymentMethod);
     }
   });
 
