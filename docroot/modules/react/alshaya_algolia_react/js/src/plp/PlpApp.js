@@ -246,9 +246,7 @@ const PlpApp = ({
       { isHelloMemberEnabled()
       && !isUserAuthenticated()
       && (
-        <div id="hello-member-become-hello-member">
-          <BecomeHelloMember />
-        </div>
+        <BecomeHelloMember />
       )}
       <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
         <PlpResultInfiniteHits

@@ -194,9 +194,7 @@ const SearchResultsComponent = ({
         { isHelloMemberEnabled()
         && !isUserAuthenticated()
         && (
-          <div id="hello-member-become-hello-member">
-            <BecomeHelloMember />
-          </div>
+          <BecomeHelloMember />
         )}
         <div id="hits" className="c-products-list product-small view-search">
           <SearchResultInfiniteHits
