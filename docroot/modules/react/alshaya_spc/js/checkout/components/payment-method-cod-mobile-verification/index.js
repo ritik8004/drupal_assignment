@@ -46,7 +46,10 @@ class PaymentMethodCodMobileVerification extends React.Component {
             '@response': JSON.stringify(response.data),
           });
         }
+
+        // Clear otp and remove loader.
         this.setState({
+          otp: '',
           wait: false,
         });
       })
@@ -69,16 +72,6 @@ class PaymentMethodCodMobileVerification extends React.Component {
    * Handle user input for otp field.
    */
   handleChange = (otp) => this.setState({ otp });
-
-  /**
-   * Handle otp resend action.
-   *
-   * @todo Implement resend otp API endpoint.
-   */
-  handleResendOtp = () => {
-    // eslint-disable-next-line no-console
-    console.log('Resend otp');
-  }
 
   handleOtpSubmit = (e) => {
     e.preventDefault();
@@ -128,7 +121,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
               <OtpTimer
                 seconds={60}
                 minutes={0}
-                resend={this.handleResendOtp}
+                resend={this.SendOtpToShippingMobileNumber}
                 text=" "
                 ButtonText={Drupal.t('Resend', {}, { context: 'cod_mobile_verification' })}
               />
