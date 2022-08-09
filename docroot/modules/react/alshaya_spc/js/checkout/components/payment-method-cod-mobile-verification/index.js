@@ -41,14 +41,13 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
     return callMagentoApi(getApiEndpoint('codMobileVerificationSendOtp', params), 'GET')
       .then((response) => {
-        if (hasValue(response.data.error)) {
+        if (hasValue(response.data.error) || !response.data) {
           logger.error('Error while sending otp for COD payment mobile verification. Response: @response', {
             '@response': JSON.stringify(response.data),
           });
         }
-        console.log(response);
         this.setState({
-          wait: true,
+          wait: false,
         });
       })
       .catch((response) => {
