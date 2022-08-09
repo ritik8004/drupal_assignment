@@ -78,6 +78,7 @@ function alshaya_bbw_transac_acq_sku_view(array &$build, EntityInterface $sku_en
 function _alshaya_bbw_transac_get_product_description($sku_entity) {
   $return = [];
   if ($fragrance_description = $sku_entity->get('attr_fragrance_description')->getString()) {
+    $fragrance_desc = [];
     $fragrance_desc['label'] = [
       '#markup' => t('Fragrance Description'),
     ];
@@ -91,6 +92,7 @@ function _alshaya_bbw_transac_get_product_description($sku_entity) {
   }
 
   if ($overview = $sku_entity->get('attr_description')->getValue()) {
+    $overview_desc = [];
     $overview_desc['label'] = [
       '#markup' => t('Overview'),
     ];
@@ -106,6 +108,7 @@ function _alshaya_bbw_transac_get_product_description($sku_entity) {
   }
 
   if ($usage = $sku_entity->get('attr_usage')->getString()) {
+    $usage_desc = [];
     $usage_desc['label'] = [
       '#markup' => t('Usage'),
     ];
@@ -116,6 +119,7 @@ function _alshaya_bbw_transac_get_product_description($sku_entity) {
   }
 
   if ($more_info = $sku_entity->get('attr_more_info')->getString()) {
+    $more_info_desc = [];
     $more_info_desc['label'] = [
       '#markup' => t('More info'),
     ];
@@ -138,6 +142,7 @@ function _alshaya_bbw_transac_get_product_description($sku_entity) {
  *   Title value.
  */
 function _alshaya_bbw_transac_get_product_title(SKU $sku) {
+  $descriptive_name = NULL;
   $title = '';
   $form = $sku->get('attr_form')->getString();
 

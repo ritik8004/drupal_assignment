@@ -240,7 +240,7 @@ function alshaya_user_preprocess_menu(&$variables) {
           unset($variables['items'][$key]);
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         // Do nothing, issue may be with external link.
       }
     }
@@ -313,7 +313,7 @@ function alshaya_user_user_presave(EntityInterface $entity) {
 function alshaya_user_preprocess_page_title(&$variables) {
   // Add back link for my account page sub links.
   $current_path = \Drupal::service('path.current')->getPath();
-  if (strpos($current_path, '/user') !== FALSE && $user = \Drupal::request()->attributes->get('user')) {
+  if (str_contains($current_path, '/user') && $user = \Drupal::request()->attributes->get('user')) {
     $arg = explode('/', $current_path);
 
     if (!empty($arg[3])) {

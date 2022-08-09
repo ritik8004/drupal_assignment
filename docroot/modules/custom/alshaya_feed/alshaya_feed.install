@@ -19,6 +19,7 @@ function alshaya_feed_update_8001() {
  * Implements hook_schema().
  */
 function alshaya_feed_schema() {
+  $schema = [];
   $schema['alshaya_feed_oos_product_skus'] = [
     'description' => 'Stores OOS product SKUs.',
     'fields' => [

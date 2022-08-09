@@ -88,7 +88,8 @@ function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $for
     if ($form['#id'] === 'views-exposed-form-stores-finder-page-2') {
       $form['country']['#options']['All'] = t('Middle East');
       $current_path = \Drupal::service('path.current')->getPath();
-      if (strpos($current_path, '/store-finder') !== FALSE) {
+      $countryName = NULL;
+      if (str_contains($current_path, '/store-finder')) {
         $countryFieldValues = FieldStorageConfig::loadByName('node', 'field_store_country')->getSetting('allowed_values');
         $filterCountry = \Drupal::request()->get('country');
         if ($filterCountry && !empty($countryFieldValues[$filterCountry])) {
@@ -115,7 +116,7 @@ function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $for
 function alshaya_ve_non_transac_page_attachments(array &$attachments) {
   // Attach store finder js only on store-finder pages.
   $current_path = \Drupal::service('path.current')->getPath();
-  if (strpos($current_path, '/store-finder') !== FALSE) {
+  if (str_contains($current_path, '/store-finder')) {
     $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googlePlacesAPI']['restrictions'] = ['country' => ''];
     $countryFieldValues = FieldStorageConfig::loadByName('node', 'field_store_country')->getSetting('allowed_values');
     unset($countryFieldValues['All']);

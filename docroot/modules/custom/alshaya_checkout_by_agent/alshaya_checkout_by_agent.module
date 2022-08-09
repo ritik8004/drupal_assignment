@@ -32,7 +32,7 @@ function alshaya_checkout_by_agent_user_login(UserInterface $account) {
 
   // Check if current user agent is in the list of smart user agents.
   foreach ($smart_user_agents ?? [] as $smart_agent) {
-    if (stripos($current_user_agent, $smart_agent) !== FALSE) {
+    if (stripos($current_user_agent, (string) $smart_agent) !== FALSE) {
       $is_smart_user_agent = TRUE;
       break;
     }

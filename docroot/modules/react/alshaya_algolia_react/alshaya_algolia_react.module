@@ -35,8 +35,8 @@ function alshaya_algolia_react_block_access(Block $block, $operation, AccountInt
   // Disable solr facets blocks and search views exposed blocks for /search
   // page, which is created for algolia.
   if ($operation == 'view' &&
-      (strpos($block->getPluginId(), 'facet') !== FALSE
-       || strpos($block->id(), 'exposedformsearchpage') !== FALSE)
+      (str_contains($block->getPluginId(), 'facet')
+       || str_contains($block->id(), 'exposedformsearchpage'))
   ) {
     $route = \Drupal::routeMatch();
     if ($route->getRouteName() == 'alshaya_algolia_react.search') {

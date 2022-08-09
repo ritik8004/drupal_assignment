@@ -275,6 +275,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   // Add transaction & payment details to confirmation data in case of KNET.
+  $payment_info = [];
   foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
     $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
   }
@@ -364,7 +365,7 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
     // Get the required orders for the user.
     $orders = \Drupal::service('alshaya_acm_customer.orders_manager')->getOrders($customer_id, 0);
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     return [];
   }
 

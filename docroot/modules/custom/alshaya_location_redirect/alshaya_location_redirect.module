@@ -34,7 +34,7 @@ function alshaya_location_redirect_page_attachments_alter(array &$page) {
     if (Settings::get('alshaya_location_redirect_exclude_login', 1)) {
       $current_path = \Drupal::service('path.current')->getPath();
 
-      if (substr($current_path, 0, 5) === '/user') {
+      if (str_starts_with($current_path, '/user')) {
         return;
       }
     }
