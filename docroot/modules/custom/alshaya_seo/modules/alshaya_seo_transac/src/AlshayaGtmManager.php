@@ -379,12 +379,16 @@ class AlshayaGtmManager {
     }
 
     $skuId = $this->skuManager->getSkuForNode($product);
+    $product_terms = $this->fetchProductCategories($product);
+    $department_attributes = $this->fetchDepartmentAttributes($product_terms);
     $skuAttributes = $this->fetchSkuAtttributes($skuId, $child);
 
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
+    $attributes['gtm-department-name'] = $department_attributes['departmentName'];
+    $attributes['gtm-department-id'] = $department_attributes['departmentId'];
 
     $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
     $attributes = array_merge($attributes, $skuAttributes);
