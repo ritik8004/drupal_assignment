@@ -46,13 +46,12 @@
       border-#{$right}: 0;
 
       @include breakpoint($only-mobile) {
-        width: calc(100% - 8rem);
+        width: calc(100% - 4rem);
       }
 
       .field-wrapper {
         height: 100%;
         align-items: center !important;
-        max-width: rem(242);
 
         .spc-aura-select {
           position: unset;
@@ -60,6 +59,7 @@
 
         .spc-aura-mobile-number-country-code {
           margin-#{$left}: rem(12);
+          width: rem(68);
 
           label {
             display: none;

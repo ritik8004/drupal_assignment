@@ -38,8 +38,8 @@ class hmContext extends DrupalSubContextBase implements DrupalSubContextInterfac
   public function gatherContexts(BeforeScenarioScope $scope) {
     $environment = $scope->getEnvironment();
 
-    $this->drupalContext = $environment->getContext('Drupal\DrupalExtension\Context\DrupalContext');
-    $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
+    $this->drupalContext = $environment->getContext(\Drupal\DrupalExtension\Context\DrupalContext::class);
+    $this->minkContext = $environment->getContext(\Drupal\DrupalExtension\Context\MinkContext::class);
   }
 
   /**

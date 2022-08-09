@@ -63,7 +63,7 @@ function alshaya_i18n_save_translations($strings) {
                 $target->delete();
               }
             }
-            catch (\Exception $e) {
+            catch (\Exception) {
               // This is fine, it's ok if text is not present.
             }
 
@@ -73,7 +73,7 @@ function alshaya_i18n_save_translations($strings) {
               ->setCustomized()
               ->save();
           }
-          catch (\Exception $e) {
+          catch (\Exception) {
             \Drupal::logger('alshaya_i18n')
               ->critical('Error occurred while saving @string in @langcode', [
                 '@string' => $translation,
@@ -123,7 +123,7 @@ function alshaya_i18n_update_context(array $strings) {
         $target->save();
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       \Drupal::logger('alshaya_i18n')
         ->critical('Error occurred while updating @string context', [
           '@string' => $source,
