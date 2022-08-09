@@ -94,7 +94,7 @@ function _alshaya_rcs_listing_advance_page_batch_operation(&$sandbox) {
   // Use the sandbox to store the information needed to track progression.
   if (!isset($sandbox['current'])) {
     $sandbox['current'] = 0;
-    $sandbox['max'] = count($nids);
+    $sandbox['max'] = is_countable($nids) ? count($nids) : 0;
   }
 
   // Process nodes by groups of 10.

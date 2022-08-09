@@ -66,6 +66,7 @@ function alshaya_mc_acq_sku_view(array &$build, EntityInterface $sku_entity, Ent
 function _alshaya_mc_get_product_description($sku_entity) {
   $return = [];
   // Prepare $at_glance variable.
+  $at_glance = [];
   $at_glance['label'] = [
     '#markup' => t('At a glance'),
   ];
@@ -74,6 +75,7 @@ function _alshaya_mc_get_product_description($sku_entity) {
   ];
 
   // Prepare $description variable.
+  $description = [];
   $description['label'] = [
     '#markup' => t('Features and benefits'),
   ];
@@ -95,6 +97,7 @@ function _alshaya_mc_get_product_description($sku_entity) {
   ];
 
   // If specifications are enabled, prepare the specification variable.
+  $specifications = [];
   if (\Drupal::config('alshaya_acm.settings')
     ->get('pdp_show_specifications')) {
     $specifications['label'] = [
@@ -133,6 +136,7 @@ function _alshaya_mc_get_product_description($sku_entity) {
   }
 
   // Prepare $whats_in_box variable.
+  $whats_in_box = [];
   $whats_in_box['label'] = [
     '#markup' => t("What's In The Box"),
   ];

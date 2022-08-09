@@ -48,7 +48,7 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
       $api_wrapper->updateCustomerPass($customer, $password);
     }
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     // IF API Down or some other issue, log message is already added
     // in AgentRequestTrait. We can simply return empty array here.
     $customer = [];

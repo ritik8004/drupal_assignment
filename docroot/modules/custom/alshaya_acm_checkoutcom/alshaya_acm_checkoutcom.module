@@ -58,7 +58,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
 
     $checkoutComApi->processCardPayment($cart, $params);
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     $checkoutComApi->redirectToPayment();
     exit;
   }

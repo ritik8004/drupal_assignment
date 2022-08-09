@@ -496,7 +496,8 @@ function alshaya_spc_update_8003() {
 function alshaya_spc_update_8002() {
   // Get connection details and PDO object.
   $connection = Database::getConnection();
-  $pdo = $connection::open($connection->getConnectionOptions());
+  $getConnectionOptions = $connection->getConnectionOptions();
+  $pdo = $connection::open($getConnectionOptions);
 
   $store = new PdoStore($pdo);
 
@@ -533,7 +534,8 @@ function alshaya_spc_install() {
 
   // Get connection details and PDO object.
   $connection = Database::getConnection();
-  $pdo = $connection::open($connection->getConnectionOptions());
+  $getConnectionOptions = $connection->getConnectionOptions();
+  $pdo = $connection::open($getConnectionOptions);
 
   $store = new PdoStore($pdo);
   $store->createTable();

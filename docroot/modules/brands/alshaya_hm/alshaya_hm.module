@@ -182,11 +182,12 @@ function _alshaya_hm_get_product_description($sku_entity) {
   }
 
   $description_value .= render($warning_markup);
-
+  $description = [];
   $description['value'] = [
     '#markup' => $description_value,
   ];
 
+  $specifications = [];
   // If specifications are enabled, prepare the specification variable.
   if (\Drupal::config('alshaya_acm.settings')
     ->get('pdp_show_specifications')) {
@@ -404,7 +405,7 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
               $object['collection_labels'][$lan_key][$attribute] = $sku->get($attribute)->getString();
             }
           }
-          $object['collection_labels'] = $object['collection_labels'] ?? (object) $object['collection_labels'];
+          $object['collection_labels'] ??= (object) $object['collection_labels'];
         }
       }
     }
@@ -416,12 +417,10 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
             $object['collection_labels'][$attribute] = $sku->get($attribute)->getString();
           }
         }
-        $object['collection_labels'] = $object['collection_labels'] ?? (object) $object['collection_labels'];
+        $object['collection_labels'] ??= (object) $object['collection_labels'];
         $concept_values = $sku->get('attr_concept')->getValue();
         if (!empty($concept_values)) {
-          $object['attr_concept'] = array_map(function ($item) {
-            return $item['value'];
-          }, $concept_values);
+          $object['attr_concept'] = array_map(fn($item) => $item['value'], $concept_values);
         }
       }
     }

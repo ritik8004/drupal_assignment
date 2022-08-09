@@ -479,7 +479,7 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity, string $operation)
     $event = new ProductUpdatedEvent($entity, $operation);
     \Drupal::service('event_dispatcher')->dispatch(ProductUpdatedEvent::EVENT_NAME, $event);
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     // Translation might not be available.
   }
 }
@@ -1021,7 +1021,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
       $skuForGallery = $skuImagesManager->getSkuForGallery($entity);
       $build['gallery'] = $skuImagesManager->getGallery($skuForGallery, $pdp_layout);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       $build['gallery'] = [];
     }
 
@@ -1156,7 +1156,7 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     $show_on_load = intval($request->query->get('show_on_load'));
 
     if ($show_on_load > 0) {
-      if (strpos($request->getRequestUri(), 'views/ajax') !== FALSE) {
+      if (str_contains($request->getRequestUri(), 'views/ajax')) {
         $request->query->set('show_on_load', NULL);
         return;
       }
@@ -1179,7 +1179,7 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
         $request->query->set('show_on_load', NULL);
       }
       // We use the show on load only on page load.
-      if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
+      if (!str_contains($request->getQueryString(), '_wrapper_format=')) {
         $per_page = $show_on_load;
       }
     }
@@ -1195,7 +1195,7 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
 function alshaya_acm_product_views_pre_render(ViewExecutable $view) {
   if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
     // Dynamically set memory limit based on number of results.
-    ini_set('memory_limit', (count($view->result) + ((int) ini_get('memory_limit'))) . 'M');
+    ini_set('memory_limit', ((is_countable($view->result) ? count($view->result) : 0) + ((int) ini_get('memory_limit'))) . 'M');
 
     $view->element['#attached']['drupalSettings']['plp_slider'] = \Drupal::config('alshaya_acm_product.display_settings')->get('plp_slider');
 
@@ -1247,7 +1247,7 @@ function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
     $view = $vars['view'];
 
     // We need to change next page number only for first page load requests.
-    if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
+    if (!str_contains($request->getQueryString(), '_wrapper_format=')) {
       if (isset($vars['items'], $vars['items']['next'], $vars['items']['next']['href'])) {
         $per_page_default = _alshaya_acm_product_get_items_per_page_on_listing();
 
@@ -1266,7 +1266,7 @@ function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
     if (($search_page || $product_list) && ($page_auto_load)) {
       $element = $vars['element'];
 
-      $next_page = $next_page ?? $pager_page_array[$element] + 1;
+      $next_page ??= $pager_page_array[$element] + 1;
 
       // Change infinite scroll to load more button after x scrolls.
       $vars['options']['automatically_load_content'] = TRUE;
@@ -1868,6 +1868,7 @@ function alshaya_acm_product_form_taxonomy_term_acq_product_category_form_alter(
  * Implements allowed values callback.
  */
 function alshaya_acm_product_pdp_layout_values() {
+  $pdp_layout_options = [];
   $pdp_layout_options['inherit'] = 'Inherit Site Config';
   $config = \Drupal::config('alshaya_acm_product.settings');
   // Prepare PDP layout select options.
@@ -1887,7 +1888,7 @@ function alshaya_acm_product_pdp_layout_values() {
 function _alshaya_acm_product_clean_form_for_oos(array $form): array {
   foreach ($form as $id => $form_item) {
     // Preserve internal keys.
-    if (strpos($id, '#') === 0) {
+    if (str_starts_with($id, '#')) {
       continue;
     }
 
@@ -2038,7 +2039,7 @@ function _alshaya_acm_product_adjust_facet_block() {
       try {
         Block::load($block_id)->setWeight($price_block->getWeight())->save();
       }
-      catch (Exception $e) {
+      catch (Exception) {
         // Do nothing.
       }
     }

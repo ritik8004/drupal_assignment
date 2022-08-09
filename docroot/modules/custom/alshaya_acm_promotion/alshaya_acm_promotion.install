@@ -32,7 +32,7 @@ function alshaya_acm_promotion_update_8027(&$sandbox) {
   // Use the sandbox to store the information needed to track progression.
   if (!isset($sandbox['current'])) {
     $sandbox['current'] = 0;
-    $sandbox['max'] = count($nids);
+    $sandbox['max'] = is_countable($nids) ? count($nids) : 0;
   }
 
   // Process nodes by groups of 10.
@@ -429,6 +429,7 @@ function alshaya_acm_promotion_update_8001() {
  * Implements hook_update_dependencies().
  */
 function alshaya_acm_promotion_update_dependencies() {
+  $dependencies = [];
   $dependencies['alshaya_transac'][8116] = [
     'alshaya_acm_promotion' => 8014,
   ];

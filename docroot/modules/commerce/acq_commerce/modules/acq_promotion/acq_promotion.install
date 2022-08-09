@@ -11,7 +11,7 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_update_N().
- * 
+ *
  * Override the translate key for description field.
  */
 function acq_promotion_update_8004() {
@@ -70,6 +70,7 @@ function acq_promotion_update_8002() {
   foreach ($tables as $promotion_table) {
     $records = $connection->select($promotion_table)->fields($promotion_table)->execute()->fetchAll(PDO::FETCH_ASSOC);
     foreach ($records as $record) {
+      // @codingStandardsIgnoreLine
       $data = unserialize($record['field_acq_promotion_data_value']);
       unset($data['products']);
       $connection->update($promotion_table)
@@ -117,6 +118,7 @@ function acq_promotion_update_8001() {
  */
 function acq_promotion_schema() {
 
+  $schema = [];
   $schema['acq_sku_promotion'] = [
     'description' => 'Stores products and promotion mapping.',
     'fields' => [
