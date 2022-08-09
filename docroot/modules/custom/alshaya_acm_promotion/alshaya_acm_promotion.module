@@ -128,7 +128,7 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
         $promotion_context = array_column($promotion_context, 'value');
       }
       $new_promotion_context = $promotion['extension']['channel'];
-      if (count($promotion_context) != count($new_promotion_context) ||
+      if ((is_countable($promotion_context) ? count($promotion_context) : 0) != (is_countable($new_promotion_context) ? count($new_promotion_context) : 0) ||
         array_diff($promotion_context, $new_promotion_context) !== array_diff($new_promotion_context, $promotion_context)) {
         $queuing_required = 1;
       }
@@ -381,7 +381,7 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
       ? \Drupal::service('renderer')->renderPlain($gallery)
       : '';
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     $build['gallery'] = [];
   }
 

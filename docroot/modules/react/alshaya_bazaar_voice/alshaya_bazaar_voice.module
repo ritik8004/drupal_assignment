@@ -330,6 +330,7 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
       $sanitized_sku = $skuManager->getSanitizedSku($sku);
       $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics($sanitized_sku);
       if ($productReviewStats !== NULL) {
+        $range = NULL;
         $productData = $productReviewStats[$sanitized_sku]['productData'];
         // Adding product data to drupal settings.
         $attachments['#attached']['drupalSettings']['productReviewStats'] = [
@@ -352,7 +353,7 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
           ];
         }
 
-        if ($productReviewStats !== NULL && isset($productReviewStats[$sanitized_sku]['reviews'])) {
+        if (isset($productReviewStats[$sanitized_sku]['reviews'])) {
           foreach ($productReviewStats[$sanitized_sku]['reviews'] as $review) {
             if ($review['UserNickname'] !== NULL) {
               $product_schema_data['review'][] = [

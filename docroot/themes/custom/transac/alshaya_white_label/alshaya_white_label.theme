@@ -57,7 +57,7 @@ function alshaya_white_label_preprocess_html(&$variables) {
   }
   // Alias path class.
   $alias_class = preg_replace("/\//", '-', $alias);
-  if (!empty($alias_class) && strpos($alias_class, 'node') !== 0) {
+  if (!empty($alias_class) && !str_starts_with($alias_class, 'node')) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('alias--' . $alias_class);
   }
   // If is homepage.
@@ -248,7 +248,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
           }
 
           // If mobile videos are not set, use desktop videos on mobile.
-          $mobileVideos = $mobileVideos ?? $desktopVideos;
+          $mobileVideos ??= $desktopVideos;
 
           $variables['#attached']['drupalSettings']['desktopVideos'] = $desktopVideos;
           $variables['#attached']['drupalSettings']['mobileVideos'] = $mobileVideos;
@@ -577,7 +577,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $node = $variables['node']->toArray();
     // Check and set the "show_right_sidebar" variable, to show or hide sidebar.
     // This is a workaround, because of https://www.drupal.org/node/2864220.
-    if (count($node['field_related_info']) >= 1) {
+    if ((is_countable($node['field_related_info']) ? count($node['field_related_info']) : 0) >= 1) {
       $paragraph = Paragraph::load($node['field_related_info'][0]['target_id'])->toArray();
       if (!empty($paragraph['field_banner']) || !empty($paragraph['field_body']) || !empty($paragraph['field_title'])) {
         $variables['show_right_sidebar'] = TRUE;
@@ -1017,7 +1017,7 @@ function alshaya_white_label_preprocess_menu(&$variables) {
     foreach ($items as $item) {
       // If path is current_path, add active class.
       if ($item['url']->getRouteName() == 'user.page') {
-        if (substr($current_path, 0, 6) === '/user/' || substr($current_path, 0, 9) === '/profile/') {
+        if (str_starts_with($current_path, '/user/') || str_starts_with($current_path, '/profile/')) {
           $attributes = $item['url']->getOption('attributes');
           $attributes['class'][] = 'is-active';
           $item['url']->setOption('attributes', $attributes);
@@ -1232,6 +1232,7 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
     ->getQuery()
     ->condition('status', 1)
     ->execute();
+  $id = NULL;
   if ($ids) {
     $id = reset($ids);
   }
@@ -1274,7 +1275,7 @@ function alshaya_white_label_preprocess_page__404(&$variables) {
  */
 function alshaya_white_label_preprocess_facets_summary_item_list(&$variables) {
   // Move clear-all link item to the end of the array & attach clear-all class.
-  if (count($variables['items']) > 0) {
+  if ((is_countable($variables['items']) ? count($variables['items']) : 0) > 0) {
     $variables['items'][0]['attributes']->addClass('clear-all');
     $clear_all_item = $variables['items'][0];
     array_splice($variables['items'], 0, 1);
@@ -1573,10 +1574,10 @@ function _alshaya_white_label_get_video_attributes($video_url) {
   $provider_host = parse_url($video_url)['host'] ?? NULL;
   $type = 'mp4';
 
-  if (strpos($provider_host, 'vimeo') !== FALSE) {
+  if (str_contains($provider_host, 'vimeo')) {
     $type = 'vimeo';
   }
-  elseif (strpos($provider_host, 'youtube') !== FALSE || strpos($provider_host, 'youtu') !== FALSE) {
+  elseif (str_contains($provider_host, 'youtube') || str_contains($provider_host, 'youtu')) {
     $type = 'youtube';
   }
   $videoAttributes = [

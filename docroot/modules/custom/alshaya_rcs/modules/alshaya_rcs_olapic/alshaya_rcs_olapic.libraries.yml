@@ -1,0 +1,6 @@
+product:
+  js:
+    js/product_detail.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/jquery
