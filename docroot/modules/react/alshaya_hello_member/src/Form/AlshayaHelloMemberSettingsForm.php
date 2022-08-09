@@ -118,6 +118,13 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('membership_popup_text_below.value') ?? '',
     ];
 
+    $form['hello_member_configuration']['show_default_benefits'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Show default benefits'),
+      '#default_value' => $config->get('show_default_benefits') ?? 3,
+      '#required' => TRUE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -133,6 +140,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       ->set('membership_info_content_node', $form_state->getValue('membership_info_content_node'))
       ->set('membership_popup_text_above', $form_state->getValue('membership_popup_text_above'))
       ->set('membership_popup_text_below', $form_state->getValue('membership_popup_text_below'))
+      ->set('show_default_benefits', $form_state->getValue('show_default_benefits'))
       ->save();
 
     parent::submitForm($form, $form_state);

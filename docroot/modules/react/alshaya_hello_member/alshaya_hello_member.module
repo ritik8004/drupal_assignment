@@ -50,6 +50,8 @@ function alshaya_hello_member_page_attachments_alter(array &$page) {
     $config = \Drupal::config('alshaya_hello_member.settings');
     $hello_member_settings['popupTextAbove'] = $config->get('membership_popup_text_above.value') ?? '';
     $hello_member_settings['popupTextBelow'] = $config->get('membership_popup_text_below.value') ?? '';
+    // Get default benifits value.
+    $hello_member_settings['showMoreLimit'] = $config->get('show_default_benefits') ?? '';
   }
   $page['#attached']['drupalSettings']['helloMember'] = $hello_member_settings;
 }
