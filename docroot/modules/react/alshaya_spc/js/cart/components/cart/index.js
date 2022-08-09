@@ -106,13 +106,15 @@ export default class Cart extends React.Component {
         // Make side bar sticky.
         stickySidebar();
 
-        const cartData = fetchCartData();
-        if (cartData instanceof Promise) {
-          cartData.then((result) => {
-            if (typeof result.error === 'undefined') {
-              window.dynamicPromotion.apply(result);
-            }
-          });
+        if (data.has_exclusive_coupon !== true) {
+          const cartData = fetchCartData();
+          if (cartData instanceof Promise) {
+            cartData.then((result) => {
+              if (typeof result.error === 'undefined') {
+                window.dynamicPromotion.apply(result);
+              }
+            });
+          }
         }
       }
 
@@ -453,8 +455,10 @@ export default class Cart extends React.Component {
           <CheckoutMessage type={actionMessageType} context="page-level-cart-action">
             {actionMessage}
           </CheckoutMessage>
-          {/* This will be used for Dynamic promotion labels. */}
-          <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
+          {/* Displaying dynamic promotion labels only when no exclusive
+           coupon gets applied in basket. */}
+          {hasExclusiveCoupon !== true
+            && (<DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />)}
           {postPayData.postpayEligibilityMessage}
           <ConditionalView condition={Tabby.isTabbyEnabled()}>
             <TabbyWidget
