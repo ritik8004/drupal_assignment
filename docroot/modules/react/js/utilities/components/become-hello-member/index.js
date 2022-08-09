@@ -1,7 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { isMobile } from '../../display';
-import { hasValue} from '../../conditionsUtility';
+import { hasValue } from '../../conditionsUtility';
 
 class BecomeHelloMember extends React.Component {
   constructor(props) {
