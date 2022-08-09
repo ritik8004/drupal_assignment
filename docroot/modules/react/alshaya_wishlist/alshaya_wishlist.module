@@ -62,6 +62,7 @@ function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface 
  * Implements hook_page_attachments_alter().
  */
 function alshaya_wishlist_page_attachments_alter(array &$page) {
+  $settings = [];
   $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
   $settings['enabled'] = $wishlist_helper->isWishListEnabled();
 

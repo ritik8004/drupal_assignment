@@ -72,7 +72,7 @@ function alshaya_js_optimisations_library_info_alter(&$libraries, $extension) {
       /**
        * TEMPORARY CODE for (D9 vs jQuery UI) compatibility with Critical JS.
        */
-      if (strpos($path, 'jquery.ui') !== FALSE) {
+      if (str_contains($path, 'jquery.ui')) {
         $attributes['data-group'] = 'd9-jquery-ui';
         // Reset to original library weight.
         $library_config['weight'] = $weight;

@@ -79,6 +79,7 @@ function alshaya_super_category_alshaya_main_menu_links_alter(array &$term_tree,
  * Implements hook_preprocess_block().
  */
 function alshaya_super_category_preprocess_block(&$variables) {
+  $parent = NULL;
   $config = \Drupal::config('alshaya_super_category.settings');
   // Check super category feature status.
   if (!$config->get('status')) {
@@ -237,9 +238,7 @@ function alshaya_super_category_block_build_alter(array &$build, BlockPluginInte
     'alshaya_shop_by_block',
   ],
   // Prepare plugin id array based on configured 'footer menu blocks".
-  array_map(function ($derivative) {
-    return "system_menu_block:$derivative";
-  }, $config->get('footer_menu_blocks')));
+  array_map(fn($derivative) => "system_menu_block:$derivative", $config->get('footer_menu_blocks')));
 
   // Get the list of blocks that are used as promo panel.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_promo_panel')) {
@@ -344,9 +343,7 @@ function alshaya_super_category_form_menu_edit_form_alter(array &$form, FormStat
 
   if (!empty($form['links']['links'])) {
     // Get only menu links from child elements.
-    $filtered_links = array_filter($form['links']['links'], function ($key) {
-      return strpos($key, 'menu_plugin_id:menu_link_content') !== FALSE;
-    }, ARRAY_FILTER_USE_KEY);
+    $filtered_links = array_filter($form['links']['links'], fn($key) => str_contains($key, 'menu_plugin_id:menu_link_content'), ARRAY_FILTER_USE_KEY);
 
     // Get term storage.
     $term_storage = $terms = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
@@ -364,9 +361,7 @@ function alshaya_super_category_form_menu_edit_form_alter(array &$form, FormStat
         // Load all the terms from term ids.
         $terms = $term_storage->loadMultiple($categories);
         // Get the label of each terms.
-        $names = array_map(function ($term) {
-          return $term->label();
-        }, $terms);
+        $names = array_map(fn($term) => $term->label(), $terms);
         // Append categories name to menu title.
         $form['links']['links'][$id]['title'][1]['#title'] .= ' (' . implode(', ', $names) . ')';
       }
@@ -557,7 +552,7 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
       $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
       $path = str_replace("/$lang/", '', urldecode($term['path']));
 
-      if (strpos($path, 'taxonomy') === FALSE) {
+      if (!str_contains($path, 'taxonomy')) {
         $form['brand']['#value'] = ($lang == 'ar') ? urldecode($path) : $path;
       }
     }
@@ -694,7 +689,7 @@ function alshaya_super_category_language_switch_links_alter(array &$links, $type
             $brand = $params['taxonomy_term'];
           }
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           // Ignore the value, someone is simply trying to mess up with system
           // using random value in GET.
           $brand = '';
@@ -791,7 +786,7 @@ function alshaya_super_category_alshaya_search_query_param_alter(&$query, FormSt
 function _alshaya_super_category_get_super_category_for_term(TermInterface $term = NULL, string $langcode = NULL) {
   if (!empty($super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired($term))) {
     if (!empty($super_category_term = Term::load($super_category['id']))) {
-      $langcode = $langcode ?? \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $langcode ??= \Drupal::languageManager()->getCurrentLanguage()->getId();
       // We doing this as we not getting translated values.
       return \Drupal::service('entity.repository')->getTranslationFromContext($super_category_term, $langcode);
     }

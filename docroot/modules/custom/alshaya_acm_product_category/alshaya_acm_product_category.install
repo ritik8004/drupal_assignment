@@ -351,7 +351,7 @@ function alshaya_acm_product_category_update_8033() {
       try {
         Block::load($block_id)->setWeight($price_block->getWeight())->save();
       }
-      catch (Exception $e) {
+      catch (Exception) {
         // Do nothing.
       }
     }
@@ -1057,6 +1057,7 @@ function alshaya_acm_product_category_update_8001() {
  * @see hook_schema()
  */
 function alshaya_acm_product_category_schema() {
+  $schema = [];
   $schema['sku_category_map'] = [
     'description' => 'Stores SKU and magento category Ids.',
     'fields' => [

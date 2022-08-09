@@ -259,6 +259,7 @@ function _alshaya_main_menu_process_tag_attributes_columns(array &$data) {
  * Implements hook_alshaya_acm_product_category_tree_data_alter().
  */
 function alshaya_main_menu_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+  $display_view_all = NULL;
   /** @var \Drupal\taxonomy\TermInterface $termObj **/
   $termObj = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($term->tid);
   if ($termObj->hasField('field_display_view_all')) {

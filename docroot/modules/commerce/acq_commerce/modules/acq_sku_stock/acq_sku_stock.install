@@ -22,6 +22,7 @@ function acq_sku_stock_update_8001() {
  * Implements hook_schema().
  */
 function acq_sku_stock_schema() {
+  $schema = [];
   $schema['acq_sku_stock'] = [
     'description' => 'Stores sku stock info.',
     'fields' => [
