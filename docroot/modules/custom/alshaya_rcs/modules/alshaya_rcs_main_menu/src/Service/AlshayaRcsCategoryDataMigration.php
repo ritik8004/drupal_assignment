@@ -560,9 +560,6 @@ class AlshayaRcsCategoryDataMigration {
       }
     }
     if (!empty($url_path)) {
-      // Replace `shop-` in begining of url path.
-      $url_path = preg_replace('/^' . preg_quote('shop-', '') . '/', '', $url_path);
-      $url_path = 'shop-' . $url_path;
       $ids[$category['id']] = $url_path;
     }
 
