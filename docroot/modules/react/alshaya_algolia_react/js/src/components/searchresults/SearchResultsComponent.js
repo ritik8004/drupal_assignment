@@ -35,6 +35,7 @@ import { isDesktop } from '../../utils/QueryStringUtils';
 import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHelper';
 import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -193,7 +194,9 @@ const SearchResultsComponent = ({
         { isHelloMemberEnabled()
         && !isUserAuthenticated()
         && (
-          <div id="hello-member-become-hello-member" />
+          <div id="hello-member-become-hello-member">
+            <BecomeHelloMember />
+          </div>
         )}
         <div id="hits" className="c-products-list product-small view-search">
           <SearchResultInfiniteHits

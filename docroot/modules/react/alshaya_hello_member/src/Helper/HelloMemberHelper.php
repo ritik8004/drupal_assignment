@@ -51,16 +51,6 @@ class HelloMemberHelper {
   }
 
   /**
-   * Helper to check if Become member block is getting shown on Listing pages.
-   *
-   * @return bool
-   *   TRUE/FALSE
-   */
-  public function showOnListingPages() {
-    return $this->getConfig()->get('become_member_on_listing_pages');
-  }
-
-  /**
    * Helper to get Cache Tags for Hello member Config.
    *
    * @return string[]

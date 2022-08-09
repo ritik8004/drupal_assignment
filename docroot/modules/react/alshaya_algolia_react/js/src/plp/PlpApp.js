@@ -24,6 +24,7 @@ import SubCategoryContent from '../components/subcategory';
 import ConditionalView from '../../common/components/conditional-view';
 import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
+import BecomeHelloMember from '../../../../js/utilities/components/become-hello-member';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -245,7 +246,9 @@ const PlpApp = ({
       { isHelloMemberEnabled()
       && !isUserAuthenticated()
       && (
-        <div id="hello-member-become-hello-member" />
+        <div id="hello-member-become-hello-member">
+          <BecomeHelloMember />
+        </div>
       )}
       <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
         <PlpResultInfiniteHits

@@ -13,7 +13,7 @@ import HelloMemberCartPopupBonusVouchersList from './hello-member-cart-popup-bon
 import HelloMemberCartPopupMemberOfferList from './hello-member-cart-popup-member-offer-list';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
-import BecomeHelloMember from '../../../../../alshaya_hello_member/js/src/components/become-hello-member';
+import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 
