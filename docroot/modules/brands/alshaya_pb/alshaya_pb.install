@@ -11,6 +11,12 @@
  *  Remove `frame` attribute from pb brand module.
  */
 function alshaya_pb_update_9401() {
+
+  // Remove frame attribute from sku entity.
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->removeField('frame');
+
   // Remove frame attribute from sku base fields config.
   $sku_base_config = \Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields');
   $fields = $sku_base_config->get('fields');
@@ -18,7 +24,7 @@ function alshaya_pb_update_9401() {
   $sku_base_config->set('fields', $fields);
   $sku_base_config->save();
 
-  // Remove frame attribute from sku configurable form  settings.
+  // Remove frame attribute from sku configurable form settings.
   $sku_form_settings_config = \Drupal::configFactory()->getEditable('acq_sku.configurable_form_settings');
 
   // Unset in attribute weights.
