@@ -387,6 +387,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => '(@hmOfferCount) تم تفعيل العرض الخاص بالأعضاء',
         'context' => 'hello_member',
       ],
+      'You have reached the maximum amount of added discounts.' => [
+        'ar' => 'لقد تخطيت الحد الأقصى من الخصومات المضافة.',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
