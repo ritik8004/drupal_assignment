@@ -20,6 +20,10 @@
     &::-webkit-calendar-picker-indicator {
       display: none;
     }
+
+    html[lang=ar] & {
+      text-align: right;
+    }
   }
 
   input[type=date] ~ label:not(.active-label) {
@@ -84,12 +88,6 @@
         font-size: rem(13);
         margin: 0;
         font-weight: normal;
-
-        html[lang=ar] & {
-          text-align: left;
-          width: 100%;
-          display: block;
-        }
       }
     }
 
