@@ -380,7 +380,7 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Bonus Voucher Applied (@hmVoucherCount)' => [
-        'ar' => '(@hmOfferCount)  تم تفعيل رصيد القسيمة',
+        'ar' => '(@hmVoucherCount) تم تفعيل رصيد القسيمة',
         'context' => 'hello_member',
       ],
       'Member Offers Applied (@hmOfferCount)' => [
