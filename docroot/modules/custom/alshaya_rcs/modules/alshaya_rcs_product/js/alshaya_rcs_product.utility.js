@@ -1168,7 +1168,7 @@ window.commerceBackend = window.commerceBackend || {};
   async function processAllLabels(mainSku) {
     // If labels have already been fetched for mainSku, they will be available
     // in static storage. Hence no need to process them again.
-    if (typeof staticDataStore.labels[mainSku] !== 'undefined') {
+    if (Drupal.hasValue(staticDataStore.labels[mainSku])) {
       return;
     }
 
@@ -1218,6 +1218,10 @@ window.commerceBackend = window.commerceBackend || {};
    */
   window.commerceBackend.getProductLabelsData = async function getProductLabelsData(mainSku, skuForLabel) {
     await processAllLabels(mainSku);
+    // Check if its simple product.
+    if (!Drupal.hasValue(skuForLabel)) {
+      return staticDataStore.labels[mainSku];
+    }
     // If it is a child product not having any label, we display the labels
     // from the parent.
     var parentSku = getParentSkuBySku(mainSku, skuForLabel);
