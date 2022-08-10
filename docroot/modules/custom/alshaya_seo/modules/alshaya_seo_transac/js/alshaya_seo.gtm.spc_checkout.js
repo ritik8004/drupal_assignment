@@ -136,16 +136,38 @@
       stepData.ecommerce.checkout.actionField.step = (step === 4) ? 4 : 3;
       if (step === 4) {
         var totals = window.spcStaticStorage.cart_raw.totals;
-        // When full payment is done using egift.
+        var auraPaymentAmount = totals.total_segments ? totals.total_segments.filter(item => item.code === 'aura_payment') : null;
+        auraPaymentAmount = typeof auraPaymentAmount[0] !== 'undefined' ? auraPaymentAmount[0].value : null;
+        var gtmPaymentName = drupalSettings.payment_methods[cartData.payment.method] ?
+          drupalSettings.payment_methods[cartData.payment.method].gtm_name
+          : 'hps_payment';
+        // When full payment is done using pseudo methods.
         if (paymentMethod === 'hps_payment') {
-          stepData.paymentOption = 'egiftcard';
+          if (totals && totals.extension_attributes.hps_redeemed_amount > 0) {
+            // For egift payment only.
+            stepData.paymentOption = 'egiftcard';
+            // For egift + aura payment.
+            if (auraPaymentAmount > 0) {
+              stepData.paymentOption = [stepData.paymentOption, 'aura'].join('_');
+            }
+          }
+          // When full payment is done using aura.
+          else if (auraPaymentAmount > 0) {
+            stepData.paymentOption = 'aura';
+          }
         }
         // When combination of payments involved.
         else if (totals && totals.extension_attributes.hps_redeemed_amount > 0) {
-          var gtmName = drupalSettings.payment_methods[cartData.payment.method] ?
-            drupalSettings.payment_methods[cartData.payment.method].gtm_name
-            : '';
-          stepData.paymentOption = [gtmName, 'egiftcard'].join('_');
+          // When egift + other payment method.
+          stepData.paymentOption = [gtmPaymentName, 'egiftcard'].join('_');
+          // When aura + egift + other payment method.
+          if (auraPaymentAmount > 0) {
+            stepData.paymentOption = [stepData.paymentOption, 'aura'].join('_');
+          }
+        }
+        // When aura + other payment method.
+        else if (auraPaymentAmount > 0) {
+          stepData.paymentOption = [gtmPaymentName, 'aura'].join('_');
         }
         // When completely non-pseudo payment used.
         else {
