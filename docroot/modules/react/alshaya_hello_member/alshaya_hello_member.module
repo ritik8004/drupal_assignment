@@ -488,7 +488,12 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
   if (!$helloMemberHelper->isHelloMemberEnabled()) {
     return;
   }
+  // Get config value.
+  $brand_membership_text = \Drupal::config('alshaya_hello_member.settings')->get('brand_membership_text');
+  $iso_currency_code = \Drupal::config('acq_commerce.currency')->get('iso_currency_code');
 
+  $build['#attached']['drupalSettings']['helloMember']['brandMembershipText'] = $brand_membership_text;
+  $build['#attached']['drupalSettings']['helloMember']['currencyCode'] = $iso_currency_code;
   $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
 
   // For hello member, aura settings has to be disabled and

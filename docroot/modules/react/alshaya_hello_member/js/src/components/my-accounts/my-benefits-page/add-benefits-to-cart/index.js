@@ -15,6 +15,7 @@ class AddBenefitsToCart extends React.Component {
       appliedAlready: false,
       isEmptyCart: false,
       voucherCodes: '',
+      isAPIError: false,
     };
   }
 
@@ -96,8 +97,14 @@ class AddBenefitsToCart extends React.Component {
             // If coupon details API is returning Error.
             logger.error('Error while calling the apply coupon Api @params, @message', {
               '@params': params,
-              '@message': response.data.message,
+              '@message': response.data.error_message,
             });
+            this.setState({
+              wait: true,
+              isAPIError: true,
+            });
+            document.getElementById('status-msg').innerHTML = response.data.error_message;
+            removeFullScreenLoader();
           }
         } else {
           params.offerCode = codeId;
@@ -125,6 +132,12 @@ class AddBenefitsToCart extends React.Component {
               '@params': params,
               '@message': response.data.message,
             });
+            this.setState({
+              wait: true,
+              isAPIError: true,
+            });
+            document.getElementById('status-msg').innerHTML = response.data.error_message;
+            removeFullScreenLoader();
           }
         }
       }
@@ -132,7 +145,9 @@ class AddBenefitsToCart extends React.Component {
   }
 
   render() {
-    const { appliedAlready, wait, isEmptyCart } = this.state;
+    const {
+      appliedAlready, wait, isEmptyCart, isAPIError,
+    } = this.state;
 
     if (!wait) {
       return (
@@ -160,6 +175,11 @@ class AddBenefitsToCart extends React.Component {
               <div className="status-icon" />
             </div>
           </>
+        )}
+        {(isAPIError) && (
+          <div className="hm-benefit-status-info" id="hm-benefit-status-info">
+            <div id="status-msg" />
+          </div>
         )}
         {(!appliedAlready && !isEmptyCart) && (
           <div className="button-wide" onClick={() => this.handleClick()}>

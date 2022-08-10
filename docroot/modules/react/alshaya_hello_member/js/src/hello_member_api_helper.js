@@ -2,7 +2,6 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import { callHelloMemberApi } from '../../../js/utilities/helloMemberHelper';
 import logger from '../../../js/utilities/logger';
-import getCurrencyCode from '../../../js/utilities/util';
 import { getPriceToHelloMemberPoint } from './utilities';
 
 /**
@@ -153,7 +152,8 @@ const getHelloMemberPointsHistory = async (firstResult, pageSize) => {
  *   Return hello member points to earn.
  */
 const getHelloMemberPointsToEarn = async (items, identifierNo) => {
-  const currencyCode = getCurrencyCode();
+  const { currencyCode } = drupalSettings.helloMember;
+
   if (!hasValue(items)) {
     logger.warning('Error while trying to get hello member points to earn. Product details is required.');
     return getErrorResponse('Product details is required.', 404);

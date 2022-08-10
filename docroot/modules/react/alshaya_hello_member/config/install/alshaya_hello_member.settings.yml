@@ -9,3 +9,5 @@ membership_popup_text_below:
   value: '<p className="hello-membership-terms">Please <a href="/">Click here</a> to read more about Hello Member programme.</p><p className="hello-membership-terms">Read the updated <a href="/">Terms and Conditions</a> and <a href="/">Privacy Policy</a></p><p className="hello-membership-terms">If you do not want to be part of the programme, <a href="/">contact us.</a></p>'
   format: full_text
 show_default_benefits: 3 # Config to store number of default benifits to be shown.
+brand_membership_text: 'H&M membership'
+langcode: en
