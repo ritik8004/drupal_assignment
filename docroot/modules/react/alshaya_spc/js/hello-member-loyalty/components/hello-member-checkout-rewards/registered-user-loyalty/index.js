@@ -109,10 +109,8 @@ class RegisteredUserLoyalty extends React.Component {
       const response = callHelloMemberApi('unsetLoyaltyCard', 'POST', requestData);
       response.then((result) => {
         if (result.status === 200) {
-          if (result.data) {
-            // Redirect to cart page.
-            window.location.href = Drupal.url('cart');
-          }
+          // Redirect to cart page.
+          window.location.href = Drupal.url('cart');
         }
       });
     }
@@ -135,9 +133,10 @@ class RegisteredUserLoyalty extends React.Component {
                 // Store info in storage.
                 window.commerceBackend.setCartDataInStorage({ cart: cartResult });
                 if (typeof cartResult.error === 'undefined') {
-                  window.dynamicPromotion.apply(cartResult);
-                  // Dispatch an event to update totals in cart object.
-                  dispatchCustomEvent('updateTotalsInCart', { totals: cartResult.totals });
+                  // Trigger event to refresh delivery methods and checkout summary section.
+                  // Discount and delivery price should be updated on the basis of hm member status.
+                  // For hm plus member, delivey method price will change to FREE.
+                  dispatchCustomEvent('refreshCartOnAddress', cartResult);
                 }
               });
             }

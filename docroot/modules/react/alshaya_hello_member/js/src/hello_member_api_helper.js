@@ -283,6 +283,28 @@ const helloMemberCustomerPhoneSearch = async (phoneNumber) => {
     });
 };
 
+/**
+ * Apply hello member loyalty on cart Id for current customer.
+ *
+ * @param {String} cartId
+ *   Cart Id.
+ */
+const applyHelloMemberLoyalty = (cartId) => {
+  const hmCustomerData = getHelloMemberCustomerData();
+  if (hmCustomerData instanceof Promise) {
+    hmCustomerData.then((response) => {
+      if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)
+        && hasValue(response.data.apc_identifier_number)) {
+        setHelloMemberLoyaltyCard(response.data.apc_identifier_number, cartId);
+      } else if (hasValue(response.error)) {
+        logger.error('Error while trying to set hello member loyalty card data: @data.', {
+          '@data': JSON.stringify(response),
+        });
+      }
+    });
+  }
+};
+
 export {
   getHelloMemberCustomerData,
   getHelloMemberTierProgressData,
@@ -291,4 +313,5 @@ export {
   setHelloMemberLoyaltyCard,
   helloMemberCustomerPhoneSearch,
   getHelloMemberDictionaryData,
+  applyHelloMemberLoyalty,
 };
