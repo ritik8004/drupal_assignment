@@ -17,7 +17,7 @@ use Drupal\block\Entity\Block;
  *
  * Set config to allow using block reference in paragraphs.
  */
-function alshaya_hm_update_9001() {
+function alshaya_hm_update_9401() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['field.field.paragraph.1_row_1_col.field_promo_block'],
