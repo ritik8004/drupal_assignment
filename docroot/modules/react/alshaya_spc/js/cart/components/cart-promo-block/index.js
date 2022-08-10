@@ -247,7 +247,7 @@ export default class CartPromoBlock extends React.Component {
       buttonText,
     } = this.state;
 
-    const { inStock, dynamicPromoLabelsCart } = this.props;
+    const { inStock, dynamicPromoLabelsCart, hasExclusiveCoupon } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
     let disabledState = false;
     // Disable the promo field if out of stock or disabled.
@@ -297,7 +297,10 @@ export default class CartPromoBlock extends React.Component {
           <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied, inStock); }}>{Drupal.t('Remove')}</button>
           <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock, productInfo); }}>{buttonText}</button>
           <div id="promo-message" />
-          <DynamicPromotionCode code={couponCode} label={couponLabel} />
+          {/* Displaying dynamic promotion code only when no exclusive
+           coupon gets applied in basket. */}
+          {hasExclusiveCoupon !== true
+            && (<DynamicPromotionCode code={couponCode} label={couponLabel} />)}
         </div>
       </div>
     );

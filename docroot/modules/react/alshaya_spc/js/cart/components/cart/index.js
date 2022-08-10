@@ -106,6 +106,8 @@ export default class Cart extends React.Component {
         // Make side bar sticky.
         stickySidebar();
 
+        // We will not trigger window.dynamicPromotion.apply on cart page
+        // if exclusive coupon is applied.
         if (data.has_exclusive_coupon !== true) {
           const cartData = fetchCartData();
           if (cartData instanceof Promise) {
@@ -520,6 +522,7 @@ export default class Cart extends React.Component {
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
               items={items}
+              hasExclusiveCoupon={hasExclusiveCoupon}
             />
             <ConditionalView condition={isAuraEnabled()}>
               <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
