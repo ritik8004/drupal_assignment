@@ -19,7 +19,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  */
 class AlshayaProductListHelper {
 
-  const VOCAB_ID = 'acq_product_category';
+  public const VOCAB_ID = 'acq_product_category';
   /**
    * Entity type manager.
    *

@@ -11,7 +11,7 @@
   host: alshayadc102dev.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02dev
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02dev2'.
@@ -27,7 +27,7 @@
   host: alshayadc102dev2.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02dev2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02dev2up'.
@@ -43,7 +43,7 @@
   host: alshayadc102dev2up.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02dev2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02dev3'.
@@ -59,7 +59,7 @@
   host: alshayadc102dev3.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02dev3
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02dev3up'.
@@ -75,7 +75,7 @@
   host: alshayadc102dev3up.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02dev3up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02devup'.
@@ -91,7 +91,7 @@
   host: alshayadc102devup.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02devup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02live'.
@@ -107,7 +107,7 @@
   host: alshayadc102live.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02live
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02pprod'.
@@ -123,7 +123,7 @@
   host: alshayadc102pprod.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02pprod
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02pprodup'.
@@ -139,7 +139,7 @@
   host: alshayadc102pprodup.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02pprodup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02qa2'.
@@ -155,7 +155,7 @@
   host: alshayadc102qa2.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02qa2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02qa2up'.
@@ -171,7 +171,7 @@
   host: alshayadc102qa2up.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02qa2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02test'.
@@ -187,7 +187,7 @@
   host: alshayadc102test.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02test
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02testup'.
@@ -203,7 +203,7 @@
   host: alshayadc102testup.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02testup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02uat'.
@@ -219,7 +219,7 @@
   host: alshayadc102uat.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02uat
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02uatup'.
@@ -235,7 +235,7 @@
   host: alshayadc102uatup.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02uatup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment '02update'.
@@ -251,7 +251,7 @@
   host: alshayadc102update.ssh.enterprise-g1.acquia-sites.com
   user: alshayadc1.02update
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment 'dev'.
@@ -267,7 +267,7 @@ dev:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment 'dev2'.
@@ -283,7 +283,7 @@ dev2:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment 'dev3'.
@@ -299,7 +299,7 @@ dev3:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment 'pprod'.
@@ -315,7 +315,7 @@ pprod:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment 'prod'.
@@ -331,7 +331,7 @@ prod:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment 'qa2'.
@@ -347,7 +347,7 @@ qa2:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment 'test'.
@@ -363,7 +363,7 @@ test:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshayadc1', environment 'uat'.
@@ -379,4 +379,4 @@ uat:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush

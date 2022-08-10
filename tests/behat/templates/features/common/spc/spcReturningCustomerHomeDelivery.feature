@@ -1,4 +1,4 @@
-@javascript @returnUser @codPayment @homeDelivery @cosaeuat @coskwuat @pbkkwuat @tbseguat @aeoaeuat @aeosauat @westelmkwuat @vsaeuat @bbwsauat @mcsauat @hmaeuat @flsauat @tbskwuat @auth @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat
+@javascript @returnUser @codPayment @homeDelivery @cosaeuat @coskwuat @mckwuat @westelmaeuat @pbkkwuat @tbseguat @aeoaeuat @aeosauat @westelmkwuat @vsaeuat @bbwsauat @mcsauat @hmaeuat @flsauat @tbskwuat @auth @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat
 Feature: SPC Checkout Home Delivery COD for returning customer
 
   Background:
@@ -48,9 +48,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
-    Then I should see "{delivery_type_text}"
-    Then I should see "{delivery_type}"
-    Then I should see "{payment_type_text}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -115,9 +112,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
-    Then I should see "{language_delivery_type_text}"
-    Then I should see "{language_delivery_type}"
-    Then I should see "{language_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
@@ -173,6 +167,5 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     And I wait 10 seconds
     And I wait for the page to load
     And I should save the order details in the file
-    Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{language_order_detail}"

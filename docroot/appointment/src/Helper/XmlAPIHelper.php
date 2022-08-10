@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use App\Service\Config\SystemSettings;
 
 /**
- * Class XmlAPIHelper.
+ * Helper class to access XML APIs.
  *
  * @package App\Helper
  */
@@ -127,6 +127,7 @@ class XmlAPIHelper {
    *   Response object.
    */
   public function fetchTimeSlots($request) {
+    $result = [];
     $selected_date = $request->query->get('selectedDate');
     $program = $request->query->get('program');
     $activity = $request->query->get('activity');
@@ -198,7 +199,7 @@ class XmlAPIHelper {
         <programExternalId>' . $param['program'] . '</programExternalId>
         <channel>' . $param['channel'] . '</channel>
       </criteria>
-      <startDateTime>' . $param['startDateTime'] . '</startDateTime> 
+      <startDateTime>' . $param['startDateTime'] . '</startDateTime>
       <clientExternalId>' . $param['client'] . '</clientExternalId>
     </ns2:bookAppointment>';
 

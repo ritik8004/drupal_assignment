@@ -62,7 +62,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
    */
   public function defaultConfiguration() {
     $config = parent::defaultConfiguration();
-    $page_types = $this->getPageTypes();
+    $page_types = static::getPageTypes();
     foreach ($page_types as $pageType => $values) {
       $config['page_types'][$pageType] = 0;
     }
@@ -75,7 +75,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    $page_types = $this->getPageTypes();
+    $page_types = static::getPageTypes();
     $form['page_types'] = [
       '#title' => $this->t('Select the Page Types'),
       '#type' => 'fieldset',

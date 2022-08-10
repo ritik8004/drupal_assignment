@@ -32,27 +32,27 @@ class AlshayaPromotionsManager {
   /**
    * Denotes the fixed_percentage_discount_order promotion subtype.
    */
-  const SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER = 'fixed_percentage_discount_order';
+  public const SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER = 'fixed_percentage_discount_order';
 
   /**
    * Denotes the fixed_amount_discount_order promotion subtype.
    */
-  const SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER = 'fixed_amount_discount_order';
+  public const SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER = 'fixed_amount_discount_order';
 
   /**
    * Denotes the free_gift_order promotion subtype.
    */
-  const SUBTYPE_FREE_GIFT = 'free_gift_order';
+  public const SUBTYPE_FREE_GIFT = 'free_gift_order';
 
   /**
    * Denotes the free_shipping_order promotion subtype.
    */
-  const SUBTYPE_FREE_SHIPPING_ORDER = 'free_shipping_order';
+  public const SUBTYPE_FREE_SHIPPING_ORDER = 'free_shipping_order';
 
   /**
    * Denotes other promotion subtype.
    */
-  const SUBTYPE_OTHER = 'other';
+  public const SUBTYPE_OTHER = 'other';
 
   /**
    * Entity Manager service.
@@ -626,7 +626,7 @@ class AlshayaPromotionsManager {
           $children[] = $child;
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         continue;
       }
     }
@@ -915,7 +915,7 @@ class AlshayaPromotionsManager {
     $label = '';
 
     // Generate label for the applicable promotion.
-    $applicablePromotion = $this->getInactiveCartPromotion($applied_rules);
+    $applicablePromotion = $this->getInactiveCartPromotion();
     if ($applicablePromotion instanceof NodeInterface) {
       $label = $this->getPromotionCodeLabel($applicablePromotion);
     }

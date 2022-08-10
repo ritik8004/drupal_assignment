@@ -137,6 +137,7 @@ class AlshayaBazaarVoiceController extends ControllerBase {
    *   Build array.
    */
   public function pieWriteReviewContainer(Request $request) {
+    $build = [];
     $bvaction = $request->query->get('bvaction');
     $bvproductId = $request->query->get('bvproductId');
 

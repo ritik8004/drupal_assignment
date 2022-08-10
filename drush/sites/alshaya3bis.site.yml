@@ -11,7 +11,7 @@
   host: alshaya3bis01dev.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01dev
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01dev2'.
@@ -27,7 +27,7 @@
   host: alshaya3bis01dev2.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01dev2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01dev2up'.
@@ -43,7 +43,7 @@
   host: alshaya3bis01dev2up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01dev2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01dev3'.
@@ -59,7 +59,7 @@
   host: alshaya3bis01dev3.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01dev3
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01dev3up'.
@@ -75,7 +75,7 @@
   host: alshaya3bis01dev3up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01dev3up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01devup'.
@@ -91,7 +91,7 @@
   host: alshaya3bis01devup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01devup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01live'.
@@ -107,7 +107,7 @@
   host: alshaya3bis01live.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01live
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01pprod'.
@@ -123,7 +123,7 @@
   host: alshaya3bis01pprod.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01pprod
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01pprodup'.
@@ -139,7 +139,7 @@
   host: alshaya3bis01pprodup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01pprodup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01qa2'.
@@ -155,7 +155,7 @@
   host: alshaya3bis01qa2.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01qa2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01qa2up'.
@@ -171,7 +171,7 @@
   host: alshaya3bis01qa2up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01qa2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01test'.
@@ -187,7 +187,7 @@
   host: alshaya3bis01test.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01test
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01testup'.
@@ -203,7 +203,7 @@
   host: alshaya3bis01testup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01testup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01uat'.
@@ -219,7 +219,7 @@
   host: alshaya3bis01uat.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01uat
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01uatup'.
@@ -235,7 +235,7 @@
   host: alshaya3bis01uatup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01uatup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya3bis', environment '01update'.
@@ -251,4 +251,4 @@
   host: alshaya3bis01update.ssh.enterprise-g1.acquia-sites.com
   user: alshaya3bis.01update
   paths:
-    drush-script: drush9
+    drush-script: drush

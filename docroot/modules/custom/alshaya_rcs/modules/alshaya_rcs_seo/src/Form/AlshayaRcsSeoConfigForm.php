@@ -66,7 +66,7 @@ class AlshayaRcsSeoConfigForm extends ConfigFormBase {
       '#type' => 'select',
       '#required' => TRUE,
       '#options' => [
-        'drupal' => $this->t('Drupal'),
+        'drupal' => $this->t(\Drupal::class),
         'magento' => $this->t('Magento'),
       ],
       '#default_value' => $config->get('sitemap_domain_to_use') ?? 'drupal',

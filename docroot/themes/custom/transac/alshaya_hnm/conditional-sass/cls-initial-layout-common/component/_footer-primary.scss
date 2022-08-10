@@ -1,0 +1,27 @@
+.cls-initial-layout {
+  @include breakpoint($only-mobile) {
+    .c-footer {
+      .footer--menu {
+        height: rem(400);
+
+        .c-footer-menu--category,
+        .c-footer-menu--about,
+        .c-footer-menu--help {
+          height: rem(60);
+
+          .is-accordion {
+            + {
+              * {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .footer_primary-right-block {
+          height: rem(170);
+        }
+      }
+    }
+  }
+}

@@ -207,6 +207,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
    *   The field details from the node.
    */
   private function quizAnswerDetails($a_nid) {
+    $taxonomy_term_trans = NULL;
     $answer_details = [];
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     $answer_node = $this->entityTypeManager->getStorage('node')->load($a_nid);

@@ -7,13 +7,13 @@ use Symfony\Component\Cache\Adapter\PdoAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 
 /**
- * Class Cache.
+ * Helper class for appointment cache.
  *
  * @package App\Cache
  */
 class Cache {
 
-  const APPOINTMENT_CACHE_TABLE = 'appointment_cache';
+  public const APPOINTMENT_CACHE_TABLE = 'appointment_cache';
 
   /**
    * Cache Expiration in seconds.

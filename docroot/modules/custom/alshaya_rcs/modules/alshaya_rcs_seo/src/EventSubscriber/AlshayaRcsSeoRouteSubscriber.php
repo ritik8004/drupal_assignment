@@ -18,6 +18,10 @@ class AlshayaRcsSeoRouteSubscriber extends RouteSubscriberBase {
     if ($route = $collection->get('alshaya_image_sitemap.alshaya_image_sitemap_get_url')) {
       $route->setDefault('_controller', '\Drupal\alshaya_rcs_seo\Controller\AlshayaRcsImageSitemapController::redirectImageSiteMap');
     }
+
+    if ($route = $collection->get('alshaya_seo.sitemap')) {
+      $route->setDefault('_controller', '\Drupal\alshaya_rcs_seo\Controller\AlshayaRcsSeoController::sitemap');
+    }
   }
 
 }

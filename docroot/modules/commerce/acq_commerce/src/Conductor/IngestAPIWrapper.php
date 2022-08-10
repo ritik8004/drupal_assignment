@@ -86,7 +86,7 @@ class IngestAPIWrapper {
     try {
       $this->tryIngestRequest($doReq, 'productFullSync', 'products', $store_id);
     }
-    catch (ConnectorException $e) {
+    catch (ConnectorException) {
     }
   }
 

@@ -5,9 +5,6 @@
  * Functions around module install.
  */
 
-use Drupal\block\Entity\Block;
-use Drupal\block\BlockInterface;
-
 /**
  * Implements hook_install().
  */
@@ -22,23 +19,8 @@ function alshaya_rcs_promotion_install() {
     'views_block__alshaya_promotion_description_block_1' => 'alshaya_rcs_promotion_description',
     'alshayaalgoliareactpromotion' => 'alshaya_algolia_react_promotion_v2',
   ];
-  $existing_promotion_block_weight = NULL;
-  foreach ($blocks as $prev_block_id => $new_block_id) {
-    $prev_block = Block::load($prev_block_id);
-    if ($prev_block instanceof BlockInterface) {
-      // Change the RCS promotion block weight based on the V1 block weight.
-      $existing_promotion_block_weight = $prev_block->getWeight();
-      $prev_block->disable()->save();
-      // Load the RCS Block and Change the weight.
-      if ($new_block_id) {
-        $new_block = Block::load($new_block_id);
-        if ($new_block instanceof BlockInterface) {
-          $new_block->setWeight($existing_promotion_block_weight);
-          $new_block->save();
-        }
-      }
-    }
-  }
+  \Drupal::moduleHandler()->loadInclude('alshaya_block', 'inc', 'alshaya_block.utility');
+  alshaya_block_switch_block_config($blocks);
 }
 
 /**
@@ -50,10 +32,6 @@ function alshaya_rcs_promotion_uninstall() {
     'views_block__alshaya_promotion_description_block_1',
     'alshayaalgoliareactpromotion',
   ];
-  foreach ($blocks as $block_id) {
-    $block = Block::load($block_id);
-    if ($block instanceof BlockInterface) {
-      $block->enable()->save();
-    }
-  }
+  \Drupal::moduleHandler()->loadInclude('alshaya_block', 'inc', 'alshaya_block.utility');
+  alshaya_block_revert_block_config($blocks);
 }

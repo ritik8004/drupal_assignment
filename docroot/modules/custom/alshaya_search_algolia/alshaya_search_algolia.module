@@ -48,9 +48,7 @@ function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op =
     return;
   }
 
-  $indexable_fields = array_keys(array_filter($fields, function ($item) {
-    return isset($item['facet']) && $item['facet'];
-  }));
+  $indexable_fields = array_keys(array_filter($fields, fn($item) => isset($item['facet']) && $item['facet']));
 
   if (empty($indexable_fields)) {
     return;

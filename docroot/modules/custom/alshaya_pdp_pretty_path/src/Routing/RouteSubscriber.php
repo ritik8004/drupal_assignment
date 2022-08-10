@@ -19,14 +19,14 @@ class RouteSubscriber extends RouteSubscriberBase {
       $sourceRoute = $collection->get($routeName);
 
       if ($sourceRoute) {
-        if (strpos($sourceRoute->getPath(), '{color}') === FALSE) {
+        if (!str_contains($sourceRoute->getPath(), '{color}')) {
           $sourceRoute->setPath($sourceRoute->getPath() . '/{color}');
         }
         $sourceRoute->setDefault('color', '');
         $sourceRoute->setRequirement('color', '.*');
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
 
     }
   }

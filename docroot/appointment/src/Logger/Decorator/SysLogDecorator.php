@@ -26,7 +26,7 @@ class SysLogDecorator extends SyslogHandler {
    */
   public function __construct(MiddlewareLogFormatter $middleware_log_formatter) {
     $this->middleWareLogFormatter = $middleware_log_formatter;
-    $identity = isset($_SERVER['AH_SITE_NAME']) ? $_SERVER['AH_SITE_NAME'] : 'drupal';
+    $identity = $_SERVER['AH_SITE_NAME'] ?? 'drupal';
     $logger = Logger::DEBUG;
     // For production, we don;t use debug level.
     if (isset($_ENV['AH_SITE_ENVIRONMENT'])

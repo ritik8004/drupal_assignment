@@ -101,7 +101,7 @@ function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles
     $webmaster_user->activate();
     $webmaster_user->save();
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     // Do nothing, we don't want staging operation to fail because of this.
   }
 }
@@ -277,6 +277,7 @@ function alshaya_master_override_default_validate_system_theme_settings_form(arr
  * Save email logo for selected theme.
  */
 function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $form_state) {
+  $theme = NULL;
   $values = $form_state->getValues();
 
   $build_info = $form_state->getBuildInfo();
@@ -631,7 +632,7 @@ function _alshaya_master_mobile_number_value_callback(&$element, $input, FormSta
   $util = \Drupal::service('mobile_number.util');
 
   if ($input) {
-    $country = !empty($input['country-code']) ? $input['country-code'] : (count($element['#allowed_countries']) == 1 ? key($element['#allowed_countries']) : NULL);
+    $country = !empty($input['country-code']) ? $input['country-code'] : ((is_countable($element['#allowed_countries']) ? count($element['#allowed_countries']) : 0) == 1 ? key($element['#allowed_countries']) : NULL);
 
     // Remove the country code prefix added in mobile field.
     $country_mobile_code = alshaya_master_get_country_mobile_code($country, $util);
@@ -937,7 +938,7 @@ function alshaya_master_acquia_search_get_list_of_possible_cores_alter(&$possibl
   $ah_env = preg_replace('@[^a-zA-Z0-9]+@', '', $core_service['ah_env']);
 
   // We want to use SOLR from 01 stack all the time.
-  if (substr($ah_env, 0, 2) !== '01') {
+  if (!str_starts_with($ah_env, '01')) {
     $ah_env = '01' . substr($ah_env, 2);
   }
 

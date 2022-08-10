@@ -1,0 +1,17 @@
+{{! @see docroot/modules/custom/alshaya_main_menu/templates/alshaya-main-menu-level4.html.twig }}
+<ul class="menu__list menu--four__list">
+  <div class="level-four__wrapper">
+    <span class="back--link"><span class="menu__back"></span> <span>{{ name }}</span></span>
+    {{#each items as |menu_item|}}
+      {{ addClass 'level4_class' '' }}
+      {{#if menu_item.overridden_path}}
+        {{ addClass 'level4_class' 'overridden-link' }}
+      {{/if}}
+      <li class="menu__list-item menu--four__list-item {{ class }} {{ @root.level4_class }}">
+        <div class="menu__link-wrapper menu-two__link-wrapper">
+          <{{@menu_item.tag}} class="menu__link menu--three__link {{ class }} {{ @root.level4_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" {{{ menu_item.tag_attr }}}>{{ menu_item.name }}</{{@menu_item.tag}}>
+        </div>
+      </li>
+    {{/each}}
+  </div>
+</ul>

@@ -29,17 +29,17 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   use LoggerChannelTrait;
   use StringTranslationTrait;
 
-  const CACHE_BIN = 'alshaya';
+  public const CACHE_BIN = 'alshaya';
 
-  const CACHE_ID = 'product_category_tree';
+  public const CACHE_ID = 'product_category_tree';
 
-  const CATEGORY_CACHE_ID = 'category_tree';
+  public const CATEGORY_CACHE_ID = 'category_tree';
 
-  const VOCABULARY_ID = 'acq_product_category';
+  public const VOCABULARY_ID = 'acq_product_category';
 
-  const CACHE_TAG = 'taxonomy_term:acq_product_category';
+  public const CACHE_TAG = 'taxonomy_term:acq_product_category';
 
-  const PLP_LAYOUT_1 = 'campaign-plp-style-1';
+  public const PLP_LAYOUT_1 = 'campaign-plp-style-1';
 
   /**
    * This will be used whether include_in_menu used or not.
@@ -307,15 +307,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         // Destroy the variable once the required data is fetched.
         $translatedEntity = NULL;
       }
-      switch ($cache_name) {
-        case 'product_list':
-          $lhn = is_null($term->field_show_in_product_list_lhn_value) ? (int) $term->field_show_in_lhn_value : (int) $term->field_show_in_product_list_lhn_value;
-          break;
-
-        default:
-          $lhn = is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value;
-          break;
-      }
+      $lhn = match ($cache_name) {
+        'product_list' => is_null($term->field_show_in_product_list_lhn_value) ? (int) $term->field_show_in_lhn_value : (int) $term->field_show_in_product_list_lhn_value,
+          default => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
+      };
       $path = Url::fromRoute(
         'entity.taxonomy_term.canonical',
         ['taxonomy_term' => $term->tid],
@@ -562,7 +557,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $terms = $node->get('field_product_category')->getValue();
       }
 
-      if (count($terms) > 0) {
+      if ((is_countable($terms) ? count($terms) : 0) > 0) {
         $term = $this->termStorage->load($terms[0]['target_id']);
       }
     }
@@ -588,7 +583,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
             $term = $this->termStorage->load($route_params['taxonomy_term']);
           }
         }
-        catch (\UnexpectedValueException $e) {
+        catch (\UnexpectedValueException) {
           $this->getLogger('ProductCategoryTree')->notice('Invalid url in views ajax request, url: @url.', [
             '@url' => $q,
           ]);
@@ -903,13 +898,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         // If image is available, only then, we process the result.
         if (!empty($image = $this->fileStorage->load($result->field_category_image_target_id))) {
           $data[$result->entity_id] = [
-            'bg_color' => $result->field_image_text_bg_color_value ? $result->field_image_text_bg_color_value : NULL,
-            'font_color' => $result->field_image_text_font_color_value ? $result->field_image_text_font_color_value : NULL,
+            'bg_color' => $result->field_image_text_bg_color_value ?: NULL,
+            'font_color' => $result->field_image_text_font_color_value ?: NULL,
             'term_image' => [
               '#theme' => 'image_style',
               '#style_name' => '186x216',
               '#uri' => $image->getFileUri(),
-              '#alt' => $result->field_category_image_alt ? $result->field_category_image_alt : '',
+              '#alt' => $result->field_category_image_alt ?: '',
             ],
           ];
         }
@@ -937,7 +932,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $terms = $node->get('field_category')->getValue();
       }
 
-      if (count($terms) > 0) {
+      if ((is_countable($terms) ? count($terms) : 0) > 0) {
         $tid = $this->productCategoryHelper->termTreeGroup($terms);
       }
     }
@@ -959,7 +954,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       $terms = [];
       if ($node->bundle() == 'advanced_page') {
         $terms = $node->get('field_product_category')->getValue();
-        if (count($terms) > 0) {
+        if ((is_countable($terms) ? count($terms) : 0) > 0) {
           $tid = $terms[0]['target_id'];
         }
       }
@@ -1090,7 +1085,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function getL1Category(TermInterface $category) {
     $parents = $this->termStorage->loadAllParents($category->id());
-    if (count($parents) < $this->getL1DepthLevel()) {
+    if ((is_countable($parents) ? count($parents) : 0) < $this->getL1DepthLevel()) {
       return $category;
     }
 
@@ -1109,7 +1104,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function getL2Category(TermInterface $category) {
     $parents = $this->termStorage->loadAllParents($category->id());
-    if (count($parents) < ($this->getL1DepthLevel() + 1)) {
+    if ((is_countable($parents) ? count($parents) : 0) < ($this->getL1DepthLevel() + 1)) {
       return $category;
     }
 
@@ -1225,7 +1220,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function getChildTermIds(int $parent = 0) {
     $l1Terms = $this->termStorage->loadTree('acq_product_category', $parent, 1);
 
-    return $l1Terms ? $l1Terms : [];
+    return $l1Terms ?: [];
   }
 
   /**

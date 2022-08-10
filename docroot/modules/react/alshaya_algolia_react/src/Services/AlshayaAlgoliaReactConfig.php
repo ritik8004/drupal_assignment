@@ -30,7 +30,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
 
   use StringTranslationTrait;
 
-  const FACET_SOURCE = 'search_api:views_page__search__page';
+  public const FACET_SOURCE = 'search_api:views_page__search__page';
 
   /**
    * The config factory service.
@@ -435,12 +435,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     }
 
     // Sort facets by weight.
-    uasort($filter_facets, function ($a, $b) {
-      if ($a['weight'] == $b['weight']) {
-        return 0;
-      }
-      return ($a['weight'] < $b['weight']) ? -1 : 1;
-    });
+    uasort($filter_facets, fn($a, $b) => $a['weight'] <=> $b['weight']);
 
     return $filter_facets;
   }

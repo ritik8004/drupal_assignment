@@ -773,6 +773,26 @@ online-booking:
     theme:
       css/conditional-sass/online-booking/online-booking.ltr.css: {}
 
+my-accounts-hello-member:
+  css:
+    theme:
+      css/conditional-sass/my-accounts-hello-member/my-accounts-hello-member.ltr.css: {}
+
+hello-member-registration:
+  css:
+    theme:
+      css/conditional-sass/hello-member-registration/hello-member-registration.ltr.css: {}
+
+my-membership-info:
+  css:
+    theme:
+      css/conditional-sass/my-membership-info/my-membership-info.ltr.css: {}
+
+hello-member-points-history:
+  css:
+    theme:
+      css/conditional-sass/hello-member-points-history/hello-member-points-history.ltr.css: {}
+
 inter-country-transfer:
   css:
     theme:
@@ -782,3 +802,28 @@ megamenu-fullwidth-layout:
   css:
     theme:
       css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css: {}
+
+hello-member-benefit-landing-page:
+  css:
+    theme:
+      css/conditional-sass/hello-member-benefit-landing-page/hello-member-benefit-landing-page.ltr.css: {}
+
+hello-member-qr-code:
+  css:
+    theme:
+      css/conditional-sass/hello-member-qr-code/hello-member-qr-code.ltr.css: {}
+
+hello-member-pdp:
+  css:
+    theme:
+      css/conditional-sass/hello-member-pdp/hello-member-pdp.ltr.css: {}
+
+hello-member-otp:
+  css:
+    theme:
+      css/conditional-sass/hello-member-otp/hello-member-otp.ltr.css: {}
+
+cls-initial-layout-common:
+  css:
+    theme:
+      css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: {}

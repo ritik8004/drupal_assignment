@@ -1,0 +1,141 @@
+%benefit-details {
+  background: $hm-benefit-description-bg;
+  color: $hm-benefit-description-txt;
+  font-size: rem(14);
+  letter-spacing: 0.7px;
+  padding: rem(52) rem(125);
+
+  @include breakpoint($only-mobile) {
+    padding: rem(52) rem(24);
+  }
+}
+
+.my-benefit-page-wrapper {
+  .image-container {
+    img {
+      width: 100%;
+    }
+  }
+
+  .voucher-wrapper {
+    text-align: center;
+    padding: rem(72) 0;
+    font-family: $alshaya-bold;
+
+    .title {
+      font-size: rem(18);
+      margin-bottom: rem(24);
+      letter-spacing: 0.9px;
+    }
+
+    .info {
+      font-size: rem(28);
+      margin-bottom: rem(38);
+      letter-spacing: 1.4px;
+    }
+
+    .expiry {
+      font-size: rem(14);
+      color: $hm-benefit-expiry-txt;
+      letter-spacing: 0.7px;
+    }
+  }
+
+  .btn-wrapper {
+    display: flex;
+    justify-content: center;
+
+    @include breakpoint($only-mobile) {
+      flex-direction: column;
+    }
+
+    .qr-code-button,
+    .button-wide {
+      min-width: rem(315);
+      height: rem(48);
+      font-family: $alshaya-bold;
+      font-size: rem(16);
+      cursor: pointer;
+
+      @include breakpoint($only-mobile) {
+        min-width: 100%;
+      }
+    }
+
+    .qr-code-button {
+      margin-#{$right}: rem(24);
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: rem(32);
+      }
+    }
+  }
+
+  .benefit-description {
+    @extend %benefit-details;
+
+    padding-bottom: 0;
+    margin-top: rem(44);
+
+    h3 {
+      font-size: rem(18);
+      color: $hm-benefit-description-heading-txt;
+    }
+
+    ul {
+      padding-#{$left}: rem(18);
+    }
+
+    p {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .expire-on {
+    @extend %benefit-details;
+
+    padding-top: rem(20);
+
+    h3 {
+      margin: 0;
+      color: $hm-benefit-description-heading-txt;
+      font-size: rem(16);
+
+      html[lang=ar] & {
+        margin-bottom: rem(8);
+      }
+    }
+  }
+
+  .benefit-Tnc {
+    padding: rem(52) rem(125);
+    text-align: center;
+    color: $hm-benefit-Tnc-txt;
+
+    @include breakpoint($only-mobile) {
+      padding: rem(52) rem(24);
+    }
+  }
+}
+
+.hello-member-benefit-page {
+  .c-user--node {
+    &.l-two--sf {
+      main {
+        width: 100%;
+        max-width: rem(890);
+        float: none;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+.qr-code-block {
+  .img-container {
+    width: rem(99);
+    padding: rem(10);
+  }
+}

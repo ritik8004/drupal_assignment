@@ -44,7 +44,7 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
     try {
       $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       return;
     }
 

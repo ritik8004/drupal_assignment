@@ -39,7 +39,7 @@ class AlshayaSrpSortLabelSettingsForm extends AlshayaDynamicConfigValueBase {
       '#title' => $this->t('Search sort options labels'),
       '#default_value' => $this->arrayValuesToString($sort_options_label),
       '#rows' => 10,
-      '#element_validate' => [[get_class($this), 'validateLabelValues']],
+      '#element_validate' => [[$this::class, 'validateLabelValues']],
       '#description' => $this->allowedValuesDescription(),
     ];
 

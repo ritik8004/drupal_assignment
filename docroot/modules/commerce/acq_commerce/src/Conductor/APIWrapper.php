@@ -30,7 +30,7 @@ class APIWrapper implements APIWrapperInterface {
   /**
    * Error code used internally for API Down cases.
    */
-  const API_DOWN_ERROR_CODE = 600;
+  public const API_DOWN_ERROR_CODE = 600;
 
   /**
    * Store ID.
@@ -162,9 +162,7 @@ class APIWrapper implements APIWrapperInterface {
     $sku = urlencode($sku);
     $endpoint = $this->apiVersion . "/agent/stock/$sku";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     try {
       $message = $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
@@ -326,6 +324,7 @@ class APIWrapper implements APIWrapperInterface {
         ]
       );
 
+      // @codingStandardsIgnoreLine
       throw new RouteException(__FUNCTION__, $this->t('Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.'));
     }
 
@@ -352,9 +351,7 @@ class APIWrapper implements APIWrapperInterface {
   public function getShippingMethods($cart_id) {
     $endpoint = $this->apiVersion . "/agent/cart/$cart_id/shipping";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $methods = [];
 
@@ -408,9 +405,7 @@ class APIWrapper implements APIWrapperInterface {
   public function getPaymentMethods($cart_id) {
     $endpoint = $this->apiVersion . "/agent/cart/$cart_id/payments";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $methods = [];
 
@@ -437,7 +432,7 @@ class APIWrapper implements APIWrapperInterface {
         $customer['customer_id'] = $existingCustomer['customer_id'];
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Note we catch \Exception instead of RouteException
       // but with the flag set FALSE
       // above, we do not expect an exception here at all unless
@@ -615,9 +610,7 @@ class APIWrapper implements APIWrapperInterface {
   public function getCustomer($email, $throwCustomerNotFound = TRUE) {
     $endpoint = $this->apiVersion . "/agent/customer/$email";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $customer = [];
 
@@ -748,9 +741,7 @@ class APIWrapper implements APIWrapperInterface {
   public function getCategories() {
     $endpoint = $this->apiVersion . "/agent/categories";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $categories = [];
 
@@ -778,13 +769,11 @@ class APIWrapper implements APIWrapperInterface {
   public function getProductOptions() {
     $endpoint = $this->apiVersion . "/agent/product/options";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $options = [];
 
-    $acm_uuid = $this->storeId ? $this->storeId : '';
+    $acm_uuid = $this->storeId ?: '';
 
     try {
       $options = $this->tryAgentRequest($doReq, 'getAttributeOptions', 'options', $acm_uuid);
@@ -808,9 +797,7 @@ class APIWrapper implements APIWrapperInterface {
 
     $endpoint = $this->apiVersion . "/agent/promotions/$type";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $result = [];
 
@@ -896,7 +883,7 @@ class APIWrapper implements APIWrapperInterface {
     $products = [];
 
     try {
-      $products = $this->tryAgentRequest($doReq, 'productFullSync', 'products', $skus, $acm_uuid);
+      $products = $this->tryAgentRequest($doReq, 'productFullSync', 'products', $skus);
     }
     catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
@@ -911,9 +898,7 @@ class APIWrapper implements APIWrapperInterface {
   public function getPaymentToken($method) {
     $endpoint = $this->apiVersion . "/agent/cart/token/$method";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $result = [];
 
@@ -959,9 +944,7 @@ class APIWrapper implements APIWrapperInterface {
   public function systemWatchdog() {
     $endpoint = $this->apiVersion . "/agent/system/wd";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $result = [];
 
@@ -992,9 +975,7 @@ class APIWrapper implements APIWrapperInterface {
     $sku = urlencode($sku);
     $endpoint = $this->apiVersion . "/agent/product/$sku/related/$type";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $result = [];
 
@@ -1087,9 +1068,7 @@ class APIWrapper implements APIWrapperInterface {
   public function getProductPosition($category_id) {
     $endpoint = $this->apiVersion . "/agent/category/$category_id/position";
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
 
     $result = [];
 
@@ -1112,9 +1091,7 @@ class APIWrapper implements APIWrapperInterface {
       return -1;
     }
     $endpoint = $this->apiVersion . "/agent/queue/total";
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->get($endpoint, $opt);
     try {
       $result = $this->tryAgentRequest($doReq, 'getQueueStatus');
     }
@@ -1133,13 +1110,11 @@ class APIWrapper implements APIWrapperInterface {
       return FALSE;
     }
     $endpoint = $this->apiVersion . "/agent/queue/purge";
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->post($endpoint, $opt));
-    };
+    $doReq = fn($client, $opt) => $client->post($endpoint, $opt);
     try {
       $this->tryAgentRequest($doReq, 'purgeQueue');
     }
-    catch (ConnectorException $e) {
+    catch (ConnectorException) {
       return FALSE;
     }
     return TRUE;

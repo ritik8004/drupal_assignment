@@ -1,4 +1,4 @@
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   Drupal.alshayaRcs = Drupal.alshayaRcs || {};
@@ -10,6 +10,9 @@
 
         // Display loader.
         if (typeof Drupal.cartNotification.spinner_start === 'function') {
+          document.querySelector('body').scrollIntoView({
+            behavior: 'smooth',
+          });
           Drupal.cartNotification.spinner_start();
         }
 
@@ -83,7 +86,7 @@
             });
 
             // Call behaviours with modal context.
-            var modalContext = $('.pdp-modal-box');
+            var modalContext = document.querySelector('.pdp-modal-box');
             globalThis.rcsPhApplyDrupalJs(modalContext);
 
             var mainProduct = entity;
@@ -103,4 +106,4 @@
       });
     }
   };
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);

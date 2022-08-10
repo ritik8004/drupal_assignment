@@ -82,7 +82,8 @@ function whitelabel_preprocess_block(&$variables) {
   }
 
   $elements_id = $variables['elements']['#id'] ?? '';
-  if (strpos($elements_id, 'block_content') !== FALSE) {
+  $block_content = NULL;
+  if (str_contains($elements_id, 'block_content')) {
     $block_content = $variables['content']['#block_content'];
     $machine_name = $block_content->get('machine_name')->value;
   }
@@ -90,6 +91,8 @@ function whitelabel_preprocess_block(&$variables) {
     $machine_name = $elements_id;
   }
 
+  $link_options = [];
+  $lang_code = NULL;
   if (in_array($machine_name, ['todaysoffer', 'today_s_offer'])) {
     $lang = \Drupal::languageManager()->getCurrentLanguage();
     $lang_code = $lang->getId();
@@ -97,6 +100,7 @@ function whitelabel_preprocess_block(&$variables) {
     $variables['#cache']['contexts'][] = 'session';
   }
 
+  $element = [];
   if ($machine_name == 'todaysoffer') {
 
     if ($variables['content']) {
@@ -148,7 +152,7 @@ function whitelabel_preprocess_block(&$variables) {
   try {
     $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
   }
-  catch (Exception $e) {
+  catch (Exception) {
     $variables['is_front'] = FALSE;
   }
   // Ensure the cache varies correctly (new in Drupal 8.3).
@@ -239,7 +243,7 @@ function whitelabel_theme_suggestions_block_alter(array &$suggestions, array $va
   switch ($base_plugin_id) {
     case 'alshaya_stores_finder':
       $block_region = Block::load($machine_name)->getRegion();
-      if (strpos($block_region, 'footer') !== FALSE) {
+      if (str_contains($block_region, 'footer')) {
         $suggestions[] = 'block__alshaya_stores_finder_footer';
       }
       break;
@@ -248,7 +252,7 @@ function whitelabel_theme_suggestions_block_alter(array &$suggestions, array $va
       $plugin_id = $variables['elements']['#plugin_id'];
       $label = $variables['elements']['#configuration']['label'];
 
-      if ($plugin_id == 'system_menu_block:main' && strpos($label, 'Main navigation') !== FALSE) {
+      if ($plugin_id == 'system_menu_block:main' && str_contains($label, 'Main navigation')) {
         $level = $variables['elements']['#configuration']['level'];
         if ($level == 1) {
           $suggestions[] = 'block__alshaya_main_menu_1';
@@ -394,7 +398,7 @@ function whitelabel_preprocess_form_element(array &$variables) {
     $classes = $variables['element']['#attributes']['class'];
     if (isset($classes)) {
       foreach ($classes as $class) {
-        if (strpos($class, 'hidden') !== FALSE) {
+        if (str_contains($class, 'hidden')) {
           $variables['is_default_form'] = TRUE;
         }
       }
@@ -450,7 +454,7 @@ function whitelabel_preprocess_html(&$variables) {
     ->getAliasByPath($path), '/');
   // Alias path class.
   $alias_class = preg_replace("/\//", '-', $alias);
-  if (!empty($alias_class) && strpos($alias_class, 'node') !== 0) {
+  if (!empty($alias_class) && !str_starts_with($alias_class, 'node')) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('alias--' . $alias_class);
   }
   // If is homepage.

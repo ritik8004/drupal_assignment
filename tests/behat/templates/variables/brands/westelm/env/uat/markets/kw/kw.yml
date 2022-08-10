@@ -1,7 +1,7 @@
 variables:
-  url_product_page: 'buy-connor-side-table-limestone.html'
-  product_listing_page_url: '/shop-new-arrivals/test-new/small-ticket/'
-  spc_product_listing_page: '/shop-new-arrivals/test-new/small-ticket/'
-  spc_basket_page: '/shop-new-arrivals/test-new/small-ticket/'
-  spc_pdp_page: 'buy-connor-side-table-limestone.html'
-  spc_sofa_page: '/shop-furniture/sofas-sectional/'
+  url_product_page: '/buy-mid-century-upholstered-dining-chair-metal-legs.html/'
+  product_listing_page_url: '/#query=sofa'
+  spc_product_listing_page: '/#query=sofa/'
+  spc_basket_page: '/#query=sofa'
+  spc_pdp_page: '/buy-mid-century-upholstered-dining-chair-metal-legs.html/'
+  spc_sofa_page: '/buy-auburn-sofa-70-1.html/'

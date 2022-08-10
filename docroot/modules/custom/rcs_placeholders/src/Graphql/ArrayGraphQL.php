@@ -65,7 +65,7 @@ class ArrayGraphQL {
     // We let the variables to be passed as objects so that they can be
     // altered in the javascript side for dynamic parameters that may not be
     // known in the backend.
-    $fields['variables'] = $fields['variables'] ?? [];
+    $fields['variables'] ??= [];
 
     return $fields;
   }

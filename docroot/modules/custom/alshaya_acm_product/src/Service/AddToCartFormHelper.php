@@ -94,7 +94,7 @@ class AddToCartFormHelper {
     $key = $configurable['#code'];
     $configurable['#attributes']['data-configurable-code'] = $key;
 
-    $configurable['#options_attributes'] = $configurable['#options_attributes'] ?? [];
+    $configurable['#options_attributes'] ??= [];
     if (isset($configurable['#type']) && $configurable['#type'] == 'select') {
       $overridden_label = $this->fieldsHelper->getOverriddenAttributeLabel($key);
 

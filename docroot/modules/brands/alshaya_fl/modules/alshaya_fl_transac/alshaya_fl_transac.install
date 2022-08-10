@@ -172,6 +172,7 @@ function alshaya_fl_transac_update_8005() {
  * "Sort by taxonomy term weight according to term name".
  */
 function alshaya_fl_transac_update_8004() {
+  $termWeightByNameWidgetOrderSettings = [];
   $termWeightByNameWidgetOrderSettings['term_weight_by_name_widget_order'] = [
     'processor_id' => 'term_weight_by_name_widget_order',
     'weight' => [

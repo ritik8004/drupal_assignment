@@ -230,7 +230,7 @@ class TextAnywhereGateway extends SmsGatewayPluginBase implements ContainerFacto
 
     try {
       $response = $client->__soapCall('SendSMS', [$params]);
-      if (strpos($response->SendSMSResult, 'Transaction OK') !== FALSE) {
+      if (str_contains($response->SendSMSResult, 'Transaction OK')) {
         foreach ($sms->getRecipients() as $recipient) {
           $report = (new SmsDeliveryReport())
             ->setRecipient($recipient)

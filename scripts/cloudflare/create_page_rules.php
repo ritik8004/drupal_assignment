@@ -37,7 +37,7 @@ $rules['cache_react_dist'] = [
     ],
     [
       "id" => "edge_cache_ttl",
-      "value" => 2678400,
+      "value" => 2_678_400,
     ],
   ],
   "priority" => 96,
@@ -49,10 +49,10 @@ $existing_rules = get_page_rules_for_zone($zone)['result'] ?? [];
 // Do not create rules again.
 // We will have separate script for update.
 foreach ($rules as $key => $rule) {
-  $check_target = strtolower(json_encode($rule['targets']));
+  $check_target = strtolower(json_encode($rule['targets'], JSON_THROW_ON_ERROR));
 
   foreach ($existing_rules as $existing_rule) {
-    if ($check_target === strtolower(json_encode($existing_rule['targets']))) {
+    if ($check_target === strtolower(json_encode($existing_rule['targets'], JSON_THROW_ON_ERROR))) {
       unset($rules[$key]);
       break;
     }

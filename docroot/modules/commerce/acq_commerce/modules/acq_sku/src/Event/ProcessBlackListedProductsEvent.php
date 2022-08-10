@@ -9,6 +9,6 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class ProcessBlackListedProductsEvent extends Event {
 
-  const EVENT_NAME = 'acq_sku.processBlackListedProduct';
+  public const EVENT_NAME = 'acq_sku.processBlackListedProduct';
 
 }

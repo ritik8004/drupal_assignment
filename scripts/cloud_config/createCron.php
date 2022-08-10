@@ -30,7 +30,7 @@ $options = [
   'headers' => [
     'Content-Type' => 'application/json',
   ],
-  'body' => json_encode($cron),
+  'body' => json_encode($cron, JSON_THROW_ON_ERROR),
 ];
 
 

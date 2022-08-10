@@ -55,6 +55,7 @@ class CartDyPageTypeEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events['dy.set.context'][] = ['setContextCart', 150];
     return $events;
   }

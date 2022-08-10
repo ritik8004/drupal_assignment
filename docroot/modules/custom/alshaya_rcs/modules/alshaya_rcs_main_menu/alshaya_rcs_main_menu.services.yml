@@ -9,6 +9,7 @@ services:
       - '@path_alias.manager'
       - '@cache.data'
       - '@database'
+      - '@module_handler'
   alshaya_rcs_main_menu.category_data_migration:
     class: Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration
     arguments:

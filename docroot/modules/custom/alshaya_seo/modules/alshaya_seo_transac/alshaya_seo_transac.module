@@ -109,7 +109,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     $page['#attached']['drupalSettings']['gtm']['productImpressionDefaultItemsInQueue'] = $seo_transac_settings->get('product_impressions_default_items_in_queue');
     $page['#attached']['drupalSettings']['gtm']['productImpressionQueueSize'] = $seo_transac_settings->get('product_impression_queue_size');
     $page['#attached']['drupalSettings']['gtm']['productImpressionTimer'] = $seo_transac_settings->get('product_impression_timer_time');
-    $page['#cache'] = $page['#cache'] ?? [];
+    $page['#cache'] ??= [];
     $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $seo_transac_settings->getCacheTags());
   }
 }
@@ -420,7 +420,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       }
     }
 
-    if (strpos($current_path, '/user') === 0) {
+    if (str_starts_with($current_path, '/user')) {
       $page_type = trim('myaccount ' . implode('', $path_parts));
     }
     elseif ($page_type === 'not defined') {
@@ -649,6 +649,8 @@ function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, I
       $parent = \Drupal::service('entity.repository')->getTranslationFromContext($parent, 'en');
       $terms[$parent->id()] = trim($parent->getName());
     }
+    // Add department id and name to index.
+    $terms = array_reverse($terms, TRUE);
     $product_gtm_attributes['gtm-department-name'] = $terms ? implode('|', $terms) : '';
     $product_gtm_attributes['gtm-department-id'] = $terms ? current(array_keys($terms)) : '';
     $object['gtm'] = $product_gtm_attributes;

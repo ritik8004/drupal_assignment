@@ -16,4 +16,12 @@
       z-index: 5;
     }
   }
+
+  .return-qty-row,
+  .return-reasons-row {
+    .return-reason-label {
+      font-family: $hnm-regular;
+      font-weight: 700;
+    }
+  }
 }

@@ -97,6 +97,7 @@ class ConfigurationServices {
    *   Program data from API.
    */
   public function getPrograms(Request $request) {
+    $langcode = NULL;
     // Get Programs from cache.
     try {
       $langcode = $request->query->get('langcode');
@@ -237,7 +238,7 @@ class ConfigurationServices {
       if (empty($latitude) || empty($longitude) || empty($radius) || empty($maxLocations) || empty($unit)) {
         $message = 'Required parameters missing to get stores.';
         $this->logger->error($message . ' Data: @request_data', [
-          '@request_data' => json_encode($param),
+          '@request_data' => json_encode($param, JSON_THROW_ON_ERROR),
         ]);
         throw new \Exception($message);
       }

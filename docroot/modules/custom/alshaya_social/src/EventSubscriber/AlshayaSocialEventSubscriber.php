@@ -87,6 +87,7 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[SocialAuthEvents::BEFORE_REDIRECT][] = [
       'beforeProviderRedirect',
       100,
