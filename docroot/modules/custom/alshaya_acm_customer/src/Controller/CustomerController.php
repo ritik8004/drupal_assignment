@@ -163,6 +163,7 @@ class CustomerController extends ControllerBase {
       if ($this->currentRequest->query->get('search')
         || $this->currentRequest->query->get('filter')) {
         $page_size = 0;
+        $offset = 0;
       }
       $orders = $this->ordersManager->getOrders($customer_id, $page_size, 'search', 'filter');
 
@@ -177,9 +178,16 @@ class CustomerController extends ControllerBase {
         }
       }
       else {
+        $order_count = $this->ordersManager->getOrdersCount($customer_id);
+        // Calculate the order count based on the filter value.
+        if ($this->currentRequest->query->get('search')
+        || $this->currentRequest->query->get('filter')) {
+          $order_count = count($orders);
+          $itemsPerPage = $order_count;
+        }
         // Get the orders to display for current page.
         $ordersPaged = array_slice($orders, $offset, $itemsPerPage, TRUE);
-        if ($this->ordersManager->getOrdersCount($customer_id) > $offset + $itemsPerPage) {
+        if ($order_count > $offset + $itemsPerPage) {
           // Get all the query parameters we currently have.
           $query = $this->currentRequest->query->all();
           $query['page'] = $currentPageNumber + 1;
