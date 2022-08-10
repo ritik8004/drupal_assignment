@@ -90,6 +90,8 @@
       font-size: rem(16);
       line-height: 1.13;
       letter-spacing: rem(1.14);
+      justify-content: center;
+      align-self: center;
 
       @include breakpoint($only-mobile) {
         display: block;
