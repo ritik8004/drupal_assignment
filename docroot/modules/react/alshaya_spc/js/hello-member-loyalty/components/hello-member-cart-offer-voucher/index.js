@@ -16,6 +16,7 @@ import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
+import resetBenefitOptions from './offer_voucher_helper';
 
 class HelloMemberCartOffersVouchers extends React.Component {
   constructor(props) {
@@ -31,7 +32,28 @@ class HelloMemberCartOffersVouchers extends React.Component {
   componentDidMount() {
     // Event listener on removing of vouchers and offers.
     document.addEventListener('clearAllPromotions', this.onClickClosePopup);
+    // Listen to `helloMemberPointsLoaded` event which will update points summary block.
+    document.addEventListener('refreshCart', this.handleErrorsOnBenefitsCartPopup, false);
   }
+
+  // Handle the errors coming from API response and reset the options.
+  handleErrorsOnBenefitsCartPopup = async (e) => {
+    const data = e.detail.data();
+    // Handle errors from bonus voucher section.
+    if (document.getElementById('voucher-err-msg').innerHTML !== ''
+      && typeof data.totals.hmAppliedVoucherCodes === 'undefined') {
+      document.getElementById('voucher-err-msg').innerHTML = '';
+      const vouchers = document.getElementsByName('vouchersBonus[]');
+      resetBenefitOptions(vouchers, 'benefit_voucher', 'submit');
+    }
+    // Handle errors from offer section.
+    if (document.getElementById('offer-err-msg').innerHTML !== ''
+      && typeof data.totals.applied_hm_offer_code === 'undefined') {
+      document.getElementById('offer-err-msg').innerHTML = '';
+      const offers = document.getElementsByName('radios');
+      resetBenefitOptions(offers, 'benefit_offer', 'submit');
+    }
+  };
 
   /**
    * Helper function to get the customer offers and voucher.

@@ -450,6 +450,11 @@ const getProcessedCartData = async (cartData) => {
       // eslint-disable-next-line max-len
       data.totals.hmAppliedVoucherCodes = cartData.cart.extension_attributes.applied_hm_voucher_codes;
     }
+    // Add is_hm_applied_voucher_removed to totals.
+    if (typeof cartData.totals.extension_attributes.is_hm_applied_voucher_removed !== 'undefined') {
+      // eslint-disable-next-line max-len
+      data.totals.isHmAppliedVoucherRemoved = cartData.totals.extension_attributes.is_hm_applied_voucher_removed;
+    }
 
     // Add applied_hm_voucher_codes and hm_voucher_discount to totals.
     if (hasValue(cartData.cart.extension_attributes.applied_hm_offer_code)) {
