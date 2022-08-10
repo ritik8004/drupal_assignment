@@ -75,6 +75,17 @@
             cursor: pointer;
           }
         }
+
+        .offer-err-msg,
+        .voucher-err-msg {
+          font-size: rem(14);
+          color: $hello-member-promo-available-notification-icon;
+          padding: rem(16);
+
+          &:empty {
+            display: none;
+          }
+        }
       }
 
       .radio-btn-list {
@@ -97,6 +108,11 @@
           background-color: $hello-member-promo-btn-bg;
           color: $hello-member-my-offers-bg;
           font-size: rem(16);
+
+          &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+          }
         }
 
         .clear-btn {
