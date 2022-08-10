@@ -4,3 +4,4 @@ membership_popup_text_above:
 membership_popup_text_below:
   value: '<p className="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</p><p className="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</p><p className="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</a></p>'
   format: full_text
+brand_membership_text: 'عضوية اتش اند ام'

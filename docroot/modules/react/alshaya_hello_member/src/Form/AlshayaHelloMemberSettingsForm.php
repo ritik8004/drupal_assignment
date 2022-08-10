@@ -125,6 +125,13 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
+    $form['hello_member_configuration']['brand_membership_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Brand membership label'),
+      '#default_value' => $config->get('brand_membership_text') ?? '',
+      '#required' => TRUE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -141,6 +148,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       ->set('membership_popup_text_above', $form_state->getValue('membership_popup_text_above'))
       ->set('membership_popup_text_below', $form_state->getValue('membership_popup_text_below'))
       ->set('show_default_benefits', $form_state->getValue('show_default_benefits'))
+      ->set('brand_membership_text', $form_state->getValue('brand_membership_text'))
       ->save();
 
     parent::submitForm($form, $form_state);

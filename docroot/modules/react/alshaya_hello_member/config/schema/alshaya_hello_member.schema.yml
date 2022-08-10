@@ -22,4 +22,7 @@ alshaya_hello_member.settings:
       label: 'Membership text below'
     show_default_benefits:
       type: integer
-      label: 'Number of default benifits.'       
+      label: 'Number of default benifits.'
+    brand_membership_text:
+      type: text
+      label: 'Provide brand name to show on loyalty switch confirmation box.'
