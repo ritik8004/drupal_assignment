@@ -159,7 +159,8 @@
         "geerlingguy/drupal-vm": "^5.2.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "mglaman/drupal-check": "^1.1",
-        "phpspec/prophecy-phpunit": "^2"
+        "phpspec/prophecy-phpunit": "^2",
+        "rector/rector": "^0.13.10"
     },
     "repositories": {
         "drupal": {
