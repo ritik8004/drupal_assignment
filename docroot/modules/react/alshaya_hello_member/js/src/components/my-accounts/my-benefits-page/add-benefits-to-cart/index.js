@@ -103,7 +103,11 @@ class AddBenefitsToCart extends React.Component {
               wait: true,
               isAPIError: true,
             });
-            document.getElementById('status-msg').innerHTML = response.data.error_message;
+            document.getElementById('error-msg').innerHTML = response.data.error_message;
+            document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
+            setTimeout(() => {
+              document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
+            }, 5000);
             removeFullScreenLoader();
           }
         } else {
@@ -136,7 +140,11 @@ class AddBenefitsToCart extends React.Component {
               wait: true,
               isAPIError: true,
             });
-            document.getElementById('status-msg').innerHTML = response.data.error_message;
+            document.getElementById('error-msg').innerHTML = response.data.error_message;
+            document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
+            setTimeout(() => {
+              document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
+            }, 5000);
             removeFullScreenLoader();
           }
         }
@@ -178,7 +186,7 @@ class AddBenefitsToCart extends React.Component {
         )}
         {(isAPIError) && (
           <div className="hello-member-benefit-status-info" id="hello-member-benefit-status-info">
-            <div id="status-msg" />
+            <div className="error" id="error-msg" />
           </div>
         )}
         {(!appliedAlready && !isEmptyCart) && (
