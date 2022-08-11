@@ -82,6 +82,7 @@ $white-linen: #f1ebdf;
 $nickel: #6d7278;
 $gainsboro: #d8d8d8;
 $silver-chalice: #afacac;
+$_hm_global_red: #e50010;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -832,10 +833,6 @@ $my-wishlist-share-modal-header: $hnm-black-three;
 $country-switcher-label: $hnm-black-three;
 $country-switcher-label-mobile: $hnm-black-three;
 
-// eGift landing page.
-$egift-accordion-active-title: $venetian_red;
-$egift-accordion-bg: $primary_bg;
-
 // Online Returns
 $online-return-eligibility-button-txt: $hnm-black-three;
 $online-return-dark-txt: $hnm-black-three;
@@ -849,29 +846,48 @@ $online-return-light-bg: $_white-four;
 $online-return-cancel-button-border: $grey4;
 
 // Hello Member membership success popup
-$hm-membership-success-popup-bg: $white-linen;
+$hello-member-membership-success-popup-bg: $white-linen;
 
 // Hello Member registration
-$hm-registration-accordion-bg: $grey9;
-$hm-registration-fields-bg: $grey9;
+$hello-member-registration-accordion-bg: $grey9;
+$hello-member-registration-fields-bg: $grey9;
 
 // Hello Member points block
-$hm-points-block-bg: $white-linen;
-$hm-points-block-light-txt: $nickel;
-$hm-points-block-tier-progress: $gainsboro;
-$hm-points-block-tier-progress-active: $hnm-red;
+$hello-member-points-block-bg: $white-linen;
+$hello-member-points-block-light-txt: $nickel;
+$hello-member-points-block-tier-progress: $gainsboro;
+$hello-member-points-block-tier-progress-active: $hnm-red;
 
 // Hello Member benefit block
-$hm-my-offers-bg: $_grey_11;
-$hm-my-offers-expiry-txt: $grey-light;
-$hm-history-points-light-title: $silver-chalice;
+$hello-member-my-offers-bg: $_grey_11;
+$hello-member-my-offers-expiry-txt: $grey-light;
+$hello-member-history-points-light-title: $silver-chalice;
 
 // Hello member history point
-$hm-points-expiry-accordion-title: $hnm-red;
-$hm-points-expiry-accordion-icon: $hnm-red;
-$hm-benefit-Tnc-txt: $silver-chalice;
+$hello-member-points-expiry-accordion-title: $hnm-red;
+$hello-member-points-expiry-accordion-icon: $hnm-red;
+$hello-member-benefit-Tnc-txt: $silver-chalice;
 
 // hello member pdp
-$hm-pdp-points-earned-txt: $venetian_red;
+$hello-member-pdp-points-earned-txt: $venetian_red;
 // hello member SPC
-$hm-accured-points-txt: $hnm-red;
+$hello-member-accured-points-txt: $hnm-red;
+
+//hello member header block
+$hello-member-menu-link-txt: $hnm-black-two;
+
+//Hello member promotion
+$hello-member-promo-notification-icon: $hnm-red;
+
+// Advanced Page components
+$advanced-page-accordion-active-title: $venetian_red;
+$advanced-page-accordion-bg: $primary_bg;
+
+// Hello Member components
+$hello-member-components-bg: $white-linen;
+$hello-member-highlight-text: $_hm_global_red;
+$hello-member-highlight-text-2: $hnm-red;
+$hello-member-text-2: $hnm-black-three;
+
+//hello member birthday popup
+$hello-member-bd-pop-title: $_hm_global_red;

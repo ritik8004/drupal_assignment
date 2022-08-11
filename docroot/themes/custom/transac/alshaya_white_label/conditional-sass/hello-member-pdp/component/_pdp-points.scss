@@ -1,7 +1,7 @@
 #hello-member-pdp {
   .hello-member-points {
     font-size: rem(10);
-    color: $hm-pdp-points-earned-txt;
+    color: $hello-member-pdp-points-earned-txt;
     letter-spacing: 0.42px;
 
     @include breakpoint($only-mobile) {

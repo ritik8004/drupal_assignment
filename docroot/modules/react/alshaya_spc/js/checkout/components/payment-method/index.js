@@ -30,6 +30,7 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import PaymentMethodTabby from '../payment-method-tabby';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
+import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -266,7 +267,7 @@ export default class PaymentMethod extends React.Component {
             </div>
             <PaymentMethodIcon methodName={method.code} methodLabel={method.name} />
           </div>
-          <ConditionalView condition={isAuraEnabled()
+          <ConditionalView condition={(isAuraEnabled() || isAuraIntegrationEnabled())
           && method.code === 'cashondelivery'
           && disablePaymentMethod === true
           && !isFullPaymentDoneByAura(cart)}

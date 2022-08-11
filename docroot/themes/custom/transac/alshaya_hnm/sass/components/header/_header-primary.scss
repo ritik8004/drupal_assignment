@@ -122,6 +122,26 @@ header {
         }
       }
     }
+
+    @include breakpoint($desktop) {
+      .block-alshaya-hello-member {
+        text-align: #{$right};
+        padding-#{$right}: rem(16);
+      }
+
+      .membership-info-link {
+        .info-link {
+          font-size: rem(14);
+          color: $hello-member-menu-link-txt;
+        }
+      }
+    }
+
+    @include breakpoint($upto-desktop) {
+      .block-alshaya-hello-member {
+        display: none;
+      }
+    }
   }
 
   #block-alshaya-white-label-search,

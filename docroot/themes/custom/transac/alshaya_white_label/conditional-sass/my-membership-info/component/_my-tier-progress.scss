@@ -9,7 +9,7 @@
 
   .progress-label {
     font-size: rem(11);
-    color: $hm-points-block-light-txt;
+    color: $hello-member-points-block-light-txt;
     width: 14%;
     text-align: $left;
     text-transform: capitalize;
@@ -31,7 +31,7 @@
     }
 
     .tier-bar-back {
-      background: $hm-points-block-tier-progress;
+      background: $hello-member-points-block-tier-progress;
       width: 100%;
       height: rem(3);
       position: relative;
@@ -50,7 +50,7 @@
             content: '';
             height: rem(8);
             width: rem(8);
-            background: $hm-points-block-tier-progress;
+            background: $hello-member-points-block-tier-progress;
             border-radius: 50%;
             display: block;
             top: rem(-20);
@@ -66,7 +66,7 @@
       }
 
       .tier-bar-front {
-        background: $hm-points-block-tier-progress-active;
+        background: $hello-member-points-block-tier-progress-active;
         position: absolute;
         height: rem(3);
       }

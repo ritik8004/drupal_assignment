@@ -1,23 +1,7 @@
 import React from 'react';
-import parse from 'html-react-parser';
-import { renderToString } from 'react-dom/server';
-import HelloMemberSvg from '../../../../svg-component/hello-member-svg';
-import AuraHeaderIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
-
-const getLoyaltySelectText = (optionName, helloMemberPoints) => {
-  if (optionName === 'hello_member_loyalty') {
-    return parse(parse(Drupal.t('@hm_icon Member earns @points points', {
-      '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
-      '@points': helloMemberPoints,
-    })));
-  }
-  if (optionName === 'aura_loyalty') {
-    return parse(parse(Drupal.t('Earn/Redeem @aura_icon Points', {
-      '@aura_icon': `<span class="hello-member-aura">${renderToString(<AuraHeaderIcon />)}</span>`,
-    })));
-  }
-  return null;
-};
+import { getLoyaltySelectText } from '../../../../../../alshaya_hello_member/js/src/utilities';
+import AuraLoyalty from '../aura/aura-loyalty';
+import AuraPointsToEarn from '../aura/aura-points-to-earn';
 
 const LoyaltySelectOption = ({
   animationDelay,
@@ -25,13 +9,31 @@ const LoyaltySelectOption = ({
   optionName,
   showLoyaltyPopup,
   helloMemberPoints,
+  cart,
 }) => (
-  <div className={`loyalty-option ${optionName} fadeInUp`} style={{ animationDelay }} onClick={() => showLoyaltyPopup(optionName)}>
-    <input id={`loyalty-option-${optionName}`} defaultChecked={currentOption === optionName} value={optionName} name="loyalty-option" type="radio" />
-    <label className="radio-sim radio-label">
-      <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>
-    </label>
-  </div>
+  <>
+    <div className={`loyalty-option ${optionName} fadeInUp`} style={{ animationDelay }} onClick={() => showLoyaltyPopup(optionName)}>
+      <input id={`loyalty-option-${optionName}`} defaultChecked={currentOption === optionName} value={optionName} name="loyalty-option" type="radio" className={currentOption === optionName ? 'loyalty-option-selected' : ''} />
+      <label className="radio-sim radio-label">
+        {(currentOption !== 'aura' || optionName === 'hello_member')
+        && <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>}
+        {(currentOption === 'aura' && optionName === 'aura')
+          && (
+            <AuraLoyalty
+              open
+              cart={cart}
+              optionName={optionName}
+            />
+          )}
+      </label>
+    </div>
+    {(currentOption === 'aura' && optionName === 'aura')
+    && (
+    <div className="aura-earned-points">
+      <AuraPointsToEarn cart={cart} />
+    </div>
+    )}
+  </>
 );
 
 export default LoyaltySelectOption;

@@ -1,0 +1,152 @@
+.hello-member-promo-section {
+  @include breakpoint($only-mobile) {
+    order: 3;
+    background-color: $primary_bg;
+    padding-bottom: rem(16);
+  }
+
+  .hello-member-promo-pop-link {
+    float: $right;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: rem(14);
+
+    @include breakpoint($only-tablet) {
+      font-size: rem(12);
+    }
+
+    @include breakpoint($only-mobile) {
+      float: none;
+      justify-content: center;
+      display: flex;
+    }
+
+    .promo-notification {
+      display: none;
+      height: rem(8);
+      width: rem(8);
+      border-radius: 50%;
+      background-color: $hello-member-promo-available-notification-icon;
+      margin: rem(4);
+    }
+
+    .promo-notification.show-note {
+      display: inline-flex;
+    }
+  }
+
+  .popup-container {
+    .popup-content {
+      @include breakpoint($tablet) {
+        width: rem(488) !important;
+      }
+
+      padding: 0 !important;
+      border: 0 !important;
+    }
+
+    .hello-member-promo-modal-title {
+      background-color: $primary_bg;
+      color: $hello-member-promo-pop-txt;
+      font-size: rem(20);
+      font-family: $alshaya-bold;
+      text-align: center;
+      padding: rem(15) 0;
+      box-shadow: 0 rem(1) 0 0 $hello-member-promo-sel-tab-border;
+    }
+
+    .close-modal {
+      @include icon(close, after) {
+        font-weight: bold;
+      }
+
+      position: relative;
+      float: $right;
+      top: rem(7);
+      font-size: rem(16);
+      padding: rem(8) rem(12);
+      cursor: pointer;
+    }
+
+    .hello-member-promo-modal-content {
+      padding: rem(14) 0;
+      padding-#{$right}: rem(46);
+      padding-#{$left}: rem(36);
+
+      @include breakpoint($only-mobile) {
+        padding-#{$right}: rem(20);
+        padding-#{$left}: rem(20);
+      }
+
+      .error-info-section {
+        display: none;
+        color: $hello-member-promo-btn-bg;
+        font-size: rem(12);
+        font-family: $alshaya-bold;
+        letter-spacing: 0.6px;
+        padding: rem(6) rem(8);
+        text-align: center;
+        line-height: 1.75;
+      }
+
+      .error {
+        display: flex;
+        flex-flow: column;
+      }
+    }
+
+    #hello-member-become-hello-member {
+      background-color: $hello-member-promo-guest-bg;
+      padding-bottom: rem(4);
+    }
+
+    .become-hello-member {
+      text-align: center;
+      background-color: $hello-member-promo-guest-bg;
+
+      .become-hello-member__header {
+        color: $hello-member-promo-guest-pop-title;
+        font-size: rem(20);
+        font-family: $alshaya-bold;
+        padding: rem(40) rem(40) 0 rem(40);
+        letter-spacing: 0.27px;
+        line-height: 1.33;
+      }
+
+      .become-hello-member__join-text {
+        font-size: rem(14);
+        letter-spacing: 0.16px;
+        color: $hello-member-promo-btn-bg;
+        line-height: 1.57;
+        padding-top: rem(5);
+      }
+
+      .become-hello-member__close {
+        display: none;
+      }
+
+      .become-hello-member__actions {
+        padding: rem(38) rem(16);
+        display: flex;
+        justify-content: center;
+        flex-flow: row wrap;
+
+        .become-hello-member__actions-link--secondary {
+          @extend %button-brand;
+
+          margin-#{$right}: 0;
+          width: 100%;
+          margin-bottom: rem(20);
+        }
+
+        .become-hello-member__actions-link--primary {
+          @extend %button-wide;
+
+          width: 100%;
+        }
+      }
+    }
+  }
+}
