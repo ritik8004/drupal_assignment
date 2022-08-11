@@ -320,6 +320,16 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
       $data_layer = array_merge($data_layer, $attributes['general']);
 
+
+      if ($data_layer['deliveryType'] === 'ship_to_store') {
+        // Add store location to datalayer.
+        $data_layer['store_location'] = $order['shipping']['address']['city'];
+      }
+      else {
+        // Add Delivery city to datalayer.
+        $data_layer['delivery_city'] = $order['shipping']['address']['city'];
+      }
+
       $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
       $advantage_card_config = \Drupal::config('alshaya_spc.advantage_card');
       // Dont send card number if its Advantage card.
