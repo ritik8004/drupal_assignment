@@ -169,7 +169,7 @@ class AddBenefitsToCart extends React.Component {
             <div className="button-wide inactive">
               {Drupal.t('This offer has been added to your bag', { context: 'hello_member' })}
             </div>
-            <div className="hm-benefit-status-info" id="hm-benefit-status-info">
+            <div className="hello-member-benefit-status-info" id="hello-member-benefit-status-info">
               <div id="status-msg" />
               <div id="disc-title" />
               <div className="status-icon" />
@@ -177,7 +177,7 @@ class AddBenefitsToCart extends React.Component {
           </>
         )}
         {(isAPIError) && (
-          <div className="hm-benefit-status-info" id="hm-benefit-status-info">
+          <div className="hello-member-benefit-status-info" id="hello-member-benefit-status-info">
             <div id="status-msg" />
           </div>
         )}

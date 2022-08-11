@@ -80,7 +80,7 @@
         .voucher-err-msg {
           font-size: rem(14);
           color: $hello-member-promo-available-notification-icon;
-          padding: rem(16);
+          padding-bottom: rem(16);
 
           &:empty {
             display: none;
