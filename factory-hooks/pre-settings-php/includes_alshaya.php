@@ -230,9 +230,6 @@ switch ($env_name) {
 
     // Log debug messages too.
     $settings['alshaya_performance_log_mode'] = 'developer';
-
-    // Set this to 1 to make testing convenient.
-    $config['alshaya_acm_product.settings']['local_storage_cache_time'] = 1;
     break;
 
   case 'dev':
@@ -252,9 +249,6 @@ switch ($env_name) {
 
     // We only debug on ACSF dev/test environments.
     $config['acq_commerce.conductor']['debug'] = TRUE;
-
-    // Set this to 1 to make testing convenient.
-    $config['alshaya_acm_product.settings']['local_storage_cache_time'] = 1;
     break;
 
   case 'live':
