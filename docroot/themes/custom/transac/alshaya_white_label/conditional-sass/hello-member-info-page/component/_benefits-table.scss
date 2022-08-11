@@ -1,0 +1,71 @@
+.alias--membership-info.nodetype--advanced_page {
+  .c-promo__item {
+    &:first-child {
+      .field--name-field-1-row-2-col.field__items {
+        @include breakpoint($tablet) {
+          align-items: flex-end;
+        }
+      }
+
+      .paragraph--type--title-textarea {
+        table {
+          tr:first-child {
+            td:first-child {
+              color: $hello-member-highlight-text;
+              font-size: rem(20);
+              font-family: $alshaya-bold;
+            }
+
+            td:nth-child(3) {
+              color: $hello-member-highlight-text;
+            }
+          }
+
+          td {
+            font-size: rem(13);
+            padding-bottom: rem(16);
+
+            &:first-child {
+              text-align: $left;
+              line-height: normal;
+            }
+
+            &:nth-child(2),
+            &:nth-child(3) {
+              width: 20%;
+              text-align: center;
+
+              svg {
+                width: rem(32);
+              }
+
+              p {
+                margin: 0;
+              }
+            }
+
+            span {
+              margin: auto;
+            }
+          }
+
+          @include breakpoint($only-mobile) {
+            margin: 0 rem(16);
+          }
+        }
+      }
+
+      .picture-tag {
+        margin-bottom: rem(16);
+
+        @include breakpoint($only-mobile) {
+          display: none;
+        }
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: rem(112);
+      }
+    }
+  }
+}

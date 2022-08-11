@@ -1,0 +1,133 @@
+.hello-member-promo-section {
+  .hello-member-promo-modal-content {
+    .react-tabs__tab-panel {
+      display: none;
+
+      &.react-tabs__tab-panel--selected {
+        display: block;
+      }
+
+      .hello-member-promo-tab-content-list {
+        height: rem(256);
+        max-height: rem(256);
+        overflow-y: auto;
+        position: relative;
+
+        .hello-member-promo-tab-cont-item {
+          background-color: $hello-member-promo-tab-items-bg;
+          border: rem(1) solid $hello-member-promo-tab-items-border;
+          height: rem(71);
+          padding: rem(20) rem(16);
+          margin-bottom: rem(10);
+          margin-#{$right}: rem(12);
+          position: relative;
+          display: flex;
+
+          .item-title {
+            display: flex;
+            flex-flow: wrap;
+            color: $hello-member-promo-btn-bg;
+            line-height: 1;
+            cursor: pointer;
+
+            .title-text {
+              font-size: rem(12);
+              letter-spacing: 0.6px;
+              width: 100%;
+              padding-bottom: rem(4);
+            }
+
+            .item-sub-title {
+              font-size: rem(10);
+              letter-spacing: 0.5px;
+              color: $hello-member-my-offers-expiry-txt;
+            }
+          }
+        }
+
+        .checkbox-sim.checkbox-label,
+        .radio-sim.radio-label {
+          display: inline-flex;
+          align-items: center;
+        }
+
+        input[type=checkbox] {
+          font-size: rem(14);
+          cursor: pointer;
+
+          &::before {
+            padding-#{$right}: rem(13);
+            position: relative;
+            top: rem(2);
+
+            @include breakpoint($only-mobile) {
+              #{$left}: rem(-4);
+              font-size: rem(24);
+            }
+
+            @include breakpoint($tablet) {
+              padding-#{$right}: rem(14);
+            }
+          }
+
+          & ~ label::before {
+            padding-#{$right}: rem(12);
+            cursor: pointer;
+          }
+        }
+
+        .offer-err-msg,
+        .voucher-err-msg {
+          font-size: rem(14);
+          color: $hello-member-promo-available-notification-icon;
+          padding-bottom: rem(16);
+
+          &:empty {
+            display: none;
+          }
+        }
+      }
+
+      .radio-btn-list {
+        .hello-member-promo-tab-cont-item {
+          padding-#{$left}: 3rem;
+        }
+      }
+
+      .hello-member-promo-tab-cont-action {
+        margin-top: rem(20);
+        padding-#{$right}: rem(10);
+        font-family: $alshaya-bold;
+        font-size: rem(16);
+
+        input {
+          @extend %button-wide;
+
+          font-family: $alshaya-bold;
+          width: 100%;
+          background-color: $hello-member-promo-btn-bg;
+          color: $hello-member-my-offers-bg;
+          font-size: rem(16);
+
+          &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+          }
+        }
+
+        .clear-btn {
+          color: $hello-member-promo-btn-bg;
+          padding: rem(40) 0 rem(26);
+          display: inline-flex;
+          justify-content: center;
+          width: 100%;
+          cursor: pointer;
+
+          @include breakpoint($only-mobile) {
+            padding: rem(30) 0 rem(26);
+          }
+        }
+      }
+    }
+  }
+}

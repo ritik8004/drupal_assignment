@@ -22,6 +22,9 @@ import PLPHierarchicalMenu from '../components/algolia/widgets/PLPHierarchicalMe
 import PLPNoResults from '../components/algolia/PLPNoResults';
 import SubCategoryContent from '../components/subcategory';
 import ConditionalView from '../../common/components/conditional-view';
+import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
+import BecomeHelloMember from '../../../../js/utilities/components/become-hello-member';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -239,6 +242,12 @@ const PlpApp = ({
           />
         )}
       </SelectedFilters>
+      {/* Show Become member content if helloMember is enabled and is guest user. */}
+      { isHelloMemberEnabled()
+      && !isUserAuthenticated()
+      && (
+        <BecomeHelloMember />
+      )}
       <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
         <PlpResultInfiniteHits
           defaultpageRender={defaultpageRender || false}

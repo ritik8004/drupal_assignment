@@ -1,6 +1,6 @@
 import React from 'react';
 import getStringMessage from '../../../../../../../js/utilities/strings';
-import setupAccordionHeight from '../../../../utilities';
+import { setupAccordionHeight } from '../../../../utilities';
 import EarnedPointsInfo from '../earned-points-info';
 import EarnedPointsItem from '../earned-points-item';
 
@@ -9,13 +9,14 @@ export default class PointsInfoSummary extends React.PureComponent {
     super(props);
     this.expandRef = React.createRef();
     this.state = {
-      open: true,
+      open: false,
     };
   }
 
   componentDidMount() {
     // Accordion setup.
     setupAccordionHeight(this.expandRef);
+    this.expandRef.current.classList.add('close-expiry-accordion');
   }
 
   showExpiryContent = () => {

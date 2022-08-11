@@ -108,7 +108,7 @@
   }
 }
 
-.c-accordion-delivery-option-parent {
+.c-accordion-delivery-option-parent.carousel-category-accordion {
   @include breakpoint($tablet) {
     display: none;
   }
