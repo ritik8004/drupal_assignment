@@ -12,6 +12,12 @@
         line-height: normal;
       }
     }
+
+    .hello-member-benefit-status-info {
+      #status-msg {
+        font-family: $hnm-demibold;
+      }
+    }
   }
 
   .expire-on {

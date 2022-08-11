@@ -1,7 +1,7 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { callHelloMemberApi } from '../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../js/utilities/logger';
+import { getHelloMemberDictionaryData } from '../../hello_member_api_helper';
 import { getPriceToHelloMemberPoint } from '../../utilities';
 
 class HelloMemberPDP extends React.Component {
@@ -15,7 +15,11 @@ class HelloMemberPDP extends React.Component {
 
   async componentDidMount() {
     // If dictionary data does not exists in storage, we do api call.
-    const response = await callHelloMemberApi('helloMemberGetDictionaryData', 'GET', { programCode: 'hello_member' });
+    const requestData = {
+      type: 'HM_ACCRUAL_RATIO',
+      programCode: 'hello_member',
+    };
+    const response = await getHelloMemberDictionaryData(requestData);
     if (hasValue(response.data) && !hasValue(response.data.error)) {
       this.setState({
         dictionaryData: response.data,

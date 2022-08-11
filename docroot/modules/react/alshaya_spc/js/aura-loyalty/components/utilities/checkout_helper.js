@@ -115,10 +115,10 @@ function getMembersToEarnMessage(pointsToEarn) {
 /**
  * Helper function to redeem points.
  */
-function redeemAuraPoints(data) {
+function redeemAuraPoints(data, context = 'aura') {
   let stateValues = {};
 
-  const apiData = window.auraBackend.processRedemption(data);
+  const apiData = window.auraBackend.processRedemption(data, context);
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {

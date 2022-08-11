@@ -134,5 +134,53 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'benefit_expire_no_date',
       'value' => t('Expires on', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'view_all_benefits',
+      'value' => t('View all Benefits', [], ['context' => 'hello_member']),
+    ],
+  ];
+}
+
+/**
+ * Hello Member aura static strings.
+ */
+function _alshaya_hello_member_aura_static_strings() {
+  return [
+    [
+      'key' => 'enter_aura_details',
+      'value' => t('Enter Aura Details', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_details_tooltip',
+      'value' => t('Add your mobile number, Aura account number or email address below to link this purchase.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'email_address',
+      'value' => t('E-mail address', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_partially_enrolled_message',
+      'value' => t('To redeem points compelete the full enrollment.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'card_submit',
+      'value' => t('Submit', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'checkout_you_have',
+      'value' => t('You have', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_points_earn_message',
+      'value' => t('You will earn <b>@points</b> Aura points with this purchase.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'redeem_points_message',
+      'value' => t('Do you want to redeem Aura points?', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'redeem_points_button',
+      'value' => t('Redeem Points', [], ['context' => 'hello_member']),
+    ],
   ];
 }

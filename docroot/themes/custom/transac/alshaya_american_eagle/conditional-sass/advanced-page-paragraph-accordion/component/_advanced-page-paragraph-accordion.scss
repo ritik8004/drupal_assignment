@@ -1,0 +1,37 @@
+.nodetype--advanced_page {
+  .c-accordion-delivery-option-parent {
+    .field--name-field-group-title {
+      color: $advanced-page-banner-title;
+    }
+
+    .c-accordion__title {
+      &:hover {
+        &::after {
+          background: unset;
+        }
+      }
+
+      &::after {
+        background: unset;
+      }
+
+      &.ui-state-active {
+        font-weight: bold;
+
+        @include icon(chevrondown, after);
+
+        &:hover {
+          &::after {
+            background: unset;
+          }
+        }
+
+        &::after {
+          background: unset;
+          #{$right}: rem(32);
+          top: 0;
+        }
+      }
+    }
+  }
+}

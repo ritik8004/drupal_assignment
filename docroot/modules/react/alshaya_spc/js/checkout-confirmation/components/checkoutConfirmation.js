@@ -17,6 +17,7 @@ import {
   getCustomerDetails,
 } from '../../../../alshaya_aura_react/js/utilities/customer_helper';
 import { getUserDetails } from '../../../../alshaya_aura_react/js/utilities/helper';
+import { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class CheckoutConfirmation extends React.Component {
     this.state = {};
 
     // Set loyaltyStatus state variable only for logged in users if Aura enabled.
-    if (isAuraEnabled() && getUserDetails().id) {
+    if ((isAuraEnabled() || isAuraIntegrationEnabled()) && getUserDetails().id) {
       this.state = {
         loyaltyStatus: 0,
       };
@@ -64,7 +65,7 @@ class CheckoutConfirmation extends React.Component {
     stickySidebar();
 
     // If Aura enabled and logged in user, invoke API to fetch user's loyalty status.
-    if (isAuraEnabled() && getUserDetails().id) {
+    if ((isAuraEnabled() || isAuraIntegrationEnabled()) && getUserDetails().id) {
       document.addEventListener('customerDetailsFetched', this.updateState, false);
       // Get customer details.
       getCustomerDetails({ fetchPoints: false, fetchTier: false });
@@ -124,7 +125,7 @@ class CheckoutConfirmation extends React.Component {
               <CompleteBenefitPayPayment payment={payment} totals={totals} />
             </ConditionalView>
             <OrderSummary
-              {...(isAuraEnabled()
+              {...((isAuraEnabled() || isAuraIntegrationEnabled())
                 && hasValue(loyaltyStatus)
                 && { loyaltyStatus }
               )}

@@ -8,6 +8,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../
 import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import Loading from '../../../../../../js/utilities/loading';
+import AddBenefitsToCart from './add-benefits-to-cart';
 
 class MyBenefitsPage extends React.Component {
   constructor(props) {
@@ -16,6 +17,8 @@ class MyBenefitsPage extends React.Component {
       wait: false,
       myBenefit: null,
       codeId: null,
+      couponId: null,
+      voucherType: null,
     };
   }
 
@@ -33,6 +36,8 @@ class MyBenefitsPage extends React.Component {
             myBenefit: response.data.coupons[0],
             wait: true,
             codeId: response.data.coupons[0].code,
+            couponId: `${response.data.coupons[0].type}|${response.data.coupons[0].code}`,
+            voucherType: response.data.coupons[0].type,
           });
           removeFullScreenLoader();
         } else {
@@ -64,7 +69,7 @@ class MyBenefitsPage extends React.Component {
 
   render() {
     const {
-      wait, myBenefit, codeId,
+      wait, myBenefit, codeId, couponId, voucherType,
     } = this.state;
 
     if (!wait) {
@@ -104,13 +109,17 @@ class MyBenefitsPage extends React.Component {
           <QrCodeDisplay
             memberId={myBenefit.member_identifier}
             qrCodeTitle={qrCodeTitle}
-            codeId={codeId}
+            codeId={couponId || codeId}
             width={79}
           />
-          <div className="button-wide">{getStringMessage('benefit_add_to_bag')}</div>
+          <AddBenefitsToCart
+            title={myBenefit.description}
+            codeId={codeId}
+            voucherType={voucherType}
+          />
         </div>
         <div className="benefit-description">
-          {(myBenefit.applied_conditions !== null) ? HTMLReactParser(myBenefit.applied_conditions) : ''}
+          {(hasValue(myBenefit.applied_conditions)) ? HTMLReactParser(myBenefit.applied_conditions) : ''}
         </div>
         <div className="expire-on">
           <h3>

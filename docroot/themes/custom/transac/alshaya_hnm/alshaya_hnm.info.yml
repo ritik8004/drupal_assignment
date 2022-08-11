@@ -314,3 +314,33 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css
+
+  alshaya_white_label/hello-member-promotion:
+    css:
+      theme:
+        css/conditional-sass/hello-member-promotion/hello-member-promotion.ltr.css: css/conditional-sass/hello-member-promotion/hello-member-promotion.ltr.css
+
+  alshaya_white_label/hello-member-aura-loyalty:
+    css:
+      theme:
+        css/conditional-sass/hello-member-aura-loyalty/hello-member-aura-loyalty.ltr.css: css/conditional-sass/hello-member-aura-loyalty/hello-member-aura-loyalty.ltr.css
+
+  alshaya_white_label/advanced-page-paragraph-accordion:
+    css:
+      theme:
+        css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css: css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css
+
+  alshaya_white_label/advanced-page-paragraph-banner:
+    css:
+      theme:
+        css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css: css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css
+
+  alshaya_white_label/hello-member-info-page:
+    css:
+      theme:
+        css/conditional-sass/hello-member-info-page/hello-member-info-page.ltr.css: css/conditional-sass/hello-member-info-page/hello-member-info-page.ltr.css
+
+  alshaya_white_label/hello-member-become-member:
+    css:
+      theme:
+        css/conditional-sass/hello-member-become-member/hello-member-become-member.ltr.css: css/conditional-sass/hello-member-become-member/hello-member-become-member.ltr.css

@@ -1,0 +1,52 @@
+.nodetype--advanced_page {
+  .paragraph_banner_block {
+    .paragraph_banner_title_subtitle {
+      .field--name-field-title {
+        font-family: $hnm-demibold;
+      }
+    }
+
+    .paragraph_banner_buttons {
+      .field--name-field-links {
+        @include breakpoint($only-mobile) {
+          flex-direction: column;
+        }
+
+        .field--name-field-links {
+          a {
+            font-family: $hnm-demibold;
+          }
+
+          &:first-child {
+            a {
+              background-color: $primary_btn_bg;
+              color: $primary_btn_text;
+
+              &:hover {
+                background: $plp-primary-cta-hover-bg;
+                border-color: $plp-primary-cta-hover-bg;
+              }
+            }
+          }
+
+          &:last-child {
+            @include breakpoint($only-mobile) {
+              margin-bottom: 0;
+              margin-top: rem(16);
+            }
+
+            a {
+              background-color: transparent;
+              color: $primary_btn_bg;
+
+              &:hover {
+                background: $plp-secondary-cta-hover-bg;
+                border-color: $primary_btn_bg;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
