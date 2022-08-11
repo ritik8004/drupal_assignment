@@ -127,6 +127,12 @@
           padding-#{$right}: rem(8);
         }
       }
+
+      .error {
+        font-size: rem(14);
+        color: $hello-member-promo-available-notification-icon;
+        padding-bottom: rem(16);
+      }
     }
   }
 
