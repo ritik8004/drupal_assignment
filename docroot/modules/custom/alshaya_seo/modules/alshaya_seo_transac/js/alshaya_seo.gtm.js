@@ -728,7 +728,7 @@
       var productObj = Drupal.alshaya_seo_gtm_get_product_values(product);
       // Dispatch a custom event to alter the product detail view object.
       document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => productObj } }));
-      const cart = Drupal.alshayaSpc.getCartData();
+      const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
       // Prepare data.
       var data = {
         event: 'productDetailView',
@@ -1349,7 +1349,7 @@
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // Dispatch a custom event to alter the product detail view object.
     document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => product } }));
-    const cart = Drupal.alshayaSpc.getCartData();
+    const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
 
     var data = {
       event: 'productDetailView',
@@ -1391,7 +1391,7 @@
       productData.eventAction = 'Add to Cart on Listing';
     }
 
-    const cart = Drupal.alshayaSpc.getCartData();
+    const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
 
     productData.ecommerce = {
       currencyCode: drupalSettings.gtm.currency,
