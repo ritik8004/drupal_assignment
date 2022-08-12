@@ -125,7 +125,7 @@
     }
 
     ~ div {
-      @include force-ltr();
+      @include force-ltr;
     }
   }
 
