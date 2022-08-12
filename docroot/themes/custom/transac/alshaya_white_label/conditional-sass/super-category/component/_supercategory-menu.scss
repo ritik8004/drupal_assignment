@@ -629,7 +629,11 @@
 
   &.super-category-home {
     @include breakpoint($upto-desktop) {
-      margin-top: rem(144);
+      margin-top: rem(162);
+
+      html[lang="ar"] & {
+        margin-top: rem(162);
+      }
     }
 
     &:not(.frontpage) {
