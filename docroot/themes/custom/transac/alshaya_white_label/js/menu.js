@@ -176,6 +176,8 @@
         }
       });
 
+      const secondaryMainMenu = $('.secondary--main--menu__list');
+
       $('.logged-out .account').click(function () {
         $('.account').addClass('active');
         $('.shop').removeClass('active');
@@ -183,6 +185,10 @@
         $('.menu--one__list').addClass('remove--toggle');
         $('.menu--one__list').removeClass('block--display');
         $('.c-menu-secondary').removeClass('remove--toggle');
+        // Removing remove--toggle class from .secondary--main--menu__list if it exists
+        if(secondaryMainMenu.length) {
+          secondaryMainMenu.removeClass('remove--toggle');
+        }
       });
 
       $('.logged-out .shop').click(function () {
@@ -193,6 +199,10 @@
         $('.menu--one__list').addClass('block--display');
         $('.c-menu-secondary').addClass('remove--toggle');
         $('.c-my-account-nav').addClass('remove--toggle');
+        // Removing block--display class from .secondary--main--menu__list if it exists
+        if(secondaryMainMenu.length) {
+          secondaryMainMenu.removeClass('block--display');
+        }
       });
 
       $('.logged-in .account--logged_in').click(function () {
@@ -203,6 +213,10 @@
         $('.menu--one__list').removeClass('block--display');
         $('.c-my-account-nav').removeClass('remove--toggle');
         $('.c-my-account-nav').removeClass('remove--toggle');
+        // Removing remove--toggle class from .secondary--main--menu__list if it exists
+        if(secondaryMainMenu.length) {
+          secondaryMainMenu.removeClass('remove--toggle');
+        }
       });
 
       $('.logged-in .shop').click(function () {
@@ -213,6 +227,10 @@
         $('.menu--one__list').addClass('block--display');
         $('.c-menu-secondary').addClass('remove--toggle');
         $('.c-my-account-nav').removeClass('block--display');
+        // Removing block--display class from .secondary--main--menu__list if it exists
+        if(secondaryMainMenu.length) {
+          secondaryMainMenu.removeClass('block--display');
+        }
       });
 
       /**
