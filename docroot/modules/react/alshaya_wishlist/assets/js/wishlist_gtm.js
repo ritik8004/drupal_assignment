@@ -23,7 +23,7 @@
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
-    const cart = Drupal.alshayaSpc.getCartData();
+    const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
     const sku = product.id;
     let productSelector = document.querySelectorAll(`[data-sku="${sku}"]`);
     if ((typeof productSelector[0] === 'undefined')) {
