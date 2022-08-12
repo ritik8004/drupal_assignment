@@ -40,3 +40,8 @@ promotional_banner:
   dependencies:
     - alshaya_white_label/promo-blocks
     - alshaya_white_label/rcs-ph-promotional-banner
+
+plp_mobile_menu:
+  version: 1.x
+  js:
+    handlebars/alshaya-rcs-plp-mobile-menu.handlebars: {}
