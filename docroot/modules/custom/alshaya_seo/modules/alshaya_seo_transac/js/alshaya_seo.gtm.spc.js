@@ -31,7 +31,11 @@
     for (var gtmKey in product.gtmAttributes) {
       productDetails[gtmKey] = product.gtmAttributes[gtmKey];
     }
-
+    productDetails['productOldPrice'] = product.price;
+    // Add stock status.
+    if(typeof product.inStock !== 'undefined') {
+      productDetails['stockStatus'] = product.inStock ? 'in stock' : 'out of stock';
+    }
     if ($.cookie('product-list') !== undefined) {
       var listValues = JSON.parse($.cookie('product-list'));
       if (listValues.hasOwnProperty(product.parentSKU)) {
