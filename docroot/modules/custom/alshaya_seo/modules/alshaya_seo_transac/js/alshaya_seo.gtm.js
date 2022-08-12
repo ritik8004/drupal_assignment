@@ -728,9 +728,11 @@
       var productObj = Drupal.alshaya_seo_gtm_get_product_values(product);
       // Dispatch a custom event to alter the product detail view object.
       document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => productObj } }));
+      const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
       // Prepare data.
       var data = {
         event: 'productDetailView',
+        cart_items_count: (cart !== null) ? cart.items_qty : 0,
         ecommerce: {
           currencyCode: drupalSettings.gtm.currency,
           detail: {
@@ -783,6 +785,7 @@
         price: parseFloat(amount),
         category: product.attr('gtm-category'),
         variant: product.attr('gtm-product-sku'),
+        product_style_code: product.attr('gtm-product-style-code'),
         dimension2: product.attr('gtm-sku-type'),
         dimension3: product.attr('gtm-dimension3'),
         dimension4: mediaCount
@@ -1077,8 +1080,14 @@
       product.position = position;
     }
 
+    const sku = product.id;
+    let productSelector = document.querySelectorAll(`[data-sku="${sku}"]`);
+    const isProductDataAvailable = (typeof productSelector[0] !== 'undefined');
     var data = {
       event: 'productClick',
+      magento_product_id: isProductDataAvailable ? productSelector[0].getAttribute('gtm-magento-product-id') : null,
+      stock_status: drupalSettings.dataLayerContent.stockStatus || isProductDataAvailable ? productSelector[0].getAttribute('gtm-stock') : null,
+      product_style_code: isProductDataAvailable ? productSelector[0].getAttribute('gtm-product-style-code') : null,
       ecommerce: {
         currencyCode: currencyCode,
         click: {
@@ -1340,9 +1349,11 @@
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // Dispatch a custom event to alter the product detail view object.
     document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => product } }));
+    const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
 
     var data = {
       event: 'productDetailView',
+      cart_items_count: (cart !== null) ? cart.items_qty : 0,
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
         detail: {
@@ -1380,8 +1391,11 @@
       productData.eventAction = 'Add to Cart on Listing';
     }
 
+    const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
+
     productData.ecommerce = {
       currencyCode: drupalSettings.gtm.currency,
+      cart_items_count: (cart !== null) ? cart.items_qty : 0,
       add: {
         products: [
           product
