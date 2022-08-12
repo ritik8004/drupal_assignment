@@ -51,6 +51,12 @@ body.wishlist-enabled {
   #wishlist-header-wrapper {
     .wishlist-header {
       padding-bottom: 0;
+
+      html[lang="ar"] & {
+        @include breakpoint($desktop) {
+          padding-top: rem(7);
+        }
+      }
     }
   }
 
@@ -69,6 +75,10 @@ body.wishlist-enabled {
       .wishlist-minicart-sticky-wrapper {
         #static-minicart-section {
           height: rem(24);
+
+          @include breakpoint($only-tablet) {
+            margin-top: 0;
+          }
 
           @include breakpoint($upto-desktop) {
             margin-top: rem(12);
