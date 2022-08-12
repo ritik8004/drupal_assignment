@@ -544,7 +544,6 @@ class AlshayaGtmManager {
       : 'out of stock';
 
     $attributes['gtm-magento-product-id'] = $sku->get('product_id')->getString();
-    $attributes['gtm-product-style-code'] = $sku->get('attr_style_code')->getString();
 
     // Override values from parent if parent sku available.
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId, 'en')) {
