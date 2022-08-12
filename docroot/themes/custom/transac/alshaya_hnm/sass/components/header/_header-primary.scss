@@ -220,7 +220,7 @@ header {
 */
 
 .c-menu-primary {
-  @include breakpoint($only-tablet) {
+  @include breakpoint($upto-tablet) {
     height: 0;
   }
 
