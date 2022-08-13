@@ -1,4 +1,4 @@
-@javascript @plp-addtocart @smoke @auth @bpaeqa @mckwqa @tbskwprod @tbsegprod @vssaprod @vskwprod
+@javascript @plp-addtocart @smoke @auth @bpaeqa @mckwqa @tbskwprod @tbsegprod @vssaprod @vskwprod @tbsegprod @tbsegpprod @vssapprod @vskwpprod @mckwpprod @bpaepprod
 Feature: Testing new PLP-Add to cart functionality for Authenticated user on config product
 
   Background:
@@ -53,6 +53,9 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user on con
   @mobile @plp-addtocart
   Scenario: As an Authenticated User, I should be able to add configurable products to cart for mobile
     Given I am on "{spc_plp_add_to_cart}"
+    And I wait for the page to load
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_class} a" on page
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery ".c-products__item.views-row button.addtobag-button" element on page
     And I wait for AJAX to finish

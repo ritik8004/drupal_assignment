@@ -68,6 +68,7 @@ variables:
   continue_shopping: 'Here are some of our favorites'
   language_continue_shopping: "إليك منتجاتنا المفضلة"
   mobile_language_class: 'ar'
+  mobile_class: 'en'
   language_short: 'ar'
   city_option: 'Abu Dhabi'
   area_option: 'Abu Dhabi Mall'

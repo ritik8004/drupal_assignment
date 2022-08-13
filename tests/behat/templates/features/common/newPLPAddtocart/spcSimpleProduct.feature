@@ -1,4 +1,4 @@
-@javascript @plp-addtocart @smoke @guest @tbskwprod @tbsegprod @vssaprod @vskwprod @bbwsaprod @bbwkwprod @bbwaeprod @bpaeprod @bpkwprod @bpsaprod
+@javascript @plp-addtocart @smoke @guest @tbsegprod @tbsegpprod @vssapprod @vskwpprod @mckwpprod @bpaepprod @tbskwprod @tbsegprod @vssaprod @vskwprod @bbwsaprod @bbwkwprod @bbwaeprod @bpaeprod @bpkwprod @bpsaprod
 Feature: Testing new PLP-Add to cart functionality for Guest user on simple product
 
   @desktop @plp-addtocart
@@ -45,6 +45,9 @@ Feature: Testing new PLP-Add to cart functionality for Guest user on simple prod
   Scenario: As a Guest User, I should be able to add products to cart on product listing page for mobile
     Given I am on "{spc_plp_add_to_cart_single}"
     And I wait 20 seconds
+    And I wait for the page to load
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_class} a" on page
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery ".c-products__item:first-child button.addtobag-button" element on page
     And I wait for AJAX to finish

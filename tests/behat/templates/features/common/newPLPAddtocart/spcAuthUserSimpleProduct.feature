@@ -1,4 +1,4 @@
-@javascript @plp-addtocart @smoke @auth @bpaeqa @mckwqa @bpaeprod @bpkwprod @bpsaprod @tbskwprod @tbsegprod @vssaprod @vskwprod @bbwsaprod @bbwkwprod @bbwaeprod
+@javascript @plp-addtocart @smoke @auth @tbsegprod @tbsegpprod @vssapprod @vskwpprod @mckwpprod @bpaepprod @bpaeqa @mckwqa @bpaeprod @bpkwprod @bpsaprod @tbskwprod @tbsegprod @vssaprod @vskwprod @bbwsaprod @bbwkwprod @bbwaeprod
 Feature: Testing new PLP-Add to cart functionality for Authenticated user on simple product
 
   Background:
@@ -56,6 +56,9 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user on sim
   Scenario: As an Authenticated User, I should be able to add products to cart on product listing page for mobile
     Given I am on "{spc_plp_add_to_cart_single}"
     And I wait 20 seconds
+    And I wait for the page to load
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_class} a" on page
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery ".c-products__item:first-child button.addtobag-button" element on page
     And I wait for AJAX to finish
