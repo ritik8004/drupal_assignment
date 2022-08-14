@@ -364,15 +364,15 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Every time you shop online or in store, you will earn points. @currency_value @currency_code = @points_value points.' => [
-        'ar' => 'في كل مرة تتسوق فيها أونلاين أو في المحلات، ستحصل على المزيد من النقاط. %currency_value %currency_value = %points_value النقاط.',
+        'ar' => 'في كل مرة تتسوق فيها أونلاين أو في المحلات، ستحصل على المزيد من النقاط. @currency_value @currency_value = @points_value النقاط.',
         'context' => 'hello_member',
       ],
       'Review your latest online purchase and earn @review_points points.' => [
-        'ar' => 'قم بمراجعة آخر عملية شراء أونلاين واحصل على %review_points نقطة.',
+        'ar' => 'قم بمراجعة آخر عملية شراء أونلاين واحصل على @review_points نقطة.',
         'context' => 'hello_member',
       ],
       'Add your date of birth, Gender, Mobile Number to earn @profile_completion_value points.' => [
-        'ar' => 'أضف تاريخ الميلاد، والجنس، ورقم الهاتف المحمول، واحصل على %profile_completion_value نقطة.',
+        'ar' => 'أضف تاريخ الميلاد، والجنس، ورقم الهاتف المحمول، واحصل على @profile_completion_value نقطة.',
         'context' => 'hello_member',
       ],
       'Members Earn @pointValue points.' => [
