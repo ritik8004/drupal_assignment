@@ -462,6 +462,7 @@ class AlshayaAlgoliaIndexHelper {
     // Update stock info for product.
     $object['stock_quantity'] = $this->skuInfoHelper->calculateStock($sku);
     $object['stock'] = $this->skuManager->getStockStatusForIndex($sku);
+    $object['in_stock'] = $object['stock'] === 2 ? 1 : 0;
     if ($object['stock'] === 0) {
       $this->removeAttributesFromIndex($object);
     }
