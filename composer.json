@@ -382,6 +382,9 @@
             },
             "drupal/coder": {
                 "Readonly variables have Missing member variable doc comment": "https://www.drupal.org/files/issues/2022-06-15/coder-readonly-doc-comment-3285707-4.patch"
+            },
+            "drupal/moderation_dashboard": {
+                "Support for SRI Integrity hash attribute": "https://www.drupal.org/files/issues/2022-07-15/3296212-2.patch"
             }
         },
         "installer-paths": {
