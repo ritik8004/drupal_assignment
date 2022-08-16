@@ -94,11 +94,6 @@
           top: rem(3);
           position: relative;
         }
-
-        .tooltip-box {
-          bottom: rem(24);
-          #{$left}: rem(-82);
-        }
       }
     }
   }
