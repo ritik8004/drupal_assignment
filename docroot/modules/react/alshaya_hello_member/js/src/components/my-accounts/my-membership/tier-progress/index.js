@@ -80,6 +80,12 @@ class TierProgress extends React.Component {
    */
   getUserProgressWidth = (tierData) => {
     let tierObj = null;
+    // If no interval data, then user has used all his vouchers.
+    // So, we return width as 100%;
+    if (hasValue(tierData.extension_attributes.current_tier)
+      && !hasValue(tierData.extension_attributes.interval)) {
+      return 100;
+    }
     // If user is new hello member, we check how far he is to become plus member.
     // Here, percentage for tier progress is calculated from max and current value.
     if (tierData.extension_attributes.current_tier === tier1Label) {

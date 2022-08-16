@@ -280,14 +280,15 @@ const OrderSummary = (props) => {
               <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
             </ConditionalView>
           </ConditionalView>
-          <ConditionalView condition={isHelloMemberEnabled() && isUserAuthenticated()}>
+          {isHelloMemberEnabled() && isUserAuthenticated() && hasValue(hmAccuredPoints)
+            && (
             <OrderSummaryItem
               context={context}
               type="hello_member"
               label={Drupal.t('Member earn', {}, { context: 'hello_member' })}
               value={hmAccuredPoints}
             />
-          </ConditionalView>
+            )}
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>

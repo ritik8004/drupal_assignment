@@ -29,7 +29,7 @@ class HelloMemberPDP extends React.Component {
     } else {
       // If coupon details API is returning Error.
       logger.error('Error while calling the dictonary data api, @message', {
-        '@message': response.data.message,
+        '@message': response.data.error_message,
       });
     }
 

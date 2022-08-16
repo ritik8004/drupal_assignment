@@ -388,7 +388,10 @@ export default class Checkout extends React.Component {
             </ConditionalView>
 
             {isHelloMemberEnabled() && (
-              <HelloMemberCheckoutContainer cart={cart} />
+              <HelloMemberCheckoutContainer
+                cart={cart}
+                refreshCart={this.refreshCart}
+              />
             )}
 
             <ConditionalView condition={isAuraEnabled()}>
