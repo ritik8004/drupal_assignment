@@ -40,7 +40,7 @@ import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
 import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
 import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../backend/v2/utility';
-import { applyHelloMemberLoyalty } from '../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
+import { applyHelloMemberLoyalty } from '../../../hello-member-loyalty/components/hello-member-checkout-rewards/utilities/loyalty_helper';
 
 export default class Cart extends React.Component {
   constructor(props) {

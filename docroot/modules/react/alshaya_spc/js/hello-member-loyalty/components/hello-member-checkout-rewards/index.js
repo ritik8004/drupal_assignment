@@ -84,7 +84,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
 
   render() {
     const { wait, hmPoints, identifierNo } = this.state;
-    const { animationDelay, cart } = this.props;
+    const { animationDelay, cart, refreshCart } = this.props;
 
     if (!hasValue(hmPoints)) {
       return null;
@@ -116,6 +116,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
             cart={cart}
             animationDelay={animationDelay}
             helloMemberPoints={hmPoints}
+            refreshCart={refreshCart}
           />
           )}
       </div>

@@ -1,3 +1,4 @@
+import { getHelloMemberCustomerData, setHelloMemberLoyaltyCard } from '../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../../../../js/utilities/error';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
@@ -86,7 +87,30 @@ function getAuraCustomerPoints(identifierNo) {
     });
 }
 
+/**
+ * Apply hello member loyalty on cart Id for current customer.
+ *
+ * @param {String} cartId
+ *   Cart Id.
+ */
+function applyHelloMemberLoyalty(cartId) {
+  const hmCustomerData = getHelloMemberCustomerData();
+  if (hmCustomerData instanceof Promise) {
+    hmCustomerData.then((response) => {
+      if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)
+        && hasValue(response.data.apc_identifier_number)) {
+        setHelloMemberLoyaltyCard(response.data.apc_identifier_number, cartId);
+      } else if (hasValue(response.error)) {
+        logger.error('Error while trying to set hello member loyalty card data: @data.', {
+          '@data': JSON.stringify(response),
+        });
+      }
+    });
+  }
+}
+
 export {
   processCheckoutCart,
   getAuraCustomerPoints,
+  applyHelloMemberLoyalty,
 };
