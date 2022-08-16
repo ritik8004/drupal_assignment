@@ -391,6 +391,50 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'لقد تخطيت الحد الأقصى من الخصومات المضافة.',
         'context' => 'hello_member',
       ],
+      'Email Address' => [
+        'ar' => 'عنوان البريد الإلكتروني',
+        'context' => 'hello_member',
+      ],
+      'To redeem points compelete the full enrollment.' => [
+        'ar' => 'لاستبدال النقاط أكمل التسجيل بالكامل.',
+        'context' => 'hello_member',
+      ],
+      'Submit' => [
+        'ar' => 'إرسال',
+        'context' => 'hello_member',
+      ],
+      'You will earn <b>@points</b> Aura points with this purchase.' => [
+        'ar' => 'سوف تفوز <b>@points</b> بنقاط أورا عند إتمام عملية الشراء.',
+        'context' => 'hello_member',
+      ],
+      'Do you want to redeem Aura points?' => [
+        'ar' => 'هل تريد استبدال نقاط أورا؟',
+        'context' => 'hello_member',
+      ],
+      'Redeem Points' => [
+        'ar' => 'عنوان البريد الإلكتروني',
+        'context' => 'hello_member',
+      ],
+      'Enter Aura Details' => [
+        'ar' => 'ادخل بيانات حساب أورا',
+        'context' => 'hello_member',
+      ],
+      'Loyalty' => [
+        'ar' => 'الولاء',
+        'context' => 'hello_member',
+      ],
+      'Verify' => [
+        'ar' => 'تأكيد',
+        'context' => 'hello_member',
+      ],
+      'Aura' => [
+        'ar' => 'أورا',
+        'context' => 'hello_member',
+      ],
+      'Enter OTP' => [
+        'ar' => 'يرجى إدخال رمز الاستخدام لمرة واحدة.',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
