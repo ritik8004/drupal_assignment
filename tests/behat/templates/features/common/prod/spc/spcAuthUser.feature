@@ -63,7 +63,3 @@ Feature: Add address to new user account.
     When I wait for AJAX to finish
     And I wait for the page to load
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
-
-
-
-
