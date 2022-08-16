@@ -162,8 +162,8 @@ class OnlineReturnController extends ControllerBase {
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_requests';
     $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
     $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_online_returns';
-    $build['#attached']['drupalSettings']['returnInfo'] = [
-      'orderDetails' => $orderDetails,
+    $build['#attached']['drupalSettings']['onlineReturns']['returnInfo'] = [
+      'orderInfo' => $orderDetails,
       'returnConfig' => $returnConfig,
       'helperBlock' => $this->getHelperBlock(),
     ];
@@ -218,8 +218,8 @@ class OnlineReturnController extends ControllerBase {
     $build['#attached']['library'][] = 'alshaya_online_returns/alshaya_return_confirmation';
     $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
     $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_online_returns';
-    $build['#attached']['drupalSettings']['returnInfo'] = [
-      'orderDetails' => $orderDetails,
+    $build['#attached']['drupalSettings']['onlineReturns']['returnInfo'] = [
+      'orderInfo' => $orderDetails,
       'returnConfirmationStrings' => $returnConfig->get('rows'),
       'dateFormat' => $returnConfig->get('return_date_format'),
       'timeZone' => date_default_timezone_get(),
