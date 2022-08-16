@@ -26,4 +26,4 @@ variables:
   spc_mada_visa_card_expiry: '09/22'
   spc_mada_visa_card_cvv: '257'
   spc_mada_password: 'Checkout1!'
-  
+
