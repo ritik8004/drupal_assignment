@@ -677,6 +677,8 @@ $country-switcher-label-mobile: $black;
 
 // eGift Landing page
 $egift-primary-text: $primary_text;
-$egift-accordion-active-title: $primary_link-active;
-$egift-banner-bg: $_egift_landing_page_banner_bg;
 $egift-card-thumbnail-border-active: $_plp_cta_hover;
+
+// Advanced Page components.
+$advanced-page-accordion-active-title: $primary_link-active;
+$advanced-page-banner-bg: $_egift_landing_page_banner_bg;

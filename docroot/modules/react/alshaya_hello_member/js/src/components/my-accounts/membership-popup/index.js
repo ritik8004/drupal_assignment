@@ -1,6 +1,6 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import MembershipInfo from '../membership-info';
+import parse from 'html-react-parser';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 class MembershipPopup extends React.Component {
@@ -37,6 +37,7 @@ class MembershipPopup extends React.Component {
 
   render() {
     const { isModelOpen } = this.state;
+    const { popupTextAbove, popupTextBelow } = drupalSettings.helloMember;
 
     return (
       <>
@@ -47,8 +48,18 @@ class MembershipPopup extends React.Component {
           closeOnEscape={false}
         >
           <div className="hello-member-popup-form">
-            <a className="close-modal" onClick={(e) => this.closeModal(e)} />
-            <MembershipInfo />
+            <div className="hello-membership-info">
+              <div className="hello-membership-title">
+                {Drupal.t('Hello Member', {}, { context: 'hello_member' })}
+              </div>
+              <div className="hello-membership-details">
+                {hasValue(popupTextAbove) ? parse(popupTextAbove) : ''}
+                <div className="hello-membership-continue">
+                  <a onClick={(e) => this.closeModal(e)}>{Drupal.t('Continue', {}, { context: 'hello_member' })}</a>
+                </div>
+                {hasValue(popupTextBelow) ? parse(popupTextBelow) : ''}
+              </div>
+            </div>
           </div>
         </Popup>
       </>

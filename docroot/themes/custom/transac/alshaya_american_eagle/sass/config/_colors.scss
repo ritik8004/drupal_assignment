@@ -715,9 +715,7 @@ $plp-quick-view-product-size-border-hover: $black;
 $plp-quick-view-product-size-text-disabled: $grey;
 
 //eGift.
-$egift-banner-bg: $bright_gray;
 $egift-banner-title: $dark_gray;
-$egift-accordion-active-title: $black;
 $egift-purchase-page-title: $black;
 $egift-card-redeem-button: $black;
 $egift-myaccount-button: $royal-blue;
@@ -741,3 +739,8 @@ $online-return-total-price-bg: $white_smoke;
 $online-return-print-cancel-border: $light-greyish;
 $online-return-button-bg: $black;
 $online-return-cancel-button-border: $warm-grey-two;
+
+// Advanced Page components.
+$advanced-page-accordion-active-title: $black;
+$advanced-page-banner-bg: $bright_gray;
+$advanced-page-banner-title: $dark_gray;

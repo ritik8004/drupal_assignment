@@ -15,6 +15,7 @@ import Tabby from '../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../js/tabby/components';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import EgiftCheckoutOrderSummary from '../../egift-card/components/egift-checkout-order-summary';
+import { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -57,7 +58,14 @@ class TotalLineItems extends React.Component {
    * Get the content of discount tooltip.
    */
   discountToolTipContent = (cartPromo) => {
+    const { totals } = this.props;
     let promoData = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
+
+    // Change the discount title if hello member offer code exists on cart.
+    if (hasValue(totals.hmOfferCode)) {
+      promoData = `<div class="applied-hm-discounts-title">${Drupal.t('Member Discount', {}, { context: 'hello_member' })}</div>`;
+    }
+
     if (cartPromo !== null
       && cartPromo !== undefined
       && Object.keys(cartPromo).length > 0) {
@@ -72,7 +80,6 @@ class TotalLineItems extends React.Component {
       });
     }
     if (Advantagecard.isAdvantagecardEnabled()) {
-      const { totals } = this.props;
       // IF advantageCardApplied add promotion label of Advantage card in Discount Tool tip.
       if ((hasValue(totals.items) && Advantagecard.isAdvantageCardApplied(totals.items))
         || (hasValue(totals.advatage_card))) {
@@ -129,10 +136,28 @@ class TotalLineItems extends React.Component {
       );
     }
 
+    // Check if hello member voucher codes are applied and set a flag to show
+    // a voucher discount line items separately in summary.
+    // - hmAppliedVoucherCodes is a comma separated string containing all
+    // voucher codes.
+    const showHmVoucherDiscount = (hasValue(totals.hmAppliedVoucherCodes)
+      && totals.hmAppliedVoucherCodes !== '');
+
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
         <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
+        {showHmVoucherDiscount && (
+          <TotalLineItem
+            name="hm-voucher-discount"
+            title={Drupal.t(
+              '@count Bonus Voucher',
+              { '@count': totals.hmAppliedVoucherCodes.split(',').length },
+              { context: 'hello_member' },
+            )}
+            value={totals.hmVoucherDiscount}
+          />
+        )}
 
         <ConditionalView condition={shippingAmount !== null}>
           <TotalLineItem
@@ -190,7 +215,8 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
-          <ConditionalView condition={isAuraEnabled()}>
+          {/* If aura or hm aura integration enabled we need to display aura checkout balance. */}
+          <ConditionalView condition={isAuraEnabled() || (isAuraIntegrationEnabled() && context !== 'cart')}>
             <AuraCheckoutOrderSummary
               totals={totals}
               dontShowVatText={dontShowVatText}

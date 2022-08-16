@@ -1,5 +1,6 @@
 import { hasValue } from './conditionsUtility';
 import { getErrorResponse } from './error';
+import { isUserAuthenticated } from './helper';
 import logger from './logger';
 import { callMagentoApi } from './requestHelper';
 
@@ -16,6 +17,16 @@ export default function isHelloMemberEnabled() {
  */
 export const isAuraIntegrationEnabled = () => isHelloMemberEnabled()
   && hasValue(drupalSettings.helloMember.auraIntegrationStatus);
+
+/**
+ * Helper function to get aura related config for hello memeber.
+ */
+export const getAuraFormConfig = () => {
+  if (hasValue(drupalSettings.helloMember.auraFormConfig)) {
+    return drupalSettings.helloMember.auraFormConfig;
+  }
+  return null;
+};
 
 /**
  * Helper function to get the customer info from user session.
@@ -77,7 +88,7 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       endpoint = '/V1/customers/apcTransactions'; // endpoint to get hello member points history.
       break;
     case 'helloMemberGetDictionaryData':
-      endpoint = '/V1/customers/apcDicData/HM_ACCRUAL_RATIO'; // endpoint to get hello member dictonary data.
+      endpoint = `/V1/customers/apcDicData/${endPointParams.type}`; // endpoint to get hello member dictonary data.
       break;
     case 'helloMemberGetPointsEarned':
       endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member points earned data.
@@ -87,6 +98,29 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       break;
     case 'helloMemberCustomerPhoneSearch':
       endpoint = `/V1/customers/apc-search/phone/${endPointParams.phoneNumber}`; // endpoint to search hello member by phone number.
+      break;
+    case 'addBonusVouchersToCart':
+      endpoint = '/V1/hello-member/carts/mine/bonusVouchers';
+      break;
+    case 'addMemberOffersToCart':
+      endpoint = '/V1/hello-member/carts/mine/memberOffers';
+      break;
+    case 'getCartData':
+      endpoint = '/V1/carts/mine/getCart';
+      break;
+    case 'unsetLoyaltyCard':
+      endpoint = isUserAuthenticated()
+        ? '/V1/customers/mine/unset-loyalty-card'
+        : '/V1/apc/unset-loyalty-card';
+      break;
+    case 'getAuraCustomerPoints':
+      endpoint = `/V1/guest/apc-points-balance/identifierNo/${endPointParams.identifierNo}`;
+      break;
+    case 'helloMemberRemoveOffers':
+      endpoint = '/V1/hello-member/carts/mine/memberOffers';
+      break;
+    case 'helloMemberRemovebonusVouchers':
+      endpoint = '/V1/hello-member/carts/mine/bonusVouchers';
       break;
 
     default:

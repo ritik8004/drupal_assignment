@@ -1,0 +1,15 @@
+.alias--membership-info.nodetype--advanced_page {
+  .c-promo__item {
+    &:first-child {
+      .paragraph--type--title-textarea {
+        table {
+          tr:first-child {
+            td:first-child {
+              font-family: $hnm-demibold;
+            }
+          }
+        }
+      }
+    }
+  }
+}
