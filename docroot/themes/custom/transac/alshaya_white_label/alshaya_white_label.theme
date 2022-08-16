@@ -1016,7 +1016,7 @@ function alshaya_white_label_preprocess_menu(&$variables) {
     $items = $variables['items'];
     foreach ($items as $item) {
       // If path is current_path, add active class.
-      if ($item['url']->getRouteName() == 'user.page') {
+      if ($item['url']->isRouted() && $item['url']->getRouteName() == 'user.page') {
         if (str_starts_with($current_path, '/user/') || str_starts_with($current_path, '/profile/')) {
           $attributes = $item['url']->getOption('attributes');
           $attributes['class'][] = 'is-active';
