@@ -171,7 +171,7 @@ class AlshayaJsOptimisationHelper {
         ],
         'rcs_listeners' => [
           'label' => t('RCS Event Listeners'),
-          'description' => t('RCS Event Listeners asset libraries are loaded with high priority to ensure listeners are registered before their events are triggered.'),
+          'description' => t('RCS Event Listener asset libraries are loaded with high priority to ensure listeners are registered before their events are triggered.'),
         ],
         'critical' => [
           'label' => t('Critical Scripts'),
@@ -189,13 +189,6 @@ class AlshayaJsOptimisationHelper {
       'form_warning' => t('WARNING: Saving this form will rebuild cache on JS files. The first load of site pages will be slower than usual.'),
     ];
   }
-
-  /**
-   * JS aggregation status flag.
-   *
-   * @var isJsAggregation
-   */
-  public static $isJsAggregation = NULL;
 
   /**
    * Critical JS status flag.
@@ -344,13 +337,14 @@ class AlshayaJsOptimisationHelper {
    */
   private function includeDependencies(array $lists, $category, $installed) {
     $included_dependecies = [];
+    $resolve_categories = ['critical', 'sitewide_1', 'sitewide_2'];
     foreach ($lists as $extension => $libraries) {
       if (in_array($extension, $installed)) {
         $libraries = (array) $libraries;
         $libraries = $this->prefixLibrary($libraries, $extension . '/');
         $library_list = $libraries;
 
-        if ($category === 'critical' || $category === 'sitewide_1' || $category === 'sitewide_2') {
+        if (in_array($category, $resolve_categories)) {
           $library_list = $this->depedencyResolver->getLibrariesWithDependencies($libraries);
         }
 
