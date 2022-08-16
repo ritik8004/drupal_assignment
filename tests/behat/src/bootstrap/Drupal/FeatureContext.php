@@ -2973,4 +2973,37 @@ JS;
       throw new \RuntimeException('Wishlist icon is inactive.');
     }
   }
+
+  /**
+   * @Given /^I create an account with "(?P<field>(?:[^"]|\\")*)" using custom password$/
+   */
+  public function iCreateAnAccountUsingCustomPassword($email) {
+    $this->getSession()->getPage()->fillField('edit-mail', $email);
+    $this->fillPassword($email);
+  }
+
+  /**
+   * @Given /^I login with "(?P<field>(?:[^"]|\\")*)" using custom password$/
+   * @Given /^I login with "(?P<field>(?:[^"]|\\")*)" using custom password with date "([^"]*)"$/
+   */
+  public function iLoginUsingCustomPassword($email, $date = '') {
+    $this->getSession()->getPage()->fillField('edit-name', $email);
+    $this->fillPassword($email, $date);
+  }
+
+  public function fillPassword($email, $date = '') {
+    $secret_key = 'vGnZFpa8JA';
+    $date = empty($date) ? date("Ymd") : $date;
+    $password_key = $email . $date . $secret_key;
+    $password = base64_encode($password_key);
+    $this->getSession()->getPage()->fillField('edit-pass', $password . '%');
+  }
+
+  /**
+   * @Given /^I uncheck the newsletter subscription checkbox$/
+   */
+  public function iUncheckTheNewsletterSubscriptionCheckbox() {
+    $this->getSession()->executeScript("jQuery('#edit-field-subscribe-newsletter-value').removeAttr('checked');jQuery('#edit-field-subscribe-newsletter-value').val(0)");
+  }
+
 }
