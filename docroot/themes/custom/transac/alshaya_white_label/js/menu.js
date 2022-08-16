@@ -176,7 +176,7 @@
         }
       });
 
-      const secondaryMainMenu = $('.secondary--main--menu__list');
+      var secondaryMainMenu = $('.secondary--main--menu__list');
 
       $('.logged-out .account').click(function () {
         $('.account').addClass('active');
@@ -186,7 +186,7 @@
         $('.menu--one__list').removeClass('block--display');
         $('.c-menu-secondary').removeClass('remove--toggle');
         // Removing remove--toggle class from .secondary--main--menu__list if it exists
-        if(secondaryMainMenu.length) {
+        if (secondaryMainMenu.length) {
           secondaryMainMenu.removeClass('remove--toggle');
         }
       });
@@ -200,7 +200,7 @@
         $('.c-menu-secondary').addClass('remove--toggle');
         $('.c-my-account-nav').addClass('remove--toggle');
         // Removing block--display class from .secondary--main--menu__list if it exists
-        if(secondaryMainMenu.length) {
+        if (secondaryMainMenu.length) {
           secondaryMainMenu.removeClass('block--display');
         }
       });
@@ -214,7 +214,7 @@
         $('.c-my-account-nav').removeClass('remove--toggle');
         $('.c-my-account-nav').removeClass('remove--toggle');
         // Removing remove--toggle class from .secondary--main--menu__list if it exists
-        if(secondaryMainMenu.length) {
+        if (secondaryMainMenu.length) {
           secondaryMainMenu.removeClass('remove--toggle');
         }
       });
@@ -228,7 +228,7 @@
         $('.c-menu-secondary').addClass('remove--toggle');
         $('.c-my-account-nav').removeClass('block--display');
         // Removing block--display class from .secondary--main--menu__list if it exists
-        if(secondaryMainMenu.length) {
+        if (secondaryMainMenu.length) {
           secondaryMainMenu.removeClass('block--display');
         }
       });
