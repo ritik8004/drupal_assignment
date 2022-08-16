@@ -435,6 +435,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'يرجى إدخال رمز الاستخدام لمرة واحدة.',
         'context' => 'hello_member',
       ],
+      'The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.' => [
+        'ar' => 'إجمالي النقاط التي ستحصل عليها من عملية الشراء هذه سيتم عرضها في صفحة تأكيد  الطلبية بعد استقطاع الخصومات والضرائب',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
