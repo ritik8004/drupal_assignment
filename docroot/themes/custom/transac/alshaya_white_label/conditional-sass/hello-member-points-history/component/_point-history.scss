@@ -1,0 +1,225 @@
+.my-points-history-wrapper {
+  font-size: rem(14);
+
+  @include breakpoint($only-mobile) {
+    overflow-x: auto;
+    padding-bottom: rem(20);
+  }
+
+  .history-points-row {
+    display: flex;
+    align-items: center;
+    border-bottom: rem(1) solid $primary_table_border;
+    padding-top: rem(28);
+    padding-bottom: rem(4);
+
+    @include breakpoint($only-mobile) {
+      display: inline-flex;
+    }
+
+    & > div {
+      width: calc(100% / 3);
+
+      @include breakpoint($only-mobile) {
+        min-width: rem(119);
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .history-light-title {
+        font-size: rem(12);
+        color: $hello-member-history-points-light-title;
+      }
+
+      .history-dark-title {
+        font-family: $alshaya-bold;
+      }
+    }
+
+    .points-date {
+      font-size: rem(12);
+      text-align: center;
+    }
+
+    .purchase-store {
+      @include breakpoint($tablet) {
+        padding-#{$left}: rem(30);
+      }
+    }
+
+    .points-earned {
+      text-align: center;
+
+      @include breakpoint($tablet) {
+        padding-#{$left}: rem(80);
+      }
+    }
+  }
+
+  .load-more-wrapper {
+    padding: rem(40);
+    text-align: center;
+
+    button {
+      @extend %button-wide;
+    }
+  }
+}
+
+.member-expiry-block {
+  text-align: center;
+  padding: rem(7) rem(24) 0;
+
+  @include breakpoint($tablet) {
+    padding: rem(7) rem(80) rem(20);
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-bottom: rem(20);
+  }
+
+  .expiry-point {
+    font-size: rem(22);
+    font-family: $alshaya-bold;
+    margin-bottom: 0;
+  }
+
+  p + p {
+    margin-top: rem(10);
+  }
+}
+
+.expiry-accordion {
+  background-color: $hello-member-points-expiry-accordion-bg;
+  margin-bottom: rem(50);
+  transition: max-height 0.1s ease-in-out;
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: rem(16);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .title {
+    padding: rem(32) rem(62);
+    display: flex;
+    align-items: center;
+    color: $hello-member-points-expiry-accordion-title;
+    font-family: $alshaya-bold;
+
+    @include breakpoint($only-mobile) {
+      padding: rem(32) rem(24);
+    }
+
+    & > div {
+      width: 50%;
+    }
+
+    &.show {
+      .points-accordion {
+        &::after {
+          transform: rotate(180deg);
+          #{$right}: rem(-10);
+        }
+      }
+    }
+  }
+
+  .content {
+    padding: 0 rem(62) rem(60);
+    display: block;
+    transition: display 0.2s ease-in-out;
+
+    @include breakpoint($only-mobile) {
+      padding: 0 rem(24) rem(40);
+    }
+
+    .points-earned-block {
+      border-bottom: rem(1) solid $primary_table_border;
+      border-top: rem(1) solid $primary_table_border;
+      padding: rem(32) 0;
+      padding-#{$right}: rem(40);
+
+      .earned-items {
+        display: flex;
+        font-size: rem(14);
+        font-family: $alshaya-bold;
+        padding-bottom: rem(10);
+
+        .item {
+          @include breakpoint($only-mobile) {
+            width: 70%;
+          }
+        }
+
+        .points {
+          @include breakpoint($only-mobile) {
+            width: 30%;
+          }
+        }
+
+        &:last-of-type {
+          padding-bottom: 0;
+        }
+
+        & > div {
+          width: 50%;
+        }
+
+        .points {
+          text-align: $right;
+        }
+      }
+    }
+
+    .earned-points-info {
+      padding-top: rem(32);
+
+      p {
+        margin: 0;
+      }
+
+      .info-items {
+        padding-bottom: rem(24);
+
+        &:last-of-type {
+          padding-bottom: 0;
+        }
+
+        .info-item-title {
+          font-family: $alshaya-bold;
+          margin-bottom: rem(8);
+        }
+      }
+    }
+  }
+
+  &.close-expiry-accordion {
+    max-height: rem(90) !important;
+    overflow: hidden;
+
+    .content {
+      display: none;
+    }
+  }
+
+  .points-accordion {
+    text-align: $right;
+    padding-#{$right}: rem(20);
+
+    @include icon(chevrondown, after) {
+      font-weight: bold;
+      font-size: rem(11);
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+      display: inline-block;
+      color: $hello-member-points-expiry-accordion-icon;
+      position: relative;
+      #{$right}: rem(-10);
+    }
+  }
+}

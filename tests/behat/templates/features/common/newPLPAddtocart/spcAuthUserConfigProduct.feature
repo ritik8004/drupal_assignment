@@ -1,4 +1,4 @@
-@javascript @plp-addtocart @smoke @auth @bpaeqa @mckwqa
+@javascript @plp-addtocart @smoke @auth @bpaeqa @mckwqa @tbskwprod @tbsegprod @vssaprod @vskwprod
 Feature: Testing new PLP-Add to cart functionality for Authenticated user on config product
 
   Background:
@@ -18,7 +18,7 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user on con
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then I should see an "#configurable-drawer" element
-    And I should see an ".pdp-link" element
+    And I should see an ".configurable-product-form-wrapper .product-details-wrapper .pdp-link" element
     And I scroll to the ".config-form-addtobag-button" element
     And I click jQuery ".config-form-addtobag-button" element on page
     And I wait for AJAX to finish
@@ -39,7 +39,7 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user on con
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then I should see an "#configurable-drawer" element
-    And I should see an ".pdp-link" element
+    And I should see an ".configurable-product-form-wrapper .product-details-wrapper .pdp-link" element
     And I scroll to the ".config-form-addtobag-button" element
     And I click jQuery ".config-form-addtobag-button" element on page
     And I wait for AJAX to finish
@@ -58,7 +58,7 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user on con
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then I should see an "#configurable-drawer" element
-    And I should see an ".pdp-link" element
+    And I should see an ".configurable-product-form-wrapper .product-details-wrapper .pdp-link" element
     And I scroll to the ".config-form-addtobag-button" element
     And I click jQuery ".config-form-addtobag-button" element on page
     And I wait for AJAX to finish

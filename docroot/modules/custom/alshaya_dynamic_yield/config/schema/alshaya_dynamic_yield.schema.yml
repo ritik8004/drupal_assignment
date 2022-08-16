@@ -1,0 +1,11 @@
+# Schema for the configuration files of the Dynamic yield module.
+alshaya_dynamic_yield.settings:
+  type: config_object
+  label: 'Alshaya dynamic yield settings'
+  mapping:
+    pdp_div_placeholder_count:
+      type: integer
+      label: 'PDP Empty Divs'
+    cart_div_placeholder_count:
+      type: integer
+      label: 'Cart Empty Divs'

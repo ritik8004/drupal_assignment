@@ -15,6 +15,21 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Add algolia category carousel settings.
+ */
+function alshaya_mobile_app_update_9402() {
+  // Import config to set "category_carousel_return_products" key.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['alshaya_mobile_app.settings'],
+    'alshaya_mobile_app',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the value for the listing_ignore_algolia_data.
  */
 function alshaya_mobile_app_update_9401() {

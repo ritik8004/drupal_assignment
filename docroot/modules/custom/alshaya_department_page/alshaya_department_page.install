@@ -140,7 +140,7 @@ function alshaya_department_page_update_8001() {
                 _alshaya_department_page_delete_alias(substr($node_alias['alias'], 1));
               }
             }
-            catch (\Exception $e) {
+            catch (\Exception) {
               // If something goes wrong.
               \Drupal::logger('alshaya_department_page')->error('Unable to process the alias @alias', ['@alias' => $node_alias['alias']]);
             }

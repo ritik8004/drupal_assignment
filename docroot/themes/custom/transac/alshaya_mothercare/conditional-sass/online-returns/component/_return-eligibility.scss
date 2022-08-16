@@ -1,0 +1,9 @@
+.user__order--detail {
+  .order-item-row.online-returns-eligibility-message {
+    .return-button-enabled {
+      @include breakpoint($desktop) {
+        flex-basis: 42%;
+      }
+    }
+  }
+}

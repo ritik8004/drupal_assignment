@@ -149,7 +149,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
               $brand = $params['taxonomy_term'];
             }
           }
-          catch (\Exception $e) {
+          catch (\Exception) {
             // Ignore the value, someone is simply trying to mess up with system
             // using random value in GET.
             $brand = '';

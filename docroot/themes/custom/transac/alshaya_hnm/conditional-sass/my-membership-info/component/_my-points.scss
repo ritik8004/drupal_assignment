@@ -1,0 +1,18 @@
+.my-membership {
+  .member-name {
+    font-family: $hnm-demibold;
+    border-bottom-color: $content_pagetitle_border;
+  }
+
+  .points-block {
+    .my-points {
+      font-family: $hnm-demibold;
+    }
+
+    .my-points-details {
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
+    }
+  }
+}

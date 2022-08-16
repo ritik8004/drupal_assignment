@@ -83,6 +83,7 @@ class KnetController extends ControllerBase {
    * Page callback to process the payment and return redirect URL.
    */
   public function response() {
+    $response = [];
     $data = $this->requestStack->getCurrentRequest()->request->all();
 
     // For new K-Net toolkit, parse and decrypt the response first.
@@ -90,7 +91,7 @@ class KnetController extends ControllerBase {
       try {
         $data = $this->knetHelper->parseAndPrepareKnetData($data);
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         $this->logger->error('K-Net is not configured properly<br>POST: @message', [
           '@message' => json_encode($data),
         ]);
@@ -104,7 +105,7 @@ class KnetController extends ControllerBase {
         throw new \Exception();
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       $this->logger->error('Invalid KNET response call found.<br>POST: @message', [
         '@message' => json_encode($data),
       ]);

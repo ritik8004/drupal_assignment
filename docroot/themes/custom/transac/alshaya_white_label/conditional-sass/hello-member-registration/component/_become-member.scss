@@ -1,0 +1,180 @@
+#edit-hello-member {
+  background: $hello-member-registration-accordion-bg;
+  max-height: rem(66);
+  transition: max-height 0.15s ease-out;
+  overflow: hidden;
+  margin: rem(40) 0;
+
+  &[open] {
+    max-height: rem(500);
+    transition: max-height 0.25s ease-in;
+  }
+
+  input[type=date] {
+    background-color: $hello-member-registration-fields-bg;
+    border: 0;
+    border-bottom: rem(1) solid currentColor;
+    width: 100%;
+    padding-top: 0;
+
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+
+    html[lang=ar] & {
+      text-align: right;
+    }
+  }
+
+  input[type=date] ~ label:not(.active-label) {
+    font-size: rem(12) !important;
+    color: $hello-member-registration-labels-txt !important;
+    position: absolute !important;
+    #{$left}: 0 !important;
+    top: rem(-16) !important;
+  }
+
+  input[type=date]:focus ~ label {
+    top: rem(-16) !important;
+    bottom: 0 !important;
+    #{$left}: 0 !important;
+    opacity: 1 !important;
+    font-size: rem(12) !important;
+  }
+
+  input[type=date] ~ label.error {
+    font-size: rem(12) !important;
+    color: $primary_input_inline_error !important;
+    position: relative !important;
+    line-height: 1;
+    top: rem(2) !important;
+    background: $hello-member-registration-fields-bg !important;
+  }
+
+  summary {
+    padding: rem(20);
+    cursor: pointer;
+    font-size: rem(18);
+    font-family: $alshaya-bold;
+
+    &::after {
+      #{$right}: rem(27);
+      font-size: rem(20);
+      font-weight: bold;
+      top: rem(21);
+      position: absolute;
+    }
+
+    &[aria-expanded='false'] {
+      @include icon(plus, after);
+    }
+
+    &[aria-expanded='true'] {
+      @include icon(minus, after);
+    }
+  }
+
+  .hello-member-accordion-wrapper {
+    padding: 0 rem(20) rem(28);
+    color: $hello-member-accordion-txt;
+
+    .js-form-type-date {
+      margin-top: 0;
+    }
+
+    .field--name-field-birth-date {
+      h4 {
+        color: $hello-member-registration-labels-txt;
+        font-size: rem(13);
+        margin: 0;
+        font-weight: normal;
+      }
+    }
+
+    .hello-member-gift-info {
+      margin-top: rem(6);
+      color: $hello-member-registration-labels-txt;
+    }
+
+    .hello-member-gender {
+      @include breakpoint($upto-desktop) {
+        padding-#{$right}: rem(36);
+      }
+
+      .form-item {
+        &.form-type-select {
+          height: rem(26);
+          margin-top: rem(38);
+
+          @include select-wrapper(100%);
+
+          &::after {
+            z-index: 0;
+            top: rem(18);
+
+            @include breakpoint($upto-desktop) {
+              top: rem(19);
+              font-weight: bold;
+              #{$right}: rem(-22);
+            }
+          }
+
+          .select2-container {
+            @include select2-style(100%);
+
+            .select2-selection {
+              background: $hello-member-registration-fields-bg;
+
+              &__arrow {
+                background: $hello-member-registration-fields-bg;
+
+                &::after {
+                  background: $hello-member-registration-fields-bg;
+                }
+              }
+            }
+          }
+
+          select {
+            @include breakpoint($upto-desktop) {
+              @include select-style(100%);
+
+              height: rem(26);
+            }
+          }
+        }
+      }
+
+      label {
+        position: absolute;
+        top: rem(-20);
+        color: $hello-member-registration-labels-txt !important;
+      }
+    }
+  }
+}
+
+details {
+  summary {
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+}
+
+.hello-member-benefit-subtitle {
+  font-size: rem(14);
+  color: $hello-member-registration-labels-txt;
+
+  @include breakpoint($tablet) {
+    position: absolute;
+    width: 100%;
+    margin-top: rem(-64);
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 0 rem(25) rem(25);
+    text-align: center;
+    margin-top: rem(-16);
+  }
+}

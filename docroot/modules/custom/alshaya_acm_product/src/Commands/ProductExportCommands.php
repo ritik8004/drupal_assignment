@@ -40,14 +40,14 @@ class ProductExportCommands extends DrushCommands {
    *
    * @var string
    */
-  const PATH = 'public://exports/v2/';
+  public const PATH = 'public://exports/v2/';
 
   /**
    * The filename prefix for the output file.
    *
    * @var string
    */
-  const FILE_NAME_PREFIX = 'product-data';
+  public const FILE_NAME_PREFIX = 'product-data';
 
   /**
    * Constructor for the class.
@@ -122,7 +122,7 @@ class ProductExportCommands extends DrushCommands {
     $batch = [
       'title' => 'Export Product Data',
       'init' => 'Starting processing of product data to be exported',
-      'finished' => [__CLASS__, 'batchFinished'],
+      'finished' => [self::class, 'batchFinished'],
     ];
 
     foreach (array_chunk($nids, $options['limit']) as $nid_batch) {
@@ -185,7 +185,7 @@ class ProductExportCommands extends DrushCommands {
 
         $context['results']['nodes']++;
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         $context['results']['failed_nids'][] = $nid;
       }
     }
@@ -216,7 +216,7 @@ class ProductExportCommands extends DrushCommands {
 
     if (!empty($results['failed_nids'])) {
       $logger->warning('Could not successfully process @count items. Items: @items', [
-        '@count' => count($results['failed_nids']),
+        '@count' => is_countable($results['failed_nids']) ? count($results['failed_nids']) : 0,
         '@items' => implode(',', $results['failed_nids']),
       ]);
     }

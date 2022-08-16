@@ -41,7 +41,7 @@ class AdvancedPageResource extends ResourceBase {
   /**
    * Node bundle machine name.
    */
-  const NODE_TYPE = 'advanced_page';
+  public const NODE_TYPE = 'advanced_page';
 
   /**
    * The mobile app utility service.
@@ -166,6 +166,7 @@ class AdvancedPageResource extends ResourceBase {
    *   The response containing list of categories.
    */
   public function get() {
+    $term = NULL;
     // Path alias of advanced page.
     $alias = $this->requestStack->query->get('url');
     $page = $this->requestStack->query->get('page');
@@ -355,7 +356,7 @@ class AdvancedPageResource extends ResourceBase {
    *   Data array.
    */
   private function handleViewBubbleMetadata($view_id, $display_id, $arguments) {
-    $this->renderContext = $this->renderContext ?? (new RenderContext());
+    $this->renderContext ??= new RenderContext();
     $result = $this->renderer->executeInRenderContext($this->renderContext, function () use ($view_id, $display_id, $arguments) {
       $view = Views::getView($view_id);
       $view->setDisplay($display_id);

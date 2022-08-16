@@ -1,0 +1,31 @@
+.hello-member-promo-section {
+  .popup-container {
+    .hello-member-promo-modal-content {
+      .react-tabs__tab-list {
+        display: flex;
+        border-bottom: rem(1) solid $hello-member-promo-tab-border;
+        padding: 0;
+        margin-top: rem(4);
+
+        .react-tabs__tab {
+          font-family: $alshaya-thin;
+          font-size: rem(16);
+          padding: rem(16) 0;
+          color: $hello-member-promo-tab-title;
+          letter-spacing: 0.8px;
+          list-style: none;
+          flex: auto;
+          cursor: pointer;
+          outline: none;
+          text-align: center;
+
+          &--selected {
+            color: $hello-member-promo-tab-title;
+            border-bottom: rem(1) solid $hello-member-promo-pop-txt;
+            font-family: $alshaya-bold;
+          }
+        }
+      }
+    }
+  }
+}

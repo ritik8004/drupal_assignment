@@ -21,11 +21,14 @@ import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 import PpdRatingsReviews from '../pdp-ratings-reviews';
-import { checkProductExpressDeliveryStatus, isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 import PdpExpressDelivery from '../pdp-express-delivery';
 import WishlistContainer from '../../../../../js/utilities/components/wishlist-container';
 import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wishlistHelper';
+import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -79,8 +82,6 @@ const PdpLayout = () => {
     freeGiftPromoUrl,
     freeGiftMessage,
     freeGiftPromoType,
-    deliveryOptions,
-    expressDeliveryClass,
     isProductBuyable,
     bigTickectProduct,
   } = productValues;
@@ -179,6 +180,12 @@ const PdpLayout = () => {
   // Get configurable options only for configurable product.
   const options = getAttributeOptionsForWishlist(configurableCombinations, skuItemCode, variant);
 
+  // Get empty divs count for dynamic yield recommendations.
+  let pdpEmptyDivsCount = 0;
+  if (hasValue(drupalSettings.pdpDyamicYieldDivsCount)) {
+    pdpEmptyDivsCount = drupalSettings.pdpDyamicYieldDivsCount;
+  }
+
   return (skuItemCode) ? (
     <>
       <div className={`magv2-header ${(isMobile ? 'fadeInVertical' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
@@ -241,18 +248,9 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
-          <ConditionalView condition={isExpressDeliveryEnabled()
-            && checkProductExpressDeliveryStatus(skuItemCode)}
-          >
-            <div className={`express-delivery ${expressDeliveryClass}`}>
-              {deliveryOptions && deliveryOptions !== null
-                && Object.keys(deliveryOptions).length > 0
-                && Object.keys(deliveryOptions).map((option) => (
-                  <div key={option} className={`express-delivery-text ${option} ${deliveryOptions[option].status}`}>
-                    <span>{deliveryOptions[option].label}</span>
-                  </div>
-                ))}
-            </div>
+          <ConditionalView condition={isExpressDeliveryEnabled()}>
+            {/* Show PDP delivery labels for magazineV2 */}
+            <PdpSddEd />
           </ConditionalView>
           <PpdRatingsReviews
             getPanelData={getPanelData}
@@ -336,6 +334,10 @@ const PdpLayout = () => {
         </div>
       ) : null}
       <PpdPanel panelContent={panelContent} />
+      <DynamicYieldPlaceholder
+        context="pdp"
+        placeHolderCount={pdpEmptyDivsCount}
+      />
     </>
   ) : emptyRes;
 };

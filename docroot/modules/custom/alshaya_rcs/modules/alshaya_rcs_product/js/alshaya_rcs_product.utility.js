@@ -240,15 +240,33 @@ window.commerceBackend = window.commerceBackend || {};
     const variantConfigurableOptions = [];
 
     Object.keys(productConfigurables).forEach(function (attributeCode) {
+      let label = productConfigurables[attributeCode].label;
       const optionId = productConfigurables[attributeCode].attribute_id;
       const optionValue = variant.product[attributeCode];
+      let value = window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]);
+
+      // Check if we have a replacement for the attributes.
+      if (Drupal.hasValue(drupalSettings.alshayaRcs.configurableFieldReplacements)) {
+        const { configurableFieldReplacements } = drupalSettings.alshayaRcs;
+        Object.keys(configurableFieldReplacements).forEach(function (field) {
+          if (configurableFieldReplacements[field].display_configurable_for === attributeCode &&
+            Drupal.hasValue(variant.product[field])
+          ) {
+            // Override default values.
+            attributeCode = field;
+            label = configurableFieldReplacements[field].label;
+            value = variant.product[field];
+          }
+        });
+      }
+
       variantConfigurableOptions.push({
+        attribute_code: `attr_${attributeCode}`,
         attribute_id: `attr_${attributeCode}`,
-        label: productConfigurables[attributeCode].label,
+        label: label,
         option_id: optionId,
         option_value: optionValue,
-        value: window.commerceBackend.getAttributeValueLabel(attributeCode, variant.product[attributeCode]),
-        value_id: variant.product[attributeCode],
+        value: value,
       });
     });
 
@@ -372,6 +390,10 @@ window.commerceBackend = window.commerceBackend || {};
       }
       const variantParentSku = variantInfo.parent_sku;
       const variantParentProduct = window.commerceBackend.getProductData(null, null, false)[variantParentSku];
+      // Use URL from parent if not available in child - we add in variants only for styled products.
+      const productUrl = Drupal.hasValue(variantInfo.url_key)
+        ? getProductUrls(variantInfo.url_key)
+        : getProductUrls(product.url_key);
       // @todo Add code for commented keys.
       info[variantSku] = {
         cart_image: window.commerceBackend.getCartImage(variant.product),
@@ -399,7 +421,7 @@ window.commerceBackend = window.commerceBackend || {};
         promotionsRaw: product.promotions,
         // @todo Add free gift promotion value here.
         freeGiftPromotion: [],
-        url: getProductUrls(variantInfo.url_key),
+        url: productUrl,
         gtm_price: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
         deliveryOptions: variantInfo.deliveryOptions,
       }
@@ -544,14 +566,18 @@ window.commerceBackend = window.commerceBackend || {};
       var unsortedValues = {};
       var sortedValues = [];
       configurables[attributeName].values.forEach(function eachValue(value) {
-        var key = Object.keys(allAttributes[attributeName]).indexOf(String(value.value_id));
-        unsortedValues[key] = value;
+        if (Drupal.hasValue(value.value_id) && Drupal.hasValue(allAttributes[attributeName])) {
+          var key = Object.keys(allAttributes[attributeName]).indexOf(String(value.value_id));
+          unsortedValues[key] = value;
+        }
       });
 
-      Object.keys(unsortedValues).sort().forEach(function eachElement(value, index) {
-        sortedValues.push(unsortedValues[value]);
-      });
-      configurablesClone[attributeName].values = sortedValues;
+      if (Drupal.hasValue(unsortedValues)) {
+        Object.keys(unsortedValues).sort().forEach(function eachElement(value, index) {
+          sortedValues.push(unsortedValues[value]);
+        });
+        configurablesClone[attributeName].values = sortedValues;
+      }
     });
 
     return configurablesClone;
@@ -749,6 +775,7 @@ window.commerceBackend = window.commerceBackend || {};
                   sku,
                   colorOptionsList,
                   variantSku,
+                  variant: variants[variantSku],
                 }
               });
 
@@ -780,8 +807,10 @@ window.commerceBackend = window.commerceBackend || {};
    *   The sku value.
    * @param {string} parentSKU
    *   (optional) The parent sku value.
+   * @param {boolean} loadStyles
+   *   (optional) Indicates if styled product need to be loaded.
    */
-  window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null) {
+  window.commerceBackend.getProductDataFromBackend = async function (sku, parentSKU = null, loadStyles = true) {
     var mainSKU = Drupal.hasValue(parentSKU) ? parentSKU : sku;
     staticDataStore.productDataFromBackend[mainSKU] = Drupal.hasValue(staticDataStore.productDataFromBackend[mainSKU])
       ? staticDataStore.productDataFromBackend[mainSKU]
@@ -791,11 +820,11 @@ window.commerceBackend = window.commerceBackend || {};
     }
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    staticDataStore.productDataFromBackend[mainSKU][sku] = globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
+    staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
       if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
-        await window.commerceBackend.getProductsInStyle(response.data.products.items[0]);
+        await window.commerceBackend.getProductsInStyle(response, loadStyles);
       }
-
+      window.commerceBackend.setRcsProductToStorage(response);
       window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
     });
 
@@ -925,9 +954,13 @@ window.commerceBackend = window.commerceBackend || {};
     fetchAndProcessCustomAttributes();
 
     // Return the label.
-    return Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue])
-      ? staticDataStore['attrLabels'][attrName][attrValue]
-      : '';
+    if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])
+      && Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue]))
+    {
+      return staticDataStore['attrLabels'][attrName][attrValue];
+    }
+
+    return '';
   };
 
   /**
@@ -1029,10 +1062,9 @@ window.commerceBackend = window.commerceBackend || {};
    *   The media item url.
    */
    window.commerceBackend.getTeaserImage = function (product) {
-    const galleryProduct = getSkuForGallery(product);
-    return galleryProduct.media_teaser;
-  };
-
+     const galleryProduct = getSkuForGallery(product);
+     return galleryProduct.media_teaser;
+   };
 
   /**
    * Get the prices from product entity.
@@ -1042,16 +1074,15 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {boolean} formatted
    *   if we need to return formatted price.
    *
-   * @return {array}
-   *   The price array.
+   * @return {object}
+   *   The price object.
    */
   window.commerceBackend.getPrices = function (product, formatted) {
-    var prices = {
+    return {
       price : formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value) : product.price_range.maximum_price.regular_price.value,
       finalPrice: formatted ? globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value) : product.price_range.maximum_price.final_price.value,
       percent_off: product.price_range.maximum_price.discount.percent_off,
     };
-    return prices;
   };
 
   /**
@@ -1137,7 +1168,7 @@ window.commerceBackend = window.commerceBackend || {};
   async function processAllLabels(mainSku) {
     // If labels have already been fetched for mainSku, they will be available
     // in static storage. Hence no need to process them again.
-    if (typeof staticDataStore.labels[mainSku] !== 'undefined') {
+    if (Drupal.hasValue(staticDataStore.labels[mainSku])) {
       return;
     }
 
@@ -1187,6 +1218,10 @@ window.commerceBackend = window.commerceBackend || {};
    */
   window.commerceBackend.getProductLabelsData = async function getProductLabelsData(mainSku, skuForLabel) {
     await processAllLabels(mainSku);
+    // Check if its simple product.
+    if (!Drupal.hasValue(skuForLabel)) {
+      return staticDataStore.labels[mainSku];
+    }
     // If it is a child product not having any label, we display the labels
     // from the parent.
     var parentSku = getParentSkuBySku(mainSku, skuForLabel);
@@ -1252,6 +1287,64 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
+   * Returns list of product attribute with labels.
+   *
+   * @param {object} data
+   *   Graphql response for additional product attributes.
+   *
+   * @returns {object}
+   *  List of product attributes values and labels.
+   */
+  function processProductAttributes (data) {
+    // Process custom attributes metadata.
+    var attributesMetadata = [];
+    data.customAttributeMetadata.items.forEach(function eachValue(value) {
+      attributesMetadata[value.attribute_code] = {};
+      for (let i = 0; i < value.attribute_options.length; i++) {
+        let option = value.attribute_options[i];
+        attributesMetadata[value.attribute_code][option.value] = option.label;
+      }
+    });
+    // Get labels for product attributes from custom attribute metadata.
+    var productAttributeValues = data.products.items[0];
+    var productAttributes = {};
+    Object.entries(productAttributeValues).forEach(function (value) {
+      if (Drupal.hasValue(value[1])) {
+        // Split comma separated product attributes.
+        let value_arr = value[1].split(',');
+        productAttributes[value[0]] = [];
+        value_arr.forEach(function (option) {
+          productAttributes[value[0]].push(attributesMetadata[value[0]][option]);
+        });
+      }
+    });
+    return productAttributes;
+  };
+
+  /**
+   * Get additional product attributes.
+   *
+   * @param {string} sku
+   *   SKU value for which additional attributes is to be returned.
+   * @param {object} attributesVariable
+   *   Product attributes lists.
+   *
+   * @returns {object}
+   *   List of product attributes values and labels.
+   */
+  window.commerceBackend.getAdditionalAttributes = async function getAdditionalAttributes(sku, attributesVariable) {
+    // Get product attributes and custom attribute metadata and labels.
+    var response = await rcsPhCommerceBackend.getData('product_additional_attributes', {
+      sku: sku ,
+      attributes: attributesVariable,
+    })
+    var productAttributes = Drupal.hasValue(response.data)
+      ? processProductAttributes(response.data)
+      : [];
+    return productAttributes;
+  };
+
+  /**
    * Clears static cache of product data.
    */
   window.commerceBackend.resetStaticStoragePostProductUpdate = function resetStaticStoragePostProductUpdate() {
@@ -1259,6 +1352,37 @@ window.commerceBackend = window.commerceBackend || {};
     staticDataStore.configurableColorData = {};
     staticDataStore.configurables = {};
     staticDataStore.labels = {};
+  }
+
+  /**
+   * Get the processed price for render.
+   *
+   * @param {Object} price
+   *   Price object.
+   *
+   * @returns {Object}
+   *   Processed price object which can be used for rendering via handlebars.
+   */
+  window.commerceBackend.getPriceForRender = function getPriceForRender(price) {
+    let currencyConfig = drupalSettings.alshaya_spc.currency_config;
+    // @todo Work on from/to prices for products.
+    const item = {
+      display_mode: 'simple',
+    };
+    item.discount = price.price_range.maximum_price.discount;
+    item.regular_price = {
+      value: price.price_range.maximum_price.regular_price.value,
+      currency_code: currencyConfig.currency_code,
+      currency_code_position: currencyConfig.currency_code_position,
+      decimal_points: currencyConfig.decimal_points,
+    };
+    item.final_price = {
+      value: price.price_range.maximum_price.final_price.value,
+      currency_code: currencyConfig.currency_code,
+      currency_code_position: currencyConfig.currency_code_position,
+      decimal_points: currencyConfig.decimal_points,
+    };
+    return item;
   }
 
   /**

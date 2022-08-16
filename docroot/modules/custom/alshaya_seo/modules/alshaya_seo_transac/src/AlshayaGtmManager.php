@@ -56,7 +56,7 @@ class AlshayaGtmManager {
    *
    * @var array
    */
-  const ROUTE_GTM_MAPPING = [
+  public const ROUTE_GTM_MAPPING = [
     'view.search.page' => 'search result page',
     'alshaya_master.home' => 'home page',
     'entity.taxonomy_term.canonical' => 'taxonomy term',
@@ -93,7 +93,7 @@ class AlshayaGtmManager {
   /**
    * Mapping between Drupal routes & GTM list types.
    */
-  const LIST_GTM_MAPPING = [
+  public const LIST_GTM_MAPPING = [
     'view.search.page' => 'Search Results Page',
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
     'entity.taxonomy_term.canonical:rcs_category' => 'PLP',
@@ -110,7 +110,7 @@ class AlshayaGtmManager {
   /**
    * GTM gobal variables that need to be available on all pages.
    */
-  const GTM_GLOBALS = [
+  public const GTM_GLOBALS = [
     'language',
     'pageType',
     'country',
@@ -120,10 +120,11 @@ class AlshayaGtmManager {
   /**
    * Html attributes mapped with GTM tags.
    */
-  const GTM_KEYS = [
+  public const GTM_KEYS = [
     'name' => 'gtm-name',
     'id' => 'gtm-main-sku',
     'price' => 'gtm-price',
+    'productOldPrice' => 'gtm-old-price',
     'brand' => 'gtm-brand',
     'category' => 'gtm-category',
     'variant' => 'gtm-product-sku',
@@ -367,6 +368,7 @@ class AlshayaGtmManager {
    *   Array of attributes to be exposed to GTM.
    */
   public function fetchProductGtmAttributes(Node $product, $view_mode, SKUInterface $child = NULL) {
+    $attributes = [];
     static $gtm_container = NULL;
 
     if (!isset($gtm_container)) {
@@ -378,12 +380,16 @@ class AlshayaGtmManager {
     }
 
     $skuId = $this->skuManager->getSkuForNode($product);
+    $product_terms = $this->fetchProductCategories($product);
+    $department_attributes = $this->fetchDepartmentAttributes($product_terms);
     $skuAttributes = $this->fetchSkuAtttributes($skuId, $child);
 
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
+    $attributes['gtm-department-name'] = $department_attributes['departmentName'];
+    $attributes['gtm-department-id'] = $department_attributes['departmentId'];
 
     $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
     $attributes = array_merge($attributes, $skuAttributes);
@@ -402,6 +408,7 @@ class AlshayaGtmManager {
    *   Array of attributes to be exposed to GTM.
    */
   public function fetchGiftGtmAttributes($view_mode, SKUInterface $sku) {
+    $attributes = [];
     static $gtm_container = NULL;
 
     if (!isset($gtm_container)) {
@@ -724,6 +731,7 @@ class AlshayaGtmManager {
    *   Array of processed attributes.
    */
   public function processAttributesForPdp(array $attributes) {
+    $processed_attributes = [];
     $processed_attributes['ecommerce'] = [];
     $processed_attributes['ecommerce']['currencyCode'] = $this->getGtmCurrency();
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
@@ -1037,10 +1045,22 @@ class AlshayaGtmManager {
       $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
     }
 
+    $additional_info = [];
+    // Fetch Additional Info.
+    foreach ($order['payment']['additional_information'] as $key => $value) {
+      if (is_object(json_decode($value))) {
+        $additional_info = json_decode($value);
+        break;
+      }
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
+      'egiftRedeemType' => !empty($additional_info) ? $additional_info->card_type : '',
+      'isAdvantageCard' => $order['coupon_code'] === 'advantage_card',
+      'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
@@ -1079,6 +1099,7 @@ class AlshayaGtmManager {
    * Helper function to fetch page-specific datalayer attributes.
    */
   public function fetchPageSpecificAttributes($page_type, $current_route) {
+    $terms = [];
     $page_dl_attributes = [];
     switch ($page_type) {
       case 'product detail page':
@@ -1197,7 +1218,7 @@ class AlshayaGtmManager {
             'productSKU' => $productSKU,
             'productStyleCode' => $productStyleCode,
             'cartTotalValue' => (float) $cart_totals['grand'],
-            'cartItemsCount' => count($cart_items),
+            'cartItemsCount' => is_countable($cart_items) ? count($cart_items) : 0,
           ];
 
           // Add cartItemsRR variable only when its not in the list of disabled
@@ -1304,7 +1325,7 @@ class AlshayaGtmManager {
           'productSKU' => $productSKU,
           'productStyleCode' => $productStyleCode,
           'cartTotalValue' => (float) $order['totals']['grand'],
-          'cartItemsCount' => count($orderItems),
+          'cartItemsCount' => is_countable($orderItems) ? count($orderItems) : 0,
         ];
 
         // We should always have store but a sanity check. Additional check to

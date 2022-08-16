@@ -1,0 +1,26 @@
+#my-accounts-hello-member {
+  .hello_member_happy_birthday_popup-content {
+    .hello-member-happy-birthday-popup {
+      .happy-birthday-popup-body {
+        .title {
+          font-family: $hnm-demibold;
+          color: $hello-member-bd-pop-title;
+        }
+
+        .description {
+          font-family: $hnm-regular;
+        }
+
+        .happy-birthday-voucher-details {
+          .avail-it {
+            font-family: $hnm-demibold;
+          }
+        }
+
+        .expiry {
+          font-family: $hnm-demibold;
+        }
+      }
+    }
+  }
+}

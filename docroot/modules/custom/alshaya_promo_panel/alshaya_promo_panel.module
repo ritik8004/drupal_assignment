@@ -13,6 +13,7 @@ use Drupal\Core\Url;
  * Implements hook_preprocess_block().
  */
 function alshaya_promo_panel_preprocess_block(&$variables) {
+  $element = [];
   switch ($variables['base_plugin_id']) {
     case 'block_content':
       $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();

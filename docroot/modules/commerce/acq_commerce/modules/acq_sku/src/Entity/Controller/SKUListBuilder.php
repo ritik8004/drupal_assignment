@@ -17,6 +17,7 @@ class SKUListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function render() {
+    $build = [];
     $build['table'] = parent::render();
     return $build;
   }
@@ -25,6 +26,7 @@ class SKUListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
+    $header = [];
     $header['id'] = $this->t('ID');
     $header['sku'] = $this->t('SKU');
     $header['title'] = $this->t('Name');
@@ -44,6 +46,9 @@ class SKUListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
+    $row = [];
+    $languages = [];
+    $mark = NULL;
     $row['id'] = $entity->id();
     $row['sku'] = $entity->getSKU();
 

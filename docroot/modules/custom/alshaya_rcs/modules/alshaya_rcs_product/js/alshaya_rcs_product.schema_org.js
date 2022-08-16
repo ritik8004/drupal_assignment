@@ -1,4 +1,4 @@
-(function ($, drupalSettings) {
+(function ($, Drupal, drupalSettings) {
   // Flag to check if metadata has already been added to the HTML.
   var schemaOrgMetadataAdded = false;
 
@@ -122,4 +122,4 @@
       $('head').append(schemaOrgProductScript);
     }
   }
-})(jQuery, drupalSettings);
+})(jQuery, Drupal, drupalSettings);

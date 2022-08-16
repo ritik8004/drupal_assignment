@@ -30,7 +30,7 @@ class CategorySyncResource extends ResourceBase {
    *
    * @const CATEGORY_TAXONOMY
    */
-  const CATEGORY_TAXONOMY = 'acq_product_category';
+  public const CATEGORY_TAXONOMY = 'acq_product_category';
 
   /**
    * Category sync helper.
@@ -86,6 +86,7 @@ class CategorySyncResource extends ResourceBase {
    *   HTTP Response.
    */
   public function post(array $data) {
+    $response = [];
     $this->categorySyncHelper->createItem($data['category_id']);
     $response['success'] = TRUE;
     return (new ModifiedResourceResponse($response));

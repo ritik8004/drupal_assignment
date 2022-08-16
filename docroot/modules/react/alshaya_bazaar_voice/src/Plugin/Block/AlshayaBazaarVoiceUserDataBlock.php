@@ -95,6 +95,7 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
    * {@inheritdoc}
    */
   public function build() {
+    $build = [];
     $user_details = [
       'userId' => alshaya_acm_customer_is_customer($this->currentUser, TRUE),
       'emailId' => $this->currentUser->getEmail(),

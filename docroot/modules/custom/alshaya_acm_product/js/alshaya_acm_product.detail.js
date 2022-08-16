@@ -192,6 +192,7 @@
                 variantSelected: selected,
                 title,
                 eligibleForReturn: variantInfo.eligibleForReturn,
+                price: variantInfo.finalPrice,
               }
             }
           });

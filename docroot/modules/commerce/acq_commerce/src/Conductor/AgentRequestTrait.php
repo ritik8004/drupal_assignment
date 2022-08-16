@@ -108,7 +108,7 @@ trait AgentRequestTrait {
       $result = $doReq($client, $reqOpts);
     }
     catch (\Exception $e) {
-      $class = get_class($e);
+      $class = $e::class;
 
       $mesg = sprintf(
         '%s: %s during request: (%d) - %s',

@@ -1,0 +1,20 @@
+{{! @see docroot/modules/custom/alshaya_main_menu/templates/alshaya-main-menu-level3.html.twig }}
+<ul class="menu__list menu--three__list">
+  <div class="level-three__wrapper">
+    <span class="back--link"><span class="menu__back"></span> <span>{{ name }}</span></span>
+    {{#each items as |menu_item|}}
+      {{ addClass 'level3_class' '' }}
+      {{#if menu_item.overridden_path}}
+        {{ addClass 'level3_class' 'overridden-link' }}
+      {{/if}}
+      <li class="menu__list-item menu--three__list-item {{ class }} {{ @root.level3_class }}">
+        <div class="menu__link-wrapper menu-two__link-wrapper">
+          <{{@menu_item.tag}} class="menu__link menu--three__link {{ class }} {{ @root.level3_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" {{{ menu_item.tag_attr }}}>{{ menu_item.name }}</{{@menu_item.tag}}>
+        </div>
+        {{#if menu_item.children }}
+          {{> main_menu_level4_partial name=name items=menu_item.children }}
+        {{/if}}
+      </li>
+    {{/each}}
+  </div>
+</ul>

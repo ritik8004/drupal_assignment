@@ -45,17 +45,11 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I wait 20 seconds
     And I should save the order details in the file
-    Then I should see "{order_confirm_text}"
-    Then I should see "{spc_returning_user_email}"
-    Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
-    Then I should see "{delivery_type_text}"
-    Then I should see "{cnc_delivery_type}"
-    Then I should see "{payment_type_text}"
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -68,8 +62,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
     And I should see "{subtotal}"
     Then I should see "{order_total}"
-    And I should see "{vat}"
-    And I should see "{continue_shopping_text}"
 
   @cc @cnc @language @mobile @checkout_com
   Scenario: As a returning customer, I should be able to checkout using click and collect with credit card
@@ -114,17 +106,11 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I wait 20 seconds
     And I should save the order details in the file
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_returning_user_email}"
-    Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
-    Then I should see "{language_delivery_type_text}"
-    Then I should see "{language_cnc_delivery_type}"
-    Then I should see "{language_payment_type_text}"
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -135,7 +121,4 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{language_subtotal}"
     Then I should see "{language_order_total}"
-    And I should see "{language_vat}"
-    And I should see "{language_continue_shopping_text}"

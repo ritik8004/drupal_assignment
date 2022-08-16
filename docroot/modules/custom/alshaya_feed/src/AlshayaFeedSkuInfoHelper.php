@@ -32,7 +32,7 @@ class AlshayaFeedSkuInfoHelper {
   /**
    * Granularity for price range.
    */
-  const PRICE_RANGE_GRANULARITY = 5;
+  public const PRICE_RANGE_GRANULARITY = 5;
 
   /**
    * Entity Type Manager service object.

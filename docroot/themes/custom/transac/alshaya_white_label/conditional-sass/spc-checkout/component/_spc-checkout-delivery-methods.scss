@@ -1,5 +1,8 @@
-.spc-checkout-delivery-methods {
-  .delivery-method {
+.spc-checkout-delivery-methods,
+.spc-hello-member-checkout-rewards-block {
+  .delivery-method,
+  .loyalty-option,
+  .linking-option {
     min-height: 3.875rem;
     background: $spc-checkout-delivery-method-bg;
     margin-bottom: 0.3125rem;

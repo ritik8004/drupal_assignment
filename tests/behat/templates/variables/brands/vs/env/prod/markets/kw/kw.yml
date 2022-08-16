@@ -4,3 +4,5 @@ variables:
   spc_product_listing_page: '/beauty/shop-mist-body/categories/body-mists/'
   spc_pdp_page: '/buy-fragrance-mists-amber-romance.html/'
   spc_basket_page: '/beauty/shop-mist-body/categories/body-mists/'
+  spc_plp_add_to_cart_single: '/beauty/shop-bags-accessories/bags/shoulder-bags/'
+  spc_plp_add_to_cart: '/victorias-secret/shop-lingerie/styles/slips/'

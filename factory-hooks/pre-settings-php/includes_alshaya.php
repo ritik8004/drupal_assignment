@@ -22,7 +22,7 @@ $settings['env'] = $env;
 if ($env_name === 'update') {
   $env_name = 'live';
 }
-elseif (substr($env_name, -2) === 'up') {
+elseif (str_ends_with($env_name, 'up')) {
   $env_name = substr($env_name, 0, -2);
 }
 
@@ -38,6 +38,7 @@ if ($settings['env'] === 'local') {
   $memory_limit = PHP_SAPI === 'cli' ? '512M' : '128M';
   ini_set('memory_limit', $memory_limit);
 
+  // phpcs:ignore
   global $host_site_code;
 
   if (!isset($host_site_code)) {
@@ -112,15 +113,14 @@ if (!empty($social_config[$env_name])) {
 }
 
 // Configure your hash salt here.
-// TODO: Security.
-// $settings['hash_salt'] = '';
-
+// @todo Security.
+// $settings['hash_salt'] = '';.
 // Shield.
-// TODO: Security.
+// @todo Security.
 $settings['alshaya_custom_shield_default_user'] = 'alshaya_shield';
 
 // ACM user.
-// TODO: Security.
+// @todo Security.
 $settings['alshaya_acm_user_username'] = 'alshaya_acm';
 $settings['alshaya_acm_user_email'] = 'noreply-acm@alshaya.com';
 
@@ -131,7 +131,7 @@ $settings['alshaya_mobile_app_user_username'] = 'alshaya_mobile_app';
 $settings['alshaya_mobile_app_user_email'] = 'noreply-mobile-app@alshaya.com';
 
 // Simple Oauth.
-// TODO: Security.
+// @todo Security.
 $soauth_key_dir = '';
 $soauth_key_name = 'alshaya_acm';
 if ($env == 'local') {
@@ -146,7 +146,7 @@ else {
 }
 
 if ($env == 'local' || $env == 'travis') {
-  // set default value for local and travis enviornment.
+  // Set default value for local and travis enviornment.
   // secret settings file. See `post-settings/zzz_overrides`.
   $settings['alshaya_custom_shield_default_pass'] = 'travis';
   $settings['alshaya_acm_user_password'] = 'travis';

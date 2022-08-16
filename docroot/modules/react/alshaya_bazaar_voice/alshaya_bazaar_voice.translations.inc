@@ -9,6 +9,7 @@
  * BazaarVoice translation.
  */
 function _alshaya_bazaar_voice_translations() {
+  $strings = [];
   $strings['v1'] = [
     'Write a review' => [
       'ar' => 'كتابة مراجعة',

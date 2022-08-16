@@ -6,9 +6,9 @@ use Drupal\Core\Form\FormBuilder;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * TODO: remove this class once https://www.drupal.org/node/766146 is fixed.
+ * Form class Acq Sku.
  *
- * Class AcqSkuFormBuilder.
+ * @todo remove this class once https://www.drupal.org/node/766146 is fixed.
  */
 class AcqSkuFormBuilder extends FormBuilder {
 
@@ -26,7 +26,7 @@ class AcqSkuFormBuilder extends FormBuilder {
       $sku = $build_info['args'][0];
 
       // Check if argument is of type SKU.
-      if (get_class($sku) == 'Drupal\acq_sku\Entity\SKU') {
+      if ($sku::class == 'Drupal\acq_sku\Entity\SKU') {
         // Set the base_form_id.
         $build_info['base_form_id'] = $form_id;
         $form_state->setBuildInfo($build_info);

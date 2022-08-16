@@ -1,0 +1,5 @@
+alshaya_dynamic_yield.alshaya_dynamic_yield_settings:
+  route_name: alshaya_dynamic_yield.settings_form
+  title: 'Alshaya Dynamic yield settings'
+  description: 'Update configurations related to dynamic yield feature'
+  parent: alshaya_master.alshaya_admin

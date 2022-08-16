@@ -18,7 +18,6 @@ $logger = \Drupal::logger('migrate_images_to_shared');
 
 $db = \Drupal::database();
 
-/* @var \Drupal\Core\File\FileSystem $file_system */
 $file_system = \Drupal::service('file_system');
 
 // Get count of skus products public files.
@@ -49,9 +48,10 @@ do {
   foreach ($result as $row) {
     $update = FALSE;
 
+    // @codingStandardsIgnoreLine
     $media = unserialize($row->attr_assets__value);
     foreach ($media as $index => $item) {
-      if (empty($item['drupal_uri']) || strpos($item['drupal_uri'], 'public://') === FALSE) {
+      if (empty($item['drupal_uri']) || !str_contains($item['drupal_uri'], 'public://')) {
         continue;
       }
 
@@ -108,7 +108,7 @@ do {
           '@destination' => $item['drupal_uri'],
         ]));
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         $logger->notice(dt('File no longer available, removing from asset. SKU: @sku; Source: @source; Destination: @destination', [
           '@sku' => $row->sku,
           '@source' => $source,
@@ -134,7 +134,7 @@ do {
     }
   }
 
-  $processed = $processed + count($result);
+  $processed = $processed + (is_countable($result) ? count($result) : 0);
   $logger->notice(dt('Processed @processed out of total @count.', [
     '@processed' => $processed,
     '@count' => $count,

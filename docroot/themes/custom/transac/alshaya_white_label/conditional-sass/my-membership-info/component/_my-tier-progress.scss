@@ -1,0 +1,75 @@
+.my-tier-progress {
+  display: flex;
+  align-items: center;
+  margin-top: rem(8);
+
+  html[lang=ar] & {
+    margin-top: rem(14);
+  }
+
+  .progress-label {
+    font-size: rem(11);
+    color: $hello-member-points-block-light-txt;
+    width: 14%;
+    text-align: $left;
+    text-transform: capitalize;
+
+    @include breakpoint($only-tablet) {
+      width: 24%;
+    }
+
+    &:last-of-type {
+      padding-#{$left}: rem(6);
+    }
+  }
+
+  .progress-wrapper {
+    width: 72%;
+
+    @include breakpoint($only-tablet) {
+      width: 67%;
+    }
+
+    .tier-bar-back {
+      background: $hello-member-points-block-tier-progress;
+      width: 100%;
+      height: rem(3);
+      position: relative;
+
+      ul {
+        position: absolute;
+        width: 100%;
+
+        @extend %list-clear;
+        @extend %list--horizontal;
+
+        li {
+          position: relative;
+
+          &::after {
+            content: '';
+            height: rem(8);
+            width: rem(8);
+            background: $hello-member-points-block-tier-progress;
+            border-radius: 50%;
+            display: block;
+            top: rem(-20);
+            #{$right}: 0;
+            position: absolute;
+            z-index: 1;
+
+            html[lang=ar] & {
+              top: rem(-16);
+            }
+          }
+        }
+      }
+
+      .tier-bar-front {
+        background: $hello-member-points-block-tier-progress-active;
+        position: absolute;
+        height: rem(3);
+      }
+    }
+  }
+}

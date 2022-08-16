@@ -215,7 +215,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
 
     foreach (array_chunk($data, $options['batch-size']) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'checkForCorruptStockIndex'],
+        [self::class, 'checkForCorruptStockIndex'],
         [$chunk],
       ];
     }
@@ -271,7 +271,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $skus = explode(',', $options['skus']);
     foreach (array_chunk($skus, $options['batch-size']) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'indexProritiesedSkus'],
+        [self::class, 'indexProritiesedSkus'],
         [$index_id, $chunk],
       ];
     }
@@ -356,9 +356,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
       return;
     }
 
-    $item_ids = array_map(function ($a) {
-      return str_replace('entity:node/', '', $a);
-    }, $item_ids);
+    $item_ids = array_map(fn($a) => str_replace('entity:node/', '', $a), $item_ids);
 
     $this->drupalLogger->warning(dt('Deleting items from index @items', [
       '@items' => json_encode($item_ids),
@@ -470,7 +468,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
 
           $query->execute();
         }
-        catch (\Exception $e) {
+        catch (\Exception) {
           // Do nothing.
         }
       }

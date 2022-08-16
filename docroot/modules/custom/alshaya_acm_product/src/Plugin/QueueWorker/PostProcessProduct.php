@@ -28,7 +28,7 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
   /**
    * Queue Name.
    */
-  const QUEUE_NAME = 'alshaya_post_process_product';
+  public const QUEUE_NAME = 'alshaya_post_process_product';
 
   /**
    * DY Product Delta Feed API Wrapper.

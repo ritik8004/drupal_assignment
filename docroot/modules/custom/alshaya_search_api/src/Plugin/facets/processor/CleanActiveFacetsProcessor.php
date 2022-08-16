@@ -109,7 +109,7 @@ class CleanActiveFacetsProcessor extends ProcessorPluginBase implements BuildPro
     $query = $this->currentRequest->query->get('f', []);
 
     foreach ($query as $q) {
-      if (strpos($q, $alias) === 0) {
+      if (str_starts_with($q, $alias)) {
         $params[] = $q;
       }
     }

@@ -90,6 +90,18 @@ body.wishlist-enabled {
       }
     }
   }
+
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .wishlist-minicart-sticky-wrapper {
+        @include breakpoint($desktop) {
+          top: 0;
+          transform: none;
+          height: rem(60);
+        }
+      }
+    }
+  }
 }
 
 .wishlist-icon {

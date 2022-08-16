@@ -122,7 +122,7 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
     $menu_title = $this->configuration['link_title'];
     $alignment_class = 'alshaya-options-' . $this->configuration['link_align'];
     $links = $this->alshayaOptionsService->getOptionsPagesLinks();
-    $menu_class = count($links) > 1 ? 'alshaya-multiple-links' : 'alshaya-single-link';
+    $menu_class = (is_countable($links) ? count($links) : 0) > 1 ? 'alshaya-multiple-links' : 'alshaya-single-link';
 
     return [
       '#theme' => 'alshaya_options_menu_link',

@@ -20,7 +20,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
  */
 class SkuImagesManagerPims extends SkuImagesManager {
   // Cache key used for product media.
-  const PRODUCT_MEDIA_CACHE_KEY = 'product_media_pims';
+  public const PRODUCT_MEDIA_CACHE_KEY = 'product_media_pims';
 
   /**
    * Inner service Sku images manager.
@@ -88,7 +88,7 @@ class SkuImagesManagerPims extends SkuImagesManager {
     $slide_style = $settings['slide_style'];
 
     if (!empty($media_item['file']) || !empty($media_item['pims_image']['url'])) {
-      $file_uri = (isset($media_item['file'])) ? $media_item['file'] : '';
+      $file_uri = $media_item['file'] ?? '';
 
       // For asset type attribute we need below changes e.g. hm and cos.
       if (!empty($media_item['pims_image']['url']) && isset($media_item['pims_image']['styles'])) {
@@ -176,6 +176,28 @@ class SkuImagesManagerPims extends SkuImagesManager {
 
     $static[$static_id] = $media;
     return $media;
+  }
+
+  /**
+   * Helper function to get swatch image url.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return false|string
+   *   Swatch image url or false.
+   */
+  public function getSwatchImageUrl(SKUInterface $sku) {
+    // Let's never download images here, we should always download when
+    // preparing gallery which is done before this.
+    $swatch_product_image = $sku->getThumbnail(FALSE);
+
+    // If we have image for the product.
+    if (!empty($swatch_product_image['file'])) {
+      return $swatch_product_image['file'];
+    }
+
+    return FALSE;
   }
 
 }

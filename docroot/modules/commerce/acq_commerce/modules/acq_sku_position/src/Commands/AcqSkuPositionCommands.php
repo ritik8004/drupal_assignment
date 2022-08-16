@@ -316,7 +316,7 @@ class AcqSkuPositionCommands extends DrushCommands {
         // Prepare list of valid nids from the response for deleting the invalid
         // ones.
         $processed_response_nids[] = $nids[$product_position['sku']];
-        $db_position_nid = isset($db_positions[$nids[$product_position['sku']]]) ? $db_positions[$nids[$product_position['sku']]] : NULL;
+        $db_position_nid = $db_positions[$nids[$product_position['sku']]] ?? NULL;
 
         // Skip merge query for this if the db position matches the one in
         // response.

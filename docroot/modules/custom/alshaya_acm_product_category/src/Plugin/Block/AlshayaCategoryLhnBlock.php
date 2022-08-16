@@ -29,7 +29,7 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
   /**
    * Config to enable/disable the lhn category tree.
    */
-  const ENABLE_DISABLE_CONFIG = 'alshaya_acm_product_category.settings';
+  public const ENABLE_DISABLE_CONFIG = 'alshaya_acm_product_category.settings';
 
   /**
    * Stores the configuration factory.

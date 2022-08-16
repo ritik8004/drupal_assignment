@@ -18,7 +18,7 @@ use Drupal\Core\Database\Connection;
  */
 class SKUFieldsManager {
 
-  const BASE_FIELD_ADDITIONS_CONFIG = 'acq_sku.base_field_additions';
+  public const BASE_FIELD_ADDITIONS_CONFIG = 'acq_sku.base_field_additions';
 
   /**
    * The Config Factory service.
@@ -110,7 +110,7 @@ class SKUFieldsManager {
 
     if ($fields) {
       $this->logger->info('Adding new fields %fields.', [
-        '%fields' => json_encode($fields),
+        '%fields' => json_encode($fields, JSON_THROW_ON_ERROR),
       ]);
 
       // Adding new fields.

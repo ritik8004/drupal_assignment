@@ -10,7 +10,7 @@ use Drupal\Core\Controller\ControllerBase;
  */
 class ExponeaController extends ControllerBase {
 
-  const EXPONEA_SETTINGS = 'exponea.settings';
+  public const EXPONEA_SETTINGS = 'exponea.settings';
 
   /**
    * Builds the response.

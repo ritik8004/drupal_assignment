@@ -16,7 +16,7 @@ class AlshayaSeoAliasUniquifier extends AliasUniquifier {
    * {@inheritdoc}
    */
   public function uniquify(&$alias, $source, $langcode) {
-    if (strpos($alias, '.html') === FALSE) {
+    if (!str_contains($alias, '.html')) {
       return parent::uniquify($alias, $source, $langcode);
     }
 

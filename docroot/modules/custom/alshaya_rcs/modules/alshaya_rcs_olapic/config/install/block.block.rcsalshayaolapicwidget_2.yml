@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_rcs_olapic
+    - system
+  theme:
+    - alshaya_white_label
+id: rcsalshayaolapicwidget_2
+theme: alshaya_white_label
+region: content
+weight: 35
+provider: null
+plugin: rcsolapicblock
+settings:
+  id: rcsolapicblock
+  label: 'Alshaya RCS Olapic Widget'
+  provider: alshaya_rcs_olapic
+  label_display: '0'
+  olapic_settings:
+  instance_id_en: aadcc92467540ada571de8b322ce5b99
+  instance_id_ar: cda944255ede48c1389c0ee3c66cf5c8
+  div_id: '2'
+  dynamic_product_id: ''
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      rcs_product: rcs_product

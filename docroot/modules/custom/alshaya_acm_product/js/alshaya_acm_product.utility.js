@@ -18,8 +18,10 @@ window.commerceBackend = window.commerceBackend || {};
    *   The sku value.
    * @param {string} parentSKU
    *   (optional) The parent sku value.
+   * @param {boolean} loadStyles
+   *   (optional) Indicates if styled product need to be loaded.
    */
-  window.commerceBackend.getProductDataFromBackend = function (sku, parentSKU = null) {
+  window.commerceBackend.getProductDataFromBackend = function (sku, parentSKU = null, loadStyles = true) {
     return $.ajax({
       url: Drupal.url('rest/v2/product/' + btoa(sku)) + '?context=cart',
       type: 'GET',

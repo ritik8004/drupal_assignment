@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://aeosa3-uat.factory.alshaya.com/en/'
+  url_base_uri: 'https://aeosa3-uat.factory.alshaya.com/en'
   collection_filter: ''
   sort_filter: 'sort by'
   rice_filter: 'Price'
@@ -8,6 +8,8 @@ variables:
   promotional_filter: ''
   size_filter: 'Size'
   filters: ''
+  spc_search_byname: 'AE'
+  spc_search_byID: 'AESA'
   language_collection_filter: ''
   language_sort_filter: 'رتب حسب'
   language_price_filter: 'السعر'

@@ -148,7 +148,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // Is it a category page?
     $category_prefix = $config->get('category.path_prefix');
 
-    if (strpos($rcs_path_to_check, '/' . $category_prefix) === 0) {
+    if (str_starts_with($rcs_path_to_check, '/' . $category_prefix)) {
       self::$entityType = 'category';
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
       self::$entityPathPrefix = $category_prefix;
@@ -167,7 +167,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // Is it a product page?
     $product_prefix = $config->get('product.path_prefix');
 
-    if (strpos($rcs_path_to_check, '/' . $product_prefix) === 0) {
+    if (str_starts_with($rcs_path_to_check, '/' . $product_prefix)) {
       self::$entityType = 'product';
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($product_prefix) + 1);
       self::$entityPathPrefix = $product_prefix;
@@ -186,7 +186,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // Is it a promotion page?
     $promotion_prefix = $config->get('promotion.path_prefix');
 
-    if (strpos($rcs_path_to_check, '/' . $promotion_prefix) === 0) {
+    if (str_starts_with($rcs_path_to_check, '/' . $promotion_prefix)) {
       self::$entityType = 'promotion';
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($promotion_prefix) + 1);
       self::$entityPathPrefix = $promotion_prefix;

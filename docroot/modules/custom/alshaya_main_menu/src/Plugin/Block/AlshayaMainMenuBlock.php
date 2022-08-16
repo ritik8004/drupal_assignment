@@ -186,7 +186,23 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
         $columns = [];
         $col = 0;
         foreach ($l2s['child'] as $l3s) {
-          // We don't show more columns than the max allowed limit.
+          // 2 below means L2 item + one blank line for spacing).
+          $l2_cost = 2 + (is_countable($l3s['child']) ? count($l3s['child']) : 0);
+
+          // If we are detecting a longer column than the expected size
+          // we iterate with new max.
+          if ($l2_cost > $ideal_max_col_length) {
+            $ideal_max_col_length = $l2_cost;
+            $reprocess = TRUE;
+            break;
+          }
+
+          if ($col_total + $l2_cost > $ideal_max_col_length) {
+            $col++;
+            $col_total = 0;
+          }
+
+          // If we have too many columns we try with more items per column.
           if ($col >= $max_nb_col) {
             $ideal_max_col_length++;
             break;

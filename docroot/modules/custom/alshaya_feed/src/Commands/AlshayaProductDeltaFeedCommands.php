@@ -195,6 +195,7 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
    * Helper function to verify if SKU is OOS on every market and delete the SKU.
    */
   private function processOosProductSku($sku, $dry_run, $domains) {
+    $is_sku_oos = NULL;
     foreach ($domains as $domain) {
       $current_domain = $domain[1];
 
@@ -291,13 +292,13 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
     $yaml_data = '';
     $start_reading = FALSE;
     foreach ($data as $line) {
-      if ((strpos($line, $acsf_site_code) > -1) && (strpos($line, ' ') !== 0)) {
+      if ((strpos($line, (string) $acsf_site_code) > -1) && (!str_starts_with($line, ' '))) {
         $start_reading = TRUE;
         $yaml_data .= $line . ':' . PHP_EOL;
         continue;
       }
       if ($start_reading) {
-        if (strpos($line, ' ') !== 0) {
+        if (!str_starts_with($line, ' ')) {
           break;
         }
         if (strpos($line, 'domains') > -1) {

@@ -1,0 +1,221 @@
+%benefit-details {
+  background: $hello-member-benefit-description-bg;
+  color: $hello-member-benefit-description-txt;
+  font-size: rem(14);
+  letter-spacing: 0.7px;
+  padding: rem(52) rem(125);
+
+  @include breakpoint($only-mobile) {
+    padding: rem(52) rem(24);
+  }
+}
+
+.my-benefit-page-wrapper {
+  .image-container {
+    img {
+      width: 100%;
+    }
+  }
+
+  .voucher-wrapper {
+    text-align: center;
+    padding: rem(72) 0;
+    font-family: $alshaya-bold;
+
+    .title {
+      font-size: rem(18);
+      margin-bottom: rem(24);
+      letter-spacing: 0.9px;
+    }
+
+    .info {
+      font-size: rem(28);
+      margin-bottom: rem(38);
+      letter-spacing: 1.4px;
+    }
+
+    .expiry {
+      font-size: rem(14);
+      color: $hello-member-benefit-expiry-txt;
+      letter-spacing: 0.7px;
+    }
+  }
+
+  .btn-wrapper {
+    display: flex;
+    justify-content: center;
+
+    @include breakpoint($only-mobile) {
+      flex-direction: column;
+    }
+
+    .qr-code-button,
+    .button-wide {
+      min-width: rem(315);
+      height: rem(48);
+      font-family: $alshaya-bold;
+      font-size: rem(16);
+      cursor: pointer;
+
+      @include breakpoint($only-mobile) {
+        min-width: 100%;
+      }
+
+      &.inactive {
+        cursor: not-allowed;
+        background-color: $hello-member-benefit-btn-inact-bg;
+      }
+    }
+
+    .qr-code-button {
+      margin-#{$right}: rem(24);
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: rem(32);
+      }
+    }
+
+    .hello-member-benefit-status-info {
+      position: fixed;
+      #{$right}: 0;
+      top: 40%;
+      background-color: $hello-member-benefit-cart-icon;
+      transition: transform 300ms cubic-bezier(0.4, 0, 1, 1);
+      transform: translateX(100%);
+      display: flex;
+      flex-direction: row;
+      text-align: $left;
+      padding: rem(32) rem(24);
+      margin-#{$right}: rem(16);
+      visibility: hidden;
+      width: rem(400);
+      flex-wrap: wrap;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-#{$right}: rem(0);
+      }
+
+      html[lang=ar] & {
+        transform: translateX(-100%);
+      }
+
+      &-active {
+        transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
+        transform: translateX(0) !important;
+        visibility: visible;
+      }
+
+      #status-msg {
+        font-family: $alshaya-bold;
+        line-height: 1.6;
+        padding-bottom: rem(8);
+      }
+
+      #disc-title {
+        width: 85%;
+        font-size: rem(16);
+        display: flex;
+        line-height: 2;
+      }
+
+      .status-icon {
+        @include icon(check) {
+          color: $hello-member-opt-success;
+          position: relative;
+          font-size: rem(32);
+          padding-#{$right}: rem(8);
+        }
+      }
+
+      .error {
+        font-size: rem(14);
+        color: $hello-member-promo-available-notification-icon;
+        padding-bottom: rem(16);
+      }
+    }
+  }
+
+  .benefit-description {
+    @extend %benefit-details;
+
+    padding-bottom: 0;
+    margin-top: rem(44);
+
+    h3 {
+      letter-spacing: 0.9px;
+      font-size: rem(18);
+      color: $hello-member-benefit-description-heading-txt;
+    }
+
+    ul {
+      padding-#{$left}: rem(18);
+    }
+
+    p {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    div {
+      background: $hello-member-benefit-description-bg !important;
+      color: $hello-member-benefit-description-txt !important;
+      line-height: 1.6;
+    }
+
+    @include breakpoint($upto-desktop) {
+      body,
+      html[lang=ar] & body {
+        margin-top: 0 !important;
+      }
+    }
+  }
+
+  .expire-on {
+    @extend %benefit-details;
+
+    padding-top: rem(20);
+
+    h3 {
+      margin: 0;
+      color: $hello-member-benefit-description-heading-txt;
+      font-size: rem(16);
+      letter-spacing: 0.8px;
+
+      html[lang=ar] & {
+        margin-bottom: rem(8);
+      }
+    }
+  }
+
+  .benefit-Tnc {
+    padding: rem(52) rem(125);
+    text-align: center;
+    color: $hello-member-benefit-Tnc-txt;
+
+    @include breakpoint($only-mobile) {
+      padding: rem(52) rem(24);
+    }
+  }
+}
+
+.hello-member-benefit-page {
+  .c-user--node {
+    &.l-two--sf {
+      main {
+        width: 100%;
+        max-width: rem(890);
+        float: none;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+.qr-code-block {
+  .img-container {
+    width: rem(99);
+    padding: rem(10);
+  }
+}

@@ -1,4 +1,4 @@
-@javascript @auth @Wishlist @homeDelivery
+@javascript @auth @Wishlist @homeDelivery @bpaeprod @bpkwprod @bpsaprod @hmkwprod @hmaeprod @coskwprod @cosaeprod @cossaprod @vskwprod @vssaprod @vsaeprod @flkwprod @flsaprod @flaeprod @mujiaeprod @mujikwprod @tbskwprod @bbwaeprod @bbwkwprod @bbwsaprod @mcaeprod @mckwprod @mcsaprod
 Feature: SPC Checkout Wishlist feature for Authenticated user
 
   Background:

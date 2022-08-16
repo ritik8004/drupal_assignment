@@ -95,7 +95,7 @@ class AlshayaSpcCommands extends DrushCommands {
       $type = $data['payment_type'] ?? '';
       if (empty($type)) {
         $type = 'knet';
-        if (strpos($payment['unique_id'], 'pay_tok_') !== FALSE) {
+        if (str_contains($payment['unique_id'], 'pay_tok_')) {
           $type = 'checkout_com';
         }
       }
@@ -274,6 +274,7 @@ class AlshayaSpcCommands extends DrushCommands {
    * @throws \Exception
    */
   protected function placeOrder(array $update, string $cart_id, $langcode) {
+    $request_options = [];
     $request_options['query']['lang'] = $langcode;
 
     // Add a custom header to ensure Middleware allows this request

@@ -89,6 +89,7 @@ function alshaya_acm_product_category_views_pre_view(ViewExecutable $view, $disp
 
   if ($view->id() === 'product_category_level_3') {
     // We want to allow creation creation of page upto 3 level.
+    $handler = [];
     if ($display_id === 'entity_reference_1') {
       $handler = $view->getHandler($display_id, 'filter', 'depth_level');
       $handler['operator'] = '<=';
@@ -126,7 +127,9 @@ function alshaya_acm_product_category_views_pre_view(ViewExecutable $view, $disp
  */
 function template_preprocess_alshaya_shop_by(&$variables) {
   // Split/Chunk the array into two parts.
-  $variables['term_tree'] = array_chunk($variables['term_tree'], ceil(count($variables['term_tree']) / 2));
+  if ($variables['term_tree']) {
+    $variables['term_tree'] = array_chunk($variables['term_tree'], ceil((is_countable($variables['term_tree']) ? count($variables['term_tree']) : 0) / 2));
+  }
 }
 
 /**
@@ -443,7 +446,7 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
     try {
       $term->get('field_select_sub_categories_plp')->setValue($selected_subcategories);
     }
-    catch (Exception $e) {
+    catch (Exception) {
       // Do nothing.
     }
   }
@@ -466,7 +469,7 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
       try {
         $term->get('field_select_sub_categories_plp')->setValue($selected_subcategories);
       }
-      catch (Exception $e) {
+      catch (Exception) {
         // Do nothing.
       }
       $parent_term->save();
@@ -569,11 +572,9 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
       $child_terms = array_flip(array_keys(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term->id())));
 
       try {
-        uksort($result_row, function ($a, $b) use ($child_terms) {
-          return $child_terms[$a] - $child_terms[$b] ?: $a - $b;
-        });
+        uksort($result_row, fn($a, $b) => $child_terms[$a] - $child_terms[$b] ?: $a - $b);
       }
-      catch (Exception $e) {
+      catch (Exception) {
         // Do nothing.
       }
 
@@ -630,7 +631,7 @@ function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $conte
     // Remove shop- as prefix from url if true.
     $is_remove_shop_prefix = $term->get('field_remove_shop_prefix')->getString();
     if ($is_remove_shop_prefix) {
-      if (strpos($alias, 'shop-') !== FALSE) {
+      if (str_contains($alias, 'shop-')) {
         $alias = str_replace('shop-', '', $alias);
       }
       return;
