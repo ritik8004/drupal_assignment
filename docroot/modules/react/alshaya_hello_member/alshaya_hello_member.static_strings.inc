@@ -156,7 +156,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'email_address',
-      'value' => t('E-mail address', [], ['context' => 'hello_member']),
+      'value' => t('Email address', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'aura_partially_enrolled_message',
@@ -181,6 +181,10 @@ function _alshaya_hello_member_aura_static_strings() {
     [
       'key' => 'redeem_points_button',
       'value' => t('Redeem Points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'enter_otp',
+      'value' => t('Enter OTP', [], ['context' => 'hello_member']),
     ],
   ];
 }
