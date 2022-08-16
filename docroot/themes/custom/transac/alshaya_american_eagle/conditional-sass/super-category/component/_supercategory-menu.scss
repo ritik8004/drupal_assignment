@@ -17,11 +17,99 @@
     }
   }
 
+  &.frontpage {
+    header.c-header {
+      .block-alshaya-react-mini-cart {
+        .acq-mini-cart {
+          .cart-link {
+            @include breakpoint($only-mobile) {
+              margin-top: rem(12);
+            }
+
+            @include breakpoint($only-tablet) {
+              margin-top: rem(3);
+            }
+          }
+        }
+      }
+    }
+
+    .c-menu-primary {
+      .store {
+        @include breakpoint($only-mobile) {
+          top: rem(16);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(14);
+        }
+      }
+    }
+
+    &.wishlist-enabled {
+      #wishlist-header-wrapper {
+        @include breakpoint($only-mobile) {
+          top: rem(71);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(64);
+        }
+      }
+    }
+  }
+
   &:not(.frontpage) {
     .branding__menu {
       #block-alshayareactcartminicartblock {
         @include breakpoint($upto-desktop) {
           top: rem(65);
+        }
+      }
+    }
+
+    header.c-header {
+      .block-alshaya-react-mini-cart {
+        .acq-mini-cart {
+          .cart-link {
+            @include breakpoint($only-mobile) {
+              margin-top: rem(14);
+            }
+
+            @include breakpoint($only-tablet) {
+              margin-top: rem(-3);
+            }
+          }
+        }
+      }
+    }
+
+    .c-menu-primary {
+      .mobile--search {
+        @include breakpoint($only-mobile) {
+          top: rem(30);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(14);
+        }
+      }
+
+      .store {
+        @include breakpoint($only-tablet) {
+          top: rem(14);
+        }
+      }
+    }
+
+    &.wishlist-enabled {
+      #wishlist-header-wrapper {
+        @include breakpoint($only-mobile) {
+          top: rem(79);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(64);
         }
       }
     }
