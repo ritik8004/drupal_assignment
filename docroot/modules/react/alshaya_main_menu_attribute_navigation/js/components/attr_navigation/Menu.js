@@ -11,7 +11,7 @@ const Menu = (props) => {
         {items.map((item) => (
           <li key={item.label} className="shop-by-shoe-size__list-item">
             <a
-              href={Drupal.url('shop-men/--size_rest-one_size_0')}
+              href={Drupal.url('shop-men/--size_shoe_eu-42')}
             >
               {item.label}
             </a>

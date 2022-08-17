@@ -34,6 +34,7 @@ const AttrNavigation = (props) => {
         attribute={`attr_${attr}.en`}
         facetOrdering
         element={element}
+        limit="1000"
       />
     </InstantSearch>
   );

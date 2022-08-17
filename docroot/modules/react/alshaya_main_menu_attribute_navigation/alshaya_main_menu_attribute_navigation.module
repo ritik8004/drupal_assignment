@@ -8,38 +8,6 @@
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 
 /**
- * Implements hook_alshaya_acm_product_category_tree_data_alter().
- */
-function alshaya_main_menu_attribute_navigation_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
-  if ($term->depth_level == '1') {
-    $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
-    $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $term->tid);
-
-    $shop_by_shoe_menu = [
-      'label' => t('Show by shoe size'),
-      'id' => 'shop-by-shoe-size' . $term->tid,
-      'path' => '#',
-      'class' => ['shop-by-shoe-size'],
-      'display_in_desktop' => $term->display_in_desktop,
-      'display_in_mobile' => FALSE,
-      // The actual depth of the term. For super category feature enabled,
-      // the depth may be wrong according to main menu. which can be
-      // processed when required.
-      //
-      // @see alshaya_main_menu_alshaya_main_menu_links_alter().
-      'depth' => (int) $term->depth_level + 1,
-      'app_navigation_link' => FALSE,
-      'data_nav_attr' => 'size_shoe_eu',
-      'data_hierarchy' => $term_hierarchy_data['hierarchy'] ?? '',
-      'data_level' => $term_hierarchy_data['level'] ?? '',
-      'data_rule_context' => $term_hierarchy_data['ruleContext'] ? implode(',', $term_hierarchy_data['ruleContext']) : '',
-      'data_category_field' => $term_hierarchy_data['category_field'] ?? '',
-    ];
-    array_unshift($data[$term->tid]['child'], $shop_by_shoe_menu);
-  }
-}
-
-/**
  * Implements hook_page_attachments_alter().
  */
 function alshaya_main_menu_attribute_navigation_page_attachments_alter(&$page) {
@@ -48,4 +16,54 @@ function alshaya_main_menu_attribute_navigation_page_attachments_alter(&$page) {
   // Get the PLP algolia index from config.
   $algoliaConfig = Drupal::service('alshaya_algoila_react.alshaya_algolia_react_config')->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE, AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE);
   $page['#attached']['drupalSettings']['man']['indexName'] = $algoliaConfig[AlshayaAlgoliaReactPLP::PAGE_TYPE]['indexName'];
+}
+
+/**
+ * Implements hook_query_TAG_NAME_alter().
+ */
+function alshaya_main_menu_attribute_navigation_query_product_category_child_terms_alter(AlterableInterface $query) {
+  // Add is_underlined field.
+  $query->leftJoin('taxonomy_term__field_shopby_filter_shoesize', 'shopby_filter_shoesize', 'shopby_filter_shoesize.entity_id=tfd.tid');
+  $query->addField('shopby_filter_shoesize', 'field_shopby_filter_shoesize_value', 'shopby_filter_shoesize');
+}
+
+/**
+ * Implements hook_acq_sku_commerce_category_alter().
+ */
+function alshaya_main_menu_attribute_navigation_acq_sku_commerce_category_alter(TermInterface $term, array $category, $parent) {
+  if (!empty($category['custom_attributes'])) {
+    // Add the new attribute field for show_filters_shoe_size menu items.
+    if (isset($category['custom_attributes']['show_filters_shoe_size'])) {
+      $term->get('field_shopby_filter_shoesize')->setValue($category['custom_attributes']['show_filters_shoe_size']['value']);
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_category_tree_data_alter().
+ */
+function alshaya_main_menu_attribute_navigation_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+  /** @var \Drupal\taxonomy\TermInterface $termObj **/
+  $termObj = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($term->tid);
+
+  // Check if we have shop by shoe size filter field available.
+  if ($termObj->hasField('field_shopby_filter_shoesize')) {
+    $shopby_filter_shoesize = (bool) $termObj->get('field_shopby_filter_shoesize')->getString();
+    // If field value is true, we will add necessary parameters on this menu
+    // item itself for React component to utilise and display the filters data.
+    if ($shopby_filter_shoesize) {
+      // Get the hierarchy data from the parent term ID.
+      $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
+      $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $term->parent_target_id);
+
+      // Pass the data_nav_attr for element identification that will be used to
+      // show filter menu items.
+      $data[$term->tid]['data_nav_attr'] = 'size_shoe_eu';
+
+      // Both these data)hierarchy and data_rule_context will be used in React
+      // component to fetch available filter options in given context.
+      $data[$term->tid]['data_hierarchy'] = $term_hierarchy_data['hierarchy'] ?? '';
+      $data[$term->tid]['data_rule_context'] = $term_hierarchy_data['ruleContext'] ? implode(',', $term_hierarchy_data['ruleContext']) : '';
+    }
+  }
 }

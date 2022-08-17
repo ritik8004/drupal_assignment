@@ -6,5 +6,5 @@ alshaya_main_menu_attribute_navigation.settings:
       type: boolean
       label: 'Enable / disable attribute navigations.'
     attributes:
-      type: array
+      type: string
       label: 'Attributes (Algolia Facets) name of which navigation to display.'

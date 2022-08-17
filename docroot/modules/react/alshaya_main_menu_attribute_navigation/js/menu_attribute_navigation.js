@@ -20,14 +20,6 @@ const renderAttributeNavigation = () => {
   });
 };
 
-/**
- * Method to handle the modal on load event and render component.
- */
-const handleOnLoad = () => {
-  renderAttributeNavigation();
-};
 
-
-// Add modal load event listener to render new
-// sofa and sectional form whenever modal opens.
-window.addEventListener('load', handleOnLoad);
+// Add modal load event listener to render shop by filters menu item.
+window.addEventListener('load', renderAttributeNavigation);
