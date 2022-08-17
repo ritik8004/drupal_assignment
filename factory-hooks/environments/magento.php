@@ -41,6 +41,7 @@ $magentos = [
   ],
   'dh_test' => [
     'url' => 'https://deb-test.store.alshaya.com',
+    'algolia_env' => 'dh_qa',
     'magento_secrets' => [
       'consumer_key' => 'akr2k4q7g3eipb6fm7loh07zt2zi3xrk',
       'consumer_secret' => '60vh9v008i8z6be31mt7wp8bg9jyfe2j',
