@@ -7,6 +7,7 @@ import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import { getApiEndpoint } from '../../../backend/v2/utility';
 import logger from '../../../../../js/utilities/logger';
 import Loading from '../../../../../js/utilities/loading';
+import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
 
 class PaymentMethodCodMobileVerification extends React.Component {
   constructor(props) {
@@ -15,12 +16,12 @@ class PaymentMethodCodMobileVerification extends React.Component {
       otp: '',
       // Flag used to show loader on send otp request.
       wait: true,
-      // Set flag when user validates otp or cart has COD otp verified.
-      otpVerified: false,
-      // Set error class when user enter incorrect otp.
-      otpErrorClass: '',
-      // Set error message when user enter incorrect otp.
-      otpErrorMessage: '',
+      // Flag to validate otp.
+      // 0 when otp is not validated.
+      // 1 when otp is verified and valid.
+      // 2 when otp is verified and invalid and show invalid otp message.
+      // 3 when error on otp validate request and show default error message.
+      otpVerified: 0,
     };
   }
 
@@ -79,8 +80,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
    */
   handleChange = (otp) => this.setState({
     otp,
-    otpErrorClass: '',
-    otpErrorMessage: '',
+    otpVerified: 0,
   });
 
   handleOtpSubmit = (e) => {
@@ -111,20 +111,27 @@ class PaymentMethodCodMobileVerification extends React.Component {
       .then((response) => {
         if (hasValue(response) && !response.data) {
           this.setState({
-            otpErrorClass: 'error',
-            otpErrorMessage: Drupal.t('Wrong OTP'),
+            otpVerified: 2,
           });
-        }
 
-        if (hasValue(response) && response.data) {
-          this.setState({
-            otpVerified: true,
-          });
+          return;
         }
 
         if (hasValue(response.data.error)) {
           logger.error('Error while validating otp for COD payment mobile verification. Response: @response', {
             '@response': JSON.stringify(response.data),
+          });
+          // Set to 3 to show default error message.
+          this.setState({
+            otpVerified: 3,
+          });
+
+          return;
+        }
+
+        if (hasValue(response) && response.data) {
+          this.setState({
+            otpVerified: 1,
           });
         }
       })
@@ -140,7 +147,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
   render() {
     const {
-      otp, wait, otpErrorClass, otpErrorMessage, otpVerified,
+      otp, wait, otpVerified,
     } = this.state;
     const { shippingMobileNumber, otpLength } = this.props;
 
@@ -156,8 +163,16 @@ class PaymentMethodCodMobileVerification extends React.Component {
       );
     }
 
-    if (otpVerified) {
-      // @todo Implement verified otp text message.
+    if (otpVerified === 1) {
+      // @todo Implement verified otp component.
+    }
+
+    let otpErrorMessage = '';
+    if (otpVerified === 2) {
+      otpErrorMessage = Drupal.t('Wrong OTP', {}, { context: 'cod_mobile_verification' });
+    }
+    if (otpVerified === 3) {
+      otpErrorMessage = getDefaultErrorMessage();
     }
 
     return (
@@ -172,9 +187,11 @@ class PaymentMethodCodMobileVerification extends React.Component {
             onChange={this.handleChange}
             numInputs={otpLength}
             isInputNum
-            className={`cod-mobile-otp__field ${otpErrorClass}`}
+            className={(otpVerified === 2 || otpVerified === 3) ? 'cod-mobile-otp__field error' : 'cod-mobile-otp__field'}
           />
-          <div id="otp-error" className="error">{ otpErrorMessage }</div>
+          <div id="otp-error" className="error">
+            { otpErrorMessage }
+          </div>
           <div className="cod-mobile-otp__controls">
             <span className="cod-mobile-otp__resend">
               {Drupal.t('Didn\'t receive the code?', {}, { context: 'cod_mobile_verification' })}
