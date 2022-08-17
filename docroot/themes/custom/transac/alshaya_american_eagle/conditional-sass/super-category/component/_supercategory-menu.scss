@@ -17,8 +17,25 @@
     }
   }
 
-  &.frontpage {
-    @include breakpoint($only-mobile) {
+  &:not(.frontpage) {
+    .branding__menu {
+      #block-alshayareactcartminicartblock {
+        @include breakpoint($upto-desktop) {
+          top: rem(65);
+        }
+      }
+    }
+  }
+
+  #mini-cart-wrapper,
+  .static-minicart-wrapper {
+    @include breakpoint($only-tablet) {
+      margin-top: rem(10);
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    &.frontpage {
       header.c-header {
         .block-alshaya-react-mini-cart {
           .acq-mini-cart {
@@ -42,41 +59,7 @@
       }
     }
 
-    @include breakpoint($only-tablet) {
-      header.c-header {
-        .block-alshaya-react-mini-cart {
-          .acq-mini-cart {
-            .cart-link {
-              margin-top: rem(3);
-            }
-          }
-        }
-      }
-
-      .c-menu-primary {
-        .store {
-          top: rem(14);
-        }
-      }
-
-      &.wishlist-enabled {
-        #wishlist-header-wrapper {
-          top: rem(64);
-        }
-      }
-    }
-  }
-
-  &:not(.frontpage) {
-    .branding__menu {
-      #block-alshayareactcartminicartblock {
-        @include breakpoint($upto-desktop) {
-          top: rem(65);
-        }
-      }
-    }
-
-    @include breakpoint($only-mobile) {
+    &:not(.frontpage) {
       header.c-header {
         .block-alshaya-react-mini-cart {
           .acq-mini-cart {
@@ -99,8 +82,34 @@
         }
       }
     }
+  }
 
-    @include breakpoint($only-tablet) {
+  @include breakpoint($only-tablet) {
+    &.frontpage {
+      header.c-header {
+        .block-alshaya-react-mini-cart {
+          .acq-mini-cart {
+            .cart-link {
+              margin-top: rem(3);
+            }
+          }
+        }
+      }
+
+      .c-menu-primary {
+        .store {
+          top: rem(14);
+        }
+      }
+
+      &.wishlist-enabled {
+        #wishlist-header-wrapper {
+          top: rem(64);
+        }
+      }
+    }
+
+    &:not(.frontpage) {
       header.c-header {
         .block-alshaya-react-mini-cart {
           .acq-mini-cart {
@@ -126,13 +135,6 @@
           top: rem(64);
         }
       }
-    }
-  }
-
-  #mini-cart-wrapper,
-  .static-minicart-wrapper {
-    @include breakpoint($only-tablet) {
-      margin-top: rem(10);
     }
   }
 }
