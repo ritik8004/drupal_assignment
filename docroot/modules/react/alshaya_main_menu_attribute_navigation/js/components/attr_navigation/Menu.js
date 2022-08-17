@@ -6,10 +6,10 @@ const Menu = (props) => {
 
   return (
     <>
-      <div>{element.dataset.label}</div>
-      <ul>
+      <div className="shop-by-shoe-size__label">{element.dataset.label}</div>
+      <ul className="shop-by-shoe-size__list">
         {items.map((item) => (
-          <li key={item.label}>
+          <li key={item.label} className="shop-by-shoe-size__list-item">
             <a
               href={Drupal.url('shop-men/--size_rest-one_size_0')}
             >
