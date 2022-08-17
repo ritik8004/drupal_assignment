@@ -32,3 +32,12 @@ function alshaya_bnpl_alshaya_spc_cart_build_alter(array &$build) {
   $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
   $bnplWidgetHelper->getBnplBuild($build, 'cart');
 }
+
+/**
+ * Implements hook_preprocess_template().
+ */
+function alshaya_bnpl_preprocess_alshaya_magazine(&$vars) {
+  /** @var \Drupal\alshaya_bnpl\AlshayaBnplWidgetHelper $bnplWidgetHelper */
+  $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
+  $bnplWidgetHelper->getBnplBuild($vars, 'pdp');
+}
