@@ -857,3 +857,8 @@ hello-member-become-member:
   css:
     theme:
       css/conditional-sass/hello-member-become-member/hello-member-become-member.ltr.css: {}
+
+megamenu-shop-by-filter:
+  css:
+    theme: 
+      css/conditional-sass/megamenu-shop-by-filter/megamenu-shop-by-filter.ltr.css: {}
