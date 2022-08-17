@@ -8,6 +8,7 @@ on:
       - uat
       - master
       - develop-hello-member
+      - qa-feature-fl-menu
   create:
     tags:
 
