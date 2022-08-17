@@ -14,6 +14,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
+use Drupal\Component\Utility\Html;
 
 /**
  * Implements hook_form_alter().
@@ -369,6 +370,18 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
         }
         $vars['express_delivery_class']['#markup'] = $delivery_options['express_delivery_applicable'] === TRUE ? 'active' : 'in-active';
       }
+
+      // Pass the SKU product page title.
+      $node = alshaya_acm_product_get_display_node($parent_sku);
+      $vars['product_title'] = $node->getTitle($parent_sku);
+
+      // Pass the product price block.
+      $priceHelper = _alshaya_acm_product_get_price_helper();
+      $vars['price_block'] = $priceHelper->getPriceBlockForSku($parent_sku, []);
+
+      // Pass the product block identifier class.
+      $sku_identifier = strtolower(Html::cleanCssIdentifier($parent_sku->getSku()));
+      $vars['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
     }
   }
 }
