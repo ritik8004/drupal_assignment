@@ -419,7 +419,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'ادخل بيانات حساب أورا',
         'context' => 'hello_member',
       ],
-      'Loyalty' => [
+      'loyalty' => [
         'ar' => 'الولاء',
         'context' => 'hello_member',
       ],
