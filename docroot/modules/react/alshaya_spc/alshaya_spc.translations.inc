@@ -615,6 +615,11 @@ function _alshaya_spc_translations() {
       'ar' => 'Please update mobile number',
       'context' => 'cod_mobile_verification',
     ],
+    'Wrong OTP' => [
+      // @todo Arabic translation to be updated.
+      'ar' => 'Wrong OTP',
+      'context' => 'cod_mobile_verification',
+    ],
   ];
 
   return $strings;
