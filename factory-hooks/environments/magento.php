@@ -42,10 +42,10 @@ $magentos = [
   'dh_test' => [
     'url' => 'https://deb-test.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => '',
-      'consumer_secret' => '',
-      'access_token' => '',
-      'access_token_secret' => '',
+      'consumer_key' => 'akr2k4q7g3eipb6fm7loh07zt2zi3xrk',
+      'consumer_secret' => '60vh9v008i8z6be31mt7wp8bg9jyfe2j',
+      'access_token' => '3brtd8fmksxo52u1r758vcx9gpxdafq4',
+      'access_token_secret' => 'iekq1ibgrdlalh5devb73ue7ei48v57i',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 40],
