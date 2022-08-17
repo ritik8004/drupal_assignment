@@ -297,6 +297,10 @@ export default class CartPromoBlock extends React.Component {
           <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied, inStock); }}>{Drupal.t('Remove')}</button>
           <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock, productInfo); }}>{buttonText}</button>
           <div id="promo-message" />
+          {/* Displaying success message below the promo text field only when exclusive
+           coupon gets applied in basket. */}
+          {hasExclusiveCoupon === true
+            && <div id="exclusive-promo-message">{Drupal.t('Promotion code is applied on the original price. All other promotions were removed.')}</div>}
           {/* Displaying dynamic promotion code only when no exclusive
            coupon gets applied in basket. */}
           {hasExclusiveCoupon !== true
