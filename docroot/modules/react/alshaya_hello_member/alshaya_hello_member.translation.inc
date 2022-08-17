@@ -439,6 +439,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'إجمالي النقاط التي ستحصل عليها من عملية الشراء هذه سيتم عرضها في صفحة تأكيد  الطلبية بعد استقطاع الخصومات والضرائب',
         'context' => 'hello_member',
       ],
+      'Discounts & Vouchers : @DiscountVoucher' => [
+        'ar' => 'خصومات وقسائم : @DiscountVoucher',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
