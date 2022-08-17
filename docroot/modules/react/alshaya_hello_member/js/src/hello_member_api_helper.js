@@ -249,7 +249,7 @@ const setHelloMemberLoyaltyCard = async (identifierNo, quoteId) => {
         return getErrorResponse(message, 500);
       }
       return {
-        status: response,
+        status: response.data,
       };
     });
 };
