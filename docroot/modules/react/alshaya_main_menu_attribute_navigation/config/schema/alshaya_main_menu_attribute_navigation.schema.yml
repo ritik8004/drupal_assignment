@@ -1,0 +1,10 @@
+alshaya_main_menu_attribute_navigation.settings:
+  type: config_object
+  label: 'Alshaya main menu attributes navigations settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Enable / disable attribute navigations.'
+    attributes:
+      type: array
+      label: 'Attributes (Algolia Facets) name of which navigation to display.'

@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
+
+/**
+ * Implements hook_alshaya_acm_product_category_tree_data_alter().
+ */
+function alshaya_main_menu_attribute_navigation_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+  if ($term->depth_level == '1') {
+    $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
+    $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $term->tid);
+
+    $shop_by_shoe_menu = [
+      'label' => t('Show by shoe size'),
+      'id' => 'shop-by-shoe-size' . $term->tid,
+      'path' => '#',
+      'class' => ['shop-by-shoe-size'],
+      'display_in_desktop' => $term->display_in_desktop,
+      'display_in_mobile' => FALSE,
+      // The actual depth of the term. For super category feature enabled,
+      // the depth may be wrong according to main menu. which can be
+      // processed when required.
+      //
+      // @see alshaya_main_menu_alshaya_main_menu_links_alter().
+      'depth' => (int) $term->depth_level + 1,
+      'app_navigation_link' => FALSE,
+      'data_nav_attr' => 'size_shoe_eu',
+      'data_hierarchy' => $term_hierarchy_data['hierarchy'] ?? '',
+      'data_level' => $term_hierarchy_data['level'] ?? '',
+      'data_rule_context' => $term_hierarchy_data['ruleContext'] ? implode(',', $term_hierarchy_data['ruleContext']) : '',
+      'data_category_field' => $term_hierarchy_data['category_field'] ?? '',
+    ];
+    array_unshift($data[$term->tid]['child'], $shop_by_shoe_menu);
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_main_menu_attribute_navigation_page_attachments_alter(&$page) {
+  $page['#attached']['library'][] = 'alshaya_main_menu_attribute_navigation/menu_attribute_navigation';
+
+  // Get the PLP algolia index from config.
+  $algoliaConfig = Drupal::service('alshaya_algoila_react.alshaya_algolia_react_config')->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE, AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE);
+  $page['#attached']['drupalSettings']['man']['indexName'] = $algoliaConfig[AlshayaAlgoliaReactPLP::PAGE_TYPE]['indexName'];
+}
