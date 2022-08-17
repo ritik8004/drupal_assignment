@@ -391,7 +391,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'لقد تخطيت الحد الأقصى من الخصومات المضافة.',
         'context' => 'hello_member',
       ],
-      'Email Address' => [
+      'Email address' => [
         'ar' => 'عنوان البريد الإلكتروني',
         'context' => 'hello_member',
       ],
