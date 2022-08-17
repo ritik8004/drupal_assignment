@@ -15,7 +15,7 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user on sim
     Given I am on "{spc_plp_add_to_cart_single}"
     And I wait 20 seconds
     And I wait for the page to load
-    And I click jQuery ".c-products__item:first-child button.addtobag-button" element on page
+    And I click jQuery ".c-products__item:first-child div.addtobag-simple-button-container button.addtobag-button" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the element ".qty-text-wrapper" should exist
@@ -37,7 +37,7 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user on sim
     And I wait for the page to load
     When I follow "{language_link}"
     And I wait for the page to load
-    And I click jQuery ".c-products__item:first-child button.addtobag-button" element on page
+    And I click jQuery ".c-products__item:first-child div.addtobag-simple-button-container button.addtobag-button" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the element ".qty-text-wrapper" should exist
@@ -57,7 +57,7 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user on sim
     Given I am on "{spc_plp_add_to_cart_single}"
     And I wait 20 seconds
     And I wait for the page to load
-    And I click jQuery ".c-products__item:first-child button.addtobag-button" element on page
+    And I click jQuery ".c-products__item:first-child div.addtobag-simple-button-container button.addtobag-button" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the element ".qty-text-wrapper" should exist
