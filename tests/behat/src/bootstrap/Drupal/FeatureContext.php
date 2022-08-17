@@ -391,7 +391,7 @@ class FeatureContext extends CustomMinkContext
     try {
       $this->getSession()
         ->executeScript("(function(){window.scrollTo($arg1, $arg2);})();");
-    } catch (\Exception $arg1) {
+    } catch (\Exception) {
       throw new \Exception("ScrollIntoView failed");
     }
   }
