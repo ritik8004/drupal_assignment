@@ -175,6 +175,9 @@ class HelloMemberCartOffersVouchers extends React.Component {
     } = this.state;
     const { totals } = this.props;
     const forceRenderTabPanel = true;
+    // Count of Vouchers and offers applied.
+    let DiscountVoucher = null;
+    let notificationClass = 'show-note';
     // Add class to show applied voucher and offer message in popup.
     const additionalClasses = hasValue(totals.hmOfferCode) || hasValue(totals.hmAppliedVoucherCodes) ? 'error' : '';
     let appliedVouchers = '';
@@ -189,6 +192,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
           )}
         </span>
       );
+      DiscountVoucher = totals.hmAppliedVoucherCodes.split(',').length;
+      notificationClass = '';
     }
 
     // Applied offer codes message in popup.
@@ -203,14 +208,35 @@ class HelloMemberCartOffersVouchers extends React.Component {
           )}
         </span>
       );
+      DiscountVoucher += totals.hmOfferCode.split(',').length;
+      notificationClass = '';
     }
+    // if no vouchers or offer are applied show only text.
+    let DiscountVouchersText = (
+      <span>
+        {Drupal.t('Discounts & Vouchers', {}, { context: 'hello_member' })}
+      </span>
+    );
+    // if vouchers or offer are applied show text with count.
+    if (hasValue(DiscountVoucher)) {
+      DiscountVouchersText = (
+        <span>
+          {Drupal.t(
+            'Discounts & Vouchers : @DiscountVoucher',
+            { '@DiscountVoucher': DiscountVoucher },
+            { context: 'hello_member' },
+          )}
+        </span>
+      );
+    }
+
 
     return (
       <>
         <div className="hello-member-promo-section">
           <a className="hello-member-promo-pop-link" onClick={() => this.onClickOpenPopup(true)}>
-            {Drupal.t('Discounts & Vouchers', {}, { context: 'hello_member' })}
-            <span className="promo-notification show-note" />
+            {DiscountVouchersText}
+            <span className={`promo-notification ${notificationClass}`} />
           </a>
           {openModal
           && (
