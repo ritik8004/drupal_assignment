@@ -118,6 +118,10 @@
           }
 
           .hello-member-svg {
+            ~ a {
+              margin-#{$right}: rem(2);
+            }
+
             @include breakpoint($only-mobile) {
               display: inline-block;
             }
