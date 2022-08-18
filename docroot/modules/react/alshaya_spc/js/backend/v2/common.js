@@ -402,7 +402,7 @@ const getProcessedCartData = async (cartData) => {
   if (hasValue(cartData.cart.extension_attributes)
     && typeof cartData
       .cart.extension_attributes.mobile_number_verified !== 'undefined') {
-    data.mobile_number_verified = cartData
+    data.cod_mobile_number_verified = cartData
       .cart.extension_attributes.mobile_number_verified;
   }
 
