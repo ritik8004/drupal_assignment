@@ -6,6 +6,7 @@
  */
 
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
+use Drupal\Core\Database\Query\AlterableInterface;
 
 /**
  * Implements hook_page_attachments_alter().
