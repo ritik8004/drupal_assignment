@@ -29,6 +29,7 @@ function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
 
   // Attach the library if feature is enabled.
   $page['#attached']['library'][] = 'alshaya_shopby_filter_attribute/menu_attribute_navigation';
+  $page['#attached']['library'][] = 'alshaya_white_label/megamenu-shop-by-filter';
 
   // Get the PLP algolia index from config.
   $algoliaConfig = Drupal::service('alshaya_algoila_react.alshaya_algolia_react_config')->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE, AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE);
@@ -60,6 +61,7 @@ function alshaya_shopby_filter_attribute_acq_sku_commerce_category_alter(TermInt
  * Implements hook_alshaya_acm_product_category_tree_data_alter().
  */
 function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+  $data[$term->tid]['class'][] = 'shop-by-filter-attribute';
   // Load shop by filter attribute module's configs.
   $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
 
