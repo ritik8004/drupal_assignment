@@ -332,3 +332,23 @@ function alshaya_vs_transac_alshaya_performance_preload_alter(array &$preload) {
     $preload = array_merge($site_preloads[$language], $preload);
   }
 }
+
+/**
+ * Implements hook_sku_product_attribute_alter().
+ */
+function alshaya_vs_transac_sku_product_attribute_alter(array &$attributes, SKUInterface $sku, string $field_name) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  // Add a valid barcode (EAN) attribute in the product feed.
+  $extra_row = [];
+  if ($field_name === 'attr_aims_barcode') {
+    $aim_barcode = '0' . $sku->get($field_name)->getString();
+    if ($skuManager->validateEanBarcode($aim_barcode)) {
+      $extra_row['key'] = 'sanitized_vs_aims_barcode';
+      $extra_row['value'] = $aim_barcode;
+    }
+  }
+  if (!empty($extra_row)) {
+    $attributes[] = $extra_row;
+  }
+}
