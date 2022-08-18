@@ -31,7 +31,7 @@ function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
   $page['#attached']['library'][] = 'alshaya_shopby_filter_attribute/menu_attribute_navigation';
 
   // Get the PLP algolia index from config.
-  $algoliaConfig = Drupal::service('alshaya_algoila_react.alshaya_algolia_react_config')->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE, AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE);
+  $algoliaConfig = \Drupal::service('alshaya_algoila_react.alshaya_algolia_react_config')->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE, AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE);
   $page['#attached']['drupalSettings']['shopByFilterAttribute']['indexName'] = $algoliaConfig[AlshayaAlgoliaReactPLP::PAGE_TYPE]['indexName'];
 }
 
