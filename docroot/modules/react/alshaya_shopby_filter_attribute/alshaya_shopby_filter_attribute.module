@@ -61,9 +61,6 @@ function alshaya_shopby_filter_attribute_acq_sku_commerce_category_alter(TermInt
  * Implements hook_alshaya_acm_product_category_tree_data_alter().
  */
 function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
-  // Adding class for CSS selector.
-  $data[$term->tid]['class'][] = 'shop-by-filter-attribute';
-
   // Load shop by filter attribute module's configs.
   $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
 
@@ -77,6 +74,9 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
     || !((bool) $term->shopby_filter_attribute)) {
     return;
   }
+
+  // Adding class for CSS selector.
+  $data[$term->tid]['class'][] = 'shop-by-filter-attribute';
 
   // Add necessary parameters on this menu item itself for React component to
   // utilise and display the filters data.
