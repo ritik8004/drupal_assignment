@@ -45,7 +45,13 @@
       }
     }
     else {
-      variant = $('.selected-variant-sku', element).val();
+      // Use first child provided in settings if available.
+      // Use the first variant otherwise.
+      var configurableCombinations = window.commerceBackend.getConfigurableCombinations(sku);
+      var variant = (typeof configurableCombinations.firstChild === 'undefined')
+        ? Object.keys(variants)[0]
+        : configurableCombinations.firstChild;
+
       // Check if we are in mag-v2 layout
       // due to different markup the initial variant fetch will fail.
       if (typeof variant === 'undefined') {

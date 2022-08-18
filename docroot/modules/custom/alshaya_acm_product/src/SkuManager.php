@@ -1197,8 +1197,8 @@ class SkuManager {
         }
 
         // Check if label is currently active.
-        $from = strtotime($data['from']);
-        $to = strtotime($data['to']);
+        $from = strtotime($data['from'] ?? '');
+        $to = strtotime($data['to'] ?? '');
 
         // First check if we have date filter.
         if ($from > 0 && $to > 0) {
@@ -1291,8 +1291,8 @@ class SkuManager {
       }
 
       // Check if label is currently active.
-      $from = strtotime($data['from']);
-      $to = strtotime($data['to']);
+      $from = strtotime($data['from'] ?? '');
+      $to = strtotime($data['to'] ?? '');
 
       // First check if we have date filter.
       if ($from > 0 && $to > 0) {

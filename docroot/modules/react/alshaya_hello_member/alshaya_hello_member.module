@@ -393,7 +393,7 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
 
   // Add hello member points for order confirmation.
   if (isset($order['extension']['hm_accrued_points'])) {
-    $settings['order_details']['hmAccuredPoints'] = $order['extension']['hm_accrued_points'] ?? 0;
+    $settings['order_details']['hmAccuredPoints'] = $order['extension']['hm_accrued_points'];
   }
 
   // Add below hello member extension_attributes to the totals for display info
@@ -481,6 +481,7 @@ function alshaya_hello_member_preprocess_user(&$variables) {
  * Implements hook_alshaya_spc_checkout_build_alter().
  */
 function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
+  $settings = [];
   /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
   $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());

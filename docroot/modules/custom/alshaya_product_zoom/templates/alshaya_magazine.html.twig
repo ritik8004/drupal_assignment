@@ -52,6 +52,11 @@
               {% endfor %}
             </div>
           {% endif %}
+
+        {# Render details before description block. #}
+        {% block beforeDescription %}
+        {% endblock %}
+
         <div class="magazine-desc-wrapper">
           {% if product_attribute_labels %}
             <ul class="collection-labels">

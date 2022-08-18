@@ -301,19 +301,16 @@ function _alshaya_hello_member_react_translations() {
       ],
       '@hm_icon @login_link or Become a member to earn @points points' => [
         'ar' => '@hm_icon @login_link أو سجّل كعضو للربح بالنقاط @points',
-        'context' => 'hello_member',
       ],
       'Confirm the Loyalty' => [
         'ar' => 'تأكيد الولاء',
         'context' => 'hello_member',
       ],
       'Do you want to remove all the benefits of @current_option and choose @selected_option benefits?' => [
-        'ar' => 'هل ترغب في إزالة جميع مزايا @current_option واختيار مزايا@selected_option',
-        'context' => 'hello_member',
+        'ar' => '@selected_option هل ترغب في إزالة جميع مزايا @current_option واختيار مزايا',
       ],
       'Sign In' => [
         'ar' => 'تسجيل الدخول',
-        'context' => 'hello_member',
       ],
       'H&M membership' => [
         'ar' => 'عضوية اتش آند ام',
@@ -364,15 +361,15 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       'Every time you shop online or in store, you will earn points. @currency_value @currency_code = @points_value points.' => [
-        'ar' => 'في كل مرة تتسوق فيها أونلاين أو في المحلات، ستحصل على المزيد من النقاط. %currency_value %currency_value = %points_value النقاط.',
+        'ar' => 'في كل مرة تتسوق فيها أونلاين أو في المحلات، ستحصل على المزيد من النقاط. @currency_value @currency_value = @points_value النقاط.',
         'context' => 'hello_member',
       ],
       'Review your latest online purchase and earn @review_points points.' => [
-        'ar' => 'قم بمراجعة آخر عملية شراء أونلاين واحصل على %review_points نقطة.',
+        'ar' => 'قم بمراجعة آخر عملية شراء أونلاين واحصل على @review_points نقطة.',
         'context' => 'hello_member',
       ],
       'Add your date of birth, Gender, Mobile Number to earn @profile_completion_value points.' => [
-        'ar' => 'أضف تاريخ الميلاد، والجنس، ورقم الهاتف المحمول، واحصل على %profile_completion_value نقطة.',
+        'ar' => 'أضف تاريخ الميلاد، والجنس، ورقم الهاتف المحمول، واحصل على @profile_completion_value نقطة.',
         'context' => 'hello_member',
       ],
       'Members Earn @pointValue points.' => [
@@ -390,6 +387,59 @@ function _alshaya_hello_member_react_translations() {
       'You have reached the maximum amount of added discounts.' => [
         'ar' => 'لقد تخطيت الحد الأقصى من الخصومات المضافة.',
         'context' => 'hello_member',
+      ],
+      'Email address' => [
+        'ar' => 'عنوان البريد الإلكتروني',
+        'context' => 'hello_member',
+      ],
+      'To redeem points compelete the full enrollment.' => [
+        'ar' => 'لاستبدال النقاط أكمل التسجيل بالكامل.',
+        'context' => 'hello_member',
+      ],
+      'Submit' => [
+        'ar' => 'إرسال',
+        'context' => 'hello_member',
+      ],
+      'You will earn <b>@points</b> Aura points with this purchase.' => [
+        'ar' => 'سوف تفوز <b>@points</b> بنقاط أورا عند إتمام عملية الشراء.',
+        'context' => 'hello_member',
+      ],
+      'Do you want to redeem Aura points?' => [
+        'ar' => 'هل تريد استبدال نقاط أورا؟',
+        'context' => 'hello_member',
+      ],
+      'Redeem Points' => [
+        'ar' => 'عنوان البريد الإلكتروني',
+        'context' => 'hello_member',
+      ],
+      'Enter Aura Details' => [
+        'ar' => 'ادخل بيانات حساب أورا',
+        'context' => 'hello_member',
+      ],
+      'loyalty' => [
+        'ar' => 'الولاء',
+      ],
+      'Verify' => [
+        'ar' => 'تأكيد',
+        'context' => 'hello_member',
+      ],
+      'Aura' => [
+        'ar' => 'أورا',
+        'context' => 'hello_member',
+      ],
+      'Enter OTP' => [
+        'ar' => 'يرجى إدخال رمز الاستخدام لمرة واحدة.',
+        'context' => 'hello_member',
+      ],
+      'The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.' => [
+        'ar' => 'إجمالي النقاط التي ستحصل عليها من عملية الشراء هذه سيتم عرضها في صفحة تأكيد  الطلبية بعد استقطاع الخصومات والضرائب',
+      ],
+      'Discounts & Vouchers : @DiscountVoucher' => [
+        'ar' => 'خصومات وقسائم : @DiscountVoucher',
+        'context' => 'hello_member',
+      ],
+      'Add your mobile number, Aura account number or email address below to link this purchase.' => [
+        'ar' => 'أضف رقم الهاتف، أو رقم حساب أورا أو بريدك الإلكتروني في الأسفل لربط عملية الشراء الحالية.',
       ],
     ],
   ];

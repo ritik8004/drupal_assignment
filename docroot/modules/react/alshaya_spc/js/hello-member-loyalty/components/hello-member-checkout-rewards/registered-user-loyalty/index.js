@@ -8,12 +8,11 @@ import LoyaltySelectOption from '../loyalty-select-option';
 import LoyaltyConfirmPopup from '../loyalty-confirm-popup';
 import { setHelloMemberLoyaltyCard } from '../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
-import { fetchCartData } from '../../../../utilities/api/requests';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 import { redeemAuraPoints } from '../../../../aura-loyalty/components/utilities/checkout_helper';
 import { getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import logger from '../../../../../../js/utilities/logger';
-import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { updatePriceSummaryBlock } from '../../../../utilities/egift_util';
 
 class RegisteredUserLoyalty extends React.Component {
   constructor(props) {
@@ -79,7 +78,8 @@ class RegisteredUserLoyalty extends React.Component {
   changeLoyaltyOption = (selectedMethod) => {
     // @todo: Trigger a pop-up to confirm the loyalty option.
     // @todo: Refresh cart with the selected value.
-    const { cart } = this.props;
+    let method = selectedMethod;
+    const { cart, refreshCart, identifierNo } = this.props;
     const {
       cart: {
         cart_id: cartId,
@@ -97,53 +97,44 @@ class RegisteredUserLoyalty extends React.Component {
         quoteId: cardIdInt,
       };
     }
-    if (selectedMethod === 'hello_member') {
+    if (method === 'hello_member') {
+      showFullScreenLoader();
       requestData.programCode = 'aura';
-      // Call API to undo redeem aura points.
-      const data = {
-        action: 'remove points',
-        userId: getUserDetails().id || 0,
-        cardNumber: loyaltyCard,
-      };
-      redeemAuraPoints(data);
-      const response = callHelloMemberApi('unsetLoyaltyCard', 'POST', requestData);
+      if (loyaltyCard === 'aura') {
+        // Call API to undo redeem aura points.
+        const data = {
+          action: 'remove points',
+          userId: getUserDetails().id || 0,
+          cardNumber: loyaltyCard,
+        };
+        redeemAuraPoints(data);
+      }
+      const response = setHelloMemberLoyaltyCard(identifierNo, cartId);
       response.then((result) => {
-        if (result.status === 200) {
-          if (result.data) {
-            // Redirect to cart page.
-            window.location.href = Drupal.url('cart');
-          }
+        if (result.status) {
+          // Redirect to cart page.
+          window.location.href = Drupal.url('cart');
+        } else {
+          method = 'aura';
+          logger.error('Error while trying to switch to hello member loyalty card cartId: @cartId', {
+            '@cartId': cartId,
+            '@response': result.data.error_message,
+          });
         }
+        removeFullScreenLoader();
       });
     }
-    if (selectedMethod === 'aura') {
+    if (method === 'aura') {
       requestData.programCode = 'hello_member';
+      showFullScreenLoader();
       const response = callHelloMemberApi('unsetLoyaltyCard', 'POST', requestData);
       // Fetch updated cart and remove the member discount from checkout summary.
-      showFullScreenLoader();
       response.then((result) => {
-        if (result.status === 200) {
-          if (result.data) {
-            window.commerceBackend.removeCartDataFromStorage();
-            // Remove hello member discount if selected method is aura.
-            const cartData = fetchCartData();
-            if (cartData instanceof Promise) {
-              cartData.then((cartResult) => {
-                if (cartResult === 'Request aborted') {
-                  return;
-                }
-                // Store info in storage.
-                window.commerceBackend.setCartDataInStorage({ cart: cartResult });
-                if (typeof cartResult.error === 'undefined') {
-                  window.dynamicPromotion.apply(cartResult);
-                  // Dispatch an event to update totals in cart object.
-                  dispatchCustomEvent('updateTotalsInCart', { totals: cartResult.totals });
-                }
-              });
-            }
-          }
+        if (result.status === 200 && result.data) {
+          updatePriceSummaryBlock(refreshCart);
         } else {
-          logger.error('Error while calling trying to unset hello member loyalty card cartId: @cartId', {
+          method = 'hello_member';
+          logger.error('Error while trying to switch to aura loyalty card cartId: @cartId', {
             '@cartId': cartId,
             '@response': result.data.error_message,
           });
@@ -153,7 +144,7 @@ class RegisteredUserLoyalty extends React.Component {
     }
 
     this.setState({
-      currentOption: selectedMethod,
+      currentOption: method,
     });
     this.resetPopupStatus(false);
   }

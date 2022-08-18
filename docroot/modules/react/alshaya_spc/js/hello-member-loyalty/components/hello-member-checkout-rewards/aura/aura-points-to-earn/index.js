@@ -4,6 +4,7 @@ import { showFullScreenLoader, removeFullScreenLoader } from '../../../../../../
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import logger from '../../../../../../../js/utilities/logger';
 import Loading from '../../../../../../../js/utilities/loading';
+import ToolTip from '../../../../../utilities/tooltip';
 
 class AuraPointsToEarn extends React.Component {
   constructor(props) {
@@ -72,11 +73,14 @@ class AuraPointsToEarn extends React.Component {
     }
 
     return (
-      <div className="points-earned-message">
-        {parse(getStringMessage('aura_points_earn_message', {
-          '@points': auraPointsToEarn,
-        }))}
-      </div>
+      <>
+        <div className="points-earned-message">
+          {parse(getStringMessage('aura_points_earn_message', {
+            '@points': auraPointsToEarn,
+          }))}
+        </div>
+        <ToolTip enable question>{Drupal.t('The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.')}</ToolTip>
+      </>
     );
   }
 }

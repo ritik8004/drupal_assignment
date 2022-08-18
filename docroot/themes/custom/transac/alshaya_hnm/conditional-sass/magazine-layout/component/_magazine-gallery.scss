@@ -48,6 +48,28 @@
         color: $gray44;
       }
     }
+
+    @include breakpoint($only-mobile) {
+      .content__title_wrapper_description {
+        text-align: $left;
+        padding: rem(16) 0 rem(26);
+
+        h1 {
+          font-size: rem(16);
+          font-weight: 400;
+        }
+
+        .info-wrapper {
+          font-size: rem(14);
+
+          .price-block {
+            border-bottom: rem(1) solid $pdp_bnpl_grey_shadow;
+            padding-bottom: rem(10);
+            margin-bottom: rem(18);
+          }
+        }
+      }
+    }
   }
 
   .collection-labels {
