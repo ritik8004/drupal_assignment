@@ -32,7 +32,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
     // Send OTP to mobile number from shipping address.
     const { otpVerified } = this.props;
     if (otpVerified === 0) {
-      this.SendOtpToShippingMobileNumber();
+      // If otpVerified is 0 then mobile number is not validated, hence send
+      // OTP to shipping address mobile number.
+      this.sendOtpToShippingMobileNumber();
     }
   }
 
@@ -52,13 +54,13 @@ class PaymentMethodCodMobileVerification extends React.Component {
       otpVerified: 0,
     },
     // Send OTP to updated mobile number from shipping address.
-    () => this.SendOtpToShippingMobileNumber());
+    () => this.sendOtpToShippingMobileNumber());
   };
 
   /**
    * Sennd OTP to mobile number from shipping address.
    */
-  SendOtpToShippingMobileNumber = () => {
+  sendOtpToShippingMobileNumber = () => {
     // Get Cart Id.
     const cartId = window.commerceBackend.getCartId();
 
@@ -230,7 +232,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
               <OtpTimer
                 seconds={60}
                 minutes={0}
-                resend={this.SendOtpToShippingMobileNumber}
+                resend={this.sendOtpToShippingMobileNumber}
                 text=" "
                 ButtonText={Drupal.t('Resend', {}, { context: 'cod_mobile_verification' })}
               />
