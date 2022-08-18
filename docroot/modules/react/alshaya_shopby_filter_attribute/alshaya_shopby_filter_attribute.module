@@ -7,11 +7,15 @@
 
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_page_attachments_alter().
  */
 function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
+  // Add cache tags for the module's settings.
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:alshaya_shopby_filter_attribute.settings']);
+
   // Load shop by filter attribute module's configs.
   $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
 
@@ -56,27 +60,32 @@ function alshaya_shopby_filter_attribute_acq_sku_commerce_category_alter(TermInt
  * Implements hook_alshaya_acm_product_category_tree_data_alter().
  */
 function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
-  /** @var \Drupal\taxonomy\TermInterface $termObj **/
-  $termObj = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($term->tid);
+  // Load shop by filter attribute module's configs.
+  $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
 
-  // Check if we have shop by shoe size filter field available.
-  if ($termObj->hasField('field_shopby_filter_attribute')) {
-    $shopby_filter_attribute = (bool) $termObj->get('field_shopby_filter_attribute')->getString();
-    // If field value is true, we will add necessary parameters on this menu
-    // item itself for React component to utilise and display the filters data.
-    if ($shopby_filter_attribute) {
-      // Get the hierarchy data from the parent term ID.
-      $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
-      $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $term->parent_target_id);
-
-      // Pass the data_nav_attr for element identification that will be used to
-      // show filter menu items.
-      $data[$term->tid]['data_nav_attr'] = 'size_shoe_eu';
-
-      // Both these data)hierarchy and data_rule_context will be used in React
-      // component to fetch available filter options in given context.
-      $data[$term->tid]['data_hierarchy'] = $term_hierarchy_data['hierarchy'] ?? '';
-      $data[$term->tid]['data_rule_context'] = $term_hierarchy_data['ruleContext'] ? implode(',', $term_hierarchy_data['ruleContext']) : '';
-    }
+  // Return if feature is disabled.
+  if (!$shopby_filter_attribute_configs['enabled']) {
+    return;
   }
+
+  // Return if the shopby_filter_attribute parameter is not set or false.
+  if (!isset($term->shopby_filter_attribute)
+    || !((bool) $term->shopby_filter_attribute)) {
+    return;
+  }
+
+  // Add necessary parameters on this menu item itself for React component to
+  // utilise and display the filters data.
+  // Get the hierarchy data from the parent term ID.
+  $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
+  $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $term->parent_target_id);
+
+  // Pass the data_nav_attr for element identification that will be used to
+  // show filter menu items.
+  $data[$term->tid]['data_nav_attr'] = $shopby_filter_attribute_configs['menuFilterAttributes'] ?? '';
+
+  // Both these data)hierarchy and data_rule_context will be used in React
+  // component to fetch available filter options in given context.
+  $data[$term->tid]['data_hierarchy'] = $term_hierarchy_data['hierarchy'] ?? '';
+  $data[$term->tid]['data_rule_context'] = $term_hierarchy_data['ruleContext'] ? implode(',', $term_hierarchy_data['ruleContext']) : '';
 }
