@@ -1,0 +1,110 @@
+.nodetype--advanced_page {
+  .c-accordion-delivery-option-parent {
+    display: block;
+
+    .field--name-field-group-title {
+      margin: 5rem 0 2.5rem;
+      font-size: 1.75rem;
+      font-family: $alshaya-bold;
+      text-align: center;
+      line-height: 2.5rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.25rem;
+        line-height: 1.4;
+        margin: 3.5rem 0 2rem;
+      }
+    }
+
+    .c-accordion {
+      border: none;
+
+      @include breakpoint($only-mobile) {
+        text-align: $left;
+      }
+    }
+
+    .c-accordion__title,
+    .c-accordion_content {
+      border: none;
+      background-color: $advanced-page-accordion-bg;
+      text-align: $left;
+    }
+
+    .c-accordion__title {
+      font-family: $alshaya-bold;
+      margin-top: 1rem;
+      font-size: 0.813rem;
+      text-transform: none;
+      color: $advanced-page-accordion-title;
+      height: auto;
+      line-height: 1.25rem;
+      letter-spacing: 0.65px;
+      padding: 0.9375rem 0;
+      padding-#{$right}: 2.5rem;
+      padding-#{$left}: 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        padding: 1.25rem 0;
+        padding-#{$right}: 2.5rem;
+        padding-#{$left}: 1rem;
+        line-height: 1rem;
+      }
+
+      @include icon(chevrondown, after) {
+        #{$right}: 1.5rem;
+        top: 1.5rem;
+        font-size: 1.5rem;
+        color: $advanced-page-accordion-title;
+      }
+
+      &::after {
+        @include breakpoint($only-mobile) {
+          #{$right}: 0.875rem;
+        }
+      }
+
+      &.ui-state-active {
+        margin-bottom: 0;
+        color: $advanced-page-accordion-active-title;
+
+        &::after {
+          transform: rotate(180deg);
+          color: $advanced-page-accordion-active-title;
+          position: absolute;
+          top: 0.6rem;
+
+          @include breakpoint($only-mobile) {
+            #{$right}: 0.875rem;
+          }
+        }
+
+        & + .c-accordion_content {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+
+    .c-accordion_content {
+      ul {
+        margin: 0;
+        list-style-type: none;
+        padding-bottom: 2.1875rem;
+        padding-#{$right}: 2.5rem;
+        padding-#{$left}: 1.5rem;
+        line-height: 1.25rem;
+
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: 1rem;
+          padding-bottom: 1.5rem;
+        }
+      }
+
+      p {
+        margin-bottom: 0;
+        color: $advanced-page-accordion-content;
+        font-size: 0.813rem;
+      }
+    }
+  }
+}

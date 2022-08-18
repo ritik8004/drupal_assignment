@@ -538,10 +538,13 @@ window.auraBackend.updateUserAuraStatus = async (inputData) => {
  * @param {Object} data
  *   Data for the API call.
  *
+ * @param {Object} context
+ *   If context is aura or hello member.
+ *
  * @returns {Object}
  *   Points and other data in case of success or error in case of failure.
  */
-window.auraBackend.processRedemption = async (data) => {
+window.auraBackend.processRedemption = async (data, context = 'aura') => {
   let message = '';
 
   const cartId = window.commerceBackend.getCartId();
@@ -559,28 +562,43 @@ window.auraBackend.processRedemption = async (data) => {
     return { data: getErrorResponse(message, 404) };
   }
 
+  if (context !== 'hello_member') {
+    // Check if required data is present in request.
+    if (!hasValue(data.userId)) {
+      message = 'Error while trying to redeem aura points. User Id is required for the feature @context.';
+      logger.error(`${message} Data: @requestData`, {
+        '@requestData': JSON.stringify(data),
+        '@context': context,
+      });
+      return { data: getErrorResponse(message, 404) };
+    }
+
+    // Get user details from session.
+    const { uid } = drupalSettings.user;
+
+    // Check if uid in the request matches the one in session.
+    if (parseInt(uid, 10) !== parseInt(data.userId, 10)) {
+      logger.error("Error while trying to redeem aura points for feature @context. User id in request doesn't match the one in session. User id from request: @reqUid. User id in session: @sessionUid.", {
+        '@reqUid': data.userId,
+        '@sessionUid': uid,
+        '@context': context,
+      });
+      return { data: getErrorResponse("User id in request doesn't match the one in session.", 404) };
+    }
+  }
+
   // Check if required data is present in request.
-  if (!hasValue(data.cardNumber) || !hasValue(data.userId)) {
-    message = 'Error while trying to redeem aura points. Card Number and User Id is required.';
+  if (!hasValue(data.cardNumber)) {
+    message = 'Error while trying to redeem aura points. Card Number is required for feature @context.';
     logger.error(`${message} Data: @requestData`, {
       '@requestData': JSON.stringify(data),
+      '@context': context,
     });
     return { data: getErrorResponse(message, 404) };
   }
 
-  // Get user details from session.
-  const { uid } = drupalSettings.user;
-
-  // Check if uid in the request matches the one in session.
-  if (parseInt(uid, 10) !== parseInt(data.userId, 10)) {
-    logger.error("Error while trying to redeem aura points. User id in request doesn't match the one in session. User id from request: @reqUid. User id in session: @sessionUid.", {
-      '@reqUid': data.userId,
-      '@sessionUid': uid,
-    });
-    return { data: getErrorResponse("User id in request doesn't match the one in session.", 404) };
-  }
-
   const redeemPointsRequestData = prepareRedeemPointsData(data, cartId);
+
   if (hasValue(redeemPointsRequestData.error)) {
     logger.error('Error while trying to create redeem points request data. Request data: @requestData. Message: @message', {
       '@requestData': JSON.stringify(data),

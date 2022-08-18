@@ -1,0 +1,215 @@
+.spc-hello-member-checkout-rewards-block {
+  .loyalty-options-registered,
+  .loyalty-options-guest {
+    .spc-aura-link-card-form {
+      color: $aura-spc-checkout-text-content;
+
+      .customer-points {
+        .aura-points-info {
+          border-radius: rem(10);
+          background: $aura-gradient-21;
+          padding: rem(14) rem(20);
+          font-family: $aura-regular;
+
+          html[lang=ar] & {
+            background: $aura-gradient-21-ar;
+          }
+        }
+
+        .spc-aura-highlight,
+        .spc-aura-points-expiry-item b {
+          font-family: $aura-bold;
+          font-weight: normal;
+          padding: 0 rem(4);
+          color: $aura-highlight;
+        }
+      }
+
+      .aura-redeem-points {
+        font-family: $aura-bold;
+        display: flex;
+        align-items: center;
+        margin-top: rem(30);
+        justify-content: space-between;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: rem(3);
+        }
+
+        .spc-aura-button {
+          border: rem(1) solid $aura-spc-button-text;
+          background: $aura-spc-button-bg;
+          color: $aura-spc-button-text;
+          font-size: rem(13);
+          border-radius: rem(4);
+          height: rem(36);
+          min-width: rem(171);
+        }
+      }
+    }
+
+    .aura-earned-points {
+      padding-#{$left}: rem(48);
+      margin-top: rem(10);
+
+      .points-earned-message {
+        font-size: rem(12);
+        color: $aura-cart-points;
+        font-family: $aura-regular;
+
+        &::before {
+          content: '!';
+          color: $aura-spc-checkout-block-bg;
+          background-color: $aura-cart-points;
+          border-radius: 50%;
+          padding: 0 rem(6);
+          font-size: rem(12);
+          display: inline-flex;
+          margin-#{$right}: rem(8);
+        }
+
+        b {
+          font-family: $aura-bold;
+        }
+      }
+    }
+  }
+
+  .loyalty-options-guest {
+    .loyalty-option {
+      padding-#{$left}: rem(20);
+
+      .customer-points {
+        font-size: rem(14);
+      }
+
+      .loaylty-option-text {
+        width: 94%;
+
+        @include breakpoint($only-mobile) {
+          width: 96%;
+        }
+
+        .Collapsible {
+          flex-grow: 1;
+        }
+
+        .loaylty-option-text {
+          @include icon('chevrondown') {
+            font-size: rem(8);
+            position: absolute;
+            top: rem(34);
+            #{$right}: rem(24);
+            transform: translateY(-50%);
+            transition: transform 0.125s ease-in-out;
+
+            @include breakpoint($only-mobile) {
+              top: rem(40);
+            }
+          }
+        }
+      }
+
+      &.hello-member-loyalty {
+        .loaylty-option-text {
+          @include breakpoint($only-mobile) {
+            display: block;
+            min-height: rem(30);
+          }
+
+          .hello-member-svg {
+            ~ a {
+              margin-#{$right}: rem(2);
+            }
+
+            @include breakpoint($only-mobile) {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .loyalty-options-registered {
+    .aura-earned-points {
+      display: flex;
+      align-items: center;
+
+      .tooltip-anchor {
+        margin-#{$left}: rem(8);
+
+        &::before {
+          background: $aura-order-confirmation-points-question-bg;
+          border: none;
+          color: $aura-order-confirmation-points-question-txt;
+        }
+      }
+    }
+
+    .loyalty-option {
+      &.hello_member {
+        .tooltip-anchor {
+          margin-#{$left}: rem(4);
+
+          &::before {
+            color: $hello-member-loyalty-aura-icon;
+            font-size: rem(16);
+            top: rem(3);
+            position: relative;
+          }
+        }
+      }
+    }
+
+    .tooltip-anchor {
+      .tooltip-box {
+        font-family: $aura-regular;
+        background: $aura-order-confirmation-points-tooltip-bg;
+        box-shadow: 0 rem(2) rem(20) 0 rgba(0, 0, 0, 0.24);
+        border: none;
+        color: $aura-order-confirmation-points-tooltip-txt;
+        bottom: rem(32);
+        #{$left}: 50%;
+        transform: translateX(-50%);
+
+        html[lang=ar] & {
+          transform: translateX(50%);
+        }
+
+        @include breakpoint($only-mobile) {
+          #{$left}: calc(50% - 4rem);
+        }
+
+        @include breakpoint($only-tablet) {
+          #{$left}: -50%;
+        }
+
+        &::before,
+        &::after {
+          border-top-color: $aura-order-confirmation-points-tooltip-bg;
+
+          @include breakpoint($only-tablet) {
+            margin-#{$left}: rem(6);
+          }
+
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: rem(50);
+          }
+
+          html[lang=ar] & {
+            left: 10%;
+
+            @include breakpoint($tablet) {
+              left: 40%;
+            }
+
+            @include breakpoint($desktop) {
+              left: 50%;
+            }
+          }
+        }
+      }
+    }
+  }
+}

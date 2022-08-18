@@ -1,0 +1,39 @@
+input[type=radio] {
+  display: none;
+
+  ~.radio-sim::before {
+    content: '';
+    position: absolute;
+    #{$left}: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: rem(48);
+    text-align: center;
+    font-size: rem(50);
+    cursor: pointer;
+  }
+
+  ~.radio-sim {
+    cursor: pointer;
+
+    @include icon(radio-empty, before) {
+      color: $hello-member-promo-radio-btn;
+    }
+  }
+
+  &:checked {
+    cursor: pointer;
+
+    ~.radio-sim {
+      @include icon(radio-filled, before) {
+        color: $hello-member-promo-radio-btn;
+      }
+    }
+  }
+
+  ~.radio-label {
+    font-size: rem(14);
+    font-family: $alshaya-thin;
+    color: $hello-member-promo-radio-btn;
+  }
+}

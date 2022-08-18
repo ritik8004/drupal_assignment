@@ -1,0 +1,5 @@
+alshaya_hello_member.hello_member_config:
+  title: 'Alshaya hello member Configurations'
+  base_route_name: alshaya_hello_member.hello_member_config
+  names:
+    - alshaya_hello_member.settings

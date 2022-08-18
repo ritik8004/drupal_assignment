@@ -1,0 +1,21 @@
+.hello-member-promo-section {
+  .hello-member-promo-pop-link {
+    .promo-notification {
+      background-color: $hello-member-promo-notification-icon;
+    }
+  }
+
+  .popup-container {
+    .hello-member-promo-modal-content {
+      .error-info-section {
+        font-family: $hnm-demibold;
+      }
+    }
+
+    .become-hello-member {
+      .become-hello-member__header {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}

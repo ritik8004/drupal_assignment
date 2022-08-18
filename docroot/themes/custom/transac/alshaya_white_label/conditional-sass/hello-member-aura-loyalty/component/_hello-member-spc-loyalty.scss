@@ -1,0 +1,246 @@
+.spc-hello-member-checkout-rewards-block {
+  .loaylty-option-text {
+    display: flex;
+    align-items: center;
+    font-size: rem(16);
+    color: $spc-checkout-delivery-info-txt;
+    min-height: rem(62);
+
+    @include breakpoint($only-mobile) {
+      min-height: rem(76);
+    }
+  }
+
+  .hello-member {
+    &-svg {
+      display: flex;
+
+      svg {
+        width: rem(34);
+        margin-#{$right}: rem(8);
+      }
+    }
+
+    &-aura {
+      display: flex;
+
+      svg {
+        width: rem(78);
+        margin: 0 rem(8);
+      }
+    }
+  }
+
+  .aura-form-items-link-card-options {
+    display: inline-flex;
+    margin-#{$left}: rem(-10);
+
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+  }
+
+  .aura {
+    .Collapsible {
+      &::before {
+        content: '';
+        border-top: rem(1) solid $hello-member-loyalty-options-border;
+        width: 100%;
+        position: absolute;
+        #{$left}: 0;
+        top: rem(62);
+
+        @include breakpoint($only-mobile) {
+          top: rem(76);
+        }
+      }
+
+      .linking-option {
+        input[type=radio] {
+          & ~ .radio-sim::before,
+          &:checked ~ .radio-sim::before {
+            @include breakpoint($only-mobile) {
+              top: 50%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .spc-aura-link-card-form {
+    padding-top: rem(20);
+    padding-bottom: rem(32);
+
+    @include breakpoint($only-mobile) {
+      padding-#{$right}: rem(8);
+    }
+
+    .aura-details {
+      display: flex;
+      font-family: $alshaya-bold;
+      color: $spc-checkout-delivery-info-txt;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: rem(12);
+      }
+
+      .tooltip-anchor {
+        margin-#{$left}: rem(4);
+
+        &::before {
+          color: $hello-member-loyalty-aura-icon;
+          font-size: rem(16);
+          top: rem(3);
+          position: relative;
+        }
+      }
+    }
+  }
+
+  .loyalty-option {
+    &.aura {
+      input[type=radio] {
+        & ~ .radio-sim::before,
+        &:checked ~ .radio-sim::before {
+          top: rem(31);
+
+          @include breakpoint($only-mobile) {
+            top: rem(37);
+          }
+        }
+      }
+
+      .Collapsible {
+        width: 96%;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+
+        .Collapsible__trigger {
+          &.is-closed {
+            ~ .Collapsible__contentOuter {
+              overflow: hidden !important;
+            }
+          }
+
+          &.is-open {
+            ~ .Collapsible__contentOuter {
+              overflow: visible !important;
+            }
+          }
+        }
+      }
+    }
+
+    input[type=radio] {
+      &:checked ~ .radio-sim {
+        @include icon(radio-empty, before) {
+          color: $spc-checkout-radio-empty;
+        }
+      }
+
+      &.loyalty-option-selected {
+        ~ .radio-sim {
+          @include icon(radio-filled, before) {
+            color: $spc-checkout-radio-filled;
+          }
+        }
+      }
+    }
+  }
+
+  .linking-option {
+    padding-#{$left}: rem(36);
+    padding-#{$right}: rem(12);
+
+    @include breakpoint($only-mobile) {
+      min-height: rem(44);
+    }
+
+    &:last-child {
+      margin-bottom: auto;
+    }
+
+    .radio-sim {
+      width: 100%;
+      font-family: $aura-regular;
+      color: $spc-checkout-delivery-info-txt;
+    }
+  }
+}
+
+.loyalty-popup-container {
+  .loyalty-confirmation-content {
+    width: rem(422) !important;
+    padding: 0 !important;
+    border: 0 !important;
+    text-align: center;
+
+    @include breakpoint($only-tablet) {
+      width: 40% !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      width: 100% !important;
+    }
+
+    .loyalty-popup-block {
+      .loyalty-popup-title {
+        padding: rem(13);
+        font-size: rem(20);
+        font-family: $alshaya-bold;
+        border-bottom: rem(1) solid $content_pagetitle_border;
+
+        .close-modal {
+          @include icon(close, after) {
+            font-weight: bold;
+          }
+
+          position: relative;
+          float: $right;
+          top: rem(7);
+          font-size: rem(16);
+          cursor: pointer;
+        }
+      }
+
+      .loyalty-question {
+        font-size: rem(14);
+        color: $hello-member-loyalty-labels-txt;
+        padding: rem(24) rem(48);
+
+        @include breakpoint($only-mobile) {
+          font-size: rem(12);
+        }
+      }
+
+      .loyalty-options {
+        padding-top: rem(22);
+        padding-bottom: rem(28);
+
+        .loyalty-cancel {
+          @extend %button-brand;
+
+          background: transparent;
+          margin-#{$right}: rem(20);
+          padding: rem(10) rem(20) rem(7);
+        }
+
+        .loyalty-yes {
+          @extend %button-wide;
+
+          padding: rem(12) rem(20) rem(9);
+          border: 0;
+        }
+
+        button {
+          font-size: rem(13);
+          min-width: rem(150);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

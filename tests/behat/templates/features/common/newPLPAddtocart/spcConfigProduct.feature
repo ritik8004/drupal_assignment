@@ -5,7 +5,7 @@ Feature: Testing new PLP-Add to cart functionality for Guest user
   Scenario: As an Authenticated User, I should be able to add configurable products to cart on product listing page
     Given I am on "{spc_plp_add_to_cart}"
     And I wait for the page to load
-    And I click jQuery ".c-products__item.views-row button.addtobag-button" element on page
+    And I click jQuery ".c-products__item.views-row:first-child button.addtobag-config-button" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then I should see an "#configurable-drawer" element
@@ -26,7 +26,7 @@ Feature: Testing new PLP-Add to cart functionality for Guest user
     And I wait for the page to load
     When I follow "{language_link}"
     And I wait for the page to load
-    And I click jQuery ".c-products__item.views-row button.addtobag-button" element on page
+    And I click jQuery ".c-products__item.views-row:first-child button.addtobag-config-button" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then I should see an "#configurable-drawer" element
@@ -45,7 +45,7 @@ Feature: Testing new PLP-Add to cart functionality for Guest user
   Scenario: As an Authenticated User, I should be able to add configurable products to cart on product listing page for mobile
      Given I am on "{spc_plp_add_to_cart}"
      And I wait for the page to load
-     And I click jQuery ".c-products__item.views-row button.addtobag-button" element on page
+     And I click jQuery ".c-products__item.views-row:first-child button.addtobag-config-button" element on page
      And I wait for AJAX to finish
      And I wait 10 seconds
      Then I should see an "#configurable-drawer" element

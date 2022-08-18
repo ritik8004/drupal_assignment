@@ -1,0 +1,122 @@
+// aura mobile number field
+.spc-aura-mobile-number {
+  + .spc-type-textfield {
+    margin-top: rem(24);
+  }
+
+  .field-wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    .error {
+      display: none;
+    }
+
+    .spc-type-textfield {
+      margin-#{$left}: rem(20);
+      width: calc(100% - 6.875rem);
+      margin-bottom: 0;
+    }
+
+    .spc-aura-mobile-number-country-code {
+      width: rem(90);
+      z-index: 4;
+
+      label {
+        color: $spc-input-label;
+        font-size: rem(12);
+        position: unset;
+      }
+
+      .spcAuraSelect__value-container {
+        padding: 0;
+      }
+
+      .spcAuraSelect__control {
+        font-size: rem(14);
+        border: none;
+        min-height: rem(24);
+        border-bottom: rem(1) solid $primary_input_border;
+        border-radius: 0;
+        box-shadow: none;
+
+        .spcAuraSelect__indicator-separator,
+        .spcAuraSelect__indicator svg {
+          display: none;
+        }
+      }
+    }
+
+    .spcAuraSelect__control--is-disabled {
+      opacity: 0.5;
+      background: none;
+
+      .spcAuraSelect__single-value--is-disabled {
+        color: initial;
+      }
+    }
+
+    .spcAuraSelect__menu {
+      margin: 0;
+      box-shadow: none;
+      width: calc(100% - 4.875rem);
+      top: calc(100% - 2rem);
+      #{$left}: rem(48);
+
+      @include breakpoint($only-mobile) {
+        width: calc(100% - 3.875rem);
+      }
+
+      .spcAuraSelect__menu-list {
+        padding: 0;
+        border: rem(1) solid $spc-select-border;
+        border-top-width: 0;
+
+        > div {
+          color: $spc-select-text;
+          border-top: rem(1) solid $spc-select-border-separator;
+          font-size: rem(12);
+          letter-spacing: 1px;
+          background: $spc-select_bg;
+          cursor: pointer;
+          padding: rem(12);
+
+          @include arabic-letter-spacing;
+
+          &:hover,
+          &.spcAuraSelect__option--is-selected {
+            background: $spc-select_bg_hover;
+          }
+
+          &.spcAuraSelect__option--is-disabled {
+            pointer-events: none;
+            opacity: 0.5;
+            background: $hello-member-loyalty-aura-disable-select-bg !important;
+          }
+        }
+      }
+    }
+
+    .spcAuraSelect__indicator {
+      padding: 0;
+
+      @include icon('chevrondown') {
+        font-size: rem(8);
+        color: $hello-member-loyalty-aura-icon;
+        transition: transform 0.3s ease-in-out;
+        width: rem(8);
+        height: rem(8);
+      }
+    }
+  }
+
+  &.open {
+    .spcAuraSelect__indicator {
+      &::before {
+        transform: rotate(180deg);
+        font-size: rem(8);
+      }
+    }
+  }
+}

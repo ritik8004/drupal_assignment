@@ -30,8 +30,8 @@
         else {
           $(this).addClass('empty-accordion-delivery-options');
         }
-        // Add class on parent of c-accordion-delivery-options so we can hide
-        // the paragraph with margin in desktop.
+        // Add below class on accordion parent to ensure compatibility
+        // with existing styles.
         $(this).parents('.c-promo__item').addClass('c-accordion-delivery-option-parent');
       });
     }
