@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
+  // Add cache tags for the module's settings.
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:alshaya_shopby_filter_attribute.settings']);
+
+  // Load shop by filter attribute module's configs.
+  $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
+
+  // Return if feature is disabled.
+  if (!$shopby_filter_attribute_configs['enabled']) {
+    return;
+  }
+
+  // Pass the configs in drupal settings to use on front-end.
+  $page['#attached']['drupalSettings']['shopByFilterAttribute'] = $shopby_filter_attribute_configs;
+
+  // Attach the library if feature is enabled.
+  $page['#attached']['library'][] = 'alshaya_shopby_filter_attribute/menu_attribute_navigation';
+  $page['#attached']['library'][] = 'alshaya_white_label/megamenu-shop-by-filter';
+
+  // Get the PLP algolia index from config.
+  $algoliaConfig = \Drupal::service('alshaya_algoila_react.alshaya_algolia_react_config')->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE, AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE);
+  $page['#attached']['drupalSettings']['shopByFilterAttribute']['indexName'] = $algoliaConfig[AlshayaAlgoliaReactPLP::PAGE_TYPE]['indexName'];
+}
+
+/**
+ * Implements hook_query_TAG_NAME_alter().
+ */
+function alshaya_shopby_filter_attribute_query_product_category_child_terms_alter(AlterableInterface $query) {
+  // Add shopby_filter_attribute field.
+  $query->leftJoin('taxonomy_term__field_shopby_filter_attribute', 'shopby_filter_attribute', 'shopby_filter_attribute.entity_id=tfd.tid');
+  $query->addField('shopby_filter_attribute', 'field_shopby_filter_attribute_value', 'shopby_filter_attribute');
+}
+
+/**
+ * Implements hook_acq_sku_commerce_category_alter().
+ */
+function alshaya_shopby_filter_attribute_acq_sku_commerce_category_alter(TermInterface $term, array $category, $parent) {
+  if (!empty($category['custom_attributes'])) {
+    // Add the new attribute field for show_filters_shoe_size menu items.
+    if (isset($category['custom_attributes']['show_filters_shoe_size'])) {
+      $term->get('field_shopby_filter_attribute')->setValue($category['custom_attributes']['show_filters_shoe_size']['value']);
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_category_tree_data_alter().
+ */
+function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+  // Load shop by filter attribute module's configs.
+  $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
+
+  // Return if feature is disabled.
+  if (!$shopby_filter_attribute_configs['enabled']) {
+    return;
+  }
+
+  // Return if the shopby_filter_attribute parameter is not set or false.
+  if (!isset($term->shopby_filter_attribute)
+    || !((bool) $term->shopby_filter_attribute)) {
+    return;
+  }
+
+  // Adding class for CSS selector.
+  $data[$term->tid]['class'][] = 'shop-by-filter-attribute';
+
+  // Add necessary parameters on this menu item itself for React component to
+  // utilise and display the filters data.
+  // Get the hierarchy data from the parent term ID for english language always.
+  // This is because our filters accepts EN data only.
+  $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
+  $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $term->parent_target_id);
+
+  // Pass the data_nav_attr for element identification that will be used to
+  // show filter menu items.
+  $data[$term->tid]['data_nav_attr'] = $shopby_filter_attribute_configs['menuFilterAttributes'] ?? '';
+
+  // Both these data)hierarchy and data_rule_context will be used in React
+  // component to fetch available filter options in given context.
+  $data[$term->tid]['data_hierarchy'] = $term_hierarchy_data['hierarchy'] ?? '';
+  $data[$term->tid]['data_rule_context'] = $term_hierarchy_data['ruleContext'] ? implode(',', $term_hierarchy_data['ruleContext']) : '';
+}

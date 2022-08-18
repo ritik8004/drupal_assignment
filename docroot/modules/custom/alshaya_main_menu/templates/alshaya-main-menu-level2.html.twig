@@ -5,7 +5,7 @@
       {% for key, columns in data.columns %}
         <div class="column {{ key }}">
           {% for key1, level2 in columns %}
-            <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}">
+            <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}" {{ attributes.setAttribute('data-nav-attr', level2.data_nav_attr).setAttribute('data-hierarchy', level2.data_hierarchy).setAttribute('data-rule-context', level2.data_rule_context).setAttribute('data-label', level2.label) }}>
               <div class="menu__link-wrapper menu-two__link-wrapper">
                   <{{ level2.tag }} class="menu__link menu-two__link {{ level2.class|join(' ') }} {{level2.sub_nav_class}}" gtm-menu-title="{{ level2.gtm_menu_title }}" {{ level2.tag_attr }}>{{ level2.label }}</{{ level2.tag }}>
               </div>
@@ -19,7 +19,7 @@
     {% elseif menu_type == 'menu_inline_display' %}
       <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
       {% for key, level2 in data.child %}
-        <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}">
+        <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}" {{ attributes.setAttribute('data-nav-attr', level2.data_nav_attr).setAttribute('data-hierarchy', level2.data_hierarchy).setAttribute('data-rule-context', level2.data_rule_context).setAttribute('data-label', level2.label) }}>
           {#Show the term tree only when term image is not available.#}
           <div class="menu__link-wrapper menu-two__link-wrapper">
             <{{ level2.tag }} class="menu__link menu-two__link {{ level2.class|join(' ') }} {{data.sub_nav_class}}" gtm-menu-title="{{ level2.gtm_menu_title }}" {{ level2.tag_attr }}>{{ level2.label }}</{{ level2.tag }}>

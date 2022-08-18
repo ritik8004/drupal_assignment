@@ -1,0 +1,4 @@
+enabled: true
+# Config for defining attribute (algolia facets) names for which
+# this feature will work.
+attributes: 'size_shoe_eu'

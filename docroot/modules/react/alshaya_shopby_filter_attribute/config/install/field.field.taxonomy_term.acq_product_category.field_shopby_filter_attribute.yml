@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_shopby_filter_attribute
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_shopby_filter_attribute
+field_name: field_shopby_filter_attribute
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Shop By Filter Attribute'
+description: 'Enable to show shop by filter attribute menu items (like shoe size). For the attribute configuration see the alshaya_main_menu_attribute_navigation.settings.'
+required: false
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
