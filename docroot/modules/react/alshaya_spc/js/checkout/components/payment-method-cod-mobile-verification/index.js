@@ -8,27 +8,52 @@ import { getApiEndpoint } from '../../../backend/v2/utility';
 import logger from '../../../../../js/utilities/logger';
 import Loading from '../../../../../js/utilities/loading';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
+import CodVerifiedText from './components/CodVerifiedText';
 
 class PaymentMethodCodMobileVerification extends React.Component {
   constructor(props) {
     super(props);
+    const { otpVerified } = this.props;
     this.state = {
       otp: '',
       // Flag used to show loader on send otp request.
-      wait: true,
+      wait: (otpVerified === 0),
       // Flag to validate otp.
       // 0 when otp is not validated.
       // 1 when otp is verified and valid.
-      // 2 when otp is verified and invalid and show invalid otp message.
-      // 3 when error on otp validate request and show default error message.
-      otpVerified: 0,
+      // 2 when otp verified Recently, no need to verify again.
+      // 3 when otp is invalid and show invalid otp message.
+      // 4 when error on otp validate request and show default error message.
+      otpVerified,
     };
   }
 
   componentDidMount = () => {
     // Send OTP to mobile number from shipping address.
-    this.SendOtpToShippingMobileNumber();
+    const { otpVerified } = this.props;
+    if (otpVerified === 0) {
+      this.SendOtpToShippingMobileNumber();
+    }
   }
+
+  componentDidUpdate(prevProps) {
+    const { shippingMobileNumber } = this.props;
+    if (shippingMobileNumber !== prevProps.shippingMobileNumber) {
+      // Update otp Verified flag and reset otp input.
+      this.updateOtpVerifiedFlag();
+    }
+  }
+
+  /**
+   * Update otpVerified when user changes shipping mobile number.
+   */
+  updateOtpVerifiedFlag = () => {
+    this.setState({
+      otpVerified: 0,
+    },
+    // Send OTP to updated mobile number from shipping address.
+    () => this.SendOtpToShippingMobileNumber());
+  };
 
   /**
    * Sennd OTP to mobile number from shipping address.
@@ -110,8 +135,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
     callMagentoApi(getApiEndpoint('codMobileVerificationValidateOtp', params), 'GET')
       .then((response) => {
         if (hasValue(response) && !response.data) {
+          // Set to 3 for invalid otp and show invalid otp message.
           this.setState({
-            otpVerified: 2,
+            otpVerified: 3,
           });
 
           return;
@@ -121,9 +147,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
           logger.error('Error while validating otp for COD payment mobile verification. Response: @response', {
             '@response': JSON.stringify(response.data),
           });
-          // Set to 3 to show default error message.
+          // Set to 4 to show default error message.
           this.setState({
-            otpVerified: 3,
+            otpVerified: 4,
           });
 
           return;
@@ -139,6 +165,10 @@ class PaymentMethodCodMobileVerification extends React.Component {
         logger.error('Error while validating otp for COD payment mobile verification. Error message: @message, Code: @errorCode', {
           '@message': response.error.message,
           '@errorCode': response.error.error_code,
+        });
+        // Set to 4 to show default error message.
+        this.setState({
+          otpVerified: 4,
         });
       });
 
@@ -163,15 +193,17 @@ class PaymentMethodCodMobileVerification extends React.Component {
       );
     }
 
-    if (otpVerified === 1) {
-      // @todo Implement verified otp component.
+    if (otpVerified === 1 || otpVerified === 2) {
+      return (
+        <CodVerifiedText mobileNumber={shippingMobileNumber} />
+      );
     }
 
     let otpErrorMessage = '';
-    if (otpVerified === 2) {
+    if (otpVerified === 3) {
       otpErrorMessage = Drupal.t('Wrong OTP', {}, { context: 'cod_mobile_verification' });
     }
-    if (otpVerified === 3) {
+    if (otpVerified === 4) {
       otpErrorMessage = getDefaultErrorMessage();
     }
 
@@ -187,7 +219,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
             onChange={this.handleChange}
             numInputs={otpLength}
             isInputNum
-            className={(otpVerified === 2 || otpVerified === 3) ? 'cod-mobile-otp__field error' : 'cod-mobile-otp__field'}
+            className={(otpVerified === 3 || otpVerified === 4) ? 'cod-mobile-otp__field error' : 'cod-mobile-otp__field'}
           />
           <div id="otp-error" className="error">
             { otpErrorMessage }

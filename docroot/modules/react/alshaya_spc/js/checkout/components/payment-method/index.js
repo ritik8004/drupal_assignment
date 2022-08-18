@@ -32,6 +32,7 @@ import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import PaymentMethodCodMobileVerification
   from '../payment-method-cod-mobile-verification';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -245,6 +246,12 @@ export default class PaymentMethod extends React.Component {
       mobileNumber = (address !== null) ? address.telephone : null;
     }
 
+    // Get COD mobile verified flag from cart data.
+    let codMobileVerified = null;
+    if (hasValue(cart.cart) && hasValue(cart.cart.mobile_number_verified)) {
+      codMobileVerified = cart.cart.mobile_number_verified;
+    }
+
     return (
       <>
         <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
@@ -309,6 +316,7 @@ export default class PaymentMethod extends React.Component {
                 ref={this.paymentMethodCod}
                 shippingMobileNumber={mobileNumber}
                 otpLength="4"
+                otpVerified={codMobileVerified}
               />
               )}
             </div>
