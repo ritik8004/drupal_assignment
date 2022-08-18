@@ -10,6 +10,7 @@ const AttrNavigation = (props) => {
   let filters = 'stock > 0';
   if (typeof element.dataset.hierarchy !== 'undefined'
     && element.dataset.hierarchy !== '') {
+    // Add filter for parent target category to show the relevant facets.
     filters = `${filters} AND field_category_name.en.lvl0: "${element.dataset.hierarchy}"`;
   }
 
@@ -26,11 +27,14 @@ const AttrNavigation = (props) => {
       indexName={drupalSettings.shopByFilterAttribute.indexName}
     >
       <Configure
+        // As we don't need any results/records from algolia, we keep this 0. We
+        // only need facets to display the available options.
         hitsPerPage="0"
         filters={filters}
         ruleContexts={ruleContexts}
       />
       <Menu
+        // We always want filters to use EN language data.
         attribute={`attr_${attr}.en`}
         facetOrdering
         element={element}

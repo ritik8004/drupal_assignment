@@ -80,7 +80,8 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
 
   // Add necessary parameters on this menu item itself for React component to
   // utilise and display the filters data.
-  // Get the hierarchy data from the parent term ID.
+  // Get the hierarchy data from the parent term ID for english language always.
+  // This is because our filters accepts EN data only.
   $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
   $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $term->parent_target_id);
 
