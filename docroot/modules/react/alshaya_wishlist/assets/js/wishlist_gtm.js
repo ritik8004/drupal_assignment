@@ -62,7 +62,7 @@
           currency: drupalSettings.gtm.currency,
           index: isProductDataAvailable ? productSelector[0].getAttribute('data-insights-position') : 0,
           item_brand: product.brand,
-          item_cateogory: gtmCategory,
+          item_category: gtmCategory,
           item_id: sku,
           item_name: product.name,
           item_variant: product.variant,
@@ -73,7 +73,7 @@
 
     // Item Category
     for (let i = 0; i < categoryArray.length; i++) {
-      data.ecommerce.items[`item_cateogory${i+2}`] = categoryArray[i];
+      data.ecommerce.items[`item_category${i+2}`] = categoryArray[i];
     }
     dataLayer.push(data);
   };
