@@ -100,7 +100,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
 
     return (
       <div className="spc-hello-member-checkout-rewards-block fadeInUp">
-        <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('loyalty', {}, { context: 'hello_member' })}</SectionTitle>
+        <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('loyalty')}</SectionTitle>
         {!isUserAuthenticated()
           && (
           <GuestUserLoyalty

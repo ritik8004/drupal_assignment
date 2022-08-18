@@ -1,4 +1,4 @@
-import HTMLReactParser from 'html-react-parser';
+import parse from 'html-react-parser';
 import React from 'react';
 import Popup from 'reactjs-popup';
 
@@ -52,11 +52,15 @@ export default class LoyaltyConfirmPopup extends React.Component {
         >
           <div className="loyalty-popup-block">
             <div className="loyalty-popup-title">
-              <span>{Drupal.t('Confirm the Loyalty', {}, { context: 'hello_member' })}</span>
+              <span>{Drupal.t('Confirm the Loyalty')}</span>
               <a className="close-modal" onClick={() => this.closeModal()} />
             </div>
             <div className="loyalty-question">
-              {HTMLReactParser(Drupal.t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits?', { '@current_option': this.getLoyaltyOptionText(currentOption), '@selected_option': this.getLoyaltyOptionText(selectedOption) }, { context: 'hello_member' }))}
+              {parse(Drupal.t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits?',
+                {
+                  '@current_option': this.getLoyaltyOptionText(currentOption),
+                  '@selected_option': this.getLoyaltyOptionText(selectedOption),
+                }))}
             </div>
             <div className="loyalty-options">
               <button
