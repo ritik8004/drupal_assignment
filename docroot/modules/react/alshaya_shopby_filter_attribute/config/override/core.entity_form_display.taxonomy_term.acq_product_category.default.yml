@@ -1,15 +1,15 @@
 dependencies:
   config:
-    - field.field.taxonomy_term.acq_product_category.field_shopby_filter_shoesize
+    - field.field.taxonomy_term.acq_product_category.field_shopby_filter_attribute
     - field.field.taxonomy_term.acq_product_category.field_shopby_filter_target_cid
 third_party_settings:
   field_group:
     group_configuration:
       children:
-        - field_shopby_filter_shoesize
+        - field_shopby_filter_attribute
         - field_shopby_filter_target_cid
 content:
-  field_shopby_filter_shoesize:
+  field_shopby_filter_attribute:
     weight: 18
     settings:
       display_label: true

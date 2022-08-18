@@ -1,7 +1,7 @@
 dependencies:
   config:
-  - field.field.taxonomy_term.acq_product_category.field_shopby_filter_shoesize
+  - field.field.taxonomy_term.acq_product_category.field_shopby_filter_attribute
   - field.field.taxonomy_term.acq_product_category.field_shopby_filter_target_cid
 hidden:
-  field_shopby_filter_shoesize: true
+  field_shopby_filter_attribute: true
   field_shopby_filter_target_cid: true

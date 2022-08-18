@@ -10,31 +10,43 @@ use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 /**
  * Implements hook_page_attachments_alter().
  */
-function alshaya_main_menu_attribute_navigation_page_attachments_alter(&$page) {
-  $page['#attached']['library'][] = 'alshaya_main_menu_attribute_navigation/menu_attribute_navigation';
+function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
+  // Load shop by filter attribute module's configs.
+  $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
+
+  // Return if feature is disabled.
+  if (!$shopby_filter_attribute_configs['enabled']) {
+    return;
+  }
+
+  // Pass the configs in drupal settings to use on front-end.
+  $page['#attached']['drupalSettings']['shopByFilterAttribute'] = $shopby_filter_attribute_configs;
+
+  // Attach the library if feature is enabled.
+  $page['#attached']['library'][] = 'alshaya_shopby_filter_attribute/menu_attribute_navigation';
 
   // Get the PLP algolia index from config.
   $algoliaConfig = Drupal::service('alshaya_algoila_react.alshaya_algolia_react_config')->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactPLP::PAGE_TYPE, AlshayaAlgoliaReactPLP::PAGE_SUB_TYPE);
-  $page['#attached']['drupalSettings']['man']['indexName'] = $algoliaConfig[AlshayaAlgoliaReactPLP::PAGE_TYPE]['indexName'];
+  $page['#attached']['drupalSettings']['shopByFilterAttribute']['indexName'] = $algoliaConfig[AlshayaAlgoliaReactPLP::PAGE_TYPE]['indexName'];
 }
 
 /**
  * Implements hook_query_TAG_NAME_alter().
  */
-function alshaya_main_menu_attribute_navigation_query_product_category_child_terms_alter(AlterableInterface $query) {
-  // Add is_underlined field.
-  $query->leftJoin('taxonomy_term__field_shopby_filter_shoesize', 'shopby_filter_shoesize', 'shopby_filter_shoesize.entity_id=tfd.tid');
-  $query->addField('shopby_filter_shoesize', 'field_shopby_filter_shoesize_value', 'shopby_filter_shoesize');
+function alshaya_shopby_filter_attribute_query_product_category_child_terms_alter(AlterableInterface $query) {
+  // Add shopby_filter_attribute field.
+  $query->leftJoin('taxonomy_term__field_shopby_filter_attribute', 'shopby_filter_attribute', 'shopby_filter_attribute.entity_id=tfd.tid');
+  $query->addField('shopby_filter_attribute', 'field_shopby_filter_attribute_value', 'shopby_filter_attribute');
 }
 
 /**
  * Implements hook_acq_sku_commerce_category_alter().
  */
-function alshaya_main_menu_attribute_navigation_acq_sku_commerce_category_alter(TermInterface $term, array $category, $parent) {
+function alshaya_shopby_filter_attribute_acq_sku_commerce_category_alter(TermInterface $term, array $category, $parent) {
   if (!empty($category['custom_attributes'])) {
     // Add the new attribute field for show_filters_shoe_size menu items.
     if (isset($category['custom_attributes']['show_filters_shoe_size'])) {
-      $term->get('field_shopby_filter_shoesize')->setValue($category['custom_attributes']['show_filters_shoe_size']['value']);
+      $term->get('field_shopby_filter_attribute')->setValue($category['custom_attributes']['show_filters_shoe_size']['value']);
     }
   }
 }
@@ -42,16 +54,16 @@ function alshaya_main_menu_attribute_navigation_acq_sku_commerce_category_alter(
 /**
  * Implements hook_alshaya_acm_product_category_tree_data_alter().
  */
-function alshaya_main_menu_attribute_navigation_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
   /** @var \Drupal\taxonomy\TermInterface $termObj **/
   $termObj = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($term->tid);
 
   // Check if we have shop by shoe size filter field available.
-  if ($termObj->hasField('field_shopby_filter_shoesize')) {
-    $shopby_filter_shoesize = (bool) $termObj->get('field_shopby_filter_shoesize')->getString();
+  if ($termObj->hasField('field_shopby_filter_attribute')) {
+    $shopby_filter_attribute = (bool) $termObj->get('field_shopby_filter_attribute')->getString();
     // If field value is true, we will add necessary parameters on this menu
     // item itself for React component to utilise and display the filters data.
-    if ($shopby_filter_shoesize) {
+    if ($shopby_filter_attribute) {
       // Get the hierarchy data from the parent term ID.
       $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
       $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $term->parent_target_id);

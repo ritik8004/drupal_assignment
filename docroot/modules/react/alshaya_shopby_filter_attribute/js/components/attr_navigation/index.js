@@ -23,7 +23,7 @@ const AttrNavigation = (props) => {
   return (
     <InstantSearch
       searchClient={searchClient}
-      indexName={drupalSettings.man.indexName}
+      indexName={drupalSettings.shopByFilterAttribute.indexName}
     >
       <Configure
         hitsPerPage="0"
@@ -34,7 +34,7 @@ const AttrNavigation = (props) => {
         attribute={`attr_${attr}.en`}
         facetOrdering
         element={element}
-        limit="1000"
+        limit={1000}
       />
     </InstantSearch>
   );

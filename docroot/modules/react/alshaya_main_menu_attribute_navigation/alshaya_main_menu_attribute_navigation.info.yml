@@ -1,7 +1,0 @@
-name: Alshaya Main Menu Attribute(s) Navigation
-type: module
-description: 'Module to implement Main Menu Attribute(s) Navigation.'
-package: 'Alshaya'
-core_version_requirement: ^9
-dependencies:
-  - alshaya_react:alshaya_react
