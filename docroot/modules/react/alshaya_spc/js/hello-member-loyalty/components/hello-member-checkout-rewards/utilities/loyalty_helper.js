@@ -18,7 +18,7 @@ function processCheckoutCart(data) {
     ? data.countryCode + data.value
     : data.value;
 
-  const apiData = window.auraBackend.updateLoyaltyCard(data.action, data.type, value);
+  const apiData = window.auraBackend.updateLoyaltyCard(data.action, data.type, value, 'hello_member');
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {

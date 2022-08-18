@@ -11,14 +11,24 @@ import { getErrorResponse } from '../../../../js/utilities/error';
  *   The field for searching.
  * @param {string} value
  *   The field value.
+ * @param {string} context
+ *   The context eg. aura or hello_member.
  *
  * @return {Object}
  *   Return API response/error.
  */
-const search = async (type, value) => {
+const search = async (type, value, context) => {
+  let requestData = {};
   const endpoint = `/V1/customers/apc-search/${type}/${value}`;
+  // If context is hello member, we pass an extra parameter to
+  // fetch user enrolled status.
+  if (context === 'hello_member') {
+    requestData = {
+      checkEnrolledStatus: 1,
+    };
+  }
 
-  return callMagentoApi(endpoint, 'GET')
+  return callMagentoApi(endpoint, 'GET', requestData)
     .then((response) => {
       let responseData = null;
 
@@ -52,11 +62,13 @@ const search = async (type, value) => {
  *   The field for searching.
  * @param {string} value
  *   The field value.
+ * @param {string} context
+ *   The context eg. aura or hello_member.
  *
  * @returns {Promise}
  *   Promise that resolves to error on failure or user data on success.
  */
-const searchUserDetails = (type, value) => {
+const searchUserDetails = (type, value, context) => {
   const validation = validateInput(type, value);
 
   if (hasValue(validation.error)) {
@@ -65,7 +77,7 @@ const searchUserDetails = (type, value) => {
 
   if (type === 'email') {
     // Call search api to get mobile number to send otp.
-    return search('email', value).then((searchResponse) => {
+    return search('email', value, context).then((searchResponse) => {
       if (typeof searchResponse.status !== 'undefined' && !searchResponse.status) {
         return getErrorResponse(
           auraErrorCodes.EMAIL_NOT_REGISTERED,
@@ -80,7 +92,7 @@ const searchUserDetails = (type, value) => {
 
   if (type === 'cardNumber' || type === 'apcNumber') {
     // Call search api to get mobile number to send otp.
-    return search('apcNumber', value).then((searchResponse) => {
+    return search('apcNumber', value, context).then((searchResponse) => {
       if (typeof searchResponse.status !== 'undefined' && !searchResponse.status) {
         return getErrorResponse(
           auraErrorCodes.INCORRECT_CARDNUMBER,
@@ -95,7 +107,7 @@ const searchUserDetails = (type, value) => {
 
   if (type === 'mobile' || type === 'phone') {
     // Call search api to verify mobile number to send otp.
-    return search('phone', value).then((searchResponse) => {
+    return search('phone', value, context).then((searchResponse) => {
       if (typeof searchResponse.status !== 'undefined' && !searchResponse.status) {
         return getErrorResponse(
           auraErrorCodes.MOBILE_NOT_REGISTERED,

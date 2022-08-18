@@ -13,10 +13,10 @@ import dispatchCustomEvent from '../../../../../../../js/utilities/events';
 import { cartContainsAnyVirtualProduct } from '../../../../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../../../../js/utilities/util';
 import LinkCardOptionMobile from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-mobile';
-import logger from '../../../../../../../js/utilities/logger';
 import LinkCardOptionEmail from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-email';
 import LinkCardOptionCard from '../../../../../aura-loyalty/components/aura-forms/aura-link-card-textbox/components/link-card-option-card';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import Loading from '../../../../../utilities/loading';
 
 class AuraLoyaltyForm extends React.Component {
   constructor(props) {
@@ -39,6 +39,7 @@ class AuraLoyaltyForm extends React.Component {
       points: 0,
       expiringPoints: 0,
       expiryDate: null,
+      waitForPoints: false,
     };
   }
 
@@ -72,6 +73,9 @@ class AuraLoyaltyForm extends React.Component {
   }
 
   handleSearchEvent = (data) => {
+    this.setState({
+      waitForPoints: true,
+    });
     const { stateValues } = data.detail;
 
     if (stateValues.error) {
@@ -100,33 +104,34 @@ class AuraLoyaltyForm extends React.Component {
         message: getStringMessage('aura_partially_enrolled_message'),
       });
     } else if (stateValues.isFullyEnrolled) {
+      // We get customer points only for fully enrolled customer.
+      showFullScreenLoader();
+      // If user is fully enrolled, we get all his apc points details.
+      const customerPoints = getAuraCustomerPoints(stateValues.cardNumber);
+      customerPoints.then((result) => {
+        if (hasValue(result.error)) {
+          this.showResponse({
+            type: 'failure',
+            message: result.error_message,
+          });
+        } else {
+          this.setState({
+            isFullyEnrolled: true,
+            points: result.auraPoints,
+            expiringPoints: result.auraPointsToExpire,
+            expiryDate: result.auraPointsExpiryDate,
+          });
+        }
+        this.setState({
+          waitForPoints: false,
+        });
+        removeFullScreenLoader();
+      });
       this.showResponse({
         type: 'success',
         message: '',
       });
-      this.setState({
-        isFullyEnrolled: true,
-      });
     }
-
-    showFullScreenLoader();
-    // If user is fully enrolled, we get all his apc points details.
-    const customerPoints = getAuraCustomerPoints(stateValues.cardNumber);
-    customerPoints.then((result) => {
-      if (hasValue(result.error)) {
-        logger.error('Error while trying to fetch customer information for user with customer id @customerId. Message: @message', {
-          '@customerId': stateValues.cardNumber,
-          '@message': result.error_message || '',
-        });
-      } else {
-        this.setState({
-          points: result.auraPoints,
-          expiringPoints: result.auraPointsToExpire,
-          expiryDate: result.auraPointsExpiryDate,
-        });
-      }
-      removeFullScreenLoader();
-    });
 
     this.setState({
       ...stateValues,
@@ -230,9 +235,18 @@ class AuraLoyaltyForm extends React.Component {
       points,
       expiringPoints,
       expiryDate,
+      waitForPoints,
     } = this.state;
 
     const { cart } = this.props;
+
+    if (isFullyEnrolled && waitForPoints) {
+      return (
+        <div className="spc-hello-member-checkout-loading fadeInUp">
+          <Loading />
+        </div>
+      );
+    }
 
     // Disable AURA guest user link card form if cart contains virtual products.
     const formActive = !(isEgiftCardEnabled() && cartContainsAnyVirtualProduct(cart.cart));
