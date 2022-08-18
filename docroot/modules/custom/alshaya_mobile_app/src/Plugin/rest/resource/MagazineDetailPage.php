@@ -316,7 +316,7 @@ class MagazineDetailPage extends ResourceBase {
         $shop_the_story['items'][] = $sku_data;
       }
     }
-    if (array_key_exists('shop_the_story', $shop_the_story)) {
+    if (array_key_exists('items', $shop_the_story)) {
       $shop_the_story['label'] = $node->field_magazine_shop_the_story->getFieldDefinition()->getLabel();
     }
 
