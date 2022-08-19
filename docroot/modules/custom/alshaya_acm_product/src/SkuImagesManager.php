@@ -1542,19 +1542,22 @@ class SkuImagesManager {
     }
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $product_media = $this->getProductMedia($sku, $context);
-    // Search image styles in product media using url and return styles.
+    // Search image styles in product media using filename and return styles.
     foreach ($media['images'] as $mid => $media_item) {
       $media['images'][$mid]['styles'] = [];
-      $key = array_search(
-        $media_item['url'],
-        array_column(
-          $product_media['media_items']['images'],
-          'drupal_uri'
-        )
-      );
+      $pims_style_key = NULL;
+      foreach ($product_media['media_items']['images'] as $key => $images) {
+        if (!empty($images['pims_image'])
+          && basename($media_item['url']) === $images['pims_image']['filename']
+        ) {
+          $pims_style_key = $key;
+          break;
+        }
+      }
+
       // Check if images styles exists for the sku and return the urls.
-      if (isset($key)) {
-        $image = $product_media['media_items']['images'][$key];
+      if (isset($pims_style_key)) {
+        $image = $product_media['media_items']['images'][$pims_style_key];
         if (!empty($image['styles'])) {
           $media['images'][$mid]['styles'] = $image['styles'];
         }
