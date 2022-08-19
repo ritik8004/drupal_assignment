@@ -43,6 +43,7 @@ variables:
   continue_shopping: 'go shopping'
   language_continue_shopping: "اذهبي للتسوق"
   mobile_language_class: 'ar'
+  mobile_class: 'en'
   language_short: 'ar'
   area_option: 'Al Baraha'
   city_option: 'Dubai'

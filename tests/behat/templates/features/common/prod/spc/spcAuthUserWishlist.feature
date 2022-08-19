@@ -1,4 +1,6 @@
-@javascript @auth @Wishlist @homeDelivery @bpaeprod @bpkwprod @tbsegprod @bpsaprod @hmkwprod @hmaeprod @coskwprod @cosaeprod @cossaprod @vskwprod @vssaprod @vsaeprod @flkwprod @flsaprod @flaeprod @mujiaeprod @mujikwprod @tbskwprod @bbwaeprod @bbwkwprod @bbwsaprod @mcaeprod @mckwprod @mcsaprod
+@javascript @auth @Wishlist @homeDelivery @bpaeprod @bpkwprod @bpsaprod @hmkwprod @hmaeprod @coskwprod @cosaeprod @cossaprod @vskwprod @vssaprod @vsaeprod @flkwprod @flsaprod @flaeprod @mujiaeprod @mujikwprod @tbskwprod @bbwaeprod @bbwkwprod @bbwsaprod @mcaeprod @mckwprod @mcsaprod
+@bpaepprod @bpkwpprod @bpsapprod @hmkwpprod @hmaepprod @coskwpprod @cosaepprod @cossapprod @vskwpprod @vssapprod @vsaepprod @flkwpprod @flsapprod @flaepprod @mujiaepprod @mujikwpprod @tbskwpprod @bbwaepprod @bbwkwpprod @bbwsapprod @mcaepprod @mckwpprod @mcsapprod
+
 Feature: SPC Checkout Wishlist feature for Authenticated user
 
   Background:

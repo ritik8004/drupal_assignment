@@ -1,4 +1,4 @@
-@javascript @smoke @mobile @newPdp
+@javascript @smoke @mobile @newPdp @flaepprod @flkwpprod @flsapprod @mcaepprod @mckwpprod @mcsapprod @mckwuat @flkwuat @mckwprod @mcaeprod @mcsaprod @flkwprod
 Feature: Testing new PDP CNC Block for Mobile
 
   Background:
@@ -6,7 +6,11 @@ Feature: Testing new PDP CNC Block for Mobile
     And I wait 10 seconds
     And I wait for the page to load
 
+  @mobile
   Scenario: To verify user is able to see CNC Block
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_class} a" on page
+    And I wait 10 seconds
+    And I wait for the page to load
     When I scroll to the ".magv2-pdp-standard-delivery-wrapper" element
     And the element ".magv2-pdp-click-and-collect-wrapper" should exist
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-title-wrapper.title" should exist
@@ -19,7 +23,7 @@ Feature: Testing new PDP CNC Block for Mobile
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-content-wrapper .instore-wrapper #click-n-collect-search-field" should exist
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-content-wrapper .instore-wrapper #click-n-collect-search-field .location-field-wrapper .location-field" should exist
 
-  @language
+  @language @mobile
   Scenario: To verify user is able to see CNC Block
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
@@ -35,7 +39,11 @@ Feature: Testing new PDP CNC Block for Mobile
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-content-wrapper .instore-wrapper #click-n-collect-search-field" should exist
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-content-wrapper .instore-wrapper #click-n-collect-search-field .location-field-wrapper .location-field" should exist
 
+  @mobile
   Scenario: To verify user is able to search stores for CNC
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_class} a" on page
+    And I wait 10 seconds
+    And I wait for the page to load
     When I scroll to the ".magv2-pdp-standard-delivery-wrapper" element
     And the element ".magv2-pdp-click-and-collect-wrapper" should exist
     Then I select the first autocomplete option for "{np_plp_store}" on the "edit-store-location" field
@@ -49,7 +57,7 @@ Feature: Testing new PDP CNC Block for Mobile
     Then I should see a ".magv2-click-collect-results .store-detail-wrapper .store-details .store-address" element on page
     Then I should see a ".magv2-click-collect-content-wrapper .magv2-click-collect-show-link" element on page
 
-  @language
+  @language @mobile
   Scenario: To verify user is able to search stores for CNC in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load

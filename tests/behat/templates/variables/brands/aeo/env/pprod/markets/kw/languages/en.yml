@@ -40,6 +40,7 @@ variables:
   language_excluding_delivery: 'قبل التوصيل'
   language_checkout_link: 'إتمام الشراء بأمان'
   mobile_language_class: 'ar'
+  mobile_class: 'en'
   language_short: 'ar'
   area_option: 'Abdali'
   city_option: ''
