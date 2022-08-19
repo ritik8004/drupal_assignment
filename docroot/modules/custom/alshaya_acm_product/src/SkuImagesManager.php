@@ -1547,22 +1547,18 @@ class SkuImagesManager {
       $media['images'][$mid]['styles'] = [];
       $pims_style_key = NULL;
       foreach ($product_media['media_items']['images'] as $key => $images) {
+        // Check if images styles exists for the sku and return the urls.
         if (!empty($images['pims_image'])
           && basename($media_item['url']) === $images['pims_image']['filename']
         ) {
-          $pims_style_key = $key;
+          $image = $product_media['media_items']['images'][$key];
+          if (!empty($image['styles'])) {
+            $media['images'][$mid]['styles'] = $image['styles'];
+          }
+          elseif (!empty($image['pims_image']['styles'])) {
+            $media['images'][$mid]['styles'] = $image['pims_image']['styles'];
+          }
           break;
-        }
-      }
-
-      // Check if images styles exists for the sku and return the urls.
-      if (isset($pims_style_key)) {
-        $image = $product_media['media_items']['images'][$pims_style_key];
-        if (!empty($image['styles'])) {
-          $media['images'][$mid]['styles'] = $image['styles'];
-        }
-        elseif (!empty($image['pims_image']['styles'])) {
-          $media['images'][$mid]['styles'] = $image['pims_image']['styles'];
         }
       }
     }
