@@ -63,15 +63,17 @@ window.commerceBackend = window.commerceBackend || {};
 
     try {
       variant.product.media_teaser = null;
-      var mediaData = JSON.parse(variant.product.assets_teaser);
-      mediaData.every(function setTeaserMedia(media) {
-        variant.product.media_teaser = media.styles.product_teaser;
-        // We do this so that we are able to detect in getSkuForGallery
-        // that the variant has media.
-        variant.product.hasMedia = true;
-        // Break as there is only 1 teaser image expected.
-        return false;
-      });
+      if (Drupal.hasValue(variant.product.assets_teaser)) {
+        var mediaData = JSON.parse(variant.product.assets_teaser);
+        mediaData.every(function setTeaserMedia(media) {
+          variant.product.media_teaser = media.styles.product_teaser;
+          // We do this so that we are able to detect in getSkuForGallery
+          // that the variant has media.
+          variant.product.hasMedia = true;
+          // Break as there is only 1 teaser image expected.
+          return false;
+        });
+      }
     }
     catch (e) {
       Drupal.alshayaLogger('error', 'Exception occurred while parsing teaser product assets for sku @sku: @message', {

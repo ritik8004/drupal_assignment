@@ -65,11 +65,13 @@ const replaceOrderPlaceHolders = function (product, itemHtml, settings) {
   // Prepare the data object with image placeholder variable.
   let imagePlaceHolder = innerHtmlObj.find('img.rcs-image');
   if (imagePlaceHolder.length > 0) {
+    var image = window.commerceBackend.getTeaserImage(product);
+    var name = Drupal.hasValue(product.name) ? product.name : imagePlaceHolder[0].getAttribute('title');
+
     htmlElms = replaceIndividualPlaceHolder(
       imagePlaceHolder[0].outerHTML,
       'productItem',
-      // @todo To change the product image to teaser image.
-      { 'image': product.image, 'name': product.title },
+      { image, name },
       settings,
     );
     imagePlaceHolder.replaceWith(htmlElms);

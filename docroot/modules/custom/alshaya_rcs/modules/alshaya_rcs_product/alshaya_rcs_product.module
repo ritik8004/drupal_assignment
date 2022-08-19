@@ -692,6 +692,18 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     $query_fields['crosssell_products'] = $rcs_product_helper->getRecommendedProductQuery('crosssell_products');
   }
 
+  $recent_orders_fields = $rcs_product_helper->getRecentOrderFields();
+  $query_fields['recent_orders'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $recent_orders_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
+
   return $query_fields;
 }
 
@@ -840,6 +852,9 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
       // Iterate over each order item.
       foreach ($order['#order']['items'] as $key => $item) {
         $build['recent_order'][$id]['#order']['items'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
+        // For backup, we will use the name from the image title attribute in
+        // case API data is not available.
+        $build['recent_order'][$id]['#order']['items'][$key]['name'] = '#rcs.productItem.name#';
         $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'];
       }
     }

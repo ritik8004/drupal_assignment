@@ -10,7 +10,7 @@
       // Get the product data based on sku.
       var skus = JSON.parse(e.extraData.params['skus']);
       Object.entries(skus).forEach(function eachSku([child, parent]) {
-        e.promises.push(Drupal.alshayaSpc.getProductDataV2(child, parent));
+        e.promises.push(window.commerceBackend.getProductDataRecentOrders(child, parent));
       });
     }
   });

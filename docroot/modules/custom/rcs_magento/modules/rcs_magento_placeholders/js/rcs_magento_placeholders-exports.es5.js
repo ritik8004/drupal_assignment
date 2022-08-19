@@ -364,6 +364,13 @@ exports.getData = async function getData(
       result = rcsCommerceBackend.invokeApi(request);
       break;
 
+    case 'recent_orders_product_data':
+      let recentOrdersVariables = rcsPhGraphqlQuery.recent_orders.variables;
+      recentOrdersVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.recent_orders.query, recentOrdersVariables);
+      result = rcsCommerceBackend.invokeApi(request);
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported by default for get_data.`);
 

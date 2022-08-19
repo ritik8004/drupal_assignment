@@ -20,6 +20,7 @@ window.commerceBackend = window.commerceBackend || {};
     configurables: {},
     // This will prevent multiple requests to fetch same product data.
     productDataFromBackend: {},
+    recentOrdersData: {},
   };
 
   /**
@@ -1061,10 +1062,10 @@ window.commerceBackend = window.commerceBackend || {};
    * @return {string}
    *   The media item url.
    */
-   window.commerceBackend.getTeaserImage = function (product) {
-     const galleryProduct = getSkuForGallery(product);
-     return galleryProduct.media_teaser;
-   };
+  window.commerceBackend.getTeaserImage = function (product) {
+    const galleryProduct = getSkuForGallery(product);
+    return galleryProduct.media_teaser;
+  };
 
   /**
    * Get the prices from product entity.
@@ -1447,6 +1448,54 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
 
   return combinations.attribute_sku[attribute][option_id][0];
 }
+
+  /**
+   *
+   *
+   * @param {string} child
+   *   Child sku.
+   * @param {string} parent
+   *   Parent sku.
+   *
+   * @returns {Object}
+   *   Product data for recent orders.
+   */
+  window.commerceBackend.getProductDataRecentOrders = function getProductDataRecentOrders(child, parent) {
+    if (Drupal.hasValue(staticDataStore.recentOrdersData[child])){
+      return staticDataStore.recentOrdersData[child];
+    }
+
+    staticDataStore.recentOrdersData[child] = globalThis.rcsPhCommerceBackend.getData('recent_orders_product_data', {sku: parent}).then(function onRecentOrdersFetched(response) {
+      try {
+        var product = response.data.products.items[0];
+        // Clone the product so as to not modify the original object.
+        product = JSON.parse(JSON.stringify(product));
+        window.commerceBackend.setMediaData(product);
+        var data = {};
+        if (product.type_id === 'configurable') {
+          product.variants.some(function eachVariant(variant) {
+            if (variant.product.sku === child) {
+              data = variant.product;
+              return true;
+            }
+            return false;
+          });
+        }
+        else {
+          data = product;
+        }
+
+        return data;
+      } catch (e) {
+        Drupal.alshayaLogger('warning', 'Could not parse product data for SKU @sku', {
+          '@sku': sku
+        });
+        return {};
+      }
+    });
+
+    return staticDataStore.recentOrdersData[child];
+  }
 
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {

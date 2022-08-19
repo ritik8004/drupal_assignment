@@ -664,4 +664,32 @@ class AlshayaRcsProductHelper {
     }
   }
 
+  /**
+   * Get recent orders fields.
+   *
+   * @return array
+   *   Returns the fields for recent orders query.
+   */
+  public function getRecentOrderFields() {
+    $fields = [
+      'total_count',
+      'items' => [
+        'type_id',
+        'sku',
+        'name',
+        '... on ConfigurableProduct' => [
+          'variants' => [
+            'product' => [
+              'sku',
+              'name',
+            ],
+          ],
+        ],
+      ],
+    ];
+
+    $this->moduleHandler->alter('alshaya_rcs_product_recent_orders_fields', $fields);
+    return $fields;
+  }
+
 }
