@@ -124,6 +124,7 @@ class AlshayaGtmManager {
     'name' => 'gtm-name',
     'id' => 'gtm-main-sku',
     'price' => 'gtm-price',
+    'productOldPrice' => 'gtm-old-price',
     'brand' => 'gtm-brand',
     'category' => 'gtm-category',
     'variant' => 'gtm-product-sku',
@@ -378,12 +379,16 @@ class AlshayaGtmManager {
     }
 
     $skuId = $this->skuManager->getSkuForNode($product);
+    $product_terms = $this->fetchProductCategories($product);
+    $department_attributes = $this->fetchDepartmentAttributes($product_terms);
     $skuAttributes = $this->fetchSkuAtttributes($skuId, $child);
 
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
+    $attributes['gtm-department-name'] = $department_attributes['departmentName'];
+    $attributes['gtm-department-id'] = $department_attributes['departmentId'];
 
     $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
     $attributes = array_merge($attributes, $skuAttributes);
@@ -529,12 +534,16 @@ class AlshayaGtmManager {
       && ($final_price < $original_price)) {
 
       $product_type = 'Discounted Product';
+      $attributes['gtm-old-price'] = _alshaya_acm_format_price_with_decimal((float) $original_price, '.', '');
     }
 
     $attributes['gtm-dimension3'] = $product_type;
 
-    // @todo This is supposed to stay blank here?
-    $attributes['gtm-stock'] = '';
+    $attributes['gtm-stock'] = $this->skuManager->isProductInStock($sku)
+      ? 'in stock'
+      : 'out of stock';
+
+    $attributes['gtm-magento-product-id'] = $sku->get('product_id')->getString();
 
     // Override values from parent if parent sku available.
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId, 'en')) {
@@ -1033,10 +1042,22 @@ class AlshayaGtmManager {
       $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
     }
 
+    $additional_info = [];
+    // Fetch Additional Info.
+    foreach ($order['payment']['additional_information'] as $key => $value) {
+      if (is_object(json_decode($value))) {
+        $additional_info = json_decode($value);
+        break;
+      }
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
+      'egiftRedeemType' => !empty($additional_info) ? $additional_info->card_type : '',
+      'isAdvantageCard' => $order['coupon_code'] === 'advantage_card',
+      'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',

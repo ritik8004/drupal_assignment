@@ -63,7 +63,7 @@ class ReturnEligibilityMessage extends React.Component {
       );
     }
 
-    if (orderType === 'ship_to_store') {
+    if (orderType === 'cc') {
       return (
         <div className="eligibility-window-container">
           <div className="eligibility-message-wrapper">

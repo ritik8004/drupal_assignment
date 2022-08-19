@@ -320,6 +320,16 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
       $data_layer = array_merge($data_layer, $attributes['general']);
 
+      $address_city = (!empty($order['shipping']['address'])) ? $order['shipping']['address']['city'] : NULL;
+      if ($data_layer['deliveryType'] === 'ship_to_store') {
+        // Add store location to datalayer.
+        $data_layer['store_location'] = $address_city;
+      }
+      else {
+        // Add Delivery city to datalayer.
+        $data_layer['delivery_city'] = $address_city;
+      }
+
       $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
       $advantage_card_config = \Drupal::config('alshaya_spc.advantage_card');
       // Dont send card number if its Advantage card.
@@ -639,7 +649,21 @@ function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, I
     }
 
     // Add GTM data.
-    $object['gtm'] = $gtmManager->fetchProductGtmAttributes($node, 'search_result');
+    $product_gtm_attributes = $gtmManager->fetchProductGtmAttributes($node, 'search_result');
+    $product_node = \Drupal::service('entity.repository')->getTranslationFromContext($node, 'en');
+    $term_list = $product_node->get('field_category')->getValue();
+    $parents = \Drupal::service('alshaya_acm_product.category_helper')->getBreadcrumbTermList($term_list);
+    $terms = [];
+    foreach ($parents ?? [] as $parent) {
+      // For GTM we always want English data.
+      $parent = \Drupal::service('entity.repository')->getTranslationFromContext($parent, 'en');
+      $terms[$parent->id()] = trim($parent->getName());
+    }
+    // Add department id and name to index.
+    $terms = array_reverse($terms, TRUE);
+    $product_gtm_attributes['gtm-department-name'] = $terms ? implode('|', $terms) : '';
+    $product_gtm_attributes['gtm-department-id'] = $terms ? current(array_keys($terms)) : '';
+    $object['gtm'] = $product_gtm_attributes;
   }
 }
 
