@@ -5,6 +5,7 @@ namespace Alshaya\Blt\Plugin\Commands;
 use Acquia\Blt\Robo\BltTasks;
 use AcquiaCloudApi\Connector\Client;
 use AcquiaCloudApi\Connector\Connector;
+use AcquiaCloudApi\Endpoints\Servers;
 
 /**
  * This class defines wrapper around cloud tasks.
@@ -87,6 +88,73 @@ class CloudTasksCommand extends BltTasks {
 
     // Say 1 if we found the task.
     echo empty($tasks) ? 0 : 1;
+  }
+
+  /**
+   * Get all the webs/servers for an environment.
+   *
+   * @param string $deployment_identifier
+   *   Deployment Identifier to validate.
+   * @param string $environment
+   *   Environment Identifier - string and not UUID.
+   *
+   * @command acquia-cloud:check-code-deployed
+   * @aliases cloud-check-code-deployed
+   *
+   * @description Get all the webs/servers for an environment.
+   *
+   * @throws \Exception
+   */
+  public function checkCodeDeployed(string $deployment_identifier, string $environment = '') {
+    $api_cred_file = getenv('HOME') . '/acquia_cloud_api_creds.php';
+    if (!file_exists($api_cred_file)) {
+      throw new \Exception('Acquia cloud cred file acquia_cloud_api_creds.php missing at home directory.');
+    }
+
+    if (empty($environment)) {
+      $environment = getenv('AH_SITE_GROUP') . '.' . getenv('AH_SITE_ENVIRONMENT');
+    }
+
+    $environments = $this->getConfigValue('cloud_prod_environments', []);
+    if ($environments) {
+      $environments = array_column($environments, 'uuid', 'env');
+      $environment_id = $environments[$environment] ?? '';
+    }
+
+    if (empty($environment_id)) {
+      throw new \Exception('Argument validation failed, please check and try again.');
+    }
+
+    $_clientId = '';
+    $_clientSecret = '';
+
+    // Above variables should be defined in the file.
+    require $api_cred_file;
+
+    $config = [
+      'key' => $_clientId,
+      'secret' => $_clientSecret,
+    ];
+
+    $servers_connector = new Servers(Client::factory((new Connector($config))));
+    $servers = $servers_connector->getAll($environment_id);
+
+    foreach ($servers as $server) {
+      if ($server->flags->web && $server->flags->active_web) {
+        $task = $this->taskSshExec($server->hostname, $environment);
+        $task->exec("cat /var/www/html/$environment/deployment_identifier");
+        $task->printOutput(FALSE);
+        $task->arg('-o StrictHostKeyChecking=no');
+
+        $server_deployment_identifier = $task->run()->getMessage();
+        if ($server_deployment_identifier !== $deployment_identifier) {
+          echo 1;
+          return;
+        }
+      }
+    }
+
+    echo 0;
   }
 
 }
