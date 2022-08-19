@@ -671,6 +671,11 @@ class AlshayaRcsProductHelper {
    *   Returns the fields for recent orders query.
    */
   public function getRecentOrderFields() {
+    static $fields = null;
+    if ($fields) {
+      return $fields;
+    }
+
     $fields = [
       'total_count',
       'items' => [
@@ -692,4 +697,19 @@ class AlshayaRcsProductHelper {
     return $fields;
   }
 
+  /**
+   * Get order details fields.
+   *
+   * @return array
+   *   Returns the fields for order details query.
+   */
+  public function getOrderDetailsFields() {
+    $fields = $this->getRecentOrderFields();
+    $fields['items']['... on ConfigurableProduct']['variants']['attributes'] = [
+      'label',
+      'code',
+    ];
+
+    return $fields;
+  }
 }

@@ -704,6 +704,18 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     ],
   ];
 
+  $order_details_fields = $rcs_product_helper->getOrderDetailsFields();
+  $query_fields['order_details'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $order_details_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
+
   return $query_fields;
 }
 
@@ -865,6 +877,7 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
           'id' => 'rcs-ph-order_teaser',
           'class' => ['block-alshaya-acm-customer'],
           'data-param-skus' => Json::encode($child_parent_mapping),
+          'data-param-context' => 'recent_order',
         ],
       ],
     ];
@@ -886,6 +899,7 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
   // Add data attributes.
   $parentSkus = [];
   $itemSkus = [];
+  $child_parent_mapping = [];
   // Update the product image with RCS Token.
   foreach ($build['#products'] as $key => &$item) {
     // Add name placeholder if the product type is simple.
@@ -908,14 +922,15 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
       $item['price'] = t('Free');
       $item['total'] = '';
     }
+    $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'];
   }
   $build['#theme_wrappers'] = [
     'container' => [
       '#attributes' => [
         'id' => 'rcs-ph-order_teaser',
-        'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
-        'data-param-item-skus' => Json::encode(array_unique($itemSkus)),
+        'data-param-skus' => Json::encode($child_parent_mapping),
         'data-rcs-dependency' => 'none',
+        'data-param-context' => 'order_details',
       ],
     ],
   ];

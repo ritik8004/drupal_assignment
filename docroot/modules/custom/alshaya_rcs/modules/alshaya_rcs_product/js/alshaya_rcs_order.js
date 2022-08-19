@@ -9,9 +9,16 @@
     ) {
       // Get the product data based on sku.
       var skus = JSON.parse(e.extraData.params['skus']);
-      Object.entries(skus).forEach(function eachSku([child, parent]) {
-        e.promises.push(window.commerceBackend.getProductDataRecentOrders(child, parent));
-      });
+      if (e.extraData.params['context'] === 'recent_order') {
+        Object.entries(skus).forEach(function eachSku([child, parent]) {
+          e.promises.push(window.commerceBackend.getProductDataRecentOrders(child, parent));
+        });
+      }
+      else if (e.extraData.params['context'] === 'order_details'){
+        Object.entries(skus).forEach(function eachSku([child, parent]) {
+          e.promises.push(window.commerceBackend.getProductDataOrderDetails(child, parent));
+        });
+      }
     }
   });
 })(Drupal, RcsEventManager);
