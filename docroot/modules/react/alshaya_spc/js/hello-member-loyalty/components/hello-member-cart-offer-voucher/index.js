@@ -233,7 +233,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
 
     return (
       <>
-        <div className="hello-member-promo-section">
+        <div className="hello-member-promo-section clearfix">
           <a className="hello-member-promo-pop-link" onClick={() => this.onClickOpenPopup(true)}>
             {DiscountVouchersText}
             <span className={`promo-notification ${notificationClass}`} />
