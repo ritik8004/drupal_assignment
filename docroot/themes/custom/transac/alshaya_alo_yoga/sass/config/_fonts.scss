@@ -1,0 +1,132 @@
+// AY specific font family
+// English fonts.
+// Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
+$ay-regular: 'Arquitecta Regular', 'NotoSansArabic Regular', 'sans-serif', 'Arial';
+$ay-regular-nodir: 'Arquitecta Regular', 'NotoSansArabic Regular', 'sans-serif', 'Arial';
+
+$ay-bold: 'Arquitecta Bold', 'NotoSansArabic Medium', 'sans-serif', 'Arial';
+$ay-bold-nodir: 'Arquitecta Bold', 'NotoSansArabic Medium', 'sans-serif', 'Arial';
+
+$ay-heavy: 'Arquitecta Heavy', 'NotoSansArabic Bold', 'sans-serif', 'Arial';
+$ay-heavy-nodir: 'Arquitecta Heavy', 'NotoSansArabic Bold', 'sans-serif', 'Arial';
+
+$ay-black: 'Arquitecta Black', 'NotoSansArabic Black', 'sans-serif', 'Arial';
+$ay-black-nodir: 'Arquitecta Black', 'NotoSansArabic Black', 'sans-serif', 'Arial';
+
+// Arabic fonts.
+// Adding En fonts so browser prints English characters & numbers correctly in arabic.
+$ay-arabic-regular: 'NotoSansArabic Regular', 'Arquitecta Regular', 'sans-serif', 'Arial';
+$ay-arabic-regular-nodir: 'NotoSansArabic Regular', 'Arquitecta Regular', 'sans-serif', 'Arial';
+
+$ay-arabic-bold: 'NotoSansArabic Medium', 'Arquitecta Bold', 'sans-serif', 'Arial';
+$ay-arabic-bold-nodir: 'NotoSansArabic Medium', 'Arquitecta Bold', 'sans-serif', 'Arial';
+
+$ay-arabic-heavy: 'NotoSansArabic Bold', 'Arquitecta Heavy', 'sans-serif', 'Arial';
+$ay-arabic-heavy-nodir: 'NotoSansArabic Bold', 'Arquitecta Heavy', 'sans-serif', 'Arial';
+
+$ay-arabic-black: 'NotoSansArabic Heavy', 'Arquitecta Black', 'sans-serif', 'Arial';
+$ay-arabic-black-nodir: 'NotoSansArabic Heavy', 'Arquitecta Black', 'sans-serif', 'Arial';
+
+//Proxima Nova
+$ay-nova-regular: 'ProximaNova Regular', 'NotoSansArabic Regular', 'sans-serif', 'Arial';
+$ay-nova-regular-nodir: 'ProximaNova Regular', 'NotoSansArabic Regular', 'sans-serif', 'Arial';
+
+$ay-nova-semibold: 'ProximaNova Semi Bold', 'NotoSansArabic Semi Bold', 'sans-serif', 'Arial';
+$ay-nova-semibold-nodir: 'ProximaNova Semi Bold', 'NotoSansArabic Semi Bold', 'sans-serif', 'Arial';
+
+$ay-nova-bold: 'ProximaNova Bold', 'NotoSansArabic Bold', 'sans-serif', 'Arial';
+$ay-nova-bold-nodir: 'ProximaNova Bold', 'NotoSansArabic Bold', 'sans-serif', 'Arial';
+
+//Proxima Nova to Arabic
+$ay-nova-arabic-regular: 'NotoSansArabic Regular', 'ProximaNova Regular', 'sans-serif', 'Arial';
+$ay-nova-arabic-regular-nodir: 'NotoSansArabic Regular', 'ProximaNova Regular', 'sans-serif', 'Arial';
+
+$ay-nova-arabic-semibold: 'NotoSansArabic Semi Bold', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+$ay-nova-arabic-semibold-nodir: 'NotoSansArabic Semi Bold', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+
+$ay-nova-arabic-bold: 'NotoSansArabic Bold', 'ProximaNova Bold', 'sans-serif', 'Arial';
+$ay-nova-arabic-bold-nodir: 'NotoSansArabic Bold', 'ProximaNova Bold', 'sans-serif', 'Arial';
+
+$alshaya-icons: 'alshaya-icons';
+$body_font: $ay-regular;
+
+// Override font variables coming from MC, without this we get a 404 as font files are no longer present in AY theme.
+$arial: $ay-regular;
+$arial-nodir: $ay-regular;
+$alshaya-bold: $ay-bold;
+$alshaya-arabic-bold: $ay-arabic-bold;
+$alshaya-thin: $ay-regular;
+$alshaya-arabic-thin: $ay-arabic-regular;
+$campaign-plp-style-1-font: $ay-regular;
+$campaign-plp-style-1-arabic-font: $ay-arabic-regular;
+
+// Icon Fonts
+$icons: (
+  arrowup: "\e93b",
+  login: "\e929",
+  chevronleft: "\e902",
+  chevronright: "\e903",
+  chevronup: "\e904",
+  check: "\e905",
+  checkshape: "\e906",
+  circle-stroke-shape: "\e907",
+  circle-shape: "\e908",
+  delivery: "\e90b",
+  direction-fill: "\e90c",
+  direction-stroke: "\e90d",
+  dropdown-collapse: "\e90e",
+  dropdown-expand: "\e90f",
+  favorite-fill: "\e910",
+  favorite-stroke: "\e911",
+  paginator-active: "\e912",
+  paginator-inactive: "\e913",
+  radio-empty: "\e914",
+  radio-filled: "\e915",
+  rating: "\e916",
+  ratingfull: "\e917",
+  video path1: "\e918",
+  video path2: "\e919",
+  loader path1: "\e91a",
+  loader path2: "\e91b",
+  loader path3: "\e91c",
+  menu: "\e91e",
+  list: "\e91f",
+  map: "\e922",
+  mylocation: "\e923",
+  newsletter: "\e924",
+  rewards: "\e926",
+  language: "\e927",
+  infomation: "\e928",
+  warning: "\2757",
+  googleplus: "\1f576",
+  facebook: "\1f575",
+  twitter: "\1f425",
+  pinterest: "\1f4cc",
+  instagram: "\1f305",
+  youtube: "\1f4fa",
+  edit-input: "\e93d",
+  bell: "\e006",
+  marquee-plus: "\e083",
+  price-tag: "\e93a",
+  bin: "\e9ad",
+  plus: "\e901",
+  close: "\e92a",
+  check-box-empty: "\e92c",
+  check-box-filled: "\e92d",
+  filter: "\e925",
+  search: "\e92f",
+  shopping-bag: "\e930",
+  arrow-left: "\e92e",
+  arrow-right: "\e92b",
+  chevrondown: "\e931",
+  minus: "\e900",
+  store: "\e909",
+  new-facebook-default: "\e90a",
+  new-facebook-hover: "\e91d",
+  new-instagram-default: "\e920",
+  new-instagram-hover: "\e921",
+  new-twitter-default: "\e932",
+  new-twitter-hover: "\e933",
+  new-whatsapp-default: "\e934",
+  new-whatsapp-hover: "\e935",
+);

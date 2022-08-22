@@ -1,0 +1,102 @@
+/**
+  * UC Browser - Specific issues and hacks for them.
+ */
+body.ucbrowser {
+  @include breakpoint($upto-desktop) {
+    .c-menu-primary {
+      .store,
+      .mobile--menu,
+      .mobile-search {
+        font-size: 0 !important;
+      }
+    }
+  }
+
+  // Fix for direction attribute support for UC browser.
+  // Select elements for size and quantity.
+  .mob-imagegallery__thumbnails__image {
+    height: 27.5rem;
+  }
+
+  &.sizeguide-modal-overlay {
+    .ui-dialog {
+      @include breakpoint($only-tablet) {
+        padding: 10rem 8.125rem !important;
+      }
+    }
+  }
+}
+
+/**
+ * Opera - Specific issues and hacks for them.
+ */
+
+/**
+ * Chrome - Specific issues and hacks.
+ */
+
+// In Chrome, padding is not applied correctly on select, adding text-indent to roughly center the number.
+body.chrome {
+  .content__title_wrapper {
+    .has--special--price,
+    .special--price,
+    .price--discount {
+      display: inline-table;
+    }
+
+    .price--discount {
+      @include breakpoint($tablet) {
+        html[lang=ar] & {
+          display: inline;
+        }
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .acq-cart-summary {
+    .price-wrapper {
+      .price-amount {
+        font-family: $ay-regular-nodir;
+      }
+    }
+  }
+
+  #table-cart-totals {
+    .price-wrapper {
+      .price-amount {
+        left: 0;
+      }
+
+      .price-currency {
+        @include breakpoint($desktop) {
+          float: none !important;
+        }
+      }
+    }
+  }
+}
+
+body.nodetype--acq_product.ucbrowser .dialog-product-image-gallery-container-mobile {
+  padding: 0 !important;
+}
+
+.ucbrowser .user__address--column {
+  width: 90%;
+}
+
+.ie .address .address--primary span::before,
+.ie .address .address--primary a::before {
+  // Adding px for IE, top not working as expected.
+  margin-top: 15px !important;
+}
+
+.ie .site-brand-home a img,
+.ie .filter-fixed-top .sticky-filter-wrapper .site-brand-home a {
+  width: auto;
+}
+
+.ie .filter-fixed-top .sticky-filter-wrapper .site-brand-home a img {
+  width: 3rem;
+}
