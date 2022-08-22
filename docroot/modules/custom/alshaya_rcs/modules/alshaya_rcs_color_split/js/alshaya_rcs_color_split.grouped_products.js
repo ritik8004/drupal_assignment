@@ -146,10 +146,10 @@ window.commerceBackend = window.commerceBackend || {};
     const mainProductAttributes = getProductConfigurableAttributes(mainProduct);
 
     if (Drupal.hasValue(styleProducts)) {
+      // Alter the configurable variants list of the main product.
+      // We will re-populate the variants.
+      mainProduct.variants = [];
       styleProducts.forEach(function eachStyleProduct(styleProduct) {
-        // Alter the configurable variants list of the main product.
-        // We will re-populate the variants.
-        mainProduct.variants = [];
         // Store each product data into static storage so that it can be used in
         // PLP add to bag to get the parent sku.
         if (mainProduct.sku !== styleProduct.sku) {

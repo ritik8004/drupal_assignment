@@ -1,0 +1,169 @@
+// aura field
+.spc-aura-link-card-form .spc-aura-link-card-form-content > .spc-aura-link-card-wrapper {
+  .form-items {
+    height: rem(36);
+    display: flex;
+    align-items: flex-start;
+
+    @include breakpoint($only-mobile) {
+      margin-top: rem(16);
+    }
+
+    &.success {
+      cursor: not-allowed;
+
+      > .spc-aura-link-card-input-mobile-aura-mobile-field,
+      > .spc-aura-link-card-input-card,
+      > .spc-aura-link-card-input-email,
+      > .spc-aura-link-card-submit {
+        pointer-events: none;
+      }
+
+      @include icon('check') {
+        display: inline-flex;
+        font-size: rem(29);
+        position: absolute;
+        #{$right}: rem(100);
+        height: 100%;
+        width: rem(32);
+        align-items: center;
+        justify-content: center;
+        color: $aura-spc-response-message;
+        z-index: 1;
+      }
+    }
+
+    > .spc-aura-link-card-input-mobile-aura-mobile-field {
+      height: 100%;
+      width: calc(100% - 6.1875rem);
+      display: flex;
+      align-items: center;
+      border: rem(1) solid $aura-spc-textbox-border;
+      border-top-#{$left}-radius: rem(4);
+      border-top-#{$right}-radius: 0;
+      border-bottom-#{$right}-radius: 0;
+      border-bottom-#{$left}-radius: rem(4);
+      border-#{$right}: 0;
+
+      @include breakpoint($only-mobile) {
+        width: calc(100% - 4rem);
+      }
+
+      .field-wrapper {
+        height: 100%;
+        align-items: center !important;
+
+        .spc-aura-select {
+          position: unset;
+        }
+
+        .spc-aura-mobile-number-country-code {
+          margin-#{$left}: rem(12);
+          width: rem(68);
+
+          label {
+            display: none;
+          }
+
+          .spcAuraSelect__control {
+            border-bottom: none !important;
+          }
+        }
+
+        .spc-type-textfield {
+          margin-#{$left}: 0 !important;
+          width: 100% !important;
+          display: flex;
+          align-items: center;
+
+          input {
+            border: none;
+            border-radius: 0;
+            border-#{$right}: 0;
+            padding-#{$left}: rem(12);
+          }
+        }
+      }
+
+      .spc-type-textfield {
+        label {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+
+  input,
+  button {
+    height: 100%;
+  }
+
+  input.spc-aura-link-card-input {
+    border: rem(1) solid $aura-spc-textbox-border;
+    border-top-#{$left}-radius: rem(4);
+    border-top-#{$right}-radius: 0;
+    border-bottom-#{$right}-radius: 0;
+    border-bottom-#{$left}-radius: rem(4);
+    border-#{$right}: 0;
+    padding-#{$left}: rem(12);
+    width: calc(100% - 6.1875rem);
+
+    @include force-ltr {
+      text-align: right;
+    }
+
+    &::placeholder {
+      color: $aura-spc-textbox-placeholder;
+    }
+  }
+
+  button.spc-aura-button {
+    width: rem(99);
+    border-radius: 0;
+    border-top-#{$right}-radius: rem(4);
+    border-bottom-#{$right}-radius: rem(4);
+    border: rem(1) solid $aura-spc-textbox-border;
+    color: $hello-member-loyalty-aura-form-btn;
+    background: $hello-member-loyalty-aura-form-btn-bg;
+  }
+
+  .sub-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-#{$left}: rem(20);
+    width: rem(82);
+    line-height: rem(34);
+
+    a {
+      color: $aura-spc-checkout-highlight;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(20);
+      margin-#{$left}: 0;
+      width: 100%;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+
+    @include breakpoint($only-mobile) {
+      a {
+        margin-#{$left}: rem(10);
+      }
+    }
+  }
+}
+
+.spc-aura-link-api-response-message:not(:empty) {
+  color: $aura-spc-response-message;
+  padding-top: rem(7);
+  font-size: rem(12);
+
+  &.error {
+    color: $primary_input_inline_error;
+  }
+}

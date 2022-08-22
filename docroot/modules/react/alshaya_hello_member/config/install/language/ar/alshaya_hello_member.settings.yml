@@ -1,0 +1,7 @@
+membership_popup_text_above:
+  value: '<p className="hello-membership-sub-title">تجربتك أصبحت أفضل! مع الشروط المحدثة وأمبير. الشروط أنت الآن عضو ويمكنك الاستمتاع بمجموعة واسعة من المزايا والميزات الجديدة. تعال واحصل على توصيل مجاني وخصم 20٪ على مشترياتك التالية!</p>'
+  format: full_text
+membership_popup_text_below:
+  value: '<p className="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</p><p className="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</p><p className="hello-membership-terms">انقر هنا لقراءة المزيد عن برنامج</a></p>'
+  format: full_text
+brand_membership_text: 'عضوية اتش اند ام'

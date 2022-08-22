@@ -1,0 +1,23 @@
+.alias--membership-info.nodetype--advanced_page {
+  .c-promo__item {
+    &:nth-of-type(2) {
+      .paragraph--type--section-divider {
+        .field--name-field-section-divider-text {
+          font-family: $hnm-demibold;
+        }
+      }
+    }
+
+    &:nth-of-type(3) {
+      .field--name-field-1-row-4-col.field__items {
+        & > .field__item {
+          .paragraph--type--image-title-subtitle {
+            .field--name-field-title {
+              font-family: $hnm-demibold;
+            }
+          }
+        }
+      }
+    }
+  }
+}

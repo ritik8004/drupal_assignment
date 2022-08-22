@@ -95,7 +95,7 @@ class ReturnRequest extends React.Component {
     const {
       itemsSelected, errorMessage, orderDetails, wait,
     } = this.state;
-    const { helperBlock } = drupalSettings.returnInfo;
+    const { helperBlock } = drupalSettings.onlineReturns.returnInfo;
     const { orderId } = orderDetails['#order'];
     if (!hasValue(orderDetails) || wait) {
       return null;
