@@ -12,7 +12,7 @@ defaults:
 jobs:
   validate:
     name: Validate
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     container:
       image: devwithlando/php:7.4-fpm-4
