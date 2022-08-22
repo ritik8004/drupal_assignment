@@ -10,7 +10,11 @@ const AttrNavigation = (props) => {
   let filters = 'stock > 0';
   if (typeof element.dataset.hierarchy !== 'undefined'
     && element.dataset.hierarchy !== '') {
-    // Add filter for parent target category to show the relevant facets.
+    // Add filters for Algolia to fetch the relevant attribute facet options
+    // only. For example, if attribute filter menus are rendered under the Men's
+    // L1 category, the relevant attribute facet options will render and similar
+    // for the other L1 categories as well. This is so the options will match
+    // from the PLP pages for the targetted category.
     filters = `${filters} AND field_category_name.en.lvl0: "${element.dataset.hierarchy}"`;
   }
 
@@ -34,8 +38,9 @@ const AttrNavigation = (props) => {
         ruleContexts={ruleContexts}
       />
       <Menu
-        // We always want filters to use EN language data.
-        attribute={`attr_${attr}.en`}
+        attributeAliase={attr}
+        // Prepare the attribute as per the Algolia facet data.
+        attribute={`attr_${attr}.${drupalSettings.path.currentLanguage}`}
         facetOrdering
         element={element}
         limit={1000}

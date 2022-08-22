@@ -3,4 +3,3 @@ services:
     class: Drupal\alshaya_shopby_filter_attribute\Helper\ShopByFilterAttributeHelper
     arguments:
       - '@config.factory'
-      - '@language_manager'
