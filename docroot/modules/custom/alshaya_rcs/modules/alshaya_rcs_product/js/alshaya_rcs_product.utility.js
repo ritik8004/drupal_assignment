@@ -1451,6 +1451,67 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
 }
 
   /**
+   * Gets the label for provided attribute.
+   *
+   * @param {Object} mainProduct
+   *   Main product object, i.e. Configurable product in case of configurable or
+   *   Simple in case of simple product.
+   * @param {string} attrCode
+   *   Product attribute code.
+   *
+   * @returns {string|Boolean}
+   *   Label if available or false if not available.
+   */
+  function getLabel(mainProduct, attrCode) {
+    var label = '';
+
+    // For color attribute, return the configured color label.
+    if (drupalSettings.alshayaColorSplit.colorAttribute === attrCode) {
+      label = drupalSettings.alshayaColorSplit.colorLabel;
+    }
+    else {
+      Drupal.hasValue(mainProduct.configurable_options)
+        && mainProduct.configurable_options.some(function eachOption(option) {
+        if (option.attribute_code === attrCode) {
+          label = option.label;
+          return true;
+        }
+        return false;
+      });
+    }
+
+    return label;
+  }
+
+  /**
+   * Fetch the product options.
+   *
+   * @param {Object} mainProduct
+   *   Main product object.
+   * @param {Object} product
+   *   Current variant object.
+   *
+   * @returns {Array}
+   *   Array of product options in format [{value: value, label:label}].
+   */
+  function getProductOptions(mainProduct, product) {
+    var options = [];
+    Drupal.hasValue(product.attributes) && product.attributes.forEach(function eachAttribute(attr) {
+      options.push({value: attr.label, label: getLabel(mainProduct, attr.code)});
+    });
+    // Check if color split is enabled.
+    if (window.commerceBackend.getProductsInStyle) {
+      var colorAttribute = drupalSettings.alshayaColorSplit.colorAttribute;
+      if (Drupal.hasValue(product.product[colorAttribute])) {
+        var label = window.commerceBackend.getAttributeValueLabel(colorAttribute, product.product[colorAttribute]);
+        options.push({value: label, label: getLabel(mainProduct, colorAttribute)});
+      }
+    }
+
+    return options;
+  }
+
+  /**
    * Get individual product data for recent orders section.
    *
    * @param {string} child
@@ -1515,16 +1576,16 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
     }
 
     staticDataStore.orderDetailsData[child] = globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku: parent}).then(function onOrderDetailsFetched(response) {
+      var data = {};
       try {
         var product = response.data.products.items[0];
         // Clone the product so as to not modify the original object.
         product = JSON.parse(JSON.stringify(product));
         window.commerceBackend.setMediaData(product);
-        var data = {};
         if (product.type_id === 'configurable') {
           product.variants.some(function eachVariant(variant) {
             if (variant.product.sku === child) {
-              data = variant.product;
+              data = variant;
               return true;
             }
             return false;
@@ -1534,7 +1595,11 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
           data = product;
         }
 
-        data.options = [];
+        var options = getProductOptions(product, data);
+        // Only take the product data except the attributes.
+        data = data.product;
+        data.options = options;
+
         return data;
       } catch (e) {
         Drupal.alshayaLogger('warning', 'Could not parse product data for SKU @sku', {
