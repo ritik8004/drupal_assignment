@@ -2,7 +2,7 @@
 
 /**
  * @file
- * File to create default content for Westelm.
+ * File to create default content for Alo Yoga.
  */
 
 use Drupal\block_content\Entity\BlockContent;
@@ -36,7 +36,7 @@ function alshaya_ay_create_copyright_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Copyright',
     'body' => [
-      'value' => "&copy; 2022 شركة أمريكان إيجل أونلاين للإدارة جميع الحقوق محفوظة",
+      'value' => "&copy; 2022 ذ م م. كل الحقوق محفوظة",
       'format' => 'rich_text',
     ],
   ]);

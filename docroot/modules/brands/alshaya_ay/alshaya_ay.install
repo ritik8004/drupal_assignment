@@ -6,72 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Enable super category feature for AY.
- */
-function alshaya_ay_update_8004() {
-  // Enable super category feature and menu block with config factory.
-  /** @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
-  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
-  $super_category_feature->enableSuperCategory();
-
-  // Remove sub brand logo as we are using super category as a feature.
-  $config = \Drupal::configFactory()->getEditable('alshaya_master.settings');
-  $config->set('sub_brand_logo_img', '');
-  $config->set('sub_brand_logo_link', '');
-  $config->save();
-
-  // Change branding block weight as per the design.
-  $config = \Drupal::configFactory()->getEditable('block.block.branding');
-  $config->set('weight', -20);
-  $config->save();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Enable Show size guide on PDP page for AY.
- */
-function alshaya_ay_update_8003() {
-  $config_factory = \Drupal::configFactory();
-  $config = $config_factory->getEditable('alshaya_acm_product.pdp_modal_links');
-  $config->set('show_size_guide_on_pdp_page', 1);
-  $config->save();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update English AE logo for mobile.
- */
-function alshaya_ay_update_8002() {
-  // Only update the new english mobile logo.
-  // We need to do this as on some sites logo is uploaded via upload field.
-  // This will ensure consistent behaviour on all AE sites.
-  $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.alshaya_alo_yoga.en');
-  $logo_path = '/themes/custom/transac/alshaya_alo_yoga/site-logo.svg';
-  $config->set('mobile_logo_path', $logo_path);
-  $config->set('mobile_logo_url', $logo_path);
-  $config->save();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Override `attribute_weights and sortable_options`.
- */
-function alshaya_ay_update_8001() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-
-  $manager->updateConfigs(
-    ['acq_sku.configurable_form_settings'],
-    'acq_sku'
-  );
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_ay_install() {
@@ -79,4 +13,116 @@ function alshaya_ay_install() {
 
   // Create default content for the site.
   alshaya_ay_create_default_content();
+
+  // Enable and set alshaya_ay as default theme and set the site logo,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_alo_yoga');
+
+  // Reset theme logo.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  $current_theme = $active_theme->getName();
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  \Drupal::configFactory()
+    ->getEditable($current_theme . '.settings')
+    ->set('logo', [
+      'path' => $site_logo . '.svg',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $site_favicon . '.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+
+  // Add the site name.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('name', 'ALO')
+    ->save();
+
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+        'url' => '',
+        'use_default' => FALSE,
+      ],
+    ])
+    ->save();
+
+  // Translate store finder block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Set the default value for back to store list link.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all The Alo Yoga');
+  $config->save();
+
+  // Setting all products buyable to be false by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 0)
+    ->set('pdp_layout', 'magazine')
+    ->save();
+
+  $strings = [
+    'seo_brand_name' => [
+      'en' => 'Alo Yoga',
+      'ar' => 'متجر Alo',
+    ],
+    'get email offers and the latest news from @site_name' => [
+      'en' => 'Enjoy 10% off your first order',
+      'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
+    ],
+    'read more' => [
+      'ar' => 'اقرأ المزيد',
+    ],
+    'read less' => [
+      'ar' => 'اقرأ  أقل',
+    ],
+    'size guide' => [
+      'ar' => 'دليل المقاسات',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_ay_transac');
+  }
+
+  // Configure map marker on checkout for CnC.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_ay/images/ay-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_ay/images/ay-pin-inactive.svg')
+    ->save();
+
+  // Check if the sharethis module exists, then remove this from
+  // the Product CT as set in alshaya_transac.install by default.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    // Get the sharethis configuration.
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+
+    // Enable share this for Products.
+    $configFactory->set('node_types.acq_product', 'acq_product');
+
+    // Enable share this for Magazine CT.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_magazine')) {
+      $configFactory->set('node_types.magazine_article', 'magazine_article');
+    }
+
+    // Save the changes.
+    $configFactory->save();
+  }
+
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
 }
