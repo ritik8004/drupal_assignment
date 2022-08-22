@@ -301,13 +301,7 @@ function _alshaya_hello_member_react_translations() {
       ],
       '@hm_icon @login_link or Become a member to earn @points points' => [
         'ar' => '@hm_icon @login_link أو سجّل كعضو للربح بالنقاط @points',
-      ],
-      'Confirm the Loyalty' => [
-        'ar' => 'تأكيد الولاء',
         'context' => 'hello_member',
-      ],
-      'Do you want to remove all the benefits of @current_option and choose @selected_option benefits?' => [
-        'ar' => '@selected_option هل ترغب في إزالة جميع مزايا @current_option واختيار مزايا',
       ],
       'Sign In' => [
         'ar' => 'تسجيل الدخول',
@@ -418,6 +412,7 @@ function _alshaya_hello_member_react_translations() {
       ],
       'loyalty' => [
         'ar' => 'الولاء',
+        'context' => 'hello_member',
       ],
       'Verify' => [
         'ar' => 'تأكيد',
@@ -433,6 +428,7 @@ function _alshaya_hello_member_react_translations() {
       ],
       'The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.' => [
         'ar' => 'إجمالي النقاط التي ستحصل عليها من عملية الشراء هذه سيتم عرضها في صفحة تأكيد  الطلبية بعد استقطاع الخصومات والضرائب',
+        'context' => 'hello_member',
       ],
       'Discounts & Vouchers : @DiscountVoucher' => [
         'ar' => 'خصومات وقسائم : @DiscountVoucher',
@@ -440,6 +436,14 @@ function _alshaya_hello_member_react_translations() {
       ],
       'Add your mobile number, Aura account number or email address below to link this purchase.' => [
         'ar' => 'أضف رقم الهاتف، أو رقم حساب أورا أو بريدك الإلكتروني في الأسفل لربط عملية الشراء الحالية.',
+      ],
+      'Confirm the Loyalty' => [
+        'ar' => 'تأكيد الولاء',
+        'context' => 'hello_member',
+      ],
+      'Do you want to remove all the benefits of @current_option and choose @selected_option benefits?' => [
+        'ar' => '@selected_option هل ترغب في إزالة جميع مزايا @current_option واختيار مزايا',
+        'context' => 'hello_member',
       ],
     ],
   ];
