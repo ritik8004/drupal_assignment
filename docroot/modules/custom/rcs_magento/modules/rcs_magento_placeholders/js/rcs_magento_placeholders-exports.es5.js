@@ -371,12 +371,12 @@ exports.getData = async function getData(
       result = rcsCommerceBackend.invokeApi(request);
       break;
 
-      case 'order_details_product_data':
-        let orderDetailsVariables = rcsPhGraphqlQuery.order_details.variables;
-        orderDetailsVariables.sku = params.sku;
-        request.data = prepareQuery(rcsPhGraphqlQuery.order_details.query, orderDetailsVariables);
-        result = rcsCommerceBackend.invokeApi(request);
-        break;
+    case 'order_details_product_data':
+      let orderDetailsVariables = rcsPhGraphqlQuery.order_details.variables;
+      orderDetailsVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.order_details.query, orderDetailsVariables);
+      result = rcsCommerceBackend.invokeApi(request);
+      break;
 
     default:
       console.log(`Placeholder ${placeholder} not supported by default for get_data.`);
