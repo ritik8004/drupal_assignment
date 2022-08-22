@@ -79,7 +79,7 @@ const replaceOrderPlaceHolders = function (product, itemHtml, settings) {
   htmlElms = replaceIndividualPlaceHolder(
     innerHtmlObj[0].innerHTML,
     'productItem',
-    { 'name': name },
+    { name },
     settings,
   );
   innerHtmlObj.html(htmlElms);
