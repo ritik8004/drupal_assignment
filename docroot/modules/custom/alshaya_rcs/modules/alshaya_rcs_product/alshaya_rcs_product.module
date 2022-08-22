@@ -867,7 +867,7 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
         // For backup, we will use the name from the image title attribute in
         // case API data is not available.
         $build['recent_order'][$id]['#order']['items'][$key]['name'] = '#rcs.productItem.name#';
-        $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'];
+        $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'] ?? $item['sku'];
       }
     }
 
@@ -896,9 +896,6 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
  * Implements hook_alshaya_acm_customer_orders_details_build_alter().
  */
 function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
-  // Add data attributes.
-  $parentSkus = [];
-  $itemSkus = [];
   $child_parent_mapping = [];
   // Update the product image with RCS Token.
   foreach ($build['#products'] as $key => &$item) {
@@ -907,9 +904,6 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
       $item['name'] = '#rcs.productItem.name#';
     }
     $item['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
-    $parentSkus[$key] = $item['extension_attributes']['parent_product_sku'];
-    // Store the item sku.
-    $itemSkus[$key] = $item['sku'];
     // Attribute placeholders.
     $item['attributes'][] = [
       'label' => '#rcs.productItemAttribute.attr_label#',
@@ -922,7 +916,7 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
       $item['price'] = t('Free');
       $item['total'] = '';
     }
-    $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'];
+    $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'] ?? $item['sku'];
   }
   $build['#theme_wrappers'] = [
     'container' => [

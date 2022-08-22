@@ -682,6 +682,15 @@ class AlshayaRcsProductHelper {
         'type_id',
         'sku',
         'name',
+        'media_gallery' => [
+          'url',
+          'label',
+          'styles',
+          '... on ProductImage' => [
+            'url',
+            'label',
+          ],
+        ],
         '... on ConfigurableProduct' => [
           'variants' => [
             'product' => [

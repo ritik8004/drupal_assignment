@@ -56,9 +56,6 @@ exports.render = function render(
  */
 const replaceOrderPlaceHolders = function (product, itemHtml, settings) {
   // Return if variant is empty.
-  if (typeof product === 'undefined') {
-    return itemHtml;
-  }
   let htmlElms = '';
   // Covert innerHtml to a jQuery object.
   const innerHtmlObj = jQuery('<div>').html(itemHtml);
@@ -66,7 +63,9 @@ const replaceOrderPlaceHolders = function (product, itemHtml, settings) {
   let imagePlaceHolder = innerHtmlObj.find('img.rcs-image');
   if (imagePlaceHolder.length > 0) {
     var image = window.commerceBackend.getTeaserImage(product);
-    var name = Drupal.hasValue(product.name) ? product.name : imagePlaceHolder[0].getAttribute('title');
+    var name = Drupal.hasValue(product) && Drupal.hasValue(product.name)
+      ? product.name
+      : imagePlaceHolder[0].getAttribute('title');
 
     htmlElms = replaceIndividualPlaceHolder(
       imagePlaceHolder[0].outerHTML,
@@ -88,7 +87,7 @@ const replaceOrderPlaceHolders = function (product, itemHtml, settings) {
   let attrPlaceHolder = innerHtmlObj.find('div.attr-wrapper:first');
   if (attrPlaceHolder.length > 0) {
     htmlElms = '';
-    product.options.forEach(item => {
+    Drupal.hasValue(product.options) && product.options.forEach(item => {
       // Get labelValue if attr_code is color.
       htmlElms += replaceIndividualPlaceHolder(
         attrPlaceHolder[0].outerHTML,

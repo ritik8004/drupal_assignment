@@ -54,6 +54,10 @@
    */
   function getProductOptions(mainProduct, product) {
     var options = [];
+    if (!Drupal.hasValue(product)) {
+      return options;
+    }
+
     Drupal.hasValue(product.attributes) && product.attributes.forEach(function eachAttribute(attr) {
       options.push({value: attr.label, label: getLabel(mainProduct, attr.code)});
     });
@@ -86,23 +90,28 @@
     }
 
     staticDataStore.recentOrdersData[child] = globalThis.rcsPhCommerceBackend.getData('recent_orders_product_data', {sku: parent}).then(function onRecentOrdersFetched(response) {
+      var data = {};
       try {
-        var product = response.data.products.items[0];
-        // Clone the product so as to not modify the original object.
-        product = JSON.parse(JSON.stringify(product));
-        window.commerceBackend.setMediaData(product);
-        var data = {};
-        if (product.type_id === 'configurable') {
-          product.variants.some(function eachVariant(variant) {
-            if (variant.product.sku === child) {
-              data = variant.product;
-              return true;
-            }
-            return false;
-          });
+        if (response.data.products.total_count) {
+          var product = response.data.products.items[0];
+          // Clone the product so as to not modify the original object.
+          product = JSON.parse(JSON.stringify(product));
+          window.commerceBackend.setMediaData(product);
+          if (product.type_id === 'configurable') {
+            product.variants.some(function eachVariant(variant) {
+              if (variant.product.sku === child) {
+                data = variant.product;
+                return true;
+              }
+              return false;
+            });
+          }
+          else {
+            data = product;
+          }
         }
         else {
-          data = product;
+          data = {sku: child};
         }
 
         return data;
@@ -110,7 +119,7 @@
         Drupal.alshayaLogger('warning', 'Could not parse recent orders product data for SKU @sku', {
           '@sku': sku
         });
-        return {};
+        return {sku: child};
       }
     });
 
@@ -136,34 +145,36 @@
     staticDataStore.orderDetailsData[child] = globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku: parent}).then(function onOrderDetailsFetched(response) {
       var data = {};
       try {
-        var product = response.data.products.items[0];
-        // Clone the product so as to not modify the original object.
-        product = JSON.parse(JSON.stringify(product));
-        window.commerceBackend.setMediaData(product);
-        if (product.type_id === 'configurable') {
-          product.variants.some(function eachVariant(variant) {
-            if (variant.product.sku === child) {
-              data = variant;
-              return true;
-            }
-            return false;
-          });
+        if (response.data.products.total_count) {
+          var product = response.data.products.items[0];
+          // Clone the product so as to not modify the original object.
+          product = JSON.parse(JSON.stringify(product));
+          window.commerceBackend.setMediaData(product);
+          if (product.type_id === 'configurable') {
+            product.variants.some(function eachVariant(variant) {
+              if (variant.product.sku === child) {
+                // Only take the product data except the attributes.
+                data = variant.product;
+                data.options = getProductOptions(product, variant);
+                return true;
+              }
+              return false;
+            });
+          }
+          else {
+            data = product;
+          }
         }
         else {
-          data = product;
+          data = {sku: child};
         }
-
-        var options = getProductOptions(product, data);
-        // Only take the product data except the attributes.
-        data = data.product;
-        data.options = options;
 
         return data;
       } catch (e) {
         Drupal.alshayaLogger('warning', 'Could not parse order details product data for SKU @sku', {
           '@sku': sku
         });
-        return {};
+        return {sku: child};
       }
     });
 

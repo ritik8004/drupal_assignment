@@ -1064,6 +1064,9 @@ window.commerceBackend = window.commerceBackend || {};
    *   The media item url.
    */
   window.commerceBackend.getTeaserImage = function (product) {
+    if (!Drupal.hasValue(product)) {
+      return null;
+    }
     const galleryProduct = getSkuForGallery(product);
     return galleryProduct.media_teaser;
   };
