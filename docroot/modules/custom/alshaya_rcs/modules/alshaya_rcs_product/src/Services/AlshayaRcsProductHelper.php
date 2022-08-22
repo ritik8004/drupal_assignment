@@ -683,12 +683,10 @@ class AlshayaRcsProductHelper {
         'sku',
         'name',
         'media_gallery' => [
-          'url',
-          'label',
-          'styles',
           '... on ProductImage' => [
             'url',
             'label',
+            'styles',
           ],
         ],
         '... on ConfigurableProduct' => [
