@@ -1,4 +1,6 @@
 .cod-mobile-otp {
+  position: relative;
+
   &__text-wrapper {
     margin-top: rem(20);
     font-size: rem(14);
@@ -30,6 +32,15 @@
 
       &:focus {
         border-color: $spc-checkout-cod-otp-primary !important;
+      }
+    }
+
+    &.error {
+      padding-top: 0;
+
+      & > input[type="tel"] {
+        color: $cod-otp-field-invalid !important;
+        border-color: $cod-otp-field-invalid !important;
       }
     }
   }
@@ -83,6 +94,23 @@
     &:disabled {
       opacity: 0.2;
       pointer-events: none;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $cod-otp-loader-overlay;
+    z-index: 2;
+
+    .loader-icon {
+      background: url(#{$base_theme_loader_img_directory_path}) center/contain no-repeat;
+      width: rem(48);
+      height: rem(48);
     }
   }
 
