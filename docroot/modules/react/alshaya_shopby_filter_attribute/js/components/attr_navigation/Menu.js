@@ -29,9 +29,8 @@ class Menu extends React.Component {
     // storage so we need to call the API request to get data loaded in storage
     // and then update the wait state to load the component.
     const { attributeAliase } = this.props;
-    const requestUri = Drupal.url(`facets-aliases/${attributeAliase}`);
     Axios
-      .get(requestUri)
+      .get(Drupal.url(`facets-aliases/${attributeAliase}`))
       .then((response) => {
         setFacetStorage(attributeAliase, response.data);
         this.setState({ wait: false });
