@@ -5,6 +5,7 @@
   &_mobile {
     font-size: rem(14);
     line-height: 1.29;
+    color: $spc-checkout-cod-otp-secondary;
   }
 
   &_message {
@@ -22,8 +23,13 @@
     border: none;
     padding: 0;
 
-    @include icon(edit-input, $before) {
-      margin: 0 rem(12);
+    &::before {
+      content: '';
+      background: url('#{$base_theme_img_directory_path}/icons/edit-pencil.svg') no-repeat;
+      width: rem(13);
+      height: rem(13);
+      display: inline-block;
+      margin: 0 rem(12) rem(-2);
     }
   }
 
