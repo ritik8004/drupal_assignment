@@ -187,14 +187,6 @@ class PaymentMethodCodMobileVerification extends React.Component {
       return (null);
     }
 
-    if (wait) {
-      return (
-        <div className="cod-mobile-otp-waiting-wrapper">
-          <Loading />
-        </div>
-      );
-    }
-
     if (otpVerified === 1 || otpVerified === 2) {
       return (
         <CodVerifiedText mobileNumber={shippingMobileNumber} />
@@ -211,6 +203,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
     return (
       <div className="cod-mobile-otp">
+        {wait && <Loading />}
         <CodVerifyText
           mobileNumber={shippingMobileNumber}
           otpLength={otpLength}
