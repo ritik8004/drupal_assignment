@@ -221,7 +221,7 @@ class FeatureContext extends CustomMinkContext
     $all_products = $page->findById('block-views-block-alshaya-product-list-block-1');
     if ($all_products !== NULL) {
       $all_products = $all_products->findAll('css', '.c-products__item');
-      $total_products = is_countable($all_products) ? count($all_products) : 0;
+      $total_products = count($all_products);
     } else {
       throw new \Exception('No products are listed on PLP');
     }
@@ -262,7 +262,7 @@ class FeatureContext extends CustomMinkContext
     $all_sizes = $page->findById('configurable_ajax');
     if ($all_sizes !== NULL) {
       $all_sizes = $all_sizes->findAll('css', 'div.form-item-configurables-size > div.select2Option > ul li');
-      $total_sizes = is_countable($all_sizes) ? count($all_sizes) : 0;
+      $total_sizes = count($all_sizes);
       foreach ($all_sizes as $size) {
         $check_li = $size->find('css', 'li')->getText();
         $size_status = $size->find('css', '.disabled') === null ? 0 : count($size->find('css', '.disabled'));
@@ -462,7 +462,7 @@ class FeatureContext extends CustomMinkContext
   {
 
     $windowNames = $this->getSession()->getWindowNames();
-    if ((is_countable($windowNames) ? count($windowNames) : 0) > 1) {
+    if (count($windowNames) > 1) {
       $this->getSession()->switchToWindow($windowNames[1]);
     } else {
       throw new \Exception('Get directions did not open a new window');
@@ -568,7 +568,7 @@ class FeatureContext extends CustomMinkContext
   {
     $page = $this->getSession()->getPage();
     $all_stores = $page->findAll('css', 'li.select-store');
-    $actual_count = is_countable($all_stores) ? count($all_stores) : 0;
+    $actual_count = count($all_stores);
     $count = (string)$actual_count;
     $text = $page->find('css', 'div.all-stores-info');
     if ($text !== null) {
@@ -682,7 +682,7 @@ class FeatureContext extends CustomMinkContext
   public function iShouldSeeAtMostThreeRecentOrdersListed($count)
   {
     $page = $this->getSession()->getPage();
-    $all_rows = is_countable($page->findAll('css', '.order-summary-row')) ? count($page->findAll('css', '.order-summary-row')) : 0;
+    $all_rows = count($page->findAll('css', '.order-summary-row'));
     if ($all_rows > $count) {
       throw new \Exception('More than three orders displayed on my account page');
     }
@@ -717,7 +717,7 @@ class FeatureContext extends CustomMinkContext
     $page = $this->getSession()->getPage();
     $results = $page->findAll('css', '.list-view-locator');
     if ($results !== NULL) {
-      $actual_count = is_countable($results) ? count($results) : 0;
+      $actual_count = count($results);
       $count = (string)$actual_count;
       $actual_text = $page->find('css', '.view-header')->getText();
       if (!str_contains($actual_text, $count)) {
@@ -849,7 +849,7 @@ class FeatureContext extends CustomMinkContext
   {
     $page = $this->getSession()->getPage();
     $all_pointers = $page->findAll('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) div');
-    $actual_count = is_countable($all_pointers) ? count($all_pointers) : 0;
+    $actual_count = count($all_pointers);
     $count = (string)$actual_count;
     $actual_text = $page->find('css', '.view-header')->getText();
     if (!str_contains($actual_text, $count)) {
@@ -927,7 +927,7 @@ class FeatureContext extends CustomMinkContext
   public function iShouldSeeAtMostRecentOrdersListedOnOrdersTab($arg1)
   {
     $page = $this->getSession()->getPage();
-    $actual_count = is_countable($page->findAll('css', '.order-item')) ? count($page->findAll('css', '.order-item')) : 0;
+    $actual_count = count($page->findAll('css', '.order-item'));
     if ($actual_count > $arg1) {
       throw new \Exception('More than 10 orders are listed on Orders tab');
     }
@@ -995,7 +995,7 @@ class FeatureContext extends CustomMinkContext
   public function iGetTheTotalCountOfAddressBlocks()
   {
     $page = $this->getSession()->getPage();
-    $this->address_count = is_countable($page->findAll('css', '.address')) ? count($page->findAll('css', '.address')) : 0;
+    $this->address_count = count($page->findAll('css', '.address'));
   }
 
   /**
@@ -1004,7 +1004,7 @@ class FeatureContext extends CustomMinkContext
   public function theNewAddressBlockShouldBeDisplayedOnAddressBook()
   {
     $page = $this->getSession()->getPage();
-    $new_address_count = is_countable($page->findAll('css', '.address')) ? count($page->findAll('css', '.address')) : 0;
+    $new_address_count = count($page->findAll('css', '.address'));
     if ($new_address_count < $this->address_count) {
       throw new \Exception('Newly added address is not being displayed on address book');
     }
@@ -1029,7 +1029,7 @@ class FeatureContext extends CustomMinkContext
   public function theAddressBlockShouldBeDeletedFromAddressBook()
   {
     $page = $this->getSession()->getPage();
-    $new_address_count = is_countable($page->findAll('css', '.address')) ? count($page->findAll('css', '.address')) : 0;
+    $new_address_count = count($page->findAll('css', '.address'));
     if ($new_address_count > $this->address_count) {
       throw new \Exception('Address did not get deleted from the address book');
     }
@@ -1266,7 +1266,7 @@ class FeatureContext extends CustomMinkContext
     if (!(($page->hasContent('items')) or ($page->hasContent(' قطعة')))) {
       throw new \Exception('Number of items not displayed on category page');
     }
-    $this->item_count = is_countable($page->findAll('css', '.field--name-name')) ? count($page->findAll('css', '.field--name-name')) : 0;
+    $this->item_count = count($page->findAll('css', '.field--name-name'));
   }
 
   /**
@@ -1275,7 +1275,7 @@ class FeatureContext extends CustomMinkContext
   public function moreItemsShouldGetLoaded()
   {
     $page = $this->getSession()->getPage();
-    $loaded_items = is_countable($page->findAll('css', '.field--name-name')) ? count($page->findAll('css', '.field--name-name')) : 0;
+    $loaded_items = count($page->findAll('css', '.field--name-name'));
     if ($loaded_items < $this->item_count) {
       throw new \Exception('Load more is not functioning correctly');
     }
@@ -1309,7 +1309,7 @@ class FeatureContext extends CustomMinkContext
   public function iShouldBeDirectedToWindowHaving($text)
   {
     $windowNames = $this->getSession()->getWindowNames();
-    if ((is_countable($windowNames) ? count($windowNames) : 0) > 1) {
+    if (count($windowNames) > 1) {
       $this->getSession()->switchToWindow($windowNames[1]);
     } else {
       throw new \Exception('Social media did not open in a new window');
@@ -1553,7 +1553,7 @@ class FeatureContext extends CustomMinkContext
     $all_products = $page->findById('block-content');
     if ($all_products !== NULL) {
       $all_products = $all_products->findAll('css', '.c-products__item');
-      $total_products = is_countable($all_products) ? count($all_products) : 0;
+      $total_products = count($all_products);
     } else {
       throw new Exception('Search passed, but search results were empty');
     }
@@ -1668,7 +1668,7 @@ class FeatureContext extends CustomMinkContext
   public function theCardBlockShouldBeDeletedFromPaymentCards()
   {
     $page = $this->getSession()->getPage();
-    $new_address_count = is_countable($page->findAll('css', '.payment-card')) ? count($page->findAll('css', '.payment-card')) : 0;
+    $new_address_count = count($page->findAll('css', '.payment-card'));
     if ($new_address_count > $this->address_count) {
       throw new \Exception('Card did not get deleted from the Payment Cards page');
     }
@@ -2335,7 +2335,7 @@ class FeatureContext extends CustomMinkContext
     }
     if (!empty($all_products)) {
       $all_products = $all_products->findAll('css', '.c-products__item');
-      $total_products = is_countable($all_products) ? count($all_products) : 0;
+      $total_products = count($all_products);
     } else {
       throw new \Exception('Search passed, but search results were empty');
     }
@@ -2374,7 +2374,7 @@ JS;
   {
     $page = $this->getSession()->getPage();
     $all_dates = $page->findAll('css','ul.calendar-wrapper li');
-    $total_dates = is_countable($all_dates) ? count($all_dates) : 0;
+    $total_dates = count($all_dates);
     for ($x = 0; $x < $total_dates; $x++) {
       if ($x == 0) {
         $child = 'li:first-child';
