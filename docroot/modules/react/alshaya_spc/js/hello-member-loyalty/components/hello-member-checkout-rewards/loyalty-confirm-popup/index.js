@@ -1,6 +1,7 @@
 import parse from 'html-react-parser';
 import React from 'react';
 import Popup from 'reactjs-popup';
+import getStringMessage from '../../../../utilities/strings';
 
 export default class LoyaltyConfirmPopup extends React.Component {
   constructor(props) {
@@ -52,11 +53,11 @@ export default class LoyaltyConfirmPopup extends React.Component {
         >
           <div className="loyalty-popup-block">
             <div className="loyalty-popup-title">
-              <span>{Drupal.t('Confirm the Loyalty')}</span>
+              <span>{getStringMessage('confirm_loyalty')}</span>
               <a className="close-modal" onClick={() => this.closeModal()} />
             </div>
             <div className="loyalty-question">
-              {parse(Drupal.t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits?',
+              {parse(getStringMessage('loyalty_modal_question',
                 {
                   '@current_option': this.getLoyaltyOptionText(currentOption),
                   '@selected_option': this.getLoyaltyOptionText(selectedOption),
