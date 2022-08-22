@@ -172,6 +172,7 @@
         bottom: rem(32);
         #{$left}: 50%;
         transform: translateX(-50%);
+        z-index: 1;
 
         html[lang=ar] & {
           transform: translateX(50%);
