@@ -7,6 +7,7 @@ import SectionTitle from '../../../utilities/section-title';
 import GuestUserLoyalty from './guest-user-loyalty';
 import RegisteredUserLoyalty from './registered-user-loyalty';
 import logger from '../../../../../js/utilities/logger';
+import getStringMessage from '../../../utilities/strings';
 
 class HelloMemberLoyaltyOptions extends React.Component {
   constructor(props) {
@@ -96,7 +97,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
 
     return (
       <div className="spc-hello-member-checkout-rewards-block fadeInUp">
-        <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('loyalty')}</SectionTitle>
+        <SectionTitle animationDelayValue={animationDelay}>{getStringMessage('loyalty_title')}</SectionTitle>
         {!isUserAuthenticated()
           && (
           <GuestUserLoyalty
