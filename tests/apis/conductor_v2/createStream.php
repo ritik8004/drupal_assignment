@@ -6,8 +6,6 @@
  * Create the entire ACM configure for a given site and environment.
  */
 
-const DRUPAL_ROOT = __DIR__ . '/../../';
-
 require_once __DIR__ . '/common.php';
 require_once __DIR__ . '/variables.php';
 require_once __DIR__ . '/../../../factory-hooks/environments/mapping.php';
