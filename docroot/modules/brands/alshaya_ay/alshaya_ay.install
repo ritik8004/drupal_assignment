@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_ay.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable super category feature for AY.
+ */
+function alshaya_ay_update_8004() {
+  // Enable super category feature and menu block with config factory.
+  /** @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
+  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
+  $super_category_feature->enableSuperCategory();
+
+  // Remove sub brand logo as we are using super category as a feature.
+  $config = \Drupal::configFactory()->getEditable('alshaya_master.settings');
+  $config->set('sub_brand_logo_img', '');
+  $config->set('sub_brand_logo_link', '');
+  $config->save();
+
+  // Change branding block weight as per the design.
+  $config = \Drupal::configFactory()->getEditable('block.block.branding');
+  $config->set('weight', -20);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable Show size guide on PDP page for AY.
+ */
+function alshaya_ay_update_8003() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('alshaya_acm_product.pdp_modal_links');
+  $config->set('show_size_guide_on_pdp_page', 1);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update English AE logo for mobile.
+ */
+function alshaya_ay_update_8002() {
+  // Only update the new english mobile logo.
+  // We need to do this as on some sites logo is uploaded via upload field.
+  // This will ensure consistent behaviour on all AE sites.
+  $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.alshaya_alo_yoga.en');
+  $logo_path = '/themes/custom/transac/alshaya_alo_yoga/site-logo.svg';
+  $config->set('mobile_logo_path', $logo_path);
+  $config->set('mobile_logo_url', $logo_path);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Override `attribute_weights and sortable_options`.
+ */
+function alshaya_ay_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['acq_sku.configurable_form_settings'],
+    'acq_sku'
+  );
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_ay_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_ay', 'inc', 'alshaya_ay.content');
+
+  // Create default content for the site.
+  alshaya_ay_create_default_content();
+}
