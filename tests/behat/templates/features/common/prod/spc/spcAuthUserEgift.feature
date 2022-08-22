@@ -1,4 +1,4 @@
-@javascript @auth @e-gift
+@javascript @auth @e-gift @bbwkwprod @bbwaeprod @bbwsaprod @vskwprod @vsaeprod @vssaprod @cosaeprod @coskwprod @cossaprod @flkwprod @flsaprod @flaeprod @hmkwprod @hmsaprod @hmaeprod @pbkkwprod @pbksaprod @pbkaeprod @tbskwprod @tbsegprod @mujikwprod @mujisaprod @mujiaeprod @pbkwprod @pbaeprod @pbsaprod @mckwprod @aeokwprod @bpkwprod @westelmkwprod
 Feature: SPC Checkout Egift feature for Authenticated user
 
   Background:

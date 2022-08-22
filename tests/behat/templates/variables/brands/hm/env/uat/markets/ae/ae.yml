@@ -1,7 +1,7 @@
 variables:
   url_product_page: 'buy-long-sleeved-blouse-black.html'
-  product_listing_page_url: '/shop-divided/'
-  spc_product_listing_page: '/shop-divided/'
-  spc_basket_page: '/shop-divided/'
-  spc_pdp_page: '/buy-hoodie-cream-original.html/'
-  spc_bank_product: '/shop-divided/'
+  product_listing_page_url: '/shop-men/new-arrivals/clothes/'
+  spc_product_listing_page: '/shop-men/new-arrivals/clothes/'
+  spc_basket_page: '/shop-men/new-arrivals/clothes/'
+  spc_pdp_page: '/buy-5-pack-sports-socks-dark-grey-marl.html/'
+  spc_bank_product: '/shop-men/new-arrivals/clothes/'
