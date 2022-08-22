@@ -684,7 +684,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
       $results = $query->execute()->fetchAll();
 
-      $this->cache->set($cid, $results, Cache::PERMANENT, ['taxonomy_term:' . self::VOCABULARY_ID]);
+      $this->cache->set($cid, $results, Cache::PERMANENT);
     }
 
     // Filter the results.
