@@ -45,19 +45,6 @@ class AlshayaRcsColorSplitHelper {
   }
 
   /**
-   * Returns the config if multiple color attributes are supported.
-   *
-   * @return bool
-   *   Returns true if multiple color attributes are set, else false.
-   */
-  public function isSupportsMultipleColorAttributes() {
-    $display_settings = $this->getProductDisplaySettings();
-    $color_attribute_config = $display_settings->get('color_attribute_config');
-
-    return $color_attribute_config['support_multiple_attributes'];
-  }
-
-  /**
    * Gets the color code attribute for products.
    *
    * @return string|bool
