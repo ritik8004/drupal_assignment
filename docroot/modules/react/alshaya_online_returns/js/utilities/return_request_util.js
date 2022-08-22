@@ -9,11 +9,12 @@ function getReturnReasons() {
     { value: 0, label: Drupal.t('Choose a reason', {}, { context: 'online_returns' }) },
   ];
   let reasonsList = [];
-  if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.returnConfig)
-    && hasValue(drupalSettings.returnInfo.returnConfig.return_reasons)) {
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.returnInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig.return_reasons)) {
     // Populate reasons values from return reasons api call.
-    reasonsList = drupalSettings.returnInfo.returnConfig.return_reasons;
+    reasonsList = drupalSettings.onlineReturns.returnInfo.returnConfig.return_reasons;
   } else if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.return_config)
     && hasValue(drupalSettings.onlineReturns.return_config.return_reasons)) {
@@ -91,10 +92,11 @@ function addCheckboxToReturnItem(item) {
  */
 function getReturnResolutions() {
   let resolutions = [];
-  if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.returnConfig)
-    && hasValue(drupalSettings.returnInfo.returnConfig.resolutions)) {
-    resolutions = drupalSettings.returnInfo.returnConfig.resolutions;
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.returnInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig.resolutions)) {
+    resolutions = drupalSettings.onlineReturns.returnInfo.returnConfig.resolutions;
   }
 
   return resolutions;

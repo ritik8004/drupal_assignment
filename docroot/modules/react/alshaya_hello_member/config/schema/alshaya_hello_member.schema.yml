@@ -14,3 +14,15 @@ alshaya_hello_member.settings:
     aura_integration_status:
       type: boolean
       label: 'Config to enable/disable aura integration with hello member'
+    membership_popup_text_above:
+      type: text_format
+      label: 'Membership text above'
+    membership_popup_text_below:
+      type: text_format
+      label: 'Membership text below'
+    show_default_benefits:
+      type: integer
+      label: 'Number of default benifits.'
+    brand_membership_text:
+      type: text
+      label: 'Provide brand name to show on loyalty switch confirmation box.'

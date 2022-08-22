@@ -4,12 +4,12 @@ namespace Drupal\alshaya_i18n\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Normalizes GET requests performing a redirect if required based on cookie.
@@ -41,11 +41,11 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
   protected $config;
 
   /**
-   * Page cache kill service.
+   * The renderer object.
    *
-   * @var \Drupal\Core\PageCache\ResponsePolicy\KillSwitch
+   * @var \Drupal\Core\Render\RendererInterface
    */
-  protected $killSwitch;
+  protected $renderer;
 
   /**
    * Constructs a AlshayaI18nRequestSubscriber object.
@@ -56,17 +56,17 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
    *   The language manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config
    *   The config.
-   * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $kill_switch
-   *   Page cache kill service.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
   public function __construct(UrlGeneratorInterface $url_generator,
                               LanguageManagerInterface $language_manager,
                               ConfigFactoryInterface $config,
-                              KillSwitch $kill_switch) {
+                              RendererInterface $renderer) {
     $this->urlGenerator = $url_generator;
     $this->languageManager = $language_manager;
     $this->config = $config->get('alshaya_i18n.settings');
-    $this->killSwitch = $kill_switch;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -79,30 +79,26 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
     $request = $event->getRequest();
 
     if ($request->getRequestUri() === '/') {
-      $languages = $this->languageManager->getLanguages();
+      // Prepare a markup to redirect user based on the lang cookie or the
+      // default langcode.
+      $js = "window.getCookie = function(name) {
+          var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+          if (match) return match[2];
+        }
+        var preferred_lang = window.getCookie('alshaya_lang');
+        if (!preferred_lang) {
+          preferred_lang = '" . $this->config->get('default_langcode') . "';
+        }
+        window.location = '/' + preferred_lang + '/';";
 
-      $options = [];
+      $redirect_script = [
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#value' => $js,
+      ];
 
-      // Check if we have cookie set and check if value is proper.
-      $preferred_lang = $request->cookies->get('alshaya_lang');
-
-      if (!empty($preferred_lang) && isset($languages[$preferred_lang])) {
-        $options['language'] = $languages[$preferred_lang];
-      }
-      else {
-        // By default we redirect to the language set in config.
-        // Not the site default language.
-        $options['language'] = $languages[$this->config->get('default_langcode')];
-      }
-
-      $redirect_uri = $this->urlGenerator->generateFromRoute('<front>', [], $options);
-
-      $response = new RedirectResponse($redirect_uri, 302);
-      $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
+      $response = new Response($this->renderer->renderPlain($redirect_script));
       $event->setResponse($response);
-
-      // Disable page cache, we want to change the redirect based on cookie.
-      $this->killSwitch->trigger();
     }
   }
 

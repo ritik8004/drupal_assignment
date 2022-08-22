@@ -8,6 +8,8 @@ import { openCartFreeGiftModal, getCartFreeGiftModalId } from '../../../utilitie
 import Advantagecard from '../../../utilities/advantagecard';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
+import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
+import HelloMemberCartOffersVouchers from '../../../hello-member-loyalty/components/hello-member-cart-offer-voucher';
 
 export default class CartPromoBlock extends React.Component {
   constructor(props) {
@@ -247,7 +249,7 @@ export default class CartPromoBlock extends React.Component {
       buttonText,
     } = this.state;
 
-    const { inStock, dynamicPromoLabelsCart, hasExclusiveCoupon } = this.props;
+    const { inStock, dynamicPromoLabelsCart, totals, hasExclusiveCoupon } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
     let disabledState = false;
     // Disable the promo field if out of stock or disabled.
@@ -287,6 +289,11 @@ export default class CartPromoBlock extends React.Component {
     return (
       <div className="spc-promo-code-block fadeInUp" style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
+        {isHelloMemberEnabled() && (
+          <HelloMemberCartOffersVouchers
+            totals={totals}
+          />
+        )}
         <div className="block-content">
           <input
             id="promo-code"

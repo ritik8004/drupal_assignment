@@ -1,3 +1,4 @@
+import parse from 'html-react-parser';
 import React from 'react';
 import Popup from 'reactjs-popup';
 
@@ -29,9 +30,10 @@ export default class LoyaltyConfirmPopup extends React.Component {
    * Utility function to get hello member points for given price.
    */
   getLoyaltyOptionText = (option) => {
-    if (option === 'hello_member_loyalty') {
-      return Drupal.t('H&M membership', {}, { context: 'hello_member' });
-    } if (option === 'aura_loyalty') {
+    if (option === 'hello_member') {
+      const { brandMembershipText } = drupalSettings.helloMember;
+      return brandMembershipText;
+    } if (option === 'aura') {
       return Drupal.t('Aura', {}, { context: 'hello_member' });
     }
     return null;
@@ -50,11 +52,15 @@ export default class LoyaltyConfirmPopup extends React.Component {
         >
           <div className="loyalty-popup-block">
             <div className="loyalty-popup-title">
-              <span>{Drupal.t('Confirm the Loyalty', {}, { context: 'hello_member' })}</span>
+              <span>{Drupal.t('Confirm the Loyalty')}</span>
               <a className="close-modal" onClick={() => this.closeModal()} />
             </div>
             <div className="loyalty-question">
-              {Drupal.t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits??', { '@current_option': this.getLoyaltyOptionText(currentOption), '@selected_option': this.getLoyaltyOptionText(selectedOption) }, { context: 'loyalty' })}
+              {parse(Drupal.t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits?',
+                {
+                  '@current_option': this.getLoyaltyOptionText(currentOption),
+                  '@selected_option': this.getLoyaltyOptionText(selectedOption),
+                }))}
             </div>
             <div className="loyalty-options">
               <button
@@ -63,7 +69,7 @@ export default class LoyaltyConfirmPopup extends React.Component {
                 type="button"
                 onClick={() => this.closeModal()}
               >
-                {Drupal.t('Cancel', {}, { context: 'hello_member' })}
+                {Drupal.t('Cancel')}
               </button>
               <button
                 className="loyalty-yes"
@@ -71,7 +77,7 @@ export default class LoyaltyConfirmPopup extends React.Component {
                 type="button"
                 onClick={() => this.confirmLoyalty(selectedOption)}
               >
-                {Drupal.t('Yes', {}, { context: 'hello_member' })}
+                {Drupal.t('Yes')}
               </button>
             </div>
           </div>

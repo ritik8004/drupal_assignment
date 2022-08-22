@@ -1,0 +1,13 @@
+.nodetype--advanced_page {
+  .c-accordion-delivery-option-parent {
+    .c-accordion__title {
+      &.ui-state-active {
+        font-weight: 600;
+
+        &::after {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}

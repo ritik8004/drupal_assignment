@@ -36,6 +36,7 @@ import {
   isEgiftUnsupportedPaymentMethod,
   isFullPaymentDoneByEgift,
 } from '../../../utilities/egift_util';
+import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -123,7 +124,7 @@ export default class PaymentMethods extends React.Component {
 
     // We disable the other payment methods when full payment is done by aura points
     // and payment method is set as `aura_payment`.
-    if (isAuraEnabled() && isPaymentMethodSetAsAura(cart)) {
+    if ((isAuraEnabled() || isAuraIntegrationEnabled()) && isPaymentMethodSetAsAura(cart)) {
       return false;
     }
 
@@ -140,7 +141,7 @@ export default class PaymentMethods extends React.Component {
     const { cart } = this.props;
 
     // If full payment is being done by aura then we change payment method to `aura_payment`.
-    if (isAuraEnabled() && isFullPaymentDoneByAura(cart)) {
+    if ((isAuraEnabled() || isAuraIntegrationEnabled()) && isFullPaymentDoneByAura(cart)) {
       this.changePaymentMethod('aura_payment');
       return;
     }
@@ -299,7 +300,7 @@ export default class PaymentMethods extends React.Component {
 
     // If aura enabled and aura points redeemed then do not allow
     // to select any payment method that is unsupported with aura.
-    if (isAuraEnabled()
+    if ((isAuraEnabled() || isAuraIntegrationEnabled())
       && cart.cart.totals.paidWithAura > 0
       && isUnsupportedPaymentMethod(method)) {
       return;
@@ -385,7 +386,7 @@ export default class PaymentMethods extends React.Component {
       // If aura enabled and customer is paying some amount of the order
       // using aura points then disable the payment methods that are
       // not supported with Aura.
-      if (isAuraEnabled() && cart.cart.totals.paidWithAura > 0) {
+      if ((isAuraEnabled() || isAuraIntegrationEnabled()) && cart.cart.totals.paidWithAura > 0) {
         disablePaymentMethod = isUnsupportedPaymentMethod(method.code);
       }
 
@@ -406,7 +407,7 @@ export default class PaymentMethods extends React.Component {
         key={method.code}
         method={method}
         animationOffset={animationOffset}
-        {...((isAuraEnabled() || (isEgiftCardEnabled()))
+        {...((isAuraEnabled() || (isAuraIntegrationEnabled()) || (isEgiftCardEnabled()))
           && disablePaymentMethod
           && { disablePaymentMethod }
         )}

@@ -23,6 +23,7 @@ import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -361,6 +362,12 @@ const getProcessedCartData = async (cartData) => {
     && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
+  // Add loyalty card and loyalty type for hello member loyalty.
+  if (isHelloMemberEnabled()) {
+    data.loyalty_card = cartData.cart.extension_attributes.loyalty_card || '';
+    data.loyalty_type = cartData.cart.extension_attributes.loyalty_type || '';
+  }
+
   // Totals.
   if (typeof cartData.totals.base_grand_total !== 'undefined') {
     data.cart_total = cartData.totals.base_grand_total;
@@ -376,7 +383,7 @@ const getProcessedCartData = async (cartData) => {
     }
     // If Aura enabled, add aura related details.
     // If Egift card is enabled get balance_payable.
-    if (isAuraEnabled() || isEgiftCardEnabled()) {
+    if (isAuraEnabled() || isEgiftCardEnabled() || isAuraIntegrationEnabled()) {
       if (element.code === 'balance_payable') {
         data.totals.balancePayable = element.value;
         // Adding an extra total balance payable attribute, so that we can use
@@ -388,6 +395,14 @@ const getProcessedCartData = async (cartData) => {
       if (element.code === 'aura_payment') {
         data.totals.paidWithAura = element.value;
       }
+    }
+
+    // if the hello member feature is enabled, add hm_voucher_discount from
+    // total segments to hmVoucherDiscount for showing in order summary block
+    // on cart and checkout pages. This will be visible in order summary only if
+    // extension_attributes.applied_hm_voucher_codes does have value(s).
+    if (isHelloMemberEnabled() && element.code === 'voucher_discount') {
+      data.totals.hmVoucherDiscount = element.value;
     }
   });
 
@@ -425,6 +440,29 @@ const getProcessedCartData = async (cartData) => {
     }
     if (hasValue(cartData.totals.extension_attributes.hps_current_balance)) {
       data.totals.egiftCurrentBalance = cartData.totals.extension_attributes.hps_current_balance;
+    }
+  }
+
+  // Check if the hello member feature is enabled and add below hello member
+  // extension_attributes to the totals for display info under order summary
+  // block on cart, checkout pages.
+  // - applied_hm_voucher_codes
+  // - applied_hm_offer_code
+  if (isHelloMemberEnabled() && hasValue(cartData.cart.extension_attributes)) {
+    // Add applied_hm_voucher_codes and hm_voucher_discount to totals.
+    if (hasValue(cartData.cart.extension_attributes.applied_hm_voucher_codes)) {
+      // eslint-disable-next-line max-len
+      data.totals.hmAppliedVoucherCodes = cartData.cart.extension_attributes.applied_hm_voucher_codes;
+    }
+    // Add is_hm_applied_voucher_removed to totals.
+    if (typeof cartData.totals.extension_attributes.is_hm_applied_voucher_removed !== 'undefined') {
+      // eslint-disable-next-line max-len
+      data.totals.isHmAppliedVoucherRemoved = cartData.totals.extension_attributes.is_hm_applied_voucher_removed;
+    }
+
+    // Add applied_hm_voucher_codes and hm_voucher_discount to totals.
+    if (hasValue(cartData.cart.extension_attributes.applied_hm_offer_code)) {
+      data.totals.hmOfferCode = cartData.cart.extension_attributes.applied_hm_offer_code;
     }
   }
 

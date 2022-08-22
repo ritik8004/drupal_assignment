@@ -1,0 +1,132 @@
+.become-hello-member {
+  padding: rem(43) rem(39);
+  margin: rem(22) 0;
+  position: relative;
+  clear: both;
+  background-color: $hello-member-components-bg;
+  text-align: center;
+
+  @include breakpoint($tablet) {
+    margin: rem(26) 0;
+    padding: rem(44) rem(39) rem(48);
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    position: absolute;
+    #{$right}: rem(14);
+    top: rem(14);
+    padding: 0;
+
+    @include icon(close, before) {
+      background: none;
+      font-size: rem(15);
+      font-weight: bold;
+    }
+  }
+
+  &__header {
+    @include breakpoint($only-mobile) {
+      margin-top: rem(16);
+
+      span {
+        display: block;
+
+        &:first-child {
+          font-family: $alshaya-bold;
+          font-size: rem(28);
+          line-height: 1.14;
+          color: $hello-member-highlight-text-2;
+        }
+
+        &:last-child {
+          margin-top: rem(8);
+          font-size: rem(14);
+          line-height: 1.57;
+          color: $hello-member-text-1;
+        }
+      }
+    }
+
+    @include breakpoint($tablet) {
+      span {
+        font-family: $alshaya-bold;
+        font-size: rem(24);
+        line-height: 1.33;
+        color: $hello-member-highlight-text-2;
+
+        &:first-child {
+          margin-#{$right}: rem(3);
+        }
+      }
+    }
+  }
+
+  &__join-text {
+    margin-top: rem(51);
+    font-size: rem(12);
+    line-height: 2.33;
+    color: $hello-member-text-2;
+
+    @include breakpoint($tablet) {
+      margin-top: rem(5);
+      font-size: rem(14);
+      line-height: 1.57;
+      color: $hello-member-text-1;
+    }
+  }
+
+  &__actions {
+    margin-top: rem(10);
+
+    @include breakpoint($tablet) {
+      margin-top: rem(41);
+    }
+
+    &-link {
+      border: solid rem(2) $hello-member-text-1;
+      padding: rem(12);
+      font-size: rem(16);
+      line-height: 1.13;
+      letter-spacing: rem(1.14);
+      justify-content: center;
+      align-self: center;
+
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+
+      @include breakpoint($tablet) {
+        display: inline-block;
+        padding: rem(13);
+        width: rem(240);
+      }
+
+      &--primary {
+        font-family: $alshaya-bold;
+        color: $hello-member-text-3;
+        background-color: $hello-member-text-1;
+
+        &:active,
+        &:focus,
+        &:hover {
+          color: $hello-member-text-3;
+        }
+      }
+
+      &--secondary {
+        font-family: $alshaya-bold;
+        color: $hello-member-text-1;
+
+        @include breakpoint($only-mobile) {
+          margin-bottom: rem(24);
+        }
+
+        @include breakpoint($tablet) {
+          margin-#{$right}: rem(24);
+        }
+      }
+    }
+  }
+}

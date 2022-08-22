@@ -17,6 +17,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
+use Drupal\Core\Site\Settings;
 use Drupal\file\Entity\File;
 
 /**
@@ -915,11 +916,32 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
  */
 function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, array $variables) {
   $node = $variables['elements']['#node'];
+  $front_page_status = \Drupal::service('path.matcher')->isFrontPage();
 
-  // Check if the current node is front page.
   if ($node instanceof Node) {
-    if (\Drupal::service('path.matcher')->isFrontPage() && $node->getType() == 'advanced_page') {
+    // Log if debug is enabled and before theme suggestions are altered.
+    if (Settings::get('is_front_page_debug_enabled', FALSE) && $node->getType() == 'advanced_page') {
+      \Drupal::logger('alshaya_white_label')->notice('Theme suggestions before altering on Advanced page: \'@suggestions\' for node ID: \'@nid\' on view mode: \'@view_mode\'. Front page status: @front_page.', [
+        '@suggestions' => implode(', ', $suggestions),
+        '@nid' => $node->id(),
+        '@view_mode' => $variables['elements']['#view_mode'],
+        '@front_page' => $front_page_status ? 'TRUE' : 'FALSE',
+      ]);
+    }
+
+    // Check if the current node is front page.
+    if ($front_page_status && $node->getType() == 'advanced_page') {
       $suggestions[] = 'node__advanced_page_front';
+
+      // Log if debug is enabled and it's a front page.
+      if (Settings::get('is_front_page_debug_enabled', FALSE)) {
+        \Drupal::logger('alshaya_white_label')->notice('Theme suggestions after altering on the Front page: \'@suggestions\' for node ID: \'@nid\' on view mode: \'@view_mode\'. Front page status: @front_page.', [
+          '@suggestions' => implode(', ', $suggestions),
+          '@nid' => $node->id(),
+          '@view_mode' => $variables['elements']['#view_mode'],
+          '@front_page' => $front_page_status ? 'TRUE' : 'FALSE',
+        ]);
+      }
     }
     elseif ($variables['elements']['#view_mode'] == 'full'
       && in_array($node->getType(), ['rcs_product', 'acq_product'])) {
@@ -929,6 +951,16 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
       $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
       $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
       $pdp_plugin->getTemplateName($suggestions, $node->getType());
+    }
+
+    // Log if debug is enabled and after theme suggestions are altered.
+    if (Settings::get('is_front_page_debug_enabled', FALSE) && $node->getType() == 'advanced_page') {
+      \Drupal::logger('alshaya_white_label')->notice('Theme suggestions after altering on Advanced page: \'@suggestions\' for node ID: \'@nid\' on view mode: \'@view_mode\'. Front page status: @front_page.', [
+        '@suggestions' => implode(', ', $suggestions),
+        '@nid' => $node->id(),
+        '@view_mode' => $variables['elements']['#view_mode'],
+        '@front_page' => $front_page_status ? 'TRUE' : 'FALSE',
+      ]);
     }
   }
 }
@@ -1016,7 +1048,7 @@ function alshaya_white_label_preprocess_menu(&$variables) {
     $items = $variables['items'];
     foreach ($items as $item) {
       // If path is current_path, add active class.
-      if ($item['url']->getRouteName() == 'user.page') {
+      if ($item['url']->isRouted() && $item['url']->getRouteName() == 'user.page') {
         if (str_starts_with($current_path, '/user/') || str_starts_with($current_path, '/profile/')) {
           $attributes = $item['url']->getOption('attributes');
           $attributes['class'][] = 'is-active';
@@ -1314,6 +1346,12 @@ function alshaya_white_label_preprocess_page_title(&$variables) {
  * Implements hook_preprocess_paragraph().
  */
 function alshaya_white_label_preprocess_paragraph(&$variables) {
+  $nodeType = '';
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.node.canonical') {
+    $nodeType = \Drupal::request()->attributes->get('node')->bundle();
+  }
+  $paragraphType = $variables['elements']['#paragraph']->getType();
+
   if ($variables['elements']['#paragraph']->getType() == 'promo_block') {
     // Get the promo block display config for twig file.
     $para_config = \Drupal::config('alshaya_paragraphs.paragraphs_custom_config');
@@ -1351,11 +1389,14 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     }
   }
   // Form the accodian content for egift.
-  if ($variables['elements']['#paragraph']->getType() == 'accordion_paragraph') {
+  if ($paragraphType == 'accordion_paragraph') {
     foreach ($variables['elements']['field_title_and_content'] as $key => $value) {
       if (is_int($key)) {
         $variables['title_content'][$key] = $value;
       }
+    }
+    if ($nodeType === 'advanced_page') {
+      $variables['#attached']['library'][] = 'alshaya_white_label/advanced-page-paragraph-accordion';
     }
   }
 
@@ -1437,6 +1478,9 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       $gtmLabel = $variables['elements']['#paragraph']->getTranslation($defaultLangcode)->get('field_title')->getValue()[0]['value'];
     }
     $variables['content']['field_title']['#attributes']['gtm-title'] = $gtmLabel ?? NULL;
+  }
+  elseif ($paragraphType === 'image_title_subtitle_link' && $nodeType === 'advanced_page') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/advanced-page-paragraph-banner';
   }
 }
 

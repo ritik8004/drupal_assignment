@@ -1,0 +1,13 @@
+.spc-aura-link-card-wrapper,
+.spc-aura-redeem-points-form-wrapper,
+.spc-aura-unlink-card-wrapper {
+  .spc-aura-button {
+    border: rem(1) solid $aura-spc-button-text;
+    background: $aura-spc-button-bg;
+    color: $aura-spc-button-text;
+    font-size: rem(13);
+    border-radius: rem(4);
+    height: rem(36);
+    font-family: $aura-bold;
+  }
+}
