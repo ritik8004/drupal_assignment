@@ -79,7 +79,7 @@ class AuraPointsToEarn extends React.Component {
             '@points': auraPointsToEarn,
           }))}
         </div>
-        <ToolTip enable question>{Drupal.t('The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.')}</ToolTip>
+        <ToolTip enable question>{getStringMessage('hello_member_points_tooltip')}</ToolTip>
       </>
     );
   }
