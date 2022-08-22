@@ -34,6 +34,7 @@ const AttrNavigation = (props) => {
         ruleContexts={ruleContexts}
       />
       <Menu
+        attributeAliase={attr}
         // We always want filters to use EN language data.
         attribute={`attr_${attr}.en`}
         facetOrdering

@@ -8,6 +8,8 @@
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Url;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -43,6 +45,10 @@ function alshaya_shopby_filter_attribute_query_product_category_child_terms_alte
   // Add shopby_filter_attribute field.
   $query->leftJoin('taxonomy_term__field_shopby_filter_attribute', 'shopby_filter_attribute', 'shopby_filter_attribute.entity_id=tfd.tid');
   $query->addField('shopby_filter_attribute', 'field_shopby_filter_attribute_value', 'shopby_filter_attribute');
+
+  // Add shopby_filter_target_cid field.
+  $query->leftJoin('taxonomy_term__field_shopby_filter_target_cid', 'shopby_filter_target_cid', 'shopby_filter_target_cid.entity_id=tfd.tid');
+  $query->addField('shopby_filter_target_cid', 'field_shopby_filter_target_cid_value', 'shopby_filter_target_cid');
 }
 
 /**
@@ -53,6 +59,13 @@ function alshaya_shopby_filter_attribute_acq_sku_commerce_category_alter(TermInt
     // Add the new attribute field for show_filters_shoe_size menu items.
     if (isset($category['custom_attributes']['show_filters_shoe_size'])) {
       $term->get('field_shopby_filter_attribute')->setValue($category['custom_attributes']['show_filters_shoe_size']['value']);
+    }
+
+    // Add the new attribute field for target_category menu items. This field
+    // contains the targetted commerce category ID for shopy by filter attribute
+    // menu items.
+    if (isset($category['custom_attributes']['target_category'])) {
+      $term->get('field_shopby_filter_target_cid')->setValue($category['custom_attributes']['target_category']['value']);
     }
   }
 }
@@ -78,12 +91,40 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
   // Adding class for CSS selector.
   $data[$term->tid]['class'][] = 'shop-by-filter-attribute';
 
+  // Identify the parent target ID for the shop by filter attribute menu items
+  // path. If $term->shopby_filter_target_cid contains a value i.e. a commerce
+  // target category ID, we need to get the associate taxonomy term ID and use
+  // that instead of $term->parent_target_id.
+  $parent_target_id = $term->parent_target_id;
+  if (isset($term->shopby_filter_target_cid)
+    && !empty($term->shopby_filter_target_cid)) {
+    // Get term ID from commerce Id.
+    $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $term_ids = $term_storage->getQuery()
+      ->condition('field_commerce_id', $term->shopby_filter_target_cid)
+      ->condition('vid', ProductCategoryTree::VOCABULARY_ID)
+      ->execute();
+
+    if (!empty($term_ids)) {
+      $term_id = reset($term_ids);
+      $parent_target_id = $term_id;
+    }
+  }
+
   // Add necessary parameters on this menu item itself for React component to
   // utilise and display the filters data.
-  // Get the hierarchy data from the parent term ID for english language always.
+  // Get the hierarchy data from the target term ID for english language always.
   // This is because our filters accepts EN data only.
   $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
-  $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $term->parent_target_id);
+  $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $parent_target_id);
+
+  $path = Url::fromRoute(
+    'entity.taxonomy_term.canonical',
+    ['taxonomy_term' => $parent_target_id],
+    ['language' => \Drupal::languageManager()->getCurrentLanguage()]
+  )->toString(TRUE)->getGeneratedUrl();
+
+  $data[$term->tid]['data_target_url'] = $path ?? '';
 
   // Pass the data_nav_attr for element identification that will be used to
   // show filter menu items.
