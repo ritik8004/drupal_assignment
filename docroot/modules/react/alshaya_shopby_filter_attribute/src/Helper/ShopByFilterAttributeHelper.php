@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_shopby_filter_attribute\Helper;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Helper class for Alshaya shop by filter/attribute navigation.
@@ -20,26 +19,15 @@ class ShopByFilterAttributeHelper {
   protected $configFactory;
 
   /**
-   * Language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
    * ShopByFilterAttributeHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language manager.
    */
   public function __construct(
-    ConfigFactoryInterface $config_factory,
-    LanguageManagerInterface $language_manager
+    ConfigFactoryInterface $config_factory
   ) {
     $this->configFactory = $config_factory;
-    $this->languageManager = $language_manager;
   }
 
   /**
@@ -48,7 +36,7 @@ class ShopByFilterAttributeHelper {
    * @return array
    *   Main menu attribute navigation config.
    */
-  public function getShopByFilterAttributeConfigs() {
+  public function getShopByFilterAttributeConfigs(): array {
     $alshaya_shopby_filter_attribute_config = $this->configFactory->get('alshaya_shopby_filter_attribute.settings');
 
     return [
@@ -63,7 +51,7 @@ class ShopByFilterAttributeHelper {
    * @return bool
    *   TRUE/FALSE
    */
-  public function isShopByFilterAttributeEnabled() {
+  public function isShopByFilterAttributeEnabled(): bool {
     return $this->configFactory->get('alshaya_shopby_filter_attribute.settings')->get('enabled');
   }
 

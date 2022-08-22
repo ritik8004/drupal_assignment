@@ -28,14 +28,6 @@ var config = {
         options: {
           rootMode: "upward",
         }
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.(woff|woff2|ttf|otf|eot|svg|gif)$/,
-        use: ['file-loader'],
       }
     ],
   },
