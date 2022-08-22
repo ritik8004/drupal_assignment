@@ -16,8 +16,12 @@ use Drush\Drush;
  */
 function alshaya_admin_update_9401() {
   $theme = \Drupal::service('theme_installer');
-  $theme->uninstall(['cog'], TRUE);
-  $theme->install(['stable'], TRUE);
+  if (\Drupal::service('theme_handler')->themeExists('cog')) {
+    $theme->uninstall(['cog'], TRUE);
+  }
+  if (!\Drupal::service('theme_handler')->themeExists('stable')) {
+    $theme->install(['stable'], TRUE);
+  }
 }
 
 /**
