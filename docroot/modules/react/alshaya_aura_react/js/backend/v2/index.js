@@ -374,12 +374,14 @@ window.auraBackend.getProgressTracker = async () => {
  *   The input value type.
  * @param {string} value
  *   The input value.
+ * @param {string} context
+ *   The context eg. aura or hello_member.
  *
  * @returns {Promise}
  *   A promise that contains the data and status in case of success and error
  * object in case of failure.
  */
-window.auraBackend.updateLoyaltyCard = async (action, type, value) => {
+window.auraBackend.updateLoyaltyCard = async (action, type, value, context) => {
   let responseData = {};
   const inputData = { action, type, value };
 
@@ -421,7 +423,7 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value) => {
 
   let searchResponse = {};
   if (action === 'add') {
-    searchResponse = await searchUserDetails(inputData.type, inputData.value);
+    searchResponse = await searchUserDetails(inputData.type, inputData.value, context);
 
     if (hasValue(searchResponse.error)) {
       logger.error('Error while trying to set loyalty card in cart. No card found. Request Data: @data.', {

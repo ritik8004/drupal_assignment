@@ -86,13 +86,9 @@ class HelloMemberLoyaltyOptions extends React.Component {
     const { wait, hmPoints, identifierNo } = this.state;
     const { animationDelay, cart, refreshCart } = this.props;
 
-    if (!hasValue(hmPoints)) {
-      return null;
-    }
-
     if (wait) {
       return (
-        <div className="spc-hello-member-checkout-rewards-block fadeInUp">
+        <div className="spc-hello-member-checkout-loading fadeInUp">
           <Loading />
         </div>
       );
@@ -100,7 +96,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
 
     return (
       <div className="spc-hello-member-checkout-rewards-block fadeInUp">
-        <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('Loyalty', {}, { context: 'hello_member' })}</SectionTitle>
+        <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('loyalty')}</SectionTitle>
         {!isUserAuthenticated()
           && (
           <GuestUserLoyalty
