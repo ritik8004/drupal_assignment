@@ -43,42 +43,36 @@ class AlshayaShopByFilterAttributeCommands extends DrushCommands {
    *
    * @command alshaya_shopby_filter_attribute:switch
    *
-   * @option enable
-   *  Pass the 'enable' to enable the feature.
-   * @option disable
-   *  Pass the 'disable' to disable the feature.
+   * @option status
+   *  Pass the 'enable' or 'disable' to switch the feature.
    * @option attributeName
    *  Pass the attribute name for which you want to show the shop by links.
    *
    * @aliases alshaya-shopby-filter-attribute
    *
-   * @usage drush alshaya-shopby-filter-attribute --enable --attributeName='size_shoe_eu'
+   * @usage drush alshaya-shopby-filter-attribute --status=enable --attributeName='size_shoe_eu'
    *   Enable shop by size_shoe_eu filter attribute.
-   * @usage drush alshaya-shopby-filter-attribute --disable
+   * @usage drush alshaya-shopby-filter-attribute --status=disable
    *   Disable the shop by filter attribute feature.
    */
   public function enableDisableShopByFilterAttribute(
     array $options = [
-      'enable' => NULL,
-      'disable' => NULL,
+      'status' => NULL,
       'attributeName' => NULL,
     ]
   ) {
-    // Check if either enable or disable option is set and proceed further only.
+    // Check if status option is set with either enable or disable else exit.
     // If we don't find any option set with command, we will abort requesting an
-    // operation flag. We do the same if both are provided together.
-    if ((empty($options['enable']) && empty($options['disable']))
-      || (!empty($options['enable']) && !empty($options['disable']))) {
-      $this->output->writeln(dt('Please provide the action to be performed with argument either --enable or --disable.'));
+    // operation flag.
+    $action = trim($options['status']);
+    if (empty($action)
+      || !in_array($action, ['enable', 'disable'])) {
+      $this->io()->error(dt("Please provide the action to be performed with argument --status='enable' or --status='disable'"));
       return;
     }
 
     // Identify the status to be set for the feature.
-    $status = (bool) $options['enable'] ?? $options['disable'];
-
-    // We will check if the feature is already enabled we will disable it and
-    // vice versa.
-    $action = $status ? 'enable' : 'disable';
+    $status = ($action === 'enable');
 
     // Confirm if the user wants to enable/disable the feature or not. If not,
     // abort the operation throwing a UserAbortException.
@@ -96,64 +90,39 @@ class AlshayaShopByFilterAttributeCommands extends DrushCommands {
     // If the current status is similar to what is requested, we will abort the
     // executation to repeat the same operation again.
     if ($status === $current_status) {
-      $this->output->writeln(dt('Aborting the operation as feature is already !action.', ['!action' => $action]));
+      $this->io()->error(dt('Aborting the operation as feature is already !action.', ['!action' => $action]));
       return;
     }
 
     // Get the attribute name supplied with the command and it's found empty, we
     // stop the further operation. We need this validation only when enabling
     // this feature i.e. if $status is TRUE.
-    $attributeName = $options['attributeName'];
+    $attributeName = $status ? $options['attributeName'] : '';
     if ($status && empty($attributeName)) {
-      $this->output->writeln(dt('Please provide filter attribute name with argument --attributeName.'));
+      $this->io()->error(dt('Please provide filter attribute name with argument --attributeName.'));
       return;
     }
 
-    // For enable this feature we will update the following settings with the
-    // relevant values as mentioned.
+    // For enable/disable this feature we update the following settings -
     // - alshaya_main_menu.settings
-    // -- show_l2_in_separate_column: TRUE (Show each L2 in separate column)
-    // -- show_highlight: FALSE (Hide highlights CTA in menu)
-    // -- show_menu_full_width: TRUE (Show menu in full width)
-    // and
+    // -- show_l2_in_separate_column (TRUE in case of enabled)
+    // -- show_highlight (FALSE in case of enabled)
+    // -- show_menu_full_width (TRUE in case of enabled)
     // - alshaya_shopby_filter_attribute.settings
-    // -- enabled: TRUE (Enable the feature)
-    // -- attributes: {--attributeName} (Like 'size_shoe_eu' etc).
-    if ($status) {
-      $this->configFactory->getEditable('alshaya_main_menu.settings')
-        ->set('show_l2_in_separate_column', TRUE)
-        ->set('show_highlight', FALSE)
-        ->set('show_menu_full_width', TRUE)
-        ->save();
+    // -- enabled (TRUE in case of enabled)
+    // -- attributes (Empty in case of disabled)
+    $this->configFactory->getEditable('alshaya_main_menu.settings')
+      ->set('show_l2_in_separate_column', $status)
+      ->set('show_highlight', !$status)
+      ->set('show_menu_full_width', $status)
+      ->save();
 
-      $configShopByFilter->set('enabled', $status);
-      $configShopByFilter->set('attributes', $attributeName);
-      $configShopByFilter->save();
-    }
-    else {
-      // For disable this feature we will update the following settings with the
-      // relevant values as mentioned.
-      // - alshaya_main_menu.settings
-      // -- show_l2_in_separate_column: FALSE (Show L2 as per the column algo)
-      // -- show_highlight: TRUE (Show highlights CTA in menu)
-      // -- show_menu_full_width: FALSE (Show menu in container width)
-      // and
-      // - alshaya_shopby_filter_attribute.settings
-      // -- enabled: FALSE (Disable the feature)
-      // -- attributes: '' (Set this to empty).
-      $this->configFactory->getEditable('alshaya_main_menu.settings')
-        ->set('show_l2_in_separate_column', FALSE)
-        ->set('show_highlight', TRUE)
-        ->set('show_menu_full_width', FALSE)
-        ->save();
-
-      $configShopByFilter->set('enabled', $status);
-      $configShopByFilter->set('attributes', '');
-      $configShopByFilter->save();
-    }
+    $configShopByFilter->set('enabled', $status);
+    $configShopByFilter->set('attributes', $attributeName);
+    $configShopByFilter->save();
 
     // Inform that the feature is successfully enabled.
-    $this->output->writeln(dt('Successfully !action shop by filter attribute feature.', ['!action' => $action . 'd']));
+    $this->io()->success(dt('Successfully !action shop by filter attribute feature.', ['!action' => $action]));
   }
 
 }
