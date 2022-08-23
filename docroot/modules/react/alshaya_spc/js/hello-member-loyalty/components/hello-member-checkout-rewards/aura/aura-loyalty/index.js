@@ -16,11 +16,15 @@ const AuraLoyalty = ({
   helloMemberPoints,
   cart,
   open,
+  showAuraPoints,
+  hideAuraPoints,
 }) => (
   <>
     <Collapsible
       trigger={auraLoyaltyHeader(optionName, helloMemberPoints)}
       open={open}
+      onOpening={() => showAuraPoints()}
+      onClosing={() => hideAuraPoints()}
     >
       <div className="spc-aura-link-card-form active">
         <AuraLoyaltyForm
