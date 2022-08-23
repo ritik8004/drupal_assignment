@@ -4,6 +4,7 @@
       .menu-two__link-wrapper a {
         @include breakpoint($desktop) {
           font-size: 0.75rem;
+          color: $mm_l2_link_desktop !important;
         }
       }
     }
