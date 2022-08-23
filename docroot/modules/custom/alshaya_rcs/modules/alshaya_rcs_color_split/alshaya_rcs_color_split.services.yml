@@ -1,0 +1,5 @@
+services:
+  alshaya_rcs_color_split.helper:
+    class: Drupal\alshaya_rcs_color_split\Service\AlshayaRcsColorSplitHelper
+    arguments:
+      - '@config.factory'
