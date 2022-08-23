@@ -108,9 +108,13 @@ const OrderSummaryBlock = ({
       <div className="block-content">
         {/* To Be used later on Checkout Delivery pages. */}
         <div className="products" />
+        {/* The coupon code and exclusive coupon flag variable passed to
+        decide whether to show the coupon code on the discount tooltip or not. */}
         <TotalLineItems
           totals={totals}
           isCartPage={showCheckoutButton}
+          couponCode={couponCode}
+          hasExclusiveCoupon={hasExclusiveCoupon}
           context={context}
           {...(collectionPointsEnabled()
             && hasValue(collectionCharge)

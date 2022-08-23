@@ -346,7 +346,7 @@ const getProcessedCartData = async (cartData) => {
     // Flag to not show the dynamic promotions on cart page, if exclusive promo/coupon
     // is applied we will get the has_exclusive_coupon flag value as true from MDC,
     // and we will not render the dynamic promos.
-    has_exclusive_coupon: (typeof cartData.cart.extension_attributes.has_exclusive_coupon !== 'undefined') ? cartData.cart.extension_attributes.has_exclusive_coupon : null,
+    has_exclusive_coupon: (typeof cartData.cart.extension_attributes.has_exclusive_coupon !== 'undefined') ? cartData.cart.extension_attributes.has_exclusive_coupon : false,
     stale_cart: (typeof cartData.stale_cart !== 'undefined') ? cartData.stale_cart : false,
     totals: {
       subtotal_incl_tax: cartData.totals.subtotal_incl_tax,

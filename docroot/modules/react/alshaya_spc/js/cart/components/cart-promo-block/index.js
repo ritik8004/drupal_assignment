@@ -249,7 +249,9 @@ export default class CartPromoBlock extends React.Component {
       buttonText,
     } = this.state;
 
-    const { inStock, dynamicPromoLabelsCart, totals, hasExclusiveCoupon } = this.props;
+    const {
+      inStock, dynamicPromoLabelsCart, totals, hasExclusiveCoupon,
+    } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
     let disabledState = false;
     // Disable the promo field if out of stock or disabled.
@@ -305,7 +307,9 @@ export default class CartPromoBlock extends React.Component {
           <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock, productInfo); }}>{buttonText}</button>
           <div id="promo-message" />
           {/* Displaying success message below the promo text field only when exclusive
-           coupon gets applied in basket. */}
+           coupon gets applied in basket.
+           This message will be shown all the time even after page load,
+           till exclusive coupon/promo is applied on basket. */}
           {hasExclusiveCoupon === true
             && <div id="exclusive-promo-message">{Drupal.t('Promotion code is applied on the original price. All other promotions were removed.')}</div>}
           {/* Displaying dynamic promotion code only when no exclusive

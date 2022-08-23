@@ -69,7 +69,7 @@ export default class Cart extends React.Component {
       // Flag to not show the dynamic promotions on cart page, if exclusive promo/coupon
       // is applied the i.e. if this exclusive promo is applied on the basket,
       // the flag value will be true, and we don't render the dynamic promos.
-      hasExclusiveCoupon: null,
+      hasExclusiveCoupon: false,
     };
   }
 
@@ -537,9 +537,14 @@ export default class Cart extends React.Component {
             <ConditionalView condition={isAuraEnabled()}>
               <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
             </ConditionalView>
+            {/* This will be used for the order summary section on cart page,
+            where we will show the coupon code on the discount tooltip
+            if any exclusive coupon code gets applied. */}
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}
+              couponCode={couponCode}
+              hasExclusiveCoupon={hasExclusiveCoupon}
               show_checkout_button
               animationDelay="0.5s"
               context="cart"
