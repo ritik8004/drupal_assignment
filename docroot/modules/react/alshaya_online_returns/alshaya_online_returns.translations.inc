@@ -290,6 +290,14 @@ function _alshaya_online_returns_translations() {
         'ar' => '',
         'context' => 'online_returns',
       ],
+      'FREE Returns' => [
+        'ar' => '',
+        'context' => 'online_returns',
+      ],
+      'Now Available Online!' => [
+        'ar' => '',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 

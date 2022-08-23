@@ -41,6 +41,8 @@ import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dyna
 import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../backend/v2/utility';
 import { applyHelloMemberLoyalty } from '../../../hello-member-loyalty/components/hello-member-checkout-rewards/utilities/loyalty_helper';
+import { isOnlineReturnsEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
+import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -503,6 +505,9 @@ export default class Cart extends React.Component {
               </ConditionalView>
             </div>
             <DeliveryInOnlyCity />
+            {isOnlineReturnsEnabled() && (
+              <OnlineReturnsCartBanner />
+            )}
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
               items={items}
