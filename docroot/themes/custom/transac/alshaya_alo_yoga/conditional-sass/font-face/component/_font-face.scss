@@ -2,15 +2,6 @@
 $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_alo_yoga/fonts';
 
 @font-face {
-  font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?p1AKYf') format('woff2'),
-  url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?p1AKYu') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'Arquitecta Regular';
   src: url('#{$base_theme_fonts_directory_path}/Arquitecta-Regular.woff2') format("woff2"),
   url('#{$base_theme_fonts_directory_path}/Arquitecta-Regular.woff') format("woff");
