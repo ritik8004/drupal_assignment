@@ -1,7 +1,7 @@
 /**
  * Rcs Event listener for swatch.
  */
- (function main(Drupal, RcsEventManager) {
+(function main(Drupal, RcsEventManager) {
   RcsEventManager.addListener('alshayaRcsAlterSwatch', function alshayaRcsAlterSwatch (e) {
     // Update swatch elements.
     if (e.detail.variant.product.swatch_data.swatch_type === 'image') {
