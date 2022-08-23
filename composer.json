@@ -143,6 +143,7 @@
         "hgoebl/mobile-detect": "^1.4.2",
         "jquery-validation/jquery-validation": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
+        "nnnick/chartjs": "^3.9",
         "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "oomphinc/composer-installers-extender": "^2.0",
         "psy/psysh": "v0.10.12",
@@ -220,6 +221,18 @@
                 "dist": {
                     "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
                     "type": "zip"
+                }
+            }
+        },
+        "chart.js": {
+            "type": "package",
+            "package": {
+                "name": "nnnick/chartjs",
+                "version": "v3.9.1",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/chartjs/Chart.js/releases/download/v3.9.1/chart.js-3.9.1.tgz",
+                    "type": "tar"
                 }
             }
         }
@@ -382,6 +395,12 @@
             },
             "drupal/coder": {
                 "Readonly variables have Missing member variable doc comment": "https://www.drupal.org/files/issues/2022-06-15/coder-readonly-doc-comment-3285707-4.patch"
+            },
+            "drupal/moderation_dashboard": {
+                "Support for SRI Integrity hash attribute - 1": "https://git.drupalcode.org/project/moderation_dashboard/-/merge_requests/21.diff",
+                "Support for SRI Integrity hash attribute - 2": "https://git.drupalcode.org/project/moderation_dashboard/-/merge_requests/23.diff",
+                "Support for SRI Integrity hash attribute - 3": "https://git.drupalcode.org/project/moderation_dashboard/-/merge_requests/24.diff",
+                "Support for SRI Integrity hash attribute - 4": "https://git.drupalcode.org/project/moderation_dashboard/-/merge_requests/26.diff"
             }
         },
         "installer-paths": {
