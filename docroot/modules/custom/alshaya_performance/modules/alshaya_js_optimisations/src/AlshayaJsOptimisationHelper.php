@@ -68,7 +68,7 @@ class AlshayaJsOptimisationHelper {
    */
   public static $jsCategories = [
     'ie_only' => [
-      'weight' => -33,
+      'weight' => -31,
       'attributes' => [
         'nomodule' => TRUE,
         'data-group' => ['ie-only'],
@@ -76,31 +76,11 @@ class AlshayaJsOptimisationHelper {
       'dependencies' => [],
     ],
     'site_libraries' => [
-      'weight' => -32,
+      'weight' => -30,
       'attributes' => [
         'data-group' => ['site-library'],
       ],
       'dependencies' => [
-        'ie-only',
-      ],
-    ],
-    'handlebars' => [
-      'weight' => -30,
-      'attributes' => [
-        'data-group' => ['handlebars'],
-      ],
-      'dependencies' => [
-        'site-library',
-        'ie-only',
-      ],
-    ],
-    'rcs_listeners' => [
-      'weight' => -29,
-      'attributes' => [
-        'data-group' => ['rcs-listeners'],
-      ],
-      'dependencies' => [
-        'site-library',
         'ie-only',
       ],
     ],
@@ -110,8 +90,6 @@ class AlshayaJsOptimisationHelper {
         'data-group' => ['critical'],
       ],
       'dependencies' => [
-        'handlebars',
-        'rcs-listeners',
         'site-library',
         'ie-only',
       ],
@@ -122,8 +100,6 @@ class AlshayaJsOptimisationHelper {
         'data-group' => ['sitewide-1'],
       ],
       'dependencies' => [
-        'handlebars',
-        'rcs-listeners',
         'site-library',
         'ie-only',
       ],
@@ -134,8 +110,6 @@ class AlshayaJsOptimisationHelper {
         'data-group' => ['sitewide-2'],
       ],
       'dependencies' => [
-        'handlebars',
-        'rcs-listeners',
         'site-library',
         'ie-only',
         'sitewide-1',
@@ -165,14 +139,6 @@ class AlshayaJsOptimisationHelper {
           'label' => t('Site Libraries'),
           'description' => t('Priority library scripts loaded for all pages throughout the site.'),
         ],
-        'handlebars' => [
-          'label' => t('Handlebar Templates'),
-          'description' => t('Handlebar template asset libraries are loaded with high priority to ensure they are present when Handlebar processor scripts run.'),
-        ],
-        'rcs_listeners' => [
-          'label' => t('RCS Event Listeners'),
-          'description' => t('RCS Event Listener asset libraries are loaded with high priority to ensure listeners are registered before their events are triggered.'),
-        ],
         'critical' => [
           'label' => t('Critical Scripts'),
           'description' => t('JS asset libraries to load with high priority on pageload. They render content and interactions above the fold, that are immediately visible on pageload. They are also responsibe for any critical and highlighting functionality on a page.'),
@@ -189,6 +155,13 @@ class AlshayaJsOptimisationHelper {
       'form_warning' => t('WARNING: Saving this form will rebuild cache on JS files. The first load of site pages will be slower than usual.'),
     ];
   }
+
+  /**
+   * JS aggregation status flag.
+   *
+   * @var isJsAggregation
+   */
+  public static $isJsAggregation = NULL;
 
   /**
    * Critical JS status flag.
@@ -337,14 +310,13 @@ class AlshayaJsOptimisationHelper {
    */
   private function includeDependencies(array $lists, $category, $installed) {
     $included_dependecies = [];
-    $resolve_categories = ['critical', 'sitewide_1', 'sitewide_2'];
     foreach ($lists as $extension => $libraries) {
       if (in_array($extension, $installed)) {
         $libraries = (array) $libraries;
         $libraries = $this->prefixLibrary($libraries, $extension . '/');
         $library_list = $libraries;
 
-        if (in_array($category, $resolve_categories)) {
+        if ($category === 'critical' || $category === 'sitewide_1' || $category === 'sitewide_2') {
           $library_list = $this->depedencyResolver->getLibrariesWithDependencies($libraries);
         }
 
