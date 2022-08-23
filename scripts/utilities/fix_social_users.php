@@ -26,7 +26,7 @@ foreach ($users as $uid => $mail) {
       throw new \Exception('Empty customer');
     }
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     $customer_not_found[] = $mail;
     continue;
   }
@@ -56,19 +56,19 @@ foreach ($users as $uid => $mail) {
 }
 
 if (isset($customer_not_found)) {
-  print 'Customer not found for social users: ' . count($customer_not_found) . PHP_EOL;
+  print 'Customer not found for social users: ' . (is_countable($customer_not_found) ? count($customer_not_found) : 0) . PHP_EOL;
   print_r($customer_not_found);
   print PHP_EOL . PHP_EOL;
 }
 
 if (isset($user_has_customer)) {
-  print 'Found users which have separate social and customer accounts: ' . count($user_has_customer) . PHP_EOL;
+  print 'Found users which have separate social and customer accounts: ' . (is_countable($user_has_customer) ? count($user_has_customer) : 0) . PHP_EOL;
   print_r($user_has_customer);
   print PHP_EOL . PHP_EOL;
 }
 
 if (isset($social_users_no_customer_account)) {
-  print 'Users with social account and no customer account: ' . count($social_users_no_customer_account) . PHP_EOL;
+  print 'Users with social account and no customer account: ' . (is_countable($social_users_no_customer_account) ? count($social_users_no_customer_account) : 0) . PHP_EOL;
   print_r($social_users_no_customer_account);
   print PHP_EOL . PHP_EOL;
 }

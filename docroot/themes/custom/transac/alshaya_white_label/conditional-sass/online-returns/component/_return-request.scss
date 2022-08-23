@@ -286,14 +286,13 @@
       }
 
       span {
-        background: $online-return-dark-bg;
+        background: $online-return-button-bg;
         color: $online-return-steps-label-txt;
         padding: 0.6875rem 2.25rem;
         font-size: 0.875rem;
         line-height: 1.125rem;
         display: block;
         font-family: $alshaya-bold;
-        text-transform: uppercase;
       }
 
       &[disabled] {
@@ -423,6 +422,7 @@
     .Collapsible__contentInner {
       line-height: 1.125rem;
       color: $online-return-dark-txt;
+      font-family: $alshaya-thin;
 
       > div:first-child {
         margin-top: 0.3125rem;
@@ -492,7 +492,7 @@
           transform: translate(-50%, -50%);
           color: $online-return-label-txt;
           #{$right}: 0.875rem;
-          font-size: 0.9rem;
+          font-size: rem(32);
 
           html[lang=ar] & {
             left: 2.25rem;
@@ -530,12 +530,12 @@
     margin-top: 1.5rem;
     margin-#{$left}: 1.125rem;
     font-size: 0.875rem;
-    color: $online-return-dark-bg;
+    color: $online-return-dark-txt;
 
     a {
       text-decoration: underline;
       margin-#{$left}: 1.125rem;
-      color: $online-return-dark-bg;
+      color: $online-return-dark-txt;
     }
   }
 

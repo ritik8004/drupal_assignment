@@ -105,7 +105,7 @@ class RouteSubscriber extends RouteSubscriberBase {
           }
         }
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
 
       }
 

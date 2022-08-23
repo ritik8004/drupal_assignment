@@ -11,7 +11,7 @@
   host: alshaya404dev.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04dev
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04dev2'.
 04dev2:
@@ -26,7 +26,7 @@
   host: alshaya404dev2.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04dev2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04dev2up'.
 04dev2up:
@@ -41,7 +41,7 @@
   host: alshaya404dev2up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04dev2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04dev3'.
 04dev3:
@@ -56,7 +56,7 @@
   host: alshaya404dev3.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04dev3
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04dev3up'.
 04dev3up:
@@ -71,7 +71,7 @@
   host: alshaya404dev3up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04dev3up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04devup'.
 04devup:
@@ -86,7 +86,7 @@
   host: alshaya404devup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04devup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04live'.
 04live:
@@ -101,7 +101,7 @@
   host: alshaya404live.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04live
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04pprod'.
 04pprod:
@@ -116,7 +116,7 @@
   host: alshaya404pprod.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04pprod
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04pprodup'.
 04pprodup:
@@ -131,7 +131,7 @@
   host: alshaya404pprodup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04pprodup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04qa2'.
 04qa2:
@@ -146,7 +146,7 @@
   host: alshaya404qa2.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04qa2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04qa2up'.
 04qa2up:
@@ -161,7 +161,7 @@
   host: alshaya404qa2up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04qa2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04test'.
 04test:
@@ -176,7 +176,7 @@
   host: alshaya404test.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04test
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04testup'.
 04testup:
@@ -191,7 +191,7 @@
   host: alshaya404testup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04testup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04uat'.
 04uat:
@@ -206,7 +206,7 @@
   host: alshaya404uat.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04uat
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04uatup'.
 04uatup:
@@ -221,7 +221,7 @@
   host: alshaya404uatup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04uatup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment '04update'.
 04update:
@@ -236,7 +236,7 @@
   host: alshaya404update.ssh.enterprise-g1.acquia-sites.com
   user: alshaya4.04update
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment 'dev'.
 dev:
@@ -251,7 +251,7 @@ dev:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment 'dev2'.
 dev2:
@@ -266,7 +266,7 @@ dev2:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment 'dev3'.
 dev3:
@@ -281,7 +281,7 @@ dev3:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment 'pprod'.
 pprod:
@@ -296,7 +296,7 @@ pprod:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment 'prod'.
 prod:
@@ -311,7 +311,7 @@ prod:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment 'qa2'.
 qa2:
@@ -326,7 +326,7 @@ qa2:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment 'test'.
 test:
@@ -341,7 +341,7 @@ test:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 # Application 'alshaya4', environment 'uat'.
 uat:
@@ -356,4 +356,4 @@ uat:
   host: null
   user: null
   paths:
-    drush-script: drush9
+    drush-script: drush

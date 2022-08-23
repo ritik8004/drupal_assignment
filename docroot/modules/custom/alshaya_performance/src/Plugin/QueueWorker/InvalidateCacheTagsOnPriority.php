@@ -15,6 +15,6 @@ class InvalidateCacheTagsOnPriority extends InvalidateCacheTags {
   /**
    * Queue Name.
    */
-  const QUEUE_NAME = 'alshaya_invalidate_cache_tags_on_priority';
+  public const QUEUE_NAME = 'alshaya_invalidate_cache_tags_on_priority';
 
 }

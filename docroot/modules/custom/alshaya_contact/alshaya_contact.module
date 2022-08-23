@@ -92,7 +92,7 @@ function alshaya_contact_webform_submission_presave(WebformSubmissionInterface $
  * Processor for the mobile number field to disable the country code.
  */
 function _alshaya_contact_mobile_number_process_fix_default(array &$element, FormStateInterface $form_state) {
-  if (strpos($form_state->getBuildInfo()['form_id'], '_api_form') === FALSE) {
+  if (!str_contains($form_state->getBuildInfo()['form_id'], '_api_form')) {
     return $element;
   }
 

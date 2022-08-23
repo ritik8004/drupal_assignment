@@ -22,17 +22,17 @@ class AlshayaPlpSortOptionsBase {
    *
    * @see alshaya_acm_product_position.settings in alshaya_pb_transac.
    */
-  const CONFIG_SORT_OPTIONS = 'alshaya_acm_product_position.settings';
+  public const CONFIG_SORT_OPTIONS = 'alshaya_acm_product_position.settings';
 
   /**
    * Vocabulary of plp page.
    */
-  const VOCABULARY_ID = 'acq_product_category';
+  public const VOCABULARY_ID = 'acq_product_category';
 
   /**
    * Mapping for route name and parameter.
    */
-  const TERM_ROUTE_PARAM = [
+  public const TERM_ROUTE_PARAM = [
     'entity.taxonomy_term.canonical' => 'taxonomy_term',
     'rest.category_product_list.GET' => 'id',
   ];
@@ -40,7 +40,7 @@ class AlshayaPlpSortOptionsBase {
   /**
    * Mapping for fields for options and label to get settings.
    */
-  const SORT_OPTIONS_SETTINGS = [
+  public const SORT_OPTIONS_SETTINGS = [
     'options' => [
       'type' => 'field_sorting_options',
       'value' => 'field_sorting_order',

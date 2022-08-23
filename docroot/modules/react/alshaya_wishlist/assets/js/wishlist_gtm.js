@@ -95,7 +95,7 @@
       event: 'removeFromWishlist',
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
-        remove: {
+        wishlist: {
           products: [
             product,
           ],

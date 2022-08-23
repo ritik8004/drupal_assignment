@@ -13,7 +13,7 @@ class AlshayaDisableSyncCommands extends DrushCommands {
   /**
    * Overidden drush commands.
    */
-  const OVERRIDE_COMMANDS = [
+  public const OVERRIDE_COMMANDS = [
     "alshaya_acm:offline-product-sync",
     "alshaya_acm:sync-products",
     "acq_promotion:sync-promotions",

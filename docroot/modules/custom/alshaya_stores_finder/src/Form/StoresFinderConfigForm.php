@@ -76,7 +76,7 @@ class StoresFinderConfigForm extends ConfigFormBase {
     $form['filter_path'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Path to MDC stores API'),
-      '#default_value' => $config->get('filter_path') ? $config->get('filter_path') : '',
+      '#default_value' => $config->get('filter_path') ?: '',
       '#description' => $this->t('Set the value using drush command: <b>drush cset alshaya_stores_finder.settings filter_path test/url</b>'),
       '#disabled' => TRUE,
     ];

@@ -159,7 +159,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
 
       return TRUE;
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       return FALSE;
     }
   }
@@ -183,7 +183,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     try {
       $carts[$cart_id] = $this->api->getCart($cart_id);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // If Cart not found or APIs not working, return empty array.
       return [];
     }

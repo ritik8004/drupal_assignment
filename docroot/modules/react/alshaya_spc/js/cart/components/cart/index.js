@@ -37,6 +37,10 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
+import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
+import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
+import { isUserAuthenticated } from '../../../backend/v2/utility';
+import { applyHelloMemberLoyalty } from '../../../hello-member-loyalty/components/hello-member-checkout-rewards/utilities/loyalty_helper';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -105,6 +109,12 @@ export default class Cart extends React.Component {
           cartData.then((result) => {
             if (typeof result.error === 'undefined') {
               window.dynamicPromotion.apply(result);
+              // Set hello member loyalty when no loyalty is set in cart.
+              // For registered user, we need to first get customer identifier number.
+              if (isHelloMemberEnabled() && isUserAuthenticated()
+                && !hasValue(result.loyalty_type)) {
+                applyHelloMemberLoyalty(result.cart_id);
+              }
             }
           });
         }
@@ -429,6 +439,12 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
+    // Get empty divs count for dynamic yield recommendations.
+    let cartEmptyDivsCount = 0;
+    if (hasValue(drupalSettings.cartDyamicYieldDivsCount)) {
+      cartEmptyDivsCount = drupalSettings.cartDyamicYieldDivsCount;
+    }
+
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
@@ -502,6 +518,7 @@ export default class Cart extends React.Component {
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
               items={items}
+              totals={totals}
             />
             <ConditionalView condition={isAuraEnabled()}>
               <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
@@ -522,6 +539,10 @@ export default class Cart extends React.Component {
         <div className="spc-post-content">
           {drupalSettings.alshaya_spc.display_cart_crosssell
             && <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} items={items} />}
+          <DynamicYieldPlaceholder
+            context="cart"
+            placeHolderCount={cartEmptyDivsCount}
+          />
         </div>
         <div className="spc-footer">
           <VatFooterText />

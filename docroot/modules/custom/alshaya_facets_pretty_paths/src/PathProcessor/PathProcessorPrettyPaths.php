@@ -56,7 +56,7 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
     }
 
     elseif (!empty($facet_link = $request->query->get('facet_link'))) {
-      if (strpos($facet_link, '/--') !== FALSE) {
+      if (str_contains($facet_link, '/--')) {
         $path_alias = substr($facet_link, 0, strrpos($facet_link, '/--'));
         $term_path = $this->aliasManager->getPathByAlias($path_alias);
         $query_param = substr($facet_link, strrpos($facet_link, '/--') + 1);
@@ -85,7 +85,7 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
         // to protect against this problem in arbitrary path processors,
         // but it is duplicated here to protect any other URL generation code
         // that might call this method separately.
-        if (strpos($path, '//') === 0) {
+        if (str_starts_with($path, '//')) {
           $path = '/' . ltrim($path, '/') . '/';
         }
       }

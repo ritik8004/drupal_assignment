@@ -26,7 +26,7 @@ use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
  */
 class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPluginInterface {
 
-  const PDP_LAYOUT_MAGAZINE_V2 = 'pdp-magazine_v2';
+  public const PDP_LAYOUT_MAGAZINE_V2 = 'pdp-magazine_v2';
 
   /**
    * The SKU Manager.
@@ -120,15 +120,10 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function getTemplateName(array &$suggestions, string $bundle) {
-    switch ($bundle) {
-      case 'rcs_product':
-        $suggestions[] = 'node__rcs_product__full_magazine_v2';
-        break;
-
-      default:
-        $suggestions[] = 'node__acq_product__full_magazine_v2';
-        break;
-    }
+    $suggestions[] = match ($bundle) {
+      'rcs_product' => 'node__rcs_product__full_magazine_v2',
+        default => 'node__acq_product__full_magazine_v2',
+    };
   }
 
   /**
@@ -284,6 +279,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['isGroup'] = TRUE;
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['alternates'] = $alternates;
           $combinations = $this->skuManager->getConfigurableCombinations($sku_entity);
+          $index = 0;
           foreach ($configurable['values'] as $value => $label) {
             $value_id = $label['value_id'];
             foreach ($combinations['attribute_sku'][$key][$value_id] ?? [] as $child_sku_code) {
@@ -293,11 +289,11 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
                 continue;
               }
 
-              $values[$value][$value_id] = $this->getAlternativeValues($alternates, $child_sku);
+              $values[$index][$value_id] = $this->getAlternativeValues($alternates, $child_sku);
               $this->getProductLabels($child_sku_code, $child_sku, $vars);
 
             }
-
+            $index++;
           }
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'] = $values;
         }
@@ -376,7 +372,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
         $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
           ->get('pdp_gallery_pager_limit');
 
-        $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+        $pager_flag = (is_countable($thumbnails) ? count($thumbnails) : 0) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
         $gallery = [
           'sku' => $sku,

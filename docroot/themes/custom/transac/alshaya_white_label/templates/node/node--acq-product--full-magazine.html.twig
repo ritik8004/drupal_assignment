@@ -18,6 +18,12 @@
   <div class="content-sidebar-wrapper">
     {% block titleBlock %}
       <div class="content__title_wrapper">
+        {% block bnpBlock %}
+        {% endblock %}
+
+        {% if hello_member_status is defined and hello_member_status %}
+          <div id="hello-member-pdp"></div>
+        {% endif %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
@@ -68,13 +74,7 @@
 
         {# Delivery options will load if express delivery enabled. #}
         {% if content.delivery_options %}
-          <div class="express-delivery desktop {{ content.express_delivery_class }}">
-            {% for key,delivery_option in content.delivery_options %}
-              <div class="express-delivery-text {{ key }} {{ delivery_option.status }}">
-                <span>{{ delivery_option.label }}</span>
-              </div>
-            {% endfor %}
-          </div>
+          <div id="sdd-ed-labels"></div>
         {% elseif content.same_day_delivery_text and content.delivery_options is empty %}
           <div class="same-day-delivery">
             <div class="same-day-content">

@@ -124,6 +124,15 @@ const OrderSummaryItem = (props) => {
     );
   }
 
+  if (type === 'hello_member') {
+    return (
+      <div className="spc-order-summary-item fadeInUp" style={styles}>
+        <span className="spc-label">{`${label}:`}</span>
+        <span className="spc-value hello-member-accured-points">{value}</span>
+      </div>
+    );
+  }
+
   return (
     <div className="spc-order-summary-item fadeInUp" style={styles}>
       <span className="spc-label">{`${label}:`}</span>

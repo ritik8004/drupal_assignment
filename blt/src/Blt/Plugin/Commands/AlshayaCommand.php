@@ -19,6 +19,7 @@ class AlshayaCommand extends BltTasks {
     $arguments = $commandData->arguments();
     if (!empty($arguments['changed_files'])) {
       $this->invokeCommand('tests:yaml:lint:files:paragraph', ['file_list' => $arguments['changed_files']]);
+      $this->invokeCommand('tests:rector:validate', ['file_list' => $arguments['changed_files']]);
       $this->invokeCommand('validate:phpcs:files', ['file_list' => $arguments['changed_files']]);
     }
 
@@ -33,7 +34,7 @@ class AlshayaCommand extends BltTasks {
 
     foreach (new \DirectoryIterator($reactDir) as $subDir) {
       if ($subDir->isDir()
-        && strpos($subDir->getBasename(), '.') === FALSE
+        && !str_contains($subDir->getBasename(), '.')
         && !in_array($subDir->getBasename(), $ignoredDirs)) {
         $pattern = '/react/' . $subDir->getBasename() . '/js';
 
@@ -52,12 +53,12 @@ class AlshayaCommand extends BltTasks {
     $do_test = FALSE;
 
     foreach ($files as $file) {
-      if (!$do_test && strpos($file, '/alshaya_spc/js/') !== FALSE) {
+      if (!$do_test && str_contains($file, '/alshaya_spc/js/')) {
         $do_test = TRUE;
       }
 
       foreach ($patterns as $pattern) {
-        if (strpos($file, $pattern) !== FALSE) {
+        if (str_contains($file, $pattern)) {
           $paths = explode('react/', $file, 2);
           $output = $this->_exec('cd ' . $paths[0] . 'react; npm run lint ' . $paths[1]);
           if ($output->getExitCode() !== 0) {

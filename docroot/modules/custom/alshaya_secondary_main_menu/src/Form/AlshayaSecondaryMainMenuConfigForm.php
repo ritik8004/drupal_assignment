@@ -13,7 +13,7 @@ class AlshayaSecondaryMainMenuConfigForm extends ConfigFormBase {
   /**
    * Default secondary_main menu layout.
    */
-  const SECONDARY_MAIN_MENU_DEFAULT_LAYOUT = 'default';
+  public const SECONDARY_MAIN_MENU_DEFAULT_LAYOUT = 'default';
 
   /**
    * {@inheritdoc}

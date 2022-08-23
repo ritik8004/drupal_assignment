@@ -1,0 +1,202 @@
+// mobile number input field with otp btn
+
+%btn-disable {
+  background: $primary_button_disabled;
+  z-index: 3;
+  pointer-events: none;
+}
+
+#edit-hello-member {
+  .mobile-otp-wrapper {
+    padding: 0 rem(20) rem(28);
+
+    .field--type-mobile-number {
+      #user-form & {
+        margin-top: 0;
+      }
+    }
+
+    #hello-member-send-otp {
+      .btn-wrapper {
+        position: relative;
+
+        button {
+          @extend %button-wide;
+
+          min-width: rem(106);
+          font-size: rem(16);
+          padding: rem(7) rem(11);
+          position: absolute;
+          right: 0; // For both lang we need button on the same place since it is mobile field.
+          top: rem(-43);
+          z-index: 1;
+        }
+
+        &.in-active {
+          button {
+            @extend %btn-disable;
+          }
+        }
+      }
+    }
+
+    label,
+    span {
+      color: $hello-member-registration-labels-txt !important;
+    }
+
+    label {
+      html[lang=ar] & {
+        text-align: left;
+        width: 100%;
+        display: block;
+      }
+    }
+
+    .error {
+      padding-top: 0;
+      color: $primary_input_inline_error !important;
+      background: $hello-member-registration-fields-bg !important;
+    }
+
+    #input-otp-error {
+      padding-top: rem(5);
+    }
+
+    .mobile-input--wrapper {
+      input {
+        background-color: $hello-member-registration-fields-bg !important;
+
+        ~ label:not(.active-label) {
+          color: $hello-member-registration-labels-txt !important;
+        }
+      }
+    }
+
+    .mb-verifier {
+      color: $hello-member-registration-labels-txt;
+
+      .verified-msg {
+        color: $hello-member-opt-success !important;
+        display: flex;
+        margin-#{$left}: rem(-5);
+
+        @include icon(check) {
+          color: $hello-member-opt-success;
+          background: $hello-member-registration-fields-bg;
+          position: relative;
+          font-size: rem(24);
+        }
+      }
+    }
+
+    .hello-member-otp-popup-form {
+      .error {
+        background: $primary_bg !important;
+      }
+    }
+  }
+}
+
+// otp pop up
+
+#hello-member-send-otp {
+  .popup-content {
+    width: rem(316) !important;
+    padding: rem(56) rem(28) rem(76) !important;
+    border: 0 !important;
+    text-align: center;
+
+    @include breakpoint($only-tablet) {
+      width: 40% !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      width: 100% !important;
+    }
+  }
+
+  .opt-title {
+    font-size: rem(16);
+    padding-bottom: rem(80);
+
+    p {
+      margin: 0;
+    }
+
+    ~ div {
+      @include force-ltr;
+    }
+  }
+
+  .hello-member-modal-form-actions {
+    padding-top: rem(51);
+  }
+
+  .hello-member-otp-submit-description {
+    padding-top: rem(24);
+    font-size: rem(16);
+  }
+
+  .hello-member-modal-form-submit {
+    @extend %button-wide;
+
+    padding: rem(11) 0;
+    font-size: rem(16);
+    min-width: 100%;
+    cursor: pointer;
+
+    &.in-active {
+      @extend %btn-disable;
+    }
+  }
+
+  .hello-member-modal-form-resend-otp {
+    margin-#{$left}: rem(10);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .hello-member-otp-popup-form {
+    input {
+      width: rem(41) !important;
+      background: $hello-member-opt-input-bg;
+      border-color: $hello-member-opt-input-border;
+
+      &:focus {
+        border-bottom: rem(1) solid $hello-member-opt-input-focus-border !important;
+      }
+    }
+
+    span {
+      margin-#{$right}: rem(10);
+    }
+
+    & > div {
+      justify-content: center;
+    }
+
+    .close-modal {
+      @include icon(close, after) {
+        font-weight: bold;
+      }
+
+      position: relative;
+      float: $right;
+      top: rem(-44);
+      font-size: rem(16);
+      #{$right}: rem(-16);
+      cursor: pointer;
+    }
+  }
+}
+
+.user-page {
+  .user-form {
+    .form-submit {
+      &.in-active {
+        @extend %btn-disable;
+      }
+    }
+  }
+}

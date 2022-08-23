@@ -140,9 +140,7 @@ function alshaya_algolia_react_update_8003() {
 
   // Ensure no facets are missing from existing sku_base_fields.
   $fields = $fields_manager->getFieldAdditions();
-  $facet_fields = array_keys(array_filter($fields, function ($item) {
-    return isset($item['facet']) && $item['facet'];
-  }));
+  $facet_fields = array_keys(array_filter($fields, fn($item) => isset($item['facet']) && $item['facet']));
   array_walk($facet_fields, function (&$field_code) {
     $field_code = "attr_{$field_code}";
   });

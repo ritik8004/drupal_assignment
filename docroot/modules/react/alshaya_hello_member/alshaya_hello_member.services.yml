@@ -1,0 +1,13 @@
+services:
+  alshaya_hello_member.hello_member_helper:
+    class: Drupal\alshaya_hello_member\Helper\HelloMemberHelper
+    arguments:
+      - '@config.factory'
+      - '@mobile_number.util'
+  alshaya_hello_member.breadcrumb:
+    class: Drupal\alshaya_hello_member\Breadcrumb\HelloMemberBenefitsPageBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }
+    arguments:
+      - '@current_user'
+      - '@request_stack'

@@ -82,9 +82,7 @@ class CloudTasksCommand extends BltTasks {
     }
 
     // Filter out the tasks with the one we are interested in.
-    $tasks = array_filter($tasks, function ($value) use ($identifier) {
-      return strpos($value->description, $identifier) > -1;
-    });
+    $tasks = array_filter($tasks, fn($value) => strpos($value->description, $identifier) > -1);
 
     // Say 1 if we found the task.
     echo empty($tasks) ? 0 : 1;

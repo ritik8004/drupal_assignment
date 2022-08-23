@@ -1,0 +1,160 @@
+{{! @see docroot/modules/custom/alshaya_product_zoom/templates/alshaya_magazine.html.twig }}
+<div class="gallery-wrapper">
+  <div id="product-zoom-container" class="product-zoom-processed">
+    {{! block magazineGallery }}
+      <div class="magazine__gallery--container">
+        {{#each thumbnails}}
+          {{#if (eq this.type "youtube")}}
+            <div data-iframe="{{ this.url }}" class="pdp-asset pdp-video pdp-asset-{{ this.index }} youtube">
+              <img loading="lazy" width='{{ this.width }}' height='{{ this.height }}' src="{{ this.thumburl }}" alt="{{ this.video_desc }}" title="{{ this.video_title }}" />
+            </div>
+          {{else if (eq this.type "vimeo")}}
+            <div data-iframe="{{ this.url }}" class="pdp-asset pdp-video pdp-asset-{{ loop.index0 }} vimeo">
+              <img loading="lazy" width='{{ this.width }}' height='{{ this.height }}' src="{{ this.thumburl }}" alt="{{ this.video_desc }}" title="{{ this.video_title }}" />
+            </div>
+          {{else if (eq this.type "video")}}
+            <figure class="pdp-asset pdp-video pdp-asset-{{ this.index }} {{ this.last }}">
+              <button class="pdp-video-close"></button>
+              <video class="gallery-video b-lazy" muted="muted" playsinline loop>
+                <source src="{{ lazy_load_placeholder }}" data-src="{{ this.url }}">
+                {{t 'Your browser does not support the video tag.' }}
+              </video>
+              <div class="pdp-video-controls">
+                <div class="control" title="{{t 'Play/Pause Video' }}"></div>
+              </div>
+            </figure>
+          {{else if (eq this.index 0) }}
+            <figure class="pdp-asset pdp-image pdp-asset-{{ this.index }} {{ this.last }}" data-image-index={{ this.index }}  data-scale="2">
+              <div class="pdp-image-zoom-wrapper">
+                <img loading="lazy" data-zoom-url="{{ this.zoomurl }}" src="{{ this.mediumurl }}" alt="{{ this.alt }}" title="{{ this.title }}"/>
+              </div>
+                <div class="product-labels"></div>
+            </figure>
+          {{else}}
+            <figure class="pdp-asset pdp-image pdp-asset-{{ this.index }} {{ this.last }}" data-image-index={{ this.index }} data-scale="2">
+              <div class="pdp-image-zoom-wrapper">
+                <img loading="lazy" data-zoom-url="{{ this.zoomurl }}" src="{{ this.mediumurl }}" alt="{{ this.alt }}" title="{{ this.title }}"/>
+              </div>
+            </figure>
+          {{/if}}
+        {{/each}}
+        <div class="magazine-product-description">
+          <div class="magazine-swatch-placeholder"></div>
+            {{! Delivery options will load if express delivery enabled. }}
+            {{#if delivery_options }}
+              <div class="express-delivery mobile {{ express_delivery_class }}">
+                {{#each delivery_options }}
+                  <div class="express-delivery-text {{ key }} {{ this.status }}">
+                    <span>{{ this.label }}</span>
+                  </div>
+                {{/each}}
+              </div>
+            {{/if}}
+          <div class="magazine-desc-wrapper">
+            {{#if product_attribute_labels }}
+              <ul class="collection-labels">
+                {{#each product_attribute_labels }}
+                  <li class="{{ key }}">{{ this }}</li>
+                {{/each}}
+              </ul>
+            {{/if}}
+            <div class="description-first">{{ description.html }}</div>
+            <div class="description-details">
+              {{#if description.title_name }}
+                <div class="title-name-wrapper">
+                  <div class="title-name-label">{{t 'TITLE NAME' }}</div>
+                  <div class="title-name-value">{{ description.title_name }}</div>
+                </div>
+              {{/if}}
+              {{#if description.description_details }}
+                  {{#description.description_details }}
+                  <div class="main-attribute-wrapper">
+                    <div class="main-attribute-label">{{ this.title }}</div>
+                    <div class="main-attribute-value">
+                      <ul>
+                      {{#each this.data }}
+                        <li>{{ this }}</li>
+                      {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                  {{/description.description_details}}
+              {{/if}}
+              {{#if description.article_warning }}
+              <div class="warning-wrapper">
+                <div class="warning-label">{{t 'safety warning' }}</div>
+                <div class="warning-value">
+                  {{ description.article_warning }}
+                </div>
+              </div>
+              {{/if}}
+              {{#if description.sku }}
+                <div class="item-code-wrapper">
+                  <div class="item-code-label">{{t 'ART NO' }}</div>
+                  <div class="item-code-value">{{ description.sku }}</div>
+                </div>
+              {{/if}}
+            </div>
+            <div class="pdp-overlay-details">{{t "DETAILS" }}</div>
+            <div class="attribute-sliderbar">
+              <div class="attribute-sliderbar__head">
+                <div class="attribute-sliderbar__title">{{t 'Details' }}</div>
+                <div class="attribute-sliderbar__close"></div>
+              </div>
+              <div class="attribute-sliderbar__content">
+                  {{#if description.composition }}
+                      <h3>{{t 'COMPOSITION' }}</h3>
+                      {{ description.composition }}
+                  {{/if}}
+                  <div class="pdp-overlay-attributes"></div>
+              </div>
+            </div>
+          </div>
+         </div>
+        {{! endblock }}
+        {{! block modalGallery }}
+          <div id="product-full-screen-gallery-container" style="display: none;">
+            <div class="imagegallery__wrapper thumbnail-count-{{ this.thumbnails.length }}">
+              <div class="yt-vi-container cloudzoom__video_modal"></div>
+              <ul id="product-full-screen-gallery">
+                {{#each this.thumbnails }}
+                  {{! As per new design we don't show videos in full screen modal galleries. }}
+                  {{#if (and
+                    (ne this.type "youtube")
+                    (ne this.type "vimeo")
+                    (ne this.type "video"))
+                  }}
+                    <li>
+                      <a href="{{ this.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
+                        <img loading="lazy" src="{{ this.fullurl }}" alt="{{ this.alt }}" title="{{ this.title }}" />
+                      </a>
+                    </li>
+                  {{/if}}
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        {{! endblock }}
+        {{! block modalMobileGallery }}
+          <div id="product-image-gallery-container-mobile" class="mob-imagegallery" style="display: none;">
+            <div class="mob-imagegallery__wrapper">
+              <ul id="product-image-gallery-mob" class="mob-imagegallery__thumbnails {{ pager_flag }}">
+                  {{#each this.thumbnails }}
+                    {{! As per new design we dont show videos in full screen modal galleries. }}
+                    {{#if (and
+                      (ne this.type "youtube")
+                      (ne this.type "vimeo")
+                      (ne this.type "video"))
+                    }}
+                      <li class="mob-imagegallery__thumbnails__image zoom">
+                        <img loading="lazy" src="{{ this.fullurl }}" alt="{{ this.alt }}" title="{{ this.title }}" />
+                      </li>
+                    {{/if}}
+                  {{/each}}
+              </ul>
+              <div class="product-labels"></div>
+            </div>
+          </div>
+        {{! endblock }}
+  </div>
+</div>

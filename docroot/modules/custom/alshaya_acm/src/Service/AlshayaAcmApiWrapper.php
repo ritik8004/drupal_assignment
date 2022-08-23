@@ -209,7 +209,7 @@ class AlshayaAcmApiWrapper extends APIWrapper {
     try {
       // First invalidate so even if we get exception, all blocks are updated.
       Cache::invalidateTags(['cart:' . $cart_id]);
-      $this->alshayaApi->updateCart($cart_id, Json::decode(Json::encode($cart), TRUE));
+      $this->alshayaApi->updateCart($cart_id, Json::decode(Json::encode($cart)));
     }
     catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());

@@ -1,0 +1,138 @@
+.my-benefits-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: rem(36);
+
+  .my-offers-vouchers-details {
+    text-align: center;
+    font-family: $alshaya-bold;
+    background: $hello-member-my-offers-bg;
+    min-height: rem(366);
+
+    @include breakpoint($tablet) {
+      width: calc(100% / 3 - 2% + 2% / 3 - 0.01px);
+      margin-bottom: 5%;
+      margin-#{$left}: 2%;
+
+      &:nth-of-type(3n+1) {
+        margin-#{$left}: 0;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      flex: 0 0 100%;
+      margin-bottom: rem(20);
+    }
+
+    .image-container {
+      img {
+        width: 100%;
+      }
+    }
+
+    .title {
+      font-size: rem(16);
+      letter-spacing: 0.8px;
+      margin-top: rem(20);
+
+      @include breakpoint($tablet) {
+        margin-top: rem(24);
+
+        .block-hello-member-benefits-block & {
+          margin-top: rem(30);
+        }
+      }
+    }
+
+    .info {
+      font-size: rem(14);
+      letter-spacing: 0.7px;
+      margin-top: rem(12);
+      font-family: $alshaya-bold;
+
+      @include breakpoint($tablet) {
+        line-height: 1.57;
+        margin-top: rem(24);
+
+        .block-hello-member-benefits-block & {
+          margin-top: rem(30);
+        }
+      }
+    }
+
+    .expiry {
+      font-size: rem(12);
+      letter-spacing: 0.6px;
+      margin-top: rem(20);
+      margin-bottom: rem(27);
+      font-family: $alshaya-bold;
+      color: $hello-member-my-offers-expiry-txt;
+
+      @include breakpoint($tablet) {
+        margin-top: rem(16);
+        margin-bottom: rem(40);
+
+        .block-hello-member-benefits-block & {
+          margin-top: rem(22);
+          margin-bottom: rem(46);
+        }
+      }
+    }
+
+    .voucher-wrapper {
+      padding: 0 rem(34);
+    }
+  }
+
+  .btn-wrapper {
+    text-align: center;
+    width: 100%;
+    margin-bottom: rem(42);
+
+    a {
+      @extend %button-brand;
+
+      cursor: pointer;
+      padding: rem(12) rem(37);
+      font-family: $alshaya-bold;
+      letter-spacing: normal;
+      line-height: 1.92;
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-left: rem(8);
+    padding-right: rem(8);
+    margin-top: rem(3);
+  }
+}
+
+.block-my-accounts-hello-member-block,
+.block-hello-member-benefits-block {
+  & > h3 {
+    font-family: $alshaya-bold;
+    font-size: rem(18);
+    letter-spacing: rem(1);
+    text-align: center;
+    padding-top: rem(18);
+
+    @include breakpoint($tablet) {
+      font-size: rem(20);
+      padding-bottom: rem(16);
+    }
+  }
+
+  &.no-benefits > h3 {
+    display: none;
+  }
+}
+
+.block-my-accounts-hello-member-block > h3 {
+  @include breakpoint($tablet) {
+    display: none;
+  }
+}

@@ -60,6 +60,7 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::TERMINATE][] = ['onKernelTerminate', 200];
     $events[AlshayaAcmProductCommands::POST_DRUSH_COMMAND_EVENT][] = [
       'postDrushCommand',

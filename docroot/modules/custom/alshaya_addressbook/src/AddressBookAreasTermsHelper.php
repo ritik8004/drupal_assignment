@@ -363,9 +363,7 @@ class AddressBookAreasTermsHelper {
    */
   public function setAddressCachedData(array $data, $key) {
     $cid = $this->getAddressbookCachedId($key);
-    $cache_tags = array_map(function ($val) {
-      return 'taxonomy_term:' . $val;
-    }, array_keys($data));
+    $cache_tags = array_map(fn($val) => 'taxonomy_term:' . $val, array_keys($data));
 
     // If there are cache tags, means there are terms. Only then
     // store in cache or this will cause issue in cache invalidation.

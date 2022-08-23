@@ -32,7 +32,7 @@ class AlshayaProductDeltaFeedHelper {
   /**
    * Custom table name to display OOS product SKUs.
    */
-  const OOS_SKU_TABLE_NAME = 'alshaya_feed_oos_product_skus';
+  public const OOS_SKU_TABLE_NAME = 'alshaya_feed_oos_product_skus';
 
   /**
    * Entity Type Manager service object.
@@ -532,7 +532,7 @@ class AlshayaProductDeltaFeedHelper {
 
     $parsed_categories = array_filter($categories, function ($e) use ($categories_to_exclude_lowercase) {
       foreach ($categories_to_exclude_lowercase as $value) {
-        if (strpos(strtolower($e), $value) !== FALSE) {
+        if (str_contains(strtolower($e), $value)) {
             return FALSE;
         }
       }
@@ -552,6 +552,7 @@ class AlshayaProductDeltaFeedHelper {
    *   Data array.
    */
   public function prepareFeedDataforSkuOos(string $sku) {
+    $fields = [];
     $fields['sku'] = $sku;
     foreach ($this->languageManager->getLanguages() as $lang => $language) {
       $locale_key_prefix = 'lng:' . AlshayaI18nLanguages::getLocale($lang) . ':';

@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_hello_member
+    - user
+  theme:
+    - alshaya_white_label
+id: mymembershipinfoblock
+theme: alshaya_white_label
+region: sidebar_first
+weight: -73
+provider: null
+plugin: my_membership_info_block
+settings:
+  id: my_membership_info_block
+  label: 'My Membership info block'
+  provider: alshaya_hello_member
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: "/user/*\r\n/profile/*"
+    negate: false
+    context_mapping: {  }
+  user_role:
+    id: user_role
+    roles:
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

@@ -32,3 +32,11 @@ function alshaya_tabby_alshaya_spc_cart_build_alter(array &$build) {
   $alshayaTabbyHelper = \Drupal::service('alshaya_tabby.widget_helper');
   $alshayaTabbyHelper->getTabbyPaymentBuild($build, 'cart');
 }
+
+/**
+ * Implements hook_preprocess_template().
+ */
+function alshaya_tabby_preprocess_alshaya_magazine(&$vars) {
+  $alshayaTabbyHelper = \Drupal::service('alshaya_tabby.widget_helper');
+  $alshayaTabbyHelper->getTabbyPaymentBuild($vars, 'pdp');
+}

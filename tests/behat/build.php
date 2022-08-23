@@ -26,7 +26,7 @@ if (!empty($specific_site) && $rebuild == FALSE) {
 }
 $profiles = $behat->buildVarsForGivenSites($specific_site, $rebuild);
 
-$viewports = array('desktop', 'mobile');
+$viewports = ['desktop', 'mobile'];
 
 foreach ($profiles as $profile => $files) {
   $variables = $behat->mergeYamlFiles($files, $profile, $rebuild);
@@ -37,7 +37,7 @@ foreach ($profiles as $profile => $files) {
       }
 
       if (is_dir(BUILD_DIR)) {
-        $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile, $viewport);
+        $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $viewport, $profile);
 
         $output = new ConsoleOutput();
         $output->write("Building $viewport features for: $profile ", TRUE, Output::VERBOSITY_NORMAL);

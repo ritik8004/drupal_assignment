@@ -44,13 +44,12 @@ function alshaya_mu_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
  * Get product description from SKU.
  */
 function _alshaya_mu_transac_get_product_description($sku_entity) {
-  $return = [];
-
   $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
   $return = [];
   $body = $sku_entity->get('attr_description')->getValue();
   if ($body) {
+    $description = [];
     $description['value'] = [
       '#markup' => $body[0]['value'],
     ];
@@ -78,6 +77,7 @@ function _alshaya_mu_transac_get_product_description($sku_entity) {
   }
 
   if ($short_desc_1 = $sku_entity->get('attr_short_description1')->getString()) {
+    $attr_short_description1_desc = [];
     $attr_short_description1_desc['value'] = [
       '#markup' => $short_desc_1,
     ];
@@ -86,6 +86,7 @@ function _alshaya_mu_transac_get_product_description($sku_entity) {
   }
 
   if ($short_desc_2 = $sku_entity->get('attr_short_description2')->getString()) {
+    $attr_short_description2_desc = [];
     $attr_short_description2_desc['value'] = [
       '#markup' => $short_desc_2,
     ];
@@ -94,6 +95,7 @@ function _alshaya_mu_transac_get_product_description($sku_entity) {
   }
 
   if ($attr_country_important_point = $sku_entity->get('attr_country_important_point')->getString()) {
+    $attr_country_important_point_desc = [];
     $attr_country_important_point_desc['label'] = [
       '#markup' => t('Country Important Points'),
     ];
@@ -105,6 +107,7 @@ function _alshaya_mu_transac_get_product_description($sku_entity) {
   }
 
   if ($attr_country_of_origin_en = $sku_entity->get('attr_country_of_origin_en')->getString()) {
+    $attr_country_of_origin_en_desc = [];
     $attr_country_of_origin_en_desc['label'] = [
       '#markup' => t('Country of Origin'),
     ];
@@ -116,6 +119,7 @@ function _alshaya_mu_transac_get_product_description($sku_entity) {
   }
 
   if ($attr_direction_en = $sku_entity->get('attr_direction_en')->getString()) {
+    $attr_direction_en_desc = [];
     $attr_direction_en_desc['label'] = [
       '#markup' => t('Direction'),
     ];
@@ -127,6 +131,7 @@ function _alshaya_mu_transac_get_product_description($sku_entity) {
   }
 
   if ($attr_material_en = $sku_entity->get('attr_material_en')->getString()) {
+    $attr_material_en_desc = [];
     $attr_material_en_desc['label'] = [
       '#markup' => t('Material'),
     ];
@@ -138,6 +143,7 @@ function _alshaya_mu_transac_get_product_description($sku_entity) {
   }
 
   // Prepare the specification variable with all attributes.
+  $specifications = [];
   $specifications['label'] = [
     '#markup' => t('Specifications'),
   ];

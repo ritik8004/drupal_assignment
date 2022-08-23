@@ -26,11 +26,11 @@ class SkuImagesManager {
 
   use LoggerChannelTrait;
 
-  const BASE_IMAGE_ROLE = 'image';
-  const SWATCH_IMAGE_ROLE = 'swatch_image';
+  public const BASE_IMAGE_ROLE = 'image';
+  public const SWATCH_IMAGE_ROLE = 'swatch_image';
 
   // Cache key used for product media.
-  const PRODUCT_MEDIA_CACHE_KEY = 'product_media';
+  public const PRODUCT_MEDIA_CACHE_KEY = 'product_media';
 
   /**
    * Module Handler service object.
@@ -203,23 +203,15 @@ class SkuImagesManager {
       $skuForGallery = $check_parent_child ? $this->getSkuForGallery($sku, $check_parent_child) : $sku;
       $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? NULL;
 
-      if (!isset($data['media_items']['images']) || empty($data['media_items']['images'])) {
-        $this->getLogger('SkuImagesManager')->notice('No images found for SKU: @sku, context: @context.', [
-          '@sku' => $skuForGallery->getSku(),
-          '@context' => $context,
-        ]);
-      }
-      else {
-        foreach ($data['media_items']['images'] as $key => $item) {
-          if (empty($item['label'])) {
-            $data['media_items']['images'][$key]['label'] = (string) $sku->label();
-          }
+      foreach ($data['media_items']['images'] ?? [] as $key => $item) {
+        if (empty($item['label'])) {
+          $data['media_items']['images'][$key]['label'] = (string) $sku->label();
         }
       }
 
       $this->productCacheManager->set($sku, $cache_key, $data);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       $data = [];
     }
 
@@ -445,7 +437,7 @@ class SkuImagesManager {
     try {
       $sku = $this->getSkuForGallery($sku);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       return [];
     }
 
@@ -512,7 +504,7 @@ class SkuImagesManager {
       try {
         return $this->getSkuForGallery($sku);
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
       }
 
       return NULL;
@@ -858,7 +850,7 @@ class SkuImagesManager {
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
             ->get($config_name);
 
-          $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+          $pager_flag = (is_countable($thumbnails) ? count($thumbnails) : 0) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
           $gallery = [
             '#type' => 'container',
@@ -914,7 +906,7 @@ class SkuImagesManager {
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
             ->get($config_name);
 
-          $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+          $pager_flag = (is_countable($thumbnails) ? count($thumbnails) : 0) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
           $gallery = [
             '#type' => 'container',
@@ -1301,6 +1293,7 @@ class SkuImagesManager {
    *   Thumbnails.
    */
   public function getThumbnailsFromMedia(array $media, $get_main_image = FALSE) {
+    $return = [];
     $thumbnails = $media['thumbs'] ?? [];
 
     $main_image = $media['main'] ?? [];
@@ -1474,7 +1467,7 @@ class SkuImagesManager {
       }
     }
 
-    $this->productCacheManager->set($sku, 'swatches', $swatches);
+    $this->productCacheManager->set($sku, 'swatches', $swatches, $sku->getCacheTags() ?? []);
   }
 
   /**
@@ -1570,6 +1563,29 @@ class SkuImagesManager {
       }
     }
     return $media;
+  }
+
+  /**
+   * Helper function to get swatch image url.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return false|string
+   *   Swatch image url or false.
+   */
+  public function getSwatchImageUrl(SKUInterface $sku) {
+    // Let's never download images here, we should always download when
+    // preparing gallery which is done before this.
+    $swatch_product_image = $sku->getThumbnail(FALSE);
+
+    // If we have image for the product.
+    if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+      $url = file_create_url($swatch_product_image['file']->getFileUri());
+      return $url;
+    }
+
+    return FALSE;
   }
 
 }

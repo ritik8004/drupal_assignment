@@ -23,17 +23,17 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
   /**
    * Billing address case - same as shipping.
    */
-  const BILLING_ADDR_CASE_SAME_AS_SHIPPING = 1;
+  public const BILLING_ADDR_CASE_SAME_AS_SHIPPING = 1;
 
   /**
    * Billing address case - not same as shipping.
    */
-  const BILLING_ADDR_CASE_NOT_SAME_AS_SHIPPING = 2;
+  public const BILLING_ADDR_CASE_NOT_SAME_AS_SHIPPING = 2;
 
   /**
    * Billing address case - click and collect.
    */
-  const BILLING_ADDR_CASE_CLICK_COLLECT = 3;
+  public const BILLING_ADDR_CASE_CLICK_COLLECT = 3;
 
   /**
    * {@inheritdoc}

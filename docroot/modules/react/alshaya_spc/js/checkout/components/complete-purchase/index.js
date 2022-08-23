@@ -19,6 +19,7 @@ import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '..
 import isAuraEnabled from '../../../../../js/utilities/helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getBookingDetailByConfirmationNumber } from '../../../../../js/utilities/onlineBookingHelper';
+import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
 
 export default class CompletePurchase extends React.Component {
   componentDidMount() {
@@ -251,7 +252,7 @@ export default class CompletePurchase extends React.Component {
     // balance payable is greater than 0.
     const { balancePayable, paidWithAura, egiftRedeemedAmount } = cart.cart.totals;
     if (isEgiftCardEnabled()
-      && isAuraEnabled()
+      && (isAuraEnabled() || isAuraIntegrationEnabled())
       && paidWithAura > 0
       && egiftRedeemedAmount > 0
       && balancePayable > 0) {

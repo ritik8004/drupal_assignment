@@ -1,0 +1,28 @@
+alshaya_hello_member.settings:
+  type: config_object
+  label: 'Alshaya hello member settings'
+  mapping:
+    status:
+      type: boolean
+      label: 'Config to enable/disable hello member'
+    points_history_page_size:
+      type: integer
+      label: 'Page size for points history data.'
+    minimum_age:
+      type: integer
+      label: 'Minimum age for user registration.'  
+    aura_integration_status:
+      type: boolean
+      label: 'Config to enable/disable aura integration with hello member'
+    membership_popup_text_above:
+      type: text_format
+      label: 'Membership text above'
+    membership_popup_text_below:
+      type: text_format
+      label: 'Membership text below'
+    show_default_benefits:
+      type: integer
+      label: 'Number of default benifits.'
+    brand_membership_text:
+      type: text
+      label: 'Provide brand name to show on loyalty switch confirmation box.'

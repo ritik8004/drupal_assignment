@@ -60,7 +60,7 @@ class CustomMinkContext extends RawDrupalContext implements SnippetAcceptingCont
    */
   public function gatherContexts(BeforeScenarioScope $scope) {
     $environment = $scope->getEnvironment();
-    $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
+    $this->minkContext = $environment->getContext(\Drupal\DrupalExtension\Context\MinkContext::class);
     $this->minkParam = $this->getMinkParameters();
   }
 

@@ -94,7 +94,7 @@ class AlshayaBlockHelper {
         /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
         $link = $element->link;
         $active_link = $link->getUrlObject()->toString();
-        if (strpos($active_link, $current_path_alias['alias']) !== 0) {
+        if (!str_starts_with($active_link, $current_path_alias['alias'])) {
           $output = [
             'active_link' => $active_link,
             'element' => $element,

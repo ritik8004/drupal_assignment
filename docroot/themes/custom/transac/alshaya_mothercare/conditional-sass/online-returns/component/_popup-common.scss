@@ -1,0 +1,21 @@
+.cancel-return-popup-container {
+  div {
+    color: $online-return-dark-txt;
+    font-family: $alshaya-thin;
+  }
+}
+
+.cancel-return-popup-container,
+.promotions-warning-modal-overlay {
+  .cancel-return-yes,
+  .continue-button {
+    background: $online-return-button-bg;
+  }
+
+  .cancel-return-options,
+  .cta-wrapper {
+    button {
+      text-transform: none;
+    }
+  }
+}

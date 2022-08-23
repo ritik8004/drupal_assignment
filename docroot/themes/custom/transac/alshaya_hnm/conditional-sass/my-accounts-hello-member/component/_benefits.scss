@@ -1,0 +1,15 @@
+.my-benefits-wrapper {
+  .my-offers-vouchers-details {
+    font-family: $hnm-demibold;
+
+    .expiry {
+      font-family: $hnm-demibold;
+    }
+  }
+}
+
+.block-hello-member-benefits-block {
+  & > h3 {
+    font-family: $hnm-demibold;
+  }
+}

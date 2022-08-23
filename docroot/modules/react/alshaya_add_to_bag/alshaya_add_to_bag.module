@@ -54,7 +54,7 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   // Get the product's info expiration time in local storage.
   // Default to zero i.e. disable the local storage.
   $productinfo_local_storage_expiration = \Drupal::service('alshaya_add_to_bag.helper')->getProductInfoLocalStorageExpiration();
-  $page['#attached']['drupalSettings']['add_to_bag']['productinfo_local_storage_expiration'] = $productinfo_local_storage_expiration ? $productinfo_local_storage_expiration : 0;
+  $page['#attached']['drupalSettings']['add_to_bag']['productinfo_local_storage_expiration'] = $productinfo_local_storage_expiration ?: 0;
 
   // Attach the theming library.
   $page['#attached']['library'][] = 'alshaya_white_label/plp-add-to-cart';

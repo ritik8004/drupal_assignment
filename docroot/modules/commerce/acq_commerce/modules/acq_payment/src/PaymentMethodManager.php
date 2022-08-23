@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_payment;
 
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\acq_cart\CartInterface;
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Component\Plugin\Factory\DefaultFactory;
@@ -49,7 +50,8 @@ class PaymentMethodManager extends DefaultPluginManager {
     $plugin_definition = $this->getDefinition($plugin_id);
     $plugin_class = DefaultFactory::getPluginClass($plugin_id, $plugin_definition);
     // If the plugin provides a factory method, pass the container to it.
-    if (is_subclass_of($plugin_class, 'Drupal\Core\Plugin\ContainerFactoryPluginInterface')) {
+    if (is_subclass_of($plugin_class, ContainerFactoryPluginInterface::class)) {
+      // @codingStandardsIgnoreLine
       $plugin = $plugin_class::create(\Drupal::getContainer(), $configuration, $plugin_id, $plugin_definition, $cart);
     }
     else {

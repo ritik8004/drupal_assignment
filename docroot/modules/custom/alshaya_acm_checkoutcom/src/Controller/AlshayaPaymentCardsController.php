@@ -124,6 +124,7 @@ class AlshayaPaymentCardsController extends PaymentCardsController {
    *   Build array.
    */
   public function listCards(UserInterface $user) {
+    $build = [];
     if ($this->checkoutComHelper->getCurrentMethod() === 'checkout_com') {
       return parent::listCards($user);
     }

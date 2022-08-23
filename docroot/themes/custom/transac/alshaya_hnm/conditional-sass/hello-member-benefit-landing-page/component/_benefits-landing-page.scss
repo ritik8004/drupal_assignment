@@ -1,0 +1,28 @@
+.my-benefit-page-wrapper {
+  .voucher-wrapper {
+    font-family: $hnm-demibold;
+  }
+
+  .btn-wrapper {
+    .qr-code-button,
+    .button-wide {
+      font-family: $hnm-demibold;
+
+      html[lang=ar] & {
+        line-height: normal;
+      }
+    }
+
+    .hello-member-benefit-status-info {
+      #status-msg {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+
+  .expire-on {
+    h3 {
+      text-transform: uppercase;
+    }
+  }
+}

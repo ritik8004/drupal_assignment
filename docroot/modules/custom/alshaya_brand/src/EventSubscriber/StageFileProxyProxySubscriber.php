@@ -79,6 +79,7 @@ class StageFileProxyProxySubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     // Priority 241 is just before stage_file_proxy.
     $events[KernelEvents::REQUEST][] = ['checkFileOrigin', 241];
     return $events;
@@ -121,7 +122,7 @@ class StageFileProxyProxySubscriber implements EventSubscriberInterface {
 
     $request_path = mb_substr($request_path, 1);
 
-    if (strpos($request_path, '' . $file_dir . '/') !== 0) {
+    if (!str_starts_with($request_path, '' . $file_dir . '/')) {
       return;
     }
 
@@ -228,7 +229,7 @@ class StageFileProxyProxySubscriber implements EventSubscriberInterface {
 
       return FALSE;
     }
-    catch (GuzzleException $e) {
+    catch (GuzzleException) {
       // Do nothing.
     }
 

@@ -1,0 +1,561 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_hello_member_module_implements_alter(&$implementations, $hook) {
+  // Call hook_alshaya_api_update_customer_api_request_alter at last.
+  if ($hook == 'alshaya_api_update_customer_api_request_alter') {
+    $group = $implementations['alshaya_hello_member'];
+    unset($implementations['alshaya_hello_member']);
+    $implementations['alshaya_hello_member'] = $group;
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_hello_member_page_attachments_alter(array &$page) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+
+  $hello_member_settings = [
+    'status' => $helloMemberHelper->isHelloMemberEnabled(),
+    'auraIntegrationStatus' => $helloMemberHelper->isAuraIntegrationEnabled(),
+  ];
+  $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
+
+  // Do not proceed if hello member is not enabled.
+  if ($hello_member_settings['status'] !== TRUE) {
+    return;
+  }
+
+  $page['#attached']['library'][] = 'alshaya_white_label/hello-member-become-member';
+
+
+  // Get the text to show in popup.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'entity.user.canonical') {
+    $config = \Drupal::config('alshaya_hello_member.settings');
+    $hello_member_settings['popupTextAbove'] = $config->get('membership_popup_text_above.value') ?? '';
+    $hello_member_settings['popupTextBelow'] = $config->get('membership_popup_text_below.value') ?? '';
+    // Get default benifits value.
+    $hello_member_settings['showMoreLimit'] = $config->get('show_default_benefits') ?? '';
+  }
+  $page['#attached']['drupalSettings']['helloMember'] = $hello_member_settings;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_hello_member_theme() {
+  $theme = [
+    'my_accounts_hello_member_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'my_membership_info_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'my_accounts_points_history' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'hello_member_benefits_page' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'hello_member_header_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+  ];
+
+  return $theme;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  // Only add if hello member enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    // For user registration form if we have the field, we remove it.
+    if (isset($form['field_birth_date'])) {
+      $form['field_birth_date']['#access'] = FALSE;
+    }
+    if (isset($form['field_gender'])) {
+      $form['field_gender']['#access'] = FALSE;
+    }
+    return;
+  }
+  if (\Drupal::currentUser()->isAnonymous()) {
+    $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
+    $form['hello_member_sub_title'] = [
+      '#weight' => -12,
+      '#markup' => '<div class="hello-member-benefit-subtitle">' . t('Become a member — don’t miss out on deals, offers, discounts and bonus vouchers.', [], ['context' => 'hello_member']) . '</div>',
+    ];
+    $form['hello_member'] = [
+      '#type' => 'details',
+      '#title' => '<div class="hello-member-add-more">' . t('Add More & Get More', [], ['context' => 'hello_member']) . '</div>',
+      '#open' => FALSE,
+      '#weight' => 8,
+    ];
+    $form['hello_member']['teasing'] = [
+      '#type' => 'markup',
+      '#markup' => t('Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?', [], ['context' => 'hello_member']),
+      '#prefix' => '<div class="hello-member-accordion-wrapper">',
+      '#weight' => 9,
+    ];
+    $form['hello_member']['field_birth_date'] = $form['field_birth_date'];
+    $form['hello_member']['field_birth_date']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
+    $form['hello_member']['field_birth_date']['#weight'] = 10;
+    unset($form['field_birth_date']);
+    $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
+    unset($form['field_gender']['widget']['#options']['_none']);
+    $form['hello_member']['field_gender'] = $form['field_gender'];
+    $form['hello_member']['field_gender']['#prefix'] = '<div class="hello-member-gender">';
+    $form['hello_member']['field_gender']['#suffix'] = '</div>';
+    $form['hello_member']['field_gender']['#weight'] = 11;
+    unset($form['field_gender']);
+    $form['field_subscribe_newsletter']['widget']['value']['#title'] = t('Yes, email me offers, style updates, and special invites to sales and events.', [], ['context' => 'hello_member']);
+
+    $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
+    $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
+    $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
+  }
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
+  // Do not proceed if Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+  $nid = NULL;
+  $config = \Drupal::config('alshaya_hello_member.settings');
+  if ($config->get('membership_info_content_node')) {
+    // Get the node ID from config.
+    $nid = $config->get('membership_info_content_node');
+  }
+  // Add Points history link.
+  $links['hello_member_points_history'] = [
+    'text' => t('Points History', [], ['context' => 'hello_member']),
+    'route' => 'alshaya_hello_member.hello_member_points_history',
+    'weight' => 41,
+  ];
+  $links['contact_details'] = [
+    'text' => t('My Details', [], ['context' => 'hello_member']),
+    'route' => 'entity.user.edit_form',
+    'weight' => 30,
+  ];
+  // Add Membership info link.
+  if (is_numeric($nid)) {
+    $links['membership_info'] = [
+      'text' => t('Membership Info', [], ['context' => 'hello_member']),
+      'route' => 'entity.node.canonical',
+      'options' => [
+        'node' => $nid,
+      ],
+      'weight' => 42,
+    ];
+  }
+}
+
+/**
+ * Implements hook_alshaya_user_breadcrumb_routes_alter().
+ */
+function alshaya_hello_member_alshaya_user_breadcrumb_routes_alter(array &$routes) {
+  $routes['alshaya_hello_member.hello_member_points_history'] = [
+    'user' => \Drupal::currentUser()->id(),
+  ];
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_hello_member_element_info_alter(array &$types) {
+  // Alter dateteime field.
+  $types['datetime']['#process'][] = 'alshaya_hello_member_datetime_set_startdate';
+}
+
+/**
+ * Custom function to alter HTML 5 date fields.
+ */
+function alshaya_hello_member_datetime_set_startdate($element) {
+  if ($element['#parents'][0] == 'field_birth_date') {
+    // Get the minimum age config value.
+    $config = \Drupal::config('alshaya_hello_member.settings');
+    $start_date = strtotime($config->get('minimum_age') . ' years ago');
+    // Set the max attribute value.
+    $element['date']['#attributes']['max'] = \Drupal::service('date.formatter')->format($start_date, 'html_date');
+    $element['date']['#max_error'] = t('The value in Date has to be less than', [], ['context' => 'hello_member']) . ' ' . $element['date']['#attributes']['max'];
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Do nothing if it is not Edit profile form.
+  if ($form_id !== 'user_form') {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+
+  // Only add if hello member enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
+  $form['#title'] = t('My Details', [], ['context' => 'hello_member']);
+  $form['hello_member'] = [
+    '#type' => 'details',
+    '#title' => '<div class="hello-member-add-more">' . t('Add More & Get More', [], ['context' => 'hello_member']) . '</div>',
+    '#open' => FALSE,
+    '#weight' => '5',
+  ];
+  $form['hello_member']['teasing'] = [
+    '#type' => 'markup',
+    '#markup' => t('Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?', [], ['context' => 'hello_member']),
+    '#prefix' => '<div class="hello-member-accordion-wrapper">',
+  ];
+  $form['hello_member']['field_birth_date'] = $form['field_birth_date'];
+  $form['hello_member']['field_birth_date']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
+  $form['hello_member']['field_birth_date']['#weight'] = 10;
+  // Disallow user to edit date of birth on edit profile form.
+  if ($form['field_birth_date']['widget'][0]['value']['#default_value']) {
+    $form['hello_member']['field_birth_date']['#disabled'] = TRUE;
+  }
+  unset($form['field_birth_date']);
+  $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
+  unset($form['field_gender']['widget']['#options']['_none']);
+  $form['hello_member']['field_gender'] = $form['field_gender'];
+  $form['hello_member']['field_gender']['#prefix'] = '<div class="hello-member-gender">';
+  $form['hello_member']['field_gender']['#suffix'] = '</div></div>';
+  $form['hello_member']['field_gender']['#weight'] = 11;
+  $form['hello_member']['field_mobile_number'] = $form['field_mobile_number'];
+  $form['hello_member']['field_mobile_number']['#prefix'] = '<div class="mobile-otp-wrapper">';
+  $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div></div>';
+  $form['hello_member']['field_mobile_number']['#weight'] = 12;
+  // Virtual input to temporary maintain otp verified status.
+  $form['otp_verified'] = [
+    '#type' => 'hidden',
+  ];
+  $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
+
+  unset($form['field_gender']);
+  unset($form['field_mobile_number']);
+  $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
+  $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
+  $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_send_otp';
+  $form['#attached']['library'][] = 'alshaya_white_label/hello-member-otp';
+  $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_profile_info';
+}
+
+/**
+ * Implements hook_page_title().
+ */
+function alshaya_hello_member_preprocess_page_title(&$variables) {
+  // Do not proceed if Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'entity.user.canonical') {
+    $variables['title'] = t('Benefits', [], ['context' => 'hello_member']);
+  }
+}
+
+/**
+ * Implements hook_alshaya_api_update_customer_api_request_alter().
+ */
+function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(array &$request_options) {
+  // Do not proceed if Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+
+  if (isset($request_options['json'], $request_options['json']['customer']['email'])) {
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($request_options['json']['customer']['email']);
+    if (!empty($user)) {
+      $user_date_of_birth = $user->get('field_birth_date')->getString();
+      if (!empty($user_date_of_birth)) {
+        $request_options['json']['customer']['dob'] = $user_date_of_birth;
+      }
+      $user_gender = $user->get('field_gender')->getString();
+      if (!empty($user_gender)) {
+        $request_options['json']['customer']['extension_attributes']['customer_gender'] = $user_gender;
+      }
+      $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
+      // Set the key/value pair.
+      if ($temp_store->get('otpVerifiedPhone')) {
+        $request_options['json']['customer']['extension_attributes']['is_verified'] = "Y";
+        // Set otp verified unchecked to update in future.
+        $temp_store->delete('otpVerifiedPhone');
+      }
+      else {
+        // If Hello member enable and Mobile number not verified
+        // remove it from update customer api request.
+        unset($request_options['json']['customer']['extension']['phone_number']);
+      }
+    }
+  }
+
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_hello_member_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'page_title_block' or alshaya_my_account_links blocks
+  // on my benefit page.
+  if ($operation == 'view' && ($block->getPluginId() == 'page_title_block' || $block->getPluginId() == 'alshaya_my_account_links')) {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+
+    if ($route_name === 'alshaya_hello_member.hello_member_benefits_page') {
+      return AccessResult::forbiddenIf(TRUE);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_hello_member_preprocess_page(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  // Hide sidebar region for benefit page.
+  if ($route_name === 'alshaya_hello_member.hello_member_benefits_page') {
+    unset($variables['page']['sidebar_first']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_hello_member_preprocess_html(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  // Add class in body for benefit page.
+  if ($route_name === 'alshaya_hello_member.hello_member_benefits_page') {
+    $variables['attributes']['class'][] = 'hello-member-benefit-page';
+  }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_hello_member_preprocess_node(&$variables) {
+  $node_bundle = $variables['node']->bundle();
+  if (in_array($node_bundle, ['acq_product', 'rcs_product'])) {
+    $variables['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_pdp';
+    $variables['#attached']['library'][] = 'alshaya_white_label/hello-member-pdp';
+    $variables['hello_member_status'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
+  }
+  elseif ($node_bundle === 'advanced_page') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/hello-member-info-page';
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_order_details_settings_alter().
+ */
+function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$settings, $order) {
+  // Do not proceed if Hello member is not enabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled()) {
+    return;
+  }
+
+  // Add hello member points for order confirmation.
+  if (isset($order['extension']['hm_accrued_points'])) {
+    $settings['order_details']['hmAccuredPoints'] = $order['extension']['hm_accrued_points'];
+  }
+
+  // Add below hello member extension_attributes to the totals for display info
+  // under order summary block on order confirmation and print order
+  // confirmation pages.
+  // - applied_hm_voucher_codes
+  // - hm_voucher_discount
+  // - applied_hm_offer_code.
+  if (isset($order['extension']['applied_hm_voucher_codes'])
+    && isset($order['extension']['hm_voucher_discount'])) {
+    $settings['order_details']['totals']['hmAppliedVoucherCodes'] = $order['extension']['applied_hm_voucher_codes'];
+    $settings['order_details']['totals']['hmVoucherDiscount'] = $order['extension']['hm_voucher_discount'];
+  }
+
+  if (isset($order['extension']['applied_hm_offer_code'])) {
+    $settings['order_details']['totals']['hmOfferCode'] = $order['extension']['applied_hm_offer_code'];
+  }
+
+  // Do not proceed if aura itegration with hello member is disabled.
+  if (!\Drupal::service('alshaya_hello_member.hello_member_helper')->isAuraIntegrationEnabled()) {
+    return;
+  }
+
+  // Add aura earn points for order confirmation.
+  if (isset($order['extension']['apc_accrued_points'])) {
+    $settings['order_details']['accruedPoints'] = $order['extension']['apc_accrued_points'] ?? 0;
+  }
+
+  // Add aura redeemed points for order confirmation.
+  if (isset($order['extension']['apc_redeemed_points'])) {
+    $settings['order_details']['redeemedPoints'] = $order['extension']['apc_redeemed_points'] ?? 0;
+  }
+
+  // Add `paidWithAura` and `balancePayable` in totals to show
+  // with order summary for order confirmation page.
+  if (isset($order['extension']['aura_payment_value'])) {
+    $settings['order_details']['totals']['paidWithAura'] = $order['extension']['aura_payment_value'] ?? 0;
+    $settings['order_details']['totals']['balancePayable'] = $order['base_grand_total'] - $order['extension']['aura_payment_value'];
+  }
+}
+
+/**
+ * User Form Submit handler to set temp setting for otp verified.
+ */
+function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterface $form_state) {
+  // If Otp is successfully verified store temp varialble.
+  if ($form_state->getValue('otp_verified')) {
+    $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
+    // Set the key/value pair.
+    $temp_store->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter().
+ */
+function alshaya_hello_member_alshaya_acm_customer_alshaya_user_recent_orders_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
+  // Do not proceed if Alshaya Hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
+    // On my account page, remove edit account link because we are adding
+    // it with Account Details section when Alshaya Hello Member is enabled.
+    unset($build['edit_account']);
+  }
+
+  return $build;
+}
+
+/**
+ * Implements hook_preprocess_user().
+ */
+function alshaya_hello_member_preprocess_user(&$variables) {
+  // If hello_member_enabled to add edit button above Account details.
+  $variables['hello_member_status'] = \Drupal::service('alshaya_hello_member.hello_member_helper')->isHelloMemberEnabled();
+  $variables['user_edit_url'] = Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]);
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ */
+function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
+  $settings = [];
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
+  // Do not proceed if Alshaya Hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+  // Get config value.
+  $brand_membership_text = \Drupal::config('alshaya_hello_member.settings')->get('brand_membership_text');
+  $iso_currency_code = \Drupal::config('acq_commerce.currency')->get('iso_currency_code');
+
+  $build['#attached']['drupalSettings']['helloMember']['brandMembershipText'] = $brand_membership_text;
+  $build['#attached']['drupalSettings']['helloMember']['currencyCode'] = $iso_currency_code;
+  $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
+  $build['#strings'] = array_merge($build['#strings'], _alshaya_hello_member_aura_static_strings());
+
+  // For hello member, aura settings has to be disabled and
+  // we need to attach aura library but don't want to
+  // use aura existing feature as a whole.
+  // Do not proceed if aura itegration with hello member is disabled.
+  if (!$helloMemberHelper->isAuraIntegrationEnabled() || \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled()) {
+    return;
+  }
+
+  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  // Attach the library for Aura backend based on the commerce backend version.
+  $build['#attached']['library'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
+
+  // Preaparing aura settings required for hello member integration.
+  $settings['config'] = \Drupal::service('alshaya_aura_react.aura_helper')->getAuraConfig();
+  $settings['userDetails']['id'] = \Drupal::currentUser()->id();
+  $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
+
+  $build['#attached']['drupalSettings']['aura'] = $settings;
+
+  // Add aura related strings.
+  \Drupal::moduleHandler()->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
+  $build['#strings'] = array_merge($build['#strings'], _alshaya_aura_static_strings());
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build().
+ */
+function alshaya_hello_member_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
+  // Do not proceed if Alshaya Hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
+  // For hello member, aura settings has to be disabled and
+  // we need to attach aura library but don't want to
+  // use aura existing feature as a whole.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() === TRUE) {
+    return;
+  }
+
+  $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_hello_member_alshaya_spc_cart_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $helloMemberHelper->getCacheTags());
+  // Do not proceed if hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+  $build['#attached']['library'][] = 'alshaya_white_label/hello-member-promotion';
+}

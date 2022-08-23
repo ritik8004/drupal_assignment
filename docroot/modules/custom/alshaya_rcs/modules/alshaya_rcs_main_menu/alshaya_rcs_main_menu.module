@@ -100,6 +100,12 @@ function alshaya_rcs_main_menu_preprocess_page_title(&$variables) {
  */
 function alshaya_rcs_main_menu_preprocess_page(&$variables) {
   $routematch = \Drupal::routeMatch();
+  if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term_data = $routematch->getParameter('taxonomy_term');
+    if ($term_data->bundle() == 'rcs_category') {
+      $variables['#attached']['library'][] = 'alshaya_rcs_main_menu/view_all';
+    }
+  }
   if ($routematch->getRouteName() == 'entity.node.canonical') {
     $node = $routematch->getParameter('node');
     if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString()) {
@@ -259,4 +265,18 @@ function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
   $query_fields['#cache']['tags'] = $rcs_main_menu_config->getCacheTags();
 
   return $query_fields;
+}
+
+/**
+ * Implements hook_rcs_handlebars_templates().
+ */
+function alshaya_rcs_main_menu_rcs_handlebars_templates(EntityInterface $entity) {
+  // Libraries to attach.
+  return [
+    'main_menu_level1' => 'alshaya_rcs_product',
+    'main_menu_level2_partial' => 'alshaya_rcs_product',
+    'main_menu_level3_partial' => 'alshaya_rcs_product',
+    'main_menu_level4_partial' => 'alshaya_rcs_product',
+    'shop_by_menu' => 'alshaya_rcs_product',
+  ];
 }

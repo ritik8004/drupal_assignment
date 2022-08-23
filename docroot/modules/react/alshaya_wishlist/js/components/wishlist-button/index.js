@@ -22,6 +22,12 @@ class WishlistButton extends React.Component {
     super(props);
     const skuCode = props.skuCode ? props.skuCode : props.sku;
 
+    let variant = null;
+    // If both skuCode and Sku is present then add the variant to the state.
+    if (props.skuCode && props.sku) {
+      variant = props.sku;
+    }
+
     // Store reference to the main contiainer.
     this.buttonContainerRef = React.createRef();
 
@@ -31,8 +37,9 @@ class WishlistButton extends React.Component {
     // Setting variant selected for current variant.
     // Options are selected attribute options for default product.
     this.state = {
-      addedInWishList: isProductExistInWishList(skuCode),
+      addedInWishList: isProductExistInWishList(skuCode, variant),
       skuCode,
+      variant, // Variant sku used for simple product with parent sku.
       options: props.options ? props.options : [],
       title: props.title ? props.title : '',
     };
@@ -138,7 +145,7 @@ class WishlistButton extends React.Component {
         // return -1. We need to remove product from the local storage if
         // skuIndex is greater than -1.
         const skuIndex = getWishListDataIndexForSku(sku);
-        if (skuIndex > -1) {
+        if (skuIndex !== null && skuIndex > -1) {
           // Get existing wishlist data from storage.
           const wishListItems = getWishListData();
 
@@ -283,7 +290,7 @@ class WishlistButton extends React.Component {
     e.persist();
 
     const {
-      addedInWishList, skuCode, options, title,
+      addedInWishList, skuCode, variant, options, title,
     } = this.state;
     const { context, sku } = this.props;
     // We don't need inline loader for buttons on wishlist page.
@@ -313,11 +320,29 @@ class WishlistButton extends React.Component {
     // then remove the product from wishlist before adding from cart
     // as the wishlist api does not update product options on add to wishlist.
     if (context === 'cart') {
-      removeProductFromWishList(skuCode).then(() => {
+      // Product Sku value from skuCode.
+      let productSku = skuCode;
+      if (addedInWishList) {
+        // Get wishlist data.
+        const wishListItems = getWishListData();
+
+        // Check if variant is in the wishlist when moving parent sku from cart
+        // for a simple sku product.
+        let ifVariantExistInWishList = false;
+        if (wishListItems && variant !== null) {
+          ifVariantExistInWishList = wishListItems.find((product) => product.sku === variant);
+        }
+
+        // If Variant is present in the wishlist
+        if (ifVariantExistInWishList) {
+          productSku = variant;
+        }
+      }
+      removeProductFromWishList(productSku).then(() => {
         if (isAnonymousUser()) {
           // Remove product from wishlist.
-          const skuIndex = getWishListDataIndexForSku(skuCode);
-          if (skuIndex > -1) {
+          const skuIndex = getWishListDataIndexForSku(productSku);
+          if (skuIndex !== null && skuIndex > -1) {
             // Get existing wishlist data from storage.
             const wishListItems = getWishListData();
 
@@ -328,6 +353,7 @@ class WishlistButton extends React.Component {
             addWishListInfoInStorage(wishListItems);
           }
         }
+        productInfo.sku = productSku;
         this.addToWishList(productInfo);
       });
       return;

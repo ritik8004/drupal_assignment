@@ -1,0 +1,6 @@
+name: Alshaya PB Transac RCS
+description: Enables RCS for PB.
+type: module
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_pb:alshaya_pb_transac

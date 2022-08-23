@@ -26,13 +26,13 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
-    And I add the billing address on checkout page
+    And I select the home delivery address
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    And the element "div.fawry-prefix-description" should exist
+    And the element ".payment-form-wrapper div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
@@ -61,13 +61,12 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
-    And I add the billing address on checkout page
-    And I wait 50 seconds
+    And I select the home delivery address
     And I wait for the page to load
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    And the element "div.fawry-prefix-description" should exist
+    And the element ".payment-form-wrapper div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
@@ -97,13 +96,12 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
-    And I add the billing address on checkout page
-    And I wait 50 seconds
+    And I select the home delivery address
     And I wait for the page to load
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-checkout_com_upapi_fawry" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    And the element "div.fawry-prefix-description" should exist
+    And the element ".payment-form-wrapper div.fawry-prefix-description" should exist
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked

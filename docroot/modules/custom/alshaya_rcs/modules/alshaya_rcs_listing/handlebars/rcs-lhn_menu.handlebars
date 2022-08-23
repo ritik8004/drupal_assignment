@@ -1,0 +1,15 @@
+<ul>
+  {{#each this as |menuItem|}}
+    <li>
+      {{! Render link if its clickable.}}
+      {{#if menuItem.clickable}}
+        <a href="{{menuItem.url}}" class="lhn-{{menuItem.level}} {{menuItem.active}}">{{menuItem.name}}</a>
+      {{else}}
+        <span class="lhn-{{menuItem.level}} {{menuItem.active}}">{{menuItem.name}}</span>
+      {{/if}}
+      {{#if menuItem.child}}
+        {{{render 'lhn_menu' menuItem.child}}}
+      {{/if}}
+    </li>
+  {{/each}}
+</ul>

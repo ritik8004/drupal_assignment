@@ -184,7 +184,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
       // Get the orders of the user.
       $customer_id = (int) $account->get('acq_customer_id')->getString();
-      $orders = alshaya_acm_customer_get_user_orders($customer_id);
+      $orders = $this->ordersManager->getOrders($customer_id);
 
       // Recent order text.
       $build['recent_order_title'] = [
@@ -208,9 +208,6 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
           ->get('cache_time_limit');
 
         $build['#cache'] = ['max-age' => $cache_time_limit];
-
-        // Sort the order in the basis of order date and show recent 3.
-        $orders = array_slice($orders, 0, 3);
 
         // All order link.
         $build['view_all_orders'] = [

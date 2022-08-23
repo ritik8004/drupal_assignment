@@ -1,0 +1,25 @@
+#my-accounts-hello-member {
+  .hello-member-popup-form {
+    .hello-membership-info {
+      .hello-membership- {
+        &details {
+          .hello-membership-sub-title {
+            font-family: $alshaya-thin;
+          }
+
+          .hello-membership-terms {
+            font-family: $alshaya-thin;
+          }
+
+          .hello-membership-continue {
+            a {
+              font-family: $hnm-demibold;
+              background-color: $primary_btn_bg;
+              color: $primary_btn_text;
+            }
+          }
+        }
+      }
+    }
+  }
+}

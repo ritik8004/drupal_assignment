@@ -9,37 +9,37 @@ final class AuraDictionaryApiConstants {
   /**
    * Aura accrual ratio constant.
    */
-  const CASHBACK_ACCRUAL_RATIO = 'APC_CASHBACK_ACCRUAL_RATIO';
+  public const CASHBACK_ACCRUAL_RATIO = 'APC_CASHBACK_ACCRUAL_RATIO';
 
   /**
    * Aura redemption ratio constant.
    */
-  const CASHBACK_REDEMPTION_RATIO = 'APC_CASHBACK_REDEMPTION_RATIO';
+  public const CASHBACK_REDEMPTION_RATIO = 'APC_CASHBACK_REDEMPTION_RATIO';
 
   /**
    * Aura recognition accrual ratio constant.
    */
-  const RECOGNITION_ACCRUAL_RATIO = 'RECOGNITION_ACCRUAL_RATIO';
+  public const RECOGNITION_ACCRUAL_RATIO = 'RECOGNITION_ACCRUAL_RATIO';
 
   /**
    * Aura phone number prefix constant.
    */
-  const EXT_PHONE_PREFIX = 'EXT_PHONE_PREFIX';
+  public const EXT_PHONE_PREFIX = 'EXT_PHONE_PREFIX';
 
   /**
    * Aura tier types constant.
    */
-  const APC_TIER_TYPES = 'APC_TIER_TYPES';
+  public const APC_TIER_TYPES = 'APC_TIER_TYPES';
 
   /**
    * Aura brands constant.
    */
-  const APC_BRANDS = 'APC_BRANDS';
+  public const APC_BRANDS = 'APC_BRANDS';
 
   /**
    * Contains all the dictionary api keys constants in the class.
    */
-  const ALL_DICTIONARY_API_CONSTANTS = [
+  public const ALL_DICTIONARY_API_CONSTANTS = [
     'CASHBACK_ACCRUAL_RATIO' => self::CASHBACK_ACCRUAL_RATIO,
     'CASHBACK_REDEMPTION_RATIO' => self::CASHBACK_REDEMPTION_RATIO,
     'RECOGNITION_ACCRUAL_RATIO' => self::RECOGNITION_ACCRUAL_RATIO,

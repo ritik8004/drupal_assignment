@@ -1,0 +1,36 @@
+.paragraph_banner_block {
+  .paragraph_banner_title_subtitle {
+    .field--name-field-title,
+    .field--name-field-sub-title {
+      color: $advanced-page-banner-title;
+    }
+  }
+
+  .paragraph_banner_buttons {
+    .field--name-field-links {
+      .field--name-field-links {
+        a {
+          color: $advanced-page-button;
+          border-color: $advanced-page-button;
+
+          &:hover {
+            background: $advanced-page-button-hover;
+          }
+        }
+
+        &:last-child {
+          a {
+            background-color: $advanced-page-button;
+            color: $primary_btn_text;
+            border-color: $advanced-page-button;
+
+            &:hover {
+              background: $advanced-page-accordion-active-title;
+              border-color: $advanced-page-accordion-active-title;
+            }
+          }
+        }
+      }
+    }
+  }
+}

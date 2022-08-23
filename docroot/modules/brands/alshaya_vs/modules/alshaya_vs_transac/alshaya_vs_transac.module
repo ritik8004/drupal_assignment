@@ -169,11 +169,9 @@ function alshaya_vs_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
  * Get product description from SKU.
  */
 function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
-  $return = [];
   $description_value = '';
   $short_desc = [];
   $read_more_link = FALSE;
-
   $body = $sku_entity->get('attr_description')->getValue();
   if (is_array($body) && !empty($body[0]['value'])) {
     $description_value = $body[0]['value'];
@@ -205,7 +203,7 @@ function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
       }
     }
   }
-
+  $description = [];
   $description['value'] = [
     '#markup' => $description_value,
   ];
@@ -214,6 +212,7 @@ function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
   // which they should be displayed.
   // $build['short_desc'] contains the description that should be
   // displayed before 'Read More'.
+  $return = [];
   $return['short_desc'] = $short_desc;
   $return['description'][] = $description;
   $return['read_more'] = $read_more_link;
@@ -331,5 +330,25 @@ function alshaya_vs_transac_alshaya_performance_preload_alter(array &$preload) {
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
   if (isset($site_preloads[$language])) {
     $preload = array_merge($site_preloads[$language], $preload);
+  }
+}
+
+/**
+ * Implements hook_sku_product_attribute_alter().
+ */
+function alshaya_vs_transac_sku_product_attribute_alter(array &$attributes, SKUInterface $sku, string $field_name) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  // Add a valid barcode (EAN) attribute in the product feed.
+  $extra_row = [];
+  if ($field_name === 'attr_aims_barcode') {
+    $aim_barcode = '0' . $sku->get($field_name)->getString();
+    if ($skuManager->validateEanBarcode($aim_barcode)) {
+      $extra_row['key'] = 'sanitized_vs_aims_barcode';
+      $extra_row['value'] = $aim_barcode;
+    }
+  }
+  if (!empty($extra_row)) {
+    $attributes[] = $extra_row;
   }
 }

@@ -23,6 +23,7 @@ import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
+import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -357,6 +358,12 @@ const getProcessedCartData = async (cartData) => {
     && { collection_charge: cartData.shipping.price_amount || '' },
   };
 
+  // Add loyalty card and loyalty type for hello member loyalty.
+  if (isHelloMemberEnabled()) {
+    data.loyalty_card = cartData.cart.extension_attributes.loyalty_card || '';
+    data.loyalty_type = cartData.cart.extension_attributes.loyalty_type || '';
+  }
+
   // Totals.
   if (typeof cartData.totals.base_grand_total !== 'undefined') {
     data.cart_total = cartData.totals.base_grand_total;
@@ -372,7 +379,7 @@ const getProcessedCartData = async (cartData) => {
     }
     // If Aura enabled, add aura related details.
     // If Egift card is enabled get balance_payable.
-    if (isAuraEnabled() || isEgiftCardEnabled()) {
+    if (isAuraEnabled() || isEgiftCardEnabled() || isAuraIntegrationEnabled()) {
       if (element.code === 'balance_payable') {
         data.totals.balancePayable = element.value;
         // Adding an extra total balance payable attribute, so that we can use
@@ -384,6 +391,14 @@ const getProcessedCartData = async (cartData) => {
       if (element.code === 'aura_payment') {
         data.totals.paidWithAura = element.value;
       }
+    }
+
+    // if the hello member feature is enabled, add hm_voucher_discount from
+    // total segments to hmVoucherDiscount for showing in order summary block
+    // on cart and checkout pages. This will be visible in order summary only if
+    // extension_attributes.applied_hm_voucher_codes does have value(s).
+    if (isHelloMemberEnabled() && element.code === 'voucher_discount') {
+      data.totals.hmVoucherDiscount = element.value;
     }
   });
 
@@ -421,6 +436,29 @@ const getProcessedCartData = async (cartData) => {
     }
     if (hasValue(cartData.totals.extension_attributes.hps_current_balance)) {
       data.totals.egiftCurrentBalance = cartData.totals.extension_attributes.hps_current_balance;
+    }
+  }
+
+  // Check if the hello member feature is enabled and add below hello member
+  // extension_attributes to the totals for display info under order summary
+  // block on cart, checkout pages.
+  // - applied_hm_voucher_codes
+  // - applied_hm_offer_code
+  if (isHelloMemberEnabled() && hasValue(cartData.cart.extension_attributes)) {
+    // Add applied_hm_voucher_codes and hm_voucher_discount to totals.
+    if (hasValue(cartData.cart.extension_attributes.applied_hm_voucher_codes)) {
+      // eslint-disable-next-line max-len
+      data.totals.hmAppliedVoucherCodes = cartData.cart.extension_attributes.applied_hm_voucher_codes;
+    }
+    // Add is_hm_applied_voucher_removed to totals.
+    if (typeof cartData.totals.extension_attributes.is_hm_applied_voucher_removed !== 'undefined') {
+      // eslint-disable-next-line max-len
+      data.totals.isHmAppliedVoucherRemoved = cartData.totals.extension_attributes.is_hm_applied_voucher_removed;
+    }
+
+    // Add applied_hm_voucher_codes and hm_voucher_discount to totals.
+    if (hasValue(cartData.cart.extension_attributes.applied_hm_offer_code)) {
+      data.totals.hmOfferCode = cartData.cart.extension_attributes.applied_hm_offer_code;
     }
   }
 
@@ -660,6 +698,14 @@ const getCart = async (force = false) => {
   // Format data.
   response.data = formatCart(response.data);
 
+  if (!isUserAuthenticated()) {
+    // Set guest cart details in local storage to use with merge guest cart API.
+    Drupal.addItemInLocalStorage('guestCartForMerge', {
+      active_quote: (typeof response.data.cart !== 'undefined') ? response.data.cart.id : null,
+      store_id: (typeof response.data.cart !== 'undefined') ? response.data.cart.store_id : null,
+    });
+  }
+
   // Store the formatted data.
   window.commerceBackend.setRawCartDataInStorage(response.data);
 
@@ -702,6 +748,63 @@ const associateCartToCustomer = async (guestCartId) => {
   logger.notice('Guest Cart @guestCartId associated to customer @customerId.', {
     '@customerId': window.drupalSettings.userDetails.customerId,
     '@guestCartId': guestCartId,
+  });
+
+  // Clear local storage.
+  removeCartIdFromStorage();
+  StaticStorage.clear();
+
+  // Reload cart.
+  await getCart(true);
+};
+
+/**
+ * Merge guest cart to customer.
+ *
+ * @returns {Promise<object/boolean>}
+ *   Returns the updated cart or false.
+ */
+const mergeGuestCartToCustomer = async () => {
+  // Get guest cart details.
+  const guestCartData = Drupal.getItemFromLocalStorage('guestCartForMerge');
+
+  if (typeof guestCartData === 'undefined' || guestCartData === null) {
+    return;
+  }
+
+  const endPointParams = {
+    customerId: drupalSettings.userDetails.customerId,
+    activeQuote: guestCartData.active_quote,
+    storeId: guestCartData.store_id,
+  };
+
+  // Merge guest cart to customer.
+  const response = await callMagentoApi(getApiEndpoint('mergeGuestCart', endPointParams), 'PUT');
+
+  // It's possible that page got reloaded quickly after login.
+  // For example on social login.
+  if (response.message === 'Request aborted') {
+    return;
+  }
+
+  if (response.status !== 200) {
+    logger.warning('Error while merging guest cart: @cartId to customer: @customerId having store: @storeId. Response: @response.', {
+      '@cartId': endPointParams.activeQuote,
+      '@customerId': endPointParams.customerId,
+      '@storeId': endPointParams.storeId,
+      '@response': JSON.stringify(response),
+    });
+
+    // Clear local storage and let the customer continue without association.
+    removeCartIdFromStorage();
+    StaticStorage.clear();
+    return;
+  }
+
+  logger.notice('Guest Cart @guestCartId merged to customer @customerId. having store id: @storeId', {
+    '@customerId': window.drupalSettings.userDetails.customerId,
+    '@guestCartId': endPointParams.activeQuote,
+    '@storeId': endPointParams.storeId,
   });
 
   // Clear local storage.
@@ -1299,4 +1402,5 @@ export {
   getLocations,
   getProductShippingMethods,
   clearProductStatusStaticCache,
+  mergeGuestCartToCustomer,
 };
