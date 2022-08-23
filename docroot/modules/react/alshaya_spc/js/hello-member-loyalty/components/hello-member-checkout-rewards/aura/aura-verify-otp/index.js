@@ -60,7 +60,7 @@ class AuraVerifyOTP extends React.Component {
           && (
           <div className="aura-verify-otp">
             <div className="aura-modal-form-submit" onClick={() => this.verifyOtp()}>
-              {Drupal.t('Verify', {}, { context: 'hello_member' })}
+              {getStringMessage('verify_otp')}
             </div>
           </div>
           )}
