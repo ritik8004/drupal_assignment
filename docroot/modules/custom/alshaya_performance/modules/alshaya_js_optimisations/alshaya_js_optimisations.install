@@ -10,15 +10,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  */
-function alshaya_js_optimisations_update_9401() {
-  _alshaya_js_optimisations_update_settings(
-    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
-  );
-}
-
-/**
- * Implements hook_update_N().
- */
 function alshaya_js_optimisations_update_9000() {
   $options = [
     'replace_keys' => [

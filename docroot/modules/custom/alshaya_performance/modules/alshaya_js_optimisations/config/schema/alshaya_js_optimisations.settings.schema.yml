@@ -18,12 +18,6 @@ alshaya_js_optimisations.settings:
         site_libraries:
           type: string
           label: 'Site Libraries'
-        handlebars:
-          type: string
-          label: 'Handlebar Templates'
-        rcs_listeners:
-          type: string
-          label: 'RCS Event Listeners'
         critical:
           type: string
           label: 'Critical Scripts'
