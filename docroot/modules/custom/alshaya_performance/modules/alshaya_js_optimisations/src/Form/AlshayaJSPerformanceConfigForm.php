@@ -161,8 +161,6 @@ class AlshayaJSPerformanceConfigForm extends ConfigFormBase {
       'status' => $form_state->getValue('status'),
       'ie_only' => $form_state->getValue('ie_only'),
       'site_libraries' => $form_state->getValue('site_libraries'),
-      'handlebars' => $form_state->getValue('handlebars'),
-      'rcs_listeners' => $form_state->getValue('rcs_listeners'),
       'critical' => $form_state->getValue('critical'),
       'sitewide_1' => $form_state->getValue('sitewide_1'),
       'sitewide_2' => $form_state->getValue('sitewide_2'),
