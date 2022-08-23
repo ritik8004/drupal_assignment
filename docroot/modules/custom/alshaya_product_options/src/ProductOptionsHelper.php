@@ -6,6 +6,7 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
@@ -293,6 +294,11 @@ class ProductOptionsHelper {
 
     $swatches = [];
     foreach ($attribute['swatches'] as $swatch) {
+      // Converts json string to array.
+      // As we get string type for swatches after MDC upgrade.
+      if (is_string($swatch)) {
+        $swatch = Json::decode($swatch);
+      }
       $swatches[$swatch['option_id']] = $swatch;
     }
 
