@@ -17,7 +17,7 @@ deployed_branches=$(echo "$branches_str" | cut -d' ' -f6)
 echo "$deployed_branches"
 
 # Hardcode some branches for security. These branches are supposed to always be deployed at least on one env/stack.
-deployed_branches+=" develop-build qa-build uat-build"
+deployed_branches+=" develop-build qa-build uat-build master-build"
 echo "Deployed branches:"
 echo $deployed_branches
 echo
