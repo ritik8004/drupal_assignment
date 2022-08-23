@@ -5,7 +5,6 @@ namespace Drupal\alshaya_shopby_filter_attribute\Commands;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Class Alshaya Shop By Filter Attribute Commands.
@@ -19,29 +18,19 @@ class AlshayaShopByFilterAttributeCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  private $configFactory;
-
-  /**
-   * The logger service.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $drupalLogger;
+  protected $configFactory;
 
   /**
    * AlshayaShopByFilterAttributeCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
-   *   LoggerFactory object.
    */
   public function __construct(
-    ConfigFactoryInterface $configFactory,
-    LoggerChannelFactoryInterface $logger_factory
+    ConfigFactoryInterface $configFactory
   ) {
+    parent::__construct();
     $this->configFactory = $configFactory;
-    $this->drupalLogger = $logger_factory->get('alshaya_shopby_filter_attribute');
   }
 
   /**
@@ -54,25 +43,41 @@ class AlshayaShopByFilterAttributeCommands extends DrushCommands {
    *
    * @command alshaya_shopby_filter_attribute:switch
    *
+   * @option enable
+   *  Pass the 'enable' to enable the feature.
+   * @option disable
+   *  Pass the 'disable' to disable the feature.
    * @option attributeName
    *  Pass the attribute name for which you want to show the shop by links.
    *
    * @aliases alshaya-shopby-filter-attribute
    *
-   * @usage drush alshaya-shopby-filter-attribute --attributeName='size_shoe_eu'
+   * @usage drush alshaya-shopby-filter-attribute --enable --attributeName='size_shoe_eu'
    *   Enable shop by size_shoe_eu filter attribute.
+   * @usage drush alshaya-shopby-filter-attribute --disable
+   *   Disable the shop by filter attribute feature.
    */
   public function enableDisableShopByFilterAttribute(
     array $options = [
+      'enable' => NULL,
+      'disable' => NULL,
       'attributeName' => NULL,
     ]
   ) {
-    // Get the alshaya_shopby_filter_attribute configs.
-    $configShopByFilter = $this->configFactory->getEditable('alshaya_shopby_filter_attribute.settings');
+    // Check if either enable or disable option is set and proceed further only.
+    // If we don't find any option set with command, we will abort requesting an
+    // operation flag. We do the same if both are provided together.
+    if ((empty($options['enable']) && empty($options['disable']))
+      || (!empty($options['enable']) && !empty($options['disable']))) {
+      $this->output->writeln(dt('Please provide the action to be performed with argument either --enable or --disable.'));
+      return;
+    }
+
+    // Identify the status to be set for the feature.
+    $status = (bool) $options['enable'] ?? $options['disable'];
 
     // We will check if the feature is already enabled we will disable it and
     // vice versa.
-    $status = (bool) !$configShopByFilter->get('enabled');
     $action = $status ? 'enable' : 'disable';
 
     // Confirm if the user wants to enable/disable the feature or not. If not,
@@ -82,18 +87,27 @@ class AlshayaShopByFilterAttributeCommands extends DrushCommands {
       throw new UserAbortException();
     }
 
-    // Get the attribute name supplied with the command and it's found empty, we
-    // stop the further operation.
-    $attributeName = $options['attributeName'];
-    if (empty($attributeName)) {
-      $this->drupalLogger->warning('Please provide filter attribute name with argument --attributeName.');
+    // Get the alshaya_shopby_filter_attribute configs.
+    $configShopByFilter = $this->configFactory->getEditable('alshaya_shopby_filter_attribute.settings');
+
+    // Get the current status of the feature.
+    $current_status = (bool) $configShopByFilter->get('enabled');
+
+    // If the current status is similar to what is requested, we will abort the
+    // executation to repeat the same operation again.
+    if ($status === $current_status) {
+      $this->output->writeln(dt('Aborting the operation as feature is already !action.', ['!action' => $action]));
       return;
     }
 
-    // Add informative message to drush command about which all settings we will
-    // update during the command run.
-    $configs_update_message = "For enable/disable this feature we will update the following settings.\n- alshaya_main_menu.settings\n-- show_l2_in_separate_column\n-- show_highlight\n-- show_menu_full_width\nand\n- alshaya_shopby_filter_attribute.settings\n-- enabled\n-- attributes\nWe can individually update the settings as well to on/off specific feature.\n\n";
-    $this->drupalLogger->notice($configs_update_message);
+    // Get the attribute name supplied with the command and it's found empty, we
+    // stop the further operation. We need this validation only when enabling
+    // this feature i.e. if $status is TRUE.
+    $attributeName = $options['attributeName'];
+    if ($status && empty($attributeName)) {
+      $this->output->writeln(dt('Please provide filter attribute name with argument --attributeName.'));
+      return;
+    }
 
     // For enable this feature we will update the following settings with the
     // relevant values as mentioned.
