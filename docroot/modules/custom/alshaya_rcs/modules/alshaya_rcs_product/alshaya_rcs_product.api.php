@@ -30,3 +30,29 @@ function hook_alshaya_rcs_product_query_fields_alter(array &$fields) {
 function hook_alshaya_rcs_product_product_options_to_query() {
   return ['size'];
 }
+
+/**
+ * Alter the product query fields for recent orders section.
+ *
+ * @param array $fields
+ *   Fields of the product query for recent orders section.
+ */
+function hook_alshaya_rcs_product_recent_orders_fields_alter(array &$fields) {
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'assets_teaser',
+  );
+}
+
+/**
+ * Alter the product query fields for order details section.
+ *
+ * @param array $fields
+ *   Fields of the product query for order details section.
+ */
+function hook_alshaya_rcs_product_order_details_fields_alter(array &$fields) {
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'color',
+  );
+}
