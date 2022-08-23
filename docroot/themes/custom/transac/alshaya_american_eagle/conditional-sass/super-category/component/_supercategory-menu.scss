@@ -27,8 +27,7 @@
     }
   }
 
-  #mini-cart-wrapper,
-  .static-minicart-wrapper {
+  #mini-cart-wrapper {
     @include breakpoint($only-tablet) {
       margin-top: rem(10);
     }
