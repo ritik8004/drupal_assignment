@@ -35,6 +35,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
       // If otpVerified is 0 then mobile number is not validated, hence send
       // OTP to shipping address mobile number.
       this.sendOtpToShippingMobileNumber();
+
+      // Disable complete purchase button.
+      this.disableCompletePurchaseButton();
     }
   }
 
@@ -43,8 +46,22 @@ class PaymentMethodCodMobileVerification extends React.Component {
     if (shippingMobileNumber !== prevProps.shippingMobileNumber) {
       // Update otp Verified flag and reset otp input.
       this.updateOtpVerifiedFlag();
+
+      // Disable complete purchase button.
+      // Disable complete purchase button.
+      this.disableCompletePurchaseButton();
     }
   }
+
+  /**
+   * Disables complete purchase button.
+   */
+  disableCompletePurchaseButton = () => {
+    const completePurchaseCTA = document.querySelector('.complete-purchase-cta');
+    if (completePurchaseCTA !== null) {
+      completePurchaseCTA.classList.add('in-active');
+    }
+  };
 
   /**
    * Update otpVerified when user changes shipping mobile number.
@@ -100,7 +117,18 @@ class PaymentMethodCodMobileVerification extends React.Component {
    *
    * // @todo Update for cod otp container.
    */
-  validateBeforePlaceOrder = () => false;
+  validateBeforePlaceOrder = () => {
+    const { otpVerified } = this.state;
+    if (otpVerified === 1 || otpVerified === 2) {
+      // otpVerified is 1 when user validates mobile in payment method
+      // and otpVerified is 2 when user has validate otp recently and received
+      // in cart data.
+      return true;
+    }
+
+    // User has not yet validated mobile number using otp, hence retur false.
+    return false;
+  };
 
   /**
    * Handle user input for otp field.
@@ -110,6 +138,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
     otpVerified: 0,
   });
 
+  /**
+   * Handle Otp form submit.
+   */
   handleOtpSubmit = (e) => {
     e.preventDefault();
 
@@ -158,6 +189,12 @@ class PaymentMethodCodMobileVerification extends React.Component {
         }
 
         if (hasValue(response) && response.data) {
+          // Enable complete purchase button.
+          const completePurchaseCTA = document.querySelector('.complete-purchase-cta');
+          if (completePurchaseCTA !== null) {
+            completePurchaseCTA.classList.remove('in-active');
+          }
+
           this.setState({
             otpVerified: 1,
           });
