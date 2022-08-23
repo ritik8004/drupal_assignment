@@ -540,6 +540,10 @@
 
   .site-brand-home {
     a {
+      img {
+        width: 100%;
+      }
+
       @include breakpoint($only-mobile) {
         margin: 0;
       }
