@@ -305,6 +305,7 @@ function _alshaya_hello_member_react_translations() {
       ],
       'Sign In' => [
         'ar' => 'تسجيل الدخول',
+        'context' => 'hello_member',
       ],
       'H&M membership' => [
         'ar' => 'عضوية اتش آند ام',
