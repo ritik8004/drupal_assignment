@@ -12,42 +12,6 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\file\FileInterface;
 
 /**
- * Implements hook_alshaya_rcs_product_query_fields_alter().
- */
-function alshaya_media_assets_alshaya_rcs_product_query_fields_alter(array &$fields) {
-  array_push(
-    $fields['items']['... on ConfigurableProduct']['variants']['product'],
-    'assets_swatch',
-    'assets_pdp',
-    'assets_cart',
-  );
-}
-
-/**
- * Implements hook_alshaya_rcs_product_recent_orders_fields_alter().
- */
-function alshaya_media_assets_alshaya_rcs_product_recent_orders_fields_alter(array &$fields) {
-  array_push(
-    $fields['items']['... on ConfigurableProduct']['variants']['product'],
-    'assets_teaser',
-  );
-}
-
-/**
- * Implements hook_library_info_alter().
- */
-function alshaya_media_assets_library_info_alter(&$libraries, $extension) {
-  if ($extension === 'alshaya_rcs_product') {
-    $self_module_path = \Drupal::moduleHandler()->getModule('alshaya_media_assets')->getPath();
-    $js = &$libraries['rcs_product_images']['js'];
-
-    // Alter the RCS product images utility with one provided here for assets.
-    $js["/$self_module_path/js/alshaya_media_assets.rcs_product_images.js"] = $js['js/alshaya_rcs_product.rcs_product_images.js'];
-    unset($js['js/alshaya_rcs_product.rcs_product_images.js']);
-  }
-}
-
-/**
  * Implements hook_alshaya_reset_config_configs_to_reset_alter().
  */
 function alshaya_media_assets_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
@@ -237,12 +201,4 @@ function alshaya_media_assets_acq_sku_base_field_additions_alter(array &$fields 
   else {
     \Drupal::logger('alshaya_media_assets')->error('The config alshaya_media_assets.sku_base_fields is empty for media assets.');
   }
-}
-
-/**
- * Implements hook_alshaya_rcs_recommended_product_query_fields_alter().
- */
-function alshaya_media_assets_alshaya_rcs_recommended_product_query_fields_alter(array &$fields) {
-  // Query for teaser assets for product recommendations.
-  $fields['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
 }
