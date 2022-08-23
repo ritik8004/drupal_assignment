@@ -1,6 +1,6 @@
 name: Alshaya RCS Media Assets
 description: Implementation of Media Assets in RCS.
 type: module
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9
 dependencies:
   - alshaya_media_assets:alshaya_media_assets
