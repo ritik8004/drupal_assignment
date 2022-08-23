@@ -1,0 +1,11 @@
+.has--three-levels {
+  .menu--two__list {
+    .menu--two__list-item > {
+      .menu-two__link-wrapper a.menu-two__link {
+        @include breakpoint($desktop) {
+          color: $mm_l2_link_desktop !important;
+        }
+      }
+    }
+  }
+}
