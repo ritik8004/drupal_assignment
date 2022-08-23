@@ -248,7 +248,7 @@ export default class PaymentMethod extends React.Component {
 
     // Get COD mobile verified flag from cart data.
     let codMobileVerified = null;
-    if (hasValue(cart.cart) && hasValue(cart.cart.cod_mobile_number_verified)) {
+    if (hasValue(cart.cart) && typeof cart.cart.cod_mobile_number_verified !== 'undefined') {
       codMobileVerified = cart.cart.cod_mobile_number_verified;
     }
 
