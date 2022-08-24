@@ -41,6 +41,8 @@ import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dyna
 import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../backend/v2/utility';
 import { applyHelloMemberLoyalty } from '../../../hello-member-loyalty/components/hello-member-checkout-rewards/utilities/loyalty_helper';
+import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
+import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -449,6 +451,11 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
+    // Check if online returns cart banner is enabled.
+    if (isOnlineReturnsCartBannerEnabled()) {
+      preContentActive = 'visible';
+    }
+
     // Get empty divs count for dynamic yield recommendations.
     let cartEmptyDivsCount = 0;
     if (hasValue(drupalSettings.cartDyamicYieldDivsCount)) {
@@ -515,6 +522,9 @@ export default class Cart extends React.Component {
               </ConditionalView>
             </div>
             <DeliveryInOnlyCity />
+            {isOnlineReturnsCartBannerEnabled() && (
+              <OnlineReturnsCartBanner />
+            )}
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
               hasExclusiveCoupon={hasExclusiveCoupon}
