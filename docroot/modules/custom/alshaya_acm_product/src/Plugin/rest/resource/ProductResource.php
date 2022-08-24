@@ -260,11 +260,11 @@ class ProductResource extends ResourceBase {
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([
       $this->getDeliveryOptionsConfig($skuEntity),
-      $data['delivery_options'],
+      $data['delivery_options'] ?? [],
     ], TRUE);
     $data['flags'] = NestedArray::mergeDeepArray([
       alshaya_acm_product_get_flags_config(),
-      $data['flags'],
+      $data['flags'] ?? [],
     ], TRUE);
 
     // Allow other modules to alter product data.
