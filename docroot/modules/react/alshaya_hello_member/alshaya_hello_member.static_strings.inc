@@ -212,7 +212,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'hm_sign_in',
-      'value' => t('Sign in', [], ['context' => 'hello_member']),
+      'value' => t('Sign In', [], ['context' => 'hello_member']),
     ],
   ];
 }
