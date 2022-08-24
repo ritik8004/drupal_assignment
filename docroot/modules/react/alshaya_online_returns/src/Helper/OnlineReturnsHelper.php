@@ -73,7 +73,7 @@ class OnlineReturnsHelper {
    *   TRUE/FALSE
    */
   public function isOnlineReturnsCartBannerEnabled() {
-    return $this->getConfig()->get('cart_banner');
+    return $this->isOnlineReturnsEnabled() && $this->getConfig()->get('cart_banner');
   }
 
   /**

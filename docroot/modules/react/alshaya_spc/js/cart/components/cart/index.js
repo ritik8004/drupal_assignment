@@ -441,6 +441,11 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
+    // Check if online returns is enabled.
+    if (isOnlineReturnsEnabled()) {
+      preContentActive = 'visible';
+    }
+
     // Get empty divs count for dynamic yield recommendations.
     let cartEmptyDivsCount = 0;
     if (hasValue(drupalSettings.cartDyamicYieldDivsCount)) {
