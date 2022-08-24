@@ -14,7 +14,7 @@ import PdpRelatedProducts from '../pdp-related-products';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
-import isAuraEnabled from '../../../../../js/utilities/helper';
+import isAuraEnabled, { checkBazaarVoiceAvailableForPdp } from '../../../../../js/utilities/helper';
 import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 import magv2Sticky from '../../../utilities/magv2StickySidebar';
 import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
@@ -252,10 +252,12 @@ const PdpLayout = () => {
             {/* Show PDP delivery labels for magazineV2 */}
             <PdpSddEd />
           </ConditionalView>
-          <PpdRatingsReviews
-            getPanelData={getPanelData}
-            removePanelData={removePanelData}
-          />
+          {checkBazaarVoiceAvailableForPdp(skuItemCode) ? (
+            <PpdRatingsReviews
+              getPanelData={getPanelData}
+              removePanelData={removePanelData}
+            />
+          ) : null}
           <div className="addtobag-button-wrapper" ref={addToBagContainer}>
             {stockStatus ? (
               <PdpCart
