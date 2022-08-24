@@ -49,18 +49,20 @@ class Menu extends React.Component {
   convertFractional = (fractionalValue) => {
     // Spit the fractional value with space. If string contains the full
     // fractional value like '32 2/3'.
-    const fractionalValueArray = fractionalValue.split(' ');
+    const [fractionalVal, ...restFractionVal] = fractionalValue.split(' ');
+    const restFractionValString = restFractionVal.join(' ').trim();
 
     // This contains 32 after spliting the above number. If it's a simple
     // fractional number like '2/3', prefix will remain to 0;
-    const prefixNumber = (fractionalValueArray.length > 1)
-      ? parseInt(fractionalValueArray[0], 10)
+    const prefixNumber = (restFractionValString.length > 0)
+      ? parseInt(fractionalVal, 10)
       : 0;
 
     // This contains the parts of fractional values like '2/3' etc.
-    const fractionalSplit = (fractionalValueArray.length > 1)
-      ? fractionalValueArray[1].split('/')
-      : fractionalValueArray[0].split('/');
+    let fractionalSplit = fractionalVal.split('/');
+    if (restFractionValString.length > 0) {
+      fractionalSplit = restFractionValString.split('/');
+    }
 
     // This contains the actual float conversion of fractional value.
     const suffixNumber = (fractionalSplit.length > 1)
@@ -68,7 +70,10 @@ class Menu extends React.Component {
       : parseFloat(fractionalSplit[0]);
 
     // Return the final float values of given fractional string.
-    return (prefixNumber + suffixNumber);
+    // Only add suffixNumber, if it's a numeric value.
+    return Number.isNaN(suffixNumber)
+      ? prefixNumber
+      : (prefixNumber + suffixNumber);
   }
 
   /**
