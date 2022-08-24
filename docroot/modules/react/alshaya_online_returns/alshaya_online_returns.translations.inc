@@ -287,7 +287,7 @@ function _alshaya_online_returns_translations() {
         'context' => 'online_returns',
       ],
       'Free online returns within 14 days' => [
-        'ar' => '',
+        'ar' => 'خدمة الإرجاع المجاني أونلاين متوفرة حتى 14 يوماً',
         'context' => 'online_returns',
       ],
       '<b>FREE Returns</b> Now Available Online!' => [
