@@ -85,7 +85,7 @@ class Menu extends React.Component {
     items.forEach((item) => {
       itemsToRender.push({
         ...item,
-        newValue: this.convertFractional(item.value),
+        newValue: this.convertFractional(item.value.trim()),
       });
     });
 
