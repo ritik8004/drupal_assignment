@@ -303,7 +303,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => '@hm_icon @login_link أو سجّل كعضو للربح بالنقاط @points',
         'context' => 'hello_member',
       ],
-      'Sign in' => [
+      'Sign In' => [
         'ar' => 'تسجيل الدخول',
         'context' => 'hello_member',
       ],
@@ -437,6 +437,7 @@ function _alshaya_hello_member_react_translations() {
       ],
       'Add your mobile number, Aura account number or email address below to link this purchase.' => [
         'ar' => 'أضف رقم الهاتف، أو رقم حساب أورا أو بريدك الإلكتروني في الأسفل لربط عملية الشراء الحالية.',
+        'context' => 'hello_member',
       ],
       'Confirm the Loyalty' => [
         'ar' => 'تأكيد الولاء',
