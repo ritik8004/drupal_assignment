@@ -86,6 +86,11 @@ function alshaya_hello_member_theme() {
         'strings' => [],
       ],
     ],
+    'become_hello_member_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
   ];
 
   return $theme;
