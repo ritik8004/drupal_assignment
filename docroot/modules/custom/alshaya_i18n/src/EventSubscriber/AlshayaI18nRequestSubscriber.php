@@ -88,7 +88,7 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
         }
         const languages = $languages;
         var preferred_lang = window.getCookie('alshaya_lang');
-        if (languages.includes(preferred_lang)) {
+        if (!languages.includes(preferred_lang)) {
           preferred_lang = '" . $this->config->get('default_langcode') . "';
         }
         window.location = '/' + preferred_lang + '/';";
