@@ -95,8 +95,7 @@ Feature: Test basket page
     And I should see an ".value .price .price-currency" element
     And I should see an ".value .price .price-amount" element
     Then I should see an ".delivery-vat" element
-
-  @remove
+    
   Scenario: As a Guest, I should be able to remove products from the basket
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
@@ -107,7 +106,7 @@ Feature: Test basket page
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And I verify the wishlist popup block
+    Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
     And I should not see an ".totals" element
@@ -232,7 +231,7 @@ Feature: Test basket page
     And I should see an ".value .price .price-amount" element
     Then I should see an ".delivery-vat" element
 
-  @language @desktop @remove
+  @language @desktop
   Scenario: As a Guest, I should be able to remove products from the basket in second language
     When I follow "{language_link}"
     And I wait 5 seconds
@@ -246,8 +245,7 @@ Feature: Test basket page
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And I verify the wishlist popup block
-    And I press the " " button
+    Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
     And I wait for the page to load
     And I should not see an ".totals" element
