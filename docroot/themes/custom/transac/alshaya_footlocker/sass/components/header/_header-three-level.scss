@@ -20,7 +20,6 @@
       .menu__link {
         font-size: 0.875rem !important;
         text-transform: capitalize;
-        line-height: rem(18);
       }
     }
   }
@@ -30,18 +29,6 @@
   li.menu--one__list-item {
     @include breakpoint($desktop) {
       vertical-align: middle;
-    }
-  }
-
-  .active--menu--links {
-    &:hover {
-      li.menu--one__list-item {
-        .menu--one__link {
-          @include breakpoint($desktop) {
-            border-bottom: none;
-          }
-        }
-      }
     }
   }
 }
