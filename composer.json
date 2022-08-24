@@ -15,6 +15,7 @@
         "acquia/blt-drupal-vm": "dev-master",
         "acquia/http-hmac-php": "~3.2",
         "acquia/lightning": "^5.2",
+        "acquia/memcache-settings": "^1.2",
         "aws/aws-sdk-php": "^3.138",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
@@ -382,6 +383,9 @@
             },
             "drupal/coder": {
                 "Readonly variables have Missing member variable doc comment": "https://www.drupal.org/files/issues/2022-06-15/coder-readonly-doc-comment-3285707-4.patch"
+            },
+            "acquia/blt-acsf": {
+                "Fix multiple addition of acsf module for local uninstallation on running blt acsf:init": "https://patch-diff.githubusercontent.com/raw/acquia/blt-acsf/pull/10.patch"
             }
         },
         "installer-paths": {
@@ -432,6 +436,7 @@
                 "drupal/core"
             ],
             "file-mapping": {
+                "[web-root]/.htaccess": "docroot/core/assets/scaffold/files/htaccess",
                 "[web-root]/sites/default/default.services.yml": {
                     "mode": "replace",
                     "path": "docroot/core/assets/scaffold/files/default.services.yml",
@@ -442,7 +447,11 @@
                     "path": "docroot/core/assets/scaffold/files/default.settings.php",
                     "overwrite": false
                 }
-            }
+            },
+            "excludes": [
+                ".htaccess"
+            ],
+            "gitignore": false
         },
         "composer-exit-on-patch-failure": true,
         "patches-ignore": {
