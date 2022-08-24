@@ -84,7 +84,7 @@
     window.commerceBackend.setMediaData(product);
 
     return {
-      url: product.url_key + '.html',
+      url: Drupal.url(product.url_key + '.html'),
       title: product.name,
       image_url: window.commerceBackend.getTeaserImage(product),
     }
@@ -118,8 +118,8 @@
             product,
           };
         } catch(e) {
-          Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
-            // '@sku': sku
+          Drupal.alshayaLogger('warning', 'Could not parse BV settings for SKU @sku', {
+            '@sku': productId,
           });
         }
       }
