@@ -303,7 +303,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => '@hm_icon @login_link أو سجّل كعضو للربح بالنقاط @points',
         'context' => 'hello_member',
       ],
-      'Sign In' => [
+      'Sign in' => [
         'ar' => 'تسجيل الدخول',
         'context' => 'hello_member',
       ],
