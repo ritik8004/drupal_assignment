@@ -47,3 +47,13 @@ function alshaya_rcs_assets_alshaya_rcs_recommended_product_query_fields_alter(a
   // Query for teaser assets for product recommendations.
   $fields['... on ConfigurableProduct'] = ['variants' => ['product' => ['assets_teaser']]];
 }
+
+/**
+ * Implements hook_alshaya_rcs_product_bv_product_fields_alter().
+ */
+function alshaya_rcs_assets_alshaya_rcs_product_bv_product_fields_alter(array &$fields) {
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'assets_teaser',
+  );
+}
