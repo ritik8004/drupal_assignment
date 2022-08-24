@@ -2,7 +2,9 @@
     // Initialize the global object.
   window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
 
-  var staticStorage = {};
+  var staticStorage = {
+    bvSettings: {},
+  };
 
   /**
    * Returns a review for the user for the current/mentioned product.
@@ -71,6 +73,24 @@
   }
 
   /**
+   * Process raw BV product object to required format.
+   *
+   * @param {Object} product
+   *   BV product object.
+   * @returns {Object}
+   *   Process product.
+   */
+  function processProduct(product) {
+    window.commerceBackend.setMediaData(product);
+
+    return {
+      url: product.url_key + '.html',
+      title: product.name,
+      image_url: window.commerceBackend.getTeaserImage(product),
+    }
+  }
+
+  /**
    * Gets bazaar voice settings.
    *
    * (optional) @param {string} productId
@@ -81,23 +101,37 @@
    */
   window.alshayaBazaarVoice.getbazaarVoiceSettings = function getbazaarVoiceSettings(productId) {
     var settings = {};
+    if (Drupal.hasValue(staticStorage.bvSettings[productId])) {
+      return staticStorage.bvSettings[productId];
+    }
+
     if (Drupal.hasValue(productId)) {
-      var product = Drupal.alshayaSpc.getProductDataV2Synchronous(productId);
-      settings = {
-        product: {
-          url: product.url,
-          title: product.title,
-          // @todo Image will be same as alshaya_acm_get_product_display_image().
-          image_url: product.image,
+      var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('bv_product', {sku: productId});
+      if (response.data.products.total_count) {
+        var product = response.data.products.items[0];
+        try {
+          // Clone the product object.
+          product = JSON.parse(JSON.stringify(product));
+          product = processProduct(product);
+
+          settings = {
+            product,
+          };
+        } catch(e) {
+          Drupal.alshayaLogger('warning', 'No combination available for any attributes in SKU @sku', {
+            // '@sku': sku
+          });
         }
-      };
+      }
     }
 
     settings = Object.assign(settings, drupalSettings.alshaya_bazaar_voice);
 
-    return {
-      productId: productId,
+    staticStorage.bvSettings[productId] = {
+      productid: productId,
       reviews: settings,
     };
+
+    return staticStorage.bvSettings[productId];
   }
 })(drupalSettings, Drupal);

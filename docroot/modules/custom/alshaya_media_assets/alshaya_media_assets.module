@@ -202,3 +202,13 @@ function alshaya_media_assets_acq_sku_base_field_additions_alter(array &$fields 
     \Drupal::logger('alshaya_media_assets')->error('The config alshaya_media_assets.sku_base_fields is empty for media assets.');
   }
 }
+
+/**
+ * Implements hook_alshaya_rcs_product_bv_product_fields_alter().
+ */
+function alshaya_media_assets_alshaya_rcs_product_bv_product_fields_alter(array &$fields) {
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'assets_teaser',
+  );
+}

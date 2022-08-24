@@ -38,6 +38,8 @@
             detail: {
               data: {
                 orderId: $ub.parent().attr('data-order-id'),
+                // Pass the dom element in the context.
+                context: $(this).parent()[0],
               }
             }
           });
