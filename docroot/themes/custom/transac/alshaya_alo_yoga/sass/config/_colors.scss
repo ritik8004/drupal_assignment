@@ -1,1 +1,148 @@
 @import "../../../alshaya_white_label/sass/config/_colors.scss";
+
+$black: #000;
+$white: #fff;
+$charcoal: #242424;
+$mine: #3b3b3b;
+$chicago: #636363;
+$dawn: #a3a3a3;
+$alto: #ccc;
+$mercury: #e1e1e1;
+$smoke: #f2f2f2;
+$alert-light: #e7cccf;
+$alert-main: #b00020;
+$alert-dark: #740031;
+$highlight-light: #f1e8dd;
+$highlight-main: #ceb18f;
+$highlight-dark: #826646;
+$success-light: #d8e1d5;
+$success-main: #758e6d; 
+$success-dark: #3c4b37;
+$accent-light: #d7ddeb;
+$accent-main: #7183b0; 
+$accent-dark: #384669;
+$purple: #cab9dc;
+$gray-light: #ededed;
+$gray-medium: #e0dfdf;
+$gray-three: #333;
+$gray-seven: #777;
+$lust-red: #e51b23;
+
+//// Global elements.
+$primary_text: $black;
+$primary_link: $black;
+$content_pagetitle: $black;
+$content_pagetitle_border: $alto;
+$primary_link-hover: $black;
+$primary_link-active: $black;
+$primary_border: $black;
+$content_link_color: $black;
+$secondary_link: $black;
+
+// Form elements.
+$primary_form_selector_border: $black;
+$primary_form_selector: $gray-three;
+$primary_form_link: $black;
+$primary_form_input_text: $gray-three;
+$primary_input_label: $gray-seven;
+$primary_input_border: $black;
+$primary_input_disabled: $alto;
+$primary_input_focus_border: $black;
+$primary_input_inline_error: $lust-red;
+
+// Form Items
+$formitem_label: $dawn;
+
+//Buttons.
+$primary_btn_bg: $black;
+$primary_empty_btn: $white;
+$primary_brand_button_text: $white;
+$primary_empty_btn_border: $black;
+$primary_brand_button: $gray-medium;
+$primary_button_disabled: $alto;
+
+
+// Checkbox & Radio.
+$primary_checkbox_empty: $white;
+$primary_checkbox_filled: $gray-three;
+$primary_radiobtn_label: $gray-three;
+$primary_radiobtn_empty: $white;
+$primary_radiobtn_filled: $gray-three;
+
+// User Form
+$user_field_link: $black;
+$user_form_text: $black;
+$my_account_nav: $black;
+$my_account_nav_active: $black;
+$my_account_nav_hover: $black;
+$user_form_layout_divider_color: $black;
+
+// Dropdown.
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_border: $black;
+$primary_dropdown_option_hover: $black;
+$primary_dropdown_option_border: $black;
+$primary_dropdown_option_disbled: $black;
+$primary_dropdown_arrow_icon: $black;
+
+// Footer
+$footer_border_top: $black;
+$footer_title_h3: $white;
+$primary_footer_input_label: $black;
+$footer_link_mobile: $white;
+$footer_link: $white;
+$footer_link_hover: $white;
+$social-icons-bg: $black;
+
+// Titles.
+$page_title: $black;
+$block_title: $black;
+$title: $black;
+$sub_title: $black;
+$label_black: $black;
+$label_dark: $black;
+$user_sidebar_block_title: $black;
+
+// Copyright
+$copyright_footer_bg: $smoke;
+$copyright_footer_paragraph: $black;
+
+// Social links
+$social_links_h3: $white;
+
+// Accordion
+$accordion_border: $black;
+
+// Language Switcher
+$lang_switch: $white;
+$lang_switch_active: $white;
+
+// Breadcrumb.
+$breadcrumb_bg: $white;
+$breadcrumb_link: $charcoal;
+$breadcrumb_link_hover: $charcoal;
+$breadcrumb_link_active: $black;
+
+// Social Auth
+$social-network-text: $black;
+$social-auth-bg: $gray-medium;
+$social-auth-bg-hover: $black;
+$social_auth_login_button_border: $gray-medium;
+$user_login_sub_text: $black;
+$user_login_link_btn_text: $black;
+$user_login_section_title: $black;
+
+// Header.
+$header_border: $gray-medium;
+$header_search_active_bg: $white;
+$header_mobile_menu_close_bg: $black;
+$header_toggle_sign_active_tab: $black;
+$header_toggle_sign_default: $gray-light;
+
+// Header secondary: ie: top header.
+$header_secondary_bg: $black;
+$header_secondary_bg_upto_desk: $black;
+$header_secondary_menu_link_mobile: $white;
+$header_secondary_menu_link: $white;
+$header_mobile_menu_arrow: $black;
+$header_c_menu_text: $black;
