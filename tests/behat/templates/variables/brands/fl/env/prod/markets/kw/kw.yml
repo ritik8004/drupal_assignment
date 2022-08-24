@@ -7,3 +7,4 @@ variables:
   np_plp_product_page: '/buy-nike-brasilia-95-medium-60l-training-duffel-bag-black.html'
   np_plp_page: '/shop-kids/upto-4-years/shoes/'
   new_pdp_enabled: TRUE
+  spc_egift_page: '/egift/'

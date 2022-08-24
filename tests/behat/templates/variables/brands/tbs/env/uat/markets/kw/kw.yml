@@ -4,3 +4,4 @@ variables:
   spc_product_listing_page: '/shop-bestsellers/'
   spc_basket_page: '/shop-bestsellers/'
   spc_pdp_page: '/buy-seaweed-pore-cleansing-exfoliator.html/'
+  spc_egift_page: '/egift/'

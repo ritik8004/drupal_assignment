@@ -8,3 +8,4 @@ variables:
   spc_multiple_product_detail_page_coupon: '/buy-atlantic-travel-size-shower-gel.html/'
   spc_single_product_detail_page_no_coupon: '/buy-atlantic-travel-size-shower-gel.html/'
   spc_multiple_product_detail_page_no_coupon: '/buy-atlantic-travel-size-shower-gel.html/'
+  spc_egift_page: '/egift/'

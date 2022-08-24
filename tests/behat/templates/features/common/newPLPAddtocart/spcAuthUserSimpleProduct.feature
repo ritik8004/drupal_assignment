@@ -1,4 +1,4 @@
-@javascript @plp-addtocart @smoke @auth @tbsegprod @tbsegpprod @vssapprod @vskwpprod @mckwpprod @bpaepprod @bpaeqa @mckwqa @bpaeprod @bpkwprod @bpsaprod @tbskwprod @tbsegprod @vssaprod @vskwprod @bbwsaprod @bbwkwprod @bbwaeprod
+@javascript @plp-addtocart @smoke @auth @vsaeprod @tbsegprod @tbsegpprod @vssapprod @vskwpprod @mckwpprod @bpaepprod @bpaeqa @mckwqa @bpaeprod @bpkwprod @bpsaprod @tbskwprod @tbsegprod @vssaprod @vskwprod @bbwsaprod @bbwkwprod @bbwaeprod
 Feature: Testing new PLP-Add to cart functionality for Authenticated user on simple product
 
   Background:

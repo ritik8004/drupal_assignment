@@ -5,3 +5,4 @@ variables:
   spc_basket_page: '/shop-men/new-arrivals/clothes/'
   spc_pdp_page: '/buy-5-pack-sports-socks-dark-grey-marl.html/'
   spc_bank_product: '/shop-men/new-arrivals/clothes/'
+  spc_egift_page: '/egift/'

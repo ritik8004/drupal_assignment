@@ -6,3 +6,4 @@ variables:
   spc_basket_page: '/beauty/shop-fragrance/fragrance/perfume/'
   spc_plp_add_to_cart_single: '/beauty/shop-fragrance/categories/rollerballs-travel-size/'
   spc_plp_add_to_cart: '/victorias-secret/shop-bras/styles/t-shirt-bra/'
+  spc_egift_page: '/egift/'

@@ -5,3 +5,4 @@ variables:
   spc_product_listing_page: '/shop-bedding/kids-bedding/duvet-covers/'
   spc_basket_page: '/shop-bedding/kids-bedding/duvet-covers/'
   spc_bank_product: '/shop-furniture/kids-bedroom-furniture/beds/'
+  spc_egift_page: '/egift/'
