@@ -276,6 +276,7 @@ export default class CartItem extends React.Component {
       selectFreeGift,
       totalsItems,
       cartShippingMethods,
+      hasExclusiveCoupon,
     } = this.props;
 
     const {
@@ -354,7 +355,13 @@ export default class CartItem extends React.Component {
                   : <a href={url}>{title}</a>}
               </div>
               <div className="spc-product-price">
-                <SpecialPrice price={price} freeItem={freeItem} finalPrice={finalPrice} />
+                <SpecialPrice
+                  price={price}
+                  freeItem={freeItem}
+                  /* If the exclusive promo/coupon is applied no other discount will
+                  get applied and the original price value will be assigned as the final price. */
+                  finalPrice={hasExclusiveCoupon !== true ? finalPrice : price}
+                />
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
@@ -414,7 +421,8 @@ export default class CartItem extends React.Component {
         </div>
         <div className="spc-cart-item-bottom-wrapper">
           <div className="spc-promotions free-gift-container">
-            {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} couponCode={couponCode} link />)}
+            {/* Displaying promo text only when no exclusive promo/coupon gets applied in basket */}
+            {hasExclusiveCoupon !== true && (promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} couponCode={couponCode} link />))}
             <ConditionalView condition={freeGiftPromotion !== null}>
               <CartPromotionFreeGift
                 key={`${sku}-free-gift`}
@@ -460,8 +468,11 @@ export default class CartItem extends React.Component {
               maxSaleQty={maxSaleQty}
             />
           )}
-          <CartItemFree type="alert" filled="true" freeItem={freeItem} />
-          <DynamicPromotionProductItem type="alert" dynamicPromoLabels={dynamicPromoLabels} />
+          {/* Displaying free gift label only when no exclusive coupon gets applied in basket */}
+          {hasExclusiveCoupon !== true && (<CartItemFree type="alert" filled="true" freeItem={freeItem} />)}
+          {/* Displaying dynamic promos only when no exclusive coupon gets applied in basket */}
+          {hasExclusiveCoupon !== true && (<DynamicPromotionProductItem type="alert" dynamicPromoLabels={dynamicPromoLabels} />)}
+
           {isItemError && (<CartItemError type="alert" errorMessage={errorMessage} />)}
         </Notifications>
       </div>

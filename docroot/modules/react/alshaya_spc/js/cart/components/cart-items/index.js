@@ -63,6 +63,7 @@ export default class CartItems extends React.Component {
       couponCode,
       totals,
       cartShippingMethods,
+      hasExclusiveCoupon,
     } = this.props;
     const productItems = [];
 
@@ -106,6 +107,7 @@ export default class CartItems extends React.Component {
             couponCode={couponCode}
             totalsItems={totals.items}
             cartShippingMethods={cartShippingMethods}
+            hasExclusiveCoupon={hasExclusiveCoupon}
           />,
         );
       }
