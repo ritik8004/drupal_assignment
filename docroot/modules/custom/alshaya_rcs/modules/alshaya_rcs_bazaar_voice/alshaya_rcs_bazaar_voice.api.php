@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hooks specific to the alshaya profile.
+ * Hooks specific to the Alshaya RCS bazaar voice .
  */
 
 /**
