@@ -15,7 +15,6 @@ document.addEventListener('onRecentOrderView', (orderDetails) => {
       ReactDOM.render(
         <RecentOrders
           productId={product.getAttribute('data-sku')}
-          productVariantId={product.getAttribute('data-variant-sku')}
         />, product,
       );
     });
