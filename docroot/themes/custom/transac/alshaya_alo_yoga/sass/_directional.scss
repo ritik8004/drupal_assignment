@@ -1,0 +1,15 @@
+$ay-regular: if-ltr($ay-regular, $ay-arabic-regular);
+$ay-arabic-regular: if-ltr($ay-arabic-regular, $ay-regular);
+$ay-bold: if-ltr($ay-bold, $ay-arabic-bold);
+$ay-arabic-bold: if-ltr($ay-arabic-bold, $ay-bold);
+$ay-heavy: if-ltr($ay-heavy, $ay-arabic-heavy);
+$ay-arabic-heavy: if-ltr($ay-arabic-heavy, $ay-heavy);
+$ay-black: if-ltr($ay-black, $ay-arabic-black);
+$ay-arabic-black: if-ltr($ay-arabic-black, $ay-black);
+
+$ay-nova-regular: if-ltr($ay-nova-regular, $ay-nova-arabic-regular);
+$ay-nova-arabic-regular: if-ltr($ay-nova-arabic-regular, $ay-nova-regular);
+$ay-nova-semibold: if-ltr($ay-nova-semibold, $ay-nova-arabic-semibold);
+$ay-nova-arabic-semibold: if-ltr($ay-nova-arabic-semibold, $ay-nova-semibold);
+$ay-nova-bold: if-ltr($ay-nova-bold, $ay-nova-arabic-bold);
+$ay-nova-arabic-bold: if-ltr($ay-nova-arabic-bold, $ay-nova-bold);

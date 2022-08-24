@@ -133,7 +133,7 @@ function alshaya_js_optimisations_js_alter(&$javascripts) {
         $value['attributes']['data-group'] === 'd9-jquery-ui'
       ) {
         // Include existing weights as fraction.
-        $value['weight'] = -31 + $value['weight'] / 100;
+        $value['weight'] = -29 + $value['weight'] / 100;
       }
       // End of TEMPORARY CODE.
     }

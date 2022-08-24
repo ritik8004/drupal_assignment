@@ -23,7 +23,7 @@ envs=$(php -r '$json = '"'$stage_res'"'; echo implode(" ", array_keys((array)jso
 
 # Get the list of stacks using the API. Exclude the "Alshaya DC 1" stack.
 stacks_res=$(curl -sk "https://www.alshaya.acsitefactory.com/api/v1/stacks" -u ${username}:${api_key} --max-time 60)
-stacks=$(php -r '$json = '"'$stacks_res'"'; $stacks = (array)json_decode($json)->stacks; if (isset($stacks[5]) && $stacks[5] === "Alshaya DC 1") { unset($stacks[5]); } echo implode(" ", array_keys($stacks));')
+stacks=$(php -r '$json = '"'$stacks_res'"'; $stacks = (array)json_decode($json)->stacks; echo implode(" ", array_keys($stacks));')
 
 # For each env+stack combination, print the deployed branch.
 for env in $envs ; do

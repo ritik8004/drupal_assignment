@@ -286,6 +286,14 @@ function _alshaya_online_returns_translations() {
         'ar' => 'المنتجات الملغاه',
         'context' => 'online_returns',
       ],
+      'Free online returns within 14 days' => [
+        'ar' => 'خدمة الإرجاع المجاني أونلاين متوفرة حتى 14 يوماً',
+        'context' => 'online_returns',
+      ],
+      '<b>FREE Returns</b> Now Available Online!' => [
+        'ar' => '<b>خدمة الإرجاع مجاناً </b> متوفرة أونلاين وفي المحلات',
+        'context' => 'online_returns',
+      ],
     ],
   ];
 
