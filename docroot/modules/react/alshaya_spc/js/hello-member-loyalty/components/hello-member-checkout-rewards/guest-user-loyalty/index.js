@@ -60,7 +60,7 @@ export default class GuestUserLoyalty extends React.Component {
         <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
           <div className="loaylty-option-text">
             {parse(parse(getStringMessage('hello_member_guest_login', {
-              '@login_link': `<a href="${Drupal.url('cart/login')}">${Drupal.t('Sign in', {}, { context: 'hello_member' })}</a>`,
+              '@login_link': `<a href="${Drupal.url('cart/login')}">${getStringMessage('hm_sign_in')}}</a>`,
               '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
               '@points': helloMemberPoints,
             })))}
