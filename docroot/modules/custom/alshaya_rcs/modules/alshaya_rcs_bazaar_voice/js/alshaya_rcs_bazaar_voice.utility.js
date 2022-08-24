@@ -108,8 +108,8 @@
     if (Drupal.hasValue(productId)) {
       var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('bv_product', {sku: productId});
       if (response.data.products.total_count) {
-        var product = response.data.products.items[0];
         try {
+          var product = response.data.products.items[0];
           // Clone the product object.
           product = JSON.parse(JSON.stringify(product));
           product = processProduct(product);
