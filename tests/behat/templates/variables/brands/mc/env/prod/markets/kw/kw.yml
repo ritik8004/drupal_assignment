@@ -6,3 +6,4 @@ variables:
   np_plp_product_page: '/buy-greentreat-boys-organic-cotton-loungewear-set-3.html/'
   np_plp_page: '/shop-boys-clothing/nightwear/pyjamas/'
   new_pdp_enabled: TRUE
+  spc_egift_page: '/egift/'
