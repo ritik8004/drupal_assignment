@@ -37,6 +37,11 @@ function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
  * Implements hook_query_TAG_NAME_alter().
  */
 function alshaya_shopby_filter_attribute_query_product_category_child_terms_alter(AlterableInterface $query) {
+  // Return if feature is not enabled.
+  if (!\Drupal::service('alshaya_shopby_filter_attribute.helper')->isShopByFilterAttributeEnabled()) {
+    return;
+  }
+
   // Add shopby_filter_attribute field.
   $query->leftJoin('taxonomy_term__field_shopby_filter_attribute', 'shopby_filter_attribute', 'shopby_filter_attribute.entity_id=tfd.tid');
   $query->addField('shopby_filter_attribute', 'field_shopby_filter_attribute_value', 'shopby_filter_attribute');
@@ -110,6 +115,7 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
   // utilise and display the filters data.
   // Get the hierarchy data from the target term ID for english language always.
   // This is because our filters accepts EN data only.
+  /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page */
   $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
   $term_hierarchy_data = $product_category_page->getCurrentSelectedCategory('en', $parent_target_id);
 
