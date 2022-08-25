@@ -57,4 +57,7 @@ function alshaya_rcs_install() {
       ]);
     }
   }
+
+  // Update index prefix to use MDC index.
+  \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix('mdc');
 }
