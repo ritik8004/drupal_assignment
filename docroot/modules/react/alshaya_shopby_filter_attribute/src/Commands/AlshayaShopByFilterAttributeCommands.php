@@ -26,7 +26,7 @@ class AlshayaShopByFilterAttributeCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
    */
-  private $cacheTagsInvalidator;
+  protected $cacheTagsInvalidator;
 
   /**
    * AlshayaShopByFilterAttributeCommands constructor.
