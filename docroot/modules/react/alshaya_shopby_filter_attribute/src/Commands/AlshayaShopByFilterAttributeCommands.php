@@ -5,6 +5,7 @@ namespace Drupal\alshaya_shopby_filter_attribute\Commands;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 
 /**
  * Class Alshaya Shop By Filter Attribute Commands.
@@ -21,16 +22,27 @@ class AlshayaShopByFilterAttributeCommands extends DrushCommands {
   protected $configFactory;
 
   /**
+   * Cache Tags Invalidator.
+   *
+   * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
+   */
+  private $cacheTagsInvalidator;
+
+  /**
    * AlshayaShopByFilterAttributeCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
+   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator
+   *   Cache Tags invalidator.
    */
   public function __construct(
-    ConfigFactoryInterface $configFactory
+    ConfigFactoryInterface $configFactory,
+    CacheTagsInvalidatorInterface $cacheTagsInvalidator
   ) {
     parent::__construct();
     $this->configFactory = $configFactory;
+    $this->cacheTagsInvalidator = $cacheTagsInvalidator;
   }
 
   /**
@@ -120,6 +132,9 @@ class AlshayaShopByFilterAttributeCommands extends DrushCommands {
     $configShopByFilter->set('enabled', $status);
     $configShopByFilter->set('attributes', $attributeName);
     $configShopByFilter->save();
+
+    // Invalidate cache for adding new menu item attribute.
+    $this->cacheTagsInvalidator->invalidateTags(['taxonomy_term:acq_product_category']);
 
     // Inform that the feature is successfully enabled.
     $this->io()->success(dt('Successfully !action shop by filter attribute feature.', ['!action' => $action]));

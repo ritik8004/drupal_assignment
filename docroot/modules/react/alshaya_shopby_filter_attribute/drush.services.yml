@@ -1,6 +1,6 @@
 services:
   alshaya_shopby_filter_attribute.commands:
     class: Drupal\alshaya_shopby_filter_attribute\Commands\AlshayaShopByFilterAttributeCommands
-    arguments: [ '@config.factory' ]
+    arguments: [ '@config.factory', '@cache_tags.invalidator' ]
     tags:
       - { name: drush.command }
