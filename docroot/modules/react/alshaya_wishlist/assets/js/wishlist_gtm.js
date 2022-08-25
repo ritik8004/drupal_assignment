@@ -58,16 +58,18 @@
       dimension2: product.dimension2 || null,
       dimension3: product.dimension3 || null,
       ecommerce: {
-        items: {
-          currency: drupalSettings.gtm.currency,
-          index: isProductDataAvailable ? productSelector[0].getAttribute('data-insights-position') : 0,
-          item_brand: product.brand,
-          item_category: gtmCategory,
-          item_id: sku,
-          item_name: product.name,
-          item_variant: product.variant,
-          price: product.price,
-        },
+        items: [
+          {
+            currency: drupalSettings.gtm.currency,
+            index: isProductDataAvailable ? productSelector[0].getAttribute('data-insights-position') : 0,
+            item_brand: product.brand,
+            item_category: gtmCategory,
+            item_id: sku,
+            item_name: product.name,
+            item_variant: product.variant,
+            price: product.price,
+          },
+        ],
       },
     };
 

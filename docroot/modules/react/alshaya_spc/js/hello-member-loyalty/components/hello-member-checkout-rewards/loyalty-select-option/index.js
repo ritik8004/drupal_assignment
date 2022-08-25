@@ -1,5 +1,5 @@
 import React from 'react';
-import { getLoyaltySelectText } from '../../../../../../alshaya_hello_member/js/src/utilities';
+import { getLoyaltySelectText } from '../utilities/loyalty_helper';
 import AuraLoyalty from '../aura/aura-loyalty';
 import AuraPointsToEarn from '../aura/aura-points-to-earn';
 import ToolTip from '../../../../utilities/tooltip';
