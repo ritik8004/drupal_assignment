@@ -1,11 +1,13 @@
 import React from 'react';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
+import dispatchCustomEvent from '../../../../../../../js/utilities/events';
 import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../../js/utilities/helloMemberHelper';
 import Loading from '../../../../../../../js/utilities/loading';
 import logger from '../../../../../../../js/utilities/logger';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { findArrayElement } from '../../../../utilities';
+import { getDefaultErrorMessage } from '../../../../../../../js/utilities/error';
 
 class AddBenefitsToCart extends React.Component {
   constructor(props) {
@@ -68,6 +70,9 @@ class AddBenefitsToCart extends React.Component {
       if (!hasValue(params.error)) {
         showFullScreenLoader();
         const { title, codeId, voucherType } = this.props;
+        let isAddedToBag = false;
+        let benefitType = 'offer';
+        let response = null;
         if (voucherType === 'BONUS_VOUCHER') {
           const { voucherCodes } = this.state;
           if (voucherCodes !== '') {
@@ -76,77 +81,79 @@ class AddBenefitsToCart extends React.Component {
           } else {
             params.voucherCodes = [codeId];
           }
-          const response = await callHelloMemberApi('addBonusVouchersToCart', 'POST', params);
+          response = await callHelloMemberApi('addBonusVouchersToCart', 'POST', params);
           if (hasValue(response.data) && !hasValue(response.data.error)) {
-            this.setState({
-              wait: true,
-              appliedAlready: true,
-            });
-            if (response.data) {
-              document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
-              if (hasValue(title)) {
-                document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
-              }
-              document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
-              setTimeout(() => {
-                document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
-              }, 5000);
-            }
-            removeFullScreenLoader();
+            isAddedToBag = true;
           } else {
-            // If coupon details API is returning Error.
-            logger.error('Error while calling the apply coupon Api @params, @message', {
-              '@params': params,
-              '@message': response.data.error_message,
-            });
-            this.setState({
-              wait: true,
-              isAPIError: true,
-            });
-            document.getElementById('error-msg').innerHTML = response.data.error_message;
-            document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
-            setTimeout(() => {
-              document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
-            }, 5000);
-            removeFullScreenLoader();
+            benefitType = 'coupon';
           }
         } else {
           params.offerCode = codeId;
           params.offerType = voucherType;
-          const response = await callHelloMemberApi('addMemberOffersToCart', 'POST', params);
+          response = await callHelloMemberApi('addMemberOffersToCart', 'POST', params);
           if (hasValue(response.data) && !hasValue(response.data.error)) {
-            this.setState({
-              wait: true,
-              appliedAlready: true,
-            });
-            if (response.data) {
-              document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
-              if (hasValue(title)) {
-                document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
-              }
-              document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
-              setTimeout(() => {
-                document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
-              }, 5000);
-            }
-            removeFullScreenLoader();
-          } else {
-            // If member offers API is returning Error.
-            logger.error('Error while calling the apply member offers Api @params, @message', {
-              '@params': params,
-              '@message': response.data.message,
-            });
-            this.setState({
-              wait: true,
-              isAPIError: true,
-            });
-            document.getElementById('error-msg').innerHTML = response.data.error_message;
-            document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
-            setTimeout(() => {
-              document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
-            }, 5000);
-            removeFullScreenLoader();
+            isAddedToBag = true;
           }
+        }
+        // Display status message if Offer/Voucher is added successfully.
+        if (isAddedToBag) {
+          this.setState({
+            wait: true,
+            appliedAlready: true,
+          });
+
+          document.getElementById('status-msg').innerHTML = Drupal.t('Added to your bag.', { context: 'hello_member' });
+          if (hasValue(title)) {
+            document.getElementById('disc-title').innerHTML = Drupal.t('@disc_title', { '@disc_title': title }, { context: 'hello_member' });
+          }
+          document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
+          setTimeout(() => {
+            document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
+          }, 5000);
+
+          const cartData = window.commerceBackend.getCart(true);
+          if (cartData instanceof Promise) {
+            cartData.then((result) => {
+              if (result.status !== 200
+                && result.data === undefined
+                && result.data.error !== undefined) {
+                dispatchCustomEvent('spcCartMessageUpdate', {
+                  type: 'error',
+                  message: getDefaultErrorMessage(),
+                });
+              } else {
+                // Calling refresh mini cart event so that storage is updated.
+                dispatchCustomEvent('refreshMiniCart', {
+                  data: () => result.data,
+                });
+                // Calling refresh cart event so that cart components
+                // are refreshed.
+                dispatchCustomEvent('refreshCart', {
+                  data: () => result.data,
+                });
+              }
+            });
+          }
+          removeFullScreenLoader();
+        } else {
+          // If coupon/offer API is returning Error.
+          logger.error('Error while calling the apply @type Api @params, @message', {
+            '@type': benefitType,
+            '@params': params,
+            '@message': (hasValue(response)) ? response.data.error_message : '',
+          });
+
+          this.setState({
+            wait: true,
+            isAPIError: true,
+          });
+
+          document.getElementById('error-msg').innerHTML = (hasValue(response)) ? response.data.error_message : '';
+          document.getElementById('hello-member-benefit-status-info').classList.toggle('hello-member-benefit-status-info-active');
+          setTimeout(() => {
+            document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
+          }, 5000);
+          removeFullScreenLoader();
         }
       }
     }
