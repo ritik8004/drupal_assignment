@@ -35,7 +35,9 @@ if (!function_exists('gardens_data_get_sites_from_file')) {
       elseif ($map = gardens_site_data_load_file()) {
         $domains = array_filter(
           $map['sites'],
-          fn($item) => $item['name'] == $name
+          function ($item) use ($name) {
+            return $item['name'] == $name;
+          }
         );
         if (GARDENS_SITE_DATA_USE_APC) {
           gardens_site_data_cache_set($cid, $domains);

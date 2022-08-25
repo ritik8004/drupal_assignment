@@ -8,6 +8,7 @@ blt validate:php
 blt validate:phpcs
 blt validate:yaml
 blt validate:twig
+blt validate:acsf
 
 # Setup site.
 blt setup:settings --define environment=ci --no-interaction --verbose
