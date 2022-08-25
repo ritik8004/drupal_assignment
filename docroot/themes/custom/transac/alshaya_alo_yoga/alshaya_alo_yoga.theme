@@ -4,38 +4,3 @@
  * @file
  * Theme specific functionality.
  */
-
-use Drupal\Core\Form\FormStateInterface;
-
-/**
- * Implements template_preprocess_block().
- */
-function alshaya_ay_preprocess_block(&$variables) {
-  // Custom block type helper classes.
-  if (isset($variables['elements'], $variables['elements']['#id'])
-    && $variables['elements']['#id'] === 'branding') {
-    $variables['site_logo'] = theme_get_setting('logo.url');
-  }
-}
-
-/**
- * Implements hook_form_alter().
- */
-// phpcs:ignore
-function alshaya_ay_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  switch ($form_id) {
-    case "views_exposed_form":
-      // Adding Place holder on Search.
-      if ($form['#id'] == 'views-exposed-form-search-page') {
-        $form['keywords']['#attributes']['placeholder'] = \Drupal::config('alshaya_search.settings')->get('search_field_placeholder');
-      }
-      break;
-  }
-}
-
-/**
- * Implements hook_js_alter().
- */
-function alshaya_ay_js_alter(&$javascript) {
-  unset($javascript['themes/custom/alshaya_white_label/menu.js']);
-}
