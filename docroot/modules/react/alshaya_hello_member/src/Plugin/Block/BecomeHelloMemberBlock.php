@@ -51,8 +51,8 @@ class BecomeHelloMemberBlock extends BlockBase implements ContainerFactoryPlugin
    */
   public static function create(ContainerInterface $container,
                                 array $configuration,
-                                                   $plugin_id,
-                                                   $plugin_definition) {
+                                $plugin_id,
+                                $plugin_definition) {
     return new static($configuration,
       $plugin_id,
       $plugin_definition,
@@ -80,7 +80,7 @@ class BecomeHelloMemberBlock extends BlockBase implements ContainerFactoryPlugin
   protected function blockAccess(AccountInterface $account) {
     // Show block only for guest users if hello member is enabled.
     return AccessResult::allowedIf(
-      $this->helloMemberHelper->isHelloMemberEnabled() && $account->isAnonymous()
+      $account->isAnonymous() && $this->helloMemberHelper->isHelloMemberEnabled()
     );
   }
 
