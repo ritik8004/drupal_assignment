@@ -121,6 +121,9 @@ class AlshayaShopByFilterAttributeCommands extends DrushCommands {
     $configShopByFilter->set('attributes', $attributeName);
     $configShopByFilter->save();
 
+    // Invalidate cache for adding new menu item attribute.
+    _alshaya_performance_queue_cache_tag_for_invalidation('taxonomy_term:acq_product_category');
+
     // Inform that the feature is successfully enabled.
     $this->io()->success(dt('Successfully !action shop by filter attribute feature.', ['!action' => $action]));
   }
