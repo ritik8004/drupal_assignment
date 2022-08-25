@@ -85,10 +85,6 @@ export class StoreFinder extends React.PureComponent {
     });
   }
 
-  showListingView = () => {
-    window.location.href = 'store-finder';
-  }
-
   showMapView = () => {
     this.setState({
       showListingView: false,
@@ -103,7 +99,7 @@ export class StoreFinder extends React.PureComponent {
       const nearbyStores = nearByStores(stores, currentLocation);
       const prevState = this.state;
       this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-      window.location.href = `store-finder/list?location=${place.formatted_address}&latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+      window.location.href = Drupal.url(`store-finder/list?location=${place.formatted_address}&latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`);
     }
   }
 
@@ -121,16 +117,11 @@ export class StoreFinder extends React.PureComponent {
     if (nearbyStores.length > 0) {
       const prevState = this.state;
       this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-      const { currentLanguage } = drupalSettings.path;
-      window.location.href = `/${currentLanguage}/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+      window.location.href = Drupal.url(`store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`);
     }
   }
 
   fail = () => 'Could not obtain location.';
-
-  showAllStores = () => {
-    window.location.href = '/store-finder/';
-  }
 
   listLocation = (value) => {
     if (value[0] !== 'undefined') {
@@ -203,7 +194,7 @@ export class StoreFinder extends React.PureComponent {
                           </div>
                         </div>
                       </div>
-                      <a className="back-to-glossary store-list-back-to-glossary" onClick={this.showAllStores}>{drupalSettings.storeLabels.store_list_label}</a>
+                      <a className="back-to-glossary store-list-back-to-glossary" href={Drupal.url('store-finder')}>{drupalSettings.storeLabels.store_list_label}</a>
                     </div>
                   ) : (
                     <div className="form--inline clearfix">
@@ -227,7 +218,7 @@ export class StoreFinder extends React.PureComponent {
                           </div>
                         </div>
                       </div>
-                      <a className={`list-view-link block-store-finder-form__list-view icon-list${listViewActive}`} onClick={this.showListingView}>{Drupal.t('List view')}</a>
+                      <a className={`list-view-link block-store-finder-form__list-view icon-list${listViewActive}`} href={Drupal.url('store-finder')}>{Drupal.t('List view')}</a>
                       <a className={`map-view-link block-store-finder-form__list-view icon-map${mapViewActive}`} onClick={this.showMapView}>{Drupal.t('Map view')}</a>
                     </div>
                   )}
