@@ -1,0 +1,17 @@
+alshaya_master.home:
+  type: config_object
+  label: 'Alshaya master home page settings'
+  mapping:
+    entity:
+      type: mapping
+      label: 'Entity configuration'
+      mapping:
+        id:
+          type: string
+          label: 'Entity ID'
+        entity_type:
+          type: string
+          label: 'Entity type'
+        view_mode:
+          type: string
+          label: 'Entity view mode'
