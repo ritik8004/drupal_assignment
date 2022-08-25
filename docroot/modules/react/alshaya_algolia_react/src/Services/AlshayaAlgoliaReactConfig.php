@@ -326,7 +326,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         }
         // Checks for alshaya_listing_page_types in the config.
         // Checks if $sub_page_type has value.
-        if (isset($visibility['alshaya_listing_page_types']) && !empty($sub_page_type)) {
+        if (isset($visibility['alshaya_listing_page_types'])
+          && !empty($sub_page_type)
+          && array_key_exists($sub_page_type, $visibility['alshaya_listing_page_types']['page_types'])) {
           // Returns to the beginning if
           // show_on_selected_pages is null or not set to 1.
           // sub_page_type is not available.
