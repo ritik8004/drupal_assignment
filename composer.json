@@ -15,7 +15,6 @@
         "acquia/blt-drupal-vm": "dev-master",
         "acquia/http-hmac-php": "~3.2",
         "acquia/lightning": "^5.2",
-        "acquia/memcache-settings": "^1.2",
         "aws/aws-sdk-php": "^3.138",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
@@ -436,7 +435,6 @@
                 "drupal/core"
             ],
             "file-mapping": {
-                "[web-root]/.htaccess": "docroot/core/assets/scaffold/files/htaccess",
                 "[web-root]/sites/default/default.services.yml": {
                     "mode": "replace",
                     "path": "docroot/core/assets/scaffold/files/default.services.yml",
@@ -447,11 +445,7 @@
                     "path": "docroot/core/assets/scaffold/files/default.settings.php",
                     "overwrite": false
                 }
-            },
-            "excludes": [
-                ".htaccess"
-            ],
-            "gitignore": false
+            }
         },
         "composer-exit-on-patch-failure": true,
         "patches-ignore": {
