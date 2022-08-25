@@ -4,12 +4,11 @@ import MyAccount from './components/my-accounts';
 
 Drupal.behaviors.alshayaHelloMemberMyAccountBehavior = {
   attach: function alshayaHelloMemberMyAccount() {
-    const querySelector = document.querySelector('#my-accounts-hello-member');
-    if (querySelector) {
+    jQuery('#my-accounts-hello-member').once('init-react').each(function () {
       ReactDOM.render(
         <MyAccount />,
-        querySelector,
+        jQuery(this)[0],
       );
-    }
+    });
   },
 };
