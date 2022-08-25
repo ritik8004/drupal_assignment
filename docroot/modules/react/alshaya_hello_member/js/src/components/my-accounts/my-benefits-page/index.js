@@ -4,7 +4,7 @@ import React from 'react';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import { removeFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import Loading from '../../../../../../js/utilities/loading';
@@ -26,7 +26,6 @@ class MyBenefitsPage extends React.Component {
     // Get customer info.
     const params = getHelloMemberCustomerInfo();
     if (!hasValue(params.error)) {
-      showFullScreenLoader();
       const { type } = drupalSettings.helloMemberBenefits;
       params.code = drupalSettings.helloMemberBenefits.code;
       if (type === 'coupon') {
