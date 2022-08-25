@@ -60,12 +60,13 @@ export default class GuestUserLoyalty extends React.Component {
       <div className="loyalty-options-guest">
         <div className="loyalty-option hello_member fadeInUp" style={{ animationDelay }}>
           <div className="loyalty-option-text">
-          {parse(parse(getStringMessage('hello_member_guest_login', {
+            {parse(parse(getStringMessage('hello_member_guest_login', {
               '@login_link': `<a href="${Drupal.url('cart/login')}">${getStringMessage('hm_sign_in')}</a>`,
               '@hm_icon': `<div class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</div>`,
               '@points': helloMemberPoints,
-            })))} <ToolTip enable>{getStringMessage('hello_member_points_tooltip')}</ToolTip></div>
-          
+            })))}
+            <ToolTip enable>{getStringMessage('hello_member_points_tooltip')}</ToolTip>
+          </div>
         </div>
         {isAuraIntegrationEnabled()
           && (
