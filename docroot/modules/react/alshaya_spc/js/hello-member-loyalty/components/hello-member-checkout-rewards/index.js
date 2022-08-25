@@ -1,5 +1,5 @@
 import React from 'react';
-import { getHelloMemberCustomerData, getHelloMemberPointsToEarn } from '../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
+import { getHelloMemberCustomerData, getHelloMemberPointsToEarn } from '../../../../../js/utilities/helloMemberHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import Loading from '../../../../../js/utilities/loading';

@@ -4,12 +4,11 @@ import HelloMemberPDP from './components/pdp';
 
 Drupal.behaviors.alshayaHelloMemberPDPBehavior = {
   attach: function alshayaHelloMemberPDP() {
-    const querySelector = document.querySelector('#hello-member-pdp');
-    if (querySelector) {
+    jQuery('#hello-member-pdp').once('init-react').each(function fn() {
       ReactDOM.render(
         <HelloMemberPDP />,
-        querySelector,
+        jQuery(this)[0],
       );
-    }
+    });
   },
 };

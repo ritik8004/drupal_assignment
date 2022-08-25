@@ -1,10 +1,14 @@
-import { getHelloMemberCustomerData, setHelloMemberLoyaltyCard } from '../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
+import React from 'react';
+import parse from 'html-react-parser';
+import { renderToString } from 'react-dom/server';
+import { callHelloMemberApi, getHelloMemberCustomerData, setHelloMemberLoyaltyCard } from '../../../../../../js/utilities/helloMemberHelper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../../../../js/utilities/error';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
-import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import { removeFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import HelloMemberSvg from '../../../../svg-component/hello-member-svg';
+import AuraHeaderIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
 
 /**
  * This is duplicate of aura utility in
@@ -109,8 +113,24 @@ function applyHelloMemberLoyalty(cartId) {
   }
 }
 
+function getLoyaltySelectText(optionName, helloMemberPoints) {
+  if (optionName === 'hello_member') {
+    return parse(parse(Drupal.t('@hm_icon Member earns @points points', {
+      '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
+      '@points': helloMemberPoints,
+    }, { context: 'hello_member' })));
+  }
+  if (optionName === 'aura') {
+    return parse(parse(Drupal.t('Earn/Redeem @aura_icon Points', {
+      '@aura_icon': `<span class="hello-member-aura">${renderToString(<AuraHeaderIcon />)}</span>`,
+    }, { context: 'hello_member' })));
+  }
+  return null;
+}
+
 export {
   processCheckoutCart,
   getAuraCustomerPoints,
   applyHelloMemberLoyalty,
+  getLoyaltySelectText,
 };
