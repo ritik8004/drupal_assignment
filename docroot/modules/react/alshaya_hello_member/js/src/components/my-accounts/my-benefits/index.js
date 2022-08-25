@@ -3,7 +3,6 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
 import Loading from '../../../../../../js/utilities/loading';
 import logger from '../../../../../../js/utilities/logger';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import MyOffersAndVouchers from './my-offers-vouchers';
 import HappyBirthdayPopup from '../happy-birthday-popup';
 
@@ -20,7 +19,6 @@ class MyBenefits extends React.Component {
     // Get customer info.
     const params = getHelloMemberCustomerInfo();
     if (!hasValue(params.error)) {
-      showFullScreenLoader();
       // Get Coupon and Offer List.
       Promise.all([
         await callHelloMemberApi('helloMemberCouponsList', 'GET', params),
@@ -58,14 +56,12 @@ class MyBenefits extends React.Component {
           myBenefitsList,
           wait: true,
         });
-        removeFullScreenLoader();
       });
     } else {
       // Set wait to true, and remove loader.
       this.setState({
         wait: true,
       });
-      removeFullScreenLoader();
     }
   }
 

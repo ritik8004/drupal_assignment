@@ -4,12 +4,11 @@ import MyMembership from './components/my-accounts/my-membership';
 
 Drupal.behaviors.alshayaHelloMemberMyMembershipBehavior = {
   attach: function alshayaHelloMemberMyMembership() {
-    const querySelector = document.querySelector('#my-membership-info');
-    if (querySelector) {
+    jQuery('#my-membership-info').once('init-react').each(function fn() {
       ReactDOM.render(
         <MyMembership />,
-        querySelector,
+        jQuery(this)[0],
       );
-    }
+    });
   },
 };
