@@ -39,3 +39,4 @@ alshaya_hello_member_become_hello_member:
     dist/become_hello_member.bundle.js: {}
   dependencies:
     - alshaya_react/react
+    - core/jquery.once
