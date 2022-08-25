@@ -77,7 +77,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
   /**
    * Sennd OTP to mobile number from shipping address.
    */
-  sendOtpToShippingMobileNumber = () => {
+  sendOtpToShippingMobileNumber = (action = 'otp sent') => {
     // Get Cart Id.
     const cartId = window.commerceBackend.getCartId();
 
@@ -95,6 +95,15 @@ class PaymentMethodCodMobileVerification extends React.Component {
         if (hasValue(response.data.error) || !response.data) {
           logger.error('Error while sending otp for COD payment mobile verification. Response: @response', {
             '@response': JSON.stringify(response.data),
+          });
+        }
+
+        // Trigger GTM event for otp sent.
+        if (typeof Drupal.alshayaSeoGtmPushCodMobileVerification !== 'undefined') {
+          Drupal.alshayaSeoGtmPushCodMobileVerification({
+            eventCategory: 'cod',
+            eventAction: action,
+            eventLabel: '',
           });
         }
 
@@ -168,6 +177,15 @@ class PaymentMethodCodMobileVerification extends React.Component {
     callMagentoApi(getApiEndpoint('codMobileVerificationValidateOtp', params), 'GET')
       .then((response) => {
         if (hasValue(response) && !response.data) {
+          // Trigger gtm event cod_otp_verification with action verification.
+          if (typeof Drupal.alshayaSeoGtmPushCodMobileVerification !== 'undefined') {
+            Drupal.alshayaSeoGtmPushCodMobileVerification({
+              eventCategory: 'cod',
+              eventAction: 'verification',
+              eventLabel: 'fail',
+            });
+          }
+
           // Set to 3 for invalid otp and show invalid otp message.
           this.setState({
             otpVerified: 3,
@@ -180,6 +198,16 @@ class PaymentMethodCodMobileVerification extends React.Component {
           logger.error('Error while validating otp for COD payment mobile verification. Response: @response', {
             '@response': JSON.stringify(response.data),
           });
+
+          // Trigger gtm event cod_otp_verification with category verification error.
+          if (typeof Drupal.alshayaSeoGtmPushCodMobileVerification !== 'undefined') {
+            Drupal.alshayaSeoGtmPushCodMobileVerification({
+              eventCategory: 'verification error',
+              eventAction: 'cod_otp',
+              eventLabel: JSON.stringify(response.data),
+            });
+          }
+
           // Set to 4 to show default error message.
           this.setState({
             otpVerified: 4,
@@ -195,6 +223,15 @@ class PaymentMethodCodMobileVerification extends React.Component {
             completePurchaseCTA.classList.remove('in-active');
           }
 
+          // Trigger gtm event cod_otp_verification with action verification.
+          if (typeof Drupal.alshayaSeoGtmPushCodMobileVerification !== 'undefined') {
+            Drupal.alshayaSeoGtmPushCodMobileVerification({
+              eventCategory: 'cod',
+              eventAction: 'verification',
+              eventLabel: 'success',
+            });
+          }
+
           this.setState({
             otpVerified: 1,
           });
@@ -205,6 +242,16 @@ class PaymentMethodCodMobileVerification extends React.Component {
           '@message': response.error.message,
           '@errorCode': response.error.error_code,
         });
+
+        // Trigger gtm event cod_otp_verification with category verification error.
+        if (typeof Drupal.alshayaSeoGtmPushCodMobileVerification !== 'undefined') {
+          Drupal.alshayaSeoGtmPushCodMobileVerification({
+            eventCategory: 'verification error',
+            eventAction: 'cod_otp',
+            eventLabel: JSON.stringify(response.error.message),
+          });
+        }
+
         // Set to 4 to show default error message.
         this.setState({
           otpVerified: 4,
@@ -212,6 +259,13 @@ class PaymentMethodCodMobileVerification extends React.Component {
       });
 
     return true;
+  };
+
+  /**
+   * Handle resend otp for mobile verification.
+   */
+  handleResendOtp = () => {
+    this.sendOtpToShippingMobileNumber('otp resent');
   };
 
   render() {
@@ -262,7 +316,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
               <OtpTimer
                 seconds={60}
                 minutes={0}
-                resend={this.sendOtpToShippingMobileNumber}
+                resend={this.handleResendOtp}
                 text=" "
                 ButtonText={Drupal.t('Resend', {}, { context: 'cod_mobile_verification' })}
               />
