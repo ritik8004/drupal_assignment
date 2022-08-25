@@ -103,8 +103,7 @@ export class StoreFinderList extends React.PureComponent {
     const nearbyStores = nearByStores(stores, currentLocation);
     const prevState = this.state;
     this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-    const { currentLanguage } = drupalSettings.path;
-    window.location.href = `/${currentLanguage}/store-finder/list?location=${place.formatted_address}&latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+    window.location.href = Drupal.url(`store-finder/list?location=${place.formatted_address}&latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`);
   }
 
   findNearMe = () => {
@@ -121,15 +120,11 @@ export class StoreFinderList extends React.PureComponent {
     if (nearbyStores.length > 0) {
       const prevState = this.state;
       this.setState({ ...prevState, stores: nearbyStores, count: nearbyStores.length });
-      window.location.href = `/store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`;
+      window.location.href = Drupal.url(`store-finder/list?latitude=${currentLocation.lat}&longitude=${currentLocation.lng}`);
     }
   }
 
   fail = () => 'Could not obtain location.'
-
-  showAllStores = () => {
-    window.location.href = '/store-finder/';
-  }
 
   toggleOpenClass = (storeId) => {
     const element = document.getElementById(`hours--label-${storeId}`);
@@ -196,7 +191,7 @@ export class StoreFinderList extends React.PureComponent {
                       </div>
                     </div>
                   </div>
-                  <a className="back-to-glossary store-list-back-to-glossary" onClick={this.showAllStores}>{drupalSettings.storeLabels.store_list_label}</a>
+                  <a className="back-to-glossary store-list-back-to-glossary" href={Drupal.url('store-finder')}>{drupalSettings.storeLabels.store_list_label}</a>
                 </div>
               </div>
               {stores.length > 0
@@ -210,7 +205,7 @@ export class StoreFinderList extends React.PureComponent {
                         <div className="list-view-locator">
                           <div className="store-row--counter">{(index + 1)}</div>
                           <div className="mobile-only-back-to-glossary store-back-to-glossary">
-                            <a href="/store-finder">Back</a>
+                            <a href={Drupal.url('store-finder')}>Back</a>
                           </div>
                           <a className="row-title" onClick={() => this.showSpecificPlace(store.id)}>
                             <span className="row-title-store-name">{store.store_name}</span>
