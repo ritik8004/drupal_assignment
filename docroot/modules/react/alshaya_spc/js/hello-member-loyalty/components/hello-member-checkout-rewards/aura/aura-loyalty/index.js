@@ -1,6 +1,6 @@
 import React from 'react';
 import Collapsible from 'react-collapsible';
-import { getLoyaltySelectText } from '../../../../../../../alshaya_hello_member/js/src/utilities';
+import { getLoyaltySelectText } from '../../utilities/loyalty_helper';
 import AuraLoyaltyForm from '../aura-loyalty-form';
 
 /**
