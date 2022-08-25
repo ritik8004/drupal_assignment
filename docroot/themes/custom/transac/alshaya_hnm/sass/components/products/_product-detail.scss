@@ -35,18 +35,18 @@
       .pay-emi-lbl {
         @include icon(chevrondown, after) {
           position: absolute;
-          #{$right}: rem(5);
+          #{$right}: rem(4);
           font-size: rem(7);
           width: rem(12);
-          top: 58%;
-          transform: translateY(-50%);
+          top: 38%;
+          transform: rotate(180deg);
           color: $pdp_bnpl_hide_lbl_text;
         }
 
         &.ui-state-hide::after {
-          transform: rotate(180deg);
-          #{$top}: 38%;
-          #{$right}: rem(4);
+          transform: translateY(-50%);
+          top: 58%;
+          #{$right}: rem(5);
         }
       }
     }
