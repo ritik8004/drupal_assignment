@@ -1,8 +1,7 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getPriceToHelloMemberPoint, getHelloMemberDictionaryData } from '../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../js/utilities/logger';
-import { getHelloMemberDictionaryData } from '../../hello_member_api_helper';
-import { getPriceToHelloMemberPoint } from '../../utilities';
 
 class HelloMemberPDP extends React.Component {
   constructor(props) {
