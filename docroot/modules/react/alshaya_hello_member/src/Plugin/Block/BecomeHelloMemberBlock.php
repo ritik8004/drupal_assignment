@@ -65,12 +65,12 @@ class BecomeHelloMemberBlock extends BlockBase implements ContainerFactoryPlugin
    */
   public function build() {
     return [
-      '#theme' => 'become_hello_member_block',
       '#attached' => [
         'library' => [
           'alshaya_hello_member/alshaya_hello_member_become_hello_member',
         ],
       ],
+      '#markup' => '<div id="hello-member-become-hello-member-block"></div>',
     ];
   }
 
