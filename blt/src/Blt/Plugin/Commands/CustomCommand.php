@@ -462,11 +462,18 @@ class CustomCommand extends BltTasks {
     $files = explode("\n", $file_list);
     // Filtering PHP files.
     $files = array_filter($files, fn($value) =>
-      str_ends_with($value, '.php')
-      || str_ends_with($value, '.module')
-      || str_ends_with($value, '.install')
-      || str_ends_with($value, '.inc')
-      || str_ends_with($value, '.theme')
+      (
+        // Ignore files in following directories.
+        !str_starts_with($value, 'factory-hooks')
+        && !str_starts_with($value, 'hooks')
+      ) && (
+        // Only take php files for validation.
+        str_ends_with($value, '.php')
+        || str_ends_with($value, '.module')
+        || str_ends_with($value, '.install')
+        || str_ends_with($value, '.inc')
+        || str_ends_with($value, '.theme')
+      )
     );
     if ($files) {
       $output = $this->_exec('cd ' . $this->getConfigValue('repo.root') . '; vendor/bin/rector process ' . implode(' ', $files) . ' --dry-run');
