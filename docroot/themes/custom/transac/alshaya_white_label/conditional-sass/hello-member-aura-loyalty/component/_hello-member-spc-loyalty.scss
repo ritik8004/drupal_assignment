@@ -200,7 +200,7 @@
     text-align: center;
 
     @include breakpoint($only-tablet) {
-      width: 40% !important;
+      width: 50% !important;
     }
 
     @include breakpoint($only-mobile) {
