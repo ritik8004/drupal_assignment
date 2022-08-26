@@ -8,7 +8,7 @@ import AuraLoyaltyForm from '../aura-loyalty-form';
  * On click of this component, aura loyalty form div will open.
  */
 const auraLoyaltyHeader = (optionName, helloMemberPoints) => (
-  <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>
+  <div className="loyalty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>
 );
 
 const AuraLoyalty = ({
