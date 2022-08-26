@@ -381,19 +381,26 @@ class AlshayaGtmManager {
 
     $skuId = $this->skuManager->getSkuForNode($product);
     $product_terms = $this->fetchProductCategories($product);
-    $department_attributes = $this->fetchDepartmentAttributes($product_terms);
+    $department_attributes = [];
+    // Fetch department attributes only if product terms exists.
+    if ($product_terms) {
+      $department_attributes = $this->fetchDepartmentAttributes($product_terms);
+    }
     $skuAttributes = $this->fetchSkuAtttributes($skuId, $child);
 
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
-    $attributes['gtm-department-name'] = array_key_exists('departmentName', $department_attributes)
-      ? $department_attributes['departmentName']
-      : '';
-    $attributes['gtm-department-id'] = array_key_exists('departmentId', $department_attributes)
-      ? $department_attributes['departmentId']
-      : '';
+    // Proceed only if we have some data in department attributes.
+    if ($department_attributes) {
+      $attributes['gtm-department-name'] = array_key_exists('departmentName', $department_attributes)
+        ? $department_attributes['departmentName']
+        : '';
+      $attributes['gtm-department-id'] = array_key_exists('departmentId', $department_attributes)
+        ? $department_attributes['departmentId']
+        : '';
+    }
 
     $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
     $attributes = array_merge($attributes, $skuAttributes);
