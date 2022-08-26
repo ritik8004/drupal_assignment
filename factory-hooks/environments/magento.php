@@ -753,7 +753,7 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
-  'hm_uat_new' => [
+  'hm_uat_ded5' => [
     'url' => 'https://hm-uat-ded5.store.alshaya.com',
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 5],
