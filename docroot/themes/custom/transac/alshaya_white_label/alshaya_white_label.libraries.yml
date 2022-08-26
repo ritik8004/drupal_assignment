@@ -799,6 +799,11 @@ inter-country-transfer:
     theme:
       css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css: {}
 
+megamenu-fullwidth-layout:
+  css:
+    theme:
+      css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css: {}
+
 hello-member-benefit-landing-page:
   css:
     theme:
@@ -853,3 +858,8 @@ hello-member-become-member:
   css:
     theme:
       css/conditional-sass/hello-member-become-member/hello-member-become-member.ltr.css: {}
+
+megamenu-shop-by-filter:
+  css:
+    theme: 
+      css/conditional-sass/megamenu-shop-by-filter/megamenu-shop-by-filter.ltr.css: {}

@@ -1,0 +1,10 @@
+alshaya_shopby_filter_attribute.settings:
+  type: config_object
+  label: 'Alshaya shop by filter attribute settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Enable / disable attribute navigations.'
+    attributes:
+      type: string
+      label: 'Filter attribute (Algolia Facets) name of which navigation to display.'

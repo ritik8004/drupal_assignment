@@ -595,6 +595,7 @@ $mm_l1_link_hover: $marine-blue;
 $mm_l1_link_hover_border_to_fill_space: $white-five;
 $mm_l1_link_active_border: $marine-blue;
 $mm_l2_link: $marine-blue;
+$mm_l2_link_desktop: $black;
 $mm_l2_link_hover: $white-five;
 $mm_l2_p: $brownish-grey;
 $mm_l3_link: $grey-ash;
@@ -2360,3 +2361,9 @@ $hello-member-promo-guest-pop-title: $_spc-discount-text;
 
 // Exclusive Coupon Code
 $exclusive-promo-message-text: $peacock-blue;
+
+// Shop by filter menu
+$shop-by-filter-attribute-item: $black;
+$shop-by-filter-attribute-item-bg: $white-smoke-light;
+$shop-by-filter-attribute-item-hover: $white-five;
+$shop-by-filter-attribute-item-bg-hover: $black;
