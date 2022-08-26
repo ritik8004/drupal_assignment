@@ -76,6 +76,10 @@
   }
 
   .loyalty-options-guest {
+    .aura-earned-points {
+      padding-#{$left}: rem(16);
+    }
+
     .loyalty-option {
       padding-#{$left}: rem(20);
 
@@ -118,6 +122,10 @@
           }
 
           .hello-member-svg {
+            ~ a {
+              margin-#{$right}: rem(2);
+            }
+
             @include breakpoint($only-mobile) {
               display: inline-block;
             }
@@ -127,7 +135,8 @@
     }
   }
 
-  .loyalty-options-registered {
+  .loyalty-options-registered,
+  .loyalty-options-guest {
     .aura-earned-points {
       display: flex;
       align-items: center;
@@ -168,6 +177,7 @@
         bottom: rem(32);
         #{$left}: 50%;
         transform: translateX(-50%);
+        z-index: 1;
 
         html[lang=ar] & {
           transform: translateX(50%);

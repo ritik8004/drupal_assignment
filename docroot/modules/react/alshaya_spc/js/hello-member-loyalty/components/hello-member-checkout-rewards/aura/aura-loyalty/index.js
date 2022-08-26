@@ -1,6 +1,6 @@
 import React from 'react';
 import Collapsible from 'react-collapsible';
-import { getLoyaltySelectText } from '../../../../../../../alshaya_hello_member/js/src/utilities';
+import { getLoyaltySelectText } from '../../utilities/loyalty_helper';
 import AuraLoyaltyForm from '../aura-loyalty-form';
 
 /**
@@ -16,11 +16,15 @@ const AuraLoyalty = ({
   helloMemberPoints,
   cart,
   open,
+  showAuraPoints,
+  hideAuraPoints,
 }) => (
   <>
     <Collapsible
       trigger={auraLoyaltyHeader(optionName, helloMemberPoints)}
       open={open}
+      onOpening={() => showAuraPoints()}
+      onClosing={() => hideAuraPoints()}
     >
       <div className="spc-aura-link-card-form active">
         <AuraLoyaltyForm

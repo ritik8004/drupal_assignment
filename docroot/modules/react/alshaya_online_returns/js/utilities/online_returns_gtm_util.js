@@ -10,10 +10,11 @@ import { getDeliveryAddress, getPaymentDetails, getReturnReasons } from './retur
  *   An object containing GTM info about the order.
  */
 function getOrderGtmInfo() {
-  if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.orderDetails)
-    && hasValue(drupalSettings.returnInfo.orderDetails['#gtm_info'])) {
-    return drupalSettings.returnInfo.orderDetails['#gtm_info'];
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.returnInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'])) {
+    return drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'];
   }
 
   // For order detail page, get the data from onlineReturns drupal settings.
@@ -168,9 +169,9 @@ function getPreparedOrderGtm(eventType, returnInfo) {
 
     // If returned items is empty then get it from filtered from onlineReturns
     // drupalSettings.
-    if (!hasValue(returnedItems.length) && hasValue(drupalSettings.onlineReturns)
-      && hasValue(drupalSettings.onlineReturns.products)) {
-      drupalSettings.onlineReturns.products.forEach((item) => {
+    if (!hasValue(returnedItems.length) && hasValue(drupalSettings.order)
+      && hasValue(drupalSettings.order.products)) {
+      drupalSettings.order.products.forEach((item) => {
         const returnData = returnInfo.items.find(
           (returnItem) => item.item_id === returnItem.order_item_id,
         );

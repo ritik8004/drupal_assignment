@@ -20,6 +20,8 @@ window.commerceBackend = window.commerceBackend || {};
     configurables: {},
     // This will prevent multiple requests to fetch same product data.
     productDataFromBackend: {},
+    recentOrdersData: {},
+    orderDetailsData: {},
   };
 
   /**
@@ -1073,10 +1075,13 @@ window.commerceBackend = window.commerceBackend || {};
    * @return {string}
    *   The media item url.
    */
-   window.commerceBackend.getTeaserImage = function (product) {
-     const galleryProduct = getSkuForGallery(product);
-     return galleryProduct.media_teaser;
-   };
+  window.commerceBackend.getTeaserImage = function (product) {
+    if (!Drupal.hasValue(product)) {
+      return null;
+    }
+    const galleryProduct = getSkuForGallery(product);
+    return galleryProduct.media_teaser;
+  };
 
   /**
    * Get the prices from product entity.

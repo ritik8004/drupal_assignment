@@ -825,7 +825,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       $entity,
       $fields,
     ]);
-    return [array_merge(['type' => 'block'], $data['block'])];
+    return [array_merge(['type' => 'block'], $data['block'] ?? [])];
   }
 
   /**

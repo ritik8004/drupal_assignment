@@ -1,5 +1,5 @@
 import React from 'react';
-import { getHelloMemberCustomerData, getHelloMemberPointsToEarn } from '../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
+import { getHelloMemberCustomerData, getHelloMemberPointsToEarn } from '../../../../../js/utilities/helloMemberHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import Loading from '../../../../../js/utilities/loading';
@@ -7,6 +7,7 @@ import SectionTitle from '../../../utilities/section-title';
 import GuestUserLoyalty from './guest-user-loyalty';
 import RegisteredUserLoyalty from './registered-user-loyalty';
 import logger from '../../../../../js/utilities/logger';
+import getStringMessage from '../../../utilities/strings';
 
 class HelloMemberLoyaltyOptions extends React.Component {
   constructor(props) {
@@ -86,13 +87,9 @@ class HelloMemberLoyaltyOptions extends React.Component {
     const { wait, hmPoints, identifierNo } = this.state;
     const { animationDelay, cart, refreshCart } = this.props;
 
-    if (!hasValue(hmPoints)) {
-      return null;
-    }
-
     if (wait) {
       return (
-        <div className="spc-hello-member-checkout-rewards-block fadeInUp">
+        <div className="spc-hello-member-checkout-loading fadeInUp">
           <Loading />
         </div>
       );
@@ -100,7 +97,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
 
     return (
       <div className="spc-hello-member-checkout-rewards-block fadeInUp">
-        <SectionTitle animationDelayValue={animationDelay}>{Drupal.t('Loyalty', {}, { context: 'hello_member' })}</SectionTitle>
+        <SectionTitle animationDelayValue={animationDelay}>{getStringMessage('loyalty_title')}</SectionTitle>
         {!isUserAuthenticated()
           && (
           <GuestUserLoyalty

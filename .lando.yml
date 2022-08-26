@@ -137,7 +137,6 @@ tooling:
 # Content of these directories are usually not required by dev.
 excludes:
   - docroot/sites/g/files
-  - docroot/middleware/var
   - docroot/appointment/var
   - files-private
 

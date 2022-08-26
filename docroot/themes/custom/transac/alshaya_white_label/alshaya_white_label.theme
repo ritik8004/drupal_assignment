@@ -17,6 +17,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
+use Drupal\Core\Site\Settings;
 use Drupal\file\Entity\File;
 
 /**
@@ -426,6 +427,14 @@ function alshaya_white_label_preprocess_block(&$variables) {
     elseif ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_DYNAMIC_LAYOUT) {
       $variables['attributes']['class'][] = 'megamenu-dynamic-layout';
       $variables['#attached']['library'][] = 'alshaya_white_label/megamenu_dynamic_layout';
+    }
+
+    // Add a class and attach full width library, if `show_menu_full_width`
+    // config is set to true.
+    $mega_menu_full_width = \Drupal::config('alshaya_main_menu.settings')->get('show_menu_full_width');
+    if ($mega_menu_full_width) {
+      $variables['attributes']['class'][] = 'megamenu-fullwidth-layout';
+      $variables['#attached']['library'][] = 'alshaya_white_label/megamenu-fullwidth-layout';
     }
   }
 
@@ -915,11 +924,32 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
  */
 function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, array $variables) {
   $node = $variables['elements']['#node'];
+  $front_page_status = \Drupal::service('path.matcher')->isFrontPage();
 
-  // Check if the current node is front page.
   if ($node instanceof Node) {
-    if (\Drupal::service('path.matcher')->isFrontPage() && $node->getType() == 'advanced_page') {
+    // Log if debug is enabled and before theme suggestions are altered.
+    if (Settings::get('is_front_page_debug_enabled', FALSE) && $node->getType() == 'advanced_page') {
+      \Drupal::logger('alshaya_white_label')->notice('Theme suggestions before altering on Advanced page: \'@suggestions\' for node ID: \'@nid\' on view mode: \'@view_mode\'. Front page status: @front_page.', [
+        '@suggestions' => implode(', ', $suggestions),
+        '@nid' => $node->id(),
+        '@view_mode' => $variables['elements']['#view_mode'],
+        '@front_page' => $front_page_status ? 'TRUE' : 'FALSE',
+      ]);
+    }
+
+    // Check if the current node is front page.
+    if ($front_page_status && $node->getType() == 'advanced_page') {
       $suggestions[] = 'node__advanced_page_front';
+
+      // Log if debug is enabled and it's a front page.
+      if (Settings::get('is_front_page_debug_enabled', FALSE)) {
+        \Drupal::logger('alshaya_white_label')->notice('Theme suggestions after altering on the Front page: \'@suggestions\' for node ID: \'@nid\' on view mode: \'@view_mode\'. Front page status: @front_page.', [
+          '@suggestions' => implode(', ', $suggestions),
+          '@nid' => $node->id(),
+          '@view_mode' => $variables['elements']['#view_mode'],
+          '@front_page' => $front_page_status ? 'TRUE' : 'FALSE',
+        ]);
+      }
     }
     elseif ($variables['elements']['#view_mode'] == 'full'
       && in_array($node->getType(), ['rcs_product', 'acq_product'])) {
@@ -929,6 +959,16 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
       $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
       $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
       $pdp_plugin->getTemplateName($suggestions, $node->getType());
+    }
+
+    // Log if debug is enabled and after theme suggestions are altered.
+    if (Settings::get('is_front_page_debug_enabled', FALSE) && $node->getType() == 'advanced_page') {
+      \Drupal::logger('alshaya_white_label')->notice('Theme suggestions after altering on Advanced page: \'@suggestions\' for node ID: \'@nid\' on view mode: \'@view_mode\'. Front page status: @front_page.', [
+        '@suggestions' => implode(', ', $suggestions),
+        '@nid' => $node->id(),
+        '@view_mode' => $variables['elements']['#view_mode'],
+        '@front_page' => $front_page_status ? 'TRUE' : 'FALSE',
+      ]);
     }
   }
 }
@@ -1180,7 +1220,8 @@ function alshaya_white_label_preprocess_mimemail_message(&$variables) {
   if (isset($menus)) {
     foreach ($menus as $menu) {
       if (isset($default_tid)) {
-        $selected_categories = array_filter($menu->link->getOptions()['categories']);
+        $menu_categories = $menu->link->getOptions()['categories'] ?? [];
+        $selected_categories = array_filter($menu_categories);
         foreach ($selected_categories as $selected_category) {
           if ($selected_category == $default_tid) {
             $title = $menu->link->getTitle();

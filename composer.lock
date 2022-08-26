@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df14a6988e2b683e5ae9e39215353fc8",
+    "content-hash": "1905618ea5dee98f48e734e352865e4a",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -497,138 +497,6 @@
                 "source": "https://github.com/acquia/http-hmac-php/tree/3.4.0"
             },
             "time": "2018-03-19T19:13:26+00:00"
-        },
-        {
-            "name": "acquia/lightning",
-            "version": "5.2.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/acquia/lightning.git",
-                "reference": "c5de34ed78132ba3beb04099e1ecd1c81e4949be"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/acquia/lightning/zipball/c5de34ed78132ba3beb04099e1ecd1c81e4949be",
-                "reference": "c5de34ed78132ba3beb04099e1ecd1c81e4949be",
-                "shasum": ""
-            },
-            "require": {
-                "composer/composer": "^1.10.22 || ^2.0.13",
-                "cweagans/composer-patches": "^1.7",
-                "drupal/acquia_connector": "^1.24-rc3 || ^2.0-rc1 || ^3",
-                "drupal/core": "^9.2.6",
-                "drupal/inline_entity_form": "^1.0-rc7",
-                "drupal/lightning_api": "^4.6",
-                "drupal/lightning_core": "^5.8",
-                "drupal/lightning_layout": "^2.10",
-                "drupal/lightning_media": "^4.6",
-                "drupal/lightning_workflow": "^3.16",
-                "drupal/page_manager": "^4.0-beta6",
-                "drupal/panelizer": "^5.0-beta3",
-                "drupal/pendo": "^1@alpha",
-                "drupal/profile_switcher": "^1.0-alpha5",
-                "drupal/search_api": "^1.17",
-                "ext-dom": "*"
-            },
-            "require-dev": {
-                "composer/installers": "^1.9",
-                "drupal/core-composer-scaffold": "^9",
-                "drupal/core-dev": "^9",
-                "drupal/devel": "^4.1",
-                "drush/drush": ">=9.7",
-                "phpspec/prophecy-phpunit": "^2",
-                "weitzman/drupal-test-traits": "dev-master"
-            },
-            "type": "drupal-profile",
-            "extra": {
-                "branch-alias": {
-                    "dev-8.x-4.x": "4.x-dev"
-                },
-                "composer-exit-on-patch-failure": "true",
-                "drupal-scaffold": {
-                    "file-mapping": {
-                        "[project-root]/.editorconfig": false,
-                        "[project-root]/.gitattributes": false,
-                        "[web-root]/.csslintrc": false,
-                        "[web-root]/INSTALL.txt": false,
-                        "[web-root]/example.gitignore": false,
-                        "[web-root]/modules/README.txt": false,
-                        "[web-root]/profiles/README.txt": false,
-                        "[web-root]/robots.txt": false,
-                        "[web-root]/sites/README.txt": false,
-                        "[web-root]/themes/README.txt": false,
-                        "[web-root]/web.config": false
-                    },
-                    "locations": {
-                        "web-root": "docroot/"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9 || ^10"
-                    }
-                },
-                "enable-patching": true,
-                "installer-paths": {
-                    "docroot/core": [
-                        "type:drupal-core"
-                    ],
-                    "docroot/libraries/{$name}": [
-                        "type:drupal-library",
-                        "type:bower-asset",
-                        "type:npm-asset"
-                    ],
-                    "docroot/modules/contrib/{$name}": [
-                        "type:drupal-module"
-                    ],
-                    "docroot/profiles/contrib/{$name}": [
-                        "type:drupal-profile"
-                    ],
-                    "docroot/themes/contrib/{$name}": [
-                        "type:drupal-theme"
-                    ]
-                },
-                "installer-types": [
-                    "bower-asset",
-                    "npm-asset"
-                ],
-                "patchLevel": {
-                    "drupal/core": "-p2"
-                },
-                "patches": {
-                    "drupal/core": {
-                        "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch",
-                        "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2021-05-20/3143958-14-subprofile-support-9.2.x.patch",
-                        "REMOVE: 2031261 - Fix SQLite variable limit": "https://www.drupal.org/files/issues/2021-02-07/2031261-137.patch",
-                        "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-21/3143958-12-change-profile-config-sync-9.1.x.patch"
-                    }
-                },
-                "patches-ignore": {
-                    "drupal/lightning_core": {
-                        "drupal/core": {
-                            "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch"
-                        }
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Acquia\\Lightning\\": "src"
-                },
-                "classmap": [
-                    "src/Composer/ConfigureLegacyProject.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "description": "The best of Drupal, curated by Acquia",
-            "support": {
-                "source": "https://github.com/acquia/lightning/tree/5.2.4"
-            },
-            "abandoned": true,
-            "time": "2021-11-02T14:10:40+00:00"
         },
         {
             "name": "algolia/algoliasearch-client-php",
@@ -1555,7 +1423,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -4014,14 +3882,6 @@
             ],
             "authors": [
                 {
-                    "name": "Dane Powell",
-                    "homepage": "https://www.drupal.org/user/339326"
-                },
-                {
-                    "name": "Mark Trapp",
-                    "homepage": "https://www.drupal.org/user/212019"
-                },
-                {
                     "name": "acquia",
                     "homepage": "https://www.drupal.org/user/1231722"
                 },
@@ -4030,8 +3890,8 @@
                     "homepage": "https://www.drupal.org/user/128652"
                 },
                 {
-                    "name": "grasmash",
-                    "homepage": "https://www.drupal.org/user/455714"
+                    "name": "Dane Powell",
+                    "homepage": "https://www.drupal.org/user/339326"
                 },
                 {
                     "name": "irek02",
@@ -4046,8 +3906,8 @@
                     "homepage": "https://www.drupal.org/user/822402"
                 },
                 {
-                    "name": "nerdstein",
-                    "homepage": "https://www.drupal.org/user/1557710"
+                    "name": "Mark Trapp",
+                    "homepage": "https://www.drupal.org/user/212019"
                 },
                 {
                     "name": "vlad.pavlovic",
@@ -4219,6 +4079,10 @@
                 {
                     "name": "grasmash",
                     "homepage": "https://www.drupal.org/user/455714"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "phenaproxima",
@@ -4580,12 +4444,12 @@
             ],
             "authors": [
                 {
-                    "name": "Centarro",
-                    "homepage": "https://www.drupal.org/user/3661446"
-                },
-                {
                     "name": "bojanz",
                     "homepage": "https://www.drupal.org/user/86106"
+                },
+                {
+                    "name": "Centarro",
+                    "homepage": "https://www.drupal.org/user/3661446"
                 },
                 {
                     "name": "dww",
@@ -4672,12 +4536,12 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "fethi.krout",
-                    "homepage": "https://www.drupal.org/user/3206765"
-                },
-                {
                     "name": "matio89",
                     "homepage": "https://www.drupal.org/user/2320090"
+                },
+                {
+                    "name": "Musa.thomas",
+                    "homepage": "https://www.drupal.org/user/1213824"
                 },
                 {
                     "name": "romainj",
@@ -5368,12 +5232,12 @@
             ],
             "authors": [
                 {
-                    "name": "Berdir",
-                    "homepage": "https://www.drupal.org/user/214652"
-                },
-                {
                     "name": "acbramley",
                     "homepage": "https://www.drupal.org/user/1036766"
+                },
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
                     "name": "fenstrat",
@@ -5435,10 +5299,6 @@
             ],
             "authors": [
                 {
-                    "name": "RobLoach",
-                    "homepage": "https://www.drupal.org/user/61114"
-                },
-                {
                     "name": "elachlan",
                     "homepage": "https://www.drupal.org/user/1021502"
                 },
@@ -5453,6 +5313,10 @@
                 {
                     "name": "podarok",
                     "homepage": "https://www.drupal.org/user/116002"
+                },
+                {
+                    "name": "RobLoach",
+                    "homepage": "https://www.drupal.org/user/61114"
                 },
                 {
                     "name": "soxofaan",
@@ -5557,10 +5421,6 @@
             ],
             "authors": [
                 {
-                    "name": "Webbeh",
-                    "homepage": "https://www.drupal.org/user/1160608"
-                },
-                {
                     "name": "cobenash",
                     "homepage": "https://www.drupal.org/user/2138470"
                 },
@@ -5571,6 +5431,10 @@
                 {
                     "name": "dinarcon",
                     "homepage": "https://www.drupal.org/user/909522"
+                },
+                {
+                    "name": "Webbeh",
+                    "homepage": "https://www.drupal.org/user/1160608"
                 }
             ],
             "description": "This plugin adds Font Size and Font Family dropdowns that applies as inline element style.",
@@ -5622,12 +5486,12 @@
             ],
             "authors": [
                 {
-                    "name": "Jelle_S",
-                    "homepage": "https://www.drupal.org/user/829198"
-                },
-                {
                     "name": "attiks",
                     "homepage": "https://www.drupal.org/user/105002"
+                },
+                {
+                    "name": "Jelle_S",
+                    "homepage": "https://www.drupal.org/user/829198"
                 },
                 {
                     "name": "nikunjkotecha",
@@ -6129,16 +5993,16 @@
             ],
             "authors": [
                 {
+                    "name": "andypost",
+                    "homepage": "https://www.drupal.org/user/118908"
+                },
+                {
                     "name": "Arla",
                     "homepage": "https://www.drupal.org/user/226712"
                 },
                 {
                     "name": "Berdir",
                     "homepage": "https://www.drupal.org/user/214652"
-                },
-                {
-                    "name": "andypost",
-                    "homepage": "https://www.drupal.org/user/118908"
                 },
                 {
                     "name": "jibran",
@@ -6542,7 +6406,7 @@
                     "datestamp": "1627275085",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -6744,16 +6608,16 @@
             ],
             "authors": [
                 {
-                    "name": "EclipseGc",
-                    "homepage": "https://www.drupal.org/user/61203"
-                },
-                {
                     "name": "damiankloip",
                     "homepage": "https://www.drupal.org/user/1037976"
                 },
                 {
                     "name": "dawehner",
                     "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "EclipseGc",
+                    "homepage": "https://www.drupal.org/user/61203"
                 },
                 {
                     "name": "esmerel",
@@ -6818,16 +6682,16 @@
             ],
             "authors": [
                 {
-                    "name": "EclipseGc",
-                    "homepage": "https://www.drupal.org/user/61203"
-                },
-                {
                     "name": "damiankloip",
                     "homepage": "https://www.drupal.org/user/1037976"
                 },
                 {
                     "name": "dawehner",
                     "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "EclipseGc",
+                    "homepage": "https://www.drupal.org/user/61203"
                 },
                 {
                     "name": "esmerel",
@@ -7024,20 +6888,16 @@
             ],
             "authors": [
                 {
-                    "name": "Berdir",
-                    "homepage": "https://www.drupal.org/user/214652"
-                },
-                {
-                    "name": "Sam152",
-                    "homepage": "https://www.drupal.org/user/1485048"
-                },
-                {
                     "name": "andypost",
                     "homepage": "https://www.drupal.org/user/118908"
                 },
                 {
                     "name": "benjy",
                     "homepage": "https://www.drupal.org/user/1852732"
+                },
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
                     "name": "dawehner",
@@ -7050,6 +6910,10 @@
                 {
                     "name": "larowlan",
                     "homepage": "https://www.drupal.org/user/395439"
+                },
+                {
+                    "name": "Sam152",
+                    "homepage": "https://www.drupal.org/user/1485048"
                 }
             ],
             "description": "Imports default content when a module is enabled",
@@ -7530,6 +7394,10 @@
             ],
             "authors": [
                 {
+                    "name": "cs_shadow",
+                    "homepage": "https://www.drupal.org/user/2828287"
+                },
+                {
                     "name": "Dave Reid",
                     "homepage": "https://www.drupal.org/user/53892"
                 },
@@ -7540,10 +7408,6 @@
                 {
                     "name": "Drupal Media Team",
                     "homepage": "https://www.drupal.org/user/3260690"
-                },
-                {
-                    "name": "cs_shadow",
-                    "homepage": "https://www.drupal.org/user/2828287"
                 },
                 {
                     "name": "phenaproxima",
@@ -7716,12 +7580,16 @@
             ],
             "authors": [
                 {
+                    "name": "floretan",
+                    "homepage": "https://www.drupal.org/user/66163"
+                },
+                {
                     "name": "Jaesin",
                     "homepage": "https://www.drupal.org/user/841054"
                 },
                 {
-                    "name": "floretan",
-                    "homepage": "https://www.drupal.org/user/66163"
+                    "name": "mglaman",
+                    "homepage": "https://www.drupal.org/user/2416470"
                 },
                 {
                     "name": "rrrob",
@@ -7800,16 +7668,16 @@
                     "homepage": "https://www.drupal.org/user/3260690"
                 },
                 {
-                    "name": "Primsi",
-                    "homepage": "https://www.drupal.org/user/282629"
-                },
-                {
                     "name": "marcingy",
                     "homepage": "https://www.drupal.org/user/77320"
                 },
                 {
                     "name": "oknate",
                     "homepage": "https://www.drupal.org/user/471638"
+                },
+                {
+                    "name": "Primsi",
+                    "homepage": "https://www.drupal.org/user/282629"
                 },
                 {
                     "name": "samuel.mortenson",
@@ -8059,8 +7927,8 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "nikunjkotecha",
-                    "homepage": "https://www.drupal.org/user/694082"
+                    "name": "RenatoG",
+                    "homepage": "https://www.drupal.org/user/3326031"
                 }
             ],
             "description": "Allow adding alternate hreflang for external sites (not languages in Drupal).",
@@ -8652,12 +8520,12 @@
             ],
             "authors": [
                 {
-                    "name": "Centarro",
-                    "homepage": "https://www.drupal.org/user/3661446"
-                },
-                {
                     "name": "bojanz",
                     "homepage": "https://www.drupal.org/user/86106"
+                },
+                {
+                    "name": "Centarro",
+                    "homepage": "https://www.drupal.org/user/3661446"
                 },
                 {
                     "name": "dawehner",
@@ -9421,8 +9289,8 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "gravelpot",
-                    "homepage": "https://www.drupal.org/user/748208"
+                    "name": "Jeff Cardwell",
+                    "homepage": "https://www.drupal.org/user/2913129"
                 },
                 {
                     "name": "lreynaga",
@@ -9431,6 +9299,10 @@
                 {
                     "name": "mark_fullmer",
                     "homepage": "https://www.drupal.org/user/2612816"
+                },
+                {
+                    "name": "mmarler",
+                    "homepage": "https://www.drupal.org/user/500192"
                 },
                 {
                     "name": "ricksta",
@@ -9443,6 +9315,10 @@
                 {
                     "name": "twfahey",
                     "homepage": "https://www.drupal.org/user/3403722"
+                },
+                {
+                    "name": "utexas",
+                    "homepage": "https://www.drupal.org/user/3716409"
                 }
             ],
             "description": "Manage which fields & layouts are available in Layout Builder",
@@ -9542,16 +9418,16 @@
             ],
             "authors": [
                 {
-                    "name": "Jeff Cardwell",
-                    "homepage": "https://www.drupal.org/user/2913129"
-                },
-                {
                     "name": "bkosborne",
                     "homepage": "https://www.drupal.org/user/788032"
                 },
                 {
                     "name": "gravelpot",
                     "homepage": "https://www.drupal.org/user/748208"
+                },
+                {
+                    "name": "Jeff Cardwell",
+                    "homepage": "https://www.drupal.org/user/2913129"
                 },
                 {
                     "name": "mark_fullmer",
@@ -10312,12 +10188,12 @@
                     "homepage": "https://www.drupal.org/user/213194"
                 },
                 {
-                    "name": "Nafes",
-                    "homepage": "https://www.drupal.org/user/2489926"
-                },
-                {
                     "name": "miro_dietiker",
                     "homepage": "https://www.drupal.org/user/227761"
+                },
+                {
+                    "name": "Nafes",
+                    "homepage": "https://www.drupal.org/user/2489926"
                 },
                 {
                     "name": "pillarsdotnet",
@@ -10488,14 +10364,6 @@
             ],
             "authors": [
                 {
-                    "name": "Fabianx",
-                    "homepage": "https://www.drupal.org/user/693738"
-                },
-                {
-                    "name": "Jeremy",
-                    "homepage": "https://www.drupal.org/user/409"
-                },
-                {
                     "name": "bdragon",
                     "homepage": "https://www.drupal.org/user/53081"
                 },
@@ -10508,8 +10376,16 @@
                     "homepage": "https://www.drupal.org/user/1037976"
                 },
                 {
+                    "name": "Fabianx",
+                    "homepage": "https://www.drupal.org/user/693738"
+                },
+                {
                     "name": "japerry",
                     "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "Jeremy",
+                    "homepage": "https://www.drupal.org/user/409"
                 },
                 {
                     "name": "jvandyk",
@@ -10603,12 +10479,12 @@
             ],
             "authors": [
                 {
-                    "name": "JeroenT",
-                    "homepage": "https://www.drupal.org/user/2228934"
-                },
-                {
                     "name": "anrikun",
                     "homepage": "https://www.drupal.org/user/410199"
+                },
+                {
+                    "name": "JeroenT",
+                    "homepage": "https://www.drupal.org/user/2228934"
                 },
                 {
                     "name": "jonas139",
@@ -11674,8 +11550,8 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "dsnopek",
-                    "homepage": "https://www.drupal.org/user/266527"
+                    "name": "EclipseGc",
+                    "homepage": "https://www.drupal.org/user/61203"
                 },
                 {
                     "name": "japerry",
@@ -11688,10 +11564,6 @@
                 {
                     "name": "phenaproxima",
                     "homepage": "https://www.drupal.org/user/205645"
-                },
-                {
-                    "name": "tim.plunkett",
-                    "homepage": "https://www.drupal.org/user/241634"
                 }
             ],
             "description": "Provides a way to place blocks on a custom page.",
@@ -11768,10 +11640,6 @@
                 {
                     "name": "phenaproxima",
                     "homepage": "https://www.drupal.org/user/205645"
-                },
-                {
-                    "name": "tim.plunkett",
-                    "homepage": "https://www.drupal.org/user/241634"
                 }
             ],
             "description": "Allow any entity view mode to be rendered using a Panels display.",
@@ -12003,10 +11871,6 @@
                     "homepage": "https://www.drupal.org/user/514222"
                 },
                 {
-                    "name": "Primsi",
-                    "homepage": "https://www.drupal.org/user/282629"
-                },
-                {
                     "name": "jeroen.b",
                     "homepage": "https://www.drupal.org/user/1853532"
                 },
@@ -12017,6 +11881,10 @@
                 {
                     "name": "miro_dietiker",
                     "homepage": "https://www.drupal.org/user/227761"
+                },
+                {
+                    "name": "Primsi",
+                    "homepage": "https://www.drupal.org/user/282629"
                 }
             ],
             "description": "Enables the creation of Paragraphs entities.",
@@ -12273,63 +12141,6 @@
             }
         },
         {
-            "name": "drupal/pendo",
-            "version": "1.0.0-alpha4",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/pendo.git",
-                "reference": "8.x-1.0-alpha4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pendo-8.x-1.0-alpha4.zip",
-                "reference": "8.x-1.0-alpha4",
-                "shasum": "4b45c8c621b90e0d43e4684e38f2b3045d84c5c8"
-            },
-            "require": {
-                "drupal/core": "^8.8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.0-alpha4",
-                    "datestamp": "1585570339",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "balsama",
-                    "homepage": "https://www.drupal.org/user/223087"
-                },
-                {
-                    "name": "grasmash",
-                    "homepage": "https://www.drupal.org/user/455714"
-                },
-                {
-                    "name": "japerry",
-                    "homepage": "https://www.drupal.org/user/45640"
-                },
-                {
-                    "name": "phenaproxima",
-                    "homepage": "https://www.drupal.org/user/205645"
-                }
-            ],
-            "description": "Provides integration with Pendo software.",
-            "homepage": "https://www.drupal.org/project/pendo",
-            "support": {
-                "source": "http://cgit.drupalcode.org/pendo",
-                "issues": "https://www.drupal.org/project/issues/pendo"
-            }
-        },
-        {
             "name": "drupal/profile",
             "version": "1.3.0",
             "source": {
@@ -12438,12 +12249,8 @@
             "authors": [
                 {
                     "name": "Author name",
-                    "homepage": "https://www.drupal.org/user/3299791",
+                    "homepage": "https://www.drupal.org/user/145609",
                     "email": "author@example.com"
-                },
-                {
-                    "name": "alexmoreno",
-                    "homepage": "https://www.drupal.org/user/145609"
                 },
                 {
                     "name": "joachim",
@@ -12460,6 +12267,10 @@
                 {
                     "name": "phenaproxima",
                     "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "University of Colorado Boulder",
+                    "homepage": "https://www.drupal.org/user/3299791"
                 }
             ],
             "description": "Allows switching of installation profiles for a Drupal site.",
@@ -12510,12 +12321,16 @@
                     "homepage": "http://www.nielsvm.org"
                 },
                 {
-                    "name": "djbobbydrake",
-                    "homepage": "https://www.drupal.org/user/336378"
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
+                },
+                {
+                    "name": "SqyD",
+                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Provides a generic external cache invalidation API and queue service.",
@@ -12556,12 +12371,16 @@
                     "homepage": "http://www.nielsvm.org"
                 },
                 {
-                    "name": "djbobbydrake",
-                    "homepage": "https://www.drupal.org/user/336378"
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
+                },
+                {
+                    "name": "SqyD",
+                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Queues every tag that Drupal invalidates internally.",
@@ -13223,7 +13042,7 @@
             "authors": [
                 {
                     "name": "Abhishek Anand",
-                    "homepage": "https://www.drupal.org/user/213194",
+                    "homepage": "https://www.drupal.org/user/1790054",
                     "email": "fly2abhishek@gmail.com"
                 },
                 {
@@ -13231,12 +13050,8 @@
                     "homepage": "https://www.drupal.org/u/jansete"
                 },
                 {
-                    "name": "cmlara",
-                    "homepage": "https://www.drupal.org/user/1790054"
-                },
-                {
-                    "name": "jansete",
-                    "homepage": "https://www.drupal.org/user/1358146"
+                    "name": "Manuel Garcia",
+                    "homepage": "https://www.drupal.org/user/213194"
                 },
                 {
                     "name": "naveenvalecha",
@@ -13245,6 +13060,10 @@
                 {
                     "name": "ram4nd",
                     "homepage": "https://www.drupal.org/user/601534"
+                },
+                {
+                    "name": "Rhane",
+                    "homepage": "https://www.drupal.org/user/2655479"
                 },
                 {
                     "name": "ron_s",
@@ -13764,10 +13583,6 @@
                     "homepage": "https://www.drupal.org/node/982682/committers"
                 },
                 {
-                    "name": "amateescu",
-                    "homepage": "https://www.drupal.org/user/729614"
-                },
-                {
                     "name": "cspitzlay",
                     "homepage": "https://www.drupal.org/user/419305"
                 },
@@ -13778,6 +13593,10 @@
                 {
                     "name": "mkalkbrenner",
                     "homepage": "https://www.drupal.org/user/124705"
+                },
+                {
+                    "name": "Nick_vh",
+                    "homepage": "https://www.drupal.org/user/122682"
                 }
             ],
             "description": "Offers an implementation of the Search API that uses an Apache Solr server for indexing content.",
@@ -14309,7 +14128,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-3.11",
-                    "datestamp": "1634344305",
+                    "datestamp": "1658781789",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14333,8 +14152,8 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "gbyte",
-                    "homepage": "https://www.drupal.org/user/2381352"
+                    "name": "WalkingDexter",
+                    "homepage": "https://www.drupal.org/user/3251330"
                 }
             ],
             "description": "Creates a standard conform hreflang XML sitemap of the site content and provides a framework for developing other sitemap types.",
@@ -19745,6 +19564,15 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.14.0"
             },
             "time": "2022-05-31T20:59:12+00:00"
+        },
+        {
+            "name": "nnnick/chartjs",
+            "version": "v3.9.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://github.com/chartjs/Chart.js/releases/download/v3.9.1/chart.js-3.9.1.tgz"
+            },
+            "type": "drupal-library"
         },
         {
             "name": "npm-asset/dropzone",
@@ -30132,7 +29960,6 @@
         "drupal/mimemail": 15,
         "drupal/mobile_number": 15,
         "drupal/path_redirect_import": 10,
-        "drupal/pendo": 15,
         "drupal/s3fs": 10,
         "drupal/search_api_algolia": 10,
         "drupal/search_api_spellcheck": 10,

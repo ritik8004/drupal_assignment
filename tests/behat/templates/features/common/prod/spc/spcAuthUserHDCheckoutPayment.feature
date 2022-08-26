@@ -1,4 +1,4 @@
-@javascript @auth @checkoutPayment @homeDelivery @coskwprod @cosaeprod @cossaprod @pbkaepprod @pbksapprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @westelmaepprod @westelmsapprod @pbkkwprod @westelmkwpprod @pbksaprod @pbkaeprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @vskwpprod @westelmkwprod @westelmaeprod @westelmsaprod @vssapprod @vskwprod @mckwpprod @tbskwprod @vsaepprod @pbsapprod @pbaepprod @mcaeprod @pbkwpprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwpprod @mcsapprod @mckwprod  @vssaprod @vsaeprod @pbsaprod @pbaeprod @pbkwprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod @mcsaprod @mckwprod
+@javascript @auth @checkoutPayment @homeDelivery @cosaepprod @cossapprod @coskwpprod @tbsaepprod @tbskwpprod @coskwprod @cosaeprod @cossaprod @pbkaepprod @pbksapprod @pbkkwpprod @mujisapprod @mujiaepprod @mujikwpprod @aeoaepprod @aeokwpprod @aeosapprod @bpaepprod @bpsapprod @bpkwpprod @westelmaepprod @westelmsapprod @pbkkwprod @westelmkwpprod @pbksaprod @pbkaeprod @mujiaeprod @mujisaprod @mujikwprod @tbsegprod @bpkwprod @bpaeprod @bpsaprod @aeoaeprod @aeokwprod @aeosaprod @vskwpprod @westelmkwprod @westelmaeprod @westelmsaprod @vssapprod @vskwprod @mckwpprod @tbskwprod @vsaepprod @pbsapprod @pbaepprod @mcaeprod @pbkwpprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwpprod @mcsapprod @mckwprod  @vssaprod @vsaeprod @pbsaprod @pbaeprod @pbkwprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod @mcsaprod @mckwprod
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Authenticated user
 
   Background:
@@ -81,9 +81,9 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
-  @cc @hd @language @mobile @checkout_com
+  @mobile
   Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language
-    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
@@ -92,7 +92,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "div.magv2-header-wrapper #block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
@@ -111,8 +111,8 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And I scroll to the "#spc-payment-methods" element
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I scroll to the "div.spc-checkout-terms-conditions" element
+    And I click the anchor link "div.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element

@@ -2,10 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MyPointsHistory from './components/my-accounts/my-points-history';
 
-const querySelector = document.querySelector('#my-accounts-points-history');
-if (querySelector) {
-  ReactDOM.render(
-    <MyPointsHistory />,
-    querySelector,
-  );
-}
+Drupal.behaviors.alshayaHelloMemberMyPointsHistoryBehavior = {
+  attach: function alshayaHelloMemberMyPointsHistory() {
+    jQuery('#my-accounts-points-history').once('init-react').each(function fn() {
+      ReactDOM.render(
+        <MyPointsHistory />,
+        jQuery(this)[0],
+      );
+    });
+  },
+};

@@ -1,8 +1,9 @@
 import React from 'react';
-import { getLoyaltySelectText } from '../../../../../../alshaya_hello_member/js/src/utilities';
+import { getLoyaltySelectText } from '../utilities/loyalty_helper';
 import AuraLoyalty from '../aura/aura-loyalty';
 import AuraPointsToEarn from '../aura/aura-points-to-earn';
 import ToolTip from '../../../../utilities/tooltip';
+import getStringMessage from '../../../../utilities/strings';
 
 const LoyaltySelectOption = ({
   animationDelay,
@@ -18,7 +19,7 @@ const LoyaltySelectOption = ({
       <label className="radio-sim radio-label">
         {(currentOption !== 'aura' || optionName === 'hello_member')
         && <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>}
-        {(optionName === 'hello_member') && (<ToolTip enable>{Drupal.t('The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.', {}, { context: 'hello_member' })}</ToolTip>)}
+        {(optionName === 'hello_member') && (<ToolTip enable>{getStringMessage('hello_member_points_tooltip')}</ToolTip>)}
         {(currentOption === 'aura' && optionName === 'aura')
           && (
             <AuraLoyalty

@@ -583,6 +583,13 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to exclusive coupon code.
+  $strings['v16'] = [
+    'Promotion code is applied on the original price. All other promotions were removed.' => [
+      'ar' => 'تم تطبيق رمز الخصم على السعر الأصلي. جميع العروض الأخرى قد تم إزالتها',
+    ],
+  ];
+
   return $strings;
 }
 

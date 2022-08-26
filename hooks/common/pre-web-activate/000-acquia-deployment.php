@@ -64,7 +64,7 @@ function main($argv, $argc) {
   try {
     $lock = new \FileLock($lockfile);
   }
-  catch (\Exception) {
+  catch (\Exception $e) {
     printf("Lock could not be acquired - another process is updating themes for this environment %s.%s on %s. Aborting.\n", $site, $env, gethostname());
     exit(1);
   }
@@ -135,33 +135,31 @@ function main($argv, $argc) {
       printf("Failed to deploy theme files to %s for %s.%s\n", $webnode, $site, $env);
       exit(1);
     }
-  }
+  } 
   else {
     printf("INFO: Nothing to do - themes appear deployed and no force flag was set.  No lockfile was found from another process.  No error status is returned.\n");
   }
 }
 
-// phpcs:disable
 /**
- * Class FileLock.
+ * Class FileLock
  *
  * Acquires a file-based lock and automatically clears it.
  */
 class FileLock {
-  // phpcs:enable
   /**
    * The lock filename.
    *
    * @var string
    */
-  public $lockFile = '';
+  var $lockFile = '';
 
   /**
    * The lock file pointer.
    *
    * @var false|resource
    */
-  public $fp;
+  var $fp;
 
   /**
    * FileLock constructor.
@@ -183,7 +181,6 @@ class FileLock {
    * Can be used to add debugging data into the lockfile.
    *
    * @param string $contents
-   *   File contents.
    */
   public function write($contents) {
     fwrite($this->fp, $contents);
@@ -200,7 +197,6 @@ class FileLock {
       unlink($this->lockFile);
     }
   }
-
 }
 
 /**
@@ -301,7 +297,7 @@ function get_lockfile($site, $env) {
  *   An environment name.
  */
 function get_live_env($registry_path) {
-  $data = json_decode(file_get_contents($registry_path), NULL);
+  $data = json_decode(file_get_contents($registry_path));
   if (empty($data->cloud->env)) {
     throw new \Exception('Unable to locate live environment for registry path ' . $registry_path);
   }
@@ -513,7 +509,6 @@ class SimpleRestMessage {
     curl_setopt($curl, CURLOPT_USERAGENT, $user_agent);
     curl_setopt($curl, CURLOPT_HEADER, 0);
     curl_setopt($curl, CURLOPT_USERPWD, $creds->name . ":" . $creds->password);
-    // @codingStandardsIgnoreLine
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
 

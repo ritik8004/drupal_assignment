@@ -43,7 +43,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
         <div className={`spc-aura-link-card-form ${active}`}>
           <div className="label">
             { getStringMessage('checkout_already_member_question') }
-            <ToolTip enable question>{ getStringMessage('checkout_already_member_question_tooltip') }</ToolTip>
+            <ToolTip enable question>{ Drupal.t('Add your mobile number, Aura account number or email address below to link this purchase.') }</ToolTip>
           </div>
           <div className="item-wrapper">
             <AuraFormLinkCard

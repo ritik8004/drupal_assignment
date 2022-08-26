@@ -32,6 +32,7 @@ variables:
   language_vat: ''
   language_checkout_link: 'إتمام الشراء بأمان'
   mobile_language_class: 'en'
+  mobile_class: 'ar'
   language_short: 'en'
   ar_collection_filter: ''
   ar_sort_filter: 'رتب حسب'

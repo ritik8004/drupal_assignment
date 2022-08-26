@@ -4,10 +4,10 @@ import Loading from '../../../../../../js/utilities/loading';
 import { getFormatedMemberId } from '../../../utilities';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
-import { getHelloMemberCustomerData } from '../../../hello_member_api_helper';
 import TierProgress from './tier-progress';
 import logger from '../../../../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { getHelloMemberCustomerData } from '../../../../../../js/utilities/helloMemberHelper';
 
 class MyMembership extends React.Component {
   constructor(props) {

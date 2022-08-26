@@ -8,6 +8,18 @@
 /**
  * Implements hook_update_N().
  *
+ * Update Datadog RUM settings.
+ */
+function datadog_js_update_9401() {
+  $config = \Drupal::configFactory()->getEditable('datadog_js.settings');
+  $config->set('rum_application_id', '');
+  $config->set('rum_client_token', '');
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update datadog_js settings.
  */
 function datadog_js_update_8001() {
