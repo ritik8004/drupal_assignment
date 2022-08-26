@@ -24,7 +24,6 @@ class RcsPhPathPrefixHelper {
    */
   public function __construct(ConfigFactoryInterface $config_factory) {
     $this->configFactory = $config_factory;
-    $this->rcsConfig = $this->configFactory->get('rcs_placeholders.settings');
   }
 
   /**
@@ -34,7 +33,8 @@ class RcsPhPathPrefixHelper {
    *   Mapping of path prefixes with the bundle.
    */
   public function getRcsPathPrefixes() {
-    $settings = $this->rcsConfig->getRawData();
+    $rcs_config = $this->configFactory->get('rcs_placeholders.settings');
+    $settings = $rcs_config->getRawData();
     $prefixes = [];
     foreach ($settings as $key => $value) {
       if (!empty($value['path_prefix'])) {

@@ -437,7 +437,7 @@ function rcs_placeholders_pathauto_alias_alter(&$alias, array $context) {
     $regex = '/^' . preg_quote('/' . $prefix, '/') . '/';
     if (preg_match($regex, $alias) && $context['bundle'] !== 'rcs_' . $key) {
       $alias = '/' . $alias_prefix_for_conflicts . ltrim($alias, '/');
-      \Drupal::messenger()->addMessage(t('Url conflict detected. Modified path alias to avoid conflict with rcs paths.'));
+      \Drupal::messenger()->addMessage(t('Url conflict detected. Modified path alias to avoid conflict with RCS paths.'));
     }
   }
 }
