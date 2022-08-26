@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_alo_yoga.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_ay_transac_install() {
+  // Move myaccountshellomemberblock and block to proper theme.
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+}
