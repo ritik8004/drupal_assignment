@@ -7,6 +7,7 @@ import { isAuraIntegrationEnabled } from '../../../../../../js/utilities/helloMe
 import AuraLoyalty from '../aura/aura-loyalty';
 import getStringMessage from '../../../../utilities/strings';
 import AuraPointsToEarn from '../aura/aura-points-to-earn';
+import ToolTip from '../../../../utilities/tooltip';
 
 export default class GuestUserLoyalty extends React.Component {
   constructor(props) {
@@ -57,19 +58,20 @@ export default class GuestUserLoyalty extends React.Component {
 
     return (
       <div className="loyalty-options-guest">
-        <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
-          <div className="loaylty-option-text">
+        <div className="loyalty-option hello_member fadeInUp" style={{ animationDelay }}>
+          <div className="loyalty-option-text">
             {parse(parse(getStringMessage('hello_member_guest_login', {
               '@login_link': `<a href="${Drupal.url('cart/login')}">${getStringMessage('hm_sign_in')}</a>`,
-              '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
+              '@hm_icon': `<div class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</div>`,
               '@points': helloMemberPoints,
             })))}
+            <ToolTip enable>{getStringMessage('hello_member_points_tooltip')}</ToolTip>
           </div>
         </div>
         {isAuraIntegrationEnabled()
           && (
-          <div className="loyalty-option aura-loyalty fadeInUp" style={{ animationDelay }}>
-            <div className="loaylty-option-text">
+          <div className="loyalty-option aura fadeInUp" style={{ animationDelay }}>
+            <div className="loyalty-option-text">
               <AuraLoyalty
                 optionName="aura"
                 open={open}
