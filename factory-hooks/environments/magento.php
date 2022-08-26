@@ -753,6 +753,33 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
+  'hm_uat_ded5' => [
+    'url' => 'https://hm-uat-ded5.store.alshaya.com',
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 5],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 8, 'ar' => 14],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 17, 'ar' => 23],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 30, 'ar' => 27],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 36, 'ar' => 33],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 42, 'ar' => 39],
+    ],
+    'magento_secrets' => [
+      'consumer_key' => 'lrw9btxtxtgiuhr2otmf4qgc0dhe8i5v',
+      'consumer_secret' => '3l5yw7p7ovqr8kovsewhhji6d3e7ntta',
+      'access_token' => 'ye6scxw0bd2a5mgegt5frbtue0ldnexc',
+      'access_token_secret' => 'gk4npgvisuw0hbpmasi0jqvblk38wgh4',
+    ],
+  ],
   'hm_uat' => [
     'url' => 'https://hm-uat2.store.alshaya.com',
     'pims_base_url' => 'http://34.249.182.88:3030',
