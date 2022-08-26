@@ -20,7 +20,7 @@ use Drupal\user\UserInterface;
  * @return string
  *   Return cleaned string without spaces and dashes.
  */
-function alshaya_acm_customer_clean_sku($sku) {
+function alshaya_acm_customer_clean_sku(string $sku): string {
   // Convert whitespaces and underscore to dash.
   $string = preg_replace("/[\s_]/", "-", $sku);
   // Clean up multiple dashes or whitespaces.

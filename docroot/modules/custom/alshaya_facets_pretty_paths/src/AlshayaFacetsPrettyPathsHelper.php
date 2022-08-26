@@ -439,7 +439,7 @@ class AlshayaFacetsPrettyPathsHelper {
 
     foreach ($alshaya_active_facet_filters[$source] as $key => $values) {
       $alias = explode('-', $values)[0] ?? '';
-      if (!in_array($alias, $validAliases ?? [])) {
+      if (isset($validAliases) && !in_array($alias, $validAliases)) {
         unset($alshaya_active_facet_filters[$source][$key]);
       }
     }

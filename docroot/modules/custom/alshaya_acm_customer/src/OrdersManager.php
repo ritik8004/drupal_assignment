@@ -358,7 +358,7 @@ class OrdersManager {
             return TRUE;
           }
           // Search by SKU.
-          elseif (stripos(alshaya_acm_customer_clean_sku($orderItem['sku']), (string) alshaya_acm_customer_clean_sku($search)) > -1) {
+          elseif (stripos(alshaya_acm_customer_clean_sku($orderItem['sku']), alshaya_acm_customer_clean_sku($search)) > -1) {
             return TRUE;
           }
         }
@@ -448,7 +448,7 @@ class OrdersManager {
       }
     }
 
-    $order = isset($result['items']) && !empty($result['items']) ? reset($result['items']) : [];
+    $order = !empty($result['items']) ? reset($result['items']) : [];
     return $this->cleanupOrder($order);
   }
 
@@ -475,7 +475,7 @@ class OrdersManager {
       return NULL;
     }
 
-    $order = isset($result['items']) && !empty($result['items']) ? reset($result['items']) : [];
+    $order = !empty($result['items']) ? reset($result['items']) : [];
     return $this->cleanupOrder($order);
   }
 
@@ -503,7 +503,7 @@ class OrdersManager {
       return NULL;
     }
 
-    $order = isset($result['items']) && !empty($result['items']) ? reset($result['items']) : [];
+    $order = !empty($result['items']) ? reset($result['items']) : [];
     return $this->cleanupOrder($order);
   }
 

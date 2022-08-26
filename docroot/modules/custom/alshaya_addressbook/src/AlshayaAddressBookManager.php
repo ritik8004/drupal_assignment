@@ -294,16 +294,14 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     // We always set the address last added or edited as primary.
     $entity->setDefault($set_default);
 
-    if (isset($customer['addresses']) && !empty($customer['addresses'])) {
-      foreach ($customer['addresses'] as $index => $address) {
-        $customer['addresses'][$index] = $address;
-        $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
-        $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
+    foreach ($customer['addresses'] ?? [] as $index => $address) {
+      $customer['addresses'][$index] = $address;
+      $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
+      $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
 
-        if ($entity->isDefault()) {
-          $customer['addresses'][$index]['default_shipping'] = 0;
-          $customer['addresses'][$index]['default_billing'] = 0;
-        }
+      if ($entity->isDefault()) {
+        $customer['addresses'][$index]['default_shipping'] = 0;
+        $customer['addresses'][$index]['default_billing'] = 0;
       }
     }
 
