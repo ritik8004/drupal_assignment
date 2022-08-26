@@ -568,6 +568,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
     $sku_entity = SKU::loadFromSku($sku);
+    // Non-refundable.
+    $is_non_refundable = NULL;
 
     if ($sku_entity instanceof SKU) {
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
@@ -629,8 +631,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Flags status.
         $flags_status = alshaya_acm_product_get_flags_status($sku);
-        // Non-refundable.
-        $is_non_refundable = NULL;
         if (isset($flags_status['non_refundable']) && $flags_status['non_refundable']['status']) {
           $is_non_refundable = $flags_status['non_refundable']['status'];
           $build['non_refundable'] = [
