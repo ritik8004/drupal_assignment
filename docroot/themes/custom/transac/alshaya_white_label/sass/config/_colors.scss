@@ -595,6 +595,7 @@ $mm_l1_link_hover: $marine-blue;
 $mm_l1_link_hover_border_to_fill_space: $white-five;
 $mm_l1_link_active_border: $marine-blue;
 $mm_l2_link: $marine-blue;
+$mm_l2_link_desktop: $black;
 $mm_l2_link_hover: $white-five;
 $mm_l2_p: $brownish-grey;
 $mm_l3_link: $grey-ash;
@@ -2326,7 +2327,8 @@ $hello-member-opt-success: $_spc-radio-filled;
 $hello-member-loyalty-labels-txt: $grey-light;
 $hello-member-loyalty-aura-icon: $black-two;
 $hello-member-loyalty-options-border: $white-smoke-light;
-$hello-member-loyalty-aura-form-btn: $_aura-disabled;
+$hello-member-loyalty-aura-form-btn: $lucky-purple-two;
+$hello-member-loyalty-aura-form-btn-border: $lucky-purple-two;
 $hello-member-loyalty-aura-form-btn-bg: $white-five;
 $hello-member-loyalty-aura-disable-select-bg: $greyish;
 
@@ -2356,3 +2358,12 @@ $hello-member-bd-exp-text: $grey-light;
 $hello-member-bd-close-icon: $white-five;
 $hello-member-promo-guest-bg: $light-yellow;
 $hello-member-promo-guest-pop-title: $_spc-discount-text;
+
+// Exclusive Coupon Code
+$exclusive-promo-message-text: $peacock-blue;
+
+// Shop by filter menu
+$shop-by-filter-attribute-item: $black;
+$shop-by-filter-attribute-item-bg: $white-smoke-light;
+$shop-by-filter-attribute-item-hover: $white-five;
+$shop-by-filter-attribute-item-bg-hover: $black;

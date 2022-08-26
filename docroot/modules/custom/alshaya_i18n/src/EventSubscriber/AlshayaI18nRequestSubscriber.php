@@ -77,6 +77,7 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
    */
   public function onKernelRequestRedirect(GetResponseEvent $event) {
     $request = $event->getRequest();
+    $languages = json_encode(array_keys($this->languageManager->getLanguages()));
 
     if ($request->getRequestUri() === '/') {
       // Prepare a markup to redirect user based on the lang cookie or the
@@ -85,9 +86,15 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
           var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
           if (match) return match[2];
         }
+        var languages = $languages;
+        var default_lang = '" . $this->config->get('default_langcode') . "';
         var preferred_lang = window.getCookie('alshaya_lang');
-        if (!preferred_lang) {
-          preferred_lang = '" . $this->config->get('default_langcode') . "';
+        try {
+          if (!languages.includes(preferred_lang)) {
+            preferred_lang = default_lang;
+          }
+        } catch (err) {
+          preferred_lang = default_lang;
         }
         window.location = '/' + preferred_lang + '/';";
 

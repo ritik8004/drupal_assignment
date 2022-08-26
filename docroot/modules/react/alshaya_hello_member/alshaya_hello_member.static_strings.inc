@@ -210,5 +210,9 @@ function _alshaya_hello_member_aura_static_strings() {
       'key' => 'verify_otp',
       'value' => t('Verify', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'hm_sign_in',
+      'value' => t('Sign In', [], ['context' => 'hello_member']),
+    ],
   ];
 }

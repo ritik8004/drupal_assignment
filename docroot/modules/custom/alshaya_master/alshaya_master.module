@@ -20,7 +20,10 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Url;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 // phpcs:ignore
 define('ALSHAYA_MASTER_CUSTOM_LOGO_TYPES', ['email', 'mobile']);
@@ -986,4 +989,24 @@ function alshaya_master_preprocess_html(&$variables) {
   $variables['#attached']['library'][] = 'alshaya_master/common_fixes';
   // Add Alshaya library for managing local storage.
   $variables['#attached']['library'][] = 'alshaya_master/local_storage_manager';
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_master_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() === 'advanced_page') {
+    // Get the home page entity details.
+    $entity_details = \Drupal::config('alshaya_master.home')->get('entity');
+
+    if ($entity->id() === $entity_details['id'] && $view_mode === $entity_details['view_mode']
+      && !\Drupal::service('path.matcher')->isFrontPage()) {
+
+      // When trying to access front page directly via its alias, we should
+      // redirect it to '/' page.
+      $response = new RedirectResponse(Url::fromRoute('<front>')->toString(), 301);
+      $response->send();
+      exit;
+    }
+  }
 }

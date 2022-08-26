@@ -1,0 +1,6 @@
+menu_attribute_navigation:
+  version: 1.0.0
+  js:
+    dist/menu_attribute_navigation.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
