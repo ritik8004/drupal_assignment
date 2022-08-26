@@ -21,5 +21,10 @@ const renderPdpDeliveryLabels = () => {
   }
 };
 
-// Set pdp labels for product zoom
+// Set pdp labels for mobile view on magazine layout
+// after product zoom gallery is loaded in order
+// to have the wrapper loaded in dom.
 document.addEventListener('productGalleryLoaded', renderPdpDeliveryLabels, false);
+
+// Set pdp labels on load for default layout.
+renderPdpDeliveryLabels();
