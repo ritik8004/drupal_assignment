@@ -334,9 +334,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
           // sub_page_type is not available.
           // the sub_page_type is not selected.
           $show_on_pages = $visibility['alshaya_listing_page_types']['show_on_selected_pages'];
-          $sub_page_type_selected = array_key_exists($sub_page_type, $visibility['alshaya_listing_page_types']['page_types'])
-            ? $visibility['alshaya_listing_page_types']['page_types'][$sub_page_type]
-            : NULL;
+          $sub_page_type_selected = $visibility['alshaya_listing_page_types']['page_types'][$sub_page_type];
           if (($show_on_pages === '1' && $sub_page_type_selected !== 1)
             || ($show_on_pages !== '1' && $sub_page_type_selected === 1)) {
             continue;
