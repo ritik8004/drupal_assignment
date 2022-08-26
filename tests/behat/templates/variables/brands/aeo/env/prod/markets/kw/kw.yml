@@ -5,4 +5,4 @@ variables:
   np_plp_page: '/shop-women/tops/t-shirts/'
   np_plp_product_page: '/buy-ae-v-rise-mom-jean-empire-blue.html/'
   spc_pdp_page: '/buy-ae-v-rise-mom-jean-empire-blue.html/'
-  np_promotion: 0
+  spc_egift_page: '/egift/'
