@@ -8,7 +8,6 @@ on:
       - uat
       - master
       - develop-hello-member
-      - qa-feature-fl-menu
   create:
 
 concurrency: deploy-${{ github.ref }}
