@@ -146,10 +146,10 @@
 
         > span {
           font-family: $alshaya-bold;
-          letter-spacing: 0.8px;
+          letter-spacing: rem(0.8);
           text-transform: uppercase;
-          font-size: 1rem;
-          margin: 2.45rem 0;
+          font-size: rem(16);
+          margin: rem(34) 0;
 
           @include arabic-letter-spacing;
         }
@@ -188,7 +188,7 @@
       @include breakpoint($only-mobile) {
         display: block;
         order: 1;
-        margin-top: 2rem;
+        margin-top: rem(24);
       }
 
       @include breakpoint($tablet) {
@@ -462,6 +462,10 @@
 
           .alshaya-social {
             margin-top: 1.25rem;
+
+            &:first-child {
+              margin-top: 0;
+            }
           }
 
           .auth-link:first-child {
