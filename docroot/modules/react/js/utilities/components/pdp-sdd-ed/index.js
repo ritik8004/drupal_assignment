@@ -84,9 +84,9 @@ export default class PdpSddEd extends React.Component {
 
 
     return (
-      <div className="express-delivery active">
+      <>
         {sddEdLabels}
-      </div>
+      </>
     );
   }
 }
