@@ -87,7 +87,7 @@
         font-size: rem(14);
       }
 
-      .loaylty-option-text {
+      .loyalty-option-text {
         width: 94%;
 
         @include breakpoint($only-mobile) {
@@ -98,7 +98,7 @@
           flex-grow: 1;
         }
 
-        .loaylty-option-text {
+        .loyalty-option-text {
           @include icon('chevrondown') {
             font-size: rem(8);
             position: absolute;
@@ -114,22 +114,46 @@
         }
       }
 
-      &.hello-member-loyalty {
-        .loaylty-option-text {
-          @include breakpoint($only-mobile) {
+      &.hello_member {
+        .loyalty-option-text {
+          @include breakpoint($upto-desktop) {
             display: block;
             min-height: rem(30);
+            letter-spacing: 0.5px;
+
+            html[lang=ar] & {
+              padding-left: rem(16);
+            }
           }
 
           .hello-member-svg {
             ~ a {
-              margin-#{$right}: rem(2);
+              margin-#{$right}: rem(4);
             }
 
-            @include breakpoint($only-mobile) {
+            @include breakpoint($upto-desktop) {
+              float: $left;
+              margin-top: 4%;
+              display: flex;
+              margin-#{$right}: rem(16);
+
+              html[lang=ar] & {
+                margin-top: 2%;
+              }
+            }
+          }
+
+          .tooltip-anchor {
+            @include breakpoint($upto-desktop) {
               display: inline-block;
             }
           }
+        }
+      }
+
+      &.aura {
+        .loyalty-option-text {
+          display: flex;
         }
       }
     }
