@@ -19,3 +19,9 @@ services:
     class: Drupal\rcs_placeholders\EventSubscriber\ExternalHreflangGetCurrentUrlEventSubscriber
     tags:
       - { name: 'event_subscriber' }
+
+
+  rcs_placeholders.path_prefix_helper:
+    class: Drupal\rcs_placeholders\Service\RcsPhPathPrefixHelper
+    arguments:
+      - '@config.factory'
