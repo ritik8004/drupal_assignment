@@ -46,6 +46,7 @@ function alshaya_rcs_install() {
     'alshaya_wishlist' => 'alshaya_rcs_wishlist',
     'alshaya_bazaar_voice' => 'alshaya_rcs_bazaar_voice',
     'alshaya_aura_react' => 'alshaya_rcs_aura',
+    'alshaya_media_assets' => 'alshaya_rcs_assets',
   ];
 
   foreach ($modules as $module_to_check => $module_to_install) {
@@ -56,4 +57,7 @@ function alshaya_rcs_install() {
       ]);
     }
   }
+
+  // Update index prefix to use MDC index.
+  \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix('mdc');
 }

@@ -1,4 +1,4 @@
-@javascript @guest
+@javascript @guest @e-gift
 Feature: SPC Checkout Egift feature for Guest user
 
   Background:
