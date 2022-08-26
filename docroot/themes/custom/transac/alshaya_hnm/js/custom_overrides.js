@@ -40,13 +40,13 @@
       if (window.MobileDetect) {
         var md = new window.MobileDetect(window.navigator.userAgent);
         if (md.mobile()) {
-          var $pdpBNPCtaDiv = $('.acq-content-product .basic-details-wrapper .mobile-only-show', context);
-          $pdpBNPCtaDiv.toggle();
+          var $pdpTabbyDiv = $('.acq-content-product .tabby.mobile-only-show', context);
+          $pdpTabbyDiv.toggleClass('bnpl-hide');
           var $pdpPostPayDiv = $('.acq-content-product .postpay.mobile-only-show', context);
-          $pdpPostPayDiv.toggle();
+          $pdpPostPayDiv.toggleClass('bnpl-hide');
           $('#pay-promo-mobile-comp', context).once('toggle-cta').click(function () {
-            $pdpBNPCtaDiv.toggle();
-            $pdpPostPayDiv.toggle();
+            $pdpTabbyDiv.toggleClass('bnpl-hide');
+            $pdpPostPayDiv.toggleClass('bnpl-hide');
             $('.pay-emi-lbl', this).toggleClass('ui-state-hide');
             $(this).toggleClass('lbl-open');
           });
