@@ -892,21 +892,23 @@ class SKU extends ContentEntityBase implements SKUInterface {
       $media_data = $entity->get('media')->getString();
       // @codingStandardsIgnoreLine
       $media_data = unserialize($media_data);
-      foreach ($media_data as $data) {
-        if (isset($data['fid'])) {
-          $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
-          $file = $fileStorage->load($data['fid']);
-          if ($file instanceof FileInterface) {
-            // Remove usage of file.
-            $file_usage = \Drupal::service('file.usage');
-            $file_usage->delete($file, $entity->getEntityTypeId(), $entity->getEntityTypeId(), $entity->id());
-            // Delete file if there is no usage.
-            if ((empty($file_usage->listUsage($file)))) {
-              \Drupal::logger('acq_sku')->notice('Deleting file @fid for sku @sku as it is getting deleted', [
-                '@fid' => $file->id(),
-                '@sku' => $entity->getSku(),
-              ]);
-              $file->delete();
+      if (!empty($media_data)) {
+        foreach ($media_data as $data) {
+          if (isset($data['fid'])) {
+            $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
+            $file = $fileStorage->load($data['fid']);
+            if ($file instanceof FileInterface) {
+              // Remove usage of file.
+              $file_usage = \Drupal::service('file.usage');
+              $file_usage->delete($file, $entity->getEntityTypeId(), $entity->getEntityTypeId(), $entity->id());
+              // Delete file if there is no usage.
+              if ((empty($file_usage->listUsage($file)))) {
+                \Drupal::logger('acq_sku')->notice('Deleting file @fid for sku @sku as it is getting deleted', [
+                  '@fid' => $file->id(),
+                  '@sku' => $entity->getSku(),
+                ]);
+                $file->delete();
+              }
             }
           }
         }

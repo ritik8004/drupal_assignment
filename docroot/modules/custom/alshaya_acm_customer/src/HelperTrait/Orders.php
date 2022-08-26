@@ -51,6 +51,9 @@ trait Orders {
    *   Cleaned up order array.
    */
   private function cleanupOrder(array $order) {
+    if (empty($order)) {
+      return [];
+    }
     $order['order_id'] = $order['entity_id'];
 
     // Customer info.

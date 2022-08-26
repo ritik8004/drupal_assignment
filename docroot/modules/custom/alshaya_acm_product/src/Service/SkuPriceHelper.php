@@ -203,12 +203,20 @@ class SkuPriceHelper {
    *   Language code used.
    */
   private function buildPriceBlockFromTo(SKU $sku, string $color = '', string $langcode = '') {
+    $child_prices = $child_final_prices = $discounts = $selling_prices = [];
     $prices = $this->skuManager->getMinPrices($sku, $color);
 
-    $child_prices = array_column($prices['children'], 'price');
-    $child_final_prices = array_column($prices['children'], 'final_price');
-    $discounts = array_column($prices['children'], 'discount');
-    $selling_prices = array_column($prices['children'], 'selling_price');
+    if ($prices['children']) {
+      $child_prices = array_column($prices['children'], 'price');
+      $child_final_prices = array_column($prices['children'], 'final_price');
+      $discounts = array_column($prices['children'], 'discount');
+      $selling_prices = array_column($prices['children'], 'selling_price');
+    }
+
+    // Ignore proceeding with building range price block when product is OOS.
+    if (empty($child_prices) || empty($child_final_prices)) {
+      return $this->buildPriceBlockSimple($sku, $color, $langcode);
+    }
 
     // We show normal price(no range) only in below conditions.
     // 0. It is possible that one product has final price but other doesn't

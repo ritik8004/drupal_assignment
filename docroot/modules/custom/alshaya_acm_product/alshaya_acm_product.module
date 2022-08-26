@@ -1477,11 +1477,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     $combinations = [];
 
-    foreach ($product_tree['combinations']['by_sku'] as $options) {
-      $combinations = NestedArray::mergeDeepArray([
-        $combinations,
-        $sku_manager->getCombinationArray($options),
-      ], TRUE);
+    if (isset($product_tree['combinations']['by_sku']) && !empty($product_tree['combinations']['by_sku'])) {
+      foreach ($product_tree['combinations']['by_sku'] as $options) {
+        $combinations = NestedArray::mergeDeepArray([
+          $combinations,
+          $sku_manager->getCombinationArray($options),
+        ], TRUE);
+      }
     }
 
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['bySku'] = $product_tree['combinations']['by_sku'];
