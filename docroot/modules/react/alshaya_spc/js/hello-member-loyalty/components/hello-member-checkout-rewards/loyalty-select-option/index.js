@@ -18,7 +18,7 @@ const LoyaltySelectOption = ({
       <input id={`loyalty-option-${optionName}`} defaultChecked={currentOption === optionName} value={optionName} name="loyalty-option" type="radio" className={currentOption === optionName ? 'loyalty-option-selected' : ''} />
       <label className="radio-sim radio-label">
         {(currentOption !== 'aura' || optionName === 'hello_member')
-        && <div className="loaylty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>}
+        && <div className="loyalty-option-text">{getLoyaltySelectText(optionName, helloMemberPoints)}</div>}
         {(optionName === 'hello_member') && (<ToolTip enable>{getStringMessage('hello_member_points_tooltip')}</ToolTip>)}
         {(currentOption === 'aura' && optionName === 'aura')
           && (
