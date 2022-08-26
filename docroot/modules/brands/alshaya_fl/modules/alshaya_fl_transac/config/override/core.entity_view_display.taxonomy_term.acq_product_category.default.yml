@@ -1,0 +1,5 @@
+dependencies:
+  config:
+  - field.field.taxonomy_term.acq_product_category.field_is_underlined
+hidden:
+  field_is_underlined: true
