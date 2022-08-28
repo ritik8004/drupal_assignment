@@ -16,12 +16,15 @@ class AddBenefitsToCart extends React.Component {
       wait: false,
       appliedAlready: false,
       isEmptyCart: false,
-      voucherCodes: '',
       isAPIError: false,
     };
   }
 
   async componentDidMount() {
+    this.getUpdatedCartInfo();
+  }
+
+  async getUpdatedCartInfo(addTobag = false) {
     const responseData = await callHelloMemberApi('getCartData', 'GET');
     if (hasValue(responseData.data)
       && !hasValue(responseData.data.error)
@@ -33,8 +36,10 @@ class AddBenefitsToCart extends React.Component {
       let voucherCodes = responseData.data.cart.extension_attributes.applied_hm_voucher_codes;
       if (hasValue(voucherCodes)) {
         voucherCodes = voucherCodes.split(',');
+        if (addTobag) {
+          return voucherCodes;
+        }
         isVoucherCodeAdded = voucherCodes.find((element) => (element === codeId));
-        this.setState({ voucherCodes });
       }
       const appliedOfferCode = responseData.data.cart.extension_attributes.applied_hm_offer_code;
       const voucherDiscount = findArrayElement(responseData.data.totals.total_segments, 'voucher_discount');
@@ -50,7 +55,6 @@ class AddBenefitsToCart extends React.Component {
           appliedAlready: true,
         });
       }
-      removeFullScreenLoader();
       this.setState({
         wait: true,
       });
@@ -60,6 +64,8 @@ class AddBenefitsToCart extends React.Component {
         wait: true,
       });
     }
+
+    return null;
   }
 
   async handleClick() {
@@ -74,8 +80,8 @@ class AddBenefitsToCart extends React.Component {
         let benefitType = 'offer';
         let response = null;
         if (voucherType === 'BONUS_VOUCHER') {
-          const { voucherCodes } = this.state;
-          if (voucherCodes !== '') {
+          const voucherCodes = await this.getUpdatedCartInfo(true);
+          if (hasValue(voucherCodes)) {
             params.voucherCodes = voucherCodes;
             params.voucherCodes.push(codeId);
           } else {
