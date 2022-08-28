@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_nb_transac.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_nb_transac_install() {
+  // Enable and set alshaya_new_balance as default theme and set,
+  // the site logo favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_new_balance');
+}

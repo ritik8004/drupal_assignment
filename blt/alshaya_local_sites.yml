@@ -342,3 +342,31 @@ sites:
     module: alshaya_ay
     type: alshaya_transac
     country: jo
+  nbkw:
+    module: alshaya_nb
+    type: alshaya_transac
+    country: kw
+  nbsa:
+    module: alshaya_nb
+    type: alshaya_transac
+    country: sa
+  nbae:
+    module: alshaya_nb
+    type: alshaya_transac
+    country: ae
+  nbeg:
+    module: alshaya_nb
+    type: alshaya_transac
+    country: eg
+  nbbh:
+    module: alshaya_nb
+    type: alshaya_transac
+    country: bh
+  nbqa:
+    module: alshaya_nb
+    type: alshaya_transac
+    country: qa
+  nbjo:
+    module: alshaya_nb
+    type: alshaya_transac
+    country: jo
