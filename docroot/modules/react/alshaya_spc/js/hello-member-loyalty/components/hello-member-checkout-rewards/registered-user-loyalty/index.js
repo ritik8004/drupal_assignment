@@ -1,12 +1,11 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { renderToString } from 'react-dom/server';
-import { callHelloMemberApi, isAuraIntegrationEnabled } from '../../../../../../js/utilities/helloMemberHelper';
+import { callHelloMemberApi, isAuraIntegrationEnabled, setHelloMemberLoyaltyCard } from '../../../../../../js/utilities/helloMemberHelper';
 import HelloMemberSvg from '../../../../svg-component/hello-member-svg';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import LoyaltySelectOption from '../loyalty-select-option';
 import LoyaltyConfirmPopup from '../loyalty-confirm-popup';
-import { setHelloMemberLoyaltyCard } from '../../../../../../alshaya_hello_member/js/src/hello_member_api_helper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 import { redeemAuraPoints } from '../../../../aura-loyalty/components/utilities/checkout_helper';
@@ -194,7 +193,7 @@ class RegisteredUserLoyalty extends React.Component {
         {!isAuraIntegrationEnabled()
           && (
           <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
-            <div className="loaylty-option-text">
+            <div className="loyalty-option-text">
               {parse(parse(Drupal.t('@hm_icon Member earns @points points', {
                 '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
                 '@points': helloMemberPoints,

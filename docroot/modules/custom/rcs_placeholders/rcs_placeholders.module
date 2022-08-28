@@ -424,3 +424,20 @@ function rcs_placeholders_page_bottom(array &$page_bottom) {
     '#cache' => $cache_meta_data,
   ];
 }
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function rcs_placeholders_pathauto_alias_alter(&$alias, array $context) {
+  $prefixes = \Drupal::service('rcs_placeholders.path_prefix_helper')->getRcsPathPrefixes();
+  $alias_prefix_for_conflicts = \Drupal::config('rcs_placeholders.settings')->get('alias_prefix_for_conflicts');
+  foreach ($prefixes as $key => $prefix) {
+    // Check if alias is not conflicted with one of the rcs path prefixes
+    // and modify if it does.
+    $regex = '/^' . preg_quote('/' . $prefix, '/') . '/';
+    if (preg_match($regex, $alias) && $context['bundle'] !== 'rcs_' . $key) {
+      $alias = '/' . $alias_prefix_for_conflicts . ltrim($alias, '/');
+      \Drupal::messenger()->addMessage(t('Url conflict detected. Modified path alias to avoid conflict with RCS paths.'));
+    }
+  }
+}
