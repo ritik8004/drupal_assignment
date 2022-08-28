@@ -1,12 +1,10 @@
-name: 'Alshaya New Balance Online (Transac)'
+name: 'Alshaya New Balance'
 type: module
-description: 'The dedicated module for transac New Balance brand.'
+description: 'The dedicated module for  New Balance brand.'
 package: Alshaya
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_nb:alshaya_nb
-  - alshaya_color_split:alshaya_color_split
-  - alshaya_mobile_app:alshaya_mobile_app
 themes:
   - alshaya_new_balance

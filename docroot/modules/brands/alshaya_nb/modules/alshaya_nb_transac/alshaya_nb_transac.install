@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, uninstall, update function for alshaya_nb_transac.
+ * Install, uninstall, update function for alshaya_nb.
  */
 
 /**
@@ -10,6 +10,75 @@
  */
 function alshaya_nb_transac_install() {
   // Enable and set alshaya_new_balance as default theme and set,
-  // the site logo favicon icon and email logo path.
+  // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_new_balance');
+
+  // Reset theme logo.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  $current_theme = $active_theme->getName();
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  \Drupal::configFactory()
+    ->getEditable($current_theme . '.settings')
+    ->set('logo', [
+      'path' => $site_logo . '.svg',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $site_favicon . '.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+
+  // Add the site name.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('name', 'New Balance')
+    ->save();
+
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+        'url' => '',
+        'use_default' => FALSE,
+      ],
+    ])
+    ->save();
+
+  $strings = [
+    'seo_brand_name' => [
+      'en' => 'New Balance',
+      'ar' => 'نيو بالانس',
+    ],
+    'get email offers and the latest news from @site_name' => [
+      'en' => 'Enjoy 10% off your first order',
+      'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
+    ],
+    'read more' => [
+      'ar' => 'اقرأ المزيد',
+    ],
+    'read less' => [
+      'ar' => 'اقرأ  أقل',
+    ],
+    'Product Description' => [
+      'ar' => 'وصف المنتج',
+    ],
+    'Product Detail' => [
+      'ar' => 'تفاصيل المنتج',
+    ],
+    'Product No:' => [
+      'ar' => 'رمز المنتج',
+    ],
+    'size guide' => [
+      'ar' => 'دليل المقاسات',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
