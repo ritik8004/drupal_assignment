@@ -991,7 +991,7 @@ class AlshayaGtmManager {
       }
 
       $product = $item['product_type'] === 'configurable'
-        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'])
+        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'] ?? NULL)
         : $this->fetchSkuAtttributes($item['sku']);
 
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
@@ -1070,7 +1070,7 @@ class AlshayaGtmManager {
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
       'egiftRedeemType' => !empty($additional_info) ? $additional_info->card_type : '',
-      'isAdvantageCard' => $order['coupon_code'] === 'advantage_card',
+      'isAdvantageCard' => isset($order['coupon_code']) && $order['coupon_code'] === 'advantage_card',
       'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],

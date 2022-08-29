@@ -1477,7 +1477,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     $combinations = [];
 
-    foreach ($product_tree['combinations']['by_sku'] as $options) {
+    foreach ($product_tree['combinations']['by_sku'] ?? [] as $options) {
       $combinations = NestedArray::mergeDeepArray([
         $combinations,
         $sku_manager->getCombinationArray($options),
