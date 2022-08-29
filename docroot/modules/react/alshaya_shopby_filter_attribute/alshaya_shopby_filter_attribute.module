@@ -92,23 +92,37 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
   // Adding class for CSS selector.
   $data[$term->tid]['class'][] = 'shop-by-filter-attribute';
 
+  // Define a static variable to store the term Ids by commerce category Ids.
+  $static = &drupal_static(__FUNCTION__, []);
+
   // Identify the parent target ID for the shop by filter attribute menu items
   // path. If $term->shopby_filter_target_cid contains a value i.e. a commerce
   // target category ID, we need to get the associate taxonomy term ID and use
   // that instead of $term->parent_target_id.
   $parent_target_id = $term->parent_target_id;
   if (isset($term->shopby_filter_target_cid)
-    && !empty($term->shopby_filter_target_cid)) {
-    // Get term ID from commerce Id.
-    $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $term_ids = $term_storage->getQuery()
-      ->condition('field_commerce_id', $term->shopby_filter_target_cid)
-      ->condition('vid', ProductCategoryTree::VOCABULARY_ID)
-      ->execute();
+    && !empty($term->shopby_filter_target_cid)
+    && $term->shopby_filter_target_cid !== '0') {
+    // Check if the associated term Id by commerce category Id exist in static
+    // data array, than load from it else we need to fetch it from DB storage.
+    if (isset($static[$term->shopby_filter_target_cid])) {
+      $parent_target_id = $static[$term->shopby_filter_target_cid];
+    }
+    else {
+      // Get term ID from commerce Id.
+      $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+      $term_ids = $term_storage->getQuery()
+        ->condition('field_commerce_id', $term->shopby_filter_target_cid)
+        ->condition('vid', ProductCategoryTree::VOCABULARY_ID)
+        ->execute();
 
-    if (!empty($term_ids)) {
-      $term_id = reset($term_ids);
-      $parent_target_id = $term_id;
+      if (!empty($term_ids)) {
+        $term_id = reset($term_ids);
+        $parent_target_id = $term_id;
+      }
+
+      // Add this to static array as well for performance improvement.
+      $static[$term->shopby_filter_target_cid] = $parent_target_id;
     }
   }
 
