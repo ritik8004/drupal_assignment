@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
-use Drupal\alshaya_hello_member\Helper\HelloMemberHelper;
 use Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Controller\ControllerBase;
@@ -64,13 +63,6 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
   protected $moduleHandler;
 
   /**
-   * Hello Member Helper service object.
-   *
-   * @var Drupal\alshaya_hello_member\Helper\HelloMemberHelper
-   */
-  protected $helloMemberHelper;
-
-  /**
    * AlshayaSpcOrderController constructor.
    *
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
@@ -85,8 +77,6 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
    *   SPC stock helper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
-   * @param Drupal\alshaya_hello_member\Helper\HelloMemberHelper $hello_member_helper
-   *   The Hello Member service.
    */
   public function __construct(
     OrdersManager $orders_manager,
@@ -94,8 +84,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
     AccountProxyInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
     AlshayaSpcStockHelper $spc_stock_helper,
-    ModuleHandlerInterface $module_handler,
-    HelloMemberHelper $hello_member_helper,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->ordersManager = $orders_manager;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
@@ -103,7 +92,6 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
     $this->entityTypeManager = $entity_type_manager;
     $this->spcStockHelper = $spc_stock_helper;
     $this->moduleHandler = $module_handler;
-    $this->helloMemberHelper = $hello_member_helper;
   }
 
   /**
@@ -116,8 +104,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
       $container->get('current_user'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_spc.stock_helper'),
-      $container->get('module_handler'),
-      $container->get('alshaya_hello_member.hello_member_helper'),
+      $container->get('module_handler')
     );
   }
 
@@ -164,16 +151,14 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
           '@order_id' => $order_id,
           '@method' => $payment_method,
         ]);
-        // Only update billing telephone in profile if hello member not enabled.
-        $helloMemberEnabled = FALSE;
-        if ($this->moduleHandler->moduleExists('alshaya_hello_member')) {
-          $helloMemberEnabled = $this->helloMemberHelper->isHelloMemberEnabled();
-        }
 
         $account = $this->alshayaGetCustomerFromSession();
         if ($account) {
-          if (empty($account->get('field_mobile_number')->getString()) && !$helloMemberEnabled) {
+          if (empty($account->get('field_mobile_number')->getString())) {
             $account->get('field_mobile_number')->setValue($cart['billing_address']['telephone']);
+            // Only update billing telephone in user mobile number
+            // if hello member is not enabled.
+            $this->moduleHandler->alter('alshaya_spc_checkout_event_controller_account', $account);
             $account->save();
           }
           else {
