@@ -56,8 +56,8 @@ class PimsSkuAssetManager extends SkuAssetManager {
 
       foreach ($unserialized_assets as $assets) {
         if ($assets['Data']['AssetType'] === $sku_asset_type) {
-          $swatch['url'] = $assets['pims_image']['url'];
-          $swatch['type'] = $assets['sortAssetType'];
+          $swatch['url'] = $assets['pims_image']['url'] ?? NULL;
+          $swatch['type'] = $assets['sortAssetType'] ?? NULL;
         }
       }
     }

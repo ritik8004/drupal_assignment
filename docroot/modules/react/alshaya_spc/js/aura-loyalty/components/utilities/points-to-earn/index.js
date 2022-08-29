@@ -6,7 +6,7 @@ import { getAllAuraStatus, getAuraConfig } from '../../../../../../alshaya_aura_
 import getStringMessage from '../../../../utilities/strings';
 import Loading from '../../../../utilities/loading';
 import AuraHeaderIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
-import AuraVerticalIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-vertical-icon';
+import AuraHorizontalIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-horizontal-icon';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
@@ -61,8 +61,8 @@ const PointsToEarnMessage = (props) => {
 
     return (
       <>
-        <div className="spc-aura-cart-icon vertical-aura-logo">
-          <AuraVerticalIcon />
+        <div className="spc-aura-cart-icon">
+          <AuraHorizontalIcon />
         </div>
         <div className="spc-aura-cart-content">
           <span className="spc-aura-points-to-earn">

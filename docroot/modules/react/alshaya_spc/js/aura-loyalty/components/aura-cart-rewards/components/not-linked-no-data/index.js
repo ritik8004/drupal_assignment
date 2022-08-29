@@ -5,7 +5,7 @@ import { handleSignUp } from '../../../../../../../alshaya_aura_react/js/utiliti
 import SignUpOtpModal from '../../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
 import ToolTip from '../../../../../utilities/tooltip';
 import getStringMessage from '../../../../../utilities/strings';
-import AuraHeaderIcon from '../../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
+import AuraHorizontalIcon from '../../../../../../../alshaya_aura_react/js/svg-component/aura-horizontal-icon';
 import { isUserAuthenticated } from '../../../../../../../js/utilities/helper';
 import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
 import AuraFormLinkCardOTPModal from '../../../aura-forms/aura-link-card-otp-modal-form';
@@ -72,7 +72,7 @@ class AuraNotLinkedNoData extends React.Component {
       <>
         <div className="block-content guest-user">
           <div className="spc-aura-cart-icon">
-            <AuraHeaderIcon />
+            <AuraHorizontalIcon />
           </div>
           <div className="spc-aura-cart-content">
             <span className="spc-join-aura-link-wrapper submit">
