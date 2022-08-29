@@ -2,3 +2,5 @@ name: Alshaya RCS Online Returns
 type: module
 description: Alshaya RCS implementation of Online Returns
 core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_online_returns:alshaya_online_returns
