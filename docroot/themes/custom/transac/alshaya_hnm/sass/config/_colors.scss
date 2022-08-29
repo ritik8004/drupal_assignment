@@ -55,6 +55,7 @@ $hnm-black-two: #000;
 $hnm-black-two-50: rgba(0, 0, 0, 0.05);
 $hnm-black-three: #222;
 $hnm-black-four: #1a1a1a;
+$hnm-black-alpha-10: rgba(0, 0, 0, 0.1);
 $hnm-grey: #f3f3f3;
 $returned: #797979;
 $whisper-light-59: rgba(235, 235, 235, 0.59);
@@ -409,10 +410,11 @@ $pdp_sell_title: $hnm-black-three;
 $pdp_mobile_wrapper: $default_background_color;
 $pdp_slick_dots_background: rgba(255, 255, 255, 0.3);
 $pdp_slick_dots_box_shadow: rgba(0, 0, 0, 0.3);
-$pdp_bnpl_open_lbl_background: $white-five;
+$pdp_bnpl_open_lbl_background: $seashell_grey;
 $pdp_bnpl_hide_lbl_text: $hnm-black-three;
 $pdp_bnpl_hide_lbl_background: $light_orange;
 $pdp_bnpl_grey_shadow: $hnm-black-two-50;
+$pdp_bnpl_lbl_shadow: $hnm-black-alpha-10;
 
 // additional attribute
 $pdp_additional_attribute_text: $hnm-black-three;
