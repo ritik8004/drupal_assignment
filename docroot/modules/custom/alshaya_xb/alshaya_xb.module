@@ -48,3 +48,12 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
     '#value' => Markup::create($js),
   ];
 }
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_xb_alshaya_my_account_links_alter(array &$links) {
+  // Removing the below links from alshaya_my_account_links block.
+  unset($links['address_book']);
+  unset($links['payment_cards']);
+}

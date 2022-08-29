@@ -21,6 +21,10 @@ class RouteSubscriber extends RouteSubscriberBase {
     if ($route = $collection->get('alshaya_spc.checkout')) {
       $route->setDefault('_controller', '\Drupal\alshaya_xb\Controller\CheckoutController::checkoutPage');
     }
+    // Altering the access for profile.user_page.multiple route.
+    if ($route = $collection->get('profile.user_page.multiple')) {
+      $route->setRequirement('_access', 'FALSE');
+    }
   }
 
 }
