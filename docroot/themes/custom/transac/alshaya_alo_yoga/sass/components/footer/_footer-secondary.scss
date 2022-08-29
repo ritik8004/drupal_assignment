@@ -1,0 +1,37 @@
+.c-footer-secondary {
+  .block-content--copyright {
+    @include breakpoint($upto-tablet) {
+      background-color: $footer-bg;
+    }
+
+    p {
+      font-family: $ay-nova-regular;
+      font-size: rem(16);
+      color: $footer-bg;
+
+      @include breakpoint($upto-tablet) {
+        color: $footer-text;
+        font-size: rem(14);
+        line-height: 1.29;
+      }
+    }
+  }
+
+  .c-footer__copy {
+    text-align: $right;
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: rem(16);
+    }
+
+    @include breakpoint($upto-tablet) {
+      text-align: $left;
+    }
+  }
+
+  .c-footer__logos {
+    @include breakpoint($upto-tablet) {
+      background-color: $footer-text;
+    }
+  }
+}

@@ -1,0 +1,11 @@
+$ay_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
+
+@mixin ic-social {
+  content: '';
+  background-repeat: no-repeat;
+  width: rem(24);
+  height: rem(24);
+  display: inline-block;
+  background-size: contain;
+  background-position: center;
+}
