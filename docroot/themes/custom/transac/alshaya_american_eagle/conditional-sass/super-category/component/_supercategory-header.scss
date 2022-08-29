@@ -6,4 +6,16 @@
       }
     }
   }
+
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home {
+          img {
+            height: rem(20);
+          }
+        }
+      }
+    }
+  }
 }
