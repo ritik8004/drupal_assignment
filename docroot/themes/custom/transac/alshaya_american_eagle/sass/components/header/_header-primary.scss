@@ -264,11 +264,10 @@ header.c-header {
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: 16%;
-        margin-top: -0.875rem;
-        background-position: 0 0.125rem;
+        margin-bottom: rem(15);
 
         html[lang=ar] & {
-          margin-top: 0.5625rem;
+          margin-bottom: rem(-2);
         }
       }
 
