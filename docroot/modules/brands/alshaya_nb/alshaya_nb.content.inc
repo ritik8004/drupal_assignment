@@ -36,7 +36,7 @@ function alshaya_nb_create_copyright_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Copyright',
     'body' => [
-      'value' => "&copy; 2020 شركة أمريكان إيجل أونلاين للإدارة جميع الحقوق محفوظة",
+      'value' => "&copy; 2022 نيو بالانس. كل الحقوق محفوظة",
       'format' => 'rich_text',
     ],
   ]);
