@@ -57,10 +57,8 @@
     }
 
     .c-footer-menu--about {
-      html[lang=en] & {
-        @include breakpoint($desktop) {
-          width: auto;
-        }
+      @include breakpoint($desktop) {
+        width: auto;
       }
     }
   }

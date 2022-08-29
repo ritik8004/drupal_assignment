@@ -27,6 +27,10 @@
     @include breakpoint($upto-tablet) {
       text-align: $left;
     }
+
+    @include breakpoint($only-mobile) {
+      color: $footer-text;
+    }
   }
 
   .c-footer__logos {
