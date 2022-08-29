@@ -3,12 +3,14 @@ alshaya_online_returns_pdp:
     dist/pdp.bundle.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_online_returns/alshaya_online_returns_util
 
 alshaya_return_requests:
   js:
     dist/returnrequest.bundle.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_online_returns/alshaya_online_returns_util
 
 alshaya_online_returns_my_accounts:
   js:
@@ -16,15 +18,24 @@ alshaya_online_returns_my_accounts:
   dependencies:
     - alshaya_react/react
     - alshaya_master/common_functions
+    - alshaya_online_returns/alshaya_online_returns_util
 
 alshaya_return_confirmation:
   js:
     dist/returnconfirmation.bundle.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_online_returns/alshaya_online_returns_util
 
 alshaya_online_returns_pdp_gtm:
   js:
     js/alshaya_online_returns_pdp_gtm.js: {}
   dependencies:
     - core/jquery
+
+alshaya_online_returns_util:
+  js:
+    js/assets/alshaya_online_returns_util_v2.js: {}
+  dependencies:
+    - core/drupalSettings
+    - alshaya_master/common_functions

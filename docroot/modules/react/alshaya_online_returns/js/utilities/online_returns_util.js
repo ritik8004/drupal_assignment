@@ -209,19 +209,7 @@ function getAdressData(shippingAddress) {
 /**
  * Utility function to get order details for return pages.
  */
-function getOrderDetails() {
-  let orderDetails = {};
-  if (hasValue(drupalSettings.onlineReturns)
-    && hasValue(drupalSettings.onlineReturns.returnInfo)
-    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo)) {
-    orderDetails = drupalSettings.onlineReturns.returnInfo.orderInfo;
-  } else if (hasValue(drupalSettings.order)
-    && hasValue(drupalSettings.order.order_details)) {
-    orderDetails['#order_details'] = drupalSettings.order.order_details;
-  }
-
-  return orderDetails;
-}
+const getOrderDetails = window.commerceBackend.getOrderDetails();
 
 /**
  * Utility function to get cancel button status.

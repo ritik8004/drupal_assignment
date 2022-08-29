@@ -32,3 +32,18 @@ function alshaya_rcs_online_returns_alshaya_rcs_product_order_details_fields_alt
     'is_returnable',
   );
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_online_returns_library_info_alter(&$libraries, $extension) {
+  /** @var \Drupal\Core\Extension\ExtensionPathResolver $extension_path_resolver*/
+  $extension_path_resolver = \Drupal::service('extension.path.resolver');
+  $self_module_path = $extension_path_resolver->getPath('module', 'alshaya_rcs_online_returns');
+
+  if ($extension === 'alshaya_online_returns' && isset($libraries['alshaya_online_returns_util'])) {
+    $options = $libraries['alshaya_online_returns_util']['js']['js/assets/alshaya_online_returns_util_v2.js'];
+    unset($libraries['alshaya_online_returns_util']['js']['js/assets/alshaya_online_returns_util_v2.js']);
+    $libraries['alshaya_online_returns_util']['js']["/$self_module_path/js/alshaya_online_returns_util_rcs.js"] = $options;
+  }
+}
