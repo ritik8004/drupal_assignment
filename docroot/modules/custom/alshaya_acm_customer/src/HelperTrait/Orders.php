@@ -52,6 +52,7 @@ trait Orders {
    */
   private function cleanupOrder(array $order) {
     if (empty($order)) {
+      \Drupal::logger('alshaya_acm_customer')->warning('Order details is empty.');
       return [];
     }
     $order['order_id'] = $order['entity_id'];

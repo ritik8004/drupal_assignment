@@ -347,14 +347,15 @@ class OrdersManager {
     $search = $search_key ? $this->currentRequest->query->get($search_key) : NULL;
     if ($search) {
       $filtered_orders = array_filter($orders, function ($order) use ($search) {
+        $search = (string) $search;
         // Search by Order ID.
-        if (stripos($order['increment_id'], (string) $search) > -1) {
+        if (stripos($order['increment_id'], $search) > -1) {
           return TRUE;
         }
 
         foreach ($order['items'] as $orderItem) {
           // Search by name.
-          if (stripos($orderItem['name'], (string) $search) > -1) {
+          if (stripos($orderItem['name'], $search) > -1) {
             return TRUE;
           }
           // Search by SKU.
@@ -469,7 +470,10 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = $response ? json_decode($response, TRUE) : [];
+    if (empty($response)) {
+      return NULL;
+    }
+    $result = json_decode($response, TRUE);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
       return NULL;
