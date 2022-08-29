@@ -489,7 +489,7 @@ class CustomCommand extends BltTasks {
   }
 
   /**
-   * Build react dist files for use in local.
+   * Build react dist files.
    *
    * @command local:react:build
    * @aliases react-build
@@ -502,6 +502,55 @@ class CustomCommand extends BltTasks {
       ->run();
 
     return $result;
+  }
+
+  /**
+   * Build react files for use in local.
+   *
+   * @command local:react:build:dev
+   * @aliases react-build-dev
+   */
+  public function reactBuildDev() {
+    foreach ($this->getFoldersWithReact() as $dir) {
+      // Print the directory path to for user.
+      $this->say($dir);
+
+      // Build the files.
+      $this->taskExec('npm run build:dev')
+        ->dir($dir)
+        ->run();
+    }
+  }
+
+  /**
+   * Wrapper to get React folders which require compiling.
+   *
+   * @return array
+   *   Folders containing webpack.config.js file for React.
+   */
+  private  function getFoldersWithReact() {
+    $folders = [];
+
+    $finder = new Finder();
+
+    // Find all the folders containing the file used to specify entry points.
+    $finder->name('webpack.config.js');
+
+    // We need to find inside custom code only.
+    $files = $finder->in($this->getConfigValue('docroot') . '/modules/react');
+
+    foreach ($files as $file) {
+      $dir = str_replace('webpack.config.js', '', $file->getRealPath());
+
+      // Ignore webpack.config.js found inside node_modules.
+      if (strpos($dir, 'node_modules') > -1 || strpos($dir, 'alshaya_react_test') > -1) {
+        continue;
+      }
+
+      $folders[] = $dir;
+    }
+
+    return $folders;
   }
 
   /**
