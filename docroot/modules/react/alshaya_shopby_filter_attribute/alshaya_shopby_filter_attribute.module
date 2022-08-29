@@ -12,11 +12,14 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Implements hook_page_attachments_alter().
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ *
+ * Attach the required libraries and drupal settings for the feature to use on
+ * front end.
  */
-function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
+function alshaya_shopby_filter_attribute_block_view_alshaya_main_menu_alter(&$build, $block) {
   // Add cache tags for the module's settings.
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:alshaya_shopby_filter_attribute.settings']);
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_shopby_filter_attribute.settings']);
 
   // Load shop by filter attribute module's configs.
   $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
@@ -27,11 +30,11 @@ function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
   }
 
   // Pass the configs in drupal settings to use on front-end.
-  $page['#attached']['drupalSettings']['shopByFilterAttribute'] = $shopby_filter_attribute_configs;
+  $build['#attached']['drupalSettings']['shopByFilterAttribute'] = $shopby_filter_attribute_configs;
 
   // Attach the library if feature is enabled.
-  $page['#attached']['library'][] = 'alshaya_shopby_filter_attribute/menu_attribute_navigation';
-  $page['#attached']['library'][] = 'alshaya_white_label/megamenu-shop-by-filter';
+  $build['#attached']['library'][] = 'alshaya_shopby_filter_attribute/menu_attribute_navigation';
+  $build['#attached']['library'][] = 'alshaya_white_label/megamenu-shop-by-filter';
 }
 
 /**
