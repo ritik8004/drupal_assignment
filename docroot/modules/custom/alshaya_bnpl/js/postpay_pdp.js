@@ -25,6 +25,14 @@
       skuBaseForm.once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
         setPostpayWidgetAmount(this, variant, event);
       });
+
+      // Set the amount and render the postpay widget after product gallery
+      // loaded. This is required for the elements which are rendered within
+      // the gallery / product zoom container that refreshes on every variant
+      // change or page load.
+      $(document).once('product-gallery-loaded').on('productGalleryLoaded', function () {
+        setPostpayWidgetAmount(skuBaseForm);
+      });
     }
   };
 
