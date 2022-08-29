@@ -192,4 +192,6 @@ function alshaya_online_returns_alshaya_spc_cart_build_alter(array &$build) {
 
   // Add the online return cart banner flag.
   $build['#attached']['drupalSettings']['onlineReturns']['cartBanner'] = $onlineReturnsHelper->isOnlineReturnsCartBannerEnabled();
+  // Attach the theming library.
+  $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
 }
