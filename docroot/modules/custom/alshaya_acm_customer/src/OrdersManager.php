@@ -312,9 +312,7 @@ class OrdersManager {
         }
 
         // Sort them by default by date.
-        usort($orders, function ($a, $b) {
-          return $b['created_at'] > $a['created_at'];
-        });
+        usort($orders, fn($a, $b) => $b['created_at'] > $a['created_at']);
 
         // Update order items to have unique records only.
         // For configurable products we get it twice (once for parent and once
@@ -349,6 +347,7 @@ class OrdersManager {
     $search = $search_key ? $this->currentRequest->query->get($search_key) : NULL;
     if ($search) {
       $filtered_orders = array_filter($orders, function ($order) use ($search) {
+        $search = (string) $search;
         // Search by Order ID.
         if (stripos($order['increment_id'], $search) > -1) {
           return TRUE;
@@ -412,7 +411,7 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
+    $result = $response ? json_decode($response, TRUE) : [];
     $count = $result['total_count'] ?? 0;
     $this->countCache->set($cid, $count);
 
@@ -440,7 +439,7 @@ class OrdersManager {
 
     if (empty($result)) {
       $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-      $result = json_decode($response ?? [], TRUE);
+      $result = $response ? json_decode($response, TRUE) : [];
     }
 
     if (!empty($result)) {
@@ -450,7 +449,7 @@ class OrdersManager {
       }
     }
 
-    $order = reset($result['items']);
+    $order = !empty($result['items']) ? reset($result['items']) : [];
     return $this->cleanupOrder($order);
   }
 
@@ -471,13 +470,16 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
+    if (empty($response)) {
+      return NULL;
+    }
+    $result = json_decode($response, TRUE);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
       return NULL;
     }
 
-    $order = reset($result['items']);
+    $order = !empty($result['items']) ? reset($result['items']) : [];
     return $this->cleanupOrder($order);
   }
 
@@ -499,13 +501,13 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
+    $result = $response ? json_decode($response, TRUE) : [];
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
       return NULL;
     }
 
-    $order = reset($result['items']);
+    $order = !empty($result['items']) ? reset($result['items']) : [];
     return $this->cleanupOrder($order);
   }
 
@@ -551,7 +553,7 @@ class OrdersManager {
     $query['searchCriteria']['pageSize'] = 1;
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
 
-    $result = json_decode($response ?? [], TRUE);
+    $result = $response ? json_decode($response, TRUE) : [];
 
     return $result['total_count'] ?? 0;
   }

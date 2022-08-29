@@ -51,6 +51,10 @@ trait Orders {
    *   Cleaned up order array.
    */
   private function cleanupOrder(array $order) {
+    if (empty($order)) {
+      $this->logger->warning('Order details found empty in cleanupOrder.');
+      return [];
+    }
     $order['order_id'] = $order['entity_id'];
 
     // Customer info.
