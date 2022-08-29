@@ -58,6 +58,11 @@ window.commerceBackend.updateGallery = function (product, layout, gallery, pageM
       jQuery('#product-zoom-container', product).removeClass('whiteout');
     }, 1);
   }
+
+  // Dispatch event for components like express-delivery label or postpay
+  // widget to load.
+  const event = new CustomEvent('productGalleryLoaded');
+  document.dispatchEvent(event);
 };
 
 /**

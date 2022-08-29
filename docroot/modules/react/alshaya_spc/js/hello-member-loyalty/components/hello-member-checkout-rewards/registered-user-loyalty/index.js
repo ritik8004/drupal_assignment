@@ -193,7 +193,7 @@ class RegisteredUserLoyalty extends React.Component {
         {!isAuraIntegrationEnabled()
           && (
           <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
-            <div className="loaylty-option-text">
+            <div className="loyalty-option-text">
               {parse(parse(Drupal.t('@hm_icon Member earns @points points', {
                 '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
                 '@points': helloMemberPoints,

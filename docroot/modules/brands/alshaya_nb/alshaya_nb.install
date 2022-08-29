@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_nb.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_nb_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_nb', 'inc', 'alshaya_nb.content');
+
+  // Create default content for the site.
+  alshaya_nb_create_default_content();
+}

@@ -1,0 +1,10 @@
+name: 'Alshaya Alo Yoga (Transac)'
+type: module
+description: 'The dedicated module for transac Alo Yoga brand.'
+package: Alshaya
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_ay:alshaya_ay
+themes:
+  - alshaya_alo_yoga
