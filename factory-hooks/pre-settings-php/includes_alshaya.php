@@ -17,6 +17,19 @@ $env_name = !in_array($env, ['travis', 'local']) ? substr($env, 2) : $env;
 
 $settings['env'] = $env;
 
+// Set home directory as per environment.
+$settings['alshaya_home_dir'] = $_SERVER['HOME'] ?? '';
+
+if ($settings['env'] === 'local') {
+  // Still keeping this condition for anyone using vagrant.
+  $settings['alshaya_home_dir'] = '/home/vagrant';
+
+  // For Lando we use custom directory for home.
+  if (getenv('LANDO')) {
+    $settings['alshaya_home_dir'] = '/app/local_home';
+  }
+}
+
 // Make sure environment name used to load settings is not pointing to update
 // environment name like 01devup or 01update.
 if ($env_name === 'update') {
