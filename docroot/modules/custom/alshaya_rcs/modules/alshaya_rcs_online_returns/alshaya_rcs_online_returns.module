@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_alshaya_rcs_product_recent_orders_fields_alter().
+ */
+function alshaya_rcs_online_returns_alshaya_rcs_product_recent_orders_fields_alter(array &$fields) {
+  array_push(
+    $fields['items'],
+    'is_returnable',
+  );
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'is_returnable',
+  );
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_recent_orders_fields_alter().
+ */
+function alshaya_rcs_online_returns_alshaya_rcs_product_order_details_fields_alter(array &$fields) {
+  array_push(
+    $fields['items'],
+    'is_returnable',
+  );
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'is_returnable',
+  );
+}

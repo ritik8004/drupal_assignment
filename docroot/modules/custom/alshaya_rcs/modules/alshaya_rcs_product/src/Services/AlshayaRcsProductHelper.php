@@ -408,7 +408,6 @@ class AlshayaRcsProductHelper {
                   ],
                 ],
               ],
-              'is_returnable',
               'stock_data' => [
                 'qty',
                 'max_sale_qty',
