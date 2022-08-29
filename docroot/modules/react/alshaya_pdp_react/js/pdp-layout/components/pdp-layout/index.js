@@ -250,7 +250,9 @@ const PdpLayout = () => {
           ) : null}
           <ConditionalView condition={isExpressDeliveryEnabled()}>
             {/* Show PDP delivery labels for magazineV2 */}
-            <PdpSddEd />
+            <div className="express-delivery active">
+              <PdpSddEd />
+            </div>
           </ConditionalView>
           {checkBazaarVoiceAvailableForPdp(skuItemCode) ? (
             <PpdRatingsReviews

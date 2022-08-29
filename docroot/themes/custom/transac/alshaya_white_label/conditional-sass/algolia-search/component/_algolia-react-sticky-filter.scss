@@ -1,7 +1,9 @@
 #alshaya-algolia-search,
 .block-alshaya-algolia-react-plp,
 .block-alshaya-algolia-react-promotion,
-.block-alshaya-algolia-react-product-list {
+.block-alshaya-algolia-react-product-list,
+.block-alshaya-algolia-listing-v2,
+.block-alshaya-algolia-react-promotion-v2 {
   .filter-fixed-top {
     .show-all-filters-algolia {
       &.empty-category {
@@ -31,7 +33,8 @@
 }
 
 @include breakpoint($only-mobile) {
-  .block-alshaya-algolia-react-plp {
+  .block-alshaya-algolia-react-plp,
+  .block-alshaya-algolia-listing-v2 {
     .filter-fixed-top {
       .block-alshaya-sub-category-block ~ .block-facet-blockcategory-facet-plp,
       .block-alshaya-sub-category-block ~ .show-all-filters-algolia {
