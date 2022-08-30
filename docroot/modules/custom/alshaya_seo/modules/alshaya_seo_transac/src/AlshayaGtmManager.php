@@ -1070,7 +1070,7 @@ class AlshayaGtmManager {
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
       'egiftRedeemType' => !empty($additional_info) ? $additional_info->card_type : '',
-      'isAdvantageCard' => $order['coupon_code'] === 'advantage_card',
+      'isAdvantageCard' => $order['coupon_code'] ?? '' === 'advantage_card',
       'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],

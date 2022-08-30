@@ -1,0 +1,8 @@
+services:
+  alshaya_rcs_online_returns.online_returns_helper:
+    class: Drupal\alshaya_rcs_online_returns\Service\RcsOnlineReturnsHelper
+    decorates: alshaya_online_returns.online_returns_helper
+    arguments:
+      - '@config.factory'
+      - '@entity_type.manager'
+      - '@alshaya_acm_checkout.options_manager'
