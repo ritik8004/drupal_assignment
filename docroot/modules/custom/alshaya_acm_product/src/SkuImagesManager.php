@@ -1536,7 +1536,7 @@ class SkuImagesManager {
    * @return array
    *   Media array containing styled images.
    */
-  public function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
+  private function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
     if (empty($media['images'])) {
       return $media;
     }
@@ -1586,6 +1586,41 @@ class SkuImagesManager {
     }
 
     return FALSE;
+  }
+
+  /**
+   * Process product media data.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU value.
+   * @param string $context
+   *   Context value.
+   *
+   * @return array
+   *   Media data.
+   */
+  public function getProductMediaDataWithStyles(SKUInterface $sku, string $context) {
+    $data = [];
+    $media = $this->getProductMedia($sku, $context);
+    $media = $this->processMediaImageStyles($media, $sku, $context);
+
+    foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      $media_data = [
+        'url' => file_create_url($media_item['drupal_uri']),
+        'image_type' => $media_item['sortAssetType'] ?? 'image',
+      ];
+
+      if (!empty($media_item['styles'])) {
+        $media_data['styles'] = $media_item['styles'];
+      }
+      elseif (!empty($media_item['pims_image']['styles'])) {
+        $media_data['styles'] = $media_item['pims_image']['styles'];
+      }
+
+      $data['images'][] = $media_data;
+    }
+
+    return $data;
   }
 
 }
