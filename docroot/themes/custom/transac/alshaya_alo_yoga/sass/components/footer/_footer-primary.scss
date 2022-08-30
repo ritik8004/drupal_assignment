@@ -60,7 +60,6 @@
       a {
         font-family: $alshaya-thin;
         line-height: 1.25;
-        text-transform: capitalize;
         font-size: rem(16);
 
         @include breakpoint($only-mobile) {
@@ -101,7 +100,6 @@
         a {
           font-family: $alshaya-thin;
           line-height: 1.25;
-          text-transform: capitalize;
           font-size: rem(16);
 
           @include breakpoint($only-mobile) {
@@ -191,7 +189,6 @@
       background-color: $primary_brand_button;
       font-family: $ay-heavy;
       font-size: rem(16);
-      font-weight: 900;
       line-height: 1.25;
       color: $primary_btn_bg;
       text-transform: uppercase;
@@ -243,11 +240,6 @@
       a:hover {
         opacity: 0.5;
       }
-    }
-
-    [class^=c-social-links--]::before {
-      color: $footer_title_h3;
-      font-size: rem(40);
     }
   }
 }
