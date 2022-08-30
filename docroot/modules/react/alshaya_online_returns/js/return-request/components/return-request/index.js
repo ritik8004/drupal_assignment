@@ -37,6 +37,7 @@ class ReturnRequest extends React.Component {
           return;
         }
         this.setState({
+          orderDetails,
           wait: false,
         });
 
