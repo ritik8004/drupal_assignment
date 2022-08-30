@@ -11,7 +11,7 @@
     .region__menu-primary {
       @include breakpoint($desktop) {
         float: $left;
-        width: 35%;
+        width: 30%;
       }
 
       .block-alshaya-super-category-menu {
