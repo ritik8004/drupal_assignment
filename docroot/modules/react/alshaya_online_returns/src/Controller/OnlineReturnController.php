@@ -150,7 +150,7 @@ class OnlineReturnController extends ControllerBase {
     $build['#cache']['tags'] = $this->onlineReturnsHelper->getCacheTags();
 
     // Get return configurations.
-    $returnConfig = $this->onlineReturnsApiHelper->getReturnsApiConfig(
+    $returnConfig = $this->onlineReturnsApiHelper->getLanguageBasedReturnsConfig(
       $this->languageManager()->getCurrentLanguage()->getId(),
     );
 
@@ -209,7 +209,7 @@ class OnlineReturnController extends ControllerBase {
     $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
 
     // Get return configurations.
-    $returnConfiguration = $this->onlineReturnsApiHelper->getReturnsApiConfig(
+    $returnConfiguration = $this->onlineReturnsApiHelper->getLanguageBasedReturnsConfig(
       $this->languageManager()->getCurrentLanguage()->getId(),
     );
 
