@@ -41,8 +41,15 @@ export default class PdpSddEd extends React.Component {
     if (checkShippingMethodsStatus(shippingMethods)) {
       shippingMethods.forEach((shippingMethod) => {
         if (shippingMethod.available !== 'undefined' && shippingMethod.available) {
-          if ((shippingMethod.carrier_code === 'SAMEDAY') || (shippingMethod.carrier_code === 'EXPRESS')) {
-            const deliveryOptionKey = shippingMethod.carrier_title.toLowerCase().replaceAll(' ', '_');
+          if (shippingMethod.carrier_code === 'SAMEDAY') {
+            const deliveryOptionKey = 'same_day_delivery';
+            expressDeliveryLabels.push({
+              key: deliveryOptionKey,
+              value: deliveryOptionsLabel[deliveryOptionKey],
+            });
+          }
+          if (shippingMethod.carrier_code === 'EXPRESS') {
+            const deliveryOptionKey = 'express_delivery';
             expressDeliveryLabels.push({
               key: deliveryOptionKey,
               value: deliveryOptionsLabel[deliveryOptionKey],
