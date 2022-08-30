@@ -209,7 +209,7 @@ function getAdressData(shippingAddress) {
 /**
  * Utility function to get order details for return pages.
  */
-const getOrderDetails = window.commerceBackend.getOrderDetails();
+const getOrderDetails = () => window.commerceBackend.getOrderDetails();
 
 /**
  * Utility function to get cancel button status.

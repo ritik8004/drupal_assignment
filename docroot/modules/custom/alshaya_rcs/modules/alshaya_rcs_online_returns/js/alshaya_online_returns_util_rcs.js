@@ -4,6 +4,6 @@
    */
   window.commerceBackend.getOrderDetails = function getOrderDetails() {
     let orderDetails = {};
-    return orderDetails;
+    return new Promise((resolve) => resolve(orderDetails));
   }
 })();

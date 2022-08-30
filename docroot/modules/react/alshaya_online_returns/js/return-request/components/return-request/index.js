@@ -18,29 +18,30 @@ class ReturnRequest extends React.Component {
       isReturnRequestSubmit: false,
       itemsSelected: [],
       errorMessage: '',
-      orderDetails: getOrderDetails(),
+      orderDetails: null,
       wait: true,
     };
   }
 
   componentDidMount() {
-    const { orderDetails } = this.state;
-    showFullScreenLoader();
-    // Validating if current order applicable for return.
-    validateReturnRequest(orderDetails).then((validateRequest) => {
-      // If return request invalid, redirect to order details page.
-      if (!validateRequest) {
-        const orderDetailsUrl = getOrderDetailsUrl(orderDetails['#order'].orderId);
-        if (hasValue(orderDetailsUrl)) {
-          window.location.href = orderDetailsUrl;
+    getOrderDetails().then((orderDetails) => {
+      showFullScreenLoader();
+      // Validating if current order applicable for return.
+      validateReturnRequest(orderDetails).then((validateRequest) => {
+        // If return request invalid, redirect to order details page.
+        if (!validateRequest) {
+          const orderDetailsUrl = getOrderDetailsUrl(orderDetails['#order'].orderId);
+          if (hasValue(orderDetailsUrl)) {
+            window.location.href = orderDetailsUrl;
+          }
+          return;
         }
-        return;
-      }
-      this.setState({
-        wait: false,
-      });
+        this.setState({
+          wait: false,
+        });
 
-      removeFullScreenLoader();
+        removeFullScreenLoader();
+      });
     });
 
     window.addEventListener('beforeunload', this.warnUser, false);
@@ -95,11 +96,13 @@ class ReturnRequest extends React.Component {
     const {
       itemsSelected, errorMessage, orderDetails, wait,
     } = this.state;
-    const { helperBlock } = drupalSettings.onlineReturns.returnInfo;
-    const { orderId } = orderDetails['#order'];
+
     if (!hasValue(orderDetails) || wait) {
       return null;
     }
+
+    const { helperBlock } = drupalSettings.onlineReturns.returnInfo;
+    const { orderId } = orderDetails['#order'];
 
     return (
       <div className="return-requests-wrapper">
