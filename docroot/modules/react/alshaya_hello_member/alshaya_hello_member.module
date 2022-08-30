@@ -570,6 +570,7 @@ function alshaya_hello_member_alshaya_spc_checkout_event_controller_account_alte
   if (!$helloMemberHelper->isHelloMemberEnabled()) {
     return;
   }
-  // Set field_mobile_number to null if hello member enabled.
+  // Set field_mobile_number to null
+  // if phone number is added from checkout page.
   $account->get('field_mobile_number')->setValue(NULL);
 }

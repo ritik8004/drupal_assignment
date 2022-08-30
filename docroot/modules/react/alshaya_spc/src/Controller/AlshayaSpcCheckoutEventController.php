@@ -156,8 +156,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         if ($account) {
           if (empty($account->get('field_mobile_number')->getString())) {
             $account->get('field_mobile_number')->setValue($cart['billing_address']['telephone']);
-            // Only update billing telephone in user mobile number
-            // if hello member is not enabled.
+            // Allow other modules to change the account data.
             $this->moduleHandler->alter('alshaya_spc_checkout_event_controller_account', $account);
             $account->save();
           }
