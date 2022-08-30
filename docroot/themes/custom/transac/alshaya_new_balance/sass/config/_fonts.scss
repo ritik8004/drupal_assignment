@@ -1,0 +1,30 @@
+// NB specific font family
+// English fonts.
+
+//Proxima Nova
+$nb-nova-regular: 'ProximaNova Regular', 'sans-serif', 'Arial';
+$nb-nova-regular-nodir: 'ProximaNova Regular', 'sans-serif', 'Arial';
+
+$nb-nova-semibold: 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+$ay-nova-semibold-nodir: 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+
+$nb-nova-bold: 'ProximaNova Bold', 'sans-serif', 'Arial';
+$ay-nova-bold-nodir: 'ProximaNova Bold', 'sans-serif', 'Arial';
+
+// Didot
+$nb-didot-regular: 'Didot Regular', 'sans-serif', 'Arial';
+$nb-didot-regular-nodir: 'Didot Regular', 'sans-serif', 'Arial';
+
+$nb-didot-medium: 'Didot Medium', 'sans-serif', 'Arial';
+$nb-didot-medium-nodir: 'Didot Medium', 'sans-serif', 'Arial';
+
+$nb-didot-bold: 'Didot Bold', 'sans-serif', 'Arial';
+$nb-didot-bold-nodir: 'Didot Medium', 'sans-serif', 'Arial';
+
+// Override font variables coming from MC, without this we get a 404 as font files are no longer present in NB theme.
+$arial: $nb-nova-regular;
+$arial-nodir: $nb-nova-regular;
+$alshaya-bold: $nb-nova-bold;
+$alshaya-arabic-bold: $nb-nova-bold;
+$alshaya-thin: $nb-nova-regular;
+$alshaya-arabic-thin: $nb-nova-regular;

@@ -1,0 +1,63 @@
+// Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fonts';
+
+@font-face {
+  font-family: 'ProximaNova Regular';
+  src:
+    url('#{$base_theme_fonts_directory_path}/ProximaNova-Regular.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/ProximaNova-Regular.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@font-face {
+  font-family: 'ProximaNova Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/ProximaNova-Bold.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/ProximaNova-Bold.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ProximaNova Semi Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/ProximaNova-Semibold.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/ProximaNova-Semibold.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Didot Regular';
+  src:
+    url('#{$base_theme_fonts_directory_path}/Didot Regular.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/Didot-Regular.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Didot Medium';
+  src:
+    url('#{$base_theme_fonts_directory_path}/Didot Medium.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/Didot-Medium.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Didot Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/Didot LT Std Bold.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/Didot-LT-Std-Bold.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
