@@ -362,6 +362,19 @@
               visibility: visible;
             }
           }
+
+          &.clear-icon {
+            #alshaya-algolia-autocomplete {
+              .react-autosuggest__container {
+                @include breakpoint($upto-desktop) {
+                  &::before,
+                  &::after {
+                    opacity: 0;
+                  }
+                }
+              }
+            }
+          }
         }
 
         .algolia-search-back-icon {
