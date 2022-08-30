@@ -7,14 +7,64 @@
     }
 
     @include breakpoint($only-tablet) {
-      padding-top: 2rem;
+      padding-top: rem(32);
     }
 
     ul {
       li {
         a {
-          font-family: $ay-nova-regular;
+          font-family: $alshaya-thin;
           text-transform: unset;
+        }
+      }
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($desktop) {
+      width: 30%;
+    }
+
+    .c-footer-menu--category {
+      h3 {
+        font-size: rem(16);
+        margin-top: rem(16);
+        margin-bottom: rem(18);
+        text-transform: none;
+
+        @include breakpoint($only-mobile) {
+          display: flex;
+          margin: 0;
+          align-items: center;
+          border-top: rem(1) solid $footer_title_h3;
+          font-family: $alshaya-thin;
+          padding: rem(14) rem(8);
+        }
+      }
+
+      .accordion--body {
+        @include breakpoint($upto-tablet) {
+          padding-#{$left}: rem(8);
+        }
+      }
+    }
+
+    .c-footer-menu__tab {
+      padding-bottom: rem(10);
+      width: max-content;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: rem(0);
+      }
+
+      a {
+        font-family: $alshaya-thin;
+        line-height: 1.25;
+        text-transform: capitalize;
+        font-size: rem(16);
+
+        @include breakpoint($only-mobile) {
+          line-height: 1;
         }
       }
     }
@@ -23,22 +73,23 @@
   .footer--abouthelp {
     @include breakpoint($desktop) {
       display: flex;
+      width: 70%;
     }
 
     .c-footer-menu--about,
     .c-footer-menu--help {
       h3 {
         font-size: rem(16);
-        font-family: $ay-nova-bold;
         margin-top: rem(16);
         margin-bottom: rem(18);
+        text-transform: none;
 
         @include breakpoint($only-mobile) {
           display: flex;
           margin: 0;
           align-items: center;
           border-top: rem(1) solid $footer_title_h3;
-          font-family: $ay-nova-regular;
+          font-family: $alshaya-thin;
           padding: rem(14) rem(8);
         }
       }
@@ -48,17 +99,39 @@
         width: max-content;
 
         a {
-          font-family: $ay-nova-regular;
+          font-family: $alshaya-thin;
           line-height: 1.25;
           text-transform: capitalize;
           font-size: rem(16);
+
+          @include breakpoint($only-mobile) {
+            line-height: 1;
+          }
+        }
+      }
+
+      .accordion--body {
+        @include breakpoint($upto-tablet) {
+          padding-#{$left}: rem(8);
+        }
+      }
+
+      .c-footer-menu__title {
+        @include breakpoint($upto-tablet) {
+          padding-bottom: rem(0);
         }
       }
     }
 
     .c-footer-menu--about {
       @include breakpoint($desktop) {
-        width: auto;
+        width: 50%;
+      }
+    }
+
+    .c-footer-menu--help {
+      @include breakpoint($desktop) {
+        width: 30%;
       }
     }
   }
@@ -66,7 +139,6 @@
   .alshaya-newsletter-subscribe {
     h3 {
       font-size: rem(16);
-      font-family: $ay-nova-bold;
       margin-top: rem(16);
       margin-bottom: rem(18);
       text-transform: unset;
@@ -108,7 +180,7 @@
     }
 
     .form-email {
-      font-family: $ay-nova-regular;
+      font-family: $alshaya-thin;
       color: $footer-newsletter-text;
       margin-top: rem(4);
       font-size: rem(12);
@@ -143,11 +215,10 @@
 
     h3 {
       font-size: rem(16);
-      font-family: $ay-nova-bold;
       color: $footer_title_h3;
 
       @include breakpoint($upto-tablet) {
-        font-family: $ay-nova-regular;
+        font-family: $alshaya-thin;
       }
     }
 
@@ -156,7 +227,7 @@
       align-items: center;
 
       @include breakpoint($upto-tablet) {
-        text-align: left;
+        text-align: $left;
       }
     }
 
