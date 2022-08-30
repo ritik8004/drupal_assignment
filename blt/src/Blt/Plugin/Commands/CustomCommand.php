@@ -462,11 +462,8 @@ class CustomCommand extends BltTasks {
     $files = explode("\n", $file_list);
     // Filtering PHP files.
     $files = array_filter($files, fn($value) =>
-      (
-        // Ignore files in following directories.
-        !str_starts_with($value, 'factory-hooks')
-        && !str_starts_with($value, 'hooks')
-      ) && (
+      // Only track files inside docroot.
+      str_starts_with($value, 'docroot') && (
         // Only take php files for validation.
         str_ends_with($value, '.php')
         || str_ends_with($value, '.module')
