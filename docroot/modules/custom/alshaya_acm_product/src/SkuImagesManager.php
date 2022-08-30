@@ -1536,7 +1536,7 @@ class SkuImagesManager {
    * @return array
    *   Media array containing styled images.
    */
-  public function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
+  private function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
     if (empty($media['images'])) {
       return $media;
     }
