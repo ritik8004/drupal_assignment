@@ -1,0 +1,245 @@
+.c-footer-primary {
+  background-color: $footer-bg;
+
+  .language-switcher-language-url {
+    @include breakpoint($upto-tablet) {
+      padding-bottom: rem(12);
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-top: rem(32);
+    }
+
+    ul {
+      li {
+        a {
+          font-family: $alshaya-thin;
+          text-transform: unset;
+        }
+      }
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($desktop) {
+      width: 30%;
+    }
+
+    .c-footer-menu--category {
+      h3 {
+        font-size: rem(16);
+        margin-top: rem(16);
+        margin-bottom: rem(18);
+        text-transform: none;
+
+        @include breakpoint($only-mobile) {
+          display: flex;
+          margin: 0;
+          align-items: center;
+          border-top: rem(1) solid $footer_title_h3;
+          font-family: $alshaya-thin;
+          padding: rem(14) rem(8);
+        }
+      }
+
+      .accordion--body {
+        @include breakpoint($upto-tablet) {
+          padding-#{$left}: rem(8);
+        }
+      }
+    }
+
+    .c-footer-menu__tab {
+      padding-bottom: rem(10);
+      width: max-content;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: rem(0);
+      }
+
+      a {
+        font-family: $alshaya-thin;
+        line-height: 1.25;
+        font-size: rem(16);
+
+        @include breakpoint($only-mobile) {
+          line-height: 1;
+        }
+      }
+    }
+  }
+
+  .footer--abouthelp {
+    @include breakpoint($desktop) {
+      display: flex;
+      width: 70%;
+    }
+
+    .c-footer-menu--about,
+    .c-footer-menu--help {
+      h3 {
+        font-size: rem(16);
+        margin-top: rem(16);
+        margin-bottom: rem(18);
+        text-transform: none;
+
+        @include breakpoint($only-mobile) {
+          display: flex;
+          margin: 0;
+          align-items: center;
+          border-top: rem(1) solid $footer_title_h3;
+          font-family: $alshaya-thin;
+          padding: rem(14) rem(8);
+        }
+      }
+
+      .c-footer-menu__title {
+        padding-bottom: rem(10);
+        width: max-content;
+
+        a {
+          font-family: $alshaya-thin;
+          line-height: 1.25;
+          font-size: rem(16);
+
+          @include breakpoint($only-mobile) {
+            line-height: 1;
+          }
+        }
+      }
+
+      .accordion--body {
+        @include breakpoint($upto-tablet) {
+          padding-#{$left}: rem(8);
+        }
+      }
+
+      .c-footer-menu__title {
+        @include breakpoint($upto-tablet) {
+          padding-bottom: rem(0);
+        }
+      }
+    }
+
+    .c-footer-menu--about {
+      @include breakpoint($desktop) {
+        width: 50%;
+      }
+    }
+
+    .c-footer-menu--help {
+      @include breakpoint($desktop) {
+        width: 30%;
+      }
+    }
+  }
+
+  .alshaya-newsletter-subscribe {
+    h3 {
+      font-size: rem(16);
+      margin-top: rem(16);
+      margin-bottom: rem(18);
+      text-transform: unset;
+
+      @include breakpoint($upto-tablet) {
+        text-align: $left;
+        font-family: $ay-nova-semibold;
+      }
+    }
+
+    .newsletter-block-label {
+      display: none;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: rem(0) rem(16);
+    }
+
+    @include breakpoint($only-tablet) {
+      min-width: initial;
+      margin-bottom: rem(45);
+    }
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: rem(18);
+
+      #footer-newsletter-form-wrapper {
+        width: auto;
+      }
+    }
+
+    #edit-email {
+      padding-#{$left}: 2%;
+      color: $footer-newsletter-text;
+
+      &::placeholder {
+        color: $footer-newsletter-text;
+      }
+    }
+
+    .form-email {
+      font-family: $alshaya-thin;
+      color: $footer-newsletter-text;
+      margin-top: rem(4);
+      font-size: rem(12);
+      padding-#{$left}: rem(8);
+    }
+
+    .form-submit {
+      background-color: $primary_brand_button;
+      font-family: $ay-heavy;
+      font-size: rem(16);
+      line-height: 1.25;
+      color: $primary_btn_bg;
+      text-transform: uppercase;
+      padding: rem(7) rem(15);
+      margin-bottom: rem(1);
+      #{$right}: 0;
+    }
+  }
+
+  .footer--social {
+    @include breakpoint($tablet) {
+      padding-#{$left}: rem(18);
+    }
+  }
+
+  .c-social-links {
+    @include breakpoint($upto-tablet) {
+      padding-top: rem(36);
+      margin: 0 rem(16);
+    }
+
+    h3 {
+      font-size: rem(16);
+      color: $footer_title_h3;
+
+      @include breakpoint($upto-tablet) {
+        font-family: $alshaya-thin;
+      }
+    }
+
+    ul {
+      display: flex;
+      align-items: center;
+
+      @include breakpoint($upto-tablet) {
+        text-align: $left;
+      }
+    }
+
+    li {
+      &:not(:last-child) {
+        margin-#{$right}: rem(16);
+
+        @include breakpoint($upto-tablet) {
+          margin-#{$right}: rem(24);
+        }
+      }
+
+      a:hover {
+        opacity: 0.5;
+      }
+    }
+  }
+}
