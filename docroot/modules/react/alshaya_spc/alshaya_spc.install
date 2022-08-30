@@ -18,8 +18,8 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Adding config translation for express delivery labels.
  */
 function alshaya_spc_update_9001() {
-  // Add alshaya_spc.settings config.
-  /** @var AlshayaConfigManager $manager */
+  // Add alshaya_spc.express_delivery config translation for labels.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigTranslations(
     'alshaya_spc.express_delivery',
