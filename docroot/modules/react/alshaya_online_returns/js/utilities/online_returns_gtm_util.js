@@ -119,12 +119,14 @@ function getProductGtmInfo(itemsSelected) {
 function getPreparedOrderGtm(eventType, returnInfo) {
   const gtmInfo = getOrderGtmInfo();
   let returnOrder = {};
+  let paymentMethods = [];
 
   // Check if general GTM info is present or not.
   if (hasValue(gtmInfo.general)) {
     const {
       transactionId,
       deliveryOption,
+      paymentMethodsUsed,
     } = gtmInfo.general;
 
     // Prepare the Return order object.
@@ -134,23 +136,29 @@ function getPreparedOrderGtm(eventType, returnInfo) {
       // @todo Will done in DIG-10167.
       orderFirstTimeTransaction: '',
     };
+
+    // Check if GTM payment methods are available or not.
+    if (paymentMethodsUsed.length > 0) {
+      paymentMethods = paymentMethodsUsed;
+    }
   }
 
   const orderDetails = getOrderDetails();
 
   // Get delivery address info.
   const deliveryInfo = getDeliveryAddress(orderDetails);
-  // Get the payment details.
-  let paymentDetails = getPaymentDetails(orderDetails);
-  // Sort the payment details based on the weight in ascending order.
-  paymentDetails = Object.values(paymentDetails).sort((p1, p2) => p1.weight - p2.weight);
+  // Get the payment details only if GTM payment info is not availble.
+  if (!paymentMethods.length > 0) {
+    let paymentDetails = getPaymentDetails(orderDetails);
+    // Combine all the payment methods.
+    if (Object.keys(paymentDetails).length > 0) {
+      // Sort the payment details based on the weight in ascending order.
+      paymentDetails = Object.values(paymentDetails).sort((p1, p2) => p1.weight - p2.weight);
 
-  // Combine all the payment methods.
-  const paymentMethods = [];
-  if (Object.keys(paymentDetails).length > 0) {
-    Object.keys(paymentDetails).forEach((index) => {
-      paymentMethods.push(paymentDetails[index].card_type);
-    });
+      Object.keys(paymentDetails).forEach((index) => {
+        paymentMethods.push(paymentDetails[index].card_type);
+      });
+    }
   }
 
   // Prepare the Return order object.
