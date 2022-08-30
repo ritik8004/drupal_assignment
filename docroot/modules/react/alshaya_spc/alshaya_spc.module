@@ -437,6 +437,7 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   $build['#attached']['drupalSettings']['expressDelivery'] = [
     'enabled' => TRUE,
     'deliveryOptionsOrder' => $express_delivery_config->get('delivery_options_order'),
+    // phpcs:ignore
     'deliveryOptionsLabel' => [
       'same_day_delivery' => t($express_delivery_config->get('same_day_delivery_label'), [], ['context' => 'same_day_delivery_label']),
       'express_delivery' => t($express_delivery_config->get('express_delivery_label'), [], ['context' => 'express_delivery_label']),
