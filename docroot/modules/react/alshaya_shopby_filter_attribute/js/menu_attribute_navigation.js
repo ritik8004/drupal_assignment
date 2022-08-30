@@ -32,6 +32,6 @@ const renderAttributeNavigation = () => {
 if (typeof drupalSettings.shopByFilterAttribute !== 'undefined'
   && typeof drupalSettings.shopByFilterAttribute.enabled !== 'undefined'
   && drupalSettings.shopByFilterAttribute.enabled) {
-  // Add modal load event listener to render shop by filters menu item.
-  window.addEventListener('load', renderAttributeNavigation);
+  // Add DOMContentLoaded event listener to render shop by filters menu item.
+  window.addEventListener('DOMContentLoaded', renderAttributeNavigation);
 }
