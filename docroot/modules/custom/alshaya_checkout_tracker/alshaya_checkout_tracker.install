@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_checkout_tracker.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_checkout_tracker_install() {
+
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+
+  $config_factory = \Drupal::configFactory();
+
+  // Set the checkout tracker block
+  // to appear just below the page title.
+  $page_title_weight = (int) $config_factory->get('block.block.page_title')->get('weight');
+  $config_factory->getEditable('block.block.checkouttrackerblock')->set('weight', $page_title_weight + 1)->save();
+}

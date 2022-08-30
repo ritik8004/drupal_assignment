@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_checkout_tracker_theme() {
+  $theme = [
+    'checkout_tracker_block' => [
+      'variables' => [
+        'steps' => [],
+      ],
+      'template' => 'checkout-tracker-block',
+    ],
+  ];
+
+  return $theme;
+}
