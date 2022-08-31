@@ -27,6 +27,18 @@ function alshaya_rcs_online_returns_alshaya_rcs_product_order_details_fields_alt
     $fields['items'],
     'is_returnable',
   );
+  $fields['items']['gtm_attributes'] = [
+    'id',
+    'name',
+    'variant',
+    'price',
+    'brand',
+    'category',
+    'dimension2',
+    'dimension3',
+    'dimension4',
+  ];
+
   array_push(
     $fields['items']['... on ConfigurableProduct']['variants']['product'],
     'is_returnable',
