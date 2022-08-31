@@ -82,7 +82,8 @@ class ReturnRefundDetails extends React.Component {
         'refunddetails_confirmed',
       );
       // On success, redirect to return confirmation page.
-      const { orderId } = getOrderDetails()['#order'];
+      const orderDetailsFresh = await getOrderDetails();
+      const { orderId } = orderDetailsFresh['#order'];
       const returnUrl = getReturnConfirmationUrl(orderId, returnId);
       if (hasValue(returnUrl)) {
         window.location.href = returnUrl;

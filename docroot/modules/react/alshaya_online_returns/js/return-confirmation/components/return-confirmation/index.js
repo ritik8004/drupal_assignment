@@ -13,19 +13,22 @@ class ReturnConfirmation extends React.Component {
     super(props);
     this.state = {
       returnId: getReturnIdFromUrl(),
-      orderDetails: getOrderDetails(),
+      orderDetails: null,
     };
   }
 
   componentDidMount = () => {
-    const { returnId, orderDetails } = this.state;
-    // Redirect to order details page if return id is not present in url.
-    if (!hasValue(returnId)) {
-      const orderDetailsUrl = getOrderDetailsUrl(orderDetails['#order'].orderId);
-      if (hasValue(orderDetailsUrl)) {
-        window.location.href = orderDetailsUrl;
+    const { returnId } = this.state;
+    getOrderDetails().then((orderDetails) => {
+      // Redirect to order details page if return id is not present in url.
+      if (!hasValue(returnId)) {
+        const orderDetailsUrl = getOrderDetailsUrl(orderDetails['#order'].orderId);
+        if (hasValue(orderDetailsUrl)) {
+          window.location.href = orderDetailsUrl;
+        }
       }
-    }
+      this.setState({ orderDetails });
+    });
   };
 
   render() {

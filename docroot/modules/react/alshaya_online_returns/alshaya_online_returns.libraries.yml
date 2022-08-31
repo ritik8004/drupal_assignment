@@ -32,6 +32,7 @@ alshaya_online_returns_pdp_gtm:
     js/alshaya_online_returns_pdp_gtm.js: {}
   dependencies:
     - core/jquery
+    - alshaya_online_returns/alshaya_online_returns_util
 
 alshaya_online_returns_util:
   js:

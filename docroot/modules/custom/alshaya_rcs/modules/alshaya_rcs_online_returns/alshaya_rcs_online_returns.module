@@ -46,4 +46,8 @@ function alshaya_rcs_online_returns_library_info_alter(&$libraries, $extension) 
     unset($libraries['alshaya_online_returns_util']['js']['js/assets/alshaya_online_returns_util_v2.js']);
     $libraries['alshaya_online_returns_util']['js']["/$self_module_path/js/alshaya_online_returns_util_rcs.js"] = $options;
   }
+
+  if ($extension === 'alshaya_spc' && isset($libraries['order_details'])) {
+    $libraries['order_details']['dependencies'][] = 'alshaya_online_returns/alshaya_online_returns_util';
+  }
 }
