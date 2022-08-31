@@ -26,9 +26,8 @@
         console.log(allProductInfo);
         allProductInfo.forEach(function eachProduct(product) {
           orderDetails['#products'].forEach(function eachOrderProduct(orderProduct) {
-            // if (product.sku !== orderProduct.sku) {
-            //   return;
-            // }
+            // @todo Remove hard code here and loop over returned products data
+            // and set the values.
             orderProduct.image_data = null;
             orderProduct.is_returnable = 1;
             orderProduct.is_big_ticket = null;
