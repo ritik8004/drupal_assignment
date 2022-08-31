@@ -16,7 +16,7 @@ class ReturnItemDetails extends React.Component {
     super(props);
     const { item: { qty_ordered: qtyOrdered } } = props;
     this.state = {
-      returnReasons: getReturnReasons(),
+      returnReasons: getReturnReasons(drupalSettings.path.currentLanguage),
       qtyOptions: getQuantityOptions(qtyOrdered),
     };
   }

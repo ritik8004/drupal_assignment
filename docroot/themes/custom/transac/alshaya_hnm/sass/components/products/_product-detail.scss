@@ -31,7 +31,7 @@
         padding-#{$right}: rem(20);
         border-top-left-radius: rem(4);
         border-top-right-radius: rem(4);
-        box-shadow: rem(2) 0 rem(4) rem(-2) $pdp_bnpl_grey_shadow;
+        box-shadow: 0 rem(-4) rem(8) rem(-2) $pdp_bnpl_lbl_shadow;
 
         .pay-emi-lbl {
           display: block;

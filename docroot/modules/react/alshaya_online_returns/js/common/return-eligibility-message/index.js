@@ -54,9 +54,12 @@ class ReturnEligibilityMessage extends React.Component {
     if (isReturnEligible) {
       return (
         <div className="eligibility-window-container">
-          <div className="eligibility-message-wrapper">
-            <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
-            <ReturnAction handleOnClick={this.handleOnClick} />
+          <div className="eligibility-message-wrapper eligibility-button">
+            <span className="return-icon" />
+            <div className="return-button-message-wrapper">
+              <ReturnWindow message={getReturnWindowOpenMessage(returnExpiration)} />
+              <ReturnAction handleOnClick={this.handleOnClick} />
+            </div>
           </div>
           <ReturnAtStore returnButtonclass="return-button-enabled" />
         </div>

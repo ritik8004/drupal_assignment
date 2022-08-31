@@ -991,7 +991,7 @@ class AlshayaGtmManager {
       }
 
       $product = $item['product_type'] === 'configurable'
-        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'])
+        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'] ?? NULL)
         : $this->fetchSkuAtttributes($item['sku']);
 
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
@@ -1070,7 +1070,7 @@ class AlshayaGtmManager {
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
       'egiftRedeemType' => !empty($additional_info) ? $additional_info->card_type : '',
-      'isAdvantageCard' => $order['coupon_code'] ?? '' === 'advantage_card',
+      'isAdvantageCard' => isset($order['coupon_code']) && $order['coupon_code'] === 'advantage_card',
       'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
@@ -1084,6 +1084,34 @@ class AlshayaGtmManager {
       'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
       'platformType' => $this->getUserDeviceType(),
     ];
+
+    // Add transaction & payment details.
+    $payment_info = [];
+    foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
+      $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
+    }
+
+    $paymentMethods = [];
+    // Get all the possible payment methods for an order.
+    if ($order['payment']['method'] === 'checkout_com_upapi') {
+      $paymentMethods[] = $payment_info['card_type'] . " Card";
+    }
+    else {
+      $paymentMethods[] = $generalInfo['paymentOption'];
+    }
+
+    // Check if some partial payment is done by any other payment methods.
+    if (array_key_exists('hps_redeemed_amount', $order['extension'])
+      && $order['extension']['hps_redeemed_amount'] > 0) {
+      $paymentMethods[] = 'eGift Card';
+    }
+
+    if (array_key_exists('aura_payment_value', $order['extension'])
+      && $order['extension']['aura_payment_value'] > 0) {
+      $paymentMethods[] = 'Aura Loyalty Card';
+    }
+
+    $generalInfo['paymentMethodsUsed'] = $paymentMethods;
 
     return [
       'general' => $generalInfo,

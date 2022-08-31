@@ -159,7 +159,7 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
 
   $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
   $build['#attached']['drupalSettings']['onlineReturns']['gtm_info'] = \Drupal::service('alshaya_seo_transac.gtm_manager')->fetchCompletedOrderAttributes($order);
-  $build['#attached']['drupalSettings']['onlineReturns']['return_config'] = \Drupal::service('alshaya_online_returns.online_returns_api_helper')->getReturnsApiConfig(
+  $build['#attached']['drupalSettings']['onlineReturns']['return_config'] = \Drupal::service('alshaya_online_returns.online_returns_api_helper')->getLanguageBasedReturnsConfig(
     \Drupal::languageManager()->getCurrentLanguage()->getId(),
   );
   $build['#attached']['drupalSettings']['onlineReturns']['refunded_products'] = $onlineReturnsHelper->prepareProductsData($build["#refunded_products"]);
@@ -192,4 +192,6 @@ function alshaya_online_returns_alshaya_spc_cart_build_alter(array &$build) {
 
   // Add the online return cart banner flag.
   $build['#attached']['drupalSettings']['onlineReturns']['cartBanner'] = $onlineReturnsHelper->isOnlineReturnsCartBannerEnabled();
+  // Attach the theming library.
+  $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
 }

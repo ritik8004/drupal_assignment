@@ -74,7 +74,7 @@
 
         {# Delivery options will load if express delivery enabled. #}
         {% if content.delivery_options %}
-          <div id="sdd-ed-labels"></div>
+          <div id="sdd-ed-labels-desktop" class="express-delivery active desktop"></div>
         {% elseif content.same_day_delivery_text and content.delivery_options is empty %}
           <div class="same-day-delivery">
             <div class="same-day-content">
