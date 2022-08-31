@@ -1,6 +1,9 @@
 (function onlineReturnsUtilsV2(Drupal, drupalSettings) {
   /**
    * Utility function to get order details for return pages.
+   *
+   * @returns {Promise}
+   *   Promise which resolves to order details.
    */
   window.commerceBackend.getOrderDetails = function getOrderDetails() {
     return new Promise((resolve) => {
