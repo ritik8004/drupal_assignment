@@ -390,6 +390,28 @@ header {
         background: $mm_l2_bg;
       }
     }
+
+    .menu--two__list {
+      .menu__list-item.is_underlined {
+        .menu__link {
+          color: $mm_l3_link_hover !important;
+
+          @include psuedo-element-underline($mm_l3_link_hover, rem(3));
+        }
+      }
+
+      .menu--two__list-item {
+        .menu--three__list {
+          li {
+            a:hover {
+              text-decoration: none;
+
+              @include psuedo-element-underline($mm_l3_link_hover, rem(2));
+            }
+          }
+        }
+      }
+    }
   }
 }
 
