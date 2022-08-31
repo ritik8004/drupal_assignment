@@ -3006,4 +3006,27 @@ JS;
     $this->getSession()->executeScript("jQuery('#edit-field-subscribe-newsletter-value').removeAttr('checked');jQuery('#edit-field-subscribe-newsletter-value').val(0)");
   }
 
+  /**
+   * @When /^I am on user registration page$/
+   */
+  public function iAmOnUserRegistrationPage()
+  {
+    $filename = 'creds.json';
+    $creds = [];
+    $options = getopt('', ['profile:']);
+    $profile_arr = explode('-', $options['profile']);
+    $env = $profile_arr[2];
+
+    if (file_exists($filename)) {
+      $creds = json_decode(file_get_contents($filename), TRUE);
+    }
+    $secret_key = '';
+    foreach ($creds as $key => $value) {
+      if ($env == $key) {
+        $secret_key = $value['secret_key'];
+      }
+    }
+    $this->visitPath('/user/register?behat=' . $secret_key);
+  }
+
 }
