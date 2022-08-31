@@ -45,6 +45,7 @@ function alshaya_rcs_online_returns_library_info_alter(&$libraries, $extension) 
     $options = $libraries['alshaya_online_returns_util']['js']['js/assets/alshaya_online_returns_util_v2.js'];
     unset($libraries['alshaya_online_returns_util']['js']['js/assets/alshaya_online_returns_util_v2.js']);
     $libraries['alshaya_online_returns_util']['js']["/$self_module_path/js/alshaya_online_returns_util_rcs.js"] = $options;
+    $libraries['alshaya_online_returns_util']['dependencies'][] = 'rcs_magento_placeholders/rcs_magento_placeholders';
   }
 
   if ($extension === 'alshaya_spc' && isset($libraries['order_details'])) {

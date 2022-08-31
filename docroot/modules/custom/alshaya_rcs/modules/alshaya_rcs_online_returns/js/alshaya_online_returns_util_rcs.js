@@ -1,4 +1,4 @@
-(function orderDetailsUtilsRcs() {
+(function orderDetailsUtilsRcs(Drupal, drupalSettings) {
   /**
    * Utility function to get order details for return pages.
    */
@@ -39,4 +39,4 @@
       return new Promise((resolve) => resolve(orderDetails));
     }
   }
-})();
+})(Drupal, drupalSettings);
