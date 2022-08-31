@@ -17,9 +17,8 @@
         var skuForRequest = product.product_type === 'configurable'
           ? product.extension_attributes.parent_product_sku
           : product.sku;
-
-          var orderData = globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku: skuForRequest});
-          productInfoPromises.push(orderData);
+        var orderData = globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku: skuForRequest});
+        productInfoPromises.push(orderData);
       });
 
       return Promise.all(productInfoPromises).then(function allProductsInfo(allProductInfo) {
