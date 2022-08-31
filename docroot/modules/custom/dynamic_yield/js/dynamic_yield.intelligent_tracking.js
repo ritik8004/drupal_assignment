@@ -11,6 +11,6 @@
     }
 
     // Simply call the controller to set the cookie.
-    $.post(Drupal.url('dyid'));
+    $.post('/dyid.php');
   });
 })(jQuery, Drupal);
