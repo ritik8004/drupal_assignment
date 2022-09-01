@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1905618ea5dee98f48e734e352865e4a",
+    "content-hash": "3359a110045380fa4cb0a5a54f699289",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -15072,6 +15072,65 @@
             }
         },
         {
+            "name": "drupal/user_csv_import",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/user_csv_import.git",
+                "reference": "2.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/user_csv_import-2.0.2.zip",
+                "reference": "2.0.2",
+                "shasum": "5cb2122a08de5505753924a174f6c1e7b1e54130"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "require-dev": {
+                "drupal/roleassign": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.2",
+                    "datestamp": "1646055681",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "eahonet",
+                    "homepage": "https://www.drupal.org/user/3546806"
+                },
+                {
+                    "name": "gisle",
+                    "homepage": "https://www.drupal.org/user/409554"
+                },
+                {
+                    "name": "mcfdez87",
+                    "homepage": "https://www.drupal.org/user/2445390"
+                }
+            ],
+            "description": "User import module",
+            "homepage": "https://github.com/steveoliver/user_import",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://github.com/steveoliver/user_import",
+                "issues": "https://github.com/steveoliver/user_import/issues"
+            }
+        },
+        {
             "name": "drupal/user_registrationpassword",
             "version": "1.0.0-alpha5",
             "source": {
@@ -29978,5 +30037,5 @@
     "platform-overrides": {
         "php": "8.0"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
