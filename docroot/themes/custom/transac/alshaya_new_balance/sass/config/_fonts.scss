@@ -21,10 +21,31 @@ $nb-didot-medium-nodir: 'Didot Medium', 'sans-serif', 'Arial';
 $nb-didot-bold: 'Didot Bold', 'sans-serif', 'Arial';
 $nb-didot-bold-nodir: 'Didot Medium', 'sans-serif', 'Arial';
 
+// Arabic fonts.
+// Adding En fonts so browser prints English characters & numbers correctly in arabic.
+$nb-arabic-regular: 'AlBayan', 'ProximaNova Regular', 'sans-serif', 'Arial';
+$nb-arabic-regular-nodir: 'AlBayan', 'ProximaNova Regular', 'sans-serif', 'Arial';
+
+$nb-arabic-bold: 'AlBayan Bold', 'ProximaNova Bold', 'sans-serif', 'Arial';
+$nb-arabic-bold-nodir: 'AlBayan Bold', 'ProximaNova Bold', 'sans-serif', 'Arial';
+
+$nb-arabic-markazitext-regular: 'MarkaziText Regular', 'ProximaNova Regular', 'sans-serif', 'Arial';
+$nb-arabic-markazitext-regular-nodir: 'MarkaziText Regular', 'ProximaNova Regular', 'sans-serif', 'Arial';
+
+$nb-arabic-markazitext-semibold: 'MarkaziText Semi Bold', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+$nb-arabic-markazitext-semibold-nodir: 'MarkaziText Semi Bold', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+
+$nb-arabic-markazitext-medium: 'MarkaziText Medium', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+$nb-arabic-markazitext-medium-nodir: 'MarkaziText Medium', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+
+$nb-arabic-markazitext-variablefont: 'MarkaziText VariableFont wght', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+$nb-arabic-markazitext-variablefont-nodir: 'MarkaziText VariableFont wght', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+
+
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in NB theme.
 $arial: $nb-nova-regular;
 $arial-nodir: $nb-nova-regular;
 $alshaya-bold: $nb-nova-bold;
-$alshaya-arabic-bold: $nb-nova-bold;
+$alshaya-arabic-bold: $nb-arabic-bold;
 $alshaya-thin: $nb-nova-regular;
-$alshaya-arabic-thin: $nb-nova-regular;
+$alshaya-arabic-thin: $nb-arabic-regular;

@@ -18,7 +18,7 @@ $dir: rtl;
 
 // Utilities for building multilingual websites.
 @import "../../alshaya_white_label/sass/directional";
-//@import "directional";
+@import "directional";
 
 // Common styles for @extend.
 @import "../../alshaya_white_label/sass/placeholder";
