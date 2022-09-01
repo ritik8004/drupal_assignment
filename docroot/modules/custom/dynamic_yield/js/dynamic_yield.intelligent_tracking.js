@@ -23,8 +23,11 @@
     // Simply call the controller to set the cookie.
     if (isDyIdCookieSet
       && !isDyIdServerCookieSet
+      && localStorageDyId
       && localStorageDyId === allCookies['_dyid']) {
       $.post('/dyid.php');
+      // Update the localstorage value.
+      localStorage.setItem('_dyid', isDyIdCookieSet);
     }
 
   });
