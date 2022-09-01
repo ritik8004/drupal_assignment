@@ -3,7 +3,7 @@
 Feature: Create new user account on the site
 
   Background:
-    When I am on "{url_register}{behat_secret_key}"
+    When I am on user registration page
     And I wait for the page to load
 
   Scenario: As an authenticated user, I should be able to sign in after providing valid credentials
