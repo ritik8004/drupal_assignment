@@ -29,9 +29,9 @@ alshaya_algolia_react.settings:
     hide_grid_toggle:
       type: boolean
       label: 'Grid toggle hide/show in srp/plp.'
-    add_to_basket_hover:
+    add_to_bag_hover:
       type: boolean
-      label: 'Enable add to basket hover effect on PLP product.'
+      label: 'Enable add to bag hover effect on PLP product.'
     top_facets_limit:
       type: integer
       label: 'Number of filters to show on srp/plp page top.'

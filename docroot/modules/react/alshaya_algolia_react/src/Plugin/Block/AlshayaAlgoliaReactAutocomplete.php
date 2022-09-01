@@ -162,7 +162,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
           'autocomplete' => $autocomplete,
           'reactTeaserView' => $reactTeaserView,
           'expressDelivery' => $express_status,
-          'addToCartHover' => $algoliaReactConfig->get('add_to_basket_hover'),
+          'addToBagHover' => $algoliaReactConfig->get('add_to_bag_hover'),
         ],
       ],
     ];

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, uninstall and update for alshaya_hm.
+ * Install, uninstall and update for alshaya_ay.
  */
 
 /**
@@ -17,13 +17,17 @@ function alshaya_ay_transac_install() {
     'alshaya_algolia_react'
   );
 
+  // Enable add to bag hover for alo yoga.
+  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  $config->set('add_to_bag_hover', TRUE);
+  $config->save();
+
+  // @todo Add arabic translation for quick add strings.
   $strings = [
     'view options' => [
-      'ar' => 'أضف إلى سلة التسوق',
       'en' => 'Quick Add',
     ],
     'add to cart' => [
-      'ar' => 'أضف إلى سلة التسوق',
       'en' => 'Add to Bag',
     ],
   ];

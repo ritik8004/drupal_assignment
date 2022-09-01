@@ -34,8 +34,8 @@ const createConfigurableDrawer = (force) => {
  * Helper function to check if Add to Bag Hover is enabled.
  */
 const isAddToBagHoverEnabled = () => {
-  if (hasValue(drupalSettings.addToCartHover)) {
-    return drupalSettings.addToCartHover;
+  if (hasValue(drupalSettings.addToBagHover)) {
+    return drupalSettings.addToBagHover;
   }
 
   return false;
