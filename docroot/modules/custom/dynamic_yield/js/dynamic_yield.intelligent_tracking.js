@@ -26,6 +26,7 @@
       && localStorageDyId
       && localStorageDyId !== allCookies['_dyid']) {
       localStorage.setItem('_dyid', isDyIdCookieSet);
+      return;
     }
 
     // Simply call the controller to set the cookie.
