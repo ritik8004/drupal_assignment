@@ -111,9 +111,21 @@ class Menu extends React.Component {
     // Prepare the menu item with the facet alias path and target category path.
     let attributeMenuItems = null;
     attributeMenuItems = itemsToRender.map((item) => {
-      // Return if value doesn't exist.
-      if (!facetValues[item.value.trim()]) {
-        return null;
+      // If value doesn't exist in local storage facet aliases list, we will
+      // generate the alias in JS from the value and set in the facetValues
+      // object to utilise further. For example,
+      // - '36 1/2' => '36_1_2'
+      // - '22.5' => '225'
+      // - '25,5' => '255' etc.
+      let itemValue = item.value.trim();
+      if (!facetValues[itemValue]) {
+        // Replace spaces and slashes with underscore.
+        // eslint-disable-next-line no-useless-escape
+        itemValue = itemValue.replace(/[ ]|[\/]/g, '_');
+        // Remove any dots and commas.
+        itemValue = itemValue.replace(/[.]|[,]/g, '');
+        // Add the generated alias for value in facetValues array.
+        facetValues[item.value.trim()] = itemValue;
       }
 
       // Prepare the final menu item path with facet alias and value.
