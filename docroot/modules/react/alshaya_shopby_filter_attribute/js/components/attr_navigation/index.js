@@ -38,7 +38,7 @@ const AttrNavigation = (props) => {
         ruleContexts={ruleContexts}
       />
       <Menu
-        attributeAliase={attr}
+        attributeAlias={attr}
         // Prepare the attribute as per the Algolia facet data.
         attribute={`attr_${attr}.${drupalSettings.path.currentLanguage}`}
         facetOrdering
