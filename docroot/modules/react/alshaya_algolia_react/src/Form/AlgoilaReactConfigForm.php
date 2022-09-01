@@ -78,6 +78,12 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('hide_grid_toggle'),
     ];
 
+    $form['add_to_basket_hover'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable add to basket hover effect on PLP product.'),
+      '#default_value' => $config->get('add_to_basket_hover'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -92,6 +98,7 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       ->set('top_results', $form_state->getValue('top_results'))
       ->set('items_per_page', $form_state->getValue('items_per_page'))
       ->set('hide_grid_toggle', $form_state->getValue('hide_grid_toggle'))
+      ->set('add_to_basket_hover', $form_state->getValue('add_to_basket_hover'))
       ->save();
 
     parent::submitForm($form, $form_state);

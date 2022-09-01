@@ -100,6 +100,8 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
 
     // Get algola settings for lhn menu.
     $config = $this->configFactory->get('alshaya_search_algolia.settings');
+    // Get algolia plp related config.
+    $algoliaReactConfig = $this->configFactory->get('alshaya_algolia_react.settings');
     $show_terms_in_lhn = $config->get('show_terms_in_lhn');
     // Menu level is upto L3 when lhn config is all.
     // Default menu level is upto L1.
@@ -160,6 +162,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
           'autocomplete' => $autocomplete,
           'reactTeaserView' => $reactTeaserView,
           'expressDelivery' => $express_status,
+          'addToCartHover' => $algoliaReactConfig->get('add_to_basket_hover'),
         ],
       ],
     ];

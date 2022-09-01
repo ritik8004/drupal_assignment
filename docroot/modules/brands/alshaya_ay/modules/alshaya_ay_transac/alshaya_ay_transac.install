@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_hm.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_ay_transac_install() {
+  // Update plp algolia react settings.
+  // Settings added for Add to basket hover.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.settings'],
+    'alshaya_algolia_react'
+  );
+
+  $strings = [
+    'view options' => [
+      'ar' => 'أضف إلى سلة التسوق',
+      'en' => 'Quick Add',
+    ],
+    'add to cart' => [
+      'ar' => 'أضف إلى سلة التسوق',
+      'en' => 'Add to Bag',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}

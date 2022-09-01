@@ -1,3 +1,5 @@
+import { hasValue } from './conditionsUtility';
+
 /**
  * Helper function to check if Add to Bag is enabled.
  */
@@ -28,7 +30,19 @@ const createConfigurableDrawer = (force) => {
   }
 };
 
+/**
+ * Helper function to check if Add to Bag Hover is enabled.
+ */
+const isAddToBagHoverEnabled = () => {
+  if (hasValue(drupalSettings.addToCartHover)) {
+    return drupalSettings.addToCartHover;
+  }
+
+  return false;
+};
+
 export {
   isAddToBagEnabled,
   createConfigurableDrawer,
+  isAddToBagHoverEnabled,
 };
