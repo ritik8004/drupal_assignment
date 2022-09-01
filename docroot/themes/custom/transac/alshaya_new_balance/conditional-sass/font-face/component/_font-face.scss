@@ -61,3 +61,73 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: 'AlBayan';
+  src:
+    url('#{$base_theme_fonts_directory_path}/AlBayan.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/AlBayan.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AlBayan Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/AlBayan-Bold.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/AlBayan-Bold.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MarkaziText Regular';
+  src:
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-Regular.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-Regular.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MarkaziText Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-Bold.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-Bold.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MarkaziText Medium';
+  src:
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-Medium.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-Medium.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MarkaziText Semi Bold';
+  src:
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-SemiBold.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-SemiBold.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MarkaziText Varibale Font';
+  src:
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-VariableFont_wght.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/MarkaziText-VariableFont_wght.woff') format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
