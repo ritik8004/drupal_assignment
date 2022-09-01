@@ -5,12 +5,18 @@
  * Module file.
  */
 
+use Drupal\Core\Cache\Cache;
+
 /**
  * Implements hook_alshaya_rcs_product_build_alter().
  */
 function alshaya_rcs_online_returns_alshaya_rcs_product_build_alter(array &$build, array &$entity_info) {
   /** @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $online_returns_helper */
   $online_returns_helper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+  $build['#cache']['tags'] = Cache::mergeTags(
+    $build['#cache']['tags'] ?? [],
+    $online_returns_helper->getCacheTags(),
+  );
   // Do not process further if feature is disabled.
   if (!$online_returns_helper->isOnlineReturnsEnabled()) {
     return;
