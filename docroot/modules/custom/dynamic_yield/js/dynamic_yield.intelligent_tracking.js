@@ -20,14 +20,20 @@
       return;
     }
 
+    // Update the localstorage value if the value it's not same as cookie.
+    if (isDyIdCookieSet
+      && !isDyIdServerCookieSet
+      && localStorageDyId
+      && localStorageDyId !== allCookies['_dyid']) {
+      localStorage.setItem('_dyid', isDyIdCookieSet);
+    }
+
     // Simply call the controller to set the cookie.
     if (isDyIdCookieSet
       && !isDyIdServerCookieSet
       && localStorageDyId
       && localStorageDyId === allCookies['_dyid']) {
       $.post('/dyid.php');
-      // Update the localstorage value.
-      localStorage.setItem('_dyid', isDyIdCookieSet);
     }
 
   });
