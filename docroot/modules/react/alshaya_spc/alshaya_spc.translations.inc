@@ -586,38 +586,31 @@ function _alshaya_spc_translations() {
   // Strings related to COD mobile verification.
   $strings['v16'] = [
     'Enter the @otp_length-digit OTP code sent to @mobile_number' => [
-      // @todo Arabic translation to be updated.
-      'ar' => 'Enter the @otp_length-digit OTP code sent to @mobile_number',
+      'ar' => 'أدخل رمز التحقق @otp_length-digit المرسل إلى @mobile_number',
       'context' => 'cod_mobile_verification',
     ],
     'change' => [
-      // @todo Arabic translation to be updated.
-      'ar' => 'change',
+      'ar' => 'تغيير',
       'context' => 'cod_mobile_verification',
     ],
     'verify' => [
-      // @todo Arabic translation to be updated.
-      'ar' => 'verify',
+      'ar' => 'تحقق',
       'context' => 'cod_mobile_verification',
     ],
     'Didn\'t receive the code?' => [
-      // @todo Arabic translation to be updated.
-      'ar' => 'Didn\'t receive the code?',
+      'ar' => 'لم تستلم الرمز؟',
       'context' => 'cod_mobile_verification',
     ],
     'Resend' => [
-      // @todo Arabic translation to be updated.
-      'ar' => 'Resend',
+      'ar' => 'إعادة إرسال',
       'context' => 'cod_mobile_verification',
     ],
     'Please update mobile number' => [
-      // @todo Arabic translation to be updated.
-      'ar' => 'Please update mobile number',
+      'ar' => 'يرجى تحديث رقم الهاتف',
       'context' => 'cod_mobile_verification',
     ],
     'Wrong OTP' => [
-      // @todo Arabic translation to be updated.
-      'ar' => 'Wrong OTP',
+      'ar' => 'رمز تحقق غير صحيح',
       'context' => 'cod_mobile_verification',
     ],
   ];
