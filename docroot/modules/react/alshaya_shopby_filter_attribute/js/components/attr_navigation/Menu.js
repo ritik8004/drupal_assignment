@@ -10,8 +10,8 @@ class Menu extends React.Component {
     // Get attribute facet values from the storage if available and set the
     // wait state accordingly. If facet values are null, we need to wait for
     // values to be loaded in componentDidMount and render the component then.
-    const { attributeAliase } = props;
-    const facetValues = getFacetStorage(attributeAliase);
+    const { attributeAlias } = props;
+    const facetValues = getFacetStorage(attributeAlias);
     this.state = {
       wait: !facetValues,
     };
@@ -28,11 +28,11 @@ class Menu extends React.Component {
     // If wait is true, means we don't have attribute facet data in local
     // storage so we need to call the API request to get data loaded in storage
     // and then update the wait state to load the component.
-    const { attributeAliase } = this.props;
+    const { attributeAlias } = this.props;
     Axios
-      .get(Drupal.url(`facets-aliases/${attributeAliase}`))
+      .get(Drupal.url(`facets-aliases/${attributeAlias}`))
       .then((response) => {
-        setFacetStorage(attributeAliase, response.data);
+        setFacetStorage(attributeAlias, response.data);
         this.setState({ wait: false });
       });
   }
@@ -82,7 +82,7 @@ class Menu extends React.Component {
    */
   getAttributeMenuItems = () => {
     // Get the attribute and element from the props.
-    const { items, element, attributeAliase } = this.props;
+    const { items, element, attributeAlias } = this.props;
 
     // Iterate algolia data and add a newValue key converting fractional to
     // float values so we can sort the options based on that in a new array.
@@ -106,18 +106,22 @@ class Menu extends React.Component {
     }
 
     // Get the attribute facet values from storage.
-    const facetValues = getFacetStorage(attributeAliase);
+    const facetValues = getFacetStorage(attributeAlias);
 
     // Prepare the menu item with the facet alias path and target category path.
     let attributeMenuItems = null;
     attributeMenuItems = itemsToRender.map((item) => {
-      // Return if value doesn't exist.
+      // If value doesn't exist, we will log it and return.
       if (!facetValues[item.value.trim()]) {
+        Drupal.alshayaLogger('warning', 'Facet alias does not exist: @attributeAlias - @itemValue', {
+          '@attributeAlias': attributeAlias,
+          '@itemValue': item.value,
+        });
         return null;
       }
 
       // Prepare the final menu item path with facet alias and value.
-      const finalPathForMenuItem = `${urlPathForMenuItem}--${attributeAliase}-${facetValues[item.value.trim()]}`;
+      const finalPathForMenuItem = `${urlPathForMenuItem}--${attributeAlias}-${facetValues[item.value.trim()]}`;
       return (
         <li key={item.label} className="shop-by-filter-attribute__list-item">
           <a
