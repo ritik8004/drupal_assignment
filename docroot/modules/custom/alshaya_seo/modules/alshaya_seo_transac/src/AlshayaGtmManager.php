@@ -1113,6 +1113,9 @@ class AlshayaGtmManager {
 
     $generalInfo['paymentMethodsUsed'] = $paymentMethods;
 
+    // Generate the deliveryInfo.
+    $generalInfo['deliveryInfo'] = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['shipping']['address'], TRUE);
+
     return [
       'general' => $generalInfo,
       'products' => $products,
