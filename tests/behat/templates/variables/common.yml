@@ -1,6 +1,5 @@
 variables:
   url_login: '/user/login'
-  url_register: '/user/register'
   spc_checkout_card: "4543474002249996"
   spc_checkout_expiry: "09/22"
   spc_checkout_cvv: "956"
