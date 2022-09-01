@@ -31,3 +31,15 @@ function alshaya_rcs_online_returns_alshaya_rcs_product_query_fields_alter(array
     'is_returnable',
   );
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_online_returns_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'alshaya_acm_product' && isset($libraries['product_utility'])) {
+    $libraries['product_utility']['dependencies'] = array_merge(
+      ['alshaya_rcs_online_returns/product_utility'],
+      $libraries['product_utility']['dependencies'] ?? [],
+    );
+  }
+}

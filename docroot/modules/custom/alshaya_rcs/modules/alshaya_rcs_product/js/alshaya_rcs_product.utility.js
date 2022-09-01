@@ -375,30 +375,6 @@ window.commerceBackend = window.commerceBackend || {};
   window.commerceBackend.getProductContext = getContext;
 
   /**
-   * Checks if online returns feature is enabled.
-   *
-   * @returns {Boolean}
-   *   Returns true if online returns is enabled, else false.
-   */
-  function isOnlineReturnsEnabled() {
-    return Drupal.hasValue(drupalSettings.onlineReturns.enabled);
-  }
-
-  /**
-   * Checks if the product is returnable.
-   *
-   * @param {Object} product
-   *   Product object.
-   *
-   * @returns {Boolean}
-   *   Returns true if product is returnable, else false.
-   */
-  function isProductReturnable(product) {
-    return Drupal.hasValue(product.is_returnable)
-      && !(parseInt(product.is_returnable, 10) !== 1);
-  }
-
-  /**
    * Gets the variants for the given product entity.
    *
    * @param {object} product
@@ -475,9 +451,15 @@ window.commerceBackend = window.commerceBackend || {};
         }
       }
 
-      if (isOnlineReturnsEnabled()) {
-        info[variantSku].eligibleForReturn = isProductReturnable(variantInfo);
-      }
+      var productInfoAlterEvent = new CustomEvent('rcsProductInfoAlter', {
+        detail: {
+          data: {
+            processedProduct: info[variantSku],
+            rawProduct: variantInfo
+          }
+        }
+      });
+      document.dispatchEvent(productInfoAlterEvent);
     });
 
     return info;
@@ -521,10 +503,6 @@ window.commerceBackend = window.commerceBackend || {};
       },
     };
 
-    if (isOnlineReturnsEnabled()) {
-      productData.eligibleForReturn = isProductReturnable(product);
-    }
-
     // Set max sale quantity.
     setMaxSaleQty(productData, product.stock_data.max_sale_qty);
 
@@ -543,6 +521,16 @@ window.commerceBackend = window.commerceBackend || {};
       }
       productData.alshaya_bazaar_voice = drupalSettings.alshaya_bazaar_voice;
     }
+
+    var productInfoAlterEvent = new CustomEvent('rcsProductInfoAlter', {
+      detail: {
+        data: {
+          processedProduct: productData,
+          rawProduct: product
+        }
+      }
+    });
+    document.dispatchEvent(productInfoAlterEvent);
 
     return productData;
   }
