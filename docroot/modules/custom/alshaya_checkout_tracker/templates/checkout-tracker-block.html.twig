@@ -1,8 +1,8 @@
 {% if steps.bagclass %}
 <div>
-  <div class="steps {{ steps.bagclass }}">Bag</div>
-  <div class="steps {{ steps.checkoutclass }}">Sign in</div>
-  <div class="steps">Delivery</div>
-  <div class="steps">confirmation</div>
+  <div class="steps {{ steps.bagclass }}"><a href = "/cart">{{ "Bag"|t({}, {'context' : 'tracker'}) }}</a></div>
+  <div class="steps {{ steps.signinclass }}"><a href = "/cart/login">{{ "Sign in"|t({}, {'context' : 'tracker'}) }}</a></div>
+  <div class="steps {{ steps.checkoutclass }}"><a href = "/checkout">{{ "Delivery"|t({}, {'context' : 'tracker'}) }}</a></div>
+  <div class="steps {{ steps.deliveryclass }}">{{ "confirmation"|t({}, {'context' : 'tracker'}) }}</div>
 </div>
 {% endif %}
