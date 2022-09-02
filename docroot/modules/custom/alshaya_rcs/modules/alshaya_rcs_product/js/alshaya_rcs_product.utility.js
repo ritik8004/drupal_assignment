@@ -450,6 +450,16 @@ window.commerceBackend = window.commerceBackend || {};
           info[variantSku].orderLimitMsg = getMaxSaleQtyMessage(maxSaleQuantity);
         }
       }
+
+      var productInfoAlterEvent = new CustomEvent('rcsProductInfoAlter', {
+        detail: {
+          data: {
+            processedProduct: info[variantSku],
+            rawProduct: variantInfo
+          }
+        }
+      });
+      document.dispatchEvent(productInfoAlterEvent);
     });
 
     return info;
@@ -511,6 +521,16 @@ window.commerceBackend = window.commerceBackend || {};
       }
       productData.alshaya_bazaar_voice = drupalSettings.alshaya_bazaar_voice;
     }
+
+    var productInfoAlterEvent = new CustomEvent('rcsProductInfoAlter', {
+      detail: {
+        data: {
+          processedProduct: productData,
+          rawProduct: product
+        }
+      }
+    });
+    document.dispatchEvent(productInfoAlterEvent);
 
     return productData;
   }
