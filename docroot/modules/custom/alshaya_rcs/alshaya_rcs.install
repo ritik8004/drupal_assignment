@@ -47,6 +47,7 @@ function alshaya_rcs_install() {
     'alshaya_bazaar_voice' => 'alshaya_rcs_bazaar_voice',
     'alshaya_aura_react' => 'alshaya_rcs_aura',
     'alshaya_media_assets' => 'alshaya_rcs_assets',
+    'alshaya_rcs_online_returns' => 'alshaya_online_returns',
   ];
 
   foreach ($modules as $module_to_check => $module_to_install) {

@@ -25,5 +25,11 @@
         font-family: $hnm-regular;
       }
     }
+
+    .return-button-enabled {
+      html[lang=ar] & {
+        flex-basis: 35%;
+      }
+    }
   }
 }

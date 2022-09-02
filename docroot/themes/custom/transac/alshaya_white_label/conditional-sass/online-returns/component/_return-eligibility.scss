@@ -21,10 +21,6 @@
         flex-basis: 40%;
         text-align: $right;
       }
-
-      html[lang=ar] & {
-        flex-basis: 35%;
-      }
     }
 
     .return-inactive {
@@ -119,6 +115,11 @@
             align-items: center;
           }
 
+          &.eligibility-button {
+            align-items: flex-start;
+            flex-wrap: nowrap;
+          }
+
           > span {
             display: flex;
             align-items: center;
@@ -133,6 +134,51 @@
               @include breakpoint($tablet) {
                 margin-#{$right}: rem(14);
               }
+            }
+
+            &.return-icon {
+              &::before {
+                margin-top: rem(3);
+
+                @include breakpoint($only-mobile) {
+                  display: none;
+                }
+              }
+            }
+          }
+
+          .return-button-message-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+
+            @include breakpoint($desktop) {
+              row-gap: rem(12);
+            }
+
+            span {
+              margin-#{$right}: rem(12);
+
+              @include breakpoint($only-mobile) {
+                display: flex;
+                align-items: center;
+              }
+
+              &::before {
+                content: '';
+                background: url('#{$base_theme_img_directory_path}/icons/ic-delivery.svg') no-repeat;
+                width: rem(26);
+                height: rem(26);
+                margin-#{$right}: rem(12);
+
+                @include breakpoint($tablet) {
+                  display: none;
+                }
+              }
+            }
+
+            button {
+              margin-#{$left}: 0;
             }
           }
         }

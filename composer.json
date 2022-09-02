@@ -128,6 +128,7 @@
         "drupal/taxonomy_access_fix": "^3.1",
         "drupal/taxonomy_term_depth": "^2.5",
         "drupal/twig_tweak": "^2.9",
+        "drupal/user_csv_import": "^2.0",
         "drupal/user_registrationpassword": "^1.0",
         "drupal/video_embed_field": "^2.0",
         "drupal/views_ajax_get": "^2.0",
