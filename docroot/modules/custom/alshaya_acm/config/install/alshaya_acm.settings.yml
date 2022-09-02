@@ -7,3 +7,4 @@ quantity_limit_enabled: FALSE
 display_upsell: TRUE # Show / Hide upsell product on PDP.
 display_related: TRUE # Show / Hide related product on PDP.
 hide_max_qty_limit_message: FALSE
+use_mdc_url: false
