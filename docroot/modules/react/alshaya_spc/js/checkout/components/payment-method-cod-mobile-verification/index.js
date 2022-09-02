@@ -321,6 +321,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
             numInputs={otpLength}
             isInputNum
             className={(otpVerified === 3 || otpVerified === 4) ? 'cod-mobile-otp__field error' : `cod-mobile-otp__field ${otpValidClass}`}
+            isDisabled={(otp.length === parseInt(otpLength, 10) && otpValidClass)}
           />
           <div id="otp-error" className="error">
             { otpErrorMessage }
