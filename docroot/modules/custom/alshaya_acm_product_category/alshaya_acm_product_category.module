@@ -21,6 +21,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\views\ViewExecutable;
 use Drupal\views\ResultRow;
 use Drupal\file\FileInterface;
+use Drupal\pathauto\PathautoState;
 use Drupal\search_api\IndexInterface;
 
 /**
@@ -200,6 +201,14 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
   // when creating a new taxonomy term.
   if ($term->isNew()) {
     $term->get('field_show_in_lhn')->setValue($term->get('field_category_include_menu')->getString());
+  }
+
+  // If we have to use MDC URLs for category, then fetch the url_key value from
+  // the synced data and append .html to it.
+  $acm_settings = \Drupal::configFactory()->getEditable('alshaya_acm.settings');
+  if (!empty($acm_settings->get('use_mdc_url')) && isset($category['custom_attributes']['url_key'])) {
+    $term->path->pathauto = PathautoState::SKIP;
+    $term->path->alias = $category['custom_attributes']['url_key']['value'];
   }
 }
 
