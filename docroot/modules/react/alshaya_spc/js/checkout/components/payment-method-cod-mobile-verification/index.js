@@ -25,6 +25,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
       // 3 when otp is invalid and show invalid otp message.
       // 4 when error on otp validate request and show default error message.
       otpVerified,
+      otpValidClass: '',
     };
   }
 
@@ -69,6 +70,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
   updateOtpVerifiedFlag = () => {
     this.setState({
       otpVerified: 0,
+      otpValidClass: '',
     },
     // Send OTP to updated mobile number from shipping address.
     () => this.sendOtpToShippingMobileNumber());
@@ -142,16 +144,19 @@ class PaymentMethodCodMobileVerification extends React.Component {
   /**
    * Handle user input for otp field.
    */
-  handleChange = (otp) => this.setState({
-    otp,
-    otpVerified: 0,
-  });
+  handleChange = (otp) => {
+    this.setState({
+      otp,
+    }, () => this.handleOtpSubmit());
+  };
 
   /**
    * Handle Otp form submit.
    */
   handleOtpSubmit = (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
 
     // Get otp from state.
     const { otp } = this.state;
@@ -162,6 +167,8 @@ class PaymentMethodCodMobileVerification extends React.Component {
     // Get allowed otp length from props.
     const { otpLength } = this.props;
 
+    // Validate otp input value.
+    // return false if otp is invalid.
     if (!hasValue(otp) || otp.length !== parseInt(otpLength, 10)) {
       return false;
     }
@@ -232,9 +239,17 @@ class PaymentMethodCodMobileVerification extends React.Component {
             });
           }
 
+          // Show loader for 2 seconds.
           this.setState({
-            otpVerified: 1,
-          });
+            wait: true,
+            otpValidClass: 'cod_otp_verified',
+          }, () => setTimeout(() => {
+            // After 2 seconds, show verified mobile number text.
+            this.setState({
+              otpVerified: 1,
+              wait: false,
+            });
+          }, 2000));
         }
       })
       .catch((response) => {
@@ -270,7 +285,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
   render() {
     const {
-      otp, wait, otpVerified,
+      otp, wait, otpVerified, otpValidClass,
     } = this.state;
     const { shippingMobileNumber, otpLength } = this.props;
 
@@ -305,7 +320,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
             onChange={this.handleChange}
             numInputs={otpLength}
             isInputNum
-            className={(otpVerified === 3 || otpVerified === 4) ? 'cod-mobile-otp__field error' : 'cod-mobile-otp__field'}
+            className={(otpVerified === 3 || otpVerified === 4) ? 'cod-mobile-otp__field error' : `cod-mobile-otp__field ${otpValidClass}`}
           />
           <div id="otp-error" className="error">
             { otpErrorMessage }
@@ -322,12 +337,13 @@ class PaymentMethodCodMobileVerification extends React.Component {
               />
             </span>
             <button
-              type="submit"
-              className="cod-mobile-otp__submit"
-              onClick={this.handleOtpSubmit}
+              type="button"
+              className={`cod-mobile-otp__submit ${otpValidClass}`}
               disabled={otp.length !== parseInt(otpLength, 10)}
             >
-              {Drupal.t('verify', {}, { context: 'cod_mobile_verification' })}
+              {otpValidClass
+                ? Drupal.t('verified', {}, { context: 'cod_mobile_verification' })
+                : Drupal.t('verify', {}, { context: 'cod_mobile_verification' })}
             </button>
           </div>
         </form>
