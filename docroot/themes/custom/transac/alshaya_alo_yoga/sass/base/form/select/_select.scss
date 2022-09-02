@@ -1,0 +1,13 @@
+.select2-dropdown {
+  ul {
+    &.select2-results__options {
+      li {
+        &.select2-results__option {
+          &:hover {
+            color: $select_drop_down_hover;
+          }
+        }
+      }
+    }
+  }
+}

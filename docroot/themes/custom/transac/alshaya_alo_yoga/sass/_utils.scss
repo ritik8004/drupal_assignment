@@ -9,3 +9,61 @@ $ay_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
   background-size: contain;
   background-position: center;
 }
+
+@mixin primaryBtn($textTransform: false) {
+  text-transform: none;
+  font-family: $ay-heavy;
+  font-size: rem(16);
+
+  @if $textTransform {
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    opacity: 0.65;
+  }
+}
+
+@mixin quaternaryBtn($textTransform: false) {
+  text-transform: unset;
+  background-color: $primary_brand_button;
+  color: $primary_btn_bg;
+  font-family: $ay-heavy;
+  font-size: rem(16);
+
+  @if $textTransform {
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    opacity: 0.65;
+    background-color: $primary_brand_button;
+  }
+}
+
+@mixin secondaryBtn($textTransform: false) {
+  text-transform: unset;
+  background-color: $secondary_btn_bg;
+  color: $secondary_btn_text;
+  font-family: $ay-heavy;
+  font-size: rem(16);
+  justify-content: center;
+
+  @include breakpoint($tablet) {
+    width: rem(216);
+  }
+
+  @if $textTransform {
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    background-color: $secondary_btn_bg_hover;
+  }
+}
+
+@mixin userLoginSectionTitle() {
+  display: block;
+  font-size: rem(24);
+  font-family: $ay-bold;
+}
