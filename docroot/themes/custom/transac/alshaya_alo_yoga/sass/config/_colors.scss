@@ -52,6 +52,7 @@ $primary_input_inline_error: $lust-red;
 
 // Form Items
 $formitem_label: $dawn;
+$select_drop_down_hover: $white;
 
 //Buttons.
 $primary_btn_bg: $black;
@@ -60,22 +61,26 @@ $primary_brand_button_text: $white;
 $primary_empty_btn_border: $black;
 $primary_brand_button: $gray-medium;
 $primary_button_disabled: $alto;
-
+$secondary_btn_bg: $white;
+$secondary_btn_text: $black;
+$secondary_btn_bg_hover: $mercury;
 
 // Checkbox & Radio.
 $primary_checkbox_empty: $white;
 $primary_checkbox_filled: $gray-three;
 $primary_radiobtn_label: $gray-three;
-$primary_radiobtn_empty: $white;
+$primary_radiobtn_empty: $gray-three;
 $primary_radiobtn_filled: $gray-three;
 
 // User Form
 $user_field_link: $black;
-$user_form_text: $black;
+$user_form_text: $dawn;
 $my_account_nav: $black;
 $my_account_nav_active: $black;
 $my_account_nav_hover: $black;
 $user_form_layout_divider_color: $black;
+$login_form_border: $alto;
+$user_form_inp_text: $gray-three;
 
 // Dropdown.
 $primary_dropdown_arrow_bg: transparent;
@@ -123,8 +128,8 @@ $lang_switch_active: $white;
 // Breadcrumb.
 $breadcrumb_bg: $white;
 $breadcrumb_link: $charcoal;
-$breadcrumb_link_hover: $charcoal;
-$breadcrumb_link_active: $black;
+$breadcrumb_link_hover: $black;
+$breadcrumb_link_active: $charcoal;
 
 // Social Auth
 $social-network-text: $black;
@@ -149,3 +154,4 @@ $header_secondary_menu_link_mobile: $white;
 $header_secondary_menu_link: $white;
 $header_mobile_menu_arrow: $black;
 $header_c_menu_text: $black;
+$header_secondary_menu_link_active: $black;

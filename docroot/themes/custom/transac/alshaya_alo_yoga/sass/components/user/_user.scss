@@ -1,0 +1,22 @@
+.c-user-login,
+.c-user-register {
+  h1 {
+    &.c-page-title {
+      display: none;
+    }
+  }
+
+  &.user-page {
+    border-top: none;
+
+    @include breakpoint($tablet) {
+      padding: rem(16) rem(0);
+    }
+  }
+}
+
+.c-user-password {
+  h1 {
+    text-transform: uppercase;
+  }
+}
