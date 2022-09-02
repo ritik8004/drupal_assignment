@@ -785,12 +785,15 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
         if ($source === 'js/alshaya_acm_product.utility.js') {
           unset($libraries['product_utility']['js'][$source]);
           $libraries['product_utility']['js']["/$self_module_path/js/alshaya_rcs_product.utility.js"] = $options;
-          $libraries['product_utility']['dependencies'] = [
-            'core/drupal',
-            'core/drupalSettings',
-            'alshaya_master/common_functions',
-            'alshaya_rcs_product/main',
-          ];
+          $libraries['product_utility']['dependencies'] = array_merge(
+            $libraries['product_utility']['dependencies'] ?? [],
+            [
+              'core/drupal',
+              'core/drupalSettings',
+              'alshaya_master/common_functions',
+              'alshaya_rcs_product/main',
+            ]
+          );
 
           break;
         }
