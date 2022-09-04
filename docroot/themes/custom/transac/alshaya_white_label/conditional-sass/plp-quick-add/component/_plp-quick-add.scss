@@ -1,0 +1,70 @@
+.quick-add {
+  @include breakpoint($desktop) {
+    display: none;
+  }
+
+  .addtobag-button-container  {
+    margin: 0;
+
+    .addtobag-button {
+      @include breakpoint($upto-desktop) {
+        #{$right}: 0;
+        z-index: 3;
+
+        &::before {
+          bottom: rem(60);
+        }
+      }
+    }
+  }
+
+  .addtobag-config-button,
+  .is-not-buyable,
+  .addtobag-button {
+    @include breakpoint($upto-desktop) {
+      font-size: 0;
+      border: 0;
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      background-color: transparent;
+      width: 100%;
+
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/quick-add-mobile.svg') center center no-repeat;
+        width: rem(45);
+        height: rem(45);
+        // background-color: transparent;
+        position: absolute;
+        bottom: rem(60);
+        #{$right}: 0;
+      }
+    }
+  }
+}
+
+.c-plp .c-products__item article:hover {
+  @include breakpoint($desktop) {
+    .quick-add {
+      display: block;
+      position: absolute;
+      width: 100%;
+      bottom: rem(112);
+      z-index: 3;
+
+      .addtobag-config-button,
+      .is-not-buyable,
+      .addtobag-button {
+        background: $plp-quick-add-bg;
+        color: $plp-quick-add-txt;
+        height: rem(55);
+        border: 0;
+      }
+
+      .addtobag-button {
+        width: calc(100%  - 2.5rem);
+      }
+    }
+  }
+}
