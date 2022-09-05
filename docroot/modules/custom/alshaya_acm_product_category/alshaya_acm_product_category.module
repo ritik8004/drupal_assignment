@@ -208,7 +208,7 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
   $acm_settings = \Drupal::configFactory()->getEditable('alshaya_acm.settings');
   if (!empty($acm_settings->get('use_mdc_url')) && isset($category['custom_attributes']['url_key'])) {
     $term->path->pathauto = PathautoState::SKIP;
-    $term->path->alias = $category['custom_attributes']['url_key']['value'];
+    $term->path->alias = '/' . $category['custom_attributes']['url_key']['value'];
   }
 }
 
