@@ -33,6 +33,7 @@ use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
 use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
 use Drupal\alshaya_acm_product\SkuImagesHelper;
+use Drupal\pathauto\PathautoState;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionInterface;
@@ -233,6 +234,14 @@ function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $pr
   // Set node activation date if product activation date available.
   if (isset($product['attributes']['product_activation_date'])) {
     $node->setCreatedTime(strtotime($product['attributes']['product_activation_date']));
+  }
+
+  // If we have to use MDC URLs for product, then fetch the url_key value from
+  // the synced data and append .html to it.
+  $acm_settings = \Drupal::configFactory()->getEditable('alshaya_acm.settings');
+  if (!empty($acm_settings->get('use_mdc_url')) && isset($product['attributes']['url_key'])) {
+    $node->path->pathauto = PathautoState::SKIP;
+    $node->path->alias = $product['attributes']['url_key'] . '.html';
   }
 
   if ($product['type'] !== 'configurable') {
@@ -568,6 +577,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
     $sku_entity = SKU::loadFromSku($sku);
+    // Non-refundable.
+    $is_non_refundable = NULL;
 
     if ($sku_entity instanceof SKU) {
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
@@ -629,8 +640,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Flags status.
         $flags_status = alshaya_acm_product_get_flags_status($sku);
-        // Non-refundable.
-        $is_non_refundable = NULL;
         if (isset($flags_status['non_refundable']) && $flags_status['non_refundable']['status']) {
           $is_non_refundable = $flags_status['non_refundable']['status'];
           $build['non_refundable'] = [
@@ -1477,7 +1486,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     $combinations = [];
 
-    foreach ($product_tree['combinations']['by_sku'] as $options) {
+    foreach ($product_tree['combinations']['by_sku'] ?? [] as $options) {
       $combinations = NestedArray::mergeDeepArray([
         $combinations,
         $sku_manager->getCombinationArray($options),

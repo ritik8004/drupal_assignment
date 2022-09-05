@@ -10,7 +10,7 @@ const OrderReturnEligibility = (props) => {
   }
 
   const {
-    onlineReturns: {
+    order: {
       products,
     },
   } = drupalSettings;

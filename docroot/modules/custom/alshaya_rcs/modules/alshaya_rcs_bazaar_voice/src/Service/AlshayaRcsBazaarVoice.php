@@ -68,4 +68,52 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
     return $request;
   }
 
+  /**
+   * Returns settings for Bazaar voice.
+   *
+   * @return array
+   *   Array of Bazaar voice settings
+   */
+  public function getRcsBazaarVoiceSettings() {
+    $basic_configs = $this->getBasicConfigurations();
+    $settings = $this->getProductBazaarVoiceDetails(NULL, $basic_configs);
+    return $settings;
+  }
+
+  /**
+   * Get the fields for BV product query.
+   *
+   * @return array
+   *   Fields for BV product query.
+   */
+  public function getBvProductQueryFields() {
+    $fields = [
+      'total_count',
+      'items' => [
+        'type_id',
+        'sku',
+        'name',
+        'url_key',
+        'media_gallery' => [
+          '... on ProductImage' => [
+            'url',
+            'label',
+            'styles',
+          ],
+        ],
+        '... on ConfigurableProduct' => [
+          'variants' => [
+            'product' => [
+              'sku',
+              'name',
+            ],
+          ],
+        ],
+      ],
+    ];
+
+    $this->moduleHandler->alter('alshaya_rcs_product_bv_product_fields', $fields);
+    return $fields;
+  }
+
 }

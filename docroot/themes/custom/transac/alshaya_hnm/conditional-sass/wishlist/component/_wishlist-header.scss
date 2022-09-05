@@ -30,4 +30,16 @@ body.wishlist-enabled {
       top: 0;
     }
   }
+
+  @include breakpoint($desktop) {
+    header {
+      .region__header {
+        .block-alshaya-react-mini-cart {
+          #mini-cart-wrapper {
+            min-width: max-content;
+          }
+        }
+      }
+    }
+  }
 }

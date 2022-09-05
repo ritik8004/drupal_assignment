@@ -44,14 +44,13 @@
         <div class="magazine-swatch-placeholder"></div>
           {# Delivery options will load if express delivery enabled. #}
           {% if delivery_options %}
-            <div class="express-delivery mobile {{ express_delivery_class }}">
-              {% for key,delivery_option in delivery_options %}
-                <div class="express-delivery-text {{ key }} {{ delivery_option.status }}">
-                  <span>{{ delivery_option.label }}</span>
-                </div>
-              {% endfor %}
-            </div>
+            <div id="sdd-ed-labels-mobile" class="express-delivery mobile {{ express_delivery_class }}"></div>
           {% endif %}
+
+        {# Render details before description block. #}
+        {% block beforeDescription %}
+        {% endblock %}
+
         <div class="magazine-desc-wrapper">
           {% if product_attribute_labels %}
             <ul class="collection-labels">

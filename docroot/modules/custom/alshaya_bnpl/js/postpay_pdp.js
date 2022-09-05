@@ -25,6 +25,14 @@
       skuBaseForm.once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
         setPostpayWidgetAmount(this, variant, event);
       });
+
+      // Set the amount and render the postpay widget after product gallery
+      // loaded. This is required for the elements which are rendered within
+      // the gallery / product zoom container that refreshes on every variant
+      // change or page load.
+      $(document).once('product-gallery-loaded').on('productGalleryLoaded', function () {
+        setPostpayWidgetAmount(skuBaseForm);
+      });
     }
   };
 
@@ -45,7 +53,13 @@
       }
     }
     else {
-      variant = $('.selected-variant-sku', element).val();
+      // Use first child provided in settings if available.
+      // Use the first variant otherwise.
+      var configurableCombinations = window.commerceBackend.getConfigurableCombinations(sku);
+      var variant = (typeof configurableCombinations.firstChild === 'undefined')
+        ? Object.keys(variants)[0]
+        : configurableCombinations.firstChild;
+
       // Check if we are in mag-v2 layout
       // due to different markup the initial variant fetch will fail.
       if (typeof variant === 'undefined') {

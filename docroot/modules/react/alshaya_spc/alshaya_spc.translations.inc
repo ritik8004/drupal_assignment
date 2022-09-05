@@ -583,8 +583,15 @@ function _alshaya_spc_translations() {
     ],
   ];
 
-  // Strings related to COD mobile verification.
+  // Strings related to exclusive coupon code.
   $strings['v16'] = [
+    'Promotion code is applied on the original price. All other promotions were removed.' => [
+      'ar' => 'تم تطبيق رمز الخصم على السعر الأصلي. جميع العروض الأخرى قد تم إزالتها',
+    ],
+  ];
+
+  // Strings related to COD mobile verification.
+  $strings['v17'] = [
     'Enter the @otp_length-digit OTP code sent to @mobile_number' => [
       'ar' => 'أدخل رمز التحقق @otp_length-digit المرسل إلى @mobile_number',
       'context' => 'cod_mobile_verification',

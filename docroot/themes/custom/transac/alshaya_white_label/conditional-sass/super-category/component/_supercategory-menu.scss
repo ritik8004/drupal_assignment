@@ -11,7 +11,7 @@
     .region__menu-primary {
       @include breakpoint($desktop) {
         float: $left;
-        width: 35%;
+        width: 30%;
       }
 
       .block-alshaya-super-category-menu {
@@ -362,6 +362,19 @@
               visibility: visible;
             }
           }
+
+          &.clear-icon {
+            #alshaya-algolia-autocomplete {
+              .react-autosuggest__container {
+                @include breakpoint($upto-desktop) {
+                  &::before,
+                  &::after {
+                    opacity: 0;
+                  }
+                }
+              }
+            }
+          }
         }
 
         .algolia-search-back-icon {
@@ -629,7 +642,11 @@
 
   &.super-category-home {
     @include breakpoint($upto-desktop) {
-      margin-top: rem(144);
+      margin-top: rem(162);
+
+      html[lang="ar"] & {
+        margin-top: rem(162);
+      }
     }
 
     &:not(.frontpage) {

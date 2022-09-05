@@ -1,0 +1,59 @@
+.alias--membership-info.nodetype--advanced_page {
+  .c-promo__item {
+    &:nth-of-type(8) {
+      .field--name-field-html-heading {
+        p {
+          margin-bottom: rem(4);
+          padding-top: rem(22);
+          font-size: rem(24);
+          font-family: $alshaya-bold;
+          line-height: 1.167;
+          color: $hello-member-highlight-text;
+          text-align: center;
+
+          @include breakpoint($tablet) {
+            font-size: rem(28);
+            padding-top: 0;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          padding: 0 rem(52);
+        }
+      }
+
+      .field--name-field-body {
+        font-size: rem(11);
+        line-height: normal;
+
+        p {
+          margin-bottom: rem(4);
+          text-align: center;
+
+          a {
+            font-size: rem(13);
+            font-family: $alshaya-bold;
+            margin-top: rem(16);
+            padding: rem(8);
+            border: rem(1) solid $link-borders;
+            display: inline-block;
+
+            @include breakpoint($only-mobile) {
+              display: none;
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          padding: 0 rem(52);
+        }
+      }
+
+      margin-top: rem(36);
+
+      @include breakpoint($tablet) {
+        margin-top: rem(128);
+      }
+    }
+  }
+}

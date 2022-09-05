@@ -1,0 +1,32 @@
+.spc-order-summary-item {
+  &.aura-order-summary-item {
+    font-size: rem(14);
+    margin-top: rem(5);
+    padding: rem(19) rem(20);
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    background: $spc-checkout-order-detail-bg;
+
+    .always-ltr {
+      direction: ltr;
+      display: inline-block;
+    }
+
+    .spc-aura-label {
+      color: $aura-order-confirmation-label;
+    }
+
+    .spc-aura-value {
+      color: $aura-order-confirmation-redeem-points;
+    }
+
+    &.earn .spc-aura-value {
+      color: $aura-order-confirmation-points;
+    }
+  }
+}
+
+.spc-order-summary .spc-aura-pending-enrollment-message {
+  margin-top: rem(5);
+}

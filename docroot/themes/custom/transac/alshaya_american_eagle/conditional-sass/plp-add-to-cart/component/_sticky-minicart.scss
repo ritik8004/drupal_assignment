@@ -1,0 +1,7 @@
+.filter-fixed-top {
+  #static-minicart-section {
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(6);
+    }
+  }
+}

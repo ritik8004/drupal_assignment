@@ -1,4 +1,4 @@
-@javascript @auth @checkoutPayment @homeDelivery @blue_card_user @bpsauat
+@javascript @auth @checkoutPayment @homeDelivery @blue_card_user @mckwuat @mcsauat @mcaeuat @pbaeuat @pbsauat @pbkwuat @bbwaeuat @bbwsauat @bbwkwuat @flaeuat @flkwuat @flsauat @hmkwuat @hmsauat @hmaeuat @vskwuat @vssauat @vsaeuat @westelmkwuat @westelmsauat @westelmaeuat @pbkaeuat @pbksauat @pbkkwuat @mujiaeuat @mujikwuat @bpaeuat @bpsauat @bpkwuat @tbskwuat @aeoaeuat @aeokwuat @aeosauat
 Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
 
   @blue_card

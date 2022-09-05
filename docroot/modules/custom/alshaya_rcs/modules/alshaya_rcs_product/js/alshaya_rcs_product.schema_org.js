@@ -38,17 +38,21 @@
         var reviewSchemaData = {};
 
         var averageOverallRating = (results[0].ReviewStatistics.AverageOverallRating);
-        averageOverallRating = averageOverallRating.toString().replace(/,/g, '');
-        averageOverallRating = parseFloat(averageOverallRating).toFixed(2);
+        if (Drupal.hasValue(averageOverallRating)) {
+          averageOverallRating = averageOverallRating.toString().replace(/,/g, '');
+          averageOverallRating = parseFloat(averageOverallRating).toFixed(2);
 
-        // Add schema for aggregate rating.
-        reviewSchemaData.aggregateRating = {
-          '@type': 'AggregateRating',
-            ratingValue: averageOverallRating,
-            reviewCount: typeof results[0].ReviewStatistics.TotalReviewCount,
-        };
+          // Add schema for aggregate rating.
+          reviewSchemaData.aggregateRating = {
+            '@type': 'AggregateRating',
+              ratingValue: averageOverallRating,
+              reviewCount: typeof results[0].ReviewStatistics.TotalReviewCount,
+          };
+        }
 
-        var reviews = Object.values(bvData.Includes.Reviews);
+        var reviews = Drupal.hasValue(bvData.Includes)
+          ? Object.values(bvData.Includes.Reviews)
+          : [];
         if (reviews.length > 0) {
           // Add schema for review.
           reviewSchemaData.review = [];

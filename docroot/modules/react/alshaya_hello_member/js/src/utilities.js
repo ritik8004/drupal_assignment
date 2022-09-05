@@ -1,5 +1,3 @@
-import { hasValue } from '../../../js/utilities/conditionsUtility';
-
 /**
  * Set up accordion container height.
  */
@@ -9,8 +7,6 @@ const setupAccordionHeight = (ref) => {
     element.style.maxHeight = `${ref.current.offsetHeight}px`;
   }
 };
-
-export default setupAccordionHeight;
 
 /**
  * Update the memberId with required format (4343 6443 6554 2322).
@@ -24,19 +20,14 @@ const getFormatedMemberId = (memberId) => memberId.replace(/(\d{4})(\d{4})(\d{4}
 const getPointstHistoryPageSize = () => drupalSettings.pointsHistoryPageSize || 10;
 
 /**
- * Utility function to get hello member points for given price.
+ * Search for specified element from array.
  */
-const getPriceToHelloMemberPoint = (price, dictionaryData) => {
-  if (hasValue(dictionaryData) && hasValue(dictionaryData.items)) {
-    const accrualRatio = dictionaryData.items[0];
-    const points = accrualRatio.value ? (price * parseFloat(accrualRatio.value)) : 0;
-    return Math.round(points);
-  }
-  return null;
-};
+// eslint-disable-next-line
+const findArrayElement = (array, code) => array.find((element) => element.code === code);
 
 export {
   getFormatedMemberId,
   getPointstHistoryPageSize,
-  getPriceToHelloMemberPoint,
+  findArrayElement,
+  setupAccordionHeight,
 };

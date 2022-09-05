@@ -470,3 +470,15 @@ html[lang='ar'] {
     }
   }
 }
+
+// Matching the styles of the static header's total to the non-static header's total
+.static-minicart-wrapper {
+  .cart-link-total {
+    color: $minicart-total;
+    font-size: rem(16);
+
+    html[lang='ar'] & {
+      margin-top: rem(8);
+    }
+  }
+}

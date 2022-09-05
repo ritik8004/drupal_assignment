@@ -124,6 +124,7 @@ class AlshayaGtmManager {
     'name' => 'gtm-name',
     'id' => 'gtm-main-sku',
     'price' => 'gtm-price',
+    'productOldPrice' => 'gtm-old-price',
     'brand' => 'gtm-brand',
     'category' => 'gtm-category',
     'variant' => 'gtm-product-sku',
@@ -380,15 +381,26 @@ class AlshayaGtmManager {
 
     $skuId = $this->skuManager->getSkuForNode($product);
     $product_terms = $this->fetchProductCategories($product);
-    $department_attributes = $this->fetchDepartmentAttributes($product_terms);
+    $department_attributes = [];
+    // Fetch department attributes only if product terms exists.
+    if ($product_terms) {
+      $department_attributes = $this->fetchDepartmentAttributes($product_terms);
+    }
     $skuAttributes = $this->fetchSkuAtttributes($skuId, $child);
 
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
-    $attributes['gtm-department-name'] = $department_attributes['departmentName'];
-    $attributes['gtm-department-id'] = $department_attributes['departmentId'];
+    // Proceed only if we have some data in department attributes.
+    if ($department_attributes) {
+      $attributes['gtm-department-name'] = array_key_exists('departmentName', $department_attributes)
+        ? $department_attributes['departmentName']
+        : '';
+      $attributes['gtm-department-id'] = array_key_exists('departmentId', $department_attributes)
+        ? $department_attributes['departmentId']
+        : '';
+    }
 
     $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
     $attributes = array_merge($attributes, $skuAttributes);
@@ -979,7 +991,7 @@ class AlshayaGtmManager {
       }
 
       $product = $item['product_type'] === 'configurable'
-        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'])
+        ? $this->fetchSkuAtttributes($item['sku'], NULL, $item['extension_attributes']['parent_product_sku'] ?? NULL)
         : $this->fetchSkuAtttributes($item['sku']);
 
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
@@ -1044,10 +1056,22 @@ class AlshayaGtmManager {
       $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
     }
 
+    $additional_info = [];
+    // Fetch Additional Info.
+    foreach ($order['payment']['additional_information'] as $key => $value) {
+      if (is_object(json_decode($value))) {
+        $additional_info = json_decode($value);
+        break;
+      }
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
+      'egiftRedeemType' => !empty($additional_info) ? $additional_info->card_type : '',
+      'isAdvantageCard' => isset($order['coupon_code']) && $order['coupon_code'] === 'advantage_card',
+      'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
@@ -1060,6 +1084,37 @@ class AlshayaGtmManager {
       'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
       'platformType' => $this->getUserDeviceType(),
     ];
+
+    // Add transaction & payment details.
+    $payment_info = [];
+    foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
+      $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
+    }
+
+    $paymentMethods = [];
+    // Get all the possible payment methods for an order.
+    if ($order['payment']['method'] === 'checkout_com_upapi') {
+      $paymentMethods[] = $payment_info['card_type'] . " Card";
+    }
+    else {
+      $paymentMethods[] = $generalInfo['paymentOption'];
+    }
+
+    // Check if some partial payment is done by any other payment methods.
+    if (array_key_exists('hps_redeemed_amount', $order['extension'])
+      && $order['extension']['hps_redeemed_amount'] > 0) {
+      $paymentMethods[] = 'eGift Card';
+    }
+
+    if (array_key_exists('aura_payment_value', $order['extension'])
+      && $order['extension']['aura_payment_value'] > 0) {
+      $paymentMethods[] = 'Aura Loyalty Card';
+    }
+
+    $generalInfo['paymentMethodsUsed'] = $paymentMethods;
+
+    // Generate the deliveryInfo.
+    $generalInfo['deliveryInfo'] = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['shipping']['address'], TRUE);
 
     return [
       'general' => $generalInfo,

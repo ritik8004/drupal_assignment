@@ -5,4 +5,4 @@ variables:
   np_plp_page: '/american-eagle/shop-mens/'
   np_plp_product_page: '/american-eagle/buy-aerie-satin-ruffle-nightie-white.html/'
   spc_pdp_page: '/american-eagle/buy-aerie-satin-ruffle-nightie-white.html/'
-  np_promotion: 0
+  spc_egift_page: '/egift/'

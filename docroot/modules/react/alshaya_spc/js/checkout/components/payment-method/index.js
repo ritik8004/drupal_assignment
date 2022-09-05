@@ -33,6 +33,7 @@ import TabbyWidget from '../../../../../js/tabby/components';
 import PaymentMethodCodMobileVerification
   from '../payment-method-cod-mobile-verification';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -292,7 +293,7 @@ export default class PaymentMethod extends React.Component {
             </div>
             <PaymentMethodIcon methodName={method.code} methodLabel={method.name} />
           </div>
-          <ConditionalView condition={isAuraEnabled()
+          <ConditionalView condition={(isAuraEnabled() || isAuraIntegrationEnabled())
           && method.code === 'cashondelivery'
           && disablePaymentMethod === true
           && !isFullPaymentDoneByAura(cart)}

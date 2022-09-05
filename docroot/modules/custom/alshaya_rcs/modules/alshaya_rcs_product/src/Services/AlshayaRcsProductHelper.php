@@ -664,4 +664,65 @@ class AlshayaRcsProductHelper {
     }
   }
 
+  /**
+   * Get recent orders fields.
+   *
+   * @return array
+   *   Returns the fields for recent orders query.
+   */
+  public function getRecentOrderFields() {
+    static $fields = NULL;
+    if ($fields) {
+      return $fields;
+    }
+
+    $fields = [
+      'total_count',
+      'items' => [
+        'type_id',
+        'sku',
+        'name',
+        'media_gallery' => [
+          '... on ProductImage' => [
+            'url',
+            'label',
+            'styles',
+          ],
+        ],
+        '... on ConfigurableProduct' => [
+          'variants' => [
+            'product' => [
+              'sku',
+              'name',
+            ],
+          ],
+        ],
+      ],
+    ];
+
+    $this->moduleHandler->alter('alshaya_rcs_product_recent_orders_fields', $fields);
+    return $fields;
+  }
+
+  /**
+   * Get order details fields.
+   *
+   * @return array
+   *   Returns the fields for order details query.
+   */
+  public function getOrderDetailsFields() {
+    $fields = $this->getRecentOrderFields();
+    $fields['items']['... on ConfigurableProduct']['configurable_options'] = [
+      'label',
+      'attribute_code',
+    ];
+    $fields['items']['... on ConfigurableProduct']['variants']['attributes'] = [
+      'label',
+      'code',
+    ];
+
+    $this->moduleHandler->alter('alshaya_rcs_product_order_details_fields', $fields);
+    return $fields;
+  }
+
 }

@@ -4,10 +4,10 @@ import Loading from '../../../../../../js/utilities/loading';
 import { getFormatedMemberId } from '../../../utilities';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
-import { getHelloMemberCustomerData } from '../../../hello_member_api_helper';
 import TierProgress from './tier-progress';
 import logger from '../../../../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { getHelloMemberCustomerData } from '../../../../../../js/utilities/helloMemberHelper';
 
 class MyMembership extends React.Component {
   constructor(props) {
@@ -59,8 +59,8 @@ class MyMembership extends React.Component {
     return (
       <>
         <div className="member-name">
-          {Drupal.t('@hello_text @first_name @last_name',
-            { '@hello_text': getStringMessage('hi'), '@first_name': myMembershipData.apc_first_name, '@last_name': myMembershipData.apc_last_name }, { context: 'hello_member' })}
+          {Drupal.t('@hello_text @first_name',
+            { '@hello_text': getStringMessage('hi'), '@first_name': myMembershipData.apc_first_name }, { context: 'hello_member' })}
         </div>
         <div className="points-block">
           <div className="my-points">

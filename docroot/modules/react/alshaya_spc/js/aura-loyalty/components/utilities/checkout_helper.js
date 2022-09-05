@@ -115,10 +115,10 @@ function getMembersToEarnMessage(pointsToEarn) {
 /**
  * Helper function to redeem points.
  */
-function redeemAuraPoints(data) {
+function redeemAuraPoints(data, context = 'aura') {
   let stateValues = {};
 
-  const apiData = window.auraBackend.processRedemption(data);
+  const apiData = window.auraBackend.processRedemption(data, context);
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
@@ -166,7 +166,7 @@ function isFullPaymentDoneByAura(cart) {
   if (cart.cart.totals !== undefined
     && Object.keys(cart.cart.totals).length !== 0
     && cart.cart.totals.balancePayable <= 0
-    && (cart.cart.totals.paidWithAura === cart.cart.totals.base_grand_total)) {
+    && (cart.cart.totals.paidWithAura >= cart.cart.totals.base_grand_total)) {
     return true;
   }
 

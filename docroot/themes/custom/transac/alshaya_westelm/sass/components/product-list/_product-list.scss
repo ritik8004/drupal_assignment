@@ -136,7 +136,8 @@
     }
   }
 
-  .block-alshaya-algolia-react-promotion {
+  .block-alshaya-algolia-react-promotion,
+  .block-alshaya-algolia-react-promotion-v2 {
     .c-products-list.product-large {
       @include breakpoint($desktop) {
         .alshaya_search_gallery {

@@ -676,8 +676,17 @@ $my-wishlist-share-modal-header: $WE_grey_three;
 $pdp-delivery-section-subtitle: $WE_grey_two;
 
 //eGift
-$egift-banner-bg: $WE_light_yellow;
-$egift-accordion-active-title: $WE_metallic_gold;
 $egift-myaccount-button: $WE_grey_three;
 $egift-myaccount-topup-button: $WE_grey_three;
 $egift-myaccount-topup-button-text: $WE_white;
+
+// Advanced Page components.
+$advanced-page-accordion-active-title: $WE_metallic_gold;
+$advanced-page-banner-bg: $WE_light_yellow;
+
+// PLP Quick view drawer.
+$plp-quick-view-product-size-text: $WE_grey_three;
+$plp-quick-view-product-size-border: $WE_grey_three;
+$plp-quick-view-product-size-border-hover: $WE_grey_three;
+$plp-quick-view-product-size-active-bg: $WE_grey_three;
+$plp-quick-view-product-size-text-disabled: $WE_grey_three;

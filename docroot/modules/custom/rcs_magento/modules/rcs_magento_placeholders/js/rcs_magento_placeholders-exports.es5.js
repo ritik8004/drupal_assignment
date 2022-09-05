@@ -364,6 +364,20 @@ exports.getData = async function getData(
       result = rcsCommerceBackend.invokeApi(request);
       break;
 
+    case 'recent_orders_product_data':
+      let recentOrdersVariables = rcsPhGraphqlQuery.recent_orders.variables;
+      recentOrdersVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.recent_orders.query, recentOrdersVariables);
+      result = rcsCommerceBackend.invokeApi(request);
+      break;
+
+    case 'order_details_product_data':
+      let orderDetailsVariables = rcsPhGraphqlQuery.order_details.variables;
+      orderDetailsVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.order_details.query, orderDetailsVariables);
+      result = rcsCommerceBackend.invokeApi(request);
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported by default for get_data.`);
 
@@ -486,6 +500,13 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
           ${params.queryBody}
         }
       }`);
+      result = rcsCommerceBackend.invokeApiSynchronous(request);
+      break;
+
+    case 'bv_product':
+      let bvProductDataVariables = rcsPhGraphqlQuery.bv_product.variables;
+      bvProductDataVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.bv_product.query, bvProductDataVariables);
       result = rcsCommerceBackend.invokeApiSynchronous(request);
       break;
 

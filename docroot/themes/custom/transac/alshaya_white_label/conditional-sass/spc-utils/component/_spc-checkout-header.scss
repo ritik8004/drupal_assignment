@@ -16,6 +16,10 @@
 
       @include breakpoint($only-mobile) {
         margin: 0;
+
+        img {
+          width: 100%;
+        }
       }
     }
 

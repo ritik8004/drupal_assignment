@@ -38,6 +38,11 @@ import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
 import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
+import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
+import { isUserAuthenticated } from '../../../backend/v2/utility';
+import { applyHelloMemberLoyalty } from '../../../hello-member-loyalty/components/hello-member-checkout-rewards/utilities/loyalty_helper';
+import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
+import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -63,6 +68,10 @@ export default class Cart extends React.Component {
       // if set to true, execution will check/recheck
       // DeliveryAreaSelect availability on cart page.
       checkShowAreaAvailabilityStatus: true,
+      // Flag to not show the dynamic promotions on cart page, if exclusive promo/coupon
+      // is applied the i.e. if this exclusive promo is applied on the basket,
+      // the flag value will be true, and we don't render the dynamic promos.
+      hasExclusiveCoupon: false,
     };
   }
 
@@ -88,6 +97,7 @@ export default class Cart extends React.Component {
           wait: false,
           couponCode: data.coupon_code,
           inStock: data.in_stock,
+          hasExclusiveCoupon: data.has_exclusive_coupon,
           ...collectionPointsEnabled() && { collectionCharge: data.collection_charge || '' },
         }));
 
@@ -101,13 +111,23 @@ export default class Cart extends React.Component {
         // Make side bar sticky.
         stickySidebar();
 
-        const cartData = fetchCartData();
-        if (cartData instanceof Promise) {
-          cartData.then((result) => {
-            if (typeof result.error === 'undefined') {
-              window.dynamicPromotion.apply(result);
-            }
-          });
+        // We will not trigger window.dynamicPromotion.apply on cart page
+        // if exclusive coupon is applied.
+        if (data.has_exclusive_coupon !== true) {
+          const cartData = fetchCartData();
+          if (cartData instanceof Promise) {
+            cartData.then((result) => {
+              if (typeof result.error === 'undefined') {
+                window.dynamicPromotion.apply(result);
+                // Set hello member loyalty when no loyalty is set in cart.
+                // For registered user, we need to first get customer identifier number.
+                if (isHelloMemberEnabled() && isUserAuthenticated()
+                  && !hasValue(result.loyalty_type)) {
+                  applyHelloMemberLoyalty(result.cart_id);
+                }
+              }
+            });
+          }
         }
       }
 
@@ -384,6 +404,7 @@ export default class Cart extends React.Component {
       collectionCharge,
       auraDetails,
       showAreaAvailabilityStatusOnCart,
+      hasExclusiveCoupon,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -430,6 +451,11 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
+    // Check if online returns cart banner is enabled.
+    if (isOnlineReturnsCartBannerEnabled()) {
+      preContentActive = 'visible';
+    }
+
     // Get empty divs count for dynamic yield recommendations.
     let cartEmptyDivsCount = 0;
     if (hasValue(drupalSettings.cartDyamicYieldDivsCount)) {
@@ -447,8 +473,10 @@ export default class Cart extends React.Component {
           <CheckoutMessage type={actionMessageType} context="page-level-cart-action">
             {actionMessage}
           </CheckoutMessage>
-          {/* This will be used for Dynamic promotion labels. */}
-          <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
+          {/* Displaying dynamic promotion labels only when no exclusive
+           coupon gets applied in basket. */}
+          {hasExclusiveCoupon !== true
+            && (<DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />)}
           {postPayData.postpayEligibilityMessage}
           <ConditionalView condition={Tabby.isTabbyEnabled()}>
             <TabbyWidget
@@ -494,8 +522,12 @@ export default class Cart extends React.Component {
               </ConditionalView>
             </div>
             <DeliveryInOnlyCity />
+            {isOnlineReturnsCartBannerEnabled() && (
+              <OnlineReturnsCartBanner />
+            )}
             <CartItems
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
+              hasExclusiveCoupon={hasExclusiveCoupon}
               items={items}
               couponCode={couponCode}
               selectFreeGift={this.selectFreeGift}
@@ -509,13 +541,20 @@ export default class Cart extends React.Component {
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
               items={items}
+              totals={totals}
+              hasExclusiveCoupon={hasExclusiveCoupon}
             />
             <ConditionalView condition={isAuraEnabled()}>
               <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
             </ConditionalView>
+            {/* This will be used for the order summary section on cart page,
+            where we will show the coupon code on the discount tooltip
+            if any exclusive coupon code gets applied. */}
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}
+              couponCode={couponCode}
+              hasExclusiveCoupon={hasExclusiveCoupon}
               show_checkout_button
               animationDelay="0.5s"
               context="cart"

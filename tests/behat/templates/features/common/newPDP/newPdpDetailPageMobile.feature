@@ -1,8 +1,11 @@
-@javascript @smoke @newPdp @mobile
+@javascript @smoke @newPdp @mobile @flaepprod @flkwpprod @flsapprod @mcaepprod @mckwpprod @mcsapprod @mckwuat @flkwuat @mckwprod @mcaeprod @mcsaprod @flkwprod
 Feature: Testing new PDP page for Mobile
 
   Background:
     Given I am on "{np_plp_page}"
+    And I wait 10 seconds
+    And I wait for the page to load
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"

@@ -1,0 +1,7 @@
+name: Alshaya Shop By Filter Attribute
+type: module
+description: 'Module to implement Shop By Filter attribute navigation item.'
+package: 'Alshaya'
+core_version_requirement: ^9
+dependencies:
+  - alshaya_algolia_react:alshaya_algolia_react

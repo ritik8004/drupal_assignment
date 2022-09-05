@@ -242,5 +242,7 @@
   <exclude-pattern>docroot/themes/custom/non_transac/*/dist</exclude-pattern>
   <exclude-pattern>docroot/themes/custom/transac/*/color</exclude-pattern>
   <exclude-pattern>docroot/themes/custom/non_transac/*/components/_twig-components</exclude-pattern>
+  <exclude-pattern>factory-hooks</exclude-pattern>
+  <exclude-pattern>hooks</exclude-pattern>
 
 </ruleset>

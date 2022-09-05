@@ -1,0 +1,133 @@
+@mixin spc-placeholder-label() {
+  font-size: 0.875rem;
+  color: $spc-input-label;
+  position: absolute;
+  #{$left}: 0;
+  top: 0;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+@mixin spc-placeholder-active() {
+  top: -1rem;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
+}
+
+.spc-hello-member-checkout-rewards-block {
+  .aura-send-otp {
+    font-family: $aura-regular;
+
+    .aura-enter-otp {
+      display: flex;
+      font-family: $aura-bold;
+
+      .tooltip-anchor {
+        &::before {
+          color: $hello-member-loyalty-aura-icon;
+          font-size: rem(18);
+          top: rem(2);
+          margin-#{$left}: rem(5);
+        }
+
+        .tooltip-box {
+          #{$left}: rem(-60);
+
+          @include breakpoint($only-mobile) {
+            margin-#{$right}: rem(-76);
+          }
+        }
+      }
+    }
+
+    // Type = Text.
+
+    .otp-field-section {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+
+      .spc-type-textfield {
+        margin-top: rem(32);
+        order: 1;
+        width: 52%;
+
+        @include breakpoint($desktop) {
+          margin-#{$right}: rem(8);
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 68%;
+        }
+
+        input[type=text] {
+          width: 100%;
+          border: none;
+          border-bottom: rem(1) solid $primary_input_border;
+          padding: 0;
+        }
+      }
+
+      .aura-verify-otp {
+        order: 2;
+
+        .aura-modal-form-submit {
+          border: rem(1) solid $aura-spc-button-text;
+          background: $aura-spc-button-bg;
+          color: $aura-spc-button-text;
+          font-size: rem(13);
+          border-top-#{$right}-radius: rem(4);
+          border-bottom-#{$right}-radius: rem(4);
+          padding: rem(6);
+          min-width: rem(99);
+          text-align: center;
+          font-family: $aura-bold;
+          cursor: pointer;
+        }
+      }
+
+      .aura-otp-submit-description {
+        order: 3;
+
+        @include breakpoint($desktop) {
+          margin-#{$left}: rem(32);
+        }
+
+        @include breakpoint($only-mobile) {
+          order: 5;
+        }
+
+        .resend-otp {
+          text-decoration: underline;
+          color: $aura-cart-points;
+          cursor: pointer;
+
+          @include breakpoint($only-mobile) {
+            font-size: rem(12);
+          }
+        }
+      }
+
+      .aura-form-messages-container {
+        order: 4;
+
+        @include breakpoint($only-mobile) {
+          order: 3;
+        }
+      }
+
+      .otp-sent-to-mobile-label {
+        order: 5;
+        color: $aura-loyalty-activity-txt;
+
+        @include breakpoint($only-mobile) {
+          order: 4;
+          font-size: rem(12);
+          margin-bottom: rem(16);
+        }
+      }
+    }
+  }
+}
