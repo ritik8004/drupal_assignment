@@ -1,0 +1,6 @@
+name: Alshaya AY Transac RCS
+description: Enables RCS for AY.
+type: module
+core_version_requirement: ^9
+dependencies:
+  - alshaya_ay:alshaya_ay_transac
