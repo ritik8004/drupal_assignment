@@ -33,6 +33,11 @@
       &:focus {
         border-color: $spc-checkout-cod-otp-primary !important;
       }
+
+      &:disabled {
+        background: none;
+        cursor: not-allowed;
+      }
     }
 
     &.error {
@@ -41,6 +46,13 @@
       & > input[type="tel"] {
         color: $cod-otp-field-invalid !important;
         border-color: $cod-otp-field-invalid !important;
+      }
+    }
+
+    &.cod_otp_verified {
+      & > input[type="tel"] {
+        color: $cod-otp-success !important;
+        border-color: $cod-otp-success !important;
       }
     }
   }
@@ -94,6 +106,10 @@
     &:disabled {
       opacity: 0.2;
       pointer-events: none;
+    }
+
+    &.cod_otp_verified {
+      background: $cod-otp-success;
     }
   }
 
