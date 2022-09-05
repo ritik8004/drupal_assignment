@@ -21,6 +21,7 @@ jobs:
       all: ${{ steps.changes.outputs.all}}
       composer: ${{ steps.changes.outputs.composer}}
       docroot: ${{ steps.changes.outputs.docroot}}
+      blt: ${{ steps.changes.outputs.blt}}
       js: ${{ steps.changes.outputs.js }}
       scss: ${{ steps.changes.outputs.scss }}
     steps:
@@ -37,6 +38,7 @@ jobs:
           echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
           echo "::set-output name=composer::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs)"
           echo "::set-output name=docroot::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs)"
+          echo "::set-output name=blt::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep blt | xargs)"
           echo "::set-output name=js::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs)"
           echo "::set-output name=scss::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs)"
       - name: Check if there are changes.
@@ -84,7 +86,6 @@ jobs:
 
       - name: echo changed files
         run: |
-          echo ${{needs.changedfiles.outputs}}
           echo ${{needs.changedfiles.outputs.composer}}
           echo ${{needs.changedfiles.outputs.blt}}
           echo ${{needs.changedfiles.outputs.docroot}}
