@@ -1,4 +1,4 @@
-@javascript @QpayPayment @homeDelivery @auth @flqauat
+@javascript @QpayPayment @checkoutPayment @homeDelivery @auth @flqauat
 Feature: SPC Checkout Home Delivery QPay Payment for Authenticated User
 
   Background:
