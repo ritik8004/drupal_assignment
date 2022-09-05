@@ -1,0 +1,68 @@
+$black: #000;
+$white: #fff;
+$nb-black: #151415;
+$nb-gray: #737b82;
+$light-gray: #f6f6f6;
+$ada-gray: #767676;
+$light-gray2: #fafafa;
+$nb-red: #cf0a2c;
+$gray: #ccc;
+$red2: #b90020;
+$gray2: #efefef;
+
+// Global elements.
+$primary_text: $black;
+$primary_link: $black;
+$content_pagetitle: $black;
+$primary_link-hover: $black;
+$primary_link-active: $black;
+$secondary_text: $nb-black;
+$primary_border: $gray;
+$secondary_border: $nb-red;
+
+//Buttons.
+$primary_btn_bg: $nb-red;
+$primary_empty_btn: $white;
+$primary_btn_text: $white;
+$primary_empty_btn_border: $nb-red;
+$primary_empty_btn_text: $nb-red;
+
+// Checkbox & Radio.
+$primary_radiobtn_label: $black;
+$primary_radiobtn_empty: $white;
+$primary_radiobtn_filled: $nb-red;
+$secondary_radiobtn_empty: $white;
+$secondary_radiobtn_filled: $black;
+
+// Dropdown.
+$primary_dropdown_bg: $white;
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_arrow_icon: $black;
+
+// Footer
+$footer_link: $black;
+$footer_link_hover: $black;
+$social-icons-bg: $white;
+$footer-bg: $white;
+$footer-text: $black;
+$footer-newsletter-text: $white;
+$footer_newsletter_bg: $black;
+
+// Copyright.
+$copyright_footer_bg: $gray2;
+$copyright_footer_paragraph: $black;
+
+// Breadcrumb.
+$breadcrumb_bg: $white;
+$breadcrumb_link: $ada-gray;
+$breadcrumb_link_hover: $ada-gray;
+$breadcrumb_link_active: $ada-gray;
+
+// Header.
+$header_border: $gray-medium;
+$header_search_active_bg: $gray2;
+
+// Header secondary: ie: top header.
+$header_secondary_bg: $gray2;
+$header_secondary_menu_link: $black;
+$header_secondarry_menu_color: $black;
