@@ -25,3 +25,17 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  html[lang=ar] {
+    body[class*="-return-confirmation"] {
+      .block-page-title-block {
+        .back-link {
+          &::before {
+            transform: none;
+          }
+        }
+      }
+    }
+  }
+}
