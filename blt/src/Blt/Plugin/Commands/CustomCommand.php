@@ -525,7 +525,7 @@ class CustomCommand extends BltTasks {
    * @return array
    *   Folders containing webpack.config.js file for React.
    */
-  private function getFoldersWithReact() {
+  private  function getFoldersWithReact() {
     $folders = [];
 
     $finder = new Finder();
