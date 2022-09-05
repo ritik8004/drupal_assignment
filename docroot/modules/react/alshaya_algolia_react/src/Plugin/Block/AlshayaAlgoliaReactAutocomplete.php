@@ -124,6 +124,13 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
     if ($display_settings->get('color_swatches_show_product_image')) {
       $libraries[] = 'alshaya_white_label/plp-swatch-hover';
     }
+
+    // Get algolia plp related config.
+    // Attach quick add css library if feature is enabled.
+    $addToBagHoverStatus = $this->configFactory->get('alshaya_algolia_react.settings')->get('add_to_bag_hover');
+    if ($addToBagHoverStatus) {
+      $libraries[] = 'alshaya_white_label/plp-quick-add';
+    }
     // Get common config and merge with new array.
     $algoliaSearchValues = [
       'local_storage_expire' => 15,
@@ -160,6 +167,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
           'autocomplete' => $autocomplete,
           'reactTeaserView' => $reactTeaserView,
           'expressDelivery' => $express_status,
+          'addToBagHover' => $addToBagHoverStatus,
         ],
       ],
     ];

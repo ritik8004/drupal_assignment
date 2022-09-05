@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_ay.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_ay_transac_install() {
+  // Update plp algolia react settings.
+  // Settings added for Add to basket hover.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.settings'],
+    'alshaya_algolia_react'
+  );
+
+  // Enable add to bag hover for alo yoga.
+  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  $config->set('add_to_bag_hover', TRUE);
+  $config->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_ay_transac', 'alshaya_ay_transac.translation');
+  if ($translations = _alshaya_ay_transac_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
