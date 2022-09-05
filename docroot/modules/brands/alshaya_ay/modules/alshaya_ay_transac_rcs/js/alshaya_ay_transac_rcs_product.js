@@ -12,7 +12,6 @@
     var data = e.detail.result;
 
     // Add extra data to product description.
-    // @todo Display field short_description provided in CORE-34020
     var description = data.description.html;
     e.detail.result.description = {
       html: description,
