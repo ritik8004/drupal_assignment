@@ -60,12 +60,6 @@ class AlshayaRcsPlpMobileMenu extends BlockBase implements ContainerFactoryPlugi
   public function build() {
 
     return [
-      '#theme' => 'alshaya_rcs_plp_mobile_menu',
-      '#data' => [
-        'name' => '#rcs.plpMobileMenu.name#',
-        'path' => '#rcs.plpMobileMenu.url_path#',
-        'langcode' => $this->languageManager->getCurrentLanguage()->getId(),
-      ],
       '#attributes' => [
         'class' => [
           'block-views-blockproduct-category-level-3-block-2',
@@ -78,6 +72,9 @@ class AlshayaRcsPlpMobileMenu extends BlockBase implements ContainerFactoryPlugi
             'data-param-entity-to-get' => 'category',
           ],
         ],
+      ],
+      '#attached' => [
+        'library' => ['alshaya_white_label/rcs-ph-plp-mobile-menu'],
       ],
     ];
   }

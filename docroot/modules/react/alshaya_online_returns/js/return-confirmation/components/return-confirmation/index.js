@@ -30,7 +30,7 @@ class ReturnConfirmation extends React.Component {
 
   render() {
     const { returnId, orderDetails } = this.state;
-    const { helperBlock } = drupalSettings.returnInfo;
+    const { helperBlock } = drupalSettings.onlineReturns.returnInfo;
     if (!hasValue(orderDetails) || !hasValue(returnId)) {
       return null;
     }

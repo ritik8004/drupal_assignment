@@ -503,6 +503,13 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
       result = rcsCommerceBackend.invokeApiSynchronous(request);
       break;
 
+    case 'bv_product':
+      let bvProductDataVariables = rcsPhGraphqlQuery.bv_product.variables;
+      bvProductDataVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.bv_product.query, bvProductDataVariables);
+      result = rcsCommerceBackend.invokeApiSynchronous(request);
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;

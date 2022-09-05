@@ -49,6 +49,7 @@ variables:
   language_continue_shopping: 'go shopping'
   continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'en'
+  mobile_class: 'ar'
   language_short: 'en'
   area_option: 'Al Badaa'
   city_option: 'Dubai'

@@ -1,4 +1,5 @@
 swatch:
+  version: 1.0
   js:
     js/alshaya_assets_swatch.js: {}
   dependencies:

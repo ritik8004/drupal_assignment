@@ -595,6 +595,7 @@ $mm_l1_link_hover: $marine-blue;
 $mm_l1_link_hover_border_to_fill_space: $white-five;
 $mm_l1_link_active_border: $marine-blue;
 $mm_l2_link: $marine-blue;
+$mm_l2_link_desktop: $black;
 $mm_l2_link_hover: $white-five;
 $mm_l2_p: $brownish-grey;
 $mm_l3_link: $grey-ash;
@@ -2261,6 +2262,7 @@ $online-return-cancellation-reason: $error-red;
 $online-return-disabled-txt: $white-five;
 $online-return-button-bg: $pumpkin-orange;
 $online-return-light-bg: $white-five;
+$online-return-notification-cart-bg: $bleach_white;
 
 // Hello Member membership success popup
 $hello-member-membership-success-popup-bg: $white-five;
@@ -2357,3 +2359,12 @@ $hello-member-bd-exp-text: $grey-light;
 $hello-member-bd-close-icon: $white-five;
 $hello-member-promo-guest-bg: $light-yellow;
 $hello-member-promo-guest-pop-title: $_spc-discount-text;
+
+// Exclusive Coupon Code
+$exclusive-promo-message-text: $peacock-blue;
+
+// Shop by filter menu
+$shop-by-filter-attribute-item: $black;
+$shop-by-filter-attribute-item-bg: $white-smoke-light;
+$shop-by-filter-attribute-item-hover: $white-five;
+$shop-by-filter-attribute-item-bg-hover: $black;
