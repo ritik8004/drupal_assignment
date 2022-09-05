@@ -100,8 +100,6 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
 
     // Get algola settings for lhn menu.
     $config = $this->configFactory->get('alshaya_search_algolia.settings');
-    // Get algolia plp related config.
-    $algoliaReactConfig = $this->configFactory->get('alshaya_algolia_react.settings');
     $show_terms_in_lhn = $config->get('show_terms_in_lhn');
     // Menu level is upto L3 when lhn config is all.
     // Default menu level is upto L1.
@@ -125,6 +123,13 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
     if ($display_settings->get('color_swatches_show_product_image')) {
       $libraries[] = 'alshaya_white_label/plp-swatch-hover';
+    }
+
+    // Get algolia plp related config.
+    // Attach quick add css library if feature is enabled.
+    $addToBagHoverStatus = $this->configFactory->get('alshaya_algolia_react.settings')->get('add_to_bag_hover');
+    if ($addToBagHoverStatus) {
+      $libraries[] = 'alshaya_white_label/plp-quick-add';
     }
     // Get common config and merge with new array.
     $algoliaSearchValues = [
@@ -162,7 +167,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
           'autocomplete' => $autocomplete,
           'reactTeaserView' => $reactTeaserView,
           'expressDelivery' => $express_status,
-          'addToBagHover' => $algoliaReactConfig->get('add_to_bag_hover'),
+          'addToBagHover' => $addToBagHoverStatus,
         ],
       ],
     ];
