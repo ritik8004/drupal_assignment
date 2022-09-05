@@ -844,6 +844,6 @@ export const formatMobileNumber = (mobileNumber) => {
   }
 
   return (mobileNumberArray !== null)
-    ? mobileNumber
-    : `+${drupalSettings.country_mobile_code} ${mobileNumberArray.join(' ')}`;
+    ? `+${drupalSettings.country_mobile_code} ${mobileNumberArray.join(' ')}`
+    : mobileNumber;
 };
