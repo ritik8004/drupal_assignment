@@ -22,14 +22,9 @@ function alshaya_ay_transac_install() {
   $config->set('add_to_bag_hover', TRUE);
   $config->save();
 
-  // @todo Add arabic translation for quick add strings.
-  $strings = [
-    'view options' => [
-      'en' => 'Quick Add',
-    ],
-    'add to cart' => [
-      'en' => 'Add to Bag',
-    ],
-  ];
-  alshaya_i18n_save_translations($strings);
+  // Add translations.
+  module_load_include('inc', 'alshaya_ay_transac', 'alshaya_ay_transac.translation');
+  if ($translations = _alshaya_ay_transac_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
