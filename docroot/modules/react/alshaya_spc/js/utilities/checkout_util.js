@@ -823,3 +823,27 @@ export const getDefaultFieldMessage = (fieldsConfig, fieldName) => {
 
   return '';
 };
+
+/**
+ * Split string at a given index.
+ */
+const split = (str, index) => [str.slice(0, index), str.slice(index)];
+
+/**
+ * Formats mobile number with spaces.
+ */
+export const formatMobileNumber = (mobileNumber) => {
+  const mobileNumberWithoutCountryCode = cleanMobileNumber(mobileNumber);
+  let mobileNumberArray = [];
+  if (mobileNumberWithoutCountryCode.length >= 6) {
+    mobileNumberArray = split(mobileNumberWithoutCountryCode, 3);
+  }
+
+  if (mobileNumberArray[1].length >= 6) {
+    [mobileNumberArray[1], mobileNumberArray[2]] = split(mobileNumberArray[1], 3);
+  }
+
+  return (mobileNumberArray !== null)
+    ? mobileNumber
+    : `+${drupalSettings.country_mobile_code} ${mobileNumberArray.join(' ')}`;
+};
