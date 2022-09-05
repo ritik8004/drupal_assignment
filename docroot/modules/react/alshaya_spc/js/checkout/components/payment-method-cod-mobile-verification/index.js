@@ -173,6 +173,12 @@ class PaymentMethodCodMobileVerification extends React.Component {
       return false;
     }
 
+    // Show loader for validate otp request.
+    this.setState({
+      wait: true,
+      otpVerified: 0,
+    });
+
     // Prepare params for endpoint.
     const params = {
       cartId: window.commerceBackend.getCartId(),
@@ -196,6 +202,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
           // Set to 3 for invalid otp and show invalid otp message.
           this.setState({
             otpVerified: 3,
+            wait: false,
           });
 
           return;
@@ -218,6 +225,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
           // Set to 4 to show default error message.
           this.setState({
             otpVerified: 4,
+            wait: false,
           });
 
           return;
@@ -239,17 +247,12 @@ class PaymentMethodCodMobileVerification extends React.Component {
             });
           }
 
-          // Show loader for 2 seconds.
+          // Remove loader set otp valid and verified class for otp input.
           this.setState({
-            wait: true,
             otpValidClass: 'cod_otp_verified',
-          }, () => setTimeout(() => {
-            // After 2 seconds, show verified mobile number text.
-            this.setState({
-              otpVerified: 1,
-              wait: false,
-            });
-          }, 2000));
+            otpVerified: 1,
+            wait: false,
+          });
         }
       })
       .catch((response) => {
@@ -270,6 +273,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
         // Set to 4 to show default error message.
         this.setState({
           otpVerified: 4,
+          wait: false,
         });
       });
 
@@ -307,6 +311,17 @@ class PaymentMethodCodMobileVerification extends React.Component {
       otpErrorMessage = getDefaultErrorMessage();
     }
 
+    let otpInputIsDisable = false;
+    if (otp.length === parseInt(otpLength, 10)) {
+      // Disable otp input as soon as user enters all digits.
+      otpInputIsDisable = true;
+    }
+
+    if (otpVerified > 2) {
+      // Enable otp input if user enters wrong otp or error response.
+      otpInputIsDisable = false;
+    }
+
     return (
       <div className="cod-mobile-otp">
         {wait && <Loading />}
@@ -321,7 +336,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
             numInputs={otpLength}
             isInputNum
             className={(otpVerified === 3 || otpVerified === 4) ? 'cod-mobile-otp__field error' : `cod-mobile-otp__field ${otpValidClass}`}
-            isDisabled={(otp.length === parseInt(otpLength, 10) && otpValidClass)}
+            isDisabled={otpInputIsDisable}
           />
           <div id="otp-error" className="error">
             { otpErrorMessage }
