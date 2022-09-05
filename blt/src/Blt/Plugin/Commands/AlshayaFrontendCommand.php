@@ -4,7 +4,6 @@ namespace Alshaya\Blt\Plugin\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Symfony\Component\Finder\Finder;
-use Drupal\Core\DrupalKernel;
 
 /**
  * Defines commands in the "alshayafe" namespace.
@@ -590,9 +589,6 @@ class AlshayaFrontendCommand extends BltTasks {
    */
   public function preCompileHandlebars() {
     $docroot = $this->getConfigValue('docroot');
-    $class_loader = require DRUPAL_ROOT . '/autoload.php';
-    $kernel = new DrupalKernel('prod', $class_loader);
-    $kernel->boot();
 
     $tasks = $this->taskExecStack();
 
@@ -613,12 +609,6 @@ class AlshayaFrontendCommand extends BltTasks {
       );
       $path_arr = explode('/', $jsFilePath);
       array_pop($path_arr);
-      $key = array_search('dist', $path_arr);
-      if ($key) {
-        $module_name = $path_arr[$key - 1];
-        $libraries = \Drupal::service('library.discovery')->getLibrariesByExtension($module_name);
-        var_dump($libraries);
-      }
       // Create dist folder if does not exists and
       // Pre-compile HandlebarsJs template.
       $dist_dir = implode('/', $path_arr);
