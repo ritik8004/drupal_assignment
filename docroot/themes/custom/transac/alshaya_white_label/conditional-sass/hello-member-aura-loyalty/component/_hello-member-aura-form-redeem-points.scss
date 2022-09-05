@@ -1,0 +1,88 @@
+.spc-aura-redeem-points-form-wrapper {
+  background: $aura-spc-checkout-block-bg;
+  padding: rem(20) 0;
+  margin-top: rem(5);
+
+  &.redeemed {
+    .label {
+      display: none;
+    }
+
+    .form-items .inputs {
+      display: block;
+      font-size: rem(14);
+      line-height: 20px;
+      font-family: $aura-regular;
+
+      > span {
+        padding-#{$right}: rem(4);
+
+        div.price {
+          display: inline;
+        }
+      }
+
+      .successful-redeem-msg {
+        b {
+          color: $aura-spc-checkout-highlight;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    border-radius: 0.625rem;
+  }
+
+  .label {
+    font-size: rem(14);
+    padding-bottom: rem(10);
+    display: block;
+    font-family: $aura-regular;
+  }
+
+  .form-items {
+    display: flex;
+    align-items: center;
+
+    .inputs {
+      display: flex;
+      align-items: center;
+    }
+
+    button {
+      width: rem(145);
+      margin-#{$left}: rem(30);
+
+      &:disabled {
+        opacity: 0.4;
+      }
+    }
+
+    .spc-aura-redeem-points-separator {
+      padding: 0 rem(13);
+      color: $aura-spc-redeem-separator;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+    }
+
+    @include breakpoint($upto-desktop) {
+      display: block;
+
+      .spc-aura-redeem-form-submit {
+        margin-#{$left}: 0;
+        margin-top: rem(30);
+        width: 100%;
+      }
+    }
+  }
+
+  .spc-aura-link-api-response-message.error {
+    font-size: rem(12);
+    font-family: $aura-regular;
+  }
+
+  .spc-aura-cod-disabled-message {
+    padding-top: rem(10);
+  }
+}

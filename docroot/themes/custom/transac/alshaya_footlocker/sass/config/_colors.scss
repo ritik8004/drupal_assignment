@@ -123,6 +123,7 @@ $mm_l1_link_hover_bg: $black;
 $mm_l1_link_hover_active: $brand-red;
 $mm_l2_link: $black;
 $mm_l2_link: $purplish-brown;
+$mm_l2_link_desktop: $black;
 $mm_l1_link_hover: $white-two;
 $mm_l2_bg: $white-two;
 $mm_l3_link: $warm-grey;
@@ -632,6 +633,11 @@ $my-wishlist-share-modal-header: $black;
 $wishlist-newpdp-button-border: $black;
 $wishlist-newpdp-button: $red;
 
-// eGift Landing page
-$egift-accordion-active-title: $primary_link-active;
-$egift-banner-bg: $_egift_landing_page_banner_bg;
+// Advanced Page components.
+$advanced-page-accordion-active-title: $primary_link-active;
+$advanced-page-banner-bg: $_egift_landing_page_banner_bg;
+
+// Shop by filter menu
+$shop-by-filter-attribute-item-bg-hover: $black;
+$shop-by-filter-attribute-item: $black;
+

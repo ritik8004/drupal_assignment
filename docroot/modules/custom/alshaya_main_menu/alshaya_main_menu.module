@@ -235,6 +235,10 @@ function alshaya_main_menu_preprocess_alshaya_main_menu_level2(&$variables) {
       break;
     }
   }
+
+  // Pass the variable on FE to determine if we have to show the highlight
+  // paragraphs in menu overlay or not.
+  $variables['show_highlight'] = \Drupal::config('alshaya_main_menu.settings')->get('show_highlight');
 }
 
 /**

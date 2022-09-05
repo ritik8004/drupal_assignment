@@ -1,0 +1,74 @@
+.spc-order-summary-item.aura-order-summary-item,
+.spc-aura-checkout-messages,
+.spc-aura-checkout-rewards-block .block-content {
+  .tooltip-anchor {
+    display: inline-block;
+    margin-#{$left}: rem(8);
+
+    .tooltip-box {
+      font-family: $aura-regular;
+      background: $aura-order-confirmation-points-tooltip-bg;
+      box-shadow: 0 rem(2) rem(20) 0 rgba(0, 0, 0, 0.24);
+      border: none;
+      color: $aura-order-confirmation-points-tooltip-txt;
+      bottom: rem(32);
+      #{$left}: 50%;
+      transform: translateX(-50%);
+
+      html[lang=ar] & {
+        transform: translateX(50%);
+      }
+
+      @include breakpoint($only-mobile) {
+        #{$left}: calc(50% - 4rem);
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$left}: -50%;
+      }
+
+      &::before,
+      &::after {
+        border-top-color: $aura-order-confirmation-points-tooltip-bg;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: rem(6);
+        }
+
+        @include breakpoint($only-mobile) {
+          margin-#{$left}: rem(50);
+        }
+
+        html[lang=ar] & {
+          left: 10%;
+
+          @include breakpoint($tablet) {
+            left: 40%;
+          }
+
+          @include breakpoint($desktop) {
+            left: 50%;
+          }
+        }
+      }
+    }
+
+    &::before {
+      background: $aura-order-confirmation-points-question-bg;
+      border: none;
+      color: $aura-order-confirmation-points-question-txt;
+    }
+  }
+}
+
+.spc-aura-checkout-messages {
+  display: inline-flex;
+}
+
+#spc-checkout-confirmation {
+  .spc-order-summary-item.aura-order-summary-item .tooltip-box {
+    @include breakpoint($only-mobile) {
+      #{$left}: rem(-64);
+    }
+  }
+}

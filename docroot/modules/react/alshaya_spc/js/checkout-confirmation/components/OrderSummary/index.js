@@ -6,7 +6,7 @@ import AuraEarnOrderSummaryItem
   from '../../../aura-loyalty/components/aura-earn-order-summary-item';
 import AuraRedeemOrderSummaryItem
   from '../../../aura-loyalty/components/aura-redeem-order-summary-item';
-import isAuraEnabled from '../../../../../js/utilities/helper';
+import isAuraEnabled, { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import OrderSummaryFawryBanner from './order-summary-fawry-banner';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import getStringMessage from '../../../utilities/strings';
@@ -15,7 +15,7 @@ import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import EgiftOrderSummaryItem from '../../../egift-card/components/egift-order-summary-item';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
+import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -280,18 +280,19 @@ const OrderSummary = (props) => {
               <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
             </ConditionalView>
           </ConditionalView>
-          <ConditionalView condition={isHelloMemberEnabled()}>
+          {isHelloMemberEnabled() && isUserAuthenticated() && hasValue(hmAccuredPoints)
+            && (
             <OrderSummaryItem
               context={context}
               type="hello_member"
               label={Drupal.t('Member earn', {}, { context: 'hello_member' })}
               value={hmAccuredPoints}
             />
-          </ConditionalView>
+            )}
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>
-      <ConditionalView condition={isAuraEnabled()}>
+      <ConditionalView condition={isAuraEnabled() || isAuraIntegrationEnabled()}>
         <AuraEarnOrderSummaryItem
           pointsEarned={accruedPoints}
           animationDelay="0.8s"

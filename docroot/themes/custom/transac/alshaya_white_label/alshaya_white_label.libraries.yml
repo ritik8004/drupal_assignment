@@ -61,6 +61,7 @@ slider_banner:
   dependencies:
     - core/jquery
     - core/drupal
+    - alshaya_white_label/utils
     - alshaya_white_label/slick
     - alshaya_white_label/alshaya_image_lazy_load
 
@@ -798,6 +799,11 @@ inter-country-transfer:
     theme:
       css/conditional-sass/inter-country-transfer/inter-country-transfer.ltr.css: {}
 
+megamenu-fullwidth-layout:
+  css:
+    theme:
+      css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css: {}
+
 hello-member-benefit-landing-page:
   css:
     theme:
@@ -818,10 +824,45 @@ hello-member-otp:
     theme:
       css/conditional-sass/hello-member-otp/hello-member-otp.ltr.css: {}
 
+hello-member-promotion:
+  css:
+    theme:
+      css/conditional-sass/hello-member-promotion/hello-member-promotion.ltr.css: {}
+
 cls-initial-layout-common:
   css:
     theme:
       css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: {}
+
+hello-member-aura-loyalty:
+  css:
+    theme:
+      css/conditional-sass/hello-member-aura-loyalty/hello-member-aura-loyalty.ltr.css: {}
+
+advanced-page-paragraph-accordion:
+  css:
+    theme:
+      css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css: {}
+
+advanced-page-paragraph-banner:
+  css:
+    theme:
+      css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css: {}
+
+hello-member-info-page:
+  css:
+    theme:
+      css/conditional-sass/hello-member-info-page/hello-member-info-page.ltr.css: {}
+
+hello-member-become-member:
+  css:
+    theme:
+      css/conditional-sass/hello-member-become-member/hello-member-become-member.ltr.css: {}
+
+megamenu-shop-by-filter:
+  css:
+    theme:
+      css/conditional-sass/megamenu-shop-by-filter/megamenu-shop-by-filter.ltr.css: {}
 
 checkout-cod-mobile-verification:
   css:

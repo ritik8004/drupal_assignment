@@ -74,7 +74,7 @@
 
         {# Delivery options will load if express delivery enabled. #}
         {% if content.delivery_options %}
-          <div id="sdd-ed-labels"></div>
+          <div id="sdd-ed-labels-desktop" class="express-delivery active desktop"></div>
         {% elseif content.same_day_delivery_text and content.delivery_options is empty %}
           <div class="same-day-delivery">
             <div class="same-day-content">
@@ -99,6 +99,12 @@
           <div class="postpay mobile-only-show"> {{ content.postpay }} </div>
         {% endif %}
 
+        {% if content.tabby %}
+          <div class="tabby mobile-only-show">
+            <div class="tabby-widget" id="tabby-promo-pdp-mobile"></div>
+          </div>
+        {% endif %}
+
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
         {% if content.reviews_rating %}
@@ -106,11 +112,6 @@
         {% endif %}
 
         <div class="basic-details-wrapper">
-          {% if content.tabby %}
-            <div class="tabby mobile-only-show">
-              <div class="tabby-widget" id="tabby-promo-pdp-mobile"></div>
-            </div>
-          {% endif %}
           {{ content.field_skus }}
           <div class="modal-share-this">
             <span class="share-icon">{{  'Share'|t }}</span>

@@ -186,3 +186,8 @@ node_modules
 
 # Ignore JS uglification builds.
 docroot/build
+
+/travis_wait*
+
+#Ignore behat secret keys.
+tests/behat/creds.json

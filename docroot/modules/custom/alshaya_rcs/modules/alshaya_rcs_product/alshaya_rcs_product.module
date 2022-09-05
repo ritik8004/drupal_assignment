@@ -692,6 +692,30 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     $query_fields['crosssell_products'] = $rcs_product_helper->getRecommendedProductQuery('crosssell_products');
   }
 
+  $recent_orders_fields = $rcs_product_helper->getRecentOrderFields();
+  $query_fields['recent_orders'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $recent_orders_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
+
+  $order_details_fields = $rcs_product_helper->getOrderDetailsFields();
+  $query_fields['order_details'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $order_details_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
+
   return $query_fields;
 }
 
@@ -761,12 +785,15 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
         if ($source === 'js/alshaya_acm_product.utility.js') {
           unset($libraries['product_utility']['js'][$source]);
           $libraries['product_utility']['js']["/$self_module_path/js/alshaya_rcs_product.utility.js"] = $options;
-          $libraries['product_utility']['dependencies'] = [
-            'core/drupal',
-            'core/drupalSettings',
-            'alshaya_master/common_functions',
-            'alshaya_rcs_product/main',
-          ];
+          $libraries['product_utility']['dependencies'] = array_merge(
+            $libraries['product_utility']['dependencies'] ?? [],
+            [
+              'core/drupal',
+              'core/drupalSettings',
+              'alshaya_master/common_functions',
+              'alshaya_rcs_product/main',
+            ]
+          );
 
           break;
         }
@@ -840,7 +867,10 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
       // Iterate over each order item.
       foreach ($order['#order']['items'] as $key => $item) {
         $build['recent_order'][$id]['#order']['items'][$key]['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
-        $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'];
+        // For backup, we will use the name from the image title attribute in
+        // case API data is not available.
+        $build['recent_order'][$id]['#order']['items'][$key]['name'] = '#rcs.productItem.name#';
+        $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'] ?? $item['sku'];
       }
     }
 
@@ -850,6 +880,7 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
           'id' => 'rcs-ph-order_teaser',
           'class' => ['block-alshaya-acm-customer'],
           'data-param-skus' => Json::encode($child_parent_mapping),
+          'data-param-context' => 'recent_order',
         ],
       ],
     ];
@@ -868,9 +899,7 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
  * Implements hook_alshaya_acm_customer_orders_details_build_alter().
  */
 function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
-  // Add data attributes.
-  $parentSkus = [];
-  $itemSkus = [];
+  $child_parent_mapping = [];
   // Update the product image with RCS Token.
   foreach ($build['#products'] as $key => &$item) {
     // Add name placeholder if the product type is simple.
@@ -878,9 +907,6 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
       $item['name'] = '#rcs.productItem.name#';
     }
     $item['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
-    $parentSkus[$key] = $item['extension_attributes']['parent_product_sku'];
-    // Store the item sku.
-    $itemSkus[$key] = $item['sku'];
     // Attribute placeholders.
     $item['attributes'][] = [
       'label' => '#rcs.productItemAttribute.attr_label#',
@@ -893,14 +919,15 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
       $item['price'] = t('Free');
       $item['total'] = '';
     }
+    $child_parent_mapping[$item['sku']] = $item['extension_attributes']['parent_product_sku'] ?? $item['sku'];
   }
   $build['#theme_wrappers'] = [
     'container' => [
       '#attributes' => [
         'id' => 'rcs-ph-order_teaser',
-        'data-param-parent-skus' => Json::encode(array_unique($parentSkus)),
-        'data-param-item-skus' => Json::encode(array_unique($itemSkus)),
+        'data-param-skus' => Json::encode($child_parent_mapping),
         'data-rcs-dependency' => 'none',
+        'data-param-context' => 'order_details',
       ],
     ],
   ];

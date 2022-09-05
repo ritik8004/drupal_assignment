@@ -684,23 +684,17 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
       $results = $query->execute()->fetchAll();
 
-      $this->cache->set($cid, $results, Cache::PERMANENT, ['taxonomy_term:' . self::VOCABULARY_ID]);
+      $this->cache->set($cid, $results, Cache::PERMANENT);
     }
 
     // Filter the results.
     if (!empty($results)) {
-      $results = array_filter($results, function ($result) use ($parent_tid) {
-        return $result->parent_target_id == $parent_tid;
-      });
+      $results = array_filter($results, fn($result) => $result->parent_target_id == $parent_tid);
       if ($exclude_not_in_menu) {
-        $results = array_filter($results, function ($result) {
-          return $result->field_category_include_menu_value == 1;
-        });
+        $results = array_filter($results, fn($result) => $result->field_category_include_menu_value == 1);
       }
       if ($mobile_only) {
-        $results = array_filter($results, function ($result) {
-          return $result->field_mobile_only_dpt_page_link_value == 1;
-        });
+        $results = array_filter($results, fn($result) => $result->field_mobile_only_dpt_page_link_value == 1);
       }
     }
 

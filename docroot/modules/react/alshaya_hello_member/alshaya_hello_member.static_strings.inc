@@ -134,5 +134,85 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'benefit_expire_no_date',
       'value' => t('Expires on', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'view_all_benefits',
+      'value' => t('View all Benefits', [], ['context' => 'hello_member']),
+    ],
+  ];
+}
+
+/**
+ * Hello Member aura static strings.
+ */
+function _alshaya_hello_member_aura_static_strings() {
+  return [
+    [
+      'key' => 'loyalty_title',
+      'value' => t('loyalty', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hello_member_guest_login',
+      'value' => t('@hm_icon @login_link or Become a member to earn @points points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hello_member_points_tooltip',
+      'value' => t('The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'confirm_loyalty',
+      'value' => t('Confirm the Loyalty', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'loyalty_modal_question',
+      'value' => t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits?', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'enter_aura_details',
+      'value' => t('Enter Aura Details', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_details_tooltip',
+      'value' => t('Add your mobile number, Aura account number or email address below to link this purchase.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'email_address',
+      'value' => t('Email address', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_partially_enrolled_message',
+      'value' => t('To redeem points compelete the full enrollment.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'card_submit',
+      'value' => t('Submit', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'checkout_you_have',
+      'value' => t('You have', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_points_earn_message',
+      'value' => t('You will earn <b>@points</b> Aura points with this purchase.', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'redeem_points_message',
+      'value' => t('Do you want to redeem Aura points?', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'redeem_points_button',
+      'value' => t('Redeem Points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'enter_otp',
+      'value' => t('Enter OTP', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'verify_otp',
+      'value' => t('Verify', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_sign_in',
+      'value' => t('Sign In', [], ['context' => 'hello_member']),
+    ],
   ];
 }

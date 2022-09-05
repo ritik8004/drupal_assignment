@@ -1,0 +1,14 @@
+.alias--membership-info.nodetype--advanced_page {
+  .c-promo__item {
+    &:nth-of-type(4),
+    &:nth-of-type(5) {
+      .field--name-field-1-row-2-col.field__items {
+        & > .field__item {
+          .field--name-field-html-heading > p {
+            font-family: $hnm-demibold;
+          }
+        }
+      }
+    }
+  }
+}
