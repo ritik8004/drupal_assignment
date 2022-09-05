@@ -4,6 +4,7 @@ namespace Alshaya\Blt\Plugin\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Symfony\Component\Finder\Finder;
+use Drupal\Core\DrupalKernel;
 
 /**
  * Defines commands in the "alshayafe" namespace.
@@ -576,6 +577,55 @@ class AlshayaFrontendCommand extends BltTasks {
       }
     }
 
+    $tasks->stopOnFail();
+    $result = $tasks->run();
+    return $result;
+  }
+
+  /**
+   * Pre-compile handlebarjs Template.
+   *
+   * @command alshayafe:handlebars-build
+   * @aliases handlebars-build, hbb
+   */
+  public function preCompileHandlebars() {
+    $docroot = $this->getConfigValue('docroot');
+    $class_loader = require DRUPAL_ROOT . '/autoload.php';
+    $kernel = new DrupalKernel('prod', $class_loader);
+    $kernel->boot();
+
+    $tasks = $this->taskExecStack();
+
+    $finder = new Finder();
+    $finder->name('*.handlebars');
+    // Find handlebar templates in custom and brand folder.
+    $finder->in($docroot . '/modules/custom');
+    $finder->in($docroot . '/modules/brands');
+
+    // Execute pre-compile command in all dir.
+    foreach ($finder as $file) {
+      $handlebarFilePath = $file->getRealPath();
+      // Pre-compiled path.
+      $jsFilePath = str_replace(
+        ["/handlebars/", '.handlebars'],
+        ["/dist/", '.js'],
+        $handlebarFilePath
+      );
+      $path_arr = explode('/', $jsFilePath);
+      array_pop($path_arr);
+      $key = array_search('dist', $path_arr);
+      if ($key) {
+        $module_name = $path_arr[$key - 1];
+        $libraries = \Drupal::service('library.discovery')->getLibrariesByExtension($module_name);
+        var_dump($libraries);
+      }
+      // Create dist folder if does not exists and
+      // Pre-compile HandlebarsJs template.
+      $dist_dir = implode('/', $path_arr);
+      $tasks->exec("cd $docroot; mkdir -p $dist_dir;
+        ./node_modules/.bin/handlebars $handlebarFilePath -f $jsFilePath -n window.rcsHandlebarsTemplates"
+      );
+    }
     $tasks->stopOnFail();
     $result = $tasks->run();
     return $result;

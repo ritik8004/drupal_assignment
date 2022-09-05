@@ -1,4 +1,5 @@
-const Handlebars = require("handlebars");
+Handlebars = require("handlebars");
+exports.Handlebars = Handlebars;
 
 /**
  * Render Handlebars templates.
@@ -37,6 +38,7 @@ function handlebarsRender(id, data) {
 
   // Compile source.
   const render = Handlebars.compile(source);
+  // const render = Handlebars.template(source);
 
   // Return rendered template using data provided.
   return render(data);

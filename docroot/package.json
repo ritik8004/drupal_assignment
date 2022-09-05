@@ -35,5 +35,8 @@
   },
   "resolutions": {
     "glob-parent": "^6.0.2"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.7"
   }
 }
