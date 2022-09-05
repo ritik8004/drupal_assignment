@@ -19,5 +19,5 @@ alshaya_rcs_product_seo:
 sitemap:
   version: 1x
   js:
-    handlebars/alshaya-rcs-sitemap.handlebars: {}
+    handlebars/sitemap.handlebars: {}
     dist/alshaya_rcs_seo_renderer.bundle.js: {}
