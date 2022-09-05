@@ -22,7 +22,7 @@ function hook_rcs_handlebars_templates(\Drupal\Core\Entity\EntityInterface $enti
 ```
 
 The libraries are defined like you would do for a Js library but you will provide
-the path for the Handlebars templates. ** Make sure that handlebar template name is _exactly same_ as the library name. **
+the path for the Handlebars templates. **Make sure that handlebar template name is _exactly same_ as the library name.**
 
 example.libraries.yml
 ```
