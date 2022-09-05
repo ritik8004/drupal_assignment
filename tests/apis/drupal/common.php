@@ -1,6 +1,8 @@
 <?php
 // phpcs:ignoreFile
 
+require_once __DIR__ . '/settings.php';
+
 function post($url, $data, array $headers = []) {
   $headers['Cache-Control'] = 'no-cache';
 
@@ -49,6 +51,7 @@ function get_session_token(string $domain) {
 }
 
 function get_token(string $domain) {
+  global $password;
   $url = "https://$domain/oauth/token?_format=json";
 
   // Get token first.
@@ -57,8 +60,11 @@ function get_token(string $domain) {
     'client_secret' => 'AlShAyA',
     'grant_type'    => 'password',
     'username' => 'alshaya_mobile_app',
-    'password' => 'AlShAyA_MoBiLe',
+    'password' => $password,
   ];
+  if (empty($token_data['password'])) {
+    throw new Exception('Password value not set in token_data. Check in git history for this file to retrieve password for local use.');
+  }
 
   $token_info = post($url, http_build_query($token_data));
   if ($token_info) {

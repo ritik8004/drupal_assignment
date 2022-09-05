@@ -1,0 +1,8 @@
+<?php
+
+// Password to authenticate alshaya_mobile_app user.
+// Check git history of common.php file to retrieve this.
+$password = '';
+
+// Add the value for new password if you want to run reset_password script else leave blank.
+$new_reset_password = '';

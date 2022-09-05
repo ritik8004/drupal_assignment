@@ -11,8 +11,12 @@ $data = [
   'reset_token' => 'QcBPAkXuxNEplKQ8x89jCj2eIgCijImbYULQfOgMUIo',
   'timestamp' => 1_641_891_870,
   'user_id' => 2_241_391,
-  'new_password' => 'Alshaya@2023',
+  // Add the password you want to set in settings.php.
+  'new_password' => $new_reset_password,
 ];
+if (empty($data['new_password'])) {
+  throw new Exception('new_password value not set');
+}
 
 /* Edit above to set proper env, skus, langcode */
 
