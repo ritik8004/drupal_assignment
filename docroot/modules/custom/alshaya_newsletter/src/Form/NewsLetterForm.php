@@ -3,11 +3,14 @@
 namespace Drupal\alshaya_newsletter\Form;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Site\Settings;
 
 /**
  * Class News Letter Form.
@@ -22,6 +25,20 @@ class NewsLetterForm extends FormBase {
   protected $apiWrapper;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * Alshaya SPC Version Helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -33,9 +50,18 @@ class NewsLetterForm extends FormBase {
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   The api wrapper.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   Alshaya SPC Version Helper.
    */
-  public function __construct(AlshayaApiWrapper $api_wrapper) {
+  public function __construct(
+    AlshayaApiWrapper $api_wrapper,
+    LanguageManagerInterface $language_manager,
+    AlshayaSpcHelper $spc_helper) {
     $this->apiWrapper = $api_wrapper;
+    $this->languageManager = $language_manager;
+    $this->spcHelper = $spc_helper;
   }
 
   /**
@@ -43,7 +69,9 @@ class NewsLetterForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_api.api')
+      $container->get('alshaya_api.api'),
+      $container->get('language_manager'),
+      $container->get('alshaya_spc.helper')
     );
   }
 
@@ -85,6 +113,7 @@ class NewsLetterForm extends FormBase {
     ];
 
     $form['#attached']['library'][] = 'alshaya_newsletter/newsletter_js';
+    $form['#attached']['drupalSettings']['newsletter']['apiUrl'] = $this->getMagentoApiInfo();
     return $form;
   }
 
@@ -94,32 +123,7 @@ class NewsLetterForm extends FormBase {
   public function submitFormAjax(array &$form, FormStateInterface $form_state) {
     $data = [];
     if (!$form_state->hasAnyErrors() && !empty($form_state->getValue('email'))) {
-      try {
-        $subscription = $this->apiWrapper->subscribeNewsletter($form_state->getValue('email'));
-
-        $status = is_array($subscription) ? $subscription['status'] : $subscription;
-
-        if ($status) {
-          $message = '<span class="message success">' . $this->t('Thank you for your subscription.') . '</span>';
-          $data['message'] = 'success';
-        }
-        else {
-          $message = '<span class="message error">' . $this->t('This email address is already subscribed.') . '</span>';
-          $data['message'] = 'failure';
-        }
-      }
-      catch (\Exception $e) {
-        if (acq_commerce_is_exception_api_down_exception($e)) {
-          $message = '<span class="message error">' . $e->getMessage() . '</span>';
-        }
-        else {
-          $message = '<span class="message error">' . $this->t('Something went wrong, please try again later.') . '</span>';
-        }
-
-        $data['message'] = 'failure';
-      }
-
-      $data['html'] = '<div class="subscription-status">' . $message . '</div>';
+      $data['email'] = $form_state->getValue('email');
     }
     else {
       $data['message'] = 'failure';
@@ -132,7 +136,7 @@ class NewsLetterForm extends FormBase {
 
     // Prepare the ajax Response.
     $response = new AjaxResponse();
-    $response->addCommand(new InvokeCommand(NULL, 'newsletterHandleResponse', [$data]));
+    $response->addCommand(new InvokeCommand(NULL, 'newsletterCallApi', [$data]));
     return $response;
   }
 
@@ -141,6 +145,37 @@ class NewsLetterForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
+  }
+
+  /**
+   * Gets the information around magento API.
+   *
+   * @return string
+   *   The API link of Magento.
+   */
+  private function getMagentoApiInfo() {
+    $cart_version = $this->spcHelper->getCommerceBackendVersion();
+    if ($cart_version != 2) {
+      return '';
+    }
+    $api_url = '';
+    $api_settings = Settings::get('alshaya_api.settings');
+    $store_settings = Settings::get('magento_lang_prefix');
+    $current_language = $this->languageManager->getCurrentLanguage()->getId();
+
+    // We proxy the requests via cloudflare, so we use the current domain as is
+    // without any language suffix so HTTP_HOST is enough.
+    $api_url = 'https://' . $_SERVER['HTTP_HOST'];
+
+    // Use proxy on only specific environments.
+    if (Settings::get('alshaya_use_proxy', FALSE)) {
+      $api_url = '/proxy/?url=' . $api_settings['magento_host'];
+    }
+
+    // Add the prefix for rest and store code.
+    $api_url .= '/rest/' . $store_settings[$current_language];
+
+    return $api_url;
   }
 
 }
