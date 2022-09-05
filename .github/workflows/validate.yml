@@ -85,6 +85,7 @@ jobs:
       - name: echo changed files
         run: |
           echo ${{needs.changedfiles.outputs.composer}}
+          echo ${{needs.changedfiles.outputs.blt}}
           echo ${{needs.changedfiles.outputs.docroot}}
           echo ${{needs.changedfiles.outputs.js}}
           echo ${{needs.changedfiles.outputs.scss}}
