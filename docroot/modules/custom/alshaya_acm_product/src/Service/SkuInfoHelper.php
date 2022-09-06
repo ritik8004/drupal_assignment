@@ -413,6 +413,7 @@ class SkuInfoHelper {
    *   The string of terms hierarchy.
    */
   protected function getProductCategoryHierarchy(TermInterface $term, $lang = NULL) {
+    $sourceTerm = [];
     $static = &drupal_static('alshaya_acm_product_get_product_category_hierarchy', []);
     $tid = $term->id();
 
@@ -658,9 +659,7 @@ class SkuInfoHelper {
     switch ($sku->bundle()) {
       case 'configurable':
         $configured_skus = $sku->get('field_configured_skus')->getValue();
-        $child_skus = array_map(function ($item) {
-          return $item['value'];
-        }, $configured_skus);
+        $child_skus = array_map(fn($item) => $item['value'], $configured_skus);
 
         $query = $this->database->select('acq_sku_stock', 'stock');
         $query->addExpression('SUM(stock.quantity)', 'final_quantity');

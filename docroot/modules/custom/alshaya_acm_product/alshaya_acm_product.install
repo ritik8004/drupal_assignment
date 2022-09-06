@@ -16,6 +16,37 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Remove all the custom cache tags from the cachetags table and clear out the
+ * product_processed_data cache bin.
+ */
+function alshaya_acm_product_update_8081() {
+  // Delete custom cache tags present in cachetags.
+  $query = \Drupal::database()->delete('cachetags');
+  $query->condition('tag', 'alshaya_sku:%', 'like');
+  $query->execute();
+
+  // Clear out the product_processed_data cache bin.
+  \Drupal::cache('product_processed_data')->deleteAll();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new config which contains configurable field label, error and label when
+ * a value is selected.
+ */
+function alshaya_acm_product_update_8080() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.fields_labels_n_error'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * New configuration 'show_size_guide_on_pdp_page'.
  */
 function alshaya_acm_product_update_8079() {

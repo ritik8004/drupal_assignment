@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_hello_member.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_hello_member_install() {
+  // Move myaccountshellomemberblock and block to proper theme.
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+
+  $config_factory = \Drupal::configFactory();
+
+  // Set the My Accounts hello member block
+  // to appear just below the page title.
+  $page_title_weight = (int) $config_factory->get('block.block.page_title')->get('weight');
+  $config_factory->getEditable('block.block.myaccountshellomemberblock')->set('weight', $page_title_weight + 1)->save();
+
+  // Set the My Membership info block
+  // to appear just above the my account links.
+  $my_account_links = (int) $config_factory->get('block.block.alshayamyaccountlinks')->get('weight');
+  $config_factory->getEditable('block.block.mymembershipinfoblock')->set('weight', $my_account_links - 1)->save();
+
+  // Set the Hello member header block
+  // to appear just above the mini cart block.
+  $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
+  $config_factory->getEditable('block.block.hellomemberheaderblock')->set('weight', $my_account_links - 2)->save();
+
+  // Enable points history link in the menu.
+  $config = $config_factory->getEditable('alshaya_user.settings');
+  // @codingStandardsIgnoreLine
+  $alshaya_hello_member = unserialize($config->get('my_account_enabled_links'));
+  $alshaya_hello_member['hello_member_points_history'] = 'hello_member_points_history';
+  $config->set('my_account_enabled_links', serialize($alshaya_hello_member));
+  $config->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_hello_member', 'alshaya_hello_member.translation');
+  if ($translations = _alshaya_hello_member_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Remove configurations related to user account fields.
+ */
+function alshaya_hello_member_uninstall() {
+  $config_factory = \Drupal::configFactory();
+  $config_factory->getEditable('field.field.user.user.field_birth_date')->delete();
+  $config_factory->getEditable('field.field.user.user.field_gender')->delete();
+  $config_factory->getEditable('field.storage.user.field_birth_date')->delete();
+  $config_factory->getEditable('field.storage.user.field_gender')->delete();
+}

@@ -122,6 +122,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[ConfigEvents::SAVE] = ['onConfigSave'];
     $events[LanguageConfigOverrideEvents::SAVE_OVERRIDE] = ['onLanguageConfigOverrideSave'];
 
@@ -377,7 +378,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     try {
       $this->logger->log($severity, $message, $args);
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Do nothing.
     }
   }

@@ -47,12 +47,12 @@ jobs:
 
   validate:
     name: Validate
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     needs: changedfiles
     if: ${{ github.event_name == 'pull_request' && (needs.changedfiles.outputs.composer || needs.changedfiles.outputs.docroot) }}
 
     container:
-      image: devwithlando/php:7.4-fpm-4
+      image: devwithlando/php:8.0-fpm-4
 
     services:
       database:

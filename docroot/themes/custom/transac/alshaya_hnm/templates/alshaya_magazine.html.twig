@@ -1,0 +1,29 @@
+{% extends "@alshaya_product_zoom/alshaya_magazine.html.twig" %}
+
+{% block beforeDescription %}
+	<div class="content__title_wrapper_description mobile-only-show">
+		{% if product_title %}
+			<h1>{{ product_title }}</h1>
+		{% endif %}
+
+		<div class="info-wrapper">
+			{% if price_block_identifier %}
+			<div class="price-block {{ price_block_identifier }}">
+				{{ price_block }}
+			</div>
+			{% endif %}
+
+			{% if postpay %}
+				{{ attach_library('alshaya_white_label/postpay-pdp') }}
+				<div class="postpay mobile-only-show">
+					{{ postpay }}
+				</div>
+			{% endif %}
+			{% if tabby %}
+				<div class="tabby mobile-only-show">
+					<div class="tabby-widget" id="tabby-promo-pdp-mobile-gallery"></div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}

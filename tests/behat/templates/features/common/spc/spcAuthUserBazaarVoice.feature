@@ -29,9 +29,9 @@ Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
     And I fill in "title" with "My Review"
     And I wait 5 seconds
     And I fill in "reviewtext" with "Product Quality is a good, overall great product. Very smooth and presentable. Great fabric Product Quality is a good, overall great product."
-    And I click jQuery "#isrecommended-error > span:nth-child(1)" element on page
+    And I click jQuery "#rating_Quality-error > label:nth-child(1) > span" element on page
     And I wait 5 seconds
-    And I fill in "usernickname"
+    And I fill in "usernickname" with "TestUser1234"
     And I wait 5 seconds
     And I scroll to the "#preview-write-review" element
     And I click jQuery "#preview-write-review" element on page
@@ -53,12 +53,12 @@ Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
     And the element "#rating .star-counter" should exist
     And I click jQuery "#rating-error > label:nth-child(1) > span" element on page
     And I wait 5 seconds
-    And I fill in "title" with "My Review"
+    And I fill in "title" with "تقييمي"
     And I wait 5 seconds
-    And I fill in "reviewtext" with "Product Quality is a good, overall great product. Very smooth and presentable. Great fabric Product Quality is a good, overall great product."
-    And I click jQuery "#isrecommended-error > span:nth-child(1)" element on page
+    And I fill in "reviewtext" with "جودة المنتج هي منتج جيد وجيد بشكل عام. سلس جدا ورائع. نسيج رائع جودة المنتج هو منتج جيد ورائع بشكل عام."
+    And I click jQuery "#rating_Quality-error > label:nth-child(1) > span" element on page
     And I wait 5 seconds
-    And I fill in "usernickname"
+    And I fill in "usernickname" with "TestUser1234"
     And I wait 5 seconds
     And I scroll to the "#preview-write-review" element
     And I click jQuery "#preview-write-review" element on page

@@ -16,4 +16,20 @@
       }
     }
   }
+
+  &:not(.frontpage) {
+    .branding__menu {
+      #block-alshayareactcartminicartblock {
+        @include breakpoint($upto-desktop) {
+          top: rem(65);
+        }
+      }
+    }
+  }
+
+  #mini-cart-wrapper {
+    @include breakpoint($only-tablet) {
+      margin-top: rem(10);
+    }
+  }
 }

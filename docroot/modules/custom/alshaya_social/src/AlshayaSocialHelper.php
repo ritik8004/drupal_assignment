@@ -104,9 +104,7 @@ class AlshayaSocialHelper {
   public function getSocialNetworks() {
     $auth = $this->configFactory->get('social_auth.settings')->get('auth');
     $enable_networks = array_keys($this->getEnabledNetworks());
-    return array_filter($auth, function ($key) use ($enable_networks) {
-      return in_array($key, $enable_networks);
-    }, ARRAY_FILTER_USE_KEY);
+    return array_filter($auth, fn($key) => in_array($key, $enable_networks), ARRAY_FILTER_USE_KEY);
   }
 
   /**

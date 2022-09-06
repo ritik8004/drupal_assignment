@@ -1,0 +1,155 @@
+@mixin advanced-page-btn {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+  font-family: $alshaya-bold;
+  max-width: 11rem;
+  font-size: 0.8125rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.nodetype--advanced_page {
+  .c-content {
+    .c-content__slider {
+      max-width: 64.125rem;
+      margin-#{$left}: auto;
+      margin-#{$right}: auto;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+
+  .paragraph-image_title_subtitle_link {
+    background-color: $advanced-page-banner-bg;
+    padding: 5.625rem 4.625rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 2rem 1.5rem;
+    }
+  }
+}
+
+.paragraph_banner_block {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @include breakpoint($only-mobile) {
+    grid-template-columns: none;
+  }
+
+  .paragraph_banner_title_subtitle {
+    display: flex;
+    flex-direction: column;
+    grid-column: span 1 / span 1;
+    text-align: $left;
+    margin-#{$left}: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .field--name-field-title {
+      font-size: 1.75rem;
+      font-family: $alshaya-bold;
+      margin-bottom: 1.125rem;
+      line-height: 2.5rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.5rem;
+      }
+    }
+
+    .field--name-field-sub-title {
+      font-size: 0.8125rem;
+      line-height: 1.25rem;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+
+  .paragraph_banner_buttons {
+    grid-column: span 1 / span 1;
+    order: 3;
+    margin-#{$left}: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0;
+    }
+
+    .field--name-field-links {
+      display: flex;
+      justify-content: space-between;
+
+      @include breakpoint($only-mobile) {
+        flex-direction: column-reverse;
+      }
+
+      .field--name-field-links {
+        width: 48.1%;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+
+        a {
+          @include advanced-page-btn;
+
+          color: $primary_btn_bg;
+          border: 1px solid $primary_btn_bg;
+          max-width: none;
+          line-height: 1rem;
+          letter-spacing: 0.0625rem;
+
+          &:hover {
+            background: $plp-secondary-cta-hover-bg;
+          }
+        }
+
+        &:last-child {
+          a {
+            background-color: $primary_btn_bg;
+            color: $primary_btn_text;
+
+            &:hover {
+              background: $plp-primary-cta-hover-bg;
+              border-color: $plp-primary-cta-hover-bg;
+            }
+          }
+
+          @include breakpoint($only-mobile) {
+            margin-bottom: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .paragraph_banner_image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-row: span 2 / span 2;
+    flex-direction: column;
+    margin-#{$right}: 1.313rem;
+
+    @include breakpoint($only-mobile) {
+      order: 2;
+      margin-bottom: 1rem;
+      margin-#{$right}: 0;
+    }
+
+    img {
+      max-width: 28rem;
+      object-fit: contain;
+    }
+  }
+}

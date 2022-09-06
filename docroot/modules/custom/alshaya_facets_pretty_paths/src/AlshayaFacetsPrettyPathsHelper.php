@@ -109,7 +109,7 @@ class AlshayaFacetsPrettyPathsHelper {
   /**
    * Replacement characters for facet values.
    */
-  const REPLACEMENTS = [
+  public const REPLACEMENTS = [
     // Convert space to double underscore.
     ' ' => '__',
     // Convert hyphen to underscore.
@@ -119,11 +119,11 @@ class AlshayaFacetsPrettyPathsHelper {
   /**
    * Meta info type select list values.
    */
-  const FACET_META_TYPE_IGNORE = 0;
-  const FACET_META_TYPE_PREFIX = 1;
-  const FACET_META_TYPE_SUFFIX = 2;
-  const VISIBLE_IN_META_TITLE = 4;
-  const VISIBLE_IN_META_DESCRIPTION = 5;
+  public const FACET_META_TYPE_IGNORE = 0;
+  public const FACET_META_TYPE_PREFIX = 1;
+  public const FACET_META_TYPE_SUFFIX = 2;
+  public const VISIBLE_IN_META_TITLE = 4;
+  public const VISIBLE_IN_META_DESCRIPTION = 5;
 
   /**
    * AlshayaFacetsPrettyPathsHelper constructor.
@@ -229,7 +229,7 @@ class AlshayaFacetsPrettyPathsHelper {
     // We have a different case for sizegroup.
     // Values coming for this filter is sigegroup|sizevalue.
     elseif ($attribute_code == 'size'
-      && strpos($value, SkuManager::SIZE_GROUP_SEPARATOR) !== FALSE
+      && str_contains($value, SkuManager::SIZE_GROUP_SEPARATOR)
       && $this->isSizeGroupEnabled()) {
       $sizeBreak = explode(SkuManager::SIZE_GROUP_SEPARATOR, $value);
       $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
@@ -265,7 +265,7 @@ class AlshayaFacetsPrettyPathsHelper {
         $alias = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $id, 'en');
         $alias = trim($alias, '/');
 
-        if (strpos($alias, 'taxonomy/term') === FALSE) {
+        if (!str_contains($alias, 'taxonomy/term')) {
           $encoded = str_replace($this->getProductOptionAliasPrefix() . '/', '', $alias);
 
           // Decode it once, it will be encoded again later.
@@ -278,7 +278,7 @@ class AlshayaFacetsPrettyPathsHelper {
         $alias = $this->aliasManager->getAliasByPath('/node/' . $id, 'en');
         $alias = trim($alias, '/');
 
-        if (strpos($alias, 'node/') === FALSE) {
+        if (!str_contains($alias, 'node/')) {
           // Decode it once, it will be encoded again later.
           $encoded = urldecode($alias);
           break;
@@ -292,7 +292,7 @@ class AlshayaFacetsPrettyPathsHelper {
 
     // Prepend size-group if enabled.
     if ($attribute_code == 'size'
-      && strpos($encoded, SkuManager::SIZE_GROUP_SEPARATOR) === FALSE
+      && !str_contains($encoded, SkuManager::SIZE_GROUP_SEPARATOR)
       && $this->isSizeGroupEnabled()) {
       $sizeBreak = explode(SkuManager::SIZE_GROUP_SEPARATOR, $value);
       $encoded = $this->getSizegroupAttributeAliasFromValue($sizeBreak[0])
@@ -336,7 +336,7 @@ class AlshayaFacetsPrettyPathsHelper {
       $alias = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $id, 'en');
       $alias = trim($alias, '/');
 
-      if (strpos($alias, 'taxonomy/term') === FALSE) {
+      if (!str_contains($alias, 'taxonomy/term')) {
         $encoded = str_replace($this->getProductOptionAliasPrefix() . '/', '', $alias);
 
         // Decode it once, it will be encoded again later.
@@ -419,7 +419,7 @@ class AlshayaFacetsPrettyPathsHelper {
       $alshaya_active_facet_filter_string = $this->currentRequest->query->get('facet_link');
       $alshaya_active_facet_filter_string = substr($alshaya_active_facet_filter_string, strpos($alshaya_active_facet_filter_string, "/--") + 3);
     }
-    elseif (strpos($this->currentRequest->getPathInfo(), "/--") !== FALSE) {
+    elseif (str_contains($this->currentRequest->getPathInfo(), "/--")) {
       $alshaya_active_facet_filter_string = substr($this->currentRequest->getPathInfo(), strpos($this->currentRequest->getPathInfo(), "/--") + 3);
     }
 
@@ -439,7 +439,7 @@ class AlshayaFacetsPrettyPathsHelper {
 
     foreach ($alshaya_active_facet_filters[$source] as $key => $values) {
       $alias = explode('-', $values)[0] ?? '';
-      if (!in_array($alias, $validAliases)) {
+      if (isset($validAliases) && !in_array($alias, $validAliases)) {
         unset($alshaya_active_facet_filters[$source][$key]);
       }
     }

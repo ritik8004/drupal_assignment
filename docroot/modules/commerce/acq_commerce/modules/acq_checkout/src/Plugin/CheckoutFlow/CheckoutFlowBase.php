@@ -172,7 +172,7 @@ abstract class CheckoutFlowBase extends PluginBase implements CheckoutFlowInterf
   public function getPreviousStepId() {
     $step_ids = array_keys($this->getVisibleSteps());
     $current_index = array_search($this->stepId, $step_ids);
-    return isset($step_ids[$current_index - 1]) ? $step_ids[$current_index - 1] : NULL;
+    return $step_ids[$current_index - 1] ?? NULL;
   }
 
   /**
@@ -181,7 +181,7 @@ abstract class CheckoutFlowBase extends PluginBase implements CheckoutFlowInterf
   public function getNextStepId() {
     $step_ids = array_keys($this->getVisibleSteps());
     $current_index = array_search($this->stepId, $step_ids);
-    return isset($step_ids[$current_index + 1]) ? $step_ids[$current_index + 1] : NULL;
+    return $step_ids[$current_index + 1] ?? NULL;
   }
 
   /**

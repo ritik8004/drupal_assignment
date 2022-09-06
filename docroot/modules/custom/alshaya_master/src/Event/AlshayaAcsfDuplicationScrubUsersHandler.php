@@ -14,7 +14,7 @@ class AlshayaAcsfDuplicationScrubUsersHandler extends AcsfEventHandler {
    * Implements AcsfEventHandler::handle().
    */
   public function handle() {
-    $this->consoleLog(dt('Entered @class', ['@class' => get_class($this)]));
+    $this->consoleLog(dt('Entered @class', ['@class' => $this::class]));
 
     $ids = \Drupal::entityQuery('user')
       ->execute();
@@ -23,7 +23,7 @@ class AlshayaAcsfDuplicationScrubUsersHandler extends AcsfEventHandler {
       $user = User::load($id);
       $roles = $user->getRoles();
 
-      $num_roles = count($roles);
+      $num_roles = is_countable($roles) ? count($roles) : 0;
 
       // Only if a user has just a single role of authenticated user,
       // we will delete them.

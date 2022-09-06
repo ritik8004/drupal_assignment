@@ -1,0 +1,7 @@
+alshaya_dynamic_yield.settings_form:
+  path: '/admin/config/alshaya/dynamic-yield'
+  defaults:
+    _form: '\Drupal\alshaya_dynamic_yield\Form\AlshayaDynamicYieldSettingsForm'
+    _title: 'Alshaya Dynamic yield settings'
+  requirements:
+    _permission: 'administer site configuration'

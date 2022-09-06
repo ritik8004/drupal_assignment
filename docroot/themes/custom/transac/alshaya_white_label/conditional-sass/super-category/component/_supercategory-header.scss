@@ -73,7 +73,7 @@
       }
 
       @include breakpoint($desktop) {
-        height: 2.25rem;
+        height: rem(24);
       }
     }
   }
@@ -350,8 +350,13 @@
       .acq-mini-cart {
         .cart-link {
           @include breakpoint($only-tablet) {
-            margin-top: 0;
+            margin-top: rem(2);
+            margin-bottom: rem(0);
             margin-#{$left}: 0;
+
+            html[lang='ar'] & {
+              margin-bottom: 0;
+            }
           }
 
           .quantity {
@@ -373,7 +378,11 @@
   .c-menu-primary {
     .mobile--menu {
       @include breakpoint($upto-desktop) {
-        top: 1.5rem;
+        top: rem(24);
+      }
+
+      @include breakpoint($only-tablet) {
+        top: rem(19);
       }
     }
   }

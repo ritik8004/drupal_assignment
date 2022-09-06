@@ -1,3 +1,4 @@
 mode: production
 routes_allowed_in_maintenance_mode:
   - image.style_public
+enable_css_cls: false

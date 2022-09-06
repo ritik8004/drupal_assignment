@@ -88,6 +88,7 @@ class AuraApiHelper {
    *   Return array of config values.
    */
   public function getAuraApiConfig($configs = [], $langcode = 'en', $reset = FALSE) {
+    $auraConfigs = [];
     $auraApiConfig = !empty($configs)
       ? $configs
       : AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS;

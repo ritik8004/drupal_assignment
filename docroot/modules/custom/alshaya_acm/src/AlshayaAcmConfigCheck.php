@@ -145,7 +145,7 @@ class AlshayaAcmConfigCheck {
     $env = Settings::get('env') ?: 'local';
 
     // We don't do anything on update envs like 01uatup.
-    if (substr($env, -2) === 'up') {
+    if (str_ends_with($env, 'up')) {
       return FALSE;
     }
 
@@ -199,7 +199,7 @@ class AlshayaAcmConfigCheck {
       $config = $this->configFactory->getEditable($config_key);
       $settings = Settings::get($config_key);
 
-      foreach ($settings as $key => $value) {
+      foreach ($settings ?? [] as $key => $value) {
         if (is_array($value)) {
           $existing = $config->get($key) ?? [];
           $value = array_replace_recursive($existing, $value);

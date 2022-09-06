@@ -153,9 +153,10 @@ $egift-titamium-white: #e4e4e4;
 $egift-gray: #979797;
 $cyan-blue: #387fcb;
 $prussian_blue: #063971;
-$egift-button-hover: rgba(51, 51, 51, 0.1);
+$button-hover: rgba(51, 51, 51, 0.1);
 $speech-red: #c00;
 $red-orange: #e6591b;
+$light-yellow: #f1ebdf;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -2124,11 +2125,18 @@ $sofa-sectional-disabled-clear-option-text: $primary_text;
 $sofa-sectional-disabled-clear-option-border: $light-greyish;
 $sofa-sectional-select-border: $new-pdp-blue;
 
-// RCS Loaders.
+// Skeletal Loaders.
 $no-color: transparent;
 $loader-gradient-1: $white;
 $loader-gradient-2: $_screeching_white;
 $loader-text-ph: $white-six;
+$text-loader-gradient: linear-gradient($loader-text-ph 1rem, $no-color 0);
+$plain-loader-gradient: linear-gradient(
+  90deg,
+  $loader-gradient-1,
+  $loader-gradient-2,
+  $loader-gradient-1
+);
 
 // eGift purchase page.
 $egift-purchase-page-border: $warm-grey-two;
@@ -2159,17 +2167,12 @@ $egift-landing-page-sub-block-title: $mothercare-black;
 $egift-landing-page-sub-block-subtitle: $black-two;
 $egift-landing-page-one-row-two-col-box-bg: $egift-titamium-white;
 $egift-button-border: $_gray_222;
-$egift-accordion-title: $mothercare-black;
-$egift-accordion-active-title: $mothercare-black;
-$egift-accordion-content: $black-two;
-$egift-banner-bg: $_algolia_suggestion_list_bg;
 $egift-breadcrumb-border: $_gray;
-$egift-accordion-bg: $white-four;
 $egift-banner-title: $_gray_222;
 $egift-myaccount-button: $prussian_blue;
 $egift-myaccount-topup-button: $prussian_blue;
 $egift-landing-page-button: $_gray_222;
-$egift-landing-page-button-hover: $egift-button-hover;
+$egift-landing-page-button-hover: $button-hover;
 
 // Wishlist
 $wishlist-header-notification-border: $pumpkin-orange;
@@ -2226,12 +2229,12 @@ $egift-redeem-form-subtitle: $egift-disabled-gray2;
 // Online Returns
 $online-return-eligibility-message-bg: $light-green;
 $online-return-eligibility-message-txt: $white-five;
-$online-return-eligibility-button-txt: $brownish-grey;
+$online-return-eligibility-button-txt: $black;
 $online-return-eligibility-button-box-shadow: $dark-green;
 $online-return-eligibility-button-hover: $white-three;
 $online-return-window-closed-bg: $new-pdp-blue;
 $online-return-bg: rgba(235, 235, 235, 0.59);
-$online-return-dark-bg: $_gray_222;
+$online-return-dark-bg: $marine-blue-two;
 $online-return-label-txt: $white-five;
 $online-return-detail-bg: rgba(247, 247, 247, 0.7);
 $online-return-ineligible-label-bg: $scarlet;
@@ -2242,17 +2245,115 @@ $online-return-request-button-bg: $white-smoke-light;
 $online-return-big-ticket-label-bg: $_spc_search_icon;
 $online-return-big-ticket-label-txt: $white-five;
 $online-return-refund-label-inactive-bg: $warm-grey-two;
-$online-return-refund-grey-txt: $greyish;
+$online-return-refund-grey-txt: $brownish-grey;
 $online-return-order-detail-border: $white;
-$online-return-refund-blue-txt: $new-pdp-blue;
-$online-return-cancel-button-border: $warm-grey-two;
+$online-return-refund-blue-txt: $_order_limit_txt;
+$online-return-cancel-button-border: $white-two;
 $online-return-status-red-label: $speech-red;
 $online-return-print-button-bg: $white-five;
 $online-return-status-green-label: $light-green;
 $online-return-status-orange-label: $red-orange;
+$online-return-dark-txt: $black;
+$online-return-disable-button-bg: $white;
+$online-return-confirmation-note-txt: $brownish-grey;
+$online-return-confirmation-border: $grey-light;
 $online-return-cancellation-reason: $error-red;
 $online-return-disabled-txt: $white-five;
-$online-return-dark-txt: $brownish-grey;
-$online-return-disable-button-bg: $white;
-$online-return-confirmation-note-txt: $greyish;
-$online-return-confirmation-border: $_gray_222;
+$online-return-button-bg: $pumpkin-orange;
+$online-return-light-bg: $white-five;
+
+// Hello Member membership success popup
+$hello-member-membership-success-popup-bg: $white-five;
+$hello-member-membership-success-popup-title: $_spc-discount-text;
+$hello-member-content-link: $black-two;
+$hello-member-btn-hover: $egift-disabled-gray2;
+
+// Hello Member registration
+$hello-member-registration-accordion-bg: $whisper;
+$hello-member-registration-fields-bg: $whisper;
+$hello-member-registration-labels-txt: $grey-light;
+$hello-member-accordion-txt: $brownish-grey;
+
+// Hello Member points block
+$hello-member-points-block-bg: $whisper;
+$hello-member-points-block-light-txt: $light-ash;
+$hello-member-points-block-tier-progress: $light-ash;
+$hello-member-points-block-tier-progress-active: $cherry;
+
+// Hello member QR code
+$hello-member-qr-code-redeem-txt: $grey-light;
+$hello-member-qr-code-bg: $white-three;
+
+// Hello Member benefit block
+$hello-member-my-offers-bg: $white-three;
+$hello-member-my-offers-expiry-txt: $grey-light;
+$hello-member-promo-pop-txt: $_sofa-section-grey2;
+$hello-member-promo-tab-title: $_gray_222;
+$hello-member-promo-tab-border: $warm-grey-two;
+$hello-member-promo-tab-items-bg: $white-smoke-light;
+$hello-member-promo-tab-items-border: $egift-gray;
+$hello-member-promo-btn-bg: $mothercare-black;
+$hello-member-promo-err-sec-bg: $light-yellow;
+$hello-member-promo-radio-btn: $mothercare-black;
+$hello-member-promo-sel-tab-border: rgba(0, 0, 0, 0.24);
+$hello-member-promo-available-notification-icon: $error-red;
+
+// Hello member history point
+$hello-member-history-points-light-title: $greyish;
+$hello-member-points-expiry-accordion-bg: $white-smoke;
+$hello-member-points-expiry-accordion-title: $error-red;
+$hello-member-points-expiry-accordion-icon: $error-red;
+
+// Hello member benefit landing page.
+$hello-member-benefit-expiry-txt: $grey-light;
+$hello-member-benefit-description-bg: $white-smoke-light;
+$hello-member-benefit-description-txt: $grey-light;
+$hello-member-benefit-description-heading-txt: $mothercare-black;
+$hello-member-benefit-Tnc-txt: $grey-light;
+$hello-member-benefit-cart-icon: $white-five;
+$hello-member-benefit-btn-inact-bg: $warm-grey-two;
+
+// hello member pdp
+$hello-member-pdp-points-earned-txt: $cherry;
+
+// Hello member otp popup
+$hello-member-opt-input-bg: $white-five;
+$hello-member-opt-input-border: $egift-gray;
+$hello-member-opt-input-focus-border: $mothercare-black;
+$hello-member-opt-success: $_spc-radio-filled;
+
+// Hello member loyalty SPC
+$hello-member-loyalty-labels-txt: $grey-light;
+$hello-member-loyalty-aura-icon: $black-two;
+$hello-member-loyalty-options-border: $white-smoke-light;
+$hello-member-loyalty-aura-form-btn: $lucky-purple-two;
+$hello-member-loyalty-aura-form-btn-border: $lucky-purple-two;
+$hello-member-loyalty-aura-form-btn-bg: $white-five;
+$hello-member-loyalty-aura-disable-select-bg: $greyish;
+
+// Advanced Page components
+$advanced-page-accordion-active-title: $mothercare-black;
+$advanced-page-accordion-bg: $white-four;
+$advanced-page-accordion-title: $mothercare-black;
+$advanced-page-accordion-content: $black-two;
+$advanced-page-banner-bg: $_algolia_suggestion_list_bg;
+$advanced-page-banner-title: $_gray_222;
+$advanced-page-button: $_gray_222;
+$advanced-page-button-hover: $button-hover;
+
+// Hello Member components
+$link-borders: $_gray_222;
+$hello-member-components-bg: $grey-shade;
+$hello-member-highlight-text: $primary_text;
+$hello-member-highlight-text-2: $primary_text;
+$hello-member-text-1: $mothercare-black;
+$hello-member-text-2: $black;
+$hello-member-text-3: $white-five;
+
+//Hello Member Birthday Popup
+$hello-member-bd-title: $speech-red;
+$hello-member-bd-sub-title: $mothercare-black;
+$hello-member-bd-exp-text: $grey-light;
+$hello-member-bd-close-icon: $white-five;
+$hello-member-promo-guest-bg: $light-yellow;
+$hello-member-promo-guest-pop-title: $_spc-discount-text;

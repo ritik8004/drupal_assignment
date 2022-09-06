@@ -66,7 +66,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     $sort_by_position = FALSE;
 
     // If requested sort option is position, set the flag to TRUE.
-    if (strpos($exposed_input, 'nid') === 0) {
+    if (str_starts_with($exposed_input, 'nid')) {
       $sort_by_position = TRUE;
     }
     // If no sort option requested and default sorting is by position, set the
@@ -165,7 +165,7 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
   }
 
   // Nid is used for position sort, this is hard coded so we use it directly.
-  if (isset($filters['sort_bef_combine']) && strpos($filters['sort_bef_combine'], 'nid') === 0) {
+  if (isset($filters['sort_bef_combine']) && str_starts_with($filters['sort_bef_combine'], 'nid')) {
     if ($tid = \Drupal::routeMatch()->getRawParameter('taxonomy_term')) {
       $view->element['#cache']['tags'][] = 'search_api_list:product:sort_position:' . $tid;
     }
@@ -453,9 +453,7 @@ function alshaya_acm_product_position_term_validate(array &$form, FormStateInter
 
   /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $menu_link */
   if (!empty($form_state->getValue('field_sorting_labels')) && $form_state->getValue('field_sorting_labels')[0]['value'] == 'override') {
-    $sort_options_labels = array_map(function ($item) {
-      return $item['label'];
-    }, $form_state->getValue('sort_options_label'));
+    $sort_options_labels = array_map(fn($item) => $item['label'], $form_state->getValue('sort_options_label'));
     if (!empty($sort_options_labels)) {
       $form_state->setValue('field_sort_options_labels', [['value' => serialize($sort_options_labels)]]);
     }
@@ -533,7 +531,7 @@ function alshaya_acm_product_position_acq_sku_position_sync_alter(array &$terms)
           ]);
         }
       }
-      catch (MissingDataExceptionAlias $e) {
+      catch (MissingDataExceptionAlias) {
         \Drupal::logger('alshaya_acm_product')->error('Error checking sort config for category @cat_id.', [
           '@cat_id' => $term->tid,
         ]);

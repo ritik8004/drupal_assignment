@@ -9,6 +9,7 @@ import {
   removeFullScreenLoader,
   setUpapiApplePayCofig,
   getPayable,
+  getPaymentMethodsData,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
@@ -29,6 +30,7 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import PaymentMethodTabby from '../payment-method-tabby';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
+import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -93,6 +95,8 @@ export default class PaymentMethod extends React.Component {
   };
 
   finalisePayment = (paymentData) => {
+    const { method } = this.props;
+    const paymentMethodsInfo = getPaymentMethodsData();
     addPaymentMethodInCart(cartActions.cartPaymentFinalise, paymentData).then((result) => {
       if (!result) {
         // If validation fails, addPaymentMethodInCart(), returns null.
@@ -162,7 +166,7 @@ export default class PaymentMethod extends React.Component {
         Drupal.removeItemFromLocalStorage('billing_shipping_same');
       } else if (result.success === undefined || !(result.success)) {
         // 3D flow error.
-        Drupal.logJavascriptError('3d flow finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        Drupal.logJavascriptError(`3d flow finalise payment | ${paymentMethodsInfo.[method.code]}`, result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       } else if (result.redirectUrl !== undefined) {
         // 3D flow success.
         const { cart } = this.props;
@@ -183,7 +187,7 @@ export default class PaymentMethod extends React.Component {
       }
     }).catch((error) => {
       removeFullScreenLoader();
-      Drupal.logJavascriptError('add payment method in cart', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+      Drupal.logJavascriptError(`add payment method in cart | ${paymentMethodsInfo.[method.code]}`, error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
     });
   };
 
@@ -263,7 +267,7 @@ export default class PaymentMethod extends React.Component {
             </div>
             <PaymentMethodIcon methodName={method.code} methodLabel={method.name} />
           </div>
-          <ConditionalView condition={isAuraEnabled()
+          <ConditionalView condition={(isAuraEnabled() || isAuraIntegrationEnabled())
           && method.code === 'cashondelivery'
           && disablePaymentMethod === true
           && !isFullPaymentDoneByAura(cart)}

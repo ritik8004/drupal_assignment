@@ -57,6 +57,7 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselV2 {
    *   The render array for carousel accordion.
    */
   private function getCarouselAccordion() {
+    $carousel = [];
     $carousel_title = $this->getCarouselTitle();
     $slug = $this->getSlug();
 
@@ -70,7 +71,7 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselV2 {
         'data-view-all' => json_encode([
           'text' => $this->getViewAllText(),
           'class' => 'category-accordion-view-all',
-        ]),
+        ], JSON_THROW_ON_ERROR),
       ],
       '#cache' => [
         'tags' => [
@@ -98,6 +99,7 @@ class ProductCategoryCarouselHelper extends ProductCategoryCarouselV2 {
    * {@inheritdoc}
    */
   public function getCarousel(ContentEntityInterface $entity) {
+    $carousel = [];
     $this->setEntity($entity);
     // By default we don't show any carousel content.
     $carousel['content'] = [];

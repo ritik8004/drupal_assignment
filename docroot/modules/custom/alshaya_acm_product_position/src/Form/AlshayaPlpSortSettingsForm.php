@@ -164,7 +164,7 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     $available_label = NULL;
     if (!empty($labels)) {
       foreach ($labels as $label_key => $label) {
-        if (strpos($label_key, $id) !== FALSE) {
+        if (str_contains($label_key, $id)) {
           if ($available_label === NULL) {
             $available_label = $label;
           }

@@ -88,7 +88,7 @@ class CartController extends ControllerBase {
       // If there is a coupon applied on cart.
       if (!empty($cart->getCoupon())) {
         // If only one item in cart.
-        if (count($cart->items()) == 1) {
+        if ((is_countable($cart->items()) ? count($cart->items()) : 0) == 1) {
           // Remove coupon.
           $cart->setCoupon('');
         }
@@ -104,7 +104,7 @@ class CartController extends ControllerBase {
         // Removal was successful in first/second try. We show success message.
         $this->messenger()->addStatus($this->t('The product has been removed from your cart.'));
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         // Do nothing, we have stored logs for the failure and we will display
         // nothing (no-change) to the user.
       }

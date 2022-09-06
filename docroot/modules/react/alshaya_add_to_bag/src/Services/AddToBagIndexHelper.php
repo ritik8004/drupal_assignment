@@ -14,7 +14,7 @@ class AddToBagIndexHelper {
   /**
    * Add To bag attribute name for index on Algolia.
    */
-  const ADD_TO_BAG_ATTRIBUTE = 'atb_product_data';
+  public const ADD_TO_BAG_ATTRIBUTE = 'atb_product_data';
 
   /**
    * SKU Info Helper service.

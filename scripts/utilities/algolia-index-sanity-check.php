@@ -133,7 +133,7 @@ foreach ($indexes as $type => $index_name) {
     $logger->warning('Removed entries from index @index, objectIDs: @objectIDs, Response: @response.', [
       '@index' => $index->getIndexName(),
       '@objectIDs' => implode(', ', $object_ids),
-      '@response' => json_encode($response->getBody()),
+      '@response' => json_encode($response->getBody(), JSON_THROW_ON_ERROR),
     ]);
   }
 }

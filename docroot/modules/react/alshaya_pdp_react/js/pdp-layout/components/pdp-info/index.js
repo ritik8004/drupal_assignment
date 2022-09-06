@@ -5,6 +5,7 @@ import Postpay from '../../../../../alshaya_spc/js/utilities/postpay';
 import TabbyWidget from '../../../../../js/tabby/components';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import PriceElement from '../../../../../js/utilities/components/price/price-element';
 
 const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
@@ -53,8 +54,7 @@ const PdpInfo = ({
           {(parseInt(finalPriceNumber, 10) < parseInt(productPriceNumber, 10))
             ? (
               <div className="magv2-pdp-final-price-wrapper">
-                <span className="magv2-pdp-final-price-currency suffix">{drupalSettings.alshaya_spc.currency_config.currency_code}</span>
-                <span className="magv2-pdp-final-price-amount">{finalPrice}</span>
+                <PriceElement amount={finalPrice} currencyClass="magv2-pdp-final-price-currency" amountClass="magv2-pdp-final-price-amount" />
                 {!shortDetail
                   ? (
                     <span className="magv2-pdp-discount-percentage">
@@ -67,8 +67,7 @@ const PdpInfo = ({
             : null}
           <div className="magv2-meta-data-wrapper">
             <div className="magv2-pdp-price-wrapper">
-              <span className="magv2-pdp-price-currency suffix">{drupalSettings.alshaya_spc.currency_config.currency_code}</span>
-              <span className="magv2-pdp-price-amount">{pdpProductPrice}</span>
+              <PriceElement amount={pdpProductPrice} currencyClass="magv2-pdp-price-currency" amountClass="magv2-pdp-price-amount" />
             </div>
             {(!shortDetail && drupalSettings.vatText)
               ? <div className="magv2-pdp-vat-text">{drupalSettings.vatText}</div>

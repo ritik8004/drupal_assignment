@@ -24,8 +24,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class AlshayaAlgoliaReactCommands extends DrushCommands {
 
-  const FACET_SOURCE_PLP = 'search_api:views_block__alshaya_product_list__block_1';
-  const FACET_SOURCE_PROMOTION = 'search_api:views_block__alshaya_product_list__block_2';
+  public const FACET_SOURCE_PLP = 'search_api:views_block__alshaya_product_list__block_1';
+  public const FACET_SOURCE_PROMOTION = 'search_api:views_block__alshaya_product_list__block_2';
 
   /**
    * The logger channel.
@@ -126,22 +126,22 @@ class AlshayaAlgoliaReactCommands extends DrushCommands {
   /**
    * Toggle algolia status for plp.
    *
-   * @param string $algolia_plp_status
-   *   Status of block.
-   *
    * @command alshaya_algolia_react:plp
    *
-   * @option $algolia_plp_status
-   *   Status of block. ('enable' to enable the algolia for plp else disable.)
+   * @option enable
+   *   Status of block. ('enable' to enable the algolia for plp.)
+   * @option disable
+   *   Status of block. ('disable' to enable the algolia for plp.)
    *
    * @aliases alshaya-algolia-react-plp
    *
-   * @usage drush alshaya-algolia-react-plp enable
-   *   Enable algolia for plp.
-   * @usage drush alshaya-algolia-react-plp disable
+   * @usage drush alshaya_algolia_react:plp --enable  --disable
    *   Disable algolia for plp and activate db.
    */
-  public function toggleAlgoliaPlp($algolia_plp_status = 'enable') {
+  public function toggleAlgoliaPlp(array $options = [
+    'enable' => FALSE,
+    'disable' => FALSE,
+  ]) {
     $index_storage = $this->entityTypeManager->getStorage('search_api_index');
     $block_storage = $this->entityTypeManager->getStorage('block');
 
@@ -149,7 +149,7 @@ class AlshayaAlgoliaReactCommands extends DrushCommands {
     $index = $index_storage->load('product');
 
     // Store the status in variable to use it in conditions.
-    $enable = ($algolia_plp_status === 'enable');
+    $enable = ($options['enable']);
 
     if (!($index->status()) && $enable) {
       $this->logger->warning('PLP move to Algolia is already done once.');

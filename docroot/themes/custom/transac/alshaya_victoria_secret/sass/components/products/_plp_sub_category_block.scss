@@ -91,6 +91,7 @@
     .filter-fixed-top {
       #block-subcategoryblock {
         position: fixed;
+        z-index: 2;
       }
     }
   }

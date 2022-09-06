@@ -11,27 +11,23 @@ exports.render = function render(
 
   switch (placeholder) {
     case "navigation_menu":
-      // Process rcs navigation renderer, if available.
-      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
-        html += globalThis.renderRcsNavigationMenu.render(
-          settings,
-          inputs,
-          innerHtml,
-          'navigation_menu'
-        );
+      if (typeof globalThis.mainMenuProcessor !== 'undefined') {
+        const menuData = globalThis.mainMenuProcessor.prepareData(
+          drupalSettings.alshayaRcs.navigationMenu,
+          inputs
+        )
+        html = handlebarsRenderer.render('main_menu_level1', menuData);
       }
       break;
 
     case "shop_by_block":
-      // Process shop by block renderer, if available.
-      if (typeof globalThis.renderRcsNavigationMenu !== 'undefined') {
-        html += globalThis.renderRcsNavigationMenu.render(
-          settings,
-          inputs,
-          innerHtml,
-          'shop_by_block'
-        );
-      }
+      // Process and render shop by block menu.
+      const shopByMenuData = globalThis.shopByMenuProcessor.prepareData(
+        settings,
+        inputs
+      );
+      html = handlebarsRenderer.render('shop_by_menu', shopByMenuData);
+
       break;
 
     case 'product_category_list':
@@ -56,13 +52,12 @@ exports.render = function render(
 
     case 'lhn_block':
       // Render lhn based block.
-      if (typeof globalThis.renderRcsLhn !== 'undefined') {
-        html += globalThis.renderRcsLhn.render(
-          settings,
-          inputs,
-          innerHtml
-        );
-      }
+      const lhnData = globalThis.lhnProcessor.prepareData(
+        settings,
+        inputs
+      );
+
+      html = handlebarsRenderer.render('lhn_menu', lhnData);
       break;
 
     case 'super_category':
@@ -139,13 +134,7 @@ exports.render = function render(
 
     case 'promotional_banner':
       // Render promotional banner block.
-      if (typeof globalThis.renderRcsPromotionalBanner !== 'undefined') {
-        html += globalThis.renderRcsPromotionalBanner.render(
-          settings,
-          entity,
-          innerHtml
-        );
-      }
+      html = handlebarsRenderer.render('promotional_banner', entity);
       break;
 
     case 'app_navigation':
@@ -168,6 +157,17 @@ exports.render = function render(
           innerHtml
         );
       }
+
+    case 'sitemap':
+      // Render the sitemap page block.
+      if (typeof global.sitemapPageRenderer !== 'undefined') {
+        html += global.sitemapPageRenderer.render(
+          settings,
+          inputs,
+          innerHtml
+        );
+      }
+      break;
 
     default:
       Drupal.alshayaLogger('debug', 'Placeholder @placeholder not supported for render.', {

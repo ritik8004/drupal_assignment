@@ -51,6 +51,10 @@ trait Orders {
    *   Cleaned up order array.
    */
   private function cleanupOrder(array $order) {
+    if (empty($order)) {
+      $this->logger->warning('Order details found empty in cleanupOrder.');
+      return [];
+    }
     $order['order_id'] = $order['entity_id'];
 
     // Customer info.
@@ -132,6 +136,21 @@ trait Orders {
       && isset($order['extension']['hfd_booking_information']['is_hfd_booking_order'])
       && $order['extension']['hfd_booking_information']['is_hfd_booking_order']) {
       $order['online_booking_information'] = $order['extension']['hfd_booking_information'];
+    }
+
+    // Hello Member Information.
+    // Pass information if available in extension attributes related to hello
+    // member feature. We expect these parameters only available when hello
+    // member feature is enabled for the markets, if not, we shouldn't receive
+    // these information from the MDC.
+    // - applied_hm_voucher_codes contains the comma separated voucher codes
+    // applied to the order.
+    // - hm_voucher_discount contain discount amount based on the voucher(s).
+    if (isset($order['extension']['hm_voucher_discount'])
+      && isset($order['extension']['applied_hm_voucher_codes'])
+      && !empty($order['extension']['applied_hm_voucher_codes'])) {
+      $order['voucher_discount'] = $order['extension']['hm_voucher_discount'] ?? 0;
+      $order['voucher_codes_count'] = count(explode(",", $order['extension']['applied_hm_voucher_codes']));
     }
 
     // Billing.

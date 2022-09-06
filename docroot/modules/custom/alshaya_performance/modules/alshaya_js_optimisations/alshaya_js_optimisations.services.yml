@@ -6,3 +6,5 @@ services:
     arguments:
       - '@config.factory'
       - '@library.dependency_resolver'
+      - '@extension.list.module'
+      - '@extension.list.theme'

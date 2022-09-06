@@ -12,6 +12,21 @@ use Drush\Drush;
 /**
  * Implements hook_update_N().
  *
+ * Install 'stable' and uninstall 'cog' theme.
+ */
+function alshaya_admin_update_9401() {
+  $theme = \Drupal::service('theme_installer');
+  if (\Drupal::service('theme_handler')->themeExists('cog')) {
+    $theme->uninstall(['cog'], TRUE);
+  }
+  if (!\Drupal::service('theme_handler')->themeExists('stable')) {
+    $theme->install(['stable'], TRUE);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add archived state and it's transitions.
  */
 function alshaya_admin_update_8005() {

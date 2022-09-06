@@ -344,9 +344,7 @@ class AlshayaAcmCommands extends DrushCommands {
 
       // Check if we need to import only specific SKUs.
       if ($query) {
-        $_alshaya_acm_products = array_filter($_alshaya_acm_products, function ($sku) use ($query) {
-          return strpos($sku['sku'], $query) !== FALSE;
-        });
+        $_alshaya_acm_products = array_filter($_alshaya_acm_products, fn($sku) => str_contains($sku['sku'], $query));
       }
 
       // Check if we need to import a limited set of products.
@@ -625,7 +623,7 @@ class AlshayaAcmCommands extends DrushCommands {
 
     // Use page size configured for conductor as default in case no override is
     // supplied via options.
-    $page_size = $page_size ?? $this->configFactory->get('acq_commerce.conductor')
+    $page_size ??= $this->configFactory->get('acq_commerce.conductor')
       ->get('product_page_size');
 
     if (!empty($csv_skus)) {

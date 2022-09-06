@@ -1,3 +1,5 @@
+import { hasValue } from './conditionsUtility';
+
 /**
  * Helper function to check if AURA is enabled.
  */
@@ -31,3 +33,10 @@ export const getAuraUserDetails = () => {
 
   return loyaltyUserDetails;
 };
+
+/**
+ * Helper function to check if Bazaar voice is available on PDP for a given SKU.
+ */
+export const checkBazaarVoiceAvailableForPdp = (skuItemCode) => hasValue(drupalSettings.productInfo)
+  && hasValue(drupalSettings.productInfo[skuItemCode])
+  && hasValue(drupalSettings.productInfo[skuItemCode].alshaya_bazaar_voice);

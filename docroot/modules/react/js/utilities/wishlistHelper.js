@@ -132,7 +132,7 @@ export const getWishListStorageKey = () => (isAnonymousUser()
 /**
  * Return the current wishlist info if available.
  *
- * @returns {object}
+ * @returns {null|Object}
  *  An object of wishlist information.
  */
 export const getWishListData = (strgKey) => {
@@ -152,7 +152,7 @@ export const getWishListData = (strgKey) => {
 /**
  * Utility function to check if product sku is already exist in wishlist.
  */
-export const isProductExistInWishList = (productSku) => {
+export const isProductExistInWishList = (productSku, variant = null) => {
   // Get existing wishlist data from storage.
   const wishListItems = getWishListData();
 
@@ -162,6 +162,10 @@ export const isProductExistInWishList = (productSku) => {
     // We need to match the given sku with the sku property for each wishlist
     // item to verify if it exist.
     ifProductExist = wishListItems.find((product) => product.sku === productSku);
+
+    if (variant !== null && !ifProductExist) {
+      ifProductExist = wishListItems.find((product) => product.sku === variant);
+    }
   }
 
   // Return true/false based on the data.
@@ -550,7 +554,7 @@ export const removeDiffFromWishlist = (productsObj) => {
             // return -1. We need to remove product from the local storage if
             // skuIndex is greater than -1.
             const skuIndex = getWishListDataIndexForSku(item.sku);
-            if (skuIndex > -1) {
+            if (skuIndex !== null && skuIndex > -1) {
               // Remove the entry for given product sku from existing storage data.
               wishListItems.splice(skuIndex, 1);
 

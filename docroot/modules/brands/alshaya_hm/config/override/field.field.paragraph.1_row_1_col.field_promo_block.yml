@@ -1,0 +1,11 @@
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.block_reference
+settings:
+  handler_settings:
+    target_bundles:
+      block_reference: block_reference
+    target_bundles_drag_drop:
+      block_reference:
+        weight: 34
+        enabled: true

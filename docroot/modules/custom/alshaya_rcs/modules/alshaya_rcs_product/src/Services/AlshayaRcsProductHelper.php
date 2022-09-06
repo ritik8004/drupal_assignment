@@ -23,12 +23,12 @@ class AlshayaRcsProductHelper {
   /**
    * RCS Content type id.
    */
-  const RCS_CONTENT_TYPE_ID = 'rcs_product';
+  public const RCS_CONTENT_TYPE_ID = 'rcs_product';
 
   /**
    * Source Content type.
    */
-  const SOURCE_CONTENT_TYPE_ID = 'acq_product';
+  public const SOURCE_CONTENT_TYPE_ID = 'acq_product';
 
   /**
    * Route match service.
@@ -187,14 +187,44 @@ class AlshayaRcsProductHelper {
       'media_gallery' => [
         'url',
         'label',
-        '... on ProductVideo' => [
-          'video_content' => [
-            'media_type',
-            'video_provider',
-            'video_url',
-            'video_title',
-            'video_description',
-            'video_metadata',
+        'styles',
+        '... on ProductImage' => [
+          'url',
+          'label',
+        ],
+      ],
+      '... on ConfigurableProduct' => [
+        'variants' => [
+          'product' => [
+            'id',
+            'sku',
+            'stock_status',
+            'price_range' => [
+              'maximum_price' => [
+                'regular_price' => [
+                  'value',
+                ],
+                'final_price' => [
+                  'value',
+                ],
+                'discount' => [
+                  'percent_off',
+                ],
+              ],
+            ],
+            'stock_data' => [
+              'qty',
+              'max_sale_qty',
+            ],
+            'media_gallery' => [
+              'url',
+              'label',
+              'styles',
+              '... on ProductImage' => [
+                'url',
+                'label',
+              ],
+            ],
           ],
         ],
       ],
@@ -463,6 +493,20 @@ class AlshayaRcsProductHelper {
   }
 
   /**
+   * Returns product additional attributes query fields.
+   *
+   * @return array
+   *   Product additional attributes query.
+   */
+  public function getProductAdditionalAttributesQueryFields() {
+    $query = [];
+    $attributes = [];
+    $attributes = $this->moduleHandler->invokeAll('alshaya_rcs_product_additional_attributes_query_fields', [$attributes]);
+    $query['items'] = $attributes;
+    return $query;
+  }
+
+  /**
    * Returns the main query and variables getting product options data.
    *
    * @return array
@@ -487,9 +531,10 @@ class AlshayaRcsProductHelper {
       // Reindex the array.
       $options = array_values($options);
       // Process data to required format.
-      $options = array_map(function ($option) {
-        return ['attribute_code' => $option , 'entity_type' => 4];
-      }, $options);
+      $options = array_map(fn($option) => [
+        'attribute_code' => $option,
+        'entity_type' => 4,
+      ], $options);
     }
 
     return $options;
@@ -617,6 +662,67 @@ class AlshayaRcsProductHelper {
         ]);
       }
     }
+  }
+
+  /**
+   * Get recent orders fields.
+   *
+   * @return array
+   *   Returns the fields for recent orders query.
+   */
+  public function getRecentOrderFields() {
+    static $fields = NULL;
+    if ($fields) {
+      return $fields;
+    }
+
+    $fields = [
+      'total_count',
+      'items' => [
+        'type_id',
+        'sku',
+        'name',
+        'media_gallery' => [
+          '... on ProductImage' => [
+            'url',
+            'label',
+            'styles',
+          ],
+        ],
+        '... on ConfigurableProduct' => [
+          'variants' => [
+            'product' => [
+              'sku',
+              'name',
+            ],
+          ],
+        ],
+      ],
+    ];
+
+    $this->moduleHandler->alter('alshaya_rcs_product_recent_orders_fields', $fields);
+    return $fields;
+  }
+
+  /**
+   * Get order details fields.
+   *
+   * @return array
+   *   Returns the fields for order details query.
+   */
+  public function getOrderDetailsFields() {
+    $fields = $this->getRecentOrderFields();
+    $fields['items']['... on ConfigurableProduct']['configurable_options'] = [
+      'label',
+      'attribute_code',
+    ];
+    $fields['items']['... on ConfigurableProduct']['variants']['attributes'] = [
+      'label',
+      'code',
+    ];
+
+    $this->moduleHandler->alter('alshaya_rcs_product_order_details_fields', $fields);
+    return $fields;
   }
 
 }

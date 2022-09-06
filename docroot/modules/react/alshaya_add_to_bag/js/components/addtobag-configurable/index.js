@@ -34,6 +34,7 @@ export default class AddToBagConfigurable extends React.Component {
 
     // Adding the loader class to start spinner.
     btn.classList.toggle('add-to-bag-loader');
+    Drupal.cartNotification.spinner_start();
 
     // Get product's information for drawer.
     const productInfoData = window.commerceBackend.getProductDataAddToBagListing(sku, styleCode);
@@ -62,10 +63,12 @@ export default class AddToBagConfigurable extends React.Component {
 
         // Open product drawer.
         this.openDrawer(response);
+        Drupal.cartNotification.spinner_stop();
 
         // Store info in storage.
         addProductInfoInStorage(response, sku);
       }).catch((error) => {
+        Drupal.cartNotification.spinner_stop();
         Drupal.alshayaLogger('error', 'Failed to fetch Product Info for sku @sku. Error @error.', {
           '@sku': (typeof sku !== 'undefined') ? sku : '',
           '@error': typeof error === 'object' ? error.message : error,

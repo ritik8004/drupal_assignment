@@ -36,6 +36,22 @@
       $('.path--user #details-privilege-card-wrapper').each(function () {
         $(this).find('.details-privilege-card-wrapper-inside').css('height', 'auto');
       });
+
+      if (window.MobileDetect) {
+        var md = new window.MobileDetect(window.navigator.userAgent);
+        if (md.mobile()) {
+          var $pdpTabbyDiv = $('.acq-content-product .tabby.mobile-only-show', context);
+          $pdpTabbyDiv.toggleClass('bnpl-hide');
+          var $pdpPostPayDiv = $('.acq-content-product .postpay.mobile-only-show', context);
+          $pdpPostPayDiv.toggleClass('bnpl-hide');
+          $('#pay-promo-mobile-comp', context).once('toggle-cta').click(function () {
+            $pdpTabbyDiv.toggleClass('bnpl-hide');
+            $pdpPostPayDiv.toggleClass('bnpl-hide');
+            $('.pay-emi-lbl', this).toggleClass('ui-state-hide');
+            $(this).toggleClass('lbl-open');
+          });
+        }
+      }
     }
   };
 

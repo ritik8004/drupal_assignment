@@ -60,7 +60,7 @@ class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
     $countryCode = $country ?? _alshaya_custom_get_site_level_country_code();
     $countryMobileCode = '+' . $this->getCountryCode($countryCode);
 
-    if (strpos($number, $countryMobileCode) === FALSE) {
+    if (!str_contains($number, $countryMobileCode)) {
       $number = $countryMobileCode . $number;
     }
 

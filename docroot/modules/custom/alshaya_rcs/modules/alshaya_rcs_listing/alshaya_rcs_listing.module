@@ -12,18 +12,6 @@ use Drupal\Core\Entity\EntityInterface;
  */
 function alshaya_rcs_listing_theme($existing, $type, $theme, $path) {
   return [
-    'alshaya_rcs_lhn_tree' => [
-      'template' => 'alshaya-rcs-lhn',
-      'variables' => [
-        'lhn_cat_tree' => NULL,
-      ],
-    ],
-    'alshaya_rcs_promotional_banner' => [
-      'template' => 'alshaya-rcs-promotional-banner',
-      'variables' => [
-        'fields' => NULL,
-      ],
-    ],
     'alshaya_rcs_plp_mobile_menu' => [
       'template' => 'alshaya-rcs-plp-mobile-menu',
       'variables' => [
@@ -77,12 +65,17 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
 
   /** @var \Drupal\alshaya_rcs_listing\Services\AlshayaRcsListingHelper $rcs_listing_helper */
   $rcs_listing_helper = \Drupal::service('alshaya_rcs_listing.helper');
-  $url_key = $rcs_listing_helper->getListingUrlKey();
+  $url_data = $rcs_listing_helper->getListingUrlKey();
+  $url_key = [$url_data];
+  if (stripos($url_data, '/view-all', 0) !== FALSE) {
+    $original_path = substr($url_data, 0, strpos($url_data, '/view-all'));
+    array_push($url_key, $original_path);
+  }
 
   $query_fields['categories'] = [
     'query' => [
-      'query($urlKey: String)' => [
-        'categories(filters: { url_path: { eq: $urlKey }})' => [
+      'query($urlKey: [String])' => [
+        'categories(filters: { url_path: { in: $urlKey }})' => [
           'total_count',
           'items' => [
             'id',
@@ -97,6 +90,7 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
             'promo_banner_for_mobile',
             'promotion_banner_mobile',
             'promotion_banner',
+            'display_view_all',
             'children' => [
               'id',
               'name',
@@ -203,7 +197,11 @@ function alshaya_rcs_listing_library_info_alter(&$libraries, $extension) {
  */
 function alshaya_rcs_listing_rcs_handlebars_templates(EntityInterface $entity) {
   // Libraries to attach to all pages node/term.
-  $libraries = ['carousel.accordion' => 'alshaya_rcs_listing'];
+  $libraries = [
+    'carousel.accordion' => 'alshaya_rcs_listing',
+    'promotional_banner' => 'alshaya_rcs_listing',
+    'lhn_menu' => 'alshaya_rcs_listing',
+  ];
 
   return $libraries;
 }

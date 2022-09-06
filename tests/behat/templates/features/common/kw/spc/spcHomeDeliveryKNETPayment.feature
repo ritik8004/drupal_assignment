@@ -114,7 +114,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I wait 10 seconds
     And I wait for the page to load
     And I wait 10 seconds
-    And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
+    And I select "بنك اختبار كي نت [KNET1]" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
     And I select date and month in the form for arabic
@@ -124,8 +124,6 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I press "proceedConfirm"
     And I wait 5 seconds
     And I wait for the page to load
-    And I wait 5 seconds
-    Then I should be on "/{language_short}/checkout/confirmation" page
     And I should save the order details in the file
 
   @cc @hd @language @mobile @Knet
@@ -160,7 +158,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I wait 10 seconds
     And I wait for the page to load
     And I wait 10 seconds
-    And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
+    And I select "بنك اختبار كي نت [KNET1]" from dropdown ".paymentselect"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
     And I select date and month in the form for arabic
@@ -170,6 +168,4 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I press "proceedConfirm"
     And I wait 5 seconds
     And I wait for the page to load
-    And I wait 5 seconds
-    Then I should be on "/{language_short}/checkout/confirmation" page
     And I should save the order details in the file

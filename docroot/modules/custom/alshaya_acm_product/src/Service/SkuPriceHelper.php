@@ -17,9 +17,9 @@ class SkuPriceHelper {
 
   use StringTranslationTrait;
 
-  const PRICE_DISPLAY_MODE_SIMPLE = 'simple';
+  public const PRICE_DISPLAY_MODE_SIMPLE = 'simple';
 
-  const PRICE_DISPLAY_MODE_FROM_TO = 'from_to';
+  public const PRICE_DISPLAY_MODE_FROM_TO = 'from_to';
 
   /**
    * SKU Manager.
@@ -205,6 +205,11 @@ class SkuPriceHelper {
   private function buildPriceBlockFromTo(SKU $sku, string $color = '', string $langcode = '') {
     $prices = $this->skuManager->getMinPrices($sku, $color);
 
+    // Ignore proceeding with building range price block when product is OOS.
+    if (empty($prices['children'])) {
+      return $this->buildPriceBlockSimple($sku, $color, $langcode);
+    }
+
     $child_prices = array_column($prices['children'], 'price');
     $child_final_prices = array_column($prices['children'], 'final_price');
     $discounts = array_column($prices['children'], 'discount');
@@ -220,7 +225,7 @@ class SkuPriceHelper {
     // zero(discount=price-final_price), in this case we show
     // range(only when final_prices are not same).
     if (count(array_filter($child_prices)) == count(array_filter($child_final_prices))
-      && (count($prices['children']) <= 1
+      && ((is_countable($prices['children']) ? count($prices['children']) : 0) <= 1
       || count(array_unique(array_filter($child_prices))) == 1
       || count(array_unique($selling_prices)) == 1)) {
 

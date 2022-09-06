@@ -13,6 +13,7 @@ use Drupal\taxonomy\TermInterface;
  * Implements hook_token_info().
  */
 function alshaya_seo_transac_token_info() {
+  $info = [];
   $info['types']['alshaya_seo'] = [
     'name' => 'Alshaya SEO Tokens',
     'description' => t('Custom tokens for meta tags.'),

@@ -12,90 +12,6 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\user\UserInterface;
 
 /**
- * Returns orders from cache if available.
- *
- * @param int $customer_id
- *   Commerce customer id.
- * @param string $search_key
- *   Key to look for in $_GET for searching.
- * @param string $filter_key
- *   Key to look for in $_GET for filtering.
- *
- * @return array
- *   Array of orders.
- */
-function alshaya_acm_customer_get_user_orders(int $customer_id, $search_key = '', $filter_key = '') {
-  /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
-  $manager = \Drupal::service('alshaya_acm_customer.orders_manager');
-  $orders = $manager->getOrders($customer_id);
-
-  if (empty($orders)) {
-    return [];
-  }
-
-  // Update order items to have unique records only.
-  // For configurable products we get it twice (once for parent and once for
-  // selected variant).
-  foreach ($orders as &$order) {
-    $order_items = [];
-    foreach ($order['items'] as $item) {
-      // If product is virtual then use item_id instead of sku as key.
-      if (!isset($order_items[$item['sku']]) && !$item['is_virtual']) {
-        $order_items[$item['sku']] = $item;
-      }
-      else {
-        $order_items[$item['item_id']] = $item;
-      }
-      $sku_entity = SKU::loadFromSku(alshaya_acm_customer_clean_sku($item['sku']));
-      if ($sku_entity instanceof SKUInterface) {
-        /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-        $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-        $order_items[$item['sku']]['name'] = $productInfoHelper->getTitle($sku_entity, 'basket');
-      }
-
-    }
-    $order['items'] = $order_items;
-  }
-
-  // Search by Order ID, SKU, Name.
-  if ($search_key && $search = \Drupal::request()->query->get($search_key)) {
-    $orders = array_filter($orders, function ($order) use ($search) {
-      // Search by Order ID.
-      if (stripos($order['increment_id'], $search) > -1) {
-        return TRUE;
-      }
-
-      foreach ($order['items'] as $orderItem) {
-        // Search by name.
-        if (stripos($orderItem['name'], $search) > -1) {
-          return TRUE;
-        }
-        // Search by SKU.
-        elseif (stripos(alshaya_acm_customer_clean_sku($orderItem['sku']), alshaya_acm_customer_clean_sku($search)) > -1) {
-          return TRUE;
-        }
-      }
-
-      return FALSE;
-    });
-  }
-
-  // Filter order by status.
-  if ($filter_key && $filter = \Drupal::request()->query->get($filter_key)) {
-    $orders = array_filter($orders, function ($order, $orderId) use ($filter) {
-      $status = alshaya_acm_customer_get_order_status($order);
-      if ($status['text'] == $filter) {
-        return TRUE;
-      }
-
-      return FALSE;
-    }, ARRAY_FILTER_USE_BOTH);
-  }
-
-  return $orders;
-}
-
-/**
  * Clean up sku values by removing spaces and dashes.
  *
  * @param string $sku
@@ -104,12 +20,11 @@ function alshaya_acm_customer_get_user_orders(int $customer_id, $search_key = ''
  * @return string
  *   Return cleaned string without spaces and dashes.
  */
-function alshaya_acm_customer_clean_sku($sku) {
+function alshaya_acm_customer_clean_sku(string $sku): string {
   // Convert whitespaces and underscore to dash.
-  $string = preg_replace("/[\s_]/", "-", $sku);
+  $sku = preg_replace("/[\s_]/", "-", $sku);
   // Clean up multiple dashes or whitespaces.
-  $string = preg_replace("/[\s-]+/", "", $string);
-  return $string;
+  return preg_replace("/[\s-]+/", "", $sku);
 }
 
 /**
@@ -299,13 +214,6 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
     $shipping_address = $order['shipping']['address'];
 
-    // Loading address from address book if customer_address_id is available.
-    if (!empty($shipping_address['customer_address_id'])) {
-      if ($entity = $address_book_manager->getUserAddressByCommerceId($order['shipping']['address']['customer_address_id'])) {
-        $shipping_address = $address_book_manager->getAddressFromEntity($entity);
-      }
-    }
-
     $shipping_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($shipping_address);
     $shipping_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($shipping_address_array['mobile_number']['value']);
 
@@ -338,6 +246,14 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
   $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
 
+  // Add hello member information if available.
+  if (isset($order['voucher_discount']) && isset($order['voucher_codes_count'])) {
+    // Pass voucher discount amount is available.
+    $orderDetails['voucher_discount'] = (float) $order['voucher_discount'] != 0 ? alshaya_acm_price_format($order['voucher_discount']) : NULL;
+    // Prepare and pass the voucher discount label.
+    $orderDetails['voucher_discount_label'] = t('@count Bonus Voucher', ['@count' => $order['voucher_codes_count']], ['context' => 'hello_member']);
+  }
+
   if ($order['totals']['surcharge'] > 0) {
     // If surcharge is enabled, only then show.
     if (\Drupal::service('alshaya_acm_checkout.checkout_helper')->isSurchargeEnabled()) {
@@ -358,6 +274,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   // Add transaction & payment details to confirmation data in case of KNET.
+  $payment_info = [];
   foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
     $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
   }
@@ -444,9 +361,10 @@ function alshaya_acm_customer_get_available_user_order_status(UserInterface $use
   try {
     // Get all the orders for the user.
     $customer_id = (int) $user->get('acq_customer_id')->getString();
-    $orders = alshaya_acm_customer_get_user_orders($customer_id);
+    // Get the required orders for the user.
+    $orders = \Drupal::service('alshaya_acm_customer.orders_manager')->getOrders($customer_id, 0);
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     return [];
   }
 

@@ -28,52 +28,52 @@ class SearchPageProductListResource extends ResourceBase {
   /**
    * Search API Index ID.
    */
-  const SEARCH_API_INDEX_ID = 'acquia_search_index';
+  public const SEARCH_API_INDEX_ID = 'acquia_search_index';
 
   /**
    * Query parse mode.
    */
-  const PARSE_MODE = 'terms';
+  public const PARSE_MODE = 'terms';
 
   /**
    * Parse mode conjunction.
    */
-  const PARSE_MODE_CONJUNCTION = 'OR';
+  public const PARSE_MODE_CONJUNCTION = 'OR';
 
   /**
    * Query string key to use for the keyword.
    */
-  const KEYWORD_KEY = 'q';
+  public const KEYWORD_KEY = 'q';
 
   /**
    * Facet source ID.
    */
-  const FACET_SOURCE_ID = 'search_api:views_page__search__page';
+  public const FACET_SOURCE_ID = 'search_api:views_page__search__page';
 
   /**
    * Views machine name.
    */
-  const VIEWS_ID = 'search';
+  public const VIEWS_ID = 'search';
 
   /**
    * Views display id.
    */
-  const VIEWS_DISPLAY_ID = 'page';
+  public const VIEWS_DISPLAY_ID = 'page';
 
   /**
    * Price facet machine id.
    */
-  const PRICE_FACET_KEY = 'final_price';
+  public const PRICE_FACET_KEY = 'final_price';
 
   /**
    * Selling Price facet machine id.
    */
-  const SELLING_PRICE_FACET_KEY = 'selling_price';
+  public const SELLING_PRICE_FACET_KEY = 'selling_price';
 
   /**
    * Page Type & Page Sub Type.
    */
-  const PAGE_TYPE = 'listing';
+  public const PAGE_TYPE = 'listing';
 
   /**
    * Parse mode plugin manager.
@@ -155,6 +155,7 @@ class SearchPageProductListResource extends ResourceBase {
    *   The response products data.
    */
   public function get() {
+    $message = [];
     // Get search keyword.
     $search_keyword = $this->currentRequest->query->get(self::KEYWORD_KEY, '');
 

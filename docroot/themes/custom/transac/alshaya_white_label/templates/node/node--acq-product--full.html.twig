@@ -89,13 +89,7 @@ set classes = [
 
           {# Delivery options will load if express delivery enabled. #}
           {% if content.delivery_options %}
-            <div class="express-delivery {{ content.express_delivery_class }}">
-            {% for key,delivery_option in content.delivery_options %}
-              <div class="express-delivery-text {{ key }} {{ delivery_option.status }}">
-                <span>{{ delivery_option.label }}</span>
-              </div>
-            {% endfor %}
-            </div>
+            <div id="sdd-ed-labels-desktop" class="express-delivery"></div>
           {% elseif content.same_day_delivery_text and content.delivery_options is empty %}
             <div class="same-day-delivery">
               <div class="same-day-content">
@@ -270,6 +264,11 @@ set classes = [
 
 </article>
 <div id="dy-recommendation"></div>
+{% if dynamicYieldPdpDivs is defined and dynamicYieldPdpDivs %}
+  {% for i in range(1, dynamicYieldPdpDivs) %}
+    <div id="dy-recommendation-pdp-{{ i }}"></div>
+  {% endfor %}
+{% endif %}
 
 {% if content.reviews_section %}
   {% if bazaarvoice_strings %}

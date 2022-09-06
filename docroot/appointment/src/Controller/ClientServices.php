@@ -99,7 +99,7 @@ class ClientServices {
       if (empty($request_content['firstName']) || empty($request_content['lastName']) || empty($request_content['dob']) || empty($request_content['mobile']) || empty($request_content['email'])) {
         $message = 'Required parameters missing to create a client.';
         $this->logger->error($message . ' Data: @request_data', [
-          '@request_data' => json_encode($request_content),
+          '@request_data' => json_encode($request_content, JSON_THROW_ON_ERROR),
         ]);
         throw new \Exception($message);
       }
@@ -127,7 +127,7 @@ class ClientServices {
 
       // Log on client update/insert.
       $this->logger->info('Client @operation successfully. Data: @params', [
-        '@params' => json_encode($request_content),
+        '@params' => json_encode($request_content, JSON_THROW_ON_ERROR),
         '@operation' => $request_content['clientExternalId'] ? 'updated' : 'inserted',
       ]);
 
@@ -136,7 +136,7 @@ class ClientServices {
     catch (\Exception $e) {
       $this->logger->error('Error occurred while @operation client. Message: @message, Data: @params', [
         '@message' => $e->getMessage(),
-        '@params' => json_encode($request_content),
+        '@params' => json_encode($request_content, JSON_THROW_ON_ERROR),
         '@operation' => $request_content['clientExternalId'] ? 'updated' : 'inserted',
       ]);
       $error = $this->apiHelper->getErrorMessage($e->getMessage(), $e->getCode());

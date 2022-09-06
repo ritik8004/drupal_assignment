@@ -1,6 +1,6 @@
 window.commerceBackend = window.commerceBackend || {};
 
-(function () {
+(function (Drupal, drupalSettings) {
   'use strict';
 
   /**
@@ -19,6 +19,80 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
+   * Get color attributes for product.
+   *
+   * @param {object} product
+   *   Raw product object.
+   * @param {array} styleProducts
+   *   Raw style products object.
+   *
+   * @returns {array}
+   *   The array of color attributes.
+   */
+  function getColorAttribute(product, styleProducts) {
+    var colorAttribute = drupalSettings.alshayaColorSplit.colorAttribute;
+    var colorAttributeValues = [];
+    if (Drupal.hasValue(styleProducts)) {
+      styleProducts.forEach(function (styleProduct) {
+        var processedColors = [];
+        styleProduct.variants.forEach(function (variant) {
+          // Check if color attribute is already added.
+          if (!processedColors.includes(variant.product[colorAttribute])) {
+            processedColors.push(variant.product[colorAttribute]);
+            // Get the labels for the color attribute.
+            if (Drupal.hasValue(variant.product[colorAttribute])) {
+              const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product[colorAttribute]);
+              // Update the array with the color values.
+              colorAttributeValues.push({value_index: variant.product[colorAttribute], store_label: label});
+            }
+          }
+        });
+      });
+    }
+    else {
+      const label = window.commerceBackend.getAttributeValueLabel(colorAttribute, product[colorAttribute]);
+      // Update the array with the color values.
+      colorAttributeValues.push({value_index: product[colorAttribute], store_label: label});
+    }
+    // Prepare configurable options object.
+    var colorAttributeObj = {
+      attribute_uid: btoa(drupalSettings.psudo_attribute),
+      label: drupalSettings.alshayaColorSplit.colorLabel,
+      position: -1,
+      attribute_code: colorAttribute,
+      values: colorAttributeValues,
+    };
+    return colorAttributeObj;
+  }
+
+  function setVariantData(variant, parent) {
+    // This will store the color values of the styled product.
+    const colorAttribute = drupalSettings.alshayaColorSplit.colorAttribute;
+    // These values will be used later on.
+    variant.product.parent_sku = parent.sku;
+    variant.product.color_attribute = colorAttribute;
+    variant.product.url_key = parent.url_key;
+    // Variants will inherit delivery options from their parent sku.
+    variant.product.deliveryOptions = {};
+    if (Drupal.hasValue(drupalSettings.expressDelivery)
+      && Drupal.hasValue(drupalSettings.expressDelivery.enabled)
+    ) {
+      variant.product.deliveryOptions = {
+        express_delivery: {
+          status: (Drupal.hasValue(parent.express_delivery) && Drupal.hasValue(drupalSettings.expressDelivery.express_delivery))
+            ? 'active'
+            : 'in-active'
+        },
+        same_day_delivery: {
+          status: (Drupal.hasValue(parent.same_day_delivery) && Drupal.hasValue(drupalSettings.expressDelivery.same_day_delivery))
+            ? 'active'
+            : 'in-active'
+        },
+      };
+    }
+  }
+
+  /**
    * Processes and stores style products data in static cache.
    *
    * @param {object} product
@@ -30,11 +104,22 @@ window.commerceBackend = window.commerceBackend || {};
    */
   function getProcessedStyleProducts(product, styleProducts) {
     var mainProduct = null;
-    styleProducts.forEach(function eachStyleProduct(styleProduct) {
-      if (styleProduct.sku === product.sku) {
-        mainProduct = JSON.parse(JSON.stringify(styleProduct));
+    // Use main product on PDP to display product attributes.
+    if (globalThis.rcsPhGetPageType() === 'product') {
+      mainProduct = product;
+    }
+    else {
+      if (Drupal.hasValue(styleProducts)) {
+        styleProducts.forEach(function eachStyleProduct(styleProduct) {
+          if (styleProduct.sku === product.sku) {
+            mainProduct = JSON.parse(JSON.stringify(styleProduct));
+          }
+        });
       }
-    });
+      else {
+        mainProduct = product;
+      }
+    }
 
     // This will hold the configugrable options for the main product keyed by
     // the attribute code and then the value index of the options.
@@ -59,86 +144,57 @@ window.commerceBackend = window.commerceBackend || {};
     });
 
     const mainProductAttributes = getProductConfigurableAttributes(mainProduct);
-    // Alter the configurable variants list of the main product.
-    // We will re-populate the variants.
-    mainProduct.variants = [];
-    // This will store the color values of the styled product.
-    const colorAttributeValues = [];
-    const colorAttribute = drupalSettings.alshayaColorSplit.colorAttribute;
 
-    styleProducts.forEach(function (styleProduct) {
-      // Store each product data into static storage so that it can be used in
-      // PLP add to bag to get the parent sku.
-      if (mainProduct.sku !== styleProduct.sku) {
-        window.commerceBackend.setRcsProductToStorage(styleProduct, mainProduct.context);
-      }
-      // Check if product is in stock.
-
-      // Check if attributes of the product is the same as the main product.
-      const styleProductAttributes = getProductConfigurableAttributes(styleProduct);
-
-      // Check if the attributes are the same of the main product and the style
-      // products.
-      var isAttributesSame = mainProductAttributes.length === styleProductAttributes.length;
-      mainProductAttributes.forEach(function (mainProductAttribute) {
-        if (!styleProductAttributes.includes(mainProductAttribute)) {
-          isAttributesSame = false;
-          // Break.
-          return false;
+    if (Drupal.hasValue(styleProducts)) {
+      // Alter the configurable variants list of the main product.
+      // We will re-populate the variants.
+      mainProduct.variants = [];
+      styleProducts.forEach(function eachStyleProduct(styleProduct) {
+        // Store each product data into static storage so that it can be used in
+        // PLP add to bag to get the parent sku.
+        if (mainProduct.sku !== styleProduct.sku) {
+          window.commerceBackend.setRcsProductToStorage(styleProduct, mainProduct.context);
         }
-      });
+        // Check if product is in stock.
 
-      if (!isAttributesSame) {
-        return;
-      }
+        // Check if attributes of the product is the same as the main product.
+        const styleProductAttributes = getProductConfigurableAttributes(styleProduct);
 
-      // Stores values of processed colors, so that they are not re-processed.
-      const processedColors = [];
-      styleProduct.variants.forEach(function (variant) {
-        // These values will be used later on.
-        variant.product.parent_sku = styleProduct.sku;
-        variant.product.color_attribute = colorAttribute;
-        variant.product.url_key = styleProduct.url_key;
-        // Variants will inherit delivery options from their parent sku.
-        variant.product.deliveryOptions = {};
-        if (Drupal.hasValue(drupalSettings.expressDelivery)
-          && Drupal.hasValue(drupalSettings.expressDelivery.enabled)
-        ) {
-          variant.product.deliveryOptions = {
-            express_delivery: {
-              status: (Drupal.hasValue(styleProduct.express_delivery) && Drupal.hasValue(drupalSettings.expressDelivery.express_delivery))
-                ? 'active'
-                : 'in-active'
-            },
-            same_day_delivery: {
-              status: (Drupal.hasValue(styleProduct.same_day_delivery) && Drupal.hasValue(drupalSettings.expressDelivery.same_day_delivery))
-                ? 'active'
-                : 'in-active'
-            },
-          };
-        }
-
-        if (!processedColors.includes(variant.product[colorAttribute])) {
-          processedColors.push(variant.product[colorAttribute]);
-          // Get the labels for the color attribute.
-          if (Drupal.hasValue(variant.product[colorAttribute])) {
-            const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product[colorAttribute]);
-            // Update the array with the color values.
-            colorAttributeValues.push({value_index: variant.product[colorAttribute], store_label: label});
+        // Check if the attributes are the same of the main product and the style
+        // products.
+        var isAttributesSame = mainProductAttributes.length === styleProductAttributes.length;
+        mainProductAttributes.forEach(function (mainProductAttribute) {
+          if (!styleProductAttributes.includes(mainProductAttribute)) {
+            isAttributesSame = false;
+            // Break.
+            return false;
           }
+        });
+
+        if (!isAttributesSame) {
+          return;
         }
 
-        mainProduct.variants.push(variant);
-      });
+        // Stores values of processed colors, so that they are not re-processed.
+        styleProduct.variants.forEach(function eachVariant(variant) {
+          setVariantData(variant, styleProduct);
+          mainProduct.variants.push(variant);
+        });
 
-      // Get all the configurable options of the style products.
-      styleProduct.configurable_options.forEach(function (styleProductOption) {
-        // Add the values of the variant to the option slist.
-        styleProductOption.values.forEach(function (value) {
-          mainProductConfigurableOptionsObject[styleProductOption.attribute_code][value.value_index] = value;
+        // Get all the configurable options of the style products.
+        styleProduct.configurable_options.forEach(function (styleProductOption) {
+          // Add the values of the variant to the option slist.
+          styleProductOption.values.forEach(function (value) {
+            mainProductConfigurableOptionsObject[styleProductOption.attribute_code][value.value_index] = value;
+          });
         });
       });
-    });
+    }
+    else {
+      mainProduct.variants.forEach(function eachVariant(variant) {
+        setVariantData(variant, mainProduct);
+      });
+    }
 
     // Now alter the configurable options for the main product.
     // Copy the resultant data for the attribute values from
@@ -151,13 +207,7 @@ window.commerceBackend = window.commerceBackend || {};
     });
 
     // Push color to the configurable options of the main product.
-    mainProduct.configurable_options.push({
-      attribute_uid: btoa(drupalSettings.psudo_attribute),
-      label: drupalSettings.alshayaColorSplit.colorLabel,
-      position: -1,
-      attribute_code: colorAttribute,
-      values: colorAttributeValues,
-    });
+    mainProduct.configurable_options.push(getColorAttribute(product, styleProducts));
 
     // Sort the configurable options according to position.
     mainProduct.configurable_options = mainProduct.configurable_options.sort(function (optionA, optionB) {
@@ -180,17 +230,24 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {object} product
    *   Raw product object.
+   * @param {string} loadStyles
+   *   Load styled products.
    *
    * @returns {void}
    */
-  window.commerceBackend.getProductsInStyle = async function getProductsInStyle(product) {
+  window.commerceBackend.getProductsInStyle = async function getProductsInStyle(product, loadStyles = true) {
     // Return if result is empty.
     if (!Drupal.hasValue(product)
       || !Drupal.hasValue(product.style_code)) {
-      return;
+      return product;
     }
-    // Get the products with the same style.
-    var styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: product.style_code });
+
+    var styleProducts = [];
+    if (loadStyles) {
+      // Get the products with the same style.
+      styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: product.style_code });
+    }
+
     return getProcessedStyleProducts(product, styleProducts);
   }
-})();
+})(Drupal, drupalSettings);

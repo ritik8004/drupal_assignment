@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_hello_member
+  theme:
+    - alshaya_white_label
+id: hellomemberheaderblock
+theme: alshaya_white_label
+region: header
+weight: -30
+provider: null
+plugin: hello_member_header_block
+settings:
+  id: hello_member_header_block
+  label: 'Hello member header block'
+  provider: alshaya_hello_member
+  label_display: '0'
+visibility: { }

@@ -41,6 +41,24 @@ export const controlAddressFormCTA = (status) => {
 };
 
 /**
+ * Payment methods data.
+ *
+ * @return {object}
+ *   The result object containing the information of payment methods API name and title.
+ */
+export const getPaymentMethodsData = () => {
+  const methodsData = [];
+  if (drupalSettings.payment_methods) {
+    Object.entries(drupalSettings.payment_methods).forEach(
+      ([key, value]) => {
+        methodsData[key] = value.name;
+      },
+    );
+  }
+  return methodsData;
+};
+
+/**
  * Place order CTA link add loading to avoid multiple clicks.
  *
  * @param status
@@ -103,6 +121,8 @@ export const placeOrder = (paymentMethod) => {
       method: paymentMethod,
     },
   };
+  const paymentMethodsInfo = getPaymentMethodsData();
+
   window.commerceBackend.placeOrder({ data })
     .then(
       (response) => {
@@ -117,7 +137,7 @@ export const placeOrder = (paymentMethod) => {
           // Add current logs as is with current conditions.
           // @todo review this and make it appropriate / logical.
           if (response.data.error) {
-            Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
+            Drupal.logJavascriptError(`place-order | ${paymentMethodsInfo.[paymentMethod]}`, 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           }
 
           // If url is absolute, then redirect to the external payment page.
@@ -142,7 +162,7 @@ export const placeOrder = (paymentMethod) => {
           message = getStringMessage('shipping_method_error');
         } else if (errorCode === 506) {
           // If cart has some OOS item.
-          Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.CHECKOUT_ERRORS);
+          Drupal.logJavascriptError(`place-order | ${paymentMethodsInfo.[paymentMethod]}`, `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.CHECKOUT_ERRORS);
         }
 
         validateCartResponse(response.data);
@@ -153,7 +173,7 @@ export const placeOrder = (paymentMethod) => {
         });
 
         // Push error to GTM.
-        Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        Drupal.logJavascriptError(`place-order | ${paymentMethodsInfo.[paymentMethod]}`, `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
         controlPlaceOrderCTA('enable');
 
@@ -164,7 +184,7 @@ export const placeOrder = (paymentMethod) => {
       },
       (error) => {
         // Processing of error here.
-        Drupal.logJavascriptError('place-order', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        Drupal.logJavascriptError(`place-order | ${paymentMethodsInfo.[paymentMethod]}`, error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
       },
     );
 };
@@ -697,6 +717,7 @@ export const updatePaymentAndPlaceOrder = (paymentMethod) => {
       analytics,
     },
   };
+  const paymentMethodsInfo = getPaymentMethodsData();
 
   const cartUpdate = addPaymentMethodInCart('update payment', data);
   if (cartUpdate instanceof Promise) {
@@ -713,7 +734,7 @@ export const updatePaymentAndPlaceOrder = (paymentMethod) => {
         placeOrder(paymentMethod);
       }
     }).catch((error) => {
-      Drupal.logJavascriptError('change payment method', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+      Drupal.logJavascriptError(`change payment method | ${paymentMethodsInfo.[paymentMethod]}`, error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
     });
   }
 };

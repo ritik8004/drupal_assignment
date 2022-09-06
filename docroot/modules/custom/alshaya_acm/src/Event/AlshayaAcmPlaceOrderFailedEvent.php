@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class AlshayaAcmPlaceOrderFailedEvent extends Event {
 
-  const EVENT_NAME = 'alshaya_acm.place_order_failed';
+  public const EVENT_NAME = 'alshaya_acm.place_order_failed';
 
   /**
    * Failure reason / message.

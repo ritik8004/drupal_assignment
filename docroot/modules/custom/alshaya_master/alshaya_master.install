@@ -11,6 +11,31 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update the home page config as per schema.
+ */
+function alshaya_master_update_9401() {
+  \Drupal::configFactory()->getEditable('alshaya_master.home')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update arabic string translation for points history link
+ * in user account section.
+ */
+function alshaya_master_update_8055() {
+  // Add string translations.
+  $strings = [
+    'Points History' => [
+      'ar' => 'سجّل النقاط',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update arabic string translation for order details.
  */
 function alshaya_master_update_8054() {

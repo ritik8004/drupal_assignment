@@ -320,7 +320,7 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
         }
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       \Drupal::logger('alshaya_acm_customer')->error('Error while resetting password for user:@email.', [
         '@email' => $email,
       ]);
@@ -518,7 +518,7 @@ function alshaya_acm_customer_user_login(UserInterface $account) {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
     alshaya_acm_customer_update_user_data($account, $customer);
   }
-  catch (\Exception $e) {
+  catch (\Exception) {
     \Drupal::logger('alshaya_acm_customer')->error('Error while resetting information for user: @email.', [
       '@email' => $account->getEmail(),
     ]);
@@ -797,7 +797,7 @@ function alshaya_acm_customer_change_pwd_form_update_password(array &$form, Form
       try {
         $api_wrapper->updateCustomerPass($customer, $pass);
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         // IF API Down or some other issue, log message is already added
         // Clear all messages first as there is success message available.
         \Drupal::messenger()->deleteAll();

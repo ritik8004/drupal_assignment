@@ -24,7 +24,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
   /**
    * Config to enable/disable the lhn category tree.
    */
-  const ENABLE_DISABLE_CONFIG_KEY = 'alshaya_acm_product_category.settings';
+  public const ENABLE_DISABLE_CONFIG_KEY = 'alshaya_acm_product_category.settings';
 
   /**
    * Stores the configuration factory.
@@ -95,31 +95,9 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
       ],
     ];
 
-    $build['wrapper']['content'] = [
-      '#theme' => 'alshaya_rcs_lhn_tree',
-      '#lhn_cat_tree' => [
-        // Clickable.
-        [
-          'lhn' => 1,
-          'label' => '#rcs.lhn.name#',
-          'url' => '#rcs.lhn.url_path#',
-          'depth' => '#rcs.lhn.level#',
-          'active' => '#rcs.lhn.active#',
-          'clickable' => TRUE,
-        ],
-        // Unclickable.
-        [
-          'lhn' => 1,
-          'label' => '#rcs.lhn.name#',
-          'url' => '#rcs.lhn.url_path#',
-          'depth' => '#rcs.lhn.level#',
-          'active' => '#rcs.lhn.active#',
-          'clickable' => FALSE,
-        ],
-      ],
-    ];
     // Attach the Listing rendrer library.
     $build['#attached']['library'][] = 'alshaya_rcs_listing/renderer';
+    $build['#attached']['library'][] = 'alshaya_rcs_listing/lhn_menu';
 
     return $build;
   }

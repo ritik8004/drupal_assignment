@@ -221,3 +221,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-cart/egift-cart.ltr.css: css/conditional-sass/egift-cart/egift-cart.ltr.css
+
+  alshaya_white_label/advanced-page-paragraph-accordion:
+    css:
+      theme:
+        css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css: css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css

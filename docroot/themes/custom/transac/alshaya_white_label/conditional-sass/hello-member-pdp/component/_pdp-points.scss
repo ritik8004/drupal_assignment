@@ -1,0 +1,19 @@
+#hello-member-pdp {
+  @include breakpoint($only-mobile) {
+    width: 100%;
+  }
+
+  .hello-member-points {
+    font-size: rem(10);
+    color: $hello-member-pdp-points-earned-txt;
+    letter-spacing: 0.42px;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+
+    p {
+      margin-bottom: rem(6);
+    }
+  }
+}

@@ -4,7 +4,66 @@
  */
 window.commerceBackend = window.commerceBackend || {};
 
-(function (Drupal, $) {
+(function (Drupal, $, drupalSettings) {
+
+  /**
+   * Gets the required data for acq_product.
+   *
+   * @param {string} sku
+   *   The product sku value.
+   * @param {string} productKey
+   *   The product view mode.
+   * @param {Boolean} processed
+   *   Whether we require the processed product data or not.
+   *
+   * @returns {Object}
+   *    The product data.
+   */
+  window.commerceBackend.getProductData = function (sku, productKey, processed) {
+    var key = productKey === 'undefined' || !productKey ? 'productInfo' : productKey;
+    if (typeof sku === 'undefined' || sku === null) {
+      return drupalSettings[key];
+    }
+
+    if (typeof drupalSettings[key] === 'undefined' || typeof drupalSettings[key][sku] === 'undefined') {
+      return null;
+    }
+
+    return drupalSettings[key][sku];
+  }
+
+  /**
+   * Gets the configurable combinations for the given sku.
+   *
+   * @param {string} sku
+   *   The sku value.
+   *
+   * @returns {object}
+   *   The object containing the configurable combinations for the given sku.
+   */
+  window.commerceBackend.getConfigurableCombinations = function (sku) {
+    return drupalSettings.configurableCombinations[sku];
+  }
+
+  /**
+   * Gets the configurable color details.
+   *
+   * @param {string} sku
+   *   The sku value.
+   *
+   * @returns {object}
+   *   The configurable color details.
+   */
+  window.commerceBackend.getConfigurableColorDetails = function (sku) {
+    var data = {};
+    if (drupalSettings.sku_configurable_color_attribute) {
+      data.sku_configurable_color_attribute = drupalSettings.sku_configurable_color_attribute;
+    }
+    if (drupalSettings.sku_configurable_options_color) {
+      data.sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
+    }
+    return data;
+  }
 
   /**
    * Fetch the product data from backend.
@@ -18,8 +77,10 @@ window.commerceBackend = window.commerceBackend || {};
    *   The sku value.
    * @param {string} parentSKU
    *   (optional) The parent sku value.
+   * @param {boolean} loadStyles
+   *   (optional) Indicates if styled product need to be loaded.
    */
-  window.commerceBackend.getProductDataFromBackend = function (sku, parentSKU = null) {
+  window.commerceBackend.getProductDataFromBackend = function (sku, parentSKU = null, loadStyles = true) {
     return $.ajax({
       url: Drupal.url('rest/v2/product/' + btoa(sku)) + '?context=cart',
       type: 'GET',
@@ -143,4 +204,4 @@ window.commerceBackend = window.commerceBackend || {};
   window.commerceBackend.clearStockStaticCache = function clearStockStaticCache() {
     return null;
   }
-})(Drupal, jQuery);
+})(Drupal, jQuery, drupalSettings);

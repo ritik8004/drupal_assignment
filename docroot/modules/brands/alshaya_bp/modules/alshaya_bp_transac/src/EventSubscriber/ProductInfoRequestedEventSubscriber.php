@@ -111,6 +111,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $return = [];
     $body = $sku_entity->get('attr_description')->getValue();
     if ($body) {
+      $description = [];
       $description['value'] = [
         '#markup' => $body[0]['value'],
       ];

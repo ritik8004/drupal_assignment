@@ -29,12 +29,13 @@ class AlshayaSearchGalleryFormatter extends ResponsiveImageFormatter {
   /**
    * Thumbnail image style constant.
    */
-  const THUMB_IMG_STYLE = '59x60';
+  public const THUMB_IMG_STYLE = '59x60';
 
   /**
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
+    $thumbnails = [];
     $elements = [];
     $files = $this->getEntitiesToView($items, $langcode);
 

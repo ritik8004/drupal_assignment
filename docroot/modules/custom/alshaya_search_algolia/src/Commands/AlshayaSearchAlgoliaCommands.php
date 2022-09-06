@@ -71,7 +71,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
   public function verifyPrices(array $options = ['batch-size' => NULL]) {
     $batch_size = $options['batch-size'] ?? 50;
     $batch = [
-      'finished' => [__CLASS__, 'batchFinish'],
+      'finished' => [self::class, 'batchFinish'],
       'title' => dt('Comparing products price with algolia'),
       'init_message' => dt('Starting price comparison...'),
       'progress_message' => dt('Completed @current products of @total.'),
@@ -81,15 +81,18 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
     $query = $this->alshayaEntityHelper->getNodesQuery();
     $nids = $query->execute();
 
-    $batch['operations'][] = [[__CLASS__, 'batchStart'], [count($nids)]];
+    $batch['operations'][] = [
+      [self::class, 'batchStart'],
+      [is_countable($nids) ? count($nids) : 0],
+    ];
     foreach (array_chunk($nids, $batch_size) as $chunk) {
       $batch['operations'][] = [
-        [__CLASS__, 'batchProcess'],
+        [self::class, 'batchProcess'],
         [$chunk],
       ];
     }
     // Prepare the output of faulty results and show.
-    $batch['operations'][] = [[__CLASS__, 'batchGenerate'], []];
+    $batch['operations'][] = [[self::class, 'batchGenerate'], []];
     batch_set($batch);
     drush_backend_batch_process();
   }
@@ -144,9 +147,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
 
       // Create object ids from node id and language to fetch results from
       // algolia.
-      $objectIDs = array_map(function ($nid) use ($language) {
-        return "entity:node/{$nid}:{$language->getId()}";
-      }, $nids);
+      $objectIDs = array_map(fn($nid) => "entity:node/{$nid}:{$language->getId()}", $nids);
 
       try {
         $objects = $index->getObjects($objectIDs, [
@@ -159,7 +160,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
         ]);
 
       }
-      catch (\Exception $e) {
+      catch (\Exception) {
         continue;
       }
 
@@ -221,9 +222,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
       $context['results']['faulty'] += count(array_values($products));
 
       // Encode each result to dump.
-      $records = array_map(function ($item) {
-        return json_encode($item);
-      }, array_values($products));
+      $records = array_map(fn($item) => json_encode($item), array_values($products));
 
       $context['message'] = implode(PHP_EOL, $records);
     }

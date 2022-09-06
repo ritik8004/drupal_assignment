@@ -310,7 +310,11 @@
 
         .store {
           #{$right}: 2rem;
-          top: 1.2rem;
+          top: rem(19);
+
+          @include breakpoint($only-tablet) {
+            top: rem(11);
+          }
         }
       }
 
@@ -443,19 +447,36 @@
     }
 
     .c-menu-primary {
-      .mobile--menu,
+      .mobile--menu {
+        @include breakpoint($upto-desktop) {
+          top: rem(32);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(19);
+        }
+      }
+
       .mobile--search {
         @include breakpoint($upto-desktop) {
-          top: 2rem;
+          top: rem(29);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(16);
         }
       }
 
       .store {
-        top: 4.5rem;
+        top: rem(72);
         z-index: 12;
 
         @include breakpoint($upto-desktop) {
-          top: 1.5rem;
+          top: rem(24);
+        }
+
+        @include breakpoint($only-tablet) {
+          top: rem(16);
         }
       }
     }
@@ -600,6 +621,70 @@
             &::after {
               opacity: 0;
             }
+          }
+        }
+      }
+    }
+  }
+
+  &.super-category-home {
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(162);
+
+      html[lang="ar"] & {
+        margin-top: rem(162);
+      }
+    }
+
+    &:not(.frontpage) {
+      &.hide-header {
+        @include breakpoint($upto-desktop) {
+          margin-top: rem(162);
+        }
+      }
+    }
+
+    &.hide-minimalistic-header {
+      .block-alshaya-algolia-react-autocomplete {
+        @include breakpoint($upto-desktop) {
+          top: 0 !important;
+        }
+      }
+
+      &:not(.frontpage) {
+        &.hide-header {
+          @include breakpoint($upto-desktop) {
+            margin-top: rem(50);
+          }
+        }
+
+        .c-menu-primary {
+          .mobile--menu,
+          .mobile--search {
+            @include breakpoint($upto-desktop) {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    .mobile--search {
+      @include breakpoint($upto-desktop) {
+        display: none !important;
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($upto-desktop) {
+        visibility: visible !important;
+        top: rem(114) !important;
+      }
+
+      &.focused {
+        .algolia-search-back-icon {
+          @include breakpoint($upto-desktop) {
+            visibility: visible;
           }
         }
       }

@@ -18,7 +18,7 @@ class AlshayaSuperCategoryManager {
   /**
    * The facet name for Super Category in the search index.
    */
-  const SEARCH_FACET_NAME = 'super_category';
+  public const SEARCH_FACET_NAME = 'super_category';
 
   /**
    * Product category tree.

@@ -3,14 +3,19 @@
 namespace Drupal\alshaya_acm_customer;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_acm_customer\HelperTrait\Orders;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\Cache;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class Orders Manager.
@@ -75,6 +80,27 @@ class OrdersManager {
   protected $configFactory;
 
   /**
+   * Product Info Helper.
+   *
+   * @var \Drupal\acq_sku\ProductInfoHelper
+   */
+  protected $productInfoHelper;
+
+  /**
+   * Current request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * The Module Handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * OrdersManager constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
@@ -89,13 +115,22 @@ class OrdersManager {
    *   LoggerFactory object.
    * @param \Drupal\Core\Cache\CacheBackendInterface $count_cache
    *   Cache Backend service for orders_count.
+   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
+   *   Product Info Helper.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   Request stack object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The Module Handler service.
    */
   public function __construct(AlshayaApiWrapper $api_wrapper,
                               ConfigFactoryInterface $config_factory,
                               CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
                               LoggerChannelFactoryInterface $logger_factory,
-                              CacheBackendInterface $count_cache) {
+                              CacheBackendInterface $count_cache,
+                              ProductInfoHelper $product_info_helper,
+                              RequestStack $request,
+                              ModuleHandlerInterface $module_handler) {
     $this->apiWrapper = $api_wrapper;
     $this->config = $config_factory->get('alshaya_acm_customer.orders_config');
     $this->cache = $cache;
@@ -103,6 +138,9 @@ class OrdersManager {
     $this->logger = $logger_factory->get('alshaya_acm_customer');
     $this->countCache = $count_cache;
     $this->configFactory = $config_factory;
+    $this->productInfoHelper = $product_info_helper;
+    $this->currentRequest = $request->getCurrentRequest();
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -217,22 +255,19 @@ class OrdersManager {
    *
    * @param int $customer_id
    *   Customer Commerce ID.
+   * @param int $page_size
+   *   Page size for the order API.
+   * @param string $search_key
+   *   Key to look for in $_GET for searching.
+   * @param string $filter_key
+   *   Key to look for in $_GET for filtering.
    *
    * @return array
    *   Orders.
    */
-  public function getOrders(int $customer_id) {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-    $cid = 'orders_list_' . $langcode . '_' . $customer_id;
-
-    if ($cache = $this->cache->get($cid)) {
-      return $cache->data;
-    }
-
+  public function getOrders(int $customer_id, int $page_size = 3, $search_key = '', $filter_key = '') {
     try {
       $query = $this->getOrdersQuery('customer_id', $customer_id);
-      $page_size = 100;
 
       // Query page size.
       $query['searchCriteria']['pageSize'] = $page_size;
@@ -242,40 +277,111 @@ class OrdersManager {
         'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
       ];
 
-      $result = $this->apiWrapper->invokeApiWithPageLimit($endpoint, $request_options, $page_size, [], $query);
+      // Prepare a cache id to store the data in static cache.
+      $cid = implode('_', [
+        'static',
+        $customer_id,
+        $page_size,
+        $search_key,
+        $filter_key,
+      ]);
+      $orders = &drupal_static($cid);
 
-      $orders = $result['items'] ?? [];
-      foreach ($orders as $key => $order) {
-        // Allow other modules to alter order details.
-        \Drupal::moduleHandler()->alter('alshaya_acm_customer_order_details', $order);
-        $orders[$key] = $this->cleanupOrder($order);
+      if (empty($orders)) {
+        if ($page_size > 0) {
+          $result = $this->apiWrapper->invokeApi($endpoint, $query, 'GET', FALSE, $request_options);
+          // Decode the json string to get the order item.
+          $result = Json::decode($result);
+        }
+        else {
+          $query['searchCriteria']['pageSize'] = 100;
+          $result = $this->apiWrapper->invokeApiWithPageLimit($endpoint, $request_options, $query['searchCriteria']['pageSize'], [], $query);
+        }
+
+        $orders = $result['items'] ?? [];
+        if ($orders) {
+          foreach ($orders as $key => $order) {
+            // Allow other modules to alter order details.
+            $this->moduleHandler->alter('alshaya_acm_customer_order_details', $order);
+            $orders[$key] = $this->cleanupOrder($order);
+          }
+          // Update the order count cache.
+          if (isset($result['total_count'])) {
+            $this->countCache->set('orders_count_' . $customer_id, $result['total_count']);
+          }
+        }
+
+        // Sort them by default by date.
+        usort($orders, fn($a, $b) => $b['created_at'] > $a['created_at']);
+
+        // Update order items to have unique records only.
+        // For configurable products we get it twice (once for parent and once
+        // for selected variant).
+        foreach ($orders as &$order) {
+          $order_items = [];
+          foreach ($order['items'] as $item) {
+            // If product is virtual then use item_id instead of sku as key.
+            if (!isset($order_items[$item['sku']]) && !$item['is_virtual']) {
+              $order_items[$item['sku']] = $item;
+            }
+            else {
+              $order_items[$item['item_id']] = $item;
+            }
+            $sku_entity = SKU::loadFromSku(alshaya_acm_customer_clean_sku($item['sku']));
+            if ($sku_entity instanceof SKUInterface) {
+              $order_items[$item['sku']]['name'] = $this->productInfoHelper->getTitle($sku_entity, 'basket');
+            }
+
+          }
+          $order['items'] = $order_items;
+        }
       }
     }
-    catch (\Exception $e) {
+    catch (\Exception) {
       // Exception message is already added to log in APIWrapper.
       $orders = [];
     }
 
-    // Sort them by default by date.
-    usort($orders, function ($a, $b) {
-      return $b['created_at'] > $a['created_at'];
-    });
+    $filtered_orders = $orders;
+    // Search by Order ID, SKU, Name.
+    $search = $search_key ? $this->currentRequest->query->get($search_key) : NULL;
+    if ($search) {
+      $filtered_orders = array_filter($orders, function ($order) use ($search) {
+        $search = (string) $search;
+        // Search by Order ID.
+        if (stripos($order['increment_id'], $search) > -1) {
+          return TRUE;
+        }
 
-    // Get the cache expiration time based on config value.
-    $cacheTimeLimit = $this->config->get('cache_time_limit');
+        foreach ($order['items'] as $orderItem) {
+          // Search by name.
+          if (stripos($orderItem['name'], $search) > -1) {
+            return TRUE;
+          }
+          // Search by SKU.
+          elseif (stripos(alshaya_acm_customer_clean_sku($orderItem['sku']), alshaya_acm_customer_clean_sku($search)) > -1) {
+            return TRUE;
+          }
+        }
 
-    // We can disable caching via config by setting it to zero.
-    if ($cacheTimeLimit > 0) {
-      $expire = strtotime('+' . $cacheTimeLimit . ' seconds');
-
-      // Store in cache.
-      $this->cache->set($cid, $orders, $expire);
+        return FALSE;
+      });
     }
 
-    // Re-set count again.
-    $this->countCache->set('orders_count_' . $customer_id, count($orders));
+    // Filter order by status.
+    $filter = $filter_key ? $this->currentRequest->get($filter_key) : NULL;
+    if ($filter) {
+      $filtered_orders = array_filter($orders, function ($order, $orderId) use ($filter) {
+        $status = alshaya_acm_customer_get_order_status($order);
+        if ($status['text'] == $filter) {
+          return TRUE;
+        }
 
-    return $orders;
+        return FALSE;
+      }, ARRAY_FILTER_USE_BOTH);
+    }
+
+    return $filtered_orders;
   }
 
   /**
@@ -305,11 +411,46 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
+    $result = $response ? json_decode($response, TRUE) : [];
     $count = $result['total_count'] ?? 0;
     $this->countCache->set($cid, $count);
 
     return $count;
+  }
+
+  /**
+   * Helper function to get specific order.
+   *
+   * @param string $increment_id
+   *   Increment ID to get order for.
+   *
+   * @return array
+   *   Order array if found.
+   */
+  public function getOrderByIncrementId(string $increment_id) {
+    $query = $this->getOrdersQuery('increment_id', $increment_id);
+
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
+    ];
+    // This cid is to store the data in static cache.
+    $cid = implode('_', [__FUNCTION__, $increment_id]);
+    $result = &drupal_static($cid);
+
+    if (empty($result)) {
+      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
+      $result = $response ? json_decode($response, TRUE) : [];
+    }
+
+    if (!empty($result)) {
+      $count = $result['total_count'] ?? 0;
+      if (empty($count)) {
+        return NULL;
+      }
+    }
+
+    $order = !empty($result['items']) ? reset($result['items']) : [];
+    return $this->cleanupOrder($order);
   }
 
   /**
@@ -329,13 +470,16 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
+    if (empty($response)) {
+      return NULL;
+    }
+    $result = json_decode($response, TRUE);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
       return NULL;
     }
 
-    $order = reset($result['items']);
+    $order = !empty($result['items']) ? reset($result['items']) : [];
     return $this->cleanupOrder($order);
   }
 
@@ -357,13 +501,13 @@ class OrdersManager {
     ];
 
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
-    $result = json_decode($response ?? [], TRUE);
+    $result = $response ? json_decode($response, TRUE) : [];
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
       return NULL;
     }
 
-    $order = reset($result['items']);
+    $order = !empty($result['items']) ? reset($result['items']) : [];
     return $this->cleanupOrder($order);
   }
 
@@ -409,7 +553,7 @@ class OrdersManager {
     $query['searchCriteria']['pageSize'] = 1;
     $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
 
-    $result = json_decode($response ?? [], TRUE);
+    $result = $response ? json_decode($response, TRUE) : [];
 
     return $result['total_count'] ?? 0;
   }

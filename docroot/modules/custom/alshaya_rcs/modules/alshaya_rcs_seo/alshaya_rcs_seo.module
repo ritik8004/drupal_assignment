@@ -21,6 +21,9 @@ function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
   $libraries['datapush']['js'][$new_source] = $options;
 
   $libraries['datapush']['dependencies'] = [
+    'core/jquery',
+    'core/drupal',
+    'core/drupalSettings',
     'rcs_placeholders/helpers',
     'alshaya_rcs_seo/alshaya_rcs_product_seo',
   ];
@@ -82,5 +85,15 @@ function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_vari
         unset($links[$key]);
       }
     }
+  }
+}
+
+/**
+ * Implements hook_alshaya_rcs_category_query_fields_alter().
+ */
+function alshaya_rcs_seo_alshaya_rcs_category_query_fields_alter(&$fields) {
+  $current_route = \Drupal::routeMatch()->getRouteName();
+  if ($current_route === 'alshaya_seo.sitemap') {
+    $fields[] = 'description';
   }
 }

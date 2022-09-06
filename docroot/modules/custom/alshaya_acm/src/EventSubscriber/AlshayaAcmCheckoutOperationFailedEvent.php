@@ -67,6 +67,7 @@ class AlshayaAcmCheckoutOperationFailedEvent implements EventSubscriberInterface
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[AcqCheckoutPaymentFailedEvent::EVENT_NAME][] = ['onPaymentFailed'];
     $events[AlshayaAcmUpdateCartFailedEvent::EVENT_NAME][] = ['onUpdateCartFailed'];
     $events[AlshayaAcmPlaceOrderFailedEvent::EVENT_NAME][] = ['onPlaceOrderFailed'];

@@ -5,6 +5,8 @@ namespace Drupal\alshaya_js_optimisations;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Asset\LibraryDependencyResolver;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\Extension\ThemeExtensionList;
 
 /**
  * Class Alshaya JS Optimisation Helper.
@@ -14,16 +16,30 @@ class AlshayaJsOptimisationHelper {
   /**
    * Config Factory.
    *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * @var ConfigFactoryInterface
    */
   protected $configFactory;
 
   /**
    * The Depedency resolver.
    *
-   * @var \Drupal\Core\Asset\LibraryDependencyResolver
+   * @var LibraryDependencyResolver
    */
   protected $depedencyResolver;
+
+  /**
+   * Module Extension List.
+   *
+   * @var ModuleExtensionList
+   */
+  protected $moduleList;
+
+  /**
+   * Theme Extension List.
+   *
+   * @var ThemeExtensionList
+   */
+  protected $themeList;
 
   /**
    * Constructs a JS optimisation helper object.
@@ -33,9 +49,16 @@ class AlshayaJsOptimisationHelper {
    * @param \Drupal\Core\Asset\LibraryDependencyResolver $depedency_resolver
    *   Dependency resolver methods.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, LibraryDependencyResolver $depedency_resolver) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    LibraryDependencyResolver $depedency_resolver,
+    ModuleExtensionList $module_list,
+    ThemeExtensionList $theme_list
+  ) {
     $this->configFactory = $config_factory;
     $this->depedencyResolver = $depedency_resolver;
+    $this->moduleList = $module_list;
+    $this->themeList = $theme_list;
   }
 
   /**
@@ -134,13 +157,6 @@ class AlshayaJsOptimisationHelper {
   }
 
   /**
-   * JS aggregation status flag.
-   *
-   * @var isJsAggregation
-   */
-  public static $isJsAggregation = NULL;
-
-  /**
    * Critical JS status flag.
    *
    * @var criticalJsEnabled
@@ -191,6 +207,11 @@ class AlshayaJsOptimisationHelper {
     $js_category = self::$jsCategories;
     $categories = array_keys($js_category);
     $resolved_data = [];
+
+    $installed_modules = array_keys($this->moduleList->getAllInstalledInfo());
+    $installed_themes = array_keys($this->themeList->getAllInstalledInfo());
+    $installed = array_merge(['core'], $installed_modules, $installed_themes);
+
     foreach ($categories as $category) {
       if (empty($critical_js[$category])) {
         continue;
@@ -201,7 +222,7 @@ class AlshayaJsOptimisationHelper {
         continue;
       }
 
-      $lists = $this->includeDependencies($lists, $category);
+      $lists = $this->includeDependencies($lists, $category, $installed);
 
       // Assign configured attributes and weights to libraries.
       foreach ($lists as $library_name) {
@@ -256,7 +277,7 @@ class AlshayaJsOptimisationHelper {
               $resolved_data[$extension][$library]['attributes'],
               $js_category[$category]['attributes']
             );
-            $resolved_data[$extension][$library]['weight'] = $set_weight ? $set_weight : $js_category[$category]['weight'];
+            $resolved_data[$extension][$library]['weight'] = $set_weight ?: $js_category[$category]['weight'];
 
             // Preserve existing 'defer' on scripts.
             if ($defer) {
@@ -274,26 +295,26 @@ class AlshayaJsOptimisationHelper {
    * Prefix library name with extension.
    */
   private function prefixLibrary(array $items, $prefix) {
-    return array_map(function ($item) use ($prefix) {
-      return $prefix . $item;
-    }, $items);
+    return array_map(fn($item) => $prefix . $item, $items);
   }
 
   /**
    * Includes depedencies to categories.
    */
-  private function includeDependencies(array $lists, $category) {
+  private function includeDependencies(array $lists, $category, $installed) {
     $included_dependecies = [];
     foreach ($lists as $extension => $libraries) {
-      $libraries = (array) $libraries;
-      $libraries = $this->prefixLibrary($libraries, $extension . '/');
-      $library_list = $libraries;
+      if (in_array($extension, $installed)) {
+        $libraries = (array) $libraries;
+        $libraries = $this->prefixLibrary($libraries, $extension . '/');
+        $library_list = $libraries;
 
-      if ($category === 'critical' || $category === 'sitewide_1' || $category === 'sitewide_2') {
-        $library_list = $this->depedencyResolver->getLibrariesWithDependencies($libraries);
+        if ($category === 'critical' || $category === 'sitewide_1' || $category === 'sitewide_2') {
+          $library_list = $this->depedencyResolver->getLibrariesWithDependencies($libraries);
+        }
+
+        $included_dependecies = array_merge($included_dependecies, $library_list);
       }
-
-      $included_dependecies = array_merge($included_dependecies, $library_list);
     }
     return $included_dependecies;
   }

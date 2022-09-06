@@ -263,7 +263,7 @@ function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
   // 404 or 500 when aliases are modified but page is still served from cache
   // or users haven't reloaded page for older aliases.
   foreach ($settings['views']['ajaxViews'] ?? [] as $dom_id => $ajax_view) {
-    if (strpos($dom_id, 'alshaya_product_list') === FALSE) {
+    if (!str_contains($dom_id, 'alshaya_product_list')) {
       continue;
     }
 
@@ -285,7 +285,7 @@ function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
 
     // Remove facets if any before getting internal path.
     $facets_path = '';
-    if (strpos($view_path, '/--') !== FALSE) {
+    if (str_contains($view_path, '/--')) {
       $view_path_parts = explode('/--', $view_path);
       $view_path = $view_path_parts[0];
       $facets_path = '--' . $view_path_parts[1];

@@ -41,7 +41,7 @@ if (!(getenv('AH_SITE_ENVIRONMENT'))) {
         $url = $arg;
       }
 
-      if (isset($url) && strpos($url, 'alshaya') !== FALSE) {
+      if (isset($url) && str_contains($url, 'alshaya')) {
         $url = str_replace('https://', '', $url);
         $url = str_replace('http://', '', $url);
 

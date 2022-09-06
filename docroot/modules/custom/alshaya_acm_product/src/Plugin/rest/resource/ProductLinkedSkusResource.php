@@ -122,6 +122,7 @@ class ProductLinkedSkusResource extends ResourceBase {
    *   The response containing linked skus of the given sku.
    */
   public function get(string $sku) {
+    $skuIds = [];
     $skuEntity = SKU::loadFromSku($sku);
     if (!$skuEntity instanceof SKUInterface) {
       throw new NotFoundHttpException("page not found");
@@ -186,15 +187,13 @@ class ProductLinkedSkusResource extends ResourceBase {
     foreach (array_keys($linkedSkus) as $linkedSku) {
       $linkedSkuEntity = SKU::loadFromSku($linkedSku);
       if ($lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)) {
-        $lightProduct['medias'] = $this->skuImagesManager->processMediaImageStyles($lightProduct['medias'], $linkedSkuEntity, 'pdp');
+        $lightProduct['medias'] = $this->skuImagesManager->getProductMediaDataWithStyles($linkedSkuEntity, 'pdp');
         $return[] = $lightProduct;
       }
     }
     // As the linked block contents on web is rendered by product_slider view
     // and which is sorted in ascending order of nid, we do the same here.
-    usort($return, function ($a, $b) {
-      return $a['nid'] <=> $b['nid'];
-    });
+    usort($return, fn($a, $b) => $a['nid'] <=> $b['nid']);
     return $return;
   }
 

@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_rcs_olapic.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_olapic_install() {
+  // Move the rcs navigation block to current theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+  // Disable the V1 blocks that are not required.
+  $blocks = [
+    'alshayaolapicwidget_2' => 'rcsalshayaolapicwidget_2',
+  ];
+  \Drupal::moduleHandler()->loadInclude('alshaya_block', 'inc', 'alshaya_block.utility');
+  alshaya_block_switch_block_config($blocks);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_rcs_olapic_uninstall() {
+  // Enable the V1 blocks.
+  $blocks = [
+    'alshayaolapicwidget_2' => 'rcsalshayaolapicwidget_2',
+  ];
+  \Drupal::moduleHandler()->loadInclude('alshaya_block', 'inc', 'alshaya_block.utility');
+  alshaya_block_revert_block_config($blocks);
+}

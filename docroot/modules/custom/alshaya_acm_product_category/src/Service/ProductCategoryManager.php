@@ -19,7 +19,7 @@ use Drupal\node\NodeInterface;
  */
 class ProductCategoryManager {
 
-  const CATEGORIZATION_IDS_CACHE_TAG = 'alshaya_acm_categorization_ids';
+  public const CATEGORIZATION_IDS_CACHE_TAG = 'alshaya_acm_categorization_ids';
 
   /**
    * SKU Manager.

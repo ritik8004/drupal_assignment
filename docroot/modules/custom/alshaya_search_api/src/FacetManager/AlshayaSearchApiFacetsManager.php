@@ -70,9 +70,7 @@ class AlshayaSearchApiFacetsManager extends DefaultFacetManager {
       }
 
       // Sort the facets by block weight.
-      uasort($facets, function ($a, $b) use ($sorted) {
-        return ($sorted[$a->id()] < $sorted[$b->id()]) ? -1 : 1;
-      });
+      uasort($facets, fn($a, $b) => ($sorted[$a->id()] < $sorted[$b->id()]) ? -1 : 1);
     }
 
     return $facets;

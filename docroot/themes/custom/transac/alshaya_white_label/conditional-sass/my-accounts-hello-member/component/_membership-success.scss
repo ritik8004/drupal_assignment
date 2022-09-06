@@ -1,0 +1,87 @@
+#my-accounts-hello-member {
+  .hello-member-popup-form {
+    background: $hello-member-membership-success-popup-bg;
+    text-align: center;
+
+    .hello-membership-info {
+      padding: rem(48) rem(60);
+
+      @include breakpoint($upto-desktop) {
+        padding: rem(40) rem(24);
+      }
+
+      a {
+        text-decoration: underline;
+      }
+
+      .hello-membership- {
+        &title {
+          font-size: rem(32);
+          margin-bottom: rem(24);
+          line-height: 1;
+          color: $hello-member-membership-success-popup-title;
+        }
+
+        &details {
+          .hello-membership-sub-title {
+            font-family: $alshaya-bold;
+            margin-bottom: rem(8);
+            font-size: rem(16);
+            letter-spacing: 0.2px;
+            line-height: 1.5;
+
+            @include breakpoint($upto-desktop) {
+              font-size: rem(14);
+            }
+          }
+
+          .hello-membership-terms {
+            font-size: rem(12);
+            margin-top: 0;
+            text-align: $left;
+
+            @include breakpoint($upto-desktop) {
+              font-size: rem(11);
+            }
+          }
+
+          .hello-membership-continue {
+            text-align: center;
+            padding: rem(36) 0;
+
+            a {
+              @extend %button-wide;
+
+              cursor: pointer;
+              background-color: $primary_btn_bg;
+              color: $primary_btn_text;
+              font-size: rem(16);
+              text-align: center;
+              font-family: $alshaya-bold;
+              width: 75%;
+              text-decoration: none;
+            }
+
+            a:hover {
+              background-color: $hello-member-btn-hover;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .hello_member_popup-content {
+    padding: 0 !important;
+    width: rem(484) !important;
+    border: 0 !important;
+
+    @include breakpoint($only-tablet) {
+      width: 50% !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      width: 95% !important;
+    }
+  }
+}

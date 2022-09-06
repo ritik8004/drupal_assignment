@@ -1,0 +1,63 @@
+.my-membership {
+  .member-name {
+    font-size: rem(20);
+    border-bottom: rem(1) solid $primary_border;
+    padding-bottom: rem(10);
+    margin-top: rem(-8);
+    font-family: $alshaya-bold;
+
+    @include breakpoint($only-tablet) {
+      margin-top: rem(7);
+    }
+  }
+
+  .points-block {
+    background: $hello-member-points-block-bg;
+    padding: rem(16) rem(14);
+    margin: rem(36) 0 rem(45);
+
+    @include breakpoint($only-tablet) {
+      padding: rem(16) rem(4);
+      margin-top: rem(36);
+    }
+
+    .my-points {
+      font-size: rem(27);
+      letter-spacing: 1.35px;
+      font-family: $alshaya-bold;
+
+      @include breakpoint($only-tablet) {
+        font-size: rem(20);
+      }
+
+      span {
+        margin-#{$right}: rem(8);
+      }
+    }
+
+    .my-points-details {
+      font-size: rem(12);
+      letter-spacing: 0.6px;
+      margin-top: rem(26);
+    }
+
+    .my-membership-id {
+      font-size: rem(11);
+      color: $hello-member-points-block-light-txt;
+      text-align: center;
+      margin-top: rem(10);
+      letter-spacing: 1.5px;
+    }
+
+    .qr-code-button {
+      margin-top: rem(36);
+    }
+  }
+}
+
+.qr-code-block {
+  .img-container {
+    width: rem(221);
+    padding: rem(20);
+  }
+}

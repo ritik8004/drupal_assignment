@@ -192,7 +192,7 @@ class StockManager {
       return 0;
     }
 
-    // @TODO: For now there is no scenario in which we have quantity in float.
+    // @todo For now there is no scenario in which we have quantity in float.
     // We have kept the database field to match what is there in MDC and code
     // can be updated later to match that. Casting it to int for now.
     return (int) $stock['quantity'];
@@ -362,7 +362,7 @@ class StockManager {
     // Sanity check.
     if (!isset($stock['sku']) || !strlen($stock['sku'])) {
       $this->logger->error('Invalid or empty product SKU. Stock message: @message', [
-        '@message' => json_encode($stock),
+        '@message' => json_encode($stock, JSON_THROW_ON_ERROR),
       ]);
 
       return;
@@ -377,7 +377,7 @@ class StockManager {
       if (empty($langcode)) {
         // It could be for a different store/website, don't do anything.
         $this->logger->info('Ignored stock message for different store. Message: @message', [
-          '@message' => json_encode($stock),
+          '@message' => json_encode($stock, JSON_THROW_ON_ERROR),
         ]);
 
         return;
@@ -387,16 +387,15 @@ class StockManager {
     // We get qty in product data and quantity in stock push or from stock api.
     $quantity = array_key_exists('qty', $stock) ? $stock['qty'] : $stock['quantity'];
     $stock_status = isset($stock['is_in_stock']) ? (int) $stock['is_in_stock'] : 1;
-    $max_sale_qty = isset($stock['max_sale_qty']) ? $stock['max_sale_qty'] : NULL;
-    $use_config_max_sale_qty = isset($stock['use_config_max_sale_qty'])
-      ? $stock['use_config_max_sale_qty'] : FALSE;
+    $max_sale_qty = $stock['max_sale_qty'] ?? NULL;
+    $use_config_max_sale_qty = $stock['use_config_max_sale_qty'] ?? FALSE;
 
     $changed = $this->updateStock($stock['sku'], $quantity, $stock_status, $max_sale_qty, $use_config_max_sale_qty);
 
     $this->logger->info('@operation stock for sku @sku. Message: @message', [
       '@operation' => $changed ? 'Updated' : 'Processed',
       '@sku' => $stock['sku'],
-      '@message' => json_encode($stock),
+      '@message' => json_encode($stock, JSON_THROW_ON_ERROR),
     ]);
   }
 

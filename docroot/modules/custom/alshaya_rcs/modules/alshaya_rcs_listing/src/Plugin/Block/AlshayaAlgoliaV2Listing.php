@@ -17,8 +17,8 @@ use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
  */
 class AlshayaAlgoliaV2Listing extends AlshayaAlgoliaReactBlockBase {
 
-  const PAGE_TYPE = 'listing';
-  const PAGE_SUB_TYPE = 'plp';
+  public const PAGE_TYPE = 'listing';
+  public const PAGE_SUB_TYPE = 'plp';
 
   /**
    * The Alshaya Algolia React Config.

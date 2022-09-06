@@ -83,6 +83,7 @@ class CountrySwitcherBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
+    $output = [];
     $hreflangsFiltered = [];
     // Fetch hreflang_external metatag from taxonomy_term__acq_product_category.
     // If empty fallback to global.

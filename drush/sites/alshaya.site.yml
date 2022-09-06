@@ -23,7 +23,7 @@ vm:
   host: alshaya01dev.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01dev
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01dev2'.
@@ -39,7 +39,7 @@ vm:
   host: alshaya01dev2.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01dev2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01dev2up'.
@@ -55,7 +55,7 @@ vm:
   host: alshaya01dev2up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01dev2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01dev3'.
@@ -71,7 +71,7 @@ vm:
   host: alshaya01dev3.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01dev3
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01dev3up'.
@@ -87,7 +87,7 @@ vm:
   host: alshaya01dev3up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01dev3up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01devup'.
@@ -103,7 +103,7 @@ vm:
   host: alshaya01devup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01devup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01live'.
@@ -119,7 +119,7 @@ vm:
   host: alshaya01live.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01live
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01pprod'.
@@ -135,7 +135,7 @@ vm:
   host: alshaya01pprod.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01pprod
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01pprodup'.
@@ -151,7 +151,7 @@ vm:
   host: alshaya01pprodup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01pprodup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01qa2'.
@@ -167,7 +167,7 @@ vm:
   host: alshaya01qa2.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01qa2
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01qa2up'.
@@ -183,7 +183,7 @@ vm:
   host: alshaya01qa2up.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01qa2up
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01qaup'.
@@ -199,7 +199,7 @@ vm:
   host: alshaya01qaup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01qaup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01test'.
@@ -215,7 +215,7 @@ vm:
   host: alshaya01test.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01test
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01testup'.
@@ -231,7 +231,7 @@ vm:
   host: alshaya01testup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01testup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01uat'.
@@ -247,7 +247,7 @@ vm:
   host: alshaya01uat.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01uat
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01uatup'.
@@ -263,7 +263,7 @@ vm:
   host: alshaya01uatup.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01uatup
   paths:
-    drush-script: drush9
+    drush-script: drush
 
 
 # Application 'alshaya', environment '01update'.
@@ -279,4 +279,4 @@ vm:
   host: alshaya01update.ssh.enterprise-g1.acquia-sites.com
   user: alshaya.01update
   paths:
-    drush-script: drush9
+    drush-script: drush

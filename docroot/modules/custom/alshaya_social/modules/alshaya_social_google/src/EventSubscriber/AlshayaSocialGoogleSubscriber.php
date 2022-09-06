@@ -47,6 +47,7 @@ class AlshayaSocialGoogleSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[SocialAuthEvents::USER_FIELDS][] = ['onUserFields'];
     return $events;
   }

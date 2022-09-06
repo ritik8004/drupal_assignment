@@ -1,0 +1,10 @@
+name: Alshaya Hello Member
+type: module
+description: 'Implements hello member feature.'
+package: 'Alshaya'
+core_version_requirement: ^8 || ^9
+dependencies:
+  - alshaya_spc:alshaya_spc
+  - alshaya_aura_react:alshaya_aura_react
+  - alshaya_react:alshaya_react
+  - alshaya_master:alshaya_master

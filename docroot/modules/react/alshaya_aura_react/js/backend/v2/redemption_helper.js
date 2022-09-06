@@ -1,5 +1,6 @@
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../../js/utilities/error';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
 /**
@@ -20,18 +21,20 @@ const prepareRedeemPointsData = (data, cartId) => {
     return getErrorResponse('Action value is required.', 404);
   }
 
+  const cartIdKey = isUserAuthenticated() ? 'quote_id' : 'masked_quote_id';
+
   if (data.action === 'remove points') {
     processedData = {
       redeemPoints: {
         action: 'remove points',
-        quote_id: hasValue(cartId) ? cartId : '',
+        [cartIdKey]: hasValue(cartId) ? cartId : '',
       },
     };
   } else if (data.action === 'set points') {
     processedData = {
       redeemPoints: {
         action: 'set points',
-        quote_id: hasValue(cartId) ? cartId : '',
+        [cartIdKey]: hasValue(cartId) ? cartId : '',
         redeem_points: hasValue(data.redeemPoints) ? data.redeemPoints : '',
         converted_money_value: hasValue(data.moneyValue) ? data.moneyValue : '',
         currencyCode: hasValue(data.currencyCode) ? data.currencyCode : '',
@@ -69,7 +72,7 @@ const prepareRedeemPointsData = (data, cartId) => {
  * @returns {Object}
  *   Points and other data in case of success or error in case of failure.
  */
-const redeemPoints = (cardNumber, data) => callMagentoApi(`/V1/apc/${cardNumber}/redeem-points`, 'POST', data).then((response) => {
+const redeemPoints = (cardNumber, data) => callMagentoApi(isUserAuthenticated() ? `/V1/apc/${cardNumber}/redeem-points` : `/V1/guest/${cardNumber}/redeem-points`, 'POST', data).then((response) => {
   if (hasValue(response.data.error)) {
     return response.data;
   }
@@ -89,16 +92,17 @@ const redeemPoints = (cardNumber, data) => callMagentoApi(`/V1/apc/${cardNumber}
   };
 
   if (hasValue(response.data.redeem_response)) {
-    responseData.data.paidWithAura = hasValue(response.data.redeem_response.cashback_deducted_value)
-      ? response.data.redeem_response.cashback_deducted_value
+    const redeemResponseData = response.data.redeem_response;
+    responseData.data.paidWithAura = hasValue(redeemResponseData.cashback_deducted_value)
+      ? redeemResponseData.cashback_deducted_value
       : responseData.data.paidWithAura;
 
-    responseData.data.balancePayable = hasValue(response.data.redeem_response.balance_payable)
-      ? response.data.redeem_response.balance_payable
+    responseData.data.balancePayable = hasValue(redeemResponseData.balance_payable)
+      ? redeemResponseData.balance_payable
       : responseData.data.balancePayable;
 
-    responseData.data.balancePoints = hasValue(response.data.redeem_response.house_hold_balance)
-      ? response.data.redeem_response.house_hold_balance
+    responseData.data.balancePoints = hasValue(redeemResponseData.house_hold_balance)
+      ? redeemResponseData.house_hold_balance
       : responseData.data.balancePoints;
   }
 
