@@ -145,6 +145,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
   /**
    * Handle user input for otp field.
+   *
+   * @param {integer} otp
+   *   The OTP received on shipping mobile number.
    */
   handleChange = (otp) => {
     this.setState({
