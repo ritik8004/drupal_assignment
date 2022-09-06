@@ -19,7 +19,7 @@ Feature: Test the My Account functionality
 
   @address
   Scenario: As an authenticated user, I should be able to address to my address book
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks > ul.my-account-nav > li > a.my-account-address-book"
     And I wait 10 seconds
     And I wait for AJAX to finish
     Then I check the address-book form
