@@ -1,4 +1,4 @@
-@javascript @auth @expressDelivery @mujiqauat @bbwsauat @hmaeuat @hmsauat
+@javascript @auth @checkoutPayment @expressDelivery @mujiqauat @bbwsauat s@hmsauat
 Feature: SPC Checkout Express Delivery feature testing for Guest user
 
   Background:
