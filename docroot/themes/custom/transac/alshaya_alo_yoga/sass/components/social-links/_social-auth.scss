@@ -1,0 +1,43 @@
+.block-alshaya-social-login {
+  .alshaya-social {
+    .auth-link {
+      @include quaternaryBtn(true);
+
+      @include breakpoint($tablet) {
+        width: rem(278);
+        max-width: rem(278);
+      }
+
+      &::before {
+        background-size: auto;
+      }
+
+      .social-network-text {
+        font-family: $ay-heavy;
+        font-size: rem(16);
+      }
+    }
+
+    .social_auth_facebook {
+      &::before {
+        background-image: url(#{$ay_theme_img_directory_path}/icons/facebook-f.svg);
+      }
+    }
+
+    .social_auth_google {
+      &::before {
+        background-image: url(#{$ay_theme_img_directory_path}/icons/google.svg);
+      }
+    }
+  }
+}
+
+.block-alshaya-signup-signin-buttons {
+  .link-button {
+    &::before {
+      background: none;
+      height: 0;
+      width: 0;
+    }
+  }
+}

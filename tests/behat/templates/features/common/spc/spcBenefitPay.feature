@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @bbwbhuat @benefit-pay
+@javascript @account @checkoutPayment @smoke @auth @bbwbhuat @benefit-pay
 Feature: Test the BenefitPay payment feature functionality
 
   Background:

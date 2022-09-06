@@ -1,0 +1,85 @@
+.c-user-login,
+.c-user-register,
+.c-user-password {
+  .section-title,
+  #block-alshayasocialloginblock .section-title {
+    @include userLoginSectionTitle;
+
+    @include breakpoint($only-mobile) {
+      font-size: rem(18);
+    }
+  }
+
+  .user-login-form,
+  .user-register-form,
+  .user-pass {
+    >a {
+      font-weight: normal;
+    }
+
+    label.form-required:not(.error),
+    .form-type-textfield label:not(.error) {
+      font-size: rem(14);
+      color: $user_form_text;
+    }
+
+    .form-email,
+    .form-text {
+      font-size: rem(14);
+    }
+
+    .form-submit {
+      @include primaryBtn(true);
+
+      @include breakpoint($tablet) {
+        html[lang=ar] & {
+          width: rem(192);
+        }
+      }
+    }
+  }
+
+  .c-content__region {
+    .user-form {
+      .field--name-field-subscribe-newsletter {
+        p {
+          font-size: rem(10) !important;
+
+          a {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    &.user-page {
+      main {
+        .block-system-main-block {
+          border-#{$right}: rem(1) solid $login_form_border;
+        }
+      }
+    }
+  }
+
+  .block-alshaya-signup-signin-buttons {
+    .link-button {
+      @include secondaryBtn(true);
+
+      @include breakpoint($tablet) {
+        width: rem(278);
+      }
+    }
+  }
+}
+
+.c-user-password {
+  &.user-page {
+    main {
+      .block-system-main-block {
+        border-#{$right}: none;
+      }
+    }
+  }
+}

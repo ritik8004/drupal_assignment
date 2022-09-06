@@ -25,3 +25,27 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  html[lang=ar] {
+    body[class*="-return-confirmation"] {
+      .block-page-title-block {
+        .back-link {
+          &::before {
+            transform: none;
+          }
+        }
+      }
+    }
+
+    .return-confirmation-wrapper {
+      .whats-next-section {
+        .whats-next-wrapper {
+          .refund {
+            width: rem(80);
+          }
+        }
+      }
+    }
+  }
+}

@@ -23,6 +23,7 @@ import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ExpressDeliveryLabel from './ExpressDeliveryLabel';
 import PriceRangeElement from '../price/PriceRangeElement';
+import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelper';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo,
@@ -212,7 +213,6 @@ const Teaser = ({
             className="list-product-gallery product-selected-url"
           >
             <Gallery
-
               media={hit.media}
               title={attribute.title}
               labels={labels}
@@ -232,6 +232,22 @@ const Teaser = ({
               setWishListButtonRef={ref}
             />
           </ConditionalView>
+          {isAddToBagHoverEnabled()
+            && (
+            <div className="quick-add">
+              <AddToBagContainer
+                url={attribute.url}
+                sku={hit.sku}
+                stockQty={hit.stock_quantity}
+                productData={attribute.atb_product_data}
+                isBuyable={attribute.is_buyable}
+                // Pass extra information to the component for update the behaviour.
+                extraInfo={extraInfo}
+                wishListButtonRef={ref}
+                styleCode={hit.attr_style_code ? hit.attr_style_code : null}
+              />
+            </div>
+            )}
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
@@ -304,7 +320,7 @@ const Teaser = ({
           </ConditionalView>
         </div>
         {/* Don't render component on wishlist page if product is OOS. */}
-        <ConditionalView condition={!showOOSButton}>
+        <ConditionalView condition={!showOOSButton && !isAddToBagHoverEnabled()}>
           <AddToBagContainer
             url={attribute.url}
             sku={hit.sku}

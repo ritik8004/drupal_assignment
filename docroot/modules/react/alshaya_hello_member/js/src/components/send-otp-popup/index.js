@@ -137,7 +137,7 @@ class SendOtpPopup extends React.Component {
         // show error message if  otp verification api fails / returns false.
         if (!result.data.status || result.data.error !== undefined) {
           // Set error for OTP field if entered wrong OTP.
-          document.getElementById('input-otp-error').innerHTML = Drupal.t('Please enter valid otp.', {}, { context: 'hello_member' });
+          document.getElementById('input-otp-error').innerHTML = Drupal.t('Please enter valid OTP', {}, { context: 'hello_member' });
           this.setState({
             hasErrored: true,
           });
