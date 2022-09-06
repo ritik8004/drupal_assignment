@@ -1,4 +1,4 @@
-@javascript @QpayPayment @guest @homeDelivery @flqauat
+@javascript @checkoutPayment @QpayPayment @guest @homeDelivery @flqauat
 Feature: SPC Checkout Home Delivery QPAy payment for guest users
 
   Background:

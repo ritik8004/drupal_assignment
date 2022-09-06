@@ -3,11 +3,10 @@ Feature: Test the My Account functionality
 
   Background:
     Given I am on "user/login"
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_new_registered_user_email}"
-    And I fill in "edit-pass" with "{spc_new_registered_user_password}"
+    And I wait for the page to load
+    And I login with "{spc_new_registered_user_email}" using custom password
     Then I press "edit-submit"
-    And I wait 10 seconds
+    And I wait for the page to load
     Then I should be on "/user" page
 
   Scenario: Authenticated user should be able to login into the system
