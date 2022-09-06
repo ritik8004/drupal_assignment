@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @flsauat
+@javascript @account @smoke @auth @checkoutPayment @flsauat
 Feature: Test the PUDO feature functionality
 
   Background:

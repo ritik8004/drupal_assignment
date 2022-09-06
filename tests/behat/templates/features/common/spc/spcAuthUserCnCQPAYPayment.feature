@@ -1,4 +1,4 @@
-@javascript @Qpay @QpayPayment @clickCollect @flqauat
+@javascript @Qpay @QpayPayment @clickCollect @checkoutPayment @flqauat
 Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
 
   Background:

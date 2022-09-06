@@ -3,8 +3,10 @@
 Feature: Add address to new user account.
 
   Background:
-    Given I am logged in as an authenticated user "{spc_new_registered_user_email}" with password "{spc_new_registered_user_password}"
-    And I wait 10 seconds
+    Given I am on "user/login"
+    And I wait for the page to load
+    And I login with "{spc_new_registered_user_email}" using custom password
+    Then I press "edit-submit"
     Then I should be on "/user" page
 
   Scenario: Authenticated user should be able to login into the system
