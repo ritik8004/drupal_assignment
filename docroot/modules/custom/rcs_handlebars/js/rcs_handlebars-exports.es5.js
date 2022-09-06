@@ -35,10 +35,12 @@ function handlebarsRender(id, data) {
 
   // Get the source template.
   const source = templates[id];
+  if (drupalSettings.rcsPhSettings.compiledHandlebars) {
+    return source(data);
+  }
 
   // Compile source.
   const render = Handlebars.compile(source);
-  // const render = Handlebars.template(source);
 
   // Return rendered template using data provided.
   return render(data);

@@ -194,15 +194,12 @@ class HandlebarsService {
     $module_path = drupal_get_path('module', $extension);
     $contents = file_get_contents("$module_path/$path");
 
-    // @todo remove Handlebars comments from templates.
-    // Add comments in the dynamic js to allow Drupal Locale to find
-    // the translatable strings.
+    // Get Translation strings.
     $strings = $this->scanTranslatableStrings($contents);
 
     // Use precompiled handlebar templates if js is preprocessed.
     $optimize_js = $this->configFactory->get('system.performance')->get('js.preprocess');
-    if (!$optimize_js) {
-      $strings = $this->scanTranslatableStrings($contents);
+    if ($optimize_js) {
       $path = str_replace(["handlebars/", ".handlebars"], ["dist/", '.js'], $path);
       $contents = file_get_contents("$module_path/$path");
       $contents .= "\n// $strings\n";
