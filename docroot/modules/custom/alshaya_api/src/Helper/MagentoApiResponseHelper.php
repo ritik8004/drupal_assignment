@@ -43,11 +43,13 @@ class MagentoApiResponseHelper {
       'email'  => (string) ($customer['email'] ?? ''),
       'firstname' => (string) ($customer['firstname'] ?? ''),
       'lastname' => (string) ($customer['lastname'] ?? ''),
+      'dob' => (string) ($customer['dob'] ?? ''),
       'title' => (string) ($customer['prefix'] ?? ''),
       'created' => (string) ($customer['created_at'] ?? ''),
       'updated' => (string) ($customer['updated_at'] ?? ''),
       'addresses' => $addresses,
       'extension' => $extension,
+      'extension_attributes' => $customer['extension_attributes'] ?? [],
     ];
   }
 
