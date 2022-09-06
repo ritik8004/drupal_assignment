@@ -39,8 +39,6 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
-    Then I select the Checkout payment method
-    And I wait for AJAX to finish
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
