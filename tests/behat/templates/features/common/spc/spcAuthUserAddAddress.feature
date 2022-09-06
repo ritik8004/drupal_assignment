@@ -10,7 +10,7 @@ Feature: Test the adding address to existing user account
     Then I should be on "/user" page
 
   Scenario: As an authenticated user, I should be able to add a new address to my address book
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks > ul.my-account-nav > li > a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
     Then I click on "#block-content a" element
