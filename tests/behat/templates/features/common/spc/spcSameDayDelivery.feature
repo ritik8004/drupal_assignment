@@ -1,4 +1,4 @@
-@javascript @auth @same-dayDelivery @mujiqauat @bbwsauat @hmaeuat @hmsauat
+@javascript @auth @checkoutPayment @same-dayDelivery @mujiqauat @bbwsauat @hmaeuat @hmsauat
 Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
 
   Background:
