@@ -1,8 +1,28 @@
-{% if steps.bagclass %}
-<div>
-  <div class="steps {{ steps.bagclass }}"><a href = "/cart">{{ "Bag"|t({}, {'context' : 'tracker'}) }}</a></div>
-  <div class="steps {{ steps.signinclass }}"><a href = "/cart/login">{{ "Sign in"|t({}, {'context' : 'tracker'}) }}</a></div>
-  <div class="steps {{ steps.checkoutclass }}"><a href = "/checkout">{{ "Delivery"|t({}, {'context' : 'tracker'}) }}</a></div>
-  <div class="steps {{ steps.deliveryclass }}">{{ "confirmation"|t({}, {'context' : 'tracker'}) }}</div>
+<div class="cko-progress-tracker">
+  <div class="step-{{ steps.stepcount }}" id="checkout-progress" data-current-step="{{ steps.stepcount }}">
+    <div class="progress-bar">
+      <div class="step step-1 {{ steps.bagclass }}">
+        <a href = "/cart">
+          <span> 1</span>
+          <div class="step-label">{{ "Bag"|t({}, {'context' : 'alshaya_checkout_tracker'}) }}</div>
+        </a>
+      </div>
+      <div class="step step-2 {{ steps.signinclass }}">
+        <a href = "/cart/login">
+          <span> 2</span>
+          <div class="step-label">{{ "Sign in"|t({}, {'context' : 'alshaya_checkout_tracker'}) }}</div>
+        </a>
+      </div>
+      <div class="step step-3 {{ steps.checkoutclass }}">
+        <a href = "/checkout">
+          <span> 3</span>
+          <div class="step-label">{{ "Delivery"|t({}, {'context' : 'alshaya_checkout_tracker'}) }}</div>
+        </a>
+      </div>
+      <div class="step step-4 {{ steps.deliveryclass }}">
+        <span> 4</span>
+        <div class="step-label">{{ "confirmation"|t({}, {'context' : 'alshaya_checkout_tracker'}) }}</div>
+      </div>
+    </div>
+  </div>
 </div>
-{% endif %}

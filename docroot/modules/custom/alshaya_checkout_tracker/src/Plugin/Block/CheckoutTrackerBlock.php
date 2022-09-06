@@ -3,8 +3,9 @@
 namespace Drupal\alshaya_checkout_tracker\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -26,13 +27,6 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $routeMatch;
 
   /**
-   * Stores the configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * Constructs a new CheckoutTrackerBlock plugin.
    *
    * @param array $configuration
@@ -43,13 +37,10 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Private temp store service.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The factory for configuration objects.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, ConfigFactoryInterface $config_factory) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
-    $this->configFactory = $config_factory;
   }
 
   /**
@@ -60,8 +51,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_route_match'),
-      $container->get('config.factory')
+      $container->get('current_route_match')
     );
   }
 
@@ -75,29 +65,38 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
     $checkout = NULL;
     $confirmation = NULL;
 
-    if ($route_name == 'acq_cart.cart') {
-      $bag = 'current';
-      $signin = '';
-      $checkout = '';
-      $confirmation = '';
-    }
-    if ($route_name == 'alshaya_spc.checkout.login') {
-      $bag = 'completed';
-      $signin = 'current';
-      $checkout = '';
-      $confirmation = '';
-    }
-    if ($route_name == 'alshaya_spc.checkout') {
-      $bag = 'completed';
-      $signin = 'completed';
-      $checkout = 'current';
-      $confirmation = '';
-    }
-    if ($route_name == 'alshaya_spc.checkout.confirmation') {
-      $bag = 'completed';
-      $signin = 'completed';
-      $checkout = 'completed';
-      $confirmation = 'current';
+    switch ($route_name) {
+      case 'acq_cart.cart':
+        $stepcount = 1;
+        $bag = 'active';
+        $signin = '';
+        $checkout = '';
+        $confirmation = '';
+        break;
+
+      case 'alshaya_spc.checkout.login':
+        $stepcount = 2;
+        $bag = 'completed';
+        $signin = 'active';
+        $checkout = '';
+        $confirmation = '';
+        break;
+
+      case 'alshaya_spc.checkout':
+        $stepcount = 3;
+        $bag = 'completed';
+        $signin = 'completed';
+        $checkout = 'active';
+        $confirmation = '';
+        break;
+
+      case 'alshaya_spc.checkout.confirmation':
+        $stepcount = 4;
+        $bag = 'completed';
+        $signin = 'completed';
+        $checkout = 'completed';
+        $confirmation = 'active';
+        break;
     }
 
     return [
@@ -107,15 +106,22 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
         'signinclass' => $signin,
         'checkoutclass' => $checkout,
         'deliveryclass' => $confirmation,
+        'stepcount' => $stepcount,
       ],
+      '#cache' => ['max-age' => 0],
     ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge() {
-    return 0;
+  protected function blockAccess(AccountInterface $account) {
+    $route_name = $this->routeMatch->getRouteName();
+
+    // Show block for specific routes.
+    return AccessResult::allowedIf(
+      $route_name === 'acq_cart.cart' || $route_name === 'alshaya_spc.checkout.login' || $route_name === 'alshaya_spc.checkout' || $route_name === 'alshaya_spc.checkout.confirmation'
+    );
   }
 
 }

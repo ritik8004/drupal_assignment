@@ -16,4 +16,9 @@ settings:
   label: 'Checkout tracker block'
   provider: alshaya_checkout_tracker
   label_display: '0'
-visibility: { }
+visibility: 
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/cart\r\n/checkout\r\n/cart/login\r\n/checkout/confirmation"
+    context_mapping: {  }

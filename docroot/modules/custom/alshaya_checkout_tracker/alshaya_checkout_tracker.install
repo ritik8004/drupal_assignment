@@ -9,7 +9,6 @@
  * Implements hook_install().
  */
 function alshaya_checkout_tracker_install() {
-
   alshaya_block_move_blocks_theme_to_theme(
     \Drupal::service('theme_handler')->getDefault(),
     'alshaya_white_label'

@@ -13,19 +13,19 @@ function _alshaya_checkout_tracker_translations() {
     'v1' => [
       'Bag' => [
         'ar' => 'الشروط والأحكام',
-        'context' => 'tracker',
+        'context' => 'alshaya_checkout_tracker',
       ],
       'Sign in' => [
         'ar' => 'الشروط والأحكام',
-        'context' => 'tracker',
+        'context' => 'alshaya_checkout_tracker',
       ],
       'Delivery' => [
         'ar' => 'الشروط والأحكام',
-        'context' => 'tracker',
+        'context' => 'alshaya_checkout_tracker',
       ],
       'confirmation' => [
         'ar' => 'الشروط والأحكام',
-        'context' => 'tracker',
+        'context' => 'alshaya_checkout_tracker',
       ],
     ],
   ];
