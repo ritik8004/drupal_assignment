@@ -27,6 +27,8 @@ class PaymentMethodCodMobileVerification extends React.Component {
       otpVerified,
       otpValidClass: '',
     };
+
+    this.validateDelay = {};
   }
 
   componentDidMount = () => {
@@ -147,6 +149,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
   handleChange = (otp) => {
     this.setState({
       otp,
+      otpVerified: 0,
     }, () => this.handleOtpSubmit());
   };
 
@@ -154,15 +157,15 @@ class PaymentMethodCodMobileVerification extends React.Component {
    * Handle Otp form submit.
    */
   handleOtpSubmit = (e) => {
+    // Clear 2 second timeout if user changes otp input.
+    clearTimeout(this.validateDelay);
+
     if (e) {
       e.preventDefault();
     }
 
     // Get otp from state.
     const { otp } = this.state;
-
-    // Get shipping mobile number from props.
-    const { shippingMobileNumber } = this.props;
 
     // Get allowed otp length from props.
     const { otpLength } = this.props;
@@ -173,10 +176,24 @@ class PaymentMethodCodMobileVerification extends React.Component {
       return false;
     }
 
+    // Wait 2 seconds for user to finish the input, then request validate otp.
+    this.validateDelay = setTimeout(() => {
+      this.validateOtp(otp);
+    }, 2000);
+
+    return true;
+  };
+
+  /**
+   * Helper function to validate otp.
+   */
+  validateOtp = (otp) => {
+    // Get shipping mobile number from props.
+    const { shippingMobileNumber } = this.props;
+
     // Show loader for validate otp request.
     this.setState({
       wait: true,
-      otpVerified: 0,
     });
 
     // Prepare params for endpoint.
@@ -187,7 +204,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
     };
 
     // Validate otp enter by the user.
-    callMagentoApi(getApiEndpoint('codMobileVerificationValidateOtp', params), 'GET')
+    return callMagentoApi(getApiEndpoint('codMobileVerificationValidateOtp', params), 'GET')
       .then((response) => {
         if (hasValue(response) && !response.data) {
           // Trigger gtm event cod_otp_verification with action verification.
@@ -276,8 +293,6 @@ class PaymentMethodCodMobileVerification extends React.Component {
           wait: false,
         });
       });
-
-    return true;
   };
 
   /**
@@ -311,17 +326,6 @@ class PaymentMethodCodMobileVerification extends React.Component {
       otpErrorMessage = getDefaultErrorMessage();
     }
 
-    let otpInputIsDisable = false;
-    if (otp.length === parseInt(otpLength, 10)) {
-      // Disable otp input as soon as user enters all digits.
-      otpInputIsDisable = true;
-    }
-
-    if (otpVerified > 2) {
-      // Enable otp input if user enters wrong otp or error response.
-      otpInputIsDisable = false;
-    }
-
     return (
       <div className="cod-mobile-otp">
         {wait && <Loading />}
@@ -336,7 +340,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
             numInputs={otpLength}
             isInputNum
             className={(otpVerified === 3 || otpVerified === 4) ? 'cod-mobile-otp__field error' : `cod-mobile-otp__field ${otpValidClass}`}
-            isDisabled={otpInputIsDisable}
+            isDisabled={wait}
           />
           <div id="otp-error" className="error">
             { otpErrorMessage }
