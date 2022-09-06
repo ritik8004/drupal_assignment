@@ -8,6 +8,37 @@
 global $magentos;
 
 $magentos = [
+  // Alo Yoga
+  'ay_qa' => [
+    'url' => 'https://alo-qa.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'zitdukk0e6zwr9piei0csgk372shqafm',
+      'consumer_secret' => '8a6w1g813pnyikoi2ksaej73cx65fcnf',
+      'access_token' => 'opqugvg6ycfsd7dy6f6t8wb3gn5mljry',
+      'access_token_secret' => 'lfuy25m63a1o5uuisnomac5z0d5o3a3w',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 40],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 28, 'ar' => 31],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 34, 'ar' => 37],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 7, 'ar' => 4],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 13, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+  ],
   // Debenhams.
   'dh_qa' => [
     'url' => 'https://integration-5ojmyuq-gqhhjajenogck.eu-3.magentosite.cloud',

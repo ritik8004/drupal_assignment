@@ -315,31 +315,31 @@ sites:
     type: alshaya_transac
     country: jo
   aykw:
-    module: alshaya_ay
+    module: alshaya_ay_transac_rcs
     type: alshaya_transac
     country: kw
   aysa:
-    module: alshaya_ay
+    module: alshaya_ay_transac_rcs
     type: alshaya_transac
     country: sa
   ayae:
-    module: alshaya_ay
+    module: alshaya_ay_transac_rcs
     type: alshaya_transac
     country: ae
   ayeg:
-    module: alshaya_ay
+    module: alshaya_ay_transac_rcs
     type: alshaya_transac
     country: eg
   aybh:
-    module: alshaya_ay
+    module: alshaya_ay_transac_rcs
     type: alshaya_transac
     country: bh
   ayqa:
-    module: alshaya_ay
+    module: alshaya_ay_transac_rcs
     type: alshaya_transac
     country: qa
   ayjo:
-    module: alshaya_ay
+    module: alshaya_ay_transac_rcs
     type: alshaya_transac
     country: jo
   nbkw:
