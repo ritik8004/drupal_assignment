@@ -190,3 +190,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css: css/conditional-sass/rcs-product-related/rcs-product-related.ltr.css
+
+  alshaya_white_label/checkout-cod-mobile-verification:
+    css:
+      theme:
+        css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css
