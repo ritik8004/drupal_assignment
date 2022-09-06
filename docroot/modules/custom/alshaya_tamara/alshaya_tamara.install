@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_tamara module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_tamara_install() {
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+  // Create taxonomy term for the new method.
+  $tamara = $checkout_options_manager->loadPaymentMethod('tamara', '3 interest-free payments');
+
+  $tamara_ar = $tamara->hasTranslation('ar')
+    ? $tamara->getTranslation('ar')
+    : $tamara->addTranslation('ar', []);
+  $tamara_ar->setName('3 مدفوعات بدون فوائد');
+  $tamara_ar->save();
+
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+
+  // Disable the new payment by default.
+  $exclude_payment_methods = $config->get('exclude_payment_methods');
+  $exclude_payment_methods['tamara'] = 'tamara';
+  $config->set('exclude_payment_methods', $exclude_payment_methods);
+
+  // Exclude the new method from refunds too by default.
+  $refund_exclude_payment_methods = $config->get('refund_exclude_payment_methods');
+  $refund_exclude_payment_methods['tamara'] = 'tamara';
+  $config->set('refund_exclude_payment_methods', $refund_exclude_payment_methods);
+
+  $config->save();
+
+  $strings = [
+    'Continue with tamara' => [
+      'ar' => 'تواصل مع تمارا',
+      'context' => 'tamara',
+    ],
+    'Your tamara order has been cancelled' => [
+      'ar' => 'تم إلغاء طلب تمارا الخاص بك',
+      'context' => 'tamara',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

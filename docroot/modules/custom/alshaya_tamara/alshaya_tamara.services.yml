@@ -1,0 +1,6 @@
+services:
+  alshaya_tamara.widget_helper:
+    class: Drupal\alshaya_tamara\AlshayaTamaraWidgetHelper
+    arguments:
+      - '@config.factory'
+      - '@logger.factory'

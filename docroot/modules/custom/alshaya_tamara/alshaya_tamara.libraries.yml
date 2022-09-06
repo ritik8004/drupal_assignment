@@ -1,0 +1,10 @@
+tamara_instalment_plan:
+  js:
+    https://cdn.tamara.co/widget/installment-plan.min.js: { type: external }
+
+tamara_checkout:
+  version: 1.0
+  js:
+    js/tamara_checkout.js: { }
+  dependencies:
+    - alshaya_tamara/tamara_instalment_plan
