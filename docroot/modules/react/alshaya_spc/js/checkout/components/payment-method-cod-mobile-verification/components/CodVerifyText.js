@@ -22,7 +22,7 @@ const CodVerifyText = ({ mobileNumber, otpLength }) => {
           },
         }, {})}
       >
-        {Drupal.t('change', {}, { context: 'cod_mobile_verification' })}
+        {Drupal.t('Change', {}, { context: 'cod_mobile_verification' })}
       </button>
     </div>
   );

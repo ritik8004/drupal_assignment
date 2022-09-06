@@ -596,7 +596,7 @@ function _alshaya_spc_translations() {
       'ar' => 'أدخل رمز التحقق @otp_length-digit المرسل إلى @mobile_number',
       'context' => 'cod_mobile_verification',
     ],
-    'change' => [
+    'Change' => [
       'ar' => 'تغيير',
       'context' => 'cod_mobile_verification',
     ],
