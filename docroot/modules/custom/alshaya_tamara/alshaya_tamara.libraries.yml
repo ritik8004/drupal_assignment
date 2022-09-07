@@ -1,4 +1,4 @@
-tamara_instalment_plan:
+tamara_installment_plan:
   js:
     https://cdn.tamara.co/widget/installment-plan.min.js: { type: external }
 
@@ -7,4 +7,4 @@ tamara_checkout:
   js:
     js/tamara_checkout.js: { }
   dependencies:
-    - alshaya_tamara/tamara_instalment_plan
+    - alshaya_tamara/tamara_installment_plan
