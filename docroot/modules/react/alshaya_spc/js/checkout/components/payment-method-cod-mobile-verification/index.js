@@ -28,9 +28,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
       otpValidClass: '',
     };
 
-    // This stores the setTimeout object in handleChange
-    // and used to clear timeout in case user changes input before timeout
-    // or clicks the verify CTA.
+    // Used to set a delay after last user input and auto-submit the form.
     this.validateDelay = null;
   }
 
