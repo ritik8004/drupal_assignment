@@ -33,14 +33,17 @@ function handlebarsRender(id, data) {
     }
   });
 
-  // Get the source template.
-  const source = templates[id];
-  if (drupalSettings.rcsPhSettings.compiledHandlebars) {
-    return source(data);
+  // Get the source/pre-compiled template.
+  const template = templates[id];
+  if (!Drupal.hasValue(template)) {
+    throw new Error("HandlebarJS template not found for id:." + id);
+  }
+  if (drupalSettings.rcsHandlebars.compiledHandlebars) {
+    return template(data);
   }
 
-  // Compile source.
-  const render = Handlebars.compile(source);
+  // Compile source template.
+  const render = Handlebars.compile(template);
 
   // Return rendered template using data provided.
   return render(data);

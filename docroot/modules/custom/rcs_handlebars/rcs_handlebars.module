@@ -39,6 +39,6 @@ function rcs_handlebars_page_attachments_alter(array &$attachments) {
   }
 
   $optimize_js = \Drupal::config('system.performance')->get('js.preprocess');
-  $attachments['#attached']['drupalSettings']['rcsPhSettings']['compiledHandlebars'] = $optimize_js;
+  $attachments['#attached']['drupalSettings']['rcsHandlebars']['compiledHandlebars'] = $optimize_js;
 
 }

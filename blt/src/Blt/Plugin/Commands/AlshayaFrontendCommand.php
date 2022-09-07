@@ -612,7 +612,7 @@ class AlshayaFrontendCommand extends BltTasks {
       // Create dist folder if does not exists and
       // Pre-compile HandlebarsJs template.
       $dist_dir = implode('/', $path_arr);
-      $tasks->exec("cd $docroot; mkdir -p $dist_dir;
+      $tasks->exec("cd $docroot && mkdir -p $dist_dir &&
         ./node_modules/.bin/handlebars $handlebarFilePath -f $jsFilePath -n window.rcsHandlebarsTemplates"
       );
     }

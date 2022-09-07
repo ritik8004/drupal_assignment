@@ -250,7 +250,7 @@ class HandlebarsService {
           ? ['rcs_handlebars/main']
           : array_merge(
               $library['dependencies'],
-              ['rcs_handlebars/main', 'rcs_handlebars/handlbarjs']
+              ['rcs_handlebars/main']
             );
       }
     }
