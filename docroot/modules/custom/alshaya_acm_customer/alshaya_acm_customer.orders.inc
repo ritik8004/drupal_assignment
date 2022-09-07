@@ -154,8 +154,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   if ($orderDetails['is_pudo_pickup']) {
     // We get `price_amount` i.e collection charge values like "5" or "Free"
     // so the below check to display accordingly.
-    $price_amount = $order['shipping']['extension_attributes']['price_amount'];
-    $orderDetails['delivery_charge'] = alshaya_acm_price_format($price_amount);
+    $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['extension_attributes']['price_amount']);
   }
   else {
     $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping']);
