@@ -179,8 +179,8 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عرض الرقم التعريفي للعضوية',
         'context' => 'hello_member',
       ],
-      'To redeem in store use this QR code.' => [
-        'ar' => 'لتفعيل هذا العرض في محلاتنا استخدم هذا الرمز',
+      'Member ID' => [
+        'ar' => 'الرقم التعريفي للعضوية',
         'context' => 'hello_member',
       ],
       'Submit Rating and Review' => [
