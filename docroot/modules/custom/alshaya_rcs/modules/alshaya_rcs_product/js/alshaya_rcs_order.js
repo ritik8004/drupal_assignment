@@ -6,6 +6,7 @@
   var staticDataStore = {
     recentOrdersData: {},
     orderDetailsData: {},
+    productData: {},
   };
 
   /**
@@ -111,6 +112,25 @@
   }
 
   /**
+   * Fetches product data for order details from Backend.
+   *
+   * @param {String} sku
+   *   SKU value.
+   *
+   * @returns {Promise}
+   *   Product data.
+   */
+  function getOrdersDetailsProductDataFromBackend(sku) {
+    if (staticDataStore.productData[sku]) {
+      return staticDataStore.productData[sku];
+    }
+
+    staticDataStore.productData[sku] =  globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku});
+    return staticDataStore.productData[sku];
+  }
+
+
+  /**
    * Get individual product data for recent orders section.
    *
    * @param {string} child
@@ -175,11 +195,7 @@
    *   Product data for recent orders.
    */
   function getProductDataOrderDetails(child, parent) {
-    if (Drupal.hasValue(staticDataStore.orderDetailsData[child])){
-      return staticDataStore.orderDetailsData[child];
-    }
-
-    staticDataStore.orderDetailsData[child] = globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku: parent}).then(function onOrderDetailsFetched(response) {
+    return getOrdersDetailsProductDataFromBackend(parent).then(function onOrderDetailsFetched(response) {
       var data = {};
       try {
         if (response.data.products.total_count) {
@@ -215,8 +231,6 @@
         return {sku: child};
       }
     });
-
-    return staticDataStore.orderDetailsData[child];
   }
 
   /**
