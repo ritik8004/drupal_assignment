@@ -1,0 +1,400 @@
+.c-footer-primary {
+  border-top: 1px solid $gray;
+  padding: 0;
+
+  .l-container {
+    max-width: 77.125rem;
+    padding: rem(18) rem(50);
+  }
+
+  @include breakpoint($only-mobile) {
+    .l-container {
+      padding: 0;
+    }
+  }
+
+  .language-switcher-language-url {
+    ul {
+      li {
+        a {
+          color: $primary_text;
+          font-family: $nb-nova-regular;
+          font-size: rem(16);
+          text-transform: capitalize;
+          font-weight: 400;
+          letter-spacing: 0.063rem;
+        }
+
+        &.is-active {
+          color: $primary_text;
+        }
+
+        &.en.is-active a {
+          font-family: $nb-nova-regular-nodir;
+          color: $primary_text;
+        }
+
+        &:first-child {
+          &::after {
+            content: none;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($upto-tablet) {
+      padding-bottom: rem(12);
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-top: rem(32);
+    }
+  }
+
+  .c-social-links {
+    h3 {
+      font-size: rem(16);
+      font-weight: 400;
+      line-height: 1.25;
+      font-family: $nb-nova-regular;
+      letter-spacing: 0.5;
+      color: $primary_text;
+    }
+  }
+
+  .footer--abouthelp {
+    .c-footer-menu--about {
+      .c-footer-menu__title {
+        a {
+          font-size: rem(14);
+          line-height: 2.125;
+        }
+      }
+    }
+  }
+
+  .footer--abouthelp,
+  .c-footer-menu--about,
+  .alshaya-newsletter-subscribe,
+  .c-footer-menu--category,
+  .c-footer-menu__title {
+    h3 {
+      font-size: rem(16);
+      font-weight: 400;
+      line-height: 1.25;
+      font-family: $nb-nova-regular;
+      letter-spacing: 0.063rem;
+      color: $primary_text;
+    }
+
+    a {
+      font-size: rem(14);
+      font-weight: 400;
+      letter-spacing: 0.01rem;
+      line-height: rem(34);
+    }
+  }
+
+  .c-footer-menu__title {
+    a {
+      font-size: rem(14);
+      font-weight: 400;
+      line-height: rem(34);
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .footer--abouthelp {
+      .c-footer-menu--about {
+        h3 {
+          padding: 1.688rem 2.313rem;
+        }
+      }
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($desktop) {
+      width: 30%;
+    }
+
+    .c-footer-menu--category {
+      h3 {
+        font-size: rem(16);
+        margin-top: rem(16);
+        margin-bottom: rem(5);
+        text-transform: none;
+
+        @include breakpoint($only-mobile) {
+          display: flex;
+          margin: 0;
+          align-items: center;
+          font-family: $alshaya-thin;
+          padding: rem(14) rem(8);
+        }
+      }
+
+      .accordion--body {
+        @include breakpoint($upto-tablet) {
+          padding-#{$left}: rem(8);
+        }
+      }
+    }
+
+    .c-footer-menu__tab {
+      padding-bottom: rem(10);
+      width: max-content;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: rem(0);
+      }
+
+      a {
+        font-family: $alshaya-thin;
+        line-height: 2.25;
+        font-size: rem(14);
+
+        @include breakpoint($only-mobile) {
+          line-height: 1;
+        }
+      }
+    }
+  }
+
+  .footer--abouthelp {
+    @include breakpoint($desktop) {
+      display: flex;
+      width: 70%;
+    }
+
+    .c-footer-menu--about,
+    .c-footer-menu--help {
+      h3 {
+        font-size: rem(16);
+        margin-top: rem(16);
+        margin-bottom: rem(5);
+        text-transform: none;
+
+        @include breakpoint($only-mobile) {
+          display: flex;
+          margin: 0;
+          align-items: center;
+          // border-top: rem(1) solid $footer_title_h3;
+          font-family: $alshaya-thin;
+          padding: rem(14) rem(8);
+        }
+      }
+
+      .c-footer-menu__title {
+        padding-bottom: rem(10);
+        width: max-content;
+
+        a {
+          font-family: $alshaya-thin;
+          line-height: 2.25;
+          font-size: rem(14);
+
+          @include breakpoint($only-mobile) {
+            line-height: 1;
+          }
+        }
+      }
+
+      .accordion--body {
+        @include breakpoint($upto-tablet) {
+          padding-#{$left}: rem(37);
+        }
+      }
+
+      .c-footer-menu__title {
+        @include breakpoint($upto-tablet) {
+          padding-bottom: rem(0);
+        }
+      }
+    }
+
+    .c-footer-menu--about {
+      @include breakpoint($desktop) {
+        width: 58%;
+      }
+    }
+
+    .c-footer-menu--help {
+      @include breakpoint($desktop) {
+        width: 30%;
+      }
+    }
+
+    .c-footer-menu--help {
+      @include breakpoint($only-mobile) {
+        border-bottom: 1px solid $gray;
+      }
+    }
+  }
+
+  .alshaya-newsletter-subscribe {
+    h3 {
+      font-size: rem(16);
+      margin-top: rem(16);
+      margin-bottom: rem(18);
+      text-transform: unset;
+
+      @include breakpoint($upto-tablet) {
+        text-align: $left;
+        // font-family: $ay-nova-semibold;
+      }
+    }
+
+    .newsletter-block-label {
+      display: none;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: rem(0) rem(16);
+    }
+
+    @include breakpoint($only-tablet) {
+      min-width: initial;
+      margin-bottom: rem(45);
+    }
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: rem(18);
+
+      #footer-newsletter-form-wrapper {
+        width: auto;
+      }
+    }
+
+    #edit-email {
+      padding-#{$left}: 2%;
+      // color: $footer-newsletter-text;
+
+      &::placeholder {
+        // color: $footer-newsletter-text;
+      }
+    }
+
+    .form-email {
+      font-family: $alshaya-thin;
+      // color: $footer-newsletter-text;
+      margin-top: rem(4);
+      font-size: rem(12);
+      padding-#{$left}: rem(8);
+    }
+
+    .form-submit {
+      // background-color: $primary_brand_button;
+      // font-family: $ay-heavy;
+      font-size: rem(16);
+      line-height: 1.25;
+      color: $primary_btn_bg;
+      text-transform: uppercase;
+      padding: rem(7) rem(15);
+      margin-bottom: rem(1);
+      #{$right}: 0;
+    }
+  }
+
+  .footer--social {
+    @include breakpoint($tablet) {
+      padding-#{$left}: rem(18);
+    }
+  }
+
+  .c-social-links {
+    @include breakpoint($upto-tablet) {
+      padding: 1.688rem 1.313rem;
+      margin: 0 rem(16);
+    }
+
+    h3 {
+      font-size: rem(16);
+      // color: $footer_title_h3;
+
+      @include breakpoint($upto-tablet) {
+        font-family: $alshaya-thin;
+      }
+    }
+
+    ul {
+      display: flex;
+      align-items: center;
+
+      @include breakpoint($upto-tablet) {
+        text-align: $left;
+      }
+    }
+
+    li {
+      &:not(:last-child) {
+        margin-#{$right}: rem(16);
+
+        @include breakpoint($upto-tablet) {
+          margin-#{$right}: rem(24);
+        }
+      }
+
+      a:hover {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .alshaya-newsletter-subscribe {
+    .form-submit {
+      font-size: 0.875rem;
+      color: #fff;
+      background-color: #cf0a2c;
+      padding: 0.625rem 1.5rem;
+      font-family: ProximaNova-Regular, sans-serif, Arial;
+      line-height: 1.25;
+      text-transform: capitalize;
+      margin-bottom: 0.0625rem;
+      right: 0;
+    }
+  }
+
+  .footer--menu {
+    @include breakpoint($only-mobile) {
+      margin: 0;
+    }
+  }
+}
+
+.c-footer-menu--about {
+  h3 {
+    color: $primary_text;
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .c-footer-primary {
+    .footer--abouthelp {
+      .c-footer-menu--about,
+      .c-footer-menu--help {
+        h3 {
+          padding: 1.688rem 2.313rem;
+
+          &::after {
+            #{$right}: 1.9rem;
+          }
+        }
+      }
+    }
+
+    .language-switcher-language-url {
+      padding: 1.688rem 2.313rem;
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .c-footer-secondary {
+    padding: 0 4.5em;
+  }
+}
+
+.c-footer-secondary {
+  padding: 0 4.5em;
+}
