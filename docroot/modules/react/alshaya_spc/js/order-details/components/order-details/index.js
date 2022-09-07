@@ -79,7 +79,7 @@ class OrderDetails extends React.Component {
       errorMessage,
     } = this.state;
 
-    if (!hasValue(order) || loading) {
+    if (loading || !hasValue(order)) {
       return null;
     }
 
