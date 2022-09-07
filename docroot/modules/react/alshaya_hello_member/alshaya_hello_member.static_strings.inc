@@ -32,7 +32,7 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'qr_code_redeem',
-      'value' => t('To redeem in store use this QR code.', [], ['context' => 'hello_member']),
+      'value' => t('Member ID', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'points_label',
