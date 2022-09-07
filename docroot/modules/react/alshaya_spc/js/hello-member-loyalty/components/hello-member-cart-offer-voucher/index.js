@@ -72,7 +72,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
         }
       });
     } else {
-      vouchers.push({ error_message: couponResponse.data.message });
       // If coupons API is returning Error.
       logger.error('Error while calling the coupons Api  @message', {
         '@message': couponResponse.data.message,
@@ -84,7 +83,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
     if (hasValue(offerResponse.data) && !hasValue(offerResponse.data.error)) {
       Offers.push(...offerResponse.data.offers);
     } else {
-      Offers.push({ error_message: offerResponse.data.message });
       // If offers API is returning Error.
       logger.error('Error while calling the offers Api @message', {
         '@message': offerResponse.data.message,
