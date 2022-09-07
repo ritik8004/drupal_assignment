@@ -15,6 +15,7 @@ let componentRendered = false;
       if (!node.length || (node.length && componentRendered)) {
         return;
       }
+
       componentRendered = true;
       // Click & Collect section will render only if it is enabled.
       ReactDOM.render(
