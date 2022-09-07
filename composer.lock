@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3359a110045380fa4cb0a5a54f699289",
+    "content-hash": "11ed4accd16f665a4c644b3b9eaa517c",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -1423,7 +1423,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -4148,20 +4148,16 @@
             "authors": [
                 {
                     "name": "Acquia",
-                    "homepage": "https://www.drupal.org/user/14023",
+                    "homepage": "https://www.drupal.org/user/1231722",
                     "email": "support@acquia.com"
-                },
-                {
-                    "name": "Rok Žlender",
-                    "homepage": "https://www.drupal.org/user/61873"
-                },
-                {
-                    "name": "acquia",
-                    "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
                     "name": "acquia.sf.ci",
                     "homepage": "https://www.drupal.org/user/3285763"
+                },
+                {
+                    "name": "Alan Evans",
+                    "homepage": "https://www.drupal.org/user/14023"
                 },
                 {
                     "name": "attila.fekete",
@@ -4184,8 +4180,16 @@
                     "homepage": "https://www.drupal.org/user/419643"
                 },
                 {
+                    "name": "nishat.baig",
+                    "homepage": "https://www.drupal.org/user/3729641"
+                },
+                {
                     "name": "roderik",
                     "homepage": "https://www.drupal.org/user/8841"
+                },
+                {
+                    "name": "Rok Žlender",
+                    "homepage": "https://www.drupal.org/user/61873"
                 }
             ],
             "description": "Connects a site with Acquia Cloud Site Factory.",
@@ -4218,20 +4222,16 @@
             ],
             "authors": [
                 {
-                    "name": "Alan Evans",
-                    "homepage": "https://www.drupal.org/user/14023"
-                },
-                {
-                    "name": "Rok Žlender",
-                    "homepage": "https://www.drupal.org/user/61873"
-                },
-                {
                     "name": "acquia",
                     "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
                     "name": "acquia.sf.ci",
                     "homepage": "https://www.drupal.org/user/3285763"
+                },
+                {
+                    "name": "Alan Evans",
+                    "homepage": "https://www.drupal.org/user/14023"
                 },
                 {
                     "name": "attila.fekete",
@@ -4254,8 +4254,16 @@
                     "homepage": "https://www.drupal.org/user/419643"
                 },
                 {
+                    "name": "nishat.baig",
+                    "homepage": "https://www.drupal.org/user/3729641"
+                },
+                {
                     "name": "roderik",
                     "homepage": "https://www.drupal.org/user/8841"
+                },
+                {
+                    "name": "Rok Žlender",
+                    "homepage": "https://www.drupal.org/user/61873"
                 }
             ],
             "description": "Helper module for duplicating Acquia Cloud Site Factory sites.",
@@ -4289,20 +4297,16 @@
             ],
             "authors": [
                 {
-                    "name": "Alan Evans",
-                    "homepage": "https://www.drupal.org/user/14023"
-                },
-                {
-                    "name": "Rok Žlender",
-                    "homepage": "https://www.drupal.org/user/61873"
-                },
-                {
                     "name": "acquia",
                     "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
                     "name": "acquia.sf.ci",
                     "homepage": "https://www.drupal.org/user/3285763"
+                },
+                {
+                    "name": "Alan Evans",
+                    "homepage": "https://www.drupal.org/user/14023"
                 },
                 {
                     "name": "attila.fekete",
@@ -4325,8 +4329,16 @@
                     "homepage": "https://www.drupal.org/user/419643"
                 },
                 {
+                    "name": "nishat.baig",
+                    "homepage": "https://www.drupal.org/user/3729641"
+                },
+                {
                     "name": "roderik",
                     "homepage": "https://www.drupal.org/user/8841"
+                },
+                {
+                    "name": "Rok Žlender",
+                    "homepage": "https://www.drupal.org/user/61873"
                 }
             ],
             "description": "Handles VCS-based themes on Acquia Cloud Site Factory.",
@@ -4359,20 +4371,16 @@
             ],
             "authors": [
                 {
-                    "name": "Alan Evans",
-                    "homepage": "https://www.drupal.org/user/14023"
-                },
-                {
-                    "name": "Rok Žlender",
-                    "homepage": "https://www.drupal.org/user/61873"
-                },
-                {
                     "name": "acquia",
                     "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
                     "name": "acquia.sf.ci",
                     "homepage": "https://www.drupal.org/user/3285763"
+                },
+                {
+                    "name": "Alan Evans",
+                    "homepage": "https://www.drupal.org/user/14023"
                 },
                 {
                     "name": "attila.fekete",
@@ -4395,8 +4403,16 @@
                     "homepage": "https://www.drupal.org/user/419643"
                 },
                 {
+                    "name": "nishat.baig",
+                    "homepage": "https://www.drupal.org/user/3729641"
+                },
+                {
                     "name": "roderik",
                     "homepage": "https://www.drupal.org/user/8841"
+                },
+                {
+                    "name": "Rok Žlender",
+                    "homepage": "https://www.drupal.org/user/61873"
                 }
             ],
             "description": "Stores sensitive variables in a single place for easy scrubbing.",
@@ -7515,10 +7531,6 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
-                    "name": "TR",
-                    "homepage": "https://www.drupal.org/user/202830"
-                },
-                {
                     "name": "bojanz",
                     "homepage": "https://www.drupal.org/user/86106"
                 },
@@ -7537,6 +7549,10 @@
                 {
                     "name": "mglaman",
                     "homepage": "https://www.drupal.org/user/2416470"
+                },
+                {
+                    "name": "TR",
+                    "homepage": "https://www.drupal.org/user/202830"
                 }
             ],
             "description": "Provides expanded entity APIs, which will be moved to Drupal core one day.",
@@ -12522,6 +12538,50 @@
             }
         },
         {
+            "name": "drupal/rate_limits",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/rate_limits.git",
+                "reference": "2.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/rate_limits-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "facef296c4350fbb4b0add41d7764b39d3900269"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.1",
+                    "datestamp": "1618494369",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "e0ipso",
+                    "homepage": "https://www.drupal.org/user/550110"
+                }
+            ],
+            "description": "Allows configurable rate limits.",
+            "homepage": "https://www.drupal.org/project/rate_limits",
+            "support": {
+                "source": "https://git.drupalcode.org/project/rate_limits"
+            }
+        },
+        {
             "name": "drupal/recaptcha",
             "version": "3.0.0",
             "source": {
@@ -14570,22 +14630,22 @@
             "authors": [
                 {
                     "name": "Getulio Valentin Sánchez (gvso)",
-                    "homepage": "https://www.drupal.org/user/3509455",
+                    "homepage": "https://www.drupal.org/user/3510098",
                     "email": "valentin2507@gmail.com"
                 },
                 {
                     "name": "Utkarsh Dixit (denutkarsh)",
-                    "homepage": "https://www.drupal.org/user/3510098",
+                    "homepage": "https://www.drupal.org/user/3101285",
                     "email": "downloadplaza97@gmail.com"
                 },
                 {
                     "name": "Himanshu Dixit (himanshu-dixit)",
-                    "homepage": "https://www.drupal.org/user/3101285",
+                    "homepage": "https://www.drupal.org/user/3513954",
                     "email": "hudixt@gmail.com"
                 },
                 {
                     "name": "Christopher C. Wells (wells)",
-                    "homepage": "https://www.drupal.org/user/3513954",
+                    "homepage": "https://www.drupal.org/user/3509455",
                     "email": "drupal.org@chris-wells.net"
                 },
                 {
@@ -15097,8 +15157,8 @@
                     "version": "2.0.2",
                     "datestamp": "1646055681",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -15128,6 +15188,50 @@
             "support": {
                 "source": "https://github.com/steveoliver/user_import",
                 "issues": "https://github.com/steveoliver/user_import/issues"
+            }
+        },
+        {
+            "name": "drupal/user_password_limit",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/user_password_limit.git",
+                "reference": "1.2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/user_password_limit-1.2.0.zip",
+                "reference": "1.2.0",
+                "shasum": "39bfc67700984d20ab7cfa4fe85027f5ac1a7716"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.2.0",
+                    "datestamp": "1622803879",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "vikashsoni",
+                    "homepage": "https://www.drupal.org/user/3635961"
+                }
+            ],
+            "description": "Allows an administrator to limit number of times resetting the password of the user by their own.",
+            "homepage": "https://www.drupal.org/project/user_password_limit",
+            "support": {
+                "source": "https://git.drupalcode.org/project/user_password_limit"
             }
         },
         {

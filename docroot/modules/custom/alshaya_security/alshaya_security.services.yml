@@ -24,3 +24,8 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [user_used_hash]
+
+  alshaya_security.route_subscriber:
+    class: Drupal\alshaya_security\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

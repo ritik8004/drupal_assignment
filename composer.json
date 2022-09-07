@@ -99,6 +99,7 @@
         "drupal/profile_switcher": "^1.0-alpha5",
         "drupal/queue_unique": "^2.0",
         "drupal/r4032login": "^2.1",
+        "drupal/rate_limits": "^2.0",
         "drupal/recaptcha": "^3.0",
         "drupal/redirect": "^1.7",
         "drupal/replicate": "^1.0",
@@ -129,6 +130,7 @@
         "drupal/taxonomy_term_depth": "^2.5",
         "drupal/twig_tweak": "^2.9",
         "drupal/user_csv_import": "^2.0",
+        "drupal/user_password_limit": "^1.2",
         "drupal/user_registrationpassword": "^1.0",
         "drupal/video_embed_field": "^2.0",
         "drupal/views_ajax_get": "^2.0",
@@ -403,6 +405,12 @@
             },
             "acquia/blt-acsf": {
                 "Fix multiple addition of acsf module for local uninstallation on running blt acsf:init": "https://patch-diff.githubusercontent.com/raw/acquia/blt-acsf/pull/10.patch"
+            },
+            "drupal/user_password_limit": {
+                "Limit requesting for password reset emails instead of resetting passwords": "https://www.drupal.org/files/issues/2022-09-06/3308181-2.patch"
+            },
+            "drupal/rate_limits": {
+                "Add option to skip rate limit for GET requests": "https://www.drupal.org/files/issues/2022-09-07/3308397-2.patch"
             }
         },
         "installer-paths": {
