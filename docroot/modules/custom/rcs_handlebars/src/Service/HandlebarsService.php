@@ -201,17 +201,17 @@ class HandlebarsService {
     $optimize_js = $this->configFactory->get('system.performance')->get('js.preprocess');
     if ($optimize_js) {
       $path = str_replace(["handlebars/", ".handlebars"], ["dist/", '.js'], $path);
-      $contents = file_get_contents("$module_path/$path");
-      $contents .= "\n// $strings\n";
-      return $contents;
-    }
-    else {
-      $json = json_encode($contents, JSON_UNESCAPED_UNICODE);
-      // Prepare script.
-      $script = "window.rcsHandlebarsTemplates = window.rcsHandlebarsTemplates || {};\n";
-      $script .= "window.rcsHandlebarsTemplates['$id'] = $json\n// $strings\n";
+      $script = file_get_contents("$module_path/$path");
+      $script .= "\n// $strings\n";
       return $script;
     }
+
+    $json = json_encode($contents, JSON_UNESCAPED_UNICODE);
+    // Prepare script.
+    $script = "window.rcsHandlebarsTemplates = window.rcsHandlebarsTemplates || {};\n";
+    $script .= "window.rcsHandlebarsTemplates['$id'] = $json\n// $strings\n";
+    return $script;
+
   }
 
   /**
