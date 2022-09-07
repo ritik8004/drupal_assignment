@@ -211,7 +211,6 @@ class HandlebarsService {
     $script = "window.rcsHandlebarsTemplates = window.rcsHandlebarsTemplates || {};\n";
     $script .= "window.rcsHandlebarsTemplates['$id'] = $json\n// $strings\n";
     return $script;
-
   }
 
   /**
