@@ -151,8 +151,10 @@ class PaymentMethodCodMobileVerification extends React.Component {
    *   The OTP received on shipping mobile number.
    */
   handleChange = (otp) => {
-    // Clear 2 second timeout if user changes otp input.
-    clearTimeout(this.validateDelay);
+    if (this.validateDelay) {
+      // Clear 2 second timeout if user changes otp input.
+      clearTimeout(this.validateDelay);
+    }
 
     this.setState({
       otp,
