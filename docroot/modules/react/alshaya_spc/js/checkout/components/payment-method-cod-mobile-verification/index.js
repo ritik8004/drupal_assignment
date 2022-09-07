@@ -153,7 +153,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
     this.setState({
       otp,
       otpVerified: 0,
-    }, () => this.handleOtpSubmit());
+    }, () => this.handleOtpSubmit(true));
   };
 
   /**
@@ -164,13 +164,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
    * @param {boolean} delay
    *   Add delay before validate otp request.
    */
-  handleOtpSubmit = (e, delay = true) => {
+  handleOtpSubmit = (delay = false) => {
     // Clear 2 second timeout if user changes otp input.
     clearTimeout(this.validateDelay);
-
-    if (e) {
-      e.preventDefault();
-    }
 
     // Get otp from state.
     const { otp } = this.state;
@@ -372,7 +368,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
             <button
               type="button"
               className={`cod-mobile-otp__submit ${otpValidClass}`}
-              onClick={(e) => this.handleOtpSubmit(e, false)}
+              onClick={(e) => { e.preventDefault(); this.handleOtpSubmit(); }}
               disabled={otp.length !== parseInt(otpLength, 10)}
             >
               {otpValidClass
