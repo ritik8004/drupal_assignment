@@ -10,6 +10,8 @@ import resetBenefitOptions from '../offer_voucher_helper';
 
 const HelloMemberCartPopupBonusVouchersList = (props) => {
   const { vouchers, totals } = props;
+  // Get formatted expiry date.
+  moment.locale(drupalSettings.path.currentLanguage);
 
   const handleChange = () => {
     const vouchersBonus = document.getElementsByName('vouchersBonus[]');
