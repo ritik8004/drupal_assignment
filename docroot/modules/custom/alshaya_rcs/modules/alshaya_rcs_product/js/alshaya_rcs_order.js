@@ -5,8 +5,7 @@
    */
   var staticDataStore = {
     recentOrdersData: {},
-    orderDetailsData: {},
-    productData: {},
+    orderDetailsProductData: {},
   };
 
   /**
@@ -121,12 +120,12 @@
    *   Product data.
    */
   function getOrdersDetailsProductDataFromBackend(sku) {
-    if (staticDataStore.productData[sku]) {
-      return staticDataStore.productData[sku];
+    if (staticDataStore.orderDetailsProductData[sku]) {
+      return staticDataStore.orderDetailsProductData[sku];
     }
 
-    staticDataStore.productData[sku] =  globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku});
-    return staticDataStore.productData[sku];
+    staticDataStore.orderDetailsProductData[sku] =  globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku});
+    return staticDataStore.orderDetailsProductData[sku];
   }
 
 
@@ -192,7 +191,7 @@
    *   Parent sku.
    *
    * @returns {Promise}
-   *   Product data for recent orders.
+   *   Product data for order details.
    */
   function getProductDataOrderDetails(child, parent) {
     return getOrdersDetailsProductDataFromBackend(parent).then(function onOrderDetailsFetched(response) {
