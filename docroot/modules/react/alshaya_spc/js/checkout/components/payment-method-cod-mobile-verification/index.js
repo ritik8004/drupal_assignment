@@ -28,7 +28,10 @@ class PaymentMethodCodMobileVerification extends React.Component {
       otpValidClass: '',
     };
 
-    this.validateDelay = {};
+    // This stores the setTimeout object in handleChange
+    // and used to clear timeout in case user changes input before timeout
+    // or clicks the verify CTA.
+    this.validateDelay = null;
   }
 
   componentDidMount = () => {
@@ -150,26 +153,13 @@ class PaymentMethodCodMobileVerification extends React.Component {
    *   The OTP received on shipping mobile number.
    */
   handleChange = (otp) => {
-    this.setState({
-      otp,
-      otpVerified: 0,
-    }, () => this.handleOtpSubmit(true));
-  };
-
-  /**
-   * Handle Otp form submit.
-   *
-   * @param {object} e
-   *   The event triggered.
-   * @param {boolean} delay
-   *   Add delay before validate otp request.
-   */
-  handleOtpSubmit = (delay = false) => {
     // Clear 2 second timeout if user changes otp input.
     clearTimeout(this.validateDelay);
 
-    // Get otp from state.
-    const { otp } = this.state;
+    this.setState({
+      otp,
+      otpVerified: 0,
+    });
 
     // Get allowed otp length from props.
     const { otpLength } = this.props;
@@ -180,15 +170,10 @@ class PaymentMethodCodMobileVerification extends React.Component {
       return false;
     }
 
-    if (delay) {
-      // Wait 2 seconds for user to finish the input, then request validate otp.
-      this.validateDelay = setTimeout(() => {
-        this.validateOtp(otp);
-      }, 2000);
-    } else {
-      // Don't wait if user clicks verify CTA.
-      this.validateOtp(otp);
-    }
+    // Wait 2 seconds for user to finish the input, then request validate otp.
+    this.validateDelay = setTimeout(() => {
+      this.validateOtp();
+    }, 2000);
 
     return true;
   };
@@ -196,9 +181,17 @@ class PaymentMethodCodMobileVerification extends React.Component {
   /**
    * Helper function to validate otp.
    */
-  validateOtp = (otp) => {
+  validateOtp = () => {
+    // Get otp from state.
+    const { otp } = this.state;
+
     // Get shipping mobile number from props.
     const { shippingMobileNumber } = this.props;
+
+    // Clear timeout if set by handleChange.
+    if (this.validateDelay) {
+      clearTimeout(this.validateDelay);
+    }
 
     // Show loader for validate otp request.
     this.setState({
@@ -368,7 +361,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
             <button
               type="button"
               className={`cod-mobile-otp__submit ${otpValidClass}`}
-              onClick={(e) => { e.preventDefault(); this.handleOtpSubmit(); }}
+              onClick={this.validateOtp}
               disabled={otp.length !== parseInt(otpLength, 10)}
             >
               {otpValidClass
