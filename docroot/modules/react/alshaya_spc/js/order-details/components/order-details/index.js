@@ -27,21 +27,26 @@ class OrderDetails extends React.Component {
     this.state = {
       returns: [],
       loading: false,
-      order: drupalSettings.order,
+      order: null,
       totalRefundAmount: 0,
       errorMessage: '',
     };
   }
 
   componentDidMount() {
-    // If Online Returns is enabled we need to process order data
-    // based on returns.
-    if (isOnlineReturnsEnabled()) {
-      showFullScreenLoader();
-
-      this.setState({ loading: true });
-      this.processOrderData();
-    }
+    this.setState({ loading: true });
+    showFullScreenLoader();
+    window.commerceBackend.getOrderDetailsData().then((orderDetails) => {
+      this.setState({ order: orderDetails });
+      // If Online Returns is enabled we need to process order data
+      // based on returns.
+      if (isOnlineReturnsEnabled()) {
+        showFullScreenLoader();
+        this.processOrderData();
+      } else {
+        this.setState({ loading: false });
+      }
+    });
   }
 
   processOrderData = async () => {
@@ -74,9 +79,10 @@ class OrderDetails extends React.Component {
       errorMessage,
     } = this.state;
 
-    if (loading) {
+    if (!hasValue(order) || loading) {
       return null;
     }
+
     removeFullScreenLoader();
 
     return (
