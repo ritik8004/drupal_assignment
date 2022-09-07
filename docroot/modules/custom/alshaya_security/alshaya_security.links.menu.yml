@@ -1,5 +1,0 @@
-alshaya_security.settings:
-  title: 'Alshaya Security settings'
-  parent: alshaya_master.alshaya_admin
-  description: 'Configure Alshaya Security settings.'
-  route_name: alshaya_security.settings
