@@ -1620,6 +1620,10 @@ class SkuImagesManager {
       $data['images'][] = $media_data;
     }
 
+    if (!isset($data['videos'])) {
+      $data['videos'] = [];
+    }
+
     return $data;
   }
 
