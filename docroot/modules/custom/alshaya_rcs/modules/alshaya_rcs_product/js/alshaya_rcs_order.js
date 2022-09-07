@@ -259,7 +259,9 @@
           return;
         }
         // Set the attributes.
-        product.attributes = indexedProducts[product.sku].options;
+        product.attributes = Drupal.hasValue(indexedProducts[product.sku].options)
+          ? indexedProducts[product.sku].options
+          : [];
         // Set the name.
         product.name = Drupal.hasValue(indexedProducts[product.sku].name)
           ? indexedProducts[product.sku].name
