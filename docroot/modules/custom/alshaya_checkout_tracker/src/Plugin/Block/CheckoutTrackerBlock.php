@@ -104,9 +104,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function getCacheContexts() {
     // Vary based on route.
-    return Cache::mergeContexts(parent::getCacheContexts(), [
-      'route',
-    ]);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
   /**

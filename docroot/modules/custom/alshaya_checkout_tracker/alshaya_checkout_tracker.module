@@ -21,3 +21,19 @@ function alshaya_checkout_tracker_theme() {
 
   return $theme;
 }
+
+/**
+ * Implements hook_page_title().
+ */
+function alshaya_checkout_tracker_preprocess_page_title(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $routes = [
+    'acq_cart.cart',
+    'alshaya_spc.checkout.login',
+    'alshaya_spc.checkout',
+    'alshaya_spc.checkout.confirmation',
+  ];
+  if (in_array($route_name, $routes)) {
+    unset($variables['title']);
+  }
+}
