@@ -16,14 +16,14 @@
         {% else %}
           <div class="step step-{{ step.stepcount }}">
         {% endif %}
-        {% if step.url is empty %}
-          <span> {{ step.stepcount }}</span>
-          <div class="step-label">{{ step.label }}</div>
-        {% else %} 
+        {% if step.url %}
           <a href = "{{ step.url }}">
             <span> {{ step.stepcount }}</span>
             <div class="step-label">{{ step.label }}</div>
           </a>
+        {% else %} 
+          <span> {{ step.stepcount }}</span>
+          <div class="step-label">{{ step.label }}</div>
         {% endif %}  
         </div>
       {% endif %}    

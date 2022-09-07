@@ -82,7 +82,6 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       'alshaya_spc.checkout.confirmation' => [
         'label' => $this->t('Confirmation', [], ['context' => 'alshaya_checkout_tracker']),
         'stepcount' => 4,
-        'url' => '',
       ],
     ];
 
