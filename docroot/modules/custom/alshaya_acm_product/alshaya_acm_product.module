@@ -241,7 +241,7 @@ function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $pr
   $acm_settings = \Drupal::configFactory()->getEditable('alshaya_acm.settings');
   if (!empty($acm_settings->get('use_mdc_url')) && isset($product['attributes']['url_key'])) {
     $node->path->pathauto = PathautoState::SKIP;
-    $node->path->alias = $product['attributes']['url_key'] . '.html';
+    $node->path->alias = '/' . trim($product['attributes']['url_key'], '/') . '.html';
   }
 
   if ($product['type'] !== 'configurable') {
