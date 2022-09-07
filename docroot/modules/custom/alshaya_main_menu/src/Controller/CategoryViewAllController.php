@@ -19,10 +19,8 @@ class CategoryViewAllController extends ControllerBase {
    *   Taxonomy term.
    */
   public function getBuild(TermInterface $taxonomy_term) {
-    $view_builder = $this->entityTypeManager()->getViewBuilder('taxonomy_term');
-    $render_array = $view_builder->view($taxonomy_term);
-    $render_array['#taxonomy_term']->setName('');
-    return $render_array;
+    // Render empty content as view-all listing is displayed by algolia block.
+    return [];
   }
 
   /**
