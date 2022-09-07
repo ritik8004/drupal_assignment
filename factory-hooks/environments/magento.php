@@ -8,6 +8,37 @@
 global $magentos;
 
 $magentos = [
+  // New Balance
+  'nb_qa' => [
+    'url' => 'https://integration-5ojmyuq-yuoofriziz4tu.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'rjwijgl0obi48vyw5adoaheq4y6vnps7',
+      'consumer_secret' => 'oe6gwidy4giuso8aq6c5ga2trmatlbyg',
+      'access_token' => '34mt253bnj9a9uwuvx64ivt197sl4yny',
+      'access_token_secret' => 'dz4ngbr3nbf6ofigtk0brkl15ctn6jkk',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 14],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 10, 'ar' => 11],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 12, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 3, 'ar' => 2],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 7, 'ar' => 6],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
+    ],
+  ],
   // Alo Yoga
   'ay_qa' => [
     'url' => 'https://alo-qa.store.alshaya.com',
