@@ -903,15 +903,9 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
   // Update the product image with RCS Token.
   foreach ($build['#products'] as $key => &$item) {
     // Add name placeholder if the product type is simple.
-    if ($item['type'] === 'simple') {
-      $item['name'] = '#rcs.productItem.name#';
-    }
-    $item['image'] = _alshaya_rcs_product_get_order_teaser_image($item);
+    $item['image'] = NULL;
     // Attribute placeholders.
-    $item['attributes'][] = [
-      'label' => '#rcs.productItemAttribute.attr_label#',
-      'value' => '#rcs.productItemAttribute.attr_value#',
-    ];
+    $item['attributes'] = [];
     // If 'applied_rule_ids' is set and price is 0, set the free gift label.
     // Using base_price instead of price here as the price is set as markup.
     if (isset($item['applied_rule_ids']) && (int) $item['base_price'] == 0) {
@@ -924,10 +918,8 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
   $build['#theme_wrappers'] = [
     'container' => [
       '#attributes' => [
-        'id' => 'rcs-ph-order_teaser',
+        'id' => 'order-teaser-container',
         'data-param-skus' => Json::encode($child_parent_mapping),
-        'data-rcs-dependency' => 'none',
-        'data-param-context' => 'order_details',
       ],
     ],
   ];
@@ -940,6 +932,7 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
   // Attaching order library.
   $build['#attached']['library'][] = 'alshaya_rcs_product/product.order';
   $build['#attached']['library'][] = 'alshaya_white_label/rcs-order-details';
+  $build['#attached']['library'][] = 'alshaya_rcs_handlebars/image';
 }
 
 /**

@@ -1,7 +1,0 @@
-alshaya_security.settings:
-  path: '/admin/config/alshaya/alshaya-security'
-  defaults:
-    _form: 'Drupal\alshaya_security\Form\AlshayaSecurityConfigForm'
-    _title: 'Alshaya Security settings'
-  requirements:
-    _permission: 'administer alshaya_security'

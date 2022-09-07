@@ -368,14 +368,14 @@ exports.getData = async function getData(
       let recentOrdersVariables = rcsPhGraphqlQuery.recent_orders.variables;
       recentOrdersVariables.sku = params.sku;
       request.data = prepareQuery(rcsPhGraphqlQuery.recent_orders.query, recentOrdersVariables);
-      result = rcsCommerceBackend.invokeApi(request);
+      result = await rcsCommerceBackend.invokeApi(request);
       break;
 
     case 'order_details_product_data':
       let orderDetailsVariables = rcsPhGraphqlQuery.order_details.variables;
       orderDetailsVariables.sku = params.sku;
       request.data = prepareQuery(rcsPhGraphqlQuery.order_details.query, orderDetailsVariables);
-      result = rcsCommerceBackend.invokeApi(request);
+      result = await rcsCommerceBackend.invokeApi(request);
       break;
 
     default:

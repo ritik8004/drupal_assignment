@@ -167,6 +167,7 @@ product.order:
     - alshaya_rcs_product/rcs_product_images
     - alshaya_rcs_color_split/rcs_grouped_products
     - alshaya_master/common_functions
+    - rcs_handlebars/main
 
 rcs_product_modal:
   version: 1.x
