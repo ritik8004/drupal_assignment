@@ -26,7 +26,10 @@ class RouteSubscriber extends RouteSubscriberBase {
       $route->setRequirement('_access', 'FALSE');
     }
     // Altering the access for store_finder routes.
-    if (($route = $collection->get('alshaya_geolocation.store_finder')) || ($route = $collection->get('alshaya_geolocation.store_finder_list'))) {
+    if ($route = $collection->get('alshaya_geolocation.store_finder')) {
+      $route->setRequirement('_access', 'FALSE');
+    }
+    if ($route = $collection->get('alshaya_geolocation.store_finder_list')) {
       $route->setRequirement('_access', 'FALSE');
     }
   }
