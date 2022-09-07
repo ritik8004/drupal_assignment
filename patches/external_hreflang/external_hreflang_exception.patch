@@ -1,0 +1,47 @@
+diff --git a/src/EventSubscriber/ExternalHreflangGetCurrentUrlEventSubscriber.php b/src/EventSubscriber/ExternalHreflangGetCurrentUrlEventSubscriber.php
+index bb078ea795..4df30275d5 100644
+--- a/src/EventSubscriber/ExternalHreflangGetCurrentUrlEventSubscriber.php
++++ b/src/EventSubscriber/ExternalHreflangGetCurrentUrlEventSubscriber.php
+@@ -4,6 +4,7 @@
+
+ use Drupal\Core\Path\PathMatcherInterface;
+ use Drupal\Core\Url;
++use Drupal\Core\Logger\LoggerChannelTrait;
+ use Drupal\external_hreflang\Event\ExternalHreflangGetCurrentUrlEvent;
+ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+ use Symfony\Component\HttpFoundation\RequestStack;
+@@ -15,6 +16,8 @@
+  */
+ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInterface {
+
++  use LoggerChannelTrait;
++
+   /**
+    * The path matcher.
+    *
+@@ -58,11 +61,21 @@ public static function getSubscribedEvents() {
+    *   Event object.
+    */
+   public function onGetCurrentUrlEvent(ExternalHreflangGetCurrentUrlEvent $event) {
+-    if ($this->pathMatcher->isFrontPage()) {
+-      $url = Url::fromRoute('<front>');
++    try {
++      if ($this->pathMatcher->isFrontPage()) {
++        $url = Url::fromRoute('<front>');
++      }
++      else {
++        $url = Url::createFromRequest($this->requestStack->getCurrentRequest());
++      }
+     }
+-    else {
+-      $url = Url::createFromRequest($this->requestStack->getCurrentRequest());
++    catch (\Exception $e) {
++      $this->getLogger('ExternalHreflangGetCurrentUrlEventSubscriber')->error('Error occurred while getting the url. Message: @message', [
++        '@message' => $e->getMessage(),
++      ]);
++
++      // Store the empty url.
++      $url = Url::fromRoute('<none>');
+     }
+
+     $event->setCurrentUrl($url);

@@ -403,6 +403,9 @@
             },
             "acquia/blt-acsf": {
                 "Fix multiple addition of acsf module for local uninstallation on running blt acsf:init": "https://patch-diff.githubusercontent.com/raw/acquia/blt-acsf/pull/10.patch"
+            },
+            "drupal/external_hreflang": {
+                "Fix the resource expection": "patches/external_hreflang/external_hreflang_exception.patch"
             }
         },
         "installer-paths": {
