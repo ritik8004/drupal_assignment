@@ -681,6 +681,10 @@ class Configurable extends SKUPluginBase {
    *   Child skus as string array.
    */
   public static function getChildSkus(SKU $sku) {
+    if ($sku->bundle() !== 'configurable') {
+      \Drupal::logger('acq_sku')->info('The product with sku: @sku is not a configurable type.', ['@sku' => $sku->getSku()]);
+      return [];
+    }
     return array_filter(array_map('trim', explode(',', $sku->get('field_configured_skus')->getString())));
   }
 
