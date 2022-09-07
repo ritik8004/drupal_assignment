@@ -609,7 +609,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
 /**
  * Wrapper function to format price value with currency.
  *
- * @param float $price
+ * @param mixed $price
  *   Price value.
  * @param array $promotions
  *   Promotions if available to display as tooltip.
@@ -620,6 +620,11 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
  *   Return rendered theme with html for price.
  */
 function alshaya_acm_price_format($price, array $promotions = [], $tooltip = '') {
+  // If the amount is not numeric then return the price as it is.
+  if (!is_numeric($price) && $price > 0) {
+    return $price;
+  }
+
   $output = [
     '#theme' => 'acq_commerce_price',
     '#price' => acq_commerce_get_clean_price($price),
