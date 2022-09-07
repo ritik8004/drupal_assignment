@@ -84,11 +84,16 @@ export default class HomeDeliveryInfo extends React.Component {
     return addressDataValue;
   }
 
-  openAddressContentPopUp = () => {
-    this.setState({
-      areaUpdated: true,
-    });
-  }
+  openAddressContentPopUp = (e) => {
+    // Event openAddressContentPopUp is used by area-confirmation-popup
+    // component and COD mobile verification component. If event detail has
+    // enabledFieldWithMessage, then we don't need to update the area.
+    if (e.detail && typeof e.detail.enabledFieldsWithMessages === 'undefined') {
+      this.setState({
+        areaUpdated: true,
+      });
+    }
+  };
 
   render() {
     const {
