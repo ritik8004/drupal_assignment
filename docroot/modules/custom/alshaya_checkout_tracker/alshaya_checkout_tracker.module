@@ -12,7 +12,8 @@ function alshaya_checkout_tracker_theme() {
   $theme = [
     'checkout_tracker_block' => [
       'variables' => [
-        'steps' => [],
+        'stepMap' => [],
+        'activeMapKey' => [],
       ],
       'template' => 'checkout-tracker-block',
     ],

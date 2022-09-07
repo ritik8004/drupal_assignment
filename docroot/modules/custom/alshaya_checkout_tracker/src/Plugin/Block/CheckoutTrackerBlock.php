@@ -3,7 +3,9 @@
 namespace Drupal\alshaya_checkout_tracker\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Url;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -60,56 +62,51 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function build() {
     $route_name = $this->routeMatch->getRouteName();
-    $bag = NULL;
-    $signin = NULL;
-    $checkout = NULL;
-    $confirmation = NULL;
 
-    switch ($route_name) {
-      case 'acq_cart.cart':
-        $stepcount = 1;
-        $bag = 'active';
-        $signin = '';
-        $checkout = '';
-        $confirmation = '';
-        break;
-
-      case 'alshaya_spc.checkout.login':
-        $stepcount = 2;
-        $bag = 'completed';
-        $signin = 'active';
-        $checkout = '';
-        $confirmation = '';
-        break;
-
-      case 'alshaya_spc.checkout':
-        $stepcount = 3;
-        $bag = 'completed';
-        $signin = 'completed';
-        $checkout = 'active';
-        $confirmation = '';
-        break;
-
-      case 'alshaya_spc.checkout.confirmation':
-        $stepcount = 4;
-        $bag = 'completed';
-        $signin = 'completed';
-        $checkout = 'completed';
-        $confirmation = 'active';
-        break;
-    }
+    $stepMap = [
+      'acq_cart.cart' => [
+        'label' => $this->t('Bag', [], ['context' => 'alshaya_checkout_tracker']),
+        'stepcount' => 1,
+        'url' => Url::fromRoute('acq_cart.cart'),
+      ],
+      'alshaya_spc.checkout.login' => [
+        'label' => $this->t('Sign in', [], ['context' => 'alshaya_checkout_tracker']),
+        'stepcount' => 2,
+        'url' => Url::fromRoute('alshaya_spc.checkout.login'),
+      ],
+      'alshaya_spc.checkout' => [
+        'label' => $this->t('Checkout', [], ['context' => 'alshaya_checkout_tracker']),
+        'stepcount' => 3,
+        'url' => Url::fromRoute('alshaya_spc.checkout'),
+      ],
+      'alshaya_spc.checkout.confirmation' => [
+        'label' => $this->t('Confirmation', [], ['context' => 'alshaya_checkout_tracker']),
+        'stepcount' => 4,
+        'url' => '',
+      ],
+    ];
 
     return [
-      '#theme' => 'checkout_tracker_block',
-      '#steps' => [
-        'bagclass' => $bag,
-        'signinclass' => $signin,
-        'checkoutclass' => $checkout,
-        'deliveryclass' => $confirmation,
-        'stepcount' => $stepcount,
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/checkout-steps',
+        ],
       ],
-      '#cache' => ['max-age' => 0],
+      '#theme' => 'checkout_tracker_block',
+      '#stepMap' => $stepMap,
+      '#activeMapKey' => $route_name,
     ];
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    // Vary based on route.
+    return Cache::mergeContexts(parent::getCacheContexts(), [
+      'route',
+    ]);
   }
 
   /**
@@ -117,10 +114,15 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   protected function blockAccess(AccountInterface $account) {
     $route_name = $this->routeMatch->getRouteName();
-
+    $routes = [
+      'acq_cart.cart',
+      'alshaya_spc.checkout.login',
+      'alshaya_spc.checkout',
+      'alshaya_spc.checkout.confirmation',
+    ];
     // Show block for specific routes.
     return AccessResult::allowedIf(
-      $route_name === 'acq_cart.cart' || $route_name === 'alshaya_spc.checkout.login' || $route_name === 'alshaya_spc.checkout' || $route_name === 'alshaya_spc.checkout.confirmation'
+      in_array($route_name, $routes)
     );
   }
 
