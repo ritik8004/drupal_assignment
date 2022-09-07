@@ -27,13 +27,12 @@ function alshaya_checkout_tracker_theme() {
  */
 function alshaya_checkout_tracker_preprocess_page_title(&$variables) {
   $route_name = \Drupal::routeMatch()->getRouteName();
-  $routes = [
+  if (in_array($route_name, [
     'acq_cart.cart',
     'alshaya_spc.checkout.login',
     'alshaya_spc.checkout',
     'alshaya_spc.checkout.confirmation',
-  ];
-  if (in_array($route_name, $routes)) {
+  ])) {
     unset($variables['title']);
   }
 }

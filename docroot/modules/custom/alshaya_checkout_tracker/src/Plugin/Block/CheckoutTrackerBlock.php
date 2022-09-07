@@ -112,15 +112,14 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   protected function blockAccess(AccountInterface $account) {
     $route_name = $this->routeMatch->getRouteName();
-    $routes = [
-      'acq_cart.cart',
-      'alshaya_spc.checkout.login',
-      'alshaya_spc.checkout',
-      'alshaya_spc.checkout.confirmation',
-    ];
     // Show block for specific routes.
     return AccessResult::allowedIf(
-      in_array($route_name, $routes)
+      in_array($route_name, [
+        'acq_cart.cart',
+        'alshaya_spc.checkout.login',
+        'alshaya_spc.checkout',
+        'alshaya_spc.checkout.confirmation',
+      ])
     );
   }
 
