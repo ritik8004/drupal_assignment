@@ -304,6 +304,12 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // without any language suffix so HTTP_HOST is enough.
   $page['#attached']['drupalSettings']['cart']['url'] = 'https://' . $_SERVER['HTTP_HOST'];
 
+  // Get cart notification side drawer related setting.
+  // If cart notification side drawer is enabled, then cart
+  // is shown as side drawer and mini cart notification will be hidden.
+  $cartDrawerStatus = \Drupal::service('alshaya_spc.cart_notification_helper')->isCartDrawerEnabled();
+  $page['#attached']['drupalSettings']['cart']['cartNotificationDrawer'] = $cartDrawerStatus;
+
   // Use proxy on only specific environments.
   if (Settings::get('alshaya_use_proxy', FALSE)) {
     $page['#attached']['drupalSettings']['cart']['url'] = '/proxy/?url=' . $api_settings['magento_host'];

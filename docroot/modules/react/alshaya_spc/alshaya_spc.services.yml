@@ -82,3 +82,8 @@ services:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcHelper
     arguments:
       - '@config.factory'
+
+  alshaya_spc.cart_notification_helper:
+    class: Drupal\alshaya_spc\Helper\CartNotificationHelper
+    arguments:
+      - '@config.factory'

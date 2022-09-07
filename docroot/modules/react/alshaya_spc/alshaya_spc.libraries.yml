@@ -15,6 +15,13 @@ mini_cart:
   dependencies:
     - alshaya_react/react
 
+cart_drawer:
+  version: 1.x
+  js:
+    dist/cartdrawer.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
 cart:
   version: 1.x
   js:

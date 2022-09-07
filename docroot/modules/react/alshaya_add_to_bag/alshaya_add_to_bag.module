@@ -65,6 +65,15 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   // Attach cart utilities library if feature is enabled.
   $page['#attached']['library'][] = 'alshaya_spc/cart_utilities';
 
+  // Get cart notification side drawer related setting.
+  // If cart notification side drawer is enabled, then cart
+  // is shown as side drawer and mini cart notification will be hidden.
+  $cartDrawerStatus = \Drupal::service('alshaya_spc.cart_notification_helper')->isCartDrawerEnabled();
+  if ($cartDrawerStatus) {
+    // Attach notification library if feature is enabled.
+    $page['#attached']['library'][] = 'alshaya_spc/cart_drawer';
+  }
+
   // Check if the acm cart notification settings exist and assign notification
   // time in drupal settings.
   $acm_cart_notification_settings = \Drupal::config('alshaya_acm_cart_notification.settings');

@@ -63,3 +63,11 @@ alshaya_spc.express_delivery:
     express_delivery_label:
       type: string
       label: 'Express Delivery Label'
+
+alshaya_spc.cart_notification:
+  type: config_object
+  label: 'Cart notification panel settings'
+  mapping:
+    notification_drawer:
+      type: boolean
+      label: 'Enable drawer panel to show cart notification'
