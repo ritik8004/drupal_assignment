@@ -621,7 +621,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
  */
 function alshaya_acm_price_format($price, array $promotions = [], $tooltip = '') {
   // If the amount is not numeric then return the price as it is.
-  if (!is_numeric($price) && $price > 0) {
+  if (!(is_numeric($price) && $price > 0)) {
     return $price;
   }
 
