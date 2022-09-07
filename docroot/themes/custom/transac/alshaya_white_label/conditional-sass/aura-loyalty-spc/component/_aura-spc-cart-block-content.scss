@@ -30,7 +30,8 @@
   .block-content.registered-user-linked {
     background-image: $aura-spc-block-bg-desktop;
     border-radius: 0.625rem;
-    padding: rem(12) rem(11) rem(12) rem(20);
+    padding-#{$right}: rem(11);
+    padding-#{$left}: rem(20);
     display: flex;
     align-items: center;
 
@@ -41,6 +42,10 @@
       @include breakpoint($tablet) {
         display: inline-flex;
         max-width: 20%;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: rem(45);
       }
 
       & > svg {
@@ -57,6 +62,12 @@
       font-size: rem(12);
       line-height: rem(20);
       max-width: calc(70% - 1.5625rem);
+      padding-top: rem(13);
+      padding-bottom: rem(13);
+
+      @include breakpoint($only-mobile) {
+        max-width: calc(70% - #{rem(45)});
+      }
 
       @include breakpoint($tablet) {
         max-width: calc(72% - 1.5625rem);
@@ -147,6 +158,8 @@
     @include breakpoint($only-mobile) {
       background-image: $aura-block-bg-mobile;
       margin: 0 1.25rem;
+      padding-#{$left}: rem(24);
+      padding-#{$right}: rem(32);
 
       html[lang=ar] & {
         background-image: $aura-block-bg-mobile-ar;
@@ -271,10 +284,6 @@
       &.vertical-aura-logo > svg {
         max-height: rem(70);
       }
-    }
-
-    .spc-aura-cart-content {
-      max-width: 76%;
     }
   }
 
