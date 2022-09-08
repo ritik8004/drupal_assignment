@@ -57,9 +57,6 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
               message: getDefaultErrorMessage(),
             });
           } else {
-            if (result.data.totals.isHmAppliedVoucherRemoved) {
-              document.getElementById('offer-err-msg').innerHTML = Drupal.t('You have reached the maximum amount of added discounts.', { context: 'hello_member' });
-            }
             // Calling refresh mini cart event so that storage is updated.
             dispatchCustomEvent('refreshMiniCart', {
               data: () => result.data,
