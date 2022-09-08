@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_main_menu\Controller;
 
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\taxonomy\TermInterface;
 
@@ -22,7 +21,7 @@ class CategoryViewAllController extends ControllerBase {
   public function getBuild(TermInterface $taxonomy_term) {
     // Render empty content as view-all listing is displayed by algolia block.
     return [
-      '#cache' => Cache::mergeTags([], $taxonomy_term->getCacheTags()),
+      '#cache' => $taxonomy_term->getCacheTags(),
     ];
   }
 
