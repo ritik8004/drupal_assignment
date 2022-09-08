@@ -1,8 +1,8 @@
 <?php
 
 // Password to authenticate alshaya_mobile_app user.
-// Check git history of common.php file to retrieve this.
-$password = '';
+// Look for the password in database for consumer client_id 'ac73dcc7-6918-4e14-8b48-86b5cd17f4d2' found under /admin/config/services/consumer
+$alshaya_mobile_app_token_password = '';
 
 // Add the value for new password if you want to run reset_password script else leave blank.
 $new_reset_password = '';
