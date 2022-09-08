@@ -98,12 +98,7 @@ class AuraLoyaltyForm extends React.Component {
 
     dispatchCustomEvent('onLinkCardSuccessful', stateValues.cardNumber);
 
-    if (hasValue(stateValues) && !stateValues.isFullyEnrolled) {
-      this.showResponse({
-        type: 'failure',
-        message: getStringMessage('aura_partially_enrolled_message'),
-      });
-    } else if (stateValues.isFullyEnrolled) {
+    if (hasValue(stateValues)) {
       // We get customer points only for fully enrolled customer.
       showFullScreenLoader();
       // If user is fully enrolled, we get all his apc points details.
@@ -116,20 +111,16 @@ class AuraLoyaltyForm extends React.Component {
           });
         } else {
           this.setState({
-            isFullyEnrolled: true,
             points: result.auraPoints,
             expiringPoints: result.auraPointsToExpire,
             expiryDate: result.auraPointsExpiryDate,
+            isFullyEnrolled: stateValues.isFullyEnrolled,
           });
         }
         this.setState({
           waitForPoints: false,
         });
         removeFullScreenLoader();
-      });
-      this.showResponse({
-        type: 'success',
-        message: '',
       });
     }
 
@@ -140,8 +131,6 @@ class AuraLoyaltyForm extends React.Component {
   };
 
   handleLoyaltyCardUnset = (data) => {
-    this.resetStorage();
-
     const { stateValues } = data.detail;
 
     this.setState({
@@ -208,9 +197,6 @@ class AuraLoyaltyForm extends React.Component {
     showFullScreenLoader();
     // Remove card from state.
     processCheckoutCart({ action: 'remove' });
-    // We clear input values from the form.
-    const input = document.querySelector('.spc-aura-link-card-wrapper .form-items input:not(:read-only)');
-    input.value = '';
   };
 
   selectOption = (option) => {
@@ -252,7 +238,7 @@ class AuraLoyaltyForm extends React.Component {
     const formActive = !(isEgiftCardEnabled() && cartContainsAnyVirtualProduct(cart.cart));
     return (
       <>
-        {!isFullyEnrolled
+        {!isFullyEnrolled && !loyaltyCardLinkedToCart
           && (
             <>
               <div className="aura-details">
@@ -286,21 +272,13 @@ class AuraLoyaltyForm extends React.Component {
                     >
                       { getStringMessage('card_submit') }
                     </button>
-                    {loyaltyCardLinkedToCart
-                      && (
-                        <div className="sub-text">
-                          <a onClick={() => this.removeCard()}>
-                            {getStringMessage('not_you_question')}
-                          </a>
-                        </div>
-                      )}
                   </div>
                 </div>
                 <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
               </div>
             </>
           )}
-        {isFullyEnrolled && hasValue(points)
+        {hasValue(points)
           && (
           <div className="customer-points">
             <div className="aura-points-info">
@@ -316,13 +294,31 @@ class AuraLoyaltyForm extends React.Component {
                 </div>
                 )}
             </div>
-            <AuraRedeemPoints
-              mobile={mobile}
-              pointsInAccount={points}
-              cardNumber={cardNumber}
-              formActive={formActive}
-              cart={cart}
-            />
+            {/* If user is partially enrolled, we show him partially enrolled message. */}
+            {!isFullyEnrolled && loyaltyCardLinkedToCart
+              && (
+                <div className="partially-enrolled">
+                  <div className="sub-text">
+                    <a onClick={() => this.removeCard()}>
+                      {getStringMessage('not_you_question')}
+                    </a>
+                  </div>
+                  <div className="partially-enrolled-message">
+                    { getStringMessage('aura_partially_enrolled_message') }
+                  </div>
+                </div>
+              )}
+            {/* If user is full enrolled, he is allowed to redeem points. */}
+            {isFullyEnrolled
+              && (
+              <AuraRedeemPoints
+                mobile={mobile}
+                pointsInAccount={points}
+                cardNumber={cardNumber}
+                formActive={formActive}
+                cart={cart}
+              />
+              )}
           </div>
           )}
       </>
