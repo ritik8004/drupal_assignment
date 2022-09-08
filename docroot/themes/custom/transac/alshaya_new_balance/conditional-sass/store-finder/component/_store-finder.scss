@@ -1,0 +1,25 @@
+.path--store-finder,
+.nodetype--store {
+  .input--wrapper [id^="edit-actions"] {
+    border-#{$left}: 0;
+  }
+
+  @include breakpoint($only-tablet) {
+    .current-location,
+    .cc-near-me {
+      width: rem(125);
+    }
+  }
+
+  .list-view-link {
+    &::before {
+      line-height: 0.6;
+    }
+  }
+
+  .c-content__region .views-exposed-form {
+    h3 {
+      color: $store_finder_header;
+    }
+  }
+}

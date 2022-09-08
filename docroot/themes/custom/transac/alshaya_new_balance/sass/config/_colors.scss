@@ -59,10 +59,25 @@ $breadcrumb_link_hover: $ada-gray;
 $breadcrumb_link_active: $ada-gray;
 
 // Header.
-$header_border: $gray-medium;
 $header_search_active_bg: $gray2;
 
 // Header secondary: ie: top header.
 $header_secondary_bg: $gray2;
 $header_secondary_menu_link: $black;
 $header_secondarry_menu_color: $black;
+
+// Store Finder.
+
+$store-finder-border-hover: $nb-red;
+$store_finder_text_hover: $nb-red;
+$store_finder_text:$black;
+$store_finder_icon: $black;
+$store_finder_search_label: $black;
+$store_finder_header: $black;
+$store_finder_header_desktop: $black;
+$store_finder_subheader: $black;
+$store_finder_glossary_text: $black;
+$store_finder_locationboder: $gray;
+$store_finder_search_input: $gray;
+$store_finder_search_input_border: $gray;
+
