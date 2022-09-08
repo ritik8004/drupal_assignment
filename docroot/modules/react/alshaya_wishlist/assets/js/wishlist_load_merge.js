@@ -13,6 +13,11 @@ window.wishListLoadedFromBackend = window.wishListLoadedFromBackend || false;
 (function (Drupal) {
 
   /**
+   * Stores if wishlist is loading.
+   */
+  var isWishlistLoading = false;
+
+  /**
    * Helper function to load wishlist information from the magento backend.
    */
   Drupal.alshayaWishlist.loadWishlistFromBackend = function() {
@@ -69,6 +74,11 @@ window.wishListLoadedFromBackend = window.wishListLoadedFromBackend || false;
 
   Drupal.behaviors.alshayaWishlistLoadOrMerge = {
     attach: function (context) {
+      // If wishlist is already loading, do not exeucte this code again on
+      // drupal behavior call.
+      if (isWishlistLoading) {
+        return;
+      }
       // Check if user is an authenticate user, we have wishlist data
       // in local storage from guest users and merge wishlist info for logged
       // in user is true, we will call backend api to merge wishlist info
@@ -129,6 +139,7 @@ window.wishListLoadedFromBackend = window.wishListLoadedFromBackend || false;
           ).then((response) => {
             if (typeof response.data.status !== 'undefined'
               && response.data.status) {
+              isWishlistLoading = true;
               Drupal.alshayaWishlist.loadWishlistFromBackend();
             }
           });
@@ -143,7 +154,7 @@ window.wishListLoadedFromBackend = window.wishListLoadedFromBackend || false;
             && Object.keys(wishListData).length === 0))) {
           // First clean the existing data in storage.
           Drupal.removeItemFromLocalStorage('loggedInUserwishlistInfo');
-
+          isWishlistLoading = true;
           // Load wishlist information from the magento backend, if wishlist
           // data is empty in local storage for authenticate users. First check
           // if wishlist is available for the customer in backend.
