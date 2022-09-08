@@ -54,6 +54,11 @@ class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
     1 => 1,
     2 => 2,
   ]) {
+    // Return if mobile_number is not provided.
+    if (!$number) {
+      return NULL;
+    }
+
     // Remove leading zero due to which number is un-recognizable.
     $number = ltrim($number, 0);
 
