@@ -23,8 +23,8 @@ class CashOnDelivery extends AlshayaSpcPaymentMethodPluginBase {
 
     // Get COD payment method mobile verification settings.
     $cod_mobile_verification = self::getCodMobileVerificationSettings();
-    $build['#attached']['drupalSettings']['codMobileVerification'] = $cod_mobile_verification;
     if ($cod_mobile_verification) {
+      $build['#attached']['drupalSettings']['codMobileVerification'] = $cod_mobile_verification;
       $build['#attached']['library'][] = 'alshaya_white_label/checkout-cod-mobile-verification';
     }
   }
