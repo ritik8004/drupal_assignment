@@ -242,7 +242,7 @@ export default class PaymentMethod extends React.Component {
 
     // Get mobile number from shipping address for the COD mobile verification.
     let mobileNumber = null;
-    if (typeof cart !== 'undefined' && typeof cart.cart.shipping !== 'undefined') {
+    if (hasValue(cart) && hasValue(cart.cart.shipping)) {
       const { address } = cart.cart.shipping;
       mobileNumber = (address !== null) ? address.telephone : null;
     }

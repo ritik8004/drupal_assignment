@@ -52,7 +52,6 @@ class PaymentMethodCodMobileVerification extends React.Component {
       this.updateOtpVerifiedFlag();
 
       // Disable complete purchase button.
-      // Disable complete purchase button.
       this.disableCompletePurchaseButton();
     }
   }
@@ -128,8 +127,6 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
   /**
    * Validate COD mobile verification before enalbing complete purchase button.
-   *
-   * // @todo Update for cod otp container.
    */
   validateBeforePlaceOrder = () => {
     const { otpVerified } = this.state;
@@ -188,7 +185,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
     // Get shipping mobile number from props.
     const { shippingMobileNumber } = this.props;
 
-    // Clear timeout if set by handleChange.
+    // Clear timeout if set by handleChange().
     if (this.validateDelay) {
       clearTimeout(this.validateDelay);
     }
@@ -227,7 +224,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
           return;
         }
 
-        if (hasValue(response.data.error)) {
+        if (hasValue(response.data) && hasValue(response.data.error)) {
           logger.error('Error while validating otp for COD payment mobile verification. Response: @response', {
             '@response': JSON.stringify(response.data),
           });
@@ -310,7 +307,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
     } = this.state;
     const { shippingMobileNumber, otpLength } = this.props;
 
-    if (shippingMobileNumber === null) {
+    if (!hasValue(shippingMobileNumber)) {
       return (null);
     }
 
