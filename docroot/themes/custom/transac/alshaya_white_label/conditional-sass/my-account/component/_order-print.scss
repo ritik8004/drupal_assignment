@@ -468,11 +468,11 @@ html[lang="ar"] {
 }
 
 @page {
-  margin: 0;
+  margin: 0 rem(16) rem(16);
 }
 
 @media print {
-  body {
+  html > body {
     margin: 0 !important;
   }
 }
