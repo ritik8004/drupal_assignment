@@ -165,12 +165,11 @@ export default class AreaSelect extends React.Component {
       options = areaList;
     }
 
-    const isDisabled = isFieldDisabled(enabledFieldsWithMessages, 'locality');
     const selectProps = {
       id: 'spc-area-select-selected',
       className: 'spc-area-select-selected',
     };
-    if (isDisabled) {
+    if (isFieldDisabled(enabledFieldsWithMessages, 'locality')) {
       selectProps.className += ' disabled';
     } else {
       selectProps.onClick = this.toggleFilterList;
