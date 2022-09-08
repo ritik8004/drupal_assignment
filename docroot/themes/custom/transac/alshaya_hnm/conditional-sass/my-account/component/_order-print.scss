@@ -32,6 +32,11 @@
     border-bottom: 1px solid $white;
     margin-bottom: 1.56rem;
     text-align: center;
+
+    img {
+      margin: rem(33) 0 rem(25);
+      height: rem(54);
+    }
   }
 
   .subtitle {
