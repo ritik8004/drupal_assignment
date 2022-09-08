@@ -21,7 +21,9 @@ class CategoryViewAllController extends ControllerBase {
   public function getBuild(TermInterface $taxonomy_term) {
     // Render empty content as view-all listing is displayed by algolia block.
     return [
-      '#cache' => $taxonomy_term->getCacheTags(),
+      '#cache' => [
+        'tags' => $taxonomy_term->getCacheTags(),
+      ],
     ];
   }
 
