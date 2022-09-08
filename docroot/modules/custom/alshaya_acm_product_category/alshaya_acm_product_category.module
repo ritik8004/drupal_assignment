@@ -210,6 +210,9 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
     $term->path->pathauto = PathautoState::SKIP;
     $term->path->alias = '/' . trim($category['custom_attributes']['url_key']['value'], '/') . '/';
   }
+  else {
+    $term->path->pathauto = PathautoState::CREATE;
+  }
 }
 
 /**
@@ -704,11 +707,15 @@ function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_fo
  *   Return element array.
  */
 function alshaya_acm_product_category_after_build(array $element, FormStateInterface $form_state) {
-  $element[0]['pathauto']['#states'] = [
-    'unchecked' => [
-      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
-    ],
-  ];
+  // If pathauto config for the term is set to false, then we keep it FALSE by
+  // default.
+  if ($element[0]["pathauto"]["#value"] != 0) {
+    $element[0]['pathauto']['#states'] = [
+      'unchecked' => [
+        ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+  }
 
   $element[0]['alias']['#states'] = [
     'empty' => [
