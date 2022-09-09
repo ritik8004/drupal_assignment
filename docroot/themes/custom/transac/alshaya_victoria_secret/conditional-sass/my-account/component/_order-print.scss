@@ -64,6 +64,11 @@
 .c-order-print {
   .site--brand {
     text-align: center;
+
+    img {
+      margin: rem(32) 0;
+      height: rem(47);
+    }
   }
 
   .delivery-details,
