@@ -154,3 +154,17 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
   $data[$term->tid]['data_hierarchy'] = $term_hierarchy_data['hierarchy'] ?? '';
   $data[$term->tid]['data_rule_context'] = $term_hierarchy_data['ruleContext'] ? implode(',', $term_hierarchy_data['ruleContext']) : '';
 }
+
+/**
+ * Implements hook_categories_all_response_alter().
+ */
+function alshaya_shopby_filter_attribute_categories_all_response_alter(&$data, $term) {
+  // Return if the shopby_filter_attribute parameter is not set.
+  if (!isset($term->shopby_filter_attribute)) {
+    return;
+  }
+
+  // Add `shopby_filter_attribute` parameter with boolean TRUE/FALSE
+  // (whatever is set) .
+  $data['alshaya_shopby_filter_attribute'] = (bool) $term->shopby_filter_attribute;
+}
