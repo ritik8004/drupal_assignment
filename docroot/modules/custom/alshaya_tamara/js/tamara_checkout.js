@@ -1,9 +1,10 @@
-(function ($, Drupal) {
-  window.tamaraAsyncCallback = function () {
+(function (Drupal, drupalSettings) {
+  // Function to render the tamara installment widget.
+  Drupal.tamaraCardInit = function () {
     // Initialise the Tamara widget configs.
     window.TamaraInstallmentPlan.init({
-      lang: 'en',
-      currency: 'AED',
+      lang: drupalSettings.path.currentLanguage,
+      currency: drupalSettings.alshaya_spc.currency_config.currency_code,
       // @todo add this when available
       // publicKey: {{tamara_public_key}}
     })
@@ -11,4 +12,4 @@
     // Render the installment plan widget.
     window.TamaraInstallmentPlan.render()
   }
-})(jQuery, Drupal);
+})(Drupal, drupalSettings);

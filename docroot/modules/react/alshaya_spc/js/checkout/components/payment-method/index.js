@@ -31,6 +31,7 @@ import PaymentMethodTabby from '../payment-method-tabby';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
+import PaymentMethodTamara from '../payment-method-tamara';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -42,6 +43,7 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodPostpay = React.createRef();
     this.paymentMethodTabby = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
+    this.paymentMethodTamara = React.createRef();
   }
 
   componentDidMount() {
@@ -255,6 +257,15 @@ export default class PaymentMethod extends React.Component {
                     </div>
                   </div>
                 </ConditionalView>
+
+                {/* Show the method description if payment method is tamara. */}
+                <ConditionalView condition={method.code === 'tamara'}>
+                  <div className="spc-payment-method-desc">
+                    <div className="desc-content">
+                      {method.description}
+                    </div>
+                  </div>
+                </ConditionalView>
               </label>
 
               <ConditionalView condition={method.code === 'tabby'}>
@@ -352,6 +363,16 @@ export default class PaymentMethod extends React.Component {
           <ConditionalView condition={isSelected && method.code === 'checkout_com_upapi_fawry'}>
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
               <PaymentMethodCheckoutComUpapiFawry
+                cart={cart}
+              />
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={(isSelected && method.code === 'tamara')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <PaymentMethodTamara
+                ref={this.paymentMethodTamara}
+                tamara={drupalSettings.tamara}
                 cart={cart}
               />
             </div>
