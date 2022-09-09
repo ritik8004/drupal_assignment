@@ -51,7 +51,7 @@
         "drupal/email_registration": "^1.0",
         "drupal/endroid_qr_code": "^3.0",
         "drupal/entity_embed": "^1.2",
-        "drupal/external_hreflang": "^1.0",
+        "drupal/external_hreflang": "^2.0",
         "drupal/facets": "^1.8",
         "drupal/field_group": "^3.2",
         "drupal/form_options_attributes": "^1.0",
@@ -403,9 +403,6 @@
             },
             "acquia/blt-acsf": {
                 "Fix multiple addition of acsf module for local uninstallation on running blt acsf:init": "https://patch-diff.githubusercontent.com/raw/acquia/blt-acsf/pull/10.patch"
-            },
-            "drupal/external_hreflang": {
-                "Fix the resource expection": "patches/external_hreflang/external_hreflang_exception.patch"
             }
         },
         "installer-paths": {
