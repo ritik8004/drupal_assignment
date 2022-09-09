@@ -17,9 +17,13 @@
     }
   }
 
-  .c-content__region .views-exposed-form {
-    h3 {
-      color: $store_finder_header;
+  .list-view-locator {
+    .views-field-field-store-open-hours {
+      .hours--wrapper {
+        .hours--label {
+          border-bottom: rem(1) solid $store-finder-openinghours-border;
+        }
+      }
     }
   }
 }
