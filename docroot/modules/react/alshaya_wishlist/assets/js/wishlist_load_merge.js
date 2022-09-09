@@ -13,8 +13,8 @@ window.wishListLoadedFromBackend = window.wishListLoadedFromBackend || false;
 (function (Drupal) {
 
   /**
-  * Helper function to load wishlist information from the magento backend.
-  */
+   * Helper function to load wishlist information from the magento backend.
+   */
   Drupal.alshayaWishlist.loadWishlistFromBackend = function() {
     window.commerceBackend.getWishlistFromBackend().then((response) => {
       let wishListItemCount = 0;
