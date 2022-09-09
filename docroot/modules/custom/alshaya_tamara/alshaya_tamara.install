@@ -15,10 +15,16 @@ function alshaya_tamara_install() {
   // Create taxonomy term for the new method.
   $tamara = $checkout_options_manager->loadPaymentMethod('tamara', '3 interest-free payments');
 
+  // Add a description for the Tamara payment method.
+  $tamara->setDescription('Pay a fraction of your total now, and the rest over time. No hidden fees, no interest!');
+  $tamara->save();
+
+  // Set the payment method arabic translation for term.
   $tamara_ar = $tamara->hasTranslation('ar')
     ? $tamara->getTranslation('ar')
     : $tamara->addTranslation('ar', []);
   $tamara_ar->setName('3 مدفوعات بدون فوائد');
+  $tamara_ar->setDescription('ادفع جزءًا بسيطًا من إجمالي المبلغ الآن ، والباقي بمرور الوقت. لا رسوم خفية ، لا فائدة!');
   $tamara_ar->save();
 
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');

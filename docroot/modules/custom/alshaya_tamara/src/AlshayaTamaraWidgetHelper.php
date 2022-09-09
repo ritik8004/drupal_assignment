@@ -52,7 +52,7 @@ class AlshayaTamaraWidgetHelper {
    */
   private function getTamaraWidgetInfo($page_type = 'pdp') {
     $info = [];
-    $info['class'] = 'tamara-widget';
+    $info['class'] = 'tamara-installment-plan-widget';
     $id = 'tamara-card-checkout';
     $info['id'] = Html::getUniqueId($id);
     return $info;
