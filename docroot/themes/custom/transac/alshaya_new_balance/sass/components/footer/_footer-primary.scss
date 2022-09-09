@@ -24,7 +24,6 @@
 
       h3 {
         color: $primary_footer_input_label;
-        font-family: $alshaya-thin;
         align-self: center;
         width: auto;
         text-transform: none;
@@ -105,7 +104,6 @@
       }
 
       .form-email {
-        font-family: $alshaya-thin;
         color: $footer-newsletter-text;
         margin-top: rem(4);
         font-size: rem(14);
@@ -140,7 +138,6 @@
         margin-top: rem(16);
         margin-bottom: rem(18);
         text-transform: none;
-        font-family: $alshaya-thin;
 
         @include breakpoint($only-mobile) {
           display: flex;
@@ -170,9 +167,7 @@
       }
 
       a {
-        font-family: $alshaya-thin;
-        font-size: rem(14);
-        text-transform: none;
+        @extend %footer-links;
       }
     }
   }
@@ -192,7 +187,6 @@
         margin-top: rem(16);
         margin-bottom: rem(18);
         text-transform: none;
-        font-family: $alshaya-thin;
 
         @include breakpoint($only-mobile) {
           display: flex;
@@ -207,9 +201,7 @@
         width: max-content;
 
         a {
-          font-family: $alshaya-thin;
-          font-size: rem(14);
-          text-transform: none;
+          @extend %footer-links;
         }
       }
 
@@ -257,16 +249,11 @@
 
     ul {
       li {
-        a {
+        a,
+        &.en a,
+        &.en.is-active a {
           font-family: $alshaya-thin;
           text-transform: unset;
-        }
-
-        &.en {
-          a {
-            font-family: $alshaya-thin;
-            text-transform: unset;
-          }
         }
       }
     }
@@ -287,7 +274,6 @@
     h3 {
       font-size: rem(17);
       color: $footer_title_h3;
-      font-family: $alshaya-thin;
     }
 
     ul {
@@ -334,4 +320,9 @@
       width: rem(320);
     }
   }
+}
+
+%footer-links {
+  font-size: rem(14);
+  text-transform: none;
 }
