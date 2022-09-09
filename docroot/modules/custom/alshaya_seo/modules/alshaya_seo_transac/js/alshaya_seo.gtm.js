@@ -18,6 +18,39 @@
   var productImpressions = [];
   var productImpressionsTimer = null;
 
+  /**
+   * Drupal Behaviour to set RefererInfo Data to storage.
+   */
+  Drupal.behaviors.setRefererInfoData = {
+    attach: function () {
+      const currentPath = drupalSettings.path.currentPath;
+      const referer = document.referrer;
+      const url = window.location.href;
+
+      if(currentPath.includes('checkout/confirmation')) {
+        // Remove refererPageType and refererPath from storage.
+        Drupal.removeItemFromLocalStorage('refererPageType');
+        Drupal.removeItemFromLocalStorage('refererPath');
+      } else if (currentPath.includes('search')) {
+        // Set Search Results Page as refererPageType
+        Drupal.addItemInLocalStorage('refererPageType', 'Search Results Page');
+        Drupal.addItemInLocalStorage('refererPath', url);
+      } else if (currentPath.includes('taxonomy/term')) {
+        // Set PLP as refererPageType
+        Drupal.addItemInLocalStorage('refererPageType', 'PLP');
+        Drupal.addItemInLocalStorage('refererPath', url);
+      } else if (currentPath.includes('node/')) {
+        const refererPath = Drupal.getItemFromLocalStorage('refererPath');
+        if (referer === '' || referer !== refererPath) {
+          // Set PDP as refererPageType only if referer is not set or
+          // Referer does not match with refererPath.
+          Drupal.addItemInLocalStorage('refererPageType', 'PDP');
+          Drupal.addItemInLocalStorage('refererPath', url);
+        }
+      }
+    }
+  };
+
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
       $('body').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', '.sku-base-form', function (event, variant, code) {
@@ -811,6 +844,17 @@
           // For all other pages, use gtm-list-name html attribute.
           // Except in PDP, to define full path from PLP.
           : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+      }
+
+      // Fetch refererPageType from localstorage.
+      const refererPageType = Drupal.getItemFromLocalStorage('refererPageType');
+      if(refererPageType !== undefined) {
+        productData.list = (refererPageType === 'Search Results Page')
+          // For SRP, use list value 'Search Result Page'.
+          ? refererPageType
+          // For all other pages, use gtm-list-name html attribute.
+          // And Replace placeholder with refererPageType.
+          : $('body').attr('gtm-list-name').replace('PDP-placeholder', refererPageType);
       }
     }
     catch (error) {
