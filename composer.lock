@@ -1423,7 +1423,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -4148,16 +4148,20 @@
             "authors": [
                 {
                     "name": "Acquia",
-                    "homepage": "https://www.drupal.org/user/1231722",
+                    "homepage": "https://www.drupal.org/user/14023",
                     "email": "support@acquia.com"
+                },
+                {
+                    "name": "Rok Žlender",
+                    "homepage": "https://www.drupal.org/user/61873"
+                },
+                {
+                    "name": "acquia",
+                    "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
                     "name": "acquia.sf.ci",
                     "homepage": "https://www.drupal.org/user/3285763"
-                },
-                {
-                    "name": "Alan Evans",
-                    "homepage": "https://www.drupal.org/user/14023"
                 },
                 {
                     "name": "attila.fekete",
@@ -4180,16 +4184,8 @@
                     "homepage": "https://www.drupal.org/user/419643"
                 },
                 {
-                    "name": "nishat.baig",
-                    "homepage": "https://www.drupal.org/user/3729641"
-                },
-                {
                     "name": "roderik",
                     "homepage": "https://www.drupal.org/user/8841"
-                },
-                {
-                    "name": "Rok Žlender",
-                    "homepage": "https://www.drupal.org/user/61873"
                 }
             ],
             "description": "Connects a site with Acquia Cloud Site Factory.",
@@ -4222,16 +4218,20 @@
             ],
             "authors": [
                 {
+                    "name": "Alan Evans",
+                    "homepage": "https://www.drupal.org/user/14023"
+                },
+                {
+                    "name": "Rok Žlender",
+                    "homepage": "https://www.drupal.org/user/61873"
+                },
+                {
                     "name": "acquia",
                     "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
                     "name": "acquia.sf.ci",
                     "homepage": "https://www.drupal.org/user/3285763"
-                },
-                {
-                    "name": "Alan Evans",
-                    "homepage": "https://www.drupal.org/user/14023"
                 },
                 {
                     "name": "attila.fekete",
@@ -4254,16 +4254,8 @@
                     "homepage": "https://www.drupal.org/user/419643"
                 },
                 {
-                    "name": "nishat.baig",
-                    "homepage": "https://www.drupal.org/user/3729641"
-                },
-                {
                     "name": "roderik",
                     "homepage": "https://www.drupal.org/user/8841"
-                },
-                {
-                    "name": "Rok Žlender",
-                    "homepage": "https://www.drupal.org/user/61873"
                 }
             ],
             "description": "Helper module for duplicating Acquia Cloud Site Factory sites.",
@@ -4297,16 +4289,20 @@
             ],
             "authors": [
                 {
+                    "name": "Alan Evans",
+                    "homepage": "https://www.drupal.org/user/14023"
+                },
+                {
+                    "name": "Rok Žlender",
+                    "homepage": "https://www.drupal.org/user/61873"
+                },
+                {
                     "name": "acquia",
                     "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
                     "name": "acquia.sf.ci",
                     "homepage": "https://www.drupal.org/user/3285763"
-                },
-                {
-                    "name": "Alan Evans",
-                    "homepage": "https://www.drupal.org/user/14023"
                 },
                 {
                     "name": "attila.fekete",
@@ -4329,16 +4325,8 @@
                     "homepage": "https://www.drupal.org/user/419643"
                 },
                 {
-                    "name": "nishat.baig",
-                    "homepage": "https://www.drupal.org/user/3729641"
-                },
-                {
                     "name": "roderik",
                     "homepage": "https://www.drupal.org/user/8841"
-                },
-                {
-                    "name": "Rok Žlender",
-                    "homepage": "https://www.drupal.org/user/61873"
                 }
             ],
             "description": "Handles VCS-based themes on Acquia Cloud Site Factory.",
@@ -4371,16 +4359,20 @@
             ],
             "authors": [
                 {
+                    "name": "Alan Evans",
+                    "homepage": "https://www.drupal.org/user/14023"
+                },
+                {
+                    "name": "Rok Žlender",
+                    "homepage": "https://www.drupal.org/user/61873"
+                },
+                {
                     "name": "acquia",
                     "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
                     "name": "acquia.sf.ci",
                     "homepage": "https://www.drupal.org/user/3285763"
-                },
-                {
-                    "name": "Alan Evans",
-                    "homepage": "https://www.drupal.org/user/14023"
                 },
                 {
                     "name": "attila.fekete",
@@ -4403,16 +4395,8 @@
                     "homepage": "https://www.drupal.org/user/419643"
                 },
                 {
-                    "name": "nishat.baig",
-                    "homepage": "https://www.drupal.org/user/3729641"
-                },
-                {
                     "name": "roderik",
                     "homepage": "https://www.drupal.org/user/8841"
-                },
-                {
-                    "name": "Rok Žlender",
-                    "homepage": "https://www.drupal.org/user/61873"
                 }
             ],
             "description": "Stores sensitive variables in a single place for easy scrubbing.",
@@ -7531,6 +7515,10 @@
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
+                    "name": "TR",
+                    "homepage": "https://www.drupal.org/user/202830"
+                },
+                {
                     "name": "bojanz",
                     "homepage": "https://www.drupal.org/user/86106"
                 },
@@ -7549,10 +7537,6 @@
                 {
                     "name": "mglaman",
                     "homepage": "https://www.drupal.org/user/2416470"
-                },
-                {
-                    "name": "TR",
-                    "homepage": "https://www.drupal.org/user/202830"
                 }
             ],
             "description": "Provides expanded entity APIs, which will be moved to Drupal core one day.",
@@ -8264,7 +8248,7 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.5+2-dev",
+                    "version": "8.x-1.4+11-dev",
                     "datestamp": "1651261757",
                     "security-coverage": {
                         "status": "not-covered",
@@ -10437,7 +10421,7 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.2+10-dev",
+                    "version": "8.x-1.1+9-dev",
                     "datestamp": "1650896584",
                     "security-coverage": {
                         "status": "not-covered",
@@ -14586,22 +14570,22 @@
             "authors": [
                 {
                     "name": "Getulio Valentin Sánchez (gvso)",
-                    "homepage": "https://www.drupal.org/user/3510098",
+                    "homepage": "https://www.drupal.org/user/3509455",
                     "email": "valentin2507@gmail.com"
                 },
                 {
                     "name": "Utkarsh Dixit (denutkarsh)",
-                    "homepage": "https://www.drupal.org/user/3101285",
+                    "homepage": "https://www.drupal.org/user/3510098",
                     "email": "downloadplaza97@gmail.com"
                 },
                 {
                     "name": "Himanshu Dixit (himanshu-dixit)",
-                    "homepage": "https://www.drupal.org/user/3513954",
+                    "homepage": "https://www.drupal.org/user/3101285",
                     "email": "hudixt@gmail.com"
                 },
                 {
                     "name": "Christopher C. Wells (wells)",
-                    "homepage": "https://www.drupal.org/user/3509455",
+                    "homepage": "https://www.drupal.org/user/3513954",
                     "email": "drupal.org@chris-wells.net"
                 },
                 {
@@ -15113,8 +15097,8 @@
                     "version": "2.0.2",
                     "datestamp": "1646055681",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
                     }
                 }
             },
@@ -30053,5 +30037,5 @@
     "platform-overrides": {
         "php": "8.0"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
