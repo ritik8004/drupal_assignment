@@ -18,6 +18,39 @@
   var productImpressions = [];
   var productImpressionsTimer = null;
 
+  /**
+   * Drupal Behaviour to set ReferrerInfo Data to storage.
+   */
+  Drupal.behaviors.setReferrerInfoData = {
+    attach: function () {
+      const currentPath = drupalSettings.path.currentPath;
+      const referrer = document.referrer;
+      const url = window.location.href;
+
+      if(currentPath.includes('checkout/confirmation')) {
+        // Remove referrerPageType and referrerPath from storage.
+        Drupal.removeItemFromLocalStorage('referrerPageType');
+        Drupal.removeItemFromLocalStorage('referrerPath');
+      } else if (currentPath.includes('search')) {
+        // Set Search Results Page as referrerPageType
+        Drupal.addItemInLocalStorage('referrerPageType', 'Search Results Page');
+        Drupal.addItemInLocalStorage('referrerPath', url);
+      } else if (currentPath.includes('taxonomy/term')) {
+        // Set PLP as referrerPageType
+        Drupal.addItemInLocalStorage('referrerPageType', 'PLP');
+        Drupal.addItemInLocalStorage('referrerPath', url);
+      } else if (currentPath.includes('node/')) {
+        const referrerPath = Drupal.getItemFromLocalStorage('referrerPath');
+        if (referrer === '' || referrer !== referrerPath) {
+          // Set PDP as referrerPageType only if referrer is not set or
+          // Referrer does not match with referrerPath.
+          Drupal.addItemInLocalStorage('referrerPageType', 'PDP');
+          Drupal.addItemInLocalStorage('referrerPath', url);
+        }
+      }
+    }
+  };
+
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
       $('body').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', '.sku-base-form', function (event, variant, code) {
@@ -811,6 +844,17 @@
           // For all other pages, use gtm-list-name html attribute.
           // Except in PDP, to define full path from PLP.
           : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+      }
+
+      // Fetch referrerPageType from localstorage.
+      const referrerPageType = Drupal.getItemFromLocalStorage('referrerPageType');
+      if(referrerPageType !== undefined) {
+        productData.list = (referrerPageType === 'Search Results Page')
+          // For SRP, use list value 'Search Result Page'.
+          ? referrerPageType
+          // For all other pages, use gtm-list-name html attribute.
+          // And Replace placeholder with referrerPageType.
+          : $('body').attr('gtm-list-name').replace('PDP-placeholder', referrerPageType);
       }
     }
     catch (error) {
