@@ -24,7 +24,7 @@ function alshaya_tamara_install() {
     ? $tamara->getTranslation('ar')
     : $tamara->addTranslation('ar', []);
   $tamara_ar->setName('3 مدفوعات بدون فوائد');
-  $tamara_ar->setName('ادفع جزءًا بسيطًا من إجمالي المبلغ الآن ، والباقي بمرور الوقت. لا رسوم خفية ، لا فائدة!');
+  $tamara_ar->setDescription('ادفع جزءًا بسيطًا من إجمالي المبلغ الآن ، والباقي بمرور الوقت. لا رسوم خفية ، لا فائدة!');
   $tamara_ar->save();
 
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
