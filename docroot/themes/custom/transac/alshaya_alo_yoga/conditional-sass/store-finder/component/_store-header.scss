@@ -37,7 +37,6 @@
       @include breakpoint($only-tablet) {
         width: 26.5%;
         padding-right: rem(8) !important;
-        max-height: rem(40);
       }
 
       @include breakpoint($desktop) {
@@ -81,7 +80,6 @@
       width: 40.5%;
       padding: rem(11);
       height: rem(40);
-      max-height: rem(40);
     }
 
     html[lang=ar] & {
