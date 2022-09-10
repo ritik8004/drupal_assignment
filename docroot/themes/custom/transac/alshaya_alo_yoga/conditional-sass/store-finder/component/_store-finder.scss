@@ -1,0 +1,41 @@
+.path--store-finder,
+.nodetype--store {
+  .geolocation-common-map-container {
+    [aria-hidden=true] {
+      padding-bottom: rem(14);
+      padding-#{$right}: rem(2);
+    }
+  }
+
+  .geolocation-google-map {
+    [aria-hidden=true] {
+      padding-bottom: rem(14);
+    }
+  }
+
+  .current-location,
+  .cc-near-me {
+    width: auto;
+
+    &::before {
+      background-size: contain;
+      position: relative;
+      top: rem(-2);
+      margin-#{$right}: rem(3);
+    }
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        padding-right: rem(18) !important;
+        padding-top: 0;
+      }
+    }
+  }
+
+  .by--alphabet {
+    h3 {
+      font-size: rem(28);
+      font-family: $ay-nova-semibold;
+    }
+  }
+}

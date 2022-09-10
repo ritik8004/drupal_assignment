@@ -1,5 +1,3 @@
-@import "../../../alshaya_white_label/sass/config/_colors.scss";
-
 $black: #000;
 $white: #fff;
 $charcoal: #242424;
@@ -155,3 +153,45 @@ $header_secondary_menu_link: $white;
 $header_mobile_menu_arrow: $black;
 $header_c_menu_text: $black;
 $header_secondary_menu_link_active: $black;
+
+// Store finder page.
+// Store finder header form.
+$store_finder_header: $black;
+$store_finder_header_desktop: $black;
+$store_finder_subheader: $black;
+$store_finder_backbtn: $black;
+$store_finder_icon: $black;
+$store_finder_text: $black;
+$store_finder_label_location: $black;
+$store_finder_border: $black;
+$store_finder_text_hover: $black;
+$store_finder_border_hover: $mercury;
+$store_finder_search_label: $alto;
+$store_finder_search_input: $mercury;
+$store_finder_search_input_bg: $white;
+$store_finder_search_input_mobile_border: $mercury;
+$store_finder_glossary_btn_border: $mercury;
+$store_finder_glossary_title: $black;
+
+// Store finder gloassary.
+$store_finder_glossary_alphabet: $black;
+$store_finder_glossary_text: $black;
+$store_finder_glossary_icon: $black;
+$store_finder_glossary_text_hover: $black;
+$store_finder_glossary_text_border: $alto;
+$store_finder_glossary_border: $mercury;
+$store_finder_glossary_link: $black;
+
+// Store finder search results.
+$store_finder_search_results_label: $black;
+$store_finder_search_results_border: $alto;
+$store_finder_search_results_counter_text: $white;
+$store_finder_search_results_tile_bg: $white;
+$store_finder_search_results_tile_hover_bg: $white;
+$store_finder_search_results_tile_link: $black;
+$store_finder_search_results_tile_icon: $black;
+$store_finder_search_results_hour_label: $black;
+$store_finder_search_results_hour_icon_open: $black;
+$store_finder_storewrapper_bg: $smoke;
+$store_finder_map_border: $mercury;
+$store_finder_search_results_counter_bg: $black;
