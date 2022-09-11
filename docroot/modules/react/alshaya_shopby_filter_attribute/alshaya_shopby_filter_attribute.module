@@ -149,8 +149,23 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
   // show filter menu items.
   $data[$term->tid]['data_nav_attr'] = $shopby_filter_attribute_configs['menuFilterAttributes'] ?? '';
 
-  // Both these data)hierarchy and data_rule_context will be used in React
-  // component to fetch available filter options in given context.
+  // These data_hierarchy, data_rule_context and data_category_field will be
+  // used in React component to fetch available filter options in given context.
   $data[$term->tid]['data_hierarchy'] = $term_hierarchy_data['hierarchy'] ?? '';
   $data[$term->tid]['data_rule_context'] = $term_hierarchy_data['ruleContext'] ? implode(',', $term_hierarchy_data['ruleContext']) : '';
+  $data[$term->tid]['data_category_field'] = $term_hierarchy_data['category_field'] ?: '';
+}
+
+/**
+ * Implements hook_categories_all_response_alter().
+ */
+function alshaya_shopby_filter_attribute_categories_all_response_alter(&$data, $term) {
+  // Return if the shopby_filter_attribute parameter is not set.
+  if (!isset($term->shopby_filter_attribute)) {
+    return;
+  }
+
+  // Add `shopby_filter_attribute` parameter with boolean TRUE/FALSE
+  // (whatever is set) .
+  $data['alshaya_shopby_filter_attribute'] = (bool) $term->shopby_filter_attribute;
 }

@@ -720,6 +720,11 @@ class MobileAppUtility {
         $record['child'] = $this->getAllCategories($langcode, $term->tid);
       }
 
+      // Add an alter hook to change the individual category record data. For
+      // example some modules add new fields in category all API response based
+      // on availability on the features like FL navigation fields.
+      $this->moduleHandler->alter('categories_all_response', $record, $term);
+
       $data[] = $record;
     }
     return $data;
