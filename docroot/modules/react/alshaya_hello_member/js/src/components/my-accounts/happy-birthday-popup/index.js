@@ -86,7 +86,7 @@ class HappyBirthdayPopup extends React.Component {
             </div>
             <div className="happy-birthday-voucher-details">
               <a className="avail-it" key={this.data.id || this.data.code} href={`${Drupal.url(`user/${uid}`)}/hello-member-benefits/${hasValue(this.data.id) ? `coupon/${this.data.id}` : `offer/${this.data.code}`}`}>
-                { Drupal.t('AVAIL IT', {}, { context: 'hello_member' }) }
+                { Drupal.t('REDEEM IT', {}, { context: 'hello_member' }) }
               </a>
             </div>
             <div className="expiry">
