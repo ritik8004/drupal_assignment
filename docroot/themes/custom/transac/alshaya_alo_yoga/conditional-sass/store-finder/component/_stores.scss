@@ -1,11 +1,5 @@
 .path--store-finder,
 .nodetype--store {
-  .by--alphabet {
-    .rows a {
-      color: $store_finder_glossary_title !important;
-    }
-  }
-
   .label--location {
     .block-store-finder-form__form__label__wrapper {
       color: $store_finder_label_location !important;
@@ -135,34 +129,6 @@
 
   .views-field-field-store-address {
     margin-bottom: 0;
-  }
-}
-
-.field--name-field-brand {
-  .field__label,
-  .field__item {
-    display: inline;
-  }
-}
-
-.view-stores-finder {
-  .views-field-field-brand {
-    .views-label-field-brand,
-    .field-content {
-      display: inline;
-    }
-  }
-
-  .hours--label {
-    & .open {
-      border-bottom: 0;
-    }
-  }
-
-  .geolocation-common-map-container {
-    .views-field-field-store-open-hours {
-      border-top: 0;
-    }
   }
 }
 
