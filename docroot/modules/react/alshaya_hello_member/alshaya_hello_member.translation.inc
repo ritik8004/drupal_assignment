@@ -295,8 +295,8 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'تطبيق العروض',
         'context' => 'hello_member',
       ],
-      'AVAIL IT' => [
-        'ar' => 'توفرها',
+      'REDEEM IT' => [
+        'ar' => 'استخدمها',
         'context' => 'hello_member',
       ],
       '@hm_icon @login_link or Become a member to earn @points points' => [
