@@ -68,6 +68,7 @@ class AlshayaBazaarVoiceApiHelper {
    * @throws \Exception
    */
   public function doRequest(string $method, string $url, array $request_options = []) {
+    $result = NULL;
     $request_options['on_stats'] = function (TransferStats $stats) {
       $code = ($stats->hasResponse())
         ? $stats->getResponse()->getStatusCode()
@@ -90,6 +91,14 @@ class AlshayaBazaarVoiceApiHelper {
       );
 
       $result = $response->getBody()->getContents();
+
+      if (empty($result)) {
+        $this->logger->error('Something went wrong while invoking BV API @api. Empty body content.', [
+          '@api' => $url,
+        ]);
+
+        return NULL;
+      }
 
       $result = is_string($result) && !empty($result)
         ? json_decode($result, TRUE)
