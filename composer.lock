@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3359a110045380fa4cb0a5a54f699289",
+    "content-hash": "cd44ee2e86f24ca9492f21356d140700",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -17545,10 +17545,10 @@
         },
         {
             "name": "jquery-validation/jquery-validation",
-            "version": "1.17.0",
+            "version": "1.19.5",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip"
+                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.19.5/jquery-validation-1.19.5.zip"
             },
             "type": "drupal-library"
         },

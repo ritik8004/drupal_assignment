@@ -140,7 +140,7 @@
         "drush/drush": "10.6.2",
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
-        "jquery-validation/jquery-validation": "~1.0",
+        "jquery-validation/jquery-validation": "^1.19",
         "mobiledetect/mobiledetectlib": "^2.8",
         "nnnick/chartjs": "^3.9",
         "npm-asset/jquery-ui-touch-punch": "^0.2.3",
@@ -171,10 +171,10 @@
             "type": "package",
             "package": {
                 "name": "jquery-validation/jquery-validation",
-                "version": "1.17.0",
+                "version": "1.19.5",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
+                    "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.19.5/jquery-validation-1.19.5.zip",
                     "type": "zip"
                 }
             }
@@ -387,7 +387,8 @@
                 "Jquery UI library for blind effect is missing in D9": "https://www.drupal.org/files/issues/2022-04-13/jquery_effects_library-3275144-2.patch"
             },
             "drupal/jquery_ui_effects": {
-                "Fix 'jquery_ui_effects/clip' library to use jquery_ui_effects/core as a dependency": "https://www.drupal.org/files/issues/2022-01-17/3258833-2.patch"
+                "Fix 'jquery_ui_effects/clip' library to use jquery_ui_effects/core as a dependency": "https://www.drupal.org/files/issues/2022-01-17/3258833-2.patch",
+                "jquery_ui_effects - Upgrade to jQuery UI 1.13.2": "https://git.drupalcode.org/project/jquery_ui_effects/-/merge_requests/3.patch"
             },
             "drupal/image_style_quality": {
                 "Static caching for toolkit definition": "https://www.drupal.org/files/issues/2021-12-03/image_style_quality-3252493-toolkit-cache.patch"
@@ -403,6 +404,27 @@
             },
             "acquia/blt-acsf": {
                 "Fix multiple addition of acsf module for local uninstallation on running blt acsf:init": "https://patch-diff.githubusercontent.com/raw/acquia/blt-acsf/pull/10.patch"
+            },
+            "drupal/jquery_ui": {
+                "jquery_ui - Upgrade to jQuery UI 1.13.2": "https://www.drupal.org/files/issues/2022-09-11/upgrade_to_jquery_ui_1_13_2-3304228-9.patch"
+            },
+            "drupal/jquery_ui_accordion": {
+                "jquery_ui_accordion - Upgrade to jQuery UI 1.13.2": "https://www.drupal.org/files/issues/2022-09-11/upgrade_to_jquery_ui_1_13_2-3308646-5.patch"
+            },
+            "drupal/jquery_ui_datepicker": {
+                "jquery_ui_datepicker - Upgrade to jQuery UI 1.13.2": "https://www.drupal.org/files/issues/2022-09-11/upgrade_to_jquery_ui_1_13_2-3308659-4.patch"
+            },
+            "drupal/jquery_ui_draggable": {
+                "jquery_ui_draggable - Upgrade to jQuery UI 1.13.2": "https://www.drupal.org/files/issues/2022-09-11/upgrade_to_jquery_ui_1_13_2-3308762-3.patch"
+            },
+            "drupal/jquery_ui_droppable": {
+                "jquery_ui_dropabble - Upgrade to jQuery UI 1.13.2": "https://www.drupal.org/files/issues/2022-09-11/upgrade_to_jquery_ui_1_13_2-3308763-3.patch"
+            },
+            "drupal/jquery_ui_slider": {
+                "jquery_ui_slider - Upgrade to jQuery UI 1.13.2": "https://www.drupal.org/files/issues/2022-09-11/upgrade_to_jquery_ui_1_13_2-3308771-3.patch"
+            },
+            "drupal/jquery_ui_tabs": {
+                "jquery_ui_tabs - Upgrade to jQuery UI 1.13.2": "https://www.drupal.org/files/issues/2022-09-11/upgrade_to_jquery_ui_1_13_2-3308829-3.patch"
             }
         },
         "installer-paths": {
