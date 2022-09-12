@@ -26,3 +26,21 @@ $nb_theme_img_directory_path: '/themes/custom/transac/alshaya_new_balance/imgs';
     opacity: 0.65;
   }
 }
+
+@mixin secondaryBtn {
+  text-transform: unset;
+  background-color: $secondary_btn_bg;
+  color: $secondary_btn_text;
+  font-family: $alshaya-bold;
+  font-size: rem(14);
+  justify-content: center;
+  border-color: $secondary_border;
+
+  @include breakpoint($tablet) {
+    width: rem(216);
+  }
+
+  &:hover {
+    background-color: $secondary_btn_bg_hover;
+  }
+}

@@ -42,6 +42,11 @@ libraries-override:
       theme:
         css/conditional-sass/font-face/font-face.ltr.css: css/conditional-sass/font-face/font-face.ltr.css
 
+  alshaya_white_label/contact:
+    css:
+      theme:
+        css/conditional-sass/contact-us/contact-us.ltr.css: css/conditional-sass/contact-us/contact-us.ltr.css
+
   alshaya_white_label/store_finder:
     css:
       theme:
