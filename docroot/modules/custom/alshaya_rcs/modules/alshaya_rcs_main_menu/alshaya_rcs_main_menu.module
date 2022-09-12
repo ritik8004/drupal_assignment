@@ -254,7 +254,7 @@ function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
   $query_fields['navigationMenu'] = [
     'query' => [
       'query($categoryId: String)' => [
-        'categories(filters: { ids: { eq: $categoryId } })'
+        'categories(filters: { ids: { eq: $categoryId }} include_in_menu: 0 )'
         => \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->getRcsCategoryMenuQuery($max_depth_to_load),
       ],
     ],
