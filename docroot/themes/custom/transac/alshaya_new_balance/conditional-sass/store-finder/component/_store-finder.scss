@@ -26,4 +26,12 @@
       }
     }
   }
+
+  .get--directions {
+    a {
+      &::after {
+        #{$right}: rem(16);
+      }
+    }
+  }
 }

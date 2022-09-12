@@ -1,0 +1,52 @@
+// Form
+// Markup: form.twig
+// Style guide: base.form
+@mixin form-selector-wrap {
+  @include icon(chevrondown, after);
+
+  font-size: 0.875rem;
+  margin-top: 2em;
+  width: 100%;
+
+  &::after {
+    font-size: 1.375rem;
+    padding: 0.25em;
+    position: absolute;
+    #{$right}: 0;
+    top: -0.7rem;
+    pointer-events: none;
+    border-radius: 0 3px 3px 0;
+  }
+}
+
+@mixin form-selector($height) {
+  border: 0;
+  border-bottom: 1px solid $primary_form_selector_border;
+  background: transparent;
+  border-radius: 0;
+  color: $primary_form_selector;
+  width: 100%;
+  height: $height;
+  outline: none;
+  appearance: none;
+}
+
+form {
+  .error,
+  .form-item--error-message {
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+    padding-top: 0.3125rem;
+    display: block;
+
+    strong {
+      font-weight: 400;
+      font-family: $arial;
+    }
+  }
+
+  input[type=checkbox].error {
+    display: block;
+    visibility: hidden;
+  }
+}
