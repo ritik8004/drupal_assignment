@@ -2,7 +2,7 @@ import React from 'react';
 
 const copyToClipboard = (e) => {
   const textarea = document.createElement('textarea');
-  textarea.innerHTML = window.location.href;
+  textarea.innerHTML = encodeURI(window.location.href);
   document.body.appendChild(textarea);
   textarea.select();
   document.execCommand('copy');
