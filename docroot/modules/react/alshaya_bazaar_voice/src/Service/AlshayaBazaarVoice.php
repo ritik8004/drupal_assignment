@@ -208,7 +208,7 @@ class AlshayaBazaarVoice {
     $request_options['query'] = $request['query'];
 
     $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
-    if (!$result['HasErrors'] && isset($result['Results'])) {
+    if (!empty($result) && !$result['HasErrors'] && !empty($result['Results'])) {
       $response = [];
       foreach ($result['Results'] as $value) {
         if ($value['ReviewStatistics']['TotalReviewCount'] > 0) {
@@ -338,7 +338,7 @@ class AlshayaBazaarVoice {
 
     $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
 
-    if (!$result['HasErrors'] && isset($result['Data']['Fields'])) {
+    if (!empty($result) && !$result['HasErrors'] && isset($result['Data']['Fields'])) {
       return $this->updateAlshayaBvWriteReviewWebForm($result['Data']['Fields']);
     }
 
@@ -879,8 +879,8 @@ class AlshayaBazaarVoice {
       $url = $request['url'];
       $request_options['query'] = $request['query'];
       $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
-      if (!$result['HasErrors'] && isset($result['Includes'])) {
-        if (isset($result['Results'])) {
+      if (!empty($result) && !$result['HasErrors'] && !empty($result['Includes'])) {
+        if (!empty($result['Results'])) {
           foreach ($result['Results'] as $review) {
             if ($review['ProductId'] === $sanitized_sku) {
               $productReviewData = [
@@ -931,7 +931,7 @@ class AlshayaBazaarVoice {
     $request_options['query'] = $request['query'];
 
     $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
-    if (!$result['HasErrors'] && isset($result['Results']) && !empty($result['Results'])) {
+    if (!empty($result) && !$result['HasErrors'] && !empty($result['Results'])) {
       $response[$product_id]['productData'] = $result['Results'][0];
       if (isset($result['Includes']['Reviews'])) {
         foreach ($result['Includes']['Reviews'] as $review) {
@@ -940,6 +940,7 @@ class AlshayaBazaarVoice {
       }
       return $response;
     }
+
     return NULL;
   }
 
