@@ -24,7 +24,9 @@ function alshaya_pb_transac_update_9401() {
   // Remove frame attribute from field storage.
   $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
   $frame_storage = $entity_update_manager->getFieldStorageDefinition('attr_frame', 'acq_sku');
-  $entity_update_manager->uninstallFieldStorageDefinition($frame_storage);
+  if (!empty($frame_storage)) {
+    $entity_update_manager->uninstallFieldStorageDefinition($frame_storage);
+  }
 
   // Remove frame attribute from sku base fields config.
   $sku_base_config = \Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields');
