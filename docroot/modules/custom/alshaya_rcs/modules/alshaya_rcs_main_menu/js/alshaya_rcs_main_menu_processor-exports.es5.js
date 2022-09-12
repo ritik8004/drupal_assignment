@@ -160,6 +160,8 @@ const processData = function (data, maxLevel, mobileMenuMaxDepth) {
     }
   });
 
+  // If delete has occurred above, then we do this to remove the empty array
+  // items.
   data = data.filter((val) => val);
   return data;
 }
