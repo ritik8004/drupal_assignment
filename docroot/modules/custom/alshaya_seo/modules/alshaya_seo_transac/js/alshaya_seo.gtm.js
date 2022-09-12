@@ -1570,18 +1570,4 @@
     };
   }
 
-  /**
-   * Helper function to push COD mobile verification gtm events to datalayer.
-   */
-  Drupal.alshayaSeoGtmPushCodMobileVerification = function (data) {
-    var event = {
-      event: 'cod_otp_verification',
-      eventCategory: data.eventCategory,
-      eventAction: data.eventAction,
-      eventLabel: data.eventLabel,
-    }
-
-    dataLayer.push(event);
-  };
-
 })(jQuery, Drupal, dataLayer);

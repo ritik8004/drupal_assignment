@@ -826,6 +826,13 @@ export const getDefaultFieldMessage = (fieldsConfig, fieldName) => {
 
 /**
  * Split string at a given index.
+ *
+ * @param {string} str
+ *   String of mobile number.
+ * @param {integer} index
+ *   Index number where mobile number should be split.
+ * @returns {array}
+ *   Array with parts of mobile number.
  */
 const split = (str, index) => [str.slice(0, index), str.slice(index)];
 
