@@ -812,6 +812,25 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       // Remove the old JS file.
       unset($libraries['acq_product_info']['js']['js/alshaya_acm_product.pdp.v1.js']);
     }
+
+    if (isset($libraries['product.order'])) {
+      // Replace the product info JS with new version.
+      // Add new JS with same options.
+      $libraries['product.order']['js']["/$self_module_path/js/alshaya_rcs_order.js"] = $libraries['product.order']['js']['js/alshaya_acm_product.order.js'];
+      $libraries['product.order']['dependencies'] ??= [];
+      array_push(
+        $libraries['product.order']['dependencies'],
+        'rcs_placeholders/helpers',
+        'rcs_magento_placeholders/rcs_magento_placeholders',
+        'alshaya_acm_product/product_utility',
+        'alshaya_rcs_product/rcs_product_images',
+        'alshaya_rcs_color_split/rcs_grouped_products',
+        'alshaya_master/common_functions',
+        'rcs_handlebars/main',
+      );
+      // Remove the old JS file.
+      unset($libraries['product.order']['js']['js/alshaya_acm_product.order.js']);
+    }
   }
   elseif ($extension === 'alshaya_acm_customer'
     && isset($libraries['order_print'])
@@ -891,7 +910,6 @@ function alshaya_rcs_product_alshaya_acm_customer_recent_order_build_alter(array
     _alshaya_rcs_product_get_cnc_config($build);
   }
   // Attaching order library.
-  $build['#attached']['library'][] = 'alshaya_rcs_product/product.order';
   $build['#attached']['library'][] = 'alshaya_white_label/rcs-order-listing';
 }
 
@@ -930,7 +948,6 @@ function alshaya_rcs_product_alshaya_acm_customer_orders_details_build_alter(arr
   _alshaya_rcs_product_get_cnc_config($build);
 
   // Attaching order library.
-  $build['#attached']['library'][] = 'alshaya_rcs_product/product.order';
   $build['#attached']['library'][] = 'alshaya_white_label/rcs-order-details';
   $build['#attached']['library'][] = 'alshaya_rcs_handlebars/image';
 }
