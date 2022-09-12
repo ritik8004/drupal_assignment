@@ -868,3 +868,8 @@ plp-quick-add:
   css:
     theme:
       css/conditional-sass/plp-quick-add/plp-quick-add.ltr.css: {}
+
+checkout-tracker:
+  css:
+    theme:
+      css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: {}
