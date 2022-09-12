@@ -26,17 +26,17 @@ product_carousel_utility:
 carousel.accordion:
   version: 1.x
   js:
-    handlebars/alshaya-rcs-carousel-accordion.handlebars: {}
+    handlebars/carousel.accordion.handlebars: {}
 
 lhn_menu:
   version: 1.x
   js:
-    handlebars/rcs-lhn_menu.handlebars: {}
+    handlebars/lhn_menu.handlebars: {}
 
 promotional_banner:
   version: 1.x
   js:
-    handlebars/alshaya-rcs-promotional-banner.handlebars: {}
+    handlebars/promotional_banner.handlebars: {}
   dependencies:
     - alshaya_white_label/promo-blocks
     - alshaya_white_label/rcs-ph-promotional-banner
@@ -44,4 +44,4 @@ promotional_banner:
 plp_mobile_menu:
   version: 1.x
   js:
-    handlebars/alshaya-rcs-plp-mobile-menu.handlebars: {}
+    handlebars/plp_mobile_menu.handlebars: {}
