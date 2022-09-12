@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * @addtogroup hooks
@@ -208,6 +209,18 @@ function hook_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array 
  *   SKU Entity.
  */
 function hook_alshaya_acm_product_skubaseform_alter(array &$form, SKUInterface $sku_entity) {
+
+}
+
+/**
+ * Allow other modules to alter the context array during product process.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   Node entity.
+ * @param array $context
+ *   An array containing a list of all the contexts used during product process.
+ */
+function hook_alshaya_acm_product_process_product_context_alter(EntityInterface $entity, array &$context) {
 
 }
 
