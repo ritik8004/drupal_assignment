@@ -14,7 +14,7 @@ use Drupal\Core\Site\Settings;
  *
  *  Remove `frame` attribute from pb transac brand module.
  */
-function alshaya_pb_transac_update_9402() {
+function alshaya_pb_transac_update_9401() {
 
   // Remove frame attribute from sku entity.
   /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
