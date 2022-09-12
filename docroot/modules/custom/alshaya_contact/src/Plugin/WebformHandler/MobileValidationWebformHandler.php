@@ -47,7 +47,7 @@ class MobileValidationWebformHandler extends WebformHandlerBase {
         if (!is_object($util->getMobileNumber($mobile_number['value']))) {
           $error_msg = $this->t('The phone number %value provided for %field is not a valid mobile number for country %country.',
             [
-              '%value' => $mobile_number,
+              '%value' => $mobile_number['value'],
               '%field' => $this->t('Mobile Number'),
               '%country' => $original_mobile_number['country-code'],
             ]);
