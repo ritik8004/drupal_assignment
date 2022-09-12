@@ -1,4 +1,7 @@
 services:
   rcs_handlebars.service:
     class: Drupal\rcs_handlebars\Service\HandlebarsService
-    arguments: ['@file_system', '@module_handler']
+    arguments:
+      - '@file_system'
+      - '@module_handler'
+      - '@config.factory'
