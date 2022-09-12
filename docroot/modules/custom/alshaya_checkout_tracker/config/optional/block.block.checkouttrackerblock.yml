@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_checkout_tracker
+  theme:
+    - alshaya_white_label
+id: checkouttrackerblock
+theme: alshaya_white_label
+region: content
+weight: -30
+provider: null
+plugin: checkout_tracker_block
+settings:
+  id: checkout_tracker_block
+  label: 'Checkout tracker block'
+  provider: alshaya_checkout_tracker
+  label_display: '0'
+visibility: 
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/cart\r\n/checkout\r\n/cart/login\r\n/checkout/confirmation"
+    context_mapping: {  }
