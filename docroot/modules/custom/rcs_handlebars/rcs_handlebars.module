@@ -40,5 +40,4 @@ function rcs_handlebars_page_attachments_alter(array &$attachments) {
 
   $attachments['#attached']['drupalSettings']['rcsHandlebars']['compiledHandlebars'] = \Drupal::config('system.performance')
     ->get('js.preprocess');
-
 }
