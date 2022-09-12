@@ -102,6 +102,7 @@ class AlshayaTamaraWidgetHelper {
     $build['#attached']['drupalSettings']['tamara']['installmentCount'] = 3;
 
     $build['#attached']['library'][] = 'alshaya_tamara/tamara_checkout';
+    $build['#attached']['library'][] = 'alshaya_white_label/tamara';
     $build['tamara'] = $this->getTamaraWidgetMarkup();
     $widget_info = $this->getTamaraWidgetInfo();
 
