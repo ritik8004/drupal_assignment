@@ -96,19 +96,21 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
     return callMagentoApi(getApiEndpoint('codMobileVerificationSendOtp', params), 'GET')
       .then((response) => {
-        if (hasValue(response.data.error) || !response.data) {
+        if (hasValue(response.data.error)) {
           logger.error('Error while sending otp for COD payment mobile verification. Response: @response', {
             '@response': JSON.stringify(response.data),
           });
         }
 
-        // Trigger GTM event for otp sent.
-        if (typeof Drupal.alshayaSeoGtmPushCodMobileVerification !== 'undefined') {
-          Drupal.alshayaSeoGtmPushCodMobileVerification({
-            eventCategory: 'cod',
-            eventAction: action,
-            eventLabel: '',
-          });
+        if (hasValue(response.data)) {
+          // Trigger GTM event for otp sent.
+          if (typeof Drupal.alshayaSeoGtmPushCodMobileVerification !== 'undefined') {
+            Drupal.alshayaSeoGtmPushCodMobileVerification({
+              eventCategory: 'cod',
+              eventAction: action,
+              eventLabel: '',
+            });
+          }
         }
 
         // Clear otp and remove loader.
