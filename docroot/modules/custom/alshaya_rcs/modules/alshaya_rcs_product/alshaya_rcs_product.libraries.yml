@@ -27,147 +27,134 @@ schema_org:
 product.block.name:
   version: 1.x
   js:
-    handlebars/rcs-product-name-block.handlebars: {}
+    handlebars/product.block.name.handlebars: {}
 
 product.block.description:
   version: 1.x
   js:
-    handlebars/rcs-product-description-block.handlebars: {}
+    handlebars/product.block.description.handlebars: {}
 
 product.block.short_description.pdp:
   version: 1.x
   js:
-    handlebars/rcs-product-short-description-block.handlebars: {}
+    handlebars/product.block.short_description.pdp.handlebars: {}
 
 product.block.short_description.pdp-magazine:
   version: 1.x
   js:
-    handlebars/rcs-product-short-description-full-magazine-block.handlebars: {}
+    handlebars/product.block.short_description.pdp-magazine.handlebars: {}
 
 product.order_quantity_limit:
   version: 1.x
   js:
-    handlebars/rcs-product-order-quantity-limit.handlebars: {}
+    handlebars/product.order_quantity_limit.handlebars: {}
 
 product.promotions:
   version: 1.x
   js:
-    handlebars/rcs-product-promotions.handlebars: {}
+    handlebars/product.promotions.handlebars: {}
 
 product.sku_base_form:
   version: 1.x
   js:
-    handlebars/rcs-sku-base-form.handlebars: {}
+    handlebars/product.sku_base_form.handlebars: {}
 
 product.sku_base_form_oos:
   version: 1.x
   js:
-    handlebars/rcs-sku-base-form-oos.handlebars: {}
+    handlebars/product.sku_base_form_oos.handlebars: {}
 
 product.not_buyable_product:
   version: 1.x
   js:
-    handlebars/rcs-not-buyable-product.html.handlebars: {}
+    handlebars/product.not_buyable_product.handlebars: {}
 
 product.delivery_info:
   version: 1.x
   js:
-    handlebars/rcs-pdp-delivery-info-block.handlebars: {}
+    handlebars/product.delivery_info.handlebars: {}
 
 product.delivery_options:
   version: 1.x
   js:
-    handlebars/rcs-pdp-delivery-options.handlebars: {}
+    handlebars/product.delivery_options.handlebars: {}
 
 product.delivery_option_hd:
   version: 1.x
   js:
-    handlebars/rcs-pdp-delivery-option-home-delivery.handlebars: {}
+    handlebars/product.delivery_option_hd.handlebars: {}
 
 product.delivery_option_ed:
   version: 1.x
   js:
-    handlebars/rcs-pdp-delivery-option-express-delivery.handlebars: {}
+    handlebars/product.delivery_option_ed.handlebars: {}
 
 product.block.price:
   version: 1.x
   js:
-    handlebars/rcs-product-price-block.handlebars: {}
+    handlebars/product.block.price.handlebars: {}
 
 product.teaser:
   version: 1.x
   js:
-    handlebars/rcs-product-teaser.handlebars: {}
+    handlebars/product.teaser.handlebars: {}
 
 product.recommended_products_block:
   version: 1.x
   js:
-    handlebars/rcs-product-recommendations-block.handlebars: {}
+    handlebars/product.recommended_products_block.handlebars: {}
 
 product.recommended_products_teaser:
   version: 1.x
   js:
-    handlebars/rcs-product-recommendation-teaser.handlebars: {}
+    handlebars/product.recommended_products_teaser.handlebars: {}
 
 product.block.price.item:
   version: 1.x
   js:
-    handlebars/rcs-product-price-item-block.handlebars: {}
+    handlebars/product.block.price.item.handlebars: {}
 
 product.modal:
   version: 1.x
   js:
-    handlebars/rcs-product-modal.handlebars: {}
+    handlebars/product.modal.handlebars: {}
   dependencies:
     - alshaya_product_zoom/cloud_zoom_pdp_gallery
 
 gallery.product.product_zoom:
   version: 1.x
   js:
-    handlebars/rcs-product-zoom.handlebars: {}
+    handlebars/gallery.product.product_zoom.handlebars: {}
 
 gallery.product.product_labels:
   version: 1.x
   js:
-    handlebars/rcs-product-labels.handlebars: {}
+    handlebars/gallery.product.product_labels.handlebars: {}
 
 gallery.product.block.product_zoom_default_gallery:
   version: 1.x
   js:
-    handlebars/rcs-product-zoom-default-gallery-block.handlebars: {}
+    handlebars/gallery.product.block.product_zoom_default_gallery.handlebars: {}
 
 gallery.product.block.product_zoom_mobile_gallery:
   version: 1.x
   js:
-    handlebars/rcs-product-zoom-mobile-gallery-block.handlebars: {}
+    handlebars/gallery.product.block.product_zoom_mobile_gallery.handlebars: {}
 
 gallery.product.block.product_zoom_modal_gallery:
   version: 1.x
   js:
-    handlebars/rcs-product-zoom-modal-gallery-block.handlebars: {}
+    handlebars/gallery.product.block.product_zoom_modal_gallery.handlebars: {}
 
 gallery.product.block.product_zoom_magazine_gallery:
   version: 1.x
   js:
-    handlebars/rcs-product-zoom-magazine-gallery-block.handlebars: {}
+    handlebars/gallery.product.block.product_zoom_magazine_gallery.handlebars: {}
 
 gallery.product.product_gallery_magazine:
   version: 1.x
   js:
-    handlebars/rcs-product-gallery-magazine.handlebars: {}
-
-product.order:
-  version: 1.x
-  js:
-    js/alshaya_rcs_order.js: {}
-  dependencies:
-    - rcs_placeholders/helpers
-    - rcs_magento_placeholders/rcs_magento_placeholders
-    - alshaya_acm_product/product_utility
-    - alshaya_rcs_product/rcs_product_images
-    - alshaya_rcs_color_split/rcs_grouped_products
-    - alshaya_master/common_functions
-    - rcs_handlebars/main
+    handlebars/gallery.product.product_gallery_magazine.handlebars: {}
 
 rcs_product_modal:
   version: 1.x
@@ -200,9 +187,9 @@ rcs_product_images:
 attribute.brand.logo:
   version: 1.x
   js:
-    handlebars/rcs-attribute-brand-logo.handlebars: {}
+    handlebars/attribute.brand.logo.handlebars: {}
 
 product.overlay_attributes:
   version: 1.x
   js:
-    handlebars/rcs-product-overlay-attributes.handlebars: {}
+    handlebars/product.overlay_attributes.handlebars: {}
