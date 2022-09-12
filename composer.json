@@ -297,7 +297,8 @@
                 "Allow fixing corrupt CSS / JS issues without waiting for Browser cache to expire": "https://git.drupalcode.org/project/drupal/-/merge_requests/2376.patch",
                 "Use Mailhelper to make site name RFC complaint": "patches/core/CORE-42856-use-mailhelper-to-make-rfc-2822-complaint.patch",
                 "Cannot use a / in route parameter": "https://www.drupal.org/files/issues/2021-02-11/2741939-31.patch",
-                "Allow profiles to define a base/parent profile": "https://www.drupal.org/files/issues/2022-06-17/1356276-688_0.patch"
+                "Allow profiles to define a base/parent profile": "https://www.drupal.org/files/issues/2022-06-17/1356276-688_0.patch",
+                "[pp-3] Bubbling of elements' max-age to the page's headers and the page cache": "https://www.drupal.org/files/issues/2021-04-19/2352009-max-age-bubbling-9.1.x.patch"
             },
             "drupal/mobile_number": {
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
