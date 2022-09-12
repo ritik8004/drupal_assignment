@@ -116,7 +116,9 @@ class AlshayaBazaarVoiceApiHelper {
       }
     }
     catch (\Exception $e) {
-      $this->logger->error($e->getMessage());
+      $this->logger->error('Some exceptions are found while invoking BV API @message', [
+        'message' => $e->getMessage(),
+      ]);
     }
 
     return $result;
