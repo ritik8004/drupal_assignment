@@ -26,24 +26,24 @@ renderer:
 main_menu_level1:
   version: 1.x
   js:
-    handlebars/rcs-main_menu_level1.handlebars: {}
+    handlebars/main_menu_level1.handlebars: {}
 
 main_menu_level2_partial:
   version: 1.x
   js:
-    handlebars/rcs-main_menu_level2-partial.handlebars: {}
+    handlebars/main_menu_level2_partial.handlebars: {}
 
 main_menu_level3_partial:
   version: 1.x
   js:
-    handlebars/rcs-main_menu_level3-partial.handlebars: {}
+    handlebars/main_menu_level3_partial.handlebars: {}
 
 main_menu_level4_partial:
   version: 1.x
   js:
-    handlebars/rcs-main_menu_level4-partial.handlebars: {}
+    handlebars/main_menu_level4_partial.handlebars: {}
 
 shop_by_menu:
   version: 1.x
   js:
-    handlebars/rcs-shop_by_menu.handlebars: {}
+    handlebars/shop_by_menu.handlebars: {}
