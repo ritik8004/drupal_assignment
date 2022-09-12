@@ -772,7 +772,14 @@ export const getPayable = (value) => {
 };
 
 /**
- * Checks if fieldname is enalbled or disabled.
+ * Helper function checks if the fieldname is present / not present in
+ * fieldsConfig.If the provided fieldname is not present in the fieldsConfig
+ * then the field is disabled.
+ *
+ * Example if fieldsConfig has {mobile: 'Please update mobile number'}
+ * and fieldname passed is email then email field is disabled as it is
+ * not present in the fieldsConfig.
+ *
  *
  * @param fieldsConfig
  *   Object having fieldnames and message to show on field name.
@@ -802,7 +809,12 @@ export const isFieldDisabled = (fieldsConfig, fieldName) => {
 };
 
 /**
- * Get default message for field from field config.
+ * Helper function checks fieldsConfig for the default message to show on
+ * the provided fieldname.
+ *
+ * Example: fieldsConfig has {mobile: 'Please update mobile number'}
+ * and fieldname passed is mobile, then default message is returned
+ * from the fieldsConfig.
  *
  * @param fieldsConfig
  *   Object with field config.
@@ -838,6 +850,13 @@ const split = (str, index) => [str.slice(0, index), str.slice(index)];
 
 /**
  * Formats mobile number with spaces.
+ * Example: +965 556 67788, +971 556 667 778, +20 223 344 5566.
+ *
+ * @param {string} mobileNumber
+ *   The mobile number with country code.
+ *
+ * @return {string}
+ *   Mobile number with country code and space formatted.
  */
 export const formatMobileNumber = (mobileNumber) => {
   const mobileNumberWithoutCountryCode = cleanMobileNumber(mobileNumber);

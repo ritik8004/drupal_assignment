@@ -50,6 +50,10 @@ const FixedFields = ({
             defaultValue={defaultValue !== '' ? defaultValue.fullname : ''}
             className={defaultValue !== '' && defaultValue.fullname !== '' ? 'focus' : ''}
             label={getStringMessage('ci_full_name')}
+            // The prop enabledFieldsWithMessages has fieldname and default
+            // message to show with the field
+            // example {mobile: 'Please update mobile number'}
+            // if fullname is not present then it will be disabled.
             disabled={isFieldDisabled(enabledFieldsWithMessages, 'fullname')}
           />
         </ConditionalView>
@@ -60,6 +64,10 @@ const FixedFields = ({
             defaultValue={defaultValue !== '' ? defaultValue.email : ''}
             className={defaultValue !== '' && defaultValue.email !== '' ? 'focus' : ''}
             label={getStringMessage('ci_email')}
+            // The prop enabledFieldsWithMessages has fieldname and default
+            // message to show with the field
+            // example {mobile: 'Please update mobile number'}
+            // if fullname is not present then it will be disabled.
             disabled={isFieldDisabled(enabledFieldsWithMessages, 'email')}
           />
         </ConditionalView>
@@ -70,6 +78,9 @@ const FixedFields = ({
           className={defaultValue !== '' && defaultValue.telephone !== '' ? 'focus' : ''}
           label={getStringMessage('ci_mobile_number')}
           disabled={isFieldDisabled(enabledFieldsWithMessages, 'mobile')}
+          // This prop is an object where object keys are field-names which will
+          // be enabled in the form and values are default message on the field
+          // example {mobile: Please update mobile number}
           enabledFieldsWithMessages={enabledFieldsWithMessages}
         />
         <input type="hidden" name="address_id" value={defaultValue !== '' && defaultValue.address_id !== null ? defaultValue.address_id : 0} />

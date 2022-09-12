@@ -148,6 +148,9 @@ export default class AddressList extends React.Component {
           showEditButton={showEditButton}
           refreshAddressList={this.refreshAddressList}
           areaUpdated={areaUpdated}
+          // This prop is an object where object keys are field-names which will
+          // be enabled in the form and values are default message on the field
+          // example {mobile: Please update mobile number}
           enabledFieldsWithMessages={enabledFieldsWithMessages}
         />,
       );

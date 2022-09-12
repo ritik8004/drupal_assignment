@@ -27,6 +27,9 @@ const DynamicFormField = (props) => {
         area_list={areaList}
         field_key={fieldKey}
         field={field}
+        // This prop is an object where object keys are field-names which will
+        // be enabled in the form and values are default message on the field
+        // example {mobile: Please update mobile number}
         enabledFieldsWithMessages={enabledFieldsWithMessages}
       />
     );
@@ -38,6 +41,9 @@ const DynamicFormField = (props) => {
         field_key={fieldKey}
         field={field}
         areasUpdate={areasUpdate}
+        // This prop is an object where object keys are field-names which will
+        // be enabled in the form and values are default message on the field
+        // example {mobile: Please update mobile number}
         enabledFieldsWithMessages={enabledFieldsWithMessages}
       />
     );
