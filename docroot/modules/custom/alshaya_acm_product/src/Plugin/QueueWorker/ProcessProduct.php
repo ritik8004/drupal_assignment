@@ -216,6 +216,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
 
     ProductCacheManager::$useCache = FALSE;
 
+    // Start by invalidating cache tags to use fresh data in all cases.
     $this->cacheTagsInvalidator->invalidateTags($cache_tags);
 
     $variants = $entity->bundle() === 'configurable'
@@ -234,6 +235,9 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       foreach ($variants as $variant) {
         $variant_sku = SKU::loadFromSku($variant, $language->getId(), FALSE);
         if ($variant_sku instanceof SKU) {
+          // Add cache tag of variants for cache invalidation in the end.
+          $cache_tags = Cache::mergeTags($cache_tags, $variant_sku->getCacheTagsToInvalidate() ?? []);
+
           // Download product images for all the variants of the product.
           $variant_data = $this->imagesManager->getProductMedia($variant_sku, 'pdp', TRUE);
           $this->imagesManager->getProductMedia($variant_sku, 'pdp', FALSE);
@@ -250,13 +254,34 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         }
       }
 
-      // Download product images for product and warm up caches.
-      $translation_data = $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
-      $this->imagesManager->getProductMedia($translation, 'pdp', FALSE);
+      // We observed that caches are not invalidated properly and user sees
+      // obsolete data even after processing the item.
+      // We have list down all the contexts that we have used till now, we are
+      // doing this to have a caching layer for all these context. So that it
+      // should get updated with every process product action.
+      $cache_contexts = [
+        'pdp',
+        'plp',
+        'search',
+        'modal',
+        'teaser',
+        'pdp-magazine_v2',
+        'cart',
+        'order_detail',
+        'modal-magazine',
+        'matchback',
+        'pdp-magazine',
+      ];
 
-      // Store the parent SKU without any images.
-      if (!isset($translation_data['media_items']['images']) || empty($translation_data['media_items']['images'])) {
-        $translation_sku_without_image = $translation->getSku();
+      foreach ($cache_contexts as $context) {
+        // Download product images for product and warm up caches.
+        $translation_data = $this->imagesManager->getProductMedia($translation, $context, TRUE);
+        $this->imagesManager->getProductMedia($translation, $context, FALSE);
+
+        // Store the parent SKU without any images.
+        if (!isset($translation_data['media_items']['images']) || empty($translation_data['media_items']['images'])) {
+          $translation_sku_without_image = $translation->getSku();
+        }
       }
 
       // Prepare the swatches and store the same in the cache.
@@ -284,6 +309,10 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         '@sku' => $translation_sku_without_image,
       ]);
     }
+
+    // End by invalidating cache tags to make sure Varnish and Drupal
+    // caches are invalidated and use the new processed data.
+    $this->cacheTagsInvalidator->invalidateTags($cache_tags);
 
     $this->getLogger('ProcessProduct')->notice('Processed product with sku: @sku', [
       '@sku' => $entity->getSku(),
