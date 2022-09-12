@@ -1,0 +1,64 @@
+@mixin social-link-width {
+  width: rem(278);
+  max-width: rem(278);
+}
+
+.block-alshaya-social-login {
+  .alshaya-social {
+    .auth-link {
+      @include secondaryBtn;
+
+      @include breakpoint($tablet) {
+        @include social-link-width;
+
+        html[lang=ar] & {
+          @include social-link-width;
+        }
+      }
+
+      &::before {
+        background-size: contain;
+        height: rem(24);
+        width: rem(24);
+
+        @include breakpoint($upto-tablet) {
+          position: relative;
+          margin-#{$right}: rem(8);
+        }
+      }
+
+      .social-network-text {
+        font-size: rem(14);
+        color: $secondary_btn_text;
+        font-family: $alshaya-bold;
+      }
+    }
+
+    .social_auth_facebook {
+      &::before {
+        background-image: url(#{$nb_theme_img_directory_path}/icons/facebook.svg);
+      }
+    }
+
+    .social_auth_google {
+      &::before {
+        background-image: url(#{$nb_theme_img_directory_path}/icons/google.svg);
+      }
+    }
+  }
+}
+
+.block-alshaya-signup-signin-buttons {
+  .link-button {
+    &::before {
+      background-image: url(#{$nb_theme_img_directory_path}/icons/user.svg);
+      background-size: contain;
+      height: rem(30);
+      width: rem(20);
+
+      @include breakpoint($upto-tablet) {
+        position: relative;
+      }
+    }
+  }
+}

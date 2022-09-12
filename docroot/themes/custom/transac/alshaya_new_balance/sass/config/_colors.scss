@@ -19,6 +19,7 @@ $primary_link-active: $black;
 $secondary_text: $nb-black;
 $primary_border: $gray;
 $secondary_border: $nb-red;
+$content_pagetitle_border: $black;
 
 //Buttons.
 $primary_btn_bg: $nb-red;
@@ -29,9 +30,9 @@ $primary_empty_btn_text: $nb-red;
 
 // Checkbox & Radio.
 $primary_radiobtn_label: $black;
-$primary_radiobtn_empty: $white;
+$primary_radiobtn_empty: $nb-gray;
 $primary_radiobtn_filled: $nb-red;
-$secondary_radiobtn_empty: $white;
+$secondary_radiobtn_empty: $nb-gray;
 $secondary_radiobtn_filled: $black;
 
 // Dropdown.
@@ -65,3 +66,59 @@ $footer-text: $black;
 $footer-newsletter-text: $white;
 $footer-top-bg: $black;
 $lang_switch: $black;
+
+$secondary_btn_bg: $white;
+$secondary_btn_bg_hover: $gray2;
+$secondary_btn_text: $nb-red;
+
+//Signup
+$user_form_text: $ada-gray;
+$social_auth_login_button_border: $nb-red;
+$user_form_layout_divider_color: $black;
+$primary_form_link: $black;
+$user_login_section_title: $black;
+$user_login_sub_text: $black;
+$primary_border: $black;
+$user_field_link: $black;
+$select_drop_down_hover: $nb-gray;
+
+// User Form
+$user_field_link: $black;
+$user_form_text: $ada-gray;
+$my_account_nav: $black;
+$my_account_nav_active: $black;
+$my_account_nav_hover: $black;
+$user_form_layout_divider_color: $black;
+$login_form_border: $black;
+$user_form_inp_text: $ada-gray;
+
+// Titles.
+$page_title: $black;
+$block_title: $black;
+$title: $black;
+$sub_title: $black;
+$label_black: $black;
+$label_dark: $black;
+$user_sidebar_block_title: $black;
+
+// Dropdown.
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_border: $black;
+$primary_dropdown_option_hover: $black;
+$primary_dropdown_option_border: $black;
+$primary_dropdown_option_disbled: $black;
+$primary_dropdown_arrow_icon: $black;
+
+// Form elements.
+$primary_form_selector_border: $black;
+$primary_form_selector: $ada-gray;
+$primary_form_link: $black;
+$primary_form_input_text: $ada-gray;
+$primary_input_label: $ada-gray;
+$primary_input_border: $black;
+$primary_input_disabled: $gray;
+$primary_input_focus_border: $black;
+$primary_input_inline_error: $red2;
+$checkout_login_separtor: $black;
+$checkout_login_separtor_txt_bg: $white;
+$checkout_login_separtor_txt: $black;

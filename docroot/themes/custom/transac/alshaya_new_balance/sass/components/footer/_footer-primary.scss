@@ -24,6 +24,7 @@
 
       h3 {
         color: $primary_footer_input_label;
+        font-family: $alshaya-thin;
         align-self: center;
         width: auto;
         text-transform: none;
@@ -53,8 +54,9 @@
         }
       }
 
-      #edit-email {
-        padding-#{$right}: 2% !important;
+      #edit-email,
+      #edit-email--2 {
+        padding-#{$right}: 2%;
         padding-#{$left}: 2%;
         color: $footer-newsletter-text;
         background-color: $footer-text;
@@ -67,6 +69,7 @@
 
         @include breakpoint($only-mobile) {
           display: inline-flex;
+          width: 80%;
         }
 
         &::placeholder {
@@ -108,6 +111,7 @@
         margin-top: rem(4);
         font-size: rem(14);
         padding-#{$left}: rem(8);
+        background: none;
       }
 
       .form-item {
@@ -138,6 +142,7 @@
         margin-top: rem(16);
         margin-bottom: rem(18);
         text-transform: none;
+        font-family: $alshaya-thin;
 
         @include breakpoint($only-mobile) {
           display: flex;
@@ -187,6 +192,7 @@
         margin-top: rem(16);
         margin-bottom: rem(18);
         text-transform: none;
+        font-family: $alshaya-thin;
 
         @include breakpoint($only-mobile) {
           display: flex;
@@ -304,6 +310,7 @@
     &::before {
       background: $primary_footer_input_label;
       width: auto;
+      #{$left}: 0;
 
       @include breakpoint($only-mobile) {
         position: relative;
@@ -312,6 +319,7 @@
 
     &::after {
       background: none;
+      #{$right}: 0;
     }
   }
 

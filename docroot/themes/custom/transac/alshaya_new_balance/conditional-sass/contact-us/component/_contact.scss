@@ -1,0 +1,71 @@
+.c-contact {
+  .c-page-title {
+    text-transform: capitalize;
+    font-size: rem(14);
+  }
+
+  .webform-submission-alshaya-contact-form {
+    .form-item {
+      &.form-type-textfield,
+      &.form-type-email,
+      &.form-type-textarea,
+      &.form-type-radio,
+      &.mobile_number {
+        label:last-of-type {
+          font-size: rem(14);
+          color: $user_form_text !important;
+          text-transform: unset;
+        }
+      }
+
+      input[type=text],
+      input[type=tel],
+      textarea,
+      .prefix {
+        font-size: rem(14) !important;
+        color: $user_form_inp_text;
+      }
+
+      legend {
+        color: $user_form_text;
+      }
+    }
+
+    .form-item-order-number,
+    .form-item-missing-items {
+      input[type=text] {
+        & ~ label {
+          &:not(.active-label) {
+            font-size: rem(14) !important;
+          }
+        }
+      }
+    }
+
+    .form-submit {
+      @include primaryBtn;
+
+      width: auto;
+      height: auto;
+    }
+
+    .contact-us-feedback,
+    .contact-us-type,
+    .contact-us-reason {
+      .select2-container {
+        .select2-selection {
+          .select2-selection__rendered {
+            font-size: rem(14);
+            color: $user_form_text;
+          }
+        }
+      }
+
+      &::after {
+        @include breakpoint($desktop) {
+          display: none;
+        }
+      }
+    }
+  }
+}
