@@ -34,7 +34,7 @@ $nb_theme_img_directory_path: '/themes/custom/transac/alshaya_new_balance/imgs';
   font-family: $alshaya-bold;
   font-size: rem(14);
   justify-content: center;
-  border-color: $social_auth_login_button_border;
+  border-color: $secondary_border;
 
   @include breakpoint($tablet) {
     width: rem(216);
