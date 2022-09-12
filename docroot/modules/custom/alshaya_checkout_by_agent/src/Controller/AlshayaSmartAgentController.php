@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_checkout_by_agent\Controller;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Url;
@@ -90,7 +91,7 @@ class AlshayaSmartAgentController extends ControllerBase {
     else {
       // For guest users, set the guest cart id in cookie, we will read from
       // there in JS to resume the cart.
-      setrawcookie('resume_cart_id', $data['masked_quote_id'], [
+      setrawcookie('resume_cart_id', Xss::filter($data['masked_quote_id']), [
         'expires' => strtotime('+1 year'),
         'path' => '/',
       ]);
