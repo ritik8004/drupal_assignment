@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_bazaar_voice\Service;
 
 use GuzzleHttp\TransferStats;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Client;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -106,13 +105,17 @@ class AlshayaBazaarVoiceApiHelper {
 
       if ($result['HasErrors']) {
         // Log the error message.
-        $this->logger->error('Error while doing BV api call. Error message: @message, Response code: @response_code.', [
-          '@message' => json_encode($result['Errors']),
-          '@response_code' => $response->getStatusCode(),
-        ]);
+        $this->logger->error('Error while doing BV api call. Error message: @message,
+          Response code: @response_code,
+          Header: @response_header',
+          [
+            '@message' => json_encode($result['Errors']),
+            '@response_code' => $response->getStatusCode(),
+            '@response_header' => json_encode($response->getHeaders()),
+          ]);
       }
     }
-    catch (ConnectException $e) {
+    catch (\Exception $e) {
       $this->logger->error($e->getMessage());
     }
 
