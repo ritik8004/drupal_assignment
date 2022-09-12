@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_bazaar_voice\Service;
 
 use GuzzleHttp\TransferStats;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Client;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -68,6 +67,7 @@ class AlshayaBazaarVoiceApiHelper {
    * @throws \Exception
    */
   public function doRequest(string $method, string $url, array $request_options = []) {
+    $result = NULL;
     $request_options['on_stats'] = function (TransferStats $stats) {
       $code = ($stats->hasResponse())
         ? $stats->getResponse()->getStatusCode()
@@ -91,20 +91,34 @@ class AlshayaBazaarVoiceApiHelper {
 
       $result = $response->getBody()->getContents();
 
+      if (empty($result)) {
+        $this->logger->error('Something went wrong while invoking BV API @api. Empty body content.', [
+          '@api' => $url,
+        ]);
+
+        return NULL;
+      }
+
       $result = is_string($result) && !empty($result)
         ? json_decode($result, TRUE)
         : $result;
 
       if ($result['HasErrors']) {
         // Log the error message.
-        $this->logger->error('Error while doing BV api call. Error message: @message, Response code: @response_code.', [
-          '@message' => json_encode($result['Errors']),
-          '@response_code' => $response->getStatusCode(),
-        ]);
+        $this->logger->error('Error while doing BV api call. Error message: @message,
+          Response code: @response_code,
+          Header: @response_header',
+          [
+            '@message' => json_encode($result['Errors']),
+            '@response_code' => $response->getStatusCode(),
+            '@response_header' => json_encode($response->getHeaders()),
+          ]);
       }
     }
-    catch (ConnectException $e) {
-      $this->logger->error($e->getMessage());
+    catch (\Exception $e) {
+      $this->logger->error('Some exceptions are found while invoking BV API @message', [
+        'message' => $e->getMessage(),
+      ]);
     }
 
     return $result;
