@@ -6,6 +6,7 @@
  */
 
 use Drupal\block\Entity\Block;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
@@ -103,7 +104,7 @@ function rcs_placeholders_preprocess_node(&$variables) {
 
   switch ($variables['view_mode']) {
     case 'full':
-      $token = '#rcs.product.slug#';
+      $token = \Drupal::token()->replace('[rcs_product:url]');
 
       $variables['#cache']['contexts'][] = 'url';
 
@@ -116,13 +117,13 @@ function rcs_placeholders_preprocess_node(&$variables) {
       break;
 
     default:
-      $token = '#rcs.productItem.slug#';
+      $token = \Drupal::token()->replace('[rcs_product_item:url]');
       break;
   }
 
   // RDF module is adding an "about" attribute based on the "url" variable.
   // If we don't set it, all the products will have "node/1" as "about".
-  $variables['url'] = '/' . $config->get('product.path_prefix') . $token;
+  $variables['url'] = Url::fromRoute('<front>')->toString() . $token;
 }
 
 /**
@@ -138,7 +139,7 @@ function rcs_placeholders_preprocess_taxonomy_term(&$variables) {
   // RDF module is adding an "about" attribute based on the "url" variable.
   // If we don't set it, all the categories will have "taxonomy/term/1" as
   // "about".
-  $variables['url'] = '/' . $config->get('category.path_prefix') . '#rcs.category.slug#';
+  $variables['url'] = Url::fromRoute('<front>')->toString() . \Drupal::token()->replace('[rcs_category:url]');
 
   $variables['#cache']['contexts'][] = 'url';
 
@@ -253,15 +254,21 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
     // We don't want the contributors to delete the default placeholder entity.
     unset($data['tabs'][0]['entity.' . $entity_type . '.delete_form']);
 
+    $token = \Drupal::token();
+
     // We alter the edit link so it actually redirects to the entity add form
     // with the title and slug as query arguments. We need to build the url
     // that way because using query options of url methods is encoding the #
     // and so the placeholders are not replaced on the frontend.
     if ($node) {
-      $url = Url::fromUserInput('/node/add/rcs_product?title=#rcs.product.name#&slug=' . $config->get('product.path_prefix') . '#rcs.product.slug#');
+      $title = $token->replace('[rcs_product:name]');
+      $slug = $token->replace('[rcs_product:url]');
+      $url = Url::fromUserInput("/node/add/rcs_product?title=$title&slug=$slug");
     }
     else {
-      $url = Url::fromUserInput('/admin/structure/taxonomy/manage/rcs_category/add?name=#rcs.category.name#&slug=' . $config->get('category.path_prefix') . '#rcs.category.slug#');
+      $title = $token->replace('[rcs_category:name]');
+      $slug = $token->replace('[rcs_category:url]');
+      $url = Url::fromUserInput("/admin/structure/taxonomy/manage/rcs_category/add?name=$title&slug=$slug");
     }
 
     if ($edit_tab) {
@@ -298,10 +305,10 @@ function _rcs_placeholders_enrichment_form_alter(array &$form, FormStateInterfac
 
   // Pre-fill the title and slug fields with values from the query.
   if (isset($q[$title_field])) {
-    $form[$title_field]['widget'][0]['value']['#default_value'] = $q[$title_field];
+    $form[$title_field]['widget'][0]['value']['#default_value'] = Xss::filter($q[$title_field]);
   }
   if (isset($q['slug'])) {
-    $form[$slug_field]['widget'][0]['value']['#default_value'] = $q['slug'];
+    $form[$slug_field]['widget'][0]['value']['#default_value'] = Xss::filter($q['slug']);
   }
 }
 
