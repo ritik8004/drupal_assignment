@@ -249,13 +249,13 @@ function alshaya_rcs_main_menu_theme_suggestions_block_alter(array &$suggestions
 function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
   $query_fields = [];
   $rcs_main_menu_config = \Drupal::config('alshaya_rcs_main_menu.settings');
-  $menu_max_depth = $rcs_main_menu_config->get('menu_max_depth');
+  $max_depth_to_load = $rcs_main_menu_config->get('max_depth_to_load');
 
   $query_fields['navigationMenu'] = [
     'query' => [
       'query($categoryId: String)' => [
-        'categories(filters: { ids: { eq: $categoryId } })'
-        => \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->getRcsCategoryMenuQuery($menu_max_depth),
+        'categories(filters: { ids: { eq: $categoryId }} include_in_menu: 0 )'
+        => \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->getRcsCategoryMenuQuery($max_depth_to_load),
       ],
     ],
     'variables' => [

@@ -335,7 +335,7 @@ const getProcessedCartData = async (cartData) => {
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.customer,
     coupon_code: typeof cartData.totals.coupon_code !== 'undefined' ? cartData.totals.coupon_code : '',
-    appliedRules: cartData.cart.applied_rule_ids_with_discount,
+    appliedRules: cartData.cart.applied_rule_ids,
     items_qty: cartData.cart.items_qty,
     cart_total: 0,
     minicart_total: 0,
