@@ -258,15 +258,19 @@ export default class PaymentMethod extends React.Component {
                   </div>
                 </ConditionalView>
 
-                {/* Show the method description if payment method is tamara. */}
                 <ConditionalView condition={method.code === 'tamara'}>
-                  <div className="spc-payment-method-desc">
-                    <div className="desc-content">
-                      {method.description}
-                    </div>
-                  </div>
+                  <button className="payment-method-tamara__info" type="button" />
                 </ConditionalView>
               </label>
+
+              {/* Show the method description if payment method is tamara. */}
+              <ConditionalView condition={method.code === 'tamara'}>
+                <div className="spc-payment-method-desc">
+                  <div className="desc-content">
+                    {method.description}
+                  </div>
+                </div>
+              </ConditionalView>
 
               <ConditionalView condition={method.code === 'tabby'}>
                 <TabbyWidget
