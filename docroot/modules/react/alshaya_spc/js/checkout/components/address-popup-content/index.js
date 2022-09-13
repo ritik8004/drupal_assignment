@@ -35,6 +35,9 @@ const AddressContent = (props) => {
         formContext={formContext}
         areaUpdated={areaUpdated}
         isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+        // This prop is an object where object keys are field-names which will
+        // be enabled in the form and values are default message on the field
+        // example {mobile: Please update mobile number}
         enabledFieldsWithMessages={enabledFieldsWithMessages}
       />
     );
@@ -51,6 +54,9 @@ const AddressContent = (props) => {
       shippingAsBilling={shippingAsBilling}
       isExpressDeliveryAvailable={isExpressDeliveryAvailable}
       fillDefaultValue={fillDefaultValue}
+      // This prop is an object where object keys are field-names which will
+      // be enabled in the form and values are default message on the field
+      // example {mobile: Please update mobile number}
       enabledFieldsWithMessages={enabledFieldsWithMessages}
     />
   );

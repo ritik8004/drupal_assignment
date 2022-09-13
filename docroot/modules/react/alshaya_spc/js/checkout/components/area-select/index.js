@@ -165,10 +165,16 @@ export default class AreaSelect extends React.Component {
       options = areaList;
     }
 
+    // Set props for the select list.
     const selectProps = {
       id: 'spc-area-select-selected',
       className: 'spc-area-select-selected',
     };
+
+    // The prop enabledFieldsWithMessages has fieldname and default
+    // message to show with the field
+    // example {mobile: 'Please update mobile number'}
+    // if locality is not present then it will be disabled.
     if (isFieldDisabled(enabledFieldsWithMessages, 'locality')) {
       selectProps.className += ' disabled';
     } else {
