@@ -1,0 +1,11 @@
+.c-order-print {
+  .site--brand {
+    img {
+      height: rem(32);
+
+      html[lang="ar"] & {
+        height: rem(32);
+      }
+    }
+  }
+}
