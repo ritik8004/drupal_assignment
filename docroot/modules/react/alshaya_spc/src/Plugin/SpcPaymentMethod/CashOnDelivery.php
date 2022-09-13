@@ -105,10 +105,10 @@ class CashOnDelivery extends AlshayaSpcPaymentMethodPluginBase implements Contai
   /**
    * Get COD payment method settings for mobile verification.
    *
-   * @return mixed
+   * @return bool
    *   Configuration value.
    */
-  public function getCodMobileVerificationSettings(): mixed {
+  public function getCodMobileVerificationSettings(): bool {
     return $this->configFactory->get('alshaya_spc.settings')->get('cod_mobile_verification');
   }
 
