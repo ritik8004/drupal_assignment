@@ -12,6 +12,8 @@ exports.prepareData = function prepareData(settings, inputs) {
   let inputsClone = JSON.parse(JSON.stringify(inputs));
   // Clean up data.
   inputsClone = processData(inputsClone, menuMaxDepth, mobileMenuMaxDepth);
+  // Convert the array of Object into Object of objects.
+  inputsClone = Object.assign({}, inputsClone);
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -65,7 +67,7 @@ function processEnrichment(menuItem) {
 /**
  * Clean up api data, add enrichment and classes.
  *
- * @param {object} data
+ * @param {Array} data
  *   The category data.
  *
  * @param {integer} maxLevel
@@ -81,21 +83,17 @@ function processEnrichment(menuItem) {
  *   The cleaned data.
  */
 const processData = function (data, maxLevel, mobileMenuMaxDepth) {
-  // Convert arrays to objects;
-  data = Object.assign({}, data);
-
-  // Loop object;
-  for (const [key, value] of Object.entries(data)) {
+  data.forEach((value, key) => {
     // Check if we have an array or object.
-    if (!((/array|object/).test(typeof value))) {
-      continue;
+    if (!((/array|object/).test(typeof data[key]))) {
+      return;
     }
 
     // Check if the item should be included in the menu.
     if (typeof data[key].include_in_menu !== 'undefined'
       && !data[key].include_in_menu) {
       delete (data[key]);
-      continue;
+      return;
     }
 
     processEnrichment(data[key]);
@@ -114,7 +112,7 @@ const processData = function (data, maxLevel, mobileMenuMaxDepth) {
     if (typeof data[key].level !== 'undefined'
       && data[key].level - 1 > maxLevel) {
       delete (data[key]);
-      continue;
+      return;
     }
 
     if (typeof data[key].include_in_desktop !== 'undefined') {
@@ -150,18 +148,21 @@ const processData = function (data, maxLevel, mobileMenuMaxDepth) {
 
     // Check children.
     if (typeof data[key].children !== 'undefined') {
-      if (Object.values(data[key].children).length < 1) {
+      if (data[key].children.length < 1) {
         // When the menus don't have children, we set to false. This is required
         // because Handlebars doesn't check empty objects in the same way it does
         // for arrays, see https://handlebarsjs.com/guide/builtin-helpers.html#if.
         data[key].children = false;
       }
       else {
-        processData(data[key].children, maxLevel, mobileMenuMaxDepth);
+        data[key].children = processData(data[key].children, maxLevel, mobileMenuMaxDepth);
       }
     }
-  }
+  });
 
+  // If delete has occurred above, then we do this to remove the empty array
+  // items.
+  data = data.filter((val) => val);
   return data;
 }
 
