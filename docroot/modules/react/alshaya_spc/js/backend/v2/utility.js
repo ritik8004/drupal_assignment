@@ -171,6 +171,12 @@ const getApiEndpoint = (action, params = {}) => {
         : '';
       break;
 
+    case 'getTamaraAvailability':
+      endpoint = isUserAuthenticated()
+        ? '/V1/carts/mine/tamara-payment-availability'
+        : `/V1/guest-carts/${endPointParams.cartId}/tamara-payment-availability`;
+      break;
+
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
