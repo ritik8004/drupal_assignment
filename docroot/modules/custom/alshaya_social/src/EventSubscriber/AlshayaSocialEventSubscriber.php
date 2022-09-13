@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\social_auth\Event\UserEvent;
 
 /**
@@ -105,7 +106,15 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
    */
   public function beforeProviderRedirect(BeforeRedirectEvent $event) {
     $base_url = $this->request->getCurrentRequest()->getSchemeAndHttpHost() . $this->request->getCurrentRequest()->getBasePath() . '/' . $this->languageManager->getCurrentLanguage()->getId();
-    $error_destination = str_replace($base_url, '', $this->request->getCurrentRequest()->server->get('HTTP_REFERER'));
+    // Get the referer URL.
+    $referer = $this->request->getCurrentRequest()->server->get('HTTP_REFERER');
+    // Validate if referer is external or internal. If it's external then
+    // redirect to login page.
+    if (!UrlHelper::externalIsLocal($referer, $base_url)) {
+      $referer = Url::fromRoute('user.login')->toString();
+    }
+
+    $error_destination = str_replace($base_url, '', $referer);
     $event->getDataHandler()->set('login_error_destination', $error_destination);
   }
 
