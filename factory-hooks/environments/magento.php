@@ -1222,7 +1222,7 @@ $magentos = [
   ],
   // BathBodyWorks.
   'bbw_qa' => [
-    'url' => 'https://integration-5ojmyuq-bbk3lvknero4c.eu-3.magentosite.cloud',
+    'url' => 'https://bbw-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
       'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
@@ -1248,7 +1248,7 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
     'jo' => [
-      'store_id' => ['en' => 14, 'ar' => 13],
+      'store_id' => ['en' => 16, 'ar' => 13],
     ],
   ],
   'bbw_apc' => [
