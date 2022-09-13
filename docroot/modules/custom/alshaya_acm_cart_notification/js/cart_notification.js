@@ -117,7 +117,19 @@
     attach: function (context, settings) {
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
         var productData = e.detail.productData;
-        Drupal.cartNotification.triggerNotification(productData);
+        if (drupalSettings.cart.cartNotificationDrawer) {
+          // Trigger cart drawer panel event when product added to cart.
+          // Cart drawer panel will open as side drawer.
+          var cartNotificationDrawer = new CustomEvent('showCartDrawer', {
+            bubbles: true,
+            detail: {
+              productInfo: productData,
+            }
+          });
+          document.dispatchEvent(cartNotificationDrawer);
+        } else {
+          Drupal.cartNotification.triggerNotification(productData);
+        }
       });
 
       $('.sku-base-form').once('cart-notification-failed').on('product-add-to-cart-failed', function () {
