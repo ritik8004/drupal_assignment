@@ -435,7 +435,8 @@ function rcs_placeholders_pathauto_alias_alter(&$alias, array $context) {
     // Check if alias is not conflicted with one of the rcs path prefixes
     // and modify if it does.
     $regex = '/^' . preg_quote('/' . $prefix, '/') . '/';
-    if (preg_match($regex, $alias) && $context['bundle'] !== 'rcs_' . $key) {
+    // Check if entity are not RCS entity or Product Category.
+    if (preg_match($regex, $alias) && $context['bundle'] !== 'rcs_' . $key && $context['bundle'] !== 'acq_product_category') {
       $alias = '/' . $alias_prefix_for_conflicts . ltrim($alias, '/');
       \Drupal::messenger()->addMessage(t('Url conflict detected. Modified path alias to avoid conflict with RCS paths.'));
     }

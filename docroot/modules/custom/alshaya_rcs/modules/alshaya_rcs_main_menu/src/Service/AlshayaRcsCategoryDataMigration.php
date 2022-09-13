@@ -221,6 +221,9 @@ class AlshayaRcsCategoryDataMigration {
       }
 
       $source_term = $term_storage->load($tid);
+      $source_term = ($source_term->language()->getId() === $langcode)
+        ? $source_term
+        : $source_term->getTranslation($langcode);
       if ($source_term instanceof TermInterface) {
         // Create new migrate category term.
         $migrate_term = self::createCategory($source_term, $langcode, $vid);
