@@ -461,7 +461,10 @@ class PromotionController extends ControllerBase {
     $cartLabels = [
       'qualified' => [],
       'next_eligible' => [],
+      // Node objects array of the promotion discounts applicable for the cart.
       'applied_rules' => [],
+      // Node objects array of the promotion discounts applied in the cart.
+      'applied_rules_with_discounts' => [],
       'shipping_free' => FALSE,
     ];
 
@@ -487,6 +490,8 @@ class PromotionController extends ControllerBase {
         ];
       }
     }
+
+    $cartLabels['applied_rules_with_discounts'] = $this->promotionsManager->getAppliedCartDiscounts();
 
     $applicableInactivePromotion = $this->promotionsManager->getInactiveCartPromotion();
     if ($applicableInactivePromotion instanceof NodeInterface) {
