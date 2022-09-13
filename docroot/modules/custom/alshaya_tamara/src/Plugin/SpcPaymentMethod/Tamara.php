@@ -3,10 +3,12 @@
 namespace Drupal\alshaya_tamara\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
+use Drupal\alshaya_tamara\AlshayaTamaraApiHelper;
 use Drupal\alshaya_tamara\AlshayaTamaraWidgetHelper;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Logger\LoggerChannelTrait;
 
 /**
  * Tamara payment method for SPC.
@@ -18,7 +20,15 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  */
 class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactoryPluginInterface {
 
+  use LoggerChannelTrait;
   use StringTranslationTrait;
+
+  /**
+   * Tamara payment method Helper.
+   *
+   * @var \Drupal\alshaya_tamara\AlshayaTamaraApiHelper
+   */
+  protected $tamaraApiHelper;
 
   /**
    * Tamara widget Helper.
@@ -38,6 +48,7 @@ class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFacto
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('alshaya_tamara.api_helper'),
       $container->get('alshaya_tamara.widget_helper'),
     );
   }
@@ -51,14 +62,18 @@ class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFacto
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\alshaya_tamara\AlshayaTamaraWidgetHelper $tamara_widget_helper
+   * @param \Drupal\alshaya_tamara\AlshayaTamaraApiHelper $tamara_api_helper
    *   Tamara api Helper.
+   * @param \Drupal\alshaya_tamara\AlshayaTamaraWidgetHelper $tamara_widget_helper
+   *   Tamara widget Helper.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
+                              AlshayaTamaraApiHelper $tamara_api_helper,
                               AlshayaTamaraWidgetHelper $tamara_widget_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->tamaraApiHelper = $tamara_api_helper;
     $this->tamaraWidgetHelper = $tamara_widget_helper;
   }
 
@@ -66,7 +81,13 @@ class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function isAvailable() {
-    // @todo we need to connect with MDC to check if tamara is available.
+    $tamaraApiConfig = $this->tamaraApiHelper->getTamaraApiConfig();
+    // Return false if `is_active` is set to false or not set.
+    if (!isset($tamaraApiConfig['is_active'])
+      || !((bool) $tamaraApiConfig['is_active'])) {
+      $this->getLogger('tamara')->warning('Tamara status is not enabled in Tamara config, ignoring.');
+      return FALSE;
+    }
     return TRUE;
   }
 

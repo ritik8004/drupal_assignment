@@ -112,7 +112,7 @@ class AlshayaTamaraWidgetHelper {
     $tamaraApiConfig = $this->tamaraApiHelper->getTamaraApiConfig();
     // No need to integrate the widget if the reponse does not have is_active or
     // set to FALSE.
-    if (empty($tamaraApiConfig['is_active'])
+    if (!isset($tamaraApiConfig['is_active'])
       || !((bool) $tamaraApiConfig['is_active'])) {
       $this->logger->error('Tamara payment method is not avtive in Tamara config, @response', [
         '@response' => Json::encode($tamaraApiConfig),
