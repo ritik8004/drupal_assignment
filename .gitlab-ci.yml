@@ -24,7 +24,6 @@ cache: &global_cache
     - $HOME/.npm
     - $HOME/.nvm
     - $CI_PROJECT_DIR/docroot/middleware/vendor
-    - $CI_PROJECT_DIR/docroot/appointment/vendor
     - $CI_PROJECT_DIR/docroot/core
     - $CI_PROJECT_DIR/docroot/libraries
     - $CI_PROJECT_DIR/docroot/modules/contrib
@@ -71,8 +70,6 @@ build:
     - export
     # Build middleware.
     - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/middleware
-    # Build appointment middleware.
-    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/appointment
 
 validate:
   stage: validate
