@@ -57,3 +57,23 @@ function alshaya_xb_alshaya_my_account_links_alter(array &$links) {
   unset($links['address_book']);
   unset($links['payment_cards']);
 }
+
+/**
+ * Implements hook_preprocess_acq_commerce_price().
+ */
+function alshaya_xb_preprocess_user_recent_order(&$variables) {
+  // Appending the Global-e order ID if it is present.
+  if (isset($variables['order']['ext_order_id']) && !empty($variables['order']['ext_order_id'])) {
+    $variables['order']['id'] = $variables['order']['id'] . ' [' . $variables['order']['ext_order_id'] . ']';
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_update_order_summary_alter().
+ */
+function alshaya_xb_alshaya_acm_customer_update_order_summary_alter(array &$order, array &$orderRow) {
+  // Appending the Global-e order ID if it is present.
+  if (isset($order['ext_order_id']) && !empty($order['ext_order_id'])) {
+    $orderRow['orderId'] = $order['increment_id'] . ' [' . $order['ext_order_id'] . ']';
+  }
+}
