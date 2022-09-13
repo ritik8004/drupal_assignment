@@ -1,0 +1,7 @@
+alshaya_tamara.settings:
+  type: config_object
+  label: 'Alshaya Tamara settings'
+  mapping:
+    installmentCount:
+      type: integer
+      label: 'Configure the Tamara installment counts.'

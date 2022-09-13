@@ -1,0 +1,3 @@
+# Config to manage the Tamara installment count during the checkout. By default
+# it'll be set to 3 installment payment option.
+installmentCount: 3

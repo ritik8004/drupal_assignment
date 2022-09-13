@@ -5,11 +5,11 @@
     window.TamaraInstallmentPlan.init({
       lang: drupalSettings.path.currentLanguage,
       currency: drupalSettings.alshaya_spc.currency_config.currency_code,
-      // @todo add this when available
-      // publicKey: {{tamara_public_key}}
-    })
+      // @todo: need to check with public key.
+      // publicKey: drupalSettings.tamara.publicKey,
+    });
 
     // Render the installment plan widget.
-    window.TamaraInstallmentPlan.render()
+    window.TamaraInstallmentPlan.render();
   }
 })(Drupal, drupalSettings);

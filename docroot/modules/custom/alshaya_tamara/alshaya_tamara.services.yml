@@ -1,6 +1,21 @@
 services:
+  cache.tamara:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [ tamara ]
+
+  alshaya_tamara.api_helper:
+    class: Drupal\alshaya_tamara\AlshayaTamaraApiHelper
+    arguments:
+      - '@alshaya_api.api'
+      - '@cache.tamara'
+      - '@logger.factory'
+
   alshaya_tamara.widget_helper:
     class: Drupal\alshaya_tamara\AlshayaTamaraWidgetHelper
     arguments:
+      - '@alshaya_tamara.api_helper'
       - '@config.factory'
       - '@logger.factory'

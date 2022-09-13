@@ -14,6 +14,13 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
  */
 class AlshayaTamaraWidgetHelper {
   /**
+   * Tamara Api Helper.
+   *
+   * @var \Drupal\alshaya_tamara\AlshayaTamaraApiHelper
+   */
+  protected $tamaraApiHelper;
+
+  /**
    * Config Factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -30,13 +37,17 @@ class AlshayaTamaraWidgetHelper {
   /**
    * AlshayaTamaraHelper Constructor.
    *
+   * @param \Drupal\alshaya_tamara\AlshayaTamaraApiHelper $tamara_api_helper
+   *   Api wrapper.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
+  public function __construct(AlshayaTamaraApiHelper $tamara_api_helper,
+                              ConfigFactoryInterface $config_factory,
                               LoggerChannelFactoryInterface $logger_factory) {
+    $this->tamaraApiHelper = $tamara_api_helper;
     $this->configFactory = $config_factory;
     $this->logger = $logger_factory->get('AlshayaTamaraHelper');
   }
@@ -98,8 +109,24 @@ class AlshayaTamaraWidgetHelper {
       return;
     }
 
-    // @todo need to confirm if this value will come from MDC or from config.
-    $build['#attached']['drupalSettings']['tamara']['installmentCount'] = 3;
+    $tamaraApiConfig = $this->tamaraApiHelper->getTamaraApiConfig();
+    // No need to integrate the widget if the reponse does not have is_active or
+    // set to FALSE.
+    if (!isset($tamaraApiConfig['is_active'])
+      || !((bool) $tamaraApiConfig['is_active'])) {
+      $this->logger->error('Tamara payment method is not avtive in Tamara config, @response', [
+        '@response' => Json::encode($tamaraApiConfig),
+      ]);
+      return;
+    }
+
+    // Check if the public key is set in tamara api config and pass in drupal
+    // settings for rendering tamara widget on checkout page.
+    $build['#attached']['drupalSettings']['tamara']['publicKey'] = $tamaraApiConfig['public_key'] ?: '';
+
+    // Get the installment count from the Alshaya Tamara module's config.
+    $alshayaTamaraConfig = $this->configFactory->get('alshaya_tamara.settings');
+    $build['#attached']['drupalSettings']['tamara']['installmentCount'] = $alshayaTamaraConfig->get('installmentCount');
 
     $build['#attached']['library'][] = 'alshaya_tamara/tamara_checkout';
     $build['tamara'] = $this->getTamaraWidgetMarkup();
