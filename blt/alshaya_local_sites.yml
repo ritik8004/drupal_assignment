@@ -182,6 +182,10 @@ sites:
     module: alshaya_aeo
     type: alshaya_transac
     country: bh
+  aeojo:
+    module: alshaya_aeo
+    type: alshaya_transac
+    country: jo
   bpkw:
     module: alshaya_bp
     type: alshaya_transac
