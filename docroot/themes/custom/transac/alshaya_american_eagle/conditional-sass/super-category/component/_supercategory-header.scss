@@ -7,17 +7,9 @@
     }
   }
 
-  &.super-category-american-eagle {
-    .branding__menu {
-      .c-header__region {
-        .block-system-branding-block {
-          .site-brand-home {
-            img {
-              height: rem(20);
-            }
-          }
-        }
-      }
-    }
+  @include logo_height(20, 42);
+
+  &.super-category-aerie {
+    @include logo_height(28, 28);
   }
 }
