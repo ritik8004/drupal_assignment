@@ -48,7 +48,7 @@
           text-transform: capitalize;
           height: rem(44);
           padding-top: rem(14);
-  
+
           &::after {
             content: '';
             height: rem(2);
@@ -61,17 +61,16 @@
 
         &:hover {
           a.menu--one__link {
-  
             &::after {
               background-color: $mm_l1_link_active_border;
               visibility: visible;
             }
           }
-  
+
           & > ul.menu--two__list {
             border-bottom: rem(1) solid $mm_l1_border;
             transform: none;
-  
+
             &::after {
               content: '';
               height: rem(1);
@@ -90,14 +89,14 @@
           &.active {
             border-bottom: none;
             color: $mm_l1_link;
-  
+
             &::after {
               background-color: $primary_link-hover;
               visibility: visible;
             }
           }
         }
-  
+
         ul.menu--two__list {
           display: block;
           overflow: hidden;
