@@ -38,6 +38,11 @@ function rcs_placeholders_token_info() {
     'description' => t('The configured path prefix for RCS categories.'),
   ];
 
+  $info['tokens']['rcs']['promotion-path-prefix'] = [
+    'name' => t('RCS promotion path prefix'),
+    'description' => t('The configured path prefix for RCS promotion.'),
+  ];
+
   // Following token must be implemented by the commerce backend.
   // It could be altered further by custom modules.
   // #rcs.product.name#.
