@@ -6,6 +6,7 @@
  */
 
 use Drupal\block\Entity\Block;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
@@ -304,10 +305,10 @@ function _rcs_placeholders_enrichment_form_alter(array &$form, FormStateInterfac
 
   // Pre-fill the title and slug fields with values from the query.
   if (isset($q[$title_field])) {
-    $form[$title_field]['widget'][0]['value']['#default_value'] = $q[$title_field];
+    $form[$title_field]['widget'][0]['value']['#default_value'] = Xss::filter($q[$title_field]);
   }
   if (isset($q['slug'])) {
-    $form[$slug_field]['widget'][0]['value']['#default_value'] = $q['slug'];
+    $form[$slug_field]['widget'][0]['value']['#default_value'] = Xss::filter($q['slug']);
   }
 }
 
