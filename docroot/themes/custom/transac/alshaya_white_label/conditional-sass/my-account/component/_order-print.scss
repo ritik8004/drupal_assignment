@@ -27,6 +27,10 @@ body {
     img {
       margin: rem(28) 0;
       height: rem(42);
+
+      html[lang=ar] & {
+        height: rem(65);
+      }
     }
   }
 
