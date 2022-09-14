@@ -15,6 +15,28 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Adds config and translation for COD payment method mobile otp verification.
+ */
+function alshaya_spc_update_9403() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_spc.settings'],
+    'alshaya_spc',
+    'install'
+  );
+
+  // Adding translations for cod mobile verification.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v17');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for strings related to exclusive coupon code.
  */
 function alshaya_spc_update_9402() {
