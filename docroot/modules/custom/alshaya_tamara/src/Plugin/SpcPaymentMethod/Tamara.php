@@ -95,7 +95,7 @@ class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function processBuild(array &$build) {
-    $this->tamaraWidgetHelper->getTamaraPaymentBuild($build, 'checkout');
+    $this->tamaraWidgetHelper->getTamaraPaymentBuild($build);
 
     $build['#strings']['tamara_error'] = [
       'key' => 'tamara_error',
