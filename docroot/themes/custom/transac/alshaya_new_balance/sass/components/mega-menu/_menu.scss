@@ -1,0 +1,112 @@
+@mixin menuListItem {
+  margin-#{$left}: 0;
+  margin-#{$right}: 0;
+  padding-#{$left}: rem(10);
+  padding-#{$right}: rem(10);
+  text-transform: none;
+
+  .menu--two__list & {
+    padding-#{$left}: 0;
+    padding-#{$right}: 0;
+  }
+}
+
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    ul {
+      &.menu--one__list {
+        width: 70%;
+        padding-#{$left}: rem(24);
+      }
+    }
+
+    li {
+      &.menu--one__list-item {
+        .menu__link {
+          font-size: rem(14);
+          text-transform: none;
+        }
+
+        &:nth-child(2) {
+          a {
+            padding-#{$left}: 0;
+          }
+        }
+
+        &:last-child {
+          a {
+            padding-#{$right}: 0;
+          }
+        }
+
+        .menu--one__link {
+          border-color: $mm_l1_desktop-border;
+        }
+      }
+    }
+
+    &:not(.megamenu-inline-layout) {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          #{$left}: -13%;
+          min-width: rem(1264);
+
+          .menu--two__list-item {
+            padding-bottom: rem(12);
+          }
+        }
+
+        .menu__links__wrapper {
+          padding: rem(20) rem(16) 0;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .menu--two__list-item {
+    > .menu-two__link-wrapper {
+      .menu-two__link {
+        @include breakpoint($upto-desktop) {
+          padding-#{$left}: rem(10);
+        }
+      }
+    }
+  }
+
+  .toggle--sign {
+    .one {
+      font-size: rem(14);
+      text-transform: uppercase;
+      width: 50%;
+
+      &.shop {
+        width: 50%;
+      }
+    }
+
+    .menu--active & {
+      #{$left}: rem(-1);
+
+      html[lang=ar] & {
+        right: 0;
+      }
+    }
+  }
+
+  .mobile--close {
+    span {
+      background-size: inherit;
+      height: rem(23);
+    }
+  }
+
+  .menu__list-item {
+    @include menuListItem;
+  }
+
+  .back--link {
+    @include menuListItem;
+  }
+}

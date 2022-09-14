@@ -56,7 +56,7 @@
 
       #edit-email,
       #edit-email--2 {
-        padding-#{$right}: 2%;
+        padding-#{$right}: 2% !important;
         padding-#{$left}: 2%;
         color: $footer-newsletter-text;
         background-color: $footer-text;
