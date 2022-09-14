@@ -242,6 +242,11 @@ class AlshayaRcsCategoryDataMigration {
         // Set commerce id if we are migrating product category.
         if ($vid == self::SOURCE_VOCABULARY_ID) {
           self::updateCommerceId($source_term, $migrate_term, $context['results']['commerce_ids']);
+          $migrate_term->field_commerce_status->setValue(1);
+          $migrate_term->path = [
+            'pathauto' => FALSE,
+            'alias' => '/' . $source_term->get('field_category_slug')->getString(),
+          ];
         }
 
         $migrate_term->save();
@@ -334,6 +339,11 @@ class AlshayaRcsCategoryDataMigration {
     // Set Commerce id for Product Category.
     if ($vid == self::SOURCE_VOCABULARY_ID) {
       self::updateCommerceId($source_parent_term, $migrate_parent_term, $results['commerce_ids']);
+      $migrate_parent_term->field_commerce_status->setValue(1);
+      $migrate_parent_term->path = [
+        'pathauto' => FALSE,
+        'alias' => '/' . $source_parent_term->get('field_category_slug')->getString(),
+      ];
     }
     $migrate_parent_term->save();
     $term_count++;
