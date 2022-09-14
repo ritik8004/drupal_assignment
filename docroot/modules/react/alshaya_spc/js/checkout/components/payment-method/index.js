@@ -302,27 +302,32 @@ export default class PaymentMethod extends React.Component {
               {Drupal.t('Cash on delivery is not available along with the Aura points.')}
             </div>
           </ConditionalView>
-
-          <ConditionalView condition={isSelected && method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
+          {/* Display bottom panel for COD payment when either surcharge is
+          applicable or mobile number OTP verification is enabled. */}
+          { isSelected && method.code === 'cashondelivery'
+          && (this.isCodMobileVerifyEnabled() || (typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0))
+          && (
             <div className={`payment-method-bottom-panel ${method.code}`}>
-              <div className="cod-surcharge-desc">
-                <CodSurchargeInformation
-                  surcharge={cart.cart.surcharge}
-                  messageKey="cod_surcharge_description"
-                />
-              </div>
+              { (typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0)
+              && (
+                <div className="cod-surcharge-desc">
+                  <CodSurchargeInformation
+                    surcharge={cart.cart.surcharge}
+                    messageKey="cod_surcharge_description"
+                  />
+                </div>
+              )}
               { this.isCodMobileVerifyEnabled()
               && (
-              <PaymentMethodCodMobileVerification
-                ref={this.paymentMethodCod}
-                shippingMobileNumber={mobileNumber}
-                otpLength="4"
-                otpVerified={codMobileVerified}
-              />
+                <PaymentMethodCodMobileVerification
+                  ref={this.paymentMethodCod}
+                  shippingMobileNumber={mobileNumber}
+                  otpLength="4"
+                  otpVerified={codMobileVerified}
+                />
               )}
             </div>
-          </ConditionalView>
-
+          )}
           <ConditionalView condition={(isSelected && method.code === 'checkout_com')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
               <CheckoutComContextProvider>
