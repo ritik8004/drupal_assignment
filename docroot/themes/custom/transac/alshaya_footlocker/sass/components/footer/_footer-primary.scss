@@ -139,12 +139,12 @@
 
 .alshaya-newsletter-subscribe {
   @include breakpoint($only-mobile) {
-    margin-bottom: 0;
+    margin-bottom: rem(32);
   }
 
   @include breakpoint($only-tablet) {
     min-width: initial;
-    margin-bottom: 2.8125rem;
+    margin-bottom: 0;
   }
 
   @include breakpoint($tablet) {
@@ -353,10 +353,6 @@
       li:not(:last-child) {
         margin-#{$right}: 0.875rem;
       }
-    }
-
-    @include breakpoint($only-tablet) {
-      margin-top: -0.75rem;
     }
 
     h3 {
