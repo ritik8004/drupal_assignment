@@ -1271,7 +1271,7 @@ class SkuManager {
       ? NULL
       : $this->productCacheManager->get($sku_entity, $cache_key);
 
-    if (!empty($cache)) {
+    if (isset($cache)) {
       return $cache;
     }
 
