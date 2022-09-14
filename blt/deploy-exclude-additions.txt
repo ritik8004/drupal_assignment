@@ -21,6 +21,9 @@
 /docroot/themes/custom/*/gulpfile.js
 /docroot/themes/custom/*/package.json
 /docroot/themes/custom/*/package-lock.json
+/docroot/themes/custom/*/*/gulpfile.js
+/docroot/themes/custom/*/*/package.json
+/docroot/themes/custom/*/*/package-lock.json
 /docroot/themes/custom/package.json
 /docroot/themes/custom/package-lock.json
 /docroot/themes/custom/transac/alshaya_example_subtheme
