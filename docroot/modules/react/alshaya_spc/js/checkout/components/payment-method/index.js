@@ -310,21 +310,21 @@ export default class PaymentMethod extends React.Component {
             <div className={`payment-method-bottom-panel ${method.code}`}>
               { (typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0)
               && (
-                <div className="cod-surcharge-desc">
-                  <CodSurchargeInformation
-                    surcharge={cart.cart.surcharge}
-                    messageKey="cod_surcharge_description"
-                  />
-                </div>
+              <div className="cod-surcharge-desc">
+                <CodSurchargeInformation
+                  surcharge={cart.cart.surcharge}
+                  messageKey="cod_surcharge_description"
+                />
+              </div>
               )}
               { this.isCodMobileVerifyEnabled()
               && (
-                <PaymentMethodCodMobileVerification
-                  ref={this.paymentMethodCod}
-                  shippingMobileNumber={mobileNumber}
-                  otpLength="4"
-                  otpVerified={codMobileVerified}
-                />
+              <PaymentMethodCodMobileVerification
+                ref={this.paymentMethodCod}
+                shippingMobileNumber={mobileNumber}
+                otpLength="4"
+                otpVerified={codMobileVerified}
+              />
               )}
             </div>
           )}
