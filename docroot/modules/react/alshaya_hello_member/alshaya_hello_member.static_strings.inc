@@ -28,7 +28,7 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'view_qr_code',
-      'value' => t('View QR code', [], ['context' => 'hello_member']),
+      'value' => t('View member ID', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'qr_code_redeem',
