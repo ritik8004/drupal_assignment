@@ -414,13 +414,12 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
         // Add attributes required for hm as label on products.
         if (!empty($label_attributes) && $sku) {
           foreach ($label_attributes as $attribute) {
-            if ($sku->get($attribute)->getString()
-              && array_key_exists('collection_labels', $object)) {
+            if ($sku->get($attribute)->getString()) {
               $object['collection_labels'][$lan_key][$attribute] = $sku->get($attribute)->getString();
             }
           }
           if (array_key_exists('collection_labels', $object)) {
-            $object['collection_labels'] ??= (object) $object['collection_labels'];
+            $object['collection_labels'] ??= $object['collection_labels'];
           }
         }
       }
@@ -429,13 +428,12 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
       $sku = _alshaya_hm_get_language_specific_data($object['search_api_language'], $object['sku'], $node);
       if (!empty($label_attributes) && $sku) {
         foreach ($label_attributes as $attribute) {
-          if ($sku->get($attribute)->getString()
-            && array_key_exists('collection_labels', $object)) {
+          if ($sku->get($attribute)->getString()) {
             $object['collection_labels'][$attribute] = $sku->get($attribute)->getString();
           }
         }
         if (array_key_exists('collection_labels', $object)) {
-          $object['collection_labels'] ??= (object) $object['collection_labels'];
+          $object['collection_labels'] ??= $object['collection_labels'];
         }
         $concept_values = $sku->get('attr_concept')->getValue();
         if (!empty($concept_values)) {
