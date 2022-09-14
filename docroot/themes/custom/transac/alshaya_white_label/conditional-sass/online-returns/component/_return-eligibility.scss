@@ -12,17 +12,6 @@
       margin-bottom: 0;
     }
 
-    .return-button-enabled {
-      @include breakpoint($tablet) {
-        margin-#{$left}: rem(10);
-      }
-
-      @include breakpoint($desktop) {
-        flex-basis: 40%;
-        text-align: $right;
-      }
-    }
-
     .return-inactive {
       margin-#{$left}: rem(38);
     }
@@ -60,8 +49,16 @@
           align-items: center;
         }
 
-        @include breakpoint($only-tablet) {
-          align-items: initial;
+        & > div:nth-child(2) {
+          @include breakpoint($tablet) {
+            margin-#{$left}: rem(10);
+          }
+
+          @include breakpoint($desktop) {
+            flex-shrink: 0;
+            flex-basis: 40%;
+            text-align: $right;
+          }
         }
       }
 
