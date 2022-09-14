@@ -1,2 +1,3 @@
 order_id_fallback: enabled
 subtotal_after_discount: false
+cod_mobile_verification: false
