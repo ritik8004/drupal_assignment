@@ -253,6 +253,9 @@ export default class PaymentMethod extends React.Component {
       codMobileVerified = cart.cart.cod_mobile_number_verified;
     }
 
+    // Check if cart has surcharge applicable.
+    const hasSurcharge = (typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0);
+
     return (
       <>
         <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
@@ -271,7 +274,7 @@ export default class PaymentMethod extends React.Component {
             <div className="payment-method-label-wrapper">
               <label className="radio-sim radio-label">
                 {method.name}
-                <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
+                <ConditionalView condition={method.code === 'cashondelivery' && hasSurcharge}>
                   <div className="spc-payment-method-desc">
                     <div className="desc-content">
                       <CodSurchargeInformation
@@ -302,13 +305,14 @@ export default class PaymentMethod extends React.Component {
               {Drupal.t('Cash on delivery is not available along with the Aura points.')}
             </div>
           </ConditionalView>
+
           {/* Display bottom panel for COD payment when either surcharge is
           applicable or mobile number OTP verification is enabled. */}
           { isSelected && method.code === 'cashondelivery'
-          && (this.isCodMobileVerifyEnabled() || (typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0))
+          && (this.isCodMobileVerifyEnabled() || hasSurcharge)
           && (
             <div className={`payment-method-bottom-panel ${method.code}`}>
-              { (typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0)
+              { hasSurcharge
               && (
               <div className="cod-surcharge-desc">
                 <CodSurchargeInformation
@@ -328,6 +332,7 @@ export default class PaymentMethod extends React.Component {
               )}
             </div>
           )}
+
           <ConditionalView condition={(isSelected && method.code === 'checkout_com')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
               <CheckoutComContextProvider>
