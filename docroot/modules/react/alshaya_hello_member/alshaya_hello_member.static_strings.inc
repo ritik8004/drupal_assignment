@@ -116,7 +116,7 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'benefit_add_to_bag',
-      'value' => t('Add to Bag', [], ['context' => 'hello_member']),
+      'value' => t('Add to bag', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'member_id_title',
@@ -152,7 +152,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'hello_member_guest_login',
-      'value' => t('@hm_icon @login_link or Become a member to earn @points points', [], ['context' => 'hello_member']),
+      'value' => t('@hm_icon @login_link or become a member to earn @points points', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'hello_member_points_tooltip',
@@ -168,7 +168,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'enter_aura_details',
-      'value' => t('Enter Aura Details', [], ['context' => 'hello_member']),
+      'value' => t('Enter aura details', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'aura_details_tooltip',
