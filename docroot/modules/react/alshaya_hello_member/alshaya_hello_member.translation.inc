@@ -171,8 +171,8 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'رمز QR',
         'context' => 'hello_member',
       ],
-      'View QR code' => [
-        'ar' => 'عرض رمز QR',
+      'View member ID' => [
+        'ar' => 'عرض الرقم التعريفي للعضوية',
         'context' => 'hello_member',
       ],
       'Member ID' => [
