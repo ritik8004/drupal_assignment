@@ -1,0 +1,9 @@
+@include breakpoint($desktop) {
+  body.aura-enabled {
+    .region__menu-secondary {
+      #block-account-menu a {
+        padding-top: rem(6);
+      }
+    }
+  }
+}
