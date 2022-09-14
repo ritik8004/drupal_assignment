@@ -1271,7 +1271,7 @@ class SkuManager {
       ? NULL
       : $this->productCacheManager->get($sku_entity, $cache_key);
 
-    if (isset($cache)) {
+    if (!empty($cache)) {
       return $cache;
     }
 
@@ -1341,7 +1341,7 @@ class SkuManager {
       }
     }
 
-    $this->productCacheManager->set($sku_entity, $cache_key, $sku_entity->getCacheTags() ?? []);
+    $this->productCacheManager->set($sku_entity, $cache_key, $sku_labels, $sku_entity->getCacheTags() ?? []);
 
     return $sku_labels;
   }
