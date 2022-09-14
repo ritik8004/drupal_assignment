@@ -34,6 +34,12 @@
         @include breakpoint($upto-desktop) {
           font-size: 0.875rem;
         }
+
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            margin-top: rem(2);
+          }
+        }
       }
     }
   }
