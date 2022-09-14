@@ -1416,12 +1416,11 @@ class SkuImagesManager {
       ];
 
       if ($this->productDisplaySettings->get('color_swatches_show_product_image') && $this->skuManager->isListingDisplayModeAggregated()) {
-        $swatch_product_image = $child->getThumbnail();
+        $swatch_product_image = $this->getThumbnailImageUrl($child);
 
         // If we have image for the product.
-        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
-          $url = file_create_url($swatch_product_image['file']->getFileUri());
-          $swatches[$child->id()]['product_url'] = file_url_transform_relative($url);
+        if ($swatch_product_image) {
+          $swatches[$child->id()]['product_url'] = $swatch_product_image;
         }
       }
     }
@@ -1566,22 +1565,20 @@ class SkuImagesManager {
   }
 
   /**
-   * Helper function to get swatch image url.
+   * Helper function to get thumbnail image url.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
    *
    * @return false|string
-   *   Swatch image url or false.
+   *   Thumbnail image url or false.
    */
-  public function getSwatchImageUrl(SKUInterface $sku) {
-    // Let's never download images here, we should always download when
-    // preparing gallery which is done before this.
-    $swatch_product_image = $sku->getThumbnail(FALSE);
+  public function getThumbnailImageUrl(SKUInterface $sku) {
+    $product_thumbnail_image = $sku->getThumbnail();
 
     // If we have image for the product.
-    if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
-      $url = file_create_url($swatch_product_image['file']->getFileUri());
+    if (!empty($product_thumbnail_image) && $product_thumbnail_image['file'] instanceof FileInterface) {
+      $url = file_create_url($product_thumbnail_image['file']->getFileUri());
       return $url;
     }
 
