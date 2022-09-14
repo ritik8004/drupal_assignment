@@ -6,7 +6,7 @@ import { callMagentoApiSynchronous } from '../../utilities/requestHelper';
 const Tamara = {
   // Check if Tamara is enabled on the site or not.
   isTamaraEnabled: () => hasValue(drupalSettings.tamara)
-    && hasValue(drupalSettings.tamara.widgetInfo),
+    && hasValue(drupalSettings.tamara.status),
 
   // Verify if the Tamara payment option is available for the current cart or
   // not. For this, we need call an MDC API to get the Tamara availability.
@@ -44,12 +44,14 @@ const Tamara = {
     // If `is_available` is set to '1', it means tamara payment option is
     // available for the current cart value. It also means that current cart
     // value falls in Tamara threshold limit.
-    // If tamara payment option is available, we storage the data in Static
-    // storage and update the tamaraStatus variable for the cart value.
+    // If the payment option available, update the tamaraStatus variable for the
+    //  cart value.
     if (hasValue(response.is_available)) {
       tamaraStatus[total] = true;
-      StaticStorage.set('tamaraStatus', tamaraStatus);
     }
+
+    // We storage the statuc in Static storage to avoid multiple API calls.
+    StaticStorage.set('tamaraStatus', tamaraStatus);
 
     // Return the tamara status from the Static Storage for the cart value.
     return tamaraStatus[total];

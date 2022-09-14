@@ -31,7 +31,7 @@ import PaymentMethodTabby from '../payment-method-tabby';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
 import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
-import PaymentMethodTamara from '../payment-method-tamara';
+import TamaraWidget from '../../../../../js/tamara/components';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -259,7 +259,11 @@ export default class PaymentMethod extends React.Component {
                 </ConditionalView>
 
                 <ConditionalView condition={method.code === 'tamara'}>
-                  <button className="payment-method-tamara__info" type="button" />
+                  <TamaraWidget
+                    ref={this.paymentMethodTamara}
+                    context="info"
+                    amount={amount}
+                  />
                 </ConditionalView>
               </label>
 
@@ -374,10 +378,10 @@ export default class PaymentMethod extends React.Component {
 
           <ConditionalView condition={(isSelected && method.code === 'tamara')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
-              <PaymentMethodTamara
+              <TamaraWidget
                 ref={this.paymentMethodTamara}
-                tamara={drupalSettings.tamara}
-                cart={cart}
+                context="installment"
+                amount={amount}
               />
             </div>
           </ConditionalView>
