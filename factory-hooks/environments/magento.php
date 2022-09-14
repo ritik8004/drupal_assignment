@@ -210,6 +210,7 @@ $magentos = [
   // Alo Yoga.
   'ay_qa' => [
     'url' => 'https://alo-qa.store.alshaya.com',
+    'algolia_env' => 'alo_qa',
     'magento_secrets' => [
       'consumer_key' => 'zitdukk0e6zwr9piei0csgk372shqafm',
       'consumer_secret' => '8a6w1g813pnyikoi2ksaej73cx65fcnf',
@@ -241,6 +242,7 @@ $magentos = [
   // New Balance.
   'nb_qa' => [
     'url' => 'https://integration-5ojmyuq-yuoofriziz4tu.eu-3.magentosite.cloud',
+    'algolia_env' => 'nb_qa',
     'magento_secrets' => [
       'consumer_key' => 'rjwijgl0obi48vyw5adoaheq4y6vnps7',
       'consumer_secret' => 'oe6gwidy4giuso8aq6c5ga2trmatlbyg',
