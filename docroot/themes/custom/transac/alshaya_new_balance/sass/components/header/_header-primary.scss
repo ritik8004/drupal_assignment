@@ -335,7 +335,7 @@ header {
         #{$right}: rem(56);
       }
 
-      @include icon_img('#{$nb_theme_img_directory_path}/icons/search.svg', 2rem, 2rem);
+      @include icon_img('#{$nb_theme_img_directory_path}/icons/search.svg', rem(32), rem(32));
 
       &::before {
         @include breakpoint($upto-desktop) {
