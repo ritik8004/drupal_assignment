@@ -1,5 +1,5 @@
 /**
- * Listens to the 'rcsUpdateResults' event and updated the result object.
+ * Listens to the 'rcsUpdateResults' event and update configurable attributes.
  */
  (function main() {
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
@@ -21,6 +21,7 @@
 
   });
 
+  // Alter variant configurable options.
   document.addEventListener('rcsProductConfigurablesAlter', function alterProduct(e) {
     var variant = e.detail.data.variant;
     variant.attributes.forEach(function eachAttr(attr) {
