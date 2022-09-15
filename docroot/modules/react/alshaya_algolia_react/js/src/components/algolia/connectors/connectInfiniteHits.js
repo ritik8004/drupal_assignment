@@ -74,6 +74,7 @@ export default createConnector({
         refinePrevious: function refinePrevious() {},
         refineNext: function refineNext() {},
         nbHits: 0,
+        indexName: '',
       };
     }
 
@@ -81,8 +82,7 @@ export default createConnector({
       ? props.defaultpageRender - 1
       : results.page;
 
-    const { hits } = results;
-    const { hitsPerPage } = results;
+    const { hits, hitsPerPage, index: indexName } = results;
     let { nbPages } = results;
 
     /* Dangling variable _state is coming from an external library here. */
@@ -161,6 +161,7 @@ export default createConnector({
       refinePrevious,
       refineNext,
       nbHits: results.nbHits,
+      indexName,
     };
   },
   getSearchParameters: function getSearchParameters(searchParameters, props, searchState) {
