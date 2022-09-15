@@ -168,7 +168,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'enter_aura_details',
-      'value' => t('Enter aura details', [], ['context' => 'hello_member']),
+      'value' => t('Enter Aura details', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'aura_details_tooltip',
