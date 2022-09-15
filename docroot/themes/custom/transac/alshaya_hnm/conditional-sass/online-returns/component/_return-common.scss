@@ -1,3 +1,16 @@
 .bold-text {
   font-family: $hnm-demibold;
 }
+
+.order-item-image {
+  .image-data-wrapper {
+    &.in-eligible,
+    &.big-ticket-item {
+      .big-ticket-item-label,
+      .not-eligible-label {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}
+
