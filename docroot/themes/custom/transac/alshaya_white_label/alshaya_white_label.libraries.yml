@@ -861,7 +861,7 @@ hello-member-become-member:
 
 megamenu-shop-by-filter:
   css:
-    theme: 
+    theme:
       css/conditional-sass/megamenu-shop-by-filter/megamenu-shop-by-filter.ltr.css: {}
 
 plp-quick-add:
@@ -873,3 +873,8 @@ checkout-tracker:
   css:
     theme:
       css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: {}
+
+checkout-cod-mobile-verification:
+  css:
+    theme:
+      css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: {}
