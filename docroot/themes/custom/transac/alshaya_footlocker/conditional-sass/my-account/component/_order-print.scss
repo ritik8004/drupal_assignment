@@ -11,6 +11,11 @@
 
     img {
       max-width: 15.5625rem;
+      height: auto;
+
+      html[lang=ar] & {
+        height: auto;
+      }
     }
   }
 

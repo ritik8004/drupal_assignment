@@ -58,6 +58,13 @@ class MobileAppUtility {
   protected $termUrls = [];
 
   /**
+   * Array of homepage cache tags.
+   *
+   * @var array
+   */
+  protected $homePageCache = [];
+
+  /**
    * Cache Backend service for alshaya.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -720,6 +727,11 @@ class MobileAppUtility {
         $record['child'] = $this->getAllCategories($langcode, $term->tid);
       }
 
+      // Add an alter hook to change the individual category record data. For
+      // example some modules add new fields in category all API response based
+      // on availability on the features like FL navigation fields.
+      $this->moduleHandler->alter('categories_all_response', $record, $term);
+
       $data[] = $record;
     }
     return $data;
@@ -733,6 +745,16 @@ class MobileAppUtility {
    */
   public function cacheableTermUrls() {
     return $this->termUrls;
+  }
+
+  /**
+   * Return homepage cache tags.
+   *
+   * @return array
+   *   Returns homepage cache tags.
+   */
+  public function cacheHomePage() {
+    return $this->homePageCache;
   }
 
   /**
@@ -1009,7 +1031,12 @@ class MobileAppUtility {
       $homepage_nid = $this->configFactory->get('alshaya_master.home')->get('entity')['id'];
       $homepage_node = $this->entityTypeManager->getStorage('node')->load($homepage_nid);
     }
-    return !empty($homepage_node) ? $homepage_node : [];
+    if (empty($homepage_node)) {
+      return [];
+    }
+    // Associate homepage cache tags to be invalidated by.
+    $this->homePageCache = $homepage_node->getCacheTags();
+    return $homepage_node;
   }
 
   /**

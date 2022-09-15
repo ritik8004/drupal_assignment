@@ -72,7 +72,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
         }
       });
     } else {
-      vouchers.push({ error_message: couponResponse.data.message });
       // If coupons API is returning Error.
       logger.error('Error while calling the coupons Api  @message', {
         '@message': couponResponse.data.message,
@@ -84,7 +83,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
     if (hasValue(offerResponse.data) && !hasValue(offerResponse.data.error)) {
       Offers.push(...offerResponse.data.offers);
     } else {
-      Offers.push({ error_message: offerResponse.data.message });
       // If offers API is returning Error.
       logger.error('Error while calling the offers Api @message', {
         '@message': offerResponse.data.message,
@@ -229,7 +227,10 @@ class HelloMemberCartOffersVouchers extends React.Component {
         </span>
       );
     }
-
+    // If applied voucher is removed show this message in offer section.
+    if (document.getElementById('offer-err-msg') && totals.isHmAppliedVoucherRemoved) {
+      document.getElementById('offer-err-msg').innerHTML = Drupal.t('You have reached the maximum amount of added discounts.', { context: 'hello_member' });
+    }
 
     return (
       <>

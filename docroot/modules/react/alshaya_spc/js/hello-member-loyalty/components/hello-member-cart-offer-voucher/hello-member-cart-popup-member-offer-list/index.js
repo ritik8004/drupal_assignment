@@ -10,6 +10,8 @@ import resetBenefitOptions from '../offer_voucher_helper';
 
 const HelloMemberCartPopupMemberOfferList = (props) => {
   const { offers, totals } = props;
+  // Get formatted expiry date.
+  moment.locale(drupalSettings.path.currentLanguage);
 
   const handleChange = () => {
     const memberOffers = document.getElementsByName('radios');
@@ -55,9 +57,6 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
               message: getDefaultErrorMessage(),
             });
           } else {
-            if (result.data.totals.isHmAppliedVoucherRemoved) {
-              document.getElementById('offer-err-msg').innerHTML = Drupal.t('You have reached the maximum amount of added discounts.', { context: 'hello_member' });
-            }
             // Calling refresh mini cart event so that storage is updated.
             dispatchCustomEvent('refreshMiniCart', {
               data: () => result.data,

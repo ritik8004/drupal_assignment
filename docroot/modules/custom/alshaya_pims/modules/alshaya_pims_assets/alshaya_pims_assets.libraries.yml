@@ -1,6 +1,0 @@
-swatch:
-  js:
-    js/alshaya_assets_swatch.js: {}
-  dependencies:
-    - rcs_placeholders/helpers
-    - alshaya_acm_product/product_utility

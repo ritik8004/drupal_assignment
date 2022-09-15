@@ -1,0 +1,56 @@
+.block-alshaya-main-menu .has--three-levels.menu--one__list-item ul {
+  .shop-by-filter-attribute {
+    font-size: initial;
+
+    &__label {
+      font-size: rem(12);
+      color: $mm_l2_link_desktop !important;
+      font-family: $alshaya-bold;
+      line-height: 1.4;
+      display: inline;
+    }
+
+    &__list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: rem(12);
+      row-gap: rem(12);
+      max-width: rem(132);
+      padding-top: rem(12);
+      padding-inline-start: 0;
+    }
+
+    &__list-item {
+      width: rem(36);
+      height: rem(32);
+      background-color: $shop-by-filter-attribute-item-bg;
+
+      a {
+        color: $shop-by-filter-attribute-item;
+        font-size: rem(10);
+        font-family: $alshaya-bold;
+        line-height: rem(14);
+        width: 100%;
+        height: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+      }
+
+      &:hover {
+        background-color: $shop-by-filter-attribute-item-bg-hover !important;
+
+        a {
+          color: $shop-by-filter-attribute-item-hover !important;
+        }
+      }
+    }
+
+    &.is_underlined {
+      .shop-by-filter-attribute__label {
+        @include psuedo-element-underline($mm_l3_link_hover, rem(3));
+      }
+    }
+  }
+}

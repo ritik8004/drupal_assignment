@@ -17,6 +17,19 @@ $env_name = !in_array($env, ['travis', 'local']) ? substr($env, 2) : $env;
 
 $settings['env'] = $env;
 
+// Set home directory as per environment.
+$settings['alshaya_home_dir'] = $_SERVER['HOME'] ?? '';
+
+if ($settings['env'] === 'local') {
+  // Still keeping this condition for anyone using vagrant.
+  $settings['alshaya_home_dir'] = '/home/vagrant';
+
+  // For Lando we use custom directory for home.
+  if (getenv('LANDO')) {
+    $settings['alshaya_home_dir'] = '/app/local_home';
+  }
+}
+
 // Make sure environment name used to load settings is not pointing to update
 // environment name like 01devup or 01update.
 if ($env_name === 'update') {
@@ -230,6 +243,9 @@ switch ($env_name) {
 
     // Log debug messages too.
     $settings['alshaya_performance_log_mode'] = 'developer';
+
+    // Set this to 1 to make testing convenient.
+    $config['alshaya_acm_product.settings']['local_storage_cache_time'] = 1;
     break;
 
   case 'dev':
@@ -249,6 +265,9 @@ switch ($env_name) {
 
     // We only debug on ACSF dev/test environments.
     $config['acq_commerce.conductor']['debug'] = TRUE;
+
+    // Set this to 1 to make testing convenient.
+    $config['alshaya_acm_product.settings']['local_storage_cache_time'] = 1;
     break;
 
   case 'live':

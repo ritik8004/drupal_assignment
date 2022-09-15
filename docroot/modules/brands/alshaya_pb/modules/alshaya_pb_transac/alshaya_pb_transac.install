@@ -12,6 +12,48 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ *  Remove `frame` attribute from pb transac brand module.
+ */
+function alshaya_pb_transac_update_9401() {
+
+  // Remove frame attribute from sku entity.
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->removeField('frame');
+
+  // Remove frame attribute from field storage.
+  $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
+  $frame_storage = $entity_update_manager->getFieldStorageDefinition('attr_frame', 'acq_sku');
+  if (!empty($frame_storage)) {
+    $entity_update_manager->uninstallFieldStorageDefinition($frame_storage);
+  }
+
+  // Remove frame attribute from sku base fields config.
+  $sku_base_config = \Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields');
+  $fields = $sku_base_config->get('fields');
+  unset($fields['frame']);
+  $sku_base_config->set('fields', $fields);
+  $sku_base_config->save();
+
+  // Remove frame attribute from sku configurable form settings.
+  $sku_form_settings_config = \Drupal::configFactory()->getEditable('acq_sku.configurable_form_settings');
+
+  // Unset in attribute weights.
+  $attribute_weights = $sku_form_settings_config->get('attribute_weights');
+  unset($attribute_weights['default']['frame']);
+  $sku_form_settings_config->set('attribute_weights', $attribute_weights);
+
+  // Unset in sortable options.
+  $sortable_options = $sku_form_settings_config->get('sortable_options');
+  $key = array_search('frame', $sortable_options);
+  unset($sortable_options[$key]);
+  $sku_form_settings_config->set('sortable_options', $sortable_options);
+  $sku_form_settings_config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
  * Queue items for acquia_search_index.

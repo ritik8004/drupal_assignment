@@ -653,3 +653,42 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
     }
   }
 }
+
+@mixin psuedo-element-underline($color: $black, $height: rem(1), $bottom: rem(-4)) {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: $bottom;
+    #{$left}: 0;
+    width: 100%;
+    height: $height;
+    background-color: $color;
+
+    html[lang="ar"] & {
+      bottom: calc(#{$bottom} + #{rem(4)});
+    }
+  }
+}
+
+// Set the height for brand logo on header.
+@mixin logo_height($height_px_en, $height_px_ar: 0) {
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home {
+          img {
+            height: rem($height_px_en);
+
+            @if $height_px_ar != 0 {
+              html[lang="ar"] & {
+                height: rem($height_px_ar);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

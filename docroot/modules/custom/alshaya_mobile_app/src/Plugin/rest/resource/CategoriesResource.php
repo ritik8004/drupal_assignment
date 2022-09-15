@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a resource to get list of all categories.
@@ -114,7 +115,7 @@ class CategoriesResource extends ResourceBase {
     // overload on the system when any term gets updated.
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
-        'tags' => [ProductCategoryTree::CACHE_TAG],
+        'tags' => Cache::mergeTags([ProductCategoryTree::CACHE_TAG], $this->mobileAppUtility->cacheHomePage()),
       ],
     ]));
   }

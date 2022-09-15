@@ -75,7 +75,7 @@
     alternate_url += window.location.search;
 
     // Perform the redirect.
-    window.location = alternate_url;
+    window.location = encodeURI(alternate_url);
   }
 
 })(jQuery, Drupal, window.drupalSettings);

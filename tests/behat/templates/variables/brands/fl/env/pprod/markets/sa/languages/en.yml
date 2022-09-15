@@ -50,6 +50,7 @@ variables:
   continue_shopping: 'go shopping'
   language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
+  mobile_class: 'en'
   language_short: 'ar'
   city_option: 'Abu Arish'
   area_option: 'Abu Arish'

@@ -6,4 +6,10 @@
       }
     }
   }
+
+  @include logo_height(20, 42);
+
+  &.super-category-aerie {
+    @include logo_height(28, 28);
+  }
 }

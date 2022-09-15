@@ -1085,6 +1085,37 @@ class AlshayaGtmManager {
       'platformType' => $this->getUserDeviceType(),
     ];
 
+    // Add transaction & payment details.
+    $payment_info = [];
+    foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
+      $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
+    }
+
+    $paymentMethods = [];
+    // Get all the possible payment methods for an order.
+    if ($order['payment']['method'] === 'checkout_com_upapi') {
+      $paymentMethods[] = $payment_info['card_type'] . " Card";
+    }
+    else {
+      $paymentMethods[] = $generalInfo['paymentOption'];
+    }
+
+    // Check if some partial payment is done by any other payment methods.
+    if (array_key_exists('hps_redeemed_amount', $order['extension'])
+      && $order['extension']['hps_redeemed_amount'] > 0) {
+      $paymentMethods[] = 'eGift Card';
+    }
+
+    if (array_key_exists('aura_payment_value', $order['extension'])
+      && $order['extension']['aura_payment_value'] > 0) {
+      $paymentMethods[] = 'Aura Loyalty Card';
+    }
+
+    $generalInfo['paymentMethodsUsed'] = $paymentMethods;
+
+    // Generate the deliveryInfo.
+    $generalInfo['deliveryInfo'] = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['shipping']['address'], TRUE);
+
     return [
       'general' => $generalInfo,
       'products' => $products,

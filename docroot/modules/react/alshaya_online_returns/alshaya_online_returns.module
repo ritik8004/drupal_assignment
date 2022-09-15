@@ -159,11 +159,9 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
 
   $build['#attached']['drupalSettings']['onlineReturns'] = $onlineReturnsHelper->prepareOrderData($order);
   $build['#attached']['drupalSettings']['onlineReturns']['gtm_info'] = \Drupal::service('alshaya_seo_transac.gtm_manager')->fetchCompletedOrderAttributes($order);
-  $build['#attached']['drupalSettings']['onlineReturns']['order_details'] = $build['#order_details'];
-  $build['#attached']['drupalSettings']['onlineReturns']['return_config'] = \Drupal::service('alshaya_online_returns.online_returns_api_helper')->getReturnsApiConfig(
+  $build['#attached']['drupalSettings']['onlineReturns']['return_config'] = \Drupal::service('alshaya_online_returns.online_returns_api_helper')->getLanguageBasedReturnsConfig(
     \Drupal::languageManager()->getCurrentLanguage()->getId(),
   );
-  $build['#attached']['drupalSettings']['onlineReturns']['products'] = $onlineReturnsHelper->prepareProductsData($build["#products"]);
   $build['#attached']['drupalSettings']['onlineReturns']['refunded_products'] = $onlineReturnsHelper->prepareProductsData($build["#refunded_products"]);
 
   // Attach the theming library.
@@ -183,4 +181,17 @@ function alshaya_online_returns_acq_sku_base_field_additions_alter(array &$field
   else {
     \Drupal::logger('alshaya_online_returns')->error('The config alshaya_online_returns.sku_base_fields is empty for online returns.');
   }
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ */
+function alshaya_online_returns_alshaya_spc_cart_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $onlineReturnsHelper */
+  $onlineReturnsHelper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+
+  // Add the online return cart banner flag.
+  $build['#attached']['drupalSettings']['onlineReturns']['cartBanner'] = $onlineReturnsHelper->isOnlineReturnsCartBannerEnabled();
+  // Attach the theming library.
+  $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
 }

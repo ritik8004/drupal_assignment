@@ -176,12 +176,15 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $max_nb_col = $max_nb_col > 0 ? $max_nb_col : 6;
       $ideal_max_col_length = $ideal_max_col_length > 0 ? $ideal_max_col_length : 10;
 
-      do {
+      // Get the config to determine if we need to show each L2 and their childs
+      // in separate column or not.
+      $l2_in_separate_column = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('show_l2_in_separate_column');
+
+      // If $l2_in_separate_column is true, we need to arrange each L2 with
+      // their childs in one per column.
+      if ($l2_in_separate_column) {
         $columns = [];
         $col = 0;
-        $col_total = 0;
-        $reprocess = FALSE;
-
         foreach ($l2s['child'] as $l3s) {
           // 2 below means L2 item + one blank line for spacing).
           $l2_cost = 2 + (is_countable($l3s['child']) ? count($l3s['child']) : 0);
@@ -205,12 +208,53 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
             break;
           }
 
+          // Assign the L3s with L2 in one column.
           $columns[$col][] = $l3s;
 
-          $col_total += $l2_cost;
-
+          // Increase the column count.
+          $col++;
         }
-      } while ($reprocess || $col >= $max_nb_col);
+      }
+      else {
+        // If the config $l2_in_separate_column is false, keep the column algo
+        // works as is considering all the column configs.
+        do {
+          $columns = [];
+          $col = 0;
+          $col_total = 0;
+          $reprocess = FALSE;
+
+          foreach ($l2s['child'] as $l3s) {
+            // 2 below means L2 item + one blank line for spacing.
+            $l2_cost = 2 + (is_countable($l3s['child']) ? count($l3s['child']) : 0);
+
+            // If we are detecting a longer column than the expected size
+            // we iterate with new max.
+            if ($l2_cost > $ideal_max_col_length) {
+              $ideal_max_col_length = $l2_cost;
+              $reprocess = TRUE;
+              break;
+            }
+
+            if ($col_total + $l2_cost > $ideal_max_col_length) {
+              $col++;
+              $col_total = 0;
+            }
+
+            // If we have too many columns we try with more items per column.
+            if ($col >= $max_nb_col) {
+              $ideal_max_col_length++;
+              break;
+            }
+
+            $columns[$col][] = $l3s;
+
+            $col_total += $l2_cost;
+
+          }
+        } while ($reprocess || $col >= $max_nb_col);
+      }
+
       $columns_tree[$l2s['label']] = [
         'l1_object' => $l2s,
         'columns' => $columns,

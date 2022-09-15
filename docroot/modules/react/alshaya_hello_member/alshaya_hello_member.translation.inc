@@ -171,12 +171,12 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'رمز QR',
         'context' => 'hello_member',
       ],
-      'View QR code' => [
-        'ar' => 'عرض رمز QR',
+      'View member ID' => [
+        'ar' => 'عرض الرقم التعريفي للعضوية',
         'context' => 'hello_member',
       ],
-      'To redeem in store use this QR code.' => [
-        'ar' => 'لتفعيل هذا العرض في محلاتنا استخدم هذا الرمز',
+      'Member ID' => [
+        'ar' => 'الرقم التعريفي للعضوية',
         'context' => 'hello_member',
       ],
       'Submit Rating and Review' => [
@@ -295,8 +295,8 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'تطبيق العروض',
         'context' => 'hello_member',
       ],
-      'AVAIL IT' => [
-        'ar' => 'توفرها',
+      'REDEEM IT' => [
+        'ar' => 'استخدمها',
         'context' => 'hello_member',
       ],
       '@hm_icon @login_link or Become a member to earn @points points' => [

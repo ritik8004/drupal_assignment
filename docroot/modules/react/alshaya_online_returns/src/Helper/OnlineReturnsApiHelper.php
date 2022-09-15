@@ -136,4 +136,28 @@ class OnlineReturnsApiHelper {
     return $configs;
   }
 
+  /**
+   * Get language based Online Returns config from API.
+   *
+   * @param string $langcode
+   *   The required lancode for the return config.
+   *
+   * @return array
+   *   Return array of config values.
+   */
+  public function getLanguageBasedReturnsConfig(string $langcode) {
+    $defaultLangCode = 'en';
+    $returnConfiguration = [];
+
+    if ($langcode != $defaultLangCode) {
+      $returnConfiguration[$defaultLangCode] = $this->getReturnsApiConfig($defaultLangCode);
+    }
+    // Load the return config for the current language.
+    $returnConfiguration[$langcode] = $this->getReturnsApiConfig(
+      $langcode,
+    );
+
+    return $returnConfiguration;
+  }
+
 }

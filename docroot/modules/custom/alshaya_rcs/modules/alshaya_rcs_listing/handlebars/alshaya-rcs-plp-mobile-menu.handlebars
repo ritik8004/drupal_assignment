@@ -1,0 +1,11 @@
+<div class="view-content">
+  {{#each this as |menuItem|}}
+  <div class="views-row">
+    <div class="views-field views-field-name">
+      <span class="field-content">
+        <a href="{{menuItem.url_path}}" hreflang="{{menuItem.langcode}}">{{menuItem.name}}</a>
+      </span>
+    </div>
+  </div>
+  {{/each}}
+</div>

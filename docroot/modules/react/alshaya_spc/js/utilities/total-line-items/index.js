@@ -58,8 +58,14 @@ class TotalLineItems extends React.Component {
    * Get the content of discount tooltip.
    */
   discountToolTipContent = (cartPromo) => {
-    const { totals } = this.props;
+    const { totals, couponCode, hasExclusiveCoupon } = this.props;
     let promoData = `<div class="applied-discounts-title">${Drupal.t('Discount applied')}</div>`;
+
+    // Add the coupon code with the discount title if exclusive coupon code applied on cart.
+    if (hasExclusiveCoupon === true) {
+      promoData += `<div class="applied-exclusive-couponcode">${couponCode}</div>`;
+      return promoData;
+    }
 
     // Change the discount title if hello member offer code exists on cart.
     if (hasValue(totals.hmOfferCode)) {
