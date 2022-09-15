@@ -30,6 +30,9 @@ import isAuraEnabled from '../../../../../js/utilities/helper';
 import PaymentMethodTabby from '../payment-method-tabby';
 import Tabby from '../../../../../js/tabby/utilities/tabby';
 import TabbyWidget from '../../../../../js/tabby/components';
+import PaymentMethodCodMobileVerification
+  from '../payment-method-cod-mobile-verification';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
 
 export default class PaymentMethod extends React.Component {
@@ -42,6 +45,7 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodPostpay = React.createRef();
     this.paymentMethodTabby = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
+    this.paymentMethodCod = React.createRef();
   }
 
   componentDidMount() {
@@ -54,6 +58,11 @@ export default class PaymentMethod extends React.Component {
       Drupal.tabbyPromoPopup(amount);
     }
   }
+
+  /**
+   * Helper function to check if cod mobile verification is enabled.
+   */
+  isCodMobileVerifyEnabled = () => drupalSettings.codMobileVerification || false;
 
   validateBeforePlaceOrder = async () => {
     const { method } = this.props;
@@ -73,6 +82,10 @@ export default class PaymentMethod extends React.Component {
 
     if (method.code === 'checkout_com_upapi_applepay') {
       return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
+    }
+
+    if (method.code === 'cashondelivery' && this.isCodMobileVerifyEnabled()) {
+      return this.paymentMethodCod.current.validateBeforePlaceOrder();
     }
 
     // Now update the payment method data in the cart.
@@ -227,6 +240,22 @@ export default class PaymentMethod extends React.Component {
       ? `${additionalClasses} in-active`
       : additionalClasses;
 
+    // Get mobile number from shipping address for the COD mobile verification.
+    let mobileNumber = null;
+    if (hasValue(cart) && hasValue(cart.cart.shipping)) {
+      const { address } = cart.cart.shipping;
+      mobileNumber = (address !== null) ? address.telephone : null;
+    }
+
+    // Get COD mobile verified flag from cart data.
+    let codMobileVerified = null;
+    if (hasValue(cart.cart) && typeof cart.cart.cod_mobile_number_verified !== 'undefined') {
+      codMobileVerified = cart.cart.cod_mobile_number_verified;
+    }
+
+    // Check if cart has surcharge applicable.
+    const hasSurcharge = (typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0);
+
     return (
       <>
         <div className={`payment-method fadeInUp payment-method-${method.code} ${additionalClasses}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
@@ -245,7 +274,7 @@ export default class PaymentMethod extends React.Component {
             <div className="payment-method-label-wrapper">
               <label className="radio-sim radio-label">
                 {method.name}
-                <ConditionalView condition={method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
+                <ConditionalView condition={method.code === 'cashondelivery' && hasSurcharge}>
                   <div className="spc-payment-method-desc">
                     <div className="desc-content">
                       <CodSurchargeInformation
@@ -277,16 +306,32 @@ export default class PaymentMethod extends React.Component {
             </div>
           </ConditionalView>
 
-          <ConditionalView condition={isSelected && method.code === 'cashondelivery' && typeof (cart.cart.surcharge) !== 'undefined' && cart.cart.surcharge.amount > 0}>
+          {/* Display bottom panel for COD payment when either surcharge is
+          applicable or mobile number OTP verification is enabled. */}
+          { isSelected && method.code === 'cashondelivery'
+          && (this.isCodMobileVerifyEnabled() || hasSurcharge)
+          && (
             <div className={`payment-method-bottom-panel ${method.code}`}>
+              { hasSurcharge
+              && (
               <div className="cod-surcharge-desc">
                 <CodSurchargeInformation
                   surcharge={cart.cart.surcharge}
                   messageKey="cod_surcharge_description"
                 />
               </div>
+              )}
+              { this.isCodMobileVerifyEnabled()
+              && (
+              <PaymentMethodCodMobileVerification
+                ref={this.paymentMethodCod}
+                shippingMobileNumber={mobileNumber}
+                otpLength="4"
+                otpVerified={codMobileVerified}
+              />
+              )}
             </div>
-          </ConditionalView>
+          )}
 
           <ConditionalView condition={(isSelected && method.code === 'checkout_com')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>

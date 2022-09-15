@@ -7,6 +7,7 @@ import {
 } from '../../../utilities/address_util';
 import getStringMessage from '../../../utilities/strings';
 import ConditionalView from '../../../common/components/conditional-view';
+import { isFieldDisabled } from '../../../utilities/checkout_util';
 
 export default class AreaSelect extends React.Component {
   isComponentMounted = true;
@@ -157,10 +158,27 @@ export default class AreaSelect extends React.Component {
       area_list: areaList,
       field,
       field_key: fieldKey,
+      enabledFieldsWithMessages,
     } = this.props;
     let options = areas;
     if (areaList !== null) {
       options = areaList;
+    }
+
+    // Set props for the select list.
+    const selectProps = {
+      id: 'spc-area-select-selected',
+      className: 'spc-area-select-selected',
+    };
+
+    // The prop enabledFieldsWithMessages has fieldname and default
+    // message to show with the field
+    // example {mobile: 'Please update mobile number'}
+    // if locality is not present then it will be disabled.
+    if (isFieldDisabled(enabledFieldsWithMessages, 'locality')) {
+      selectProps.className += ' disabled';
+    } else {
+      selectProps.onClick = this.toggleFilterList;
     }
 
     const panelTitle = getStringMessage('address_select', { '@label': field.label });
@@ -180,7 +198,7 @@ export default class AreaSelect extends React.Component {
       <div className={`spc-type-select area-options-count-${options.length}`}>
         <label>{field.label}</label>
 
-        <div id="spc-area-select-selected" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
+        <div {...selectProps}>
           { (areaLabel.length > 0) ? areaLabel : panelTitle }
         </div>
 
