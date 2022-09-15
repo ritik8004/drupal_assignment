@@ -2368,32 +2368,6 @@ JS;
   }
 
   /**
-   * @Then I book first available slot
-   */
-  public function firstAvailableSlotIsBooked()
-  {
-    $page = $this->getSession()->getPage();
-    $all_dates = $page->findAll('css','ul.calendar-wrapper li');
-    $total_dates = count($all_dates);
-    for ($x = 0; $x < $total_dates; $x++) {
-      if ($x == 0) {
-        $child = 'li:first-child';
-      }
-      else {
-        $child = "li:nth-child($x)";
-      }
-      $this->iClickOnElement(".appointment-datepicker ul.calendar-wrapper $child");
-      $this->iWaitSeconds('5');
-      if (empty($page->find('css','.appointment-timeslots-wrapper .appointment-time-slots .appointment-slots-empty'))) {
-        $this->inOfElementShouldContain(".appointment-datepicker ul.calendar-wrapper $child", "class", "active");
-        $this->iWaitSeconds('10');
-        $this->iClickOnElement('.appointment-timeslots-wrapper .appointment-time-slots .morning-items-wrapper ul.morning-items li:first-child');
-        break;
-      }
-    }
-  }
-
-  /**
    * @When I press :addCart button
    * @param $addCart
    */
