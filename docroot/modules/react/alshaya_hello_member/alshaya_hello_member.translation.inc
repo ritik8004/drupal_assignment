@@ -160,7 +160,7 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
       '<p>By registering you agreed to our <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>' => [
-        'en' => '<p>By clicking "Become a member", I agree to the H&M Membership <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>' => [
+        'en' => '<p>By clicking "Become a member", I agree to the H&M Membership <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>',
         'ar' => '<p></a>بالضغط على "سجل عضويتك"، فإنك توافق على شروط وأحكام<a href="/terms" class="final-tnc"> عضوية اتش آند أم</p>',
       ],
       'Terms & conditions' => [
