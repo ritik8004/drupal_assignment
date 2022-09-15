@@ -44,3 +44,30 @@ $nb_theme_img_directory_path: '/themes/custom/transac/alshaya_new_balance/imgs';
     background-color: $secondary_btn_bg_hover;
   }
 }
+
+@mixin icon_img_styles($height, $width) {
+  speak: none;
+  content: "";
+  display: inline-block;
+  height: $height;
+  width: $width;
+  margin-bottom: rem(-6);
+  cursor: pointer;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $styles {
+      background: url($imgpath) $repeat;
+
+      @include icon_img_styles($height, $width);
+    }
+  }
+}

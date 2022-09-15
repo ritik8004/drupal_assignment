@@ -1,0 +1,65 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .highlights {
+      margin-top: rem(24);
+    }
+
+    .menu--two__list {
+      .menu--two__list-item {
+        >.menu-two__link-wrapper {
+          max-width: rem(192);
+
+          a {
+            &:hover {
+              opacity: 0.6;
+            }
+          }
+        }
+      }
+    }
+
+    .menu--three__list-item {
+      >.menu-two__link-wrapper {
+        a {
+          &:hover {
+            opacity: 0.7;
+          }
+        }
+
+        .menu__link {
+          font-size: rem(14) !important;
+          line-height: 1.25;
+        }
+      }
+    }
+  }
+}
+
+.menu--two__list {
+  .back--link {
+    @include breakpoint($upto-desktop) {
+      border: none;
+    }
+  }
+
+  .menu--two__list-item {
+    >.menu-two__link-wrapper {
+      @include breakpoint($upto-desktop) {
+        border: none;
+
+        .menu-two__link {
+          padding-top: rem(16);
+          padding-bottom: rem(16);
+        }
+      }
+    }
+  }
+}
+
+.menu--three__list-item {
+  >.menu-two__link-wrapper {
+    @include breakpoint($upto-tablet) {
+      border: none;
+    }
+  }
+}
