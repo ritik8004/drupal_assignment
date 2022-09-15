@@ -2,4 +2,45 @@
   summary {
     font-family: $hnm-demibold;
   }
+
+  .hello-member-accordion-wrapper {
+    .hello-member-gender {
+      .form-item.form-type-select {
+        .select2-container {
+          .select2-selection {
+            .select2-selection__rendered {
+              text-transform: unset;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-user-register {
+  main {
+    .user-register-form.user-form {
+      .form-actions {
+        .form-submit {
+          text-transform: unset;
+        }
+      }
+    }
+  }
+
+  .c-page-title {
+    text-transform: unset;
+  }
+}
+
+.logged-out,
+.logged-in {
+  .select2-dropdown {
+    ul.select2-results__options {
+      li.select2-results__option {
+        text-transform: unset;
+      }
+    }
+  }
 }
