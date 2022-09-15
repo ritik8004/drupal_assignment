@@ -4,6 +4,8 @@
       img {
         height: rem(32);
         width: auto;
+        align-self: flex-start;
+        margin-top: rem(12);
       }
 
       .payment-method-label-wrapper {
@@ -14,11 +16,11 @@
 
           &::before {
             top: rem(30);
-
-            html[lang=ar] & {
-              top: rem(28);
-            }
           }
+        }
+
+        .tamara-widget {
+          display: inline-block;
 
           .payment-method-tamara__info {
             background: none;
@@ -28,11 +30,10 @@
               color: $_spc-billing-help;
               font-size: rem(20);
               position: relative;
-              top: rem(2);
+              top: rem(3);
             }
           }
         }
-
 
         .spc-payment-method-desc {
           font-size: rem(12);
@@ -58,6 +59,25 @@
           .spc-payment-method-desc {
             font-size: rem(10);
           }
+
+          .tamara-widget {
+            .payment-method-tamara__info {
+              padding-#{$right}: 0;
+              padding-#{$left}: rem(4);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .spc-checkout-payment-options {
+    .payment-method-tamara {
+      .payment-method-top-panel {
+        img {
+          margin-top: rem(16);
         }
       }
     }
