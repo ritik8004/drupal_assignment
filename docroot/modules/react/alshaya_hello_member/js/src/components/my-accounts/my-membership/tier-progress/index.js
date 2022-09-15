@@ -151,7 +151,7 @@ class TierProgress extends React.Component {
         { currentTier === tier2Label
           && (
           <div className="progress-header">
-            {Drupal.t('@plus_label Member', { '@plus_label': tier2Label }, { context: 'hello_member' })}
+            {Drupal.t('@plus_label member', { '@plus_label': tier2Label }, { context: 'hello_member' })}
           </div>
           )}
         <div className="my-points">
@@ -159,7 +159,10 @@ class TierProgress extends React.Component {
           <span>{getStringMessage('points_label')}</span>
         </div>
         <div className="my-tier-progress">
-          <div className="progress-label">{currentTier}</div>
+          { currentTier !== tier2Label
+          && (
+            <div className="progress-label">{currentTier}</div>
+          )}
           <div className="progress-wrapper">
             <div className="tier-bar-back">
               <ul>
