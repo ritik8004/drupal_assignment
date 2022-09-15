@@ -105,12 +105,10 @@ window.wishListLoadedFromBackend = window.wishListLoadedFromBackend || false;
       const skuOptions = [];
       if (item.options.length > 0) {
         item.options.forEach((option) => {
-          if (Drupal.hasValue(option.option_value)) {
-            skuOptions.push({
-              id: option.option_id,
-              value: option.option_value,
-            });
-          }
+          skuOptions.push({
+            id: option.option_id,
+            value: option.option_value,
+          });
         });
       }
 

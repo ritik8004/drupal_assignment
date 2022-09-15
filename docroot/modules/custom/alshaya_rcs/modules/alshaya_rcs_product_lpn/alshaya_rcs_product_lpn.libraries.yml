@@ -1,0 +1,4 @@
+alter_configurables:
+  version: 1.x
+  js:
+    js/alshaya_rcs_product_lpn.js: {}

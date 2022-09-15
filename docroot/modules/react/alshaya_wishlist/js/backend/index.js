@@ -55,12 +55,10 @@ window.commerceBackend.addRemoveWishlistItemsInBackend = async (data, action) =>
       if (typeof data.options !== 'undefined'
         && data.options.length > 0) {
         data.options.forEach((option) => {
-          if (Drupal.hasValue(option.option_value)) {
-            skuOptions.push({
-              id: option.option_id,
-              value: option.option_value,
-            });
-          }
+          skuOptions.push({
+            id: option.option_id,
+            value: option.option_value,
+          });
         });
       }
 
