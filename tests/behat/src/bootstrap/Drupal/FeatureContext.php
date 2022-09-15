@@ -3023,4 +3023,29 @@ JS;
     $this->visitPath('/user/register?behat=' . $secret_key);
   }
 
+  /**
+   * @Given /^I verify the wishlist popup block$/
+   */
+  public function iVerifyTheWishlistPopupBlock()
+  {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $empty_cart = $page->find('css', '#spc-cart .spc-empty-text');
+    if ($empty_cart == null) {
+      $wishlist_enabled = $this->getSession()->evaluateScript('return jQuery(".wishlist-enabled").length');
+      if (!empty($wishlist_enabled)) {
+        $page->find('css', '#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn')->click();
+        $this->iWaitSeconds('5');
+        $page = $this->getSession()->getPage();
+        $page->pressButton('wishlist-no');
+        $this->iWaitSeconds('5');
+      }
+      else {
+        $page->find('css', '#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn')->click();
+      }
+    }
+    else {
+      throw new \Exception('Cart is empty!');
+    }
+  }
 }
