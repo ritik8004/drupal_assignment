@@ -20,4 +20,12 @@
     }
 
   });
+
+  document.addEventListener('rcsProductConfigurablesAlter', function alterProduct(e) {
+    var variant = e.detail.data.variant;
+    variant.attributes.forEach(function eachAttr(attr) {
+      variant.product[attr.code] = attr.value_index;
+    });
+  });
+
 })();
