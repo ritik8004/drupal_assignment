@@ -25,7 +25,7 @@ import ExpressDeliveryLabel from './ExpressDeliveryLabel';
 import PriceRangeElement from '../price/PriceRangeElement';
 
 const Teaser = ({
-  hit, gtmContainer = null, pageType, extraInfo,
+  hit, gtmContainer = null, pageType, extraInfo, indexName,
   // 'extraInfo' is used to pass additional information that
   // we want to use in this component.
 }) => {
@@ -151,18 +151,6 @@ const Teaser = ({
   // Create a ref for wishlist icon button. This ref will be used to update the
   // icon in teaser when product is added to wishlist from drawer.
   const ref = React.createRef();
-
-  // Index name is required for algolia analytics.
-  // Set index name from search settings and pass in data attributes in teaser.
-  let { indexName } = drupalSettings.algoliaSearch.search;
-  if (isWishlistPage(extraInfo)) {
-    // If user has visited wish-list page then get index name
-    // from wishlist settings.
-    ({ indexName } = drupalSettings.wishlist);
-  } else if (pageType === 'plp' && productListIndexStatus()) {
-    // If user has visited plp then get index name from listing.
-    ({ indexName } = drupalSettings.algoliaSearch.listing);
-  }
 
   // Check if price is a range or single value.
   let renderPrice = '';
