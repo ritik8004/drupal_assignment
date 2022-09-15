@@ -98,8 +98,14 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   // Calculate total items in the order.
   $orderRow['quantity'] = alshaya_acm_customer_get_order_total_quantity($order);
 
+  // Fetching order currency code if it is available to format the price.
+  $order_currency_code = '';
+  if (isset($order['order_currency_code']) && !empty($order['order_currency_code'])) {
+    $order_currency_code = $order['order_currency_code'];
+  }
+
   // Format total to have max 3 decimals as per mockup.
-  $orderRow['total'] = alshaya_acm_price_format($order['totals']['grand']);
+  $orderRow['total'] = alshaya_acm_price_format($order['totals']['grand'], [], '', $order_currency_code);
 
   // Calculate status of order based on status of items.
   $orderRow['status'] = alshaya_acm_customer_get_order_status($order);
@@ -151,13 +157,19 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $pudo_pickup = !empty($order['shipping']['extension_attributes']['click_and_collect_type']) ? $order['shipping']['extension_attributes']['click_and_collect_type'] : '';
   $orderDetails['is_pudo_pickup'] = $pudo_pickup === 'pudo_pickup';
 
+  // Fetching order currency code if it is available to format the price.
+  $order_currency_code = '';
+  if (isset($order['order_currency_code']) && !empty($order['order_currency_code'])) {
+    $order_currency_code = $order['order_currency_code'];
+  }
+
   if ($orderDetails['is_pudo_pickup']) {
     // We get `price_amount` i.e collection charge values like "5" or "Free"
     // so the below check to display accordingly.
-    $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['extension_attributes']['price_amount']);
+    $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['extension_attributes']['price_amount'], [], '', $order_currency_code);
   }
   else {
-    $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping']);
+    $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping'], [], '', $order_currency_code);
   }
 
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
@@ -241,13 +253,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method']);
   $orderDetails['payment_method'] = $payment_method_term->getName();
   $orderDetails['payment_method_code'] = $order['payment']['method'];
-  $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
-  $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
+  $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub'], [], '', $order_currency_code);
+  $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount'], [], '', $order_currency_code) : NULL;
 
   // Add hello member information if available.
   if (isset($order['voucher_discount']) && isset($order['voucher_codes_count'])) {
     // Pass voucher discount amount is available.
-    $orderDetails['voucher_discount'] = (float) $order['voucher_discount'] != 0 ? alshaya_acm_price_format($order['voucher_discount']) : NULL;
+    $orderDetails['voucher_discount'] = (float) $order['voucher_discount'] != 0 ? alshaya_acm_price_format($order['voucher_discount'], [], '', $order_currency_code) : NULL;
     // Prepare and pass the voucher discount label.
     $orderDetails['voucher_discount_label'] = t('@count Bonus Voucher', ['@count' => $order['voucher_codes_count']], ['context' => 'hello_member']);
   }
@@ -263,13 +275,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       $orderDetails['surcharge']['#markup'] = alshaya_acm_price_format(
         $order['extension']['surcharge_incl_tax'],
         [],
-        $surcharge_tooltip
+        $surcharge_tooltip,
+        $order_currency_code
       );
-      $orderDetails['surcharge_print']['#markup'] = alshaya_acm_price_format($order['extension']['surcharge_incl_tax']);
+      $orderDetails['surcharge_print']['#markup'] = alshaya_acm_price_format($order['extension']['surcharge_incl_tax'], [], '', $order_currency_code);
     }
   }
-
-  $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
+  $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand'], [], '', $order_currency_code);
 
   // Add transaction & payment details to confirmation data in case of KNET.
   $payment_info = [];
@@ -423,11 +435,17 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $products = [];
   $cancelled_products = [];
 
+  // Fetching order currency code if it is available to format the price.
+  $order_currency_code = '';
+  if (isset($order['order_currency_code']) && !empty($order['order_currency_code'])) {
+    $order_currency_code = $order['order_currency_code'];
+  }
+
   foreach ($order['items'] as $item) {
     $item['price'] = acq_commerce_get_clean_price($item['price']);
     $product = $item;
-    $product['price'] = alshaya_acm_price_format($item['price']);
-    $product['total'] = alshaya_acm_price_format($item['ordered'] * $item['price']);
+    $product['price'] = alshaya_acm_price_format($item['price'], [], '', $order_currency_code);
+    $product['total'] = alshaya_acm_price_format($item['ordered'] * $item['price'], [], '', $order_currency_code);
     $product['attributes'] = [];
 
     $sku = SKU::loadFromSku($item['sku']);
@@ -473,7 +491,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
     if ($item['is_item_cancelled']) {
       $cancelled_item = $product;
-      $cancelled_item['total'] = alshaya_acm_price_format($product['refund_amount']);
+      $cancelled_item['total'] = alshaya_acm_price_format($product['refund_amount'], [], '', $order_currency_code);
       $cancelled_item['ordered'] = $product['cancelled_quantity'];
 
       $cancelled_products[] = $cancelled_item;

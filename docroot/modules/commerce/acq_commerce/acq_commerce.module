@@ -57,7 +57,9 @@ function template_preprocess_acq_commerce_price(array &$variables) {
     $config_data[$current_language]['decimal_points'] = $config->get('decimal_points');
   }
 
-  $variables['currency_format'] = $config_data[$current_language]['currency_format'];
+  if (empty($variables['currency_format'])) {
+    $variables['currency_format'] = $config_data[$current_language]['currency_format'];
+  }
   $variables['currency_code_position'] = $config_data[$current_language]['currency_code_position'];
 
   $variables['price'] = acq_commerce_get_clean_price($variables['price']);
