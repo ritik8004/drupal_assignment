@@ -1,6 +1,6 @@
 header {
   @include breakpoint($desktop) {
-    border-bottom: 1px solid $header_border;
+    border-bottom: rem(1) solid $header_border;
   }
 
   .region__header {
@@ -80,7 +80,7 @@ header {
             margin-top: 0;
             margin-#{$left}: rem(56);
 
-            html[lang='ar'] & {
+            html[lang=ar] & {
               text-align: center;
             }
           }
@@ -90,7 +90,7 @@ header {
               width: rem(48);
             }
 
-            html[lang='ar'] & {
+            html[lang=ar] & {
               width: rem(53);
               height: rem(29);
 
@@ -234,20 +234,6 @@ header {
       #{$left}: rem(-24);
       top: rem(4);
     }
-
-    &::before,
-    &::after {
-      position: relative;
-      top: rem(-1);
-    }
-
-    &::before {
-      content: "(";
-    }
-
-    &::after {
-      content: ")";
-    }
   }
 }
 
@@ -360,7 +346,7 @@ header {
       }
     }
 
-    @include breakpoint($upto-tablet) {
+    @include breakpoint($only-mobile) {
       display: block;
       text-align: $left;
       border: none;
@@ -402,7 +388,7 @@ header {
       top: rem(27);
     }
 
-    @include icon_img('#{$nb_theme_img_directory_path}/icons/store-finder.svg', 2rem, 2rem);
+    @include icon_img('#{$nb_theme_img_directory_path}/icons/store-finder.svg', rem(32), rem(32));
 
     &::before {
       content: '';
