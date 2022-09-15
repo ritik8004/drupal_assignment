@@ -47,6 +47,36 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
     '#attributes' => ['id' => 'globaleScript'],
     '#value' => Markup::create($js),
   ];
+
+  // Inline JS added for the checkout page to clear the shopping
+  // cart/mini-cart for Guest user after order is placed.
+  if (\Drupal::routeMatch()->getRouteName() == 'alshaya_spc.checkout') {
+    $js = '
+     var glegem = glegem || function () {
+      (window["glegem"].q = window["glegem"].q || []).push(arguments)
+     }
+
+     glegem("OnCheckoutStepLoaded", function (data) {
+      switch (data.StepId) {
+        case data.Steps.LOADED:
+          break;
+
+        case data.Steps.CONFIRMATION:
+          // Clear local storage.
+          window.commerceBackend.removeCartDataFromStorage(true);
+          break;
+      }
+    });';
+
+    $page_bottom['alshaya_xb_checkout_cross_border'] = [
+      '#type'  => 'html_tag',
+      '#tag'   => 'script',
+      '#value' => Markup::create($js),
+      '#cache' => [
+        'tags' => ['alshaya_xb:checkout_cross_border'],
+      ],
+    ];
+  }
 }
 
 /**
