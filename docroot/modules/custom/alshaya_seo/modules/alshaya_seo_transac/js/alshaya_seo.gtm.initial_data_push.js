@@ -21,6 +21,13 @@
       ) {
         cartId = data.cart.cart_id;
       }
+      else {
+        // Fetch cart id from user_cart_id for authenticated users if available.
+        let userCartId = Drupal.getItemFromLocalStorage('user_cart_id');
+        if (typeof userCartId !== 'undefined') {
+          cartId = userCartId;
+        }
+      }
     }
     if (typeof cartId === 'string' || typeof cartId === 'number') {
       e.detail.data().cart_id = cartId;
