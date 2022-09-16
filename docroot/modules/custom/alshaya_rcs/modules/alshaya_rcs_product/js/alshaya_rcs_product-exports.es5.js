@@ -190,37 +190,6 @@ exports.render = function render(
 ) {
   let html = "";
   switch (placeholder) {
-    case "delivery-info-block":
-      if (!isProductBuyable(entity)) {
-        break;
-      }
-
-      // Add express delivery options that are available on product entity.
-      const deliveryInfo = {
-        delivery_in_only_city_text: drupalSettings.alshayaRcs.pdp.delivery_in_only_city_text,
-        expressDelivery: [],
-        sameDayDelivery: {
-          text: null,
-          sub_text: null,
-        }
-      };
-
-      // Express delivery.
-     drupalSettings.alshayaRcs.pdp.expressDelivery.forEach(function (option, i) {
-        option.class = (option.status && Drupal.hasValue(entity[option.id]))
-          ? 'active'
-          : 'in-active';
-        deliveryInfo.expressDelivery.push(option);
-      });
-
-      // Same day delivery.
-      if (Drupal.hasValue(entity.same_day_delivery)) {
-        deliveryInfo.sameDayDelivery = drupalSettings.alshayaRcs.pdp.sameDayDelivery;
-      }
-
-      html = handlebarsRenderer.render('product.delivery_info', deliveryInfo);
-      break;
-
     case "delivery-options":
       if (!isProductBuyable(entity)) {
         break;

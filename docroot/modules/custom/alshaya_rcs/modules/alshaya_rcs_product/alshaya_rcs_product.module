@@ -292,14 +292,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $config = \Drupal::config('alshaya_acm_product.home_delivery');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $config->getCacheTags());
 
-  // PDP Same day delivery.
-  $delivery_options = [
-    'text' => $product_settings->get('same_day_delivery_text'),
-    'sub_text' => $product_settings->get('same_day_delivery_sub_text'),
-  ];
-  $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['sameDayDelivery'] = $delivery_options;
-  $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['delivery_in_only_city_text'] = $product_settings->get('delivery_in_only_city_text');
-
   // PDP Express Delivery.
   $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
   $delivery_options_order = $express_delivery_config->get('delivery_options_order');
@@ -316,7 +308,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     ];
   }
   $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
-  $build['#attached']['drupalSettings']['alshayaRcs']['pdp']['expressDelivery'] = $delivery_options;
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
 
   // Address fields configs for Delivery options side drawer.
@@ -336,6 +327,20 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     'view' => $view_mode,
   ];
   \Drupal::moduleHandler()->alter('alshaya_rcs_product_build', $build, $entity_info);
+
+  /** @var \Drupal\Core\Config\ImmutableConfig $express_delivery_config */
+  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
+  // Adding address related configs to load area list block.
+  $build['#attached']['drupalSettings']['expressDelivery'] = [
+    'enabled' => TRUE,
+    'deliveryOptionsOrder' => $express_delivery_config->get('delivery_options_order'),
+    'deliveryOptionsLabel' => [
+      'same_day_delivery' => $express_delivery_config->get('same_day_delivery_label'),
+      'express_delivery' => $express_delivery_config->get('express_delivery_label'),
+    ],
+  ];
+  // Attaching library for react component to show PDP express delivery labels.
+  $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';
 }
 
 /**
