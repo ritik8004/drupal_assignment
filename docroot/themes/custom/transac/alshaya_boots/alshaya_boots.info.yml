@@ -226,3 +226,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css: css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css
+
+  alshaya_white_label/checkout-cod-mobile-verification:
+    css:
+      theme:
+        css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css

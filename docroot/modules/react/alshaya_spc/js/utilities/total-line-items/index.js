@@ -64,6 +64,7 @@ class TotalLineItems extends React.Component {
     // Add the coupon code with the discount title if exclusive coupon code applied on cart.
     if (hasExclusiveCoupon === true) {
       promoData += `<div class="applied-exclusive-couponcode">${couponCode}</div>`;
+      return promoData;
     }
 
     // Change the discount title if hello member offer code exists on cart.

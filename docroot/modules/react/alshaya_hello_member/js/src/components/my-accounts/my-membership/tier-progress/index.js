@@ -2,9 +2,10 @@ import React from 'react';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import Loading from '../../../../../../../js/utilities/loading';
 import logger from '../../../../../../../js/utilities/logger';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 import { getHelloMemberTierProgressData } from '../../../../hello_member_api_helper';
 
-const tier1Label = 'hello';
+const tier1Label = 'member';
 const tier2Label = 'plus';
 const newVoucherCode = 'NEW_COUPON';
 const plusVoucherCode = 'GET_PLUS';
@@ -118,6 +119,8 @@ class TierProgress extends React.Component {
       userProgressWidth,
     } = this.state;
 
+    const { apcPoints } = this.props;
+
     if (wait) {
       return (
         <div className="tier-summary-wrapper" style={{ animationDelay: '0.4s' }}>
@@ -145,8 +148,21 @@ class TierProgress extends React.Component {
     }
     return (
       <>
+        { currentTier === tier2Label
+          && (
+          <div className="progress-header">
+            {Drupal.t('@plus_label member', { '@plus_label': tier2Label }, { context: 'hello_member' })}
+          </div>
+          )}
+        <div className="my-points">
+          <span>{apcPoints}</span>
+          <span>{getStringMessage('points_label')}</span>
+        </div>
         <div className="my-tier-progress">
-          <div className="progress-label">{currentTier}</div>
+          { currentTier !== tier2Label
+          && (
+            <div className="progress-label">{currentTier}</div>
+          )}
           <div className="progress-wrapper">
             <div className="tier-bar-back">
               <ul>

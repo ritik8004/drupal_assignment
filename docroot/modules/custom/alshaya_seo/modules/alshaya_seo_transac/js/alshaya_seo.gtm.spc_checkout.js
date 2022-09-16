@@ -181,6 +181,20 @@
     }
   };
 
+  /**
+   * Helper function to push COD mobile verification gtm events to datalayer.
+   */
+  Drupal.alshayaSeoGtmPushCodMobileVerification = function (data) {
+    var event = {
+      event: 'cod_otp_verification',
+      eventCategory: data.eventCategory,
+      eventAction: data.eventAction,
+      eventLabel: data.eventLabel,
+    };
+
+    dataLayer.push(event);
+  };
+
   document.addEventListener('checkoutCartUpdate', function (e) {
     var step = Drupal.alshayaSeoSpc.getStepFromContainer();
     Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step);

@@ -152,6 +152,7 @@ export default class AddressItem extends React.Component {
       isSelected,
       headingText,
       showEditButton,
+      enabledFieldsWithMessages,
     } = this.props;
     const { areaUpdated } = this.state;
     const mobDefaultVal = cleanMobileNumber(address.mobile);
@@ -231,6 +232,10 @@ export default class AddressItem extends React.Component {
                       default_val={editAddressData}
                       processAddress={this.processAddress}
                       fillDefaultValue
+                      // This prop is an object where object keys are field-names which will
+                      // be enabled in the form and values are default message on the field
+                      // example {mobile: Please update mobile number}
+                      enabledFieldsWithMessages={enabledFieldsWithMessages}
                     />
                   </>
                 </Popup>

@@ -178,7 +178,12 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
         '#title' => $this->t('edit account details'),
         '#url' => Url::fromRoute('entity.user.edit_form', ['user' => $uid]),
         '#attributes' => [
-          'class' => ['button', 'button-wide', 'edit-account'],
+          'class' => [
+            'button',
+            'button-wide',
+            'edit-account',
+            'edit-account-btn-button',
+          ],
         ],
       ];
 

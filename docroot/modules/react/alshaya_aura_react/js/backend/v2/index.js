@@ -731,7 +731,7 @@ window.auraBackend.getAuraPointsToEarn = async (items, cardNumber) => {
   if (!hasValue(cardNumber)) {
     let totalPrice = 0;
     Object.entries(items).forEach(([, item]) => {
-      totalPrice += (item.qty * item.price);
+      totalPrice += (item.qty * item.finalPrice);
     });
 
     return {
@@ -752,7 +752,7 @@ window.auraBackend.getAuraPointsToEarn = async (items, cardNumber) => {
     const itemDetails = {
       code: item.sku,
       quantity: item.qty,
-      amount: item.qty * item.price,
+      amount: item.qty * item.finalPrice,
     };
     products.push(itemDetails);
   });

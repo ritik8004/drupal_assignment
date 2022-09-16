@@ -159,6 +159,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'متابعة',
         'context' => 'hello_member',
       ],
+      '<p>By registering you agreed to our <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>' => [
+        'en' => '<p>By clicking "Become a member", I agree to the H&M Membership <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>',
+        'ar' => '<p></a>بالضغط على "سجل عضويتك"، فإنك توافق على شروط وأحكام<a href="/terms" class="final-tnc"> عضوية اتش آند أم</p>',
+      ],
       'Terms & conditions' => [
         'ar' => 'الشروط والأحكام',
         'context' => 'hello_member',
@@ -171,8 +175,8 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'رمز QR',
         'context' => 'hello_member',
       ],
-      'View QR code' => [
-        'ar' => 'عرض رمز QR',
+      'View member ID' => [
+        'ar' => 'عرض الرقم التعريفي للعضوية',
         'context' => 'hello_member',
       ],
       'Member ID' => [
@@ -295,11 +299,11 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'تطبيق العروض',
         'context' => 'hello_member',
       ],
-      'AVAIL IT' => [
-        'ar' => 'توفرها',
+      'REDEEM IT' => [
+        'ar' => 'استخدمها',
         'context' => 'hello_member',
       ],
-      '@hm_icon @login_link or Become a member to earn @points points' => [
+      '@hm_icon @login_link or become a member to earn @points points' => [
         'ar' => '@hm_icon @login_link أو سجّل كعضو للربح بالنقاط @points',
         'context' => 'hello_member',
       ],
@@ -343,7 +347,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'سلة التسوق فارغة',
         'context' => 'hello_member',
       ],
-      'Add to Bag' => [
+      'Add to bag' => [
         'ar' => 'أضف إلى حقيبة التسوق',
         'context' => 'hello_member',
       ],
@@ -407,7 +411,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عنوان البريد الإلكتروني',
         'context' => 'hello_member',
       ],
-      'Enter Aura Details' => [
+      'Enter Aura details' => [
         'ar' => 'ادخل بيانات حساب أورا',
         'context' => 'hello_member',
       ],

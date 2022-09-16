@@ -5,6 +5,7 @@ namespace Drupal\rcs_handlebars\Service;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Service for Handlebars templates.
@@ -27,6 +28,14 @@ class HandlebarsService {
    */
   protected $moduleHandler;
 
+
+  /**
+   * The configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
   /**
    * The list of translatable strings.
    *
@@ -41,11 +50,15 @@ class HandlebarsService {
    *   File system service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration factory.
    */
   public function __construct(FileSystemInterface $file_system,
-                              ModuleHandlerInterface $module_handler) {
+    ModuleHandlerInterface $module_handler,
+    ConfigFactoryInterface $config_factory) {
     $this->fileSystem = $file_system;
     $this->moduleHandler = $module_handler;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -180,17 +193,23 @@ class HandlebarsService {
     // Load template.
     $module_path = drupal_get_path('module', $extension);
     $contents = file_get_contents("$module_path/$path");
-    $json = json_encode($contents, JSON_UNESCAPED_UNICODE);
 
-    // @todo remove Handlebars comments from templates.
-    // Add comments in the dynamic js to allow Drupal Locale to find
-    // the translatable strings.
+    // Get Translation strings.
     $strings = $this->scanTranslatableStrings($contents);
 
+    // Use precompiled handlebar templates if js is preprocessed.
+    $optimize_js = $this->configFactory->get('system.performance')->get('js.preprocess');
+    if ($optimize_js) {
+      $path = str_replace(["handlebars/", ".handlebars"], ["dist/", '.js'], $path);
+      $script = file_get_contents("$module_path/$path");
+      $script .= "\n// $strings\n";
+      return $script;
+    }
+
+    $json = json_encode($contents, JSON_UNESCAPED_UNICODE);
     // Prepare script.
     $script = "window.rcsHandlebarsTemplates = window.rcsHandlebarsTemplates || {};\n";
     $script .= "window.rcsHandlebarsTemplates['$id'] = $json\n// $strings\n";
-
     return $script;
   }
 
@@ -228,7 +247,10 @@ class HandlebarsService {
       if ($is_handlebars_library) {
         $library['dependencies'] = empty($library['dependencies'])
           ? ['rcs_handlebars/main']
-          : array_merge($library['dependencies'], ['rcs_handlebars/main']);
+          : array_merge(
+              $library['dependencies'],
+              ['rcs_handlebars/main']
+            );
       }
     }
   }
