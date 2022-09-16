@@ -48,6 +48,7 @@ function alshaya_rcs_install() {
     'alshaya_aura_react' => 'alshaya_rcs_aura',
     'alshaya_media_assets' => 'alshaya_rcs_assets',
     'alshaya_online_returns' => 'alshaya_rcs_online_returns',
+    'alshaya_product_lpn' => 'alshaya_rcs_product_lpn',
   ];
 
   foreach ($modules as $module_to_check => $module_to_install) {
