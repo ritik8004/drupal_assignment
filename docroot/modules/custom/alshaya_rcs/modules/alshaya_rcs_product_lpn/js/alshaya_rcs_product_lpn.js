@@ -10,11 +10,13 @@
    *  The main product object.
    */
   function updateVariantAttributes(product) {
-    product.variants.forEach(function eachValue(variant) {
-      variant.attributes.forEach(function eachAttr(attr) {
-        variant.product[attr.code] = attr.value_index;
+    if (product.type_id === 'configurable') {
+      product.variants.forEach(function eachValue(variant) {
+        variant.attributes.forEach(function eachAttr(attr) {
+          variant.product[attr.code] = attr.value_index;
+        });
       });
-    });
+    }
   }
 
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
@@ -29,15 +31,11 @@
     // Update variant to include configurable attributes.
     if (Array.isArray(e.detail.result)) {
       e.detail.result.forEach(function eachValue(product) {
-        if (product.type_id === 'configurable') {
-          updateVariantAttributes(product);
-        }
+        updateVariantAttributes(product);
       });
     }
     else {
-      if (e.detail.result.type_id === 'configurable') {
-        updateVariantAttributes(e.detail.result);
-      }
+      updateVariantAttributes(e.detail.result);
     }
   });
 
