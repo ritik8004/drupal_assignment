@@ -3,7 +3,7 @@
 
 require_once 'common.php';
 
-$urls_csv = array_map('str_getcsv', file(__DIR__ . '/urls.csv'));
+$urls_csv = array_map('str_getcsv', file(__DIR__ . '/only_urls.csv'));
 $domains_csv = array_map('str_getcsv', file(__DIR__ . '/domains.csv'));
 
 if (empty($urls_csv) || empty($domains_csv)) {
