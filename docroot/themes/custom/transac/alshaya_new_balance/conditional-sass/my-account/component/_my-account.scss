@@ -1,0 +1,7 @@
+.c-sidebar-first {
+  .block:first-child {
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(20);
+    }
+  }
+}

@@ -1,0 +1,40 @@
+.c-user--node {
+  .subtitle {
+    border-bottom-color: $user_acc_details_border;
+  }
+
+  &.l-two--sf {
+    aside {
+      &.c-sidebar-first {
+        @include breakpoint($upto-desktop) {
+          .my-account-mobile-title2 {
+            display: none;
+          }
+
+          .my-account-mobile-title1 {
+            border-bottom: rem(1) solid $primary_border;
+            padding-bottom: rem(16);
+          }
+
+          li {
+            &.my-account {
+              + li {
+                a {
+                  border-top: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .c-sidebar-first {
+    .my-account-nav {
+      a {
+        border-bottom-color: $my_acc_mob_border_color;
+      }
+    }
+  }
+}
