@@ -133,6 +133,16 @@ const OrderSummaryItem = (props) => {
     );
   }
 
+  // Using a specific class for Tamara Payment Method.
+  if (value.props && value.props.methodName && value.props.methodName === 'tamara') {
+    return (
+      <div className="spc-order-summary-item fadeInUp spc-order-summary-item--tamara" style={styles}>
+        <span className="spc-label">{`${label}:`}</span>
+        <span className="spc-value">{value}</span>
+      </div>
+    );
+  }
+
   return (
     <div className="spc-order-summary-item fadeInUp" style={styles}>
       <span className="spc-label">{`${label}:`}</span>
