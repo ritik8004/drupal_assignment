@@ -39,6 +39,8 @@ $balancers = [
   'bal-6560',
   'bal-6561',
   'bal-6562',
+  'bal-6657',
+  'bal-6658',
 ];
 
 foreach ($balancers as $balancer) {
