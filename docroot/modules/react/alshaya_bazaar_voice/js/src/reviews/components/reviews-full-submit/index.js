@@ -5,7 +5,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ClosedReviewSubmit from './closed-review-submit';
 import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getEmailFromTokenParams, isOpenWriteReviewForm } from '../../../utilities/user_util';
+import { createUserStorage, getEmailFromTokenParams, isOpenWriteReviewForm } from '../../../utilities/user_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import PostReviewMessage from './post-review-message';
@@ -50,6 +50,11 @@ export default class WriteReviewButton extends React.Component {
             buttonClass: 'pie_notification',
           };
         }
+      }
+      // set local storage user details
+      if (userDetails && Object.keys(userDetails).length !== 0) {
+        createUserStorage(userDetails.user.userId, userDetails.user.emailId);
+        this.getReviews();
       }
       this.setState({ ...data, ...{ userDetails } });
     });
