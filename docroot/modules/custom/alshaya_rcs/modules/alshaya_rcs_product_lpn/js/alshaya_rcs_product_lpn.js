@@ -18,7 +18,6 @@
         });
       });
     }
-
   });
 
   // Alter variant configurable options.
