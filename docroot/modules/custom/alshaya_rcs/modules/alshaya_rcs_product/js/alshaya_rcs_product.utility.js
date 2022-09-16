@@ -241,15 +241,6 @@ window.commerceBackend = window.commerceBackend || {};
     const productConfigurables = getConfigurables(product);
     const variantConfigurableOptions = [];
 
-    var productConfigurablesAlterEvent = new CustomEvent('rcsProductConfigurablesAlter', {
-      detail: {
-        data: {
-          variant: variant
-        }
-      }
-    });
-    document.dispatchEvent(productConfigurablesAlterEvent);
-
     Object.keys(productConfigurables).forEach(function (attributeCode) {
       let label = productConfigurables[attributeCode].label;
       const optionId = productConfigurables[attributeCode].attribute_id;

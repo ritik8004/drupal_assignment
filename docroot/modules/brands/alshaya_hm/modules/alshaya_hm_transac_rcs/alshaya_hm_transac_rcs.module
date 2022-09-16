@@ -83,7 +83,6 @@ function alshaya_hm_transac_rcs_alshaya_rcs_product_product_options_to_query() {
   return [
     'fit',
     'article_description',
-    'season_code',
   ];
 }
 
