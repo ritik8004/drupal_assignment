@@ -189,7 +189,44 @@
           }
         }
       }
+
+      .customer-points {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: space-between;
+
+        .aura-points-info {
+          width: 80%;
+
+          @include breakpoint($upto-desktop) {
+            width: 74%;
+          }
+        }
+
+        .sub-text {
+          width: 15%;
+          text-align: center;
+          cursor: pointer;
+
+          @include breakpoint($upto-desktop) {
+            width: 19%;
+          }
+
+          a {
+            color: $aura-spc-checkout-highlight;
+            text-decoration: underline;
+          }
+          
+        }
+        .partially-enrolled {
+          width: 100%;
+          padding-top: rem(20);
+        }
+      }
     }
+
+
 
     .tooltip-anchor {
       .tooltip-box {
