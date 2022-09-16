@@ -105,8 +105,8 @@ Feature: Test basket page
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for the page to load
-    And I verify the wishlist popup block
-    And I wait 5 seconds
+    And I verify the wishlist popup block if enabled and remove the cart item
+    And I wait for the page to load
     And I should not see an ".totals" element
     And I should not see an ".grand-total" element
     And I should not see an ".value .price .price-currency" element
@@ -242,8 +242,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for the page to load
-    And I verify the wishlist popup block
-    And I wait 5 seconds
+    And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
     And I should not see an ".totals" element
     And I should not see an ".grand-total" element
@@ -263,7 +262,7 @@ Feature: Test basket page
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for the page to load
-    And I verify the wishlist popup block
+    And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
     And I should not see an ".totals" element
     And I should not see an ".grand-total" element

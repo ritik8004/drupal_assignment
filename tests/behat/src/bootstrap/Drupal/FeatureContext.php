@@ -66,7 +66,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iWaitForThePageToLoad()
   {
-    $this->getSession()->wait($this->parameters['ajax_waittime'] * 1000, "document.readyState === 'complete'");
+    $this->getSession()->wait($this->parameters['ajax_waittime'] * 3000, "document.readyState === 'complete'");
   }
 
   /**
@@ -3024,28 +3024,28 @@ JS;
   }
 
   /**
-   * @Given /^I verify the wishlist popup block$/
+   * @Given /^I verify the wishlist popup block if enabled and remove the cart item$/
    */
   public function iVerifyTheWishlistPopupBlock()
   {
-    $session = $this->getSession();
-    $page = $session->getPage();
+    $page = $this->getSession()->getPage();
     $empty_cart = $page->find('css', '#spc-cart .spc-empty-text');
-    if ($empty_cart == null) {
-      $wishlist_enabled = $this->getSession()->evaluateScript('return jQuery(".wishlist-enabled").length');
-      if (!empty($wishlist_enabled)) {
-        $page->find('css', '#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn')->click();
-        $this->iWaitSeconds('5');
-        $page = $this->getSession()->getPage();
-        $page->pressButton('wishlist-no');
-        $this->iWaitSeconds('5');
-      }
-      else {
-        $page->find('css', '#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn')->click();
-      }
-    }
-    else {
+
+    if (!empty($empty_cart)) {
       throw new \Exception('Cart is empty!');
     }
+
+    // Click the remove button.
+    $page->find('css', '#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn')->click();
+
+    // If Wishlist is enabled we will get the popup.
+    if ($this->getSession()->evaluateScript('return jQuery(".wishlist-enabled").length')) {
+      $page = $this->getSession()->getPage();
+
+      // For our tests, we don't want to move to wishlist.
+      // Click the no button to just remove the item.
+      $page->pressButton('wishlist-no');
+    }
+    $this->iWaitSeconds('5');
   }
 }
