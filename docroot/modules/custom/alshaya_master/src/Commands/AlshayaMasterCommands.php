@@ -23,6 +23,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Consolidation\AnnotatedCommand\AnnotationData;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
+use Drupal\Component\Serialization\Yaml;
 
 /**
  * Alshaya Master Commands class.
@@ -208,21 +209,15 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
 
     // Determine which brand to install.
     $brand_module = $options['brand_module'];
+    $sites = Yaml::decode(file_get_contents('../blt/alshaya_local_sites.yml'))['sites'];
+    // @codingStandardsIgnoreLine
+    global $host_site_code;
 
-    // Get the current installed profile.
-    $profile = str_replace('alshaya_', '_', $this->cachedStorage->read('core.extension')['profile']);
-    $this->output()->writeln(dt('Printing the brand module before @brand_module.', ['@brand_module' => $brand_module]));
-    // Try to look for transac and non transac specific module for brand before
-    // brand installing brand module. i.e. alshaya_vs_transac.
-    if (isset($modules[$brand_module . $profile])) {
-      $brand_module = $brand_module . $profile;
-    }
-    $this->output()->writeln(dt('Printing the brand module after @brand_module.', ['@brand_module' => $brand_module]));
-    if (!empty($brand_module)) {
-      if (isset($modules[$brand_module])) {
+    if (!empty($sites[$host_site_code])
+      && !empty($sites[$host_site_code]['module'])) {
+      $brand_module = $sites[$host_site_code]['module'];
+      if (isset($brand_module)) {
         if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
-          $this->output()->writeln(dt('Enabling the @brand_module brand module.', ['@brand_module' => $brand_module]));
-
           // Install the module.
           $this->moduleInstaller->install([$brand_module]);
 
