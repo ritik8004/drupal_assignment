@@ -165,7 +165,7 @@ profile is a light/static site without any commercial feature.`
 * See "Create a new theme for the site." for specific instructions on creating a new theme.
 * Add a new brand support:
   * Add DB and Alias in `box/config.yml`
-  * Add site in `blt/alshaya_local_sites.yml` with proper values (check existing sites for example)
+  * Add site in `blt/alshaya_sites.yml` with proper values (check existing sites for example)
   * Add drush aliases to the site into `drush/sites` folder with proper values (check existing sites for example)
   * (For transact site) Add proper settings for the new site in
     * factory-hooks/environments/magento.php

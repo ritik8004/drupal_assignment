@@ -209,12 +209,19 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
 
     // Determine which brand to install.
     $brand_module = $options['brand_module'];
-    $sites = Yaml::decode(file_get_contents('../blt/alshaya_local_sites.yml'))['sites'];
+    $sites = Yaml::decode(file_get_contents('../blt/alshaya_sites.yml'))['sites'];
     // @codingStandardsIgnoreLine
     global $host_site_code;
 
     // Get the current installed profile.
     $profile = str_replace('alshaya_', '_', $this->cachedStorage->read('core.extension')['profile']);
+
+    // Try to look for transac and non transac specific module for brand before
+    // brand installing brand module. i.e. alshaya_vs_transac.
+    if (isset($modules[$brand_module . $profile])) {
+      $brand_module = $brand_module . $profile;
+    }
+
     // Try to get the brand module from settings file if available.
     if (!empty($sites[$host_site_code]) && !empty($sites[$host_site_code]['module'])) {
       $brand_module = $sites[$host_site_code]['module'];
@@ -226,7 +233,10 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
     }
 
     if (!empty($brand_module)
-      && empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
+      && isset($modules[$brand_module])) {
+      if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
+        $this->output()->writeln(dt('Enabling the @brand_module brand module.', ['@brand_module' => $brand_module]));
+
         // Install the module.
         $this->moduleInstaller->install([$brand_module]);
 
