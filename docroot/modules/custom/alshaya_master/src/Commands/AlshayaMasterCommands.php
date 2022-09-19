@@ -213,6 +213,18 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
     // @codingStandardsIgnoreLine
     global $host_site_code;
 
+    // Get the current installed profile.
+    $profile = str_replace('alshaya_', '_', $this->cachedStorage->read('core.extension')['profile']);
+    // Try to get the brand module from settings file if available.
+    if (!empty($sites[$host_site_code]) && !empty($sites[$host_site_code]['module'])) {
+      $brand_module = $sites[$host_site_code]['module'];
+    }
+    // Try to look for transac and non transac specific module for brand before
+    // brand installing brand module. i.e. alshaya_vs_transac.
+    elseif (isset($modules[$brand_module . $profile])) {
+      $brand_module = $brand_module . $profile;
+    }
+
     if (!empty($sites[$host_site_code])
       && !empty($sites[$host_site_code]['module'])) {
       $brand_module = $sites[$host_site_code]['module'];
