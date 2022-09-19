@@ -521,7 +521,7 @@ const PaymentMethodIcon = (props) => {
 
   if (methodName === 'tamara') {
     // We do not have Tamara logo in SVG format, using JPG instead.
-    return isDesktop() ? <img loading="lazy" src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-desktop.jpg" /> : <img loading="lazy" src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-mobile.jpg" />;
+    return isDesktop() ? <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-desktop.jpg" className="tamara-icon tamara-icon--desktop" /> : <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-mobile.jpg" className="tamara-icon tamara-icon--mobile" />;
   }
 
   return (
