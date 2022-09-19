@@ -15,13 +15,12 @@ const PaymentMethodsLogos = memo((props) => {
   }
 
   // Prepare the logos for all payment method icons using existing icons.
-  // @todo: FE to check and use new logos for the cart page. It can be done
-  // with the existing PaymentMethodIcon component passing the conext of cart
-  // or checkout pages. But if required, we can have a new component for this.
   const methodIcons = Object.values(paymentMethods).map((method) => (
+    // Using context prop in order to display Cart page specific icons for Visa and Mastercard.
     <PaymentMethodIcon
       methodName={method.code}
       methodLabel={method.name}
+      context="cart"
     />
   ));
 
@@ -29,14 +28,14 @@ const PaymentMethodsLogos = memo((props) => {
   return (
     <>
       <div className="spc-cart-payment-method-logos-block">
-        <div className="block-title">
+        <div className="spc-cart-payment-method-logos-block__title">
           {Drupal.t(
             'Checkout quickly and securely with',
             {},
             { context: 'cart_payment_logos' },
           )}
         </div>
-        <div className="block-content">{methodIcons}</div>
+        <div className="spc-cart-payment-method-logos-block__content">{methodIcons}</div>
       </div>
     </>
   );
