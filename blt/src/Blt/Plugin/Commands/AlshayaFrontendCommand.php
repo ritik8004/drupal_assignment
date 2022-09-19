@@ -416,7 +416,7 @@ class AlshayaFrontendCommand extends BltTasks {
     $processOutput = 0;
     // Github CI env push event check.
     // Only proceed if we are in Github CI.
-    if (getenv('GITHUB_ACTIONS') == 'true' && getenv('GITHUB_EVENT_NAME') == 'push') {
+    if (getenv('GITHUB_ACTIONS') == 'true') {
       $tasks = $this->taskExecStack();
       $tasks->stopOnFail();
 
