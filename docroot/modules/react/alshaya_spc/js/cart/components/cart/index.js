@@ -43,7 +43,7 @@ import { isUserAuthenticated } from '../../../backend/v2/utility';
 import { applyHelloMemberLoyalty } from '../../../hello-member-loyalty/components/hello-member-checkout-rewards/utilities/loyalty_helper';
 import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
 import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
-import PaymentMethodsLogos from '../payment-methods';
+import PaymentMethodsLogos from '../payment-methods-logos';
 
 export default class Cart extends React.Component {
   constructor(props) {
