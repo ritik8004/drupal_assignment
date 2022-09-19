@@ -25,6 +25,7 @@ $gray-medium: #e0dfdf;
 $gray-three: #333;
 $gray-seven: #777;
 $lust-red: #e51b23;
+$gray-four: #d9d9d9;
 
 //// Global elements.
 $primary_text: $black;
@@ -42,7 +43,7 @@ $primary_form_selector_border: $black;
 $primary_form_selector: $gray-three;
 $primary_form_link: $black;
 $primary_form_input_text: $gray-three;
-$primary_input_label: $gray-seven;
+$primary_input_label: $dawn;
 $primary_input_border: $black;
 $primary_input_disabled: $alto;
 $primary_input_focus_border: $black;
@@ -73,9 +74,9 @@ $primary_radiobtn_filled: $gray-three;
 // User Form
 $user_field_link: $black;
 $user_form_text: $dawn;
-$my_account_nav: $black;
-$my_account_nav_active: $black;
-$my_account_nav_hover: $black;
+$my_account_nav: $gray-three;
+$my_account_nav_active: $gray-three;
+$my_account_nav_hover: $gray-three;
 $user_form_layout_divider_color: $black;
 $login_form_border: $alto;
 $user_form_inp_text: $gray-three;
@@ -210,3 +211,14 @@ $mm_highlight_label: $black;
 $mm_highlight_title: $black;
 $mm_highlight_description: $black;
 $mm_l3_link_hover: $black;
+
+//My Account
+$label_dark: $black;
+$label_black: $black;
+$user_order_help_bg: $gray-four;
+$user_order_help_text: $black;
+$user_order_help_text_links: $gray-three;
+$user_acc_details_border: $alto;
+$user_nav_mobile_link: $gray-three;
+$my_acc_mob_border_color: $gray-light;
+$user_account_wrapper_light: $black;
