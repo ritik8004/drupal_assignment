@@ -1,0 +1,7 @@
+.c-user-edit {
+  #user-form {
+    #edit-submit {
+      @include primaryBtn(true);
+    }
+  }
+}
