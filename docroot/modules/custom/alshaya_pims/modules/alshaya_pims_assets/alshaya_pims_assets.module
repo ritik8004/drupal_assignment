@@ -73,23 +73,6 @@ function _alshaya_pims_assets_acq_sku_process_assets(array $product, array $exis
 }
 
 /**
- * Implements hook_alshaya_acm_product_media_items_alter().
- */
-function alshaya_pims_assets_alshaya_acm_product_media_items_alter(array &$media, SKU $sku) {
-  /** @var \Drupal\alshaya_media_assets\Services\SkuAssetManager $assetsManager */
-  $assetsManager = \Drupal::service('alshaya_media_assets.skuassetsmanager');
-  $assets = $assetsManager->getAssets($sku);
-
-  foreach ($assets ?? [] as $asset) {
-    if (!empty($asset['drupal_uri'])) {
-      $asset['media_type'] = $assetsManager->getAssetType($asset);
-
-      $media[] = $asset;
-    }
-  }
-}
-
-/**
  * Implements hook_alshaya_acm_product_pdp_swath_type_alter().
  */
 function alshaya_pims_assets_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
