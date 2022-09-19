@@ -69,11 +69,6 @@ product.not_buyable_product:
   js:
     handlebars/rcs-not-buyable-product.html.handlebars: {}
 
-product.delivery_info:
-  version: 1.x
-  js:
-    handlebars/rcs-pdp-delivery-info-block.handlebars: {}
-
 product.delivery_options:
   version: 1.x
   js:
