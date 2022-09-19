@@ -1,0 +1,286 @@
+header {
+  @include breakpoint($desktop) {
+    border-bottom: rem(1) solid $header_border;
+  }
+
+  .region__header {
+    @include breakpoint($desktop) {
+      display: flex;
+      width: 100%;
+      flex-flow: row nowrap;
+      align-items: center;
+    }
+
+    .block-alshaya-main-menu {
+      @include breakpoint($desktop) {
+        width: 60%;
+        margin: 0;
+
+        li.menu--one__list-item {
+          margin-#{$right}: rem(10);
+
+          html[lang=ar] & {
+            float: right;
+          }
+
+          html[lang=en] & {
+            float: left;
+          }
+
+          &:last-child {
+            margin-#{$right}: 0;
+          }
+
+          .menu__link {
+            font-size: rem(14);
+          }
+
+          .menu--one__link {
+            width: fit-content;
+            font-family: $ay-heavy;
+            font-size: rem(17);
+          }
+        }
+      }
+    }
+
+    .block-alshaya-react-mini-cart {
+      @include breakpoint($desktop) {
+        width: 5%;
+      }
+    }
+
+    .block-system-branding-block {
+      @include breakpoint($desktop) {
+        width: 6%;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: auto;
+      }
+
+      .site-brand-home {
+        @include breakpoint($desktop) {
+          min-width: rem(32);
+          padding-top: rem(2);
+        }
+
+        a {
+          @include breakpoint($only-mobile) {
+            html[lang=ar] & {
+              text-align: center;
+              margin-top: 0;
+            }
+          }
+
+          img {
+            html[lang=ar] & {
+              width: rem(53);
+              height: rem(29);
+
+              @include breakpoint($tablet) {
+                margin-top: 0;
+                width: unset;
+                height: rem(38);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .c-header__region {
+    @include breakpoint($only-mobile) {
+      height: rem(48);
+      margin-top: rem(9);
+
+      html[lang=ar] & {
+        height: rem(48);
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      border-bottom: rem(1) solid $header_border;
+    }
+
+    @include breakpoint($desktop) {
+      padding-bottom: rem(12);
+      padding-top: rem(24);
+    }
+  }
+}
+
+.site-brand-home {
+  @include breakpoint($only-mobile) {
+    width: 100%;
+  }
+
+  .block-system-branding-block & {
+    html[lang=ar] & {
+      @include breakpoint($upto-desktop) {
+        width: auto;
+
+        img {
+          width: rem(80);
+          height: rem(30);
+        }
+      }
+    }
+  }
+
+  a {
+    @include breakpoint($desktop) {
+      display: inline-flex;
+      width: rem(70);
+
+      .alias--cart-login & {
+        width: rem(96);
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      max-width: rem(128);
+      margin: 0 auto;
+
+      html[lang=ar] & {
+        max-width: rem(64);
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      width: rem(96);
+      margin: 0 auto;
+      position: absolute;
+      #{$left}: 0;
+      #{$right}: 0;
+      top: 0;
+
+      html[lang=ar] & {
+        max-width: rem(80);
+        top: rem(6);
+      }
+    }
+  }
+}
+
+.block-cart-mini-block,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  .cart-link-total {
+    display: none;
+  }
+
+  .cart-link {
+    width: rem(20);
+    height: rem(20);
+
+    @include breakpoint($only-mobile) {
+      background-size: auto;
+      #{$left}: rem(-3);
+      top: rem(10);
+
+      html[lang=ar] & {
+        top: rem(11);
+        right: rem(-7);
+        margin-top: 0;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      top: rem(12);
+      #{$left}: rem(-16);
+    }
+
+    @include breakpoint($desktop) {
+      top: rem(-1);
+      #{$left}: rem(24);
+    }
+  }
+
+  .quantity {
+    font-size: rem(12);
+    position: relative;
+    bottom: rem(-4);
+    #{$left}: rem(-22);
+
+    @include breakpoint($only-mobile) {
+      #{$left}: rem(-24);
+      top: rem(4);
+    }
+  }
+}
+
+#mini-cart-wrapper {
+  @include breakpoint($desktop) {
+    min-width: auto;
+    padding-#{$right}: rem(20);
+  }
+}
+
+#block-cartminiblock,
+.block-alshaya-react-mini-cart {
+  @include breakpoint($only-tablet) {
+    position: absolute;
+  }
+}
+
+.c-menu-primary {
+  @include breakpoint($tablet) {
+    height: 0;
+  }
+
+  .hamburger--menu {
+    @include breakpoint($only-mobile) {
+      .logged-in & {
+        padding: 0;
+        #{$left}: rem(8);
+        top: rem(16);
+      }
+    }
+  }
+
+  a {
+    @include breakpoint($upto-desktop) {
+      font-size: rem(12);
+    }
+  }
+
+  .mobile--menu {
+    top: rem(20);
+    font-size: 0;
+    padding: 0;
+
+    @include breakpoint($only-mobile) {
+      #{$left}: rem(10);
+      top: rem(19);
+
+      html[lang=ar] & {
+        right: rem(12);
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      position: absolute;
+      #{$left}: rem(18);
+    }
+
+    &::before {
+      @include breakpoint($upto-desktop) {
+        height: rem(26);
+        width: rem(29);
+        margin-#{$right}: 0;
+      }
+    }
+  }
+
+  .block-system-menublock {
+    li {
+      position: static;
+    }
+  }
+}
+
+.menu--two__list {
+  margin-top: rem(20) !important;
+}

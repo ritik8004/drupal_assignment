@@ -12,13 +12,20 @@ export default class WithModal extends React.Component {
   constructor(props) {
     super(props);
     this.key = (!props.modalStatusKey) ? 'open' : props.modalStatusKey;
-    this.state = { [this.key]: false };
+    this.state = {
+      [this.key]: false,
+      // This object is to enable only selective fields.
+      // By default all fields will be enabled,
+      // if selective fields example name, email, mobile are passed in object with
+      // message then only those fields will be enabled other will be disabled.
+      enabledFieldsWithMessages: {},
+    };
   }
 
   componentDidMount() {
     this.isComponentMounted = true;
 
-    if (isExpressDeliveryEnabled()) {
+    if (isExpressDeliveryEnabled() || drupalSettings.codMobileVerification === true) {
       document.addEventListener('openAddressContentPopup', this.openAddressContentPopUp);
     }
     // Adding custom "escape" key event listner for popup.
@@ -44,6 +51,9 @@ export default class WithModal extends React.Component {
 
   openAddressContentPopUp = (e) => {
     if (e.detail && this.key === 'hdInfo') {
+      this.setState({
+        enabledFieldsWithMessages: e.detail.enabledFieldsWithMessages,
+      });
       this.triggerOpenModal();
     }
   }
@@ -64,7 +74,10 @@ export default class WithModal extends React.Component {
     if (modalKey && this.key === modalKey) {
       return;
     }
-    this.setState({ [this.key]: false });
+    this.setState({
+      [this.key]: false,
+      enabledFieldsWithMessages: {},
+    });
   }
 
   goBackInHistory = (e) => {
@@ -89,13 +102,14 @@ export default class WithModal extends React.Component {
 
   render() {
     const { children } = this.props;
-    const { [this.key]: isModalOpen } = this.state;
+    const { [this.key]: isModalOpen, enabledFieldsWithMessages } = this.state;
     return (
       <>
         {children({
           triggerOpenModal: this.triggerOpenModal,
           triggerCloseModal: this.goBackInHistory,
           isModalOpen,
+          enabledFieldsWithMessages,
         })}
       </>
     );

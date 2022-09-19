@@ -824,10 +824,10 @@ window.commerceBackend = window.commerceBackend || {};
         }
       });
 
-      staticDataStore.configurableColorData[sku] = data;
-
-      return data;
     }
+
+    staticDataStore.configurableColorData[sku] = data;
+    return data;
   }
 
   /**

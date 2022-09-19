@@ -2,7 +2,7 @@
 $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fonts';
 
 @font-face {
-  font-family: 'ProximaNova Regular';
+  font-family: 'ProximaNova-Regular';
   src:
     url('#{$base_theme_fonts_directory_path}/ProximaNova-Regular.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/ProximaNova-Regular.woff') format("woff");
@@ -13,7 +13,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 
 
 @font-face {
-  font-family: 'ProximaNova Bold';
+  font-family: 'ProximaNova-Bold';
   src:
     url('#{$base_theme_fonts_directory_path}/ProximaNova-Bold.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/ProximaNova-Bold.woff') format("woff");
@@ -23,7 +23,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'ProximaNova Semi Bold';
+  font-family: 'ProximaNova-Semibold';
   src:
     url('#{$base_theme_fonts_directory_path}/ProximaNova-Semibold.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/ProximaNova-Semibold.woff') format("woff");
@@ -33,9 +33,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'Didot Regular';
+  font-family: 'Didot-Regular';
   src:
-    url('#{$base_theme_fonts_directory_path}/Didot Regular.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/Didot-Regular.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/Didot-Regular.woff') format("woff");
   font-weight: normal;
   font-style: normal;
@@ -43,20 +43,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'Didot Medium';
+  font-family: 'Didot-Medium';
   src:
-    url('#{$base_theme_fonts_directory_path}/Didot Medium.woff2') format("woff2"),
+    url('#{$base_theme_fonts_directory_path}/Didot-Medium.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/Didot-Medium.woff') format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Didot Bold';
-  src:
-    url('#{$base_theme_fonts_directory_path}/Didot LT Std Bold.woff2') format("woff2"),
-    url('#{$base_theme_fonts_directory_path}/Didot-LT-Std-Bold.woff') format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -73,7 +63,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'AlBayan Bold';
+  font-family: 'AlBayan-Bold';
   src:
     url('#{$base_theme_fonts_directory_path}/AlBayan-Bold.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/AlBayan-Bold.woff') format("woff");
@@ -83,7 +73,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'MarkaziText Regular';
+  font-family: 'MarkaziText-Regular';
   src:
     url('#{$base_theme_fonts_directory_path}/MarkaziText-Regular.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/MarkaziText-Regular.woff') format("woff");
@@ -93,7 +83,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'MarkaziText Bold';
+  font-family: 'MarkaziText-Bold';
   src:
     url('#{$base_theme_fonts_directory_path}/MarkaziText-Bold.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/MarkaziText-Bold.woff') format("woff");
@@ -103,7 +93,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'MarkaziText Medium';
+  font-family: 'MarkaziText-Medium';
   src:
     url('#{$base_theme_fonts_directory_path}/MarkaziText-Medium.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/MarkaziText-Medium.woff') format("woff");
@@ -113,7 +103,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'MarkaziText Semi Bold';
+  font-family: 'MarkaziText-SemiBold';
   src:
     url('#{$base_theme_fonts_directory_path}/MarkaziText-SemiBold.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/MarkaziText-SemiBold.woff') format("woff");
@@ -123,7 +113,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'MarkaziText Varibale Font';
+  font-family: 'MarkaziText-VariableFont_wght';
   src:
     url('#{$base_theme_fonts_directory_path}/MarkaziText-VariableFont_wght.woff2') format("woff2"),
     url('#{$base_theme_fonts_directory_path}/MarkaziText-VariableFont_wght.woff') format("woff");

@@ -99,6 +99,7 @@ class WishlistButton extends React.Component {
       // Remove event listener bind in componentDidMount.
       document.removeEventListener('getWishlistFromBackendSuccess', this.checkProductStatusInWishlist, false);
     }
+    document.removeEventListener('product-add-to-cart-success', this.handleProductAddToCart, false);
   };
 
   /**

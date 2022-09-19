@@ -417,6 +417,14 @@ const getProcessedCartData = async (cartData) => {
       .cart.extension_attributes.hfd_hold_confirmation_number;
   }
 
+  // Check if COD payment mobile verification flag is present in cart extensions.
+  if (hasValue(cartData.cart.extension_attributes)
+    && typeof cartData
+      .cart.extension_attributes.mobile_number_verified !== 'undefined') {
+    data.cod_mobile_number_verified = cartData
+      .cart.extension_attributes.mobile_number_verified;
+  }
+
   // Check if inter country transfer feature is enabled and have delivery date.
   if (hasValue(cartData.shipping) && hasValue(cartData.shipping.ictDate)) {
     data.ictDate = cartData.shipping.ictDate;

@@ -1,0 +1,23 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .highlights {
+      margin-top: rem(24);
+    }
+
+    .menu--two__list {
+      .menu--two__list-item {
+        > .menu-two__link-wrapper {
+          max-width: rem(192);
+        }
+      }
+    }
+
+    .menu--three__list-item {
+      > .menu-two__link-wrapper {
+        .menu__link {
+          font-size: rem(14) !important;
+        }
+      }
+    }
+  }
+}

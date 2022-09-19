@@ -715,10 +715,12 @@ class AlshayaRcsProductHelper {
     $fields['items']['... on ConfigurableProduct']['configurable_options'] = [
       'label',
       'attribute_code',
+      'attribute_uid',
     ];
     $fields['items']['... on ConfigurableProduct']['variants']['attributes'] = [
       'label',
       'code',
+      'value_index',
     ];
 
     $this->moduleHandler->alter('alshaya_rcs_product_order_details_fields', $fields);

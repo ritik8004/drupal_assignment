@@ -132,7 +132,8 @@ class CheckoutCartItem extends React.Component {
         />
         {context !== 'confirmation' && context !== 'print' && (
           <div className="spc-promotions">
-            {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} couponCode={couponCode} promo={key} sku={sku} link />)}
+            {/* Displaying promo text only when no exclusive promo/coupon gets applied */}
+            {hasExclusiveCoupon !== true && (promotions.map((key) => <CartPromotion key={`${key}-${sku}`} couponCode={couponCode} promo={key} sku={sku} link />))}
           </div>
         )}
       </div>

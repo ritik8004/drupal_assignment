@@ -2,44 +2,47 @@
 // English fonts.
 
 //Proxima Nova
-$nb-nova-regular: 'ProximaNova Regular', 'sans-serif', 'Arial';
-$nb-nova-regular-nodir: 'ProximaNova Regular', 'sans-serif', 'Arial';
+$nb-nova-regular: 'ProximaNova-Regular', 'sans-serif', 'Arial';
+$nb-nova-regular-nodir: 'ProximaNova-Regular', 'sans-serif', 'Arial';
 
-$nb-nova-semibold: 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
-$ay-nova-semibold-nodir: 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+$nb-nova-semibold: 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
+$ay-nova-semibold-nodir: 'ProximaNova-Semi-Bold', 'sans-serif', 'Arial';
 
-$nb-nova-bold: 'ProximaNova Bold', 'sans-serif', 'Arial';
-$ay-nova-bold-nodir: 'ProximaNova Bold', 'sans-serif', 'Arial';
+$nb-nova-bold: 'ProximaNova-Bold', 'sans-serif', 'Arial';
+$ay-nova-bold-nodir: 'ProximaNova-Bold', 'sans-serif', 'Arial';
 
 // Didot
-$nb-didot-regular: 'Didot Regular', 'sans-serif', 'Arial';
-$nb-didot-regular-nodir: 'Didot Regular', 'sans-serif', 'Arial';
+$nb-didot-regular: 'Didot-Regular', 'sans-serif', 'Arial';
+$nb-didot-regular-nodir: 'Didot-Regular', 'sans-serif', 'Arial';
 
-$nb-didot-medium: 'Didot Medium', 'sans-serif', 'Arial';
-$nb-didot-medium-nodir: 'Didot Medium', 'sans-serif', 'Arial';
+$nb-didot-medium: 'Didot-Medium', 'sans-serif', 'Arial';
+$nb-didot-medium-nodir: 'Didot-Medium', 'sans-serif', 'Arial';
 
-$nb-didot-bold: 'Didot Bold', 'sans-serif', 'Arial';
-$nb-didot-bold-nodir: 'Didot Medium', 'sans-serif', 'Arial';
+$nb-didot-bold: 'Didot-Bold', 'sans-serif', 'Arial';
+$nb-didot-bold-nodir: 'Didot-Medium', 'sans-serif', 'Arial';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$nb-arabic-regular: 'AlBayan', 'ProximaNova Regular', 'sans-serif', 'Arial';
-$nb-arabic-regular-nodir: 'AlBayan', 'ProximaNova Regular', 'sans-serif', 'Arial';
+$nb-arabic-albayan-regular: 'AlBayan', 'ProximaNova Regular', 'sans-serif', 'Arial';
+$nb-arabic-albayan-regular-nodir: 'AlBayan', 'ProximaNova Regular', 'sans-serif', 'Arial';
 
-$nb-arabic-bold: 'AlBayan Bold', 'ProximaNova Bold', 'sans-serif', 'Arial';
-$nb-arabic-bold-nodir: 'AlBayan Bold', 'ProximaNova Bold', 'sans-serif', 'Arial';
+$nb-arabic-albayan-bold: 'AlBayan Bold', 'ProximaNova Bold', 'sans-serif', 'Arial';
+$nb-arabic-albayan-bold-nodir: 'AlBayan Bold', 'ProximaNova Bold', 'sans-serif', 'Arial';
 
-$nb-arabic-markazitext-regular: 'MarkaziText Regular', 'ProximaNova Regular', 'sans-serif', 'Arial';
-$nb-arabic-markazitext-regular-nodir: 'MarkaziText Regular', 'ProximaNova Regular', 'sans-serif', 'Arial';
+$nb-arabic-regular: 'MarkaziText-Regular', 'ProximaNova-Regular', 'sans-serif', 'Arial';
+$nb-arabic-regular-nodir: 'MarkaziText-Regular', 'ProximaNova-Regular', 'sans-serif', 'Arial';
 
-$nb-arabic-markazitext-semibold: 'MarkaziText Semi Bold', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
-$nb-arabic-markazitext-semibold-nodir: 'MarkaziText Semi Bold', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+$nb-arabic-semibold: 'MarkaziText-SemiBold', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
+$nb-arabic-semibold-nodir: 'MarkaziText-SemiBold', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
 
-$nb-arabic-markazitext-medium: 'MarkaziText Medium', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
-$nb-arabic-markazitext-medium-nodir: 'MarkaziText Medium', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+$nb-arabic-bold: 'MarkaziText-Bold', 'ProximaNova-Bold', 'sans-serif', 'Arial';
+$nb-arabic-bold-nodir: 'MarkaziText-Bold', 'ProximaNova-Bold', 'sans-serif', 'Arial';
 
-$nb-arabic-markazitext-variablefont: 'MarkaziText VariableFont wght', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
-$nb-arabic-markazitext-variablefont-nodir: 'MarkaziText VariableFont wght', 'ProximaNova Semi Bold', 'sans-serif', 'Arial';
+$nb-arabic-medium: 'MarkaziText-Medium', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
+$nb-arabic-medium-nodir: 'MarkaziText-Medium', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
+
+$nb-arabic-variablefont: 'MarkaziText-VariableFont wght', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
+$nb-arabic-variablefont-nodir: 'MarkaziText-VariableFont wght', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
 
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in NB theme.

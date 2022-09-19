@@ -25,7 +25,12 @@ body {
     margin-bottom: 1.56rem;
 
     img {
-      padding: 1.75rem 0;
+      margin: rem(28) 0;
+      height: rem(42);
+
+      html[lang=ar] & {
+        height: rem(65);
+      }
     }
   }
 
@@ -463,5 +468,15 @@ html[lang="ar"] {
       position: absolute;
       #{$right}: 0;
     }
+  }
+}
+
+@page {
+  margin: 0 rem(16) rem(16);
+}
+
+@media print {
+  html > body {
+    margin: 0 !important;
   }
 }

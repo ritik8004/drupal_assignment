@@ -241,7 +241,7 @@ function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $pr
   $acm_settings = \Drupal::configFactory()->getEditable('alshaya_acm.settings');
   if (!empty($acm_settings->get('use_mdc_url')) && isset($product['attributes']['url_key'])) {
     $node->path->pathauto = PathautoState::SKIP;
-    $node->path->alias = $product['attributes']['url_key'] . '.html';
+    $node->path->alias = '/' . trim($product['attributes']['url_key'], '/') . '.html';
   }
 
   if ($product['type'] !== 'configurable') {
@@ -1493,14 +1493,16 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       ], TRUE);
     }
 
-    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['bySku'] = $product_tree['combinations']['by_sku'];
+    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['bySku'] = $product_tree['combinations']['by_sku'] ?? NULL;
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['combinations'] = $combinations;
-    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['byAttribute'] = $product_tree['combinations']['by_attribute'];
+    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['byAttribute'] = $product_tree['combinations']['by_attribute'] ?? NULL;
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['configurables'] = $product_tree['configurables'];
 
     // Get the first child from attribute_sku which has values sorted
     // same as add to cart form.
-    $sorted_variants = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
+    $sorted_variants = !empty($product_tree['combinations']['attribute_sku'])
+      ? array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0]
+      : [];
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['firstChild'] = reset($sorted_variants);
 
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
@@ -2240,4 +2242,37 @@ function alshaya_acm_product_get_delivery_options($sku) {
   $delivery_options['express_delivery_applicable'] = $isExpressDeliveryApplicable;
 
   return $delivery_options;
+}
+
+/**
+ * Implements hook_alshaya_acm_product_process_product_context_alter().
+ */
+function alshaya_acm_product_alshaya_acm_product_process_product_context_alter(EntityInterface $entity, array &$context) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  // Update the context based on the pdp layout.
+  $pdp_layout = $skuManager->getPdpLayout($entity);
+  if ($pdp_layout) {
+    $context[] = $pdp_layout;
+  }
+  // Add the pdp layout with modal.
+  $pdp_layout_modal = $skuManager->getPdpLayout($entity, 'modal');
+  if ($pdp_layout_modal) {
+    $context[] = $pdp_layout_modal;
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_acm_product_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  $build['#attached']['library'][] = 'alshaya_acm_product/product.order';
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_acm_product_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  $build['#attached']['library'][] = 'alshaya_acm_product/product.order';
 }

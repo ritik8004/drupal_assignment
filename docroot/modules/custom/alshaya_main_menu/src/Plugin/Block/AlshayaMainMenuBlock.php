@@ -225,8 +225,8 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
           $reprocess = FALSE;
 
           foreach ($l2s['child'] as $l3s) {
-            // 2 below means L2 item + one blank line for spacing).
-            $l2_cost = 2 + count($l3s['child']);
+            // 2 below means L2 item + one blank line for spacing.
+            $l2_cost = 2 + (is_countable($l3s['child']) ? count($l3s['child']) : 0);
 
             // If we are detecting a longer column than the expected size
             // we iterate with new max.

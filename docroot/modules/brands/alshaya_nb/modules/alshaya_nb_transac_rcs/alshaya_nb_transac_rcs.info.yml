@@ -1,0 +1,6 @@
+name: Alshaya NB Transac RCS
+description: Enables RCS for NB.
+type: module
+core_version_requirement: ^9
+dependencies:
+  - alshaya_nb:alshaya_nb_transac

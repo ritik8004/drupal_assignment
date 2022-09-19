@@ -1,0 +1,11 @@
+.c-breadcrumb {
+  li {
+    text-transform: capitalize;
+
+    &:last-of-type {
+      a {
+        font-weight: 400;
+      }
+    }
+  }
+}

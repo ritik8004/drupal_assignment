@@ -227,7 +227,10 @@ class HelloMemberCartOffersVouchers extends React.Component {
         </span>
       );
     }
-
+    // If applied voucher is removed show this message in offer section.
+    if (document.getElementById('offer-err-msg') && totals.isHmAppliedVoucherRemoved) {
+      document.getElementById('offer-err-msg').innerHTML = Drupal.t('You have reached the maximum amount of added discounts.', { context: 'hello_member' });
+    }
 
     return (
       <>

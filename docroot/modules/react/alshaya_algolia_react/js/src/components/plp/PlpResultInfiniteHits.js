@@ -6,7 +6,7 @@ import ImageElement from '../gallery/imageHelper/ImageElement';
 import ConditionalView from '../../../common/components/conditional-view';
 
 const PlpResultInfiniteHits = connectInfiniteHits(({
-  hits, hasMore, refineNext, children = null, gtmContainer, pageType,
+  hits, hasMore, refineNext, children = null, gtmContainer, pageType, indexName,
 }) => {
   // Create ref to get element after it gets rendered.
   const teaserRef = useRef();
@@ -92,6 +92,7 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
                   hit={hit}
                   gtmContainer={gtmContainer}
                   pageType={pageType}
+                  indexName={indexName}
                 />
               ))
             }
@@ -134,6 +135,7 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
                           hit={hit}
                           gtmContainer={gtmContainer}
                           pageType={pageType}
+                          indexName={indexName}
                         />
                       ))}
                     </div>

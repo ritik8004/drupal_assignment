@@ -1,0 +1,54 @@
+.c-footer-secondary {
+  background-color: $footer_border_top;
+
+  .c-footer__copy {
+    text-align: $left;
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: rem(16);
+    }
+
+    @include breakpoint($only-mobile) {
+      color: $footer-text;
+      text-align: center;
+      padding: rem(27) rem(20);
+    }
+
+    @include breakpoint($tablet) {
+      float: $left;
+    }
+  }
+
+  .c-footer__logos {
+    @include breakpoint($upto-tablet) {
+      background-color: $footer_border_top;
+      line-height: 1;
+      padding-bottom: rem(22);
+    }
+
+    @include breakpoint($tablet) {
+      float: $right;
+    }
+
+    .c-footer__logo--mastercard {
+      background-image: url(#{$nb_theme_img_directory_path}/icons/mastercard.svg);
+      width: rem(42);
+    }
+
+    .c-footer__logo--visa {
+      background-image: url(#{$nb_theme_img_directory_path}/icons/visa.svg);
+      width: rem(40);
+    }
+
+    .c-footer__logo--mastercard,
+    .c-footer__logo--visa {
+      height: rem(26);
+    }
+
+    li {
+      &:not(:last-child) {
+        margin-#{$right}: rem(12);
+      }
+    }
+  }
+}

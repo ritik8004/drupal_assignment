@@ -38,6 +38,7 @@
     .spc-aura-cart-icon {
       max-width: 30%;
       margin-#{$right}: rem(25);
+      flex-shrink: 0;
 
       @include breakpoint($tablet) {
         display: inline-flex;
@@ -66,7 +67,7 @@
       padding-bottom: rem(13);
 
       @include breakpoint($only-mobile) {
-        max-width: calc(70% - #{rem(45)});
+        max-width: calc(76% - #{rem(45)});
       }
 
       @include breakpoint($tablet) {
@@ -75,7 +76,7 @@
 
       @include breakpoint($desktop) {
         line-height: rem(22);
-        max-width: calc(76% - 1.5625rem);
+        max-width: calc(80% - #{rem(25)});
       }
 
       & > div {
@@ -220,10 +221,6 @@
         b {
           font-family: $aura-caption-bold;
         }
-      }
-
-      @include breakpoint($only-mobile) {
-        font-size: rem(14);
       }
     }
 

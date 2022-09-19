@@ -770,3 +770,106 @@ export const getPayable = (value) => {
     : value.cart.totals.base_grand_total;
   return amount;
 };
+
+/**
+ * Helper function checks if the fieldname is present / not present in
+ * fieldsConfig.If the provided fieldname is not present in the fieldsConfig
+ * then the field is disabled.
+ *
+ * Example if fieldsConfig has {mobile: 'Please update mobile number'}
+ * and fieldname passed is email then email field is disabled as it is
+ * not present in the fieldsConfig.
+ *
+ *
+ * @param fieldsConfig
+ *   Object having fieldnames and message to show on field name.
+ * @param fieldName
+ *   Field name.
+ *
+ * @returns {boolean}
+ *   True if disabled and false is not disabled.
+ */
+export const isFieldDisabled = (fieldsConfig, fieldName) => {
+  if (!hasValue(fieldsConfig)) {
+    // If fieldsConfig is undefined or empty means the all the fields should
+    // be enabled by default, hence we return false for disabled attribute
+    // on text field.
+    return false;
+  }
+
+  if (Object.keys(fieldsConfig).indexOf(fieldName) > -1) {
+    // If fieldsConfig has values and the field name is present then we keep it
+    // enabled, hence we return false for disabled attribute on text field.
+    return false;
+  }
+
+  // If fieldsConfig has value and fieldname is not present then we disable it
+  // by return true for disabled attribute on text field.
+  return true;
+};
+
+/**
+ * Helper function checks fieldsConfig for the default message to show on
+ * the provided fieldname.
+ *
+ * Example: fieldsConfig has {mobile: 'Please update mobile number'}
+ * and fieldname passed is mobile, then default message is returned
+ * from the fieldsConfig.
+ *
+ * @param fieldsConfig
+ *   Object with field config.
+ * @param fieldName
+ *   Field name.
+ *
+ * @returns {string|*}
+ *   Empty or field message.
+ */
+export const getDefaultFieldMessage = (fieldsConfig, fieldName) => {
+  if (!hasValue(fieldsConfig)) {
+    return '';
+  }
+
+  if (Object.keys(fieldsConfig).indexOf(fieldName) > -1) {
+    return fieldsConfig[fieldName];
+  }
+
+  return '';
+};
+
+/**
+ * Split string at a given index.
+ *
+ * @param {string} str
+ *   String of mobile number.
+ * @param {integer} index
+ *   Index number where mobile number should be split.
+ * @returns {array}
+ *   Array with parts of mobile number.
+ */
+const split = (str, index) => [str.slice(0, index), str.slice(index)];
+
+/**
+ * Formats mobile number with spaces.
+ * Example: +965 556 67788, +971 556 667 778, +20 223 344 5566.
+ *
+ * @param {string} mobileNumber
+ *   The mobile number with country code.
+ *
+ * @return {string}
+ *   Mobile number with country code and space formatted.
+ */
+export const formatMobileNumber = (mobileNumber) => {
+  const mobileNumberWithoutCountryCode = cleanMobileNumber(mobileNumber);
+  let mobileNumberArray = [];
+  if (mobileNumberWithoutCountryCode.length >= 6) {
+    mobileNumberArray = split(mobileNumberWithoutCountryCode, 3);
+  }
+
+  if (mobileNumberArray[1].length >= 6) {
+    [mobileNumberArray[1], mobileNumberArray[2]] = split(mobileNumberArray[1], 3);
+  }
+
+  return (mobileNumberArray !== null)
+    ? `+${drupalSettings.country_mobile_code} ${mobileNumberArray.join(' ')}`
+    : mobileNumber;
+};

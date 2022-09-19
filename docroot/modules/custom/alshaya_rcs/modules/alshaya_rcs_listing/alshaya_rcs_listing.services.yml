@@ -15,3 +15,30 @@ services:
       - '@config.factory'
       - '@alshaya_acm_product_category.page'
       - '@entity_type.manager'
+  alshaya_rcs_algolia_listing.index_helper:
+      class: Drupal\alshaya_rcs_listing\Service\AlshayaRcsAlgoliaIndexHelper
+      decorates: alshaya_search_algolia.index_helper
+      public: false
+      decoration_priority: 1
+      arguments:
+        - '@alshaya_acm_product.skumanager'
+        - '@alshaya_acm_product.sku_images_manager'
+        - '@renderer'
+        - '@alshaya_acm_product.sku_info'
+        - '@logger.factory'
+        - '@entity_type.manager'
+        - '@entity.repository'
+        - '@datetime.time'
+        - '@alshaya_acm_product.price_helper'
+        - '@alshaya_acm_product_category.sales_category_manager'
+        - '@config.factory'
+        - '@alshaya_product_options.swatches'
+        - '@language_manager'
+        - '@alshaya_super_category.super_category_feature_manager'
+        - '@alshaya_acm_product_category.product_category_tree'
+        - '@alshaya_facets_pretty_paths.pretty_paths_helper'
+        - '@facets.manager'
+        - '@alshaya_facets_pretty_paths.pretty_aliases'
+        - '@acq_sku.product_info_helper'
+        - '@module_handler'
+        - '@alshaya_acm_product.sku_images_helper'

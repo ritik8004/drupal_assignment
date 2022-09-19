@@ -17,8 +17,9 @@ $content_pagetitle: $black;
 $primary_link-hover: $black;
 $primary_link-active: $black;
 $secondary_text: $nb-black;
-$primary_border: $gray;
+$primary_border: $black;
 $secondary_border: $nb-red;
+$content_pagetitle_border: $black;
 
 //Buttons.
 $primary_btn_bg: $nb-red;
@@ -26,31 +27,22 @@ $primary_empty_btn: $white;
 $primary_btn_text: $white;
 $primary_empty_btn_border: $nb-red;
 $primary_empty_btn_text: $nb-red;
+$secondary_btn_bg: $white;
+$secondary_btn_bg_hover: $gray2;
+$secondary_btn_text: $nb-red;
 
 // Checkbox & Radio.
 $primary_radiobtn_label: $black;
-$primary_radiobtn_empty: $white;
+$primary_radiobtn_empty: $nb-gray;
 $primary_radiobtn_filled: $nb-red;
-$secondary_radiobtn_empty: $white;
+$secondary_radiobtn_empty: $nb-gray;
 $secondary_radiobtn_filled: $black;
+$primary_checkbox_filled: $nb-red;
 
 // Dropdown.
 $primary_dropdown_bg: $white;
 $primary_dropdown_arrow_bg: transparent;
 $primary_dropdown_arrow_icon: $black;
-
-// Footer
-$footer_link: $black;
-$footer_link_hover: $black;
-$social-icons-bg: $white;
-$footer-bg: $white;
-$footer-text: $black;
-$footer-newsletter-text: $white;
-$footer_newsletter_bg: $black;
-
-// Copyright.
-$copyright_footer_bg: $gray2;
-$copyright_footer_paragraph: $black;
 
 // Breadcrumb.
 $breadcrumb_bg: $white;
@@ -59,10 +51,108 @@ $breadcrumb_link_hover: $ada-gray;
 $breadcrumb_link_active: $ada-gray;
 
 // Header.
-$header_border: $gray-medium;
 $header_search_active_bg: $gray2;
 
 // Header secondary: ie: top header.
 $header_secondary_bg: $gray2;
 $header_secondary_menu_link: $black;
 $header_secondarry_menu_color: $black;
+$mm_l2_link: $black;
+$mm_l3_link_hover: $black;
+
+// Store Finder.
+$store-finder-border-hover: $nb-red;
+$store_finder_text_hover: $nb-red;
+$store_finder_text:$black;
+$store_finder_icon: $black;
+$store_finder_search_label: $black;
+$store_finder_header: $black;
+$store_finder_header_desktop: $black;
+$store_finder_subheader: $black;
+$store_finder_glossary_text: $black;
+$store_finder_search_results_tile_link: $black;
+$store_finder_search_input: $gray;
+$store_finder_search_input_border: $gray;
+$store_finder_glossary_alphabet: $black;
+$store_finder_search_results_hour_label :$black;
+$store_finder_search_results_tile_icon: $black;
+$store_finder_search_results_hour_icon_open: $black;
+$store_finder_glossary_icon: $black;
+$store_finder_backbtn: $black;
+$store_finder_search_results_counter_bg: $nb-red;
+
+// Footer
+$footer_border_top: $gray2;
+$footer_title_h3: $black;
+$primary_footer_input_label: $white;
+$footer_link_mobile: $black;
+$footer_link: $black;
+$footer_link_hover: $gray;
+$social-icons-bg: $black;
+$footer-text: $black;
+$footer-newsletter-text: $white;
+$footer-top-bg: $black;
+$lang_switch: $black;
+
+//Signup
+$user_form_text: $ada-gray;
+$social_auth_login_button_border: $nb-red;
+$user_form_layout_divider_color: $black;
+$primary_form_link: $black;
+$user_login_section_title: $black;
+$user_login_sub_text: $black;
+$user_field_link: $black;
+$select_drop_down_hover: $nb-gray;
+
+// User Form
+$my_account_nav: $black;
+$my_account_nav_active: $black;
+$my_account_nav_hover: $black;
+$user_form_layout_divider_color: $black;
+$login_form_border: $black;
+$user_form_inp_text: $ada-gray;
+
+// Titles.
+$page_title: $black;
+$block_title: $black;
+$title: $black;
+$sub_title: $black;
+$label_black: $black;
+$label_dark: $black;
+$user_sidebar_block_title: $black;
+
+// Dropdown.
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_border: $black;
+$primary_dropdown_option_hover: $black;
+$primary_dropdown_option_border: $black;
+$primary_dropdown_option_disbled: $black;
+$primary_dropdown_arrow_icon: $black;
+
+// Form elements.
+$primary_form_selector_border: $black;
+$primary_form_selector: $ada-gray;
+$primary_form_input_text: $ada-gray;
+$primary_input_label: $ada-gray;
+$primary_input_border: $black;
+$primary_input_disabled: $gray;
+$primary_input_focus_border: $black;
+$primary_input_inline_error: $red2;
+$checkout_login_separtor: $black;
+$checkout_login_separtor_txt_bg: $white;
+$checkout_login_separtor_txt: $black;
+
+//Megamenu
+$mm_l1_desktop-border: $black;
+$mm_l1_link_hover: $black;
+$mm_l1_link: $black;
+$mm_l2_link: $black;
+$mm_l2_link_desktop: $black;
+$mm_l2_link_hover: $black;
+$mm_l3_link: $black;
+$mm_l3_link_hover: $black;
+$main_menu_bg: $white;
+$header_mobile_menu_arrow: $black;
+$header_toggle_sign_active_tab: $black;
+$header_mobile_menu_close: $black;
+$header_secondary_menu_link_mobile: $black;

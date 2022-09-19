@@ -1,10 +1,10 @@
 import React from 'react';
-import { showError } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { removeError, showError } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { sendOtp } from '../../../../../../../js/utilities/otp_helper';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import AuraFormModalMessage from '../../../../../aura-loyalty/components/aura-forms/aura-form-modal-message';
-import { getInlineErrorSelector } from '../../../../../aura-loyalty/components/utilities/link_card_sign_up_modal_helper';
+import { getInlineErrorSelector, resetInputElement } from '../../../../../aura-loyalty/components/utilities/link_card_sign_up_modal_helper';
 import TextField from '../../../../../utilities/textfield';
 import ToolTip from '../../../../../utilities/tooltip';
 import AuraVerifyOTP from '../aura-verify-otp';
@@ -31,6 +31,10 @@ class AuraSendOTP extends React.Component {
   }
 
   sendOtp = () => {
+    this.resetModalMessages();
+    removeError(getInlineErrorSelector('otp').otp);
+    resetInputElement('otp');
+
     const { mobile } = this.props;
     showFullScreenLoader();
     const apiData = sendOtp(mobile, 'link');
