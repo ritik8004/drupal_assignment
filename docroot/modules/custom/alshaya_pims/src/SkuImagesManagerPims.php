@@ -179,22 +179,22 @@ class SkuImagesManagerPims extends SkuImagesManager {
   }
 
   /**
-   * Helper function to get swatch image url.
+   * Helper function to get thumbnail image url.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
    *
    * @return false|string
-   *   Swatch image url or false.
+   *   Thumbnail image url or false.
    */
-  public function getSwatchImageUrl(SKUInterface $sku) {
-    // Let's never download images here, we should always download when
-    // preparing gallery which is done before this.
-    $swatch_product_image = $sku->getThumbnail(FALSE);
+  public function getThumbnailImageUrl(SKUInterface $sku) {
+    $media = $this->getSkuMediaItems($sku);
 
-    // If we have image for the product.
-    if (!empty($swatch_product_image['file'])) {
-      return $swatch_product_image['file'];
+    // We loop through all the media items and return the first image.
+    foreach ($media as $media_item) {
+      if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
+        return $this->getSwatchImageFromMedia($media_item);
+      }
     }
 
     return FALSE;
