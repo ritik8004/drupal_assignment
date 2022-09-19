@@ -1,6 +1,7 @@
 .c-user-login,
 .c-user-register,
 .c-user-password {
+
   .section-title,
   #block-alshayasocialloginblock .section-title {
     display: block;
@@ -110,6 +111,43 @@
     @include breakpoint($only-mobile) {
       font-size: rem(14);
       padding-top: rem(0);
+    }
+  }
+}
+
+.c-user--node {
+  &.l-two--sf {
+    aside {
+      &.c-sidebar-first {
+        @include breakpoint($upto-desktop) {
+          .my-account-mobile-title2 {
+            display: none;
+          }
+
+          .my-account-mobile-title1 {
+            border-bottom: rem(1) solid $primary_border;
+            padding-bottom: rem(16);
+          }
+
+          li {
+            &.my-account {
+              + li {
+                a {
+                  border-top: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .c-sidebar-first {
+    .my-account-nav {
+      a {
+        border-bottom-color: $my_acc_mob_border_color;
+      }
     }
   }
 }
