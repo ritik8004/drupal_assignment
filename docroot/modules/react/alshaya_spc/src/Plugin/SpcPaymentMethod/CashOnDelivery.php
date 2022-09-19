@@ -80,10 +80,10 @@ class CashOnDelivery extends AlshayaSpcPaymentMethodPluginBase implements Contai
    * @return array
    *   Translated strings array.
    */
-  public function getCodSurchargeStrings(): array {
+  public static function getCodSurchargeStrings(): array {
     $strings = [];
 
-    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+    $checkout_settings = \Drupal::config('alshaya_acm_checkout.settings');
 
     $string_keys = [
       'cod_surcharge_label',
