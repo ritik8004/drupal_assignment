@@ -1,0 +1,35 @@
+#backtotop {
+  bottom: rem(60);
+  font-size: rem(0);
+
+  @include breakpoint($only-mobile) {
+    bottom: rem(125);
+    #{$right}: rem(17);
+  }
+
+  @include breakpoint($only-tablet) {
+    bottom: rem(65);
+  }
+
+  @include icon(arrowup, before) {
+    content: "-";
+    position: absolute;
+    width: rem(3);
+    left: rem(35);
+    bottom: rem(40);
+    transform: rotate(90deg);
+    height: rem(35);
+    background: $btt_text;
+  }
+
+  @include icon(arrowup, after) {
+    background: none;
+    color: $btt_text;
+    font-size: rem(45);
+    font-weight: 700;
+    top: rem(7);
+    right: rem(10);
+    width: auto;
+    -moz-osx-font-smoothing: inherit;
+  }
+}
