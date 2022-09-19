@@ -877,7 +877,7 @@ class AlshayaAlgoliaIndexHelper {
       if ($index_product_image_url && !empty($swatch['image_url'])) {
         $child = SKU::loadFromSku($swatch['child_sku_code']);
 
-        $swatchUrl = $this->skuImagesManager->getSwatchImageUrl($child);
+        $swatchUrl = $this->skuImagesManager->getThumbnailImageUrl($child);
         if ($swatchUrl) {
           $swatch['product_image_url'] = $swatchUrl;
         }
