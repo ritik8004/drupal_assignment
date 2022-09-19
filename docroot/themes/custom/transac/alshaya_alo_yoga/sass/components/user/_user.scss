@@ -4,6 +4,7 @@
       p {
         font-family: $ay-regular;
         font-size: rem(16);
+
         @include breakpoint($desktop) {
           width: 26.5%;
         }
@@ -34,7 +35,7 @@
       @include primaryBtn(true);
     }
   }
-  
+
   .user-form {
     .form-text,
     .form-email,

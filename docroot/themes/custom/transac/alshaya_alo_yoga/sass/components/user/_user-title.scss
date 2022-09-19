@@ -7,7 +7,6 @@
   @include breakpoint($only-mobile) {
     font-size: rem(12);
     line-height: 2.5;
-    font-weight: 950;
     font-family: $ay-black;
   }
 }
