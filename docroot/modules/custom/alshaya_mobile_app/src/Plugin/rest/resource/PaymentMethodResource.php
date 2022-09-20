@@ -193,6 +193,8 @@ class PaymentMethodResource extends ResourceBase {
 
     $response = new ResourceResponse($response_data);
     $this->addCacheableTermDependency($response);
+    // Adding dependency on the config.
+    $response->addCacheableDependency($checkout_settings);
     return $response;
   }
 
