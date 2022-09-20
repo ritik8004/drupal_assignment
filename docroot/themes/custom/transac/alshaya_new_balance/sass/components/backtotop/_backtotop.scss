@@ -1,0 +1,21 @@
+#backtotop {
+  bottom: rem(60);
+
+  @include breakpoint($only-mobile) {
+    bottom: rem(119);
+    #{$right}: rem(17);
+  }
+
+  @include breakpoint($only-tablet) {
+    bottom: rem(65);
+  }
+
+  &::after {
+    content: '';
+    background: url(#{$nb_theme_img_directory_path}/icons/backtop.svg) no-repeat;
+    background-size: contain;
+    border-radius: 0;
+    top: 0;
+    #{$right}: rem(27);
+  }
+}
