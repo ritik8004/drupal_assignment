@@ -432,6 +432,17 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
     ],
+    'nb' => [
+      'default' => [
+        'default' => [
+          'algolia_sandbox.settings' => [
+            'app_id' => 'URA45U05O9',
+            'write_api_key' => '9ff37017c4597d52eec9d63f7a502a2c',
+            'search_api_key' => '9ff37017c4597d52eec9d63f7a502a2c',
+          ],
+        ],
+      ],
+    ],
     'default' => [
       'default' => [
         'default' => [
