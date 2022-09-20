@@ -6,7 +6,7 @@
     bottom: rem(119);
     #{$right}: rem(17);
   }
-  
+
   @include breakpoint($only-tablet) {
     bottom: rem(65);
   }
