@@ -3,10 +3,10 @@ import { isDesktop } from '../../../../js/utilities/display';
 import BenefitPaySVG from './components/benefit-pay-svg';
 
 const PaymentMethodIcon = (props) => {
-  const { methodName, methodLabel } = props;
+  const { methodName, methodLabel, context } = props;
   if (methodName === 'banktransfer') {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
+      <svg className="payment-method-icon" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
         <defs>
           <rect id="prefix__xa" width="50" height="32" x="0" y="0" rx="2" />
           <path id="prefix__xc" d="M22.851 26.262V10.865c0-.532-.435-.966-.966-.966H7.715c-.532 0-.967.434-.967.966v15.397c0 .531.435.966.967.966h14.17c.531 0 .966-.435.966-.966zm1.38 0c0 1.303-1.055 2.358-2.346 2.358H7.715c-1.291 0-2.347-1.055-2.347-2.358V10.865c0-1.304 1.055-2.358 2.347-2.358h14.17c1.291 0 2.347 1.054 2.347 2.358v15.397z" />
@@ -39,8 +39,142 @@ const PaymentMethodIcon = (props) => {
   }
   if (methodName === 'checkout_com'
     || methodName === 'checkout_com_upapi') {
+    // Rendering both Visa and Mastercard icons together if context is cart.
+    if (context && context === 'cart') {
+      return (
+        <>
+          <svg className="payment-method-icon" width="53" height="16" viewBox="0 0 53 16" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <clipPath id="c4cise2qfa">
+                <path d="M1440 0v1339H0V0h1440z" />
+              </clipPath>
+              <clipPath id="nhseukycab">
+                <path d="M6.87 0 4.271 15.079H0L2.68 0h4.19z" />
+              </clipPath>
+              <clipPath id="dbmktl4twc">
+                <path d="M6.87 0 4.271 15.079H0L3.435 0h3.434z" />
+              </clipPath>
+              <clipPath id="rwcfj2rxqd">
+                <path d="M8.963 0c1.676 0 3.016.335 3.854.67l-.67 3.267-.42-.167c-.753-.335-1.758-.587-3.182-.587-1.676 0-2.43.67-2.43 1.34 0 .754.922 1.173 2.43 1.927 2.513 1.09 3.602 2.43 3.602 4.189 0 3.183-2.932 5.277-7.372 5.277-1.927 0-3.77-.419-4.775-.837l.586-3.435.587.251c1.424.587 2.345.838 4.02.838 1.173 0 2.514-.503 2.514-1.508 0-.67-.503-1.173-2.178-1.927-1.676-.753-3.77-1.926-3.77-4.188C1.76 2.094 4.775 0 8.963 0z" />
+              </clipPath>
+              <clipPath id="2ugk2tydhe">
+                <path d="M8.963 0c1.676 0 3.016.335 3.854.67l-.67 3.267-.42-.167c-.753-.335-1.758-.587-3.182-.587-1.676 0-2.43.67-2.43 1.34 0 .754.922 1.173 2.43 1.927 2.513 1.09 3.602 2.43 3.602 4.189 0 3.183-2.932 5.277-7.372 5.277-1.927 0-3.77-.419-4.775-.837l.586-3.435.587.251c1.424.587 2.345.838 4.02.838 1.173 0 2.514-.503 2.514-1.508 0-.67-.503-1.173-2.178-1.927-1.676-.753-3.016-1.926-3.016-4.188C2.513 2.094 4.775 0 8.963 0z" />
+              </clipPath>
+              <clipPath id="xnwyc7atqf">
+                <path d="m11.728 0 3.518 15.079h-4.02l-.503-2.514H5.36l-.837 2.514H0l6.283-13.99C6.702.084 7.455 0 8.46 0h3.267zM8.796 4.105c-.251.586-.587 1.508-.587 1.508s-1.424 3.685-1.675 4.44v.083h3.518C9.885 9.298 9.047 5.53 9.047 5.53z" />
+              </clipPath>
+              <clipPath id="gnqdctuhug">
+                <path d="m11.728 0 3.518 15.079h-4.02l-.503-2.514H5.36l-.837 2.514H0l7.288-13.99C7.707.084 8.461 0 9.466 0h2.262zM8.796 4.105c-.251.586-.587 1.508-.587 1.508l-.004.011c-.084.226-1.347 3.619-1.671 4.428v.084h3.518C9.885 9.298 9.047 5.53 9.047 5.53z" />
+              </clipPath>
+              <clipPath id="hyhtkw4jth">
+                <path d="M15.079 0 8.293 15.079H3.77L0 1.675c2.68 1.34 5.11 4.105 5.864 6.618l.419 2.178L10.555 0h4.524z" />
+              </clipPath>
+              <clipPath id="z0coa3ytfi">
+                <path d="M15.079 0 8.293 15.079H3.77L0 1.675c2.68 1.34 5.11 4.105 5.864 6.618l.419 2.178L11.393 0h3.686z" />
+              </clipPath>
+              <clipPath id="bx018y214j">
+                <path d="M7.79 0c.922 0 1.676.251 1.927 1.257l1.508 7.12C9.801 4.607 6.115 1.424.754.167L0 0z" />
+              </clipPath>
+              <clipPath id="8y9xzum8uk">
+                <path d="m0 0 7.79.754c.922 0 1.76.586 2.011 1.592l1.424 5.947C9.801 4.523 5.361 1.257 0 0z" />
+              </clipPath>
+              <clipPath id="punj4ve5gl">
+                <path d="m2.687.824 5.774 1.773c1.173.419 1.508 1.424 1.759 2.43l1.005 3.266C10.06 5.21 6.876 2.461 2.82.876L2.687.824z" />
+              </clipPath>
+              <clipPath id="oi2c63d7hm">
+                <path d="M0 0c2.68 1.34 5.11 4.105 5.864 6.618l.335 2.094 1.34-3.183 2.848 2.848-2.094 5.026H3.77z" />
+              </clipPath>
+              <clipPath id="7lfkx6u3zn">
+                <path d="m.67 0 3.602 3.686H0L.67 0z" />
+              </clipPath>
+              <clipPath id="pi44gwl4jo">
+                <path d="m7.288 0 3.602 3.518c-1.256 1.34-3.435 2.095-6.115 2.095-1.927 0-3.77-.42-4.775-.838L.586 1.34l.587.252c1.424.586 2.345.837 4.02.837 1.173 0 2.514-.502 2.514-1.508C7.79.586 7.623.335 7.288 0z" />
+              </clipPath>
+              <clipPath id="9c320kggsp">
+                <path d="m4.915 8.46-.978 2.514.838-2.513.14-.001zm0 0 2.704-6.94c-.047.124-.452 1.212-.86 2.3l-.153.405a123.59 123.59 0 0 1-.658 1.723h3.518C9.298 5.11 8.461 1.34 8.461 1.34L8.209 0l5.027 4.859 1.424 6.115h-4.021l-.503-2.513-5.221-.001z" />
+              </clipPath>
+            </defs>
+            <g clipPath="url(#c4cise2qfa)" transform="translate(-1001 -710)">
+              <g clipPath="url(#nhseukycab)" transform="translate(1020.35 710.503)">
+                <path fill="#3B58BF" d="M0 0h6.87v15.079H0V0z" />
+              </g>
+              <g clipPath="url(#dbmktl4twc)" transform="translate(1020.35 710.503)">
+                <path fill="#293588" d="M0 0h6.87v15.079H0V0z" />
+              </g>
+              <g clipPath="url(#rwcfj2rxqd)" transform="translate(1026.969 710)">
+                <path fill="#3B58BF" d="M0 0h12.817v15.916H0V0z" />
+              </g>
+              <g clipPath="url(#2ugk2tydhe)" transform="translate(1026.969 710)">
+                <path fill="#293588" d="M0 0h12.817v15.916H0V0z" />
+              </g>
+              <g clipPath="url(#xnwyc7atqf)" transform="translate(1038.529 710.503)">
+                <path fill="#3B58BF" d="M0 0h15.246v15.079H0V0z" />
+              </g>
+              <g clipPath="url(#gnqdctuhug)" transform="translate(1038.529 710.503)">
+                <path fill="#293588" d="M0 0h15.246v15.079H0V0z" />
+              </g>
+              <g clipPath="url(#hyhtkw4jth)" transform="translate(1006.361 710.586)">
+                <path fill="#3B58BF" d="M0 0h15.079v15.079H0V0z" />
+              </g>
+              <g clipPath="url(#z0coa3ytfi)" transform="translate(1006.361 710.586)">
+                <path fill="#293588" d="M0 0h15.079v15.079H0V0z" />
+              </g>
+              <g clipPath="url(#bx018y214j)" transform="translate(1001 710.503)">
+                <path fill="#FFBC00" d="M0 0h11.225v8.377H0V0z" />
+              </g>
+              <g clipPath="url(#8y9xzum8uk)" transform="translate(1001 710.503)">
+                <path fill="#F7981C" d="M0 0h11.225v8.293H0V0z" />
+              </g>
+              <g clipPath="url(#punj4ve5gl)" transform="translate(1001 710.503)">
+                <path fill="#ED7C00" d="M0 0h11.225v8.293H0V0z" />
+              </g>
+              <g clipPath="url(#oi2c63d7hm)" transform="translate(1006.445 712.178)">
+                <path fill="#051244" d="M0 0h10.387v13.403H0V0z" />
+              </g>
+              <g clipPath="url(#7lfkx6u3zn)" transform="translate(1020.35 721.895)">
+                <path fill="#051244" d="M0 0h4.272v3.686H0V0z" />
+              </g>
+              <g clipPath="url(#pi44gwl4jo)" transform="translate(1026.969 720.387)">
+                <path fill="#051244" d="M0 0h10.89v5.613H0V0z" />
+              </g>
+              <g clipPath="url(#9c320kggsp)" transform="translate(1039.115 714.607)">
+                <path fill="#051244" d="M0 0h14.66v10.974H0V0z" />
+              </g>
+            </g>
+          </svg>
+          <svg className="payment-method-icon" width="35" height="20" viewBox="0 0 35 20" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <clipPath id="8qo15s92ya">
+                <path d="M1440 0v1339H0V0h1440z" />
+              </clipPath>
+              <clipPath id="ynjl3vtsub">
+                <path d="M8.75 0v15.724H0V0h8.75z" />
+              </clipPath>
+              <clipPath id="ka86v2zzvc">
+                <path d="M2.654 3.216a10 10 0 0 1 13.525-1.078A9.982 9.982 0 0 0 12.36 10a9.983 9.983 0 0 0 3.82 7.862A10 10 0 0 1 2.653 3.216z" />
+              </clipPath>
+              <clipPath id="wlpq5ijsid">
+                <path d="M10.55 1.006A10 10 0 1 1 0 17.862 10.001 10.001 0 0 0 0 2.138a10 10 0 0 1 10.55-1.132z" />
+              </clipPath>
+            </defs>
+            <g clipPath="url(#8qo15s92ya)" transform="translate(-1068 -708)">
+              <g clipPath="url(#ynjl3vtsub)" transform="translate(1081.64 710.138)">
+                <path fill="#FF5E00" d="M0 0h8.75v15.724H0V0z" />
+              </g>
+              <g clipPath="url(#ka86v2zzvc)" transform="translate(1069.835 708)">
+                <path fill="#EB001B" d="M0 0h16.18v20H0V0z" />
+              </g>
+              <g clipPath="url(#wlpq5ijsid)" transform="translate(1086.015 708)">
+                <path fill="#F79E1B" d="M0 0h16.179v20H0V0z" />
+              </g>
+            </g>
+          </svg>
+        </>
+      );
+    }
+
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
+      <svg className="payment-method-icon" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
         <defs>
           <rect id="prefix__qa" width="50" height="32" x="0" y="0" rx="2" />
           <path id="prefix__qc" d="M7.312 14.69c.408 0 .739.331.739.74 0 .407-.331.738-.74.738h-.48v10.928c0 .02.019.04.041.04h18.522v-.793c0-.404.327-.731.731-.731.404 0 .732.327.732.731v1.531c0 .409-.328.74-.732.74H6.872c-.829 0-1.504-.68-1.504-1.518V15.429c0-.408.327-.739.732-.739h1.212zm22.664-6.183c.809 0 1.464.661 1.464 1.478V22.43c0 .816-.655 1.478-1.464 1.478H11.491c-.808 0-1.463-.662-1.463-1.478V9.985c0-.817.655-1.478 1.463-1.478h18.485zm0 7H11.49v6.923h18.485v-6.923zm0-5.522H11.491v2.41h18.485v-2.41z" />
@@ -68,7 +202,7 @@ const PaymentMethodIcon = (props) => {
   }
   if (methodName === 'checkout_com_upapi_knet') {
     return (
-      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="156px" height="99px" viewBox="0 0 156 99" enableBackground="new 0 0 156 99" space="preserve">
+      <svg className="payment-method-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="156px" height="99px" viewBox="0 0 156 99" enableBackground="new 0 0 156 99" space="preserve">
         <image
           id="image0"
           width="156"
@@ -414,7 +548,7 @@ const PaymentMethodIcon = (props) => {
   }
   if (methodName === 'checkout_com_applepay' || methodName === 'checkout_com_upapi_applepay') {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
+      <svg className="payment-method-icon" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
         <defs>
           <rect id="prefix__qaa" width="50" height="32" x="0" y="0" rx="2" />
         </defs>
@@ -432,7 +566,7 @@ const PaymentMethodIcon = (props) => {
   }
   if (methodName === 'checkout_com_upapi_qpay') {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152 97" width="152" height="97">
+      <svg className="payment-method-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152 97" width="152" height="97">
         <defs>
           <image
             id="img1"
@@ -448,7 +582,7 @@ const PaymentMethodIcon = (props) => {
 
   if (methodName === 'postpay') {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
+      <svg className="payment-method-icon" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
         <defs>
           <rect id="prefix__qa" width="50" height="32" x="0" y="0" rx="2" />
         </defs>
@@ -485,7 +619,7 @@ const PaymentMethodIcon = (props) => {
 
   if (methodName === 'tabby') {
     return (
-      <svg className="styles__tabby-info__logo--ec151" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="65px" height="26px" alt={methodLabel}>
+      <svg className="styles__tabby-info__logo--ec151 payment-method-icon" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="65px" height="26px" alt={methodLabel}>
         <path d="M92.2524 0H7.74757C3.46871 0 0 3.48347 0 7.78054V32.2195C0 36.5165 3.46871 40 7.74757 40H92.2524C96.5313 40 100 36.5165 100 32.2195V7.78054C100 3.48347 96.5313 0 92.2524 0Z" fill="url(#paint0_linear_99_113_0.9997948959381204)" />
         <path d="M86.9113 12.6893L81.5394 33.1972L81.5274 33.2434H85.7106L91.1016 12.6893H86.9113Z" fill="#292929" />
         <path d="M20.4447 24.3575C19.817 24.6651 19.1268 24.8233 18.4279 24.8198C16.9206 24.8198 16.0655 24.5796 15.9731 23.3607V23.2793C15.9731 23.2301 15.967 23.1788 15.967 23.1306V19.5946L15.9731 19.1765V16.6805H15.967V15.6073L15.9731 15.1863V12.7746L12.237 13.269C14.7673 12.7787 16.2173 10.778 16.2173 8.7864V7.56049H12.015V13.3032L11.7778 13.3695V24.0018C11.9165 26.9892 13.888 28.7648 17.1146 28.7648C18.2708 28.762 19.4146 28.5251 20.4768 28.0684L20.4979 28.0594V24.3294L20.4447 24.3575Z" fill="#292929" />
@@ -507,7 +641,7 @@ const PaymentMethodIcon = (props) => {
 
   if (methodName === 'checkout_com_upapi_fawry') {
     return (
-      <svg version="1.1" id="fLayer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="170px" height="83px" viewBox="0 0 170 83" enableBackground="new 0 0 170 83" space="preserve">
+      <svg className="payment-method-icon" version="1.1" id="fLayer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="170px" height="83px" viewBox="0 0 170 83" enableBackground="new 0 0 170 83" space="preserve">
         <image overflow="visible" width="170" height="83" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAABTCAMAAAA4NWxhAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjhCREU2NzhEREJCQzExRUFCMTI3REZFRjE3QTFFNkY1IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjhCREU2NzhFREJCQzExRUFCMTI3REZFRjE3QTFFNkY1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OEJERTY3OEJEQkJDMTFFQUIxMjdERkVGMTdBMUU2RjUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OEJERTY3OENEQkJDMTFFQUIxMjdERkVGMTdBMUU2RjUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7NobVyAAADAFBMVEWlyNlWl7f/6QAAScllkmb/3TkhfqV5m1q91+TJ3OcAWbLr8vYqeYr/4lYAW4y3tjYXcpdyqsQAYqX/3AD/87X/+NgAa5n/0gjk7PMNc53/zQBTinNxl2GirEQAbJcYeKIedY0xfIfT5OyKtsz/6obkyBv/7JIAUoadwtX/1gCTpUvLvCvNwCZOlrY1iq3/++b+1wctgKf/+wC8uC7/2iQAZaH/5gAAaZYAOHRCg33/2QAAVrb/7gD/5AAMbpoAU7zszBSHoVJspsGrsz3/2gD/8a7/4gCTvtL/76IAaZwVbJkAXa7FuizawiLp0xf/1ABWjW4AYZH/30L/8wD/6H3/9MTNvSdioL3/4ACXsGr/3Qr/1gMAXql9ssoAYak3g3n/3QD//PL/0gPdxB43gIO32PgATYLBujJtnLuBoFkAZp//2y3UxCWMpUz/0wT/5WX/zwBEgYXlzBf/1xAAZJL/0QDe6vFKiXT00yzZ5u4AKmpckWjx9vmnrT+Zq0vyzRL1+Pr/2QUAQnv/1QkAVoj/1gw3eqI/hqu20uDhxx0kdpAAW7AVaab/2Rr50g0AZpQMaZcAZKZPhXv60wpZn7yRo1HbzCH4+/z/1yQLZpUNYqsEbJhDjrD9+/5mkG4AT775/f8ibplNi24Na6acrUP+/P0Abpr20w3/2AL+1xsAZ6LUwCf9/v4FbJ2TqUn/1QPVvioAbJgAbpcFaZ4AcJuNutD/4AP/3QH/2wH/2gP//fj8/P35+vsAY6MGaZatzdzw0RIFZ5UHYJAAa5P/////2R7/1AMAbZf/1QEAbZn/1AL/zwn//v8AX49CiHL//f5wkG2epEzQxDf/8xb05BAPaKD8/f753Aju4BOerD4eaoa0sTwGZZP22AkEapz01gdgi3ENYLhjkXjIwC4AWr8RcZT/4itCkbIBbJnP4OrGx6HP5//kxSEhbL/63QDn0jHv8vYAbpX/0QSXq0YAT6CeqET31B4/f4PLyihJgX7+/v7r0hBDgHhHhnnSykP///9PCp9uAAABAHRSTlP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AU/cHJQAADdZJREFUeNrkm3tYE1cWwMOIgCNGSDRKDAOIOkbACsoEkgwgxGgMNgZayTYhjUhjiStmMdFan9W0VbKa4qMPbUu1a5YiNp2WSnT1s4/ZDEGi3Yfb3bXrdrd11X0Wt67V1nXvTBKegfb7LCZ+e/6Amzszl9+ce865554bWHeAjCubs/PnESs755TNoylZd+48MLLdFemyYjyNOl7rug+kfTxALXPdFzLyDmvBoO+hspr5jJitqggwkWmsspDzr20381VPl616aMqUh1aNXK3im8MOW8baGQpUxeePXDD+BBmQE+MXjOTzVeE16hWs1SGmnm8e8zDZTx4eY7Y2ecKIOmcgKlDpivFkCBn/n3+6ayMJVWvmTyNDy2MCubw2clC15qpxg5CeW1P4zTG8asAsCGnR3nNUrfnaeHIwmWxpTHsE76VXT4cBgjBcLpfjENRUe09RhyQlp9s+LPwRpulGqm2Ddm0URC8Gsj56Y5PwnqKqzAsGJyWzUAop/DMmDpIa2vYdhSV2Rgolmfg9ReU/NATpxPctBMVr3CT1q9Xjxm43chCKIHgKBQ9RzsbuIarW/OKtIVDnowCL4rw+1eC/Hasp5FEUpZMoGxqUhYVL7iWqyjxuCNLXDrK9BEF8+PlfMWaR5e5aqKcAevzc2ZlLNsau3AYMQyjW4DiOyd1+u22SicVBcxGCpljbu+3Rgp8yIVhWhFw5hms94l6393u6Pyp/zFBKTTQ6ASnhS3nlL2b6bjxTryAIXTxXigE6EAGuySDMvfnIkoyMHS4MEtd6tFy3W6bBtACmqg2TuWUGuYtuczG3TGZwV7UZQJ9GK4awPYtKFzWJNTK3uDtyV7XJxeCJnrjSG7WdP5RPTXzOB+af8KIV5DQ+rVbsgpJH8OBN0o7A2Pix64fSCho4HL0i9dBGOS5umlRfnRb/EzlQsaZubXx1WuqbeLvLo/l6cVp19aXflZckVFfXL4aw62sTmpVwprga3BI/W+4fTlOXHw86pmpCoVrfODEE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" />
       </svg>
     );
@@ -521,11 +655,16 @@ const PaymentMethodIcon = (props) => {
 
   if (methodName === 'tamara') {
     // We do not have Tamara logo in SVG format, using JPG instead.
-    return isDesktop() ? <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-desktop.jpg" className="tamara-icon tamara-icon--desktop" /> : <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-mobile.jpg" className="tamara-icon tamara-icon--mobile" />;
+    // Using the same icon for desktop and mobile if context is cart.
+    if (context && context === 'cart') {
+      return <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-desktop.jpg" className="tamara-icon payment-method-icon" />;
+    }
+
+    return isDesktop() ? <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-desktop.jpg" className="tamara-icon tamara-icon--desktop payment-method-icon" /> : <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-mobile.jpg" className="tamara-icon tamara-icon--mobile payment-method-icon" />;
   }
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="49" height="33" viewBox="0 0 49 33">
+    <svg className="payment-method-icon" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="49" height="33" viewBox="0 0 49 33">
       <defs>
         <rect id="a" width="49" height="33" rx="2" />
       </defs>
