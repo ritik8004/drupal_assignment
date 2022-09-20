@@ -1,6 +1,6 @@
 header {
   @include breakpoint($desktop) {
-    border-bottom: rem(1) solid $header_border;
+    border-bottom: none;
   }
 
   .region__header {
@@ -117,7 +117,7 @@ header {
     }
 
     @include breakpoint($only-tablet) {
-      border-bottom: rem(1) solid $header_border;
+      border-bottom: none;
     }
 
     @include breakpoint($desktop) {
@@ -257,11 +257,15 @@ header {
   }
 
   .hamburger--menu {
-    @include breakpoint($only-mobile) {
-      .logged-in & {
+    .logged-in & {
+      @include breakpoint($only-mobile) {
         padding: 0;
         #{$left}: rem(8);
         top: rem(16);
+      }
+
+      @include breakpoint($only-mobile) {
+        top: rem(22);
       }
     }
   }
@@ -461,5 +465,13 @@ header {
   @include breakpoint($upto-tablet) {
     margin-top: rem(-40);
     #{$right}: rem(20);
+  }
+}
+
+body {
+  .branding__menu {
+    @include breakpoint($upto-desktop) {
+      box-shadow: none;
+    }
   }
 }

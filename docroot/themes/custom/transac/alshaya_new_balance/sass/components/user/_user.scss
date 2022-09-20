@@ -1,0 +1,25 @@
+.path--user {
+  .c-order-help {
+    .field--name-body {
+      p {
+        font-size: rem(14);
+      }
+
+      li {
+        font-size: rem(13);
+      }
+    }
+  }
+
+  .l-two--sf {
+    @include breakpoint($desktop) {
+      margin-top: rem(16);
+    }
+
+    &.c-user--node {
+      @include breakpoint($only-tablet) {
+        margin-top: rem(0);
+      }
+    }
+  }
+}
