@@ -97,7 +97,7 @@ class AlshayaSuperCategoryManager {
       $config->set('default_category_tid', $default_parent);
     }
 
-    $config->save(TRUE);
+    $config->save();
 
     // Enable/Disable the super category menu block.
     $this->changeSuperCategoryMenuBlockStatus($enable);
