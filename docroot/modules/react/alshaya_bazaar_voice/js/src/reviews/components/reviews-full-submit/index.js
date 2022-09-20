@@ -54,7 +54,10 @@ export default class WriteReviewButton extends React.Component {
       }
       // set local storage user details
       if (hasValue(userDetails) && hasValue(userDetails.user)) {
-        createUserStorage(userDetails.user.userId, userDetails.user.emailId);
+        const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
+        if (userStorage === null) {
+          createUserStorage(userDetails.user.userId, userDetails.user.emailId);
+        }
       }
 
       this.setState({ ...data, ...{ userDetails } });
