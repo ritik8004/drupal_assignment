@@ -4,6 +4,7 @@ import WriteReviewForm from './WriteReviewForm';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ClosedReviewSubmit from './closed-review-submit';
 import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { createUserStorage, getEmailFromTokenParams, isOpenWriteReviewForm } from '../../../utilities/user_util';
 import ConditionalView from '../../../common/components/conditional-view';
@@ -41,6 +42,7 @@ export default class WriteReviewButton extends React.Component {
     }
 
     getUserDetails(productId).then((userDetails) => {
+      console.log('userDetails.user', userDetails.user);
       let data = {};
       if (params.get('userToken') !== null) {
         const currentEmail = getEmailFromTokenParams(params);
@@ -52,7 +54,7 @@ export default class WriteReviewButton extends React.Component {
         }
       }
       // set local storage user details
-      if (userDetails && Object.keys(userDetails).length !== 0) {
+      if (hasValue(userDetails.user) && Object.keys(userDetails).length !== 0) {
         createUserStorage(userDetails.user.userId, userDetails.user.emailId);
       }
       this.setState({ ...data, ...{ userDetails } });
