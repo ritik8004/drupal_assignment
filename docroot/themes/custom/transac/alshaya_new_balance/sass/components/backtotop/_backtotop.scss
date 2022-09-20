@@ -1,6 +1,5 @@
 #backtotop {
   bottom: rem(60);
-  font-size: rem(0);
 
   @include breakpoint($only-mobile) {
     bottom: rem(119);
@@ -13,16 +12,10 @@
 
   &::after {
     content: '';
-    background: url(../imgs/icons/Backtop.svg) no-repeat;
+    background: url(#{$nb_theme_img_directory_path}/icons/backtop.svg) no-repeat;
     background-size: contain;
     border-radius: 0;
     top: 0;
     #{$right}: rem(27);
   }
 }
-
-
-
-
-
-
