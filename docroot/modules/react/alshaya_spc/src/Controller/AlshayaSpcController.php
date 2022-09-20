@@ -250,6 +250,7 @@ class AlshayaSpcController extends ControllerBase {
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
+            'display_cart_payment_icons' => $cart_config->get('display_cart_payment_icons') ?? FALSE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
           // This key gets the dynamic area value of the area placeholder

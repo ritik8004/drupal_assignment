@@ -21,6 +21,8 @@ const PaymentMethodsLogos = memo((props) => {
       methodName={method.code}
       methodLabel={method.name}
       context="cart"
+      // Added to avoid unique key props warning.
+      key={method.code}
     />
   ));
 

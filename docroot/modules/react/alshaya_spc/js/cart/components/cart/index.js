@@ -564,9 +564,8 @@ export default class Cart extends React.Component {
                 && { collectionCharge }
               )}
             />
-            <PaymentMethodsLogos
-              paymentMethods={drupalSettings.payment_methods}
-            />
+            {drupalSettings.alshaya_spc.display_cart_payment_icons
+              && <PaymentMethodsLogos paymentMethods={drupalSettings.payment_methods} />}
           </div>
         </div>
         <div className="spc-post-content">
