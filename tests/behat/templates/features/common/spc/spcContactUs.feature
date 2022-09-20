@@ -1,9 +1,7 @@
-@javascript @account @smoke @auth @contact-us @mujikwuat @coskwuat @mujisauat @cosaeuat @coskwuat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @bpaeuat @tbseguat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @bpaeqa @tbskwuat @bbwsauat @mcsaqa @flsauat @hmaeuat @vskwqa @vsaeqa @flkwuat @hmkwqa @mckwuat @vsaeuat @vssauat @bbwkwuat @bbwaeuat @hmkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
-Feature: Verify the Contact Us page on the site for Auth User
+@javascript @account @smoke @guest @contact-us @mujikwuat @coskwuat @mujisauat @cosaeuat @coskwuat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @bpaeuat @tbseguat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @bpaeqa @tbskwuat @bbwsauat @mcsaqa @flsauat @hmaeuat @vskwqa @vsaeqa @flkwuat @hmkwqa @mckwuat @vsaeuat @vssauat @bbwkwuat @bbwaeuat @hmkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
+Feature: Verify the Contact Us page on the site as a guest user
 
   Background:
-    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait for the page to load
     When I am on user contact us page
     And I wait for the page to load
     Then I should see an "#block-page-title h1.c-page-title" element
@@ -89,7 +87,7 @@ Feature: Verify the Contact Us page on the site for Auth User
     Then I should see an "#select2-edit-reason2-container" element
     And I select "missing_items" from "#edit-reason1" select2 field
     And I fill in "order_number" with "140090"
-    And I fill in "edit-missing-items" with "missing-items-list"
+#    And I fill in "edit-missing-items" with "missing-items-list"
     And I fill in "message" with "Client feedback"
     Then I click on "#edit-submit" element
     And I wait for the page to load
@@ -107,8 +105,9 @@ Feature: Verify the Contact Us page on the site for Auth User
     Then I should see an "#select2-edit-type-container" element
     And I select "inquiry" from "#edit-type" select2 field
     Then I should see an "#select2-edit-reason2-container" element
-    And I select "products" from "#edit-reason2" select2 field
+    And I select "exchange_refund_policy" from "#edit-reason4" select2 field
     And I fill in "order_number" with "140090"
+#    And I fill in "edit-missing-items" with "missing-items-list"
     And I fill in "message" with "Client feedback"
     Then I click on "#edit-submit" element
     And I wait for the page to load
@@ -196,9 +195,9 @@ Feature: Verify the Contact Us page on the site for Auth User
     And I fill in "last_name" with "User"
     And I fill in "email" with "testuser123@gmail.com"
     And I select "online_shopping" from "#edit-feedback" select2 field
-    Then I should see an "#edit-type" element
+    Then I should see an "#select2-edit-type-container" element
     And I select "complaint" from "#edit-type" select2 field
-    Then I should see an "#edit-reason2" element
+    Then I should see an "#select2-edit-reason2-container" element
     And I select "wrong_delivery" from "#edit-reason1" select2 field
     And I fill in "order_number" with "140090"
     And I fill in "message" with "Client feedback"
@@ -214,9 +213,9 @@ Feature: Verify the Contact Us page on the site for Auth User
     And I fill in "last_name" with "User"
     And I fill in "email" with "testuser456@gmail.com"
     And I select "feeback_inquiry" from "#edit-feedback" select2 field
-    Then I should see an "#edit-type" element
+    Then I should see an "#select2-edit-type-container" element
     And I select "inquiry" from "#edit-type" select2 field
-    Then I should see an "#edit-reason2" element
+    Then I should see an "#select2-edit-reason2-container" element
     And I select "alshaya_privileges_club" from "#edit-reason4" select2 field
     And I fill in "order_number" with "140090"
     And I fill in "message" with "Client feedback"
@@ -235,12 +234,14 @@ Feature: Verify the Contact Us page on the site for Auth User
     And I fill in "mobile_number[mobile]" with "55667788"
     And I fill in "email" with "testuser123@gmail.com"
     And I select "online_shopping" from "#edit-feedback" select2 field
-    Then I should see an "#edit-type" element
+    Then I should see an "#select2-edit-type-container" element
     And I select "complaint" from "#edit-type" select2 field
-    Then I should see an "#edit-reason2" element
+    Then I should see an "#select2-edit-reason2-container" element
     And I select "refund_not_received" from "#edit-reason1" select2 field
     And I fill in "order_number" with "140090"
     And I fill in "message" with "Client feedback"
     Then I click on "#edit-submit" element
     And I wait for the page to load
     Then I should see a ".webform-confirmation__message" element on page
+
+

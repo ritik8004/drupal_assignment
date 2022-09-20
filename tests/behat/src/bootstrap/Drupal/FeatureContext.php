@@ -1928,6 +1928,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iClickJqueryElementOnPage($element)
   {
+    $element = addslashes($element);
     $this->getSession()->executeScript("document.querySelector('$element').click();");
   }
 
@@ -3046,11 +3047,11 @@ JS;
   /**
    * @Given /^I select "([^"]*)" from "([^"]*)" select2 field$/
    */
-  public function iSelectFromSelect2field($arg1, $arg2)
+  public function iSelectFromSelect2field($value, $selector)
   {
     $session = $this->getSession();
-    $session->executeScript('jQuery(' . $arg1 . ').val(' . $arg2 . ').trigger("change")');
-    $this->iWaitSeconds('5');
+    $selector = addslashes($selector);
+    $value = addslashes($value);
+    $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
   }
-
 }
