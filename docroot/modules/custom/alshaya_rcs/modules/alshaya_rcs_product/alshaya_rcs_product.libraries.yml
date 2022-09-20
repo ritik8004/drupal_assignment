@@ -69,11 +69,6 @@ product.not_buyable_product:
   js:
     handlebars/product.not_buyable_product.handlebars: {}
 
-product.delivery_info:
-  version: 1.x
-  js:
-    handlebars/product.delivery_info.handlebars: {}
-
 product.delivery_options:
   version: 1.x
   js:
