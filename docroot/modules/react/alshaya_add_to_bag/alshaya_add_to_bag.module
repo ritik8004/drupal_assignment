@@ -80,6 +80,7 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   if ($cartDrawerStatus) {
     // Attach notification library if feature is enabled.
     $page['#attached']['library'][] = 'alshaya_spc/cart_drawer';
+    $page['#attached']['library'][] = 'alshaya_white_label/drawer-cart-notification';
   }
 
   // Check if the acm cart notification settings exist and assign notification

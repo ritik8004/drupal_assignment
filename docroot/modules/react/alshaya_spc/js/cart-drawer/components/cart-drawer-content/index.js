@@ -20,13 +20,17 @@ const CartDrawerContent = (props) => {
           <a className="close-modal" onClick={closeModal} />
         </div>
         <div className="product-details">
-          <img loading="lazy" src={productData.image} alt={productData.product_name} title={productData.product_name} />
-          <div className="product-title">{Drupal.t('@productTitle has been added to your bag.', { '@productTitle': productData.product_name })}</div>
-          <div className="product-quantity">{Drupal.t('Qty : @quantity', { '@quantity': productData.quantity })}</div>
-          <div className="cart-drawer-links">
-            <a href={Drupal.url('cart')} className="add-to-bag">{Drupal.t('VIEW BAG')}</a>
-            <a href={checkoutUrl} className="checkout">{Drupal.t('CHECKOUT')}</a>
+          <div className="product-img">
+            <img loading="lazy" src={productData.image} alt={productData.product_name} title={productData.product_name} />
           </div>
+          <div className="product-desc">
+            <div className="product-title">{Drupal.t('@productTitle has been added to your bag.', { '@productTitle': productData.product_name })}</div>
+            <div className="product-quantity">{Drupal.t('Qty : @quantity', { '@quantity': productData.quantity })}</div>
+          </div>
+        </div>
+        <div className="cart-drawer-links">
+          <a href={Drupal.url('cart')} className="add-to-bag">{Drupal.t('VIEW BAG')}</a>
+          <a href={checkoutUrl} className="checkout">{Drupal.t('CHECKOUT')}</a>
         </div>
       </div>
     </div>
