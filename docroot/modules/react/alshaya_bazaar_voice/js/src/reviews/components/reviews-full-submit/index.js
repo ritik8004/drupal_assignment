@@ -42,7 +42,6 @@ export default class WriteReviewButton extends React.Component {
     }
 
     getUserDetails(productId).then((userDetails) => {
-      console.log('userDetails.user', userDetails.user);
       let data = {};
       if (params.get('userToken') !== null) {
         const currentEmail = getEmailFromTokenParams(params);
@@ -54,9 +53,10 @@ export default class WriteReviewButton extends React.Component {
         }
       }
       // set local storage user details
-      if (hasValue(userDetails.user) && Object.keys(userDetails).length !== 0) {
+      if (hasValue(userDetails) && hasValue(userDetails.user)) {
         createUserStorage(userDetails.user.userId, userDetails.user.emailId);
       }
+
       this.setState({ ...data, ...{ userDetails } });
     });
   }
