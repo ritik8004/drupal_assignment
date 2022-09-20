@@ -12,7 +12,7 @@
     transition: opacity 300ms ease-in;
   }
 }
-  
+
 body {
   &.overlay-cart-drawer {
     overflow: hidden;
@@ -129,7 +129,7 @@ body {
     justify-content: space-between;
 
     a {
-      &.add-to-bag, 
+      &.add-to-bag,
       &.checkout {
         @extend %button-brand;
 
