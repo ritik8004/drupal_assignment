@@ -20,8 +20,16 @@ function alshaya_xb_page_attachments(array &$attachments) {
  * Implements hook_page_bottom().
  */
 function alshaya_xb_page_bottom(array &$page_bottom) {
-  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
-    return;
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  // We need to allow the script to be added on the below admin routes.
+  $admin_routes = [
+    'change_pwd_page.change_password_form',
+    'entity.user.edit_form',
+  ];
+  if (!in_array($route_name, $admin_routes)) {
+    if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+      return;
+    }
   }
 
   // @todo These values are hardcoded for the POC and need to be configurable.
@@ -50,7 +58,7 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
 
   // Inline JS added for the checkout page to clear the shopping
   // cart/mini-cart for Guest user after order is placed.
-  if (\Drupal::routeMatch()->getRouteName() == 'alshaya_spc.checkout') {
+  if ($route_name == 'alshaya_spc.checkout') {
     $js = '
      var glegem = glegem || function () {
       (window["glegem"].q = window["glegem"].q || []).push(arguments)
