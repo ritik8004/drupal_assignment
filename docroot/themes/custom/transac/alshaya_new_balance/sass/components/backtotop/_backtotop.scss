@@ -15,7 +15,7 @@
     content: "-";
     position: absolute;
     width: rem(3);
-    left: rem(35);
+    #{$left}: rem(35);
     bottom: rem(40);
     transform: rotate(90deg);
     height: rem(35);
@@ -28,7 +28,7 @@
     font-size: rem(45);
     font-weight: 700;
     top: rem(7);
-    right: rem(10);
+    #{$right}: rem(10);
     width: auto;
     -moz-osx-font-smoothing: inherit;
   }
