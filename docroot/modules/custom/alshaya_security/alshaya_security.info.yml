@@ -8,3 +8,5 @@ dependencies:
   - autologout:autologout
   - drupal:language
   - pcb:pcb
+  - rate_limits:rate_limits
+  - user_password_limit:user_password_limit
