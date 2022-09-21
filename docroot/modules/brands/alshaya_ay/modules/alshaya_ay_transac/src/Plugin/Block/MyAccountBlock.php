@@ -75,6 +75,7 @@ class MyAccountBlock extends BlockBase implements ContainerFactoryPluginInterfac
 
     return [
       '#markup' => '<div class="my-account-icon">' . $data . '</div>',
+      '#cache' => ['contexts' => ['user']],
     ];
   }
 
