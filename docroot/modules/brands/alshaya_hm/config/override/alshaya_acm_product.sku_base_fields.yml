@@ -230,6 +230,7 @@ fields:
   is_external:
     label: 'Is external beauty product'
     type: 'string'
+    translatable: 0
     description: 'Sku applicable for the external beauty product or not.'
 
   finish:
