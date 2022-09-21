@@ -12,7 +12,7 @@ default:
                 - Drupal\DrupalExtension\Context\DrupalContext
                 - Drupal\DrupalExtension\Context\MessageContext
     extensions:
-        Behat\MinkExtension:
+        Drupal\MinkExtension:
             files_path: "%paths.base%/files"
             browser_name: chrome
             goutte:
