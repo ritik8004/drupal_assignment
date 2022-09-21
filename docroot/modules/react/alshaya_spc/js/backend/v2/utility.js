@@ -172,11 +172,11 @@ const getApiEndpoint = (action, params = {}) => {
       break;
 
     case 'codMobileVerificationSendOtp':
-      endpoint = `/V1/send/${endPointParams.cartId}/mobile/${endPointParams.mobileNumber}`;
+      endpoint = '/V1/carts/otp/send';
       break;
 
     case 'codMobileVerificationValidateOtp':
-      endpoint = `/V1/validate/${endPointParams.cartId}/mobile/${endPointParams.mobileNumber}/otp/${endPointParams.otp}`;
+      endpoint = '/V1/carts/otp/verify';
       break;
 
     case 'getTamaraAvailability':
