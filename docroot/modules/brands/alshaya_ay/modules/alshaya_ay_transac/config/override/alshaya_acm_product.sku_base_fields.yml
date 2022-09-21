@@ -1,0 +1,40 @@
+fields:
+  waist:
+    label: 'Waist'
+    cardinality: -1
+    index: 1
+    facet: 1
+  support:
+    label: 'Support'
+    cardinality: -1
+    index: 1
+    facet: 1
+  length:
+    label: 'Length'
+    cardinality: -1
+    index: 1
+    facet: 1
+  just_dropped:
+    label: 'Just dropped'
+    cardinality: -1
+    index: 1
+    facet: 1
+  color_way:
+    label: 'Color way'
+    cardinality: -1
+    index: 1
+  fit:
+    label: 'Fit'
+    type: 'text_long'
+  quick_fit:
+    label: 'Quick Fit'
+    type: 'text_long'
+  fabrication:
+    label: 'Fabrication'
+    type: 'text_long'
+  how_to_use:
+    abel: 'How to use'
+    type: 'text_long'
+  why_we_love_it:
+    abel: 'Why we love it'
+    type: 'text_long'
