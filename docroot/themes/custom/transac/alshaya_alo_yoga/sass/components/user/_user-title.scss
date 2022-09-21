@@ -40,7 +40,15 @@
 }
 
 .c-user-edit,
-.c-change-password {
+.c-change-password,
+.order-detail,
+.c-communication-preferences,
+.c-order-list,
+.c-user--node,
+.c-address-book,
+.c-payment-cards,
+.c-loyalty-club-page,
+.c-my-egift {
   .block-page-title-block {
     @include breakpoint($only-mobile) {
       text-align: center;

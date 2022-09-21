@@ -1,0 +1,19 @@
+.block-alshaya-acm-customer {
+  & > .edit-account {
+    @include secondaryBtn(true);
+
+    height: rem(48);
+    padding: rem(14);
+    top: rem(-101);
+
+    @include breakpoint($only-tablet) {
+      top: rem(-83);
+    }
+  }
+}
+
+.block-alshaya-user-recent-orders {
+  .no--orders + a {
+    @include primaryBtn(true);
+  }
+}

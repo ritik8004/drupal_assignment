@@ -48,6 +48,7 @@ $ay_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
   font-family: $ay-heavy;
   font-size: rem(16);
   justify-content: center;
+  border: rem(1) solid $secondary_btn_border;
 
   @include breakpoint($tablet) {
     width: rem(216);
