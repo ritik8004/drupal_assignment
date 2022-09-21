@@ -19,7 +19,7 @@ function alshaya_ay_transac_install() {
   // Set My account block
   // to appear just above the mini cart block.
   $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
-  $config_factory->getEditable('block.block.myaccountblock')->set('weight', $my_account_links - 2)->save();
+  $config_factory->getEditable('block.block.myaccounticonblock')->set('weight', $my_account_links - 2)->save();
 }
 
 /**

@@ -9,14 +9,14 @@ use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Url;
 
 /**
- * Provides My Account block.
+ * Provides My Account icon block.
  *
  * @Block(
- *   id = "my_account_block",
- *   admin_label = @Translation("My Account block")
+ *   id = "my_account_icon_block",
+ *   admin_label = @Translation("My Account Icon block")
  * )
  */
-class MyAccountBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class MyAccountIconBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The current user service object.
