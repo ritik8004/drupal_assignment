@@ -280,7 +280,7 @@ class AuraLoyaltyForm extends React.Component {
           )}
         {hasValue(points)
           && (
-          <div className="customer-points">
+          <div className={(!isFullyEnrolled && loyaltyCardLinkedToCart) ? 'customer-points not-you' : 'customer-points'}>
             <div className="aura-points-info">
               <div className="total-points">
                 { getStringMessage('checkout_you_have') }
