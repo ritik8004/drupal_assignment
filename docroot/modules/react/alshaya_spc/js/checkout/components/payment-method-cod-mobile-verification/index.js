@@ -82,12 +82,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
    * Sennd OTP to mobile number from shipping address.
    */
   sendOtpToShippingMobileNumber = (action = 'otp sent') => {
-    // Get Cart Id.
-    const cartId = window.commerceBackend.getCartId();
-
     // Prepare params.
     const params = {
-      cart_id: cartId,
+      cart_id: window.commerceBackend.getCartId().toString(),
     };
 
     return callMagentoApi(getApiEndpoint('codMobileVerificationSendOtp'), 'POST', params)
@@ -193,7 +190,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
     // Prepare params for endpoint.
     const params = {
-      cart_id: window.commerceBackend.getCartId(),
+      cart_id: window.commerceBackend.getCartId().toString(),
       code: parseInt(otp, 10),
     };
 
