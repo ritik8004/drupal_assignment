@@ -62,14 +62,6 @@ class GlobaleSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('globale_url'),
     ];
 
-    $form['globale_store_code_instance'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Global-e Store Code Instance'),
-      '#description' => $this->t('Enter the Global-e store code instance URL.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('globale_store_code_instance'),
-    ];
-
     return $form;
   }
 
@@ -79,8 +71,6 @@ class GlobaleSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_xb.settings');
     $config->set('globale_url', $form_state->getValue('globale_url'));
-    $config->set('globale_store_code_instance', $form_state->getValue('globale_store_code_instance'));
-
     $config->save();
 
     return parent::submitForm($form, $form_state);
