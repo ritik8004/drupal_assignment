@@ -85,20 +85,17 @@ class PaymentMethodCodMobileVerification extends React.Component {
     // Get Cart Id.
     const cartId = window.commerceBackend.getCartId();
 
-    // Get shipping address mobile number.
-    const { shippingMobileNumber } = this.props;
-
     // Prepare params.
     const params = {
-      cartId,
-      mobileNumber: shippingMobileNumber.replace('+', ''),
+      cart_id: cartId,
     };
 
-    return callMagentoApi(getApiEndpoint('codMobileVerificationSendOtp', params), 'GET')
+    return callMagentoApi(getApiEndpoint('codMobileVerificationSendOtp'), 'POST', params)
       .then((response) => {
         if (hasValue(response.data.error)) {
-          logger.error('Error while sending otp for COD payment mobile verification. Response: @response', {
-            '@response': JSON.stringify(response.data),
+          logger.error('Error while sending otp for COD payment mobile verification. Message: @message, Code: @errorCode.', {
+            '@message': response.data.error_message,
+            '@errorCode': response.data.error_code,
           });
         }
 
@@ -120,9 +117,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
         });
       })
       .catch((response) => {
-        logger.error('Error while sending otp for COD payment mobile verification. Error message: @message, Code: @errorCode', {
-          '@message': response.error.message,
-          '@errorCode': response.error.error_code,
+        logger.error('Error while sending otp for COD payment mobile verification. Message: @message, Code: @errorCode', {
+          '@message': hasValue(response.data.error_message) ? response.data.error_message : '',
+          '@errorCode': hasValue(response.data.error_code) ? response.data.error_code : '',
         });
       });
   };
@@ -184,9 +181,6 @@ class PaymentMethodCodMobileVerification extends React.Component {
     // Get otp from state.
     const { otp } = this.state;
 
-    // Get shipping mobile number from props.
-    const { shippingMobileNumber } = this.props;
-
     // Clear timeout if set by handleChange().
     if (this.validateDelay) {
       clearTimeout(this.validateDelay);
@@ -199,13 +193,12 @@ class PaymentMethodCodMobileVerification extends React.Component {
 
     // Prepare params for endpoint.
     const params = {
-      cartId: window.commerceBackend.getCartId(),
-      mobileNumber: shippingMobileNumber.replace('+', ''),
-      otp,
+      cart_id: window.commerceBackend.getCartId(),
+      code: parseInt(otp, 10),
     };
 
     // Validate otp enter by the user.
-    return callMagentoApi(getApiEndpoint('codMobileVerificationValidateOtp', params), 'GET')
+    return callMagentoApi(getApiEndpoint('codMobileVerificationValidateOtp'), 'POST', params)
       .then((response) => {
         if (hasValue(response) && !response.data) {
           // Trigger gtm event cod_otp_verification with action verification.
@@ -227,8 +220,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
         }
 
         if (hasValue(response.data) && hasValue(response.data.error)) {
-          logger.error('Error while validating otp for COD payment mobile verification. Response: @response', {
-            '@response': JSON.stringify(response.data),
+          logger.error('Error while validating otp for COD payment mobile verification. Message: @message, Code: @errorCode.', {
+            '@message': response.data.error_message,
+            '@errorCode': response.data.error_code,
           });
 
           // Trigger gtm event cod_otp_verification with category verification error.
@@ -274,9 +268,9 @@ class PaymentMethodCodMobileVerification extends React.Component {
         }
       })
       .catch((response) => {
-        logger.error('Error while validating otp for COD payment mobile verification. Error message: @message, Code: @errorCode', {
-          '@message': response.error.message,
-          '@errorCode': response.error.error_code,
+        logger.error('Error while validating otp for COD payment mobile verification. Message: @message, Code: @errorCode.', {
+          '@message': hasValue(response.data.error_message) ? response.data.error_message : '',
+          '@errorCode': hasValue(response.data.error_code) ? response.data.error_code : '',
         });
 
         // Trigger gtm event cod_otp_verification with category verification error.
