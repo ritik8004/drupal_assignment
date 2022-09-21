@@ -107,6 +107,7 @@ export default class EgiftCardPurchase extends React.Component {
         name: `${productData.product_name}/${productData.price}`,
         price: productData.price,
         variant: productData.sku,
+        category: 'eGift Card',
         dimension2: 'virtual',
         dimension4: 1,
         quantity: 1,
