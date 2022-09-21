@@ -23,8 +23,8 @@ function alshaya_tamara_install() {
   $tamara_ar = $tamara->hasTranslation('ar')
     ? $tamara->getTranslation('ar')
     : $tamara->addTranslation('ar', []);
-  $tamara_ar->setName('3 مدفوعات بدون فوائد');
-  $tamara_ar->setDescription('ادفع جزءًا بسيطًا من إجمالي المبلغ الآن ، والباقي بمرور الوقت. لا رسوم خفية ، لا فائدة!');
+  $tamara_ar->setName('3 دفعات بدون فائدة');
+  $tamara_ar->setDescription('ادفع جزء من المبلغ الإجمالي الآن، والبقية لاحقاً. بدون فوائد أو رسوم خفية');
   $tamara_ar->save();
 
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
@@ -43,11 +43,11 @@ function alshaya_tamara_install() {
 
   $strings = [
     'Continue with tamara' => [
-      'ar' => 'تواصل مع تمارا',
+      'ar' => 'استمر مع تمارا',
       'context' => 'tamara',
     ],
     'Your tamara order has been cancelled' => [
-      'ar' => 'تم إلغاء طلب تمارا الخاص بك',
+      'ar' => 'تم إلغاء طلب تمارا',
       'context' => 'tamara',
     ],
   ];

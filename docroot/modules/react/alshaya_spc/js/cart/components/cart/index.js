@@ -43,7 +43,7 @@ import { isUserAuthenticated } from '../../../backend/v2/utility';
 import { applyHelloMemberLoyalty } from '../../../hello-member-loyalty/components/hello-member-checkout-rewards/utilities/loyalty_helper';
 import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
 import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
-import PaymentMethodsLogos from '../payment-methods-logos';
+import CartPaymentMethodsLogos from '../payment-methods-logos';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -564,9 +564,11 @@ export default class Cart extends React.Component {
                 && { collectionCharge }
               )}
             />
-            <PaymentMethodsLogos
-              paymentMethods={drupalSettings.payment_methods}
-            />
+            {/* Display all available payment methods icons on the cart page
+            below the continue to checkout button only if the config
+            display_cart_payment_icons is set to true. */}
+            {drupalSettings.alshaya_spc.display_cart_payment_icons
+              && <CartPaymentMethodsLogos paymentMethods={drupalSettings.payment_methods} />}
           </div>
         </div>
         <div className="spc-post-content">

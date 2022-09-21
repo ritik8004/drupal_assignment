@@ -250,6 +250,7 @@ class AlshayaSpcController extends ControllerBase {
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
+            'display_cart_payment_icons' => $this->config('alshaya_spc.settings')->get('display_cart_payment_icons') ?? FALSE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
           // This key gets the dynamic area value of the area placeholder
@@ -261,6 +262,8 @@ class AlshayaSpcController extends ControllerBase {
         'tags' => $cache_tags,
       ],
     ];
+
+    $build = $this->addCheckoutConfigSettings($build);
 
     // Get payment methods.
     $payment_methods = [];
