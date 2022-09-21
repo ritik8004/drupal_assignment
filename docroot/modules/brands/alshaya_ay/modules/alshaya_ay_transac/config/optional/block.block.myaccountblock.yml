@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_ay_transac
+  theme:
+    - alshaya_alo_yoga
+id: myaccountblock
+theme: alshaya_alo_yoga
+region: header
+weight: -30
+provider: null
+plugin: my_account_block
+settings:
+  id: my_account_block
+  label: 'My Account block'
+  provider: alshaya_ay_transac
+  label_display: '0'
+visibility: { }
