@@ -43,6 +43,7 @@ class Configurable extends SKUPluginBase {
       return $static[$langcode][$sku_code];
     }
 
+    // @codingStandardsIgnoreLine
     $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
 
     if (empty($configurables) || !is_array($configurables)) {
@@ -525,9 +526,11 @@ class Configurable extends SKUPluginBase {
       return $sku->label();
     }
 
+    // phpcs:disable
     $configurables = unserialize(
       $parent_sku->field_configurable_attributes->getString()
     );
+    // phpcs:enable
 
     $label_parts = [];
     foreach ($configurables as $configurable) {
@@ -663,6 +666,7 @@ class Configurable extends SKUPluginBase {
       return [];
     }
 
+    // @codingStandardsIgnoreLine
     $configurations = unserialize($attributes);
     if (empty($configurations) || !is_array($configurations)) {
       return [];
