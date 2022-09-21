@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_tamara;
+namespace Drupal\alshaya_tamara\Helper;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Serialization\Json;
@@ -11,7 +11,7 @@ use Drupal\Core\Site\Settings;
 /**
  * Helper class for Tamara.
  *
- * @package Drupal\alshaya_tamara
+ * @package Drupal\alshaya_tamara\Helper
  */
 class AlshayaTamaraApiHelper {
 
