@@ -1,0 +1,3 @@
+# Added default config values as empty.
+globale_url: ''
+globale_store_code_instance: ''

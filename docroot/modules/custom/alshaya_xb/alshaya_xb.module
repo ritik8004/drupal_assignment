@@ -32,14 +32,15 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
     }
   }
 
-  // @todo These values are hardcoded for the POC and need to be configurable.
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $ge_store_code = 'row_' . $language;
-  $ge_js_src = '//intgepi.bglobale.com/includes/js/1197';
+  $config = \Drupal::config('alshaya_xb.settings');
+  $ge_js_src = $config->get('globale_url') ?? '';
+  $ge_store_code_instance = $config->get('globale_store_code_instance') ?? '';
 
   $js = "
      var geStoreCode = '$ge_store_code';
-     var geStoreCodeInstance = document.location.hostname;
+     var geStoreCodeInstance = '$ge_store_code_instance';
      (function () {
        var s = document.createElement('script');
        s.type = 'text/javascript';
