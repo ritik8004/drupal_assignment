@@ -3,8 +3,8 @@
 namespace Drupal\alshaya_tamara\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
-use Drupal\alshaya_tamara\AlshayaTamaraApiHelper;
-use Drupal\alshaya_tamara\AlshayaTamaraWidgetHelper;
+use Drupal\alshaya_tamara\Helper\AlshayaTamaraApiHelper;
+use Drupal\alshaya_tamara\Helper\AlshayaTamaraWidgetHelper;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -26,14 +26,14 @@ class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFacto
   /**
    * Tamara payment method Helper.
    *
-   * @var \Drupal\alshaya_tamara\AlshayaTamaraApiHelper
+   * @var \Drupal\alshaya_tamara\Helper\AlshayaTamaraApiHelper
    */
   protected $tamaraApiHelper;
 
   /**
    * Tamara widget Helper.
    *
-   * @var \Drupal\alshaya_tamara\AlshayaTamaraWidgetHelper
+   * @var \Drupal\alshaya_tamara\Helper\AlshayaTamaraWidgetHelper
    */
   protected $tamaraWidgetHelper;
 
@@ -62,9 +62,9 @@ class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFacto
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\alshaya_tamara\AlshayaTamaraApiHelper $tamara_api_helper
+   * @param \Drupal\alshaya_tamara\Helper\AlshayaTamaraApiHelper $tamara_api_helper
    *   Tamara api Helper.
-   * @param \Drupal\alshaya_tamara\AlshayaTamaraWidgetHelper $tamara_widget_helper
+   * @param \Drupal\alshaya_tamara\Helper\AlshayaTamaraWidgetHelper $tamara_widget_helper
    *   Tamara widget Helper.
    */
   public function __construct(array $configuration,

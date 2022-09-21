@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_tamara;
+namespace Drupal\alshaya_tamara\Helper;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -9,13 +9,13 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 /**
  * Helper class for Tamara.
  *
- * @package Drupal\alshaya_tamara
+ * @package Drupal\alshaya_tamara\Helper
  */
 class AlshayaTamaraWidgetHelper {
   /**
    * Tamara Api Helper.
    *
-   * @var \Drupal\alshaya_tamara\AlshayaTamaraApiHelper
+   * @var \Drupal\alshaya_tamara\Helper\AlshayaTamaraApiHelper
    */
   protected $tamaraApiHelper;
 
@@ -36,7 +36,7 @@ class AlshayaTamaraWidgetHelper {
   /**
    * AlshayaTamaraHelper Constructor.
    *
-   * @param \Drupal\alshaya_tamara\AlshayaTamaraApiHelper $tamara_api_helper
+   * @param \Drupal\alshaya_tamara\Helper\AlshayaTamaraApiHelper $tamara_api_helper
    *   Api wrapper.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.

@@ -7,14 +7,14 @@ services:
     arguments: [ tamara ]
 
   alshaya_tamara.api_helper:
-    class: Drupal\alshaya_tamara\AlshayaTamaraApiHelper
+    class: Drupal\alshaya_tamara\Helper\AlshayaTamaraApiHelper
     arguments:
       - '@alshaya_api.api'
       - '@cache.tamara'
       - '@logger.factory'
 
   alshaya_tamara.widget_helper:
-    class: Drupal\alshaya_tamara\AlshayaTamaraWidgetHelper
+    class: Drupal\alshaya_tamara\Helper\AlshayaTamaraWidgetHelper
     arguments:
       - '@alshaya_tamara.api_helper'
       - '@config.factory'
