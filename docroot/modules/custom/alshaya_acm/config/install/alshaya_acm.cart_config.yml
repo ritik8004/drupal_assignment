@@ -3,6 +3,3 @@ checkout_feature: 'enabled'
 checkout_disabled_page: ''
 cart_storage_expiration: 15 #This is in minutes (15m for example).
 display_cart_crosssell: TRUE
-# Add a config to determine if we need to show all available payment methods
-# icons on the cart page or not.
-display_cart_payment_icons: FALSE

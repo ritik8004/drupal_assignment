@@ -7,7 +7,7 @@ import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
  * drupalSettings and passing those as props to effectively using React memo.
  * So this component will only loads again when props get changed.
  */
-const PaymentMethodsLogos = memo((props) => {
+const CartPaymentMethodsLogos = memo((props) => {
   // Get the available payment methods from props.
   const { paymentMethods } = props;
   if (!paymentMethods) {
@@ -21,7 +21,6 @@ const PaymentMethodsLogos = memo((props) => {
       methodName={method.code}
       methodLabel={method.name}
       context="cart"
-      // Added to avoid unique key props warning.
       key={method.code}
     />
   ));
@@ -43,4 +42,4 @@ const PaymentMethodsLogos = memo((props) => {
   );
 });
 
-export default PaymentMethodsLogos;
+export default CartPaymentMethodsLogos;

@@ -220,6 +220,9 @@ class AlshayaSpcController extends ControllerBase {
     $acm_checkout_settings = $this->config('alshaya_acm_checkout.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $acm_checkout_settings->getCacheTags());
 
+    $alshaya_spc_settings = $this->config('alshaya_spc.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $alshaya_spc_settings->getCacheTags());
+
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // Get country code.
@@ -250,7 +253,7 @@ class AlshayaSpcController extends ControllerBase {
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
-            'display_cart_payment_icons' => $cart_config->get('display_cart_payment_icons') ?? FALSE,
+            'display_cart_payment_icons' => $alshaya_spc_settings->get('display_cart_payment_icons') ?? FALSE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
           // This key gets the dynamic area value of the area placeholder
