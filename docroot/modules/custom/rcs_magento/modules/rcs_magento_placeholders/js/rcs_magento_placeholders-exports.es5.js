@@ -98,6 +98,8 @@ exports.getEntity = async function getEntity(langcode) {
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
         result.context = 'pdp';
+        // Store product data in static storage.
+        globalThis.RcsPhStaticStorage.set('product_data_' + result.sku, result);
         // Set product options data to static storage.
         globalThis.RcsPhStaticStorage.set('product_options', {data: {customAttributeMetadata: response.data.customAttributeMetadata}});
       }
