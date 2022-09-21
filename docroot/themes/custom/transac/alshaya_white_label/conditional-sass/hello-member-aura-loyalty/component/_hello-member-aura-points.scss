@@ -31,6 +31,7 @@
         align-items: center;
         margin-top: rem(30);
         justify-content: space-between;
+        width: 100%;
 
         @include breakpoint($only-mobile) {
           margin-#{$right}: rem(3);
@@ -156,7 +157,7 @@
           cursor: pointer;
 
           @include breakpoint($upto-desktop) {
-            width: 19%;
+            width: 20%;
           }
 
           a {
@@ -265,6 +266,20 @@
 
   .loyalty-options-registered {
     .customer-points {
+      .aura-points-info {
+        width: 100%;
+      }
+
+      .aura-redeem-points {
+        .redeem-msg {
+          @include breakpoint($upto-desktop) {
+            white-space: break-spaces;
+          }
+        }
+      }
+    }
+
+    .not-you {
       display: flex;
       flex-flow: row wrap;
       align-items: center;
@@ -274,24 +289,14 @@
         width: 80%;
 
         @include breakpoint($upto-desktop) {
-          width: 74%;
-        }
-      }
-
-      .aura-redeem-points {
-        .spc-aura-button {
-          #{$left}: rem(60);
-
-          @include breakpoint($upto-desktop) {
-            #{$left}: rem(0);
-          }
+          width: 74;
         }
       }
     }
   }
 
   .loyalty-options-guest {
-    .customer-points {
+    .not-you {
       display: flex;
       flex-flow: row wrap;
       align-items: center;
@@ -301,17 +306,7 @@
         width: 80%;
 
         @include breakpoint($upto-desktop) {
-          width: 74%;
-        }
-      }
-
-      .aura-redeem-points {
-        .spc-aura-button {
-          #{$left}: rem(80);
-
-          @include breakpoint($upto-desktop) {
-            #{$left}: rem(0);
-          }
+          width: 74;
         }
       }
     }
