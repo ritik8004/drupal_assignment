@@ -564,6 +564,9 @@ export default class Cart extends React.Component {
                 && { collectionCharge }
               )}
             />
+            {/* Display all available payment methods icons on the cart page
+            below the continue to checkout button only if the config
+            display_cart_payment_icons is set to true. */}
             {drupalSettings.alshaya_spc.display_cart_payment_icons
               && <CartPaymentMethodsLogos paymentMethods={drupalSettings.payment_methods} />}
           </div>
