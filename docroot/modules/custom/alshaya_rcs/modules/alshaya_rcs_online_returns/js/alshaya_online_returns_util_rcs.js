@@ -22,13 +22,17 @@
       });
 
       return Promise.all(productInfoPromises).then(function allProductsInfo(allProductInfo) {
-        console.log(allProductInfo);
-        allProductInfo.forEach(function eachProduct(product) {
+        var productItems = allProductInfo[0].data.products.items;
+        productItems.forEach(function eachProduct(product) {
           orderDetails['#products'].forEach(function eachOrderProduct(orderProduct) {
-            // @todo Remove hard code here and loop over returned products data
-            // and set the values.
-            orderProduct.image_data = null;
-            orderProduct.is_returnable = 1;
+            window.commerceBackend.setMediaData(product);
+            orderProduct.image_data = {
+              url: window.commerceBackend.getTeaserImage(product),
+              alt: product.name,
+              title: product.name,
+            };
+            orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product);
+            // @todo Populate this value when working on big ticket items.
             orderProduct.is_big_ticket = null;
           });
         });

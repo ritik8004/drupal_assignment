@@ -104,3 +104,13 @@ function alshaya_rcs_online_returns_library_info_alter(&$libraries, $extension) 
     $libraries['order_details']['dependencies'][] = 'alshaya_online_returns/alshaya_online_returns_util';
   }
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_rcs_online_returns_page_attachments(array &$page) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'alshaya_online_returns.return_request') {
+    _alshaya_rcs_product_get_product_image_config($page);
+  }
+}
