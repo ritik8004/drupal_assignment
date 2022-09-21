@@ -71,6 +71,11 @@
           color: $hello-member-registration-labels-txt !important;
         }
       }
+
+      .form-item--error-message {
+        padding-top: rem(14);
+        background: $hello-member-registration-fields-bg;
+      }
     }
 
     .mb-verifier {

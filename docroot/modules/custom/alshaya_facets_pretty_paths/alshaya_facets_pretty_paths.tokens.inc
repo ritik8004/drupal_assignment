@@ -43,8 +43,12 @@ function alshaya_facets_pretty_paths_tokens_alter(array &$replacements, array $c
       $facet_summary_items = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION, 'plp');
       // Getting the page title. (Mini Dresses)
       if ($route = $request->attributes->get(RouteObjectInterface::ROUTE_OBJECT)) {
-        $title_object = \Drupal::service('title_resolver')->getTitle($request, $route);
-        $title = $title_object['#markup'];
+        /** @var \Drupal\Core\Controller\TitleResolver $title_resolver */
+        $title_resolver = \Drupal::service('title_resolver');
+        $title = $title_resolver->getTitle($request, $route);
+        if (is_array($title)) {
+          $title = $title['#markup'];
+        }
       }
       // Replacing page title by adding facets
       // (Shop exclusive and luxury H&M green Mini Dresses for Ladies).

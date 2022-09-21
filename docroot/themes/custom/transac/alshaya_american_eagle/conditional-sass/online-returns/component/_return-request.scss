@@ -3,6 +3,16 @@
   .refund-details-wrapper {
     .refund-detail-label,
     .select-items-label {
+      padding-top: rem(18);
+      padding-bottom: rem(14);
+      line-height: rem(18);
+
+      @include breakpoint($desktop) {
+        padding-top: rem(17);
+        padding-bottom: rem(13);
+        line-height: rem(22);
+      }
+
       .select-items-header,
       .refund-detail-header {
         &::before {

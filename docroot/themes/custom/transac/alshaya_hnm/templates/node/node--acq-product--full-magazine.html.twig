@@ -2,7 +2,7 @@
 {% block bnpBlock %}
   {% if (content.postpay or content.tabby) %}
     <div class="pay-promo-mobile-collapse mobile-only-show" id="pay-promo-mobile-comp">
-      <span class="pay-emi-lbl">Interest-Free Installments</span>
+      <span class="pay-emi-lbl">{{ 'Interest-Free Installments'|t }}</span>
     </div>
   {% endif %}
 {% endblock %}

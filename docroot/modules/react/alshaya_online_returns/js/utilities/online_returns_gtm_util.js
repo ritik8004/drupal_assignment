@@ -1,7 +1,7 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getOrderDetails } from './online_returns_util';
 import { getReturnedItems } from './return_confirmation_util';
-import { getDeliveryAddress, getPaymentDetails, getReturnReasons } from './return_request_util';
+import { getPaymentDetails, getReturnReasons } from './return_request_util';
 
 /**
  * Utility function to get order GTM info.
@@ -127,6 +127,7 @@ function getPreparedOrderGtm(eventType, returnInfo) {
       transactionId,
       deliveryOption,
       paymentMethodsUsed,
+      deliveryInfo,
     } = gtmInfo.general;
 
     // Prepare the Return order object.
@@ -141,12 +142,15 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     if (paymentMethodsUsed.length > 0) {
       paymentMethods = paymentMethodsUsed;
     }
+
+    // Prepare the Return order object.
+    if (deliveryInfo) {
+      returnOrder.orderDeliveryCity = deliveryInfo.area_parent_display;
+      returnOrder.orderDeliveryArea = deliveryInfo.administrative_area_display;
+    }
   }
 
   const orderDetails = getOrderDetails();
-
-  // Get delivery address info.
-  const deliveryInfo = getDeliveryAddress(orderDetails);
   // Get the payment details only if GTM payment info is not availble.
   if (!paymentMethods.length > 0) {
     let paymentDetails = getPaymentDetails(orderDetails);
@@ -161,11 +165,6 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     }
   }
 
-  // Prepare the Return order object.
-  if (deliveryInfo) {
-    returnOrder.orderDeliveryCity = deliveryInfo.area_parent_display;
-    returnOrder.orderDeliveryArea = deliveryInfo.administrative_area_display;
-  }
   // This will always be online in our case.
   returnOrder.returnType = 'online';
 

@@ -191,10 +191,12 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
     array_unshift($form['#validate'], 'alshaya_acm_customer_login_validate');
     $form['#validate'][] = 'alshaya_acm_customer_login_post_validate';
     $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
+    $form['pass']['#attributes']['autocomplete'] = 'off';
   }
 
   if ($form_id == 'user_register_form') {
     array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name');
+    $form['account']['pass']['#attributes']['autocomplete'] = 'off';
 
     // We allow Drupal admins to create only admin users and customers can be
     // created in Magento directly.

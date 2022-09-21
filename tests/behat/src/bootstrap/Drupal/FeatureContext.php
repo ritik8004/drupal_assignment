@@ -66,7 +66,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iWaitForThePageToLoad()
   {
-    $this->getSession()->wait($this->parameters['ajax_waittime'] * 1000, "document.readyState === 'complete'");
+    $this->getSession()->wait($this->parameters['ajax_waittime'] * 3000, "document.readyState === 'complete'");
   }
 
   /**
@@ -3006,4 +3006,46 @@ JS;
     $this->getSession()->executeScript("jQuery('#edit-field-subscribe-newsletter-value').removeAttr('checked');jQuery('#edit-field-subscribe-newsletter-value').val(0)");
   }
 
+  /**
+   * @When /^I am on user registration page$/
+   */
+  public function iAmOnUserRegistrationPage()
+  {
+    $filename = 'creds.json';
+    $options = getopt('', ['profile:']);
+    $profile_arr = explode('-', $options['profile']);
+    $env = $profile_arr[2];
+    $secret_key = '';
+    if (file_exists($filename)) {
+      $creds = json_decode(file_get_contents($filename), TRUE);
+      $secret_key = $creds[$env]['secret_key'] ?? '';
+    }
+    $this->visitPath('/user/register?behat=' . $secret_key);
+  }
+
+  /**
+   * @Given /^I verify the wishlist popup block if enabled and remove the cart item$/
+   */
+  public function iVerifyTheWishlistPopupBlock()
+  {
+    $page = $this->getSession()->getPage();
+    $empty_cart = $page->find('css', '#spc-cart .spc-empty-text');
+
+    if (!empty($empty_cart)) {
+      throw new \Exception('Cart is empty!');
+    }
+
+    // Click the remove button.
+    $page->find('css', '#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn')->click();
+
+    // If Wishlist is enabled we will get the popup.
+    if ($this->getSession()->evaluateScript('return jQuery(".wishlist-enabled").length')) {
+      $page = $this->getSession()->getPage();
+
+      // For our tests, we don't want to move to wishlist.
+      // Click the no button to just remove the item.
+      $page->pressButton('wishlist-no');
+    }
+    $this->iWaitSeconds('5');
+  }
 }

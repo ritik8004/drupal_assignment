@@ -450,6 +450,16 @@ window.commerceBackend = window.commerceBackend || {};
           info[variantSku].orderLimitMsg = getMaxSaleQtyMessage(maxSaleQuantity);
         }
       }
+
+      var productInfoAlterEvent = new CustomEvent('rcsProductInfoAlter', {
+        detail: {
+          data: {
+            processedProduct: info[variantSku],
+            rawProduct: variantInfo
+          }
+        }
+      });
+      document.dispatchEvent(productInfoAlterEvent);
     });
 
     return info;
@@ -511,6 +521,16 @@ window.commerceBackend = window.commerceBackend || {};
       }
       productData.alshaya_bazaar_voice = drupalSettings.alshaya_bazaar_voice;
     }
+
+    var productInfoAlterEvent = new CustomEvent('rcsProductInfoAlter', {
+      detail: {
+        data: {
+          processedProduct: productData,
+          rawProduct: product
+        }
+      }
+    });
+    document.dispatchEvent(productInfoAlterEvent);
 
     return productData;
   }
@@ -804,10 +824,10 @@ window.commerceBackend = window.commerceBackend || {};
         }
       });
 
-      staticDataStore.configurableColorData[sku] = data;
-
-      return data;
     }
+
+    staticDataStore.configurableColorData[sku] = data;
+    return data;
   }
 
   /**
@@ -834,7 +854,7 @@ window.commerceBackend = window.commerceBackend || {};
     }
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
+    staticDataStore.productDataFromBackend[mainSKU][sku] = globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
       if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
         await window.commerceBackend.getProductsInStyle(response, loadStyles);
       }

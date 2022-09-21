@@ -96,6 +96,14 @@ const checkExpressDeliveryStatus = () => {
  * Gets the express delivery configuration from magento for listing pages.
  */
 async function getExpressDeliveryStatus() {
+  // Validate if SDD/ED is enabled or not.
+  if (!isExpressDeliveryEnabled()) {
+    return {
+      sameDayDelivery: false,
+      expressDelivery: false,
+    };
+  }
+
   // Get express-delivery settings from MDC for labels display.
   // Here we don't pass any sku, we only pass get_config_details as true
   // in order to MDC configuration for listing page to control the display of

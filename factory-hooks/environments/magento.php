@@ -238,6 +238,70 @@ $magentos = [
       'store_id' => ['en' => 25, 'ar' => 22],
     ],
   ],
+  // Alo Yoga.
+  'ay_qa' => [
+    'url' => 'https://alo-qa.store.alshaya.com',
+    'algolia_env' => 'alo_qa',
+    'magento_secrets' => [
+      'consumer_key' => 'zitdukk0e6zwr9piei0csgk372shqafm',
+      'consumer_secret' => '8a6w1g813pnyikoi2ksaej73cx65fcnf',
+      'access_token' => 'opqugvg6ycfsd7dy6f6t8wb3gn5mljry',
+      'access_token_secret' => 'lfuy25m63a1o5uuisnomac5z0d5o3a3w',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 40],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 28, 'ar' => 31],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 34, 'ar' => 37],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 7, 'ar' => 4],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 13, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+  ],
+  // New Balance.
+  'nb_qa' => [
+    'url' => 'https://integration-5ojmyuq-yuoofriziz4tu.eu-3.magentosite.cloud',
+    'algolia_env' => 'nb_qa',
+    'magento_secrets' => [
+      'consumer_key' => 'rjwijgl0obi48vyw5adoaheq4y6vnps7',
+      'consumer_secret' => 'oe6gwidy4giuso8aq6c5ga2trmatlbyg',
+      'access_token' => '34mt253bnj9a9uwuvx64ivt197sl4yny',
+      'access_token_secret' => 'dz4ngbr3nbf6ofigtk0brkl15ctn6jkk',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 14],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 10, 'ar' => 11],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 12, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 3, 'ar' => 2],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 7, 'ar' => 6],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
+    ],
+  ],
   // The body shop.
   'tbs_qa' => [
     'url' => 'https://tbs-uat.store.alshaya.com',
@@ -1160,7 +1224,7 @@ $magentos = [
   ],
   // BathBodyWorks.
   'bbw_qa' => [
-    'url' => 'https://integration-5ojmyuq-bbk3lvknero4c.eu-3.magentosite.cloud',
+    'url' => 'https://bbw-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
       'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
@@ -1186,7 +1250,7 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
     'jo' => [
-      'store_id' => ['en' => 14, 'ar' => 13],
+      'store_id' => ['en' => 16, 'ar' => 13],
     ],
   ],
   'bbw_apc' => [

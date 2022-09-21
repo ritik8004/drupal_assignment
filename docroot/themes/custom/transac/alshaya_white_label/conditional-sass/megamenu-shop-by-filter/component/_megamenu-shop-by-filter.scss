@@ -7,6 +7,7 @@
       color: $mm_l2_link_desktop !important;
       font-family: $alshaya-bold;
       line-height: 1.4;
+      display: inline;
     }
 
     &__list {
@@ -43,6 +44,12 @@
         a {
           color: $shop-by-filter-attribute-item-hover !important;
         }
+      }
+    }
+
+    &.is_underlined {
+      .shop-by-filter-attribute__label {
+        @include psuedo-element-underline($mm_l3_link_hover, rem(3));
       }
     }
   }

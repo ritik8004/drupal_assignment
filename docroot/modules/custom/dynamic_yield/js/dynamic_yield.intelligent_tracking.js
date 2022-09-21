@@ -1,4 +1,4 @@
-(function ($, Drupal) {
+(function ($) {
   $(window).on('load', function () {
     // This is being done on "load" since only at this time we have the
     // _dyid cookie available which will be required in the controller.
@@ -6,11 +6,36 @@
     var isDyIdCookieSet = '_dyid' in allCookies;
     var isDyIdServerCookieSet = '_dyid_server' in allCookies;
 
-    if (!isDyIdCookieSet || isDyIdServerCookieSet) {
+    // Return from here if both the cookies are available.
+    if (isDyIdCookieSet && isDyIdServerCookieSet) {
+      return;
+    }
+
+    // Update the local storage if dyid is empty in localstorage.
+    var localStorageDyId = localStorage.getItem('_dyid');
+    if (isDyIdCookieSet
+      && !isDyIdServerCookieSet
+      && !localStorageDyId) {
+      localStorage.setItem('_dyid', isDyIdCookieSet);
+      return;
+    }
+
+    // Update the localstorage value if the value it's not same as cookie.
+    if (isDyIdCookieSet
+      && !isDyIdServerCookieSet
+      && localStorageDyId
+      && localStorageDyId !== allCookies['_dyid']) {
+      localStorage.setItem('_dyid', isDyIdCookieSet);
       return;
     }
 
     // Simply call the controller to set the cookie.
-    $.post(Drupal.url('dyid'));
+    if (isDyIdCookieSet
+      && !isDyIdServerCookieSet
+      && localStorageDyId
+      && localStorageDyId === allCookies['_dyid']) {
+      $.post('/dyid.php');
+    }
+
   });
-})(jQuery, Drupal);
+})(jQuery);

@@ -140,6 +140,8 @@ class AlshayaColorSplitManager {
     if (isset($static[$static_key])) {
       return $static[$static_key];
     }
+    // Initialize with empty array.
+    $static[$static_key] = [];
 
     /** @var \Drupal\acq_sku\Entity\SKU[] $variants */
     $variants = \Drupal::entityTypeManager()

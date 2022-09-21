@@ -37,5 +37,17 @@ function hook_options_list_resource_response_alter(array &$data) {
 }
 
 /**
+ * Alter the output of "categories" (category/all) resource.
+ *
+ * @param array $data
+ *   The output of the API.
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   The taxonomy term.
+ */
+function hook_categories_all_response_alter(array &$data, TermInterface $term) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

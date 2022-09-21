@@ -1,0 +1,4 @@
+image:
+  version: 1.x
+  js:
+    handlebars/image.handlebars: {}

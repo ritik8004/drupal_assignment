@@ -29,3 +29,6 @@ alshaya_acm.settings:
     hide_max_qty_limit_message:
       type: boolean
       label: 'Show / hide max qty limited message on PDP/Cart'
+    use_mdc_url:
+      type: boolean
+      label: 'Use URL generated from MDC'

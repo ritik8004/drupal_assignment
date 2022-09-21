@@ -16,6 +16,12 @@
       .become-hello-member__header {
         font-family: $hnm-demibold;
       }
+
+      .become-hello-member__actions {
+        .become-hello-member__actions-link {
+          text-transform: unset;
+        }
+      }
     }
   }
 }

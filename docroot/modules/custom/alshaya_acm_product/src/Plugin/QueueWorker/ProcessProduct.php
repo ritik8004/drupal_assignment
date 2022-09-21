@@ -14,6 +14,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Queue\RequeueException;
@@ -93,6 +94,13 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    * @var \Drupal\alshaya_acm_product\Service\ProductQueueUtility
    */
   protected $queueUtility;
+
+  /**
+   * The Module Handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
 
   /**
    * Static cache for all the products processed in current process.
@@ -216,6 +224,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
 
     ProductCacheManager::$useCache = FALSE;
 
+    // Start by invalidating cache tags to use fresh data in all cases.
     $this->cacheTagsInvalidator->invalidateTags($cache_tags);
 
     $variants = $entity->bundle() === 'configurable'
@@ -231,16 +240,42 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $variant_sku_without_image = [];
       $translation_sku_without_image = '';
 
+      // We observed that caches are not invalidated properly and user sees
+      // obsolete data even after processing the item.
+      // We have list down all the contexts that we have used till now, we are
+      // doing this to have a caching layer for all these context. So that it
+      // should get updated with every process product action.
+      $cache_contexts = [
+        'pdp',
+        'plp',
+        'search',
+        'teaser',
+        'cart',
+        'order_detail',
+      ];
+
+      if ($node instanceof NodeInterface) {
+        // Allow other modules to alter the context array.
+        $this->moduleHandler->alter('alshaya_acm_product_process_product_context', $node, $cache_contexts);
+        // Remove any duplicate entries from the context.
+        $cache_contexts = array_unique($cache_contexts);
+      }
+
       foreach ($variants as $variant) {
         $variant_sku = SKU::loadFromSku($variant, $language->getId(), FALSE);
         if ($variant_sku instanceof SKU) {
-          // Download product images for all the variants of the product.
-          $variant_data = $this->imagesManager->getProductMedia($variant_sku, 'pdp', TRUE);
-          $this->imagesManager->getProductMedia($variant_sku, 'pdp', FALSE);
+          // Add cache tag of variants for cache invalidation in the end.
+          $cache_tags = Cache::mergeTags($cache_tags, $variant_sku->getCacheTagsToInvalidate() ?? []);
 
-          // Collect the child SKUs without any images.
-          if (!isset($variant_data['media_items']['images']) || empty($variant_data['media_items']['images'])) {
-            $variant_sku_without_image[] = $variant_sku->getSku();
+          foreach ($cache_contexts as $context) {
+            // Download product images for all the variants of the product.
+            $variant_data = $this->imagesManager->getProductMedia($variant_sku, $context, TRUE);
+            $this->imagesManager->getProductMedia($variant_sku, $context, FALSE);
+
+            // Collect the child SKUs without any images.
+            if (!isset($variant_data['media_items']['images']) || empty($variant_data['media_items']['images'])) {
+              $variant_sku_without_image[] = $variant_sku->getSku();
+            }
           }
 
           if ($node) {
@@ -250,13 +285,15 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         }
       }
 
-      // Download product images for product and warm up caches.
-      $translation_data = $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
-      $this->imagesManager->getProductMedia($translation, 'pdp', FALSE);
+      foreach ($cache_contexts as $context) {
+        // Download product images for product and warm up caches.
+        $translation_data = $this->imagesManager->getProductMedia($translation, $context, TRUE);
+        $this->imagesManager->getProductMedia($translation, $context, FALSE);
 
-      // Store the parent SKU without any images.
-      if (!isset($translation_data['media_items']['images']) || empty($translation_data['media_items']['images'])) {
-        $translation_sku_without_image = $translation->getSku();
+        // Store the parent SKU without any images.
+        if (!isset($translation_data['media_items']['images']) || empty($translation_data['media_items']['images'])) {
+          $translation_sku_without_image = $translation->getSku();
+        }
       }
 
       // Prepare the swatches and store the same in the cache.
@@ -284,6 +321,10 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         '@sku' => $translation_sku_without_image,
       ]);
     }
+
+    // End by invalidating cache tags to make sure Varnish and Drupal
+    // caches are invalidated and use the new processed data.
+    $this->cacheTagsInvalidator->invalidateTags($cache_tags);
 
     $this->getLogger('ProcessProduct')->notice('Processed product with sku: @sku', [
       '@sku' => $entity->getSku(),
@@ -361,6 +402,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    *   The Entity Type Manager.
    * @param \Drupal\alshaya_acm_product\Service\ProductQueueUtility $queue_utility
    *   Product Queue Utility.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The Module Handler service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -371,7 +414,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
                               CacheTagsInvalidatorInterface $cache_tags_invalidator,
                               ProductProcessedManager $product_processed_manager,
                               EntityTypeManagerInterface $entity_type_manager,
-                              ProductQueueUtility $queue_utility) {
+                              ProductQueueUtility $queue_utility,
+                              ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->skuManager = $sku_manager;
     $this->imagesManager = $sku_images_manager;
@@ -380,6 +424,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     $this->productProcessedManager = $product_processed_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->queueUtility = $queue_utility;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -408,7 +453,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $container->get('cache_tags.invalidator'),
       $container->get('alshaya_acm_product.product_processed_manager'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_acm_product.product_queue_utility')
+      $container->get('alshaya_acm_product.product_queue_utility'),
+      $container->get('module_handler')
     );
   }
 

@@ -5,12 +5,3 @@ dynamic_yield.settings_form:
     _title: 'Dynamic yield'
   requirements:
     _permission: 'administer dynamic yield'
-
-dynamic_yield.intelligent_tracking:
-  path: '/dyid'
-  defaults:
-    _title: 'Dynamic Yield Intelligent Tracking'
-    _controller: '\Drupal\dynamic_yield\Controller\DynamicYieldController::intelligentTracking'
-  methods: ['POST']
-  requirements:
-    _permission: 'access content'

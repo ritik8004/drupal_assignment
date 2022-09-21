@@ -1,0 +1,6 @@
+name: Alshaya RCS Handlebars
+type: module
+description: Alshaya RCS Implementation of Handlebars
+core_version_requirement: ^8 || ^9
+dependencies:
+  - rcs_handlebars:rcs_handlebars

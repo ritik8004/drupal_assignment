@@ -590,6 +590,38 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to COD mobile verification.
+  $strings['v17'] = [
+    'Enter the @otp_length-digit OTP code sent to @mobile_number' => [
+      'ar' => 'أدخل رمز التحقق @otp_length-digit المرسل إلى @mobile_number',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Change' => [
+      'ar' => 'تغيير',
+      'context' => 'cod_mobile_verification',
+    ],
+    'verify' => [
+      'ar' => 'تحقق',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Didn\'t receive the code?' => [
+      'ar' => 'لم تستلم الرمز؟',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Resend' => [
+      'ar' => 'إعادة إرسال',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Please update mobile number' => [
+      'ar' => 'يرجى تحديث رقم الهاتف',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Wrong OTP' => [
+      'ar' => 'رمز تحقق غير صحيح',
+      'context' => 'cod_mobile_verification',
+    ],
+  ];
+
   return $strings;
 }
 

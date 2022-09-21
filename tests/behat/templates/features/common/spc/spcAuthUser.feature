@@ -3,11 +3,10 @@ Feature: Test the My Account functionality
 
   Background:
     Given I am on "user/login"
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_new_registered_user_email}"
-    And I fill in "edit-pass" with "{spc_new_registered_user_password}"
+    And I wait for the page to load
+    And I login with "{spc_new_registered_user_email}" using custom password
     Then I press "edit-submit"
-    And I wait 10 seconds
+    And I wait for the page to load
     Then I should be on "/user" page
 
   Scenario: Authenticated user should be able to login into the system
@@ -20,7 +19,7 @@ Feature: Test the My Account functionality
 
   @address
   Scenario: As an authenticated user, I should be able to address to my address book
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks > ul.my-account-nav > li > a.my-account-address-book"
     And I wait 10 seconds
     And I wait for AJAX to finish
     Then I check the address-book form

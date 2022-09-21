@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
+use Drupal\alshaya_acm_product\DeliveryOptionsHelper;
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPLP;
 use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactPromotion;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,16 +34,30 @@ class AlgoliaController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * Delivery options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
+  /**
    * AlgoliaController constructor.
    *
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig $config_helper
    *   Algolia React Config Helper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module services.
+   * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
+   *   Delivery options helper service.
    */
-  public function __construct(AlshayaAlgoliaReactConfig $config_helper, ModuleHandlerInterface $module_handler) {
+  public function __construct(
+    AlshayaAlgoliaReactConfig $config_helper,
+    ModuleHandlerInterface $module_handler,
+    DeliveryOptionsHelper $delivery_options_helper
+  ) {
     $this->configHelper = $config_helper;
     $this->moduleHandler = $module_handler;
+    $this->deliveryOptionsHelper = $delivery_options_helper;
   }
 
   /**
@@ -52,6 +67,7 @@ class AlgoliaController extends ControllerBase {
     return new static(
       $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
       $container->get('module_handler'),
+      $container->get('alshaya_acm_product.delivery_options_helper'),
     );
   }
 
@@ -100,6 +116,15 @@ class AlgoliaController extends ControllerBase {
     $this->moduleHandler->alter('algolia_react_option_list_information', $query_type, $page_type, $page_sub_type);
 
     $config = $this->configHelper->getAlgoliaReactCommonConfig($page_type, $page_sub_type);
+
+    if (isset($config['search']['filters']['attr_delivery_ways'])) {
+      if (!$this->deliveryOptionsHelper->getExpressDeliveryStatus()) {
+        unset($config['search']['filters']['attr_delivery_ways']['facet_values']['express_day_delivery_available']);
+      }
+      if (!$this->deliveryOptionsHelper->getSameDayDeliveryStatus()) {
+        unset($config['search']['filters']['attr_delivery_ways']['facet_values']['same_day_delivery_available']);
+      }
+    }
 
     $settings = [];
     $settings['application_id'] = $config['commonAlgoliaSearch']['application_id'];

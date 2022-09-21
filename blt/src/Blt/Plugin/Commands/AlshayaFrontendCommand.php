@@ -416,7 +416,7 @@ class AlshayaFrontendCommand extends BltTasks {
     $processOutput = 0;
     // Github CI env push event check.
     // Only proceed if we are in Github CI.
-    if (getenv('GITHUB_ACTIONS') == 'true' && getenv('GITHUB_EVENT_NAME') == 'push') {
+    if (getenv('GITHUB_ACTIONS') == 'true') {
       $tasks = $this->taskExecStack();
       $tasks->stopOnFail();
 
@@ -576,6 +576,46 @@ class AlshayaFrontendCommand extends BltTasks {
       }
     }
 
+    $tasks->stopOnFail();
+    $result = $tasks->run();
+    return $result;
+  }
+
+  /**
+   * Pre-compile handlebarjs Template.
+   *
+   * @command alshayafe:handlebars-build
+   * @aliases handlebars-build, hbb
+   */
+  public function preCompileHandlebars() {
+    $docroot = $this->getConfigValue('docroot');
+
+    $tasks = $this->taskExecStack();
+
+    $finder = new Finder();
+    $finder->name('*.handlebars');
+    // Find handlebar templates in custom and brand folder.
+    $finder->in($docroot . '/modules/custom');
+    $finder->in($docroot . '/modules/brands');
+
+    // Execute pre-compile command in all dir.
+    foreach ($finder as $file) {
+      $handlebarFilePath = $file->getRealPath();
+      // Pre-compiled path.
+      $jsFilePath = str_replace(
+        ["/handlebars/", '.handlebars'],
+        ["/dist/", '.js'],
+        $handlebarFilePath
+      );
+      $path_arr = explode('/', $jsFilePath);
+      array_pop($path_arr);
+      // Create dist folder if does not exists and
+      // Pre-compile HandlebarsJs template.
+      $dist_dir = implode('/', $path_arr);
+      $tasks->exec("cd $docroot && mkdir -p $dist_dir &&
+        ./modules/custom/node_modules/.bin/handlebars $handlebarFilePath -f $jsFilePath -n window.rcsHandlebarsTemplates"
+      );
+    }
     $tasks->stopOnFail();
     $result = $tasks->run();
     return $result;

@@ -861,5 +861,10 @@ hello-member-become-member:
 
 megamenu-shop-by-filter:
   css:
-    theme: 
+    theme:
       css/conditional-sass/megamenu-shop-by-filter/megamenu-shop-by-filter.ltr.css: {}
+
+checkout-cod-mobile-verification:
+  css:
+    theme:
+      css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: {}

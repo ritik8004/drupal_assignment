@@ -29,11 +29,19 @@ function alshaya_add_to_bag_theme() {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_add_to_bag_page_attachments_alter(array &$page) {
+  // Skip the processing of add to bag for checkout and confirmation page.
+  if (in_array(\Drupal::routeMatch()->getRouteName(), [
+    'alshaya_spc.checkout',
+    'alshaya_spc.checkout.confirmation',
+  ])) {
+    return;
+  }
+
   $add_to_bag_feature_status = \Drupal::service('alshaya_add_to_bag.helper')->isAddToBagFeatureEnabled();
   $add_to_bag_settings = \Drupal::config('alshaya_add_to_bag.settings');
 
   $page['#attached']['drupalSettings']['add_to_bag']['display_addtobag'] = $add_to_bag_feature_status;
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $add_to_bag_settings->getCacheTags());
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $add_to_bag_settings->getCacheTags());
 
   // Allow other modules to update the feature status so all the required
   // libraries and settings will be available on the page but the main
@@ -75,30 +83,30 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   // Send the cart quantity options to be used while displaying quantity
   // dropdown. Adding the setting to global namespace.
   $page['#attached']['drupalSettings']['add_to_bag']['cart_quantity_options'] = _alshaya_acm_get_cart_quantity_options();
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:alshaya_acm.cart_config']);
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], ['config:alshaya_acm.cart_config']);
 
   // Get the screen width from where we want to show configurable boxes. Adding
   // the setting to the global namespace.
   $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $page['#attached']['drupalSettings']['show_configurable_boxes_after'] = (int) $display_settings->get('show_configurable_boxes_after');
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $display_settings->getCacheTags());
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $display_settings->getCacheTags());
 
   // Add vat text.
   $product_settings = \Drupal::config('alshaya_acm_product.settings');
   $page['#attached']['drupalSettings']['vat_text'] = $product_settings->get('vat_text');
   $page['#attached']['drupalSettings']['is_all_products_buyable'] = (bool) $product_settings->get('all_products_buyable');
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $product_settings->getCacheTags());
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $product_settings->getCacheTags());
 
   // Pass max sale quantity status and whether message show be shown.
   $alshaya_acm_settings = \Drupal::config('alshaya_acm.settings');
   $page['#attached']['drupalSettings']['add_to_bag']['max_sale_quantity_enabled'] = $alshaya_acm_settings->get('quantity_limit_enabled');
   $page['#attached']['drupalSettings']['add_to_bag']['max_sale_hide_message'] = $alshaya_acm_settings->get('hide_max_qty_limit_message');
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $alshaya_acm_settings->getCacheTags());
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_acm_settings->getCacheTags());
 
   // Pass config for showing/hiding quantity selector in configurable product
   // form.
   $page['#attached']['drupalSettings']['add_to_bag']['show_quantity'] = \Drupal::service('acq_sku.cart_form_helper')->showQuantity();
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:acq_sku.configurable_form_settings']);
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], ['config:acq_sku.configurable_form_settings']);
 }
 
 /**

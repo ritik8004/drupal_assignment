@@ -20,10 +20,6 @@
       .title-wrapper {
         text-transform: capitalize;
         color: $online-return-dark-txt;
-
-        span.rejected {
-          color: $online-return-status-red-label;
-        }
       }
     }
 
@@ -55,6 +51,7 @@
       .print-label-button {
         border-color: $online-return-print-cancel-border;
         color: $online-return-dark-txt;
+        padding-top: rem(14);
       }
     }
 
