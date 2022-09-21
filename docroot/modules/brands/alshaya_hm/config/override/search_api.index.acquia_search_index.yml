@@ -189,3 +189,43 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_skin_type:
+    label: 'Skin Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_skin_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_finish:
+    label: 'Finish'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_finish
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_coverage:
+    label: 'Coverage'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_coverage
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_spf:
+    label: 'Spf'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_spf
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
