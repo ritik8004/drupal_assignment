@@ -100,7 +100,7 @@
           }
 
           @include breakpoint($only-mobile) {
-            #{$left}: calc(50% - 4rem);
+            #{$left}: calc(50% - #{rem(64)});
           }
 
           @include breakpoint($only-tablet) {
