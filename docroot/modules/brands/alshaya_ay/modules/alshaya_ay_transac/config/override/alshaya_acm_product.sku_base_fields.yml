@@ -1,11 +1,4 @@
 fields:
-  color_family:
-    label: 'Color'
-    type: 'string'
-    cardinality: -1
-    index: 1
-    facet: 1
-    translatable: 0
   waist:
     label: 'Waist'
     cardinality: -1
