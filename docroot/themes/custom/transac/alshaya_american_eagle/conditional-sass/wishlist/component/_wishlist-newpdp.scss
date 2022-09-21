@@ -1,0 +1,21 @@
+@include breakpoint($only-mobile) {
+  body.wishlist-enabled {
+    &.magazine-layout-v2 {
+      .magv2-header:not(.magv2-pdp-sticky-header) {
+        .wishlist-button-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .wishlist-icon {
+            margin: 0;
+          }
+
+          &:not(.loading) {
+            border: rem(1) solid $magv2-icon-bg-border;
+          }
+        }
+      }
+    }
+  }
+}
