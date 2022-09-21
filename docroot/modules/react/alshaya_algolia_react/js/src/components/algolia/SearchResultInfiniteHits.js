@@ -4,7 +4,7 @@ import Teaser from '../teaser';
 import { removeLoader } from '../../utils';
 
 export default connectInfiniteHits(({
-  hits, hasMore, refineNext, pageNumber, pageType, children,
+  hits, hasMore, refineNext, pageNumber, pageType, children, indexName,
 }) => {
   // Create ref to get element after it gets rendered.
   const teaserRef = useRef();
@@ -39,6 +39,7 @@ export default connectInfiniteHits(({
               hit={hit}
               pageType={pageType}
               pageNumber={pageNumber}
+              indexName={indexName}
             />
           ))
           : (null)}

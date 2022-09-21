@@ -280,7 +280,7 @@ class AuraLoyaltyForm extends React.Component {
           )}
         {hasValue(points)
           && (
-          <div className="customer-points">
+          <div className={(!isFullyEnrolled && loyaltyCardLinkedToCart) ? 'customer-points not-you' : 'customer-points'}>
             <div className="aura-points-info">
               <div className="total-points">
                 { getStringMessage('checkout_you_have') }
@@ -297,16 +297,18 @@ class AuraLoyaltyForm extends React.Component {
             {/* If user is partially enrolled, we show him partially enrolled message. */}
             {!isFullyEnrolled && loyaltyCardLinkedToCart
               && (
-                <div className="partially-enrolled">
+                <>
                   <div className="sub-text">
                     <a onClick={() => this.removeCard()}>
                       {getStringMessage('not_you_question')}
                     </a>
                   </div>
-                  <div className="partially-enrolled-message">
-                    { getStringMessage('aura_partially_enrolled_message') }
+                  <div className="partially-enrolled">
+                    <div className="partially-enrolled-message">
+                      { getStringMessage('aura_partially_enrolled_message') }
+                    </div>
                   </div>
-                </div>
+                </>
               )}
             {/* If user is full enrolled, he is allowed to redeem points. */}
             {isFullyEnrolled

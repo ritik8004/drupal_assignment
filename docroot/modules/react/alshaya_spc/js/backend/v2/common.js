@@ -124,6 +124,8 @@ window.commerceBackend.setCartDataInStorage = (data) => {
     cartInfo,
     parseInt(drupalSettings.alshaya_spc.cart_storage_expiration, 10) * 60,
   );
+  // Remove 'user_cart_id' as cart_data localstorage is available.
+  Drupal.removeItemFromLocalStorage('user_cart_id');
 };
 
 /**
@@ -415,6 +417,14 @@ const getProcessedCartData = async (cartData) => {
     && hasValue(cartData.cart.extension_attributes.hfd_hold_confirmation_number)) {
     data.hfd_hold_confirmation_number = cartData
       .cart.extension_attributes.hfd_hold_confirmation_number;
+  }
+
+  // Check if COD payment mobile verification flag is present in cart extensions.
+  if (hasValue(cartData.cart.extension_attributes)
+    && typeof cartData
+      .cart.extension_attributes.mobile_number_verified !== 'undefined') {
+    data.cod_mobile_number_verified = cartData
+      .cart.extension_attributes.mobile_number_verified;
   }
 
   // Check if inter country transfer feature is enabled and have delivery date.
@@ -759,7 +769,16 @@ const associateCartToCustomer = async (guestCartId) => {
   StaticStorage.clear();
 
   // Reload cart.
-  await getCart(true);
+  const cartData = await getCart(true);
+  if (hasValue(cartData)
+    && hasValue(cartData.data)
+    && hasValue(cartData.data.cart)
+    && hasValue(cartData.data.cart.id)
+    && isUserAuthenticated()
+  ) {
+    // store authenticated user cart id in 'user_cart_id';
+    Drupal.addItemInLocalStorage('user_cart_id', cartData.data.cart.id);
+  }
 };
 
 /**

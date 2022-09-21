@@ -10,3 +10,6 @@ alshaya_rcs_main_menu.settings:
     menu_max_depth:
       type: integer
       label: 'Main menu maximum depth'
+    max_depth_to_load:
+      type: integer
+      label: 'Depth of categories to fetch from GraphQL API'

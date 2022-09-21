@@ -2245,6 +2245,25 @@ function alshaya_acm_product_get_delivery_options($sku) {
 }
 
 /**
+ * Implements hook_alshaya_acm_product_process_product_context_alter().
+ */
+function alshaya_acm_product_alshaya_acm_product_process_product_context_alter(EntityInterface $entity, array &$context) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  // Update the context based on the pdp layout.
+  $pdp_layout = $skuManager->getPdpLayout($entity);
+  if ($pdp_layout) {
+    $context[] = $pdp_layout;
+  }
+  // Add the pdp layout with modal.
+  $pdp_layout_modal = $skuManager->getPdpLayout($entity, 'modal');
+  if ($pdp_layout_modal) {
+    $context[] = $pdp_layout_modal;
+  }
+}
+
+/**
  * Implements hook_alshaya_acm_customer_recent_order_build_alter().
  */
 function alshaya_acm_product_alshaya_acm_customer_recent_order_build_alter(array &$build) {

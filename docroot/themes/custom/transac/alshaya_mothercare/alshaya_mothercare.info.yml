@@ -147,3 +147,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css: css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css
+
+  alshaya_white_label/checkout-cod-mobile-verification:
+    css:
+      theme:
+        css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css

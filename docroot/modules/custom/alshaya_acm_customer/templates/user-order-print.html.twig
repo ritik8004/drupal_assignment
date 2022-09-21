@@ -249,22 +249,22 @@
       {% endfor %}
     {% endif %}
 
-    <tr class="sub-total-row">
+    <tr class="sub-total-row total">
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td class="right--align">{{ "Sub total"|t }}</td>
-      <td class="blend">
+      <td class="blend order-detail-value">
         {{ order_details.sub_total }}
       </td>
       <td class="empty--cell">&nbsp;</td>
     </tr>
 
 		{% if order_details.discount is not empty %}
-      <tr class="sub-total-row">
+      <tr class="sub-total-row discount-row total">
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td class="right--align">{{ "Discount"|t }}</td>
-        <td class="blend">
+        <td class="blend order-detail-value">
 					{{ order_details.discount }}
         </td>
         <td class="empty--cell">&nbsp;</td>
@@ -272,48 +272,48 @@
 		{% endif %}
 
     {% if order_details.voucher_discount is not empty %}
-      <tr class="sub-total-row">
+      <tr class="sub-total-row total">
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td class="right--align">
           {{ order_details.voucher_discount_label }}
         </td>
-        <td class="blend">
+        <td class="blend order-detail-value">
 					{{ order_details.voucher_discount }}
         </td>
         <td class="empty--cell">&nbsp;</td>
       </tr>
 		{% endif %}
 
-    <tr class="delivery-charge-row">
+    <tr class="delivery-charge-row total">
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td class="right--align">{{ order_details.is_pudo_pickup ? "Collection Charge"|t : "Delivery charge"|t }}</td>
-      <td class="blend">
+      <td class="blend order-detail-value">
         {{ order_details.delivery_charge }}
       </td>
       <td class="empty--cell">&nbsp;</td>
     </tr>
 
     {% if order_details.surcharge %}
-      <tr class="surcharge-row collapse-row">
+      <tr class="surcharge-row collapse-row total">
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td class="right--align">{{ order_details.surcharge_label }}</td>
-        <td class="blend">
+        <td class="blend order-detail-value">
           {{ order_details.surcharge_print }}
         </td>
         <td class="empty--cell">&nbsp;</td>
       </tr>
     {% endif %}
 
-    <tr class="total-row">
+    <tr class="total-row total">
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td class="right--align">
         <div class="dark upcase">{{ "Order Total"|t }}</div>
       </td>
-      <td class="warm--white">
+      <td class="warm--white order-detail-value">
         <div class="dark">
           {{ order_details.order_total }}
         </div>
@@ -322,7 +322,7 @@
     </tr>
 
     {% if vat_text %}
-      <tr class="total-row vat-row">
+      <tr class="total-row vat-row total">
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td> </td>
@@ -362,7 +362,7 @@
         {% endif %}
       </td>
     {% endif %}
-    <td>
+    <td class="order__product--desc">
       <div class="dark">{{ product.name }}</div>
 
       {% for attribute in product.attributes %}

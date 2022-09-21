@@ -10,6 +10,18 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Re-save default category tid as per schema.
+ */
+function alshaya_super_category_update_9401() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_super_category.settings');
+  $default_parent = $config->get('default_category_tid');
+  $config->set('default_category_tid', $default_parent);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Added Super category logo fields to product category terms.
  */
 function alshaya_super_category_update_8007() {

@@ -28,7 +28,7 @@ class ReturnEligibilityMessage extends React.Component {
       returns,
     } = this.props;
 
-    if (!hasValue(orderId) || isReturnEligible === null) {
+    if (!hasValue(orderId) || isReturnEligible === null || !hasValue(returnExpiration)) {
       return null;
     }
 

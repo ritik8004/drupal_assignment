@@ -11,9 +11,7 @@ window.commerceBackend = window.commerceBackend || {};
    * @returns {Promise}
    *   Order details data.
    */
-  window.commerceBackend.getOrderDetailsData = function getOrderDetailsData() {
-    return new Promise(function (resolve) {
-      return resolve(drupalSettings.order);
-    });
+  window.commerceBackend.getOrderDetailsData = async function getOrderDetailsData() {
+    return drupalSettings.order;
   }
 })(drupalSettings);

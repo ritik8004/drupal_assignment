@@ -8,6 +8,7 @@ on:
       - uat
       - master
       - develop-hello-member
+      - develop-brand-rollout
   create:
 
 concurrency: deploy-${{ github.ref }}

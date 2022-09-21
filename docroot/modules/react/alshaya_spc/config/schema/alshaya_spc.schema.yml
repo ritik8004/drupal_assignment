@@ -8,6 +8,9 @@ alshaya_spc.settings:
     subtotal_after_discount:
       type: boolean
       label: 'To show/hide subtotal after discount on cart/checkout page.'
+    cod_mobile_verification:
+      type: boolean
+      label: 'Turn on / off cash on delivery payment method mobile otp verification'
 
 alshaya_spc.click_n_collect:
   type: config_object

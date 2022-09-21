@@ -31,6 +31,7 @@
         align-items: center;
         margin-top: rem(30);
         justify-content: space-between;
+        width: 100%;
 
         @include breakpoint($only-mobile) {
           margin-#{$right}: rem(3);
@@ -51,6 +52,8 @@
     .aura-earned-points {
       padding-#{$left}: rem(48);
       margin-top: rem(10);
+      display: flex;
+      align-items: center;
 
       .points-earned-message {
         font-size: rem(12);
@@ -70,6 +73,102 @@
 
         b {
           font-family: $aura-bold;
+        }
+      }
+
+      .tooltip-anchor {
+        margin-#{$left}: rem(8);
+
+        &::before {
+          background: $aura-order-confirmation-points-question-bg;
+          border: none;
+          color: $aura-order-confirmation-points-question-txt;
+        }
+
+        .tooltip-box {
+          font-family: $aura-regular;
+          background: $aura-order-confirmation-points-tooltip-bg;
+          box-shadow: 0 rem(2) rem(20) 0 rgba(0, 0, 0, 0.24);
+          border: none;
+          color: $aura-order-confirmation-points-tooltip-txt;
+          bottom: rem(32);
+          #{$left}: 50%;
+          transform: translateX(-50%);
+          z-index: 1;
+
+          html[lang=ar] & {
+            transform: translateX(50%);
+          }
+
+          @include breakpoint($only-mobile) {
+            #{$left}: calc(50% - #{rem(64)});
+          }
+
+          @include breakpoint($only-tablet) {
+            #{$left}: -50%;
+          }
+
+          &::before,
+          &::after {
+            border-top-color: $aura-order-confirmation-points-tooltip-bg;
+
+            @include breakpoint($only-tablet) {
+              margin-#{$left}: rem(6);
+            }
+
+            @include breakpoint($only-mobile) {
+              margin-#{$left}: rem(50);
+            }
+
+            html[lang=ar] & {
+              left: 10%;
+
+              @include breakpoint($tablet) {
+                left: 40%;
+              }
+
+              @include breakpoint($desktop) {
+                left: 50%;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .loyalty-option {
+      &.hello_member {
+        .tooltip-anchor {
+          margin-#{$left}: rem(4);
+
+          &::before {
+            color: $hello-member-loyalty-aura-icon;
+            font-size: rem(16);
+            top: rem(3);
+            position: relative;
+          }
+        }
+      }
+
+      .customer-points {
+        .sub-text {
+          width: 15%;
+          text-align: center;
+          cursor: pointer;
+
+          @include breakpoint($upto-desktop) {
+            width: 20%;
+          }
+
+          a {
+            color: $aura-spc-checkout-highlight;
+            text-decoration: underline;
+          }
+        }
+
+        .partially-enrolled {
+          width: 100%;
+          padding-top: rem(20);
         }
       }
     }
@@ -157,87 +256,57 @@
         }
       }
     }
+
+    .customer-points {
+      .aura-points-info {
+        width: 100%;
+      }
+    }
   }
 
-  .loyalty-options-registered,
-  .loyalty-options-guest {
-    .aura-earned-points {
+  .loyalty-options-registered {
+    .customer-points {
+      .aura-points-info {
+        width: 100%;
+      }
+
+      .aura-redeem-points {
+        .redeem-msg {
+          @include breakpoint($upto-desktop) {
+            white-space: break-spaces;
+          }
+        }
+      }
+    }
+
+    .not-you {
       display: flex;
+      flex-flow: row wrap;
       align-items: center;
+      justify-content: space-between;
 
-      .tooltip-anchor {
-        margin-#{$left}: rem(8);
+      .aura-points-info {
+        width: 80%;
 
-        &::before {
-          background: $aura-order-confirmation-points-question-bg;
-          border: none;
-          color: $aura-order-confirmation-points-question-txt;
+        @include breakpoint($upto-desktop) {
+          width: 74;
         }
       }
     }
+  }
 
-    .loyalty-option {
-      &.hello_member {
-        .tooltip-anchor {
-          margin-#{$left}: rem(4);
+  .loyalty-options-guest {
+    .not-you {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: space-between;
 
-          &::before {
-            color: $hello-member-loyalty-aura-icon;
-            font-size: rem(16);
-            top: rem(3);
-            position: relative;
-          }
-        }
-      }
-    }
+      .aura-points-info {
+        width: 80%;
 
-    .tooltip-anchor {
-      .tooltip-box {
-        font-family: $aura-regular;
-        background: $aura-order-confirmation-points-tooltip-bg;
-        box-shadow: 0 rem(2) rem(20) 0 rgba(0, 0, 0, 0.24);
-        border: none;
-        color: $aura-order-confirmation-points-tooltip-txt;
-        bottom: rem(32);
-        #{$left}: 50%;
-        transform: translateX(-50%);
-        z-index: 1;
-
-        html[lang=ar] & {
-          transform: translateX(50%);
-        }
-
-        @include breakpoint($only-mobile) {
-          #{$left}: calc(50% - 4rem);
-        }
-
-        @include breakpoint($only-tablet) {
-          #{$left}: -50%;
-        }
-
-        &::before,
-        &::after {
-          border-top-color: $aura-order-confirmation-points-tooltip-bg;
-
-          @include breakpoint($only-tablet) {
-            margin-#{$left}: rem(6);
-          }
-
-          @include breakpoint($only-mobile) {
-            margin-#{$left}: rem(50);
-          }
-
-          html[lang=ar] & {
-            left: 10%;
-
-            @include breakpoint($tablet) {
-              left: 40%;
-            }
-
-            @include breakpoint($desktop) {
-              left: 50%;
-            }
-          }
+        @include breakpoint($upto-desktop) {
+          width: 74%;
         }
       }
     }

@@ -55,7 +55,12 @@ class AuraBlockViewBuilder implements RenderCallbackInterface {
       '#title' => t('edit account details'),
       '#url' => Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]),
       '#attributes' => [
-        'class' => ['button', 'button-wide', 'edit-account'],
+        'class' => [
+          'button',
+          'button-wide',
+          'edit-account',
+          'edit-account-btn-button',
+        ],
       ],
     ];
 

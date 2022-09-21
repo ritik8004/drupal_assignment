@@ -51,7 +51,7 @@
             <{{@menu_item.tag}} class="menu__link menu--one__link {{ class }} {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" {{{ menu_item.tag_attr }}}>{{ menu_item.name }}</{{@menu_item.tag}}>
           {{/if}}
         </div>
-        {{#if menu_item.children }}
+        {{#if menu_item.children.length }}
           {{> main_menu_level2_partial name=menu_item.name menu_items=menu_item.children level_class=level_class level1_highlights=menu_item.highlight_paragraphs}}
         {{/if}}
       </li>
