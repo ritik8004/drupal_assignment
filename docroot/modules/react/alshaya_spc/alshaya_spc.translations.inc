@@ -625,7 +625,7 @@ function _alshaya_spc_translations() {
   // Strings related to payment method logos block on cart page.
   $strings['v18'] = [
     'Checkout quickly and securely with' => [
-      'ar' => 'الخروج بسرعة وأمان مع',
+      'ar' => 'دفع سريع وآمن مع',
       'context' => 'cart_payment_logos',
     ],
   ];
