@@ -306,7 +306,7 @@
         width: 80%;
 
         @include breakpoint($upto-desktop) {
-          width: 74;
+          width: 74%;
         }
       }
     }
