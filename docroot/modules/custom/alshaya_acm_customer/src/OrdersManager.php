@@ -445,7 +445,7 @@ class OrdersManager {
     if (!empty($result)) {
       $count = $result['total_count'] ?? 0;
       if (empty($count)) {
-        return NULL;
+        return [];
       }
     }
 
