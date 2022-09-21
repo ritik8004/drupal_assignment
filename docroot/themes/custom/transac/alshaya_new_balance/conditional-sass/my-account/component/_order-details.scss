@@ -1,0 +1,9 @@
+#block-userrecentorders {
+  h2 {
+    &.subtitle {
+      border-bottom: rem(1) solid $user_acc_details_border;
+      font-size: rem(14);
+      text-transform: capitalize;
+    }
+  }
+}
