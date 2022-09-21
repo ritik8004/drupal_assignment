@@ -199,16 +199,6 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_is_external:
-    label: 'External'
-    datasource_id: entity:node
-    property_path: field_skus:entity:attr_is_external
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
   attr_finish:
     label: 'Finish'
     datasource_id: entity:node
@@ -233,16 +223,6 @@ field_settings:
     label: 'Spf'
     datasource_id: entity:node
     property_path: field_skus:entity:attr_spf
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
-  attr_shade_number:
-    label: 'Shade number'
-    datasource_id: entity:node
-    property_path: field_skus:entity:attr_shade_number
     type: string
     dependencies:
       config:
