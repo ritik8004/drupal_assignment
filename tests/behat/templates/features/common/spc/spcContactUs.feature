@@ -87,7 +87,6 @@ Feature: Verify the Contact Us page on the site as a guest user
     Then I should see an "#select2-edit-reason2-container" element
     And I select "missing_items" from "#edit-reason1" select2 field
     And I fill in "order_number" with "140090"
-#    And I fill in "edit-missing-items" with "missing-items-list"
     And I fill in "message" with "Client feedback"
     Then I click on "#edit-submit" element
     And I wait for the page to load
@@ -107,7 +106,6 @@ Feature: Verify the Contact Us page on the site as a guest user
     Then I should see an "#select2-edit-reason2-container" element
     And I select "exchange_refund_policy" from "#edit-reason4" select2 field
     And I fill in "order_number" with "140090"
-#    And I fill in "edit-missing-items" with "missing-items-list"
     And I fill in "message" with "Client feedback"
     Then I click on "#edit-submit" element
     And I wait for the page to load
@@ -243,5 +241,3 @@ Feature: Verify the Contact Us page on the site as a guest user
     Then I click on "#edit-submit" element
     And I wait for the page to load
     Then I should see a ".webform-confirmation__message" element on page
-
-
