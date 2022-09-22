@@ -4,6 +4,13 @@ header {
   }
 
   .region__header {
+    @include breakpoint($only-mobile) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
     @include breakpoint($desktop) {
       display: flex;
       width: 100%;
@@ -278,10 +285,8 @@ header {
     @include breakpoint($only-mobile) {
       background-size: auto;
       #{$left}: rem(-3);
-      top: rem(10);
 
       html[lang=ar] & {
-        top: rem(11);
         right: rem(-7);
         margin-top: 0;
       }
