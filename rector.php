@@ -18,6 +18,7 @@ use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
 use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
+use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
 use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\Set\ValueObject\LevelSetList;
@@ -50,5 +51,6 @@ return static function (RectorConfig $rectorConfig): void {
     MixedTypeRector::class,
     ThisCallOnStaticMethodToStaticCallRector::class,
     JsonThrowOnErrorRector::class,
+    ChangeSwitchToMatchRector::class,
   ]);
 };
