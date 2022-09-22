@@ -80,9 +80,9 @@ class MyBenefitsPage extends React.Component {
       return null;
     }
 
-    let qrCodeTitle = getStringMessage('offer_id_title');
+    let qrCodeTitle = getStringMessage('benefit_id_title');
     if (drupalSettings.helloMemberBenefits.type === 'coupon') {
-      qrCodeTitle = getStringMessage('coupon_id_title');
+      qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
     return (
