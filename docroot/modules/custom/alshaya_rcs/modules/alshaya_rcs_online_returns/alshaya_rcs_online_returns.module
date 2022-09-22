@@ -39,13 +39,74 @@ function alshaya_rcs_online_returns_alshaya_rcs_product_query_fields_alter(array
 }
 
 /**
+ * Implements hook_alshaya_rcs_product_recent_orders_fields_alter().
+ */
+function alshaya_rcs_online_returns_alshaya_rcs_product_recent_orders_fields_alter(array &$fields) {
+  array_push(
+    $fields['items'],
+    'is_returnable',
+  );
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'is_returnable',
+  );
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_recent_orders_fields_alter().
+ */
+function alshaya_rcs_online_returns_alshaya_rcs_product_order_details_fields_alter(array &$fields) {
+  array_push(
+    $fields['items'],
+    'is_returnable',
+  );
+  $fields['items']['gtm_attributes'] = [
+    'id',
+    'name',
+    'variant',
+    'price',
+    'brand',
+    'category',
+    'dimension2',
+    'dimension3',
+    'dimension4',
+  ];
+
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'is_returnable',
+  );
+}
+
+/**
  * Implements hook_library_info_alter().
  */
 function alshaya_rcs_online_returns_library_info_alter(&$libraries, $extension) {
+  /** @var \Drupal\Core\Extension\ExtensionPathResolver $extension_path_resolver*/
+  $extension_path_resolver = \Drupal::service('extension.path.resolver');
+  $self_module_path = $extension_path_resolver->getPath('module', 'alshaya_rcs_online_returns');
+
   if ($extension === 'alshaya_acm_product' && isset($libraries['product_utility'])) {
     $libraries['product_utility']['dependencies'] = array_merge(
       ['alshaya_rcs_online_returns/product_utility'],
       $libraries['product_utility']['dependencies'] ?? [],
     );
+  }
+
+  if ($extension === 'alshaya_online_returns' && isset($libraries['alshaya_online_returns_util'])) {
+    $options = $libraries['alshaya_online_returns_util']['js']['js/assets/alshaya_online_returns_util_v2.js'];
+    unset($libraries['alshaya_online_returns_util']['js']['js/assets/alshaya_online_returns_util_v2.js']);
+    $libraries['alshaya_online_returns_util']['js']["/$self_module_path/js/alshaya_online_returns_util_rcs.js"] = $options;
+    $libraries['alshaya_online_returns_util']['dependencies'][] = 'rcs_magento_placeholders/rcs_magento_placeholders';
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_rcs_online_returns_page_attachments(array &$page) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'alshaya_online_returns.return_request') {
+    _alshaya_rcs_product_get_product_image_config($page);
   }
 }

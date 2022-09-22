@@ -13,7 +13,7 @@ import { getOrderDetails } from './online_returns_util';
  * @returns {Object}
  *   Error in case of missing data else the processed data.
  */
-const prepareReturnRequestData = (data) => {
+const prepareReturnRequestData = async (data) => {
   if (!hasValue(data)) {
     logger.error('Error while trying to prepare data for creating return request. Data: @request_data', {
       '@request_data': JSON.stringify(data),
@@ -21,7 +21,7 @@ const prepareReturnRequestData = (data) => {
     return getErrorResponse('Request data is required.', 404);
   }
 
-  const orderDetails = getOrderDetails();
+  const orderDetails = await getOrderDetails();
 
   // Process request data in required format.
   const items = [];
@@ -58,7 +58,7 @@ const prepareReturnRequestData = (data) => {
 };
 
 const createReturnRequest = async (itemsSelected) => {
-  const data = prepareReturnRequestData(itemsSelected);
+  const data = await prepareReturnRequestData(itemsSelected);
 
   if (hasValue(data.error)) {
     logger.error('Error while trying to prepare return request data. Data: @data.', {
