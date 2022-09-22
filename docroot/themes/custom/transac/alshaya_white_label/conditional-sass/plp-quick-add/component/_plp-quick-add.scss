@@ -49,7 +49,7 @@
       display: block;
       position: absolute;
       width: 100%;
-      bottom: rem(112);
+      bottom: rem(64);
       z-index: 3;
 
       .addtobag-config-button,
@@ -59,10 +59,8 @@
         color: $plp-quick-add-txt;
         height: rem(55);
         border: 0;
-      }
-
-      .addtobag-button {
-        width: calc(100% - 2.5rem);
+        margin: rem(24) rem(8) 0;
+        width: calc(100% - #{rem(16)});
       }
     }
   }
