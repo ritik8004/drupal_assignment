@@ -271,7 +271,7 @@ body {
     &.slug-banner-processed {
       .block-alshaya-algolia-react-autocomplete {
         @include breakpoint($only-tablet) {
-          bottom:rem(-57);
+          bottom: rem(-57);
         }
       }
 
