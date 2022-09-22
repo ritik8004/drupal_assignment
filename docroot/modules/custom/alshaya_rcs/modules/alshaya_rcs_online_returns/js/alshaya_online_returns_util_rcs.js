@@ -1,4 +1,11 @@
+window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails || {};
+
 (function orderDetailsUtilsRcs(Drupal, drupalSettings) {
+
+  var staticStorage = {
+    orderDetailsStorage: {},
+  };
+
   /**
    * Utility function to get order details for return pages.
    *
@@ -25,6 +32,8 @@
         var productItems = allProductInfo[0].data.products.items;
         productItems.forEach(function eachProduct(product) {
           orderDetails['#products'].forEach(function eachOrderProduct(orderProduct) {
+            // Store in static storage so that it can be used later.
+            staticStorage.orderDetailsStorage[product.sku] = product;
             window.commerceBackend.setMediaData(product);
             orderProduct.image_data = {
               url: window.commerceBackend.getTeaserImage(product),
@@ -34,6 +43,7 @@
             orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product);
             // @todo Populate this value when working on big ticket items.
             orderProduct.is_big_ticket = null;
+            console.log(orderProduct);
           });
         });
         return orderDetails;
@@ -43,5 +53,38 @@
       orderDetails['#order_details'] = drupalSettings.order.order_details;
       return new Promise((resolve) => resolve(orderDetails));
     }
+  }
+
+  /**
+   * Get the order gtm info.
+   *
+   * @returns {Object}
+   *   Order GTM info.
+   */
+  window.commerceBackend.getOrderGtmInfo = function getOrderGtmInfo() {
+    if (Drupal.hasValue(drupalSettings.onlineReturns)
+      && Drupal.hasValue(drupalSettings.onlineReturns.returnInfo)
+      && Drupal.hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo)
+      && Drupal.hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'])) {
+      drupalSettings.onlineReturns.returnInfo.orderInfo['#products'].forEach((product) => {
+        var parentSku = Drupal.hasValue(product.type)
+          ? product.extension_attributes.parent_product_sku
+          : sku;
+        var sku = product.sku;
+        if (Drupal.hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'].products[sku])) {
+          drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'].products[sku] = staticStorage.orderDetailsStorage[parentSku].gtm_attributes;
+        }
+      });
+
+      return drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'];
+    }
+
+    // For order detail page, get the data from online returns drupal settings.
+    if (Drupal.hasValue(drupalSettings.onlineReturns)
+      && Drupal.hasValue(drupalSettings.onlineReturns.gtm_info)) {
+      return drupalSettings.onlineReturns.gtm_info;
+    }
+
+    return {};
   }
 })(Drupal, drupalSettings);

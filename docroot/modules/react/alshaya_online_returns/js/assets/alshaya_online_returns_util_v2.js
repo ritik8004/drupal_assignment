@@ -1,3 +1,5 @@
+window.commerceBackend = window.commerceBackend || {};
+
 (function onlineReturnsUtilsV2(Drupal, drupalSettings) {
   /**
    * Utility function to get order details for return pages.
@@ -19,5 +21,28 @@
 
       return resolve(orderDetails);
     });
+  };
+
+  /**
+   * Get the order gtm info.
+   *
+   * @returns {Object}
+   *   Order GTM info.
+   */
+  window.commerceBackend.getOrderGtmInfo = function getOrderGtmInfo() {
+    if (Drupal.hasValue(drupalSettings.onlineReturns)
+      && Drupal.hasValue(drupalSettings.onlineReturns.returnInfo)
+      && Drupal.hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo)
+      && Drupal.hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'])) {
+      return drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'];
+    }
+
+    // For order detail page, get the data from online returns drupal settings.
+    if (Drupal.hasValue(drupalSettings.onlineReturns)
+      && Drupal.hasValue(drupalSettings.onlineReturns.gtm_info)) {
+      return drupalSettings.onlineReturns.gtm_info;
+    }
+
+    return {};
   };
 }(Drupal, drupalSettings));

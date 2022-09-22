@@ -9,22 +9,7 @@ import { getPaymentDetails, getReturnReasons } from './return_request_util';
  * @return {Object}
  *   An object containing GTM info about the order.
  */
-function getOrderGtmInfo() {
-  if (hasValue(drupalSettings.onlineReturns)
-    && hasValue(drupalSettings.onlineReturns.returnInfo)
-    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo)
-    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'])) {
-    return drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'];
-  }
-
-  // For order detail page, get the data from onlineReturns drupal settings.
-  if (hasValue(drupalSettings.onlineReturns)
-    && hasValue(drupalSettings.onlineReturns.gtm_info)) {
-    return drupalSettings.onlineReturns.gtm_info;
-  }
-
-  return {};
-}
+const getOrderGtmInfo = () => window.commerceBackend.getOrderGtmInfo();
 
 /**
  * Util function to get the product return reason text.
