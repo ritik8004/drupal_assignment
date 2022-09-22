@@ -1,0 +1,124 @@
+.c-plp {
+  .c-products-list {
+    &.product-small {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: rem(342);
+        }
+
+        .alshaya_search_mainimage {
+          @include breakpoint($only-mobile) {
+            height: rem(234);
+          }
+        }
+      }
+    }
+
+    &.product-large {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: rem(408);
+        }
+      }
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: rem(342);
+          }
+        }
+      }
+    }
+  }
+
+  .c-products__item {
+    text-align: $left;
+
+    article {
+      &:hover {
+        &::after {
+          display: none;
+        }
+      }
+
+      .alshaya_search_slider {
+        display: none;
+
+        .slick-slider {
+          display: none;
+        }
+      }
+    }
+
+    .field--name-name {
+      padding: 0;
+      font-size: rem(16);
+      font-weight: 400;
+      margin-bottom: rem(5);
+      line-height: 1.4;
+    }
+
+    .price-type__wrapper,
+    .price-wrapper {
+      color: $plp_product_price_txt;
+    }
+  }
+
+  .region__content {
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar-productlist,
+    .block-facets-summary-blockfilter-bar {
+      .filter-list-label {
+        text-transform: capitalize;
+      }
+
+      ul {
+        li {
+          a {
+            span {
+              &.facet-item__value {
+                border-radius: rem(21) 0 0 rem(21);
+                text-transform: capitalize;
+                padding-top: 0.125rem;
+
+                html[lang=ar] & {
+                  border-radius: 0 rem(21) rem(21) 0;
+                }
+              }
+
+              &.js-facet-deactivate {
+                border-radius: 0 rem(21) rem(21) 0;
+
+                html[lang=ar] & {
+                  border-radius: rem(21) 0 0 rem(21);
+                }
+              }
+            }
+          }
+
+          &.clear-all {
+            a {
+              text-transform: uppercase;
+              font-size: rem(12);
+            }
+          }
+        }
+      }
+    }
+
+    .block-page-title-block {
+      &.mobile {
+        h1 {
+          @include breakpoint($only-mobile) {
+            padding: rem(22) 0;
+          }
+        }
+      }
+    }
+  }
+}

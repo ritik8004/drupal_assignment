@@ -1,0 +1,35 @@
+#alshaya-algolia-search {
+  .c-page-title {
+    font-size: rem(38);
+    font-family: $ay-heavy;
+    text-transform: unset;
+  }
+}
+
+#alshaya-algolia-plp,
+#alshaya-algolia-search {
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        text-transform: unset;
+      }
+    }
+  }
+
+  #sort_by {
+    li {
+      a {
+        font-size: rem(14);
+      }
+    }
+  }
+
+  .block-facet-blockcategory-facet-plp,
+  .block-facet-blockcategory-facet-search {
+    .c-accordion__title {
+      &.c-collapse__title {
+        text-transform: uppercase;
+      }
+    }
+  }
+}
