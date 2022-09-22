@@ -940,7 +940,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $this->cacheTags[] = 'block';
     $this->cacheTags[] = 'block_content_view';
     $results = array_map(function ($item) {
-      [$entity_type, $uuid] = explode(':', $item['plugin_id']);
+      [$entity_type, $uuid] = strpos($item['plugin_id'], ':')
+        ? explode(':', $item['plugin_id'])
+        : [$item['plugin_id'], ''];
       if ($entity_type == 'block_content') {
         $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
         $block = reset($block);
