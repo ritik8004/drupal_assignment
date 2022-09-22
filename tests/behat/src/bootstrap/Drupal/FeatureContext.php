@@ -1928,6 +1928,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iClickJqueryElementOnPage($element)
   {
+    $element = addslashes($element);
     $this->getSession()->executeScript("document.querySelector('$element').click();");
   }
 
@@ -3011,18 +3012,48 @@ JS;
    */
   public function iAmOnUserRegistrationPage()
   {
+    $this->visitPath('/user/register?behat=' . $this->getBehatSecretKey());
+  }
+
+  /**
+   * @When /^I am on user contact us page$/
+   */
+  public function iAmOnContactUsPage()
+  {
+    $this->visitPath('/contact?behat=' . $this->getBehatSecretKey());
+  }
+
+  private function getBehatSecretKey() {
+    static $key = NULL;
+
+    // Avoid file load everytime.
+    if (isset($key)) {
+      return $key;
+    }
+
     $filename = 'creds.json';
     $options = getopt('', ['profile:']);
     $profile_arr = explode('-', $options['profile']);
     $env = $profile_arr[2];
-    $secret_key = '';
+    $key = '';
     if (file_exists($filename)) {
       $creds = json_decode(file_get_contents($filename), TRUE);
-      $secret_key = $creds[$env]['secret_key'] ?? '';
+      $key = $creds[$env]['secret_key'] ?? '';
     }
-    $this->visitPath('/user/register?behat=' . $secret_key);
+
+    return $key;
   }
 
+  /**
+   * @Given /^I select "([^"]*)" from "([^"]*)" select2 field$/
+   */
+  public function iSelectFromSelect2field($value, $selector)
+  {
+    $session = $this->getSession();
+    $selector = addslashes($selector);
+    $value = addslashes($value);
+    $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
+}
   /**
    * @Given /^I verify the wishlist popup block if enabled and remove the cart item$/
    */

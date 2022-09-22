@@ -239,7 +239,7 @@ class CustomCommand extends BltTasks {
    * @description Setup local dev environment.
    */
   public function refreshLocal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_sites.yml'));
     $sites = $data['sites'];
     $list = implode(', ', array_keys($sites));
     if ($site == NULL) {
@@ -287,7 +287,7 @@ class CustomCommand extends BltTasks {
    * @description Reinstall local dev environment.
    */
   public function refreshLocalDrupal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_sites.yml'));
     $sites = $data['sites'];
     $list = implode(', ', array_keys($sites));
     if ($site == NULL) {

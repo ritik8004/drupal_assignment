@@ -24,6 +24,12 @@
       border: 1px solid $magv2-icon-bg-border;
       padding: 0.313rem;
     }
+
+    .back-button.back-to-home {
+      &::after {
+        background: url('#{$brand_theme_img_directory_path}/icons/home.svg') center no-repeat;
+      }
+    }
   }
 }
 

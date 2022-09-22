@@ -1,0 +1,9 @@
+#block-userrecentorders {
+  h2 {
+    &.subtitle {
+      font-weight: 700;
+      border-bottom: rem(1) solid $user_acc_details_border;
+      text-transform: uppercase;
+    }
+  }
+}

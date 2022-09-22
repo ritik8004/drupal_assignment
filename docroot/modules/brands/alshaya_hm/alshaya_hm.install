@@ -15,6 +15,25 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Add field for new attribute.
+ */
+function alshaya_hm_update_9402() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Invoke source config save for the override to be saved.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product', 'install');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set config to allow using block reference in paragraphs.
  */
 function alshaya_hm_update_9401() {

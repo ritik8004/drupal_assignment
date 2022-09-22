@@ -1,0 +1,50 @@
+.c-plp {
+  .region__content {
+    .view-header {
+      .search-count {
+        font-size: rem(14) !important;
+      }
+    }
+  }
+}
+
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search):not(.block-facet-blockcategory-facet-plp),
+.c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
+  ul {
+    padding: 0;
+
+    .facet-item {
+      padding: rem(16) rem(24) !important;
+
+      span {
+        font-size: rem(14);
+        line-height: rem(20);
+
+        &.facet-item__count {
+          font-size: rem(14);
+          line-height: rem(20);
+          color: $plp_facet_count_number;
+        }
+      }
+
+      &.is-active:not(.facet-item--expanded) {
+        &::after {
+          content: unset;
+        }
+      }
+
+      &:hover {
+        background: $plp_filter_active_item;
+      }
+    }
+  }
+}
+
+.filter-fixed-top {
+  .sticky-filter-wrapper {
+    .site-brand-home a {
+      height: rem(56);
+      width: rem(40);
+    }
+  }
+}

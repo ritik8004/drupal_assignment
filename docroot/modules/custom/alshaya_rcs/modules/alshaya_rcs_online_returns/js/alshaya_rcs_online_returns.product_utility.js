@@ -1,3 +1,5 @@
+window.commerceBackend = window.commerceBackend || {};
+
 (function rcsOnlineReturnsproductUtility() {
   /**
    * Checks if the product is returnable.
@@ -8,7 +10,7 @@
    * @returns {Boolean}
    *   Returns true if product is returnable, else false.
    */
-  function isProductReturnable(product) {
+  window.commerceBackend.isProductReturnable = function isProductReturnable(product) {
     return Drupal.hasValue(product.is_returnable)
       && !(parseInt(product.is_returnable, 10) !== 1);
   }

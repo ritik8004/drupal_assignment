@@ -15,10 +15,11 @@ function alshaya_ay_transac_install() {
     alshaya_i18n_save_translations($translations);
   }
 
-  // Enable side drawer panel for cart notification.
-  $config = \Drupal::configFactory()->getEditable('alshaya_spc.cart_notification');
-  $config->set('notification_drawer', TRUE);
-  $config->save();
+  // Set My account block
+  // to appear just above the mini cart block.
+  $config_factory = \Drupal::configFactory();
+  $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
+  $config_factory->getEditable('block.block.myaccounticonblock')->set('weight', $my_account_links - 2)->save();
 }
 
 /**
@@ -28,6 +29,16 @@ function alshaya_ay_transac_modules_installed($modules) {
   if (in_array('alshaya_algolia_react', $modules)) {
     $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
     $config->set('add_to_bag_hover', TRUE);
+    $config->save();
+  }
+  if (in_array('alshaya_add_to_bag', $modules)) {
+    $config = \Drupal::configFactory()->getEditable('alshaya_add_to_bag.settings');
+    $config->set('display_addtobag', TRUE);
+    $config->save();
+  }
+  if (in_array('alshaya_spc', $modules)) {
+    $config = \Drupal::configFactory()->getEditable('alshaya_spc.cart_notification');
+    $config->set('notification_drawer', TRUE);
     $config->save();
   }
 }

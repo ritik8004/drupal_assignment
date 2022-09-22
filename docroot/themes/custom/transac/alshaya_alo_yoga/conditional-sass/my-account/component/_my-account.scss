@@ -1,0 +1,9 @@
+.c-sidebar-first {
+  .my-account-nav {
+    a {
+      &.active {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+}

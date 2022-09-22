@@ -5,6 +5,6 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use Symfony\Component\Yaml\Yaml;
 
-$data = Yaml::parse(file_get_contents(__DIR__ . '/../../../blt/alshaya_local_sites.yml'));
+$data = Yaml::parse(file_get_contents(__DIR__ . '/../../../blt/alshaya_sites.yml'));
 
 print implode(' ', array_keys($data['sites']));

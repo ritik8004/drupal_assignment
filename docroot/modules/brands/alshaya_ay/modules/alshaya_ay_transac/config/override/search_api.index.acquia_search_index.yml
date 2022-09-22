@@ -1,0 +1,41 @@
+field_settings:
+  attr_waist:
+    label: 'Waist'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_waist
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_support:
+    label: 'Support'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_support
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_length:
+    label: 'Length'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_length
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_just_dropped:
+    label: 'Just dropped'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_just_dropped
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku

@@ -1,0 +1,38 @@
+.user__address--column {
+  font-size: rem(14);
+}
+
+.address {
+  &.default {
+    .address--data {
+      font-size: rem(14);
+    }
+  }
+
+  .address--content {
+    color: $address_text;
+  }
+
+  .address--label {
+    font-family: $ay-nova-bold;
+  }
+}
+
+.c-address-book {
+  .block-system {
+    @include breakpoint($only-mobile) {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    & > a {
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-top: rem(28);
+      }
+    }
+  }
+}

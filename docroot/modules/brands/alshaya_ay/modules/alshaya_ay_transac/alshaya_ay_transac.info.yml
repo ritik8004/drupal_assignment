@@ -6,5 +6,7 @@ core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_ay:alshaya_ay
+  - alshaya_color_split:alshaya_color_split
+  - alshaya_add_to_bag:alshaya_add_to_bag
 themes:
   - alshaya_alo_yoga

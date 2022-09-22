@@ -1,0 +1,71 @@
+.path--user {
+  .c-order-help {
+    .field--name-body {
+      p {
+        font-family: $ay-regular;
+        font-size: rem(16);
+
+        @include breakpoint($desktop) {
+          width: 26.5%;
+        }
+      }
+
+      li {
+        font-size: rem(14);
+
+        &:first-child {
+          @include breakpoint($desktop) {
+            text-align: center;
+          }
+        }
+      }
+
+      ul {
+        @include breakpoint($desktop) {
+          width: 68%;
+        }
+      }
+    }
+  }
+}
+
+.user-page {
+  .change-pwd-form {
+    .form-submit {
+      @include primaryBtn(true);
+    }
+  }
+
+  .user-form {
+    .form-text,
+    .form-email,
+    .form-tel {
+      font-size: rem(14);
+    }
+
+    .form-type-textfield {
+      label {
+        &:not(.error) {
+          font-size: rem(14);
+        }
+      }
+    }
+
+    label {
+      &.form-required {
+        &:not(.error) {
+          font-size: rem(14);
+        }
+      }
+    }
+
+    .mobile-number-field {
+      .mobile-input--wrapper {
+        .prefix {
+          font-size: rem(14);
+          color: $user_field_link;
+        }
+      }
+    }
+  }
+}
