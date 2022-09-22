@@ -195,3 +195,12 @@ function alshaya_online_returns_alshaya_spc_cart_build_alter(array &$build) {
   // Attach the theming library.
   $build['#attached']['library'][] = 'alshaya_white_label/online-returns';
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_online_returns_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'alshaya_spc' && isset($libraries['order_details'])) {
+    $libraries['order_details']['dependencies'][] = 'alshaya_online_returns/alshaya_online_returns_util';
+  }
+}
