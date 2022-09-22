@@ -26,6 +26,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       vouchers: [],
       Offers: [],
       isAnonymous: true,
+      isVoucherRemoved: false,
     };
   }
 
@@ -40,18 +41,30 @@ class HelloMemberCartOffersVouchers extends React.Component {
   handleErrorsOnBenefitsCartPopup = async (e) => {
     const data = e.detail.data();
     // Handle errors from bonus voucher section.
+    const vouchers = document.getElementsByName('vouchersBonus[]');
     if (document.getElementById('voucher-err-msg').innerHTML !== ''
       && typeof data.totals.hmAppliedVoucherCodes === 'undefined') {
       document.getElementById('voucher-err-msg').innerHTML = '';
-      const vouchers = document.getElementsByName('vouchersBonus[]');
       resetBenefitOptions(vouchers, 'benefit_voucher', 'submit');
-    }
-    // Handle errors from offer section.
-    if (document.getElementById('offer-err-msg').innerHTML !== ''
+    } else if (data.totals.isHmAppliedVoucherRemoved) {
+      // Unset all coupon vouchers if reached to max limit.
+      resetBenefitOptions(vouchers, 'benefit_voucher', 'submit');
+      document.getElementById('offer-err-msg').innerHTML = Drupal.t('You have reached the maximum amount of added discounts.', { context: 'hello_member' });
+      this.setState({
+        isVoucherRemoved: true,
+      });
+    } else if (document.getElementById('offer-err-msg').innerHTML !== ''
       && typeof data.totals.applied_hm_offer_code === 'undefined') {
-      document.getElementById('offer-err-msg').innerHTML = '';
+      // Handle errors from offer section.
+      const { isVoucherRemoved } = this.state;
       const offers = document.getElementsByName('radios');
-      resetBenefitOptions(offers, 'benefit_offer', 'submit');
+      document.getElementById('offer-err-msg').innerHTML = '';
+      if (!isVoucherRemoved) {
+        resetBenefitOptions(offers, 'benefit_offer', 'submit');
+        this.setState({
+          isVoucherRemoved: false,
+        });
+      }
     }
   };
 
@@ -229,7 +242,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
         </span>
       );
     }
-
 
     return (
       <>
