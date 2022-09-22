@@ -9,12 +9,9 @@
  * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
  */
 function alshaya_tamara_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
-  $tamaraApiConfig = \Drupal::service('alshaya_tamara.api_helper')->getTamaraApiConfig();
-
-  // Return false if `is_active` is set to false or not set.
-  if (!isset($tamaraApiConfig['is_active'])
-    || !((bool) $tamaraApiConfig['is_active'])) {
-    return FALSE;
+  // Return if the Tamara payment method is not enabled.
+  if (!\Drupal::service('alshaya_tamara.helper')->isTamaraEnabled($build)) {
+    return;
   }
 
   // Attach the tamara library.
