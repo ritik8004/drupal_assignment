@@ -5,6 +5,3 @@ alshaya_xb.settings:
     globale_url:
       type: string
       label: 'Global-e URL'
-    globale_store_code_instance:
-      type: string
-      label: 'Global-e Store Code Instance URL'

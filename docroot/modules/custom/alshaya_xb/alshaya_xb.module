@@ -36,11 +36,10 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
   $ge_store_code = 'row_' . $language;
   $config = \Drupal::config('alshaya_xb.settings');
   $ge_js_src = $config->get('globale_url') ?? '';
-  $ge_store_code_instance = $config->get('globale_store_code_instance') ?? '';
 
   $js = "
      var geStoreCode = '$ge_store_code';
-     var geStoreCodeInstance = '$ge_store_code_instance';
+     var geStoreCodeInstance = document.location.hostname;
      (function () {
        var s = document.createElement('script');
        s.type = 'text/javascript';
