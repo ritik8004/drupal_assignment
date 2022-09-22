@@ -18,6 +18,32 @@ use Drupal\block\Entity\Block;
  * Add field for new attribute.
  */
 function alshaya_hm_update_9402() {
+
+  $strings = [
+    'Finish' => [
+      'en' => 'Finish',
+      'ar' => 'اللمسة النهائية',
+    ],
+    'SPF' => [
+      'en' => 'SPF',
+      'ar' => 'درجة الوقاية من الشمس',
+    ],
+    'Skin Type' => [
+      'en' => 'Skin Type',
+      'ar' => 'نوع البشرة',
+    ],
+    'Coverage' => [
+      'en' => 'Coverage',
+      'ar' => 'التغطية',
+    ],
+    'Shade Number' => [
+      'en' => 'Shade Number',
+      'ar' => 'رقم اللون',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_acm_product.sku_base_fields'],
