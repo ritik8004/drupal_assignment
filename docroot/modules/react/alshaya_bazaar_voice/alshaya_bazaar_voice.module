@@ -243,8 +243,6 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $parent_sku = NULL;
-
   // Return if bazaarvoice disabled in my account.
   if ($basic_configs['myaccount_rating_reviews']) {
     return;
@@ -254,6 +252,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
     $build['recent_order'][$key]['#order']['bazaarvoice'] = TRUE;
     foreach ($build['recent_order'][$key]['#order']['items'] as $item_key => $item) {
       $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
+      $parent_sku = NULL;
       if (isset($item['extension_attributes']['parent_product_sku'])&& $item['product_type'] === 'configurable') {
         $parent_sku = $item['extension_attributes']['parent_product_sku'];
       }
@@ -284,14 +283,13 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $parent_sku = NULL;
-
   // Return if bazaarvoice disabled in my account.
   if ($basic_configs['myaccount_rating_reviews']) {
     return;
   }
   $bazaarvoiceSettings = [];
   foreach ($order['items'] as $item) {
+    $parent_sku = NULL;
     if (isset($item['extension_attributes']['parent_product_sku'])&& $item['product_type'] === 'configurable') {
       $parent_sku = $item['extension_attributes']['parent_product_sku'];
     }
@@ -303,6 +301,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
     $attachments = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
     $build['#attached'] = array_merge_recursive($build['#attached'] ?? [], $attachments);
     foreach ($build['#products'] as $key => $item) {
+      $parent_sku = NULL;
       if (isset($item['extension_attributes']['parent_product_sku'])&& $item['product_type'] === 'configurable') {
         $parent_sku = $item['extension_attributes']['parent_product_sku'];
       }
