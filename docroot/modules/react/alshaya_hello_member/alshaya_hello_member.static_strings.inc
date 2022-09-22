@@ -120,15 +120,11 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'member_id_title',
-      'value' => t('Membership Id QR Code', [], ['context' => 'hello_member']),
+      'value' => t('Your Member ID', [], ['context' => 'hello_member']),
     ],
     [
-      'key' => 'coupon_id_title',
-      'value' => t('Coupon QR Code', [], ['context' => 'hello_member']),
-    ],
-    [
-      'key' => 'offer_id_title',
-      'value' => t('Offer QR Code', [], ['context' => 'hello_member']),
+      'key' => 'benefit_id_title',
+      'value' => t('Your Benefit', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'benefit_expire_no_date',
