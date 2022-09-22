@@ -247,8 +247,8 @@ class AdvancedPageResource extends ResourceBase {
       }
     }
 
-    if ($node->get('field_use_as_department_page')->value == 1) {
-      $term = $node->get('field_product_category')->referencedEntities()[0];
+    if ($node->get('field_use_as_department_page')->getString()) {
+      $term = $node->get('field_product_category')->referencedEntities()[0] ?? NULL;
       if ($term instanceof TermInterface) {
         $current_language = $this->mobileAppUtility->currentLanguage();
         $term = $term->hasTranslation($current_language) ? $term->getTranslation($current_language) : $term;
