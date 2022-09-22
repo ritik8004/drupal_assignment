@@ -1,0 +1,20 @@
+.spc-checkout-section-title {
+  font-size: rem(18);
+  font-family: $ay-heavy;
+  text-transform: uppercase;
+
+  @include breakpoint($only-mobile) {
+    background-color: $spc_promo_code_block_mob_bg;
+    line-height: 2.875;
+    text-align: left;
+    padding-left: rem(16);
+    font-size: rem(14);
+  }
+
+  span {
+    &:nth-child(2) {
+      font-family: $ay-regular;
+      font-weight: 500;
+    }
+  }
+}

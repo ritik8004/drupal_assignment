@@ -1,0 +1,18 @@
+.spc-product-price {
+  font-size: rem(16);
+  font-family: $ay-heavy;
+}
+
+.spc-order-summary-block {
+  @include breakpoint($only-mobile) {
+    .block-content {
+      .actions {
+        background-color: $spc_promo_code_block_mob_header_bg;
+      }
+    }
+
+    .totals {
+      background-color: $spc_promo_code_block_mob_header_bg;
+    }
+  }
+}

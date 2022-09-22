@@ -1,0 +1,18 @@
+.alias--cart,
+.alias--checkout,
+.alias--checkout-confirmation {
+  .spc-main,
+  .spc-pre-content,
+  .spc-post-content,
+  .spc-footer {
+    @include breakpoint($desktop) {
+      max-width: rem(1236);
+    }
+  }
+
+  .page-standard {
+    &:not(.l-two--sf) {
+      background-color: $spc_checkout_page_bg;
+    }
+  }
+}

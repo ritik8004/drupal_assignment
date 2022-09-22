@@ -16,7 +16,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_alo_yoga/fonts
   font-family: 'Arquitecta Bold';
   src:
     url('#{$base_theme_fonts_directory_path}/Arquitecta-Bold.woff2') format("woff2"),
-    url('#{$base_theme_fonts_directory_path}/Arquitecta-Regular.woff') format("woff");
+    url('#{$base_theme_fonts_directory_path}/Arquitecta-Bold.woff') format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
