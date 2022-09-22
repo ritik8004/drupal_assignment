@@ -1,6 +1,0 @@
-name: Alshaya RCS Super Category
-type: module
-core_version_requirement: ^8 || ^9
-description: Alshaya RCS implementation of Alshaya Super Category feature.
-dependencies:
-  - alshaya_super_category:alshaya_super_category
