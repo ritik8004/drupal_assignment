@@ -83,6 +83,11 @@ class CartData {
       return self::$selfReference;
     }
 
+    // Basic check to confirm required data is available.
+    if (empty($data) || empty($data['products']) || empty($data['cart'])) {
+      throw new \InvalidArgumentException();
+    }
+
     $items = [];
 
     foreach ($data['products'] ?? [] as $product) {
