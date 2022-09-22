@@ -362,7 +362,7 @@ class AlshayaYamlProcess {
 
     // Set the MinkExtension base_url to current site's base url.
     if (isset($variables['variables']['url_base_uri'])) {
-      $yaml['extensions']['Behat\MinkExtension']['base_url'] = $variables['variables']['url_base_uri'];
+      $yaml['extensions']['Drupal\MinkExtension']['base_url'] = $variables['variables']['url_base_uri'];
     }
 
     // Setting the ScreenshotExtension configuration to capture the failed screenshots.
@@ -375,11 +375,11 @@ class AlshayaYamlProcess {
     // Running tags on test executions
     $tags = '';
     if ($viewport == 'mobile') {
-      $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = ["--window-size=375,667"];
+      $yaml['extensions']['Drupal\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = ["--window-size=375,667"];
       $tags = "~@desktop";
     }
     else {
-      $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = ["--window-size=1440,960"];
+      $yaml['extensions']['Drupal\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = ["--window-size=1440,960"];
       $tags = "~@mobile";
     }
 

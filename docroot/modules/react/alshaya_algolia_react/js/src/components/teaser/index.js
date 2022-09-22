@@ -57,7 +57,7 @@ const Teaser = ({
       }
     }
   }
-  let overallRating = (hit.attr_bv_average_overall_rating !== undefined) ? hit.attr_bv_average_overall_rating : '';
+  let overallRating = (Drupal.hasValue(hit.attr_bv_average_overall_rating)) ? hit.attr_bv_average_overall_rating : '';
   if (pageType === 'plp' && productListIndexStatus()) {
     overallRating = overallRating[currentLanguage];
   }
@@ -72,7 +72,7 @@ const Teaser = ({
     if (pageType === 'plp'
       && productListIndexStatus()
       && value !== null) {
-      if (value[currentLanguage] !== undefined) {
+      if (Drupal.hasValue(value[currentLanguage])) {
         attribute[key] = value[currentLanguage];
       } else {
         // If the value for current language code does not exist
@@ -135,7 +135,7 @@ const Teaser = ({
     teaserClass = `${teaserClass} product-element-alignment`;
   }
 
-  const showRating = (hit.attr_bv_total_review_count !== undefined
+  const showRating = (Drupal.hasValue(hit.attr_bv_total_review_count)
     && hit.attr_bv_total_review_count > 0
     && showReviewsRating !== undefined
     && showReviewsRating === 1
@@ -229,7 +229,11 @@ const Teaser = ({
                 </ul>
               </div>
               )}
-            <ConditionalView condition={showBrandName && attribute.attr_brand_name !== undefined}>
+            <ConditionalView condition={
+                showBrandName
+                && Drupal.hasValue(attribute.attr_brand_name)
+              }
+            >
               <div className="listing-brand-name">
                 {attribute.attr_brand_name}
               </div>
@@ -274,7 +278,7 @@ const Teaser = ({
           <ConditionalView condition={
               isExpressDeliveryEnabled()
               && checkExpressDeliveryStatus()
-              && hit.attr_express_delivery !== undefined
+              && Drupal.hasValue(hit.attr_express_delivery)
               && hit.attr_express_delivery[0] === '1'
             }
           >
@@ -284,7 +288,7 @@ const Teaser = ({
               isExpressDeliveryEnabled()
               && checkExpressDeliveryStatus()
               && pageType === 'plp'
-              && hit.attr_express_delivery !== undefined
+              && Drupal.hasValue(hit.attr_express_delivery)
               && hit.attr_express_delivery[currentLanguage][0] === '1'
             }
           >
