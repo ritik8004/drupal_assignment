@@ -389,7 +389,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       'attr_article_license_company' => $this->t('LICENSE COMPANY'),
       'attr_article_license_item' => $this->t('LICENSE ITEM'),
       'attr_finish' => $this->t('Finish'),
-      'attr_spf' => $this->t('Spf'),
+      'attr_spf' => $this->t('SPF'),
       'attr_skin_type' => $this->t('Skin Type'),
       'attr_coverage' => $this->t('Coverage'),
       'attr_shade_number' => $this->t('Shade Number'),
