@@ -9,6 +9,7 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -36,6 +37,8 @@ use Detection\MobileDetect;
  * @package Drupal\alshaya_seo
  */
 class AlshayaGtmManager {
+
+  use LoggerChannelTrait;
 
   /**
    * Store GTM Container in static to avoid re-calculating.
@@ -776,11 +779,19 @@ class AlshayaGtmManager {
     }
 
     // If list cookie is set, set the list variable.
-    $product_list = $this->requestStack->getCurrentRequest()->cookies->get('product-list');
-    if (isset($product_list)) {
-      $listValues = Json::decode($product_list);
-      $product_details['list'] = $listValues[$product_details['id']] ?? '';
+    if (!empty($product_details['id'])) {
+      $product_list = $this->requestStack->getCurrentRequest()->cookies->get('product-list');
+      if (isset($product_list)) {
+        $listValues = Json::decode($product_list);
+        $product_details['list'] = $listValues[$product_details['id']] ?? '';
+      }
     }
+    else {
+      $this->getLogger(self::class)->warning('GTM Product Details does not contain ID. Details: @details.', [
+        '@details' => json_encode($product_details),
+      ]);
+    }
+
     return $product_details;
   }
 
