@@ -3,12 +3,11 @@
 namespace Drupal\alshaya_tamara\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
-use Drupal\alshaya_tamara\Helper\AlshayaTamaraApiHelper;
-use Drupal\alshaya_tamara\Helper\AlshayaTamaraWidgetHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Logger\LoggerChannelTrait;
+use Drupal\Core\Cache\CacheableMetadata;
 
 /**
  * Tamara payment method for SPC.
@@ -20,22 +19,14 @@ use Drupal\Core\Logger\LoggerChannelTrait;
  */
 class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactoryPluginInterface {
 
-  use LoggerChannelTrait;
   use StringTranslationTrait;
 
   /**
-   * Tamara payment method Helper.
+   * Config Factory.
    *
-   * @var \Drupal\alshaya_tamara\Helper\AlshayaTamaraApiHelper
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $tamaraApiHelper;
-
-  /**
-   * Tamara widget Helper.
-   *
-   * @var \Drupal\alshaya_tamara\Helper\AlshayaTamaraWidgetHelper
-   */
-  protected $tamaraWidgetHelper;
+  protected $configFactory;
 
   /**
    * {@inheritdoc}
@@ -48,8 +39,7 @@ class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFacto
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_tamara.api_helper'),
-      $container->get('alshaya_tamara.widget_helper'),
+      $container->get('config.factory'),
     );
   }
 
@@ -62,40 +52,34 @@ class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFacto
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\alshaya_tamara\Helper\AlshayaTamaraApiHelper $tamara_api_helper
-   *   Tamara api Helper.
-   * @param \Drupal\alshaya_tamara\Helper\AlshayaTamaraWidgetHelper $tamara_widget_helper
-   *   Tamara widget Helper.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              AlshayaTamaraApiHelper $tamara_api_helper,
-                              AlshayaTamaraWidgetHelper $tamara_widget_helper) {
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->tamaraApiHelper = $tamara_api_helper;
-    $this->tamaraWidgetHelper = $tamara_widget_helper;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isAvailable() {
-    $tamaraApiConfig = $this->tamaraApiHelper->getTamaraApiConfig();
-    // Return false if `is_active` is set to false or not set.
-    if (!isset($tamaraApiConfig['is_active'])
-      || !((bool) $tamaraApiConfig['is_active'])) {
-      $this->getLogger('tamara')->warning('Tamara status is not enabled in Tamara config, ignoring.');
-      return FALSE;
-    }
-    return TRUE;
+    $this->configFactory = $config_factory;
   }
 
   /**
    * {@inheritdoc}
    */
   public function processBuild(array &$build) {
-    $this->tamaraWidgetHelper->getTamaraPaymentBuild($build);
+    // Pass the tamara active status in the drupal settings.
+    $build['#attached']['drupalSettings']['tamara']['status'] = TRUE;
+
+    // Get the installment count from the Alshaya Tamara module's config.
+    $alshayaTamaraConfig = $this->configFactory->get('alshaya_tamara.settings');
+    $build['#attached']['drupalSettings']['tamara']['installmentCount'] = $alshayaTamaraConfig->get('installmentCount');
+    CacheableMetadata::createFromRenderArray($build)
+      ->addCacheableDependency($alshayaTamaraConfig)
+      ->applyTo($build);
+
+    // Attach the libraries for tamara widgets.
+    $build['#attached']['library'][] = 'alshaya_tamara/tamara_checkout';
+    $build['#attached']['library'][] = 'alshaya_white_label/tamara';
 
     $build['#strings']['tamara_error'] = [
       'key' => 'tamara_error',
