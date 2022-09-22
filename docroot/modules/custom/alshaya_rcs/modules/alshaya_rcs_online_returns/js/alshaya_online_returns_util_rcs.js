@@ -43,7 +43,6 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
             orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product);
             // @todo Populate this value when working on big ticket items.
             orderProduct.is_big_ticket = null;
-            console.log(orderProduct);
           });
         });
         return orderDetails;
