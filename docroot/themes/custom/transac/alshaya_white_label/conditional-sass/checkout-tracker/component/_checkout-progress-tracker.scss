@@ -128,11 +128,11 @@
 
         &.current {
           &::after {
-            background-color: $cko_step_active_bg;
+            background-color: $cko-steps-active-bg;
           }
 
           span {
-            color: $cko_step_active_text;
+            color: $cko-steps-active-txt;
           }
 
           .step-label {
