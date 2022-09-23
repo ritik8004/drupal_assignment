@@ -2,9 +2,12 @@ import React from 'react';
 import SavedCardItem from './SavedCardItem';
 
 const SavedCardsList = ({
-  closeSavedCardListModal, selected, onExistingCardSelect, onNewCardClick,
+  closeSavedCardListModal,
+  selected,
+  onExistingCardSelect,
+  onNewCardClick,
+  tokenizedCards,
 }) => {
-  const { tokenizedCards } = drupalSettings.checkoutComUpapi;
   const cardITems = Object.entries(tokenizedCards).map(([key, card]) => (
     <SavedCardItem
       key={card.public_hash}

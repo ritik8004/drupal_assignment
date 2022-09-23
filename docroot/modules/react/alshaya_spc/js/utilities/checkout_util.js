@@ -9,6 +9,8 @@ import {
 } from './egift_util';
 import { addPaymentMethodInCart } from './update_cart';
 import { isEgiftCardEnabled } from '../../../js/utilities/util';
+import { callMagentoApi } from '../../../js/utilities/requestHelper';
+import { getApiEndpoint } from '../backend/v2/utility';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -872,4 +874,47 @@ export const formatMobileNumber = (mobileNumber) => {
   return (mobileNumberArray !== null)
     ? `+${drupalSettings.country_mobile_code} ${mobileNumberArray.join(' ')}`
     : mobileNumber;
+};
+
+
+/**
+ * Utility function to get the list of saved tokenized cards.
+ *
+ * @returns {array}
+ *   An array containing the list of all the save cards.
+ */
+export const getTokenizedCards = async () => {
+  const { customerId } = drupalSettings.userDetails;
+  const { allowedCardsMapping } = drupalSettings.checkoutComUpapi;
+  let tokenizedCards = [];
+  const savedCards = [];
+  let savedCard = [];
+
+  if (allowedCardsMapping) {
+    tokenizedCards = await callMagentoApi(getApiEndpoint('tokenizedCards'), 'GET', {
+      customer_id: customerId,
+    });
+
+    if (tokenizedCards) {
+      let { items } = tokenizedCards.data;
+      // Sort the items based on the created time.
+      items = Object.values(items).sort((p1, p2) => p1.created_at < p2.created_at);
+      items.forEach((item) => {
+        savedCard = JSON.parse(item.token_details);
+        savedCard.public_hash = btoa(item.public_hash);
+        // Map the card type to card type machine name.
+        const type = savedCard.type.toLowerCase();
+        savedCard.type = allowedCardsMapping[type]
+          ? allowedCardsMapping[type] : savedCard.type;
+        savedCard.paymentMethod = savedCard.type;
+        // Assign an object if not exists.
+        if (!savedCards[savedCard.public_hash]) {
+          savedCards[savedCard.public_hash] = {};
+        }
+        savedCards[savedCard.public_hash] = savedCard;
+      });
+    }
+  }
+
+  return savedCards;
 };
