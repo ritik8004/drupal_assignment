@@ -5,8 +5,7 @@ import { callMagentoApiSynchronous } from '../../utilities/requestHelper';
 
 const Tamara = {
   // Check if Tamara is enabled on the site or not.
-  isTamaraEnabled: () => hasValue(drupalSettings.tamara)
-    && hasValue(drupalSettings.tamara.status),
+  isTamaraEnabled: () => hasValue(drupalSettings.tamara),
 
   // Verify if the Tamara payment option is available for the current cart or
   // not. For this, we need call an MDC API to get the Tamara availability.

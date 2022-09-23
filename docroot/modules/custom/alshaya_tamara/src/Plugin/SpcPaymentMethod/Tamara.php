@@ -14,7 +14,7 @@ use Drupal\Core\Cache\CacheableMetadata;
  *
  * @AlshayaSpcPaymentMethod(
  *   id = "tamara",
- *   label = @Translation("Instalments with Tamara"),
+ *   label = @Translation("Installments with Tamara"),
  * )
  */
 class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactoryPluginInterface {
@@ -67,9 +67,6 @@ class Tamara extends AlshayaSpcPaymentMethodPluginBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function processBuild(array &$build) {
-    // Pass the tamara active status in the drupal settings.
-    $build['#attached']['drupalSettings']['tamara']['status'] = TRUE;
-
     // Get the installment count from the Alshaya Tamara module's config.
     $alshayaTamaraConfig = $this->configFactory->get('alshaya_tamara.settings');
     $build['#attached']['drupalSettings']['tamara']['installmentCount'] = $alshayaTamaraConfig->get('installmentCount');
