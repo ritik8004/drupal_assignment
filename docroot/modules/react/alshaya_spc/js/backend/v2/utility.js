@@ -188,6 +188,10 @@ const getApiEndpoint = (action, params = {}) => {
         : `/V1/guest-carts/${endPointParams.cartId}/tamara-payment-availability`;
       break;
 
+    case 'tokenizedCards':
+      endpoint = '/V1/checkoutcomupapi/getTokenList';
+      break;
+
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
