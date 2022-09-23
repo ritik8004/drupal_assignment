@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\Core\Database\Connection;
 
 /**
  * Overidden super category tree service.
@@ -44,6 +45,13 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
   protected $cache;
 
   /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+  /**
    * Construct RcsProductCategoryTree.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
@@ -54,12 +62,21 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
    *   Entity Type Manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database service.
    */
-  public function __construct(RequestStack $request_stack, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache) {
+  public function __construct(
+    RequestStack $request_stack,
+    LanguageManagerInterface $language_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    CacheBackendInterface $cache,
+    Connection $connection
+  ) {
     $this->requestStack = $request_stack;
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->cache = $cache;
+    $this->connection = $connection;
   }
 
   /**

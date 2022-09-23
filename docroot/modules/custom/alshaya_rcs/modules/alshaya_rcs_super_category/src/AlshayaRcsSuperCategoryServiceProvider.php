@@ -28,6 +28,7 @@ class AlshayaRcsSuperCategoryServiceProvider extends ServiceProviderBase impleme
           new Reference('language_manager'),
           new Reference('entity_type.manager'),
           new Reference('cache.product_category_tree'),
+          new Reference('database'),
         ]
       );
     $defination->setPublic(TRUE);
