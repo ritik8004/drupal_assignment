@@ -125,6 +125,16 @@
           }
         }
 
+        &.current {
+          &::after {
+            background-color: $cko_step_active_bg;
+          }
+
+          span {
+            color: $cko_step_active_text;
+          }
+        }
+
         &::after {
           content: "";
           position: absolute;

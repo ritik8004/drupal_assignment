@@ -3,14 +3,6 @@
     .progress-bar {
       .step {
         &.current {
-          &::after {
-            background-color: $cko_step_active_bg;
-          }
-
-          span {
-            color: $cko_step_active_text;
-          }
-
           .step-label {
             font-family: $alshaya-bold;
           }
