@@ -9,7 +9,7 @@
 
       @include breakpoint($desktop) {
         grid-template-columns: rem(180) rem(395) rem(77);
-        position: absolute;
+        width: fit-content;
       }
 
       @include breakpoint($only-mobile) {
@@ -41,6 +41,12 @@
 
     .spc-product-attributes-wrapper {
       font-size: rem(16);
+    }
+
+    &:last-child {
+      border-bottom: rem(1) solid $spc_cart_item_border_color;
+      width: fit-content;
+      padding-bottom: rem(28);
     }
   }
 }
