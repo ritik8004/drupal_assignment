@@ -65,6 +65,24 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
   }
 }
 
+@mixin tertiaryBtn($textTransform: false) {
+  text-transform: unset;
+  background-color: $tertiary_btn_bg;
+  color: $tertiary_btn_text;
+  font-family: $ay-heavy;
+  font-size: rem(16);
+  border: rem(1) solid $tertiary_btn_border;
+
+  @if $textTransform {
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    opacity: 0.65;
+    background-color: $tertiary_btn_bg;
+  }
+}
+
 @mixin userLoginSectionTitle() {
   display: block;
   font-size: rem(24);

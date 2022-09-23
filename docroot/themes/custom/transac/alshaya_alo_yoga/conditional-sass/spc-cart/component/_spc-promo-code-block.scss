@@ -1,0 +1,22 @@
+.spc-promo-code-block {
+  .promo-submit {
+    @include primaryBtn(true);
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: rem(16);
+  }
+
+  .block-content {
+    @include breakpoint($tablet) {
+      padding: rem(34);
+      background-color: $spc-order-summary-totals-bg;
+    }
+  }
+
+  #promo-code,
+  .promo-remove,
+  .promo-submit {
+    height: rem(40);
+  }
+}

@@ -110,6 +110,7 @@
             color: $cko-steps-label-txt !important;
             font-size: rem(14);
             top: calc(100% + #{rem(28)});
+            font-family: $alshaya-bold;
 
             @include breakpoint($only-mobile) {
               font-size: rem(10);
@@ -122,6 +123,20 @@
             background: url('#{$base_theme_img_directory_path}/icons/done-state.svg') no-repeat;
             background-color: $cko-steps-active-bg;
             background-position: 60%;
+          }
+        }
+
+        &.current {
+          &::after {
+            background-color: $cko-steps-active-bg;
+          }
+
+          span {
+            color: $cko-steps-active-txt;
+          }
+
+          .step-label {
+            font-family: $alshaya-bold;
           }
         }
 
