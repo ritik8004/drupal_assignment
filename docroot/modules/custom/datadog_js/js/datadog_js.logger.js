@@ -2,7 +2,7 @@
   // Initial a variable with page load timestamp to identify the actual time.
   // This time will remain unchanged within the context of window.
   window.pageLoadTime = window.pageLoadTime || new Date().getTime();
-  let pageUuid = '';
+  var pageUuid = '';
 
   Drupal.logViaDataDog = function (severity, message, context) {
     try {
