@@ -124,8 +124,6 @@ window.commerceBackend.setCartDataInStorage = (data) => {
     cartInfo,
     parseInt(drupalSettings.alshaya_spc.cart_storage_expiration, 10) * 60,
   );
-  // Remove 'user_cart_id' as cart_data localstorage is available.
-  Drupal.removeItemFromLocalStorage('user_cart_id');
 };
 
 /**
