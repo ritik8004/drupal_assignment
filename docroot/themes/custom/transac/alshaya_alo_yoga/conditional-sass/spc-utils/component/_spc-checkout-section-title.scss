@@ -6,8 +6,8 @@
   @include breakpoint($only-mobile) {
     background-color: $spc_promo_code_block_mob_bg;
     line-height: 2.875;
-    text-align: left;
-    padding-left: rem(16);
+    text-align: $left;
+    padding-#{$left}: rem(16);
     font-size: rem(14);
   }
 

@@ -11,7 +11,7 @@
 .spc-checkout {
   .checkout-link {
     &:not(.checkout_com_applepay) {
-      float: right;
+      float: $right;
       width: auto;
       padding: 0 rem(22);
     }
