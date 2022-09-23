@@ -199,24 +199,20 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'أضف إلى الحقيبة',
         'context' => 'hello_member',
       ],
-      'Coupon QR Code' => [
-        'ar' => 'رمز QR الكوبون',
+      'Your Benefit' => [
+        'ar' => 'المزايا الخاصة بك',
         'context' => 'hello_member',
       ],
       'Coupon' => [
         'ar' => 'رالكوبون',
         'context' => 'hello_member',
       ],
-      'Offer QR Code' => [
-        'ar' => 'رمز QR العرض',
-        'context' => 'hello_member',
-      ],
       'Offer' => [
         'ar' => 'العرض',
         'context' => 'hello_member',
       ],
-      'Membership Id QR Code' => [
-        'ar' => 'رمز QR لهوية العضوية',
+      'Your Member ID' => [
+        'ar' => 'رقم عضويتك التعريفي',
         'context' => 'hello_member',
       ],
       'Minimum age' => [

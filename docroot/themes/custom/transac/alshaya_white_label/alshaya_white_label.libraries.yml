@@ -878,3 +878,8 @@ checkout-cod-mobile-verification:
   css:
     theme:
       css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: {}
+
+user-account:
+  css:
+    theme:
+      css/conditional-sass/user-account/user-account.ltr.css: {}
