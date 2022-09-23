@@ -1,0 +1,15 @@
+.spc-order-summary-order-detail .spc-order-summary-item--tamara {
+  padding-top: 0;
+  padding-bottom: 0;
+  align-items: center;
+  height: rem(60);
+
+  .spc-value {
+    display: flex;
+    align-items: center;
+
+    .tamara-icon {
+      height: rem(32);
+    }
+  }
+}
