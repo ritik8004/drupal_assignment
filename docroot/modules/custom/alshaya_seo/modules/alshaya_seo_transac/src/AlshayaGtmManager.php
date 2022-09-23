@@ -1057,15 +1057,14 @@ class AlshayaGtmManager {
     if ($is_customer) {
       $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
       $customer_id = $current_user->get('acq_customer_id')->getString();
-      $orders_count = $this->ordersManager->getOrdersCount($customer_id);
       if (!empty($current_user->get('field_mobile_number')->getValue())) {
         $phone_number = $current_user->get('field_mobile_number')->getValue()[0]['value'];
       }
     }
-    else {
-      // For guest user too we want to know if user has placed multiple orders.
-      $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
-    }
+    // Order count should be checked by email only, To cover the scenario,
+    // When the email has been used to place order as guest user and
+    // Later on same email was used to create an account.
+    $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
 
     $additional_info = [];
     // Fetch Additional Info.
