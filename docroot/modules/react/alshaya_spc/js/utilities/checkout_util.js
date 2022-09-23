@@ -885,17 +885,16 @@ export const formatMobileNumber = (mobileNumber) => {
  */
 export const getTokenizedCards = async () => {
   const { allowedCardsMapping } = drupalSettings.checkoutComUpapi;
-  let tokenizedCards = [];
   const savedCards = [];
-  let savedCard = [];
 
   if (allowedCardsMapping) {
-    tokenizedCards = await callMagentoApi(getApiEndpoint('tokenizedCards'), 'GET');
+    const tokenizedCards = await callMagentoApi(getApiEndpoint('tokenizedCards'), 'GET');
+    let savedCard = [];
 
     if (tokenizedCards) {
       let { items } = tokenizedCards.data;
       // Sort the items based on the created time.
-      items = Object.values(items).sort((p1, p2) => p1.created_at < p2.created_at);
+      items = Object.values(items).sort((card1, card2) => card1.created_at < card2.created_at);
       items.forEach((item) => {
         savedCard = JSON.parse(item.token_details);
         savedCard.public_hash = btoa(item.public_hash);
