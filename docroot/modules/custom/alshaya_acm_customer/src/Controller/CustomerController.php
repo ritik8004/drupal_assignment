@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Customer controller to add/override pages for customer.
@@ -300,6 +301,11 @@ class CustomerController extends ControllerBase {
     $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $order = $this->ordersManager->getOrderByIncrementId($order_id);
+    if (empty($order)) {
+      $response = new RedirectResponse(Url::fromRoute('entity.user.canonical', ['user' => $user->id()])->toString());
+      $response->send();
+      exit;
+    }
 
     $build = alshaya_acm_customer_build_order_detail($order);
     $build['order'] = $order;
@@ -434,6 +440,9 @@ class CustomerController extends ControllerBase {
     $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $order = _alshaya_acm_checkout_get_last_order_from_session();
+    if (empty($order)) {
+      return [];
+    }
 
     $build = alshaya_acm_customer_build_order_detail($order);
 
@@ -532,7 +541,9 @@ class CustomerController extends ControllerBase {
     $user_order = $this->ordersManager->getOrderByIncrementId($order_id);
     // If order belongs to the current user and invoice is available for
     // download.
-    $download_invoice = !empty($user_order['extension']['invoice_path']);
+    if ($user_order) {
+      $download_invoice = !empty($user_order['extension']['invoice_path']);
+    }
 
     return AccessResult::allowedIf($download_invoice);
   }
