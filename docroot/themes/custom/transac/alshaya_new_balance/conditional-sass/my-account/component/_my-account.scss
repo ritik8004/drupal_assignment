@@ -4,4 +4,14 @@
       margin-top: rem(20);
     }
   }
+
+  .item-list {
+    .my-account-nav {
+      li {
+        text-decoration: underline;
+        color: $my_acc_nav_text;
+        font-size: rem(14);
+      }
+    }
+  }
 }

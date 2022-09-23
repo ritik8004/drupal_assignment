@@ -32,3 +32,13 @@
     text-transform: capitalize;
   }
 }
+
+.c-order-list {
+  .block-page-title-block {
+    padding: 0 0 rem(23);
+
+    @include breakpoint($only-tablet) {
+      padding: rem(30) rem(0) rem(25);
+    }
+  }
+}
