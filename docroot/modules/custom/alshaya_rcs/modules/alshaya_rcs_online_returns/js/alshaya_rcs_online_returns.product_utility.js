@@ -16,6 +16,6 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   document.addEventListener('rcsProductInfoAlter', function alterProduct(e) {
-    e.detail.data.processedProduct.eligibleForReturn = isProductReturnable(e.detail.data.rawProduct);
+    e.detail.data.processedProduct.eligibleForReturn = window.commerceBackend.isProductReturnable(e.detail.data.rawProduct);
   });
 })();
