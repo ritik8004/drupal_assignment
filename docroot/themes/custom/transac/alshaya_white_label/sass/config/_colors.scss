@@ -1545,8 +1545,6 @@ $spc-delivery-area-popup-border: $mothercare-black;
 $spc-delivery-area-popup-text: $mothercare-black;
 $spc-delivery-area-popup-bg: $white-five;
 $spc-cart-product-attribute-input: transparent;
-$cko_step_active_bg: $mothercare-black;
-$cko_step_active_text: $white-five;
 
 // Order QTY Limit.
 $order_qty_limit_bg: $_dynamic_promo_text_bg;
@@ -2385,6 +2383,8 @@ $cko-steps-inactive-bg: $white-five;
 $cko-steps-active-bg: $mothercare-black;
 $cko-steps-active-txt: $white-five;
 $cko-steps-inactive-txt: $mothercare-black;
+$cko_step_active_bg: $mothercare-black;
+$cko_step_active_text: $white-five;
 
 // Checkout OTP mobile verification.
 $spc-checkout-cod-otp-primary: $mothercare-black;

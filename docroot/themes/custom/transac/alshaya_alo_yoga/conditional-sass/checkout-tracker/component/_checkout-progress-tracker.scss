@@ -2,18 +2,6 @@
   #checkout-progress {
     .progress-bar {
       .step {
-        &.current {
-          .step-label {
-            font-family: $alshaya-bold;
-          }
-        }
-
-        &.completed {
-          .step-label {
-            font-family: $alshaya-bold;
-          }
-        }
-
         span {
           font-family: $ay-bold;
         }

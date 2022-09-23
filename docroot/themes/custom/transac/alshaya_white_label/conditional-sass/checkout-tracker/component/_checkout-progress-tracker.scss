@@ -110,6 +110,7 @@
             color: $cko-steps-label-txt !important;
             font-size: rem(14);
             top: calc(100% + #{rem(28)});
+            font-family: $alshaya-bold;
 
             @include breakpoint($only-mobile) {
               font-size: rem(10);
@@ -132,6 +133,10 @@
 
           span {
             color: $cko_step_active_text;
+          }
+
+          .step-label {
+            font-family: $alshaya-bold;
           }
         }
 
