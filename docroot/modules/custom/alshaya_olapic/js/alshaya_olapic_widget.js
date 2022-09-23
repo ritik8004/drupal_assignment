@@ -52,7 +52,7 @@
           if (isOlapicInitialised) {
             initOlapicWidgets(context);
           }
-        });
+        }, 1);
       } else {
         initOlapicWidgets(context);
       }
