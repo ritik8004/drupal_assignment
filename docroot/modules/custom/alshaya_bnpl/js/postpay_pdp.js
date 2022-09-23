@@ -51,8 +51,7 @@
       if ((typeof event.detail !== 'undefined') && (typeof event.detail.variant !== 'undefined')) {
         variant = event.detail.variant;
       }
-    }
-    else {
+    } else if (productData.type != 'simple') {
       // Use first child provided in settings if available.
       // Use the first variant otherwise.
       var configurableCombinations = window.commerceBackend.getConfigurableCombinations(sku);
