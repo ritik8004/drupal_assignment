@@ -37,6 +37,7 @@ import {
   isFullPaymentDoneByEgift,
 } from '../../../utilities/egift_util';
 import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
+import Tamara from '../../../../../js/tamara/utilities/tamara';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -248,6 +249,16 @@ export default class PaymentMethods extends React.Component {
             && (!Tabby.isAvailable() || !Tabby.productAvailable(this))) {
             return;
           }
+
+          // Check if the tamara is enabled and available for the current cart
+          // as an payment option. If not, exclude it from the available payment
+          // option for the customers.
+          if (method.code === 'tamara'
+            && (Tamara.isTamaraEnabled()
+            && !Tamara.isAvailable(this))) {
+            return;
+          }
+
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
       });
