@@ -884,16 +884,13 @@ export const formatMobileNumber = (mobileNumber) => {
  *   An array containing the list of all the save cards.
  */
 export const getTokenizedCards = async () => {
-  const { customerId } = drupalSettings.userDetails;
   const { allowedCardsMapping } = drupalSettings.checkoutComUpapi;
   let tokenizedCards = [];
   const savedCards = [];
   let savedCard = [];
 
   if (allowedCardsMapping) {
-    tokenizedCards = await callMagentoApi(getApiEndpoint('tokenizedCards'), 'GET', {
-      customer_id: customerId,
-    });
+    tokenizedCards = await callMagentoApi(getApiEndpoint('tokenizedCards'), 'GET');
 
     if (tokenizedCards) {
       let { items } = tokenizedCards.data;
