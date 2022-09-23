@@ -10,6 +10,7 @@ on:
       - develop-hello-member
       - develop-cross-border
       - develop-brand-rollout
+      - develop-tamara
   create:
 
 concurrency: deploy-${{ github.ref }}
