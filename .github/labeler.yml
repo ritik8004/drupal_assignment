@@ -1,0 +1,9 @@
+# This is used in ./workflow.pull_request_label.yml action.
+
+hook update:
+  - docroot/modules/**/*.install
+  - docroot/profiles/custom/**/*.install
+
+MAPP:
+  - 'docroot/modules/**/Plugin/rest/resource/**/*'
+  - 'docroot/modules/custom/alshaya_mobile_app/**/*'
