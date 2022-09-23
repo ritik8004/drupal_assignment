@@ -19,10 +19,6 @@ class AlshayaRcsSuperCategoryServiceProvider extends ServiceProviderBase impleme
    * {@inheritdoc}
    */
   public function alter(ContainerBuilder $container) {
-    // Override the 'AlshayaSuperCategoryManager' service.
-    $container->getDefinition('alshaya_super_category.super_category_feature_manager')
-      ->setClass(AlshayaRcsSuperCategoryManager::class);
-
     // Override the ProductCategoryTree service.
     $defination = new Definition(RcsProductCategoryTree::class);
     $defination

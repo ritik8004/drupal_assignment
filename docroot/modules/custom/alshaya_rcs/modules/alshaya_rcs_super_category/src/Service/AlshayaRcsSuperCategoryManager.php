@@ -23,7 +23,10 @@ class AlshayaRcsSuperCategoryManager extends AlshayaSuperCategoryManager {
       $status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
       if ($status) {
         $super_categories_terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('rcs_category',0, 1, TRUE);
-        $default_category_tid = !empty($super_categories_terms) ? current($super_categories_terms)->id(): NULL;
+        $default_category_tid = !empty($super_categories_terms) ? current($super_categories_terms)->id() : 0;
+      }
+      else {
+        $default_category_tid = 0;
       }
     }
 

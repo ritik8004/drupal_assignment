@@ -7,3 +7,13 @@ services:
      - '@language_manager'
      - '@logger.factory'
      - '@alshaya_api.api'
+  alshaya_rcs_super_category.super_category_feature_manager:
+    class: Drupal\alshaya_rcs_super_category\Service\AlshayaRcsSuperCategoryManager
+    decorates: alshaya_super_category.super_category_feature_manager
+    decoration_priority: 1
+    arguments:
+      - '@alshaya_acm_product_category.product_category_tree'
+      - '@config.factory'
+      - '@entity_type.manager'
+      - '@module_handler'
+      - '@alshaya_config.manager'

@@ -121,8 +121,11 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @return \Drupal\Core\Entity\EntityInterface|mixed|null
    *   Return the taxonomy term object if found else NULL.
    */
-  public function getCategoryTermFromRoute() {
-    $term = parent::getCategoryTermFromRoute();
+  public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
+    $term = NULL;
+    if ($check_acq_terms) {
+      $term = parent::getCategoryTermFromRoute();
+    }
 
     if (empty($term)) {
       $request = $this->requestStack->getCurrentRequest();

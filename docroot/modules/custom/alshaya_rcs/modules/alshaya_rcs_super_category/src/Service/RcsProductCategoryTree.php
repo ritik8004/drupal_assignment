@@ -63,13 +63,7 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
   }
 
   /**
-   * Get top level category items.
-   *
-   * @param string $langcode
-   *   (optional) The language code.
-   *
-   * @return array
-   *   Processed term data.
+   * {@inheritdoc}
    */
   public function getCategoryRootTerms($langcode = NULL) {
     if (empty($langcode)) {
@@ -93,15 +87,7 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
   }
 
   /**
-   * Get super category term from url.
-   *
-   * @param null|object $term
-   *   (optional) The term object.
-   * @param string $langcode
-   *   (optional) The language code.
-   *
-   * @return array|\Drupal\taxonomy\TermInterface|mixed|null
-   *   Return array of term or term object or term id.
+   * {@inheritdoc}
    */
   public function getCategoryTermRequired($term = NULL, $langcode = NULL) {
     $path = $this->requestStack->getCurrentRequest()->getPathInfo();
@@ -127,6 +113,13 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
 
     $super_categories = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('rcs_category', 0, 1, FALSE);
     return !empty($super_categories) ? current($super_categories)->tid : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
+    return parent::getCategoryTermFromRoute(FALSE);
   }
 
 }
