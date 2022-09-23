@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\taxonomy\TermInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Rcs Super Category Helper.
@@ -155,6 +156,41 @@ class RcsSuperCategoryHelper {
       }
       $term->field_category_slug->setValue($category['url_key']);
       $term->save();
+
+      // Create Advanced pages.
+      $node_storage = $this->entityTypeManager->getStorage('node');
+      $query = $node_storage->getQuery();
+      $query->condition('type', 'advanced_page');
+      $query->condition('field_category_slug', $category['url_key']);
+      $nodes = $query->execute();
+      if (empty($nodes)) {
+        $node = $node_storage
+          ->create(
+            [
+              'title' => $category['name'],
+              'type' => 'advanced_page',
+              'langcode' => $lang_code,
+            ]
+          );
+      }
+      else {
+        $node = $node_storage->load(current($nodes));
+        if ($node  instanceof NodeInterface && $node->hasTranslation($lang_code)) {
+          continue;
+        }
+        $node = $node->addTranslation($lang_code,
+          [
+            'title' => $category['name'],
+            'type' => 'advanced_page',
+            'langcode' => $lang_code,
+          ]
+        );
+      }
+
+      $node->field_use_as_department_page->setValue(TRUE);
+      $node->field_category_slug->setValue($category['url_key']);
+      $node->save();
+
     }
   }
 
