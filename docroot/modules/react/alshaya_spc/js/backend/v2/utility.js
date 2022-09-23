@@ -23,6 +23,9 @@ const removeCartIdFromStorage = () => {
     return;
   }
 
+  // Remove user cart id if user is not authenticated.
+  Drupal.removeItemFromLocalStorage('user_cart_id');
+
   Drupal.removeItemFromLocalStorage('cart_id');
 };
 
