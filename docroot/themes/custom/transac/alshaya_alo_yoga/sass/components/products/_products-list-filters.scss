@@ -1,0 +1,34 @@
+// Css for filters on products listing page and search page.
+.c-plp .c-content__region {
+  // Main all filters div theming.
+  .all-filters,
+  .all-filters-algolia {
+    .filter__inner {
+      .views-exposed-form,
+      .c-facet {
+        &.c-accordion,
+        &.c-collapse-item {
+          .c-accordion__title,
+          .c-collapse__title {
+            font-size: rem(14);
+
+            &::after {
+              font-size: rem(32);
+              #{$right}: rem(24);
+            }
+
+            .selected-facets {
+              margin-#{$right}: rem(24);
+            }
+          }
+        }
+      }
+    }
+
+    .filter__head {
+      .filter-sort-title {
+        text-transform: capitalize;
+      }
+    }
+  }
+}

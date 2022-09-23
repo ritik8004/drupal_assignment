@@ -48,3 +48,12 @@
     }
   }
 }
+
+.show-all-filters,
+.show-all-filters-algolia {
+  .upto-desktop {
+    @include breakpoint($upto-desktop) {
+      text-transform: uppercase;
+    }
+  }
+}
