@@ -35,6 +35,14 @@
       }
     }
 
+    .progress-header {
+      color: $hello-member-points-block-tier-title;
+      font-size: rem(25);
+      font-family: $alshaya-bold;
+      padding: rem(16) rem(0);
+      text-transform: capitalize;
+    }
+
     .my-points-details {
       font-size: rem(12);
       letter-spacing: 0.6px;

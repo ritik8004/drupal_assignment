@@ -159,6 +159,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'متابعة',
         'context' => 'hello_member',
       ],
+      '<p>By registering you agreed to our <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>' => [
+        'en' => '<p>By clicking "Become a member", I agree to the H&M Membership <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>',
+        'ar' => '<p></a>بالضغط على "سجل عضويتك"، فإنك توافق على شروط وأحكام<a href="/terms" class="final-tnc"> عضوية اتش آند أم</p>',
+      ],
       'Terms & conditions' => [
         'ar' => 'الشروط والأحكام',
         'context' => 'hello_member',
@@ -171,12 +175,12 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'رمز QR',
         'context' => 'hello_member',
       ],
-      'View QR code' => [
-        'ar' => 'عرض رمز QR',
+      'View member ID' => [
+        'ar' => 'عرض الرقم التعريفي للعضوية',
         'context' => 'hello_member',
       ],
-      'To redeem in store use this QR code.' => [
-        'ar' => 'لتفعيل هذا العرض في محلاتنا استخدم هذا الرمز',
+      'Member ID' => [
+        'ar' => 'الرقم التعريفي للعضوية',
         'context' => 'hello_member',
       ],
       'Submit Rating and Review' => [
@@ -195,24 +199,20 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'أضف إلى الحقيبة',
         'context' => 'hello_member',
       ],
-      'Coupon QR Code' => [
-        'ar' => 'رمز QR الكوبون',
+      'Your Benefit' => [
+        'ar' => 'المزايا الخاصة بك',
         'context' => 'hello_member',
       ],
       'Coupon' => [
         'ar' => 'رالكوبون',
         'context' => 'hello_member',
       ],
-      'Offer QR Code' => [
-        'ar' => 'رمز QR العرض',
-        'context' => 'hello_member',
-      ],
       'Offer' => [
         'ar' => 'العرض',
         'context' => 'hello_member',
       ],
-      'Membership Id QR Code' => [
-        'ar' => 'رمز QR لهوية العضوية',
+      'Your Member ID' => [
+        'ar' => 'رقم عضويتك التعريفي',
         'context' => 'hello_member',
       ],
       'Minimum age' => [
@@ -295,11 +295,11 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'تطبيق العروض',
         'context' => 'hello_member',
       ],
-      'AVAIL IT' => [
-        'ar' => 'توفرها',
+      'REDEEM IT' => [
+        'ar' => 'استخدمها',
         'context' => 'hello_member',
       ],
-      '@hm_icon @login_link or Become a member to earn @points points' => [
+      '@hm_icon @login_link or become a member to earn @points points' => [
         'ar' => '@hm_icon @login_link أو سجّل كعضو للربح بالنقاط @points',
         'context' => 'hello_member',
       ],
@@ -343,7 +343,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'سلة التسوق فارغة',
         'context' => 'hello_member',
       ],
-      'Add to Bag' => [
+      'Add to bag' => [
         'ar' => 'أضف إلى حقيبة التسوق',
         'context' => 'hello_member',
       ],
@@ -407,7 +407,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'عنوان البريد الإلكتروني',
         'context' => 'hello_member',
       ],
-      'Enter Aura Details' => [
+      'Enter Aura details' => [
         'ar' => 'ادخل بيانات حساب أورا',
         'context' => 'hello_member',
       ],

@@ -28,11 +28,11 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'view_qr_code',
-      'value' => t('View QR code', [], ['context' => 'hello_member']),
+      'value' => t('View member ID', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'qr_code_redeem',
-      'value' => t('To redeem in store use this QR code.', [], ['context' => 'hello_member']),
+      'value' => t('Member ID', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'points_label',
@@ -116,19 +116,15 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'benefit_add_to_bag',
-      'value' => t('Add to Bag', [], ['context' => 'hello_member']),
+      'value' => t('Add to bag', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'member_id_title',
-      'value' => t('Membership Id QR Code', [], ['context' => 'hello_member']),
+      'value' => t('Your Member ID', [], ['context' => 'hello_member']),
     ],
     [
-      'key' => 'coupon_id_title',
-      'value' => t('Coupon QR Code', [], ['context' => 'hello_member']),
-    ],
-    [
-      'key' => 'offer_id_title',
-      'value' => t('Offer QR Code', [], ['context' => 'hello_member']),
+      'key' => 'benefit_id_title',
+      'value' => t('Your Benefit', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'benefit_expire_no_date',
@@ -152,7 +148,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'hello_member_guest_login',
-      'value' => t('@hm_icon @login_link or Become a member to earn @points points', [], ['context' => 'hello_member']),
+      'value' => t('@hm_icon @login_link or become a member to earn @points points', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'hello_member_points_tooltip',
@@ -168,7 +164,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'enter_aura_details',
-      'value' => t('Enter Aura Details', [], ['context' => 'hello_member']),
+      'value' => t('Enter Aura details', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'aura_details_tooltip',

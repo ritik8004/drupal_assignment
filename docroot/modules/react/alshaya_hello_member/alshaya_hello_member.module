@@ -574,3 +574,17 @@ function alshaya_hello_member_alshaya_spc_checkout_event_controller_account_alte
   // if phone number is added from checkout page.
   $account->get('field_mobile_number')->setValue(NULL);
 }
+
+/**
+ * Implements hook_alshaya_acm_customer_update_account_alter().
+ */
+function alshaya_hello_member_alshaya_acm_customer_update_account_alter($user, $customer) {
+  // Update DOB details coming from magento to drupal.
+  if (isset($customer['dob'])) {
+    $user->get('field_birth_date')->setValue($customer['dob']);
+  }
+  // Update gender details coming from magento to drupal.
+  if (isset($customer['extension_attributes']['customer_gender'])) {
+    $user->get('field_gender')->setValue($customer['extension_attributes']['customer_gender']);
+  }
+}
