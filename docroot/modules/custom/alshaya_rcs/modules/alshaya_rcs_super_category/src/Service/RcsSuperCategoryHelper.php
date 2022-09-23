@@ -55,7 +55,7 @@ class RcsSuperCategoryHelper {
   /**
    * RcsSuperCategoryHelper constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
@@ -133,7 +133,7 @@ class RcsSuperCategoryHelper {
    */
   protected function synchronizeCategories($super_categories, $existing_super_categories, $lang_code) {
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    //
+    // Map existing cateogeries with their slug.
     $existing_super_categories = $this->processExistingCategories($existing_super_categories, $lang_code);
     foreach ($super_categories as $slug => $category) {
       // Check if rcs category with the slug already exists.
@@ -175,7 +175,7 @@ class RcsSuperCategoryHelper {
       }
       else {
         $node = $node_storage->load(current($nodes));
-        if ($node  instanceof NodeInterface && $node->hasTranslation($lang_code)) {
+        if ($node instanceof NodeInterface && $node->hasTranslation($lang_code)) {
           continue;
         }
         $node = $node->addTranslation($lang_code,
@@ -190,7 +190,6 @@ class RcsSuperCategoryHelper {
       $node->field_use_as_department_page->setValue(TRUE);
       $node->field_category_slug->setValue($category['url_key']);
       $node->save();
-
     }
   }
 
