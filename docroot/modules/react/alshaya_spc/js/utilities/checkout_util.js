@@ -889,9 +889,9 @@ export const getTokenizedCards = async () => {
 
   if (allowedCardsMapping) {
     const tokenizedCards = await callMagentoApi(getApiEndpoint('tokenizedCards'), 'GET');
-    let savedCard = [];
 
     if (tokenizedCards) {
+      let savedCard = [];
       let { items } = tokenizedCards.data;
       // Sort the items based on the created time.
       items = Object.values(items).sort((card1, card2) => card1.created_at < card2.created_at);
