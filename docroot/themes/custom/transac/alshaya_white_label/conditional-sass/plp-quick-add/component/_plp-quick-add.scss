@@ -43,25 +43,34 @@
   }
 }
 
-.c-plp .c-products__item article:hover {
-  @include breakpoint($desktop) {
-    .quick-add {
-      display: block;
-      position: absolute;
-      width: 100%;
-      bottom: rem(64);
-      z-index: 3;
+.c-plp .c-products__item,
+.c-plp #my-wishlist .c-products__item {
+  article:hover {
+    @include breakpoint($desktop) {
+      .quick-add {
+        display: block;
+        position: absolute;
+        width: 100%;
+        top: rem(254);
+        z-index: 3;
 
-      .addtobag-config-button,
-      .is-not-buyable,
-      .addtobag-button {
-        background: $plp-quick-add-bg;
-        color: $plp-quick-add-txt;
-        height: rem(55);
-        border: 0;
-        margin: rem(24) rem(8) 0;
-        width: calc(100% - #{rem(16)});
+        .addtobag-config-button,
+        .is-not-buyable,
+        .addtobag-button {
+          background: $plp-quick-add-bg;
+          color: $plp-quick-add-txt;
+          height: rem(55);
+          border: 0;
+          margin: rem(24) rem(8) 0;
+          width: calc(100% - #{rem(16)});
+        }
       }
     }
+  }
+}
+
+#my-wishlist {
+  @include breakpoint($desktop) {
+    display: block;
   }
 }
