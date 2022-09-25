@@ -1,0 +1,5 @@
+services:
+  alshaya_tamara.helper:
+    class: Drupal\alshaya_tamara\Helper\AlshayaTamaraHelper
+    arguments:
+      - '@config.factory'

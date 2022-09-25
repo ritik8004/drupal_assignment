@@ -9,6 +9,7 @@ on:
       - master
       - develop-hello-member
       - develop-brand-rollout
+      - develop-tamara
   create:
 
 concurrency: deploy-${{ github.ref }}
