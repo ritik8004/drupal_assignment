@@ -7,7 +7,6 @@ use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class Alshaya Algolia Search Breadcrumb Builder.
@@ -15,23 +14,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class AlshayaAlgoliaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
   use StringTranslationTrait;
-
-  /**
-   * Request stack service object.
-   *
-   * @var null|\Symfony\Component\HttpFoundation\Request
-   */
-  protected $currentRequest;
-
-  /**
-   * AlshayaAlgoliaSearchBreadcrumbBuilder constructor.
-   *
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   Request stack service object.
-   */
-  public function __construct(RequestStack $request_stack) {
-    $this->currentRequest = $request_stack->getCurrentRequest();
-  }
 
   /**
    * {@inheritdoc}
@@ -49,7 +31,7 @@ class AlshayaAlgoliaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterfac
     $breadcrumb->addLink(Link::createFromRoute($this->t('Search results'), '<none>'));
 
     // Add url path cacheable context for the breadcrumb.
-    $breadcrumb->addCacheContexts(['url.path:context']);
+    $breadcrumb->addCacheContexts(['url.path']);
     return $breadcrumb;
   }
 

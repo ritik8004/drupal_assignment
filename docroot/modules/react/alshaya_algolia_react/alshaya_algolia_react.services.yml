@@ -21,5 +21,3 @@ services:
     class: Drupal\alshaya_algolia_react\Breadcrumb\AlshayaAlgoliaSearchBreadcrumbBuilder
     tags:
       - { name: breadcrumb_builder, priority: 100 }
-    arguments:
-      - '@request_stack'
