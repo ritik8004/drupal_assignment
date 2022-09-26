@@ -30,7 +30,6 @@ dependencies:
   - drupal:syslog
   - twig_tweak:twig_tweak
   - image_widget_crop:image_widget_crop
-  - moderation_dashboard:moderation_dashboard
 
 themes:
   - whitelabel
