@@ -31,7 +31,7 @@ class AlshayaAlgoliaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterfac
     $breadcrumb->addLink(Link::createFromRoute($this->t('Search results'), '<none>'));
 
     // Add url path cacheable context for the breadcrumb.
-    $breadcrumb->addCacheContexts(['url.path']);
+    $breadcrumb->addCacheContexts(['route.name']);
     return $breadcrumb;
   }
 
