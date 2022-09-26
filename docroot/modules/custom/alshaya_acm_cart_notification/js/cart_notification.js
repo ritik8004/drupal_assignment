@@ -118,6 +118,7 @@
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
         var productData = e.detail.productData;
         if (drupalSettings.cart.cartNotificationDrawer) {
+          Drupal.cartNotification.spinner_stop();
           // Trigger cart drawer panel event when product added to cart.
           // Cart drawer panel will open as side drawer.
           var cartNotificationDrawer = new CustomEvent('showCartDrawer', {
@@ -137,23 +138,26 @@
         scrollToErrorPDP();
       });
 
-      $(window).on('click', function () {
-        // #cart_notification for the default mini cart icon.
-        // #magv2_cart_notification for New PDP layout mobile cart icon.
-        // #static_minicart_notification for StaticMinicart notification.
-        $('#cart_notification, #magv2_cart_notification, #static_minicart_notification').each(function () {
-          if ($(this).html().length > 0) {
-            $(this).empty();
-            $('body').removeClass('notification--on');
-            $(this).removeClass('has--notification');
-          }
+      // Only if cart drawer panel feature is disabled.
+      if (!drupalSettings.cart.cartNotificationDrawer) {
+        $(window).on('click', function () {
+          // #cart_notification for the default mini cart icon.
+          // #magv2_cart_notification for New PDP layout mobile cart icon.
+          // #static_minicart_notification for StaticMinicart notification.
+          $('#cart_notification, #magv2_cart_notification, #static_minicart_notification').each(function () {
+            if ($(this).html().length > 0) {
+              $(this).empty();
+              $('body').removeClass('notification--on');
+              $(this).removeClass('has--notification');
+            }
+          });
         });
-      });
 
-      // Stop event from inside container to propogate out.
-      $('#cart_notification, #magv2_cart_notification, #static_minicart_notification').once('bind-events').on('click', function (event) {
-        event.stopPropagation();
-      });
+        // Stop event from inside container to propogate out.
+        $('#cart_notification, #magv2_cart_notification, #static_minicart_notification').once('bind-events').on('click', function (event) {
+          event.stopPropagation();
+        });
+      }
 
       $('.edit-add-to-cart', context).on('mousedown', function () {
         var that = this;

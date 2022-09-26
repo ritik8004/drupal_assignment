@@ -21,6 +21,13 @@ class CartNotificationDrawer extends React.Component {
   }
 
   /**
+   * Remove the event listener when component gets deleted.
+   */
+  componentWillUnmount() {
+    document.removeEventListener('showCartDrawer', this.handleProductAddToCart, false);
+  }
+
+  /**
    * This event listener function called when item added to cart.
    *
    * @param {object} event
@@ -44,6 +51,7 @@ class CartNotificationDrawer extends React.Component {
         <CartDrawerContent
           productData={productData.productInfo}
           closeModal={() => this.closeModal()}
+          overlayClass="overlay-cart"
         />
       );
     }

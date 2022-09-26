@@ -3,8 +3,8 @@ import React from 'react';
 const CartDrawerPopupContent = ({ children, className = '' }) => {
   const closeModal = (e) => {
     if (e.target.classList.contains('cart-drawer-popup-content')) {
-      if (document.querySelector('body').classList.contains('overlay-related-select')) {
-        document.querySelector('body').classList.remove('overlay-related-select');
+      if (document.querySelector('body').classList.contains('overlay-cart-drawer')) {
+        document.querySelector('body').classList.remove('overlay-cart-drawer');
       }
 
       if (children !== null && document.querySelector('body').classList.contains(children.props.overlayClass)) {
