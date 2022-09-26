@@ -344,3 +344,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/hello-member-become-member/hello-member-become-member.ltr.css: css/conditional-sass/hello-member-become-member/hello-member-become-member.ltr.css
+
+  alshaya_white_label/checkout-cod-mobile-verification:
+    css:
+      theme:
+        css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css
