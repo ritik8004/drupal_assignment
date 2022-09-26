@@ -11,6 +11,21 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Update the translation store list link label if not present.
+ */
+function alshaya_dh_transac_update_9401() {
+  $store_config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config_translation = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings');
+  $list_link_label = $config_translation->get('store_list_label') ?? $store_config->get('store_list_label');
+  if ($list_link_label === 'List of all The Debenhams Stores') {
+    $config_translation->set('store_list_label', 'قائمة بجميع متاجر دبنهامز');
+    $config_translation->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updates machine_name field in block_content bundles.
  */
 function alshaya_dh_transac_update_8002() {
@@ -136,6 +151,10 @@ function alshaya_dh_transac_install() {
   $config->set('store_list_label', 'List of all The Debenhams Stores');
   $config->save();
 
+  // Sets translation for the store list link label.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_list_label', 'قائمة بجميع متاجر دبنهامز')
+    ->save();
 
   $strings = [
     'seo_brand_name' => [
