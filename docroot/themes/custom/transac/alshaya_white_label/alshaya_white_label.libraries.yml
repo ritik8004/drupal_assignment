@@ -883,3 +883,7 @@ user-account:
   css:
     theme:
       css/conditional-sass/user-account/user-account.ltr.css: {}
+tamara:
+  css:
+    theme:
+      css/conditional-sass/tamara/tamara.ltr.css: {}

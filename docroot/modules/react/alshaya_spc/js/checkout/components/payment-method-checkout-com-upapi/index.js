@@ -200,11 +200,10 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
   };
 
   render() {
-    const { selectedCard, tokenizedCard } = this.context;
-
+    const { selectedCard, tokenizedCard, tokenizedCards } = this.context;
     let activeCard = {};
     if (tokenizedCard !== '') {
-      activeCard = { ...drupalSettings.checkoutComUpapi.tokenizedCards }[tokenizedCard];
+      activeCard = tokenizedCards[tokenizedCard];
     }
 
     const newCard = (
@@ -254,6 +253,7 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
                       closeSavedCardListModal={triggerCloseModal}
                       onExistingCardSelect={this.onExistingCardSelect}
                       onNewCardClick={this.openNewCard}
+                      tokenizedCards={tokenizedCards}
                     />
                   </>
                 </Popup>
