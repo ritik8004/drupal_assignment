@@ -8,6 +8,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Cache\CacheableMetadata;
 
 /**
  * Class Alshaya Algolia Search Breadcrumb Builder.
@@ -47,7 +48,13 @@ class AlshayaAlgoliaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterfac
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
     $breadcrumb->addLink(Link::createFromRoute($this->t('Search results'), '<none>'));
-    $breadcrumb->addCacheableDependency(['url.path']);
+
+    // Create a cacheable object and use the url path as cache context.
+    $cacheability = new CacheableMetadata();
+    $cacheability->addCacheContexts(['url.path:context']);
+
+    // Add url path cacheable context for the breadcrumb.
+    $breadcrumb->addCacheableDependency($cacheability);
     return $breadcrumb;
   }
 
