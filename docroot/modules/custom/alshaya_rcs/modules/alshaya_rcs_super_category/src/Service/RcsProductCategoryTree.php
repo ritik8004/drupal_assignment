@@ -52,6 +52,13 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
   protected $connection;
 
   /**
+   * Term storage object.
+   *
+   * @var \Drupal\taxonomy\TermStorageInterface
+   */
+  protected $termStorage;
+
+  /**
    * Construct RcsProductCategoryTree.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
@@ -77,6 +84,7 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     $this->entityTypeManager = $entity_type_manager;
     $this->cache = $cache;
     $this->connection = $connection;
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
   }
 
   /**
@@ -151,6 +159,25 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
    */
   public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
     return parent::getCategoryTermFromRoute(FALSE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getTermByName($name, $langcode = NULL) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $query = $term_storage->getQuery();
+    $query->condition('vid', 'rcs_category');
+    $query->condition('field_category_slug', $name);
+    $query->condition('langcode', $langcode);
+    $tids = $query->execute();
+    if (!empty($tids)) {
+      $term = $term_storage->load(current($tids));
+      return (!empty($term)) ? $term->id() : NULL;
+    }
   }
 
 }
