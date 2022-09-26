@@ -1,0 +1,44 @@
+.spc-cart-payment-method-logos-block {
+  background-color: $spc-cart-payment-method-logos-block-bg;
+  padding-left: rem(20);
+  padding-right: rem(20);
+
+  &__title {
+    font-size: rem(14);
+    line-height: rem(16);
+    text-align: center;
+    color: $spc-cart-payment-method-logos-block-title;
+    padding-top: rem(18);
+    border-top: rem(1) solid $spc-cart-payment-method-logos-block-border;
+  }
+
+  &__content {
+    margin-top: rem(9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: rem(18);
+
+    .payment-method-icon {
+      height: rem(20);
+      width: auto;
+
+      &:not(:last-child) {
+        margin-#{$right}: rem(14);
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .spc-cart-payment-method-logos-block {
+    &__title {
+      padding-top: rem(12);
+    }
+
+    &__content {
+      margin-top: rem(12);
+      padding-bottom: rem(20);
+    }
+  }
+}

@@ -10,7 +10,7 @@ import {
 import ConditionalView
   from '../../../../../js/utilities/components/conditional-view';
 import MyEgiftTopUp from '../my-egift-top-up';
-import TrashIconSVG from '../../../svg-component/trash-icon-svg';
+import EgiftUnlinkIcon from '../../../svg-component/unlink-icon-svg';
 import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
 import PriceElement
   from '../../../../../alshaya_spc/js/utilities/special-price/PriceElement';
@@ -124,7 +124,7 @@ class EgiftCardLinked extends React.Component {
                 type="button"
                 className="egift-card-remove"
               >
-                <TrashIconSVG />
+                <EgiftUnlinkIcon />
                 <span className="egift-ulink-text">
                   {Drupal.t('Unlink', {}, { context: 'egift' })}
                 </span>

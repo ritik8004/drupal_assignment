@@ -1,0 +1,10 @@
+@include breakpoint($tablet-landscape) {
+  .wishlist-enabled {
+    &.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+      .wishlist-pdp-full {
+        // Changing the positioning in order to accomdate smaller width images in AE.
+        #{$right}: rem(132);
+      }
+    }
+  }
+}

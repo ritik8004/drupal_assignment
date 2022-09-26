@@ -34,6 +34,7 @@ import PaymentMethodCodMobileVerification
   from '../payment-method-cod-mobile-verification';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
+import TamaraWidget from '../../../../../js/tamara/components';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -46,6 +47,7 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodTabby = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
     this.paymentMethodCod = React.createRef();
+    this.paymentMethodTamara = React.createRef();
   }
 
   componentDidMount() {
@@ -286,6 +288,24 @@ export default class PaymentMethod extends React.Component {
                 </ConditionalView>
               </label>
 
+              {/* Show the method description and info icon if payment method is tamara. */}
+              { method.code === 'tamara'
+                && (
+                  <>
+                    <TamaraWidget
+                      ref={this.paymentMethodTamara}
+                      context="info"
+                      amount={amount}
+                    />
+
+                    <div className="spc-payment-method-desc">
+                      <div className="desc-content">
+                        {method.description}
+                      </div>
+                    </div>
+                  </>
+                )}
+
               <ConditionalView condition={method.code === 'tabby'}>
                 <TabbyWidget
                   pageType="checkout"
@@ -401,6 +421,17 @@ export default class PaymentMethod extends React.Component {
               />
             </div>
           </ConditionalView>
+
+          { (isSelected && method.code === 'tamara')
+            && (
+              <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+                <TamaraWidget
+                  ref={this.paymentMethodTamara}
+                  context="installment"
+                  amount={amount}
+                />
+              </div>
+            )}
         </div>
       </>
     );

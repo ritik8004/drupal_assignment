@@ -12,6 +12,20 @@ body.wishlist-enabled {
     }
   }
 
+  #wishlist-header-wrapper {
+    @include breakpoint($upto-desktop) {
+      top: rem(11);
+      #{$right}: rem(50);
+    }
+
+    .wishlist-header {
+      @include breakpoint($upto-desktop) {
+        padding-bottom: 0;
+        padding-#{$right}: 0;
+      }
+    }
+  }
+
   header {
     .region__header {
       .block-alshaya-react-mini-cart {
