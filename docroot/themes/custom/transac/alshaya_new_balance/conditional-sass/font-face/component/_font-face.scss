@@ -53,26 +53,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_new_balance/fo
 }
 
 @font-face {
-  font-family: 'AlBayan';
-  src:
-    url('#{$base_theme_fonts_directory_path}/AlBayan.woff2') format("woff2"),
-    url('#{$base_theme_fonts_directory_path}/AlBayan.woff') format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'AlBayan-Bold';
-  src:
-    url('#{$base_theme_fonts_directory_path}/AlBayan-Bold.woff2') format("woff2"),
-    url('#{$base_theme_fonts_directory_path}/AlBayan-Bold.woff') format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'NotoNaskhArabic-Regular';
   src:
     url('#{$base_theme_fonts_directory_path}/NotoNaskhArabic-Regular.woff2') format("woff2"),
