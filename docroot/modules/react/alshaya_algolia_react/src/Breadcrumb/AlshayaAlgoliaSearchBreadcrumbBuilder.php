@@ -17,7 +17,7 @@ class AlshayaAlgoliaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterfac
   use StringTranslationTrait;
 
   /**
-   * Request stock service object.
+   * Request stack service object.
    *
    * @var null|\Symfony\Component\HttpFoundation\Request
    */
@@ -27,7 +27,7 @@ class AlshayaAlgoliaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterfac
    * AlshayaAlgoliaSearchBreadcrumbBuilder constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   Request stock service object.
+   *   Request stack service object.
    */
   public function __construct(RequestStack $request_stack) {
     $this->currentRequest = $request_stack->getCurrentRequest();
