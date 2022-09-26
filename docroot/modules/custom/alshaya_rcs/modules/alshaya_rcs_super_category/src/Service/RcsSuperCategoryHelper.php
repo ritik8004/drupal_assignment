@@ -154,7 +154,7 @@ class RcsSuperCategoryHelper {
           'langcode' => $lang_code,
         ]);
       }
-      $term->field_category_slug->setValue($category['url_key']);
+      $term->get('field_category_slug')->setValue($category['url_key']);
       $term->save();
 
       // Create Advanced pages.
@@ -187,8 +187,8 @@ class RcsSuperCategoryHelper {
         );
       }
 
-      $node->field_use_as_department_page->setValue(TRUE);
-      $node->field_category_slug->setValue($category['url_key']);
+      $node->get('field_use_as_department_page')->setValue(TRUE);
+      $node->get('field_category_slug')->setValue($category['url_key']);
       $node->save();
     }
   }
