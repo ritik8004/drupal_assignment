@@ -9,7 +9,7 @@ const CodVerifiedText = ({ mobileNumber }) => {
   const phoneNumber = formatMobileNumber(mobileNumber);
   return (
     <div className="cod-mobile-otp__verified">
-      <span className="cod-mobile-otp__verified_mobile">
+      <span className="cod-mobile-otp__verified_mobile" dir="ltr">
         {phoneNumber}
       </span>
       <span className="cod-mobile-otp__verified_message">
