@@ -10,6 +10,11 @@
     color: $spc-checkout-cod-otp-secondary;
   }
 
+  &__mobile {
+    color: $spc-checkout-cod-otp-secondary;
+    display: inline-block;
+  }
+
   &__btn-link {
     text-decoration: underline;
     color: $spc-checkout-cod-otp-primary;
@@ -125,7 +130,8 @@
     z-index: 2;
 
     .loader-icon {
-      background: url(#{$base_theme_loader_img_directory_path}) center/contain no-repeat;
+      background: url(#{$base_theme_loader_img_directory_path}) center/contain
+        no-repeat;
       width: rem(48);
       height: rem(48);
     }
@@ -160,6 +166,10 @@
   @include breakpoint($tablet) {
     &__text-wrapper {
       margin-top: rem(21);
+    }
+
+    &__mobile {
+      margin-#{$left}: rem(4);
     }
 
     &__field {
