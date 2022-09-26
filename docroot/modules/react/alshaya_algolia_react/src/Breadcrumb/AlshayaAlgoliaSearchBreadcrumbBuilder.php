@@ -46,28 +46,8 @@ class AlshayaAlgoliaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterfac
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
-    $breadcrumb->addCacheableDependency(['url.path', 'url.query_args']);
-
-    $queryString = explode('&', $this->currentRequest->getQueryString());
-
-    // If on search page but no filter.
-    if (empty($queryString[0])) {
-      $breadcrumb->addLink(Link::createFromRoute($this->t('Search'), $route_match->getRouteName()));
-    }
-
-    foreach ($queryString as $string) {
-      $query = explode('=', $string);
-      if ($query[0] == 'keywords') {
-        if (empty($query[1])) {
-          $linkText = $this->t('Search results');
-        }
-        else {
-          $linkText = $this->t('Search results for "@keyword"', ['@keyword' => urldecode($query[1])]);
-        }
-        $breadcrumb->addLink(Link::createFromRoute($linkText, '<none>'));
-        return $breadcrumb;
-      }
-    }
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Search results'), '<none>'));
+    $breadcrumb->addCacheableDependency(['url.path']);
     return $breadcrumb;
   }
 
