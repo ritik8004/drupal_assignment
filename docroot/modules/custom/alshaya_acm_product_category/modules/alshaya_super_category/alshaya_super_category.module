@@ -135,7 +135,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
         $parent = end($parents);
       }
 
-      if (!$parent instanceof TermInterface && !$variables['content']['site_logo']['#access']) {
+      if (!$parent instanceof TermInterface || !$variables['content']['site_logo']['#access']) {
         return;
       }
 

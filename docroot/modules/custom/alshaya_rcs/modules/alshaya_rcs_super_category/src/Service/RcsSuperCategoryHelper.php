@@ -115,7 +115,7 @@ class RcsSuperCategoryHelper {
       }
       // Delete term if not found in mdc categories and is not level 2.
       $slug = $category->get('field_category_slug')->getString();
-      if (!str_contains($slug, '/') && !in_array($slug, array_keys($super_categories))) {
+      if (count(explode('/', $slug)) < 2 && !in_array($slug, array_keys($super_categories))) {
         $category->delete();
       }
     }
