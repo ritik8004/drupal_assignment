@@ -592,8 +592,8 @@ function _alshaya_spc_translations() {
 
   // Strings related to COD mobile verification.
   $strings['v17'] = [
-    'Enter the @otp_length-digit OTP code sent to ' => [
-      'ar' => 'أدخل رمز التحقق @otp_length-digit المرسل إلى ',
+    'Enter the @otp_length-digit OTP code sent to' => [
+      'ar' => 'أدخل رمز التحقق @otp_length-digit المرسل إلى',
       'context' => 'cod_mobile_verification',
     ],
     'Change' => [

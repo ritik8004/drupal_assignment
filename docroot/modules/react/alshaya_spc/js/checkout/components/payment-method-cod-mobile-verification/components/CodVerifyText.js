@@ -8,11 +8,11 @@ const CodVerifyText = ({ mobileNumber, otpLength }) => {
   return (
     <div className="cod-mobile-otp__text-wrapper">
       <span className="cod-mobile-otp__text">
-        {Drupal.t('Enter the @otp_length-digit OTP code sent to ', {
+        {Drupal.t('Enter the @otp_length-digit OTP code sent to', {
           '@otp_length': otpLength,
         }, { context: 'cod_mobile_verification' })}
       </span>
-      <span dir="ltr">{phoneNumber}</span>
+      <span dir="ltr">{` ${phoneNumber} `}</span>
       <button
         type="button"
         className="cod-mobile-otp__btn-link"
