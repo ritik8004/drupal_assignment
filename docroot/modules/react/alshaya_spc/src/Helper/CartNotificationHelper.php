@@ -31,7 +31,7 @@ class CartNotificationHelper {
   }
 
   /**
-   * Helper to check if Hello Member is enabled.
+   * Helper to check if notification drawer is enabled.
    *
    * @return bool
    *   TRUE/FALSE
@@ -41,7 +41,7 @@ class CartNotificationHelper {
   }
 
   /**
-   * Wrapper function to get Cart notification Config.
+   * Wrapper function to get cart notification Config.
    *
    * @return \Drupal\Core\Config\ImmutableConfig
    *   Cart notification config.

@@ -2,7 +2,7 @@ import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import isCartNotificationDrawerEnabled from '../../../utilities/cart_notification_util';
 import CartDrawerContent from '../cart-drawer-content';
-import CartDrawerPanel from '../cart-drawer-panel';
+import CartDrawerPopupContent from '../utilities/cart-drawer-popup-content';
 
 class CartNotificationDrawer extends React.Component {
   constructor(props) {
@@ -74,11 +74,9 @@ class CartNotificationDrawer extends React.Component {
 
     return (
       <div className="cart-notification-drawer">
-        <div className="cart-drawer-wrapper">
-          <CartDrawerPanel
-            panelContent={panelContent}
-          />
-        </div>
+        <CartDrawerPopupContent>
+          {panelContent}
+        </CartDrawerPopupContent>
       </div>
     );
   }
