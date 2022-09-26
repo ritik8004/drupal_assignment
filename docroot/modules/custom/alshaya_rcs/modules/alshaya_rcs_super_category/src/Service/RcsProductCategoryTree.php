@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_rcs_super_category\Service;
 
 use Drupal\alshaya_super_category\ProductSuperCategoryTree;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Cache\Cache;
 
 /**
