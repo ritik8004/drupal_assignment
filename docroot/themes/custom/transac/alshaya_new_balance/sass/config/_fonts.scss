@@ -38,7 +38,6 @@ $nb-arabic-medium-nodir: 'NotoNaskhArabic-Medium', 'ProximaNova-SemiBold', 'sans
 $nb-arabic-variablefont: 'NotoNaskhArabic-Variable', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
 $nb-arabic-variablefont-nodir: 'NotoNaskhArabic-Variable', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
 
-
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in NB theme.
 $arial: $nb-nova-regular;
 $arial-nodir: $nb-nova-regular;
