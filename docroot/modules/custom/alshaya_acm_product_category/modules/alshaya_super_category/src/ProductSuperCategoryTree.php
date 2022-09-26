@@ -123,6 +123,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    */
   public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
     $term = NULL;
+    // Do not check acq category terms in V3.
     if ($check_acq_terms) {
       $term = parent::getCategoryTermFromRoute();
     }

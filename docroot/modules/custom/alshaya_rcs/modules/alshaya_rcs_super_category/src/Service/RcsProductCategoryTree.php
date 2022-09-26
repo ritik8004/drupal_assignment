@@ -118,18 +118,32 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
       $url_key = $path_arr[1];
     }
 
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
     if (!empty($url_key)) {
       $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
       $query->condition('vid', 'rcs_category');
       $query->condition('field_category_slug', $url_key);
       $tids = $query->execute();
       if (!empty($tids)) {
-        return current($tids);
+        $term = $term_storage->load(current($tids));
+        return [
+          'id' => $term->id(),
+          'label' => $term->getName(),
+          'path' => $term->get('path')->getString(),
+        ];
       }
     }
 
-    $super_categories = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('rcs_category', 0, 1, FALSE);
-    return !empty($super_categories) ? current($super_categories)->tid : NULL;
+    $super_categories = $term_storage->loadTree('rcs_category', 0, 1, TRUE);
+
+    if (!empty($super_categories)) {
+      $term = current($super_categories);
+      return [
+        'id' => $term->id(),
+        'label' => $term->getName(),
+        'path' => $term->get('path')->getString(),
+      ];
+    }
   }
 
   /**

@@ -4,6 +4,8 @@ namespace Drupal\alshaya_rcs_super_category\Commands;
 
 use Drush\Commands\DrushCommands;
 use Drupal\alshaya_rcs_super_category\Service\RcsSuperCategoryHelper;
+use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Class Alshaya RCS Super Category Commands.
@@ -19,13 +21,23 @@ class RcsSuperCategoryCommands extends DrushCommands {
   protected $rcsSuperCategoryHelper;
 
   /**
+   * Logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $drupalLogger;
+
+  /**
    * RcsSuperCategoryCommands constructor.
    *
    * @param \Drupal\alshaya_rcs_super_category\Service\RcsSuperCategoryHelper $rcs_super_helper
    *   Rcs Super Category Helper service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   *   Logger factory service.
    */
-  public function __construct(RcsSuperCategoryHelper $rcs_super_helper) {
+  public function __construct(RcsSuperCategoryHelper $rcs_super_helper, LoggerChannelFactoryInterface $logger) {
     $this->rcsSuperCategoryHelper = $rcs_super_helper;
+    $this->drupalLogger = $logger->get('alshaya_rcs_super_category');;
   }
 
   /**
@@ -39,8 +51,12 @@ class RcsSuperCategoryCommands extends DrushCommands {
    *   Syncs rcs super categories.
    */
   public function syncSuperCategories() {
-    $this->output->writeln(dt('Synchronizing all super categories...'));
+    $msg = 'Synchronizing all super categories...';
+    $this->say($msg);
+    $this->drupalLogger->info($msg);
     $this->rcsSuperCategoryHelper->syncSuperCategories();
-    $this->output->writeln(dt('Successfully completed syncing super categories.'));
+    $msg = 'Successfully completed syncing super categories.';
+    $this->say($msg);
+    $this->drupalLogger->info($msg);
   }
 }
