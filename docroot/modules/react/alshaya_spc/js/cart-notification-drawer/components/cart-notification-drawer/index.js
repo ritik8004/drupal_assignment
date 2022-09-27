@@ -29,7 +29,6 @@ class CartNotificationDrawer extends React.Component {
 
   /**
    * This event listener function called when item added to cart.
-   *
    * @param {object} event
    *  Event detail containing product data.
    */
