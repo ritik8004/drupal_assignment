@@ -24,6 +24,7 @@ import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
+import { isFreeGiftProduct } from '../../../../js/utilities/price';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -605,8 +606,8 @@ const getProcessedCartData = async (cartData) => {
           }
 
           // Free Item is only for free gift products which are having
-          // price 0, rest all are free but still via different rules.
-          if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
+          // price 0/0.01, rest all are free but still via different rules.
+          if (isFreeGiftProduct(totalItem.base_price) && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
             data.items[itemKey].freeItem = true;
           }
         }
