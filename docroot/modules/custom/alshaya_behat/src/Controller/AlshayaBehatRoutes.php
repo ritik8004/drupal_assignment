@@ -10,7 +10,7 @@ use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -89,7 +89,7 @@ class AlshayaBehatRoutes extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirects to node page if found else redirects to 404 page.
    *
-   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
    */
   public function firstInStockProduct() {
     // Query the database to fetch in stock products.
@@ -121,6 +121,9 @@ class AlshayaBehatRoutes extends ControllerBase {
 
       // Fetch the display node for the sku.
       $node = $this->skuManager->getDisplayNode($main_sku);
+      if (is_null($node)) {
+        continue;
+      }
       // Request the node and check if there is any error when loading the node.
       // If there is an error we check the next sku.
       $request = Request::create('/node/' . $node->id());
@@ -135,7 +138,65 @@ class AlshayaBehatRoutes extends ControllerBase {
     }
 
     // If no SKU is found which in stock, then redirect to 404 page.
-    throw new NotFoundHttpException();
+    throw new BadRequestHttpException();
+  }
+
+  /**
+   * Provides the first OOS product.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirects to node page if found else redirects to 404 page.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+   */
+  public function firstOosProduct() {
+    // Query the database to fetch out of stock products.
+    $query = $this->database->select('acq_sku_field_data', 'afd');
+    $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = afd.sku');
+    $query->leftJoin('node__field_skus', 'nfs', 'nfs.field_skus_value = afd.sku');
+    $query->condition('quantity', '0');
+    $query->fields('afd', ['sku']);
+    $skus = $query->distinct()->execute()->fetchCol();
+
+    foreach ($skus as $sku) {
+      // Load the sku.
+      $main_sku = SKU::loadFromSku($sku);
+      if (!$this->stockManager->isProductInStock($main_sku)) {
+        // SKU might be configurable. So fetch the parent.
+        $parent_sku = $this->skuManager->getParentSkuBySku($main_sku);
+        if ($parent_sku) {
+          if (!$this->stockManager->isProductInStock($parent_sku)) {
+            $main_sku = $parent_sku;
+          }
+          else {
+            continue;
+          }
+        }
+      }
+      else {
+        continue;
+      }
+
+      // Fetch the display node for the sku.
+      $node = $this->skuManager->getDisplayNode($main_sku);
+      if (is_null($node)) {
+        continue;
+      }
+      // Request the node and check if there is any error when loading the node.
+      // If there is an error we check the next sku.
+      $request = Request::create('/node/' . $node->id());
+      try {
+        $this->httpKernel->handle($request, HttpKernelInterface::SUB_REQUEST);
+      }
+      catch (\Exception) {
+        continue;
+      }
+      // Redirect to the node page.
+      return new RedirectResponse($node->toUrl()->toString());
+    }
+
+    // If no SKU is found which in stock, then redirect to 404 page.
+    throw new BadRequestHttpException();
   }
 
 }
