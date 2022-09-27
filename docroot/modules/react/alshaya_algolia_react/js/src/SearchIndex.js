@@ -14,8 +14,9 @@ import SearchApp from './search/SearchApp';
     <SearchApp />,
     document.querySelector('#alshaya-algolia-autocomplete'),
   );
-
-  $('#alshaya-algolia-autocomplete input[type="search"]').on('mousedown tap focus', () => {
+  $('#alshaya-algolia-autocomplete input[type="search"]').on('mousedown tap focus keyup', () => {
     window.algoliaSearchActivityStarted = true;
+    // Add localStorage to check if search is activated.
+    Drupal.addItemInLocalStorage('isSearchActivated', $('#alshaya-algolia-autocomplete input[type="search"]')[0].value.length > 0);
   });
 }(jQuery, drupalSettings));
