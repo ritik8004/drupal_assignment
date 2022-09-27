@@ -155,7 +155,7 @@ const OrderSummary = (props) => {
     moment.locale(currentLanguage);
   }
 
-  if (methodCode === 'tabby') {
+  if (methodCode === 'tabby' || methodCode === 'tamara') {
     methodIcon = <PaymentMethodIcon methodName={methodCode} methodLabel={method} />;
   }
   // Dont show Delivery related summary if order has only virtual product,

@@ -6,6 +6,7 @@
     font-size: rem(14);
     line-height: 1.29;
     color: $spc-checkout-cod-otp-secondary;
+    display: inline-block;
   }
 
   &_message {
@@ -16,7 +17,7 @@
   }
 
   &_edit {
-    font-size: rem(12);
+    font-size: rem(14);
     line-height: 1.29;
     color: $spc-checkout-cod-otp-primary;
     background: none;
@@ -35,6 +36,6 @@
 
   @include breakpoint($tablet) {
     padding-top: rem(13);
-    padding-bottom: rem(21);
+    padding-bottom: rem(1);
   }
 }

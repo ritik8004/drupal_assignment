@@ -5,3 +5,8 @@ swatches:
     - color
   plp:
     - color
+color_attribute_config:
+  support_multiple_attributes: true
+  configurable_color_attribute: 'color'
+  configurable_color_label_attribute: 'attr_color'
+  configurable_color_code_attribute: 'attr_rgb_color'

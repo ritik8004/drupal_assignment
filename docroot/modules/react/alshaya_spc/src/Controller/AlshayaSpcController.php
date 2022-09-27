@@ -217,6 +217,9 @@ class AlshayaSpcController extends ControllerBase {
     $cart_config = $this->config('alshaya_acm.cart_config');
     $cache_tags = Cache::mergeTags($cache_tags, $cart_config->getCacheTags());
 
+    $acm_checkout_settings = $this->config('alshaya_acm_checkout.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $acm_checkout_settings->getCacheTags());
+
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // Get country code.
@@ -247,6 +250,7 @@ class AlshayaSpcController extends ControllerBase {
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
             'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
+            'display_cart_payment_icons' => $this->config('alshaya_spc.settings')->get('display_cart_payment_icons') ?? FALSE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
           // This key gets the dynamic area value of the area placeholder
@@ -260,6 +264,34 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     $build = $this->addCheckoutConfigSettings($build);
+
+    // Get payment methods.
+    $payment_methods = [];
+    $exclude_payment_methods = array_filter($acm_checkout_settings->get('exclude_payment_methods'));
+
+    foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
+      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id'], $payment_method['label']->__toString());
+      // Avoid displaying the excluded methods.
+      if (isset($exclude_payment_methods[$payment_method['id']])) {
+        continue;
+      }
+
+      /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
+      $plugin = $this->paymentMethodManager->createInstance($payment_method['id']);
+      if (!($plugin->isAvailable())) {
+        continue;
+      }
+
+      $payment_methods[$payment_method['id']] = [
+        'code' => $payment_method_term->get('field_payment_code')->getString(),
+        'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
+        'weight' => $payment_method_term->getWeight(),
+      ];
+    }
+    $arrayColumn = array_column($payment_methods, 'weight');
+
+    array_multisort($arrayColumn, SORT_ASC, $payment_methods);
+    $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
     if ($this->spcHelper->getCommerceBackendVersion() == 2) {
       $checkout_settings = Settings::get('alshaya_checkout_settings');

@@ -11,6 +11,21 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update the translation store list link label if not present.
+ */
+function alshaya_stores_finder_update_9401() {
+  $store_config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config_translation = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings');
+  $list_link_label = $config_translation->get('store_list_label') ?? $store_config->get('store_list_label');
+  if ($list_link_label === 'List of all Stores') {
+    $config_translation->set('store_list_label', 'قائمة جميع الفروع');
+    $config_translation->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update MDC API url for Store Finder page.
  */
 function alshaya_stores_finder_update_9000() {
@@ -246,5 +261,6 @@ function alshaya_stores_finder_install() {
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
     ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
+    ->set('store_list_label', 'قائمة جميع الفروع')
     ->save();
 }

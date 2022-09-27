@@ -592,8 +592,8 @@ function _alshaya_spc_translations() {
 
   // Strings related to COD mobile verification.
   $strings['v17'] = [
-    'Enter the @otp_length-digit OTP code sent to @mobile_number' => [
-      'ar' => 'أدخل رمز التحقق @otp_length-digit المرسل إلى @mobile_number',
+    'Enter the @otp_length-digit OTP code sent to' => [
+      'ar' => 'أدخل رمز التحقق @otp_length-digit المرسل إلى',
       'context' => 'cod_mobile_verification',
     ],
     'Change' => [
@@ -619,6 +619,14 @@ function _alshaya_spc_translations() {
     'Wrong OTP' => [
       'ar' => 'رمز تحقق غير صحيح',
       'context' => 'cod_mobile_verification',
+    ],
+  ];
+
+  // Strings related to payment method logos block on cart page.
+  $strings['v18'] = [
+    'Checkout quickly and securely with' => [
+      'ar' => 'دفع سريع وآمن مع',
+      'context' => 'cart_payment_logos',
     ],
   ];
 
