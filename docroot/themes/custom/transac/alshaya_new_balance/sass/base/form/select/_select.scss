@@ -3,11 +3,11 @@
     &.select2-results__options {
       li {
         &.select2-results__option {
-          border: rem(1) solid $select_border;
+          border: rem(1) solid $primary_dropdown_border;
           border-bottom: none;
 
           &:last-child {
-            border-bottom: rem(1) solid $select_border;
+            border-bottom: rem(1) solid $primary_dropdown_border;
           }
 
           &:hover {
