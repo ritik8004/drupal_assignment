@@ -154,6 +154,14 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
         }
       }
     }
+
+    // If we have to use MDC URLs for promotions, then fetch the url_key value
+    // from the synced data.
+    $acm_settings = \Drupal::configFactory()->getEditable('alshaya_acm.settings');
+    if (!empty($acm_settings->get('use_mdc_url')) && isset($promotion['extension']['promotion_url_key'])) {
+      $node->path->pathauto = PathautoState::SKIP;
+      $node->path->alias = '/' . trim($promotion['extension']['promotion_url_key'], '/');
+    }
   }
 }
 
