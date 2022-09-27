@@ -264,7 +264,7 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     // Get payment methods and attach to Drupal settings.
-    $this->getPaymentMethods($build);
+    $this->addPaymentMethodsToBuild($build);
 
     $build = $this->addCheckoutConfigSettings($build);
 
@@ -661,7 +661,7 @@ class AlshayaSpcController extends ControllerBase {
     ];
 
     // Get payment methods and attach to Drupal settings.
-    $this->getPaymentMethods($build);
+    $this->addPaymentMethodsToBuild($build);
     // Process build data for each payment method available on checkout page. It
     // will add processed data in drupal settings and will attach the necessary
     // libraries to the checkout build.
@@ -1080,7 +1080,7 @@ class AlshayaSpcController extends ControllerBase {
    * @param array $build
    *   Build array.
    */
-  private function getPaymentMethods(array &$build) {
+  private function addPaymentMethodsToBuild(array &$build) {
     $checkout_settings = $this->config('alshaya_acm_checkout.settings');
 
     $ab_testing = $this->config('alshaya_acm_checkout.ab_testing');
