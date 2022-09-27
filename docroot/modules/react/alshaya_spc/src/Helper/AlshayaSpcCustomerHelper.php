@@ -282,6 +282,15 @@ class AlshayaSpcCustomerHelper {
       // If address already exists.
       if (!empty($address_data['address_id'])) {
         $profile = $this->entityTypeManager->getStorage('profile')->load($address_data['address_id']);
+        // Return from here if profile doesn't exists.
+        if (!($profile instanceof Profile)) {
+          $this->logger->error('Address in address book is not available for the user @user having address info @address.', [
+            '@user' => $uid,
+            '@address' => json_encode($address),
+          ]);
+
+          return FALSE;
+        }
       }
       else {
         $profile = $this->entityTypeManager->getStorage('profile')->create([
@@ -289,16 +298,6 @@ class AlshayaSpcCustomerHelper {
           'uid' => $uid,
         ]);
         $profile->setOwnerId($uid);
-      }
-
-      // Return from here if profile doesn't exists.
-      if (!($profile instanceof Profile)) {
-        $this->logger->error('Address in address book is not available for the user @user having address info @address.', [
-          '@user' => $uid,
-          '@address' => json_encode($address),
-        ]);
-
-        return FALSE;
       }
 
       // Prepare mobile info.
