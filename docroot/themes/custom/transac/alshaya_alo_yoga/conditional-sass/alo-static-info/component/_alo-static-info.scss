@@ -30,13 +30,9 @@
     }
 
     &-title {
-      font-family: $alshaya-bold;
       font-size: rem(16);
       line-height: 1.25;
       margin: 0;
-    }
-
-    &-content {
     }
 
     &-info {
@@ -60,19 +56,35 @@
     &__content {
       margin-top: rem(36);
       border-style: solid;
-      border-color: $primary_border;
+      border-color: $static-info-border;
       border-width: rem(1) 0;
     }
 
     &__purpose {
+      text-align: $left;
+
       &-header {
         display: flex;
         align-items: center;
         padding: rem(16) 0 rem(8);
+
+        @include icon(chevrondown, after) {
+          font-size: rem(24);
+        }
+
+        &.active {
+          @include icon(chevronup, after);
+        }
       }
 
       &-title {
-        margin-left: rem(8);
+        font-family: $ay-nova-semibold;
+        margin-#{$left}: rem(8);
+        flex-grow: 1;
+      }
+
+      &-content {
+        padding-bottom: rem(16);
       }
 
       &:first-child {
@@ -94,16 +106,18 @@
     }
 
     &__content {
-      margin-top: rem(40);
+      margin: rem(40) auto 0;
       display: flex;
       justify-content: space-around;
       align-items: flex-start;
+      max-width: rem(1000);
     }
 
     &__purpose {
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: rem(400);
 
       &-header {
       }
@@ -114,6 +128,7 @@
       }
 
       &-title {
+        font-family: $alshaya-bold;
         font-size: rem(18);
         line-height: 1.27;
       }
