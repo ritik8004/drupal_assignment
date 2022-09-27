@@ -139,7 +139,7 @@
       });
 
       // Only if cart drawer panel feature is disabled.
-      if (!drupalSettings.cart.cartNotificationDrawer) {
+      if (drupalSettings.cart && !drupalSettings.cart.cartNotificationDrawer ) {
         $(window).on('click', function () {
           // #cart_notification for the default mini cart icon.
           // #magv2_cart_notification for New PDP layout mobile cart icon.
