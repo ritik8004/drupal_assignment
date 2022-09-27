@@ -117,7 +117,7 @@
     attach: function (context, settings) {
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function (e) {
         var productData = e.detail.productData;
-        if (drupalSettings.cart.cartNotificationDrawer) {
+        if (drupalSettings.cart && drupalSettings.cart.cartNotificationDrawer) {
           Drupal.cartNotification.spinner_stop();
           // Trigger cart drawer panel event when product added to cart.
           // Cart drawer panel will open as side drawer.

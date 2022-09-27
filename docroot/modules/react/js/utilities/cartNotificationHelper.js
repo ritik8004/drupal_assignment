@@ -1,4 +1,4 @@
-import { hasValue } from "./conditionsUtility";
+import { hasValue } from './conditionsUtility';
 
 /**
  * Helper function to check if Cart notification drawer is enabled.
