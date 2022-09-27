@@ -41,16 +41,10 @@ function alshaya_tamara_install() {
 
   $config->save();
 
-  $strings = [
-    'Continue with tamara' => [
-      'ar' => 'استمر مع تمارا',
-      'context' => 'tamara',
-    ],
-    'Your tamara order has been cancelled' => [
-      'ar' => 'تم إلغاء طلب تمارا',
-      'context' => 'tamara',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
+  // Add translations.
+  module_load_include('inc', 'alshaya_tamara', 'alshaya_tamara.translations');
+  $translations = _alshaya_tamara_get_translations();
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
 }

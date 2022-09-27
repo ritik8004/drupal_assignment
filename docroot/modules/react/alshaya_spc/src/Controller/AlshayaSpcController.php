@@ -263,35 +263,10 @@ class AlshayaSpcController extends ControllerBase {
       ],
     ];
 
+    // Get payment methods and attach to Drupal settings.
+    $this->addPaymentMethodsToBuild($build);
+
     $build = $this->addCheckoutConfigSettings($build);
-
-    // Get payment methods.
-    $payment_methods = [];
-    $exclude_payment_methods = array_filter($acm_checkout_settings->get('exclude_payment_methods'));
-
-    foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
-      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id'], $payment_method['label']->__toString());
-      // Avoid displaying the excluded methods.
-      if (isset($exclude_payment_methods[$payment_method['id']])) {
-        continue;
-      }
-
-      /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
-      $plugin = $this->paymentMethodManager->createInstance($payment_method['id']);
-      if (!($plugin->isAvailable())) {
-        continue;
-      }
-
-      $payment_methods[$payment_method['id']] = [
-        'code' => $payment_method_term->get('field_payment_code')->getString(),
-        'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
-        'weight' => $payment_method_term->getWeight(),
-      ];
-    }
-    $arrayColumn = array_column($payment_methods, 'weight');
-
-    array_multisort($arrayColumn, SORT_ASC, $payment_methods);
-    $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
     if ($this->spcHelper->getCommerceBackendVersion() == 2) {
       $checkout_settings = Settings::get('alshaya_checkout_settings');
@@ -342,9 +317,6 @@ class AlshayaSpcController extends ControllerBase {
 
     $cc_config = $this->config('alshaya_click_collect.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $cc_config->getCacheTags());
-
-    $ab_testing = $this->config('alshaya_acm_checkout.ab_testing');
-    $cache_tags = Cache::mergeTags($cache_tags, $ab_testing->getCacheTags());
 
     $checkout_settings = $this->config('alshaya_acm_checkout.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
@@ -688,49 +660,16 @@ class AlshayaSpcController extends ControllerBase {
       ],
     ];
 
-    // Get payment methods.
-    $payment_methods = [];
-    $exclude_payment_methods = array_filter($checkout_settings->get('exclude_payment_methods'));
-
-    foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
-      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id'], $payment_method['label']->__toString());
-      // Avoid displaying the excluded methods.
-      if (isset($exclude_payment_methods[$payment_method['id']])) {
-        continue;
-      }
-
+    // Get payment methods and attach to Drupal settings.
+    $this->addPaymentMethodsToBuild($build);
+    // Process build data for each payment method available on checkout page. It
+    // will add processed data in drupal settings and will attach the necessary
+    // libraries to the checkout build.
+    foreach ($build['#attached']['drupalSettings']['payment_methods'] ?? [] as $payment_method) {
       /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
-      $plugin = $this->paymentMethodManager->createInstance($payment_method['id']);
-      if (!($plugin->isAvailable())) {
-        continue;
-      }
-
+      $plugin = $this->paymentMethodManager->createInstance($payment_method['code']);
       $plugin->processBuild($build);
-
-      $payment_methods[$payment_method['id']] = [
-        'name' => $payment_method_term->label(),
-        'gtm_name' => $payment_method_term->label(),
-        'description' => $payment_method_term->getDescription(),
-        'code' => $payment_method_term->get('field_payment_code')->getString(),
-        'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
-        'weight' => $payment_method_term->getWeight(),
-        'ab_testing' => $ab_testing->get($payment_method['id']) ?? FALSE,
-      ];
-
-      if ($this->languageManager->getCurrentLanguage()->getId() !== 'en') {
-        $payment_method_term_en = $payment_method_term->getTranslation('en');
-        $payment_methods[$payment_method['id']]['gtm_name'] = $payment_method_term_en->label();
-      }
-
-      // Show default on top.
-      $payment_methods[$payment_method['id']]['weight'] = $payment_methods[$payment_method['id']]['default']
-        ? -999
-        : (int) $payment_method_term->getWeight();
     }
-    $arrayColumn = array_column($payment_methods, 'weight');
-
-    array_multisort($arrayColumn, SORT_ASC, $payment_methods);
-    $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
     $build = $this->addCheckoutConfigSettings($build);
 
@@ -1133,6 +1072,64 @@ class AlshayaSpcController extends ControllerBase {
     $build['#cache']['contexts'][] = 'user';
 
     return $build;
+  }
+
+  /**
+   * Add payment methods and configurations to settings.
+   *
+   * @param array $build
+   *   Build array.
+   */
+  private function addPaymentMethodsToBuild(array &$build) {
+    $checkout_settings = $this->config('alshaya_acm_checkout.settings');
+
+    $ab_testing = $this->config('alshaya_acm_checkout.ab_testing');
+    $cache_tags = Cache::mergeTags($build['#cache']['tags'] ?? [], $ab_testing->getCacheTags());
+
+    // Get payment methods.
+    $payment_methods = [];
+    $exclude_payment_methods = array_filter($checkout_settings->get('exclude_payment_methods'));
+
+    foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
+      // Avoid displaying the excluded methods.
+      if (isset($exclude_payment_methods[$payment_method['id']])) {
+        continue;
+      }
+
+      /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
+      $plugin = $this->paymentMethodManager->createInstance($payment_method['id']);
+      if (!($plugin->isAvailable())) {
+        continue;
+      }
+
+      // Get the payment method term data.
+      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id'], $payment_method['label']->__toString());
+
+      $payment_methods[$payment_method['id']] = [
+        'name' => $payment_method_term->label(),
+        'gtm_name' => $payment_method_term->label(),
+        'description' => $payment_method_term->getDescription(),
+        'code' => $payment_method_term->get('field_payment_code')->getString(),
+        'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
+        'weight' => $payment_method_term->getWeight(),
+        'ab_testing' => $ab_testing->get($payment_method['id']) ?? FALSE,
+      ];
+
+      if ($this->languageManager->getCurrentLanguage()->getId() !== 'en') {
+        $payment_method_term_en = $payment_method_term->getTranslation('en');
+        $payment_methods[$payment_method['id']]['gtm_name'] = $payment_method_term_en->label();
+      }
+
+      // Show default on top.
+      $payment_methods[$payment_method['id']]['weight'] = $payment_methods[$payment_method['id']]['default']
+        ? -999
+        : (int) $payment_method_term->getWeight();
+    }
+    $arrayColumn = array_column($payment_methods, 'weight');
+
+    array_multisort($arrayColumn, SORT_ASC, $payment_methods);
+    $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
+    $build['#cache']['tags'] = $cache_tags;
   }
 
 }
