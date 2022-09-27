@@ -15,10 +15,12 @@ function alshaya_rcs_super_category_rcs_placeholders_processor_path_alter(string
   if (empty($term)) {
     // Remove the super category from the url.
     $path_arr = explode('/', $path);
+    // Check for with/without trailing slash in slug.
+    $paths =[$path_arr[1], $path_arr[1] . '/'];
     $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     $query = $term_storage->getQuery();
     $query->condition('vid', 'rcs_category');
-    $query->condition('field_category_slug', $path_arr[1]);
+    $query->condition('field_category_slug', $paths, 'IN');
     $tids = $query->execute();
     if (!empty($tids)) {
       $term = $term_storage->load(current($tids));

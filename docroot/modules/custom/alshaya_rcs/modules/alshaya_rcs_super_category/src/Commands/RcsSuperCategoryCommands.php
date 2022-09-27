@@ -51,12 +51,8 @@ class RcsSuperCategoryCommands extends DrushCommands {
    *   Syncs rcs super categories.
    */
   public function syncSuperCategories() {
-    $msg = 'Synchronizing all super categories...';
-    $this->say($msg);
-    $this->drupalLogger->info($msg);
+    $this->drupalLogger->notice('Synchronizing all super categories...');
     $this->rcsSuperCategoryHelper->syncSuperCategories();
-    $msg = 'Successfully completed syncing super categories.';
-    $this->say($msg);
-    $this->drupalLogger->info($msg);
+    $this->drupalLogger->notice('Successfully completed syncing super categories.');
   }
 }
