@@ -3,16 +3,3 @@ alshaya_cross_border:
    theme:
      # @todo The URL is hard coded for POC, we have to make this configurable.
      '//intgepi.bglobale.com/includes/css/1197': { type: external, attributes: { id: GEPIStyles, type: text/css } }
-
-alshaya_xb_checkout:
-  js:
-    js/alshaya_xb_checkout.js: {}
-  dependencies:
-    - core/drupal
-
-alshaya_xb_checkout_seo:
-  js:
-    js/alshaya_xb_checkout_seo.js: {}
-  dependencies:
-    - core/drupal
-    - datalayer/datapush
