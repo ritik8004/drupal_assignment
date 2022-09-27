@@ -33,20 +33,7 @@
   }
 }
 
-.c-address-book {
-  .block-page-title-block {
-    // padding: 0 0 rem(25);
-
-    @include breakpoint($only-tablet) {
-      // padding: rem(30) rem(0) rem(25);
-    }
-  }
-}
-
 .c-order-list {
-  // .block-page-title-block {
-  //   padding: 0 0 rem(32);
-  // }
   .order-search-form {
     top: rem(-16);
 
