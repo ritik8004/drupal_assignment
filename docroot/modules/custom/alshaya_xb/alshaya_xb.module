@@ -62,7 +62,19 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
     $js = '
      var glegem = glegem || function () {
       (window["glegem"].q = window["glegem"].q || []).push(arguments)
-     }';
+     }
+
+     glegem("OnCheckoutStepLoaded", function (data) {
+      switch (data.StepId) {
+        case data.Steps.LOADED:
+          break;
+
+        case data.Steps.CONFIRMATION:
+          // Clear local storage.
+          window.commerceBackend.removeCartDataFromStorage(true);
+          break;
+      }
+    });';
 
     $page_bottom['alshaya_xb_checkout_cross_border'] = [
       '#type'  => 'html_tag',
