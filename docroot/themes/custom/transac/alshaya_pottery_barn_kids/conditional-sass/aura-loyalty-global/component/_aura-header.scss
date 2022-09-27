@@ -16,7 +16,7 @@ body {
           }
 
           li,
-          a {
+          a:not(.language-link) {
             align-items: center;
             display: inline-flex;
           }

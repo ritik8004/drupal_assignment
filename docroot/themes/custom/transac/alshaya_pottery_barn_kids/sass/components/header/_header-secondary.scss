@@ -24,7 +24,7 @@
       display: inline-block;
     }
 
-    &::before {
+    &:not(.language-link)::before {
       @include breakpoint($desktop) {
         content: none !important;
       }
