@@ -132,7 +132,6 @@ $settings['file_scan_ignore_directories'] = [
   'node_modules',
   'bower_components',
   'middleware',
-  'appointment',
 ];
 
 /**

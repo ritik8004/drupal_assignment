@@ -18,10 +18,3 @@ then
   cd "$docrootDir/middleware"
   composer install
 fi
-
-if [ -d "$docrootDir/appointment" ];
-then
-  echo "Doing composer install for appointment"
-  cd "$docrootDir/appointment"
-  composer install
-fi
