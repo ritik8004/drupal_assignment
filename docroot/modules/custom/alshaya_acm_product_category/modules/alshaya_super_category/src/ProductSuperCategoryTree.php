@@ -121,8 +121,12 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @return \Drupal\Core\Entity\EntityInterface|mixed|null
    *   Return the taxonomy term object if found else NULL.
    */
-  public function getCategoryTermFromRoute() {
-    $term = parent::getCategoryTermFromRoute();
+  public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
+    $term = NULL;
+    // Do not check acq category terms in V3.
+    if ($check_acq_terms) {
+      $term = parent::getCategoryTermFromRoute();
+    }
 
     if (empty($term)) {
       $request = $this->requestStack->getCurrentRequest();
@@ -130,9 +134,9 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       $path_parts = pathinfo($current_uri);
       $term_path = explode('/', $path_parts['dirname']);
       if (!empty($term_path[2])) {
-        $term = $this->getTermByName($term_path[2]);
-        if (!empty($term->tid)) {
-          $term = $this->termStorage->load($term->tid);
+        $tid = $this->getTermByName($term_path[2]);
+        if (!empty($tid)) {
+          $term = $this->termStorage->load($tid);
         }
       }
       elseif ($request->get('_route') == 'view.search.page') {
@@ -195,7 +199,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     $query->condition('tfd.vid', self::VOCABULARY_ID);
     $query->where("REPLACE(LOWER(tfd.name), ' ','-') LIKE :name", [':name' => Html::cleanCssIdentifier($name)]);
     $query->orderBy('tfd.weight', 'ASC');
-    return $query->execute()->fetch();
+    $result = $query->execute()->fetch();
+    return !empty($result) ? $result->tid : NULL;
   }
 
   /**

@@ -1,0 +1,43 @@
+services:
+  alshaya_rcs_super_category.super_categories_helper:
+    class: Drupal\alshaya_rcs_super_category\Service\RcsSuperCategoryHelper
+    arguments:
+     - '@config.factory'
+     - '@entity_type.manager'
+     - '@language_manager'
+     - '@logger.factory'
+     - '@alshaya_api.api'
+  alshaya_rcs_super_category.super_category_feature_manager:
+    class: Drupal\alshaya_rcs_super_category\Service\AlshayaRcsSuperCategoryManager
+    decorates: alshaya_super_category.super_category_feature_manager
+    decoration_priority: 1
+    arguments:
+      - '@alshaya_acm_product_category.product_category_tree'
+      - '@config.factory'
+      - '@entity_type.manager'
+      - '@module_handler'
+      - '@alshaya_config.manager'
+  alshaya_rcs_super_category.product_category_tree:
+    class: Drupal\alshaya_rcs_super_category\Service\RcsProductCategoryTree
+    decorates: alshaya_acm_product_category.product_category_tree
+    decoration_priority: 8
+    arguments:
+      - '@alshaya_rcs_super_category.product_category_tree.inner'
+      - '@request_stack'
+      - '@path.current'
+      - '@entity_type.manager'
+      - '@entity.repository'
+      - '@language_manager'
+      - '@cache.product_category_tree'
+      - '@current_route_match'
+      - '@database'
+      - '@config.factory'
+      - '@path_alias.manager'
+      - '@alshaya_acm_product.category_helper'
+      - '@module_handler'
+      - '@theme.manager'
+
+  alshaya_rcs_super_category.path_processor:
+    class: Drupal\alshaya_rcs_super_category\PathProcessor\RcsSuperCategoryPathProcessor
+    tags:
+      - { name: path_processor_outbound, priority: 300 }
