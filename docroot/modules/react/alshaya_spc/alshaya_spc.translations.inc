@@ -600,7 +600,7 @@ function _alshaya_spc_translations() {
       'ar' => 'تغيير',
       'context' => 'cod_mobile_verification',
     ],
-    'verify' => [
+    'Verify' => [
       'ar' => 'تحقق',
       'context' => 'cod_mobile_verification',
     ],
@@ -618,6 +618,10 @@ function _alshaya_spc_translations() {
     ],
     'Wrong OTP' => [
       'ar' => 'رمز تحقق غير صحيح',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Edit' => [
+      'ar' => 'تعديل',
       'context' => 'cod_mobile_verification',
     ],
   ];
