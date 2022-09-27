@@ -31,7 +31,10 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     data.products = [];
     data.cart = {
       'subtotal': cartData.totals['subtotal_incl_tax'],
+      // Applicable promotion rule ids as comma seperated string based on the cart items.
       'applied_rules': cartData.appliedRules,
+      // Discount applied promotion rule ids as comma seperated string based on the cart items.
+      'applied_rules_with_discounts': cartData.appliedRulesWithDiscount,
     };
 
     for (var i in cartData.items) {
