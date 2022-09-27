@@ -1,0 +1,4 @@
+name: Alshaya Behat
+type: module
+description: Alshaya Behat module
+core_version_requirement: ^8 || ^9

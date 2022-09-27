@@ -18,6 +18,17 @@ use Drupal\search_api\Entity\Server;
 /**
  * Implements hook_update_N().
  *
+ * Installs alshaya_behat module.
+ */
+function alshaya_transac_update_9402() {
+  if (!(\Drupal::moduleHandler()->moduleExists('alshaya_behat'))) {
+    \Drupal::service('module_installer')->install(['alshaya_behat']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Uninstall alshaya_appointment module.
  */
 function alshaya_transac_update_9403() {
