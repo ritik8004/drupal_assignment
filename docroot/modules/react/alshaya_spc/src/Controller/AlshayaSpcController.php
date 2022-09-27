@@ -668,6 +668,14 @@ class AlshayaSpcController extends ControllerBase {
     foreach ($build['#attached']['drupalSettings']['payment_methods'] ?? [] as $payment_method) {
       /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
       $plugin = $this->paymentMethodManager->createInstance($payment_method['code']);
+      // Check if payment method is available at backend else remove it from the
+      // options to checkout.
+      if (!($plugin->isAvailable())) {
+        unset($build['#attached']['drupalSettings']['payment_methods'][$payment_method['code']]);
+        continue;
+      }
+
+      // If available proceed to process the required build.
       $plugin->processBuild($build);
     }
 
@@ -1093,12 +1101,6 @@ class AlshayaSpcController extends ControllerBase {
     foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
       // Avoid displaying the excluded methods.
       if (isset($exclude_payment_methods[$payment_method['id']])) {
-        continue;
-      }
-
-      /** @var \Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase $plugin */
-      $plugin = $this->paymentMethodManager->createInstance($payment_method['id']);
-      if (!($plugin->isAvailable())) {
         continue;
       }
 
