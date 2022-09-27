@@ -341,6 +341,7 @@ class PaymentMethodCodMobileVerification extends React.Component {
             <span className="cod-mobile-otp__resend">
               {Drupal.t('Didn\'t receive the code?', {}, { context: 'cod_mobile_verification' })}
               <OtpTimer
+                key={shippingMobileNumber}
                 seconds={60}
                 minutes={0}
                 resend={this.handleResendOtp}
