@@ -572,6 +572,11 @@ class AlshayaFrontendCommand extends BltTasks {
           $pattern .= '/src';
         }
 
+        // Skip if JS folder does not exist.
+        if (!is_dir($pattern)) {
+          continue;
+        }
+
         $tasks->exec("cd $reactDir; npm run lint $pattern");
       }
     }
