@@ -92,7 +92,7 @@ class AlshayaBehatRoutes extends ControllerBase {
    * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
    */
   public function firstInStockProduct() {
-    // Query the database to fetch in stock products.
+    // Query the database to fetch in-stock products.
     $query = $this->database->select('node__field_skus', 'nfs');
     $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = nfs.field_skus_value');
     $query->condition('quantity', '0', '>');
@@ -100,7 +100,7 @@ class AlshayaBehatRoutes extends ControllerBase {
     $skus = $query->distinct()->execute()->fetchCol();
 
     foreach ($skus as $sku) {
-      // Load the sku.
+      // Load the SKU.
       $main_sku = SKU::loadFromSku($sku);
       if ($this->stockManager->isProductInStock($main_sku)) {
         // SKU might be configurable. So fetch the parent.
@@ -118,7 +118,7 @@ class AlshayaBehatRoutes extends ControllerBase {
         continue;
       }
 
-      // Fetch the display node for the sku.
+      // Fetch the display node for the SKU.
       $node = $this->skuManager->getDisplayNode($main_sku);
       if (is_null($node)) {
         continue;
@@ -136,8 +136,8 @@ class AlshayaBehatRoutes extends ControllerBase {
       return new RedirectResponse($node->toUrl()->toString());
     }
 
-    // If no SKU is found which in stock, then redirect to 404 page.
-    throw new BadRequestHttpException();
+    // If no SKU is found which is in stock, then redirect to 400 page.
+    throw new BadRequestHttpException('No in-stock products found.');
   }
 
   /**
@@ -193,8 +193,8 @@ class AlshayaBehatRoutes extends ControllerBase {
       return new RedirectResponse($node->toUrl()->toString());
     }
 
-    // If no SKU is found which in stock, then redirect to 404 page.
-    throw new BadRequestHttpException();
+    // If no SKU is found which is OOS, then redirect to 400 page.
+    throw new BadRequestHttpException('No OOS products found.');
   }
 
 }
