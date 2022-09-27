@@ -27,6 +27,7 @@ services:
       - '@alshaya_spc.cookies'
       - '@session'
       - '@alshaya_addressbook.manager'
+      - '@logger.factory'
 
   alshaya_spc.order_helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper
