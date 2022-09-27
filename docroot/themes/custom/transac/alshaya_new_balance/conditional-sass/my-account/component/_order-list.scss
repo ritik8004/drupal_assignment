@@ -5,3 +5,89 @@
     }
   }
 }
+
+.alshaya-acm-customer-order-list-search {
+  .form-item {
+    input {
+      width: rem(225);
+      border-#{$right}-color: $tertiary-border;
+      border-color: $tertiary-border;
+      height: rem(40);
+      border-#{$right}-width: 0;
+
+      @include breakpoint($only-mobile) {
+        display: inherit;
+        width: 100%;
+        border: rem(1) solid $tertiary-border;
+        margin-#{$left}: 0;
+        top: 0;
+        height: rem(54);
+      }
+    }
+
+    label {
+      display: none;
+    }
+  }
+
+  .form-type-select {
+    &::after {
+      height: rem(40);
+      top: rem(1);
+      line-height: 1.5;
+    }
+
+    @include breakpoint($only-mobile) {
+      position: absolute;
+      bottom: rem(54);
+    }
+
+    .select2-container {
+      @include breakpoint($only-tablet) {
+        width: rem(190) !important;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: rem(45);
+        #{$right}: rem(8);
+      }
+
+      .select2-selection__arrow {
+        &::after,
+        b {
+          display: none;
+        }
+      }
+
+      .select2-selection {
+        border-color: $tertiary-border;
+        height: rem(40);
+        border-radius: rem(0);
+
+        .select2-selection__rendered {
+          line-height: 2.3;
+
+          @include breakpoint($upto-desktop) {
+            line-height: 3.3;
+          }
+        }
+      }
+    }
+  }
+
+  .form-actions {
+    &::after {
+      background: none;
+      border-color: $tertiary-border;
+      border-#{$left}-width: 0;
+      height: rem(40);
+      bottom: rem(0);
+      line-height: 1;
+    }
+  }
+
+  .form-type-select {
+    margin-#{$left}: rem(0);
+    width: rem(190);
+  }
+}
