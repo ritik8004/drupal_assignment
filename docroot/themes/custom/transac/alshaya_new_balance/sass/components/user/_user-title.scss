@@ -33,12 +33,76 @@
   }
 }
 
-.c-order-list {
+.c-address-book {
   .block-page-title-block {
-    padding: 0 0 rem(23);
+    // padding: 0 0 rem(25);
 
     @include breakpoint($only-tablet) {
-      padding: rem(30) rem(0) rem(25);
+      // padding: rem(30) rem(0) rem(25);
+    }
+  }
+}
+
+.c-order-list {
+  // .block-page-title-block {
+  //   padding: 0 0 rem(32);
+  // }
+  .order-search-form {
+    top: rem(-16);
+
+    @include breakpoint($only-tablet) {
+      top: rem(0);
+    }
+  }
+
+  .block-page-title-block {
+    @include breakpoint($only-tablet) {
+      padding-top: rem(16);
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .c-address-book,
+  .c-communication-preferences,
+  .c-change-password,
+  .c-user-edit {
+    .block-page-title-block {
+      .back-link {
+        top: rem(10);
+        position: relative;
+
+        h1.c-page-title {
+          line-height: 2.5;
+        }
+      }
+    }
+  }
+
+  .c-order-list {
+    .block-page-title-block {
+      .back-link {
+        position: relative;
+        top: rem(-6);
+
+        h1.c-page-title {
+          line-height: 2.5;
+        }
+
+        @include breakpoint($only-mobile) {
+          @include icon(chevronup, before) {
+            position: absolute;
+            #{$left}: rem(-8);
+            top: rem(5);
+            font-size: rem(34);
+            transform: rotate(270deg);
+
+            html[lang=ar] & {
+              transform: rotate(90deg);
+            }
+          }
+        }
+      }
     }
   }
 }

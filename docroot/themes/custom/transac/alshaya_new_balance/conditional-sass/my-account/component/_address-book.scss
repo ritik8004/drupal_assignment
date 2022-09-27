@@ -1,6 +1,6 @@
 .user__address--column {
   font-size: rem(14);
-  min-height: 273px;
+  min-height: rem(273);
 }
 
 .address {
@@ -15,11 +15,11 @@
   }
 
   .address--content {
-    color: $address_text;
+    color: $my_acc_address_text;
   }
 
   .address--label {
-    font-family: $nb-nova-bold;
+    font-family: $alshaya-bold;
   }
 }
 
