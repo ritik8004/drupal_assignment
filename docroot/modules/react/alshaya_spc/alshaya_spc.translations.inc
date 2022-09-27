@@ -620,6 +620,14 @@ function _alshaya_spc_translations() {
       'ar' => 'رمز تحقق غير صحيح',
       'context' => 'cod_mobile_verification',
     ],
+    'Edit' => [
+      'ar' => 'تعديل',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Verified' => [
+      'ar' => 'موثق',
+      'context' => 'cod_mobile_verification',
+    ],
   ];
 
   // Strings related to payment method logos block on cart page.
