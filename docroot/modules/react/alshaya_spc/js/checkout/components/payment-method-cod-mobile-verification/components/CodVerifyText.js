@@ -12,7 +12,7 @@ const CodVerifyText = ({ mobileNumber, otpLength }) => {
           '@otp_length': otpLength,
         }, { context: 'cod_mobile_verification' })}
       </span>
-      <span dir="ltr">{` ${phoneNumber} `}</span>
+      <span className="cod-mobile-otp__mobile" dir="ltr">{phoneNumber}</span>
       <button
         type="button"
         className="cod-mobile-otp__btn-link"
