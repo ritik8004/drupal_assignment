@@ -28,33 +28,46 @@
       const url = window.location.href;
 
       if(currentPath.includes('checkout/confirmation')) {
-        // Remove referrerPageType and referrerPath from storage.
-        Drupal.removeItemFromLocalStorage('referrerPageType');
-        Drupal.removeItemFromLocalStorage('referrerPath');
-        Drupal.removeItemFromLocalStorage('referrerList');
+        // Remove referrerData and isSearchActivated from storage.
+        Drupal.removeItemFromLocalStorage('referrerData');
+        Drupal.removeItemFromLocalStorage('isSearchActivated');
       } else if (currentPath.includes('search')) {
-        // Set Search Results Page as referrerPageType
-        Drupal.addItemInLocalStorage('referrerPageType', 'Search Results Page');
-        Drupal.addItemInLocalStorage('referrerPath', url);
+        const referrerData = {
+          pageType: 'Search Results Page',
+          path: url,
+          list: 'Search Results Page',
+          previousPageType: '',
+        };
+
+        Drupal.addItemInLocalStorage('referrerData', referrerData);
+        Drupal.removeItemFromLocalStorage('isSearchActivated');
       } else if (currentPath.includes('taxonomy/term')) {
         const listName =  $('body').attr('gtm-list-name');
         // Set PLP as referrerPageType
-        Drupal.addItemInLocalStorage('referrerPageType', 'PLP');
-        Drupal.addItemInLocalStorage('referrerPath', url);
-        if(listName !== undefined) {
-          Drupal.addItemInLocalStorage('referrerList', listName);
-        }
+        const referrerData = {
+          pageType: 'PLP',
+          path: url,
+          list: listName !== undefined ? listName : '',
+          previousList: '',
+        };
+
+        Drupal.addItemInLocalStorage('referrerData', referrerData);
+        Drupal.removeItemFromLocalStorage('isSearchActivated');
       } else if (currentPath.includes('node/')) {
-        const referrerPath = Drupal.getItemFromLocalStorage('referrerPath');
-        if (referrer === '' || referrer !== referrerPath) {
+        const referrerData = Drupal.getItemFromLocalStorage('referrerData');
+        if (referrer === '' || (referrer !== referrerData.path)) {
           // Set PDP as referrerPageType only if referrer is not set or
           // Referrer does not match with referrerPath.
           const listName =  $('body').attr('gtm-list-name');
-          Drupal.addItemInLocalStorage('referrerPageType', 'PDP');
-          Drupal.addItemInLocalStorage('referrerPath', url);
-          if(listName !== undefined) {
-            Drupal.addItemInLocalStorage('referrerList', listName);
-          }
+          const referrerData = {
+            pageType: 'PDP',
+            path: url,
+            list: listName !== undefined ? listName : '',
+            previousList: '',
+          };
+
+          Drupal.addItemInLocalStorage('referrerData', referrerData);
+          Drupal.removeItemFromLocalStorage('isSearchActivated');
         }
       }
     }
@@ -856,19 +869,18 @@
       }
 
       // Fetch referrerPageType from localstorage.
-      const referrerPageType = Drupal.getItemFromLocalStorage('referrerPageType');
-      if(referrerPageType !== undefined) {
-        if (referrerPageType === 'Search Results Page') {
+      const referrerData = Drupal.getItemFromLocalStorage('referrerData');
+      if(referrerData !== null) {
+        if (referrerData.pageType === 'Search Results Page') {
           // For SRP, use list value 'Search Result Page'
-          productData.list = referrerPageType;
+          productData.list = referrerData.pageType;
         }
         else {
-          const referrerList = Drupal.getItemFromLocalStorage('referrerList');
           let listName = '';
-          if(referrerList !== undefined) {
+          if(referrerData.list !== undefined) {
             // Use Available referrerList data as list data,
             // If available.
-            listName = referrerList;
+            listName = referrerData.list;
           }
           else {
             // Fetch from gtm-list-name attribute.
@@ -876,7 +888,7 @@
           }
 
           // IF listName contains placeholder remove it.
-          productData.list = listName.replace('PDP-placeholder', referrerPageType);
+          productData.list = listName.replace('PDP-placeholder', referrerData.pageType);
         }
       }
     }
