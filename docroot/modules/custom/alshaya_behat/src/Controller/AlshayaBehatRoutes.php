@@ -93,11 +93,10 @@ class AlshayaBehatRoutes extends ControllerBase {
    */
   public function firstInStockProduct() {
     // Query the database to fetch in stock products.
-    $query = $this->database->select('acq_sku_field_data', 'afd');
-    $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = afd.sku');
-    $query->leftJoin('node__field_skus', 'nfs', 'nfs.field_skus_value = afd.sku');
+    $query = $this->database->select('node__field_skus', 'nfs');
+    $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = nfs.field_skus_value');
     $query->condition('quantity', '0', '>');
-    $query->fields('afd', ['sku']);
+    $query->fields('stock', ['sku']);
     $skus = $query->distinct()->execute()->fetchCol();
 
     foreach ($skus as $sku) {
@@ -151,11 +150,10 @@ class AlshayaBehatRoutes extends ControllerBase {
    */
   public function firstOosProduct() {
     // Query the database to fetch out of stock products.
-    $query = $this->database->select('acq_sku_field_data', 'afd');
-    $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = afd.sku');
-    $query->leftJoin('node__field_skus', 'nfs', 'nfs.field_skus_value = afd.sku');
-    $query->condition('quantity', '0');
-    $query->fields('afd', ['sku']);
+    $query = $this->database->select('node__field_skus', 'nfs');
+    $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = nfs.field_skus_value');
+    $query->condition('quantity', '0', '=');
+    $query->fields('stock', ['sku']);
     $skus = $query->distinct()->execute()->fetchCol();
 
     foreach ($skus as $sku) {
