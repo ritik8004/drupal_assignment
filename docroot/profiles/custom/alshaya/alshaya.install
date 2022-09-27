@@ -12,24 +12,6 @@ use Drupal\Core\File\FileSystemInterface;
  *
  * Uninstall unnecessary modules.
  */
-function alshaya_update_9402() {
-  $modules = [];
-  if (\Drupal::moduleHandler()->moduleExists('moderation_dashboard')) {
-    $modules[] = 'moderation_dashboard';
-  }
-  if (\Drupal::moduleHandler()->moduleExists('page_manager')) {
-    $modules[] = 'page_manager';
-  }
-  if (!empty($modules)) {
-    \Drupal::service('module_installer')->uninstall($modules);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
- * Uninstall unnecessary modules.
- */
 function alshaya_update_9401() {
   $modules = [];
   if (\Drupal::moduleHandler()->moduleExists('simple_oauth_extras')) {
@@ -58,6 +40,12 @@ function alshaya_update_9401() {
   }
   if (\Drupal::moduleHandler()->moduleExists('openapi_ui_swagger')) {
     $modules[] = 'openapi';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('moderation_dashboard')) {
+    $modules[] = 'moderation_dashboard';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('page_manager')) {
+    $modules[] = 'page_manager';
   }
   if (!empty($modules)) {
     \Drupal::service('module_installer')->uninstall($modules);
