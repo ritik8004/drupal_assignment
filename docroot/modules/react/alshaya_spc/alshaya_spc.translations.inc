@@ -600,7 +600,7 @@ function _alshaya_spc_translations() {
       'ar' => 'تغيير',
       'context' => 'cod_mobile_verification',
     ],
-    'Verify' => [
+    'verify' => [
       'ar' => 'تحقق',
       'context' => 'cod_mobile_verification',
     ],
@@ -622,6 +622,10 @@ function _alshaya_spc_translations() {
     ],
     'Edit' => [
       'ar' => 'تعديل',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Verified' => [
+      'ar' => 'موثق',
       'context' => 'cod_mobile_verification',
     ],
   ];
