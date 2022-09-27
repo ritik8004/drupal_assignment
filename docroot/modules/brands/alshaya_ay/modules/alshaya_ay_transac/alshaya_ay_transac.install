@@ -37,8 +37,8 @@ function alshaya_ay_transac_modules_installed($modules) {
     $config->save();
   }
   if (in_array('alshaya_spc', $modules)) {
-    $config = \Drupal::configFactory()->getEditable('alshaya_spc.cart_notification');
-    $config->set('notification_drawer', TRUE);
+    $config = \Drupal::configFactory()->getEditable('alshaya_spc.settings');
+    $config->set('is_notification_drawer', TRUE);
     $config->save();
   }
 }
