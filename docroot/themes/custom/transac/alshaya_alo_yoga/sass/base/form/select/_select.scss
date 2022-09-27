@@ -3,8 +3,16 @@
     &.select2-results__options {
       li {
         &.select2-results__option {
+          border: rem(1) solid $select_border;
+          border-bottom: none;
+
+          &:last-child {
+            border-bottom: rem(1) solid $select_border;
+          }
+
           &:hover {
-            color: $select_drop_down_hover;
+            color: $select_drop_down_hover_text;
+            background-color: $select_drop_down_hover_bg;
           }
         }
       }
