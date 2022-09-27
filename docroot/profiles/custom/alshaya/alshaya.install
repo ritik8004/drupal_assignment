@@ -41,6 +41,12 @@ function alshaya_update_9401() {
   if (\Drupal::moduleHandler()->moduleExists('openapi_ui_swagger')) {
     $modules[] = 'openapi';
   }
+  if (\Drupal::moduleHandler()->moduleExists('moderation_dashboard')) {
+    $modules[] = 'moderation_dashboard';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('page_manager')) {
+    $modules[] = 'page_manager';
+  }
   if (!empty($modules)) {
     \Drupal::service('module_installer')->uninstall($modules);
   }
