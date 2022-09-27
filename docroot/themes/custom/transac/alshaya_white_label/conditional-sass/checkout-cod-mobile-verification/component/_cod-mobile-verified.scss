@@ -36,6 +36,6 @@
 
   @include breakpoint($tablet) {
     padding-top: rem(13);
-    padding-bottom: rem(21);
+    padding-bottom: rem(1);
   }
 }
