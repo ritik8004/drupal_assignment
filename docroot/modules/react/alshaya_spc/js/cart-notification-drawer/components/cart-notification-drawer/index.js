@@ -1,8 +1,8 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import isCartNotificationDrawerEnabled from '../../../utilities/cart_notification_util';
-import CartDrawerContent from '../cart-drawer-content';
-import CartDrawerPopupContent from '../utilities/cart-drawer-popup-content';
+import isCartNotificationDrawerEnabled from '../../../../../js/utilities/cartNotificationHelper';
+import CartNotificationDrawerContent from '../cart-notification-drawer-content';
+import CartNotificationDrawerPopupContent from '../utilities/cart-notification-drawer-popup-content';
 
 class CartNotificationDrawer extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class CartNotificationDrawer extends React.Component {
 
   componentDidMount() {
     if (isCartNotificationDrawerEnabled()) {
-      document.addEventListener('showCartDrawer', this.handleProductAddToCart);
+      document.addEventListener('showCartNotificationDrawer', this.handleProductAddToCart);
     }
   }
 
@@ -24,7 +24,7 @@ class CartNotificationDrawer extends React.Component {
    * Remove the event listener when component gets deleted.
    */
   componentWillUnmount() {
-    document.removeEventListener('showCartDrawer', this.handleProductAddToCart, false);
+    document.removeEventListener('showCartNotificationDrawer', this.handleProductAddToCart, false);
   }
 
   /**
@@ -48,7 +48,7 @@ class CartNotificationDrawer extends React.Component {
   getPanelContent = (productData) => {
     if (hasValue(productData) && hasValue(productData.productInfo)) {
       return (
-        <CartDrawerContent
+        <CartNotificationDrawerContent
           productData={productData.productInfo}
           closeModal={() => this.closeModal()}
           overlayClass="overlay-cart"
@@ -74,9 +74,9 @@ class CartNotificationDrawer extends React.Component {
 
     return (
       <div className="cart-notification-drawer">
-        <CartDrawerPopupContent>
+        <CartNotificationDrawerPopupContent>
           {panelContent}
-        </CartDrawerPopupContent>
+        </CartNotificationDrawerPopupContent>
       </div>
     );
   }

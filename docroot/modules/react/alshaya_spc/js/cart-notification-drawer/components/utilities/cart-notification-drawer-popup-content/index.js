@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CartDrawerPopupContent = ({ children, className = '' }) => {
+const CartNotificationDrawerPopupContent = ({ children, className = '' }) => {
   const closeModal = (e) => {
     if (e.target.classList.contains('cart-drawer-popup-content')) {
       if (document.querySelector('body').classList.contains('overlay-cart-drawer')) {
@@ -23,4 +23,4 @@ const CartDrawerPopupContent = ({ children, className = '' }) => {
   );
 };
 
-export default CartDrawerPopupContent;
+export default CartNotificationDrawerPopupContent;

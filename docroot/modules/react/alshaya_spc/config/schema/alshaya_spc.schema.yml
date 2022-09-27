@@ -14,6 +14,9 @@ alshaya_spc.settings:
     display_cart_payment_icons:
       type: boolean
       label: 'Display payment method icons on cart page'
+    is_notification_drawer:
+      type: boolean
+      label: 'Enable drawer panel to show cart notification'
 
 alshaya_spc.click_n_collect:
   type: config_object
@@ -69,11 +72,3 @@ alshaya_spc.express_delivery:
     express_delivery_label:
       type: string
       label: 'Express Delivery Label'
-
-alshaya_spc.cart_notification:
-  type: config_object
-  label: 'Cart notification panel settings'
-  mapping:
-    notification_drawer:
-      type: boolean
-      label: 'Enable drawer panel to show cart notification'

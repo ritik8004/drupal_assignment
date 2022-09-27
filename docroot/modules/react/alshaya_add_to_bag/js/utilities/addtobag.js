@@ -1,4 +1,4 @@
-import isCartNotificationDrawerEnabled from '../../../alshaya_spc/js/utilities/cart_notification_util';
+import isCartNotificationDrawerEnabled from '../../../js/utilities/cartNotificationHelper';
 import dispatchCustomEvent from '../../../js/utilities/events';
 import logger from '../../../js/utilities/logger';
 
@@ -40,7 +40,7 @@ export const handleUpdateCartRespose = (response, productData) => {
       // If cart drawer feature is enabled, we show side drawer for cart.
       // Else we show mini cart notification.
       if (isCartNotificationDrawerEnabled()) {
-        dispatchCustomEvent('showCartDrawer', { productInfo });
+        dispatchCustomEvent('showCartNotificationDrawer', { productInfo });
       } else if ((typeof productInfo.skuType !== 'undefined') && productInfo.skuType === 'config') {
         // To show notification for config products once drawer is closed.
         setTimeout(() => {

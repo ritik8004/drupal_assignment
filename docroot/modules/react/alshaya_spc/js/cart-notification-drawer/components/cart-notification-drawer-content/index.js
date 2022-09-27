@@ -3,7 +3,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import SectionTitle from '../../../utilities/section-title';
 
-const CartDrawerContent = (props) => {
+const CartNotificationDrawerContent = (props) => {
   const {
     productData,
     closeModal,
@@ -37,4 +37,4 @@ const CartDrawerContent = (props) => {
   );
 };
 
-export default CartDrawerContent;
+export default CartNotificationDrawerContent;

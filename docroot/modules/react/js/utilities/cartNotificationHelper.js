@@ -1,8 +1,9 @@
-import { hasValue } from '../../../js/utilities/conditionsUtility';
+import { hasValue } from "./conditionsUtility";
 
 /**
  * Helper function to check if Cart notification drawer is enabled.
  */
+
 const isCartNotificationDrawerEnabled = () => {
   if (hasValue(drupalSettings.cart)
     && hasValue(drupalSettings.cart.cartNotificationDrawer)) {
