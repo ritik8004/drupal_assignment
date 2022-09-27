@@ -42,6 +42,13 @@ class CartData {
   private $appliedRules;
 
   /**
+   * Cart applied rules with discounts.
+   *
+   * @var array
+   */
+  private $appliedRulesWithDiscount;
+
+  /**
    * CartData constructor.
    *
    * @param array $items
@@ -50,13 +57,17 @@ class CartData {
    *   Cart subtotal.
    * @param array $applied_rules
    *   Cart applied rules.
+   * @param array $applied_rules_with_discounts
+   *   Cart applied rules with discounts.
    */
   public function __construct(array $items,
                               float $subtotal,
-                              array $applied_rules = []) {
+                              array $applied_rules = [],
+                              array $applied_rules_with_discounts = []) {
     $this->items = $items;
     $this->subtotal = $subtotal;
     $this->appliedRules = $applied_rules;
+    $this->appliedRulesWithDiscount = $applied_rules_with_discounts;
   }
 
   /**
@@ -114,12 +125,13 @@ class CartData {
 
     $subtotal = (float) $data['cart']['subtotal'] ?? 0;
     $applied_rules = explode(',', $data['cart']['applied_rules'] ?? '');
+    $applied_rules_with_discounts = explode(',', $data['cart']['applied_rules_with_discounts'] ?? '');
 
     if (empty($items) || empty($subtotal)) {
       throw new \InvalidArgumentException();
     }
 
-    self::$selfReference = new static($items, $subtotal, $applied_rules);
+    self::$selfReference = new static($items, $subtotal, $applied_rules, $applied_rules_with_discounts);
     return self::$selfReference;
   }
 
@@ -161,6 +173,16 @@ class CartData {
    */
   public function getAppliedRules() {
     return $this->appliedRules;
+  }
+
+  /**
+   * Get cart applied rules with discounts.
+   *
+   * @return array
+   *   Array of applied rules with discounts.
+   */
+  public function getappliedRulesWithDiscount(): array {
+    return $this->appliedRulesWithDiscount;
   }
 
   /**
