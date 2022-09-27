@@ -1,4 +1,14 @@
 field_settings:
+  attr_color_family:
+    label: 'Color'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_family
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   attr_gender:
     label: 'Gender'
     datasource_id: entity:node
@@ -29,10 +39,30 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_just_dropped:
-    label: 'Just dropped'
+  attr_width_description:
+    label: 'Width description'
     datasource_id: entity:node
-    property_path: field_skus:entity:attr_just_dropped
+    property_path: field_skus:entity:attr_width_description
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_nb_type:
+    label: 'Product type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_nb_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_closure_type:
+    label: 'Closure type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_closure_type
     type: string
     dependencies:
       config:

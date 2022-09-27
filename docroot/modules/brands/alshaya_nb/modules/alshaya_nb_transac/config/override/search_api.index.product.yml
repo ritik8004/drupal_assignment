@@ -1,38 +1,68 @@
 field_settings:
-  attr_waist:
-    label: 'Waist'
+  attr_color_family:
+    label: 'Color'
     datasource_id: entity:node
-    property_path: field_skus:entity:attr_waist
+    property_path: field_skus:entity:attr_color_family
     type: string
     dependencies:
       config:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_support:
-    label: 'Support'
+  attr_gender:
+    label: 'Gender'
     datasource_id: entity:node
-    property_path: field_skus:entity:attr_support
+    property_path: field_skus:entity:attr_gender
     type: string
     dependencies:
       config:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_length:
-    label: 'Length'
+  attr_line:
+    label: 'Line'
     datasource_id: entity:node
-    property_path: field_skus:entity:attr_length
+    property_path: field_skus:entity:attr_line
     type: string
     dependencies:
       config:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_just_dropped:
-    label: 'Just dropped'
+  attr_desired_fit:
+    label: 'Fit'
     datasource_id: entity:node
-    property_path: field_skus:entity:attr_just_dropped
+    property_path: field_skus:entity:attr_desired_fit
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_width_description:
+    label: 'Width description'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_width_description
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_nb_type:
+    label: 'Product type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_nb_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_closure_type:
+    label: 'Closure type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_closure_type
     type: string
     dependencies:
       config:
