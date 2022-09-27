@@ -51,9 +51,10 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     }
 
     if (!empty($url_key)) {
+      $url_keys = [$url_key, $url_key . '/'];
       $query = $this->termStorage->getQuery();
       $query->condition('vid', 'rcs_category');
-      $query->condition('field_category_slug', $url_key);
+      $query->condition('field_category_slug', $url_keys, 'IN');
       $tids = $query->execute();
       if (!empty($tids)) {
         $term = $this->termStorage->load(current($tids));
@@ -91,9 +92,10 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     if (empty($langcode)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
+    $names = [$name, $name . '/'];
     $query = $this->termStorage->getQuery();
     $query->condition('vid', 'rcs_category');
-    $query->condition('field_category_slug', $name);
+    $query->condition('field_category_slug', $names, 'IN');
     $query->condition('langcode', $langcode);
     $tids = $query->execute();
     if (!empty($tids)) {

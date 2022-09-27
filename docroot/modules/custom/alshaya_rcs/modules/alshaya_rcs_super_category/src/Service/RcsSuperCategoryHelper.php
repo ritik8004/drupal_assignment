@@ -115,7 +115,10 @@ class RcsSuperCategoryHelper {
       }
       // Delete term if not found in mdc categories and is not level 2.
       $slug = $category->get('field_category_slug')->getString();
-      if (count(explode('/', $slug)) < 2 && !in_array($slug, array_keys($super_categories))) {
+      if (count(explode('/', $slug)) < 2
+        && !in_array($slug, array_keys($super_categories))
+        && !in_array($slug . '/', array_keys($super_categories))
+      ) {
         $category->delete();
       }
     }
@@ -137,11 +140,19 @@ class RcsSuperCategoryHelper {
     $existing_super_categories = $this->processExistingCategories($existing_super_categories, $lang_code);
     foreach ($super_categories as $slug => $category) {
       // Check if rcs category with the slug already exists.
+      $existing_category = NULL;
       if (!empty($existing_super_categories[$slug])) {
-        if ($existing_super_categories[$slug]->hasTranslation($lang_code)) {
+        $existing_category = $existing_super_categories[$slug];
+      }
+      elseif (!empty($existing_super_categories[$slug . '/'])) {
+        $existing_category = $existing_super_categories[$slug . '/'];
+      }
+
+      if (!empty($existing_category)) {
+        if ($existing_category->hasTranslation($lang_code)) {
           continue;
         }
-        $term = $existing_super_categories[$slug]->addTranslation($lang_code, [
+        $term = $existing_category->addTranslation($lang_code, [
           'vid' => 'rcs_category',
           'name' => $category['name'],
           'langcode' => $lang_code,
@@ -158,10 +169,11 @@ class RcsSuperCategoryHelper {
       $term->save();
 
       // Create Advanced pages.
+      $url_keys = [$category['url_key'], $category['url_key'] . '/'];
       $node_storage = $this->entityTypeManager->getStorage('node');
       $query = $node_storage->getQuery();
       $query->condition('type', 'advanced_page');
-      $query->condition('field_category_slug', $category['url_key']);
+      $query->condition('field_category_slug', $url_keys, 'IN');
       $nodes = $query->execute();
       if (empty($nodes)) {
         $node = $node_storage
