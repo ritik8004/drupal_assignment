@@ -1077,6 +1077,7 @@ function alshaya_transac_install() {
     'alshaya_pdp_layouts',
     'alshaya_acm_dashboard',
     'datadog_js',
+    'alshaya_behat',
   ];
 
   // Add 10 MB per module we are going to enable above.
