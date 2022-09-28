@@ -11,17 +11,21 @@
   }
 
   &__mobile {
-    color: $spc-checkout-cod-otp-secondary;
     display: inline-block;
-  }
 
-  &__btn-link {
-    text-decoration: underline;
-    color: $spc-checkout-cod-otp-primary;
-    background: none;
-    border: none;
-    margin-#{$left}: rem(8);
-    padding: 0;
+    &-number {
+      color: $spc-checkout-cod-otp-secondary;
+      display: inline-block;
+    }
+
+    &-change {
+      text-decoration: underline;
+      color: $spc-checkout-cod-otp-primary;
+      background: none;
+      border: none;
+      margin-#{$left}: rem(8);
+      padding: 0;
+    }
   }
 
   &__form {
@@ -153,6 +157,7 @@
       & > div {
         width: rem(50);
         text-align: $left;
+        white-space: nowrap;
       }
     }
 
