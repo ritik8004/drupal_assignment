@@ -40,7 +40,7 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
               alt: product.name,
               title: product.name,
             };
-            orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product);
+            orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product, orderProduct.sku);
             // @todo Populate this value when working on big ticket items.
             orderProduct.is_big_ticket = null;
           });
