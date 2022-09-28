@@ -36,8 +36,3 @@ services:
       - '@alshaya_acm_product.category_helper'
       - '@module_handler'
       - '@theme.manager'
-
-  alshaya_rcs_super_category.path_processor:
-    class: Drupal\alshaya_rcs_super_category\PathProcessor\RcsSuperCategoryPathProcessor
-    tags:
-      - { name: path_processor_outbound, priority: 300 }
