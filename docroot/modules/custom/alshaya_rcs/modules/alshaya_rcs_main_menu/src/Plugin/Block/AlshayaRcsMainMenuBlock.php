@@ -143,6 +143,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           $rcs_main_menu_settings->getCacheTags(),
           $main_menu_settings->getCacheTags()
         ),
+        'contexts' => ['url.path'],
       ],
     ];
 
