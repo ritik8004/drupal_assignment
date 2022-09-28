@@ -220,3 +220,38 @@ fields:
   season_code:
     label: 'Season Code'
     type: 'string'
+
+  skin_type:
+    label: 'Skin Type'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  is_external:
+    label: 'Is external beauty product'
+    type: 'string'
+    translatable: 0
+    description: 'Sku applicable for the external beauty product or not.'
+
+  finish:
+    label: 'Finish'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  coverage:
+    label: 'Coverage'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  spf:
+    label: 'Spf'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  shade_number:
+    label: 'Shade Number'
+    type: 'string'
+    index: 1
