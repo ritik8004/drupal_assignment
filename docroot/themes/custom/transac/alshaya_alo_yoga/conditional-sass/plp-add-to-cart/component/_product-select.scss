@@ -9,9 +9,11 @@
 
 .alshaya-select {
   .alshayaSelect__control {
+    height: rem(55);
+
     > div:nth-child(2) {
       .alshayaSelect__indicator {
-        background: $plp-quick-view-product-quantity-arrow-bg;
+        background: $primary_dropdown_arrow_bg;
       }
     }
   }

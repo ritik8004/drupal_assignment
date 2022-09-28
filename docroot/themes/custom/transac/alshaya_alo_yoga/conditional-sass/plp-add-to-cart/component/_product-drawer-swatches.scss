@@ -2,10 +2,15 @@
   .li-swatch-color {
     a {
       border-radius: 100%;
+      width: rem(34);
+      height: rem(34);
 
       &.active {
         &::after {
           border-radius: 100%;
+          top: rem(-4.8);
+          #{$left}: rem(-4.8);
+          border-color: $plp-quick-view-product-color-border;
         }
       }
     }

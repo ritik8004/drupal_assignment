@@ -4,9 +4,11 @@
   }
 
   ul.attribute-options-list {
+    margin: rem(10) rem(0);
+
     li {
       padding: rem(12) rem(10);
-      margin-#{$right}: 0.25rem;
+      margin-#{$right}: rem(4);
       font-size: rem(16);
 
       &.active {
@@ -20,10 +22,6 @@
 
       &:hover {
         min-width: rem(40);
-      }
-
-      &.disabled {
-        color: $plp-quick-view-product-size-text;
       }
     }
   }
@@ -39,5 +37,9 @@
         margin-#{$left}: rem(0);
       }
     }
+  }
+
+  .selected-text {
+    font-weight: 400;
   }
 }
