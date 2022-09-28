@@ -55,8 +55,15 @@
         Drupal.removeItemFromLocalStorage('isSearchActivated');
       } else if (currentPath.includes('node/')) {
         const referrerData = Drupal.getItemFromLocalStorage('referrerData');
-        if (referrer === '' || (referrer !== referrerData.path)) {
-          // Set PDP as referrerPageType only if referrer is not set or
+        const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
+        if (referrer === ''
+          || ( isSearchActivated !== null
+            && !isSearchActivated
+            && referrer !== referrerData.path
+          )
+        ) {
+          // Set PDP as referrerPageType only if referrer is not set,
+          // Search is not active or
           // Referrer does not match with referrerPath.
           const listName =  $('body').attr('gtm-list-name');
           const referrerData = {
