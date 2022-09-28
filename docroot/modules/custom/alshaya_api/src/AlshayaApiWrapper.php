@@ -14,6 +14,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\LocalRedirectResponse;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -21,7 +22,6 @@ use Drupal\Core\Url;
 use GuzzleHttp\TransferStats;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
-use Drupal\Core\Routing\CurrentRouteMatch;
 
 /**
  * Class Alshaya Api Wrapper.
@@ -101,11 +101,11 @@ class AlshayaApiWrapper {
   protected $moduleHandler;
 
   /**
-   * Current Route object.
+   * The current user.
    *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentRoute;
+  protected $currentUser;
 
   /**
    * Constructs a new AlshayaApiWrapper object.
@@ -126,8 +126,8 @@ class AlshayaApiWrapper {
    *   The magento api helper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route
-   *   Current Route object.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   Current user object.
    */
   public function __construct(
     LanguageManagerInterface $language_manager,
@@ -138,7 +138,7 @@ class AlshayaApiWrapper {
     FileSystemInterface $fileSystem,
     MagentoApiHelper $mdc_helper,
     ModuleHandlerInterface $module_handler,
-    CurrentRouteMatch $current_route
+    AccountInterface $current_user
   ) {
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
@@ -149,7 +149,7 @@ class AlshayaApiWrapper {
     $this->fileSystem = $fileSystem;
     $this->mdcHelper = $mdc_helper;
     $this->moduleHandler = $module_handler;
-    $this->currentRoute = $current_route;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -297,19 +297,6 @@ class AlshayaApiWrapper {
         throw $e;
       }
       $result = NULL;
-
-      if ($e->getCode() === 401 && PHP_SAPI !== 'cli') {
-        $this->logger->error('Exception while updating customer data @data against the api @api. Message: @message.', [
-          '@data' => $data['username'] ?? '',
-          '@api' => $url,
-          '@message' => $e->getMessage(),
-        ]);
-
-        // Handle the 401 exception in the respective endpoints.
-        if ($endpoint === 'customers/search' || $endpoint === 'integration/customer/token/bySocialDetail') {
-          throw $e;
-        }
-      }
 
       $this->logger->error('Exception while invoking API @api. Message: @message.', [
         '@api' => $url,
@@ -1105,13 +1092,18 @@ class AlshayaApiWrapper {
           'customerEmail' => $mail,
         ],
         'JSON',
-        FALSE,
+        TRUE,
         $request_options
       );
     }
     catch (\Exception $e) {
-      if ($e->getCode() === 401 && PHP_SAPI !== 'cli' && $this->currentRoute->getRouteName() !== 'user.login') {
+      $this->logger->error('Exception while authenticating customer data @data against the api @api. Message: @message.', [
+        '@data' => $mail,
+        '@api' => $endpoint,
+        '@message' => $e->getMessage(),
+      ]);
 
+      if ($e->getCode() === 401 && $this->currentUser->isAuthenticated()) {
         user_logout();
 
         // We redirect to an user/login path.
@@ -1120,10 +1112,6 @@ class AlshayaApiWrapper {
         return $response;
       }
 
-      $this->logger->error('Exception while authenticating customer. Error: @response. E-mail: @email', [
-        '@response' => $e->getMessage(),
-        '@email' => $mail,
-      ]);
       return NULL;
     }
   }
@@ -1140,6 +1128,7 @@ class AlshayaApiWrapper {
    * @throws \Exception
    */
   public function getCustomer($email) {
+    $endpoint = 'customers/search';
     $query_string_values = [
       'condition_type' => 'eq',
       'field' => 'email',
@@ -1157,7 +1146,7 @@ class AlshayaApiWrapper {
     ];
 
     try {
-      $response = $this->invokeApi("customers/search", $query_string_array, 'GET', FALSE, $request_options);
+      $response = $this->invokeApi($endpoint, $query_string_array, 'GET', TRUE, $request_options);
       $result = Json::decode($response);
       if (!empty($result['items'])) {
         $customer = MagentoApiResponseHelper::customerFromSearchResult(reset($result['items']));
@@ -1165,8 +1154,13 @@ class AlshayaApiWrapper {
       }
     }
     catch (\Exception $e) {
-      if ($e->getCode() === 401 && PHP_SAPI !== 'cli' && $this->currentRoute->getRouteName() !== 'user.login') {
+      $this->logger->error('Exception while fetching customer data @data against the api @api. Message: @message.', [
+        '@data' => $email,
+        '@api' => $endpoint,
+        '@message' => $e->getMessage(),
+      ]);
 
+      if ($e->getCode() === 401 && $this->currentUser->isAuthenticated()) {
         user_logout();
 
         // We redirect to an user/login path.
@@ -1175,7 +1169,7 @@ class AlshayaApiWrapper {
         return $response;
       }
 
-      throw new \Exception($e->getMessage(), $e->getCode(), $e);
+      return NULL;
     }
 
     return $customer;
