@@ -5,8 +5,11 @@ namespace Drupal\alshaya_behat\Controller;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\StockManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Http\RequestStack;
+use Drupal\Core\Site\Settings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +51,13 @@ class AlshayaBehatRoutes extends ControllerBase {
   protected $httpKernel;
 
   /**
+   * Request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * {@inheritDoc}
    */
   public static function create(ContainerInterface $container) {
@@ -56,6 +66,7 @@ class AlshayaBehatRoutes extends ControllerBase {
       $container->get('acq_sku.stock_manager'),
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('http_kernel.basic'),
+      $container->get('request_stack')
     );
   }
 
@@ -70,17 +81,33 @@ class AlshayaBehatRoutes extends ControllerBase {
    *   Sku manager.
    * @param \Symfony\Component\HttpKernel\HttpKernel $http_kernel
    *   Http kernel.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    */
   public function __construct(
     Connection $connection,
     StockManager $stock_manager,
     SkuManager $sku_manager,
-    HttpKernel $http_kernel
+    HttpKernel $http_kernel,
+    RequestStack $request_stack
   ) {
     $this->database = $connection;
     $this->stockManager = $stock_manager;
     $this->skuManager = $sku_manager;
     $this->httpKernel = $http_kernel;
+    $this->request = $request_stack->getCurrentRequest();
+  }
+
+  /**
+   * Access checker for behat requests.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   The access result.
+   */
+  public function checkAccess() {
+    $behat_key_in_settings = Settings::get('behat_secret_key');
+    $behat_key_in_url = $this->request->query->get('behat');
+    return AccessResult::allowedIf($behat_key_in_settings === $behat_key_in_url);
   }
 
   /**

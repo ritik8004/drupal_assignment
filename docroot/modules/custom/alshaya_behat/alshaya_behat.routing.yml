@@ -3,11 +3,11 @@ alshaya_behat.first_in_stock_product:
   defaults:
     _controller: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::firstInStockProduct'
   requirements:
-    _permission: 'access content'
+    _custom_access: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::checkAccess'
 
 alshaya_behat.first_oos_product:
   path: /behat/first-oos-product
   defaults:
     _controller: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::firstOosProduct'
   requirements:
-    _permission: 'access content'
+    _custom_access: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::checkAccess'
