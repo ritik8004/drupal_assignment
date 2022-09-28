@@ -16,10 +16,9 @@ function alshaya_ay_transac_create_default_content() {
 }
 
 /**
- * Create default alo is a brand of purpose block content.
+ * Create brand of purpose block for AY PDP.
  */
 function alshaya_ay_transac_create_brand_purpose_block_content() {
-  // Create alo is a brand of purpose block content.
   $block_content = BlockContent::create([
     'uuid' => '440b823b-e16c-457a-bc03-4a096f8ae171',
     'info' => 'Alo is a Brand of Purpose',
@@ -57,7 +56,7 @@ function alshaya_ay_transac_create_brand_purpose_block_content() {
     'langcode' => 'en',
   ]);
   $block_content->save();
-  // Create alo is a brand of purpose block translation.
+  // Create brand of purpose block for AY PDP translation.
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Alo is a Brand of Purpose',
     'body' => [

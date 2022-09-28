@@ -2,29 +2,31 @@
 
 /**
  * @file
- * Install, uninstall and update for alshaya_ay.
+ * Install, uninstall and update for alshaya_ay_transac.
  */
 
 /**
  * Implements hook_install().
  */
 function alshaya_ay_transac_install() {
-
   // Add translations.
   module_load_include('inc', 'alshaya_ay_transac', 'alshaya_ay_transac.translation');
   if ($translations = _alshaya_ay_transac_get_translations()) {
     alshaya_i18n_save_translations($translations);
   }
 
-  $config_factory = \Drupal::configFactory();
   // Set My account block
   // to appear just above the mini cart block.
+  $config_factory = \Drupal::configFactory();
   $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
   $config_factory->getEditable('block.block.myaccounticonblock')->set('weight', $my_account_links - 2)->save();
   // Set Brand Purpose block
   // to appear just below the content block.
   $brand_purpose = (int) $config_factory->get('block.block.content')->get('weight');
   $config_factory->getEditable('block.block.aloisabrandofpurpose')->set('weight', $brand_purpose + 1)->save();
+
+  // Add mobile navigation block to menu primary region.
+  alshaya_config_install_configs(['block.block.mobilenavigation'], 'alshaya_transac', 'optional');
 }
 
 /**
@@ -39,6 +41,11 @@ function alshaya_ay_transac_modules_installed($modules) {
   if (in_array('alshaya_add_to_bag', $modules)) {
     $config = \Drupal::configFactory()->getEditable('alshaya_add_to_bag.settings');
     $config->set('display_addtobag', TRUE);
+    $config->save();
+  }
+  if (in_array('alshaya_spc', $modules)) {
+    $config = \Drupal::configFactory()->getEditable('alshaya_spc.settings');
+    $config->set('is_notification_drawer', TRUE);
     $config->save();
   }
 }

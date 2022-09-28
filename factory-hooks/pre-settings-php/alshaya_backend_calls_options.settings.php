@@ -151,12 +151,4 @@ $settings['alshaya_backend_calls_options'] = [
       'timeout' => 30,
     ],
   ],
-  'appointment_booking' => [
-    'default' => [
-      'timeout' => 30,
-    ],
-    'customer_me_get' => [
-      'timeout' => 10,
-    ],
-  ],
 ];

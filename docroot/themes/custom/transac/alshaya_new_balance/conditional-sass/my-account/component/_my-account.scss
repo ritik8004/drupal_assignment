@@ -4,4 +4,13 @@
       margin-top: rem(20);
     }
   }
+
+  .item-list {
+    .my-account-nav {
+      li {
+        text-decoration: underline;
+        font-size: rem(14);
+      }
+    }
+  }
 }

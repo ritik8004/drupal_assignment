@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Module file for Alshaya RCS Super category.
+ */
+
+use Drupal\taxonomy\TermInterface;
+
+/**
+ * Implements hook_rcs_placeholders_processor_path_alter().
+ */
+function alshaya_rcs_super_category_rcs_placeholders_processor_path_alter(string &$path) {
+  $mapping = &drupal_static(__FUNCTION__, []);
+
+  if (isset($mapping[$path])) {
+    $path = $mapping[$path];
+    return;
+  }
+
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  // We need original path for storing in static cache.
+  $original_path = $path;
+
+  $path_arr = explode('/', $path);
+
+  // Check for with/without trailing slash in slug.
+  $paths = [$path_arr[1], $path_arr[1] . '/'];
+
+  $tids = $term_storage->getQuery()
+    ->condition('vid', 'rcs_category')
+    ->condition('field_category_slug', $paths, 'IN')
+    ->execute();
+
+  if (empty($tids)) {
+    return;
+  }
+
+  $term = $term_storage->load(current($tids));
+  if ($term instanceof TermInterface) {
+    // @todo store the term in static cache for later use.
+    unset($path_arr[1]);
+
+    $path = implode('/', $path_arr);
+    $mapping[$original_path] = $path;
+  }
+}

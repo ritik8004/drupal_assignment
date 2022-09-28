@@ -33,4 +33,17 @@ const getVatText = () => (
     : ''
 );
 
-export { calculateDiscount, getVatText };
+/**
+ * Check If product is free or not using its price.
+ *
+ * @returns {boolean}
+ *   True if product is free.
+ */
+const isFreeGiftProduct = (price) => {
+  if (price === 0 || price === 0.01) {
+    return true;
+  }
+  return false;
+};
+
+export { calculateDiscount, getVatText, isFreeGiftProduct };

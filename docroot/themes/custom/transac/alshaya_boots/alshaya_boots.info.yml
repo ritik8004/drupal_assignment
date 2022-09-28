@@ -87,11 +87,6 @@ libraries-override:
       theme:
         css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css
 
-  alshaya_white_label/appointment-booking:
-    css:
-      theme:
-        css/conditional-sass/appointment-booking/appointment-booking.ltr.css: css/conditional-sass/appointment-booking/appointment-booking.ltr.css
-
   alshaya_white_label/shop-by-brand:
     css:
       theme:

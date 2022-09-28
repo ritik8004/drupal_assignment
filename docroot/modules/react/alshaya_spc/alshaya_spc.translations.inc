@@ -593,7 +593,7 @@ function _alshaya_spc_translations() {
   // Strings related to COD mobile verification.
   $strings['v17'] = [
     'Enter the @otp_length-digit OTP code sent to' => [
-      'ar' => 'أدخل رمز التحقق @otp_length-digit المرسل إلى',
+      'ar' => 'أدخل رمز التحقق @otpLength المرسل إلى الرقم',
       'context' => 'cod_mobile_verification',
     ],
     'Change' => [
@@ -618,6 +618,14 @@ function _alshaya_spc_translations() {
     ],
     'Wrong OTP' => [
       'ar' => 'رمز تحقق غير صحيح',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Edit' => [
+      'ar' => 'تعديل',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Verified' => [
+      'ar' => 'موثق',
       'context' => 'cod_mobile_verification',
     ],
   ];
