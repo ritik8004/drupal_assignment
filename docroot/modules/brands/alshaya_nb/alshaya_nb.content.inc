@@ -13,6 +13,8 @@ use Drupal\block_content\Entity\BlockContent;
 function alshaya_nb_create_default_content() {
   // Create copyright block.
   alshaya_nb_create_copyright_block_content();
+  // Create footer block.
+  alshaya_nb_create_footer_logo_block_content();
 }
 
 /**
@@ -46,7 +48,7 @@ function alshaya_nb_create_copyright_block_content() {
 /**
  * Create Footer logo block content for NB.
  */
-function alshaya_nb_create_footer_logo_block() {
+function alshaya_nb_create_footer_logo_block_content() {
   // Footer logo path en.
   $logo_path_en = '/' . drupal_get_path('theme', 'alshaya_new_balance') . '/site-logo.svg';
   // Create footer logo block content.
