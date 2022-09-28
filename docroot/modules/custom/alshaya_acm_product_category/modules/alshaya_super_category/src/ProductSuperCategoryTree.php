@@ -122,7 +122,10 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Return the taxonomy term object if found else NULL.
    */
   public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
-    $term = NULL;
+    $term = &drupal_static('super_category_term');
+    if (!empty($term)) {
+      return $term;
+    }
     // Do not check acq category terms in V3.
     if ($check_acq_terms) {
       $term = parent::getCategoryTermFromRoute();
