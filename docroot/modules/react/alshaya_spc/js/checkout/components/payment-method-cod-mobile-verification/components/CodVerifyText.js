@@ -12,18 +12,20 @@ const CodVerifyText = ({ mobileNumber, otpLength }) => {
           '@otp_length': otpLength,
         }, { context: 'cod_mobile_verification' })}
       </span>
-      <span className="cod-mobile-otp__mobile" dir="ltr">{phoneNumber}</span>
-      <button
-        type="button"
-        className="cod-mobile-otp__btn-link"
-        onClick={() => dispatchCustomEvent('openAddressContentPopup', {
-          enabledFieldsWithMessages: {
-            mobile: Drupal.t('Please update mobile number', {}, { context: 'cod_mobile_verification' }),
-          },
-        }, {})}
-      >
-        {Drupal.t('Change', {}, { context: 'cod_mobile_verification' })}
-      </button>
+      <span className="cod-mobile-otp__mobile">
+        <span className="cod-mobile-otp__mobile-number" dir="ltr">{phoneNumber}</span>
+        <button
+          type="button"
+          className="cod-mobile-otp__mobile-change"
+          onClick={() => dispatchCustomEvent('openAddressContentPopup', {
+            enabledFieldsWithMessages: {
+              mobile: Drupal.t('Please update mobile number', {}, { context: 'cod_mobile_verification' }),
+            },
+          }, {})}
+        >
+          {Drupal.t('Change', {}, { context: 'cod_mobile_verification' })}
+        </button>
+      </span>
     </div>
   );
 };
