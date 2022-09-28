@@ -406,6 +406,10 @@ header {
             & > .menu__link-wrapper {
               .menu__link {
                 @include psuedo-element-underline($mm_l3_link_hover, rem(3));
+
+                &:hover {
+                  @include psuedo-element-underline($mm_l3_link_hover, rem(2));
+                }
               }
             }
           }
