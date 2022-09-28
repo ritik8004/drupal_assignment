@@ -1,6 +1,7 @@
 # New Behat Architecture
 
  - [Local setup](#cloud-setup) :anchor:
+ - [Remote setup](#wrench-remote-setup):anchor:
  - [Important file and variable](#bell-important-variable) :anchor:
  - [Guide lines for using variables format](#book-guide-lines-for-using-variables-format) :anchor:
 
@@ -166,6 +167,17 @@ templates/variables/brands/hm/env/uat/markets/kw/kw.yml
 templates/variables/brands/hm/env/uat/markets/kw/languages/en.yml
 ```
 
+### :wrench: Remote setup
+In the home directory settings file on the remote server, we need to add the following line:
+```
+$settings['behat_secret_key'] = '{secret_key}';
+```
+Eg. check `~/settings/settings.php` on the stack 2 UAT server.
+
+This secret key will be used for access checking for certain routes to ensure that only the behat scripts will be able to access them.
+
+Eg. `/behat/first-in-stock-product?behat={secret_key}` route will only be accessed by the behat scripts.
+When executing the scripts, we need to provide the same secret key in the URL `behat` query parameter that is provided in the settings file, otherwise the path will not be accessible.
 ### :bell: IMPORTANT Variable:
 Following file and variable is must, for any given environment.
 *For each enabled languages* (If a site has two language EN and AR):
@@ -428,7 +440,7 @@ For example :-  anon_username: 'Sample User Name'
         1. `bin/behat --profile=pb-kw-pprod-en-desktop`
         2. `bin/behat --profile=pb-ae-pprod-en-desktop`
         3. `bin/behat --profile=pb-sa-pprod-en-desktop`
-        
+
 **Please Note**:
 
 For testing the functionalities like New Checkout and New Pdp the following variables need to be set as TRUE or 1 in the yaml files where the functionality is available.
@@ -448,7 +460,7 @@ For example: The New PDP functionality is available on HM-SA on QA environment (
 variables:
   new_pdp_enabled: TRUE
 ```
-OR 
+OR
 ```text
 variables:
   new_pdp_enabled: 1
