@@ -11,17 +11,3 @@ then
   cd "$docrootDir/proxy"
   composer install
 fi
-
-if [ -d "$docrootDir/middleware" ];
-then
-  echo "Doing composer install for middleware"
-  cd "$docrootDir/middleware"
-  composer install
-fi
-
-if [ -d "$docrootDir/appointment" ];
-then
-  echo "Doing composer install for appointment"
-  cd "$docrootDir/appointment"
-  composer install
-fi

@@ -131,8 +131,6 @@ $settings['extension_discovery_scan_tests'] = FALSE;
 $settings['file_scan_ignore_directories'] = [
   'node_modules',
   'bower_components',
-  'middleware',
-  'appointment',
 ];
 
 /**
