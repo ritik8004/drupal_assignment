@@ -464,6 +464,7 @@ class CustomCommand extends BltTasks {
     $files = array_filter($files, fn($value) =>
       (
         // Only track required files inside docroot.
+        // Validate modules, profiles, proxy and themes folder only.
         str_starts_with($value, 'docroot/modules')
         || str_starts_with($value, 'docroot/profiles')
         || str_starts_with($value, 'docroot/proxy')

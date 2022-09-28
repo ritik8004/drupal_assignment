@@ -561,24 +561,26 @@ class AlshayaFrontendCommand extends BltTasks {
     // Run Jest tests.
     $tasks->exec("cd $reactDir; npm test");
 
-    foreach (new \DirectoryIterator($reactDir) as $subDir) {
-      if ($subDir->isDir()
-        && !str_contains($subDir->getBasename(), '.')
-        && !in_array($subDir->getBasename(), self::$reactIgnoredDirs)) {
-        $pattern = $reactDir . '/' . $subDir->getBasename() . '/js';
+    $finder = new Finder();
+    // Find all react folders containing the file used to specify entry points.
+    $finder->name('webpack.config.js');
+    // We need to find inside react code only.
+    $files = $finder->in($reactDir);
 
-        // For module like alshaya_algolia_react we have react files in src.
-        if (is_dir($subDir->getRealPath() . '/js/src')) {
-          $pattern .= '/src';
-        }
-
-        // Skip if JS folder does not exist.
-        if (!is_dir($pattern)) {
-          continue;
-        }
-
-        $tasks->exec("cd $reactDir; npm run lint $pattern");
+    foreach ($files as $file) {
+      // Ignore webpack.config.js found inside below folders.
+      if (
+        str_contains($file, 'node_modules')
+        || str_contains($file, 'alshaya_react')
+        || str_contains($file, 'alshaya_react_test')
+      ) {
+        continue;
       }
+      $dir = str_replace('webpack.config.js', '', $file->getRealPath());
+      // For module like alshaya_algolia_react we keep react files in src.
+      $dir .= is_dir($dir . '/js/src') ? '/js/src' : '/js';
+
+      $tasks->exec("cd $reactDir; npm run lint $dir");
     }
 
     $tasks->stopOnFail();
