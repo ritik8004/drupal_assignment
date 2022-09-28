@@ -178,6 +178,25 @@ This secret key will be used for access checking for certain routes to ensure th
 
 Eg. `/behat/first-in-stock-product?behat={secret_key}` route will only be accessed by the behat scripts.
 When executing the scripts, we need to provide the same secret key in the URL `behat` query parameter that is provided in the settings file, otherwise the path will not be accessible.
+
+We also need to provide these secret keys to the automation scripts.
+For that, create a file :`tests/behat/creds.json`.
+Add the secret keys there for the different environments in the following format:
+```
+{
+  "uat": {
+    "secret_key": "{secret_key}"
+  },
+  "pprod": {
+    "secret_key": "{secret_key}"
+  },
+  "prod": {
+    "secret_key": "{secret_key}"
+  }
+}
+```
+The function `getBehatSecretKey()` in `tests/behat/src/bootstrap/Drupal/FeatureContext.php` file makes use of the secret keys.
+
 ### :bell: IMPORTANT Variable:
 Following file and variable is must, for any given environment.
 *For each enabled languages* (If a site has two language EN and AR):
