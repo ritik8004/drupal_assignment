@@ -20,6 +20,7 @@ function alshaya_ay_transac_install() {
   $config_factory = \Drupal::configFactory();
   $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
   $config_factory->getEditable('block.block.myaccounticonblock')->set('weight', $my_account_links - 2)->save();
+
   // Set Brand Purpose block
   // to appear just below the content block.
   $brand_purpose = (int) $config_factory->get('block.block.content')->get('weight');
