@@ -1,0 +1,13 @@
+.swatch-list {
+  .li-swatch-color {
+    a {
+      border-radius: 100%;
+
+      &.active {
+        &::after {
+          border-radius: 100%;
+        }
+      }
+    }
+  }
+}

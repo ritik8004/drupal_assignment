@@ -1,0 +1,30 @@
+.alshaya-select-wrapper,
+.form-select-wrapper {
+  padding-top: rem(24);
+
+  label {
+    font-size: rem(16);
+  }
+}
+
+.alshaya-select {
+  .alshayaSelect__control {
+    > div:nth-child(2) {
+      .alshayaSelect__indicator {
+        background: $plp-quick-view-product-quantity-arrow-bg;
+      }
+    }
+  }
+
+  .alshayaSelect__menu {
+    width: rem(167);
+  }
+}
+
+.attribute-wrapper {
+  margin: rem(20) rem(0);
+
+  @include breakpoint($mobile) {
+    margin: rem(22) rem(0);
+  }
+}
