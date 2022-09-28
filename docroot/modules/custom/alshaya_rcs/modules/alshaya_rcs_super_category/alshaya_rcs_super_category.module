@@ -18,27 +18,17 @@ function alshaya_rcs_super_category_rcs_placeholders_processor_path_alter(string
     return;
   }
 
-  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-
-  // We need original path for storing in static cache.
-  $original_path = $path;
-
-  $path_arr = explode('/', $path);
-
-  // Check for with/without trailing slash in slug.
-  $paths = [$path_arr[1], $path_arr[1] . '/'];
-
-  $tids = $term_storage->getQuery()
-    ->condition('vid', 'rcs_category')
-    ->condition('field_category_slug', $paths, 'IN')
-    ->execute();
-
-  if (empty($tids)) {
-    return;
+  $term = &drupal_static('super_category_term', []);
+  if (empty($term)) {
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
   }
 
-  $term = $term_storage->load(current($tids));
   if ($term instanceof TermInterface) {
+
+    // We need original path for storing in static cache.
+    $original_path = $path;
+
+    $path_arr = explode('/', $path);
     // @todo store the term in static cache for later use.
     unset($path_arr[1]);
 
@@ -52,7 +42,10 @@ function alshaya_rcs_super_category_rcs_placeholders_processor_path_alter(string
  */
 function alshaya_rcs_super_category_alshaya_rcs_main_menu_alter(&$variables) {
   // Assign super category from url as category in menu.
-  $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+  $term = &drupal_static('super_category_term', []);
+  if (empty($term)) {
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+  }
   if ($term instanceof TermInterface) {
     $variables['category_id'] = $term->id();
   }
