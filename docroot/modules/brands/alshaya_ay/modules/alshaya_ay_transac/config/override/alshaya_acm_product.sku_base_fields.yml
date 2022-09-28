@@ -33,8 +33,8 @@ fields:
     label: 'Fabrication'
     type: 'text_long'
   how_to_use:
-    abel: 'How to use'
+    label: 'How to use'
     type: 'text_long'
   why_we_love_it:
-    abel: 'Why we love it'
+    label: 'Why we love it'
     type: 'text_long'

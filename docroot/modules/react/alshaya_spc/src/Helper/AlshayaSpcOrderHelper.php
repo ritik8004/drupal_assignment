@@ -381,7 +381,7 @@ class AlshayaSpcOrderHelper {
     // We will use this as flag in React to avoid reading from local storage
     // and also avoid doing API call.
     $data['prepared'] = TRUE;
-    $data['freeItem'] = ($item['price_incl_tax'] == 0);
+    $data['freeItem'] = ($item['price_incl_tax'] == 0) || ($item['price_incl_tax'] == SkuManager::FREE_GIFT_PRICE);
     $data['title'] = $item['name'];
     $data['finalPrice'] = $this->skuInfoHelper->formatPriceDisplay((float) $item['price']);
     $data['sku'] = $item['sku'];
