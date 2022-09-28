@@ -608,7 +608,7 @@ export const pushWishlistSeoGtmData = (productData, action = 'add') => {
     // The product drawer is coming in page end in DOM,
     // so element.closest is not right selector when quick view is open.
     if (gtmProduct === null) {
-      const sku = productData.element.getAttribute('data-sku') ? productData.element.getAttribute('data-sku') : productData.variant;
+      const sku = productData.element.closest('form').getAttribute('data-sku') ? productData.element.closest('form').getAttribute('data-sku') : productData.variant;
       gtmProduct = document.querySelector(`article[data-sku="${sku}"]`);
     }
     const product = Drupal.alshaya_seo_gtm_get_product_values(
