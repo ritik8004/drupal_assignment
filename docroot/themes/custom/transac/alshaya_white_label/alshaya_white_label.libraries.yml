@@ -879,6 +879,11 @@ checkout-cod-mobile-verification:
     theme:
       css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: {}
 
+drawer-cart-notification:
+  css:
+    theme:
+      css/conditional-sass/drawer-cart-notification/drawer-cart-notification.ltr.css: {}
+
 user-account:
   css:
     theme:
