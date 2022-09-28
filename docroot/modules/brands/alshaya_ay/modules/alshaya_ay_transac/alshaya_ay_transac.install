@@ -9,6 +9,7 @@
  * Implements hook_install().
  */
 function alshaya_ay_transac_install() {
+
   // Add translations.
   module_load_include('inc', 'alshaya_ay_transac', 'alshaya_ay_transac.translation');
   if ($translations = _alshaya_ay_transac_get_translations()) {
@@ -20,6 +21,10 @@ function alshaya_ay_transac_install() {
   // to appear just above the mini cart block.
   $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
   $config_factory->getEditable('block.block.myaccounticonblock')->set('weight', $my_account_links - 2)->save();
+  // Set Brand Purpose block
+  // to appear just below the content block.
+  $brand_purpose = (int) $config_factory->get('block.block.content')->get('weight');
+  $config_factory->getEditable('block.block.aloisabrandofpurpose')->set('weight', $brand_purpose + 1)->save();
 }
 
 /**
