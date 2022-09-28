@@ -20,6 +20,9 @@ function alshaya_ay_transac_install() {
   // to appear just above the mini cart block.
   $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
   $config_factory->getEditable('block.block.myaccounticonblock')->set('weight', $my_account_links - 2)->save();
+
+  // Add mobile navigation block to menu primary region.
+  alshaya_config_install_configs(['block.block.mobilenavigation'], 'alshaya_transac', 'optional');
 }
 
 /**
