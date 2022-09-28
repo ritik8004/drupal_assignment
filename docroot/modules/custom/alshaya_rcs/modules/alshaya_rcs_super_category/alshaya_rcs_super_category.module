@@ -29,7 +29,6 @@ function alshaya_rcs_super_category_rcs_placeholders_processor_path_alter(string
     $original_path = $path;
 
     $path_arr = explode('/', $path);
-    // @todo store the term in static cache for later use.
     unset($path_arr[1]);
 
     $path = implode('/', $path_arr);
