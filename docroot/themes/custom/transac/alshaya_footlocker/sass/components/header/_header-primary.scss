@@ -358,13 +358,13 @@ header {
       .menu--one__link {
         border: 0;
         height: 2.5rem;
-        font-size: 1rem;
+        font-size: rem(14);
         padding: 0.625rem 1.5rem;
         font-family: $alshaya-bold;
         line-height: 1;
         color: $mm_l1_link;
         margin-top: 0;
-        text-transform: capitalize;
+        text-transform: uppercase;
 
         html[lang=ar] & {
           font-size: 0.875rem;
@@ -392,20 +392,26 @@ header {
     }
 
     .menu--two__list {
-      .menu__list-item.is_underlined {
+      .menu--two__list-item.is_underlined {
         & > .menu__link-wrapper {
           .menu__link {
-            color: $mm_l3_link_hover !important;
-
-            @include psuedo-element-underline($mm_l3_link_hover, rem(3));
+            @include psuedo-element-underline($mm_l2_link_desktop, rem(3));
           }
         }
       }
 
       .menu--two__list-item {
         .menu--three__list {
-          li {
-            a:hover {
+          .menu__list-item.is_underlined {
+            & > .menu__link-wrapper {
+              .menu__link {
+                @include psuedo-element-underline($mm_l3_link_hover, rem(3));
+              }
+            }
+          }
+
+          .menu__list-item {
+            .menu__link:hover {
               text-decoration: none;
 
               @include psuedo-element-underline($mm_l3_link_hover, rem(2));
