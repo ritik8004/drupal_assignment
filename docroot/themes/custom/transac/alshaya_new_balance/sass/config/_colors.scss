@@ -194,7 +194,7 @@ $plp_clear_all_btn_disabled: $ada-gray;
 $plp_all_filter_title: $black;
 $plp_all_filter_filter_arrow: $black;
 $plp_clear_all_btn_text: $nb-red;
-$plp_all_filter_title: $nb-red;
+$plp_filter_txt: $ada-gray;
 
 // Accordion
 $accordion_title: $black;
@@ -204,15 +204,19 @@ $accordion_title_icon: $black;
 $algolia-input-text: $black;
 $algolia-trending-title-text: $black;
 $algolia-react-progressbar: $gray2;
-$algolia-react-progressbar-text: $ada-gray;
+$algolia-react-progressbar-text: $black;
 $algolia-react-progressbar-fill: $black;
 $algolia-react-search-page-title: $black;
 $algolia-react-sidebar-label-color: $black;
 $algolia-search-clear-text-icon: $black;
 $algolia-react-facet-label: $black;
-$algolia_react-facet-item-color: $black;
+$algolia_react-facet-item-color: $nb-black;
 $algolia-search-icon-background: $gray2;
 $algolia-auto-complete-border: $gray;
 $algolia-input-placeholder-text: $black;
 $algolia_search_input_bg: $gray2;
 $algolia-search-icon: $black;
+
+// plp add to cart
+$plp-primary-cta-hover-bg: rgba(207, 10, 44, 0.9);
+$plp-secondary-cta-hover-bg: rgba(207, 10, 44, 0.1);
