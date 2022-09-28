@@ -123,7 +123,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    */
   public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
     $term = &drupal_static('super_category_term');
-    if (!empty($term)) {
+    if (isset($term)) {
       return $term;
     }
     // Do not check acq category terms in V3.
