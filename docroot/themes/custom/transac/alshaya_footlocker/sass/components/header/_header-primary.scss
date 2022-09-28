@@ -364,7 +364,7 @@ header {
         line-height: 1;
         color: $mm_l1_link;
         margin-top: 0;
-        text-transform: uppercase;
+        text-transform: capitalize;
 
         html[lang=ar] & {
           font-size: 0.875rem;
