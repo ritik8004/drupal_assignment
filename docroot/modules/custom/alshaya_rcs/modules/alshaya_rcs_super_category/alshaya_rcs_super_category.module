@@ -46,3 +46,14 @@ function alshaya_rcs_super_category_rcs_placeholders_processor_path_alter(string
     $mapping[$original_path] = $path;
   }
 }
+
+/**
+ * Implements hook_alshaya_rcs_main_menu_alter().
+ */
+function alshaya_rcs_super_category_alshaya_rcs_main_menu_alter(&$variables) {
+  // Assign super category from url as category in menu.
+  $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+  if ($term instanceof TermInterface) {
+    $variables['category_id'] = $term->id();
+  }
+}
