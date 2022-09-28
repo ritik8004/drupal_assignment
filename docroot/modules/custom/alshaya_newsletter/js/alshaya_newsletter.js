@@ -67,33 +67,37 @@
         }
       }
 
+      /**
+       * Utility function to subscribe the newsletter.
+       *
+       * @param {array} data
+       *   The array containing the email and some meta info.
+       */
       $.fn.newsletterCallApi = function (data) {
         var message = '';
-        // Validate the newsletter API and show the proper error message based
-        // on the fulfilling criteria.
-        try {
-          if (!Drupal.validateNewsletterEmail(data['email'])) {
-            // Validate if the email id is subscribed or not.
-            if (Drupal.subscriberNewsletter(data['email'])) {
+        // Proceed only if email is present.
+        if (data['email']) {
+          // Validate the newsletter API and show the proper error message based
+          // on the fulfilling criteria.
+          try {
+            if (!Drupal.subscriberNewsletter(data['email'])) {
+              // Validate if the email id is subscribed or not.
               message = '<span class="message success">' + Drupal.t('Thank you for your subscription.') + '</span>';
               data['message'] = 'success';
             } else {
-              message = '<span class="message error">' + drupalSettings.globalErrorMessage + '</span>';
+              // Show the error message saying the email is already subscribed.
               data['message'] = 'failure';
+              message = '<span class="message error">' + Drupal.t('This email address is already subscribed.') + '</span>';
             }
-          } else {
-            // Show the error message saying the email is already subscribed.
+          } catch (err) {
+            // Log the error message.
+            Drupal.logJavascriptError('Something went wrong', err);
+            message = '<span class="message error">' + drupalSettings.globalErrorMessage + '</span>';
             data['message'] = 'failure';
-            message = '<span class="message error">' + Drupal.t('This email address is already subscribed.') + '</span>';
           }
-        } catch (err) {
-          // Log the error message.
-          Drupal.logJavascriptError('Something went wrong', err);
-          message = '<span class="message error">' + drupalSettings.globalErrorMessage + '</span>';
-          data['message'] = 'failure';
+          // Update the message in data.
+          data['html'] = '<div class="subscription-status">' + message + '</div>';
         }
-        // Update the message in data.
-        data['html'] = message;
 
         // Call the response handler function with all the required data.
         $.fn.newsletterHandleResponse(data);
@@ -106,8 +110,8 @@
     $('#footer-newsletter-form-wrapper').html('');
   };
 
-  // Validate the email using validate API.
-  Drupal.validateNewsletterEmail = function(email) {
+  // Subscribe newsletter.
+  Drupal.subscriberNewsletter = function(email) {
     var alreadySubscribed = false;
     // Call the validate API.
     $.ajax({
@@ -124,26 +128,6 @@
     });
 
     return alreadySubscribed;
-  }
-
-  // Subscribe newsletter.
-  Drupal.subscriberNewsletter = function(email) {
-    var subscribed = false;
-    // Call the validate API.
-    $.ajax({
-      url: drupalSettings.newsletter.apiUrl + '/V1/newsletter/subscribe',
-      type: 'POST',
-      dataType: 'json',
-      processData: false,
-      async: false,
-      contentType: 'application/json',
-      data: JSON.stringify({ email: email }),
-      success: function (response) {
-        subscribed = response.status;
-      }
-    });
-
-    return subscribed;
   }
 
 })(jQuery, Drupal, drupalSettings);
