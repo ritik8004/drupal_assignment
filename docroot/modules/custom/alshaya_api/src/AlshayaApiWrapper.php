@@ -296,23 +296,21 @@ class AlshayaApiWrapper {
       if ($throw_exception) {
         throw $e;
       }
-      if ($e->getCode() == 401 && PHP_SAPI !== 'cli') {
-        $result = NULL;
+      $result = NULL;
+
+      if ($e->getCode() === 401 && PHP_SAPI !== 'cli') {
         $this->logger->error('Exception while updating customer data @data against the api @api. Message: @message.', [
-          '@data' => $data['username'],
+          '@data' => $data['username'] ?? '',
           '@api' => $url,
           '@message' => $e->getMessage(),
         ]);
-        if ($this->currentRoute->getRouteName() !== 'user.login') {
-          user_logout();
-          // We redirect to an user/login path.
-          $response = new LocalRedirectResponse(Url::fromRoute('user.login')->toString());
-          $response->send();
-          return $response;
+
+        // Handle the 401 exception in the respective endpoints.
+        if ($endpoint === 'customers/search' || $endpoint === 'integration/customer/token/bySocialDetail') {
+          throw $e;
         }
       }
 
-      $result = NULL;
       $this->logger->error('Exception while invoking API @api. Message: @message.', [
         '@api' => $url,
         '@message' => $e->getMessage(),
@@ -1112,6 +1110,16 @@ class AlshayaApiWrapper {
       );
     }
     catch (\Exception $e) {
+      if ($e->getCode() === 401 && PHP_SAPI !== 'cli' && $this->currentRoute->getRouteName() !== 'user.login') {
+
+        user_logout();
+
+        // We redirect to an user/login path.
+        $response = new LocalRedirectResponse(Url::fromRoute('user.login')->toString());
+        $response->send();
+        return $response;
+      }
+
       $this->logger->error('Exception while authenticating customer. Error: @response. E-mail: @email', [
         '@response' => $e->getMessage(),
         '@email' => $mail,
@@ -1157,6 +1165,16 @@ class AlshayaApiWrapper {
       }
     }
     catch (\Exception $e) {
+      if ($e->getCode() === 401 && PHP_SAPI !== 'cli' && $this->currentRoute->getRouteName() !== 'user.login') {
+
+        user_logout();
+
+        // We redirect to an user/login path.
+        $response = new LocalRedirectResponse(Url::fromRoute('user.login')->toString());
+        $response->send();
+        return $response;
+      }
+
       throw new \Exception($e->getMessage(), $e->getCode(), $e);
     }
 
