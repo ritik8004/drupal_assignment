@@ -40,18 +40,7 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
               alt: product.name,
               title: product.name,
             };
-            if (product.type_id === 'configurable') {
-              product.variants.some(function eachVariant(variant) {
-                if (variant.product.sku === orderProduct.sku) {
-                  orderProduct.is_returnable = window.commerceBackend.isProductReturnable(variant.product);
-                  return true;
-                }
-                return false;
-              });
-            }
-            else {
-              orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product);
-            }
+            orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product, orderProduct.sku);
             // @todo Populate this value when working on big ticket items.
             orderProduct.is_big_ticket = null;
           });
