@@ -23,6 +23,7 @@ $_egift_landing_page_banner_bg: #f0f0f0;
 // Header color.
 $dark-brown: #504a4a;
 $brand-red: #dc062b;
+$brand-grey: #515151;
 
 //global for entire site
 $primary_btn_bg: $black;
@@ -123,17 +124,18 @@ $mm_l1_link_hover_bg: $black;
 $mm_l1_link_hover_active: $brand-red;
 $mm_l2_link: $black;
 $mm_l2_link: $purplish-brown;
-$mm_l2_link_desktop: $black;
+$mm_l2_link_desktop: $brand-grey;
 $mm_l1_link_hover: $white-two;
 $mm_l2_bg: $white-two;
 $mm_l3_link: $warm-grey;
 $mm_body_overlay: rgba(0, 0, 0, 0.6);
-$mm_bg_desk: $dark-brown;
+$mm_bg_desk: $black;
 $mm_bg: $white-two;
 $mm_l1_border: $white-three;
 $mm_l1_link_bg: $white-two;
 $mm_l2_link_hover: $black;
 $mm_l2_p: $white-two;
+$mm_l3_link: $black;
 $mm_l3_link_bg: $white-two;
 $mm_l3_link_hover: $black;
 $mm_highlight_label: $purplish-brown;
