@@ -84,6 +84,7 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
       '#theme' => 'alshaya_social',
       '#social_networks' => $this->socialHelper->getSocialNetworks(),
       '#section_title' => $titles[$this->routeMatch->getRouteName()] ?? '',
+      '#cache' => ['max-age' => 0],
     ];
   }
 
