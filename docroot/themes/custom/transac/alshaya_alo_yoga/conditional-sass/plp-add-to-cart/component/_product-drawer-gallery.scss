@@ -1,0 +1,56 @@
+.configurable-product-form-wrapper {
+  .gallery-wrapper {
+    position: relative;
+
+    .slick-slider {
+      .slick-slide {
+        height: rem(408);
+
+        img {
+          min-height: rem(408);
+        }
+      }
+
+      .slick-arrow {
+        &::before {
+          color: $plp-slider-icon-bg;
+          font-size: rem(20);
+        }
+      }
+    }
+
+    .slick-dots {
+      li {
+        width: rem(8);
+        height: rem(8);
+
+        button {
+          width: rem(8);
+          height: rem(8);
+
+          &::before {
+            width: rem(8);
+            height: rem(8);
+            top: rem(-8);
+            color: $plp_slider_dots;
+            opacity: 0.4;
+
+            @include breakpoint($tablet) {
+              top: rem(-10);
+            }
+          }
+        }
+
+        &.slick-active {
+          background: transparent !important;
+
+          button {
+            &::before {
+              color: $plp_slider_dots !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}

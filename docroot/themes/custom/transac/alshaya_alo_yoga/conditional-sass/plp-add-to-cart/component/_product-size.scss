@@ -1,0 +1,45 @@
+.attribute-wrapper {
+  label {
+    font-size: rem(16);
+  }
+
+  ul.attribute-options-list {
+    margin: rem(10) rem(0);
+
+    li {
+      padding: rem(12) rem(10);
+      margin-#{$right}: rem(4);
+      font-size: rem(16);
+
+      &.active {
+        padding: rem(12) rem(6);
+        min-width: rem(44);
+
+        &:hover {
+          min-width: rem(44);
+        }
+      }
+
+      &:hover {
+        min-width: rem(40);
+      }
+    }
+  }
+
+  &_size {
+    @include breakpoint($only-mobile) {
+      width: rem(303);
+    }
+
+    + .alshaya-select-wrapper {
+      @include breakpoint($only-mobile) {
+        float: $left;
+        margin-#{$left}: rem(0);
+      }
+    }
+  }
+
+  .selected-text {
+    font-weight: 400;
+  }
+}

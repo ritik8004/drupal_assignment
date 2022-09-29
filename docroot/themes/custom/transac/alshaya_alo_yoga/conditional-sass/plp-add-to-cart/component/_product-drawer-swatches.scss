@@ -1,0 +1,20 @@
+.swatch-list {
+  margin: rem(13) rem(0) rem(6);
+
+  .li-swatch-color {
+    a {
+      border-radius: 100%;
+      width: rem(34);
+      height: rem(34);
+
+      &.active {
+        &::after {
+          border-radius: 100%;
+          top: rem(-5);
+          #{$left}: rem(-5);
+          border-color: $plp-quick-view-product-color-border;
+        }
+      }
+    }
+  }
+}
