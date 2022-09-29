@@ -68,12 +68,12 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
       switch (data.StepId) {
         case data.Steps.LOADED:
           // Push data to datalayer.
-          dataLayer.push(Drupal.getGlobaleGaCheckoutData(data, 2));
+          window.dataLayer.push(Drupal.getGlobaleGaCheckoutData(data, 2));
           break;
 
         case data.Steps.CONFIRMATION:
           // Push data to datalayer.
-          dataLayer.push(Drupal.getGlobaleGaCheckoutData(data, 4));
+          window.dataLayer.push(Drupal.getGlobaleGaCheckoutData(data, 4));
           // Clear local storage.
           window.commerceBackend.removeCartDataFromStorage(true);
           break;
