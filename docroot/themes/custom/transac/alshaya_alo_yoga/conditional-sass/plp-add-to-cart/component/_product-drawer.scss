@@ -45,7 +45,7 @@
         transform: translate(50%, 50%);
         background-size: contain;
         #{$left}: rem(82);
-        top: rem(5);
+        top: rem(2);
 
         @include breakpoint($only-mobile) {
           #{$left}: rem(68);
