@@ -29,7 +29,14 @@
 
 name: Back-merge
 
-on: push
+on:
+  push:
+    branches:
+      - develop
+      - qa
+      - uat
+      - master
+
 
 concurrency: backmerge-${{ github.ref_name }}
 
