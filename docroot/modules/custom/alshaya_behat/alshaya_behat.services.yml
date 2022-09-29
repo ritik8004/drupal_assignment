@@ -1,0 +1,6 @@
+services:
+  alshaya_behat.helper:
+    class: \Drupal\alshaya_behat\Service\AlshayaBehatHelper
+    arguments:
+      - '@database'
+      - '@http_kernel.basic'
