@@ -31,7 +31,7 @@ export const algoliaSearchClient = {
         };
         Drupal.addItemInLocalStorage('referrerData', referrerData);
       }
-    } else if (referrerData.previousList !== '') {
+    } else if (referrerData !== null && referrerData.previousList !== '') {
       referrerData.list = referrerData.previousList;
       referrerData.previousList = '';
       Drupal.addItemInLocalStorage('referrerData', referrerData);
