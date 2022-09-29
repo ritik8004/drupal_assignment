@@ -131,6 +131,7 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
     $config = $this->config('alshaya_main_menu.settings');
     $config->set('mobile_main_menu_max_depth', $form_state->getValue('mobile_main_menu_max_depth'));
     $config->set('desktop_main_menu_layout', $form_state->getValue('desktop_main_menu_layout'));
+    $config->set('mobile_main_menu_layout', $form_state->getValue('mobile_main_menu_layout'));
     $config->set('max_nb_col', $form_state->getValue('max_nb_col'));
     $config->set('ideal_max_col_length', $form_state->getValue('ideal_max_col_length'));
     $config->set('show_l2_in_separate_column', $form_state->getValue('show_l2_in_separate_column'));
