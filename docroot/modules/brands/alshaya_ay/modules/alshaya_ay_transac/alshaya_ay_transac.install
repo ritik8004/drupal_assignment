@@ -21,6 +21,11 @@ function alshaya_ay_transac_install() {
   $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
   $config_factory->getEditable('block.block.myaccounticonblock')->set('weight', $my_account_links - 2)->save();
 
+  // Set Brand Purpose block
+  // to appear just below the content block.
+  $brand_purpose = (int) $config_factory->get('block.block.content')->get('weight');
+  $config_factory->getEditable('block.block.aloisabrandofpurpose')->set('weight', $brand_purpose + 1)->save();
+
   // Add mobile navigation block to menu primary region.
   alshaya_config_install_configs(['block.block.mobilenavigation'], 'alshaya_transac', 'optional');
 }
