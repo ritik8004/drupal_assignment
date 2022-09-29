@@ -5,15 +5,23 @@
       // Create a new instance of ladda for the specified button.
       var l = $('.edit-newsletter').ladda();
 
-      $('.edit-newsletter').on('click', function () {
-        // Doing this as we checking class and its not available immediately
-        // due to race condition.
-        setTimeout(function () {
-          if (!$('form#alshaya-newsletter-subscribe').hasClass('ajax-submit-prevented')) {
-            // Start loading
-            l.ladda('start');
-          }
-        }, 10);
+      $('.edit-newsletter').once().on('click', function (e) {
+        var data = [];
+        // Event prevent the form submission.
+        e.preventDefault();
+        // Get the value of email from the form.
+        data['email'] = $("#alshaya-newsletter-subscribe #edit-email").val();
+        if (!data['email']) {
+          data['message'] = 'failure';
+          data['html'] = '<div class="subscription-status"><span class="message error">' + Drupal.t('Please enter an email address') + '</span></div>';
+        } else {
+          // Start loading
+          l.ladda('start');
+        }
+        // Update the interval time in the data array.
+        data['interval'] = drupalSettings.newsletter.ajaxSpinnerMessageInterval;
+        // Call the API to subscribe to the newsletter.
+        $.fn.newsletterCallApi(data);
       });
 
       // Hide multiple inline error messages for email field.
@@ -115,7 +123,7 @@
     var alreadySubscribed = false;
     // Call the validate API.
     $.ajax({
-      url: drupalSettings.newsletter.apiUrl + '/V1/newsletter/subscription',
+      url: drupalSettings.cart.url + drupalSettings.newsletter.apiUrl,
       type: 'POST',
       dataType: 'json',
       processData: false,
