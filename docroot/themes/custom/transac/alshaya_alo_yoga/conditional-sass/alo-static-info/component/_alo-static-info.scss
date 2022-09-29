@@ -1,4 +1,4 @@
-.block-name {
+.brand-purpose {
   font-family: $alshaya-thin;
   font-size: rem(16);
   line-height: 1.25;
@@ -20,9 +20,6 @@
     padding: 0 rem(32);
   }
 
-  &__content {
-  }
-
   &__purpose {
     &-icon {
       width: rem(32);
@@ -35,20 +32,9 @@
       margin: 0;
     }
 
-    &-info {
-    }
-
     &-link {
       text-decoration: underline;
       cursor: pointer;
-    }
-  }
-
-  &__accordion {
-    &-header {
-    }
-
-    &-content {
     }
   }
 
@@ -88,7 +74,7 @@
       }
 
       &:first-child {
-        border-bottom: rem(1) solid $primary_border;
+        border-bottom: rem(1) solid $static-info-border;
       }
     }
   }
@@ -100,9 +86,6 @@
       font-family: $ay-bold;
       font-size: rem(32);
       line-height: 1.13;
-    }
-
-    &__subtitle {
     }
 
     &__content {
@@ -119,9 +102,6 @@
       align-items: center;
       width: rem(400);
 
-      &-header {
-      }
-
       &-icon {
         width: rem(48);
         height: rem(48);
@@ -131,23 +111,6 @@
         font-family: $alshaya-bold;
         font-size: rem(18);
         line-height: 1.27;
-      }
-
-      &-content {
-      }
-
-      &-info {
-      }
-
-      &-link {
-      }
-    }
-
-    &__accordion {
-      &-header {
-      }
-
-      &-content {
       }
     }
   }
