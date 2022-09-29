@@ -84,7 +84,6 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
       '#theme' => 'alshaya_social',
       '#social_networks' => $this->socialHelper->getSocialNetworks(),
       '#section_title' => $titles[$this->routeMatch->getRouteName()] ?? '',
-      '#cache' => ['max-age' => 0],
     ];
   }
 
@@ -92,7 +91,7 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route', 'url']);
   }
 
   /**
