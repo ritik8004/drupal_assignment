@@ -869,10 +869,10 @@ $magentos = [
       'store_id' => ['en' => 42, 'ar' => 39],
     ],
     'magento_secrets' => [
-      'consumer_key' => 'lrw9btxtxtgiuhr2otmf4qgc0dhe8i5v',
-      'consumer_secret' => '3l5yw7p7ovqr8kovsewhhji6d3e7ntta',
-      'access_token' => 'ye6scxw0bd2a5mgegt5frbtue0ldnexc',
-      'access_token_secret' => 'gk4npgvisuw0hbpmasi0jqvblk38wgh4',
+      'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
+      'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
+      'access_token' => 'ncevhsnmxu35fln4fq3c009lo09frfgm',
+      'access_token_secret' => 'dm4h99kjd387rv29ivthpbatx7dn5g1b',
     ],
   ],
   'hm_uat' => [
