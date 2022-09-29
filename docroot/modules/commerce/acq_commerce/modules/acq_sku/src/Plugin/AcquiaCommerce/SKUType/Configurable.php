@@ -526,11 +526,8 @@ class Configurable extends SKUPluginBase {
       return $sku->label();
     }
 
-    // phpcs:disable
-    $configurables = unserialize(
-      $parent_sku->field_configurable_attributes->getString()
-    );
-    // phpcs:enable
+    // @codingStandardsIgnoreLine
+    $configurables = unserialize($parent_sku->field_configurable_attributes->getString());
 
     $label_parts = [];
     foreach ($configurables as $configurable) {
