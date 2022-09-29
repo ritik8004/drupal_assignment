@@ -551,8 +551,10 @@ export const checkoutAddressProcess = (e) => {
         document.getElementById('email-error').classList.add('error');
         isError = true;
       } else if (response.data.email === 'exists') {
-        document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
-        document.getElementById('email-error').classList.add('error');
+        if (document.getElementById('email-error') !== null) {
+          document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
+          document.getElementById('email-error').classList.add('error');
+        }
         isError = true;
       } else {
         // Remove error class and any error message.
@@ -735,8 +737,10 @@ export const processBillingUpdateFromForm = (e, shipping) => {
           let isError = false;
           // Validate if email id exists then throw error and return.
           if (result.data.email === 'exists') {
-            document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
-            document.getElementById('email-error').classList.add('error');
+            if (document.getElementById('email-error') !== null) {
+              document.getElementById('email-error').innerHTML = getStringMessage('form_error_customer_exists');
+              document.getElementById('email-error').classList.add('error');
+            }
             isError = true;
           } else if (result.data.email === 'invalid') {
             document.getElementById('email-error').innerHTML = getStringMessage('form_error_email_not_valid', { '%mail': validationData.email });
