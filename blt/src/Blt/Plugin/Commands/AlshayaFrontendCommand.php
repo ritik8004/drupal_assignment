@@ -558,9 +558,6 @@ class AlshayaFrontendCommand extends BltTasks {
     // Validate utility files.
     $tasks->exec("cd $reactDir; npm run lint $reactDir/js/");
 
-    // Run Jest tests.
-    $tasks->exec("cd $reactDir; npm test");
-
     $finder = new Finder();
     // Find all react folders containing the file used to specify entry points.
     $finder->name('webpack.config.js');
