@@ -1,0 +1,50 @@
+.spc-sidebar {
+  .spc-promo-code-block,
+  .spc-order-summary-block {
+    .spc-checkout-section-title {
+      font-size: rem(16);
+      font-family: $alshaya-thin;
+      text-transform: capitalize;
+      font-weight: 700;
+      margin-bottom: rem(23);
+    }
+  }
+
+  .spc-promo-code-block {
+    margin-bottom: rem(35);
+  }
+
+  .spc-order-summary-block {
+    .spc-checkout-section-title {
+      margin-bottom: rem(30);
+    }
+
+    .block-content {
+      .totals {
+        .hero-total {
+          .total-line-item {
+            .grand-total {
+              font-size: rem(18);
+              font-weight: 700;
+            }
+
+            .value {
+              font-size: rem(14);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.spc-content {
+  .spc-title-wrapper {
+    .spc-checkout-section-title {
+      font-weight: 700;
+      text-transform: capitalize;
+      font-family: $alshaya-thin;
+      margin-bottom: rem(22);
+    }
+  }
+}

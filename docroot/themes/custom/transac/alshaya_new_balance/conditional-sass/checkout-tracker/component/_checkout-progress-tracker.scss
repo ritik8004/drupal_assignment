@@ -1,0 +1,16 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    width: 80%;
+
+    .progress-bar {
+      .step {
+        &.current,
+        &.completed {
+          &::after {
+            border-color: $cko-steps-current-active-border;
+          }
+        }
+      }
+    }
+  }
+}
