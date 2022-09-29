@@ -644,9 +644,7 @@ class AlshayaPromoLabelManager {
       }
 
       $coupon = $free_promotion['#promo_code'] ?? '';
-      $coupon = is_array($coupon)
-        ? $coupon[0]['value']
-        : $coupon;
+      $coupon = $coupon[0]['value'] ?? $coupon;
 
       $free_promotion += [
         'coupon' => $coupon,
