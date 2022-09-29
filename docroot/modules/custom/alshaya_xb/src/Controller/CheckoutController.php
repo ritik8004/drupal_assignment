@@ -24,6 +24,7 @@ class CheckoutController extends ControllerBase {
         'library' => [
           'alshaya_react/react',
           'alshaya_spc/commerce_backend.cart.v2',
+          'alshaya_xb/alshaya_xb_checkout_seo',
         ],
       ],
     ];
