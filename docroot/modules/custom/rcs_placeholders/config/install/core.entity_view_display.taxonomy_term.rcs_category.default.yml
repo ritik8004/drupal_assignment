@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.taxonomy_term.rcs_category.field_category_slug
     - field.field.taxonomy_term.rcs_category.field_metatags
+    - field.field.taxonomy_term.rcs_category.field_mdc_category_id
     - taxonomy.vocabulary.rcs_category
   module:
     - metatag
@@ -23,3 +24,4 @@ content:
 hidden:
   field_category_slug: true
   field_metatags: true
+  field_mdc_category_id: true

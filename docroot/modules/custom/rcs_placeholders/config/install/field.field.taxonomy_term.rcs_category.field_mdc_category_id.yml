@@ -1,0 +1,20 @@
+uuid: 95bc99de-0fda-4b09-bff6-95995f35266e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_mdc_category_id
+    - taxonomy.vocabulary.rcs_category
+id: taxonomy_term.rcs_category.field_mdc_category_id
+field_name: field_mdc_category_id
+entity_type: taxonomy_term
+bundle: rcs_category
+label: 'Mdc Category Id'
+description: 'Stores Mdc Product Category Id.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
+skip_translation_check: 0

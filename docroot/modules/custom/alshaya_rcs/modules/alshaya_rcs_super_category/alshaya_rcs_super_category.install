@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Functions around module install.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_super_category_install() {
+  // Sync L1 RCS Category terms from mdc.
+  \Drupal::service('alshaya_rcs_super_category.super_categories_helper')->syncSuperCategories();
+}
