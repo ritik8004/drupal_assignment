@@ -24,28 +24,28 @@ function alshaya_ay_transac_create_brand_purpose_block_content() {
     'info' => 'Alo is a Brand of Purpose',
     'machine_name' => 'brand_purpose',
     'body' => [
-      'value' => '<div class="block-name">
-      <h4 class="block-name__title">ALO IS A BRAND OF PURPOSE</h4>
-      <p class="block-name__subtitle">Your purchase helps support our mission to bring yoga to the world.</p>
-      <div class="block-name__content">
-        <div class="block-name__purpose">
-          <div class="block-name__purpose-header block-name__accordion-header">
-            <img class="block-name__purpose-icon" src="" loading="lazy" />
-            <h6 class="block-name__purpose-title">100% Sweatshop-free</h6>
+      'value' => '<div class="brand-purpose">
+      <h4 class="brand-purpose__title">ALO IS A BRAND OF PURPOSE</h4>
+      <p class="brand-purpose__subtitle">Your purchase helps support our mission to bring yoga to the world.</p>
+      <div class="brand-purpose__content">
+        <div class="brand-purpose__purpose">
+          <div class="brand-purpose__purpose-header brand-purpose__accordion-header">
+            <img class="brand-purpose__purpose-icon" src="" loading="lazy" />
+            <h6 class="brand-purpose__purpose-title">100% Sweatshop-free</h6>
           </div>
-          <div class="block-name__purpose-content block-name__accordion-content">
-            <p class="block-name__purpose-info">Alo is human-kind. Our W.R.A.P.-certified factories provide fair wages & workers’ rights.</p>
-            <a class="block-name__purpose-link">Learn More</a>
+          <div class="brand-purpose__purpose-content brand-purpose__accordion-content">
+            <p class="brand-purpose__purpose-info">Alo is human-kind. Our W.R.A.P.-certified factories provide fair wages & workers’ rights.</p>
+            <a class="brand-purpose__purpose-link">Learn More</a>
           </div>
         </div>
-        <div class="block-name__purpose">
-          <div class="block-name__purpose-header block-name__accordion-header">
-            <img class="block-name__purpose-icon" src="" loading="lazy" />
-            <h6 class="block-name__purpose-title">Alo is Eco-Aware</h6>
+        <div class="brand-purpose__purpose">
+          <div class="brand-purpose__purpose-header brand-purpose__accordion-header">
+            <img class="brand-purpose__purpose-icon" src="" loading="lazy" />
+            <h6 class="brand-purpose__purpose-title">Alo is Eco-Aware</h6>
           </div>
-          <div class="block-name__purpose-content block-name__accordion-content">
-            <p class="block-name__purpose-info">We use advanced, eco-friendly production methods to reduce waste & protect our natural resources</p>
-            <a class="block-name__purpose-link">Learn More</a>
+          <div class="brand-purpose__purpose-content brand-purpose__accordion-content">
+            <p class="brand-purpose__purpose-info">We use advanced, eco-friendly production methods to reduce waste & protect our natural resources</p>
+            <a class="brand-purpose__purpose-link">Learn More</a>
           </div>
         </div>
       </div>
@@ -60,28 +60,28 @@ function alshaya_ay_transac_create_brand_purpose_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Alo is a Brand of Purpose',
     'body' => [
-      'value' => '<div class="block-name">
-      <h4 class="block-name__title">ALO IS A BRAND OF PURPOSE</h4>
-      <p class="block-name__subtitle">Your purchase helps support our mission to bring yoga to the world.</p>
-      <div class="block-name__content">
-        <div class="block-name__purpose">
-          <div class="block-name__purpose-header block-name__accordion-header">
-            <img class="block-name__purpose-icon" src="" loading="lazy" />
-            <h6 class="block-name__purpose-title">100% Sweatshop-free</h6>
+      'value' => '<div class="brand-purpose">
+      <h4 class="brand-purpose__title">ALO IS A BRAND OF PURPOSE</h4>
+      <p class="brand-purpose__subtitle">Your purchase helps support our mission to bring yoga to the world.</p>
+      <div class="brand-purpose__content">
+        <div class="brand-purpose__purpose">
+          <div class="brand-purpose__purpose-header brand-purpose__accordion-header">
+            <img class="brand-purpose__purpose-icon" src="" loading="lazy" />
+            <h6 class="brand-purpose__purpose-title">100% Sweatshop-free</h6>
           </div>
-          <div class="block-name__purpose-content block-name__accordion-content">
-            <p class="block-name__purpose-info">Alo is human-kind. Our W.R.A.P.-certified factories provide fair wages & workers’ rights.</p>
-            <a class="block-name__purpose-link">Learn More</a>
+          <div class="brand-purpose__purpose-content brand-purpose__accordion-content">
+            <p class="brand-purpose__purpose-info">Alo is human-kind. Our W.R.A.P.-certified factories provide fair wages & workers’ rights.</p>
+            <a class="brand-purpose__purpose-link">Learn More</a>
           </div>
         </div>
-        <div class="block-name__purpose">
-          <div class="block-name__purpose-header block-name__accordion-header">
-            <img class="block-name__purpose-icon" src="" loading="lazy" />
-            <h6 class="block-name__purpose-title">Alo is Eco-Aware</h6>
+        <div class="brand-purpose__purpose">
+          <div class="brand-purpose__purpose-header brand-purpose__accordion-header">
+            <img class="brand-purpose__purpose-icon" src="" loading="lazy" />
+            <h6 class="brand-purpose__purpose-title">Alo is Eco-Aware</h6>
           </div>
-          <div class="block-name__purpose-content block-name__accordion-content">
-            <p class="block-name__purpose-info">We use advanced, eco-friendly production methods to reduce waste & protect our natural resources</p>
-            <a class="block-name__purpose-link">Learn More</a>
+          <div class="brand-purpose__purpose-content brand-purpose__accordion-content">
+            <p class="brand-purpose__purpose-info">We use advanced, eco-friendly production methods to reduce waste & protect our natural resources</p>
+            <a class="brand-purpose__purpose-link">Learn More</a>
           </div>
         </div>
       </div>
