@@ -16,7 +16,7 @@
  * @param array $fields
  *   Fields of the category query.
  */
-function hook_alshaya_rcs_category_query_fields_alter(array &$fields) {
+function hook_alshaya_rcs_category_query_fields_alter(array &$fields, $depth = 0) {
   $fields[] = 'description';
 }
 

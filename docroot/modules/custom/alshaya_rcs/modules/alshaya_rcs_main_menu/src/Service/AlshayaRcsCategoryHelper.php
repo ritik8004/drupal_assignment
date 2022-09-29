@@ -508,7 +508,7 @@ class AlshayaRcsCategoryHelper {
       'display_view_all',
     ];
 
-    $this->moduleHandler->alter('alshaya_rcs_category_query_fields', $category_fields);
+    $this->moduleHandler->alter('alshaya_rcs_category_query_fields', $category_fields, $depth);
 
     $query = [
       $item_key => $category_fields,
