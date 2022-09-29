@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Site\Settings;
-use Drupal\rate_limits\Entity\RateLimitConfig;
 
 /**
  * Implements hook_update_n().
@@ -20,34 +19,13 @@ function alshaya_security_update_9401() {
     'rate_limits',
   ]);
 
-  // Setting password reset limit config for users.
-  $userPwdLimitConfig = \Drupal::configFactory()->getEditable('user_password_limit.settings');
-  $userPwdLimitConfig->set('limit_enable', 1);
-  $userPwdLimitConfig->set('max_limit', 5);
-  $userPwdLimitConfig->save();
-
   // Setting IP wise rate limit config for reset password.
-  $rateLimitConfig = RateLimitConfig::create([
-    'id' => 'reset_password_rate_limit',
-    'label' => 'Reset Password Rate Limit',
-    'user_flood_route' => [
-      'uid_only' => FALSE,
-      'ip_limit' => 50,
-      'ip_window' => 3600,
-      'user_limit' => 10,
-      'user_window' => 21600,
-    ],
-    'user_flood_global' => [
-      'uid_only' => FALSE,
-      'ip_limit' => 50,
-      'ip_window' => 3600,
-      'user_limit' => 10,
-      'user_window' => 21600,
-    ],
-    'skip_get_requests' => TRUE,
-    'tags' => ['rate_limited'],
-  ]);
-  $rateLimitConfig->save();
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['rate_limits.rate_limit_config.reset_password_rate_limit.yml'],
+      'alshaya_security',
+      'install'
+    );
 
   // Add translations.
   \Drupal::moduleHandler()->loadInclude('alshaya_security', 'inc', 'alshaya_security.translations');
