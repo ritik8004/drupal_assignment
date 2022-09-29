@@ -1,0 +1,12 @@
+.return-requests-wrapper {
+  .popup-overlay {
+    background-color: $online-return-popup-overlay-bg !important;
+  }
+}
+.return-requests-wrapper,.return-confirmation-wrapper {
+  .price--discount{
+    font-size: rem(12);
+    margin-top: rem(3);
+    font-weight: normal;
+  }
+}

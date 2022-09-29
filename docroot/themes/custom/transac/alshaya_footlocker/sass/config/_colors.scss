@@ -19,6 +19,7 @@ $new-pdp-blue: #007aff;
 $new-pdp-nero: #1a1a1a;
 $_plp_secondary_cta_hover: rgba(0, 0, 0, 0.1);
 $_egift_landing_page_banner_bg: #f0f0f0;
+$faded-black: rgba(0, 0, 0, 0.75);
 
 // Header color.
 $dark-brown: #504a4a;
@@ -643,3 +644,17 @@ $advanced-page-banner-bg: $_egift_landing_page_banner_bg;
 $shop-by-filter-attribute-item-bg-hover: $black;
 $shop-by-filter-attribute-item: $black;
 
+// Online Returns
+$online-return-dark-bg: $black;
+$order_detail_td_dark_content: $black;
+$online-return-detail-bg: $white-two;
+$online-return-refund-grey-txt: $warm-grey;
+$online-return-dark-txt: $black;
+$online-return-refund-blue-txt: $new-pdp-blue;
+$online-return-button-bg: $black;
+$online-return-confirmation-note-txt: $warm-grey;
+$online-return-address-line-warm-grey-txt: $warm-grey;
+$online-return-popup-overlay-bg: $faded-black;
+$online-return-unit-price-warm-grey-txt: $warm-grey;
+$online-return-big-ticket-label-bg: $info-blue;
+$online-return-ineligible-label-bg: rgba(208, 2, 27, 0.75);
