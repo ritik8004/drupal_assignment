@@ -55,7 +55,6 @@ const getImageUrl = (customAttributes, type) => {
 };
 
 const getTextAreaMaxLength = () => {
-  console.log("dfdf");
   const { textAreaMaxlength } = drupalSettings.egiftCard;
   if (textAreaMaxlength !== null) {
     return textAreaMaxlength;

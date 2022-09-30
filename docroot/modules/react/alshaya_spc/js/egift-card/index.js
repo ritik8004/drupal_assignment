@@ -85,7 +85,6 @@ export default class RedeemEgiftCard extends React.Component {
 
   // Update the redemption accordion status.
   changeRedemptionAccordionStatus = () => {
-    console.log("Fgdfg");
     const { active } = this.state;
     this.setState({ active: !active });
   }
