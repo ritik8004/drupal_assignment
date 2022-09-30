@@ -13,7 +13,7 @@ export const algoliaSearchClient = {
     // Check if Search is activated on any page.
     if (isSearchActivated) {
       if (referrerData !== null) {
-        if (referrerData.list) {
+        if (referrerData.list && referrerData.list !== 'Search Results Page') {
           // Store the pageType temporarily and set SRP as pagetype.
           referrerData.previousList = referrerData.list;
           referrerData.list = 'Search Results Page';
