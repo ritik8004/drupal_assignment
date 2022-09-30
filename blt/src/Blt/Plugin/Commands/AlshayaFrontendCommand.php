@@ -544,6 +544,61 @@ class AlshayaFrontendCommand extends BltTasks {
   }
 
   /**
+   * Test / Lint React changed files.
+   *
+   * @param string $changed_files
+   *   Changed files..
+   *
+   * @command alshayafe:test-react:changed-files
+   * @aliases test-react-changed-files
+   */
+  public function testOnlyChangedReactFiles(string $changed_files = '') {
+    $reactDir = $this->getConfigValue('docroot') . '/modules/react';
+    $tasks = $this->taskExecStack();
+
+    // Flag to determine if there are files to lint.
+    $files_to_lint = FALSE;
+
+    $changed_react_js_files = explode(' ', $changed_files);
+
+    // If there are files changed.
+    if (!empty($changed_react_js_files)) {
+      $relative_react_directory_path = 'docroot/modules/react/';
+      $react_changed_files = array_filter($changed_react_js_files, function ($js_file) use ($relative_react_directory_path) {
+        // Get files only in react directory
+        // and ignore webpack, node modules, react module files.
+        return (
+          str_contains($js_file, $relative_react_directory_path) &&
+          !(str_contains($js_file, 'webpack.config.js') ||
+            str_contains($js_file, 'node_modules') ||
+            str_contains($js_file, 'alshaya_react'))
+        );
+      });
+
+      // If there are files for linting.
+      if (!empty($react_changed_files)) {
+        $files_to_lint = TRUE;
+        $files_for_linting = implode(' ', str_replace($relative_react_directory_path, '', $react_changed_files));
+
+        $tasks->printTaskInfo('Changed JS files for linting - {changed_files}', [
+          'changed_files' => $files_for_linting,
+        ]);
+
+        $tasks->exec("cd $reactDir; npm run lint $files_for_linting");
+      }
+    }
+
+    // If there are no files to lint.
+    if (!$files_to_lint) {
+      $this->say("There are no files for linting.");
+      return;
+    }
+
+    $tasks->stopOnFail();
+    return $tasks->run();
+  }
+
+  /**
    * Test / Lint React files.
    *
    * @command alshayafe:test-react
