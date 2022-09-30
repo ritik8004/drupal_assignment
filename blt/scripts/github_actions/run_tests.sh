@@ -11,7 +11,7 @@ CHANGED_FILES="$1"
 blt validate:composer
 
 # PHP check
-if [[ ${CHANGED_FILES} =~ ".php" || ${CHANGED_FILES} =~ ".theme" || ${CHANGED_FILES} =~ ".module" || ${CHANGED_FILES} =~ ".inc" || ${CHANGED_FILES} =~ ".install"]]
+if [[ ${CHANGED_FILES} =~ ".php" || ${CHANGED_FILES} =~ ".theme" || ${CHANGED_FILES} =~ ".module" || ${CHANGED_FILES} =~ ".inc" || ${CHANGED_FILES} =~ ".install" ]]
 then
   blt validate:php
   blt validate:phpcs
