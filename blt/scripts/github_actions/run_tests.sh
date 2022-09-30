@@ -8,12 +8,7 @@ CHANGED_FILES="$1"
 # Run tests.
 
 # Composer check
-if [[ ${CHANGED_FILES} =~ "composer.lock" || ${CHANGED_FILES} =~ "composer.json" ]]
-then
-  blt validate:composer
-else
-  echo "Skipping validate:composer checks as there is no change in Composer."
-fi
+blt validate:composer
 
 # PHP check
 if [[ ${CHANGED_FILES} =~ ".php" || ${CHANGED_FILES} =~ ".theme" || ${CHANGED_FILES} =~ ".module" || ${CHANGED_FILES} =~ ".inc" || ${CHANGED_FILES} =~ ".install"]]
