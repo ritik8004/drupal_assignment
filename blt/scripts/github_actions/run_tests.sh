@@ -38,7 +38,7 @@ fi
 blt validate:acsf
 
 # Drupal installation check
-if [[ ${CHANGED_FILES} =~ ".profile" || ${CHANGED_FILES} =~ ".info.yml" || ${CHANGED_FILES} =~ ".services.yml" || ${CHANGED_FILES} =~ "config/install" || ${CHANGED_FILES} =~ "config/optional" || ${CHANGED_FILES} =~ ".install" ]]
+if [[ ${CHANGED_FILES} =~ ".profile" || ${CHANGED_FILES} =~ ".yml" || ${CHANGED_FILES} =~ ".install" ]]
 then
   # Setup site.
   blt setup:settings --define environment=ci --no-interaction --verbose
