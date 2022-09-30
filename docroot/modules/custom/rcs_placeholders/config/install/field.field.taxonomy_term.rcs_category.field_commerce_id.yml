@@ -9,8 +9,8 @@ id: taxonomy_term.rcs_category.field_commerce_id
 field_name: field_commerce_id
 entity_type: taxonomy_term
 bundle: rcs_category
-label: 'Mdc Category Id'
-description: 'Stores Mdc Product Category Id.'
+label: 'Mdc Commerce Id'
+description: 'Stores Mdc Product Commerce Id.'
 required: false
 translatable: false
 default_value: {  }
