@@ -1,8 +1,8 @@
 alshaya_cross_border:
  css:
    theme:
-     # @todo The URL is hard coded for POC, we have to make this configurable.
-     '//intgepi.bglobale.com/includes/css/1197': { type: external, attributes: { id: GEPIStyles, type: text/css } }
+     # This URL is a placeholder and this is configurable, which is altered in the hook_library_info_alter.
+     '/intgepi.bglobale.com/includes/css/id': { type: external, attributes: { id: GEPIStyles, type: text/css } }
 
 alshaya_xb_checkout_seo:
   js:
