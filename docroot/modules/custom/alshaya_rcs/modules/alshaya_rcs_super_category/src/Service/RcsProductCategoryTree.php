@@ -34,7 +34,9 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
       if ($placeholder_tid === $category->id() || empty($mdc_id)) {
         continue;
       }
-      $category = $category->getTranslation($langcode);
+      $category_en = ($category->hasTranslation($langcode))
+        ? $category->getTranslation('en')
+        : $category;
       $term_data[$mdc_id] = [
         'id' => $mdc_id,
         'label' => $category->getName(),

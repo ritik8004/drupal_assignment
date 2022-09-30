@@ -167,9 +167,9 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
       if ($category->id() === $placeholder_tid || empty($mdc_id)) {
         continue;
       }
-      $category_en = ($category->language()->getId() === 'en')
-        ? $category
-        : $category->getTranslation('en');
+      $category_en = ($category->hasTranslation('en'))
+        ? $category->getTranslation('en')
+        : $category;
       $class = ' brand-' . Html::cleanCssIdentifier(mb_strtolower($category_en->getName()));
       $gtm_menu_title = NULL;
       if ($current_tid === $category->id()
