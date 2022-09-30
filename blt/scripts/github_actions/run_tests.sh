@@ -37,7 +37,7 @@ fi
 
 blt validate:acsf
 
-# Drupal installtion check
+# Drupal installation check
 if [[ ${CHANGED_FILES} =~ ".info.yml" || ${CHANGED_FILES} =~ ".services.yml" || ${CHANGED_FILES} =~ "config/install" || ${CHANGED_FILES} =~ "config/optional" || ${CHANGED_FILES} =~ ".install" ]]
 then
   # Setup site.
