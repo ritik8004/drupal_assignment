@@ -190,8 +190,9 @@
           product.variant = product.id;
         }
 
+        cart_total_count = (event.detail.cartData !== null) ? event.detail.cartData.items_qty : null;
         // Push product addToCart event to GTM.
-        Drupal.alshayaSeoGtmPushAddToCart(product);
+        Drupal.alshayaSeoGtmPushAddToCart(product, cart_total_count);
       });
 
       // Push GTM event on add to cart failure.
@@ -1467,7 +1468,7 @@
    * @param {object} product
    *   The jQuery HTML object containing GTM attributes for the product.
    */
-  Drupal.alshayaSeoGtmPushAddToCart = function (product) {
+  Drupal.alshayaSeoGtmPushAddToCart = function (product, cart_total_count = null) {
     // Remove product position: Not needed while adding to cart.
     delete product.position;
 
@@ -1486,12 +1487,13 @@
     else if (isPageTypeListing()) {
       productData.eventAction = 'Add to Cart on Listing';
     }
-
-    const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
-
+    if (cart_total_count == null) {
+      const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
+      cart_total_count = (cart !== null) ? cart.items_qty : 0
+    }
     productData.ecommerce = {
       currencyCode: drupalSettings.gtm.currency,
-      cart_items_count: (cart !== null) ? cart.items_qty : 0,
+      cart_items_count: cart_total_count,
       add: {
         products: [
           product
