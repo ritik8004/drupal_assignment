@@ -30,11 +30,11 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     $super_categories = $this->termStorage->loadTree('rcs_category', 0, 1, TRUE);
     $term_data = [];
     foreach ($super_categories as $category) {
-      if ($placeholder_tid === $category->id()) {
+      $mdc_id = $category->get('field_commerce_id')->getString();
+      if ($placeholder_tid === $category->id() || empty($mdc_id)) {
         continue;
       }
       $category = $category->getTranslation($langcode);
-      $mdc_id = $category->get('field_commerce_id')->getString();
       $term_data[$mdc_id] = [
         'id' => $mdc_id,
         'label' => $category->getName(),

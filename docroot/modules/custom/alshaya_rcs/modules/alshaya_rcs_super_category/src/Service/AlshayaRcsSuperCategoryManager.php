@@ -24,8 +24,8 @@ class AlshayaRcsSuperCategoryManager extends AlshayaSuperCategoryManager {
       $placeholder_tid = $this->configFactory->get('rcs_placeholders.settings')->get('category.placeholder_tid');
       if ($status) {
         $super_categories_terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('rcs_category',0, 1, TRUE);
-        foreach ($super_categories_terms as $key => $categories_terms) {
-          if ($categories_terms->id() === $placeholder_tid) {
+        foreach ($super_categories_terms as $key => $categories_term) {
+          if ($categories_term->id() === $placeholder_tid || empty($categories_term->get('field_commerce_id')->getString())) {
             unset($super_categories_terms[$key]);
             break;
           }

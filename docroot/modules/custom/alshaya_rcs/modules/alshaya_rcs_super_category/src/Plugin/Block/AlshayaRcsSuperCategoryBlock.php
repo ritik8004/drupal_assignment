@@ -16,6 +16,9 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Url;
 use Drupal\alshaya_rcs_super_category\Service\AlshayaRcsSuperCategoryManager;
 use Drupal\alshaya_rcs_super_category\Service\RcsProductCategoryTree;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides alshaya rcs super category menu block.
@@ -117,6 +120,17 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
   /**
    * {@inheritdoc}
    */
+  protected function blockAccess(AccountInterface $account) {
+    // Don't need to build this block if status of super category settings
+    // is false.
+    return AccessResult::allowedIf(
+      $this->configFactory->get('alshaya_super_category.settings')->get('status')
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
@@ -136,11 +150,6 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function build() {
-    // Don't need to build this block if status of super category settings
-    // is false.
-    if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
-      return [];
-    }
     $lang_code = $this->languageManager->getCurrentLanguage()->getId();
     $current_super_term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
     $current_tid = ($current_super_term instanceof TermInterface)
@@ -151,9 +160,11 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
 
     // Load L1 supercategories.
     $super_categories =$this->entityTypeManager->getStorage('taxonomy_term')->loadTree('rcs_category', 0, 1, TRUE);
-    $term_data = [];
+    $cache_tags = $term_data = [];
     foreach($super_categories as $category) {
-      if ($category->id() === $placeholder_tid) {
+      $mdc_id = $category->get('field_commerce_id')->getString();
+      // Check if its placeholder term or enriched term.
+      if ($category->id() === $placeholder_tid || empty($mdc_id)) {
         continue;
       }
       $category_en = ($category->language()->getId() === 'en')
@@ -169,13 +180,12 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
 
       // Get brand icons of supercategory.
       $img_path = $inactive_path = NULL;
-      $mdc_id = $category->get('field_commerce_id')->getString();
       $brand_icons = $this->productCategoryTree->getBrandIcons($mdc_id);
       if ((isset($brand_icons['active_image']) && !empty($brand_icons['active_image']))
       && (isset($brand_icons['inactive_image']) && !empty($brand_icons['inactive_image']))) {
         $img_path = (str_contains($class, 'active'))
-        ? $brand_icons['active_image']
-        : $brand_icons['inactive_image'];
+          ? $brand_icons['active_image']
+          : $brand_icons['inactive_image'];
         $inactive_path = $brand_icons['active_image'];
       }
 
@@ -188,6 +198,10 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
         'inactive_path' => $inactive_path,
         'path' => '/' . $category->get('field_category_slug')->getString(),
       ];
+      $cache_tags = Cache::mergeTags(
+        $cache_tags,
+        $category->getCacheTags()
+      );
     }
 
     // Set the default parent from settings.
@@ -198,7 +212,10 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
     if (isset($term_data[$parent_id])) {
       $term_data[$parent_id]['path'] = Url::fromRoute('<front>')->toString();
     }
-
+    $cache_tags = Cache::mergeTags(
+      $cache_tags,
+      $this->configFactory->get('alshaya_super_category.settings')->getCacheTags()
+    );
     return [
       '#theme' => 'alshaya_super_category_top_level',
       '#term_tree' => $term_data,
@@ -207,6 +224,9 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
           'block-alshaya-super-category-menu',
           'block-alshaya-super-category',
         ],
+      ],
+      '#cache' => [
+        'tags' => $cache_tags,
       ],
       '#attached' => [
         'library' => [
