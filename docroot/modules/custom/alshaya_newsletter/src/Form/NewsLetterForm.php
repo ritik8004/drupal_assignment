@@ -2,12 +2,8 @@
 
 namespace Drupal\alshaya_newsletter\Form;
 
-use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\InvokeCommand;
 
 /**
  * Class News Letter Form.
@@ -15,36 +11,10 @@ use Drupal\Core\Ajax\InvokeCommand;
 class NewsLetterForm extends FormBase {
 
   /**
-   * The api wrapper.
-   *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
-   */
-  protected $apiWrapper;
-
-  /**
    * {@inheritdoc}
    */
   public function getFormId() {
     return 'alshaya_newsletter_subscribe';
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
-   *   The api wrapper.
-   */
-  public function __construct(AlshayaApiWrapper $api_wrapper) {
-    $this->apiWrapper = $api_wrapper;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('alshaya_api.api')
-    );
   }
 
   /**
@@ -69,71 +39,21 @@ class NewsLetterForm extends FormBase {
     ];
 
     $form['newsletter'] = [
-      '#type' => 'submit',
+      '#type' => 'button',
       '#value' => $this->t('sign up'),
-      '#ajax' => [
-        'event' => 'click',
-        'callback' => '::submitFormAjax',
-        'wrapper' => 'footer-newsletter-form-wrapper',
-      ],
       '#suffix' => '<div id="footer-newsletter-form-wrapper"></div>',
       '#attributes' => [
-        'class' => ['edit-newsletter', 'cv-validate-before-ajax'],
+        'class' => ['edit-newsletter'],
         'data-twig-suggestion' => 'newsletter',
         'data-style' => 'zoom-in',
       ],
     ];
 
     $form['#attached']['library'][] = 'alshaya_newsletter/newsletter_js';
+    $form['#attached']['drupalSettings']['newsletter']['apiUrl'] = '/V1/newsletter/subscription';
+    $form['#attached']['drupalSettings']['newsletter']['ajaxSpinnerMessageInterval'] = $this->config('alshaya_master.settings')->get('ajax_spinner_message_interval');
+
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitFormAjax(array &$form, FormStateInterface $form_state) {
-    $data = [];
-    if (!$form_state->hasAnyErrors() && !empty($form_state->getValue('email'))) {
-      try {
-        $subscription = $this->apiWrapper->subscribeNewsletter($form_state->getValue('email'));
-
-        $status = is_array($subscription) ? $subscription['status'] : $subscription;
-
-        if ($status) {
-          $message = '<span class="message success">' . $this->t('Thank you for your subscription.') . '</span>';
-          $data['message'] = 'success';
-        }
-        else {
-          $message = '<span class="message error">' . $this->t('This email address is already subscribed.') . '</span>';
-          $data['message'] = 'failure';
-        }
-      }
-      catch (\Exception $e) {
-        if (acq_commerce_is_exception_api_down_exception($e)) {
-          $message = '<span class="message error">' . $e->getMessage() . '</span>';
-        }
-        else {
-          $message = '<span class="message error">' . $this->t('Something went wrong, please try again later.') . '</span>';
-        }
-
-        $data['message'] = 'failure';
-      }
-
-      $data['html'] = '<div class="subscription-status">' . $message . '</div>';
-    }
-    else {
-      $data['message'] = 'failure';
-      $data['html'] = '<div class="subscription-status"><span class="message error">' . $this->t('Please enter an email address') . '</span></div>';
-    }
-
-    // Get the interval we want to show the message for on our ladda button.
-    $interval = $this->config('alshaya_master.settings')->get('ajax_spinner_message_interval');
-    $data['interval'] = $interval;
-
-    // Prepare the ajax Response.
-    $response = new AjaxResponse();
-    $response->addCommand(new InvokeCommand(NULL, 'newsletterHandleResponse', [$data]));
-    return $response;
   }
 
   /**
