@@ -555,7 +555,6 @@ class AlshayaFrontendCommand extends BltTasks {
   public function testOnlyChangedReactFiles(string $changed_files = '') {
     $reactDir = $this->getConfigValue('docroot') . '/modules/react';
     $tasks = $this->taskExecStack();
-    $tasks->stopOnFail();
 
     // Flag to determine if there are files to lint.
     $files_to_lint = FALSE;
@@ -591,7 +590,8 @@ class AlshayaFrontendCommand extends BltTasks {
 
     // If there are no files to lint.
     if (!$files_to_lint) {
-      $tasks->exec('echo "There are no files for linting."');
+      $this->say("There are no files for linting.");
+      return;
     }
 
     $tasks->stopOnFail();
@@ -612,6 +612,9 @@ class AlshayaFrontendCommand extends BltTasks {
 
     // Validate utility files.
     $tasks->exec("cd $reactDir; npm run lint $reactDir/js/");
+
+    // Run Jest tests.
+    $tasks->exec("cd $reactDir; npm test");
 
     $finder = new Finder();
     // Find all react folders containing the file used to specify entry points.
