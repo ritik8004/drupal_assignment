@@ -5,6 +5,7 @@ namespace Drupal\alshaya_rcs_super_category\Service;
 use Drupal\alshaya_super_category\ProductSuperCategoryTree;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Cache\Cache;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Overidden super category tree service.
@@ -86,11 +87,13 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
         }
       }
       $term = current($super_categories);
-      return [
-        'id' => $term->get('field_commerce_id')->getString(),
-        'label' => $term->getName(),
-        'path' => '/' . $term->get('field_category_slug')->getString(),
-      ];
+      if ($term instanceof TermInterface) {
+        return [
+          'id' => $term->get('field_commerce_id')->getString(),
+          'label' => $term->getName(),
+          'path' => '/' . $term->get('field_category_slug')->getString(),
+        ];
+      }
     }
   }
 
