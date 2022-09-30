@@ -164,8 +164,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
       if ($current_tid === $category->id()
       ) {
         $class .= ' active';
-        $gtm_menu_title =
-         $category_en->getName();
+        $gtm_menu_title = $category_en->getName();
       }
 
       // Get brand icons of supercategory.
