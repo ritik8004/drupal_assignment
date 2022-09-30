@@ -21,9 +21,16 @@ class AlshayaRcsSuperCategoryManager extends AlshayaSuperCategoryManager {
     $default_category_tid = &drupal_static(__FUNCTION__);
     if (!isset($default_category_tid)) {
       $status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
+      $placeholder_tid = $this->configFactory->get('rcs_placeholders.settings')->get('category.placeholder_tid');
       if ($status) {
         $super_categories_terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('rcs_category',0, 1, TRUE);
-        $default_category_tid = !empty($super_categories_terms) ? current($super_categories_terms)->id() : 0;
+        foreach ($super_categories_terms as $key => $categories_terms) {
+          if ($categories_terms->id() === $placeholder_tid) {
+            unset($super_categories_terms[$key]);
+            break;
+          }
+        }
+        $default_category_tid = !empty($super_categories_terms) ? current($super_categories_terms)->get('field_commerce_id')->getString() : 0;
       }
       else {
         $default_category_tid = 0;

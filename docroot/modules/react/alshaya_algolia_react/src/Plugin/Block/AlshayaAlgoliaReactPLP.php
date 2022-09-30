@@ -168,9 +168,13 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
       // visible in menu. Condition here is same as what we use to populate
       // lhn_category field in Algolia Index.
       // @see AlshayaAlgoliaIndexHelper::getCategoryHierarchy()
-      $algoliaSearch['categoryFacetEnabled'] = (int) $term->get('field_category_include_menu')->getString();
+      $algoliaSearch['categoryFacetEnabled'] = $term->hasField('field_category_include_menu')
+        ? (int) $term->get('field_category_include_menu')->getString()
+        : 0;
 
-      $group_sub_category_enabled = $term->get('field_group_by_sub_categories')->getValue();
+      $group_sub_category_enabled = $term->hasField('field_group_by_sub_categories')
+        ? $term->get('field_group_by_sub_categories')->getValue()
+        : FALSE;
       if ($group_sub_category_enabled) {
         $sub_categories = $term->get('field_select_sub_categories_plp')->getValue();
         $subcategories = [];

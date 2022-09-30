@@ -5,6 +5,7 @@ namespace Drupal\alshaya_rcs_super_category\Service;
 use Drupal\alshaya_super_category\ProductSuperCategoryTree;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Cache\Cache;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Overidden super category tree service.
@@ -24,11 +25,20 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     if ($term_data = $this->cache->get($cid)) {
       return $term_data->data;
     }
+    $placeholder_tid = $this->configFactory->get('rcs_placeholders.settings')->get('category.placeholder_tid');
 
     $super_categories = $this->termStorage->loadTree('rcs_category', 0, 1, TRUE);
     $term_data = [];
-    foreach ($super_categories as $categories) {
-      $term_data[] = $categories->getTranslation($langcode);
+    foreach ($super_categories as $category) {
+      if ($placeholder_tid === $category->id()) {
+        continue;
+      }
+      $category = $category->getTranslation($langcode);
+      $mdc_id = $category->get('field_commerce_id')->getString();
+      $term_data[$mdc_id] = [
+        'id' => $mdc_id,
+        'label' => $category->getName(),
+      ];
     }
 
     $this->cache->set($cid, $term_data, Cache::PERMANENT, [ProductCategoryTree::CACHE_TAG]);
@@ -59,22 +69,31 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
       if (!empty($tids)) {
         $term = $this->termStorage->load(current($tids));
         return [
-          'id' => $term->id(),
+          'id' => $term->get('field_commerce_id')->getString(),
           'label' => $term->getName(),
-          'path' => $term->get('path')->getString(),
+          'path' => '/' . $term->get('field_category_slug')->getString(),
         ];
       }
     }
 
     $super_categories = $this->termStorage->loadTree('rcs_category', 0, 1, TRUE);
+    $placeholder_tid = $this->configFactory->get('rcs_placeholders.settings')->get('category.placeholder_tid');
 
     if (!empty($super_categories)) {
+      foreach ($super_categories as $key => $categories_terms) {
+        if ($categories_terms->id() === $placeholder_tid) {
+          unset($super_categories[$key]);
+          break;
+        }
+      }
       $term = current($super_categories);
-      return [
-        'id' => $term->id(),
-        'label' => $term->getName(),
-        'path' => $term->get('path')->getString(),
-      ];
+      if ($term instanceof TermInterface) {
+        return [
+          'id' => $term->get('field_commerce_id')->getString(),
+          'label' => $term->getName(),
+          'path' => '/' . $term->get('field_category_slug')->getString(),
+        ];
+      }
     }
   }
 

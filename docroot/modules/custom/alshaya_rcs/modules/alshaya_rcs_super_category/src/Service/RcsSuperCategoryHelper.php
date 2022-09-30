@@ -166,6 +166,7 @@ class RcsSuperCategoryHelper {
         ]);
       }
       $term->get('field_category_slug')->setValue($category['url_key']);
+      $term->get('field_commerce_id')->setValue($category['id']);
       $term->save();
 
       // Create Advanced pages.
@@ -231,6 +232,7 @@ class RcsSuperCategoryHelper {
       $processed_categories[$url_key] = [
         'name' => $category['name'],
         'url_key' => $url_key,
+        'id' => $category['id'],
       ];
     }
     return $processed_categories;
