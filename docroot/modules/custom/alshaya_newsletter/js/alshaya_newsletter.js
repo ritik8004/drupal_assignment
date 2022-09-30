@@ -1,19 +1,70 @@
-(function ($) {
+(function ($, Drupal, drupalSettings) {
   Drupal.behaviors.alshayaNewsletter = {
     attach: function (context, settings) {
 
       // Create a new instance of ladda for the specified button.
       var l = $('.edit-newsletter').ladda();
 
-      $('.edit-newsletter').on('click', function () {
-        // Doing this as we checking class and its not available immediately
-        // due to race condition.
-        setTimeout(function () {
-          if (!$('form#alshaya-newsletter-subscribe').hasClass('ajax-submit-prevented')) {
-            // Start loading
-            l.ladda('start');
+      $('.edit-newsletter').once().on('click', function (e) {
+        var data = [];
+        // Event prevent the form submission.
+        e.preventDefault();
+        // Get the value of email from the form.
+        data['email'] = $("#alshaya-newsletter-subscribe #edit-email").val();
+        if (!data['email']) {
+          data['message'] = 'failure';
+          data['html'] = '<div class="subscription-status"><span class="message error">' + Drupal.t('Please enter an email address') + '</span></div>';
+        } else {
+          // Start loading
+          l.ladda('start');
+        }
+        // Update the interval time in the data array.
+        data['interval'] = drupalSettings.newsletter.ajaxSpinnerMessageInterval;
+        // Call the API to subscribe to the newsletter.
+        var message = '';
+        // Proceed only if email is present & form is not having any existing
+        // error.
+        if (data['email'] && !$("#edit-email-error").html()) {
+          // Validate the newsletter API and show the proper error message based
+          // on the fulfilling criteria.
+          var alreadySubscribed = false;
+
+          try {
+            // Call the validate API.
+            $.ajax({
+              url: drupalSettings.cart.url + drupalSettings.newsletter.apiUrl,
+              type: 'POST',
+              dataType: 'json',
+              processData: false,
+              async: false,
+              contentType: 'application/json',
+              data: JSON.stringify({ email: data['email'] }),
+              success: function (response) {
+                alreadySubscribed = response.is_subscribed;
+              }
+            });
+
+            if (!alreadySubscribed) {
+              // Validate if the email id is subscribed or not.
+              message = '<span class="message success">' + Drupal.t('Thank you for your subscription.') + '</span>';
+              data['message'] = 'success';
+            } else {
+              // Show the error message saying the email is already subscribed.
+              data['message'] = 'failure';
+              message = '<span class="message error">' + Drupal.t('This email address is already subscribed.') + '</span>';
+            }
+          } catch (err) {
+            // Log the error message.
+            Drupal.logJavascriptError('Something went wrong', err);
+            message = '<span class="message error">' + drupalSettings.globalErrorMessage + '</span>';
+            data['message'] = 'failure';
           }
-        }, 10);
+          // Update the message in data.
+          data['html'] = '<div class="subscription-status">' + message + '</div>';
+        }
+
+        // Call the response handler function with all the required data.
+        $.fn.newsletterHandleResponse(data);
       });
 
       // Hide multiple inline error messages for email field.
@@ -74,4 +125,4 @@
     $('#footer-newsletter-form-wrapper').html('');
   };
 
-})(jQuery);
+})(jQuery, Drupal, drupalSettings);
