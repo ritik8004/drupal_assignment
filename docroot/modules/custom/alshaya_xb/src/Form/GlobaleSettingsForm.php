@@ -54,12 +54,12 @@ class GlobaleSettingsForm extends ConfigFormBase {
 
     $config = $this->config('alshaya_xb.settings');
 
-    $form['globale_url'] = [
+    $form['globale_js_url'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Global-e URL'),
-      '#description' => $this->t('Enter the Global-e URL.'),
+      '#title' => $this->t('Global-e JS URL'),
+      '#description' => $this->t('Enter the Global-e JS URL.'),
       '#required' => TRUE,
-      '#default_value' => $config->get('globale_url'),
+      '#default_value' => $config->get('globale_js_url'),
     ];
 
     $form['globale_css_url'] = [
@@ -78,7 +78,7 @@ class GlobaleSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_xb.settings');
-    $config->set('globale_url', $form_state->getValue('globale_url'));
+    $config->set('globale_js_url', $form_state->getValue('globale_js_url'));
     $config->set('globale_css_url', $form_state->getValue('globale_css_url'));
     $config->save();
 
