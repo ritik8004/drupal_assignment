@@ -162,7 +162,10 @@ jobs:
 
       - name: React validate
         if: ${{ needs.changedfiles.outputs.js }}
-        run: blt alshayafe:test-react
+        run: |
+          echo 'Changes JS files are ---'
+          echo ${{ needs.changedfiles.outputs.js }}
+          blt alshayafe:test-react
 
       - name: Frontend validate
         if: ${{ needs.changedfiles.outputs.scss }}
