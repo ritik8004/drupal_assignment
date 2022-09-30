@@ -579,7 +579,7 @@ class AlshayaFrontendCommand extends BltTasks {
       // If there are files for linting.
       if (!empty($react_changed_files)) {
         $files_to_lint = TRUE;
-        $files_for_linting = implode(' ',str_replace($relative_react_directory_path, '', $react_changed_files));
+        $files_for_linting = implode(' ', str_replace($relative_react_directory_path, '', $react_changed_files));
 
         $tasks->printTaskInfo('Changed JS files for linting - {changed_files}', [
           'changed_files' => $files_for_linting,
