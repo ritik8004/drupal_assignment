@@ -11,7 +11,7 @@ CHANGED_FILES="$1"
 blt validate:composer
 
 # PHP check
-if [[ ${CHANGED_FILES} =~ ".php" || ${CHANGED_FILES} =~ ".theme" || ${CHANGED_FILES} =~ ".module" || ${CHANGED_FILES} =~ ".inc" || ${CHANGED_FILES} =~ ".install" ]]
+if [[ ${CHANGED_FILES} =~ ".profile" || ${CHANGED_FILES} =~ ".php" || ${CHANGED_FILES} =~ ".theme" || ${CHANGED_FILES} =~ ".module" || ${CHANGED_FILES} =~ ".inc" || ${CHANGED_FILES} =~ ".install" ]]
 then
   blt validate:php
   blt validate:phpcs
@@ -38,7 +38,7 @@ fi
 blt validate:acsf
 
 # Drupal installation check
-if [[ ${CHANGED_FILES} =~ ".info.yml" || ${CHANGED_FILES} =~ ".services.yml" || ${CHANGED_FILES} =~ "config/install" || ${CHANGED_FILES} =~ "config/optional" || ${CHANGED_FILES} =~ ".install" ]]
+if [[ ${CHANGED_FILES} =~ ".profile" || ${CHANGED_FILES} =~ ".info.yml" || ${CHANGED_FILES} =~ ".services.yml" || ${CHANGED_FILES} =~ "config/install" || ${CHANGED_FILES} =~ "config/optional" || ${CHANGED_FILES} =~ ".install" ]]
 then
   # Setup site.
   blt setup:settings --define environment=ci --no-interaction --verbose
