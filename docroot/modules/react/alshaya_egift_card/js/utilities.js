@@ -1,5 +1,5 @@
 /**
- * Get query string for egift list api.
+ * Get query string for e-gift list api.
  *
  */
 const getQueryStringForEgiftCards = () => ({
