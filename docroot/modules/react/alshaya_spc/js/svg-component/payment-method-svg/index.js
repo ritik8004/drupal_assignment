@@ -1,5 +1,4 @@
 import React from 'react';
-import { isDesktop } from '../../../../js/utilities/display';
 import BenefitPaySVG from './components/benefit-pay-svg';
 
 const PaymentMethodIcon = (props) => {
@@ -655,12 +654,7 @@ const PaymentMethodIcon = (props) => {
 
   if (methodName === 'tamara') {
     // We do not have Tamara logo in SVG format, using JPG instead.
-    // Using the same icon for desktop and mobile if context is cart.
-    if (context && context === 'cart') {
-      return <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-desktop.jpg" className="tamara-icon payment-method-icon" />;
-    }
-
-    return isDesktop() ? <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-desktop.jpg" className="tamara-icon tamara-icon--desktop payment-method-icon" /> : <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-mobile.jpg" className="tamara-icon tamara-icon--mobile payment-method-icon" />;
+    return <img src="/themes/custom/transac/alshaya_white_label/imgs/icons/tamara-desktop.jpg" className="tamara-icon payment-method-icon" />;
   }
 
   return (
