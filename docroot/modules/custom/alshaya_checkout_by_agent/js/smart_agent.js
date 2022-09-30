@@ -26,10 +26,8 @@
   };
 
   Drupal.smartAgent.endTransaction = function () {
-    // Remove middleware cookies.
-    // Cart data in local storage will be removed by SPC code.
-    $.removeCookie('PHPSESSID-legacy', {path: '/'});
-    $.removeCookie('PHPSESSID', {path: '/'});
+    // Reset the cart data from the storage.
+    window.commerceBackend.removeCartDataFromStorage(true);
 
     // Redirect to home page.
     var redirectUrl = Drupal.url('');
