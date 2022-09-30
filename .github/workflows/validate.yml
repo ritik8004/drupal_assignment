@@ -176,4 +176,4 @@ jobs:
         run: blt alshayafe:test-themes
 
       - name: Run Tests
-        run: bash $SCRIPT_DIR/run_tests.sh
+        run: bash $SCRIPT_DIR/run_tests.sh "${{ needs.changedfiles.outputs.all }}"
