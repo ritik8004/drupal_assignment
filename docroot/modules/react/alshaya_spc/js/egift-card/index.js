@@ -44,7 +44,7 @@ export default class RedeemEgiftCard extends React.Component {
     document.addEventListener('refreshCartOnPaymentMethod', this.changeRedemptionStatusBasedOnPaymentMethod, false);
     // Change the redemption screen based on the cart redemption status.
     const { cart: cartData } = this.props;
-    // Change the state of redeemption if egift is already available.
+    // Change the state of redemption if egift is already available.
     if (isEgiftRedemptionDone(cartData.cart)) {
       // Extract the card number for further calculation.
       this.setState({
