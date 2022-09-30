@@ -223,7 +223,6 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
           ],
         ],
       ],
-      '#cache' => ['max-age' => 0],
     ];
   }
 
