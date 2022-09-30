@@ -35,7 +35,7 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $ge_store_code = 'row_' . $language;
   $config = \Drupal::config('alshaya_xb.settings');
-  $ge_js_src = $config->get('globale_url') ?? '';
+  $ge_js_src = $config->get('globale_js_url') ?? '';
 
   $js = "
      var geStoreCode = '$ge_store_code';
