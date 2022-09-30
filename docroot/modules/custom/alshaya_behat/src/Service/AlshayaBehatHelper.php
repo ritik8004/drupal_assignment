@@ -124,10 +124,10 @@ class AlshayaBehatHelper {
     $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = nfs.field_skus_value');
 
     if ($oos) {
-      $query->condition('quantity', '0', '=');
+      $query->condition('status', '0');
     }
     else {
-      $query->condition('quantity', '0', '>');
+      $query->condition('status', '1');
     }
 
     $query->fields('stock', ['sku']);
