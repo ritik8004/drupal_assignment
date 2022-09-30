@@ -5,3 +5,6 @@ alshaya_xb.settings:
     globale_url:
       type: string
       label: 'Global-e URL'
+    globale_css_url:
+      type: string
+      label: 'Global-e CSS URL'
