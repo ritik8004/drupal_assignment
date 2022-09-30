@@ -56,22 +56,6 @@ function alshaya_ay_install() {
     ])
     ->save();
 
-  // Translate store finder block's link title.
-  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
-    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
-    ->save();
-
-  // Set the default value for back to store list link.
-  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
-  $config->set('store_list_label', 'List of all The Alo Yoga');
-  $config->save();
-
-  // Setting all products buyable to be false by default.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
-    ->set('all_products_buyable', 0)
-    ->set('pdp_layout', 'magazine')
-    ->save();
-
   $strings = [
     'seo_brand_name' => [
       'en' => 'Alo Yoga',
@@ -91,38 +75,5 @@ function alshaya_ay_install() {
       'ar' => 'دليل المقاسات',
     ],
   ];
-
   alshaya_i18n_save_translations($strings);
-
-  // Set google map marker.
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
-    alshaya_stores_finder_set_default_marker_icon('alshaya_ay_transac');
-  }
-
-  // Configure map marker on checkout for CnC.
-  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
-    ->set('map_marker.active', '/modules/brands/alshaya_ay/images/ay-pin-active.svg')
-    ->set('map_marker.in_active', '/modules/brands/alshaya_ay/images/ay-pin-inactive.svg')
-    ->save();
-
-  // Check if the sharethis module exists, then remove this from
-  // the Product CT as set in alshaya_transac.install by default.
-  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
-    // Get the sharethis configuration.
-    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-
-    // Enable share this for Products.
-    $configFactory->set('node_types.acq_product', 'acq_product');
-
-    // Enable share this for Magazine CT.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_magazine')) {
-      $configFactory->set('node_types.magazine_article', 'magazine_article');
-    }
-
-    // Save the changes.
-    $configFactory->save();
-  }
-
-  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
-  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
 }
