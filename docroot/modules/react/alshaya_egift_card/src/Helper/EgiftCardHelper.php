@@ -197,7 +197,7 @@ class EgiftCardHelper {
     // Traverse all the items and check the product type.
     foreach($order['items'] as $key => $value) {
       if (!$value['is_virtual']) {
-        $allVirtualItems = TRUE;
+        $allVirtualItems = FALSE;
         $normalItemsExists = TRUE;
       } else {
         $virtualItemsExists = TRUE;
