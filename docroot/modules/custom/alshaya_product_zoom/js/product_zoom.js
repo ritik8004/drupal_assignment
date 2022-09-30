@@ -626,6 +626,8 @@
   function addNoThumbnailsClass() {
     if ($('#product-zoom-container > .cloudzoom.thumbnail-count-1').length) {
       $('.content__main').addClass('no-thumbnails');
+    } else {
+      $('.content__main').removeClass('no-thumbnails');
     }
   }
 
