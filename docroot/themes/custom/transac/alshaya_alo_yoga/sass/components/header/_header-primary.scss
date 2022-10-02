@@ -62,6 +62,10 @@ header {
     }
 
     .block-alshaya-react-mini-cart {
+      @include breakpoint($only-mobile) {
+        order: 3;
+      }
+
       @include breakpoint($desktop) {
         width: 5%;
       }
@@ -131,11 +135,11 @@ header {
     .block-cart-mini-block,
     .block-alshaya-react-mini-cart {
       .cart-link {
-        background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?nhd) no-repeat;
+        background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?nhd) no-repeat center;
         margin-bottom: 0;
 
         &:hover {
-          background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
+          background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg) no-repeat center;
 
           .quantity {
             color: $primary_minicart_hover;
@@ -145,7 +149,7 @@ header {
         @include breakpoint($desktop) {
           top: 0;
           height: rem(24);
-          width: rem(18);
+          width: rem(24);
           #{$left}: 0.3125rem;
 
           html[lang=ar] & {

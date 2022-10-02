@@ -1,6 +1,7 @@
 .c-header {
   .block-my-account-icon-block {
     margin-#{$right}: rem(12);
+    order: 1;
 
     @include breakpoint($tablet) {
       display: none;
@@ -14,6 +15,7 @@
       height: rem(24);
       display: inline-block;
       background: center/rem(16) no-repeat;
+      vertical-align: middle;
     }
 
     .user-login {
