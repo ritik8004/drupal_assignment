@@ -860,6 +860,7 @@
         price: parseFloat(amount),
         category: product.attr('gtm-category'),
         variant: product.attr('gtm-product-sku'),
+        product_style_code: product.attr('gtm-product-style-code'),
         dimension2: product.attr('gtm-sku-type'),
         dimension3: product.attr('gtm-dimension3'),
         dimension4: mediaCount
@@ -1185,6 +1186,7 @@
       event: 'productClick',
       magento_product_id: isProductDataAvailable ? productSelector[0].getAttribute('gtm-magento-product-id') : null,
       stock_status: drupalSettings.dataLayerContent.stockStatus || isProductDataAvailable ? productSelector[0].getAttribute('gtm-stock') : null,
+      product_style_code: isProductDataAvailable ? productSelector[0].getAttribute('gtm-product-style-code') : null,
       ecommerce: {
         currencyCode: currencyCode,
         click: {
