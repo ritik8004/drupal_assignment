@@ -31,6 +31,11 @@ function alshaya_ay_transac_install() {
   $brand_purpose = (int) $config_factory->get('block.block.content')->get('weight');
   $config_factory->getEditable('block.block.aloisabrandofpurpose')->set('weight', $brand_purpose + 1)->save();
 
+  // Set main menu block in the header region.
+  $config_factory->getEditable('block.block.alshayarcsmainmenu')->set('region', 'header')->save();
+  $pri_menu = (int) $config_factory->get('block.block.branding')->get('weight');
+  $config_factory->getEditable('block.block.alshayarcsmainmenu')->set('weight', $pri_menu - 1)->save();
+
   // Add mobile navigation block to menu primary region.
   alshaya_config_install_configs(['block.block.mobilenavigation'], 'alshaya_transac', 'optional');
 
