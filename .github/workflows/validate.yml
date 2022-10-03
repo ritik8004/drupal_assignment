@@ -1,8 +1,13 @@
 name: Validate
 
 on:
-  workflow_dispatch:
   pull_request:
+    branches:
+      types:
+        - opened
+        - reopened
+        - synchronize
+        - ready_for_review
 
 concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
@@ -156,17 +161,21 @@ jobs:
             ~/.nvm
           key: ${{ runner.os }}-node
 
-      - name: Frontend and React setup
-        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
-        run: blt alshayafe:setup
-
       - name: React validate
         if: ${{ needs.changedfiles.outputs.js }}
-        run: blt alshayafe:test-react
+        run: |
+          echo 'Changed JS files are - ${{ needs.changedfiles.outputs.js }}'
+          blt alshayafe:setup-react
+          blt alshayafe:test-react:changed-files "${{ needs.changedfiles.outputs.js }}"
 
       - name: Frontend validate
         if: ${{ needs.changedfiles.outputs.scss }}
-        run: blt alshayafe:test-themes
+        run: |
+          echo 'Changed CSS files are - ${{ needs.changedfiles.outputs.scss }}'
+          blt alshayafe:setup-themes
+          blt alshayafe:test-themes
 
       - name: Run Tests
-        run: bash $SCRIPT_DIR/run_tests.sh
+        run: |
+          echo 'Changed files are - ${{ needs.changedfiles.outputs.all }}'
+          bash $SCRIPT_DIR/run_tests.sh "${{ needs.changedfiles.outputs.all }}"

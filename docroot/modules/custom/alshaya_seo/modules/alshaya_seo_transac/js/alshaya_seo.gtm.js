@@ -54,20 +54,32 @@
         Drupal.addItemInLocalStorage('referrerData', referrerData);
         Drupal.removeItemFromLocalStorage('isSearchActivated');
       } else if (currentPath.includes('node/')) {
-        const referrerData = Drupal.getItemFromLocalStorage('referrerData');
-        const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
-        if (referrer === ''
-          || ( isSearchActivated !== null
-            && !isSearchActivated
-            && referrer !== referrerData.path
-          )
-        ) {
-          // Set PDP as referrerPageType only if referrer is not set,
-          // Search is not active or
-          // Referrer does not match with referrerPath.
-          const listName =  $('body').attr('gtm-list-name');
+        const listName = $('body').attr('gtm-list-name');
+        const gtmContainer =  $('body').attr('gtm-container');
+        // Check if node is of PDP type.
+        if (gtmContainer === 'product detail page') {
+          const referrerData = Drupal.getItemFromLocalStorage('referrerData');
+          const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
+          if (referrer === '' || !referrerData.path.includes(referrer)) {
+            if(isSearchActivated !== null && !isSearchActivated) {
+              // Set PDP as referrerPageType only if referrer is not set,
+              // Search is not active or
+              // Referrer does not match with referrerPath.
+              const referrerData = {
+                pageType: 'PDP',
+                path: url,
+                list: listName !== undefined ? listName : '',
+                previousList: '',
+              };
+
+              Drupal.addItemInLocalStorage('referrerData', referrerData);
+              Drupal.removeItemFromLocalStorage('isSearchActivated');
+            }
+          }
+        }
+        else {
           const referrerData = {
-            pageType: 'PDP',
+            pageType: gtmContainer !== undefined ? gtmContainer : '',
             path: url,
             list: listName !== undefined ? listName : '',
             previousList: '',
@@ -178,8 +190,9 @@
           product.variant = product.id;
         }
 
+        cart_total_count = (event.detail.cartData !== null) ? event.detail.cartData.items_qty : null;
         // Push product addToCart event to GTM.
-        Drupal.alshayaSeoGtmPushAddToCart(product);
+        Drupal.alshayaSeoGtmPushAddToCart(product, cart_total_count);
       });
 
       // Push GTM event on add to cart failure.
@@ -1455,7 +1468,7 @@
    * @param {object} product
    *   The jQuery HTML object containing GTM attributes for the product.
    */
-  Drupal.alshayaSeoGtmPushAddToCart = function (product) {
+  Drupal.alshayaSeoGtmPushAddToCart = function (product, cart_total_count = null) {
     // Remove product position: Not needed while adding to cart.
     delete product.position;
 
@@ -1474,12 +1487,13 @@
     else if (isPageTypeListing()) {
       productData.eventAction = 'Add to Cart on Listing';
     }
-
-    const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
-
+    if (cart_total_count == null) {
+      const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
+      cart_total_count = (cart !== null) ? cart.items_qty : 0
+    }
     productData.ecommerce = {
       currencyCode: drupalSettings.gtm.currency,
-      cart_items_count: (cart !== null) ? cart.items_qty : 0,
+      cart_items_count: cart_total_count,
       add: {
         products: [
           product

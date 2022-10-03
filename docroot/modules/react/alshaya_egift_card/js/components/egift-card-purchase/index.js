@@ -76,7 +76,7 @@ export default class EgiftCardPurchase extends React.Component {
         productInfo.totalQty = cartItem.qty;
       }
 
-      // Dispatch event to refresh the react minicart component.
+      // Dispatch event to refresh the react mini-cart component.
       const refreshMiniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data() { return response.data; }, productInfo } });
       document.dispatchEvent(refreshMiniCartEvent);
 
@@ -84,7 +84,7 @@ export default class EgiftCardPurchase extends React.Component {
       const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data() { return response.data; } } });
       document.dispatchEvent(refreshCartEvent);
 
-      // If Aura is enabled and alreay redeemed with aura points,
+      // If Aura is enabled and already redeemed with aura points,
       // On adding eGfit products to cart remove aura redeemed points.
       if (isAuraEnabled()
         && (typeof response.data.totals.paidWithAura !== 'undefined'
@@ -107,6 +107,7 @@ export default class EgiftCardPurchase extends React.Component {
         name: `${productData.product_name}/${productData.price}`,
         price: productData.price,
         variant: productData.sku,
+        category: 'eGift Card',
         dimension2: 'virtual',
         dimension4: 1,
         quantity: 1,
