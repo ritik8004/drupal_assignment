@@ -1,0 +1,18 @@
+.checkout-link {
+  &:not(.checkout_com_applepay) {
+    a {
+      font-size: rem(14);
+      font-family: $alshaya-bold;
+    }
+  }
+}
+
+.spc-checkout {
+  .checkout-link {
+    &:not(.checkout_com_applepay) {
+      float: $right;
+      width: auto;
+      padding: rem(0) rem(22);
+    }
+  }
+}
