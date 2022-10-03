@@ -161,19 +161,19 @@ jobs:
             ~/.nvm
           key: ${{ runner.os }}-node
 
-      - name: Frontend and React setup
-        if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
-        run: blt alshayafe:setup
-
       - name: React validate
         if: ${{ needs.changedfiles.outputs.js }}
         run: |
           echo 'Changed JS files are - ${{ needs.changedfiles.outputs.js }}'
+          blt alshayafe:setup-react
           blt alshayafe:test-react:changed-files "${{ needs.changedfiles.outputs.js }}"
 
       - name: Frontend validate
         if: ${{ needs.changedfiles.outputs.scss }}
-        run: blt alshayafe:test-themes
+        run: |
+          echo 'Changed CSS files are - ${{ needs.changedfiles.outputs.scss }}'
+          blt alshayafe:setup-themes
+          blt alshayafe:test-themes
 
       - name: Run Tests
         run: |
