@@ -24,6 +24,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ExpressDeliveryLabel from './ExpressDeliveryLabel';
 import PriceRangeElement from '../price/PriceRangeElement';
 import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelper';
+import ArticleSwatches from '../article_swatch';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -290,6 +291,14 @@ const Teaser = ({
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
             {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
+            {/* Render color swatches based on article/sku id */}
+            {hasValue(attribute.article_swatches)
+              ? (
+                <ArticleSwatches
+                  articleSwatches={attribute.article_swatches}
+                  url={attribute.url}
+                />
+              ) : null}
           </div>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
