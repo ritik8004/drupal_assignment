@@ -51,6 +51,12 @@
           #{$left}: rem(68);
         }
       }
+
+      &.add-to-bag-loader {
+        &::before {
+          content: unset;
+        }
+      }
     }
 
     .pdp-link {
