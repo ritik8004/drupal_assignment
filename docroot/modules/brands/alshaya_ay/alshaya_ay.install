@@ -24,6 +24,8 @@ function alshaya_ay_install() {
   $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
   $config->set('store_list_label', 'List of all The Alo Yoga');
   $config->save();
+  // Configure map marker on checkout for CnC.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')->set('map_marker.active', '/modules/brands/alshaya_ay/images/ay-pin-active.svg')->set('map_marker.in_active', '/modules/brands/alshaya_ay/images/ay-pin-inactive.svg')->save();
   // Reset theme logo.
   $active_theme = \Drupal::theme()->getActiveTheme();
   $current_theme = $active_theme->getName();

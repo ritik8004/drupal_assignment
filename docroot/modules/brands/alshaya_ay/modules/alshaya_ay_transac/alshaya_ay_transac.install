@@ -33,13 +33,6 @@ function alshaya_ay_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     alshaya_stores_finder_set_default_marker_icon('alshaya_ay_transac');
   }
-
-  // Configure map marker on checkout for CnC.
-  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
-    ->set('map_marker.active', '/modules/brands/alshaya_ay/images/ay-pin-active.svg')
-    ->set('map_marker.in_active', '/modules/brands/alshaya_ay/images/ay-pin-inactive.svg')
-    ->save();
-
   // Check if the sharethis module exists, then remove this from
   // the Product CT as set in alshaya_transac.install by default.
   if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
