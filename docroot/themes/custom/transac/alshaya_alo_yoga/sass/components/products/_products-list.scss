@@ -66,6 +66,24 @@
     .price-wrapper {
       color: $plp_product_price_txt;
     }
+
+    .alshaya_search_gallery {
+      overflow: visible;
+      max-height: none;
+      line-height: 0;
+      position: relative;
+
+      .alshaya_search_mainimage {
+        opacity: 1;
+        display: block;
+      }
+
+      &.lazy-hover {
+        .alshaya_search_hoverimage {
+          display: none;
+        }
+      }
+    }
   }
 
   .region__content {
@@ -119,6 +137,24 @@
           }
         }
       }
+    }
+  }
+}
+
+.alshaya_search_hoverimage {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  width: 100%;
+  z-index: 1;
+}
+
+article[data-vmode=search_result] {
+  &:hover {
+    .alshaya_search_hoverimage {
+      transition: opacity 0.2s ease-in;
+      opacity: 1;
     }
   }
 }
