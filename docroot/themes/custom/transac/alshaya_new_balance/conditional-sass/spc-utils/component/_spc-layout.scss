@@ -9,10 +9,4 @@
       max-width: rem(1238);
     }
   }
-
-  .page-standard {
-    &:not(.l-two--sf) {
-      background-color: $spc_checkout_page_bg;
-    }
-  }
 }

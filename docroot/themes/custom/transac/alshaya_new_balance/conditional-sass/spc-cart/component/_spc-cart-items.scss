@@ -26,7 +26,6 @@
       a {
         font-family: $alshaya-thin;
         font-size: rem(16);
-        text-transform: capitalize;
       }
 
       .spc-product-container {
@@ -48,7 +47,7 @@
 
     .spc-product-price {
       font-size: rem(16);
-      font-weight: 700;
+      font-family: $alshaya-bold;
     }
 
     .spc-product-attributes-wrapper {

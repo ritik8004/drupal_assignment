@@ -230,9 +230,21 @@ $spc-order-total-suffix-text: $black;
 $spc_cart_item_border_color: $gray;
 $spc-product-attributes: $ada-gray;
 $spc-select-border: $gray;
-$spc_checkout_page_bg: $white;
+$spc-cart-background: $white;
 
 // Checkout steps
 $cko-steps-active-bg: $nb-red;
 $cko-steps-current-active-border: $nb-red;
 $cko-steps-active-border: $black;
+
+// Checkout Global.
+$checkout_section_titles: $black;
+$checkout_guest_button_border: $nb-red;
+$checkout_guest_button_txt: $nb-red;
+
+// Checkout Login page.
+$checkout_login_submit_button_background: $nb-red;
+$checkout_login_link_text: $black;
+
+// Social Auth
+$social-network-text: $nb-red;
