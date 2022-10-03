@@ -1,0 +1,79 @@
+name: Deploy on Schedule
+
+on:
+#  pull_request:
+  schedule:
+    # Run every day at 11:30AM and 4:30PM IST.
+    - cron: '0 6,11 * * *'
+
+concurrency: deploy-${{ github.ref }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  changedfiles:
+    runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'acquia-pso' && github.event_name == 'schedule' }}
+
+    # Map a step output to a job output
+    outputs:
+      all: ${{ steps.changes.outputs.all }}
+      themes: ${{ steps.changes.outputs.themes }}
+      react: ${{ steps.changes.outputs.react }}
+
+    strategy:
+      matrix:
+        branch: [ develop, develop-brand-rollout ]
+
+    steps:
+      # Make sure we have some code to diff.
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ matrix.branch }}
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changes
+        # Set outputs using the command.
+        run: |
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)"
+          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
+          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: changedfiles
+    if: ${{ github.repository_owner == 'acquia-pso' && github.event_name == 'schedule' }}
+
+    container:
+      image: devwithlando/php:8.0-fpm-4
+
+    env:
+      CI: GITHUB_ACTIONS
+      COMPOSER_MEMORY_LIMIT: -1
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      SSH_DEPLOYMENT_KEY: ${{ secrets.BLT_SSH_DEPLOYMENT_KEY }}
+
+    strategy:
+      matrix:
+        branch: [ develop, develop-brand-rollout ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ matrix.branch }}
+
+      - name: Artifact Build
+        uses: ./.github/actions/deploy_build
+        with:
+          SCRIPT_DIR: ${SCRIPT_DIR}
+          SSH_AUTH_SOCK: ${SSH_AUTH_SOCK}
+          SSH_DEPLOYMENT_KEY: ${SSH_DEPLOYMENT_KEY}
+          CHANGED_THEMES_FILES: ${{ needs.changedfiles.outputs.themes }}
+          CHANGED_REACT_FILES: ${{ needs.changedfiles.outputs.react }}
+          CHANGED_ALL_FILES: ${{ needs.changedfiles.outputs.all }}
