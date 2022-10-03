@@ -18,6 +18,12 @@ function alshaya_ay_install() {
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_alo_yoga');
 
+  // Translate store finder block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')->set('settings', ['link_title' => 'البحث عن محلاتنا'])->save();
+  // Set the default value for back to store list link.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all The Alo Yoga');
+  $config->save();
   // Reset theme logo.
   $active_theme = \Drupal::theme()->getActiveTheme();
   $current_theme = $active_theme->getName();
