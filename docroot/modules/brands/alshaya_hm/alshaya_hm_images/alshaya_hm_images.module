@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\alshaya_media_assets\Services\SkuAssetManager;
 use Drupal\image\Entity\ImageStyle;
 
@@ -41,6 +42,10 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
   elseif (in_array($context, ['teaser', 'product_category_carousel'])) {
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+    /** @var \Drupal\alshaya_acm_product\SkuImagesHelper $skuImagesHelper */
+    $skuImagesHelper = \Drupal::service('alshaya_acm_product.sku_images_helper');
+
     try {
       $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku);
     }
@@ -57,7 +62,8 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
 
     if (!empty($teaser_assets)) {
       $sku_media = reset($teaser_assets);
-      $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku->label(), 'product_teaser');
+      $sku_media['label'] = $sku->label();
+      $build['image'] = $skuImagesHelper->getSkuImage($sku_media, SkuImagesHelper::STYLE_PRODUCT_TEASER);
     }
   }
   elseif ($context == 'pdp' && !empty($build['free_gift_promotions']['#free_sku_code']) && empty($build['free_gift_promotions']['#sku_image'])) {
