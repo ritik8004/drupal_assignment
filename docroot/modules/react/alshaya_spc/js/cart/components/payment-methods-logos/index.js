@@ -20,7 +20,6 @@ const CartPaymentMethodsLogos = memo((props) => {
     <PaymentMethodIcon
       methodName={method.code}
       methodLabel={method.name}
-      context="cart"
       key={method.code}
     />
   ));
