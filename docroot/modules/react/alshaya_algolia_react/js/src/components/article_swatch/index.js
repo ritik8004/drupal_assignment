@@ -8,10 +8,16 @@ const ArticleSwatches = ({ articleSwatches, url }) => {
   const limit = drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
   const totalNoOfSwatches = articleSwatches.length;
   const diff = totalNoOfSwatches - limit;
-  let swatchMoreText = '';
+  let swatchMoreText = null;
 
   if (diff > 0) {
-    swatchMoreText = ` +${diff}`;
+    swatchMoreText = (
+      <a className="more-color-swatch" href={url}>
+        {' '}
+        +
+        {diff}
+      </a>
+    );
   }
 
   return (
@@ -27,7 +33,7 @@ const ArticleSwatches = ({ articleSwatches, url }) => {
             />
           ),
         )}
-        <a className="more-color-swatch" href={url}>{swatchMoreText}</a>
+        {swatchMoreText}
       </div>
     </div>
   );
