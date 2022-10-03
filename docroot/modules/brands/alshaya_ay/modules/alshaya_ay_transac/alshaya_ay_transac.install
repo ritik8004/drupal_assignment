@@ -43,9 +43,6 @@ function alshaya_ay_transac_install() {
     // Save the changes.
     $configFactory->save();
   }
-
-  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
-  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
 }
 
 /**
