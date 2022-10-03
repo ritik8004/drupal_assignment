@@ -76,7 +76,7 @@ export default class EgiftCardPurchase extends React.Component {
         productInfo.totalQty = cartItem.qty;
       }
 
-      // Dispatch event to refresh the react minicart component.
+      // Dispatch event to refresh the react mini-cart component.
       const refreshMiniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data() { return response.data; }, productInfo } });
       document.dispatchEvent(refreshMiniCartEvent);
 
