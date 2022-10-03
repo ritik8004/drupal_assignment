@@ -3,7 +3,9 @@ name: Validate
 on:
   pull_request:
     types:
-      - review_requested
+      - opened
+      - reopened
+      - synchronize
       - ready_for_review
 
 concurrency:
