@@ -93,13 +93,3 @@ runs:
         ssh-agent -a ${{ inputs.SSH_AUTH_SOCK }} > /dev/null
         ssh-add - <<< "${{ inputs.SSH_DEPLOYMENT_KEY }}"
       if: ${{ inputs.SSH_DEPLOYMENT_KEY }}
-
-    - name: Deploy branch
-      shell: bash
-      run: bash ${{ inputs.SCRIPT_DIR }}/deploy_branch.sh
-      if: ${{ inputs.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/heads') }}
-
-    - name: Deploy tag
-      shell: bash
-      run: bash ${{ inputs.SCRIPT_DIR }}/deploy_tag.sh
-      if: ${{ inputs.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/tags') }}
