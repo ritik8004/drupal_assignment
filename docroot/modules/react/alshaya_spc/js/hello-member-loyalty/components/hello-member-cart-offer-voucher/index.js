@@ -259,7 +259,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 <a className="close-modal" onClick={() => this.onClickClosePopup()} />
                 {isAnonymous
                 && (
-                  <BecomeHelloMember destination="cart" />
+                  <BecomeHelloMember destination={Drupal.url('cart')} />
                 )}
                 {!isAnonymous
                 && (
