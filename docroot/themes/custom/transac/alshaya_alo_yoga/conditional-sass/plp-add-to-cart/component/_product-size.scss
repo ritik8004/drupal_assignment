@@ -28,7 +28,7 @@
 
   &_size {
     @include breakpoint($only-mobile) {
-      width: rem(303);
+      width: 100%;
     }
 
     + .alshaya-select-wrapper {
