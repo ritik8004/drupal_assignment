@@ -1,6 +1,7 @@
 name: Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - qa
@@ -17,7 +18,7 @@ defaults:
 jobs:
   changedfiles:
     runs-on: ubuntu-latest
-    if: ${{ github.repository_owner == 'acquia-pso' && (github.event_name == 'push' || github.event_name == 'create') }}
+    if: ${{ github.repository_owner == 'acquia-pso' }}
 
     # Map a step output to a job output
     outputs:
@@ -44,7 +45,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     needs: changedfiles
-    if: ${{ github.repository_owner == 'acquia-pso' && (github.event_name == 'push' || github.event_name == 'create') }}
+    if: ${{ github.repository_owner == 'acquia-pso' }}
 
     container:
       image: devwithlando/php:8.0-fpm-4
