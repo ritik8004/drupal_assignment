@@ -3,8 +3,8 @@ name: Deploy on Schedule
 on:
 #  pull_request:
   schedule:
-    # Run every day at 11:30AM and 4:30PM IST.
-    - cron: '0 6,11 * * *'
+    # Run every day at 2AM, 8AM, 2PM and 8PM IST.
+    - cron: '30 2,8,14,20 * * *'
 
 concurrency: deploy-${{ github.ref }}
 
@@ -25,7 +25,9 @@ jobs:
 
     strategy:
       matrix:
-        branch: [ develop, develop-brand-rollout ]
+        branch:
+          - develop
+          - develop-brand-rollout
 
     steps:
       # Make sure we have some code to diff.
@@ -60,7 +62,9 @@ jobs:
 
     strategy:
       matrix:
-        branch: [ develop, develop-brand-rollout ]
+        branch:
+          - develop
+          - develop-brand-rollout
 
     steps:
       - name: Checkout
