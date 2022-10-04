@@ -46,8 +46,14 @@ class PaymentMethodCodMobileVerification extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { shippingMobileNumber } = this.props;
-    if (shippingMobileNumber !== prevProps.shippingMobileNumber) {
+    const { otpVerified } = this.props;
+
+    // Check if props otpVerified is updated from MDC api.
+    if (prevProps.otpVerified === otpVerified) {
+      return;
+    }
+
+    if (otpVerified === 0) {
       // Update otp Verified flag and reset otp input.
       this.updateOtpVerifiedFlag();
 
