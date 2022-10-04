@@ -81,3 +81,7 @@ jobs:
           CHANGED_THEMES_FILES: ${{ needs.changedfiles.outputs.themes }}
           CHANGED_REACT_FILES: ${{ needs.changedfiles.outputs.react }}
           CHANGED_ALL_FILES: ${{ needs.changedfiles.outputs.all }}
+
+      - name: Deploy ${{ matrix.branch }} branch
+        run: bash $SCRIPT_DIR/deploy_branch.sh ${{ matrix.branch }}
+        if: ${{ inputs.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/heads') }}
