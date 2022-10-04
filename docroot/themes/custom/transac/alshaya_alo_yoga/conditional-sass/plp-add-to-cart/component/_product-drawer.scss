@@ -12,6 +12,16 @@
       }
     }
 
+    .special--price {
+      font-family: $alshaya-thin;
+    }
+
+    .price--discount {
+      padding-#{$left}: 0;
+      width: 100%;
+      font-size: rem(18);
+    }
+
     .product-title {
       font-size: rem(24);
       padding-bottom: rem(6);

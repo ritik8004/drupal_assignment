@@ -1,0 +1,5 @@
+.price--discount {
+  @include breakpoint($tablet) {
+    font-size: rem(16);
+  }
+}
