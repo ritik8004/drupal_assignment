@@ -1,0 +1,105 @@
+name: "Artifact Build"
+description: "Builds and deploys the Artifact"
+inputs:
+  SCRIPT_DIR:
+    required: true
+  SSH_AUTH_SOCK:
+    required: false
+  SSH_DEPLOYMENT_KEY:
+    required: true
+  CHANGED_THEMES_FILES:
+    required: true
+  CHANGED_REACT_FILES:
+    required: true
+  CHANGED_ALL_FILES:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare environment variables
+      shell: bash
+      run: |
+        echo "GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+        echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
+        echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
+        echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
+        echo "CHANGED_THEME_FILES=${{ inputs.CHANGED_THEMES_FILES }}" >> $GITHUB_ENV
+        echo "CHANGED_REACT_FILES=${{ inputs.CHANGED_REACT_FILES }}" >> $GITHUB_ENV
+        echo "CHANGED_ALL_FILES=${{ inputs.CHANGED_ALL_FILES }}" >> $GITHUB_ENV
+
+    - name: Run Composer install
+      shell: bash
+      run: |
+        composer self-update
+        composer self-update --2
+        composer validate --no-check-all --ansi
+        composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
+
+    - name: Prepare bin executables
+      shell: bash
+      run: |
+        ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
+        ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
+
+    - name: Build all middleware
+      shell: bash
+      run: bash ${GITHUB_WORKSPACE}/blt/scripts/middleware-build.sh "${GITHUB_WORKSPACE}"
+
+    - name: Cache dependencies installed with Composer
+      shell: bash
+      id: composer-cache
+      run: |
+        echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+    - uses: actions/cache@v2
+      with:
+        path: |
+          "${{ steps.composer-cache.outputs.dir }}"
+          ~/.drush/cache
+        key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+
+    - name: Setup environment
+      shell: bash
+      run: bash ${{ inputs.SCRIPT_DIR }}/setup_env.sh
+
+    - name: Install Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: "14.19.0"
+
+    - name: Install Gulp
+      shell: bash
+      run: npm install -g gulp-cli
+
+    - name: Cache node modules
+      shell: bash
+      id: npm-cache-dir
+      run: |
+        echo "::set-output name=dir::$(npm config get cache)"
+
+    # @todo check if this really works or we need one step per directory
+    - uses: actions/cache@v2
+      with:
+        path: |
+          "${{ steps.npm-cache-dir.outputs.dir }}"
+          ~/.npm
+          ~/.nvm
+        key: ${{ runner.os }}-node
+
+    - name: Prepare deployment key
+      shell: bash
+      run: |
+        ssh-agent -a ${{ inputs.SSH_AUTH_SOCK }} > /dev/null
+        ssh-add - <<< "${{ inputs.SSH_DEPLOYMENT_KEY }}"
+      if: ${{ inputs.SSH_DEPLOYMENT_KEY }}
+
+    - name: Deploy branch
+      shell: bash
+      run: bash ${{ inputs.SCRIPT_DIR }}/deploy_branch.sh
+      if: ${{ inputs.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/heads') }}
+
+    - name: Deploy tag
+      shell: bash
+      run: bash ${{ inputs.SCRIPT_DIR }}/deploy_tag.sh
+      if: ${{ inputs.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/tags') }}
