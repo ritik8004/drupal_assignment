@@ -31,7 +31,7 @@ jobs:
 
     steps:
       # Make sure we have some code to diff.
-      - name: Checkout repository
+      - name: Checkout ${{ matrix.branch }} repository
         uses: actions/checkout@v2
         with:
           ref: ${{ matrix.branch }}
@@ -67,7 +67,7 @@ jobs:
           - develop-brand-rollout
 
     steps:
-      - name: Checkout
+      - name: Checkout ${{ matrix.branch }} repository
         uses: actions/checkout@v2
         with:
           ref: ${{ matrix.branch }}
