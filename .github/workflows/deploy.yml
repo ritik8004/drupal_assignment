@@ -3,12 +3,9 @@ name: Deploy
 on:
   push:
     branches:
-      - develop
       - qa
       - uat
       - master
-      - develop-hello-member
-      - develop-brand-rollout
   create:
 
 concurrency: deploy-${{ github.ref }}
