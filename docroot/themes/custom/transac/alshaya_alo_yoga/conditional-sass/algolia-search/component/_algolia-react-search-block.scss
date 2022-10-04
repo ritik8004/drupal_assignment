@@ -291,3 +291,23 @@ body {
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  body {
+    &.Sticky-algolia-search {
+      .block-alshaya-algolia-react-autocomplete {
+        display: none;
+      }
+
+      .branding__menu {
+        position: fixed !important;
+        top: 0;
+      }
+    }
+  }
+
+  .html--overlay {
+    overflow-y: auto !important;
+  }
+}
+
