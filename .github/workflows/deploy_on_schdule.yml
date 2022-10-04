@@ -30,6 +30,14 @@ jobs:
           - develop-brand-rollout
 
     steps:
+      - name: Check for commits in branch
+        id: check-new-commits
+        uses: adriangl/check-new-commits-action@v1
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          seconds: 25200 # 7 hours in seconds
+          branch: ${{ matrix.branch }}
+
       # Make sure we have some code to diff.
       - name: Checkout ${{ matrix.branch }} repository
         uses: actions/checkout@v2
@@ -49,7 +57,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     needs: changedfiles
-    if: ${{ github.repository_owner == 'acquia-pso' }}
+    if: ${{ needs.changedfiles.steps.check-new-commits.outputs.has-new-commits == 'true' && github.repository_owner == 'acquia-pso' }}
 
     container:
       image: devwithlando/php:8.0-fpm-4
