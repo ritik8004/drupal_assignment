@@ -36,8 +36,8 @@
         width: rem(45);
         height: rem(45);
         position: absolute;
-        bottom: rem(60);
-        #{$right}: 0;
+        bottom: rem(62);
+        #{$right}: rem(10);
       }
     }
   }

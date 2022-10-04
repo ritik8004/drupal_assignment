@@ -34,6 +34,8 @@
       font-size: rem(16);
       height: rem(48);
       font-family: $alshaya-thin;
+      display: inline-flex;
+      justify-content: center;
 
       &::before {
         content: "";
@@ -41,15 +43,10 @@
         background-repeat: no-repeat;
         width: rem(16);
         height: rem(20);
-        position: absolute;
         transform: translate(50%, 50%);
         background-size: contain;
-        #{$left}: rem(82);
-        top: rem(2);
-
-        @include breakpoint($only-mobile) {
-          #{$left}: rem(68);
-        }
+        margin-top: rem(-12);
+        margin-#{$right}: rem(23);
       }
 
       &.add-to-bag-loader {
@@ -74,6 +71,14 @@
         color: $plp-view-full-product-text;
         padding-#{$left}: rem(8);
       }
+    }
+  }
+
+  &-container {
+    width: rem(330);
+
+    @include breakpoint($tablet) {
+      width: rem(330);
     }
   }
 

@@ -3,6 +3,8 @@
   // Main all filters div theming.
   .all-filters,
   .all-filters-algolia {
+    max-width: rem(330);
+
     .filter__inner {
       .views-exposed-form,
       .c-facet {
@@ -19,6 +21,14 @@
 
             .selected-facets {
               margin-#{$right}: rem(24);
+
+              .title {
+                width: rem(104);
+
+                @include breakpoint($only-mobile) {
+                  width: rem(104);
+                }
+              }
             }
           }
         }
