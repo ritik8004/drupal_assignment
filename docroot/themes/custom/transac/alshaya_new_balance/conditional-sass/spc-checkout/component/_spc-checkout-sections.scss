@@ -1,0 +1,43 @@
+#spc-checkout {
+  .spc-sidebar {
+    .spc-order-summary-block {
+      .product-content {
+        background-color: $spc-product-checkout-bg;
+        padding-top: rem(0);
+        padding-#{$left}: rem(0);
+
+        .product-item {
+          padding: rem(24) rem(0) rem(0) rem(24);
+          background-color: $spc-product-checkout-bg;
+
+          .spc-product-title-price {
+            display: flex;
+            justify-content: inherit;
+
+            .spc-product-price {
+              font-family: $alshaya-bold;
+            }
+          }
+        }
+      }
+
+      .block-content {
+        .totals {
+          background-color: $spc-product-checkout-bg;
+        }
+      }
+    }
+  }
+}
+
+#spc-checkout {
+  .spc-content {
+    .spc-checkout-delivery-information {
+      padding-top: rem(30);
+
+      .spc-checkout-section-title {
+        margin-bottom: rem(27);
+      }
+    }
+  }
+}
