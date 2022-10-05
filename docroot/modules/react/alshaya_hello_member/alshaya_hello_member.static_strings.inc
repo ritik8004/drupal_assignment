@@ -134,6 +134,14 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'view_all_benefits',
       'value' => t('View all Benefits', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'member',
+      'value' => t('Member', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'plus',
+      'value' => t('Plus', [], ['context' => 'hello_member']),
+    ],
   ];
 }
 
