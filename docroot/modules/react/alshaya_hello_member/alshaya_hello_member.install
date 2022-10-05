@@ -6,6 +6,19 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add new translations.
+ */
+function alshaya_hello_member_update_9401() {
+  module_load_include('inc', 'alshaya_hello_member', 'alshaya_hello_member.translation');
+  $translations = _alshaya_hello_member_get_translations('v2');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_hello_member_install() {

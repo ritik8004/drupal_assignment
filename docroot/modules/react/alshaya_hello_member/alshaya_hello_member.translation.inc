@@ -448,6 +448,16 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
     ],
+    'v2' => [
+      'Member' => [
+        'ar' => 'عضوية',
+        'context' => 'hello_member',
+      ],
+      'Plus' => [
+        'ar' => 'مميزه',
+        'context' => 'hello_member',
+      ],
+    ],
   ];
 }
 
