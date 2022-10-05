@@ -161,7 +161,7 @@ class TierProgress extends React.Component {
         <div className="my-tier-progress">
           { currentTier !== tier2Label
           && (
-            <div className="progress-label">{currentTier}</div>
+            <div className="progress-label">{getStringMessage(currentTier)}</div>
           )}
           <div className="progress-wrapper">
             <div className="tier-bar-back">
@@ -171,7 +171,7 @@ class TierProgress extends React.Component {
               <div style={{ width: `${userProgressWidth}%` }} className="tier-bar-front" />
             </div>
           </div>
-          <div className="progress-label">{nextTier}</div>
+          <div className="progress-label">{getStringMessage(nextTier)}</div>
         </div>
         <div className="my-points-details">
           {pointsSummmary}
