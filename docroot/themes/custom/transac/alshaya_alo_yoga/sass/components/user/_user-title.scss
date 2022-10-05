@@ -84,6 +84,14 @@
   }
 }
 
+.order-detail {
+  .block-page-title-block {
+    @include breakpoint($tablet) {
+      border-bottom: none;
+    }
+  }
+}
+
 .user-page {
   &.c-change-password {
     .c-page-title {
