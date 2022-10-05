@@ -20,7 +20,7 @@ function alshaya_nb_transac_install() {
     ->set('region', 'header')
     ->save();
   $pri_menu = (int) $config_factory
-    ->get('block.block.alshayaalgoliareactautocomplete')
+    ->get('block.block.branding')
     ->get('weight');
   $config_factory->getEditable('block.block.alshayamainmenu')
     ->set('weight', $pri_menu - 1)
