@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import parse from 'html-react-parser';
 
 class PdpDynamicPromotions extends React.Component {
@@ -22,18 +21,14 @@ class PdpDynamicPromotions extends React.Component {
     }
   }
 
-  refreshDynamicPromoLabels = (skuMainCode, cartDataValue) => {
-    if (cartDataValue !== null) {
-      const cartDataUrl = Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartDataValue);
-      const url = Drupal.url(`rest/v1/promotions/dynamic-label-product/${btoa(skuMainCode)}/?cacheable=1&context=web&${cartDataUrl}`);
-
-      axios.get(url).then((response) => {
-        if (response.data.length !== 0) {
-          this.setState({
-            label: response.data.label,
-          });
-        }
-      });
+  refreshDynamicPromoLabels = async (skuMainCode, cartDataValue) => {
+    if (Drupal.alshayaPromotions && cartDataValue !== null) {
+      const response = Drupal.alshayaPromotions.getDynamicLabel(skuMainCode, cartDataValue);
+      if (response && response.label) {
+        this.setState({
+          label: response.label,
+        });
+      }
     }
   }
 

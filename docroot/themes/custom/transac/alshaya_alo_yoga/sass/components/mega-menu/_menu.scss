@@ -148,8 +148,6 @@
     }
 
     .menu--active & {
-      #{$left}: rem(-1);
-
       html[lang=ar] & {
         right: 0;
       }
@@ -183,8 +181,8 @@
   }
 
   .block-alshaya-main-menu {
-    position: fixed;
-    top: rem(127);
+    position: absolute;
+    top: rem(111);
     bottom: 0;
     left: 0;
     right: 0;
@@ -233,6 +231,14 @@
 
     .block-alshaya-main-menu {
       display: block !important;
+    }
+  }
+
+  body {
+    &.Sticky-algolia-search {
+      .block-alshaya-main-menu {
+        top: rem(47);
+      }
     }
   }
 }

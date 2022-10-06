@@ -410,13 +410,3 @@ header {
 .menu--two__list {
   margin-top: rem(18) !important;
 }
-
-body {
-  &.mobile--overlay {
-    &::before {
-      @include breakpoint($upto-desktop) {
-        z-index: 12;
-      }
-    }
-  }
-}

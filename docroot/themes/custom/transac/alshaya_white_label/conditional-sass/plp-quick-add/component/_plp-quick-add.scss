@@ -32,12 +32,14 @@
 
       &::before {
         content: '';
-        background: url('#{$base_theme_img_directory_path}/icons/quick-add-mobile.svg') center center no-repeat;
+        background: url('#{$base_theme_img_directory_path}/icons/quick-add-mobile.svg?gdhb') center center no-repeat;
         width: rem(45);
         height: rem(45);
         position: absolute;
         bottom: rem(62);
         #{$right}: rem(10);
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
       }
     }
   }

@@ -2,6 +2,9 @@
 
 set -ev
 
-$BLT_DIR/bin/blt artifact:deploy --commit-msg "Automated commit by Github Actions for Build $GITHUB_RUN_NUMBER of workflow $GITHUB_WORKFLOW" --branch "$GITHUB_REF_NAME-build" --no-interaction --verbose
+# Use the branch name from argument or use default from GITHUB variable.
+BRANCH_NAME=${1:-$GITHUB_REF_NAME}
+
+$BLT_DIR/bin/blt artifact:deploy --commit-msg "Automated commit by Github Actions for Build $GITHUB_RUN_NUMBER of workflow $GITHUB_WORKFLOW" --branch "$BRANCH_NAME-build" --no-interaction --verbose
 
 set +v

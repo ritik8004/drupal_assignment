@@ -30,6 +30,7 @@ $gray-five: #dfdfdf;
 $gray-six: #979797;
 $gray-seven: #f5f5f5;
 $gray-eight: #e5e5e5;
+$green: #090;
 
 //// Global elements.
 $primary_text: $black;
@@ -233,6 +234,19 @@ $user_acc_details_border: $alto;
 $user_nav_mobile_link: $gray-three;
 $my_acc_mob_border_color: $gray-light;
 $user_account_wrapper_light: $black;
+$block_acm_customer_txt: $black;
+$order_recent_order_order_detail_link: $black;
+$order_detail_order_summary_row_bg: $white;
+$order_detail_td_light_content: $dawn;
+$order_detail_td_dark_content: $black;
+$order_detail_order_details_row: $smoke;
+$order_detail_order_details_row_td_blend: $alert-light;
+$order_detail_delivery_details_row_content: $black;
+$order_detail_delivery_details_row_bg: $green;
+$order_detail_delivery_details_row_text: $white;
+$order_detail_sub_total_row_text: $dawn;
+$order_detail_order_item_row_bg: $white;
+$order_detail_order_item_row_light_text: $alto;
 
 //Address Book
 $address_add_form_text: $gray-three;
@@ -362,3 +376,11 @@ $static-info-border: $mercury;
 
 // Mobile Multi Menu
 $menu_bg: $white;
+
+// Out of stock button.
+$oos_btn_bg: $alert-main;
+
+// PDP and PLP promotions
+$pdp_product_discount_text: $alert-main;
+$pdp_product_special_price_text: $alert-main;
+$pdp_product_discount_price: $alert-main;

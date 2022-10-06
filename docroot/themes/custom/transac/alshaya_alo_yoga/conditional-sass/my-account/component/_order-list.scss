@@ -17,3 +17,10 @@
     @include primaryBtn(true);
   }
 }
+
+.c-order-list {
+  .subtitle {
+    font-family: $ay-bold;
+    font-size: rem(18);
+  }
+}
