@@ -32,13 +32,13 @@ class QrCodeDisplay extends React.Component {
   render() {
     const { isModelOpen } = this.state;
     const {
-      memberId, qrCodeTitle, codeId, width,
+      memberId, qrCodeTitle, codeId, width, memberTitle,
     } = this.props;
 
     return (
       <>
         <div onClick={(e) => this.openModal(e)} className="qr-code-button">
-          {getStringMessage('view_qr_code')}
+          {memberTitle}
         </div>
         <Popup
           open={isModelOpen}
