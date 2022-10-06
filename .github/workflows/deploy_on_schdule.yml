@@ -4,7 +4,8 @@ on:
 #  pull_request:
   schedule:
     # Run every day at 2AM, 8AM, 2PM and 8PM IST.
-    - cron: '30 2,8,14,20 * * *'
+    # Changed to every hour for now till it is tested.
+    - cron: '30 * * * *'
 
 concurrency: deploy-${{ github.ref }}
 
@@ -35,7 +36,8 @@ jobs:
         uses: adriangl/check-new-commits-action@v1
         with:
           token: ${{ secrets.BOT_TOKEN }}
-          seconds: 25200 # 7 hours in seconds
+          seconds: 5400 # 1.5 hours in seconds, @todo revert to 7 hours once testing is finished
+          # seconds: 25200 # 7 hours in seconds
           branch: ${{ matrix.branch }}
 
       # Make sure we have some code to diff.
@@ -49,9 +51,9 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)"
-          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
-          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD HEAD~${{ needs.changedfiles.steps.check-new-commits.outputs.new-commits-number }} HEAD | xargs)"
+          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRTD HEAD~${{ needs.changedfiles.steps.check-new-commits.outputs.new-commits-number }} HEAD | grep docroot/themes/custom | xargs)"
+          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRTD HEAD~${{ needs.changedfiles.steps.check-new-commits.outputs.new-commits-number }} HEAD | grep docroot/modules/react | xargs)"
 
   deploy:
     name: Deploy
