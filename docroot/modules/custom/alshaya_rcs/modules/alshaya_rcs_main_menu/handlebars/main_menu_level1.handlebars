@@ -1,5 +1,5 @@
 {{! @see docroot/modules/custom/alshaya_main_menu/templates/alshaya-main-menu-level1.html.twig }}
-<div class="main--menu" data-menu-timing="{{ highlight_timing }}">
+<div class="main--menu {{#if (eq mobile_menu_layout "visual_mobile_menu")}}desktop-only{{/if}}" data-menu-timing="{{ highlight_timing }}">
   <div class="toggle--sign no--desktop">
     <div class="shop one active">{{t 'shop'}}</div>
     {{#if user_logged_in }}
@@ -62,7 +62,7 @@
       </div>
     {{/if}}
   </ul>
-  {{#if visual_mobile_menu}}
+  {{#if (eq mobile_menu_layout "visual_mobile_menu")}}
     {{> visual_mobile_menu_partial}}
   {{/if}}
 </div>
