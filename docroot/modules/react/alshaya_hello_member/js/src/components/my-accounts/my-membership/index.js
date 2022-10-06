@@ -67,7 +67,11 @@ class MyMembership extends React.Component {
             apcPoints={myMembershipData.apc_points}
             myMembershipData={myMembershipData}
           />
-          <QrCodeDisplay memberId={memberId} width={200} />
+          <QrCodeDisplay
+            memberId={memberId}
+            width={200}
+            memberTitle={getStringMessage('view_qr_code')}
+          />
           <div className="my-membership-id">
             {memberId}
           </div>
