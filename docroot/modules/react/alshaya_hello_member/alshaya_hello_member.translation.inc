@@ -457,6 +457,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'مميزه',
         'context' => 'hello_member',
       ],
+      'Redeem in store' => [
+        'ar' => 'الاستخدام في المحل',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
