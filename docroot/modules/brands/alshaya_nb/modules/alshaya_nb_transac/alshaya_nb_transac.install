@@ -13,6 +13,18 @@ function alshaya_nb_transac_install() {
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_new_balance');
 
+  $config_factory = \Drupal::configFactory();
+  // Set main menu block in the header region.
+  $config_factory
+    ->getEditable('block.block.alshayamainmenu')
+    ->set('region', 'header')
+    ->save();
+  $pri_menu = (int) $config_factory
+    ->get('block.block.branding')
+    ->get('weight');
+  $config_factory->getEditable('block.block.alshayamainmenu')
+    ->set('weight', $pri_menu - 1)
+    ->save();
   // Reset theme logo.
   $active_theme = \Drupal::theme()->getActiveTheme();
   $current_theme = $active_theme->getName();
@@ -81,4 +93,16 @@ function alshaya_nb_transac_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_nb_transac_modules_installed($modules) {
+  if (in_array('alshaya_algolia_react', $modules)) {
+    $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+    $config->set('hide_grid_toggle', TRUE);
+    $config->save();
+  }
+
 }
