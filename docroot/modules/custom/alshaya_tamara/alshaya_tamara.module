@@ -21,3 +21,18 @@ function alshaya_tamara_alshaya_spc_checkout_confirmation_order_build_alter(arra
   // Attach the tamara library.
   $build['#attached']['library'][] = 'alshaya_white_label/tamara';
 }
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_tamara_alshaya_spc_cart_build_alter(array &$build) {
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_tamara.settings']);
+
+  // Return if the Tamara payment method is not enabled.
+  if (!\Drupal::service('alshaya_tamara.helper')->isTamaraEnabled()) {
+    return;
+  }
+
+  // Pass the tamara variable in drupalSettings.
+  $build['#attached']['drupalSettings']['tamara'] = TRUE;
+}
