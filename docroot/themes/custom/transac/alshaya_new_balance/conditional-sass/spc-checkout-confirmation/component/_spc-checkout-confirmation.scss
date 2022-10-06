@@ -41,13 +41,10 @@
 
       .spc-order-summary-block {
         .product-content {
-          background-color: $spc-product-checkout-bg;
           padding-top: rem(0);
           padding-#{$left}: rem(0);
 
           .product-item {
-            background-color: $spc-product-checkout-bg;
-
             .spc-product-title-price {
               display: flex;
               justify-content: inherit;
@@ -56,12 +53,6 @@
                 font-family: $alshaya-bold;
               }
             }
-          }
-        }
-
-        .block-content {
-          .totals {
-            background-color: $spc-product-checkout-bg;
           }
         }
       }

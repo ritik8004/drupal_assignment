@@ -3,7 +3,6 @@
 
   .spc-checkout-empty-delivery-text {
     @include icon('chevron#{$right}', before) {
-      // color: $plp-view-full-product-text-arrow;
       #{$right}: rem(5);
     }
   }

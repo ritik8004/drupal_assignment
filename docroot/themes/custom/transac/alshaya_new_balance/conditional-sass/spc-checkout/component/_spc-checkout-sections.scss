@@ -2,12 +2,9 @@
   .spc-sidebar {
     .spc-order-summary-block {
       .product-content {
-        background-color: $spc-product-checkout-bg;
         padding: 0;
 
         .product-item {
-          background-color: $spc-product-checkout-bg;
-
           .spc-product-title-price {
             display: flex;
             justify-content: inherit;
@@ -20,12 +17,6 @@
           .spc-product-attributes {
             font-size: rem(14);
           }
-        }
-      }
-
-      .block-content {
-        .totals {
-          background-color: $spc-product-checkout-bg;
         }
       }
     }

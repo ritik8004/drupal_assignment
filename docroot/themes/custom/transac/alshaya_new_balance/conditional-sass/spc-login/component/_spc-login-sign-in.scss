@@ -137,14 +137,6 @@
   }
 
   .checkout-login-wrapper {
-    .fieldset-wrapper {
-      .form-type-password {
-        #unmask_password {
-          color: $spc-unmark-password-text;
-        }
-      }
-    }
-
     .checkout-login-separator {
       > span {
         @include breakpoint($only-mobile) {

@@ -4,8 +4,10 @@
   }
 
   .block-content {
-    @include breakpoint($mobile) {
-      padding: rem(34);
+    background: $checkout-login-promo-bg;
+    padding: rem(34);
+
+    @include breakpoint($only-mobile) {
       background-color: $spc-order-summary-totals-bg;
     }
   }
@@ -26,5 +28,15 @@
 
   .promo-submit {
     font-weight: 700;
+  }
+}
+
+.spc-order-summary-block {
+  .block-content {
+    background: $checkout-login-promo-bg;
+
+    .totals {
+      background: $checkout-login-promo-bg;
+    }
   }
 }

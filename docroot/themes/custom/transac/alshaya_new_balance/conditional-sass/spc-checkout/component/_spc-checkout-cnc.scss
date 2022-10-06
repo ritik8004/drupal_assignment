@@ -12,7 +12,7 @@
     .spc-cnc-store-search-form-item {
       margin-#{$right}: 0;
 
-      @include icon(search, after) {
+      &::after {
         color: $spc-cnc-store-input-search-icon;
         height: rem(40);
       }
