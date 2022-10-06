@@ -1,11 +1,11 @@
 name: Deploy on Schedule
 
 on:
+  workflow_dispatch:
 #  pull_request:
   schedule:
     # Run every day at 2AM, 8AM, 2PM and 8PM IST.
-    # Changed to every hour for now till it is tested.
-    - cron: '25 * * * *'
+    - cron: '30 2,8,14,20 * * *'
 
 concurrency: deploy-${{ github.ref }}
 
