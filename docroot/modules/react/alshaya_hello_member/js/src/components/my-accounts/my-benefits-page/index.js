@@ -107,6 +107,7 @@ class MyBenefitsPage extends React.Component {
             qrCodeTitle={qrCodeTitle}
             codeId={couponId || codeId}
             width={79}
+            memberTitle={getStringMessage('redeem_in_store')}
           />
           <AddBenefitsToCart
             title={myBenefit.description}
