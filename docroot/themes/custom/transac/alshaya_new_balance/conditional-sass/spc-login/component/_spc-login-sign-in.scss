@@ -25,7 +25,7 @@
         &::after {
           content: '';
           width: 100%;
-          background: #000;
+          background: $spc-login-seprator-bg;
           height: rem(1);
           position: absolute;
           top: 50%;
@@ -34,11 +34,11 @@
         }
 
         > span {
-          letter-spacing: 1(rem);
+          letter-spacing: rem(1);
           font-size: rem(14);
-          padding: rem(0) rem(10);
+          padding: 0 rem(10);
           background: $spc-cart-background;
-          color: $primary_text;
+          color: $spc-login-seprator-text;
         }
 
         @include breakpoint($upto-desktop) {
@@ -71,14 +71,14 @@
         font-weight: 400;
         margin-top: rem(50);
 
-        @include breakpoint($tablet) {
+        @include breakpoint($only-tablet) {
           margin-top: rem(10);
         }
       }
     }
 
     .edit-checkout-as-guest {
-      border: 1px solid;
+      border: rem(1) solid;
       height: rem(56);
       font-family: $alshaya-bold;
 
@@ -140,7 +140,7 @@
     .fieldset-wrapper {
       .form-type-password {
         #unmask_password {
-          color: $primary_text;
+          color: $spc-unmark-password-text;
         }
       }
     }

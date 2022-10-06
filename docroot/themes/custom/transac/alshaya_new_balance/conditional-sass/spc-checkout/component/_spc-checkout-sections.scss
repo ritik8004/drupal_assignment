@@ -3,11 +3,9 @@
     .spc-order-summary-block {
       .product-content {
         background-color: $spc-product-checkout-bg;
-        padding-top: rem(0);
-        padding-#{$left}: rem(0);
+        padding: 0;
 
         .product-item {
-          padding: rem(24) rem(0) rem(0) rem(24);
           background-color: $spc-product-checkout-bg;
 
           .spc-product-title-price {
@@ -17,6 +15,10 @@
             .spc-product-price {
               font-family: $alshaya-bold;
             }
+          }
+
+          .spc-product-attributes {
+            font-size: rem(14);
           }
         }
       }

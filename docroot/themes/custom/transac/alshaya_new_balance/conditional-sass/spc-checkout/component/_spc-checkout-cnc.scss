@@ -1,0 +1,25 @@
+.spc-cnc-address-form-sidebar {
+  .spc-cnc-location-search-wrapper {
+    .cc-near-me {
+      background: $spc-cnc-store-search-icon-bg;
+      height: rem(40);
+
+      @include icon('mylocation', before) {
+        color: $spc-cnc-store-search-icon-color;
+      }
+    }
+
+    .spc-cnc-store-search-form-item {
+      margin-#{$right}: 0;
+
+      @include icon(search, after) {
+        color: $spc-cnc-store-input-search-icon;
+        height: rem(40);
+      }
+
+      input {
+        height: rem(38);
+      }
+    }
+  }
+}

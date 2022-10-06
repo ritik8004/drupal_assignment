@@ -1,5 +1,12 @@
 .spc-checkout-delivery-information {
   padding-top: rem(30);
+
+  .spc-checkout-empty-delivery-text {
+    @include icon('chevron#{$right}', before) {
+      // color: $plp-view-full-product-text-arrow;
+      #{$right}: rem(5);
+    }
+  }
 }
 
 .spc-checkout-delivery-methods {
