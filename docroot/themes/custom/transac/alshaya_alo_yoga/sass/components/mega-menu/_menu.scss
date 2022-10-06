@@ -148,8 +148,6 @@
     }
 
     .menu--active & {
-      #{$left}: rem(-1);
-
       html[lang=ar] & {
         right: 0;
       }
