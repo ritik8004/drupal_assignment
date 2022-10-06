@@ -1,4 +1,5 @@
 import React from 'react';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import { getTokenizedCards } from '../../utilities/checkout_util';
 import { allowSavedCcForTopUp } from '../../utilities/egift_util';
 
@@ -24,8 +25,9 @@ class CheckoutComUpapiContextProvider extends React.Component {
 
   componentDidMount() {
     const { tokenize } = drupalSettings.checkoutComUpapi;
-    // Get the tokenized cards only if tokenize if enabled.
-    if (tokenize) {
+    // Get the tokenized cards only if tokenize if enabled & user is
+    // authenticated.
+    if (tokenize && isUserAuthenticated()) {
       const tokenizedCards = getTokenizedCards();
       // Show the loader till we have the response.
       if (tokenizedCards instanceof Promise) {
