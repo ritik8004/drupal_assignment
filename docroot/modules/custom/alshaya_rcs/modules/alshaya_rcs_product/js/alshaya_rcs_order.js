@@ -272,6 +272,21 @@
           alt: product.name,
           title: product.name,
         });
+
+        drupalSettings.onlineReturns.refunded_products.some(function eachRefundedProduct(refundedProduct) {
+          if (refundedProduct.sku !== product.sku) {
+            return false;
+          }
+          refundedProduct.attributes = product.attributes;
+          refundedProduct.name = product.name;
+          refundedProduct.image_data = {
+            url: indexedProducts[product.sku].media_teaser,
+            alt: product.name,
+            title: product.name,
+          }
+          refundedProduct.is_returnable = indexedProducts[product.sku].is_returnable;
+          return true;
+        });
       });
 
       return drupalSettings.order;
