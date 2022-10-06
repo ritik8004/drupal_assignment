@@ -336,3 +336,10 @@ function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$f
 
   }
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_rcs_main_menu_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_partial';
+}
