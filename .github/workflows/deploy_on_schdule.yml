@@ -5,7 +5,7 @@ on:
   schedule:
     # Run every day at 2AM, 8AM, 2PM and 8PM IST.
     # Changed to every hour for now till it is tested.
-    - cron: '30 * * * *'
+    - cron: '5 * * * *'
 
 concurrency: deploy-${{ github.ref }}
 
@@ -36,7 +36,7 @@ jobs:
         uses: adriangl/check-new-commits-action@v1
         with:
           token: ${{ secrets.BOT_TOKEN }}
-          seconds: 5400 # 1.5 hours in seconds, @todo revert to 7 hours once testing is finished
+          seconds: 86400 # 24 hours in seconds, @todo revert to 7 hours once testing is finished
           # seconds: 25200 # 7 hours in seconds
           branch: ${{ matrix.branch }}
 
