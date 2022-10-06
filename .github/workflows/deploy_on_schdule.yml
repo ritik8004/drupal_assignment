@@ -14,15 +14,19 @@ defaults:
     shell: bash
 
 jobs:
-  changedfiles:
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     if: ${{ github.repository_owner == 'acquia-pso' }}
 
-    # Map a step output to a job output
-    outputs:
-      all: ${{ steps.changes.outputs.all }}
-      themes: ${{ steps.changes.outputs.themes }}
-      react: ${{ steps.changes.outputs.react }}
+    container:
+      image: devwithlando/php:8.0-fpm-4
+
+    env:
+      CI: GITHUB_ACTIONS
+      COMPOSER_MEMORY_LIMIT: -1
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      SSH_DEPLOYMENT_KEY: ${{ secrets.BLT_SSH_DEPLOYMENT_KEY }}
 
     strategy:
       matrix:
@@ -41,7 +45,8 @@ jobs:
           branch: ${{ matrix.branch }}
 
       # Make sure we have some code to diff.
-      - name: Checkout ${{ matrix.branch }} repository
+      - name: Checkout ${{ matrix.branch }} repository to get diff
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         uses: actions/checkout@v2
         with:
           ref: ${{ matrix.branch }}
@@ -49,49 +54,30 @@ jobs:
 
       - name: Get changed files
         id: changes
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         # Set outputs using the command.
         run: |
           echo "::set-output name=all::$(git diff $(git rev-list -n1 --before="1 day ago" HEAD) --name-only --diff-filter=ACMRTD | xargs)"
           echo "::set-output name=themes::$(git diff $(git rev-list -n1 --before="1 day ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/themes/custom | xargs)"
           echo "::set-output name=react::$(git diff $(git rev-list -n1 --before="1 day ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/modules/react | xargs)"
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: changedfiles
-    if: ${{ needs.changedfiles.steps.check-new-commits.outputs.has-new-commits == 'true' && github.repository_owner == 'acquia-pso' }}
-
-    container:
-      image: devwithlando/php:8.0-fpm-4
-
-    env:
-      CI: GITHUB_ACTIONS
-      COMPOSER_MEMORY_LIMIT: -1
-      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-      SSH_DEPLOYMENT_KEY: ${{ secrets.BLT_SSH_DEPLOYMENT_KEY }}
-
-    strategy:
-      matrix:
-        branch:
-          - develop
-          - develop-brand-rollout
-
-    steps:
-      - name: Checkout ${{ matrix.branch }} repository
+      - name: Checkout ${{ matrix.branch }} repository again for preparing deployment
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         uses: actions/checkout@v2
         with:
           ref: ${{ matrix.branch }}
 
       - name: Artifact Build
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         uses: ./.github/actions/deploy_build
         with:
           SCRIPT_DIR: ${SCRIPT_DIR}
           SSH_AUTH_SOCK: ${SSH_AUTH_SOCK}
           SSH_DEPLOYMENT_KEY: ${SSH_DEPLOYMENT_KEY}
-          CHANGED_THEMES_FILES: ${{ needs.changedfiles.outputs.themes }}
-          CHANGED_REACT_FILES: ${{ needs.changedfiles.outputs.react }}
-          CHANGED_ALL_FILES: ${{ needs.changedfiles.outputs.all }}
+          CHANGED_ALL_FILES: ${{ needs.changes.outputs.all }}
+          CHANGED_THEMES_FILES: ${{ steps.changes.outputs.themes }}
+          CHANGED_REACT_FILES: ${{ steps.changes.outputs.react }}
 
       - name: Deploy ${{ matrix.branch }} branch
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' && env.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/heads') }}
         run: bash $SCRIPT_DIR/deploy_branch.sh ${{ matrix.branch }}
-        if: ${{ env.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/heads') }}
