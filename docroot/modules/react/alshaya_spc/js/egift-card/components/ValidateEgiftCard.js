@@ -24,7 +24,7 @@ export default class ValidateEgiftCard extends React.Component {
     }
   }
 
-  // Resend the code for egift card verification.
+  // Resend the code for e-Gift card verification.
   handleResendCode = async () => {
     // Remove any existing error message and code.
     document.getElementById('egift_verification_code_error').innerHTML = '';
