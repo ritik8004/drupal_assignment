@@ -13,7 +13,7 @@
  */
 function alshaya_rcs_super_category_get_block_ids() {
   return [
-    'supercategorymenu' => 'alshaya_rcs_supercategory_menu',
+    'supercategorymenu' => 'alshayarcssupercategorymenu',
   ];
 }
 

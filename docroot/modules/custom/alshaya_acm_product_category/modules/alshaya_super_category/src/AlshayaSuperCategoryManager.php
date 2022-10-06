@@ -201,4 +201,23 @@ class AlshayaSuperCategoryManager {
     return !empty($default_category_tid) ? $default_category_tid : NULL;
   }
 
+  /**
+   * Get the Super Category Term for current page.
+   *
+   * @return \Drupal\taxonomy\TermInterface|null
+   *   Super Category Term if found.
+   */
+  public function getCategoryTermFromRoute(): ?TermInterface {
+    $term = $this->productCategoryTree->getCategoryTermFromRoute();
+
+    if (empty($term)) {
+      $default_tid = $this->getDefaultCategoryId();
+      if ($default_tid) {
+        return $this->entityTypeManager->getStorage('taxonomy_term')->load();
+      }
+    }
+
+    return NULL;
+  }
+
 }

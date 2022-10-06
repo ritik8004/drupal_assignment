@@ -12,6 +12,10 @@ use Drupal\taxonomy\TermInterface;
  */
 class RcsProductCategoryTree extends ProductSuperCategoryTree {
 
+  public const VOCABULARY_ID = 'rcs_category';
+
+  public const CACHE_TAG = 'taxonomy_term:rcs_category';
+
   /**
    * {@inheritdoc}
    */
@@ -25,23 +29,27 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     if ($term_data = $this->cache->get($cid)) {
       return $term_data->data;
     }
+
     $placeholder_tid = $this->configFactory->get('rcs_placeholders.settings')->get('category.placeholder_tid');
 
     $super_categories = $this->termStorage->loadTree('rcs_category', 0, 1, TRUE);
     $term_data = [];
     foreach ($super_categories as $category) {
       $mdc_id = $category->get('field_commerce_id')->getString();
+
       if ($placeholder_tid === $category->id() || empty($mdc_id)) {
         continue;
       }
-      $category_en = ($category->hasTranslation($langcode))
-        ? $category->getTranslation('en')
-        : $category;
-      $term_data[$mdc_id] = [
-        'id' => $mdc_id,
+
+      $term_data[$category->id()] = [
+        'id' => $category->id(),
+        'commerce_id' => $mdc_id,
         'label' => $category->getName(),
+        'position' => (int) $category->get('weight')->getString(),
       ];
     }
+
+    uasort($term_data, fn($item1, $item2) => $item1['position'] <=> $item2['position']);
 
     $this->cache->set($cid, $term_data, Cache::PERMANENT, [ProductCategoryTree::CACHE_TAG]);
     return $term_data;
@@ -103,7 +111,19 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
    * {@inheritdoc}
    */
   public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
-    return parent::getCategoryTermFromRoute(FALSE);
+    $term = &drupal_static('super_category_term');
+
+    if (isset($term)) {
+      return NULL;
+    }
+
+    $term_from_route = parent::getCategoryTermFromRoute(FALSE);
+    if ($term_from_route instanceof TermInterface) {
+      $term = $term_from_route;
+      return $term;
+    }
+
+    return NULL;
   }
 
   /**

@@ -1,11 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  module:
-    - alshaya_rcs_super_category
-  theme:
-    - alshaya_white_label
-id: alshaya_rcs_supercategory_menu
+id: alshayarcssupercategorymenu
 theme: alshaya_white_label
 region: menu_primary
 weight: 0

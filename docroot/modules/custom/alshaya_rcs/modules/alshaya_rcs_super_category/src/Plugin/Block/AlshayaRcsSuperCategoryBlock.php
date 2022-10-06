@@ -150,43 +150,42 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function build() {
-    $lang_code = $this->languageManager->getCurrentLanguage()->getId();
-    $current_super_term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    $current_super_term = $this->superCategorymanager->getCategoryTermFromRoute();
     $current_tid = ($current_super_term instanceof TermInterface)
       ? $current_super_term->id()
       : NULL;
 
-    $placeholder_tid = $this->configFactory->get('rcs_placeholders.settings')->get('category.placeholder_tid');
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $cache_tags = $term_data = [];
 
     // Load L1 supercategories.
-    $super_categories =$this->entityTypeManager->getStorage('taxonomy_term')->loadTree('rcs_category', 0, 1, TRUE);
-    $cache_tags = $term_data = [];
-    foreach($super_categories as $category) {
+    $super_categories = $this->productCategoryTree->getCategoryRootTerms();
+    foreach($super_categories as $super_category) {
+      $category = $term_storage->load($super_category['id']);
+
       $mdc_id = $category->get('field_commerce_id')->getString();
-      // Check if its placeholder term or enriched term.
-      if ($category->id() === $placeholder_tid || empty($mdc_id)) {
-        continue;
-      }
+
       $category_en = ($category->hasTranslation('en'))
         ? $category->getTranslation('en')
         : $category;
+
       $class = ' brand-' . Html::cleanCssIdentifier(mb_strtolower($category_en->getName()));
+
       $gtm_menu_title = NULL;
-      if ($current_tid === $category->id()
-      ) {
+      if ($current_tid === $category->id()) {
         $class .= ' active';
         $gtm_menu_title = $category_en->getName();
       }
 
       // Get brand icons of supercategory.
       $img_path = $inactive_path = NULL;
-      $brand_icons = $this->productCategoryTree->getBrandIcons($mdc_id);
-      if ((isset($brand_icons['active_image']) && !empty($brand_icons['active_image']))
-      && (isset($brand_icons['inactive_image']) && !empty($brand_icons['inactive_image']))) {
+      $brand_icons = $this->productCategoryTree->getBrandIcons($super_category['id']);
+      if (!empty($brand_icons['active_image']) && !empty($brand_icons['inactive_image'])) {
         $img_path = (str_contains($class, 'active'))
           ? $brand_icons['active_image']
           : $brand_icons['inactive_image'];
-        $inactive_path = $brand_icons['active_image'];
+
+        $inactive_path = $brand_icons['inactive_image'];
       }
 
       $term_data[$mdc_id] = [
@@ -198,6 +197,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
         'inactive_path' => $inactive_path,
         'path' => '/' . $category->get('field_category_slug')->getString(),
       ];
+
       $cache_tags = Cache::mergeTags(
         $cache_tags,
         $category->getCacheTags()
@@ -212,10 +212,12 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
     if (isset($term_data[$parent_id])) {
       $term_data[$parent_id]['path'] = Url::fromRoute('<front>')->toString();
     }
+
     $cache_tags = Cache::mergeTags(
       $cache_tags,
       $this->configFactory->get('alshaya_super_category.settings')->getCacheTags()
     );
+
     return [
       '#theme' => 'alshaya_super_category_top_level',
       '#term_tree' => $term_data,

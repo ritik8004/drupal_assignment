@@ -18,6 +18,12 @@ class AlshayaRcsShopByBlock extends AlshayaShopByBlock {
    * {@inheritdoc}
    */
   public function build() {
+    $variables = [];
+
+    $variables['category_id'] = $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category');
+
+    // Allow other modules to modify the variables.
+    $this->moduleHandler->alter('alshaya_rcs_main_menu', $variables);
 
     // Return rcs shop by container.
     return [
@@ -27,7 +33,7 @@ class AlshayaRcsShopByBlock extends AlshayaShopByBlock {
             'id' => 'rcs-ph-shop_by_block',
             'data-rcs-dependency' => 'navigation_menu',
             'data-param-entity-to-get' => 'navigation_menu',
-            'data-param-category_id' => $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category'),
+            'data-param-category_id' => $variables['category_id'],
           ],
         ],
       ],
