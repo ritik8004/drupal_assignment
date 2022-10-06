@@ -29,9 +29,32 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
       });
 
       return Promise.all(productInfoPromises).then(function allProductsInfo(allProductInfo) {
-        var productItems = allProductInfo[0].data.products.items;
-        productItems.forEach(function eachProduct(product) {
-          orderDetails['#products'].forEach(function eachOrderProduct(orderProduct) {
+        var productItems = [];
+        // Promise.all() returns the products in different arrays.
+        // So we merge the data into a single array of products.
+        allProductInfo.forEach(function eachProductItem(item) {
+          if (Drupal.hasValue(item.data.products.items[0])) {
+            productItems.push(item.data.products.items[0]);
+          }
+        });
+
+        // Loop over the order items.
+        // Find the corresponding product data for the order item which is
+        // fetched from the API call above.
+        // Then merge the product data with the order data.
+        orderDetails['#products'].forEach(function eachOrderProduct(orderProduct) {
+          productItems.forEach(function eachProduct(product) {
+            var isVariantPresent = false;
+            product.variants.some(function name(variant) {
+              if (variant.product.sku === orderProduct.sku) {
+                isVariantPresent = true;
+                return true;
+              }
+              return false;
+            });
+            if (!isVariantPresent) {
+              return;
+            }
             // Store in static storage so that it can be used later.
             staticStorage.orderDetailsStorage[product.sku] = product;
             window.commerceBackend.setMediaData(product);
