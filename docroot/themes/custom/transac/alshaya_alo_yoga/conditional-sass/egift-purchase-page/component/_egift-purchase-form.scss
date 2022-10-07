@@ -1,0 +1,20 @@
+#egift-card-purchase-wrapper {
+  .step-title {
+    font-family: $ay-heavy;
+  }
+
+  .step-two-wrapper {
+    .egift-input-title {
+      font-size: rem(14);
+    }
+  }
+
+  .action-buttons {
+    button[type=submit] {
+      &:nth-of-type(1) {
+        background: $egift_form_ckt_text;
+        color: $egift_form_ckt_bg;
+      }
+    }
+  }
+}

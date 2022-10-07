@@ -96,7 +96,7 @@ class ProductDyPageTypeEventSubscriber implements EventSubscriberInterface {
         if ($productSku->bundle() === 'configurable') {
           $combinations = $this->skuManager->getConfigurableCombinations($productSku);
           if (isset($combinations['by_sku'])) {
-            $event->setDyContextData([key($combinations['by_sku'])]);
+            $event->setDyContextData([strval(key($combinations['by_sku']))]);
           }
         }
         else {

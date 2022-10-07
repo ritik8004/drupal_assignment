@@ -1,0 +1,44 @@
+.egift-landing-page {
+  .popup-content.egift-balance-check-content {
+    .egift-amount-update-wrapper {
+      .egift-check-bal-title {
+        font-family: $ay-heavy;
+      }
+
+      .close {
+        #{$right}: rem(10);
+        top: rem(16);
+
+        @include breakpoint($only-mobile) {
+          top: rem(21);
+        }
+
+        &::before {
+          font-size: rem(16);
+        }
+      }
+    }
+
+    .egift-balance-check-form {
+      .egift-header-wrapper {
+        p {
+          font-family: $ay-heavy;
+        }
+      }
+
+      .egift-button {
+        font-family: $ay-heavy;
+        text-transform: unset;
+      }
+    }
+
+    .egift-balance-response {
+      .egift-topup-btn-wrapper {
+        button {
+          font-family: $ay-heavy;
+          text-transform: unset;
+        }
+      }
+    }
+  }
+}
