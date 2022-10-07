@@ -13,6 +13,7 @@ class AlshayaRcsSuperCategoryManager extends AlshayaSuperCategoryManager {
    */
   public function getDefaultCategoryId() {
     $default_category_tid = &drupal_static(__FUNCTION__);
+
     if (!isset($default_category_tid)) {
       $default_category_tid = 0;
 
@@ -20,9 +21,10 @@ class AlshayaRcsSuperCategoryManager extends AlshayaSuperCategoryManager {
 
       if ($status) {
         $super_categories_terms = $this->productCategoryTree->getCategoryRootTerms();
-        $default_category_tid = !empty($super_categories_terms)
-          ? current($super_categories_terms)['commerce_id']
-          : 0;
+
+        if (!empty($super_categories_terms)) {
+          $default_category_tid = current($super_categories_terms)['commerce_id'] ?? 0;
+        }
       }
     }
 

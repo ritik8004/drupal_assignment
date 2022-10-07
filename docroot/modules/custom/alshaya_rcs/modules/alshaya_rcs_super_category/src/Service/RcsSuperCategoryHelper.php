@@ -96,6 +96,8 @@ class RcsSuperCategoryHelper {
         $this->logger->notice('No categories available in API response for language @language.', [
           '@language' => $language_code,
         ]);
+
+        continue;
       }
 
       $super_categories = $this->processSuperCategories($super_categories['children_data']);

@@ -188,17 +188,20 @@ class AlshayaSuperCategoryManager {
    * Helper function to get the default_category_tid.
    *
    * @return mixed
-   *   return term id if enabled or NULL.
+   *   return term id if enabled or 0.
    */
   public function getDefaultCategoryId() {
     $default_category_tid = &drupal_static(__FUNCTION__);
     if (!isset($default_category_tid)) {
+      $default_category_tid = 0;
+
       $status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
       if ($status) {
         $default_category_tid = alshaya_super_category_get_default_term();
       }
     }
-    return !empty($default_category_tid) ? $default_category_tid : NULL;
+
+    return $default_category_tid;
   }
 
   /**
@@ -213,7 +216,7 @@ class AlshayaSuperCategoryManager {
     if (empty($term)) {
       $default_tid = $this->getDefaultCategoryId();
       if ($default_tid) {
-        return $this->entityTypeManager->getStorage('taxonomy_term')->load();
+        return $this->entityTypeManager->getStorage('taxonomy_term')->load($default_tid);
       }
     }
 
