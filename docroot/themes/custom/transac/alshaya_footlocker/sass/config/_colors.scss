@@ -20,6 +20,7 @@ $new-pdp-nero: #1a1a1a;
 $_plp_secondary_cta_hover: rgba(0, 0, 0, 0.1);
 $_egift_landing_page_banner_bg: #f0f0f0;
 $faded-black: rgba(0, 0, 0, 0.75);
+$faded-red: rgba(208, 2, 27, 0.75);
 
 // Header color.
 $dark-brown: #504a4a;
@@ -657,4 +658,5 @@ $online-return-address-line-warm-grey-txt: $warm-grey;
 $online-return-popup-overlay-bg: $faded-black;
 $online-return-unit-price-warm-grey-txt: $warm-grey;
 $online-return-big-ticket-label-bg: $info-blue;
-$online-return-ineligible-label-bg: rgba(208, 2, 27, 0.75);
+$online-return-ineligible-label-bg: $faded-red;
+$online-return-error-msg-color: $white-two;

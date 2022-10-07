@@ -207,5 +207,15 @@
       margin-#{$left}: 0;
     }
   }
+
+  div.errors-container {
+    .error-message {
+      font-size: rem(14);
+      line-height: 1.29;
+      font-family: $alshaya-bold;
+      color: $online-return-error-msg-color;
+      margin-top: 0;
+    }
+  }
 }
 

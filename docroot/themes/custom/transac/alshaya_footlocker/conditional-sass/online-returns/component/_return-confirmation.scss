@@ -15,10 +15,12 @@
     .return-confirmation-detail-wrapper {
       padding-left: rem(35);
       padding-right: rem(35);
+
       @include breakpoint($tablet) {
         padding-left: rem(25);
         padding-right: rem(25);
       }
+
       .return-id-label,
       .return-request-date,
       .refund-method-title,
@@ -42,7 +44,7 @@
 
       @include breakpoint($tablet) {
         padding-left: 0;
-      padding-right:0;
+        padding-right: 0;
         margin-top: rem(20);
         text-align: $left;
       }
