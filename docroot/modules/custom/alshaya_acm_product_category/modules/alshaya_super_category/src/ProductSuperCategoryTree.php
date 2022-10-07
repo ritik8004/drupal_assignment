@@ -122,10 +122,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Return the taxonomy term object if found else NULL.
    */
   public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
-    $term = &drupal_static('super_category_term');
-    if (isset($term)) {
-      return $term;
-    }
+    $term = NULL;
+
     // Do not check acq category terms in V3.
     if ($check_acq_terms) {
       $term = parent::getCategoryTermFromRoute();
@@ -133,11 +131,12 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
 
     if (empty($term)) {
       $request = $this->requestStack->getCurrentRequest();
-      $current_uri = $request->getRequestUri();
-      $path_parts = pathinfo($current_uri);
-      $term_path = explode('/', $path_parts['dirname']);
-      if (!empty($term_path[2])) {
-        $tid = $this->getTermByName($term_path[2]);
+
+      $path_parts = explode('/', trim($request->getRequestUri(), '/'));
+
+      // $path_parts[0] will have language so ignore it.
+      if (!empty($path_parts[1])) {
+        $tid = $this->getTermByName($path_parts[1]);
         if (!empty($tid)) {
           $term = $this->termStorage->load($tid);
         }
@@ -171,11 +170,11 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     }
 
     // If term is of 'acq_product_category' vocabulary.
-    if ($term instanceof TermInterface && $term->bundle() == self::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->bundle() == static::VOCABULARY_ID) {
       return $term;
     }
 
-    return $term;
+    return NULL;
   }
 
   /**
@@ -229,7 +228,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     // Get all child terms for the given parent.
     $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE);
 
-    $this->cache->set($cid, $term_data, Cache::PERMANENT, [self::CACHE_TAG]);
+    $this->cache->set($cid, $term_data, Cache::PERMANENT, [static::CACHE_TAG]);
     return $term_data;
   }
 

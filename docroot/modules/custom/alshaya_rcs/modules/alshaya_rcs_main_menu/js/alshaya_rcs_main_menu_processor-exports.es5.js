@@ -34,7 +34,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     'menu_type': menuLayout,
     'menu_items': inputsClone,
     'user_logged_in': drupalSettings.user.uid > 1,
-    'path_prefix': drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix,
+    'path_prefix': Drupal.url(''),
     'aura_enabled': auraEnabled,
     'highlight_timing': highlightTiming,
     'promopanel_class': '', // @todo Implement promo panel block class.

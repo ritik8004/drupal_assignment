@@ -99,7 +99,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       $variables['mobile_menu_max_depth']++;
     }
 
-    // Alter rcs main menu hook.
+    // Allow other modules to modify the variables.
     $this->moduleHandler->alter('alshaya_rcs_main_menu', $variables);
 
     $build = [
