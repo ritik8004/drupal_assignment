@@ -29,9 +29,32 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
       });
 
       return Promise.all(productInfoPromises).then(function allProductsInfo(allProductInfo) {
-        var productItems = allProductInfo[0].data.products.items;
-        productItems.forEach(function eachProduct(product) {
-          orderDetails['#products'].forEach(function eachOrderProduct(orderProduct) {
+        var productItems = [];
+        // Promise.all() returns the products in different arrays.
+        // So we merge the data into a single array of products.
+        allProductInfo.forEach(function eachProductItem(item) {
+          if (Drupal.hasValue(item.data.products.items[0])) {
+            productItems.push(item.data.products.items[0]);
+          }
+        });
+
+        // Loop over the order items.
+        // Find the corresponding product data for the order item which is
+        // fetched from the API call above.
+        // Then merge the product data with the order data.
+        orderDetails['#products'].forEach(function eachOrderProduct(orderProduct) {
+          productItems.forEach(function eachProduct(product) {
+            var currentVariant = null;
+            product.variants.some(function name(variant) {
+              if (variant.product.sku === orderProduct.sku) {
+                currentVariant = variant;
+                return true;
+              }
+              return false;
+            });
+            if (!Drupal.hasValue(currentVariant)) {
+              return;
+            }
             // Store in static storage so that it can be used later.
             staticStorage.orderDetailsStorage[product.sku] = product;
             window.commerceBackend.setMediaData(product);
@@ -40,6 +63,7 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
               alt: product.name,
               title: product.name,
             };
+            orderProduct.attributes = window.commerceBackend.getProductOptions(product, currentVariant);
             orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product, orderProduct.sku);
             // @todo Populate this value when working on big ticket items.
             orderProduct.is_big_ticket = null;
@@ -86,4 +110,22 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
 
     return {};
   }
+
+  document.addEventListener('alterOrderProductData', function onAlterProductData(e) {
+    var product = e.detail.data.product;
+    drupalSettings.onlineReturns.refunded_products.some(function eachRefundedProduct(refundedProduct) {
+      if (refundedProduct.sku !== product.sku) {
+        return false;
+      }
+      refundedProduct.attributes = product.attributes;
+      refundedProduct.name = product.name;
+      refundedProduct.image_data = {
+        url: product.imageData.src,
+        alt: product.imageData.alt,
+        title: product.imageData.title,
+      }
+      refundedProduct.is_returnable = product.is_returnable;
+      return true;
+    });
+  });
 })(Drupal, drupalSettings);
