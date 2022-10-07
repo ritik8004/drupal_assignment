@@ -1,0 +1,54 @@
+.nodetype--advanced_page {
+  .c-accordion-delivery-option-parent {
+    .field--name-field-group-title {
+      font-size: rem(24);
+      font-family: $ay-heavy;
+    }
+
+    .c-accordion__title {
+      font-family: $alshaya-bold;
+      font-size: rem(14);
+      background-color: $egift_accordian_title_bg;
+      border: rem(1) solid $egift_accordian_title_border;
+
+      &::after {
+        #{$right}: 0.9375rem;
+
+        @include breakpoint($only-mobile) {
+          #{$right}: 0;
+          top: 1.6rem;
+        }
+      }
+
+      &.ui-state-active {
+        &::after {
+          #{$right}: 1.875rem;
+          top: 1.3rem;
+
+          @include breakpoint($only-mobile) {
+            #{$right}: 0.9375rem;
+          }
+        }
+
+        color: $egift_accordian_active_title;
+        border-bottom: none;
+
+        & + .c-accordion_content {
+          background-color: $egift_accordian_title_bg;
+          border: rem(1) solid $egift_accordian_title_border;
+          border-top: none;
+        }
+      }
+    }
+
+    .c-accordion_content {
+      p {
+        font-size: rem(14);
+      }
+
+      ul {
+        padding-#{$left}: 0;
+      }
+    }
+  }
+}

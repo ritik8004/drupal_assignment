@@ -303,6 +303,10 @@ $accordion_title_icon: $black;
 $primary_minicart_hover: $white;
 $primary_minicart_quantity_text: $black;
 $primary_minicart_quantity_bg: transparent;
+$minicart_notification_btn_bg: $white;
+$minicart_notification_btn_text: $black;
+$minicart_notification_border: $black;
+$minicart_notification_text: $black;
 
 //SPC
 $spc-order-summary-totals-bg: $smoke;
@@ -388,3 +392,13 @@ $oos_btn_bg: $alert-main;
 $pdp_product_discount_text: $alert-main;
 $pdp_product_special_price_text: $alert-main;
 $pdp_product_discount_price: $alert-main;
+
+//eGift
+$egift_form_ckt_bg: $alto;
+$egift_form_ckt_text: $white;
+$egift-purchase-page-border: $alto;
+$advanced-page-banner-bg: $smoke;
+$egift-landing-page-one-row-two-col-box-bg: $smoke;
+$egift_accordian_active_title: $alert-dark;
+$egift_accordian_title_bg: $white;
+$egift_accordian_title_border: $alto;

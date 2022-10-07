@@ -1,0 +1,9 @@
+#cart_notification {
+  .notification {
+    .col-2 {
+      a {
+        border: rem(1) solid $minicart_notification_border;
+      }
+    }
+  }
+}
