@@ -27,6 +27,7 @@ class RegisteredUserLoyalty extends React.Component {
       currentOption: hasValue(loyaltyType) ? loyaltyType : 'hello_member',
       selectedOption: null,
       showLoyaltyPopup: false,
+      billingError: 0,
     };
   }
 
@@ -56,10 +57,28 @@ class RegisteredUserLoyalty extends React.Component {
   showLoyaltyPopup = (method) => {
     // @todo: Trigger a pop-up to confirm the loyalty option.
     // @todo: Refresh cart with the selected value.
-    this.setState({
-      showLoyaltyPopup: true,
-      selectedOption: method,
-    });
+
+    // add address validation for aura
+    if (method === 'aura') {
+      const { cart } = this.props;
+      const billingAddress = cart.cart;
+      const billingAddressData = billingAddress.billing_address;
+      if (billingAddressData === null) {
+        this.setState({ billingError: 1 });
+      } else {
+        this.setState({
+          showLoyaltyPopup: true,
+          selectedOption: method,
+          billingError: 0,
+        });
+      }
+    } else {
+      this.setState({
+        showLoyaltyPopup: true,
+        selectedOption: method,
+
+      });
+    }
   }
 
   resetPopupStatus = (showLoyaltyPopup) => {
@@ -150,7 +169,9 @@ class RegisteredUserLoyalty extends React.Component {
 
   render() {
     const { animationDelay, helloMemberPoints, cart } = this.props;
-    const { currentOption, selectedOption, showLoyaltyPopup } = this.state;
+    const {
+      currentOption, selectedOption, showLoyaltyPopup, billingError,
+    } = this.state;
 
     if (!hasValue(helloMemberPoints)) {
       return null;
@@ -201,6 +222,14 @@ class RegisteredUserLoyalty extends React.Component {
             </div>
           </div>
           )}
+        {billingError === 1 && (
+
+          <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
+            <div className="loyalty-option-text">
+              <p id="loyalty-option-text-error">Please add delivery information for Aura Points benefits</p>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
