@@ -184,8 +184,8 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     returnOrder.refundAmount = refundAmount;
     returnOrder.refundMethods = paymentMethods.length > 0 ? paymentMethods.join('_') : '';
     returnOrder.returnId = returnInfo.increment_id;
-    // @Todo To add the firstTimeReturn info when available.
-    returnOrder.firstTimeReturn = '';
+    returnOrder.firstTimeReturn = returnInfo.extension_attributes.is_first_return
+      ? 'True' : 'False';
   }
 
   return returnOrder;
