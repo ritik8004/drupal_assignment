@@ -2,3 +2,5 @@ name: Alshaya Behat
 type: module
 description: Alshaya Behat module
 core_version_requirement: ^9
+dependencies:
+  - alshaya_acm_product:alshaya_acm_product
