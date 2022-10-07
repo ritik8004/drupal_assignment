@@ -110,4 +110,22 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
 
     return {};
   }
+
+  document.addEventListener('alterOrderProductData', function onAlterProductData(e) {
+    var product = e.detail.data.product;
+    drupalSettings.onlineReturns.refunded_products.some(function eachRefundedProduct(refundedProduct) {
+      if (refundedProduct.sku !== product.sku) {
+        return false;
+      }
+      refundedProduct.attributes = product.attributes;
+      refundedProduct.name = product.name;
+      refundedProduct.image_data = {
+        url: product.imageData.src,
+        alt: product.imageData.alt,
+        title: product.imageData.title,
+      }
+      refundedProduct.is_returnable = product.is_returnable;
+      return true;
+    });
+  });
 })(Drupal, drupalSettings);

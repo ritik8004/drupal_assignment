@@ -172,21 +172,25 @@ window.commerceBackend = window.commerceBackend || {};
           alt: product.name,
           title: product.name,
         });
-
-        drupalSettings.onlineReturns.refunded_products.some(function eachRefundedProduct(refundedProduct) {
-          if (refundedProduct.sku !== product.sku) {
-            return false;
+        product.is_returnable = indexedProducts[product.sku].is_returnable;
+        // Add this data temporarily so that it can be used in the alter hook.
+        product.imageData = {
+          src: indexedProducts[product.sku].media_teaser,
+          alt: product.name,
+          title: product.name,
+        };
+        // Allow other modules like online returns to take action based on this
+        // product data.
+        var alterOrderProductDataEvent = new CustomEvent('alterOrderProductData', {
+          detail: {
+            data: {
+              product ,
+            }
           }
-          refundedProduct.attributes = product.attributes;
-          refundedProduct.name = product.name;
-          refundedProduct.image_data = {
-            url: indexedProducts[product.sku].media_teaser,
-            alt: product.name,
-            title: product.name,
-          }
-          refundedProduct.is_returnable = indexedProducts[product.sku].is_returnable;
-          return true;
         });
+        document.dispatchEvent(alterOrderProductDataEvent);
+        // Delete the temporary key.
+        delete(product.imageData);
       });
 
       return drupalSettings.order;
