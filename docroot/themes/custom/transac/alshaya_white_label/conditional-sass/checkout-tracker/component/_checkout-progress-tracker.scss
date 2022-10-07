@@ -64,8 +64,12 @@
           top: calc(100% + #{rem(18)});
           white-space: nowrap;
           #{$left}: 50%;
-          transform: translateX(-50%) perspective(62.5rem);
+          transform: translateX(-50%) perspective(rem(1000));
           color: $cko-steps-label-txt;
+
+          html[lang=ar] & {
+            transform: translateX(50%) perspective(rem(1000));
+          }
         }
 
         span {
@@ -151,6 +155,10 @@
           background-color: $cko-steps-inactive-bg;
           border-radius: 50%;
           border: rem(1) solid $cko-steps-active-border;
+
+          html[lang=ar] & {
+            transform: translate(50%, -50%);
+          }
 
           @include breakpoint($only-mobile) {
             width: rem(26);

@@ -241,10 +241,30 @@ $cko-steps-active-border: $black;
 $checkout_section_titles: $black;
 $checkout_guest_button_border: $nb-red;
 $checkout_guest_button_txt: $nb-red;
+$checkout_header_border-bottom : $gray;
 
 // Checkout Login page.
 $checkout_login_submit_button_background: $nb-red;
 $checkout_login_link_text: $black;
+$checkout-login-promo-bg: $light-gray;
 
 // Social Auth
 $social-network-text: $nb-red;
+
+// SPC checkout
+$spc-checkout-radio-empty: $nb-red;
+$spc-checkout-radio-filled: $nb-red;
+$spc-checkout-cart-background: $light-gray;
+$spc-deliver-button: $nb-red;
+$spc-deliver-button: $nb-red;
+$spc-login-seprator-bg: $black;
+$spc-login-seprator-text: $black;
+$spc-cnc-store-search-icon: $nb-red;
+$spc-cnc-store-search-icon-bg: $nb-red;
+$spc-cnc-store-search-icon-color: $white;
+$spc-checkout-close-icon-bg: $black;
+$spc-checkout-close-map-icon: $white;
+$spc-cnc-store-input-search-icon: $ada-gray;
+$spc-order-summary-product-area-bg: $white;
+$spc-order-summary-totals-bg: $white;
+$user_pwd_unmask: $black;

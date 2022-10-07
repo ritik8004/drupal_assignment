@@ -10,3 +10,12 @@
     }
   }
 }
+
+.alias--checkout,
+.alias--checkout-confirmation {
+  .page-standard {
+    &:not(.l-two--sf) {
+      background-color: $spc-checkout-cart-background;
+    }
+  }
+}

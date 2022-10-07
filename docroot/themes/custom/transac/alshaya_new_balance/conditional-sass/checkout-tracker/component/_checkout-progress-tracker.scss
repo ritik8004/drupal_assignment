@@ -10,6 +10,12 @@
             border-color: $cko-steps-current-active-border;
           }
         }
+
+        span {
+          html[lang=ar] & {
+            transform: translate3d(0, rem(2), 0) scale(1);
+          }
+        }
       }
     }
   }
