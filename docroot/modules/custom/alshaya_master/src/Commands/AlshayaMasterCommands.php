@@ -175,6 +175,9 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
     'brand_module' => self::REQ,
     'country_code' => self::REQ,
   ]) {
+    // Increase memory limit to make sure install finishes fine.
+    ini_set('memory_limit', '2G');
+
     $post_install_status = $this->state->get('alshaya_master_post_drupal_install', 'not done');
     $modules = $this->moduleExtensionList->getList();
 
