@@ -158,6 +158,8 @@ class AlshayaBehatHelper {
         // Load the SKU.
         $main_sku = SKU::loadFromSku($sku);
         // If product is not buyable, use a different product.
+        // We check here instead of adding condition to the db query since we
+        // have to check the global configuration also.
         if (!alshaya_acm_product_is_buyable($main_sku)) {
           continue;
         }
