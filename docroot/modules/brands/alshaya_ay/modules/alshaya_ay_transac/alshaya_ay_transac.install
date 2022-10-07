@@ -10,7 +10,7 @@
  */
 function alshaya_ay_transac_install() {
   // Add translations.
-  module_load_include('inc', 'alshaya_ay_transac', 'alshaya_ay_transac.translation');
+  \Drupal::moduleHandler()->loadInclude('alshaya_ay_transac', 'inc', 'alshaya_ay_transac.translation');
   if ($translations = _alshaya_ay_transac_get_translations()) {
     alshaya_i18n_save_translations($translations);
   }
@@ -31,11 +31,6 @@ function alshaya_ay_transac_install() {
   $brand_purpose = (int) $config_factory->get('block.block.content')->get('weight');
   $config_factory->getEditable('block.block.aloisabrandofpurpose')->set('weight', $brand_purpose + 1)->save();
 
-  // Set main menu block in the header region.
-  $config_factory->getEditable('block.block.alshayarcsmainmenu')->set('region', 'header')->save();
-  $pri_menu = (int) $config_factory->get('block.block.branding')->get('weight');
-  $config_factory->getEditable('block.block.alshayarcsmainmenu')->set('weight', $pri_menu - 1)->save();
-
   // Add mobile navigation block to menu primary region.
   alshaya_config_install_configs(['block.block.mobilenavigation'], 'alshaya_transac', 'optional');
 
@@ -43,6 +38,7 @@ function alshaya_ay_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     alshaya_stores_finder_set_default_marker_icon('alshaya_ay_transac');
   }
+
   // Check if the sharethis module exists, then remove this from
   // the Product CT as set in alshaya_transac.install by default.
   if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
@@ -52,26 +48,5 @@ function alshaya_ay_transac_install() {
     $configFactory->set('node_types.acq_product', 'acq_product');
     // Save the changes.
     $configFactory->save();
-  }
-}
-
-/**
- * Implements hook_modules_installed().
- */
-function alshaya_ay_transac_modules_installed($modules) {
-  if (in_array('alshaya_algolia_react', $modules)) {
-    $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
-    $config->set('add_to_bag_hover', TRUE);
-    $config->save();
-  }
-  if (in_array('alshaya_add_to_bag', $modules)) {
-    $config = \Drupal::configFactory()->getEditable('alshaya_add_to_bag.settings');
-    $config->set('display_addtobag', TRUE);
-    $config->save();
-  }
-  if (in_array('alshaya_spc', $modules)) {
-    $config = \Drupal::configFactory()->getEditable('alshaya_spc.settings');
-    $config->set('is_notification_drawer', TRUE);
-    $config->save();
   }
 }
