@@ -44,6 +44,7 @@ import { applyHelloMemberLoyalty } from '../../../hello-member-loyalty/component
 import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
 import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
 import CartPaymentMethodsLogos from '../payment-methods-logos';
+import Tamara from '../../../../../js/tamara/utilities/tamara';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -279,7 +280,7 @@ export default class Cart extends React.Component {
   preparePostpayMessage = (totals) => {
     let postpay = null;
     let postpayEligibilityMessage = null;
-    if (Postpay.isPostpayEnabled()) {
+    if (Postpay.isPostpayEnabled() && !Tamara.isTamaraEnabled()) {
       postpay = (
         <PostpayCart
           amount={totals.base_grand_total}
