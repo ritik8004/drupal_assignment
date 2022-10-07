@@ -1,8 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { hasValue } from '../../js/utilities/conditionsUtility';
 import PdpLayout from './pdp-layout/components/pdp-layout';
 
-ReactDOM.render(
-  <PdpLayout />,
-  document.getElementById('pdp-layout'),
-);
+if (hasValue(drupalSettings.alshayaRcs)) {
+  window.alshayaRenderPdpMagV2 = function renderPdpMagV2(productInfo,
+    configurableCombinations, productLabels) {
+    drupalSettings.productInfo = productInfo;
+    drupalSettings.configurableCombinations = configurableCombinations;
+    drupalSettings.productLabels = productLabels;
+    ReactDOM.render(
+      <PdpLayout />,
+      document.getElementById('pdp-layout'),
+    );
+  };
+} else {
+  ReactDOM.render(
+    <PdpLayout />,
+    document.getElementById('pdp-layout'),
+  );
+}

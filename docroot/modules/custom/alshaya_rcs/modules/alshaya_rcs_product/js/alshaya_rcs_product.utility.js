@@ -1056,6 +1056,33 @@ window.commerceBackend = window.commerceBackend || {};
     return skuForGallery;
   };
 
+  // Expose the function to global level.
+  window.commerceBackend.getSkuForGallery = getSkuForGallery;
+
+  window.commerceBackend.getProductLabel = function (sku) {
+    const productLabel = {
+      'M6082R02910': [{
+         'image': {
+          'alt': "",
+          'title': "",
+          'uri': "public://labels/media/amasty/amlabel/MicrosoftTeams-image_11_.png",
+          'url': "https://flkw2-uat.factory.alshaya.com/sites/g/files/bndsjb881/files/labels/media/amasty/amlabel/MicrosoftTeams-image_11_.png",
+         },
+         'position': "top-left",
+      }],
+      'ALYB1013F0001.15OZ': [{
+        'image': {
+         'alt': "",
+         'title': "",
+         'uri': "public://labels/media/amasty/amlabel/MicrosoftTeams-image_11_.png",
+         'url': "https://flkw2-uat.factory.alshaya.com/sites/g/files/bndsjb881/files/labels/media/amasty/amlabel/MicrosoftTeams-image_11_.png",
+        },
+        'position': "top-left",
+     }],
+    };
+    return productLabel
+  }
+
   /**
    * Get first image from media to display as list.
    *

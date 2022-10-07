@@ -12,14 +12,16 @@ class PdpPromotionLabel extends React.Component {
 
   componentDidMount() {
     // On first page load.
-    this.getPromotionInfo();
+    // @todo
+    // this.getPromotionInfo();
   }
 
   componentDidUpdate(prevProps) {
     const { skuMainCode } = this.props;
     // If there is a change in props value (parent sku).
     if (prevProps.skuMainCode !== skuMainCode) {
-      this.getPromotionInfo();
+      // @todo
+      // this.getPromotionInfo();
     }
   }
 

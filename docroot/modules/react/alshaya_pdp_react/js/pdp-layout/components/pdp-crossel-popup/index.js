@@ -69,11 +69,12 @@ class CrossellPopupContent extends React.Component {
   render() {
     const { closeModal, relatedSku } = this.props;
 
-    const url = Drupal.url(`rest/v2/product/${btoa(relatedSku)}?pdp=magazinev2`);
+    // const url = Drupal.url(`rest/v2/product/${btoa(relatedSku)}?pdp=magazinev2`);
     const {
       relatedProductData, variantSelected, skuMainCode, cartDataValue,
     } = this.state;
-    this.getRelatedProductsInfo(relatedProductData, url, relatedSku);
+    // @todo
+    // this.getRelatedProductsInfo(relatedProductData, url, relatedSku);
     let title = '';
     let pdpProductPrice = '';
     let finalPrice = '';
