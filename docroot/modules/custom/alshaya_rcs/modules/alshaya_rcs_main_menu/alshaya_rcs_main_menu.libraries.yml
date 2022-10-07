@@ -48,7 +48,7 @@ shop_by_menu:
   js:
     handlebars/shop_by_menu.handlebars: {}
 
-# This handlebars template is to used add markup for visual mobile menu.
+# This handlebars template is to be used to add markup for visual mobile menu.
 visual_mobile_menu_partial:
   version: 1.x
   js:
