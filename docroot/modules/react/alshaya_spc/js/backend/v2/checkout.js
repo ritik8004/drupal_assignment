@@ -1381,6 +1381,17 @@ const isPostpayPaymentMethod = (paymentMethod) => paymentMethod.indexOf('postpay
 const isTabbyPaymentMethod = (paymentMethod) => paymentMethod.indexOf('tabby', 0) !== -1;
 
 /**
+ * Checks if tamara payment method.
+ *
+ * @param {string} paymentMethod
+ *   Payment method code.
+ *
+ * @return {bool}
+ *   TRUE if payment methods from tamara
+ */
+const isTamaraPaymentMethod = (paymentMethod) => paymentMethod.indexOf('tamara', 0) !== -1;
+
+/**
  * Prepare message to log when API fail after payment successful.
  *
  * @param {array} cart
@@ -1579,7 +1590,8 @@ const paymentUpdate = async (data) => {
   // If upapi payment method (payment method via checkout.com).
   if (isUpapiPaymentMethod(paymentData.method)
     || isPostpayPaymentMethod(paymentData.method)
-    || isTabbyPaymentMethod(paymentData.method)) {
+    || isTabbyPaymentMethod(paymentData.method)
+    || isTamaraPaymentMethod(paymentData.method)) {
     // Add success and fail redirect url to additional data.
     params.payment.additional_data.successUrl = `${window.location.origin}${Drupal.url('spc/payment-callback/success')}`;
     params.payment.additional_data.failUrl = `${window.location.origin}${Drupal.url(`spc/payment-callback/${paymentData.method}/error`)}`;
