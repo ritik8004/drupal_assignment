@@ -12,21 +12,21 @@
       border: rem(1) solid $egift_accordian_title_border;
 
       &::after {
-        #{$right}: 0.9375rem;
+        #{$right}: rem(15);
 
         @include breakpoint($only-mobile) {
           #{$right}: 0;
-          top: 1.6rem;
+          top: rem(26);
         }
       }
 
       &.ui-state-active {
         &::after {
-          #{$right}: 1.875rem;
-          top: 1.3rem;
+          #{$right}: rem(30);
+          top: rem(21);
 
           @include breakpoint($only-mobile) {
-            #{$right}: 0.9375rem;
+            #{$right}: rem(15);
           }
         }
 

@@ -6,15 +6,15 @@
       }
 
       .close {
-        #{$right}: 0.625rem;
-        top: 1rem;
+        #{$right}: rem(10);
+        top: rem(16);
 
         @include breakpoint($only-mobile) {
-          top: 1.3rem;
+          top: rem(21);
         }
 
         &::before {
-          font-size: 1rem;
+          font-size: rem(16);
         }
       }
     }
