@@ -44,15 +44,15 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
         // Then merge the product data with the order data.
         orderDetails['#products'].forEach(function eachOrderProduct(orderProduct) {
           productItems.forEach(function eachProduct(product) {
-            var isVariantPresent = false;
+            var currentVariant = null;
             product.variants.some(function name(variant) {
               if (variant.product.sku === orderProduct.sku) {
-                isVariantPresent = true;
+                currentVariant = variant;
                 return true;
               }
               return false;
             });
-            if (!isVariantPresent) {
+            if (!Drupal.hasValue(currentVariant)) {
               return;
             }
             // Store in static storage so that it can be used later.
@@ -63,6 +63,7 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
               alt: product.name,
               title: product.name,
             };
+            orderProduct.attributes = window.commerceBackend.getProductOptions(product, currentVariant);
             orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product, orderProduct.sku);
             // @todo Populate this value when working on big ticket items.
             orderProduct.is_big_ticket = null;
