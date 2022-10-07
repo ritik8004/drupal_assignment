@@ -188,3 +188,8 @@ product.overlay_attributes:
   version: 1.x
   js:
     handlebars/product.overlay_attributes.handlebars: {}
+
+order_utility:
+  version: 1.x
+  js:
+    js/alshaya_rcs_order_utility.js: {}
