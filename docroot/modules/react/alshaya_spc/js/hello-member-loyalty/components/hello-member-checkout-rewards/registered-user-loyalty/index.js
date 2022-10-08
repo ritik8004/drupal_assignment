@@ -12,6 +12,7 @@ import { redeemAuraPoints } from '../../../../aura-loyalty/components/utilities/
 import { getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import logger from '../../../../../../js/utilities/logger';
 import { updatePriceSummaryBlock } from '../../../../utilities/egift_util';
+import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 
 class RegisteredUserLoyalty extends React.Component {
   constructor(props) {
@@ -27,7 +28,6 @@ class RegisteredUserLoyalty extends React.Component {
       currentOption: hasValue(loyaltyType) ? loyaltyType : 'hello_member',
       selectedOption: null,
       showLoyaltyPopup: false,
-      billingError: 0,
     };
   }
 
@@ -64,12 +64,23 @@ class RegisteredUserLoyalty extends React.Component {
       const billingAddress = cart.cart;
       const billingAddressData = billingAddress.billing_address;
       if (billingAddressData === null) {
-        this.setState({ billingError: 1 });
+        // Adding error class in the section.
+        const deliveryInfo = document.getElementsByClassName('spc-checkout-delivery-information');
+        const deliveryInfoError = document.getElementById('delivery-information-error');
+        smoothScrollTo('.spc-checkout-delivery-information');
+        if (deliveryInfo.length !== 0 && deliveryInfoError === null) {
+          const tag = document.createElement('p');
+          const errorMessage = document.createTextNode(Drupal.t('Please add delivery information'));
+
+          tag.appendChild(errorMessage);
+          deliveryInfo[0].appendChild(tag);
+          tag.setAttribute('id', 'delivery-information-error');
+        }
       } else {
         this.setState({
           showLoyaltyPopup: true,
           selectedOption: method,
-          billingError: 0,
+
         });
       }
     } else {
@@ -170,7 +181,7 @@ class RegisteredUserLoyalty extends React.Component {
   render() {
     const { animationDelay, helloMemberPoints, cart } = this.props;
     const {
-      currentOption, selectedOption, showLoyaltyPopup, billingError,
+      currentOption, selectedOption, showLoyaltyPopup,
     } = this.state;
 
     if (!hasValue(helloMemberPoints)) {
@@ -222,14 +233,6 @@ class RegisteredUserLoyalty extends React.Component {
             </div>
           </div>
           )}
-        {billingError === 1 && (
-
-          <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
-            <div className="loyalty-option-text">
-              <p id="loyalty-option-text-error">Please add delivery information for Aura Points benefits</p>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
