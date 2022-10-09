@@ -217,9 +217,10 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
   // Attach magazine layout v2 js.
   if (isset($entity) && $sku_manager->getPdpLayout($entity) === 'pdp-magazine_v2') {
+    $alshaya_pdp_react = \Drupal::config('alshaya_pdp_react.settings');
     $build['#attached']['library'][] = 'alshaya_pdp_react/pdp_magazine_v2_layout';
     $build['#attached']['library'][] = 'alshaya_white_label/magazine-layout-v2';
-
+    $build['#attached']['drupalSettings']['alshayaRcs']['show_new_pdp_desc_container'] = $alshaya_pdp_react->get('show_new_pdp_desc_container');
   }
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');

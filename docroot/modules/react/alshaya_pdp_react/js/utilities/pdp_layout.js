@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Clear cart data.
@@ -256,7 +257,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     priceRaw = productInfo[skuItemCode].priceRaw;
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;
-    labels = productLabels[skuItemCode];
+    labels = hasValue(productLabels) ? productLabels[skuItemCode] : [];
     stockQty = productInfo[skuItemCode].stockQty;
     firstChild = skuItemCode;
     promotions = productInfo[skuItemCode].promotionsRaw;
@@ -276,7 +277,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           priceRaw = variantInfo.priceRaw;
           finalPrice = variantInfo.finalPrice;
           pdpGallery = variantInfo.rawGallery;
-          labels = productLabels[variant];
+          labels = hasValue(productLabels) ? productLabels[variant] : [];
           stockQty = variantInfo.stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
           promotions = variantInfo.promotionsRaw;
@@ -311,8 +312,11 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       }
     }
   }
+
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
+  const additionalAttributes = skuItemCode ? productInfo[skuItemCode].additionalAttributes : [];
+
   const relatedProducts = [
     'crosssell',
     'upsell',
@@ -329,6 +333,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     pdpGallery,
     shortDesc,
     description,
+    additionalAttributes,
     configurableCombinations,
     relatedProducts,
     stockStatus,

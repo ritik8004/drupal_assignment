@@ -29,6 +29,8 @@ import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wish
 import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
+import PdpNewDescContainer from '../pdp-new-desc-container';
+
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -69,6 +71,7 @@ const PdpLayout = () => {
     pdpGallery,
     shortDesc,
     description,
+    additionalAttributes,
     configurableCombinations,
     relatedProducts,
     stockStatus,
@@ -217,6 +220,14 @@ const PdpLayout = () => {
           >
             <Lozenges labels={labels} sku={skuItemCode} />
           </PdpGallery>
+          {(hasValue(drupalSettings.showNewPdpDescContainer)
+            && drupalSettings.showNewPdpDescContainer)
+            && (
+            <PdpNewDescContainer
+              description={description}
+              additionalAttributes={additionalAttributes}
+            />
+            )}
         </div>
         <div className="magv2-sidebar" ref={sidebarContainer}>
           <PdpInfo
@@ -297,16 +308,20 @@ const PdpLayout = () => {
               productInfo={productInfo}
             />
           </ConditionalView>
-          <PdpDescription
-            skuCode={skuMainCode}
-            pdpDescription={description}
-            pdpShortDesc={shortDesc}
-            title={title}
-            pdpProductPrice={priceRaw}
-            finalPrice={finalPrice}
-            getPanelData={getPanelData}
-            removePanelData={removePanelData}
-          />
+          {(hasValue(drupalSettings.showNewPdpDescContainer)
+            && !drupalSettings.showNewPdpDescContainer)
+            && (
+            <PdpDescription
+              skuCode={skuMainCode}
+              pdpDescription={description}
+              pdpShortDesc={shortDesc}
+              title={title}
+              pdpProductPrice={priceRaw}
+              finalPrice={finalPrice}
+              getPanelData={getPanelData}
+              removePanelData={removePanelData}
+            />
+            )}
           <ConditionalView
             condition={isExpressDeliveryEnabled()
             && isProductBuyable && !bigTickectProduct}

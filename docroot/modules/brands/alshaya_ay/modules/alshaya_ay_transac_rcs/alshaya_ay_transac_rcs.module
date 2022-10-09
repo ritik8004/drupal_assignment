@@ -16,3 +16,17 @@ function alshaya_ay_transac_rcs_node_view(array &$build, EntityInterface $entity
     $build['#attached']['library'][] = 'alshaya_ay_transac_rcs/product';
   }
 }
+
+/**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_ay_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
+  array_push(
+    $fields['items'],
+    'fit',
+    'fabrication',
+    'color_way',
+    'how_to_use',
+    'why_we_love_it',
+  );
+}
