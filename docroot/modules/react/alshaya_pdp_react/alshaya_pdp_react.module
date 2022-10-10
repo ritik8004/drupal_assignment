@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Module file with hooks specific alshaya pdp react.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_pdp_react_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'rcs_product' || $entity->bundle() == 'acq_product') {
+    $alshaya_pdp_react_config = \Drupal::config('alshaya_pdp_react.settings');
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_pdp_react_config->getCacheTags());
+    // Set drupal settings for new pdp description container
+    // and upsell/crossell/related products should appears from drupal or DY.
+    $build['#attached']['drupalSettings']['showNewPdpDescContainer'] = $alshaya_pdp_react_config->get('show_new_pdp_desc_container');
+    $build['#attached']['drupalSettings']['showRelatedProductsFromDrupal'] = $alshaya_pdp_react_config->get('show_related_products_from_drupal');
+  }
+}

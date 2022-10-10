@@ -5,11 +5,10 @@ import PdpLayout from './pdp-layout/components/pdp-layout';
 
 // Update drupalSettings if V3 enabled.
 if (hasValue(drupalSettings.alshayaRcs)) {
-  window.alshayaRenderPdpMagV2 = function renderPdpMagV2(productInfo,
-    configurableCombinations) {
-    drupalSettings.productInfo = productInfo;
-    drupalSettings.configurableCombinations = configurableCombinations;
-    drupalSettings.showNewPdpDescContainer = drupalSettings.alshayaRcs.show_new_pdp_desc_container;
+  window.alshayaRenderPdpMagV2 = function renderPdpMagV2(productInfo, configurableCombinations) {
+    // Update product details coming from qraphql for the current product.
+    drupalSettings.productInfo = productInfo || '';
+    drupalSettings.configurableCombinations = configurableCombinations || '';
 
     ReactDOM.render(
       <PdpLayout />,

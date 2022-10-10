@@ -5,3 +5,6 @@ alshaya_pdp_react.settings:
     show_new_pdp_description:
       type: boolean
       label: 'Show new pdp description section.'
+    show_related_products_from_drupal:
+      type: boolean
+      label: 'Show related products coming via drupal/mdc api.'

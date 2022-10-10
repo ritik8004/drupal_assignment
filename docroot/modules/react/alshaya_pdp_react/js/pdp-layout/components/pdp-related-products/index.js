@@ -12,8 +12,7 @@ class PdpRelatedProducts extends React.Component {
   }
 
   componentDidMount() {
-    // @todo
-    // this.getRelatedProducts();
+    this.getRelatedProducts();
   }
 
   getRelatedProducts = () => {

@@ -34,7 +34,12 @@ import PdpNewDescContainer from '../pdp-new-desc-container';
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
   const [panelContent, setPanelContent] = useState(null);
-  const { productInfo } = drupalSettings;
+  const {
+    productInfo,
+    showNewPdpDescContainer,
+    showRelatedProductsFromDrupal,
+  } = drupalSettings;
+
   let skuItemCode = '';
 
   if (productInfo) {
@@ -219,8 +224,7 @@ const PdpLayout = () => {
           >
             <Lozenges labels={labels} sku={skuItemCode} />
           </PdpGallery>
-          {(hasValue(drupalSettings.showNewPdpDescContainer)
-            && drupalSettings.showNewPdpDescContainer)
+          {showNewPdpDescContainer
             && (
             <PdpNewDescContainer
               description={description}
@@ -307,8 +311,7 @@ const PdpLayout = () => {
               productInfo={productInfo}
             />
           </ConditionalView>
-          {(hasValue(drupalSettings.showNewPdpDescContainer)
-            && !drupalSettings.showNewPdpDescContainer)
+          {!showNewPdpDescContainer
             && (
             <PdpDescription
               skuCode={skuMainCode}
@@ -336,7 +339,7 @@ const PdpLayout = () => {
           <PdpSharePanel />
         </div>
       </div>
-      {relatedProducts ? (
+      {(relatedProducts && showRelatedProductsFromDrupal) ? (
         <div className="magv2-pdp-crossell-upsell-wrapper" ref={crosssellContainer}>
           {Object.keys(relatedProducts).map((type) => (
             <PdpRelatedProducts
@@ -350,7 +353,7 @@ const PdpLayout = () => {
             />
           ))}
         </div>
-      ) : null}
+      ) : <div className="magv2-pdp-crossell-upsell-wrapper" ref={crosssellContainer} />}
       <PpdPanel panelContent={panelContent} />
       <DynamicYieldPlaceholder
         context="pdp"
