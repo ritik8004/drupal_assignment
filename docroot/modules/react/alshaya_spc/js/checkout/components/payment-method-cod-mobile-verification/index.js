@@ -54,12 +54,16 @@ class PaymentMethodCodMobileVerification extends React.Component {
       return;
     }
 
-    if (otpVerified === 0) {
+    if (prevProps.otpVerified !== otpVerified) {
       // Update otp Verified flag and reset otp input.
-      this.updateOtpVerifiedFlag();
+      this.updateOtpVerifiedFlag(otpVerified);
 
       // Disable complete purchase button.
-      this.disableCompletePurchaseButton();
+      if (otpVerified === 0) {
+        this.disableCompletePurchaseButton();
+      } else {
+        this.enableCompletePurchaseButton();
+      }
     }
   }
 
@@ -74,11 +78,21 @@ class PaymentMethodCodMobileVerification extends React.Component {
   };
 
   /**
+   * Enables complete purchase button.
+   */
+  enableCompletePurchaseButton = () => {
+    const completePurchaseCTA = document.querySelector('.complete-purchase-cta');
+    if (completePurchaseCTA !== null) {
+      completePurchaseCTA.classList.remove('in-active');
+    }
+  };
+
+  /**
    * Update otpVerified when user changes shipping mobile number.
    */
-  updateOtpVerifiedFlag = () => {
+  updateOtpVerifiedFlag = (otpVerified = 0) => {
     this.setState({
-      otpVerified: 0,
+      otpVerified,
       otpValidClass: '',
     },
     // Send OTP to updated mobile number from shipping address.
