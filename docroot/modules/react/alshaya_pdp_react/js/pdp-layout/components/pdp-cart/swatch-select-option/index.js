@@ -10,7 +10,8 @@ const SwatchSelectOption = ({
       {Object.keys(configurables.values).map((attr) => {
         const attrVal = configurables.values[attr].value_id;
         const swatchValue = configurables.values[attr].swatch_image
-        || configurables.values[attr].swatch_color;
+          || configurables.values[attr].swatch_color;
+        const swatchType = configurables.values[attr].swatch_type || '';
 
         if (code === nextCode) {
           return (
@@ -22,7 +23,7 @@ const SwatchSelectOption = ({
               handleLiClick={handleLiClick}
               code={code}
               label={configurables.values[attr].label}
-              swatchType={configurables.values[attr].swatch_type}
+              swatchType={swatchType}
             />
           );
         }
@@ -34,7 +35,7 @@ const SwatchSelectOption = ({
             handleLiClick={handleLiClick}
             code={code}
             label={configurables.values[attr].label}
-            swatchType={configurables.values[attr].swatch_type}
+            swatchType={swatchType}
           />
         );
       })}

@@ -31,7 +31,6 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
 import PdpNewDescContainer from '../pdp-new-desc-container';
 
-
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
   const [panelContent, setPanelContent] = useState(null);
