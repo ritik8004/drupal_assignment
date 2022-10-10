@@ -11,10 +11,10 @@ Feature: Add address to new user account.
 
   Scenario: Authenticated user should be able to login into the system
     Then the element "#block-page-title .c-page-title" should exist
-    And the element "a.edit-account-btn-button" should exist
     And the element "#block-userrecentorders" should exist
     And the element "#block-userrecentorders .no--orders" should exist
     And the element "#block-userrecentorders .subtitle" should exist
+    And the element "a.edit-account-btn-button" should exist
     And I should see "You have no recent orders to display."
 
   @address @desktop
