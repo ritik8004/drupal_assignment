@@ -44,8 +44,8 @@
     .select-items-label {
       line-height: 1.22;
       font-size: rem(18);
-      padding-left: 20px;
-      padding-right: 20px;
+      padding-left: rem(20);
+      padding-right: rem(20);
 
       @include breakpoint($desktop) {
         padding-#{$left}: rem(32);
@@ -102,7 +102,7 @@
           margin-bottom: rem(28);
 
           @include breakpoint($tablet) {
-            margin-top: -1.8rem;
+            margin-top: rem(-29);
           }
         }
       }
@@ -215,6 +215,10 @@
       font-family: $alshaya-bold;
       color: $online-return-error-msg-color;
       margin-top: 0;
+
+      @include breakpoint($tablet) {
+        text-align: $left;
+      }
     }
   }
 }
