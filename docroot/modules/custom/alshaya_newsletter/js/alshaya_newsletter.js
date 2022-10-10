@@ -27,8 +27,8 @@
           $(ajaxWrapper).empty();
         }
 
-        if ($('.block-alshaya-newsletter-subscription #footer-newsletter-form-wrapper span.message').hasClass('error')) {
-          $('.block-alshaya-newsletter-subscription #footer-newsletter-form-wrapper .subscription-status').remove()
+        if ($(ajaxWrapper).find('span.message').hasClass('error')) {
+          $(ajaxWrapper).find('.subscription-status').remove();
         }
       });
 
