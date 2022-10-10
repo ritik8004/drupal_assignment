@@ -95,10 +95,3 @@ function alshaya_geolocation_update_dependencies() {
   ];
   return $dependencies;
 }
-
-/**
- * Implements hook_install().
- */
-function alshaya_geolocation_install() {
-  \Drupal::service('module_installer')->install(['geolocation_google_maps']);
-}
