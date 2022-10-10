@@ -86,6 +86,16 @@ body {
         margin-top: 1.7rem;
       }
     }
+
+    .payment-method-icon {
+      &.tamara-icon {
+        display: inline-block;
+        height: rem(32);
+        width: rem(76);
+        background-image: url('#{$base_theme_img_directory_path}/icons/tamara.jpg');
+        background-size: cover;
+      }
+    }
   }
 
   .order-item-row {
