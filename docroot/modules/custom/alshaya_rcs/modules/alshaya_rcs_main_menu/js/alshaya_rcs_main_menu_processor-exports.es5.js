@@ -6,6 +6,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     menuMaxDepth,
     mobileMenuMaxDepth,
     highlightTiming,
+    mobileMenuLayout,
   } = settings;
 
   // Clone the input data.
@@ -14,6 +15,9 @@ exports.prepareData = function prepareData(settings, inputs) {
   inputsClone = processData(inputsClone, menuMaxDepth, mobileMenuMaxDepth);
   // Convert the array of Object into Object of objects.
   inputsClone = Object.assign({}, inputsClone);
+
+  // Check if is_visual_menu_layout set on first level item.
+  const { is_visual_menu_layout: isVisualMenuLayout } = inputsClone[0] || 0;
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -38,6 +42,9 @@ exports.prepareData = function prepareData(settings, inputs) {
     'aura_enabled': auraEnabled,
     'highlight_timing': highlightTiming,
     'promopanel_class': '', // @todo Implement promo panel block class.
+    // If API response has menu level 1 item set to is_visual_menu_layout then
+    // set layout from settings else default.
+    'mobile_menu_layout': Boolean(isVisualMenuLayout) ? mobileMenuLayout : 'default',
   };
 }
 
