@@ -408,5 +408,13 @@ header {
 }
 
 .menu--two__list {
-  margin-top: rem(18) !important;
+  margin-top: rem(0) !important;
+  padding-top: rem(15);
+
+  &::before {
+    content: "";
+    width: 100%;
+    position: absolute;
+    border-top: rem(1) solid $header_border;
+  }
 }
