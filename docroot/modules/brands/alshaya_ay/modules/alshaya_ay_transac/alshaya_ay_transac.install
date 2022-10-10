@@ -9,11 +9,6 @@
  * Implements hook_install().
  */
 function alshaya_ay_transac_install() {
-  // Enable magazine layout V2.
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product.settings');
-  $config->set('pdp_layout', 'magazine_v2');
-  $config->save();
-
   // Add translations.
   \Drupal::moduleHandler()->loadInclude('alshaya_ay_transac', 'inc', 'alshaya_ay_transac.translation');
   if ($translations = _alshaya_ay_transac_get_translations()) {

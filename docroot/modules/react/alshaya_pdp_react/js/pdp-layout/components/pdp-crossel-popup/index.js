@@ -68,7 +68,7 @@ class CrossellPopupContent extends React.Component {
 
   render() {
     const { closeModal, relatedSku } = this.props;
-
+    // @todo - This should be managed via DY only.
     // const url = Drupal.url(`rest/v2/product/${btoa(relatedSku)}?pdp=magazinev2`);
     const {
       relatedProductData, variantSelected, skuMainCode, cartDataValue,
