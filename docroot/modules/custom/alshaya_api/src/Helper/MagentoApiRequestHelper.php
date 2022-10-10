@@ -46,9 +46,9 @@ class MagentoApiRequestHelper {
       }
     }
 
-    if (($customAttrs = $customer['extension']) && (is_countable($customAttrs) ? count($customAttrs) : 0)) {
+    if (!empty($customer['extension']) && is_array($customer['extension'])) {
       $attrData = [];
-      foreach ($customAttrs as $key => $value) {
+      foreach ($customer['extension'] as $key => $value) {
         $attrData[] = [
           'attribute_code' => $key,
           'value' => $value,
