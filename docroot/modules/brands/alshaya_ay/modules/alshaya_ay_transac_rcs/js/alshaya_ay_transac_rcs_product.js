@@ -18,7 +18,7 @@
       'how_to_use': Drupal.t('HOW TO USE'),
       'why_we_love_it': Drupal.t('WHY WE LOVE IT'),
     };
-  
+
     let additionalAttributes = [];
     for (var attributesCode in additional_attributes) {
       if (Drupal.hasValue(data[attributesCode])) {
@@ -35,7 +35,7 @@
       html: [{value: {'#markup': description }}],
       additional_attributes: additionalAttributes,
     };
-  
+
     // Append field values to short_description.
     // The text will be trimmed if the description is longer than 160 characters.
     e.detail.result.short_description = { html: data.description.html[0].value['#markup'] };
