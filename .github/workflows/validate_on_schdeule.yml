@@ -64,6 +64,7 @@ jobs:
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
 
       - name: Run Composer install
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         run: |
           composer self-update
           composer self-update --2
@@ -71,16 +72,19 @@ jobs:
           composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
       - name: Prepare bin executables
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         run: |
           ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
           ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
 
       - name: Cache dependencies installed with Composer
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         id: composer-cache
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - uses: actions/cache@v2
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         with:
           path: |
             "${{ steps.composer-cache.outputs.dir }}"
@@ -88,21 +92,25 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
 
       - name: Setup environment
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         run: |
           bash $SCRIPT_DIR/setup_env.sh
           bash $SCRIPT_DIR/setup_mysql.sh
 
       - name: Install Node
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         uses: actions/setup-node@v2
         with:
           node-version: "14.19.0"
 
       - name: Cache node modules
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         id: npm-cache-dir
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
 
       - uses: actions/cache@v2
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         with:
           path: |
             "${{ steps.npm-cache-dir.outputs.dir }}"
@@ -111,6 +119,7 @@ jobs:
           key: ${{ runner.os }}-node
 
       - name: React validate
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         run: |
           blt alshayafe:setup-react
           blt alshayafe:test-react
