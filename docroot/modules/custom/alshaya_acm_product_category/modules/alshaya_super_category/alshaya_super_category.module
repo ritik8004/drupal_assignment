@@ -160,7 +160,10 @@ function alshaya_super_category_preprocess_block(&$variables) {
           $query->condition('field_category_slug', $current_super_category[2]);
           $term_id = $query->execute();
           // Load the term based on the id.
-          $parent = Term::load($term_id);
+          if ((is_countable($term_id) ? count($term_id) : 0) > 0) {
+            $term_id = array_keys($term_id);
+            $parent = Term::load($term_id[0]);
+          }
         }
       }
 
