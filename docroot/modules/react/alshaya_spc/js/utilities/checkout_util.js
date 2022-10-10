@@ -945,21 +945,23 @@ export const getTokenizedCards = async () => {
       let savedCard = [];
       let { items } = tokenizedCards.data;
       // Sort the items based on the created time.
-      items = Object.values(items).sort((card1, card2) => card1.created_at < card2.created_at);
-      items.forEach((item) => {
-        savedCard = JSON.parse(item.token_details);
-        savedCard.public_hash = btoa(item.public_hash);
-        // Map the card type to card type machine name.
-        const type = savedCard.type.toLowerCase();
-        savedCard.type = allowedCardsMapping[type]
-          ? allowedCardsMapping[type] : savedCard.type;
-        savedCard.paymentMethod = savedCard.type;
-        // Assign an object if not exists.
-        if (!savedCards[savedCard.public_hash]) {
-          savedCards[savedCard.public_hash] = {};
-        }
-        savedCards[savedCard.public_hash] = savedCard;
-      });
+      if (items) {
+        items = Object.values(items).sort((card1, card2) => card1.created_at < card2.created_at);
+        items.forEach((item) => {
+          savedCard = JSON.parse(item.token_details);
+          savedCard.public_hash = btoa(item.public_hash);
+          // Map the card type to card type machine name.
+          const type = savedCard.type.toLowerCase();
+          savedCard.type = allowedCardsMapping[type]
+            ? allowedCardsMapping[type] : savedCard.type;
+          savedCard.paymentMethod = savedCard.type;
+          // Assign an object if not exists.
+          if (!savedCards[savedCard.public_hash]) {
+            savedCards[savedCard.public_hash] = {};
+          }
+          savedCards[savedCard.public_hash] = savedCard;
+        });
+      }
     }
   }
 

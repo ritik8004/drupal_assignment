@@ -1,7 +1,6 @@
 name: Deploy on Schedule
 
 on:
-#  pull_request:
   schedule:
     # Run every day at 2AM, 8AM, 2PM and 8PM IST.
     - cron: '30 2,8,14,20 * * *'
@@ -13,43 +12,10 @@ defaults:
     shell: bash
 
 jobs:
-  changedfiles:
-    runs-on: ubuntu-latest
-    if: ${{ github.repository_owner == 'acquia-pso' && github.event_name == 'schedule' }}
-
-    # Map a step output to a job output
-    outputs:
-      all: ${{ steps.changes.outputs.all }}
-      themes: ${{ steps.changes.outputs.themes }}
-      react: ${{ steps.changes.outputs.react }}
-
-    strategy:
-      matrix:
-        branch:
-          - develop
-          - develop-brand-rollout
-
-    steps:
-      # Make sure we have some code to diff.
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ matrix.branch }}
-          fetch-depth: 2
-
-      - name: Get changed files
-        id: changes
-        # Set outputs using the command.
-        run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)"
-          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
-          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
-
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    needs: changedfiles
-    if: ${{ github.repository_owner == 'acquia-pso' && github.event_name == 'schedule' }}
+    if: ${{ github.repository_owner == 'acquia-pso' }}
 
     container:
       image: devwithlando/php:8.0-fpm-4
@@ -67,17 +33,49 @@ jobs:
           - develop-brand-rollout
 
     steps:
-      - name: Checkout
+      - name: Check for commits in branch
+        id: check-new-commits
+        uses: adriangl/check-new-commits-action@v1
+        with:
+          branch: ${{ matrix.branch }}
+          token: ${{ secrets.BOT_TOKEN }}
+          # 7 hours in seconds, when changing please update other places too.
+          seconds: 25200
+
+      # Make sure we have some code to diff.
+      - name: Checkout ${{ matrix.branch }} repository to get diff
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ matrix.branch }}
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changes
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        # Set outputs using the command.
+        run: |
+          echo "::set-output name=all::$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | xargs)"
+          echo "::set-output name=themes::$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/themes/custom | xargs)"
+          echo "::set-output name=react::$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/modules/react | xargs)"
+
+      - name: Checkout ${{ matrix.branch }} repository again for preparing deployment
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         uses: actions/checkout@v2
         with:
           ref: ${{ matrix.branch }}
 
       - name: Artifact Build
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         uses: ./.github/actions/deploy_build
         with:
           SCRIPT_DIR: ${SCRIPT_DIR}
           SSH_AUTH_SOCK: ${SSH_AUTH_SOCK}
           SSH_DEPLOYMENT_KEY: ${SSH_DEPLOYMENT_KEY}
-          CHANGED_THEMES_FILES: ${{ needs.changedfiles.outputs.themes }}
-          CHANGED_REACT_FILES: ${{ needs.changedfiles.outputs.react }}
-          CHANGED_ALL_FILES: ${{ needs.changedfiles.outputs.all }}
+          CHANGED_ALL_FILES: ${{ needs.changes.outputs.all }}
+          CHANGED_THEMES_FILES: ${{ steps.changes.outputs.themes }}
+          CHANGED_REACT_FILES: ${{ steps.changes.outputs.react }}
+
+      - name: Deploy ${{ matrix.branch }} branch
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' && env.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/heads') }}
+        run: bash $SCRIPT_DIR/deploy_branch.sh ${{ matrix.branch }}
