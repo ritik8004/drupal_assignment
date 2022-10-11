@@ -42,7 +42,7 @@
           $('.secondary--main--menu').once('alshayaSecondaryMainMenu').prepend('<li class="secondary-main-menu-header closed">' + Drupal.t('More') + ' </li>')
           $('.block-alshaya-main-menu .secondary--main--menu').show();
           $('.main--menu .promo-wrapper').show();
-          $('.secondary-main-menu-header').on('click', function () {
+          $('.secondary-main-menu-header').once('secondary-main-menu').on('click', function () {
             $('.secondary-main-menu-header').toggleClass('closed');
           })
         }
