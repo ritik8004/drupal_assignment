@@ -1,0 +1,89 @@
+.magv2-new-desc {
+  border: rem(1) #cccccc;
+  border-top-style: solid;
+  border-bottom-style: solid;
+
+  &__item {
+    &__title {
+      font-family: $alshaya-bold; //$ay-bold
+      color: #000000;
+    }
+
+    &__text {
+      font-family: $alshaya-thin;
+      line-height: rem(24);
+      color: #636363;
+      padding-bottom: rem(18);
+
+      & > p {
+        margin: 0;
+      }
+
+      & > ul {
+        margin-top: rem(5);
+        margin-bottom: 0;
+        padding-#{$left}: rem(20);
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: rem(16) rem(12) rem(44);
+
+    &__item {
+      &:not(:last-child) {
+        border-bottom: 1px solid #cccccc;
+      }
+
+      &__title {
+        margin: 0;
+        font-size: rem(16);
+        line-height: rem(20);
+        padding: rem(9) 0 rem(11);
+
+        @include icon(plus, after) {
+          font-size: rem(16);
+          float: $right;
+          margin-#{$right}: rem(9);
+        }
+
+        &.active {
+          @include icon(minus, after);
+        }
+      }
+
+      &__text {
+        font-size: rem(14);
+      }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    clear: both;
+    display: flex;
+    display: flex;
+    margin: rem(37) 0 rem(46);
+    border-color: #e1e1e1;
+
+    &__item {
+      max-width: 50%;
+
+      &:not(:last-child) {
+        padding-#{$right}: rem(64);
+      }
+
+      &__title {
+        margin-top: rem(16);
+        margin-bottom: rem(8);
+        // font-family: $ay-heavy;
+        font-size: rem(28);
+        line-height: rem(32);
+      }
+
+      &__text {
+        font-size: rem(16);
+        line-height: rem(24);
+      }
+    }
+  }
+}

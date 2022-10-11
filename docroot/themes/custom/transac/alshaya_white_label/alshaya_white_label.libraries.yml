@@ -415,6 +415,7 @@ magazine-layout-v2:
       css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-react-animate
+    - alshaya_white_label/alshaya-accordion
 
 shop-by-brand:
   css:
@@ -892,3 +893,11 @@ mobile-menu:
   css:
     theme:
       css/conditional-sass/mobile-menu/mobile-menu.ltr.css: {}
+
+alshaya-accordion:
+  js:
+    js/alshaya-accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
