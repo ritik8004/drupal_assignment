@@ -147,6 +147,24 @@ class AlshayaSuperCategoryManager {
   }
 
   /**
+   * Helper function to get status of the feature.
+   *
+   * @return bool
+   *   Status of the feature.
+   */
+  protected function isEnabled(): bool {
+    static $status;
+
+    if (!isset($status)) {
+      $status = (bool) $this->configFactory
+        ->get('alshaya_super_category.settings')
+        ->get('status');
+    }
+
+    return $status;
+  }
+
+  /**
    * Returns the supercategory for a "Product" node.
    *
    * @param \Drupal\node\NodeInterface $node
@@ -157,31 +175,30 @@ class AlshayaSuperCategoryManager {
    *   node is not a product node. Returns false if supercategory is disabled.
    */
   public function getSuperCategories(NodeInterface $node) {
-    $super_categories = [];
-    $is_super_category_enabled = &drupal_static('alshaya_super_category_status', NULL);
-    if (is_null($is_super_category_enabled)) {
-      $is_super_category_enabled = $this->configFactory->get('alshaya_super_category.settings')->get('status');
-
-    }
-    if (!$is_super_category_enabled) {
+    if (!$this->isEnabled()) {
       return FALSE;
     }
-    elseif ($is_super_category_enabled && $node->bundle() === 'acq_product') {
-      $categories = $node->get('field_category')->getValue();
-      $langcode = $node->language()->getId();
-      foreach ($categories as $category) {
-        if (!empty($category)) {
-          $category = $this->entityTypeManager->getStorage('taxonomy_term')->load($category['target_id']);
-          // Get the super category.
-          $super_category = _alshaya_super_category_get_super_category_for_term($category, $langcode);
-          if ($super_category instanceof TermInterface) {
-            $super_categories[] = $super_category->getName();
-          }
+
+    if ($node->bundle() !== 'acq_product') {
+      return FALSE;
+    }
+
+    $super_categories = [];
+
+    $categories = $node->get('field_category')->getValue();
+    $langcode = $node->language()->getId();
+    foreach ($categories as $category) {
+      if (!empty($category)) {
+        $category = $this->entityTypeManager->getStorage('taxonomy_term')->load($category['target_id']);
+        // Get the super category.
+        $super_category = _alshaya_super_category_get_super_category_for_term($category, $langcode);
+        if ($super_category instanceof TermInterface) {
+          $super_categories[$super_category->getName()] = $super_category->getName();
         }
       }
     }
 
-    return !empty($super_categories) ? array_values(array_unique($super_categories)) : $super_categories;
+    return array_values($super_categories);
   }
 
   /**
@@ -191,6 +208,10 @@ class AlshayaSuperCategoryManager {
    *   return term id if enabled or 0.
    */
   public function getDefaultCategoryId() {
+    if (!$this->isEnabled()) {
+      return 0;
+    }
+
     $default_category_tid = &drupal_static(__FUNCTION__);
     if (!isset($default_category_tid)) {
       $default_category_tid = 0;
@@ -211,6 +232,10 @@ class AlshayaSuperCategoryManager {
    *   Super Category Term if found.
    */
   public function getCategoryTermFromRoute(): ?TermInterface {
+    if (!$this->isEnabled()) {
+      return NULL;
+    }
+
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
 
     if (empty($term)) {
