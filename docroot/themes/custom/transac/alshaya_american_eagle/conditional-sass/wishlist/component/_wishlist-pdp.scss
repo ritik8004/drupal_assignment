@@ -5,12 +5,6 @@
         // Changing the positioning in order to accomdate smaller width images in AE.
         #{$right}: rem(132);
       }
-
-      .content__main.no-thumbnails {
-        .wishlist-pdp-full {
-          #{$right}: rem(238);
-        }
-      }
     }
   }
 }
