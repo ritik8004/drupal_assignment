@@ -308,23 +308,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $config = \Drupal::config('alshaya_acm_product.home_delivery');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $config->getCacheTags());
 
-  // PDP Express Delivery.
-  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-  $delivery_options_order = $express_delivery_config->get('delivery_options_order');
-  $delivery_options = [];
-  foreach ($delivery_options_order as $option) {
-    $delivery_options[] = [
-      'status' => $express_delivery_config->get($option . '_status'),
-      'id' => $option,
-      // @codingStandardsIgnoreLine
-      'label' => t($express_delivery_config->get($option . '_label'),
-        [],
-        ['context' => $option . '_label']
-      ),
-    ];
-  }
   $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
 
   // Address fields configs for Delivery options side drawer.
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
@@ -357,6 +341,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   ];
   // Attaching library for react component to show PDP express delivery labels.
   $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
 }
 
 /**
