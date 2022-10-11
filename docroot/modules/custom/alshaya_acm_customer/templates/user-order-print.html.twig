@@ -111,13 +111,7 @@
 
         <div class="mobile-only payment--details">
           <div class="label font-small">{{ "Payment method"|t }}</div>
-          <div class="dark">
-              {% if order_details.payment_method_code == 'tamara' %}
-                <span class="payment-method-icon tamara-icon" />
-              {% else %}
-                {{ order_details.payment_method }}
-              {% endif %}
-            </div>
+          <div class="dark">{{ order_details.payment_method }}</div>
         </div>
 
         {% if order_details.payment.referenceNumber %}
@@ -194,13 +188,7 @@
       </td>
       <td class="above-mobile blend">
         <div class="label payment-method font-small">{{ "Payment method"|t }}</div>
-        <div class="dark">
-          {% if order_details.payment_method_code == 'tamara' %}
-            <span class="payment-method-icon tamara-icon" />
-          {% else %}
-            {{ order_details.payment_method }}
-          {% endif %}
-        </div>
+        <div class="dark">{{ order_details.payment_method }}</div>
 
         {% if order_details.payment.referenceNumber %}
           <div class="label delivery-method font-small">{{ "Reference No"|t }}</div>

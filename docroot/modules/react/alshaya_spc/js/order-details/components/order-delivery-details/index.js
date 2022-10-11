@@ -2,7 +2,6 @@ import React from 'react';
 import parse from 'html-react-parser';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../../js/utilities/display';
-import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 
 const OrderDeliveryDetails = (props) => {
   const { order } = props;
@@ -56,13 +55,7 @@ const OrderDeliveryDetails = (props) => {
           { hasValue(orderDetails.payment_method) && (
             <div className="mobile-only payment--details">
               <div className="label font-small">{Drupal.t('Payment method')}</div>
-              <div className="dark">
-                {orderDetails.payment_method_code === 'tamara' ? (
-                  <PaymentMethodIcon methodName={orderDetails.payment_method_code} />
-                ) : (
-                  orderDetails.payment_method
-                )}
-              </div>
+              <div className="dark">{orderDetails.payment_method}</div>
             </div>
           )}
 
@@ -160,13 +153,7 @@ const OrderDeliveryDetails = (props) => {
 
         <div className="above-mobile blend">
           <div className="label payment-method font-small">{Drupal.t('Payment method')}</div>
-          <div className="dark">
-            {orderDetails.payment_method_code === 'tamara' ? (
-              <PaymentMethodIcon methodName={orderDetails.payment_method_code} />
-            ) : (
-              orderDetails.payment_method
-            )}
-          </div>
+          <div className="dark">{orderDetails.payment_method}</div>
 
           { hasValue(orderDetails.payment.referenceNumber) && (
             <>
