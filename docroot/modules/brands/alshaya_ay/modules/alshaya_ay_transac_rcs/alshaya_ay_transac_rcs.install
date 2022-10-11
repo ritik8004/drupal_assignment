@@ -10,6 +10,11 @@
  */
 function alshaya_ay_transac_rcs_install() {
   \Drupal::service('module_installer')->install(['alshaya_rcs']);
+  // Update the RCS main menu configuration.
+  $main_menu_config = \Drupal::configFactory()->getEditable('alshaya_rcs_main_menu.settings');
+  $main_menu_config->set('menu_max_depth', 4);
+  $main_menu_config->set('max_depth_to_load', 5);
+  $main_menu_config->save();
 }
 
 /**
