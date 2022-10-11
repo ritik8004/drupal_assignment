@@ -1,0 +1,6 @@
+services:
+  alshaya_shopby_filter_attribute.commands:
+    class: Drupal\alshaya_shopby_filter_attribute\Commands\AlshayaShopByFilterAttributeCommands
+    arguments: [ '@config.factory' ]
+    tags:
+      - { name: drush.command }

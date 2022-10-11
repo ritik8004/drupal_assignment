@@ -6,6 +6,8 @@ use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
+use Drupal\profile\Entity\Profile;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -56,6 +58,13 @@ class AlshayaSpcCustomerHelper {
   protected $addressBookManager;
 
   /**
+   * Logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -70,6 +79,8 @@ class AlshayaSpcCustomerHelper {
    *   The session.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
    *   Address book manager.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger factory.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -77,7 +88,8 @@ class AlshayaSpcCustomerHelper {
     ModuleHandlerInterface $module_handler,
     AlshayaSpcCookies $spc_cookies,
     Session $session,
-    AlshayaAddressBookManager $address_book_manager
+    AlshayaAddressBookManager $address_book_manager,
+    LoggerChannelFactoryInterface $logger_factory
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->apiWrapper = $api_wrapper;
@@ -85,6 +97,7 @@ class AlshayaSpcCustomerHelper {
     $this->spcCookies = $spc_cookies;
     $this->session = $session;
     $this->addressBookManager = $address_book_manager;
+    $this->logger = $logger_factory->get('alshaya_acm_checkout');
   }
 
   /**
@@ -269,6 +282,15 @@ class AlshayaSpcCustomerHelper {
       // If address already exists.
       if (!empty($address_data['address_id'])) {
         $profile = $this->entityTypeManager->getStorage('profile')->load($address_data['address_id']);
+        // Return from here if profile doesn't exists.
+        if (!($profile instanceof Profile)) {
+          $this->logger->error('Address in address book is not available for the user @user having address info @address.', [
+            '@user' => $uid,
+            '@address' => json_encode($address),
+          ]);
+
+          return FALSE;
+        }
       }
       else {
         $profile = $this->entityTypeManager->getStorage('profile')->create([

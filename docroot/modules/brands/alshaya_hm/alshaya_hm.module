@@ -99,6 +99,8 @@ function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityView
       $build['description'] = $return['description'];
       $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_hm.label_order.settings']);
     }
+    // If its a external beauty product.
+    $build['#attached']['drupalSettings']['isExternal'] = $sku_entity->get('attr_is_external')->getString();
   }
 }
 
@@ -418,7 +420,6 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
               $object['collection_labels'][$lan_key][$attribute] = $sku->get($attribute)->getString();
             }
           }
-          $object['collection_labels'] ??= (object) $object['collection_labels'];
         }
       }
     }
@@ -430,7 +431,6 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
             $object['collection_labels'][$attribute] = $sku->get($attribute)->getString();
           }
         }
-        $object['collection_labels'] ??= (object) $object['collection_labels'];
         $concept_values = $sku->get('attr_concept')->getValue();
         if (!empty($concept_values)) {
           $object['attr_concept'] = array_map(fn($item) => $item['value'], $concept_values);

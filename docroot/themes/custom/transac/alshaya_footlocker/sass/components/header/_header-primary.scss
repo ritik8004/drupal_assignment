@@ -358,7 +358,7 @@ header {
       .menu--one__link {
         border: 0;
         height: 2.5rem;
-        font-size: 1rem;
+        font-size: rem(14);
         padding: 0.625rem 1.5rem;
         font-family: $alshaya-bold;
         line-height: 1;
@@ -388,6 +388,40 @@ header {
 
       .menu--two__list {
         background: $mm_l2_bg;
+      }
+    }
+
+    .menu--two__list {
+      .menu--two__list-item.is_underlined {
+        & > .menu__link-wrapper {
+          .menu__link {
+            @include psuedo-element-underline($mm_l2_link_desktop, rem(3));
+          }
+        }
+      }
+
+      .menu--two__list-item {
+        .menu--three__list {
+          .menu__list-item.is_underlined {
+            & > .menu__link-wrapper {
+              .menu__link {
+                @include psuedo-element-underline($mm_l3_link_hover, rem(3));
+
+                &:hover {
+                  @include psuedo-element-underline($mm_l3_link_hover, rem(2));
+                }
+              }
+            }
+          }
+
+          .menu__list-item {
+            .menu__link:hover {
+              text-decoration: none;
+
+              @include psuedo-element-underline($mm_l3_link_hover, rem(2));
+            }
+          }
+        }
       }
     }
   }

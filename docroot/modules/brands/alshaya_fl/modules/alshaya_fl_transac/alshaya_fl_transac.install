@@ -6,6 +6,38 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create new field `Show underline?` (mapped to is_underlined in MDC)
+ * for acq_product_category taxonomy.
+ */
+function alshaya_fl_transac_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    [
+      'field.storage.taxonomy_term.field_is_underlined',
+      'field.field.taxonomy_term.acq_product_category.field_is_underlined',
+    ],
+    'alshaya_fl_transac',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+  $manager->updateConfigs(
+    [
+      'core.entity_form_display.taxonomy_term.acq_product_category.default',
+      'core.entity_view_display.taxonomy_term.acq_product_category.default',
+    ],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+}
 
 /**
  * Implements hook_update_N().

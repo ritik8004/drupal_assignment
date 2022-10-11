@@ -1,5 +1,6 @@
 import React from 'react';
 import NotEligibleForReturn from '../not-eligible-for-return';
+import EligibleForReturn from '../eligible-for-return';
 
 class OnlineReturnsPDP extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class OnlineReturnsPDP extends React.Component {
     } = this.state;
 
     if (eligibleForReturn) {
-      return null;
+      return <EligibleForReturn />;
     }
 
     return <NotEligibleForReturn />;

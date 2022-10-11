@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_shopby_filter_target_cid
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_shopby_filter_target_cid
+field_name: field_shopby_filter_target_cid
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Shop By Filter - Target Category ID'
+description: 'Shop by filter menu items (like shop by shoe size menu links) will link to given target category path.'
+required: false
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

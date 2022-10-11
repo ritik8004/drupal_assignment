@@ -1,11 +1,11 @@
-import React, { Suspense } from 'react';
+import React, { memo, Suspense } from 'react';
 import {
   isWishlistEnabled,
   isShareWishlistPage,
 } from '../../wishlistHelper';
 import EmptyErrorBoundary from '../empty-error-boundary/EmptyErrorBoundary';
 
-function WishlistContainer(props) {
+const WishlistContainer = memo((props) => {
   // Return if feature is not enabled or
   // we are on shared wishlist page.
   if (!isWishlistEnabled() || isShareWishlistPage()) {
@@ -44,6 +44,6 @@ function WishlistContainer(props) {
       </Suspense>
     </EmptyErrorBoundary>
   );
-}
+});
 
 export default WishlistContainer;

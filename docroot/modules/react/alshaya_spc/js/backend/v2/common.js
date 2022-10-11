@@ -24,6 +24,7 @@ import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
+import { isFreeGiftProduct } from '../../../../js/utilities/price';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -343,6 +344,10 @@ const getProcessedCartData = async (cartData) => {
     response_message: null,
     in_stock: true,
     is_error: false,
+    // Flag to not show the dynamic promotions on cart page, if exclusive promo/coupon
+    // is applied we will get the has_exclusive_coupon flag value as true from MDC,
+    // and we will not render the dynamic promos.
+    has_exclusive_coupon: (typeof cartData.cart.extension_attributes.has_exclusive_coupon !== 'undefined') ? cartData.cart.extension_attributes.has_exclusive_coupon : false,
     stale_cart: (typeof cartData.stale_cart !== 'undefined') ? cartData.stale_cart : false,
     totals: {
       subtotal_incl_tax: cartData.totals.subtotal_incl_tax,
@@ -411,6 +416,14 @@ const getProcessedCartData = async (cartData) => {
     && hasValue(cartData.cart.extension_attributes.hfd_hold_confirmation_number)) {
     data.hfd_hold_confirmation_number = cartData
       .cart.extension_attributes.hfd_hold_confirmation_number;
+  }
+
+  // Check if COD payment mobile verification flag is present in cart extensions.
+  if (hasValue(cartData.cart.extension_attributes)
+    && typeof cartData
+      .cart.extension_attributes.mobile_number_verified !== 'undefined') {
+    data.cod_mobile_number_verified = cartData
+      .cart.extension_attributes.mobile_number_verified;
   }
 
   // Check if inter country transfer feature is enabled and have delivery date.
@@ -593,8 +606,8 @@ const getProcessedCartData = async (cartData) => {
           }
 
           // Free Item is only for free gift products which are having
-          // price 0, rest all are free but still via different rules.
-          if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
+          // price 0/0.01, rest all are free but still via different rules.
+          if (isFreeGiftProduct(totalItem.base_price) && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
             data.items[itemKey].freeItem = true;
           }
         }
@@ -755,7 +768,16 @@ const associateCartToCustomer = async (guestCartId) => {
   StaticStorage.clear();
 
   // Reload cart.
-  await getCart(true);
+  const cartData = await getCart(true);
+  if (hasValue(cartData)
+    && hasValue(cartData.data)
+    && hasValue(cartData.data.cart)
+    && hasValue(cartData.data.cart.id)
+    && isUserAuthenticated()
+  ) {
+    // store authenticated user cart id in 'user_cart_id';
+    Drupal.addItemInLocalStorage('user_cart_id', cartData.data.cart.id);
+  }
 };
 
 /**

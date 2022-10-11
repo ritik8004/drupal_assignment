@@ -583,6 +583,61 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to exclusive coupon code.
+  $strings['v16'] = [
+    'Promotion code is applied on the original price. All other promotions were removed.' => [
+      'ar' => 'تم تطبيق رمز الخصم على السعر الأصلي. جميع العروض الأخرى قد تم إزالتها',
+    ],
+  ];
+
+  // Strings related to COD mobile verification.
+  $strings['v17'] = [
+    'Enter the @otp_length-digit OTP code sent to' => [
+      'ar' => 'أدخل رمز التحقق @otp_length المرسل إلى الرقم',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Change' => [
+      'ar' => 'تغيير',
+      'context' => 'cod_mobile_verification',
+    ],
+    'verify' => [
+      'ar' => 'تحقق',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Didn\'t receive the code?' => [
+      'ar' => 'لم تستلم الرمز؟',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Resend' => [
+      'ar' => 'إعادة إرسال',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Please update mobile number' => [
+      'ar' => 'يرجى تحديث رقم الهاتف',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Wrong OTP' => [
+      'ar' => 'رمز تحقق غير صحيح',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Edit' => [
+      'ar' => 'تعديل',
+      'context' => 'cod_mobile_verification',
+    ],
+    'Verified' => [
+      'ar' => 'موثق',
+      'context' => 'cod_mobile_verification',
+    ],
+  ];
+
+  // Strings related to payment method logos block on cart page.
+  $strings['v18'] = [
+    'Checkout quickly and securely with' => [
+      'ar' => 'دفع سريع وآمن مع',
+      'context' => 'cart_payment_logos',
+    ],
+  ];
+
   return $strings;
 }
 

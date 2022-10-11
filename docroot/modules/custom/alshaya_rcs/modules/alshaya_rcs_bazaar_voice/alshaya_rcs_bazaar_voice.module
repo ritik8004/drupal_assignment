@@ -104,7 +104,37 @@ function alshaya_rcs_bazaar_voice_library_info_alter(&$libraries, $extension) {
 function alshaya_rcs_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
   /** @var \Drupal\alshaya_rcs_bazaar_voice\Service\AlshayaRcsBazaarVoice $alshaya_bazaar_voice */
   $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
-  $basic_configs = $alshaya_bazaar_voice->getBasicConfigurations();
-  $settings = $alshaya_bazaar_voice->getProductBazaarVoiceDetails(NULL, $basic_configs);
-  $build['#attached']['drupalSettings']['alshaya_bazaar_voice'] = $settings;
+  $build['#attached']['drupalSettings']['alshaya_bazaar_voice'] = $alshaya_bazaar_voice->getRcsBazaarVoiceSettings();
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_recent_order_build_alter().
+ */
+function alshaya_rcs_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_rcs_bazaar_voice\Service\AlshayaRcsBazaarVoice $alshaya_bazaar_voice */
+  $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
+  $build['#attached']['drupalSettings']['alshaya_bazaar_voice'] = $alshaya_bazaar_voice->getRcsBazaarVoiceSettings();
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query().
+ */
+function alshaya_rcs_bazaar_voice_rcs_placeholders_graphql_query() {
+  $query_fields = [];
+  /** @var \Drupal\alshaya_rcs_bazaar_voice\Service\AlshayaRcsBazaarVoice $alshaya_bazaar_voice */
+  $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
+  $product_query_fields = $alshaya_bazaar_voice->getBvProductQueryFields();
+
+  $query_fields['bv_product'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $product_query_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
+
+  return $query_fields;
 }

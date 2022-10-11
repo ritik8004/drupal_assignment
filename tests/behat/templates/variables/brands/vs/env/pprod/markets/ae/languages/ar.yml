@@ -48,6 +48,7 @@ variables:
   checkout_link: 'إتمام الشراء بأمان'
   language_continue_shopping: 'go shopping'
   mobile_language_class: 'en'
+  mobile_class: 'ar'
   language_short: 'en'
   street: 'Street A'
   building: 'Building B'

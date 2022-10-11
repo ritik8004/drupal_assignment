@@ -19,6 +19,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides a resource to get attributes for SKU's list.
@@ -97,6 +98,13 @@ class SkusProductList extends ResourceBase {
   private $productCategoryHelper;
 
   /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -127,6 +135,8 @@ class SkusProductList extends ResourceBase {
    *   SKU Images Manager.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   The Product Category helper service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
 
   /**
@@ -146,7 +156,8 @@ class SkusProductList extends ResourceBase {
     SkuInfoHelper $sku_info_helper,
     ModuleHandlerInterface $module_handler,
     SkuImagesManager $sku_images_manager,
-    ProductCategoryHelper $product_category_helper
+    ProductCategoryHelper $product_category_helper,
+    ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
@@ -163,6 +174,7 @@ class SkusProductList extends ResourceBase {
     $this->moduleHandler = $module_handler;
     $this->skuImagesManager = $sku_images_manager;
     $this->productCategoryHelper = $product_category_helper;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -183,7 +195,8 @@ class SkusProductList extends ResourceBase {
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('alshaya_acm_product.category_helper')
+      $container->get('alshaya_acm_product.category_helper'),
+      $container->get('config.factory')
     );
   }
 
@@ -229,6 +242,12 @@ class SkusProductList extends ResourceBase {
     $cacheable_metadata = $response->getCacheableMetadata();
     foreach ($sku_cache_tags as $sku_cache_tag) {
       $cacheable_metadata->addCacheTags($sku_cache_tag);
+    }
+
+    // Set max-age if API request contains invalid/disabled SKUs.
+    if (in_array(NULL, $data)) {
+      $max_age = $this->configFactory->get('alshaya_mobile_app.settings')->get('no_product_cache_ttl');
+      $cacheable_metadata->mergeCacheMaxAge($max_age);
     }
 
     // Since the sku list is passed in query arguments, we shall add a

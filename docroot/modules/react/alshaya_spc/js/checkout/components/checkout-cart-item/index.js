@@ -69,6 +69,7 @@ class CheckoutCartItem extends React.Component {
       },
       context,
       couponCode,
+      hasExclusiveCoupon,
     } = this.props;
 
     const {
@@ -105,7 +106,13 @@ class CheckoutCartItem extends React.Component {
                 : title}
             </div>
             <div className="spc-product-price">
-              <SpecialPrice price={originalPrice} freeItem={freeItem} finalPrice={finalPrice} />
+              <SpecialPrice
+                price={originalPrice}
+                freeItem={freeItem}
+                /* If the exclusive promo/coupon is applied no other discount will
+                get applied and the original price value will be assigned as the final price. */
+                finalPrice={hasExclusiveCoupon !== true ? finalPrice : originalPrice}
+              />
             </div>
           </div>
           <div className="spc-product-attributes">
@@ -125,7 +132,8 @@ class CheckoutCartItem extends React.Component {
         />
         {context !== 'confirmation' && context !== 'print' && (
           <div className="spc-promotions">
-            {promotions.map((key) => <CartPromotion key={`${key}-${sku}`} couponCode={couponCode} promo={key} sku={sku} link />)}
+            {/* Displaying promo text only when no exclusive promo/coupon gets applied */}
+            {hasExclusiveCoupon !== true && (promotions.map((key) => <CartPromotion key={`${key}-${sku}`} couponCode={couponCode} promo={key} sku={sku} link />))}
           </div>
         )}
       </div>

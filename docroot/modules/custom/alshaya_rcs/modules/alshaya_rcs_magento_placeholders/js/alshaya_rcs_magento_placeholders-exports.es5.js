@@ -150,13 +150,13 @@ exports.render = function render(
 
     case 'plp_mobile_menu':
       // Render the PLP mobile menu block.
-      if (typeof globalThis.renderRcsPlpMobileMenu !== 'undefined') {
-        html += globalThis.renderRcsPlpMobileMenu.render(
-          settings,
-          entity,
-          innerHtml
-        );
-      }
+      const plpMobileMenuData = globalThis.plpMobileMenuProcessor.prepareData(
+        settings,
+        entity
+      );
+
+      html += handlebarsRenderer.render('plp_mobile_menu', plpMobileMenuData);
+      break;
 
     case 'sitemap':
       // Render the sitemap page block.

@@ -1,7 +1,5 @@
 variables:
   url_login: '/user/login'
-  url_register: '/user/register?'
-  behat_secret_key: 'behat=6548ffa6b2bc4b7652ba1dc90133b3d0'
   spc_checkout_card: "4543474002249996"
   spc_checkout_expiry: "09/22"
   spc_checkout_cvv: "956"
@@ -26,4 +24,3 @@ variables:
   spc_mada_visa_card_expiry: '09/22'
   spc_mada_visa_card_cvv: '257'
   spc_mada_password: 'Checkout1!'
-

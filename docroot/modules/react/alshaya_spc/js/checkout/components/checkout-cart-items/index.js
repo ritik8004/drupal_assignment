@@ -3,7 +3,9 @@ import React from 'react';
 import CheckoutCartItem from '../checkout-cart-item';
 import CheckoutVirtualCartItem from '../../../egift-card/components/egift-virtual-checkout-cart-item';
 
-const CheckoutCartItems = ({ items, context, couponCode }) => {
+const CheckoutCartItems = ({
+  items, context, couponCode, hasExclusiveCoupon,
+}) => {
   const productItems = [];
   Object.entries(items).forEach(([key, product]) => {
     if (product.isEgiftCard) {
@@ -14,7 +16,13 @@ const CheckoutCartItems = ({ items, context, couponCode }) => {
     } else {
       // Normal products.
       productItems.push(
-        <CheckoutCartItem key={key} couponCode={couponCode} item={product} context={context} />,
+        <CheckoutCartItem
+          key={key}
+          couponCode={couponCode}
+          item={product}
+          context={context}
+          hasExclusiveCoupon={hasExclusiveCoupon}
+        />,
       );
     }
   });

@@ -5,7 +5,6 @@ import ToolTip from '../../../../utilities/tooltip';
 import { getAllAuraStatus, getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import getStringMessage from '../../../../utilities/strings';
 import Loading from '../../../../utilities/loading';
-import AuraHeaderIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
 import AuraHorizontalIcon from '../../../../../../alshaya_aura_react/js/svg-component/aura-horizontal-icon';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
@@ -36,7 +35,7 @@ const PointsToEarnMessage = (props) => {
     return (
       <>
         <div className="spc-aura-cart-icon">
-          <AuraHeaderIcon />
+          <AuraHorizontalIcon />
         </div>
         <div className="spc-aura-cart-content">
           <span className="spc-aura-points-to-earn">
@@ -104,7 +103,7 @@ const PointsToEarnMessage = (props) => {
     return (
       <>
         <div className="spc-aura-cart-icon">
-          <AuraHeaderIcon />
+          <AuraHorizontalIcon />
         </div>
         <div className="spc-aura-cart-content">
           <span className="spc-aura-points-to-earn">

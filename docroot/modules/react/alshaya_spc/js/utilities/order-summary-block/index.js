@@ -63,6 +63,7 @@ const OrderSummaryBlock = ({
   context,
   couponCode,
   collectionCharge,
+  hasExclusiveCoupon,
 }) => {
   const orderSummaryTitle = Drupal.t('Order Summary');
   const continueCheckoutLink = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
@@ -96,15 +97,24 @@ const OrderSummaryBlock = ({
       {!showCheckoutButton
         && (
         <div className={`product-content product-count-${Object.keys(items).length}`}>
-          <CheckoutCartItems items={items} couponCode={couponCode} context={context} />
+          <CheckoutCartItems
+            items={items}
+            couponCode={couponCode}
+            context={context}
+            hasExclusiveCoupon={hasExclusiveCoupon}
+          />
         </div>
         )}
       <div className="block-content">
         {/* To Be used later on Checkout Delivery pages. */}
         <div className="products" />
+        {/* The coupon code and exclusive coupon flag variable passed to
+        decide whether to show the coupon code on the discount tooltip or not. */}
         <TotalLineItems
           totals={totals}
           isCartPage={showCheckoutButton}
+          couponCode={couponCode}
+          hasExclusiveCoupon={hasExclusiveCoupon}
           context={context}
           {...(collectionPointsEnabled()
             && hasValue(collectionCharge)

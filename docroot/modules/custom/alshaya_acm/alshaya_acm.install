@@ -16,6 +16,22 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add setting to use MDC URL.
+ */
+function alshaya_acm_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm.settings', 'alshaya_acm.cart_config'],
+    'alshaya_acm',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update decimal_points for currency config.
  */
 function alshaya_acm_update_8019() {

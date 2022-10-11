@@ -1,1 +1,2 @@
 status: true # Config to enable/disable Online Returns feature.
+cart_banner: true # Config to enable/disable Online Returns cart banner.

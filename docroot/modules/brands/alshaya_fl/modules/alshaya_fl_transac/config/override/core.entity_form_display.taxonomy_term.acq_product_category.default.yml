@@ -1,0 +1,16 @@
+dependencies:
+  config:
+    - field.field.taxonomy_term.acq_product_category.field_is_underlined
+third_party_settings:
+  field_group:
+    group_configuration:
+      children:
+        - field_is_underlined
+content:
+  field_is_underlined:
+    weight: 18
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content

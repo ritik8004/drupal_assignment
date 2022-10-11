@@ -139,7 +139,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
       }
       $config->set('default_category_tid', $default_parent);
     }
-    $config->save(TRUE);
+    $config->save();
 
     // Load super category menu block and change status.
     $blocks = $this->entityTypeManager->getStorage('block')->loadByProperties(['id' => 'supercategorymenu']);

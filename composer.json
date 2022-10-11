@@ -14,7 +14,6 @@
         "acquia/blt-drupal-test": "^1.0",
         "acquia/blt-drupal-vm": "dev-master",
         "acquia/http-hmac-php": "~3.2",
-        "acquia/lightning": "^5.2",
         "aws/aws-sdk-php": "^3.138",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
@@ -52,7 +51,7 @@
         "drupal/email_registration": "^1.0",
         "drupal/endroid_qr_code": "^3.0",
         "drupal/entity_embed": "^1.2",
-        "drupal/external_hreflang": "^1.0",
+        "drupal/external_hreflang": "^2.0",
         "drupal/facets": "^1.8",
         "drupal/field_group": "^3.2",
         "drupal/form_options_attributes": "^1.0",
@@ -96,7 +95,6 @@
         "drupal/path_redirect_import": "^1.0@beta",
         "drupal/pathauto": "^1.6",
         "drupal/pcb": "^2.3",
-        "drupal/pendo": "^1@alpha",
         "drupal/profile": "^1.3",
         "drupal/profile_switcher": "^1.0-alpha5",
         "drupal/queue_unique": "^2.0",
@@ -130,6 +128,7 @@
         "drupal/taxonomy_access_fix": "^3.1",
         "drupal/taxonomy_term_depth": "^2.5",
         "drupal/twig_tweak": "^2.9",
+        "drupal/user_csv_import": "^2.0",
         "drupal/user_registrationpassword": "^1.0",
         "drupal/video_embed_field": "^2.0",
         "drupal/views_ajax_get": "^2.0",
@@ -143,6 +142,7 @@
         "hgoebl/mobile-detect": "^1.4.2",
         "jquery-validation/jquery-validation": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
+        "nnnick/chartjs": "^3.9",
         "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "oomphinc/composer-installers-extender": "^2.0",
         "psy/psysh": "v0.10.12",
@@ -222,6 +222,18 @@
                     "type": "zip"
                 }
             }
+        },
+        "chart.js": {
+            "type": "package",
+            "package": {
+                "name": "nnnick/chartjs",
+                "version": "v3.9.1",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/chartjs/Chart.js/releases/download/v3.9.1/chart.js-3.9.1.tgz",
+                    "type": "tar"
+                }
+            }
         }
     },
     "autoload-dev": {
@@ -285,7 +297,8 @@
                 "Allow fixing corrupt CSS / JS issues without waiting for Browser cache to expire": "https://git.drupalcode.org/project/drupal/-/merge_requests/2376.patch",
                 "Use Mailhelper to make site name RFC complaint": "patches/core/CORE-42856-use-mailhelper-to-make-rfc-2822-complaint.patch",
                 "Cannot use a / in route parameter": "https://www.drupal.org/files/issues/2021-02-11/2741939-31.patch",
-                "Allow profiles to define a base/parent profile": "https://www.drupal.org/files/issues/2022-06-17/1356276-688_0.patch"
+                "Allow profiles to define a base/parent profile": "https://www.drupal.org/files/issues/2022-06-17/1356276-688_0.patch",
+                "[pp-3] Bubbling of elements' max-age to the page's headers and the page cache": "https://www.drupal.org/files/issues/2021-04-19/2352009-max-age-bubbling-9.1.x.patch"
             },
             "drupal/mobile_number": {
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
@@ -382,6 +395,12 @@
             },
             "drupal/coder": {
                 "Readonly variables have Missing member variable doc comment": "https://www.drupal.org/files/issues/2022-06-15/coder-readonly-doc-comment-3285707-4.patch"
+            },
+            "drupal/moderation_dashboard": {
+                "Support for SRI Integrity hash attribute - 1": "https://git.drupalcode.org/project/moderation_dashboard/-/merge_requests/21.diff",
+                "Support for SRI Integrity hash attribute - 2": "https://git.drupalcode.org/project/moderation_dashboard/-/merge_requests/23.diff",
+                "Support for SRI Integrity hash attribute - 3": "https://git.drupalcode.org/project/moderation_dashboard/-/merge_requests/24.diff",
+                "Support for SRI Integrity hash attribute - 4": "https://git.drupalcode.org/project/moderation_dashboard/-/merge_requests/26.diff"
             },
             "acquia/blt-acsf": {
                 "Fix multiple addition of acsf module for local uninstallation on running blt acsf:init": "https://patch-diff.githubusercontent.com/raw/acquia/blt-acsf/pull/10.patch"

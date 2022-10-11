@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @checkoutPayment @clickCollect @tbskwprod @coskwprod @pbkkwpprod @westelmkwpprod @vskwpprod @bpkwprod @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod @vskwprod
+@javascript @KNET @KNetPayment @checkoutPayment @clickCollect @coskwpprod @tbskwpprod @tbskwprod @coskwprod @pbkkwpprod @westelmkwpprod @vskwpprod @bpkwprod @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @flkwprod @hmkwprod @vskwprod
 Feature: SPC Checkout Click and Collect using KNET payment method
 
   Background:
@@ -97,6 +97,9 @@ Feature: SPC Checkout Click and Collect using KNET payment method
 
   @cc @cnc @mobile @knet
   Scenario: As a Guest, I should be able to checkout using click and collect with knet
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_class} a" on page
+    And I wait 10 seconds
+    And I wait for the page to load
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load

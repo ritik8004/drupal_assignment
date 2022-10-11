@@ -310,8 +310,8 @@ function alshaya_aura_react_alshaya_acm_customer_recent_order_build_alter(array 
 
   foreach ($build['recent_order'] as $key => $order) {
     $build['recent_order'][$key]['#order']['aura_enabled'] = TRUE;
-    $build['recent_order'][$key]['#order']['apc_accrued_points'] = $order['#order']['extension']['apc_accrued_points'];
-    $build['recent_order'][$key]['#order']['apc_redeemed_points'] = $order['#order']['extension']['apc_redeemed_points'];
+    $build['recent_order'][$key]['#order']['apc_accrued_points'] = $order['#order']['extension']['apc_accrued_points'] ?? 0;
+    $build['recent_order'][$key]['#order']['apc_redeemed_points'] = $order['#order']['extension']['apc_redeemed_points'] ?? 0;
   }
 }
 

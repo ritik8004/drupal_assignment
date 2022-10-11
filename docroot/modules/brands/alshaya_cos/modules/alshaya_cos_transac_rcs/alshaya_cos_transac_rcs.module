@@ -57,7 +57,7 @@ function alshaya_cos_transac_rcs_rcs_handlebars_templates_alter(&$templates, $en
 function alshaya_cos_transac_rcs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'rcs_product') {
     $build['#attached']['library'][] = 'alshaya_cos_transac_rcs/product';
-    $build['#attached']['library'][] = 'alshaya_pims_assets/swatch';
+    $build['#attached']['library'][] = 'alshaya_rcs_assets/swatch';
   }
 }
 
@@ -66,5 +66,5 @@ function alshaya_cos_transac_rcs_node_view(array &$build, EntityInterface $entit
  */
 function alshaya_cos_transac_rcs_add_to_bag_library_alter(array &$libraries) {
   // Alter swatch images for cos.
-  $libraries['add_to_bag_utility']['dependencies'][] = 'alshaya_pims_assets/swatch';
+  $libraries['add_to_bag_utility']['dependencies'][] = 'alshaya_rcs_assets/swatch';
 }

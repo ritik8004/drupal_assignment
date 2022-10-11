@@ -19,3 +19,12 @@ alshaya_main_menu.settings:
     ideal_max_col_length:
       type: integer
       label: 'Ideal length of the column'
+    show_l2_in_separate_column:
+      type: boolean
+      label: 'Show each L2 and their child menus in a separate column'
+    show_highlight:
+      type: boolean
+      label: 'Show / hide menu highlights CTA'
+    show_menu_full_width:
+      type: boolean
+      label: 'Show menu overlay in full width'

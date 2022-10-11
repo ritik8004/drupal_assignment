@@ -12,6 +12,12 @@ import {
 export const isOnlineReturnsEnabled = () => hasValue(drupalSettings.onlineReturns);
 
 /**
+ * Helper function to check if Online Returns cart banner is enabled.
+ */
+export const isOnlineReturnsCartBannerEnabled = () => isOnlineReturnsEnabled()
+  && hasValue(drupalSettings.onlineReturns.cartBanner);
+
+/**
  * Helper function to get processed returns data for Order.
  *
  * @param orderEntityId

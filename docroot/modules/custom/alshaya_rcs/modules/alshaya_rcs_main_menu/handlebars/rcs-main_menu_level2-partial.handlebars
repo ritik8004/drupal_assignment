@@ -42,7 +42,7 @@
     <div class="menu__link-wrapper menu-two__link-wrapper">
       <{{ this.tag }} class="menu__link menu-two__link {{ class }} {{ @root.level2_class }} sub-nav-{{cleanCssIdentifier @root.sub_nav_name }}" gtm-menu-title="{{ this.name }}" {{{ this.tag_attr }}}>{{ this.name }}</{{ this.tag }}>
     </div>
-    {{#if this.children }}
+    {{#if this.children.length }}
       {{> main_menu_level3_partial name=name items=this.children }}
     {{/if}}
   </li>

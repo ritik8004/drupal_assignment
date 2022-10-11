@@ -21,6 +21,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\views\ViewExecutable;
 use Drupal\views\ResultRow;
 use Drupal\file\FileInterface;
+use Drupal\pathauto\PathautoState;
 use Drupal\search_api\IndexInterface;
 
 /**
@@ -200,6 +201,17 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
   // when creating a new taxonomy term.
   if ($term->isNew()) {
     $term->get('field_show_in_lhn')->setValue($term->get('field_category_include_menu')->getString());
+  }
+
+  // If we have to use MDC URLs for category, then fetch the url_key value from
+  // the synced data and append .html to it.
+  $acm_settings = \Drupal::configFactory()->getEditable('alshaya_acm.settings');
+  if (!empty($acm_settings->get('use_mdc_url')) && isset($category['custom_attributes']['url_key'])) {
+    $term->path->pathauto = PathautoState::SKIP;
+    $term->path->alias = '/' . trim($category['custom_attributes']['url_key']['value'], '/') . '/';
+  }
+  else {
+    $term->path->pathauto = PathautoState::CREATE;
   }
 }
 
@@ -695,11 +707,16 @@ function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_fo
  *   Return element array.
  */
 function alshaya_acm_product_category_after_build(array $element, FormStateInterface $form_state) {
-  $element[0]['pathauto']['#states'] = [
-    'unchecked' => [
-      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
-    ],
-  ];
+  $use_mdc_url = \Drupal::config('alshaya_acm.settings')->get('use_mdc_url');
+  if (!$use_mdc_url) {
+    // If pathauto config for the term is set to false, then we keep it FALSE by
+    // default.
+    $element[0]['pathauto']['#states'] = [
+      'unchecked' => [
+        ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+  }
 
   $element[0]['alias']['#states'] = [
     'empty' => [

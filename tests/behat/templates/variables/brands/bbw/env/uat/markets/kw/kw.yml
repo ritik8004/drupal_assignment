@@ -9,3 +9,4 @@ variables:
   spc_multiple_product_detail_page_coupon: '/buy-dark-kiss-bathtub-gift-set-1.html/'
   spc_single_product_detail_page_no_coupon: '/buy-dark-kiss-bathtub-gift-set-1.html/'
   spc_multiple_product_detail_page_no_coupon: '/buy-dark-kiss-bathtub-gift-set-1.html/'
+  spc_egift_page: '/egift/'

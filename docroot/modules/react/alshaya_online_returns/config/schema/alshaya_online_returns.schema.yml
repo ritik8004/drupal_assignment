@@ -5,6 +5,9 @@ alshaya_online_returns.settings:
     status:
       type: boolean
       label: 'Config to enable/disable Online Returns feature'
+    cart_banner:
+      type: boolean
+      label: 'Config to enable/disable Online Returns cart bannere'
 
 alshaya_online_returns.return_confirmation:
   type: config_object

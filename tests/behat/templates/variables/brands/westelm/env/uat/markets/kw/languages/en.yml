@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://wekw2-uat.factory.alshaya.com/en/'
+  url_base_uri: 'https://wekw2-uat.factory.alshaya.com/en'
   collection_filter: 'Collection'
   sort_filter: 'Sort'
   brand_filter: 'Product Type'

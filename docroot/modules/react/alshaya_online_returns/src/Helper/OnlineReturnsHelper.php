@@ -67,6 +67,16 @@ class OnlineReturnsHelper {
   }
 
   /**
+   * Helper to check if Online Returns cart banner is enabled.
+   *
+   * @return bool
+   *   TRUE/FALSE
+   */
+  public function isOnlineReturnsCartBannerEnabled() {
+    return $this->isOnlineReturnsEnabled() && $this->getConfig()->get('cart_banner');
+  }
+
+  /**
    * Helper to get Cache Tags for Online Returns Config.
    *
    * @return string[]

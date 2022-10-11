@@ -74,10 +74,11 @@ function formatDateTime(date) {
   // Setting default value for date format.
   // It can be changed via config object.
   let formattedDate = null;
-  if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.dateFormat)) {
-    const dateFormat = drupalSettings.returnInfo.dateFormat || 'DD MMM YYYY @H[h]mm';
-    formattedDate = moment.utc(date).tz(drupalSettings.returnInfo.timeZone).format(dateFormat);
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.returnInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.dateFormat)) {
+    const { dateFormat, timeZone } = drupalSettings.onlineReturns.returnInfo;
+    formattedDate = moment.utc(date).tz(timeZone).format(dateFormat || 'DD MMM YYYY @H[h]mm');
   }
   return formattedDate;
 }
@@ -210,12 +211,13 @@ function getAdressData(shippingAddress) {
  */
 function getOrderDetails() {
   let orderDetails = {};
-  if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.orderDetails)) {
-    orderDetails = drupalSettings.returnInfo.orderDetails;
-  } else if (hasValue(drupalSettings.onlineReturns)
-    && hasValue(drupalSettings.onlineReturns.order_details)) {
-    orderDetails['#order_details'] = drupalSettings.onlineReturns.order_details;
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.returnInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo)) {
+    orderDetails = drupalSettings.onlineReturns.returnInfo.orderInfo;
+  } else if (hasValue(drupalSettings.order)
+    && hasValue(drupalSettings.order.order_details)) {
+    orderDetails['#order_details'] = drupalSettings.order.order_details;
   }
 
   return orderDetails;

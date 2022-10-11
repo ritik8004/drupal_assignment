@@ -13,8 +13,6 @@
  * Gets the queue status for all the known sites in live env for hm brand
  */
 
-const DRUPAL_ROOT = __DIR__ . '/../../';
-
 require_once __DIR__ . '/common.php';
 require_once __DIR__ . '/variables.php';
 
@@ -34,17 +32,21 @@ $env_map = [
 
 $env = $env_map[$env] ?? $env;
 
-foreach ($conductors as $key => $value) {
-  [$country_brand, $base_env] = explode('_', $key);
-  if ($base_env !== $env) {
-    continue;
+while (1) {
+  foreach ($conductors as $key => $value) {
+    [$country_brand, $base_env] = explode('_', $key);
+    if ($base_env !== $env) {
+      continue;
+    }
+
+    if (!empty($brand) && $brand !== substr($country_brand, 0, -2)) {
+      continue;
+    }
+
+    $data = get_queue_total($value['site_id']);
+    echo PHP_EOL . '=> ' . $country_brand . ' : ' . $data->total;
+    print PHP_EOL;
   }
 
-  if (!empty($brand) && $brand !== substr($country_brand, 0, -2)) {
-    continue;
-  }
-
-  $data = get_queue_total($value['site_id']);
-  echo PHP_EOL . '=> ' . $country_brand . ' : ' . $data->total;
-  print PHP_EOL;
+  sleep(30);
 }

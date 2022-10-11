@@ -1,7 +1,7 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getOrderDetails } from './online_returns_util';
 import { getReturnedItems } from './return_confirmation_util';
-import { getDeliveryAddress, getPaymentDetails, getReturnReasons } from './return_request_util';
+import { getPaymentDetails, getReturnReasons } from './return_request_util';
 
 /**
  * Utility function to get order GTM info.
@@ -10,10 +10,11 @@ import { getDeliveryAddress, getPaymentDetails, getReturnReasons } from './retur
  *   An object containing GTM info about the order.
  */
 function getOrderGtmInfo() {
-  if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.orderDetails)
-    && hasValue(drupalSettings.returnInfo.orderDetails['#gtm_info'])) {
-    return drupalSettings.returnInfo.orderDetails['#gtm_info'];
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.returnInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'])) {
+    return drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'];
   }
 
   // For order detail page, get the data from onlineReturns drupal settings.
@@ -118,12 +119,15 @@ function getProductGtmInfo(itemsSelected) {
 function getPreparedOrderGtm(eventType, returnInfo) {
   const gtmInfo = getOrderGtmInfo();
   let returnOrder = {};
+  let paymentMethods = [];
 
   // Check if general GTM info is present or not.
   if (hasValue(gtmInfo.general)) {
     const {
       transactionId,
       deliveryOption,
+      paymentMethodsUsed,
+      deliveryInfo,
     } = gtmInfo.general;
 
     // Prepare the Return order object.
@@ -133,30 +137,34 @@ function getPreparedOrderGtm(eventType, returnInfo) {
       // @todo Will done in DIG-10167.
       orderFirstTimeTransaction: '',
     };
+
+    // Check if GTM payment methods are available or not.
+    if (paymentMethodsUsed.length > 0) {
+      paymentMethods = paymentMethodsUsed;
+    }
+
+    // Prepare the Return order object.
+    if (deliveryInfo) {
+      returnOrder.orderDeliveryCity = deliveryInfo.area_parent_display;
+      returnOrder.orderDeliveryArea = deliveryInfo.administrative_area_display;
+    }
   }
 
   const orderDetails = getOrderDetails();
+  // Get the payment details only if GTM payment info is not availble.
+  if (!paymentMethods.length > 0) {
+    let paymentDetails = getPaymentDetails(orderDetails);
+    // Combine all the payment methods.
+    if (Object.keys(paymentDetails).length > 0) {
+      // Sort the payment details based on the weight in ascending order.
+      paymentDetails = Object.values(paymentDetails).sort((p1, p2) => p1.weight - p2.weight);
 
-  // Get delivery address info.
-  const deliveryInfo = getDeliveryAddress(orderDetails);
-  // Get the payment details.
-  let paymentDetails = getPaymentDetails(orderDetails);
-  // Sort the payment details based on the weight in ascending order.
-  paymentDetails = Object.values(paymentDetails).sort((p1, p2) => p1.weight - p2.weight);
-
-  // Combine all the payment methods.
-  const paymentMethods = [];
-  if (Object.keys(paymentDetails).length > 0) {
-    Object.keys(paymentDetails).forEach((index) => {
-      paymentMethods.push(paymentDetails[index].card_type);
-    });
+      Object.keys(paymentDetails).forEach((index) => {
+        paymentMethods.push(paymentDetails[index].card_type);
+      });
+    }
   }
 
-  // Prepare the Return order object.
-  if (deliveryInfo) {
-    returnOrder.orderDeliveryCity = deliveryInfo.area_parent_display;
-    returnOrder.orderDeliveryArea = deliveryInfo.administrative_area_display;
-  }
   // This will always be online in our case.
   returnOrder.returnType = 'online';
 
@@ -168,9 +176,9 @@ function getPreparedOrderGtm(eventType, returnInfo) {
 
     // If returned items is empty then get it from filtered from onlineReturns
     // drupalSettings.
-    if (!hasValue(returnedItems.length) && hasValue(drupalSettings.onlineReturns)
-      && hasValue(drupalSettings.onlineReturns.products)) {
-      drupalSettings.onlineReturns.products.forEach((item) => {
+    if (!hasValue(returnedItems.length) && hasValue(drupalSettings.order)
+      && hasValue(drupalSettings.order.products)) {
+      drupalSettings.order.products.forEach((item) => {
         const returnData = returnInfo.items.find(
           (returnItem) => item.item_id === returnItem.order_item_id,
         );

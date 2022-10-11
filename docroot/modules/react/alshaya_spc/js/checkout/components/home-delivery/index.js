@@ -84,11 +84,16 @@ export default class HomeDeliveryInfo extends React.Component {
     return addressDataValue;
   }
 
-  openAddressContentPopUp = () => {
-    this.setState({
-      areaUpdated: true,
-    });
-  }
+  openAddressContentPopUp = (e) => {
+    // Event openAddressContentPopUp is used by area-confirmation-popup
+    // component and COD mobile verification component. If event detail has
+    // enabledFieldWithMessage, then we don't need to update the area.
+    if (e.detail && typeof e.detail.enabledFieldsWithMessages === 'undefined') {
+      this.setState({
+        areaUpdated: true,
+      });
+    }
+  };
 
   render() {
     const {
@@ -119,7 +124,9 @@ export default class HomeDeliveryInfo extends React.Component {
     return (
       <div className="delivery-information-preview">
         <WithModal modalStatusKey="hdInfo" areaUpdated={areaUpdated}>
-          {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+          {({
+            triggerOpenModal, triggerCloseModal, isModalOpen, enabledFieldsWithMessages,
+          }) => (
             <>
               <div className="spc-delivery-customer-info">
                 <div className="delivery-name">
@@ -157,6 +164,7 @@ export default class HomeDeliveryInfo extends React.Component {
                     areaUpdated={areaUpdated}
                     isExpressDeliveryAvailable={isExpressDeliveryAvailable}
                     fillDefaultValue
+                    enabledFieldsWithMessages={enabledFieldsWithMessages}
                   />
                 </React.Suspense>
               </Popup>

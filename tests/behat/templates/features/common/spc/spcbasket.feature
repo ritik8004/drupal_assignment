@@ -95,7 +95,7 @@ Feature: Test basket page
     And I should see an ".value .price .price-currency" element
     And I should see an ".value .price .price-amount" element
     Then I should see an ".delivery-vat" element
-
+    
   Scenario: As a Guest, I should be able to remove products from the basket
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds

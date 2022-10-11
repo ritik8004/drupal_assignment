@@ -43,4 +43,4 @@ swatch:
   js:
     js/alshaya_hm_assets_swatch.js: {}
   dependencies:
-    - alshaya_pims_assets/swatch
+    - alshaya_rcs_assets/swatch

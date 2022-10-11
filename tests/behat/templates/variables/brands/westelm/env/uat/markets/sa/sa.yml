@@ -5,3 +5,4 @@ variables:
   spc_basket_page: '/shop-new-arrivals/test-new-product/new-products/'
   spc_pdp_page: 'buy-sumatra-extra-wide-dresser.html'
   spc_bank_product: 'buy-sumatra-extra-wide-dresser.html'
+  spc_single_product_detail_page_coupon: '/buy-sumatra-extra-wide-dresser.html/'

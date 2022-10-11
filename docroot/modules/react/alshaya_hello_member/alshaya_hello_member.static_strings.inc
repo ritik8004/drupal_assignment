@@ -31,6 +31,10 @@ function _alshaya_hello_member_static_strings() {
       'value' => t('View member ID', [], ['context' => 'hello_member']),
     ],
     [
+      'key' => 'redeem_in_store',
+      'value' => t('Redeem in store', [], ['context' => 'hello_member']),
+    ],
+    [
       'key' => 'qr_code_redeem',
       'value' => t('Member ID', [], ['context' => 'hello_member']),
     ],
@@ -133,6 +137,14 @@ function _alshaya_hello_member_static_strings() {
     [
       'key' => 'view_all_benefits',
       'value' => t('View all Benefits', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'member',
+      'value' => t('Member', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'plus',
+      'value' => t('Plus', [], ['context' => 'hello_member']),
     ],
   ];
 }

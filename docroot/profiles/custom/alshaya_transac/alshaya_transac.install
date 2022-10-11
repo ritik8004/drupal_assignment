@@ -18,6 +18,18 @@ use Drupal\search_api\Entity\Server;
 /**
  * Implements hook_update_N().
  *
+ * Installs user_csv_import module and roleaasign_with_user_csv_import sub
+ * module if it  is not enabled.
+ */
+function alshaya_transac_update_9401() {
+  if (!(\Drupal::moduleHandler()->moduleExists('user_csv_import'))) {
+    \Drupal::service('module_installer')->install(['user_csv_import']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Disable search api default server and uninstall acquia_search module.
  */
 function alshaya_transac_update_8141() {

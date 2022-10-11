@@ -306,6 +306,9 @@ export default class CompletePurchase extends React.Component {
       case 'tabby':
         buttonText = Drupal.t('Continue with tabby');
         break;
+      case 'tamara':
+        buttonText = Drupal.t('Continue with tamara', {}, { context: 'tamara' });
+        break;
       default:
         buttonText = Drupal.t('complete purchase');
     }

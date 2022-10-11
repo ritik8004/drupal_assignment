@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_alshaya_rcs_product_build_alter().
+ */
+function alshaya_rcs_online_returns_alshaya_rcs_product_build_alter(array &$build, array &$entity_info) {
+  /** @var \Drupal\alshaya_online_returns\Helper\OnlineReturnsHelper $online_returns_helper */
+  $online_returns_helper = \Drupal::service('alshaya_online_returns.online_returns_helper');
+  $build['#cache']['tags'] = Cache::mergeTags(
+    $build['#cache']['tags'] ?? [],
+    $online_returns_helper->getCacheTags(),
+  );
+  // Do not process further if feature is disabled.
+  if (!$online_returns_helper->isOnlineReturnsEnabled()) {
+    return;
+  }
+  $build['#attached']['drupalSettings']['onlineReturns']['enabled'] = TRUE;
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_rcs_online_returns_alshaya_rcs_product_query_fields_alter(array &$fields) {
+  array_push(
+    $fields['items'],
+    'is_returnable',
+  );
+  array_push(
+    $fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'is_returnable',
+  );
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_online_returns_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'alshaya_acm_product' && isset($libraries['product_utility'])) {
+    $libraries['product_utility']['dependencies'] = array_merge(
+      ['alshaya_rcs_online_returns/product_utility'],
+      $libraries['product_utility']['dependencies'] ?? [],
+    );
+  }
+}

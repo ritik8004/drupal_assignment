@@ -420,6 +420,7 @@ export default class Checkout extends React.Component {
               in_stock={cart.cart.in_stock}
               cart_promo={cart.cart.cart_promo}
               couponCode={cart.cart.coupon_code}
+              hasExclusiveCoupon={cart.cart.has_exclusive_coupon}
               show_checkout_button={false}
               animationDelay="0.4s"
               context="checkout"

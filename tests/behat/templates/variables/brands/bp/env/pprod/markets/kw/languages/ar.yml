@@ -50,6 +50,7 @@ variables:
   continue_shopping: 'إليك منتجاتنا المفضلة'
   language_continue_shopping: 'Here are some of our favorites'
   mobile_language_class: 'en'
+  mobile_class: 'ar'
   language_short: 'en'
   ar_collection_filter: ''
   ar_sort_filter: 'رتب حسب'

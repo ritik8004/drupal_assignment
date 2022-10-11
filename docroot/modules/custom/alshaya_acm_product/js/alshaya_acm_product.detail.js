@@ -209,6 +209,11 @@
 
           $('.price-block-' + productData.identifier, node).html(variantInfo.price);
 
+          // If its external beauty product change title on variant change.
+          if (Drupal.hasValue(drupalSettings.isExternal)) {
+            $('.content__title_wrapper h1').html(variantInfo.title);
+          }
+
           if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
             window.commerceBackend.updateGallery(node, productData.layout, productData.gallery, sku, variantInfo.sku);
           }

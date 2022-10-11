@@ -18,6 +18,80 @@
   var productImpressions = [];
   var productImpressionsTimer = null;
 
+  /**
+   * Drupal Behaviour to set ReferrerInfo Data to storage.
+   */
+  Drupal.behaviors.setReferrerInfoData = {
+    attach: function () {
+      const currentPath = drupalSettings.path.currentPath;
+      const referrer = document.referrer;
+      const url = window.location.href;
+
+      if(currentPath.includes('checkout/confirmation')) {
+        // Remove referrerData and isSearchActivated from storage.
+        Drupal.removeItemFromLocalStorage('referrerData');
+        Drupal.removeItemFromLocalStorage('isSearchActivated');
+      } else if (currentPath.includes('search')) {
+        const referrerData = {
+          pageType: 'Search Results Page',
+          path: url,
+          list: 'Search Results Page',
+          previousPageType: '',
+        };
+
+        Drupal.addItemInLocalStorage('referrerData', referrerData);
+        Drupal.removeItemFromLocalStorage('isSearchActivated');
+      } else if (currentPath.includes('taxonomy/term')) {
+        const listName =  $('body').attr('gtm-list-name');
+        // Set PLP as referrerPageType
+        const referrerData = {
+          pageType: 'PLP',
+          path: url,
+          list: listName !== undefined ? listName : '',
+          previousList: '',
+        };
+
+        Drupal.addItemInLocalStorage('referrerData', referrerData);
+        Drupal.removeItemFromLocalStorage('isSearchActivated');
+      } else if (currentPath.includes('node/')) {
+        const listName = $('body').attr('gtm-list-name');
+        const gtmContainer =  $('body').attr('gtm-container');
+        // Check if node is of PDP type.
+        if (gtmContainer === 'product detail page') {
+          const referrerData = Drupal.getItemFromLocalStorage('referrerData');
+          const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
+          if (referrer === '' || !referrerData.path.includes(referrer)) {
+            if(isSearchActivated !== null && !isSearchActivated) {
+              // Set PDP as referrerPageType only if referrer is not set,
+              // Search is not active or
+              // Referrer does not match with referrerPath.
+              const referrerData = {
+                pageType: 'PDP',
+                path: url,
+                list: listName !== undefined ? listName : '',
+                previousList: '',
+              };
+
+              Drupal.addItemInLocalStorage('referrerData', referrerData);
+              Drupal.removeItemFromLocalStorage('isSearchActivated');
+            }
+          }
+        }
+        else {
+          const referrerData = {
+            pageType: gtmContainer !== undefined ? gtmContainer : '',
+            path: url,
+            list: listName !== undefined ? listName : '',
+            previousList: '',
+          };
+
+          Drupal.addItemInLocalStorage('referrerData', referrerData);
+          Drupal.removeItemFromLocalStorage('isSearchActivated');
+        }
+      }
+    }
+  };
+
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
       $('body').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', '.sku-base-form', function (event, variant, code) {
@@ -811,6 +885,30 @@
           // For all other pages, use gtm-list-name html attribute.
           // Except in PDP, to define full path from PLP.
           : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+      }
+
+      // Fetch referrerPageType from localstorage.
+      const referrerData = Drupal.getItemFromLocalStorage('referrerData');
+      if(referrerData !== null) {
+        if (referrerData.pageType === 'Search Results Page') {
+          // For SRP, use list value 'Search Result Page'
+          productData.list = referrerData.pageType;
+        }
+        else {
+          let listName = '';
+          if(referrerData.list !== undefined) {
+            // Use Available referrerList data as list data,
+            // If available.
+            listName = referrerData.list;
+          }
+          else {
+            // Fetch from gtm-list-name attribute.
+            listName = $('body').attr('gtm-list-name');
+          }
+
+          // IF listName contains placeholder remove it.
+          productData.list = listName.replace('PDP-placeholder', referrerData.pageType);
+        }
       }
     }
     catch (error) {

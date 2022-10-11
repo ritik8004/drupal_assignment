@@ -18,11 +18,12 @@ function getReturnIdFromUrl() {
  */
 function getReturnedItems(returnData) {
   const returnedItems = [];
-  if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.orderDetails)
-    && hasValue(drupalSettings.returnInfo.orderDetails['#products'])) {
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.returnInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo['#products'])) {
     // Filter out returned items from order details array.
-    const allProducts = drupalSettings.returnInfo.orderDetails['#products'];
+    const allProducts = drupalSettings.onlineReturns.returnInfo.orderInfo['#products'];
     const returnedItemsRaw = returnData.items;
     returnedItemsRaw.forEach((returnItem) => {
       const productDetails = allProducts.find((item) => item.item_id === returnItem.order_item_id);
@@ -38,9 +39,10 @@ function getReturnedItems(returnData) {
  */
 function getReturnConfirmationStrings() {
   let returnConfirmationStrings = null;
-  if (hasValue(drupalSettings.returnInfo)
-    && hasValue(drupalSettings.returnInfo.returnConfirmationStrings)) {
-    returnConfirmationStrings = drupalSettings.returnInfo.returnConfirmationStrings;
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.returnInfo)
+    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfirmationStrings)) {
+    returnConfirmationStrings = drupalSettings.onlineReturns.returnInfo.returnConfirmationStrings;
   }
   return returnConfirmationStrings;
 }

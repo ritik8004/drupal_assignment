@@ -12,7 +12,6 @@ attribute_weights:
     size: 10
     height: 11
     length: 12
-    frame: 13
 show_quantity: TRUE
 sortable_options:
   - option
@@ -26,5 +25,4 @@ sortable_options:
   - product_type
   - height
   - length
-  - frame
   - fabric

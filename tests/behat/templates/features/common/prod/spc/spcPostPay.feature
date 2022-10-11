@@ -1,4 +1,4 @@
-@javascript @PostPay @homeDelivery @guest @mujiaeprod @vsaeprod @flaeprod
+@javascript @PostPay @homeDelivery @guest @vsaeprod @flaeprod @bpaeprod @mcaeprod @aeoaeprod @bbwaeprod
 Feature: SPC Checkout Home Delivery using Installments with PostPay method for Guest user
 
   Background:

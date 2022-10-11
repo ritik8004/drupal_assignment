@@ -29,3 +29,6 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+  frame:
+    label: 'Frame'
+    configurable: 1

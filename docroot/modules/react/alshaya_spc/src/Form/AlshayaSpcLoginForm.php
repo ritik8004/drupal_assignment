@@ -94,7 +94,6 @@ class AlshayaSpcLoginForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['#prefix'] = '<div class="checkout-login-separator order-3"><span>' . $this->t('or') . '</span></div>';
     $form['returning_customer'] = [
       '#markup' => '<span class="selected-tab-title mobile-only-block">' . $this->t('Sign In') . '</span>',
       '#weight' => -51,

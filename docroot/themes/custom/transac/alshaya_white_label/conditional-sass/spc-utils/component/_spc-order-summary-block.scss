@@ -86,6 +86,14 @@
         position: absolute;
         top: -0.1875rem;
         #{$right}: -1.875rem;
+
+        .applied-exclusive-couponcode {
+          font-family: $alshaya-bold;
+          font-size: rem(10);
+          line-height: rem(12);
+          margin-top: rem(8);
+          margin-bottom: rem(8);
+        }
       }
     }
   }

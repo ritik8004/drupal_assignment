@@ -68,6 +68,7 @@ variables:
   payment_type_text: 'طريقة الدفع:'
   language_governorate: 'Kuwait City'
   mobile_language_class: 'en'
+  mobile_class: 'ar'
   language_short: 'en'
   street: 'Street A'
   building: 'Building B'

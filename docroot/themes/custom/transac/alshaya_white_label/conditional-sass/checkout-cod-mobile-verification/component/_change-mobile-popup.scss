@@ -1,0 +1,21 @@
+.spc-address-form-content {
+  .spc-type-tel {
+    &__input {
+      &.invalid {
+        border-color: $cod-otp-field-invalid !important;
+      }
+    }
+
+    &__message {
+      &.error {
+        color: $cod-otp-field-invalid;
+      }
+    }
+  }
+
+  input:disabled,
+  .spc-area-select-selected.disabled {
+    background: none;
+    cursor: not-allowed;
+  }
+}

@@ -11,7 +11,7 @@
         <div class="menu__link-wrapper menu-two__link-wrapper">
           <{{@menu_item.tag}} class="menu__link menu--three__link {{ class }} {{ @root.level3_class }}" style="{{@root.style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" {{{ menu_item.tag_attr }}}>{{ menu_item.name }}</{{@menu_item.tag}}>
         </div>
-        {{#if menu_item.children }}
+        {{#if menu_item.children.length }}
           {{> main_menu_level4_partial name=name items=menu_item.children }}
         {{/if}}
       </li>

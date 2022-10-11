@@ -26,6 +26,7 @@ variables:
   continue_shopping: 'إليك منتجاتنا المفضلة'
   language_continue_shopping: 'Here are some of our favorites'
   mobile_language_class: 'en'
+  mobile_class: 'ar'
   language_short: 'en'
   language_area_option: 'Kuwait City'
   language_city_option: 'Ahmadi'

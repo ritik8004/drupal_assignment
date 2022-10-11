@@ -1,0 +1,55 @@
+.has--three-levels {
+  .menu--two__list {
+    .menu--two__list-item > {
+      .menu-two__link-wrapper a.menu-two__link {
+        @include breakpoint($desktop) {
+          color: $mm_l2_link_desktop !important;
+        }
+      }
+    }
+  }
+
+  .menu--three__list-item {
+    > .menu-two__link-wrapper {
+      .menu__link {
+        line-height: rem(18);
+      }
+    }
+  }
+
+  .active--menu--links {
+    &:hover {
+      li.menu--one__list-item {
+        .menu--one__link {
+          @include breakpoint($desktop) {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  div.block-alshaya-main-menu {
+    li.menu--one__list-item {
+      &:hover {
+        .menu--one__link {
+          background: transparent;
+          position: relative;
+
+          &::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: rem(6);
+            background-image: url("#{$brand_theme_img_directory_path}/icons/menu-hover-barcode.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+          }
+        }
+      }
+    }
+  }
+}

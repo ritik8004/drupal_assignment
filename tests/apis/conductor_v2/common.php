@@ -306,3 +306,16 @@ function get_queue_total($site_id) {
 function update_queue_status($site_id, bool $status = FALSE) {
   return invoke_api('config/site/' . $site_id . '/queue', 'GET', ['pause' => $status]);
 }
+
+/**
+ * Function to purge the queue.
+ *
+ * @param $site_id
+ *   The site id to get the queue count from.
+ *
+ * @return object
+ *   The data returned by the API.
+ */
+function purge_queue($site_id) {
+  return invoke_api('config/site/' . $site_id . '/queue/purge', 'POST');
+}

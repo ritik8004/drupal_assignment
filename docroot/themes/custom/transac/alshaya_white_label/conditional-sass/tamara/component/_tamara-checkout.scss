@@ -1,0 +1,85 @@
+.spc-checkout-payment-options {
+  .payment-method-tamara {
+    .payment-method-top-panel {
+      img {
+        height: rem(32);
+        width: auto;
+        align-self: flex-start;
+        margin-top: rem(12);
+      }
+
+      .payment-method-label-wrapper {
+        padding-bottom: rem(12);
+
+        .radio-label {
+          display: inline-flex;
+
+          &::before {
+            top: rem(30);
+          }
+        }
+
+        .tamara-widget {
+          display: inline-block;
+
+          .payment-method-tamara__info {
+            background: none;
+            border: none;
+
+            @include icon(infomation, after) {
+              color: $_spc-billing-help;
+              font-size: rem(20);
+              position: relative;
+              top: rem(3);
+            }
+          }
+        }
+
+        .spc-payment-method-desc {
+          font-size: rem(12);
+          padding-#{$left}: 0;
+          padding-top: rem(8);
+        }
+      }
+    }
+
+    .tamara-installment-plan-widget {
+      padding-top: 0 !important;
+      padding-#{$left}: rem(48) !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .spc-checkout-payment-options {
+    .payment-method-tamara {
+      .payment-method-top-panel {
+        .payment-method-label-wrapper {
+          .spc-payment-method-desc {
+            font-size: rem(10);
+          }
+
+          .tamara-widget {
+            .payment-method-tamara__info {
+              padding-#{$right}: 0;
+              padding-#{$left}: rem(4);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .spc-checkout-payment-options {
+    .payment-method-tamara {
+      .payment-method-top-panel {
+        img {
+          margin-top: rem(16);
+        }
+      }
+    }
+  }
+}

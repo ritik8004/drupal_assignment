@@ -26,3 +26,4 @@ product:
 promotion:
   placeholder_nid:
   path_prefix: 'promotion'
+alias_prefix_for_conflicts: 'page-'

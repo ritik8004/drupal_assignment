@@ -8,3 +8,4 @@ variables:
   spc_single_product_detail_page_coupon: ''
   spc_multiple_product_detail_page_coupon: ''
   spc_single_product_detail_page_no_coupon: ''
+  spc_egift_page: '/egift/'

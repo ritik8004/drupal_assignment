@@ -379,8 +379,11 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {object} product
    *   The product entity.
+   *
+   * @param {object} variantParentProduct
+   *   The variant parent.
    */
-  function getVariantsInfo(product) {
+  function getVariantsInfo(product, variantParentProduct) {
     const info = {};
     var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     product.variants.forEach(function (variant) {
@@ -391,7 +394,6 @@ window.commerceBackend = window.commerceBackend || {};
         return;
       }
       const variantParentSku = variantInfo.parent_sku;
-      const variantParentProduct = window.commerceBackend.getProductData(null, null, false)[variantParentSku];
       // Use URL from parent if not available in child - we add in variants only for styled products.
       const productUrl = Drupal.hasValue(variantInfo.url_key)
         ? getProductUrls(variantInfo.url_key)
@@ -445,9 +447,19 @@ window.commerceBackend = window.commerceBackend || {};
         if (maxSaleQuantity > 0) {
           info[variantSku].maxSaleQty = maxSaleQuantity;
           info[variantSku].stock.maxSaleQty = maxSaleQuantity;
-          info[variantSku].stock.orderLimitMsg = getMaxSaleQtyMessage(maxSaleQuantity);
+          info[variantSku].orderLimitMsg = getMaxSaleQtyMessage(maxSaleQuantity);
         }
       }
+
+      var productInfoAlterEvent = new CustomEvent('rcsProductInfoAlter', {
+        detail: {
+          data: {
+            processedProduct: info[variantSku],
+            rawProduct: variantInfo
+          }
+        }
+      });
+      document.dispatchEvent(productInfoAlterEvent);
     });
 
     return info;
@@ -491,24 +503,12 @@ window.commerceBackend = window.commerceBackend || {};
       },
     };
 
-    let maxSaleQty = 0;
+    // Set max sale quantity.
+    setMaxSaleQty(productData, product.stock_data.max_sale_qty);
 
-    if (productData.type === 'simple') {
-      maxSaleQty = isQuantityLimitEnabled() ? getMaxSaleQuantity(product) : maxSaleQty;
-    }
-    else if (productData.type === 'configurable') {
+    if (productData.type === 'configurable') {
       productData.configurables = getConfigurables(product);
-      productData.variants = getVariantsInfo(product);
-
-      if (isQuantityLimitEnabled()) {
-        maxSaleQty = getMaxSaleQuantity(product);
-      }
-    }
-
-    if (maxSaleQty > 0) {
-      productData.maxSaleQty = maxSaleQty;
-      productData.max_sale_qty_parent = false;
-      productData.orderLimitMsg = getMaxSaleQtyMessage(maxSaleQty);
+      productData.variants = getVariantsInfo(product, productData);
     }
 
     // Add general bazaar voice data to product data if present.
@@ -522,7 +522,39 @@ window.commerceBackend = window.commerceBackend || {};
       productData.alshaya_bazaar_voice = drupalSettings.alshaya_bazaar_voice;
     }
 
+    var productInfoAlterEvent = new CustomEvent('rcsProductInfoAlter', {
+      detail: {
+        data: {
+          processedProduct: productData,
+          rawProduct: product
+        }
+      }
+    });
+    document.dispatchEvent(productInfoAlterEvent);
+
     return productData;
+  }
+
+  /**
+   * Set max sale quantity.
+   *
+   * @param {object} productData
+   *   The product data.
+   *
+   * @param {integer} maxSaleQty
+   *   The quantity.
+   */
+  function setMaxSaleQty(productData, maxSaleQty) {
+    productData.maxSaleQty = 0;
+    if (!isQuantityLimitEnabled()) {
+      return;
+    }
+
+    if (maxSaleQty > 0) {
+      productData.maxSaleQty = maxSaleQty;
+      productData.max_sale_qty_parent = false;
+      productData.orderLimitMsg = getMaxSaleQtyMessage(maxSaleQty);
+    }
   }
 
   function fetchAndProcessCustomAttributes() {
@@ -792,10 +824,10 @@ window.commerceBackend = window.commerceBackend || {};
         }
       });
 
-      staticDataStore.configurableColorData[sku] = data;
-
-      return data;
     }
+
+    staticDataStore.configurableColorData[sku] = data;
+    return data;
   }
 
   /**
@@ -822,7 +854,7 @@ window.commerceBackend = window.commerceBackend || {};
     }
     // Get the product data.
     // The product will be fetched and saved in static storage.
-    staticDataStore.productDataFromBackend[mainSKU] = globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
+    staticDataStore.productDataFromBackend[mainSKU][sku] = globalThis.rcsPhCommerceBackend.getData('product_by_sku', {sku: mainSKU}).then(async function productsFetched(response){
       if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
         await window.commerceBackend.getProductsInStyle(response, loadStyles);
       }

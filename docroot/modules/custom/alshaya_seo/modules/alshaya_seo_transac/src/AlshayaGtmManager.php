@@ -9,6 +9,7 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -36,6 +37,8 @@ use Detection\MobileDetect;
  * @package Drupal\alshaya_seo
  */
 class AlshayaGtmManager {
+
+  use LoggerChannelTrait;
 
   /**
    * Store GTM Container in static to avoid re-calculating.
@@ -776,11 +779,19 @@ class AlshayaGtmManager {
     }
 
     // If list cookie is set, set the list variable.
-    $product_list = $this->requestStack->getCurrentRequest()->cookies->get('product-list');
-    if (isset($product_list)) {
-      $listValues = Json::decode($product_list);
-      $product_details['list'] = $listValues[$product_details['id']] ?? '';
+    if (!empty($product_details['id'])) {
+      $product_list = $this->requestStack->getCurrentRequest()->cookies->get('product-list');
+      if (isset($product_list)) {
+        $listValues = Json::decode($product_list);
+        $product_details['list'] = $listValues[$product_details['id']] ?? '';
+      }
     }
+    else {
+      $this->getLogger(self::class)->warning('GTM Product Details does not contain ID. Details: @details.', [
+        '@details' => json_encode($product_details),
+      ]);
+    }
+
     return $product_details;
   }
 
@@ -1046,15 +1057,14 @@ class AlshayaGtmManager {
     if ($is_customer) {
       $current_user = $this->entityTypeManager->getStorage('user')->load($current_user_id);
       $customer_id = $current_user->get('acq_customer_id')->getString();
-      $orders_count = $this->ordersManager->getOrdersCount($customer_id);
       if (!empty($current_user->get('field_mobile_number')->getValue())) {
         $phone_number = $current_user->get('field_mobile_number')->getValue()[0]['value'];
       }
     }
-    else {
-      // For guest user too we want to know if user has placed multiple orders.
-      $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
-    }
+    // Order count should be checked by email only, To cover the scenario,
+    // When the email has been used to place order as guest user and
+    // Later on same email was used to create an account.
+    $orders_count = $this->ordersManager->getOrdersCountByCustomerMail($order['email']);
 
     $additional_info = [];
     // Fetch Additional Info.
@@ -1084,6 +1094,37 @@ class AlshayaGtmManager {
       'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
       'platformType' => $this->getUserDeviceType(),
     ];
+
+    // Add transaction & payment details.
+    $payment_info = [];
+    foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
+      $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
+    }
+
+    $paymentMethods = [];
+    // Get all the possible payment methods for an order.
+    if ($order['payment']['method'] === 'checkout_com_upapi') {
+      $paymentMethods[] = $payment_info['card_type'] . " Card";
+    }
+    else {
+      $paymentMethods[] = $generalInfo['paymentOption'];
+    }
+
+    // Check if some partial payment is done by any other payment methods.
+    if (array_key_exists('hps_redeemed_amount', $order['extension'])
+      && $order['extension']['hps_redeemed_amount'] > 0) {
+      $paymentMethods[] = 'eGift Card';
+    }
+
+    if (array_key_exists('aura_payment_value', $order['extension'])
+      && $order['extension']['aura_payment_value'] > 0) {
+      $paymentMethods[] = 'Aura Loyalty Card';
+    }
+
+    $generalInfo['paymentMethodsUsed'] = $paymentMethods;
+
+    // Generate the deliveryInfo.
+    $generalInfo['deliveryInfo'] = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['shipping']['address'], TRUE);
 
     return [
       'general' => $generalInfo,

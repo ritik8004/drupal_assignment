@@ -1,4 +1,4 @@
-@javascript @auth @e-gift @hmkwuat @pbkwuat
+@javascript @auth @e-gift @hmkwuat @pbkwuat @bbwkwuat @bbwaeuat @bbwsauat @vskwuat @vssauat @vsaeuat @flkwuat @flsauat @flaeuat @coskwuat @cossauat @cosaeuat @hmsauat @hmaeuat @pbkkwuat @pbksauat @pbkaeuat @tbskwuat @tbseguat @mujikwuat @mujisauat @mujiaeuat @pbsauat @pbaeuat @mckwuat @aeokwuat @bpkwuat @westelmkwuat
 Feature: SPC Checkout Egift feature for Authenticated user
 
   Background:

@@ -39,6 +39,37 @@ $magentos = [
       'store_id' => ['en' => 14, 'ar' => 13],
     ],
   ],
+  'dh_test' => [
+    'url' => 'https://deb-test.store.alshaya.com',
+    'algolia_env' => 'dh_qa',
+    'magento_secrets' => [
+      'consumer_key' => 'akr2k4q7g3eipb6fm7loh07zt2zi3xrk',
+      'consumer_secret' => '60vh9v008i8z6be31mt7wp8bg9jyfe2j',
+      'access_token' => '3brtd8fmksxo52u1r758vcx9gpxdafq4',
+      'access_token_secret' => 'iekq1ibgrdlalh5devb73ue7ei48v57i',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 40],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 28, 'ar' => 31],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 34, 'ar' => 37],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 7, 'ar' => 4],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 13, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+  ],
   'dh_uat' => [
     'url' => 'https://deb-uat.store.alshaya.com',
     'magento_secrets' => [
@@ -205,6 +236,70 @@ $magentos = [
     ],
     'jo' => [
       'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+  ],
+  // Alo Yoga.
+  'ay_qa' => [
+    'url' => 'https://alo-qa.store.alshaya.com',
+    'algolia_env' => 'alo_qa',
+    'magento_secrets' => [
+      'consumer_key' => 'zitdukk0e6zwr9piei0csgk372shqafm',
+      'consumer_secret' => '8a6w1g813pnyikoi2ksaej73cx65fcnf',
+      'access_token' => 'opqugvg6ycfsd7dy6f6t8wb3gn5mljry',
+      'access_token_secret' => 'lfuy25m63a1o5uuisnomac5z0d5o3a3w',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 40],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 28, 'ar' => 31],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 34, 'ar' => 37],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 7, 'ar' => 4],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 13, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+  ],
+  // New Balance.
+  'nb_qa' => [
+    'url' => 'https://integration-5ojmyuq-yuoofriziz4tu.eu-3.magentosite.cloud',
+    'algolia_env' => 'nb_qa',
+    'magento_secrets' => [
+      'consumer_key' => 'rjwijgl0obi48vyw5adoaheq4y6vnps7',
+      'consumer_secret' => 'oe6gwidy4giuso8aq6c5ga2trmatlbyg',
+      'access_token' => '34mt253bnj9a9uwuvx64ivt197sl4yny',
+      'access_token_secret' => 'dz4ngbr3nbf6ofigtk0brkl15ctn6jkk',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 14],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 10, 'ar' => 11],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 12, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 3, 'ar' => 2],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 7, 'ar' => 6],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
     ],
   ],
   // The body shop.
@@ -774,10 +869,10 @@ $magentos = [
       'store_id' => ['en' => 42, 'ar' => 39],
     ],
     'magento_secrets' => [
-      'consumer_key' => 'lrw9btxtxtgiuhr2otmf4qgc0dhe8i5v',
-      'consumer_secret' => '3l5yw7p7ovqr8kovsewhhji6d3e7ntta',
-      'access_token' => 'ye6scxw0bd2a5mgegt5frbtue0ldnexc',
-      'access_token_secret' => 'gk4npgvisuw0hbpmasi0jqvblk38wgh4',
+      'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
+      'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
+      'access_token' => 'ncevhsnmxu35fln4fq3c009lo09frfgm',
+      'access_token_secret' => 'dm4h99kjd387rv29ivthpbatx7dn5g1b',
     ],
   ],
   'hm_uat' => [
@@ -796,10 +891,10 @@ $magentos = [
       'store_id' => ['en' => 30, 'ar' => 27],
     ],
     'bh' => [
-      'store_id' => ['en' => 35, 'ar' => 32],
+      'store_id' => ['en' => 36, 'ar' => 33],
     ],
     'qa' => [
-      'store_id' => ['en' => 41, 'ar' => 38],
+      'store_id' => ['en' => 42, 'ar' => 39],
     ],
     'magento_secrets' => [
       'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
@@ -855,6 +950,25 @@ $magentos = [
   // Pottery Barn.
   'pb_qa' => [
     'url' => 'https://integration-5ojmyuq-rfuu4sicyisyw.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'auf96nt6b1loar4yc2qm55pluqd5sgrn',
+      'consumer_secret' => 'i1lhnoafn6a1ggjou2juj366cpcnnhel',
+      'access_token' => 's4rfv318v1gxmrnq8mjdn01uhejd8760',
+      'access_token_secret' => '4x5otnn378pjr1v3acnmoe934niwjlw7',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+  ],
+  // MDC instance for Tamara payment option.
+  'pb_tamara' => [
+    'url' => 'https://tamara-hl3vs3y-rfuu4sicyisyw.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'auf96nt6b1loar4yc2qm55pluqd5sgrn',
       'consumer_secret' => 'i1lhnoafn6a1ggjou2juj366cpcnnhel',
@@ -1129,7 +1243,7 @@ $magentos = [
   ],
   // BathBodyWorks.
   'bbw_qa' => [
-    'url' => 'https://integration-5ojmyuq-bbk3lvknero4c.eu-3.magentosite.cloud',
+    'url' => 'https://bbw-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
       'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
@@ -1155,7 +1269,7 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
     'jo' => [
-      'store_id' => ['en' => 14, 'ar' => 13],
+      'store_id' => ['en' => 16, 'ar' => 13],
     ],
   ],
   'bbw_apc' => [
@@ -1269,34 +1383,8 @@ $magentos = [
   ],
   // Foot Locker.
   'fl_qa' => [
-    'url' => 'https://integration-5ojmyuq-z2fi6fmoo7n4a.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'f0er5posi7oc9e2p96195mb20e2hh05q',
-      'consumer_secret' => 'f0h2pwyren0ooppm6ix50705l5iouekj',
-      'access_token' => 'tkkes5bu2l9qn8y3hbaex7x6xbcsfvxr',
-      'access_token_secret' => 'p8e71whrsnx4pdim61wyush1qp5tvqqs',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'bh' => [
-      'store_id' => ['en' => 10, 'ar' => 9],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-  ],
-  'fl_test' => [
     'url' => 'https://fl-test.store.alshaya.com',
+    'algolia_env' => 'fl_test',
     'magento_secrets' => [
       'consumer_key' => '7odnwfhqxgemmfg8cmmo7iqipbb74hav',
       'consumer_secret' => 'mqf2sk1s87h9hmqmeyu2wdtetj73hyqf',
@@ -1305,6 +1393,21 @@ $magentos = [
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 19],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 7, 'ar' => 10],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 13, 'ar' => 16],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 31, 'ar' => 28],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 37, 'ar' => 34],
     ],
   ],
   'fl_uat' => [
