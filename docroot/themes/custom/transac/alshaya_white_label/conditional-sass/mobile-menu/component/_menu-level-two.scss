@@ -1,34 +1,32 @@
-.ay-menu--two__list {
-  background-color: $white-five;
-  padding-top: rem(15);
-  padding-left: rem(13);
-  padding-right: rem(13);
-  padding-bottom: rem(16);
-}
+.ay-level-two {
+  background-color: $menu_bg;
+  padding: rem(15) rem(13) rem(16);
 
-.ay-menu--two__link {
-  position: relative;
-  display: block;
-  margin-bottom: rem(16);
-  color: $white-five;
+  &__link {
+    position: relative;
+    display: flex;
+    margin-bottom: rem(16);
+    height: rem(149);
 
-  &:last-child {
-    margin-bottom: 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
-}
 
-.ay-menu--two__image {
-  width: 100%;
-  height: auto;
-}
+  &__image {
+    width: 100%;
+    height: auto;
+  }
 
-.ay-menu--two__heading {
-  position: absolute;
-  z-index: 1;
-  white-space: nowrap;
-  transform: translateY(-50%);
-  top: 50%;
-  left: rem(18);
-  font-size: rem(18);
-  line-height: 1.22;
+  &__heading {
+    position: absolute;
+    z-index: 1;
+    white-space: nowrap;
+    transform: translateY(-50%);
+    top: 50%;
+    #{$left}: rem(18);
+    font-size: rem(18);
+    line-height: 1.22;
+    color: $mob_menu_two_color_text;
+  }
 }
