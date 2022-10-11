@@ -29,6 +29,11 @@ function alshaya_add_to_bag_theme() {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_add_to_bag_page_attachments_alter(array &$page) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
   // Skip the processing of add to bag for checkout and confirmation page.
   if (in_array(\Drupal::routeMatch()->getRouteName(), [
     'alshaya_spc.checkout',
