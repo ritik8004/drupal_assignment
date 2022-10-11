@@ -97,16 +97,14 @@ export const showFullScreenLoader = (contextualClass = '') => {
   let loaderDiv = document.querySelector('.fullscreen-loader');
   if (typeof contextualClass === 'string' && contextualClass !== '') {
     if (loaderDiv) {
-      if (loaderDiv.classList.contains(contextualClass)) {
-        // Loader already contains this contextual class.
-        return;
+      if (!loaderDiv.classList.contains(contextualClass)) {
+        // Add contextual class to existing loader.
+        loaderDiv.classList.add(contextualClass);
       }
-      // Add contextual class to existing loader.
-      loaderDiv.classList.add(contextualClass);
-    } else {
-      // Append contextual class to the list of classes.
-      classes = fullLoaderClasses.concat([contextualClass]);
+      return;
     }
+    // Append contextual class to the list of classes.
+    classes = fullLoaderClasses.concat([contextualClass]);
   } else if (loaderDiv) {
     // Loader already loaded.
     return;
@@ -129,22 +127,16 @@ export const showFullScreenLoader = (contextualClass = '') => {
  *   The loader context.
  */
 export const removeFullScreenLoader = (contextualClass = '') => {
-  let loaderDiv = null;
-  if (typeof contextualClass === 'string' && contextualClass !== '') {
-    // Check if there is a loader with the contextual class.
-    loaderDiv = document.querySelector(`.${contextualClass}`);
-    if (loaderDiv) {
-      // Remove the contextual class.
-      loaderDiv.classList.remove(contextualClass);
-    }
-  } else {
-    // Populate loader div.
-    loaderDiv = document.querySelector('.fullscreen-loader');
-  }
-
-  // Loader div is not on the page.
+  // Populate loader div.
+  const loaderDiv = document.querySelector('.fullscreen-loader');
   if (!loaderDiv) {
     return;
+  }
+
+  // Check if there is a loader with the contextual class.
+  if (loaderDiv.classList.contains(contextualClass)) {
+    // Remove the contextual class.
+    loaderDiv.classList.remove(contextualClass);
   }
 
   // Check if there are still contextual classes.
