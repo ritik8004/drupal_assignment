@@ -101,6 +101,7 @@
           font-family: $alshaya-thin;
           line-height: 1.25;
           font-size: rem(16);
+          text-transform: none;
 
           @include breakpoint($only-mobile) {
             line-height: 1;
