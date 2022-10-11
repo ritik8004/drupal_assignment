@@ -386,7 +386,7 @@ function rcs_placeholders_language_switch_links_alter(array &$links, $type, Url 
     )->toString();
 
     // Add the URL as is, RCS expects the URL to be same in all languages.
-    $url .= RcsPhPathProcessor::getFullPath(FALSE);
+    $url .= RcsPhPathProcessor::getFullPath();
 
     // We use absolute url below to make sure Drupal does not modify it.
     $links[$language->getId()]['url'] = Url::fromUri($url);
