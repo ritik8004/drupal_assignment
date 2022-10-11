@@ -17,7 +17,7 @@
     &.product-large {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          height: rem(408);
+          height: rem(480);
         }
       }
     }
@@ -137,6 +137,12 @@
           }
         }
       }
+    }
+  }
+
+  .c-page-title {
+    @include breakpoint($only-mobile) {
+      padding-bottom: rem(20);
     }
   }
 }
