@@ -165,7 +165,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['super_category']);
   }
 
 }

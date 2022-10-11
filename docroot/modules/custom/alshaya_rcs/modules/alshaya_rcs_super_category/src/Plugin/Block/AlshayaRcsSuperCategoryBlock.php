@@ -195,7 +195,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
         'gtm_menu_title' => $gtm_menu_title,
         'imgPath' => $img_path,
         'inactive_path' => $inactive_path,
-        'path' => '/' . $category->get('field_category_slug')->getString(),
+        'path' => Url::fromUserInput('/' . $category->get('field_category_slug')->getString())->toString(),
       ];
 
       $cache_tags = Cache::mergeTags(

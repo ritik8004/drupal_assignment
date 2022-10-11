@@ -1,4 +1,11 @@
 services:
+  cache_context.super_category:
+    class: Drupal\alshaya_super_category\Cache\Context\SuperCategoryCacheContext
+    arguments:
+      - '@alshaya_super_category.super_category_feature_manager'
+    tags:
+      - { name: cache.context }
+
   alshaya_super_category.product_category_tree:
     class: Drupal\alshaya_super_category\ProductSuperCategoryTree
     decorates: alshaya_acm_product_category.product_category_tree

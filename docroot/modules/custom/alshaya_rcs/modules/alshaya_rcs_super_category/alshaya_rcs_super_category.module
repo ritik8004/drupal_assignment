@@ -25,13 +25,17 @@ function alshaya_rcs_super_category_rcs_placeholders_processor_path_alter(string
     // We need original path for storing in static cache.
     $original_path = $path;
 
-    $path_arr = explode('/', $path);
-    // Do nothing if we land on super category page itself.
-    if (count(array_filter($path_arr)) >= 2) {
-      unset($path_arr[1]);
+    $path_parts = explode('/', $path);
+
+    // Remove the super category from path.
+    $slug = trim($term->get('field_category_slug')->getString(), '/');
+    foreach ($path_parts as $index => $path_part) {
+      if ($path_part === $slug) {
+        unset($path_parts[$index]);
+      }
     }
 
-    $path = implode('/', $path_arr);
+    $path = implode('/', array_values($path_parts));
     $mapping[$original_path] = $path;
   }
 }
