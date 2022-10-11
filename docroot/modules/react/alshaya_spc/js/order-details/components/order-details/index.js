@@ -35,13 +35,13 @@ class OrderDetails extends React.Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    showFullScreenLoader();
+    showFullScreenLoader('order-details');
     window.commerceBackend.getOrderDetailsData().then((orderDetails) => {
       this.setState({ order: orderDetails });
       // If Online Returns is enabled we need to process order data
       // based on returns.
       if (isOnlineReturnsEnabled()) {
-        showFullScreenLoader();
+        showFullScreenLoader('order-details');
         this.processOrderData();
       } else {
         this.setState({ loading: false });
@@ -83,7 +83,7 @@ class OrderDetails extends React.Component {
       return null;
     }
 
-    removeFullScreenLoader();
+    removeFullScreenLoader('order-details');
 
     return (
       <>
