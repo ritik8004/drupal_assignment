@@ -36,7 +36,6 @@
           display: flex;
           margin: 0;
           align-items: center;
-          border-top: rem(1) solid $footer_title_h3;
           font-family: $alshaya-thin;
           padding: rem(14) rem(8);
         }
@@ -61,6 +60,7 @@
         font-family: $alshaya-thin;
         line-height: 1.25;
         font-size: rem(16);
+        text-transform: none;
 
         @include breakpoint($only-mobile) {
           line-height: 1;
@@ -87,7 +87,6 @@
           display: flex;
           margin: 0;
           align-items: center;
-          border-top: rem(1) solid $footer_title_h3;
           font-family: $alshaya-thin;
           padding: rem(14) rem(8);
         }
