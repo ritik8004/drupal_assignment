@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_rcs_main_menu\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -67,7 +68,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
     );
   }
 
@@ -158,6 +159,13 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
     }
 
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
   }
 
 }

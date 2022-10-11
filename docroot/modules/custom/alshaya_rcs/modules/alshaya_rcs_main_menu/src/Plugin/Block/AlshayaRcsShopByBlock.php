@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_rcs_main_menu\Plugin\Block;
 
 use Drupal\alshaya_acm_product_category\Plugin\Block\AlshayaShopByBlock;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides alshaya rcs shop by block.
@@ -19,7 +20,6 @@ class AlshayaRcsShopByBlock extends AlshayaShopByBlock {
    */
   public function build() {
     $variables = [];
-
     $variables['category_id'] = $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category');
 
     // Allow other modules to modify the variables.
@@ -44,6 +44,13 @@ class AlshayaRcsShopByBlock extends AlshayaShopByBlock {
         ],
       ]
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
   }
 
 }

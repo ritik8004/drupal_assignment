@@ -26,7 +26,10 @@ function alshaya_rcs_super_category_rcs_placeholders_processor_path_alter(string
     $original_path = $path;
 
     $path_arr = explode('/', $path);
-    unset($path_arr[1]);
+    // Do nothing if we land on super category page itself.
+    if (count(array_filter($path_arr)) >= 2) {
+      unset($path_arr[1]);
+    }
 
     $path = implode('/', $path_arr);
     $mapping[$original_path] = $path;
