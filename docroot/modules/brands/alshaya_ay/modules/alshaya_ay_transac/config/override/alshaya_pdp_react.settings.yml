@@ -1,2 +1,2 @@
-show_new_pdp_desc_container: true
+pdp_description_container_type: 2
 show_related_products_from_drupal: false

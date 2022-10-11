@@ -1,4 +1,4 @@
-(function (Drupal, drupalSettings, $, RcsEventManager) {
+(function (Drupal, drupalSettings, RcsEventManager) {
   // Call event after entity load and process product data.
   RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
     var mainProduct = e.detail.entity;
@@ -137,4 +137,4 @@
     };
   }
 
-})(Drupal, drupalSettings, jQuery, RcsEventManager);
+})(Drupal, drupalSettings, RcsEventManager);

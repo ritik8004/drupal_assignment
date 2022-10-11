@@ -29,14 +29,14 @@ import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wish
 import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
-import PdpNewDescContainer from '../pdp-new-desc-container';
+import PdpDescriptionType2 from '../pdp-description-type2';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
   const [panelContent, setPanelContent] = useState(null);
   const {
     productInfo,
-    showNewPdpDescContainer,
+    pdpDescriptionContainerType,
     showRelatedProductsFromDrupal,
   } = drupalSettings;
 
@@ -224,9 +224,9 @@ const PdpLayout = () => {
           >
             <Lozenges labels={labels} sku={skuItemCode} />
           </PdpGallery>
-          {showNewPdpDescContainer
+          {(pdpDescriptionContainerType === 2)
             && (
-            <PdpNewDescContainer
+            <PdpDescriptionType2
               description={description}
               additionalAttributes={additionalAttributes}
             />
@@ -311,7 +311,7 @@ const PdpLayout = () => {
               productInfo={productInfo}
             />
           </ConditionalView>
-          {!showNewPdpDescContainer
+          {(pdpDescriptionContainerType === 1)
             && (
             <PdpDescription
               skuCode={skuMainCode}

@@ -2,7 +2,7 @@ import React from 'react';
 import parse from 'html-react-parser';
 import PdpSectionText from '../utilities/pdp-section-text';
 
-const PdpNewDescContainer = (props) => {
+const PdpDescriptionType2 = (props) => {
   const {
     description,
     additionalAttributes,
@@ -32,4 +32,4 @@ const PdpNewDescContainer = (props) => {
   ));
 };
 
-export default PdpNewDescContainer;
+export default PdpDescriptionType2;
