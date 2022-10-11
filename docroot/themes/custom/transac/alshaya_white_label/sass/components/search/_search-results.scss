@@ -135,9 +135,9 @@ header,
 .fullscreen-loader {
   position: fixed;
   z-index: 1000;
-  padding: 4px;
+  padding: rem(4);
   opacity: 0.9;
-  border-radius: 7px;
+  border-radius: rem(7);
   background-position: center center;
 }
 
