@@ -241,6 +241,8 @@ header {
 .site-brand-home {
   @include breakpoint($only-mobile) {
     width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .block-system-branding-block & {
@@ -286,6 +288,11 @@ header {
       html[lang=ar] & {
         max-width: rem(80);
         top: rem(6);
+      }
+
+      .alias--cart-login &,
+      .alias--checkout & {
+        position: static;
       }
     }
   }

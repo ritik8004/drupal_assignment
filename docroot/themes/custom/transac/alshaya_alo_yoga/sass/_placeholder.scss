@@ -18,8 +18,12 @@
 
 %page-title {
   text-transform: unset;
+  font-size: rem(38);
+  font-family: $ay-heavy;
 
   @include breakpoint($only-mobile) {
     text-align: center;
+    padding: rem(20);
+    font-size: rem(20);
   }
 }
