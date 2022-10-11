@@ -29,11 +29,17 @@ import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wish
 import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
+import PdpDescriptionType2 from '../pdp-description-type2';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
   const [panelContent, setPanelContent] = useState(null);
-  const { productInfo } = drupalSettings;
+  const {
+    productInfo,
+    pdpDescriptionContainerType,
+    showRelatedProductsFromDrupal,
+  } = drupalSettings;
+
   let skuItemCode = '';
 
   if (productInfo) {
@@ -69,6 +75,7 @@ const PdpLayout = () => {
     pdpGallery,
     shortDesc,
     description,
+    additionalAttributes,
     configurableCombinations,
     relatedProducts,
     stockStatus,
@@ -217,6 +224,13 @@ const PdpLayout = () => {
           >
             <Lozenges labels={labels} sku={skuItemCode} />
           </PdpGallery>
+          {(pdpDescriptionContainerType === 2)
+            && (
+            <PdpDescriptionType2
+              description={description}
+              additionalAttributes={additionalAttributes}
+            />
+            )}
         </div>
         <div className="magv2-sidebar" ref={sidebarContainer}>
           <PdpInfo
@@ -297,16 +311,19 @@ const PdpLayout = () => {
               productInfo={productInfo}
             />
           </ConditionalView>
-          <PdpDescription
-            skuCode={skuMainCode}
-            pdpDescription={description}
-            pdpShortDesc={shortDesc}
-            title={title}
-            pdpProductPrice={priceRaw}
-            finalPrice={finalPrice}
-            getPanelData={getPanelData}
-            removePanelData={removePanelData}
-          />
+          {(pdpDescriptionContainerType === 1)
+            && (
+            <PdpDescription
+              skuCode={skuMainCode}
+              pdpDescription={description}
+              pdpShortDesc={shortDesc}
+              title={title}
+              pdpProductPrice={priceRaw}
+              finalPrice={finalPrice}
+              getPanelData={getPanelData}
+              removePanelData={removePanelData}
+            />
+            )}
           <ConditionalView
             condition={isExpressDeliveryEnabled()
             && isProductBuyable && !bigTickectProduct}
@@ -322,7 +339,7 @@ const PdpLayout = () => {
           <PdpSharePanel />
         </div>
       </div>
-      {relatedProducts ? (
+      {(relatedProducts && showRelatedProductsFromDrupal) ? (
         <div className="magv2-pdp-crossell-upsell-wrapper" ref={crosssellContainer}>
           {Object.keys(relatedProducts).map((type) => (
             <PdpRelatedProducts
@@ -336,7 +353,7 @@ const PdpLayout = () => {
             />
           ))}
         </div>
-      ) : null}
+      ) : <div className="magv2-pdp-crossell-upsell-wrapper" ref={crosssellContainer} />}
       <PpdPanel panelContent={panelContent} />
       <DynamicYieldPlaceholder
         context="pdp"

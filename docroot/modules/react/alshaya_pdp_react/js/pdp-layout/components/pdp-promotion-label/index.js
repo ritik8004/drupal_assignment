@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import PdpDynamicPromotions from '../pdp-dynamic-promotions';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class PdpPromotionLabel extends React.Component {
   constructor(props) {
@@ -25,36 +26,46 @@ class PdpPromotionLabel extends React.Component {
 
   getPromotionInfo = () => {
     // If product promotion data is already processed.
-    const { skuMainCode } = this.props;
+    const { skuMainCode, promotions } = this.props;
     const { promotionsRawData } = this.state;
-    const url = Drupal.url(`rest/v2/product/${btoa(skuMainCode)}?pdp=magazinev2`);
-    const promotionStateValue = promotionsRawData ? promotionsRawData[skuMainCode] : null;
-    if (promotionStateValue === null || promotionStateValue === undefined) {
-      axios.get(url).then((response) => {
-        if (response.data.length !== 0) {
-          const promotions = promotionsRawData || {};
-          promotions[skuMainCode] = response.data.promotionsRaw;
-          this.setState({
-            promotionsRawData: promotions,
-          });
-        }
-      });
+
+    if (!hasValue(promotions)) {
+      const url = Drupal.url(`rest/v2/product/${btoa(skuMainCode)}?pdp=magazinev2`);
+      const promotionStateValue = promotionsRawData ? promotionsRawData[skuMainCode] : null;
+      if (promotionStateValue === null || promotionStateValue === undefined) {
+        axios.get(url).then((response) => {
+          if (response.data.length !== 0) {
+            const promotionsData = promotionsRawData || {};
+            promotionsData[skuMainCode] = response.data.promotionsRaw;
+            this.setState({
+              promotionsRawData: promotionsData,
+            });
+          }
+        });
+      }
     }
   }
-
 
   render() {
     const {
       skuMainCode,
       cartDataValue,
+      promotions,
     } = this.props;
     const { promotionsRawData } = this.state;
-    const promotions = promotionsRawData ? promotionsRawData[skuMainCode] : null;
 
-    return (promotions) ? (
+    let promotionsData = promotionsRawData ? promotionsRawData[skuMainCode] : null;
+    // Check promotions from props.
+    if (hasValue(promotions)) {
+      promotionsData = promotions;
+    }
+
+    return (promotionsData) ? (
       <>
-        {Object.keys(promotions).map((key) => (
-          <p><a href={promotions[key].promo_web_url}>{promotions[key].text}</a></p>
+        {Object.keys(promotionsData).map((key) => (
+          <p key={key}>
+            <a href={promotionsData[key].promo_web_url}>{promotionsData[key].text}</a>
+          </p>
         ))}
         <div id="dynamic-promo-labels">
           <PdpDynamicPromotions skuMainCode={skuMainCode} cartDataValue={cartDataValue} />
@@ -63,4 +74,5 @@ class PdpPromotionLabel extends React.Component {
     ) : null;
   }
 }
+
 export default PdpPromotionLabel;
