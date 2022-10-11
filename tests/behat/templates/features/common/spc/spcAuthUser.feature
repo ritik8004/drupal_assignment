@@ -14,12 +14,12 @@ Feature: Test the My Account functionality
     And the element "#block-userrecentorders" should exist
     And the element "#block-userrecentorders .no--orders" should exist
     And the element "#block-userrecentorders .subtitle" should exist
-    And the element "#block-userrecentorders .edit-account" should exist
+    And the element "a.edit-account-btn-button" should exist
     And I should see "You have no recent orders to display."
 
   @address
   Scenario: As an authenticated user, I should be able to address to my address book
-    When I click the label for "#block-alshayamyaccountlinks > ul.my-account-nav > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
     And I wait 10 seconds
     And I wait for AJAX to finish
     Then I check the address-book form

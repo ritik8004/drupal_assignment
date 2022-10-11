@@ -21,7 +21,7 @@ Feature: Test the My Account functionality
     And the element "#block-content .account-content-wrapper .email" should exist
 
   Scenario: As an authenticated user, I should be able to update my contact details
-    When I click the label for "#block-alshayamyaccountlinks >ul.my-account-nav > li > a.my-account-contact-details"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
     And I wait for the page to load
     When I fill in "field_mobile_number[0][mobile]" with "{mobile}"
     And I press "edit-submit"
@@ -47,7 +47,7 @@ Feature: Test the My Account functionality
 
   @address
   Scenario: As an authenticated user, I should be able to edit address to my address book
-    When I click the label for "#block-alshayamyaccountlinks > ul.my-account-nav > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
     Then I check the address-book form
@@ -64,13 +64,12 @@ Feature: Test the My Account functionality
       | field_address[0][address][locality]                  | {locality}    |
       | field_address[0][address][address_line2]             | {floor}       |
     And I press "op"
-    When I wait for AJAX to finish
     And I wait 10 seconds
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 
   @cancel
   Scenario: As an authenticated user, I should be able to perform Cancel action on add/edit address pages
-    When I click the label for "#block-alshayamyaccountlinks > ul.my-account-nav > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
     Then I click on "#block-content a" element
@@ -93,7 +92,7 @@ Feature: Test the My Account functionality
   @delete
   Scenario: As an authenticated user, I should not be able to delete my primary address but should be able to delete any
   other address
-    When I click the label for "#block-alshayamyaccountlinks > ul.my-account-nav > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
     Then the element "div.view-id-address_book .user__address--column div.address.default" should exist
@@ -103,13 +102,12 @@ Feature: Test the My Account functionality
     Then I click on "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" element
     And I wait 10 seconds
     Then I click on "form.profile-address-book-delete-form.profile-confirm-form div.form-actions button" element
-    When I wait for AJAX to finish
     And I wait 10 seconds
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 
   @change-password
   Scenario: As an authenticated user, I should see the options to change my password
-    When I click the label for "#block-alshayamyaccountlinks > ul.my-account-nav > li > a.my-account-change-password"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-change-password"
     And I wait 10 seconds
     And I wait for the page to load
     And I should see an "#block-page-title" element
