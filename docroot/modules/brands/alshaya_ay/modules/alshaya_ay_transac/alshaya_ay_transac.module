@@ -23,10 +23,7 @@ function alshaya_ay_transac_preprocess_html(&$variables) {
 
   // We need an additional class on body tag for showing search input field
   // expanded when the current page is a super category home page except the
-  // site home page. For example, in AEO, we have two super categories for now
-  // i.e. Americal Eagle and Aerie so we need new class on Aerie home page only
-  // as Americal Eagle home page is set to site home page.
-  // Get the root or super categories.
+  // site home page.
   /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
   $super_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
 
