@@ -5,10 +5,14 @@ body.wishlist-enabled {
     }
 
     .wishlist-icon {
-      height: rem(18);
-      width: rem(18);
+      height: rem(20);
+      width: rem(20);
       top: rem(5);
       position: relative;
+
+      html[lang=ar] & {
+        top: rem(8);
+      }
     }
   }
 
