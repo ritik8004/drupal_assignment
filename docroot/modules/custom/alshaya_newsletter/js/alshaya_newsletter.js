@@ -69,7 +69,7 @@
 
           // Call the response handler function with all the required data.
           $.fn.newsletterHandleResponse(data);
-        },10);
+        }, 1);
       });
 
       // Hide multiple inline error messages for email field.
