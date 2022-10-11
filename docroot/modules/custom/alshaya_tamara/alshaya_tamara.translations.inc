@@ -20,6 +20,12 @@ function _alshaya_tamara_translations() {
         'context' => 'tamara',
       ],
     ],
+    'v2' => [
+      'Tamara' => [
+        'ar' => 'تمارا',
+        'context' => 'tamara',
+      ],
+    ],
   ];
 
   return $strings;
