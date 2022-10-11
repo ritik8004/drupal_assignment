@@ -210,6 +210,10 @@ class RcsSuperCategoryHelper {
           'type' => 'advanced_page',
           'langcode' => $lang_code,
         ]);
+
+        $node->setPublished();
+        $node->set('moderation_state', 'published');
+        $node->setPromoted(NodeInterface::NOT_PROMOTED);
       }
       else {
         $node = $node_storage->load(current($nodes));
@@ -223,6 +227,10 @@ class RcsSuperCategoryHelper {
               'type' => 'advanced_page',
               'langcode' => $lang_code,
             ]);
+
+            $node->setPublished();
+            $node->set('moderation_state', 'published');
+            $node->setPromoted(NodeInterface::NOT_PROMOTED);
           }
         }
       }
