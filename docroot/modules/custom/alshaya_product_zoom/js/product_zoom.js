@@ -26,9 +26,6 @@
         // Adding class if there is no slider.
         addPagerClass();
 
-        // Adding class to .content__main if only one item in slider
-        addNoThumbnailsClass()
-
         // Modal view on image click in desktop and tablet.
         // Modal view for PDP Slider, when clicking on main image.
         var element = $(zoomContainer.find('#product-full-screen-gallery-container'));
@@ -617,17 +614,6 @@
           $(this).addClass('pager-yes');
         }
       });
-    }
-  }
-
-  /**
-   * Add .no-thumbnails class for if only 1 slide available.
-   */
-  function addNoThumbnailsClass() {
-    if ($('#product-zoom-container > .cloudzoom.thumbnail-count-1').length) {
-      $('.content__main').addClass('no-thumbnails');
-    } else {
-      $('.content__main').removeClass('no-thumbnails');
     }
   }
 
