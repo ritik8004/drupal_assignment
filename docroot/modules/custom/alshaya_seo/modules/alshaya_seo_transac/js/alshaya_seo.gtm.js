@@ -1584,7 +1584,7 @@
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
       eventLabel: context,
-      eventAction: message,
+      eventAction: decodeURIComponent(message),
       eventPlace: 'Error occurred on ' + window.location.href,
       eventValue: 0,
       nonInteraction: 0,
