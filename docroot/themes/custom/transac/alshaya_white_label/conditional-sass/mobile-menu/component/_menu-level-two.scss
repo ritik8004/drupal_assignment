@@ -1,0 +1,34 @@
+.ay-menu--two__list {
+  background-color: $white-five;
+  padding-top: rem(15);
+  padding-left: rem(13);
+  padding-right: rem(13);
+  padding-bottom: rem(16);
+}
+
+.ay-menu--two__link {
+  position: relative;
+  display: block;
+  margin-bottom: rem(16);
+  color: $white-five;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ay-menu--two__image {
+  width: 100%;
+  height: auto;
+}
+
+.ay-menu--two__heading {
+  position: absolute;
+  z-index: 1;
+  white-space: nowrap;
+  transform: translateY(-50%);
+  top: 50%;
+  left: rem(18);
+  font-size: rem(18);
+  line-height: 1.22;
+}
