@@ -229,6 +229,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
       ],
       '#cache' => [
         'tags' => $cache_tags,
+        'contexts' => ['super_category', 'url.query_args:brand'],
       ],
       '#attached' => [
         'library' => [
