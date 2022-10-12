@@ -135,7 +135,7 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     }
     $names = [$name, $name . '/'];
     $query = $this->termStorage->getQuery();
-    $query->condition('vid', 'rcs_category');
+    $query->condition('vid', self::VOCABULARY_ID);
     $query->condition('field_category_slug', $names, 'IN');
     $query->condition('langcode', $langcode);
     $tids = $query->execute();
@@ -143,19 +143,6 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
       $term = $this->termStorage->load(current($tids));
       return (!empty($term)) ? $term->id() : NULL;
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCategoryTermParents($term) {
-    $parents = [];
-    // If term is of 'acq_product_category' vocabulary.
-    if ($term instanceof TermInterface && $term->bundle() == self::VOCABULARY_ID) {
-      // Get all parents of the given term.
-      $parents = $this->termStorage->loadAllParents($term->id());
-    }
-    return $parents;
   }
 
 }
