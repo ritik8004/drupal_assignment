@@ -1,0 +1,206 @@
+.nodetype--acq_product .page-wrapper {
+  background-color: #ffffff;
+}
+
+.magv2-sidebar {
+  padding-left: rem(12);
+  padding-right: rem(12);
+  background-color: #ffffff;
+
+  .magv2-detail-wrapper {
+    .magv2-pdp-title-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: rem(6);
+
+      .magv2-pdp-title {
+        font-family: $ay-nova-semibold;
+        font-size: rem(20);
+        line-height: rem(22);
+        color: #000000;
+        padding: 0;
+      }
+
+      .magv2-pdp-brand-logo {
+        float: none;
+        margin: 0;
+      }
+    }
+
+    .magv2-pdp-price {
+      .magv2-pdp-price-container {
+        margin-bottom: rem(20);
+
+        .magv2-pdp-final-price-wrapper {
+          font-family: $ay-regular;
+          font-size: rem(18);
+          line-height: rem(22);
+          color: #000000;
+        }
+
+        .magv2-meta-data-wrapper {
+          .magv2-pdp-price-wrapper {
+            font-family: $ay-regular;
+            font-size: rem(16);
+            line-height: rem(22);
+            color: #636363;
+          }
+
+          .magv2-pdp-vat-text {
+            font-family: $alshaya-thin;
+            font-size: rem(14);
+            line-height: rem(18);
+            color: #636363;
+          }
+        }
+      }
+    }
+
+    .postpay {
+      margin-bottom: rem(20);
+    }
+
+    .tabby {
+      margin-bottom: rem(6);
+    }
+  }
+
+  .addtobag-button-wrapper {
+    margin-top: rem(12);
+
+    .pdp-cart-form {
+      .sku-base-form {
+        .cart-form-attribute {
+          .magv2-swatch-attribute {
+            li {
+              padding: rem(6);
+              margin: 0;
+              border-radius: 50%;
+            }
+
+            .active {
+              border: rem(1) solid #636363;
+              margin-left: rem(6);
+              margin-right: rem(6);
+            }
+
+            a {
+              width: rem(35);
+              height: rem(35);
+              border-radius: 50%;
+              border: none;
+            }
+          }
+        }
+
+        .magv2-size-btn-wrapper {
+          font-family: $alshaya-thin;
+          font-size: rem(16);
+          color: #000000;
+        }
+
+        .magv2-add-to-basket-container {
+          .magv2-button {
+            font-family: $ay-heavy;
+            font-size: rem(16);
+            line-height: rem(20);
+            background: #000000;
+
+            &::before {
+              content: "";
+              background: url(/themes/custom/transac/alshaya_alo_yoga/imgs/icons/basket-white.svg)
+                center/contain no-repeat;
+              height: rem(20);
+              width: rem(20);
+              display: inline-block;
+              vertical-align: middle;
+              margin-#{$right}: rem(19);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .wishlist-button-wrapper {
+    border-color: #000000 !important;
+
+    .wishlist-link {
+      font-family: $ay-heavy !important;
+      font-size: rem(16) !important;
+      line-height: rem(20);
+      color: #000000 !important;
+
+      &::before {
+        content: "";
+        background: url(/themes/custom/transac/alshaya_alo_yoga/imgs/icons/wishlist-empty-icon.svg?adsas)
+          center/contain no-repeat;
+        width: rem(20);
+        height: rem(20);
+        display: inline-block;
+        vertical-align: middle;
+        margin-#{$right}: rem(17);
+      }
+    }
+  }
+
+  .aura-pdp-points-section {
+    margin: rem(20) 0;
+  }
+
+  .card {
+    background-color: #f2f2f2;
+    box-shadow: none;
+    margin-bottom: rem(11);
+
+    &.close-card {
+      .title {
+        vertical-align: middle;
+      }
+    }
+
+    .title {
+      font-size: rem(16);
+      line-height: rem(20);
+
+      .card-icon-svg {
+        margin-#{$left}: rem(-10);
+      }
+    }
+
+    .content {
+      font-size: rem(16);
+      line-height: rem(20);
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .magv2-sidebar {
+      .magv2-detail-wrapper {
+        .magv2-pdp-title-wrapper {
+          .magv2-pdp-title {
+            font-family: $ay-bold;
+            font-size: rem(32);
+            line-height: rem(36);
+          }
+        }
+      }
+
+      .addtobag-button-wrapper {
+        .pdp-cart-form {
+          .sku-base-form {
+            .cart-form-attribute {
+              .magv2-swatch-attribute {
+                li {
+                  width: auto;
+                  height: auto;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

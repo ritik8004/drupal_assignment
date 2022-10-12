@@ -5,7 +5,7 @@
 
   &__item {
     &__title {
-      font-family: $alshaya-bold; //$ay-bold
+      font-family: $alshaya-bold;
       color: #000000;
     }
 
@@ -32,7 +32,7 @@
 
     &__item {
       &:not(:last-child) {
-        border-bottom: 1px solid #cccccc;
+        border-bottom: rem(1) solid #cccccc;
       }
 
       &__title {
@@ -62,20 +62,17 @@
     clear: both;
     display: flex;
     display: flex;
-    margin: rem(37) 0 rem(46);
+    margin: rem(37) rem(-16) rem(46);
     border-color: #e1e1e1;
 
     &__item {
       max-width: 50%;
-
-      &:not(:last-child) {
-        padding-#{$right}: rem(64);
-      }
+      padding-left: rem(16);
+      padding-right: rem(16);
 
       &__title {
         margin-top: rem(16);
         margin-bottom: rem(8);
-        // font-family: $ay-heavy;
         font-size: rem(28);
         line-height: rem(32);
       }
