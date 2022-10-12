@@ -131,33 +131,17 @@
                     productData.options.push(configLabel + ": " + configValue);
                   });
 
-                  // Check if user should be redirected to cart page automatically.
-                  var redirectToCartCount = Drupal.getItemFromLocalStorage('addToCartCount');
-                  if (!redirectToCartCount) {
-                    redirectToCartCount = 0;
-                  }
-                  var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
-                  var redirectToCartThreshold = drupalSettings.alshaya_spc.redirectToCartThreshold[deviceType];
-                  if (redirectToCartThreshold > 0 && redirectToCartCount >= redirectToCartThreshold) {
-                    // Reset the counter.
-                    Drupal.addItemInLocalStorage('addToCartCount', 0);
-                    // Redirect to cart page.
-                    window.location = Drupal.url('cart');
-                  } else {
-                    // Update the counter.
-                    Drupal.addItemInLocalStorage('addToCartCount', redirectToCartCount + 1);
-                    // Prepare the event.
-                    var cartNotification = new CustomEvent('product-add-to-cart-failed', {
-                      bubbles: true,
-                      detail: {
-                        postData: post_data,
-                        productData: productData,
-                        message: response.error_message,
-                      },
-                    });
-                    // Dispatch event so that handlers can process it.
-                    form[0].dispatchEvent(cartNotification);
-                  }
+                  // Prepare the event.
+                  var cartNotification = new CustomEvent('product-add-to-cart-failed', {
+                    bubbles: true,
+                    detail: {
+                      postData: post_data,
+                      productData: productData,
+                      message: response.error_message,
+                    },
+                  });
+                  // Dispatch event so that handlers can process it.
+                  form[0].dispatchEvent(cartNotification);
                 }
                 else if (response.cart_id) {
                   if ((response.response_message === null || response.response_message.status === 'success')
@@ -181,6 +165,27 @@
                   $(form).trigger(cartNotification);
 
                   window.commerceBackend.processAndStoreProductData(productData.parentSku, productData.variant, productInfoKey);
+
+                  // Check if user should be redirected to cart page automatically.
+                  var redirectToCartCount = Drupal.getItemFromLocalStorage('addToCartCount');
+                  if (!redirectToCartCount) {
+                    redirectToCartCount = 0;
+                  }
+                  var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
+                  var redirectToCartThreshold = drupalSettings.alshaya_spc.redirectToCartThreshold[deviceType];
+                  // Check redirect threshold.
+                  if (redirectToCartThreshold > 0) {
+                    if (redirectToCartCount >= redirectToCartThreshold) {
+                      // Reset the counter.
+                      Drupal.addItemInLocalStorage('addToCartCount', 0);
+                      // Redirect to cart page.
+                      window.location = Drupal.url('cart');
+                    }
+                    else {
+                      // Update the counter.
+                      Drupal.addItemInLocalStorage('addToCartCount', redirectToCartCount + 1);
+                    }
+                  }
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {
