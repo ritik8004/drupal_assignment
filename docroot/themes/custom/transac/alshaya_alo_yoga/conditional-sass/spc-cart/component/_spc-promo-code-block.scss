@@ -10,7 +10,7 @@
   .block-content {
     @include breakpoint($tablet) {
       padding: rem(34);
-      background-color: $spc-order-summary-totals-bg;
+      background-color: $spc-order-summary-bg;
     }
   }
 

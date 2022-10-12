@@ -42,12 +42,23 @@
     .spc-product-attributes-wrapper {
       font-size: rem(16);
       line-height: 1.25;
+
+      @include breakpoint($only-mobile) {
+        font-size: rem(14);
+      }
     }
 
     &:last-child {
       border-bottom: rem(1) solid $spc_cart_item_border_color;
       width: fit-content;
       padding-bottom: rem(28);
+    }
+  }
+
+  .spc-cart-item-bottom-wrapper,
+  .spc-warnings-alerts {
+    @include breakpoint($only-mobile) {
+      padding: 0 rem(16);
     }
   }
 }
