@@ -62,10 +62,6 @@ header {
     }
 
     .block-alshaya-react-mini-cart {
-      @include breakpoint($only-mobile) {
-        order: 3;
-      }
-
       @include breakpoint($desktop) {
         width: 5%;
       }
@@ -138,11 +134,11 @@ header {
     .block-cart-mini-block,
     .block-alshaya-react-mini-cart {
       .cart-link {
-        background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?nhd) no-repeat center;
-        margin-bottom: rem(3);
+        background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?nhd) no-repeat;
+        margin-bottom: 0;
 
         &:hover {
-          background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg) no-repeat center;
+          background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
 
           .quantity {
             color: $primary_minicart_hover;
@@ -152,8 +148,8 @@ header {
         @include breakpoint($desktop) {
           top: rem(3);
           height: rem(24);
-          width: rem(24);
-          #{$left}: rem(5);
+          width: rem(18);
+          #{$left}: 0.3125rem;
 
           html[lang=ar] & {
             right: rem(-4);
@@ -408,6 +404,9 @@ header {
     }
 
     &::before {
+      background-repeat: no-repeat;
+      background-position-y: rem(12);
+
       @include breakpoint($upto-desktop) {
         height: rem(26);
         width: rem(29);
@@ -432,5 +431,39 @@ header {
     width: 100%;
     position: absolute;
     border-top: rem(1) solid $header_border;
+  }
+}
+
+.super-category-enabled {
+  &.frontpage {
+    header {
+      &.c-header {
+        .block-alshaya-react-mini-cart,
+        .block-cart-mini-block,
+        .wishlist-header-wrapper {
+          top: rem(72);
+
+          .cart-link {
+            background-size: rem(22);
+          }
+        }
+      }
+    }
+
+    &.wishlist-enabled {
+      #wishlist-header-wrapper {
+        @include breakpoint($only-mobile) {
+          top: rem(68);
+        }
+      }
+    }
+  }
+
+  &.wishlist-enabled {
+    #wishlist-header-wrapper {
+      @include breakpoint($upto-desktop) {
+        #{$right}: rem(60);
+      }
+    }
   }
 }
