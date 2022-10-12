@@ -334,6 +334,15 @@ exports.getData = async function getData(
       result = rcsCommerceBackend.invokeApi(request);
       break;
 
+    case 'single_product_by_color_sku' :
+      // Build query.
+      let singleProductByColorVariables = rcsPhGraphqlQuery.single_product_by_color_sku.variables;
+      singleProductByColorVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_color_sku.query, singleProductByColorVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
+      break;
+
     case 'related-products':
       // Build query.
       let relatedListVariables = rcsPhGraphqlQuery.related_products.variables;

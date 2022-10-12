@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import getSingleProductByColorSku from '../../utils/articleSwatchUtil';
 
-const ArticleSwatches = ({ articleSwatches, url }) => {
+const ArticleSwatches = ({
+  sku, articleSwatches, url, handleSwatchSelect,
+}) => {
+  const [selectedSwatch, setActiveSwatch] = useState(sku);
   if (typeof articleSwatches === 'undefined') {
     return null;
   }
@@ -20,14 +25,38 @@ const ArticleSwatches = ({ articleSwatches, url }) => {
     );
   }
 
+  // Update content for the product as per selected swatch item.
+  const showSelectedSwatchProduct = async (e, skuCode) => {
+    e.preventDefault();
+    setActiveSwatch(skuCode);
+    const response = await getSingleProductByColorSku(skuCode);
+    if (hasValue(response)) {
+      const price = window.commerceBackend.getPrices(response[0], true);
+      const productData = {
+        sku: skuCode,
+        media: response[0].article_media_gallery,
+        name: response[0].name,
+        url: response[0].url_key,
+        priceData: price,
+      };
+      handleSwatchSelect(productData);
+    } else {
+      // If graphQl API is returning Error.
+      Drupal.alshayaLogger('error', 'Error while calling the graph ql to fetch product info for sku: @sku', {
+        '@sku': sku,
+      });
+    }
+  };
+
   return (
     <div className="article-swatch-wrapper">
       <div className="swatches">
         {articleSwatches.map(
           (swatch) => (
             <button
+              onClick={(e) => showSelectedSwatchProduct(e, swatch.article_sku_code)}
               type="button"
-              className="article-swatch"
+              className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
               key={swatch.article_sku_code}
               style={{ backgroundColor: swatch.rgb_color }}
             />
