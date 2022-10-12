@@ -6,6 +6,8 @@
       .sku-base-form {
         .cart-form-attribute {
           .magv2-swatch-attribute {
+            margin-bottom: rem(50);
+
             li {
               padding: rem(6);
               margin: 0;
@@ -23,6 +25,23 @@
               height: rem(35);
               border-radius: 50%;
               border: none;
+            }
+
+            .group-swatch-option {
+              display: flex;
+              flex-direction: column;
+              margin-#{$left}: rem(6);
+            }
+
+            .group-swatch-text {
+              font-size: rem(14);
+              line-height: rem(18);
+              margin-bottom: rem(10);
+              color: $primary_text;
+            }
+
+            .group-swatch-items {
+              display: flex;
             }
           }
         }
@@ -64,6 +83,12 @@
               li {
                 width: auto;
                 height: auto;
+              }
+
+              .group-swatch-text {
+                font-size: rem(16);
+                line-height: rem(20);
+                margin-bottom: rem(14);
               }
             }
           }
