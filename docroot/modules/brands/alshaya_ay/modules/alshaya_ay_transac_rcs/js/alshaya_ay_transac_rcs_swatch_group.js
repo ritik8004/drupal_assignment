@@ -6,7 +6,7 @@
   RcsEventManager.addListener('alshayaRcsAlterSwatch', function alshayaRcsAlterSwatch (e) {
     const colorGroupAttribute = 'color_way';
     e.detail.displayColorGroup = true;
-    if(Drupal.hasValue(e.detail.variant.product[colorGroupAttribute])) {
+    if (Drupal.hasValue(e.detail.variant.product[colorGroupAttribute])) {
       const colorGroupValue = e.detail.variant.product[colorGroupAttribute];
       const colorGroupLabel = window.commerceBackend.getAttributeValueLabel(colorGroupAttribute, colorGroupValue);
 
