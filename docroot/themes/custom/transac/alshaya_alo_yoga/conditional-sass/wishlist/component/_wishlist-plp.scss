@@ -8,6 +8,13 @@
       background-position: center;
       border-radius: 50%;
       background-color: $plp_wishlist_icon_bg;
+
+      @include breakpoint($upto-desktop) {
+        width: rem(24);
+        height: rem(24);
+        top: rem(6);
+        #{$right}: rem(6);
+      }
     }
   }
 }

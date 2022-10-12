@@ -42,3 +42,14 @@
     }
   }
 }
+
+#alshaya-algolia-plp,
+#alshaya-algolia-search {
+  .block-facet-blockcategory-facet-plp,
+  .block-facet-blockcategory-facet-search {
+    a {
+      text-transform: unset;
+      color: $algolia-search-lhn;
+    }
+  }
+}
