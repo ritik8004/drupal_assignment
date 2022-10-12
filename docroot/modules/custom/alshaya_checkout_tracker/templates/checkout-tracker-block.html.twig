@@ -3,7 +3,7 @@
   <div class="step-{{ currentstepcount }}" id="checkout-progress" data-current-step="{{ currentstepcount }}">
     <div class="progress-bar">
     {% for key,step in stepMap %}
-      {% if key == activeMapKey %}
+      {% if (key == activeMapKey) and (currentstepcount != 4) %}
         <div class="step step-{{ step.stepcount }} current">
           <a href = "{{ step.url }}">
             <span> {{ step.stepcount }}</span>
@@ -11,7 +11,7 @@
           </a>
         </div>
       {% else %}
-        {% if step.stepcount < currentstepcount %}
+        {% if (step.stepcount < currentstepcount) or (currentstepcount == 4) %}
           <div class="step step-{{ step.stepcount }} completed">
         {% else %}
           <div class="step step-{{ step.stepcount }}">
@@ -21,12 +21,12 @@
             <span> {{ step.stepcount }}</span>
             <div class="step-label">{{ step.label }}</div>
           </a>
-        {% else %} 
+        {% else %}
           <span> {{ step.stepcount }}</span>
           <div class="step-label">{{ step.label }}</div>
-        {% endif %}  
+        {% endif %}
         </div>
-      {% endif %}    
+      {% endif %}
     {% endfor %}
     </div>
   </div>

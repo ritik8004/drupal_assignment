@@ -12,19 +12,19 @@ function _alshaya_checkout_tracker_translations() {
   $strings = [
     'v1' => [
       'Bag' => [
-        'ar' => 'الشروط والأحكام',
+        'ar' => 'حقيبة التسوق',
         'context' => 'alshaya_checkout_tracker',
       ],
       'Sign in' => [
-        'ar' => 'الشروط والأحكام',
+        'ar' => 'تسجيل الدخول',
         'context' => 'alshaya_checkout_tracker',
       ],
       'Delivery' => [
-        'ar' => 'الشروط والأحكام',
+        'ar' => 'الدفع والتوصيل',
         'context' => 'alshaya_checkout_tracker',
       ],
       'confirmation' => [
-        'ar' => 'الشروط والأحكام',
+        'ar' => 'التأكيد',
         'context' => 'alshaya_checkout_tracker',
       ],
     ],

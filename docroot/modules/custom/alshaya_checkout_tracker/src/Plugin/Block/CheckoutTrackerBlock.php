@@ -89,6 +89,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       '#attached' => [
         'library' => [
           'alshaya_white_label/checkout-tracker',
+          'alshaya_checkout_tracker/alshaya_checkout_tracker',
         ],
       ],
       '#theme' => 'checkout_tracker_block',
