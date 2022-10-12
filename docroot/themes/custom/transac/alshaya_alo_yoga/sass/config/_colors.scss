@@ -168,6 +168,11 @@ $header_mobile_menu_arrow: $black;
 $header_c_menu_text: $black;
 $header_secondary_menu_link_active: $black;
 $header_my_account_h3_title: $white;
+$header_super_category_enabled_bg: $black;
+$header_super_cat_menu_text: $white;
+$header_super_cat_menu_active_text: $black;
+$header_super_category_menu_bg: $black;
+$header_super_category_menu_active_bg: $white;
 
 // Store finder page.
 // Store finder header form.
@@ -312,7 +317,7 @@ $minicart_notification_border: $black;
 $minicart_notification_text: $black;
 
 //SPC
-$spc-order-summary-totals-bg: $smoke;
+$spc-order-summary-totals-bg: $white1;
 $spc-cart-background: $white;
 $spc-cart-promo-code-submit-enabled: $black;
 $spc_cart_item_border_color: $gray-five;
@@ -338,7 +343,7 @@ $spc_promo_code_block_mob_header_bg: $white;
 $spc-select-border: $gray-eight;
 $spc-basket-close-icon-bg: $gray-light;
 $spc-order-summary-item-bg: $white;
-$spc-order-summary-totals-bg: $white1;
+$spc-order-summary-bg: $smoke;
 
 // Wishlist
 $wishlist-header-notification-border: $black;

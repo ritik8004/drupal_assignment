@@ -16,6 +16,12 @@
     }
   }
 
+  @include breakpoint($tablet) {
+    .block-content {
+      background: $spc-order-summary-bg;
+    }
+  }
+
   .product-content {
     padding: rem(11);
 

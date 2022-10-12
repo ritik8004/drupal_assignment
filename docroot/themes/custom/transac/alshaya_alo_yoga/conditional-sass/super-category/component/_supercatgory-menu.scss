@@ -1,0 +1,92 @@
+.super-category-enabled {
+  .c-menu-secondary {
+    .region__menu-secondary {
+      @include breakpoint($desktop) {
+        height: rem(36);
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    .menu--account,
+    .block-alshaya-stores-finder,
+    .block-language-blocklanguage-interface {
+      @include breakpoint($desktop) {
+        padding-top: rem(2);
+      }
+    }
+  }
+
+  &:not(.frontpage) {
+    .branding__menu {
+      #block-alshayareactcartminicartblock {
+        @include breakpoint($upto-desktop) {
+          top: rem(65);
+        }
+      }
+    }
+  }
+
+  #mini-cart-wrapper {
+    @include breakpoint($only-tablet) {
+      margin-top: rem(10);
+    }
+  }
+
+  .c-menu-primary {
+    .region__menu-primary {
+      @include breakpoint($desktop) {
+        width: auto;
+      }
+
+      .block-alshaya-super-category-menu {
+        @include breakpoint($upto-desktop) {
+          z-index: 12;
+          height: rem(36);
+        }
+
+        .menu--one__list {
+          height: rem(36);
+
+          li {
+            height: rem(36);
+          }
+
+          .menu--one__link {
+            height: rem(36);
+            padding: rem(8) rem(16);
+            color: $header_super_cat_menu_text;
+            text-transform: none;
+
+            @include breakpoint($upto-desktop) {
+              background-color: $header_super_category_menu_bg;
+            }
+
+            &.active {
+              color: $header_super_cat_menu_active_text;
+
+              @include breakpoint($upto-desktop) {
+                background-color: $header_super_category_menu_active_bg;
+              }
+            }
+
+            &:hover {
+              color: $header_super_cat_menu_active_text;
+
+              @include breakpoint($upto-desktop) {
+                color: $header_super_cat_menu_active_text;
+                background-color: $header_super_category_menu_active_bg;
+              }
+            }
+
+            &::after {
+              content: attr(title);
+              font-family: $ay-bold;
+              font-size: rem(14);
+            }
+          }
+        }
+      }
+    }
+  }
+}

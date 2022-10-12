@@ -143,3 +143,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/plp-quick-add/plp-quick-add.ltr.css: css/conditional-sass/plp-quick-add/plp-quick-add.ltr.css
+
+  alshaya_white_label/super-category:
+    css:
+      theme:
+        css/conditional-sass/super-category/super-category.ltr.css: css/conditional-sass/super-category/super-category.ltr.css
