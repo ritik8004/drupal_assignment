@@ -283,11 +283,12 @@ header {
       position: absolute;
       #{$left}: 0;
       #{$right}: 0;
-      top: 0;
+      top: rem(39);
+      height: rem(33);
 
       html[lang=ar] & {
         max-width: rem(80);
-        top: rem(6);
+        top: rem(45);
       }
 
       .alias--cart-login &,
@@ -397,6 +398,7 @@ header {
 
       html[lang=ar] & {
         right: rem(12);
+        top: rem(12);
       }
     }
 

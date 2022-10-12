@@ -1,0 +1,13 @@
+@include breakpoint($upto-desktop) {
+  .menu--mobile-navigation {
+    top: rem(36);
+  }
+
+  .super-category-enabled {
+    .c-menu-primary {
+      .mobile--menu {
+        top: rem(4);
+      }
+    }
+  }
+}

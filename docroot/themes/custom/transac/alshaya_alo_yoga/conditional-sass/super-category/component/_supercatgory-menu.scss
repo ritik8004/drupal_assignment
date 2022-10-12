@@ -25,6 +25,14 @@
         }
       }
     }
+
+    @include breakpoint($upto-desktop) {
+      .c-menu-primary {
+        .mobile--menu {
+          top: rem(1);
+        }
+      }
+    }
   }
 
   #mini-cart-wrapper {
@@ -85,6 +93,16 @@
               font-size: rem(14);
             }
           }
+        }
+      }
+    }
+  }
+
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home {
+          display: block;
         }
       }
     }
