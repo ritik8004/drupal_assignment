@@ -165,7 +165,7 @@ exports.getEntity = async function getEntity(langcode) {
 
     if (pageType === 'product') {
       // Store product data in static storage.
-      globalThis.RcsPhStaticStorage.set('product_data_' + updateResult.sku, updateResult);
+      globalThis.RcsPhStaticStorage.set('product_data_' + updateResult.detail.result.sku, updateResult.detail.result);
     }
 
     return updateResult.detail.result;
