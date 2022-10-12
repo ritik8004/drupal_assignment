@@ -198,7 +198,6 @@ export default class ConfigurableForm extends React.Component {
     const {
       productData,
       selectedVariant,
-      parentSku,
       onItemAddedToCart,
       sku,
     } = this.props;
@@ -236,7 +235,7 @@ export default class ConfigurableForm extends React.Component {
 
     triggerUpdateCart({
       action: 'add item',
-      sku: parentSku,
+      sku,
       qty: quantity,
       variant: selectedVariant,
       options,
@@ -256,7 +255,7 @@ export default class ConfigurableForm extends React.Component {
           formAttributeValues,
         );
         pushSeoGtmData({
-          sku: parentSku,
+          sku,
           error: true,
           error_message: response.error_message,
           options: optionsForGtm,
@@ -285,7 +284,7 @@ export default class ConfigurableForm extends React.Component {
       }, 500);
 
       // Dispatch add to cart event for product drawer components.
-      dispatchCustomEvent('product-add-to-cart-success', { sku: parentSku });
+      dispatchCustomEvent('product-add-to-cart-success', { sku });
     });
   }
 
