@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getSingleProductByColorSku } from '../../utils/articleSwatchUtil';
+import getSingleProductByColorSku from '../../utils/articleSwatchUtil';
 
 const ArticleSwatches = ({
   sku, articleSwatches, url, handleSwatchSelect,
