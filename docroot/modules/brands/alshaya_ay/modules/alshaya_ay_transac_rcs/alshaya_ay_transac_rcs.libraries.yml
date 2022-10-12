@@ -5,3 +5,11 @@ product:
   dependencies:
     - core/jquery
     - rcs_placeholders/helpers
+color_group:
+  version: 1.x
+  js:
+    js/alshaya_ay_transac_rcs_color_group.js: {}
+  dependencies:
+    - core/jquery
+    - rcs_placeholders/helpers
+    - alshaya_acm_product/product_utility
