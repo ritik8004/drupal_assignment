@@ -402,6 +402,9 @@ header {
     }
 
     &::before {
+      background-repeat: no-repeat;
+      background-position-y: rem(12);
+
       @include breakpoint($upto-desktop) {
         height: rem(26);
         width: rem(29);
@@ -426,5 +429,22 @@ header {
     width: 100%;
     position: absolute;
     border-top: rem(1) solid $header_border;
+  }
+}
+
+.super-category-enabled {
+  &.frontpage {
+    header {
+      &.c-header {
+        .block-alshaya-react-mini-cart,
+        .block-cart-mini-block {
+          top: rem(69);
+
+          .cart-link {
+            background-size: rem(22);
+          }
+        }
+      }
+    }
   }
 }

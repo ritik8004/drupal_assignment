@@ -148,3 +148,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/super-category/super-category.ltr.css: css/conditional-sass/super-category/super-category.ltr.css
+
+  alshaya_white_label/user-account:
+    css:
+      theme:
+        css/conditional-sass/user-account/user-account.ltr.css: css/conditional-sass/user-account/user-account.ltr.css

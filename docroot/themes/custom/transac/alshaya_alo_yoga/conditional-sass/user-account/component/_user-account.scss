@@ -1,0 +1,14 @@
+.c-header {
+  .block-my-account-icon-block {
+    top: rem(68);
+    #{$right}: rem(44);
+    position: absolute;
+  }
+
+  .my-account-icon {
+    .user-account,
+    .user-login {
+      background-size: rem(24);
+    }
+  }
+}
