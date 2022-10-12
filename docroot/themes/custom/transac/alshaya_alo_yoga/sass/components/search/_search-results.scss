@@ -6,3 +6,14 @@
     min-height: rem(264);
   }
 }
+
+.alias--search aside {
+  &.c-sidebar-first {
+    .c-accordion__title {
+      &::after {
+        #{$right}: rem(-3);
+        font-size: rem(27);
+      }
+    }
+  }
+}

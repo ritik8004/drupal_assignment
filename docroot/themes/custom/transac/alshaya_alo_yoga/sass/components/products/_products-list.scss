@@ -37,6 +37,7 @@
 
   .c-products__item {
     text-align: $left;
+    font-size: rem(16);
 
     article {
       &:hover {
@@ -57,7 +58,7 @@
     .field--name-name {
       padding: 0;
       font-size: rem(16);
-      font-weight: 400;
+      font-weight: 700;
       margin-bottom: rem(5);
       line-height: 1.4;
     }
@@ -114,6 +115,10 @@
 
                 html[lang=ar] & {
                   border-radius: rem(21) 0 0 rem(21);
+                }
+
+                &::after {
+                  top: rem(17);
                 }
               }
             }

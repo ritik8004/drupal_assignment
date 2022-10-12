@@ -1,7 +1,7 @@
 .c-plp {
   .region__content {
     .view-header {
-      .search-count {
+      &.search-count {
         font-size: rem(14) !important;
       }
     }
@@ -64,6 +64,14 @@
 
 .show-all-filters,
 .show-all-filters-algolia {
+  @include breakpoint($desktop) {
+    margin-#{$left}: rem(12);
+  }
+
+  @include breakpoint($upto-desktop) {
+    font-size: rem(16);
+  }
+
   .upto-desktop {
     @include breakpoint($upto-desktop) {
       text-transform: uppercase;
