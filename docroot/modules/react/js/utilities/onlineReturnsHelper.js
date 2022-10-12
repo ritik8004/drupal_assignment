@@ -40,6 +40,10 @@ export const getProcessedReturnsData = async (orderEntityId, products) => {
 
   const allReturns = [];
 
+  if (products.length) {
+    await window.commerceBackend.setReturnsProductData(products);
+  }
+
   // Looping through each return items.
   returnResponse.data.items.forEach((returnItem) => {
     const itemsData = [];

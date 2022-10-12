@@ -111,6 +111,59 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
     return {};
   }
 
+  /**
+   * Set returns product data in order data.
+   *
+   * @param {Object} orderProducts
+   *   Array of products in the order.
+   */
+  window.commerceBackend.setReturnsProductData = async function setReturnsProductData(orderProducts) {
+    var productInfoPromises = [];
+    orderProducts.forEach(function eachProduct(product) {
+      var skuForRequest = product.product_type === 'configurable'
+        ? product.extension_attributes.parent_product_sku
+        : product.sku;
+      var orderData = globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku: skuForRequest});
+      productInfoPromises.push(orderData);
+    });
+
+    return await Promise.all(productInfoPromises).then(function allProductsInfo(allProductInfo) {
+      var productItems = {};
+      // Promise.all() returns the products in different arrays.
+      // So we merge the data into a single array of products.
+      allProductInfo.forEach(function eachProductItem(item) {
+        if (Drupal.hasValue(item.data.products.items[0])) {
+          productItems[item.data.products.items[0].sku] = item.data.products.items[0];
+        }
+      });
+
+      orderProducts.forEach(function eachProduct(orderProduct) {
+        // Fetch the ordered product data.
+        var product = productItems[orderProduct.sku];
+        orderProduct.attributes = [];
+        if (orderProduct.type === 'configurable') {
+          product = productItems[orderProduct.extension_attributes.parent_product_sku];
+          product.variants.some(function eachVariant(variant) {
+            if (variant.product.sku === orderProduct.sku) {
+              orderProduct.attributes = window.commerceBackend.getProductOptions(product, variant);
+              return true;
+            }
+            return false;
+          });
+        }
+
+        // Update the product data with proper name, image and options.
+        window.commerceBackend.setMediaData(product);
+        orderProduct.image_data = {
+          url: window.commerceBackend.getTeaserImage(product),
+          alt: product.name,
+          title: product.name,
+        };
+        orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product, orderProduct.sku);
+      });
+    });
+  }
+
   document.addEventListener('alterOrderProductData', function onAlterProductData(e) {
     var product = e.detail.data.product;
     drupalSettings.onlineReturns.refunded_products.some(function eachRefundedProduct(refundedProduct) {
