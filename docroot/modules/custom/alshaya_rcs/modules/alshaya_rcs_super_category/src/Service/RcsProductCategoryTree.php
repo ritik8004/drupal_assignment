@@ -114,7 +114,7 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     $term = &drupal_static('super_category_term');
 
     if (isset($term)) {
-      return NULL;
+      return $term;
     }
 
     $term_from_route = parent::getCategoryTermFromRoute(FALSE);

@@ -110,7 +110,9 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
     $referer = $this->request->getCurrentRequest()->server->get('HTTP_REFERER');
     // Validate if referer is external or internal. If it's external then
     // redirect to login page.
-    if (!UrlHelper::externalIsLocal($referer, $base_url)) {
+    if (!empty($referer)
+      && UrlHelper::isValid($referer, TRUE)
+      && !UrlHelper::externalIsLocal($referer, $base_url)) {
       $referer = Url::fromRoute('user.login')->toString();
     }
 

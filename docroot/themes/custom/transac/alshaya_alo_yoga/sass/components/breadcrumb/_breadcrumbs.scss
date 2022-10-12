@@ -1,5 +1,14 @@
 .c-breadcrumb {
+  ol {
+    padding: rem(14) rem(24) 0;
+  }
+
   li {
     text-transform: capitalize;
+
+    &::after {
+      padding-#{$right}: rem(8);
+      padding-#{$left}: rem(8);
+    }
   }
 }

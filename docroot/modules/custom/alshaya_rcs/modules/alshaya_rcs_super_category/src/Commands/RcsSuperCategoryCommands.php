@@ -4,7 +4,6 @@ namespace Drupal\alshaya_rcs_super_category\Commands;
 
 use Drush\Commands\DrushCommands;
 use Drupal\alshaya_rcs_super_category\Service\RcsSuperCategoryHelper;
-use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**

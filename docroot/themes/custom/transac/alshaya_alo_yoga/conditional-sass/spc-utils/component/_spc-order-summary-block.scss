@@ -15,4 +15,40 @@
       background-color: $spc_promo_code_block_mob_header_bg;
     }
   }
+
+  .product-content {
+    padding: rem(11);
+
+    .product-item {
+      padding: rem(15);
+      background: $spc-order-summary-item-bg;
+
+      .spc-product-title {
+        @include breakpoint($desktop) {
+          max-width: 64%;
+        }
+
+        a {
+          font-family: $ay-heavy;
+        }
+      }
+
+      .spc-product-title-price {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .spc-product-meta-data {
+        justify-content: unset;
+      }
+    }
+  }
+
+  .totals {
+    background: $spc-order-summary-totals-bg;
+  }
+
+  .total-line-item {
+    font-size: rem(18);
+  }
 }

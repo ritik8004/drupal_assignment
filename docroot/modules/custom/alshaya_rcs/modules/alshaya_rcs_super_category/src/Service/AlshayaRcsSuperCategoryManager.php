@@ -12,6 +12,10 @@ class AlshayaRcsSuperCategoryManager extends AlshayaSuperCategoryManager {
    * {@inheritdoc}
    */
   public function getDefaultCategoryId() {
+    if (!$this->isEnabled()) {
+      return NULL;
+    }
+
     $default_category_tid = &drupal_static(__FUNCTION__);
 
     if (!isset($default_category_tid)) {
@@ -38,6 +42,10 @@ class AlshayaRcsSuperCategoryManager extends AlshayaSuperCategoryManager {
    *   Super Category Term if found.
    */
   public function getCategoryTermFromRoute(): ?TermInterface {
+    if (!$this->isEnabled()) {
+      return NULL;
+    }
+
     static $term;
 
     if (isset($term)) {

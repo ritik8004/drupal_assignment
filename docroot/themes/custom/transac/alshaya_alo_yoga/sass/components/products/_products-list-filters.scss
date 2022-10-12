@@ -1,43 +1,47 @@
 // Css for filters on products listing page and search page.
-.c-plp .c-content__region {
-  // Main all filters div theming.
-  .all-filters,
-  .all-filters-algolia {
-    max-width: rem(330);
+.c-plp {
+  padding-top: 0;
 
-    .filter__inner {
-      .views-exposed-form,
-      .c-facet {
-        &.c-accordion,
-        &.c-collapse-item {
-          .c-accordion__title,
-          .c-collapse__title {
-            font-size: rem(14);
+  .c-content__region {
+    // Main all filters div theming.
+    .all-filters,
+    .all-filters-algolia {
+      max-width: rem(330);
 
-            &::after {
-              font-size: rem(32);
-              #{$right}: rem(24);
-            }
+      .filter__inner {
+        .views-exposed-form,
+        .c-facet {
+          &.c-accordion,
+          &.c-collapse-item {
+            .c-accordion__title,
+            .c-collapse__title {
+              font-size: rem(14);
 
-            .selected-facets {
-              margin-#{$right}: rem(24);
+              &::after {
+                font-size: rem(32);
+                #{$right}: rem(24);
+              }
 
-              .title {
-                width: rem(104);
+              .selected-facets {
+                margin-#{$right}: rem(24);
 
-                @include breakpoint($only-mobile) {
+                .title {
                   width: rem(104);
+
+                  @include breakpoint($only-mobile) {
+                    width: rem(104);
+                  }
                 }
               }
             }
           }
         }
       }
-    }
 
-    .filter__head {
-      .filter-sort-title {
-        text-transform: capitalize;
+      .filter__head {
+        .filter-sort-title {
+          text-transform: capitalize;
+        }
       }
     }
   }

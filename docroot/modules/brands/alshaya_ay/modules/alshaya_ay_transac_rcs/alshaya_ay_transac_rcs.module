@@ -14,6 +14,31 @@ use Drupal\Core\Entity\EntityInterface;
 function alshaya_ay_transac_rcs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'rcs_product') {
     $build['#attached']['library'][] = 'alshaya_ay_transac_rcs/product';
+    $build['#attached']['library'][] = 'alshaya_ay_transac_rcs/swatch_group';
     $build['#attached']['library'][] = 'alshaya_alo_yoga/alo-static-info';
   }
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_product_options_to_query().
+ */
+function alshaya_ay_transac_rcs_alshaya_rcs_product_product_options_to_query() {
+  return ['color_way'];
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_ay_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
+  array_push(
+    $fields['items'],
+    'fit',
+    'fabrication',
+    'color_way',
+    'how_to_use',
+    'why_we_love_it',
+  );
+  array_push($fields['items']['... on ConfigurableProduct']['variants']['product'],
+    'color_way',
+  );
 }

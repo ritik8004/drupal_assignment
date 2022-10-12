@@ -134,9 +134,17 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
 
       $path_parts = explode('/', trim($request->getRequestUri(), '/'));
 
-      // $path_parts[0] will have language so ignore it.
-      if (!empty($path_parts[1])) {
-        $tid = $this->getTermByName($path_parts[1]);
+      // $path_parts[0] will have language so remove it.
+      foreach (array_keys($this->languageManager->getLanguages()) as $langcode) {
+        if ($path_parts[0] === $langcode) {
+          unset($path_parts[0]);
+          $path_parts = array_values($path_parts);
+          break;
+        }
+      }
+
+      if (!empty($path_parts[0])) {
+        $tid = $this->getTermByName($path_parts[0]);
         if (!empty($tid)) {
           $term = $this->termStorage->load($tid);
         }

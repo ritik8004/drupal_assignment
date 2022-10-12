@@ -145,15 +145,25 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
  */
 function _get_cnc_settings() {
   $cnc_settings = \Drupal::config('alshaya_click_collect.settings');
+  $store_finder_config = \Drupal::configFactory()->get('alshaya_stores_finder.settings');
+  $cache_tags = [];
+  $cache_tags = array_merge($cache_tags, $store_finder_config->getCacheTags());
 
   return [
     'drupalSettings' => [
       'alshaya_click_collect' => [
         'status' => $cnc_settings->get('feature_status'),
       ],
+      'clickNCollect' => [
+        'cncEnabled' => $cnc_settings->get('feature_status'),
+        'cncSubtitleAvailable' => $cnc_settings->get('checkout_click_collect_available'),
+        'cncSubtitleUnavailable' => $cnc_settings->get('checkout_click_collect_unavailable'),
+        'cncFormPlaceholder' => $store_finder_config->get('store_search_placeholder'),
+        'countryCode' => _alshaya_custom_get_site_level_country_code(),
+      ],
     ],
     '#cache' => [
-      'tags' => $cnc_settings->getCacheTags(),
+      'tags' => array_merge($cache_tags, $cnc_settings->getCacheTags()),
     ],
   ];
 }
@@ -204,6 +214,14 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
   // Attach product dynamic yield js.
   $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_dynamic_yield';
+
+  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+  // Attach magazine layout v2 js.
+  if (isset($entity) && $sku_manager->getPdpLayout($entity) === 'pdp-magazine_v2') {
+    $build['#attached']['library'][] = 'alshaya_pdp_react/pdp_magazine_v2_layout';
+    $build['#attached']['library'][] = 'alshaya_white_label/magazine-layout-v2';
+  }
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());
@@ -266,8 +284,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   $build['#attached']['drupalSettings']['alshayaRcs']['default_meta_image'] = \Drupal::token()->replace('[alshaya_seo:meta_image]');
 
-  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
-  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
   $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $sku_manager->showImagesFromChildrenAfterAllOptionsSelected();
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpLayout'] = $sku_manager->getPdpLayout($entity);
   $build['#attached']['drupalSettings']['alshayaRcs']['quantityLimitEnabled'] = $isQuantityLimitEnabled;
@@ -292,23 +308,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $config = \Drupal::config('alshaya_acm_product.home_delivery');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $config->getCacheTags());
 
-  // PDP Express Delivery.
-  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-  $delivery_options_order = $express_delivery_config->get('delivery_options_order');
-  $delivery_options = [];
-  foreach ($delivery_options_order as $option) {
-    $delivery_options[] = [
-      'status' => $express_delivery_config->get($option . '_status'),
-      'id' => $option,
-      // @codingStandardsIgnoreLine
-      'label' => t($express_delivery_config->get($option . '_label'),
-        [],
-        ['context' => $option . '_label']
-      ),
-    ];
-  }
   $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
 
   // Address fields configs for Delivery options side drawer.
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
@@ -341,6 +341,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   ];
   // Attaching library for react component to show PDP express delivery labels.
   $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
 }
 
 /**
@@ -876,6 +877,10 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
     unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
     $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
+  }
+  elseif ($extension === 'alshaya_pdp_react'
+    && isset($libraries['pdp_magazine_v2_layout'])) {
+    $libraries['pdp_magazine_v2_layout']['js']["/$self_module_path/js/alshaya_rcs_pdp_magazine_v2.js"] = [];
   }
 }
 

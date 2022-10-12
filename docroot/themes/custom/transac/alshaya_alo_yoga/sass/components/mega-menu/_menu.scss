@@ -47,7 +47,7 @@
           font-size: rem(14);
           text-transform: capitalize;
           height: rem(44);
-          padding-top: rem(14);
+          padding-top: rem(12);
 
           &::after {
             content: '';
@@ -120,6 +120,10 @@
         .menu__links__wrapper {
           padding: rem(20) rem(16) 0;
         }
+      }
+
+      .term-image__wrapper {
+        background: transparent;
       }
     }
   }

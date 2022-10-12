@@ -1,8 +1,21 @@
 .c-plp {
   .region__content {
     .view-header {
-      .search-count {
+      &.search-count {
         font-size: rem(14) !important;
+      }
+    }
+  }
+
+  .block-facets-summary-blockfilter-bar-promotions,
+  .block-facets-summary-blockfilter-bar-plp,
+  .block-facets-summary-blockfilter-bar-productlist,
+  .block-facets-summary-blockfilter-bar {
+    ul {
+      li.clear-all {
+        a {
+          font-size: rem(12) !important;
+        }
       }
     }
   }
@@ -51,6 +64,14 @@
 
 .show-all-filters,
 .show-all-filters-algolia {
+  @include breakpoint($desktop) {
+    margin-#{$left}: rem(12);
+  }
+
+  @include breakpoint($upto-desktop) {
+    font-size: rem(16);
+  }
+
   .upto-desktop {
     @include breakpoint($upto-desktop) {
       text-transform: uppercase;

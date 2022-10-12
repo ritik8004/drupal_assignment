@@ -32,6 +32,7 @@ $gray-seven: #f5f5f5;
 $gray-eight: #e5e5e5;
 $green: #090;
 $gray-nine: #e9e9e9;
+$white1: #fafafa;
 
 //// Global elements.
 $primary_text: $black;
@@ -271,17 +272,18 @@ $algolia-search-icon: $black;
 $algolia-search-clear-text-icon: $black;
 $algolia-react-facet-label: $black;
 $algolia_react-facet-item-color: $black;
+$algolia-search-lhn: $chicago;
 
 // PLP
 $plp_grid_active_color: $black;
-$plp_wishlist_icon_bg: $mercury;
+$plp_wishlist_icon_bg: $smoke;
 $plp_search_count: $black;
 $plp_tile_product_title: $black;
 $plp_tile_product_text: $black;
 $plp_facet_filter_bg: $black;
 $plp_facet_clear_text: $black;
 $plp_filter_active_item: $smoke;
-$plp_facet_count_number: $chicago;
+$plp_facet_count_number: $dawn;
 $plp_facet_border: $alto;
 $plp_filter_active_tick: $black;
 $plp_tile_product_title_hover: $black;
@@ -293,7 +295,8 @@ $plp_all_filter_title: $black;
 $plp_all_filter_filter_arrow: $black;
 $plp_clear_all_btn_text: $black;
 $plp_all_filter_title: $black;
-
+$plp_facet_summary_filter_icon: $white;
+$plp_facet_filter_link: $white;
 
 // Accordion
 $accordion_title: $black;
@@ -334,6 +337,8 @@ $spc_promo_code_block_mob_bg: $smoke;
 $spc_promo_code_block_mob_header_bg: $white;
 $spc-select-border: $gray-eight;
 $spc-basket-close-icon-bg: $gray-light;
+$spc-order-summary-item-bg: $white;
+$spc-order-summary-totals-bg: $white1;
 
 // Wishlist
 $wishlist-header-notification-border: $black;
@@ -362,6 +367,7 @@ $plp-view-full-product-text-arrow: $black;
 $plp-quick-view-size-guide-text: $black;
 $plp-quick-view-product-size-text-disabled: $dawn;
 $plp-quick-view-product-color-border: $chicago;
+$plp_selected_filter_label_text: $mine;
 
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $black;
@@ -402,3 +408,10 @@ $egift-landing-page-one-row-two-col-box-bg: $smoke;
 $egift_accordian_active_title: $alert-dark;
 $egift_accordian_title_bg: $white;
 $egift_accordian_title_border: $alto;
+
+// highlighted banner
+$highlights_subtitle_hover: $black;
+
+// LHN
+$lhn_l2: $black;
+$lhn_l3: $chicago;
