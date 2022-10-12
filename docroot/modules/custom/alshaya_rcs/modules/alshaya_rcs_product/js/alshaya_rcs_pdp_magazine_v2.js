@@ -12,7 +12,7 @@
     const productInfoV2 = processProductMagV2(mainProduct, productInfoV1);
     processedProduct[mainProduct.sku] = {...productInfoV1, ...productInfoV2};
     if (mainProduct.type_id === 'configurable') {
-      configurableCombinations[mainProduct.sku] = window.commerceBackend.processConfigurableCombinations(mainProduct.sku);
+      configurableCombinations[mainProduct.sku] = processConfigurableCombinations(mainProduct.sku);
     }
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
@@ -58,7 +58,7 @@
    * @returns {Object}
    *    The product data.
    */
-  window.commerceBackend.processConfigurableCombinations = function (mainSKU) {
+  function processConfigurableCombinations(mainSKU) {
     var combinations = window.commerceBackend.getConfigurableCombinations(mainSKU);
     var colorDetails = window.commerceBackend.getConfigurableColorDetails(mainSKU);
     // Allow other module to override the changes.

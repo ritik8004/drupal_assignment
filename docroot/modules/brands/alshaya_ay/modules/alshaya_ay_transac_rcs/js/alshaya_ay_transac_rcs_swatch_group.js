@@ -11,7 +11,7 @@
       const colorGroupLabel = window.commerceBackend.getAttributeValueLabel(colorGroupAttribute, colorGroupValue);
 
       e.detail.colorOptionsList = Object.assign(e.detail.colorOptionsList, {
-        'color_group_label': Drupal.t('@label', {'@label': colorGroupLabel}),
+        'color_group_label': colorGroupLabel,
       });
     } else {
       e.detail.colorOptionsList = Object.assign(e.detail.colorOptionsList, {
@@ -24,32 +24,35 @@
   RcsEventManager.addListener('alshayaRcsAlterProcessConfigurableCombinations', function alshayaRcsAlterProcessConfigurableCombinations (e) {
     // Initialize with default values to avoid undefined error.
     let swatchData = [];
-    e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute]['isSwatch'] = false;
-    e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute]['isSwatchGroup'] = false;
-    // Set swatch data if available.
-    if (Drupal.hasValue(e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute])) {
-      e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute]['isSwatch'] = true;
-      e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute]['isSwatchGroup'] = true;
+    const colorAttribute = e.detail.colorDetails.sku_configurable_color_attribute;
 
-      e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute].values.forEach(function(option, key) {
-        e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute].values[key].swatch_type = 'text';
+    e.detail.combinations.configurables[colorAttribute]['isSwatch'] = false;
+    e.detail.combinations.configurables[colorAttribute]['isSwatchGroup'] = false;
+    // Set swatch data if available.
+    if (Drupal.hasValue(e.detail.combinations.configurables[colorAttribute])) {
+      e.detail.combinations.configurables[colorAttribute]['isSwatch'] = true;
+      e.detail.combinations.configurables[colorAttribute]['isSwatchGroup'] = true;
+
+      e.detail.combinations.configurables[colorAttribute].values.forEach(function(option, key) {
+        e.detail.combinations.configurables[colorAttribute].values[key].swatch_type = 'text';
         if (Drupal.hasValue(e.detail.colorDetails.sku_configurable_options_color[option.value_id])
           && e.detail.colorDetails.sku_configurable_options_color[option.value_id].swatch_type === 'RGB') {
-            e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute].values[key].swatch_color = e.detail.colorDetails.sku_configurable_options_color[option.value_id].display_value;
-            e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute].values[key].swatch_type = e.detail.colorDetails.sku_configurable_options_color[option.value_id].swatch_type;
-            e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute].values[key].color_group = e.detail.colorDetails.sku_configurable_options_color[option.value_id].color_group_label;
+            e.detail.combinations.configurables[colorAttribute].values[key].swatch_color = e.detail.colorDetails.sku_configurable_options_color[option.value_id].display_value;
+            e.detail.combinations.configurables[colorAttribute].values[key].swatch_type = e.detail.colorDetails.sku_configurable_options_color[option.value_id].swatch_type;
+            e.detail.combinations.configurables[colorAttribute].values[key].color_group = e.detail.colorDetails.sku_configurable_options_color[option.value_id].color_group_label;
         }
       });
 
-      swatchData = e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute].values;
+      swatchData = e.detail.combinations.configurables[colorAttribute].values;
       if (swatchData.length > 0) {
+        // Group array based on color group attribute.
         result = swatchData.reduce(function (r, a) {
           r[a.color_group] = r[a.color_group] || [];
           r[a.color_group].push(a);
           return r;
         }, Object.create(null));
         //Set swatch with color grouping.
-        e.detail.combinations.configurables[e.detail.colorDetails.sku_configurable_color_attribute].values = result;
+        e.detail.combinations.configurables[colorAttribute].values = result;
       }
     }
   });
