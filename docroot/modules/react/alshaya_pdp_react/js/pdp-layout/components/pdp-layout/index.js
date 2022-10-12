@@ -106,6 +106,7 @@ const PdpLayout = () => {
   const galleryContainer = useRef();
   const sidebarContainer = useRef();
   const crosssellContainer = useRef();
+  const newDescContainer = useRef();
   const addToBagContainer = useRef();
   let content;
   let buttonRef;
@@ -122,11 +123,11 @@ const PdpLayout = () => {
   const sidebarSticky = () => {
     const sidebarWrapper = sidebarContainer.current;
     const mainWrapper = mainContainer.current;
-    const crosssellWrapper = crosssellContainer.current;
+    const nextComponentWrapper = newDescContainer.current || crosssellContainer.current;
     const galleryWrapper = galleryContainer.current;
 
     if (!isMobile) {
-      magv2Sticky(sidebarWrapper, galleryWrapper, crosssellWrapper, mainWrapper);
+      magv2Sticky(sidebarWrapper, galleryWrapper, nextComponentWrapper, mainWrapper);
     }
   };
 
@@ -173,8 +174,7 @@ const PdpLayout = () => {
       });
     }
     stickyButton();
-  },
-  []);
+  }, []);
 
   const getPanelData = useCallback((data) => {
     setPanelContent(data);
@@ -224,13 +224,6 @@ const PdpLayout = () => {
           >
             <Lozenges labels={labels} sku={skuItemCode} />
           </PdpGallery>
-          {(pdpDescriptionContainerType === 2)
-            && (
-            <PdpDescriptionType2
-              description={description}
-              additionalAttributes={additionalAttributes}
-            />
-            )}
         </div>
         <div className="magv2-sidebar" ref={sidebarContainer}>
           <PdpInfo
@@ -313,20 +306,20 @@ const PdpLayout = () => {
           </ConditionalView>
           {(pdpDescriptionContainerType === 1)
             && (
-            <PdpDescription
-              skuCode={skuMainCode}
-              pdpDescription={description}
-              pdpShortDesc={shortDesc}
-              title={title}
-              pdpProductPrice={priceRaw}
-              finalPrice={finalPrice}
-              getPanelData={getPanelData}
-              removePanelData={removePanelData}
-            />
+              <PdpDescription
+                skuCode={skuMainCode}
+                pdpDescription={description}
+                pdpShortDesc={shortDesc}
+                title={title}
+                pdpProductPrice={priceRaw}
+                finalPrice={finalPrice}
+                getPanelData={getPanelData}
+                removePanelData={removePanelData}
+              />
             )}
           <ConditionalView
             condition={isExpressDeliveryEnabled()
-            && isProductBuyable && !bigTickectProduct}
+              && isProductBuyable && !bigTickectProduct}
           >
             <PdpExpressDelivery />
           </ConditionalView>
@@ -339,6 +332,17 @@ const PdpLayout = () => {
           <PdpSharePanel />
         </div>
       </div>
+
+      {(pdpDescriptionContainerType === 2)
+        && (
+          <div className="magv2-new-desc" ref={newDescContainer}>
+            <PdpDescriptionType2
+              description={description}
+              additionalAttributes={additionalAttributes}
+            />
+          </div>
+        )}
+
       {(relatedProducts && showRelatedProductsFromDrupal) ? (
         <div className="magv2-pdp-crossell-upsell-wrapper" ref={crosssellContainer}>
           {Object.keys(relatedProducts).map((type) => (

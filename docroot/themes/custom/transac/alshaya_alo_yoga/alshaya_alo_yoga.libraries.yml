@@ -19,9 +19,5 @@ alo-static-info:
   css:
     theme:
       css/conditional-sass/alo-static-info/alo-static-info.ltr.css: {}
-  js:
-    js/alo-static-info.js: {}
   dependencies:
-    - core/jquery
-    - core/jquery.once
-    - core/drupal
+    - alshaya_white_label/alshaya-accordion
