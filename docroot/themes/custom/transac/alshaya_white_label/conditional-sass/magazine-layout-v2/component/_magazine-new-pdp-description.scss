@@ -1,18 +1,18 @@
 .magv2-new-desc {
-  border: rem(1) #cccccc;
+  border: rem(1) $magazine-pdp-borders;
   border-top-style: solid;
   border-bottom-style: solid;
 
   &__item {
     &__title {
       font-family: $alshaya-bold;
-      color: #000000;
+      color: $magazine-pdp-label;
     }
 
     &__text {
       font-family: $alshaya-thin;
       line-height: rem(24);
-      color: #636363;
+      color: $magazine-pdp-secondary-text;
       padding-bottom: rem(18);
 
       & > p {
@@ -32,7 +32,7 @@
 
     &__item {
       &:not(:last-child) {
-        border-bottom: rem(1) solid #cccccc;
+        border-bottom: rem(1) solid $magazine-pdp-borders;
       }
 
       &__title {
@@ -63,7 +63,7 @@
     display: flex;
     display: flex;
     margin: rem(37) rem(-16) rem(46);
-    border-color: #e1e1e1;
+    border-color: $magazine-pdp-borders-light;
 
     &__item {
       max-width: 50%;
