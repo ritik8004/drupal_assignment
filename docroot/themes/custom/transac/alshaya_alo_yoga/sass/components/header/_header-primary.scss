@@ -437,13 +437,30 @@ header {
     header {
       &.c-header {
         .block-alshaya-react-mini-cart,
-        .block-cart-mini-block {
-          top: rem(69);
+        .block-cart-mini-block,
+        .wishlist-header-wrapper {
+          top: rem(72);
 
           .cart-link {
             background-size: rem(22);
           }
         }
+      }
+    }
+
+    &.wishlist-enabled {
+      #wishlist-header-wrapper {
+        @include breakpoint($only-mobile) {
+          top: rem(68);
+        }
+      }
+    }
+  }
+
+  &.wishlist-enabled {
+    #wishlist-header-wrapper {
+      @include breakpoint($upto-desktop) {
+        #{$right}: rem(60);
       }
     }
   }
