@@ -61,24 +61,13 @@
   function processConfigurableCombinations(mainSKU) {
     var combinations = window.commerceBackend.getConfigurableCombinations(mainSKU);
     var colorDetails = window.commerceBackend.getConfigurableColorDetails(mainSKU);
-    // Set swatch data if available.
-    if (Drupal.hasValue(combinations.configurables[colorDetails.sku_configurable_color_attribute])) {
-      combinations.configurables[colorDetails.sku_configurable_color_attribute]['isSwatch'] = true;
-      combinations.configurables[colorDetails.sku_configurable_color_attribute].values.forEach(function(option, key){
-        switch(colorDetails.sku_configurable_options_color[option.value_id].swatch_type) {
-          case 'RGB':
-            combinations.configurables[colorDetails.sku_configurable_color_attribute].values[key].swatch_color = colorDetails.sku_configurable_options_color[option.value_id].display_value;
-            combinations.configurables[colorDetails.sku_configurable_color_attribute].values[key].swatch_type = colorDetails.sku_configurable_options_color[option.value_id].swatch_type;
-            break;
-          case 'Image':
-            combinations.configurables[colorDetails.sku_configurable_color_attribute].values[key].swatch_image = colorDetails.sku_configurable_options_color[option.value_id].display_value;
-            combinations.configurables[colorDetails.sku_configurable_color_attribute].values[key].swatch_type = colorDetails.sku_configurable_options_color[option.value_id].swatch_type;
-            break;
-          default:
-            combinations.configurables[colorDetails.sku_configurable_color_attribute].values[key].swatch_type = colorDetails.sku_configurable_options_color[option.value_id].swatch_type;
-        }
-      });
-    }
+    // Allow other module to override the changes.
+    RcsEventManager.fire('alshayaRcsAlterProcessConfigurableCombinations', {
+      detail: {
+        combinations,
+        colorDetails
+      }
+    });
 
     return combinations;
   }
@@ -97,7 +86,9 @@
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
       info[variantInfo.sku] = processedVariants[variantInfo.sku];
-      info[variantInfo.sku]['rawGallery'] = updateGallery(variantInfo, product.name);
+      if (Drupal.hasValue(info[variantInfo.sku])) {
+        info[variantInfo.sku]['rawGallery'] = updateGallery(variantInfo, product.name);
+      }
     });
 
     return info;
@@ -113,6 +104,7 @@
    *   The gallery for pdp new layout.
    */
   function updateGallery(product, name) {
+    var gallery = {};
     var thumbnails = [];
 
     const child = window.commerceBackend.getSkuForGallery(product);
@@ -126,15 +118,17 @@
         'type': 'image',
       };
     });
+    
+    if (thumbnails.length > 0) {
+      gallery = {
+        'pager_flag': (thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit) 
+          ? 'pager-yes' : 'pager-no',
+        'sku': child.sku,
+        'thumbnails': thumbnails,
+      };
+    }
 
-    const pager_flag = (thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit) 
-      ? 'pager-yes' : 'pager-no';
-
-    return {
-      'pager_flag': pager_flag,
-      'sku': child.sku,
-      'thumbnails': thumbnails,
-    };
+    return gallery;
   }
 
 })(Drupal, drupalSettings, RcsEventManager);
