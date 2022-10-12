@@ -6,3 +6,5 @@ services:
       - '@http_kernel.basic'
       - '@acq_sku.stock_manager'
       - '@alshaya_acm_product.skumanager'
+      - '@entity.repository'
+      - '@entity_type.manager'
