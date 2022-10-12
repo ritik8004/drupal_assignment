@@ -330,12 +330,17 @@
 
         // Check for user login type in cookies.
         var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
-        if (drupalSettings.user.uid && loginType === undefined) {
+        if (drupalSettings.user.uid && loginType === undefined && orderConfirmationPage.length === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , 'Email');
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
-        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && Drupal.getItemFromLocalStorage('userID') !== userDetails.userID && loginType !== undefined) {
+        if (!(socialWindow)
+          && userDetails.userID !== undefined
+          && userDetails.userID !== 0
+          && Drupal.getItemFromLocalStorage('userID') !== userDetails.userID
+          && loginType !== undefined
+          && orderConfirmationPage.length === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
           Drupal.addItemInLocalStorage('userID', userDetails.userID);
         }
@@ -1584,7 +1589,7 @@
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
       eventLabel: context,
-      eventAction: message,
+      eventAction: decodeURIComponent(message),
       eventPlace: 'Error occurred on ' + window.location.href,
       eventValue: 0,
       nonInteraction: 0,
