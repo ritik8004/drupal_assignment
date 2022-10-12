@@ -45,4 +45,15 @@ window.commerceBackend = window.commerceBackend || {};
 
     return {};
   };
+
+  /**
+   * Set returns product data in order data.
+   *
+   * Do nothing for V2, this is used in V3.
+   *
+   * @param {Object} orderProducts
+   *   Array of products in the order.
+   */
+  window.commerceBackend.setReturnsProductData = function setReturnsProductData() {
+  };
 }(Drupal, drupalSettings));
