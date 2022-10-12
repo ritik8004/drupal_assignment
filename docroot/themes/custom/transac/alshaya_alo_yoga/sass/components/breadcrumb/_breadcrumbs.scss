@@ -5,5 +5,10 @@
 
   li {
     text-transform: capitalize;
+
+    &::after {
+      padding-#{$right}: rem(8);
+      padding-#{$left}: rem(8);
+    }
   }
 }
