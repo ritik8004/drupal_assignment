@@ -81,8 +81,8 @@ const Teaser = ({
     setSkuMedia(productData.media);
     const renderSkuPrice = (
       <Price
-        price={productData.price.regular_price.value}
-        finalPrice={productData.price.final_price.value}
+        price={productData.priceData.price}
+        finalPrice={productData.priceData.finalPrice}
       />
     );
     setSwatchAttributeData({

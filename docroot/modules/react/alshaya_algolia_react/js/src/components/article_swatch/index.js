@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getSingleProductByColorSku } from '../../utils/articleSwatchUtil';
 
 const ArticleSwatches = ({
   sku, articleSwatches, url, handleSwatchSelect,
@@ -24,21 +26,26 @@ const ArticleSwatches = ({
   }
 
   // Update content for the product as per selected swatch item.
-  const showSelectedSwatchProduct = (e, skuCode) => {
+  const showSelectedSwatchProduct = async (e, skuCode) => {
     e.preventDefault();
     setActiveSwatch(skuCode);
-    global.rcsPhCommerceBackend.getData('single_product_by_color_sku', {
-      sku: skuCode,
-    }).then((response) => {
+    const response = await getSingleProductByColorSku(skuCode);
+    if (hasValue(response)) {
+      const price = window.commerceBackend.getPrices(response[0], true);
       const productData = {
         sku: skuCode,
         media: response[0].article_media_gallery,
         name: response[0].name,
         url: response[0].url_key,
-        price: response[0].price_range.maximum_price,
+        priceData: price,
       };
       handleSwatchSelect(productData);
-    }, []);
+    } else {
+      // If graphQl API is returning Error.
+      Drupal.alshayaLogger('error', 'Error while calling the graph ql to fetch product info for sku: @sku', {
+        '@sku': sku,
+      });
+    }
   };
 
   return (
