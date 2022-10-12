@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const ArticleSwatches = ({ articleSwatches, url }) => {
+const ArticleSwatches = ({
+  sku, articleSwatches, url, handleSwatchSelect,
+}) => {
+  const [selectedSwatch, setActiveSwatch] = useState(sku);
   if (typeof articleSwatches === 'undefined') {
     return null;
   }
@@ -20,14 +23,33 @@ const ArticleSwatches = ({ articleSwatches, url }) => {
     );
   }
 
+  // Update content for the product as per selected swatch item.
+  const showSelectedSwatchProduct = (e, skuCode) => {
+    e.preventDefault();
+    setActiveSwatch(skuCode);
+    global.rcsPhCommerceBackend.getData('single_product_by_color_sku', {
+      sku: skuCode,
+    }).then((response) => {
+      const productData = {
+        sku: skuCode,
+        media: response[0].article_media_gallery,
+        name: response[0].name,
+        url: response[0].url_key,
+        price: response[0].price_range.maximum_price,
+      };
+      handleSwatchSelect(productData);
+    }, []);
+  };
+
   return (
     <div className="article-swatch-wrapper">
       <div className="swatches">
         {articleSwatches.map(
           (swatch) => (
             <button
+              onClick={(e) => showSelectedSwatchProduct(e, swatch.article_sku_code)}
               type="button"
-              className="article-swatch"
+              className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
               key={swatch.article_sku_code}
               style={{ backgroundColor: swatch.rgb_color }}
             />

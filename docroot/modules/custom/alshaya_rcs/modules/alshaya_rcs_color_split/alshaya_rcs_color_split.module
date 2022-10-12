@@ -119,6 +119,43 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
       'skus' => NULL,
     ],
   ];
+
+  // Prepare query for different color sku in PLP.
+  $color_sku_query_fields = [
+    'items' => [
+      'id',
+      'name',
+      'url_key',
+      'price_range' => [
+        'maximum_price' => [
+          'regular_price' => [
+            'value',
+          ],
+          'final_price' => [
+            'value',
+          ],
+          'discount' => [
+            'percent_off',
+          ],
+        ],
+      ],
+      'article_media_gallery' => [
+        'url',
+        'image_type',
+      ],
+    ],
+  ];
+  // Alter this query.
+  $queries['single_product_by_color_sku'] = [
+    'query' => [
+      'query($sku: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => $color_sku_query_fields,
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+    ],
+  ];
 }
 
 /**
