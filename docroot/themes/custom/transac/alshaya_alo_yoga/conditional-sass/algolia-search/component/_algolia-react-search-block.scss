@@ -294,7 +294,7 @@ body {
 
 @include breakpoint($only-mobile) {
   body {
-    &.Sticky-algolia-search {
+    &.hide-minimalistic-header {
       .block-alshaya-algolia-react-autocomplete {
         display: none;
       }
