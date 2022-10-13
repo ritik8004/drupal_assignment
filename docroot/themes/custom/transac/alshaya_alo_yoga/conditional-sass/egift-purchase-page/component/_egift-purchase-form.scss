@@ -10,10 +10,13 @@
   }
 
   .action-buttons {
-    button[type=submit] {
-      &:nth-of-type(1) {
-        background: $egift_form_ckt_text;
-        color: $egift_form_ckt_bg;
+    button[disabled] {
+      &.egift-purchase-add-to-cart-button {
+        border-color: $egift_form_ckt_btn_border;
+      }
+
+      &.egift-purchase-checkout-button {
+        color: $egift_form_ckt_text;
       }
     }
   }
