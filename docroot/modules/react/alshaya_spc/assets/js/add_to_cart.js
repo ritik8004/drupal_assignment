@@ -201,9 +201,6 @@
 
                   window.commerceBackend.processAndStoreProductData(productData.parentSku, productData.variant, productInfoKey);
 
-                  // Check if user should be redirected to cart page automatically.
-                  alshayaSpcRedirectToCart(cartItem.sku);
-
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {
                     bubbles: true,
@@ -232,6 +229,9 @@
                       )
                     );
                   }
+
+                  // Check if user should be redirected to cart page automatically.
+                  alshayaSpcRedirectToCart(cartItem.sku);
                 }
               })
               .catch (function() {
