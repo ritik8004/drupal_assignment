@@ -76,7 +76,13 @@ function rcs_placeholders_preprocess_html(&$variables) {
   if (!empty(RcsPhPathProcessor::$entityType)) {
     $variables['#attached']['drupalSettings']['rcsPage']['type'] = RcsPhPathProcessor::$entityType;
     $variables['#attached']['drupalSettings']['rcsPage']['urlKey'] = RcsPhPathProcessor::getUrlKey();
-    $variables['#attached']['drupalSettings']['rcsPage']['fullPath'] = RcsPhPathProcessor::getFullPath();
+    $config = \Drupal::config('alshaya_super_category.settings');
+    if ($config->get('status') && RcsPhPathProcessor::$entityType === 'product') {
+      $variables['#attached']['drupalSettings']['rcsPage']['fullPath'] = RcsPhPathProcessor::$entityPath;
+    }
+    else {
+      $variables['#attached']['drupalSettings']['rcsPage']['fullPath'] = RcsPhPathProcessor::getFullPath();
+    }
 
     if ($config->get(RcsPhPathProcessor::$entityType . '.enrichment')) {
       $variables['#attached']['drupalSettings']['rcsPage']['enrichment'] = RcsPhPathProcessor::$entityData;
