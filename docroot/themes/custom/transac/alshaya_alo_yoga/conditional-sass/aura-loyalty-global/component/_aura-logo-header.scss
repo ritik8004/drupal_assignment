@@ -1,0 +1,52 @@
+#block-aurarewardsheader {
+  @include breakpoint($desktop) {
+    .aura-header-link.open {
+      a.join-aura {
+        &:hover {
+          background: #fff;
+
+          svg {
+            // Footlocker needs a white logo as header is black.
+            .letter {
+              fill: #1e2749;
+            }
+
+            .circle {
+              fill: url("#gradient1");
+            }
+          }
+        }
+      }
+    }
+
+    #aura-header-modal {
+      a.join-aura {
+        svg {
+          // Footlocker needs a white logo as header is black.
+          .letter {
+            fill: #bcc9ff;
+          }
+
+          .circle {
+            fill: url("#gradient2");
+          }
+        }
+
+        &:hover {
+          background: #fff;
+
+          svg {
+            // Footlocker needs a white logo as header is black.
+            .letter {
+              fill: #1e2749;
+            }
+
+            .circle {
+              fill: url("#gradient1");
+            }
+          }
+        }
+      }
+    }
+  }
+}
