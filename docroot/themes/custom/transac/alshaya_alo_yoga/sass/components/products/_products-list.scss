@@ -193,17 +193,19 @@ article[data-vmode=search_result] {
       margin: 0 rem(4);
       border-radius: 50%;
       border: 0;
+      position: relative;
+      padding: 0;
 
       &.active::before,
       &:hover::before {
         content: '';
         border: rem(1) solid  $plp-quick-view-product-color-border;
-        position: relative;
+        position: absolute;
         display: inline-block;
         width: rem(24);
         height: rem(24);
-        top: rem(-4);
-        #{$left}: rem(-9);
+        top: rem(-3);
+        #{$left}: rem(-3);
         z-index: 1;
         border-radius: 50%;
       }
