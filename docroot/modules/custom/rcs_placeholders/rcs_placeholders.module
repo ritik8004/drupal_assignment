@@ -76,7 +76,6 @@ function rcs_placeholders_preprocess_html(&$variables) {
   if (!empty(RcsPhPathProcessor::$entityType)) {
     $variables['#attached']['drupalSettings']['rcsPage']['type'] = RcsPhPathProcessor::$entityType;
     $variables['#attached']['drupalSettings']['rcsPage']['urlKey'] = RcsPhPathProcessor::getUrlKey();
-    $config = \Drupal::config('alshaya_super_category.settings');
     $variables['#attached']['drupalSettings']['rcsPage']['fullPath'] = RcsPhPathProcessor::getFullPath();
 
     if ($config->get(RcsPhPathProcessor::$entityType . '.enrichment')) {
