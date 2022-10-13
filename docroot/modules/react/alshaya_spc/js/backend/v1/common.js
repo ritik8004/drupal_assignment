@@ -154,6 +154,7 @@ window.commerceBackend.setCartDataInStorage = (data) => Drupal.addItemInLocalSto
  */
 window.commerceBackend.removeCartDataFromStorage = () => {
   Drupal.removeItemFromLocalStorage('cart_data');
+  Drupal.removeItemFromLocalStorage('addToCartSkus');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method
