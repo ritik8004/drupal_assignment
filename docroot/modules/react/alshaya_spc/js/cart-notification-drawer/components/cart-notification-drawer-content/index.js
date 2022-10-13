@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import SectionTitle from '../../../utilities/section-title';
@@ -25,7 +26,7 @@ const CartNotificationDrawerContent = (props) => {
           <img loading="lazy" src={productData.image} alt={productData.product_name} title={productData.product_name} />
         </div>
         <div className="product-desc">
-          <div className="product-title">{Drupal.t('@productTitle has been added to your bag.', { '@productTitle': productData.product_name })}</div>
+          <div className="product-title">{parse(Drupal.t('@productTitle has been added to your bag.', { '@productTitle': productData.product_name }))}</div>
           <div className="product-quantity">{Drupal.t('Qty : @quantity', { '@quantity': productData.quantity })}</div>
         </div>
       </div>
