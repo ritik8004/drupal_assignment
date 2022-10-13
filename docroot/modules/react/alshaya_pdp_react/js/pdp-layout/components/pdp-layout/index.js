@@ -306,20 +306,20 @@ const PdpLayout = () => {
           </ConditionalView>
           {(pdpDescriptionContainerType === 1)
             && (
-              <PdpDescription
-                skuCode={skuMainCode}
-                pdpDescription={description}
-                pdpShortDesc={shortDesc}
-                title={title}
-                pdpProductPrice={priceRaw}
-                finalPrice={finalPrice}
-                getPanelData={getPanelData}
-                removePanelData={removePanelData}
-              />
+            <PdpDescription
+              skuCode={skuMainCode}
+              pdpDescription={description}
+              pdpShortDesc={shortDesc}
+              title={title}
+              pdpProductPrice={priceRaw}
+              finalPrice={finalPrice}
+              getPanelData={getPanelData}
+              removePanelData={removePanelData}
+            />
             )}
           <ConditionalView
             condition={isExpressDeliveryEnabled()
-              && isProductBuyable && !bigTickectProduct}
+            && isProductBuyable && !bigTickectProduct}
           >
             <PdpExpressDelivery />
           </ConditionalView>

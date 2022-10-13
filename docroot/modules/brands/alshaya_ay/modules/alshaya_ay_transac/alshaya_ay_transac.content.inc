@@ -64,7 +64,7 @@ function alshaya_ay_transac_create_brand_purpose_block_content() {
       <h4 class="brand-purpose__title">ألو يوغا هي علامة تجارية تحمل هدفاً</h4>
       <p class="brand-purpose__subtitle">إن شرائك يساعدنا على إتمام مهمتنا ونشر اليوغا في العالم</p>
       <div class="brand-purpose__content">
-        <div class="brand-purpose__purpose">
+        <div class="brand-purpose__purpose alshaya-accordion--mobile">
           <div class="brand-purpose__purpose-header alshaya-accordion-header">
             <img class="brand-purpose__purpose-icon" src="/themes/custom/transac/alshaya_alo_yoga/imgs/icons/sweatshop-free.svg?v1" loading="lazy" />
             <h6 class="brand-purpose__purpose-title">مصانع غير مُستغلة للعمال بنسبة %100</h6>
@@ -74,7 +74,7 @@ function alshaya_ay_transac_create_brand_purpose_block_content() {
             <a class="brand-purpose__purpose-link" href="#">أعرف أكثر</a>
           </div>
         </div>
-        <div class="brand-purpose__purpose">
+        <div class="brand-purpose__purpose alshaya-accordion--mobile">
           <div class="brand-purpose__purpose-header alshaya-accordion-header">
             <img class="brand-purpose__purpose-icon" src="/themes/custom/transac/alshaya_alo_yoga/imgs/icons/eco-aware.svg?v1" loading="lazy" />
             <h6 class="brand-purpose__purpose-title">ألو يوغا هي ماركة صديقة للبيئة</h6>

@@ -1,5 +1,12 @@
+.magazine-layout-v2 {
+  #pdp-layout {
+    background-color: $pdp_bg;
+  }
+}
+
 .nodetype--acq_product {
-  .page-wrapper {
+  .page-wrapper,
+  .c-footer {
     background-color: $pdp_bg;
   }
 }
