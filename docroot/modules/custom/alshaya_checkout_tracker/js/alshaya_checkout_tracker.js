@@ -1,10 +1,15 @@
-(function ($, Drupal) {
+/**
+ * @file
+ * Removes progress tracker for empty cart.
+ */
+
+(function ($, Drupal, drupalSettings) {
   Drupal.behaviors.checkouttracker = {
     attach: function (context, settings) {
       const cartData = Drupal.alshayaSpc.getCartData();
-      if (!(cartData && Drupal.hasValue(cartData.items))) {
+      if (drupalSettings.path.currentPath === 'cart' && !(cartData && Drupal.hasValue(cartData.items))) {
         $('#block-checkouttrackerblock').addClass('hide-checkout-tracker');
       }
     }
-  }
-})(jQuery, Drupal);
+  };
+})(jQuery, Drupal, drupalSettings);
