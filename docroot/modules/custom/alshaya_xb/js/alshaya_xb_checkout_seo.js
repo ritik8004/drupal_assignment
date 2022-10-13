@@ -5,77 +5,76 @@
 
 (function (Drupal) {
   /**
-   * Helper function to map the Global-e checkout data to datalayer.
+   * Pushes Global-e data to Datalayer.
    *
-   * @param {object} data
-   *   Checkout data Object.
-   * @param {number} step
-   *   Step number.
+   * @param {object} geData
+   *   The Global-e data.
+   * @param {integer} step.
+   *   The step number.
+   */
+  Drupal.alshayaXbCheckoutGaPush = function (geData, step) {
+    try {
+      Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
+    }
+    catch (error) {
+      Drupal.logJavascriptError("Alshaya XB Checkout", error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+    }
+  }
+
+  /**
+   * Helper function to map the Global-e checkout data to cart data.
+   *
+   * @param {object} geData
+   *   Global-e checkout data.
    *
    * @return {object}
-   *   The checkout data mapping from global-e.
+   *   The cart data object.
    */
-  Drupal.getGlobaleGaCheckoutData = function (data, step) {
-    var checkoutDataLayer = {
-      language: drupalSettings.path.currentLanguage,
-      country: data.details.CustomerDetails.ShippingAddress.ShippingCountryName,
-      currency: data.details.CustomerCurrencyCode,
-      pageType: "checkout delivery page",
-      event: 'checkout',
-      ecommerce: {
-        currencyCode: data.details.CustomerCurrencyCode,
-        checkout: {
-          actionField: {
-            step: step,
-            action: "checkout"
-          },
-          products: []
-        }
+  Drupal.mapGlobaleCheckoutData = function (geData) {
+    let productGtm = [];
+    let cartItemsCount = 0;
+    if (geData.details.ProductInformation) {
+      Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
+        const product = productItem[1];
+        const productGtmData = {
+          "item_id": product.CartItemId,
+          "sku": product.SKU,
+          "qty": product.Quantity,
+          "name": product.ProductName,
+          "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
+          "finalPrice": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
+        };
+        cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
+        productGtm.push(productGtmData);
+      });
+    }
+
+    return {
+      "cart_id": window.commerceBackend.getCartId(),
+      "uid": drupalSettings.user.uid,
+      "items_qty": cartItemsCount,
+      "cart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
+      "minicart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
+      "surcharge": {
+        "amount": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency,
+        "is_applied": (geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency > 0) ? true : false
       },
-      deliveryOption: step === 4 ? data.details.ShippingMethodName : undefined,
-      deliveryType: step === 4 ? data.details.ShippingMethodType : undefined,
-      deliveryArea: step === 4 ? data.details.CustomerDetails.ShippingAddress.ShippingCityRegion : undefined,
-      deliveryCity: step === 4 ? data.details.CustomerDetails.ShippingAddress.ShippingCity : undefined,
-      privilegeCustomer: "",
-      privilegesCardNumber: "",
-      productSKU: [],
-      productStyleCode: [],
-      cartTotalValue: "",
-      cartItemsCount: "",
-      cartItemsFlocktory: [],
-      paymentOption: step === 4 ? data.details.PaymentMethods : undefined,
+      "shipping": {
+        "type": geData.details.ShippingMethodType,
+        "methods": geData.details.ShippingMethodName,
+      },
+      "payment": {
+        "method": geData.OrderPaymentMethods
+      },
+      "totals": {
+        "subtotal_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
+        "base_grand_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
+        "base_grand_total_without_surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
+        "discount_amount": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
+        "surcharge": 0, // @todo we need to check whether global-e has this field or not
+        "shipping_incl_tax": null // @todo we need to check whether global-e has this field or not
+      },
+      "items": productGtm,
     };
-
-    Object.entries(data.details.ProductInformation).forEach(function (productItem) {
-      const product = productItem[1];
-      const productGtm = {
-        "quantity": product.Quantity,
-        "name": product.ProductName,
-        "id": product.ProductGroupCode,
-        "price": product.ProductPrices.CustomerTransaction.CustomerTotalPrice,
-        "brand": product.Brand,
-        "category":product.Categories,
-        "variant": product.SKU,
-        "dimension2": "",
-        "dimension4": "",
-        "dimension3": "",
-        "productOldPrice": product.ProductPrices.CustomerTransaction.CustomerTotalPrice
-      };
-      checkoutDataLayer.ecommerce.checkout.products.push(productGtm);
-
-      checkoutDataLayer.productSKU.push(product.SKU);
-      checkoutDataLayer.productStyleCode.push(product.ProductGroupCode);
-      checkoutDataLayer.cartTotalValue = product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency;
-
-      const cartItemsFlocktory = {
-        id: product.ProductGroupCode,
-        price: product.CustomerDiscountedPriceInMerchantCurrency,
-        count: "",
-        title: product.ProductName,
-        image: ""
-      };
-      checkoutDataLayer.cartItemsFlocktory.push(cartItemsFlocktory);
-    });
-    return checkoutDataLayer;
   };
 })(Drupal);
