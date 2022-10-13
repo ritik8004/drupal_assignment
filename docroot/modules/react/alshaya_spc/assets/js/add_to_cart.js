@@ -6,7 +6,7 @@
 
       alshayaSpcRedirectToCart = function(sku) {
         // Key used to store skus in local storage when they are added to cart.
-        var storageKey = 'addToCartSkus';
+        var storageKey = 'add_to_cart_skus';
         // Detects device type.
         var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
 
