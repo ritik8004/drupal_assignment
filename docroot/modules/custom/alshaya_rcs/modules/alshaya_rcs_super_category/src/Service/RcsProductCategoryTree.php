@@ -135,7 +135,7 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     }
     $names = [$name, $name . '/'];
     $query = $this->termStorage->getQuery();
-    $query->condition('vid', 'rcs_category');
+    $query->condition('vid', self::VOCABULARY_ID);
     $query->condition('field_category_slug', $names, 'IN');
     $query->condition('langcode', $langcode);
     $tids = $query->execute();

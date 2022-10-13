@@ -612,7 +612,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function getCategoryTermParents($term) {
     $parents = [];
     // If term is of 'acq_product_category' vocabulary.
-    if ($term instanceof TermInterface && $term->bundle() == self::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->bundle() == static::VOCABULARY_ID) {
       // Get all parents of the given term.
       $parents = $this->termStorage->loadAllParents($term->id());
     }
@@ -826,7 +826,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       "{$field}_height",
     ]);
     $query->condition('term_image_field.entity_id', $tid);
-    $query->condition('term_image_field.bundle', ProductCategoryTree::VOCABULARY_ID);
+    $query->condition('term_image_field.bundle', static::VOCABULARY_ID);
     if (!empty($langcode)) {
       $query->condition('term_image_field.langcode', $langcode);
     }
