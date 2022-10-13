@@ -158,11 +158,11 @@ function alshaya_super_category_preprocess_block(&$variables) {
           // Load term by comparing the slug with current super category.
           $query = \Drupal::entityQuery('taxonomy_term');
           $query->condition('field_category_slug', $current_super_category[2]);
-          $term_id = $query->execute();
+          $term_ids = $query->execute();
           // Load the term based on the id.
-          if ((is_countable($term_id) ? count($term_id) : 0) > 0) {
-            $term_id = array_keys($term_id);
-            $parent = Term::load($term_id[0]);
+          if (!empty($term_ids)) {
+            $term_ids = array_keys($term_ids);
+            $parent = Term::load($term_ids[0]);
           }
         }
       }
