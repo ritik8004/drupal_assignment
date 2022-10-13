@@ -309,7 +309,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
 
   // Add alshaya_spc configs to Drupal settings.
   $alshaya_spc_config = \Drupal::config('alshaya_spc.settings');
-  $page['#cache']['tags'] = array_merge($page['#cache']['tags'], $alshaya_spc_config->getCacheTags());
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_spc_config->getCacheTags());
 
   // Redirect to cart threshold.
   $page['#attached']['drupalSettings']['alshaya_spc']['redirectToCartThreshold'] = $alshaya_spc_config->get('redirect_to_cart_threshold');
