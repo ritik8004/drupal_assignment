@@ -98,9 +98,9 @@ function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityView
       $return = _alshaya_hm_get_product_description($sku_entity);
       $build['description'] = $return['description'];
       $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_hm.label_order.settings']);
+      // If its a external beauty product.
+      $build['#attached']['drupalSettings']['isExternal'] = $sku_entity->get('attr_is_external')->getString();
     }
-    // If its a external beauty product.
-    $build['#attached']['drupalSettings']['isExternal'] = $sku_entity->get('attr_is_external')->getString();
   }
 }
 
