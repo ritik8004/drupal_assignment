@@ -49,7 +49,7 @@
 
       .block-alshaya-super-category-menu {
         @include breakpoint($upto-desktop) {
-          z-index: 12;
+          z-index: 11;
           height: rem(36);
         }
 
