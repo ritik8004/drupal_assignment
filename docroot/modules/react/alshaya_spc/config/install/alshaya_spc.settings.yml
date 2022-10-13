@@ -4,6 +4,8 @@ cod_mobile_verification: false
 # Add a config to determine if we need to show all available payment methods
 # icons on the cart page or not.
 display_cart_payment_icons: false
+# Used to redirect users to cart page every time they add X number of items to the cart.
+# This functionality is disabled when the value is set to 0.
 redirect_to_cart_threshold:
   mobile: 0
   desktop: 0
