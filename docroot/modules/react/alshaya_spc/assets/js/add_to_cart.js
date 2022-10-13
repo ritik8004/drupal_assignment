@@ -1,3 +1,4 @@
+/* eslint-disable */
 (function ($, Drupal, document) {
 
   Drupal.behaviors.alshayaSpcAddToCart = {
