@@ -29,7 +29,7 @@ class PdpPromotionLabel extends React.Component {
     const { skuMainCode, promotions } = this.props;
     const { promotionsRawData } = this.state;
 
-    if (!hasValue(promotions)) {
+    if (!hasValue(promotions) && !hasValue(drupalSettings.alshayaRcs)) {
       const url = Drupal.url(`rest/v2/product/${btoa(skuMainCode)}?pdp=magazinev2`);
       const promotionStateValue = promotionsRawData ? promotionsRawData[skuMainCode] : null;
       if (promotionStateValue === null || promotionStateValue === undefined) {
