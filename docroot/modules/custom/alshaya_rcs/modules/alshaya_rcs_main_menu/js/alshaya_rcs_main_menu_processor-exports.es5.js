@@ -42,9 +42,8 @@ exports.prepareData = function prepareData(settings, inputs) {
     'aura_enabled': auraEnabled,
     'highlight_timing': highlightTiming,
     'promopanel_class': '', // @todo Implement promo panel block class.
-    // If API response has menu level 1 item set to is_visual_menu_layout then
-    // set layout from settings else default.
-    'mobile_menu_layout': Boolean(isVisualMenuLayout) ? mobileMenuLayout : 'default',
+    // Set mobile menu layout from settings.
+    'mobile_menu_layout': mobileMenuLayout,
   };
 }
 
