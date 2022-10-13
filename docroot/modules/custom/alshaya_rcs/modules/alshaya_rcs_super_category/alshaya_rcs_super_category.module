@@ -50,3 +50,18 @@ function alshaya_rcs_super_category_alshaya_rcs_main_menu_alter(array &$variable
     $variables['category_id'] = $term->get('field_commerce_id')->getString();
   }
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_super_category_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'alshaya_rcs_listing' && isset($libraries['category_utility'])) {
+    // Alter the category utility library to replace the base JS file with the
+    // utility file provided by this module.
+    $self_module_path = drupal_get_path('module', 'alshaya_rcs_super_category');
+
+    $options = $libraries['category_utility']['js']['js/category_utility.js'];
+    unset($libraries['category_utility']['js']['js/category_utility.js']);
+    $libraries['category_utility']['js']["/$self_module_path/js/super_category_utility.js"] = $options;
+  }
+}
