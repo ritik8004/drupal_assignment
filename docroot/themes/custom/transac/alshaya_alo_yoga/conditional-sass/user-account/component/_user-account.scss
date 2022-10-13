@@ -1,8 +1,12 @@
 .c-header {
   .block-my-account-icon-block {
-    top: rem(70);
+    top: rem(47);
     #{$right}: rem(75);
     position: absolute;
+
+    html[lang=ar] & {
+      top: rem(54);
+    }
   }
 
   .my-account-icon {

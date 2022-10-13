@@ -435,13 +435,17 @@ header {
 }
 
 .super-category-enabled {
-  &.frontpage {
+  &[class^="super-category"] {
     header {
       &.c-header {
-        .block-alshaya-react-mini-cart,
+        #block-alshayareactcartminicartblock,
         .block-cart-mini-block,
         .wishlist-header-wrapper {
-          top: rem(72);
+          top: rem(47);
+
+          html[lang=ar] & {
+            top: rem(53);
+          }
 
           .cart-link {
             background-size: rem(22);
@@ -453,16 +457,86 @@ header {
     &.wishlist-enabled {
       #wishlist-header-wrapper {
         @include breakpoint($only-mobile) {
-          top: rem(68);
+          top: rem(47);
+
+          html[lang=ar] & {
+            top: rem(53);
+          }
+        }
+      }
+    }
+
+
+    &.wishlist-enabled {
+      #wishlist-header-wrapper {
+        @include breakpoint($upto-desktop) {
+          #{$right}: rem(60);
         }
       }
     }
   }
+}
 
-  &.wishlist-enabled {
+body {
+  &.hide-minimalistic-header.super-category-enabled {
+    .block-alshaya-super-category-menu {
+      display: none;
+    }
+
+    #block-branding {
+      a {
+        top: rem(10);
+
+        &::before {
+          content: '';
+          width: 100%;
+          display: block;
+          height: rem(60);
+          background-color: $menu_bg;
+          position: fixed;
+          z-index: -10;
+          #{$right}: 0;
+          top: 0;
+        }
+      }
+    }
+
+    #block-myaccounticonblock {
+      top: rem(19) !important;
+    }
+
     #wishlist-header-wrapper {
-      @include breakpoint($upto-desktop) {
-        #{$right}: rem(60);
+      top: rem(18) !important;
+    }
+
+    #block-alshayareactcartminicartblock {
+      top: rem(21) !important;
+      transform: none;
+    }
+
+    .hamburger--menu {
+      &.mobile--menu {
+        z-index: 1000;
+        position: fixed;
+        top: rem(17);
+
+        @include breakpoint($upto-desktop) {
+          display: block !important;
+        }
+      }
+    }
+  }
+}
+
+.c-menu-primary {
+  .mobile--search {
+    @include breakpoint($only-mobile) {
+      margin-right: 0;
+      #{$right}: rem(8);
+
+      html[lang=ar] & {
+        padding-left: 0;
+        left: 0;
       }
     }
   }
