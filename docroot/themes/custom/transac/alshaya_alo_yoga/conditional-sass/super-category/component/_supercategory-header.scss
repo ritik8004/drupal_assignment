@@ -11,3 +11,25 @@
     }
   }
 }
+
+@include breakpoint($desktop) {
+  .super-category-enabled {
+    header {
+      .c-header__region {
+        padding-bottom: rem(16);
+      }
+    }
+
+    &.frontpage {
+      header {
+        &.c-header {
+          .block-alshaya-react-mini-cart,
+          .block-cart-mini-block,
+          .wishlist-header-wrapper {
+            padding-top: 0;
+          }
+        }
+      }
+    }
+  }
+}

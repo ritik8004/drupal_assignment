@@ -6,6 +6,11 @@
           height: rem(358);
         }
 
+        @include breakpoint($only-mobile) {
+          height: rem(240);
+          margin-bottom: rem(26);
+        }
+
         .alshaya_search_mainimage {
           @include breakpoint($only-mobile) {
             height: rem(264);
@@ -69,7 +74,7 @@
     }
 
     .alshaya_search_gallery {
-      overflow: visible;
+      overflow: hidden;
       max-height: none;
       line-height: 0;
       position: relative;

@@ -11,9 +11,11 @@
 .spc-checkout {
   .checkout-link {
     &:not(.checkout_com_applepay) {
-      float: $right;
-      width: auto;
-      padding: 0 rem(22);
+      @include breakpoint($desktop) {
+        float: $right;
+        width: auto;
+        padding: 0 rem(22);
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 .c-footer-secondary {
   .block-content--copyright {
     @include breakpoint($upto-tablet) {
-      background-color: $footer-bg;
+      background-color: $footer-secondary-bg-mobile;
     }
 
     p {
@@ -10,9 +10,10 @@
       color: $footer-bg;
 
       @include breakpoint($upto-tablet) {
-        color: $footer-text;
+        color: $footer-text-mobile;
         font-size: rem(14);
         line-height: 1.29;
+        text-align: center;
       }
     }
   }
@@ -37,5 +38,11 @@
     @include breakpoint($upto-tablet) {
       background-color: $footer-text;
     }
+  }
+}
+
+.region__footer-secondary #block-copyright {
+  @include breakpoint($only-mobile) {
+    border-top: rem(1) solid $primary_border;
   }
 }

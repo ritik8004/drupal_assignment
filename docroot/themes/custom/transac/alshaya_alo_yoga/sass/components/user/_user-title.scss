@@ -101,3 +101,13 @@
     }
   }
 }
+
+.c-user-login,
+.c-user-password,
+.c-user-register {
+  h1 {
+    @include breakpoint($desktop) {
+      top: rem(-88);
+    }
+  }
+}
