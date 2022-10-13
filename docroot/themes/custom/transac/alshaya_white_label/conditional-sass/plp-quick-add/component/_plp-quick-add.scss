@@ -75,6 +75,22 @@
   @include breakpoint($desktop) {
     display: block;
   }
+
+  .c-plp & {
+    .c-products__item {
+      article:hover {
+        .quick-add {
+          @include breakpoint($desktop) {
+            top: rem(271);
+          }
+
+          button {
+            border-radius: 0;
+          }
+        }
+      }
+    }
+  }
 }
 
 .large-grid {

@@ -158,3 +158,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css
+
+  alshaya_white_label/aura-loyalty-global:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
