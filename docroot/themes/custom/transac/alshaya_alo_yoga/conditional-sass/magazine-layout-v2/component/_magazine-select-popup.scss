@@ -1,0 +1,17 @@
+.magv2-select-popup-container {
+  .magv2-select-popup-header-wrapper {
+    label {
+      color: $primary_text;
+    }
+  }
+
+  .select-attribute {
+    .active {
+      .magv2-select-list-wrapper {
+        &::before {
+          color: $primary_text;
+        }
+      }
+    }
+  }
+}
