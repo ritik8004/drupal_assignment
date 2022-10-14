@@ -28,32 +28,6 @@ function alshaya_rcs_main_menu_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Check for given path, department page exists.
- *
- * Check for given path, department page exists. If department page exists
- * then return that department page node id or return false.
- *
- * @param string $path
- *   The current route path.
- *
- * @return int|bool
- *   Department page node id or false.
- */
-function alshaya_rcs_main_menu_is_department_page(string $path) {
-  return \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->isDepartmentPage($path);
-}
-
-/**
- * Helper function to fetch list of department pages.
- *
- * @return array
- *   Nids of department pages keyed by slug.
- */
-function alshaya_rcs_main_menu_get_department_pages() {
-  return \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->getDepartmentPages();
-}
-
-/**
  * Implements hook_form_alter().
  */
 function alshaya_rcs_main_menu_form_alter(&$form, FormStateInterface $form_state, $form_id) {

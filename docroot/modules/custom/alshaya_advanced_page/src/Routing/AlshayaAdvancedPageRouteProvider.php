@@ -42,9 +42,9 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
       }
     }
 
-    // If V2 function exist for checking department page,
+    // If RCS function exist for checking department page,
     // proceed and check for department page existance.
-    if (function_exists('alshaya_rcs_main_menu_is_department_page')
+    if (function_exists('alshaya_rcs_listing_is_department_page')
       && !empty($collection) && isset($exploded_path[3])
       && is_numeric($exploded_path[3])) {
       // With V2 we use slug and not not term reference so we need the original
@@ -57,7 +57,7 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
       $filtered_path = $matches[1] ?? '';
       if ($filtered_path) {
         // Get list of department pages.
-        $department_node = alshaya_rcs_main_menu_is_department_page($filtered_path);
+        $department_node = alshaya_rcs_listing_is_department_page($filtered_path);
         $collection = $this->setRouteOptions($collection, $exploded_path, $department_node, TRUE);
       }
     }
