@@ -1,6 +1,5 @@
 import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import isCartNotificationDrawerEnabled from '../../../../../js/utilities/cartNotificationHelper';
 import CartNotificationDrawerContent from '../cart-notification-drawer-content';
 import CartNotificationDrawerPopupContent from '../utilities/cart-notification-drawer-popup-content';
 
@@ -8,43 +7,25 @@ class CartNotificationDrawer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      productAddedToBasket: false,
-      productData: null,
-      panelContent: null,
+      cartDrawerOpen: true,
     };
   }
 
-  componentDidMount() {
-    if (isCartNotificationDrawerEnabled()) {
-      document.addEventListener('showCartNotificationDrawer', this.handleProductAddToCart);
+  componentDidUpdate(prevProps) {
+    const { cartDrawerOpen } = this.props;
+    if (prevProps.cartDrawerOpen !== cartDrawerOpen) {
+      this.refreshState();
     }
   }
 
-  /**
-   * Remove the event listener when component gets deleted.
-   */
-  componentWillUnmount() {
-    document.removeEventListener('showCartNotificationDrawer', this.handleProductAddToCart, false);
+  refreshState = () => {
+    this.setState({
+      cartDrawerOpen: true,
+    });
   }
 
-  /**
-   * This event listener function called when item added to cart.
-   * @param {object} event
-   *  Event detail containing product data.
-   */
-  handleProductAddToCart = (event) => {
-    if (event.detail) {
-      // to make sure that markup is present in DOM.
-      document.querySelector('body').classList.add('overlay-cart-drawer');
-      this.setState({
-        productAddedToBasket: true,
-        productData: event.detail,
-        panelContent: this.getPanelContent(event.detail),
-      });
-    }
-  }
-
-  getPanelContent = (productData) => {
+  getPanelContent = () => {
+    const { productData } = this.props;
     if (hasValue(productData) && hasValue(productData.productInfo)) {
       return (
         <CartNotificationDrawerContent
@@ -60,14 +41,18 @@ class CartNotificationDrawer extends React.Component {
   closeModal = () => {
     document.querySelector('body').classList.remove('overlay-cart-drawer');
     this.setState({
-      panelContent: null,
+      cartDrawerOpen: false,
     });
   }
 
   render() {
-    const { productAddedToBasket, productData, panelContent } = this.state;
+    const { cartDrawerOpen } = this.state;
+    if (!cartDrawerOpen) {
+      return null;
+    }
 
-    if (!productAddedToBasket && !hasValue(productData) && !hasValue(panelContent)) {
+    const panelContent = this.getPanelContent();
+    if (!hasValue(panelContent)) {
       return null;
     }
 

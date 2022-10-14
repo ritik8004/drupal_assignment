@@ -82,10 +82,14 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   // If cart notification side drawer is enabled, then cart
   // is shown as side drawer and mini cart notification will be hidden.
   $spcConfig = \Drupal::config('alshaya_spc.settings');
-  if ($spcConfig->get('is_notification_drawer')) {
+  if ($spcConfig->get('show_notification_drawer')) {
     // Attach notification library if feature is enabled.
+    $page['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_drawer_js';
     $page['#attached']['library'][] = 'alshaya_spc/cart_notification_drawer';
     $page['#attached']['library'][] = 'alshaya_white_label/drawer-cart-notification';
+  }
+  else {
+    $page['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_mini_cart';
   }
 
   // Check if the acm cart notification settings exist and assign notification

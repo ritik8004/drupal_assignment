@@ -288,7 +288,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // If cart notification side drawer is enabled, then cart
   // is shown as side drawer and mini cart notification will be hidden.
   $spcConfig = \Drupal::config('alshaya_spc.settings');
-  $page['#attached']['drupalSettings']['cart']['cartNotificationDrawer'] = $spcConfig->get('is_notification_drawer') ?? FALSE;
+  $page['#attached']['drupalSettings']['cart']['cartNotificationDrawer'] = $spcConfig->get('show_notification_drawer') ?? FALSE;
 
   // Use proxy on only specific environments.
   if (Settings::get('alshaya_use_proxy', FALSE)) {

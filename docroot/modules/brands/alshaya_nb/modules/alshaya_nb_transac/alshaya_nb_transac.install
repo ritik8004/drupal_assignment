@@ -63,46 +63,9 @@ function alshaya_nb_transac_install() {
     ])
     ->save();
 
-  $strings = [
-    'seo_brand_name' => [
-      'en' => 'New Balance',
-      'ar' => 'نيو بالانس',
-    ],
-    'get email offers and the latest news from @site_name' => [
-      'en' => 'Enjoy 10% off your first order',
-      'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
-    ],
-    'read more' => [
-      'ar' => 'اقرأ المزيد',
-    ],
-    'read less' => [
-      'ar' => 'اقرأ  أقل',
-    ],
-    'Product Description' => [
-      'ar' => 'وصف المنتج',
-    ],
-    'Product Detail' => [
-      'ar' => 'تفاصيل المنتج',
-    ],
-    'Product No:' => [
-      'ar' => 'رمز المنتج',
-    ],
-    'size guide' => [
-      'ar' => 'دليل المقاسات',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Implements hook_modules_installed().
- */
-function alshaya_nb_transac_modules_installed($modules) {
-  if (in_array('alshaya_algolia_react', $modules)) {
-    $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
-    $config->set('hide_grid_toggle', TRUE);
-    $config->save();
+  // Add translations.
+  module_load_include('inc', 'alshaya_nb_transac', 'alshaya_nb_transac.translation');
+  if ($translations = _alshaya_nb_transac_get_translations()) {
+    alshaya_i18n_save_translations($translations);
   }
-
 }

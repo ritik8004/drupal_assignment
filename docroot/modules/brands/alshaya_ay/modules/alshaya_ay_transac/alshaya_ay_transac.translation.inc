@@ -8,7 +8,7 @@
 /**
  * Alshaya alo yoga translation.
  */
-function _alshaya_ay_transac_react_translations() {
+function _alshaya_ay_transac_translations() {
   // @todo Add arabic translation for quick add strings.
   return [
     'v1' => [
@@ -32,7 +32,7 @@ function _alshaya_ay_transac_react_translations() {
  *   Translations.
  */
 function _alshaya_ay_transac_get_translations(string $version = '') {
-  $translations = _alshaya_ay_transac_react_translations();
+  $translations = _alshaya_ay_transac_translations();
   // If no version mentioned, return all version strings.
   if (empty($version)) {
     $trans_data = [];
