@@ -335,7 +335,15 @@ class RcsSuperCategoryHelper {
     //Retreive logo images for each field and save it.
     foreach ($field_arr as $field_name) {
       $file_url = $mdc_url . $category[$field_name];
-      $file = system_retrieve_file($file_url, $directory, TRUE, FileSystemInterface::EXISTS_REPLACE);
+      $file_name = basename($file_url);
+      $uri = $directory . '/' . $file_name;
+      if (!file_exists($uri)) {
+        $file = system_retrieve_file($file_url, $directory, TRUE, FileSystemInterface::EXISTS_REPLACE);
+      }
+      else {
+        $files = $this->entityTypeManager->getStorage('file')->loadByProperties(['uri' => $uri]);
+        $file = current($files);
+      }
       if ($file instanceof FileInterface) {
         $term->get($field_name)->setValue($file->id());
       }
