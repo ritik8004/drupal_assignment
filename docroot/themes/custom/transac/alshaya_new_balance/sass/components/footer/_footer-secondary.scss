@@ -4,10 +4,6 @@
   .c-footer__copy {
     text-align: $left;
 
-    @include breakpoint($desktop) {
-      margin-#{$left}: rem(16);
-    }
-
     @include breakpoint($only-mobile) {
       color: $footer-text;
       text-align: center;
@@ -16,6 +12,12 @@
 
     @include breakpoint($tablet) {
       float: $left;
+    }
+
+    .field--name-body {
+      p {
+        font-size: rem(12);
+      }
     }
   }
 
@@ -49,6 +51,13 @@
       &:not(:last-child) {
         margin-#{$right}: rem(12);
       }
+    }
+  }
+
+  .l-container {
+    @include breakpoint($desktop) {
+      max-width: rem(1284);
+      padding: 0 rem(24);
     }
   }
 }

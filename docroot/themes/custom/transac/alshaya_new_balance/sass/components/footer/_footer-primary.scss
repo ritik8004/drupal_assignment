@@ -143,6 +143,7 @@
         margin-bottom: rem(18);
         text-transform: none;
         font-family: $alshaya-thin;
+        letter-spacing: 0.32px;
 
         @include breakpoint($only-mobile) {
           display: flex;
@@ -193,6 +194,7 @@
         margin-bottom: rem(18);
         text-transform: none;
         font-family: $alshaya-thin;
+        letter-spacing: 0.32px;
 
         @include breakpoint($only-mobile) {
           display: flex;
@@ -326,6 +328,13 @@
   .primary--footer--right {
     @include breakpoint($only-tablet) {
       width: rem(320);
+    }
+  }
+
+  .l-container {
+    @include breakpoint($desktop) {
+      max-width: rem(1284);
+      padding: 0 rem(24);
     }
   }
 }
