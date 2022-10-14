@@ -39,7 +39,7 @@ Feature: Verify the Contact Us page on the site for Auth User
     And I fill in "message" with "Client feedback"
     Then I click on "#edit-submit" element
     Then I should see an "div.form-item--error-message" element
-    And I fill in "mobile_number[mobile]" with "55667788"
+    And I fill in "mobile_number[mobile]" with "{mobile}"
     And I wait for the page to load
     Then I click on "#edit-submit" element
     Then I should see a ".webform-confirmation__message" element on page
@@ -82,7 +82,7 @@ Feature: Verify the Contact Us page on the site for Auth User
     And I wait for AJAX to finish
     When I fill in "first_name" with "Test"
     And I fill in "last_name" with "User"
-    And I fill in "mobile_number[mobile]" with "55667788"
+    And I fill in "mobile_number[mobile]" with "{mobile}"
     And I fill in "email" with "testuser123@gmail.com"
     And I select "online_shopping" from "#edit-feedback" select2 field
     Then I should see an "#select2-edit-type-container" element
@@ -102,7 +102,7 @@ Feature: Verify the Contact Us page on the site for Auth User
     And I wait for AJAX to finish
     And I fill in "first_name" with "Test"
     And I fill in "last_name" with "User"
-    And I fill in "mobile_number[mobile]" with "55667788"
+    And I fill in "mobile_number[mobile]" with "{mobile}"
     And I fill in "email" with "testuser456@gmail.com"
     And I select "online_shopping" from "#edit-feedback" select2 field
     Then I should see an "#select2-edit-type-container" element
@@ -147,7 +147,7 @@ Feature: Verify the Contact Us page on the site for Auth User
     And I fill in "message" with "Client feedback"
     Then I click on "#edit-submit" element
     Then I should see an "div.form-item--error-message" element
-    And I fill in "mobile_number[mobile]" with "55667788"
+    And I fill in "mobile_number[mobile]" with "{mobile}"
     And I wait for the page to load
     Then I click on "#edit-submit" element
     Then I should see a ".webform-confirmation__message" element on page
@@ -184,7 +184,7 @@ Feature: Verify the Contact Us page on the site for Auth User
     And I fill in "message" with "Client feedback"
     Then I click on "#edit-submit" element
     Then I should see an "div.form-item--error-message" element
-    And I fill in "mobile_number[mobile]" with "55667788"
+    And I fill in "mobile_number[mobile]" with "{mobile}"
     And I wait for the page to load
     Then I click on "#edit-submit" element
     Then I should see a ".webform-confirmation__message" element on page
@@ -233,7 +233,7 @@ Feature: Verify the Contact Us page on the site for Auth User
     And I wait for AJAX to finish
     When I fill in "first_name" with "Test"
     And I fill in "last_name" with "User"
-    And I fill in "mobile_number[mobile]" with "55667788"
+    And I fill in "mobile_number[mobile]" with "{mobile}"
     And I fill in "email" with "testuser123@gmail.com"
     And I select "online_shopping" from "#edit-feedback" select2 field
     Then I should see an "#edit-type" element
