@@ -5,9 +5,8 @@
     line-height: rem(20);
 
     &:last-of-type {
-      a {
-        font-weight: 400;
-      }
+      font-weight: 400;
+      color: $breadcrumb_link_active;
     }
 
     &::after {
