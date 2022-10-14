@@ -3079,4 +3079,31 @@ JS;
     }
     $this->iWaitSeconds('5');
   }
+
+  /**
+   * @Given /^I wait for element "([^"]*)"$/
+   */
+  public function iWaitForElement($arg1)
+  {
+    $found = $this->waitForElement($arg1);
+    if (!$found) {
+      throw new \Exception("Element {$arg1} not found.");
+    }
+  }
+
+  /**
+   * Dynamically wait for an element to be available on page.
+   */
+  private function waitForElement($selector, $time = 60): bool
+  {
+    while ($time > 0) {
+      if (!is_null($this->getSession()->getPage()->find('css', $selector))) {
+        return true;
+      } else {
+        sleep(1);
+        $time--;
+      }
+    }
+    return false;
+  }
 }
