@@ -42,3 +42,14 @@ services:
         - '@acq_sku.product_info_helper'
         - '@module_handler'
         - '@alshaya_acm_product.sku_images_helper'
+  alshaya_rcs_listing.department_pages_helper:
+    class: Drupal\alshaya_rcs_listing\Service\AlshayaRcsListingDepartmentPagesHelper
+    decorates: alshaya_advanced_page.department_page_helper
+    public: false
+    arguments:
+      - '@database'
+      - '@current_route_match'
+      - '@cache.data'
+      - '@entity_type.manager'
+      - '@path.current'
+      - '@path_alias.manager'
