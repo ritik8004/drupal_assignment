@@ -18,6 +18,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for element ".edit-checkout-as-guest"
     Then I should be on "/cart/login" page
     When I click the anchor link ".edit-checkout-as-guest" on page
+    # Wait and select the Click and Collect delivery method in checkout page.
     And I wait for element "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
