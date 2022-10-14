@@ -19,7 +19,7 @@ function _alshaya_checkout_tracker_translations() {
         'ar' => 'تسجيل الدخول',
         'context' => 'alshaya_checkout_tracker',
       ],
-      'Delivery' => [
+      'Delivery and Payment' => [
         'ar' => 'الدفع والتوصيل',
         'context' => 'alshaya_checkout_tracker',
       ],

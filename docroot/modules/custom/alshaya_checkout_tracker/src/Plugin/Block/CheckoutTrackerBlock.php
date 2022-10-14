@@ -75,7 +75,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
         'url' => Url::fromRoute('alshaya_spc.checkout.login'),
       ],
       'alshaya_spc.checkout' => [
-        'label' => $this->t('Checkout', [], ['context' => 'alshaya_checkout_tracker']),
+        'label' => $this->t('Delivery and Payment', [], ['context' => 'alshaya_checkout_tracker']),
         'stepcount' => 3,
         'url' => Url::fromRoute('alshaya_spc.checkout'),
       ],
