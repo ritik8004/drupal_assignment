@@ -7,6 +7,7 @@ services:
      - '@language_manager'
      - '@logger.factory'
      - '@alshaya_api.api'
+     - '@file_system'
   alshaya_rcs_super_category.super_category_feature_manager:
     class: Drupal\alshaya_rcs_super_category\Service\AlshayaRcsSuperCategoryManager
     decorates: alshaya_super_category.super_category_feature_manager
