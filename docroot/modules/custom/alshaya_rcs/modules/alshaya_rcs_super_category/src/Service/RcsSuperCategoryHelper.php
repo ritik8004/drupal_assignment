@@ -11,6 +11,8 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\taxonomy\TermInterface;
 use Drupal\node\NodeInterface;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\file\FileInterface;
 
 /**
  * Rcs Super Category Helper.
@@ -53,6 +55,13 @@ class RcsSuperCategoryHelper {
   protected $apiWrapper;
 
   /**
+   * The file_system service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * RcsSuperCategoryHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -71,13 +80,15 @@ class RcsSuperCategoryHelper {
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
     LoggerChannelFactoryInterface $logger_factory,
-    AlshayaApiWrapper $api_wrapper
+    AlshayaApiWrapper $api_wrapper,
+    FileSystemInterface $file_system
   ) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
     $this->logger = $logger_factory->get('alshaya_rcs_super_category');
     $this->apiWrapper = $api_wrapper;
+    $this->fileSystem = $file_system;
   }
   /**
    * Syncs L1 categories from Mdc backend.
@@ -192,6 +203,9 @@ class RcsSuperCategoryHelper {
         }
       }
 
+      // Fetch super category logos and save them.
+      $this->setLogoImages($term, $category);
+
       $term->get('field_category_slug')->setValue($category['url_path']);
       $term->get('field_commerce_id')->setValue($category['id']);
       $term->get('weight')->setValue($category['position']);
@@ -293,6 +307,39 @@ class RcsSuperCategoryHelper {
   protected function getCustomAttribute($category, $attribute_code) {
     $key = array_search($attribute_code, array_column($category['custom_attributes'], 'attribute_code'));
     return $category['custom_attributes'][$key]['value'];
+  }
+
+  /**
+   * Sets Logo images for rcs categories.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Rcs Category term.
+   * @param array $category
+   *   Mdc category.
+   */
+  protected function setLogoImages(&$term, $category) {
+    $mdc_url = Settings::get('alshaya_api.settings')['magento_host'];
+
+    $directory = $this->configFactory->get('system.file')->get('default_scheme') . '://category-images';
+    $this->fileSystem->prepareDirectory(
+      $directory,
+      FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS
+    );
+
+    $field_arr = [
+      'field_logo_active_image',
+      'field_logo_header_image',
+      'field_logo_inactive_image',
+    ];
+
+    //Retreive logo images for each field and save it.
+    foreach ($field_arr as $field_name) {
+      $file_url = $mdc_url . $category[$field_name];
+      $file = system_retrieve_file($file_url, $directory, TRUE, FileSystemInterface::EXISTS_REPLACE);
+      if ($file instanceof FileInterface) {
+        $term->get($field_name)->setValue($file->id());
+      }
+    }
   }
 
 }
