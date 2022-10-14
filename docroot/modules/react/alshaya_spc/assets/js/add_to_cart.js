@@ -10,8 +10,14 @@
         // Detects device type.
         var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
 
-        // Get redirect threshold for the device.
-        var redirectToCartThreshold = settings.alshaya_spc.redirectToCartThreshold[deviceType];
+        // Check if drupal settings are present.
+        var values = settings.alshaya_spc.redirectToCartThreshold || null;
+        if (!values) {
+          return;
+        }
+
+        // Get redirect threshold for the specific device.
+        var redirectToCartThreshold = values[deviceType];
         // Check if redirection to cart is enabled i.e. >= 1.
         if (redirectToCartThreshold < 1) {
           return;
