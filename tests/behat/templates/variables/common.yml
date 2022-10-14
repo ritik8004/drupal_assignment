@@ -7,6 +7,7 @@ variables:
   spc_Qpay_month: "6"
   spc_Qpay_year: "2027"
   spc_Knet_card: "8888880000000001"
+  spc_Knet_card_prefix: "888888"
   spc_Knet_month: "9"
   spc_Knet_year: "2025"
   spc_Knet_pin: "1234"
