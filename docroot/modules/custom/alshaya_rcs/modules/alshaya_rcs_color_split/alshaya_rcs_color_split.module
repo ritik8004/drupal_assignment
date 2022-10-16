@@ -126,6 +126,7 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query_alter(&$queries)
       'id',
       'name',
       'url_key',
+      'end_user_url',
       'price_range' => [
         'maximum_price' => [
           'regular_price' => [

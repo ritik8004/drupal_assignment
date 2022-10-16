@@ -175,7 +175,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     if (str_starts_with($rcs_path_to_check, '/' . $product_prefix)) {
       self::$entityType = 'product';
-      self::$entityPath = ltrim($rcs_path_to_check, '/');
+      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($product_prefix) + 1);
       self::$entityPathPrefix = $product_prefix;
       self::$entityFullPath = $full_path;
 
@@ -284,13 +284,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     if (empty(self::$entityType)) {
       return '';
     }
-    $config = \Drupal::config('alshaya_super_category.settings');
-    if ($config->get('status') && RcsPhPathProcessor::$entityType === 'product') {
-      $url = self::$entityPath;
-    }
-    else {
-      $url = self::$entityFullPath;
-    }
+    $url = self::$entityFullPath;
     // Trim the front slash.
     if ($trim) {
       $url = trim($url, '/');
