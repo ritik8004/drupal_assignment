@@ -83,10 +83,10 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
    * {@inheritDoc}
    */
   public function getDepartmentPages() {
-    static $department_pages = [];
+    static $department_pages = NULL;
 
     // We cache the nid-tid relationship for a single page request.
-    if (empty($department_pages)) {
+    if (!isset($department_pages)) {
       $query = $this->database->select('node__field_category_slug', 'nfcs');
       $query->addField('nfcs', 'field_category_slug_value', 'tid');
       $query->addField('nfcs', 'entity_id', 'nid');

@@ -48,10 +48,10 @@ class AlshayaDepartmentPageHelper {
    *   Nids of department pages keyed by term ids.
    */
   public function getDepartmentPages() {
-    static $department_pages;
+    static $department_pages = NULL;
 
     // We cache the nid-tid relationship for a single page request.
-    if (empty($department_pages)) {
+    if (!isset($department_pages)) {
       $query = $this->database->select('node__field_product_category', 'nfpc');
       $query->addField('nfpc', 'field_product_category_target_id', 'tid');
       $query->addField('nfpc', 'entity_id', 'nid');
