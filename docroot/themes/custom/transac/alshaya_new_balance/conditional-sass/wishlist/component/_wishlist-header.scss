@@ -1,0 +1,13 @@
+body {
+  &.wishlist-enabled {
+    #wishlist-header-wrapper {
+      top: rem(10);
+      right: rem(20);
+    }
+
+    .wishlist-icon {
+      height: rem(19);
+      width: rem(21);
+    }
+  }
+}

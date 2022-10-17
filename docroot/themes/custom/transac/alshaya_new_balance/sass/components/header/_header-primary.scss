@@ -11,7 +11,7 @@ header {
       align-items: center;
 
       & > div {
-        width: 15%;
+        width: 17.5%;
       }
     }
 
@@ -22,7 +22,8 @@ header {
         padding-#{$left}: rem(105);
 
         ul.menu--one__list {
-          padding-#{$left}: rem(28);
+          padding-#{$left}: rem(24);
+          width: auto;
         }
 
         li.menu--one__list-item {
@@ -79,6 +80,7 @@ header {
           @include breakpoint($upto-tablet) {
             margin-top: 0;
             margin-#{$left}: rem(56);
+            z-index: 2;
 
             html[lang=ar] & {
               text-align: center;

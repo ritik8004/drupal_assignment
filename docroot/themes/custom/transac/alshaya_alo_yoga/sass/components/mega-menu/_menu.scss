@@ -15,7 +15,7 @@
   .block-alshaya-main-menu {
     ul {
       &.menu--one__list {
-        padding-#{$left}: rem(24);
+        padding-#{$left}: rem(40);
       }
     }
 
@@ -47,7 +47,7 @@
           font-size: rem(14);
           text-transform: uppercase;
           height: rem(44);
-          padding-top: rem(12);
+          padding-top: 0;
 
           &::after {
             content: '';
