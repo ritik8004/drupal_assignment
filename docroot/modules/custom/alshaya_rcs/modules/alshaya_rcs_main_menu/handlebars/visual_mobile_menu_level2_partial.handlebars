@@ -1,42 +1,9 @@
-<div class="ay-level-two">
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-  <a href="#" class="ay-level-two__link">
-    <img src="https://media.gettyimages.com/photos/never-leave-home-without-your-confidence-picture-id1157185406?k=20&m=1157185406&s=612x612&w=0&h=rJSdwCIA4z-SGpDFksMaZ7gfWzQ9jjBxOMKZXZC52BU=" alt="image" /150="" class="ay-level-two__image">
-    <div class="ay-level-two__heading">New Arrival</div>
-  </a>
-</div>
+{{#each menu_columns}}
+  {{#each this as |menu_item|}}
+    <a class="ay-level-two__link" {{menu_item.tag_attr}}>
+      <img class="ay-level-two__image" src="{{menu_item.image}}">
+      <div class="ay-level-two__heading">{{menu_item.name}}</div>
+    </a>
+  {{/each}}
+{{/each}}
+
