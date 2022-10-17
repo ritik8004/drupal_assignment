@@ -24,7 +24,6 @@
 
   @include breakpoint($only-mobile) {
     text-align: center;
-    padding: rem(20);
     font-size: rem(20);
   }
 }

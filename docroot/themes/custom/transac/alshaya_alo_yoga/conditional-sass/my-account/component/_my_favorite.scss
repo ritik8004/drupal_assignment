@@ -39,6 +39,20 @@
           }
         }
       }
+
+      #plp-hits {
+        @include breakpoint($only-mobile) {
+          padding-top: rem(48);
+        }
+      }
+    }
+
+    .block-page-title-block {
+      .back-link {
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+      }
     }
   }
 }

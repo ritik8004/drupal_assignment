@@ -5,16 +5,16 @@
 
   @include breakpoint($only-mobile) {
     font-size: rem(20);
-    line-height: 2.5;
+    padding-#{$left}: 0;
   }
 }
 
 .c-user--node {
   .subtitle {
     border-bottom-color: $user_acc_details_border;
-    font-family: $ay-regular;
+    font-family: $ay-bold;
     font-size: rem(18);
-    font-weight: 700;
+    text-transform: uppercase;
   }
 
   &.l-two--sf {
