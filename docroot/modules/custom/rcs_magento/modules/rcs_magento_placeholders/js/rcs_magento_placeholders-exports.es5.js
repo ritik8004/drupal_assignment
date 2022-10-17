@@ -223,6 +223,17 @@ exports.getData = async function getData(
         return staticNavigationData;
       }
 
+      // Check if it exists in localstorage.
+      var navigation_menu_cache_time = drupalSettings.rcs.navigation_menu_cache_time;
+      if (navigation_menu_cache_time !== 0) {
+        const navigationData = globalThis.RcsPhLocalStorage.get(
+          'navigation_menu_' + rcsPhGraphqlQuery.navigationMenu.variables.categoryId
+        );
+        if (navigationData !== null) {
+          return navigationData;
+        }
+      }
+
       // Prepare request parameters.
       // Fetch categories for navigation menu using categories api.
       request.data = prepareQuery(rcsPhGraphqlQuery.navigationMenu.query, rcsPhGraphqlQuery.navigationMenu.variables);
@@ -237,6 +248,13 @@ exports.getData = async function getData(
         result = response.data.categories.items[0].children;
         // Store category data in static storage.
         globalThis.RcsPhStaticStorage.set(placeholder + '_data', result);
+        if (navigation_menu_cache_time !== 0) {
+          globalThis.RcsPhLocalStorage.set(
+            'navigation_menu_' + rcsPhGraphqlQuery.navigationMenu.variables.categoryId,
+            result,
+            navigation_menu_cache_time
+          );
+        }
       }
       break;
 

@@ -24,4 +24,10 @@ function rcs_magento_placeholders_page_attachments_alter(array &$attachments) {
   }
 
   $attachments['#attached']['drupalSettings']['rcs']['404Page'] = $configured_404_page;
+
+  $rcs_placeholder_settings = \Drupal::configFactory()->get('rcs_magento_placeholders.settings');
+  $menu_expiration_time = $rcs_placeholder_settings
+  ? $rcs_placeholder_settings->get('navigation_menu_cache_time')
+  : 0;
+  $attachments['#attached']['drupalSettings']['rcs']['navigation_menu_cache_time'] = $menu_expiration_time;
 }
