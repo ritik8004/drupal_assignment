@@ -183,7 +183,7 @@
     return promotionData;
   }
   // If graphQL API is returning Error.
-  Drupal.alshayaLogger('error', 'Error while calling the graphQL to fetch product info for sku: @sku', {
+  Drupal.alshayaLogger('error', 'Error while calling the graphQL to fetch product promotion info for sku: @sku', {
     '@sku': skuMainCode,
   });
 
