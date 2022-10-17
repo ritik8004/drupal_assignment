@@ -111,4 +111,12 @@
       }
     }
   }
+
+  .block-alshaya-algolia-react-autocomplete {
+    .algolia-search-cleartext-icon {
+      @include breakpoint($desktop) {
+        #{$right}: rem(2);
+      }
+    }
+  }
 }
