@@ -344,14 +344,13 @@ class RcsSuperCategoryHelper {
     //Retreive logo images for each field and save it.
     foreach ($field_arr as $field_name) {
       $file_url = $mdc_url . $category[$field_name];
-      $file_name = basename($file_url);
       $fid = !empty($term->get($field_name)->getValue())
-      ? $term->get($field_name)->getValue()[0]['target_id']
-      : NULL;
+        ? $term->get($field_name)->getValue()[0]['target_id']
+        : NULL;
       // Do not download logos again if aleady present.
       if (!$force_download && $fid) {
         $file = File::load($fid);
-        if ($file->getFilename() === $file_name) {
+        if ($file->getFilename() === basename($file_url)) {
           continue;
         }
       }
