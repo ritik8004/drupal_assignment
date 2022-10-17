@@ -16,21 +16,15 @@ class PdpPromotionLabel extends React.Component {
     this.getPromotionInfo();
   }
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     const { skuMainCode } = this.props;
     // If there is a change in props value (parent sku).
     if (prevProps.skuMainCode !== skuMainCode) {
-      // Get product promotions from graphQL if V3 is enabled.
-      if (hasValue(drupalSettings.alshayaRcs)) {
-        const promotion = await window.commerceBackend.getPdpPromotionV2Labels(skuMainCode);
-        this.getPromotionInfo(promotion);
-      } else {
-        this.getPromotionInfo();
-      }
+      this.getPromotionInfo(prevProps.skuMainCode);
     }
   }
 
-  getPromotionInfo = (promotion) => {
+  async getPromotionInfo(prevMainSku) {
     const { skuMainCode } = this.props;
     let promotionsData = {};
     // Get product promotions from V2 if V3 is not enabled.
@@ -50,9 +44,14 @@ class PdpPromotionLabel extends React.Component {
         });
       }
     } else {
-      // Get product promotions from V3.
+      // Get product promotions from graphQL if V3 is enabled.
       const { promotions } = this.props;
-      promotionsData[skuMainCode] = (hasValue(promotion)) ? promotion : promotions;
+      let promotion = promotions;
+      if (prevMainSku !== skuMainCode) {
+        promotion = await window.commerceBackend.getPdpPromotionLabels(skuMainCode);
+      }
+      promotionsData[skuMainCode] = promotion;
+
       this.setState({
         promotionsRawData: promotionsData,
       });

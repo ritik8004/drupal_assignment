@@ -149,7 +149,7 @@
    * @returns {Object}
    *   Product promotion labels.
    */
-  window.commerceBackend.getPdpPromotionV2Labels = async function getPdpPromotionV2Labels(skuMainCode) {
+  window.commerceBackend.getPdpPromotionLabels = async function getPdpPromotionLabels(skuMainCode) {
     const staticStorageKey = `pdpPromotion_${skuMainCode}`;
 
     let promotionData = Drupal.hasValue(staticDataStore.pdpPromotion[staticStorageKey])
