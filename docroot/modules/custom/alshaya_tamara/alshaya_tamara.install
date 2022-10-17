@@ -6,20 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Add new translations for Tamara payment method.
- */
-function alshaya_tamara_update_9401() {
-  // Add translations.
-  module_load_include('inc', 'alshaya_tamara', 'alshaya_tamara.translations');
-  $translations = _alshaya_tamara_get_translations('v2');
-  if ($translations) {
-    alshaya_i18n_save_translations($translations);
-  }
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_tamara_install() {
