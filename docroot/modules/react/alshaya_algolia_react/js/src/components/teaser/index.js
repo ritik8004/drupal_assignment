@@ -234,6 +234,7 @@ const Teaser = ({
               title={title}
               labels={labels}
               sku={sku}
+              greenLeaf={hit.attr_green_leaf ? hit.attr_green_leaf : null}
               initSlider={initSlider}
               setSlider={setSlider}
             />
