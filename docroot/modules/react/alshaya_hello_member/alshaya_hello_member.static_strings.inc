@@ -167,10 +167,6 @@ function _alshaya_hello_member_aura_static_strings() {
       'value' => t('The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.', [], ['context' => 'hello_member']),
     ],
     [
-      'key' => 'confirm_loyalty',
-      'value' => t('Confirm the Loyalty', [], ['context' => 'hello_member']),
-    ],
-    [
       'key' => 'loyalty_modal_question',
       'value' => t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits?', [], ['context' => 'hello_member']),
     ],
