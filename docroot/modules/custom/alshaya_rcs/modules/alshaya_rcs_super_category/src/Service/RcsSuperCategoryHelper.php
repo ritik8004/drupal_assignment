@@ -13,6 +13,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Rcs Super Category Helper.
@@ -90,10 +91,14 @@ class RcsSuperCategoryHelper {
     $this->apiWrapper = $api_wrapper;
     $this->fileSystem = $file_system;
   }
+
   /**
    * Syncs L1 categories from Mdc backend.
+   *
+   * @param boolean $force_download
+   *   Force download logos.
    */
-  public function syncSuperCategories() {
+  public function syncSuperCategories($force_download) {
     foreach ($this->languageManager->getLanguages() as $language_code => $language) {
       $this->logger->notice('Synchronizing super categories for language @language.', [
         '@language' => $language_code,
@@ -120,7 +125,7 @@ class RcsSuperCategoryHelper {
       $this->deleteOrphansCategories($super_categories, $existing_super_categories);
 
       // Sync categories.
-      $this->synchronizeCategories($super_categories, $existing_super_categories, $language_code);
+      $this->synchronizeCategories($super_categories, $existing_super_categories, $language_code, $force_download);
     }
   }
 
@@ -166,8 +171,10 @@ class RcsSuperCategoryHelper {
    *   Existing rcs categories.
    * @param string $lang_code
    *   Language code.
+   * @param boolean $force_download
+   *   Force download logos.
    */
-  protected function synchronizeCategories($super_categories, $existing_super_categories, $lang_code) {
+  protected function synchronizeCategories($super_categories, $existing_super_categories, $lang_code, $force_download) {
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
 
     // Map existing categories with their slug.
@@ -204,7 +211,7 @@ class RcsSuperCategoryHelper {
       }
 
       // Fetch super category logos and save them.
-      $this->setLogoImages($term, $category);
+      $this->setLogoImages($term, $category, $force_download);
 
       $term->get('field_category_slug')->setValue($category['url_path']);
       $term->get('field_commerce_id')->setValue($category['id']);
@@ -316,8 +323,10 @@ class RcsSuperCategoryHelper {
    *   Rcs Category term.
    * @param array $category
    *   Mdc category.
+   * @param boolean $force_download
+   *   Force download logos.
    */
-  protected function setLogoImages(&$term, $category) {
+  protected function setLogoImages(&$term, $category, $force_download) {
     $mdc_url = Settings::get('alshaya_api.settings')['magento_host'];
 
     $directory = $this->configFactory->get('system.file')->get('default_scheme') . '://category-images';
@@ -335,9 +344,27 @@ class RcsSuperCategoryHelper {
     //Retreive logo images for each field and save it.
     foreach ($field_arr as $field_name) {
       $file_url = $mdc_url . $category[$field_name];
-      $file = system_retrieve_file($file_url, $directory, TRUE, FileSystemInterface::EXISTS_REPLACE);
-      if ($file instanceof FileInterface) {
-        $term->get($field_name)->setValue($file->id());
+      $fid = !empty($term->get($field_name)->getValue())
+        ? $term->get($field_name)->getValue()[0]['target_id']
+        : NULL;
+      // Do not download logos again if aleady present.
+      if (!$force_download && $fid) {
+        $file = File::load($fid);
+        if ($file->getFilename() === basename($file_url)) {
+          continue;
+        }
+      }
+      else {
+        // Delete old file entity.
+        $file = File::load($fid);
+        if ($file instanceof FileInterface) {
+          $file->delete();
+        }
+        // Retreive file from mdc url.
+        $file = system_retrieve_file($file_url, $directory, TRUE, FileSystemInterface::EXISTS_RENAME);
+        if ($file instanceof FileInterface) {
+          $term->get($field_name)->setValue($file->id());
+        }
       }
     }
   }

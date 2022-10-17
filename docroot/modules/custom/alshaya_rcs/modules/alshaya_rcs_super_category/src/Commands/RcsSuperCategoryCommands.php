@@ -48,10 +48,12 @@ class RcsSuperCategoryCommands extends DrushCommands {
    *
    * @usage drush sync-rcs-super-categories
    *   Syncs rcs super categories.
+   * @usage drush sync-rcs-super-categories --force-download
+   *   Force download all super category logos.
    */
-  public function syncSuperCategories() {
+  public function syncSuperCategories(array $options = ['force-download' => FALSE]) {
     $this->drupalLogger->notice('Synchronizing all super categories...');
-    $this->rcsSuperCategoryHelper->syncSuperCategories();
+    $this->rcsSuperCategoryHelper->syncSuperCategories($options['force-download']);
     $this->drupalLogger->notice('Successfully completed syncing super categories.');
   }
 }
