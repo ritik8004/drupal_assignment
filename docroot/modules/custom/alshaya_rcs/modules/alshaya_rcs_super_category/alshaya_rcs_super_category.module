@@ -65,3 +65,72 @@ function alshaya_rcs_super_category_library_info_alter(&$libraries, $extension) 
     $libraries['category_utility']['js']["/$self_module_path/js/super_category_utility.js"] = $options;
   }
 }
+
+/**
+ * Implements hook_alshaya_rcs_product_query_fields_alter().
+ */
+function alshaya_rcs_super_category_alshaya_rcs_product_query_fields_alter(&$query_fields) {
+  // Add the new `end_user_url` to get the super category item.
+  array_push($query_fields['items'], 'end_user_url');
+
+  return $query_fields;
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query_alter().
+ */
+function alshaya_rcs_super_category_rcs_placeholders_graphql_query_alter(&$queries) {
+  // Do this only if the color split module is enabled.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_color_split')) {
+    /** @var Drupal\alshaya_rcs_color_split\Service\AlshayaRcsColorSplitHelper $color_split_helper */
+    $color_split_helper = \Drupal::service('alshaya_rcs_color_split.helper');
+    $color_sku_query_fields = $color_split_helper->getColorSkuProductQueryFields();
+
+    // Add the new `end_user_url` to get the super category item.
+    array_push($color_sku_query_fields['items'], 'end_user_url');
+
+    $queries['single_product_by_color_sku'] = [
+      'query' => [
+        'query($sku: String)' => [
+          'products(filter: {sku: {eq: $sku}})' => $color_sku_query_fields,
+        ],
+      ],
+      'variables' => [
+        'sku' => NULL,
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_alshaya_rcs_recommended_product_query_fields_alter().
+ */
+function alshaya_rcs_super_category_alshaya_rcs_recommended_product_query_fields_alter(&$query_fields) {
+  // Add the new `end_user_url` to get the super category item.
+  array_push($query_fields, 'end_user_url');
+
+  return $query_fields;
+}
+
+/**
+ * Implements hook_alshaya_rcs_product_bv_product_fields_alter().
+ */
+function alshaya_rcs_super_category_alshaya_rcs_product_bv_product_fields_alter($query_fields) {
+  // Add the new `end_user_url` to get the super category item.
+  array_push($query_fields['items'], 'end_user_url');
+
+  return $query_fields;
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_rcs_super_category_page_attachments(array &$attachments) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
+  // Attach the super category product process library to all the pages.
+  $attachments['#attached']['library'][] = 'alshaya_rcs_super_category/rcs_super_category_product_process';
+}
