@@ -8,7 +8,7 @@ use Drupal\Core\DependencyInjection\ServiceModifierInterface;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
 
 /**
- * Class Alshaya RCS Listing Department Page Service Provider.
+ * Class Alshaya RCS Listing Service Provider.
  */
 class AlshayaRcsListingServiceProvider extends ServiceProviderBase implements ServiceModifierInterface {
 
