@@ -1,13 +1,11 @@
 @mixin pageTitle {
   font-size: rem(28);
-  font-family: $ay-regular;
-  font-weight: 700;
+  font-family: $ay-heavy;
   text-transform: uppercase;
 
   @include breakpoint($only-mobile) {
-    font-size: rem(12);
+    font-size: rem(20);
     line-height: 2.5;
-    font-family: $ay-black;
   }
 }
 
