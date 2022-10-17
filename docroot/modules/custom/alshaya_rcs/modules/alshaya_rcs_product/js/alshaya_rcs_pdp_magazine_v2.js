@@ -147,7 +147,7 @@
  *   The parent sku value.
  *
  * @returns {Object}
- *   Product promotion labels.s
+ *   Product promotion labels.
  */
  window.commerceBackend.getPdpPromotionV2Labels = async function getPdpPromotionV2Labels(skuMainCode) {
   const staticStorageKey = `pdpPromotion_${skuMainCode}`;
