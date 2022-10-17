@@ -12,6 +12,19 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ *  Disables quick view drawer on wishlist pages.
+ */
+function alshaya_pb_transac_update_9402() {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_wishlist')) {
+    $wishlist_config = \Drupal::configFactory()->getEditable('alshaya_wishlist.settings');
+    $wishlist_config->set('disable_quickview_wishlist_page', TRUE);
+    $wishlist_config->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  *  Remove `frame` attribute from pb transac brand module.
  */
 function alshaya_pb_transac_update_9401() {
