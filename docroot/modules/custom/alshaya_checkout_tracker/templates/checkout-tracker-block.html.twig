@@ -16,7 +16,7 @@
         {% else %}
           <div class="step step-{{ step.stepcount }}">
         {% endif %}
-        {% if step.url %}
+        {% if (step.url) and (currentstepcount != 4) %}
           <a href = "{{ step.url }}">
             <span> {{ step.stepcount }}</span>
             <div class="step-label">{{ step.label }}</div>
