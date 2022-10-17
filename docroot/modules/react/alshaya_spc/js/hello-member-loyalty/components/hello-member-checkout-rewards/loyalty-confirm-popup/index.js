@@ -1,7 +1,5 @@
-import parse from 'html-react-parser';
 import React from 'react';
 import Popup from 'reactjs-popup';
-import getStringMessage from '../../../../utilities/strings';
 
 export default class LoyaltyConfirmPopup extends React.Component {
   constructor(props) {
@@ -42,7 +40,17 @@ export default class LoyaltyConfirmPopup extends React.Component {
 
   render() {
     const { open } = this.state;
-    const { currentOption, selectedOption } = this.props;
+    const { selectedOption } = this.props;
+    let popupTitle = Drupal.t('Switch to H&M member', {}, { context: 'hello_member' });
+    let popupDescription = Drupal.t('This purchase will accumulate points earned towards your H&M Membership', {}, { context: 'hello_member' });
+    let earnButton = Drupal.t('Earn H&M points', {}, { context: 'hello_member' });
+    let continueButton = Drupal.t('Continue with Aura Points', {}, { context: 'hello_member' });
+    if (this.getLoyaltyOptionText(selectedOption) === 'Aura') {
+      popupTitle = Drupal.t('Switch to Aura points', {}, { context: 'hello_member' });
+      popupDescription = Drupal.t('This purchase will accumulate points earned towards your Aura Membership', {}, { context: 'hello_member' });
+      earnButton = Drupal.t('Earn Aura points', {}, { context: 'hello_member' });
+      continueButton = Drupal.t('Continue with H&M Points', {}, { context: 'hello_member' });
+    }
     return (
       <div className="loyalty-popup-container">
         <Popup
@@ -53,32 +61,28 @@ export default class LoyaltyConfirmPopup extends React.Component {
         >
           <div className="loyalty-popup-block">
             <div className="loyalty-popup-title">
-              <span>{getStringMessage('confirm_loyalty')}</span>
+              <span>{popupTitle}</span>
               <a className="close-modal" onClick={() => this.closeModal()} />
             </div>
             <div className="loyalty-question">
-              {parse(getStringMessage('loyalty_modal_question',
-                {
-                  '@current_option': this.getLoyaltyOptionText(currentOption),
-                  '@selected_option': this.getLoyaltyOptionText(selectedOption),
-                }))}
+              {popupDescription}
             </div>
             <div className="loyalty-options">
-              <button
-                className="loyalty-cancel"
-                id="loyalty-cancel"
-                type="button"
-                onClick={() => this.closeModal()}
-              >
-                {Drupal.t('Cancel')}
-              </button>
               <button
                 className="loyalty-yes"
                 id="loyalty-yes"
                 type="button"
                 onClick={() => this.confirmLoyalty(selectedOption)}
               >
-                {Drupal.t('Yes')}
+                {earnButton}
+              </button>
+              <button
+                className="loyalty-cancel"
+                id="loyalty-cancel"
+                type="button"
+                onClick={() => this.closeModal()}
+              >
+                {continueButton}
               </button>
             </div>
           </div>

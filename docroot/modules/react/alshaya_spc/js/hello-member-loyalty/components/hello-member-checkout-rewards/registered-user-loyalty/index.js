@@ -195,7 +195,6 @@ class RegisteredUserLoyalty extends React.Component {
           && (
           <LoyaltyConfirmPopup
             showLoyaltyPopup={showLoyaltyPopup}
-            currentOption={currentOption}
             selectedOption={selectedOption}
             changeLoyaltyOption={this.changeLoyaltyOption}
             resetPopupStatus={this.resetPopupStatus}
