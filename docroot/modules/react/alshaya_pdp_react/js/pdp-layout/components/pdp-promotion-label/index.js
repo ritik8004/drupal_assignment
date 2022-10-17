@@ -47,7 +47,7 @@ class PdpPromotionLabel extends React.Component {
       // Get product promotions from graphQL if V3 is enabled.
       const { promotions } = this.props;
       let promotion = promotions;
-      if (prevMainSku !== skuMainCode) {
+      if (hasValue(prevMainSku) && prevMainSku !== skuMainCode) {
         promotion = await window.commerceBackend.getPdpPromotionLabels(skuMainCode);
       }
       promotionsData[skuMainCode] = promotion;
