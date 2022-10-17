@@ -1,4 +1,13 @@
-<div id="pdp-layout" {{ attributes }} {{ gtm_attributes }}></div>
+{%
+  set classes = [
+  'node',
+  'node--type-' ~ node.bundle|clean_class,
+  view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+]
+%}
+{% set attributes = attributes.addClass(classes) %}
+
+<div id="pdp-layout" data-sku="#rcs.product._self|sku#" data-sku-type="#rcs.product._self|sku-type#" {{ attributes }} {{ gtm_attributes }}></div>
 {% if bazaar_voice_strings %}
   {{ bazaar_voice_strings }}
 {% endif %}

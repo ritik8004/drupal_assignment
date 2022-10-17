@@ -200,14 +200,13 @@ export const triggerAddToCart = (
   }
 };
 
-export const getProductValues = (skuItemCode, variant, setVariant) => {
+export const getProductValues = (productInfo, configurableCombinations,
+  skuItemCode, variant, setVariant) => {
   let brandLogo; let brandLogoAlt; let
     brandLogoTitle; let freeGiftImage;
   let freeGiftPromoUrl; let freeGiftMessage;
   let freeGiftTitle; let freeGiftPromoCode = null;
   let freeGiftPromoType;
-  let configurableCombinations = '';
-  const { productInfo } = drupalSettings;
   const { variants } = productInfo[skuItemCode];
   const { stockStatus } = productInfo[skuItemCode];
   const { productLabels } = drupalSettings;
@@ -267,7 +266,6 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       bigTickectProduct = productInfo[skuItemCode].bigTickectProduct;
     }
     if (productInfo[skuItemCode].type === 'configurable') {
-      configurableCombinations = drupalSettings.configurableCombinations;
       if (Object.keys(variants).length > 0) {
         if (variant == null) {
           setVariant(configurableCombinations[skuItemCode].firstChild);
@@ -334,7 +332,6 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     shortDesc,
     description,
     additionalAttributes,
-    configurableCombinations,
     relatedProducts,
     stockStatus,
     labels,
@@ -357,8 +354,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
 /**
  * Fetch available stores for given lat and lng.
  */
-export const fetchAvailableStores = (coords) => {
-  const { productInfo } = drupalSettings;
+export const fetchAvailableStores = (productInfo, coords) => {
   let skuItemCode = null;
   if (productInfo) {
     [skuItemCode] = Object.keys(productInfo);

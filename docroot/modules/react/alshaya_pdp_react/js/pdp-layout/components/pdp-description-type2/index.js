@@ -22,7 +22,7 @@ const PdpDescriptionType2 = (props) => {
       )
         : (
           <>
-            <h2 className="magv2-new-desc__item__title alshaya-accordion-header">{ Drupal.t('@label', { '@label': descriptionData[item].label })}</h2>
+            <h2 className="magv2-new-desc__item__title alshaya-accordion-header">{ descriptionData[item].label }</h2>
             <PdpSectionText className="magv2-new-desc__item__text alshaya-accordion-content">
               {parse(descriptionData[item].value)}
             </PdpSectionText>

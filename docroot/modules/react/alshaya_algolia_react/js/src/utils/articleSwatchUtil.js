@@ -12,7 +12,7 @@ export default async function getSingleProductByColorSku(skuCode) {
     return response;
   }
   // If graphQl API is returning Error.
-  Drupal.alshayaLogger('error', 'Error while calling the graph ql to fetch product info for sku: @sku', {
+  Drupal.alshayaLogger('error', 'Error while calling the GraphQL to fetch product info for sku: @sku', {
     '@sku': skuCode,
   });
   return null;

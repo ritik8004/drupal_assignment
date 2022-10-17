@@ -3,21 +3,19 @@ import ReactDOM from 'react-dom';
 import { hasValue } from '../../js/utilities/conditionsUtility';
 import PdpLayout from './pdp-layout/components/pdp-layout';
 
-// Update drupalSettings if V3 enabled.
-if (hasValue(drupalSettings.alshayaRcs)) {
-  window.alshayaRenderPdpMagV2 = function renderPdpMagV2(productInfo, configurableCombinations) {
-    // Update product details coming from qraphql for the current product.
-    drupalSettings.productInfo = productInfo || '';
-    drupalSettings.configurableCombinations = configurableCombinations || '';
-
-    ReactDOM.render(
-      <PdpLayout />,
-      document.getElementById('pdp-layout'),
-    );
-  };
-} else {
+window.alshayaRenderPdpMagV2 = function renderPdpMagV2(productInfo, configurableCombinations) {
   ReactDOM.render(
-    <PdpLayout />,
+    <PdpLayout
+      productInfo={productInfo}
+      configurableCombinations={configurableCombinations}
+    />,
     document.getElementById('pdp-layout'),
   );
+};
+
+if (hasValue(drupalSettings)) {
+  const { productInfo, configurableCombinations } = drupalSettings;
+  if (hasValue(productInfo) && hasValue(configurableCombinations)) {
+    window.alshayaRenderPdpMagV2(productInfo, configurableCombinations);
+  }
 }

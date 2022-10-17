@@ -31,11 +31,10 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
 import PdpDescriptionType2 from '../pdp-description-type2';
 
-const PdpLayout = () => {
+const PdpLayout = ({ productInfo, configurableCombinations }) => {
   const [variant, setVariant] = useState(null);
   const [panelContent, setPanelContent] = useState(null);
   const {
-    productInfo,
     pdpDescriptionContainerType,
     showRelatedProductsFromDrupal,
   } = drupalSettings;
@@ -64,7 +63,8 @@ const PdpLayout = () => {
   };
 
   // Get product data based on sku.
-  const productValues = getProductValues(skuItemCode, variant, setVariant);
+  const productValues = getProductValues(productInfo, configurableCombinations,
+    skuItemCode, variant, setVariant);
   const {
     brandLogo,
     brandLogoAlt,
@@ -76,7 +76,6 @@ const PdpLayout = () => {
     shortDesc,
     description,
     additionalAttributes,
-    configurableCombinations,
     relatedProducts,
     stockStatus,
     labels,
@@ -327,7 +326,9 @@ const PdpLayout = () => {
             <PdpStandardDelivery />
           </ConditionalView>
           {stockStatus ? (
-            <PdpClickCollect />
+            <PdpClickCollect
+              productInfo={productInfo}
+            />
           ) : null}
           <PdpSharePanel />
         </div>

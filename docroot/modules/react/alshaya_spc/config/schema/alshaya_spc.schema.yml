@@ -14,7 +14,7 @@ alshaya_spc.settings:
     display_cart_payment_icons:
       type: boolean
       label: 'Display payment method icons on cart page'
-    is_notification_drawer:
+    show_notification_drawer:
       type: boolean
       label: 'Enable drawer panel to show cart notification'
 
