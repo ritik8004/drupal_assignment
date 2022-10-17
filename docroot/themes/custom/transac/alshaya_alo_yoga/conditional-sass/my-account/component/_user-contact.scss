@@ -2,6 +2,8 @@
   #user-form {
     #edit-submit {
       @include primaryBtn(true);
+
+      min-width: rem(170);
     }
   }
 }

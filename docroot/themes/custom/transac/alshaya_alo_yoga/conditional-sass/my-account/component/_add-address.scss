@@ -76,8 +76,34 @@
   .block-system > a {
     @include secondaryBtn(true);
 
-    height: rem(48);
+    min-height: rem(48);
     padding: rem(14);
     margin-top: rem(-16);
+  }
+}
+
+#edit-billing-address,
+.alias--cart-checkout-payment,
+.c-add-address,
+.c-address-book,
+.checkout-login {
+  .address-book-address,
+  .profile-form {
+    .form-actions {
+      .form-submit {
+        min-width: rem(170);
+        font-size: rem(16);
+      }
+
+      .cancel-button {
+        @include secondaryBtn(true);
+
+        padding: rem(14);
+
+        @include breakpoint($tablet) {
+          width: auto;
+        }
+      }
+    }
   }
 }

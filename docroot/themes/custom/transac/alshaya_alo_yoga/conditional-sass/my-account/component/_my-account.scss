@@ -7,3 +7,11 @@
     }
   }
 }
+
+.aura-my-account.aura-enabled .block-page-title-block .edit-account {
+  @extend %button-brand;
+
+  background-color: $primary_empty_btn;
+  color: $tertiary_btn_text;
+  padding: rem(14);
+}
