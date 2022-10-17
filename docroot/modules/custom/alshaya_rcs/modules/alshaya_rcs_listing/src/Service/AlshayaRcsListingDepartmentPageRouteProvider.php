@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_rcs_listing\Routing;
+namespace Drupal\alshaya_rcs_listing\Service;
 
 use Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper;
 use Drupal\Core\Routing\RouteProvider;

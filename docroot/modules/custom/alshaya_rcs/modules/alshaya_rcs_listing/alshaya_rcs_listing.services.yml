@@ -56,7 +56,7 @@ services:
   alshaya_rcs_listing.department_page_route_provider:
     decorates: router.route_provider
     priority: -20
-    class: Drupal\alshaya_rcs_listing\Routing\AlshayaRcsListingDepartmentPageRouteProvider
+    class: Drupal\alshaya_rcs_listing\Service\AlshayaRcsListingDepartmentPageRouteProvider
     arguments:
       - '@database'
       - '@state'
