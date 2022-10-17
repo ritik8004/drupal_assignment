@@ -98,7 +98,7 @@ function getProductRecommendation(products, sectionTitle) {
   products.forEach((product) => {
     data.products.push({
       sku: product.sku,
-      url: `${product.url_key}.html`,
+      url: `/${product.url_key}.html`,
       name: product.name,
       image: window.commerceBackend.getTeaserImage(product),
       price_details: window.commerceBackend.getPriceForRender(product),

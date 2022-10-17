@@ -10,18 +10,31 @@
       return;
     }
 
+    var result = e.detail.result;
+
+    switch (e.detail.placeholder || '') {
+      case 'crosssel-products':
+        result = result[0].crosssell_products;
+        break;
+
+      case 'upsell-products':
+        result = result[0].upsell_products;
+        break;
+
+      case 'related-products':
+        result = result[0].related_products;
+        break;
+    }
+
     // If the result is array then process all the items.
-    if (Array.isArray(e.detail.result)) {
-      e.detail.result.forEach(item => {
+    if (Array.isArray(result)) {
+      result.forEach((item, key) => {
         if (Drupal.hasValue(item.end_user_url)) {
-          var endUserUrl = item.end_user_url.replace('.html', '');
-          item.url_key = endUserUrl;
+          result[key].url_key = item.end_user_url.replace('.html', '');
         }
       });
-    } else if (Drupal.hasValue(e.detail.result.end_user_url)) {
-      // Filter out the .html from the `end_user_url`.
-      var endUserUrl = e.detail.result.end_user_url.replace('.html', '');
-      e.detail.result.url_key = endUserUrl;
+    } else if (Drupal.hasValue(result.end_user_url)) {
+      result.url_key = result.end_user_url.replace('.html', '');
     }
   });
 })(Drupal);

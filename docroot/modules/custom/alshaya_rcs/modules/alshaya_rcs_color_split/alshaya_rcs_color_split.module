@@ -88,32 +88,9 @@ function alshaya_rcs_color_split_rcs_placeholders_graphql_query() {
     ],
   ];
 
-  // Prepare query for different color sku in PLP.
-  $color_sku_query_fields = [
-    'items' => [
-      'id',
-      'name',
-      'url_key',
-      'end_user_url',
-      'price_range' => [
-        'maximum_price' => [
-          'regular_price' => [
-            'value',
-          ],
-          'final_price' => [
-            'value',
-          ],
-          'discount' => [
-            'percent_off',
-          ],
-        ],
-      ],
-      'article_media_gallery' => [
-        'url',
-        'image_type',
-      ],
-    ],
-  ];
+  /** @var Drupal\alshaya_rcs_color_split\Service\AlshayaRcsColorSplitHelper $color_split_helper */
+  $color_split_helper = \Drupal::service('alshaya_rcs_color_split.helper');
+  $color_sku_query_fields = $color_split_helper->getColorSkuProductQueryFields();
 
   $query_fields['single_product_by_color_sku'] = [
     'query' => [
