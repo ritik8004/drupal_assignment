@@ -59,7 +59,7 @@
 
     Drupal.behaviors.alshayaAcmMiniCartNotification = {
       attach: function () {
-        $(window).on('click', function () {
+        $(window).once('alshayaAcmMiniCartNotification').on('click', function () {
           // #cart_notification for the default mini cart icon.
           // #magv2_cart_notification for New PDP layout mobile cart icon.
           // #static_minicart_notification for StaticMinicart notification.

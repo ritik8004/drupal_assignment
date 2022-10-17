@@ -8,3 +8,4 @@ dependencies:
   - acq_commerce:acq_sku
   - alshaya_acm_product:alshaya_acm_product
   - alshaya_master:alshaya_master
+  - alshaya_spc:alshaya_spc

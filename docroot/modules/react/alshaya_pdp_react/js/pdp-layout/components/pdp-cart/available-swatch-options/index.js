@@ -12,7 +12,8 @@ const AvailableSwatchOptions = (props) => {
   } = props;
 
   const backgroundStyle = (swatchType === 'RGB'
-    ? `backgroundColor: ${value}` : `backgroundImage: url(${value})`);
+    ? `backgroundColor: ${value}`
+    : `backgroundImage: url(${value})`);
 
   if (nextValues.indexOf(attr) !== -1) {
     return (

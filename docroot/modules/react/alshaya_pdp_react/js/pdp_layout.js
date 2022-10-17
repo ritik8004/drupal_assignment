@@ -13,7 +13,6 @@ window.alshayaRenderPdpMagV2 = function renderPdpMagV2(productInfo, configurable
   );
 };
 
-
 if (hasValue(drupalSettings)) {
   const { productInfo, configurableCombinations } = drupalSettings;
   if (hasValue(productInfo) && hasValue(configurableCombinations)) {

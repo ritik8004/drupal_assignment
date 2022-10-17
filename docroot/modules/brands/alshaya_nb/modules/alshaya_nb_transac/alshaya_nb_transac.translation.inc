@@ -51,7 +51,7 @@ function _alshaya_nb_transac_translations() {
  *   Translations.
  */
 function _alshaya_nb_transac_get_translations(string $version = '') {
-  $translations = __alshaya_nb_transac_translations();
+  $translations = _alshaya_nb_transac_translations();
   // If no version mentioned, return all version strings.
   if (empty($version)) {
     $trans_data = [];
