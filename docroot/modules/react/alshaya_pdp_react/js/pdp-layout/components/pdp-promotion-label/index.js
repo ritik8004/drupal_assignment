@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import PdpDynamicPromotions from '../pdp-dynamic-promotions';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import getPdpPromotionV2Labels from '../../../utilities/pdpPromotionV2Label';
 
 class PdpPromotionLabel extends React.Component {
   constructor(props) {
@@ -16,26 +17,32 @@ class PdpPromotionLabel extends React.Component {
     this.getPromotionInfo();
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     const { skuMainCode } = this.props;
     // If there is a change in props value (parent sku).
     if (prevProps.skuMainCode !== skuMainCode) {
-      this.getPromotionInfo();
+      // Get product promotions from graphQL if V3 is enabled.
+      if (hasValue(drupalSettings.alshayaRcs)) {
+        const promotion = await getPdpPromotionV2Labels(skuMainCode);
+        this.getPromotionInfo(promotion);
+      } else {
+        this.getPromotionInfo();
+      }
     }
   }
 
-  getPromotionInfo = () => {
-    // If product promotion data is already processed.
-    const { skuMainCode, promotions } = this.props;
-    const { promotionsRawData } = this.state;
-
-    if (!hasValue(promotions) && !hasValue(drupalSettings.alshayaRcs)) {
+  getPromotionInfo = (promotion) => {
+    const { skuMainCode } = this.props;
+    let promotionsData = {};
+    // Get product promotions from V2 if V3 is not enabled.
+    if (!hasValue(drupalSettings.alshayaRcs)) {
+      const { promotionsRawData } = this.state;
       const url = Drupal.url(`rest/v2/product/${btoa(skuMainCode)}?pdp=magazinev2`);
       const promotionStateValue = promotionsRawData ? promotionsRawData[skuMainCode] : null;
       if (promotionStateValue === null || promotionStateValue === undefined) {
         axios.get(url).then((response) => {
           if (response.data.length !== 0) {
-            const promotionsData = promotionsRawData || {};
+            promotionsData = promotionsRawData || {};
             promotionsData[skuMainCode] = response.data.promotionsRaw;
             this.setState({
               promotionsRawData: promotionsData,
@@ -43,6 +50,12 @@ class PdpPromotionLabel extends React.Component {
           }
         });
       }
+    } else {
+      // Get product promotions from V3.
+      promotionsData[skuMainCode] = (hasValue(promotion)) ? promotion : null;
+      this.setState({
+        promotionsRawData: promotionsData,
+      });
     }
   }
 
@@ -50,15 +63,9 @@ class PdpPromotionLabel extends React.Component {
     const {
       skuMainCode,
       cartDataValue,
-      promotions,
     } = this.props;
     const { promotionsRawData } = this.state;
-
-    let promotionsData = promotionsRawData ? promotionsRawData[skuMainCode] : null;
-    // Check promotions from props.
-    if (hasValue(promotions)) {
-      promotionsData = promotions;
-    }
+    const promotionsData = promotionsRawData ? promotionsRawData[skuMainCode] : null;
 
     return (promotionsData) ? (
       <>
