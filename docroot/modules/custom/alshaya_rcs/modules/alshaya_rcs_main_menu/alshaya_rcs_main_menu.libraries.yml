@@ -70,5 +70,4 @@ visual_mobile_menu_ui:
   dependencies:
     - core/jquery
     - core/drupal
-    - core/drupalSettings
     - alshaya_rcs_main_menu/visual_mobile_menu_partial
