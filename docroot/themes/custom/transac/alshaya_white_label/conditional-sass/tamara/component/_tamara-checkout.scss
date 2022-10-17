@@ -55,6 +55,10 @@
   .spc-checkout-payment-options {
     .payment-method-tamara {
       .payment-method-top-panel {
+        img {
+          height: rem(34);
+        }
+
         .payment-method-label-wrapper {
           .spc-payment-method-desc {
             font-size: rem(10);
