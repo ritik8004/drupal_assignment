@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import PdpDynamicPromotions from '../pdp-dynamic-promotions';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import getPdpPromotionV2Labels from '../../../utilities/pdpPromotionV2Label';
 
 class PdpPromotionLabel extends React.Component {
   constructor(props) {
@@ -23,7 +22,7 @@ class PdpPromotionLabel extends React.Component {
     if (prevProps.skuMainCode !== skuMainCode) {
       // Get product promotions from graphQL if V3 is enabled.
       if (hasValue(drupalSettings.alshayaRcs)) {
-        const promotion = await getPdpPromotionV2Labels(skuMainCode);
+        const promotion = await window.commerceBackend.getPdpPromotionV2Labels(skuMainCode);
         this.getPromotionInfo(promotion);
       } else {
         this.getPromotionInfo();
@@ -52,7 +51,8 @@ class PdpPromotionLabel extends React.Component {
       }
     } else {
       // Get product promotions from V3.
-      promotionsData[skuMainCode] = (hasValue(promotion)) ? promotion : null;
+      const { promotions } = this.props;
+      promotionsData[skuMainCode] = (hasValue(promotion)) ? promotion : promotions;
       this.setState({
         promotionsRawData: promotionsData,
       });
