@@ -357,7 +357,7 @@ const PdpLayout = () => {
             />
           ))}
         </div>
-      ) : <div className="magv2-pdp-crossell-upsell-wrapper" ref={crosssellContainer} />}
+      ) : null}
       <PpdPanel panelContent={panelContent} />
       <DynamicYieldPlaceholder
         context="pdp"
