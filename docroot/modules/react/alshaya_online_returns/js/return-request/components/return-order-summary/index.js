@@ -17,8 +17,8 @@ const ReturnOrderSummary = ({
       <div className="order-summary-row">
         <div className="order-summary-details">
           <div className="order-transaction">
-            <div className="light tablet-light font-small">{ Drupal.t('Order ID', {}, { context: 'online_returns' }) }</div>
-            <div className="dark">{orderDetails['#order'].orderId}</div>
+            <div className="light tablet-light font-small order-id-label">{ Drupal.t('Order ID', {}, { context: 'online_returns' }) }</div>
+            <div className="dark order-id">{orderDetails['#order'].orderId}</div>
             <div className="light order--date--time font-small">{ orderDetails['#order'].orderDate }</div>
           </div>
           <div className="order-quantity">

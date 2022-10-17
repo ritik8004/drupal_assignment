@@ -1,0 +1,7 @@
+.return-requests-wrapper {
+  .return-reasons-select {
+    @include breakpoint($only-mobile) {
+      margin-bottom: rem(40);
+    }
+  }
+}

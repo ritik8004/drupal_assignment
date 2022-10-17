@@ -1,0 +1,104 @@
+.return-confirmation-wrapper {
+  .return-details-section,
+  .return-items-wrapper {
+    .return-details-title,
+    .return-items-label {
+      padding-bottom: rem(16);
+
+      @include breakpoint($tablet) {
+        padding-bottom: rem(4);
+      }
+    }
+  }
+
+  .return-details-section {
+    .return-confirmation-detail-wrapper {
+      padding-left: rem(35);
+      padding-right: rem(35);
+
+      @include breakpoint($tablet) {
+        padding-left: rem(25);
+        padding-right: rem(25);
+      }
+
+      .return-id-label,
+      .return-request-date,
+      .refund-method-title,
+      .address-title {
+        font-size: rem(12);
+        line-height: 1.33;
+      }
+
+      .return-confirmation-address {
+        margin-bottom: rem(8);
+      }
+    }
+  }
+
+  .return-details-section {
+    .return-note-label {
+      text-align: center;
+      margin-top: rem(11);
+      padding-left: rem(25);
+      padding-right: rem(25);
+
+      @include breakpoint($tablet) {
+        padding-left: 0;
+        padding-right: 0;
+        margin-top: rem(20);
+        text-align: $left;
+      }
+    }
+  }
+
+  .return-items-wrapper {
+    .item-details {
+      .order__details--wrapper {
+        .attribute-detail,
+        .item-code,
+        .item-quantity {
+          margin-bottom: 0;
+          font-size: rem(12);
+          line-height: 1.33;
+        }
+
+        .item-name {
+          font-size: rem(14);
+          font-weight: normal;
+          line-height: 1.29;
+        }
+
+        .item-price {
+          .light {
+            font-size: rem(12);
+            line-height: 1.33;
+            margin-bottom: 0;
+          }
+
+          .price {
+            font-size: rem(14);
+            line-height: 1.29;
+            font-weight: normal;
+            color: $online-return-unit-price-warm-grey-txt;
+          }
+        }
+      }
+
+      .item-total-price {
+        .light {
+          font-size: rem(12);
+          line-height: 1.33;
+          margin-bottom: 0;
+        }
+
+        .price-wrapper {
+          .price {
+            font-size: rem(14);
+            line-height: 1.29;
+            font-weight: normal;
+          }
+        }
+      }
+    }
+  }
+}
