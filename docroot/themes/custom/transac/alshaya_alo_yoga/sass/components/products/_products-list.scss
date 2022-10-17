@@ -63,9 +63,9 @@
     .field--name-name {
       padding: 0;
       font-size: rem(16);
-      font-weight: 700;
       margin-bottom: rem(5);
       line-height: 1.4;
+      font-family: $ay-nova-semibold;
     }
 
     .price-type__wrapper,
@@ -88,6 +88,13 @@
         .alshaya_search_hoverimage {
           display: none;
         }
+      }
+    }
+
+    .promotions  {
+      .sku-promotion-item {
+        margin-#{$left}: 0;
+        margin-#{$right}: 0;
       }
     }
   }

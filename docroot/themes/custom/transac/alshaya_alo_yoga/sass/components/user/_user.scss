@@ -36,6 +36,14 @@
     }
   }
 
+  .alias--user-login &,
+  .alias--user-register & {
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: rem(8);
+      margin-#{$right}: rem(8);
+    }
+  }
+
   .user-form {
     .form-text,
     .form-email,

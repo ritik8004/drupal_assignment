@@ -5,8 +5,37 @@
         &.product-small {
           .alshaya_search_gallery {
             @include breakpoint($desktop) {
-              height: rem(342);
+              height: rem(448);
             }
+
+            @include breakpoint($only-mobile) {
+              height: rem(259);
+            }
+          }
+        }
+      }
+    }
+
+    #my-wishlist {
+      .c-products__item {
+        article {
+          &:hover {
+            .quick-add {
+              @include breakpoint($desktop) {
+                top: rem(352);
+              }
+            }
+          }
+        }
+      }
+
+      .quick-add  {
+        .addtobag-button::before,
+        .addtobag-config-button::before,
+        .is-not-buyable::before {
+          @include breakpoint($only-mobile) {
+            bottom: rem(95);
+            #{$right}: rem(10);
           }
         }
       }
