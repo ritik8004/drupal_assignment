@@ -1,14 +1,15 @@
 <?php
 
-namespace Drupal\alshaya_advanced_page\Routing;
+namespace Drupal\alshaya_rcs_listing\Routing;
 
 use Drupal\Core\Routing\RouteProvider;
+use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Class Alshaya Advanced Page Route Provider.
+ * Class Alshaya RCS Listing Route Provider.
  */
-class AlshayaAdvancedPageRouteProvider extends RouteProvider {
+class AlshayaRcsListingDepartmentPageRouteProvider extends RouteProvider {
 
   /**
    * {@inheritdoc}
@@ -19,28 +20,27 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
     // If collection has term view route.
     if (!empty($collection) && $collection->get('entity.taxonomy_term.canonical')) {
       $exploded_path = explode('/', $path);
-      // Get tid from path.
-      if (isset($exploded_path[3]) && is_numeric($exploded_path[3])) {
+    }
 
-        // If we have both route `term canonical` and `term edit` available,
-        // this case happens only for the term edit url. We check for the
-        // `edit` in url as well to make sure term/edit screen and not process
-        // further if term edit screen.
-        if (($collection->get('entity.taxonomy_term.edit_form')
-            || $collection->get('entity.taxonomy_term.content_translation_add')
-            || $collection->get('entity.taxonomy_term.content_translation_overview')
-            || $collection->get('entity.taxonomy_term.delete_form'))
-          && isset($exploded_path[4])
-          && in_array($exploded_path[4], ['edit', 'translations', 'delete'])) {
-          return $collection;
-        }
-
-        $department_node = alshaya_advanced_page_is_department_page($exploded_path[3]);
-        // If department page exists.
+    // If RCS function exist for checking department page,
+    // proceed and check for department page existance.
+    if (function_exists('alshaya_rcs_listing_is_department_page')
+      && !empty($collection) && isset($exploded_path[3])
+      && is_numeric($exploded_path[3])) {
+      // With V2 we use slug and not not term reference so we need the original
+      // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
+      // For this RCS provides a way to get original path if it had processed
+      // and converted the value available in $path. We use it to get the
+      // original path and check from slug.
+      $filtered_path = RcsPhPathProcessor::getOrignalPathFromProcessed($path);
+      preg_match('/^\/(.*)\/$/', $filtered_path, $matches);
+      $filtered_path = $matches[1] ?? '';
+      if ($filtered_path) {
+        // Get list of department pages.
+        $department_node = alshaya_rcs_listing_is_department_page($filtered_path);
         $collection = $this->setRouteOptions($collection, $exploded_path, $department_node, TRUE);
       }
     }
-
     return $collection;
   }
 

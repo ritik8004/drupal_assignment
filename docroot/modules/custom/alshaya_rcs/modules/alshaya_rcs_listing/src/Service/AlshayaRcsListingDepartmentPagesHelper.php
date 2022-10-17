@@ -108,7 +108,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
     // and converted the value available in $path. We use it to get the
     // original path and check from slug.
     $filtered_path = RcsPhPathProcessor::getOrignalPathFromProcessed($path);
-    preg_match('/^\/(.*)\/?$/', $filtered_path, $matches);
+    preg_match('/^\/(.*)\/$/', $filtered_path, $matches);
     $filtered_path = $matches[1] ?? '';
 
     if (empty($filtered_path)) {
@@ -149,10 +149,10 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
    * Check if current page is a department page.
    *
    * @return int|bool
-   *   TRUE if department page else FALSE.
+   *   Return nid if department page else FALSE.
    */
   public function isDepartmentPage() {
-    return (bool) $this->getDepartmentPageNode();
+    return $this->getDepartmentPageNode();
   }
 
 }
