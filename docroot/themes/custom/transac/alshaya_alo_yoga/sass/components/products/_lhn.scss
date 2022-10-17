@@ -14,9 +14,19 @@
   }
 
   > ul > li {
+    margin-bottom: 0;
+
     > .lhn-2 {
       font-family: $alshaya-thin;
       text-transform: uppercase;
+    }
+  }
+
+  .lhn-3.active {
+    + ul {
+      li {
+        padding-#{$left}: 0;
+      }
     }
   }
 }
