@@ -24,9 +24,10 @@ class AlshayaRcsListingDepartmentPageRouteProvider extends RouteProvider {
 
     // If RCS function exist for checking department page,
     // proceed and check for department page existance.
-    if (function_exists('alshaya_rcs_listing_is_department_page')
-      && !empty($collection) && isset($exploded_path[3])
-      && is_numeric($exploded_path[3])) {
+    if (!empty($collection)
+      && isset($exploded_path[3])
+      && is_numeric($exploded_path[3])
+    ) {
       // With V2 we use slug and not not term reference so we need the original
       // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
       // For this RCS provides a way to get original path if it had processed
