@@ -192,19 +192,3 @@ function alshaya_rcs_listing_rcs_handlebars_templates(EntityInterface $entity) {
 
   return $libraries;
 }
-
-/**
- * Check for given path, department page exists.
- *
- * Check for given path, department page exists. If department page exists
- * then return that department page node id or return false.
- *
- * @param string $path
- *   The current route path.
- *
- * @return int|bool
- *   Department page node id or false.
- */
-function alshaya_rcs_listing_is_department_page(string $path) {
-  return \Drupal::service('alshaya_advanced_page.department_page_helper')->isDepartmentPage($path);
-}

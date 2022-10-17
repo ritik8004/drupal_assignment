@@ -2,14 +2,77 @@
 
 namespace Drupal\alshaya_rcs_listing\Routing;
 
+use Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper;
 use Drupal\Core\Routing\RouteProvider;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 use Symfony\Component\Routing\RouteCollection;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Path\CurrentPathStack;
+use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
+use Drupal\Core\State\StateInterface;
+use Drupal\Core\Database\Connection;
 
 /**
  * Class Alshaya RCS Listing Route Provider.
  */
 class AlshayaRcsListingDepartmentPageRouteProvider extends RouteProvider {
+
+  /**
+   * Department page helper.
+   *
+   * @var \Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper
+   */
+  protected $departmentPageHelper;
+
+  /**
+   * Constructs a new AlshayaRcsListingDepartmentPageRouteProvider.
+   *
+   * @param \Drupal\Core\Database\Connection $connection
+   *   A database connection object.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state.
+   * @param \Drupal\Core\Path\CurrentPathStack $current_path
+   *   The current path.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_backend
+   *   The cache backend.
+   * @param \Drupal\Core\PathProcessor\InboundPathProcessorInterface $path_processor
+   *   The path processor.
+   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tag_invalidator
+   *   The cache tag invalidator.
+   * @param string $table
+   *   (Optional) The table in the database to use for matching.
+   *   Defaults to 'router'.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   (Optional) The language manager.
+   * @param \Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper $department_page_helper
+   *   Department page helper.
+   */
+  public function __construct(
+    Connection $connection,
+    StateInterface $state,
+    CurrentPathStack $current_path,
+    CacheBackendInterface $cache_backend,
+    InboundPathProcessorInterface $path_processor,
+    CacheTagsInvalidatorInterface $cache_tag_invalidator,
+    $table,
+    LanguageManagerInterface $language_manager,
+    AlshayaDepartmentPageHelper $department_page_helper
+  ) {
+    parent::__construct(
+      $connection,
+      $state,
+      $current_path,
+      $cache_backend,
+      $path_processor,
+      $cache_tag_invalidator,
+      $table,
+      $language_manager
+    );
+
+    $this->departmentPageHelper = $department_page_helper;
+  }
 
   /**
    * {@inheritdoc}
@@ -38,7 +101,7 @@ class AlshayaRcsListingDepartmentPageRouteProvider extends RouteProvider {
       $filtered_path = $matches[1] ?? '';
       if ($filtered_path) {
         // Get list of department pages.
-        $department_node = alshaya_rcs_listing_is_department_page($filtered_path);
+        $department_node = $this->departmentPageHelper->isDepartmentPage();
         $collection = $this->setRouteOptions($collection, $exploded_path, $department_node, TRUE);
       }
     }

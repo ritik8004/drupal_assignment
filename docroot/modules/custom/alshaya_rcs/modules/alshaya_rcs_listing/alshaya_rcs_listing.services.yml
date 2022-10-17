@@ -53,3 +53,20 @@ services:
       - '@entity_type.manager'
       - '@path.current'
       - '@path_alias.manager'
+  alshaya_rcs_listing.department_page_route_provider:
+    decorates: router.route_provider
+    priority: -20
+    class: Drupal\alshaya_rcs_listing\Routing\AlshayaRcsListingDepartmentPageRouteProvider
+    arguments:
+      - '@database'
+      - '@state'
+      - '@path.current'
+      - '@cache.data'
+      - '@path_processor_manager'
+      - '@cache_tags.invalidator'
+      - 'router'
+      - '@language_manager'
+      - '@alshaya_advanced_page.department_page_helper'
+    tags:
+      - { name: event_subscriber }
+      - { name: backend_overridable }
