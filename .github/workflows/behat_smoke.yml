@@ -1,4 +1,4 @@
-name: Cron
+name: Behat Smoke Tests
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ defaults:
 
 jobs:
   full:
-    name: Validate Daily
+    name: Validate Smoke Tests
 
     runs-on: ubuntu-latest
     container:
@@ -75,4 +75,4 @@ jobs:
         run: bash ${SCRIPT_DIR}/setup_env.sh
 
       - name: Test app
-        run: bash ${SCRIPT_DIR}/test_app_daily.sh
+        run: bash ${SCRIPT_DIR}/test_smoke.sh
