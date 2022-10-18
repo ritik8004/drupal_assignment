@@ -75,13 +75,19 @@ class MyAccountIconBlock extends BlockBase implements ContainerFactoryPluginInte
 
     return [
       '#markup' => '<div class="my-account-icon">' . $data . '</div>',
-      '#cache' => ['contexts' => ['user']],
       '#attached' => [
         'library' => [
           'alshaya_white_label/user-account',
         ],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['user.roles:authenticated']);
   }
 
 }
