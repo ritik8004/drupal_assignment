@@ -73,11 +73,11 @@
     }
   }
 
-  &.user-page{
+  &.user-page {
     main {
       .region__content {
         .block-system-main-block {
-          @include breakpoint($only-mobile){
+          @include breakpoint($only-mobile) {
             padding-top: rem(24);
           }
         }
