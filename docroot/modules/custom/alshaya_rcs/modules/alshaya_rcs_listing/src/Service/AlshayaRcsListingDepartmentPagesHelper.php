@@ -136,7 +136,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
       if (is_object($node)) {
         if ($node->isPublished()) {
           $data[$filtered_path] = $nid;
-          $this->cache->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, $node->getCacheTags());
+          $this->cache->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
           return $nid;
         }
       }
