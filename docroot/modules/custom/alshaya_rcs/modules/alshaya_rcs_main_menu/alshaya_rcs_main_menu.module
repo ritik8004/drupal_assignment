@@ -5,6 +5,7 @@
  * Constains hooks and alters for Alshaya Rcs Main Menu.
  */
 
+use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -24,32 +25,6 @@ function alshaya_rcs_main_menu_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
-}
-
-/**
- * Check for given path, department page exists.
- *
- * Check for given path, department page exists. If department page exists
- * then return that department page node id or return false.
- *
- * @param string $path
- *   The current route path.
- *
- * @return int|bool
- *   Department page node id or false.
- */
-function alshaya_rcs_main_menu_is_department_page(string $path) {
-  return \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->isDepartmentPage($path);
-}
-
-/**
- * Helper function to fetch list of department pages.
- *
- * @return array
- *   Nids of department pages keyed by slug.
- */
-function alshaya_rcs_main_menu_get_department_pages() {
-  return \Drupal::service('alshaya_rcs_main_menu.rcs_category_helper')->getDepartmentPages();
 }
 
 /**
@@ -251,6 +226,12 @@ function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
   $rcs_main_menu_config = \Drupal::config('alshaya_rcs_main_menu.settings');
   $max_depth_to_load = $rcs_main_menu_config->get('max_depth_to_load');
 
+  $variables = [];
+  $variables['category_id'] = $rcs_main_menu_config->get('root_category');
+
+  // Allow other modules to modify the variables.
+  \Drupal::moduleHandler()->alter('alshaya_rcs_main_menu', $variables);
+
   $query_fields['navigationMenu'] = [
     'query' => [
       'query($categoryId: String)' => [
@@ -259,7 +240,7 @@ function alshaya_rcs_main_menu_rcs_placeholders_graphql_query() {
       ],
     ],
     'variables' => [
-      'categoryId' => $rcs_main_menu_config->get('root_category'),
+      'categoryId' => $variables['category_id'],
     ],
   ];
   $query_fields['#cache']['tags'] = $rcs_main_menu_config->getCacheTags();
@@ -279,4 +260,65 @@ function alshaya_rcs_main_menu_rcs_handlebars_templates(EntityInterface $entity)
     'main_menu_level4_partial' => 'alshaya_rcs_product',
     'shop_by_menu' => 'alshaya_rcs_product',
   ];
+}
+
+/**
+ * Implements hook_alshaya_rcs_category_query_fields_alter().
+ *
+ * Build query fields based on mobile menu layout settings.
+ */
+function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$fields, $depth) {
+  if (\Drupal::config('alshaya_main_menu.settings')->get('mobile_main_menu_layout') !== AlshayaMainMenuConfigForm::MOBILE_MENU_VISUAL) {
+    return;
+  }
+
+  $actual_depth = \Drupal::config('alshaya_rcs_main_menu.settings')->get('max_depth_to_load') - $depth;
+
+  switch ($actual_depth) {
+    case 1:
+      // Add fields for level 1.
+      $fields = array_merge($fields, [
+        'image',
+        'is_visual_menu_layout',
+      ]);
+      break;
+
+    case 2:
+      // Add fields for level 2.
+      $fields = array_merge($fields, [
+        'image',
+      ]);
+      break;
+
+    case 3:
+      // Add fields for level 3.
+      $fields = array_merge($fields, [
+        'image',
+        'is_include_in_level2',
+        'is_carousel_slider',
+      ]);
+      break;
+
+    case 4:
+    default:
+      // Add fields any other depths.
+      $fields = array_merge($fields, [
+        'image',
+        'is_include_in_level2',
+      ]);
+      break;
+
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_rcs_main_menu_page_attachments(array &$attachments) {
+  // Attach visual mobile menu libraries.
+  if (\Drupal::config('alshaya_main_menu.settings')->get('mobile_main_menu_layout') === AlshayaMainMenuConfigForm::MOBILE_MENU_VISUAL) {
+    $attachments['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_ui';
+    $attachments['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_partial';
+    $attachments['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_level2_partial';
+  }
 }

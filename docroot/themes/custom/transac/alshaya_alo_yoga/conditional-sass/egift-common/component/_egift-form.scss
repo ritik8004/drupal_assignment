@@ -1,0 +1,11 @@
+.egifts-form-wrapper {
+  .action-buttons {
+    button[type=submit] {
+      text-transform: uppercase;
+
+      &:hover {
+        opacity: 0.65;
+      }
+    }
+  }
+}

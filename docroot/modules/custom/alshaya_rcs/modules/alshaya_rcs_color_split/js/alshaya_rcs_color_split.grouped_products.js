@@ -13,9 +13,11 @@ window.commerceBackend = window.commerceBackend || {};
    *   The array of configurable attributes.
    */
   function getProductConfigurableAttributes(product) {
-    return product.variants[0].attributes.map(function (attribute) {
-      return attribute.code;
-    });
+    if (Drupal.hasValue(product.variants)) {
+      return product.variants[0].attributes.map(function (attribute) {
+        return attribute.code;
+      });
+    }
   }
 
   /**
@@ -34,19 +36,21 @@ window.commerceBackend = window.commerceBackend || {};
     var colorAttributeValues = [];
     if (Drupal.hasValue(styleProducts)) {
       styleProducts.forEach(function (styleProduct) {
-        var processedColors = [];
-        styleProduct.variants.forEach(function (variant) {
-          // Check if color attribute is already added.
-          if (!processedColors.includes(variant.product[colorAttribute])) {
-            processedColors.push(variant.product[colorAttribute]);
-            // Get the labels for the color attribute.
-            if (Drupal.hasValue(variant.product[colorAttribute])) {
-              const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product[colorAttribute]);
-              // Update the array with the color values.
-              colorAttributeValues.push({value_index: variant.product[colorAttribute], store_label: label});
+        if (Drupal.hasValue(styleProduct.variants)) {
+          var processedColors = [];
+          styleProduct.variants.forEach(function (variant) {
+            // Check if color attribute is already added.
+            if (!processedColors.includes(variant.product[colorAttribute])) {
+              processedColors.push(variant.product[colorAttribute]);
+              // Get the labels for the color attribute.
+              if (Drupal.hasValue(variant.product[colorAttribute])) {
+                const label = window.commerceBackend.getAttributeValueLabel(variant.product.color_attribute, variant.product[colorAttribute]);
+                // Update the array with the color values.
+                colorAttributeValues.push({value_index: variant.product[colorAttribute], store_label: label});
+              }
             }
-          }
-        });
+          });
+        }
       });
     }
     else {
@@ -162,14 +166,16 @@ window.commerceBackend = window.commerceBackend || {};
 
         // Check if the attributes are the same of the main product and the style
         // products.
-        var isAttributesSame = mainProductAttributes.length === styleProductAttributes.length;
-        mainProductAttributes.forEach(function (mainProductAttribute) {
-          if (!styleProductAttributes.includes(mainProductAttribute)) {
-            isAttributesSame = false;
-            // Break.
-            return false;
-          }
-        });
+        if (Drupal.hasValue(styleProductAttributes)) {
+          var isAttributesSame = mainProductAttributes.length === styleProductAttributes.length;
+          mainProductAttributes.forEach(function (mainProductAttribute) {
+            if (!styleProductAttributes.includes(mainProductAttribute)) {
+              isAttributesSame = false;
+              // Break.
+              return false;
+            }
+          });
+        }
 
         if (!isAttributesSame) {
           return;

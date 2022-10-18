@@ -674,12 +674,13 @@ class AlshayaPromoLabelManager {
 
       switch ($view_mode) {
         case 'full':
+          // Add a flag to update promo label dynamically.
+          $build['promotions']['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
+
           // We process promotions for magazine v2 layout in react itself.
           if ($this->skuManager->getPdpLayout($sku, 'pdp') === SkuManager::PDP_LAYOUT_MAGAZINE_V2) {
             break;
           }
-          // Add a flag to update promo label dynamically.
-          $build['promotions']['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
 
           // Add container for dynamic promotion display.
           $build['promotions']['dynamic_label'] = [

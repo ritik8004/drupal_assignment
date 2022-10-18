@@ -1,0 +1,43 @@
+#my-wishlist {
+  .addtobag-config-button {
+    @include breakpoint($upto-desktop) {
+      background-color: transparent;
+      #{$left}: 0;
+    }
+  }
+
+  .quick-add {
+    .addtobag-button,
+    .addtobag-config-button,
+    .is-not-buyable {
+      &::before {
+        @include breakpoint($upto-desktop) {
+          bottom: rem(80);
+          #{$right}: rem(16);
+        }
+
+        @include breakpoint($only-tablet) {
+          bottom: rem(112);
+        }
+      }
+    }
+  }
+
+  .addtobag-config-button-container {
+    @include breakpoint($tablet) {
+      margin-#{$right}: 0;
+      margin-#{$left}: 0;
+    }
+  }
+}
+
+.wishlist-share-popup-container {
+  .wishlist-share-popup-block {
+    .actions {
+      button {
+        font-family: $ay-heavy;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+.spc-section-billing-address {
+  .spc-billing-address-wrapper {
+    .spc-billing-bottom-panel {
+      @include breakpoint($upto-desktop) {
+        background: $spc_checkout_delivery_mob_bg;
+      }
+    }
+  }
+}

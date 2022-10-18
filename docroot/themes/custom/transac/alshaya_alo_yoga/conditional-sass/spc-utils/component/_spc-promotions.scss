@@ -1,0 +1,6 @@
+.spc-promotions {
+  &:not(:empty) {
+    font-family: $ay-black;
+    padding-#{$left}: 0;
+  }
+}

@@ -9,6 +9,7 @@ const SwatchSelectOption = ({
     <ul id={code} className="select-attribute magv2-swatch-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
       {Object.keys(configurables.values).map((attr) => {
         const attrVal = configurables.values[attr].value_id;
+
         if (code === nextCode) {
           return (
             <AvailableSwatchOptions

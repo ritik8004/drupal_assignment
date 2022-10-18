@@ -21,7 +21,7 @@ const PromotionsDynamicLabelsUtil = {
     }
 
     const productLabels = {};
-    const response = Drupal.alshayaPromotions.getRcsDynamicLabel('', cartData, '', 'cart');
+    const response = Drupal.alshayaPromotions.getDynamicLabel('', cartData, '', 'cart');
     const { cart_labels, products_labels } = response;
 
     if (products_labels) {

@@ -1,0 +1,17 @@
+.spc-checkout {
+  .checkout-link {
+    &:not(.checkout_com_applepay) {
+      float: none;
+      width: 100%;
+    }
+  }
+}
+
+.spc-checkout-terms-conditions {
+  font-size: rem(14);
+
+  @include breakpoint($only-mobile) {
+    padding-bottom: rem(33);
+    padding-top: rem(12);
+  }
+}

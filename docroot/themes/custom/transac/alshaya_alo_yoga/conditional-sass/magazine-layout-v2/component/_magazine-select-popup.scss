@@ -1,0 +1,26 @@
+.non-grouped-attr {
+  .magv2-select-popup {
+    @include breakpoint($only-mobile) {
+      &-content-wrapper {
+        .non-group-anchor-wrapper {
+          label {
+            justify-content: initial;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($tablet) {
+      &-header-wrapper {
+        text-align: initial;
+        font-size: rem(18);
+
+        .close {
+          &::before {
+            font-size: rem(40);
+          }
+        }
+      }
+    }
+  }
+}

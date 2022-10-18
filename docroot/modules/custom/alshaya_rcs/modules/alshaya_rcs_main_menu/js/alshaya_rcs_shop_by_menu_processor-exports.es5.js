@@ -19,8 +19,6 @@
  *
  * @param {object} catItem
  *   Rcs Category menu item.
- * @param {object} settings
- *   The drupal settings object.
  * @param {object} enrichmentData
  *   Enriched data object for the current item.
  * @param {boolean} isSuperCategoryEnabled
@@ -29,16 +27,15 @@
  * @returns {object}
  *   Processed menu item.
  */
-function processCategory(catItem, settings, enrichmentData, isSuperCategoryEnabled) {
+function processCategory(catItem, enrichmentData, isSuperCategoryEnabled) {
 
   const level_url_path = catItem.url_path;
   // Append category prefix in L2 if super category is enabled.
   if (isSuperCategoryEnabled) {
-    let urlItems = catItem.url_path.split('/');
-    if (urlItems.length > 1) {
-      urlItems[1] = `${settings.rcsPhSettings.categoryPathPrefix}${urlItems[1]}`;
-    }
-    catItem.url_path = urlItems.join('/').replace(/\/+$/, '/');
+    // Remove the supercategory from the path since the page URL already
+    // contains the supercategory and this path will be getting appened to the
+    // page url.
+    catItem.url_path = level_url_path.replace(/[a-zA-Z0-9]+\//, '');
   } else {
     catItem.url_path = level_url_path.replace(/\/+$/, '/');
   }
@@ -67,37 +64,16 @@ function processCategory(catItem, settings, enrichmentData, isSuperCategoryEnabl
  */
 exports.prepareData = function prepareData(settings, inputs) {
   let enrichmentData = globalThis.rcsGetEnrichedCategories();
-  let catItems = filterAvailableItems(inputs);
+  // Clone the original input data so as to not modify it.
+  let catItems = JSON.parse(JSON.stringify(inputs));
+  catItems = filterAvailableItems(catItems);
   catItems.sort(function (a, b) {
     return parseInt(a.position) - parseInt(b.position);
   });
   // Get the active super category.
-  const isSuperCategoryEnabled = !!settings.superCategory;
-   // Proceed only if superCategory is enabled.
-   if (isSuperCategoryEnabled) {
-    let activeSuperCategory = globalThis.rcsWindowLocation().pathname.split('/')[2];
-    // Check if the active super category is valid or not.
-    let validSuperCategory = false;
-    catItems.forEach((item) => {
-      if (activeSuperCategory == item.url_path) {
-        validSuperCategory = true;
-      }
-    });
-    if (!validSuperCategory && catItems[0].url_path.length) {
-      // If there are no active super category then make first item as default.
-      activeSuperCategory = catItems[0].url_path;
-    }
-    // Filter out the items that doesn't belong to the active super category.
-    if (isSuperCategoryEnabled) {
-      catItems = catItems.filter((item) => {
-        return activeSuperCategory == item.url_path;
-      });
-    }
-  }
-
   let menuItems = [];
   catItems.forEach(function eachCategory(catItem) {
-    menuItems.push(processCategory(catItem, settings, enrichmentData, isSuperCategoryEnabled));
+    menuItems.push(processCategory(catItem, enrichmentData, !!settings.superCategory));
   });
 
   return {

@@ -7,11 +7,12 @@ const DefaultSwatchOptions = (props) => {
     handleLiClick,
     code,
     label,
+    swatchType,
   } = props;
 
   return (
     <li key={attr} id={`value${attr}`} className="in-active" value={attr} data-attribute-label={label}>
-      <a href="#" style={{ backgroundImage: `url(${value})` }} onClick={(e) => handleLiClick(e, code)} />
+      <a href="#" style={(swatchType === 'RGB' ? { backgroundColor: value } : { backgroundImage: `url(${value})` })} onClick={(e) => handleLiClick(e, code)} />
     </li>
   );
 };

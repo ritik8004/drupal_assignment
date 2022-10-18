@@ -3,9 +3,11 @@
 namespace Drupal\alshaya_rcs_main_menu\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides alshaya rcs main menu block.
@@ -25,6 +27,13 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
   protected $configFactory;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaRcsMainMenuBlock constructor.
    *
    * @param array $configuration
@@ -35,10 +44,19 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
    *   Plugin definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    ConfigFactoryInterface $config_factory,
+    ModuleHandlerInterface $module_handler
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -49,7 +67,8 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('module_handler'),
     );
   }
 
@@ -59,26 +78,31 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
   public function build() {
     // Get the alshaya rcs main menu config object.
     $rcs_main_menu_settings = $this->configFactory->get('alshaya_rcs_main_menu.settings');
-    $max_depth = $rcs_main_menu_settings->get('menu_max_depth');
-    $category_id = $rcs_main_menu_settings->get('root_category');
+    $variables = [];
+    $variables['max_depth'] = $rcs_main_menu_settings->get('menu_max_depth');
+    $variables['category_id'] = $rcs_main_menu_settings->get('root_category');
 
     // Get the alshaya main menu config object.
     $main_menu_settings = $this->configFactory->get('alshaya_main_menu.settings');
-    $highlight_timing = (int) $main_menu_settings->get('desktop_main_menu_highlight_timing');
-    $max_nb_col = (int) $main_menu_settings->get('max_nb_col');
-    $ideal_max_col_length = (int) $main_menu_settings->get('ideal_max_col_length');
-    $menu_layout = $main_menu_settings->get('desktop_main_menu_layout');
+    $variables['highlight_timing'] = (int) $main_menu_settings->get('desktop_main_menu_highlight_timing');
+    $variables['max_nb_col'] = (int) $main_menu_settings->get('max_nb_col');
+    $variables['ideal_max_col_length'] = (int) $main_menu_settings->get('ideal_max_col_length');
+    $variables['menu_layout'] = $main_menu_settings->get('desktop_main_menu_layout');
 
     // Get the alshaya mobile main menu config object.
     $mobile_menu_settings = $this->configFactory->get('alshaya_main_menu.settings');
-    $mobile_menu_max_depth = $mobile_menu_settings->get('mobile_main_menu_max_depth');
+    $variables['mobile_menu_max_depth'] = $mobile_menu_settings->get('mobile_main_menu_max_depth');
+    $variables['mobile_menu_layout'] = $mobile_menu_settings->get('mobile_main_menu_layout');
 
     // Get Super category status.
     $super_category_status = (boolean) $this->configFactory->get('alshaya_super_category.settings')->get('status');
     if ($super_category_status) {
       // Increase the mobile max depth.
-      $mobile_menu_max_depth++;
+      $variables['mobile_menu_max_depth']++;
     }
+
+    // Allow other modules to modify the variables.
+    $this->moduleHandler->alter('alshaya_rcs_main_menu', $variables);
 
     $build = [
       '#attributes' => [
@@ -91,7 +115,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           '#attributes' => [
             'id' => 'rcs-ph-navigation_menu',
             'data-rcs-dependency' => 'none',
-            'data-param-category_id' => $category_id,
+            'data-param-category_id' => $variables['category_id'],
           ],
         ],
       ],
@@ -99,12 +123,13 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
         'drupalSettings' => [
           'alshayaRcs' => [
             'navigationMenu' => [
-              'menuMaxDepth' => $max_depth,
-              'mobileMenuMaxDepth' => $mobile_menu_max_depth,
-              'maxNbCol' => $max_nb_col > 0 ? $max_nb_col : 6,
-              'idealMaxColLength' => $ideal_max_col_length > 0 ? $ideal_max_col_length : 10,
-              'menuLayout' => $menu_layout,
-              'highlightTiming' => $highlight_timing,
+              'menuMaxDepth' => $variables['max_depth'],
+              'mobileMenuMaxDepth' => $variables['mobile_menu_max_depth'],
+              'maxNbCol' => $variables['max_nb_col'] > 0 ? $variables['max_nb_col'] : 6,
+              'idealMaxColLength' => $variables['ideal_max_col_length'] > 0 ? $variables['ideal_max_col_length'] : 10,
+              'menuLayout' => $variables['menu_layout'],
+              'highlightTiming' => $variables['highlight_timing'],
+              'mobileMenuLayout' => $variables['mobile_menu_layout'],
             ],
           ],
         ],
@@ -121,18 +146,26 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           $rcs_main_menu_settings->getCacheTags(),
           $main_menu_settings->getCacheTags()
         ),
+        'contexts' => ['url.path'],
       ],
     ];
 
     // Attach further Handlebars templates if needed.
-    if ($max_depth > 2) {
+    if ($variables['max_depth'] > 2) {
       $build['#attached']['library'][] = 'alshaya_rcs_main_menu/main_menu_level3_partial';
     }
-    if ($max_depth > 3) {
+    if ($variables['max_depth'] > 3) {
       $build['#attached']['library'][] = 'alshaya_rcs_main_menu/main_menu_level4_partial';
     }
 
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['super_category']);
   }
 
 }
