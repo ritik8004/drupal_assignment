@@ -41,18 +41,7 @@ globalThis.RcsPhLocalStorage = {};
     localStorage.setItem(storageKey, JSON.stringify(dataToStore));
   }
   catch (e) {
-    if (e.name === 'QuotaExceededError') {
-      // Log quota exceeded error in datadog and set flag.
-      if (sessionStorage.getItem('_quotaExceededErrorLogged') !== '1') {
-        let localKeys = Object.keys(localStorage);
-        let _lsTotal=0, totalSize;
-        $.each(localKeys, function (index, value) {
-          _lsTotal += ((localStorage[value].length + value.length)* 2);
-        });
-        totalSize = (_lsTotal / 1024).toFixed(2) + " KB";
-        sessionStorage.setItem('_quotaExceededErrorLogged', '1');
-      }
-    }
+    return false;
   }
 
   // Return true as an indication of values stored successfully.

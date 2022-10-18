@@ -4,4 +4,4 @@ rcs_magento_placeholders.settings:
   mapping:
     navigation_menu_cache_time:
       type: integer
-      label: 'Navigation menu expiration time in mins.'
+      label: 'Navigation menu expiration time in seconds.'
