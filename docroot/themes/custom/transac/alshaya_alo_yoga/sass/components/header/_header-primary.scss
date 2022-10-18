@@ -281,6 +281,8 @@ header {
       .alias--cart-login &,
       .alias--checkout & {
         position: static;
+        top: 0;
+        height: rem(36);
       }
     }
   }
