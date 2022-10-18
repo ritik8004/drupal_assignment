@@ -462,9 +462,11 @@ header {
   }
 
   .block-system-branding-block {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    @include breakpoint($only-mobile) {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 }
 
