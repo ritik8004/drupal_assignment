@@ -1,0 +1,13 @@
+.spc-checkout-payment-options {
+  .payment-method-tamara {
+    .payment-method-top-panel {
+      .payment-method-label-wrapper {
+        .tamara-widget {
+          .payment-method-tamara__info {
+            @include icon(infomation, after);
+          }
+        }
+      }
+    }
+  }
+}
