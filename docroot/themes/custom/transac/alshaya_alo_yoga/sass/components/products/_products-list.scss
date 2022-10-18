@@ -213,13 +213,17 @@ article[data-vmode=search_result] {
 
     .article-swatch {
       display: block;
-      width: rem(18);
-      height: rem(18);
-      margin: 0 rem(4);
+      width: rem(20);
+      height: rem(20);
+      margin: 0 rem(5);
       border-radius: 50%;
       border: rem(1) solid $swatch-border;
       position: relative;
       padding: 0;
+
+      &:first-of-type {
+        margin-#{$left}: 0;
+      }
 
       &.active::before,
       &:hover::before {
@@ -229,8 +233,8 @@ article[data-vmode=search_result] {
         display: inline-block;
         width: rem(24);
         height: rem(24);
-        top: rem(-4);
-        #{$left}: rem(-4);
+        top: rem(-3);
+        #{$left}: rem(-3);
         z-index: 1;
         border-radius: 50%;
       }
