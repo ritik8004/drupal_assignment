@@ -5,6 +5,9 @@
         .loyalty-cancel,
         .loyalty-yes {
           text-transform: unset;
+          width: rem(250);
+          margin-#{$right}: rem(0);
+          margin-top: rem(3);
         }
       }
     }
