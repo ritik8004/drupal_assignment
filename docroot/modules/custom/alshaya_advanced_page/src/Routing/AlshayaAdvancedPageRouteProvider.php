@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_advanced_page\Routing;
 
 use Drupal\Core\Routing\RouteProvider;
-use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -42,25 +41,6 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
       }
     }
 
-    // If V2 function exist for checking department page,
-    // proceed and check for department page existance.
-    if (function_exists('alshaya_rcs_main_menu_is_department_page')
-      && !empty($collection) && isset($exploded_path[3])
-      && is_numeric($exploded_path[3])) {
-      // With V2 we use slug and not not term reference so we need the original
-      // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
-      // For this RCS provides a way to get original path if it had processed
-      // and converted the value available in $path. We use it to get the
-      // original path and check from slug.
-      $filtered_path = RcsPhPathProcessor::getOrignalPathFromProcessed($path);
-      preg_match('/^\/(.*)\/$/', $filtered_path, $matches);
-      $filtered_path = $matches[1] ?? '';
-      if ($filtered_path) {
-        // Get list of department pages.
-        $department_node = alshaya_rcs_main_menu_is_department_page($filtered_path);
-        $collection = $this->setRouteOptions($collection, $exploded_path, $department_node, TRUE);
-      }
-    }
     return $collection;
   }
 

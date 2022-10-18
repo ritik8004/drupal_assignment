@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import PdpDynamicPromotions from '../pdp-dynamic-promotions';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import getPdpPromotionV2Labels from '../../../utilities/pdpPromotionV2Label';
 
 class PdpPromotionLabel extends React.Component {
   constructor(props) {
@@ -17,21 +16,15 @@ class PdpPromotionLabel extends React.Component {
     this.getPromotionInfo();
   }
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     const { skuMainCode } = this.props;
     // If there is a change in props value (parent sku).
     if (prevProps.skuMainCode !== skuMainCode) {
-      // Get product promotions from graphQL if V3 is enabled.
-      if (hasValue(drupalSettings.alshayaRcs)) {
-        const promotion = await getPdpPromotionV2Labels(skuMainCode);
-        this.getPromotionInfo(promotion);
-      } else {
-        this.getPromotionInfo();
-      }
+      this.getPromotionInfo(prevProps.skuMainCode);
     }
   }
 
-  getPromotionInfo = (promotion) => {
+  getPromotionInfo = (prevMainSku) => {
     const { skuMainCode } = this.props;
     let promotionsData = {};
     // Get product promotions from V2 if V3 is not enabled.
@@ -51,11 +44,31 @@ class PdpPromotionLabel extends React.Component {
         });
       }
     } else {
-      // Get product promotions from V3.
-      promotionsData[skuMainCode] = (hasValue(promotion)) ? promotion : null;
+      // Get default promotions and set in state coming
+      // from graphQL if V3 is enabled.
+      const { promotions } = this.props;
+      promotionsData[skuMainCode] = promotions;
       this.setState({
         promotionsRawData: promotionsData,
       });
+
+      if (hasValue(prevMainSku) && prevMainSku !== skuMainCode) {
+        // Check promotion data for static cache and set state.
+        const promotionData = window.commerceBackend.getPdpPromotionLabels(skuMainCode);
+        if (hasValue(promotionData) && Array.isArray(promotionData)) {
+          promotionsData[skuMainCode] = promotionData;
+          this.setState({
+            promotionsRawData: promotionsData,
+          });
+        } else { // Check promotion data from api and set state.
+          promotionData.then((promotion) => {
+            promotionsData[skuMainCode] = promotion;
+            this.setState({
+              promotionsRawData: promotionsData,
+            });
+          });
+        }
+      }
     }
   }
 

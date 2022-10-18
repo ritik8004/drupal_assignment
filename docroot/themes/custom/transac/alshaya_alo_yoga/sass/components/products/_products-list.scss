@@ -209,7 +209,7 @@ article[data-vmode=search_result] {
       height: rem(18);
       margin: 0 rem(4);
       border-radius: 50%;
-      border: 0;
+      border: rem(1) solid $swatch-border;
       position: relative;
       padding: 0;
 
@@ -221,8 +221,8 @@ article[data-vmode=search_result] {
         display: inline-block;
         width: rem(24);
         height: rem(24);
-        top: rem(-3);
-        #{$left}: rem(-3);
+        top: rem(-4);
+        #{$left}: rem(-4);
         z-index: 1;
         border-radius: 50%;
       }

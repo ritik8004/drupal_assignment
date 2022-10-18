@@ -1,3 +1,14 @@
+.alias--cart {
+  .spc-checkout-section-title {
+    @include breakpoint($only-mobile) {
+      text-align: $left;
+      height: rem(46);
+      line-height: 3.375;
+      margin-bottom: 0;
+    }
+  }
+}
+
 .spc-checkout-section-title {
   font-size: rem(18);
   font-family: $ay-heavy;

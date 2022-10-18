@@ -6,13 +6,19 @@
 .spc-order-summary-block {
   @include breakpoint($only-mobile) {
     .block-content {
+      background: $spc-cart-background;
+
       .actions {
         background-color: $spc_promo_code_block_mob_header_bg;
       }
     }
 
     .totals {
-      background-color: $spc_promo_code_block_mob_header_bg;
+      background: $spc-cart-background;
+    }
+
+    .total-line-item {
+      font-size: rem(14);
     }
   }
 
@@ -50,11 +56,13 @@
     }
   }
 
-  .totals {
-    background: $spc-order-summary-totals-bg;
-  }
+  @include breakpoint($desktop) {
+    .totals {
+      background: $spc-order-summary-totals-bg;
+    }
 
-  .total-line-item {
-    font-size: rem(18);
+    .total-line-item {
+      font-size: rem(18);
+    }
   }
 }

@@ -1,4 +1,13 @@
+/**
+ * Global variable which will contain pdp magazine related data.
+ */
+ window.commerceBackend = window.commerceBackend || {};
+
 (function (Drupal, drupalSettings, RcsEventManager) {
+  const staticDataStore = {
+    pdpPromotion: [],
+  };
+
   // Call event after entity load and process product data.
   RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
     var mainProduct = e.detail.entity;
@@ -129,6 +138,56 @@
     }
 
     return gallery;
+  }
+
+  /**
+   * Get Product promotion labels.
+   *
+   * @param {string} skuMainCode
+   *   The parent sku value.
+   *
+   * @returns {Object}
+   *   Product promotion labels.
+   */
+  window.commerceBackend.getPdpPromotionLabels = function getPdpPromotionLabels(skuMainCode) {
+    const staticStorageKey = `pdpPromotion_${skuMainCode}`;
+
+    let promotionData = Drupal.hasValue(staticDataStore.pdpPromotion[staticStorageKey])
+      ? staticDataStore.pdpPromotion[staticStorageKey]
+      : null;
+
+    if (promotionData !== null) {
+      return promotionData;
+    }
+
+    return globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {
+      sku: skuMainCode,
+    }).then(function(response) {
+      if (Drupal.hasValue(response.data)) {
+        const promotionVal = [];
+        if (Drupal.hasValue(response.data.products.items[0].promotions)) {
+          const promotionData = response.data.products.items[0].promotions;
+          promotionData.forEach((promotion, index) => {
+            promotionVal[index] = {
+              promo_web_url: promotion.url,
+              text: promotion.label,
+              context: promotion.context,
+              type: promotion.type,
+            };
+          });
+        }
+        promotionData = promotionVal;
+        staticDataStore.pdpPromotion[staticStorageKey] = promotionData;
+  
+        return promotionData;
+      }
+      // If graphQL API is returning Error.
+      Drupal.alshayaLogger('error', 'Error while calling the graphQL to fetch product promotion info for sku: @sku', {
+        '@sku': skuMainCode,
+      });
+
+      return null;
+    });
   }
 
 })(Drupal, drupalSettings, RcsEventManager);

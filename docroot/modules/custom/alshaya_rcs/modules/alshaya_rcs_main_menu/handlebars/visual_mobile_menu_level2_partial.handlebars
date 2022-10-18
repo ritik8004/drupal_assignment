@@ -1,9 +1,8 @@
 {{#each menu_columns}}
   {{#each this as |menu_item|}}
-    <a class="ay-level-two__link" {{menu_item.tag_attr}}>
-      <img class="ay-level-two__image" src="{{menu_item.image}}">
-      <div class="ay-level-two__heading">{{menu_item.name}}</div>
-    </a>
+    <{{@menu_item.tag}} class="visual-mobile-level-two__link" {{#if (lt menu_item.children.length 1) }} {{{menu_item.tag_attr}}} {{/if}}>
+      <img class="visual-mobile-level-two__image" src="{{menu_item.image}}">
+      <div class="visual-mobile-level-two__heading">{{menu_item.name}}</div>
+    </{{@menu_item.tag}}>
   {{/each}}
 {{/each}}
-

@@ -5,10 +5,9 @@ body.wishlist-enabled {
     }
 
     .wishlist-icon {
-      height: rem(20);
-      width: rem(20);
       top: rem(1);
       position: relative;
+      background-position: center;
     }
   }
 
@@ -36,3 +35,82 @@ body.wishlist-enabled {
     }
   }
 }
+
+.wishlist-enabled {
+  #wishlist-header-wrapper {
+    @include breakpoint($upto-desktop) {
+      top: initial !important;
+      position: relative !important;
+      #{$right}: initial !important;
+    }
+  }
+}
+
+
+body {
+  &.wishlist-enabled {
+    #wishlist-header-wrapper {
+      @include breakpoint($upto-desktop) {
+        position: relative;
+        top: initial;
+        #{$right}: initial;
+      }
+
+      .wishlist-link {
+        width: initial;
+      }
+    }
+
+    header {
+      .region__header {
+        .block-alshaya-wishlist {
+          flex-grow: initial;
+          margin-#{$right}: 12px;
+        }
+      }
+    }
+
+    .wishlist-header {
+      .wishlist-icon {
+        top: initial;
+      }
+    }
+
+    .wishlist-icon {
+      margin-#{$left}: initial;
+      margin-#{$right}: initial;
+    }
+  }
+}
+
+.super-category-enabled {
+  &:not(.no-sticky-algolia-search-bar),
+  &:not(.frontpage) {
+    .block.block-alshaya-react-mini-cart,
+    .branding__menu #block-alshayareactcartminicartblock {
+      @include breakpoint($upto-desktop) {
+        position: relative !important;
+        top: initial !important;
+        #{$right}: initial !important;
+
+        .cart-link {
+          width: rem(24);
+          height: rem(24);
+          background-position: center;
+        }
+      }
+    }
+  }
+}
+
+header.c-header {
+  .block-alshaya-react-mini-cart {
+    .cart-link {
+      margin-#{$right}: 0;
+    }
+  }
+}
+
+
+
+

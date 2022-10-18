@@ -1,15 +1,24 @@
-.magv2-select-popup-container {
-  .magv2-select-popup-header-wrapper {
-    label {
-      color: $primary_text;
+.non-grouped-attr {
+  .magv2-select-popup {
+    @include breakpoint($only-mobile) {
+      &-content-wrapper {
+        .non-group-anchor-wrapper {
+          label {
+            justify-content: initial;
+          }
+        }
+      }
     }
-  }
 
-  .select-attribute {
-    .active {
-      .magv2-select-list-wrapper {
-        &::before {
-          color: $primary_text;
+    @include breakpoint($tablet) {
+      &-header-wrapper {
+        text-align: initial;
+        font-size: rem(18);
+
+        .close {
+          &::before {
+            font-size: rem(40);
+          }
         }
       }
     }
