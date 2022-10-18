@@ -416,7 +416,6 @@ magazine-layout-v2:
   dependencies:
     - alshaya_white_label/alshaya-react-animate
     - alshaya_white_label/alshaya-accordion
-    - alshaya_white_label/aura-loyalty-pdp
 
 shop-by-brand:
   css:
