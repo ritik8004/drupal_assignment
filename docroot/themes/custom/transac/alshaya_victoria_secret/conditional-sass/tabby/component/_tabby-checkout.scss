@@ -5,7 +5,11 @@
         .installment-popup {
           @include icon(infomation, after) {
             font-size: 1.25rem;
-            top: -0.1875rem;
+            top: rem(-3);
+
+            html[lang=ar] & {
+              top: rem(-1);
+            }
           }
         }
       }
