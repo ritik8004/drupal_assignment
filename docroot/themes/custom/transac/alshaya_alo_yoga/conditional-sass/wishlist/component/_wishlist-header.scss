@@ -76,28 +76,36 @@ body {
       }
 
       .wishlist-link {
-        width: initial;
+        @include breakpoint($upto-desktop) {
+          width: initial;
+        }
       }
     }
 
     header {
       .region__header {
         .block-alshaya-wishlist {
-          flex-grow: initial;
-          margin-#{$right}: 12px;
+          @include breakpoint($upto-desktop) {
+            flex-grow: initial;
+            margin-#{$right}: rem(12);
+          }
         }
       }
     }
 
     .wishlist-header {
       .wishlist-icon {
-        top: initial;
+        @include breakpoint($upto-desktop) {
+          top: initial;
+        }
       }
     }
 
     .wishlist-icon {
-      margin-#{$left}: initial;
-      margin-#{$right}: initial;
+      @include breakpoint($upto-desktop) {
+        margin-#{$left}: initial;
+        margin-#{$right}: initial;
+      }
     }
   }
 }
@@ -125,11 +133,9 @@ body {
 header.c-header {
   .block-alshaya-react-mini-cart {
     .cart-link {
-      margin-#{$right}: 0;
+      @include breakpoint($upto-desktop) {
+        margin-#{$right}: 0;
+      }
     }
   }
 }
-
-
-
-
