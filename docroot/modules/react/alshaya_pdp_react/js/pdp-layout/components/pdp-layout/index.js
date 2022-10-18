@@ -132,7 +132,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
 
   // Sticky Header
   const showStickyHeader = () => {
-    window.addEventListener('load', () => {
+    jQuery(document).ready(() => {
       magv2StickyHeader(buttonRef, header, content, isMobile);
     });
 
@@ -153,13 +153,8 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
       }
     };
 
-    window.addEventListener('load', () => {
-      headerButton();
-    });
-
-    window.addEventListener('resize', () => {
-      headerButton();
-    });
+    jQuery(document).ready(headerButton);
+    window.addEventListener('resize', headerButton);
   };
 
   useEffect(() => {
