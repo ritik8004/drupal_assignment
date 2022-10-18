@@ -83,6 +83,16 @@
           height: rem(46);
         }
       }
+
+      @include breakpoint($desktop) {
+        width: auto;
+      }
+
+      img {
+        @include breakpoint($desktop) {
+          width: auto;
+        }
+      }
     }
   }
 }
