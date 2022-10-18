@@ -13,5 +13,8 @@
 
   background-color: $primary_empty_btn;
   color: $tertiary_btn_text;
-  padding: rem(14);
+  padding: rem(13);
+  font-size: rem(16);
+  border-width: rem(1);
+  letter-spacing: normal;
 }
