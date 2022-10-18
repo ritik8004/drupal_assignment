@@ -112,7 +112,7 @@ body {
 
 .super-category-enabled {
   &:not(.no-sticky-algolia-search-bar),
-  &:not(.frontpage) {
+  &:not(.frontpage):not(.page-type-product) {
     .block.block-alshaya-react-mini-cart,
     .branding__menu #block-alshayareactcartminicartblock {
       @include breakpoint($upto-desktop) {
