@@ -11,8 +11,7 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Guest user
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And the element "div.tabby #tabby-promo-pdp-main" should exist
-    And the element "div.tabby #tabby-promo-pdp-main span.tabby-promo-snippet__text" should exist
+    And the element "div.tabby #tabby-promo-pdp" should exist
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
@@ -53,8 +52,7 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Guest user
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And the element "div.tabby #tabby-promo-pdp-main" should exist
-    And the element "div.tabby #tabby-promo-pdp-main span.tabby-promo-snippet__text" should exist
+    And the element "div.tabby #tabby-promo-pdp" should exist
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
