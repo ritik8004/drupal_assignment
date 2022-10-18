@@ -356,9 +356,11 @@ class RcsSuperCategoryHelper {
       }
       else {
         // Delete old file entity.
-        $file = File::load($fid);
-        if ($file instanceof FileInterface) {
-          $file->delete();
+        if ($fid) {
+          $file = File::load($fid);
+          if ($file instanceof FileInterface) {
+            $file->delete();
+          }
         }
         // Retreive file from mdc url.
         $file = system_retrieve_file($file_url, $directory, TRUE, FileSystemInterface::EXISTS_RENAME);
