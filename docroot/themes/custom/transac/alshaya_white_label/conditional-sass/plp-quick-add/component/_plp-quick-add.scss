@@ -29,7 +29,7 @@
       position: absolute;
       background-color: transparent;
       width: rem(50);
-      top: rem(190);
+      top: rem(205);
       #{$right}: rem(10);
 
       &::before {
@@ -40,7 +40,7 @@
         position: absolute;
         border-radius: 50%;
         background-color: rgba(255, 255, 255, 0.5);
-        background-size: contain;
+        background-size: rem(20);
       }
     }
   }
