@@ -152,6 +152,7 @@ window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   StaticStorage.clear();
 
   Drupal.removeItemFromLocalStorage('cart_data');
+  Drupal.removeItemFromLocalStorage('add_to_cart_skus');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method

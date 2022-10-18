@@ -14,6 +14,16 @@ alshaya_spc.settings:
     display_cart_payment_icons:
       type: boolean
       label: 'Display payment method icons on cart page'
+    redirect_to_cart_threshold:
+      type: mapping
+      label: 'Redirect to cart threshold.'
+      mapping:
+        mobile:
+          type: integer
+          label: 'Mobile configuration'
+        desktop:
+          type: integer
+          label: 'Desktop configuration'
 
 alshaya_spc.click_n_collect:
   type: config_object
