@@ -4,7 +4,7 @@
   Drupal.behaviors.alshayaSpcAddToCart = {
     attach: function (context, settings) {
 
-      alshayaSpcRedirectToCart = function(sku) {
+      function alshayaSpcRedirectToCart(sku) {
         // Key used to store skus in local storage when they are added to cart.
         var storageKey = 'add_to_cart_skus';
         // Detects device type.
