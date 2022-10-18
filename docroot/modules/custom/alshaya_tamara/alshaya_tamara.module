@@ -21,3 +21,37 @@ function alshaya_tamara_alshaya_spc_checkout_confirmation_order_build_alter(arra
   // Attach the tamara library.
   $build['#attached']['library'][] = 'alshaya_white_label/tamara';
 }
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_tamara_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // If order is placed using Tamara payment method, we need to show `Tamara`
+  // as a payment method in customer's order details section.
+  if (isset($build["#order_details"]["payment_method_code"])
+    && $build["#order_details"]["payment_method_code"] == 'tamara') {
+    $build["#order_details"]["payment_method"] = t('Tamara', [], ['context' => 'tamara']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_tamara_preprocess_node(&$variables) {
+  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
+    // Check if tamara is enabled.
+    $variables['tamara_enabled'] = \Drupal::service('alshaya_tamara.helper')
+      ->isTamaraEnabled();
+  }
+}
+
+/**
+ * Implements hook_preprocess_template().
+ */
+function alshaya_tamara_preprocess_alshaya_magazine(&$variables) {
+  // Pass tamara status to alshaya magazine template.
+  // TRUE if tamara is enabled and FALSE when tamara module/feature
+  // is disabled.
+  $variables['tamara_enabled'] = \Drupal::service('alshaya_tamara.helper')
+    ->isTamaraEnabled();
+}
