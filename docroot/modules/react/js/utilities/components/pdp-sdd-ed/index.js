@@ -1,5 +1,5 @@
 import React from 'react';
-import { checkShippingMethodsStatus } from '../../expressDeliveryHelper';
+import { checkExpressDeliveryStatus, checkSameDayDeliveryStatus, checkShippingMethodsStatus } from '../../expressDeliveryHelper';
 
 export default class PdpSddEd extends React.Component {
   constructor(props) {
@@ -42,11 +42,16 @@ export default class PdpSddEd extends React.Component {
       shippingMethods.forEach((shippingMethod) => {
         if (shippingMethod.available !== 'undefined' && shippingMethod.available) {
           if ((shippingMethod.carrier_code === 'SAMEDAY') || (shippingMethod.carrier_code === 'EXPRESS')) {
-            const deliveryOptionKey = shippingMethod.carrier_title.toLowerCase().replaceAll(' ', '_');
-            expressDeliveryLabels.push({
-              key: deliveryOptionKey,
-              value: deliveryOptionsLabel[deliveryOptionKey],
-            });
+            const deliveryOptionKey = (shippingMethod.carrier_code === 'SAMEDAY') ? 'same_day_delivery' : 'express_delivery';
+            // Check what is the status of delivery option key in the BE and
+            // respect the same.
+            if ((deliveryOptionKey === 'same_day_delivery' && checkSameDayDeliveryStatus())
+              || (deliveryOptionKey === 'express_delivery' && checkExpressDeliveryStatus())) {
+              expressDeliveryLabels.push({
+                key: deliveryOptionKey,
+                value: deliveryOptionsLabel[deliveryOptionKey],
+              });
+            }
           }
         }
       });

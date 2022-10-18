@@ -6,6 +6,7 @@ use Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Cache\Cache;
@@ -55,6 +56,13 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
   protected $spcStockHelper;
 
   /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaSpcOrderController constructor.
    *
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
@@ -67,19 +75,23 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
    *   Entity type manager.
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper $spc_stock_helper
    *   SPC stock helper.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    */
   public function __construct(
     OrdersManager $orders_manager,
     LoggerChannelFactoryInterface $logger_factory,
     AccountProxyInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
-    AlshayaSpcStockHelper $spc_stock_helper
+    AlshayaSpcStockHelper $spc_stock_helper,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->ordersManager = $orders_manager;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
     $this->spcStockHelper = $spc_stock_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -91,7 +103,8 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
       $container->get('logger.factory'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_spc.stock_helper')
+      $container->get('alshaya_spc.stock_helper'),
+      $container->get('module_handler')
     );
   }
 
@@ -143,6 +156,8 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         if ($account) {
           if (empty($account->get('field_mobile_number')->getString())) {
             $account->get('field_mobile_number')->setValue($cart['billing_address']['telephone']);
+            // Allow other modules to change the account data.
+            $this->moduleHandler->alter('alshaya_spc_checkout_event_controller_account', $account);
             $account->save();
           }
           else {

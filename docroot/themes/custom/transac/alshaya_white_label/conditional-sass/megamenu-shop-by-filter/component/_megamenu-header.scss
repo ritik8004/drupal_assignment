@@ -50,48 +50,6 @@
           }
         }
       }
-
-      .menu--two__list {
-        .menu--two__list-item {
-          .menu--three__list {
-            li.menu--three__list-item {
-              a:hover::after,
-              &.is_underlined a::after {
-                content: "";
-                position: absolute;
-                bottom: rem(-4);
-                #{$left}: 0;
-                width: 100%;
-                background-color: $mm_l3_link_hover;
-
-                html[lang="ar"] & {
-                  bottom: 0;
-                }
-              }
-
-              a:hover {
-                text-decoration: none;
-                position: relative;
-
-                &::after {
-                  height: rem(2);
-                }
-              }
-
-              &.is_underlined {
-                a {
-                  position: relative;
-                  color: $mm_l3_link_hover !important;
-
-                  &::after {
-                    height: rem(3);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   }
 }

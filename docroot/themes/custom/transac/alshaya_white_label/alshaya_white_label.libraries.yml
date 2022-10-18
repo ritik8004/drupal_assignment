@@ -409,11 +409,6 @@ order-qty-limit:
     theme:
       css/conditional-sass/order-qty-limit/order-qty-limit.ltr.css: {}
 
-appointment-booking:
-  css:
-    theme:
-      css/conditional-sass/appointment-booking/appointment-booking.ltr.css: {}
-
 magazine-layout-v2:
   css:
     theme:
@@ -861,5 +856,15 @@ hello-member-become-member:
 
 megamenu-shop-by-filter:
   css:
-    theme: 
+    theme:
       css/conditional-sass/megamenu-shop-by-filter/megamenu-shop-by-filter.ltr.css: {}
+
+checkout-cod-mobile-verification:
+  css:
+    theme:
+      css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: {}
+
+tamara:
+  css:
+    theme:
+      css/conditional-sass/tamara/tamara.ltr.css: {}

@@ -20,12 +20,11 @@ use Drupal\user\UserInterface;
  * @return string
  *   Return cleaned string without spaces and dashes.
  */
-function alshaya_acm_customer_clean_sku($sku) {
+function alshaya_acm_customer_clean_sku(string $sku): string {
   // Convert whitespaces and underscore to dash.
-  $string = preg_replace("/[\s_]/", "-", $sku);
+  $sku = preg_replace("/[\s_]/", "-", $sku);
   // Clean up multiple dashes or whitespaces.
-  $string = preg_replace("/[\s-]+/", "", $string);
-  return $string;
+  return preg_replace("/[\s-]+/", "", $sku);
 }
 
 /**
@@ -155,9 +154,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   if ($orderDetails['is_pudo_pickup']) {
     // We get `price_amount` i.e collection charge values like "5" or "Free"
     // so the below check to display accordingly.
-    $orderDetails['delivery_charge'] = ($order['shipping']['extension_attributes']['price_amount'] > 0)
-      ? alshaya_acm_price_format($order['shipping']['extension_attributes']['price_amount'])
-      : $order['shipping']['extension_attributes']['price_amount'];
+    $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['extension_attributes']['price_amount']);
   }
   else {
     $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['totals']['shipping']);

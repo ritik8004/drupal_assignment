@@ -243,7 +243,6 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
   // Return if bazaarvoice disabled in my account.
   if ($basic_configs['myaccount_rating_reviews']) {
     return;
@@ -253,9 +252,10 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
     $build['recent_order'][$key]['#order']['bazaarvoice'] = TRUE;
     foreach ($build['recent_order'][$key]['#order']['items'] as $item_key => $item) {
       $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
-      $parent_sku = $item['product_type'] === 'configurable'
-        ? $item['extension_attributes']['parent_product_sku']
-        : NULL;
+      $parent_sku = NULL;
+      if (isset($item['extension_attributes']['parent_product_sku'])&& $item['product_type'] === 'configurable') {
+        $parent_sku = $item['extension_attributes']['parent_product_sku'];
+      }
       $parent_sku_id = $parent_sku ?? $alshayaBazaarVoice->checkParentSku($item['sku']);
       $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
       if (!empty($sanitized_parent_sku)) {
@@ -283,26 +283,28 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
   // Return if bazaarvoice disabled in my account.
   if ($basic_configs['myaccount_rating_reviews']) {
     return;
   }
   $bazaarvoiceSettings = [];
   foreach ($order['items'] as $item) {
-    $parent_sku = $item['product_type'] === 'configurable'
-      ? $item['extension_attributes']['parent_product_sku']
-      : NULL;
+    $parent_sku = NULL;
+    if (isset($item['extension_attributes']['parent_product_sku'])&& $item['product_type'] === 'configurable') {
+      $parent_sku = $item['extension_attributes']['parent_product_sku'];
+    }
     $parent_sku_id = $parent_sku ?? $alshayaBazaarVoice->checkParentSku($item['sku']);
     $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
     $bazaarvoiceSettings[$sanitized_parent_sku] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs, $item);
   }
   if (!empty($bazaarvoiceSettings)) {
-    $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
+    $attachments = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
+    $build['#attached'] = array_merge_recursive($build['#attached'] ?? [], $attachments);
     foreach ($build['#products'] as $key => $item) {
-      $parent_sku = $item['product_type'] === 'configurable'
-        ? $item['extension_attributes']['parent_product_sku']
-        : NULL;
+      $parent_sku = NULL;
+      if (isset($item['extension_attributes']['parent_product_sku'])&& $item['product_type'] === 'configurable') {
+        $parent_sku = $item['extension_attributes']['parent_product_sku'];
+      }
       $parent_sku_id = $parent_sku ?? $alshayaBazaarVoice->checkParentSku($item['sku']);
       $sanitized_parent_sku = $skuManager->getSanitizedSku($parent_sku_id);
       $build['#products'][$key]['bazaarvoice_link'] = TRUE;
@@ -355,9 +357,9 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
           // Adding product and review data for SEO.
           $product_schema_data['aggregateRating'] = [
             '@type' => 'AggregateRating',
-            'bestRating' => max($range),
+            'bestRating' => is_array($range) ? max($range) : 0,
             'ratingValue' => number_format((float) $productData['ReviewStatistics']['AverageOverallRating'], 2, '.', '') ?? NULL,
-            'worstRating' => min($range),
+            'worstRating' => is_array($range) ? min($range) : 0,
             'reviewCount' => $productData['ReviewStatistics']['TotalReviewCount'] ?? NULL,
           ];
         }
@@ -373,9 +375,9 @@ function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachm
                 'name' => $review['Title'],
                 'reviewRating' => [
                   '@type' => 'Rating',
-                  'bestRating' => max($range),
+                  'bestRating' => is_array($range) ? max($range) : 0,
                   'ratingValue' => $review['Rating'],
-                  'worstRating' => min($range),
+                  'worstRating' => is_array($range) ? min($range) : 0,
                 ],
               ];
             }

@@ -18,6 +18,80 @@
   var productImpressions = [];
   var productImpressionsTimer = null;
 
+  /**
+   * Drupal Behaviour to set ReferrerInfo Data to storage.
+   */
+  Drupal.behaviors.setReferrerInfoData = {
+    attach: function () {
+      const currentPath = drupalSettings.path.currentPath;
+      const referrer = document.referrer;
+      const url = window.location.href;
+
+      if(currentPath.includes('checkout/confirmation')) {
+        // Remove referrerData and isSearchActivated from storage.
+        Drupal.removeItemFromLocalStorage('referrerData');
+        Drupal.removeItemFromLocalStorage('isSearchActivated');
+      } else if (currentPath.includes('search')) {
+        const referrerData = {
+          pageType: 'Search Results Page',
+          path: url,
+          list: 'Search Results Page',
+          previousPageType: '',
+        };
+
+        Drupal.addItemInLocalStorage('referrerData', referrerData);
+        Drupal.removeItemFromLocalStorage('isSearchActivated');
+      } else if (currentPath.includes('taxonomy/term')) {
+        const listName =  $('body').attr('gtm-list-name');
+        // Set PLP as referrerPageType
+        const referrerData = {
+          pageType: 'PLP',
+          path: url,
+          list: listName !== undefined ? listName : '',
+          previousList: '',
+        };
+
+        Drupal.addItemInLocalStorage('referrerData', referrerData);
+        Drupal.removeItemFromLocalStorage('isSearchActivated');
+      } else if (currentPath.includes('node/')) {
+        const listName = $('body').attr('gtm-list-name');
+        const gtmContainer =  $('body').attr('gtm-container');
+        // Check if node is of PDP type.
+        if (gtmContainer === 'product detail page') {
+          const referrerData = Drupal.getItemFromLocalStorage('referrerData');
+          const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
+          if (referrer === '' || !referrerData.path.includes(referrer)) {
+            if(isSearchActivated !== null && !isSearchActivated) {
+              // Set PDP as referrerPageType only if referrer is not set,
+              // Search is not active or
+              // Referrer does not match with referrerPath.
+              const referrerData = {
+                pageType: 'PDP',
+                path: url,
+                list: listName !== undefined ? listName : '',
+                previousList: '',
+              };
+
+              Drupal.addItemInLocalStorage('referrerData', referrerData);
+              Drupal.removeItemFromLocalStorage('isSearchActivated');
+            }
+          }
+        }
+        else {
+          const referrerData = {
+            pageType: gtmContainer !== undefined ? gtmContainer : '',
+            path: url,
+            list: listName !== undefined ? listName : '',
+            previousList: '',
+          };
+
+          Drupal.addItemInLocalStorage('referrerData', referrerData);
+          Drupal.removeItemFromLocalStorage('isSearchActivated');
+        }
+      }
+    }
+  };
+
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
       $('body').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', '.sku-base-form', function (event, variant, code) {
@@ -116,8 +190,9 @@
           product.variant = product.id;
         }
 
+        cart_total_count = (event.detail.cartData !== null) ? event.detail.cartData.items_qty : null;
         // Push product addToCart event to GTM.
-        Drupal.alshayaSeoGtmPushAddToCart(product);
+        Drupal.alshayaSeoGtmPushAddToCart(product, cart_total_count);
       });
 
       // Push GTM event on add to cart failure.
@@ -255,12 +330,17 @@
 
         // Check for user login type in cookies.
         var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
-        if (drupalSettings.user.uid && loginType === undefined) {
+        if (drupalSettings.user.uid && loginType === undefined && orderConfirmationPage.length === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , 'Email');
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
-        if (!(socialWindow) && userDetails.userID !== undefined && userDetails.userID !== 0 && Drupal.getItemFromLocalStorage('userID') !== userDetails.userID && loginType !== undefined) {
+        if (!(socialWindow)
+          && userDetails.userID !== undefined
+          && userDetails.userID !== 0
+          && Drupal.getItemFromLocalStorage('userID') !== userDetails.userID
+          && loginType !== undefined
+          && orderConfirmationPage.length === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
           Drupal.addItemInLocalStorage('userID', userDetails.userID);
         }
@@ -785,6 +865,7 @@
         price: parseFloat(amount),
         category: product.attr('gtm-category'),
         variant: product.attr('gtm-product-sku'),
+        product_style_code: product.attr('gtm-product-style-code'),
         dimension2: product.attr('gtm-sku-type'),
         dimension3: product.attr('gtm-dimension3'),
         dimension4: mediaCount
@@ -811,6 +892,30 @@
           // For all other pages, use gtm-list-name html attribute.
           // Except in PDP, to define full path from PLP.
           : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+      }
+
+      // Fetch referrerPageType from localstorage.
+      const referrerData = Drupal.getItemFromLocalStorage('referrerData');
+      if(referrerData !== null) {
+        if (referrerData.pageType === 'Search Results Page') {
+          // For SRP, use list value 'Search Result Page'
+          productData.list = referrerData.pageType;
+        }
+        else {
+          let listName = '';
+          if(referrerData.list !== undefined) {
+            // Use Available referrerList data as list data,
+            // If available.
+            listName = referrerData.list;
+          }
+          else {
+            // Fetch from gtm-list-name attribute.
+            listName = $('body').attr('gtm-list-name');
+          }
+
+          // IF listName contains placeholder remove it.
+          productData.list = listName.replace('PDP-placeholder', referrerData.pageType);
+        }
       }
     }
     catch (error) {
@@ -1086,6 +1191,7 @@
       event: 'productClick',
       magento_product_id: isProductDataAvailable ? productSelector[0].getAttribute('gtm-magento-product-id') : null,
       stock_status: drupalSettings.dataLayerContent.stockStatus || isProductDataAvailable ? productSelector[0].getAttribute('gtm-stock') : null,
+      product_style_code: isProductDataAvailable ? productSelector[0].getAttribute('gtm-product-style-code') : null,
       ecommerce: {
         currencyCode: currencyCode,
         click: {
@@ -1369,7 +1475,7 @@
    * @param {object} product
    *   The jQuery HTML object containing GTM attributes for the product.
    */
-  Drupal.alshayaSeoGtmPushAddToCart = function (product) {
+  Drupal.alshayaSeoGtmPushAddToCart = function (product, cart_total_count = null) {
     // Remove product position: Not needed while adding to cart.
     delete product.position;
 
@@ -1388,12 +1494,13 @@
     else if (isPageTypeListing()) {
       productData.eventAction = 'Add to Cart on Listing';
     }
-
-    const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
-
+    if (cart_total_count == null) {
+      const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
+      cart_total_count = (cart !== null) ? cart.items_qty : 0
+    }
     productData.ecommerce = {
       currencyCode: drupalSettings.gtm.currency,
-      cart_items_count: (cart !== null) ? cart.items_qty : 0,
+      cart_items_count: cart_total_count,
       add: {
         products: [
           product
@@ -1482,7 +1589,7 @@
       event: 'eventTracker',
       eventCategory: category || 'unknown errors',
       eventLabel: context,
-      eventAction: message,
+      eventAction: decodeURIComponent(message),
       eventPlace: 'Error occurred on ' + window.location.href,
       eventValue: 0,
       nonInteraction: 0,

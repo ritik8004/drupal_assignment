@@ -188,3 +188,6 @@ node_modules
 docroot/build
 
 /travis_wait*
+
+#Ignore behat secret keys.
+tests/behat/creds.json

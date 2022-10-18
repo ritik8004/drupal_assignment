@@ -1,77 +1,33 @@
-(function main(Drupal, RcsEventManager) {
+window.commerceBackend = window.commerceBackend || {};
+
+(function main(Drupal, RcsEventManager, drupalSettings) {
 
   /**
    * Local static data store.
    */
   var staticDataStore = {
     recentOrdersData: {},
-    orderDetailsData: {},
+    orderDetailsProductData: {},
   };
 
   /**
-   * Gets the label for provided attribute.
+   * Fetches product data for order details from Backend.
    *
-   * @param {Object} mainProduct
-   *   Main product object, i.e. Configurable product in case of configurable or
-   *   Simple in case of simple product.
-   * @param {string} attrCode
-   *   Product attribute code.
+   * @param {String} sku
+   *   SKU value.
    *
-   * @returns {string|Boolean}
-   *   Label if available or false if not available.
+   * @returns {Promise}
+   *   Product data.
    */
-   function getLabel(mainProduct, attrCode) {
-    var label = '';
-
-    // For color attribute, return the configured color label.
-    if (drupalSettings.alshayaColorSplit.colorAttribute === attrCode) {
-      label = drupalSettings.alshayaColorSplit.colorLabel;
-    }
-    else {
-      Drupal.hasValue(mainProduct.configurable_options)
-        && mainProduct.configurable_options.some(function eachOption(option) {
-        if (option.attribute_code === attrCode) {
-          label = option.label;
-          return true;
-        }
-        return false;
-      });
+  function getOrdersDetailsProductDataFromBackend(sku) {
+    if (staticDataStore.orderDetailsProductData[sku]) {
+      return staticDataStore.orderDetailsProductData[sku];
     }
 
-    return label;
+    staticDataStore.orderDetailsProductData[sku] =  globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku});
+    return staticDataStore.orderDetailsProductData[sku];
   }
 
-  /**
-   * Fetch the product options.
-   *
-   * @param {Object} mainProduct
-   *   Main product object.
-   * @param {Object} product
-   *   Current variant object.
-   *
-   * @returns {Array}
-   *   Array of product options in format [{value: value, label:label}].
-   */
-  function getProductOptions(mainProduct, product) {
-    var options = [];
-    if (!Drupal.hasValue(product)) {
-      return options;
-    }
-
-    Drupal.hasValue(product.attributes) && product.attributes.forEach(function eachAttribute(attr) {
-      options.push({value: attr.label, label: getLabel(mainProduct, attr.code)});
-    });
-    // Check if color split is enabled.
-    if (window.commerceBackend.getProductsInStyle) {
-      var colorAttribute = drupalSettings.alshayaColorSplit.colorAttribute;
-      if (Drupal.hasValue(product.product[colorAttribute])) {
-        var label = window.commerceBackend.getAttributeValueLabel(colorAttribute, product.product[colorAttribute]);
-        options.push({value: label, label: getLabel(mainProduct, colorAttribute)});
-      }
-    }
-
-    return options;
-  }
 
   /**
    * Get individual product data for recent orders section.
@@ -135,14 +91,10 @@
    *   Parent sku.
    *
    * @returns {Promise}
-   *   Product data for recent orders.
+   *   Product data for order details.
    */
   function getProductDataOrderDetails(child, parent) {
-    if (Drupal.hasValue(staticDataStore.orderDetailsData[child])){
-      return staticDataStore.orderDetailsData[child];
-    }
-
-    staticDataStore.orderDetailsData[child] = globalThis.rcsPhCommerceBackend.getData('order_details_product_data', {sku: parent}).then(function onOrderDetailsFetched(response) {
+    return getOrdersDetailsProductDataFromBackend(parent).then(function onOrderDetailsFetched(response) {
       var data = {};
       try {
         if (response.data.products.total_count) {
@@ -155,7 +107,7 @@
               if (variant.product.sku === child) {
                 // Only take the product data except the attributes.
                 data = variant.product;
-                data.options = getProductOptions(product, variant);
+                data.options = window.commerceBackend.getProductOptions(product, variant);
                 return true;
               }
               return false;
@@ -171,14 +123,78 @@
 
         return data;
       } catch (e) {
-        Drupal.alshayaLogger('warning', 'Could not parse order details product data for SKU @sku', {
-          '@sku': sku
+        Drupal.alshayaLogger('warning', 'Could not parse order details product data for SKU @child. Message: @message', {
+          '@sku': child,
+          '@message': e.message,
         });
         return {sku: child};
       }
     });
+  }
 
-    return staticDataStore.orderDetailsData[child];
+  /**
+   * Gets data for Order Details page
+   *
+   * @returns {Promise}
+   *   Order details data.
+   */
+  window.commerceBackend.getOrderDetailsData = function getOrderDetailsData() {
+    var skus = document.getElementById('order-teaser-container').getAttribute('data-param-skus');
+    skus = JSON.parse(skus);
+    var requests = [];
+    Object.entries(skus).forEach(function eachSku([child, parent]) {
+      requests.push(getProductDataOrderDetails(child, parent));
+    });
+
+    return Promise.all(requests).then(function processProducts(products) {
+      // Convert array to object with SKU value as index.
+      var indexedProducts = {};
+      products.forEach(function eachProduct(product) {
+        indexedProducts[product.sku] = product;
+      });
+
+      // Merge product data to drupalSettings.order.
+      drupalSettings.order.products.forEach(function eachOrderProduct(product) {
+        if (!Drupal.hasValue(indexedProducts[product.sku])) {
+          return;
+        }
+        // Set the attributes.
+        product.attributes = Drupal.hasValue(indexedProducts[product.sku].options)
+          ? indexedProducts[product.sku].options
+          : [];
+        // Set the name.
+        product.name = Drupal.hasValue(indexedProducts[product.sku].name)
+          ? indexedProducts[product.sku].name
+          : product.name;
+        // Set the display image.
+        product.image = handlebarsRenderer.render('image', {
+          src: indexedProducts[product.sku].media_teaser,
+          alt: product.name,
+          title: product.name,
+        });
+        product.is_returnable = indexedProducts[product.sku].is_returnable;
+        // Add this data temporarily so that it can be used in the alter hook.
+        product.imageData = {
+          src: indexedProducts[product.sku].media_teaser,
+          alt: product.name,
+          title: product.name,
+        };
+        // Allow other modules like online returns to take action based on this
+        // product data.
+        var alterOrderProductDataEvent = new CustomEvent('alterOrderProductData', {
+          detail: {
+            data: {
+              product ,
+            }
+          }
+        });
+        document.dispatchEvent(alterOrderProductDataEvent);
+        // Delete the temporary key.
+        delete(product.imageData);
+      });
+
+      return drupalSettings.order;
+    });
   }
 
   RcsEventManager.addListener('invokingApi', function invokingApi(e) {
@@ -196,11 +212,7 @@
           e.promises.push(getProductDataRecentOrders(child, parent));
         });
       }
-      else if (e.extraData.params['context'] === 'order_details'){
-        Object.entries(skus).forEach(function eachSku([child, parent]) {
-          e.promises.push(getProductDataOrderDetails(child, parent));
-        });
-      }
     }
   });
-})(Drupal, RcsEventManager);
+
+})(Drupal, RcsEventManager, drupalSettings);

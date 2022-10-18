@@ -30,16 +30,23 @@
   .block-content.registered-user-linked {
     background-image: $aura-spc-block-bg-desktop;
     border-radius: 0.625rem;
-    padding: rem(20) rem(30);
+    padding-#{$right}: rem(11);
+    padding-#{$left}: rem(20);
     display: flex;
-    justify-content: space-between;
     align-items: center;
 
     .spc-aura-cart-icon {
       max-width: 30%;
+      margin-#{$right}: rem(25);
+      flex-shrink: 0;
 
       @include breakpoint($tablet) {
-        max-width: 35%;
+        display: inline-flex;
+        max-width: 20%;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: rem(45);
       }
 
       & > svg {
@@ -53,11 +60,27 @@
     }
 
     .spc-aura-cart-content {
-      max-width: 60%;
-      line-height: rem(26);
+      font-size: rem(12);
+      line-height: rem(20);
+      max-width: calc(70% - 1.5625rem);
+      padding-top: rem(13);
+      padding-bottom: rem(13);
 
       @include breakpoint($only-mobile) {
-        max-width: 65%;
+        max-width: calc(76% - #{rem(45)});
+      }
+
+      @include breakpoint($tablet) {
+        max-width: calc(72% - 1.5625rem);
+      }
+
+      @include breakpoint($desktop) {
+        line-height: rem(22);
+        max-width: calc(80% - #{rem(25)});
+      }
+
+      & > div {
+        display: inline;
       }
 
       .spc-aura-or-text {
@@ -136,6 +159,8 @@
     @include breakpoint($only-mobile) {
       background-image: $aura-block-bg-mobile;
       margin: 0 1.25rem;
+      padding-#{$left}: rem(24);
+      padding-#{$right}: rem(32);
 
       html[lang=ar] & {
         background-image: $aura-block-bg-mobile-ar;
@@ -146,8 +171,8 @@
     .spc-link-aura-link,
     .spc-link-play-store {
       cursor: pointer;
-      line-height: 1.63;
-      font-size: 1rem;
+      font-size: rem(12);
+      line-height: rem(22);
       color: $auro-join-signin-text;
       text-decoration: underline;
 
@@ -156,7 +181,8 @@
       }
 
       @include breakpoint($only-mobile) {
-        font-size: rem(14);
+        font-size: rem(12);
+        line-height: rem(20);
       }
 
       html[lang=ar] & {
@@ -170,6 +196,10 @@
           text-align: center;
         }
       }
+    }
+
+    .spc-link-aura-link {
+      margin-#{$right}: rem(4);
     }
 
     .spc-join-aura-link,
@@ -191,10 +221,6 @@
         b {
           font-family: $aura-caption-bold;
         }
-      }
-
-      @include breakpoint($only-mobile) {
-        font-size: rem(14);
       }
     }
 
@@ -256,10 +282,6 @@
         max-height: rem(70);
       }
     }
-
-    .spc-aura-cart-content {
-      max-width: 65%;
-    }
   }
 
   .block-content.registered-user-unlinked-card {
@@ -267,7 +289,6 @@
       .spc-link-aura-link-wrapper {
         display: inline-block;
         text-align: $left;
-        margin-#{$right}: rem(5);
       }
     }
 
@@ -319,41 +340,6 @@
             padding: 0 1rem;
           }
         }
-      }
-    }
-  }
-
-  .spc-aura-unlink-card-wrapper {
-    .description,
-    .no-link-message {
-      b,
-      a {
-        color: $aura-spc-cart-unlinked-highlight;
-      }
-
-      a {
-        text-decoration: underline;
-        padding-#{$left}: 0.5rem;
-        cursor: pointer;
-      }
-    }
-
-    .description {
-      font-family: $aura-regular;
-      margin-bottom: 1.25rem;
-      color: $aura-spc-cart-unlinked-desc;
-
-      b {
-        font-family: $aura-bold;
-        display: block;
-      }
-    }
-
-    .no-link-message {
-      margin-top: 1.25rem;
-
-      a {
-        cursor: pointer;
       }
     }
   }

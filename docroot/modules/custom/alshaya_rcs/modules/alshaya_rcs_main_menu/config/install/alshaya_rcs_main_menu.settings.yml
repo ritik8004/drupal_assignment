@@ -2,3 +2,5 @@
 root_category: 2
 # Defining menu depth to fetch from the Magento, default to 3.
 menu_max_depth: 3
+# Depth of categories to fetch from GraphQL API.
+max_depth_to_load: 4

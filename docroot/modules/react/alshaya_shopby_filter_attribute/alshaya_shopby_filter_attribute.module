@@ -12,11 +12,14 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Implements hook_page_attachments_alter().
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ *
+ * Attach the required libraries and drupal settings for the feature to use on
+ * front end.
  */
-function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
+function alshaya_shopby_filter_attribute_block_view_alshaya_main_menu_alter(&$build, $block) {
   // Add cache tags for the module's settings.
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], ['config:alshaya_shopby_filter_attribute.settings']);
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_shopby_filter_attribute.settings']);
 
   // Load shop by filter attribute module's configs.
   $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
@@ -27,11 +30,11 @@ function alshaya_shopby_filter_attribute_page_attachments_alter(&$page) {
   }
 
   // Pass the configs in drupal settings to use on front-end.
-  $page['#attached']['drupalSettings']['shopByFilterAttribute'] = $shopby_filter_attribute_configs;
+  $build['#attached']['drupalSettings']['shopByFilterAttribute'] = $shopby_filter_attribute_configs;
 
   // Attach the library if feature is enabled.
-  $page['#attached']['library'][] = 'alshaya_shopby_filter_attribute/menu_attribute_navigation';
-  $page['#attached']['library'][] = 'alshaya_white_label/megamenu-shop-by-filter';
+  $build['#attached']['library'][] = 'alshaya_shopby_filter_attribute/menu_attribute_navigation';
+  $build['#attached']['library'][] = 'alshaya_white_label/megamenu-shop-by-filter';
 }
 
 /**
@@ -92,23 +95,37 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
   // Adding class for CSS selector.
   $data[$term->tid]['class'][] = 'shop-by-filter-attribute';
 
+  // Define a static variable to store the term Ids by commerce category Ids.
+  $static = &drupal_static(__FUNCTION__, []);
+
   // Identify the parent target ID for the shop by filter attribute menu items
   // path. If $term->shopby_filter_target_cid contains a value i.e. a commerce
   // target category ID, we need to get the associate taxonomy term ID and use
   // that instead of $term->parent_target_id.
   $parent_target_id = $term->parent_target_id;
   if (isset($term->shopby_filter_target_cid)
-    && !empty($term->shopby_filter_target_cid)) {
-    // Get term ID from commerce Id.
-    $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $term_ids = $term_storage->getQuery()
-      ->condition('field_commerce_id', $term->shopby_filter_target_cid)
-      ->condition('vid', ProductCategoryTree::VOCABULARY_ID)
-      ->execute();
+    && !empty($term->shopby_filter_target_cid)
+    && $term->shopby_filter_target_cid !== '0') {
+    // Check if the associated term Id by commerce category Id exist in static
+    // data array, than load from it else we need to fetch it from DB storage.
+    if (isset($static[$term->shopby_filter_target_cid])) {
+      $parent_target_id = $static[$term->shopby_filter_target_cid];
+    }
+    else {
+      // Get term ID from commerce Id.
+      $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+      $term_ids = $term_storage->getQuery()
+        ->condition('field_commerce_id', $term->shopby_filter_target_cid)
+        ->condition('vid', ProductCategoryTree::VOCABULARY_ID)
+        ->execute();
 
-    if (!empty($term_ids)) {
-      $term_id = reset($term_ids);
-      $parent_target_id = $term_id;
+      if (!empty($term_ids)) {
+        $term_id = reset($term_ids);
+        $parent_target_id = $term_id;
+      }
+
+      // Add this to static array as well for performance improvement.
+      $static[$term->shopby_filter_target_cid] = $parent_target_id;
     }
   }
 
@@ -132,8 +149,23 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
   // show filter menu items.
   $data[$term->tid]['data_nav_attr'] = $shopby_filter_attribute_configs['menuFilterAttributes'] ?? '';
 
-  // Both these data)hierarchy and data_rule_context will be used in React
-  // component to fetch available filter options in given context.
+  // These data_hierarchy, data_rule_context and data_category_field will be
+  // used in React component to fetch available filter options in given context.
   $data[$term->tid]['data_hierarchy'] = $term_hierarchy_data['hierarchy'] ?? '';
   $data[$term->tid]['data_rule_context'] = $term_hierarchy_data['ruleContext'] ? implode(',', $term_hierarchy_data['ruleContext']) : '';
+  $data[$term->tid]['data_category_field'] = $term_hierarchy_data['category_field'] ?: '';
+}
+
+/**
+ * Implements hook_categories_all_response_alter().
+ */
+function alshaya_shopby_filter_attribute_categories_all_response_alter(&$data, $term) {
+  // Return if the shopby_filter_attribute parameter is not set.
+  if (!isset($term->shopby_filter_attribute)) {
+    return;
+  }
+
+  // Add `shopby_filter_attribute` parameter with boolean TRUE/FALSE
+  // (whatever is set) .
+  $data['alshaya_shopby_filter_attribute'] = (bool) $term->shopby_filter_attribute;
 }

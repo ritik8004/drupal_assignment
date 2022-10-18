@@ -63,14 +63,15 @@ class MyMembership extends React.Component {
             { '@hello_text': getStringMessage('hi'), '@first_name': myMembershipData.apc_first_name }, { context: 'hello_member' })}
         </div>
         <div className="points-block">
-          <div className="my-points">
-            <span>{myMembershipData.apc_points}</span>
-            <span>{getStringMessage('points_label')}</span>
-          </div>
           <TierProgress
+            apcPoints={myMembershipData.apc_points}
             myMembershipData={myMembershipData}
           />
-          <QrCodeDisplay memberId={memberId} width={200} />
+          <QrCodeDisplay
+            memberId={memberId}
+            width={200}
+            memberTitle={getStringMessage('view_qr_code')}
+          />
           <div className="my-membership-id">
             {memberId}
           </div>

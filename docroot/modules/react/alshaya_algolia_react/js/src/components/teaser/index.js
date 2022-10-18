@@ -25,7 +25,7 @@ import ExpressDeliveryLabel from './ExpressDeliveryLabel';
 import PriceRangeElement from '../price/PriceRangeElement';
 
 const Teaser = ({
-  hit, gtmContainer = null, pageType, extraInfo,
+  hit, gtmContainer = null, pageType, extraInfo, indexName,
   // 'extraInfo' is used to pass additional information that
   // we want to use in this component.
 }) => {
@@ -57,7 +57,7 @@ const Teaser = ({
       }
     }
   }
-  let overallRating = (hit.attr_bv_average_overall_rating !== undefined) ? hit.attr_bv_average_overall_rating : '';
+  let overallRating = (Drupal.hasValue(hit.attr_bv_average_overall_rating)) ? hit.attr_bv_average_overall_rating : '';
   if (pageType === 'plp' && productListIndexStatus()) {
     overallRating = overallRating[currentLanguage];
   }
@@ -72,7 +72,7 @@ const Teaser = ({
     if (pageType === 'plp'
       && productListIndexStatus()
       && value !== null) {
-      if (value[currentLanguage] !== undefined) {
+      if (Drupal.hasValue(value[currentLanguage])) {
         attribute[key] = value[currentLanguage];
       } else {
         // If the value for current language code does not exist
@@ -135,7 +135,7 @@ const Teaser = ({
     teaserClass = `${teaserClass} product-element-alignment`;
   }
 
-  const showRating = (hit.attr_bv_total_review_count !== undefined
+  const showRating = (Drupal.hasValue(hit.attr_bv_total_review_count)
     && hit.attr_bv_total_review_count > 0
     && showReviewsRating !== undefined
     && showReviewsRating === 1
@@ -151,18 +151,6 @@ const Teaser = ({
   // Create a ref for wishlist icon button. This ref will be used to update the
   // icon in teaser when product is added to wishlist from drawer.
   const ref = React.createRef();
-
-  // Index name is required for algolia analytics.
-  // Set index name from search settings and pass in data attributes in teaser.
-  let { indexName } = drupalSettings.algoliaSearch.search;
-  if (isWishlistPage(extraInfo)) {
-    // If user has visited wish-list page then get index name
-    // from wishlist settings.
-    ({ indexName } = drupalSettings.wishlist);
-  } else if (pageType === 'plp' && productListIndexStatus()) {
-    // If user has visited plp then get index name from listing.
-    ({ indexName } = drupalSettings.algoliaSearch.listing);
-  }
 
   // Check if price is a range or single value.
   let renderPrice = '';
@@ -241,7 +229,11 @@ const Teaser = ({
                 </ul>
               </div>
               )}
-            <ConditionalView condition={showBrandName && attribute.attr_brand_name !== undefined}>
+            <ConditionalView condition={
+                showBrandName
+                && Drupal.hasValue(attribute.attr_brand_name)
+              }
+            >
               <div className="listing-brand-name">
                 {attribute.attr_brand_name}
               </div>
@@ -286,7 +278,7 @@ const Teaser = ({
           <ConditionalView condition={
               isExpressDeliveryEnabled()
               && checkExpressDeliveryStatus()
-              && hit.attr_express_delivery !== undefined
+              && Drupal.hasValue(hit.attr_express_delivery)
               && hit.attr_express_delivery[0] === '1'
             }
           >
@@ -296,7 +288,7 @@ const Teaser = ({
               isExpressDeliveryEnabled()
               && checkExpressDeliveryStatus()
               && pageType === 'plp'
-              && hit.attr_express_delivery !== undefined
+              && Drupal.hasValue(hit.attr_express_delivery)
               && hit.attr_express_delivery[currentLanguage][0] === '1'
             }
           >

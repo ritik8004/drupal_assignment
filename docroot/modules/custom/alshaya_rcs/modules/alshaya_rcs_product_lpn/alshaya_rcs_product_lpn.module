@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Constains hooks and alters for Alshaya Rcs Product LPN.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_rcs_product_lpn_page_attachments(array &$attachments) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
+  // Attach alter confiburable options library for all pages.
+  $attachments['#attached']['library'][] = 'alshaya_rcs_product_lpn/alter_configurables';
+}

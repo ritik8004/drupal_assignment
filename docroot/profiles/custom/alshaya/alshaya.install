@@ -10,6 +10,51 @@ use Drupal\Core\File\FileSystemInterface;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall unnecessary modules.
+ */
+function alshaya_update_9401() {
+  $modules = [];
+  if (\Drupal::moduleHandler()->moduleExists('simple_oauth_extras')) {
+    $modules[] = 'simple_oauth_extras';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('lightning_api')) {
+    $modules[] = 'lightning_api';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('jsonapi')) {
+    $modules[] = 'jsonapi';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('openapi_jsonapi')) {
+    $modules[] = 'openapi_jsonapi';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('openapi_rest')) {
+    $modules[] = 'openapi_rest';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('openapi_ui_redoc')) {
+    $modules[] = 'openapi_ui_redoc';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('openapi_ui_swagger')) {
+    $modules[] = 'openapi_ui_swagger';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('openapi_ui_swagger')) {
+    $modules[] = 'openapi_ui';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('openapi_ui_swagger')) {
+    $modules[] = 'openapi';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('moderation_dashboard')) {
+    $modules[] = 'moderation_dashboard';
+  }
+  if (\Drupal::moduleHandler()->moduleExists('page_manager')) {
+    $modules[] = 'page_manager';
+  }
+  if (!empty($modules)) {
+    \Drupal::service('module_installer')->uninstall($modules);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enables mysql module if not enabled already.
  */
 function alshaya_update_9400() {

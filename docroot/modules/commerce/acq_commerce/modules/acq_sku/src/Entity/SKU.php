@@ -892,7 +892,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       $media_data = $entity->get('media')->getString();
       // @codingStandardsIgnoreLine
       $media_data = unserialize($media_data);
-      foreach ($media_data as $data) {
+      foreach ($media_data ?? [] as $data) {
         if (isset($data['fid'])) {
           $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
           $file = $fileStorage->load($data['fid']);

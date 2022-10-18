@@ -16,6 +16,7 @@ import TabbyWidget from '../../../../js/tabby/components';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
 import EgiftCheckoutOrderSummary from '../../egift-card/components/egift-checkout-order-summary';
 import { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
+import Tamara from '../../../../js/tamara/utilities/tamara';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -47,7 +48,7 @@ class TotalLineItems extends React.Component {
     }
 
     const {
-      applied_rules: cartPromo,
+      applied_rules_with_discounts: cartPromo,
       shipping_free: freeShipping,
     } = event.detail.cart_labels;
 
@@ -64,6 +65,7 @@ class TotalLineItems extends React.Component {
     // Add the coupon code with the discount title if exclusive coupon code applied on cart.
     if (hasExclusiveCoupon === true) {
       promoData += `<div class="applied-exclusive-couponcode">${couponCode}</div>`;
+      return promoData;
     }
 
     // Change the discount title if hello member offer code exists on cart.
@@ -130,7 +132,8 @@ class TotalLineItems extends React.Component {
       : totals.base_grand_total_without_surcharge;
 
     let postpay;
-    if (Postpay.isPostpayEnabled()) {
+    // We don't show postpay if tamara is enabled.
+    if (Postpay.isPostpayEnabled() && !Tamara.isTamaraEnabled()) {
       postpay = (
         <PostpayCart
           amount={totals.base_grand_total}
@@ -230,7 +233,10 @@ class TotalLineItems extends React.Component {
             />
           </ConditionalView>
           {postpay}
-          <ConditionalView condition={isCartPage && Tabby.isTabbyEnabled()}>
+          {/** We don't show tabby if tamara is enabled. */}
+          <ConditionalView
+            condition={isCartPage && Tabby.isTabbyEnabled() && !Tamara.isTamaraEnabled()}
+          >
             <TabbyWidget
               pageType="cart"
               classNames="spc-tabby"

@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * @addtogroup hooks
@@ -76,6 +77,16 @@ function hook_alshaya_spc_checkout_login_build_alter(array &$build) {
  */
 function hook_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
   $build['#attached']['drupalSettings']['item_code_label'] = 'Item Code';
+}
+
+/**
+ * Alter the account phone number while checkout.
+ *
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   Account details.
+ */
+function hook_alshaya_spc_checkout_event_controller_account_alter(AccountInterface &$account) {
+
 }
 
 /**

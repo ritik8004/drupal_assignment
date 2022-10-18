@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 import Popup from 'reactjs-popup';
 import { renderToString } from 'react-dom/server';
 import Loading from '../../../../../utilities/loading';
-import AuraHeaderIcon from '../../../../../../../alshaya_aura_react/js/svg-component/aura-header-icon';
+import AuraHorizontalIcon from '../../../../../../../alshaya_aura_react/js/svg-component/aura-horizontal-icon';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import ToolTip from '../../../../../utilities/tooltip';
 import AuraFormUnlinkedCard from '../../../aura-forms/aura-unlinked-card';
@@ -93,7 +93,7 @@ class AuraNotLinkedData extends React.Component {
         <>
           <div className="block-content registered-user-linked-pending-enrollment">
             <div className="spc-aura-cart-icon">
-              <AuraHeaderIcon />
+              <AuraHorizontalIcon />
             </div>
             <div className="spc-aura-cart-content">
               <span className="spc-aura-points-to-earn">
@@ -112,7 +112,7 @@ class AuraNotLinkedData extends React.Component {
       <>
         <div className="block-content registered-user-unlinked-card">
           <div className="spc-aura-cart-icon">
-            <AuraHeaderIcon />
+            <AuraHorizontalIcon />
           </div>
           <div className="spc-aura-cart-content">
             <div className="spc-aura-points-to-earn">

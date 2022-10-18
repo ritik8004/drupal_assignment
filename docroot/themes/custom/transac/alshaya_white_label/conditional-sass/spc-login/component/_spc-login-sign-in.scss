@@ -111,10 +111,6 @@
       input {
         font-size: 0.875rem;
       }
-
-      .order-3 {
-        display: none;
-      }
     }
 
     .checkout-login-actions-wrapper {
@@ -144,35 +140,28 @@
       }
     }
 
-    .checkout-login-separator > span,
-    .login-separator > span {
-      @include breakpoint($only-mobile) {
-        font-family: $alshaya-bold;
-        letter-spacing: 0.8px;
-        text-transform: uppercase;
-        font-size: 1rem;
-        margin: 2.45rem 0;
-
-        @include arabic-letter-spacing;
-      }
-    }
-
     .checkout-login-separator {
       @include breakpoint($only-mobile) {
         margin: 0;
 
         > span {
-          margin: 1rem 0;
+          font-family: $alshaya-bold;
+          letter-spacing: rem(0.8);
+          text-transform: uppercase;
+          font-size: rem(16);
+          margin: rem(34) 0;
+
+          @include arabic-letter-spacing;
+        }
+
+        &--email {
+          order: 2;
+        }
+
+        &--social {
+          order: 4;
         }
       }
-
-      @include breakpoint($tablet) {
-        font-size: 0.875em;
-      }
-    }
-
-    .order-5 {
-      order: 5;
     }
   }
 
@@ -183,6 +172,10 @@
     @include breakpoint($only-mobile) {
       display: flex;
       flex-direction: column;
+
+      & > .edit-checkout-login {
+        order: 3;
+      }
     }
 
     .above-mobile-block {
@@ -194,8 +187,8 @@
 
       @include breakpoint($only-mobile) {
         display: block;
-        order: 6;
-        margin-top: 2rem;
+        order: 1;
+        margin-top: rem(24);
       }
 
       @include breakpoint($tablet) {
@@ -244,7 +237,6 @@
 
     .edit-checkout-login {
       text-align: $left;
-      order: 4;
 
       .form-item {
         @include breakpoint($only-mobile) {
@@ -453,6 +445,7 @@
 
       @include breakpoint($only-mobile) {
         padding: 0;
+        order: 5;
       }
     }
 
@@ -467,12 +460,12 @@
         @include breakpoint($only-mobile) {
           margin-top: 0;
 
-          .login-separator + .alshaya-social {
-            margin-top: 0;
-          }
-
           .alshaya-social {
             margin-top: 1.25rem;
+
+            &:first-child {
+              margin-top: 0;
+            }
           }
 
           .auth-link:first-child {
@@ -502,10 +495,7 @@
         }
       }
 
-      .login-separator.bottom {
-        margin: 0;
-      }
-
+      .login-separator.bottom,
       .login-separator.top {
         display: none;
       }

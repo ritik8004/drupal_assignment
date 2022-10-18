@@ -25,5 +25,23 @@
         font-family: $hnm-regular;
       }
     }
+
+    .return-button-enabled {
+      html[lang=ar] & {
+        flex-basis: 35%;
+      }
+    }
+  }
+}
+
+.order-item-image {
+  .image-data-wrapper {
+    &.in-eligible,
+    &.big-ticket-item {
+      .big-ticket-item-label,
+      .not-eligible-label {
+        font-family: $hnm-demibold;
+      }
+    }
   }
 }

@@ -23,6 +23,9 @@ const removeCartIdFromStorage = () => {
     return;
   }
 
+  // Remove user cart id if user is not authenticated.
+  Drupal.removeItemFromLocalStorage('user_cart_id');
+
   Drupal.removeItemFromLocalStorage('cart_id');
 };
 
@@ -169,6 +172,24 @@ const getApiEndpoint = (action, params = {}) => {
       endpoint = !isUserAuthenticated()
         ? `/V1/guest-carts/${endPointParams.cartId}/order`
         : '';
+      break;
+
+    case 'codMobileVerificationSendOtp':
+      endpoint = '/V1/carts/otp/send';
+      break;
+
+    case 'codMobileVerificationValidateOtp':
+      endpoint = '/V1/carts/otp/verify';
+      break;
+
+    case 'getTamaraAvailability':
+      endpoint = isUserAuthenticated()
+        ? '/V1/carts/mine/tamara-payment-availability'
+        : `/V1/guest-carts/${endPointParams.cartId}/tamara-payment-availability`;
+      break;
+
+    case 'tokenizedCards':
+      endpoint = '/V1/checkoutcomupapi/getTokenList';
       break;
 
     default:

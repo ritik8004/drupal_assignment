@@ -12,6 +12,7 @@ import { redeemAuraPoints } from '../../../../aura-loyalty/components/utilities/
 import { getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import logger from '../../../../../../js/utilities/logger';
 import { updatePriceSummaryBlock } from '../../../../utilities/egift_util';
+import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 
 class RegisteredUserLoyalty extends React.Component {
   constructor(props) {
@@ -56,10 +57,39 @@ class RegisteredUserLoyalty extends React.Component {
   showLoyaltyPopup = (method) => {
     // @todo: Trigger a pop-up to confirm the loyalty option.
     // @todo: Refresh cart with the selected value.
-    this.setState({
-      showLoyaltyPopup: true,
-      selectedOption: method,
-    });
+
+    // add address validation for aura
+    if (method === 'aura') {
+      const { cart } = this.props;
+      const billingAddress = cart.cart;
+      const billingAddressData = billingAddress.billing_address;
+      if (billingAddressData === null) {
+        // Adding error class in the section.
+        const deliveryInfo = document.getElementsByClassName('spc-checkout-delivery-information');
+        const deliveryInfoError = document.getElementById('delivery-information-error');
+        smoothScrollTo('.spc-checkout-delivery-information');
+        if (deliveryInfo.length !== 0 && deliveryInfoError === null) {
+          const tag = document.createElement('p');
+          const errorMessage = document.createTextNode(Drupal.t('Please add delivery information'));
+
+          tag.appendChild(errorMessage);
+          deliveryInfo[0].appendChild(tag);
+          tag.setAttribute('id', 'delivery-information-error');
+        }
+      } else {
+        this.setState({
+          showLoyaltyPopup: true,
+          selectedOption: method,
+
+        });
+      }
+    } else {
+      this.setState({
+        showLoyaltyPopup: true,
+        selectedOption: method,
+
+      });
+    }
   }
 
   resetPopupStatus = (showLoyaltyPopup) => {
@@ -150,7 +180,9 @@ class RegisteredUserLoyalty extends React.Component {
 
   render() {
     const { animationDelay, helloMemberPoints, cart } = this.props;
-    const { currentOption, selectedOption, showLoyaltyPopup } = this.state;
+    const {
+      currentOption, selectedOption, showLoyaltyPopup,
+    } = this.state;
 
     if (!hasValue(helloMemberPoints)) {
       return null;
@@ -163,7 +195,6 @@ class RegisteredUserLoyalty extends React.Component {
           && (
           <LoyaltyConfirmPopup
             showLoyaltyPopup={showLoyaltyPopup}
-            currentOption={currentOption}
             selectedOption={selectedOption}
             changeLoyaltyOption={this.changeLoyaltyOption}
             resetPopupStatus={this.resetPopupStatus}

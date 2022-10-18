@@ -1,6 +1,12 @@
 .block-alshaya-algolia-react-autocomplete {
   background-color: $algolia-search-bar-background;
 
+  .menu--open & {
+    @include breakpoint($upto-desktop) {
+      visibility: hidden !important;
+    }
+  }
+
   .algolia-search-cleartext-icon {
     position: absolute;
     #{$right}: 3.5rem;

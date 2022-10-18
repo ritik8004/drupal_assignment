@@ -157,6 +157,9 @@ class UserResetPassword extends ResourceBase {
     if (!($user instanceof UserInterface)) {
       return $this->mobileAppUtility->sendStatusResponse($this->t('Invalid user id.'));
     }
+    if (!$user->isActive()) {
+      return $this->mobileAppUtility->sendStatusResponse($this->t('The user account has not been activated or is blocked. Please verify the email address to activate the account.'));
+    }
 
     $hash = $data['reset_token'];
     $timestamp = $data['timestamp'];

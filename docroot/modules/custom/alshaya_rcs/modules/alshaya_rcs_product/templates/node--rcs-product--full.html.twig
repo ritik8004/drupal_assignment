@@ -72,7 +72,7 @@ set classes = [
           <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
           {% if express_delivery_enabled is defined and express_delivery_enabled %}
-            <div id="rcs-ph-delivery-info-block"></div>
+            <div id="sdd-ed-labels-desktop" class="express-delivery"></div>
           {% endif %}
 
           <div id="pdp-store-click-collect-list"></div>
@@ -115,6 +115,14 @@ set classes = [
                 #rcs.product._self|short_description#
               </div>
             {% endblock %}
+
+            {% if online_returns_status is defined and online_returns_status %}
+              <div id="online-returns-pdp-desktop" class="desktop-only"></div>
+            {% endif %}
+
+            {% if online_returns_status is defined and online_returns_status %}
+              <div id="online-returns-pdp-mobile" class="mobile-only"></div>
+            {% endif %}
 
             {% block descBlock %}
               <div class="description-wrapper">

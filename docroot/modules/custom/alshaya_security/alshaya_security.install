@@ -10,6 +10,33 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_n().
  *
+ * Add password reset rate limit.
+ */
+function alshaya_security_update_9401() {
+  // Enable required modules.
+  \Drupal::service('module_installer')->install([
+    'user_password_limit',
+    'rate_limits',
+  ]);
+
+  // Setting IP wise rate limit config for reset password.
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['rate_limits.rate_limit_config.reset_password_rate_limit.yml'],
+      'alshaya_security',
+      'install'
+    );
+
+  // Add translations.
+  \Drupal::moduleHandler()->loadInclude('alshaya_security', 'inc', 'alshaya_security.translations');
+  if ($translations = _alshaya_security_get_translations('v1')) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * Remove configuration, we will use from settings only now.
  */
 function alshaya_security_update_8002() {

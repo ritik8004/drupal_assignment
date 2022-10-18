@@ -3,7 +3,7 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 /**
  * Utility function to get return reason options.
  */
-function getReturnReasons() {
+function getReturnReasons(langcode = 'en') {
   // Setting default value for return reasons
   const returnReasons = [
     { value: 0, label: Drupal.t('Choose a reason', {}, { context: 'online_returns' }) },
@@ -12,13 +12,15 @@ function getReturnReasons() {
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.returnInfo)
     && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig)
-    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig.return_reasons)) {
+    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig[langcode])
+    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig[langcode].return_reasons)) {
     // Populate reasons values from return reasons api call.
-    reasonsList = drupalSettings.onlineReturns.returnInfo.returnConfig.return_reasons;
+    reasonsList = drupalSettings.onlineReturns.returnInfo.returnConfig[langcode].return_reasons;
   } else if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.return_config)
-    && hasValue(drupalSettings.onlineReturns.return_config.return_reasons)) {
-    reasonsList = drupalSettings.onlineReturns.return_config.return_reasons;
+    && hasValue(drupalSettings.onlineReturns.return_config[langcode])
+    && hasValue(drupalSettings.onlineReturns.return_config[langcode].return_reasons)) {
+    reasonsList = drupalSettings.onlineReturns.return_config[langcode].return_reasons;
   }
 
   Object.keys(reasonsList).forEach((key) => {

@@ -18,11 +18,24 @@
         font-family: $hnm-demibold;
       }
     }
+
+    .qr-code-button,
+    .button-wide {
+      text-transform: unset;
+    }
   }
 
   .expire-on {
     h3 {
       text-transform: uppercase;
+    }
+  }
+}
+
+.my-membership {
+  .points-block {
+    .qr-code-button {
+      text-transform: unset;
     }
   }
 }

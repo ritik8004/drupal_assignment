@@ -52,5 +52,5 @@ module.exports = function (gulp, config, bs) {
       .pipe(utils.onDev(bs.stream()));
   });
 
-  gulp.task('styles', gulp.series('styles-ltr', 'styles-rtl'));
+  gulp.task('styles', gulp.parallel('styles-ltr', 'styles-rtl'));
 };

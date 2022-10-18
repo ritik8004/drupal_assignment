@@ -20,6 +20,13 @@ class CashOnDelivery extends AlshayaSpcPaymentMethodPluginBase {
    */
   public function processBuild(array &$build) {
     $build['#strings'] = array_merge($build['#strings'], self::getCodSurchargeStrings());
+
+    // Get COD payment method mobile verification settings.
+    $cod_mobile_verification = $this->getCodMobileVerificationSettings();
+    if ($cod_mobile_verification) {
+      $build['#attached']['drupalSettings']['codMobileVerification'] = $cod_mobile_verification;
+      $build['#attached']['library'][] = 'alshaya_white_label/checkout-cod-mobile-verification';
+    }
   }
 
   /**
@@ -28,7 +35,7 @@ class CashOnDelivery extends AlshayaSpcPaymentMethodPluginBase {
    * @return array
    *   Translated strings array.
    */
-  public static function getCodSurchargeStrings() {
+  public static function getCodSurchargeStrings(): array {
     $strings = [];
 
     $checkout_settings = \Drupal::config('alshaya_acm_checkout.settings');
@@ -48,6 +55,16 @@ class CashOnDelivery extends AlshayaSpcPaymentMethodPluginBase {
     }
 
     return $strings;
+  }
+
+  /**
+   * Get COD payment method settings for mobile verification.
+   *
+   * @return bool
+   *   Configuration value.
+   */
+  private function getCodMobileVerificationSettings(): bool {
+    return \Drupal::config('alshaya_spc.settings')->get('cod_mobile_verification');
   }
 
 }

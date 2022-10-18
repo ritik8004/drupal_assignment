@@ -28,11 +28,15 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'view_qr_code',
-      'value' => t('View QR code', [], ['context' => 'hello_member']),
+      'value' => t('View member ID', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'redeem_in_store',
+      'value' => t('Redeem in store', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'qr_code_redeem',
-      'value' => t('To redeem in store use this QR code.', [], ['context' => 'hello_member']),
+      'value' => t('Member ID', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'points_label',
@@ -116,19 +120,15 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'benefit_add_to_bag',
-      'value' => t('Add to Bag', [], ['context' => 'hello_member']),
+      'value' => t('Add to bag', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'member_id_title',
-      'value' => t('Membership Id QR Code', [], ['context' => 'hello_member']),
+      'value' => t('Your Member ID', [], ['context' => 'hello_member']),
     ],
     [
-      'key' => 'coupon_id_title',
-      'value' => t('Coupon QR Code', [], ['context' => 'hello_member']),
-    ],
-    [
-      'key' => 'offer_id_title',
-      'value' => t('Offer QR Code', [], ['context' => 'hello_member']),
+      'key' => 'benefit_id_title',
+      'value' => t('Your Benefit', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'benefit_expire_no_date',
@@ -137,6 +137,14 @@ function _alshaya_hello_member_static_strings() {
     [
       'key' => 'view_all_benefits',
       'value' => t('View all Benefits', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'member',
+      'value' => t('Member', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'plus',
+      'value' => t('Plus', [], ['context' => 'hello_member']),
     ],
   ];
 }
@@ -152,15 +160,11 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'hello_member_guest_login',
-      'value' => t('@hm_icon @login_link or Become a member to earn @points points', [], ['context' => 'hello_member']),
+      'value' => t('@hm_icon @login_link or become a member to earn @points points', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'hello_member_points_tooltip',
       'value' => t('The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.', [], ['context' => 'hello_member']),
-    ],
-    [
-      'key' => 'confirm_loyalty',
-      'value' => t('Confirm the Loyalty', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'loyalty_modal_question',
@@ -168,7 +172,7 @@ function _alshaya_hello_member_aura_static_strings() {
     ],
     [
       'key' => 'enter_aura_details',
-      'value' => t('Enter Aura Details', [], ['context' => 'hello_member']),
+      'value' => t('Enter Aura details', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'aura_details_tooltip',
@@ -213,6 +217,38 @@ function _alshaya_hello_member_aura_static_strings() {
     [
       'key' => 'hm_sign_in',
       'value' => t('Sign In', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_popup_title',
+      'value' => t('Switch to H&M member', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_popup_title',
+      'value' => t('Switch to Aura points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_popup_description',
+      'value' => t('This purchase will accumulate points earned towards your H&M Membership', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_popup_description',
+      'value' => t('This purchase will accumulate points earned towards your Aura Membership', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_earn_points',
+      'value' => t('Earn H&M points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_earn_points',
+      'value' => t('Earn Aura points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_continue_points',
+      'value' => t('Continue with H&M Points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_continue_points',
+      'value' => t('Continue with Aura Points', [], ['context' => 'hello_member']),
     ],
   ];
 }

@@ -71,7 +71,7 @@ class AlshayaSpcLoginController extends ControllerBase {
       '#parents' => ['login_form'],
       '#type' => 'fieldset',
       '#title' => $this->t('sign in with email address'),
-      '#prefix' => '<div class="checkout-login-wrapper"><div class="multistep-login">',
+      '#prefix' => '<div class="checkout-login-wrapper"><div class="multistep-login"><div class="checkout-login-separator checkout-login-separator--email mobile-only-show"><span>' . $this->t('or') . '</span></div>',
       '#attributes' => [
         'class' => ['edit-checkout-login'],
       ],
@@ -86,7 +86,7 @@ class AlshayaSpcLoginController extends ControllerBase {
       '#attributes' => [
         'class' => ['social-signin-enabled', 'social-signup-form'],
       ],
-      '#prefix' => '<div class="checkout-login-separator order-5"><span>' . $this->t('or') . '</span></div>',
+      '#prefix' => '<div class="checkout-login-separator checkout-login-separator--social mobile-only-show"><span>' . $this->t('or') . '</span></div>',
       '#access' => $this->socialHelper->getStatus(),
     ];
 

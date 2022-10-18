@@ -416,7 +416,7 @@ class AlshayaFrontendCommand extends BltTasks {
     $processOutput = 0;
     // Github CI env push event check.
     // Only proceed if we are in Github CI.
-    if (getenv('GITHUB_ACTIONS') == 'true' && getenv('GITHUB_EVENT_NAME') == 'push') {
+    if (getenv('GITHUB_ACTIONS') == 'true') {
       $tasks = $this->taskExecStack();
       $tasks->stopOnFail();
 
@@ -544,6 +544,61 @@ class AlshayaFrontendCommand extends BltTasks {
   }
 
   /**
+   * Test / Lint React changed files.
+   *
+   * @param string $changed_files
+   *   Changed files..
+   *
+   * @command alshayafe:test-react:changed-files
+   * @aliases test-react-changed-files
+   */
+  public function testOnlyChangedReactFiles(string $changed_files = '') {
+    $reactDir = $this->getConfigValue('docroot') . '/modules/react';
+    $tasks = $this->taskExecStack();
+
+    // Flag to determine if there are files to lint.
+    $files_to_lint = FALSE;
+
+    $changed_react_js_files = explode(' ', $changed_files);
+
+    // If there are files changed.
+    if (!empty($changed_react_js_files)) {
+      $relative_react_directory_path = 'docroot/modules/react/';
+      $react_changed_files = array_filter($changed_react_js_files, function ($js_file) use ($relative_react_directory_path) {
+        // Get files only in react directory
+        // and ignore webpack, node modules, react module files.
+        return (
+          str_contains($js_file, $relative_react_directory_path) &&
+          !(str_contains($js_file, 'webpack.config.js') ||
+            str_contains($js_file, 'node_modules') ||
+            str_contains($js_file, 'alshaya_react'))
+        );
+      });
+
+      // If there are files for linting.
+      if (!empty($react_changed_files)) {
+        $files_to_lint = TRUE;
+        $files_for_linting = implode(' ', str_replace($relative_react_directory_path, '', $react_changed_files));
+
+        $tasks->printTaskInfo('Changed JS files for linting - {changed_files}', [
+          'changed_files' => $files_for_linting,
+        ]);
+
+        $tasks->exec("cd $reactDir; npm run lint $files_for_linting");
+      }
+    }
+
+    // If there are no files to lint.
+    if (!$files_to_lint) {
+      $this->say("There are no files for linting.");
+      return;
+    }
+
+    $tasks->stopOnFail();
+    return $tasks->run();
+  }
+
+  /**
    * Test / Lint React files.
    *
    * @command alshayafe:test-react
@@ -561,21 +616,68 @@ class AlshayaFrontendCommand extends BltTasks {
     // Run Jest tests.
     $tasks->exec("cd $reactDir; npm test");
 
-    foreach (new \DirectoryIterator($reactDir) as $subDir) {
-      if ($subDir->isDir()
-        && !str_contains($subDir->getBasename(), '.')
-        && !in_array($subDir->getBasename(), self::$reactIgnoredDirs)) {
-        $pattern = $reactDir . '/' . $subDir->getBasename() . '/js';
+    $finder = new Finder();
+    // Find all react folders containing the file used to specify entry points.
+    $finder->name('webpack.config.js');
+    // We need to find inside react code only.
+    $files = $finder->in($reactDir);
 
-        // For module like alshaya_algolia_react we have react files in src.
-        if (is_dir($subDir->getRealPath() . '/js/src')) {
-          $pattern .= '/src';
-        }
-
-        $tasks->exec("cd $reactDir; npm run lint $pattern");
+    foreach ($files as $file) {
+      // Ignore webpack.config.js found inside below folders.
+      if (
+        str_contains($file, 'node_modules')
+        || str_contains($file, 'alshaya_react')
+        || str_contains($file, 'alshaya_react_test')
+      ) {
+        continue;
       }
+      $dir = str_replace('webpack.config.js', '', $file->getRealPath());
+      // For module like alshaya_algolia_react we keep react files in src.
+      $dir .= is_dir($dir . '/js/src') ? '/js/src' : '/js';
+
+      $tasks->exec("cd $reactDir; npm run lint $dir");
     }
 
+    $tasks->stopOnFail();
+    $result = $tasks->run();
+    return $result;
+  }
+
+  /**
+   * Pre-compile handlebarjs Template.
+   *
+   * @command alshayafe:handlebars-build
+   * @aliases handlebars-build, hbb
+   */
+  public function preCompileHandlebars() {
+    $docroot = $this->getConfigValue('docroot');
+
+    $tasks = $this->taskExecStack();
+
+    $finder = new Finder();
+    $finder->name('*.handlebars');
+    // Find handlebar templates in custom and brand folder.
+    $finder->in($docroot . '/modules/custom');
+    $finder->in($docroot . '/modules/brands');
+
+    // Execute pre-compile command in all dir.
+    foreach ($finder as $file) {
+      $handlebarFilePath = $file->getRealPath();
+      // Pre-compiled path.
+      $jsFilePath = str_replace(
+        ["/handlebars/", '.handlebars'],
+        ["/dist/", '.js'],
+        $handlebarFilePath
+      );
+      $path_arr = explode('/', $jsFilePath);
+      array_pop($path_arr);
+      // Create dist folder if does not exists and
+      // Pre-compile HandlebarsJs template.
+      $dist_dir = implode('/', $path_arr);
+      $tasks->exec("cd $docroot && mkdir -p $dist_dir &&
+        ./modules/custom/node_modules/.bin/handlebars $handlebarFilePath -f $jsFilePath -n window.rcsHandlebarsTemplates"
+      );
+    }
     $tasks->stopOnFail();
     $result = $tasks->run();
     return $result;

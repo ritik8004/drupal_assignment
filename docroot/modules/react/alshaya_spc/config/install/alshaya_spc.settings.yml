@@ -1,2 +1,6 @@
 order_id_fallback: enabled
 subtotal_after_discount: false
+cod_mobile_verification: false
+# Add a config to determine if we need to show all available payment methods
+# icons on the cart page or not.
+display_cart_payment_icons: false

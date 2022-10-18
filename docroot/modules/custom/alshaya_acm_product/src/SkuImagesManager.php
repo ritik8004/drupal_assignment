@@ -1416,12 +1416,11 @@ class SkuImagesManager {
       ];
 
       if ($this->productDisplaySettings->get('color_swatches_show_product_image') && $this->skuManager->isListingDisplayModeAggregated()) {
-        $swatch_product_image = $child->getThumbnail();
+        $swatch_product_image = $this->getThumbnailImageUrl($child);
 
         // If we have image for the product.
-        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
-          $url = file_create_url($swatch_product_image['file']->getFileUri());
-          $swatches[$child->id()]['product_url'] = file_url_transform_relative($url);
+        if ($swatch_product_image) {
+          $swatches[$child->id()]['product_url'] = $swatch_product_image;
         }
       }
     }
@@ -1536,7 +1535,7 @@ class SkuImagesManager {
    * @return array
    *   Media array containing styled images.
    */
-  public function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
+  private function processMediaImageStyles(array $media, SKUInterface $sku, string $context) {
     if (empty($media['images'])) {
       return $media;
     }
@@ -1566,26 +1565,63 @@ class SkuImagesManager {
   }
 
   /**
-   * Helper function to get swatch image url.
+   * Helper function to get thumbnail image url.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
    *
    * @return false|string
-   *   Swatch image url or false.
+   *   Thumbnail image url or false.
    */
-  public function getSwatchImageUrl(SKUInterface $sku) {
-    // Let's never download images here, we should always download when
-    // preparing gallery which is done before this.
-    $swatch_product_image = $sku->getThumbnail(FALSE);
+  public function getThumbnailImageUrl(SKUInterface $sku) {
+    $product_thumbnail_image = $sku->getThumbnail();
 
     // If we have image for the product.
-    if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
-      $url = file_create_url($swatch_product_image['file']->getFileUri());
+    if (!empty($product_thumbnail_image) && $product_thumbnail_image['file'] instanceof FileInterface) {
+      $url = file_create_url($product_thumbnail_image['file']->getFileUri());
       return $url;
     }
 
     return FALSE;
+  }
+
+  /**
+   * Process product media data.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU value.
+   * @param string $context
+   *   Context value.
+   *
+   * @return array
+   *   Media data.
+   */
+  public function getProductMediaDataWithStyles(SKUInterface $sku, string $context) {
+    $data = [];
+    $media = $this->getProductMedia($sku, $context);
+    $media = $this->processMediaImageStyles($media, $sku, $context);
+
+    foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      $media_data = [
+        'url' => file_create_url($media_item['drupal_uri']),
+        'image_type' => $media_item['sortAssetType'] ?? 'image',
+      ];
+
+      if (!empty($media_item['styles'])) {
+        $media_data['styles'] = $media_item['styles'];
+      }
+      elseif (!empty($media_item['pims_image']['styles'])) {
+        $media_data['styles'] = $media_item['pims_image']['styles'];
+      }
+
+      $data['images'][] = $media_data;
+    }
+
+    if (!isset($data['videos'])) {
+      $data['videos'] = [];
+    }
+
+    return $data;
   }
 
 }

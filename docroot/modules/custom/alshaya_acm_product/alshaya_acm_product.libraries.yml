@@ -80,3 +80,8 @@ add_to_bag_utility:
     - core/drupal
     - core/drupalSettings
     - alshaya_master/local_storage_manager
+
+product.order:
+  version: 1.x
+  js:
+    js/alshaya_acm_product.order.js: {}

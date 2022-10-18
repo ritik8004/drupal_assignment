@@ -1,7 +1,7 @@
 import React from 'react';
 
 const BenefitPaySVG = () => (
-  <svg width="63px" height="41px" viewBox="0 0 63 41" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">
+  <svg className="payment-method-icon" width="63px" height="41px" viewBox="0 0 63 41" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">
     <title>benefitpay</title>
     <defs>
       <rect id="path-1" x="0" y="0" width="62" height="40" rx="4" />

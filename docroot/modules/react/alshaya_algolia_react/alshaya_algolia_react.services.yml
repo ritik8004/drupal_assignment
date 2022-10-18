@@ -16,3 +16,8 @@ services:
 
   alshaya_algolia_react.helper:
     class: Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper
+
+  alshaya_algolia_react.breadcrumb:
+    class: Drupal\alshaya_algolia_react\Breadcrumb\AlshayaAlgoliaSearchBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }

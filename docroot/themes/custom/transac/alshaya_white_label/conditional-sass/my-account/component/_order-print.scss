@@ -25,7 +25,12 @@ body {
     margin-bottom: 1.56rem;
 
     img {
-      padding: 1.75rem 0;
+      margin: rem(28) 0;
+      height: rem(42);
+
+      html[lang=ar] & {
+        height: rem(65);
+      }
     }
   }
 
@@ -76,18 +81,55 @@ body {
 
     .blend {
       background-color: $order_print_order_details_row_bg_blend;
+      padding-left: rem(22);
+      padding-right: rem(22);
 
       .delivery--method {
         margin-top: 1.7rem;
       }
     }
+
+    > td {
+      padding-top: rem(23);
+      padding-bottom: rem(21);
+      vertical-align: top;
+    }
+
+    td:first-child {
+      padding-left: rem(24);
+      padding-right: rem(24);
+    }
+
+    .order__delivery-details {
+      padding-left: rem(33);
+      padding-right: rem(33);
+    }
   }
 
   .order-item-row {
+    > td {
+      padding-top: rem(23);
+      padding-bottom: rem(23);
+      vertical-align: top;
+    }
+
+    td:first-child {
+      padding-left: rem(24);
+      padding-right: rem(24);
+    }
+
     .blend {
+      padding-left: rem(22);
+      padding-right: rem(22);
+
       @include breakpoint($upto-ptablet) {
         vertical-align: top;
       }
+    }
+
+    .order__product--desc {
+      padding-left: rem(33);
+      padding-right: rem(33);
     }
 
     .attr-wrapper {
@@ -109,17 +151,28 @@ body {
     border-top: 1px solid $order_print_product_count_row_border;
     border-bottom: 1px solid $order_print_product_count_row_border;
 
-    @include breakpoint($desktop) {
-      td {
-        padding-bottom: 1rem;
-        padding-top: 1rem;
-      }
+    td {
+      padding-bottom: rem(16);
+      padding-top: rem(16);
+      padding-#{$left}: rem(24);
     }
   }
 
   .sub-total-row .blend,
   .delivery-charge-row .blend {
     background: $order_print_delivery_subtotal_row_blend;
+  }
+
+  .total {
+    > td {
+      padding-top: rem(7);
+      padding-bottom: rem(7);
+
+      &.order-detail-value {
+        padding-left: rem(22);
+        padding-right: rem(22);
+      }
+    }
   }
 
   .total-row {
@@ -149,8 +202,10 @@ body {
     padding-#{$right}: 2.4rem !important;
   }
 
-  .delivery-charge-row .right--align {
-    padding-#{$left}: 0 !important;
+  .delivery-charge-row {
+    .right--align {
+      padding-#{$left}: 0 !important;
+    }
   }
 }
 
@@ -393,6 +448,10 @@ body.path--confirmation.alias--confirmation-print {
     }
 
     .order-details-row {
+      > td {
+        padding-top: rem(23);
+      }
+
       .above-mobile.blend,
       .desktop-only {
         @include breakpoint($upto-ptablet) {
@@ -463,5 +522,15 @@ html[lang="ar"] {
       position: absolute;
       #{$right}: 0;
     }
+  }
+}
+
+@page {
+  margin: 0 rem(16) rem(16);
+}
+
+@media print {
+  html > body {
+    margin: 0 !important;
   }
 }

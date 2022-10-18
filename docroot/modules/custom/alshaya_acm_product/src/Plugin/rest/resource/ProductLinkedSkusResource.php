@@ -187,7 +187,7 @@ class ProductLinkedSkusResource extends ResourceBase {
     foreach (array_keys($linkedSkus) as $linkedSku) {
       $linkedSkuEntity = SKU::loadFromSku($linkedSku);
       if ($lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)) {
-        $lightProduct['medias'] = $this->skuImagesManager->processMediaImageStyles($lightProduct['medias'], $linkedSkuEntity, 'pdp');
+        $lightProduct['medias'] = $this->skuImagesManager->getProductMediaDataWithStyles($linkedSkuEntity, 'pdp');
         $return[] = $lightProduct;
       }
     }

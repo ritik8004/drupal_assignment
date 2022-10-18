@@ -11,22 +11,22 @@ product:
 product.block.description:
   version: 1.x
   js:
-    handlebars/rcs-product-description-block.handlebars: { }
+    handlebars/product.block.description.handlebars: { }
 
 product.block.description_details:
   version: 1.x
   js:
-    handlebars/rcs-product-description-details-block.handlebars: { }
+    handlebars/product.block.description_details.handlebars: { }
 
 product.block.short_description.pdp-magazine:
   version: 1.x
   js:
-    handlebars/rcs-product-short-description-full-magazine-block.handlebars: { }
+    handlebars/product.block.short_description.pdp-magazine.handlebars: { }
 
 gallery.product.product_gallery_magazine:
   version: 1.x
   js:
-    handlebars/rcs-product-gallery-magazine.handlebars: {}
+    handlebars/gallery.product.product_gallery_magazine.handlebars: {}
 
 product_overlay:
   version: 1.x

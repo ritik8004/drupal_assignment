@@ -11,6 +11,21 @@ use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update the translation store list link label if not present.
+ */
+function alshaya_mc_update_9401() {
+  $store_config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config_translation = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings');
+  $list_link_label = $config_translation->get('store_list_label') ?? $store_config->get('store_list_label');
+  if ($list_link_label === 'List of all Mothercare Stores') {
+    $config_translation->set('store_list_label', 'جميع محلات مذركير');
+    $config_translation->save();
+  }
+}
+
+/**
  * Installing new product type facet.
  */
 function alshaya_mc_update_8322() {
@@ -496,6 +511,11 @@ function alshaya_mc_install() {
   $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
   $config->set('store_list_label', 'List of all Mothercare Stores');
   $config->save();
+
+  // Sets translation for the store list link label.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_list_label', 'جميع محلات مذركير')
+    ->save();
 
   // Setting all products buyable to be false by default.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')

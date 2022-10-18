@@ -205,6 +205,11 @@ class SkuPriceHelper {
   private function buildPriceBlockFromTo(SKU $sku, string $color = '', string $langcode = '') {
     $prices = $this->skuManager->getMinPrices($sku, $color);
 
+    // Ignore proceeding with building range price block when product is OOS.
+    if (empty($prices['children'])) {
+      return $this->buildPriceBlockSimple($sku, $color, $langcode);
+    }
+
     $child_prices = array_column($prices['children'], 'price');
     $child_final_prices = array_column($prices['children'], 'final_price');
     $discounts = array_column($prices['children'], 'discount');

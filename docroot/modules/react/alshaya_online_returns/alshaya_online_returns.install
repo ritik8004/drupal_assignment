@@ -16,6 +16,11 @@ function alshaya_online_returns_update_9401() {
   if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
   }
+
+  // Set default value as TRUE for the field.
+  $config = \Drupal::configFactory()->getEditable('alshaya_online_returns.settings');
+  $config->set('cart_banner', TRUE);
+  $config->save();
 }
 
 /**
