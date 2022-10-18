@@ -10,7 +10,7 @@
  *
  * Add/update config for new pdp description container.
  */
-function alshaya_pdp_react_update_9403() {
+function alshaya_pdp_react_update_9400() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_pdp_react.settings'],
