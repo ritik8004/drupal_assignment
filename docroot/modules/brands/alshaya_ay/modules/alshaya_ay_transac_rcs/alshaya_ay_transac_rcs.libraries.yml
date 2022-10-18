@@ -3,7 +3,6 @@ product:
   js:
     js/alshaya_ay_transac_rcs_product.js: {}
   dependencies:
-    - core/jquery
     - rcs_placeholders/helpers
 swatch_group:
   version: 1.x
