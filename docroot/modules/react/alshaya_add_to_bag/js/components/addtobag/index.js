@@ -17,7 +17,7 @@ const AddToBag = (props) => {
   } = props;
 
   // Only View More button will be visible for wishlist pages.
-  if (['wishlist', 'wishlist/share'].includes(drupalSettings.path.currentPath) && drupalSettings.wishlist.config.disableQuickViewInWishlistPage) {
+  if (extraInfo.disableQuickViewDrawer) {
     return (
       <NotBuyableButton url={url} />
     );

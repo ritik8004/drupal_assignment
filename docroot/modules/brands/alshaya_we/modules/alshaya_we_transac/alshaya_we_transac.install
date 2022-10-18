@@ -10,19 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- *  Disables quick view drawer on wishlist pages.
- */
-function alshaya_we_transac_update_9401() {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_wishlist')) {
-    $wishlist_config = \Drupal::configFactory()->getEditable('alshaya_wishlist.settings');
-    $wishlist_config->set('disable_quickview_wishlist_page', TRUE);
-    $wishlist_config->save();
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add translation for the Category string.
  */
 function alshaya_we_transac_update_8003() {
