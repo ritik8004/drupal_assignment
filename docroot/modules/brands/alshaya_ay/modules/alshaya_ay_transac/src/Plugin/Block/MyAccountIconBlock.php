@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_ay_transac\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Session\AccountProxy;
@@ -87,7 +88,7 @@ class MyAccountIconBlock extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['user.roles:authenticated']);
+    return Cache::mergeContexts(parent::getCacheContexts() ?? [], ['user.roles:authenticated']);
   }
 
 }
