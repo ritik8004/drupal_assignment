@@ -1,0 +1,330 @@
+.alias--cart {
+  .spc-content {
+    .spc-title-wrapper {
+      @include breakpoint($desktop) {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+    }
+  }
+
+  .spc-cart-items {
+    .spc-cart-item-bottom-wrapper {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  #spc-cart {
+    .spc-promotions {
+      &.free-gift-container {
+        display: flex;
+        flex-direction: column;
+        width: 40%;
+
+        @include breakpoint($only-mobile) {
+          width: 50%;
+        }
+      }
+    }
+  }
+
+  .spc-cart-shipping-methods {
+    padding-top: 1.5rem;
+    width: 60%;
+
+    @include breakpoint($only-mobile) {
+      width: 50%;
+    }
+  }
+
+  .sku-cart-delivery-methods {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.6875rem;
+    color: $spc-cart-delivery-tags;
+
+    @include breakpoint($upto-desktop) {
+      flex-direction: column;
+
+      .shipping-tags-first-row {
+        display: flex;
+      }
+
+      .shipping-tags-first-row,
+      .shipping-tags-second-row {
+        .cart-shipping-method {
+          display: flex;
+
+          .information-icon {
+            @include icon(infomation, after) {
+              top: 0.1875rem;
+            }
+
+            &:hover {
+              .method-title {
+                transform: translateY(-0.625rem);
+              }
+            }
+          }
+        }
+      }
+
+      .carrier-title {
+        display: inline-block;
+        white-space: nowrap;
+
+        html[lang=ar] & {
+          padding-top: 0.1875rem;
+          padding-bottom: 0.25rem;
+        }
+      }
+
+      .carrier-title,
+      .information-icon {
+        display: flex;
+        align-items: center;
+      }
+
+      .shipping-tags-second-row {
+        margin-top: 0.625rem;
+
+        .cart-shipping-method {
+          justify-content: flex-end;
+        }
+      }
+    }
+
+    .shipping-tags-first-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    @include breakpoint($desktop) {
+      .shipping-tags-second-row:not(:empty) {
+        padding-#{$left}: 0.625rem;
+      }
+    }
+
+    .carrier-title {
+      padding: 0.125rem 1.5rem 0.1875rem 0.4375rem;
+      display: inline-block;
+
+      html[lang=ar] & {
+        padding: 0.125rem 0.4375rem 0.1875rem 1.5rem;
+      }
+    }
+
+    .information-icon {
+      @include icon(infomation, after) {
+        font-size: 0.8125rem;
+        position: absolute;
+        #{$right}: 0.25rem;
+        top: 0;
+
+        html[lang=ar] & {
+          @include breakpoint($only-mobile) {
+            top: -0.125rem;
+          }
+        }
+      }
+    }
+
+    .cart-shipping-method {
+      padding-#{$left}: 0.625rem;
+      position: relative;
+      margin-bottom: 0.9375rem;
+
+      @include breakpoint($desktop) {
+        flex-shrink: 0;
+      }
+
+      &:first-child {
+        padding-#{$left}: 0;
+      }
+
+      &.active {
+        &.standard {
+          .carrier-title {
+            border: 1px solid $spc-cart-standard-delivery-border;
+          }
+        }
+
+        &.sameday {
+          .carrier-title {
+            border: 1px solid $spc-cart-sameday-delivery-border;
+          }
+        }
+
+        &.express {
+          .carrier-title {
+            border: 1px solid $spc-cart-express-delivery-border;
+          }
+        }
+      }
+
+      .information-icon {
+        &:hover {
+          .method-title {
+            display: block;
+            position: absolute;
+            bottom: 0.75rem;
+            border: 1px solid $spc-cart-delivery-info-border;
+            padding: 0.125rem 0.5rem 0.125rem 0.5625rem;
+            background: white;
+            max-width: 9rem;
+            width: 200%;
+            z-index: 2;
+            transform: translateY(-0.9375rem);
+            #{$right}: -0.3125rem;
+            border-radius: 0.25rem;
+            text-align: center;
+
+            &::before {
+              content: '';
+              position: absolute;
+              width: 0.75rem;
+              height: 0.75rem;
+              border-#{$left}: 1px solid $spc-cart-delivery-info;
+              border-top: 1px solid $spc-cart-delivery-info;
+              border-#{$right}: none;
+              border-bottom: none;
+              bottom: -0.4375rem;
+              transform: rotate(-135deg);
+              background: $spc-cart-delivery-info-bg;
+              #{$right}: 0.625rem;
+              border-radius: 0.125rem;
+
+              html[lang=ar] & {
+                transform: rotate(135deg);
+              }
+            }
+
+            span {
+              position: relative;
+              z-index: 1;
+            }
+          }
+        }
+      }
+
+      &.in-active {
+        .carrier-title {
+          border: 1px solid $spc-cart-delivery-info-inactive-border;
+        }
+
+        .carrier-title,
+        .information-icon {
+          color: $spc-cart-delivery-info-inactive;
+        }
+
+        .information-icon {
+          &:hover {
+            .method-title {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    .method-title {
+      display: none;
+    }
+
+    @include breakpoint($desktop) {
+      .shipping-tags-first-row,
+      .shipping-tags-second-row {
+        .information-icon {
+          &::after {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+  }
+
+  #delivery-area-select {
+    color: $spc-cart-delivery-area-select;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-bottom: 0.625rem;
+    }
+
+    .delivery-area-label {
+      display: flex;
+      white-space: nowrap;
+
+      @include breakpoint($only-mobile) {
+        justify-content: center;
+      }
+
+      > div {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+      }
+    }
+
+    .delivery-area-name {
+      font-family: $alshaya-bold;
+      padding-#{$left}: 0.3125rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 10.3125rem;
+      display: block;
+      vertical-align: bottom;
+      padding-#{$right}: 1.25rem;
+    }
+
+    .delivery-area-button {
+      font-size: 0;
+
+      @include icon('chevrondown') {
+        font-size: 1.25rem;
+        padding-#{$left}: 0.3125rem;
+        position: absolute;
+        top: 60%;
+        #{$right}: 0;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  .spc-select {
+    .spcSelect__menu {
+      z-index: 5;
+
+      .spcSelect__menu-list {
+        border-color: $express-delivery-menu-list-border;
+      }
+    }
+  }
+
+  .spc-delivery-area {
+    #delivery-area-list-items {
+      li.area-select-list-item.active {
+        .area-select-item-wrapper {
+          &::before {
+            color: $spc-cart-express-delivery-radio-button;
+          }
+        }
+      }
+    }
+  }
+
+  .spc-checkout-section-title {
+    text-transform: none;
+  }
+}

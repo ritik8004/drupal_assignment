@@ -79,7 +79,6 @@ body {
       position: absolute;
       #{$right}: 0;
       color: transparent;
-      top: rem(22);
       transform: translateY(-50%);
 
       @include icon('close') {

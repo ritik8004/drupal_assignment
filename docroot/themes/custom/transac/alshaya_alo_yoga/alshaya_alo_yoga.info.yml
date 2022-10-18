@@ -163,3 +163,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
+
+  alshaya_white_label/sameday-express-delivery:
+    css:
+      theme:
+        css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css

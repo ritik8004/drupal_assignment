@@ -5,4 +5,18 @@
       padding-top: rem(32);
     }
   }
+
+  .js-pager__items {
+    &.pager {
+      li.pager__item {
+        button {
+          height: rem(48);
+          font-family: $ay-heavy;
+          font-size: rem(16);
+          text-transform: uppercase;
+          width: rem(231);
+        }
+      }
+    }
+  }
 }

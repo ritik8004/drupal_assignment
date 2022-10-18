@@ -1,7 +1,8 @@
 .product-drawer {
   &-content-wrapper {
     .product-details-wrapper {
-      padding: rem(40) rem(24) rem(20);
+      padding: rem(26) rem(16) rem(20);
+      background-color: $plp-quick-view-bg;
 
       .attribute-wrapper_size {
         a {
@@ -9,7 +10,16 @@
           text-decoration: underline;
           color: $plp-quick-view-size-guide-text;
         }
+
+        .alshayaSelect__menu {
+          min-width: rem(298);
+        }
       }
+    }
+
+    .price {
+      font-size: rem(18);
+      font-family: $ay-regular;
     }
 
     .special--price {
@@ -23,8 +33,9 @@
     }
 
     .product-title {
-      font-size: rem(24);
-      padding-bottom: rem(6);
+      font-size: rem(20);
+      padding-bottom: rem(3);
+      font-family: $ay-nova-semibold;
     }
 
     .content--item-code {
@@ -43,9 +54,10 @@
     .config-form-addtobag-button {
       font-size: rem(16);
       height: rem(48);
-      font-family: $alshaya-thin;
+      font-family: $ay-heavy;
       display: inline-flex;
       justify-content: center;
+      text-transform: uppercase;
 
       &::before {
         content: "";

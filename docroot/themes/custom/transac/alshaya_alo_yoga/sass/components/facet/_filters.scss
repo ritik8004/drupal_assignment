@@ -68,6 +68,12 @@
     margin-#{$left}: rem(12);
   }
 
+  &::before {
+    @include breakpoint($only-mobile) {
+      #{$right}: rem(3);
+    }
+  }
+
   @include breakpoint($upto-desktop) {
     font-size: rem(16);
   }
@@ -75,6 +81,16 @@
   .upto-desktop {
     @include breakpoint($upto-desktop) {
       text-transform: uppercase;
+    }
+  }
+}
+
+.c-facet.c-accordion,
+.c-facet.c-collapse-item {
+  .c-accordion__title,
+  .c-collapse__title {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: rem(12);
     }
   }
 }

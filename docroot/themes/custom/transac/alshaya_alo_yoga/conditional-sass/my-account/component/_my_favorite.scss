@@ -55,4 +55,14 @@
       }
     }
   }
+
+  .c-products-list {
+    &.view-algolia-plp,
+    &.view-search {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0;
+        padding-#{$right}: 0;
+      }
+    }
+  }
 }
