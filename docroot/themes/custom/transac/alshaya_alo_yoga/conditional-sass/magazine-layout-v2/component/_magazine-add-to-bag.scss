@@ -13,18 +13,28 @@
             li {
               padding: rem(6);
               margin: 0;
-              border-radius: 50%;
+              position: relative;
             }
 
             .active {
-              outline: rem(1) solid $pdp_secondary_text;
+              &::before {
+                position: absolute;
+                content: "";
+                width: 100%;
+                height: 100%;
+                top: 0;
+                #{$left}: 0;
+                display: inline-block;
+                border-radius: 50%;
+                border: rem(1) solid $pdp_secondary_text;
+              }
             }
 
             a {
               width: rem(35);
               height: rem(35);
               border-radius: 50%;
-              border: none;
+              border: rem(1) solid $swatch-border;
             }
 
             .group-swatch-option {
@@ -57,7 +67,8 @@
           .magv2-button {
             &::before {
               content: "";
-              background: url(#{$ay_theme_img_directory_path}/icons/basket-white.svg?v1) center/contain no-repeat;
+              background: url(#{$ay_theme_img_directory_path}/icons/basket-white.svg?v1)
+                center/contain no-repeat;
               height: rem(20);
               width: rem(20);
               display: inline-block;

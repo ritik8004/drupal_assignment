@@ -7,6 +7,10 @@
 %}
 {% set attributes = attributes.addClass(classes) %}
 
+{% if aura_enabled is defined and aura_enabled %}
+  {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
+{% endif %}
+
 <div id="pdp-layout" data-sku="#rcs.product._self|sku#" data-sku-type="#rcs.product._self|sku-type#" {{ attributes }} {{ gtm_attributes }}></div>
 {% if bazaar_voice_strings %}
   {{ bazaar_voice_strings }}
