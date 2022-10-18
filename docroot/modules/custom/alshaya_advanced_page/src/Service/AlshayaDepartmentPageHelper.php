@@ -89,16 +89,4 @@ class AlshayaDepartmentPageHelper {
     return $result;
   }
 
-  /**
-   * Check if current page is a department page.
-   *
-   * Do nothing here. Implementation will be done in the overriding methods.
-   *
-   * @return int|bool
-   *   Return nid if department page else FALSE.
-   */
-  public function isDepartmentPage() {
-    return FALSE;
-  }
-
 }

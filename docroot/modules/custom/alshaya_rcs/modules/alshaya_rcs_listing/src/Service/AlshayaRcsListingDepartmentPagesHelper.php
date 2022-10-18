@@ -145,14 +145,4 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
     return FALSE;
   }
 
-  /**
-   * Check if current page is a department page.
-   *
-   * @return int|bool
-   *   Return nid if department page else FALSE.
-   */
-  public function isDepartmentPage() {
-    return $this->getDepartmentPageNode();
-  }
-
 }
