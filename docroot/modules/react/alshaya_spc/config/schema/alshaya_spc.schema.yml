@@ -17,6 +17,16 @@ alshaya_spc.settings:
     show_notification_drawer:
       type: boolean
       label: 'Enable drawer panel to show cart notification'
+    redirect_to_cart_threshold:
+      type: mapping
+      label: 'Redirect to cart threshold.'
+      mapping:
+        mobile:
+          type: integer
+          label: 'Mobile configuration'
+        desktop:
+          type: integer
+          label: 'Desktop configuration'
 
 alshaya_spc.click_n_collect:
   type: config_object
