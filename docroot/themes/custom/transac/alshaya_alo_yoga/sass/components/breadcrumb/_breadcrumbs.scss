@@ -10,5 +10,9 @@
       padding-#{$right}: rem(8);
       padding-#{$left}: rem(8);
     }
+
+    &:last-of-type {
+      font-family: $ay-nova-semibold;
+    }
   }
 }

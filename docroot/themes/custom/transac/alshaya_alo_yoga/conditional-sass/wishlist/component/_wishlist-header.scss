@@ -34,6 +34,25 @@ body.wishlist-enabled {
       }
     }
   }
+
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .wishlist-minicart-sticky-wrapper {
+        .wishlist-header {
+          &.header-wrapper,
+          &.sticky-wrapper {
+            @include breakpoint($desktop) {
+              #{$right}: rem(24);
+
+              html[lang=ar] & {
+                left: rem(40);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .wishlist-enabled {

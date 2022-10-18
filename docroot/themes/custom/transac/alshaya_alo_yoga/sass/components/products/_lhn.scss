@@ -9,6 +9,13 @@
       a,
       span {
         text-transform: unset;
+
+        &.lhn-3,
+        &.lhn-4 {
+          &.active {
+            font-family: $ay-nova-semibold;
+          }
+        }
       }
     }
   }

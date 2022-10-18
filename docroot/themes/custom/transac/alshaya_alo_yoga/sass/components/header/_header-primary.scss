@@ -486,3 +486,27 @@ header {
   }
 }
 
+.filter-fixed-top {
+  #static-minicart-section {
+    .static-minicart-wrapper {
+      .cart-link {
+        @include breakpoint($desktop) {
+          top: rem(-4);
+          #{$left}: rem(16);
+
+          html[lang=ar] & {
+            right: rem(-3);
+          }
+        }
+
+        .quantity {
+          @include breakpoint($desktop) {
+            html[lang=ar] & {
+              right: rem(5);
+            }
+          }
+        }
+      }
+    }
+  }
+}

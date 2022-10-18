@@ -28,7 +28,9 @@
       padding: 0;
       position: absolute;
       background-color: transparent;
-      width: 100%;
+      width: rem(50);
+      top: rem(190);
+      #{$right}: rem(10);
 
       &::before {
         content: '';
@@ -36,8 +38,6 @@
         width: rem(45);
         height: rem(45);
         position: absolute;
-        bottom: rem(72);
-        #{$right}: rem(10);
         border-radius: 50%;
         background-color: rgba(255, 255, 255, 0.5);
         background-size: contain;
