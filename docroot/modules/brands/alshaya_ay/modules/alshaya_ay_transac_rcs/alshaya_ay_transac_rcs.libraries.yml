@@ -10,6 +10,5 @@ swatch_group:
   js:
     js/alshaya_ay_transac_rcs_swatch_group.js: {}
   dependencies:
-    - core/jquery
     - rcs_placeholders/helpers
     - alshaya_acm_product/product_utility

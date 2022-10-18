@@ -15,18 +15,11 @@ function _alshaya_ay_translations() {
         'en' => 'Alo Yoga',
         'ar' => 'متجر Alo',
       ],
-      'get email offers and the latest news from @site_name' => [
-        'en' => 'Enjoy 10% off your first order',
-        'ar' => 'استمتع بخصم 10٪ على طلبك الأول',
-      ],
       'read more' => [
         'ar' => 'اقرأ المزيد',
       ],
       'read less' => [
         'ar' => 'اقرأ  أقل',
-      ],
-      'size guide' => [
-        'ar' => 'دليل المقاسات',
       ],
     ],
   ];
