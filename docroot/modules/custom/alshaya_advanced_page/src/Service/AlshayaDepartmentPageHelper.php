@@ -81,7 +81,7 @@ class AlshayaDepartmentPageHelper {
     if ($node) {
       // Check if the current node type is department_page. For revision related
       // pages $node will have nid.
-      if ($node instanceof Node && $node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+      if ($node instanceof Node && $node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString()) {
         $result = $node;
       }
     }
