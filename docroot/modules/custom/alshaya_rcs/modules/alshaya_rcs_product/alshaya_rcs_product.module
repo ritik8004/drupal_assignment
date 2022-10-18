@@ -126,6 +126,8 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
       'data-drupal-form-fields',
       'data-main-sku',
       'data-rcs-sku',
+      'st_title',
+      'st_url',
     ],
   );
 
@@ -326,6 +328,18 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   // Attaching library for react component to show PDP express delivery labels.
   $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_rcs_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
+  if (!empty($build['sharethis'])) {
+    $build['sharethis']['#content']['m_path'] = '#rcs.product._self|absolute_url#';
+    foreach ($build["sharethis"]["#content"]["st_spans"] as &$span) {
+      $span["#attributes"]["st_url"] = '#rcs.product._self|absolute_url#';
+    }
+  }
 }
 
 /**
