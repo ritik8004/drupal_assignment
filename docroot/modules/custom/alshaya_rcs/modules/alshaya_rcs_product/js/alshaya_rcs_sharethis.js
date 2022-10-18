@@ -28,12 +28,19 @@
       Drupal.loadShareThis(false);
       // Execute the code to start sharethis. Wait for a second so that the
       // sharethis JS is loaded.
-      setTimeout(function executeSharethisJs() {
+      var shareThisExecution = setInterval(function executeSharethisJs() {
         if (typeof stLight !== 'undefined') {
           stLight.options(drupalSettings.sharethis);
         }
+        else {
+          // Wait until sharethis js is loaded.
+          return;
+        }
         stButtons.locateElements();
+        clearInterval(shareThisExecution);
       }, 1000);
+
+      shareThisExecution();
     }
   };
 })(jQuery, drupalSettings);
