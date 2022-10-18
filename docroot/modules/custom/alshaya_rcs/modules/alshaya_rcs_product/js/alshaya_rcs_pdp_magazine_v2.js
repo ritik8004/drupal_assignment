@@ -149,7 +149,7 @@
    * @returns {Object}
    *   Product promotion labels.
    */
-  window.commerceBackend.getPdpPromotionLabels = async function getPdpPromotionLabels(skuMainCode) {
+  window.commerceBackend.getPdpPromotionLabels = function getPdpPromotionLabels(skuMainCode) {
     const staticStorageKey = `pdpPromotion_${skuMainCode}`;
 
     let promotionData = Drupal.hasValue(staticDataStore.pdpPromotion[staticStorageKey])
@@ -160,34 +160,34 @@
       return promotionData;
     }
 
-    const response = await globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {
+    return globalThis.rcsPhCommerceBackend.getData('single_product_by_sku', {
       sku: skuMainCode,
-    });
-
-    if (Drupal.hasValue(response.data)) {
-      const promotionVal = [];
-      if (Drupal.hasValue(response.data.products.items[0].promotions)) {
-        const promotionData = response.data.products.items[0].promotions;
-        promotionData.forEach((promotion, index) => {
-          promotionVal[index] = {
-            promo_web_url: promotion.url,
-            text: promotion.label,
-            context: promotion.context,
-            type: promotion.type,
-          };
-        });
+    }).then(function(response) {
+      if (Drupal.hasValue(response.data)) {
+        const promotionVal = [];
+        if (Drupal.hasValue(response.data.products.items[0].promotions)) {
+          const promotionData = response.data.products.items[0].promotions;
+          promotionData.forEach((promotion, index) => {
+            promotionVal[index] = {
+              promo_web_url: promotion.url,
+              text: promotion.label,
+              context: promotion.context,
+              type: promotion.type,
+            };
+          });
+        }
+        promotionData = promotionVal;
+        staticDataStore.pdpPromotion[staticStorageKey] = promotionData;
+  
+        return promotionData;
       }
-      promotionData = promotionVal;
-      staticDataStore.pdpPromotion[staticStorageKey] = promotionData;
+      // If graphQL API is returning Error.
+      Drupal.alshayaLogger('error', 'Error while calling the graphQL to fetch product promotion info for sku: @sku', {
+        '@sku': skuMainCode,
+      });
 
-      return promotionData;
-    }
-    // If graphQL API is returning Error.
-    Drupal.alshayaLogger('error', 'Error while calling the graphQL to fetch product promotion info for sku: @sku', {
-      '@sku': skuMainCode,
+      return null;
     });
-
-    return null;
   }
 
 })(Drupal, drupalSettings, RcsEventManager);

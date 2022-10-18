@@ -24,7 +24,7 @@ class PdpPromotionLabel extends React.Component {
     }
   }
 
-  async getPromotionInfo(prevMainSku) {
+  getPromotionInfo(prevMainSku) {
     const { skuMainCode } = this.props;
     let promotionsData = {};
     // Get product promotions from V2 if V3 is not enabled.
@@ -44,17 +44,31 @@ class PdpPromotionLabel extends React.Component {
         });
       }
     } else {
-      // Get product promotions from graphQL if V3 is enabled.
+      // Get default promotions and set in state coming
+      // from graphQL if V3 is enabled.
       const { promotions } = this.props;
-      let promotion = promotions;
-      if (hasValue(prevMainSku) && prevMainSku !== skuMainCode) {
-        promotion = await window.commerceBackend.getPdpPromotionLabels(skuMainCode);
-      }
-      promotionsData[skuMainCode] = promotion;
-
+      promotionsData[skuMainCode] = promotions;
       this.setState({
         promotionsRawData: promotionsData,
       });
+
+      if (hasValue(prevMainSku) && prevMainSku !== skuMainCode) {
+        // Check promotion data for static cache and set state.
+        const promotionData = window.commerceBackend.getPdpPromotionLabels(skuMainCode);
+        if (hasValue(promotionData) && Array.isArray(promotionData)) {
+          promotionsData[skuMainCode] = promotionData;
+          this.setState({
+            promotionsRawData: promotionsData,
+          });
+        } else { // Check promotion data from api and set state.
+          promotionData.then((promotion) => {
+            promotionsData[skuMainCode] = promotion;
+            this.setState({
+              promotionsRawData: promotionsData,
+            });
+          });
+        }
+      }
     }
   }
 
