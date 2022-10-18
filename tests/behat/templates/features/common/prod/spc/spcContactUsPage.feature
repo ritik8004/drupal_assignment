@@ -37,7 +37,7 @@ Feature: Verify the Contact Us page on the site for Guest User
     And I fill in "message" with "Client feedback"
     Then I click on "#edit-submit" element
     Then I should see an "div.form-item--error-message" element
-    And I fill in "mobile_number[mobile]" with "55667788"
+    And I fill in "mobile_number[mobile]" with "{mobile}"
     And I wait for the page to load
     Then I click on "#edit-submit" element
     Then I should see a ".webform-confirmation__message" element on page

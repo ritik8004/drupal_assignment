@@ -37,7 +37,6 @@ Feature: SPC Checkout Home Delivery using Installments with PostPay method for G
     And I wait for AJAX to finish
     Then the element "div.postpay-widget" should exist
     Then the element "div.postpay-payment-summary" should exist
-    Then the element "div.postpay-instalment-notice" should exist
     And I click on the checkout button
     Then I should see an iframe window
     And I wait for AJAX to finish
@@ -78,7 +77,6 @@ Feature: SPC Checkout Home Delivery using Installments with PostPay method for G
     And I wait for AJAX to finish
     Then the element "div.postpay-widget" should exist
     Then the element "div.postpay-payment-summary" should exist
-    Then the element "div.postpay-instalment-notice" should exist
     And I click on the checkout button
     Then I should see an iframe window
     And I wait for AJAX to finish
