@@ -104,8 +104,20 @@
 .c-user-password,
 .c-user-register {
   h1 {
-    @include breakpoint($desktop) {
-      top: rem(-88);
+    @include pageTitle;
+  }
+}
+
+.c-user-password {
+  h1 {
+    @include breakpoint($tablet) {
+      margin-top: rem(16);
+      top: rem(-64);
+    }
+
+    @include breakpoint($only-mobile) {
+      top: rem(-52);
+      width: 100%;
     }
   }
 }

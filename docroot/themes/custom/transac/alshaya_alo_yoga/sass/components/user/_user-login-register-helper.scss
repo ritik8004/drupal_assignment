@@ -72,6 +72,18 @@
       }
     }
   }
+
+  &.user-page {
+    main {
+      .region__content {
+        .block-system-main-block {
+          @include breakpoint($only-mobile) {
+            padding-top: rem(24);
+          }
+        }
+      }
+    }
+  }
 }
 
 .c-user-password {
