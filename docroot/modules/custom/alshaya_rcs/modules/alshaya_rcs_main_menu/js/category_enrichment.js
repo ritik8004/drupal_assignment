@@ -5,7 +5,14 @@
  *   Enriched data.
  */
 globalThis.rcsGetEnrichedCategories = () => {
-  return globalThis.RcsPhStaticStorage.get('enriched_categories') || [];
+  var enrichedCategories = globalThis.RcsPhStaticStorage.get('enriched_categories');
+  if (Drupal.hasValue(enrichedCategories)) {
+    return enrichedCategories;
+  }
+  if (drupalSettings.rcs.navigationMenuCacheTime !== 0) {
+    return globalThis.RcsPhLocalStorage.get('enriched_categories') || [];
+  }
+  return [];
 }
 
 // Load the enrichment along with categories from Commerce Backend.
@@ -17,6 +24,13 @@ globalThis.rcsGetEnrichedCategories = () => {
         url: Drupal.url('rest/v2/categories'),
         success: function success (data) {
           globalThis.RcsPhStaticStorage.set('enriched_categories', data);
+          if (drupalSettings.rcs.navigationMenuCacheTime !== 0) {
+            globalThis.RcsPhLocalStorage.set(
+              'enriched_categories',
+              data,
+              drupalSettings.rcs.navigationMenuCacheTime
+            );
+          }
         }
       }));
     }
