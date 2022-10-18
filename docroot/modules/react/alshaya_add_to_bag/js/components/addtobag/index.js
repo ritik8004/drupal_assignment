@@ -17,7 +17,7 @@ const AddToBag = (props) => {
   } = props;
 
   // Only View More button will be visible for wishlist pages.
-  if (extraInfo.disableQuickViewDrawer) {
+  if (typeof extraInfo !== 'undefined' && extraInfo.disableQuickViewDrawer === true) {
     return (
       <NotBuyableButton url={url} />
     );
