@@ -33,6 +33,16 @@
         }
       }
     }
+
+    &.alias--cart {
+      .page-standard {
+        &.l-container {
+          @include breakpoint($upto-desktop) {
+            margin-top: 0 !important;
+          }
+        }
+      }
+    }
   }
 
   #mini-cart-wrapper {

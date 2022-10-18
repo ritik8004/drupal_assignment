@@ -35,6 +35,7 @@ $gray-nine: #e9e9e9;
 $white1: #fafafa;
 $gray-ec: #ececec;
 $white-alpha4: rgba(255, 255, 255, 0.4);
+$info-1: #bbdfff;
 
 //// Global elements.
 $primary_text: $black;
@@ -353,6 +354,8 @@ $spc_checkout_delivery_mob_bg: $white;
 $spc-cnc-toggle-bg: $white;
 $spc-cnc-toggle-bg-active: $black;
 $spc-cnc-store-search-icon: $mercury;
+$spc-checkout-success-message-background: $info-1;
+$spc-checkout-success-message-color: $black;
 
 // Wishlist
 $wishlist-header-notification-border: $black;

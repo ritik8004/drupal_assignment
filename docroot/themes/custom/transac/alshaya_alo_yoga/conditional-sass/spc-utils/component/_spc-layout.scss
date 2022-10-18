@@ -16,3 +16,19 @@
     }
   }
 }
+
+.alias--cart {
+  .spc-main {
+    .spc-sidebar {
+      @include breakpoint($upto-desktop) {
+        margin-top: 0;
+      }
+     }
+  }
+
+  .spc-pre-content-sticky {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+}
