@@ -114,5 +114,10 @@
       margin-top: rem(16);
       top: rem(-64);
     }
+
+    @include breakpoint($only-mobile) {
+      top: rem(-52);
+      width: 100%;
+    }
   }
 }
