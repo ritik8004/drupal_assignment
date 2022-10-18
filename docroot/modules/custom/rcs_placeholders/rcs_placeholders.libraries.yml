@@ -2,6 +2,7 @@ helpers:
   version: 1.x
   js:
     js/rcs_placeholders.static_storage.js: { }
+    js/rcs_placeholders.local_storage.js: { }
     js/rcs_placeholders-exports.js: { }
     js/eventManager.js: {}
   dependencies:
