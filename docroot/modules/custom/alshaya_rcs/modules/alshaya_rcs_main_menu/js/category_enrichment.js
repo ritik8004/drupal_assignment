@@ -10,7 +10,7 @@ globalThis.rcsGetEnrichedCategories = () => {
   if (Drupal.hasValue(enrichedCategories)) {
     return enrichedCategories;
   }
-  if (drupalSettings.rcs.navigation_menu_cache_time !== 0) {
+  if (drupalSettings.rcs.navigationMenuCacheTime !== 0) {
     return globalThis.RcsPhLocalStorage.get('enriched_categories') || [];
   }
   return [];
@@ -25,11 +25,11 @@ globalThis.rcsGetEnrichedCategories = () => {
         url: Drupal.url('rest/v2/categories'),
         success: function success (data) {
           globalThis.RcsPhStaticStorage.set('enriched_categories', data);
-          if (drupalSettings.rcs.navigation_menu_cache_time !== 0) {
+          if (drupalSettings.rcs.navigationMenuCacheTime !== 0) {
             globalThis.RcsPhLocalStorage.set(
               'enriched_categories',
               data,
-              drupalSettings.rcs.navigation_menu_cache_time
+              drupalSettings.rcs.navigationMenuCacheTime
             );
           }
         }

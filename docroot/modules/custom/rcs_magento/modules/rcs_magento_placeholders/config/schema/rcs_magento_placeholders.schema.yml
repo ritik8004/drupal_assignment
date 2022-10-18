@@ -1,0 +1,7 @@
+rcs_magento_placeholders.settings:
+  type: config_object
+  label: 'Alshaya RCS Magento Placeholder settings'
+  mapping:
+    navigation_menu_cache_time:
+      type: integer
+      label: 'Navigation menu expiration time in mins.'
