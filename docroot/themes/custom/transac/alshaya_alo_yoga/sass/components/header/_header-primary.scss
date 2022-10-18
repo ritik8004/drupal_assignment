@@ -4,7 +4,7 @@ header {
   }
 
   .region__header {
-    @include breakpoint($only-mobile) {
+    @include breakpoint($upto-desktop) {
       display: flex;
       align-items: center;
       justify-content: flex-end;
@@ -176,8 +176,10 @@ header {
       .quantity {
         font-size: rem(10);
         #{$left}: rem(-1);
-        background: transparent;
+        background: $cart_filled_background;
+        color: $cart_filled_color;
         padding-top: 0;
+        border-radius: 0;
 
         @include breakpoint($desktop) {
           #{$left}: rem(-1);
@@ -191,8 +193,8 @@ header {
         }
 
         @include breakpoint($only-mobile) {
-          top: rem(9);
-          #{$left}: rem(3);
+          top: initial;
+          #{$left}: initial;
 
           html[lang=ar] & {
             right: rem(9);
@@ -428,8 +430,14 @@ header {
 }
 
 .super-category-enabled {
+  .menu--mobile-navigation {
+    @include breakpoint($upto-desktop) {
+      background-color: transparent;
+    }
+  }
+
   .region__header {
-    @include breakpoint($only-mobile) {
+    @include breakpoint($upto-desktop) {
       position: relative;
       margin-top: rem(36);
     }
@@ -448,13 +456,13 @@ header {
 
 header {
   .region__header {
-    @include breakpoint($only-mobile) {
+    @include breakpoint($upto-desktop) {
       padding: rem(11) rem(8);
     }
   }
 
   .c-header__region {
-    @include breakpoint($only-mobile) {
+    @include breakpoint($upto-desktop) {
       padding-right: 0;
       padding-left: 0;
       background-color: $menu_bg;
@@ -462,7 +470,7 @@ header {
   }
 
   .block-system-branding-block {
-    @include breakpoint($only-mobile) {
+    @include breakpoint($upto-desktop) {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
@@ -472,7 +480,7 @@ header {
 
 .site-brand-home {
   a {
-    @include breakpoint($only-mobile) {
+    @include breakpoint($upto-desktop) {
       position: relative;
       left: initial;
       right: initial;
