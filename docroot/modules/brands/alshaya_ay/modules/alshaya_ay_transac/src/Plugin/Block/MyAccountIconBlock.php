@@ -87,7 +87,7 @@ class MyAccountIconBlock extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['user.roles:authenticated']);
+    return Cache::mergeContexts(parent::getCacheContexts() ?? [], ['user.roles:authenticated']);
   }
 
 }
