@@ -462,6 +462,40 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
     ],
+    'v3' => [
+      'Switch to H&M member' => [
+        'ar' => 'الانتقال إلى عضوية اتش آند ام',
+        'context' => 'hello_member',
+      ],
+      'This purchase will accumulate points earned towards your H&M Membership' => [
+        'ar' => 'سيتم إضافة النقاط المكتسبة من عملية الشراء إلى عضويتك لدى اتش آند ام',
+        'context' => 'hello_member',
+      ],
+      'Earn H&M points' => [
+        'ar' => 'اكسب نقاط اتش آند ام',
+        'context' => 'hello_member',
+      ],
+      'Continue with Aura Points' => [
+        'ar' => 'المتابعة مع نقاط أورا',
+        'context' => 'hello_member',
+      ],
+      'Switch to Aura points' => [
+        'ar' => 'الانتقال إلى نقاط أورا',
+        'context' => 'hello_member',
+      ],
+      'This purchase will accumulate points earned towards your Aura Membership' => [
+        'ar' => 'سيتم إضافة النقاط المكتسبة من عملية الشراء إلى عضويتك في أورا',
+        'context' => 'hello_member',
+      ],
+      'Earn Aura points' => [
+        'ar' => 'اكسب نقاط أورا',
+        'context' => 'hello_member',
+      ],
+      'Continue with H&M Points' => [
+        'ar' => 'المتابعة مع نقاط اتش آند ام',
+        'context' => 'hello_member',
+      ],
+    ],
   ];
 }
 

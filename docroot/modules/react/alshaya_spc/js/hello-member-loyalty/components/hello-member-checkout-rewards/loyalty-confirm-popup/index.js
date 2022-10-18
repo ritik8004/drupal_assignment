@@ -1,4 +1,3 @@
-import parse from 'html-react-parser';
 import React from 'react';
 import Popup from 'reactjs-popup';
 import getStringMessage from '../../../../utilities/strings';
@@ -42,7 +41,19 @@ export default class LoyaltyConfirmPopup extends React.Component {
 
   render() {
     const { open } = this.state;
-    const { currentOption, selectedOption } = this.props;
+    const { selectedOption } = this.props;
+    let popupTitle = getStringMessage('hm_popup_title');
+    let popupDescription = getStringMessage('hm_popup_description');
+    let earnButton = getStringMessage('hm_earn_points');
+    let continueButton = getStringMessage('aura_continue_points');
+
+    if (this.getLoyaltyOptionText(selectedOption) === 'Aura') {
+      popupTitle = getStringMessage('aura_popup_title');
+      popupDescription = getStringMessage('aura_popup_description');
+      earnButton = getStringMessage('aura_earn_points');
+      continueButton = getStringMessage('hm_continue_points');
+    }
+
     return (
       <div className="loyalty-popup-container">
         <Popup
@@ -53,32 +64,28 @@ export default class LoyaltyConfirmPopup extends React.Component {
         >
           <div className="loyalty-popup-block">
             <div className="loyalty-popup-title">
-              <span>{getStringMessage('confirm_loyalty')}</span>
+              <span>{popupTitle}</span>
               <a className="close-modal" onClick={() => this.closeModal()} />
             </div>
             <div className="loyalty-question">
-              {parse(getStringMessage('loyalty_modal_question',
-                {
-                  '@current_option': this.getLoyaltyOptionText(currentOption),
-                  '@selected_option': this.getLoyaltyOptionText(selectedOption),
-                }))}
+              {popupDescription}
             </div>
             <div className="loyalty-options">
-              <button
-                className="loyalty-cancel"
-                id="loyalty-cancel"
-                type="button"
-                onClick={() => this.closeModal()}
-              >
-                {Drupal.t('Cancel')}
-              </button>
               <button
                 className="loyalty-yes"
                 id="loyalty-yes"
                 type="button"
                 onClick={() => this.confirmLoyalty(selectedOption)}
               >
-                {Drupal.t('Yes')}
+                {earnButton}
+              </button>
+              <button
+                className="loyalty-cancel"
+                id="loyalty-cancel"
+                type="button"
+                onClick={() => this.closeModal()}
+              >
+                {continueButton}
               </button>
             </div>
           </div>
