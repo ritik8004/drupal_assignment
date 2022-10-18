@@ -17,6 +17,13 @@ class PdpCart extends React.Component {
     Drupal.attachBehaviors(document.querySelector('.pdp-cart-form'), drupalSettings);
   }
 
+  componentDidUpdate() {
+    const { childRef } = this.props;
+    if (childRef) {
+      childRef(this.wrapper);
+    }
+  }
+
   render() {
     const {
       configurableCombinations,
