@@ -24,7 +24,7 @@ class PdpPromotionLabel extends React.Component {
     }
   }
 
-  getPromotionInfo(prevMainSku) {
+  getPromotionInfo = (prevMainSku) => {
     const { skuMainCode } = this.props;
     let promotionsData = {};
     // Get product promotions from V2 if V3 is not enabled.
