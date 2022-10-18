@@ -9,6 +9,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\node\NodeInterface;
 use Drupal\path_alias\AliasManager;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 
@@ -133,12 +134,10 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
       $nid = $department_pages[$filtered_path];
       /** @var \Drupal\node\Entity\Node $node */
       $node = $this->entityTypeManager->getStorage('node')->load($nid);
-      if (is_object($node)) {
-        if ($node->isPublished()) {
-          $data[$filtered_path] = $nid;
-          $this->cache->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
-          return $nid;
-        }
+      if ($node instanceof NodeInterface && $node->isPublished()) {
+        $data[$filtered_path] = $nid;
+        $this->cache->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
+        return $nid;
       }
     }
 
