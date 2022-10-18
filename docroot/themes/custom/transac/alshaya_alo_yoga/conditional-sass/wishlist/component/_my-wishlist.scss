@@ -29,6 +29,17 @@
       margin-#{$left}: 0;
     }
   }
+
+  .empty-message {
+    .actions a {
+      border-radius: 0;
+      font-family: $ay-heavy;
+      padding: rem(14);
+      text-transform: uppercase;
+      line-height: normal;
+      height: 48px;
+    }
+  }
 }
 
 .wishlist-share-popup-container {
