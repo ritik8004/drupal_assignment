@@ -480,7 +480,9 @@ export default class Cart extends React.Component {
           {hasExclusiveCoupon !== true
             && (<DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />)}
           {postPayData.postpayEligibilityMessage}
-          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+          {/* Displaying tabby widget only if tabby is enabled and
+          tamara is disabled */}
+          <ConditionalView condition={Tabby.isTabbyEnabled() && !Tamara.isTamaraEnabled()}>
             <TabbyWidget
               pageType="cart"
               classNames="spc-tabby-info"
@@ -498,7 +500,9 @@ export default class Cart extends React.Component {
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />
           {postPayData.postpay}
-          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+          {/* Displaying tabby widget only if tabby is enabled and
+          tamara is disabled */}
+          <ConditionalView condition={Tabby.isTabbyEnabled() && !Tamara.isTamaraEnabled()}>
             <TabbyWidget
               pageType="cart"
               classNames="spc-tabby-mobile-preview"
