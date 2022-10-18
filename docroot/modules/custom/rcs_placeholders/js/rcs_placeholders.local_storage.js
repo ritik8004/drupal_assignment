@@ -26,17 +26,15 @@ globalThis.RcsPhLocalStorage = {};
   // Prepare the expiry time for the storage data. Storage expiry
   // time must be provided in seconds.
   // If it's zero, we don't store data in the local storage.
-  if (expireAfterTime === 0) {
+  if (Drupal.hasValue(expireAfterTime) && expireAfterTime === 0) {
     return false;
   }
 
   // Prepare data to store.
   const dataToStore = { data: storageData };
 
-  // If this is null, we don't set any expiry to the data storage in the local storage.
-  if (expireAfterTime) {
-    dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime) * 60 * 1000);
-  }
+  // Set expiry time.
+  dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime) * 1000);
 
   try {
     // Store data in the local storage with the expiry time.
@@ -52,12 +50,8 @@ globalThis.RcsPhLocalStorage = {};
           _lsTotal += ((localStorage[value].length + value.length)* 2);
         });
         totalSize = (_lsTotal / 1024).toFixed(2) + " KB";
-        // Logging error message and size used in local storage.
-        Drupal.alshayaLogger('error', e.message + ' Total size in localStorage: ' + totalSize, localKeys);
         sessionStorage.setItem('_quotaExceededErrorLogged', '1');
       }
-    } else {
-      Drupal.alshayaLogger('error', e.message);
     }
   }
 
@@ -100,11 +94,6 @@ globalThis.RcsPhLocalStorage = {};
     if (typeof storageItem === 'string') {
       return storageItem;
     }
-
-    // Unknown reason.
-    Drupal.alshayaLogger('warning', 'globalThis.RcsPhLocalStorage.get failed to fetch the data for @key.', {
-      '@key': storageKey,
-    });
 
     return null;
   }

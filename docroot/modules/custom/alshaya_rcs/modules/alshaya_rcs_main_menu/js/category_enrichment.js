@@ -5,7 +5,6 @@
  *   Enriched data.
  */
 globalThis.rcsGetEnrichedCategories = () => {
-
   var enrichedCategories = globalThis.RcsPhStaticStorage.get('enriched_categories');
   if (Drupal.hasValue(enrichedCategories)) {
     return enrichedCategories;
