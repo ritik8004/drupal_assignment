@@ -1,5 +1,6 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import getStringMessage from '../../../../utilities/strings';
 
 export default class LoyaltyConfirmPopup extends React.Component {
   constructor(props) {
@@ -41,16 +42,18 @@ export default class LoyaltyConfirmPopup extends React.Component {
   render() {
     const { open } = this.state;
     const { selectedOption } = this.props;
-    let popupTitle = Drupal.t('Switch to H&M member', {}, { context: 'hello_member' });
-    let popupDescription = Drupal.t('This purchase will accumulate points earned towards your H&M Membership', {}, { context: 'hello_member' });
-    let earnButton = Drupal.t('Earn H&M points', {}, { context: 'hello_member' });
-    let continueButton = Drupal.t('Continue with Aura Points', {}, { context: 'hello_member' });
+    let popupTitle = getStringMessage('hm_popup_title');
+    let popupDescription = getStringMessage('hm_popup_description');
+    let earnButton = getStringMessage('hm_earn_points');
+    let continueButton = getStringMessage('aura_continue_points');
+
     if (this.getLoyaltyOptionText(selectedOption) === 'Aura') {
-      popupTitle = Drupal.t('Switch to Aura points', {}, { context: 'hello_member' });
-      popupDescription = Drupal.t('This purchase will accumulate points earned towards your Aura Membership', {}, { context: 'hello_member' });
-      earnButton = Drupal.t('Earn Aura points', {}, { context: 'hello_member' });
-      continueButton = Drupal.t('Continue with H&M Points', {}, { context: 'hello_member' });
+      popupTitle = getStringMessage('aura_popup_title');
+      popupDescription = getStringMessage('aura_popup_description');
+      earnButton = getStringMessage('aura_earn_points');
+      continueButton = getStringMessage('hm_continue_points');
     }
+
     return (
       <div className="loyalty-popup-container">
         <Popup

@@ -218,5 +218,37 @@ function _alshaya_hello_member_aura_static_strings() {
       'key' => 'hm_sign_in',
       'value' => t('Sign In', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'hm_popup_title',
+      'value' => t('Switch to H&M member', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_popup_title',
+      'value' => t('Switch to Aura points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_popup_description',
+      'value' => t('This purchase will accumulate points earned towards your H&M Membership', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_popup_description',
+      'value' => t('This purchase will accumulate points earned towards your Aura Membership', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_earn_points',
+      'value' => t('Earn H&M points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_earn_points',
+      'value' => t('Earn Aura points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_continue_points',
+      'value' => t('Continue with H&M Points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_continue_points',
+      'value' => t('Continue with Aura Points', [], ['context' => 'hello_member']),
+    ],
   ];
 }
