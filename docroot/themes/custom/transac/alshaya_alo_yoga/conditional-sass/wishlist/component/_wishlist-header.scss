@@ -5,11 +5,8 @@ body.wishlist-enabled {
     }
 
     .wishlist-icon {
-      height: rem(20);
-      width: rem(20);
       top: rem(1);
       position: relative;
-      background-size: rem(19);
       background-position: center;
     }
   }
@@ -99,7 +96,6 @@ body {
         .cart-link {
           width: rem(24);
           height: rem(24);
-          background-size: rem(19);
           background-position: center;
         }
       }
