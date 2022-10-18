@@ -35,6 +35,14 @@
       }
     }
   }
+
+  .block-alshaya-user {
+    &:not(.c-my-account-nav) {
+      .sign-out {
+        display: block;
+      }
+    }
+  }
 }
 
 .user-page {
