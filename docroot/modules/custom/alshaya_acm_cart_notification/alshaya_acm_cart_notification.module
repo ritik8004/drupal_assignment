@@ -144,3 +144,18 @@ function alshaya_acm_cart_notification_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['addToCartNotificationTime'] = \Drupal::config('alshaya_acm_cart_notification.settings')->get('notification_time');
   }
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_acm_cart_notification_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'alshaya_acm_cart_notification' && isset($libraries['cart_notification_js'])) {
+    // Get cart notification side drawer related setting.
+    $spcConfig = \Drupal::config('alshaya_spc.settings');
+    // If cart notification side drawer is enabled, then cart
+    // drawer library is added else mini cart notification will be added.
+    $libraries['cart_notification_js']['dependencies'][] = $spcConfig->get('show_notification_drawer')
+      ? 'alshaya_acm_cart_notification/cart_notification_drawer'
+      : 'alshaya_acm_cart_notification/cart_notification_mini_cart';
+  }
+}
