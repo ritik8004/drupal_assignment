@@ -189,7 +189,8 @@ const Teaser = ({
     renderPrice = <PriceRangeElement priceRange={attribute.alshaya_price_range} />;
   }
 
-  const title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
+  let title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
+  title = title.toString();
   const url = hasValue(updatedAttribute.url) ? updatedAttribute.url : attribute.url;
 
   return (
@@ -234,10 +235,15 @@ const Teaser = ({
               title={title}
               labels={labels}
               sku={sku}
-              greenLeaf={hit.attr_green_leaf ? hit.attr_green_leaf : null}
               initSlider={initSlider}
               setSlider={setSlider}
             />
+            {hasValue(hit.attr_green_leaf) && hit.attr_green_leaf
+              && (
+                <div className="labels-container bottom-right">
+                  <span className="map-green-leaf" />
+                </div>
+              )}
           </a>
           {/* Render the component if the page isn't wishlist listing page. */}
           <ConditionalView condition={!isWishlistPage(extraInfo)}>

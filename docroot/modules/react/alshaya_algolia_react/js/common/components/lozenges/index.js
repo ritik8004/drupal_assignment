@@ -1,12 +1,11 @@
 import React from 'react';
 import ImageElement
   from '../../../src/components/gallery/imageHelper/ImageElement';
-import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 // Supported label positions.
 const ALLOWED_POSITIONS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
 
-const Lozenges = ({ labels, sku, greenLeaf }) => {
+const Lozenges = ({ labels, sku }) => {
   if (typeof labels === 'undefined' || labels.length === 0) {
     return (null);
   }
@@ -36,24 +35,15 @@ const Lozenges = ({ labels, sku, greenLeaf }) => {
                 // Only render labels in supported positions.
                 if (ALLOWED_POSITIONS.includes(key)) {
                   return (
-                    <>
-                      <div
-                        className={`labels-container ${key}`}
-                        key={`${key}-label-container`}
-                      >
-                        <LabelItems
-                          bifercatedLabels={bifercatedLabels}
-                          directionKey={key}
-                          sku={sku}
-                        />
-                      </div>
-                      {hasValue(greenLeaf) && greenLeaf
-                        && (
-                          <div className="labels-container bottom-right">
-                            <span className="map-green-leaf" />
-                          </div>
-                        )}
-                    </>
+                    <div
+                      className={`labels-container ${key}`}
+                      key={`${key}-label-container`}
+                    >
+                      <LabelItems
+                        bifercatedLabels={bifercatedLabels}
+                        directionKey={key}
+                      />
+                    </div>
                   );
                 }
                 return null;
@@ -67,12 +57,12 @@ const Lozenges = ({ labels, sku, greenLeaf }) => {
   return null;
 };
 
-const LabelItems = ({ bifercatedLabels, directionKey, sku }) => (
+const LabelItems = ({ bifercatedLabels, directionKey }) => (
   <>
     {
-      bifercatedLabels[directionKey].map((labelItem) => (
+      bifercatedLabels[directionKey].map((labelItem, index) => (
         // Product SKU added as a unique key.
-        <div className="label" key={`label-${sku}`}>
+        <div className="label" key={`label-${index.toString()}`}>
           <ImageElement
             src={labelItem.image.url}
             alt={labelItem.image.alt}
