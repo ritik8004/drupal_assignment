@@ -44,7 +44,9 @@ export default class CartPromoBlock extends React.Component {
       if (isEgiftCardEnabled() && cartItemIsVirtual(items[key])) {
         return;
       }
-      Drupal.alshayaSpc.getProductData(key, this.productDataCallback, items[key].parentSKU);
+      Drupal.alshayaSpc.getProductData(key, this.productDataCallback, {
+        parentSKU: items[key].parentSKU,
+      });
     });
   }
 
