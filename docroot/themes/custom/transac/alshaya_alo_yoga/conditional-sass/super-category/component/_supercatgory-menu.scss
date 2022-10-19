@@ -129,4 +129,51 @@
       }
     }
   }
+
+  // Resetting core styles by setting initial to support flex for icons
+  &.frontpage,
+  &:not(.frontpage) {
+    &.wishlist-enabled {
+      #wishlist-header-wrapper {
+        @include breakpoint($only-mobile) {
+          top: initial;
+          position: relative;
+          right: initial;
+          left: initial;
+        }
+      }
+    }
+    // For AR different selector target on CORE
+    .branding__menu #block-alshayareactcartminicartblock {
+      @include breakpoint($upto-desktop) {
+        top: initial;
+        #{$right}: initial;
+        position: relative;
+      }
+    }
+
+    header.c-header {
+      // Resetting core styles by setting initial to support flex for icons
+      .block-alshaya-react-mini-cart {
+        @include breakpoint($upto-desktop) {
+          top: initial;
+          #{$right}: initial;
+        }
+
+        .cart-link {
+          @include breakpoint($upto-desktop) {
+            width: rem(24);
+            height: rem(24);
+            background-position: center;
+          }
+        }
+      }
+    }
+    // Using !important as on core !important is used
+    &:not(.no-sticky-algolia-search-bar) {
+      .block-alshaya-react-mini-cart {
+        position: relative !important;
+      }
+    }
+  }
 }

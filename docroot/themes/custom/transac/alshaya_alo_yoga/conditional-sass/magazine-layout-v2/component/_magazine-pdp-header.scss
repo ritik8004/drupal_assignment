@@ -29,5 +29,13 @@
         }
       }
     }
+
+    #sticky-header-btn {
+      .magv2-button {
+        font-family: $ay-heavy;
+        padding: rem(14);
+        border-radius: 0;
+      }
+    }
   }
 }

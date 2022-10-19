@@ -188,7 +188,7 @@ header {
 
         @include breakpoint($only-tablet) {
           html[lang=ar] & {
-            right: rem(10);
+            right: rem(5);
           }
         }
 
@@ -197,7 +197,7 @@ header {
           #{$left}: initial;
 
           html[lang=ar] & {
-            right: rem(9);
+            right: rem(5);
           }
         }
       }
@@ -454,6 +454,31 @@ header {
   }
 }
 
+.overlay-product-modal,
+.overlay-cart-drawer {
+  &.super-category-enabled {
+    .c-menu-primary {
+      .region__menu-primary {
+        .block-alshaya-super-category-menu {
+          @include breakpoint($upto-desktop) {
+            z-index: 11;
+          }
+        }
+      }
+    }
+  }
+}
+
+body.aura-enabled {
+  &.overlay-cart-drawer {
+    .header--wrapper {
+      @include breakpoint($desktop) {
+        z-index: 6;
+      }
+    }
+  }
+}
+
 header {
   .region__header {
     @include breakpoint($upto-desktop) {
@@ -472,8 +497,12 @@ header {
   .block-system-branding-block {
     @include breakpoint($upto-desktop) {
       position: absolute;
-      left: 50%;
+      #{$left}: 50%;
       transform: translateX(-50%);
+
+      html[lang="ar"] & {
+        transform: translateX(50%);
+      }
     }
   }
 }
