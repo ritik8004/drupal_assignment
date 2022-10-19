@@ -5,10 +5,13 @@
 
 (function alshayaRcsSharethis($, drupalSettings) {
   'use strict';
+
+  var shareThisLoaded = false;
+
   Drupal.behaviors.shareThis = {
     attach: function alshayaRcsShareThisBehavior(context) {
-      // Check if we are displaying sharethis in the page.
-      if ($('.sharethis-container').length === 0) {
+      // Check if we are displaying sharethis in the page and do not re-execute.
+      if (shareThisLoaded || $('.sharethis-container').length === 0) {
         return;
       }
       // Check if the PDP rendering is complete.
@@ -24,6 +27,8 @@
       if (skuBaseForm.length === 0) {
         return;
       }
+      // Now we can load sharethis.
+      shareThisLoaded = true;
       // Start loading sharethis button js.
       Drupal.loadShareThis(false);
       // Execute the code to start sharethis. Wait for a second so that the
@@ -39,8 +44,6 @@
         stButtons.locateElements();
         clearInterval(shareThisExecution);
       }, 1000);
-
-      shareThisExecution();
     }
   };
 })(jQuery, drupalSettings);
