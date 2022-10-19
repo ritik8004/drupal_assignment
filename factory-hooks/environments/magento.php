@@ -272,34 +272,34 @@ $magentos = [
   ],
   // New Balance.
   'nb_qa' => [
-    'url' => 'https://integration-5ojmyuq-yuoofriziz4tu.eu-3.magentosite.cloud',
+    'url' => 'https://new-test.store.alshaya.com',
     'algolia_env' => 'nb_qa',
     'magento_secrets' => [
-      'consumer_key' => 'rjwijgl0obi48vyw5adoaheq4y6vnps7',
-      'consumer_secret' => 'oe6gwidy4giuso8aq6c5ga2trmatlbyg',
-      'access_token' => '34mt253bnj9a9uwuvx64ivt197sl4yny',
-      'access_token_secret' => 'dz4ngbr3nbf6ofigtk0brkl15ctn6jkk',
+      'consumer_key' => 'l8csj64bgzq0qx9swo8ucfpqlvbrdqm2',
+      'consumer_secret' => 'ankpwqyu26mwo64s27hvp5n4vskk0u1f',
+      'access_token' => 'v89se7nqofezmbr93tikchhh76zj2hrm',
+      'access_token_secret' => 'pl3yz25ojn466dhpi5d37ew11sbxjqyl',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 14],
+      'store_id' => ['en' => 1, 'ar' => 39],
     ],
     'sa' => [
-      'store_id' => ['en' => 10, 'ar' => 11],
+      'store_id' => ['en' => 27, 'ar' => 30],
     ],
     'ae' => [
-      'store_id' => ['en' => 12, 'ar' => 13],
+      'store_id' => ['en' => 33, 'ar' => 36],
     ],
     'eg' => [
-      'store_id' => ['en' => 3, 'ar' => 2],
+      'store_id' => ['en' => 6, 'ar' => 3],
     ],
     'bh' => [
-      'store_id' => ['en' => 5, 'ar' => 4],
+      'store_id' => ['en' => 12, 'ar' => 9],
     ],
     'qa' => [
-      'store_id' => ['en' => 7, 'ar' => 6],
+      'store_id' => ['en' => 18, 'ar' => 15],
     ],
     'jo' => [
-      'store_id' => ['en' => 9, 'ar' => 8],
+      'store_id' => ['en' => 24, 'ar' => 21],
     ],
   ],
   // The body shop.

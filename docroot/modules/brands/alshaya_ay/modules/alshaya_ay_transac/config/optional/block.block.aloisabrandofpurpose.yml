@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_ay_transac
+  theme:
+    - alshaya_alo_yoga
+id: aloisabrandofpurpose
+theme: alshaya_alo_yoga
+region: content
+weight: 52
+provider: null
+plugin: block_content:440b823b-e16c-457a-bc03-4a096f8ae171
+settings:
+  id: block_content:440b823b-e16c-457a-bc03-4a096f8ae171
+  label: 'Alo is a Brand of Purpose'
+  provider: alshaya_ay_transac
+  label_display: '0'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      acq_product: acq_product
+      rcs_product: rcs_product
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

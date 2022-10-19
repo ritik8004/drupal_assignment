@@ -3,7 +3,9 @@
 namespace Drupal\alshaya_rcs_main_menu\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,6 +28,13 @@ class AlshayaRcsDpAppNavigation extends BlockBase implements ContainerFactoryPlu
   protected $configFactory;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructor for AlshayaRcsDpAppNavigation.
    *
    * @param array $configuration
@@ -36,13 +45,17 @@ class AlshayaRcsDpAppNavigation extends BlockBase implements ContainerFactoryPlu
    *   The plugin implementation definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler service.
    */
   public function __construct(array $configuration,
                                     $plugin_id,
                                     $plugin_definition,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -54,6 +67,7 @@ class AlshayaRcsDpAppNavigation extends BlockBase implements ContainerFactoryPlu
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
+      $container->get('module_handler'),
     );
   }
 
@@ -73,6 +87,12 @@ class AlshayaRcsDpAppNavigation extends BlockBase implements ContainerFactoryPlu
       ];
     }
 
+    $variables = [];
+    $variables['category_id'] = $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category');
+
+    // Allow other modules to modify the variables.
+    $this->moduleHandler->alter('alshaya_rcs_main_menu', $variables);
+
     return [
       '#theme' => 'alshaya_rcs_dp_app_navigation',
       '#data' => $data,
@@ -81,11 +101,18 @@ class AlshayaRcsDpAppNavigation extends BlockBase implements ContainerFactoryPlu
           '#attributes' => [
             'id' => 'rcs-ph-app_navigation',
             'data-param-entity-to-get' => 'navigation_menu',
-            'data-param-category_id' => $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category'),
+            'data-param-category_id' => $variables['category_id'],
           ],
         ],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['super_category']);
   }
 
 }

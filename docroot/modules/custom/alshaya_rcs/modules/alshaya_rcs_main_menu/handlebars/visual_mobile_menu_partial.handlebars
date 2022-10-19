@@ -1,0 +1,40 @@
+<div id="visual-mobile-menu-level1" class="no--desktop">
+  <ul class="visual-mobile-menu__list visual-mobile-menu--one__list">
+  {{#each menu_items as |menu_item|}}
+    {{ addStyle 'level1_style' '' }}
+    {{ addClass 'level1_class' '' }}
+    {{#if background_color }}
+      {{ addStyle 'level1_style' 'background-color' background_color }}
+      {{ addClass 'level1_class' 'has-bg-color' }}
+    {{/if}}
+    {{#if overridden_path}}
+      {{ addClass 'level1_class' 'overridden-link' }}
+    {{/if}}
+    {{#if font_color }}
+      {{ addStyle 'level1_style' 'color' font_color }}
+    {{/if}}
+    {{#if menu_item.icon}}
+      {{ addClass 'level1_class' 'with-icon' }}
+    {{/if}}
+    <li class="visual-mobile-menu__list-item visual-mobile-menu--one__list-item {{ class }} {{ @root.level1_class }} {{ promopanel_class }} {{ menu_item.hide_in_desktop }} {{ menu_item.hide_in_mobile_tablet }}">
+      <div class="menu__link-wrapper menu-two__link-wrapper">
+      {{#if menu_item.icon }}
+          <{{@menu_item.tag}} class="visual-mobile-menu__link visual-mobile-menu--one__link {{ class }} {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" {{{ menu_item.tag_attr }}}>
+          <span class="icon"><img src="{{ menu_item.icon.icon_url }}" alt="{{ menu_item.name }}"/></span>
+        {{ menu_item.name }}
+        </{{@menu_item.tag}}>
+      {{else}}
+          <{{@menu_item.tag}} class="visual-mobile-menu__link visual-mobile-menu--one__link {{ class }} {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="#{{ menu_item.id }}">{{ menu_item.name }}</{{@menu_item.tag}}>
+      {{/if}}
+      </div>
+    </li>
+  {{/each}}
+  </ul>
+  <div class="visual-mobile-level-two no--desktop">
+    {{#each menu_items as |menu_item|}}
+      <div id="{{menu_item.id}}" class="tabContent">
+        {{> visual_mobile_menu_level2_partial menu_columns=menu_item.children}}
+      </div>
+    {{/each}}
+  </div>
+</div>

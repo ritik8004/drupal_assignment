@@ -74,7 +74,7 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
     }
   };
 
-  window.addEventListener('load', () => {
+  jQuery(document).ready(() => {
     const galleryWrapper = gallerycontainer;
 
     if (galleryWrapper.offsetHeight > siderbarwrapper.offsetHeight) {

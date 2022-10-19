@@ -178,7 +178,7 @@
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = productData.variants[variant];
-          var parentSku = variantInfo.parent_sku;
+          var parentSku = Drupal.hasValue(drupalSettings.catalogRestructuringStatus) ? variantInfo.parent_sku : sku;
           var title = variantInfo.cart_title;
 
           // Trigger an event on variant select.

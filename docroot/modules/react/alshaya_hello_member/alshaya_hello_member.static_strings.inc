@@ -167,10 +167,6 @@ function _alshaya_hello_member_aura_static_strings() {
       'value' => t('The total points you will earn on this purchase will be displayed on the Order Confirmation page after applying all discounts and taxes.', [], ['context' => 'hello_member']),
     ],
     [
-      'key' => 'confirm_loyalty',
-      'value' => t('Confirm the Loyalty', [], ['context' => 'hello_member']),
-    ],
-    [
       'key' => 'loyalty_modal_question',
       'value' => t('Do you want to remove all the benefits of @current_option and choose @selected_option benefits?', [], ['context' => 'hello_member']),
     ],
@@ -221,6 +217,38 @@ function _alshaya_hello_member_aura_static_strings() {
     [
       'key' => 'hm_sign_in',
       'value' => t('Sign In', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_popup_title',
+      'value' => t('Switch to H&M member', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_popup_title',
+      'value' => t('Switch to Aura points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_popup_description',
+      'value' => t('This purchase will accumulate points earned towards your H&M Membership', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_popup_description',
+      'value' => t('This purchase will accumulate points earned towards your Aura Membership', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_earn_points',
+      'value' => t('Earn H&M points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_earn_points',
+      'value' => t('Earn Aura points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'hm_continue_points',
+      'value' => t('Continue with H&M Points', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'aura_continue_points',
+      'value' => t('Continue with Aura Points', [], ['context' => 'hello_member']),
     ],
   ];
 }

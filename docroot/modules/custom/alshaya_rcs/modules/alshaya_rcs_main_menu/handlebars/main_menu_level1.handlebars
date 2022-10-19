@@ -22,7 +22,7 @@
   <div class="mobile--close no--desktop">
     <span></span>
   </div>
-  <ul class="menu__list menu--one__list">
+  <ul class="menu__list menu--one__list {{#if (eq mobile_menu_layout "visual_mobile_menu")}}no--mobile{{/if}}">
     <div class="menu-backdrop"></div>
     {{#each menu_items as |menu_item|}}
       {{ addStyle 'level1_style' '' }}
@@ -62,4 +62,7 @@
       </div>
     {{/if}}
   </ul>
+  {{#if (eq mobile_menu_layout "visual_mobile_menu")}}
+    {{> visual_mobile_menu_partial menu_items=menu_items}}
+  {{/if}}
 </div>

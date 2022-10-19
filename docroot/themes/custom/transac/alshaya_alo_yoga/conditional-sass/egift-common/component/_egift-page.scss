@@ -1,0 +1,30 @@
+.page-standard {
+  &.c-egift-page {
+    .c-page-title {
+      font-size: rem(32);
+      font-family: $ay-heavy;
+
+      @include breakpoint($only-mobile) {
+        font-size: rem(26);
+      }
+    }
+  }
+}
+
+#egift-card-purchase-wrapper {
+  .step-title {
+    font-size: rem(20);
+    font-family: $ay-heavy;
+
+    @include breakpoint($only-mobile) {
+      font-size: rem(16);
+    }
+  }
+}
+
+.egifts-form-wrapper {
+  .subtitle-text {
+    font-size: rem(16);
+    font-family: $ay-heavy;
+  }
+}

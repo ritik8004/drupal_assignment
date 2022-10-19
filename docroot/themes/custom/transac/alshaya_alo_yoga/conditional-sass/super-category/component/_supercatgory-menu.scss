@@ -1,0 +1,179 @@
+.super-category-enabled {
+  .c-menu-secondary {
+    .region__menu-secondary {
+      @include breakpoint($desktop) {
+        height: rem(36);
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    .menu--account,
+    .block-alshaya-stores-finder,
+    .block-language-blocklanguage-interface {
+      @include breakpoint($desktop) {
+        height: unset;
+      }
+    }
+  }
+
+  &:not(.frontpage) {
+    .branding__menu {
+      #block-alshayareactcartminicartblock {
+        @include breakpoint($upto-desktop) {
+          top: rem(65);
+        }
+      }
+    }
+
+    @include breakpoint($upto-desktop) {
+      .c-menu-primary {
+        .mobile--menu {
+          top: rem(1);
+        }
+      }
+    }
+
+    &.alias--cart {
+      .page-standard {
+        &.l-container {
+          @include breakpoint($upto-desktop) {
+            margin-top: 0 !important;
+          }
+        }
+      }
+    }
+  }
+
+  #mini-cart-wrapper {
+    @include breakpoint($only-tablet) {
+      margin-top: rem(10);
+    }
+  }
+
+  .c-menu-primary {
+    .region__menu-primary {
+      @include breakpoint($desktop) {
+        width: auto;
+      }
+
+      .block-alshaya-super-category-menu {
+        @include breakpoint($upto-desktop) {
+          z-index: 11;
+          height: rem(36);
+        }
+
+        .menu--one__list {
+          height: rem(36);
+
+          html[lang=ar] & {
+            padding-right: rem(23);
+          }
+
+          li {
+            height: rem(36);
+          }
+
+          .menu--one__link {
+            height: rem(36);
+            padding: rem(8) rem(16);
+            color: $header_super_cat_menu_text;
+            text-transform: none;
+
+            @include breakpoint($upto-desktop) {
+              background-color: $header_super_category_menu_bg;
+            }
+
+            &.active {
+              color: $header_super_cat_menu_active_text;
+
+              @include breakpoint($upto-desktop) {
+                background-color: $header_super_category_menu_active_bg;
+              }
+            }
+
+            &:hover {
+              color: $header_super_cat_menu_active_text;
+
+              @include breakpoint($upto-desktop) {
+                color: $header_super_cat_menu_active_text;
+                background-color: $header_super_category_menu_active_bg;
+              }
+            }
+
+            &::after {
+              content: attr(title);
+              font-family: $ay-bold;
+              font-size: rem(14);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete {
+    .algolia-search-cleartext-icon {
+      @include breakpoint($desktop) {
+        #{$right}: rem(2);
+      }
+    }
+  }
+
+  // Resetting core styles by setting initial to support flex for icons
+  &.frontpage,
+  &:not(.frontpage) {
+    &.wishlist-enabled {
+      #wishlist-header-wrapper {
+        @include breakpoint($only-mobile) {
+          top: initial;
+          position: relative;
+          right: initial;
+          left: initial;
+        }
+      }
+    }
+    // For AR different selector target on CORE
+    .branding__menu #block-alshayareactcartminicartblock {
+      @include breakpoint($upto-desktop) {
+        top: initial;
+        #{$right}: initial;
+        position: relative;
+      }
+    }
+
+    header.c-header {
+      // Resetting core styles by setting initial to support flex for icons
+      .block-alshaya-react-mini-cart {
+        @include breakpoint($upto-desktop) {
+          top: initial;
+          #{$right}: initial;
+        }
+
+        .cart-link {
+          @include breakpoint($upto-desktop) {
+            width: rem(24);
+            height: rem(24);
+            background-position: center;
+          }
+        }
+      }
+    }
+    // Using !important as on core !important is used
+    &:not(.no-sticky-algolia-search-bar) {
+      .block-alshaya-react-mini-cart {
+        position: relative !important;
+      }
+    }
+  }
+}

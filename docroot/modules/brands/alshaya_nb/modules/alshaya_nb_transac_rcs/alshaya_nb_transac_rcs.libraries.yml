@@ -1,0 +1,6 @@
+product:
+  version: 1.x
+  js:
+    js/alshaya_nb_transac_rcs_product.js: {}
+  dependencies:
+    - rcs_placeholders/helpers

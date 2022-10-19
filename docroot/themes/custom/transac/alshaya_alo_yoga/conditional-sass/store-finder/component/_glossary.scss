@@ -1,0 +1,23 @@
+.view-stores-finder {
+  &.view-display-id-page_2 {
+    .view-header {
+      font-weight: normal;
+
+      @include breakpoint($only-tablet) {
+        margin-bottom: rem(16);
+      }
+
+      @include breakpoint($desktop) {
+        margin-bottom: rem(13);
+      }
+    }
+  }
+
+  &.view-display-id-page_1 {
+    .view-header {
+      strong {
+        font-weight: normal;
+      }
+    }
+  }
+}

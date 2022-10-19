@@ -94,6 +94,7 @@ class WishListHelper {
       'localStorageExpirationForLoggedIn' => $alshaya_wishlist_config->get('local_storage_expiration_logged_in'),
       'removeAfterAddtocart' => $alshaya_wishlist_config->get('remove_after_addtocart'),
       'enabledShare' => $alshaya_wishlist_config->get('enabled_share'),
+      'disableQuickViewInWishlistPage' => $alshaya_wishlist_config->get('disable_quickview_wishlist_page'),
     ];
 
     // These configurations we need only for the logged in customers.

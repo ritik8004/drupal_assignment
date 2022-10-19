@@ -83,4 +83,47 @@ class AlshayaRcsColorSplitHelper {
     return $color_attribute;
   }
 
+  /**
+   * Gets the color sku query.
+   *
+   * @return array
+   *   An array containing all the fields required for color sku product.
+   */
+  public function getColorSkuProductQueryFields() {
+    $static = &drupal_static(__METHOD__, []);
+    if (!empty($static)) {
+      return $static;
+    }
+
+    // Prepare query for different color sku in PLP.
+    $color_sku_query_fields = [
+      'items' => [
+        'id',
+        'name',
+        'url_key',
+        'price_range' => [
+          'maximum_price' => [
+            'regular_price' => [
+              'value',
+            ],
+            'final_price' => [
+              'value',
+            ],
+            'discount' => [
+              'percent_off',
+            ],
+          ],
+        ],
+        'article_media_gallery' => [
+          'url',
+          'image_type',
+        ],
+      ],
+    ];
+
+    $static = $color_sku_query_fields;
+
+    return $static;
+  }
+
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import GroupSelectOption from '../group-select-option';
+import GroupSwatchSelectOption from '../group-swatch-select-option';
 import NonGroupSelectOption from '../non-group-select-option';
 import SwatchSelectOption from '../swatch-select-option';
 
@@ -7,7 +8,7 @@ class CartSelectOption extends React.Component {
   constructor(props) {
     super(props);
     const {
-      isGroup, configurables, isSwatch,
+      isGroup, configurables, isSwatch, isSwatchGroup,
     } = this.props;
     let defaultGroup = null;
 
@@ -22,6 +23,7 @@ class CartSelectOption extends React.Component {
       groupName: isGroup ? defaultGroup : null,
       groupStatus: isGroup,
       swatchStatus: isSwatch,
+      groupSwatchStatus: isSwatchGroup,
       selected: null,
     };
   }
@@ -191,6 +193,7 @@ class CartSelectOption extends React.Component {
       groupStatus,
       swatchStatus,
       selected,
+      groupSwatchStatus,
     } = this.state;
 
     const swatchSelectOption = (
@@ -204,6 +207,20 @@ class CartSelectOption extends React.Component {
         handleLiClick={this.handleLiClick}
       />
     );
+
+    const groupSwatchSelectOption = (
+      <GroupSwatchSelectOption
+        handleSelectionChanged={this.handleSelectionChanged}
+        configurables={configurables}
+        code={code}
+        nextCode={nextCode}
+        nextValues={nextValues}
+        selected={selected}
+        handleLiClick={this.handleLiClick}
+      />
+    );
+    // Set the current swatch option.
+    const currentSwatchSelectOption = (typeof groupSwatchStatus === 'undefined' && !groupSwatchStatus) ? swatchSelectOption : groupSwatchSelectOption;
 
     const selectOption = (!swatchStatus) ? (
       <div className="non-grouped-attr" onClick={(e) => (e.target.classList.contains('non-grouped-attr') ? this.closeModal(e) : null)}>
@@ -222,7 +239,7 @@ class CartSelectOption extends React.Component {
           context={context}
         />
       </div>
-    ) : swatchSelectOption;
+    ) : currentSwatchSelectOption;
 
     return (groupStatus) ? (
       <div className="grouped-attr" onClick={(e) => (e.target.classList.contains('grouped-attr') ? this.closeModal(e) : null)}>

@@ -415,6 +415,7 @@ magazine-layout-v2:
       css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-react-animate
+    - alshaya_white_label/alshaya-accordion
 
 shop-by-brand:
   css:
@@ -859,12 +860,44 @@ megamenu-shop-by-filter:
     theme:
       css/conditional-sass/megamenu-shop-by-filter/megamenu-shop-by-filter.ltr.css: {}
 
+plp-quick-add:
+  css:
+    theme:
+      css/conditional-sass/plp-quick-add/plp-quick-add.ltr.css: {}
+
+checkout-tracker:
+  css:
+    theme:
+      css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: {}
+
 checkout-cod-mobile-verification:
   css:
     theme:
       css/conditional-sass/checkout-cod-mobile-verification/checkout-cod-mobile-verification.ltr.css: {}
 
+drawer-cart-notification:
+  css:
+    theme:
+      css/conditional-sass/drawer-cart-notification/drawer-cart-notification.ltr.css: {}
+
+user-account:
+  css:
+    theme:
+      css/conditional-sass/user-account/user-account.ltr.css: {}
 tamara:
   css:
     theme:
       css/conditional-sass/tamara/tamara.ltr.css: {}
+
+mobile-menu:
+  css:
+    theme:
+      css/conditional-sass/mobile-menu/mobile-menu.ltr.css: {}
+
+alshaya-accordion:
+  js:
+    js/alshaya-accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal

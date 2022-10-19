@@ -48,6 +48,13 @@ function alshaya_sub_profile_installed($profile) {
 function alshaya_final_common_install_task($profile) {
   global $_alshaya_modules_installed;
 
+  // Update the site mail address to alshaya.com address so mails would work.
+  // On Production, we need the domain added to Acquia Mail and configure it.
+  \Drupal::configFactory()
+    ->getEditable('system.site')
+    ->set('mail', 'no-reply@alshaya.com')
+    ->save();
+
   // Get the modules to be enabled for this env.
   $additional_modules = Settings::get('additional_modules');
 

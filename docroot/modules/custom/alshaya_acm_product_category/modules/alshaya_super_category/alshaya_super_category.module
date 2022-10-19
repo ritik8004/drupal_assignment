@@ -135,7 +135,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
         $parent = end($parents);
       }
 
-      if (!$parent instanceof TermInterface && !$variables['content']['site_logo']['#access']) {
+      if (!$parent instanceof TermInterface || !$variables['content']['site_logo']['#access']) {
         return;
       }
 
@@ -158,9 +158,12 @@ function alshaya_super_category_preprocess_block(&$variables) {
           // Load term by comparing the slug with current super category.
           $query = \Drupal::entityQuery('taxonomy_term');
           $query->condition('field_category_slug', $current_super_category[2]);
-          $term_id = $query->execute();
+          $term_ids = $query->execute();
           // Load the term based on the id.
-          $parent = Term::load($term_id);
+          if (!empty($term_ids)) {
+            $term_ids = array_keys($term_ids);
+            $parent = Term::load($term_ids[0]);
+          }
         }
       }
 

@@ -53,6 +53,13 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       '#default_value' => $wishlist_config->get('wishlist_label'),
     ];
 
+    $form['alshaya_wishlist']['disable_quickview_wishlist_page'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable quick view from Wishlist page'),
+      '#description' => $this->t('If checked, quick view option will not appear for product tiles in wishlist page.'),
+      '#default_value' => $wishlist_config->get('disable_quickview_wishlist_page'),
+    ];
+
     $form['alshaya_wishlist']['share'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Share your wishlist configurations'),
@@ -104,6 +111,7 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
       ->set('email_subject', $form_state->getValue('email_subject'))
       ->set('email_template', $form_state->getValue('email_template'))
       ->set('enabled_share', $form_state->getValue('enabled_share'))
+      ->set('disable_quickview_wishlist_page', $form_state->getValue('disable_quickview_wishlist_page'))
       ->save();
 
     parent::submitForm($form, $form_state);
