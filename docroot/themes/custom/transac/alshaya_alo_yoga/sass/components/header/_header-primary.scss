@@ -188,7 +188,7 @@ header {
 
         @include breakpoint($only-tablet) {
           html[lang=ar] & {
-            right: rem(10);
+            right: rem(5);
           }
         }
 
@@ -197,7 +197,7 @@ header {
           #{$left}: initial;
 
           html[lang=ar] & {
-            right: rem(9);
+            right: rem(5);
           }
         }
       }
@@ -472,8 +472,12 @@ header {
   .block-system-branding-block {
     @include breakpoint($upto-desktop) {
       position: absolute;
-      left: 50%;
+      #{$left}: 50%;
       transform: translateX(-50%);
+
+      html[lang="ar"] & {
+        transform: translateX(50%);
+      }
     }
   }
 }
