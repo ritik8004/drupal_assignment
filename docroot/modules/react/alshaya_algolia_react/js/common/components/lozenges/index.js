@@ -36,11 +36,8 @@ const Lozenges = ({ labels, sku, greenLeaf }) => {
                 // Only render labels in supported positions.
                 if (ALLOWED_POSITIONS.includes(key)) {
                   return (
-                    <>
-                      <div
-                        className={`labels-container ${key}`}
-                        key={`${key}-label-container`}
-                      >
+                    <div key={`${key}-label-container`}>
+                      <div className={`labels-container ${key}`}>
                         <LabelItems
                           bifercatedLabels={bifercatedLabels}
                           directionKey={key}
@@ -53,7 +50,7 @@ const Lozenges = ({ labels, sku, greenLeaf }) => {
                             <span className="map-green-leaf" />
                           </div>
                         )}
-                    </>
+                    </div>
                   );
                 }
                 return null;
@@ -72,7 +69,7 @@ const LabelItems = ({ bifercatedLabels, directionKey, sku }) => (
     {
       bifercatedLabels[directionKey].map((labelItem) => (
         // Product SKU added as a unique key.
-        <div className="label" key={`label-${sku}`}>
+        <div className="label" key={`${sku}-label`}>
           <ImageElement
             src={labelItem.image.url}
             alt={labelItem.image.alt}

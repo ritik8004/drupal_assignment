@@ -189,7 +189,8 @@ const Teaser = ({
     renderPrice = <PriceRangeElement priceRange={attribute.alshaya_price_range} />;
   }
 
-  const title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
+  let title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
+  title = title.toString();
   const url = hasValue(updatedAttribute.url) ? updatedAttribute.url : attribute.url;
 
   return (
