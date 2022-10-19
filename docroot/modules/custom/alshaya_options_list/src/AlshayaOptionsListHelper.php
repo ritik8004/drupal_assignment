@@ -429,7 +429,7 @@ class AlshayaOptionsListHelper {
 
     $attribute_options = $config->get('alshaya_options_pages');
     if (empty($attribute_options[$request])) {
-      return NULL;
+      return [];
     }
     $attributeCodes = array_filter($attribute_options[$request]['attributes']);
     // Check for cache first.
