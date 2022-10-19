@@ -16,6 +16,23 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * [6.19.0] Add color swatch limit configuration for mobile view.
+ */
+function alshaya_acm_product_update_9400() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'alshaya_acm_product.display_settings',
+  ],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove all the custom cache tags from the cachetags table and clear out the
  * product_processed_data cache bin.
  */
