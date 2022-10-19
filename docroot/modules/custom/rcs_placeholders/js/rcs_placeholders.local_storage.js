@@ -120,7 +120,7 @@ globalThis.RcsPhLocalStorage = {};
   return (typeof storageItem.data !== 'undefined') ? storageItem.data : storageItem;
 };
 
-globalThis.runLocalStorageCleaner = async function () {
+globalThis.RcsPhLocalStorage.gc = async function () {
     // Get all the local storage keys having the above defined key strings.
     const filteredKeys = Object.keys(localStorage);
 
@@ -135,7 +135,7 @@ globalThis.runLocalStorageCleaner = async function () {
 
   // Run the cleaner function once on the window load event.
   $(window).on('load', function () {
-    globalThis.runLocalStorageCleaner();
+    globalThis.RcsPhLocalStorage.gc();
   });
 }
 )(jQuery, globalThis);
