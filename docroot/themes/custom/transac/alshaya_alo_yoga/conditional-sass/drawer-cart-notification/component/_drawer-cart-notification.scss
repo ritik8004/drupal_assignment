@@ -3,7 +3,9 @@
     a {
       &.add-to-bag,
       &.checkout {
-        padding: rem(14);
+        padding: rem(13);
+        font-size: rem(16);
+        letter-spacing: normal;
       }
 
       &.add-to-bag {
