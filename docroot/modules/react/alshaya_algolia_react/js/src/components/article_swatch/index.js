@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isMobile } from '../../../../../js/utilities/display';
 import getSingleProductByColorSku from '../../utils/articleSwatchUtil';
 
 const ArticleSwatches = ({
@@ -9,8 +10,10 @@ const ArticleSwatches = ({
   if (typeof articleSwatches === 'undefined') {
     return null;
   }
+  // Get plp color swatch limit for desktop/mobile view.
+  const limit = (isMobile()) ? drupalSettings.reactTeaserView.swatches.swatchPlpLimitMobileView
+    : drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
 
-  const limit = drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
   const totalNoOfSwatches = articleSwatches.length;
   const diff = totalNoOfSwatches - limit;
   let swatchMoreText = null;
@@ -28,6 +31,7 @@ const ArticleSwatches = ({
   // Update content for the product as per selected swatch item.
   const showSelectedSwatchProduct = async (e, skuCode) => {
     e.preventDefault();
+
     setActiveSwatch(skuCode);
     const response = await getSingleProductByColorSku(skuCode);
     if (hasValue(response)) {
@@ -51,7 +55,7 @@ const ArticleSwatches = ({
   return (
     <div className="article-swatch-wrapper">
       <div className="swatches">
-        {articleSwatches.map(
+        {articleSwatches.slice(0, limit).map(
           (swatch) => (
             <button
               onClick={(e) => showSelectedSwatchProduct(e, swatch.article_sku_code)}
