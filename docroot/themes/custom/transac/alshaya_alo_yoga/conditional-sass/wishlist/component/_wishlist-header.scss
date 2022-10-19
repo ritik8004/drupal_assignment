@@ -55,19 +55,9 @@ body.wishlist-enabled {
   }
 }
 
-.wishlist-enabled {
-  #wishlist-header-wrapper {
-    @include breakpoint($upto-desktop) {
-      top: initial !important;
-      position: relative !important;
-      #{$right}: initial !important;
-    }
-  }
-}
-
-
 body {
   &.wishlist-enabled {
+    // Resetting style of CORE theme
     #wishlist-header-wrapper {
       @include breakpoint($upto-desktop) {
         position: relative;
@@ -84,6 +74,7 @@ body {
 
     header {
       .region__header {
+        // Resetting style of CORE theme
         .block-alshaya-wishlist {
           @include breakpoint($upto-desktop) {
             flex-grow: initial;
@@ -92,7 +83,7 @@ body {
         }
       }
     }
-
+    // Resetting style of CORE theme
     .wishlist-header {
       .wishlist-icon {
         @include breakpoint($upto-desktop) {
@@ -100,31 +91,11 @@ body {
         }
       }
     }
-
+    // Resetting style of CORE theme
     .wishlist-icon {
       @include breakpoint($upto-desktop) {
-        margin-#{$left}: initial;
-        margin-#{$right}: initial;
-      }
-    }
-  }
-}
-
-.super-category-enabled {
-  &:not(.no-sticky-algolia-search-bar),
-  &:not(.frontpage):not(.page-type-product) {
-    .block.block-alshaya-react-mini-cart,
-    .branding__menu #block-alshayareactcartminicartblock {
-      @include breakpoint($upto-desktop) {
-        position: relative !important;
-        top: initial !important;
-        #{$right}: initial !important;
-
-        .cart-link {
-          width: rem(24);
-          height: rem(24);
-          background-position: center;
-        }
+        margin-right: initial;
+        margin-left: initial;
       }
     }
   }
