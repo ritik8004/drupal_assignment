@@ -503,8 +503,9 @@ exports.computePhFilters = function (input, filter) {
               label = value.value_index;
               // Add a logger here so that we have info around the content where
               // we don't have label.
-              Drupal.alshayaLogger('debug', 'Product with SKU: @sku doesn\'t contain proper color label.', {
-                '@sku': data.sku
+              Drupal.alshayaLogger('debug', '@attribute label is missing for the index @value_index .', {
+                '@attribute': option.attribute,
+                '@value_index': label,
               });
             }
             let selectOption = { value: value.value_index, text: label };
