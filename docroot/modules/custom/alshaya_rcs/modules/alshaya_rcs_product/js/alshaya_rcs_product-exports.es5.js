@@ -497,8 +497,15 @@ exports.computePhFilters = function (input, filter) {
           // Add the option values.
           option.values.forEach((value) => {
             let label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            // Use the index value as label when the label doesn't exists for
+            // respective index.
             if (!Drupal.hasValue(label)) {
               label = value.value_index;
+              // Add a logger here so that we have info around the content where
+              // we don't have label.
+              Drupal.alshayaLogger('debug', 'Product with SKU: @sku doesn\'t contain proper color label.', {
+                '@sku': data.sku
+              });
             }
             let selectOption = { value: value.value_index, text: label };
 
