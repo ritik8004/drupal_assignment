@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
+use Drupal\file\FileInterface;
 
 /**
  * Class Product Super Category Tree.
@@ -418,7 +419,9 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       $id = "field_logo_{$key}_target_id";
       if (!empty($logo_data)) {
         $image = $this->fileStorage->load($logo_data->$id);
-        $brand_logos[$key] = file_create_url($image->getFileUri());
+        if ($image instanceof FileInterface) {
+          $brand_logos[$key] = file_create_url($image->getFileUri());
+        }
       }
     }
 
