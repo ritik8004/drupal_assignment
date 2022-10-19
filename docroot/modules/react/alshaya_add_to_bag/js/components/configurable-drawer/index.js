@@ -90,7 +90,7 @@ class ConfigurableProductDrawer extends React.Component {
     const { images } = selectedVariantData.media;
     const { original_price: originalPrice, final_price: finalPrice } = selectedVariantData;
     const vatText = getVatText();
-    const parentSku = selectedVariantData.parent_sku;
+    const parentSku = productData.catalog_restructured ? selectedVariantData.parent_sku : sku;
 
     return (
       <ProductDrawer

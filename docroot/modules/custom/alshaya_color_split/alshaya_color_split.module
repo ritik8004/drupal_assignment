@@ -308,6 +308,7 @@ function alshaya_color_split_node_view(array &$build, EntityInterface $entity, E
     elseif ($sku->bundle() === 'configurable') {
       $build['#attached']['library'][] = 'alshaya_color_split/grouped_configurable';
     }
+    $build['#attached']['drupalSettings']['catalogRestructuringStatus'] = TRUE;
   }
 }
 
