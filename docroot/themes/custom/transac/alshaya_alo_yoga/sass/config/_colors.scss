@@ -34,7 +34,6 @@ $green: #090;
 $orange: #e6591b;
 $gray-nine: #e9e9e9;
 $white1: #fafafa;
-$gray-ec: #ececec;
 $white-alpha4: rgba(255, 255, 255, 0.4);
 $info-1: #bbdfff;
 
@@ -143,6 +142,7 @@ $accordion_border: $black;
 // Language Switcher
 $lang_switch: $white;
 $lang_switch_active: $white;
+$lang_switch_firsttime_bg: $black;
 
 // Breadcrumb.
 $breadcrumb_bg: $white;
@@ -461,7 +461,7 @@ $magv2-popup-header-label: $primary_text;
 $magv2-size-radio-filled: $primary_text;
 
 // Swatches
-$swatch-border: $gray-ec;
+$swatch-border: $mercury;
 
 // SDD and ED
 $sameday-express-delivery-drawer-btn: $primary_btn_bg;
