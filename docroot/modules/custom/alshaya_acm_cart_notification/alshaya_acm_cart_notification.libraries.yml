@@ -12,7 +12,6 @@ cart_notification_drawer:
   js:
     js/cart_notification_drawer.js: {}
   dependencies:
-    - alshaya_acm_cart_notification/cart_notification_js
     - alshaya_spc/cart_notification_drawer
     - alshaya_white_label/drawer-cart-notification
 
@@ -20,5 +19,3 @@ cart_notification_mini_cart:
   version: 1.x
   js:
     js/cart_notification_mini_cart.js: {}
-  dependencies:
-    - alshaya_acm_cart_notification/cart_notification_js
