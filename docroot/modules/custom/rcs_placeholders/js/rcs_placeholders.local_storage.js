@@ -1,3 +1,5 @@
+(function ($, globalThis) {
+
 globalThis.RcsPhLocalStorage = {};
 
 /**
@@ -118,4 +120,24 @@ globalThis.RcsPhLocalStorage = {};
   // If it's a new format simply return the data.
   return (typeof storageItem.data !== 'undefined') ? storageItem.data : storageItem;
 };
+
+globalThis.runLocalStorageCleaner = async function () {
+    // Get all the local storage keys having the above defined key strings.
+    const filteredKeys = Object.keys(localStorage);
+
+    // If we have keys available to clean, iterate and run get item storage
+    // helper func for each to remove it from local storage, if expired
+    if (filteredKeys) {
+      filteredKeys.forEach(storageKey => {
+        globalThis.RcsPhLocalStorage.get(storageKey);
+      });
+    }
+  };
+
+  // Run the cleaner function once on the window load event.
+  $(window).on('load', function () {
+    globalThis.runLocalStorageCleaner();
+  });
+}
+)(jQuery, globalThis);
 
