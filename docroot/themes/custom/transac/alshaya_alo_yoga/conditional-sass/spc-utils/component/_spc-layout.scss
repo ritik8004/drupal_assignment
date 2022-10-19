@@ -24,11 +24,22 @@
         margin-top: 0;
       }
     }
+
+    .spc-content {
+      width: 53.5%;
+    }
   }
 
   .spc-pre-content-sticky {
     @include breakpoint($only-mobile) {
       display: none;
     }
+  }
+}
+
+.alias--cart-login,
+.alias--checkout {
+  .c-footer-secondary {
+    background-color: $spc-checkout-footer-secondary-bg;
   }
 }

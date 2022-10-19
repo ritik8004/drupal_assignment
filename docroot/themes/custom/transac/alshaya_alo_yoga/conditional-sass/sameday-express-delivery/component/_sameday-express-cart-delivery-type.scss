@@ -1,0 +1,28 @@
+.alias--cart {
+  #delivery-area-select {
+    .delivery-area-label {
+      @include breakpoint($only-mobile) {
+        #{$left}: rem(15);
+        top: rem(10);
+        justify-content: $left;
+        position: relative;
+      }
+    }
+
+    .delivery-area-name {
+      padding-#{$left}: rem(10);
+    }
+
+    .delivery-area-button {
+      &::before {
+        #{$right}: rem(-17);
+        font-size: rem(28);
+        top: rem(10);
+      }
+    }
+  }
+
+  .spc-checkout-section-title {
+    text-transform: uppercase;
+  }
+}
