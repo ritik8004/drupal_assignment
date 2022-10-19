@@ -90,6 +90,98 @@
         }
       }
 
+      &--open {
+        #top-results {
+          @include breakpoint($only-mobile) {
+            padding: 0 rem(8);
+          }
+
+          .promotions {
+            .sku-promotion-item {
+              @include breakpoint($only-mobile) {
+                font-size: rem(12);
+                display: block;
+                margin: rem(4) 0 0;
+              }
+            }
+          }
+
+          .c-products__item {
+            .field--name-name {
+              @include breakpoint($only-mobile) {
+                padding: 0;
+                font-size: rem(16);
+                font-family: $ay-nova-semibold;
+                margin-bottom: rem(5);
+                margin-top: rem(10);
+                line-height: 1.3;
+              }
+
+              a {
+                @include breakpoint($only-mobile) {
+                  font-size: rem(16);
+                  color: $algolia_react-facet-item-color;
+                }
+              }
+            }
+
+            .price-wrapper {
+              @include breakpoint($only-mobile) {
+                color: $plp_product_price_txt;
+                font-size: rem(16);
+              }
+            }
+
+            .article-swatch-wrapper {
+              @include breakpoint($only-mobile) {
+                margin-top: rem(12);
+              }
+            }
+
+            .express_delivery {
+              @include breakpoint($only-mobile) {
+                font-size: rem(10);
+                padding: 0;
+                border: rem(1) solid $plp_express_delivery_tag;
+                margin-top: rem(10);
+                display: inline-block;
+                font-family: $alshaya-thin;
+                width: rem(96);
+                height: rem(20);
+                text-align: center;
+                line-height: rem(20);
+              }
+            }
+
+            .quick-add .addtobag-button,
+            .quick-add .addtobag-config-button,
+            .quick-add .is-not-buyable {
+              @include breakpoint($only-mobile) {
+                top: rem(215);
+              }
+            }
+
+            .alshaya_search_hoverimage,
+            .alshaya_search_mainimage {
+              @include breakpoint($only-mobile) {
+                min-height: rem(256);
+              }
+            }
+          }
+
+          ul {
+            li {
+              &.ais-Hits-item {
+                .c-products__item {
+                  text-align: $left;
+                  font-size: rem(16);
+                }
+              }
+            }
+          }
+        }
+      }
+
       .react-autosuggest__suggestions-list {
         .react-autosuggest__suggestion {
           .aa-suggestion {
