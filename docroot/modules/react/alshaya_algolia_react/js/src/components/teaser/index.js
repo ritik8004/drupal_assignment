@@ -235,10 +235,15 @@ const Teaser = ({
               title={title}
               labels={labels}
               sku={sku}
-              greenLeaf={hit.attr_green_leaf ? hit.attr_green_leaf : null}
               initSlider={initSlider}
               setSlider={setSlider}
             />
+            {hasValue(hit.attr_green_leaf) && hit.attr_green_leaf
+              && (
+                <div className="labels-container bottom-right">
+                  <span className="map-green-leaf" />
+                </div>
+              )}
           </a>
           {/* Render the component if the page isn't wishlist listing page. */}
           <ConditionalView condition={!isWishlistPage(extraInfo)}>
