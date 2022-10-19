@@ -56,9 +56,17 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   /**
    * RCS Full Path.
    *
-   * @var array|null
+   * @var string
    */
   public static $entityFullPath;
+
+  /**
+   * RCS Full Path.
+   *
+   * @var string
+   */
+  public static $pageFullPath;
+
 
   /**
    * The node storage.
@@ -146,6 +154,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       '/',
       $request->getPathInfo()
     );
+    self::$pageFullPath = $full_path;
 
     // Allow other modules to alter the path.
     $this->moduleHandler->alter('rcs_placeholders_processor_path', $rcs_path_to_check);
