@@ -83,12 +83,10 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   // is shown as side drawer and mini cart notification will be hidden.
   $spcConfig = \Drupal::config('alshaya_spc.settings');
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $spcConfig->getCacheTags());
-  if ($spcConfig->get('show_notification_drawer')) {
-    // Attach notification library if feature is enabled.
-    $page['#attached']['library'][] = $spcConfig->get('show_notification_drawer')
-      ? 'alshaya_acm_cart_notification/cart_notification_drawer'
-      : 'alshaya_acm_cart_notification/cart_notification_mini_cart';
-  }
+  // Attach notification library if feature is enabled.
+  $page['#attached']['library'][] = $spcConfig->get('show_notification_drawer')
+    ? 'alshaya_acm_cart_notification/cart_notification_drawer'
+    : 'alshaya_acm_cart_notification/cart_notification_mini_cart';
 
   // Check if the acm cart notification settings exist and assign notification
   // time in drupal settings.
