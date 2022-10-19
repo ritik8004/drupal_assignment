@@ -1,17 +1,29 @@
 %button-wide {
-  font-family: $ay-bold;
+  font-family: $ay-heavy;
   text-transform: uppercase;
   background-color: $primary_btn_bg;
-  font-size: 0.8125rem;
+  font-size: rem(13);
   text-align: center;
 }
 
 %button-brand {
   @include arabic-letter-spacing;
 
-  border: 2px solid $primary_empty_btn_border;
+  border: rem(2) solid $primary_empty_btn_border;
   color: $primary_empty_btn;
-  font-size: 0.875rem;
-  letter-spacing: 1px;
+  font-size: rem(14);
+  letter-spacing: rem(1);
   text-transform: uppercase;
+  font-family: $ay-heavy;
+}
+
+%page-title {
+  text-transform: uppercase;
+  font-size: rem(28);
+  font-family: $ay-heavy;
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+    font-size: rem(20);
+  }
 }

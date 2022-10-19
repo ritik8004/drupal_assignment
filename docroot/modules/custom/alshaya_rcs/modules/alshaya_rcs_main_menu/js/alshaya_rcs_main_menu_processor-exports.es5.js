@@ -6,6 +6,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     menuMaxDepth,
     mobileMenuMaxDepth,
     highlightTiming,
+    mobileMenuLayout,
   } = settings;
 
   // Clone the input data.
@@ -14,6 +15,9 @@ exports.prepareData = function prepareData(settings, inputs) {
   inputsClone = processData(inputsClone, menuMaxDepth, mobileMenuMaxDepth);
   // Convert the array of Object into Object of objects.
   inputsClone = Object.assign({}, inputsClone);
+
+  // Check if is_visual_menu_layout set on first level item.
+  const { is_visual_menu_layout: isVisualMenuLayout } = inputsClone[0] || 0;
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -34,10 +38,12 @@ exports.prepareData = function prepareData(settings, inputs) {
     'menu_type': menuLayout,
     'menu_items': inputsClone,
     'user_logged_in': drupalSettings.user.uid > 1,
-    'path_prefix': drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix,
+    'path_prefix': Drupal.url(''),
     'aura_enabled': auraEnabled,
     'highlight_timing': highlightTiming,
     'promopanel_class': '', // @todo Implement promo panel block class.
+    // Set mobile menu layout from settings.
+    'mobile_menu_layout': mobileMenuLayout,
   };
 }
 

@@ -1,0 +1,37 @@
+.path--store-finder,
+.nodetype--store {
+  .input--wrapper [id^="edit-actions"] {
+    border-#{$left}: 0;
+  }
+
+  @include breakpoint($only-tablet) {
+    .current-location,
+    .cc-near-me {
+      width: rem(125);
+    }
+  }
+
+  .list-view-link {
+    &::before {
+      line-height: 0.6;
+    }
+  }
+
+  .list-view-locator {
+    .views-field-field-store-open-hours {
+      .hours--wrapper {
+        .hours--label {
+          border-bottom: rem(1) solid $store_finder_search_results_border;
+        }
+      }
+    }
+  }
+
+  .get--directions {
+    a {
+      &::after {
+        #{$right}: rem(16);
+      }
+    }
+  }
+}

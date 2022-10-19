@@ -1,0 +1,32 @@
+.visual-mobile-level-two {
+  background-color: $menu_bg;
+  padding: rem(15) rem(13) rem(16);
+
+  &__link {
+    position: relative;
+    display: flex;
+    margin-bottom: rem(16);
+    height: rem(149);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+  }
+
+  &__heading {
+    position: absolute;
+    z-index: 1;
+    white-space: nowrap;
+    transform: translateY(-50%);
+    top: 50%;
+    #{$left}: rem(18);
+    font-size: rem(18);
+    line-height: 1.22;
+    color: $mob_menu_two_color_text;
+  }
+}

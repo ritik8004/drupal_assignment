@@ -1,0 +1,11 @@
+.wishlist-text {
+  &.cart {
+    &.cart-item {
+      font-size: rem(16);
+
+      @include breakpoint($only-mobile) {
+        font-size: rem(14);
+      }
+    }
+  }
+}

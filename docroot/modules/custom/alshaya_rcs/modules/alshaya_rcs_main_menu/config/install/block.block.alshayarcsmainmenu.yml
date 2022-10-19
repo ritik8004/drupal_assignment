@@ -9,7 +9,7 @@ id: alshayarcsmainmenu
 # @Todo: Use alshaya whitelabel and then move it to current theme.
 theme: alshaya_white_label
 region: pre_content
-weight: -20
+weight: -33
 provider: null
 plugin: alshaya_rcs_main_menu
 settings:

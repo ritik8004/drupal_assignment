@@ -563,9 +563,12 @@ window.commerceBackend = window.commerceBackend || {};
     response.data.customAttributeMetadata.items
     && response.data.customAttributeMetadata.items.forEach(function eachCustomAttribute(option) {
       var allOptionsForAttribute = {};
-      option.attribute_options.forEach(function (optionValue) {
-        allOptionsForAttribute[optionValue.value] = optionValue.label;
-      })
+      // Proceed only if `attribute_options` exists.
+      if (Drupal.hasValue(option['attribute_options'])) {
+        option.attribute_options.forEach(function (optionValue) {
+          allOptionsForAttribute[optionValue.value] = optionValue.label;
+        })
+      }
       // Set to static storage.
       staticDataStore['attrLabels'][option.attribute_code] = allOptionsForAttribute;
     });
@@ -681,7 +684,7 @@ window.commerceBackend = window.commerceBackend || {};
         combinations.by_sku[variantSku] = typeof combinations.by_sku[variantSku] !== 'undefined'
           ? combinations.by_sku[variantSku]
           : {};
-        combinations.by_sku[variantSku][configurableCodes[i]] = attributeVal.toString();
+        combinations.by_sku[variantSku][configurableCodes[i]] = attributeVal ? attributeVal.toString() : '';
 
         combinations.attribute_sku[configurableCodes[i]] = typeof combinations.attribute_sku[configurableCodes[i]] !== 'undefined'
           ? combinations.attribute_sku[configurableCodes[i]]
@@ -1055,6 +1058,9 @@ window.commerceBackend = window.commerceBackend || {};
     skuForGallery = Drupal.hasValue(child) ? child : skuForGallery;
     return skuForGallery;
   };
+
+  // Expose the function to global level.
+  window.commerceBackend.getSkuForGallery = getSkuForGallery;
 
   /**
    * Get first image from media to display as list.

@@ -102,8 +102,8 @@
    * @param {object} cartData
    *   The cart data object.
    */
-  Drupal.alshayaPromotions.refreshDynamicLabels = function (sku, cartData) {
-    const response = Drupal.alshayaPromotions.getRcsDynamicLabel(sku, cartData);
+  Drupal.alshayaPromotions.refreshDynamicLabels = async function (sku, cartData) {
+    const response = Drupal.alshayaPromotions.getDynamicLabel(sku, cartData);
     if (response && response.label) {
       Drupal.alshayaPromotions.updateDynamicLabel(sku, response);
     }
@@ -155,7 +155,7 @@
    * @returns {object}
    *   An oject containing the dynamic promotion label.
    */
-  Drupal.alshayaPromotions.getRcsDynamicLabel = function (sku, cartData, viewMode = 'links', type = 'product') {
+  Drupal.alshayaPromotions.getDynamicLabel = function (sku, cartData, viewMode = 'links', type = 'product') {
     let response = null;
     if (typeof drupalSettings.alshayaRcs !== 'undefined') {
       // Prepare cart object.

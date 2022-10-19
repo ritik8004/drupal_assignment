@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Clear cart data.
@@ -199,14 +200,13 @@ export const triggerAddToCart = (
   }
 };
 
-export const getProductValues = (skuItemCode, variant, setVariant) => {
+export const getProductValues = (productInfo, configurableCombinations,
+  skuItemCode, variant, setVariant) => {
   let brandLogo; let brandLogoAlt; let
     brandLogoTitle; let freeGiftImage;
   let freeGiftPromoUrl; let freeGiftMessage;
   let freeGiftTitle; let freeGiftPromoCode = null;
   let freeGiftPromoType;
-  let configurableCombinations = '';
-  const { productInfo } = drupalSettings;
   const { variants } = productInfo[skuItemCode];
   const { stockStatus } = productInfo[skuItemCode];
   const { productLabels } = drupalSettings;
@@ -256,7 +256,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     priceRaw = productInfo[skuItemCode].priceRaw;
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;
-    labels = productLabels[skuItemCode];
+    labels = hasValue(productLabels) ? productLabels[skuItemCode] : [];
     stockQty = productInfo[skuItemCode].stockQty;
     firstChild = skuItemCode;
     promotions = productInfo[skuItemCode].promotionsRaw;
@@ -266,7 +266,6 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       bigTickectProduct = productInfo[skuItemCode].bigTickectProduct;
     }
     if (productInfo[skuItemCode].type === 'configurable') {
-      configurableCombinations = drupalSettings.configurableCombinations;
       if (Object.keys(variants).length > 0) {
         if (variant == null) {
           setVariant(configurableCombinations[skuItemCode].firstChild);
@@ -276,7 +275,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           priceRaw = variantInfo.priceRaw;
           finalPrice = variantInfo.finalPrice;
           pdpGallery = variantInfo.rawGallery;
-          labels = productLabels[variant];
+          labels = hasValue(productLabels) ? productLabels[variant] : [];
           stockQty = variantInfo.stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
           promotions = variantInfo.promotionsRaw;
@@ -311,8 +310,11 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       }
     }
   }
+
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
+  const additionalAttributes = skuItemCode ? productInfo[skuItemCode].additionalAttributes : [];
+
   const relatedProducts = [
     'crosssell',
     'upsell',
@@ -329,7 +331,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     pdpGallery,
     shortDesc,
     description,
-    configurableCombinations,
+    additionalAttributes,
     relatedProducts,
     stockStatus,
     labels,
@@ -352,8 +354,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
 /**
  * Fetch available stores for given lat and lng.
  */
-export const fetchAvailableStores = (coords) => {
-  const { productInfo } = drupalSettings;
+export const fetchAvailableStores = (productInfo, coords) => {
   let skuItemCode = null;
   if (productInfo) {
     [skuItemCode] = Object.keys(productInfo);

@@ -1,0 +1,40 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .highlights {
+      margin-top: rem(24);
+      margin-bottom: rem(24);
+    }
+
+    .menu--two__list {
+      .menu--two__list-item {
+        > .menu-two__link-wrapper {
+          max-width: rem(192);
+        }
+      }
+    }
+
+    .menu--three__list-item {
+      > .menu-two__link-wrapper {
+        .menu__link {
+          font-size: rem(14) !important;
+        }
+      }
+    }
+  }
+}
+
+.highlights {
+  @include breakpoint($desktop) {
+    .hightlight__title {
+      font-size: rem(10);
+      font-family: $alshaya-thin;
+      margin-top: rem(6);
+    }
+
+    .highlighted a:hover {
+      .hightlight__title {
+        text-decoration: underline;
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+fields:
+  color_family:
+    label: 'Color'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+    swatch: 1
+    translatable: 0
+  gender:
+    label: 'Gender'
+    cardinality: -1
+    index: 1
+    facet: 1
+  line:
+    label: 'Line'
+    cardinality: -1
+    index: 1
+    facet: 1
+  desired_fit:
+    label: 'Fit'
+    cardinality: -1
+    index: 1
+    facet: 1
+  width_description:
+    label: 'Width Description'
+    cardinality: -1
+    index: 1
+    facet: 1
+  european_size:
+    label: 'European Size'
+    cardinality: -1
+    index: 1
+  uk_size:
+    label: 'UK Size'
+    cardinality: -1
+    index: 1
+  nb_type:
+    label: 'Product type'
+    cardinality: -1
+    index: 1
+    facet: 1
+  closure_type:
+    label: 'Closure type'
+    cardinality: -1
+    index: 1
+    facet: 1
+  green_leaf:
+    label: 'Green leaf'
+    type: 'string'
+    translatable: 0
+    index: 1
+  primary_material:
+    label: 'Primary Material'
+    type: 'string'
+  technologies:
+    label: 'Technologies'
+    type: 'string'
+  feature_bullets:
+    label: 'Feature Bullets'
+    type: 'text_long'
+  weight:
+    label: 'Weight'
+    type: 'string'

@@ -1,0 +1,22 @@
+.cart-drawer-content {
+  .cart-drawer-links {
+    a {
+      &.add-to-bag,
+      &.checkout {
+        padding: rem(14);
+      }
+
+      &.add-to-bag {
+        color: $secondary_btn_text;
+      }
+    }
+  }
+
+  .product-details {
+    .product-desc {
+      .product-title {
+        font-family: $ay-nova-semibold;
+      }
+    }
+  }
+}

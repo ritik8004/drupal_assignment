@@ -20,7 +20,7 @@ global $acsf_site_code;
 if (empty($_acsf_site_name) && $settings['env'] == 'local') {
   global $host_site_code;
 
-  $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/alshaya_local_sites.yml'));
+  $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/alshaya_sites.yml'));
 
   foreach ($data['sites'] as $acsf_site_code => $site_info) {
     if ($host_site_code == $acsf_site_code) {

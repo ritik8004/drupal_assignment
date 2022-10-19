@@ -1,0 +1,35 @@
+.c-plp,
+#top-results {
+  .c-products__item {
+    .wishlist-icon {
+      width: rem(32);
+      height: rem(32);
+      background-size: 75%;
+      background-position: center;
+      border-radius: 50%;
+      background-color: $plp_wishlist_icon_bg;
+
+      @include breakpoint($upto-desktop) {
+        width: rem(24);
+        height: rem(24);
+        top: rem(6);
+        #{$right}: rem(6);
+      }
+    }
+  }
+}
+
+.wishlist-enabled {
+  &.overlay-product-modal {
+    .wishlist-icon {
+      &.productDrawer {
+        background-color: $plp_wishlist_icon_bg;
+        width: rem(31);
+        height: rem(31);
+        border-radius: 50%;
+        background-size: 69%;
+        background-position: center;
+      }
+    }
+  }
+}

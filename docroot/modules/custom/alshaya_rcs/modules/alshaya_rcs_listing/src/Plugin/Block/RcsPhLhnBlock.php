@@ -8,6 +8,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -41,6 +42,13 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
   protected $routeMatch;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaCategoryLhnBlock constructor.
    *
    * @param array $configuration
@@ -53,16 +61,20 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
    *   The factory for configuration objects.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     ConfigFactoryInterface $config_factory,
-    RouteMatchInterface $route_match) {
+    RouteMatchInterface $route_match,
+    ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->routeMatch = $route_match;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -75,6 +87,7 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('current_route_match'),
+      $container->get('module_handler'),
     );
   }
 
@@ -83,6 +96,13 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
    */
   public function build() {
     $build = [];
+    $variables = [];
+
+    // Add the default category id.
+    $variables['category_id'] = $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category');
+
+    // Allow other modules to modify the variables.
+    $this->moduleHandler->alter('alshaya_rcs_main_menu', $variables);
 
     $build['wrapper'] = [
       '#type' => 'container',
@@ -91,13 +111,14 @@ class RcsPhLhnBlock extends BlockBase implements ContainerFactoryPluginInterface
         'data-param-get-data' => 'false',
         'class' => ['block-alshaya-category-lhn-block'],
         'data-param-entity-to-get' => 'navigation_menu',
-        'data-param-category_id' => $this->configFactory->get('alshaya_rcs_main_menu.settings')->get('root_category'),
+        'data-param-category_id' => $variables['category_id'],
       ],
     ];
 
     // Attach the Listing rendrer library.
     $build['#attached']['library'][] = 'alshaya_rcs_listing/renderer';
     $build['#attached']['library'][] = 'alshaya_rcs_listing/lhn_menu';
+    $build['#attached']['library'][] = 'alshaya_rcs_listing/category_utility';
 
     return $build;
   }

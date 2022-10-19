@@ -4,16 +4,16 @@
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <style type="text/css">
         body,p {font-family: Arial, helvetica; font-size: 13px; line-height: 1.31; color: #000;}
-        h1 {font-size: 24px; color: #000; border-bottom: 1px solid #ddd; padding-bottom: 15px; font-weight: normal; text-transform: uppercase;}
-        a { color: #888; text-decoration: none;}
+        h1 {font-size: 24px; color: #000; border-bottom: 1px solid #ccc; padding-bottom: 15px; font-weight: normal; text-transform: capitalize;}
+        a { color: #000; text-decoration: none;}
         .bold { font-weight: bold; }
-        .button { text-transform: uppercase; background: #000; font-size: 12px; color: #fff; padding: 10px 30px; margin: 10px 0; display: inline-block;}
+        .button { text-transform: capitalize; background: #cf0a2c; font-size: 12px; color: #fff; padding: 10px 30px; margin: 10px 0; display: inline-block;}
         p { margin-bottom: 16px;}
         #center {min-height: 200px; padding: 0 25px;}
-        #header {border-bottom: 1px solid #ddd; padding: 25px 25px 40px 25px; margin-bottom: 23px;}
+        #header {border-bottom: 1px solid #ccc; padding: 25px 25px 40px 25px; margin-bottom: 23px;}
         .footer {margin-top: 50px;}
         .footer p img { display: none;}
-        u + #mimemail-body a {color: #888;}
+        u + #mimemail-body a {color: #000;}
         u + #mimemail-body .button {color: #fff !important;}
         #mimemail-body.ar {text-align: right;}
         @media only screen and (max-device-width: 480px) {
@@ -33,7 +33,7 @@
         {{ body|raw }}
       </div>
     </div>
-    <div class="footer" style="border-top: 2px solid #000; text-align: center;">
+    <div class="footer" style="border-top: 2px solid #efefef; text-align: center;">
       <div style="padding-top: 30px; padding-bottom: 50px;">
         {% for name, link in links %}
           <a href="{{ link }}" target="_blank" style="text-decoration: none;">
@@ -41,7 +41,7 @@
           </a>
         {% endfor %}
       </div>
-      <div style="font-family: Arial, helvetica; font-size: 11px; color: #000; line-height: 1.55; background: #f6f6f6; padding: 16px; text-align: center;">
+      <div style="font-family: Arial, helvetica; font-size: 11px; color: #000; line-height: 1.55; background: #fff; padding: 16px; text-align: center;">
         <p style="margin:0; color: #000; font-size: 11px;">
           {{ email_footer }}
         </p>

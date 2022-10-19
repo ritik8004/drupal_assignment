@@ -29,6 +29,11 @@ function alshaya_add_to_bag_theme() {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_add_to_bag_page_attachments_alter(array &$page) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
   // Skip the processing of add to bag for checkout and confirmation page.
   if (in_array(\Drupal::routeMatch()->getRouteName(), [
     'alshaya_spc.checkout',
@@ -72,6 +77,16 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
 
   // Attach cart utilities library if feature is enabled.
   $page['#attached']['library'][] = 'alshaya_spc/cart_utilities';
+
+  // Get cart notification side drawer related setting.
+  // If cart notification side drawer is enabled, then cart
+  // is shown as side drawer and mini cart notification will be hidden.
+  $spcConfig = \Drupal::config('alshaya_spc.settings');
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $spcConfig->getCacheTags());
+  // Attach notification library if feature is enabled.
+  $page['#attached']['library'][] = $spcConfig->get('show_notification_drawer')
+    ? 'alshaya_acm_cart_notification/cart_notification_drawer'
+    : 'alshaya_acm_cart_notification/cart_notification_mini_cart';
 
   // Check if the acm cart notification settings exist and assign notification
   // time in drupal settings.

@@ -75,7 +75,7 @@ Having mysql exposed on localhost is useful for connecting to mysql from clients
 If you're adding new sites
 * Add the new site as described in [README file](./README.md#create-a-new-site)
 * No need to rebuild like in vagrant
-* After adding entry in blt/alshaya_local_sites.yml just run `lando create-databases`
+* After adding entry in blt/alshaya_sites.yml just run `lando create-databases`
 
 ### Varnish
 

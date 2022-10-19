@@ -1,0 +1,36 @@
+#spc-checkout {
+  .spc-sidebar {
+    .spc-order-summary-block {
+      .product-content {
+        padding: 0;
+
+        .product-item {
+          .spc-product-title-price {
+            display: flex;
+            justify-content: inherit;
+
+            .spc-product-price {
+              font-family: $alshaya-bold;
+            }
+          }
+
+          .spc-product-attributes {
+            font-size: rem(14);
+          }
+        }
+      }
+    }
+  }
+}
+
+#spc-checkout {
+  .spc-content {
+    .spc-checkout-delivery-information {
+      padding-top: rem(30);
+
+      .spc-checkout-section-title {
+        margin-bottom: rem(27);
+      }
+    }
+  }
+}

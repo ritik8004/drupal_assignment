@@ -1,0 +1,11 @@
+.i-dots {
+  .slick-dots-container > li {
+    height: rem(6) !important;
+    width: rem(6) !important;
+
+    &.slick-active {
+      height: rem(6) !important;
+      width: rem(6) !important;
+    }
+  }
+}

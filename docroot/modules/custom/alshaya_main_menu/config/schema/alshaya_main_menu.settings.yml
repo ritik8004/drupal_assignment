@@ -13,6 +13,9 @@ alshaya_main_menu.settings:
     desktop_main_menu_layout:
       type: string
       label: 'Main menu display on desktop'
+    mobile_main_menu_layout:
+      type: string
+      label: 'Main menu display on mobile view'
     max_nb_col:
       type: integer
       label: 'Maxinum number of columns to show'
