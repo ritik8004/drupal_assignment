@@ -44,11 +44,8 @@ class FeatureContext extends CustomMinkContext
    * Removes banners and popups.
    *
    * @BeforeStep
-   *
-   * @param BeforeStepScope $event
-   *   The event.
    */
-  public function hideBanners(BeforeStepScope $event)
+  public function hideBanners()
   {
     $classesToHide = [
       '.popup-window',
