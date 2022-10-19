@@ -1,5 +1,4 @@
 (function ($, globalThis) {
-
 globalThis.RcsPhLocalStorage = {};
 
 /**
