@@ -1,9 +1,12 @@
 <?php
+
 /**
  * @file
  * File to create default content for New Balance.
  */
+
 use Drupal\block_content\Entity\BlockContent;
+
 /**
  * Create default block_content.
  */
@@ -16,7 +19,7 @@ function alshaya_nb_transac_create_default_content() {
  * Create Footer logo block content for NB.
  */
 function alshaya_nb_transac_create_footer_logo_block() {
-    $logo_path_en = '/' . drupal_get_path('theme', 'alshaya_new_balance') . '/site-logo.svg';
+  $logo_path_en = '/' . drupal_get_path('theme', 'alshaya_new_balance') . '/site-logo.svg';
   // Create footer logo block content.
   $block_content = BlockContent::create([
     'info' => 'NB Footer Logo Block',
