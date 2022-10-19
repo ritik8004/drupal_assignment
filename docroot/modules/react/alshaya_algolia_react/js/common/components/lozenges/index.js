@@ -44,6 +44,7 @@ const Lozenges = ({ labels, sku, greenLeaf }) => {
                         <LabelItems
                           bifercatedLabels={bifercatedLabels}
                           directionKey={key}
+                          sku={sku}
                         />
                       </div>
                       {hasValue(greenLeaf) && greenLeaf
@@ -66,14 +67,12 @@ const Lozenges = ({ labels, sku, greenLeaf }) => {
   return null;
 };
 
-const LabelItems = ({ bifercatedLabels, directionKey }) => (
+const LabelItems = ({ bifercatedLabels, directionKey, sku }) => (
   <>
     {
-      bifercatedLabels[directionKey].map((labelItem, index) => (
-        // BE to provide and add a unique key here.
-        // Below line added to suppress the linting error, until the unique key is decided.
-        // eslint-disable-next-line react/no-array-index-key
-        <div className="label" key={`label-${index}`}>
+      bifercatedLabels[directionKey].map((labelItem) => (
+        // Product SKU added as a unique key.
+        <div className="label" key={`label-${sku}`}>
           <ImageElement
             src={labelItem.image.url}
             alt={labelItem.image.alt}
