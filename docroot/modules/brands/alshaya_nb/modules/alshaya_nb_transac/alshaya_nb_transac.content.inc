@@ -11,7 +11,7 @@ use Drupal\block_content\Entity\BlockContent;
  * Create default block_content.
  */
 function alshaya_nb_transac_create_default_content() {
-  // Create copyright block.
+  // Create footer logo block.
   alshaya_nb_transac_create_footer_logo_block();
 }
 
