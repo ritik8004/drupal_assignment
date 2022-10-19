@@ -81,6 +81,7 @@ window.commerceBackend = window.commerceBackend || {};
    *   (optional) Indicates if styled product need to be loaded.
    */
   window.commerceBackend.getProductDataFromBackend = function (sku, parentSKU = null, loadStyles = true) {
+    var mainParentSKU = Drupal.hasValue(parentSKU) ? parentSKU : null;
     return $.ajax({
       url: Drupal.url('rest/v2/product/' + btoa(sku)) + '?context=cart',
       type: 'GET',
@@ -104,9 +105,7 @@ window.commerceBackend = window.commerceBackend || {};
           attrOptions = Drupal.alshayaSpc.getGroupingOptions(response.attributes);
         }
 
-        var parentSKU = response.parent_sku !== null
-          ? response.parent_sku
-          : response.sku;
+        var parentSKU = mainParentSKU || response.parent_sku || response.sku;
 
         Drupal.alshayaSpc.storeProductData({
           id: response.id,

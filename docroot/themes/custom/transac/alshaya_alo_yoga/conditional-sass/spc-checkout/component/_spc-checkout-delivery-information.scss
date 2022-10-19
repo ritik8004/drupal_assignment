@@ -1,0 +1,7 @@
+.spc-checkout-delivery-information {
+  .delivery-information-preview {
+    @include breakpoint($upto-desktop) {
+      background: $spc_checkout_delivery_mob_bg;
+    }
+  }
+}

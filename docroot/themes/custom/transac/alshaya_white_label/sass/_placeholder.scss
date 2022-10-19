@@ -63,3 +63,12 @@
     display: inline-block;
   }
 }
+
+%steps-border {
+  content: "";
+  position: absolute;
+  #{$left}: 0;
+  top: 50%;
+  height: rem(1);
+  width: 100%;
+}

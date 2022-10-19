@@ -23,6 +23,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Consolidation\AnnotatedCommand\AnnotationData;
 use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
+use Drupal\Component\Serialization\Yaml;
 
 /**
  * Alshaya Master Commands class.
@@ -174,6 +175,9 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
     'brand_module' => self::REQ,
     'country_code' => self::REQ,
   ]) {
+    // Increase memory limit to make sure install finishes fine.
+    ini_set('memory_limit', '2G');
+
     $post_install_status = $this->state->get('alshaya_master_post_drupal_install', 'not done');
     $modules = $this->moduleExtensionList->getList();
 
@@ -208,55 +212,61 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
 
     // Determine which brand to install.
     $brand_module = $options['brand_module'];
+    $sites = Yaml::decode(file_get_contents('../blt/alshaya_sites.yml'))['sites'];
+    // @codingStandardsIgnoreLine
+    global $_acsf_site_name;
 
     // Get the current installed profile.
     $profile = str_replace('alshaya_', '_', $this->cachedStorage->read('core.extension')['profile']);
 
+    // Try to get the brand module from settings file if available.
+    if (!empty($sites[$_acsf_site_name]) && !empty($sites[$_acsf_site_name]['module'])) {
+      $brand_module = $sites[$_acsf_site_name]['module'];
+    }
     // Try to look for transac and non transac specific module for brand before
     // brand installing brand module. i.e. alshaya_vs_transac.
-    if (isset($modules[$brand_module . $profile])) {
+    elseif (isset($modules[$brand_module . $profile])) {
       $brand_module = $brand_module . $profile;
     }
 
-    if (!empty($brand_module)) {
-      if (isset($modules[$brand_module])) {
-        if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
-          $this->output()->writeln(dt('Enabling the @brand_module brand module.', ['@brand_module' => $brand_module]));
+    if (!empty($brand_module)
+      && isset($modules[$brand_module])) {
+      if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
+        $this->output()->writeln(dt('Enabling the @brand_module brand module.', ['@brand_module' => $brand_module]));
 
-          // Install the module.
-          $this->moduleInstaller->install([$brand_module]);
+        // Install the module.
+        $this->moduleInstaller->install([$brand_module]);
 
-          // Update config with installed brand and module names.
-          $this->configFactory->getEditable('alshaya.installed_brand')
-            ->set('module', $brand_module)
-            ->save();
+        // Update config with installed brand and module names.
+        $this->configFactory->getEditable('alshaya.installed_brand')
+          ->set('module', $brand_module)
+          ->save();
 
-          // Get langcodes for all languages.
-          $langcodes = array_keys($this->languageManager->getLanguages());
+        // Get langcodes for all languages.
+        $langcodes = array_keys($this->languageManager->getLanguages());
 
-          // Get all config names available in current module.
-          $names = ConfigHelper::forModule($brand_module)->optional()->listAll();
+        // Get all config names available in current module.
+        $names = ConfigHelper::forModule($brand_module)->optional()->listAll();
 
-          // Update config translations from string translations.
-          $this->localeConfigManager->updateConfigTranslations($names, $langcodes);
+        // Update config translations from string translations.
+        $this->localeConfigManager->updateConfigTranslations($names, $langcodes);
 
-          // Get all config names available in current profile.
-          $names = ConfigHelper::forModule($this->installProfile)->optional()->listAll();
+        // Get all config names available in current profile.
+        $names = ConfigHelper::forModule($this->installProfile)->optional()->listAll();
 
-          // Update config translations from string translations.
-          $this->localeConfigManager->updateConfigTranslations($names, $langcodes);
-        }
-        else {
-          $this->output()->writeln(dt("Brand module @brand_module can't be enabled because the site is already configured with @existing_brand_module.",
-            [
-              '@brand_module' => $brand_module,
-              '@existing_brand_module' => $this->configFactory->get('alshaya.installed_brand')->get('module'),
-            ]));
-        }
+        // Update config translations from string translations.
+        $this->localeConfigManager->updateConfigTranslations($names, $langcodes);
       }
       else {
-        $this->output()->writeln(dt('Brand module @brand_module does not exists.', ['@brand_module' => $brand_module]));
+        $this->output()->writeln(dt("Brand module @brand_module can't be enabled because the site is already configured with @existing_brand_module.",
+          [
+            '@brand_module' => $brand_module,
+            '@existing_brand_module' => $this->configFactory->get('alshaya.installed_brand')->get('module'),
+          ]));
       }
+    }
+    else {
+      $this->output()->writeln(dt('Brand module @brand_module does not exists.', ['@brand_module' => $brand_module]));
     }
 
     if ($post_install_status == 'not done') {

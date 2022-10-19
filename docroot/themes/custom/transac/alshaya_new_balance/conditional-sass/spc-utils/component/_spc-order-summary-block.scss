@@ -1,0 +1,23 @@
+.spc-order-summary-block {
+  .hero-total {
+    & > .total-line-item {
+      .grand-total {
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+
+  .totals {
+    padding: rem(28) rem(28) rem(0);
+  }
+
+  .total-line-item {
+    margin-bottom: rem(17);
+  }
+
+  .block-content {
+    .actions {
+      padding: rem(0) rem(28) rem(24);
+    }
+  }
+}

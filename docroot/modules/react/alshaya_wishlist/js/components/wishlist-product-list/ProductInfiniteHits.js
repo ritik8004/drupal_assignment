@@ -72,6 +72,8 @@ const ProductInfiniteHits = connectInfiniteHits(({
                 extraInfo={{
                   isWishlistPage: true,
                   showAddToBag: true,
+                  disableQuickViewDrawer:
+                    drupalSettings.wishlist.config.disableQuickViewInWishlistPage,
                   addToCartButtonText: Drupal.t('Move to basket', {}, { context: 'wishlist' }),
                   inStock: getWishlistItemInStockStatus(hit),
                 }}

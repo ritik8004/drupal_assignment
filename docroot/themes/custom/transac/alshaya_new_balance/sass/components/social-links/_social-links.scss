@@ -1,0 +1,25 @@
+.ic-social {
+  &-facebook {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$nb_theme_img_directory_path}/icons/facebook.svg);
+    }
+  }
+
+  &-instagram {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$nb_theme_img_directory_path}/icons/instagram.svg);
+    }
+  }
+
+  &-twitter {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$nb_theme_img_directory_path}/icons/twitter.svg);
+    }
+  }
+}

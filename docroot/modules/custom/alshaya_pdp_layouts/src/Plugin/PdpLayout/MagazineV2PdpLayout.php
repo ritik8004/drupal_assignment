@@ -137,6 +137,18 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_magazine_v2';
 
     $entity = $vars['node'];
+    // Get sharethis settings.
+    if (isset($vars['elements']['sharethis'])) {
+      $this->getShareThisSettings($vars);
+    }
+
+    // Get cnc config info.
+    $this->getCncSettings($vars);
+
+    if ($entity->bundle() != 'acq_product') {
+      return;
+    }
+
     $sku = $this->skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
     $vars['sku'] = $sku_entity;

@@ -1,0 +1,9 @@
+services:
+  alshaya_rcs_super_category.commands:
+    class: Drupal\alshaya_rcs_super_category\Commands\RcsSuperCategoryCommands
+    arguments:
+      - '@alshaya_rcs_super_category.super_categories_helper'
+      - '@logger.factory'
+
+    tags:
+      - { name: drush.command }

@@ -2,6 +2,7 @@ import React from 'react';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import AddToBagConfigurable from '../addtobag-configurable';
 import AddToBagSimple from '../addtobag-simple';
+import NotBuyableButton from '../buttons/not-buyable';
 
 const AddToBag = (props) => {
   const {
@@ -14,6 +15,13 @@ const AddToBag = (props) => {
     wishListButtonRef,
     styleCode,
   } = props;
+
+  // Only View More button will be visible for wishlist pages.
+  if (typeof extraInfo !== 'undefined' && extraInfo.disableQuickViewDrawer === true) {
+    return (
+      <NotBuyableButton url={url} />
+    );
+  }
 
   const skuType = productData.sku_type;
 

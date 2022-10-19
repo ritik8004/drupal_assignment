@@ -3,7 +3,7 @@ import React from 'react';
 const AvailableSelectOptions = ({
   nextValues, attr, value, handleLiClick, selected, code,
 }) => {
-  if (nextValues.indexOf(attr) !== -1) {
+  if (nextValues.indexOf(String(attr)) !== -1) {
     let selectedVal = selected;
     // If the previously selected value is disabled.
     if (nextValues.indexOf(String(selectedVal)) === -1) {

@@ -1,0 +1,49 @@
+#alshaya-algolia-search {
+  .c-page-title {
+    font-size: rem(38);
+    text-transform: unset;
+  }
+}
+
+#alshaya-algolia-plp,
+#alshaya-algolia-search {
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        text-transform: uppercase;
+        font-size: rem(16);
+
+        &::after {
+          font-size: rem(32);
+          #{$right}: rem(5);
+        }
+      }
+    }
+
+    ul {
+      @include breakpoint($upto-desktop) {
+        width: 100vw;
+        max-width: none;
+        border-#{$left}: 0;
+        border-#{$right}: 0;
+      }
+    }
+  }
+
+  #sort_by {
+    li {
+      a {
+        font-size: rem(14);
+      }
+    }
+  }
+
+  .block-facet-blockcategory-facet-plp,
+  .block-facet-blockcategory-facet-search {
+    .c-accordion__title {
+      &.c-collapse__title {
+        text-transform: unset;
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+name: 'Alshaya New Balance'
+type: module
+description: 'The dedicated module for New Balance brand.'
+package: Alshaya
+core_version_requirement: ^9
+dependencies:
+  - alshaya_nb:alshaya_nb
+themes:
+  - alshaya_new_balance

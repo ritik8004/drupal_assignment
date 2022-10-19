@@ -47,3 +47,27 @@ shop_by_menu:
   version: 1.x
   js:
     handlebars/shop_by_menu.handlebars: {}
+
+# This handlebars template is to be used to add markup for visual mobile menu.
+visual_mobile_menu_partial:
+  version: 1.x
+  js:
+    handlebars/visual_mobile_menu_partial.handlebars: {}
+  dependencies:
+    - alshaya_rcs_main_menu/main_menu_level1
+
+visual_mobile_menu_level2_partial:
+  version: 1.x
+  js:
+    handlebars/visual_mobile_menu_level2_partial.handlebars: {}
+  dependencies:
+    - alshaya_rcs_main_menu/visual_mobile_menu_partial
+
+visual_mobile_menu_ui:
+  version: 1.x
+  js:
+    assets/visual_mobile_menu_ui.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - alshaya_rcs_main_menu/visual_mobile_menu_partial

@@ -1,0 +1,7 @@
+#alshaya-algolia-plp {
+  .show-all-filters-algolia.empty-category {
+    @include breakpoint($only-mobile) {
+      top: rem(-14);
+    }
+  }
+}
