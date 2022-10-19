@@ -3,7 +3,6 @@ import Slider from 'react-slick';
 import ImageElement from '../imageHelper/ImageElement';
 import Lozenges
   from '../../../../common/components/lozenges';
-import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const SliderElement = ({
   src, title,
@@ -50,7 +49,7 @@ class SearchGallery extends React.PureComponent {
 
   render() {
     const {
-      media, title, labels, sku, initSlider, greenLeaf,
+      media, title, labels, sku, initSlider,
     } = this.props;
     const mainImageUrl = typeof this.mainImage.url !== 'undefined' ? this.mainImage.url : '';
     const thumbnails = [];
@@ -82,9 +81,7 @@ class SearchGallery extends React.PureComponent {
             />
             {(sliderStatus && initSlider) ? this.onHoverAppendMarkup(thumbnails) : ''}
           </div>
-          {(hasValue(greenLeaf) && greenLeaf)
-            ? <Lozenges labels={labels} sku={sku} greenLeaf={greenLeaf} />
-            : <Lozenges labels={labels} sku={sku} />}
+          <Lozenges labels={labels} sku={sku} />
         </div>
       </div>
     );
