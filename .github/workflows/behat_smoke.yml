@@ -59,14 +59,20 @@ jobs:
       - name: Cache dependencies installed with Composer
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "{composer_cache_dirs}={$(composer config cache-files-dir)}" >> $GITHUB_ENV
+          echo "${{ env.composer_cache_dirs }}"
 
       - uses: actions/cache@v2
         with:
           path: |
-            "${{ steps.composer-cache.outputs.dir }}"
+            "${{ env.composer_cache_dirs }}"
             ~/.drush/cache
           key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.19.0"
 
       - name: Setup Chrome
         run: bash ${SCRIPT_DIR}/setup_chrome.sh
