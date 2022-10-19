@@ -89,15 +89,18 @@ class OptionsListResource extends ResourceBase {
    *
    * Returns response data based on configured attribute code.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return \Drupal\rest\ModifiedResourceResponse
    *   The response containing options term data.
    */
-  public function get(string $page_url) {
+  public function get(string $page_url): ModifiedResourceResponse {
     if (!$this->alshayaOptionsService->optionsPageEnabled()) {
       throw new NotFoundHttpException();
     }
 
     $response_data = $this->alshayaOptionsService->getOptionsList($page_url);
+    if (empty($response_data)) {
+      throw new NotFoundHttpException('Term option not found.');
+    }
 
     $this->moduleHandler->alter('options_list_resource_response', $response_data);
 
