@@ -460,7 +460,7 @@ header {
       padding: rem(11) rem(8);
     }
 
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($only-tablet) {
       padding: rem(18) rem(16);
     }
   }
