@@ -565,13 +565,18 @@ class AlshayaFrontendCommand extends BltTasks {
     if (!empty($changed_react_js_files)) {
       $relative_react_directory_path = 'docroot/modules/react/';
       $react_changed_files = array_filter($changed_react_js_files, function ($js_file) use ($relative_react_directory_path) {
+        // Get the directory/module name of the file.
+        $pos = strpos($js_file, "docroot/modules/react/");
+        $dir_name = explode("/", substr($js_file, $pos))[3];
         // Get files only in react directory
         // and ignore webpack, node modules, react module files.
         return (
           str_contains($js_file, $relative_react_directory_path) &&
           !(str_contains($js_file, 'webpack.config.js') ||
             str_contains($js_file, 'node_modules') ||
-            str_contains($js_file, 'alshaya_react'))
+            str_contains($js_file, 'alshaya_react') ||
+            str_contains($js_file, $dir_name . '/assets/') ||
+            str_contains($js_file, $dir_name . '/js/assets/'))
         );
       });
 
