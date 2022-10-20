@@ -481,8 +481,12 @@ body.aura-enabled {
 
 header {
   .region__header {
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($only-mobile) {
       padding: rem(11) rem(8);
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: rem(18) rem(16);
     }
   }
 
@@ -491,6 +495,16 @@ header {
       padding-right: 0;
       padding-left: 0;
       background-color: $menu_bg;
+    }
+
+    .block-system-branding-block {
+      .site-brand-home {
+        img {
+          @include breakpoint($only-tablet) {
+            width: rem(64);
+          }
+        }
+      }
     }
   }
 
