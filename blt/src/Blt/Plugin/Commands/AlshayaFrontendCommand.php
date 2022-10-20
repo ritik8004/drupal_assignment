@@ -576,7 +576,7 @@ class AlshayaFrontendCommand extends BltTasks {
             str_contains($js_file, 'node_modules') ||
             str_contains($js_file, 'alshaya_react') ||
             str_contains($js_file, $dir_name . '/assets/') ||
-            str_contains($js_file, $dir_name . '/assets/js/'))
+            str_contains($js_file, $dir_name . '/js/assets/'))
         );
       });
 
