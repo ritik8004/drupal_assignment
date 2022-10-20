@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_rcs_main_menu\Service;
 
+use Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -140,10 +141,10 @@ class AlshayaRcsCategoryHelper {
   /**
    * Sets optional dependency on department pager helper service.
    *
-   * @param \Drupal\alshaya_rcs_listing\Service\AlshayaRcsListingDepartmentPagesHelper $department_pages_helper
-   *   Department page helper.
+   * @param \Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper $department_pages_helper
+   *   Department pages helper.
    */
-  public function setDepartmentHelper(AlshayaRcsListingDepartmentPagesHelper $department_pages_helper) {
+  public function setDepartmentHelper(AlshayaDepartmentPageHelper $department_pages_helper) {
     $this->departmentPageHelper = $department_pages_helper;
   }
 
