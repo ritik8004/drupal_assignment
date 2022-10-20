@@ -1,12 +1,5 @@
 langcode: en
 status: true
-dependencies:
-  config:
-    - rest.resource.acq_customer_delete
-    - rest.resource.alshaya_acm_product_category_mapping
-  module:
-    - rest
-    - system
 id: alshaya_magento_consumer
 label: 'Alshaya Magento Consumer'
 weight: 19
