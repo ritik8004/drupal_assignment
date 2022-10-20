@@ -30,12 +30,23 @@
       }
 
       .quick-add {
-        .addtobag-button::before,
-        .addtobag-config-button::before,
-        .is-not-buyable::before {
+        .addtobag-button,
+        .addtobag-config-button,
+        .is-not-buyable {
           @include breakpoint($only-mobile) {
-            bottom: rem(95);
+            width: rem(56);
+            height: rem(56);
+            position: absolute;
             #{$right}: rem(10);
+            #{$left}: unset;
+            margin-top: 0;
+          }
+
+          &::before {
+            @include breakpoint($only-mobile) {
+              bottom: rem(12);
+              #{$right}: 0;
+            }
           }
         }
       }
