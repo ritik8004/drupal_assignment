@@ -10,6 +10,8 @@
 
 .spc-order-summary-block {
   @include breakpoint($only-mobile) {
+    border-top: rem(1) solid $spc_cart_item_border_color;
+
     .block-content {
       background: $spc-cart-background;
 
