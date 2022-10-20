@@ -22,7 +22,7 @@ function alshaya_rcs_super_category_get_block_ids() {
  */
 function alshaya_rcs_super_category_install() {
   // Sync L1 RCS Category terms from mdc.
-  \Drupal::service('alshaya_rcs_super_category.super_categories_helper')->syncSuperCategories();
+  \Drupal::service('alshaya_rcs_super_category.super_categories_helper')->syncSuperCategories(TRUE);
 
   // Move the rcs navigation block to current theme.
   $current_theme = \Drupal::config('system.theme')->get('default');
