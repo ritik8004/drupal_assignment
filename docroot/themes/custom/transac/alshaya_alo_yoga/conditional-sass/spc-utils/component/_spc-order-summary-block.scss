@@ -1,0 +1,68 @@
+.spc-product-price {
+  font-size: rem(16);
+  font-family: $ay-heavy;
+}
+
+.spc-order-summary-block {
+  @include breakpoint($only-mobile) {
+    .block-content {
+      background: $spc-cart-background;
+
+      .actions {
+        background-color: $spc_promo_code_block_mob_header_bg;
+      }
+    }
+
+    .totals {
+      background: $spc-cart-background;
+    }
+
+    .total-line-item {
+      font-size: rem(14);
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .block-content {
+      background: $spc-order-summary-bg;
+    }
+  }
+
+  .product-content {
+    padding: rem(11);
+
+    .product-item {
+      padding: rem(15);
+      background: $spc-order-summary-item-bg;
+
+      .spc-product-title {
+        @include breakpoint($desktop) {
+          max-width: 64%;
+        }
+
+        a {
+          font-family: $ay-heavy;
+        }
+      }
+
+      .spc-product-title-price {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .spc-product-meta-data {
+        justify-content: unset;
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .totals {
+      background: $spc-order-summary-totals-bg;
+    }
+
+    .total-line-item {
+      font-size: rem(18);
+    }
+  }
+}

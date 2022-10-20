@@ -21,7 +21,7 @@ Feature: Test the My Account functionality
     And the element "#block-content .account-content-wrapper .email" should exist
 
   Scenario: As an authenticated user, I should be able to update my contact details
-    When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-contact-details"
     And I wait for the page to load
     When I fill in "field_mobile_number[0][mobile]" with "{mobile}"
     And I press "edit-submit"

@@ -1,11 +1,12 @@
 import React from 'react';
 import ImageElement
   from '../../../src/components/gallery/imageHelper/ImageElement';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 // Supported label positions.
 const ALLOWED_POSITIONS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
 
-const Lozenges = ({ labels, sku }) => {
+const Lozenges = ({ labels, sku, greenLeaf }) => {
   if (typeof labels === 'undefined' || labels.length === 0) {
     return (null);
   }
@@ -35,15 +36,23 @@ const Lozenges = ({ labels, sku }) => {
                 // Only render labels in supported positions.
                 if (ALLOWED_POSITIONS.includes(key)) {
                   return (
-                    <div
-                      className={`labels-container ${key}`}
-                      key={`${key}-label-container`}
-                    >
-                      <LabelItems
-                        bifercatedLabels={bifercatedLabels}
-                        directionKey={key}
-                      />
-                    </div>
+                    <>
+                      <div
+                        className={`labels-container ${key}`}
+                        key={`${key}-label-container`}
+                      >
+                        <LabelItems
+                          bifercatedLabels={bifercatedLabels}
+                          directionKey={key}
+                        />
+                      </div>
+                      {hasValue(greenLeaf) && greenLeaf
+                        && (
+                          <div className="labels-container bottom-right">
+                            <span className="map-green-leaf" />
+                          </div>
+                        )}
+                    </>
                   );
                 }
                 return null;
@@ -62,6 +71,8 @@ const LabelItems = ({ bifercatedLabels, directionKey }) => (
     {
       bifercatedLabels[directionKey].map((labelItem, index) => (
         // BE to provide and add a unique key here.
+        // Below line added to suppress the linting error, until the unique key is decided.
+        // eslint-disable-next-line react/no-array-index-key
         <div className="label" key={`label-${index}`}>
           <ImageElement
             src={labelItem.image.url}

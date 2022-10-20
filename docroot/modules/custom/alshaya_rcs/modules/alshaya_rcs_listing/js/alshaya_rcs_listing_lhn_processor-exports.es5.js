@@ -65,11 +65,11 @@ function processLhnMenu(item, settings, enrichmentData) {
  */
 exports.prepareData = function prepareData(settings, inputs) {
   // @todo Handle special base where we separate URL by - instead of /.
-  const firstLevelTermUrl = globalThis.rcsWindowLocation().pathname.match(`\/${settings.path.currentLanguage}\/(.*?)\/(.*?)$`);
+  const firstLevelTermUrl = Drupal.getTopLevelCategoryUrl();
   let menuItems = [];
   if (firstLevelTermUrl) {
     let catItems = inputs.filter(function filterCat(input) {
-      return input.url_path === firstLevelTermUrl[1];
+      return input.url_key === firstLevelTermUrl;
     });
     if (catItems.length > 0 && !!catItems[0].children) {
       // Get the enrichment data.

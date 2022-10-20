@@ -28,6 +28,16 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
   public const MAIN_MENU_DYNAMIC_LAYOUT = 'menu_dynamic_display';
 
   /**
+   * Default layout for mobile main menu navigation.
+   */
+  public const MOBILE_MENU_DEFAULT = 'default';
+
+  /**
+   * Visual mobile main menu layout.
+   */
+  public const MOBILE_MENU_VISUAL = 'visual_mobile_menu';
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -66,6 +76,17 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('desktop_main_menu_layout'),
       '#title' => $this->t('Main menu display on desktop'),
       '#description' => $this->t('Select inline menu display option to display the l3 option inline to l2 otherwise it will follow the core.'),
+    ];
+
+    $form['mobile_main_menu_layout'] = [
+      '#type' => 'select',
+      '#options' => [
+        self::MOBILE_MENU_DEFAULT => $this->t('Default mobile menu display'),
+        self::MOBILE_MENU_VISUAL => $this->t('Visual layout for mobile menu display'),
+      ],
+      '#default_value' => $config->get('mobile_main_menu_layout'),
+      '#title' => $this->t('Main menu display on mobile view'),
+      '#description' => $this->t('This settings is to select different layout for main menu on mobile view. Note: The visual menu requires certain parameter from MDC backend.'),
     ];
 
     $form['max_nb_col'] = [
@@ -110,6 +131,7 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
     $config = $this->config('alshaya_main_menu.settings');
     $config->set('mobile_main_menu_max_depth', $form_state->getValue('mobile_main_menu_max_depth'));
     $config->set('desktop_main_menu_layout', $form_state->getValue('desktop_main_menu_layout'));
+    $config->set('mobile_main_menu_layout', $form_state->getValue('mobile_main_menu_layout'));
     $config->set('max_nb_col', $form_state->getValue('max_nb_col'));
     $config->set('ideal_max_col_length', $form_state->getValue('ideal_max_col_length'));
     $config->set('show_l2_in_separate_column', $form_state->getValue('show_l2_in_separate_column'));

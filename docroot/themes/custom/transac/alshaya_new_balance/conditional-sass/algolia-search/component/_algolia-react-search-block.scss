@@ -1,0 +1,25 @@
+.block-alshaya-algolia-react-autocomplete {
+  #alshaya-algolia-autocomplete {
+    width: 100%;
+
+    .react-autosuggest__container {
+      &::before {
+        background: none;
+      }
+
+      &::after {
+        height: rem(16);
+        width: rem(16);
+        top: rem(10);
+      }
+    }
+  }
+
+  .react-autosuggest__input {
+    border-radius: 0;
+    border-width: rem(1);
+    background-color: $alg_search_bg;
+    font-size: rem(16);
+    height: rem(36);
+  }
+}

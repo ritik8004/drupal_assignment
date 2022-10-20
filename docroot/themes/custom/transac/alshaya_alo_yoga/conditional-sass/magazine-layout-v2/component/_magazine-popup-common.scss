@@ -1,0 +1,15 @@
+.magv2 {
+  @include breakpoint($only-mobile) {
+    &-select {
+      &-popup {
+        &-wrapper {
+          justify-content: flex-end;
+        }
+
+        &-content-wrapper {
+          flex-grow: initial;
+        }
+      }
+    }
+  }
+}

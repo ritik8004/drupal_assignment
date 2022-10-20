@@ -260,7 +260,9 @@ function alshaya_acm_product_category_form_views_exposed_form_alter(&$form, Form
 function alshaya_acm_product_category_entity_field_access_alter(array &$grants, array $context) {
   if ($context['operation'] === 'view' && $context['field_definition']->getTargetEntityTypeId() === 'taxonomy_term' && $context['field_definition']->getname() === 'field_plp_menu') {
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
-    if ($term instanceof TermInterface && $term->get('field_plp_layout')->value != ProductCategoryTree::PLP_LAYOUT_1) {
+    if ($term instanceof TermInterface
+      && $term->hasField('field_plp_layout')
+      && $term->get('field_plp_layout')->getString() != ProductCategoryTree::PLP_LAYOUT_1) {
       // Do not show this field on pages that are not campaign-plp-style-1.
       $grants[':default'] = AccessResult::forbidden()->inheritCacheability($grants[':default'])->addCacheableDependency($context['items']->getEntity());
     }

@@ -1,0 +1,8 @@
+.add-to-basket-loader {
+  &.addtobag-simple-button-container,
+  &.qty-sel-container {
+    &::after {
+      top: 50%;
+    }
+  }
+}

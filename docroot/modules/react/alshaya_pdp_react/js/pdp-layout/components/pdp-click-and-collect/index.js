@@ -70,9 +70,10 @@ export default class PdpClickCollect extends React.PureComponent {
    * Autocomplete handler for the places list.
    */
   placesAutocompleteHandler = () => {
+    const { productInfo } = this.props;
     const place = this.autocomplete.getPlace();
     if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
-      fetchAvailableStores({
+      fetchAvailableStores(productInfo, {
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng(),
         location: place.formatted_address,

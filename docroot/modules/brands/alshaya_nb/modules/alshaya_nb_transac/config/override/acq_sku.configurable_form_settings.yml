@@ -1,0 +1,7 @@
+attribute_weights:
+  default:
+    color: 1
+    size: 2
+sortable_options:
+  - color
+  - size

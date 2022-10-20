@@ -45,3 +45,8 @@ plp_mobile_menu:
   version: 1.x
   js:
     handlebars/plp_mobile_menu.handlebars: {}
+
+category_utility:
+  version: 1.x
+  js:
+    js/category_utility.js: {}

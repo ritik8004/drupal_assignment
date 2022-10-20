@@ -1,0 +1,8 @@
+#hits,
+#plp-hits {
+  .chrome & {
+    @include breakpoint($desktop) {
+      padding-top: rem(32);
+    }
+  }
+}

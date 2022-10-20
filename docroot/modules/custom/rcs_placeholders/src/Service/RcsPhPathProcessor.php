@@ -54,6 +54,13 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public static $entityData;
 
   /**
+   * RCS Full Path.
+   *
+   * @var array|null
+   */
+  public static $entityFullPath;
+
+  /**
    * The node storage.
    *
    * @var \Drupal\node\NodeStorageInterface
@@ -134,7 +141,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // we use $request->getPathInfo() to get the real requested url instead of
     // $path.
     // Remove language code from URL.
-    $rcs_path_to_check = str_replace(
+    $full_path = $rcs_path_to_check = str_replace(
       '/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
       '/',
       $request->getPathInfo()
@@ -142,7 +149,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     // Allow other modules to alter the path.
     $this->moduleHandler->alter('rcs_placeholders_processor_path', $rcs_path_to_check);
-
     $config = \Drupal::config('rcs_placeholders.settings');
 
     // Is it a category page?
@@ -152,16 +158,16 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       self::$entityType = 'category';
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
       self::$entityPathPrefix = $category_prefix;
+      self::$entityFullPath = $full_path;
 
-      self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
+      self::$processedPaths[$full_path] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
 
-      $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', $rcs_path_to_check) : NULL;
+      $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', $full_path) : NULL;
       if (isset($category)) {
         self::$entityData = $category->toArray();
-        self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $category->id();
+        self::$processedPaths[$full_path] = '/taxonomy/term/' . $category->id();
       }
-
-      return self::$processedPaths[$rcs_path_to_check];
+      return self::$processedPaths[$full_path];
     }
 
     // Is it a product page?
@@ -171,6 +177,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       self::$entityType = 'product';
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($product_prefix) + 1);
       self::$entityPathPrefix = $product_prefix;
+      self::$entityFullPath = $full_path;
 
       self::$processedPaths[$rcs_path_to_check] = '/node/' . $config->get('product.placeholder_nid');
 
@@ -190,6 +197,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       self::$entityType = 'promotion';
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($promotion_prefix) + 1);
       self::$entityPathPrefix = $promotion_prefix;
+      self::$entityFullPath = $full_path;
 
       self::$processedPaths[$rcs_path_to_check] = '/node/' . $config->get('promotion.placeholder_nid');
 
@@ -276,7 +284,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     if (empty(self::$entityType)) {
       return '';
     }
-    $url = self::$entityPathPrefix . self::$entityPath;
+    $url = self::$entityFullPath;
     // Trim the front slash.
     if ($trim) {
       $url = trim($url, '/');

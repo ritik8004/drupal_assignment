@@ -1059,6 +1059,9 @@ window.commerceBackend = window.commerceBackend || {};
     return skuForGallery;
   };
 
+  // Expose the function to global level.
+  window.commerceBackend.getSkuForGallery = getSkuForGallery;
+
   /**
    * Get first image from media to display as list.
    *

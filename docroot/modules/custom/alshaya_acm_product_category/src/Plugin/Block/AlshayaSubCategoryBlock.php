@@ -103,7 +103,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
     $current_language = $this->languageManager->getCurrentLanguage()->getId();
 
-    if ($term instanceof TermInterface) {
+    if ($term instanceof TermInterface && $term->hasField('field_select_sub_categories_plp')) {
       // Get all selected subcategories to be displayed on PLP.
       $selected_subcategories = array_column($term->get('field_select_sub_categories_plp')->getValue(), 'value');
 
@@ -190,7 +190,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
 
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')) {
+    if ($term instanceof TermInterface && $term->hasField('field_group_by_sub_categories')) {
       if ($term->get('field_group_by_sub_categories')->getString()) {
         $cachetags = $this->getCacheTags();
 
