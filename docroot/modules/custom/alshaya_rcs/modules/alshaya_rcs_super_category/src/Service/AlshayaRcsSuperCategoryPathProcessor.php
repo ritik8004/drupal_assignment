@@ -71,7 +71,7 @@ class AlshayaRcsSuperCategoryPathProcessor extends RcsPhPathProcessor {
       return parent::processInbound($path, $request);
     }
 
-    $this->processEntity('category');
+    $this->processCategoryEntity();
     return self::$processedPaths[self::$pageFullPath];
   }
 
