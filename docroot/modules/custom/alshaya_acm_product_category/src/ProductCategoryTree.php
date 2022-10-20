@@ -317,7 +317,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $uri_options
       )->toString(TRUE)->getGeneratedUrl();
       $clickable = !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE;
-      if ($term->display_view_all) {
+      if (isset($term->display_view_all) && $term->display_view_all) {
         $clickable = FALSE;
       }
       $data[$term->tid] = [
@@ -377,7 +377,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
       if ($child) {
         $data[$term->tid]['child'] = $this->getCategoryTree($langcode, $term->tid);
-        if ($term->display_view_all && $term->depth_level == '2') {
+        if (isset($term->display_view_all)
+          && $term->display_view_all
+          && $term->depth_level == '2') {
           $view_all = [
             'label' => $this->t('View All'),
             'gtm_menu_title' => 'View All',
