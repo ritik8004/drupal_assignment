@@ -178,7 +178,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     $category_prefix = $this->getEntityPrefix('category');
 
     if (str_starts_with($rcs_path_to_check, '/' . $category_prefix)) {
-      $this->processEntity('category');
+      $this->processCategoryEntity();
       return self::$processedPaths[$full_path];
     }
 
@@ -245,14 +245,13 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
   /**
    * Process the entity and set the static variables.
-   *
-   * @param string $entity_type
-   *   The entity type to process.
    */
-  protected function processEntity($entity_type) {
-    $entity_prefix = $this->getEntityPrefix($entity_type);
-    $placehodler_id = $this->getPlaceholderId($entity_type);
-    $entity_url_prefix = $this->getEntityUrlPrefix($entity_type);
+  protected function processCategoryEntity() {
+    $entity_type = 'category';
+    $config = $this->getRcsPhSettings();
+    $entity_prefix = $config->get("$entity_type.path_prefix");
+    $placehodler_id = $config->get("$entity_type.placeholder_tid");
+    $entity_url_prefix = '/taxonomy/term/';
 
     self::$entityType = $entity_type;
     self::$entityPath = substr_replace(self::$rcsPathToCheck, '', 0, strlen($entity_prefix) + 1);
@@ -260,32 +259,13 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     self::$entityFullPath = self::$pageFullPath;
     self::$processedPaths[self::$pageFullPath] = $entity_url_prefix . $placehodler_id;
 
-    $entity = $this->isEntityEnriched($entity_type)
+    $entity = $this->isEntityEnrichmentEnabled($entity_type)
       ? $this->getEnrichedEntity($entity_type, self::$pageFullPath)
       : NULL;
     if (isset($entity)) {
       self::$entityData = $entity->toArray();
       self::$processedPaths[self::$pageFullPath] = $entity_url_prefix . $entity->id();
     }
-  }
-
-  /**
-   * Gets the given entity type URL prefix.
-   *
-   * @param string $entity_type
-   *   The entity type.
-   *
-   * @return string
-   *   The URL prefix.
-   */
-  protected function getEntityUrlPrefix($entity_type) {
-    $prefix = NULL;
-    switch ($entity_type) {
-      case 'category':
-        $prefix = '/taxonomy/term/';
-        break;
-    }
-    return $prefix;
   }
 
   /**
@@ -318,20 +298,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   }
 
   /**
-   * Gets the given entity type placeholder ID from the config.
-   *
-   * @param string $entity_type
-   *   The entity type.
-   *
-   * @return string
-   *   The entity placeholder ID.
-   */
-  protected function getPlaceholderId($entity_type) {
-    $config = $this->getRcsPhSettings();
-    return $config->get("$entity_type.placeholder_tid");
-  }
-
-  /**
    * Checks if enrichment is enabled for the given entity type.
    *
    * @param string $entity_type
@@ -340,7 +306,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    * @return bool
    *   True if enrichment is enabled else false.
    */
-  protected function isEntityEnriched($entity_type) {
+  protected function isEntityEnrichmentEnabled($entity_type) {
     $config = $this->getRcsPhSettings();
     return $config->get("$entity_type.enrichment");
   }
