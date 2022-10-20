@@ -240,9 +240,13 @@ article[data-vmode=search_result] {
       }
     }
 
-    .swatch-more-link {
-      margin-#{$left}: rem(10);
-      margin-top: rem(2);
+    .more-color-swatch {
+      margin-#{$left}: rem(2);
+      font-size: rem(14);
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: rem(7);
+      }
     }
   }
 }

@@ -43,10 +43,6 @@ body.wishlist-enabled {
           &.sticky-wrapper {
             @include breakpoint($desktop) {
               #{$right}: rem(24);
-
-              html[lang=ar] & {
-                left: rem(40);
-              }
             }
           }
         }
