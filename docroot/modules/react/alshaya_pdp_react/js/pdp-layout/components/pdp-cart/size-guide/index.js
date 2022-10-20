@@ -2,16 +2,9 @@ import React from 'react';
 import parse from 'html-react-parser';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
-const getRcsSizeGuideSettings = () => {
-  if (hasValue(drupalSettings.alshayaRcs) && hasValue(drupalSettings.alshayaRcs.sizeGuide)) {
-    return drupalSettings.alshayaRcs.sizeGuide;
-  }
-  return null;
-};
-
 const SizeGuide = ({ attrId }) => {
   // Get size guide as per v3 architecture.
-  let sizeGuide = getRcsSizeGuideSettings();
+  let sizeGuide = window.commerceBackend.getRcsSizeGuideSettings();
 
   // Get size guide from drupal settings for v2 architecture.
   if (!hasValue(sizeGuide)) {
