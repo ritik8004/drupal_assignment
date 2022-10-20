@@ -135,14 +135,7 @@
   &:not(.frontpage) {
     &.wishlist-enabled {
       #wishlist-header-wrapper {
-        @include breakpoint($only-mobile) {
-          top: initial;
-          position: relative;
-          right: initial;
-          left: initial;
-        }
-
-        @include breakpoint($only-tablet) {
+        @include breakpoint($upto-desktop) {
           top: initial;
           position: relative;
           right: initial;
