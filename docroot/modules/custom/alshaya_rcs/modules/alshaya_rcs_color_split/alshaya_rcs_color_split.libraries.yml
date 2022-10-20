@@ -5,3 +5,4 @@ rcs_grouped_products:
   dependencies:
     - core/drupal
     - rcs_placeholders/helpers
+    - alshaya_master/common_functions
