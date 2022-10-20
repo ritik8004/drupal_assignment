@@ -530,11 +530,11 @@ header {
     .static-minicart-wrapper {
       .cart-link {
         @include breakpoint($desktop) {
-          top: rem(-4);
-          #{$left}: rem(16);
+          top: 0;
+          #{$left}: rem(22);
 
           html[lang=ar] & {
-            right: rem(-3);
+            right: rem(14);
           }
         }
 

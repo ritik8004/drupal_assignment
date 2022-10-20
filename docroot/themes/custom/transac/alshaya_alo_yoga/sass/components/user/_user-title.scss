@@ -1,6 +1,6 @@
 @mixin pageTitle {
   font-size: rem(28);
-  font-family: $ay-heavy;
+  font-family: $ay-bold;
   text-transform: uppercase;
 
   @include breakpoint($only-mobile) {

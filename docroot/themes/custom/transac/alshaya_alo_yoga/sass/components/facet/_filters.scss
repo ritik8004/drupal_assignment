@@ -64,6 +64,8 @@
 
 .show-all-filters,
 .show-all-filters-algolia {
+  text-transform: capitalize;
+
   @include breakpoint($desktop) {
     margin-#{$left}: rem(12);
   }
