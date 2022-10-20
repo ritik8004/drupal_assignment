@@ -36,19 +36,6 @@
   display: none;
 }
 
-//@todo this is a temporary styling
-.visual-mobile-level-three__link {
-  position: absolute;
-  z-index: 1;
-  white-space: nowrap;
-  transform: translateY(-50%);
-  top: 50%;
-  left: 1.125rem;
-  font-size: 1.125rem;
-  line-height: 1.22;
-  color: #fff;
-}
-
 //@todo this is a temporary styling until we have images.
 .visual-mobile-level-two__link,
 .visual-mobile-level-three .l2-header {
@@ -61,13 +48,7 @@
 
 //@todo this is a temporary styling
 .visual-mobile-level-three__heading {
-  position: absolute;
-  z-index: 1;
-  white-space: nowrap;
-  transform: translateY(-50%);
-  top: 50%;
-  left: 1.125rem;
-  font-size: 1.125rem;
-  line-height: 1.22;
-  color: #fff;
+  position: relative;
+  background: #0a65aa;
+  height: 50px;
 }
