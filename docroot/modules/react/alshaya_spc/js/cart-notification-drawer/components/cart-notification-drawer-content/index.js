@@ -34,6 +34,16 @@ const CartNotificationDrawerContent = (props) => {
         <a href={Drupal.url('cart')} className="add-to-bag">{Drupal.t('VIEW BAG')}</a>
         <a href={checkoutUrl} className="checkout">{Drupal.t('CHECKOUT')}</a>
       </div>
+      <div className="dy-cart-recommendations">
+        {/* use below container for cross-sell / up-sell type product carousel. */}
+        <div id="cart-crossell-upsell-wrapper" data-sku={productData.sku} />
+
+        {/* use below container for recommendation type product carousel */}
+        <div id="cart-recommended-products-wrapper" data-sku={productData.sku} />
+
+        {/* use below container for additional recommendations */}
+        <div id="cart-additional-recommendations-products-wrapper" data-sku={productData.sku} />
+      </div>
     </div>
   );
 };
