@@ -102,6 +102,16 @@
           top: rem(388);
         }
       }
+
+      .quick-add {
+        .addtobag-button,
+        .addtobag-config-button,
+        .is-not-buyable {
+          @include breakpoint($only-mobile) {
+            top: rem(530);
+          }
+        }
+      }
     }
   }
 }
