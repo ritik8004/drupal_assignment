@@ -20,7 +20,7 @@
 .alias--cart {
   .spc-main {
     .spc-sidebar {
-      @include breakpoint($upto-desktop) {
+      @include breakpoint($only-mobile) {
         margin-top: 0;
       }
     }
@@ -41,5 +41,21 @@
 .alias--checkout {
   .c-footer-secondary {
     background-color: $spc-checkout-footer-secondary-bg;
+  }
+}
+
+.alias--checkout {
+  .spc-main {
+    @include breakpoint($only-mobile) {
+      margin-bottom: rem(8);
+
+      .spc-sidebar {
+        margin-top: rem(14);
+      }
+
+      .spc-checkout-section-title {
+        margin-bottom: 0;
+      }
+    }
   }
 }
