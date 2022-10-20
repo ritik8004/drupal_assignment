@@ -30,7 +30,6 @@ jobs:
       matrix:
         branch:
           - develop
-          - develop-brand-rollout
 
     steps:
       - name: Check for commits in branch
