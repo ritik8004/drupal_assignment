@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 
 /**
  * Provides alshaya rcs main menu block.
@@ -158,7 +159,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       $build['#attached']['library'][] = 'alshaya_rcs_main_menu/main_menu_level4_partial';
     }
 
-    if ($variables['mobile_menu_layout'] === 'visual_mobile_menu') {
+    if ($variables['mobile_menu_layout'] === AlshayaMainMenuConfigForm::MOBILE_MENU_VISUAL) {
       $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_ui';
       $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_partial';
       $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_level2_partial';
