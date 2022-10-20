@@ -342,17 +342,17 @@ function alshaya_rcs_product_node_view_alter(array &$build, EntityInterface $nod
     // Remove the button JS library from the render array as the JS file will
     // be directly loaded using custom js.
     // @see Drupal.behaviors.shareThis in alshaya_rcs_product module.
-    if ($build["sharethis"]["#attached"]["library"]) {
-      foreach ($build["sharethis"]["#attached"]["library"] as $key => &$library) {
-        if ($library === "sharethis/sharethispickerexternalbuttons") {
-          unset($build["sharethis"]["#attached"]["library"][$key]);
-          $build["sharethis"]["#attached"]["library"] = array_values($build["sharethis"]["#attached"]["library"]);
+    if ($build['sharethis']['#attached']['library']) {
+      foreach ($build['sharethis']['#attached']['library'] as $key => &$library) {
+        if ($library === 'sharethis/sharethispickerexternalbuttons') {
+          unset($build['sharethis']['#attached']['library'][$key]);
+          $build['sharethis']['#attached']['library'] = array_values($build['sharethis']['#attached']['library']);
           break;
         }
       }
     }
-    foreach ($build["sharethis"]["#content"]["st_spans"] as &$span) {
-      $span["#attributes"]["st_url"] = '#rcs.product._self|absolute_url#';
+    foreach ($build['sharethis']['#content']['st_spans'] as &$span) {
+      $span['#attributes']['st_url'] = '#rcs.product._self|absolute_url#';
     }
   }
 }
