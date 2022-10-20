@@ -190,7 +190,7 @@
           product.variant = product.id;
         }
 
-        cart_total_count = (event.detail.cartData !== null) ? event.detail.cartData.items_qty : null;
+        var cart_total_count = (event.detail.cartData !== null) ? event.detail.cartData.items_qty : null;
         // Push product addToCart event to GTM.
         Drupal.alshayaSeoGtmPushAddToCart(product, cart_total_count);
       });

@@ -127,6 +127,8 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
       'data-drupal-form-fields',
       'data-main-sku',
       'data-rcs-sku',
+      'st_title',
+      'st_url',
     ],
   );
 
@@ -329,6 +331,30 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   // Attaching library for react component to show PDP express delivery labels.
   $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_rcs_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
+  if (!empty($build['sharethis'])) {
+    $build['sharethis']['#content']['m_path'] = '#rcs.product._self|absolute_url#';
+    // Remove the button JS library from the render array as the JS file will
+    // be directly loaded using custom js.
+    // @see Drupal.behaviors.shareThis in alshaya_rcs_product module.
+    if ($build["sharethis"]["#attached"]["library"]) {
+      foreach ($build["sharethis"]["#attached"]["library"] as $key => &$library) {
+        if ($library === "sharethis/sharethispickerexternalbuttons") {
+          unset($build["sharethis"]["#attached"]["library"][$key]);
+          $build["sharethis"]["#attached"]["library"] = array_values($build["sharethis"]["#attached"]["library"]);
+          break;
+        }
+      }
+    }
+    foreach ($build["sharethis"]["#content"]["st_spans"] as &$span) {
+      $span["#attributes"]["st_url"] = '#rcs.product._self|absolute_url#';
+    }
+  }
 }
 
 /**
@@ -864,6 +890,23 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
     unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
     $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
+  }
+  elseif ($extension === 'sharethis') {
+    if (isset($libraries['sharethis'])) {
+      foreach ($libraries['sharethis']['dependencies'] as $key => $dependency) {
+        // Remove addition of this JS as this will be added directly using JS.
+        // @see Drupal.behaviors.shareThis in alshaya_rcs_product module.
+        if ($dependency === 'sharethis/sharethispickerexternalbuttons') {
+          unset($libraries['sharethis']['dependencies'][$key]);
+          $libraries['sharethis']['dependencies'] = array_values($libraries['sharethis']['dependencies']);
+          break;
+        }
+      }
+      // Replace the contrib JS Sharethis file with custom JS file.
+      $options = $libraries['sharethis']['js']['js/sharethis.js'];
+      unset($libraries['sharethis']['js']['js/sharethis.js']);
+      $libraries['sharethis']['js']["/$self_module_path/js/alshaya_rcs_sharethis.js"] = $options;
+    }
   }
   elseif ($extension === 'alshaya_pdp_react'
     && isset($libraries['pdp_magazine_v2_layout'])) {
