@@ -421,7 +421,7 @@ window.commerceBackend = window.commerceBackend || {};
         description: '',
         price: globalThis.rcsPhRenderingEngine.computePhFilters(variantInfo, 'price'),
         finalPrice: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
-        priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
+        priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.regular_price.value),
         promotionsRaw: product.promotions,
         // @todo Add free gift promotion value here.
         freeGiftPromotion: [],

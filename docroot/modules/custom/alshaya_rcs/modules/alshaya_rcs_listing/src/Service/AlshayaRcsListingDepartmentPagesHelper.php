@@ -7,10 +7,8 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeInterface;
-use Drupal\path_alias\AliasManager;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 
 /**
@@ -33,20 +31,6 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
   protected $entityTypeManager;
 
   /**
-   * Current path.
-   *
-   * @var \Drupal\Core\Path\CurrentPathStack
-   */
-  protected $currentPath;
-
-  /**
-   * Alias manager.
-   *
-   * @var \Drupal\path_alias\AliasManager
-   */
-  protected $aliasManager;
-
-  /**
    * Constructor for AlshayaDepartmentPageHelper.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -57,18 +41,12 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
    *   Cache.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\Core\Path\CurrentPathStack $current_path
-   *   Current path.
-   * @param \Drupal\path_alias\AliasManager $alias_manager
-   *   Alias manager.
    */
   public function __construct(
     Connection $connection,
     RouteMatchInterface $route_match,
     CacheBackendInterface $cache,
     EntityTypeManagerInterface $entity_type_manager,
-    CurrentPathStack $current_path,
-    AliasManager $alias_manager
   ) {
     parent::__construct(
       $connection,
@@ -76,8 +54,6 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
     );
     $this->cache = $cache;
     $this->entityTypeManager = $entity_type_manager;
-    $this->currentPath = $current_path;
-    $this->aliasManager = $alias_manager;
   }
 
   /**
@@ -101,8 +77,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
    * {@inheritDoc}
    */
   public function getDepartmentPageNode() {
-    $path = $this->currentPath->getPath();
-    $path = $this->aliasManager->getAliasByPath($path);
+    $path = RcsPhPathProcessor::$pageFullPath;
     // With V2 we use slug and not not term reference so we need the original
     // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
     // For this RCS provides a way to get original path if it had processed
@@ -118,7 +93,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
 
     $data = [];
     // Check for cache first.
-    $cache = $this->cache->get('alshaya_rcs_main_menu:slug:nodes');
+    $cache = $this->cache->get('alshaya_rcs_listing:slug:nodes');
     if ($cache) {
       $data = $cache->data;
       // If cache hit.
@@ -136,7 +111,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
       $node = $this->entityTypeManager->getStorage('node')->load($nid);
       if ($node instanceof NodeInterface && $node->isPublished()) {
         $data[$filtered_path] = $nid;
-        $this->cache->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
+        $this->cache->set('alshaya_rcs_listing:slug:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
         return $nid;
       }
     }
