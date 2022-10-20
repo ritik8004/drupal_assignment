@@ -15,9 +15,13 @@
  *
  * @param array $fields
  *   Fields of the category query.
+ * @param int $depth
+ *   The depth of the menu.
  */
-function hook_alshaya_rcs_category_query_fields_alter(array &$fields, $depth = 0) {
-  $fields[] = 'description';
+function hook_alshaya_rcs_category_query_fields_alter(array &$fields, int $depth) {
+  if ($depth > 1) {
+    $fields[] = 'description';
+  }
 }
 
 /**
