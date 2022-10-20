@@ -364,10 +364,12 @@ $spc-checkout-success-message-background: $green;
 $spc-checkout-warning-message-background: $orange;
 $spc-checkout-success-message-color: $white;
 $spc-checkout-error-message-color: $white;
-
-// SPC Checkout.
 $spc-checkout-delivery-method-bg: $white;
 $spc-checkout-footer-secondary-bg: $white;
+$spc-cart-sameday-delivery-border: $gray-eight;
+$spc-cart-standard-delivery-border: $gray-eight;
+$spc-cart-express-delivery-border: $gray-eight;
+$spc-cart-delivery-tags: $gray-three;
 
 // Wishlist
 $wishlist-header-notification-border: $black;

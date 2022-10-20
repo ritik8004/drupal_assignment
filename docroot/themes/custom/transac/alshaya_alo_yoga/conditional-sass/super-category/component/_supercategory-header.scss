@@ -10,6 +10,17 @@
       }
     }
   }
+
+  body {
+    &.super-category-enabled {
+      &.aura-enabled {
+        .main--menu ul.menu--one__list,
+        .c-menu-secondary {
+          top: rem(127);
+        }
+      }
+    }
+  }
 }
 
 @include breakpoint($desktop) {
@@ -62,6 +73,44 @@
       #alshaya-algolia-autocomplete {
         width: rem(280);
       }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .super-category-enabled {
+    .c-menu-secondary,
+    .toggle--sign,
+    .main--menu ul.menu--one__list {
+      width: 100%;
+      top: rem(127);
+    }
+
+    .mobile--close {
+      background: transparent;
+      // Declaring the top position twice so it doesn't flash the wrong position in the closing transition.
+      top: rem(42) !important;
+    }
+
+    .menu--active {
+      .mobile--close {
+        #{$left}: rem(8);
+        top: rem(42) !important;
+        background: transparent;
+        height: rem(32);
+        width: rem(32);
+
+        span::before {
+          content: none;
+        }
+      }
+    }
+  }
+
+  // @TODO: This can be removed if we are not rendering this element in the markup
+  .super-category-enabled {
+    .toggle--sign {
+      display: none;
     }
   }
 }
