@@ -9,22 +9,31 @@
 
   Drupal.behaviors.alshayaPerformanceShareThis = {
     attach: function (context) {
+      // For RCS PDP, we initialize from alshaya_rcs_sharethis.js.
+      if ($('body').hasClass('nodetype--rcs_product')) {
+        return;
+      }
+
       $('.sharethis-wrapper').once('load-share-this').each(function () {
         // Do it when window load finishes, resized or scrolled.
         $(window).on('load resize scroll', function () {
-          Drupal.loadShareThis();
+          Drupal.loadShareThis(true);
         });
 
         // Also do it for magazine layout.
         $('.share-icon').on('click', function () {
-          Drupal.loadShareThis();
+          Drupal.loadShareThis(true);
         });
       })
     }
   };
 
-  Drupal.loadShareThis = function () {
-    if ($('#sharethis-js').length === 0 && $('.sharethis-wrapper').isElementInViewPort(0)) {
+  Drupal.loadShareThis = function (checkWrapper) {
+    var toCheckWrapper = typeof checkWrapper === 'undefined'
+      ? true
+      : Drupal.hasValue(checkWrapper);
+    if ((toCheckWrapper && $('#sharethis-js').length === 0 && $('.sharethis-wrapper').isElementInViewPort(0))
+      || !toCheckWrapper) {
       $('head').append('<script id="sharethis-js" src="https://ws.sharethis.com/button/buttons.js"></script>');
       setTimeout(Drupal.shareThisLoaded, 1);
     }
