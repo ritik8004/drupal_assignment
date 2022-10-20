@@ -605,6 +605,10 @@ exports.computePhFilters = function (input, filter) {
       value = `${input.url_key}.html`;
       break;
 
+    case 'absolute_url':
+      value = Drupal.url.toAbsolute(`${input.url_key}.html`);
+      break;
+
     case 'brand_logo':
       if (input.brand_logo_data.url !== null) {
         data = {
