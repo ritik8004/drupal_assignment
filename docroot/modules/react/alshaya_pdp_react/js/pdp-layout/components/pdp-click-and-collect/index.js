@@ -42,7 +42,7 @@ export default class PdpClickCollect extends React.PureComponent {
         this.autocomplete = new window.google.maps.places.Autocomplete(
           this.searchplaceInput,
           {
-            types: [],
+            types: ['geocode'],
             componentRestrictions: { country: drupalSettings.clickNCollect.countryCode },
           },
         );

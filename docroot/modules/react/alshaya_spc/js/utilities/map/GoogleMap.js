@@ -58,7 +58,7 @@ export default class GoogleMap extends React.Component {
 
     // For autocomplete textfield.
     this.autocomplete = new window.google.maps.places.Autocomplete(this.autocompleteTextField(), {
-      types: [],
+      types: ['geocode'],
       componentRestrictions: { country: window.drupalSettings.country_code },
     });
     this.autocomplete.addListener('place_changed', this.placesAutocompleteHandler);
