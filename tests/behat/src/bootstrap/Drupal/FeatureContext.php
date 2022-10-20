@@ -48,7 +48,7 @@ class FeatureContext extends CustomMinkContext
   public function hideBanners()
   {
     $classesToHide = [
-      '.popup-window',
+      '.block-content--marketing-popup',
       '.exponea-subbox-banner',
       '.exponea-subbox-subscription-dialog',
     ];
