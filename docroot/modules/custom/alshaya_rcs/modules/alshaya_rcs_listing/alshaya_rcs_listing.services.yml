@@ -51,8 +51,6 @@ services:
       - '@current_route_match'
       - '@cache.data'
       - '@entity_type.manager'
-      - '@path.current'
-      - '@path_alias.manager'
   alshaya_rcs_listing.department_page_route_provider:
     decorates: router.route_provider
     priority: -20
