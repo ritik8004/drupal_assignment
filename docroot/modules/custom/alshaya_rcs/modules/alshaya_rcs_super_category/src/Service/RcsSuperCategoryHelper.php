@@ -343,26 +343,31 @@ class RcsSuperCategoryHelper {
 
     //Retreive logo images for each field and save it.
     foreach ($field_arr as $field_name) {
-      $file_url = $mdc_url . $category[$field_name];
+      $file_url = !empty($category[$field_name])
+        ? $mdc_url . $category[$field_name]
+        : NULL;
       $fid = !empty($term->get($field_name)->getValue())
         ? $term->get($field_name)->getValue()[0]['target_id']
         : NULL;
       // Do not download logos again if aleady present.
       if (!$force_download && $fid) {
         $file = File::load($fid);
-        if ($file->getFilename() === basename($file_url)) {
+        if ($file instanceof FileInterface
+          && $file->getFilename() === basename($file_url)
+        ) {
           continue;
         }
       }
-      else {
-        // Delete old file entity.
-        if ($fid) {
-          $file = File::load($fid);
-          if ($file instanceof FileInterface) {
-            $file->delete();
-          }
+      // Delete old file entity.
+      if ($fid) {
+        $file = File::load($fid);
+        if ($file instanceof FileInterface) {
+          $file->delete();
+          $term->get($field_name)->setValue(NULL);
         }
-        // Retreive file from mdc url.
+      }
+      // Retreive file from mdc url.
+      if ($file_url) {
         $file = system_retrieve_file($file_url, $directory, TRUE, FileSystemInterface::EXISTS_RENAME);
         if ($file instanceof FileInterface) {
           $term->get($field_name)->setValue($file->id());
