@@ -257,6 +257,87 @@ export const getAllowedAttributeValues = (
 };
 
 /**
+ * Gets the default values of the attributes which are enabled for display.
+ * @see Drupal.refreshConfigurables().
+ *
+ * @param {object} activeSwatchData
+ *   The hierarchy of attributes under the main attribute.
+ *    "article_castor_id": {
+ *      "8010": {
+ *       "size": {
+ *         "7045": {
+ *          "season_code": {
+ *            "39937": "1"
+ *          }
+ *         }
+ *       }
+ *      }
+ *     }
+ *
+ * @param {string} attribute
+ *   The name of the selected attribute.
+ * @param {object} selectedFormValues
+ *   The array of selected form values like {attr1: val1, attr2: val2....}.
+ * @param {object} configurableAttributes
+ *   The configurable attributes data.
+ *
+ * @returns {string}
+ *   The default attribute value.
+ */
+export const getDefaultAttributeValues = (
+  activeSwatchData,
+  attribute,
+  selectedFormValues,
+  configurableAttributes,
+) => {
+  const selectedFormAttributeNames = Object.keys(selectedFormValues);
+  let defaultAttributeValue = '';
+
+  for (let i = 0; i < selectedFormAttributeNames.length; i++) {
+    const code = selectedFormAttributeNames[i];
+
+    if (typeof activeSwatchData !== 'undefined' && typeof activeSwatchData[code] !== 'undefined') {
+      if (code === attribute) {
+        // Get all other available attributes for a given attribute.
+        const availableValues = Object.keys(activeSwatchData[code]);
+        let defaultAttr = '';
+
+        // Check if the fist available attribute is valid.
+        Object.values(configurableAttributes[code].values).some((attributeValues) => {
+          if (availableValues.includes(attributeValues.value)) {
+            defaultAttr = attributeValues.value;
+            return true;
+          }
+          return false;
+        });
+        return defaultAttr;
+      }
+
+      // Get the next attribute data from the hierarchy and check if the end of
+      // the hierarchy has been reached.
+      const nextLevelData = activeSwatchData[code][selectedFormValues[code]];
+      if (typeof nextLevelData !== 'object') {
+        return defaultAttributeValue;
+      }
+
+      // Create clones to allow modification.
+      const selectedFormValuesClone = JSON.parse(JSON.stringify(selectedFormValues));
+      delete selectedFormValuesClone[code];
+
+      // Do a recursive call to travel further down the attribute hierarchy.
+      defaultAttributeValue = getDefaultAttributeValues(
+        nextLevelData,
+        attribute,
+        selectedFormValuesClone,
+        configurableAttributes,
+      );
+    }
+  }
+
+  return defaultAttributeValue;
+};
+
+/**
  * Returns the allowed values for quantity for the quantity dropdown.
  *
  * @param {string} selectedVariant
