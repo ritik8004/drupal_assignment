@@ -41,6 +41,28 @@ class FeatureContext extends CustomMinkContext
   private $parameters;
 
   /**
+   * Removes banners and popups.
+   *
+   * @BeforeStep
+   */
+  public function hideBanners()
+  {
+    $classesToHide = [
+      '.block-content--marketing-popup',
+      '.exponea-subbox-banner',
+      '.exponea-subbox-subscription-dialog',
+    ];
+
+    $driver = $this->getSession()->getDriver();
+    if ($driver instanceof Selenium2Driver && $driver->getWebDriverSession()) {
+      $classes = implode(',', $classesToHide);
+      $script = 'var sheet = window.document.styleSheets[0];';
+      $script .= "sheet.insertRule('$classes { display: none!important; }', sheet.cssRules.length);";
+      $this->getSession()->executeScript($script);
+    }
+  }
+
+  /**
    * Storing URL of page.
    * @var
    */
