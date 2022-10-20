@@ -24,6 +24,7 @@ import logger from '../../../js/utilities/logger';
 import { getDefaultErrorMessage } from '../../../js/utilities/error';
 import RedeemEgiftSVG from '../svg-component/redeem-egift-svg';
 import { isFullPaymentDoneByAura } from '../aura-loyalty/components/utilities/checkout_helper';
+import { isUserAuthenticated } from '../backend/v2/utility';
 
 export default class RedeemEgiftCard extends React.Component {
   constructor(props) {
@@ -44,7 +45,7 @@ export default class RedeemEgiftCard extends React.Component {
     document.addEventListener('refreshCartOnPaymentMethod', this.changeRedemptionStatusBasedOnPaymentMethod, false);
     // Change the redemption screen based on the cart redemption status.
     const { cart: cartData } = this.props;
-    // Change the state of redeemption if egift is already available.
+    // Change the state of redemption if egift is already available.
     if (isEgiftRedemptionDone(cartData.cart)) {
       // Extract the card number for further calculation.
       this.setState({
@@ -87,6 +88,14 @@ export default class RedeemEgiftCard extends React.Component {
   changeRedemptionAccordionStatus = () => {
     const { active } = this.state;
     this.setState({ active: !active });
+  }
+
+  // Returns event action name.
+  getEventAction = () => {
+    if (isUserAuthenticated()) {
+      return 'card_logged_in';
+    }
+    return 'card_guest';
   }
 
   // Perform code validation.
@@ -135,7 +144,7 @@ export default class RedeemEgiftCard extends React.Component {
                     // Dispatch egift guest redemption verification for GTM.
                     dispatchCustomEvent('egiftCardRedeemed', {
                       label: 'egift_verification',
-                      action: 'card_redemption',
+                      action: this.getEventAction(),
                     });
                   });
                 }
@@ -204,7 +213,7 @@ export default class RedeemEgiftCard extends React.Component {
         // Dispatch egift guest redemption interaction for GTM.
         dispatchCustomEvent('egiftCardRedeemed', {
           label: 'egift_interaction',
-          action: 'card_redemption',
+          action: this.getEventAction(),
         });
       } else if (isValidResponseWithFalseResult(response)) {
         result = {
@@ -255,7 +264,7 @@ export default class RedeemEgiftCard extends React.Component {
       // Dispatch egift guest redemption removed for GTM.
       dispatchCustomEvent('egiftCardRedeemed', {
         label: 'egift_remove',
-        action: 'card_redemption',
+        action: this.getEventAction(),
       });
     }
 

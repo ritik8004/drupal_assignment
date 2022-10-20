@@ -1,0 +1,13 @@
+product:
+  version: 1.x
+  js:
+    js/alshaya_ay_transac_rcs_product.js: {}
+  dependencies:
+    - rcs_placeholders/helpers
+swatch_group:
+  version: 1.x
+  js:
+    js/alshaya_ay_transac_rcs_swatch_group.js: {}
+  dependencies:
+    - rcs_placeholders/helpers
+    - alshaya_acm_product/product_utility

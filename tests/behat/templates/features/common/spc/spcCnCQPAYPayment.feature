@@ -1,4 +1,4 @@
-@javascript @Qpay @QpayPayment @clickCollect @flqauat
+@javascript @Qpay @checkoutPayment @QpayPayment @clickCollect @flqauat
 Feature: SPC Checkout Click and Collect using QPay Payment method
 
   Background:

@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
+use Drupal\file\FileInterface;
 
 /**
  * Class Product Super Category Tree.
@@ -121,18 +122,32 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @return \Drupal\Core\Entity\EntityInterface|mixed|null
    *   Return the taxonomy term object if found else NULL.
    */
-  public function getCategoryTermFromRoute() {
-    $term = parent::getCategoryTermFromRoute();
+  public function getCategoryTermFromRoute(bool $check_acq_terms = TRUE) {
+    $term = NULL;
+
+    // Do not check acq category terms in V3.
+    if ($check_acq_terms) {
+      $term = parent::getCategoryTermFromRoute();
+    }
 
     if (empty($term)) {
       $request = $this->requestStack->getCurrentRequest();
-      $current_uri = $request->getRequestUri();
-      $path_parts = pathinfo($current_uri);
-      $term_path = explode('/', $path_parts['dirname']);
-      if (!empty($term_path[2])) {
-        $term = $this->getTermByName($term_path[2]);
-        if (!empty($term->tid)) {
-          $term = $this->termStorage->load($term->tid);
+
+      $path_parts = explode('/', trim($request->getRequestUri(), '/'));
+
+      // $path_parts[0] will have language so remove it.
+      foreach (array_keys($this->languageManager->getLanguages()) as $langcode) {
+        if ($path_parts[0] === $langcode) {
+          unset($path_parts[0]);
+          $path_parts = array_values($path_parts);
+          break;
+        }
+      }
+
+      if (!empty($path_parts[0])) {
+        $tid = $this->getTermByName($path_parts[0]);
+        if (!empty($tid)) {
+          $term = $this->termStorage->load($tid);
         }
       }
       elseif ($request->get('_route') == 'view.search.page') {
@@ -164,11 +179,11 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     }
 
     // If term is of 'acq_product_category' vocabulary.
-    if ($term instanceof TermInterface && $term->bundle() == self::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->bundle() == static::VOCABULARY_ID) {
       return $term;
     }
 
-    return $term;
+    return NULL;
   }
 
   /**
@@ -195,7 +210,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     $query->condition('tfd.vid', self::VOCABULARY_ID);
     $query->where("REPLACE(LOWER(tfd.name), ' ','-') LIKE :name", [':name' => Html::cleanCssIdentifier($name)]);
     $query->orderBy('tfd.weight', 'ASC');
-    return $query->execute()->fetch();
+    $result = $query->execute()->fetch();
+    return !empty($result) ? $result->tid : NULL;
   }
 
   /**
@@ -221,7 +237,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     // Get all child terms for the given parent.
     $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE);
 
-    $this->cache->set($cid, $term_data, Cache::PERMANENT, [self::CACHE_TAG]);
+    $this->cache->set($cid, $term_data, Cache::PERMANENT, [static::CACHE_TAG]);
     return $term_data;
   }
 
@@ -403,7 +419,9 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       $id = "field_logo_{$key}_target_id";
       if (!empty($logo_data)) {
         $image = $this->fileStorage->load($logo_data->$id);
-        $brand_logos[$key] = file_create_url($image->getFileUri());
+        if ($image instanceof FileInterface) {
+          $brand_logos[$key] = file_create_url($image->getFileUri());
+        }
       }
     }
 

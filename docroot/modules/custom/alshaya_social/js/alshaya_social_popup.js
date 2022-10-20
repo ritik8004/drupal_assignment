@@ -77,7 +77,7 @@
    * @returns {string|number|null}
    */
   function urlParam (name, url = null) {
-    url = url || window.location.href;
+    url = url || encodeURI(window.location.href);
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(url);
     if (results == null){
        return null;

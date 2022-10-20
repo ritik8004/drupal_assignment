@@ -502,6 +502,51 @@
   }
 }
 
+.spc-aura-cart-rewards-block,
+.block-aura-rewards-header,
+#aura-mobile-header-shop {
+  .spc-aura-unlink-card-wrapper {
+    .description,
+    .no-link-message {
+      b,
+      a {
+        color: $aura-spc-cart-unlinked-highlight;
+      }
+
+      a {
+        text-decoration: underline;
+        padding-#{$left}: rem(8);
+        padding-#{$right}: 0;
+        cursor: pointer;
+      }
+    }
+
+    .description {
+      font-family: $aura-regular;
+      margin-bottom: rem(20);
+      color: $aura-spc-cart-unlinked-desc;
+
+      b {
+        font-family: $aura-bold;
+        display: block;
+      }
+    }
+
+    .no-link-message {
+      margin-top: rem(20);
+
+      a {
+        font-family: $aura-regular;
+        line-height: rem(26);
+        color: $aura-loyalty-dark-text;
+        padding-#{$left}: rem(22);
+        vertical-align: unset;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
 // Join Aura Modal Positioning Fix For Mobile Devices.
 
 @include breakpoint($only-mobile) {

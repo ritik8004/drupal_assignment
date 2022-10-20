@@ -18,6 +18,39 @@ use Drupal\search_api\Entity\Server;
 /**
  * Implements hook_update_N().
  *
+ * Installs alshaya_behat module.
+ */
+function alshaya_transac_update_9404() {
+  if (!(\Drupal::moduleHandler()->moduleExists('alshaya_behat'))) {
+    \Drupal::service('module_installer')->install(['alshaya_behat']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Uninstall alshaya_appointment module.
+ */
+function alshaya_transac_update_9403() {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_appointment')) {
+    \Drupal::service('module_installer')->uninstall(['alshaya_appointment']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Uninstall unnecessary modules.
+ */
+function alshaya_transac_update_9402() {
+  if (\Drupal::moduleHandler()->moduleExists('layout_discovery')) {
+    \Drupal::service('module_installer')->uninstall(['layout_discovery']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Installs user_csv_import module and roleaasign_with_user_csv_import sub
  * module if it  is not enabled.
  */
@@ -1044,6 +1077,7 @@ function alshaya_transac_install() {
     'alshaya_pdp_layouts',
     'alshaya_acm_dashboard',
     'datadog_js',
+    'alshaya_behat',
   ];
 
   // Add 10 MB per module we are going to enable above.

@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Url;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_page_attachments().
@@ -24,4 +25,11 @@ function rcs_magento_placeholders_page_attachments_alter(array &$attachments) {
   }
 
   $attachments['#attached']['drupalSettings']['rcs']['404Page'] = $configured_404_page;
+
+  $rcs_placeholder_settings = \Drupal::configFactory()->get('rcs_magento_placeholders.settings');
+  $menu_expiration_time = $rcs_placeholder_settings
+    ? $rcs_placeholder_settings->get('navigation_menu_cache_time')
+    : 0;
+  $attachments['#cache']['tags'] = Cache::mergeTags($attachments['#cache']['tags'], $rcs_placeholder_settings->getCacheTags());
+  $attachments['#attached']['drupalSettings']['rcs']['navigationMenuCacheTime'] = $menu_expiration_time;
 }

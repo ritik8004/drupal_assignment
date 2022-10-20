@@ -343,39 +343,4 @@
       }
     }
   }
-
-  .spc-aura-unlink-card-wrapper {
-    .description,
-    .no-link-message {
-      b,
-      a {
-        color: $aura-spc-cart-unlinked-highlight;
-      }
-
-      a {
-        text-decoration: underline;
-        padding-#{$left}: 0.5rem;
-        cursor: pointer;
-      }
-    }
-
-    .description {
-      font-family: $aura-regular;
-      margin-bottom: 1.25rem;
-      color: $aura-spc-cart-unlinked-desc;
-
-      b {
-        font-family: $aura-bold;
-        display: block;
-      }
-    }
-
-    .no-link-message {
-      margin-top: 1.25rem;
-
-      a {
-        cursor: pointer;
-      }
-    }
-  }
 }

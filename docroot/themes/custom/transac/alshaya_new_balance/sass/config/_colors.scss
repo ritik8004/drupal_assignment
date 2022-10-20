@@ -1,0 +1,281 @@
+$black: #000;
+$white: #fff;
+$nb-black: #151415;
+$nb-gray: #737b82;
+$light-gray: #f6f6f6;
+$ada-gray: #767676;
+$light-gray2: #fafafa;
+$nb-red: #cf0a2c;
+$gray: #ccc;
+$red2: #b90020;
+$gray2: #efefef;
+
+// Global elements.
+$primary_text: $black;
+$primary_link: $black;
+$content_pagetitle: $black;
+$primary_link-hover: $black;
+$primary_link-active: $black;
+$secondary_text: $nb-black;
+$primary_border: $black;
+$tertiary-border: $gray;
+$secondary_border: $nb-red;
+$content_pagetitle_border: $black;
+
+//Buttons.
+$primary_btn_bg: $nb-red;
+$primary_empty_btn: $white;
+$primary_btn_text: $white;
+$primary_empty_btn_border: $nb-red;
+$primary_empty_btn_text: $nb-red;
+$secondary_btn_bg: $white;
+$secondary_btn_bg_hover: $gray2;
+$secondary_btn_text: $nb-red;
+
+// Checkbox & Radio.
+$primary_radiobtn_label: $black;
+$primary_radiobtn_empty: $nb-gray;
+$primary_radiobtn_filled: $nb-red;
+$secondary_radiobtn_empty: $nb-gray;
+$secondary_radiobtn_filled: $black;
+$primary_checkbox_filled: $nb-red;
+
+// Dropdown.
+$primary_dropdown_bg: $white;
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_arrow_icon: $black;
+
+// Breadcrumb.
+$breadcrumb_bg: $white;
+$breadcrumb_link: $ada-gray;
+$breadcrumb_link_hover: $ada-gray;
+$breadcrumb_link_active: $ada-gray;
+
+// Homepage Slider
+$hp_slider_dots: $ada-gray;
+
+// Instragram slider dots.
+$instagram_dots_default: $gray;
+
+// Header.
+$header_search_active_bg: $gray2;
+
+// Header secondary: ie: top header.
+$header_secondary_bg: $gray2;
+$header_secondary_menu_link: $black;
+$header_secondarry_menu_color: $black;
+$mm_l2_link: $black;
+$mm_l3_link_hover: $black;
+
+// Store Finder.
+$store-finder-border-hover: $nb-red;
+$store_finder_text_hover: $nb-red;
+$store_finder_text:$black;
+$store_finder_icon: $black;
+$store_finder_search_label: $black;
+$store_finder_header: $black;
+$store_finder_header_desktop: $black;
+$store_finder_subheader: $black;
+$store_finder_glossary_text: $black;
+$store_finder_search_results_tile_link: $black;
+$store_finder_search_input: $gray;
+$store_finder_search_input_border: $gray;
+$store_finder_glossary_alphabet: $black;
+$store_finder_search_results_hour_label :$black;
+$store_finder_search_results_tile_icon: $black;
+$store_finder_search_results_hour_icon_open: $black;
+$store_finder_glossary_icon: $black;
+$store_finder_backbtn: $black;
+$store_finder_search_results_counter_bg: $nb-red;
+
+// Footer
+$footer_border_top: $gray2;
+$footer_title_h3: $black;
+$primary_footer_input_label: $white;
+$footer_link_mobile: $black;
+$footer_link: $black;
+$footer_link_hover: $gray;
+$social-icons-bg: $black;
+$footer-text: $black;
+$footer-newsletter-text: $white;
+$footer-top-bg: $black;
+$lang_switch: $black;
+
+//Signup
+$user_form_text: $ada-gray;
+$social_auth_login_button_border: $nb-red;
+$user_form_layout_divider_color: $black;
+$primary_form_link: $black;
+$user_login_section_title: $black;
+$user_login_sub_text: $black;
+$user_field_link: $black;
+$select_drop_down_hover: $nb-gray;
+
+// User Form
+$my_account_nav: $nb-black;
+$my_account_nav_active: $nb-black;
+$my_account_nav_hover: $nb-black;
+$user_form_layout_divider_color: $black;
+$login_form_border: $black;
+$user_form_inp_text: $ada-gray;
+
+// Titles.
+$page_title: $black;
+$block_title: $black;
+$title: $black;
+$sub_title: $black;
+$label_black: $black;
+$label_dark: $black;
+$user_sidebar_block_title: $black;
+
+// Dropdown.
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_border: $gray;
+$primary_dropdown_option_hover: $black;
+$primary_dropdown_option_border: $gray;
+$primary_dropdown_option_disbled: $black;
+$primary_dropdown_arrow_icon: $black;
+$select_drop_down_hover_bg: $gray2;
+$select_drop_down_hover_text: $black;
+
+// Form elements.
+$primary_form_selector_border: $black;
+$primary_form_selector: $ada-gray;
+$primary_form_input_text: $ada-gray;
+$primary_input_label: $ada-gray;
+$primary_input_border: $black;
+$primary_input_disabled: $gray;
+$primary_input_focus_border: $black;
+$primary_input_inline_error: $red2;
+$checkout_login_separtor: $black;
+$checkout_login_separtor_txt_bg: $white;
+$checkout_login_separtor_txt: $black;
+
+//Megamenu
+$mm_l1_desktop-border: $black;
+$mm_l1_link_hover: $black;
+$mm_l1_link: $black;
+$mm_l2_link: $black;
+$mm_l2_link_desktop: $black;
+$mm_l2_link_hover: $black;
+$mm_l3_link: $black;
+$mm_l3_link_hover: $black;
+$main_menu_bg: $white;
+$header_mobile_menu_arrow: $black;
+$header_toggle_sign_active_tab: $black;
+$header_mobile_menu_close: $black;
+$header_secondary_menu_link_mobile: $black;
+
+// Back to top
+$btt_text: $black;
+
+//My Account
+$label_dark: $ada-gray;
+$label_black: $ada-gray;
+$user_order_help_bg: $light-gray;
+$user_order_help_text: $black;
+$user_order_help_text_links: $ada-gray;
+$user_acc_details_border:$gray;
+$user_nav_mobile_link: $ada-gray;
+$my_acc_mob_border_color: $gray2;
+$my_acc_address_text: $black;
+$address_form_radio: $nb-red;
+$user_account_nav: $nb-black;
+$order_search_form_border: $white;
+
+// PLP
+$plp_search_count: $ada-gray;
+$plp_tile_product_title: $black;
+$plp_tile_product_text: $black;
+$plp_facet_filter_bg: $nb-red;
+$plp_facet_clear_text: $black;
+$plp_filter_active_item: $light-gray;
+$plp_facet_count_number: $black;
+$plp_filter_active_tick: $black;
+$plp_tile_product_title_hover: $black;
+$plp_product_price_txt: $black;
+$plp_filter_icon: $black;
+$plp_all_filter_button_color: $white;
+$plp_clear_all_btn_disabled: $ada-gray;
+$plp_all_filter_title: $black;
+$plp_all_filter_filter_arrow: $black;
+$plp_clear_all_btn_text: $nb-red;
+$plp_filter_txt: $ada-gray;
+
+// Product Detail Page
+$pdp_product_itemcode: $ada-gray;
+$pdp_title_section_border: $gray2;
+
+// Accordion
+$accordion_title: $black;
+$accordion_title_icon: $black;
+
+//Algolia search bar.
+$algolia-input-text: $black;
+$algolia-trending-title-text: $black;
+$algolia-react-progressbar: $gray2;
+$algolia-react-progressbar-text: $black;
+$algolia-react-progressbar-fill: $black;
+$algolia-react-search-page-title: $black;
+$algolia-react-sidebar-label-color: $black;
+$algolia-search-clear-text-icon: $black;
+$algolia-react-facet-label: $black;
+$algolia_react-facet-item-color: $nb-black;
+$algolia-search-icon-background: $gray2;
+$algolia-auto-complete-border: $gray;
+$algolia-input-placeholder-text: $black;
+$algolia_search_input_bg: $gray2;
+$algolia-search-icon: $black;
+$alg_search_bg: $gray2;
+
+// plp add to cart
+$plp-primary-cta-hover-bg: rgba(207, 10, 44, 0.9);
+$plp-secondary-cta-hover-bg: rgba(207, 10, 44, 0.1);
+
+//SPC
+$spc-order-summary-totals-bg: $light-gray;
+$spc-promo-code-border: $gray;
+$spc_promo_code_block_mob_bg: $light-gray;
+$spc-promo-code-input-text: $ada-gray;
+$spc-order-total-suffix-text: $black;
+$spc_cart_item_border_color: $gray;
+$spc-product-attributes: $ada-gray;
+$spc-select-border: $gray;
+$spc-cart-background: $white;
+
+// Checkout steps
+$cko-steps-active-bg: $nb-red;
+$cko-steps-current-active-border: $nb-red;
+$cko-steps-active-border: $black;
+
+// Checkout Global.
+$checkout_section_titles: $black;
+$checkout_guest_button_border: $nb-red;
+$checkout_guest_button_txt: $nb-red;
+$checkout_header_border-bottom : $gray;
+
+// Checkout Login page.
+$checkout_login_submit_button_background: $nb-red;
+$checkout_login_link_text: $black;
+$checkout-login-promo-bg: $light-gray;
+
+// Social Auth
+$social-network-text: $nb-red;
+
+// SPC checkout
+$spc-checkout-radio-empty: $nb-red;
+$spc-checkout-radio-filled: $nb-red;
+$spc-checkout-cart-background: $light-gray;
+$spc-deliver-button: $nb-red;
+$spc-deliver-button: $nb-red;
+$spc-login-seprator-bg: $black;
+$spc-login-seprator-text: $black;
+$spc-cnc-store-search-icon: $nb-red;
+$spc-cnc-store-search-icon-bg: $nb-red;
+$spc-cnc-store-search-icon-color: $white;
+$spc-checkout-close-icon-bg: $black;
+$spc-checkout-close-map-icon: $white;
+$spc-cnc-store-input-search-icon: $ada-gray;
+$spc-order-summary-product-area-bg: $white;
+$spc-order-summary-totals-bg: $white;
+$user_pwd_unmask: $black;

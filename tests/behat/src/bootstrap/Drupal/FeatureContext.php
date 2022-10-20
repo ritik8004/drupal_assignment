@@ -41,6 +41,28 @@ class FeatureContext extends CustomMinkContext
   private $parameters;
 
   /**
+   * Removes banners and popups.
+   *
+   * @BeforeStep
+   */
+  public function hideBanners()
+  {
+    $classesToHide = [
+      '.block-content--marketing-popup',
+      '.exponea-subbox-banner',
+      '.exponea-subbox-subscription-dialog',
+    ];
+
+    $driver = $this->getSession()->getDriver();
+    if ($driver instanceof Selenium2Driver && $driver->getWebDriverSession()) {
+      $classes = implode(',', $classesToHide);
+      $script = 'var sheet = window.document.styleSheets[0];';
+      $script .= "sheet.insertRule('$classes { display: none!important; }', sheet.cssRules.length);";
+      $this->getSession()->executeScript($script);
+    }
+  }
+
+  /**
    * Storing URL of page.
    * @var
    */
@@ -66,7 +88,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iWaitForThePageToLoad()
   {
-    $this->getSession()->wait($this->parameters['ajax_waittime'] * 1000, "document.readyState === 'complete'");
+    $this->getSession()->wait($this->parameters['ajax_waittime'] * 3000, "document.readyState === 'complete'");
   }
 
   /**
@@ -1928,6 +1950,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iClickJqueryElementOnPage($element)
   {
+    $element = addslashes($element);
     $this->getSession()->executeScript("document.querySelector('$element').click();");
   }
 
@@ -2364,32 +2387,6 @@ JS;
     $val = $this->getSession()->evaluateScript($js);
     if ($val == '') {
       throw new \Exception('Promo-code not applied');
-    }
-  }
-
-  /**
-   * @Then I book first available slot
-   */
-  public function firstAvailableSlotIsBooked()
-  {
-    $page = $this->getSession()->getPage();
-    $all_dates = $page->findAll('css','ul.calendar-wrapper li');
-    $total_dates = count($all_dates);
-    for ($x = 0; $x < $total_dates; $x++) {
-      if ($x == 0) {
-        $child = 'li:first-child';
-      }
-      else {
-        $child = "li:nth-child($x)";
-      }
-      $this->iClickOnElement(".appointment-datepicker ul.calendar-wrapper $child");
-      $this->iWaitSeconds('5');
-      if (empty($page->find('css','.appointment-timeslots-wrapper .appointment-time-slots .appointment-slots-empty'))) {
-        $this->inOfElementShouldContain(".appointment-datepicker ul.calendar-wrapper $child", "class", "active");
-        $this->iWaitSeconds('10');
-        $this->iClickOnElement('.appointment-timeslots-wrapper .appointment-time-slots .morning-items-wrapper ul.morning-items li:first-child');
-        break;
-      }
     }
   }
 
@@ -3011,16 +3008,98 @@ JS;
    */
   public function iAmOnUserRegistrationPage()
   {
+    $this->visitPath('/user/register?behat=' . $this->getBehatSecretKey());
+  }
+
+  /**
+   * @When /^I am on user contact us page$/
+   */
+  public function iAmOnContactUsPage()
+  {
+    $this->visitPath('/contact?behat=' . $this->getBehatSecretKey());
+  }
+
+  private function getBehatSecretKey() {
+    static $key = NULL;
+
+    // Avoid file load everytime.
+    if (isset($key)) {
+      return $key;
+    }
+
     $filename = 'creds.json';
     $options = getopt('', ['profile:']);
     $profile_arr = explode('-', $options['profile']);
     $env = $profile_arr[2];
-    $secret_key = '';
+    $key = '';
     if (file_exists($filename)) {
       $creds = json_decode(file_get_contents($filename), TRUE);
-      $secret_key = $creds[$env]['secret_key'] ?? '';
+      $key = $creds[$env]['secret_key'] ?? '';
     }
-    $this->visitPath('/user/register?behat=' . $secret_key);
+
+    return $key;
   }
 
+  /**
+   * @Given /^I select "([^"]*)" from "([^"]*)" select2 field$/
+   */
+  public function iSelectFromSelect2field($value, $selector)
+  {
+    $session = $this->getSession();
+    $selector = addslashes($selector);
+    $value = addslashes($value);
+    $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
+}
+  /**
+   * @Given /^I verify the wishlist popup block if enabled and remove the cart item$/
+   */
+  public function iVerifyTheWishlistPopupBlock()
+  {
+    $page = $this->getSession()->getPage();
+    $empty_cart = $page->find('css', '#spc-cart .spc-empty-text');
+
+    if (!empty($empty_cart)) {
+      throw new \Exception('Cart is empty!');
+    }
+
+    // Click the remove button.
+    $page->find('css', '#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn')->click();
+
+    // If Wishlist is enabled we will get the popup.
+    if ($this->getSession()->evaluateScript('return jQuery(".wishlist-enabled").length')) {
+      $page = $this->getSession()->getPage();
+
+      // For our tests, we don't want to move to wishlist.
+      // Click the no button to just remove the item.
+      $page->pressButton('wishlist-no');
+    }
+    $this->iWaitSeconds('5');
+  }
+
+  /**
+   * @Given /^I wait for element "([^"]*)"$/
+   */
+  public function iWaitForElement($arg1)
+  {
+    $found = $this->waitForElement($arg1);
+    if (!$found) {
+      throw new \Exception("Element {$arg1} not found.");
+    }
+  }
+
+  /**
+   * Dynamically wait for an element to be available on page.
+   */
+  private function waitForElement($selector, $time = 60): bool
+  {
+    while ($time > 0) {
+      if (!is_null($this->getSession()->getPage()->find('css', $selector))) {
+        return true;
+      } else {
+        sleep(1);
+        $time--;
+      }
+    }
+    return false;
+  }
 }

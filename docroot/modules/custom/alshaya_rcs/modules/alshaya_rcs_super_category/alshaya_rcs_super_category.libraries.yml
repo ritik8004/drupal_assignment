@@ -1,0 +1,6 @@
+rcs_super_category_product_process:
+  version: 1.x
+  js:
+    js/rcs_super_category_product_process.js: {}
+  dependencies:
+    - core/jquery

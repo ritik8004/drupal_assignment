@@ -98,7 +98,7 @@ function getProductRecommendation(products, sectionTitle) {
   products.forEach((product) => {
     data.products.push({
       sku: product.sku,
-      url: `${product.url_key}.html`,
+      url: Drupal.url(`${product.url_key}.html`),
       name: product.name,
       image: window.commerceBackend.getTeaserImage(product),
       price_details: window.commerceBackend.getPriceForRender(product),
@@ -497,8 +497,16 @@ exports.computePhFilters = function (input, filter) {
           // Add the option values.
           option.values.forEach((value) => {
             let label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
+            // Use the index value as label when the label doesn't exists for
+            // respective index.
             if (!Drupal.hasValue(label)) {
               label = value.value_index;
+              // Add a logger here so that we have info around the content where
+              // we don't have label.
+              Drupal.alshayaLogger('debug', '@attribute label is missing for the index @value_index .', {
+                '@attribute': option.attribute,
+                '@value_index': label,
+              });
             }
             let selectOption = { value: value.value_index, text: label };
 
@@ -595,6 +603,10 @@ exports.computePhFilters = function (input, filter) {
 
     case 'url':
       value = `${input.url_key}.html`;
+      break;
+
+    case 'absolute_url':
+      value = Drupal.url.toAbsolute(`${input.url_key}.html`);
       break;
 
     case 'brand_logo':

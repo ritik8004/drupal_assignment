@@ -137,6 +137,7 @@ window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   StaticStorage.clear();
 
   Drupal.removeItemFromLocalStorage('cart_data');
+  Drupal.removeItemFromLocalStorage('add_to_cart_skus');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method
@@ -336,7 +337,12 @@ const getProcessedCartData = async (cartData) => {
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.customer,
     coupon_code: typeof cartData.totals.coupon_code !== 'undefined' ? cartData.totals.coupon_code : '',
+    // Promotion rule ids applicable for the cart items,
+    // Which is used to show cart message that explains how to avail the discounts in the cart.
     appliedRules: cartData.cart.applied_rule_ids,
+    // Discounts applied rule ids, because of these rules the price discounts present in the cart,
+    // Which used to show the discounts tooltip.
+    appliedRulesWithDiscount: typeof cartData.cart.extension_attributes !== 'undefined' ? cartData.cart.extension_attributes.applied_rule_ids_with_discount : '',
     items_qty: cartData.cart.items_qty,
     cart_total: 0,
     minicart_total: 0,

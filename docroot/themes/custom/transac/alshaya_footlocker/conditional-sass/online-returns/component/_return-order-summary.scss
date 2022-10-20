@@ -1,0 +1,54 @@
+.return-requests-wrapper {
+  .order-details-wrapper {
+    .button {
+      &.status-pending,
+      &.status-delivered,
+      &.status-complete,
+      &.status-processing,
+      &.status-returned {
+        font-family: $alshaya-bold;
+        font-size: rem(14);
+        line-height: 1.29;
+        text-transform: uppercase;
+        width: auto;
+        height: auto;
+        padding: rem(6) rem(19);
+      }
+    }
+
+    .order-summary-row {
+      .order-summary-details {
+        .order-id-label {
+          line-height: 1.33;
+        }
+
+        .order-id {
+          font-size: rem(14);
+          line-height: 1.29;
+        }
+
+        .order--date--time {
+          line-height: 1.33;
+        }
+      }
+
+      .order-quantity {
+        .order--items {
+          font-weight: normal;
+          line-height: 1.29;
+          font-size: rem(14);
+          color: $black;
+        }
+      }
+
+      .order-status {
+        display: flex;
+        justify-content: $right;
+
+        @include breakpoint($tablet) {
+          justify-content: $left;
+        }
+      }
+    }
+  }
+}

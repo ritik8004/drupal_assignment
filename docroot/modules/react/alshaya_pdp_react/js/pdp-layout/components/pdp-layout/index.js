@@ -29,11 +29,16 @@ import { getAttributeOptionsForWishlist } from '../../../../../js/utilities/wish
 import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dynamic-yield-placeholder';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
+import PdpDescriptionType2 from '../pdp-description-type2';
 
-const PdpLayout = () => {
+const PdpLayout = ({ productInfo, configurableCombinations }) => {
   const [variant, setVariant] = useState(null);
   const [panelContent, setPanelContent] = useState(null);
-  const { productInfo } = drupalSettings;
+  const {
+    pdpDescriptionContainerType,
+    showRelatedProductsFromDrupal,
+  } = drupalSettings;
+
   let skuItemCode = '';
 
   if (productInfo) {
@@ -58,7 +63,8 @@ const PdpLayout = () => {
   };
 
   // Get product data based on sku.
-  const productValues = getProductValues(skuItemCode, variant, setVariant);
+  const productValues = getProductValues(productInfo, configurableCombinations,
+    skuItemCode, variant, setVariant);
   const {
     brandLogo,
     brandLogoAlt,
@@ -69,7 +75,7 @@ const PdpLayout = () => {
     pdpGallery,
     shortDesc,
     description,
-    configurableCombinations,
+    additionalAttributes,
     relatedProducts,
     stockStatus,
     labels,
@@ -99,6 +105,7 @@ const PdpLayout = () => {
   const galleryContainer = useRef();
   const sidebarContainer = useRef();
   const crosssellContainer = useRef();
+  const newDescContainer = useRef();
   const addToBagContainer = useRef();
   let content;
   let buttonRef;
@@ -115,17 +122,17 @@ const PdpLayout = () => {
   const sidebarSticky = () => {
     const sidebarWrapper = sidebarContainer.current;
     const mainWrapper = mainContainer.current;
-    const crosssellWrapper = crosssellContainer.current;
+    const nextComponentWrapper = newDescContainer.current || crosssellContainer.current;
     const galleryWrapper = galleryContainer.current;
 
     if (!isMobile) {
-      magv2Sticky(sidebarWrapper, galleryWrapper, crosssellWrapper, mainWrapper);
+      magv2Sticky(sidebarWrapper, galleryWrapper, nextComponentWrapper, mainWrapper);
     }
   };
 
   // Sticky Header
   const showStickyHeader = () => {
-    window.addEventListener('load', () => {
+    jQuery(document).ready(() => {
       magv2StickyHeader(buttonRef, header, content, isMobile);
     });
 
@@ -146,13 +153,8 @@ const PdpLayout = () => {
       }
     };
 
-    window.addEventListener('load', () => {
-      headerButton();
-    });
-
-    window.addEventListener('resize', () => {
-      headerButton();
-    });
+    jQuery(document).ready(headerButton);
+    window.addEventListener('resize', headerButton);
   };
 
   useEffect(() => {
@@ -166,8 +168,7 @@ const PdpLayout = () => {
       });
     }
     stickyButton();
-  },
-  []);
+  }, []);
 
   const getPanelData = useCallback((data) => {
     setPanelContent(data);
@@ -297,16 +298,19 @@ const PdpLayout = () => {
               productInfo={productInfo}
             />
           </ConditionalView>
-          <PdpDescription
-            skuCode={skuMainCode}
-            pdpDescription={description}
-            pdpShortDesc={shortDesc}
-            title={title}
-            pdpProductPrice={priceRaw}
-            finalPrice={finalPrice}
-            getPanelData={getPanelData}
-            removePanelData={removePanelData}
-          />
+          {(pdpDescriptionContainerType === 1)
+            && (
+            <PdpDescription
+              skuCode={skuMainCode}
+              pdpDescription={description}
+              pdpShortDesc={shortDesc}
+              title={title}
+              pdpProductPrice={priceRaw}
+              finalPrice={finalPrice}
+              getPanelData={getPanelData}
+              removePanelData={removePanelData}
+            />
+            )}
           <ConditionalView
             condition={isExpressDeliveryEnabled()
             && isProductBuyable && !bigTickectProduct}
@@ -317,12 +321,25 @@ const PdpLayout = () => {
             <PdpStandardDelivery />
           </ConditionalView>
           {stockStatus ? (
-            <PdpClickCollect />
+            <PdpClickCollect
+              productInfo={productInfo}
+            />
           ) : null}
           <PdpSharePanel />
         </div>
       </div>
-      {relatedProducts ? (
+
+      {(pdpDescriptionContainerType === 2)
+        && (
+          <div className="magv2-new-desc" ref={newDescContainer}>
+            <PdpDescriptionType2
+              description={description}
+              additionalAttributes={additionalAttributes}
+            />
+          </div>
+        )}
+
+      {(relatedProducts && showRelatedProductsFromDrupal) ? (
         <div className="magv2-pdp-crossell-upsell-wrapper" ref={crosssellContainer}>
           {Object.keys(relatedProducts).map((type) => (
             <PdpRelatedProducts

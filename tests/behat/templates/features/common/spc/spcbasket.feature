@@ -95,7 +95,7 @@ Feature: Test basket page
     And I should see an ".value .price .price-currency" element
     And I should see an ".value .price .price-amount" element
     Then I should see an ".delivery-vat" element
-    
+
   Scenario: As a Guest, I should be able to remove products from the basket
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
@@ -104,10 +104,8 @@ Feature: Test basket page
     And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for AJAX to finish
-    And I wait 30 seconds
-    Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
-    And I wait 10 seconds
+    And I wait for the page to load
+    And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
     And I should not see an ".totals" element
     And I should not see an ".grand-total" element
@@ -243,10 +241,8 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for AJAX to finish
-    And I wait 30 seconds
-    Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
-    And I wait 10 seconds
+    And I wait for the page to load
+    And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
     And I should not see an ".totals" element
     And I should not see an ".grand-total" element
@@ -265,10 +261,8 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for AJAX to finish
-    And I wait 30 seconds
-    Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
-    And I wait 10 seconds
+    And I wait for the page to load
+    And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
     And I should not see an ".totals" element
     And I should not see an ".grand-total" element

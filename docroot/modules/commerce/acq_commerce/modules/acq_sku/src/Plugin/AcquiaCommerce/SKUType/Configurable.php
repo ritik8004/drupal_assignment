@@ -43,6 +43,7 @@ class Configurable extends SKUPluginBase {
       return $static[$langcode][$sku_code];
     }
 
+    // @codingStandardsIgnoreLine
     $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
 
     if (empty($configurables) || !is_array($configurables)) {
@@ -525,9 +526,8 @@ class Configurable extends SKUPluginBase {
       return $sku->label();
     }
 
-    $configurables = unserialize(
-      $parent_sku->field_configurable_attributes->getString()
-    );
+    // @codingStandardsIgnoreLine
+    $configurables = unserialize($parent_sku->field_configurable_attributes->getString());
 
     $label_parts = [];
     foreach ($configurables as $configurable) {
@@ -663,6 +663,7 @@ class Configurable extends SKUPluginBase {
       return [];
     }
 
+    // @codingStandardsIgnoreLine
     $configurations = unserialize($attributes);
     if (empty($configurations) || !is_array($configurations)) {
       return [];
@@ -681,6 +682,10 @@ class Configurable extends SKUPluginBase {
    *   Child skus as string array.
    */
   public static function getChildSkus(SKU $sku) {
+    if ($sku->bundle() !== 'configurable') {
+      \Drupal::logger('acq_sku')->info('The product with sku: @sku is not a configurable type.', ['@sku' => $sku->getSku()]);
+      return [];
+    }
     return array_filter(array_map('trim', explode(',', $sku->get('field_configured_skus')->getString())));
   }
 

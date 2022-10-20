@@ -40,13 +40,17 @@ class AlshayaSecuritySubscriber implements EventSubscriberInterface {
       // Add the header for HSTS.
       $event->getResponse()->headers->set('Strict-Transport-Security', $header);
 
+      $cache_control = explode(', ', (string) $event->getResponse()->headers->get('cache-control'));
       // Add no-store if no-cache is available.
-      if ($cache_control = $event->getResponse()->headers->get('cache-control')) {
-        if (strpos($cache_control, 'no-cache') > -1) {
-          $cache_control .= ', no-store';
-          $event->getResponse()->headers->set('cache-control', $cache_control);
-        }
+      if (in_array('no-cache', $cache_control)) {
+        $cache_control[] = 'no-store';
       }
+      // Add must-revalidate if not available.
+      if (!in_array('must-revalidate', $cache_control)) {
+        $cache_control[] = 'must-revalidate';
+      }
+      $event->getResponse()->headers->set('cache-control', implode(', ', $cache_control));
+
     }
   }
 

@@ -1,0 +1,9 @@
+.spc-delivery-area {
+  #delivery-area-list-items {
+    .area-select-item-wrapper {
+      &::before {
+        height: rem(21);
+      }
+    }
+  }
+}

@@ -12,6 +12,8 @@
       a {
         border: none;
         position: relative;
+        margin-left: rem(3);
+        margin-right: rem(3);
 
         &::before {
           content: '';

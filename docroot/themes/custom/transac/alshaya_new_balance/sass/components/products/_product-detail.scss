@@ -1,0 +1,91 @@
+.c-pdp.l-one--w {
+  @include breakpoint($desktop) {
+    max-width: rem(1185);
+  }
+}
+
+.nodetype--acq_product {
+  .region__content {
+    @include breakpoint($tablet) {
+      margin: rem(6) 0;
+    }
+  }
+}
+
+.content {
+  &__main {
+    @include breakpoint($desktop) {
+      width: 68%;
+    }
+
+    .gallery-wrapper {
+      @include breakpoint($mobile) {
+        min-height: auto;
+      }
+    }
+  }
+
+  &__sidebar {
+    @include breakpoint($desktop) {
+      width: 32%;
+    }
+  }
+
+  &__title_wrapper {
+    h1,
+    h1 span {
+      font-size: rem(32);
+      line-height: rem(40);
+      font-family: $alshaya-bold;
+
+      @include breakpoint($only-mobile) {
+        font-size: rem(24);
+      }
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: rem(8);
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+
+    .price {
+      font-size: rem(18);
+      font-family: $alshaya-bold;
+      margin-bottom: rem(8);
+    }
+
+    .content--item-code {
+      font-size: rem(14);
+    }
+
+    @include breakpoint($desktop) {
+      width: 32%;
+    }
+  }
+}
+
+.delivery-options-wrapper {
+  .c-accordion__title {
+    font-size: rem(16);
+    line-height: rem(20);
+  }
+
+  .c-accordion-delivery-options {
+    padding-top: rem(25);
+    padding-bottom: rem(25);
+  }
+}
+
+#lightSlider {
+  .slick-slide {
+    @include breakpoint($desktop) {
+      width: rem(86) !important;
+      height: rem(86) !important;
+    }
+  }
+}

@@ -18,3 +18,9 @@ services:
       - '@module_handler'
     tags:
       - { name: 'event_subscriber' }
+
+  alshaya_advanced_page.department_page_helper:
+    class: Drupal\alshaya_department_page\Service\AlshayaDepartmentPageHelper
+    arguments:
+      - '@database'
+      - '@current_route_match'

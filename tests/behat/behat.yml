@@ -17,7 +17,7 @@ default:
   formatters:
     pretty: ~
   extensions:
-    Behat\MinkExtension:
+    Drupal\MinkExtension:
       files_path: "%paths.base%/files"
       browser_name: chrome
       goutte:

@@ -428,6 +428,9 @@ class AlshayaOptionsListHelper {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $attribute_options = $config->get('alshaya_options_pages');
+    if (empty($attribute_options[$request])) {
+      return [];
+    }
     $attributeCodes = array_filter($attribute_options[$request]['attributes']);
     // Check for cache first.
     $cid = 'alshaya_options_page:' . $request . ':' . $langcode;

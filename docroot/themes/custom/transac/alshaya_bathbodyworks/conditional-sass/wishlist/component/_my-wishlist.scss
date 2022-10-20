@@ -1,0 +1,18 @@
+.path--wishlist {
+  #my-wishlist,
+  .product-drawer-container {
+    .login-message {
+      .text {
+        html[lang='en'] & {
+          position: relative;
+          top: rem(2);
+
+          &::before {
+            position: relative;
+            top: rem(-2);
+          }
+        }
+      }
+    }
+  }
+}

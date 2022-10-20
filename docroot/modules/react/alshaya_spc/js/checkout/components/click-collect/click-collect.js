@@ -506,10 +506,12 @@ class ClickCollect extends React.Component {
 
   selectStoreButtonVisibility = (action) => {
     const selectStoreBtn = document.getElementsByClassName('spc-cnc-store-actions')[0];
-    if (action === true) {
-      selectStoreBtn.classList.add('show');
-    } else {
-      selectStoreBtn.classList.remove('show');
+    if (typeof selectStoreBtn !== 'undefined') {
+      if (action === true) {
+        selectStoreBtn.classList.add('show');
+      } else {
+        selectStoreBtn.classList.remove('show');
+      }
     }
   }
 

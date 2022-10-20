@@ -6,7 +6,7 @@ import { getProductShippingMethods } from '../backend/v2/common';
 export const getGovernatesList = () => window.commerceBackend.getGovernatesList()
   .then(
     (responseData) => {
-      if (typeof responseData !== 'object') {
+      if (responseData === null || typeof responseData !== 'object') {
         removeFullScreenLoader();
         return null;
       }
@@ -37,7 +37,7 @@ export const getDeliveryAreaList = (governateId) => window.commerceBackend.getDe
 )
   .then(
     (responseData) => {
-      if (typeof responseData !== 'object') {
+      if (responseData === null || typeof responseData !== 'object') {
         removeFullScreenLoader();
         return null;
       }
@@ -64,7 +64,7 @@ export const getCartShippingMethods = (currArea, sku, cartId) => getProductShipp
 )
   .then(
     (responseData) => {
-      if (typeof responseData !== 'object') {
+      if (responseData === null || typeof responseData !== 'object') {
         removeFullScreenLoader();
         return null;
       }
@@ -81,7 +81,11 @@ export const getCartShippingMethods = (currArea, sku, cartId) => getProductShipp
     }),
   )
   .catch((error) => {
-    Drupal.logJavascriptError('get-cart-shipping-methods', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+    if (drupalSettings.path.currentPath === 'checkout') {
+      Drupal.logJavascriptError('get-cart-shipping-methods', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+    } else {
+      Drupal.logJavascriptError('get-cart-shipping-methods', error);
+    }
   });
 
 export const getDeliveryAreaValue = (areaId) => window.commerceBackend.getDeliveryAreaValue(
@@ -89,7 +93,7 @@ export const getDeliveryAreaValue = (areaId) => window.commerceBackend.getDelive
 )
   .then(
     (responseData) => {
-      if (typeof responseData !== 'object') {
+      if (responseData === null || typeof responseData !== 'object') {
         removeFullScreenLoader();
         return null;
       }

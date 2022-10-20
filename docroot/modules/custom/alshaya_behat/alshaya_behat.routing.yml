@@ -1,0 +1,20 @@
+alshaya_behat.first_in_stock_product:
+  path: /behat/first-in-stock-product
+  defaults:
+    _controller: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::firstInStockProduct'
+  requirements:
+    _custom_access: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::checkAccess'
+
+alshaya_behat.first_oos_product:
+  path: /behat/first-oos-product
+  defaults:
+    _controller: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::firstOosProduct'
+  requirements:
+    _custom_access: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::checkAccess'
+
+alshaya_behat.first_plp_with_products:
+  path: /behat/product-listing-page
+  defaults:
+    _controller: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::firstPlpWithInStockProduct'
+  requirements:
+    _custom_access: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::checkAccess'

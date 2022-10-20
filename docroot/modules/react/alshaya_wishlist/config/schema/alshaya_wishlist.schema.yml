@@ -26,3 +26,6 @@ alshaya_wishlist.settings:
     enabled_share:
       type: boolean
       label: 'Switch to enable and disable Wishlist sharing feature.'
+    disable_quickview_wishlist_page:
+      type: boolean
+      label: 'Switch to enable or disable quick view drawer on wishlist pages.'

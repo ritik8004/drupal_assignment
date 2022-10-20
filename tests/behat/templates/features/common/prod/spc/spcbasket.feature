@@ -108,8 +108,7 @@ Feature: Test basket page
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
-    Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
-    And I wait 10 seconds
+    And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
     And I should not see an ".totals" element
     And I should not see an ".grand-total" element
@@ -247,8 +246,7 @@ Feature: Test basket page
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
-    Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
-    And I wait 10 seconds
+    And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
     And I should not see an ".totals" element
     And I should not see an ".grand-total" element
@@ -269,8 +267,7 @@ Feature: Test basket page
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
-    Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
-    And I wait 10 seconds
+    And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
     And I should not see an ".totals" element
     And I should not see an ".grand-total" element

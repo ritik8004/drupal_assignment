@@ -1,0 +1,15 @@
+.magv2-new-desc {
+  &__item {
+    &__title {
+      font-family: $ay-bold;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    &__item {
+      &__title {
+        font-family: $ay-heavy;
+      }
+    }
+  }
+}
