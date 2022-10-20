@@ -13,6 +13,23 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
+ * Update the config in db.
+ */
+function alshaya_api_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Add fields to product index.
+  $manager->updateConfigs(
+    ['user.role.alshaya_magento_consumer'],
+    'alshaya_api',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.10.0] Update permissions to allow post on new rest
  * resource alshaya_acm_product_category_mapping.
  */
