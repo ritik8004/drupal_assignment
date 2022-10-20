@@ -567,7 +567,7 @@ class AlshayaFrontendCommand extends BltTasks {
       $react_changed_files = array_filter($changed_react_js_files, function ($js_file) use ($relative_react_directory_path) {
         // Get the directory/module name of the file.
         $pos = strpos($js_file, "docroot/modules/react/");
-        $dir_name = explode("/", substr($js_file, $pos));
+        $dir_name = explode("/", substr($js_file, $pos))[3];
         // Get files only in react directory
         // and ignore webpack, node modules, react module files.
         return (
