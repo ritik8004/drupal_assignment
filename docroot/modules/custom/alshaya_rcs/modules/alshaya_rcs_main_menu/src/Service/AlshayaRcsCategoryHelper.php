@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_rcs_main_menu\Service;
 
-use Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -118,8 +117,6 @@ class AlshayaRcsCategoryHelper {
    *   The database connection manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
-   * @param \Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper $department_pages_helper
-   *   Department pages helper.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
@@ -128,8 +125,7 @@ class AlshayaRcsCategoryHelper {
                               AliasManagerInterface $alias_manager,
                               CacheBackendInterface $cache,
                               Connection $connection,
-                              ModuleHandlerInterface $module_handler,
-                              AlshayaDepartmentPageHelper $department_pages_helper
+                              ModuleHandlerInterface $module_handler
                               ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
@@ -139,6 +135,15 @@ class AlshayaRcsCategoryHelper {
     $this->cache = $cache;
     $this->connection = $connection;
     $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * Sets optional dependency on department pager helper service.
+   *
+   * @param \Drupal\alshaya_rcs_listing\Service\AlshayaRcsListingDepartmentPagesHelper $department_pages_helper
+   *   Department page helper.
+   */
+  public function setDepartmentHelper(AlshayaRcsListingDepartmentPagesHelper $department_pages_helper) {
     $this->departmentPageHelper = $department_pages_helper;
   }
 
