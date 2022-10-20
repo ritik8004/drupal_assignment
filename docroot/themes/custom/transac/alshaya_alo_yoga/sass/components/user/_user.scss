@@ -98,4 +98,10 @@
   top: rem(5);
   font-size: rem(10);
   text-transform: uppercase;
+
+  .change-pwd-form & {
+    @include breakpoint($only-mobile) {
+      top: rem(3);
+    }
+  }
 }

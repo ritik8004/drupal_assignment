@@ -61,7 +61,6 @@ const LabelItems = ({ bifercatedLabels, directionKey }) => (
   <>
     {
       bifercatedLabels[directionKey].map((labelItem, index) => (
-        // Product SKU added as a unique key.
         <div className="label" key={`label-${index.toString()}`}>
           <ImageElement
             src={labelItem.image.url}

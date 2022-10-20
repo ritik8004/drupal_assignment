@@ -310,15 +310,3 @@ function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$f
 
   }
 }
-
-/**
- * Implements hook_page_attachments().
- */
-function alshaya_rcs_main_menu_page_attachments(array &$attachments) {
-  // Attach visual mobile menu libraries.
-  if (\Drupal::config('alshaya_main_menu.settings')->get('mobile_main_menu_layout') === AlshayaMainMenuConfigForm::MOBILE_MENU_VISUAL) {
-    $attachments['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_ui';
-    $attachments['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_partial';
-    $attachments['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_level2_partial';
-  }
-}
