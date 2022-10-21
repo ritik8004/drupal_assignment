@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ReturnIndividualItem from '../../../return-request/components/return-individual-item';
 import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
@@ -12,12 +12,19 @@ const ReturnedItemsListing = ({
     return null;
   }
 
-  // Push the required info to GTM.
-  Drupal.alshayaSeoGtmPushReturn(
-    getProductGtmInfo(returnedItems),
-    getPreparedOrderGtm('returnconfirmed', returnData),
-    'returnconfirmed',
-  );
+  useEffect(() => {
+    // Push the required info to GTM.
+    const triggerGtmForReturnConfirmation = async () => {
+      Drupal.alshayaSeoGtmPushReturn(
+        getProductGtmInfo(returnedItems),
+        await getPreparedOrderGtm('returnconfirmed', returnData),
+        'returnconfirmed',
+      );
+    };
+
+    // Call the function.
+    triggerGtmForReturnConfirmation();
+  });
 
   return (
     <div className="return-items-wrapper">

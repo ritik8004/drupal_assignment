@@ -101,7 +101,7 @@ function getProductGtmInfo(itemsSelected) {
  * @returns {object}
  *   The return order GTM object.
  */
-function getPreparedOrderGtm(eventType, returnInfo) {
+async function getPreparedOrderGtm(eventType, returnInfo = []) {
   const gtmInfo = getOrderGtmInfo();
   let returnOrder = {};
   let paymentMethods = [];
@@ -119,7 +119,6 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     returnOrder = {
       orderTransactionId: transactionId,
       orderType: deliveryOption,
-      // @todo Will done in DIG-10167.
       orderFirstTimeTransaction: '',
     };
 
@@ -135,7 +134,15 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     }
   }
 
-  const orderDetails = getOrderDetails();
+  const orderDetails = await getOrderDetails();
+  // Extract the order information from order details.
+  if (Drupal.hasValue(orderDetails['#order_details'])
+    && Object.prototype.hasOwnProperty.call(orderDetails['#order_details'], 'orderFirstTimeTransaction')
+    && (typeof orderDetails['#order_details'].orderFirstTimeTransaction) === 'boolean') {
+    returnOrder.orderFirstTimeTransaction = orderDetails['#order_details'].orderFirstTimeTransaction
+      ? 'True' : 'False';
+  }
+
   // Get the payment details only if GTM payment info is not availble.
   if (!paymentMethods.length > 0) {
     let paymentDetails = getPaymentDetails(orderDetails);
