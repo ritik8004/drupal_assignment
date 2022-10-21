@@ -24,7 +24,7 @@
         {{ menu_item.name }}
         </{{@menu_item.tag}}>
       {{else}}
-          <{{@menu_item.tag}} class="visual-mobile-menu__link visual-mobile-menu--one__link {{ class }} {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="#{{ menu_item.id }}">{{ menu_item.name }}</{{@menu_item.tag}}>
+          <{{@menu_item.tag}} class="visual-mobile-menu__link visual-mobile-menu--one__link {{ class }} {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="#l1-{{ menu_item.id }}">{{ menu_item.name }}</{{@menu_item.tag}}>
       {{/if}}
       </div>
     </li>
@@ -32,8 +32,8 @@
   </ul>
   <div class="visual-mobile-level-two">
     {{#each menu_items as |menu_item|}}
-      <div id="{{menu_item.id}}" class="tabContent">
-        {{> visual_mobile_menu_level2_partial menu_columns=menu_item.children}}
+      <div id="l1-{{menu_item.id}}">
+        {{> visual_mobile_menu_level2_partial l1_name=menu_item.name menu_items=menu_item.children}}
       </div>
     {{/each}}
   </div>
