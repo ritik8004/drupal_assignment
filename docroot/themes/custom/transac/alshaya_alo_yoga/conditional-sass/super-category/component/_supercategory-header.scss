@@ -32,6 +32,37 @@
           top: rem(43);
         }
       }
+
+      .branding__menu {
+        .block-alshaya-algolia-react-autocomplete {
+          top: rem(46);
+          visibility: visible;
+        }
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      top: rem(46);
+      visibility: visible;
+
+      html[lang="ar"] & {
+        top: rem(46);
+      }
+
+      .algolia-search-back-icon {
+        display: none;
+      }
+
+      .algolia-search-cleartext-icon {
+        #{$right}: 0;
+      }
+
+      &.focused {
+        .algolia-search-cleartext-icon {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
     }
   }
 

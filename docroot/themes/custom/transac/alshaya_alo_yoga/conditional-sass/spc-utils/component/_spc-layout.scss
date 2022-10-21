@@ -61,3 +61,14 @@
     }
   }
 }
+
+@include breakpoint($tablet) {
+  .alias--checkout,
+  .alias--checkout-confirmation {
+    .site-brand-home {
+      a {
+        width: auto;
+      }
+    }
+  }
+}
