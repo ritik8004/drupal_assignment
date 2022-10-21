@@ -889,10 +889,10 @@ tamara:
     theme:
       css/conditional-sass/tamara/tamara.ltr.css: {}
 
-mobile-menu:
+visual-mobile-menu:
   css:
     theme:
-      css/conditional-sass/mobile-menu/mobile-menu.ltr.css: {}
+      css/conditional-sass/visual-mobile-menu/visual-mobile-menu.ltr.css: {}
 
 alshaya-accordion:
   js:
