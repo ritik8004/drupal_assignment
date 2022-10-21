@@ -4,7 +4,7 @@
       top: initial;
       position: relative;
       #{$right}: initial;
-      margin-#{$right}: rem(18);
+      margin-#{$right}: rem(12);
     }
 
     html[lang=ar] & {
@@ -25,9 +25,7 @@
     .user-account,
     .user-login {
       @include breakpoint($upto-desktop) {
-        background-size: rem(19);
-        width: rem(19);
-        height: rem(19);
+        background-size: rem(24);
       }
     }
   }

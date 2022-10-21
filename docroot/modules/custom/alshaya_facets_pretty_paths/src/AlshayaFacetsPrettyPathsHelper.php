@@ -717,7 +717,7 @@ class AlshayaFacetsPrettyPathsHelper {
       }
     }
 
-    return $facets_alias_mapping[$attribute_code];
+    return $facets_alias_mapping[$attribute_code] ?? NULL;
   }
 
 }
