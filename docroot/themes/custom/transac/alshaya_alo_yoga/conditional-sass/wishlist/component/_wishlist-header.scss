@@ -10,6 +10,18 @@ body.wishlist-enabled {
       background-position: center;
       background-size: rem(18);
     }
+
+    &.hide-minimalistic-header {
+      &:not(.frontpage) {
+        .wishlist-header {
+          .wishlist-icon {
+            @include breakpoint($upto-desktop) {
+              top: rem(-19);
+            }
+          }
+        }
+      }
+    }
   }
 
   #wishlist-header-wrapper {
