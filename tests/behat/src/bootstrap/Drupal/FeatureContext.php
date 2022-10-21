@@ -3004,43 +3004,6 @@ JS;
   }
 
   /**
-   * @When /^I am on user registration page$/
-   */
-  public function iAmOnUserRegistrationPage()
-  {
-    $this->visitPath('/user/register?behat=' . $this->getBehatSecretKey());
-  }
-
-  /**
-   * @When /^I am on user contact us page$/
-   */
-  public function iAmOnContactUsPage()
-  {
-    $this->visitPath('/contact?behat=' . $this->getBehatSecretKey());
-  }
-
-  private function getBehatSecretKey() {
-    static $key = NULL;
-
-    // Avoid file load everytime.
-    if (isset($key)) {
-      return $key;
-    }
-
-    $filename = 'creds.json';
-    $options = getopt('', ['profile:']);
-    $profile_arr = explode('-', $options['profile']);
-    $env = $profile_arr[2];
-    $key = '';
-    if (file_exists($filename)) {
-      $creds = json_decode(file_get_contents($filename), TRUE);
-      $key = $creds[$env]['secret_key'] ?? '';
-    }
-
-    return $key;
-  }
-
-  /**
    * @Given /^I select "([^"]*)" from "([^"]*)" select2 field$/
    */
   public function iSelectFromSelect2field($value, $selector)
