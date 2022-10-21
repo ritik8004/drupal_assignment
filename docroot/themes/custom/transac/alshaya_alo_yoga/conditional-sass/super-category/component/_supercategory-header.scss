@@ -65,3 +65,9 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .c-menu-primary .region__menu-primary #block-mobilenavigation {
+    position: absolute;
+  }
+}
