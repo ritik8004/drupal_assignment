@@ -1,4 +1,4 @@
-(function ($, Drupal, document) {
+(function (Drupal) {
   Drupal.cartNotification = Drupal.cartNotification || {};
 
   Drupal.cartNotification.triggerNotification = function (data) {
@@ -14,4 +14,4 @@
     document.dispatchEvent(cartNotificationDrawer);
   }
 
-})(jQuery, Drupal, document);
+})(Drupal);
