@@ -53,3 +53,73 @@
     }
   }
 }
+
+.hide-minimalistic-header {
+  .block-alshaya-algolia-react-autocomplete {
+    @include breakpoint($only-mobile) {
+      visibility: hidden !important;
+      transition: visibility 300ms;
+    }
+  }
+
+  &.super-category-enabled {
+    .c-menu-primary {
+      .block-system-menublock li {
+        @include breakpoint($only-mobile) {
+          position: fixed;
+          top: rem(6);
+          z-index: 13;
+        }
+      }
+
+      .region__menu-primary {
+        .block-alshaya-super-category-menu {
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
+        }
+
+        #block-mobilenavigation {
+          @include breakpoint($only-mobile) {
+            position: fixed;
+            top: rem(34);
+          }
+        }
+      }
+    }
+
+    .region__header {
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+        transition: margin-top 300ms;
+      }
+    }
+
+    .c-header__region {
+      @include breakpoint($only-mobile) {
+        position: fixed;
+        width: 100%;
+        border-bottom: rem(1) solid $algolia-auto-complete-border;
+      }
+    }
+  }
+}
+
+.super-category-enabled {
+  .c-menu-primary .region__menu-primary #block-mobilenavigation {
+    @include breakpoint($only-mobile) {
+      position: absolute;
+      top: rem(48);
+    }
+  }
+}
+
+.logged-in {
+  &.hide-minimalistic-header {
+    .super-category-enabled .c-header__region {
+      @include breakpoint($only-mobile) {
+        top: rem(48);
+      }
+    }
+  }
+}
