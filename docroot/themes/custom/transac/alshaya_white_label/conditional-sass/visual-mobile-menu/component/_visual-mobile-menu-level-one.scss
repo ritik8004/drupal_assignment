@@ -1,4 +1,8 @@
 .visual-mobile-menu {
+  &.ui-tabs {
+    padding: 0;
+  }
+
   &--one__list {
     height: rem(45);
     display: flex;
@@ -20,7 +24,7 @@
       .visual-mobile-menu--one__link {
         color: $mob_menu_active_link_txt;
 
-        @include psuedo-element-underline($mob_menu_active_link_txt, rem(1), rem(0));
+        @include psuedo-element-underline($mob_menu_active_link_txt, rem(1), rem(-1));
 
         html[lang=ar] & {
           @include psuedo-element-underline($mob_menu_active_link_txt, rem(1), rem(-4));
