@@ -85,3 +85,10 @@ body {
     }
   }
 }
+
+.mobile--overlay .branding__menu {
+  &::before {
+    // Removing the dark overlay when mobile menu is open.
+    content: none;
+  }
+}
