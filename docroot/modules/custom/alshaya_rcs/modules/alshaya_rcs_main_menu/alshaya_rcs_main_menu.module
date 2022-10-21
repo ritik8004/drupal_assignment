@@ -278,14 +278,14 @@ function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$f
   $actual_depth = \Drupal::config('alshaya_rcs_main_menu.settings')->get('max_depth_to_load') - $depth;
 
   switch ($actual_depth) {
-    case 1:
+    case 0:
       // Add fields for level 1.
       $fields = array_merge($fields, [
-        'image',
         'is_visual_menu_layout',
       ]);
       break;
 
+    case 1:
     case 2:
       // Add fields for level 2.
       $fields = array_merge($fields, [
