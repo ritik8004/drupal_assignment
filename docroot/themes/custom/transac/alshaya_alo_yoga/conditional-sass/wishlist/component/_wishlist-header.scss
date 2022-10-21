@@ -17,16 +17,6 @@ body.wishlist-enabled {
     }
   }
 
-  header {
-    .region__header {
-      .block-alshaya-react-mini-cart {
-        @include breakpoint($desktop) {
-          width: 5%;
-        }
-      }
-    }
-  }
-
   .filter-fixed-top {
     .sticky-filter-wrapper {
       .wishlist-minicart-sticky-wrapper {
@@ -60,6 +50,11 @@ body {
           display: initial;
           flex-grow: initial;
           margin-#{$right}: rem(12);
+
+          @include breakpoint($desktop) {
+            margin-#{$left}: rem(34);
+            margin-#{$right}: rem(19);
+          }
         }
       }
     }

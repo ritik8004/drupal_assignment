@@ -51,10 +51,6 @@
     }
 
     .react-autosuggest__container {
-      @include breakpoint($desktop) {
-        top: rem(-4);
-      }
-
       &::before {
         height: auto;
         width: auto;

@@ -16,6 +16,7 @@ header {
       width: 100%;
       flex-flow: row nowrap;
       align-items: center;
+      justify-content: initial;
 
       & > div {
         @include breakpoint($desktop) {
@@ -109,7 +110,7 @@ header {
         background-size: rem(14) rem(18);
 
         &:hover {
-          background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1) no-repeat;
+          background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1);
 
           .quantity {
             color: $primary_minicart_hover;
@@ -194,6 +195,12 @@ header {
       top: rem(4);
     }
   }
+
+  @include breakpoint($desktop) {
+    .acq-mini-cart {
+      float: none;
+    }
+  }
 }
 
 #block-cartminiblock,
@@ -209,13 +216,7 @@ header {
   }
 
   .hamburger--menu {
-    @include breakpoint($only-mobile) {
-      .logged-in & {
-        padding: 0;
-        #{$left}: rem(8);
-        top: rem(16);
-      }
-    }
+    margin: 0;
   }
 
   a {
@@ -235,7 +236,6 @@ header {
       top: rem(19);
 
       html[lang=ar] & {
-        right: rem(12);
         top: initial;
       }
     }
@@ -250,8 +250,8 @@ header {
       background-position: center;
 
       @include breakpoint($upto-desktop) {
-        height: rem(26);
-        width: rem(29);
+        height: rem(32);
+        width: rem(32);
         margin-#{$right}: 0;
 
         html[lang=ar] & {
@@ -270,7 +270,7 @@ header {
 
 .menu--two__list {
   margin-top: 0 !important;
-  padding-top: rem(11);
+  padding-top: rem(17);
 
   &::before {
     content: '';
@@ -352,6 +352,7 @@ header {
   .block-system-branding-block {
     @include breakpoint($upto-desktop) {
       position: absolute;
+      bottom: rem(10);
       #{$left}: 50%;
       transform: translateX(-50%);
 
@@ -367,6 +368,7 @@ header {
     height: auto;
     display: flex;
     width: rem(49);
+    margin: 0;
 
     @include breakpoint($desktop) {
       width: rem(65);
