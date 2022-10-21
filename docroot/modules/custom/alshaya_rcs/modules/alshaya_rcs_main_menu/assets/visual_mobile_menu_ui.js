@@ -4,6 +4,12 @@
       // Initiate tabs on visual mobile menu level 1.
       $('#visual-mobile-menu-level1').once('visual-mobile-tabs').tabs();
 
+      // When we click on L1 links, all L2 should be visible and L3 hidden.
+      $('.visual-mobile-menu--one__link').once('visual-mobile-l1-click').tabs().click(function () {
+        $('.visual-mobile-level-two__link').show();
+        $('.visual-mobile-level-three').hide();
+      });
+
       // When we click on a L2 menu, we hide all L2 menus and show respective
       // L3 menu only.
       $('.visual-mobile-level-two__link').once('visual-mobile-l2-click').click(function () {
