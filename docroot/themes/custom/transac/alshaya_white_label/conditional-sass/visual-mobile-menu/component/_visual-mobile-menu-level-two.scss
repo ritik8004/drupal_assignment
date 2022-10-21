@@ -30,3 +30,25 @@
     color: $mob_menu_two_color_text;
   }
 }
+
+//@todo: move to level-three scss
+.visual-mobile-level-three {
+  display: none;
+}
+
+//@todo this is a temporary styling until we have images.
+.visual-mobile-level-two__link,
+.visual-mobile-level-three .l2-header {
+  position: relative;
+  display: flex;
+  margin-bottom: 1rem;
+  height: 9.3125rem;
+  background: #0a65aa;
+}
+
+//@todo this is a temporary styling
+.visual-mobile-level-three__heading {
+  position: relative;
+  background: #0a65aa;
+  height: 50px;
+}
