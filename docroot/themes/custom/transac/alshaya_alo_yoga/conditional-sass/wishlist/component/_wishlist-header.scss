@@ -1,3 +1,5 @@
+// Some styles reset from CORE, using 'initial' values.
+
 body.wishlist-enabled {
   .wishlist-header {
     @include breakpoint($desktop) {
