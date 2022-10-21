@@ -39,7 +39,7 @@ class flContext extends DrupalSubContextBase implements DrupalSubContextInterfac
     $environment = $scope->getEnvironment();
 
     $this->drupalContext = $environment->getContext(\Drupal\DrupalExtension\Context\DrupalContext::class);
-    $this->minkContext = $environment->getContext(\Drupal\DrupalExtension\Context\MinkContext::class);
+    $this->minkContext = $environment->getContext(\Alshaya\BehatContexts\OverriddenMinkContext::class);
   }
 
   /**

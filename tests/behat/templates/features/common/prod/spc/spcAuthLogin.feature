@@ -3,7 +3,7 @@
 Feature: Create new user account on the site
 
   Background:
-    When I am on user registration page
+    Given I am on "/user/register"
     And I wait for the page to load
 
   Scenario: As an authenticated user, I should be able to sign in after providing valid credentials

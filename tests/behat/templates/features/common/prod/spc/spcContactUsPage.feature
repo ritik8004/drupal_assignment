@@ -3,7 +3,7 @@
 Feature: Verify the Contact Us page on the site for Guest User
 
   Background:
-    When I am on user contact us page
+    When I go to "/contact"
     And I wait for the page to load
     Then I should see an "#block-page-title h1.c-page-title" element
 
