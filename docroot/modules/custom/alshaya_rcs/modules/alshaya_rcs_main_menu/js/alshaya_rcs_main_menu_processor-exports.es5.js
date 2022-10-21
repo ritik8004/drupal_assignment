@@ -16,10 +16,16 @@ exports.prepareData = function prepareData(settings, inputs) {
   // Convert the array of Object into Object of objects.
   menuItems = Object.assign({}, menuItems);
 
-  // If we are using visual mobile menu layout we also need to send the
+  // Check if Visual Mobile is enabled via Drupal configuration and also if the
+  // top level category is configured to be displayed as Visual Mobile menu.
+  const isVisualMobileMenu = (mobileMenuLayout === 'visual_mobile_menu'
+    && Drupal.hasValue(inputs.is_visual_menu_layout) ? true : false
+  );
+
+  // If we are using visual mobile menu we also need to send the
   // original menu structure that is not split into columns.
-  let visualMobileMenuItems = {};
-  if (mobileMenuLayout === 'visual_mobile_menu') {
+  let visualMobileMenuItems = [];
+  if (isVisualMobileMenu) {
     visualMobileMenuItems = JSON.parse(JSON.stringify(menuItems));
   }
 
@@ -46,8 +52,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     'aura_enabled': auraEnabled,
     'highlight_timing': highlightTiming,
     'promopanel_class': '', // @todo Implement promo panel block class.
-    // Set mobile menu layout from settings.
-    'mobile_menu_layout': mobileMenuLayout,
+    'is_visual_mobile_menu': isVisualMobileMenu,
     'visual_mobile_menu_items': visualMobileMenuItems,
   };
 }
