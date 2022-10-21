@@ -45,7 +45,7 @@ export default class CancelReturnPopUp extends React.Component {
       if (hasValue(returnData) && hasValue(returnData.items)) {
         Drupal.alshayaSeoGtmPushReturn(
           getProductGtmInfo(returnData.items),
-          getPreparedOrderGtm('cancelreturnconfirmed', returnInfo),
+          await getPreparedOrderGtm('cancelreturnconfirmed', returnInfo),
           'cancelreturnconfirmed',
         );
       }
