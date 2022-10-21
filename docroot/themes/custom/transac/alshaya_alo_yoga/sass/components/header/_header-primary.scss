@@ -88,7 +88,6 @@ header {
 
       html[lang=ar] & {
         height: rem(48);
-        margin-top: rem(3);
       }
     }
 
@@ -126,6 +125,7 @@ header {
         color: $cart_filled_color;
         padding-top: 0;
         border-radius: 0;
+        background: $cart_filled_background;
 
         @include breakpoint($desktop) {
           #{$left}: rem(-1);
@@ -139,8 +139,8 @@ header {
         }
 
         @include breakpoint($only-mobile) {
-          top: initial;
-          #{$left}: initial;
+          #{$left}: rem(5);
+          font-size: rem(9);
 
           html[lang=ar] & {
             right: rem(5);
@@ -383,6 +383,21 @@ header {
 
     .branding__menu {
       box-shadow: none;
+    }
+  }
+}
+
+.logged-in {
+  header.c-header {
+    .block-alshaya-react-mini-cart,
+    .block-cart-mini-block {
+      .quantity {
+        @include breakpoint($upto-desktop) {
+          top: rem(8);
+          width: rem(13);
+          height: rem(13);
+        }
+      }
     }
   }
 }

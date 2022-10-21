@@ -64,14 +64,14 @@
 
         @include breakpoint($upto-desktop) {
           top: rem(8);
-          #{$left}: inherit;
+          #{$left}: unset;
           #{$right}: rem(-4);
           opacity: 1;
           transition: opacity 0.2s;
         }
 
         @include breakpoint($only-mobile) {
-          #{$right}: rem(-4);
+          position: absolute;
         }
       }
 
@@ -205,11 +205,14 @@
 
     .react-autosuggest__input {
       @include breakpoint($only-mobile) {
-        height: rem(56);
+        height: rem(45);
         margin: 0;
         width: 100%;
         border: rem(1) solid $algolia-auto-complete-border;
         padding-#{$left}: rem(8);
+        border-right: 0;
+        border-left: 0;
+        padding-#{$left}: rem(10);
       }
 
       @include breakpoint($upto-desktop) {
