@@ -1078,6 +1078,13 @@ class AlshayaGtmManager {
       }
     }
 
+    $first_time_transac = $orders_count > 1 ? 'False' : 'True';
+    // Fetch the info around first time transaction if available.
+    if (array_key_exists('order_first_time_transaction', $order['extension'])) {
+      $first_time_transac = $order['extension']['order_first_time_transaction']
+        ? 'True' : 'False';
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
@@ -1087,7 +1094,7 @@ class AlshayaGtmManager {
       'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
-      'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
+      'firstTimeTransaction' => $first_time_transac,
       'privilegesCardNumber' => $loyalty_card,
       'userId' => $customer_id,
       'userEmailID' => $order['email'],
