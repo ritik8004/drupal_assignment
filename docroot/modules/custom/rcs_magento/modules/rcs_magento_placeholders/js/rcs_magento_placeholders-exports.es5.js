@@ -1,3 +1,11 @@
+const getMenuLocalStorageKey = (category_id) => {
+  return [
+    'navigation_menu',
+    drupalSettings.path.currentLanguage,
+    category_id,
+  ].join('_');
+}
+
 /**
  * Handle 404 case on initial request.
  *
@@ -227,7 +235,7 @@ exports.getData = async function getData(
       var navigationMenuCacheTime = drupalSettings.rcs.navigationMenuCacheTime;
       if (navigationMenuCacheTime !== 0) {
         const navigationData = globalThis.RcsPhLocalStorage.get(
-          'navigation_menu_' + rcsPhGraphqlQuery.navigationMenu.variables.categoryId
+          getMenuLocalStorageKey(rcsPhGraphqlQuery.navigationMenu.variables.categoryId)
         );
         if (navigationData !== null) {
           return navigationData;
@@ -248,10 +256,11 @@ exports.getData = async function getData(
         result = response.data.categories.items[0].children;
         // Store category data in static storage.
         globalThis.RcsPhStaticStorage.set(placeholder + '_data', result);
+
         // Store category data in local storage.
         if (navigationMenuCacheTime !== 0) {
           globalThis.RcsPhLocalStorage.set(
-            'navigation_menu_' + rcsPhGraphqlQuery.navigationMenu.variables.categoryId,
+            getMenuLocalStorageKey(rcsPhGraphqlQuery.navigationMenu.variables.categoryId),
             result,
             navigationMenuCacheTime
           );
