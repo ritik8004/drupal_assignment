@@ -457,7 +457,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
   }
 
   if (\Drupal::config('alshaya_main_menu.settings')->get('mobile_main_menu_layout') === AlshayaMainMenuConfigForm::MOBILE_MENU_VISUAL) {
-    $variables['#attached']['library'][] = 'alshaya_white_label/mobile-menu';
+    $variables['#attached']['library'][] = 'alshaya_white_label/visual-mobile-menu';
   }
 }
 
