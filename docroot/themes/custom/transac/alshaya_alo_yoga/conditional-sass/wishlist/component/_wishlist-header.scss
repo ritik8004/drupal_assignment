@@ -5,23 +5,15 @@ body.wishlist-enabled {
     }
 
     .wishlist-icon {
-      top: rem(1);
-      position: relative;
       background-position: center;
+      background-size: rem(18);
     }
   }
 
   #wishlist-header-wrapper {
-    @include breakpoint($upto-desktop) {
-      top: rem(11);
-      #{$right}: rem(50);
-    }
-
     .wishlist-header {
-      @include breakpoint($upto-desktop) {
-        padding-bottom: 0;
-        padding-#{$right}: 0;
-      }
+      padding-bottom: initial;
+      padding-#{$right}: initial;
     }
   }
 
@@ -55,16 +47,9 @@ body {
   &.wishlist-enabled {
     // Resetting style of CORE theme
     #wishlist-header-wrapper {
-      @include breakpoint($upto-desktop) {
-        position: relative;
-        top: initial;
-        #{$right}: initial;
-      }
-
       .wishlist-link {
-        @include breakpoint($upto-desktop) {
-          width: initial;
-        }
+        display: initial;
+        vertical-align: initial;
       }
     }
 
@@ -72,36 +57,10 @@ body {
       .region__header {
         // Resetting style of CORE theme
         .block-alshaya-wishlist {
-          @include breakpoint($upto-desktop) {
-            flex-grow: initial;
-            margin-#{$right}: rem(12);
-          }
+          display: initial;
+          flex-grow: initial;
+          margin-#{$right}: rem(12);
         }
-      }
-    }
-    // Resetting style of CORE theme
-    .wishlist-header {
-      .wishlist-icon {
-        @include breakpoint($upto-desktop) {
-          top: initial;
-        }
-      }
-    }
-    // Resetting style of CORE theme
-    .wishlist-icon {
-      @include breakpoint($upto-desktop) {
-        margin-right: initial;
-        margin-left: initial;
-      }
-    }
-  }
-}
-
-header.c-header {
-  .block-alshaya-react-mini-cart {
-    .cart-link {
-      @include breakpoint($upto-desktop) {
-        margin-#{$right}: 0;
       }
     }
   }

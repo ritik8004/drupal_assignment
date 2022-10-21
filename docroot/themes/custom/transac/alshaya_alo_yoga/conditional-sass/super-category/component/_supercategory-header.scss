@@ -48,27 +48,6 @@
       }
     }
 
-    .branding__menu {
-      .c-header__region {
-        .block-system-branding-block {
-          .site-brand-home {
-            height: rem(64);
-
-            img {
-              height: unset;
-              margin: unset;
-            }
-          }
-        }
-      }
-    }
-
-    .block-system-branding-block {
-      .site-brand-home a {
-        height: unset;
-      }
-    }
-
     .block-alshaya-algolia-react-autocomplete {
       #alshaya-algolia-autocomplete {
         width: rem(280);

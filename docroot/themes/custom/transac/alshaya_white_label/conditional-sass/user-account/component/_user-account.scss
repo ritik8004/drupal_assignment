@@ -8,12 +8,16 @@
   }
 
   .my-account-icon {
+    display: flex;
+
     .user-login,
     .user-account {
       width: rem(24);
       height: rem(24);
       display: inline-block;
-      background: center/rem(16) no-repeat;
+      background-position: center;
+      background-size: rem(18) rem(16);
+      background-repeat: no-repeat;
     }
 
     .user-login {
