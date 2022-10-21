@@ -37,6 +37,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
   const {
     pdpDescriptionContainerType,
     showRelatedProductsFromDrupal,
+    isTamaraEnabled,
   } = drupalSettings;
 
   let skuItemCode = '';
@@ -229,6 +230,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
             brandLogoTitle={brandLogoTitle}
             animateTitlePrice
             context="main"
+            isTamaraEnabled={isTamaraEnabled}
           />
           <div className="promotions promotions-full-view-mode">
             <PdpPromotionLabel
