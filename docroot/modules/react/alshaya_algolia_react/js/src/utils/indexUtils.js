@@ -321,8 +321,11 @@ export function cleanUpValue(searchState, context, id) {
 }
 
 export function addAbsolutePositions(hits, hitsPerPage, page) {
+  // Used Drupal settings to know the pages based on set number of items.
+  const itemsPerPage = parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
+  const pageIndex = (hitsPerPage > itemsPerPage) ? 0 : page;
   return hits.map((hit, index) => _objectSpread({}, hit, {
-    __position: hitsPerPage * page + index + 1,
+    __position: hitsPerPage * pageIndex + index + 1,
   }));
 }
 export function addQueryID(hits, queryID) {
