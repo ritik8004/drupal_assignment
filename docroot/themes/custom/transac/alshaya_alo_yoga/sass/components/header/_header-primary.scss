@@ -1,3 +1,5 @@
+// Some styles reset from CORE, using 'initial' values.
+
 header {
   @include breakpoint($desktop) {
     border-bottom: rem(1) solid $header_border;
@@ -16,6 +18,7 @@ header {
       width: 100%;
       flex-flow: row nowrap;
       align-items: center;
+      justify-content: initial;
 
       & > div {
         @include breakpoint($desktop) {
@@ -30,7 +33,7 @@ header {
 
     .block-alshaya-main-menu {
       @include breakpoint($desktop) {
-        width: 59%;
+        flex-grow: 1;
         margin: 0;
 
         li.menu--one__list-item {
@@ -68,42 +71,11 @@ header {
     }
 
     .block-system-branding-block {
+      width: auto;
+
       @include breakpoint($desktop) {
-        width: 6%;
-      }
-
-      @include breakpoint($only-mobile) {
-        width: auto;
-      }
-
-      .site-brand-home {
-        @include breakpoint($desktop) {
-          min-width: rem(32);
-          padding-top: rem(4);
-        }
-
-        a {
-          @include breakpoint($only-mobile) {
-            html[lang=ar] & {
-              text-align: center;
-              margin-top: 0;
-            }
-          }
-
-          img {
-            html[lang=ar] & {
-              @include breakpoint($only-mobile) {
-                width: rem(49);
-                height: auto;
-              }
-
-              @include breakpoint($tablet) {
-                margin-top: 0;
-                width: unset;
-                height: rem(46);
-              }
-            }
-          }
+        .site-brand-home {
+          min-width: initial;
         }
       }
     }
@@ -134,41 +106,16 @@ header {
     .block-cart-mini-block,
     .block-alshaya-react-mini-cart {
       .cart-link {
-        background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) no-repeat;
-        margin-bottom: 0;
+        background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) center no-repeat;
+        width: rem(24);
+        height: rem(24);
+        background-size: rem(14) rem(18);
 
         &:hover {
-          background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1) no-repeat;
+          background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1);
 
           .quantity {
             color: $primary_minicart_hover;
-          }
-        }
-
-        @include breakpoint($desktop) {
-          top: rem(-2);
-          height: rem(24);
-          width: rem(18);
-          #{$left}: rem(32);
-        }
-
-        @include breakpoint($only-tablet) {
-          margin-#{$left}: 16%;
-          margin-bottom: rem(15);
-
-          html[lang=ar] & {
-            margin-bottom: rem(-2);
-          }
-        }
-
-        @include breakpoint($only-mobile) {
-          height: rem(32);
-          width: rem(32);
-          margin-#{$right}: rem(-5);
-          margin-top: 0;
-
-          html[lang=ar] & {
-            margin-left: rem(4);
           }
         }
       }
@@ -176,7 +123,6 @@ header {
       .quantity {
         font-size: rem(10);
         #{$left}: rem(-1);
-        background: $cart_filled_background;
         color: $cart_filled_color;
         padding-top: 0;
         border-radius: 0;
@@ -202,18 +148,6 @@ header {
         }
       }
 
-      #mini-cart-wrapper {
-        @include breakpoint($only-tablet) {
-          margin-top: 0;
-
-          .block-cart-mini-block .cart-link,
-          .block-alshaya-react-mini-cart .cart-link {
-            margin-top: 0;
-            margin-bottom: 0;
-          }
-        }
-      }
-
       @include breakpoint($only-tablet) {
         top: rem(10);
         #{$right}: rem(-7);
@@ -229,64 +163,8 @@ header {
 
 .site-brand-home {
   @include breakpoint($only-mobile) {
-    width: 100%;
     display: flex;
     justify-content: center;
-  }
-
-  .block-system-branding-block & {
-    html[lang=ar] & {
-      @include breakpoint($upto-desktop) {
-        width: auto;
-
-        img {
-          width: rem(80);
-          height: rem(30);
-        }
-      }
-    }
-  }
-
-  a {
-    @include breakpoint($desktop) {
-      display: inline-flex;
-      width: rem(70);
-
-      .alias--cart-login & {
-        width: rem(96);
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      max-width: rem(128);
-      margin: 0 auto;
-
-      html[lang=ar] & {
-        max-width: rem(64);
-      }
-    }
-
-    @include breakpoint($only-mobile) {
-      width: rem(49);
-      margin: 0 auto;
-      position: absolute;
-      #{$left}: 0;
-      #{$right}: 0;
-      top: rem(39);
-      height: rem(33);
-
-      html[lang=ar] & {
-        max-width: rem(80);
-        top: rem(45);
-      }
-
-      .alias--cart-login &,
-      .alias--checkout & {
-        position: static;
-        top: 0;
-        height: rem(36);
-      }
-    }
   }
 }
 
@@ -298,34 +176,15 @@ header {
   }
 
   .cart-link {
-    width: rem(25);
-    height: rem(25);
+    background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) center no-repeat;
+    background-size: rem(14) rem(18);
 
     &:hover {
-      background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
+      background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg);
 
       .quantity {
         color: $primary_minicart_hover;
       }
-    }
-
-    @include breakpoint($only-mobile) {
-      background-size: auto;
-
-      html[lang=ar] & {
-        margin-top: 0;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      top: rem(12);
-      #{$left}: rem(-16);
-    }
-
-    @include breakpoint($desktop) {
-      top: rem(2);
-      #{$left}: rem(24);
-      position: absolute;
     }
   }
 
@@ -340,12 +199,11 @@ header {
       top: rem(4);
     }
   }
-}
 
-#mini-cart-wrapper {
   @include breakpoint($desktop) {
-    min-width: auto;
-    padding-#{$right}: rem(20);
+    .acq-mini-cart {
+      float: none;
+    }
   }
 }
 
@@ -362,13 +220,7 @@ header {
   }
 
   .hamburger--menu {
-    @include breakpoint($only-mobile) {
-      .logged-in & {
-        padding: 0;
-        #{$left}: rem(8);
-        top: rem(16);
-      }
-    }
+    margin: 0;
   }
 
   a {
@@ -378,33 +230,17 @@ header {
   }
 
   .mobile--menu {
-    top: rem(20);
     font-size: 0;
     padding: 0;
     z-index: 13;
-
-    @include breakpoint($only-mobile) {
-      #{$left}: rem(10);
-      top: rem(19);
-
-      html[lang=ar] & {
-        right: rem(12);
-        top: initial;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      position: absolute;
-      #{$left}: rem(18);
-    }
 
     &::before {
       background-repeat: no-repeat;
       background-position: center;
 
       @include breakpoint($upto-desktop) {
-        height: rem(26);
-        width: rem(29);
+        height: rem(32);
+        width: rem(32);
         margin-#{$right}: 0;
 
         html[lang=ar] & {
@@ -423,7 +259,7 @@ header {
 
 .menu--two__list {
   margin-top: 0 !important;
-  padding-top: rem(11);
+  padding-top: rem(17);
 
   &::before {
     content: '';
@@ -500,21 +336,12 @@ header {
       padding-left: 0;
       background-color: $menu_bg;
     }
-
-    .block-system-branding-block {
-      .site-brand-home {
-        img {
-          @include breakpoint($only-tablet) {
-            width: rem(64);
-          }
-        }
-      }
-    }
   }
 
   .block-system-branding-block {
     @include breakpoint($upto-desktop) {
       position: absolute;
+      bottom: rem(10);
       #{$left}: 50%;
       transform: translateX(-50%);
 
@@ -527,43 +354,13 @@ header {
 
 .site-brand-home {
   a {
-    @include breakpoint($upto-desktop) {
-      position: relative;
-      left: initial;
-      right: initial;
-      top: initial;
-      margin-#{$left}: 0;
-      height: auto;
-      margin-top: rem(8);
+    height: auto;
+    display: flex;
+    width: rem(49);
+    margin: 0;
 
-      html[lang=ar] & {
-        top: initial;
-      }
-    }
-  }
-}
-
-.filter-fixed-top {
-  #static-minicart-section {
-    .static-minicart-wrapper {
-      .cart-link {
-        @include breakpoint($desktop) {
-          top: 0;
-          #{$left}: rem(22);
-
-          html[lang=ar] & {
-            right: rem(14);
-          }
-        }
-
-        .quantity {
-          @include breakpoint($desktop) {
-            html[lang=ar] & {
-              right: rem(5);
-            }
-          }
-        }
-      }
+    @include breakpoint($desktop) {
+      width: rem(65);
     }
   }
 }
@@ -582,6 +379,10 @@ header {
           visibility: hidden;
         }
       }
+    }
+
+    .branding__menu {
+      box-shadow: none;
     }
   }
 }
