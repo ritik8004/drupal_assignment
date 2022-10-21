@@ -18,14 +18,6 @@
   }
 
   &:not(.frontpage) {
-    @include breakpoint($upto-desktop) {
-      .c-menu-primary {
-        .mobile--menu {
-          top: rem(1);
-        }
-      }
-    }
-
     &.alias--cart {
       .page-standard {
         &.l-container {

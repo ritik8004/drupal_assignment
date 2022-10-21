@@ -31,7 +31,7 @@ header {
 
     .block-alshaya-main-menu {
       @include breakpoint($desktop) {
-        width: 59%;
+        flex-grow: 1;
         margin: 0;
 
         li.menu--one__list-item {
@@ -226,24 +226,9 @@ header {
   }
 
   .mobile--menu {
-    top: rem(20);
     font-size: 0;
     padding: 0;
     z-index: 13;
-
-    @include breakpoint($only-mobile) {
-      #{$left}: rem(10);
-      top: rem(19);
-
-      html[lang=ar] & {
-        top: initial;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      position: absolute;
-      #{$left}: rem(18);
-    }
 
     &::before {
       background-repeat: no-repeat;
@@ -390,6 +375,10 @@ header {
           visibility: hidden;
         }
       }
+    }
+
+    .branding__menu {
+      box-shadow: none;
     }
   }
 }

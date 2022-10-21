@@ -6,8 +6,13 @@
   .super-category-enabled {
     .c-menu-primary {
       .mobile--menu {
+        position: fixed;
         #{$left}: rem(8);
-        top: rem(7);
+        top: rem(43);
+
+        html[lang=ar] & {
+          top: rem(43);
+        }
       }
     }
 
@@ -18,6 +23,29 @@
             display: initial;
           }
         }
+      }
+    }
+
+    &:not(.frontpage) {
+      .c-menu-primary {
+        .mobile--menu {
+          top: rem(43);
+        }
+      }
+    }
+  }
+
+  .c-menu-primary .region__menu-primary {
+    #block-mobilenavigation,
+    .menu--mobile-navigation {
+      position: absolute;
+
+      .mobile--search {
+        display: none;
+      }
+
+      .store {
+        display: none;
       }
     }
   }
@@ -78,6 +106,7 @@
 
             img {
               height: initial;
+              max-width: 100%;
             }
           }
         }
@@ -122,9 +151,5 @@
     .toggle--sign {
       display: none;
     }
-  }
-
-  .c-menu-primary .region__menu-primary #block-mobilenavigation {
-    position: absolute;
   }
 }
