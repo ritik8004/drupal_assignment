@@ -5,8 +5,6 @@
         .non-group-anchor-wrapper {
           label {
             justify-content: initial;
-            font-family: $ay-heavy;
-            text-transform: uppercase;
           }
         }
       }
@@ -24,12 +22,5 @@
         }
       }
     }
-  }
-}
-
-.magv2-select-popup-header-wrapper {
-  label {
-    font-family: $ay-heavy;
-    text-transform: uppercase;
   }
 }
