@@ -29,7 +29,7 @@
     @include breakpoint($upto-desktop) {
       .c-menu-primary {
         .mobile--menu {
-          top: rem(-2);
+          top: rem(1);
         }
       }
     }
@@ -105,10 +105,6 @@
               content: attr(title);
               font-family: $ay-bold;
               font-size: rem(14);
-
-              @include breakpoint($only-mobile) {
-                font-size: rem(12);
-              }
             }
           }
         }
@@ -127,40 +123,9 @@
   }
 
   .block-alshaya-algolia-react-autocomplete {
-    @include breakpoint($only-mobile) {
-      top: rem(45);
-    }
-
     .algolia-search-cleartext-icon {
       @include breakpoint($desktop) {
         #{$right}: rem(2);
-      }
-    }
-
-    &.clear-icon {
-      &.show-algolia-search-bar {
-        .algolia-search-cleartext-icon {
-          @include breakpoint($only-mobile) {
-            display: none;
-          }
-        }
-      }
-    }
-
-    .react-autosuggest__container {
-      .algolia-search-back-icon {
-        @include breakpoint($only-mobile) {
-          top: rem(6);
-          #{$left}: rem(-7);
-        }
-      }
-    }
-
-    #alshaya-algolia-autocomplete {
-      .react-autosuggest__container {
-        &::after {
-          top: rem(2);
-        }
       }
     }
   }
@@ -218,22 +183,6 @@
     }
   }
 
-  &:not(.frontpage) {
-    &.hide-minimalistic-header {
-      .branding__menu #block-alshayareactcartminicartblock {
-        @include breakpoint($upto-desktop) {
-          top: rem(46);
-        }
-      }
-
-      .branding__menu {
-        @include breakpoint($upto-desktop) {
-          top: rem(46);
-        }
-      }
-    }
-  }
-
   header.c-header {
     .block-alshaya-react-mini-cart,
     .block-cart-mini-block {
@@ -245,36 +194,6 @@
               #{$left}: rem(2);
             }
           }
-        }
-      }
-    }
-  }
-}
-
-
-.super-category-enabled:not(.frontpage) {
-  .branding__menu .block-alshaya-algolia-react-autocomplete {
-    @include breakpoint($only-mobile) {
-      visibility: visible;
-      top: rem(45);
-    }
-  }
-}
-
-.logged-in {
-  &.super-category-enabled:not(.frontpage) {
-    &.hide-minimalistic-header {
-      .branding__menu,
-      .branding__menu #block-alshayareactcartminicartblock {
-        @include breakpoint($upto-desktop) {
-          top: rem(45);
-        }
-      }
-
-      .branding__menu {
-        @include breakpoint($upto-desktop) {
-          height: rem(45);
-          top: 0;
         }
       }
     }

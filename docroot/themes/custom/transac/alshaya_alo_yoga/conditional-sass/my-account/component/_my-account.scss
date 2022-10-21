@@ -8,14 +8,6 @@
       }
     }
   }
-
-  .block {
-    &:first-child {
-      @include breakpoint($upto-desktop) {
-        margin-top: rem(30);
-      }
-    }
-  }
 }
 
 .aura-my-account.aura-enabled .block-page-title-block .edit-account {
