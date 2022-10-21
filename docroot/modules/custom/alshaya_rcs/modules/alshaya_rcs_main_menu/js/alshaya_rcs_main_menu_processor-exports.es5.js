@@ -10,14 +10,18 @@ exports.prepareData = function prepareData(settings, inputs) {
   } = settings;
 
   // Clone the input data.
-  let inputsClone = JSON.parse(JSON.stringify(inputs));
+  let menuItems = JSON.parse(JSON.stringify(inputs));
   // Clean up data.
-  inputsClone = processData(inputsClone, menuMaxDepth, mobileMenuMaxDepth);
+  menuItems = processData(menuItems, menuMaxDepth, mobileMenuMaxDepth);
   // Convert the array of Object into Object of objects.
-  inputsClone = Object.assign({}, inputsClone);
+  menuItems = Object.assign({}, menuItems);
 
-  // Check if is_visual_menu_layout set on first level item.
-  const { is_visual_menu_layout: isVisualMenuLayout } = inputsClone[0] || 0;
+  // If we are using visual mobile menu layout we also need to send the
+  // original menu structure that is not split into columns.
+  let visualMobileMenuItems = {};
+  if (mobileMenuLayout === 'visual_mobile_menu') {
+    visualMobileMenuItems = JSON.parse(JSON.stringify(menuItems));
+  }
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -27,7 +31,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     case 'default':
     default:
       // Distribute L3 items into columns.
-      inputsClone = splitIntoCols(inputsClone, maxNbCol, idealMaxColLength);
+      menuItems = splitIntoCols(menuItems, maxNbCol, idealMaxColLength);
   }
 
   let auraEnabled = Drupal.hasValue(drupalSettings.aura)
@@ -36,7 +40,7 @@ exports.prepareData = function prepareData(settings, inputs) {
 
   return {
     'menu_type': menuLayout,
-    'menu_items': inputsClone,
+    'menu_items': menuItems,
     'user_logged_in': drupalSettings.user.uid > 1,
     'path_prefix': Drupal.url(''),
     'aura_enabled': auraEnabled,
@@ -44,6 +48,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     'promopanel_class': '', // @todo Implement promo panel block class.
     // Set mobile menu layout from settings.
     'mobile_menu_layout': mobileMenuLayout,
+    'visual_mobile_menu_items': visualMobileMenuItems,
   };
 }
 
