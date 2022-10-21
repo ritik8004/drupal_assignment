@@ -11,18 +11,6 @@ body.wishlist-enabled {
     }
   }
 
-  &.hide-minimalistic-header {
-    &:not(.frontpage) {
-      .wishlist-header {
-        .wishlist-icon {
-          @include breakpoint($upto-desktop) {
-            top: rem(-19);
-          }
-        }
-      }
-    }
-  }
-
   #wishlist-header-wrapper {
     @include breakpoint($upto-desktop) {
       top: rem(11);
@@ -86,7 +74,7 @@ body {
         .block-alshaya-wishlist {
           @include breakpoint($upto-desktop) {
             flex-grow: initial;
-            margin-#{$right}: rem(15);
+            margin-#{$right}: rem(12);
           }
         }
       }
@@ -96,8 +84,6 @@ body {
       .wishlist-icon {
         @include breakpoint($upto-desktop) {
           top: initial;
-          height: rem(18);
-          width: rem(18);
         }
       }
     }
