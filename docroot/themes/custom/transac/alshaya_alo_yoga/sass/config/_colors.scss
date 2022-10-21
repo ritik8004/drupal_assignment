@@ -36,6 +36,10 @@ $gray-nine: #e9e9e9;
 $white1: #fafafa;
 $white-alpha4: rgba(255, 255, 255, 0.4);
 $info-1: #bbdfff;
+$green2: #9dd3ba;
+$yellow: #ede4d0;
+$sky_blue: #93cdff;
+
 
 //// Global elements.
 $primary_text: $black;
@@ -366,9 +370,9 @@ $spc-checkout-success-message-color: $white;
 $spc-checkout-error-message-color: $white;
 $spc-checkout-delivery-method-bg: $white;
 $spc-checkout-footer-secondary-bg: $white;
-$spc-cart-sameday-delivery-border: $gray-eight;
-$spc-cart-standard-delivery-border: $gray-eight;
-$spc-cart-express-delivery-border: $gray-eight;
+$spc-cart-sameday-delivery-border: $green2;
+$spc-cart-standard-delivery-border: $yellow;
+$spc-cart-express-delivery-border: $sky_blue;
 $spc-cart-delivery-tags: $gray-three;
 
 // Wishlist
@@ -467,6 +471,12 @@ $swatch-border: $mercury;
 
 // SDD and ED
 $sameday-express-delivery-drawer-btn: $primary_btn_bg;
+$del_opt_sub_title_txt: $chicago;
+$del_opt_title_text: $chicago;
+$magv2-share-icons-default-color: $black;
+$magv2-pinterest-share-icon-hover: $gray-three;
+$magv2-share-btn: $black;
+$magv2-text: $chicago;
 
 // Messages and Errors
 $default_msg_bg: $green;
