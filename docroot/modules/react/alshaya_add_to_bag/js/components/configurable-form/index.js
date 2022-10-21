@@ -12,6 +12,7 @@ import {
   getSelectedOptionsForGtm,
   isMaxSaleQtyReached,
   isHideMaxSaleMsg,
+  getDefaultAttributeValues,
 } from '../../utilities/addtobag';
 import QuantitySelector from '../quantity-selector';
 import SizeGuide from '../size-guide';
@@ -25,10 +26,56 @@ import dispatchCustomEvent from '../../../../js/utilities/events';
 export default class ConfigurableForm extends React.Component {
   constructor(props) {
     super(props);
-    const { selectedVariant, productData } = props;
+    const { selectedVariant, productData, extraInfo } = props;
 
     // Set the default attributes.
     const firstChildAttributes = productData.configurable_combinations.by_sku[selectedVariant];
+
+    // If the current page is not a wishlist page, then we will choose the first
+    // available options, else will use the user chosen variant.
+    if (!isWishlistPage(extraInfo)) {
+      const combinationsHierarchy = productData
+        .configurable_combinations
+        .attribute_hierarchy_with_values;
+      let activeSwatchKey = null;
+      let activeSwatchValue = null;
+
+      // Get the active swatch key and value.
+      Object.keys(firstChildAttributes).some((key) => {
+        if (productData.configurable_attributes[key].is_swatch) {
+          activeSwatchKey = key;
+          activeSwatchValue = firstChildAttributes[key];
+          return true;
+        }
+        return false;
+      });
+
+      // Get the first available values for other attributes based on the active
+      // swatch value.
+      if (activeSwatchKey && activeSwatchValue) {
+        // Get the next attribute data from the hierarchy.
+        const activeSwatchData = combinationsHierarchy[activeSwatchKey][activeSwatchValue];
+
+        // Create clones to allow modification.
+        const firstChildAttributesClone = JSON.parse(JSON.stringify(firstChildAttributes));
+        delete firstChildAttributesClone[activeSwatchKey];
+
+        Object.keys(firstChildAttributesClone).forEach((attribute) => {
+          const defaultAttributeValue = getDefaultAttributeValues(
+            activeSwatchData,
+            attribute,
+            firstChildAttributesClone,
+            productData.configurable_attributes,
+          );
+
+          // Update to default value.
+          if (defaultAttributeValue.length !== 0) {
+            firstChildAttributes[attribute] = defaultAttributeValue;
+            firstChildAttributesClone[attribute] = defaultAttributeValue;
+          }
+        });
+      }
+    }
 
     // Store reference to the config form.
     this.formRef = React.createRef();
