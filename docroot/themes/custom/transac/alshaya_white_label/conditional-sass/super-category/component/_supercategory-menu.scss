@@ -547,6 +547,10 @@
     }
   }
 
+  &:not(.frontpage) {
+
+  }
+  
   @include breakpoint($only-mobile) {
     html[lang="ar"] {
       .block-alshaya-algolia-react-autocomplete {
