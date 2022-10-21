@@ -119,3 +119,11 @@
     position: absolute;
   }
 }
+
+.logged-in {
+  .super-category-enabled header.c-header .c-header__region {
+    @include breakpoint($upto-desktop) {
+      top: 0;
+    }
+  }
+}

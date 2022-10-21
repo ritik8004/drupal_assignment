@@ -137,6 +137,11 @@ header {
         background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) no-repeat;
         margin-bottom: 0;
 
+        @include breakpoint($only-mobile) {
+          background-size: rem(13);
+          margin-#{$right}: 0;
+        }
+
         &:hover {
           background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1) no-repeat;
 
@@ -193,8 +198,9 @@ header {
         }
 
         @include breakpoint($only-mobile) {
-          top: initial;
-          #{$left}: initial;
+          top: rem(7);
+          #{$left}: rem(6);
+          font-size: rem(9);
 
           html[lang=ar] & {
             right: rem(5);
@@ -384,7 +390,7 @@ header {
     z-index: 13;
 
     @include breakpoint($only-mobile) {
-      #{$left}: rem(10);
+      #{$left}: rem(14);
       top: rem(19);
 
       html[lang=ar] & {
@@ -532,9 +538,9 @@ header {
       left: initial;
       right: initial;
       top: initial;
-      margin-#{$left}: 0;
+      margin-#{$left}: rem(13);
       height: auto;
-      margin-top: rem(8);
+      margin-top: rem(3);
 
       html[lang=ar] & {
         top: initial;
@@ -580,6 +586,21 @@ header {
         .mobile--menu {
           // Hiding the hamburger open toggle when menu is open.
           visibility: hidden;
+        }
+      }
+    }
+  }
+}
+
+.logged-in {
+  header.c-header {
+    .block-alshaya-react-mini-cart,
+    .block-cart-mini-block {
+      .quantity {
+        @include breakpoint($upto-desktop) {
+          top: rem(8);
+          width: rem(12);
+          height: rem(12);
         }
       }
     }
