@@ -123,7 +123,6 @@ header {
       .quantity {
         font-size: rem(10);
         #{$left}: rem(-1);
-        background: $cart_filled_background;
         color: $cart_filled_color;
         padding-top: 0;
         border-radius: 0;
