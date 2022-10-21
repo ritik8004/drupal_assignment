@@ -1,3 +1,5 @@
+// Some styles reset from CORE, using 'initial' values.
+
 @include breakpoint($upto-desktop) {
   .menu--mobile-navigation {
     top: rem(36);
@@ -6,7 +8,77 @@
   .super-category-enabled {
     .c-menu-primary {
       .mobile--menu {
-        top: rem(4);
+        position: fixed;
+        #{$left}: rem(8);
+        top: rem(43);
+
+        html[lang=ar] & {
+          top: rem(43);
+        }
+      }
+    }
+
+    .branding__menu {
+      .c-header__region {
+        .block-system-branding-block {
+          .site-brand-home {
+            display: initial;
+          }
+        }
+      }
+    }
+
+    &:not(.frontpage) {
+      .c-menu-primary {
+        .mobile--menu {
+          top: rem(43);
+        }
+      }
+
+      .branding__menu {
+        .block-alshaya-algolia-react-autocomplete {
+          top: rem(46);
+          visibility: visible;
+        }
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      top: rem(46);
+      visibility: visible;
+
+      html[lang="ar"] & {
+        top: rem(46);
+      }
+
+      .algolia-search-back-icon {
+        display: none;
+      }
+
+      .algolia-search-cleartext-icon {
+        #{$right}: 0;
+      }
+
+      &.focused {
+        .algolia-search-cleartext-icon {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+  }
+
+  .c-menu-primary .region__menu-primary {
+    #block-mobilenavigation,
+    .menu--mobile-navigation {
+      position: absolute;
+
+      .mobile--search {
+        display: none;
+      }
+
+      .store {
+        display: none;
       }
     }
   }
@@ -27,11 +99,11 @@
   .super-category-enabled {
     header {
       .c-header__region {
-        padding-bottom: 0;
-        padding-top: rem(12);
+        padding-top: rem(16);
+        padding-bottom: rem(16);
 
-        html[lang=ar] & {
-          padding-bottom: 0;
+        html[lang="ar"] & {
+          padding-bottom: rem(16);
         }
       }
     }
@@ -48,30 +120,29 @@
       }
     }
 
+    .block-alshaya-algolia-react-autocomplete {
+      #alshaya-algolia-autocomplete {
+        width: rem(280);
+      }
+    }
+
     .branding__menu {
       .c-header__region {
         .block-system-branding-block {
           .site-brand-home {
-            height: rem(64);
+            height: initial;
+
+            a {
+              min-width: initial;
+              height: initial;
+            }
 
             img {
-              height: unset;
-              margin: unset;
+              height: initial;
+              max-width: 100%;
             }
           }
         }
-      }
-    }
-
-    .block-system-branding-block {
-      .site-brand-home a {
-        height: unset;
-      }
-    }
-
-    .block-alshaya-algolia-react-autocomplete {
-      #alshaya-algolia-autocomplete {
-        width: rem(280);
       }
     }
   }
@@ -113,9 +184,5 @@
     .toggle--sign {
       display: none;
     }
-  }
-
-  .c-menu-primary .region__menu-primary #block-mobilenavigation {
-    position: absolute;
   }
 }

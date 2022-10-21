@@ -1,0 +1,51 @@
+// Some styles reset from CORE, using 'initial' values.
+
+.super-category-enabled {
+  &:not(.frontpage) {
+    &.hide-minimalistic-header {
+      .branding__menu {
+        #wishlist-header-wrapper {
+          top: initial !important;
+        }
+
+        #block-alshayareactcartminicartblock {
+          top: initial;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .super-category-enabled {
+    &.hide-minimalistic-header {
+      .c-menu-primary {
+        #block-mobilenavigation,
+        .menu--mobile-navigation {
+          position: fixed;
+
+          .mobile--menu {
+            top: rem(43);
+            position: fixed;
+          }
+        }
+      }
+
+      &.no-sticky-algolia-search-bar {
+        #block-cartminiblock,
+        .block-alshaya-react-mini-cart,
+        .c-menu-primary .region__menu-primary .menu--mobile-navigation {
+          transform: none;
+          transition: none;
+        }
+      }
+
+      #block-cartminiblock,
+      .block-alshaya-react-mini-cart,
+      .c-menu-primary .region__menu-primary .menu--mobile-navigation {
+        transform: none;
+        transition: none;
+      }
+    }
+  }
+}
