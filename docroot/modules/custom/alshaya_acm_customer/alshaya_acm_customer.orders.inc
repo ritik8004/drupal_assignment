@@ -353,6 +353,11 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       break;
   }
 
+  // Add the first time order transaction flag if available.
+  if (array_key_exists('order_first_time_transaction', $order['extension'])) {
+    $orderDetails['orderFirstTimeTransaction'] = $order['extension']['order_first_time_transaction'];
+  }
+
   return $orderDetails;
 }
 
