@@ -1,0 +1,59 @@
+.order-detail {
+  .user__order--detail {
+    .return-initiated-item,
+    .returned-items-row {
+      .return-status-id-container,
+      .return-status-wrapper {
+        .status-label {
+          font-size: rem(18);
+        }
+      }
+    }
+
+    .cancel-return-button-wrapper {
+      button {
+        padding: 0 rem(13);
+        padding-#{$left}: rem(10);
+      }
+
+      .cancel-button-text {
+        &::before {
+          font-size: rem(32);
+          margin-#{$right}: rem(2);
+        }
+      }
+    }
+  }
+}
+
+.order-detail,
+.block-alshaya-user-recent-orders {
+  .user__order--detail {
+    div.order-item-row.delivered-items,
+    tr.order-item-row.delivered-items,
+    div.order-item-row.cancelled-items,
+    tr.order-item-row.cancelled-items {
+      > div,
+      td {
+        text-transform: uppercase;
+      }
+    }
+
+    .order-summary-row {
+      .button {
+        &.status-complete,
+        &.status-delivered,
+        &.status-pending,
+        &.status-processing,
+        &.status-returned {
+          text-transform: uppercase;
+          font-weight: 700;
+
+          @include breakpoint($upto-desktop) {
+            line-height: rem(30);
+          }
+        }
+      }
+    }
+  }
+}
