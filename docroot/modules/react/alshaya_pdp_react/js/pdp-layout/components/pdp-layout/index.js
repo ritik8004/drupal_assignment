@@ -33,7 +33,10 @@ import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
   const [panelContent, setPanelContent] = useState(null);
-  const { productInfo } = drupalSettings;
+  const {
+    productInfo,
+    isTamaraEnabled,
+  } = drupalSettings;
   let skuItemCode = '';
 
   if (productInfo) {
@@ -228,6 +231,7 @@ const PdpLayout = () => {
             brandLogoTitle={brandLogoTitle}
             animateTitlePrice
             context="main"
+            isTamaraEnabled={isTamaraEnabled}
           />
           <div className="promotions promotions-full-view-mode">
             <PdpPromotionLabel
