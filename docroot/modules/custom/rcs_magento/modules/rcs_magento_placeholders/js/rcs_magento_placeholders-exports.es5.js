@@ -244,8 +244,8 @@ exports.getData = async function getData(
         && Array.isArray(response.data.categories.items)
         && response.data.categories.items.length > 0
       ) {
-        // Get children for root category.
-        result = response.data.categories.items[0].children;
+        // Get first item from the response.
+        result = response.data.categories.items[0];
         // Store category data in static storage.
         globalThis.RcsPhStaticStorage.set(placeholder + '_data', result);
         // Store category data in local storage.
