@@ -264,14 +264,14 @@ class ReturnItemsListing extends React.Component {
   /**
    * Process return request continue.
    */
-  handleReturnContinue = () => {
+  handleReturnContinue = async () => {
     const { open } = this.state;
 
     const { itemsSelected } = this.props;
     // Push data to GTM.
     Drupal.alshayaSeoGtmPushReturn(
       getProductGtmInfo(itemsSelected),
-      getPreparedOrderGtm('item_confirmed'),
+      await getPreparedOrderGtm('item_confirmed'),
       'item_confirmed',
     );
     // When user clicks continue button, disable the item

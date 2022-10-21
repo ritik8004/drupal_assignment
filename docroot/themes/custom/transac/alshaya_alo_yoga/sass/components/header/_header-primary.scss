@@ -400,12 +400,16 @@ header {
 
     &::before {
       background-repeat: no-repeat;
-      background-position-y: rem(12);
+      background-position: center;
 
       @include breakpoint($upto-desktop) {
         height: rem(26);
         width: rem(29);
         margin-#{$right}: 0;
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
       }
     }
   }

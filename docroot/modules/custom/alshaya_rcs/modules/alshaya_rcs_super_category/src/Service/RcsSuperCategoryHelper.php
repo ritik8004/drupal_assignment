@@ -3,13 +3,11 @@
 namespace Drupal\alshaya_rcs_super_category\Service;
 
 use Drupal\Core\Site\Settings;
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
-use Drupal\taxonomy\TermInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
@@ -328,6 +326,7 @@ class RcsSuperCategoryHelper {
    */
   protected function setLogoImages(&$term, $category, $force_download) {
     $mdc_url = Settings::get('alshaya_api.settings')['magento_host'];
+    $mdc_url = rtrim($mdc_url, '/') . '/';
 
     $directory = $this->configFactory->get('system.file')->get('default_scheme') . '://category-images';
     $this->fileSystem->prepareDirectory(
@@ -344,7 +343,7 @@ class RcsSuperCategoryHelper {
     //Retreive logo images for each field and save it.
     foreach ($field_arr as $field_name) {
       $file_url = !empty($category[$field_name])
-        ? $mdc_url . $category[$field_name]
+        ? $mdc_url . ltrim($category[$field_name], '/')
         : NULL;
       $fid = !empty($term->get($field_name)->getValue())
         ? $term->get($field_name)->getValue()[0]['target_id']
