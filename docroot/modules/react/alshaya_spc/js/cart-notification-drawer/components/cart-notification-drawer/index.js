@@ -16,6 +16,7 @@ const CartNotificationDrawer = ({ productData }) => {
 
   const closeModal = () => {
     document.querySelector('body').classList.remove('overlay-cart-drawer');
+    document.querySelector('body').classList.add('hide-minimalistic-header');
     setCartDrawerState(false);
   };
 
