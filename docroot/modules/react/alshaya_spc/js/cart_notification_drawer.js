@@ -10,6 +10,9 @@ import CartNotificationDrawer from './cart-notification-drawer/components/cart-n
 const renderCartNotificationDrawer = (e) => {
   if (hasValue(e.detail)) {
     document.querySelector('body').classList.add('overlay-cart-drawer');
+    if (document.querySelector('body').classList.contains('hide-minimalistic-header')) {
+      document.querySelector('body').classList.remove('hide-minimalistic-header');
+    }
     const container = document.getElementById('cart_notification');
     if (container) {
       ReactDOM.render(

@@ -39,3 +39,23 @@
     }
   }
 }
+
+.magazine-layout-v2 {
+  &.overlay-cart-drawer {
+    .branding__menu {
+      @include breakpoint($only-mobile) {
+        display: block;
+
+        .region__header {
+          margin-top: 0;
+          height: 0;
+          padding: 0;
+
+          #block-alshayaalgoliareactautocomplete {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
