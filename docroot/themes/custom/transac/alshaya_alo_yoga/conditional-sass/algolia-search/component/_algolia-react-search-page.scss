@@ -38,6 +38,7 @@
     .c-accordion__title {
       &.c-collapse__title {
         text-transform: uppercase;
+        font-size: rem(16);
       }
     }
   }
