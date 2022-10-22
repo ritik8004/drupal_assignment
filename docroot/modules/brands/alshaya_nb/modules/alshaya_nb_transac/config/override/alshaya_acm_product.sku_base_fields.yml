@@ -22,8 +22,14 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+  sustainability:
+    label: 'Sustainability'
+    cardinality: -1
+    index: 1
+    facet: 1
   width_description:
     label: 'Width Description'
+    configurable: 1
     cardinality: -1
     index: 1
     facet: 1
@@ -35,7 +41,7 @@ fields:
     label: 'UK Size'
     cardinality: -1
     index: 1
-  nb_type:
+  nb_product_type:
     label: 'Product type'
     cardinality: -1
     index: 1
@@ -59,6 +65,6 @@ fields:
   feature_bullets:
     label: 'Feature Bullets'
     type: 'text_long'
-  weight:
-    label: 'Weight'
-    type: 'string'
+  green_leaf_notice:
+    label: 'Sustainability'
+    type: 'text_long'
