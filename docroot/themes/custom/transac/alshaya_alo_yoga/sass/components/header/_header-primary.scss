@@ -104,6 +104,16 @@ header {
   &.c-header {
     .block-cart-mini-block,
     .block-alshaya-react-mini-cart {
+      @include breakpoint($only-tablet) {
+        top: rem(10);
+        #{$right}: rem(-7);
+
+        html[lang=ar] & {
+          top: 0;
+          left: rem(1);
+        }
+      }
+
       .cart-link {
         background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) center no-repeat;
         width: rem(24);
@@ -121,40 +131,25 @@ header {
 
       .quantity {
         font-size: rem(10);
-        #{$left}: rem(-1);
+        #{$left}: rem(2);
         color: $cart_filled_color;
-        padding-top: 0;
+        padding-top: rem(4);
         border-radius: 0;
-        background: $cart_filled_background;
+        background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1);
+        width: rem(20);
+        height: rem(20);
+        background-size: 68%;
+        background-repeat: no-repeat;
+        background-position: center;
+        top: rem(2);
 
         @include breakpoint($desktop) {
-          #{$left}: rem(5);
-          bottom: rem(-8);
+          bottom: unset;
         }
 
-        @include breakpoint($only-tablet) {
-          html[lang=ar] & {
-            right: rem(6);
-          }
-        }
-
-        @include breakpoint($only-mobile) {
-          #{$left}: rem(5);
+        @include breakpoint($upto-desktop) {
+          #{$left}: rem(2);
           font-size: rem(9);
-
-          html[lang=ar] & {
-            right: rem(6);
-          }
-        }
-      }
-
-      @include breakpoint($only-tablet) {
-        top: rem(10);
-        #{$right}: rem(-7);
-
-        html[lang=ar] & {
-          top: 0;
-          left: rem(1);
         }
       }
     }
@@ -383,22 +378,6 @@ header {
 
     .branding__menu {
       box-shadow: none;
-    }
-  }
-}
-
-.logged-in {
-  header.c-header {
-    .block-alshaya-react-mini-cart,
-    .block-cart-mini-block {
-      .quantity {
-        width: rem(13);
-        height: rem(13);
-
-        @include breakpoint($upto-desktop) {
-          top: rem(8);
-        }
-      }
     }
   }
 }
