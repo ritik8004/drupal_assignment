@@ -6,19 +6,20 @@
   }
 
   .super-category-enabled {
-    @include breakpoint($upto-desktop) {
+    margin-top: rem(125);
+
+    &.frontpage {
       margin-top: rem(125);
 
-      &.frontpage {
-        margin-top: rem(125);
+      &.hide-minimalistic-header {
+        margin-top: rem(72);
+        transition: margin-top 0.3s;
       }
     }
 
     &.frontpage {
-      @include breakpoint($upto-desktop) {
-        .page-standard.c-front {
-          margin-top: 0;
-        }
+      .page-standard.c-front {
+        margin-top: 0;
       }
     }
 
@@ -61,25 +62,15 @@
 
     .block-alshaya-algolia-react-autocomplete {
       top: rem(46);
-      visibility: visible;
 
       html[lang="ar"] & {
         top: rem(46);
       }
 
-      .algolia-search-back-icon {
-        display: none;
-      }
-
       .algolia-search-cleartext-icon {
         #{$right}: 0;
-      }
-
-      &.focused {
-        .algolia-search-cleartext-icon {
-          opacity: 1;
-          visibility: visible;
-        }
+        top: rem(5);
+        z-index: 2;
       }
     }
   }

@@ -94,6 +94,18 @@
     }
   }
 
+  &.no-sticky-algolia-search-bar:not(.frontpage) {
+    .block-alshaya-algolia-react-autocomplete {
+      &.focused {
+        .algolia-search-back-icon {
+          @include breakpoint($upto-desktop) {
+            visibility: visible;
+          }
+        }
+      }
+    }
+  }
+
   .block-alshaya-algolia-react-autocomplete {
     @include breakpoint($only-mobile) {
       top: rem(45);
@@ -108,18 +120,37 @@
     &.clear-icon {
       &.show-algolia-search-bar {
         .algolia-search-cleartext-icon {
-          @include breakpoint($only-mobile) {
+          @include breakpoint($upto-desktop) {
             display: none;
+          }
+        }
+      }
+
+      #alshaya-algolia-autocomplete {
+        .react-autosuggest__input {
+          @include breakpoint($upto-desktop) {
+            padding-#{$left}: rem(13) !important;
           }
         }
       }
     }
 
+    // .super-category-enabled .block-alshaya-algolia-react-autocomplete.clear-icon #alshaya-algolia-autocomplete .react-autosuggest__input
+
     .react-autosuggest__container {
       .algolia-search-back-icon {
-        @include breakpoint($only-mobile) {
+        @include breakpoint($upto-desktop) {
           top: rem(6);
-          #{$left}: rem(-7);
+          #{$left}: unset;
+          #{$right}: rem(12);
+
+          &::before {
+            content: '';
+            background: url('#{$ay_theme_img_directory_path}/icons/search-close-icon.svg') #fff no-repeat;
+            width: rem(36);
+            height: rem(34);
+            background-position: center;
+          }
         }
       }
     }
@@ -199,6 +230,30 @@
   }
 }
 
+.hide-minimalistic-header.super-category-enabled {
+  .block-alshaya-algolia-react-autocomplete {
+    .react-autosuggest__container {
+      .algolia-search-back-icon {
+        @include breakpoint($upto-desktop) {
+          visibility: hidden !important;
+        }
+      }
+    }
+  }
+}
+
+.menu--open.hide-minimalistic-header.super-category-enabled {
+  .block-alshaya-algolia-react-autocomplete {
+    .react-autosuggest__container {
+      .algolia-search-back-icon {
+        @include breakpoint($upto-desktop) {
+          visibility: visible !important;;
+        }
+      }
+    }
+  }
+}
+
 .logged-in {
   &.super-category-enabled:not(.frontpage) {
     &.hide-minimalistic-header {
@@ -216,7 +271,8 @@
     .c-menu-primary {
       .mobile--menu {
         @include breakpoint($upto-desktop) {
-          top: rem(35);
+          top: rem(33);
+          #{$left}: rem(-2);
         }
       }
     }
