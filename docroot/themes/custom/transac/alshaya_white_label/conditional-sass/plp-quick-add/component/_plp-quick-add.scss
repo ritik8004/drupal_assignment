@@ -26,11 +26,10 @@
       border: 0;
       margin: 0;
       padding: 0;
-      position: absolute;
+      position: relative;
       background-color: transparent;
-      width: rem(50);
-      top: rem(205);
-      #{$right}: rem(10);
+      width: 100%;
+      height: 0;
 
       &::before {
         content: '';
@@ -41,6 +40,8 @@
         border-radius: 50%;
         background-color: rgba(255, 255, 255, 0.5);
         background-size: rem(20);
+        top: rem(-66);
+        #{$right}: rem(10);
       }
     }
   }
@@ -100,6 +101,18 @@
       &:hover {
         .quick-add {
           top: rem(388);
+        }
+      }
+    }
+
+    .quick-add {
+      .addtobag-button,
+      .addtobag-config-button,
+      .is-not-buyable {
+        &::before {
+          @include breakpoint($only-mobile) {
+            top: rem(-55);
+          }
         }
       }
     }
