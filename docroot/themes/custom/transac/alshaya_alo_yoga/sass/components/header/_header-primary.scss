@@ -128,13 +128,13 @@ header {
         background: $cart_filled_background;
 
         @include breakpoint($desktop) {
-          #{$left}: rem(-1);
-          bottom: rem(-5);
+          #{$left}: rem(5);
+          bottom: rem(-8);
         }
 
         @include breakpoint($only-tablet) {
           html[lang=ar] & {
-            right: rem(5);
+            right: rem(6);
           }
         }
 
@@ -143,7 +143,7 @@ header {
           font-size: rem(9);
 
           html[lang=ar] & {
-            right: rem(5);
+            right: rem(6);
           }
         }
       }
@@ -392,10 +392,11 @@ header {
     .block-alshaya-react-mini-cart,
     .block-cart-mini-block {
       .quantity {
+        width: rem(13);
+        height: rem(13);
+
         @include breakpoint($upto-desktop) {
           top: rem(8);
-          width: rem(13);
-          height: rem(13);
         }
       }
     }
