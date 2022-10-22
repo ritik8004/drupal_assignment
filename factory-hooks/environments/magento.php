@@ -270,6 +270,63 @@ $magentos = [
       'store_id' => ['en' => 25, 'ar' => 22],
     ],
   ],
+  'ay_uat' => [
+    'url' => 'https://alo-uat.store.alshaya.com',
+    'algolia_env' => 'alo_uat',
+    'magento_secrets' => [
+      'consumer_key' => 'mpels2g3gn39ghwt4vhl0ukmkvua21u2',
+      'consumer_secret' => 'a0llszrrlawnjo3jvhat30gwx48zekz0',
+      'access_token' => 'hlt64xc67pslpvl0qac5zbfwi8wks65z',
+      'access_token_secret' => 'mmngcqo7k9nl9r5lme3dfgqqr3p87x3v',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 38],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 26, 'ar' => 29],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 32, 'ar' => 35],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 5, 'ar' => 2],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 8],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 17, 'ar' => 14],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 23, 'ar' => 20],
+    ],
+  ],
+  'ay_prod' => [
+    'url' => 'https://alo.store.alshaya.com',
+    'algolia_env' => 'alo_prod',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 38],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 26, 'ar' => 29],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 32, 'ar' => 35],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 5, 'ar' => 2],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 8],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 17, 'ar' => 14],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 23, 'ar' => 20],
+    ],
+  ],
   // New Balance.
   'nb_qa' => [
     'url' => 'https://new-test.store.alshaya.com',
@@ -1245,10 +1302,10 @@ $magentos = [
   'bbw_qa' => [
     'url' => 'https://bbw-test.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
-      'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
-      'access_token' => 'oiy66ouu8mpeorbu47cke2xsdhfku3jg',
-      'access_token_secret' => '2ovq0ccau2cd60a2xfterr2y2fi711w4',
+      'consumer_key' => '42eno838ymyoge2lntfa23z8d5a5xdn1',
+      'consumer_secret' => 'uss4yeg62ye0y1tk4xqw0reiluxgy1x2',
+      'access_token' => '55njn7zeteonp9t1ly4hjn8wbilazjby',
+      'access_token_secret' => 'gy7qsug16b6vlesdz6wnwoyni3zd2tqs',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 2],

@@ -32,6 +32,33 @@
           }
         }
       }
+
+      .labels-container {
+        position: absolute;
+        #{$right}: rem(13);
+        top: rem(201);
+        z-index: 1;
+
+        @include breakpoint($only-tablet) {
+          top: rem(235);
+        }
+
+        @include breakpoint($desktop) {
+          #{$right}: rem(23);
+          top: rem(247);
+        }
+
+        @include breakpoint($desktop-wide) {
+          top: rem(274);
+        }
+
+        .map-green-leaf {
+          background: url(#{$nb_theme_img_directory_path}/icons/green-leaf.svg) no-repeat;
+          display: block;
+          height: rem(21);
+          width: rem(11);
+        }
+      }
     }
   }
 

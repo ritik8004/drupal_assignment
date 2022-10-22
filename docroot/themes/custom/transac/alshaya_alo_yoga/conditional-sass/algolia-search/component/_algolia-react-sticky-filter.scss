@@ -5,9 +5,17 @@
 .block-alshaya-algolia-listing-v2,
 .block-alshaya-algolia-react-promotion-v2 {
   .filter-fixed-top {
-    .show-all-filters-algolia {
+    .show-all-filters-algolia,
+    .block-facet-blockcategory-facet-plp,
+    .block-facet-blockcategory-facet-search {
       @include breakpoint($only-mobile) {
-        top: rem(57);
+        top: rem(47);
+      }
+
+      .menu--open & {
+        @include breakpoint($only-mobile) {
+          display: none !important;
+        }
       }
     }
   }

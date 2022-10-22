@@ -6,4 +6,24 @@
       }
     }
   }
+
+  .title-block,
+  .spc-checkout-section-title {
+    justify-content: $left;
+    font-size: rem(18);
+  }
+
+  .close-modal {
+    &::before {
+      font-size: rem(40);
+    }
+  }
+
+  .area-label {
+    margin-top: 0;
+  }
+
+  .delivery-type-wrapper {
+    margin: rem(20);
+  }
 }
