@@ -5,6 +5,12 @@
         font-size: rem(14) !important;
       }
     }
+
+    .view-empty {
+      @include breakpoint($upto-desktop) {
+        padding-#{$left}: rem(16);
+      }
+    }
   }
 
   .block-facets-summary-blockfilter-bar-promotions,

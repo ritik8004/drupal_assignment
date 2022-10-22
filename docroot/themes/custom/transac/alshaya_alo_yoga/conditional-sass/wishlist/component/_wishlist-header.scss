@@ -55,6 +55,12 @@ body {
             margin-#{$right}: rem(19);
           }
         }
+
+        .block-alshaya-react-mini-cart {
+          @include breakpoint($desktop) {
+            top: rem(-3);
+          }
+        }
       }
     }
   }
