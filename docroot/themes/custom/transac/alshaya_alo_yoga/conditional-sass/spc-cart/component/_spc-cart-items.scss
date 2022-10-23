@@ -52,6 +52,10 @@
       border-bottom: rem(1) solid $spc_cart_item_border_color;
       width: fit-content;
       padding-bottom: rem(28);
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
     }
   }
 

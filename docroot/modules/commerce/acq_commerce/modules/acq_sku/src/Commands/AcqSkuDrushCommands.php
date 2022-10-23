@@ -650,6 +650,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     if (empty($context['sandbox'])) {
       // Get all the entities that need to be deleted.
       $context['sandbox']['results'] = [];
+      $context['sandbox']['current'] = 0;
 
       // Get all acq_product entities.
       $query = \Drupal::entityQuery('node');
@@ -702,7 +703,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     $delete = [];
 
     foreach ($results as $result) {
-      $context['results'][] = $results['type'] . ' : ' . $result['entity_id'];
+      $context['results'][] = $result['type'] . ' : ' . $result['entity_id'];
       $context['sandbox']['progress']++;
       $context['sandbox']['current_id'] = $result['entity_id'];
 

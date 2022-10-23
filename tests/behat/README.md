@@ -195,7 +195,7 @@ Add the secret keys there for the different environments in the following format
   }
 }
 ```
-The function `getBehatSecretKey()` in `tests/behat/src/bootstrap/Drupal/FeatureContext.php` file makes use of the secret keys.
+The function `getBehatSecretKey()` in `tests/behat/src/bootstrap/Drupal/OverriddenMinkContext.php` file makes use of the secret keys.
 
 ### :bell: IMPORTANT Variable:
 Following file and variable is must, for any given environment.

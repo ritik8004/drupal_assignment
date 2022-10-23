@@ -39,9 +39,14 @@ function alshaya_tamara_alshaya_acm_customer_orders_details_build_alter(array &$
  */
 function alshaya_tamara_preprocess_node(&$variables) {
   if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
-    // Check if tamara is enabled.
-    $variables['tamara_enabled'] = \Drupal::service('alshaya_tamara.helper')
-      ->isTamaraEnabled();
+    $tamara_enabled = \Drupal::service('alshaya_tamara.helper')->isTamaraEnabled();
+    // Add tamara status for full mode only so that it can be used in
+    // v2 magazine view mode by PDP react components.
+    if ($variables['view_mode'] == 'full') {
+      $variables['#attached']['drupalSettings']['isTamaraEnabled'] = $tamara_enabled;
+    }
+    // Pass tamara status to node template for all view modes.
+    $variables['tamara_enabled'] = $tamara_enabled;
   }
 }
 

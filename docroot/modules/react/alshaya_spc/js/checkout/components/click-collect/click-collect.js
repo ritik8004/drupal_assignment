@@ -162,7 +162,7 @@ class ClickCollect extends React.Component {
       this.autocomplete = new window.google.maps.places.Autocomplete(
         this.searchplaceInput,
         {
-          types: [],
+          types: ['geocode'],
           componentRestrictions: { country: window.drupalSettings.country_code },
         },
       );

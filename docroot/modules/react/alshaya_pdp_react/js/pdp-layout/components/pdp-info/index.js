@@ -11,7 +11,7 @@ const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
   shortDetail = false, brandLogo,
   brandLogoAlt, brandLogoTitle, animateTitlePrice,
-  hidepostpay, context,
+  hidepostpay, context, isTamaraEnabled = false,
 }) => {
   let discountPercantage = null;
   const productPriceNumber = pdpProductPrice.replace(',', '');
@@ -76,7 +76,10 @@ const PdpInfo = ({
         </div>
       </div>
       {postpay}
-      <ConditionalView condition={context === 'main' && Tabby.isTabbyEnabled()}>
+      <ConditionalView condition={context === 'main'
+        && Tabby.isTabbyEnabled()
+        && !isTamaraEnabled}
+      >
         <TabbyWidget
           classNames=""
           pageType="pdp"

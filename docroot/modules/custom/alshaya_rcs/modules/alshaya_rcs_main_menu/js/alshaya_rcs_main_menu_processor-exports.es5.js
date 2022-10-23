@@ -10,14 +10,24 @@ exports.prepareData = function prepareData(settings, inputs) {
   } = settings;
 
   // Clone the input data.
-  let inputsClone = JSON.parse(JSON.stringify(inputs));
+  let menuItems = JSON.parse(JSON.stringify(inputs.children));
   // Clean up data.
-  inputsClone = processData(inputsClone, menuMaxDepth, mobileMenuMaxDepth);
+  menuItems = processData(menuItems, menuMaxDepth, mobileMenuMaxDepth);
   // Convert the array of Object into Object of objects.
-  inputsClone = Object.assign({}, inputsClone);
+  menuItems = Object.assign({}, menuItems);
 
-  // Check if is_visual_menu_layout set on first level item.
-  const { is_visual_menu_layout: isVisualMenuLayout } = inputsClone[0] || 0;
+  // Check if Visual Mobile is enabled via Drupal configuration and also if the
+  // top level category is configured to be displayed as Visual Mobile menu.
+  const isVisualMobileMenu = (mobileMenuLayout === 'visual_mobile_menu'
+    && Drupal.hasValue(inputs.is_visual_menu_layout) ? true : false
+  );
+
+  // If we are using visual mobile menu we also need to send the
+  // original menu structure that is not split into columns.
+  let visualMobileMenuItems = [];
+  if (isVisualMobileMenu) {
+    visualMobileMenuItems = JSON.parse(JSON.stringify(menuItems));
+  }
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -27,7 +37,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     case 'default':
     default:
       // Distribute L3 items into columns.
-      inputsClone = splitIntoCols(inputsClone, maxNbCol, idealMaxColLength);
+      menuItems = splitIntoCols(menuItems, maxNbCol, idealMaxColLength);
   }
 
   let auraEnabled = Drupal.hasValue(drupalSettings.aura)
@@ -36,14 +46,14 @@ exports.prepareData = function prepareData(settings, inputs) {
 
   return {
     'menu_type': menuLayout,
-    'menu_items': inputsClone,
+    'menu_items': menuItems,
     'user_logged_in': drupalSettings.user.uid > 1,
     'path_prefix': Drupal.url(''),
     'aura_enabled': auraEnabled,
     'highlight_timing': highlightTiming,
     'promopanel_class': '', // @todo Implement promo panel block class.
-    // Set mobile menu layout from settings.
-    'mobile_menu_layout': mobileMenuLayout,
+    'is_visual_mobile_menu': isVisualMobileMenu,
+    'visual_mobile_menu_items': visualMobileMenuItems,
   };
 }
 

@@ -5,7 +5,6 @@ namespace Drupal\alshaya_egift_card\Controller;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\LocalRedirectResponse;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Access\AccessResult;
@@ -164,6 +163,8 @@ class AlshayaEgiftCardController extends ControllerBase {
     $cacheableMetadata->setCacheMaxAge(0);
     $response->addCacheableDependency($cacheableMetadata);
     $response->send();
+    // Response is already send in $response->send().
+    exit;
   }
 
 }
