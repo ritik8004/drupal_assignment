@@ -21,8 +21,8 @@
           background: none;
           color: $primary_minicart_quantity_text;
           text-align: center;
-          top: rem(8);
-          #{$left}: rem(8);
+          top: rem(16);
+          #{$left}: rem(13);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -35,26 +35,6 @@
         font-family: $ay-heavy;
         padding: rem(14);
         border-radius: 0;
-      }
-    }
-  }
-}
-
-.magazine-layout-v2 {
-  &.overlay-cart-drawer {
-    .branding__menu {
-      @include breakpoint($only-mobile) {
-        display: block;
-
-        .region__header {
-          margin-top: 0;
-          height: 0;
-          padding: 0;
-
-          #block-alshayaalgoliareactautocomplete {
-            display: none;
-          }
-        }
       }
     }
   }
