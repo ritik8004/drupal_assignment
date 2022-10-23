@@ -134,10 +134,10 @@ libraries-override:
       theme:
         css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css: css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css
 
-  alshaya_white_label/mobile-menu:
+  alshaya_white_label/visual-mobile-menu:
     css:
       theme:
-        css/conditional-sass/mobile-menu/mobile-menu.ltr.css: css/conditional-sass/mobile-menu/mobile-menu.ltr.css
+        css/conditional-sass/visual-mobile-menu/visual-mobile-menu.ltr.css: css/conditional-sass/visual-mobile-menu/visual-mobile-menu.ltr.css
 
   alshaya_white_label/plp-quick-add:
     css:
@@ -148,11 +148,6 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/super-category/super-category.ltr.css: css/conditional-sass/super-category/super-category.ltr.css
-
-  alshaya_white_label/user-account:
-    css:
-      theme:
-        css/conditional-sass/user-account/user-account.ltr.css: css/conditional-sass/user-account/user-account.ltr.css
 
   alshaya_white_label/magazine-layout-v2:
     css:

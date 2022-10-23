@@ -1,3 +1,10 @@
+const getEnrichedCategoriesStorageKey = () => {
+  return [
+    'enriched_categories',
+    drupalSettings.path.currentLanguage,
+  ].join('_');
+}
+
 /**
  * Get the enriched data from the storage.
  *
@@ -10,7 +17,7 @@ globalThis.rcsGetEnrichedCategories = () => {
     return enrichedCategories;
   }
   if (drupalSettings.rcs.navigationMenuCacheTime !== 0) {
-    return globalThis.RcsPhLocalStorage.get('enriched_categories') || [];
+    return globalThis.RcsPhLocalStorage.get(getEnrichedCategoriesStorageKey()) || [];
   }
   return [];
 }
@@ -26,7 +33,7 @@ globalThis.rcsGetEnrichedCategories = () => {
           globalThis.RcsPhStaticStorage.set('enriched_categories', data);
           if (drupalSettings.rcs.navigationMenuCacheTime !== 0) {
             globalThis.RcsPhLocalStorage.set(
-              'enriched_categories',
+              getEnrichedCategoriesStorageKey(),
               data,
               drupalSettings.rcs.navigationMenuCacheTime
             );

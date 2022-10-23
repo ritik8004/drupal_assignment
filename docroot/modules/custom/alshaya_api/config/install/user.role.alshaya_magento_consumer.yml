@@ -6,4 +6,5 @@ weight: 19
 is_admin: null
 permissions:
   - 'access content'
+  - 'restful post acq_customer_delete'
   - 'restful post alshaya_acm_product_category_mapping'

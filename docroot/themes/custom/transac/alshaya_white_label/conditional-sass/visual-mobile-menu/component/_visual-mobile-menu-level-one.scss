@@ -1,0 +1,54 @@
+.visual-mobile-menu {
+  &.ui-tabs {
+    padding: 0;
+  }
+
+  &--one__list {
+    height: rem(45);
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: $menu_bg;
+    border-top: rem(1) solid $mob_menu_one_border_color;
+    border-bottom: rem(1) solid $mob_menu_one_border_color;
+    overflow-x: auto;
+    // Overriding padding from tabs library.
+    padding: 0 rem(10) !important;
+  }
+
+  &--one__list-item {
+    padding: rem(14);
+
+    &.ui-tabs-active {
+      .visual-mobile-menu--one__link {
+        color: $mob_menu_active_link_txt;
+
+        @include psuedo-element-underline($mob_menu_active_link_txt, rem(1), rem(-1));
+
+        html[lang=ar] & {
+          @include psuedo-element-underline($mob_menu_active_link_txt, rem(1), rem(-4));
+        }
+      }
+    }
+
+    &:not(:last-child) {
+      .visual-mobile-menu--one__link {
+        margin-#{$right}: rem(28);
+      }
+    }
+  }
+
+  &--one__link {
+    line-height: rem(16);
+    font-family: $alshaya-bold;
+    color: $mob_menu_link_txt;
+    font-size: rem(12);
+    // Overriding padding from tabs library.
+    padding: 0 !important;
+
+    &:not(:last-child) {
+      margin-#{$right}: rem(28);
+    }
+  }
+}

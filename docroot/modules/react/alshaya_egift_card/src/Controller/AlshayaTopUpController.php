@@ -52,6 +52,8 @@ class AlshayaTopUpController extends ControllerBase {
     if (!$eGift_status) {
       $response = new LocalRedirectResponse(Url::fromRoute('<front>')->toString());
       $response->send();
+      // Response is already send in $response->send().
+      exit;
     }
     return [
       '#theme' => 'egift_topup_page',
