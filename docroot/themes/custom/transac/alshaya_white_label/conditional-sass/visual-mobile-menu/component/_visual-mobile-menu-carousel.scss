@@ -1,0 +1,30 @@
+.visual-mobile-collection-wrapper {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding-left: rem(12);
+  padding-right: rem(12);
+  margin-bottom: rem(20);
+
+  .visual-mobile-level-three__link {
+    display: inline-block;
+    border-bottom: 0;
+    padding: 0;
+
+    &:not(:last-child) {
+      margin-#{$right}: rem(10);
+    }
+
+    .visual-mobile-level-three__heading {
+      font-size: rem(10);
+      font-family: $alshaya-bold;
+      margin-top: rem(4);
+      padding-#{$left}: 0;
+    }
+
+    .visual-mobile-level_three__image {
+      height: rem(100);
+      width: rem(100);
+    }
+  }
+}
