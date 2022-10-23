@@ -14,3 +14,8 @@ product.block.description_details:
   version: 1.x
   js:
     handlebars/product.block.description_details.handlebars: { }
+
+gallery.product.product_zoom:
+  version: 1.x
+  js:
+    handlebars/gallery.product.product_zoom.handlebars: {}

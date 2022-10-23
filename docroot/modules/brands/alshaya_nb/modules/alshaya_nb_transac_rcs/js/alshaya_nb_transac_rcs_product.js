@@ -1,7 +1,7 @@
 /**
  * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
- (function main() {
+ (function main($) {
   // Event listener to update the data layer object with the proper product
   // data.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
@@ -20,6 +20,7 @@
       technologies: data.technologies,
       feature_bullets: data.feature_bullets,
       green_leaf_notice: data.green_leaf_notice,
+      green_leaf: true,
       sku: data.sku,
     };
 
@@ -33,4 +34,4 @@
     short_description.html += (data.weight) ? '' + data.weight : '';
     e.detail.result.short_description = short_description;
   });
-})();
+})(jQuery);

@@ -33,14 +33,13 @@ function alshaya_nb_transac_rcs_module_implements_alter(&$implementations, $hook
  * Implements hook_rcs_handlebars_templates_alter().
  */
 function alshaya_nb_transac_rcs_rcs_handlebars_templates_alter(&$templates, $entity) {
-  // @todo This code is copied from COS. Please update the code to have proper
-  // description available for DH and remove the unnecessary templates.
   if (!$entity || $entity->bundle() !== 'rcs_product') {
     return;
   }
 
   $templates['product.block.description'] = 'alshaya_nb_transac_rcs';
   $templates['product.block.description_details'] = 'alshaya_nb_transac_rcs';
+  $templates['gallery.product.product_zoom'] = 'alshaya_nb_transac_rcs';
 }
 
 /**
