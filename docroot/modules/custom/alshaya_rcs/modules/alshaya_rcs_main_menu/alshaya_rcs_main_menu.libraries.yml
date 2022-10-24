@@ -83,4 +83,4 @@ visual_mobile_menu_carousel_partial:
   js:
     handlebars/visual_mobile_menu_carousel_partial.handlebars: {}
   dependencies:
-    - alshaya_rcs_main_menu/visual_mobile_menu_level1_partial
+    - alshaya_rcs_main_menu/visual_mobile_menu_level2_partial

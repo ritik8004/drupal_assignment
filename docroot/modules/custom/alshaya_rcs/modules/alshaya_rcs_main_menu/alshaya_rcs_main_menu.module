@@ -300,7 +300,6 @@ function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$f
       $fields = array_merge($fields, [
         'image',
         'is_include_in_level2',
-        'is_carousel_slider',
       ]);
       break;
 
