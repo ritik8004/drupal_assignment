@@ -166,6 +166,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
       if ($variables['max_depth'] > 2) {
         $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_level3_partial';
       }
+      $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_carousel_partial';
     }
 
     return $build;

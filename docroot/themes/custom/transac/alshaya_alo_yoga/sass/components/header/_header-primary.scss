@@ -367,7 +367,9 @@ header {
         // Removing the dark overlay when mobile menu is open.
         content: none;
       }
+    }
 
+    &.menu--open {
       .c-menu-primary {
         .mobile--menu {
           // Hiding the hamburger open toggle when menu is open.
