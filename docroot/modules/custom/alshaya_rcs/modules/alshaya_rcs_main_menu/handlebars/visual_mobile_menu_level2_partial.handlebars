@@ -1,6 +1,7 @@
 {{ set 'l1_name' l1_name }}
 {{#each menu_items as |l2_item|}}
   {{#if l2_item.is_carousel_slider }}
+    <div class="visual-mobile-level-three__heading">{{l2_item.name}}</div>
     {{> visual_mobile_menu_carousel_partial menu_items=l2_item.children}}
   {{else}}
     <{{@l2_item.tag}} class="visual-mobile-level-two__link" {{#if (gt l2_item.children.length 1) }} href="#l2-{{l2_item.id}}" {{else}} {{{l2_item.tag_attr}}} {{/if}}>
