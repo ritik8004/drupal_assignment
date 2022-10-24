@@ -1,6 +1,11 @@
-//@todo: move to level-three scss
 .visual-mobile-level-three {
   display: none;
+  height: calc(100vh - #{rem(125)});
+  position: fixed;
+  top: rem(125);
+  width: 100%;
+  overflow: auto;
+  background: $menu_bg;
 
   .back--link {
     display: flex;
