@@ -4,8 +4,8 @@
     // Only when placeholder is navigation_menu.
     if (Drupal.hasValue(e.detail.placeholder)
       && e.detail.placeholder === 'navigation_menu'
-      && e.detail.result) {
-      e.detail.result.map(function (l2data) {
+      && e.detail.result.children) {
+      e.detail.result.children.map(function (l2data) {
         l2data.children.map(function (l3data) {
           if (l3data.display_view_all === 1) {
             l3data.children.unshift({
