@@ -63,6 +63,12 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     setCartData(cartDataVal);
   };
 
+  const checkProduct = (productInfoData) => {
+    if (productInfoData) {
+      jQuery('#block-aloisabrandofpurpose').addClass('active');
+    }
+  };
+
   // Get product data based on sku.
   const productValues = getProductValues(productInfo, configurableCombinations,
     skuItemCode, variant, setVariant);
@@ -161,7 +167,6 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
   useEffect(() => {
     sidebarSticky();
     showStickyHeader();
-
     if (isAuraEnabled()) {
       document.addEventListener('customerDetailsFetched', (e) => {
         const { stateValues } = e.detail;
@@ -169,6 +174,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
       });
     }
     stickyButton();
+    checkProduct(productInfo);
   }, []);
 
   const getPanelData = useCallback((data) => {
