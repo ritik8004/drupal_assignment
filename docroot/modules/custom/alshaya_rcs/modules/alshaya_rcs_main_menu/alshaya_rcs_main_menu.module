@@ -262,6 +262,7 @@ function alshaya_rcs_main_menu_rcs_handlebars_templates(EntityInterface $entity)
     'visual_mobile_menu_level1_partial' => 'alshaya_rcs_product',
     'visual_mobile_menu_level2_partial' => 'alshaya_rcs_product',
     'visual_mobile_menu_level3_partial' => 'alshaya_rcs_product',
+    'visual_mobile_menu_carousel_partial' => 'alshaya_rcs_product',
   ];
 }
 
@@ -290,6 +291,7 @@ function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$f
       // Add fields for level 2.
       $fields = array_merge($fields, [
         'image',
+        'is_carousel_slider',
       ]);
       break;
 
@@ -298,7 +300,6 @@ function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$f
       $fields = array_merge($fields, [
         'image',
         'is_include_in_level2',
-        'is_carousel_slider',
       ]);
       break;
 

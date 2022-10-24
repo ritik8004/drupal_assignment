@@ -77,3 +77,10 @@ visual_mobile_menu_ui:
   dependencies:
     - core/jquery
     - core/drupal
+
+visual_mobile_menu_carousel_partial:
+  version: 1.x
+  js:
+    handlebars/visual_mobile_menu_carousel_partial.handlebars: {}
+  dependencies:
+    - alshaya_rcs_main_menu/visual_mobile_menu_level2_partial
