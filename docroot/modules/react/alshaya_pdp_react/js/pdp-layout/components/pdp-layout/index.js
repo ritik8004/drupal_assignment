@@ -65,7 +65,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
 
   const checkProduct = (productInfoData) => {
     if (productInfoData) {
-      jQuery('#block-aloisabrandofpurpose').addClass('active');
+      document.getElementById('block-aloisabrandofpurpose').classList.add('active');
     }
   };
 
