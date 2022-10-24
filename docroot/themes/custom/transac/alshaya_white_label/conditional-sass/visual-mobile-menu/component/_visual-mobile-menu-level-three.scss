@@ -14,13 +14,28 @@
     align-items: center;
 
     .menu__back {
-      width: rem(28);
-      height: rem(35);
+      display: none;
     }
 
     a {
       width: 100%;
       display: inline-block;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &::before {
+        content: '';
+        width: rem(28);
+        height: rem(35);
+        background: url('#{$brand_theme_img_directory_path}/icons/chevronleft.svg') no-repeat;
+        position: absolute;
+        #{$left}: 0;
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
+      }
     }
   }
 
