@@ -6,6 +6,17 @@
  */
 
 /**
+ * Implements hook_update().
+ */
+function alshaya_ay_transac_update_9411() {
+  // Add translations.
+  \Drupal::moduleHandler()->loadInclude('alshaya_ay_transac', 'inc', 'alshaya_ay_transac.translation');
+  if ($translations = _alshaya_ay_transac_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_ay_transac_install() {
