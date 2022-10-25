@@ -323,6 +323,10 @@ header {
     @include breakpoint($only-tablet) {
       padding: rem(18) rem(16);
     }
+
+    @include breakpoint($upto-desktop) {
+      transition: margin-top 300ms;
+    }
   }
 
   .c-header__region {
