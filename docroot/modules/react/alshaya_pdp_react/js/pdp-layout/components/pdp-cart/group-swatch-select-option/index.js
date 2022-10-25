@@ -17,7 +17,7 @@ const GroupSwatchSelectOption = ({
         return (
           <div className="group-swatch-option" key={attr}>
             <span className="group-swatch-text">
-              {Drupal.t('@attr', { '@attr': `${attr}: ` })}
+              {attr}
               <span id={`color-label-${attr}`} />
             </span>
             <div className="group-swatch-items">
@@ -26,7 +26,7 @@ const GroupSwatchSelectOption = ({
                 // Set label for current color variant.
                 if (typeof colorLabel !== 'undefined'
                 && colorLabel === configurables.values[attr][item].label) {
-                  document.getElementById(`color-label-${attr}`).innerHTML = colorLabel;
+                  document.getElementById(`color-label-${attr}`).innerHTML = `: ${colorLabel}`;
                 }
                 if (code === nextCode) {
                   return (
