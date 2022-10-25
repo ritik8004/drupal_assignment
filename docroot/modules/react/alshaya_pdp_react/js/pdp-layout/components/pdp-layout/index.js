@@ -66,8 +66,8 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
   // Remove class form block in PDP
   const loadAfterProductDataFetch = (productInfoData) => {
     if (productInfoData) {
-      const el = document.querySelector('.toggleBlock');
-      el.classList.remove('hideBlock');
+      const el = document.querySelector('.load-after-product-data-fetch');
+      el.classList.remove('hide-block');
     }
   };
 
