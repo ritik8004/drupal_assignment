@@ -234,36 +234,35 @@ exports.getData = async function getData(
       // Check if it exists in localstorage.
       var navigationMenuCacheTime = drupalSettings.rcs.navigationMenuCacheTime;
       if (navigationMenuCacheTime !== 0) {
-        const navigationData = globalThis.RcsPhLocalStorage.get(
+        result = globalThis.RcsPhLocalStorage.get(
           getMenuLocalStorageKey(rcsPhGraphqlQuery.navigationMenu.variables.categoryId)
         );
-        if (navigationData !== null) {
-          return navigationData;
-        }
       }
 
       // Prepare request parameters.
       // Fetch categories for navigation menu using categories api.
-      request.data = prepareQuery(rcsPhGraphqlQuery.navigationMenu.query, rcsPhGraphqlQuery.navigationMenu.variables);
+      if (result === null) {
+        request.data = prepareQuery(rcsPhGraphqlQuery.navigationMenu.query, rcsPhGraphqlQuery.navigationMenu.variables);
 
-      response = await rcsCommerceBackend.invokeApi(request);
-      // Get exact data from response.
-      if (response !== null
-        && Array.isArray(response.data.categories.items)
-        && response.data.categories.items.length > 0
-      ) {
-        // Get children for root category.
-        result = response.data.categories.items[0].children;
-        // Store category data in static storage.
-        globalThis.RcsPhStaticStorage.set(placeholder + '_data', result);
+        response = await rcsCommerceBackend.invokeApi(request);
+        // Get exact data from response.
+        if (response !== null
+          && Array.isArray(response.data.categories.items)
+          && response.data.categories.items.length > 0
+        ) {
+          // Get first item from the response.
+          result = response.data.categories.items[0];
+          // Store category data in static storage.
+          globalThis.RcsPhStaticStorage.set(placeholder + '_data', result);
 
-        // Store category data in local storage.
-        if (navigationMenuCacheTime !== 0) {
-          globalThis.RcsPhLocalStorage.set(
-            getMenuLocalStorageKey(rcsPhGraphqlQuery.navigationMenu.variables.categoryId),
-            result,
-            navigationMenuCacheTime
-          );
+          // Store category data in local storage.
+          if (navigationMenuCacheTime !== 0) {
+            globalThis.RcsPhLocalStorage.set(
+              getMenuLocalStorageKey(rcsPhGraphqlQuery.navigationMenu.variables.categoryId),
+              result,
+              navigationMenuCacheTime
+            );
+          }
         }
       }
       break;
