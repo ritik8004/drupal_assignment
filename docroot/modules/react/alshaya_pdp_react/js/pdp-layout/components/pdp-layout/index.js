@@ -63,9 +63,11 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     setCartData(cartDataVal);
   };
 
-  const checkProduct = (productInfoData) => {
+  // Remove class form block in PDP
+  const loadAfterProductDataFetch = (productInfoData) => {
     if (productInfoData) {
-      document.getElementById('block-aloisabrandofpurpose').classList.add('active');
+      const el = document.querySelector('.toggleBlock');
+      el.classList.remove('hideBlock');
     }
   };
 
@@ -174,7 +176,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
       });
     }
     stickyButton();
-    checkProduct(productInfo);
+    loadAfterProductDataFetch(productInfo);
   }, []);
 
   const getPanelData = useCallback((data) => {

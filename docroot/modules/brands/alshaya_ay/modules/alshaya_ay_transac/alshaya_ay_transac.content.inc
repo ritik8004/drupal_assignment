@@ -24,7 +24,7 @@ function alshaya_ay_transac_create_brand_purpose_block_content() {
     'info' => 'Alo is a Brand of Purpose',
     'machine_name' => 'brand_purpose',
     'body' => [
-      'value' => '<div class="brand-purpose">
+      'value' => '<div class="brand-purpose hideBlock toggleBlock">
       <h4 class="brand-purpose__title">ALO IS A BRAND OF PURPOSE</h4>
       <p class="brand-purpose__subtitle">Your purchase helps support our mission to bring yoga to the world.</p>
       <div class="brand-purpose__content">
