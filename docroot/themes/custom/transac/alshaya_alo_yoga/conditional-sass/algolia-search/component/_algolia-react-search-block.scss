@@ -335,4 +335,12 @@ body {
       }
     }
   }
+
+  &.mobile--overlay.menu--open {
+    .block-alshaya-algolia-react-autocomplete {
+      &::before {
+        opacity: 0;
+      }
+    }
+  }
 }
