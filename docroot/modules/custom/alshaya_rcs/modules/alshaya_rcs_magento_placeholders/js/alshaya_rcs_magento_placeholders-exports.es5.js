@@ -14,7 +14,10 @@ exports.render = function render(
       if (typeof globalThis.mainMenuProcessor !== 'undefined') {
         const menuData = globalThis.mainMenuProcessor.prepareData(
           drupalSettings.alshayaRcs.navigationMenu,
-          inputs.children
+          // Here we need to push the top level category + children
+          // as the top level categories has the information about
+          // Visual mobile menu.
+          inputs
         )
         html = handlebarsRenderer.render('main_menu_level1', menuData);
       }
