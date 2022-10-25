@@ -59,7 +59,6 @@
   .block-alshaya-algolia-react-autocomplete {
     @include breakpoint($only-mobile) {
       visibility: hidden !important;
-      transition: visibility 300ms;
     }
   }
 
@@ -92,7 +91,6 @@
     .region__header {
       @include breakpoint($only-mobile) {
         margin-top: 0;
-        transition: margin-top 300ms;
       }
     }
 

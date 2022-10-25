@@ -219,6 +219,33 @@
       }
     }
   }
+
+  &.super-category-home {
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($upto-desktop) {
+        visibility: visible !important;
+        top: rem(45) !important;
+      }
+    }
+
+    &.hide-minimalistic-header {
+      .block-alshaya-algolia-react-autocomplete {
+        @include breakpoint($upto-desktop) {
+          visibility: hidden !important;
+        }
+      }
+
+      &:not(.frontpage) {
+        .c-menu-primary {
+          .mobile--menu {
+            @include breakpoint($upto-desktop) {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .super-category-enabled:not(.frontpage) {
