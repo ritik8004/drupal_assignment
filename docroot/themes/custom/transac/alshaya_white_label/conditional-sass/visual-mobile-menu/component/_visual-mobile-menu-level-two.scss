@@ -1,7 +1,7 @@
 .visual-mobile-level-two {
   overflow: auto;
   background-color: $menu_bg;
-  height: 100vh;
+  height: 100%;
   padding-top: rem(14);
   // Offsetting height used by supercategory, header and search block so all items are visible on scroll.
   padding-bottom: rem(172);

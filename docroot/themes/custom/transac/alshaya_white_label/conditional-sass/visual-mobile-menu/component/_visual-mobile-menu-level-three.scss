@@ -1,6 +1,8 @@
 .visual-mobile-level-three {
   display: none;
-  height: calc(100vh - #{rem(125)});
+  height: 100%;
+  // Offsetting height used by supercategory, header and search block so all items are visible on scroll.
+  padding-bottom: rem(125);
   position: fixed;
   top: rem(125);
   width: 100%;
