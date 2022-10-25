@@ -14,9 +14,51 @@ function _alshaya_ay_transac_translations() {
     'v1' => [
       'view options' => [
         'en' => 'Quick Add',
+        'ar' => 'إضافة سريعة',
       ],
       'add to cart' => [
         'en' => 'Add to Bag',
+        'ar' => 'إضافة إلى حقيبة التسوق',
+      ],
+      'just dropped' => [
+        'ar' => 'وصل للتو',
+      ],
+      'Length' => [
+        'ar' => 'الطول',
+      ],
+      'Support' => [
+        'ar' => 'الدعم',
+      ],
+      'Waist' => [
+        'ar' => 'محيط الخصر',
+      ],
+      'List of all The Alo Yoga' => [
+        'ar' => 'قائمة جميع منتجات ألو يوغا',
+      ],
+      'View All' => [
+        'en' => 'Shop All',
+        'ar' => 'تسوق جميع المنتجات',
+      ],
+      'Shop by Activity' => [
+        'ar' => 'تسوق بحسب النشاط',
+      ],
+      'FIT' => [
+        'ar' => 'القصّة',
+      ],
+      'FABRICATION' => [
+        'ar' => 'الصُنع',
+      ],
+      'DESCRIPTION' => [
+        'ar' => 'وصف المنتج',
+      ],
+      'HOW TO USE' => [
+        'ar' => 'كيفيةالاستخدام',
+      ],
+      'WHY WE LOVE IT' => [
+        'ar' => 'لماذا نعشقها',
+      ],
+      'Core' => [
+        'ar' => 'كور',
       ],
     ],
   ];
