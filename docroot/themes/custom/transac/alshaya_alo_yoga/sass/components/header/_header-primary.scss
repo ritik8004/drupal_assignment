@@ -252,6 +252,17 @@ header {
   }
 }
 
+.mobile--close {
+  #{$left}: rem(8);
+  visibility: hidden;
+}
+
+.menu--active {
+  .mobile--close {
+    visibility: visible;
+  }
+}
+
 .menu--two__list {
   margin-top: 0 !important;
   padding-top: rem(17);
