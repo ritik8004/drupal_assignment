@@ -63,6 +63,14 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     setCartData(cartDataVal);
   };
 
+  // Remove class form block in PDP
+  const loadAfterProductDataFetch = (productInfoData) => {
+    if (productInfoData) {
+      const el = document.querySelector('.load-after-product-data-fetch');
+      el.classList.remove('hide-block');
+    }
+  };
+
   // Get product data based on sku.
   const productValues = getProductValues(productInfo, configurableCombinations,
     skuItemCode, variant, setVariant);
@@ -161,7 +169,6 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
   useEffect(() => {
     sidebarSticky();
     showStickyHeader();
-
     if (isAuraEnabled()) {
       document.addEventListener('customerDetailsFetched', (e) => {
         const { stateValues } = e.detail;
@@ -169,6 +176,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
       });
     }
     stickyButton();
+    loadAfterProductDataFetch(productInfo);
   }, []);
 
   const getPanelData = useCallback((data) => {
