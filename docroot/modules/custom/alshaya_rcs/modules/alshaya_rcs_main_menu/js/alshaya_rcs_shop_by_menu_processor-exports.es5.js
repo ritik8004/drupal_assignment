@@ -65,7 +65,7 @@ function processCategory(catItem, enrichmentData, isSuperCategoryEnabled) {
 exports.prepareData = function prepareData(settings, inputs) {
   let enrichmentData = globalThis.rcsGetEnrichedCategories();
   // Clone the original input data so as to not modify it.
-  let catItems = JSON.parse(JSON.stringify(inputs.children));
+  let catItems = JSON.parse(JSON.stringify(inputs));
   catItems = filterAvailableItems(catItems);
   catItems.sort(function (a, b) {
     return parseInt(a.position) - parseInt(b.position);

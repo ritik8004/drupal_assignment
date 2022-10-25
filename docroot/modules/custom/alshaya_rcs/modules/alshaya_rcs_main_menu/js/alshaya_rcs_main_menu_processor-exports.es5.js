@@ -10,7 +10,7 @@ exports.prepareData = function prepareData(settings, inputs) {
   } = settings;
 
   // Clone the input data.
-  let menuItems = JSON.parse(JSON.stringify(inputs.children));
+  let menuItems = JSON.parse(JSON.stringify(inputs));
   // Clean up data.
   menuItems = processData(menuItems, menuMaxDepth, mobileMenuMaxDepth);
   // Convert the array of Object into Object of objects.
