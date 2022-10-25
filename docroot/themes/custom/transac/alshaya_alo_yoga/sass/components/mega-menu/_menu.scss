@@ -1,6 +1,6 @@
 @mixin menuListItem {
-  margin-#{$left}: 0;
-  margin-#{$right}: 0;
+  margin-left: rem(30);
+  margin-right: rem(30);
   padding-#{$left}: rem(10);
   padding-#{$right}: rem(10);
   text-transform: none;
@@ -172,5 +172,17 @@
 
   .back--link {
     @include menuListItem;
+  }
+}
+
+
+.menu__list-item {
+  @include breakpoint($upto-desktop) {
+    border-bottom-color: $vm_l2_mobile_border;
+
+    .menu__link {
+      font-family: $ay-black;
+      text-transform: uppercase;
+    }
   }
 }
