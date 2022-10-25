@@ -60,7 +60,7 @@ function alshaya_ay_transac_create_brand_purpose_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Alo is a Brand of Purpose',
     'body' => [
-      'value' => '<div class="brand-purpose">
+      'value' => '<div class="brand-purpose hide-block load-after-product-data-fetch">
       <h4 class="brand-purpose__title">ألو يوغا هي علامة تجارية تحمل هدفاً</h4>
       <p class="brand-purpose__subtitle">إن شرائك يساعدنا على إتمام مهمتنا ونشر اليوغا في العالم</p>
       <div class="brand-purpose__content">
