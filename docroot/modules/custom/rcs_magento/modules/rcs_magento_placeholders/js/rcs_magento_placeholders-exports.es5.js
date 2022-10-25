@@ -238,7 +238,14 @@ exports.getData = async function getData(
           getMenuLocalStorageKey(rcsPhGraphqlQuery.navigationMenu.variables.categoryId)
         );
         if (navigationData !== null) {
-          return navigationData;
+          // Allow cached data to be altered before returning.
+          var navigationDataResults = RcsEventManager.fire('rcsUpdateResults', {
+            detail: {
+              result: navigationData,
+              placeholder: placeholder,
+            }
+          });
+          return navigationDataResults.detail.result;
         }
       }
 
