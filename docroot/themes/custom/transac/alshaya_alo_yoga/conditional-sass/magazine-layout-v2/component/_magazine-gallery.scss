@@ -10,4 +10,12 @@
       }
     }
   }
+
+  .popup-overlay {
+    .popup-content img {
+      @include breakpoint($desktop) {
+        height: rem(800);
+      }
+    }
+  }
 }

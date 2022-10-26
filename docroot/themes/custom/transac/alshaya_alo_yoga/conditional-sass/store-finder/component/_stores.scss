@@ -125,6 +125,7 @@
 
   .hours--label::after {
     margin-top: rem(5);
+    #{$right}: rem(-8);
   }
 
   .views-field-field-store-address {
