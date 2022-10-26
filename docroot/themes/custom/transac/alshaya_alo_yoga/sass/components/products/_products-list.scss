@@ -74,6 +74,10 @@
       margin-bottom: rem(5);
       line-height: 1.4;
       font-family: $ay-nova-semibold;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
     }
 
     .price-type__wrapper,
@@ -103,6 +107,12 @@
       .sku-promotion-item {
         margin-#{$left}: 0;
         margin-#{$right}: 0;
+      }
+    }
+
+    .price-block {
+      @include breakpoint($desktop) {
+        padding-bottom: rem(12);
       }
     }
   }
