@@ -109,8 +109,17 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
   elseif ($route_name == 'alshaya_spc.checkout.login') {
     $variables['destination'] = Url::fromRoute('alshaya_spc.checkout', [])->toString();
   }
-  elseif (\Drupal::request()->query->get('destination')) {
-    $variables['destination'] = \Drupal::request()->query->get('destination');
+  elseif ($destination = \Drupal::request()->query->get('destination')) {
+    try {
+      if (!empty(Url::fromUserInput($destination))) {
+        $variables['destination'] = $destination;
+      }
+    }
+    catch (InvalidArgumentException) {
+      \Drupal::logger('alshaya_social')->warning('Invalid query param for destination @destination', [
+        '@destination' => $destination,
+      ]);
+    }
   }
 
   foreach ($variables['social_networks'] as $network => &$network_info) {
