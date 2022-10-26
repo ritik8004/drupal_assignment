@@ -488,7 +488,7 @@ export const addToCartSimple = (
  * @returns {Object}
  *   Processed size guide object.
  */
-window.commerceBackend.getRcsSizeGuideSettings = () => {
+window.commerceBackend.getSizeGuideSettings = () => {
   // Get size guide from drupal settings for v2 architecture.
   const { isSizeGuideEnabled, sizeGuide } = drupalSettings;
   if (isSizeGuideEnabled && hasValue(sizeGuide)) {

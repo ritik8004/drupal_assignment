@@ -4,7 +4,7 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const SizeGuide = ({ attrId }) => {
   // Get size guide as per v3 architecture.
-  const sizeGuide = window.commerceBackend.getRcsSizeGuideSettings();
+  const sizeGuide = window.commerceBackend.getSizeGuideSettings();
 
   if (hasValue(sizeGuide)) {
     // If the current attr matches the size attribute.
