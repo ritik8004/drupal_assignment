@@ -2,15 +2,8 @@
 
 /**
  * @file
- * Install, uninstall and update for alshaya_pb_transac_rcs.
+ * Install, uninstall and update hooks for the module.
  */
-
-/**
- * Implements hook_install().
- */
-function alshaya_pb_transac_rcs_install() {
-  \Drupal::service('module_installer')->install(['alshaya_rcs']);
-}
 
 /**
  * Implements hook_uninstall().
