@@ -1061,7 +1061,10 @@ function _alshaya_rcs_product_get_cnc_config(array &$build) {
 function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) {
   $current_language = NULL;
   // Return from here if input type is not textarea or text.
-  if ($attribute && !in_array($attribute['frontend_input'], ['text', 'textarea'])) {
+  if ($attribute
+    && isset($attribute['frontend_input'])
+    && !in_array($attribute['frontend_input'], ['text', 'textarea'])
+  ) {
     return;
   }
 
