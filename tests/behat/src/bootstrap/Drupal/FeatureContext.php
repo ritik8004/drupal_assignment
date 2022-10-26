@@ -2811,12 +2811,14 @@ JS;
     $session = $this->getSession();
     $email_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(0).text()');
     $order_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(1).text()');
-    $payment_method = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-detail .spc-value\').eq(4).text()');
+    $payment_method = $session->evaluateScript('return getPaymentMethod(); function getPaymentMethod() {var value=null; window.dataLayer.some(function eachObject(item) {if (item.event === \'purchaseSuccess\') {value=item.paymentOption; return true;} return false;}); return value;}');
+    $delivery_option = $session->evaluateScript('return getDeliveryMethod(); function getDeliveryMethod() {var value=null; window.dataLayer.some(function eachObject(item) {if (item.event === \'purchaseSuccess\') {value=item.deliveryOption; return true;} return false;}); return value;}');
     $order_detail = [
       'email' => $email_id,
       'order_id' => $order_id,
       'order_date' => date('Y-m-d'),
       'payment_method' => $payment_method,
+      'delivery_option' => $delivery_option,
     ];
     $filename = 'order_details.json';
     $orders = [];
