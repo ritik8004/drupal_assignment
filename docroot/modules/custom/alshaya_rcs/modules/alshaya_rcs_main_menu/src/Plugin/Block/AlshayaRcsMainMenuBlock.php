@@ -138,6 +138,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
           'alshaya_rcs_main_menu/renderer',
           'alshaya_rcs_main_menu/main_menu_level1',
           'alshaya_rcs_main_menu/main_menu_level2_partial',
+          'alshaya_rcs_main_menu/view_all',
           'alshaya_white_label/rcs-ph-navigation-menu',
         ],
       ],
@@ -161,8 +162,12 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
 
     if ($variables['mobile_menu_layout'] === AlshayaMainMenuConfigForm::MOBILE_MENU_VISUAL) {
       $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_ui';
-      $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_partial';
+      $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_level1_partial';
       $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_level2_partial';
+      if ($variables['max_depth'] > 2) {
+        $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_level3_partial';
+      }
+      $build['#attached']['library'][] = 'alshaya_rcs_main_menu/visual_mobile_menu_carousel_partial';
     }
 
     return $build;

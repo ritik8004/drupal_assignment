@@ -1,10 +1,17 @@
 .spc-product-price {
   font-size: rem(16);
   font-family: $ay-heavy;
+
+  @include breakpoint($only-mobile) {
+    font-size: rem(14);
+    font-family: $arial;
+  }
 }
 
 .spc-order-summary-block {
   @include breakpoint($only-mobile) {
+    border-top: rem(1) solid $spc_cart_item_border_color;
+
     .block-content {
       background: $spc-cart-background;
 
@@ -42,16 +49,31 @@
 
         a {
           font-family: $ay-heavy;
+
+          @include breakpoint($only-mobile) {
+            font-family: $arial;
+          }
         }
       }
 
       .spc-product-title-price {
         display: flex;
         justify-content: space-between;
+
+        @include breakpoint($only-mobile) {
+          flex-direction: column;
+        }
       }
 
       .spc-product-meta-data {
         justify-content: unset;
+      }
+
+      .spc-product-attributes {
+        @include breakpoint($only-mobile) {
+          font-size: rem(14);
+          line-height: 1.3;
+        }
       }
     }
   }

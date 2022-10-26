@@ -213,6 +213,9 @@ window.commerceBackend = window.commerceBackend || {};
     // @see _alshaya_acm_product_get_size_guide_info()
     productInfo.size_guide = drupalSettings.alshayaRcs.sizeGuide;
 
+    // Set catalog restructuring enabled or not.
+    productInfo.catalogRestructured = drupalSettings.alshayaRcs.catalogRestructured;
+
     // Set configurable attributes.
     var configurableCombinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     productInfo.configurable_attributes = {};

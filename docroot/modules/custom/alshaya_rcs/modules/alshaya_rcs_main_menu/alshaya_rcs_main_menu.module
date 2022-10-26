@@ -75,12 +75,6 @@ function alshaya_rcs_main_menu_preprocess_page_title(&$variables) {
  */
 function alshaya_rcs_main_menu_preprocess_page(&$variables) {
   $routematch = \Drupal::routeMatch();
-  if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
-    $term_data = $routematch->getParameter('taxonomy_term');
-    if ($term_data->bundle() == 'rcs_category') {
-      $variables['#attached']['library'][] = 'alshaya_rcs_main_menu/view_all';
-    }
-  }
   if ($routematch->getRouteName() == 'entity.node.canonical') {
     $node = $routematch->getParameter('node');
     if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString()) {
@@ -259,6 +253,10 @@ function alshaya_rcs_main_menu_rcs_handlebars_templates(EntityInterface $entity)
     'main_menu_level3_partial' => 'alshaya_rcs_product',
     'main_menu_level4_partial' => 'alshaya_rcs_product',
     'shop_by_menu' => 'alshaya_rcs_product',
+    'visual_mobile_menu_level1_partial' => 'alshaya_rcs_product',
+    'visual_mobile_menu_level2_partial' => 'alshaya_rcs_product',
+    'visual_mobile_menu_level3_partial' => 'alshaya_rcs_product',
+    'visual_mobile_menu_carousel_partial' => 'alshaya_rcs_product',
   ];
 }
 
@@ -275,18 +273,19 @@ function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$f
   $actual_depth = \Drupal::config('alshaya_rcs_main_menu.settings')->get('max_depth_to_load') - $depth;
 
   switch ($actual_depth) {
-    case 1:
+    case 0:
       // Add fields for level 1.
       $fields = array_merge($fields, [
-        'image',
         'is_visual_menu_layout',
       ]);
       break;
 
+    case 1:
     case 2:
       // Add fields for level 2.
       $fields = array_merge($fields, [
         'image',
+        'is_carousel_slider',
       ]);
       break;
 
@@ -295,7 +294,6 @@ function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$f
       $fields = array_merge($fields, [
         'image',
         'is_include_in_level2',
-        'is_carousel_slider',
       ]);
       break;
 

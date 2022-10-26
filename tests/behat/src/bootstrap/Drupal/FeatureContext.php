@@ -7,6 +7,7 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Exception;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Session;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
@@ -27,7 +28,6 @@ use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Drupal\node\Entity\Node;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
-
 
 define("ORDER_ASC", 1);
 define("ORDER_DSC", 0);
@@ -53,12 +53,19 @@ class FeatureContext extends CustomMinkContext
       '.exponea-subbox-subscription-dialog',
     ];
 
-    $driver = $this->getSession()->getDriver();
-    if ($driver instanceof Selenium2Driver && $driver->getWebDriverSession()) {
-      $classes = implode(',', $classesToHide);
-      $script = 'var sheet = window.document.styleSheets[0];';
-      $script .= "sheet.insertRule('$classes { display: none!important; }', sheet.cssRules.length);";
-      $this->getSession()->executeScript($script);
+    try {
+      $session = $this->getSession();
+      if ($session instanceof Session) {
+        $driver = $session->getDriver();
+        if ($driver instanceof Selenium2Driver && $driver->getWebDriverSession()) {
+          $classes = implode(',', $classesToHide);
+          $script = 'var sheet = window.document.styleSheets[0];';
+          $script .= "sheet.insertRule('$classes { display: none!important; }', sheet.cssRules.length);";
+          $this->getSession()->executeScript($script);
+        }
+      }
+    } catch (\Exception) {
+      // Silently fail when there is an error in this event.
     }
   }
 
@@ -2811,12 +2818,14 @@ JS;
     $session = $this->getSession();
     $email_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(0).text()');
     $order_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(1).text()');
-    $payment_method = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-detail .spc-value\').eq(4).text()');
+    $payment_method = $session->evaluateScript('return getPaymentMethod(); function getPaymentMethod() {var value=null; window.dataLayer.some(function eachObject(item) {if (item.event === \'purchaseSuccess\') {value=item.paymentOption; return true;} return false;}); return value;}');
+    $delivery_option = $session->evaluateScript('return getDeliveryMethod(); function getDeliveryMethod() {var value=null; window.dataLayer.some(function eachObject(item) {if (item.event === \'purchaseSuccess\') {value=item.deliveryOption; return true;} return false;}); return value;}');
     $order_detail = [
       'email' => $email_id,
       'order_id' => $order_id,
       'order_date' => date('Y-m-d'),
       'payment_method' => $payment_method,
+      'delivery_option' => $delivery_option,
     ];
     $filename = 'order_details.json';
     $orders = [];
@@ -3001,43 +3010,6 @@ JS;
    */
   public function iUncheckTheNewsletterSubscriptionCheckbox() {
     $this->getSession()->executeScript("jQuery('#edit-field-subscribe-newsletter-value').removeAttr('checked');jQuery('#edit-field-subscribe-newsletter-value').val(0)");
-  }
-
-  /**
-   * @When /^I am on user registration page$/
-   */
-  public function iAmOnUserRegistrationPage()
-  {
-    $this->visitPath('/user/register?behat=' . $this->getBehatSecretKey());
-  }
-
-  /**
-   * @When /^I am on user contact us page$/
-   */
-  public function iAmOnContactUsPage()
-  {
-    $this->visitPath('/contact?behat=' . $this->getBehatSecretKey());
-  }
-
-  private function getBehatSecretKey() {
-    static $key = NULL;
-
-    // Avoid file load everytime.
-    if (isset($key)) {
-      return $key;
-    }
-
-    $filename = 'creds.json';
-    $options = getopt('', ['profile:']);
-    $profile_arr = explode('-', $options['profile']);
-    $env = $profile_arr[2];
-    $key = '';
-    if (file_exists($filename)) {
-      $creds = json_decode(file_get_contents($filename), TRUE);
-      $key = $creds[$env]['secret_key'] ?? '';
-    }
-
-    return $key;
   }
 
   /**

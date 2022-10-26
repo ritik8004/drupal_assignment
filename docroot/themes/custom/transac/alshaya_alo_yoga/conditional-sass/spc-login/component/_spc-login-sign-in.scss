@@ -75,24 +75,4 @@
       }
     }
   }
-
-  .site-brand-home {
-    a {
-      html[lang=ar] & {
-        @include breakpoint($desktop) {
-          height: rem(46);
-        }
-      }
-
-      @include breakpoint($desktop) {
-        width: auto;
-      }
-
-      img {
-        @include breakpoint($desktop) {
-          width: auto;
-        }
-      }
-    }
-  }
 }

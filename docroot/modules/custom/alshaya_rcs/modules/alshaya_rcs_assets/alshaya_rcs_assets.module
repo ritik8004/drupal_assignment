@@ -34,6 +34,9 @@ function alshaya_rcs_assets_library_info_alter(&$libraries, $extension) {
  * Implements hook_alshaya_rcs_product_recent_orders_fields_alter().
  */
 function alshaya_rcs_assets_alshaya_rcs_product_recent_orders_fields_alter(array &$fields) {
+  unset($fields['items']['... on ConfigurableProduct']['variants']['product']['media_gallery']);
+  unset($fields['items']['media_gallery']);
+
   array_push(
     $fields['items']['... on ConfigurableProduct']['variants']['product'],
     'assets_teaser',

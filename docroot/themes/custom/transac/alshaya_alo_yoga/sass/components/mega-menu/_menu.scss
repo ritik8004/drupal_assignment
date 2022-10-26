@@ -1,6 +1,6 @@
 @mixin menuListItem {
-  margin-#{$left}: 0;
-  margin-#{$right}: 0;
+  margin-left: rem(30);
+  margin-right: rem(30);
   padding-#{$left}: rem(10);
   padding-#{$right}: rem(10);
   text-transform: none;
@@ -15,13 +15,14 @@
   .block-alshaya-main-menu {
     ul {
       &.menu--one__list {
-        padding-#{$left}: rem(40);
+        padding-#{$left}: rem(48);
       }
     }
 
     li {
       &.menu--one__list-item {
         display: inline-block;
+        line-height: rem(40);
 
         .menu__link {
           font-size: rem(14);
@@ -48,13 +49,13 @@
           text-transform: uppercase;
           height: rem(44);
           padding-top: 0;
+          padding-bottom: 0;
 
           &::after {
             content: '';
             height: rem(2);
             width: auto;
             transition: all 0.3s ease-out;
-            margin: rem(10) auto 0;
             display: block;
           }
         }
@@ -109,7 +110,7 @@
     &:not(.megamenu-inline-layout) {
       li.menu--one__list-item {
         ul.menu--two__list {
-          #{$left}: -13%;
+          #{$left}: -11%;
           min-width: rem(1264);
 
           .menu--two__list-item {
@@ -171,5 +172,17 @@
 
   .back--link {
     @include menuListItem;
+  }
+}
+
+
+.menu__list-item {
+  @include breakpoint($upto-desktop) {
+    border-bottom-color: $vm_l2_mobile_border;
+
+    .menu__link {
+      font-family: $ay-black;
+      text-transform: uppercase;
+    }
   }
 }

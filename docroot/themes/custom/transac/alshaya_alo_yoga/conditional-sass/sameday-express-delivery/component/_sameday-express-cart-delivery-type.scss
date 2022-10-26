@@ -25,4 +25,35 @@
   .spc-checkout-section-title {
     text-transform: uppercase;
   }
+
+  .spc-cart-shipping-methods {
+    @include breakpoint($only-mobile) {
+      padding-top: 0;
+    }
+  }
+
+  .sku-cart-delivery-methods {
+    font-size: rem(12);
+
+    .carrier-title {
+      padding-top: rem(6);
+      padding-bottom: rem(6);
+
+      html[lang=ar] & {
+        padding-top: rem(6);
+        padding-bottom: rem(6);
+      }
+    }
+
+    .shipping-tags-first-row {
+      .cart-shipping-method {
+        .information-icon {
+          &::after {
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+  }
 }

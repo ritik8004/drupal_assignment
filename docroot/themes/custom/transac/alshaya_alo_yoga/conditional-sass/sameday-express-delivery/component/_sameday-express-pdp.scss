@@ -11,5 +11,30 @@
         }
       }
     }
+
+    .express-delivery-title {
+      height: rem(44);
+    }
+
+    .magv2-pdp-section-title {
+      font-family: $ay-nova-semibold;
+      font-size: rem(16);
+    }
+
+    .express-delivery-subtitle {
+      color: $del_opt_sub_title_txt;
+    }
+
+    .cart-shipping-method {
+      .carrier-title {
+        font-size: rem(14);
+        font-family: $ay-nova-semibold;
+        color: $del_opt_title_text;
+      }
+
+      .method-title {
+        color: $del_opt_title_text;
+      }
+    }
   }
 }
