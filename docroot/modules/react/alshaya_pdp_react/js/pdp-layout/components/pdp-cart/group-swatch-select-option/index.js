@@ -26,7 +26,7 @@ const GroupSwatchSelectOption = ({
               {Object.keys(configurables.values[attr]).map((item) => {
                 const attrVal = configurables.values[attr][item].value_id;
                 // Set label for current color variant.
-                if (hasValue(colorLabel)
+                if (hasValue(colorLabel) && hasValue(colorLabelId)
                 && colorLabel === configurables.values[attr][item].label) {
                   colorLabelId.innerHTML = `: ${colorLabel}`;
                 }
