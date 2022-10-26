@@ -9,11 +9,13 @@ const GroupSwatchSelectOption = ({
   <div className="non-groupped-attr magv2-swatches-wrapper">
     <ul id={code} className="select-attribute magv2-swatch-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
       {Object.keys(configurables.values).map((attr) => {
-        if (hasValue(document.getElementById(`color-label-${attr}`))) {
-          document.getElementById(`color-label-${attr}`).innerHTML = '';
-        }
+        const colorLabelId = document.getElementById(`color-label-${attr}`);
         // Get label for current color variant.
         const colorLabel = window.commerceBackend.getAttributeValueLabel(code, selected);
+        if (hasValue(colorLabelId)) {
+          colorLabelId.innerHTML = '';
+        }
+
         return (
           <div className="group-swatch-option" key={attr}>
             <span className="group-swatch-text">
@@ -24,9 +26,9 @@ const GroupSwatchSelectOption = ({
               {Object.keys(configurables.values[attr]).map((item) => {
                 const attrVal = configurables.values[attr][item].value_id;
                 // Set label for current color variant.
-                if (typeof colorLabel !== 'undefined'
+                if (hasValue(colorLabel)
                 && colorLabel === configurables.values[attr][item].label) {
-                  document.getElementById(`color-label-${attr}`).innerHTML = `: ${colorLabel}`;
+                  colorLabelId.innerHTML = `: ${colorLabel}`;
                 }
                 if (code === nextCode) {
                   return (
