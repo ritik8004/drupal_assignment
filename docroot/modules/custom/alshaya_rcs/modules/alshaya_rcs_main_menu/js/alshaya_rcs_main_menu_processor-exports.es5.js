@@ -131,22 +131,16 @@ const processData = function (data, maxLevel, mobileMenuMaxDepth) {
       return;
     }
 
-    if (typeof data[key].include_in_desktop !== 'undefined') {
-      if (!data[key].include_in_desktop) {
-        data[key].hide_in_desktop = 'hide-on-desktop';
-      }
-      else {
-        data[key].hide_in_desktop = '';
-      }
+    // Set desktop class to all menu items.
+    data[key].desktop_class = null;
+    if (typeof data[key].include_in_desktop !== 'undefined' && !data[key].include_in_desktop) {
+      data[key].desktop_class = 'hide-on-desktop';
     }
 
-    if (typeof data[key].include_in_mobile_tablet !== 'undefined') {
-      if (!data[key].include_in_mobile_tablet) {
-        data[key].hide_in_mobile_tablet = 'hide-on-mobile';
-      }
-      else {
-        data[key].hide_in_mobile_tablet = '';
-      }
+    // Set mobile_tablet class to all menu items.
+    data[key].mobile_tablet_class = null;
+    if (typeof data[key].include_in_mobile_tablet !== 'undefined' && !data[key].include_in_mobile_tablet) {
+      data[key].mobile_tablet_class = 'hide-on-mobile';
     }
 
     if (Drupal.hasValue(data[key].move_to_right)) {
