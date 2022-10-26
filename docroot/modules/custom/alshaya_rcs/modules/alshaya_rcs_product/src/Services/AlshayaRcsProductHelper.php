@@ -314,6 +314,22 @@ class AlshayaRcsProductHelper {
         'ship_to_store',
         'is_returnable',
         'reserve_and_collect',
+        'free_gift_promotion' => [
+          'rule_id',
+          'rule_type',
+          'rule_web_url',
+          'rule_name',
+          'rule_description',
+          'auto_add',
+          'max_gift',
+          'coupon_code',
+          'total_items',
+          'gifts' => [
+            'id',
+            'sku',
+            'name',
+          ],
+        ],
         'price_range' => [
           'maximum_price' => [
             'regular_price' => [
@@ -398,6 +414,22 @@ class AlshayaRcsProductHelper {
               'attribute_set_id',
               'swatch_data' => [
                 'swatch_type',
+              ],
+              'free_gift_promotion' => [
+                'rule_id',
+                'rule_type',
+                'rule_web_url',
+                'rule_name',
+                'rule_description',
+                'auto_add',
+                'max_gift',
+                'coupon_code',
+                'total_items',
+                'gifts' => [
+                  'id',
+                  'sku',
+                  'name',
+                ],
               ],
               'price_range' => [
                 'maximum_price' => [

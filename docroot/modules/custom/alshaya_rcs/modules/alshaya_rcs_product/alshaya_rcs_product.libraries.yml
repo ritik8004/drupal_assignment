@@ -65,6 +65,20 @@ product.promotions:
   js:
     handlebars/product.promotions.handlebars: {}
 
+product.promotion_free_gift:
+  version: 1.x
+  js:
+    handlebars/product.promotion_free_gift.handlebars: {}
+  dependencies:
+    - alshaya_white_label/free_gifts
+
+product.promotion_free_gift_list:
+  version: 1.x
+  js:
+    handlebars/product.promotion_free_gift_list.handlebars: {}
+  dependencies:
+    - alshaya_white_label/free_gifts
+
 product.sku_base_form:
   version: 1.x
   js:

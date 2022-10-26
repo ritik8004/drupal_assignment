@@ -410,8 +410,7 @@ window.commerceBackend = window.commerceBackend || {};
         finalPrice: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
         priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.regular_price.value),
         promotionsRaw: product.promotions,
-        // @todo Add free gift promotion value here.
-        freeGiftPromotion: [],
+        freeGiftPromotion: variantInfo.free_gift_promotion,
         url: productUrl,
         gtm_price: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
         deliveryOptions: variantInfo.deliveryOptions,
@@ -479,8 +478,7 @@ window.commerceBackend = window.commerceBackend || {};
       finalPrice: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value),
       priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
       promotionsRaw: product.promotions,
-      // @todo Add free gift promotion value here.
-      freeGiftPromotion: [],
+      freeGiftPromotion: product.free_gift_promotion,
       is_non_refundable: product.non_refundable_products,
       stock: {
         qty: product.stock_data.qty,

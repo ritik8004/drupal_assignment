@@ -795,6 +795,43 @@ exports.computePhFilters = function (input, filter) {
       value = `price-block-${cleanSku}`;
       break;
 
+    case 'promotion_free_gift':
+      const freeGiftPromotions = input.free_gift_promotion;
+      // Proceed only if we have free gift promotion items.
+      if (freeGiftPromotions.length > 0) {
+        data.freeGiftType = freeGiftPromotions[0].rule_type;
+        data.freeGiftCoupon = freeGiftPromotions[0].coupon_code;
+        data.freeGiftPromoUrl = Drupal.url(freeGiftPromotions[0].rule_web_url);
+
+        const giftItems = freeGiftPromotions[0].gifts;
+        // Get the image of first free gift item.
+        if (freeGiftPromotions[0].total_items > 0) {
+          // Get the free gift sku info.
+          // const giftItemProductInfo = window.commerceBackend.getProductData(giftItems[0].sku, null, false);
+          const skuImage = window.commerceBackend.getFirstImage(input);
+          data.freeGiftImage = Drupal.hasValue(skuImage)
+            ? skuImage.url
+            : drupalSettings.alshayaRcs.default_meta_image;
+        }
+
+        // Do processing of free gift items.
+        if (freeGiftPromotions[0].total_items > 1
+          && freeGiftPromotions[0].rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+
+          // Render handlebars plugin.
+          value = handlebarsRenderer.render(`product.${filter}_list`, data);
+        } else if (freeGiftPromotions[0].total_items > 0) {
+          const freeGift = giftItems[0];
+
+          data.freeGiftTitle = freeGift.name;
+          data.freeGiftSku = freeGift.sku;
+
+          // Render handlebars plugin.
+          value = handlebarsRenderer.render(`product.${filter}`, data);
+        }
+      }
+      break;
+
     default:
       Drupal.alshayaLogger('debug', 'Unknown JS filter @filter.', {'@filter': filter})
   }

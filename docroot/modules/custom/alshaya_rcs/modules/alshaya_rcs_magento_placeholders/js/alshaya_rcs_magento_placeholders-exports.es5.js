@@ -211,6 +211,7 @@ exports.computePhFilters = function (input, filter) {
     case 'description':
     case 'short_description':
     case 'promotions':
+    case 'promotion_free_gift':
     case 'teaser_image':
     case 'price_block_identifier':
     case 'absolute_url':
