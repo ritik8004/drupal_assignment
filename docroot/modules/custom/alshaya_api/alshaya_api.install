@@ -13,6 +13,24 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
+ * Add magento settings back in config.
+ */
+function alshaya_api_update_9402() {
+  $alshaya_api_settings = Settings::get('alshaya_api.settings');
+  $alshaya_api_config = \Drupal::configFactory()->getEditable('alshaya_api.settings');
+  $alshaya_api_config
+    ->set('magento_host', $alshaya_api_settings['magento_host'])
+    ->set('consumer_key', $alshaya_api_settings['consumer_key'])
+    ->set('consumer_secret', $alshaya_api_settings['consumer_secret'])
+    ->set('access_token', $alshaya_api_settings['access_token'])
+    ->set('access_token_secret', $alshaya_api_settings['access_token_secret'])
+    ->set('verify_ssl', $alshaya_api_settings['verify_ssl'])
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the config in db.
  */
 function alshaya_api_update_9401() {
