@@ -22,9 +22,7 @@
       item['show_cart_form'] = 'no-cart-form';
 
       // Make url relative.
-      // @todo Move to a function.
-      let url = new URL(item.end_user_url);
-      item['url'] = url.toString().substring(url.origin.length);
+      item['url'] = Drupal.url(item.end_user_url);
 
       // Prepare price item.
       item['price_details'] = window.commerceBackend.getPriceForRender(item);
