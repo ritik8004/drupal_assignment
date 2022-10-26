@@ -7,6 +7,7 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Exception;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Session;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
@@ -27,7 +28,6 @@ use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Drupal\node\Entity\Node;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
-
 
 define("ORDER_ASC", 1);
 define("ORDER_DSC", 0);
@@ -53,12 +53,19 @@ class FeatureContext extends CustomMinkContext
       '.exponea-subbox-subscription-dialog',
     ];
 
-    $driver = $this->getSession()->getDriver();
-    if ($driver instanceof Selenium2Driver && $driver->getWebDriverSession()) {
-      $classes = implode(',', $classesToHide);
-      $script = 'var sheet = window.document.styleSheets[0];';
-      $script .= "sheet.insertRule('$classes { display: none!important; }', sheet.cssRules.length);";
-      $this->getSession()->executeScript($script);
+    try {
+      $session = $this->getSession();
+      if ($session instanceof Session) {
+        $driver = $session->getDriver();
+        if ($driver instanceof Selenium2Driver && $driver->getWebDriverSession()) {
+          $classes = implode(',', $classesToHide);
+          $script = 'var sheet = window.document.styleSheets[0];';
+          $script .= "sheet.insertRule('$classes { display: none!important; }', sheet.cssRules.length);";
+          $this->getSession()->executeScript($script);
+        }
+      }
+    } catch (\Exception) {
+      // Silently fail when there is an error in this event.
     }
   }
 
