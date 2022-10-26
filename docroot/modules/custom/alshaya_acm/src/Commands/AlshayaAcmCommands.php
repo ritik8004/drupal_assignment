@@ -219,7 +219,17 @@ class AlshayaAcmCommands extends DrushCommands {
       global $magentos;
 
       if (isset($magentos[$mdc])) {
-        $this->configManager->replaceYamlSettingsOverrides($mdc);
+        // Update the magento host and secrets.
+        $config = $this->configFactory->getEditable('alshaya_api.settings');
+        $config->set('magento_host', $magentos[$mdc]['url']);
+        foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
+          $config->set($key, $value);
+        }
+        $config->save();
+
+        $this->output->writeln(dt('Configuring alshaya_api.settings.magento_host to @value.', [
+          '@value' => $magentos[$mdc]['url'],
+        ]));
 
         // Determine the country code to use.
         $country_code = !empty($options['country_code'])
@@ -238,6 +248,7 @@ class AlshayaAcmCommands extends DrushCommands {
 
         $configs = [
           'acq_commerce.store' => 'store_id',
+          'alshaya_api.settings' => 'magento_lang_prefix',
         ];
 
         $this->moduleHandler->alter('alshaya_acm_switch_magento_configs', $configs);
