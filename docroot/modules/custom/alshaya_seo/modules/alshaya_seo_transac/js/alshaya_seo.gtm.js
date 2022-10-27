@@ -236,9 +236,10 @@
       var deliveryType = 'Home Delivery';
       var userDetails = '';
       var userId = '';
-      if (typeof drupalSettings.userDetails === 'undefined') {
+      if (typeof drupalSettings.userDetails.userID === 'undefined') {
         userDetails = drupalSettings.user;
         userId = userDetails.uid;
+        userDetails.userID = userId;
       }
       // userDetails is set in case of google/facebook login.
       else  {
@@ -338,7 +339,6 @@
         if (!(socialWindow)
           && userDetails.userID !== undefined
           && userDetails.userID !== 0
-          && userDetails.userID !== drupalSettings.user.uid
           && loginType !== undefined
           && orderConfirmationPage.length === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
