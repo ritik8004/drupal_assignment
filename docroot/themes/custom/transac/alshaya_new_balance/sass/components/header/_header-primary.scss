@@ -89,6 +89,7 @@ header {
             margin-top: 0;
             margin-#{$left}: rem(56);
             z-index: 2;
+            display: inline-flex;
 
             html[lang=ar] & {
               text-align: center;
@@ -162,6 +163,7 @@ header {
 .site-brand-home {
   @include breakpoint($only-mobile) {
     width: 100%;
+    display: inline-flex;
   }
 
   a {
