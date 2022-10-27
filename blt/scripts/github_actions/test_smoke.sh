@@ -7,12 +7,14 @@ composer install -n
 
 cd bin
 npm install
-wget --max-redirect=1 https://goo.gl/s4o9Vx -O selenium.jar
-java -jar selenium.jar &
 
 cd ..
 
-./behat-build.sh --rebuild=TRUE
+java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar &
+sleep 3
+
+./behat-build.sh --rebuild=TRUE --site=hm-kw-uat-en
+
 # @todo change below to execute smoke tests on all sites.
 bin/behat --profile=hm-kw-uat-en-desktop --format pretty --tags="@contact-us"
 
