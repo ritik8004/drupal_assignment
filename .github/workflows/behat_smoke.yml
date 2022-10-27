@@ -69,6 +69,12 @@ jobs:
             ~/.drush/cache
           key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
 
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: microsoft
+          java-version: 17
+
       - name: Install Node
         uses: actions/setup-node@v2
         with:
