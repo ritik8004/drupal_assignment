@@ -34,6 +34,7 @@ jobs:
       MYSQL_USER_NAME: drupal
       MYSQL_DATABASE_NAME: drupal
       MYSQL_HOST: database
+      BEHAT_SECRET_KEY: ${{ secrets.BEHAT_SECRET_KEY }}
 
     steps:
       - name: Prepare environment variables
@@ -85,6 +86,9 @@ jobs:
 
       - name: Setup environment
         run: bash ${SCRIPT_DIR}/setup_env.sh
+
+      - name: Setup Behat credentials
+        run: echo "${{ env.BEHAT_SECRET_KEY }}" > ${GITHUB_WORKSPACE}/tests/behat/creds.json
 
       - name: Test app
         run: bash ${SCRIPT_DIR}/test_smoke.sh
