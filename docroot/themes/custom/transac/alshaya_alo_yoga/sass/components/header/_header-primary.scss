@@ -204,7 +204,7 @@ header {
 
 .static-minicart-wrapper {
   .quantity {
-    left: rem(2);
+    #{$left}: rem(2);
     bottom: rem(-5);
   }
 
