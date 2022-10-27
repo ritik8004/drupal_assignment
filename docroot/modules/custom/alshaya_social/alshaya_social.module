@@ -109,15 +109,17 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
   elseif ($route_name == 'alshaya_spc.checkout.login') {
     $variables['destination'] = Url::fromRoute('alshaya_spc.checkout', [])->toString();
   }
-  elseif ($destination = \Drupal::request()->query->get('destination')) {
+  elseif (\Drupal::request()->query->get('destination')) {
+    $destination = \Drupal::request()->query->get('destination');
     try {
       if (!empty(Url::fromUserInput($destination))) {
         $variables['destination'] = $destination;
       }
     }
-    catch (InvalidArgumentException) {
-      \Drupal::logger('alshaya_social')->warning('Invalid query param for destination @destination', [
+    catch (InvalidArgumentException $e) {
+      \Drupal::logger('alshaya_social')->warning('Invalid value provided for destination query param: @destination. Error message is: @message', [
         '@destination' => $destination,
+        '@message' => $e->getMessage(),
       ]);
     }
   }
