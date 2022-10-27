@@ -68,9 +68,12 @@ header {
     .block-system-branding-block {
       flex-grow: 1;
 
+      @include breakpoint($tablet) {
+        flex-grow: initial;
+      }
+
       @include breakpoint($desktop) {
         width: auto;
-        flex-grow: initial;
       }
 
       @include breakpoint($only-mobile) {
@@ -78,18 +81,20 @@ header {
       }
 
       .site-brand-home {
+        display: inline-flex;
+
         @include breakpoint($desktop) {
           min-width: rem(32);
           padding-top: rem(2);
-          display: inline-flex;
         }
 
         a {
+          display: inline-flex;
+
           @include breakpoint($upto-tablet) {
             margin-top: 0;
             margin-#{$left}: rem(56);
             z-index: 2;
-            display: inline-flex;
 
             html[lang=ar] & {
               text-align: center;
@@ -109,12 +114,6 @@ header {
             html[lang=ar] & {
               width: rem(48);
               height: auto;
-
-              @include breakpoint($tablet) {
-                margin-top: 0;
-                width: auto;
-                height: auto;
-              }
             }
           }
         }
@@ -141,6 +140,11 @@ header {
 
     @include breakpoint($only-tablet) {
       border-bottom: none;
+      height: rem(68);
+      margin: 0;
+      padding-bottom: 0;
+      display: flex;
+      align-items: center;
     }
 
     @include breakpoint($desktop) {
@@ -169,7 +173,6 @@ header {
   a {
     @include breakpoint($only-tablet) {
       margin-#{$left}: rem(56);
-      margin-top: rem(-8);
     }
   }
 
@@ -226,7 +229,7 @@ header {
     margin: 0;
     position: initial;
 
-    html[lang="ar"] & {
+    html[lang=ar] & {
       margin-top: 0;
     }
   }
@@ -245,6 +248,10 @@ header {
 }
 
 #mini-cart-wrapper {
+  @include breakpoint($tablet) {
+    margin-top: 0;
+  }
+
   @include breakpoint($desktop) {
     min-width: auto;
     padding-#{$right}: rem(20);
@@ -259,7 +266,7 @@ header {
 #block-cartminiblock,
 .block-alshaya-react-mini-cart {
   @include breakpoint($only-tablet) {
-    position: absolute;
+    position: initial;
   }
 }
 

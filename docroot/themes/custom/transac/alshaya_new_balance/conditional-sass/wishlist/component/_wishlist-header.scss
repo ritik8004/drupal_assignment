@@ -11,6 +11,10 @@ body {
 
       .wishlist-header {
         padding-bottom: initial;
+
+        @include breakpoint($tablet) {
+          padding-#{$right}: initial;
+        }
       }
     }
 
@@ -28,6 +32,10 @@ body {
         .block-alshaya-wishlist {
           flex-grow: initial;
           margin-#{$right}: rem(11);
+
+          @include breakpoint($desktop) {
+            margin-#{$right}: rem(12);
+          }
 
           @include breakpoint($desktop) {
             margin-#{$right}: 0;

@@ -22,20 +22,42 @@
     height: rem(50);
   }
 
+  @include breakpoint($tablet) {
+    position: initial;
+    flex-grow: 1;
+
+    #alshaya-algolia-autocomplete {
+      padding: 0;
+      width: rem(216);
+
+      .react-autosuggest__container {
+        &::after {
+          height: rem(33);
+          #{$right}: rem(16);
+          font-size: rem(24);
+        }
+      }
+    }
+
+    .react-autosuggest__input {
+      height: rem(33);
+    }
+  }
+
   @include breakpoint($desktop) {
+    flex-grow: initial;
+
     // Core override.
     header .region__header > & {
       width: rem(183);
     }
 
     #alshaya-algolia-autocomplete {
-      padding: 0;
+      width: 100%;
 
       .react-autosuggest__container {
         &::after {
-          height: rem(33);
           #{$right}: rem(18);
-          font-size: rem(24);
         }
       }
 
@@ -68,7 +90,7 @@
     .block-alshaya-algolia-react-autocomplete {
       top: rem(68);
 
-      html[lang="ar"] & {
+      html[lang=ar] & {
         top: rem(68);
       }
 
