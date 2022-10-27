@@ -10,7 +10,7 @@ npm install
 
 cd ..
 
-java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar &
+java -Dwebdriver.chrome.driver=$CHROMEWEBDRIVER/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar &
 sleep 3
 
 ./behat-build.sh --rebuild=TRUE --site=hm-kw-uat-en
