@@ -136,6 +136,36 @@
     }
   }
 
+  .site-brand-wrapper {
+    height: rem(80);
+
+    a {
+      @include breakpoint($only-mobile) {
+        width: rem(40);
+        height: rem(20);
+        #{$left}: rem(180);
+        top: rem(5);
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: 0;
+        margin-top: 0;
+        width: rem(75);
+        height: rem(36);
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      height: 3.25rem;
+    }
+
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        height: rem(80);
+      }
+    }
+  }
+
   .checkout-login-wrapper {
     .checkout-login-separator {
       > span {

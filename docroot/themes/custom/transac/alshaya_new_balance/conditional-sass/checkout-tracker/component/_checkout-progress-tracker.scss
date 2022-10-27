@@ -17,6 +17,12 @@
           }
         }
       }
+
+      .step.current {
+        .step-label {
+          color: $cko-current-steps-label-txt;
+        }
+      }
     }
   }
 }
