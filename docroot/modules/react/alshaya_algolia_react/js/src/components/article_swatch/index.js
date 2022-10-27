@@ -59,6 +59,7 @@ const ArticleSwatches = ({
           (swatch) => (
             <button
               onClick={(e) => showSelectedSwatchProduct(e, swatch.article_sku_code)}
+              data-color={swatch.rgb_color}
               type="button"
               className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
               key={swatch.article_sku_code}

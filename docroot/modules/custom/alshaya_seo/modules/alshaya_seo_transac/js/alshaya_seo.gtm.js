@@ -1205,6 +1205,39 @@
 
     dataLayer.push(data);
   };
+
+  /**
+   * Helper function to push swatch click events to GTM.
+   *
+   * @param element
+   */
+   Drupal.alshaya_seo_gtm_push_swatch_click = function (element) {
+    // Don't trigger swatch click event for items in cross-sell on Mobile.
+    if (((element.closest('.owl-item').length !== 0) ||
+      (element.closest('.no-carousel').length == 0)) &&
+      ($(window).width() < 320)) {
+      return;
+    }
+
+    var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+    const sku = product.id;
+    let productSelector = document.querySelector(`[gtm-main-sku="${sku}"]`);
+    if (Drupal.hasValue(productSelector)) {
+      var swatchData = productSelector.querySelector('.article-swatch-wrapper .article-swatch.active');
+      if (Drupal.hasValue(swatchData) && Drupal.hasValue(swatchData.dataset.color)) {
+        var data = {
+          event: 'colorInteraction',
+          eventCategory: 'colorSwatch',
+          eventAction: 'clicked-' + swatchData.dataset.color,
+          eventLabel: product.name + '_' + sku,
+          eventValue: 0,
+          nonInteraction: 0,
+        };
+        dataLayer.push(data);
+      }
+    }
+  };
+
   /**
    * Helper function to push lead events.
    *
