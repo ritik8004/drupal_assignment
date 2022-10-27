@@ -4,6 +4,9 @@ header {
   }
 
   .region__header {
+    display: flex;
+    align-items: center;
+
     @include breakpoint($desktop) {
       display: flex;
       width: 100%;
@@ -17,12 +20,12 @@ header {
 
     .block-alshaya-main-menu {
       @include breakpoint($desktop) {
-        width: 74%;
+        width: auto;
         margin: 0;
+        flex-grow: 1;
         padding-#{$left}: rem(105);
 
         ul.menu--one__list {
-          padding-#{$left}: rem(24);
           width: auto;
         }
 
@@ -57,13 +60,17 @@ header {
 
     .block-alshaya-react-mini-cart {
       @include breakpoint($desktop) {
-        width: 5%;
+        width: auto;
+        margin-#{$left}: rem(40);
       }
     }
 
     .block-system-branding-block {
+      flex-grow: 1;
+
       @include breakpoint($desktop) {
-        width: 6%;
+        width: auto;
+        flex-grow: initial;
       }
 
       @include breakpoint($only-mobile) {
@@ -74,6 +81,7 @@ header {
         @include breakpoint($desktop) {
           min-width: rem(32);
           padding-top: rem(2);
+          display: inline-flex;
         }
 
         a {
@@ -87,34 +95,46 @@ header {
             }
           }
 
+          @include breakpoint($desktop) {
+            width: rem(70);
+            height: rem(34);
+          }
+
           img {
             @include breakpoint($upto-tablet) {
               width: rem(48);
             }
 
             html[lang=ar] & {
-              width: rem(53);
-              height: rem(29);
+              width: rem(48);
+              height: auto;
 
               @include breakpoint($tablet) {
                 margin-top: 0;
-                width: rem(48);
-                height: rem(38);
+                width: auto;
+                height: auto;
               }
             }
           }
         }
       }
     }
+
+    & > div {
+      display: inline-flex;
+    }
   }
 
   .c-header__region {
     @include breakpoint($only-mobile) {
-      height: rem(48);
-      margin-top: rem(9);
+      height: rem(68);
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      padding-#{$right}: rem(16);
 
       html[lang=ar] & {
-        height: rem(48);
+        height: rem(68);
       }
     }
 
@@ -123,8 +143,8 @@ header {
     }
 
     @include breakpoint($desktop) {
-      padding-bottom: rem(12);
-      padding-top: rem(24);
+      padding-bottom: rem(16);
+      padding-top: rem(16);
     }
 
     .block-system-branding-block {
@@ -175,9 +195,9 @@ header {
     }
 
     @include breakpoint($upto-tablet) {
-      width: rem(96);
+      width: auto;
+      display: inline-block;
       margin: 0 auto;
-      position: absolute;
       #{$left}: 0;
       #{$right}: 0;
       top: 0;
@@ -201,28 +221,11 @@ header {
   .cart-link {
     width: rem(24);
     height: rem(24);
+    margin: 0;
+    position: initial;
 
-    @include breakpoint($only-mobile) {
-      background-size: auto;
-      #{$left}: rem(-3);
-      top: rem(10);
-
-      html[lang=ar] & {
-        top: rem(11);
-        right: rem(-7);
-        margin-top: 0;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      top: rem(12);
-      #{$left}: rem(-16);
-    }
-
-    @include breakpoint($desktop) {
-      top: rem(-1);
-      #{$left}: rem(24);
-      background-size: contain;
+    html[lang="ar"] & {
+      margin-top: 0;
     }
   }
 
@@ -244,6 +247,11 @@ header {
     min-width: auto;
     padding-#{$right}: rem(20);
   }
+}
+
+.acq-mini-cart,
+#mini-cart-wrapper {
+  display: inline-flex;
 }
 
 #block-cartminiblock,

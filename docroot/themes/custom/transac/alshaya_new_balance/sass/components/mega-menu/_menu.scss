@@ -16,7 +16,7 @@
     ul {
       &.menu--one__list {
         width: 70%;
-        padding-#{$left}: rem(24);
+        padding-#{$left}: 0;
       }
     }
 
@@ -48,7 +48,7 @@
     &:not(.megamenu-inline-layout) {
       li.menu--one__list-item {
         ul.menu--two__list {
-          #{$left}: -13%;
+          #{$left}: -10%;
           min-width: rem(1264);
 
           .menu--two__list-item {

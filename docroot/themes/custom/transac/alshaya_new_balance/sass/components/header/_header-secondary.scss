@@ -10,6 +10,11 @@
     text-align: $right;
     height: rem(24);
     text-transform: none;
+
+    .region__menu-secondary {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 
   li {
