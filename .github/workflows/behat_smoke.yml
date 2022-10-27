@@ -18,6 +18,10 @@ jobs:
     container:
       image: devwithlando/php:8.0-fpm-4
 
+    services:
+      selenium:
+        image: selenium/standalone-chrome
+
     env:
       CI: GITHUB_ACTIONS
       BEHAT_SECRET_KEY: ${{ secrets.BEHAT_SECRET_KEY }}
@@ -70,16 +74,16 @@ jobs:
       - name: Setup ChromeDriver
         uses: nanasess/setup-chromedriver@v1
 
-      - name: Run ChromeDriver
-        run: |
-          export DISPLAY=:99
-          chromedriver --url-base=/wd/hub &
+#      - name: Run ChromeDriver
+#        run: |
+#          export DISPLAY=:99
+#          chromedriver --url-base=/wd/hub &
+#
+#      - name: Setup Chrome
+#        uses: browser-actions/setup-chrome@latest
 
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@latest
-
-      - name: Verify Chrome
-        run: chrome --version
+#      - name: Verify Chrome
+#        run: chrome --version
 
       - name: Setup environment
         run: bash ${SCRIPT_DIR}/setup_env.sh
