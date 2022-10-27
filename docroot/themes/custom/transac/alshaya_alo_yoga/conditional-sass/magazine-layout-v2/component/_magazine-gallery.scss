@@ -1,0 +1,21 @@
+.magv2-pdp-gallery {
+  .magazine__gallery--container-desktop {
+    .magv2-pdp-image {
+      &:last-child {
+        &:nth-child(odd) {
+          @include breakpoint($tablet) {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .popup-overlay {
+    .popup-content img {
+      @include breakpoint($desktop) {
+        height: rem(800);
+      }
+    }
+  }
+}

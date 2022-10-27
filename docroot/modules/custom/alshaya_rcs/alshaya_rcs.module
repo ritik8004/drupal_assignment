@@ -64,3 +64,28 @@ function alshaya_rcs_rcs_placeholders_graphql_query() {
 
   return $query_fields;
 }
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_rcs_modules_installed($modules) {
+  // Enable rcs super category module only if super category feature is enabled.
+  if (\Drupal::configFactory()->get('alshaya_super_category.settings')->get('status')) {
+    \Drupal::service('module_installer')->install(['alshaya_rcs_super_category']);
+  }
+}
+
+/**
+ * Implements hook_alshaya_super_category_status_update().
+ */
+function alshaya_rcs_alshaya_super_category_status_update($status, $default_parent, $path_alter) {
+  // Enable/Disable the rcs super category module based on
+  // the super category feature status.
+  $module_installer = \Drupal::service('module_installer');
+  if ($status) {
+    $module_installer->install(['alshaya_rcs_super_category']);
+  }
+  elseif (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_super_category')) {
+    $module_installer->uninstall(['alshaya_rcs_super_category']);
+  }
+}

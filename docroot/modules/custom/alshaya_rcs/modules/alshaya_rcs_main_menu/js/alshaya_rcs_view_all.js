@@ -22,6 +22,7 @@
               show_on_dpt: l3data.show_on_dpt,
               url_key: 'view_all',
               url_path: l3data.url_path + '/view-all',
+              image: l3data.image,
             });
           }
         });
