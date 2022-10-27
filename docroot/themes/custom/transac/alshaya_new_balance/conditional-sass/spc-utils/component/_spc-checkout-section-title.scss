@@ -5,6 +5,13 @@
       font-size: rem(16);
       margin-bottom: rem(23);
       font-family: $alshaya-bold;
+      text-transform: capitalize;
+
+      @include breakpoint($only-mobile) {
+        text-transform: uppercase;
+        text-align: #{$left};
+        padding-#{$left}: rem(16);
+      }
     }
   }
 
@@ -24,6 +31,10 @@
             .grand-total {
               font-size: rem(18);
               font-family: $alshaya-bold;
+
+              @include breakpoint($only-mobile) {
+                font-size: rem(14);
+              }
             }
 
             .value {
