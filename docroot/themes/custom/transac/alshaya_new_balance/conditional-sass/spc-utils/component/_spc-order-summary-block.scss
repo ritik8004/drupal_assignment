@@ -26,11 +26,6 @@
   .block-content {
     .actions {
       padding: rem(0) rem(28) rem(24);
-
-      @include breakpoint($only-mobile) {
-        position: relative;
-        top: rem(180);
-      }
     }
   }
 }
