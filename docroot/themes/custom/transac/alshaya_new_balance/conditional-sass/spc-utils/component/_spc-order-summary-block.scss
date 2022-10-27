@@ -9,15 +9,28 @@
 
   .totals {
     padding: rem(28) rem(28) rem(0);
+
+    @include breakpoint($only-mobile) {
+      padding: rem(21) rem(16) rem(0);
+    }
   }
 
   .total-line-item {
     margin-bottom: rem(17);
+
+    @include breakpoint($only-mobile) {
+      font-size: rem(14);
+    }
   }
 
   .block-content {
     .actions {
       padding: rem(0) rem(28) rem(24);
+
+      @include breakpoint($only-mobile) {
+        position: relative;
+        top: rem(180);
+      }
     }
   }
 }
