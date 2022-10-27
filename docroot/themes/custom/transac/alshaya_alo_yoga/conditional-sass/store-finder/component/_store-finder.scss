@@ -38,4 +38,25 @@
       font-family: $ay-nova-semibold;
     }
   }
+
+  .store-finder--wrapper {
+    .block-store-finder-form__input__wrapper {
+      overflow: hidden;
+    }
+
+    .input--wrapper [id^=edit-actions] {
+      border: 0;
+      background: transparent;
+    }
+  }
+
+  .c-content__region,
+  .view-stores-finder {
+    max-width: rem(1232);
+
+    @include breakpoint($tablet) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
 }
