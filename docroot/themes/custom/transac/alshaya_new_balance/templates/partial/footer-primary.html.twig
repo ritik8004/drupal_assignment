@@ -29,6 +29,10 @@
         </div>
       </div>
 
+      <div class="footer--nb-logo-block">
+        {{ page.footer_primary.nbfooterlogoblock }}
+      </div>
+
       <div class="footer--social">
         {{ page.footer_primary.sociallinks }}
       </div>
@@ -37,7 +41,7 @@
         {{ page.footer_primary.languageswitcher_2 }}
       </div>
 
-      {{ page.footer_primary|without('alshayanewslettersubscription', 'alshayarcsshopby', 'aboutbrand', 'alshaya_help', 'languageswitcher_2', 'sociallinks') }}
+      {{ page.footer_primary|without('alshayanewslettersubscription', 'alshayarcsshopby', 'aboutbrand', 'alshaya_help', 'languageswitcher_2', 'sociallinks', 'nbfooterlogoblock') }}
     </div>
 
     <div class="footer--menu above-mobile-block">
