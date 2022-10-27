@@ -1,6 +1,5 @@
 /bin/*
 !/bin/package.json
-!/bin/package-lock.json
 /vendor
 /build
 /feature
