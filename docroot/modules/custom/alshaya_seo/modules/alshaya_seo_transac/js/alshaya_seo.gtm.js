@@ -338,7 +338,7 @@
         if (!(socialWindow)
           && userDetails.userID !== undefined
           && userDetails.userID !== 0
-          && Drupal.getItemFromLocalStorage('userID') !== userDetails.userID
+          && userDetails.userID !== drupalSettings.user.uid
           && loginType !== undefined
           && orderConfirmationPage.length === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);

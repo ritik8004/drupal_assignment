@@ -703,7 +703,7 @@ class AlshayaFacetsPrettyPathsHelper {
    * @param string $attribute_code
    *   Product option attribute code.
    *
-   * @return string
+   * @return string|null
    *   Facet url alias.
    */
   public function getFacetAlias($attribute_code) {

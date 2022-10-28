@@ -45,7 +45,6 @@ function alshaya_rcs_install() {
     'alshaya_media_assets' => 'alshaya_rcs_assets',
     'alshaya_online_returns' => 'alshaya_rcs_online_returns',
     'alshaya_product_lpn' => 'alshaya_rcs_product_lpn',
-    'alshaya_super_category' => 'alshaya_rcs_super_category',
     'alshaya_olapic' => 'alshaya_rcs_olapic',
   ];
 

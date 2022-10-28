@@ -103,14 +103,25 @@ function alshaya_social_user_settings_submit(array &$form, FormStateInterface $f
  */
 function alshaya_social_preprocess_alshaya_social(&$variables) {
   $route_name = \Drupal::routeMatch()->getRouteName();
+  $destination = \Drupal::request()->query->get('destination');
   if ($route_name == 'acq_checkout.form') {
     $variables['destination'] = Url::fromRoute($route_name, ['step' => 'delivery'])->toString();
   }
   elseif ($route_name == 'alshaya_spc.checkout.login') {
     $variables['destination'] = Url::fromRoute('alshaya_spc.checkout', [])->toString();
   }
-  elseif (\Drupal::request()->query->get('destination')) {
-    $variables['destination'] = \Drupal::request()->query->get('destination');
+  elseif (!empty($destination)) {
+    try {
+      if (!empty(Url::fromUserInput($destination))) {
+        $variables['destination'] = $destination;
+      }
+    }
+    catch (InvalidArgumentException $e) {
+      \Drupal::logger('alshaya_social')->warning('Invalid value provided for destination query param: @destination. Error message is: @message', [
+        '@destination' => $destination,
+        '@message' => $e->getMessage(),
+      ]);
+    }
   }
 
   foreach ($variables['social_networks'] as $network => &$network_info) {

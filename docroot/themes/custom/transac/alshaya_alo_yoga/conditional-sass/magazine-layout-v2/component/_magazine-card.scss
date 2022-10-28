@@ -5,7 +5,7 @@
     margin-bottom: rem(11);
 
     &.close-card {
-      height: rem(50);
+      height: rem(42);
 
       .title {
         vertical-align: middle;
@@ -16,6 +16,7 @@
       font-size: rem(16);
       line-height: rem(20);
       padding: rem(4) rem(16) rem(16);
+      padding-top: 0;
 
       .card-icon-svg {
         margin-#{$left}: rem(-10);

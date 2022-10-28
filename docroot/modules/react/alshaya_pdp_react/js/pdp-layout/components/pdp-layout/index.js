@@ -67,7 +67,9 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
   const loadAfterProductDataFetch = (productInfoData) => {
     if (productInfoData) {
       const el = document.querySelector('.load-after-product-data-fetch');
-      el.classList.remove('hide-block');
+      if (hasValue(el)) {
+        el.classList.remove('hide-block');
+      }
     }
   };
 
