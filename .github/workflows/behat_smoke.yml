@@ -53,7 +53,7 @@ jobs:
           echo "{composer_cache_dirs}={$(composer config cache-files-dir)}" >> $GITHUB_ENV
           echo "${{ env.composer_cache_dirs }}"
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             "${{ env.composer_cache_dirs }}"
@@ -67,9 +67,10 @@ jobs:
           java-version: 17
 
       - name: Install Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "14.19.0"
+          cache: "npm"
 
       - name: Setup ChromeDriver
         uses: nanasess/setup-chromedriver@v1

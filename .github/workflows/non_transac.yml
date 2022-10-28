@@ -53,7 +53,7 @@ jobs:
           echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run Composer install
         run: |
@@ -72,7 +72,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             "${{ steps.composer-cache.outputs.dir }}"
@@ -85,9 +85,10 @@ jobs:
           bash $SCRIPT_DIR/setup_mysql.sh
 
       - name: Install Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "14.19.0"
+          cache: "npm"
 
       - name: Install CLI for working with YAML files
         run: npm install -g yaml-cli
