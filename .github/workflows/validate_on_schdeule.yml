@@ -81,7 +81,7 @@ jobs:
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
@@ -113,7 +113,7 @@ jobs:
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         id: npm-cache-dir
         run: |
-          echo "::set-output name=dir::$(npm config get cache)"
+          echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
