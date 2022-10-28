@@ -92,9 +92,16 @@ function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_vari
  * Implements hook_alshaya_rcs_category_query_fields_alter().
  */
 function alshaya_rcs_seo_alshaya_rcs_category_query_fields_alter(&$fields) {
-  $fields[] = 'gtm_name';
   $current_route = \Drupal::routeMatch()->getRouteName();
   if ($current_route === 'alshaya_seo.sitemap') {
     $fields[] = 'description';
   }
+}
+
+/**
+ * Implements hook_rcs_placeholders_graphql_query_alter().
+ */
+function alshaya_rcs_seo_rcs_placeholders_graphql_query_alter(&$query_fields) {
+  array_push($query_fields['categories']['query']['query($urlKey: [String])']['categories(filters: { url_path: { in: $urlKey }})']['items'], 'gtm_name');
+  array_push($query_fields['categories']['query']['query($urlKey: [String])']['categories(filters: { url_path: { in: $urlKey }})']['items']['breadcrumbs'], 'category_gtm_name');
 }
