@@ -45,7 +45,7 @@ jobs:
       # Make sure we have some code to diff.
       - name: Checkout ${{ matrix.branch }} repository to get diff
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ matrix.branch }}
           fetch-depth: 2
@@ -61,7 +61,7 @@ jobs:
 
       - name: Checkout ${{ matrix.branch }} repository again for preparing deployment
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ matrix.branch }}
 

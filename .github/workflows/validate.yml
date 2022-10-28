@@ -31,7 +31,7 @@ jobs:
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 100
 
@@ -104,7 +104,7 @@ jobs:
           echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run Composer install
         run: |
@@ -123,7 +123,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             "${{ steps.composer-cache.outputs.dir }}"
@@ -136,10 +136,16 @@ jobs:
           bash $SCRIPT_DIR/setup_mysql.sh
 
       - name: Install Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
         with:
           node-version: "14.19.0"
+          cache: "npm"
+          cache-dependency-path: |
+            docroot/package-lock.json
+            docroot/modules/custom/package-lock.json
+            docroot/modules/react/package-lock.json
+            docroot/themes/custom/package-lock.json
 
       - name: Install Gulp
         if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
@@ -152,7 +158,7 @@ jobs:
           echo "::set-output name=dir::$(npm config get cache)"
 
       # @todo check if this really works or we need one step per directory
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             "${{ steps.npm-cache-dir.outputs.dir }}"

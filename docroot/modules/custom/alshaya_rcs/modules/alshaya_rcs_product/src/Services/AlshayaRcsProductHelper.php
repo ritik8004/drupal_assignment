@@ -310,6 +310,7 @@ class AlshayaRcsProductHelper {
         'express_delivery',
         'same_day_delivery',
         'ship_to_store',
+        'is_returnable',
         'reserve_and_collect',
         'price_range' => [
           'maximum_price' => [
@@ -390,6 +391,7 @@ class AlshayaRcsProductHelper {
               'express_delivery',
               'same_day_delivery',
               'ship_to_store',
+              'is_returnable',
               'reserve_and_collect',
               'attribute_set_id',
               'swatch_data' => [

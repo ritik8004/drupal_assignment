@@ -30,6 +30,8 @@ import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dyna
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
 import PdpDescriptionType2 from '../pdp-description-type2';
+import { isOnlineReturnsEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
+import OnlineReturnsPDP from '../../../../../alshaya_online_returns/js/pdp/components/online-returns-pdp';
 
 const PdpLayout = ({ productInfo, configurableCombinations }) => {
   const [variant, setVariant] = useState(null);
@@ -322,6 +324,12 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
               getPanelData={getPanelData}
               removePanelData={removePanelData}
             />
+            )}
+          {(pdpDescriptionContainerType === 2 && isOnlineReturnsEnabled())
+            && (
+            <div className="online-returns-pdp">
+              <OnlineReturnsPDP />
+            </div>
             )}
           <ConditionalView
             condition={isExpressDeliveryEnabled()
