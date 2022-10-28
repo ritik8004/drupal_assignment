@@ -23,6 +23,10 @@ product_attributes:
   version: 1.x
   js:
     js/product_attributes.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - rcs_placeholders/helpers
 
 schema_org:
   js:

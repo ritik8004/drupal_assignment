@@ -11,7 +11,7 @@
     var rcsType = e.request.rcsType || '';
     if (rcsType === 'product') {
       e.promises.push(jQuery.ajax({
-        url: Drupal.url('rcs/product-attribute-options'),
+        url: Drupal.url('rcs/product-attribute-options?cacheable=1'),
         success: function success (data) {
           globalThis.RcsPhStaticStorage.set('product_options', {
             data: {

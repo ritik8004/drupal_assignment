@@ -45,6 +45,5 @@ services:
     arguments:
       - '@alshaya_rcs_product.helper'
       - '@logger.factory'
-      - '@cache.data'
       - '@language_manager'
       - '@entity_type.manager'
