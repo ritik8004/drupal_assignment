@@ -204,7 +204,7 @@ class AlshayaAcmCommands extends DrushCommands {
             '@value' => $value,
           ]));
 
-          $this->drupalLogger->info('Configuring acq_commerce.conductor.@key to @value.', [
+          $this->drupalLogger->notice('Configuring acq_commerce.conductor.@key to @value.', [
             '@key' => $key,
             '@value' => $value,
           ]);
@@ -236,7 +236,7 @@ class AlshayaAcmCommands extends DrushCommands {
           '@value' => $magentos[$mdc]['url'],
         ]));
 
-        $this->drupalLogger->info('Configuring alshaya_api.settings.magento_host to @value.', [
+        $this->drupalLogger->notice('Configuring alshaya_api.settings.magento_host to @value.', [
           '@value' => $magentos[$mdc]['url'],
         ]);
 
@@ -278,7 +278,7 @@ class AlshayaAcmCommands extends DrushCommands {
               '@value' => $value,
             ]));
 
-            $this->drupalLogger->info('Configuring @name.@key to @value.', [
+            $this->drupalLogger->notice('Configuring @name.@key to @value.', [
               '@name' => $name,
               '@key' => $key,
               '@value' => $value,
@@ -305,7 +305,7 @@ class AlshayaAcmCommands extends DrushCommands {
                 '@value' => $value,
               ]));
 
-              $this->drupalLogger->info('Configuring @name.@key to @value.', [
+              $this->drupalLogger->notice('Configuring @name.@key to @value.', [
                 '@name' => $name,
                 '@key' => $key . ' ' . $lang,
                 '@value' => $value,
