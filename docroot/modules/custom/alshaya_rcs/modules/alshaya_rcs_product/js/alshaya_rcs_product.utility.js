@@ -557,23 +557,6 @@ window.commerceBackend = window.commerceBackend || {};
     }
   }
 
-  function fetchAndProcessCustomAttributes() {
-    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
-    // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata.items
-    && response.data.customAttributeMetadata.items.forEach(function eachCustomAttribute(option) {
-      var allOptionsForAttribute = {};
-      // Proceed only if `attribute_options` exists.
-      if (Drupal.hasValue(option['attribute_options'])) {
-        option.attribute_options.forEach(function (optionValue) {
-          allOptionsForAttribute[optionValue.value] = optionValue.label;
-        })
-      }
-      // Set to static storage.
-      staticDataStore['attrLabels'][option.attribute_code] = allOptionsForAttribute;
-    });
-  }
-
   /**
    * Returns all the custom attributes with values.
    *
@@ -581,9 +564,6 @@ window.commerceBackend = window.commerceBackend || {};
    *  Custom attributes with values.
    */
   function getAllCustomAttributes() {
-    if (!Drupal.hasValue(staticDataStore['attrLabels'])) {
-      fetchAndProcessCustomAttributes();
-    }
     return staticDataStore['attrLabels'];
   }
 
@@ -987,8 +967,6 @@ window.commerceBackend = window.commerceBackend || {};
     if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])) {
       return staticDataStore['attrLabels'][attrName][attrValue];
     }
-
-    fetchAndProcessCustomAttributes();
 
     // Return the label.
     if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])

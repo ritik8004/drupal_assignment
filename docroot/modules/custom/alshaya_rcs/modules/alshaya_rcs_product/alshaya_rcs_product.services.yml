@@ -39,3 +39,13 @@ services:
       - '@path_alias.manager'
       - '@database'
       - '@logger.factory'
+
+  alshaya_rcs_product.product_attributes_helper:
+    class: \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductAttributesHelper
+    arguments:
+      - '@alshaya_rcs_product.helper'
+      - '@http_client'
+      - '@logger.factory'
+      - '@cache.data'
+      - '@language_manager'
+      - '@entity_type.manager'

@@ -17,6 +17,12 @@ rcs_product_info:
     - alshaya_rcs_product/main
     # This library's JS is dynamically replaced with V3 JS.
     - alshaya_acm_product/product_utility
+    - alshaya_rcs_product/product_attributes
+
+product_attributes:
+  version: 1.x
+  js:
+    js/product_attributes.js: {}
 
 schema_org:
   js:

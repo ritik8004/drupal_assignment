@@ -567,34 +567,14 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     'products(filter: {url_key: {eq: $url}})' => $product_query_fields,
   ];
 
-  $product_options_query_fields = $rcs_product_helper->getProductOptionsQueryFields();
-  $product_options_query_variables = [
-    'attributes' => $rcs_product_helper->getProductOptionsQueryVariables(),
-  ];
-  $product_options_query = [
-    'customAttributeMetadata(attributes: $attributes)' => $product_options_query_fields,
-  ];
-
-  // The query to fetch the product options data like color, size labels.
-  $query_fields['product_options'] = [
-    'query' => [
-      'query($attributes: [AttributeInput!]!)' => $product_options_query,
-    ],
-    'variables' => $product_options_query_variables,
-  ];
-
   // Make sure this happens in the end.
   if ($rcs_product_helper->isRcsPdp()) {
-    // Here we are doing a combined query for product data and product option
-    // data.
-    $product_and_custom_attributes_query = $product_query_by_url_key + $product_options_query;
-    $product_and_custom_attributes_variables = ['url' => $url_key] + $product_options_query_variables;
 
     $query_fields['pdp_product'] = [
       'query' => [
-        'query($url: String, $attributes: [AttributeInput!]!)' => $product_and_custom_attributes_query,
+        'query($url: String)' => $product_query_by_url_key,
       ],
-      'variables' => $product_and_custom_attributes_variables,
+      'variables' => ['url' => $url_key],
     ];
   }
 
