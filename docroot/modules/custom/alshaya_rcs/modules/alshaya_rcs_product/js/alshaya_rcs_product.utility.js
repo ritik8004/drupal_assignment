@@ -987,8 +987,8 @@ window.commerceBackend = window.commerceBackend || {};
     if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])) {
       return staticDataStore['attrLabels'][attrName][attrValue];
     }
-    fetchAndProcessCustomAttributes();
 
+    fetchAndProcessCustomAttributes();
 
     // Return the label.
     if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])
