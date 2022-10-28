@@ -44,7 +44,6 @@ services:
     class: \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductAttributesHelper
     arguments:
       - '@alshaya_rcs_product.helper'
-      - '@http_client'
       - '@logger.factory'
       - '@cache.data'
       - '@language_manager'
