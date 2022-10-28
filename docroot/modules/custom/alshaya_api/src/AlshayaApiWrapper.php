@@ -162,7 +162,6 @@ class AlshayaApiWrapper {
     $this->moduleHandler = $module_handler;
     $this->currentUser = $current_user;
     $this->configFactory = $config_factory;
-
   }
 
   /**
