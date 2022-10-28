@@ -181,4 +181,10 @@
       max-width: unset;
     }
   }
+
+  .site-brand-wrapper {
+    html[lang=ar] & {
+      height: rem(112);
+    }
+  }
 }
