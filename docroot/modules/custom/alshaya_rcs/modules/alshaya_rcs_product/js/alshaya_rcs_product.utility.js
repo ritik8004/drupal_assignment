@@ -561,7 +561,7 @@ window.commerceBackend = window.commerceBackend || {};
     var response = globalThis.RcsPhStaticStorage.get('product_options');
     // Process the data to extract what we require and format it into an object.
     response.data.customAttributeMetadata
-    && Object.entries(response.data.customAttributeMetadata).forEach(function eachCustomAttribute([attr_code, options]) {
+    && Object.entries(response.data.customAttributeMetadata).forEach(function eachCustomAttribute([attrCode, options]) {
       var allOptionsForAttribute = {};
       // Proceed only if `attribute_options` exists.
       if (Drupal.hasValue(options)) {
@@ -570,7 +570,7 @@ window.commerceBackend = window.commerceBackend || {};
         })
       }
       // Set to static storage.
-      staticDataStore['attrLabels'][attr_code] = allOptionsForAttribute;
+      staticDataStore['attrLabels'][attrCode] = allOptionsForAttribute;
     });
   }
 

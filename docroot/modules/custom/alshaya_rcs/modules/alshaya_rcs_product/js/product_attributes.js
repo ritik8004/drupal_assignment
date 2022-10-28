@@ -6,16 +6,20 @@
  */
 
 // Load cached product options from magento backend.
-(function main(RcsEventManager, globalThis, Drupal) {
+(function main(RcsEventManager, Drupal, jQuery) {
   RcsEventManager.addListener('invokingApi', function invokingApi (e) {
     var rcsType = e.request.rcsType || '';
     if (rcsType === 'product') {
       e.promises.push(jQuery.ajax({
         url: Drupal.url('rcs/product-attribute-options'),
         success: function success (data) {
-          globalThis.RcsPhStaticStorage.set('product_options', {data: {customAttributeMetadata: data}});
+          globalThis.RcsPhStaticStorage.set('product_options', {
+            data: {
+              customAttributeMetadata: data,
+            }
+          });
         }
       }));
     }
   });
-})(RcsEventManager, globalThis, Drupal);
+})(RcsEventManager, Drupal, jQuery);

@@ -115,7 +115,10 @@ class AlshayaRcsProductAttributesHelper {
           'weight' => $product_option->weight->value,
         ];
       }
-      $this->cache->set($cid, $items, Cache::PERMANENT, ['taxonomy_term:sku_product_option']);
+      $this->cache->set($cid, $items, Cache::PERMANENT, [
+        'taxonomy_term:sku_product_option',
+        'taxonomy_term_list:sku_product_option',
+      ]);
     }
 
     return $items;

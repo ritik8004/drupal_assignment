@@ -29,7 +29,10 @@ class RcsProductAttributesResource extends ResourceBase {
     $response = new ResourceResponse($response_data);
 
     $cacheableMetadata = $response->getCacheableMetadata();
-    $cacheableMetadata->addCacheTags(['taxonomy_term:sku_product_option']);
+    $cacheableMetadata->addCacheTags([
+      'taxonomy_term:sku_product_option',
+      'taxonomy_term_list:sku_product_option',
+    ]);
     $response->addCacheableDependency($cacheableMetadata);
     return $response;
   }
