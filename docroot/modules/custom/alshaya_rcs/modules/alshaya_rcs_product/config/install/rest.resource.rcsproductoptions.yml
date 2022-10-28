@@ -1,0 +1,18 @@
+uuid: 69b5b32e-8834-44b6-8bce-24b3c6b4dd1a
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_rcs_product
+    - serialization
+    - user
+id: rcsproductoptions
+plugin_id: rcsproductoptions
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie
