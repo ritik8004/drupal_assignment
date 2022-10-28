@@ -558,19 +558,19 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   function fetchAndProcessCustomAttributes() {
-    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
+    var response = globalThis.RcsPhStaticStorage.get('product_options');
     // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata.items
-    && response.data.customAttributeMetadata.items.forEach(function eachCustomAttribute(option) {
+    response.data.customAttributeMetadata
+    && Object.entries(response.data.customAttributeMetadata).forEach(function eachCustomAttribute([attrCode, options]) {
       var allOptionsForAttribute = {};
       // Proceed only if `attribute_options` exists.
-      if (Drupal.hasValue(option['attribute_options'])) {
-        option.attribute_options.forEach(function (optionValue) {
+      if (Drupal.hasValue(options)) {
+        options.forEach(function (optionValue) {
           allOptionsForAttribute[optionValue.value] = optionValue.label;
         })
       }
       // Set to static storage.
-      staticDataStore['attrLabels'][option.attribute_code] = allOptionsForAttribute;
+      staticDataStore['attrLabels'][attrCode] = allOptionsForAttribute;
     });
   }
 
