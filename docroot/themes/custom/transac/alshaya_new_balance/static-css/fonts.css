@@ -1,0 +1,180 @@
+@font-face {
+  font-family: "ITCGaramondStd-BkCond";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ITCGaramondStd-BkCond.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ITCGaramondStd-BkCond.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ProximaNova-Regular";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNova-Regular.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNova-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ProximaNova-Regular-2";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNova-Regular-2.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNova-Regular-2.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ProximaNova-Bold";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNova-Bold.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNova-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ProximaNovaAlt-Regular";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNovaAlt-Regular.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNovaAlt-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ProximaNovaAW01-Regular";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNovaAW01-Regular.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/ProximaNovaAW01-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Didot-Regular";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/Didot-Regular.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/Didot-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Didot-Medium";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/Didot-Medium.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/Didot-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DidotBold-Italic";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/DidotBold-Italic.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/DidotBold-Italic.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DidotLTStd-Bold";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/DidotLTStd-Bold.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/DidotLTStd-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DidotLTStd-Italic";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/DidotLTStd-Italic.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/DidotLTStd-Italic.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AlBayan-Bold";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/AlBayan-Bold.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/AlBayan-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AlBayan";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/AlBayan.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/AlBayan.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MarkaziText-Bold";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-Bold.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MarkaziText-Medium";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-Medium.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MarkaziText-Regular";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-Regular.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MarkaziText-SemiBold";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-SemiBold.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-SemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MarkaziText-VariableFont_wght";
+  src:
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-VariableFont_wght.woff2") format("woff2"),
+    url("https://newbalance.com.kw/themes/custom/transac/alshaya_new_balance/fonts/MarkaziText-VariableFont_wght.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
