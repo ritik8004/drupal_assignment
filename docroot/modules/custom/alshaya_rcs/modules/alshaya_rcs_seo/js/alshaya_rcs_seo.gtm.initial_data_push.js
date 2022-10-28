@@ -74,7 +74,10 @@
     };
 
     // Get categories from breadcrumb.
-    var breadcrumbs = renderRcsBreadcrumb.normalize(entity);
+    var breadcrumbs = renderRcsBreadcrumb.normalize(entity, {
+      nameKey: 'gtm_name',
+      breadcrumbTermNameKey: 'category_gtm_name'
+    });
     var breadcrumbTitles = [];
     if (Array.isArray(breadcrumbs) && breadcrumbs.length) {
       // Remove the product from breadcrumb.
