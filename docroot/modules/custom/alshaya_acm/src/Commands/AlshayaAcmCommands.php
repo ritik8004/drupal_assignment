@@ -199,11 +199,6 @@ class AlshayaAcmCommands extends DrushCommands {
         foreach ($conductors[$acm] as $key => $value) {
           $config->set($key, $value);
 
-          $this->output->writeln(dt('Configuring acq_commerce.conductor.@key to @value.', [
-            '@key' => $key,
-            '@value' => $value,
-          ]));
-
           $this->drupalLogger->notice('Configuring acq_commerce.conductor.@key to @value.', [
             '@key' => $key,
             '@value' => $value,
@@ -231,10 +226,6 @@ class AlshayaAcmCommands extends DrushCommands {
           $config->set($key, $value);
         }
         $config->save();
-
-        $this->output->writeln(dt('Configuring alshaya_api.settings.magento_host to @value.', [
-          '@value' => $magentos[$mdc]['url'],
-        ]));
 
         $this->drupalLogger->notice('Configuring alshaya_api.settings.magento_host to @value.', [
           '@value' => $magentos[$mdc]['url'],
@@ -272,12 +263,6 @@ class AlshayaAcmCommands extends DrushCommands {
 
             $config->set($key, $value)->save();
 
-            $this->output->writeln(dt('Configuring @name.@key to @value.', [
-              '@name' => $name,
-              '@key' => $key,
-              '@value' => $value,
-            ]));
-
             $this->drupalLogger->notice('Configuring @name.@key to @value.', [
               '@name' => $name,
               '@key' => $key,
@@ -298,12 +283,6 @@ class AlshayaAcmCommands extends DrushCommands {
               $value = $magentos[$mdc][$country_code][$key][$lang] ?? $magentos['default'][$country_code][$key][$lang];
 
               $config->set($key, $value)->save();
-
-              $this->output->writeln(dt('Configuring @name.@key to @value.', [
-                '@name' => $name,
-                '@key' => $key . ' ' . $lang,
-                '@value' => $value,
-              ]));
 
               $this->drupalLogger->notice('Configuring @name.@key to @value.', [
                 '@name' => $name,
