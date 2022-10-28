@@ -6,4 +6,4 @@ consumer_secret: null
 access_token: null
 access_token_secret: null
 magento_host: null
-verify_ssl: null
+verify_ssl: 1
