@@ -313,10 +313,11 @@ header {
     padding: 0;
 
     @include breakpoint($only-mobile) {
-      #{$left}: rem(10);
+      #{$left}: rem(16);
+      margin-top: 0;
 
       html[lang=ar] & {
-        right: rem(12);
+        right: rem(16);
       }
     }
 
@@ -351,21 +352,34 @@ header {
       z-index: 0;
 
       @include breakpoint($upto-desktop) {
-        width: rem(16);
+        width: auto;
         margin-#{$right}: 0;
         #{$left}: unset;
-        top: rem(24);
-        #{$right}: rem(56);
+        top: rem(22);
+        #{$right}: rem(93);
       }
 
       @include icon_img('#{$nb_theme_img_directory_path}/icons/search.svg', rem(32), rem(32));
 
       &::before {
-        @include breakpoint($upto-desktop) {
-          height: rem(20);
-          width: rem(20);
+        background-size: rem(24);
+        margin-bottom: 0;
+
+        @include breakpoint($upto-tablet) {
+          height: rem(24);
+          width: rem(24);
           margin-#{$right}: 0;
+          top: 0;
+          #{$left}: 0;
         }
+      }
+
+      @include breakpoint($tablet) {
+        display: none;
+      }
+
+      body.frontpage & {
+        display: none;
       }
     }
 
