@@ -68,6 +68,11 @@ runs:
       with:
         node-version: "14.19.0"
         cache: "npm"
+        cache-dependency-path: |
+          docroot/package-lock.json
+          docroot/modules/custom/package-lock.json
+          docroot/modules/react/package-lock.json
+          docroot/themes/custom/package-lock.json
 
     - name: Install Gulp
       shell: bash
