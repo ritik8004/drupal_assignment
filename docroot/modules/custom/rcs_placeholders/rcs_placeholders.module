@@ -261,12 +261,12 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
     // that way because using query options of url methods is encoding the #
     // and so the placeholders are not replaced on the frontend.
     if ($node) {
-      $title = $token->replace('[rcs_product:name]');
+      $title = $token->replace('[rcs_product:name|url_encode]');
       $slug = $token->replace('[rcs_product:url]');
       $url = Url::fromUserInput("/node/add/rcs_product?title=$title&slug=$slug");
     }
     else {
-      $title = $token->replace('[rcs_category:name]');
+      $title = $token->replace('[rcs_category:name|url_encode]');
       $slug = $token->replace('[rcs_category:url]');
       $url = Url::fromUserInput("/admin/structure/taxonomy/manage/rcs_category/add?name=$title&slug=$slug");
     }
