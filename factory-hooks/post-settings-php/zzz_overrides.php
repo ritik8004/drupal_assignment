@@ -61,18 +61,11 @@ $overridding_settings_files = [
   $settings_path . '-' . $acsf_site_code,
   $settings_path . '-' . $acsf_site_code . $country_code,
 ];
-$extensions = ['php'];
 
-foreach ($extensions as $extension) {
-  foreach ($overridding_settings_files as $file) {
-    $file = $file . ".$extension";
-    switch ($extension) {
-      case 'php':
-        if (file_exists($file)) {
-          include_once $file;
-        }
-        break;
-    }
+foreach ($overridding_settings_files as $file) {
+  $file = $file . '.php';
+  if (file_exists($file)) {
+    include_once $file;
   }
 }
 
