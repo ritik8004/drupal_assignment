@@ -2501,7 +2501,7 @@ JS;
   }
 
   /**
-   *  @Then the checkout payment checkbox should be checked
+   * @Then the checkout payment checkbox should be checked
    */
   public function checkoutPaymentMethodSelected () {
     $page = $this->getSession()->getPage();
@@ -2515,9 +2515,9 @@ JS;
   }
 
   /**
-   *  @Then the Knet payment checkbox should be checked
+   * @Then the Knet payment checkbox should be checked
    */
-  public function checkoutKNETPaymentMethodSelected () {
+  public function checkoutKNETPaymentMethodSelected() {
     $page = $this->getSession()->getPage();
     $checkoutField = $page->find('css', '#payment-method-checkout_com_upapi_knet');
     if (!empty($checkoutField)) {
@@ -2695,8 +2695,8 @@ JS;
       $element3->click();
     }
     else {
-        throw new \Exception(sprintf('Add to cart button not found.'));
-      }
+      throw new \Exception(sprintf('Add to cart button not found.'));
+    }
   }
 
   /**
@@ -3017,11 +3017,9 @@ JS;
    */
   public function iSelectFromSelect2field($value, $selector)
   {
-    $session = $this->getSession();
-    $selector = addslashes($selector);
-    $value = addslashes($value);
-    $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
-}
+    $this->iFillInWithUsingJQuery($selector, $value);
+  }
+
   /**
    * @Given /^I verify the wishlist popup block if enabled and remove the cart item$/
    */
@@ -3073,5 +3071,15 @@ JS;
       }
     }
     return false;
+  }
+
+  /**
+   * @Given /^I fill in "([^"]*)" with "([^"]*)" using jQuery$/
+   */
+  public function iFillInWithUsingJQuery($selector, $value){
+    $session = $this->getSession();
+    $selector = addslashes($selector);
+    $value = addslashes($value);
+    $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
   }
 }
