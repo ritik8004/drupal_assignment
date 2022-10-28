@@ -23,8 +23,8 @@ widget:
   type: range_checkbox
   config:
     show_numbers: true
-    soft_limit: '10'
-    granularity: '500'
+    soft_limit: 10
+    granularity: 500
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
