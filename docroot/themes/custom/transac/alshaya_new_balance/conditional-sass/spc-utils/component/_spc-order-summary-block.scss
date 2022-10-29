@@ -1,5 +1,9 @@
 .spc-order-summary-block {
   .hero-total {
+    padding: 0;
+    margin-top: rem(16);
+    padding-top: rem(16);
+    
     & > .total-line-item {
       .grand-total {
         font-family: $alshaya-thin;
@@ -8,18 +12,19 @@
   }
 
   .totals {
-    padding: rem(28) rem(28) rem(0);
+    padding: rem(24);
 
     @include breakpoint($only-mobile) {
-      padding: rem(21) rem(16) rem(0);
+      padding: rem(16);
     }
   }
 
   .total-line-item {
-    margin-bottom: rem(17);
+    margin-bottom: rem(6);
 
     @include breakpoint($only-mobile) {
-      font-size: rem(14);
+      font-size: rem(16);
+      text-transform: capitalize;
     }
   }
 

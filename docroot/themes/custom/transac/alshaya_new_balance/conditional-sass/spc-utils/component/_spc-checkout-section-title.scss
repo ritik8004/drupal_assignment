@@ -31,10 +31,6 @@
             .grand-total {
               font-size: rem(18);
               font-family: $alshaya-bold;
-
-              @include breakpoint($only-mobile) {
-                font-size: rem(14);
-              }
             }
 
             .value {
