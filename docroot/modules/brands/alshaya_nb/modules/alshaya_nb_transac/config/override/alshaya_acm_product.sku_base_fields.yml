@@ -72,5 +72,5 @@ fields:
     label: 'Feature Bullets'
     type: 'text_long'
   green_leaf_notice:
-    label: 'Sustainability'
+    label: 'Green leaf notice'
     type: 'text_long'
