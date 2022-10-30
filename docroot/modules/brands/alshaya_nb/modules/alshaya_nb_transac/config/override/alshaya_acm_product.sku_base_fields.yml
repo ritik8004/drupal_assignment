@@ -62,6 +62,12 @@ fields:
   technologies:
     label: 'Technologies'
     type: 'string'
+  weight:
+    label: 'Weight'
+    type: 'string'
+  weight_text:
+    label: 'Weight Text'
+    type: 'string'
   feature_bullets:
     label: 'Feature Bullets'
     type: 'text_long'

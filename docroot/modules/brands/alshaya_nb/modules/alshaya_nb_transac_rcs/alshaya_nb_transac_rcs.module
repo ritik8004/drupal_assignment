@@ -53,9 +53,12 @@ function alshaya_nb_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$f
     'feature_bullets',
     'green_leaf_notice',
     'green_leaf',
-    'width_description',
   );
   array_push($fields['items']['... on ConfigurableProduct']['variants']['product'],
     'width_description',
+    'swatch_image',
+    'swatch_image_url',
+    'weight',
+    'weight_text',
   );
 }
