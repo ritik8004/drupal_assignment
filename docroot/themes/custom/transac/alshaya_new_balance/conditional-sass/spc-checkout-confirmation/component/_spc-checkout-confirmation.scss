@@ -5,10 +5,12 @@
     margin-bottom: rem(26);
 
     .spc-checkout-confirmation-print-button {
+      text-transform: capitalize;
+      border-radius: inherit;
+
       @include breakpoint($only-mobile) {
         width: 90%;
         height: rem(42);
-        border-radius: inherit;
       }
     }
   }
@@ -41,8 +43,9 @@
 
       .spc-order-summary-block {
         .product-content {
-          padding-top: rem(0);
-          padding-#{$left}: rem(0);
+          padding-top: rem(10);
+          padding-#{$left}: rem(8);
+          padding-#{$right}: rem((8));
 
           .product-item {
             .spc-product-title-price {

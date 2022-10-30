@@ -16,6 +16,12 @@
             transform: translate3d(0, rem(2), 0) scale(1);
           }
         }
+
+        &.current {
+          .step-label {
+            color: $cko-current-steps-label-txt;
+          }
+        }
       }
     }
   }
