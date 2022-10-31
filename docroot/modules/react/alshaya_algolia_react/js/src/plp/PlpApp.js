@@ -25,7 +25,6 @@ import ConditionalView from '../../common/components/conditional-view';
 import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../js/utilities/components/become-hello-member';
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -52,7 +51,6 @@ const PlpApp = ({
   ruleContext,
   categoryField,
   promotionNodeId,
-  useCurrentLanguage,
 }) => {
   const plpCategoryRef = useRef();
   const allFiltersRef = useRef();
@@ -88,7 +86,7 @@ const PlpApp = ({
   if (pageSubType === 'plp') {
     let { currentLanguage } = drupalSettings.path;
     // Set default EN category filter in product list index for VM.
-    if (!hasValue(useCurrentLanguage) && productListIndexStatus()) {
+    if (productListIndexStatus()) {
       currentLanguage = 'en';
     }
     if (typeof subCategories !== 'undefined' && Object.keys(subCategories).length > 0) {

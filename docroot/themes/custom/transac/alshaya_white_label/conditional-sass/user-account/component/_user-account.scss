@@ -2,7 +2,7 @@
   .block-my-account-icon-block {
     margin-#{$right}: rem(12);
 
-    @include breakpoint($tablet) {
+    @include breakpoint($desktop) {
       display: none;
     }
   }

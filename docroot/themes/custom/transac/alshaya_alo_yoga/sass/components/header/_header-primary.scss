@@ -185,9 +185,15 @@ header {
 
   .quantity {
     font-size: rem(10);
-    position: relative;
-    bottom: rem(-6);
-    #{$left}: rem(-1);
+    #{$left}: 0;
+    color: $cart_filled_color;
+    padding-top: rem(4);
+    border-radius: 0;
+    background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1) center no-repeat;
+    width: rem(24);
+    height: rem(24);
+    background-size: rem(14) rem(18);
+    top: 0;
 
     @include breakpoint($only-mobile) {
       #{$left}: rem(-24);
@@ -204,7 +210,6 @@ header {
 
 .static-minicart-wrapper {
   .quantity {
-    #{$left}: rem(2);
     bottom: rem(-5);
   }
 

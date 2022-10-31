@@ -105,6 +105,10 @@
 .c-user-register {
   h1 {
     @include pageTitle;
+
+    @include breakpoint($tablet) {
+      top: rem(-80);
+    }
   }
 }
 
@@ -112,7 +116,7 @@
   h1 {
     @include breakpoint($tablet) {
       margin-top: rem(16);
-      top: rem(-64);
+      top: rem(-72);
     }
 
     @include breakpoint($only-mobile) {
