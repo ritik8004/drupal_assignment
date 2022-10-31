@@ -145,6 +145,9 @@ function getPdpSwatchImageUrl(product, childSku) {
   product.variants.forEach(function (variant) {
     if (variant.product.sku == childSku) {
       swatchImageUrl = variant.product.media.swatch;
+      if (!Drupal.hasValue(swatchImageUrl) && Drupal.hasValue(variant.product.swatch_image)) {
+        swatchImageUrl = variant.product.swatch_image_url || null;
+      }
       // Break from the loop.
       return false;
     }
