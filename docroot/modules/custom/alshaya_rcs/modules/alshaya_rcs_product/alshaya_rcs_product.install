@@ -78,4 +78,8 @@ function alshaya_rcs_product_update_9401() {
     'alshaya_rcs_product',
     'install',
   );
+
+  // Re-save config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
 }
