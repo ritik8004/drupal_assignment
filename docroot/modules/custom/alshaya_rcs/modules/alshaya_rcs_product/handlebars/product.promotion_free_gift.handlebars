@@ -1,7 +1,7 @@
 <div class="free-gift-promo-wrapper free-gift-promo-list">
   {{#if freeGiftImage }}
     <div class="free-gift-image">
-      <img src="{{ freeGiftImage.url }}" title="{{ freeGiftTitle }}" alt="{{ freeGiftTitle }}" typeof="foaf:Image"
+      <img src="{{ freeGiftImage }}" title="{{ freeGiftTitle }}" alt="{{ freeGiftTitle }}" typeof="foaf:Image"
         loading="lazy">
     </div>
   {{/if}}
@@ -12,9 +12,10 @@
     </div>
     <div class="free-gift-message">
         <a href={{ freeGiftPromoUrl }}
-          class="use-ajax"
+          class="free-gift-modal"
           data-dialog-type="modal"
-          data-dialog-options='{"width":"auto"}'>
+          data-dialog-options='{"width":"auto"}'
+          data-sku={{ freeGiftSku }}>
           {{ freeGiftTitle }}
         </a>{{t 'with this product' }}
     </div>
@@ -22,9 +23,7 @@
     {{#if freeGiftCoupon }}
       <div class="free-gift-coupon-code">
         {{t "Use Code " }}
-        {{#each freeGiftCoupon }}
-          <span class="coupon-code">{{ this.value }}</span>
-        {{/each}}
+          <span class="coupon-code">{{ freeGiftCoupon }}</span>
         {{t 'with this product' }}
       </div>
     {{/if}}

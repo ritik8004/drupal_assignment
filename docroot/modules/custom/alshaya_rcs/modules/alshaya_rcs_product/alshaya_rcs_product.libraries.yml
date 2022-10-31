@@ -79,6 +79,14 @@ product.promotion_free_gift_list:
   dependencies:
     - alshaya_white_label/free_gifts
 
+product.promotion_free_gift_modal:
+  version: 1.x
+  js:
+    handlebars/product.promotion_free_gift_modal.handlebars: {}
+  dependencies:
+    - alshaya_white_label/attribute
+    - alshaya_white_label/free_gifts
+
 product.sku_base_form:
   version: 1.x
   js:

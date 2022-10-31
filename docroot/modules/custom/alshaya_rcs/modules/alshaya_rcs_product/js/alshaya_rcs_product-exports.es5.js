@@ -802,28 +802,43 @@ exports.computePhFilters = function (input, filter) {
         data.freeGiftType = freeGiftPromotions[0].rule_type;
         data.freeGiftCoupon = freeGiftPromotions[0].coupon_code;
         data.freeGiftPromoUrl = Drupal.url(freeGiftPromotions[0].rule_web_url);
+        data.freeGiftTitle = '';
+        data.freeGiftImage = '';
 
         const giftItems = freeGiftPromotions[0].gifts;
         // Get the image of first free gift item.
         if (freeGiftPromotions[0].total_items > 0) {
           // Get the free gift sku info.
-          // const giftItemProductInfo = window.commerceBackend.getProductData(giftItems[0].sku, null, false);
-          const skuImage = window.commerceBackend.getFirstImage(input);
-          data.freeGiftImage = Drupal.hasValue(skuImage)
-            ? skuImage.url
-            : drupalSettings.alshayaRcs.default_meta_image;
+          const giftItemProductInfo = window.commerceBackend.getProductData(giftItems[0].sku, null, false);
+          if (giftItemProductInfo) {
+            // Get the first image.
+            const skuImage = window.commerceBackend.getFirstImage(giftItemProductInfo);
+            data.freeGiftImage = Drupal.hasValue(skuImage)
+              ? skuImage.url
+              : drupalSettings.alshayaRcs.default_meta_image;
+          }
+          // Set the first free gift title.
+          data.freeGiftTitle = giftItems[0].name;
         }
 
         // Do processing of free gift items.
+        // @see Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager::getFreeGiftDisplay().
         if (freeGiftPromotions[0].total_items > 1
           && freeGiftPromotions[0].rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+          // Load all the free gift items.
+          var freeGiftSkus = [];
+          giftItems.forEach((item) => {
+            freeGiftSkus.push(item.sku);
+          });
+          // @todo Add more logic here for the promotion with multiple gift
+          // items.
+          data.freeGiftSku = freeGiftSkus;
+          data.freeGiftPromotionTitle = freeGiftPromotions[0].rule_name;
 
           // Render handlebars plugin.
           value = handlebarsRenderer.render(`product.${filter}_list`, data);
         } else if (freeGiftPromotions[0].total_items > 0) {
           const freeGift = giftItems[0];
-
-          data.freeGiftTitle = freeGift.name;
           data.freeGiftSku = freeGift.sku;
 
           // Render handlebars plugin.

@@ -70,10 +70,13 @@ window.commerceBackend = window.commerceBackend || {};
    *   The raw product object.
    * @param {string} context
    *   Context in which the product data was fetched.
+   * @param {string} productSku
+   *   The product SKU.
    */
-  window.commerceBackend.setRcsProductToStorage = function setRcsProductToStorage(product, context) {
+  window.commerceBackend.setRcsProductToStorage = function setRcsProductToStorage(product, context, productSku = null) {
+    var sku = Drupal.hasValue(productSku) ? productSku : product.sku;
     product.context = Drupal.hasValue(context) ? context : null;
-    globalThis.RcsPhStaticStorage.set('product_data_' + product.sku, product);
+    globalThis.RcsPhStaticStorage.set('product_data_' + sku, product);
   }
 
   /**
@@ -834,7 +837,7 @@ window.commerceBackend = window.commerceBackend || {};
       if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
         await window.commerceBackend.getProductsInStyle(response, loadStyles);
       }
-      window.commerceBackend.setRcsProductToStorage(response);
+      window.commerceBackend.setRcsProductToStorage(response, null, mainSKU);
       window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
     });
 

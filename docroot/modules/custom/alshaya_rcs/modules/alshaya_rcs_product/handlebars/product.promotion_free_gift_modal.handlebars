@@ -1,0 +1,63 @@
+<article
+  class="entity--type-node"
+  data-sku="{{ item_code }}"
+  data-insights-object-id="entity:node/{{ entity.id }}:{{ language }}"
+  data-vmode="modal">
+  {{#if sku.back_to_collection }}
+    {{ sku.back_to_collection }}
+  {{/if}}
+
+    <div class="acq-content-product-modal">
+      <div class="content__title_wrapper">
+        {{#if entity.brand_logo_data.url }}
+          <div><img loading="lazy" className="sub-brand-logo"
+              title="{{ entity.brand_logo_data.title }}"
+              alt="{{ entity.brand_logo_data.alt }}"
+              src="{{ entity.brand_logo_data.url }}" />
+          </div>
+        {{/if}}
+
+      {{#unless is_page }}
+        <h2 class="c-products__free__item__label">{{t 'FREE GIFT' }}</h2>
+          {{#if sku.subtitle }}
+            <h2 class="c-products__free__item__subtitle">
+              <span class="title--sub">
+                {{ sku.subtitle }}
+              </span>
+            </h2>
+          {{/if }}
+          <h2 class="field--name-name">
+            {{ entity.name }}
+          </h2>
+      {{/unless}}
+
+      <div class="content--item-code">
+        <span class="field__label">{{t 'Item Code' }}:</span>
+        {{ item_code }}
+      </div>
+    </div>
+
+    <div class="content__main {{ image_slider_position_pdp }}">
+      <div class="gallery-wrapper"></div>
+    </div>
+
+    <div class="content__sidebar">
+        {{!-- <div class="field--name-field-skus field__items">
+          <div class="add_to_cart_form" data-rcs-sku="{{ entity.sku }}"></div>
+        </div> --}}
+      <div class="short-description-wrapper">
+        <div class="content--short-description">
+          {{#if entity.description }}
+            <h2 class="field__label">{{t 'Product Description' }}</h2>
+              <div class="field__content-wrapper">
+                <div class="field__content">
+                  <div class="desc-wrapper">
+                    {{ entity.description.html }}
+                  </div>
+                </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

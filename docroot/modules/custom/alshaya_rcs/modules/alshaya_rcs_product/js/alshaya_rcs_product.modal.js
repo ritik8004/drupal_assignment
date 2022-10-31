@@ -104,6 +104,45 @@
 
         return false;
       });
+
+      // Modal view for the free gift.
+      $('.free-gift-message a').once().on('click', async function(e) {
+        e.preventDefault();
+
+        // Try to get sku from the element clicked.
+        var skus = $(this).data('sku').split(',');
+        if (skus.length === 1) {
+          // Load the product data based on sku.
+          var freeGiftProduct = globalThis.RcsPhStaticStorage.get('product_data_' + skus[0]);
+          if (freeGiftProduct) {
+            var data = {
+              entity: freeGiftProduct,
+              language: drupalSettings.path.currentLanguage,
+              is_page: false,
+              item_code: skus[0],
+              image_slider_position_pdp: drupalSettings.alshaya_white_label.image_slider_position_pdp,
+            };
+            var elem = document.createElement('div');
+            elem.innerHTML = handlebarsRenderer.render('product.promotion_free_gift_modal', data);
+
+            // Open modal.
+            Drupal.dialog(elem, {
+              dialogClass: 'pdp-modal-box',
+              autoResize: false,
+              closeOnEscape: true,
+              width: 'auto',
+            }).showModal();
+
+            $('.pdp-modal-box').find('.ui-widget-content').attr('id', 'drupal-modal');
+
+            // Call behaviours with modal context.
+            var modalContext = $('.pdp-modal-box');
+            globalThis.rcsPhApplyDrupalJs(modalContext);
+          }
+        } else if (skus.length > 1) {
+          // @todo Handle the scenario of multiple free gift.
+        }
+      });
     }
   };
 })(jQuery, Drupal, drupalSettings);
