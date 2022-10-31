@@ -1,7 +1,7 @@
 /**
  * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
- (function main() {
+(function main(RcsEventManager) {
   // Event listener to update the data layer object with the proper product
   // data.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
@@ -33,4 +33,4 @@
     short_description.html += (data.green_leaf_notice) ? '' + data.green_leaf_notice : '';
     e.detail.result.short_description = short_description;
   });
-})();
+})(RcsEventManager);
