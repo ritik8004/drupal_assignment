@@ -115,8 +115,6 @@
               'Search Results Page',
               $(this).attr('data-insights-position')
             );
-            // Push swatch click event.
-            Drupal.alshaya_seo_gtm_push_swatch_click($(this));
           }
         });
 
