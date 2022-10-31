@@ -1205,6 +1205,26 @@
 
     dataLayer.push(data);
   };
+
+  /**
+   * Helper function to push swatch click events to GTM.
+   *
+   * @param element
+   */
+   Drupal.alshayaSeoGtmPushSwatchClick = function (productData) {
+    if (Drupal.hasValue(productData)) {
+      var data = {
+        event: 'colorInteraction',
+        eventCategory: 'colorSwatch',
+        eventAction: 'clicked-' + productData.color,
+        eventLabel: productData.name + '_' + productData.sku,
+        eventValue: 0,
+        nonInteraction: 0,
+      };
+      dataLayer.push(data);
+    }
+  };
+
   /**
    * Helper function to push lead events.
    *
