@@ -29,6 +29,7 @@
 
         .step-label {
           white-space: initial;
+          text-align: center;
         }
 
         span {
@@ -45,6 +46,12 @@
           span {
             position: absolute;
             transform: translate(-50%, -50%);
+
+            html[lang=ar] & {
+              transform: translate(-50%, -50%);
+              top: rem(2);
+              left: 0;
+            }
           }
         }
       }

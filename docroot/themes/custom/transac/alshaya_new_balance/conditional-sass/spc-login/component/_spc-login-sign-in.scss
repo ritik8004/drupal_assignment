@@ -145,6 +145,7 @@
         height: rem(20);
         #{$left}: rem(180);
         top: rem(5);
+        display: inline-flex;
       }
 
       @include breakpoint($only-tablet) {
@@ -157,6 +158,11 @@
 
     @include breakpoint($only-mobile) {
       height: rem(52);
+
+      .site-brand-home {
+        width: auto;
+        display: inline-flex;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -179,12 +185,6 @@
   .c-post-content {
     .l-container {
       max-width: unset;
-    }
-  }
-
-  .site-brand-wrapper {
-    html[lang=ar] & {
-      height: rem(112);
     }
   }
 }
