@@ -54,9 +54,9 @@ jobs:
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         # Set outputs using the command.
         run: |
-          echo "::set-output name=all::$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | xargs)"
-          echo "::set-output name=themes::$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/themes/custom | xargs)"
-          echo "::set-output name=react::$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/modules/react | xargs)"
+          echo "all=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | xargs)" >> $GITHUB_OUTPUT
+          echo "themes=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/themes/custom | xargs)" >> $GITHUB_OUTPUT
+          echo "react=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/modules/react | xargs)" >> $GITHUB_OUTPUT
 
       - name: Checkout ${{ matrix.branch }} repository again for preparing deployment
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}

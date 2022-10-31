@@ -50,7 +50,7 @@ runs:
       shell: bash
       id: composer-cache
       run: |
-        echo "::set-output name=dir::$(composer config cache-files-dir)"
+        echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
     - uses: actions/cache@v3
       with:
@@ -82,7 +82,7 @@ runs:
       shell: bash
       id: npm-cache-dir
       run: |
-        echo "::set-output name=dir::$(npm config get cache)"
+        echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
     # @todo check if this really works or we need one step per directory
     - uses: actions/cache@v3
