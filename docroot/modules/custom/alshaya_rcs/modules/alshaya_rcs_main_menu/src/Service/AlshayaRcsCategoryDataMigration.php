@@ -228,10 +228,9 @@ class AlshayaRcsCategoryDataMigration {
         // Create new migrate category term.
         $migrate_term = self::createCategory($source_term, $langcode, $vid);
         // Create parent terms.
-        if (!empty($source_term->parent->getString())
-          && $source_term->parent->getValue()[0]['target_id'] != 0
-        ) {
-          $pid = self::createParentCategory($source_term->parent->getValue()[0]['target_id'], $langcode, $vid, $context['results'], $context['sandbox']['term_count']);
+        $parent_term_id = intval($source_term->parent->getString());
+        if (!empty($parent_term_id)) {
+          $pid = self::createParentCategory($parent_term_id, $langcode, $vid, $context['results'], $context['sandbox']['term_count']);
           if ($pid) {
             $migrate_term->set('parent', $pid);
           }
@@ -322,10 +321,9 @@ class AlshayaRcsCategoryDataMigration {
     $source_parent_term = ($source_parent_term->language()->getId() == $langcode) ? $source_parent_term : $source_parent_term->getTranslation($langcode);
 
     // Recursively create parent term.
-    if (!empty($source_parent_term->parent->getString())
-      && $source_parent_term->parent->getValue()[0]['target_id'] != 0
-    ) {
-      $pid = self::createParentCategory($source_parent_term->parent->getValue()[0]['target_id'], $langcode, $vid, $results, $term_count);
+    $current_parent_tid = intval($source_parent_term->parent->getString());
+    if (!empty($current_parent_tid)) {
+      $pid = self::createParentCategory($current_parent_tid, $langcode, $vid, $results, $term_count);
     }
 
     $migrate_parent_term = self::createCategory($source_parent_term, $langcode, $vid);
