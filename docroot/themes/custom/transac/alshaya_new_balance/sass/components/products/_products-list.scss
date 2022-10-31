@@ -28,7 +28,7 @@
 
         .alshaya_search_mainimage {
           @include breakpoint($only-mobile) {
-            height: rem(234);
+            height: auto;
           }
         }
       }
@@ -39,7 +39,7 @@
 
         &.bottom-right {
           #{$right}: rem(13);
-          top: rem(201);
+          top: rem(145);
 
           @include breakpoint($only-tablet) {
             top: rem(235);
