@@ -4,7 +4,7 @@
       <option value="" selected="selected" disabled="disabled">{{ this.select_option_label }}</option>
       {{#each this.select_options}}
         {{#if this.swatch-image }}
-        <option value="{{ this.value }}" swatch-image="{{ this.swatch-image }}">{{ this.text }}</option>
+          <option value="{{ this.value }}" swatch-image="{{ this.swatch-image }}">{{ this.text }}</option>
         {{else}}
           <option value="{{ this.value }}" >{{ this.text }}</option>
         {{/if}}
