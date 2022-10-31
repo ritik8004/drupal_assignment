@@ -120,11 +120,13 @@ header {
         height: rem(24);
         background-size: rem(14) rem(18);
 
-        &:hover {
-          background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1);
+        @include breakpoint($desktop) {
+          &:hover {
+            background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1);
 
-          .quantity {
-            color: $primary_minicart_hover;
+            .quantity {
+              color: $primary_minicart_hover;
+            }
           }
         }
       }
@@ -174,11 +176,13 @@ header {
     background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) center no-repeat;
     background-size: rem(14) rem(18);
 
-    &:hover {
-      background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg);
+    @include breakpoint($desktop) {
+      &:hover {
+        background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg);
 
-      .quantity {
-        color: $primary_minicart_hover;
+        .quantity {
+          color: $primary_minicart_hover;
+        }
       }
     }
   }
