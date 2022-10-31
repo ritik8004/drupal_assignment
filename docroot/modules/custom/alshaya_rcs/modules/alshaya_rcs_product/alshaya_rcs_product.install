@@ -64,3 +64,22 @@ function alshaya_rcs_product_uninstall() {
   \Drupal::service('alshaya_rcs_product.helper')
     ->rollbackProductMigration();
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable rcs product options rest resource.
+ */
+function alshaya_rcs_product_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['rest.resource.rcsproductoptions'],
+    'alshaya_rcs_product',
+    'install',
+  );
+
+  // Re-save config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
