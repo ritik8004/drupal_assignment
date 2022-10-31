@@ -70,7 +70,7 @@ jobs:
       - name: Cache dependencies installed with Composer
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         with:
@@ -89,6 +89,11 @@ jobs:
         with:
           node-version: "14.19.0"
           cache: "npm"
+          cache-dependency-path: |
+            docroot/package-lock.json
+            docroot/modules/custom/package-lock.json
+            docroot/modules/react/package-lock.json
+            docroot/themes/custom/package-lock.json
 
       - name: Install CLI for working with YAML files
         run: npm install -g yaml-cli

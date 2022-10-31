@@ -31,7 +31,6 @@ import PlpApp from './plp/PlpApp';
               level={level}
               hierarchy={hierarchy}
               promotionNodeId={promotionId}
-              useCurrentLanguage
             />,
             document.querySelector('#alshaya-algolia-plp'),
           );

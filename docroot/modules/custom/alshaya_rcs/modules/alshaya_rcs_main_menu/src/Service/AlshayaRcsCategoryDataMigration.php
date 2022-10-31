@@ -228,8 +228,9 @@ class AlshayaRcsCategoryDataMigration {
         // Create new migrate category term.
         $migrate_term = self::createCategory($source_term, $langcode, $vid);
         // Create parent terms.
-        if (!empty($source_term->parent->getString())) {
-          $pid = self::createParentCategory($source_term->parent->getString(), $langcode, $vid, $context['results'], $context['sandbox']['term_count']);
+        $parent_term_id = intval($source_term->parent->getString());
+        if (!empty($parent_term_id)) {
+          $pid = self::createParentCategory($parent_term_id, $langcode, $vid, $context['results'], $context['sandbox']['term_count']);
           if ($pid) {
             $migrate_term->set('parent', $pid);
           }
@@ -308,7 +309,7 @@ class AlshayaRcsCategoryDataMigration {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  private static function createParentCategory(int $tid, string $langcode, string $vid, array &$results = NULL, int &$term_count = NULL) {
+  private static function createParentCategory($tid, string $langcode, string $vid, array &$results = NULL, int &$term_count = NULL) {
     $pid = NULL;
     // Already saved so return parent category tid.
     if (!empty($results['acq_term_mapping'][$tid])) {
@@ -320,8 +321,9 @@ class AlshayaRcsCategoryDataMigration {
     $source_parent_term = ($source_parent_term->language()->getId() == $langcode) ? $source_parent_term : $source_parent_term->getTranslation($langcode);
 
     // Recursively create parent term.
-    if (!empty($source_parent_term->parent->getString())) {
-      $pid = self::createParentCategory($source_parent_term->parent->getString(), $langcode, $vid, $results, $term_count);
+    $current_parent_tid = intval($source_parent_term->parent->getString());
+    if (!empty($current_parent_tid)) {
+      $pid = self::createParentCategory($current_parent_tid, $langcode, $vid, $results, $term_count);
     }
 
     $migrate_parent_term = self::createCategory($source_parent_term, $langcode, $vid);

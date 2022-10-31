@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acsf-tools.git",
-                "reference": "a1d62c7da4ceb68df1ce44221a1674052ab5e817"
+                "reference": "08d31ee86a36c620a80d8ed584e39ccf36331801"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/a1d62c7da4ceb68df1ce44221a1674052ab5e817",
-                "reference": "a1d62c7da4ceb68df1ce44221a1674052ab5e817",
+                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/08d31ee86a36c620a80d8ed584e39ccf36331801",
+                "reference": "08d31ee86a36c620a80d8ed584e39ccf36331801",
                 "shasum": ""
             },
             "require": {

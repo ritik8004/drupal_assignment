@@ -14,15 +14,15 @@ exports.render = function render(
   if (entity !== null) {
     if (entity.breadcrumbs && entity.breadcrumbs.length) {
       entity.breadcrumbs.forEach(item => {
-        hierarchy_list.push(item.category_name);
+        hierarchy_list.push(item.category_gtm_name);
         // Also, build the rule context.
-        context_list.push(formatCleanRuleContext(item.category_name));
+        context_list.push(formatCleanRuleContext(item.category_gtm_name));
         contexts.push(context_list.join('__'));
       });
     }
     // Push the current category name.
-    hierarchy_list.push(entity.name);
-    context_list.push(formatCleanRuleContext(entity.name));
+    hierarchy_list.push(entity.gtm_name);
+    context_list.push(formatCleanRuleContext(entity.gtm_name));
     contexts.push(context_list.join('__'));
     // Combine all the items.
     hierarchy_list = hierarchy_list.join(' > ');

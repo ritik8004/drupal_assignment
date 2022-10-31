@@ -91,6 +91,7 @@ exports.getEntity = async function getEntity(langcode) {
       ["Content-Type", "application/json"],
       ["Store", drupalSettings.rcs.commerceBackend.store],
     ],
+    rcsType: pageType,
   };
 
   let result = null;
@@ -108,8 +109,6 @@ exports.getEntity = async function getEntity(langcode) {
         result.context = 'pdp';
         // Store product data in static storage.
         globalThis.RcsPhStaticStorage.set('product_data_' + result.sku, result);
-        // Set product options data to static storage.
-        globalThis.RcsPhStaticStorage.set('product_options', {data: {customAttributeMetadata: response.data.customAttributeMetadata}});
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -508,21 +507,6 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
           });
         });
       }
-      break;
-
-    case 'product-option':
-      const staticKey = `product_options`;
-      const staticOption = globalThis.RcsPhStaticStorage.get(staticKey);
-
-      if (staticOption !== null) {
-        return staticOption;
-      }
-
-      request.data = prepareQuery(rcsPhGraphqlQuery.product_options.query, rcsPhGraphqlQuery.product_options.variables);
-
-      result = rcsCommerceBackend.invokeApiSynchronous(request);
-
-      globalThis.RcsPhStaticStorage.set(staticKey, result);
       break;
 
     case 'dynamic-promotion-label':
