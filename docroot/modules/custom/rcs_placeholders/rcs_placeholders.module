@@ -313,86 +313,42 @@ function _rcs_placeholders_enrichment_form_alter(array &$form, FormStateInterfac
   $title_field = $entity->getEntityTypeId() == 'node' ? 'title' : 'name';
   $slug_field = $entity->getEntityTypeId() == 'node' ? 'field_product_slug' : 'field_category_slug';
 
-  // Pre-fill the title and slug fields with values from the query.
+  // Pre-fill the title and slug fields with safe values from the query.
   if (isset($q[$title_field])) {
-    $form[$title_field]['widget'][0]['value']['#default_value'] = Xss::filter($q[$title_field]);
+    $form[$title_field]['widget'][0]['value']['#default_value'] = _rcs_placeholders_get_safe_value($q[$title_field]);
   }
   if (isset($q['slug'])) {
-    $form[$slug_field]['widget'][0]['value']['#default_value'] = Xss::filter($q['slug']);
+    $form[$slug_field]['widget'][0]['value']['#default_value'] = _rcs_placeholders_get_safe_value($q['slug']);
   }
 }
 
 /**
- * Stores the referer and adds a new submit handler.
+ * Gets the sanitized value.
  *
- * @param array $form
- *   The form.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   The form state interface.
- */
-function _rcs_placeholders_enrichment_add_redirection(array &$form, FormStateInterface $form_state) {
-  // Add submission handler.
-  if (isset($form['actions']['submit']['#submit'])) {
-    foreach (array_keys($form['actions']) as $action) {
-      if ($action !== 'preview'
-        && isset($form['actions'][$action]['#type'])
-        && $form['actions'][$action]['#type'] === 'submit') {
-        $form['actions'][$action]['#submit'][] = '_rcs_placeholders_enrichment_redirect';
-      }
-    }
-  }
-  else {
-    $form['#submit'][] = '_rcs_placeholders_enrichment_redirect';
-  }
-
-  // Get the referer url.
-  $request = \Drupal::request();
-  $referer = $request->headers->get('referer');
-  $url = \Drupal::service('file_url_generator')->transformRelative($referer);
-
-  // Store the referer to be used for redirection after form is submitted.
-  $form['referer'] = [
-    '#type' => 'hidden',
-    '#value' => $url,
-  ];
-}
-
-/**
- * Redirect callback for Enrichment form.
+ * @param string $value
+ *   The value.
  *
- * @param array $form
- *   The form.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   The form state interface.
+ * @return string
+ *   The sanitized value.
  */
-function _rcs_placeholders_enrichment_redirect(array $form, FormStateInterface $form_state) {
-  $input = $form_state->getUserInput();
-  if (!empty($input['referer'])) {
-    // Redirect the user back to referer.
-    $form_state->setRedirectUrl(Url::fromUserInput($input['referer']));
-  }
+function _rcs_placeholders_get_safe_value($value) {
+  // Make sure value is safe.
+  $value = Xss::filter($value);
+  // Decode html entities.
+  return Html::decodeEntities($value);
 }
 
 /**
  * Implements hook_form_taxonomy_term_VOCABULARY_form_alter().
  */
 function rcs_placeholders_form_taxonomy_term_rcs_category_form_alter(&$form, FormStateInterface $form_state) {
-  _rcs_placeholders_enrichment_add_redirection($form, $form_state);
   _rcs_placeholders_enrichment_form_alter($form, $form_state);
-}
-
-/**
- * Implements hook_form_taxonomy_term_VOCABULARY_delete_form_alter().
- */
-function rcs_placeholders_form_taxonomy_term_rcs_category_delete_form_alter(&$form, FormStateInterface $form_state) {
-  _rcs_placeholders_enrichment_add_redirection($form, $form_state);
 }
 
 /**
  * Implements hook_form_node_NODE_TYPE_form_alter().
  */
 function rcs_placeholders_form_node_rcs_product_form_alter(&$form, FormStateInterface $form_state) {
-  _rcs_placeholders_enrichment_add_redirection($form, $form_state);
   _rcs_placeholders_enrichment_form_alter($form, $form_state);
 }
 
