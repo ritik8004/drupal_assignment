@@ -6,6 +6,7 @@
  */
 
 use Drupal\block\Entity\Block;
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
@@ -242,11 +243,20 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
 
   // If the entity is enriched, we only alter the tabs label.
   if (($node && $node->nid->value !== $config->get('product.placeholder_nid')) || ($term && $term->tid->value !== $config->get('category.placeholder_tid'))) {
+    // Add destination to the query string to take the user back
+    // after form submission.
+    $options = [
+      'query' => [
+        'destination' => RcsPhPathProcessor::getFullPath(),
+      ],
+    ];
     if ($edit_tab) {
       $edit_tab['#link']['title'] = t('Edit the enrichment');
+      $edit_tab['#link']['url']->setOptions($options);
     }
     if (isset($data['tabs'][0]['entity.' . $entity_type . '.delete_form'])) {
       $data['tabs'][0]['entity.' . $entity_type . '.delete_form']['#link']['title'] = t('Delete the enrichment');
+      $data['tabs'][0]['entity.' . $entity_type . '.delete_form']['#link']['url']->setOptions($options);
     }
   }
   // If the entity is not enriched, alter the tabs links.
@@ -263,12 +273,12 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
     if ($node) {
       $title = $token->replace('[rcs_product:name|url_encode]');
       $slug = $token->replace('[rcs_product:url]');
-      $url = Url::fromUserInput("/node/add/rcs_product?title=$title&slug=$slug");
+      $url = Url::fromUserInput("/node/add/rcs_product?title=$title&slug=$slug&destination=$slug");
     }
     else {
       $title = $token->replace('[rcs_category:name|url_encode]');
       $slug = $token->replace('[rcs_category:url]');
-      $url = Url::fromUserInput("/admin/structure/taxonomy/manage/rcs_category/add?name=$title&slug=$slug");
+      $url = Url::fromUserInput("/admin/structure/taxonomy/manage/rcs_category/add?name=$title&slug=$slug&destination=$slug");
     }
 
     if ($edit_tab) {
