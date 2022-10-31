@@ -113,6 +113,12 @@
           }
         }
       }
+
+      &.show-algolia-search-bar {
+        @include breakpoint($upto-desktop) {
+          top: rem(45);
+        }
+      }
     }
   }
 

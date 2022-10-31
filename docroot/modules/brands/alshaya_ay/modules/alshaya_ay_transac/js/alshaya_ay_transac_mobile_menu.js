@@ -14,7 +14,7 @@
         var searchInput = searchBlock.find('input');
         var searchBackButton = searchBlock.find('.algolia-search-back-icon');
         var searchClearButton = searchBlock.find('.algolia-search-cleartext-icon');
-  
+
         // Closing the search if user opens the menu while search is focused.
         $(menuOpenButton).once('menu-open').click(function() {
           if(searchBlock.hasClass('focused')) {
@@ -27,9 +27,9 @@
             searchInput.blur();
           }
         });
-  
+
         // Closing the menu if user searches while menu is open.
-        $(searchBlock).once('search-block').click(function() {
+        $(searchInput).once('search-block').focus(function() {
           if(menu.hasClass('menu--active')) {
             window.scrollTo(0, 0);
             menuCloseButton.click();
