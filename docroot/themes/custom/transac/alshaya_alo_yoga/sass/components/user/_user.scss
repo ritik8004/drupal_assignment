@@ -96,7 +96,6 @@
   .change-pwd-form,
   .user-form {
     .form-tel,
-    .form-text,
     .form-type-textfield label:not(.error),
     label.form-required:not(.error) {
       text-transform: capitalize;
@@ -114,8 +113,6 @@
   text-transform: uppercase;
 
   .change-pwd-form & {
-    @include breakpoint($only-mobile) {
-      top: rem(3);
-    }
+    top: rem(2);
   }
 }

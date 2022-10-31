@@ -101,3 +101,13 @@
     font-family: $ay-bold;
   }
 }
+
+.block-alshaya-signup-signin-buttons {
+  .link-button {
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        padding-right: 0;
+      }
+    }
+  }
+}
