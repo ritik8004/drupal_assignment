@@ -87,6 +87,14 @@
       }
     }
 
+    &.no-sticky-algolia-search-bar {
+      .block-alshaya-algolia-react-autocomplete {
+        &.show-algolia-search-bar {
+          padding: 0;
+        }
+      }
+    }
+
     .block-alshaya-algolia-react-autocomplete {
       top: rem(68);
 
