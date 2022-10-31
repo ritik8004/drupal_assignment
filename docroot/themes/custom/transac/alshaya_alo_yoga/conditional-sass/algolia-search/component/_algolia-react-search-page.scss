@@ -53,6 +53,14 @@
       color: $algolia-search-lhn;
     }
   }
+
+  .c-products__item {
+    .special--price {
+      @include breakpoint($tablet) {
+        margin-#{$left}: rem(12);
+      }
+    }
+  }
 }
 
 .hide-minimalistic-header {
