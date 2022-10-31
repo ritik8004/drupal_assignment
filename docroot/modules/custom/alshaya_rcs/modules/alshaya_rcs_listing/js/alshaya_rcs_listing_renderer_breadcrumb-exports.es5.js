@@ -33,7 +33,7 @@ exports.render = function render(
  */
 exports.normalize = function normalize(
   data,
-  {nameKey = 'name', breadcrumbTermNameKey = 'category_name'}
+  keys = {nameKey: 'name', breadcrumbTermNameKey: 'category_name'}
 ) {
   let normalized = [];
 
@@ -46,7 +46,7 @@ exports.normalize = function normalize(
     // For root level categories, push name without a url.
     normalized.push({
       url: null,
-      text: data[nameKey],
+      text: data[keys.nameKey],
       data_url: data.url_path,
       id: data.id,
     });
@@ -58,7 +58,7 @@ exports.normalize = function normalize(
   Object.keys(data.breadcrumbs).forEach(function (i) {
     normalized.push({
       url: data.breadcrumbs[i].category_url_path,
-      text: data.breadcrumbs[i][breadcrumbTermNameKey],
+      text: data.breadcrumbs[i][keys.breadcrumbTermNameKey],
       data_url: data.breadcrumbs[i].category_url_path,
       id: data.breadcrumbs[i].category_id,
     });
@@ -67,7 +67,7 @@ exports.normalize = function normalize(
   // Push the last crumb without a url.
   normalized.push({
     url: null,
-    text: data[nameKey],
+    text: data[keys.nameKey],
     data_url: data.url_path,
     id: data.id,
   });
