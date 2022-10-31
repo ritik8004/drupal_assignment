@@ -44,6 +44,12 @@
         .menu--one__list {
           height: rem(36);
 
+          @include breakpoint($desktop) {
+            html[lang=ar] & {
+              padding-right: 0;
+            }
+          }
+
           li {
             height: rem(36);
           }
