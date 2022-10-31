@@ -228,8 +228,10 @@ class AlshayaRcsCategoryDataMigration {
         // Create new migrate category term.
         $migrate_term = self::createCategory($source_term, $langcode, $vid);
         // Create parent terms.
-        if (!empty($source_term->parent->getString())) {
-          $pid = self::createParentCategory($source_term->parent->getString(), $langcode, $vid, $context['results'], $context['sandbox']['term_count']);
+        if (!empty($source_term->parent->getValue())
+          && $source_term->parent->getValue()[0]['target_id'] != 0
+        ) {
+          $pid = self::createParentCategory($source_term->parent->getValue()[0]['target_id'], $langcode, $vid, $context['results'], $context['sandbox']['term_count']);
           if ($pid) {
             $migrate_term->set('parent', $pid);
           }
@@ -308,7 +310,7 @@ class AlshayaRcsCategoryDataMigration {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  private static function createParentCategory(int $tid, string $langcode, string $vid, array &$results = NULL, int &$term_count = NULL) {
+  private static function createParentCategory($tid, string $langcode, string $vid, array &$results = NULL, int &$term_count = NULL) {
     $pid = NULL;
     // Already saved so return parent category tid.
     if (!empty($results['acq_term_mapping'][$tid])) {
