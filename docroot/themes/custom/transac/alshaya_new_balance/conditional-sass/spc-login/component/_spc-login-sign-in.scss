@@ -156,7 +156,7 @@
     }
 
     @include breakpoint($only-mobile) {
-      height: 3.25rem;
+      height: rem(52);
     }
 
     @include breakpoint($desktop) {

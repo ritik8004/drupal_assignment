@@ -235,14 +235,20 @@ header {
   }
 
   .quantity {
-    font-size: rem(12);
+    font-size: rem(9);
     position: relative;
-    bottom: rem(-4);
-    #{$left}: rem(-22);
+    bottom: rem(-16);
+    #{$left}: rem(9);
+    width: rem(14);
+    height: rem(14);
 
     @include breakpoint($only-mobile) {
-      #{$left}: rem(-24);
-      top: rem(4);
+      #{$left}: rem(8);
+      top: rem(13);
+    }
+
+    @include breakpoint($only-tablet) {
+      top: rem(15);
     }
   }
 }
