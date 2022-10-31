@@ -996,17 +996,6 @@ function alshaya_acm_product_update_8032() {
 }
 
 /**
- * Implements hook_post_update_NAME().
- *
- * Re-save index to create required tables.
- */
-function alshaya_acm_product_post_update_8030(&$sandbox) {
-  // This is required because with deleting and re-adding the attribute,
-  // also deletes/removes the attribute info from search api.
-  _alshaya_search_resave_indexes();
-}
-
-/**
  * Implements hook_update_N().
  *
  * Change 'product_collection' sku attribute cardinality to unlimited.
@@ -1145,18 +1134,6 @@ function alshaya_acm_product_update_8027() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
-}
-
-/**
- * Implements hook_post_update_NAME().
- *
- * Re-save index to create required tables.
- *
- * We do this in post update hook as it doesn't work together with config update
- * in normal hook_update.
- */
-function alshaya_acm_product_post_update_8026(&$sandbox) {
-  _alshaya_search_resave_indexes();
 }
 
 /**
@@ -1345,18 +1322,6 @@ function alshaya_acm_product_update_8019() {
 function alshaya_acm_product_update_8018() {
   // Adding configuration for back_to_list.
   alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product');
-}
-
-/**
- * Implements hook_post_update_NAME().
- *
- * Re-save index to create required tables.
- *
- * We do this in post update hook as it doesn't work together with config update
- * in normal hook_update.
- */
-function alshaya_acm_product_post_update_8017(&$sandbox) {
-  _alshaya_search_resave_indexes();
 }
 
 /**

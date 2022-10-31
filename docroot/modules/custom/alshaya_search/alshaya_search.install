@@ -402,18 +402,6 @@ function alshaya_search_update_8013() {
 }
 
 /**
- * Implements hook_post_update_NAME().
- *
- * Re-save index to create required tables.
- *
- * We do this in post update hook as it doesn't work together with config update
- * in normal hook_update.
- */
-function alshaya_search_post_update_8012(&$sandbox) {
-  _alshaya_search_resave_indexes();
-}
-
-/**
  * Implements hook_update_N().
  *
  * Updated facets config.
