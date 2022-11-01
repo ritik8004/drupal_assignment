@@ -112,8 +112,9 @@ header {
             }
 
             html[lang=ar] & {
-              width: rem(48);
+              width: auto;
               height: auto;
+              margin-top: auto;
             }
           }
         }

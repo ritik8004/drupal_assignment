@@ -1,9 +1,25 @@
 .alias--checkout,
 .alias--checkout-confirmation {
   .site-brand-home {
+    height: rem(46);
+
     a {
       @include breakpoint($tablet) {
         justify-content: center;
+      }
+
+      @include breakpoint($only-mobile) {
+        img {
+          width: rem(40);
+        }
+      }
+    }
+
+    @include breakpoint($tablet) {
+      height: rem(76);
+
+      a {
+        width: rem(75);
       }
     }
   }

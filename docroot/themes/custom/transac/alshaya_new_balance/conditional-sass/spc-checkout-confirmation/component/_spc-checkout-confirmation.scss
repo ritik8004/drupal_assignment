@@ -1,16 +1,26 @@
 #spc-checkout-confirmation {
-  padding-top: rem(55);
+  padding-top: 0;
 
   .spc-pre-content {
-    margin-bottom: rem(26);
+    margin-bottom: 0;
+    padding: rem(24) 0;
 
     .spc-checkout-confirmation-print-button {
-      text-transform: capitalize;
+      text-transform: uppercase;
       border-radius: inherit;
 
       @include breakpoint($only-mobile) {
         width: 90%;
         height: rem(42);
+      }
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: rem(28);
+      margin-bottom: rem(2);
+
+      .spc-checkout-confirmation-print-button {
+        top: rem(16);
       }
     }
   }
@@ -25,7 +35,7 @@
         }
 
         .spc-order-summary-order-preview {
-          margin-bottom: rem(11);
+          margin-bottom: 0;
         }
       }
 
@@ -43,9 +53,8 @@
 
       .spc-order-summary-block {
         .product-content {
-          padding-top: rem(10);
-          padding-#{$left}: rem(8);
-          padding-#{$right}: rem((8));
+          padding: rem(11) rem(15);
+          margin-bottom: rem(5);
 
           .product-item {
             .spc-product-title-price {
@@ -57,8 +66,46 @@
               }
             }
           }
+
+          &:empty {
+            display: none;
+          }
         }
       }
+    }
+  }
+}
+
+.spc-order-summary-order-detail {
+  margin: rem(5) auto;
+
+  @include breakpoint($tablet) {
+    margin-top: rem(12);
+
+    label {
+      height: rem(60);
+    }
+  }
+}
+
+.spc-order-summary-order-preview {
+  font-size: rem(12);
+
+  .spc-order-summary-item {
+    @include breakpoint($only-mobile) {
+      border-bottom: none;
+    }
+
+    .spc-value {
+      color: $spc-order-summary-text;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    font-size: rem(14);
+
+    .spc-order-summary-item {
+      padding: rem(21) rem(12);
     }
   }
 }
