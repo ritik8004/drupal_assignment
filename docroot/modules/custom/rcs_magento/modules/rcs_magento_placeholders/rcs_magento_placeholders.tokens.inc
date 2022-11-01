@@ -39,6 +39,10 @@ function rcs_magento_placeholders_tokens($type, $tokens, array $data, array $opt
             $replacements[$original] = '#rcs.category.name#';
             break;
 
+          case 'name|url_encode':
+            $replacements[$original] = '#rcs.category.name|url_encode#';
+            break;
+
           case 'slug':
             $replacements[$original] = '#rcs.category.url_path#';
             break;
@@ -59,6 +63,10 @@ function rcs_magento_placeholders_tokens($type, $tokens, array $data, array $opt
 
           case 'name':
             $replacements[$original] = '#rcs.product.name#';
+            break;
+
+          case 'name|url_encode':
+            $replacements[$original] = '#rcs.product.name|url_encode#';
             break;
 
           case 'slug':

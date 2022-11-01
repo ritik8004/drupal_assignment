@@ -608,6 +608,10 @@ exports.computePhFilters = function (input, filter) {
       value = `${input.url_key}.html`;
       break;
 
+    case 'url_encode':
+      value = Drupal.encodePath(input);
+      break;
+
     case 'absolute_url':
       value = Drupal.url.toAbsolute(`${input.url_key}.html`);
       break;
