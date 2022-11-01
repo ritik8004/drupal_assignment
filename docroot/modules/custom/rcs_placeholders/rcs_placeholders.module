@@ -228,10 +228,26 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
     return;
   }
 
-  $entity_type = $node ? 'node' : 'taxonomy_term';
+  // The entity type.
+  $entity_type = NULL;
+  // The enrichment type.
+  $enrichment_type = NULL;
+  // Enrichment is enabled or not.
+  $enrichment_enabled = FALSE;
+  // Entity is enriched or not.
+  $entity_is_enriched = FALSE;
 
-  if (isset($data['tabs'][0]['entity.' . $entity_type . '.edit_form'])) {
-    $edit_tab = &$data['tabs'][0]['entity.' . $entity_type . '.edit_form'];
+  if ($node) {
+    $entity_type = 'node';
+    $enrichment_type = 'product';
+    $enrichment_enabled = $config->get('product.enrichment');
+    $entity_is_enriched = $enrichment_enabled && $node->nid->value !== $config->get('product.placeholder_nid');
+  }
+  elseif ($term) {
+    $entity_type = 'taxonomy_term';
+    $enrichment_type = 'category';
+    $enrichment_enabled = $config->get('category.enrichment');
+    $entity_is_enriched = $enrichment_enabled && $term->tid->value !== $config->get('category.placeholder_tid');
   }
   else {
     $edit_tab = NULL;
