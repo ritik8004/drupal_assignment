@@ -27,8 +27,8 @@
         }
 
         .alshaya_search_mainimage {
-          @include breakpoint($only-mobile) {
-            height: rem(234);
+          @include breakpoint($upto-desktop) {
+            height: auto;
           }
         }
       }
@@ -39,19 +39,11 @@
 
         &.bottom-right {
           #{$right}: rem(13);
-          top: rem(201);
-
-          @include breakpoint($only-tablet) {
-            top: rem(235);
-          }
+          bottom: rem(13);
 
           @include breakpoint($desktop) {
             #{$right}: rem(23);
-            top: rem(247);
-          }
-
-          @include breakpoint($desktop-wide) {
-            top: rem(274);
+            bottom: rem(23);
           }
         }
 
@@ -109,6 +101,11 @@
       color: $plp_product_price_txt;
       font-size: rem(18);
       font-family: $alshaya-bold;
+    }
+
+    .list-product-gallery {
+      position: relative;
+      display: inline-block;
     }
   }
 
