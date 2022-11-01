@@ -86,9 +86,41 @@ body {
   }
 }
 
-.mobile--overlay .branding__menu {
+// Giving the search block an overlay for tablet when required.
+.block-alshaya-algolia-react-autocomplete {
   &::before {
-    // Removing the dark overlay when mobile menu is open.
-    content: none;
+    @include breakpoint($only-tablet) {
+      content: '';
+      background: transparent;
+      position: absolute;
+      z-index: -1;
+      left: 0;
+      right: 0;
+      top: rem(2);
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    }
+  }
+}
+
+.mobile--overlay {
+  .branding__menu {
+    &::before {
+      height: rem(81);
+
+      @include breakpoint($only-tablet) {
+        height: rem(100);
+      }
+    }
+  }
+
+  &.menu--open {
+    .branding__menu {
+      &::before {
+        // Removing the dark overlay when mobile menu is open.
+        opacity: 0;
+      }
+    }
   }
 }

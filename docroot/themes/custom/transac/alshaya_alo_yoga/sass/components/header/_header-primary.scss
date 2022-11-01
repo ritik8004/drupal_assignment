@@ -380,6 +380,17 @@ header {
         transform: translateX(50%);
       }
     }
+
+    @include breakpoint($only-tablet) {
+      .site-brand-home {
+        img {
+          html[lang=ar] & {
+            width: 100%;
+            height: auto;
+          }
+        }
+      }
+    }
   }
 }
 
