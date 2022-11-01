@@ -8,6 +8,10 @@
     .all-filters-algolia {
       max-width: rem(330);
 
+      @include breakpoint($upto-desktop) {
+        max-width: 100%;
+      }
+
       .filter__inner {
         .views-exposed-form,
         .c-facet {

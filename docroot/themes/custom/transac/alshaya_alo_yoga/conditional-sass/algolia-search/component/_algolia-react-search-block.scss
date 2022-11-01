@@ -149,6 +149,10 @@
                 height: rem(20);
                 text-align: center;
                 line-height: rem(20);
+
+                html[lang=ar] & {
+                  line-height: rem(16);
+                }
               }
             }
 
