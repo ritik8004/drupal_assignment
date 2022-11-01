@@ -655,6 +655,7 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
   }
 
   // Fetch additional product attributes.
+  $product_options_query_fields = $rcs_product_helper->getProductOptionsQueryFields();
   $attributes_fields = $rcs_product_helper->getProductAdditionalAttributesQueryFields();
   if (!empty($attributes_fields['items'])) {
     $query_fields['product_additional_attributes'] = [
