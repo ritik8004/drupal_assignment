@@ -1,0 +1,105 @@
+.return-requests-wrapper {
+  .order-details-wrapper {
+    .order-summary-row {
+      align-items: flex-start;
+     border-bottom-color: $online-return-summary-border;
+      .light {
+        color: $online-return-light-text;
+      }
+
+      .dark {
+        color: $online-return-dark-text;
+      }
+
+      .order-id-label, .order--date--time, .item-count{
+        line-height: 1.33;
+      }
+
+      .order-transaction,
+      .order-quantity,
+      .order-status,
+      .order-total-column {
+        > div {
+          margin-bottom: rem(2);
+        }
+      }
+
+      .order-transaction {
+        padding-top: rem(16);
+
+        @include breakpoint($tablet) {
+          padding: rem(24);
+        }
+
+        .order-id {
+          font-size: rem(14);
+          line-height: 1.29;
+        }
+      }
+      .order-quantity {
+        padding-top: rem(12);
+        padding-bottom: rem(16);
+        @include breakpoint($tablet) {
+          padding: rem(24);
+        }
+
+        .order--items {
+          font-weight: normal;
+          font-size: rem(14);
+          line-height: 1.29;
+        }
+
+      }
+
+      .order-status {
+        padding-top: rem(16);
+        display: flex;
+        justify-content: flex-end;
+
+        @include breakpoint($tablet) {
+          padding: rem(24);
+        }
+
+        .button {
+          font-size: rem(14);
+          line-height: 1.29;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-weight: normal;
+        }
+      }
+
+      .order-total-column {
+        @include breakpoint($tablet) {
+          padding: rem(24);
+        }
+
+        .order-total-wrapper {
+          >div {
+            @include breakpoint($tablet) {
+              margin-bottom: rem(2);
+            }
+          }
+
+          .price {
+            .price-amount,
+            .price-currency {
+              font-weight: normal;
+            }
+            .price-currency {
+              &.suffix {
+                margin-#{$right}: 0;
+
+                @include breakpoint($tablet){
+                  margin-#{$right}: 0;
+                }
+              }
+            }
+          }
+
+        }
+      }
+    }
+  }
+}

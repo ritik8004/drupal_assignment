@@ -1,0 +1,84 @@
+.return-requests-wrapper {
+  .products-list-wrapper,
+  .refund-details-wrapper {
+    margin-left: rem(-8);
+    margin-right: rem(-8);
+
+    .select-items-label,
+    .refund-detail-label {
+      margin-top: rem(12);
+      padding: rem(16) rem(20);
+      .select-items-header,
+      .refund-detail-header {
+        @include icon(chevrondown, before) {
+          #{$right}: 0;
+        }
+      }
+    }
+
+    .items-table {
+      .order-item-row {
+        .order__details--summary {
+          padding-bottom: rem(25);
+          .dark {
+            color: $online-return-dark-text;
+          }
+          .light {
+            color: $online-return-light-text;
+          }
+
+          .item-name {
+            font-size: rem(14px);
+            line-height: 1.29;
+            font-weight: normal;
+          }
+          .item-code {
+            margin-bottom: 0;
+          }
+        }
+
+        .item-total-price {
+          .dark {
+            color: $online-return-dark-text;
+          }
+          .light {
+            color: $online-return-light-text;
+          }
+          .price{
+            font-weight: normal;
+            font-size: rem(14);
+            line-height: 1.29;
+            .price-currency {
+              &.suffix {
+                margin-#{$right}: rem(4);
+              }
+            }
+          }
+        }
+
+        .item-price {
+
+          >div {
+            margin-bottom: rem(3);
+          }
+
+          .dark {
+            color: $online-return-dark-text;
+          }
+          .light {
+            color: $online-return-light-text;
+            font-size: rem(12);
+            line-height: 1.33;
+          }
+
+          .price{
+            font-weight: normal;
+            font-size: rem(14);
+            line-height: 1.29;
+          }
+        }
+      }
+    }
+
+  }
+}
