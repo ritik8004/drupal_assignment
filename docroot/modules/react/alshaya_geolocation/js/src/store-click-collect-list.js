@@ -4,7 +4,8 @@ import { StoreClickCollectList } from './alshaya-store-click-collect-list';
 
 let componentRendered = false;
 
-(function storeClickCollectListMain(drupalSettings) {
+(function storeClickCollectListMain(Drupal, jQuery, drupalSettings) {
+  /* eslint-disable no-param-reassign */
   Drupal.behaviors.alshayaGeolocationCncRcsBehavior = {
     attach: function alshayaGeolocationCnCRcs() {
       if (drupalSettings.storeLabels.state !== 'enabled') {
@@ -24,4 +25,4 @@ let componentRendered = false;
       );
     },
   };
-}(drupalSettings));
+}(Drupal, jQuery, drupalSettings));
