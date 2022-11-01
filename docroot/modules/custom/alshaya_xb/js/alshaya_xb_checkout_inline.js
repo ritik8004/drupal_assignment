@@ -14,6 +14,7 @@ glegem("OnCheckoutStepLoaded", function (data) {
       Drupal.alshayaXbCheckoutGaPush(data, 4);
       // Clear local storage.
       window.commerceBackend.removeCartDataFromStorage(true);
+      Drupal.removeItemFromLocalStorage('ge_cart_id');
       break;
   }
 });
