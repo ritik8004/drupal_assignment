@@ -218,7 +218,7 @@ function rcs_placeholders_entity_delete(EntityInterface $entity) {
 /**
  * Implements hook_menu_local_tasks_alter().
  */
-function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
+function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability) {
   $config = \Drupal::config('rcs_placeholders.settings');
 
   $node = \Drupal::routeMatch()->getParameter('node');
@@ -250,8 +250,24 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
     $enrichment_enabled = $config->get('category.enrichment');
     $entity_is_enriched = $enrichment_enabled && $term->tid->value !== $config->get('category.placeholder_tid');
   }
-  else {
-    $edit_tab = NULL;
+
+  // Remove tabs with links to the reserved RCS entities.
+  $tabs = [];
+  if (isset($data['tabs'][0])) {
+    $tabs = &$data['tabs'][0];
+    foreach ($tabs as &$tab) {
+      $route_params = $tab['#link']['url']->getRouteParameters();
+      if (isset($route_params['taxonomy_term']) && $route_params['taxonomy_term'] === $config->get('category.placeholder_tid')
+        || isset($route_params['node']) && $route_params['node'] === $config->get('product.placeholder_nid')
+      ) {
+        $tab['#access'] = AccessResult::forbidden();
+      }
+    }
+  }
+
+  // Check if enrichments are enabled.
+  if (!$enrichment_enabled) {
+    return;
   }
 
   // If the entity is enriched, we only alter the tabs label.
