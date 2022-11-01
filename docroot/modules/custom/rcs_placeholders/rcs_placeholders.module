@@ -270,29 +270,40 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
     return;
   }
 
-  // If the entity is enriched, we only alter the tabs label.
-  if (($node && $node->nid->value !== $config->get('product.placeholder_nid')) || ($term && $term->tid->value !== $config->get('category.placeholder_tid'))) {
+  // Current language.
+  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  // If the entity is enriched we alter the tabs' label and url.
+  if ($entity_is_enriched) {
     // Add destination to the query string to take the user back
     // after form submission.
     $options = [
       'query' => [
-        'destination' => RcsPhPathProcessor::getFullPath(),
+        'destination' => $current_language . '/' . RcsPhPathProcessor::getFullPath(),
       ],
     ];
-    if ($edit_tab) {
+    // Remove View tab.
+    if (isset($tabs['entity.' . $entity_type . '.canonical'])) {
+      $edit_tab = &$tabs['entity.' . $entity_type . '.canonical'];
+      $edit_tab['#access'] = AccessResult::forbidden();
+    }
+    // Alter the Edit tab.
+    if (isset($tabs['entity.' . $entity_type . '.edit_form'])) {
+      $edit_tab = &$tabs['entity.' . $entity_type . '.edit_form'];
       $edit_tab['#link']['title'] = t('Edit the enrichment');
       $edit_tab['#link']['url']->setOptions($options);
+      $edit_tab['#access'] = AccessResult::allowed();
     }
-    if (isset($data['tabs'][0]['entity.' . $entity_type . '.delete_form'])) {
-      $data['tabs'][0]['entity.' . $entity_type . '.delete_form']['#link']['title'] = t('Delete the enrichment');
-      $data['tabs'][0]['entity.' . $entity_type . '.delete_form']['#link']['url']->setOptions($options);
+    // Alter the Delete tab.
+    if (isset($tabs['entity.' . $entity_type . '.delete_form'])) {
+      $edit_tab = &$tabs['entity.' . $entity_type . '.delete_form'];
+      $edit_tab['#link']['title'] = t('Delete the enrichment');
+      $edit_tab['#link']['url']->setOptions($options);
+      $edit_tab['#access'] = AccessResult::allowed();
     }
   }
-  // If the entity is not enriched, alter the tabs links.
+  // If the entity is not enriched, alter the edit link.
   else {
-    // We don't want the contributors to delete the default placeholder entity.
-    unset($data['tabs'][0]['entity.' . $entity_type . '.delete_form']);
-
     $token = \Drupal::token();
 
     // We need at least two tabs for the links to appear. Add view tab.
