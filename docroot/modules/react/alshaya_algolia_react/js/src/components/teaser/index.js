@@ -238,6 +238,7 @@ const Teaser = ({
               initSlider={initSlider}
               setSlider={setSlider}
             />
+            {/* Render the green leaf icon for the sustainable products. */}
             {hasValue(hit.attr_green_leaf) && hit.attr_green_leaf
               && (
                 <div className="labels-container bottom-right">
