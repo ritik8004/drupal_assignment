@@ -278,8 +278,12 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
     }
   };
 
-  // Remove redeemed Card.
-  handleRemoveCard = (triggerGtmEvent = false) => {
+  /**
+   * Remove redeemed card.
+   *
+   * @param {boolean} triggerEvent
+   */
+  handleRemoveCard = (triggerEvent = false) => {
     const { egiftLinkedCardNumber } = this.state;
     const { cart, refreshCart } = this.props;
     let postData = {
@@ -315,8 +319,8 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               apiErrorMessage: '',
               setChecked: false,
             });
-            if (triggerGtmEvent !== undefined && triggerGtmEvent) {
-              // Dispatch unlink egift redeemed for GTM.
+            // Dispatch unlink egift redeemed for GTM.
+            if (triggerEvent) {
               dispatchCustomEvent('egiftCardRedeemed', {
                 label: 'unchecked',
                 action: 'linked_card_redemption',
