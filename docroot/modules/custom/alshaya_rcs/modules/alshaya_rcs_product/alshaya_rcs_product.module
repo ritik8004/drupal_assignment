@@ -195,8 +195,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   // Attach required libraries.
   $build['#attached']['library'][] = 'alshaya_rcs_product/main';
-  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
-  $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
   $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
@@ -210,6 +208,12 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+  $pdp_layout = $sku_manager->getPdpLayout($entity, $view_mode);
+
+  if (!str_contains($pdp_layout, 'magazine_v2')) {
+    $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
+    $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
+  }
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());
