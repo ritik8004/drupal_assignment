@@ -113,6 +113,13 @@
       top: rem(45);
     }
 
+    @include breakpoint($only-tablet) {
+      &,
+      html[lang=ar] & {
+        top: rem(62);
+      }
+    }
+
     .algolia-search-cleartext-icon {
       @include breakpoint($desktop) {
         #{$right}: rem(2);
@@ -136,8 +143,6 @@
         }
       }
     }
-
-    // .super-category-enabled .block-alshaya-algolia-react-autocomplete.clear-icon #alshaya-algolia-autocomplete .react-autosuggest__input
 
     .react-autosuggest__container {
       .algolia-search-back-icon {
@@ -220,13 +225,25 @@
         }
       }
     }
+
+    .c-menu-primary {
+      .mobile--menu {
+        @include breakpoint($only-tablet) {
+          top: 0;
+        }
+      }
+    }
   }
 
   &.super-category-home {
     .block-alshaya-algolia-react-autocomplete {
-      @include breakpoint($upto-desktop) {
+      @include breakpoint($only-mobile) {
         visibility: visible !important;
         top: rem(45) !important;
+      }
+
+      @include breakpoint($only-tablet) {
+        top: rem(62) !important;
       }
     }
 
@@ -255,6 +272,10 @@
     @include breakpoint($only-mobile) {
       visibility: visible;
       top: rem(45);
+    }
+
+    @include breakpoint($only-tablet) {
+      top: rem(62);
     }
   }
 }
