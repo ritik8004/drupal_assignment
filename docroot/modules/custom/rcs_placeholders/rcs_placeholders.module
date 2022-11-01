@@ -17,6 +17,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\rcs_placeholders\Graphql\ArrayGraphQL;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 
 /**
  * Implements hook_theme().
@@ -278,6 +279,15 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
 
     $token = \Drupal::token();
 
+    // We need at least two tabs for the links to appear. Add view tab.
+    $data['tabs'][0]["entity.$entity_type.view"] = [
+      '#theme' => 'menu_local_task',
+      '#link' => [
+        'title' => t('View'),
+        'url' => Url::fromUserInput('#'),
+      ],
+    ];
+
     // We alter the edit link so it actually redirects to the entity add form
     // with the title and slug as query arguments. We need to build the url
     // that way because using query options of url methods is encoding the #
@@ -285,18 +295,27 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name) {
     if ($node) {
       $title = $token->replace('[rcs_product:name|url_encode]');
       $slug = $token->replace('[rcs_product:url]');
-      $url = Url::fromUserInput("/node/add/rcs_product?title=$title&slug=$slug&destination=$slug");
+      $destination = "$current_language/$slug";
+      $url = Url::fromUserInput("/node/add/rcs_product?title=$title&slug=$slug&destination=/$destination");
     }
-    else {
+    elseif ($term) {
       $title = $token->replace('[rcs_category:name|url_encode]');
       $slug = $token->replace('[rcs_category:url]');
-      $url = Url::fromUserInput("/admin/structure/taxonomy/manage/rcs_category/add?name=$title&slug=$slug&destination=$slug");
+      $destination = "$current_language/$slug";
+      $url = Url::fromUserInput("/admin/structure/taxonomy/manage/rcs_category/add?name=$title&slug=$slug&destination=/$destination");
     }
 
-    if ($edit_tab) {
-      $edit_tab['#link']['url'] = $url;
-      $edit_tab['#link']['title'] = t('Enrich');
-    }
+    // Add a tab linking to Enrich form.
+    $data['tabs'][0]["entity.$entity_type.enrich"] = [
+      '#theme' => 'menu_local_task',
+      '#link' => [
+        'title' => t('Enrich'),
+        'url' => $url,
+      ],
+    ];
+
+    // The tab we're adding is dependent on a user's access to add content.
+    $cacheability->addCacheContexts(['user.permissions']);
   }
 }
 
