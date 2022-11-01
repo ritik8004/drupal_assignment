@@ -26,10 +26,10 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
     'change_pwd_page.change_password_form',
     'entity.user.edit_form',
   ];
-  if (!in_array($route_name, $admin_routes)) {
-    if (\Drupal::service('router.admin_context')->isAdminRoute()) {
-      return;
-    }
+  if (!in_array($route_name, $admin_routes) &&
+    \Drupal::service('router.admin_context')->isAdminRoute()
+  ) {
+    return;
   }
 
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
