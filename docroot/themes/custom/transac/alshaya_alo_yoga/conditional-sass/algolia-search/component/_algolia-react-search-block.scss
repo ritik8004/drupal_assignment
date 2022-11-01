@@ -72,6 +72,10 @@
         @include breakpoint($only-mobile) {
           position: absolute;
         }
+
+        @include breakpoint($only-tablet) {
+          #{$right}: rem(28);
+        }
       }
 
       .trending-title {
@@ -145,6 +149,10 @@
                 height: rem(20);
                 text-align: center;
                 line-height: rem(20);
+
+                html[lang=ar] & {
+                  line-height: rem(16);
+                }
               }
             }
 
@@ -219,7 +227,7 @@
 
       @include breakpoint($only-tablet) {
         height: rem(66);
-        padding-#{$left}: rem(56);
+        padding-#{$left}: rem(24);
       }
     }
   }
@@ -247,12 +255,6 @@
 body {
   .block-alshaya-algolia-react-autocomplete {
     &.focused {
-      .react-autosuggest__input {
-        @include breakpoint($upto-desktop) {
-          padding-#{$left}: rem(16) !important;
-        }
-      }
-
       .algolia-search-back-icon {
         @include breakpoint($only-tablet) {
           visibility: hidden;
@@ -336,10 +338,25 @@ body {
     }
   }
 
-  &.mobile--overlay.menu--open {
+  &.mobile--overlay {
     .block-alshaya-algolia-react-autocomplete {
       &::before {
-        opacity: 0;
+        @include breakpoint($only-tablet) {
+          opacity: 1;
+          z-index: 7;
+          transform: translate3d(0, 0, 0);
+          background-color: $header_mobile_menu_overlay;
+        }
+      }
+    }
+
+    &.menu--open {
+      .block-alshaya-algolia-react-autocomplete {
+        &::before {
+          @include breakpoint($only-mobile) {
+            opacity: 0;
+          }
+        }
       }
     }
   }

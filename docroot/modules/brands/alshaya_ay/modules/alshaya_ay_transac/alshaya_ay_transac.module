@@ -39,3 +39,14 @@ function alshaya_ay_transac_preprocess_html(&$variables) {
     $variables['attributes']['class'][] = 'super-category-home';
   }
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_ay_transac_library_info_alter(&$libraries, $extension) {
+  // Attach mobile_menu library wherever the alshaya_algolia_react
+  // library is loaded.
+  if ($extension === 'alshaya_algolia_react' && isset($libraries['autocomplete'])) {
+    $libraries['autocomplete']['dependencies'][] = 'alshaya_ay_transac/mobile_menu';
+  }
+}

@@ -103,7 +103,7 @@
     }
 
     .c-header__region {
-      @include breakpoint($only-mobile) {
+      @include breakpoint($upto-tablet) {
         position: fixed;
         width: 100%;
         border-bottom: rem(1) solid $algolia-auto-complete-border;

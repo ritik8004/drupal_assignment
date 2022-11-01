@@ -16,6 +16,12 @@
   }
 }
 
+@include breakpoint($only-tablet) {
+  .c-menu-primary .region__menu-primary #block-mobilenavigation {
+    z-index: 12;
+  }
+}
+
 @include breakpoint($upto-desktop) {
   .super-category-enabled {
     &.hide-minimalistic-header {

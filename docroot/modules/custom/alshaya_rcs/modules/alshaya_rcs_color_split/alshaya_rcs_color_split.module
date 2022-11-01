@@ -176,6 +176,13 @@ function alshaya_rcs_color_split_node_view(array &$build, EntityInterface $entit
   if (($entity->bundle() !== 'rcs_product')) {
     return;
   }
+  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+  $pdp_layout = $sku_manager->getPdpLayout($entity, $view_mode);
+  if (str_contains($pdp_layout, 'magazine_v2')) {
+    return;
+  }
+
   // Attach both the libraries as we do not know the type of the product
   // in backend.
   $build['#attached']['library'][] = 'alshaya_color_split/grouped_simple';

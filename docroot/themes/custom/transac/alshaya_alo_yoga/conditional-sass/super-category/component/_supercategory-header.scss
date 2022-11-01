@@ -23,18 +23,6 @@
       }
     }
 
-    .c-menu-primary {
-      .mobile--menu {
-        position: fixed;
-        #{$left}: rem(8);
-        top: rem(43);
-
-        html[lang=ar] & {
-          top: rem(43);
-        }
-      }
-    }
-
     .branding__menu {
       .c-header__region {
         .block-system-branding-block {
@@ -165,6 +153,18 @@
       top: rem(125);
     }
 
+    .c-menu-primary {
+      .mobile--menu {
+        position: fixed;
+        #{$left}: rem(8);
+        top: rem(43);
+
+        html[lang=ar] & {
+          top: rem(43);
+        }
+      }
+    }
+
     .mobile--close {
       background: transparent;
       // Declaring the top position twice so it doesn't flash the wrong position in the closing transition.
@@ -190,6 +190,22 @@
   .super-category-enabled {
     .toggle--sign {
       display: none;
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .super-category-enabled {
+    .c-menu-primary {
+      .mobile--menu {
+        position: absolute;
+        top: 0;
+        margin-#{$left}: rem(13);
+      }
+    }
+
+    .block-system-breadcrumb-block {
+      top: rem(24);
     }
   }
 }
