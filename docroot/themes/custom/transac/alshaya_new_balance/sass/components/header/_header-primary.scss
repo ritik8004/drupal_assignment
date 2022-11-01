@@ -107,14 +107,18 @@ header {
           }
 
           img {
-            @include breakpoint($upto-tablet) {
-              width: rem(48);
-            }
-
             html[lang=ar] & {
               width: auto;
               height: auto;
               margin-top: auto;
+            }
+
+            @include breakpoint($upto-desktop) {
+              width: rem(48);
+
+              html[lang=ar] & {
+                width: rem(48);
+              }
             }
           }
         }
