@@ -18,6 +18,13 @@ function alshaya_ay_transac_update_9400() {
   if ($translations) {
     alshaya_i18n_save_translations($translations);
   }
+  // Update config for add to bag hover.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.settings'],
+    'alshaya_algolia_react'
+  );
 }
 
 /**
