@@ -1,11 +1,17 @@
 .menu--open {
   &.super-category-enabled {
     #block-alshayaalgoliareactautocomplete {
-      @include breakpoint($only-mobile) {
+      @include breakpoint($upto-desktop) {
         visibility: visible !important;
-        top: 45px !important;
+        top: rem(45) !important;
         position: absolute;
         z-index: 15;
+      }
+
+      @include breakpoint($only-tablet) {
+        position: fixed;
+        top: rem(40) !important;
+        max-width: rem(500);
       }
     }
   }

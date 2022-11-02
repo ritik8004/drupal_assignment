@@ -12,7 +12,8 @@
 
       // When we click on a L2 menu, we hide all L2 menus and show respective
       // L3 menu only.
-      $('.visual-mobile-level-two__link').once('visual-mobile-l2-click').click(function () {
+      $('.visual-mobile-level-two__link').once('visual-mobile-l2-click').click(function (event) {
+        event.preventDefault();
         var target = $(this).attr('href');
         // Show L3 menu.
         $(target).show();
@@ -21,7 +22,8 @@
       });
 
       // When we click the back link, we show the L2 menus again.
-      $('.visual-mobile-level-three .back--link a').once('visual-mobile-l3-back-link-click').click(function () {
+      $('.visual-mobile-level-three .back--link a').once('visual-mobile-l3-back-link-click').click(function (event) {
+        event.preventDefault();
         var target = $(this).attr('href');
         // Hide L3 menu.
         $(target).hide();
