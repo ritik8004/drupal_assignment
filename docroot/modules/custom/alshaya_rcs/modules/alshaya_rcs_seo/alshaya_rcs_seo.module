@@ -11,37 +11,26 @@ use Drupal\Core\Site\Settings;
  * Implements hook_library_info_alter().
  */
 function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
-  /** @var \Drupal\Core\Extension\ExtensionPathResolver $extension_path_resolver*/
-  $extension_path_resolver = \Drupal::service('extension.path.resolver');
-  $self_module_path = $extension_path_resolver->getPath('module', 'alshaya_rcs_seo');
-
-  if ($extension === 'alshaya_seo_transac'
-    && isset($libraries['gtm_pdp_magazine_v2'])
-  ) {
-    $libraries['gtm_pdp_magazine_v2']['js']["/$self_module_path/js/alshaya_rcs_seo.gtm.pdp_magazine_v2.js"] = [];
-    $libraries['alshaya_dynamic_yield.product_modal']['dependencies'] = [
-      'core/jQuery',
-      'core/Drupal',
-    ];
+  if ($extension !== 'datalayer') {
+    return;
   }
-  elseif ($extension === 'datalayer') {
-    $new_source = '/' . $extension_path_resolver->getPath('module', 'alshaya_rcs_seo') . '/js/datapush.js';
-    $options = $libraries['datapush']['js']['js/datapush.js'];
-    unset($libraries['datapush']['js']['js/datapush.js']);
-    $libraries['datapush']['js'][$new_source] = $options;
 
-    $libraries['datapush']['dependencies'] = [
-      'core/jquery',
-      'core/drupal',
-      'core/drupalSettings',
-      'rcs_placeholders/helpers',
-      'alshaya_rcs_seo/alshaya_rcs_product_seo',
-    ];
+  $new_source = '/' . drupal_get_path('module', 'alshaya_rcs_seo') . '/js/datapush.js';
+  $options = $libraries['datapush']['js']['js/datapush.js'];
+  unset($libraries['datapush']['js']['js/datapush.js']);
+  $libraries['datapush']['js'][$new_source] = $options;
 
-    // Load it in the footer as the files which contain the event handlers will
-    // be loaded in the footer only.
-    unset($libraries['datapush']['header']);
-  }
+  $libraries['datapush']['dependencies'] = [
+    'core/jquery',
+    'core/drupal',
+    'core/drupalSettings',
+    'rcs_placeholders/helpers',
+    'alshaya_rcs_seo/alshaya_rcs_product_seo',
+  ];
+
+  // Load it in the footer as the files which contain the event handlers will
+  // be loaded in the footer only.
+  unset($libraries['datapush']['header']);
 }
 
 /**

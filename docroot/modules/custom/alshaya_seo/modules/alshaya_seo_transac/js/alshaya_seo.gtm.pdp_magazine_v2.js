@@ -20,11 +20,6 @@
   }, 500));
 
   $(window).on('load', function () {
-    // Do not trigger on page load, instead let rcs_seo code handle the
-    // triggering.
-    if ($('body').hasClass('rcs-page')) {
-      return;
-    }
     // Trigger productDetailView event.
     Drupal.alshayaSeoGtmPushProductDetailView($('#pdp-layout'));
   });
