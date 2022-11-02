@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_page_attachments().
@@ -33,7 +34,8 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
   }
 
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $ge_store_code = 'row_' . $language;
+  $settings = Settings::get('magento_lang_prefix');
+  $ge_store_code = $settings[$language];
   $config = \Drupal::config('alshaya_xb.settings');
   $ge_js_src = $config->get('globale_js_url') ?? '';
 
