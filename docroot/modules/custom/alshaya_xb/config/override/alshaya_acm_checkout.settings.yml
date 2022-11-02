@@ -1,1 +1,3 @@
-exclude_payment_methods: { 'postpay': postpay, 'checkout_com': checkout_com }
+exclude_payment_methods:
+  postpay: postpay
+  checkout_com: checkout_com

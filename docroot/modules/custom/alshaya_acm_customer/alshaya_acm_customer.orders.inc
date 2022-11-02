@@ -100,7 +100,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
 
   // Fetching order currency code if it is available to format the price.
   $order_currency_code = '';
-  if (isset($order['order_currency_code']) && !empty($order['order_currency_code'])) {
+  if (!empty($order['order_currency_code'])) {
     $order_currency_code = $order['order_currency_code'];
   }
 
@@ -159,7 +159,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   // Fetching order currency code if it is available to format the price.
   $order_currency_code = '';
-  if (isset($order['order_currency_code']) && !empty($order['order_currency_code'])) {
+  if (!empty($order['order_currency_code'])) {
     $order_currency_code = $order['order_currency_code'];
   }
 
@@ -442,7 +442,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
   // Fetching order currency code if it is available to format the price.
   $order_currency_code = '';
-  if (isset($order['order_currency_code']) && !empty($order['order_currency_code'])) {
+  if (!empty($order['order_currency_code'])) {
     $order_currency_code = $order['order_currency_code'];
   }
 
