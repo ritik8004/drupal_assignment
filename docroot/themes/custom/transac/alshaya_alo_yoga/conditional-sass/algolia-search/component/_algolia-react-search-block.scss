@@ -243,6 +243,12 @@
             opacity: 0;
           }
         }
+
+        .react-autosuggest__input {
+          @include breakpoint($only-tablet) {
+            padding-#{$left}: rem(36);
+          }
+        }
       }
     }
   }
@@ -355,7 +361,7 @@ body {
     &.menu--open {
       .block-alshaya-algolia-react-autocomplete {
         &::before {
-          @include breakpoint($only-mobile) {
+          @include breakpoint($upto-desktop) {
             opacity: 0;
           }
         }
