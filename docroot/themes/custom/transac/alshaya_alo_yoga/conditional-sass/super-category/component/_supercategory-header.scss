@@ -8,6 +8,10 @@
   .super-category-enabled {
     margin-top: rem(125);
 
+    html[lang=ar] & {
+      margin-top: rem(125);
+    }
+
     &.frontpage {
       margin-top: rem(125);
 
