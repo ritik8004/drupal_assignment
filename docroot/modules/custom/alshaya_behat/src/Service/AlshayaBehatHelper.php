@@ -114,18 +114,16 @@ class AlshayaBehatHelper {
    *
    * @param string $path
    *   Path to entity.
-   * @param int|string $id
-   *   Entity ID.
    *
    * @return bool
    *   TRUE if node loads successfully else false.
    */
-  private function isEntityPageLoading(string $path, int|string $id): bool {
-    $request = Request::create("/$path/$id");
-    $request_success = TRUE;
+  public function isEntityPageLoading(string $path): bool {
+    $request = Request::create($path);
 
     try {
-      $this->httpKernel->handle($request, HttpKernelInterface::SUB_REQUEST);
+      $res = $this->httpKernel->handle($request, HttpKernelInterface::SUB_REQUEST);
+      $request_success = $res->getStatusCode() === 200;
     }
     catch (\Exception) {
       $request_success = FALSE;
@@ -221,7 +219,7 @@ class AlshayaBehatHelper {
         // Request the node and check if there is any error when loading the
         // node.
         // If there is an error we check the next sku.
-        if (!$this->isEntityPageLoading('node', $node->id())) {
+        if (!$this->isEntityPageLoading("/node/$node->id()")) {
           continue;
         }
         return $node;
@@ -283,7 +281,7 @@ class AlshayaBehatHelper {
       }
       foreach ($categories as $category) {
         // Skip if category is a parent or if its not loading properly.
-        if (in_array($category, $all_parent_term_ids) || !$this->isEntityPageLoading('taxonomy/term', $category)) {
+        if (in_array($category, $all_parent_term_ids) || !$this->isEntityPageLoading("/taxonomy/term/$category")) {
           continue;
         }
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category);
