@@ -269,6 +269,10 @@ header {
   .block-system-menublock {
     li {
       position: static;
+
+      @include breakpoint($only-tablet) {
+        z-index: 12;
+      }
     }
   }
 }
@@ -315,6 +319,18 @@ header {
       .block-alshaya-super-category-menu {
         @include breakpoint($upto-desktop) {
           z-index: 12;
+        }
+      }
+    }
+  }
+
+  &.menu--open.mobile--overlay {
+    .c-menu-primary {
+      .region__menu-primary {
+        .block-alshaya-super-category-menu {
+          @include breakpoint($only-tablet) {
+            z-index: 0;
+          }
         }
       }
     }
@@ -411,8 +427,10 @@ header {
   body {
     &.mobile--overlay.menu--open {
       &::before {
-        // Removing the dark overlay when mobile menu is open.
-        content: none;
+        @include breakpoint($only-mobile) {
+          // Removing the dark overlay when mobile menu is open.
+          opacity: 0;
+        }
       }
     }
 
