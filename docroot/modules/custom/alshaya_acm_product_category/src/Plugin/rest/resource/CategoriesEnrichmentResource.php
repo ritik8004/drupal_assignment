@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
+use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -62,6 +63,13 @@ class CategoriesEnrichmentResource extends ResourceBase {
   protected $entityTypeManager;
 
   /**
+   * Mobile app utility.
+   *
+   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
+   */
+  protected $mobileAppUtility;
+
+  /**
    * AlshayaRcsCategoryResource constructor.
    *
    * @param array $configuration
@@ -84,6 +92,8 @@ class CategoriesEnrichmentResource extends ResourceBase {
    *   Database connection.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
+   *   Mobile app utility.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -94,13 +104,15 @@ class CategoriesEnrichmentResource extends ResourceBase {
                               AlshayaRcsCategoryHelper $alshaya_rcs_category_helper,
                               AlshayaRequestContextManager $alshaya_request_context_manager,
                               Connection $connection,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              MobileAppUtility $mobile_app_utility) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->alshayaRcsCategoryHelper = $alshaya_rcs_category_helper;
     $this->requestContextManager = $alshaya_request_context_manager;
     $this->connection = $connection;
     $this->entityTypeManager = $entity_type_manager;
+    $this->mobileAppUtility = $mobile_app_utility;
   }
 
   /**
@@ -117,7 +129,8 @@ class CategoriesEnrichmentResource extends ResourceBase {
       $container->get('alshaya_rcs_main_menu.rcs_category_helper'),
       $container->get('alshaya_acm_product.context_manager'),
       $container->get('database'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('alshaya_mobile_app.utility')
     );
   }
 
