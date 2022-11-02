@@ -1,13 +1,32 @@
 .return-requests-wrapper {
+
+  .products-list-wrapper {
+    .items-table {
+      margin-bottom: rem(2);
+      border-bottom-color: $online-return-border-color;
+    }
+  }
+
+
   .products-list-wrapper,
   .refund-details-wrapper {
     margin-left: rem(-8);
     margin-right: rem(-8);
 
+    @include breakpoint($tablet) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
     .select-items-label,
     .refund-detail-label {
       margin-top: rem(12);
       padding: rem(16) rem(20);
+
+      @include breakpoint($tablet) {
+        padding: rem(15) rem(32);
+      }
+
       .select-items-header,
       .refund-detail-header {
         @include icon(chevrondown, before) {
@@ -28,9 +47,10 @@
           }
 
           .item-name {
-            font-size: rem(14px);
+            font-size: rem(14);
             line-height: 1.29;
             font-weight: normal;
+            margin-bottom: rem(6);
           }
           .item-code {
             margin-bottom: 0;
@@ -80,5 +100,25 @@
       }
     }
 
+  }
+
+  .continue-button-wrapper,
+  .confirm-return-button-wrapper {
+    margin-top: rem(-2);
+    padding: rem(16) rem(20);
+    margin-bottom: rem(20);
+
+    @include breakpoint($tablet) {
+      padding-right: rem(32);
+      padding-left: rem(32);
+      border-top: 1px solid $content_pagetitle_border;
+    }
+
+    button {
+      @include breakpoint($tablet) {
+        margin-#{$right}: 0;
+        padding: 0;
+      }
+    }
   }
 }

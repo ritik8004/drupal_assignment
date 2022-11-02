@@ -2,7 +2,7 @@
   .order-details-wrapper {
     .order-summary-row {
       align-items: flex-start;
-     border-bottom-color: $online-return-summary-border;
+      border-bottom-color: $online-return-border-color;
       .light {
         color: $online-return-light-text;
       }
