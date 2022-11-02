@@ -30,6 +30,7 @@ jobs:
       matrix:
         branch:
           - develop
+          - develop-cross-border
 
     steps:
       - name: Check for commits in branch

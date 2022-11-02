@@ -7,7 +7,11 @@
     <tr class="order-summary-row">
       <td class="order-transaction">
         <div class="light tablet-light">{{ 'Order ID' | t }}</div>
-        <div class="dark">{{ order.id }}</div>
+        {% if order.ext_order_id %}
+          <div class="dark">{{ order.id ~ " [" ~ order.ext_order_id ~ "]" }}</div>
+        {% else %}
+          <div class="dark">{{ order.id }}</div>
+        {% endif %}
         <div class="light order--date--time">{{ order.date }}</div>
 
         <div class="mobile-only">
