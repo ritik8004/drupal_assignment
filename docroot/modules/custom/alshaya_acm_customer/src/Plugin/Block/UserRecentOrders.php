@@ -234,6 +234,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             $order['totals']['grand'] = [
               '#theme' => 'acq_commerce_price',
               '#price' => isset($order['totals']) ? $order['totals']['grand'] : 0,
+              '#currency_format' => $order['order_currency_code'] ?? '',
             ];
 
             // Iterate over each order item.
