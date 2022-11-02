@@ -504,7 +504,7 @@ exports.computePhFilters = function (input, filter) {
               // Add a logger here so that we have info around the content where
               // we don't have label.
               Drupal.alshayaLogger('debug', '@attribute label is missing for the index @value_index .', {
-                '@attribute': option.attribute,
+                '@attribute': option.attribute_code,
                 '@value_index': label,
               });
             }
