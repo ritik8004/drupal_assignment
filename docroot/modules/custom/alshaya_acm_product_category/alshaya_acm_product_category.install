@@ -16,7 +16,7 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
- * Add new Product Linked SKU resource v2.
+ * Add new Categories enrichment resource and updated user permissions.
  */
 function alshaya_acm_product_category_update_9401() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
