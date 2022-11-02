@@ -16,6 +16,57 @@
   .address--label {
     font-family: $ay-nova-bold;
   }
+
+  &-book-address {
+    .form-type-select {
+      .select2-selection {
+        height: rem(52) !important;
+        border-color: $primary_dropdown_border;
+
+        &__rendered {
+          line-height: rem(36) !important;
+        }
+
+        &__arrow {
+          height: rem(52);
+
+          &::after {
+            line-height: rem(52);
+            top: 0;
+          }
+        }
+      }
+
+      select {
+        &.select2-select {
+          &.form-select {
+            @include breakpoint($only-mobile) {
+              height: rem(52);
+            }
+          }
+        }
+      }
+
+      &::after {
+        @include breakpoint($only-mobile) {
+          line-height: rem(52);
+        }
+      }
+    }
+  }
+}
+
+.select2-container--default {
+  .select2-selection--single {
+    .select2-selection__placeholder {
+      color: $primary_dropdown_text !important;
+    }
+  }
+}
+
+.select2-search--dropdown {
+  border: rem(1) solid $primary_dropdown_border;
+  border-bottom: 0;
 }
 
 .c-address-book {
