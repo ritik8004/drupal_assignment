@@ -1,6 +1,7 @@
 .visual-mobile-level-three {
   @include breakpoint($only-tablet) {
     max-width: rem(500);
+    top: rem(90);
   }
 
   &__heading {

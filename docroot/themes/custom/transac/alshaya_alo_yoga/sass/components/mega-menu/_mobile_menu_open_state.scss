@@ -3,7 +3,7 @@
     #block-alshayaalgoliareactautocomplete {
       @include breakpoint($upto-desktop) {
         visibility: visible !important;
-        top: 45px !important;
+        top: rem(45) !important;
         position: absolute;
         z-index: 15;
       }
