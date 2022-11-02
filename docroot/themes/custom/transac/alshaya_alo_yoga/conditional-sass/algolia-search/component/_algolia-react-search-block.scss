@@ -64,7 +64,7 @@
         @include breakpoint($upto-desktop) {
           top: rem(8);
           #{$left}: unset;
-          #{$right}: rem(-4);
+          #{$right}: 0;
           opacity: 1;
           transition: opacity 0.2s;
         }

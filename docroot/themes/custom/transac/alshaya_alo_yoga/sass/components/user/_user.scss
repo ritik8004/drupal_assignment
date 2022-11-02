@@ -8,6 +8,10 @@
 
         @include breakpoint($desktop) {
           width: 26.5%;
+
+          html[lang=ar] & {
+            margin-left: 0;
+          }
         }
       }
 
@@ -24,6 +28,10 @@
           @include breakpoint($desktop) {
             text-align: $left;
             padding-#{$left}: rem(20);
+
+            html[lang=ar] & {
+              text-align: center;
+            }
           }
         }
       }
@@ -114,5 +122,28 @@
 
   .change-pwd-form & {
     top: rem(2);
+  }
+}
+
+#block-content {
+  .order-items li {
+    .order-list-wrapper-container {
+      @include breakpoint($only-mobile) {
+        height: auto;
+        margin-top: rem(10);
+      }
+
+      .first {
+        @include breakpoint($desktop) {
+          width: rem(134);
+        }
+      }
+
+      .first-second {
+        @include breakpoint($desktop) {
+          height: rem(120);
+        }
+      }
+    }
   }
 }
