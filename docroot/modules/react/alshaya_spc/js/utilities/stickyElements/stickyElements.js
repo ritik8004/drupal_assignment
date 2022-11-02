@@ -115,6 +115,9 @@ function stickySidebar() {
   window.addEventListener('scroll', () => {
     // Desktop & Tablet sticky right column.
     if (window.innerWidth > 767) {
+      // Sidebar.
+      const spcSidebar = document.getElementsByClassName('spc-sidebar');
+
       // Before we begin we need to check if the content is smaller than sidebar,
       // if yes no sticky needed.
       // 40 is margin bottom which is fixed.
@@ -126,13 +129,15 @@ function stickySidebar() {
         const cartItemsH = document.getElementsByClassName('spc-cart-items')[0].offsetHeight + 42;
         if (cartItemsH < spcPromoCodeBlockH + orderSummaryBlockH) {
           // Content not eligible for sticky.
+          // Removing the sticky class if it was applied when content was taller.
+          if (spcSidebar[0].classList.contains('sticky')) {
+            spcSidebar[0].classList.remove('sticky');
+          }
           return;
         }
       }
 
       const offSet = getSidebarOffsetTop();
-      // Sidebar.
-      const spcSidebar = document.getElementsByClassName('spc-sidebar');
 
       // If sidebar not available.
       if (spcSidebar.length === 0) {
