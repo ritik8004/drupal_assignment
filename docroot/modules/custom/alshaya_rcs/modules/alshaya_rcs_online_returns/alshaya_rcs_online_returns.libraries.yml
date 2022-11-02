@@ -1,3 +1,5 @@
 product_utility:
   js:
     js/alshaya_rcs_online_returns.product_utility.js: {}
+  dependencies:
+    - alshaya_rcs_product/product_attributes
