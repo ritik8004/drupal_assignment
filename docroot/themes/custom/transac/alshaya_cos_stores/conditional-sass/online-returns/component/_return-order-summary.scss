@@ -3,6 +3,7 @@
     .order-summary-row {
       align-items: flex-start;
       border-bottom-color: $online-return-border-color;
+
       .light {
         color: $online-return-light-text;
       }
@@ -11,7 +12,9 @@
         color: $online-return-dark-text;
       }
 
-      .order-id-label, .order--date--time, .item-count{
+      .order-id-label,
+      .order--date--time,
+      .item-count {
         line-height: 1.33;
       }
 
@@ -36,9 +39,11 @@
           line-height: 1.29;
         }
       }
+
       .order-quantity {
         padding-top: rem(12);
         padding-bottom: rem(16);
+
         @include breakpoint($tablet) {
           padding: rem(24);
         }
@@ -48,7 +53,6 @@
           font-size: rem(14);
           line-height: 1.29;
         }
-
       }
 
       .order-status {
@@ -87,17 +91,17 @@
             .price-currency {
               font-weight: normal;
             }
+
             .price-currency {
               &.suffix {
                 margin-#{$right}: 0;
 
-                @include breakpoint($tablet){
+                @include breakpoint($tablet) {
                   margin-#{$right}: 0;
                 }
               }
             }
           }
-
         }
       }
     }
