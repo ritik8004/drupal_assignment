@@ -40,9 +40,10 @@
       }
 
       @include breakpoint($desktop) {
-        width: 20%;
-        padding-top: rem(4);
-        padding-bottom: rem(8);
+        width: 16%;
+        line-height: 3.5;
+        padding-bottom: 0;
+        padding-right: rem(46);
       }
     }
 
@@ -142,6 +143,8 @@
   .list-view-link,
   .map-view-link {
     text-transform: uppercase;
+    border: rem(1) solid $store_finder_border_hover;
+    line-height: 1.5;
 
     @include breakpoint($tablet) {
       height: rem(48);
@@ -152,13 +155,15 @@
       font-size: rem(14);
     }
 
+    &:hover,
     &.active {
       padding: rem(15) 0;
-    }
-
-    &:hover {
-      padding: rem(14) 0;
       border: rem(2) solid $store_finder_border;
+      line-height: 1.4;
+
+      html[lang=ar] & {
+        line-height: 1.35;
+      }
     }
 
     @include breakpoint($tablet) {
@@ -188,6 +193,33 @@
         vertical-align: top;
       }
     }
+
+    &::before {
+      @include breakpoint($desktop) {
+        margin-top: rem(-6);
+      }
+    }
+  }
+
+  .list-view-link {
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: rem(18);
+    }
+
+    &::before {
+      @include breakpoint($desktop) {
+        margin-#{$right}: rem(4);
+      }
+    }
+
+    &:hover,
+    &.active {
+      &::before {
+        @include breakpoint($desktop) {
+          line-height: rem(17);
+        }
+      }
+    }
   }
 
   .block-store-finder-form__form__label__wrapper,
@@ -211,7 +243,9 @@
       width: 37%;
 
       html[lang=ar] & {
-        width: 30%;
+        width: 29%;
+        margin-right: rem(10);
+        margin-left: rem(10);
       }
     }
 
@@ -270,6 +304,11 @@
     @include breakpoint($tablet) {
       margin-top: rem(26);
       margin-bottom: rem(9);
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-left: rem(24);
+      padding-right: rem(24);
     }
 
     @include breakpoint($only-mobile) {
