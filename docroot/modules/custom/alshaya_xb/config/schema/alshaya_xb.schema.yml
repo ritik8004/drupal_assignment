@@ -1,0 +1,10 @@
+alshaya_xb.settings:
+  type: config_object
+  label: 'Global-e config'
+  mapping:
+    globale_js_url:
+      type: string
+      label: 'Global-e JS URL'
+    globale_css_url:
+      type: string
+      label: 'Global-e CSS URL'

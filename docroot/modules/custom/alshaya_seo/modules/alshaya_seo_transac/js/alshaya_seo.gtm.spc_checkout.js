@@ -135,9 +135,9 @@
       var stepData = JSON.parse(JSON.stringify(data));
       stepData.ecommerce.checkout.actionField.step = (step === 4) ? 4 : 3;
       if (step === 4) {
-        var totals = window.spcStaticStorage.cart_raw.totals;
+        var totals = (window.spcStaticStorage.cart_raw && window.spcStaticStorage.cart_raw.totals) ? window.spcStaticStorage.cart_raw.totals : '';
         var auraPaymentAmount = totals.total_segments ? totals.total_segments.filter(item => item.code === 'aura_payment') : null;
-        auraPaymentAmount = typeof auraPaymentAmount[0] !== 'undefined' ? auraPaymentAmount[0].value : null;
+        auraPaymentAmount = (auraPaymentAmount && typeof auraPaymentAmount[0] !== 'undefined') ? auraPaymentAmount[0].value : null;
         var gtmPaymentName = drupalSettings.payment_methods[cartData.payment.method] ?
           drupalSettings.payment_methods[cartData.payment.method].gtm_name
           : 'hps_payment';

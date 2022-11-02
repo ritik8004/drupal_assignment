@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_xb_page_attachments(array &$attachments) {
+  if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
+    $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_cross_border';
+  }
+}
+
+/**
+ * Implements hook_page_bottom().
+ */
+function alshaya_xb_page_bottom(array &$page_bottom) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  // We need to allow the script to be added on the below admin routes.
+  $admin_routes = [
+    'change_pwd_page.change_password_form',
+    'entity.user.edit_form',
+  ];
+  if (!in_array($route_name, $admin_routes) &&
+    \Drupal::service('router.admin_context')->isAdminRoute()
+  ) {
+    return;
+  }
+
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $ge_store_code = 'row_' . $language;
+  $config = \Drupal::config('alshaya_xb.settings');
+  $ge_js_src = $config->get('globale_js_url') ?? '';
+
+  // Dynamic js to be added on every page.
+  $js = "
+     var geStoreCode = '$ge_store_code';
+     var geStoreCodeInstance = document.location.hostname;
+     (function () {
+       var s = document.createElement('script');
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = '$ge_js_src';
+       document.getElementsByTagName('head')[0].appendChild(s);
+     })();";
+
+  // Add inline script to the page bottom.
+  $page_bottom['alshaya_xb_cross_border'] = [
+    '#type'  => 'html_tag',
+    '#tag'   => 'script',
+    '#attributes' => ['id' => 'globaleScript'],
+    '#value' => Markup::create($js),
+  ];
+
+  // Inline JS added for the checkout page. This is required because the scripts
+  // need to be on the page before the page loads. Also note that Global-e
+  // scripts are added directly to the header.
+  if ($route_name == 'alshaya_spc.checkout') {
+    $file = \Drupal::service('extension.list.module')->getPath('alshaya_xb') . '/js/alshaya_xb_checkout_inline.js';
+    $page_bottom['alshaya_xb_checkout_cross_border'] = [
+      '#type'  => 'html_tag',
+      '#tag'   => 'script',
+      '#value' => Markup::create(file_get_contents($file)),
+      '#cache' => [
+        'tags' => ['alshaya_xb:checkout_cross_border'],
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_xb_alshaya_my_account_links_alter(array &$links) {
+  // Removing the below links from alshaya_my_account_links block.
+  unset($links['address_book']);
+  unset($links['payment_cards']);
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_update_order_summary_alter().
+ */
+function alshaya_xb_alshaya_acm_customer_update_order_summary_alter(array &$order, array &$orderRow) {
+  // Appending the Global-e order ID if it is present.
+  if (isset($order['ext_order_id']) && !empty($order['ext_order_id'])) {
+    $orderRow['orderId'] = $order['increment_id'] . ' [' . $order['ext_order_id'] . ']';
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_xb_library_info_alter(&$libraries, $extension) {
+  if (isset($libraries['alshaya_cross_border'])) {
+    $config = \Drupal::config('alshaya_xb.settings');
+    $ge_css_src = $config->get('globale_css_url') ?? '';
+    if ($ge_css_src) {
+      // Adding the global-e CSS url dynamically.
+      $library_key = key($libraries['alshaya_cross_border']['css']['theme']);
+      $library_array = $libraries['alshaya_cross_border']['css']['theme'][$library_key];
+      unset($libraries['alshaya_cross_border']['css']['theme'][$library_key]);
+      $libraries['alshaya_cross_border']['css']['theme'][$ge_css_src] = $library_array;
+    }
+  }
+}
