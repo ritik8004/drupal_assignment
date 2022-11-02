@@ -91,15 +91,3 @@
     }
   }
 }
-
-#block-content {
-  .order-items li {
-    .order-list-wrapper-container {
-      .first {
-        @include breakpoint($desktop) {
-          width: rem(134);
-        }
-      }
-    }
-  }
-}

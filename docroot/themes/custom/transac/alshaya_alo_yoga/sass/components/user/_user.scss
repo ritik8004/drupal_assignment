@@ -132,6 +132,18 @@
         height: auto;
         margin-top: rem(10);
       }
+
+      .first {
+        @include breakpoint($desktop) {
+          width: rem(134);
+        }
+      }
+
+      .first-second {
+        @include breakpoint($desktop) {
+          height: rem(120);
+        }
+      }
     }
   }
 }
