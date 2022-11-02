@@ -130,7 +130,8 @@ class CategoriesEnrichmentResource extends ResourceBase {
       $container->get('alshaya_acm_product.context_manager'),
       $container->get('database'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_mobile_app.utility')
+      $container->get('alshaya_mobile_app.utility'),
+      $container->get('language_manager')
     );
   }
 
@@ -161,7 +162,11 @@ class CategoriesEnrichmentResource extends ResourceBase {
    */
   public function getCategoryEnrichmentData($langcode) {
     $tids = $this->getTermsToEnrich($langcode);
-    $data = array_map(fn($tid) => $this->enrichTerm($tid), $tids);
+    $data = [];
+    foreach ($tids as $tid) {
+      $term_data = $this->enrichTerm($tid);
+      $data[key($term_data)] = $term_data[key($term_data)];
+    }
 
     return $data;
   }
@@ -240,18 +245,24 @@ class CategoriesEnrichmentResource extends ResourceBase {
   public function enrichTerm($tid) {
     /** @var \Drupal\taxonomy\Entity\Term $term */
     $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
+    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $term_url = $term->toUrl()->toString(TRUE)->getGeneratedUrl();
+    // Trim slashes and remove langcode.
+    $term_url = str_replace("$current_langcode/", '', trim($term_url, '/'));
 
     return [
-      'id' => $term->id(),
-      'name' => $term->label(),
-      'include_in_desktop' => (int) $term->get('field_include_in_desktop')->getString(),
-      'include_in_mobile_tablet' => (int) $term->get('field_include_in_mobile_tablet')->getString(),
-      'move_to_right' => (int) $term->get('field_move_to_right')->getString(),
-      'font_color' => $term->get('field_term_font_color')->getString(),
-      'background_color' => $term->get('field_term_background_color')->getString(),
-      'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
-      'item_clickable' => (bool) $term->get('field_display_as_clickable_link')->getString(),
-      'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+      $term_url => [
+        'id' => $term->id(),
+        'name' => $term->label(),
+        'include_in_desktop' => (int) $term->get('field_include_in_desktop')->getString(),
+        'include_in_mobile_tablet' => (int) $term->get('field_include_in_mobile_tablet')->getString(),
+        'move_to_right' => (int) $term->get('field_move_to_right')->getString(),
+        'font_color' => $term->get('field_term_font_color')->getString(),
+        'background_color' => $term->get('field_term_background_color')->getString(),
+        'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
+        'item_clickable' => (bool) $term->get('field_display_as_clickable_link')->getString(),
+        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+      ],
     ];
   }
 
