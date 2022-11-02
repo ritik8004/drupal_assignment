@@ -76,4 +76,30 @@
       margin-bottom: 0;
     }
   }
+
+  .print--button {
+    @include breakpoint($desktop) {
+      top: rem(12);
+    }
+  }
+
+  .download-invoice-wrapper {
+    text-transform: capitalize;
+
+    @include breakpoint($desktop) {
+      top: rem(21);
+    }
+  }
+}
+
+#block-content {
+  .order-items li {
+    .order-list-wrapper-container {
+      .first {
+        @include breakpoint($desktop) {
+          width: rem(134);
+        }
+      }
+    }
+  }
 }
