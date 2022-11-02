@@ -192,6 +192,9 @@ const Teaser = ({
   let title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
   title = title.toString();
   const url = hasValue(updatedAttribute.url) ? updatedAttribute.url : attribute.url;
+  // Determining the green leaf flag for PLP and wishlist page.
+  const greenLeaf = typeof hit.attr_green_leaf[currentLanguage] !== 'undefined'
+    ? hit.attr_green_leaf[currentLanguage] : hit.attr_green_leaf;
 
   return (
     <div className={teaserClass}>
@@ -239,7 +242,7 @@ const Teaser = ({
               setSlider={setSlider}
             />
             {/* Render the green leaf icon for the sustainable products. */}
-            {hasValue(hit.attr_green_leaf) && hit.attr_green_leaf
+            {hasValue(greenLeaf) && greenLeaf
               && (
                 <div className="labels-container bottom-right">
                   <span className="map-green-leaf" />
