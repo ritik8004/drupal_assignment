@@ -320,7 +320,7 @@
   &.super-category-enabled.frontpage {
     .c-menu-primary {
       .mobile--menu {
-        @include breakpoint($upto-desktop) {
+        @include breakpoint($only-mobile) {
           top: rem(33);
           #{$left}: rem(-2);
         }
