@@ -27,7 +27,7 @@ class DomainConfigOverrides {
   protected $requestStack;
 
   /**
-   * AlshayXbDomainMapping constructor.
+   * DomainConfigOverrides constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
    *   Config factory.
