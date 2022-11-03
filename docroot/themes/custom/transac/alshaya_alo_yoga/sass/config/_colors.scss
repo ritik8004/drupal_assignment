@@ -104,11 +104,12 @@ $user_pwd_unmask: $gray-three;
 
 // Dropdown.
 $primary_dropdown_arrow_bg: transparent;
-$primary_dropdown_border: $alto;
+$primary_dropdown_border: $mercury;
 $primary_dropdown_option_hover: $black;
 $primary_dropdown_option_border: $alto;
 $primary_dropdown_option_disbled: $black;
 $primary_dropdown_arrow_icon: $black;
+$primary_dropdown_text: $black;
 
 // Footer
 $footer_border_top: $black;
@@ -139,6 +140,9 @@ $copyright_footer_paragraph: $black;
 
 // Social links
 $social_links_h3: $white;
+
+// contact form.
+$webform_contact_dropdown_disable_text: $black;
 
 // Accordion
 $accordion_border: $black;
