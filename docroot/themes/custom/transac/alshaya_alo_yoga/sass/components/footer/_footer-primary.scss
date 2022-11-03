@@ -134,6 +134,12 @@
     }
   }
 
+  #alshaya-newsletter-subscribe {
+    #edit-email {
+      border-bottom-width: 0;
+    }
+  }
+
   .alshaya-newsletter-subscribe {
     h3 {
       font-size: rem(16);
@@ -169,29 +175,7 @@
     }
 
     #edit-email {
-      padding-left: rem(10);
-      padding-right: rem(10) !important;
-      color: $footer-newsletter-text;
-
-      html[lang=ar] & {
-        padding-left: rem(10) !important;
-      }
-
-      @include breakpoint($desktop) {
-        width: 68%;
-
-        html[lang=ar] & {
-          width: 64%;
-        }
-      }
-
-      @include breakpoint($only-tablet) {
-        width: 70%;
-
-        html[lang=ar] & {
-          width: 66%;
-        }
-      }
+      padding-#{$left}: 2%;
 
       &::placeholder {
         color: $footer-newsletter-text;
@@ -218,9 +202,9 @@
       color: $primary_btn_bg;
       text-transform: uppercase;
       padding: 0 rem(15);
-      margin-bottom: rem(1);
+      margin-bottom: 0;
       #{$right}: 0;
-      height: rem(39);
+      height: rem(40);
     }
   }
 
