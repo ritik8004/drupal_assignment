@@ -1,7 +1,9 @@
 services:
   alshaya_xb.set_xb_cookie_subscriber:
     class: Drupal\alshaya_xb\EventSubscriber\SetXBCookieSubscriber
-    arguments: ['@request_stack']
+    arguments:
+      - '@request_stack'
+      - '@alshaya_xb.domain_config_overrides'
     tags:
       - { name: event_subscriber }
 

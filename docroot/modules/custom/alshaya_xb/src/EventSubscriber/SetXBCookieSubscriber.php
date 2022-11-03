@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_xb\EventSubscriber;
 
+use Drupal\alshaya_xb\Service\DomainConfigOverrides;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -21,10 +22,19 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
   protected $request;
 
   /**
+   * Domain config overrides for xb.
+   *
+   * @var \Drupal\alshaya_xb\Service\DomainConfigOverrides
+   */
+  protected DomainConfigOverrides $domainConfigOverrides;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(RequestStack $request) {
+  public function __construct(RequestStack $request,
+                              DomainConfigOverrides $domain_config) {
     $this->request = $request;
+    $this->domainConfigOverrides = $domain_config;
   }
 
   /**
@@ -38,12 +48,13 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // @todo For POC we have hardcoded the currency to OMR,
-    // this needs to be changed later.
+    // Get configs by domain.
+    $xbConfig = $this->domainConfigOverrides->getXbConfigByDomain();
+
     $cookie_value = json_encode([
-      'countryISO' => 'OM',
-      'currencyCode' => 'OMR',
-      'cultureCode' => 'ar',
+      'countryISO' => $xbConfig['code'],
+      'currencyCode' => $xbConfig['currency_code'],
+      'cultureCode' => $xbConfig['culture_code'],
     ]);
 
     $cookie = new Cookie(
@@ -67,6 +78,7 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::RESPONSE][] = ['setXbCookie', -10];
     return $events;
   }
