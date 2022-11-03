@@ -49,6 +49,7 @@
 
         a {
           font-family: $ay-heavy;
+          text-transform: uppercase;
 
           @include breakpoint($only-mobile) {
             font-family: $arial;
