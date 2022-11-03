@@ -18,6 +18,7 @@ $countries = [
   'bh' => 'Bahrain',
   'qa' => 'Qatar',
   'jo' => 'Jordan',
+  'xb' => 'Cross Border',
 ];
 
 $languages = [
