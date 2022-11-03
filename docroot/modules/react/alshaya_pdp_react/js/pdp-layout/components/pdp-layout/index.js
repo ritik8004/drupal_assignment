@@ -181,6 +181,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     }
     stickyButton();
     loadAfterProductDataFetch(productInfo);
+    Drupal.alshayaSeoGtmPushProductDetailView(document.getElementById('pdp-layout'));
   }, []);
 
   const getPanelData = useCallback((data) => {
