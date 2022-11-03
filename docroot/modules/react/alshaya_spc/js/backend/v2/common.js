@@ -612,6 +612,11 @@ const getProcessedCartData = async (cartData) => {
           data.items[itemKey].topupCardNumber = (
             hasValue(item.extension_attributes.topup_card_number)
           ) ? item.extension_attributes.topup_card_number : null;
+
+          // If item is a top-up card add the product name used for top-up.
+          data.items[itemKey].productName = (
+            hasValue(item.extension_attributes.topup_card_name)
+          ) ? item.extension_attributes.topup_card_name : null;
         }
       }
 
