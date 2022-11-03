@@ -141,12 +141,12 @@
 
         .select2-selection__rendered {
           // Matching the height with container to vertically center
-          // align the quanitity.
+          // the quantity number.
           line-height: rem(48);
         }
 
         .select2-selection__arrow {
-          // Vertically center dropdown the arrow.
+          // Vertically center the dropdown arrow.
           top: 50%;
           transform: translateY(-50%);
         }
@@ -154,7 +154,7 @@
     }
 
     &::after {
-      // Vertically center dropdown the arrow.
+      // Vertically center the dropdown arrow.
       top: 50%;
       transform: translateY(-50%);
     }
@@ -187,9 +187,9 @@
     .sku-base-form {
       button[type="submit"] {
         margin-bottom: 0;
+        width: rem(280);
         height: rem(56);
         margin-#{$left}: rem(18);
-        width: rem(280);
         text-transform: none;
 
         @include breakpoint($only-mobile) {
