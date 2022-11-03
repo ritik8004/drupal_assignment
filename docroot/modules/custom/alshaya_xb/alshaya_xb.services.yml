@@ -9,3 +9,9 @@ services:
     class: Drupal\alshaya_xb\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+
+  alshaya_xb.domain_mapping:
+    class: Drupal\alshaya_xb\Service\AlshayaXbDomainMapping
+    arguments:
+      - '@config.factory'
+      - '@request_stack'
