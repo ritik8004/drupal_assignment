@@ -6,11 +6,11 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Http\RequestStack;
 
 /**
- * Alshaya XB domain mapping service.
+ * Provides config overrides based on domain.
  *
  * @package Drupal\alshaya_xb\Service
  */
-class AlshayaXbDomainMapping {
+class DomainConfigOverrides {
 
   /**
    * Config Factory.

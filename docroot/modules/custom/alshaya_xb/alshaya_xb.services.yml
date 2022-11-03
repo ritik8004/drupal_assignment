@@ -10,8 +10,8 @@ services:
     tags:
       - { name: event_subscriber }
 
-  alshaya_xb.domain_mapping:
-    class: Drupal\alshaya_xb\Service\AlshayaXbDomainMapping
+  alshaya_xb.domain_config_overrides:
+    class: Drupal\alshaya_xb\Service\DomainConfigOverrides
     arguments:
       - '@config.factory'
       - '@request_stack'
