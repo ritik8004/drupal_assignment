@@ -173,12 +173,24 @@
       padding-right: rem(10) !important;
       color: $footer-newsletter-text;
 
+      html[lang=ar] & {
+        padding-left: rem(10) !important;
+      }
+
       @include breakpoint($desktop) {
         width: 68%;
+
+        html[lang=ar] & {
+          width: 64%;
+        }
       }
 
       @include breakpoint($only-tablet) {
         width: 70%;
+
+        html[lang=ar] & {
+          width: 66%;
+        }
       }
 
       &::placeholder {
