@@ -134,6 +134,12 @@
     }
   }
 
+  #alshaya-newsletter-subscribe {
+    #edit-email {
+      border-bottom-width: 0;
+    }
+  }
+
   .alshaya-newsletter-subscribe {
     h3 {
       font-size: rem(16);
@@ -194,12 +200,12 @@
       background-color: $primary_brand_button;
       font-family: $ay-heavy;
       font-size: rem(16);
-      line-height: 1.3;
       color: $primary_btn_bg;
       text-transform: uppercase;
-      padding: rem(9) rem(15);
-      margin-bottom: rem(1);
+      padding: 0 rem(15);
+      margin-bottom: 0;
       #{$right}: 0;
+      height: rem(40);
     }
   }
 
