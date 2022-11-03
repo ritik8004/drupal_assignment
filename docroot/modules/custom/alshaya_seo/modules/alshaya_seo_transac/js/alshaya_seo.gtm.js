@@ -1190,7 +1190,7 @@
     var data = {
       event: 'productClick',
       magento_product_id: isProductDataAvailable ? productSelector[0].getAttribute('gtm-magento-product-id') : null,
-      stock_status: drupalSettings.dataLayerContent.stockStatus || isProductDataAvailable ? productSelector[0].getAttribute('gtm-stock') : null,
+      stock_status: drupalSettings.dataLayerContent.stockStatus || (isProductDataAvailable ? productSelector[0].getAttribute('gtm-stock') : null),
       product_style_code: isProductDataAvailable ? productSelector[0].getAttribute('gtm-product-style-code') : null,
       ecommerce: {
         currencyCode: currencyCode,
