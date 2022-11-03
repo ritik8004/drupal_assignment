@@ -1,4 +1,4 @@
 # Added default config values as empty.
 globale_js_url: ''
 globale_css_url: ''
-domain_globale_data_mapping: []
+domain_mapping: []

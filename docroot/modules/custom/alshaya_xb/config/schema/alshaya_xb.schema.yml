@@ -8,12 +8,12 @@ alshaya_xb.settings:
     globale_css_url:
       type: string
       label: 'Global-e CSS URL'
-    domain_globale_data_mapping:
+    domain_mapping:
       type: sequence
-      label: 'Domains and global-e data'
+      label: 'Provides config based on domain'
       sequence:
         type: config_object
-        label: 'Global-e data and domain'
+        label: 'Config overrides based on domain'
         mapping:
           domains:
             type: string
