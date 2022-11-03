@@ -59,7 +59,7 @@ class AlshayaXbDomainMapping {
 
     foreach ($domainMappings as $domainMapping) {
       // Get domain and prefix comma separated.
-      $domains = $domainMapping['domain'];
+      $domains = $domainMapping['domains'];
       $domain_prefix = explode(',', $domains);
       $domain = $domain_prefix[0];
       $prefix = $domain_prefix[1];
