@@ -94,18 +94,6 @@ function datadog_js_page_attachments(array &$attachments) {
       ],
       'datadog_js_init',
     ];
-
-    // Attaching minfied code, source js/detect_modern_browser.js
-    $modern_browser_detect_script = [
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'script',
-        '#value' => Markup::create('!function(window){window.isModernBrowser=!1}(window),function(window){class __ES6Test{}let a,b={a:!0,c:()=>!0,d:[1,2,3]};const g=!0;let{c:c,d:d}=b,e=[...d,4];window.isModernBrowser=!0}(window);'),
-      ],
-      'detect_modern_browser',
-    ];
-
-    $attachments['#attached']['html_head'][] = $modern_browser_detect_script;
     $attachments['#attached']['html_head'][] = $log_script;
     $attachments['#attached']['html_head'][] = $log_markup;
     $attachments['#attached']['library'][] = 'datadog_js/logger';

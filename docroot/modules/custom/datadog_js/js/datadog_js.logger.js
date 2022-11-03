@@ -1,4 +1,34 @@
-(function (Drupal) {
+(function (Drupal,window) {
+  // Adding logic to detect modern ES6 js is supported
+  window.isModernBrowser = false;
+  try {
+    () => {};
+
+  // Class support
+  class __ES6Test {}
+
+  // Object initializer property and method shorthands
+  let a = true;
+  let b = {
+    a,
+    c() {
+      return true;
+    },
+    d: [1, 2, 3],
+  };
+  const g = true;
+
+  // Object destructuring
+  let { c, d } = b;
+
+  // Spread operator
+  let e = [...d, 4];
+
+  window.isModernBrowser = true;
+  } catch (error) {
+    window.isModernBrowser = false;
+  }
+
   // Initial a variable with page load timestamp to identify the actual time.
   // This time will remain unchanged within the context of window.
   window.pageLoadTime = window.pageLoadTime || new Date().getTime();
@@ -20,7 +50,7 @@
       context.pageLoadTime = window.pageLoadTime;
 
       // Pass flag weather browser is mordern or not
-      context.isModernBrowser = window.isModernBrowser;
+      context.isModernBrowser = window.isModernBrowser ? true: false;
 
       // Generate the unique ID only once for a page and pass to Datadog log for better monitoring.
       if (!pageUuid) {
@@ -84,4 +114,4 @@
     return uuid;
   };
 
-})(Drupal);
+})(Drupal,window);
