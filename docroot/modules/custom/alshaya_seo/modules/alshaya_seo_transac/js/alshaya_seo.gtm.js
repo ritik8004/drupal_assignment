@@ -60,7 +60,7 @@
         if (gtmContainer === 'product detail page') {
           const referrerData = Drupal.getItemFromLocalStorage('referrerData');
           const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
-          if (referrer === '' || !referrerData.path.includes(referrer)) {
+          if (referrer === '' || (Drupal.hasValue(referrerData) && !referrerData.path.includes(referrer))) {
             if(isSearchActivated !== null && !isSearchActivated) {
               // Set PDP as referrerPageType only if referrer is not set,
               // Search is not active or
