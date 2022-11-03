@@ -46,7 +46,7 @@ class AlshayaXbDomainMapping {
    * Get XB config data by domain or site code.
    *
    * @return array|null
-   *   XB data array by domain or site prefix.
+   *   XB data array by domain or null.
    */
   public function getXbConfigByDomain(): ?array {
     $config = $this->configFactory->get('alshaya_xb.settings');
@@ -59,14 +59,13 @@ class AlshayaXbDomainMapping {
 
     foreach ($domainMappings as $domainMapping) {
       // Get domain and prefix comma separated.
-      $domains = $domainMapping['domains'];
-      $domain_prefix = explode(',', $domains);
-      $domain = $domain_prefix[0];
-      $prefix = $domain_prefix[1];
-      if (strstr($base_url, $domain) || strstr($base_url, $prefix)) {
+      $domains = explode(',', $domainMapping['domains']);
+      foreach ($domains as $domain) {
         // Check if base_url has domain or the site prefix.
-        // then collect xb config data.
-        $xbConfig = $domainMapping;
+        if (strstr($base_url, $domain)) {
+          $xbConfig = $domainMapping;
+          break 2;
+        }
       }
     }
 
