@@ -161,10 +161,10 @@ class CategoriesEnrichmentResource extends ResourceBase {
    *   Enrichment data.
    */
   public function getCategoryEnrichmentData($langcode) {
-    $tids = $this->getTermsToEnrich($langcode);
+    $tids = $this->getEnrichedTerms($langcode);
     $data = [];
     foreach ($tids as $tid) {
-      $term_data = $this->enrichTerm($tid);
+      $term_data = $this->getEnrichedTermData($tid);
       $data[key($term_data)] = $term_data[key($term_data)];
     }
 
@@ -172,12 +172,12 @@ class CategoriesEnrichmentResource extends ResourceBase {
   }
 
   /**
-   * Get the list of tids for which we need enrichment.
+   * Get the list of tids for which we have enrichment.
    *
    * @return array
    *   Array of tids.
    */
-  protected function getTermsToEnrich($langcode) {
+  protected function getEnrichedTerms($langcode) {
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid']);
 
@@ -242,7 +242,7 @@ class CategoriesEnrichmentResource extends ResourceBase {
    * @param int $tid
    *   Term id.
    */
-  public function enrichTerm($tid) {
+  public function getEnrichedTermData($tid) {
     /** @var \Drupal\taxonomy\Entity\Term $term */
     $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
