@@ -176,6 +176,7 @@
 
     #edit-email {
       padding-#{$left}: 2%;
+      color: $footer-newsletter-text;
 
       &::placeholder {
         color: $footer-newsletter-text;
