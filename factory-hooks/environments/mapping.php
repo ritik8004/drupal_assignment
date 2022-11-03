@@ -353,6 +353,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'aeo_apc',
         'conductor' => 'aeoxb_dev3',
       ],
+      'test' => [
+        'magento' => 'aeo_test',
+        'conductor' => 'aeoxb_test',
+      ],
     ],
     'aeokw' => [
       'dev2' => [
