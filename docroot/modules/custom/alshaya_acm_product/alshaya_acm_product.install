@@ -18,7 +18,7 @@ use Drupal\facets\Entity\Facet;
  *
  * Add configuration to show swatches in carousel view.
  */
-function alshaya_acm_product_update_9401() {
+function alshaya_acm_product_update_9402() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
@@ -26,7 +26,7 @@ function alshaya_acm_product_update_9401() {
   ],
     'alshaya_acm_product',
     'install',
-    AlshayaConfigManager::MODE_REPLACE,
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE,
   );
 }
 
