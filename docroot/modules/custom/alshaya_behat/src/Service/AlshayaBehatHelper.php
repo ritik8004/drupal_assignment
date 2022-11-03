@@ -2,9 +2,11 @@
 
 namespace Drupal\alshaya_behat\Service;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\StockManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityBase;
 use Drupal\Core\Entity\EntityInterface;
@@ -71,6 +73,21 @@ class AlshayaBehatHelper {
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
+   * The api wrapper.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  protected $apiWrapper;
+
+  /**
+   * The api wrapper.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $alshayaApi;
+
+
+  /**
    * Number of skus to fetch.
    *
    * @var int
@@ -92,6 +109,10 @@ class AlshayaBehatHelper {
    *   Entity repository.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity storage.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   The acm api wrapper.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
+   *   The mdc api wrapper.
    */
   public function __construct(
     Connection $connection,
@@ -99,7 +120,9 @@ class AlshayaBehatHelper {
     StockManager $stock_manager,
     SkuManager $sku_manager,
     EntityRepositoryInterface $entity_repository,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    APIWrapper $api_wrapper,
+    AlshayaApiWrapper $alshaya_api
   ) {
     $this->database = $connection;
     $this->httpKernel = $http_kernel;
@@ -107,6 +130,8 @@ class AlshayaBehatHelper {
     $this->skuManager = $sku_manager;
     $this->entityRepository = $entity_repository;
     $this->entityTypeManager = $entity_type_manager;
+    $this->apiWrapper = $api_wrapper;
+    $this->alshayaApi = $alshaya_api;
   }
 
   /**
@@ -118,7 +143,7 @@ class AlshayaBehatHelper {
    * @return bool
    *   TRUE if node loads successfully else false.
    */
-  public function isEntityPageLoading(string $path): bool {
+  private function isEntityPageLoading(string $path): bool {
     $request = Request::create($path);
 
     try {
@@ -299,6 +324,53 @@ class AlshayaBehatHelper {
     }
 
     return NULL;
+  }
+
+  /**
+   * Provides the in-stock Product having a promotion.
+   *
+   * @param string $type
+   *   Promotion types like groupn, groupn_disc etc.
+   *
+   * @return \Drupal\node\NodeInterface|string
+   *   The node object else error message.
+   */
+  public function getWorkingProductWithPromo(string $type): NodeInterface|string {
+    // ACM API to fetch all promotion details.
+    $promotions = $this->apiWrapper->getPromotions('cart');
+    $promotions = is_array($promotions) ? $promotions : [];
+    $promo_types = array_column($promotions, 'action');
+
+    // If no promotion available of given type.
+    if (empty($promotions) || !in_array($type, $promo_types)) {
+      return 'No in-stock products found with given promotion type.';
+    }
+
+    // List of products having the promotion associated with.
+    $products = $promotions[array_search($type, $promo_types)]['products'] ?? [];
+    foreach ($products as $item) {
+      if (!empty($item['product_sku'])) {
+        // MDC API to fetch SKU details.
+        $product_details = $this->alshayaApi->getSku($item['product_sku']);
+        if (!empty($product_details)
+          && !empty($product_details['name'])
+          && !empty($product_details['custom_attributes'])
+          && $product_details['status'] === 1
+          && $product_details['extension_attributes']['stock_item']['is_in_stock'] === TRUE
+        ) {
+          // @todo Build product url from MDC API for V3 using GraphQL, independent of drupal DB.
+          $node = $this->skuManager->getDisplayNode($item['product_sku'], FALSE);
+          if ($node instanceof NodeInterface && $this->isEntityPageLoading($node->toUrl()->toString())) {
+            return $node;
+          }
+          else {
+            return 'Available product not found in Drupal Application. Probable sync issue.';
+          }
+        }
+      }
+    }
+
+    return 'No in-stock products found with given promotion type.';
   }
 
 }

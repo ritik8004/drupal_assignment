@@ -2,9 +2,6 @@
 
 namespace Drupal\alshaya_behat\Controller;
 
-use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_behat\Service\AlshayaBehatHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
@@ -36,36 +33,12 @@ class AlshayaBehatRoutes extends ControllerBase {
   protected $alshayaBehat;
 
   /**
-   * The api wrapper.
-   *
-   * @var \Drupal\acq_commerce\Conductor\APIWrapper
-   */
-  protected $apiWrapper;
-
-  /**
-   * The api wrapper.
-   *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
-   */
-  protected $alshayaApi;
-
-  /**
-   * The sku manager service.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuManager
-   */
-  protected $skuManager;
-
-  /**
    * {@inheritDoc}
    */
   public static function create(ContainerInterface $container): AlshayaBehatRoutes|static {
     return new static(
       $container->get('request_stack'),
-      $container->get('alshaya_behat.helper'),
-      $container->get('acq_commerce.api'),
-      $container->get('alshaya_api.api'),
-      $container->get('alshaya_acm_product.skumanager')
+      $container->get('alshaya_behat.helper')
     );
   }
 
@@ -76,25 +49,13 @@ class AlshayaBehatRoutes extends ControllerBase {
    *   Request stack.
    * @param \Drupal\alshaya_behat\Service\AlshayaBehatHelper $alshaya_behat
    *   Alshaya behat.
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
-   *   The acm api wrapper.
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
-   *   The mdc api wrapper.
-   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
-   *   The sku manager service.
    */
   public function __construct(
     RequestStack $request_stack,
-    AlshayaBehatHelper $alshaya_behat,
-    APIWrapper $api_wrapper,
-    AlshayaApiWrapper $alshaya_api,
-    SkuManager $sku_manager
+    AlshayaBehatHelper $alshaya_behat
   ) {
     $this->request = $request_stack->getCurrentRequest();
     $this->alshayaBehat = $alshaya_behat;
-    $this->apiWrapper = $api_wrapper;
-    $this->alshayaApi = $alshaya_api;
-    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -182,46 +143,14 @@ class AlshayaBehatRoutes extends ControllerBase {
    * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
    */
   public function inStockProductWithPromo(string $type): RedirectResponse {
-    // ACM API to fetch all promotion details.
-    $promotions = $this->apiWrapper->getPromotions('cart');
-    $promotions = is_array($promotions) ? $promotions : [];
-    $promo_types = array_column($promotions, 'action');
-
-    // If no promotion available of given type.
-    if (empty($promotions) || !in_array($type, $promo_types)) {
-      throw new BadRequestHttpException('No in-stock products found with given promotion type.');
+    $result = $this->alshayaBehat->getWorkingProductWithPromo($type);
+    if ($result instanceof NodeInterface) {
+      // Redirect to the node page.
+      return new RedirectResponse($result->toUrl()->toString());
     }
 
-    // List of products having the promotion associated with.
-    $products = $promotions[array_search($type, $promo_types)]['products'] ?? [];
-    foreach ($products as $item) {
-      if (!empty($item['product_sku'])) {
-        // MDC API to fetch SKU details.
-        $product_details = $this->alshayaApi->getSku($item['product_sku']);
-        if (!empty($product_details)
-          && !empty($product_details['name'])
-          && !empty($product_details['custom_attributes'])
-          && $product_details['status'] === 1
-          && $product_details['extension_attributes']['stock_item']['is_in_stock'] === TRUE
-        ) {
-          // @todo Build product url from MDC API for V3 using GraphQL, independent of drupal DB.
-          $node = $this->skuManager->getDisplayNode($item['product_sku'], FALSE);
-          if ($node instanceof NodeInterface && $this->alshayaBehat->isEntityPageLoading($node->toUrl()->toString())) {
-            break;
-          }
-          else {
-            $node = NULL;
-            throw new BadRequestHttpException('Available product not found in Drupal Application. Probable sync issue.');
-          }
-        }
-      }
-    }
-    if (!empty($node)) {
-      // Redirect to the PDP.
-      return new RedirectResponse($node->toUrl()->toString());
-    }
-
-    throw new BadRequestHttpException('No in-stock products found with given promotion type.');
+    // If no in-stock product found with promotion, then redirect to 400 page.
+    throw new BadRequestHttpException(is_string($result) ? $result : 'No in-stock products found with given promotion type.');
   }
 
 }
