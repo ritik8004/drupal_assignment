@@ -29,9 +29,17 @@
     @include breakpoint($desktop) {
       width: 32%;
     }
+
+    .mobile-content-wrapper {
+      @include breakpoint($only-mobile) {
+        padding: 0 rem(20);
+      }
+    }
   }
 
   &__title_wrapper {
+    border-bottom: none;
+
     h1,
     h1 span {
       font-size: rem(32);
@@ -63,6 +71,10 @@
       font-size: rem(14);
     }
 
+    @include breakpoint($only-mobile) {
+      padding: 0 rem(20);
+    }
+
     @include breakpoint($desktop) {
       width: 32%;
     }
@@ -86,6 +98,112 @@
     @include breakpoint($desktop) {
       width: rem(86) !important;
       height: rem(86) !important;
+    }
+  }
+}
+
+.select2Option {
+  h4 {
+    font-size: rem(16);
+    line-height: rem(20);
+    margin-top: rem(20);
+
+    span:first-child {
+      font-family: $alshaya-bold;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: rem(4);
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: rem(16);
+    }
+  }
+}
+
+.basic-details-wrapper .field--name-field-skus {
+  .form-item-quantity {
+    select.form-select {
+      // This renders only for viewport width < 1025.
+      height: rem(56);
+      padding-#{$left}: rem(10);
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        height: rem(53);
+      }
+    }
+
+    .select2-container {
+      .select2-selection {
+        height: rem(56);
+
+        .select2-selection__rendered {
+          // Matching the height with container to vertically center
+          // align the quanitity.
+          line-height: rem(48);
+        }
+
+        .select2-selection__arrow {
+          // Vertically center dropdown the arrow.
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+
+    &::after {
+      // Vertically center dropdown the arrow.
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .form-item.form-type-select.form-item-quantity {
+    @include breakpoint($only-mobile) {
+      float: unset;
+      top: unset;
+      width: 100%;
+      margin-bottom: rem(18);
+    }
+
+    @include breakpoint($only-tablet) {
+      float: $left;
+      top: 0;
+    }
+  }
+}
+
+.field--name {
+  &-field-skus {
+    .sku-base-form > div,
+    .sku-base-form > .js-form-wrapper {
+      @include breakpoint($mobile) {
+        width: 100%;
+      }
+    }
+
+    .sku-base-form {
+      button[type="submit"] {
+        margin-bottom: 0;
+        height: rem(56);
+        margin-#{$left}: rem(18);
+        width: rem(280);
+        text-transform: none;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          height: rem(46);
+        }
+
+        @include breakpoint($only-tablet) {
+          float: $right;
+          width: rem(170);
+          margin-top: rem(23);
+          margin-#{$left}: rem(8);
+        }
+      }
     }
   }
 }
