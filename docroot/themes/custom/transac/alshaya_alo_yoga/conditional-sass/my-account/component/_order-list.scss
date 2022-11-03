@@ -10,6 +10,16 @@
       top: rem(-83);
     }
   }
+
+  .show-all {
+    font-family: $ay-nova-semibold;
+  }
+
+  .recent__orders--list:first-of-type {
+    tr:first-child td {
+      border-top: 0;
+    }
+  }
 }
 
 .block-alshaya-user-recent-orders {
@@ -25,5 +35,60 @@
     font-family: $ay-bold;
     font-size: rem(18);
     text-transform: uppercase;
+  }
+
+  .orders-list-pager-wrapper {
+    button {
+      @include secondaryBtn(true);
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.recent__orders--list {
+  .order__detail--link a {
+    font-family: $ay-nova-semibold;
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-type-select {
+    @include breakpoint($only-mobile) {
+      width: 49%;
+    }
+
+    .select2-container {
+      .select2-selection {
+        @include breakpoint($desktop) {
+          font-size: rem(12);
+        }
+      }
+    }
+  }
+
+  .form-actions {
+    &::after {
+      padding: rem(7) 0 rem(5);
+    }
+  }
+
+  &.active--search {
+    .form-item-search {
+      input {
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          margin: 0;
+        }
+      }
+
+      input[type=text]:focus {
+        @include breakpoint($only-mobile) {
+          position: absolute;
+        }
+      }
+    }
   }
 }

@@ -1,4 +1,11 @@
-.visual-mobile-level-three__heading {
-  font-family: $ay-black;
-  text-transform: uppercase;
+.visual-mobile-level-three {
+  @include breakpoint($only-tablet) {
+    max-width: rem(500);
+    top: rem(90);
+  }
+
+  &__heading {
+    font-family: $ay-black;
+    text-transform: uppercase;
+  }
 }

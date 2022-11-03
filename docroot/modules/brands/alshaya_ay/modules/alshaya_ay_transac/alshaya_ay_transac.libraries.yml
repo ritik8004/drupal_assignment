@@ -1,0 +1,6 @@
+mobile_menu:
+  version: 1.x
+  js:
+    js/alshaya_ay_transac_mobile_menu.js: {}
+  dependencies:
+    - core/jquery

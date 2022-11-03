@@ -8,6 +8,7 @@ color_swatches: false
 color_swatches_hover: false
 color_swatches_show_product_image: false
 show_variants_thumbnail_plp_gallery: false
+show_variants_thumbnail_plp_gallery2: false
 show_configurable_boxes_after: 767
 plp_slider:
   item: 4
