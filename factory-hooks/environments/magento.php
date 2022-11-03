@@ -1792,7 +1792,7 @@ $magentos = [
       'store_id' => ['en' => 1, 'ar' => 6],
     ],
     'xb' => [
-      'store_id' => ['en' => 00, 'ar' => 00],
+      'store_id' => ['en' => 21, 'ar' => 18],
     ],
     'sa' => [
       'store_id' => ['en' => 2, 'ar' => 3],

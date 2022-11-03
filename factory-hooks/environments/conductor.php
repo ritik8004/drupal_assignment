@@ -1202,9 +1202,9 @@ $conductors = [
     'site_id' => 176,
   ],
   'aeoxb_test' => [
-    'hmac_id' => '???',
-    'hmac_secret' => '???',
-    'site_id' => 000,
+    'hmac_id' => '1529e8ec8e2b4cb0a2813d88208ce033',
+    'hmac_secret' => 'ZjA4NTc0MWUtYTNiNi00',
+    'site_id' => 575,
   ],
   'aeoeg_qa' => [
     'hmac_id' => '5e49e396d2ec416f9216a3a287f738fc',
