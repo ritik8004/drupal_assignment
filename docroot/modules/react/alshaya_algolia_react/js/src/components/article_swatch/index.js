@@ -7,6 +7,7 @@ const ArticleSwatches = ({
   sku, articleSwatches, url, handleSwatchSelect,
 }) => {
   const [selectedSwatch, setActiveSwatch] = useState(sku);
+  const [swatchStatus, setSwatchStatus] = useState({});
   if (typeof articleSwatches === 'undefined') {
     return null;
   }
@@ -47,6 +48,9 @@ const ArticleSwatches = ({
       handleSwatchSelect(productData);
       Drupal.alshayaSeoGtmPushSwatchClick(productData);
     } else {
+      // Set disabled as true for current swatch for product goes oos
+      // or any error.
+      setSwatchStatus({ [swatch.article_sku_code]: true });
       // If graphQl API is returning Error.
       Drupal.alshayaLogger('error', 'Error while calling the GraphQL to fetch product info for sku: @sku', {
         '@sku': sku,
@@ -65,6 +69,7 @@ const ArticleSwatches = ({
               className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
               key={swatch.article_sku_code}
               style={{ backgroundColor: swatch.rgb_color }}
+              disabled={swatchStatus[swatch.article_sku_code]}
             />
           ),
         )}
