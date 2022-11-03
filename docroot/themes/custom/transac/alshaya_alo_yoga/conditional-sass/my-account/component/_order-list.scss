@@ -64,6 +64,32 @@
       .select2-selection {
         @include breakpoint($desktop) {
           font-size: rem(12);
+          height: rem(35);
+        }
+
+        &__arrow {
+          @include breakpoint($desktop) {
+            height: rem(35);
+          }
+
+          &::after {
+            @include breakpoint($desktop) {
+              line-height: rem(35);
+              height: rem(35);
+            }
+          }
+        }
+
+        &__rendered {
+          @include breakpoint($desktop) {
+            height: rem(35);
+          }
+        }
+
+        .select2-selection__rendered {
+          @include breakpoint($desktop) {
+            line-height: rem(35);
+          }
         }
       }
     }
