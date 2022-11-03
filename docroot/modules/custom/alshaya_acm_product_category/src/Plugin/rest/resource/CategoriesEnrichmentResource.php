@@ -160,7 +160,12 @@ class CategoriesEnrichmentResource extends ResourceBase {
       );
 
     $response = new ResourceResponse($response_data);
-    $this->addCacheableTermDependency($response);
+    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
+      '#cache' => [
+        'tags' => $this->termCacheTags,
+      ],
+    ]));
+
     return $response;
   }
 
@@ -282,20 +287,6 @@ class CategoriesEnrichmentResource extends ResourceBase {
         'deeplink' => $this->mobileAppUtility->getDeepLink($term),
       ],
     ];
-  }
-
-  /**
-   * Adding rcs category terms dependency to response.
-   *
-   * @param \Drupal\rest\ResourceResponse $response
-   *   Response object.
-   */
-  protected function addCacheableTermDependency(ResourceResponse $response) {
-    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
-      '#cache' => [
-        'tags' => $this->termCacheTags,
-      ],
-    ]));
   }
 
 }
