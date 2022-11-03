@@ -5,6 +5,8 @@
       {{#each this.select_options}}
         {{#if this.swatch-image }}
           <option value="{{ this.value }}" swatch-image="{{ this.swatch-image }}">{{ this.text }}</option>
+        {{else if this.group-data }}
+          <option value="{{ this.value }}" group-data="{{ this.group-data }}">{{ this.text }}</option>
         {{else}}
           <option value="{{ this.value }}" >{{ this.text }}</option>
         {{/if}}

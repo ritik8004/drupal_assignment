@@ -157,6 +157,40 @@ function getPdpSwatchImageUrl(product, childSku) {
 }
 
 /**
+ * Get the size group data for the provide sku.
+ *
+ * @param {string} sku
+ *   The SKU value.
+ *
+ * @returns {string|null}
+ *   The size group.
+ */
+ function getPdpSizeGroupData(product, childSku) {
+  let sizeGroup = {};
+  let flag = true;
+  const sizeGroupAlternates = drupalSettings.alshayaRcs.pdpSizeGroupAlternates;
+  product.variants.forEach(function (variant) {
+    if (variant.product.sku == childSku) {
+      sizeGroupAlternates.forEach(function (alternates) {
+        const value = variant.product[alternates.value];
+        if (!Drupal.hasValue(value)) {
+          flag = false;
+        }
+        const valueLabel = window.commerceBackend.getAttributeValueLabel(alternates.value, value);
+        sizeGroup[alternates.value] = {
+          'label': alternates.label,
+          'value': valueLabel,
+        }
+      });
+      // Break from the loop.
+      return false;
+    }
+  });
+
+  return (flag) ? JSON.stringify(sizeGroup) : null;
+}
+
+/**
  * Removes unavailable option values from provided configurable options.
  *
  * @param {string} sku
@@ -487,6 +521,9 @@ exports.computePhFilters = function (input, filter) {
           const formattedAttributeCode = option.attribute_code.replaceAll('_', '-');
           // Check if the attribute is a swatch attribute.
           const isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
+          // Check if the attribute is a size group attribute.
+          const isSizeGroupOption = drupalSettings.alshayaRcs.pdpSizeGroupAttribute.includes(option.attribute_code);
+
           let dataDefaultTitle = option.label;
           let dataTitle = null;
           const configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(input.sku);
@@ -497,6 +534,7 @@ exports.computePhFilters = function (input, filter) {
           }
 
           const selectOptions = [];
+          let sizeGroupData = null;
           // Add the option values.
           option.values.forEach((value) => {
             let label = window.commerceBackend.getAttributeValueLabel(option.attribute_code, value.value_index);
@@ -520,6 +558,13 @@ exports.computePhFilters = function (input, filter) {
               // Drupal.alshaya_color_images_generate_swatch_markup().
               if (childSku !== null && !Drupal.hasValue(configurableColorDetails)) {
                 selectOption['swatch-image'] = getPdpSwatchImageUrl(input, childSku);
+              }
+            } else if (isSizeGroupOption) {
+              const childSku = window.commerceBackend.getChildSkuFromAttribute(input.sku, option.attribute_code, value.value_index);
+              sizeGroupData = getPdpSizeGroupData(input, childSku);
+              // If configurableSizeGroup has value, then we process the group data.
+              if (childSku !== null && Drupal.hasValue(sizeGroupData)) {
+                selectOption['group-data'] = sizeGroupData;
               }
             }
             selectOptions.push(selectOption);
@@ -551,6 +596,15 @@ exports.computePhFilters = function (input, filter) {
             return Drupal.t('@title field is required.', { '@title': label });
           };
 
+          let configurableClass = 'form-item-configurable-select';
+          let configurableWrapperClass = 'configurable-select';
+          if (isOptionSwatch) {
+            configurableClass = 'form-item-configurable-swatch';
+            configurableWrapperClass = 'configurable-swatch';
+          } else if (isSizeGroupOption && Drupal.hasValue(sizeGroupData)) {
+            configurableClass = 'form-item-configurable-select-group';
+          }
+
           const configurableOption = ({
             data_configurable_code: option.attribute_code,
             data_default_title: dataDefaultTitle,
@@ -558,8 +612,8 @@ exports.computePhFilters = function (input, filter) {
             data_selected_title: option.label,
             data_drupal_selector: `edit-configurables-${formattedAttributeCode}`,
             id: `edit-configurables-${formattedAttributeCode}`,
-            class: isOptionSwatch ? 'form-item-configurable-swatch' : 'form-item-configurable-select',
-            wrapperClass: isOptionSwatch ? 'configurable-swatch' : 'configurable-select',
+            class: configurableClass,
+            wrapperClass: configurableWrapperClass,
             hiddenClass: (hiddenFormAttributes.includes(option.attribute_code)) ? 'hidden' : '',
             name: `configurables[${option.attribute_code}]`,
             data_msg_required: getLabelErrorMessage(option.attribute_code, dataDefaultTitle),
