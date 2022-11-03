@@ -193,9 +193,14 @@ const Teaser = ({
   let title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
   title = title.toString();
   const url = hasValue(updatedAttribute.url) ? updatedAttribute.url : attribute.url;
-  // Determining the green leaf flag for PLP and wishlist page.
-  const greenLeaf = typeof hit.attr_green_leaf[currentLanguage] !== 'undefined'
-    ? hit.attr_green_leaf[currentLanguage] : hit.attr_green_leaf;
+  // Checking whether the green leaf attribute is present or not.
+  let greenLeaf = null;
+  if (hasValue(hit.attr_green_leaf)) {
+    // Determining the green leaf flag for PLP and wishlist page.
+    greenLeaf = typeof hit.attr_green_leaf[currentLanguage] !== 'undefined'
+      ? hit.attr_green_leaf[currentLanguage]
+      : hit.attr_green_leaf;
+  }
 
   return (
     <div className={teaserClass}>
