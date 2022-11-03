@@ -219,7 +219,7 @@ class AlshayaBehatHelper {
         // Request the node and check if there is any error when loading the
         // node.
         // If there is an error we check the next sku.
-        if (!$this->isEntityPageLoading("/node/$node->id()")) {
+        if (!$this->isEntityPageLoading('/node/' . $node->id())) {
           continue;
         }
         return $node;

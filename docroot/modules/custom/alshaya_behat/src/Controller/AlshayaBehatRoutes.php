@@ -3,13 +3,13 @@
 namespace Drupal\alshaya_behat\Controller;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_behat\Service\AlshayaBehatHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Http\RequestStack;
-use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -50,11 +50,11 @@ class AlshayaBehatRoutes extends ControllerBase {
   protected $alshayaApi;
 
   /**
-   * The language manager.
+   * The sku manager service.
    *
-   * @var \Drupal\Core\Language\LanguageManager
+   * @var \Drupal\alshaya_acm_product\SkuManager
    */
-  protected $languageManager;
+  protected $skuManager;
 
   /**
    * {@inheritDoc}
@@ -65,7 +65,7 @@ class AlshayaBehatRoutes extends ControllerBase {
       $container->get('alshaya_behat.helper'),
       $container->get('acq_commerce.api'),
       $container->get('alshaya_api.api'),
-      $container->get('language_manager')
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 
@@ -80,21 +80,21 @@ class AlshayaBehatRoutes extends ControllerBase {
    *   The acm api wrapper.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
    *   The mdc api wrapper.
-   * @param \Drupal\Core\Language\LanguageManager $language_manager
-   *   The language manager.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   The sku manager service.
    */
   public function __construct(
     RequestStack $request_stack,
     AlshayaBehatHelper $alshaya_behat,
     APIWrapper $api_wrapper,
     AlshayaApiWrapper $alshaya_api,
-    LanguageManager $language_manager
+    SkuManager $sku_manager
   ) {
     $this->request = $request_stack->getCurrentRequest();
     $this->alshayaBehat = $alshaya_behat;
     $this->apiWrapper = $api_wrapper;
     $this->alshayaApi = $alshaya_api;
-    $this->languageManager = $language_manager;
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -173,15 +173,18 @@ class AlshayaBehatRoutes extends ControllerBase {
   /**
    * Provides the in-stock Product having a promotion.
    *
+   * @param string $type
+   *   Promotion types like groupn, groupn_disc etc.
+   *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirects to PDP page if found else redirects to 404 page.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
    */
-  public function inStockProductWithPromo($type): RedirectResponse {
-    $product_url = NULL;
+  public function inStockProductWithPromo(string $type): RedirectResponse {
     // ACM API to fetch all promotion details.
     $promotions = $this->apiWrapper->getPromotions('cart');
+    $promotions = is_array($promotions) ? $promotions : [];
     $promo_types = array_column($promotions, 'action');
 
     // If no promotion available of given type.
@@ -191,8 +194,6 @@ class AlshayaBehatRoutes extends ControllerBase {
 
     // List of products having the promotion associated with.
     $products = $promotions[array_search($type, $promo_types)]['products'] ?? [];
-    $current_lang = $this->languageManager->getCurrentLanguage()->getId();
-    // Fetch product details in english for creating PDP url.
     foreach ($products as $item) {
       if (!empty($item['product_sku'])) {
         // MDC API to fetch SKU details.
@@ -203,24 +204,21 @@ class AlshayaBehatRoutes extends ControllerBase {
           && $product_details['status'] === 1
           && $product_details['extension_attributes']['stock_item']['is_in_stock'] === TRUE
         ) {
-          $attributes = array_column($product_details['custom_attributes'], 'value', 'attribute_code');
-          if (!empty($attributes['url_key'])) {
-            // Building product url from API data.
-            $product_url = '/' . $current_lang . '/buy-' . rtrim($attributes['url_key'], '-' . strtolower($product_details['sku'])) . '.html';
-            // Check if page loads correctly.
-            if ($this->alshayaBehat->isEntityPageLoading($product_url)) {
-              break;
-            }
-            else {
-              $product_url = NULL;
-            }
+          // @todo Build product url from MDC API for V3 using GraphQL, independent of drupal DB.
+          $node = $this->skuManager->getDisplayNode($item['product_sku'], FALSE);
+          if ($node instanceof NodeInterface && $this->alshayaBehat->isEntityPageLoading($node->toUrl()->toString())) {
+            break;
+          }
+          else {
+            $node = NULL;
+            throw new BadRequestHttpException('Available product not found in Drupal Application. Probable sync issue.');
           }
         }
       }
     }
-    if ($product_url) {
+    if (!empty($node)) {
       // Redirect to the PDP.
-      return new RedirectResponse($product_url);
+      return new RedirectResponse($node->toUrl()->toString());
     }
 
     throw new BadRequestHttpException('No in-stock products found with given promotion type.');
