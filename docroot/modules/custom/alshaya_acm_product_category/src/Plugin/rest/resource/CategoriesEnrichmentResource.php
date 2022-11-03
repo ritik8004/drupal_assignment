@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -68,6 +69,18 @@ class CategoriesEnrichmentResource extends ResourceBase {
    * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
    */
   protected $mobileAppUtility;
+
+  /**
+   * Rcs category term cache tags.
+   *
+   * @var array
+   */
+  protected $termCacheTags = [];
+
+  /**
+   * The VID for the taxonomy we are targeting.
+   */
+  public const VOCABULARY_ID = 'acq_product_category';
 
   /**
    * AlshayaRcsCategoryResource constructor.
@@ -161,6 +174,8 @@ class CategoriesEnrichmentResource extends ResourceBase {
    *   Enrichment data.
    */
   public function getCategoryEnrichmentData($langcode) {
+    $this->termCacheTags = ['taxonomy_term_list:' . self::VOCABULARY_ID];
+
     $tids = $this->getEnrichedTerms($langcode);
     $data = [];
     foreach ($tids as $tid) {
@@ -250,6 +265,9 @@ class CategoriesEnrichmentResource extends ResourceBase {
     // Trim slashes and remove langcode.
     $term_url = str_replace("$current_langcode/", '', trim($term_url, '/'));
 
+    // Add term object in array for cache dependency.
+    $this->termCacheTags = Cache::mergeTags($this->termCacheTags, $term->getCacheTags());
+
     return [
       $term_url => [
         'id' => $term->id(),
@@ -275,7 +293,7 @@ class CategoriesEnrichmentResource extends ResourceBase {
   protected function addCacheableTermDependency(ResourceResponse $response) {
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
-        'tags' => $this->alshayaRcsCategoryHelper->getTermsCacheTags(),
+        'tags' => $this->termCacheTags,
       ],
     ]));
   }
