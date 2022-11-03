@@ -169,8 +169,17 @@
     }
 
     #edit-email {
-      padding-#{$left}: 2%;
+      padding-left: rem(10);
+      padding-right: rem(10) !important;
       color: $footer-newsletter-text;
+
+      @include breakpoint($desktop) {
+        width: 68%;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 70%;
+      }
 
       &::placeholder {
         color: $footer-newsletter-text;
@@ -194,12 +203,12 @@
       background-color: $primary_brand_button;
       font-family: $ay-heavy;
       font-size: rem(16);
-      line-height: 1.3;
       color: $primary_btn_bg;
       text-transform: uppercase;
-      padding: rem(9) rem(15);
+      padding: 0 rem(15);
       margin-bottom: rem(1);
       #{$right}: 0;
+      height: rem(39);
     }
   }
 
