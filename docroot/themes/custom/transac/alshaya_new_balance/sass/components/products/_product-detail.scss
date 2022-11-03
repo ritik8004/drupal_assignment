@@ -82,14 +82,17 @@
 }
 
 .delivery-options-wrapper {
-  .c-accordion__title {
-    font-size: rem(16);
-    line-height: rem(20);
-  }
+  margin-top: rem(38);
 
   .c-accordion-delivery-options {
-    padding-top: rem(25);
-    padding-bottom: rem(25);
+    padding-top: 0;
+    padding-bottom: rem(22);
+
+    .ui-accordion-header {
+      font-size: rem(16);
+      line-height: rem(20);
+      padding-top: rem(22);
+    }
   }
 }
 
@@ -118,6 +121,31 @@
 
     @include breakpoint($only-tablet) {
       margin-top: rem(16);
+    }
+  }
+
+  .select-buttons {
+    li {
+      span,
+      a {
+        &.picked,
+        &:hover {
+          border-color: $pdp_size_option_selected_border;
+        }
+      }
+
+      &.disabled {
+        span,
+        a {
+          background-image: none;
+          background-color: $pdp_size_option_disabled_bg;
+
+          &:hover {
+            color: $pdp_size_option_text;
+            border-color: $pdp_size_option_border;
+          }
+        }
+      }
     }
   }
 }
@@ -173,6 +201,21 @@
       top: 0;
     }
   }
+
+  .form-item-configurables-size {
+    .select2Option {
+      .select-buttons {
+        li {
+          span,
+          a {
+            width: rem(86);
+            height: rem(44);
+            line-height: rem(16);
+          }
+        }
+      }
+    }
+  }
 }
 
 .field--name {
@@ -205,5 +248,37 @@
         }
       }
     }
+  }
+}
+
+.short-description-wrapper:not(.matchback-description-wrapper) {
+  .c-pdp & {
+    border-top: none;
+  }
+}
+
+.short-description-wrapper {
+  margin-top: rem(34);
+
+  .field {
+    &__label {
+      // We are not displaying the description label in NB.
+      display: none;
+    }
+
+    &__content {
+      line-height: rem(24);
+    }
+  }
+
+  .read-more-description-link,
+  .read-more-description-link-mobile {
+    line-height: rem(18);
+    text-decoration: underline;
+    margin-top: rem(8);
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-top: rem(30);
   }
 }
