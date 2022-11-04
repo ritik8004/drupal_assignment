@@ -619,8 +619,8 @@ export const pushWishlistSeoGtmData = (productData, action = 'add') => {
     product.quantity = 1;
 
     // Set product variant to the selected variant.
-    if (product.dimension2 !== 'simple' && typeof productData.sku !== 'undefined') {
-      product.variant = productData.sku;
+    if (product.dimension2 !== 'simple' && (typeof productData.variant !== 'undefined' || typeof productData.sku !== 'undefined')) {
+      product.variant = productData.variant || productData.sku;
     } else {
       product.variant = product.id;
     }
