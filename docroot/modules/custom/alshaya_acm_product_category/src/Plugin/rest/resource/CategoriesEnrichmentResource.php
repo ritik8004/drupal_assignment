@@ -8,7 +8,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
-use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
+use Drupal\alshaya_acm_product_category\Event\EnrichedCategoryDataAlterEvent;
+use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Connection;
@@ -56,13 +57,6 @@ class CategoriesEnrichmentResource extends ResourceBase {
   protected $entityTypeManager;
 
   /**
-   * Mobile app utility.
-   *
-   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
-   */
-  protected $mobileAppUtility;
-
-  /**
    * Rcs category term cache tags.
    *
    * @var array
@@ -73,6 +67,13 @@ class CategoriesEnrichmentResource extends ResourceBase {
    * The VID for the taxonomy we are targeting.
    */
   public const VOCABULARY_ID = 'acq_product_category';
+
+  /**
+   * Event dispatcher.
+   *
+   * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
+   */
+  protected $eventDispatcher;
 
   /**
    * AlshayaRcsCategoryResource constructor.
@@ -95,8 +96,8 @@ class CategoriesEnrichmentResource extends ResourceBase {
    *   Database connection.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
-   *   Mobile app utility.
+   * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $event_dispatcher
+   *   Event dispatcher.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -107,13 +108,13 @@ class CategoriesEnrichmentResource extends ResourceBase {
                               AlshayaRequestContextManager $alshaya_request_context_manager,
                               Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
-                              MobileAppUtility $mobile_app_utility) {
+                              ContainerAwareEventDispatcher $event_dispatcher) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->requestContextManager = $alshaya_request_context_manager;
     $this->connection = $connection;
     $this->entityTypeManager = $entity_type_manager;
-    $this->mobileAppUtility = $mobile_app_utility;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -127,12 +128,10 @@ class CategoriesEnrichmentResource extends ResourceBase {
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('language_manager'),
-      $container->get('alshaya_rcs_main_menu.rcs_category_helper'),
       $container->get('alshaya_acm_product.context_manager'),
       $container->get('database'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_mobile_app.utility'),
-      $container->get('language_manager')
+      $container->get('event_dispatcher')
     );
   }
 
@@ -261,20 +260,27 @@ class CategoriesEnrichmentResource extends ResourceBase {
     // Add term object in array for cache dependency.
     $this->termCacheTags = Cache::mergeTags($this->termCacheTags, $term->getCacheTags());
 
-    return [
-      $term_url => [
-        'id' => $term->id(),
-        'name' => $term->label(),
-        'include_in_desktop' => (int) $term->get('field_include_in_desktop')->getString(),
-        'include_in_mobile_tablet' => (int) $term->get('field_include_in_mobile_tablet')->getString(),
-        'move_to_right' => (int) $term->get('field_move_to_right')->getString(),
-        'font_color' => $term->get('field_term_font_color')->getString(),
-        'background_color' => $term->get('field_term_background_color')->getString(),
-        'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
-        'item_clickable' => (bool) $term->get('field_display_as_clickable_link')->getString(),
-        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
-      ],
+    $data = [
+      'id' => $term->id(),
+      'name' => $term->label(),
+      'include_in_desktop' => (int) $term->get('field_include_in_desktop')->getString(),
+      'include_in_mobile_tablet' => (int) $term->get('field_include_in_mobile_tablet')->getString(),
+      'move_to_right' => (int) $term->get('field_move_to_right')->getString(),
+      'font_color' => $term->get('field_term_font_color')->getString(),
+      'background_color' => $term->get('field_term_background_color')->getString(),
+      'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
+      'item_clickable' => (bool) $term->get('field_display_as_clickable_link')->getString(),
     ];
+
+    $event = new EnrichedCategoryDataAlterEvent([
+      'processed_data' => $data,
+      'term' => $term,
+    ]);
+    $this->eventDispatcher->dispatch($event, EnrichedCategoryDataAlterEvent::EVENT_NAME);
+    // Get the altered data.
+    $data = $event->getData();
+
+    return [$term_url => $data['processed_data']];
   }
 
 }

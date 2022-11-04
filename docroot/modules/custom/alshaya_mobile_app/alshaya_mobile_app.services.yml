@@ -66,3 +66,9 @@ services:
       - '@alshaya_acm_product.price_helper'
       - '@alshaya_product_options.swatches'
       - '@config.factory'
+  alshaya_mobile_app.categories_enrichment_subscriber:
+    class: Drupal\alshaya_mobile_app\EventSubscriber\CategoriesEnrichmentEventSubscriber
+    arguments:
+      - '@alshaya_mobile_app.utility'
+    tags:
+      - {name: 'event_subscriber'}
