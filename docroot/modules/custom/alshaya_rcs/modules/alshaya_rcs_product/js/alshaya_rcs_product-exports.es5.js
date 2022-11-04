@@ -543,7 +543,10 @@ exports.computePhFilters = function (input, filter) {
           // Check if the attribute is a swatch attribute.
           const isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
           // Check if the attribute is a size group attribute.
-          const isSizeGroupOption = drupalSettings.alshayaRcs.pdpSizeGroupAttribute.includes(option.attribute_code);
+          let isSizeGroupOption = false;
+          if (Drupal.hasValue(drupalSettings.alshayaRcs.pdpSizeGroupAttribute)) {
+            isSizeGroupOption = drupalSettings.alshayaRcs.pdpSizeGroupAttribute.includes(option.attribute_code);
+          }
 
           let dataDefaultTitle = option.label;
           let dataTitle = null;
