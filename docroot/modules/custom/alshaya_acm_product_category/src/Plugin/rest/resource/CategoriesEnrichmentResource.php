@@ -7,7 +7,6 @@ use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
@@ -34,13 +33,6 @@ class CategoriesEnrichmentResource extends ResourceBase {
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
-
-  /**
-   * The alshaya rcs_category helper.
-   *
-   * @var \Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper
-   */
-  protected $alshayaRcsCategoryHelper;
 
   /**
    * Alshaya Request Context Manager.
@@ -97,8 +89,6 @@ class CategoriesEnrichmentResource extends ResourceBase {
    *   Logger channel.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper $alshaya_rcs_category_helper
-   *   The alshaya rcs_category helper.
    * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshaya_request_context_manager
    *   Alshaya Request Context Manager.
    * @param \Drupal\Core\Database\Connection $connection
@@ -114,14 +104,12 @@ class CategoriesEnrichmentResource extends ResourceBase {
                               array $serializer_formats,
                               LoggerInterface $logger,
                               LanguageManagerInterface $language_manager,
-                              AlshayaRcsCategoryHelper $alshaya_rcs_category_helper,
                               AlshayaRequestContextManager $alshaya_request_context_manager,
                               Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
                               MobileAppUtility $mobile_app_utility) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
-    $this->alshayaRcsCategoryHelper = $alshaya_rcs_category_helper;
     $this->requestContextManager = $alshaya_request_context_manager;
     $this->connection = $connection;
     $this->entityTypeManager = $entity_type_manager;
