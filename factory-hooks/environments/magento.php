@@ -1962,30 +1962,7 @@ $magentos = [
     ],
   ],
   'mu_qa' => [
-    'url' => 'https://integration-5ojmyuq-szaftnexsfo4k.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'd8gfbetgjq5ivnqoqas85hdpi1zdplf1',
-      'consumer_secret' => 'gaxphnn61qgg5js9dsy2xrwlc70dehn5',
-      'access_token' => '214yfy8hauwdqu4b25ci573iefokdp85',
-      'access_token_secret' => 'z6jfn1akazvc86cpq5v1ymwi5ikcouhr',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-  ],
-  'mu_test' => [
+    'algolia_env' => 'mu_test',
     'url' => 'https://muji-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'cd2hqmtyqht62jka3w54jm1bdd9zdlhq',
