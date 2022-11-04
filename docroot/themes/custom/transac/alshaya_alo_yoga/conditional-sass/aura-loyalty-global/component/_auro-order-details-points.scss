@@ -1,0 +1,13 @@
+#block-content {
+  .order-items {
+    li .order-list-wrapper-container.has-aura-points {
+      .fourth {
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            padding-right: rem(32);
+          }
+        }
+      }
+    }
+  }
+}
