@@ -1,0 +1,9 @@
+.block-alshaya-grid-count-block {
+  height: auto;
+
+  .total-result-count {
+    @include breakpoint($only-mobile) {
+      padding: rem(20);
+    }
+  }
+}

@@ -1,7 +1,7 @@
 #alshaya-algolia-search {
   .c-page-title {
-    font-size: rem(38);
-    text-transform: unset;
+    font-size: rem(28);
+    text-transform: capitalize;
   }
 }
 
@@ -12,6 +12,7 @@
       .c-collapse__title {
         text-transform: uppercase;
         font-size: rem(16);
+        line-height: initial;
 
         &::after {
           font-size: rem(32);
@@ -42,7 +43,22 @@
   .block-facet-blockcategory-facet-search {
     .c-accordion__title {
       &.c-collapse__title {
-        text-transform: unset;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .c-page-title {
+    padding: rem(12) 0 rem(16);
+  }
+
+  .c-products-list {
+    &.view-algolia-plp,
+    &.view-search {
+      .view-content {
+        gap: rem(34) rem(10);
+        justify-content: flex-start;
+        margin: 0 rem(12);
       }
     }
   }

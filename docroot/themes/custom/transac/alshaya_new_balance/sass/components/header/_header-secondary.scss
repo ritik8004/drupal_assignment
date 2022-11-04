@@ -53,8 +53,10 @@
 
 body {
   @include breakpoint($upto-desktop) {
+    margin-top: rem(68);
+
     html[lang=ar] & {
-      margin-top: rem(60);
+      margin-top: rem(68);
     }
   }
 
