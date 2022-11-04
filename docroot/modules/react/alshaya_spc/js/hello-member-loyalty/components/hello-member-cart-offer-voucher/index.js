@@ -73,10 +73,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
    */
   getCustomerOffersAndVouchers = async () => {
     const { vouchers, Offers } = this.state;
-
     // Get coupons list.
     const couponResponse = await callHelloMemberApi('helloMemberCouponsList', 'GET');
-
     if (hasValue(couponResponse.data) && !hasValue(couponResponse.data.error)) {
       couponResponse.data.coupons.forEach((coupon) => {
         if (coupon.promotion_type === 'voucher') {
