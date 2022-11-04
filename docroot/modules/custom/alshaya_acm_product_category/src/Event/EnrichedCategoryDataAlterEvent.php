@@ -5,14 +5,14 @@ namespace Drupal\alshaya_acm_product_category\Event;
 use Drupal\Component\EventDispatcher\Event;
 
 /**
- * Event that is fired when a user logs in.
+ * Event that is fired when processing categories data for categories API.
  */
 class EnrichedCategoryDataAlterEvent extends Event {
 
   public const EVENT_NAME = 'enriched_category_data_alter';
 
   /**
-   * The user account.
+   * The term data.
    *
    * @var array
    */
