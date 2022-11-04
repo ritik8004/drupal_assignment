@@ -216,6 +216,47 @@ function disableUnavailableOptions(sku, configurableOptions) {
   return configurableOptionsClone;
 }
 
+/**
+ * Processes media into Media collection object.
+ *
+ * @param {object} media
+ *   Product media.
+ * @param {object} entity
+ *   Product entity.
+ * @param {string} entity
+ *   Product entity.
+ * @param {string} length
+ *   Product entity.
+ *
+ * @returns {object}
+ *   Returns media collection object.
+ */
+function setMediaCollection(media, entity, index, length) {
+  if (media.type === 'image') {
+    return {
+      index: index,
+      type: 'image',
+      alt: entity.name,
+      title: entity.name,
+      thumburl: media.thumbnails,
+      mediumurl: media.medium,
+      zoomurl: media.zoom,
+      fullurl: media.url,
+      last: (index + 1 === length) ? 'last' : '',
+    };
+  }
+  else {
+    return {
+      index: index,
+      type: 'video',
+      alt: entity.name,
+      title: entity.name,
+      fullurl: media.url,
+      last: (index + 1 === length) ? 'last' : '',
+    };
+  }
+}
+
 exports.render = function render(
   settings,
   placeholder,
@@ -302,33 +343,13 @@ exports.render = function render(
             return true;
           }
           variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia, i) {
-            mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
-              index: i,
-              type: 'image',
-              alt: entity.name,
-              title: entity.name,
-              thumburl: variantMedia.thumbnails,
-              mediumurl: variantMedia.medium,
-              zoomurl: variantMedia.zoom,
-              fullurl: variantMedia.url,
-              last: (i + 1 === length) ? 'last' : '',
-            });
+            mediaCollection.thumbnails = mediaCollection.thumbnails.concat(setMediaCollection(variantMedia, entity, i, length));
           });
         });
       }
       else {
         entity.media.forEach(function setEntityThumbnails(entityMedia, i) {
-          mediaCollection.thumbnails = mediaCollection.thumbnails.concat({
-            index: i,
-            type: 'image',
-            alt: entity.name,
-            title: entity.name,
-            thumburl: entityMedia.thumbnails,
-            mediumurl: entityMedia.medium,
-            zoomurl: entityMedia.zoom,
-            fullurl: entityMedia.url,
-            last: (i + 1 === length) ? 'last' : '',
-          });
+          mediaCollection.thumbnails = mediaCollection.thumbnails.concat(setMediaCollection(entityMedia, entity));
         });
       }
 
