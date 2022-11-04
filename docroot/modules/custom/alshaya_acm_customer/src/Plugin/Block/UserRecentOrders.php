@@ -234,6 +234,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             $order['totals']['grand'] = [
               '#theme' => 'acq_commerce_price',
               '#price' => isset($order['totals']) ? $order['totals']['grand'] : 0,
+              '#currency_format' => $order['order_currency_code'] ?? '',
             ];
 
             // Iterate over each order item.
@@ -244,7 +245,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               $order['items'][$key]['image'] = alshaya_acm_get_product_display_image(
                 $item['sku'],
                 SkuImagesHelper::STYLE_PRODUCT_TEASER,
-                'order_detail'
+                'cart'
               );
 
               // Total price.

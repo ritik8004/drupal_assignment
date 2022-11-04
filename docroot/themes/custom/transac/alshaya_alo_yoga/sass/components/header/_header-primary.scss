@@ -1,0 +1,450 @@
+// Some styles reset from CORE, using 'initial' values.
+
+header {
+  @include breakpoint($desktop) {
+    border-bottom: rem(1) solid $header_border;
+  }
+
+  .region__header {
+    @include breakpoint($upto-desktop) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
+    @include breakpoint($desktop) {
+      display: flex;
+      width: 100%;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: initial;
+
+      & > div {
+        @include breakpoint($desktop) {
+          width: auto;
+        }
+
+        @include breakpoint($upto-desktop) {
+          display: block;
+        }
+      }
+    }
+
+    .block-alshaya-main-menu {
+      @include breakpoint($desktop) {
+        flex-grow: 1;
+        margin: 0;
+
+        li.menu--one__list-item {
+          margin-#{$right}: rem(10);
+
+          html[lang=ar] & {
+            float: right;
+          }
+
+          html[lang=en] & {
+            float: left;
+          }
+
+          &:last-child {
+            margin-#{$right}: 0;
+          }
+
+          .menu__link {
+            font-size: rem(14);
+          }
+
+          .menu--one__link {
+            width: fit-content;
+            font-family: $ay-heavy;
+            font-size: rem(17);
+          }
+        }
+      }
+    }
+
+    .block-alshaya-react-mini-cart {
+      @include breakpoint($desktop) {
+        width: 5%;
+      }
+    }
+
+    .block-system-branding-block {
+      width: auto;
+
+      @include breakpoint($desktop) {
+        .site-brand-home {
+          min-width: initial;
+        }
+      }
+    }
+  }
+
+  .c-header__region {
+    @include breakpoint($only-mobile) {
+      height: rem(48);
+      margin-top: rem(9);
+
+      html[lang=ar] & {
+        height: rem(48);
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      border-bottom: rem(1) solid $header_border;
+    }
+
+    @include breakpoint($desktop) {
+      padding-bottom: rem(12);
+      padding-top: rem(24);
+    }
+  }
+
+  &.c-header {
+    .block-cart-mini-block,
+    .block-alshaya-react-mini-cart {
+      @include breakpoint($only-tablet) {
+        top: rem(10);
+        #{$right}: rem(-7);
+
+        html[lang=ar] & {
+          top: 0;
+          left: rem(1);
+        }
+      }
+
+      .cart-link {
+        background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) center no-repeat;
+        width: rem(24);
+        height: rem(24);
+        background-size: rem(14) rem(18);
+
+        @include breakpoint($desktop) {
+          &:hover {
+            background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1);
+
+            .quantity {
+              color: $primary_minicart_hover;
+            }
+          }
+        }
+      }
+
+      .quantity {
+        font-size: rem(10);
+        #{$left}: rem(2);
+        color: $cart_filled_color;
+        padding-top: rem(4);
+        border-radius: 0;
+        background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1);
+        width: rem(20);
+        height: rem(20);
+        background-size: 68%;
+        background-repeat: no-repeat;
+        background-position: center;
+        top: rem(2);
+
+        @include breakpoint($desktop) {
+          bottom: unset;
+        }
+
+        @include breakpoint($upto-desktop) {
+          #{$left}: rem(2);
+          font-size: rem(9);
+        }
+      }
+    }
+  }
+}
+
+.site-brand-home {
+  @include breakpoint($only-mobile) {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.block-cart-mini-block,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  .cart-link-total {
+    display: none;
+  }
+
+  .cart-link {
+    background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) center no-repeat;
+    background-size: rem(14) rem(18);
+
+    @include breakpoint($desktop) {
+      &:hover {
+        background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg);
+
+        .quantity {
+          color: $primary_minicart_hover;
+        }
+      }
+    }
+  }
+
+  .quantity {
+    font-size: rem(10);
+    #{$left}: 0;
+    color: $cart_filled_color;
+    padding-top: rem(4);
+    border-radius: 0;
+    background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1) center no-repeat;
+    width: rem(24);
+    height: rem(24);
+    background-size: rem(14) rem(18);
+    top: 0;
+
+    @include breakpoint($only-mobile) {
+      #{$left}: rem(-24);
+      top: rem(4);
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .acq-mini-cart {
+      float: none;
+    }
+  }
+}
+
+.static-minicart-wrapper {
+  .quantity {
+    bottom: rem(-5);
+  }
+
+  .cart-link {
+    height: rem(24);
+    width: rem(24);
+  }
+}
+
+#block-cartminiblock,
+.block-alshaya-react-mini-cart {
+  @include breakpoint($only-tablet) {
+    position: absolute;
+  }
+}
+
+.c-menu-primary {
+  @include breakpoint($tablet) {
+    height: 0;
+  }
+
+  .hamburger--menu {
+    margin: 0;
+  }
+
+  a {
+    @include breakpoint($upto-desktop) {
+      font-size: rem(12);
+    }
+  }
+
+  .mobile--menu {
+    font-size: 0;
+    padding: 0;
+    z-index: 13;
+
+    &::before {
+      background-repeat: no-repeat;
+      background-position: center;
+
+      @include breakpoint($upto-desktop) {
+        height: rem(32);
+        width: rem(32);
+        margin-#{$right}: 0;
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+
+  .block-system-menublock {
+    li {
+      position: static;
+
+      @include breakpoint($only-tablet) {
+        z-index: 12;
+      }
+    }
+  }
+}
+
+.mobile--close {
+  #{$left}: rem(8);
+  visibility: hidden;
+}
+
+.menu--active {
+  .mobile--close {
+    visibility: visible;
+  }
+}
+
+.menu--two__list {
+  margin-top: 0 !important;
+  padding-top: rem(17);
+
+  &::before {
+    content: '';
+    width: 100%;
+    position: absolute;
+    border-top: rem(1) solid $header_border;
+  }
+}
+
+.super-category-enabled {
+  .menu--mobile-navigation {
+    @include breakpoint($upto-desktop) {
+      background-color: transparent;
+    }
+  }
+
+  .region__header {
+    @include breakpoint($upto-desktop) {
+      position: relative;
+      margin-top: rem(36);
+    }
+  }
+
+  .c-menu-primary {
+    .region__menu-primary {
+      .block-alshaya-super-category-menu {
+        @include breakpoint($upto-desktop) {
+          z-index: 12;
+        }
+      }
+    }
+  }
+
+  &.menu--open.mobile--overlay {
+    .c-menu-primary {
+      .region__menu-primary {
+        .block-alshaya-super-category-menu {
+          @include breakpoint($only-tablet) {
+            z-index: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.overlay-product-modal,
+.overlay-cart-drawer {
+  &.super-category-enabled {
+    .c-menu-primary {
+      .region__menu-primary {
+        .block-alshaya-super-category-menu {
+          @include breakpoint($upto-desktop) {
+            z-index: 11;
+          }
+        }
+      }
+    }
+  }
+}
+
+body.aura-enabled {
+  &.overlay-cart-drawer {
+    .header--wrapper {
+      @include breakpoint($desktop) {
+        z-index: 6;
+      }
+    }
+  }
+}
+
+header {
+  .region__header {
+    @include breakpoint($only-mobile) {
+      padding: rem(11) rem(8);
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: rem(18) rem(16);
+    }
+
+    @include breakpoint($upto-desktop) {
+      transition: margin-top 300ms;
+    }
+  }
+
+  .c-header__region {
+    @include breakpoint($upto-desktop) {
+      padding-right: 0;
+      padding-left: 0;
+      background-color: $menu_bg;
+    }
+  }
+
+  .block-system-branding-block {
+    @include breakpoint($upto-desktop) {
+      position: absolute;
+      bottom: rem(10);
+      #{$left}: 50%;
+      transform: translateX(-50%);
+
+      html[lang="ar"] & {
+        transform: translateX(50%);
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .site-brand-home {
+        img {
+          html[lang=ar] & {
+            width: 100%;
+            height: auto;
+          }
+        }
+      }
+    }
+  }
+}
+
+.site-brand-home {
+  a {
+    height: auto;
+    display: flex;
+    width: rem(49);
+    margin: 0;
+
+    @include breakpoint($desktop) {
+      width: rem(65);
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  body {
+    &.mobile--overlay.menu--open {
+      &::before {
+        @include breakpoint($only-mobile) {
+          // Removing the dark overlay when mobile menu is open.
+          opacity: 0;
+        }
+      }
+    }
+
+    &.menu--open {
+      .c-menu-primary {
+        .mobile--menu {
+          // Hiding the hamburger open toggle when menu is open.
+          visibility: hidden;
+        }
+      }
+    }
+
+    .branding__menu {
+      box-shadow: none;
+    }
+  }
+}

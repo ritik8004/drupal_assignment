@@ -1,0 +1,149 @@
+.path--user {
+  .c-order-help {
+    .field--name-body {
+      p {
+        font-family: $ay-bold;
+        text-transform: uppercase;
+        font-size: rem(16);
+
+        @include breakpoint($desktop) {
+          width: 26.5%;
+
+          html[lang=ar] & {
+            margin-left: 0;
+          }
+        }
+      }
+
+      li {
+        font-size: rem(12);
+
+        &:first-child {
+          @include breakpoint($desktop) {
+            text-align: center;
+          }
+        }
+
+        &:last-child {
+          @include breakpoint($desktop) {
+            text-align: $left;
+            padding-#{$left}: rem(20);
+
+            html[lang=ar] & {
+              text-align: center;
+            }
+          }
+        }
+      }
+
+      ul {
+        @include breakpoint($desktop) {
+          width: 68%;
+        }
+      }
+    }
+  }
+
+  .block-alshaya-user {
+    &:not(.c-my-account-nav) {
+      .sign-out {
+        display: block;
+      }
+    }
+  }
+}
+
+.user-page {
+  .change-pwd-form {
+    .form-submit {
+      @include primaryBtn(true);
+    }
+  }
+
+  .alias--user-login &,
+  .alias--user-register & {
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: rem(12);
+      margin-#{$right}: rem(12);
+    }
+  }
+
+  .user-form {
+    .form-text,
+    .form-email,
+    .form-tel {
+      font-size: rem(14);
+    }
+
+    .form-type-textfield {
+      label {
+        &:not(.error) {
+          font-size: rem(14);
+        }
+      }
+    }
+
+    label {
+      &.form-required {
+        &:not(.error) {
+          font-size: rem(14);
+        }
+      }
+    }
+
+    .mobile-number-field {
+      .mobile-input--wrapper {
+        .prefix {
+          font-size: rem(14);
+          color: $user_field_link;
+        }
+      }
+    }
+  }
+
+  .change-pwd-form,
+  .user-form {
+    .form-tel,
+    .form-type-textfield label:not(.error),
+    label.form-required:not(.error) {
+      text-transform: capitalize;
+    }
+
+    .form-email {
+      text-transform: unset;
+    }
+  }
+}
+
+#unmask_password {
+  top: rem(5);
+  font-size: rem(10);
+  text-transform: uppercase;
+
+  .change-pwd-form & {
+    top: rem(2);
+  }
+}
+
+#block-content {
+  .order-items li {
+    .order-list-wrapper-container {
+      @include breakpoint($only-mobile) {
+        height: auto;
+        margin-top: rem(10);
+      }
+
+      .first {
+        @include breakpoint($desktop) {
+          width: rem(134);
+        }
+      }
+
+      .first-second {
+        @include breakpoint($desktop) {
+          height: rem(120);
+        }
+      }
+    }
+  }
+}

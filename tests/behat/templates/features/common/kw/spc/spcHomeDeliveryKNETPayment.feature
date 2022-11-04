@@ -52,35 +52,6 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     And I wait 10 seconds
     And I wait for the page to load
     And I should save the order details in the file
-    Then I should see "{order_confirm_text}"
-    Then I should see "{anon_email}"
-    Then I should see "{order_detail}"
-    Then I click jQuery "#spc-detail-open" element on page
-    And I wait 2 seconds
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
-    Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
-    Then I should see "{delivery_type_text}"
-    Then I should see "{delivery_type}"
-    Then I should see "{payment_type_text}"
-    Then I should see "{knet_payment_type}"
-    Then I click jQuery "#spc-detail-open" element on page
-    And I wait 2 seconds
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-title-price .spc-product-title a" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-attributes" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .total-line-item .sub-total" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .total-line-item .value .price .price-currency" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .total-line-item .value .price .price-amount" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .grand-total" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-currency" should exist
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .totals .hero-total .value .price .price-amount" should exist
-    And I should see "{subtotal}"
-    Then I should see "{order_total}"
-    And I should see "{vat}"
-    And I should see "{continue_shopping_text}"
 
   @cc @hd @language @desktop @Knet
   Scenario: As a Guest, I should be able to checkout using KNET payment in second language

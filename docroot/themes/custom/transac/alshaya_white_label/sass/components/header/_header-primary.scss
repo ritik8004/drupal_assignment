@@ -28,7 +28,7 @@
 @include breakpoint($desktop) {
   .no--desktop,
   .toggle--sign.no--desktop {
-    display: none;
+    display: none !important;
   }
 
   .header--wrapper {
@@ -1814,5 +1814,17 @@ html {
         }
       }
     }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .no--mobile {
+    display: none !important;
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .no--tablet {
+    display: none !important;
   }
 }

@@ -15,6 +15,13 @@ mini_cart:
   dependencies:
     - alshaya_react/react
 
+cart_notification_drawer:
+  version: 1.x
+  js:
+    dist/cart_notification_drawer.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
 cart:
   version: 1.x
   js:
@@ -57,6 +64,7 @@ add_to_cart:
   dependencies:
     - alshaya_spc/cart_utilities
     - core/drupalSettings
+    - alshaya_master/local_storage_manager
 
 checkout-confirmation:
   version: 1.x

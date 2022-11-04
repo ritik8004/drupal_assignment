@@ -1,0 +1,32 @@
+#product-zoom-container {
+  .img-wrap {
+    &.product-image-zoomed {
+      .product-image-zoom-placeholder {
+        #{$left}: 0 !important;
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .cloudzoom {
+    #cloud-zoom-wrap {
+      text-align: unset;
+
+      .img-wrap {
+        height: auto;
+        margin-#{$right}: rem(20);
+
+        img {
+          max-width: rem(680);
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+
+    &__herocontainer {
+      width: calc(100% - #{rem(126)});
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, uninstall and update for alshaya_cos_transac_rcs.
+ * Install, uninstall and update hooks for the module.
  */
 
 /**

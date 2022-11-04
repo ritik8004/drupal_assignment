@@ -1,0 +1,11 @@
+.block-facet-blockcategory-facet-search.c-facet.c-accordion {
+  ul {
+    a.facet-item,
+    li:not(.category-all) label,
+    li.category-all {
+      span {
+        font-size: rem(14);
+      }
+    }
+  }
+}

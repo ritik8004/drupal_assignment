@@ -560,6 +560,9 @@ class AlshayaGtmManager {
       : 'out of stock';
 
     $attributes['gtm-magento-product-id'] = $sku->get('product_id')->getString();
+    $attributes['gtm-product-style-code'] = $sku->hasField('attr_style_code')
+      ? $sku->get('attr_style_code')->getString()
+      : NULL;
 
     // Override values from parent if parent sku available.
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId, 'en')) {
@@ -990,7 +993,9 @@ class AlshayaGtmManager {
       // If its a virtual product i.e egift card or egift topup.
       if ($item['type'] === 'virtual') {
         $products[$item['item_id']] = [
-          'name' => $item['name'] . '/' . $item['price'],
+          'name' => ($item['sku'] == 'giftcard_topup')
+          ? $item['extension_attributes']['topup_card_name'] . '/' . $item['price']
+          : $item['name'] . '/' . $item['price'],
           'id' => $item['item_id'],
           'price' => $item['price'],
           'variant' => $item['sku'],
@@ -1075,6 +1080,13 @@ class AlshayaGtmManager {
       }
     }
 
+    $first_time_transac = $orders_count > 1 ? 'False' : 'True';
+    // Fetch the info around first time transaction if available.
+    if (array_key_exists('order_first_time_transaction', $order['extension'])) {
+      $first_time_transac = $order['extension']['order_first_time_transaction']
+        ? 'True' : 'False';
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
@@ -1084,7 +1096,7 @@ class AlshayaGtmManager {
       'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
-      'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
+      'firstTimeTransaction' => $first_time_transac,
       'privilegesCardNumber' => $loyalty_card,
       'userId' => $customer_id,
       'userEmailID' => $order['email'],

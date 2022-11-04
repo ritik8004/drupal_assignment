@@ -55,7 +55,7 @@ export const fetchCartData = async () => {
         return null;
       }
 
-      if (typeof response !== 'object') {
+      if (response === null || typeof response !== 'object') {
         redirectToCart();
         return null;
       }

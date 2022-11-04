@@ -1,4 +1,4 @@
-@javascript @auth @expressDelivery @mujiqauat @bbwsauat @hmaeuat @hmsauat
+@javascript @auth @checkoutPayment @expressDelivery @mujiqauat @bbwsauat @hmsauat
 Feature: SPC Checkout Express Delivery feature testing for Guest user
 
   Background:
@@ -183,4 +183,3 @@ Feature: SPC Checkout Express Delivery feature testing for Guest user
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{order_detail}"
-    

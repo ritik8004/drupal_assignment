@@ -62,7 +62,7 @@ const LabelItems = ({ bifercatedLabels, directionKey }) => (
     {
       bifercatedLabels[directionKey].map((labelItem, index) => (
         // BE to provide and add a unique key here.
-        <div className="label" key={`label-${index}`}>
+        <div className="label" key={`label-${index.toString()}`}>
           <ImageElement
             src={labelItem.image.url}
             alt={labelItem.image.alt}

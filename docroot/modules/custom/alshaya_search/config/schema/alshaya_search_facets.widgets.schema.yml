@@ -1,0 +1,10 @@
+# Config schema for range_checkbox, you can find the implementation in
+# Drupal\alshaya_search\Plugin\facets\widget\RangeWidget. Additional option for
+# this widget are "granularity".
+facet.widget.config.range_checkbox:
+  type: facet.widget.config.checkbox
+  label: 'List of range checkbox widget configuration'
+  mapping:
+    granularity:
+      type: integer
+      label: 'Granularity'

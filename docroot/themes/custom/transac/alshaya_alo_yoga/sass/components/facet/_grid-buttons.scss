@@ -1,0 +1,13 @@
+.block-alshaya-grid-count-block {
+  .grid-buttons {
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: rem(12);
+    }
+  }
+
+  .total-result-count {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: rem(12);
+    }
+  }
+}

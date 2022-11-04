@@ -6,14 +6,28 @@ exports.prepareData = function prepareData(settings, inputs) {
     menuMaxDepth,
     mobileMenuMaxDepth,
     highlightTiming,
+    mobileMenuLayout,
   } = settings;
 
   // Clone the input data.
-  let inputsClone = JSON.parse(JSON.stringify(inputs));
+  let menuItems = JSON.parse(JSON.stringify(inputs.children));
   // Clean up data.
-  inputsClone = processData(inputsClone, menuMaxDepth, mobileMenuMaxDepth);
+  menuItems = processData(menuItems, menuMaxDepth, mobileMenuMaxDepth);
   // Convert the array of Object into Object of objects.
-  inputsClone = Object.assign({}, inputsClone);
+  menuItems = Object.assign({}, menuItems);
+
+  // Check if Visual Mobile is enabled via Drupal configuration and also if the
+  // top level category is configured to be displayed as Visual Mobile menu.
+  const isVisualMobileMenu = (mobileMenuLayout === 'visual_mobile_menu'
+    && Drupal.hasValue(inputs.is_visual_menu_layout) ? true : false
+  );
+
+  // If we are using visual mobile menu we also need to send the
+  // original menu structure that is not split into columns.
+  let visualMobileMenuItems = [];
+  if (isVisualMobileMenu) {
+    visualMobileMenuItems = JSON.parse(JSON.stringify(menuItems));
+  }
 
   switch (menuLayout) {
     case 'menu_inline_display':
@@ -23,7 +37,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     case 'default':
     default:
       // Distribute L3 items into columns.
-      inputsClone = splitIntoCols(inputsClone, maxNbCol, idealMaxColLength);
+      menuItems = splitIntoCols(menuItems, maxNbCol, idealMaxColLength);
   }
 
   let auraEnabled = Drupal.hasValue(drupalSettings.aura)
@@ -32,12 +46,14 @@ exports.prepareData = function prepareData(settings, inputs) {
 
   return {
     'menu_type': menuLayout,
-    'menu_items': inputsClone,
+    'menu_items': menuItems,
     'user_logged_in': drupalSettings.user.uid > 1,
-    'path_prefix': drupalSettings.path.baseUrl + drupalSettings.path.pathPrefix,
+    'path_prefix': Drupal.url(''),
     'aura_enabled': auraEnabled,
     'highlight_timing': highlightTiming,
     'promopanel_class': '', // @todo Implement promo panel block class.
+    'is_visual_mobile_menu': isVisualMobileMenu,
+    'visual_mobile_menu_items': visualMobileMenuItems,
   };
 }
 
@@ -115,22 +131,16 @@ const processData = function (data, maxLevel, mobileMenuMaxDepth) {
       return;
     }
 
-    if (typeof data[key].include_in_desktop !== 'undefined') {
-      if (!data[key].include_in_desktop) {
-        data[key].hide_in_desktop = 'hide-on-desktop';
-      }
-      else {
-        data[key].hide_in_desktop = '';
-      }
+    // Set desktop class to all menu items.
+    data[key].desktop_class = null;
+    if (typeof data[key].include_in_desktop !== 'undefined' && !data[key].include_in_desktop) {
+      data[key].desktop_class = 'hide-on-desktop';
     }
 
-    if (typeof data[key].include_in_mobile_tablet !== 'undefined') {
-      if (!data[key].include_in_mobile_tablet) {
-        data[key].hide_in_mobile_tablet = 'hide-on-mobile';
-      }
-      else {
-        data[key].hide_in_mobile_tablet = '';
-      }
+    // Set mobile_tablet class to all menu items.
+    data[key].mobile_tablet_class = null;
+    if (typeof data[key].include_in_mobile_tablet !== 'undefined' && !data[key].include_in_mobile_tablet) {
+      data[key].mobile_tablet_class = 'hide-on-mobile';
     }
 
     if (Drupal.hasValue(data[key].move_to_right)) {

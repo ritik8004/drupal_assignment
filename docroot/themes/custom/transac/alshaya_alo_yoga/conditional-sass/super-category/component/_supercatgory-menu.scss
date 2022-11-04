@@ -1,0 +1,323 @@
+.super-category-enabled {
+  .c-menu-secondary {
+    .region__menu-secondary {
+      @include breakpoint($desktop) {
+        height: rem(36);
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    .menu--account,
+    .block-alshaya-stores-finder,
+    .block-language-blocklanguage-interface {
+      @include breakpoint($desktop) {
+        height: unset;
+      }
+    }
+  }
+
+  &:not(.frontpage) {
+    &.alias--cart {
+      .page-standard {
+        &.l-container {
+          @include breakpoint($upto-desktop) {
+            margin-top: 0 !important;
+          }
+        }
+      }
+    }
+  }
+
+  .c-menu-primary {
+    .region__menu-primary {
+      @include breakpoint($desktop) {
+        width: auto;
+      }
+
+      .block-alshaya-super-category-menu {
+        @include breakpoint($upto-desktop) {
+          z-index: 11;
+          height: rem(36);
+        }
+
+        .menu--one__list {
+          height: rem(36);
+
+          @include breakpoint($desktop) {
+            html[lang=ar] & {
+              padding-right: 0;
+            }
+          }
+
+          li {
+            height: rem(36);
+          }
+
+          .menu--one__link {
+            height: rem(36);
+            padding: rem(8) rem(16);
+            color: $header_super_cat_menu_text;
+            text-transform: none;
+
+            @include breakpoint($upto-desktop) {
+              background-color: $header_super_category_menu_bg;
+            }
+
+            &.active {
+              color: $header_super_cat_menu_active_text;
+
+              @include breakpoint($upto-desktop) {
+                background-color: $header_super_category_menu_active_bg;
+              }
+            }
+
+            &:hover {
+              color: $header_super_cat_menu_active_text;
+
+              @include breakpoint($upto-desktop) {
+                color: $header_super_cat_menu_active_text;
+                background-color: $header_super_category_menu_active_bg;
+              }
+            }
+
+            &::after {
+              content: attr(title);
+              font-family: $ay-bold;
+              font-size: rem(14);
+
+              @include breakpoint($only-mobile) {
+                font-size: rem(12);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.no-sticky-algolia-search-bar:not(.frontpage) {
+    .block-alshaya-algolia-react-autocomplete {
+      &.focused {
+        .algolia-search-back-icon {
+          @include breakpoint($upto-desktop) {
+            visibility: visible;
+          }
+        }
+      }
+
+      &:not(.focused) {
+        .algolia-search-back-icon {
+          @include breakpoint($upto-desktop) {
+            visibility: hidden;
+          }
+        }
+      }
+
+      &.show-algolia-search-bar {
+        @include breakpoint($upto-desktop) {
+          top: rem(45);
+        }
+      }
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete {
+    @include breakpoint($only-mobile) {
+      top: rem(45);
+    }
+
+    @include breakpoint($only-tablet) {
+      &,
+      html[lang=ar] & {
+        top: rem(62);
+      }
+    }
+
+    .algolia-search-cleartext-icon {
+      @include breakpoint($desktop) {
+        #{$right}: rem(2);
+      }
+    }
+
+    .react-autosuggest__container {
+      .algolia-search-back-icon {
+        @include breakpoint($upto-desktop) {
+          top: rem(6);
+
+          &::before {
+            #{$left}: 0;
+          }
+        }
+      }
+    }
+
+    #alshaya-algolia-autocomplete {
+      .react-autosuggest__container {
+        &::after {
+          top: rem(2);
+        }
+      }
+    }
+
+    &.focused,
+    &.clear-icon {
+      #alshaya-algolia-autocomplete {
+        .react-autosuggest__container {
+          @include breakpoint($upto-desktop) {
+            &::before,
+            &::after {
+              visibility: hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Resetting core styles by setting initial to support flex for icons
+  &.frontpage,
+  &:not(.frontpage) {
+    &.wishlist-enabled {
+      #wishlist-header-wrapper {
+        @include breakpoint($upto-desktop) {
+          top: initial;
+          position: relative;
+          right: initial;
+          left: initial;
+          z-index: initial;
+        }
+      }
+    }
+    // For AR different selector target on CORE
+    .branding__menu #block-alshayareactcartminicartblock {
+      @include breakpoint($upto-desktop) {
+        top: initial;
+        #{$right}: initial;
+        position: relative;
+      }
+    }
+
+    header.c-header {
+      // Resetting core styles by setting initial to support flex for icons
+      .block-alshaya-react-mini-cart {
+        @include breakpoint($upto-desktop) {
+          top: initial;
+          #{$right}: initial;
+        }
+      }
+    }
+    // Using !important as on core !important is used
+    &:not(.no-sticky-algolia-search-bar) {
+      .block-alshaya-react-mini-cart {
+        position: relative !important;
+      }
+    }
+  }
+
+  &:not(.frontpage) {
+    &.hide-minimalistic-header {
+      .branding__menu #block-alshayareactcartminicartblock {
+        @include breakpoint($upto-desktop) {
+          top: rem(46);
+        }
+      }
+
+      .branding__menu {
+        @include breakpoint($upto-desktop) {
+          top: rem(46);
+        }
+      }
+    }
+
+    .c-menu-primary {
+      .mobile--menu {
+        @include breakpoint($only-tablet) {
+          top: 0;
+        }
+      }
+    }
+  }
+
+  &.super-category-home {
+    .block-alshaya-algolia-react-autocomplete {
+      @include breakpoint($only-mobile) {
+        visibility: visible !important;
+        top: rem(45) !important;
+      }
+
+      @include breakpoint($only-tablet) {
+        top: rem(62) !important;
+      }
+    }
+
+    &.hide-minimalistic-header {
+      .block-alshaya-algolia-react-autocomplete {
+        @include breakpoint($upto-desktop) {
+          visibility: hidden !important;
+        }
+      }
+
+      &:not(.frontpage) {
+        .c-menu-primary {
+          .mobile--menu {
+            @include breakpoint($upto-desktop) {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.super-category-enabled:not(.frontpage) {
+  .branding__menu .block-alshaya-algolia-react-autocomplete {
+    @include breakpoint($only-mobile) {
+      visibility: visible;
+      top: rem(45);
+    }
+
+    @include breakpoint($only-tablet) {
+      top: rem(62);
+    }
+  }
+}
+
+.hide-minimalistic-header.super-category-enabled {
+  .block-alshaya-algolia-react-autocomplete {
+    .react-autosuggest__container {
+      .algolia-search-back-icon,
+      .algolia-search-cleartext-icon {
+        @include breakpoint($upto-desktop) {
+          visibility: hidden !important;
+        }
+      }
+    }
+  }
+}
+
+.logged-in {
+  &.super-category-enabled:not(.frontpage) {
+    &.hide-minimalistic-header {
+      .branding__menu {
+        @include breakpoint($upto-desktop) {
+          height: rem(45);
+          top: 0;
+        }
+      }
+    }
+  }
+
+  &.super-category-enabled:not(.frontpage),
+  &.super-category-enabled.frontpage {
+    .c-menu-primary {
+      .mobile--menu {
+        @include breakpoint($only-mobile) {
+          top: rem(33);
+          #{$left}: rem(-2);
+        }
+      }
+    }
+  }
+}

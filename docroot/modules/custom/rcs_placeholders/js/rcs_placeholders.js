@@ -76,7 +76,7 @@
                 for (const attribute of attributes) {
                   $(`[${ attribute } *= '${ fieldPh }']`)
                     .each(function eachEntityPhAttributeReplace() {
-                      $(this).attr(attribute, $(this).attr(attribute).replace(fieldPh, entityFieldValue));
+                      $(this).attr(attribute, $(this).attr(attribute).replaceAll(fieldPh, entityFieldValue));
                     });
                 }
               });

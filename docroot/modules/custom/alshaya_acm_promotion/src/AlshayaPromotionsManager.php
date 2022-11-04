@@ -686,6 +686,38 @@ class AlshayaPromotionsManager {
   }
 
   /**
+   * Get cart applied rules with discounts.
+   *
+   * @return array
+   *   List of applied rules with discounts.
+   */
+  public function getAppliedCartDiscounts(): array {
+    $cartDiscountsApplied = [];
+    $cart = CartData::getCart();
+    $getappliedRulesWithDiscount = ($cart instanceof CartData)
+    ? $cart->getappliedRulesWithDiscount()
+    : [];
+
+    if (!empty($getappliedRulesWithDiscount)) {
+      foreach ($getappliedRulesWithDiscount as $rule_id) {
+        $promotion_node = $this->getPromotionByRuleId($rule_id);
+        if ($promotion_node instanceof NodeInterface) {
+          $cartDiscountsApplied[$rule_id] = $promotion_node;
+          $description = $promotion_node->get('field_acq_promotion_description')->first()
+            ? $promotion_node->get('field_acq_promotion_description')->first()->getValue()['value']
+            : '';
+          $cartDiscountsApplied[$rule_id] = [
+            'label' => $promotion_node->get('field_acq_promotion_label')->getString(),
+            'description' => $description,
+          ];
+        }
+      }
+    }
+
+    return $cartDiscountsApplied;
+  }
+
+  /**
    * Get sorted cart promotions.
    *
    * @return array

@@ -1,0 +1,15 @@
+.alshaya_search_hoverimage,
+.alshaya_search_mainimage {
+  min-height: rem(342);
+}
+
+.alias--search aside {
+  &.c-sidebar-first {
+    .c-accordion__title {
+      &::after {
+        #{$right}: rem(-3);
+        font-size: rem(27);
+      }
+    }
+  }
+}

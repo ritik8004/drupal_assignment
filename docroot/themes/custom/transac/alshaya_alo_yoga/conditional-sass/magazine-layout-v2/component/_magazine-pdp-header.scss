@@ -1,0 +1,39 @@
+.magv2-header {
+  .magv2-header-wrapper {
+    .cart-link {
+      @include breakpoint($only-mobile) {
+        margin-top: rem(-2);
+      }
+
+      &::before {
+        background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) center no-repeat;
+      }
+
+      .quantity {
+        @include breakpoint($only-mobile) {
+          font-size: rem(10);
+          color: $cart_filled_color;
+          text-align: center;
+          top: rem(11);
+          #{$left}: rem(11);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1) center no-repeat;
+          width: rem(24);
+          height: rem(24);
+          border-radius: 0;
+          padding-top: rem(6);
+        }
+      }
+    }
+
+    #sticky-header-btn {
+      .magv2-button {
+        font-family: $ay-heavy;
+        padding: rem(14);
+        border-radius: 0;
+      }
+    }
+  }
+}

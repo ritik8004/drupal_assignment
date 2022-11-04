@@ -55,18 +55,18 @@ jobs:
         id: validate-req
         run: |
           if [[ "${{ secrets.BOT_TOKEN }}" != '' ]];  then
-            echo "::set-output name=valid_req::true"
+            echo "valid_req=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=valid_req::false"
+            echo "valid_req=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Check for Slack secrets
         id: validate-slack
         run: |
           if [[ "${{ secrets.SLACK_WEBHOOK_URL }}" != '' ]];  then
-            echo "::set-output name=valid_slack::true"
+            echo "valid_slack=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=valid_slack::false"
+            echo "valid_slack=false" >> $GITHUB_OUTPUT
           fi
 
   matrix:
@@ -83,7 +83,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           token: ${{ secrets.BOT_TOKEN }}
@@ -119,12 +119,12 @@ jobs:
           matrix+=$branch
           matrix+='] }'
           echo $matrix
-          echo "::set-output name=matrix::$matrix"
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
           if [[ "$branch" == "" ]]; then
-            echo "::set-output name=empty_matrix::true"
+            echo "empty_matrix=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=empty_matrix::false"
+            echo "empty_matrix=false" >> $GITHUB_OUTPUT
           fi
 
 
@@ -140,7 +140,7 @@ jobs:
 
     steps:
       - name: Checkout ${{ matrix.branch }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ matrix.branch }}
           fetch-depth: 0

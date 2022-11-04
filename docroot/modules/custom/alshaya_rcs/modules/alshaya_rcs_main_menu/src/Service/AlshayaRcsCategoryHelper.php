@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_rcs_main_menu\Service;
 
+use Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -92,6 +93,13 @@ class AlshayaRcsCategoryHelper {
   protected $moduleHandler;
 
   /**
+   * Department page helper.
+   *
+   * @var \Drupal\alshaya_rcs_listing\Service\AlshayaRcsListingDepartmentPagesHelper
+   */
+  protected $departmentPageHelper;
+
+  /**
    * Constructs a new AlshayaRcsCategoryHelper instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -128,6 +136,16 @@ class AlshayaRcsCategoryHelper {
     $this->cache = $cache;
     $this->connection = $connection;
     $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * Sets optional dependency on department pager helper service.
+   *
+   * @param \Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper $department_pages_helper
+   *   Department pages helper.
+   */
+  public function setDepartmentHelper(AlshayaDepartmentPageHelper $department_pages_helper) {
+    $this->departmentPageHelper = $department_pages_helper;
   }
 
   /**
@@ -399,7 +417,7 @@ class AlshayaRcsCategoryHelper {
   public function getDeepLink($object) {
     $slug = $object->get('field_category_slug')->getString();
     // Get all the departments pages having category slug value.
-    $department_pages = $this->getDepartmentPages();
+    $department_pages = $this->departmentPageHelper->getDepartmentPages();
     // @todo Change the logic here once we get the prefixed response from
     // magento.
     if (array_key_exists($slug, $department_pages)) {
@@ -414,69 +432,6 @@ class AlshayaRcsCategoryHelper {
     }
 
     return '';
-  }
-
-  /**
-   * Check for given path, department page exists.
-   *
-   * Check for given path, department page exists. If department page exists
-   * then return that department page node id or return false.
-   *
-   * @param string $path
-   *   The current route path.
-   *
-   * @return int|bool
-   *   Department page node id or false.
-   */
-  public function isDepartmentPage(string $path) {
-    $data = [];
-    // Check for cache first.
-    $cache = $this->cache->get('alshaya_rcs_main_menu:slug:nodes');
-    if ($cache) {
-      $data = $cache->data;
-      // If cache hit.
-      if (!empty($data[$path])) {
-        return $data[$path];
-      }
-    }
-
-    // Get all department pages.
-    $department_pages = $this->getDepartmentPages();
-    // If there is department page available for given term.
-    if (isset($department_pages[$path])) {
-      $nid = $department_pages[$path];
-      /** @var \Drupal\node\Entity\Node $node */
-      $node = $this->entityTypeManager->getStorage('node')->load($nid);
-      if (is_object($node)) {
-        if ($node->isPublished()) {
-          $data[$path] = $nid;
-          $this->cache->set('alshaya_rcs_main_menu:slug:nodes', $data, Cache::PERMANENT, $node->getCacheTags());
-          return $nid;
-        }
-      }
-    }
-
-    return FALSE;
-  }
-
-  /**
-   * Helper function to fetch list of department pages.
-   *
-   * @return array
-   *   Nids of department pages keyed by slug.
-   */
-  public function getDepartmentPages() {
-    static $department_pages = [];
-
-    // We cache the nid-tid relationship for a single page request.
-    if (empty($department_pages)) {
-      $query = $this->connection->select('node__field_category_slug', 'nfcs');
-      $query->addField('nfcs', 'field_category_slug_value', 'tid');
-      $query->addField('nfcs', 'entity_id', 'nid');
-      $department_pages = $query->execute()->fetchAllKeyed();
-    }
-
-    return $department_pages;
   }
 
   /**
@@ -508,7 +463,7 @@ class AlshayaRcsCategoryHelper {
       'display_view_all',
     ];
 
-    $this->moduleHandler->alter('alshaya_rcs_category_query_fields', $category_fields);
+    $this->moduleHandler->alter('alshaya_rcs_category_query_fields', $category_fields, $depth);
 
     $query = [
       $item_key => $category_fields,

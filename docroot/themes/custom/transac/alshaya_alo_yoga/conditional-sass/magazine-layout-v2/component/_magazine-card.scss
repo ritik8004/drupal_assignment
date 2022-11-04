@@ -1,0 +1,54 @@
+.magv2-sidebar {
+  .card {
+    background-color: $pdp_card_bg;
+    box-shadow: none;
+    margin-bottom: rem(11);
+
+    &.close-card {
+      height: rem(42);
+
+      .title {
+        vertical-align: middle;
+      }
+    }
+
+    .title {
+      font-size: rem(16);
+      line-height: rem(20);
+      padding: rem(4) rem(16) rem(16);
+      padding-top: 0;
+
+      .card-icon-svg {
+        margin-#{$left}: rem(-10);
+        margin-#{$right}: rem(4);
+      }
+    }
+
+    .content {
+      font-size: rem(16);
+      line-height: rem(20);
+    }
+
+    .magv2-card-icon-svg {
+      height: rem(40);
+      width: rem(40);
+      margin-#{$right}: rem(4);
+
+      &.magv2-click-n-collect-search-svg {
+        svg {
+          display: none;
+        }
+
+        &::before {
+          content: "";
+          background: url(#{$ay_theme_img_directory_path}/icons/delivery-store-search.svg?v1) center/contain no-repeat;
+          height: rem(20);
+          width: rem(20);
+          top: 50%;
+          position: absolute;
+          transform: translate(50%, -50%);
+        }
+      }
+    }
+  }
+}

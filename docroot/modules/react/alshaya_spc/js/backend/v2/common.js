@@ -116,6 +116,21 @@ window.commerceBackend.setCartDataInStorage = (data) => {
   cartInfo.last_update = new Date().getTime();
   StaticStorage.set('cart', cartInfo);
 
+  // Store masked cart id for Global-e integration for checkout page.
+  // We need to keep this data on a dedicated key because cart_data is
+  // not available in local storage on checkout page.
+  if (hasValue(cartInfo.cart)
+    && hasValue(cartInfo.cart.ge_cart_id)
+  ) {
+    Drupal.addItemInLocalStorage(
+      'ge_cart_id',
+      cartInfo.cart.ge_cart_id,
+      parseInt(drupalSettings.alshaya_spc.cart_storage_expiration, 10) * 60,
+    );
+    // Delete from cart object.
+    delete (cartInfo.cart.ge_cart_id);
+  }
+
   // @todo find better way to get this using commerceBackend.
   // As of now it not possible to get it on page load before all
   // other JS is executed and for all other JS refactoring
@@ -137,6 +152,7 @@ window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   StaticStorage.clear();
 
   Drupal.removeItemFromLocalStorage('cart_data');
+  Drupal.removeItemFromLocalStorage('add_to_cart_skus');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method
@@ -332,11 +348,17 @@ const getProcessedCartData = async (cartData) => {
   const data = {
     cart_id: cartId,
     cart_id_int: cartData.cart.id,
+    ge_cart_id: cartData.cart.extension_attributes.cart_id,
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.customer,
     coupon_code: typeof cartData.totals.coupon_code !== 'undefined' ? cartData.totals.coupon_code : '',
+    // Promotion rule ids applicable for the cart items,
+    // Which is used to show cart message that explains how to avail the discounts in the cart.
     appliedRules: cartData.cart.applied_rule_ids,
+    // Discounts applied rule ids, because of these rules the price discounts present in the cart,
+    // Which used to show the discounts tooltip.
+    appliedRulesWithDiscount: typeof cartData.cart.extension_attributes !== 'undefined' ? cartData.cart.extension_attributes.applied_rule_ids_with_discount : '',
     items_qty: cartData.cart.items_qty,
     cart_total: 0,
     minicart_total: 0,
@@ -590,6 +612,11 @@ const getProcessedCartData = async (cartData) => {
           data.items[itemKey].topupCardNumber = (
             hasValue(item.extension_attributes.topup_card_number)
           ) ? item.extension_attributes.topup_card_number : null;
+
+          // If item is a top-up card add the product name used for top-up.
+          data.items[itemKey].productName = (
+            hasValue(item.extension_attributes.topup_card_name)
+          ) ? item.extension_attributes.topup_card_name : null;
         }
       }
 

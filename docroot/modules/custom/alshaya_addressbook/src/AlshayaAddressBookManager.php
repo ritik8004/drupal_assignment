@@ -284,7 +284,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
     unset($customer['extension']);
 
-    if ((is_countable($customer['addresses']) ? count($customer['addresses']) : 0) == 0) {
+    if (isset($customer['addresses']) &&
+        (is_countable($customer['addresses']) ? count($customer['addresses']) : 0) == 0) {
       // If user has no address, then we make this
       // as primary one by default.
       $set_default = TRUE;
@@ -296,7 +297,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
     foreach ($customer['addresses'] ?? [] as $index => $address) {
       $customer['addresses'][$index] = $address;
-      $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
+      $customer['addresses'][$index]['customer_id'] = $customer['customer_id'] ?? NULL;
       $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
 
       if ($entity->isDefault()) {
@@ -307,7 +308,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
     $address_id = $entity->get('field_address_id')->getString();
     $new_address = $this->getAddressFromEntity($entity);
-    $new_address['customer_id'] = $customer['customer_id'];
+    $new_address['customer_id'] = $customer['customer_id'] ?? NULL;
 
     $address_index = FALSE;
     if ($address_id) {
@@ -378,7 +379,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
 
       $customer['addresses'][$index] = $address;
-      $customer['addresses'][$index]['customer_id'] = $customer['customer_id'];
+      $customer['addresses'][$index]['customer_id'] = $customer['customer_id'] ?? NULL;
       $customer['addresses'][$index]['customer_address_id'] = $address['address_id'];
 
       if ($entity->isDefault()) {

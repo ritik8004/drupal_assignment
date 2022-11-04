@@ -1,0 +1,22 @@
+#alshaya-algolia-search,
+.block-alshaya-algolia-react-plp,
+.block-alshaya-algolia-react-promotion,
+.block-alshaya-algolia-react-product-list,
+.block-alshaya-algolia-listing-v2,
+.block-alshaya-algolia-react-promotion-v2 {
+  .filter-fixed-top {
+    .show-all-filters-algolia,
+    .block-facet-blockcategory-facet-plp,
+    .block-facet-blockcategory-facet-search {
+      @include breakpoint($only-mobile) {
+        top: rem(47);
+      }
+
+      .menu--open & {
+        @include breakpoint($only-mobile) {
+          display: none !important;
+        }
+      }
+    }
+  }
+}

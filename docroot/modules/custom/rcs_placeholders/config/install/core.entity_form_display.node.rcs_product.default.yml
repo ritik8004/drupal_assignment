@@ -70,7 +70,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
+  field_product_slug:
+    type: string_textfield
+    weight: 12
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: { }
 hidden:
   body: true
   field_metatags: true
-  field_product_slug: true

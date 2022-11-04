@@ -1,0 +1,225 @@
+.return-requests-wrapper {
+  .products-list-wrapper {
+    .items-table {
+      .order-item-row {
+        .order__details--wrapper {
+          .attribute-detail,
+          .item-code,
+          .item-quantity {
+            margin-bottom: 0;
+            font-size: rem(12);
+            line-height: 1.33;
+          }
+
+          .item-price {
+            .light {
+              font-size: rem(12);
+              line-height: 1.33;
+              margin-bottom: 0;
+            }
+
+            .price {
+              font-size: rem(14);
+              line-height: 1.29;
+              font-weight: normal;
+              color: $online-return-unit-price-warm-grey-txt;
+            }
+          }
+
+          .item-total-price {
+            .light {
+              font-size: rem(12);
+              line-height: 1.33;
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .products-list-wrapper,
+  .refund-details-wrapper {
+    .refund-detail-label,
+    .select-items-label {
+      line-height: 1.22;
+      font-size: rem(18);
+      padding-left: rem(20);
+      padding-right: rem(20);
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: rem(32);
+        padding-#{$right}: rem(20);
+      }
+
+      .select-items-header,
+      .refund-detail-header {
+        &::before {
+          #{$right}: 0;
+          font-size: rem(32);
+
+          @include breakpoint($desktop) {
+            font-size: rem(48);
+          }
+        }
+      }
+    }
+
+    .items-table {
+      .order-item-row {
+        .order__details--summary {
+          .item-name {
+            font-weight: normal;
+            font-size: rem(14);
+            line-height: 1.29;
+          }
+
+          .item-price {
+            font-size: rem(12);
+            line-height: 1.33;
+
+            .price-block {
+              font-size: rem(14);
+              line-height: 1.2;
+            }
+          }
+        }
+
+        .item-total-price {
+          > div {
+            margin-bottom: 0;
+          }
+
+          .price {
+            font-size: rem(14);
+            line-height: 1.29;
+            font-weight: normal;
+          }
+        }
+
+        .big-ticket-wrapper {
+          line-height: 1.33;
+          margin-bottom: rem(28);
+
+          @include breakpoint($tablet) {
+            margin-top: rem(-29);
+          }
+        }
+      }
+    }
+  }
+
+  .continue-button-wrapper {
+    button {
+      span {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .return-request-bottom-page-link {
+    line-height: 1.29;
+  }
+
+  .refund-details-wrapper {
+    .refund-method-wrapper {
+      .refund-method-title {
+        font-size: rem(18);
+        line-height: 1.22;
+        font-weight: normal;
+        margin-bottom: rem(15);
+      }
+
+      .method-listing-label {
+        font-size: rem(14);
+        line-height: 1.29;
+      }
+
+      .card-detail {
+        font-size: rem(16);
+        line-height: 1.13;
+      }
+
+      .refund-message {
+        margin-top: rem(20);
+      }
+
+      .refund-amount-title {
+        font-size: rem(18);
+        line-height: 1.22;
+      }
+    }
+
+    .return-collection-wrapper {
+      .return-collection-title {
+        font-size: rem(18);
+        line-height: 1.22;
+        margin-bottom: rem(15);
+      }
+    }
+
+    .return-address-wrapper {
+      .return-address-title {
+        font-size: rem(18);
+        line-height: 1.22;
+      }
+
+      .return-address-details {
+        .customer-name {
+          font-size: rem(16);
+          line-height: 1.22;
+          font-family: $alshaya-bold;
+          margin-bottom: rem(8);
+        }
+
+        .address-line-content,
+        .spc-phone-number {
+          font-size: rem(14);
+          line-height: 1.29;
+          margin-bottom: rem(2);
+          color: $online-return-address-line-warm-grey-txt;
+        }
+      }
+    }
+  }
+
+  .continue-button-wrapper,
+  .confirm-return-button-wrapper {
+    button {
+      span {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .order-details-wrapper {
+    .order-summary-row {
+      .order-total-column {
+        .price {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+
+  .return-request-bottom-page-link {
+    @include breakpoint($tablet) {
+      margin-#{$left}: 0;
+    }
+  }
+
+  div.errors-container {
+    .error-message {
+      font-size: rem(14);
+      line-height: 1.29;
+      font-family: $alshaya-bold;
+      color: $online-return-error-msg-color;
+      margin-top: 0;
+
+      @include breakpoint($tablet) {
+        text-align: $left;
+      }
+    }
+  }
+}
+

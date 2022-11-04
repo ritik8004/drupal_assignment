@@ -317,7 +317,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $uri_options
       )->toString(TRUE)->getGeneratedUrl();
       $clickable = !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE;
-      if ($term->display_view_all) {
+      if (isset($term->display_view_all) && $term->display_view_all) {
         $clickable = FALSE;
       }
       $data[$term->tid] = [
@@ -377,7 +377,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
       if ($child) {
         $data[$term->tid]['child'] = $this->getCategoryTree($langcode, $term->tid);
-        if ($term->display_view_all && $term->depth_level == '2') {
+        if (isset($term->display_view_all)
+          && $term->display_view_all
+          && $term->depth_level == '2') {
           $view_all = [
             'label' => $this->t('View All'),
             'gtm_menu_title' => 'View All',
@@ -612,7 +614,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function getCategoryTermParents($term) {
     $parents = [];
     // If term is of 'acq_product_category' vocabulary.
-    if ($term instanceof TermInterface && $term->bundle() == self::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->bundle() == static::VOCABULARY_ID) {
       // Get all parents of the given term.
       $parents = $this->termStorage->loadAllParents($term->id());
     }
@@ -826,7 +828,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       "{$field}_height",
     ]);
     $query->condition('term_image_field.entity_id', $tid);
-    $query->condition('term_image_field.bundle', ProductCategoryTree::VOCABULARY_ID);
+    $query->condition('term_image_field.bundle', static::VOCABULARY_ID);
     if (!empty($langcode)) {
       $query->condition('term_image_field.langcode', $langcode);
     }

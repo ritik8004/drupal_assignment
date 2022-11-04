@@ -1,0 +1,35 @@
+.non-grouped-attr {
+  .magv2-select-popup {
+    @include breakpoint($only-mobile) {
+      &-content-wrapper {
+        .non-group-anchor-wrapper {
+          label {
+            justify-content: initial;
+            font-family: $ay-heavy;
+            text-transform: uppercase;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($tablet) {
+      &-header-wrapper {
+        text-align: initial;
+        font-size: rem(18);
+
+        .close {
+          &::before {
+            font-size: rem(40);
+          }
+        }
+      }
+    }
+  }
+}
+
+.magv2-select-popup-header-wrapper {
+  label {
+    font-family: $ay-heavy;
+    text-transform: uppercase;
+  }
+}

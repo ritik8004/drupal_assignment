@@ -10,6 +10,8 @@ services:
       - '@cache.data'
       - '@database'
       - '@module_handler'
+    calls:
+      - [setDepartmentHelper, ['@?alshaya_rcs_listing.department_pages_helper']]
   alshaya_rcs_main_menu.category_data_migration:
     class: Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration
     arguments:

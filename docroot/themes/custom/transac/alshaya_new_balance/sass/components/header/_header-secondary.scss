@@ -1,0 +1,67 @@
+.c-menu-secondary {
+  text-transform: none;
+  text-align: $left;
+
+  @include breakpoint($upto-tablet) {
+    width: 100%;
+  }
+
+  @include breakpoint($desktop) {
+    text-align: $right;
+    height: rem(24);
+    text-transform: none;
+  }
+
+  li {
+    @include breakpoint($upto-desktop) {
+      height: rem(46);
+      margin-#{$left}: 0;
+      margin-#{$right}: 0;
+      padding-#{$left}: rem(10);
+      padding-#{$right}: rem(10);
+      border: none;
+
+      &::after {
+        font-size: rem(26);
+        #{$right}: rem(16);
+      }
+    }
+  }
+
+  a {
+    font-size: rem(14);
+    height: rem(24);
+    display: flex;
+    align-items: center;
+
+    @include breakpoint($upto-desktop) {
+      height: rem(46);
+      line-height: 2.5;
+    }
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+}
+
+body {
+  @include breakpoint($upto-desktop) {
+    html[lang=ar] & {
+      margin-top: rem(60);
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: rem(64);
+  }
+}
+
+.menu__in {
+  &::after {
+    @include breakpoint($upto-desktop) {
+      font-size: rem(26);
+    }
+  }
+}

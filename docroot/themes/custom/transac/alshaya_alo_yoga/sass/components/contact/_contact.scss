@@ -1,0 +1,5 @@
+.user-communication-preference {
+  .form-submit {
+    @include primaryBtn(true);
+  }
+}

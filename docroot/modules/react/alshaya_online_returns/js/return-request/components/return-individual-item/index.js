@@ -66,9 +66,11 @@ const ReturnIndividualItem = ({
         <div className="order__details--summary order__details--description">
           <div className="item-name dark">{item.name}</div>
           {productAttributes && Object.keys(productAttributes).map((attribute) => (
-            <div key={productAttributes[attribute].label} className="attribute-detail light">
-              {Drupal.t('@attrLabel: @attrValue', { '@attrLabel': productAttributes[attribute].label, '@attrValue': productAttributes[attribute].value })}
-            </div>
+            productAttributes[attribute].label && productAttributes[attribute].value && (
+              <div key={productAttributes[attribute].label} className="attribute-detail light">
+                {Drupal.t('@attrLabel: @attrValue', { '@attrLabel': productAttributes[attribute].label, '@attrValue': productAttributes[attribute].value })}
+              </div>
+            )
           ))}
           <div className="item-code light">
             {Drupal.t('Item Code: @sku', { '@sku': item.sku })}

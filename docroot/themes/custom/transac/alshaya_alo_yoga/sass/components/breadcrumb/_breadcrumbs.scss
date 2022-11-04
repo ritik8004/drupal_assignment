@@ -1,0 +1,22 @@
+.c-breadcrumb {
+  ol {
+    padding: rem(14) rem(24) 0;
+
+    @include breakpoint($only-tablet) {
+      padding-bottom: rem(14);
+    }
+  }
+
+  li {
+    text-transform: capitalize;
+
+    &::after {
+      padding-#{$right}: rem(8);
+      padding-#{$left}: rem(8);
+    }
+
+    &:last-of-type {
+      font-family: $ay-nova-semibold;
+    }
+  }
+}

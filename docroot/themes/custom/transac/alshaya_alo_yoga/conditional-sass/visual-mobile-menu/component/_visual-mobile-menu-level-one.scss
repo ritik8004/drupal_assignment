@@ -1,0 +1,14 @@
+.visual-mobile-menu {
+  &--one__list-item {
+    &.ui-tabs-active {
+      .visual-mobile-menu--one__link {
+        font-family: $ay-black;
+      }
+    }
+  }
+
+  &--one__link {
+    font-family: $ay-heavy;
+    text-transform: uppercase;
+  }
+}

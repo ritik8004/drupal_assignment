@@ -1,0 +1,8 @@
+name: 'Alshaya RCS Product LPN'
+type: module
+description: 'RCS Implementation for Product Linked Part Numbers(LPN) related changes.'
+package: 'Alshaya'
+core_version_requirement: ^9
+dependencies:
+  - alshaya_product_lpn:alshaya_product_lpn
+  - alshaya_rcs_product:alshaya_rcs_product

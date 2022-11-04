@@ -6,6 +6,45 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update EN, AR paths for brand's email logo.
+ */
+function alshaya_fl_update_9402() {
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site logo path with default name.
+  $site_logo = $active_theme->getPath() . '/site-logo';
+
+  // Save default logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
+    ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+
+  // Save arabic logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the translation store list link label if not present.
+ */
+function alshaya_fl_update_9401() {
+  $store_config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config_translation = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings');
+  $list_link_label = $config_translation->get('store_list_label') ?? $store_config->get('store_list_label');
+  if ($list_link_label === 'List of all footlocker Stores') {
+    $config_translation->set('store_list_label', 'جميع محلات فوت لوكر');
+    $config_translation->save();
+  }
+}
+
+/**
  * Implements hook_update_n().
  *
  * [5.3.0] Set swatch image style config to save original brand logo in
@@ -59,6 +98,11 @@ function alshaya_fl_install() {
   $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
   $config->set('store_list_label', 'List of all footlocker Stores');
   $config->save();
+
+  // Sets translation for the store list link label.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_list_label', 'جميع محلات فوت لوكر')
+    ->save();
 
   // Set initial translation string for en language.
   // Array of language translation strings.

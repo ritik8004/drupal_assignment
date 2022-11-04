@@ -12,12 +12,6 @@ body.aura-enabled {
           }
         }
       }
-
-      ul.menu__list {
-        li:first-of-type {
-          border-top: 1px solid $header_border;
-        }
-      }
     }
 
     #aura-mobile-header-shop:not(:empty) {

@@ -1,0 +1,118 @@
+.c-plp {
+  .c-products-list {
+    &.product-small {
+      .c-products__item {
+        @include breakpoint($only-mobile) {
+          width: calc(100% / 2 - 3.5% + 3.5% / 2);
+          margin-#{$left}: 3.5%;
+        }
+
+        @include breakpoint($desktop) {
+          width: calc(100% / 3 - 1.797% + 1.797% / 3 - 0.01px);
+
+          &:nth-of-type(4n+1) {
+            margin-#{$left}: 1.797%;
+          }
+
+          &:nth-of-type(3n+1) {
+            margin-#{$left}: 0;
+            clear: both;
+          }
+        }
+      }
+
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: rem(310);
+        }
+
+        .alshaya_search_mainimage {
+          @include breakpoint($only-mobile) {
+            height: rem(234);
+          }
+        }
+      }
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: rem(310);
+          }
+        }
+      }
+    }
+  }
+
+  .c-products__item {
+    text-align: $left;
+
+    article {
+      &:hover {
+        &::after {
+          display: none;
+        }
+      }
+
+      .alshaya_search_slider {
+        display: none;
+
+        .slick-slider {
+          display: none;
+        }
+      }
+    }
+
+    .field--name-name {
+      padding: 0;
+      font-size: rem(14);
+      font-family: $alshaya-bold;
+      margin-bottom: rem(5);
+      line-height: 1.4;
+    }
+
+    .price-type__wrapper,
+    .price-wrapper {
+      color: $plp_product_price_txt;
+      font-size: rem(18);
+      font-family: $alshaya-bold;
+    }
+  }
+
+  .region__content {
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar-productlist,
+    .block-facets-summary-blockfilter-bar {
+      .filter-list-label {
+        text-transform: capitalize;
+      }
+
+      ul {
+        li {
+          a {
+            span {
+              &.facet-item__value {
+                text-transform: capitalize;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .block-page-title-block {
+      &.mobile {
+        h1 {
+          @include breakpoint($only-mobile) {
+            padding: rem(22) 0;
+          }
+        }
+      }
+    }
+  }
+}
+

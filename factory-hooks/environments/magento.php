@@ -270,36 +270,124 @@ $magentos = [
       'store_id' => ['en' => 25, 'ar' => 22],
     ],
   ],
-  // New Balance.
-  'nb_qa' => [
-    'url' => 'https://integration-5ojmyuq-yuoofriziz4tu.eu-3.magentosite.cloud',
-    'algolia_env' => 'nb_qa',
+  'ay_uat' => [
+    'url' => 'https://alo-uat.store.alshaya.com',
+    'algolia_env' => 'alo_uat',
     'magento_secrets' => [
-      'consumer_key' => 'rjwijgl0obi48vyw5adoaheq4y6vnps7',
-      'consumer_secret' => 'oe6gwidy4giuso8aq6c5ga2trmatlbyg',
-      'access_token' => '34mt253bnj9a9uwuvx64ivt197sl4yny',
-      'access_token_secret' => 'dz4ngbr3nbf6ofigtk0brkl15ctn6jkk',
+      'consumer_key' => 'mpels2g3gn39ghwt4vhl0ukmkvua21u2',
+      'consumer_secret' => 'a0llszrrlawnjo3jvhat30gwx48zekz0',
+      'access_token' => 'hlt64xc67pslpvl0qac5zbfwi8wks65z',
+      'access_token_secret' => 'mmngcqo7k9nl9r5lme3dfgqqr3p87x3v',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 14],
+      'store_id' => ['en' => 1, 'ar' => 38],
     ],
     'sa' => [
-      'store_id' => ['en' => 10, 'ar' => 11],
+      'store_id' => ['en' => 26, 'ar' => 29],
     ],
     'ae' => [
-      'store_id' => ['en' => 12, 'ar' => 13],
+      'store_id' => ['en' => 32, 'ar' => 35],
     ],
     'eg' => [
-      'store_id' => ['en' => 3, 'ar' => 2],
+      'store_id' => ['en' => 5, 'ar' => 2],
     ],
     'bh' => [
-      'store_id' => ['en' => 5, 'ar' => 4],
+      'store_id' => ['en' => 11, 'ar' => 8],
     ],
     'qa' => [
-      'store_id' => ['en' => 7, 'ar' => 6],
+      'store_id' => ['en' => 17, 'ar' => 14],
     ],
     'jo' => [
-      'store_id' => ['en' => 9, 'ar' => 8],
+      'store_id' => ['en' => 23, 'ar' => 20],
+    ],
+  ],
+  'ay_prod' => [
+    'url' => 'https://alo.store.alshaya.com',
+    'algolia_env' => 'alo_prod',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 38],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 26, 'ar' => 29],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 32, 'ar' => 35],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 5, 'ar' => 2],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 8],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 17, 'ar' => 14],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 23, 'ar' => 20],
+    ],
+  ],
+  // New Balance.
+  'nb_qa' => [
+    'url' => 'https://new-test.store.alshaya.com',
+    'algolia_env' => 'nb_qa',
+    'magento_secrets' => [
+      'consumer_key' => 'l8csj64bgzq0qx9swo8ucfpqlvbrdqm2',
+      'consumer_secret' => 'ankpwqyu26mwo64s27hvp5n4vskk0u1f',
+      'access_token' => 'v89se7nqofezmbr93tikchhh76zj2hrm',
+      'access_token_secret' => 'pl3yz25ojn466dhpi5d37ew11sbxjqyl',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 39],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 27, 'ar' => 30],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 33, 'ar' => 36],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 6, 'ar' => 3],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 12, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 18, 'ar' => 15],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 24, 'ar' => 21],
+    ],
+  ],
+  'nb_uat' => [
+    'url' => 'https://new-uat.store.alshaya.com',
+    'algolia_env' => 'nb_uat',
+    'magento_secrets' => [
+      'consumer_key' => 'ytdw1wx95500tmzap7d99nurwmppsmjf',
+      'consumer_secret' => 'zk2qivlygzvdo15a91n5mb6xj9na6b62',
+      'access_token' => 'ex3jiyqbgadnd8km0cfw6m56jnvww548',
+      'access_token_secret' => 'vd38wdceuvo72ziy6qoswjuj73xtuftg',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 40],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 28, 'ar' => 31],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 34, 'ar' => 37],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 7, 'ar' => 4],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 13, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
     ],
   ],
   // The body shop.
@@ -1245,10 +1333,10 @@ $magentos = [
   'bbw_qa' => [
     'url' => 'https://bbw-test.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
-      'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
-      'access_token' => 'oiy66ouu8mpeorbu47cke2xsdhfku3jg',
-      'access_token_secret' => '2ovq0ccau2cd60a2xfterr2y2fi711w4',
+      'consumer_key' => '42eno838ymyoge2lntfa23z8d5a5xdn1',
+      'consumer_secret' => 'uss4yeg62ye0y1tk4xqw0reiluxgy1x2',
+      'access_token' => '55njn7zeteonp9t1ly4hjn8wbilazjby',
+      'access_token_secret' => 'gy7qsug16b6vlesdz6wnwoyni3zd2tqs',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 2],
@@ -1703,6 +1791,9 @@ $magentos = [
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 6],
     ],
+    'xb' => [
+      'store_id' => ['en' => 21, 'ar' => 18],
+    ],
     'sa' => [
       'store_id' => ['en' => 2, 'ar' => 3],
     ],
@@ -1726,9 +1817,9 @@ $magentos = [
     'url' => 'https://apc-uovxi7i-tw5uijob6hir2.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
-      'consumer_secret' => 'k63ke42x62x1hssrtxy1e33c5vmyqgwy',
+      'consumer_secret' => '0:3:a2NiFYT0TU9OGG6i09arK1JZfGKw',
       'access_token' => 'o0kvxvg1hge9j51twpyztl9uxvvq78y2',
-      'access_token_secret' => '05m2gsyg0sxrs87aehwghc2ct0ttmtuo',
+      'access_token_secret' => '0:3:epdVIKzYTMl4D5eOuRmlSbL1BePV',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 6],
@@ -1871,30 +1962,7 @@ $magentos = [
     ],
   ],
   'mu_qa' => [
-    'url' => 'https://integration-5ojmyuq-szaftnexsfo4k.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'd8gfbetgjq5ivnqoqas85hdpi1zdplf1',
-      'consumer_secret' => 'gaxphnn61qgg5js9dsy2xrwlc70dehn5',
-      'access_token' => '214yfy8hauwdqu4b25ci573iefokdp85',
-      'access_token_secret' => 'z6jfn1akazvc86cpq5v1ymwi5ikcouhr',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-  ],
-  'mu_test' => [
+    'algolia_env' => 'mu_test',
     'url' => 'https://muji-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'cd2hqmtyqht62jka3w54jm1bdd9zdlhq',

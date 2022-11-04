@@ -3,15 +3,14 @@ Feature: Test the adding address to existing user account
 
   Background:
     Given I am on "user/login"
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
+    And I wait for the page to load
+    And I login with "{spc_new_registered_user_email}" using custom password
     Then I press "edit-submit"
-    And I wait 10 seconds
+    And I wait for the page to load
     Then I should be on "/user" page
 
   Scenario: As an authenticated user, I should be able to add a new address to my address book
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
     Then I click on "#block-content a" element

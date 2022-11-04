@@ -1,0 +1,48 @@
+.visual-mobile-level-two {
+  overflow: auto;
+  background-color: $menu_bg;
+  height: 100%;
+  padding-top: rem(14);
+  // Offsetting height used by supercategory, header and search block so all items are visible on scroll.
+  padding-bottom: rem(172);
+
+  &__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 rem(12) rem(16);
+    height: rem(150);
+    // Displaying a background color if image does not load.
+    background-color: $mob_menu_two_img_background;
+
+    &:last-of-type {
+      margin-bottom: rem(14);
+    }
+  }
+
+  &__image {
+    position: absolute;
+    top: 0;
+    #{left}: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    // Assuming that the important part of the images will at the top,
+    // so we prevent cropping.
+    object-position: top;
+  }
+
+  &__heading {
+    z-index: 1;
+    white-space: nowrap;
+    margin-#{$left}: rem(32);
+    font-size: rem(18);
+    line-height: 1.22;
+    color: $mob_menu_two_color_text;
+    text-transform: uppercase;
+  }
+
+  .ui-tabs-panel {
+    padding: 0;
+  }
+}

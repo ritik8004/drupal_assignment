@@ -1,0 +1,113 @@
+.product-drawer {
+  &-content-wrapper {
+    .product-details-wrapper {
+      padding: rem(26) rem(16) rem(20);
+      background-color: $plp-quick-view-bg;
+
+      .attribute-wrapper_size {
+        a {
+          font-size: rem(14);
+          text-decoration: underline;
+          color: $plp-quick-view-size-guide-text;
+        }
+
+        .alshayaSelect__menu {
+          min-width: rem(298);
+        }
+      }
+    }
+
+    .price {
+      font-size: rem(18);
+      font-family: $ay-regular;
+    }
+
+    .special--price {
+      font-family: $alshaya-thin;
+    }
+
+    .price--discount {
+      padding-#{$left}: 0;
+      width: 100%;
+      font-size: rem(18);
+    }
+
+    .product-title {
+      font-size: rem(20);
+      padding-bottom: rem(3);
+      font-family: $ay-nova-semibold;
+    }
+
+    .content--item-code {
+      font-size: rem(14);
+      width: 100%;
+      border-bottom: rem(1) solid $algolia-input-border;
+      padding-bottom: rem(9);
+    }
+
+    .alshayaSelect {
+      &__control {
+        min-width: rem(167);
+      }
+    }
+
+    .config-form-addtobag-button {
+      font-size: rem(16);
+      height: rem(48);
+      font-family: $ay-heavy;
+      display: inline-flex;
+      justify-content: center;
+      text-transform: uppercase;
+
+      &::before {
+        content: "";
+        background: url(#{$ay_theme_img_directory_path}/icons/add-to-bag.svg);
+        background-repeat: no-repeat;
+        width: rem(16);
+        height: rem(20);
+        transform: translate(50%, 50%);
+        background-size: contain;
+        margin-top: rem(-12);
+        margin-#{$right}: rem(23);
+      }
+
+      &.add-to-bag-loader {
+        &::before {
+          content: unset;
+        }
+      }
+    }
+
+    .pdp-link {
+      color: $plp-view-full-product-text;
+      font-size: rem(14);
+      border-color: $plp-product-details-text;
+
+      @include icon('chevron#{$right}', before) {
+        color: $plp-view-full-product-text-arrow;
+        #{$right}: rem(5);
+      }
+
+      a {
+        font-size: rem(14);
+        color: $plp-view-full-product-text;
+        padding-#{$left}: rem(8);
+      }
+    }
+  }
+
+  &-container {
+    width: rem(330);
+
+    @include breakpoint($tablet) {
+      width: rem(330);
+    }
+  }
+
+  &-header-wrapper {
+    label {
+      font-size: rem(18);
+      font-family: $alshaya-bold;
+    }
+  }
+}

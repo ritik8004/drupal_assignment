@@ -1,0 +1,120 @@
+.block-alshaya-acm-customer {
+  & > .edit-account {
+    @include secondaryBtn(true);
+
+    height: rem(48);
+    padding: rem(14);
+    top: rem(-101);
+
+    @include breakpoint($only-tablet) {
+      top: rem(-83);
+    }
+  }
+
+  .show-all {
+    font-family: $ay-nova-semibold;
+  }
+
+  .recent__orders--list:first-of-type {
+    tr:first-child td {
+      border-top: 0;
+    }
+  }
+}
+
+.block-alshaya-user-recent-orders {
+  .no--orders + a {
+    @include primaryBtn(true);
+
+    padding: rem(17);
+  }
+}
+
+.c-order-list {
+  .subtitle {
+    font-family: $ay-bold;
+    font-size: rem(18);
+    text-transform: uppercase;
+  }
+
+  .orders-list-pager-wrapper {
+    button {
+      @include secondaryBtn(true);
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.recent__orders--list {
+  .order__detail--link a {
+    font-family: $ay-nova-semibold;
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-type-select {
+    @include breakpoint($only-mobile) {
+      width: 49%;
+    }
+
+    .select2-container {
+      .select2-selection {
+        @include breakpoint($desktop) {
+          font-size: rem(12);
+          height: rem(35);
+        }
+
+        &__arrow {
+          @include breakpoint($desktop) {
+            height: rem(35);
+          }
+
+          &::after {
+            @include breakpoint($desktop) {
+              line-height: rem(35);
+              height: rem(35);
+            }
+          }
+        }
+
+        &__rendered {
+          @include breakpoint($desktop) {
+            height: rem(35);
+          }
+        }
+
+        .select2-selection__rendered {
+          @include breakpoint($desktop) {
+            line-height: rem(35);
+          }
+        }
+      }
+    }
+  }
+
+  .form-actions {
+    &::after {
+      padding: rem(7) 0 rem(5);
+    }
+  }
+
+  &.active--search {
+    .form-item-search {
+      input {
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          margin: 0;
+        }
+      }
+
+      input[type=text]:focus {
+        @include breakpoint($only-mobile) {
+          position: absolute;
+        }
+      }
+    }
+  }
+}

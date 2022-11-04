@@ -12,6 +12,15 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Adds products to reindex queue as we have to update product style code.
+ */
+function alshaya_seo_transac_update_9402() {
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adds products to reindex queue as we have to add some extra data with index.
  */
 function alshaya_seo_transac_update_9401() {

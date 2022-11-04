@@ -1,0 +1,99 @@
+.user__address--column {
+  font-size: rem(14);
+}
+
+.address {
+  &.default {
+    .address--data {
+      font-size: rem(14);
+    }
+  }
+
+  .address--content {
+    color: $address_text;
+  }
+
+  .address--label {
+    font-family: $ay-nova-bold;
+  }
+
+  &-book-address {
+    .form-type-select {
+      .select2-selection {
+        height: rem(52) !important;
+        border-color: $primary_dropdown_border;
+
+        &__rendered {
+          line-height: rem(36) !important;
+        }
+
+        &__arrow {
+          height: rem(52);
+
+          &::after {
+            line-height: rem(52);
+            top: 0;
+          }
+        }
+      }
+
+      select {
+        &.select2-select {
+          &.form-select {
+            @include breakpoint($only-mobile) {
+              height: rem(52);
+            }
+          }
+        }
+      }
+
+      &::after {
+        @include breakpoint($only-mobile) {
+          line-height: rem(52);
+        }
+      }
+    }
+  }
+}
+
+.select2-container--default {
+  .select2-selection--single {
+    .select2-selection__placeholder {
+      color: $primary_dropdown_text !important;
+    }
+  }
+}
+
+.select2-search--dropdown {
+  border: rem(1) solid $primary_dropdown_border;
+  border-bottom: 0;
+}
+
+.c-address-book {
+  .block-system {
+    @include breakpoint($only-mobile) {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    & > a {
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-top: rem(28);
+      }
+    }
+  }
+}
+
+.user-form,
+.address-book-address,
+#selected-store-wrapper {
+  .mobile-number-field {
+    .mobile-input--wrapper {
+      align-items: center;
+    }
+  }
+}

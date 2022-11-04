@@ -1,0 +1,31 @@
+.c-header {
+  .block-my-account-icon-block {
+    margin-#{$right}: rem(12);
+
+    @include breakpoint($desktop) {
+      display: none;
+    }
+  }
+
+  .my-account-icon {
+    display: flex;
+
+    .user-login,
+    .user-account {
+      width: rem(24);
+      height: rem(24);
+      display: inline-block;
+      background-position: center;
+      background-size: rem(18) rem(16);
+      background-repeat: no-repeat;
+    }
+
+    .user-login {
+      background-image: url("#{$base_theme_img_directory_path}/icons/account-user-outline.svg?v1");
+    }
+
+    .user-account {
+      background-image: url("#{$base_theme_img_directory_path}/icons/account-user-filled.svg?v1");
+    }
+  }
+}

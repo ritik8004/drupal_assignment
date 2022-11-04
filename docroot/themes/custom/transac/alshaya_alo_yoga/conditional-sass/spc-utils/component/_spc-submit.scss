@@ -1,0 +1,21 @@
+.checkout-link {
+  &:not(.checkout_com_applepay) {
+    @include primaryBtn(true);
+
+    a {
+      font-family: $ay-heavy;
+    }
+  }
+}
+
+.spc-checkout {
+  .checkout-link {
+    &:not(.checkout_com_applepay) {
+      @include breakpoint($desktop) {
+        float: $right;
+        width: auto;
+        padding: 0 rem(22);
+      }
+    }
+  }
+}

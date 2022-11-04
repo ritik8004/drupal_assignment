@@ -1,0 +1,21 @@
+.select2-dropdown {
+  ul {
+    &.select2-results__options {
+      li {
+        &.select2-results__option {
+          border: rem(1) solid $primary_dropdown_border;
+          border-bottom: none;
+
+          &:last-child {
+            border-bottom: rem(1) solid $primary_dropdown_border;
+          }
+
+          &:hover {
+            color: $select_drop_down_hover_text;
+            background-color: $select_drop_down_hover_bg;
+          }
+        }
+      }
+    }
+  }
+}

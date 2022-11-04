@@ -216,6 +216,7 @@ export default class EgiftTopPurchase extends React.Component {
             name: `${topUpCard.name}/${params.topup.amount}`,
             price: params.topup.amount,
             variant: topUpCard.sku,
+            category: 'eGift Card',
             dimension2: topUpCard.type_id,
             dimension4: 1,
             quantity: 1,

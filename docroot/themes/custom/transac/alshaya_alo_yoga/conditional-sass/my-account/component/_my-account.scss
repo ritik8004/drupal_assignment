@@ -1,0 +1,30 @@
+.c-sidebar-first {
+  .my-account-nav {
+    a {
+      text-transform: capitalize;
+
+      &.active {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+
+  .block {
+    &:first-child {
+      @include breakpoint($upto-desktop) {
+        margin-top: rem(30);
+      }
+    }
+  }
+}
+
+.aura-my-account.aura-enabled .block-page-title-block .edit-account {
+  @extend %button-brand;
+
+  background-color: $primary_empty_btn;
+  color: $tertiary_btn_text;
+  padding: rem(13);
+  font-size: rem(16);
+  border-width: rem(1);
+  letter-spacing: normal;
+}
