@@ -26,6 +26,7 @@ class AddBenefitsToCart extends React.Component {
 
   async getUpdatedCartInfo(addTobag = false) {
     const responseData = await callHelloMemberApi('getCartData', 'GET');
+
     if (hasValue(responseData.data)
       && !hasValue(responseData.data.error)
       && responseData.data.cart.items_count > 0
@@ -43,6 +44,7 @@ class AddBenefitsToCart extends React.Component {
       }
       const appliedOfferCode = responseData.data.cart.extension_attributes.applied_hm_offer_code;
       const voucherDiscount = findArrayElement(responseData.data.totals.total_segments, 'voucher_discount');
+
       if (promotionType === 'voucher'
         && hasValue(isVoucherCodeAdded)
         && hasValue(voucherDiscount)) {
