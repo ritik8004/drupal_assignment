@@ -45,17 +45,17 @@ class DomainConfigOverrides {
   /**
    * Get XB config data by domain or site code.
    *
-   * @return array|null
-   *   XB data array by domain or null.
+   * @return array
+   *   XB data array by domain or empty.
    */
-  public function getXbConfigByDomain(): ?array {
+  public function getXbConfigByDomain(): array {
     $config = $this->configFactory->get('alshaya_xb.settings');
     $domainMappings = $config->get('domain_mapping');
 
     // Get current base url.
     $base_url = $this->requestStack->getCurrentRequest()->getHost();
 
-    $xbConfig = NULL;
+    $xbConfig = [];
 
     foreach ($domainMappings as $domainMapping) {
       // Get domain and prefix comma separated.

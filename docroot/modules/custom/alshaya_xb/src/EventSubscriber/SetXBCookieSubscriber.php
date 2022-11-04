@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_xb\EventSubscriber;
 
 use Drupal\alshaya_xb\Service\DomainConfigOverrides;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -29,12 +30,28 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
   protected DomainConfigOverrides $domainConfigOverrides;
 
   /**
-   * {@inheritdoc}
+   * Logger factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected LoggerChannelFactoryInterface $logger;
+
+  /**
+   * SetXBCookieSubscriber constructor.
+   *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   The Request stack.
+   * @param \Drupal\alshaya_xb\Service\DomainConfigOverrides $domain_config
+   *   Domain config overrides.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   *   Logger factory.
    */
   public function __construct(RequestStack $request,
-                              DomainConfigOverrides $domain_config) {
+                              DomainConfigOverrides $domain_config,
+                              LoggerChannelFactoryInterface $logger) {
     $this->request = $request;
     $this->domainConfigOverrides = $domain_config;
+    $this->logger = $logger;
   }
 
   /**
@@ -48,13 +65,18 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // Get configs by domain.
-    $xbConfig = $this->domainConfigOverrides->getXbConfigByDomain();
+    // Get config overrides by domain.
+    $configOverrides = $this->domainConfigOverrides->getXbConfigByDomain();
+
+    if (empty($configOverrides)) {
+      $this->logger->get('alshaya_xb')->alert('Cross border domain config overrides are empty.');
+      return;
+    }
 
     $cookie_value = json_encode([
-      'countryISO' => $xbConfig['code'],
-      'currencyCode' => $xbConfig['currency_code'],
-      'cultureCode' => $xbConfig['culture_code'],
+      'countryISO' => $configOverrides['code'],
+      'currencyCode' => $configOverrides['currency_code'],
+      'cultureCode' => $configOverrides['culture_code'],
     ]);
 
     $cookie = new Cookie(

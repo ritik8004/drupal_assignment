@@ -4,6 +4,7 @@ services:
     arguments:
       - '@request_stack'
       - '@alshaya_xb.domain_config_overrides'
+      - '@logger.factory'
     tags:
       - { name: event_subscriber }
 
