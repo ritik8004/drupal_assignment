@@ -4,7 +4,7 @@
 (function main(RcsEventManager) {
   // Event listener to update the data layer object with the proper product
   // data.
-  RcsEventManager.addListener('rcsUpdateResults', (e) => {
+  RcsEventManager.addListener('rcsUpdateResults', function updateProductData(e) {
     // Return if result is empty.
     if (typeof e.detail.result === 'undefined' || e.detail.pageType !== 'product') {
       return;

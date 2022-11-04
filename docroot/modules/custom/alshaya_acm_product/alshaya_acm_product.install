@@ -26,7 +26,7 @@ function alshaya_acm_product_update_9401() {
   ],
     'alshaya_acm_product',
     'install',
-    AlshayaConfigManager::MODE_ADD_MISSING,
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE,
   );
 }
 

@@ -43,6 +43,16 @@ function alshaya_nb_transac_rcs_rcs_handlebars_templates_alter(&$templates, $ent
 }
 
 /**
+ * Implements hook_alshaya_rcs_product_product_options_to_query().
+ */
+function alshaya_nb_transac_rcs_alshaya_rcs_product_product_options_to_query() {
+  return [
+    'uk_size',
+    'european_size',
+  ];
+}
+
+/**
  * Implements hook_alshaya_rcs_product_query_fields_alter().
  */
 function alshaya_nb_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$fields) {
@@ -60,5 +70,7 @@ function alshaya_nb_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$f
     'swatch_image_url',
     'weight',
     'weight_text',
+    'uk_size',
+    'european_size',
   );
 }
