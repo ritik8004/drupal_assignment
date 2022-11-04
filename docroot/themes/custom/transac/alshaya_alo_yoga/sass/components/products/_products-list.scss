@@ -248,6 +248,22 @@ article[data-vmode=search_result] {
         z-index: 1;
         border-radius: 50%;
       }
+
+      &.disabled {
+        pointer-events: none;
+
+        &::before {
+          content: '';
+          height: rem(2);
+          width: rem(19);
+          background-color: $swatch-border;
+          position: absolute;
+          display: inline-block;
+          transform: rotate(45deg);
+          #{$left}: 0;
+          top: rem(8);
+        }
+      }
     }
 
     .more-color-swatch {
