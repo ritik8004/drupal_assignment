@@ -1,0 +1,60 @@
+.return-requests-wrapper {
+  .return-qty-select {
+    margin-bottom: rem(24);
+  }
+
+  .order-item-row {
+    .return-reasons-row {
+      @include breakpoint($desktop) {
+        padding-#{$right}: 0;
+      }
+    }
+  }
+
+  .return-reasons-row,
+  .return-qty-row {
+    padding-left: rem(20);
+    padding-right: rem(20);
+    margin-top: 0;
+
+    .return-reason-label {
+      padding-bottom: 0;
+      color: $online-return-dark-text;
+      margin-bottom: rem(1);
+    }
+  }
+
+  .return-reasons-select,
+  .return-qty-select {
+    .reasonsSelect__control,
+    .qtySelect__control {
+      height: rem(40);
+      background-color: $online-return-select-bg;
+
+      .reasonsSelect__single-value {
+        color: $online-return-select-txt-color;
+      }
+
+      .reasonsSelect__dropdown-indicator,
+      .qtySelect__dropdown-indicator {
+        @include icon('chevrondown') {
+          font-size: rem(34);
+        }
+      }
+    }
+  }
+
+  .return-qty-row {
+    @include breakpoint($tablet) {
+      padding-#{$left}: rem(16);
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: rem(50);
+    }
+
+    @include breakpoint($desktop-wide) {
+      padding-#{$left}: rem(94);
+    }
+  }
+}
