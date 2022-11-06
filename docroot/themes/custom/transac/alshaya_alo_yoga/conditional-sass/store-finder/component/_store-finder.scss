@@ -15,6 +15,10 @@
   .geolocation-google-map {
     [aria-hidden=true] {
       padding-bottom: rem(18);
+
+      html[lang=ar] & {
+        margin-left: rem(-1);
+      }
     }
   }
 
