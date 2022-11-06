@@ -157,7 +157,7 @@
     .c-products__item {
       .promotions {
         .sku-promotion-link {
-          color: #979797;
+          color: $plp_promotion_link;
         }
 
         .sku-promotion-item {
@@ -202,10 +202,10 @@
 
     .c-products__item {
       .promotions {
-        color: #000;
+        color: $primary_link;
 
         .sku-promotion-link {
-          color: #000;
+          color: $primary_link;
         }
       }
 
@@ -238,7 +238,7 @@
 
     .c-page-title__description,
     .field--name-field-acq-promotion-description {
-      color: #000;
+      color: $primary_text;
     }
   }
 

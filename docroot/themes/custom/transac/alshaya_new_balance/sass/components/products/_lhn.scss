@@ -11,7 +11,7 @@
 
         a,
         span {
-          color: #151415;
+          color: $secondary_text;
         }
       }
     }
@@ -19,7 +19,7 @@
     & > ul {
       & > li {
         & > .lhn-2 {
-          color: #151415;
+          color: $secondary_text;
           text-decoration: underline;
         }
       }

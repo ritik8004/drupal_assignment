@@ -13,7 +13,7 @@
             font-size: rem(12);
             padding: rem(18) rem(24);
             padding-#{$right}: rem(16);
-            border-bottom: rem(1) solid #efefef;
+            border-bottom: rem(1) solid $plp_filter_border;
 
             &::after {
               font-size: rem(32);
@@ -31,7 +31,7 @@
       .c-collapse-item {
         & > ul {
           .facet-item {
-            border-bottom: rem(1) solid #efefef;
+            border-bottom: rem(1) solid $plp_filter_border;
           }
         }
       }
@@ -39,7 +39,7 @@
 
     .filter__head {
       height: rem(92);
-      border-bottom: rem(1) solid #efefef;
+      border-bottom: rem(1) solid $plp_filter_border;
 
       .filter-sort-title {
         text-transform: capitalize;
@@ -67,11 +67,11 @@
 
       .facet-all-clear,
       .facet-clear-all {
-        border-color: #cf0a2c;
-        color: #cf0a2c;
+        border-color: $secondary_border;
+        color: $secondary_btn_text;
 
         a {
-          color: #cf0a2c;
+          color: $secondary_btn_text;
         }
       }
     }

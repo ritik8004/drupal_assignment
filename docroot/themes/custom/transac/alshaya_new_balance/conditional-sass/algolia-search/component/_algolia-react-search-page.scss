@@ -35,7 +35,7 @@
       @include breakpoint($upto-desktop) {
         width: auto;
         max-width: none;
-        border: rem(1) solid #dadada;
+        border: rem(1) solid $primary_dropdown_border;
         #{$left}: rem(-1);
       }
     }

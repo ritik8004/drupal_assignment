@@ -9,6 +9,7 @@ $nb-red: #cf0a2c;
 $gray: #ccc;
 $red2: #b90020;
 $gray2: #efefef;
+$gray-97: #979797;
 
 // Global elements.
 $primary_text: $black;
@@ -21,6 +22,7 @@ $primary_border: $black;
 $tertiary-border: $gray;
 $secondary_border: $nb-red;
 $content_pagetitle_border: $black;
+$default_bg: $white;
 
 //Buttons.
 $primary_btn_bg: $nb-red;
@@ -202,6 +204,8 @@ $plp_all_filter_title: $black;
 $plp_all_filter_filter_arrow: $black;
 $plp_clear_all_btn_text: $nb-red;
 $plp_filter_txt: $ada-gray;
+$plp_filter_border: $gray2;
+$plp_promotion_link: $gray-97;
 
 // Product Detail Page
 $pdp_product_itemcode: $ada-gray;

@@ -3,7 +3,7 @@
     .view-header {
       &.search-count {
         font-size: rem(16) !important;
-        color: #000;
+        color: $primary_text;
       }
     }
   }
@@ -95,7 +95,7 @@
     &.c-collapse-item {
       .sticky-filter-wrapper & {
         padding: rem(10);
-        border: rem(1) solid #ccc;
+        border: rem(1) solid $tertiary-border;
       }
     }
   }
@@ -112,11 +112,11 @@
 .show-all-filters-algolia,
 .show-all-filters {
   font-size: rem(16);
-  color: #000;
+  color: $primary_text;
 
   @include breakpoint($only-mobile) {
     padding-#{$left}: 0;
-    border: rem(1) solid #dadada;
+    border: rem(1) solid $tertiary-border;
 
     &::before {
       #{$right}: 0;
@@ -170,7 +170,7 @@
   justify-content: center;
   padding: 0 rem(17);
   column-gap: rem(10);
-  background: #fff;
+  background: $default_bg;
   width: 100%;
 
   .filter-facets {
