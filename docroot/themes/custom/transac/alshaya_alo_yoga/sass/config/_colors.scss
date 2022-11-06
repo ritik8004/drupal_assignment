@@ -422,8 +422,10 @@ $plp-secondary-cta-hover-bg: $white;
 $plp-quick-view-bg: $white;
 
 //PLP slider.
-$plp_slider_dots: $white;
+$plp_slider_dots: rgba(0, 0, 0, 0.4);
 $plp-slider-icon-bg: $white;
+$hp_slider_dots: $black;
+$instagram_dots_default: rgba(0, 0, 0, 0.4);
 
 // Drawer cart notification
 $drawer-panel-close-icon: $black;
