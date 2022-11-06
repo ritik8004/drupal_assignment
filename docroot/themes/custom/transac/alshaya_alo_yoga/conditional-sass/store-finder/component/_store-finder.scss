@@ -4,6 +4,11 @@
     [aria-hidden=true] {
       padding-bottom: rem(18);
       padding-#{$right}: rem(2);
+
+      html[lang=ar] & {
+        padding-left: 0;
+        margin-left: rem(-1);
+      }
     }
   }
 

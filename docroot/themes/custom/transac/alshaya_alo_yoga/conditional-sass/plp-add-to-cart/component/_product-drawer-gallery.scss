@@ -5,7 +5,6 @@
         bottom: rem(-16);
 
         &::before {
-          color: $plp-slider-icon-bg;
           font-size: rem(20);
         }
       }
@@ -13,37 +12,18 @@
 
     .slick-dots {
       li {
-        width: rem(8);
-        height: rem(8);
-
         button {
-          width: rem(8);
-          height: rem(8);
-
           &::before {
-            width: rem(8);
-            height: rem(8);
-            top: rem(-8);
-            color: $plp_slider_dots;
-            opacity: 0.4;
-            font-size: rem(38);
-          }
-        }
-
-        &.slick-active {
-          background: transparent !important;
-
-          button {
-            &::before {
-              color: $plp_slider_dots !important;
-            }
+            // proxima nova font family cut dots and descrese the size of the font so replacing with arial.
+            font-family: 'arial';
+            font-size: rem(32);
           }
         }
 
         &.small {
           button {
             &::before {
-              font-size: rem(38);
+              font-size: rem(32);
             }
           }
         }
