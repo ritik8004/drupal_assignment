@@ -1,0 +1,13 @@
+#spc-checkout-confirmation {
+  .spc-pre-content {
+    .spc-checkout-confirmation-print-button {
+      @include secondaryBtn(true);
+
+      border-radius: 0;
+
+      &:hover {
+        color: $secondary_btn_text;
+      }
+    }
+  }
+}
