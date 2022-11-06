@@ -17,7 +17,7 @@
 
       .show-all-filters-algolia {
         top: initial;
-        right: initial;
+        #{$right}: initial;
         position: relative;
         height: rem(48);
         margin: 0;

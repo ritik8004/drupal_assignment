@@ -1,0 +1,11 @@
+.c-plp,
+#top-results {
+  @include breakpoint($tablet) {
+    .c-products__item {
+      .wishlist-icon {
+        top: rem(16);
+        #{$right}: rem(16);
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+@include breakpoint($desktop) {
+  .block-alshaya-category-lhn-block {
+    text-decoration: underline;
+  }
+
+  .block-alshaya-category-lhn-block,
+  .block-alshaya-product-list-lhn-block {
+    ul {
+      li {
+        font-size: rem(14);
+
+        a,
+        span {
+          color: #151415;
+        }
+      }
+    }
+
+    & > ul {
+      & > li {
+        & > .lhn-2 {
+          color: #151415;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

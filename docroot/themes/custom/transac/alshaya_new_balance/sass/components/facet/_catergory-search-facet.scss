@@ -6,6 +6,10 @@
       span {
         font-size: rem(14);
       }
+
+      @include breakpoint($tablet) {
+        margin-bottom: rem(26) !important;
+      }
     }
   }
 }
@@ -17,6 +21,24 @@
       display: flex !important;
       border: rem(1) solid $plp_mobile_separator;
       align-items: center;
+
+      h3 {
+        &.active {
+          background: none;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .c-sidebar-first {
+    .c-facet__blocks {
+      .block-facet-blockcategory-facet-search {
+        & > ul {
+          margin-top: rem(11);
+        }
+      }
     }
   }
 }

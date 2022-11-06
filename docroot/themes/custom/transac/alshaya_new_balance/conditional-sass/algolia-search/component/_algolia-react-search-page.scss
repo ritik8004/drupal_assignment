@@ -3,6 +3,16 @@
     font-size: rem(28);
     text-transform: capitalize;
   }
+
+  @include breakpoint($tablet) {
+    .c-page-title {
+      font-size: rem(38);
+    }
+
+    .c-content__region {
+      margin-top: rem(24);
+    }
+  }
 }
 
 #alshaya-algolia-plp,
@@ -23,10 +33,10 @@
 
     ul {
       @include breakpoint($upto-desktop) {
-        width: 100vw;
+        width: auto;
         max-width: none;
-        border-#{$left}: 0;
-        border-#{$right}: 0;
+        border: rem(1) solid #dadada;
+        #{$left}: rem(-1);
       }
     }
   }
@@ -60,6 +70,33 @@
         justify-content: flex-start;
         margin: 0 rem(12);
       }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .container-wrapper {
+      position: relative;
+    }
+
+    .c-page-title {
+      padding: rem(3) 0 rem(16);
+      margin-bottom: rem(13);
+    }
+
+    .c-products-list {
+      &.view-algolia-plp,
+      &.view-search {
+        .view-content {
+          gap: rem(50) rem(26);
+          margin: rem(19) 0 0;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .c-page-title {
+      margin-#{$left}: 16.91%;
     }
   }
 }

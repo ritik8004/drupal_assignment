@@ -24,8 +24,13 @@
         height: rem(53);
         background: #fff;
         color: #cf0a2c;
-        border: rem(1) solid #CF0A2C;
+        border: rem(1) solid #cf0a2c;
       }
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: rem(107);
+      margin-bottom: 0;
     }
   }
 }
