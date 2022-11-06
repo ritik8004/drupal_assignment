@@ -165,6 +165,14 @@
             height: rem(26);
           }
         }
+
+        &.step-4 {
+          &.completed {
+            .step-label {
+              font-family: $alshaya-bold;
+            }
+          }
+        }
       }
     }
   }
