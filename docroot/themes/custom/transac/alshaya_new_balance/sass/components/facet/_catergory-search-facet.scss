@@ -19,7 +19,7 @@
   .algolia-plp-category-facet {
     @include breakpoint($only-mobile) {
       display: flex !important;
-      border: rem(1) solid $plp_mobile_separator;
+      border: rem(1) solid $tertiary-border;
       align-items: center;
 
       h3 {
