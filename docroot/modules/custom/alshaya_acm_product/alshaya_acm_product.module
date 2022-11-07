@@ -1202,6 +1202,16 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
  * Implements hook_views_pre_render().
  */
 function alshaya_acm_product_views_pre_render(ViewExecutable $view) {
+  // To sort the view listing order based on the arguments passed.
+  if ($view->id() == 'product_slider' && $view->current_display === 'block_matchback' &&  $args = $view->args[0]) {
+    $order = explode(',', $args);
+    $to_sort = [];
+    foreach ($view->result as $row) {
+      $to_sort[$row->nid] = $row;
+    }
+    uksort($to_sort, fn($key1, $key2) => (array_search($key1, $order) > array_search($key2, $order)) ? 1 : -1);
+    $view->result = array_values($to_sort);
+  }
   if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
     // Dynamically set memory limit based on number of results.
     ini_set('memory_limit', ((is_countable($view->result) ? count($view->result) : 0) + ((int) ini_get('memory_limit'))) . 'M');
