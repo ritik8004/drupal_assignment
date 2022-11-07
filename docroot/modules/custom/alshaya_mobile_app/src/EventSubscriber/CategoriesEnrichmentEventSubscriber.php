@@ -48,7 +48,7 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
    */
   public function onEnrichedCategoryDataAlter(EnrichedCategoryDataAlterEvent $event) {
     $term_data = $event->getData();
-    $term_data['processed_data']['deeplink'] = $this->mobileAppUtility->getDeepLink($term_data['term']);
+    $term_data['processed_data']['deeplink'] = $this->mobileAppUtility->getDeeplinkForResource($term_data['term_url']);
     $event->setData($term_data);
   }
 

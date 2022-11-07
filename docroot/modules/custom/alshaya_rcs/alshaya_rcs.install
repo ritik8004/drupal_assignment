@@ -46,6 +46,7 @@ function alshaya_rcs_install() {
     'alshaya_online_returns' => 'alshaya_rcs_online_returns',
     'alshaya_product_lpn' => 'alshaya_rcs_product_lpn',
     'alshaya_olapic' => 'alshaya_rcs_olapic',
+    'alshaya_mobile_app' => 'alshaya_rcs_mobile_app',
   ];
 
   foreach ($modules as $module_to_check => $module_to_install) {

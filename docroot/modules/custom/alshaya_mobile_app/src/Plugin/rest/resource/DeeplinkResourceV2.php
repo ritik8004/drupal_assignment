@@ -30,7 +30,7 @@ class DeeplinkResourceV2 extends DeeplinkResource {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
-    $url = parent::getDeeplink($alias);
+    $url = $this->mobileAppUtility->getDeeplinkForResource($alias);
     // Check if sku is encoded.
     if (str_contains($url, 'product-exclude-linked')) {
       $url_array = explode('product-exclude-linked', $url);

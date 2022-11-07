@@ -274,7 +274,7 @@ class CategoriesEnrichmentResource extends ResourceBase {
 
     $event = new EnrichedCategoryDataAlterEvent([
       'processed_data' => $data,
-      'term' => $term,
+      'term_url' => $term_url,
     ]);
     $this->eventDispatcher->dispatch($event, EnrichedCategoryDataAlterEvent::EVENT_NAME);
     // Get the altered data.

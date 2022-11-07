@@ -10,6 +10,7 @@ services:
       - '@cache.data'
       - '@database'
       - '@module_handler'
+      - '@event_dispatcher'
     calls:
       - [setDepartmentHelper, ['@?alshaya_rcs_listing.department_pages_helper']]
   alshaya_rcs_main_menu.category_data_migration:

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_rcs_main_menu\Service;
 
+use Drupal\alshaya_acm_product_category\Event\EnrichedCategoryDataAlterEvent;
 use Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -16,6 +17,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Service provides helper functions for the rcs category taxonomy.
@@ -100,6 +102,13 @@ class AlshayaRcsCategoryHelper {
   protected $departmentPageHelper;
 
   /**
+   * An event dispatcher instance to use for configuration events.
+   *
+   * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * Constructs a new AlshayaRcsCategoryHelper instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -118,6 +127,8 @@ class AlshayaRcsCategoryHelper {
    *   The database connection manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   Event dispatcher.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
@@ -126,8 +137,8 @@ class AlshayaRcsCategoryHelper {
                               AliasManagerInterface $alias_manager,
                               CacheBackendInterface $cache,
                               Connection $connection,
-                              ModuleHandlerInterface $module_handler
-                              ) {
+                              ModuleHandlerInterface $module_handler,
+                              EventDispatcherInterface $event_dispatcher) {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->renderer = $renderer;
@@ -136,6 +147,7 @@ class AlshayaRcsCategoryHelper {
     $this->cache = $cache;
     $this->connection = $connection;
     $this->moduleHandler = $module_handler;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -206,7 +218,6 @@ class AlshayaRcsCategoryHelper {
         'background_color' => $term->get('field_term_background_color')->getString(),
         'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
         'item_clickable' => (bool) $term->get('field_display_as_clickable_link')->getString(),
-        'deeplink' => $this->getDeepLink($term),
       ];
 
       // Get overridden target link.
@@ -257,10 +268,19 @@ class AlshayaRcsCategoryHelper {
         }
       }
 
+      $menu_item_slug = $term->get('field_category_slug')->getString();
+
+      $event = new EnrichedCategoryDataAlterEvent([
+        'processed_data' => $record,
+        'term_url' => $menu_item_slug,
+      ]);
+      $this->eventDispatcher->dispatch($event, EnrichedCategoryDataAlterEvent::EVENT_NAME);
+      // Get the altered data.
+      $record = $event->getData()['processed_data'];
+
       // Add term object in array for cache dependency.
       $this->termCacheTags = Cache::mergeTags($this->termCacheTags, $term->getCacheTags());
 
-      $menu_item_slug = $term->get('field_category_slug')->getString();
       $data[$menu_item_slug] = $record;
     }
 
