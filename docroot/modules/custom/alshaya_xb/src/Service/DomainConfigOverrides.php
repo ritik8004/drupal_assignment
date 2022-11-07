@@ -46,16 +46,16 @@ class DomainConfigOverrides {
    * Get XB config data by domain or site code.
    *
    * @return array
-   *   XB data array by domain or empty.
+   *   Returns config overrides by domain.
    */
-  public function getXbConfigByDomain(): array {
+  public function getConfigByDomain(): array {
     $config = $this->configFactory->get('alshaya_xb.settings');
     $domainMappings = $config->get('domain_mapping');
 
     // Get current base url.
     $base_url = $this->requestStack->getCurrentRequest()->getHost();
 
-    $xbConfig = [];
+    $configOverrides = [];
 
     foreach ($domainMappings as $domainMapping) {
       // Get domain and prefix comma separated.
@@ -63,13 +63,13 @@ class DomainConfigOverrides {
       foreach ($domains as $domain) {
         // Check if base_url has domain or the site prefix.
         if (strstr($base_url, $domain)) {
-          $xbConfig = $domainMapping;
+          $configOverrides = $domainMapping;
           break 2;
         }
       }
     }
 
-    return $xbConfig;
+    return $configOverrides;
   }
 
 }

@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_xb\EventSubscriber;
 
 use Drupal\alshaya_xb\Service\DomainConfigOverrides;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -30,28 +29,17 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
   protected DomainConfigOverrides $domainConfigOverrides;
 
   /**
-   * Logger factory.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
-   */
-  protected LoggerChannelFactoryInterface $logger;
-
-  /**
    * SetXBCookieSubscriber constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
    *   The Request stack.
    * @param \Drupal\alshaya_xb\Service\DomainConfigOverrides $domain_config
    *   Domain config overrides.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   Logger factory.
    */
   public function __construct(RequestStack $request,
-                              DomainConfigOverrides $domain_config,
-                              LoggerChannelFactoryInterface $logger) {
+                              DomainConfigOverrides $domain_config) {
     $this->request = $request;
     $this->domainConfigOverrides = $domain_config;
-    $this->logger = $logger;
   }
 
   /**
@@ -66,7 +54,7 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
     }
 
     // Get config overrides by domain.
-    $configOverrides = $this->domainConfigOverrides->getXbConfigByDomain();
+    $configOverrides = $this->domainConfigOverrides->getConfigByDomain();
 
     // Return if configOverrides is empty.
     if (empty($configOverrides)) {
