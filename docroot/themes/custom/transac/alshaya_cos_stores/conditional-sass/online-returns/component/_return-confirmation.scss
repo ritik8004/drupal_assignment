@@ -1,4 +1,12 @@
 .return-confirmation-wrapper {
+    .order-details-button-wrapper {
+
+        @include breakpoint($tablet) {
+            padding: rem(8) rem(14);
+            top: rem(13);
+        }
+    }
+
   .refund-success-message {
     .message-text {
       font-size: rem(15);
@@ -121,6 +129,9 @@
     .item-details {
       padding-left: rem(17);
       padding-right: rem(17);
+    }
+    .item-price {
+        padding-#{$left}: rem(27);
     }
 
     .item-total-price {
