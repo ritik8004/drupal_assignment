@@ -19,6 +19,7 @@ window.commerceBackend = window.commerceBackend || {};
       var productMediaStyles = JSON.parse(media.styles);
       processedMedia = {
         // @todo Add type of asset when dealing with video etc.
+        type: 'image',
         url: media.url,
         medium: productMediaStyles.product_zoom_medium_606x504,
         zoom: productMediaStyles.product_zoom_large_800x800,
