@@ -1817,9 +1817,9 @@ $magentos = [
     'url' => 'https://apc-uovxi7i-tw5uijob6hir2.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
-      'consumer_secret' => '0:3:a2NiFYT0TU9OGG6i09arK1JZfGKw',
+      'consumer_secret' => 'k63ke42x62x1hssrtxy1e33c5vmyqgwy',
       'access_token' => 'o0kvxvg1hge9j51twpyztl9uxvvq78y2',
-      'access_token_secret' => '0:3:epdVIKzYTMl4D5eOuRmlSbL1BePV',
+      'access_token_secret' => '05m2gsyg0sxrs87aehwghc2ct0ttmtuo',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 6],
