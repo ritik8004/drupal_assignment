@@ -2,7 +2,7 @@
  * @file
  * Sub category scroll JS file.
  */
-
+/* eslint-disable */
 (function ($, Drupal) {
 
   /**
@@ -42,7 +42,7 @@
       } else if ($('.region__content').hasClass('filter-fixed-top') && $('.plp-subcategory-block').offset().top < $(element).offset().top) {
         stickyFilterPosition = $('.site-brand-home').outerHeight() + 10;
       } else {
-        if($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+        if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
           stickyFilterPosition = $('.site-brand-home').outerHeight() + 10;
         } else {
           // Adding 170px of margin from top so term title
