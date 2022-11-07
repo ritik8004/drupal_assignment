@@ -40,3 +40,9 @@ export const getAuraUserDetails = () => {
 export const checkBazaarVoiceAvailableForPdp = (skuItemCode) => hasValue(drupalSettings.productInfo)
   && hasValue(drupalSettings.productInfo[skuItemCode])
   && hasValue(drupalSettings.productInfo[skuItemCode].alshaya_bazaar_voice);
+
+/**
+ * Helper function to check if Checkout Tracker is enabled.
+ */
+export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
+  && hasValue(drupalSettings.checkoutTracker.enabled);

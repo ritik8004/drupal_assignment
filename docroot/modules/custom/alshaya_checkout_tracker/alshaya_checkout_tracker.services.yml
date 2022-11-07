@@ -1,0 +1,5 @@
+services:
+  alshaya_checkout_tracker.checkout_tracker_helper:
+    class: Drupal\alshaya_checkout_tracker\Helper\CheckoutTrackerHelper
+    arguments:
+      - '@config.factory'
