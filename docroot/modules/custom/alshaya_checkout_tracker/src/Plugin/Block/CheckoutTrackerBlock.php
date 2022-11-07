@@ -10,6 +10,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_checkout_tracker\Helper\CheckoutTrackerHelper;
 
 /**
  * Provides a 'CheckoutTrackerBlock' block.
@@ -29,6 +30,13 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $routeMatch;
 
   /**
+   * Checkout Helper service object.
+   *
+   * @var Drupal\alshaya_checkout_tracker\Helper\CheckoutTrackerHelper
+   */
+  protected $checkoutTrackerHelper;
+
+  /**
    * Constructs a new CheckoutTrackerBlock plugin.
    *
    * @param array $configuration
@@ -39,10 +47,13 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Private temp store service.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
+   * @param Drupal\alshaya_checkout_tracker\Helper\CheckoutTrackerHelper $checkoutTrackerHelper
+   *   The Hello Member service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, CheckoutTrackerHelper $checkoutTrackerHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
+    $this->CheckoutTrackerHelper = $checkoutTrackerHelper;
   }
 
   /**
@@ -53,7 +64,8 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('alshaya_checkout_tracker.checkout_tracker_helper')
     );
   }
 
@@ -114,6 +126,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
     $route_name = $this->routeMatch->getRouteName();
     // Show block for specific routes.
     return AccessResult::allowedIf(
+      $this->CheckoutTrackerHelper->isCheckoutTrackerEnabled() &&
       in_array($route_name, [
         'acq_cart.cart',
         'alshaya_spc.checkout.login',
