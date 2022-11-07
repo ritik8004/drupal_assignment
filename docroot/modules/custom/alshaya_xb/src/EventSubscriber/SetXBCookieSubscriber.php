@@ -68,15 +68,15 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
     // Get config overrides by domain.
     $configOverrides = $this->domainConfigOverrides->getXbConfigByDomain();
 
+    // Return if configOverrides is empty.
     if (empty($configOverrides)) {
-      $this->logger->get('alshaya_xb')->alert('Cross border domain config overrides are empty.');
       return;
     }
 
     $cookie_value = json_encode([
-      'countryISO' => $configOverrides['code'],
-      'currencyCode' => $configOverrides['currency_code'],
-      'cultureCode' => $configOverrides['culture_code'],
+      'countryISO' => $configOverrides['code'] ?? NULL,
+      'currencyCode' => $configOverrides['currency_code'] ?? NULL,
+      'cultureCode' => $configOverrides['culture_code'] ?? NULL,
     ]);
 
     $cookie = new Cookie(
