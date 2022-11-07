@@ -116,12 +116,13 @@ function alshaya_xb_library_info_alter(&$libraries, $extension) {
  */
 function alshaya_xb_page_attachments_alter(array &$page) {
   $configOverrides = \Drupal::service('alshaya_xb.domain_config_overrides')->getXbConfigByDomain();
-  if (empty($configOverrides)) {
+  if (empty($configOverrides) || empty($configOverrides['country'])) {
     return;
   }
 
   // Set gtm country to config overrides.
   $page['#attached']['drupalSettings']['gtm']['country'] = $configOverrides['country'];
+
 }
 
 /**
@@ -129,7 +130,7 @@ function alshaya_xb_page_attachments_alter(array &$page) {
  */
 function alshaya_xb_datalayer_alter(array &$data_layer) {
   $configOverrides = \Drupal::service('alshaya_xb.domain_config_overrides')->getXbConfigByDomain();
-  if (empty($configOverrides)) {
+  if (empty($configOverrides) || empty($configOverrides['country'])) {
     return;
   }
 
