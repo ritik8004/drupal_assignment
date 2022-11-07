@@ -98,6 +98,45 @@
       display: inline-block;
     }
 
+    .swatches {
+      .swatch-image {
+        img {
+          width: rem(40);
+          aspect-ratio: 1;
+          object-fit: contain;
+        }
+      }
+
+      &:not(.slider-swatches) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        column-gap: rem(6);
+      }
+    }
+
+    .slick {
+      &-slider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      &-list {
+        width: rem(86);
+      }
+
+      &-track {
+        display: flex;
+        column-gap: rem(6);
+      }
+
+      &-next,
+      &-prev {
+        position: static;
+      }
+    }
+
     @include breakpoint($mobile) {
       min-height: initial;
     }
@@ -221,6 +260,27 @@
       .price-wrapper {
         font-size: rem(18);
       }
+
+      .swatches {
+        .swatch-image {
+          img {
+            width: rem(50);
+          }
+        }
+      }
+
+      .slick {
+        &-list {
+          width: rem(162);
+        }
+
+        &-next,
+        &-prev {
+          &::before {
+            font-size: rem(40);
+          }
+        }
+      }
     }
 
     ul.js-pager__items {
@@ -256,6 +316,14 @@
     .block-alshaya-rcs-promotion {
       &.block-alshaya-algolia-react-promotion-v2 {
         position: relative;
+      }
+    }
+
+    .c-products__item {
+      .slick {
+        &-list {
+          width: rem(218);
+        }
       }
     }
   }
