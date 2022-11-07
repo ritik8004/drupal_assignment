@@ -128,6 +128,10 @@
     li {
       span,
       a {
+        &.picked {
+          font-family: $alshaya-bold;
+        }
+
         &.picked,
         &:hover {
           border-color: $pdp_size_option_selected_border;
@@ -203,16 +207,121 @@
   }
 
   .form-item-configurables-size {
+    .group-wrapper {
+      margin-top: rem(20);
+
+      .group {
+        .select2Option {
+          h4 {
+            span:first-child {
+              font-family: $alshaya-thin;
+            }
+
+            .selected-text {
+              display: none;
+            }
+          }
+
+          .select-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: rem(13) rem(14);
+            column-gap: rem(13);
+            row-gap: rem(10);
+
+            li {
+              span,
+              a {
+                width: rem(84);
+                height: rem(44);
+                line-height: rem(16);
+                margin: 0;
+              }
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          select.form-select.form-item-configurable-select {
+            height: rem(53);
+          }
+
+          &::after {
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+
+    .group-anchor-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: rem(10) rem(17);
+      margin-top: rem(34);
+
+      a {
+        height: rem(42);
+        width: rem(114);
+        margin: 0;
+
+        @include breakpoint($only-mobile) {
+          width: rem(96);
+          height: rem(36);
+        }
+      }
+    }
+
+    &::after {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+    }
+  }
+
+  .form-item-configurables-width-description {
     .select2Option {
+      h4 {
+        span:first-child {
+          font-family: $alshaya-thin;
+        }
+
+        .selected-text {
+          display: none;
+        }
+      }
+
       .select-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: rem(10) rem(8);
+        margin-top: rem(16);
+
         li {
           span,
           a {
-            width: rem(86);
+            width: rem(120);
             height: rem(44);
             line-height: rem(16);
+            margin: 0;
           }
         }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      @include select-wrapper(100%);
+
+      select.form-select {
+        @include select-style(100%);
+
+        width: 100%;
+        height: rem(53);
+      }
+
+      &::after {
+        top: 50%;
+        transform: translateY(-50%);
       }
     }
   }
@@ -280,5 +389,38 @@
 
   @include breakpoint($only-mobile) {
     margin-top: rem(30);
+  }
+}
+
+.description-wrapper {
+  .close {
+    @include breakpoint($tablet) {
+      height: rem(45);
+      width: rem(45);
+      font-size: rem(45);
+    }
+  }
+
+  .field {
+    &__label {
+      text-align: center;
+    }
+  }
+
+  .desc-value,
+  .text {
+    line-height: rem(24);
+  }
+
+  .desc-wrapper,
+  .description-section,
+  .address {
+    border-top: none;
+  }
+
+  &.desc-open {
+    @include breakpoint($desktop) {
+      width: 32%;
+    }
   }
 }
