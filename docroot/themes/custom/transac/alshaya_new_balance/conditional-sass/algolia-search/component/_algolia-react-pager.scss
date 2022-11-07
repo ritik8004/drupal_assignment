@@ -19,18 +19,23 @@
 
     li.pager__item {
       button {
-        font-size: rem(14);
+        @include secondaryBtn;
+
         width: 100%;
         height: rem(53);
-        background: $secondary_btn_bg;
-        color: $secondary_btn_text;
-        border: rem(1) solid $secondary_border;
+        border: rem(1) solid;
       }
     }
 
     @include breakpoint($tablet) {
       margin-top: rem(107);
       margin-bottom: 0;
+
+      li.pager__item {
+        button {
+          width: 100%;
+        }
+      }
     }
   }
 }
