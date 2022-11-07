@@ -31,14 +31,14 @@ class AlshayaSearchAlgoliaSetupCommands extends DrushCommands {
   }
 
   /**
-   * Create facets.
+   * Lists available facets.
    *
    * @command alshaya_search_algolia:get-facets
    *
    * @aliases alshaya-algolia-get-facets
    *
    * @usage drush alshaya-algolia-get-facets
-   *   Create facets for the site.
+   *   Lists available facets.
    */
   public function getFacets() {
     $facets = $this->facetManager->getFacetsByFacetSourceId(AlshayaAlgoliaReactConfig::FACET_SOURCE);
@@ -55,7 +55,7 @@ class AlshayaSearchAlgoliaSetupCommands extends DrushCommands {
       $facets_to_create[$facet->getFieldIdentifier()] = $facet->getFieldIdentifier();
     }
 
-    print_r(array_values($facets_to_create));
+    print(json_encode(array_values($facets_to_create))) . PHP_EOL;
   }
 
 }
