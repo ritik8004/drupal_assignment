@@ -195,7 +195,7 @@ function disableUnavailableOptions(sku, configurableOptions) {
  *   Returns media collection object.
  */
 function setMediaCollection(media, entity, index, length) {
-  if (media.type === 'image') {
+  if (!Drupal.hasValue(media.type) || media.type === 'image') {
     return {
       index: index,
       type: 'image',
