@@ -1,1 +1,1 @@
-checkout_tracker_enabled: false # Config to enable/disable checkout tracker.
+enabled: false # Config to enable/disable checkout tracker.

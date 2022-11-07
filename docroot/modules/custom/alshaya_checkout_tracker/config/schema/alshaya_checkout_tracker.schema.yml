@@ -2,6 +2,6 @@ alshaya_checkout_tracker.settings:
   type: config_object
   label: 'Alshaya checkout tracker settings'
   mapping:
-    checkout_tracker_enabled:
+    enabled:
       type: boolean
       label: 'Config to enable/disable checkout tracker'

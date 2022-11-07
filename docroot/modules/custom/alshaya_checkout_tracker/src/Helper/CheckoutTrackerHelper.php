@@ -37,7 +37,7 @@ class CheckoutTrackerHelper {
    *   TRUE/FALSE
    */
   public function isCheckoutTrackerEnabled() {
-    return $this->getConfig()->get('checkout_tracker_enabled');
+    return $this->getConfig()->get('enabled');
   }
 
   /**
