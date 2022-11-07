@@ -341,7 +341,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
  */
 function alshaya_rcs_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
   if (!empty($build['sharethis'])) {
-    $build['sharethis']['#content']['m_path'] = '#rcs.product._self|absolute_url#';
+    $build['sharethis']['#content']['m_path'] = \Drupal::request()->getUri();
+
     // Remove the button JS library from the render array as the JS file will
     // be directly loaded using custom js.
     // @see Drupal.behaviors.shareThis in alshaya_rcs_product module.
@@ -354,9 +355,23 @@ function alshaya_rcs_product_node_view_alter(array &$build, EntityInterface $nod
         }
       }
     }
+
     foreach ($build['sharethis']['#content']['st_spans'] as &$span) {
-      $span['#attributes']['st_url'] = '#rcs.product._self|absolute_url#';
+      $span['#attributes']['st_url'] = \Drupal::request()->getUri();
     }
+
+
+    // Variable to store the sharethis block render output.
+    $renderedBuild = $build['sharethis'];
+    // Removing properties not needed for Drupal renderer service.
+    unset($renderedBuild['#attached']);
+    unset($renderedBuild['#weight']);
+
+    $build['sharethis']['#attached']['library'][] = 'alshaya_acm_product/sharethis';
+
+    // New drupalSettings variable to store the rendered output and to be used
+    // in pdp-layout.
+    $build['sharethis']['#attached']['drupalSettings']['sharethis']['contentRendered'] = \Drupal::service('renderer')->render($renderedBuild);
   }
 }
 
