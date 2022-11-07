@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_xb\EventSubscriber;
 
+use Drupal\alshaya_xb\Service\DomainConfigOverrides;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -21,10 +22,24 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
   protected $request;
 
   /**
-   * {@inheritdoc}
+   * Domain config overrides for xb.
+   *
+   * @var \Drupal\alshaya_xb\Service\DomainConfigOverrides
    */
-  public function __construct(RequestStack $request) {
+  protected DomainConfigOverrides $domainConfigOverrides;
+
+  /**
+   * SetXBCookieSubscriber constructor.
+   *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   The Request stack.
+   * @param \Drupal\alshaya_xb\Service\DomainConfigOverrides $domain_config
+   *   Domain config overrides.
+   */
+  public function __construct(RequestStack $request,
+                              DomainConfigOverrides $domain_config) {
     $this->request = $request;
+    $this->domainConfigOverrides = $domain_config;
   }
 
   /**
@@ -38,12 +53,18 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // @todo For POC we have hardcoded the currency to OMR,
-    // this needs to be changed later.
+    // Get config overrides by domain.
+    $configOverrides = $this->domainConfigOverrides->getConfigByDomain();
+
+    // Return if configOverrides is empty.
+    if (empty($configOverrides)) {
+      return;
+    }
+
     $cookie_value = json_encode([
-      'countryISO' => 'OM',
-      'currencyCode' => 'OMR',
-      'cultureCode' => 'ar',
+      'countryISO' => $configOverrides['code'] ?? NULL,
+      'currencyCode' => $configOverrides['currency_code'] ?? NULL,
+      'cultureCode' => $configOverrides['culture_code'] ?? NULL,
     ]);
 
     $cookie = new Cookie(
@@ -67,6 +88,7 @@ class SetXBCookieSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+    $events = [];
     $events[KernelEvents::RESPONSE][] = ['setXbCookie', -10];
     return $events;
   }
