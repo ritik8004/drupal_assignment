@@ -39,6 +39,23 @@ body {
       transform: translateX(0) !important;
       opacity: 1;
     }
+
+    // magizine version 2 layout for mobile view
+    &.magazine-layout-v2 {
+      .magv2-header {
+        @include breakpoint($only-mobile) {
+          transition: none;
+        }
+
+        &.magv2-pdp-non-sticky-header {
+          @include breakpoint($only-mobile) {
+            opacity: 1;
+            transform: unset;
+            pointer-events: unset;
+          }
+        }
+      }
+    }
   }
 
   #alshaya-algolia-search,
