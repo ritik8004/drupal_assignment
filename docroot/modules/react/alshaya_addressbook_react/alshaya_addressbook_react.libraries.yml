@@ -1,0 +1,5 @@
+alshaya_addressbook_react_user_profile:
+  js:
+    dist/user_addressbook.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
