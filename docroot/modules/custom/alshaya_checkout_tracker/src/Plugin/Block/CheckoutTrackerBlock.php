@@ -53,7 +53,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
   public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, CheckoutTrackerHelper $checkoutTrackerHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
-    $this->CheckoutTrackerHelper = $checkoutTrackerHelper;
+    $this->checkoutTrackerHelper = $checkoutTrackerHelper;
   }
 
   /**
@@ -126,14 +126,14 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
     $route_name = $this->routeMatch->getRouteName();
     // Show block for specific routes.
     return AccessResult::allowedIf(
-      $this->CheckoutTrackerHelper->isCheckoutTrackerEnabled() &&
+      $this->checkoutTrackerHelper->isCheckoutTrackerEnabled() &&
       in_array($route_name, [
         'acq_cart.cart',
         'alshaya_spc.checkout.login',
         'alshaya_spc.checkout',
         'alshaya_spc.checkout.confirmation',
       ])
-    );
+    )->addCacheableDependency($this->checkoutTrackerHelper->getCacheTags());
   }
 
 }
