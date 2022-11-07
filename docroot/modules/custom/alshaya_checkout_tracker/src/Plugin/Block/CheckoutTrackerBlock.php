@@ -48,7 +48,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
    * @param Drupal\alshaya_checkout_tracker\Helper\CheckoutTrackerHelper $checkoutTrackerHelper
-   *   The Hello Member service.
+   *   The Checkout Tracker service.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, CheckoutTrackerHelper $checkoutTrackerHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
