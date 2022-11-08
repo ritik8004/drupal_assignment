@@ -4,7 +4,7 @@ import { validateInfo } from '../../../../alshaya_spc/js/utilities/checkout_util
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import { updateCustomerDetails } from '../../utilities/addressbook_api_helper';
-import { getDataInMagentoFormat, getProcessedFormData } from '../../utilities/addressbook_util';
+import { getDataInMagentoFormat, getProcessedFormData, getValueFromAddressData } from '../../utilities/addressbook_util';
 import SelectList from '../../utilities/selectlist';
 import TextField from '../../utilities/textfield';
 
@@ -24,6 +24,30 @@ export default class AddAddressForm extends React.Component {
       areaParentsOptionMapping: this.getProcessAreaOptions(areaParentsOptionMapping),
       areaOptions: [],
     };
+  }
+
+  componentDidMount() {
+    const {
+      defaultAddressValue,
+      addressFields,
+    } = this.props;
+
+    // Populate the default value for the select list fields.
+    if (hasValue(defaultAddressValue)) {
+      const areaParentValue = getValueFromAddressData(defaultAddressValue, 'area_parent', addressFields);
+      // Now if area_parent is having any default value then, we will have to
+      // trigger the onChange function to populate the value in
+      // administrative_area.
+      if (hasValue(areaParentValue)) {
+        this.handleAreaParentChange('area_parent', areaParentValue);
+        const areaOptionValue = getValueFromAddressData(defaultAddressValue, 'administrative_area', addressFields);
+        // Update the status now.
+        this.setState({
+          defaultAreaParent: areaParentValue,
+          defaultAreaOption: areaOptionValue,
+        });
+      }
+    }
   }
 
   /**
@@ -104,14 +128,17 @@ export default class AddAddressForm extends React.Component {
     e.preventDefault();
     const { elements } = e.target;
     const {
-      defaultValues,
+      customerInfo,
       handleCustomerInfoUpdate,
       addressFields,
+      areaOptions,
+      defaultAddressValue,
     } = this.props;
+
     // Perform validation.
     if (!this.handleValidation(elements)) {
-      let processedData = getProcessedFormData(elements, defaultValues, addressFields);
-      if (hasValue(processedData)) {
+      let processedData = getProcessedFormData(elements, addressFields, areaOptions);
+      if (Object.keys(processedData).length > 0) {
         // Show full screen loader.
         showFullScreenLoader();
         const validationRequest = validateInfo(processedData);
@@ -120,7 +147,11 @@ export default class AddAddressForm extends React.Component {
             if (result.status === 200 && result.data.status) {
               // Before calling the API, convert the address in Magento API
               // required format.
-              processedData = getDataInMagentoFormat(processedData, defaultValues, addressFields);
+              let addressItemId = null;
+              if (hasValue(defaultAddressValue)) {
+                addressItemId = defaultAddressValue.id;
+              }
+              processedData = getDataInMagentoFormat(processedData, customerInfo, addressItemId);
               if (hasValue(processedData)) {
                 const customerDetail = updateCustomerDetails(processedData);
                 if (customerDetail instanceof Promise) {
@@ -167,17 +198,17 @@ export default class AddAddressForm extends React.Component {
    *   The default value if exists.
    */
   getDefaultValue = (key) => {
-    const { defaultValues, addressFields } = this.props;
+    const { defaultAddressValue, addressFields } = this.props;
 
     let value = '';
-    if (hasValue(addressFields) && hasValue(defaultValues)) {
+    if (hasValue(addressFields) && hasValue(defaultAddressValue)) {
       const {
         custom_attributes: customAttributes,
         firstname,
         lastname,
         telephone,
         street,
-      } = defaultValues[0];
+      } = defaultAddressValue;
 
       // Check if the key is of address field.
       if (hasValue(addressFields[key])) {
@@ -197,19 +228,7 @@ export default class AddAddressForm extends React.Component {
             value = value[0].value;
           }
         }
-        // Update the state if the key is area_parent or administrative_area.
-        if (key === 'administrative_area') {
-          this.setState({
-            defaultAreaParent: value,
-          });
-        }
-
-        if (key === 'area_parent') {
-          this.setState({
-            defaultAreaOption: value,
-          });
-        }
-      } else if (key === 'full_name') {
+      } else if (key === 'fullname') {
         // Get the full name.
         value = makeFullName(firstname, lastname);
       } else if (key === 'mobile') {
@@ -241,7 +260,7 @@ export default class AddAddressForm extends React.Component {
 
     const { toggleAddressForm, addressFields, formButtonText } = this.props;
 
-    const { country_name: countryName } = drupalSettings;
+    const { country } = drupalSettings.gtm;
 
     return (
       <form
@@ -250,9 +269,9 @@ export default class AddAddressForm extends React.Component {
       >
         <div className="field-wrapper">
           <TextField
-            name="full_name"
+            name="fullname"
             label={Drupal.t('Full name')}
-            defaultValue={this.getDefaultValue('full_name')}
+            defaultValue={this.getDefaultValue('fullname')}
           />
 
           <div className="address-book-address">
@@ -265,7 +284,7 @@ export default class AddAddressForm extends React.Component {
 
             <div className="country-field-wrapper">
               <div className="country-label">{Drupal.t('Country')}</div>
-              <div className="country-name">{countryName}</div>
+              <div className="country-name">{country}</div>
             </div>
 
             {/* Show all the address fields */}
@@ -280,7 +299,7 @@ export default class AddAddressForm extends React.Component {
                       key={index}
                       label={field.label}
                       options={areaParents}
-                      attributeName={field.key}
+                      attributeName={index}
                       defaultValue={defaultAreaParent}
                       onChange={this.handleAreaParentChange}
                     />
@@ -291,7 +310,7 @@ export default class AddAddressForm extends React.Component {
                       key={field.key}
                       label={field.label}
                       options={areaOptions}
-                      attributeName={field.key}
+                      attributeName={index}
                       defaultValue={defaultAreaOption}
                       onChange={this.handleAreaOptionChange}
                     />

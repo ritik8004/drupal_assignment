@@ -12,7 +12,7 @@ class UserAddressBook extends React.Component {
 
     this.state = {
       userAddressItems: [],
-      defaultValues: [],
+      defaultAddressValue: [],
       showLoader: true,
       showAddForm: false,
       areaParents: [],
@@ -87,7 +87,13 @@ class UserAddressBook extends React.Component {
    */
   getAddressItem = (id) => {
     const { userAddressItems } = this.state;
-    return userAddressItems.filter((item) => item.id === id);
+    const filteredItem = userAddressItems.filter((item) => item.id === id);
+
+    if (hasValue(filteredItem)) {
+      return filteredItem[0];
+    }
+
+    return [];
   }
 
   /**
@@ -104,13 +110,13 @@ class UserAddressBook extends React.Component {
     if (actionType === 'add') {
       this.setState({
         showAddForm: true,
-        defaultValues: [],
+        defaultAddressValue: [],
         formButtonText: Drupal.t('add address'),
       });
     } else if (actionType === 'edit' && id) {
       this.setState({
         showAddForm: true,
-        defaultValues: this.getAddressItem(id),
+        defaultAddressValue: this.getAddressItem(id),
         formButtonText: Drupal.t('save'),
       });
     } else {
@@ -147,7 +153,7 @@ class UserAddressBook extends React.Component {
       showLoader,
       userAddressItems,
       showAddForm,
-      defaultValues,
+      defaultAddressValue,
       addressFields,
       areaParents,
       areaOptions,
@@ -167,8 +173,10 @@ class UserAddressBook extends React.Component {
           {showAddForm && (
             <AddAddressForm
               toggleAddressForm={this.toggleAddressForm}
-              defaultValues={defaultValues}
+              defaultAddressValue={defaultAddressValue}
+              customerInfo={customerInfo}
               areaParents={areaParents}
+              areaOptions={areaOptions}
               addressFields={addressFields}
               areaParentsOptionMapping={areaParentsOptionMapping}
               formButtonText={formButtonText}

@@ -6,7 +6,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Controller\UserController;
 use Drupal\user\UserInterface;
-use Drupal\address\Repository\CountryRepository;
 use Drupal\profile\Entity\ProfileTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -23,23 +22,13 @@ class AlshayaAddressBookController extends UserController {
   protected $mobileUtil;
 
   /**
-   * Address Country Repository service object.
-   *
-   * @var \Drupal\address\Repository\CountryRepository
-   */
-  protected $addressCountryRepository;
-
-  /**
    * AlshayaAddressBookController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
-   * @param \Drupal\address\Repository\CountryRepository $address_country_repository
-   *   Address Country Repository service object.
    */
-  public function __construct(MobileNumberUtilInterface $mobile_util, CountryRepository $address_country_repository) {
+  public function __construct(MobileNumberUtilInterface $mobile_util) {
     $this->mobileUtil = $mobile_util;
-    $this->addressCountryRepository = $address_country_repository;
   }
 
   /**
@@ -47,8 +36,7 @@ class AlshayaAddressBookController extends UserController {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('mobile_number.util'),
-      $container->get('address.country_repository')
+      $container->get('mobile_number.util')
     );
   }
 
@@ -68,7 +56,6 @@ class AlshayaAddressBookController extends UserController {
   public function userProfileForm(RouteMatchInterface $route_match, UserInterface $user, ProfileTypeInterface $profile_type) {
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
-    $country_list = $this->addressCountryRepository->getList();
 
     return [
       '#type' => 'markup',
@@ -79,7 +66,6 @@ class AlshayaAddressBookController extends UserController {
         ],
         'drupalSettings' => [
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
-          'country_name' => $country_list[$country_code],
         ],
       ],
     ];
