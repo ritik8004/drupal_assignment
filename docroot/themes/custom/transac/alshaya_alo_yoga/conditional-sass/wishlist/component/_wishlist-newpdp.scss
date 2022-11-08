@@ -8,6 +8,15 @@ body.wishlist-enabled {
             display: flex;
           }
         }
+
+        .wishlist-button-wrapper {
+          @include breakpoint($only-tablet) {
+            html[lang=ar] {
+              height: auto;
+              padding-bottom: rem(10);
+            }
+          }
+        }
       }
     }
   }
