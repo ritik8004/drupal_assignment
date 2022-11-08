@@ -2,6 +2,7 @@
  * @file
  * Sub category scroll JS file.
  */
+
 (function ($, Drupal) {
 
   /**
