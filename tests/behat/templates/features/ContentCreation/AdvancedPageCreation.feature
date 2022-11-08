@@ -37,3 +37,4 @@ Feature: To verify the Advanced page content creation on the site.
     And I wait for element "#node-advanced-page-delete-form"
     And I press "edit-submit"
     Then I should see "The Advanced Page [Test] Automation Advanced Page edited has been deleted."
+    
