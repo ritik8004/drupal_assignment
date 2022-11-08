@@ -1,0 +1,15 @@
+.magv2-sidebar {
+  .addtobag-button-wrapper {
+    .pdp-cart-form {
+      .sku-base-form {
+        .magv2-add-to-basket-container {
+          .magv2-button.magv2-add-to-basket-loader {
+            &::before {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
