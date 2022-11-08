@@ -4,3 +4,11 @@ logger:
     js/datadog_js.logger.js: {}
   dependencies:
     - core/drupal
+
+modern_browser_detector:
+  version: 1
+  js:
+    js/modern_browser_detector.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
