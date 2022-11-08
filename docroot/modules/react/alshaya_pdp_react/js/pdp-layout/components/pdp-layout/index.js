@@ -170,7 +170,15 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     window.addEventListener('resize', headerButton);
   };
 
+  const removeClassFromPDPLayout = (className) => {
+    const element = document.querySelector('#pdp-layout');
+    if (typeof element !== 'undefined') {
+      element.classList.remove(className);
+    }
+  };
+
   useEffect(() => {
+    removeClassFromPDPLayout('content-loading');
     sidebarSticky();
     showStickyHeader();
     if (isAuraEnabled()) {
