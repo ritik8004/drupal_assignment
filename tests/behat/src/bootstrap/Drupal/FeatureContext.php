@@ -3082,4 +3082,49 @@ JS;
     $value = addslashes($value);
     $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
   }
+
+  /**
+   * Function to upload image for image field.
+   * @param $field - input id, name or label.
+   * @param $file - File name placed in Media folder.
+   *
+   * @Given /^I upload "([^"]*)" image "([^"]*)"$/
+   *
+   */
+  public function uploadImage($field, $file) {
+
+    if ($this->getMinkParameter('files_path')) {
+      $fullPath = rtrim(
+          realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $file;
+      if (is_file($fullPath)) {
+        $file = $fullPath;
+      }
+    }
+    $this->getSession()->getPage()->attachFileToField($field, $file);
+    $this->iWaitForAjaxToFinish();
+  }
+
+  /**
+   * Context to upload image in image field.
+   *
+   * @param $field_name - input id, name or label.
+   * @param $file - File name placed in Media folder.
+   *
+   * @Given /^I upload "([^"]*)" image in "([^"]*)" image field$/
+   *
+   */
+  public function iUploadImageInImageField($file, $field_name) {
+    $this->uploadImage($field_name, $file);
+  }
+
+  /**
+   *
+   * @Given /^I edit the page$/
+   */
+  public function iEditPage() {
+    $edit = $this->getSession()
+      ->getPage()
+      ->find('css', "#block-local-tasks ul li a[href$= 'edit']");
+    $edit->click();
+  }
 }
