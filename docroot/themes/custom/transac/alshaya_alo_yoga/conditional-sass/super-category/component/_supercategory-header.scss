@@ -269,3 +269,15 @@
     }
   }
 }
+
+.super-category-enabled {
+  &.magazine-layout-v2 {
+    &.nodetype--acq_product {
+      html[lang=ar] & {
+        @include breakpoint($only-mobile) {
+          margin-top: rem(32);
+        }
+      }
+    }
+  }
+}

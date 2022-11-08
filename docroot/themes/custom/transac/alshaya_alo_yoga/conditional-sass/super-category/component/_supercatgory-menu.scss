@@ -58,7 +58,7 @@
             height: rem(36);
             padding: rem(8) rem(16);
             color: $header_super_cat_menu_text;
-            text-transform: none;
+            text-transform: uppercase;
 
             @include breakpoint($upto-desktop) {
               background-color: $header_super_category_menu_bg;
