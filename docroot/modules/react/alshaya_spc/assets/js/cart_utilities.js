@@ -395,10 +395,66 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     }
   }
 
+  /**
+   * Redirects users to the cart page after they added a certain
+   * number of variants to the cart.
+   *
+   * @param {string} sku
+   *   The sku.
+   */
+  Drupal.alshayaSpc.alshayaSpcRedirectToCart = function (sku) {
+    // Key used to store skus in local storage when they are added to cart.
+    var storageKey = 'add_to_cart_skus';
+    // Detects device type.
+    var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
+
+    // Check if drupal settings are present.
+    var values = drupalSettings.alshaya_spc.redirectToCartThreshold || null;
+    if (!values) {
+      return;
+    }
+
+    // Get redirect threshold for the specific device.
+    var redirectToCartThreshold = values[deviceType];
+    // Check if redirection to cart is enabled i.e. >= 1.
+    if (redirectToCartThreshold < 1) {
+      return;
+    }
+
+    // Get skus from local storage.
+    var skus = Drupal.getItemFromLocalStorage(storageKey) || [];
+    // Check if current sku is already counted.
+    if (skus.includes(sku)) {
+      return;
+    }
+
+    // Add current sku.
+    skus.push(sku);
+
+    // Update local storage.
+    Drupal.addItemInLocalStorage(storageKey, skus);
+
+    // We will redirect if the number of items is multiple of threshold.
+    // example: if threshold is 3, we will redirect at 3, 6, 9...
+    if (skus.length % redirectToCartThreshold === 0) {
+      // Redirect to cart page.
+      window.location = Drupal.url('cart');
+    }
+  }
+
   Drupal.behaviors.spcCartUtilities = {
     attach: function(context) {
       // Set analytics data in hidden field.
       Drupal.SpcPopulateDataFromGA();
+
+      // Add an event listener to redirect users to cart page.
+      $(window).once('after-add-to-cart').on('afterAddToCart', function (e) {
+        const detail = e.detail;
+        // Check if the event was triggered from PDP page.
+        if (Drupal.hasValue(detail.context) && detail.context === 'pdp') {
+          Drupal.alshayaSpc.alshayaSpcRedirectToCart(detail.productData.variant);
+        }
+      });
     }
   }
 

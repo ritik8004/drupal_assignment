@@ -4,46 +4,6 @@
   Drupal.behaviors.alshayaSpcAddToCart = {
     attach: function (context, settings) {
 
-      function alshayaSpcRedirectToCart(sku) {
-        // Key used to store skus in local storage when they are added to cart.
-        var storageKey = 'add_to_cart_skus';
-        // Detects device type.
-        var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
-
-        // Check if drupal settings are present.
-        var values = settings.alshaya_spc.redirectToCartThreshold || null;
-        if (!values) {
-          return;
-        }
-
-        // Get redirect threshold for the specific device.
-        var redirectToCartThreshold = values[deviceType];
-        // Check if redirection to cart is enabled i.e. >= 1.
-        if (redirectToCartThreshold < 1) {
-          return;
-        }
-
-        // Get skus from local storage.
-        var skus = Drupal.getItemFromLocalStorage(storageKey) || [];
-        // Check if current sku is already counted.
-        if (skus.includes(sku)) {
-          return;
-        }
-
-        // Add current sku.
-        skus.push(sku);
-
-        // Update local storage.
-        Drupal.addItemInLocalStorage(storageKey, skus);
-
-        // We will redirect if the number of items is multiple of threshold.
-        // example: if threshold is 3, we will redirect at 3, 6, 9...
-        if (skus.length % redirectToCartThreshold === 0) {
-          // Redirect to cart page.
-          window.location = Drupal.url('cart');
-        }
-      };
-
       $('form.sku-base-form').on('submit.validate', function (event) {
         // Stop submitting form via normal process as this refreshes/redirects
         // the page on submit button click.
@@ -236,8 +196,15 @@
                     );
                   }
 
-                  // Check if user should be redirected to cart page automatically.
-                  alshayaSpcRedirectToCart(cartItem.sku);
+                  // Send notification after we finished adding to cart.
+                  var event = new CustomEvent('afterAddToCart', {
+                    bubbles: true,
+                    detail: {
+                      context: 'pdp',
+                      productData: productData,
+                    }
+                  });
+                  document.dispatchEvent(event);
                 }
               })
               .catch (function() {

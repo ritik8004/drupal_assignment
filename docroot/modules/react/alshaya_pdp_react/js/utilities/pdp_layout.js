@@ -199,6 +199,16 @@ export const triggerAddToCart = (
 
     // Refresh dynamic promo labels on cart update.
     pdpLabelRefresh(cartData);
+
+    // Send notification after we finished adding to cart.
+    const event = new CustomEvent('afterAddToCart', {
+      bubbles: true,
+      detail: {
+        context: 'pdp',
+        productData,
+      },
+    });
+    document.dispatchEvent(event);
   }
 };
 
