@@ -2,7 +2,6 @@
  * @file
  * Sub category scroll JS file.
  */
-/* eslint-disable */
 (function ($, Drupal) {
 
   /**
