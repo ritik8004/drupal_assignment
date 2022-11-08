@@ -7,3 +7,8 @@ pdp_magazine_v2_layout:
     - core/drupalSettings
     - core/drupal.debounce
     - alshaya_seo/gtm
+
+pdp_size_guide_utility:
+  version: 1.x
+  js:
+    js/size_guide_utility.js: { }
