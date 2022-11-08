@@ -35,8 +35,9 @@ function alshaya_pdp_react_library_info_alter(&$libraries, $extension) {
       if (!$node) {
         return;
       }
-      $bundle = $node->getType();
-      if ($bundle === 'acq_product') {
+      // Including size utility only if v2 product.
+      // Do not need this utility in case of v3.
+      if ($node->getType() === 'acq_product') {
         $libraries['pdp_magazine_v2_layout']['dependencies'][] = 'alshaya_pdp_react/pdp_size_guide_utility';
       }
     }
