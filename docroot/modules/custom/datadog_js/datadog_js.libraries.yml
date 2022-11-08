@@ -9,6 +9,3 @@ modern_browser_detector:
   version: 1
   js:
     js/modern_browser_detector.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery
