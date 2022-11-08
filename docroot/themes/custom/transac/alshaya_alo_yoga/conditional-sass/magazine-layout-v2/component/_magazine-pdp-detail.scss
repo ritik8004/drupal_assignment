@@ -12,6 +12,7 @@
         line-height: rem(22);
         color: $primary_text;
         padding: 0;
+        text-transform: capitalize;
       }
 
       .magv2-pdp-brand-logo {
@@ -65,6 +66,7 @@
           font-family: $ay-bold;
           font-size: rem(32);
           line-height: rem(36);
+          text-transform: uppercase;
         }
       }
     }
