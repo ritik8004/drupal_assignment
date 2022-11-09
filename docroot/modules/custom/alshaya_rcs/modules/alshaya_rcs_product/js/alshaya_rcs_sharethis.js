@@ -8,7 +8,7 @@
 
   var shareThisLoaded = false;
 
-  RcsEventManager.addListener('alshayaPageEntityLoaded', function (e) {
+  RcsEventManager.addListener('alshayaPageEntityLoaded', function alshayaRcsSharethisPageEntityLoaded (e) {
     if (!drupalSettings.sharethis || !drupalSettings.sharethis.contentRendered) {
       return;
     }

@@ -360,7 +360,6 @@ function alshaya_rcs_product_node_view_alter(array &$build, EntityInterface $nod
       $span['#attributes']['st_url'] = \Drupal::request()->getUri();
     }
 
-
     // Variable to store the sharethis block render output.
     $renderedBuild = $build['sharethis'];
     // Removing properties not needed for Drupal renderer service.
