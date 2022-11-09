@@ -122,7 +122,7 @@
             color: $online-return-light-text;
           }
 
-          .item-total-label {
+          .item-total-price-label {
             @include breakpoint($tablet) {
               margin-bottom: rem(3);
             }
@@ -152,7 +152,7 @@
             color: $online-return-light-text;
           }
 
-          .item-price-label {
+          .item-unit-price-label {
             font-size: rem(12);
             line-height: 1.33;
 

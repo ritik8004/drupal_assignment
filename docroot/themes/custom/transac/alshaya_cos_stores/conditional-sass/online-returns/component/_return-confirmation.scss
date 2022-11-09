@@ -69,7 +69,6 @@
       margin-top: rem(20);
     }
 
-
     .return-confirmation-detail-wrapper {
       padding: rem(20) 0;
 
@@ -126,6 +125,7 @@
 
   .return-details-section,
   .return-items-wrapper {
+
     .return-details-title,
     .return-items-label {
       padding-bottom: rem(12);
@@ -170,7 +170,7 @@
     .item-total-price {
       margin-top: rem(40);
 
-      .item-total-label {
+      .item-total-price-label {
         color: $online-return-light-text;
         margin-bottom: 0;
       }

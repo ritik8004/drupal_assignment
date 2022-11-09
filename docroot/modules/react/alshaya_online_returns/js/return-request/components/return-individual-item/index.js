@@ -82,7 +82,7 @@ const ReturnIndividualItem = ({
 
         <ConditionalView condition={!isMobile()}>
           <div className="item-price">
-            <div className="light item-price-label">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
+            <div className="light item-unit-price-label">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
             <div className="dark">
               <Price
                 price={item.original_price.toString()}
@@ -94,7 +94,7 @@ const ReturnIndividualItem = ({
 
         <ConditionalView condition={isMobile()}>
           <div className="item-total-price">
-            <div className="light item-total-label">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
+            <div className="light item-total-price-label">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
             <span className="dark"><PriceElement amount={itemQuantity * priceIncTax} /></span>
           </div>
         </ConditionalView>
@@ -124,7 +124,7 @@ const ReturnIndividualItem = ({
 
       <ConditionalView condition={!isMobile()}>
         <div className="item-total-price">
-          <div className="light item-total-label">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
+          <div className="light item-total-price-label">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
           <span className="dark"><PriceElement amount={itemQuantity * priceIncTax} /></span>
         </div>
       </ConditionalView>
