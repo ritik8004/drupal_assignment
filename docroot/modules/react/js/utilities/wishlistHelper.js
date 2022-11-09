@@ -92,7 +92,8 @@ export const getWishlistInfoStorageExpirationForLoggedIn = () => ((typeof drupal
 export const getAttributeOptionsForWishlist = (configurableCombinations, skuItemCode, variant) => {
   // Add configurable options only for configurable product.
   const options = [];
-  if (isWishlistEnabled() && hasValue(configurableCombinations)
+  if (isWishlistEnabled()
+    && hasValue(configurableCombinations)
     && hasValue(variant)) {
     if (hasValue(configurableCombinations[skuItemCode])) {
       Object.keys(configurableCombinations[skuItemCode].bySku[variant]).forEach((key) => {
