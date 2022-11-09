@@ -1,8 +1,8 @@
 /**
  * Detect browser is modern or not and add variable to window object
  */
-(function (window) {
-	window.isModernBrowser = false;
+(function () {
+  window.isModernBrowser = false;
 	try {
 		() => { };
 
@@ -30,4 +30,4 @@
 	} catch (error) {
 		window.isModernBrowser = false;
 	}
-}(window));
+}());
