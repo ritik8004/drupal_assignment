@@ -380,7 +380,9 @@
                 "Configuration Rewrite module conflicts with s3fs module": "https://www.drupal.org/files/issues/2021-07-20/3203786-4.patch"
             },
             "drupal/sharethis": {
-                "Optimise library of sharethis module": "https://www.drupal.org/files/issues/2022-03-10/optimise-libraries-3268825-5.patch"
+                "Optimise library of sharethis module": "https://www.drupal.org/files/issues/2022-03-10/optimise-libraries-3268825-5.patch",
+                "ShareThis admin arrows are remotely hosted and missing": "https://www.drupal.org/files/issues/2022-03-29/sharethis-replace-missing-admin-arrows.patch",
+                "Execute setup picker only once.": "https://www.drupal.org/files/issues/2022-11-09/setup-picker-once-3319692-8.patch"
             },
             "acquia/lightning": {
                 "Fix for drush updb failure during lightning upgrade": "https://www.drupal.org/files/issues/2022-04-07/3274101-2.patch"
