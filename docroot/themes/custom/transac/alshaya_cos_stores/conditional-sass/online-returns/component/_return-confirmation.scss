@@ -1,17 +1,25 @@
 .return-confirmation-wrapper {
-    .order-details-button-wrapper {
-
-        @include breakpoint($tablet) {
-            padding: rem(8) rem(14);
-            top: rem(13);
-        }
+  .order-details-button-wrapper {
+    @include breakpoint($tablet) {
+      padding: rem(8) rem(14);
+      top: rem(13);
     }
+
+    @include breakpoint($desktop) {
+      padding: rem(8) rem(14);
+      top: rem(6);
+    }
+  }
 
   .refund-success-message {
     .message-text {
       font-size: rem(15);
       font-weight: bold;
       line-height: 1.2;
+
+      &::before {
+        width: rem(28);
+      }
     }
   }
 
@@ -126,12 +134,37 @@
   }
 
   .return-items-wrapper {
-    .item-details {
-      padding-left: rem(17);
-      padding-right: rem(17);
+    .order__details--summary {
+      @include breakpoint($desktop-wide) {
+        padding-#{$left}: rem(4);
+      }
     }
+
+    .special--price {
+      .price-wrapper {
+        .price {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+
+    .item-price,
+    .item-total-price {
+      .price-currency.suffix {
+        margin-#{$right}: rem(4);
+
+        @include breakpoint($desktop) {
+          margin-#{$right}: rem(16);
+        }
+      }
+    }
+
     .item-price {
-        padding-#{$left}: rem(27);
+      padding-#{$left}: rem(27);
+
+      @include breakpoint($desktop-wide) {
+        padding-#{$left}: rem(0);
+      }
     }
 
     .item-total-price {
@@ -149,8 +182,22 @@
         font-weight: normal;
 
         .price-currency.suffix {
-          margin-right: rem(4);
+          margin-#{$right}: rem(4);
+
+          @include breakpoint($desktop) {
+            margin-right: rem(16);
+          }
         }
+      }
+    }
+
+    .item-details {
+      padding-left: rem(17);
+      padding-right: rem(17);
+
+      @include breakpoint($desktop-wide) {
+        padding-left: rem(40);
+        padding-right: rem(40);
       }
     }
   }

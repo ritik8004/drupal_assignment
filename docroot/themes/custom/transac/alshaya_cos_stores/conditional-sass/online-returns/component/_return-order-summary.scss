@@ -4,6 +4,12 @@
       align-items: flex-start;
       border-bottom-color: $online-return-border-color;
 
+      .order-summary-details {
+        @include breakpoint($tablet) {
+          flex-basis: rem(424);
+        }
+      }
+
       .light {
         color: $online-return-light-text;
       }
@@ -61,7 +67,8 @@
         justify-content: flex-end;
 
         @include breakpoint($tablet) {
-          padding: rem(24);
+          padding: rem(24) 0;
+          justify-content: flex-start;
         }
 
         .button {
@@ -71,6 +78,8 @@
           justify-content: center;
           align-items: center;
           font-weight: normal;
+          flex-basis: rem(106);
+          height: rem(30);
         }
       }
 

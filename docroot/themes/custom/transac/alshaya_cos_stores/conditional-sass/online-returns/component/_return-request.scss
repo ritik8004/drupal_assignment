@@ -107,11 +107,11 @@
 
         .item-total-price {
           @include breakpoint($desktop) {
-            padding-left: rem(50);
+            padding-#{$left}: rem(50);
           }
 
           @include breakpoint($desktop-wide) {
-            padding-left: rem(94);
+            padding-#{$left}: rem(94);
           }
 
           .dark {
