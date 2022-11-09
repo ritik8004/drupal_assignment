@@ -95,7 +95,9 @@ export const getAttributeOptionsForWishlist = (configurableCombinations, skuItem
   if (isWishlistEnabled()
     && hasValue(configurableCombinations)
     && hasValue(variant)) {
-    if (hasValue(configurableCombinations[skuItemCode])) {
+    if (hasValue(configurableCombinations[skuItemCode])
+      && hasValue(configurableCombinations[skuItemCode].bySku)
+    ) {
       Object.keys(configurableCombinations[skuItemCode].bySku[variant]).forEach((key) => {
         const option = {
           option_id: configurableCombinations[skuItemCode].configurables[key].attribute_id,
