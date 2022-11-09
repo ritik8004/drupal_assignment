@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import moment from 'moment';
 import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHelper';
@@ -16,6 +18,13 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
   const handleChange = () => {
     const vouchersBonus = document.getElementsByName('vouchersBonus[]');
     resetBenefitOptions(vouchersBonus, 'benefit_voucher', 'change');
+    const selchBox = [];
+    const arInputflds = vouchersBonus.length;
+    for (let i = 0; i < arInputflds; i++) {
+      if (vouchersBonus[i].type === 'checkbox' && vouchersBonus[i].checked === true) { selchBox.push(vouchersBonus[i].getAttribute('voucherdes')); }
+    }
+    const vouchersList = selchBox.join(' | ');
+    Drupal.voucherOfferSelected(vouchersList, 'selected-bonus-voucher');
   };
 
   // handle submit.
@@ -23,14 +32,17 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
     e.preventDefault();
     showFullScreenLoader();
     const seletedVouchers = [];
+    const seletedVouchersDes = [];
     // get the list of user selected vouchers from voucher form.
     Object.entries(e.target).forEach(
       ([, value]) => {
         if (value.checked) {
           seletedVouchers.push(value.value);
+          seletedVouchersDes.push(value.getAttribute('voucherdes'));
         }
       },
     );
+    const vouchersListDes = seletedVouchersDes.join(' | ');
     // api call to update the selected vouchers.
     const response = await callHelloMemberApi('addBonusVouchersToCart', 'POST', { voucherCodes: seletedVouchers });
     // Display the message if discount amount reached threshold and not valid.
@@ -63,6 +75,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
             dispatchCustomEvent('refreshCart', {
               data: () => result.data,
             });
+            Drupal.voucherOfferSelectedApply(vouchersListDes, 'applied-bonus-voucher');
           }
         });
       }
@@ -91,6 +104,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
                 type="checkbox"
                 id={`voucher${index}`}
                 value={voucher.code}
+                voucherdes={voucher.description}
                 name="vouchersBonus[]"
                 defaultChecked={typeof totals.hmAppliedVoucherCodes !== 'undefined' ? totals.hmAppliedVoucherCodes.split(',').includes(voucher.code) : false}
                 onChange={handleChange}

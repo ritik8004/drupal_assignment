@@ -81,6 +81,8 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       $route_match = \Drupal::routeMatch();
       if ($route_match->getRouteName() == 'acq_cart.cart') {
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_cart';
+        $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_hello_member';
+
       }
 
       if ($route_match->getRouteName() == 'alshaya_spc.checkout') {

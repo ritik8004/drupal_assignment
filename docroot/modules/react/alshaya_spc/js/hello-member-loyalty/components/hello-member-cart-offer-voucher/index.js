@@ -122,9 +122,10 @@ class HelloMemberCartOffersVouchers extends React.Component {
       openModal,
     });
     removeFullScreenLoader();
+    Drupal.discountVoucherData();
   };
 
-  // on click close symbol close the popup.
+  // on click close symbol close the popup
   onClickClosePopup = async () => {
     this.setState({
       openModal: false,

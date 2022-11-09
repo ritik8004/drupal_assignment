@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import React from 'react';
 import moment from 'moment';
 import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHelper';
@@ -16,21 +17,31 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
   const handleChange = () => {
     const memberOffers = document.getElementsByName('radios');
     resetBenefitOptions(memberOffers, 'benefit_offer', 'change');
+    const selchBox = [];
+    const arInputflds = memberOffers.length;
+    for (let i = 0; i < arInputflds; i++) {
+      if (memberOffers[i].type === 'radio' && memberOffers[i].checked === true) { selchBox.push(memberOffers[i].getAttribute('voucherdes')); }
+    }
+    const vouchersList = selchBox.join(' | ');
+    Drupal.voucherOfferSelected(vouchersList, 'selected-offer-voucher');
   };
 
   // handle submit.
   const handleSubmit = async (e) => {
     e.preventDefault();
     let seletedOffer = '';
+    const seletedVouchersDes = [];
     showFullScreenLoader();
     // get the list of user selected vouchers from voucher form.
     Object.entries(e.target).forEach(
       ([, value]) => {
         if (value.checked) {
           seletedOffer = value;
+          seletedVouchersDes.push(value.getAttribute('voucherdes'));
         }
       },
     );
+    const vouchersListDes = seletedVouchersDes.join(' | ');
     // api call to update the selected offers.
     const response = await callHelloMemberApi('addMemberOffersToCart', 'POST', {
       offerCode: seletedOffer.value,
@@ -66,6 +77,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
             dispatchCustomEvent('refreshCart', {
               data: () => result.data,
             });
+            Drupal.voucherOfferSelectedApply(vouchersListDes, 'applied-offer-voucher');
           }
         });
       }
@@ -95,6 +107,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
                 id={`offer${index}`}
                 data-offer={typeof offer.type !== 'undefined' ? offer.type : 'offer'}
                 name="radios"
+                voucherdes={offer.description}
                 value={offer.code}
                 defaultChecked={typeof totals.hmOfferCode !== 'undefined' ? totals.hmOfferCode === offer.code : false}
                 onChange={handleChange}
