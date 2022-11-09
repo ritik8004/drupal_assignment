@@ -54,7 +54,7 @@ function stickyMobileCartPreview() {
   }
 
   // Check for super category menu.
-  const superCategoryMenu = document.getElementById('block-supercategorymenu');
+  const superCategoryMenu = document.getElementsByClassName('block-alshaya-super-category-menu')[0];
 
   // Check for super menu.
   const superMenu = document.getElementById('block-supermenu');

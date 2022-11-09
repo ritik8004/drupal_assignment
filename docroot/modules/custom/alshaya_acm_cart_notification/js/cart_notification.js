@@ -194,7 +194,7 @@
       // Calculate the sticky header hight.
       var stickyHeaderHight = function () {
         var brandingMenuHight = ($('.branding__menu').length > 0) ? $('.branding__menu').height() : 0;
-        var superCategoryHight = ($('#block-supercategorymenu').length > 0) ? $('#block-supercategorymenu').height() : 0;
+        var superCategoryHight = ($('.block-alshaya-super-category-menu').length > 0) ? $('.block-alshaya-super-category-menu').height() : 0;
 
         // If mobile.
         if ($(window).width() < 768) {
