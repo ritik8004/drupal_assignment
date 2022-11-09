@@ -395,14 +395,9 @@ $conductors = [
     'site_id' => 566,
   ],
   'pbkw_qa' => [
-    'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
-    'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
-    'site_id' => 31,
-  ],
-  'pbkw_test' => [
-    'hmac_id' => 'c6a513700dd3465b9a22ca825a07877f',
-    'hmac_secret' => 'MGVlM2IxMGMtZjhiMy00',
-    'site_id' => 542,
+    'hmac_id' => '60d7080b75034cf6864adddb614eddbd',
+    'hmac_secret' => 'Y2FjOGUwOTYtNzVmMS00',
+    'site_id' => 599,
   ],
   'pbkw_uat' => [
     'hmac_id' => 'cf6afd0bd1624636bd21f4581dc5e252',
@@ -416,14 +411,9 @@ $conductors = [
   ],
   // Pottery Barn SA.
   'pbsa_qa' => [
-    'hmac_id' => '76f67886b7d34f3aad6ae85e75f93550',
-    'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
-    'site_id' => 32,
-  ],
-  'pbsa_test' => [
-    'hmac_id' => '0403f1dfdc254010b0302d754c9e934e',
-    'hmac_secret' => 'OTA2NDY3MzQtZDQ5ZC00',
-    'site_id' => 543,
+    'hmac_id' => '112dd3509073446e8f9b8429e4187f03',
+    'hmac_secret' => 'NmY3YmIyNmUtZDRlOC00',
+    'site_id' => 600,
   ],
   'pbsa_uat' => [
     'hmac_id' => 'eb9126f28aaf466fab9494405fc6a4fe',
@@ -447,14 +437,9 @@ $conductors = [
     'site_id' => 148,
   ],
   'pbae_qa' => [
-    'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
-    'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
-    'site_id' => 33,
-  ],
-  'pbae_test' => [
-    'hmac_id' => '4ea050b993324a15a9c06fb98811024b',
-    'hmac_secret' => 'Y2M1Y2IxNjktZDBkNC00',
-    'site_id' => 544,
+    'hmac_id' => 'df604021ad054309a326e28f91fce8de',
+    'hmac_secret' => 'MjQ3ZTE3MjEtMTUyNS00',
+    'site_id' => 601,
   ],
   'pbae_uat' => [
     'hmac_id' => 'f3e36947161c4cb2bbe1448a890eb45c',
