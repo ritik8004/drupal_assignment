@@ -54,7 +54,7 @@ class AuraPDP extends React.Component {
       && typeof firstChild !== 'undefined'
       && typeof productInfo !== 'undefined') {
       const priceKey = (mode === 'related') ? 'final_price' : 'finalPrice';
-      const price = productInfo[skuCode].variants
+      const price = Drupal.hasValue(productInfo[skuCode].variants)
         ? productInfo[skuCode].variants[firstChild][priceKey]
         : productInfo[skuCode][priceKey];
 
