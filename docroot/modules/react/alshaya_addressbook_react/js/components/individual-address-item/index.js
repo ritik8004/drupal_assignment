@@ -11,6 +11,7 @@ class IndividualAddressItem extends React.Component {
     super(props);
 
     this.state = {
+      // This flag we are using to show the delete wraning message.
       deleteWarningModalOpen: false,
     };
   }
