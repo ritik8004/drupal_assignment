@@ -261,6 +261,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showProductImage' => $display_settings->get('color_swatches_show_product_image'),
         'showVariantsThumbnail' => $display_settings->get('show_variants_thumbnail_plp_gallery'),
         'showSwatches' => $display_settings->get('color_swatches'),
+        'showSliderSwatch' => $display_settings->get('show_variants_thumbnail_plp_gallery2'),
         'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
         'swatchPlpLimitMobileView' => $display_settings->get('swatch_plp_limit_mobile_view'),
       ],

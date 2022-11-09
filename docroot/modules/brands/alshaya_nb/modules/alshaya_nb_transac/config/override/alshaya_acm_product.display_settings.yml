@@ -1,8 +1,21 @@
 color_swatches_show_product_image: true
 show_variants_thumbnail_plp_gallery: true
+show_variants_thumbnail_plp_gallery2: true
 show_parent_images_in_child: true
 swatches:
   pdp:
     - color
   plp:
     - color_family
+size_group:
+  pdp: 'size'
+  alternates:
+    -
+      value: 'size'
+      label: 'US'
+    -
+      value: 'uk_size'
+      label: 'UK'
+    -
+      value: 'european_size'
+      label: 'EU'

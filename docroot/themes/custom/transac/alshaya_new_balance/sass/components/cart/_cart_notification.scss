@@ -1,0 +1,30 @@
+#cart_notification,
+#static_minicart_notification {
+  @include breakpoint($tablet) {
+    top: rem(60);
+    #{$right}: rem(6);
+  }
+
+  @include breakpoint($desktop) {
+    top: rem(38);
+  }
+
+  @include breakpoint($only-mobile) {
+    #{$right}: rem(-16);
+    top: rem(36);
+  }
+}
+
+html[lang=ar] {
+  #cart_notification,
+  #static_minicart_notification {
+    @include breakpoint($desktop) {
+      top: rem(38);
+    }
+
+    @include breakpoint($only-tablet) {
+      top: rem(59);
+      left: rem(6);
+    }
+  }
+}

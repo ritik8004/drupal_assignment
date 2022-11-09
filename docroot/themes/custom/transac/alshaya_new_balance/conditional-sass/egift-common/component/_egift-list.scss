@@ -1,0 +1,10 @@
+.egifts-form-wrapper {
+  .subtitle-text {
+    font-size: rem(16);
+
+    @include breakpoint($only-mobile) {
+      font-size: rem(14);
+      text-align: center;
+    }
+  }
+}

@@ -149,7 +149,7 @@
           display: flex;
           align-items: center;
           font-family: $alshaya-thin;
-          padding: rem(14) rem(8);
+          padding: rem(14) rem(25);
         }
       }
 
@@ -200,7 +200,7 @@
           display: flex;
           align-items: center;
           font-family: $alshaya-thin;
-          padding: rem(14) rem(8);
+          padding: rem(14) rem(25);
         }
       }
 
@@ -267,16 +267,33 @@
     }
   }
 
-  .footer--social {
+  .footer--social,
+  .footer--nb-logo-block {
     @include breakpoint($tablet) {
-      padding-#{$left}: rem(18);
+      padding-#{$left}: rem(12);
+    }
+  }
+
+  .footer--nb-logo-block {
+    @include breakpoint($only-mobile) {
+      margin: 0;
+      margin-#{$left}: rem(24);
+      margin-#{$right}: rem(30);
+    }
+  }
+
+  .footer--social {
+    .c-social-links {
+      @include breakpoint($desktop) {
+        margin-top: rem(19);
+      }
     }
   }
 
   .c-social-links {
     @include breakpoint($upto-tablet) {
-      padding-top: rem(36);
-      margin: 0 rem(16);
+      padding-top: rem(12);
+      margin: 0 rem(25);
     }
 
     h3 {
@@ -335,6 +352,23 @@
     @include breakpoint($desktop) {
       max-width: rem(1284);
       padding: 0 rem(24);
+    }
+  }
+
+  .block-content--nbfooterlogoblock {
+    .footer-brand-home {
+      margin-top: rem(18);
+
+      img {
+        height: rem(27);
+        width: rem(56);
+      }
+
+      p {
+        font-size: rem(16);
+        line-height: 2;
+        color: $footer_logo_blk_text;
+      }
     }
   }
 }

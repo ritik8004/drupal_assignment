@@ -1,0 +1,31 @@
+<div class="gallery-wrapper">
+  <div id="product-zoom-container" data-gallery-sku={{ skuForGallery }}>
+    {{{ render 'gallery.product.block.product_zoom_default_gallery' }}}
+    {{{ render 'gallery.product.block.product_zoom_mobile_gallery' }}}
+    {{!-- Add swatch images as magazine --}}
+    {{#if (eq pdp_gallery_type 'classic')}}
+      {{{ render 'gallery.product.block.product_zoom_magazine_gallery' }}}
+    {{/if}}
+    {{{ render 'gallery.product.block.product_zoom_modal_gallery' }}}
+  </div>
+  <div class="product-desc-wrapper">
+    <div class="product-details">{{t 'Product Details' }}</div>
+    {{#if description.sku }}
+      <div class="product-sku-title">{{t 'Style' }}</div>
+      <div class="product-sku-id">
+        {{ description.sku }}
+      </div>
+    {{/if}}
+    <div class="product-desc-value">
+      {{#if description.primary_material }}
+        <p>{{ description.primary_material }}</p>
+      {{/if}}
+      {{#if description.technologies }}
+        <p>{{ description.technologies }}</p>
+      {{/if}}
+      {{#if description.feature_bullets }}
+        <p>{{ description.feature_bullets }}</p>
+      {{/if}}
+    </div>
+  </div>
+</div>

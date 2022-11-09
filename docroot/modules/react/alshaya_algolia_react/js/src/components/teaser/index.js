@@ -25,13 +25,14 @@ import ExpressDeliveryLabel from './ExpressDeliveryLabel';
 import PriceRangeElement from '../price/PriceRangeElement';
 import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelper';
 import ArticleSwatches from '../article_swatch';
+import SliderSwatch from '../slider-swatch';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
   // 'extraInfo' is used to pass additional information that
   // we want to use in this component.
 }) => {
-  const { showSwatches } = drupalSettings.reactTeaserView.swatches;
+  const { showSwatches, showSliderSwatch } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
@@ -189,8 +190,17 @@ const Teaser = ({
     renderPrice = <PriceRangeElement priceRange={attribute.alshaya_price_range} />;
   }
 
-  const title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
+  let title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
+  title = title.toString();
   const url = hasValue(updatedAttribute.url) ? updatedAttribute.url : attribute.url;
+  // Checking whether the green leaf attribute is present or not.
+  let greenLeaf = null;
+  if (hasValue(hit.attr_green_leaf)) {
+    // Determining the green leaf flag for PLP and wishlist page.
+    greenLeaf = typeof hit.attr_green_leaf[currentLanguage] !== 'undefined'
+      ? hit.attr_green_leaf[currentLanguage]
+      : hit.attr_green_leaf;
+  }
 
   return (
     <div className={teaserClass}>
@@ -237,6 +247,13 @@ const Teaser = ({
               initSlider={initSlider}
               setSlider={setSlider}
             />
+            {/* Render the green leaf icon for the sustainable products. */}
+            {hasValue(greenLeaf) && greenLeaf
+              && (
+                <div className="labels-container bottom-right">
+                  <span className="map-green-leaf" />
+                </div>
+              )}
           </a>
           {/* Render the component if the page isn't wishlist listing page. */}
           <ConditionalView condition={!isWishlistPage(extraInfo)}>
@@ -320,6 +337,7 @@ const Teaser = ({
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
             {showSwatches ? <Swatches swatches={attribute.swatches} url={url} /> : null}
+            {showSliderSwatch ? <SliderSwatch swatches={attribute.swatches} url={url} /> : null}
             {/* Render color swatches based on article/sku id */}
             {hasValue(attribute.article_swatches)
               ? (

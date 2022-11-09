@@ -1,0 +1,37 @@
+.block-customer-service-block {
+  h3 {
+    margin: 0 auto rem(8);
+    text-transform: uppercase;
+  }
+
+  p {
+    margin: 0;
+    font-family: $alshaya-thin;
+
+    &:last-child {
+      .light {
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: rem(16) rem(48);
+  }
+
+  @include breakpoint($tablet) {
+    padding: rem(40) rem(24);
+    font-size: rem(16);
+
+    p {
+      font-size: rem(14);
+      line-height: rem(18);
+
+      &:last-child {
+        .light {
+          line-height: initial;
+        }
+      }
+    }
+  }
+}

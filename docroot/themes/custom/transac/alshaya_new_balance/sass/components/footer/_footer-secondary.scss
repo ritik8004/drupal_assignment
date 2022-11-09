@@ -7,11 +7,14 @@
     @include breakpoint($only-mobile) {
       color: $footer-text;
       text-align: center;
-      padding: rem(27) rem(20);
+      padding: rem(10) 0;
     }
 
     @include breakpoint($tablet) {
-      float: $left;
+      float: $right;
+      text-align: $right;
+      width: auto;
+      margin-#{$right}: 0;
     }
 
     .field--name-body {
