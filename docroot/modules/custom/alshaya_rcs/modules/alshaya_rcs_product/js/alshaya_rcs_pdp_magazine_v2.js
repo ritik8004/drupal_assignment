@@ -22,10 +22,25 @@
     processedProduct[mainProduct.sku] = {...productInfoV1, ...productInfoV2};
     if (mainProduct.type_id === 'configurable') {
       configurableCombinations[mainProduct.sku] = processConfigurableCombinations(mainProduct.sku);
+      configurableCombinations[mainProduct.sku].firstChild = getFirstChild(productInfoV2);
     }
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
   });
+
+  /**
+   * Get first child of SKU.
+   *
+   * @param {Object} product
+   *   Product object.
+   *
+   * @returns {String|null}
+   *   SKU value or null.
+   */
+  function getFirstChild(product) {
+    var variantSkus = Object.keys(product.variants);
+    return variantSkus.length ? variantSkus.pop() : null;
+  }
 
   /**
    * Process product data as per maganize v2 data format.
@@ -94,8 +109,8 @@
     const info = {};
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
-      info[variantInfo.sku] = processedVariants[variantInfo.sku];
-      if (Drupal.hasValue(info[variantInfo.sku])) {
+      if (Drupal.hasValue(processedVariants[variantInfo.sku])) {
+        info[variantInfo.sku] = processedVariants[variantInfo.sku];
         info[variantInfo.sku]['rawGallery'] = updateGallery(variantInfo, product.name);
       }
     });
@@ -127,10 +142,10 @@
         'type': 'image',
       };
     });
-    
+
     if (thumbnails.length > 0) {
       gallery = {
-        'pager_flag': (thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit) 
+        'pager_flag': (thumbnails.length > drupalSettings.alshayaRcs.pdpGalleryPagerLimit)
           ? 'pager-yes' : 'pager-no',
         'sku': child.sku,
         'thumbnails': thumbnails,
@@ -178,7 +193,7 @@
         }
         promotionData = promotionVal;
         staticDataStore.pdpPromotion[staticStorageKey] = promotionData;
-  
+
         return promotionData;
       }
       // If graphQL API is returning Error.

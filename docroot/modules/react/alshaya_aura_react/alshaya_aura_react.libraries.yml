@@ -43,6 +43,7 @@ alshaya_aura_pdp:
   dependencies:
     - alshaya_react/react
     - alshaya_acm_product/product_utility
+    - alshaya_master/common_functions
 
 # This is compatible with commerce backend version 1.
 aura_backend.v1:
