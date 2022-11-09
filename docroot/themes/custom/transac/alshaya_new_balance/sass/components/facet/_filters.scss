@@ -200,6 +200,7 @@
 
     .filter-fixed-top & {
       top: rem(6);
+      z-index: 1;
     }
   }
 
