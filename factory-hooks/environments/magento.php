@@ -1200,33 +1200,6 @@ $magentos = [
   ],
   // Victoria Secret.
   'vs_qa' => [
-    'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'ykhx46sjfr2wp7682ph7hvwivt9gf92p',
-      'consumer_secret' => 'ws58leuqt6746q0cwlh6m9hplh84dkm9',
-      'access_token' => 'aissfukfwphot1i3d11na24jcyqb2od8',
-      'access_token_secret' => 'lvc4hhwak1nei7bul20tg3umjmed0nh0',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'bh' => [
-      'store_id' => ['en' => 10, 'ar' => 9],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-  ],
-  'vs_test' => [
     'url' => 'https://vs-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'x7perq2khr9t52qeg2rv6ly5uakgv5lw',
