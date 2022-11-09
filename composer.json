@@ -380,7 +380,9 @@
                 "Configuration Rewrite module conflicts with s3fs module": "https://www.drupal.org/files/issues/2021-07-20/3203786-4.patch"
             },
             "drupal/sharethis": {
-                "Optimise library of sharethis module": "https://www.drupal.org/files/issues/2022-03-10/optimise-libraries-3268825-5.patch"
+                "Optimise library of sharethis module": "https://www.drupal.org/files/issues/2022-03-10/optimise-libraries-3268825-5.patch",
+                "ShareThis admin arrows are remotely hosted and missing": "https://www.drupal.org/files/issues/2022-03-29/sharethis-replace-missing-admin-arrows.patch",
+                "Execute setup picker only once.": "https://www.drupal.org/files/issues/2022-11-09/setup-picker-once-3319692-8.patch"
             },
             "acquia/lightning": {
                 "Fix for drush updb failure during lightning upgrade": "https://www.drupal.org/files/issues/2022-04-07/3274101-2.patch"
@@ -430,7 +432,7 @@
                 "jquery_ui_tabs - Upgrade to jQuery UI 1.13.2": "https://www.drupal.org/files/issues/2022-09-11/upgrade_to_jquery_ui_1_13_2-3308829-3.patch"
             },
             "drupal/user_password_limit": {
-                "Limit requesting for password reset emails instead of resetting passwords": "https://www.drupal.org/files/issues/2022-09-06/3308181-2.patch"
+                "Limit requesting for password reset emails instead of resetting passwords": "https://www.drupal.org/files/issues/2022-11-09/3308181-4.patch"
             },
             "drupal/rate_limits": {
                 "Add option to skip rate limit for GET requests": "https://www.drupal.org/files/issues/2022-09-07/3308397-2.patch"

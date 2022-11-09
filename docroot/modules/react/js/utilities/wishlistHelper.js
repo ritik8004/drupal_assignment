@@ -87,20 +87,25 @@ export const getWishlistInfoStorageExpirationForLoggedIn = () => ((typeof drupal
  *  Sku code of variant.
  *
  * @returns array
- *  Attribute options of configurabel product.
+ *  Attribute options of configurable product.
  */
 export const getAttributeOptionsForWishlist = (configurableCombinations, skuItemCode, variant) => {
   // Add configurable options only for configurable product.
   const options = [];
-  if (isWishlistEnabled() && configurableCombinations !== ''
-    && configurableCombinations[skuItemCode] && variant) {
-    Object.keys(configurableCombinations[skuItemCode].bySku[variant]).forEach((key) => {
-      const option = {
-        option_id: configurableCombinations[skuItemCode].configurables[key].attribute_id,
-        option_value: configurableCombinations[skuItemCode].bySku[variant][key],
-      };
-      options.push(option);
-    });
+  if (isWishlistEnabled()
+    && hasValue(configurableCombinations)
+    && hasValue(variant)) {
+    if (hasValue(configurableCombinations[skuItemCode])
+      && hasValue(configurableCombinations[skuItemCode].bySku)
+    ) {
+      Object.keys(configurableCombinations[skuItemCode].bySku[variant]).forEach((key) => {
+        const option = {
+          option_id: configurableCombinations[skuItemCode].configurables[key].attribute_id,
+          option_value: configurableCombinations[skuItemCode].bySku[variant][key],
+        };
+        options.push(option);
+      });
+    }
   }
   return options;
 };

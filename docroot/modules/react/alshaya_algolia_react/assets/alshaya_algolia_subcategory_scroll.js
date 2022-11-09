@@ -15,7 +15,7 @@
     var stickyFilterPosition;
 
     if ($(window).width() < 768) {
-      stickyFilterPosition = $('#block-supercategorymenu').outerHeight() + $('#block-mobilenavigation').outerHeight() + $('.show-all-filters').outerHeight() + $('#block-subcategoryblock').outerHeight();
+      stickyFilterPosition = $('.block-alshaya-super-category-menu').outerHeight() + $('#block-mobilenavigation').outerHeight() + $('.show-all-filters').outerHeight() + $('#block-subcategoryblock').outerHeight();
       if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
         // If target is above of the current view point in that case subcategory will be visible.
         if ($('.plp-subcategory-block').offset().top > $(element).offset().top) {
@@ -42,7 +42,7 @@
       } else if ($('.region__content').hasClass('filter-fixed-top') && $('.plp-subcategory-block').offset().top < $(element).offset().top) {
         stickyFilterPosition = $('.site-brand-home').outerHeight() + 10;
       } else {
-        if($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+        if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
           stickyFilterPosition = $('.site-brand-home').outerHeight() + 10;
         } else {
           // Adding 170px of margin from top so term title

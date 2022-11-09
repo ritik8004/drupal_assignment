@@ -1,0 +1,21 @@
+#egift-card-purchase-wrapper {
+  .step-two-wrapper {
+    .egift-input-title {
+      font-size: rem(14);
+    }
+  }
+
+  .action-buttons {
+    text-transform: capitalize;
+
+    button[disabled] {
+      &.egift-purchase-add-to-cart-button {
+        border-color: $egift_form_ckt_btn_border;
+      }
+
+      &.egift-purchase-checkout-button {
+        color: $egift_form_ckt_text;
+      }
+    }
+  }
+}

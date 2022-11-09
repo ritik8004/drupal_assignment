@@ -1036,24 +1036,6 @@ $magentos = [
     ],
   ],
   // Pottery Barn.
-  'pb_qa' => [
-    'url' => 'https://integration-5ojmyuq-rfuu4sicyisyw.eu.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'auf96nt6b1loar4yc2qm55pluqd5sgrn',
-      'consumer_secret' => 'i1lhnoafn6a1ggjou2juj366cpcnnhel',
-      'access_token' => 's4rfv318v1gxmrnq8mjdn01uhejd8760',
-      'access_token_secret' => '4x5otnn378pjr1v3acnmoe934niwjlw7',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-  ],
   // MDC instance for Tamara payment option.
   'pb_tamara' => [
     'url' => 'https://tamara-hl3vs3y-rfuu4sicyisyw.eu-3.magentosite.cloud',
@@ -1073,7 +1055,8 @@ $magentos = [
       'store_id' => ['en' => 4, 'ar' => 5],
     ],
   ],
-  'pb_test' => [
+  'pb_qa' => [
+    'algolia_env' => 'pb_test',
     'url' => 'https://pb-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'npg1gjry1gvxoptojwdw4j3qjgegfm8l',
@@ -1200,33 +1183,7 @@ $magentos = [
   ],
   // Victoria Secret.
   'vs_qa' => [
-    'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'ykhx46sjfr2wp7682ph7hvwivt9gf92p',
-      'consumer_secret' => 'ws58leuqt6746q0cwlh6m9hplh84dkm9',
-      'access_token' => 'aissfukfwphot1i3d11na24jcyqb2od8',
-      'access_token_secret' => 'lvc4hhwak1nei7bul20tg3umjmed0nh0',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'bh' => [
-      'store_id' => ['en' => 10, 'ar' => 9],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-  ],
-  'vs_test' => [
+    'algolia_env' => 'vs_test',
     'url' => 'https://vs-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'x7perq2khr9t52qeg2rv6ly5uakgv5lw',
@@ -1817,9 +1774,9 @@ $magentos = [
     'url' => 'https://apc-uovxi7i-tw5uijob6hir2.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
-      'consumer_secret' => '0:3:a2NiFYT0TU9OGG6i09arK1JZfGKw',
+      'consumer_secret' => 'k63ke42x62x1hssrtxy1e33c5vmyqgwy',
       'access_token' => 'o0kvxvg1hge9j51twpyztl9uxvvq78y2',
-      'access_token_secret' => '0:3:epdVIKzYTMl4D5eOuRmlSbL1BePV',
+      'access_token_secret' => '05m2gsyg0sxrs87aehwghc2ct0ttmtuo',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 6],
