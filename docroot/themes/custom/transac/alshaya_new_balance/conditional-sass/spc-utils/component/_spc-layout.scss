@@ -19,3 +19,17 @@
     }
   }
 }
+
+.alias--checkout,
+.alias--cart,
+.alias--checkout-confirmation {
+  .spc-sidebar.sticky {
+    position: initial;
+  }
+
+  @include breakpoint($only-mobile) {
+    .c-footer {
+      padding-bottom: rem(92);
+    }
+  }
+}

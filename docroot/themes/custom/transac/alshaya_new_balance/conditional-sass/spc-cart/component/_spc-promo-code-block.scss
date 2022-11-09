@@ -9,6 +9,8 @@
 
     @include breakpoint($only-mobile) {
       background-color: $spc-order-summary-totals-bg;
+      padding-#{$left}: rem(16);
+      padding-#{$right}: rem(28);
     }
   }
 
@@ -28,6 +30,7 @@
 
   .promo-submit {
     font-weight: 700;
+    text-transform: capitalize;
   }
 }
 
