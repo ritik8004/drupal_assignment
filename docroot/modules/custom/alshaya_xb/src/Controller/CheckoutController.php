@@ -26,6 +26,11 @@ class CheckoutController extends ControllerBase {
           'alshaya_spc/commerce_backend.cart.v2',
           'alshaya_xb/alshaya_xb_checkout_seo',
         ],
+        // Set empty payment methods in settings.
+        // This is used for GTM and populated with data from global-e.
+        'drupalSettings' => [
+          'payment_methods' => [],
+        ],
       ],
     ];
   }
