@@ -93,13 +93,31 @@ export default class AddAddressForm extends React.Component {
     return processedAreaOptions;
   }
 
+  /**
+   * Validates the form submission.
+   *
+   * @param {object} elements
+   *   An object containing the form submission.
+   *
+   * @returns {boolean}
+   *   Return TRUE/FALSE based on the validation.
+   */
   handleValidation = (elements) => {
     const errors = [];
     // Loop though all the elements except the optional once.
     Array.from(elements).forEach((item) => {
-      if (item.value.length === 0) {
+      // We will have to make sure to validate the value of area_parent &
+      // administrative_area as these fields are required. And with react-select
+      // we cannot pass required flag.
+      if (hasValue(item.name)
+        && (item.required
+        || item.name === 'area_parent'
+        || item.name === 'administrative_area')
+        && item.value.length === 0) {
+        // Push the items in the error array to display the error messages based
+        // on item name.
         errors.push(item.name);
-      } else {
+      } else if (hasValue(item.name)) {
         document.getElementById(`${item.name}-error`).innerHTML = '';
       }
     });
@@ -107,10 +125,12 @@ export default class AddAddressForm extends React.Component {
     if (errors.length > 0) {
       errors.forEach((name) => {
         // Check if element is not empty.
-        // `address_line2` is an optional field, so we can skip this.
-        // @todo To make it dynamic based on the required flag.
-        if (elements[name] && name !== 'address_line2') {
-          const label = elements[name].getAttribute('message');
+        if (elements[name]) {
+          let label = elements[name].getAttribute('message');
+          // For area_parent & administrative_area, get the message from label.
+          if (name === 'area_parent' || name === 'administrative_area') {
+            label = document.getElementById(`${name}-error`).parentNode.getElementsByTagName('label')[0].innerHTML;
+          }
           if (hasValue(label)) {
             document.getElementById(`${name}-error`).innerHTML = Drupal.t('Please enter your @title.', { '@title': label });
           }
@@ -135,8 +155,8 @@ export default class AddAddressForm extends React.Component {
       defaultAddressValue,
     } = this.props;
 
-    // Perform validation.
-    if (!this.handleValidation(elements)) {
+    // Perform frontend validation once.
+    if (this.handleValidation(elements)) {
       let processedData = getProcessedFormData(elements, addressFields, areaOptions);
       if (Object.keys(processedData).length > 0) {
         // Show full screen loader.
@@ -159,13 +179,40 @@ export default class AddAddressForm extends React.Component {
                     if (!hasValue(response.errors)
                       && hasValue(response.data)) {
                       handleCustomerInfoUpdate(response.data);
-
+                      let message = '';
+                      // There are two type operation we are doing right now,
+                      // update or add. And we can identify based on the default
+                      // value.
+                      if (hasValue(addressItemId)) {
+                        message = Drupal.t('Address is updated successfully.');
+                      } else {
+                        message = Drupal.t('Address is added successfully.');
+                      }
+                      // Show the confirmation message.
+                      Drupal.alshayaAddressBookReactShowGlobalMessage(
+                        message,
+                        'status',
+                      );
                       // Remove the loader.
                       removeFullScreenLoader();
+                    } else {
+                      // Show the error message.
+                      Drupal.alshayaAddressBookReactShowGlobalMessage(
+                        drupalSettings.globalErrorMessage,
+                        'error',
+                      );
                     }
                   });
                 }
               }
+            } else if (result.status === 200 && !result.data.status) {
+              // @todo Handle the BE validation here.
+            } else if (result.status !== 200) {
+              // Show the error message.
+              Drupal.alshayaAddressBookReactShowGlobalMessage(
+                drupalSettings.globalErrorMessage,
+                'error',
+              );
             }
           });
         }
@@ -173,6 +220,33 @@ export default class AddAddressForm extends React.Component {
     }
   };
 
+  /**
+   * Handles the on change operation of administrative_area.
+   *
+   * @param {string} attributeName
+   *   The attribute name.
+   * @param {string} value
+   *   The selected value from the selectlist.
+   */
+  handleAreaOptionChange = (attributeName, value) => {
+    // Proceed only if value is not empty.
+    if (value) {
+      this.setState({
+        defaultAreaOption: value,
+      });
+      // Remove the error message if any.
+      document.getElementById(`${attributeName}-error`).innerHTML = '';
+    }
+  };
+
+  /**
+   * Handles the on change operation of area_parent.
+   *
+   * @param {string} attributeName
+   *   The attribute name.
+   * @param {string} value
+   *   The selected value from the selectlist.
+   */
   handleAreaParentChange = (attributeName, value) => {
     // Proceed only if value is not empty.
     if (value) {
@@ -182,10 +256,10 @@ export default class AddAddressForm extends React.Component {
           areaOptions: areaParentsOptionMapping[value][0],
           defaultAreaParent: value,
         });
+        // Remove the error message if any.
+        document.getElementById(`${attributeName}-error`).innerHTML = '';
       }
     }
-
-    return [];
   };
 
   /**
@@ -239,17 +313,6 @@ export default class AddAddressForm extends React.Component {
     return value;
   };
 
-  handleAreaOptionChange = (attributeName, value) => {
-    // Proceed only if value is not empty.
-    if (value) {
-      this.setState({
-        defaultAreaOption: value,
-      });
-    }
-
-    return [];
-  };
-
   render() {
     const {
       areaParents,
@@ -271,6 +334,8 @@ export default class AddAddressForm extends React.Component {
           <TextField
             name="fullname"
             label={Drupal.t('Full name')}
+            required
+            maxLength="128"
             defaultValue={this.getDefaultValue('fullname')}
           />
 
@@ -278,6 +343,7 @@ export default class AddAddressForm extends React.Component {
             <TextField
               type="tel"
               name="mobile"
+              required
               defaultValue={this.getDefaultValue('mobile')}
               label={Drupal.t('Mobile number')}
             />

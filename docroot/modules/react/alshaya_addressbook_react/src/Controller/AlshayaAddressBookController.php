@@ -63,9 +63,13 @@ class AlshayaAddressBookController extends UserController {
       '#attached' => [
         'library' => [
           'alshaya_addressbook_react/alshaya_addressbook_react_user_profile',
+          'alshaya_addressbook_react/alshaya_addressbook_react_util',
         ],
         'drupalSettings' => [
-          'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+          'addressbook' => [
+            'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+            'mobile_max_limit' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
+          ],
         ],
       ],
     ];

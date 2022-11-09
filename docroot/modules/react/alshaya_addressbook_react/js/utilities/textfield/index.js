@@ -20,8 +20,10 @@ class TextField extends React.Component {
   }
 
   render() {
-    const countryMobileCode = window.drupalSettings.country_mobile_code;
-    const countryMobileCodeMaxLength = window.drupalSettings.mobile_maxlength;
+    const {
+      country_mobile_code: countryMobileCode,
+      mobile_max_limit: countryMobileCodeMaxLength,
+    } = drupalSettings.addressbook;
     const {
       defaultValue,
       type,
@@ -103,6 +105,7 @@ class TextField extends React.Component {
           placeholder={placeholder}
           message={label}
           tabIndex="0"
+          required={required}
           onKeyDown={this.handleKeyDown}
         />
         <div className="c-input__bar" />
