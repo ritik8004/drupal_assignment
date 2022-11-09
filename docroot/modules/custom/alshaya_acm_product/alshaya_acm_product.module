@@ -912,7 +912,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
  * Implements hook_ENTITY_TYPE_view_alter().
  */
 function alshaya_acm_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
-  if (!empty($build['sharethis'])) {
+  if (!empty($build['sharethis']) && $node->bundle() === 'acq_product') {
     // Variable to store the sharethis block render output.
     $renderedBuild = $build['sharethis'];
     // Removing properties not needed for Drupal renderer service.
