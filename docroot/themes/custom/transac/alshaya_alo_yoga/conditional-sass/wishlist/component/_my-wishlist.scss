@@ -3,6 +3,8 @@
     @include breakpoint($upto-desktop) {
       background-color: transparent;
       #{$left}: 0;
+      margin: 0;
+      padding: 0;
     }
   }
 
