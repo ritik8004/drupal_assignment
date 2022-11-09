@@ -62,12 +62,6 @@
     }
   }
 
-  .c-post-content {
-    .l-container {
-      max-width: unset;
-    }
-  }
-
   .site-brand-wrapper {
     html[lang=ar] & {
       @include breakpoint($desktop) {
