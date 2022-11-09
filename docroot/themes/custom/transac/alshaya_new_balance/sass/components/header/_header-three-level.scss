@@ -63,3 +63,17 @@
     }
   }
 }
+
+.block-alshaya-main-menu {
+  .active--menu--links {
+    &:hover {
+      li.menu--one__list-item {
+        .menu--one__link {
+          @include breakpoint($desktop) {
+            border: none;
+          }
+        }
+      }
+    }
+  }
+}

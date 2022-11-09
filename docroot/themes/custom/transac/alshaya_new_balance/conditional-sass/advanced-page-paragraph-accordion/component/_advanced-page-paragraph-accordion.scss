@@ -1,0 +1,66 @@
+.nodetype--advanced_page {
+  .c-accordion-delivery-option-parent {
+    .field--name-field-group-title {
+      font-size: rem(24);
+
+      @include breakpoint($only-mobile) {
+        font-size: rem(18);
+      }
+    }
+
+    .c-accordion__title {
+      font-family: $alshaya-bold;
+      font-size: rem(14);
+      background-color: $egift_accordian_title_bg;
+      border: rem(1) solid $egift_accordian_title_border;
+
+      @include breakpoint($only-mobile) {
+        font-size: rem(13);
+      }
+
+      &::after {
+        #{$right}: rem(15);
+
+        @include breakpoint($only-mobile) {
+          #{$right}: 0;
+          top: rem(26);
+        }
+      }
+
+      &.ui-state-active {
+        &::after {
+          #{$right}: rem(30);
+          top: rem(21);
+
+          @include breakpoint($only-mobile) {
+            #{$right}: rem(15);
+          }
+        }
+
+        color: $egift_accordian_active_title;
+        border-bottom: none;
+
+        & + .c-accordion_content {
+          background-color: $egift_accordian_title_bg;
+          border: rem(1) solid $egift_accordian_title_border;
+          border-top: none;
+          padding: rem(4) rem(16);
+        }
+      }
+    }
+
+    .c-accordion_content {
+      p {
+        font-size: rem(14);
+
+        @include breakpoint($only-mobile) {
+          font-size: rem(12);
+        }
+      }
+
+      ul {
+        padding-#{$left}: 0;
+      }
+    }
+  }
+}

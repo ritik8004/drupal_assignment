@@ -10,6 +10,11 @@
     text-align: $right;
     height: rem(24);
     text-transform: none;
+
+    .region__menu-secondary {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 
   li {
@@ -48,8 +53,10 @@
 
 body {
   @include breakpoint($upto-desktop) {
+    margin-top: rem(68);
+
     html[lang=ar] & {
-      margin-top: rem(60);
+      margin-top: rem(68);
     }
   }
 

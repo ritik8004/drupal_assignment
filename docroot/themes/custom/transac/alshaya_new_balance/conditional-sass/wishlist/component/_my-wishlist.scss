@@ -1,0 +1,12 @@
+.path--wishlist {
+  #block-page-title {
+    .c-page-title {
+      font-size: rem(14);
+      text-transform: capitalize;
+
+      @include breakpoint($only-mobile) {
+        font-size: rem(18);
+      }
+    }
+  }
+}

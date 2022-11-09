@@ -41,7 +41,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
   });
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="filter-facets">
       {facets}
     </div>
   );
