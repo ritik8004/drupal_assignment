@@ -61,10 +61,15 @@
     }
 
     .select2-container {
+      @include breakpoint($desktop) {
+        width: rem(193) !important;
+      }
+
       .select2-selection {
         @include breakpoint($desktop) {
           font-size: rem(12);
           height: rem(35);
+          width: rem(193);
         }
 
         &__arrow {
@@ -76,6 +81,10 @@
             @include breakpoint($desktop) {
               line-height: rem(35);
               height: rem(35);
+
+              html[lang=ar] & {
+                right: rem(1);
+              }
             }
           }
         }
