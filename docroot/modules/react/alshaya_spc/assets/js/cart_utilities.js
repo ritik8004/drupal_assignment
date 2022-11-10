@@ -445,15 +445,6 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     attach: function(context) {
       // Set analytics data in hidden field.
       Drupal.SpcPopulateDataFromGA();
-
-      // Add an event listener to redirect users to cart page.
-      $(window).once('after-add-to-cart').on('afterAddToCart', function (e) {
-        const detail = e.detail;
-        // Check if the event was triggered from PDP page.
-        if (Drupal.hasValue(detail.context) && detail.context === 'pdp') {
-          Drupal.alshayaSpc.alshayaSpcRedirectToCart(detail.productData.variant);
-        }
-      });
     }
   }
 
@@ -508,6 +499,15 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       if (cartData && typeof cartData.cart_id_int !== 'undefined') {
         context.cCartIdInt = cartData.cart_id_int;
       }
+    }
+  });
+
+  // Add an event listener to redirect users to cart page.
+  document.addEventListener('afterAddToCart', (e) => {
+    const detail = e.detail;
+    // Check if the event was triggered from PDP page.
+    if (Drupal.hasValue(detail.context) && detail.context === 'pdp') {
+      Drupal.alshayaSpc.alshayaSpcRedirectToCart(detail.productData.variant);
     }
   });
 
