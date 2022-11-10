@@ -16,9 +16,8 @@ import ReviewSummary from './reviews/components/review-summary';
 
       reviews.addClass('processed');
 
-      const mainSku = node.attr('data-sku');
       ReactDOM.render(
-        <ReviewSummary productId={mainSku} />,
+        <ReviewSummary productId={node.attr('data-sku')} />,
         document.getElementById('reviews-section'),
       );
 
