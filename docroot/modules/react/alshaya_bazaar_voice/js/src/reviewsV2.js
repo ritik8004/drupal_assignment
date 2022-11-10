@@ -5,7 +5,8 @@ import ReviewSummary from './reviews/components/review-summary';
 (function reviewsV2($, Drupal, drupalSettings) {
   Drupal.behaviors.alshayaReviewsV2 = { // eslint-disable-line no-param-reassign
     attach: function reviewsV2Attach() {
-      if ($('.entity--type-node').not('[data-sku *= "#"]').length === 0) {
+      const node = $('.entity--type-node').not('[data-sku *= "#"]');
+      if (node.length === 0) {
         return;
       }
       const reviews = $('#reviews-section');
@@ -15,8 +16,9 @@ import ReviewSummary from './reviews/components/review-summary';
 
       reviews.addClass('processed');
 
+      const mainSku = node.attr('data-sku');
       ReactDOM.render(
-        <ReviewSummary />,
+        <ReviewSummary productId={mainSku} />,
         document.getElementById('reviews-section'),
       );
 
