@@ -1,0 +1,318 @@
+.return-requests-wrapper {
+  .products-list-wrapper {
+    .items-table {
+      margin-bottom: rem(2);
+      border-bottom-color: $online-return-border-color;
+    }
+  }
+
+
+  .products-list-wrapper,
+  .refund-details-wrapper {
+    margin-left: rem(-8);
+    margin-right: rem(-8);
+
+    @include breakpoint($tablet) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .select-items-label,
+    .refund-detail-label {
+      margin-top: rem(12);
+      padding: rem(16) rem(20);
+
+      @include breakpoint($tablet) {
+        margin-top: rem(20);
+        padding: rem(15) rem(32);
+      }
+
+      .select-items-header,
+      .refund-detail-header {
+        &::before {
+          #{$right}: 0;
+        }
+      }
+    }
+
+    .items-table {
+      .order-item-row {
+        .order-item-image {
+          padding-#{$left}: rem(32);
+          padding-#{$right}: 0;
+        }
+
+        .order__details--summary {
+          padding-bottom: rem(25);
+          padding-#{$right}: rem(41);
+          padding-#{$left}: rem(24);
+
+          .dark {
+            color: $online-return-dark-text;
+          }
+
+          .light {
+            color: $online-return-light-text;
+          }
+
+          .item-name {
+            font-size: rem(14);
+            line-height: 1.29;
+            font-weight: normal;
+            margin-bottom: rem(6);
+          }
+
+          .item-code {
+            margin-bottom: 0;
+          }
+        }
+
+        .order-item-checkbox {
+          margin-#{$left}: rem(33);
+
+          @include breakpoint($tablet) {
+            margin-#{$left}: rem(17);
+          }
+
+          @include breakpoint($desktop) {
+            margin-#{$left}: rem(-3);
+          }
+        }
+
+        .item-total-price {
+          @include breakpoint($tablet) {
+            padding-#{$left}: 0;
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$left}: rem(50);
+          }
+
+          @include breakpoint($desktop-wide) {
+            padding-#{$left}: rem(55);
+          }
+
+          .dark {
+            color: $online-return-dark-text;
+          }
+
+          .light {
+            color: $online-return-light-text;
+          }
+
+          .item-total-price-label {
+            @include breakpoint($tablet) {
+              margin-bottom: rem(3);
+            }
+          }
+
+          .price {
+            font-weight: normal;
+            font-size: rem(14);
+            line-height: 1.29;
+          }
+        }
+
+        .item-price {
+          @include breakpoint($desktop) {
+            padding-#{$right}: 0;
+          }
+
+          @include breakpoint($desktop-wide) {
+            padding-#{$right}: rem(39);
+          }
+
+          >div {
+            margin-bottom: rem(3);
+          }
+
+          .dark {
+            color: $online-return-dark-text;
+          }
+
+          .light {
+            color: $online-return-light-text;
+          }
+
+          .item-unit-price-label {
+            font-size: rem(12);
+            line-height: 1.33;
+
+            @include breakpoint( $tablet) {
+              margin-bottom: rem(3);
+            }
+          }
+
+          .price {
+            font-weight: normal;
+            font-size: rem(14);
+            line-height: 1.29;
+            margin-#{$left}: 0;
+          }
+        }
+
+        .image-data-wrapper,
+        .order__details--summary,
+        .item-price,
+        .item-total-price {
+          > div {
+            margin-bottom: 0;
+          }
+        }
+
+        .item-price,
+        .item-total-price {
+          .price {
+            .price-currency.suffix {
+              margin-#{$right}: rem(4);
+
+              @include breakpoint($tablet) {
+                margin-#{$right}: rem(16);
+              }
+            }
+          }
+        }
+
+        .order-item-image,
+        .order__details--summary,
+        .item-price,
+        .item-total-price {
+          @include breakpoint($tablet) {
+            padding-bottom: rem(16);
+          }
+        }
+      }
+    }
+
+    // Core theme !important is used so using here
+    .return-address-title {
+      @include breakpoint($only-mobile) {
+        margin-bottom: rem(4) !important;
+      }
+    }
+  }
+
+  .continue-button-wrapper,
+  .confirm-return-button-wrapper {
+    margin-top: rem(-2);
+    padding: rem(16) rem(20);
+    margin-bottom: rem(20);
+
+    @include breakpoint($tablet) {
+      padding-right: rem(32);
+      padding-left: rem(32);
+      border-top: rem(1) solid $content_pagetitle_border;
+    }
+
+    button {
+      @include breakpoint($tablet) {
+        margin-#{$right}: 0;
+        padding: 0;
+      }
+    }
+  }
+
+  .confirm-return-button-wrapper {
+    border-top: 0;
+  }
+
+  .refund-details-wrapper {
+    .refund-method-wrapper,
+    .refund-amount-wrapper,
+    .return-collection-wrapper,
+    .return-address-wrapper {
+      @include breakpoint($only-mobile) {
+        padding: rem(28) 0 0 0;
+        margin-left: rem(20);
+        margin-right: rem(20);
+      }
+
+
+      @include breakpoint($tablet) {
+        padding: rem(48) 0 0 0;
+        margin-left: rem(32);
+        margin-right: rem(32);
+      }
+    }
+
+    div[class$="-title"] {
+      font-size: rem(18);
+      line-height: 1.22;
+      margin-bottom: rem(16);
+      color: $online-return-dark-text;
+    }
+
+    .method-listing-label,
+    .return-collection-message,
+    .return-address-details {
+      color: $online-return-refund-msg-txt;
+    }
+
+    .method-listing-label {
+      margin-bottom: rem(20);
+      color: $online-return-refund-msg-txt;
+    }
+
+
+    .refund-method-wrapper {
+      @include breakpoint($tablet) {
+        padding-top: rem(32);
+      }
+
+      .method-wrapper {
+        color: $online-return-dark-text;
+        margin-bottom: rem(20);
+
+        .bold-text {
+          font-weight: bold;
+        }
+
+        .refund-message {
+          margin-top: rem(16);
+          line-height: 1.33;
+        }
+      }
+    }
+
+    .refund-amount-wrapper {
+      @include breakpoint($tablet) {
+        padding-top: rem(48);
+      }
+    }
+
+    .return-collection-wrapper {
+      border-top-color: $online-return-border-color;
+    }
+
+    .return-address-wrapper {
+      .return-address-desc {
+        margin-bottom: rem(16);
+      }
+
+      .customer-name {
+        font-weight: bold;
+        margin-bottom: rem(4);
+      }
+
+      .spc-phone-number {
+        margin-top: rem(2);
+      }
+    }
+
+    .return-address-details {
+      > div {
+        margin-bottom: rem(0);
+      }
+    }
+
+    .Collapsible__contentInner {
+      > div:first-child {
+        margin-top: 0;
+      }
+
+      > div:nth-child(2n) {
+        margin-bottom: rem(48);
+      }
+    }
+  }
+}
