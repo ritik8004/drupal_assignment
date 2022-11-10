@@ -26,16 +26,14 @@
    *   Object containing the basic vouchers details.
    * @param {string} eventAction
    *   The event that is getting performed during product return.
-   * @param {object} appliedVouchers
-   *   Object containing the basic vouchersListDes details.
    */
 
 // This function is called when voucher(s) are selected by customer.
-Drupal.voucherOfferSelected = function (vouchersSelected, eventAction) {
+Drupal.alshayaSeoGtmPushVoucherOfferSelect = function (vouchersSelected, eventAction) {
 
-  // Prepare the return data.
+  // Prepare the voucher data.
   var voucherSelectedData = {
-    event: 'voucherOfferSelected',
+    event: 'VoucherOfferSelect',
     eventAction: eventAction,
     eventLabel: vouchersSelected,
     eventCategory: 'memberOffer',
@@ -45,10 +43,19 @@ Drupal.voucherOfferSelected = function (vouchersSelected, eventAction) {
     dataLayer.push(voucherSelectedData);
   }
 }
-// This function is called when offers are applied by customer
-Drupal.voucherOfferSelectedApply = function (appliedVouchers, eventAction) {
 
-  // Prepare the return data.
+ /**
+   * Function to push the voucher offer events to data layer.
+   * @param {object} appliedVouchers
+   *   Object containing the basic vouchersListDes details.
+   * @param {string} eventAction
+   *   The event that is getting performed during product return.
+   */
+
+// This function is called when offers are applied by customer
+Drupal.alshayaSeoGtmPushVoucherOfferSelectedApply = function (appliedVouchers, eventAction) {
+
+  // Prepare the voucher data.
   var returnData = {
     event: 'voucherApplied',
     eventAction: eventAction,

@@ -17,7 +17,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
     const memberOffers = document.getElementsByName('radios');
     resetBenefitOptions(memberOffers, 'benefit_offer', 'change');
     if (e.target.type === 'radio' && e.target.checked === true) {
-      Drupal.voucherOfferSelected(e.target.getAttribute('description'), 'selected-offer-voucher');
+      Drupal.alshayaSeoGtmPushVoucherOfferSelect(e.target.getAttribute('description'), 'selected-offer-voucher');
     }
   };
 
@@ -25,18 +25,18 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let seletedOffer = '';
-    const seletedOfferDescription = [];
+    const offerDescriptionData = [];
     showFullScreenLoader();
     // get the list of user selected vouchers from voucher form.
     Object.entries(e.target).forEach(
       ([, value]) => {
         if (value.checked) {
           seletedOffer = value;
-          seletedOfferDescription.push(value.getAttribute('description'));
+          offerDescriptionData.push(value.getAttribute('description'));
         }
       },
     );
-    const offerListDescription = seletedOfferDescription.join(' | ');
+
     // api call to update the selected offers.
     const response = await callHelloMemberApi('addMemberOffersToCart', 'POST', {
       offerCode: seletedOffer.value,
@@ -72,7 +72,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
             dispatchCustomEvent('refreshCart', {
               data: () => result.data,
             });
-            Drupal.voucherOfferSelectedApply(offerListDescription, 'applied-offer-voucher');
+            Drupal.alshayaSeoGtmPushVoucherOfferSelectedApply(offerDescriptionData.join(' | '), 'applied-offer-voucher');
           }
         });
       }

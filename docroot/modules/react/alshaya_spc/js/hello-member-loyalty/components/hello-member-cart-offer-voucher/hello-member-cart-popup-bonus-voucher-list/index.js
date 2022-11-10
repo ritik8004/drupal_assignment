@@ -18,12 +18,10 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
     const vouchersBonus = document.getElementsByName('vouchersBonus[]');
     resetBenefitOptions(vouchersBonus, 'benefit_voucher', 'change');
     const selectBox = [];
-    const selectBoxlength = vouchersBonus.length;
-    for (let i = 0; i < selectBoxlength; i++) {
+    for (let i = 0; i < vouchersBonus.length; i++) {
       if (vouchersBonus[i].type === 'checkbox' && vouchersBonus[i].checked === true) { selectBox.push(vouchersBonus[i].getAttribute('description')); }
     }
-    const vouchersList = selectBox.join(' | ');
-    Drupal.voucherOfferSelected(vouchersList, 'selected-bonus-voucher');
+    Drupal.alshayaSeoGtmPushVoucherOfferSelect(selectBox.join(' | '), 'selected-bonus-voucher');
   };
 
   // handle submit.
@@ -31,17 +29,17 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
     e.preventDefault();
     showFullScreenLoader();
     const seletedVouchers = [];
-    const seletedVouchersDescription = [];
+    const voucherDescriptionData = [];
     // get the list of user selected vouchers from voucher form.
     Object.entries(e.target).forEach(
       ([, value]) => {
         if (value.checked) {
           seletedVouchers.push(value.value);
-          seletedVouchersDescription.push(value.getAttribute('description'));
+          voucherDescriptionData.push(value.getAttribute('description'));
         }
       },
     );
-    const ListseletedVouchersDescription = seletedVouchersDescription.join(' | ');
+
     // api call to update the selected vouchers.
     const response = await callHelloMemberApi('addBonusVouchersToCart', 'POST', { voucherCodes: seletedVouchers });
     // Display the message if discount amount reached threshold and not valid.
@@ -74,7 +72,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
             dispatchCustomEvent('refreshCart', {
               data: () => result.data,
             });
-            Drupal.voucherOfferSelectedApply(ListseletedVouchersDescription, 'applied-bonus-voucher');
+            Drupal.alshayaSeoGtmPushVoucherOfferSelectedApply(voucherDescriptionData.join(' | '), 'applied-bonus-voucher');
           }
         });
       }
