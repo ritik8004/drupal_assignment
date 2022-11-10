@@ -40,7 +40,7 @@
 
       .reasonsSelect__dropdown-indicator,
       .qtySelect__dropdown-indicator {
-        @include icon('chevrondown') {
+        &::before {
           font-size: rem(34);
         }
       }

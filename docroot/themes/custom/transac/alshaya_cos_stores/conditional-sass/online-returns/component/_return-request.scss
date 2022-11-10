@@ -29,7 +29,7 @@
 
       .select-items-header,
       .refund-detail-header {
-        @include icon(chevrondown, before) {
+        &::before {
           #{$right}: 0;
         }
       }
