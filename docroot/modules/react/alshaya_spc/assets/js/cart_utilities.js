@@ -399,10 +399,10 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
    * Redirects users to the cart page after they added a certain
    * number of variants to the cart.
    *
-   * @param {string} sku
-   *   The sku.
+   * @param {array} skus
+   *   The list of skus.
    */
-  Drupal.alshayaSpc.alshayaSpcRedirectToCart = function (sku) {
+  Drupal.alshayaSpc.alshayaSpcRedirectToCart = function (skus) {
     // Check if drupal settings are present.
     var values = drupalSettings.alshaya_spc.redirectToCartThreshold || null;
     if (!values) {
@@ -417,21 +417,6 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     if (redirectToCartThreshold < 1) {
       return;
     }
-
-    // Key used to store skus in local storage when they are added to cart.
-    var storageKey = 'add_to_cart_skus';
-    // Get skus from local storage.
-    var skus = Drupal.getItemFromLocalStorage(storageKey) || [];
-    // Check if current sku is already counted.
-    if (skus.includes(sku)) {
-      return;
-    }
-
-    // Add current sku.
-    skus.push(sku);
-
-    // Update local storage.
-    Drupal.addItemInLocalStorage(storageKey, skus);
 
     // We will redirect if the number of items is multiple of threshold.
     // example: if threshold is 3, we will redirect at 3, 6, 9...

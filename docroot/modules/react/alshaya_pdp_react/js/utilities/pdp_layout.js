@@ -203,7 +203,7 @@ export const triggerAddToCart = (
       bubbles: true,
       detail: {
         context: 'pdp',
-        productData,
+        skus: Object.keys(cartData.items),
       },
     });
     document.dispatchEvent(event);
