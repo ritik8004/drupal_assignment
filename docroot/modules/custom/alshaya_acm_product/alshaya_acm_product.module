@@ -1203,7 +1203,8 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
  */
 function alshaya_acm_product_views_pre_render(ViewExecutable $view) {
   // To sort the view listing order based on the arguments passed.
-  if ($view->id() == 'product_slider' && $view->current_display === 'block_matchback' &&  $args = $view->args[0]) {
+  if ($view->id() == 'product_slider' && $view->current_display === 'block_matchback' && !empty($view->args)) {
+    $args = $view->args[0];
     $order = explode(',', $args);
     $to_sort = [];
     foreach ($view->result as $row) {
