@@ -37,35 +37,10 @@
 
     .items-table {
       .order-item-row {
-        @include breakpoint($only-mobile) {
-          grid-template:
-            "a b c" auto
-            "d d d" auto
-            "e e ." / rem(76) rem(110) auto;
-        }
-
-        @include breakpoint($tablet) {
-          grid-template:
-            "a b c d" auto
-            "e f g h" auto/rem(60) rem(80) auto rem(128);
-        }
-
-        @include breakpoint($desktop) {
-          grid-template:
-            "a b c d" auto
-            "e f g h" auto/rem(90) rem(144) auto rem(172);
-        }
-
-        @include breakpoint($desktop-wide) {
-          grid-template:
-            "a b c d" auto
-            "e f g h" auto/rem(116) rem(144) rem(368) auto;
-        }
-
 
         .order-item-image {
-          padding-left: 0;
-          padding-right: 0;
+          padding-#{$left}: rem(32);
+          padding-#{$right}: 0;
         }
 
         .order__details--summary {
@@ -106,12 +81,15 @@
         }
 
         .item-total-price {
+          @include breakpoint($tablet) {
+            padding-#{$left}: 0;
+          }
           @include breakpoint($desktop) {
             padding-#{$left}: rem(50);
           }
 
           @include breakpoint($desktop-wide) {
-            padding-#{$left}: rem(94);
+            padding-#{$left}: rem(55);
           }
 
           .dark {
@@ -139,6 +117,9 @@
           @include breakpoint($desktop) {
             padding-#{$right}: 0;
           }
+          @include breakpoint($desktop-wide) {
+            padding-#{$right}: rem(39);
+          }
 
           >div {
             margin-bottom: rem(3);
@@ -165,6 +146,7 @@
             font-weight: normal;
             font-size: rem(14);
             line-height: 1.29;
+            margin-#{$left}: 0;
           }
         }
 
