@@ -35,7 +35,7 @@ function alshaya_ay_transac_preprocess_html(&$variables) {
 
   // Check if we have term from route exist in super/root category list and add
   // a helper class for FE to update styles.
-  if (!empty($term_from_route) && $super_categories[$term_from_route->id()]) {
+  if (!empty($term_from_route) && isset($super_categories[$term_from_route->id()])) {
     $variables['attributes']['class'][] = 'super-category-home';
   }
 }
