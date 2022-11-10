@@ -403,17 +403,14 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
    *   The sku.
    */
   Drupal.alshayaSpc.alshayaSpcRedirectToCart = function (sku) {
-    // Key used to store skus in local storage when they are added to cart.
-    var storageKey = 'add_to_cart_skus';
-    // Detects device type.
-    var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
-
     // Check if drupal settings are present.
     var values = drupalSettings.alshaya_spc.redirectToCartThreshold || null;
     if (!values) {
       return;
     }
 
+    // Detects device type.
+    var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
     // Get redirect threshold for the specific device.
     var redirectToCartThreshold = values[deviceType];
     // Check if redirection to cart is enabled i.e. >= 1.
@@ -421,6 +418,8 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       return;
     }
 
+    // Key used to store skus in local storage when they are added to cart.
+    var storageKey = 'add_to_cart_skus';
     // Get skus from local storage.
     var skus = Drupal.getItemFromLocalStorage(storageKey) || [];
     // Check if current sku is already counted.
