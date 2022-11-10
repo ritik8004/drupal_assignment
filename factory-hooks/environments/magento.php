@@ -363,31 +363,57 @@ $magentos = [
     'url' => 'https://new-uat.store.alshaya.com',
     'algolia_env' => 'nb_uat',
     'magento_secrets' => [
-      'consumer_key' => 'ytdw1wx95500tmzap7d99nurwmppsmjf',
-      'consumer_secret' => 'zk2qivlygzvdo15a91n5mb6xj9na6b62',
-      'access_token' => 'ex3jiyqbgadnd8km0cfw6m56jnvww548',
-      'access_token_secret' => 'vd38wdceuvo72ziy6qoswjuj73xtuftg',
+      'consumer_key' => '8zvpa7dl0pfwmsc8dgcv8ntkicrity6s',
+      'consumer_secret' => 'lp8rn7nahffg9yg7qmujc7k6kja94gmn',
+      'access_token' => 'uad6ffzwibexi25sx8iyi6db0oei6njl',
+      'access_token_secret' => 'bpv8q9u0a0yiimpkv78k6g530vv12lwr',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 40],
+      'store_id' => ['en' => 1, 'ar' => 39],
     ],
     'sa' => [
-      'store_id' => ['en' => 28, 'ar' => 31],
+      'store_id' => ['en' => 27, 'ar' => 30],
     ],
     'ae' => [
-      'store_id' => ['en' => 34, 'ar' => 37],
+      'store_id' => ['en' => 33, 'ar' => 36],
     ],
     'eg' => [
-      'store_id' => ['en' => 7, 'ar' => 4],
+      'store_id' => ['en' => 6, 'ar' => 3],
     ],
     'bh' => [
-      'store_id' => ['en' => 13, 'ar' => 10],
+      'store_id' => ['en' => 12, 'ar' => 9],
     ],
     'qa' => [
-      'store_id' => ['en' => 19, 'ar' => 16],
+      'store_id' => ['en' => 18, 'ar' => 15],
     ],
     'jo' => [
-      'store_id' => ['en' => 25, 'ar' => 22],
+      'store_id' => ['en' => 24, 'ar' => 21],
+    ],
+  ],
+  'nb_prod' => [
+    'url' => 'https://new.store.alshaya.com',
+    'algolia_env' => 'nb_prod',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 39],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 27, 'ar' => 30],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 33, 'ar' => 36],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 6, 'ar' => 3],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 12, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 18, 'ar' => 15],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 24, 'ar' => 21],
     ],
   ],
   // The body shop.
