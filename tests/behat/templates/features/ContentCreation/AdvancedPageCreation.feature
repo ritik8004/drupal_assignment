@@ -10,7 +10,8 @@ Feature: To verify the Advanced page content creation on the site.
     And I fill in "Title" with "[Test] Automation Advanced Page"
     And I click on "#edit-field-slider-add-more-add-more-button-banner" element
     And I wait for element ".ajax-new-content .paragraph-type-top"
-    And I upload "image1.jpeg" image in "files[field_slider_0_subform_field_banner_0]" image field
+    And I attach the file "image1.jpeg" to "files[field_slider_0_subform_field_banner_0]"
+    And I wait for element "div.image-preview"
     And I fill in "field_slider[0][subform][field_banner][0][alt]" with "AltText"
     And I press "edit-submit"
     And I wait for element "#block-breadcrumbs"
