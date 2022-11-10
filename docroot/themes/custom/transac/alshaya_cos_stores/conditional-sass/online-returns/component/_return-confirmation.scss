@@ -185,7 +185,7 @@
           margin-#{$right}: rem(4);
 
           @include breakpoint($desktop) {
-            margin-right: rem(16);
+            margin-#{$right}: rem(16);
           }
         }
       }
