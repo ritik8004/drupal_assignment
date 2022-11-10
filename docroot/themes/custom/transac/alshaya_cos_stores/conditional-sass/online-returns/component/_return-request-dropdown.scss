@@ -8,6 +8,7 @@
       @include breakpoint($desktop) {
         padding-#{$right}: 0;
       }
+
       @include breakpoint($desktop-wide) {
         padding-#{$right}: rem(39);
       }

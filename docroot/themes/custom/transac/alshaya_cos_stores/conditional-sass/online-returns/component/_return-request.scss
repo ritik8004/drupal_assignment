@@ -37,7 +37,6 @@
 
     .items-table {
       .order-item-row {
-
         .order-item-image {
           padding-#{$left}: rem(32);
           padding-#{$right}: 0;
@@ -84,6 +83,7 @@
           @include breakpoint($tablet) {
             padding-#{$left}: 0;
           }
+
           @include breakpoint($desktop) {
             padding-#{$left}: rem(50);
           }
@@ -117,6 +117,7 @@
           @include breakpoint($desktop) {
             padding-#{$right}: 0;
           }
+
           @include breakpoint($desktop-wide) {
             padding-#{$right}: rem(39);
           }
@@ -244,12 +245,12 @@
     .method-listing-label,
     .return-collection-message,
     .return-address-details {
-      color: $onlene-return-refund-msg-txt;
+      color: $online-return-refund-msg-txt;
     }
 
     .method-listing-label {
       margin-bottom: rem(20);
-      color: $onlene-return-refund-msg-txt;
+      color: $online-return-refund-msg-txt;
     }
 
 
