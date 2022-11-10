@@ -201,7 +201,7 @@
                     bubbles: true,
                     detail: {
                       context: 'pdp',
-                      skus: Object.keys(response.items),
+                      cartData: response,
                     }
                   });
                   document.dispatchEvent(event);

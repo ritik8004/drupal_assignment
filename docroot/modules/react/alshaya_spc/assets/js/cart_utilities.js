@@ -460,10 +460,10 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
    * Redirects users to the cart page after they added a certain
    * number of variants to the cart.
    *
-   * @param {array} skus
-   *   The list of skus.
+   * @param {object} cartData
+   *   The cart data.
    */
-  function alshayaSpcRedirectToCart(skus) {
+  function alshayaSpcRedirectToCart(cartData) {
     // Check if drupal settings are present.
     var values = drupalSettings.alshaya_spc.redirectToCartThreshold || null;
     if (!values) {
@@ -481,7 +481,9 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
 
     // We will redirect if the number of items is multiple of threshold.
     // example: if threshold is 3, we will redirect at 3, 6, 9...
-    if (skus.length % redirectToCartThreshold === 0) {
+    if (Drupal.hasValue(cartData.items)
+      && Object.keys(cartData.items).length % redirectToCartThreshold === 0
+    ) {
       // Redirect to cart page.
       window.location = Drupal.url('cart');
     }
@@ -491,8 +493,10 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
   document.addEventListener('afterAddToCart', (e) => {
     const detail = e.detail;
     // Check if the event was triggered from PDP page.
-    if (Drupal.hasValue(detail.context) && detail.context === 'pdp') {
-      alshayaSpcRedirectToCart(detail.skus);
+    if (Drupal.hasValue(detail.context) && detail.context === 'pdp'
+      && Drupal.hasValue(detail.cartData)
+    ) {
+      alshayaSpcRedirectToCart(detail.cartData);
     }
   });
 
