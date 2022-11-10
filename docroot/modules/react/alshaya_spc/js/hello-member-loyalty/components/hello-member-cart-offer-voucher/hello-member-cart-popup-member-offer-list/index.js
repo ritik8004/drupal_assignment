@@ -13,35 +13,30 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
   const { offers, totals } = props;
   // Get formatted expiry date.
   moment.locale(drupalSettings.path.currentLanguage);
-
-  const handleChange = () => {
+  const handleChange = (e) => {
     const memberOffers = document.getElementsByName('radios');
     resetBenefitOptions(memberOffers, 'benefit_offer', 'change');
-    const selchBox = [];
-    const arInputflds = memberOffers.length;
-    for (let i = 0; i < arInputflds; i++) {
-      if (memberOffers[i].type === 'radio' && memberOffers[i].checked === true) { selchBox.push(memberOffers[i].getAttribute('voucherdes')); }
+    if (e.target.type === 'radio' && e.target.checked === true) {
+      Drupal.voucherOfferSelected(e.target.getAttribute('description'), 'selected-offer-voucher');
     }
-    const vouchersList = selchBox.join(' | ');
-    Drupal.voucherOfferSelected(vouchersList, 'selected-offer-voucher');
   };
 
   // handle submit.
   const handleSubmit = async (e) => {
     e.preventDefault();
     let seletedOffer = '';
-    const seletedVouchersDes = [];
+    const seletedOfferDescription = [];
     showFullScreenLoader();
     // get the list of user selected vouchers from voucher form.
     Object.entries(e.target).forEach(
       ([, value]) => {
         if (value.checked) {
           seletedOffer = value;
-          seletedVouchersDes.push(value.getAttribute('voucherdes'));
+          seletedOfferDescription.push(value.getAttribute('description'));
         }
       },
     );
-    const vouchersListDes = seletedVouchersDes.join(' | ');
+    const offerListDescription = seletedOfferDescription.join(' | ');
     // api call to update the selected offers.
     const response = await callHelloMemberApi('addMemberOffersToCart', 'POST', {
       offerCode: seletedOffer.value,
@@ -77,7 +72,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
             dispatchCustomEvent('refreshCart', {
               data: () => result.data,
             });
-            Drupal.voucherOfferSelectedApply(vouchersListDes, 'applied-offer-voucher');
+            Drupal.voucherOfferSelectedApply(offerListDescription, 'applied-offer-voucher');
           }
         });
       }
@@ -107,7 +102,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
                 id={`offer${index}`}
                 data-offer={typeof offer.type !== 'undefined' ? offer.type : 'offer'}
                 name="radios"
-                voucherdes={offer.description}
+                description={offer.description}
                 value={offer.code}
                 defaultChecked={typeof totals.hmOfferCode !== 'undefined' ? totals.hmOfferCode === offer.code : false}
                 onChange={handleChange}

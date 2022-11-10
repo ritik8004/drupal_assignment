@@ -2,60 +2,57 @@
  * @file
  * JS code to integrate with GTM.
  */
- (function ($,Drupal, dataLayer) {
+ (function (Drupal, dataLayer) {
 
-
-
- /**
-   * Function to push the vouchers return events to data layer.
-   *
-   * @param {object} vouchers
-   *   Object containing the basic vouchers details.
-   * @param {string} eventAction
-   *   The event that is getting performed during product return.
-   * @param {object} vouchersListDes
-   *   Object containing the basic vouchersListDes details.
-   */
-
-
-    // This function is called when the click on the discount voucher link
-    Drupal.discountVoucherData = function () {
-      // Prepare the return data.
-      var returnData = {
-        event: 'discountVoucherClickPopup',
+   // This function is called when the click on the discount voucher link
+    Drupal.alshayaSeoGtmPushVoucherLinkClick = function () {
+      // Prepare the voucher click data,.
+      var voucherClickData = {
+        event: 'voucherLinkClick',
         eventCategory: "memberOffer",
         eventAction: "discountVoucher",
         eventLabel: "voucher_link",
       }
       // Proceed only if dataLayer exists.
       if (dataLayer) {
-        dataLayer.push(returnData);
+        dataLayer.push(voucherClickData);
       }
     }
 
-// This function is called when the click on the discount voucher link
-Drupal.voucherOfferSelected = function (vouchers, eventAction) {
+  /**
+   * Function to push the voucher click events to data layer.
+   *
+   * @param {object} vouchersSelected
+   *   Object containing the basic vouchers details.
+   * @param {string} eventAction
+   *   The event that is getting performed during product return.
+   * @param {object} appliedVouchers
+   *   Object containing the basic vouchersListDes details.
+   */
+
+// This function is called when voucher(s) are selected by customer.
+Drupal.voucherOfferSelected = function (vouchersSelected, eventAction) {
 
   // Prepare the return data.
-  var returnData = {
+  var voucherSelectedData = {
     event: 'voucherOfferSelected',
     eventAction: eventAction,
-    eventLabel: vouchers,
+    eventLabel: vouchersSelected,
     eventCategory: 'memberOffer',
     }
   // Proceed only if dataLayer exists.
   if (dataLayer) {
-    dataLayer.push(returnData);
+    dataLayer.push(voucherSelectedData);
   }
 }
-// This function is called when the apply offer
-Drupal.voucherOfferSelectedApply = function (vouchersListDes, eventAction) {
+// This function is called when offers are applied by customer
+Drupal.voucherOfferSelectedApply = function (appliedVouchers, eventAction) {
 
   // Prepare the return data.
   var returnData = {
-    event: 'voucherOfferSelectedApply',
+    event: 'voucherApplied',
     eventAction: eventAction,
-    eventLabel: vouchersListDes,
+    eventLabel: appliedVouchers,
     eventCategory: 'memberOffer',
     }
   // Proceed only if dataLayer exists.
@@ -64,4 +61,4 @@ Drupal.voucherOfferSelectedApply = function (vouchersListDes, eventAction) {
   }
 }
 
-  })($,Drupal, dataLayer);
+  })(Drupal, dataLayer);

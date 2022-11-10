@@ -14,16 +14,15 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
   const { vouchers, totals } = props;
   // Get formatted expiry date.
   moment.locale(drupalSettings.path.currentLanguage);
-
-  const handleChange = () => {
+  const handleChange = (e) => {
     const vouchersBonus = document.getElementsByName('vouchersBonus[]');
     resetBenefitOptions(vouchersBonus, 'benefit_voucher', 'change');
-    const selchBox = [];
-    const arInputflds = vouchersBonus.length;
-    for (let i = 0; i < arInputflds; i++) {
-      if (vouchersBonus[i].type === 'checkbox' && vouchersBonus[i].checked === true) { selchBox.push(vouchersBonus[i].getAttribute('voucherdes')); }
+    const selectBox = [];
+    const selectBoxlength = vouchersBonus.length;
+    for (let i = 0; i < selectBoxlength; i++) {
+      if (vouchersBonus[i].type === 'checkbox' && vouchersBonus[i].checked === true) { selectBox.push(vouchersBonus[i].getAttribute('description')); }
     }
-    const vouchersList = selchBox.join(' | ');
+    const vouchersList = selectBox.join(' | ');
     Drupal.voucherOfferSelected(vouchersList, 'selected-bonus-voucher');
   };
 
@@ -32,17 +31,17 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
     e.preventDefault();
     showFullScreenLoader();
     const seletedVouchers = [];
-    const seletedVouchersDes = [];
+    const seletedVouchersDescription = [];
     // get the list of user selected vouchers from voucher form.
     Object.entries(e.target).forEach(
       ([, value]) => {
         if (value.checked) {
           seletedVouchers.push(value.value);
-          seletedVouchersDes.push(value.getAttribute('voucherdes'));
+          seletedVouchersDescription.push(value.getAttribute('description'));
         }
       },
     );
-    const vouchersListDes = seletedVouchersDes.join(' | ');
+    const ListseletedVouchersDescription = seletedVouchersDescription.join(' | ');
     // api call to update the selected vouchers.
     const response = await callHelloMemberApi('addBonusVouchersToCart', 'POST', { voucherCodes: seletedVouchers });
     // Display the message if discount amount reached threshold and not valid.
@@ -75,7 +74,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
             dispatchCustomEvent('refreshCart', {
               data: () => result.data,
             });
-            Drupal.voucherOfferSelectedApply(vouchersListDes, 'applied-bonus-voucher');
+            Drupal.voucherOfferSelectedApply(ListseletedVouchersDescription, 'applied-bonus-voucher');
           }
         });
       }
@@ -104,7 +103,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
                 type="checkbox"
                 id={`voucher${index}`}
                 value={voucher.code}
-                voucherdes={voucher.description}
+                description={voucher.description}
                 name="vouchersBonus[]"
                 defaultChecked={typeof totals.hmAppliedVoucherCodes !== 'undefined' ? totals.hmAppliedVoucherCodes.split(',').includes(voucher.code) : false}
                 onChange={handleChange}

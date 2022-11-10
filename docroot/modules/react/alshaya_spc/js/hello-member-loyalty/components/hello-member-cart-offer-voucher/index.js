@@ -122,7 +122,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       openModal,
     });
     removeFullScreenLoader();
-    Drupal.discountVoucherData();
+    Drupal.alshayaSeoGtmPushVoucherLinkClick();
   };
 
   // on click close symbol close the popup
