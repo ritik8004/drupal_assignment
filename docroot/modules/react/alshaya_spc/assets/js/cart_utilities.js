@@ -487,12 +487,43 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     }
   });
 
+  /**
+   * Redirects users to the cart page after they added a certain
+   * number of variants to the cart.
+   *
+   * @param {array} skus
+   *   The list of skus.
+   */
+  function alshayaSpcRedirectToCart(skus) {
+    // Check if drupal settings are present.
+    var values = drupalSettings.alshaya_spc.redirectToCartThreshold || null;
+    if (!values) {
+      return;
+    }
+
+    // Detects device type.
+    var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
+    // Get redirect threshold for the specific device.
+    var redirectToCartThreshold = values[deviceType];
+    // Check if redirection to cart is enabled i.e. >= 1.
+    if (redirectToCartThreshold < 1) {
+      return;
+    }
+
+    // We will redirect if the number of items is multiple of threshold.
+    // example: if threshold is 3, we will redirect at 3, 6, 9...
+    if (skus.length % redirectToCartThreshold === 0) {
+      // Redirect to cart page.
+      window.location = Drupal.url('cart');
+    }
+  }
+
   // Add an event listener to redirect users to cart page.
   document.addEventListener('afterAddToCart', (e) => {
     const detail = e.detail;
     // Check if the event was triggered from PDP page.
     if (Drupal.hasValue(detail.context) && detail.context === 'pdp') {
-      Drupal.alshayaSpc.alshayaSpcRedirectToCart(detail.productData.variant);
+      alshayaSpcRedirectToCart(detail.skus);
     }
   });
 
