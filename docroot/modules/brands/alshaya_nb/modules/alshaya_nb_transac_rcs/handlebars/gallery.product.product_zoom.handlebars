@@ -13,8 +13,11 @@
     {{#if description.sku }}
       <div class="product-sku-title">{{t 'Style' }}</div>
       <div class="product-sku-id">
-        {{ description.sku }}
+        {{ description.article_number }}
       </div>
+    {{/if}}
+    {{#if description.weight }}
+      <p>{{ description.weight }}</p>
     {{/if}}
     <div class="product-desc-value">
       {{#if description.primary_material }}
