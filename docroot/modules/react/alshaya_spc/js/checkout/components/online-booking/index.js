@@ -303,6 +303,9 @@ export default class OnlineBooking extends React.Component {
       return <DefaultShippingElement method={method} price={price} />;
     }
 
+    const viewDeliveryScheduleEvent = new CustomEvent('viewDeliveryScheduleEvent');
+    document.dispatchEvent(viewDeliveryScheduleEvent);
+
     return (
       <>
         <div id="online-booking" className="online-booking">

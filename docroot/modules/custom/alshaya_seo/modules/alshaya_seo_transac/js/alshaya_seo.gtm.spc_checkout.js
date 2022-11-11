@@ -291,6 +291,19 @@
 
   // When the schedule for online booking is changed, trigger GTM event to note
   // that.
+  document.addEventListener('viewDeliveryScheduleEvent', function viewDeliveryScheduleEvent() {
+    // Prepare data.
+    var data = {
+      event: 'delivery_schedule',
+      eventCategory: 'delivery_schedule',
+      eventAction: 'view',
+      eventLabel: '',
+    };
+    dataLayer.push(data);
+  });
+
+  // When the schedule for online booking is changed, trigger GTM event to note
+  // that.
   document.addEventListener('holdBookingSlotEvent', function holdBookingSlotEvent(e) {
     var status = e.detail.data.status;
     if (status) {
