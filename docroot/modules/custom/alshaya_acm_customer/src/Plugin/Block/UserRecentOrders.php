@@ -275,8 +275,9 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               }
               else {
                 $order['items'][$key]['price'] = [
-                  '#markup' => alshaya_acm_price_format($order['items'][$key]['price'], [], '', $order_currency_code),
+                  '#theme' => 'acq_commerce_price',
                   '#price' => $order['items'][$key]['price'],
+                  '#currency_format' => $order['order_currency_code'] ?? '',
                 ];
               }
 
