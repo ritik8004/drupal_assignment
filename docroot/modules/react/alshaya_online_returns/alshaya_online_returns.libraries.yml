@@ -33,6 +33,7 @@ alshaya_online_returns_pdp_gtm:
   dependencies:
     - core/jquery
     - alshaya_online_returns/alshaya_online_returns_util
+    - alshaya_acm_product/product.view_mode
 
 alshaya_online_returns_util:
   js:
