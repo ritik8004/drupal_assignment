@@ -348,7 +348,7 @@ exports.render = function render(
         zoom: [],
         thumbnails: [],
       };
-
+      let weight = '';
       if (entity.type_id === 'configurable') {
         // Fetch the media for the gallery sku.
         entity.variants.every(function (variant) {
@@ -356,6 +356,7 @@ exports.render = function render(
             // Continue with the loop.
             return true;
           }
+          weight = Drupal.hasValue(variant.product.weight_text) ? variant.product.weight_text : '';
           variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia, i) {
             mediaCollection.thumbnails = mediaCollection.thumbnails.concat(setMediaCollection(variantMedia, entity, i, length));
           });
@@ -372,6 +373,8 @@ exports.render = function render(
         html = '';
         break;
       }
+      entity.description.article_number = Drupal.hasValue(params.skuForGallery) ? params.skuForGallery : '';
+      entity.description.weight = weight;
 
       const data = {
         description: entity.description,

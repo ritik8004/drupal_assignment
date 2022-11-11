@@ -4,3 +4,9 @@ logger:
     js/datadog_js.logger.js: {}
   dependencies:
     - core/drupal
+    - datadog_js/modern_browser_detector
+
+modern_browser_detector:
+  version: 1
+  js:
+    js/modern_browser_detector.js: { preprocess: false }

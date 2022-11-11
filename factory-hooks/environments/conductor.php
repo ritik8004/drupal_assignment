@@ -426,11 +426,6 @@ $conductors = [
     'site_id' => 56,
   ],
   // Pottery Barn AE.
-  'pbae_dev' => [
-    'hmac_id' => 'a22d85c970484b17acb2511b4181aa81',
-    'hmac_secret' => 'ODczNzNiNGItNmQwMy00',
-    'site_id' => 139,
-  ],
   'pbae_dev2' => [
     'hmac_id' => 'c1d103b9b2194fa0ba957981e566c0ce',
     'hmac_secret' => 'YWFmOTJmODctYmMwNS00',
