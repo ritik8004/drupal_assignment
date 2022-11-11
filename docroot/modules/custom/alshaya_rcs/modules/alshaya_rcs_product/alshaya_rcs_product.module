@@ -286,11 +286,13 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $configurable_form_settings = \Drupal::config('acq_sku.configurable_form_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['showQuantity'] = $configurable_form_settings->get('show_quantity');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $configurable_form_settings->getCacheTags());
+
+  /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
+  $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
+
   // Adding the sequence of the configurable attributes based
-  // on order defined in 'acq_sku.configurable_form_settings'.
-  $configurableAttributes = $configurable_form_settings->get('attribute_weights')['default'];
-  asort($configurableAttributes);
-  $build['#attached']['drupalSettings']['configurableAttributes'] = array_keys($configurableAttributes);
+  // on order defined in config 'acq_sku.configurable_form_settings'.
+  $build['#attached']['drupalSettings']['configurableAttributes'] = $rcs_product_helper->getConfigurableAttributes();
 
   $alshaya_master_settings = \Drupal::config('alshaya_master.settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
