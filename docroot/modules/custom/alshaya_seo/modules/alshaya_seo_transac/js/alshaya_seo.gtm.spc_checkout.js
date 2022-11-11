@@ -289,4 +289,20 @@
     }
   };
 
+  // When the schedule for online booking is changed, trigger GTM event to note
+  // that.
+  document.addEventListener('holdBookingSlotEvent', function holdBookingSlotEvent(e) {
+    var status = e.detail.data.status;
+    if (status) {
+      // Prepare data.
+      var data = {
+        event: 'delivery_schedule',
+        eventCategory: 'delivery_schedule',
+        eventAction: 'change',
+        eventLabel: '',
+      };
+      dataLayer.push(data);
+    }
+  });
+
 })(jQuery, Drupal, dataLayer);

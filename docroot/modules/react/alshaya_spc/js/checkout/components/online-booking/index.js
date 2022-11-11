@@ -267,6 +267,15 @@ export default class OnlineBooking extends React.Component {
       result.hfd_appointment_details = bookingDetails.hfd_appointment_details;
     }
 
+    const holdBookingSlotEvent = new CustomEvent('holdBookingSlotEvent', {
+      detail: {
+        data: {
+          status: result.status,
+        },
+      },
+    });
+    document.dispatchEvent(holdBookingSlotEvent);
+
     // Set booking Details response and close the modal.
     this.setState({ bookingDetails: result, isModalOpen: false });
   };
