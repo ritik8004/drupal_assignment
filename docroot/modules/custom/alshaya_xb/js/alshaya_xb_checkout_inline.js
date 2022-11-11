@@ -10,8 +10,6 @@ glegem("OnCheckoutStepLoaded", function (data) {
       break;
 
     case data.Steps.CONFIRMATION:
-      // Populate drupal settings with details from GE data
-      drupalSettings.payment_methods['global-e'] = data.details.PaymentMethods[0].PaymentMethodTypeName;
       // Push data to datalayer.
       Drupal.alshayaXbCheckoutGaPush(data, 4);
       // Clear local storage.
