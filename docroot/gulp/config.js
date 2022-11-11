@@ -42,6 +42,7 @@ const blackList = [
   "themes/contrib/kashmir/js/global.js",
   "themes/custom/non_transac/whitelabel/components/_annotations/annotations.js",
   "modules/contrib/webform/js/webform.assets.js",
+  "modules/custom/datadog_js/js/modern_browser_detector.js",
 ];
 
 // Exclude from adding 'use strict'.
