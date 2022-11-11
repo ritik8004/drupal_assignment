@@ -230,13 +230,6 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             $order['date'] = alshaya_master_get_site_date_from_api_date($order['created_at'], 'order_date');
             $order['id'] = $order['increment_id'];
 
-            // Fetching order currency code if it is available to format
-            // the price.
-            $order_currency_code = '';
-            if (!empty($order['order_currency_code'])) {
-              $order_currency_code = $order['order_currency_code'];
-            }
-
             // Theme the order total grands with currency.
             $order['totals']['grand'] = [
               '#theme' => 'acq_commerce_price',
