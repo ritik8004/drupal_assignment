@@ -4,7 +4,19 @@
 
   @include breakpoint($only-mobile) {
     font-size: rem(14);
-    font-family: $arial;
+  }
+
+  .price-block {
+    @include breakpoint($tablet) {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .special--price {
+    @include breakpoint($tablet) {
+      margin-#{$left}: 0;
+    }
   }
 }
 
@@ -44,15 +56,13 @@
 
       .spc-product-title {
         @include breakpoint($desktop) {
-          max-width: 64%;
+          max-width: 51%;
+          padding-#{$right}: rem(20);
         }
 
         a {
           font-family: $ay-heavy;
-
-          @include breakpoint($only-mobile) {
-            font-family: $arial;
-          }
+          text-transform: uppercase;
         }
       }
 

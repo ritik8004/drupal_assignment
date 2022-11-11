@@ -60,7 +60,7 @@
         if (gtmContainer === 'product detail page') {
           const referrerData = Drupal.getItemFromLocalStorage('referrerData');
           const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
-          if (referrer === '' || !referrerData.path.includes(referrer)) {
+          if (referrer === '' || (Drupal.hasValue(referrerData) && !referrerData.path.includes(referrer))) {
             if(isSearchActivated !== null && !isSearchActivated) {
               // Set PDP as referrerPageType only if referrer is not set,
               // Search is not active or
@@ -236,9 +236,10 @@
       var deliveryType = 'Home Delivery';
       var userDetails = '';
       var userId = '';
-      if (typeof drupalSettings.userDetails === 'undefined') {
+      if (typeof drupalSettings.userDetails.userID === 'undefined') {
         userDetails = drupalSettings.user;
         userId = userDetails.uid;
+        userDetails.userID = userId;
       }
       // userDetails is set in case of google/facebook login.
       else  {
@@ -338,7 +339,6 @@
         if (!(socialWindow)
           && userDetails.userID !== undefined
           && userDetails.userID !== 0
-          && userDetails.userID !== drupalSettings.user.uid
           && loginType !== undefined
           && orderConfirmationPage.length === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
@@ -1190,7 +1190,7 @@
     var data = {
       event: 'productClick',
       magento_product_id: isProductDataAvailable ? productSelector[0].getAttribute('gtm-magento-product-id') : null,
-      stock_status: drupalSettings.dataLayerContent.stockStatus || isProductDataAvailable ? productSelector[0].getAttribute('gtm-stock') : null,
+      stock_status: drupalSettings.dataLayerContent.stockStatus || (isProductDataAvailable ? productSelector[0].getAttribute('gtm-stock') : null),
       product_style_code: isProductDataAvailable ? productSelector[0].getAttribute('gtm-product-style-code') : null,
       ecommerce: {
         currencyCode: currencyCode,

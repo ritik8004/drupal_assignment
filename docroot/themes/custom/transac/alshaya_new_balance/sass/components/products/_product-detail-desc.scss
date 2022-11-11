@@ -1,0 +1,28 @@
+.product-desc-wrapper {
+  .product-details {
+    font-family: $alshaya-bold;
+    font-size: rem(24);
+    line-height: rem(24);
+    margin-top: rem(36);
+    margin-bottom: rem(18);
+  }
+
+  .product-sku-title {
+    display: inline;
+  }
+
+  .product-sku-id {
+    display: inline;
+    margin-#{$left}: rem(2);
+  }
+
+  .product-desc-value {
+    line-height: rem(24);
+    margin-top: rem(12);
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}

@@ -170,7 +170,15 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     window.addEventListener('resize', headerButton);
   };
 
+  const removeClassFromPDPLayout = (className) => {
+    const element = document.querySelector('#pdp-layout');
+    if (typeof element !== 'undefined') {
+      element.classList.remove(className);
+    }
+  };
+
   useEffect(() => {
+    removeClassFromPDPLayout('content-loading');
     sidebarSticky();
     showStickyHeader();
     if (isAuraEnabled()) {
@@ -181,6 +189,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     }
     stickyButton();
     loadAfterProductDataFetch(productInfo);
+    Drupal.alshayaSeoGtmPushProductDetailView(document.getElementById('pdp-layout'));
   }, []);
 
   const getPanelData = useCallback((data) => {

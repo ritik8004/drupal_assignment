@@ -118,8 +118,10 @@ body {
   &.menu--open {
     .branding__menu {
       &::before {
-        // Removing the dark overlay when mobile menu is open.
-        opacity: 0;
+        @include breakpoint($only-mobile) {
+          // Removing the dark overlay when mobile menu is open in mobile.
+          opacity: 0;
+        }
       }
     }
   }

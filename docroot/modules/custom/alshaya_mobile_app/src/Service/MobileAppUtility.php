@@ -1054,7 +1054,7 @@ class MobileAppUtility {
     $product_list_lhn_value = NULL;
     $url_object = $this->pathValidator->getUrlIfValid($url);
     $route_parameters = $url_object->getrouteParameters();
-    if (!$route_parameters['node']) {
+    if (!isset($route_parameters['node']) || !$route_parameters['node']) {
       return FALSE;
     }
     $node = $this->entityTypeManager->getStorage('node')->load($route_parameters['node']);

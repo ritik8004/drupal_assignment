@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_rcs_super_category\Service;
 
 use Drupal\alshaya_super_category\ProductSuperCategoryTree;
-use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Cache\Cache;
 use Drupal\taxonomy\TermInterface;
 
@@ -24,7 +23,7 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
 
-    $cid = ProductCategoryTree::CACHE_ID . '_' . $langcode;
+    $cid = static::CACHE_ID . '_' . $langcode;
 
     if ($term_data = $this->cache->get($cid)) {
       return $term_data->data;
@@ -51,7 +50,7 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
 
     uasort($term_data, fn($item1, $item2) => $item1['position'] <=> $item2['position']);
 
-    $this->cache->set($cid, $term_data, Cache::PERMANENT, [ProductCategoryTree::CACHE_TAG]);
+    $this->cache->set($cid, $term_data, Cache::PERMANENT, [static::CACHE_TAG]);
     return $term_data;
   }
 
@@ -133,9 +132,10 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     if (empty($langcode)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
+
     $names = [$name, $name . '/'];
     $query = $this->termStorage->getQuery();
-    $query->condition('vid', self::VOCABULARY_ID);
+    $query->condition('vid', static::VOCABULARY_ID);
     $query->condition('field_category_slug', $names, 'IN');
     $query->condition('langcode', $langcode);
     $tids = $query->execute();

@@ -18,7 +18,7 @@ import { fetchCartData } from '../../../utilities/api/requests';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import AuraCartContainer from '../../../aura-loyalty/components/aura-cart-rewards/aura-cart-container';
-import isAuraEnabled from '../../../../../js/utilities/helper';
+import isAuraEnabled, { isCheckoutTracker } from '../../../../../js/utilities/helper';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 import PostpayCart from '../postpay/postpay';
 import Postpay from '../../../utilities/postpay';
@@ -162,6 +162,10 @@ export default class Cart extends React.Component {
       }
 
       const { items } = this.state;
+      // If Checkout Tracker is enabled and cart is empty hide checkout tracker
+      if (isCheckoutTracker() && items.length === 0) {
+        document.getElementById('block-checkouttrackerblock').classList.add('hide-checkout-tracker');
+      }
 
       // Call dynamic-yield spa api for cart context.
       if (typeof window.DY !== 'undefined' && typeof window.DY.API !== 'undefined') {

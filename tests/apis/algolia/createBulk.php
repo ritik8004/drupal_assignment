@@ -12,6 +12,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 $app_id = 'Q402AB9LJF';
 $app_secret_admin = '0fe92997d79ed56790912b14d3ecbc5f';
 
+// List of sites to perform the operation, add/comment out as required.
 $sites = [
   'vskw',
   'vssa',
@@ -19,6 +20,7 @@ $sites = [
   'vsqa'
 ];
 
+// List of envs to perform the operation, add/comment out as required.
 $envs = [
   'local',
   '01dev',
@@ -49,6 +51,7 @@ foreach ($envs as $env) {
   }
 }
 
+// Comment out this line to run the script on live app.
 exit;
 
 // Settings for live app.
@@ -63,7 +66,7 @@ $envs = [
 ];
 
 foreach ($envs as $env) {
-  foreach ($brands as $brand) {
+  foreach ($sites as $brand) {
     $prefix = $env . '_' . $brand;
     foreach ($languages as $language) {
       try {

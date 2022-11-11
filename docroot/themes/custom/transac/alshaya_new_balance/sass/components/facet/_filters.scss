@@ -3,6 +3,7 @@
     .view-header {
       &.search-count {
         font-size: rem(16) !important;
+        color: $primary_text;
       }
     }
   }
@@ -28,12 +29,18 @@
 .c-facet {
   &.c-accordion,
   &.c-collapse-item {
+    float: none;
+
     .c-accordion__title,
     .c-collapse__title {
       text-transform: unset;
 
-      &::after {
+      @include icon(chevrondown, after) {
         font-size: rem(24);
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: rem(10);
       }
     }
 
@@ -66,6 +73,29 @@
             background: $plp_filter_active_item;
           }
         }
+
+        @include breakpoint($desktop) {
+          top: 100%;
+          #{$left}: rem(-1);
+        }
+      }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    &.c-accordion,
+    &.c-collapse-item {
+      margin: 0;
+
+      &:first-child {
+        margin: 0;
+      }
+    }
+
+    &.c-collapse-item {
+      .sticky-filter-wrapper & {
+        padding: rem(10);
+        border: rem(1) solid $tertiary-border;
       }
     }
   }
@@ -82,5 +112,112 @@
 .show-all-filters-algolia,
 .show-all-filters {
   font-size: rem(16);
-  color: $plp_filter_txt;
+  color: $primary_text;
+
+  @include breakpoint($only-mobile) {
+    padding-#{$left}: 0;
+    border: rem(1) solid $tertiary-border;
+
+    &::before {
+      #{$right}: 0;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .filter-fixed-top & {
+      margin-#{$left}: rem(18);
+    }
+  }
+}
+
+#alshaya-algolia-plp,
+#alshaya-algolia-search {
+  @include breakpoint($only-mobile) {
+    .block-facet-blockcategory-facet-search {
+      & + .show-all-filters-algolia {
+        flex-basis: 50%;
+      }
+    }
+
+    .show-all-filters-algolia {
+      width: 50%;
+      flex-basis: 100%;
+      height: rem(38);
+      margin: 0;
+      padding-#{$left}: rem(10);
+      text-transform: uppercase;
+      float: none;
+
+      &.empty-category {
+        height: rem(38);
+        line-height: rem(38);
+      }
+    }
+
+    &.filter-fixed-top {
+      .show-all-filters-algolia {
+        &.empty-category {
+          height: rem(48);
+          line-height: rem(48);
+        }
+      }
+    }
+  }
+}
+
+.container-without-product {
+  display: flex;
+  justify-content: center;
+  padding: 0 rem(17);
+  column-gap: rem(10);
+  background: $default_bg;
+  width: 100%;
+
+  .filter-facets {
+    display: none;
+  }
+
+  .filter-fixed-top & {
+    position: fixed;
+    top: rem(68);
+    height: rem(48);
+    z-index: 10;
+    column-gap: 0;
+    padding: 0;
+  }
+
+  @include breakpoint($tablet) {
+    justify-content: flex-start;
+    padding: 0;
+    background: none;
+
+    .filter-fixed-top & {
+      top: rem(6);
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .filter-facets {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: rem(14);
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .filter-fixed-top {
+    .block-alshaya-plp-facets-block-all,
+    .block-alshaya-productlist-facets-block-all,
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all,
+    .block-facet-blockcategory-facet-search,
+    > .block-facet-blockcategory-facet-plp,
+    > .block-facet-blockcategory-facet-promo,
+    > .block-facet-blockcategory-facet-search,
+    .block-facet-blockcategory-facet-plp {
+      position: initial;
+    }
+  }
 }

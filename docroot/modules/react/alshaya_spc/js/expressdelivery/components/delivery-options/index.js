@@ -56,7 +56,10 @@ export default class DeliveryOptions extends React.Component {
   fetchShippingMethods = (variantSelected) => {
     const currentArea = getDeliveryAreaStorage();
     const attr = document.getElementsByClassName('sku-base-form');
-    const productSku = variantSelected !== undefined ? variantSelected : attr[0].getAttribute('data-sku');
+    const productSku = variantSelected !== undefined
+      ? variantSelected
+      : attr.length && attr[0].getAttribute('data-sku');
+
     const { checkSddEdAvailabilityStatus } = this.state;
     if (productSku && productSku !== null) {
       showFullScreenLoader();

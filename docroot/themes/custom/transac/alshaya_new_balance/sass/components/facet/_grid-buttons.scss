@@ -1,0 +1,15 @@
+.block-alshaya-grid-count-block {
+  height: auto;
+
+  .total-result-count {
+    @include breakpoint($only-mobile) {
+      padding: rem(20);
+    }
+  }
+
+  @include breakpoint($tablet) {
+    position: absolute;
+    #{$right}: 0;
+    top: rem(13);
+  }
+}

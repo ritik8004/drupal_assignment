@@ -19,11 +19,6 @@
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoPdpMagazineV2Gtm.prepareProductImpressions, $('.magv2-pdp-crossell-upsell-wrapper'), drupalSettings, event);
   }, 500));
 
-  $(window).on('load', function () {
-    // Trigger productDetailView event.
-    Drupal.alshayaSeoGtmPushProductDetailView($('#pdp-layout'));
-  });
-
   // Product click handler for product slider.
   $(document).once('product-clicked').on('click', '.magv2-pdp-crossell-upsell-wrapper .magv2-pdp-crossell-upsell-image-wrapper', function () {
     var subListName = Drupal.alshayaSeoPdpMagazineV2Gtm.getRecommendationListName($(this));

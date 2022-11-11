@@ -216,7 +216,7 @@ class ProductInfoResource extends ResourceBase {
         $isColorSplitEnabled = $this->moduleHandler->moduleExists('alshaya_color_split');
 
         // Set catalog restructuring enabled or not.
-        $data['catalog_restructured'] = $isColorSplitEnabled;
+        $data['catalogRestructured'] = $isColorSplitEnabled;
 
         foreach ($configurables ?? [] as $attribute_data) {
           $attribute_code = $attribute_data['code'];

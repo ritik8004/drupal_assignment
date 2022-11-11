@@ -319,6 +319,7 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               apiErrorMessage: '',
               setChecked: false,
             });
+
             // Dispatch unlink egift redeemed for GTM.
             if (triggerEvent) {
               dispatchCustomEvent('egiftCardRedeemed', {

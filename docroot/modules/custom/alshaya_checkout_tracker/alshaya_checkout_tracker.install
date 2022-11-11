@@ -20,4 +20,10 @@ function alshaya_checkout_tracker_install() {
   // to appear just below the page title.
   $page_title_weight = (int) $config_factory->get('block.block.page_title')->get('weight');
   $config_factory->getEditable('block.block.checkouttrackerblock')->set('weight', $page_title_weight + 1)->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_checkout_tracker', 'alshaya_checkout_tracker.translations');
+  if ($translations = _alshaya_checkout_tracker_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }

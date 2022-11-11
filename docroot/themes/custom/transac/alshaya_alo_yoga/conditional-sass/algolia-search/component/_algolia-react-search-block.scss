@@ -64,7 +64,7 @@
         @include breakpoint($upto-desktop) {
           top: rem(8);
           #{$left}: unset;
-          #{$right}: rem(-4);
+          #{$right}: 0;
           opacity: 1;
           transition: opacity 0.2s;
         }
@@ -219,10 +219,8 @@
         border-right: 0;
         border-left: 0;
         padding-#{$left}: rem(16);
-      }
-
-      @include breakpoint($upto-desktop) {
         line-height: rem(20);
+        background-color: $algolia-top-search-result;
       }
 
       @include breakpoint($only-tablet) {
@@ -245,6 +243,12 @@
         &::after {
           @include breakpoint($upto-desktop) {
             opacity: 0;
+          }
+        }
+
+        .react-autosuggest__input {
+          @include breakpoint($only-tablet) {
+            padding-#{$left}: rem(36);
           }
         }
       }
@@ -353,7 +357,7 @@ body {
     &.menu--open {
       .block-alshaya-algolia-react-autocomplete {
         &::before {
-          @include breakpoint($only-mobile) {
+          @include breakpoint($upto-desktop) {
             opacity: 0;
           }
         }

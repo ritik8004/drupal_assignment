@@ -29,9 +29,17 @@
     @include breakpoint($desktop) {
       width: 32%;
     }
+
+    .mobile-content-wrapper {
+      @include breakpoint($only-mobile) {
+        padding: 0 rem(20);
+      }
+    }
   }
 
   &__title_wrapper {
+    border-bottom: none;
+
     h1,
     h1 span {
       font-size: rem(32);
@@ -63,6 +71,10 @@
       font-size: rem(14);
     }
 
+    @include breakpoint($only-mobile) {
+      padding: 0 rem(20);
+    }
+
     @include breakpoint($desktop) {
       width: 32%;
     }
@@ -70,14 +82,17 @@
 }
 
 .delivery-options-wrapper {
-  .c-accordion__title {
-    font-size: rem(16);
-    line-height: rem(20);
-  }
+  margin-top: rem(38);
 
   .c-accordion-delivery-options {
-    padding-top: rem(25);
-    padding-bottom: rem(25);
+    padding-top: 0;
+    padding-bottom: rem(22);
+
+    .ui-accordion-header {
+      font-size: rem(16);
+      line-height: rem(20);
+      padding-top: rem(22);
+    }
   }
 }
 
@@ -86,6 +101,344 @@
     @include breakpoint($desktop) {
       width: rem(86) !important;
       height: rem(86) !important;
+    }
+  }
+}
+
+.select2Option {
+  h4 {
+    font-size: rem(16);
+    line-height: rem(20);
+    margin-top: rem(20);
+
+    span:first-child {
+      font-family: $alshaya-bold;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: rem(4);
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: rem(16);
+    }
+  }
+
+  .select-buttons {
+    li {
+      span,
+      a {
+        &.picked {
+          font-family: $alshaya-bold;
+        }
+
+        &.picked,
+        &:hover {
+          border-color: $pdp_size_option_selected_border;
+        }
+      }
+
+      &.disabled {
+        span,
+        a {
+          background-image: none;
+          background-color: $pdp_size_option_disabled_bg;
+
+          &:hover {
+            color: $pdp_size_option_text;
+            border-color: $pdp_size_option_border;
+          }
+        }
+      }
+    }
+  }
+}
+
+.basic-details-wrapper .field--name-field-skus {
+  .form-item-quantity {
+    select.form-select {
+      // This renders only for viewport width < 1025.
+      height: rem(56);
+      padding-#{$left}: rem(10);
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        height: rem(53);
+      }
+    }
+
+    .select2-container {
+      .select2-selection {
+        height: rem(56);
+
+        .select2-selection__rendered {
+          // Matching the height with container to vertically center
+          // the quantity number.
+          line-height: rem(48);
+        }
+
+        .select2-selection__arrow {
+          // Vertically center the dropdown arrow.
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+
+    &::after {
+      // Vertically center the dropdown arrow.
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .form-item.form-type-select.form-item-quantity {
+    @include breakpoint($only-mobile) {
+      float: unset;
+      top: unset;
+      width: 100%;
+      margin-bottom: rem(18);
+    }
+
+    @include breakpoint($only-tablet) {
+      float: $left;
+      top: 0;
+    }
+  }
+
+  .form-item-configurables-size {
+    .group-wrapper {
+      margin-top: rem(20);
+
+      .group {
+        .select2Option {
+          h4 {
+            span:first-child {
+              font-family: $alshaya-thin;
+            }
+
+            .selected-text {
+              display: none;
+            }
+          }
+
+          .select-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: rem(13) rem(14);
+            column-gap: rem(13);
+            row-gap: rem(10);
+
+            li {
+              span,
+              a {
+                width: rem(84);
+                height: rem(44);
+                line-height: rem(16);
+                margin: 0;
+              }
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          select.form-select.form-item-configurable-select {
+            height: rem(53);
+          }
+
+          &::after {
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+
+    .group-anchor-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: rem(10) rem(17);
+      margin-top: rem(34);
+
+      a {
+        height: rem(42);
+        width: rem(114);
+        margin: 0;
+
+        @include breakpoint($only-mobile) {
+          width: rem(96);
+          height: rem(36);
+        }
+      }
+    }
+
+    &::after {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+    }
+  }
+
+  .form-item-configurables-width-description {
+    .select2Option {
+      h4 {
+        span:first-child {
+          font-family: $alshaya-thin;
+        }
+
+        .selected-text {
+          display: none;
+        }
+      }
+
+      .select-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: rem(10) rem(8);
+        margin-top: rem(16);
+
+        li {
+          span,
+          a {
+            width: rem(120);
+            height: rem(44);
+            line-height: rem(16);
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      @include select-wrapper(100%);
+
+      select.form-select {
+        @include select-style(100%);
+
+        width: 100%;
+        height: rem(53);
+      }
+
+      &::after {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
+
+.field--name {
+  &-field-skus {
+    .sku-base-form > div,
+    .sku-base-form > .js-form-wrapper {
+      @include breakpoint($mobile) {
+        width: 100%;
+      }
+    }
+
+    .sku-base-form {
+      button[type="submit"] {
+        margin-bottom: 0;
+        width: rem(280);
+        height: rem(56);
+        margin-#{$left}: rem(18);
+        text-transform: none;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          height: rem(46);
+        }
+
+        @include breakpoint($only-tablet) {
+          float: $right;
+          width: rem(170);
+          margin-top: rem(23);
+          margin-#{$left}: rem(8);
+        }
+      }
+    }
+  }
+}
+
+.short-description-wrapper:not(.matchback-description-wrapper) {
+  .c-pdp & {
+    border-top: none;
+  }
+}
+
+.short-description-wrapper {
+  margin-top: rem(34);
+
+  .field {
+    &__label {
+      // We are not displaying the description label in NB.
+      display: none;
+    }
+
+    &__content {
+      line-height: rem(24);
+    }
+  }
+
+  .read-more-description-link,
+  .read-more-description-link-mobile {
+    line-height: rem(18);
+    text-decoration: underline;
+    margin-top: rem(8);
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-top: rem(30);
+  }
+}
+
+.description-wrapper {
+  .close {
+    @include breakpoint($tablet) {
+      height: rem(45);
+      width: rem(45);
+      font-size: rem(45);
+    }
+  }
+
+  .field {
+    &__label {
+      text-align: center;
+    }
+  }
+
+  .green-leaf-title {
+    position: relative;
+    font-family: $alshaya-bold;
+    margin-top: rem(24);
+    padding-#{$left}: rem(16);
+
+    &::before {
+      content: '';
+      background: url(#{$nb_theme_img_directory_path}/icons/green-leaf.svg) no-repeat;
+      height: rem(24);
+      width: rem(14);
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      #{$left}: 0;
+    }
+  }
+
+  .desc-value,
+  .text {
+    line-height: rem(24);
+  }
+
+  .desc-wrapper,
+  .description-section,
+  .address {
+    border-top: none;
+  }
+
+  &.desc-open {
+    @include breakpoint($desktop) {
+      width: 32%;
     }
   }
 }

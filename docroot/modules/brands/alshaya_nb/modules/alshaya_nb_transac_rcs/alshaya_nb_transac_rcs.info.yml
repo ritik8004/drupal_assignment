@@ -4,4 +4,3 @@ type: module
 core_version_requirement: ^9
 dependencies:
   - alshaya_nb_transac:alshaya_nb_transac
-  - alshaya_rcs:alshaya_rcs

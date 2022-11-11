@@ -33,15 +33,22 @@ const checkProductExpressDeliveryStatus = (sku) => {
  */
 const checkShippingMethodsStatus = (shippingMethods) => {
   let count = 0;
+  let isError = false;
   if (typeof shippingMethods !== 'undefined') {
     shippingMethods.forEach((shippingMethod) => {
+      if (typeof shippingMethod === 'string') {
+        logger.error('Error occurred while fetching the shipping method. Shipping method: @response.', {
+          '@response': shippingMethod,
+        });
+        isError = true;
+      }
       if (shippingMethod.available !== 'undefined' && shippingMethod.available) {
         if ((shippingMethod.carrier_code === 'SAMEDAY') || (shippingMethod.carrier_code === 'EXPRESS')) {
           count += 1;
         }
       }
     });
-    if (count > 0) {
+    if (count > 0 && !isError) {
       return true;
     }
   }
