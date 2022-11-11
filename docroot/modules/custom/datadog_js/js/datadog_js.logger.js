@@ -2,7 +2,7 @@
   // Initial a variable with page load timestamp to identify the actual time.
   // This time will remain unchanged within the context of window.
   window.pageLoadTime = window.pageLoadTime || new Date().getTime();
-  let pageUuid = '';
+  var pageUuid = '';
 
   Drupal.logViaDataDog = function (severity, message, context) {
     try {
@@ -18,6 +18,9 @@
       // Pass the actual page load time upon user request to Datadog log for
       // better monitoring.
       context.pageLoadTime = window.pageLoadTime;
+
+      // Pass flag weather browser is mordern or not
+      context.isModernBrowser = !!window.isModernBrowser;
 
       // Generate the unique ID only once for a page and pass to Datadog log for better monitoring.
       if (!pageUuid) {
