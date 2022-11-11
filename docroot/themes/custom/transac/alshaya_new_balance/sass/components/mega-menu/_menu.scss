@@ -69,16 +69,18 @@
     > .menu-two__link-wrapper {
       .menu-two__link {
         @include breakpoint($upto-desktop) {
-          padding-#{$left}: rem(10);
+          padding-#{$left}: 0;
         }
       }
     }
   }
 
   .toggle--sign {
+    width: calc(100% - #{rem(50)});
+
     .one {
-      font-size: rem(14);
-      text-transform: none;
+      font-size: rem(12);
+      text-transform: uppercase;
       width: 50%;
 
       &.shop {
@@ -108,5 +110,20 @@
 
   .back--link {
     @include menuListItem;
+
+    .menu--two__list & {
+      padding-#{$left}: rem(23);
+    }
+  }
+
+  .block-alshaya-main-menu {
+    li {
+      &.menu--one__list-item {
+        .menu--one__link {
+          padding: rem(16) rem(10);
+          padding-#{$left}: rem(14);
+        }
+      }
+    }
   }
 }
