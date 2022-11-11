@@ -1,6 +1,7 @@
 name: Deploy on Schedule
 
 on:
+  workflow_dispatch:
   schedule:
     # Run every day at 2AM, 8AM, 2PM and 8PM IST.
     - cron: '30 2,8,14,20 * * *'
@@ -32,6 +33,15 @@ jobs:
           - develop
 
     steps:
+      - name: Check for commits in branch
+        uses: adriangl/check-new-commits-action@v1
+        id: check-new-commits
+        with:
+          branch: ${{ matrix.branch }}
+          token: ${{ secrets.BOT_TOKEN }}
+          # 7 hours in seconds, when changing please update other places too.
+          seconds: 25200
+
       # Make sure we have some code to diff.
       - name: Checkout ${{ matrix.branch }} repository to get diff
         uses: actions/checkout@v3
@@ -43,12 +53,15 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
+          git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only
+          git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only | wc -l
+          git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only | wc -l | xargs
           echo "changes=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only | wc -l | xargs)" >> $GITHUB_ENV
           echo "all=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | xargs)" >> $GITHUB_OUTPUT
           echo "themes=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/themes/custom | xargs)" >> $GITHUB_OUTPUT
           echo "react=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/modules/react | xargs)" >> $GITHUB_OUTPUT
 
-      - name: Debug
+      - name: Debug Info
         run: |
           echo "Number of files changed: ${{ env.changes }}"
 
