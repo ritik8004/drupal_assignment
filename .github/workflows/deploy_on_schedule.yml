@@ -53,9 +53,6 @@ jobs:
 
       - name: Debug Info
         run: |
-          git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only
-          git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only | wc -l
-          git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only | wc -l | xargs
           echo "Number of files changed: ${{ env.changes }}"
 
       - name: Artifact Build
