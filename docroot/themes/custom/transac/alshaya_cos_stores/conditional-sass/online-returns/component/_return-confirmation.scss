@@ -164,7 +164,7 @@
       padding-#{$left}: rem(27);
 
       @include breakpoint($desktop-wide) {
-        padding-#{$left}: rem(0);
+        padding-#{$left}: 0;
       }
     }
 
@@ -172,7 +172,7 @@
       margin-top: rem(40);
 
       @include breakpoint($tablet) {
-        margin-top: rem(0);
+        margin-top: 0;
       }
 
       .item-total-price-label {
