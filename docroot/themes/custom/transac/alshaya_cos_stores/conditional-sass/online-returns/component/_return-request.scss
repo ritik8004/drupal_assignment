@@ -135,6 +135,7 @@
           }
 
           .item-unit-price-label {
+            color: $online-return-light-text;
             font-size: rem(12);
             line-height: 1.33;
 
@@ -244,7 +245,8 @@
 
     .method-listing-label,
     .return-collection-message,
-    .return-address-details {
+    .return-address-details,
+    .refund-method-listing {
       color: $online-return-refund-msg-txt;
     }
 
@@ -311,7 +313,11 @@
       }
 
       > div:nth-child(2n) {
-        margin-bottom: rem(48);
+        margin-bottom: rem(28);
+
+        @include breakpoint($tablet) {
+          margin-bottom: rem(48);
+        }
       }
     }
   }

@@ -157,6 +157,10 @@
     }
 
     .item-price {
+      .item-unit-price-label {
+        color: $online-return-light-text;
+      }
+
       padding-#{$left}: rem(27);
 
       @include breakpoint($desktop-wide) {
@@ -166,6 +170,10 @@
 
     .item-total-price {
       margin-top: rem(40);
+
+      @include breakpoint($tablet) {
+        margin-top: rem(0);
+      }
 
       .item-total-price-label {
         color: $online-return-light-text;
