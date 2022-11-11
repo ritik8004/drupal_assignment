@@ -1,3 +1,23 @@
+@mixin sticky-search-bar {
+  .algolia-search-back-icon {
+    width: rem(36);
+    height: rem(36);
+    top: rem(16);
+  }
+
+  #alshaya-algolia-autocomplete {
+    .react-autosuggest__container {
+      &::after {
+        height: rem(68);
+      }
+    }
+  }
+
+  .react-autosuggest__input {
+    height: rem(68);
+  }
+}
+
 .block-alshaya-algolia-react-autocomplete {
   #alshaya-algolia-autocomplete {
     width: 100%;
@@ -91,8 +111,18 @@
       .block-alshaya-algolia-react-autocomplete {
         &.show-algolia-search-bar {
           padding: 0;
+
+          @include sticky-search-bar;
         }
       }
+    }
+
+    &.Sticky-algolia-search {
+      .block-alshaya-algolia-react-autocomplete {
+        padding: 0;
+      }
+
+      @include sticky-search-bar;
     }
 
     .block-alshaya-algolia-react-autocomplete {
