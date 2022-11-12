@@ -481,6 +481,16 @@ exports.computePhFilters = function (input, filter) {
       value = input.sku;
       break;
 
+    case 'old-price':
+      const priceInfo = window.commerceBackend.getPrices(input, true);
+      // See Drupal\alshaya_seo_transac\AlshayaGtmManager::fetchSkuAtttributes().
+      if (Drupal.hasValue(priceInfo)
+        && ((priceInfo.price != priceInfo.finalPrice)
+        && (priceInfo.finalPrice < priceInfo.price))) {
+        value = priceInfo.price;
+      }
+      break;
+
     case 'sku-clean':
       value = Drupal.cleanCssIdentifier(input.sku);
       break;
