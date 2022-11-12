@@ -103,6 +103,8 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
     $attributes['gtm-product-sku-class-identifier'] = '#rcs.product._self|sku-clean#';
     $attributes['gtm-sku-type'] = '#rcs.product._self|sku-type#';
     $attributes['gtm-main-sku'] = '#rcs.product._self|sku#';
+    $attributes['gtm-magento-product-id'] = '#rcs.product.id#';
+    $attributes['gtm-old-price'] = '#rcs.product._self|old-price#';
 
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
