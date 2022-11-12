@@ -319,6 +319,9 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
     // with the title and slug as query arguments. We need to build the url
     // that way because using query options of url methods is encoding the #
     // and so the placeholders are not replaced on the frontend.
+    $add_url = '';
+    $title = '';
+    $slug = '';
     if ($node) {
       $title = $token->replace('[rcs_product:name|url_encode]');
       $slug = $token->replace('[rcs_product:url]');
@@ -328,9 +331,12 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
     elseif ($term) {
       $title = $token->replace('[rcs_category:name|url_encode]');
       $slug = $token->replace('[rcs_category:url]');
-      $destination = "$current_language/$slug";
-      $url = Url::fromUserInput("/admin/structure/taxonomy/manage/rcs_category/add?name=$title&slug=$slug&destination=/$destination");
+      $add_url = Url::fromRoute('entity.taxonomy_term.add_form', ['taxonomy_vocabulary' => 'rcs_category']);
     }
+
+    // Append a custom query string without URL encoding the arguments.
+    // This is required because we are outputting a RCS placeholder.
+    $url = Url::fromUri($add_url->toUriString() . "?name=$title&slug=$slug&destination=/$current_language/$slug");
 
     // Add a tab linking to Enrich form.
     $data['tabs'][0]["entity.$entity_type.enrich"] = [
