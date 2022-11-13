@@ -269,6 +269,14 @@
       }
     }
   }
+
+  &:not(.no-sticky-algolia-search-bar) {
+    @include breakpoint($upto-desktop) {
+      &.hide-header {
+        margin-top: rem(136);
+      }
+    }
+  }
 }
 
 .super-category-enabled:not(.frontpage) {
