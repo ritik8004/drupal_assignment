@@ -539,6 +539,7 @@ exports.computePhFilters = function (input, filter) {
         for (let i = 1; i <= quantity; i++) {
           quantityValues.push(i);
         }
+        data.quantity_title = Drupal.t('Quantity');
         data.quantity_dropdown = quantityValues;
       }
 
