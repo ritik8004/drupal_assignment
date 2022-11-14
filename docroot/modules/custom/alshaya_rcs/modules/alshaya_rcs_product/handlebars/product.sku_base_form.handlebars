@@ -34,6 +34,7 @@
   <span class="quantity-{{ sku }}">
     {{#if quantity_dropdown }}
       <div class="js-form-item form-item js-form-type-select form-type-select js-form-item-quantity form-item-quantity">
+        <label for="edit-quantity" class="js-form-required form-required">{{ this.quantity_title }}</label>
         <select name="quantity" class="edit-quantity form-select">
           {{#each quantity_dropdown}}
             {{#if (eq @index 0)}}
