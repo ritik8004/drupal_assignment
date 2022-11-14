@@ -29,7 +29,13 @@
 
         &.completed {
           .step-label {
-            top: rem(32);
+            top: rem(36);
+          }
+        }
+
+        &.current {
+          .step-label {
+            top: rem(26);
           }
         }
 
@@ -80,6 +86,7 @@
         .step {
           .step-label {
             white-space: nowrap;
+            top: rem(37);
           }
         }
       }
