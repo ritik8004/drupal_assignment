@@ -1,0 +1,26 @@
+.user__order--detail {
+  .order-item-row {
+    &.online-returns-eligibility-message {
+      #online-returns-eligibility-window {
+        .eligibility-window-container {
+          font-family: $alshaya-thin;
+        }
+
+        .return-items-button {
+          font-family: $muji-demibold;
+        }
+      }
+    }
+  }
+}
+
+.image-data-wrapper {
+  &.in-eligible {
+    .not-eligible-label {
+      font-size: rem(12);
+      font-family: $alshaya-thin;
+      padding: rem(2) rem(10);
+      line-height: rem(16);
+    }
+  }
+}
