@@ -56,13 +56,11 @@
         {{/if}}
       </li>
     {{/each}}
-    {{#unless is_visual_mobile_menu }}
-      {{#if aura_enabled }}
-        <div class="no--desktop">
-          <div id="aura-mobile-header-shop"></div>
-        </div>
-      {{/if}}
-    {{/unless}}
+    {{#if aura_enabled }}
+      <div class="no--desktop">
+        <div id="aura-mobile-header-shop"></div>
+      </div>
+    {{/if}}
   </ul>
   {{#if is_visual_mobile_menu }}
     {{> visual_mobile_menu_level1_partial menu_items=visual_mobile_menu_items}}

@@ -9,48 +9,4 @@ body.aura-enabled {
       }
     }
   }
-
-  &.menu--open {
-    &.super-category-enabled {
-      &.frontpage,
-      &:not(.frontpage) {
-        .branding__menu {
-          #block-alshayareactcartminicartblock {
-            @include breakpoint($upto-desktop) {
-              z-index: 14;
-            }
-          }
-        }
-      }
-
-      #block-alshayaalgoliareactautocomplete {
-        @include breakpoint($upto-desktop) {
-          z-index: 14;
-        }
-      }
-
-      .c-menu-primary .region__menu-primary .block-alshaya-super-category-menu {
-        @include breakpoint($upto-desktop) {
-          z-index: 11;
-        }
-      }
-    }
-
-    &.wishlist-enabled {
-      header .region__header{
-        .block-alshaya-wishlist,
-        .block-system-branding-block {
-          @include breakpoint($upto-desktop) {
-            z-index: 14;
-          }
-        }
-      }
-    }
-
-    .c-header .block-my-account-icon-block {
-      @include breakpoint($upto-desktop) {
-        z-index: 14;
-      }
-    }
-  }
 }
