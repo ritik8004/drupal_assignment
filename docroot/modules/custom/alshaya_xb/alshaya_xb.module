@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Site\Settings;
 
@@ -147,6 +148,28 @@ function alshaya_xb_alshaya_api_update_customer_api_request_alter(array &$reques
   if (isset($request_options['json']['customer']['addresses'])
     && !empty($request_options['json']['customer']['addresses'])) {
     unset($request_options['json']['customer']['addresses']);
+  }
+}
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_xb_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_fixed_price_field = \Drupal::config('alshaya_xb.sku_base_fields')->get('fields');
+  if ($alshaya_fixed_price_field) {
+    $fields = array_merge($fields, $alshaya_fixed_price_field);
+  }
+  else {
+    \Drupal::logger('alshaya_xb')->error('The config alshaya_xb.sku_base_fields is empty.');
+  }
+}
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
+  if ($product['extension']['xb_fixed_price']) {
+    $sku->get('attr_fixed_price')->setValue(serialize($product['extension']['xb_fixed_price']));
   }
 }
 
