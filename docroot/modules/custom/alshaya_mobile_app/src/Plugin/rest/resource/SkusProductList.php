@@ -243,6 +243,9 @@ class SkusProductList extends ResourceBase {
     foreach ($sku_cache_tags as $sku_cache_tag) {
       $cacheable_metadata->addCacheTags($sku_cache_tag);
     }
+    if (!empty($this->cache['tags'])) {
+      $cacheable_metadata->addCacheTags($this->cache['tags']);
+    }
 
     // Set max-age if API request contains invalid/disabled SKUs.
     if (in_array(NULL, $data)) {
@@ -250,6 +253,9 @@ class SkusProductList extends ResourceBase {
       $cacheable_metadata->mergeCacheMaxAge($max_age);
     }
 
+    if (!empty($this->cache['contexts'])) {
+      $cacheable_metadata->addCacheContexts($this->cache['contexts']);
+    }
     // Since the sku list is passed in query arguments, we shall add a
     // dependency on query arguments.
     $cacheable_metadata->addCacheContexts(['url.query_args']);
@@ -351,6 +357,11 @@ class SkusProductList extends ResourceBase {
    */
   private function getDeliveryOptionsStatus(SKUInterface $sku) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $this->cache['tags'] = Cache::mergeTags(
+      $this->cache['tags'],
+      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags()
+    );
+
     return [
       'home_delivery' => [
         'status' => alshaya_acm_product_is_buyable($sku) && alshaya_acm_product_available_home_delivery($sku),
