@@ -377,3 +377,9 @@
   font-size: rem(14);
   text-transform: none;
 }
+
+.ladda-button[data-style="zoom-in"] {
+  .ladda-spinner {
+    top: rem(22);
+  }
+}
