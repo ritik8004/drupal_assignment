@@ -20,3 +20,6 @@ alshaya_super_category.settings:
       sequence:
         type: string
         label: 'Menu type'
+    show_brand_filter:
+      type: boolean
+      label: 'Show brand filter facet.'
