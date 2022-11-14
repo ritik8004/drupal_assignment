@@ -156,10 +156,10 @@
 
 .basic-details-wrapper .field--name-field-skus {
   .form-item-configurables-color {
-    margin-bottom: rem(4);
+    margin-bottom: rem(30);
 
-    @include breakpoint($only-mobile) {
-      margin-bottom: rem(30);
+    @include breakpoint($tablet) {
+      margin-bottom: rem(4);
     }
   }
 
