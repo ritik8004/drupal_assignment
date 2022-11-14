@@ -9,11 +9,12 @@ export default function SideBar(props) {
           { drupalSettings.algoliaSearch.enable_lhn_tree_search > 0
             && (
             <div className="c-facet__blocks">
-              {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined) && (
-              <div className="c-facet__blocks c-facet block-facet-blockcategory-facet-search supercategory-facet c-accordion">
-                <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.search.filters.super_category.label}</h3>
-                {children[0]}
-              </div>
+              {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined)
+                && (drupalSettings.superCategory.show_brand_filter) && (
+                <div className="c-facet__blocks c-facet block-facet-blockcategory-facet-search supercategory-facet c-accordion">
+                  <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.search.filters.super_category.label}</h3>
+                  {children[0]}
+                </div>
               )}
               <div className="c-facet__blocks c-facet block-facet-blockcategory-facet-search c-accordion">
                 <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
