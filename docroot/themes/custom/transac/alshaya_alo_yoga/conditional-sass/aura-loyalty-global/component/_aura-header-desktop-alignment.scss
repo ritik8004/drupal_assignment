@@ -37,7 +37,7 @@ body.aura-enabled {
     }
 
     &.wishlist-enabled {
-      header .region__header{
+      header .region__header {
         .block-alshaya-wishlist,
         .block-system-branding-block {
           @include breakpoint($upto-desktop) {
