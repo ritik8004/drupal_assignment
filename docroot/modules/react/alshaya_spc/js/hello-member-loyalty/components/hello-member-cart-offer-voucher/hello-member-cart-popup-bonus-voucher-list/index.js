@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unknown-property */
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import moment from 'moment';
 import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHelper';
@@ -14,7 +12,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
   const { vouchers, totals } = props;
   // Get formatted expiry date.
   moment.locale(drupalSettings.path.currentLanguage);
-  const handleChange = (e) => {
+  const handleChange = () => {
     const vouchersBonus = document.getElementsByName('vouchersBonus[]');
     resetBenefitOptions(vouchersBonus, 'benefit_voucher', 'change');
     const selectBox = [];
@@ -39,7 +37,6 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
         }
       },
     );
-
     // api call to update the selected vouchers.
     const response = await callHelloMemberApi('addBonusVouchersToCart', 'POST', { voucherCodes: seletedVouchers });
     // Display the message if discount amount reached threshold and not valid.

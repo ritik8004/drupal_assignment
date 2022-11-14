@@ -25,10 +25,9 @@
    * @param {object} vouchersSelected
    *   Object containing the basic vouchers details.
    * @param {string} eventAction
-   *   The event that is getting performed during product return.
+   *   The event that is getting performed when we perform action.
    */
 
-// This function is called when voucher(s) are selected by customer.
 Drupal.alshayaSeoGtmPushVoucherOfferSelect = function (vouchersSelected, eventAction) {
 
   // Prepare the voucher data.
@@ -45,18 +44,17 @@ Drupal.alshayaSeoGtmPushVoucherOfferSelect = function (vouchersSelected, eventAc
 }
 
  /**
-   * Function to push the voucher offer events to data layer.
+   *  Function to push the voucher offer events to data layer.
    * @param {object} appliedVouchers
    *   Object containing the basic vouchersListDes details.
    * @param {string} eventAction
-   *   The event that is getting performed during product return.
+   *
    */
 
-// This function is called when offers are applied by customer
 Drupal.alshayaSeoGtmPushVoucherOfferSelectedApply = function (appliedVouchers, eventAction) {
 
   // Prepare the voucher data.
-  var returnData = {
+  var voucherAppliedData = {
     event: 'voucherApplied',
     eventAction: eventAction,
     eventLabel: appliedVouchers,
@@ -64,7 +62,7 @@ Drupal.alshayaSeoGtmPushVoucherOfferSelectedApply = function (appliedVouchers, e
     }
   // Proceed only if dataLayer exists.
   if (dataLayer) {
-    dataLayer.push(returnData);
+    dataLayer.push(voucherAppliedData);
   }
 }
 
