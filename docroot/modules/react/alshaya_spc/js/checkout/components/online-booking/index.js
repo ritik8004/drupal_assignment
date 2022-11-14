@@ -85,6 +85,14 @@ export default class OnlineBooking extends React.Component {
         }
       }
     }
+
+    // If there is no api error, then we are rendering the component. Then we
+    // trigger the view event.
+    if (!hasValue(result.api_error)) {
+      const viewDeliveryScheduleEvent = new CustomEvent('viewDeliveryScheduleEvent');
+      document.dispatchEvent(viewDeliveryScheduleEvent);
+    }
+
     // Set booking Details response and wait to false.
     this.setState({ bookingDetails: result, wait: false });
   }
@@ -302,9 +310,6 @@ export default class OnlineBooking extends React.Component {
     if (bookingDetails.api_error) {
       return <DefaultShippingElement method={method} price={price} />;
     }
-
-    const viewDeliveryScheduleEvent = new CustomEvent('viewDeliveryScheduleEvent');
-    document.dispatchEvent(viewDeliveryScheduleEvent);
 
     return (
       <>
