@@ -118,14 +118,14 @@ class AddressbookResource extends ResourceBase {
   public function get() {
     $response_data = [
       'address_fields' => _alshaya_spc_get_address_fields(),
-      'area_parents' => $this->areasTermsHelper->getAllGovernates(),
-      'area_options' => $this->areasTermsHelper->getAllAreas(),
+      'area_parents' => $this->areasTermsHelper->getAllGovernates(TRUE),
+      'area_options' => $this->areasTermsHelper->getAllAreas(TRUE),
       'area_parents_options' => [],
     ];
 
     // Get the mapping of area parents with the area options.
     foreach ($response_data['area_parents'] ?? [] as $key => $item) {
-      $response_data['area_parents_options'][$key] = $this->areasTermsHelper->getAllAreasWithParent($key);
+      $response_data['area_parents_options'][$key] = $this->areasTermsHelper->getAllAreasWithParent($key, TRUE);
     }
 
     $response = new ResourceResponse($response_data);
