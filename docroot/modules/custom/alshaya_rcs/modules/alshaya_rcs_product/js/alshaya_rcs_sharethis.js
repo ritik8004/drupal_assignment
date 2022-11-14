@@ -8,10 +8,25 @@
 
   var shareThisLoaded = false;
 
+  RcsEventManager.addListener('alshayaPageEntityLoaded', function alshayaRcsSharethisPageEntityLoaded (e) {
+    if (!drupalSettings.sharethis || !drupalSettings.sharethis.contentRendered) {
+      return;
+    }
+    rcsPhReplaceEntityPh(drupalSettings.sharethis.contentRendered, 'product', e.detail.entity, drupalSettings.path.currentLanguage)
+      .forEach(function eachReplacement(r) {
+        const fieldPh = r[0];
+        const entityFieldValue = r[1];
+
+        // Apply the replacement on all the elements containing the
+        // placeholder.
+        drupalSettings.sharethis.contentRendered = globalThis.rcsReplaceAll(drupalSettings.sharethis.contentRendered, fieldPh, entityFieldValue);
+      });
+  });
+
   Drupal.behaviors.shareThis = {
     attach: function alshayaRcsShareThisBehavior(context) {
       // Check if we are displaying sharethis in the page and do not re-execute.
-      if (shareThisLoaded || $('.sharethis-container').length === 0) {
+      if (shareThisLoaded || $('.sharethis-container, .sharethis-wrapper', context).length === 0) {
         return;
       }
       // Check if the PDP rendering is complete.

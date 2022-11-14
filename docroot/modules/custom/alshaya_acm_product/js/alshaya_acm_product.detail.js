@@ -655,14 +655,6 @@
     }
   });
 
-  Drupal.getProductKeyForProductViewMode = function (viewMode) {
-    var productKey = (viewMode === 'matchback' || viewMode === 'matchback_mobile')
-      ? viewMode
-      : 'productInfo';
-
-    return productKey
-  };
-
   Drupal.getSelectedProductFromQueryParam = function (viewMode, productInfo) {
     var selectedSku = '';
     // Use swatch from query parameter if pdp pretty path module is enabled.

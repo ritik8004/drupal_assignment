@@ -3,8 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 
-window.commerceBackend = window.commerceBackend || {};
-
 /**
  * Clear cart data.
  *
@@ -199,6 +197,16 @@ export const triggerAddToCart = (
 
     // Refresh dynamic promo labels on cart update.
     pdpLabelRefresh(cartData);
+
+    // Send notification after we finished adding to cart.
+    const event = new CustomEvent('afterAddToCart', {
+      bubbles: true,
+      detail: {
+        context: 'pdp',
+        cartData,
+      },
+    });
+    document.dispatchEvent(event);
   }
 };
 
@@ -480,19 +488,4 @@ export const addToCartSimple = (
     .catch((error) => {
       Drupal.logJavascriptError('addToCartSimple', error, GTM_CONSTANTS.CART_ERRORS);
     });
-};
-
-/**
- * Get size guide settings for pdp v2.
- *
- * @returns {Object}
- *   Processed size guide object.
- */
-window.commerceBackend.getSizeGuideSettings = () => {
-  // Get size guide from drupal settings for v2 architecture.
-  const { isSizeGuideEnabled, sizeGuide } = drupalSettings;
-  if (isSizeGuideEnabled && hasValue(sizeGuide)) {
-    return sizeGuide;
-  }
-  return null;
 };

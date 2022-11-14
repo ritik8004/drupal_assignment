@@ -173,3 +173,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css: css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css
+
+  alshaya_white_label/online-returns:
+    css:
+      theme:
+        css/conditional-sass/online-returns/online-returns.ltr.css: css/conditional-sass/online-returns/online-returns.ltr.css

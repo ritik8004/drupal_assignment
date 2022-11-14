@@ -365,7 +365,7 @@ $spc-order-summary-bg: $smoke;
 $spc_checkout_delivery_mob_bg: $white;
 $spc-cnc-toggle-bg: $white;
 $spc-cnc-toggle-bg-active: $black;
-$spc-cnc-store-search-icon: $mercury;
+$spc-cnc-store-search-icon: $black;
 $spc-checkout-success-message-background: $info-1;
 $spc-checkout-success-message-color: $black;
 $spc-promotion-link: $alert-main;
@@ -477,6 +477,14 @@ $magv2-mobile-size-drawer-label: $primary_text;
 $magv2-popup-header-label: $primary_text;
 $magv2-size-radio-filled: $primary_text;
 $magv2-gallery-popup-cross: $black;
+$magv2-size-options: $charcoal;
+$magv2-size-btn-border: $smoke;
+$magv2-desc-popup-bg: $smoke;
+$magv2-desc-popup-title-border: $mercury;
+$magv2-size-guide-link: $black;
+$magv2-size-guide-link-border: $charcoal;
+// intentionally done for pinterest color which we don't have in color scheme.
+$magv2-pinterest-share-icon-hover: #bc091d;
 
 // Swatches
 $swatch-border: $mercury;
@@ -486,7 +494,6 @@ $sameday-express-delivery-drawer-btn: $primary_btn_bg;
 $del_opt_sub_title_txt: $chicago;
 $del_opt_title_text: $chicago;
 $magv2-share-icons-default-color: $black;
-$magv2-pinterest-share-icon-hover: $gray-three;
 $magv2-share-btn: $black;
 $magv2-text: $chicago;
 

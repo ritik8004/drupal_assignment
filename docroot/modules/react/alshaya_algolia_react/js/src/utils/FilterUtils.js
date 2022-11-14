@@ -65,7 +65,7 @@ function sortItemsByMegaMenu(items, selector, label) {
     try {
       if (l1MenuItems[i].getAttribute(label) !== null) {
         // Add 10 to allow adding All at top.
-        weight[l1MenuItems[i].getAttribute(label).trim()] = parseInt(i, 10) + 10;
+        weight[l1MenuItems[i].getAttribute(label).toLowerCase().trim()] = parseInt(i, 10) + 10;
       }
     } catch (e) {
       // Do nothing.
@@ -73,8 +73,8 @@ function sortItemsByMegaMenu(items, selector, label) {
   });
 
   Object.keys(items).forEach((i) => {
-    if (weight[items[i].label.trim()] !== undefined) {
-      sortedItems[weight[items[i].label]] = items[i];
+    if (weight[items[i].label.toLowerCase().trim()] !== undefined) {
+      sortedItems[weight[items[i].label.toLowerCase().trim()]] = items[i];
     } else if (items[i].label === window.Drupal.t('All')) {
       // Use 1 for All to ensure Object.values work properly.
       sortedItems[1] = items[i];
@@ -94,7 +94,7 @@ function getSortedItems(items, element) {
   switch (element) {
     case 'category': {
       // If super category is enabled then we sort the category filters by result count.
-      if (document.getElementById('block-supercategorymenu') !== null) {
+      if (document.getElementsByClassName('block-alshaya-super-category-menu').length > 0) {
         sortedItems = sortItemsByCount(items);
       } else {
         sortedItems = sortItemsByMegaMenu(items, '.menu--one__link', 'title');
@@ -102,7 +102,7 @@ function getSortedItems(items, element) {
       break;
     }
     case 'supercategory': {
-      if (document.getElementById('block-supercategorymenu') !== null) {
+      if (document.getElementsByClassName('block-alshaya-super-category-menu').length > 0) {
         sortedItems = sortItemsByMegaMenu(items, '[data-super-category-label]', 'data-super-category-label');
       }
       break;

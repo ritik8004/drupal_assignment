@@ -395,14 +395,9 @@ $conductors = [
     'site_id' => 566,
   ],
   'pbkw_qa' => [
-    'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
-    'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
-    'site_id' => 31,
-  ],
-  'pbkw_test' => [
-    'hmac_id' => 'c6a513700dd3465b9a22ca825a07877f',
-    'hmac_secret' => 'MGVlM2IxMGMtZjhiMy00',
-    'site_id' => 542,
+    'hmac_id' => '60d7080b75034cf6864adddb614eddbd',
+    'hmac_secret' => 'Y2FjOGUwOTYtNzVmMS00',
+    'site_id' => 599,
   ],
   'pbkw_uat' => [
     'hmac_id' => 'cf6afd0bd1624636bd21f4581dc5e252',
@@ -416,14 +411,9 @@ $conductors = [
   ],
   // Pottery Barn SA.
   'pbsa_qa' => [
-    'hmac_id' => '76f67886b7d34f3aad6ae85e75f93550',
-    'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
-    'site_id' => 32,
-  ],
-  'pbsa_test' => [
-    'hmac_id' => '0403f1dfdc254010b0302d754c9e934e',
-    'hmac_secret' => 'OTA2NDY3MzQtZDQ5ZC00',
-    'site_id' => 543,
+    'hmac_id' => '112dd3509073446e8f9b8429e4187f03',
+    'hmac_secret' => 'NmY3YmIyNmUtZDRlOC00',
+    'site_id' => 600,
   ],
   'pbsa_uat' => [
     'hmac_id' => 'eb9126f28aaf466fab9494405fc6a4fe',
@@ -436,25 +426,15 @@ $conductors = [
     'site_id' => 56,
   ],
   // Pottery Barn AE.
-  'pbae_dev' => [
-    'hmac_id' => 'a22d85c970484b17acb2511b4181aa81',
-    'hmac_secret' => 'ODczNzNiNGItNmQwMy00',
-    'site_id' => 139,
-  ],
   'pbae_dev2' => [
     'hmac_id' => 'c1d103b9b2194fa0ba957981e566c0ce',
     'hmac_secret' => 'YWFmOTJmODctYmMwNS00',
     'site_id' => 148,
   ],
   'pbae_qa' => [
-    'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
-    'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
-    'site_id' => 33,
-  ],
-  'pbae_test' => [
-    'hmac_id' => '4ea050b993324a15a9c06fb98811024b',
-    'hmac_secret' => 'Y2M1Y2IxNjktZDBkNC00',
-    'site_id' => 544,
+    'hmac_id' => 'df604021ad054309a326e28f91fce8de',
+    'hmac_secret' => 'MjQ3ZTE3MjEtMTUyNS00',
+    'site_id' => 601,
   ],
   'pbae_uat' => [
     'hmac_id' => 'f3e36947161c4cb2bbe1448a890eb45c',
@@ -723,9 +703,9 @@ $conductors = [
     'site_id' => 458,
   ],
   'vskw_qa' => [
-    'hmac_id' => 'd00662613f144789831ebfe3d5885e37',
-    'hmac_secret' => 'ZjI0NzBhNGUtMjM2Zi00',
-    'site_id' => 26,
+    'hmac_id' => '3e75d53631114bb58165633212411114',
+    'hmac_secret' => 'YzVkNTc5MjgtY2NjMS00',
+    'site_id' => 590,
   ],
   'vskw_uat' => [
     'hmac_id' => '2b264eb0f00c4264b53b2004d94100ab',
@@ -744,9 +724,9 @@ $conductors = [
     'site_id' => 459,
   ],
   'vssa_qa' => [
-    'hmac_id' => 'b88bad1f106b439ea3a156bd2085e178',
-    'hmac_secret' => 'Yjc1YTRjNTAtNDNkNi00',
-    'site_id' => 27,
+    'hmac_id' => '7d0e8c5a084f4e4a8e2324d4dd7cadd4',
+    'hmac_secret' => 'ZjMwYWY3NDUtMTg5OC00',
+    'site_id' => 591,
   ],
   'vssa_uat' => [
     'hmac_id' => 'f7b9f553828249438d1b9c0173052e48',
@@ -770,9 +750,9 @@ $conductors = [
     'site_id' => 140,
   ],
   'vsae_qa' => [
-    'hmac_id' => 'c938cdcc017b44bfb7bc736a0ab8a150',
-    'hmac_secret' => 'MjM5Y2Q0OTMtMjczNy00',
-    'site_id' => 28,
+    'hmac_id' => 'b626adcb9fc24eafb2ff861f04601f00',
+    'hmac_secret' => 'Nzc4NDY4Y2MtMDM4OS00',
+    'site_id' => 592,
   ],
   'vsae_uat' => [
     'hmac_id' => '56b8b235bf854030ba2ae71473cf28fd',
@@ -786,9 +766,9 @@ $conductors = [
   ],
   // VictoriaSecret EG.
   'vseg_qa' => [
-    'hmac_id' => '2024c11d8b3c4a789a45430676be1a4b',
-    'hmac_secret' => 'Y2E1ZjA5NzItNDExOC00',
-    'site_id' => 383,
+    'hmac_id' => 'c605d9b12be641b5bb7d06755ecbbef1',
+    'hmac_secret' => 'MjQ0NDYxZjgtZTJkYy00',
+    'site_id' => 593,
   ],
   'vseg_uat' => [
     'hmac_id' => 'd4b6f2f3070848bba00656a582f9bb48',
@@ -800,9 +780,9 @@ $conductors = [
   ],
   // VictoriaSecret BH.
   'vsbh_qa' => [
-    'hmac_id' => '41959011408f489696d78b00dcbd2ee3',
-    'hmac_secret' => 'ZDU5YTM5MWEtMTlmOC00',
-    'site_id' => 384,
+    'hmac_id' => '99907edeb07f4a6c970fe151ffcbd673',
+    'hmac_secret' => 'OTNlYjQyZmQtY2IxNi00',
+    'site_id' => 594,
   ],
   'vsbh_uat' => [
     'hmac_id' => '495335ce724c4e1b940e003d77234bd6',
@@ -814,9 +794,9 @@ $conductors = [
   ],
   // VictoriaSecret QA.
   'vsqa_qa' => [
-    'hmac_id' => '6fb1a9c4003141f9aa2ec04cd8a2234a',
-    'hmac_secret' => 'NTlkNDg3ZjgtNDFlNy00',
-    'site_id' => 385,
+    'hmac_id' => '8852cb39bbd4475a8966aeed6d4fe66a',
+    'hmac_secret' => 'ZTZhZWZmYjAtZjFmMy00',
+    'site_id' => 595,
   ],
   'vsqa_dev3' => [
     'hmac_id' => 'b2932dd328a24195a1b768cd3629d8fa',

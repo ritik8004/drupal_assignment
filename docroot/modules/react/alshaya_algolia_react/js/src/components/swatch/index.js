@@ -1,7 +1,7 @@
 import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
-const Swatch = ({ swatch, url }) => {
+export const Swatch = ({ swatch, url }) => {
   let selectedImage = `${url}?selected=${swatch.child_id}`;
   if (swatch.url !== undefined) {
     selectedImage = swatch.url;

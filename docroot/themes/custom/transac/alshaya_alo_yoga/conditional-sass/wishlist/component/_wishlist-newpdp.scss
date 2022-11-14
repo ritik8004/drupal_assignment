@@ -1,0 +1,23 @@
+body.wishlist-enabled {
+  &.magazine-layout-v2 {
+    .magv2-main {
+      .magv2-sidebar {
+        .wishlist-link {
+          @include breakpoint($only-tablet) {
+            align-items: center;
+            display: flex;
+          }
+        }
+
+        .wishlist-button-wrapper {
+          @include breakpoint($only-tablet) {
+            html[lang=ar] & {
+              height: auto;
+              padding-bottom: rem(10);
+            }
+          }
+        }
+      }
+    }
+  }
+}

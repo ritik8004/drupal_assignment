@@ -1,0 +1,24 @@
+.egifts-form-wrapper {
+  .action-buttons {
+    button[type=submit],
+    button[type=button]:not(.my-topup-cancel-btn) {
+      text-transform: unset;
+      font-size: rem(16);
+
+      &:hover {
+        opacity: 0.65;
+      }
+    }
+  }
+
+  .egift-open-amount-wrapper {
+    button[disabled] {
+      background: $egift_form_dem_btn_bg;
+      border-color: $egift_form_dem_btn_bg;
+
+      &::after {
+        color: $egift_form_dem_btn_txt;
+      }
+    }
+  }
+}
