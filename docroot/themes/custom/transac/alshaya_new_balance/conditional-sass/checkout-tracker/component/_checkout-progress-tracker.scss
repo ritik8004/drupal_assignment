@@ -27,6 +27,12 @@
           }
         }
 
+        &.completed {
+          .step-label {
+            top: rem(32);
+          }
+        }
+
         .step-label {
           white-space: initial;
           text-align: center;
