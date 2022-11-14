@@ -11,7 +11,7 @@
     }
 
     @include breakpoint($tablet) {
-      float: $right;
+      float: $left;
       text-align: $right;
       width: auto;
       margin-#{$right}: 0;
