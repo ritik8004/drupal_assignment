@@ -56,11 +56,10 @@
 
       #edit-email,
       #edit-email--2 {
-        padding-#{$right}: 2% !important;
-        padding-#{$left}: 2%;
+        padding-#{$right}: 0% !important;
         color: $footer-newsletter-text;
         background-color: $footer-text;
-        border-bottom-color: $footer-newsletter-text;
+        border-bottom-color: $footer-newsletter-border;
         width: 62%;
 
         @include breakpoint($only-tablet) {
@@ -123,7 +122,12 @@
 
         @include breakpoint($only-mobile) {
           position: relative;
-          margin-top: rem(25);
+          margin-top: rem(20);
+        }
+
+        @include breakpoint($tablet) {
+          #{$right}: rem(-20);
+          bottom: rem(-3);
         }
       }
     }
