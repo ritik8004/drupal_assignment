@@ -92,6 +92,8 @@ function alshaya_acm_product_category_views_pre_view(ViewExecutable $view, $disp
     // We want to allow creation creation of page upto 3 level.
     $handler = [];
     if ($display_id === 'entity_reference_1') {
+      // Removes include in menu field filter.
+      $view->removeHandler($display_id, 'filter', 'field_category_include_menu_value');
       $handler = $view->getHandler($display_id, 'filter', 'depth_level');
       $handler['operator'] = '<=';
       $handler['value']['value'] = 4;
