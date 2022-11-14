@@ -1,0 +1,23 @@
+.return-requests-wrapper {
+  .return-qty-row,
+  .return-reasons-row {
+    @include breakpoint($desktop) {
+      padding-#{$right}: rem(34);
+    }
+
+    .return-reason-label {
+      font-family: $alshaya-thin;
+    }
+  }
+
+  .return-qty-select,
+  .return-reasons-select {
+    .qtySelect__control,
+    .reasonsSelect__control {
+      .qtySelect__single-value,
+      .reasonsSelect__single-value {
+        color: $primary_text;
+      }
+    }
+  }
+}
