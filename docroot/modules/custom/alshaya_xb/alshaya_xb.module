@@ -137,3 +137,15 @@ function alshaya_xb_datalayer_alter(array &$data_layer) {
   // Set gtm country to config overrides.
   $data_layer['country'] = $configOverrides['country'];
 }
+
+/**
+ * Implements hook_alshaya_api_update_customer_api_request_alter().
+ */
+function alshaya_xb_alshaya_api_update_customer_api_request_alter(array &$request_options) {
+  // Do not update customer addresses with contact details
+  // as address book is disabled for cross border.
+  if (isset($request_options['json']['customer']['addresses'])
+    && !empty($request_options['json']['customer']['addresses'])) {
+    unset($request_options['json']['customer']['addresses']);
+  }
+}
