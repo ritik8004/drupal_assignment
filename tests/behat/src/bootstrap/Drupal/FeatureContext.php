@@ -3082,5 +3082,4 @@ JS;
     $value = addslashes($value);
     $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
   }
-
 }
