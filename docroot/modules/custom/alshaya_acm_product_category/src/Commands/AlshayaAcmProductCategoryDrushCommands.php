@@ -343,24 +343,6 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
   }
 
   /**
-   * Checks if we need to return absolute url for the field.
-   *
-   * @param string $field
-   *   Product category file field.
-   */
-  protected static function getAbsoluteUrl($field) {
-    $absolute_url_fields = [
-      'field_logo_active_image',
-      'field_logo_header_image',
-      'field_logo_inactive_image',
-    ];
-    if (in_array($field, $absolute_url_fields)) {
-      return FALSE;
-    }
-    return TRUE;
-  }
-
-  /**
    * Get required term data for export.
    *
    * @param \Drupal\taxonomy\Entity\Term $term
@@ -403,7 +385,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
               // Load file and get the Image URL.
               $image = \Drupal::entityTypeManager()->getStorage('file')->load($target_id);
               if ($image) {
-                $data[$field] = $image->createFileUrl(self::getAbsoluteUrl($field));
+                $data[$field] = $image->createFileUrl(FALSE);
               }
             }
             break;
