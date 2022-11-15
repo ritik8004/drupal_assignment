@@ -345,6 +345,8 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $areas = [];
+    $areas_translations = $this->areaTermsHelper->getAllAreas(TRUE, TRUE);
+    $governates_translations = $this->areaTermsHelper->getAllGovernates(TRUE, TRUE);
     $parent_list = $this->areaTermsHelper->getAllGovernates(TRUE);
     if (!empty($parent_list)) {
       foreach ($parent_list as $location_id => $location_name) {
@@ -630,6 +632,8 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_white_label/spc-checkout',
         ],
         'drupalSettings' => [
+          'areas_translations' => $areas_translations,
+          'governates_translations' => $governates_translations,
           'cnc_enabled' => $cnc_enabled,
           'cnc_subtitle_available' => $cc_config->get('checkout_click_collect_available'),
           'cnc_subtitle_unavailable' => $cc_config->get('checkout_click_collect_unavailable'),
@@ -1073,6 +1077,22 @@ class AlshayaSpcController extends ControllerBase {
     $settings['alshaya_spc']['subtotal_after_discount'] = $alshaya_spc_config->get('subtotal_after_discount');
 
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
+
+    // Get shipping methods and attach to Drupal settings.
+    $shipping_methods = [];
+    $shipping_options = $this->checkoutOptionManager->getAllShippingTerms() ?? [];
+    foreach ($shipping_options as $shipping_option) {
+      $method_code = $shipping_option->get('field_shipping_method_code')->getValue();
+      if (!empty($method_code)) {
+        $shipping_methods[$method_code[0]['value']] = $shipping_option->label();
+
+        if ($this->languageManager->getCurrentLanguage()->getId() !== 'en') {
+          $shipping_option_en = $shipping_option->getTranslation('en');
+          $shipping_methods[$method_code[0]['value']] = $shipping_option_en->label();
+        }
+      }
+    }
+    $build['#attached']['drupalSettings']['shipping_methods_translations'] = $shipping_methods;
 
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $cache_tags);
 
