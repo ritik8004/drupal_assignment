@@ -39,3 +39,7 @@ fields:
   rgb_color:
     label: 'RGB color'
     type: 'string'
+
+  season_code:
+    label: 'Season Code'
+    type: 'string'
