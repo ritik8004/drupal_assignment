@@ -216,6 +216,7 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
       'background_color' => $term->get('field_term_background_color')->getString(),
       'remove_from_breadcrumb' => (int) $term->get('field_remove_term_in_breadcrumb')->getString(),
       'item_clickable' => (bool) $term->get('field_display_as_clickable_link')->getString(),
+      'deeplink' => $this->mobileAppUtility->getDeepLink($term),
     ];
 
     return [$term_url => $data];
