@@ -131,5 +131,4 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
     </>
   );
 };
-
 export default HelloMemberCartPopupBonusVouchersList;

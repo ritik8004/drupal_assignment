@@ -20,8 +20,7 @@
     }
 
   /**
-   * Function to push the voucher click events to data layer.
-   *
+   * Function to push the voucher click events to data layer.ß
    * @param {object} vouchersSelected
    *   Object containing the basic vouchers details.
    * @param {string} eventAction
