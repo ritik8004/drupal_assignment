@@ -74,9 +74,15 @@
     var input = document.querySelector('[data-id="' + area_id + '"]');
     return {
       deliveryOption: 'Home Delivery',
-      deliveryType: cart.shipping.methods[0].carrier_title,
-      deliveryArea: $(input).data('label'),
-      deliveryCity: $(input).data('parent-label'),
+      deliveryType: drupalSettings.shipping_methods_translations[cart.shipping.methods[0].method_code] ?
+        drupalSettings.shipping_methods_translations[cart.shipping.methods[0].method_code]
+        : cart.shipping.methods[0].carrier_title,
+      deliveryArea: drupalSettings.areas_translations[$(input).data('id')] ?
+        drupalSettings.areas_translations[$(input).data('id')]
+        : $(input).data('label'),
+      deliveryCity: drupalSettings.governates_translations[$(input).data('parent-id')] ?
+        drupalSettings.governates_translations[$(input).data('parent-id')]
+        : $(input).data('parent-label'),
     };
   };
 
