@@ -6,6 +6,31 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Install all required modules.
+ */
+function alshaya_rcs_update_9401(&$sandbox) {
+  $module_handler = \Drupal::moduleHandler();
+  $module_installer = \Drupal::service('module_installer');
+
+  $modules_to_install = [];
+
+  $modules = _alshaya_rcs_get_modules_mapping();
+
+  foreach ($modules as $module_to_check => $module_to_install) {
+    if ($module_handler->moduleExists($module_to_check)) {
+      $modules_to_install[] = $module_to_install;
+    }
+  }
+
+  $module_installer->install($modules_to_install);
+  \Drupal::logger('alshaya_rcs')->notice('Installed RCS modules: @modules', [
+    '@modules' => implode(',', $modules_to_install),
+  ]);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_rcs_install() {
