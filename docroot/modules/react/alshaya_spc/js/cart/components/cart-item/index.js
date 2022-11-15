@@ -344,6 +344,7 @@ export default class CartItem extends React.Component {
         style={{ animationDelay: animationDelayValue }}
         data-sku={sku}
         gtm-old-price={price}
+        gtm-magento-product-id={skuId}
       >
         <div className="spc-product-tile">
           <div className="spc-product-image">
