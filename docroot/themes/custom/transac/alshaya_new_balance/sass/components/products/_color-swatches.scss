@@ -12,7 +12,7 @@
           &:hover {
             &::after {
               top: unset;
-              bottom: rem(1);
+              bottom: rem(3);
               #{$left}: 0;
               height: rem(4);
               width: 100%;
