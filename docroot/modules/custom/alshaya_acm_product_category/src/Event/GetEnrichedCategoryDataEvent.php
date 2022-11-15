@@ -10,7 +10,7 @@ use Drupal\Core\Cache\CacheableMetadata;
  */
 class GetEnrichedCategoryDataEvent extends Event {
 
-  public const EVENT_NAME = 'enriched_category_data_alter';
+  public const EVENT_NAME = 'enriched_category_data';
 
   /**
    * The current langcode.
