@@ -11,9 +11,14 @@
   // Call event after entity load and process product data.
   RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
     var mainProduct = e.detail.entity;
+
+    // Prepare the first child info before loading styled products.
+    var firstChild = getFirstChild(mainProduct);
+
     if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
       mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
     }
+
     var processedProduct = [];
     var configurableCombinations = [];
     // Prepare data for productinfo to be used in new pdp layout.
@@ -22,7 +27,7 @@
     processedProduct[mainProduct.sku] = {...productInfoV1, ...productInfoV2};
     if (mainProduct.type_id === 'configurable') {
       configurableCombinations[mainProduct.sku] = processConfigurableCombinations(mainProduct.sku);
-      configurableCombinations[mainProduct.sku].firstChild = getFirstChild(productInfoV2);
+      configurableCombinations[mainProduct.sku].firstChild = firstChild;
     }
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
@@ -38,8 +43,10 @@
    *   SKU value or null.
    */
   function getFirstChild(product) {
-    var variantSkus = Object.keys(product.variants);
-    return variantSkus.length ? variantSkus.pop() : null;
+    var firstVariant = product.variants.length > 0
+      ? Object.values(product.variants).shift()
+      : null;
+    return firstVariant ? firstVariant.product.sku : null;
   }
 
   /**
