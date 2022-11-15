@@ -85,14 +85,27 @@
   margin-top: rem(38);
 
   .c-accordion-delivery-options {
-    padding-top: 0;
-    padding-bottom: rem(22);
+    padding-top: rem(18);
+    padding-bottom: rem(12);
+    border-top: rem(1) solid $pdp_title_section_border;
 
     .ui-accordion-header {
       font-size: rem(16);
       line-height: rem(20);
-      padding-top: rem(22);
+      padding-top: 0;
+
+      .c-accordion__title {
+        border: none;
+        font-size: rem(16);
+        line-height: rem(20);
+      }
     }
+  }
+}
+
+#pdp-store-click-collect-list {
+  .delivery-options-wrapper {
+    margin-top: rem(-1);
   }
 }
 
