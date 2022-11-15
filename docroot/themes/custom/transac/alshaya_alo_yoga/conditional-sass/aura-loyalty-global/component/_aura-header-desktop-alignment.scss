@@ -28,12 +28,6 @@ body.aura-enabled {
           z-index: 14;
         }
       }
-
-      .c-menu-primary .region__menu-primary .block-alshaya-super-category-menu {
-        @include breakpoint($upto-desktop) {
-          z-index: 11;
-        }
-      }
     }
 
     &.wishlist-enabled {
