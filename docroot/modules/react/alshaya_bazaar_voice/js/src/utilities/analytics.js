@@ -90,7 +90,7 @@ function processAnalyticsDatalayerPush(eventName, inViewData) {
   const reviewElement = document.getElementById('reviews-section');
   function reviewsListener(event) {
     event.preventDefault();
-    if (window.scrollY > reviewElement.offsetTop) {
+    if (reviewElement !== null && window.scrollY > reviewElement.offsetTop) {
       pushContentToDataLayer(eventName, inViewData);
       window.removeEventListener('scroll', reviewsListener);
     }
