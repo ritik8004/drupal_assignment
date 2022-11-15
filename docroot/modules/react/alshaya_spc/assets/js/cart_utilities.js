@@ -357,6 +357,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     // Store proper variant sku in gtm data now.
     gtmAttributes.variant = productDataSKU;
     Drupal.alshayaSpc.storeProductData({
+      id: productInfo.id,
       sku: productDataSKU,
       parentSKU: parentSKU,
       skuType: productInfo.type,
