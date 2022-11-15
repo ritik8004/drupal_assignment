@@ -12,12 +12,13 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
   const { vouchers, totals } = props;
   // Get formatted expiry date.
   moment.locale(drupalSettings.path.currentLanguage);
+
   const handleChange = () => {
     const vouchersBonus = document.getElementsByName('vouchersBonus[]');
     resetBenefitOptions(vouchersBonus, 'benefit_voucher', 'change');
     const selectBox = [];
     for (let i = 0; i < vouchersBonus.length; i++) {
-      if (vouchersBonus[i].type === 'checkbox' && vouchersBonus[i].checked === true) { selectBox.push(vouchersBonus[i].getAttribute('description')); }
+      if (vouchersBonus[i].type === 'checkbox' && vouchersBonus[i].checked === true) { selectBox.push(vouchersBonus[i].getAttribute('voucherDescription')); }
     }
     Drupal.alshayaSeoGtmPushVoucherOfferSelect(selectBox.join(' | '), 'selected-bonus-voucher');
   };
@@ -33,7 +34,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
       ([, value]) => {
         if (value.checked) {
           seletedVouchers.push(value.value);
-          voucherDescriptionData.push(value.getAttribute('description'));
+          voucherDescriptionData.push(value.getAttribute('voucherDescription'));
         }
       },
     );
@@ -98,7 +99,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
                 type="checkbox"
                 id={`voucher${index}`}
                 value={voucher.code}
-                description={voucher.description}
+                voucherDescription={voucher.description}
                 name="vouchersBonus[]"
                 defaultChecked={typeof totals.hmAppliedVoucherCodes !== 'undefined' ? totals.hmAppliedVoucherCodes.split(',').includes(voucher.code) : false}
                 onChange={handleChange}
@@ -131,4 +132,5 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
     </>
   );
 };
+
 export default HelloMemberCartPopupBonusVouchersList;

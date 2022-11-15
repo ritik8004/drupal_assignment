@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unknown-property */
 import React from 'react';
 import moment from 'moment';
 import { callHelloMemberApi } from '../../../../../../js/utilities/helloMemberHelper';
@@ -13,11 +12,12 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
   const { offers, totals } = props;
   // Get formatted expiry date.
   moment.locale(drupalSettings.path.currentLanguage);
+
   const handleChange = (e) => {
     const memberOffers = document.getElementsByName('radios');
     resetBenefitOptions(memberOffers, 'benefit_offer', 'change');
     if (e.target.type === 'radio' && e.target.checked === true) {
-      Drupal.alshayaSeoGtmPushVoucherOfferSelect(e.target.getAttribute('description'), 'selected-offer-voucher');
+      Drupal.alshayaSeoGtmPushVoucherOfferSelect(e.target.getAttribute('offerDescription'), 'selected-offer-voucher');
     }
   };
 
@@ -32,7 +32,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
       ([, value]) => {
         if (value.checked) {
           seletedOffer = value;
-          offerDescriptionData.push(value.getAttribute('description'));
+          offerDescriptionData.push(value.getAttribute('offerDescription'));
         }
       },
     );
@@ -102,7 +102,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
                 id={`offer${index}`}
                 data-offer={typeof offer.type !== 'undefined' ? offer.type : 'offer'}
                 name="radios"
-                description={offer.description}
+                offerDescription={offer.description}
                 value={offer.code}
                 defaultChecked={typeof totals.hmOfferCode !== 'undefined' ? totals.hmOfferCode === offer.code : false}
                 onChange={handleChange}
