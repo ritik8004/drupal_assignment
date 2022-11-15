@@ -21,16 +21,16 @@
  *   Rcs Category menu item.
  * @param {object} enrichmentData
  *   Enriched data object for the current item.
- * @param {object} settings
- *   Drupal settings object.
+ * @param {string} language
+ *   Current language.
  *
  * @returns {object}
  *   Processed menu item.
  */
-function processCategory(catItem, enrichmentData, settings) {
+function processCategory(catItem, enrichmentData, language) {
 
   const level_url_path = catItem.url_path;
-  catItem.url_path = `/${settings.path.currentLanguage}/${level_url_path.replace(/\/+$/, '/')}`;
+  catItem.url_path = `/${language}/${level_url_path.replace(/\/+$/, '/')}`;
 
   // Apply enrichments.
   if (enrichmentData && enrichmentData[level_url_path]) {
@@ -38,7 +38,7 @@ function processCategory(catItem, enrichmentData, settings) {
     // Override label from Drupal.
     catItem.name = enrichedDataObj.name;
     if (typeof enrichedDataObj.url_path !== 'undefined') {
-      catItem.url_path = `/${settings.path.currentLanguage}/${enrichedDataObj.url_path}`;
+      catItem.url_path = `/${language}/${enrichedDataObj.url_path}`;
     }
   }
 
@@ -67,7 +67,7 @@ exports.prepareData = function prepareData(settings, inputs) {
   // Get the active super category.
   let menuItems = [];
   catItems.forEach(function eachCategory(catItem) {
-    menuItems.push(processCategory(catItem, enrichmentData, settings));
+    menuItems.push(processCategory(catItem, enrichmentData, settings.path.currentLanguage));
   });
 
   return {
