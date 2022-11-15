@@ -155,7 +155,8 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
   public function build() {
     // Don't need to build this block if status of super category settings
     // is false.
-    if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+    $super_category_settings = $this->configFactory->get('alshaya_super_category.settings');
+    if (!$super_category_settings->get('status')) {
       return [];
     }
 
@@ -197,7 +198,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
 
       $term_info_en = $term_data_en[$term_id];
       $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(mb_strtolower($term_info_en['label']));
-      if ($term_id == $current_term['id']) {
+      if (isset($current_term['id']) && $term_id == $current_term['id']) {
         $term_info['class'] .= ' active';
         $term_info['gtm_menu_title'] = $term_info_en['label'];
       }
@@ -232,6 +233,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
         'drupalSettings' => [
           'superCategory' => [
             'search_facet' => AlshayaSuperCategoryManager::SEARCH_FACET_NAME,
+            'show_brand_filter' => $super_category_settings->get('show_brand_filter'),
           ],
         ],
       ],

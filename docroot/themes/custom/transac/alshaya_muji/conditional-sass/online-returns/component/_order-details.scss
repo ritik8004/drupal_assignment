@@ -1,0 +1,45 @@
+.order-detail {
+  .user__order--detail {
+    .return-initiated-item,
+    .returned-items-row {
+      .return-status-id-container,
+      .return-status-wrapper {
+        .status-label {
+          font-family: $muji-demibold;
+        }
+      }
+    }
+
+    .return-initiated-item {
+      color: $primary_text;
+    }
+
+    .returned-items {
+      color: $primary_text;
+
+      .title-wrapper {
+        font-family: $muji-demibold;
+      }
+    }
+
+    .cancel-return-button-wrapper {
+      button {
+        padding: 0 rem(13);
+        padding-#{$left}: rem(10);
+      }
+
+      .cancel-button-text {
+        &::before {
+          font-size: rem(32);
+          margin-#{$right}: rem(2);
+        }
+      }
+    }
+
+    .print-return-label-wrapper {
+      .print-label-button {
+        color: $primary_text;
+      }
+    }
+  }
+}

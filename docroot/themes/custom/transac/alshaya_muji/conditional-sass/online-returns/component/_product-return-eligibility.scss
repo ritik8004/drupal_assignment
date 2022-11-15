@@ -1,0 +1,14 @@
+body.nodetype--acq_product {
+  div[id*=online-returns-pdp] {
+    font-family: $muji-demibold;
+    color: $online-return-info-pdp;
+    background: $online-return-info-pdp-bg;
+    padding: rem(10);
+    margin-top: rem(15);
+    line-height: rem(20);
+
+    .return-eligibility-pdp {
+      font-size: rem(16);
+    }
+  }
+}

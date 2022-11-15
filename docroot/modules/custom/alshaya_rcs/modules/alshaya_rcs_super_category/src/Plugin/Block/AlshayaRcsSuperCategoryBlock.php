@@ -150,6 +150,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function build() {
+    $super_category_settings = $this->configFactory->get('alshaya_super_category.settings');
     $current_super_term = $this->superCategoryManager->getCategoryTermFromRoute();
     $current_tid = ($current_super_term instanceof TermInterface)
       ? $current_super_term->id()
@@ -215,7 +216,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
 
     $cache_tags = Cache::mergeTags(
       $cache_tags,
-      $this->configFactory->get('alshaya_super_category.settings')->getCacheTags()
+      $super_category_settings->getCacheTags()
     );
 
     return [
@@ -239,6 +240,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
         'drupalSettings' => [
           'superCategory' => [
             'search_facet' => AlshayaSuperCategoryManager::SEARCH_FACET_NAME,
+            'show_brand_filter' => $super_category_settings->get('show_brand_filter'),
           ],
           'theme' => [
             'path' => $this->themeManager->getActiveTheme()->getPath(),
