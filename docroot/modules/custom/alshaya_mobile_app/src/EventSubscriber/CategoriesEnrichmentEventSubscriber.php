@@ -45,7 +45,7 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
   protected $languageManager;
 
   /**
-   * Undocumented variable
+   * Cacheability metadata.
    *
    * @var \Drupal\Core\Cache\CacheableMetadata
    */
