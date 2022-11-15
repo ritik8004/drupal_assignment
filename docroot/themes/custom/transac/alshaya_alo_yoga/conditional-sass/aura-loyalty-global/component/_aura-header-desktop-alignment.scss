@@ -9,4 +9,42 @@ body.aura-enabled {
       }
     }
   }
+
+  &.menu--open {
+    &.super-category-enabled {
+      &.frontpage,
+      &:not(.frontpage) {
+        .branding__menu {
+          #block-alshayareactcartminicartblock {
+            @include breakpoint($upto-desktop) {
+              z-index: 14;
+            }
+          }
+        }
+      }
+
+      #block-alshayaalgoliareactautocomplete {
+        @include breakpoint($upto-desktop) {
+          z-index: 14;
+        }
+      }
+    }
+
+    &.wishlist-enabled {
+      header .region__header {
+        .block-alshaya-wishlist,
+        .block-system-branding-block {
+          @include breakpoint($upto-desktop) {
+            z-index: 14;
+          }
+        }
+      }
+    }
+
+    .c-header .block-my-account-icon-block {
+      @include breakpoint($upto-desktop) {
+        z-index: 14;
+      }
+    }
+  }
 }
