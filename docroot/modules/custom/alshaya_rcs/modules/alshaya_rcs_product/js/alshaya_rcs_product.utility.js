@@ -1519,6 +1519,37 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
       product.variants.forEach(function eachVariant(variant) {
         variant.product.parent_sku = product.sku;
       });
+
+      // Sort the configurable options based on config in Drupal.
+      var sortedConfigurableOptions = [];
+      var sortedConfigurableAttributes = [];
+
+      // Logic to sort the sequencing of configurable attributes as per
+      // the sequence mentioned in configurable form settings.
+      const configurableAttributeWeights = drupalSettings.configurableAttributes;
+      if (Drupal.hasValue(configurableAttributeWeights) && Drupal.hasValue(product.configurable_options)) {
+        // Add all the attributes as per config.
+        configurableAttributeWeights.forEach(function eachConfigurableAttribute(attribute) {
+          product.configurable_options.forEach(function eachConfigurableOption(option) {
+            if (option.attribute_code === attribute
+              && !sortedConfigurableAttributes.includes(attribute)) {
+              sortedConfigurableOptions.push(option);
+              sortedConfigurableAttributes.push(attribute);
+            }
+          });
+        });
+
+        // Add all the attributes which are there in the product but not in
+        // config in the end.
+        product.configurable_options.forEach(function eachConfigurableOption(option) {
+          if (!sortedConfigurableAttributes.includes(option.attribute_code)) {
+            sortedConfigurableOptions.push(option);
+            sortedConfigurableAttributes.push(option.attribute_code);
+          }
+        });
+      }
+
+      product.configurable_options = sortedConfigurableOptions;
     }
 
     var promotionVal = [];

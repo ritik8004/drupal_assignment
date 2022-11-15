@@ -113,6 +113,7 @@
         var combinations = window.commerceBackend.getConfigurableCombinations(sku);
         var code = $(this).attr('data-configurable-code');
         var selected = $(this).val();
+        var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
 
         Drupal.refreshConfigurables(form, code, selected);
 
@@ -134,7 +135,7 @@
             ]
           );
           // Dispatching event on variant change to listen in react.
-          if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled) {
+          if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled && viewMode !== 'matchback' && viewMode !== 'matchback_mobile') {
             Drupal.dispatchAuraProductUpdateEvent($(this));
           }
         }
@@ -346,8 +347,12 @@
 
       if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled) {
         $('select.edit-quantity').once('product-edit-quantity').on('change', function () {
-          // Dispatching event on quantity change to listen in react.
-          Drupal.dispatchAuraProductUpdateEvent($(this));
+          var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
+
+          if (viewMode !== 'matchback' && viewMode !== 'matchback_mobile') {
+            // Dispatching event on quantity change to listen in react.
+            Drupal.dispatchAuraProductUpdateEvent($(this));
+          }
         });
       }
     }
@@ -654,14 +659,6 @@
       $('.content__title_wrapper').addClass('show-sticky-wrapper');
     }
   });
-
-  Drupal.getProductKeyForProductViewMode = function (viewMode) {
-    var productKey = (viewMode === 'matchback' || viewMode === 'matchback_mobile')
-      ? viewMode
-      : 'productInfo';
-
-    return productKey
-  };
 
   Drupal.getSelectedProductFromQueryParam = function (viewMode, productInfo) {
     var selectedSku = '';

@@ -157,15 +157,23 @@
     }
 
     .item-price {
+      .item-unit-price-label {
+        color: $online-return-light-text;
+      }
+
       padding-#{$left}: rem(27);
 
       @include breakpoint($desktop-wide) {
-        padding-#{$left}: rem(0);
+        padding-#{$left}: 0;
       }
     }
 
     .item-total-price {
       margin-top: rem(40);
+
+      @include breakpoint($tablet) {
+        margin-top: 0;
+      }
 
       .item-total-price-label {
         color: $online-return-light-text;

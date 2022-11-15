@@ -99,7 +99,8 @@ $footer_link: $black;
 $footer_link_hover: $gray;
 $social-icons-bg: $black;
 $footer-text: $black;
-$footer-newsletter-text: $white;
+$footer-newsletter-text: $gray;
+$footer-newsletter-border: $white;
 $footer-top-bg: $black;
 $lang_switch: $black;
 $footer_logo_blk_text: $nb-black;
@@ -173,6 +174,7 @@ $header_secondary_menu_link_mobile: $black;
 $btt_text: $black;
 
 //My Account
+$user_account_wrapper_light: $ada-gray;
 $label_dark: $ada-gray;
 $label_black: $ada-gray;
 $user_order_help_bg: $light-gray;
@@ -301,7 +303,10 @@ $spc-order-summary-totals-bg: $white;
 $user_pwd_unmask: $black;
 
 //Wishlist
-
+$wishlist-header-notification-border: $nb-red;
+$wishlist-button-border: $nb-red;
+$wishlist-button-register-txt: $nb-red;
+$wishlist-button-bg-hover: $nb-red;
 $wishlist-oos: $black;
 $wishlist-button-bg: $nb-red;
 

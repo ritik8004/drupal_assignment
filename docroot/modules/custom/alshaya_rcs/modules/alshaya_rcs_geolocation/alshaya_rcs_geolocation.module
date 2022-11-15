@@ -37,6 +37,7 @@ function alshaya_rcs_geolocation_node_view_alter(array &$build, EntityInterface 
     'help_text' => $config['help_text'],
     'available_at_title' => '',
     'select_option_text' => $config['select_option_text'],
+    'state' => $config['feature_status'],
   ];
 }
 

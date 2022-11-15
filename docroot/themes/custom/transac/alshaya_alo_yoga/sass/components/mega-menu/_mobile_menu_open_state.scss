@@ -68,6 +68,23 @@
       }
     }
   }
+
+  &.super-category-enabled.frontpage .branding__menu #block-alshayareactcartminicartblock,
+  &.super-category-enabled:not(.frontpage) .branding__menu #block-alshayareactcartminicartblock,
+  & body.wishlist-enabled header .region__header .block-alshaya-wishlist,
+  .c-header .block-my-account-icon-block,
+  header .region__header .block-system-branding-block {
+    @include breakpoint($upto-desktop) {
+      z-index: 15;
+    }
+  }
+
+  &.super-category-enabled:not(.frontpage).hide-minimalistic-header .branding__menu,
+  &.mobile--overlay .branding__menu::before {
+    @include breakpoint($upto-desktop) {
+      height: rem(36);
+    }
+  }
 }
 
 .hide-minimalistic-header {

@@ -203,8 +203,10 @@ function getPdpSwatchImageUrl(product, childSku) {
  */
 function disableUnavailableOptions(sku, configurableOptions) {
   const combinations = window.commerceBackend.getConfigurableCombinations(sku);
-  // Clone this so as to not modify the original object.
+
+  // Clone this to not modify the original object.
   let configurableOptionsClone = JSON.parse(JSON.stringify(configurableOptions));
+
   configurableOptionsClone.forEach(function eachOption(option) {
     option.values = option.values.filter(function eachValue(value) {
       if (Drupal.hasValue(combinations.attribute_sku[option.attribute_code][value.value_index])) {
@@ -212,20 +214,6 @@ function disableUnavailableOptions(sku, configurableOptions) {
       }
     });
   });
-  // Logic to sort the sequencing of configurable attributes as per
-  // the sequence mentioned in configurable form settings.
-  const configurableAttributeWeights = drupalSettings.configurableAttributes;
-  let sortedConfigurableOptions = [];
-  if (Drupal.hasValue(configurableAttributeWeights) && Drupal.hasValue(configurableOptionsClone)) {
-    configurableAttributeWeights.forEach(function eachAttribute(attribute) {
-      configurableOptionsClone.forEach(function eachOptions(option) {
-        if (option.attribute_code === attribute) {
-          sortedConfigurableOptions.push(option);
-        }
-      });
-    });
-    configurableOptionsClone = sortedConfigurableOptions;
-  }
 
   return configurableOptionsClone;
 }
@@ -493,6 +481,16 @@ exports.computePhFilters = function (input, filter) {
       value = input.sku;
       break;
 
+    case 'old-price':
+      const priceInfo = window.commerceBackend.getPrices(input, true);
+      // See Drupal\alshaya_seo_transac\AlshayaGtmManager::fetchSkuAtttributes().
+      if (Drupal.hasValue(priceInfo)
+        && ((priceInfo.price != priceInfo.finalPrice)
+        && (priceInfo.finalPrice < priceInfo.price))) {
+        value = priceInfo.price;
+      }
+      break;
+
     case 'sku-clean':
       value = Drupal.cleanCssIdentifier(input.sku);
       break;
@@ -541,6 +539,7 @@ exports.computePhFilters = function (input, filter) {
         for (let i = 1; i <= quantity; i++) {
           quantityValues.push(i);
         }
+        data.quantity_title = Drupal.t('Quantity');
         data.quantity_dropdown = quantityValues;
       }
 
