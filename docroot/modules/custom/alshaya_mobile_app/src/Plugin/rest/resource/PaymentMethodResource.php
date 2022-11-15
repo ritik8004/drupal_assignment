@@ -168,6 +168,9 @@ class PaymentMethodResource extends ResourceBase {
             $visibility = FALSE;
           }
         }
+        $weight = ($payment_method_term->get('field_payment_default')->getString() == '1')
+          ? -999
+          : (int) $payment_method_term->getWeight();
 
         $payment_method_code = $payment_method_term->get('field_payment_code')->getString();
 
@@ -178,12 +181,16 @@ class PaymentMethodResource extends ResourceBase {
           'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
           'visibility' => $visibility,
           'refund_text' => $this->ordersManager->getRefundText($payment_method_code),
+          'weight' => $weight,
         ];
 
         // Adding to property for using later to attach cacheable dependency.
         $this->paymetMethodTerms[] = $payment_method_term;
       }
     }
+
+    $weight_data = array_column($response_data, 'weight');
+    array_multisort($weight_data, SORT_ASC, $response_data);
 
     if (empty($response_data)) {
       // Sending modified response so response is not cached when no payment
