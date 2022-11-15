@@ -87,7 +87,7 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     return [
       GetEnrichedCategoryDataEvent::EVENT_NAME => [
-        ['onEnrichedCategoryDataAlter'],
+        ['onGetEnrichedCategoryData'],
       ],
     ];
   }
@@ -98,7 +98,7 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\alshaya_acm_product_category\Event\GetEnrichedCategoryDataEvent $event
    *   Contains term data to alter.
    */
-  public function onEnrichedCategoryDataAlter(GetEnrichedCategoryDataEvent $event) {
+  public function onGetEnrichedCategoryData(GetEnrichedCategoryDataEvent $event) {
     $all_terms_data = $this->getCategoryEnrichmentData($event->getLangcode());
     $event->setData($all_terms_data);
     $this->cacheabilityMetadata->addCacheTags(['taxonomy_term_list:' . self::VOCABULARY_ID]);
