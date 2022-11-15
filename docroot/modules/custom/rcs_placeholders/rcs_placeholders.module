@@ -284,7 +284,8 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
         'destination' => $current_language . '/' . RcsPhPathProcessor::getFullPath(),
       ],
     ];
-    // Remove View tab.
+    // When we are already viewing the enriched content there is
+    // no need to see a link to 'View'.
     if (isset($tabs['entity.' . $entity_type . '.canonical'])) {
       $edit_tab = &$tabs['entity.' . $entity_type . '.canonical'];
       $edit_tab['#access'] = AccessResult::forbidden();
