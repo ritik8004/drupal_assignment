@@ -4,9 +4,10 @@ import EligibleForReturn from '../eligible-for-return';
 
 class OnlineReturnsPDP extends React.Component {
   constructor(props) {
+    const { eligibleForReturn } = props;
     super(props);
     this.state = {
-      eligibleForReturn: true,
+      eligibleForReturn,
     };
   }
 
@@ -22,7 +23,6 @@ class OnlineReturnsPDP extends React.Component {
 
   updateState = (variantDetails) => {
     const { data } = variantDetails.detail;
-
     if (data.length !== 0) {
       this.setState({
         eligibleForReturn: data.eligibleForReturn,
