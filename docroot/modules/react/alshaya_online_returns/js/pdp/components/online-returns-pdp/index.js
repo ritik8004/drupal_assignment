@@ -23,6 +23,7 @@ class OnlineReturnsPDP extends React.Component {
 
   updateState = (variantDetails) => {
     const { data } = variantDetails.detail;
+
     if (data.length !== 0) {
       this.setState({
         eligibleForReturn: data.eligibleForReturn,
