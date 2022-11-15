@@ -133,7 +133,9 @@ export const triggerAddToCart = (
       }
     }
 
+    gtmAttributes.variant = productDataSKU;
     Drupal.alshayaSpc.storeProductData({
+      id: productInfo[skuCode].id,
       sku: productDataSKU,
       parentSKU,
       title: productData.product_name,
