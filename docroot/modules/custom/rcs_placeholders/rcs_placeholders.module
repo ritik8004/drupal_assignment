@@ -10,6 +10,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
+use Drupal\user\Entity\User;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
@@ -79,6 +80,10 @@ function rcs_placeholders_preprocess_html(&$variables) {
     $variables['#attached']['drupalSettings']['rcsPage']['type'] = RcsPhPathProcessor::$entityType;
     $variables['#attached']['drupalSettings']['rcsPage']['urlKey'] = RcsPhPathProcessor::getUrlKey();
     $variables['#attached']['drupalSettings']['rcsPage']['fullPath'] = RcsPhPathProcessor::getFullPath();
+
+    if ($config->get(RcsPhPathProcessor::$entityType . '.enrichment')) {
+      $variables['#attached']['drupalSettings']['rcsPage']['enrichment'] = RcsPhPathProcessor::$entityData;
+    }
   }
 
   // We need to override default cache context as we use the placeholder term
@@ -229,10 +234,10 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
     return;
   }
 
+  // The entity.
+  $entity = NULL;
   // The entity type.
   $entity_type = NULL;
-  // The enrichment type.
-  $enrichment_type = NULL;
   // Enrichment is enabled or not.
   $enrichment_enabled = FALSE;
   // Entity is enriched or not.
@@ -242,11 +247,15 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
     $entity_type = 'node';
     $enrichment_enabled = $config->get('product.enrichment');
     $entity_is_enriched = $enrichment_enabled && $node->id() !== $config->get('product.placeholder_nid');
+    $entity = $node;
+    unset($node);
   }
   elseif ($term) {
     $entity_type = 'taxonomy_term';
     $enrichment_enabled = $config->get('category.enrichment');
     $entity_is_enriched = $enrichment_enabled && $term->id() !== $config->get('category.placeholder_tid');
+    $entity = $term;
+    unset($term);
   }
 
   // Remove tabs with links to the reserved RCS entities.
@@ -270,6 +279,8 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
 
   // Current language.
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  // Get the current user to check permissions.
+  $user = User::load(\Drupal::currentUser()->id());
 
   // If the entity is enriched we alter the tabs' label and url.
   if ($entity_is_enriched) {
@@ -280,7 +291,8 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
         'destination' => $current_language . '/' . RcsPhPathProcessor::getFullPath(),
       ],
     ];
-    // Remove View tab.
+    // When we are already viewing the enriched content there is
+    // no need to see a link to 'View'.
     if (isset($tabs['entity.' . $entity_type . '.canonical'])) {
       $edit_tab = &$tabs['entity.' . $entity_type . '.canonical'];
       $edit_tab['#access'] = AccessResult::forbidden();
@@ -290,14 +302,14 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
       $edit_tab = &$tabs['entity.' . $entity_type . '.edit_form'];
       $edit_tab['#link']['title'] = t('Edit the enrichment');
       $edit_tab['#link']['url']->setOptions($options);
-      $edit_tab['#access'] = AccessResult::allowed();
+      $edit_tab['#access'] = $entity->access('update', $user);
     }
     // Alter the Delete tab.
     if (isset($tabs['entity.' . $entity_type . '.delete_form'])) {
       $edit_tab = &$tabs['entity.' . $entity_type . '.delete_form'];
       $edit_tab['#link']['title'] = t('Delete the enrichment');
       $edit_tab['#link']['url']->setOptions($options);
-      $edit_tab['#access'] = AccessResult::allowed();
+      $edit_tab['#access'] = $entity->access('delete', $user);
     }
   }
   // If the entity is not enriched, alter the edit link.
@@ -311,19 +323,20 @@ function rcs_placeholders_menu_local_tasks_alter(&$data, $route_name, RefinableC
         'title' => t('View'),
         'url' => Url::fromUserInput('#'),
       ],
+      '#access' => $entity->access('update', $user),
     ];
 
     // We alter the edit link so it actually redirects to the entity add form
     // with the title and slug as query arguments. We need to build the url
     // that way because using query options of url methods is encoding the #
     // and so the placeholders are not replaced on the frontend.
-    if ($node) {
+    if ($entity_type === 'node') {
       $title = $token->replace('[rcs_product:name|url_encode]');
       $slug = $token->replace('[rcs_product:url]');
       $add_url = Url::fromRoute('node.add', ['node_type' => 'rcs_product']);
       $url = Url::fromUri($add_url->toUriString() . "?title=$title&slug=$slug&destination=/$current_language/$slug");
     }
-    elseif ($term) {
+    elseif ($entity_type === 'taxonomy_term') {
       $name = $token->replace('[rcs_category:name|url_encode]');
       $slug = $token->replace('[rcs_category:url]');
       $add_url = Url::fromRoute('entity.taxonomy_term.add_form', ['taxonomy_vocabulary' => 'rcs_category']);
