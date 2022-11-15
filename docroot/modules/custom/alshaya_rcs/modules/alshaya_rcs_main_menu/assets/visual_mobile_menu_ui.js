@@ -19,6 +19,8 @@
         $(target).show();
         // hide L3 menus.
         $('.visual-mobile-level-two__link').hide();
+        // hide Aura block when we are in L3
+        $('#aura-mobile-header-shop').hide();
       });
 
       // When we click the back link, we show the L2 menus again.
@@ -29,6 +31,8 @@
         $(target).hide();
         // Show L2 menus.
         $('.visual-mobile-level-two__link').show();
+        // Show Aura block when we are back in L2
+        $('#aura-mobile-header-shop').show();
       });
     }
   };
