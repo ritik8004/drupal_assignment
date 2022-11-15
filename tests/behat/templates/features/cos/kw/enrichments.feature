@@ -1,4 +1,4 @@
-@javascript @enrichments @desktop
+@javascript @enrichments @desktop @rcs
 Feature: Enrichments
   In order to customise the look and feel of navigation
   As a editor
@@ -33,5 +33,3 @@ Feature: Enrichments
     Then I follow "Delete the enrichment"
     And I press "Delete"
     Then the "#block-page-title h1" element should not contain "Enriched"
-
-  # Scenario: Test enrichments for nodes
