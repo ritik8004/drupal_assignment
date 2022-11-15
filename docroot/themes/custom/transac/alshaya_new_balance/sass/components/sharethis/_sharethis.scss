@@ -1,6 +1,6 @@
 // share fields on product detail page
 .sharethis-wrapper {
-  text-align: left;
+  text-align: $left;
 
   > span {
     margin-#{$right}: rem(22);
