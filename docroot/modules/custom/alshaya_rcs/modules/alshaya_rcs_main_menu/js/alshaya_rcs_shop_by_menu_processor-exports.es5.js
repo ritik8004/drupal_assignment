@@ -21,16 +21,14 @@
  *   Rcs Category menu item.
  * @param {object} enrichmentData
  *   Enriched data object for the current item.
- * @param {string} language
- *   Current language.
  *
  * @returns {object}
  *   Processed menu item.
  */
-function processCategory(catItem, enrichmentData, language) {
+function processCategory(catItem, enrichmentData) {
 
   const level_url_path = catItem.url_path;
-  catItem.url_path = `/${language}/${level_url_path.replace(/\/+$/, '/')}`;
+  catItem.url_path = Drupal.url(level_url_path.replace(/\/+$/, '/'));
 
   // Apply enrichments.
   if (enrichmentData && enrichmentData[level_url_path]) {
@@ -38,7 +36,7 @@ function processCategory(catItem, enrichmentData, language) {
     // Override label from Drupal.
     catItem.name = enrichedDataObj.name;
     if (typeof enrichedDataObj.url_path !== 'undefined') {
-      catItem.url_path = `/${language}/${enrichedDataObj.url_path}`;
+      catItem.url_path = Drupal.url(enrichedDataObj.url_path);
     }
   }
 
@@ -48,15 +46,13 @@ function processCategory(catItem, enrichmentData, language) {
 /**
  * Processes mdc categories for rendering.
  *
- * @param {object} settings
- *   The drupal settings object.
  * @param {object} inputs
  *   Mdc Categories.
  *
  * @returns {object}
  *   Returns prepared categories to be displayed.
  */
-exports.prepareData = function prepareData(settings, inputs) {
+exports.prepareData = function prepareData(inputs) {
   let enrichmentData = globalThis.rcsGetEnrichedCategories();
   // Clone the original input data so as to not modify it.
   let catItems = JSON.parse(JSON.stringify(inputs));
@@ -67,7 +63,7 @@ exports.prepareData = function prepareData(settings, inputs) {
   // Get the active super category.
   let menuItems = [];
   catItems.forEach(function eachCategory(catItem) {
-    menuItems.push(processCategory(catItem, enrichmentData, settings.path.currentLanguage));
+    menuItems.push(processCategory(catItem, enrichmentData));
   });
 
   return {

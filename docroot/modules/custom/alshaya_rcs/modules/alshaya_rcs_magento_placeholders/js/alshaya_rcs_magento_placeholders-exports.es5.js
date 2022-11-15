@@ -26,7 +26,6 @@ exports.render = function render(
     case "shop_by_block":
       // Process and render shop by block menu.
       const shopByMenuData = globalThis.shopByMenuProcessor.prepareData(
-        settings,
         inputs.children
       );
       html = handlebarsRenderer.render('shop_by_menu', shopByMenuData);
