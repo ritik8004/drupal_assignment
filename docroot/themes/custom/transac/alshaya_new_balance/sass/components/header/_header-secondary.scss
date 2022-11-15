@@ -10,21 +10,37 @@
     text-align: $right;
     height: rem(24);
     text-transform: none;
+
+    .region__menu-secondary {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 
-  li {
-    @include breakpoint($upto-desktop) {
-      height: rem(46);
+  @include breakpoint($upto-desktop) {
+    ul {
+      margin-top: rem(6);
+    }
+
+    li {
+      height: rem(50);
+      padding-#{$left}: rem(24);
+      padding-#{$right}: rem(10);
       margin-#{$left}: 0;
       margin-#{$right}: 0;
-      padding-#{$left}: rem(10);
-      padding-#{$right}: rem(10);
       border: none;
 
       &::after {
-        font-size: rem(26);
-        #{$right}: rem(16);
+        font-size: rem(32);
+        #{$right}: rem(8);
+        margin-top: rem(-42);
       }
+    }
+
+    a {
+      height: rem(50);
+      padding: rem(16) rem(4);
+      padding-#{$left}: 0;
     }
   }
 
@@ -48,8 +64,10 @@
 
 body {
   @include breakpoint($upto-desktop) {
+    margin-top: rem(68);
+
     html[lang=ar] & {
-      margin-top: rem(60);
+      margin-top: rem(68);
     }
   }
 
@@ -61,7 +79,7 @@ body {
 .menu__in {
   &::after {
     @include breakpoint($upto-desktop) {
-      font-size: rem(26);
+      font-size: rem(32);
     }
   }
 }

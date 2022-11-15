@@ -205,6 +205,7 @@ exports.computePhFilters = function (input, filter) {
     case 'schema_stock':
     case 'brand_logo':
     case 'url':
+    case 'old-price':
     case 'url_encode':
     case 'stock_qty':
     case 'name':

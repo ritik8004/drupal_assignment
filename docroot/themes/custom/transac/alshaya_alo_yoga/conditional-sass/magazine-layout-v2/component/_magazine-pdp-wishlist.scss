@@ -2,6 +2,12 @@
   .wishlist-button-wrapper {
     border-color: $primary_empty_btn_border !important;
 
+    body.wishlist-enabled.magazine-layout-v2 & {
+      @include breakpoint($only-tablet) {
+        height: auto;
+      }
+    }
+
     .wishlist-link {
       font-family: $ay-heavy !important;
       font-size: rem(16) !important;
@@ -17,6 +23,13 @@
         display: inline-block;
         vertical-align: middle;
         margin-#{$right}: rem(17);
+        margin-top: rem(-4);
+
+        @include breakpoint($only-tablet) {
+          width: rem(21);
+          margin-left: unset;
+          margin-top: unset;
+        }
       }
     }
   }

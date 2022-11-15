@@ -132,12 +132,22 @@
     // 1st condition is triggered when we refresh checkout page with payment
     // method selected. Next conditions are specifically for step 3 and 4.
     if ((cartData.payment.method && step === 2) || step === 3 || step === 4) {
+      // Make a clone of the object.
       var stepData = JSON.parse(JSON.stringify(data));
       stepData.ecommerce.checkout.actionField.step = (step === 4) ? 4 : 3;
+
+      if (stepData.ecommerce.checkout.actionField.step === 3) {
+        var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
+
+        stepData.with_delivery_schedule = Drupal.hasValue(rawCartData.cart.extension_attributes.hfd_hold_confirmation_number)
+        ? 'yes'
+        : 'no';
+      }
+
       if (step === 4) {
-        var totals = window.spcStaticStorage.cart_raw.totals;
+        var totals = (window.spcStaticStorage.cart_raw && window.spcStaticStorage.cart_raw.totals) ? window.spcStaticStorage.cart_raw.totals : '';
         var auraPaymentAmount = totals.total_segments ? totals.total_segments.filter(item => item.code === 'aura_payment') : null;
-        auraPaymentAmount = typeof auraPaymentAmount[0] !== 'undefined' ? auraPaymentAmount[0].value : null;
+        auraPaymentAmount = (auraPaymentAmount && typeof auraPaymentAmount[0] !== 'undefined') ? auraPaymentAmount[0].value : null;
         var gtmPaymentName = drupalSettings.payment_methods[cartData.payment.method] ?
           drupalSettings.payment_methods[cartData.payment.method].gtm_name
           : 'hps_payment';

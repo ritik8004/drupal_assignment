@@ -11,6 +11,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update arabic string translation for field is required..
+ */
+function alshaya_master_update_9402() {
+  // Add string translations.
+  $strings = [
+    '@title field is required.' => [
+      'ar' => 'يرجى إدخال @title',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the home page config as per schema.
  */
 function alshaya_master_update_9401() {
@@ -1136,6 +1151,9 @@ function alshaya_master_install() {
     '@title is required.' => [
       'ar' => 'يرجى إدخال @title',
       'en' => 'Please enter your @title.',
+    ],
+    '@title field is required.' => [
+      'ar' => 'يرجى إدخال @title',
     ],
     'Please select a size.' => [
       'ar' => 'يرجى اختيار المقاس',

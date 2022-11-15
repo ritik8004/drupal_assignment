@@ -9,6 +9,7 @@ $nb-red: #cf0a2c;
 $gray: #ccc;
 $red2: #b90020;
 $gray2: #efefef;
+$gray-97: #979797;
 
 // Global elements.
 $primary_text: $black;
@@ -21,6 +22,7 @@ $primary_border: $black;
 $tertiary-border: $gray;
 $secondary_border: $nb-red;
 $content_pagetitle_border: $black;
+$default_bg: $white;
 
 //Buttons.
 $primary_btn_bg: $nb-red;
@@ -97,9 +99,11 @@ $footer_link: $black;
 $footer_link_hover: $gray;
 $social-icons-bg: $black;
 $footer-text: $black;
-$footer-newsletter-text: $white;
+$footer-newsletter-text: $gray;
+$footer-newsletter-border: $white;
 $footer-top-bg: $black;
 $lang_switch: $black;
+$footer_logo_blk_text: $nb-black;
 
 //Signup
 $user_form_text: $ada-gray;
@@ -170,6 +174,7 @@ $header_secondary_menu_link_mobile: $black;
 $btt_text: $black;
 
 //My Account
+$user_account_wrapper_light: $ada-gray;
 $label_dark: $ada-gray;
 $label_black: $ada-gray;
 $user_order_help_bg: $light-gray;
@@ -201,10 +206,25 @@ $plp_all_filter_title: $black;
 $plp_all_filter_filter_arrow: $black;
 $plp_clear_all_btn_text: $nb-red;
 $plp_filter_txt: $ada-gray;
+$plp_filter_border: $gray2;
+$plp_promotion_link: $gray-97;
 
 // Product Detail Page
 $pdp_product_itemcode: $ada-gray;
 $pdp_title_section_border: $gray2;
+$pdp_white_color_attribute_hover_border: $red2;
+$pdp_white_color_attribute_border: $nb-red;
+$pdp_size_option_text: $black;
+$pdp_size_option_border: $gray;
+$pdp_size_option_selected_bg: $black;
+$pdp_size_option_selected_text: $white;
+$pdp_size_option_selected_border: $black;
+$pdp_size_option_disabled_bg: $gray2;
+$pdp_sidebar_link: $nb-red;
+$pdp_desc_wrapper_close_icon: $black;
+$pdp_desc_wrapper_close_bg: $white;
+$pdp_sidebar_label: $black;
+$pdp_desc_wrapper_border: $black;
 
 // Accordion
 $accordion_title: $black;
@@ -227,6 +247,7 @@ $algolia-input-placeholder-text: $black;
 $algolia_search_input_bg: $gray2;
 $algolia-search-icon: $black;
 $alg_search_bg: $gray2;
+$alg_search_mobile_bg: $white;
 
 // plp add to cart
 $plp-primary-cta-hover-bg: rgba(207, 10, 44, 0.9);
@@ -247,6 +268,7 @@ $spc-cart-background: $white;
 $cko-steps-active-bg: $nb-red;
 $cko-steps-current-active-border: $nb-red;
 $cko-steps-active-border: $black;
+$cko-current-steps-label-txt: $nb-red;
 
 // Checkout Global.
 $checkout_section_titles: $black;
@@ -279,3 +301,36 @@ $spc-cnc-store-input-search-icon: $ada-gray;
 $spc-order-summary-product-area-bg: $white;
 $spc-order-summary-totals-bg: $white;
 $user_pwd_unmask: $black;
+
+//Wishlist
+$wishlist-header-notification-border: $nb-red;
+$wishlist-button-border: $nb-red;
+$wishlist-button-register-txt: $nb-red;
+$wishlist-button-bg-hover: $nb-red;
+$wishlist-oos: $black;
+$wishlist-button-bg: $nb-red;
+
+//eGift
+$advanced-page-banner-bg: $light-gray;
+$egift-landing-page-one-row-two-col-box-bg: $light-gray;
+$egift_accordian_title_bg: $white;
+$egift_accordian_title_border: $gray;
+$egift_accordian_active_title: $nb-red;
+$egift_form_ckt_btn_border: $gray;
+$egift_form_ckt_text: $ada-gray;
+$egift-purchase-disabled-btn-text: $ada-gray;
+$plp-quick-view-product-size-active-bg: $black;
+$plp-quick-view-product-size-active-bg: $black;
+$plp-quick-view-product-size-border-hover: $black;
+$egift_form_dem_btn_bg: $black;
+$egift_form_dem_btn_txt: $white;
+
+// Notification popup.
+$minicart_notification_border: $nb-red;
+$minicart_notification_text: $nb-red;
+$minicart_notification_btn_bg: $nb-red;
+$primary_minicart_quantity_bg: $nb-red;
+
+// Checkout confirmation.
+$progress-tracker-bg: $white;
+$spc-order-summary-text: $black;

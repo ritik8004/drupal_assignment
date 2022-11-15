@@ -1,0 +1,5 @@
+alshaya_xb.globale_settings:
+  route_name: alshaya_xb.globale_settings_form
+  title: 'Alshaya XB Global-e settings'
+  description: 'Update configurations related to cross border global-e'
+  parent: alshaya_master.alshaya_admin

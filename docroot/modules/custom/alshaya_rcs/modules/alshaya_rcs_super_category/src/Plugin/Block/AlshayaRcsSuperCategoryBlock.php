@@ -113,7 +113,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
     $this->request = $request;
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
-    $this->superCategorymanager = $super_category_manager;
+    $this->superCategoryManager = $super_category_manager;
     $this->productCategoryTree = $product_category_tree;
   }
 
@@ -150,7 +150,8 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function build() {
-    $current_super_term = $this->superCategorymanager->getCategoryTermFromRoute();
+    $super_category_settings = $this->configFactory->get('alshaya_super_category.settings');
+    $current_super_term = $this->superCategoryManager->getCategoryTermFromRoute();
     $current_tid = ($current_super_term instanceof TermInterface)
       ? $current_super_term->id()
       : NULL;
@@ -205,7 +206,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
     }
 
     // Set the default parent from settings.
-    $parent_id = $this->superCategorymanager->getDefaultCategoryId();
+    $parent_id = $this->superCategoryManager->getDefaultCategoryId();
 
     // Set default category link to redirect to home page.
     // Default category is set to active, while we are on home page.
@@ -215,7 +216,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
 
     $cache_tags = Cache::mergeTags(
       $cache_tags,
-      $this->configFactory->get('alshaya_super_category.settings')->getCacheTags()
+      $super_category_settings->getCacheTags()
     );
 
     return [
@@ -239,6 +240,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
         'drupalSettings' => [
           'superCategory' => [
             'search_facet' => AlshayaSuperCategoryManager::SEARCH_FACET_NAME,
+            'show_brand_filter' => $super_category_settings->get('show_brand_filter'),
           ],
           'theme' => [
             'path' => $this->themeManager->getActiveTheme()->getPath(),

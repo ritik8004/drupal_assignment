@@ -265,7 +265,7 @@ class AlshayaRcsProductHelper {
    * @return array
    *   The configurable attributes for the products in the site.
    */
-  private function getConfigurableAttributes() {
+  public function getConfigurableAttributes() {
     $attributes = &drupal_static(__METHOD__, []);
     if (!empty($attributes)) {
       return $attributes;
@@ -273,6 +273,8 @@ class AlshayaRcsProductHelper {
 
     $attribute_weights = $this->configFactory->get('acq_sku.configurable_form_settings')->get('attribute_weights');
     foreach ($attribute_weights as $group) {
+      asort($group);
+
       foreach (array_keys($group) as $attribute) {
         $attributes[] = $attribute;
       }

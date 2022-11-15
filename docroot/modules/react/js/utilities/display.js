@@ -107,7 +107,7 @@ const isMobile = () => (window.innerWidth < 768);
  *   If the device is desktop or not.
  */
 const isDesktop = () => (
-  window.innerWidth > 1023
+  window.innerWidth > 1024
 );
 
 export {

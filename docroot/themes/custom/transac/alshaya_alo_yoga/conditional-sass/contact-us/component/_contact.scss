@@ -51,8 +51,15 @@
       .select2-container {
         .select2-selection {
           .select2-selection__rendered {
-            font-size: rem(14);
-            color: $user_form_text;
+            font-size: rem(16);
+          }
+        }
+      }
+
+      select {
+        &.form-select {
+          @include breakpoint($only-mobile) {
+            height: rem(52);
           }
         }
       }
@@ -60,6 +67,10 @@
       &::after {
         @include breakpoint($desktop) {
           display: none;
+        }
+
+        @include breakpoint($only-mobile) {
+          line-height: rem(52);
         }
       }
     }

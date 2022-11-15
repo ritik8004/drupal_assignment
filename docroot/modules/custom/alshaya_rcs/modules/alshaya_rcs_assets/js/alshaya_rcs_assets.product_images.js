@@ -29,14 +29,23 @@ window.commerceBackend = window.commerceBackend || {};
         variant.product.hasMedia = true;
         mediaData = JSON.parse(variant.product.assets_pdp);
         mediaData.forEach(function setGalleryMedia(media) {
-          variant.product.media.push({
-            // @todo Add type of asset when dealing with video etc.
-            url: media.url,
-            medium: media.styles.product_zoom_medium_606x504,
-            zoom: media.styles.product_zoom_large_800x800,
-            thumbnails: media.styles.pdp_gallery_thumbnail,
-            teaser: media.styles.product_teaser,
-          });
+          if (media.image_type !== "MovingMedia") {
+            variant.product.media.push({
+              type: 'image',
+              url: media.url,
+              medium: media.styles.product_zoom_medium_606x504,
+              zoom: media.styles.product_zoom_large_800x800,
+              thumbnails: media.styles.pdp_gallery_thumbnail,
+              teaser: media.styles.product_teaser,
+            });
+          }
+          else {
+            variant.product.media.push({
+              type: 'video',
+              url: media.url,
+            });
+
+          }
         });
       }
     }

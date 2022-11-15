@@ -993,7 +993,9 @@ class AlshayaGtmManager {
       // If its a virtual product i.e egift card or egift topup.
       if ($item['type'] === 'virtual') {
         $products[$item['item_id']] = [
-          'name' => $item['name'] . '/' . $item['price'],
+          'name' => ($item['sku'] == 'giftcard_topup')
+          ? $item['extension_attributes']['topup_card_name'] . '/' . $item['price']
+          : $item['name'] . '/' . $item['price'],
           'id' => $item['item_id'],
           'price' => $item['price'],
           'variant' => $item['sku'],
@@ -1089,9 +1091,9 @@ class AlshayaGtmManager {
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
-      'egiftRedeemType' => !empty($additional_info) ? $additional_info->card_type : '',
+      'egiftRedeemType' => $additional_info->card_type ?? '',
       'isAdvantageCard' => isset($order['coupon_code']) && $order['coupon_code'] === 'advantage_card',
-      'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
+      'redeemEgiftCardValue' => $additional_info->amount ?? '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $first_time_transac,

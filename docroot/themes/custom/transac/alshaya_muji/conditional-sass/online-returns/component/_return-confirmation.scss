@@ -1,0 +1,38 @@
+.return-confirmation-wrapper {
+  color: $primary_text;
+
+  .whats-next-label {
+    font-family: $muji-demibold;
+  }
+
+  .whats-next-section {
+    .whats-next-wrapper {
+      .title {
+        font-family: $alshaya-thin;
+      }
+
+      .description {
+        @include breakpoint($only-tablet) {
+          width: rem(432);
+        }
+      }
+    }
+  }
+
+  .return-details-section,
+  .return-items-wrapper {
+    .return-details-title,
+    .return-items-label {
+      font-family: $muji-demibold;
+    }
+  }
+
+  .return-details-section {
+    .return-confirmation-detail-wrapper {
+      @include breakpoint($only-tablet) {
+        padding: rem(16);
+        grid-template: "a b c d" auto/rem(153) rem(168) rem(135) auto;
+      }
+    }
+  }
+}

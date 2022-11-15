@@ -10,6 +10,7 @@
     top: 0;
     #{$left}: 0;
     transition: opacity 300ms ease-in;
+    display: block;
   }
 }
 
@@ -38,6 +39,40 @@ body {
       transform: translateX(0) !important;
       opacity: 1;
     }
+
+    // magizine version 2 layout for mobile view
+    &.magazine-layout-v2 {
+      .magv2-header {
+        @include breakpoint($only-mobile) {
+          transition: none;
+        }
+
+        &.magv2-pdp-non-sticky-header {
+          @include breakpoint($only-mobile) {
+            opacity: 1;
+            transform: unset;
+            pointer-events: unset;
+          }
+        }
+      }
+    }
+  }
+
+  #alshaya-algolia-search,
+  .block-alshaya-algolia-listing-v2,
+  .block-alshaya-algolia-react-plp,
+  .block-alshaya-algolia-react-product-list,
+  .block-alshaya-algolia-react-promotion,
+  .block-alshaya-algolia-react-promotion-v2 {
+    .filter-fixed-top {
+      .show-all-filters-algolia,
+      .block-facet-blockcategory-facet-plp,
+      .block-facet-blockcategory-facet-search {
+        @include breakpoint($only-mobile) {
+          z-index: 8;
+        }
+      }
+    }
   }
 }
 
@@ -59,16 +94,11 @@ body {
   }
 
   .title-block {
-    display: flex;
-    align-items: center;
     padding-bottom: rem(24);
-    justify-content: space-between;
     position: relative;
     padding-top: rem(10);
 
     .spc-checkout-section-title {
-      width: 80%;
-      align-items: center;
       text-align: center;
       font-size: rem(18);
       font-family: $alshaya-bold;
@@ -81,14 +111,19 @@ body {
       color: transparent;
       transform: translateY(-50%);
 
+      @include breakpoint($upto-desktop) {
+        position: absolute !important;
+        overflow: unset !important;
+      }
+
       @include icon('close') {
         font-size: rem(40);
         width: rem(32);
         height: rem(32);
         color: $drawer-panel-close-icon;
-        right: rem(-12);
-        position: relative;
-        top: rem(-2);
+        #{$right}: rem(-12);
+        position: absolute;
+        top: rem(-32);
       }
     }
   }
@@ -133,6 +168,13 @@ body {
         padding: rem(12);
         text-align: center;
         min-width: rem(136);
+        align-items: center;
+        display: inline-flex;
+        justify-content: center;
+
+        html[lang=ar] & {
+          max-width: rem(96);
+        }
       }
 
       &.checkout {

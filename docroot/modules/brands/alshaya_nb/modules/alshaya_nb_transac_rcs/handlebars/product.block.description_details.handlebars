@@ -1,0 +1,21 @@
+<div class="desc-wrapper">
+  <div class="desc-value">
+    <p>{{{ html }}}</p>
+    {{#if green_leaf }}
+      <div class="green-leaf-title">{{t "Meets New Balance's green leaf standard" }}</div>
+    {{/if}}
+    {{#if green_leaf_notice }}
+      <p>{{{ green_leaf_notice }}}</p>
+    {{/if}}
+    {{#if legal_notice.status }}
+    <div class="legal-notice desc-wrapper">
+      <div class="desc-label">
+        {{ legal_notice.label }}
+      </div>
+      <div class="desc-value">
+        {{{ legal_notice.summary }}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>

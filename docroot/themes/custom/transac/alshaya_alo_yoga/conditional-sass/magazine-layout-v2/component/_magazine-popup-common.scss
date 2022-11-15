@@ -1,13 +1,21 @@
 .magv2 {
-  @include breakpoint($only-mobile) {
-    &-select {
-      &-popup {
-        &-wrapper {
+  &-select {
+    &-popup {
+      &-wrapper {
+        @include breakpoint($only-mobile) {
           justify-content: flex-end;
         }
+      }
 
-        &-content-wrapper {
+      &-content-wrapper {
+        @include breakpoint($only-mobile) {
           flex-grow: initial;
+        }
+      }
+
+      &-header-wrapper {
+        @include breakpoint($tablet) {
+          box-shadow: none;
         }
       }
     }

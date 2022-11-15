@@ -53,9 +53,9 @@
       customer_type: drupalSettings.userDetails.customerType,
       currency: drupalSettings.gtm.currency,
       department_id: drupalSettings.dataLayerContent.departmentId ||
-        isProductDataAvailable ? productSelector[0].getAttribute('gtm-department-id') : null,
+        (isProductDataAvailable ? productSelector[0].getAttribute('gtm-department-id') : null),
       department_name: drupalSettings.dataLayerContent.departmentName ||
-        isProductDataAvailable ? productSelector[0].getAttribute('gtm-department-name') : null,
+        (isProductDataAvailable ? productSelector[0].getAttribute('gtm-department-name') : null),
       magento_product_id: isProductDataAvailable ? productSelector[0].getAttribute('gtm-magento-product-id') : null,
       language: drupalSettings.gtm.language,
       page_type: drupalSettings.dataLayerContent.pageType,
@@ -64,7 +64,7 @@
       product_price: product.price,
       product_style_code: sku,
       stock_status: drupalSettings.dataLayerContent.stockStatus ||
-        isProductDataAvailable ? productSelector[0].getAttribute('gtm-stock') : null,
+        (isProductDataAvailable ? productSelector[0].getAttribute('gtm-stock') : null),
       user_id: drupalSettings.userDetails.customerId,
       user_type: drupalSettings.userDetails.customerType,
       dimension2: product.dimension2 || null,

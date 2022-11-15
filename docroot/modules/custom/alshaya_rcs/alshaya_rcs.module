@@ -73,6 +73,41 @@ function alshaya_rcs_modules_installed($modules) {
   if (\Drupal::configFactory()->get('alshaya_super_category.settings')->get('status')) {
     \Drupal::service('module_installer')->install(['alshaya_rcs_super_category']);
   }
+
+  // Go through the list of all the enabled modules and check if any overriden
+  // module exists in RCS. if YES then enable the same in RCS.
+  $enable_module_list = [];
+  $mapped_modules_list = _alshaya_rcs_get_modules_mapping();
+
+  foreach ($modules as $module) {
+    if (array_key_exists($module, $mapped_modules_list)) {
+      $enable_module_list[] = $mapped_modules_list[$module];
+    }
+  }
+
+  // Enable all the required modules.
+  if (count($enable_module_list) > 0) {
+    \Drupal::service('module_installer')->install($enable_module_list);
+  }
+}
+
+/**
+ * Function to get the mapping of overridden modules in RCS.
+ */
+function _alshaya_rcs_get_modules_mapping() {
+  return [
+    'alshaya_magazine' => 'alshaya_rcs_magazine',
+    'alshaya_color_split' => 'alshaya_rcs_color_split',
+    'alshaya_add_to_bag' => 'alshaya_rcs_add_to_bag',
+    'alshaya_wishlist' => 'alshaya_rcs_wishlist',
+    'alshaya_bazaar_voice' => 'alshaya_rcs_bazaar_voice',
+    'alshaya_aura_react' => 'alshaya_rcs_aura',
+    'alshaya_media_assets' => 'alshaya_rcs_assets',
+    'alshaya_online_returns' => 'alshaya_rcs_online_returns',
+    'alshaya_product_lpn' => 'alshaya_rcs_product_lpn',
+    'alshaya_olapic' => 'alshaya_rcs_olapic',
+    'alshaya_mobile_app' => 'alshaya_rcs_mobile_app',
+  ];
 }
 
 /**
