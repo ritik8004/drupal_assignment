@@ -210,12 +210,19 @@ class AlshayaFrontendCommand extends BltTasks {
 
           // Copy step.
           $this->say('Copying unchanged ' . $themeName . ' theme from ' . $cssFromDir . ' to ' . $cssToDir);
-          $result = $this->taskCopyDir([$cssFromDir => $cssToDir])
-            ->overwrite(TRUE)
-            ->run();
-          // If copying failed preparing for build.
-          if (!$result->wasSuccessful()) {
+          try {
+            $result = $this->taskCopyDir([$cssFromDir => $cssToDir])
+              ->overwrite(TRUE)
+              ->run();
+            // If copying failed preparing for build.
+            if (!$result->wasSuccessful()) {
+              $this->say('Unable to copy css files from cloud. Building theme ' . $themeName);
+              $build = TRUE;
+            }
+          }
+          catch (\Throwable $e) {
             $this->say('Unable to copy css files from cloud. Building theme ' . $themeName);
+            $this->say('Error: ' . $e->getMessage());
             $build = TRUE;
           }
         }
@@ -345,11 +352,19 @@ class AlshayaFrontendCommand extends BltTasks {
 
           // Copy step.
           $this->say('Copying unchanged ' . $file->getRelativePath() . ' react module from ' . $reactFromDir . ' to ' . $reactToDir);
-          $result = $this->taskCopyDir([$reactFromDir => $reactToDir])
-            ->overwrite(TRUE)
-            ->run();
-          if (!$result->wasSuccessful()) {
+
+          try {
+            $result = $this->taskCopyDir([$reactFromDir => $reactToDir])
+              ->overwrite(TRUE)
+              ->run();
+            if (!$result->wasSuccessful()) {
+              $this->say('Unable to copy react files from cloud. Building react module ' . $file->getRelativePath());
+              $build = TRUE;
+            }
+          }
+          catch (\Throwable $e) {
             $this->say('Unable to copy react files from cloud. Building react module ' . $file->getRelativePath());
+            $this->say('Error: ' . $e->getMessage());
             $build = TRUE;
           }
         }
