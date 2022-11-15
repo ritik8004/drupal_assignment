@@ -101,7 +101,7 @@ class AddressbookResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('alshaya_addressbook_react'),
+      $container->get('logger.factory')->get('AddressbookResource'),
       $container->get('language_manager'),
       $container->get('alshaya_addressbook.manager'),
       $container->get('alshaya_addressbook.area_terms_helper'),
@@ -142,10 +142,7 @@ class AddressbookResource extends ResourceBase {
   protected function addRequiredCacheableDependency(ResourceResponse $response) {
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
-        'tags' => array_merge(
-          $this->configFactory->get('alshaya_addressbook.settings')->getCacheTags() ?? [],
-          ['taxonomy_term_list:' . AlshayaAddressBookManagerInterface::AREA_VOCAB],
-        ),
+        'tags' => ['taxonomy_term_list:' . AlshayaAddressBookManagerInterface::AREA_VOCAB],
       ],
     ]));
   }

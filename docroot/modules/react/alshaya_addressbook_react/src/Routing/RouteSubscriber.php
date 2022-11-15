@@ -19,16 +19,9 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     // Change controller & title for address_book page.
     if ($route = $collection->get('profile.user_page.multiple')) {
-      $route->setDefault('_title_callback', '\Drupal\alshaya_addressbook_react\Routing\RouteSubscriber::addressBookPageTitle');
+      $route->setDefault('_title_callback', '\Drupal\alshaya_addressbook_react\Controller\AlshayaAddressBookController::addressBookPageTitle');
       $route->setDefault('_controller', '\Drupal\alshaya_addressbook_react\Controller\AlshayaAddressBookController::userProfileForm');
     }
-  }
-
-  /**
-   * Page title for address_book page.
-   */
-  public function addressBookPageTitle() {
-    return $this->t('Address book');
   }
 
 }

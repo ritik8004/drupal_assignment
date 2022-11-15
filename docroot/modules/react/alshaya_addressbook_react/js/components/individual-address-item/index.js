@@ -198,7 +198,7 @@ class IndividualAddressItem extends React.Component {
             <button type="button" className="close" onClick={() => this.triggerDeleteModal(false)}>
               &times;
             </button>
-            <div className="header">{Drupal.t('delete address')}</div>
+            <div className="header">{Drupal.t('Delete address')}</div>
             <div className="content">
               {Drupal.t('You have selected to delete this address, are you sure?')}
             </div>

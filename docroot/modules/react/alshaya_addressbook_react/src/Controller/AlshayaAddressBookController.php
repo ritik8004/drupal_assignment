@@ -72,7 +72,17 @@ class AlshayaAddressBookController extends UserController {
           ],
         ],
       ],
+      '#cache' => [
+        'tags' => $this->config('alshaya_master.mobile_number_settings')->getCacheTags() ?? [],
+      ],
     ];
+  }
+
+  /**
+   * Page title for address_book page.
+   */
+  public function addressBookPageTitle() {
+    return $this->t('Address book');
   }
 
 }

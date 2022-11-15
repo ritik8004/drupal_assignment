@@ -42,7 +42,7 @@ const getCustomerDetails = async () => {
 const updateCustomerDetails = async (updatedUserDetails) => callMagentoApi('/V1/customers/me', 'PUT',
   { customer: updatedUserDetails }).then((response) => {
   if (hasValue(response.data.error)) {
-    logger.notice('Error while trying to update customer details. Request Data: @data. Message: @message', {
+    logger.warning('Error while trying to update customer details. Request Data: @data. Message: @message', {
       '@data': JSON.stringify(response.data),
       '@message': response.data.error_message,
     });
