@@ -37,7 +37,8 @@ Feature: Enrichments
   @node
   Scenario: Test enrichments for nodes
     Given I visit "/search"
-    And I follow "#hits .view-content > div:first-child a"
+    And I wait for element "#hits .view-content"
+    And I click on "#hits .view-content > div:first-child a" element
     # Delete any previous enrichment.
     And I make sure there are no enrichments
     # Check that the tabs have the correct links.
@@ -45,7 +46,7 @@ Feature: Enrichments
 
     # Add enrichment.
     Then I follow "Enrich"
-    And I fill in "Name" with "Enriched node"
+    And I fill in "Title" with "Enriched node"
     And I press "Save"
     Then the "#block-page-title h1" element should contain "Enriched node"
     Then I should see the link "Translate" in "#block-local-tasks" section
@@ -53,7 +54,7 @@ Feature: Enrichments
     # Edit the enrichment.
     Then I follow "Edit the enrichment"
     Then I should see value "Enriched node" for element "#edit-name-0-value"
-    And I fill in "Name" with "Enriched node updated"
+    And I fill in "Title" with "Enriched node updated"
     And I press "Save"
     Then the "#block-page-title h1" element should contain "Enriched node updated"
 
