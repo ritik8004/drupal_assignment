@@ -5,7 +5,7 @@ Feature: Enrichments
   I want to add enrichments to terms
 
   Background:
-    Given I am logged in as a user with the "Admin" role
+    Given I am logged in as an authenticated user "{spc_admin_user_email}" with password "{spc_admin_user_password}"
 
   Scenario: Test enrichments for categories
     # Click on the last item of main menu.
