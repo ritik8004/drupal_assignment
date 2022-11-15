@@ -11,7 +11,7 @@ import ConditionalView from '../../../../../js/utilities/components/conditional-
 const PpdDescription = (props) => {
   const {
     pdpShortDesc, pdpDescription, skuCode, finalPrice,
-    pdpProductPrice, title, getPanelData, removePanelData,
+    pdpProductPrice, title, getPanelData, removePanelData, eligibleForReturn,
   } = props;
 
   const closeModal = () => {
@@ -55,7 +55,9 @@ const PpdDescription = (props) => {
 
       <ConditionalView condition={isOnlineReturnsEnabled()}>
         <div className="online-returns-pdp">
-          <OnlineReturnsPDP />
+          <OnlineReturnsPDP
+            eligibleForReturn={eligibleForReturn}
+          />
         </div>
       </ConditionalView>
     </div>
