@@ -7,7 +7,6 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\alshaya_acm\AlshayaMdcQueueManager;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
-use Drupal\Core\Site\Settings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Datetime\TimeInterface;
 
@@ -169,7 +168,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
       ['Verify SSL', empty($mdc_settings->get('verify_ssl')) ? 'Disabled' : 'Enabled'],
     ];
     $store_language_mapping = $this->i18nHelper->getStoreLanguageMapping();
-    $mdc_language_prefixes = Settings::get('magento_lang_prefix');
+    $mdc_language_prefixes = $mdc_settings->get('magento_lang_prefix');
     foreach ($store_language_mapping as $key => $value) {
       $rows[] = ['Langcode | Prefix | Store ID', "$key | $mdc_language_prefixes[$key] | $value"];
     }
