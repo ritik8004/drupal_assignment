@@ -16,6 +16,15 @@ class MyOffersAndVouchers extends React.Component {
     };
   }
 
+  handleShowMoreClick = () => {
+    const { expanded } = this.state;
+    this.setState({
+      expanded: !expanded,
+    });
+    // Push show more click data to gtm.
+    Drupal.alshayaSeoGtmPushBenefitShowmore(expanded);
+  }
+
   getShowBenefitsLink = () => {
     const { currentPath } = drupalSettings.path;
     const { uid } = drupalSettings.user;
@@ -31,10 +40,7 @@ class MyOffersAndVouchers extends React.Component {
     if (myBenefitsList.length > showMoreLimit) {
       const { expanded } = this.state;
       return (
-        <a onClick={() => this.setState({
-          expanded: !expanded,
-        })}
-        >
+        <a onClick={() => this.handleShowMoreClick()}>
           {expanded ? getStringMessage('show_less') : getStringMessage('show_all')}
         </a>
       );
