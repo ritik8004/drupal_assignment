@@ -138,16 +138,6 @@ function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_s
 }
 
 /**
- * Get middleware url.
- *
- * @return string
- *   Middleware url.
- */
-function _alshaya_spc_get_middleware_url() {
-  return '/middleware/public';
-}
-
-/**
  * Implements hook_alshaya_acm_product_light_product_data_alter().
  */
 function alshaya_spc_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
