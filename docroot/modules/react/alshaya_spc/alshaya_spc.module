@@ -276,7 +276,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
   }
 
   $api_settings = \Drupal::config('alshaya_api.settings');
-  $store_settings = Settings::get('magento_lang_prefix');
+  $store_settings = $api_settings->get('magento_lang_prefix');
   $language_manager = \Drupal::languageManager();
   $current_language = $language_manager->getCurrentLanguage()->getId();
 

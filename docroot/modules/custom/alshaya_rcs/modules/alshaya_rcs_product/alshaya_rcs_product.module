@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_theme().
@@ -1108,7 +1107,7 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   try {
     $response = Json::decode(\Drupal::httpClient()->get($request_url, [
       'headers' => [
-        'store' => Settings::get('magento_lang_prefix')[$current_language],
+        'store' => $settings->get('magento_lang_prefix')[$current_language],
       ],
     ])->getBody());
   }

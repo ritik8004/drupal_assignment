@@ -27,5 +27,5 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
   $current_language = \Drupal::languageManager()
     ->getCurrentLanguage()
     ->getId();
-  $attachments['#attached']['drupalSettings']['rcs']['commerceBackend']['store'] = Settings::get('magento_lang_prefix')[$current_language];
+  $attachments['#attached']['drupalSettings']['rcs']['commerceBackend']['store'] = $api_settings->get('magento_lang_prefix')[$current_language];
 }
