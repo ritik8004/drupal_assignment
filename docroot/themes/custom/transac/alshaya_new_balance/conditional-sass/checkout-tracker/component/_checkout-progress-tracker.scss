@@ -18,12 +18,16 @@
           }
 
           .step-label {
-            top: rem(21);
-
             @include breakpoint($only-mobile) {
               width: rem(75);
               text-align: center;
             }
+          }
+        }
+
+        &.current {
+          .step-label {
+            top: calc(100% + #{rem(30)});
           }
         }
 
@@ -74,6 +78,7 @@
         .step {
           .step-label {
             white-space: nowrap;
+            top: calc(100% + #{rem(20)});
           }
         }
       }
