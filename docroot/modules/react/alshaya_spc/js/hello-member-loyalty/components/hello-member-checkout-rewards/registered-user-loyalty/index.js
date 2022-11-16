@@ -149,6 +149,8 @@ class RegisteredUserLoyalty extends React.Component {
             '@cartId': cartId,
             '@response': result.data.error_message,
           });
+          // Push error events to gtm.
+          Drupal.alshayaSeoGtmLoyaltyOptionsError('hello_member', result.data.error_message);
         }
         removeFullScreenLoader();
       });
@@ -167,6 +169,8 @@ class RegisteredUserLoyalty extends React.Component {
             '@cartId': cartId,
             '@response': result.data.error_message,
           });
+          // Push error events to gtm.
+          Drupal.alshayaSeoGtmLoyaltyOptionsError('aura', result.data.error_message);
         }
         removeFullScreenLoader();
       });
@@ -175,6 +179,8 @@ class RegisteredUserLoyalty extends React.Component {
     this.setState({
       currentOption: method,
     });
+    // Push loyalty method data to gtm when customer changes loyalty option.
+    Drupal.alshayaSeoGtmLoyaltySwitch(method);
     this.resetPopupStatus(false);
   }
 

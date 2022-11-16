@@ -9,7 +9,7 @@
   Drupal.alshayaSeoGtmPushVoucherLinkClick = function () {
     // Prepare the voucher click data,.
     var voucherClickData = {
-      event: 'voucherLinkClick',
+      event: 'hellomember',
       eventCategory: "memberOffer",
       eventAction: "discountVoucher",
       eventLabel: "voucher_link",
@@ -31,7 +31,7 @@
 
     // Prepare the voucher data.
     var voucherSelectedData = {
-      event: 'VoucherOfferSelect',
+      event: 'hellomember',
       eventAction: eventAction,
       eventLabel: vouchersSelected,
       eventCategory: 'memberOffer',
@@ -52,7 +52,7 @@
   Drupal.alshayaSeoGtmPushVoucherOfferSelectedApply = function (appliedVouchers, eventAction) {
     // Prepare the voucher data.
     var voucherAppliedData = {
-      event: 'voucherApplied',
+      event: 'hellomember',
       eventAction: eventAction,
       eventLabel: appliedVouchers,
       eventCategory: 'memberOffer',
@@ -72,7 +72,7 @@
   Drupal.alshayaSeoGtmPushBenefitsOffer = function (benefitsData) {
     // Prepare the benefit offer data.
     var benefitGtmData = {
-      event: "benefitsDetailView",
+      event: "myaccount",
       eventAction: 'benefits - detail view',
       eventLabel: benefitsData.promotionType + '_' + benefitsData.description,
       eventCategory: 'myaccount',
@@ -91,7 +91,7 @@
   Drupal.alshayaSeoGtmPushBenefitAddToBag = function (benefitsData) {
     // Prepare the benefit offer data.
     var benefitGtmData = {
-      event: "benefitsAddToBag",
+      event: "myaccount",
       eventAction: 'benefits - add to bag',
       eventLabel: benefitsData.title + '_' + benefitsData.promotionType,
       eventCategory: 'myaccount',
@@ -110,7 +110,7 @@
   Drupal.alshayaSeoGtmPushBenefitShowmore = function (expanded) {
     // Prepare the show more gtm data.
     var benefitShowMoreData = {
-      event: "benefitsShowMore",
+      event: "myaccount",
       eventAction: 'benefits - expand',
       eventLabel: expanded ? 'Show less' : 'Show all',
       eventCategory: 'myaccount',
@@ -131,7 +131,7 @@
   Drupal.alshayaSeoGtmPushBenefitQrData = function (benefitName, benefitType) {
     // Prepare the benefit qr code data.
     var benefitsQRdata = {
-      event: "benefitsViewQrCode",
+      event: "myaccount",
       eventAction: 'benefits - view qr code',
       eventLabel: benefitType + '_' + benefitName,
       eventCategory: 'myaccount',
@@ -139,6 +139,50 @@
       nonInteraction: 0,
     }
     dataLayer.push(benefitsQRdata);
+  }
+
+  /**
+   * Function to push the loyalty switch events to data layer.
+   *
+   * @param {string} method
+   *   Loyalty type selected by customer.
+   */
+  Drupal.alshayaSeoGtmLoyaltySwitch = function (method) {
+    // Prepare the loyalty switch data.
+    var loyaltySwitchData = {
+      event: 'loyaltySwitch',
+      eventAction: "loyalty_switch",
+      eventLabel: method,
+      eventCategory: "loyalty switch",
+      eventValue: 0,
+      nonInteraction: 0,
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(loyaltySwitchData);
+    }
+  }
+
+  /**
+   * Function to push the loyalty type errors to data layer.
+   *
+   * @param {string} method
+   *   Loyalty type selected by customer.
+   */
+  Drupal.alshayaSeoGtmLoyaltyOptionsError = function (method, message) {
+    // Prepare the loyalty error data.
+    var errorData = {
+      event: 'warning',
+      eventAction: method,
+      eventLabel: message,
+      eventCategory: 'warning',
+      eventValue: 0,
+      nonInteraction: 0,
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(errorData);
+    }
   }
 
 })(Drupal, dataLayer);
