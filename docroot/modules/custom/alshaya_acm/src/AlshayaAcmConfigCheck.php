@@ -256,12 +256,12 @@ class AlshayaAcmConfigCheck {
 
     // Reset magento_lang_prefix - EN.
     $this->configFactory->getEditable('alshaya_api.settings')
-      ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['en'])
+      ->set('magento_lang_prefix.en', Settings::get('magento_lang_prefix')['en'])
       ->save();
 
     // Reset magento_lang_prefix - AR.
-    $this->languageManager->getLanguageConfigOverride('ar', 'alshaya_api.settings')
-      ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
+    $this->configFactory->getEditable('alshaya_api.settings')
+      ->set('magento_lang_prefix.ar', Settings::get('magento_lang_prefix')['ar'])
       ->save();
 
     // Reset log mode when resetting config.
