@@ -1,0 +1,12 @@
+.user__order--detail.recent__orders--list {
+  .order-total-column {
+    .aura-points {
+      @include breakpoint($desktop) {
+        html[lang=ar] & {
+          margin-right: rem(16);
+          margin-top: rem(3);
+        }
+      }
+    }
+  }
+}

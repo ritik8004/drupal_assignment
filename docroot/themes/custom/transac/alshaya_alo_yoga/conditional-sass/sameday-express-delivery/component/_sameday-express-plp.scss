@@ -1,0 +1,11 @@
+#alshaya-algolia-search,
+#alshaya-algolia-plp,
+#my-wishlist {
+  .c-products__item {
+    .express_delivery {
+      html[lang=ar] & {
+        line-height: rem(16);
+      }
+    }
+  }
+}

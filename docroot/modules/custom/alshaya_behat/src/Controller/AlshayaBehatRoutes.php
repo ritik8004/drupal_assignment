@@ -131,4 +131,26 @@ class AlshayaBehatRoutes extends ControllerBase {
     throw new BadRequestHttpException('No PLP with in stock products found.');
   }
 
+  /**
+   * Provides the in-stock Product having a promotion.
+   *
+   * @param string $type
+   *   Promotion types like groupn, groupn_disc etc.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirects to PDP page if found else redirects to 404 page.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+   */
+  public function inStockProductWithPromo(string $type): RedirectResponse {
+    $result = $this->alshayaBehat->getWorkingProductWithPromo($type);
+    if ($result instanceof NodeInterface) {
+      // Redirect to the node page.
+      return new RedirectResponse($result->toUrl()->toString());
+    }
+
+    // If no in-stock product found with promotion, then redirect to 400 page.
+    throw new BadRequestHttpException(is_string($result) ? $result : 'No in-stock products found with given promotion type.');
+  }
+
 }

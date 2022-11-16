@@ -558,19 +558,19 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   function fetchAndProcessCustomAttributes() {
-    var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('product-option');
+    var response = globalThis.RcsPhStaticStorage.get('product_options');
     // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata.items
-    && response.data.customAttributeMetadata.items.forEach(function eachCustomAttribute(option) {
+    response.data.customAttributeMetadata
+    && Object.entries(response.data.customAttributeMetadata).forEach(function eachCustomAttribute([attrCode, options]) {
       var allOptionsForAttribute = {};
       // Proceed only if `attribute_options` exists.
-      if (Drupal.hasValue(option['attribute_options'])) {
-        option.attribute_options.forEach(function (optionValue) {
+      if (Drupal.hasValue(options)) {
+        options.forEach(function (optionValue) {
           allOptionsForAttribute[optionValue.value] = optionValue.label;
         })
       }
       // Set to static storage.
-      staticDataStore['attrLabels'][option.attribute_code] = allOptionsForAttribute;
+      staticDataStore['attrLabels'][attrCode] = allOptionsForAttribute;
     });
   }
 
@@ -1519,6 +1519,37 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
       product.variants.forEach(function eachVariant(variant) {
         variant.product.parent_sku = product.sku;
       });
+
+      // Sort the configurable options based on config in Drupal.
+      var sortedConfigurableOptions = [];
+      var sortedConfigurableAttributes = [];
+
+      // Logic to sort the sequencing of configurable attributes as per
+      // the sequence mentioned in configurable form settings.
+      const configurableAttributeWeights = drupalSettings.configurableAttributes;
+      if (Drupal.hasValue(configurableAttributeWeights) && Drupal.hasValue(product.configurable_options)) {
+        // Add all the attributes as per config.
+        configurableAttributeWeights.forEach(function eachConfigurableAttribute(attribute) {
+          product.configurable_options.forEach(function eachConfigurableOption(option) {
+            if (option.attribute_code === attribute
+              && !sortedConfigurableAttributes.includes(attribute)) {
+              sortedConfigurableOptions.push(option);
+              sortedConfigurableAttributes.push(attribute);
+            }
+          });
+        });
+
+        // Add all the attributes which are there in the product but not in
+        // config in the end.
+        product.configurable_options.forEach(function eachConfigurableOption(option) {
+          if (!sortedConfigurableAttributes.includes(option.attribute_code)) {
+            sortedConfigurableOptions.push(option);
+            sortedConfigurableAttributes.push(option.attribute_code);
+          }
+        });
+      }
+
+      product.configurable_options = sortedConfigurableOptions;
     }
 
     var promotionVal = [];

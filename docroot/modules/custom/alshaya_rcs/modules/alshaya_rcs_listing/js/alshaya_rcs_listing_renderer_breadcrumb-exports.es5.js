@@ -25,10 +25,15 @@ exports.render = function render(
  * Normalize the original data.
  *
  * @param data
- *    The original data.
+ *   The original data.
+ * @param nameKey
+ *   The keys from which to fetch the category name and breadcrumb term name.
+ *   For GTM, we need English value only which is fetched from gtm_name key. So
+ *   this parameter is added so that the caller can specify the name key.
  */
 exports.normalize = function normalize(
   data,
+  keys = {nameKey: 'name', breadcrumbTermNameKey: 'category_name'}
 ) {
   let normalized = [];
 
@@ -41,7 +46,7 @@ exports.normalize = function normalize(
     // For root level categories, push name without a url.
     normalized.push({
       url: null,
-      text: data.name,
+      text: data[keys.nameKey],
       data_url: data.url_path,
       id: data.id,
     });
@@ -53,7 +58,7 @@ exports.normalize = function normalize(
   Object.keys(data.breadcrumbs).forEach(function (i) {
     normalized.push({
       url: data.breadcrumbs[i].category_url_path,
-      text: data.breadcrumbs[i].category_name,
+      text: data.breadcrumbs[i][keys.breadcrumbTermNameKey],
       data_url: data.breadcrumbs[i].category_url_path,
       id: data.breadcrumbs[i].category_id,
     });
@@ -62,7 +67,7 @@ exports.normalize = function normalize(
   // Push the last crumb without a url.
   normalized.push({
     url: null,
-    text: data.name,
+    text: data[keys.nameKey],
     data_url: data.url_path,
     id: data.id,
   });

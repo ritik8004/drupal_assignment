@@ -3,6 +3,8 @@
     @include breakpoint($upto-desktop) {
       background-color: transparent;
       #{$left}: 0;
+      margin: 0;
+      padding: 0;
     }
   }
 
@@ -38,6 +40,10 @@
       text-transform: uppercase;
       line-height: normal;
       height: rem(48);
+
+      html[lang=ar] & {
+        line-height: 1.4;
+      }
     }
   }
 }
@@ -48,6 +54,16 @@
       button {
         font-family: $ay-heavy;
         text-transform: uppercase;
+      }
+    }
+  }
+}
+
+.path--wishlist {
+  .product-drawer-container {
+    .login-message {
+      .actions {
+        display: flex;
       }
     }
   }

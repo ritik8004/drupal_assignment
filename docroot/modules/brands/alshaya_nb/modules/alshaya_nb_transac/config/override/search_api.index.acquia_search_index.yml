@@ -39,6 +39,16 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_sustainability:
+    label: 'Sustainability'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_sustainability
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   attr_width_description:
     label: 'Width description'
     datasource_id: entity:node
@@ -49,10 +59,10 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_nb_type:
+  attr_nb_product_type:
     label: 'Product type'
     datasource_id: entity:node
-    property_path: field_skus:entity:attr_nb_type
+    property_path: field_skus:entity:attr_nb_product_type
     type: string
     dependencies:
       config:

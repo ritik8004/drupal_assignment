@@ -439,7 +439,10 @@ class Configurable extends SKUPluginBase {
         }
 
         if ($configurable_attribute) {
-          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
+          // Remove elements with null value for value_id field to avoid
+          // array_flip() warnings due to null value.
+          $configurable_attribute_values = array_filter(array_column($configurable_attribute, 'value_id'));
+          $configurable_attribute_weights = array_flip($configurable_attribute_values);
           uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
             // There are cases when configurable attributes are not available
             // in weight, this generates notices. To avoid notices we do it

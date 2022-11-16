@@ -3,8 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 
-window.commerceBackend = window.commerceBackend || {};
-
 /**
  * Clear cart data.
  *
@@ -135,7 +133,9 @@ export const triggerAddToCart = (
       }
     }
 
+    gtmAttributes.variant = productDataSKU;
     Drupal.alshayaSpc.storeProductData({
+      id: productInfo[skuCode].id,
       sku: productDataSKU,
       parentSKU,
       title: productData.product_name,
@@ -199,6 +199,16 @@ export const triggerAddToCart = (
 
     // Refresh dynamic promo labels on cart update.
     pdpLabelRefresh(cartData);
+
+    // Send notification after we finished adding to cart.
+    const event = new CustomEvent('afterAddToCart', {
+      bubbles: true,
+      detail: {
+        context: 'pdp',
+        cartData,
+      },
+    });
+    document.dispatchEvent(event);
   }
 };
 
@@ -224,6 +234,7 @@ export const getProductValues = (productInfo, configurableCombinations,
   let expressDeliveryClass = '';
   let bigTickectProduct = false;
   let isProductBuyable = '';
+  let eligibleForReturn = false;
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -264,6 +275,7 @@ export const getProductValues = (productInfo, configurableCombinations,
     promotions = productInfo[skuItemCode].promotionsRaw;
     deliveryOptions = productInfo[skuItemCode].deliveryOptions;
     expressDeliveryClass = productInfo[skuItemCode].expressDeliveryClass;
+    eligibleForReturn = productInfo[skuItemCode].eligibleForReturn;
     if (productInfo[skuItemCode].bigTickectProduct) {
       bigTickectProduct = productInfo[skuItemCode].bigTickectProduct;
     }
@@ -283,6 +295,7 @@ export const getProductValues = (productInfo, configurableCombinations,
           promotions = variantInfo.promotionsRaw;
           deliveryOptions = variantInfo.deliveryOptions;
           expressDeliveryClass = variantInfo.expressDeliveryClass;
+          eligibleForReturn = variantInfo.eligibleForReturn;
           // free gift promotion variable from variant sku.
           if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
             freeGiftPromoType = variantInfo.freeGiftPromotion['#promo_type'];
@@ -350,6 +363,7 @@ export const getProductValues = (productInfo, configurableCombinations,
     expressDeliveryClass,
     isProductBuyable,
     bigTickectProduct,
+    eligibleForReturn,
   };
 };
 
@@ -480,19 +494,4 @@ export const addToCartSimple = (
     .catch((error) => {
       Drupal.logJavascriptError('addToCartSimple', error, GTM_CONSTANTS.CART_ERRORS);
     });
-};
-
-/**
- * Get size guide settings for pdp v2.
- *
- * @returns {Object}
- *   Processed size guide object.
- */
-window.commerceBackend.getSizeGuideSettings = () => {
-  // Get size guide from drupal settings for v2 architecture.
-  const { isSizeGuideEnabled, sizeGuide } = drupalSettings;
-  if (isSizeGuideEnabled && hasValue(sizeGuide)) {
-    return sizeGuide;
-  }
-  return null;
 };

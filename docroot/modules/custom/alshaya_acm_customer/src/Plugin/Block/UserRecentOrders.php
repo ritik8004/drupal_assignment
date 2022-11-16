@@ -234,6 +234,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             $order['totals']['grand'] = [
               '#theme' => 'acq_commerce_price',
               '#price' => isset($order['totals']) ? $order['totals']['grand'] : 0,
+              '#currency_format' => $order['order_currency_code'] ?? '',
             ];
 
             // Iterate over each order item.
@@ -244,13 +245,14 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               $order['items'][$key]['image'] = alshaya_acm_get_product_display_image(
                 $item['sku'],
                 SkuImagesHelper::STYLE_PRODUCT_TEASER,
-                'order_detail'
+                'cart'
               );
 
               // Total price.
               $order['items'][$key]['total_price'] = [
                 '#theme' => 'acq_commerce_price',
                 '#price' => ($order['items'][$key]['price'] * $order['items'][$key]['ordered']),
+                '#currency_format' => $order['order_currency_code'] ?? '',
               ];
 
               // If 'applied_rule_ids' is set and price is 0, set the free gift
@@ -269,6 +271,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                 $order['items'][$key]['price'] = [
                   '#theme' => 'acq_commerce_price',
                   '#price' => $order['items'][$key]['price'],
+                  '#currency_format' => $order['order_currency_code'] ?? '',
                 ];
               }
 
@@ -277,6 +280,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                 $cancelled_item['price'] = [
                   '#theme' => 'acq_commerce_price',
                   '#price' => $order['items'][$key]['refund_amount'],
+                  '#currency_format' => $order['order_currency_code'] ?? '',
                 ];
                 $cancelled_item['ordered'] = $order['items'][$key]['cancelled_quantity'];
 

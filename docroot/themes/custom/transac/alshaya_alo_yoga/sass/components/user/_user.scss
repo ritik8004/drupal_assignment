@@ -8,11 +8,15 @@
 
         @include breakpoint($desktop) {
           width: 26.5%;
+
+          html[lang=ar] & {
+            margin-left: 0;
+          }
         }
       }
 
       li {
-        font-size: rem(14);
+        font-size: rem(12);
 
         &:first-child {
           @include breakpoint($desktop) {
@@ -24,6 +28,10 @@
           @include breakpoint($desktop) {
             text-align: $left;
             padding-#{$left}: rem(20);
+
+            html[lang=ar] & {
+              text-align: center;
+            }
           }
         }
       }
@@ -55,8 +63,8 @@
   .alias--user-login &,
   .alias--user-register & {
     @include breakpoint($only-mobile) {
-      margin-#{$left}: rem(8);
-      margin-#{$right}: rem(8);
+      margin-#{$left}: rem(12);
+      margin-#{$right}: rem(12);
     }
   }
 
@@ -96,7 +104,6 @@
   .change-pwd-form,
   .user-form {
     .form-tel,
-    .form-text,
     .form-type-textfield label:not(.error),
     label.form-required:not(.error) {
       text-transform: capitalize;
@@ -114,8 +121,29 @@
   text-transform: uppercase;
 
   .change-pwd-form & {
-    @include breakpoint($only-mobile) {
-      top: rem(3);
+    top: rem(2);
+  }
+}
+
+#block-content {
+  .order-items li {
+    .order-list-wrapper-container {
+      @include breakpoint($only-mobile) {
+        height: auto;
+        margin-top: rem(10);
+      }
+
+      .first {
+        @include breakpoint($desktop) {
+          width: rem(134);
+        }
+      }
+
+      .first-second {
+        @include breakpoint($desktop) {
+          height: rem(120);
+        }
+      }
     }
   }
 }

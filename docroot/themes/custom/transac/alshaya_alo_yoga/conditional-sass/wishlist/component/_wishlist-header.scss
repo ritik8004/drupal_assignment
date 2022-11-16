@@ -63,5 +63,19 @@ body {
         }
       }
     }
+
+    .filter-fixed-top {
+      .sticky-filter-wrapper {
+        .wishlist-minicart-sticky-wrapper {
+          #static-minicart-section {
+            .static-minicart-wrapper {
+              @include breakpoint($only-tablet) {
+                margin-top: rem(2);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

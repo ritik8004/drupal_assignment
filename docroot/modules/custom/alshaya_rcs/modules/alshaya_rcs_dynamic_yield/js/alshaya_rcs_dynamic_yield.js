@@ -5,7 +5,7 @@
 
 (function (Drupal, RcsEventManager) {
 
-  window.DY = window.DY || [];
+  window.DY = window.DY || {};
   var initialDyData = window.DY;
   if (rcsPhGetPageType() === null) {
     var alterInitialDYData = new CustomEvent('alterInitialDynamicYield', { detail: { data: initialDyData } });

@@ -30,6 +30,8 @@ import DynamicYieldPlaceholder from '../../../../../js/utilities/components/dyna
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import PdpSddEd from '../../../../../js/utilities/components/pdp-sdd-ed';
 import PdpDescriptionType2 from '../pdp-description-type2';
+import { isOnlineReturnsEnabled } from '../../../../../js/utilities/onlineReturnsHelper';
+import OnlineReturnsPDP from '../../../../../alshaya_online_returns/js/pdp/components/online-returns-pdp';
 
 const PdpLayout = ({ productInfo, configurableCombinations }) => {
   const [variant, setVariant] = useState(null);
@@ -101,6 +103,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     freeGiftPromoType,
     isProductBuyable,
     bigTickectProduct,
+    eligibleForReturn,
   } = productValues;
 
   const emptyRes = (
@@ -168,7 +171,15 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     window.addEventListener('resize', headerButton);
   };
 
+  const removeClassFromPDPLayout = (className) => {
+    const element = document.querySelector('#pdp-layout');
+    if (typeof element !== 'undefined') {
+      element.classList.remove(className);
+    }
+  };
+
   useEffect(() => {
+    removeClassFromPDPLayout('content-loading');
     sidebarSticky();
     showStickyHeader();
     if (isAuraEnabled()) {
@@ -179,6 +190,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     }
     stickyButton();
     loadAfterProductDataFetch(productInfo);
+    Drupal.alshayaSeoGtmPushProductDetailView(document.getElementById('pdp-layout'));
   }, []);
 
   const getPanelData = useCallback((data) => {
@@ -315,6 +327,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
             <PdpDescription
               skuCode={skuMainCode}
               pdpDescription={description}
+              eligibleForReturn={eligibleForReturn}
               pdpShortDesc={shortDesc}
               title={title}
               pdpProductPrice={priceRaw}
@@ -322,6 +335,14 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
               getPanelData={getPanelData}
               removePanelData={removePanelData}
             />
+            )}
+          {(pdpDescriptionContainerType === 2 && isOnlineReturnsEnabled())
+            && (
+            <div className="online-returns-pdp">
+              <OnlineReturnsPDP
+                eligibleForReturn={eligibleForReturn}
+              />
+            </div>
             )}
           <ConditionalView
             condition={isExpressDeliveryEnabled()

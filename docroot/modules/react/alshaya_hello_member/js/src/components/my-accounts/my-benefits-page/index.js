@@ -17,7 +17,7 @@ class MyBenefitsPage extends React.Component {
       myBenefit: null,
       codeId: null,
       couponId: null,
-      voucherType: null,
+      promotionType: null,
     };
   }
 
@@ -35,7 +35,7 @@ class MyBenefitsPage extends React.Component {
             wait: true,
             codeId: response.data.coupons[0].code,
             couponId: `${response.data.coupons[0].type}|${response.data.coupons[0].code}`,
-            voucherType: response.data.coupons[0].type,
+            promotionType: response.data.coupons[0].promotion_type,
           });
         } else {
           // If coupon details API is returning Error.
@@ -65,7 +65,7 @@ class MyBenefitsPage extends React.Component {
 
   render() {
     const {
-      wait, myBenefit, codeId, couponId, voucherType,
+      wait, myBenefit, codeId, couponId, promotionType,
     } = this.state;
 
     if (!wait) {
@@ -112,7 +112,7 @@ class MyBenefitsPage extends React.Component {
           <AddBenefitsToCart
             title={myBenefit.description}
             codeId={codeId}
-            voucherType={voucherType}
+            promotionType={promotionType}
           />
         </div>
         <div className="benefit-description">

@@ -76,9 +76,10 @@ class HelloMemberCartOffersVouchers extends React.Component {
 
     // Get coupons list.
     const couponResponse = await callHelloMemberApi('helloMemberCouponsList', 'GET');
+
     if (hasValue(couponResponse.data) && !hasValue(couponResponse.data.error)) {
       couponResponse.data.coupons.forEach((coupon) => {
-        if (coupon.type === 'BONUS_VOUCHER') {
+        if (coupon.promotion_type === 'voucher') {
           vouchers.push(coupon);
         } else {
           Offers.push(coupon);
@@ -121,6 +122,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       openModal,
     });
     removeFullScreenLoader();
+    Drupal.alshayaSeoGtmPushVoucherLinkClick();
   };
 
   // on click close symbol close the popup.

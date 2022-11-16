@@ -5,6 +5,13 @@
       font-size: rem(16);
       margin-bottom: rem(23);
       font-family: $alshaya-bold;
+      text-transform: capitalize;
+
+      @include breakpoint($only-mobile) {
+        text-transform: uppercase;
+        text-align: #{$left};
+        padding-#{$left}: rem(16);
+      }
     }
   }
 
@@ -41,6 +48,7 @@
     .spc-checkout-section-title {
       margin-bottom: rem(22);
       font-family: $alshaya-bold;
+      text-transform: capitalize;
     }
   }
 }

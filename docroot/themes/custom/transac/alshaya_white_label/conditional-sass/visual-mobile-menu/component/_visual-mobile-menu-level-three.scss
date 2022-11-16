@@ -8,12 +8,14 @@
   width: 100%;
   overflow: auto;
   background: $menu_bg;
+  border-top: rem(1) solid $mob_menu_one_border_color;
 
   .back--link {
     display: flex;
     text-align: center;
     padding: 0;
     align-items: center;
+    border: none;
 
     .menu__back {
       display: none;

@@ -2,6 +2,15 @@
   max-width: rem(1026);
   margin: 0 auto rem(15);
 
+  .alias--checkout &,
+  .alias--checkout-confirmation & {
+    margin: 0 auto rem(84);
+
+    @include breakpoint($only-mobile) {
+      margin: 0 auto rem(44);
+    }
+  }
+
   #checkout-progress {
     width: 90%;
     margin: 0 auto;
@@ -39,11 +48,21 @@
         &::after {
           transform: scaleX(0.666) translateY(-50%);
         }
+
+        .step.step-2 {
+          .logged-in & {
+            pointer-events: none;
+          }
+        }
       }
 
       &-4 {
         &::after {
           transform: scaleX(1) translateY(-50%);
+        }
+
+        .step {
+          pointer-events: none;
         }
       }
     }
@@ -77,6 +96,14 @@
           transition: 0.3s ease;
           display: block;
           transform: translate3d(0, 0, 0) scale(1);
+          width: rem(20);
+          height: rem(20);
+          text-align: center;
+          padding-top: rem(2);
+
+          html[lang=ar] & {
+            padding-top: rem(4);
+          }
 
           @include breakpoint($only-mobile) {
             font-size: rem(14);
@@ -105,18 +132,18 @@
 
         &.completed {
           span {
-            color: $cko-steps-active-txt;
+            color: transparent;
             transform: translate3d(0, 0, 0) scale(2);
-            font-size: 0;
           }
 
           .step-label {
             color: $cko-steps-label-txt !important;
             font-size: rem(14);
-            top: calc(100% + #{rem(28)});
+            top: calc(100% + #{rem(20)});
 
             @include breakpoint($only-mobile) {
               font-size: rem(10);
+              top: calc(100% + #{rem(18)});
             }
           }
 
@@ -136,10 +163,12 @@
 
           span {
             color: $cko-steps-active-txt;
+            pointer-events: none;
           }
 
           .step-label {
             font-family: $alshaya-bold;
+            pointer-events: none;
           }
         }
 
@@ -163,6 +192,14 @@
           @include breakpoint($only-mobile) {
             width: rem(26);
             height: rem(26);
+          }
+        }
+
+        &.step-4 {
+          &.completed {
+            .step-label {
+              font-family: $alshaya-bold;
+            }
           }
         }
       }

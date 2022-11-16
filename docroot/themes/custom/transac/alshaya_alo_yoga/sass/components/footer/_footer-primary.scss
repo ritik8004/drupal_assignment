@@ -134,6 +134,12 @@
     }
   }
 
+  #alshaya-newsletter-subscribe {
+    #edit-email {
+      border-bottom-width: 0;
+    }
+  }
+
   .alshaya-newsletter-subscribe {
     h3 {
       font-size: rem(16);
@@ -175,6 +181,10 @@
       &::placeholder {
         color: $footer-newsletter-text;
       }
+
+      &.error {
+        border-bottom-width: rem(1) !important;
+      }
     }
 
     .form-email {
@@ -183,18 +193,19 @@
       margin-top: rem(4);
       font-size: rem(12);
       padding-#{$left}: rem(8);
+      height: rem(40);
     }
 
     .form-submit {
       background-color: $primary_brand_button;
       font-family: $ay-heavy;
       font-size: rem(16);
-      line-height: 1.25;
       color: $primary_btn_bg;
       text-transform: uppercase;
-      padding: rem(7) rem(15);
-      margin-bottom: rem(1);
+      padding: 0 rem(15);
+      margin-bottom: 0;
       #{$right}: 0;
+      height: rem(40);
     }
   }
 
@@ -213,10 +224,7 @@
     h3 {
       font-size: rem(16);
       color: $footer_title_h3;
-
-      @include breakpoint($upto-tablet) {
-        font-family: $alshaya-thin;
-      }
+      font-family: $alshaya-bold;
     }
 
     ul {
@@ -242,4 +250,9 @@
       }
     }
   }
+}
+
+.ladda-button[data-style=zoom-in] .ladda-spinner {
+  #{$left}: 70%;
+  top: rem(20);
 }

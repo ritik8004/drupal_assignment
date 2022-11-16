@@ -7,6 +7,7 @@ const ArticleSwatches = ({
   sku, articleSwatches, url, handleSwatchSelect,
 }) => {
   const [selectedSwatch, setActiveSwatch] = useState(sku);
+  const [disabled, setDisabled] = useState({});
   if (typeof articleSwatches === 'undefined') {
     return null;
   }
@@ -29,22 +30,27 @@ const ArticleSwatches = ({
   }
 
   // Update content for the product as per selected swatch item.
-  const showSelectedSwatchProduct = async (e, skuCode) => {
+  const showSelectedSwatchProduct = async (e, swatch) => {
     e.preventDefault();
 
-    setActiveSwatch(skuCode);
-    const response = await getSingleProductByColorSku(skuCode);
+    setActiveSwatch(swatch.article_sku_code);
+    const response = await getSingleProductByColorSku(swatch.article_sku_code);
     if (hasValue(response)) {
       const price = window.commerceBackend.getPrices(response[0], true);
       const productData = {
-        sku: skuCode,
+        sku: swatch.article_sku_code,
         media: response[0].article_media_gallery,
         name: response[0].name,
-        url: response[0].url_key,
+        url: Drupal.url(response[0].end_user_url),
         priceData: price,
+        color: swatch.rgb_color,
       };
       handleSwatchSelect(productData);
+      Drupal.alshayaSeoGtmPushSwatchClick(productData);
     } else {
+      // Set disabled as true for current swatch for product goes oos
+      // or any error.
+      setDisabled({ [swatch.article_sku_code]: true });
       // If graphQl API is returning Error.
       Drupal.alshayaLogger('error', 'Error while calling the GraphQL to fetch product info for sku: @sku', {
         '@sku': sku,
@@ -58,11 +64,12 @@ const ArticleSwatches = ({
         {articleSwatches.slice(0, limit).map(
           (swatch) => (
             <button
-              onClick={(e) => showSelectedSwatchProduct(e, swatch.article_sku_code)}
+              onClick={(e) => showSelectedSwatchProduct(e, swatch)}
               type="button"
               className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
               key={swatch.article_sku_code}
               style={{ backgroundColor: swatch.rgb_color }}
+              disabled={disabled[swatch.article_sku_code]}
             />
           ),
         )}

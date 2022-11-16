@@ -1,0 +1,35 @@
+alshaya_xb.settings:
+  type: config_object
+  label: 'Global-e config'
+  mapping:
+    globale_js_url:
+      type: string
+      label: 'Global-e JS URL'
+    globale_css_url:
+      type: string
+      label: 'Global-e CSS URL'
+    domain_mapping:
+      type: sequence
+      label: 'Provides config based on domain'
+      sequence:
+        type: config_object
+        label: 'Config overrides based on domain'
+        mapping:
+          domains:
+            type: string
+            label: 'Domain and site prefix comma separated eg: americaneagle.om,aeoom'
+          code:
+            type: string
+            label: 'Country code eg: om'
+          country:
+            type: string
+            label: 'Country name eg: Oman'
+          currency_code:
+            type: string
+            label: 'Currency code eg: OMR'
+          hotline_number:
+            type: string
+            label: 'Hotline number'
+          culture_code:
+            type: string
+            label: 'Culture code eg: ar'

@@ -6,6 +6,7 @@ require_once 'common.php';
 $domain = $argv[1] ?? '';
 $theme = $argv[2] ?? '';
 $magento_site_code = $argv[3] ?? '';
+$pims_bucket = $argv[4] ?? '';
 
 if (empty($domain)) {
   print 'Please specify the domain to create rules for.';
@@ -29,6 +30,57 @@ $domain_clean = str_replace('www.', '', $domain);
 
 $rules = [];
 
+// V3
+if ($pims_bucket) {
+  $rules['assets'] = [
+    "targets" => [
+      [
+        "target" => "url",
+        "constraint" => [
+          "operator" => "matches",
+          "value" => "*$domain_clean/assets/*",
+        ],
+      ],
+    ],
+    "actions" => [
+      [
+        "id" => "resolve_override",
+        "value" => "media.$domain_clean",
+      ],
+      [
+        "id" => "host_header_override",
+        "value" => "$pims_bucket.s3.eu-west-1.amazonaws.com",
+      ],
+    ],
+    "priority" => 100,
+    "status" => "active",
+  ];
+}
+
+$rules['media'] = [
+  "targets" => [
+    [
+      "target" => "url",
+      "constraint" => [
+        "operator" => "matches",
+        "value" => "*$domain_clean/media/*",
+      ],
+    ],
+  ],
+  "actions" => [
+    [
+      "id" => "resolve_override",
+      "value" => "commerce.$domain_clean",
+    ],
+    [
+      "id" => "host_header_override",
+      "value" => $magento_site_code . ".store.alshaya.com",
+    ],
+  ],
+  "priority" => 99,
+  "status" => "active",
+];
+
 // V2.
 $rules['commerce_v2'] = [
   "targets" => [
@@ -36,21 +88,21 @@ $rules['commerce_v2'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/rest/*_*/V1/*",
+        "value" => "*$domain_clean/rest/*_*/V1/*",
       ],
     ],
   ],
   "actions" => [
     [
       "id" => "resolve_override",
-      "value" => "commerce." . $domain_clean . "",
+      "value" => "commerce.$domain_clean",
     ],
     [
       "id" => "host_header_override",
       "value" => $magento_site_code . ".store.alshaya.com",
     ],
   ],
-  "priority" => "97",
+  "priority" => 97,
   "status" => "active",
 ];
 
@@ -60,7 +112,7 @@ $rules['commerce_v2_callback'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/*/spc/payment-callback/*",
+        "value" => "*$domain_clean/*/spc/payment-callback/*",
       ],
     ],
   ],
@@ -70,7 +122,7 @@ $rules['commerce_v2_callback'] = [
       "value" => 0,
     ],
   ],
-  "priority" => "98",
+  "priority" => 98,
   "status" => "active",
 ];
 
@@ -80,7 +132,7 @@ $rules['cache_react_dist'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/modules/react/*/dist/*",
+        "value" => "*$domain_clean/modules/react/*/dist/*",
       ],
     ],
   ],
@@ -91,7 +143,7 @@ $rules['cache_react_dist'] = [
     ],
     [
       "id" => "edge_cache_ttl",
-      "value" => 2_678_400,
+      "value" => 2678400,
     ],
   ],
   "priority" => 96,
@@ -135,33 +187,11 @@ $rules['favicon'] = [
       "id" => "forwarding_url",
       "value" => [
         "url" => "https://" . $domain . "/themes/custom/transac/" . $theme . "/favicon.ico",
-        "status_code" => "301",
+        "status_code" => 301,
       ],
     ],
   ],
   "status" => "active",
-];
-
-$rules['maintenance_rule'] = [
-  "targets" => [
-    [
-      "target" => "url",
-      "constraint" => [
-        "operator" => "matches",
-        "value" => "*" . $domain_clean . "/*",
-      ],
-    ],
-  ],
-  "actions" => [
-    [
-      "id" => "forwarding_url",
-      "value" => [
-        "url" => "https://monitoring.factory.alshaya.com/maintenance.html",
-        "status_code" => "302",
-      ],
-    ],
-  ],
-  "status" => "disabled",
 ];
 
 $rules['https'] = [
@@ -170,7 +200,7 @@ $rules['https'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "http://*" . $domain_clean . "/*",
+        "value" => "http://*$domain_clean/*",
       ],
     ],
   ],
@@ -179,7 +209,7 @@ $rules['https'] = [
       "id" => "always_use_https",
     ],
   ],
-  "priority" => "100",
+  "priority" => 1000,
   "status" => "active",
 ];
 
@@ -189,7 +219,7 @@ $rules['_cf_cache_bypass'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/*?*_cf_cache_bypass=1*",
+        "value" => "*$domain_clean/*?*_cf_cache_bypass=1*",
       ],
     ],
   ],
@@ -199,7 +229,7 @@ $rules['_cf_cache_bypass'] = [
       "value" => "bypass",
     ],
   ],
-  "priority" => "80",
+  "priority" => 80,
   "status" => "active",
 ];
 
@@ -209,7 +239,7 @@ $rules['node_edit'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/*/node/*/edit*",
+        "value" => "*$domain_clean/*/node/*/edit*",
       ],
     ],
   ],
@@ -217,12 +247,8 @@ $rules['node_edit'] = [
     [
       "id" => "disable_security",
     ],
-    [
-      "id" => "browser_cache_ttl",
-      "value" => "14400",
-    ],
   ],
-  "priority" => "13",
+  "priority" => 13,
   "status" => "active",
 ];
 
@@ -232,7 +258,7 @@ $rules['admin_config'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/*/admin/config/*",
+        "value" => "*$domain_clean/*/admin/config/*",
       ],
     ],
   ],
@@ -241,7 +267,7 @@ $rules['admin_config'] = [
       "id" => "disable_security",
     ],
   ],
-  "priority" => "12",
+  "priority" => 12,
   "status" => "active",
 ];
 
@@ -251,7 +277,7 @@ $rules['cron'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/cron.php",
+        "value" => "*$domain_clean/cron.php",
       ],
     ],
   ],
@@ -265,7 +291,7 @@ $rules['cron'] = [
       "value" => "bypass",
     ],
   ],
-  "priority" => "11",
+  "priority" => 11,
   "status" => "active",
 ];
 
@@ -275,7 +301,7 @@ $rules['themes_custom'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/themes/custom/*",
+        "value" => "*$domain_clean/themes/custom/*",
       ],
     ],
   ],
@@ -289,7 +315,7 @@ $rules['themes_custom'] = [
       "value" => "cache_everything",
     ],
   ],
-  "priority" => "10",
+  "priority" => 10,
   "status" => "active",
 ];
 
@@ -299,7 +325,7 @@ $rules['assets_vendor'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/core/assets/vendor/*",
+        "value" => "*$domain_clean/core/assets/vendor/*",
       ],
     ],
   ],
@@ -313,7 +339,7 @@ $rules['assets_vendor'] = [
       "value" => "cache_everything",
     ],
   ],
-  "priority" => "9",
+  "priority" => 9,
   "status" => "active",
 ];
 
@@ -323,7 +349,7 @@ $rules['files'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/sites/*/files/*",
+        "value" => "*$domain_clean/sites/*/files/*",
       ],
     ],
   ],
@@ -337,7 +363,7 @@ $rules['files'] = [
       "value" => "cache_everything",
     ],
   ],
-  "priority" => "8",
+  "priority" => 8,
   "status" => "active",
 ];
 
@@ -347,7 +373,7 @@ $rules['profile_themes'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/profiles/custom/*/themes/*",
+        "value" => "*$domain_clean/profiles/custom/*/themes/*",
       ],
     ],
   ],
@@ -361,7 +387,7 @@ $rules['profile_themes'] = [
       "value" => "cache_everything",
     ],
   ],
-  "priority" => "6",
+  "priority" => 6,
   "status" => "active",
 ];
 
@@ -371,31 +397,7 @@ $rules['users'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/*/user/*",
-      ],
-    ],
-  ],
-  "actions" => [
-    [
-      "id" => "browser_cache_ttl",
-      "value" => 0,
-    ],
-    [
-      "id" => "cache_level",
-      "value" => "bypass",
-    ],
-  ],
-  "priority" => "5",
-  "status" => "active",
-];
-
-$rules['user_register'] = [
-  "targets" => [
-    [
-      "target" => "url",
-      "constraint" => [
-        "operator" => "matches",
-        "value" => "*" . $domain_clean . "/user/register*",
+        "value" => "*$domain_clean/*/user/*",
       ],
     ],
   ],
@@ -405,16 +407,19 @@ $rules['user_register'] = [
       "value" => "high",
     ],
     [
+      "id" => "browser_cache_ttl",
+      "value" => 0,
+    ],
+    [
       "id" => "cache_level",
       "value" => "bypass",
     ],
   ],
-  "priority" => "4",
+  "priority" => 5,
   "status" => "active",
 ];
 
 $rules['batch'] = [
-  "id" => "9b88907f08f3f0d98706f79234038e4e",
   "targets" => [
     [
       "target" => "url",
@@ -434,7 +439,7 @@ $rules['batch'] = [
       "value" => "off",
     ],
   ],
-  "priority" => "2",
+  "priority" => 2,
   "status" => "active",
 ];
 
@@ -444,14 +449,14 @@ $rules['session'] = [
       "target" => "url",
       "constraint" => [
         "operator" => "matches",
-        "value" => "*" . $domain_clean . "/*",
+        "value" => "*$domain_clean/*",
       ],
     ],
   ],
   "actions" => [
     [
       "id" => "browser_cache_ttl",
-      "value" => "1200",
+      "value" => 1200,
     ],
     [
       "id" => "cache_level",
@@ -459,7 +464,7 @@ $rules['session'] = [
     ],
     [
       "id" => "edge_cache_ttl",
-      "value" => "1200",
+      "value" => 1200,
     ],
     [
       "id" => "bypass_cache_on_cookie",
@@ -469,9 +474,13 @@ $rules['session'] = [
       "id" => "disable_apps",
     ],
   ],
-  "priority" => "1",
+  "priority" => 1,
   "status" => "active",
 ];
+
+usort($rules, function ($a, $b) {
+  return $a['priority'] ?? 1 <=> $b['priority'] ?? 1;
+});
 
 $zone = get_zone_for_domain($domain);
 
@@ -488,7 +497,7 @@ foreach ($rules as $key => $rule) {
   $check_target = strtolower(json_encode($rule['targets']));
 
   foreach ($existing_rules as $existing_rule) {
-    if ($check_target === strtolower(json_encode($existing_rule['targets'], JSON_THROW_ON_ERROR))) {
+    if ($check_target === strtolower(json_encode($existing_rule['targets']))) {
       unset($rules[$key]);
       break;
     }
@@ -498,5 +507,9 @@ foreach ($rules as $key => $rule) {
 }
 
 foreach ($rules as $rule) {
-  print_r(create_page_rule_for_zone($zone, $rule));
+  $response = create_page_rule_for_zone($zone, $rule);
+  if ($response['errors']) {
+    print_r($response);
+    die();
+  }
 }

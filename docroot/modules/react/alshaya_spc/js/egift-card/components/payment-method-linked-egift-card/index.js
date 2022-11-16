@@ -150,11 +150,11 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       });
     }
     // Event listener on delivery information update to remove redeemed Amount.
-    document.addEventListener('refreshCartOnAddress', this.handleRemoveCard);
+    document.addEventListener('refreshCartOnAddress', () => { this.handleRemoveCard(); });
     // Event listener on CnC store selection.
-    document.addEventListener('refreshCartOnCnCSelect', this.handleRemoveCard);
+    document.addEventListener('refreshCartOnCnCSelect', () => { this.handleRemoveCard(); });
     // Event listener on shiping method update to remove redeemed Amount.
-    document.addEventListener('changeShippingMethod', this.handleRemoveCard);
+    document.addEventListener('changeShippingMethod', () => { this.handleRemoveCard(); });
     // Event listener on dom click to remove link card payment error.
     document.addEventListener('click', this.handleRemoveError, false);
   }
@@ -274,12 +274,16 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
       }
     } else {
       // On unchecking the checkbox this will be executed to remove redemption.
-      this.handleRemoveCard();
+      this.handleRemoveCard(true);
     }
   };
 
-  // Remove redeemed Card.
-  handleRemoveCard = () => {
+  /**
+   * Remove redeemed card.
+   *
+   * @param {boolean} triggerEvent
+   */
+  handleRemoveCard = (triggerEvent = false) => {
     const { egiftLinkedCardNumber } = this.state;
     const { cart, refreshCart } = this.props;
     let postData = {
@@ -315,11 +319,14 @@ class PaymentMethodLinkedEgiftCard extends React.Component {
               apiErrorMessage: '',
               setChecked: false,
             });
+
             // Dispatch unlink egift redeemed for GTM.
-            dispatchCustomEvent('egiftCardRedeemed', {
-              label: 'unchecked',
-              action: 'linked_card_redemption',
-            });
+            if (triggerEvent) {
+              dispatchCustomEvent('egiftCardRedeemed', {
+                label: 'unchecked',
+                action: 'linked_card_redemption',
+              });
+            }
           } else {
             logger.error('Empty Response while calling the cancel eGiftRedemption. Action: @action, CardNumber: @cardNumber, Response: @response', {
               '@action': postData.redeem_points.action,

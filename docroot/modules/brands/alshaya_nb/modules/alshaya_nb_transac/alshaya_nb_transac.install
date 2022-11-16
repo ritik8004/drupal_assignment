@@ -12,7 +12,6 @@ function alshaya_nb_transac_install() {
   // Enable and set alshaya_new_balance as default theme and set,
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_new_balance');
-
   $config_factory = \Drupal::configFactory();
   // Set main menu block in the header region.
   $config_factory
@@ -64,8 +63,13 @@ function alshaya_nb_transac_install() {
     ->save();
 
   // Add translations.
-  module_load_include('inc', 'alshaya_nb_transac', 'alshaya_nb_transac.translation');
-  if ($translations = _alshaya_nb_transac_get_translations()) {
+  \Drupal::moduleHandler()->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations();
+  if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
   }
+  // Add content.
+  \Drupal::moduleHandler()->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.content');
+  // Create default content for custom block.
+  alshaya_nb_transac_create_default_content();
 }

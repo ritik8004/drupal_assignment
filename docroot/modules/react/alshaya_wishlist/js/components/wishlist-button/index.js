@@ -490,7 +490,7 @@ class WishlistButton extends React.Component {
         const { sku } = this.props;
         if (sku === e.detail.data.sku || this.ifExistsInSameGroup(parentSkuSelected)) {
           const configurableCombinations = window.commerceBackend.getConfigurableCombinations(
-            parentSkuSelected,
+            sku,
           );
           this.setState({
             skuCode: parentSkuSelected,

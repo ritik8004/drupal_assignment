@@ -1,13 +1,14 @@
 // share fields on product detail page
 .sharethis-wrapper {
-  text-align: left;
-
-  @include breakpoint($only-mobile) {
-    margin: rem(16) 0 0;
-  }
+  text-align: $left;
 
   > span {
     margin-#{$right}: rem(22);
+    margin-top: rem(22);
+
+    @include breakpoint($tablet) {
+      margin-top: rem(28);
+    }
   }
 
   .st_facebook_custom {

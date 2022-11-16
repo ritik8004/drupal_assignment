@@ -46,7 +46,6 @@
         &.status-pending,
         &.status-processing,
         &.status-returned {
-          text-transform: uppercase;
           font-weight: 700;
 
           @include breakpoint($upto-desktop) {

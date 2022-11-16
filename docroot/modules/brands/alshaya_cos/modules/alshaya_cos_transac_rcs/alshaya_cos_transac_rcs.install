@@ -6,6 +6,13 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function alshaya_cos_transac_rcs_install() {
+  \Drupal::service('module_installer')->install(['alshaya_rcs']);
+}
+
+/**
  * Implements hook_uninstall().
  */
 function alshaya_cos_transac_rcs_uninstall() {
