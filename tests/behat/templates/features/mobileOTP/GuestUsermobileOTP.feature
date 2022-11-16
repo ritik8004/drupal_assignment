@@ -6,7 +6,8 @@ Feature: To verify the mobile OTP functionality on COD payment method for Guest 
     And I wait for the page to load
     And I wait for AJAX to finish
 
-  @valid-otp @guest @desktop
+  @valid-otp @desktop
+  # @todo Check if can also work on mobile test
   Scenario: As a Guest user, I should be able to validate the mobile OTP for COD payment method
     # @todo: Find a way to detect when a full loader is on the page and the element is not clickable
     When I click on Add-to-cart button
