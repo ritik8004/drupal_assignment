@@ -1,0 +1,5 @@
+main:
+  js:
+    dist/alshaya_behat.bundle.js: {}
+  dependencies:
+    - core/drupal
