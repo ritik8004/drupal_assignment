@@ -164,6 +164,7 @@ class SkuPriceHelper {
       $this->build['#price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $price,
+        '#sku' => $sku,
       ];
 
       // Get the discounted price.
@@ -176,6 +177,7 @@ class SkuPriceHelper {
         $this->build['#final_price'] = [
           '#theme' => 'acq_commerce_price',
           '#price' => $final_price,
+          '#sku' => $sku,
         ];
 
         // Get discount if discounted price available.
@@ -188,6 +190,7 @@ class SkuPriceHelper {
       $this->build['#price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $final_price,
+        '#sku' => $sku,
       ];
     }
   }
