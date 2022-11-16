@@ -28,13 +28,6 @@ body.aura-enabled {
           z-index: 14;
         }
       }
-
-      .block-alshaya-super-category-menu.hide-super-category {
-        @include breakpoint($upto-desktop) {
-          display: none !important;
-          z-index: 11;
-        }
-      }
     }
 
     &.wishlist-enabled {
@@ -52,6 +45,12 @@ body.aura-enabled {
       @include breakpoint($upto-desktop) {
         z-index: 14;
       }
+    }
+  }
+
+  .aura-modal-form {
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(36);
     }
   }
 }
