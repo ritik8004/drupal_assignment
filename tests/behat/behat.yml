@@ -32,13 +32,15 @@ default:
           #                      w3c: false
           chrome:
             switches:
-              - "--headless"
-              - "--disable-gpu"
-              - "--no-sandbox"
-              # - "--window-size=1920,1080"
-              - "--ignore-certificate-errors"
+#              - "--headless"
+#              - "--disable-gpu"
+#              - "--no-sandbox"
+#              # - "--window-size=1920,1080"
+#              - "--ignore-certificate-errors"
     Drupal\DrupalExtension:
       blackbox: ~
+      region_map:
+        local_tasks: "#block-local-tasks"
     emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
       name: html
       renderer: Twig,Behat2
