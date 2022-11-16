@@ -130,7 +130,7 @@
    */
   Drupal.alshayaSeoGtmPushBenefitQrData = function (benefitName, benefitType) {
     // Prepare the benefit qr code data.
-    var returnData = {
+    var benefitsQRdata = {
       event: "benefitsViewQrCode",
       eventAction: 'benefits - view qr code',
       eventLabel: benefitType + '_' + benefitName,
@@ -138,7 +138,7 @@
       eventValue: 0,
       nonInteraction: 0,
     }
-    dataLayer.push(returnData);
+    dataLayer.push(benefitsQRdata);
   }
 
 })(Drupal, dataLayer);
