@@ -189,7 +189,9 @@ class AlshayaApiWrapper {
    *   The Language prefix for current language.
    */
   private function getMagentoLangPrefix() {
-    return Settings::get('magento_lang_prefix')[$this->langcode];
+    return $this->configFactory
+      ->get('alshaya_api.settings')
+      ->get('magento_lang_prefix')[$this->langcode];
   }
 
   /**
