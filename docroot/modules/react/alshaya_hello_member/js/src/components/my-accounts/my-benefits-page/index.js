@@ -30,13 +30,19 @@ class MyBenefitsPage extends React.Component {
       if (type === 'coupon') {
         const response = await callHelloMemberApi('helloMemberCouponPage', 'GET', params);
         if (hasValue(response.data) && !hasValue(response.data.error)) {
+          const promotionType = response.data.coupons[0].promotion_type;
+          const { description } = response.data.coupons[0];
           this.setState({
             myBenefit: response.data.coupons[0],
             wait: true,
             codeId: response.data.coupons[0].code,
             couponId: `${response.data.coupons[0].type}|${response.data.coupons[0].code}`,
-            promotionType: response.data.coupons[0].promotion_type,
+            promotionType,
           });
+          // Push coupon data to gtm once it is loaded.
+          if (hasValue(promotionType) && hasValue(description)) {
+            Drupal.alshayaSeoGtmPushBenefitsOffer({ promotionType, description });
+          }
         } else {
           // If coupon details API is returning Error.
           logger.error('Error while calling the coupon details Api @params, @message', {
@@ -103,6 +109,8 @@ class MyBenefitsPage extends React.Component {
         </div>
         <div className="btn-wrapper">
           <QrCodeDisplay
+            benefitName={myBenefit.description}
+            benefitType={promotionType}
             memberId={myBenefit.member_identifier}
             qrCodeTitle={qrCodeTitle}
             codeId={couponId || codeId}

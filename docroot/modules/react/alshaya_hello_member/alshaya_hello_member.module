@@ -496,6 +496,7 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
   $build['#attached']['drupalSettings']['helloMember']['brandMembershipText'] = $brand_membership_text;
   $build['#attached']['drupalSettings']['helloMember']['currencyCode'] = $iso_currency_code;
   $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
+  $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_hello_member';
 
   \Drupal::moduleHandler()->loadInclude('alshaya_hello_member', 'inc', 'alshaya_hello_member.static_strings');
   $build['#strings'] = array_merge($build['#strings'], _alshaya_hello_member_aura_static_strings());
@@ -558,6 +559,7 @@ function alshaya_hello_member_alshaya_spc_cart_build_alter(array &$build) {
     return;
   }
   $build['#attached']['library'][] = 'alshaya_white_label/hello-member-promotion';
+  $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_hello_member';
 }
 
 /**
