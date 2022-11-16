@@ -2,9 +2,6 @@ services:
   alshaya_rcs_main_menu.rcs_category_helper:
     class: Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper
     arguments:
-      - '@entity_type.manager'
-      - '@config.factory'
-      - '@renderer'
       - '@language_manager'
       - '@path_alias.manager'
       - '@cache.data'
@@ -26,6 +23,10 @@ services:
     tags:
       - {name: 'event_subscriber'}
     arguments:
+      - '@renderer'
       - '@language_manager'
       - '@alshaya_rcs_main_menu.rcs_category_helper'
       - '@alshaya_acm_product.context_manager'
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@event_dispatcher'

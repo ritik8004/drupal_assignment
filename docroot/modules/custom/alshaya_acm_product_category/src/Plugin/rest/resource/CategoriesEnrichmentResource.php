@@ -91,9 +91,7 @@ class CategoriesEnrichmentResource extends ResourceBase {
   public function get() {
     $event = new GetEnrichedCategoryDataEvent($this->languageManager->getCurrentLanguage()->getId());
     $this->eventDispatcher->dispatch(GetEnrichedCategoryDataEvent::EVENT_NAME, $event);
-    // The data should also contain appropriate cacheability metadata.
     $data = $event->getData();
-
     $response = new ResourceResponse($data);
     $response->addCacheableDependency($event->getCacheabilityMetadata());
 
