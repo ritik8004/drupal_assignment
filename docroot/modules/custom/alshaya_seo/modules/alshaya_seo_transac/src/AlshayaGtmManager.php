@@ -952,7 +952,7 @@ class AlshayaGtmManager {
 
     $dimension7 = '';
     $dimension8 = '';
-    print_r($order);
+
     $order['shipping_description'] = !empty($order['shipping_description']) ? $order['shipping_description'] : [];
     $shipping_info = !empty($order['shipping_description']) ? explode(' - ', $order['shipping_description']) : '';
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
