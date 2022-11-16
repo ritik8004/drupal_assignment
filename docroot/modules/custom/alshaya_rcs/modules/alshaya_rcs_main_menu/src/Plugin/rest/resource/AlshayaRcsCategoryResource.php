@@ -20,7 +20,7 @@ use Drupal\Core\Cache\CacheableMetadata;
  *   id = "rcscategories",
  *   label = @Translation("List all rcs categories with enrichment data"),
  *   uri_paths = {
- *     "canonical" = "/rest/v3/categories"
+ *     "canonical" = "/rest/v2/categories"
  *   }
  * )
  */

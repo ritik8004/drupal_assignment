@@ -9,9 +9,11 @@ use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_update_N().
+ *
+ * Delete rcs categories resource and permissions.
  */
 function alshaya_rcs_main_menu_update_9401() {
-  // Deleting the sku_images rest config.
+  // Deleting the rcs categories rest config.
   \Drupal::configFactory()->getEditable('rest.resource.rcscategories')->delete();
   // Disable the resource related permissions.
   $role = Role::load('anonymous');

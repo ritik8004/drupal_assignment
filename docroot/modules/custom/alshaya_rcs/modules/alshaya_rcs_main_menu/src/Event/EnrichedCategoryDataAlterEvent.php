@@ -5,7 +5,7 @@ namespace Drupal\alshaya_rcs_main_menu\Event;
 use Drupal\Component\EventDispatcher\Event;
 
 /**
- * Event that is fired when a user logs in.
+ * Event that is fired when category data altering needs to be done.
  */
 class EnrichedCategoryDataAlterEvent extends Event {
 
