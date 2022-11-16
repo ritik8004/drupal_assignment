@@ -49,9 +49,12 @@
   figure {
     margin: 0;
 
+    @include clearfix;
+
     img {
       width: 100%;
       cursor: pointer;
+      float: $left;
     }
 
     .pdp-image-zoom-wrapper {
@@ -371,7 +374,6 @@
 
 .magazine-layout-node .gallery-wrapper .pdp-asset {
   position: relative;
-  line-height: 0;
 }
 
 .magazine-layout-node .acq-content-product {
