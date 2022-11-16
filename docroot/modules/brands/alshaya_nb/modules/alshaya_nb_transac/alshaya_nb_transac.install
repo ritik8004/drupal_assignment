@@ -6,6 +6,18 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Hide grid toggle in plp and srp.
+ */
+function alshaya_nb_transac_update_9401() {
+  // Hide grid toggle option on listing pages.
+  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
+    ->set('hide_grid_toggle', TRUE)
+    ->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_nb_transac_install() {
