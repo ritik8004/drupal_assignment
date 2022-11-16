@@ -65,6 +65,7 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical' => 'taxonomy term',
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.taxonomy_term.canonical:rcs_category' => 'product listing page',
+    'entity.node.canonical:product_list' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:rcs_product' => 'product detail page',
     'entity.node.canonical:advanced_page' => 'advanced page',
@@ -1227,15 +1228,27 @@ class AlshayaGtmManager {
         break;
 
       case 'product listing page':
-        $taxonomy_term = $current_route['route_params']['taxonomy_term'];
-        $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
-        foreach ($taxonomy_parents as $taxonomy_parent) {
-          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
-          /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
-          $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+        if (isset($current_route['route_params']['node'])) {
+          $node = $current_route['route_params']['node'];
+          if ($node->hasTranslation('en')) {
+            $node = $node->getTranslation('en');
+          }
+          $page_dl_attributes = [
+            'list' => $node->getTitle(),
+            'listingName' => $node->getTitle(),
+          ];
         }
+        else {
+          $taxonomy_term = $current_route['route_params']['taxonomy_term'];
+          $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+          foreach ($taxonomy_parents as $taxonomy_parent) {
+            $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
+            /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
+            $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+          }
 
-        $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+        }
         break;
 
       case 'advanced page':

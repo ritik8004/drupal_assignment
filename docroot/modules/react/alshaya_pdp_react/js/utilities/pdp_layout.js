@@ -133,7 +133,9 @@ export const triggerAddToCart = (
       }
     }
 
+    gtmAttributes.variant = productDataSKU;
     Drupal.alshayaSpc.storeProductData({
+      id: productInfo[skuCode].id,
       sku: productDataSKU,
       parentSKU,
       title: productData.product_name,
@@ -232,6 +234,7 @@ export const getProductValues = (productInfo, configurableCombinations,
   let expressDeliveryClass = '';
   let bigTickectProduct = false;
   let isProductBuyable = '';
+  let eligibleForReturn = false;
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -272,6 +275,7 @@ export const getProductValues = (productInfo, configurableCombinations,
     promotions = productInfo[skuItemCode].promotionsRaw;
     deliveryOptions = productInfo[skuItemCode].deliveryOptions;
     expressDeliveryClass = productInfo[skuItemCode].expressDeliveryClass;
+    eligibleForReturn = productInfo[skuItemCode].eligibleForReturn;
     if (productInfo[skuItemCode].bigTickectProduct) {
       bigTickectProduct = productInfo[skuItemCode].bigTickectProduct;
     }
@@ -291,6 +295,7 @@ export const getProductValues = (productInfo, configurableCombinations,
           promotions = variantInfo.promotionsRaw;
           deliveryOptions = variantInfo.deliveryOptions;
           expressDeliveryClass = variantInfo.expressDeliveryClass;
+          eligibleForReturn = variantInfo.eligibleForReturn;
           // free gift promotion variable from variant sku.
           if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
             freeGiftPromoType = variantInfo.freeGiftPromotion['#promo_type'];
@@ -358,6 +363,7 @@ export const getProductValues = (productInfo, configurableCombinations,
     expressDeliveryClass,
     isProductBuyable,
     bigTickectProduct,
+    eligibleForReturn,
   };
 };
 

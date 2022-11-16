@@ -35,7 +35,8 @@ $env_map = [
 ];
 
 foreach ($conductors as $key => $value) {
-  [$country_brand, $base_env] = explode('_', $key);
+  [$country_brand, $base_env] = get_brand_country_and_env($key);
+
   $base_env = $env_map[$base_env] ?? $base_env;
 
   if ($env !== $base_env || empty($value['site_id'])) {

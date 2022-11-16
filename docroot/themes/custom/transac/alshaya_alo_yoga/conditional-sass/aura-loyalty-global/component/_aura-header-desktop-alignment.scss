@@ -29,8 +29,9 @@ body.aura-enabled {
         }
       }
 
-      .c-menu-primary .region__menu-primary .block-alshaya-super-category-menu {
+      .block-alshaya-super-category-menu.hide-super-category {
         @include breakpoint($upto-desktop) {
+          display: none !important;
           z-index: 11;
         }
       }

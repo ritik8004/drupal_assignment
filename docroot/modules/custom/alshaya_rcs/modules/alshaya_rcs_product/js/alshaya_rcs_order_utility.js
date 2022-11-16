@@ -17,7 +17,8 @@ window.commerceBackend = window.commerceBackend || {};
     var label = '';
 
     // For color attribute, return the configured color label.
-    if (drupalSettings.alshayaColorSplit.colorAttribute === attrCode) {
+    if (Drupal.hasValue(drupalSettings.alshayaColorSplit)
+      && drupalSettings.alshayaColorSplit.colorAttribute === attrCode) {
       label = drupalSettings.alshayaColorSplit.colorLabel;
     }
     else {

@@ -128,3 +128,11 @@ gtm_online_returns:
   dependencies:
     - alshaya_seo_transac/gtm
     - core/drupal
+
+gtm_hello_member:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.hello_member.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal

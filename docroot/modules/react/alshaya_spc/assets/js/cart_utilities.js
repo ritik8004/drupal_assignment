@@ -357,6 +357,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     // Store proper variant sku in gtm data now.
     gtmAttributes.variant = productDataSKU;
     Drupal.alshayaSpc.storeProductData({
+      id: productInfo.id,
       sku: productDataSKU,
       parentSKU: parentSKU,
       skuType: productInfo.type,
@@ -475,15 +476,21 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     // Get redirect threshold for the specific device.
     var redirectToCartThreshold = values[deviceType];
     // Check if redirection to cart is enabled i.e. >= 1.
-    if (redirectToCartThreshold < 1) {
+    if (redirectToCartThreshold < 1 || !Drupal.hasValue(cartData.items)) {
       return;
+    }
+
+    // Count items, ignoring free gifts.
+    var count = 0;
+    for (const [sku, item] of Object.entries(cartData.items)) {
+      if (!Drupal.hasValue(item.freeItem)) {
+        count++;
+      }
     }
 
     // We will redirect if the number of items is multiple of threshold.
     // example: if threshold is 3, we will redirect at 3, 6, 9...
-    if (Drupal.hasValue(cartData.items)
-      && Object.keys(cartData.items).length % redirectToCartThreshold === 0
-    ) {
+    if (count % redirectToCartThreshold === 0) {
       // Redirect to cart page.
       window.location = Drupal.url('cart');
     }
