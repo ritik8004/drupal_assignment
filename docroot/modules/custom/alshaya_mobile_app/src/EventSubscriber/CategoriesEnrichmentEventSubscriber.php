@@ -87,7 +87,7 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     return [
       GetEnrichedCategoryDataEvent::EVENT_NAME => [
-        ['onGetEnrichedCategoryData'],
+        ['onGetEnrichedCategoryData', 1],
       ],
     ];
   }

@@ -2,8 +2,8 @@
 
 namespace Drupal\alshaya_rcs_main_menu\Service;
 
-use Drupal\alshaya_acm_product_category\Event\GetEnrichedCategoryDataEvent;
 use Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper;
+use Drupal\alshaya_rcs_main_menu\Event\EnrichedCategoryDataAlterEvent;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -270,11 +270,11 @@ class AlshayaRcsCategoryHelper {
 
       $menu_item_slug = $term->get('field_category_slug')->getString();
 
-      $event = new GetEnrichedCategoryDataEvent([
+      $event = new EnrichedCategoryDataAlterEvent([
         'processed_data' => $record,
         'term_url' => $menu_item_slug,
       ]);
-      $this->eventDispatcher->dispatch($event, GetEnrichedCategoryDataEvent::EVENT_NAME);
+      $this->eventDispatcher->dispatch($event, EnrichedCategoryDataAlterEvent::EVENT_NAME);
       // Get the altered data.
       $record = $event->getData()['processed_data'];
 

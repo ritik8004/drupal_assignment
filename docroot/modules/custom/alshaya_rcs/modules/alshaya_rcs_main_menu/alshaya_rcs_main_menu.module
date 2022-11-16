@@ -308,13 +308,3 @@ function alshaya_rcs_main_menu_alshaya_rcs_category_query_fields_alter(array &$f
 
   }
 }
-
-/**
- * Implements hook_rest_resource_alter().
- */
-function alshaya_rcs_main_menu_rest_resource_alter(array &$definitions) {
-  // Override the plugin class with the V3 plugin class.
-  $enrichment_resource = &$definitions['categories_enrichment'];
-  $enrichment_resource['class'] = 'Drupal\alshaya_rcs_main_menu\Plugin\rest\resource\AlshayaRcsCategoryResource';
-  $enrichment_resource['provider'] = 'alshaya_rcs_main_menu';
-}

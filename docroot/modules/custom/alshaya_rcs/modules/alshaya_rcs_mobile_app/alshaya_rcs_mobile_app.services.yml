@@ -1,4 +1,7 @@
 services:
+  logger.channel.alshaya_rcs_mobile_app:
+    parent: logger.channel_base
+    arguments: ['alshaya_rcs_mobile_app']
   alshaya_rcs_mobile_app.v3_utility:
     class: Drupal\alshaya_rcs_mobile_app\Service\RcsMobileAppUtility
     decorates: alshaya_mobile_app.utility
@@ -25,3 +28,10 @@ services:
       - '@path.validator'
       - '@alshaya_acm_product_category.page'
       - '@router.request_context'
+  alshaya_rcs_mobile_app.categories_enrichment_subscriber:
+    class: Drupal\alshaya_rcs_mobile_app\EventSubscriber\AlshayaRcsMobileAppCategoryDataAlterEventSubscriber
+    tags:
+      - {name: 'event_subscriber'}
+    arguments:
+      - '@alshaya_mobile_app.utility'
+      - '@logger.channel.alshaya_rcs_mobile_app'

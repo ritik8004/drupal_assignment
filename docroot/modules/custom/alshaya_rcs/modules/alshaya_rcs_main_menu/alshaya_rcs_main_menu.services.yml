@@ -21,3 +21,11 @@ services:
       - '@language_manager'
       - '@database'
       - '@path_alias.manager'
+  alshaya_rcs_main_menu.categories_enrichment_subscriber:
+    class: Drupal\alshaya_rcs_main_menu\EventSubscriber\AlshayaRcsCategoriesEnrichmentEventSubscriber
+    tags:
+      - {name: 'event_subscriber'}
+    arguments:
+      - '@language_manager'
+      - '@alshaya_rcs_main_menu.rcs_category_helper'
+      - '@alshaya_acm_product.context_manager'
