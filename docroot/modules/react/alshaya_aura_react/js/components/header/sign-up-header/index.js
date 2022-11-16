@@ -35,7 +35,7 @@ class SignUpHeader extends React.Component {
       document.querySelector('.block-alshaya-main-menu').classList.add('aura-header-modal-open');
       // this is needed when visual menu is enable with sticky super category.
       // we want to hide sticky super category when user open Aura popup from mobile.
-      if (document.querySelector('.block-alshaya-super-category')) {
+      if (document.querySelector('.aura-header-modal-open')) {
         document.querySelector('.block-alshaya-super-category').classList.add('hide-super-category');
       }
     }
