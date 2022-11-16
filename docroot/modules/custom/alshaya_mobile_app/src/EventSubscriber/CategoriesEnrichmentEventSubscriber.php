@@ -101,7 +101,6 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
   public function onGetEnrichedCategoryData(GetEnrichedCategoryDataEvent $event) {
     $all_terms_data = $this->getCategoryEnrichmentData($event->getLangcode());
     $event->setData($all_terms_data);
-    $this->cacheabilityMetadata->addCacheTags(['taxonomy_term_list:' . self::VOCABULARY_ID]);
     $event->setCacheabilityMetadata($this->cacheabilityMetadata);
   }
 
@@ -122,6 +121,7 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
       $data[key($term_data)] = $term_data[key($term_data)];
     }
 
+    $this->cacheabilityMetadata->addCacheTags(['taxonomy_term_list:' . self::VOCABULARY_ID]);
     return $data;
   }
 
@@ -203,9 +203,6 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
     $term_url = $term->toUrl()->toString(TRUE)->getGeneratedUrl();
     // Trim slashes and remove langcode.
     $term_url = preg_replace('/' . $current_langcode . '\//', '', trim($term_url, '/'), 1);
-
-    $this->cacheabilityMetadata = $this->cacheabilityMetadata->merge($this->cacheabilityMetadata->createFromObject($term));
-
     $data = [
       'id' => $term->id(),
       'name' => $term->label(),
@@ -218,6 +215,8 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
       'item_clickable' => (bool) $term->get('field_display_as_clickable_link')->getString(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($term),
     ];
+
+    $this->cacheabilityMetadata->addCacheableDependency($term);
 
     return [$term_url => $data];
   }
