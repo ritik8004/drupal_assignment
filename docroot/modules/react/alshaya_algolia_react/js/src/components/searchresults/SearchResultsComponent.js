@@ -116,14 +116,14 @@ const SearchResultsComponent = ({
               />
               {!isDesktop() && (
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
-                  {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined)
-                    && (drupalSettings.superCategory.show_brand_filter) && (
+                  {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined) && (
                     <div>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
                         {Drupal.t('Brands/Category')}
                       </h3>
                       <div className="category-facet-wrapper">
-                        {hasSuperCategoryFilter() && (
+                        {hasSuperCategoryFilter()
+                          && (drupalSettings.superCategory.show_brand_filter) && (
                           <div className="supercategory-facet c-accordion">
                             <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.search.filters.super_category.label}</h3>
                             <Menu
