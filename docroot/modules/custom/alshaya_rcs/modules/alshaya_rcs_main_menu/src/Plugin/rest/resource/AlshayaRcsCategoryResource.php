@@ -14,6 +14,8 @@ use Drupal\Core\Cache\CacheableMetadata;
 /**
  * Provides a resource to get list of all categories.
  *
+ *  @todo This is no longer used and should be deleted.
+ *
  * @RestResource(
  *   id = "rcscategories",
  *   label = @Translation("List all rcs categories with enrichment data"),
