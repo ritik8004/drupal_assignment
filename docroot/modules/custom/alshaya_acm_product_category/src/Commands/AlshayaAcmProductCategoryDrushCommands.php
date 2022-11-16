@@ -11,7 +11,6 @@ use Drupal\metatag\MetatagManagerInterface;
 use Drupal\metatag\MetatagToken;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -246,6 +245,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     foreach ($tids as $tid) {
       try {
         // Export the translated term data as well.
+        /** @var \Drupal\taxonomy\TermInterface $term */
         $term = $term_storage->load($tid);
         foreach ($term->getTranslationLanguages() as $langcode => $language) {
           $translated_term = $term->getTranslation($langcode);
@@ -383,6 +383,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
             if (!empty($value) && array_key_exists('target_id', $value[0])) {
               $target_id = $value[0]['target_id'];
               // Load file and get the Image URL.
+              /** @var \Drupal\file\FileInterface $image */
               $image = \Drupal::entityTypeManager()->getStorage('file')->load($target_id);
               if ($image) {
                 $data[$field] = $image->createFileUrl(FALSE);
@@ -491,7 +492,9 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
       return $store_code[$langcode];
     }
 
-    $store_code[$langcode] = Settings::get('magento_lang_prefix')[$langcode];
+    $store_code[$langcode] = \Drupal::configFactory()
+      ->get('alshaya_api.settings')
+      ->get('magento_lang_prefix')[$langcode];
 
     return $store_code[$langcode];
   }

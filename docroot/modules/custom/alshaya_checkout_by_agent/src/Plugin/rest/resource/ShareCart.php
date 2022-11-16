@@ -7,7 +7,6 @@ use Drupal\alshaya_spc\Helper\SecureText;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\kaleyra\MessageApiAdapter;
@@ -309,8 +308,8 @@ class ShareCart extends ResourceBase {
       'langcode' => $langcode,
     ];
 
-    $key = Settings::get('alshaya_api.settings');
-    $encryptedData = SecureText::encrypt(json_encode($data), $key['consumer_secret']);
+    $key = $this->configFactory->get('alshaya_api.settings');
+    $encryptedData = SecureText::encrypt(json_encode($data), $key->get('consumer_secret'));
 
     if ($this->spcHelper->getCommerceBackendVersion() == 2) {
       $cart_url = Url::fromRoute('alshaya_checkout_by_agent.resume', [], ['absolute' => TRUE])->toString();

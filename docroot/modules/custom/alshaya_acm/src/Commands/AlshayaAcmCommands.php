@@ -21,7 +21,7 @@ use Drush\Drush;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Consolidation\AnnotatedCommand\CommandData;
-use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Class Alshaya Acm Commands.
@@ -101,11 +101,11 @@ class AlshayaAcmCommands extends DrushCommands {
   private $moduleHandler;
 
   /**
-   * Config manager service.
+   * Logger Channel.
    *
-   * @var \Drupal\alshaya_config\AlshayaConfigManager
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  private $configManager;
+  protected $drupalLogger;
 
   /**
    * AlshayaAcmCommands constructor.
@@ -130,8 +130,8 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Sku manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module Handler.
-   * @param \Drupal\alshaya_config\AlshayaConfigManager $config_manager
-   *   Config manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
+   *   Logger Factory.
    */
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
@@ -143,7 +143,7 @@ class AlshayaAcmCommands extends DrushCommands {
                               AlshayaMdcQueueManager $mdcQueueManager,
                               SkuManager $skuManager,
                               ModuleHandlerInterface $moduleHandler,
-                              AlshayaConfigManager $config_manager) {
+                              LoggerChannelFactoryInterface $logger_channel_factory) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
@@ -154,7 +154,7 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->mdcQueueManager = $mdcQueueManager;
     $this->skuManager = $skuManager;
     $this->moduleHandler = $moduleHandler;
-    $this->configManager = $config_manager;
+    $this->drupalLogger = $logger_channel_factory->get('alshaya_acm');
   }
 
   /**
@@ -199,10 +199,10 @@ class AlshayaAcmCommands extends DrushCommands {
         foreach ($conductors[$acm] as $key => $value) {
           $config->set($key, $value);
 
-          $this->output->writeln(dt('Configuring acq_commerce.conductor.@key to @value.', [
+          $this->drupalLogger->notice('Configuring acq_commerce.conductor.@key to @value.', [
             '@key' => $key,
             '@value' => $value,
-          ]));
+          ]);
         }
 
         $config->save();
@@ -219,7 +219,17 @@ class AlshayaAcmCommands extends DrushCommands {
       global $magentos;
 
       if (isset($magentos[$mdc])) {
-        $this->configManager->replaceYamlSettingsOverrides($mdc);
+        // Update the magento host and secrets.
+        $config = $this->configFactory->getEditable('alshaya_api.settings');
+        $config->set('magento_host', $magentos[$mdc]['url']);
+        foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
+          $config->set($key, $value);
+        }
+        $config->save();
+
+        $this->drupalLogger->notice('Configuring alshaya_api.settings.magento_host to @value.', [
+          '@value' => $magentos[$mdc]['url'],
+        ]);
 
         // Determine the country code to use.
         $country_code = !empty($options['country_code'])
@@ -238,6 +248,7 @@ class AlshayaAcmCommands extends DrushCommands {
 
         $configs = [
           'acq_commerce.store' => 'store_id',
+          'alshaya_api.settings' => 'magento_lang_prefix',
         ];
 
         $this->moduleHandler->alter('alshaya_acm_switch_magento_configs', $configs);
@@ -252,11 +263,11 @@ class AlshayaAcmCommands extends DrushCommands {
 
             $config->set($key, $value)->save();
 
-            $this->output->writeln(dt('Configuring @name.@key to @value.', [
+            $this->drupalLogger->notice('Configuring @name.@key to @value.', [
               '@name' => $name,
               '@key' => $key,
               '@value' => $value,
-            ]));
+            ]);
           }
           // For configs that are different per language, we process below.
           else {
@@ -273,11 +284,11 @@ class AlshayaAcmCommands extends DrushCommands {
 
               $config->set($key, $value)->save();
 
-              $this->output->writeln(dt('Configuring @name.@key to @value.', [
+              $this->drupalLogger->notice('Configuring @name.@key to @value.', [
                 '@name' => $name,
                 '@key' => $key . ' ' . $lang,
                 '@value' => $value,
-              ]));
+              ]);
             }
           }
         }

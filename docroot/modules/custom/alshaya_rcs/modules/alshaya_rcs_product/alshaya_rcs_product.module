@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_theme().
@@ -1093,7 +1092,7 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   }
   // Invoke GraphQL API and get the options list.
   $attribute_code = $attribute['attribute_code'];
-  $settings = Settings::get('alshaya_api.settings');
+  $settings = \Drupal::config('alshaya_api.settings');
 
   // In Array attribute will only be added for materials attribute code.
   $is_array = '';
@@ -1103,12 +1102,12 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   }
   $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '"' . $is_array . '){attribute_code store_id attribute_values{key,value}}}';
   // Magento URL to get the product option attributes.
-  $request_url = $settings['magento_host'] . '/graphql?query=' . $query;
+  $request_url = $settings->get('magento_host') . '/graphql?query=' . $query;
 
   try {
     $response = Json::decode(\Drupal::httpClient()->get($request_url, [
       'headers' => [
-        'store' => Settings::get('magento_lang_prefix')[$current_language],
+        'store' => $settings->get('magento_lang_prefix')[$current_language],
       ],
     ])->getBody());
   }
