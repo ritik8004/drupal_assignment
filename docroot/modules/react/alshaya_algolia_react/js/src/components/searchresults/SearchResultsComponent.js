@@ -36,6 +36,7 @@ import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHe
 import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -117,6 +118,7 @@ const SearchResultsComponent = ({
               {!isDesktop() && (
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
                   {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined
+                    && hasValue(drupalSettings.superCategory)
                     && drupalSettings.superCategory.show_brand_filter) && (
                     <div>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
