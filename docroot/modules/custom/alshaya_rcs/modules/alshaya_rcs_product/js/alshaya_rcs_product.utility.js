@@ -400,6 +400,7 @@ window.commerceBackend = window.commerceBackend || {};
         : getProductUrls(product.url_key);
       // @todo Add code for commented keys.
       info[variantSku] = {
+        id: variant.product.id,
         cart_image: window.commerceBackend.getCartImage(variant.product),
         cart_title: product.name,
         click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
