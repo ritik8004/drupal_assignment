@@ -13,6 +13,13 @@
     }
   }
 
+  .user-register-form,
+  .user-login-form {
+    .form-submit {
+      height: rem(56);
+    }
+  }
+
   h1 {
     &.c-page-title {
       font-size: rem(14);
