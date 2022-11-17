@@ -2282,12 +2282,13 @@ window.commerceBackend.placeOrder = async (data) => {
     cartId: window.commerceBackend.getCartId(),
   };
 
-  logger.notice('Place order API called with the following values: masked_cart_id: @maskedCartId, cartId: @cartId, customerId: @customerId, paymentMethod: @paymentMethod, deliveryMethod: @deliveryMethod, totalAmount: @totalAmount', {
+  logger.notice('Invoking place order API now with the following values: masked_cart_id: @maskedCartId, cartId: @cartId, customerId: @customerId, paymentMethod: @paymentMethod, deliveryMethod: @deliveryMethod, totalAmount: @totalAmount', {
     '@maskedCartId': window.commerceBackend.getCartId(),
     '@cartId': cart.data.cart.id,
     '@customerId': window.drupalSettings.userDetails.customerId,
     '@paymentMethod': data.data.paymentMethod.method,
-    '@deliveryMethod': cart.data.shipping.type,
+    '@deliveryType': cart.data.shipping.type,
+    '@deliveryMethod': cart.data.shipping.method,
     '@totalAmount': cart.data.totals.base_grand_total,
   });
 
