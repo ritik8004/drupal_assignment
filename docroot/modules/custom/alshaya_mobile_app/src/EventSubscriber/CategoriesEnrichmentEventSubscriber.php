@@ -99,8 +99,7 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
    *   Contains term data to alter.
    */
   public function onGetEnrichedCategoryData(GetEnrichedCategoryDataEvent $event) {
-    $all_terms_data = $this->getCategoryEnrichmentData($event->getLangcode());
-    $event->setData($all_terms_data);
+    $event->setData($this->getCategoryEnrichmentData($event->getLangcode()));
     $event->setCacheabilityMetadata($this->cacheabilityMetadata);
   }
 

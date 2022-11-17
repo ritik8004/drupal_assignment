@@ -102,18 +102,4 @@ class RcsMobileAppUtility extends MobileAppUtility {
     ];
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public function getDeepLink($object, $type = '') {
-    $return = '';
-
-    if ($object instanceof TermInterface) {
-      switch ($object->bundle()) {
-        case 'rcs_product_category':
-          break;
-      }
-    }
-  }
-
 }

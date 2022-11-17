@@ -15,7 +15,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
  *
  * @RestResource(
  *   id = "categories_enrichment",
- *   label = @Translation("List all acq categories with enrichment data"),
+ *   label = @Translation("List all categories with enrichment data"),
  *   uri_paths = {
  *     "canonical" = "/rest/v3/categories"
  *   }
@@ -38,7 +38,7 @@ class CategoriesEnrichmentResource extends ResourceBase {
   protected $languageManager;
 
   /**
-   * AlshayaRcsCategoryResource constructor.
+   * CategoriesEnrichmentResource constructor.
    *
    * @param array $configuration
    *   Configuration array.
@@ -76,7 +76,7 @@ class CategoriesEnrichmentResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('alshaya_mobile_app'),
+      $container->get('logger.factory')->get('alshaya_acm_product_category'),
       $container->get('event_dispatcher'),
       $container->get('language_manager')
     );
@@ -89,10 +89,12 @@ class CategoriesEnrichmentResource extends ResourceBase {
    *   The response containing list of categories.
    */
   public function get() {
+    // We pass language from here so that we do not have to decide the language
+    // source individually in other places. We mainly use this to fetch
+    // categories for a certain langcode.
     $event = new GetEnrichedCategoryDataEvent($this->languageManager->getCurrentLanguage()->getId());
     $this->eventDispatcher->dispatch(GetEnrichedCategoryDataEvent::EVENT_NAME, $event);
-    $data = $event->getData();
-    $response = new ResourceResponse($data);
+    $response = new ResourceResponse($event->getData());
     $response->addCacheableDependency($event->getCacheabilityMetadata());
 
     return $response;
