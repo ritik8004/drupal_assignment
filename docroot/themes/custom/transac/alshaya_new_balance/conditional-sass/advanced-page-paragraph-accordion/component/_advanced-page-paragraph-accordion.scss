@@ -13,6 +13,8 @@
       font-size: rem(14);
       background-color: $egift_accordian_title_bg;
       border: rem(1) solid $egift_accordian_title_border;
+      transition-property: border-bottom;
+      transition-delay: 0.4s;
 
       @include breakpoint($only-mobile) {
         font-size: rem(13);
@@ -20,17 +22,17 @@
 
       &::after {
         #{$right}: rem(15);
+        font-size: rem(34);
 
         @include breakpoint($only-mobile) {
-          #{$right}: 0;
           top: rem(26);
+          font-size: rem(24);
         }
       }
 
       &.ui-state-active {
         &::after {
-          #{$right}: rem(30);
-          top: rem(21);
+          top: rem(12);
 
           @include breakpoint($only-mobile) {
             #{$right}: rem(15);
@@ -39,17 +41,15 @@
 
         color: $egift_accordian_active_title;
         border-bottom: none;
-
-        & + .c-accordion_content {
-          background-color: $egift_accordian_title_bg;
-          border: rem(1) solid $egift_accordian_title_border;
-          border-top: none;
-          padding: rem(4) rem(16);
-        }
       }
     }
 
     .c-accordion_content {
+      background-color: $egift_accordian_title_bg;
+      border: rem(1) solid $egift_accordian_title_border;
+      border-top: none;
+      padding: rem(4) rem(16);
+
       p {
         font-size: rem(14);
 
