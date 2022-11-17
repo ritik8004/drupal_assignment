@@ -60,6 +60,11 @@ function alshaya_api_update_9402() {
       unlink($file);
     }
   }
+
+  // Reset alshaya_api.settings.
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'alshaya_api.settings');
 }
 
 /**
