@@ -7,7 +7,6 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper;
 use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product_category\Event\GetEnrichedCategoryDataEvent;
-use Drupal\alshaya_rcs_main_menu\Event\EnrichedCategoryDataAlterEvent;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -119,7 +118,7 @@ class AlshayaRcsCategoriesEnrichmentEventSubscriber implements EventSubscriberIn
     return [
       GetEnrichedCategoryDataEvent::EVENT_NAME => [
         // This should execute before the subscriber in
-        // alshaya_acm_product_category module.
+        // alshaya_mobile_app module.
         ['onGetEnrichedCategoryData', 2],
       ],
     ];
@@ -142,7 +141,6 @@ class AlshayaRcsCategoriesEnrichmentEventSubscriber implements EventSubscriberIn
 
     $event->setData($term_data);
     $event->setCacheabilityMetadata($this->cacheabilityMetadata);
-    $event->stopPropagation();
   }
 
   /**
@@ -256,14 +254,6 @@ class AlshayaRcsCategoriesEnrichmentEventSubscriber implements EventSubscriberIn
       }
 
       $menu_item_slug = $term->get('field_category_slug')->getString();
-
-      $event = new EnrichedCategoryDataAlterEvent([
-        'processed_data' => $record,
-        'term_url' => $menu_item_slug,
-      ]);
-      $this->eventDispatcher->dispatch($event, EnrichedCategoryDataAlterEvent::EVENT_NAME);
-      // Get the altered data.
-      $record = $event->getData()['processed_data'];
 
       // Add term object in array for cache dependency.
       $this->cacheabilityMetadata->addCacheableDependency($term);

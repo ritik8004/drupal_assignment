@@ -2,8 +2,8 @@
 
 namespace Drupal\alshaya_rcs_mobile_app\EventSubscriber;
 
+use Drupal\alshaya_acm_product_category\Event\GetEnrichedCategoryDataEvent;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
-use Drupal\alshaya_rcs_main_menu\Event\EnrichedCategoryDataAlterEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -45,24 +45,28 @@ class AlshayaRcsMobileAppCategoryDataAlterEventSubscriber implements EventSubscr
   /**
    * Set deeplink for enriched term data.
    *
-   * @param \Drupal\alshaya_rcs_main_menu\Event\EnrichedCategoryDataAlterEvent $event
+   * @param \Drupal\alshaya_acm_product_category\Event\GetEnrichedCategoryDataEvent $event
    *   The event.
    */
-  public function onEnrichedCategoryDataAlter(EnrichedCategoryDataAlterEvent $event) {
-    $data = $event->getData();
-    $deeplink = NULL;
-    try {
-      $deeplink = $this->mobileAppUtility->getDeeplinkForResource($data['term_url']);
+  public function onGetEnrichedCategoryData(GetEnrichedCategoryDataEvent $event) {
+    $term_data = $event->getData();
+
+    foreach ($term_data as $url => &$term) {
+      $deeplink = NULL;
+      try {
+        $deeplink = $this->mobileAppUtility->getDeeplinkForResource($url);
+      }
+      catch (\Exception $e) {
+        $this->logger->info('Deeplink could not be generated for the term_id: @term_id, term url: @term_url, message: @message', [
+          '@term_id' => $term['id'],
+          '@term_url' => $url,
+          '@message' => $e->getMessage(),
+        ]);
+      }
+      $term['deeplink'] = $deeplink;
     }
-    catch (\Exception $e) {
-      $this->logger->info('Deeplink could not be generated for the term_id: @term_id, term url: @term_url, message: @message', [
-        '@term_id' => $data['processed_data']['id'],
-        '@term_url' => $data['term_url'],
-        '@message' => $e->getMessage(),
-      ]);
-    }
-    $data['processed_data']['deeplink'] = $deeplink;
-    $event->setData($data);
+
+    $event->setData($term_data);
   }
 
   /**
@@ -70,8 +74,9 @@ class AlshayaRcsMobileAppCategoryDataAlterEventSubscriber implements EventSubscr
    */
   public static function getSubscribedEvents() {
     return [
-      EnrichedCategoryDataAlterEvent::EVENT_NAME => [
-        ['onEnrichedCategoryDataAlter'],
+      GetEnrichedCategoryDataEvent::EVENT_NAME => [
+        // This event should execute after alshaya_rcs_main_menu subscriber.
+        ['onGetEnrichedCategoryData', 0],
       ],
     ];
   }

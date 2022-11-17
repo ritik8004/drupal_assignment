@@ -87,7 +87,7 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     return [
       GetEnrichedCategoryDataEvent::EVENT_NAME => [
-        ['onGetEnrichedCategoryData', 1],
+        ['onGetEnrichedCategoryData', 0],
       ],
     ];
   }
@@ -99,6 +99,10 @@ class CategoriesEnrichmentEventSubscriber implements EventSubscriberInterface {
    *   Contains term data to alter.
    */
   public function onGetEnrichedCategoryData(GetEnrichedCategoryDataEvent $event) {
+    // Do not process further if event data is already set.
+    if (!empty($event->getData())) {
+      return;
+    }
     $event->setData($this->getCategoryEnrichmentData($event->getLangcode()));
     $event->setCacheabilityMetadata($this->cacheabilityMetadata);
   }
