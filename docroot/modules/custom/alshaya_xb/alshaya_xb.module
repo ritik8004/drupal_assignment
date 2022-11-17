@@ -177,14 +177,11 @@ function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $e
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_xb_preprocess_acq_commerce_price(&$variables) {
-  /** @var \Drupal\acq_sku\Entity\SKU $sku */
-  $sku = $variables['sku'];
+  // Get fixed_price data from variables.
+  $fixed_price_serialized = $variables['fixed_price'];
 
-  // Get attribute fixed_price from sku.
-  $fixed_price_serialized = $sku->get('attr_fixed_price')->getValue();
-
-  if (!empty($fixed_price_serialized[0]['value'])) {
-    $prices = unserialize($fixed_price_serialized[0]['value'], ['allowed_classes' => FALSE]);
+  if (!empty($fixed_price_serialized)) {
+    $prices = unserialize($fixed_price_serialized, ['allowed_classes' => FALSE]);
     $fixed_price = [];
     foreach ($prices as $price) {
       // If special price has value then use it with country code.
@@ -201,7 +198,6 @@ function alshaya_xb_preprocess_acq_commerce_price(&$variables) {
  * Implements hook_theme_registry_alter().
  */
 function alshaya_xb_theme_registry_alter(&$theme_registry) {
-  $theme_registry['acq_commerce_price']['variables']['sku'] = NULL;
   $theme_registry['acq_commerce_price']['variables']['fixed_price'] = NULL;
 }
 

@@ -159,12 +159,13 @@ class SkuPriceHelper {
     $prices = $this->skuManager->getMinPrices($sku, $color);
     $price = $prices['price'];
     $final_price = $prices['final_price'];
+    $fixed_price = $prices['fixed_price'] ?? NULL;
 
     if ($price) {
       $this->build['#price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $price,
-        '#sku' => $sku,
+        '#fixed_price' => $fixed_price,
       ];
 
       // Get the discounted price.
@@ -177,7 +178,7 @@ class SkuPriceHelper {
         $this->build['#final_price'] = [
           '#theme' => 'acq_commerce_price',
           '#price' => $final_price,
-          '#sku' => $sku,
+          '#fixed_price' => $fixed_price,
         ];
 
         // Get discount if discounted price available.
@@ -190,7 +191,7 @@ class SkuPriceHelper {
       $this->build['#price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $final_price,
-        '#sku' => $sku,
+        '#fixed_price' => $fixed_price,
       ];
     }
   }
