@@ -149,3 +149,11 @@ function alshaya_xb_alshaya_api_update_customer_api_request_alter(array &$reques
     unset($request_options['json']['customer']['addresses']);
   }
 }
+
+/**
+ * Implements hook_alshaya_get_currency_code_alter().
+ */
+function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
+  $currency['xb']['en'] = 'AED';
+  $currency['xb']['ar'] = 'AED';
+}
