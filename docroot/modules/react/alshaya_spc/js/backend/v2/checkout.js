@@ -2282,6 +2282,15 @@ window.commerceBackend.placeOrder = async (data) => {
     cartId: window.commerceBackend.getCartId(),
   };
 
+  logger.notice('Place order API called with the following values: masked_cart_id: @maskedCartId, cartId: @cartId, customerId: @customerId, paymentMethod: @paymentMethod, deliveryMethod: @deliveryMethod, totalAmount: @totalAmount', {
+    '@maskedCartId': window.commerceBackend.getCartId(),
+    '@cartId': cart.data.cart.id,
+    '@customerId': window.drupalSettings.userDetails.customerId,
+    '@paymentMethod': data.data.paymentMethod.method,
+    '@deliveryMethod': cart.data.shipping.type,
+    '@totalAmount': cart.data.totals.base_grand_total,
+  });
+
   // As we are using guest cart update in case of Topup, we will not use
   // bearerToken.
   const useBearerToken = (getTopUpQuote() === null);
