@@ -22,11 +22,35 @@
   .list-view-link {
     &::before {
       line-height: 0.6;
+      margin-#{$right}: rem(6);
     }
 
     &.active {
       &::before {
         margin-#{$right}: rem(5);
+      }
+    }
+  }
+
+  .hours--label {
+    &::after {
+      #{$right}: rem(7);
+    }
+  }
+
+  .c-content__region {
+    .c-content__region {
+      padding-#{$left}: 0;
+      padding-#{$right}: 0;
+    }
+  }
+
+  .by--alphabet {
+    .rows {
+      a {
+        &:hover {
+          color: #000;
+        }
       }
     }
   }
@@ -53,6 +77,7 @@
     .hours--label.open {
       &::after {
         top: rem(1);
+        #{$right}: rem(10);
       }
     }
   }
@@ -66,6 +91,22 @@ html[lang=ar] {
 
     .store-row--counter {
       line-height: 1.4;
+    }
+
+    .c-content__region {
+      .c-content__region {
+        padding-#{$left}: 0;
+        padding-#{$right}: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: rem(12);
+        padding-#{$right}: rem(12);
+      }
+    }
+
+    .current-location {
+      padding-top: rem(5);
     }
   }
 }
