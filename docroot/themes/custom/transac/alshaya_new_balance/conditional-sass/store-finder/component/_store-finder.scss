@@ -11,9 +11,23 @@
     }
   }
 
+  .view-footer {
+    .load-more-button {
+      a {
+        padding: rem(20) 0;
+      }
+    }
+  }
+
   .list-view-link {
     &::before {
       line-height: 0.6;
+    }
+
+    &.active {
+      &::before {
+        margin-#{$right}: rem(5);
+      }
     }
   }
 
@@ -32,6 +46,26 @@
       &::after {
         #{$right}: rem(16);
       }
+    }
+  }
+
+  .hours--wrapper {
+    .hours--label.open {
+      &::after {
+        top: rem(1);
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .path--store-finder {
+    .label--location {
+      border-right: none;
+    }
+
+    .store-row--counter {
+      line-height: 1.4;
     }
   }
 }
