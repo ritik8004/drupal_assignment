@@ -46,7 +46,7 @@ body {
     }
   }
 
-  .wishlist-enabled {
+  &.wishlist-enabled {
     .filter-fixed-top {
       .sticky-filter-wrapper {
         .wishlist-minicart-sticky-wrapper {
