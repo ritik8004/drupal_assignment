@@ -16,7 +16,8 @@
   .user-register-form,
   .user-login-form {
     .form-submit {
-      height: rem(56);
+      height: auto;
+      padding: rem(20) 0 !important;
     }
   }
 
