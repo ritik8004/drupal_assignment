@@ -116,14 +116,14 @@ const SearchResultsComponent = ({
               />
               {!isDesktop() && (
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
-                  {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined) && (
+                  {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined
+                    && drupalSettings.superCategory.show_brand_filter) && (
                     <div>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
                         {Drupal.t('Brands/Category')}
                       </h3>
                       <div className="category-facet-wrapper">
-                        {hasSuperCategoryFilter()
-                          && (drupalSettings.superCategory.show_brand_filter) && (
+                        {hasSuperCategoryFilter() && (
                           <div className="supercategory-facet c-accordion">
                             <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.search.filters.super_category.label}</h3>
                             <Menu
@@ -148,7 +148,8 @@ const SearchResultsComponent = ({
                       </div>
                     </div>
                   )}
-                  {(drupalSettings.algoliaSearch.search.filters.super_category === undefined) && (
+                  {(drupalSettings.algoliaSearch.search.filters.super_category === undefined
+                    || !drupalSettings.superCategory.show_brand_filter) && (
                     <>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                       <HierarchicalMenu
