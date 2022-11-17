@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku_stock\EventSubscriber;
 
 use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
+use Drupal\alshaya_acm_product\Plugin\rest\resource\StockResource;
 use Drupal\Core\Cache\Cache;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -41,7 +42,14 @@ class StockUpdatedEventSubscriber implements EventSubscriberInterface {
 
     // This is last fallback. Any custom event subscriber should use
     // higher priority and stop event propagation to apply smarter logic.
-    Cache::invalidateTags($event->getSku()->getCacheTagsToInvalidate());
+    // Invalidate the SKU and the corresponding stock cache when the stock
+    // status or quantity is updated.
+    $cache_tags = Cache::mergeTags(
+      $event->getSku()->getCacheTagsToInvalidate(),
+      [StockResource::CACHE_PREFIX . $event->getSku()->id()],
+    );
+
+    Cache::invalidateTags($cache_tags);
   }
 
 }
