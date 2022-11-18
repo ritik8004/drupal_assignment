@@ -2,7 +2,17 @@
  * @file
  * JS code to integrate with GTM.
  */
- (function (Drupal, dataLayer) {
+
+ (function ($, Drupal, dataLayer) {
+
+  Drupal.behaviors.alshayaHelloMember = {
+    attach: function (context) {
+      $('.hello-membership-terms .contact-us',context).once('helloMemberTermsConditions').on('click', function () {
+        Drupal.alshayaSeoGtmPusHmAutoEnrollClickContact();
+      });
+    }
+  };
+
   /**
    * This function is called when the click on the discount voucher link.
    */
@@ -255,17 +265,49 @@
    * This function is called when birthday pop-up click.
    */
   Drupal.alshayaSeoGtmPushBirtdayPopupClick = function (voucherName) {
-   // Prepare the popup event data.
-   var birtdayPopupClick = {
-     event: 'popup',
-     eventCategory: "popup",
-     eventAction: "hmspecialvoucher - click",
-     eventLabel: voucherName,
-   }
-   // Proceed only if dataLayer exists.
-   if (dataLayer) {
-     dataLayer.push(birtdayPopupClick);
-   }
- }
+    // Prepare the popup event data.
+    var birtdayPopupClick = {
+      event: 'popup',
+      eventCategory: "popup",
+      eventAction: "hmspecialvoucher - click",
+      eventLabel: voucherName,
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(birtdayPopupClick);
+    }
+  }
 
-})(Drupal, dataLayer);
+  /**
+   * This function is called when hello member welcome pop up is displayed.
+   */
+  Drupal.alshayaSeoGtmPushHmAutoEnrollView = function () {
+    // Prepare the Popup Data.
+    var PopupData = {
+      event: 'popup',
+      eventAction: 'hmAutoEnroll - view',
+      eventCategory: 'pop-up',
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(PopupData);
+    }
+  }
+
+  /**
+   * This function is called when user clics on contact us on popup.
+   */
+  Drupal.alshayaSeoGtmPushHmAutoEnrollClickContact = function () {
+    // Prepare the contact us onclick data.
+    var ContactUsClick = {
+      event: 'popup',
+      eventAction: 'hmAutoEnroll-click-contact_us',
+      eventCategory: 'pop-up',
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(ContactUsClick);
+    }
+  }
+
+})(jQuery, Drupal, dataLayer);
