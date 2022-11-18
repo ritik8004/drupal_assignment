@@ -1,0 +1,30 @@
+.user__order--detail {
+  .order-item-row {
+    &.online-returns-eligibility-message {
+      #online-returns-eligibility-window {
+        .return-items-button {
+          background-color: $online-return-eligibility-button-bg;
+          border-radius: 0;
+        }
+
+        .eligibility-window-container {
+          font-family: $alshaya-thin;
+        }
+
+        .find-stores {
+          font-family: $alshaya-bold;
+        }
+      }
+    }
+  }
+}
+
+.image-data-wrapper {
+  &.big-ticket-item,
+  &.in-eligible {
+    .big-ticket-item-label,
+    .not-eligible-label {
+      font-family: $alshaya-thin;
+    }
+  }
+}
