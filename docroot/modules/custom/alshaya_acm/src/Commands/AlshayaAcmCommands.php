@@ -237,6 +237,13 @@ class AlshayaAcmCommands extends DrushCommands {
           : Settings::get('country_code');
 
         $country_code = strtolower($country_code);
+        foreach ($magentos[$mdc][$country_code]['store_id'] as $store_lang => $mdc_store_id) {
+          $this->drupalLogger->notice('Configuring alshaya_api.settings.magento_lang_prefix to @value.', [
+            '@value' => $store_lang,
+          ]);
+          $config->set("magento_lang_prefix.$store_lang", Settings::get('magento_lang_prefix')[$store_lang]);
+        }
+        $config->save();
 
         if (!isset($magentos[$mdc][$country_code])) {
           $this->output->writeln(dt('Unknown "@country_code" country code for "@mdc" MDC. Using the current site\'s country code "@current_country_code".', [
@@ -248,7 +255,6 @@ class AlshayaAcmCommands extends DrushCommands {
 
         $configs = [
           'acq_commerce.store' => 'store_id',
-          'alshaya_api.settings' => 'magento_lang_prefix',
         ];
 
         $this->moduleHandler->alter('alshaya_acm_switch_magento_configs', $configs);
