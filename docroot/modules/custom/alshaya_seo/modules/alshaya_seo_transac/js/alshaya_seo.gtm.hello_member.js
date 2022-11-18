@@ -266,7 +266,7 @@
    */
   Drupal.alshayaSeoGtmPushBirtdayPopupClick = function (voucherName) {
     // Prepare the popup event data.
-    var birtdayPopupClick = {
+    var birthdayPopupClick = {
       event: 'popup',
       eventCategory: "popup",
       eventAction: "hmspecialvoucher - click",
@@ -274,7 +274,7 @@
     }
     // Proceed only if dataLayer exists.
     if (dataLayer) {
-      dataLayer.push(birtdayPopupClick);
+      dataLayer.push(birthdayPopupClick);
     }
   }
 
