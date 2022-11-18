@@ -105,11 +105,22 @@
   }
 }
 
-.c-user-register {
+.c-user-register,
+.c-user-login {
   .section-title {
     @include breakpoint($only-mobile) {
       font-size: rem(14);
       padding-top: rem(0);
+    }
+  }
+
+  main {
+    .user-register-form,
+    .user-login-form {
+      .form-submit {
+        padding: rem(20) 0;
+        height: auto;
+      }
     }
   }
 }
