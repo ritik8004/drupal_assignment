@@ -24,6 +24,9 @@ class MembershipPopup extends React.Component {
         isModelOpen: true,
       });
     }
+
+    // Push hello member enroll popup display to gtm.
+    Drupal.alshayaSeoGtmPushHmAutoEnrollView();
   };
 
   closeModal = (e) => {
