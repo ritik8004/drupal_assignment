@@ -1,0 +1,18 @@
+.return-requests-wrapper {
+  .confirm-return-button-wrapper,
+  .continue-button-wrapper {
+    button[disabled] {
+      span {
+        color: $online-return-disable-button-txt;
+      }
+    }
+  }
+
+  .refund-details-wrapper {
+    .Collapsible__contentInner {
+      div[class$=-title] {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+}
