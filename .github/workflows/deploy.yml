@@ -143,7 +143,7 @@ jobs:
             ~/.nvm
           key: ${{ runner.os }}-node
 
-      - name: Prepare deployment key(s)
+      - name: Prepare deployment key
         run: |
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ env.SSH_DEPLOYMENT_KEY }}"
