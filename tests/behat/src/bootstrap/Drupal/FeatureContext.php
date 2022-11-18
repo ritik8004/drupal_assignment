@@ -3082,4 +3082,15 @@ JS;
     $value = addslashes($value);
     $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
   }
+
+  /**
+   *
+   * @Given /^I edit the page$/
+   */
+  public function iEditPage() {
+    $edit = $this->getSession()
+      ->getPage()
+      ->find('css', "#block-local-tasks ul li a[href$= 'edit']");
+    $edit->click();
+  }
 }
