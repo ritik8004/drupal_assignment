@@ -5,7 +5,9 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\TypedData\Exception\ReadOnlyException;
 
 /**
  * Implements hook_page_attachments().
@@ -146,6 +148,42 @@ function alshaya_xb_alshaya_api_update_customer_api_request_alter(array &$reques
   if (isset($request_options['json']['customer']['addresses'])
     && !empty($request_options['json']['customer']['addresses'])) {
     unset($request_options['json']['customer']['addresses']);
+  }
+}
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_xb_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_fixed_price_field = \Drupal::config('alshaya_xb.sku_base_fields')->get('fields');
+  if ($alshaya_fixed_price_field) {
+    $fields = array_merge($fields, $alshaya_fixed_price_field);
+  }
+  else {
+    \Drupal::logger('alshaya_xb')->error('The config alshaya_xb.sku_base_fields is empty.');
+  }
+}
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
+  if ($product['extension']['xb_fixed_price']) {
+    $fixed_prices = [];
+    foreach ($product['extension']['xb_fixed_price'] as $fixed_price) {
+      // If special price has value then use it with country code.
+      $fixed_prices[$fixed_price['country_code']] = $fixed_price['special_price'] ?? $fixed_price['price'];
+    }
+
+    try {
+      // Set json in fixed price attribute in sku.
+      $sku->get('attr_fixed_price')->setValue(json_encode($fixed_prices));
+    }
+    catch (ReadOnlyException $e) {
+      \Drupal::logger('alshaya_xb')->error('Error occurred while storing fixed price attribute value in sku. @error_message', [
+        '@error_message' => $e->getMessage(),
+      ]);
+    }
   }
 }
 
