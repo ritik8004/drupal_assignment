@@ -21,7 +21,7 @@ class RcsPhPathProcessorEvent {
    * @return array
    *   Data value.
    */
-  public function getData() {
+  public function getData():array {
     return $this->data;
   }
 
