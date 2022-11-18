@@ -51,6 +51,9 @@ class FeatureContext extends CustomMinkContext
       '.block-content--marketing-popup',
       '.exponea-subbox-banner',
       '.exponea-subbox-subscription-dialog',
+      '.subbox-banner-backdrop',
+      '.subbox-banner',
+      '.subbox-wrap',
     ];
 
     try {
