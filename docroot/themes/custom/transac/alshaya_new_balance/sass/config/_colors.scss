@@ -10,6 +10,9 @@ $gray: #ccc;
 $red2: #b90020;
 $gray2: #efefef;
 $gray-97: #979797;
+$med-dark-red: #c00;
+$blue: #44a6ff;
+$nb-green: #60b257;
 
 // Global elements.
 $primary_text: $black;
@@ -68,6 +71,9 @@ $header_secondary_menu_link: $black;
 $header_secondarry_menu_color: $black;
 $mm_l2_link: $black;
 $mm_l3_link_hover: $black;
+
+// Order detail, recent orders, order list page.
+$order_detail_td_light_content: $ada-gray;
 
 // Store Finder.
 $store-finder-border-hover: $nb-red;
@@ -340,3 +346,22 @@ $primary_minicart_quantity_bg: $nb-red;
 // Checkout confirmation.
 $progress-tracker-bg: $white;
 $spc-order-summary-text: $black;
+
+// Online returns
+$online-return-eligibility-message-bg: $black;
+$online-return-eligibility-button-bg: $nb-red;
+$online-return-eligibility-button-txt: $white;
+$online-return-eligibility-button-hover: $nb-red;
+$online-return-dark-bg: $nb-black;
+$online-return-ineligible-label-bg: $med-dark-red;
+$online-return-disable-button-bg: $gray;
+$online-return-disable-button-txt: $ada-gray;
+$online-return-refund-label-inactive-bg: $gray2;
+$online-return-disabled-txt: $ada-gray;
+$online-return-button-bg: $nb-red;
+$online-return-refund-blue-txt: $blue;
+$online-return-refund-grey-txt: $ada-gray;
+$online-return-dark-txt: $black;
+$online-return-status-green-label: $nb-green;
+$online-return-cancel-button-border: $nb-red;
+$online-return-order-detail-border: $gray;

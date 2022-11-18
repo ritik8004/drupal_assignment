@@ -1,0 +1,15 @@
+.return-confirmation-wrapper {
+  .refund-success-message {
+    font-family: $alshaya-thin;
+  }
+
+  .whats-next-section,
+  .return-details-section,
+  .return-items-wrapper {
+    .return-details-title,
+    .return-items-label,
+    .whats-next-title {
+      font-family: $alshaya-bold;
+    }
+  }
+}
