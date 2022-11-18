@@ -7,6 +7,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
+use Drupal\rcs_placeholders\RcsPhPathProcessorEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -111,6 +113,13 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   protected $configFactory;
 
   /**
+   * Event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * Constructs a new RcsPhPathProcessor instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -121,6 +130,8 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    *   The module handler.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -129,13 +140,15 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
     ModuleHandlerInterface $module_handler,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    EventDispatcherInterface $event_dispatcher
   ) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
     $this->configFactory = $config_factory;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -181,6 +194,9 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     // Is it a product page?
     $product_prefix = $config->get('product.path_prefix');
+
+    $event = new RcsPhPathProcessorEvent();
+    $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::EVENT_NAME);
 
     if (str_starts_with($rcs_path_to_check, '/' . $product_prefix)) {
       self::$entityType = 'product';
