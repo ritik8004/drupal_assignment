@@ -56,6 +56,8 @@ export default class CartItem extends React.Component {
       // Add event listener for add to wishlist action.
       document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);
     }
+    // Push error messages to GTM datalayer.
+    this.pushGtmErrors(this.props);
   }
 
   componentDidUpdate() {
@@ -231,6 +233,13 @@ export default class CartItem extends React.Component {
         // Trigger message.
         if (messageInfo !== null) {
           dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
+          // Push error message to GTM.
+          if (messageInfo.type !== undefined
+            && messageInfo.type === 'error'
+            && messageInfo.message !== undefined
+            && messageInfo.message !== '') {
+            Drupal.logJavascriptError(`update-cart-item-data-sku-${sku}`, messageInfo.message, GTM_CONSTANTS.CART_ERRORS);
+          }
         }
 
         // Trigger recommended products refresh.
@@ -251,6 +260,30 @@ export default class CartItem extends React.Component {
 
         return null;
       });
+    }
+  }
+
+  /**
+   * Handler to push error messages to GTM datalayer.
+   */
+  pushGtmErrors = (props) => {
+    const {
+      item: {
+        sku,
+        qty,
+        stock,
+        in_stock: inStock,
+      },
+    } = props;
+
+    // Out of stock error.
+    if (inStock !== true) {
+      Drupal.logJavascriptError(`update-cart-item-data-sku-${sku}`, 'This product is out of stock. Please remove to proceed.', GTM_CONSTANTS.CART_ERRORS);
+    }
+
+    // Item quantity limit error.
+    if (inStock && stock < qty) {
+      Drupal.logJavascriptError(`update-cart-item-data-sku-${sku}`, 'This product is not available in selected quantity. Please adjust the quantity to proceed.', GTM_CONSTANTS.CART_ERRORS);
     }
   }
 
