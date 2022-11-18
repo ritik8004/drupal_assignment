@@ -16,6 +16,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
