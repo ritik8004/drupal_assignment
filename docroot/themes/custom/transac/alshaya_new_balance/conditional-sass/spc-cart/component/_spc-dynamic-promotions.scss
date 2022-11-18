@@ -4,9 +4,9 @@
       &.fixed_percentage_discount_order,
       &.free_gift_order {
         &[threshold=true] {
-          background: $basket_dynamic_promotion_fixed_percentage_discount_order_bg;
+          background: $basket_fixed_percentage_inactive_header_promo_bg;
           color: $basket_dynamic_promotion_fixed_percentage_discount_order_text;
-          border-color: $basket_dynamic_promotion_fixed_percentage_discount_order_bg;
+          border-color: $basket_fixed_percentage_inactive_header_promo_bg;
 
           svg #fill-value {
             fill: $basket_dynamic_promotion_fixed_percentage_discount_order_text;

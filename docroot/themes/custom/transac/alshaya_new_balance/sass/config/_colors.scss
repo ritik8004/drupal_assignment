@@ -73,6 +73,9 @@ $header_secondarry_menu_color: $black;
 $mm_l2_link: $black;
 $mm_l3_link_hover: $black;
 
+// Order detail, recent orders, order list page.
+$order_detail_td_light_content: $ada-gray;
+
 // Store Finder.
 $store-finder-border-hover: $nb-red;
 $store_finder_text_hover: $nb-red;
@@ -237,6 +240,9 @@ $pdp_desc_wrapper_border: $black;
 $accordion_title: $black;
 $accordion_title_icon: $black;
 
+// Product Add to cart form.
+$pdp_sizeguide_link: $nb-red;
+
 // Express Delivery
 $sameday-express-delivery-drawer-btn: $primary_btn_bg;
 
@@ -349,7 +355,6 @@ $spc-order-summary-text: $black;
 // Basket top promotions.
 $basket_free_delivery_active_header_promo_txt: $nb-red;
 $basket_fixed_percentage_inactive_header_promo_bg: $nb-red;
-$basket_dynamic_promotion_fixed_percentage_discount_order_bg: $nb-red;
 $basket_dynamic_promotion_fixed_percentage_discount_order_text: $white;
 $basket_available_code: $nb-red;
 
