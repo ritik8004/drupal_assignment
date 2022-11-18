@@ -1849,7 +1849,7 @@ window.commerceBackend.addPaymentMethod = async (data) => {
  */
 window.commerceBackend.getCartForCheckout = async () => {
   const cartId = window.commerceBackend.getCartId();
-  logger.debug('Loading cart data for checkout page for cart: @cCartId:', {
+  logger.debug('Loading cart data for checkout page for cart: @cCartId.', {
     '@cCartId': cartId,
   });
 
@@ -1861,7 +1861,7 @@ window.commerceBackend.getCartForCheckout = async () => {
       // This could happen for multiple reasons,
       // For example isAnonymousUserWithoutCart or we got 404.
       if (!hasValue(cart) || !hasValue(cart.data)) {
-        logger.warning('Empty response received for getCart API call for cart: @cCartId:', {
+        logger.warning('Empty response received for getCart API call for cart: @cCartId.', {
           '@cCartId': cartId,
         });
 
