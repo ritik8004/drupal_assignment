@@ -13,14 +13,6 @@
     }
   }
 
-  .user-register-form,
-  .user-login-form {
-    .form-submit {
-      height: auto;
-      padding: rem(20) 0 !important;
-    }
-  }
-
   h1 {
     &.c-page-title {
       font-size: rem(14);
@@ -156,6 +148,17 @@
       a {
         border-bottom-color: $my_acc_mob_border_color;
       }
+    }
+  }
+}
+
+.c-user-register main .user-register-form.user-form,
+main .user-register-form,
+.user-login-form {
+  .form-actions {
+    .form-submit {
+      padding: rem(20) 0;
+      height: auto;
     }
   }
 }
