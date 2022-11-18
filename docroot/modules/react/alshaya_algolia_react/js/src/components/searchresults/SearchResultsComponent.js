@@ -71,6 +71,10 @@ const SearchResultsComponent = ({
     parentRef.current.classList.toggle('category-facet-open');
   };
 
+  const showBrandFilter = hasValue(drupalSettings.superCategory)
+    ? drupalSettings.superCategory.show_brand_filter
+    : false;
+
   // Add the drawer markup for add to bag feature.
   createConfigurableDrawer();
 
@@ -118,8 +122,7 @@ const SearchResultsComponent = ({
               {!isDesktop() && (
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
                   {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined
-                    && hasValue(drupalSettings.superCategory)
-                    && drupalSettings.superCategory.show_brand_filter) && (
+                    && showBrandFilter) && (
                     <div>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
                         {Drupal.t('Brands/Category')}
@@ -151,7 +154,7 @@ const SearchResultsComponent = ({
                     </div>
                   )}
                   {(drupalSettings.algoliaSearch.search.filters.super_category === undefined
-                    || !drupalSettings.superCategory.show_brand_filter) && (
+                    || !showBrandFilter) && (
                     <>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                       <HierarchicalMenu
