@@ -3,7 +3,7 @@
 
   @include breakpoint($only-mobile) {
     bottom: rem(119);
-    #{$right}: rem(17);
+    #{$right}: rem(-5);
   }
 
   @include breakpoint($only-tablet) {
