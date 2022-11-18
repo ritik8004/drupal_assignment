@@ -33,3 +33,13 @@
     }
   }
 }
+
+.alias--cart {
+  .spc-main {
+    .spc-content {
+      @include breakpoint($desktop) {
+        width: 54.8%;
+      }
+    }
+  }
+}
