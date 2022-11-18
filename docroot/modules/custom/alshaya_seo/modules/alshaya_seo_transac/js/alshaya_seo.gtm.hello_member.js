@@ -283,30 +283,30 @@
    */
   Drupal.alshayaSeoGtmPushHmAutoEnrollView = function () {
     // Prepare the Popup Data.
-    var PopupData = {
+    var popupData = {
       event: 'popup',
       eventAction: 'hmAutoEnroll - view',
       eventCategory: 'pop-up',
     }
     // Proceed only if dataLayer exists.
     if (dataLayer) {
-      dataLayer.push(PopupData);
+      dataLayer.push(popupData);
     }
   }
 
   /**
    * This function is called when user clics on contact us on popup.
    */
-  Drupal.alshayaSeoGtmPushHmAutoEnrollClickContact = function () {
+  Drupal.alshayaSeoGtmPusHmAutoEnrollClickContact = function () {
     // Prepare the contact us onclick data.
-    var ContactUsClick = {
+    var contactUsClick = {
       event: 'popup',
       eventAction: 'hmAutoEnroll-click-contact_us',
       eventCategory: 'pop-up',
     }
     // Proceed only if dataLayer exists.
     if (dataLayer) {
-      dataLayer.push(ContactUsClick);
+      dataLayer.push(contactUsClick);
     }
   }
 
