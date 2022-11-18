@@ -182,6 +182,9 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     $this->moduleHandler->alter('rcs_placeholders_processor_path', $rcs_path_to_check);
     self::$rcsPathToCheck = $rcs_path_to_check;
 
+    $event = new RcsPhPathProcessorEvent($rcs_path_to_check);
+    $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::EVENT_NAME);
+
     $config = $this->configFactory->get('rcs_placeholders.settings');
 
     // Is it a category page?
