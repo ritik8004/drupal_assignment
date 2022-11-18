@@ -195,13 +195,6 @@ function alshaya_xb_preprocess_acq_commerce_price(&$variables) {
 }
 
 /**
- * Implements hook_theme_registry_alter().
- */
-function alshaya_xb_theme_registry_alter(&$theme_registry) {
-  $theme_registry['acq_commerce_price']['variables']['fixed_price'] = NULL;
-}
-
-/**
  * Implements hook_alshaya_get_currency_code_alter().
  */
 function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
