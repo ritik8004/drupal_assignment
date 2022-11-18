@@ -217,4 +217,55 @@
     }
   }
 
+  /**
+   * This function is called when birthday pop-up load.
+   */
+  Drupal.alshayaSeoGtmPushBirthdayPopupView = function (voucherName) {
+    // Prepare the popup event data.
+    var popUpData = {
+      event: 'popup',
+      eventCategory: "popup",
+      eventAction: "hmspecialvoucher - show",
+      eventLabel: voucherName,
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(popUpData);
+    }
+  }
+
+  /**
+   * This function is called when birthday pop-up close.
+   */
+  Drupal.alshayaSeoGtmPushBirtdayPopupClose = function (voucherName) {
+    // Prepare the popup event data.
+    var popUpData = {
+      event: 'popup',
+      eventCategory: "popup",
+      eventAction: "hmspecialvoucher - close",
+      eventLabel: voucherName,
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(popUpData);
+    }
+  }
+
+  /**
+   * This function is called when birthday pop-up click.
+   */
+  Drupal.alshayaSeoGtmPushBirtdayPopupClick = function (voucherName) {
+   // Prepare the popup event data.
+   var birtdayPopupClick = {
+     event: 'popup',
+     eventCategory: "popup",
+     eventAction: "hmspecialvoucher - click",
+     eventLabel: voucherName,
+   }
+   // Proceed only if dataLayer exists.
+   if (dataLayer) {
+     dataLayer.push(birtdayPopupClick);
+   }
+ }
+
 })(Drupal, dataLayer);
