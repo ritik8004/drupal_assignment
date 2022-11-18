@@ -51,6 +51,14 @@ if ($pims_bucket) {
         "id" => "host_header_override",
         "value" => "$pims_bucket.s3.eu-west-1.amazonaws.com",
       ],
+      [
+        'id' => 'browser_cache_ttl',
+        'value' => 14400,
+      ],
+      [
+        'id' => 'edge_cache_ttl',
+        'value' => 31536000,
+      ],
     ],
     "priority" => 100,
     "status" => "active",

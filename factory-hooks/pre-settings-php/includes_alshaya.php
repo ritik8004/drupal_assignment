@@ -271,6 +271,13 @@ switch ($env_name) {
     $settings['additional_modules'][] = 'alshaya_mobile_app';
     break;
 
+  case 'pprod':
+    // Enable Mobile APP module on all new sites by default for non-prod.
+    $settings['additional_modules'][] = 'alshaya_mobile_app';
+
+    $settings['alshaya_use_proxy'] = TRUE;
+    break;
+
   case 'live':
     // We want to timeout linked skus API call in 1 second on prod.
     $settings['linked_skus_timeout'] = 1;
