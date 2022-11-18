@@ -185,4 +185,36 @@
     }
   }
 
+  /**
+   * This function is called when landed on the points view page.
+   */
+  Drupal.alshayaSeoGtmPushPoints = function () {
+    // Prepare the points view data.
+    var pointsData = {
+      event: 'my accounts',
+      eventCategory: "my accounts",
+      eventAction: "points - view",
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(pointsData);
+    }
+  }
+
+  /**
+   * This function is called when click on the points view all link.
+   */
+  Drupal.alshayaSeoGtmPushPointsViewAll = function () {
+    // Prepare the points view all click data.
+    var pointsViewAll = {
+      event: 'my accounts',
+      eventCategory: "my accounts",
+      eventAction: "points - view all",
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(pointsViewAll);
+    }
+  }
+
 })(Drupal, dataLayer);

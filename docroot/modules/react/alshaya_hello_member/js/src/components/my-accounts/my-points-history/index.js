@@ -22,6 +22,8 @@ class MyPointsHistory extends React.Component {
   componentDidMount() {
     // Get transactions data purchased via hello member points.
     this.getPointsHistoryData();
+    // Push points view data to gtm.
+    Drupal.alshayaSeoGtmPushPoints();
   }
 
   /**
@@ -31,6 +33,8 @@ class MyPointsHistory extends React.Component {
     const { pageSize } = this.state;
     this.setState((prev) => ({ firstPage: prev.firstPage + pageSize }), () => {
       this.getPointsHistoryData();
+      // Push points view all button click to gtm.
+      Drupal.alshayaSeoGtmPushPointsViewAll();
     });
   }
 
