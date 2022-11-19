@@ -98,7 +98,7 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
 
     // Product specific attributes will be added in front end.
     $attributes['gtm-category'] = '#rcs.product.gtm_attributes.category#';
-    $attributes['gtm-name'] = '#rcs.product.name#';
+    $attributes['gtm-name'] = '#rcs.product.gtm_attributes.name#';
     $attributes['gtm-product-sku'] = '#rcs.product._self|sku#';
     $attributes['gtm-product-sku-class-identifier'] = '#rcs.product._self|sku-clean#';
     $attributes['gtm-sku-type'] = '#rcs.product._self|sku-type#';
