@@ -2,3 +2,11 @@
 .alshaya_search_mainimage {
   min-height: initial;
 }
+
+.alias--search {
+  aside.c-sidebar-first {
+    .c-accordion__title::after {
+      #{$right}: rem(-2);
+    }
+  }
+}

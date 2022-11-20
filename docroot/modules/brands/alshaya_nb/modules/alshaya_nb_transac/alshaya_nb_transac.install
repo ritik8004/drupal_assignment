@@ -15,6 +15,10 @@ function alshaya_nb_transac_update_9401() {
   \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
     ->set('hide_grid_toggle', TRUE)
     ->save();
+  // PDP gallery thumbnail image slider settings.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('pdp_slider_items_settings.pdp_slider_items_number', 6)
+    ->save();
 }
 
 /**

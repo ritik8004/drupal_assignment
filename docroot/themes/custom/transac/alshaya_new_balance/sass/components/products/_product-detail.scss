@@ -54,6 +54,7 @@
     h1 {
       margin-top: 0;
       margin-bottom: rem(8);
+      width: 100%;
 
       @include breakpoint($only-mobile) {
         margin-top: 0;
@@ -106,15 +107,6 @@
 #pdp-store-click-collect-list {
   .delivery-options-wrapper {
     margin-top: rem(-1);
-  }
-}
-
-#lightSlider {
-  .slick-slide {
-    @include breakpoint($desktop) {
-      width: rem(86) !important;
-      height: rem(86) !important;
-    }
   }
 }
 
