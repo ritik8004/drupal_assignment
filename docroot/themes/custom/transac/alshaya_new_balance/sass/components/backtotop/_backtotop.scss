@@ -15,8 +15,9 @@
     background: url(#{$nb_theme_img_directory_path}/icons/backtop.svg) no-repeat;
     background-size: contain;
     border-radius: 0;
-    top: 0;
+    top: rem(1);
     #{$right}: rem(27);
-    width: rem(26);
+    width: rem(30);
+    height: rem(30);
   }
 }
