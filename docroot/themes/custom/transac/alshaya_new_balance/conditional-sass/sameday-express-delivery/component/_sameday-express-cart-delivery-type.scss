@@ -7,8 +7,9 @@
 
     .delivery-area-button {
       &::before {
-        font-size: rem(47);
-        #{$right}: rem(-11);
+        font-size: rem(36);
+        #{$right}: rem(-6);
+        top: rem(9);
       }
     }
   }
