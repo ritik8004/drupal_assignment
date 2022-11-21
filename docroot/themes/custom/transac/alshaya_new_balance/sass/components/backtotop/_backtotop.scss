@@ -2,8 +2,8 @@
   bottom: rem(60);
 
   @include breakpoint($only-mobile) {
-    bottom: rem(119);
-    #{$right}: rem(-5);
+    bottom: rem(81);
+    #{$right}: rem(-7);
   }
 
   @include breakpoint($only-tablet) {
@@ -17,5 +17,6 @@
     border-radius: 0;
     top: 0;
     #{$right}: rem(27);
+    width: rem(26);
   }
 }
