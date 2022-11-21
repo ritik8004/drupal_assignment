@@ -41,6 +41,7 @@ const ArticleSwatches = ({
         sku: swatch.article_sku_code,
         media: response[0].article_media_gallery,
         name: response[0].name,
+        gtm_name: response[0].gtm_attributes.name,
         url: Drupal.url(response[0].end_user_url),
         priceData: price,
         color: swatch.rgb_color,

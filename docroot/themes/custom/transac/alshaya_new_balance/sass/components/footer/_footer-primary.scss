@@ -107,10 +107,11 @@
 
       .form-email {
         color: $footer-newsletter-text;
-        margin-top: rem(4);
+        margin-top: 0;
         font-size: rem(14);
         padding-#{$left}: rem(8);
         background: none;
+        height: rem(30);
       }
 
       .form-item {
@@ -127,7 +128,7 @@
 
         @include breakpoint($tablet) {
           #{$right}: rem(-20);
-          bottom: rem(-3);
+          bottom: rem(-8);
         }
       }
     }
@@ -385,5 +386,22 @@
 .ladda-button[data-style="zoom-in"] {
   .ladda-spinner {
     top: rem(22);
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  .form-item {
+    label {
+      &#edit-email-error,
+      &.error {
+        background: transparent;
+      }
+    }
+  }
+
+  .subscription-status {
+    .success {
+      padding: 0;
+    }
   }
 }

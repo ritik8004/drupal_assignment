@@ -185,7 +185,13 @@ const Teaser = ({
   if (!hasPriceRange(attribute.alshaya_price_range)) {
     renderPrice = hasValue(attribute.rendered_price)
       ? Parser(attribute.rendered_price)
-      : <Price price={attribute.original_price} finalPrice={attribute.final_price} />;
+      : (
+        <Price
+          price={attribute.original_price}
+          finalPrice={attribute.final_price}
+          fixedPrice={attribute.fixed_price}
+        />
+      );
   } else {
     renderPrice = <PriceRangeElement priceRange={attribute.alshaya_price_range} />;
   }
