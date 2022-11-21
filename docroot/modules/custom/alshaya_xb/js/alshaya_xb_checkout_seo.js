@@ -14,7 +14,7 @@
    */
   Drupal.alshayaXbCheckoutGaPush = function (geData, step) {
     try {
-      if (typeof geData.details.PaymentMethods !== 'undefined' && geData.details.PaymentMethods !== null) {
+      if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
         // Populate drupal settings with details from GE data.
         drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
       }
