@@ -1217,7 +1217,7 @@
         event: 'colorInteraction',
         eventCategory: 'colorSwatch',
         eventAction: 'clicked-' + productData.color,
-        eventLabel: productData.name + '_' + productData.sku,
+        eventLabel: productData.gtm_name + '_' + productData.sku,
         eventValue: 0,
         nonInteraction: 0,
       };

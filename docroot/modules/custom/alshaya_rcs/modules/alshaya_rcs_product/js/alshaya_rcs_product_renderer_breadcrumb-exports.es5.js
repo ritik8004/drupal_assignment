@@ -29,6 +29,7 @@ exports.render = function render(
  */
 exports.normalize = function normalize(
   data,
+  keys = { nameKey: 'name', breadcrumbTermNameKey: 'category_name' }
 ) {
   if (!Array.isArray(data.categories) || data.categories.length < 1) {
     return [];
@@ -84,7 +85,7 @@ exports.normalize = function normalize(
     Object.keys(deepestCategory.breadcrumbs).forEach(function (i) {
       normalized.push({
         url: deepestCategory.breadcrumbs[i].category_url_path,
-        text: deepestCategory.breadcrumbs[i].category_name,
+        text: deepestCategory.breadcrumbs[i][keys.breadcrumbTermNameKey],
         data_url: deepestCategory.breadcrumbs[i].category_url_path,
         id: deepestCategory.breadcrumbs[i].category_id,
       });
@@ -93,7 +94,7 @@ exports.normalize = function normalize(
     // Push the last part of the normalized.
     normalized.push({
       url: deepestCategory.url_path,
-      text: deepestCategory.name,
+      text: deepestCategory[keys.nameKey],
       data_url: deepestCategory.url_path,
       id: deepestCategory.id,
     });
@@ -102,7 +103,7 @@ exports.normalize = function normalize(
   // Push the last crumb without a url.
   normalized.push({
     url: null,
-    text: data.name,
+    text: data[keys.nameKey],
   });
 
   return normalized;
