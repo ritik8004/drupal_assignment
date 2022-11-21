@@ -1631,10 +1631,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
   else {
-    $form = [
-      '#theme' => 'empty_add_to_cart_form',
-      '#text' => t('Out of stock'),
-    ];
+    // If Product is OOS, remove all form items and display OOS message.
+    $form = _alshaya_acm_product_clean_form_for_oos($form);
   }
 
   // Form state cache is not needed for this form since, we are regenerating the
