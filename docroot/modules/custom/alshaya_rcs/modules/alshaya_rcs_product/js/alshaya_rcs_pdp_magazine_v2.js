@@ -12,9 +12,6 @@
   RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
     var mainProduct = e.detail.entity;
 
-    // Prepare the first child info before loading styled products.
-    var firstChild = getFirstChild(mainProduct);
-
     if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
       mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
     }
@@ -27,7 +24,7 @@
     processedProduct[mainProduct.sku] = {...productInfoV1, ...productInfoV2};
     if (mainProduct.type_id === 'configurable') {
       configurableCombinations[mainProduct.sku] = processConfigurableCombinations(mainProduct.sku);
-      configurableCombinations[mainProduct.sku].firstChild = firstChild;
+      configurableCombinations[mainProduct.sku].firstChild = getFirstChild(mainProduct);
     }
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
@@ -43,10 +40,15 @@
    *   SKU value or null.
    */
   function getFirstChild(product) {
-    var firstVariant = product.variants.length > 0
-      ? Object.values(product.variants).shift()
-      : null;
-    return firstVariant ? firstVariant.product.sku : null;
+    var firstChild = null;
+    var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
+    try {
+      var sortedVariants = Object.values(Object.values(combinations['attribute_sku'])[0])[0];
+      firstChild = sortedVariants[0];
+    } catch (e) {
+      // Do nothing.
+    }
+    return firstChild;
   }
 
   /**
