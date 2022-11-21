@@ -233,40 +233,46 @@
   }
 
   .form-item-configurables-size {
+    .select2Option {
+      h4 {
+        span:first-child {
+          font-family: $alshaya-thin;
+        }
+
+        .selected-text {
+          display: none;
+        }
+      }
+
+      .select-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: rem(13) rem(14);
+        column-gap: rem(13);
+        row-gap: rem(10);
+
+        li {
+          span,
+          a {
+            width: rem(84);
+            height: rem(44);
+            line-height: rem(16);
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      select.form-select.form-item-configurable-select {
+        height: rem(53);
+      }
+    }
+
     .group-wrapper {
       margin-top: rem(20);
 
       .group {
-        .select2Option {
-          h4 {
-            span:first-child {
-              font-family: $alshaya-thin;
-            }
-
-            .selected-text {
-              display: none;
-            }
-          }
-
-          .select-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: rem(13) rem(14);
-            column-gap: rem(13);
-            row-gap: rem(10);
-
-            li {
-              span,
-              a {
-                width: rem(84);
-                height: rem(44);
-                line-height: rem(16);
-                margin: 0;
-              }
-            }
-          }
-        }
-
         @include breakpoint($only-mobile) {
           select.form-select.form-item-configurable-select {
             height: rem(53);
@@ -294,6 +300,32 @@
         @include breakpoint($only-mobile) {
           width: rem(96);
           height: rem(36);
+        }
+      }
+    }
+
+    &:not(.form-type-configurable-select-group) {
+      h4.list-title {
+        margin-top: rem(12);
+
+        @include breakpoint($only-tablet) {
+          margin-top: rem(8);
+        }
+      }
+
+      select.form-select.form-item-configurable-select {
+        margin-top: rem(12);
+      }
+
+      .select-buttons {
+        margin-top: rem(14);
+      }
+
+      &::after {
+        @include breakpoint($upto-desktop) {
+          top: 50%;
+          transform: translateY(-35%);
+          display: inline;
         }
       }
     }
