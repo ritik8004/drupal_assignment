@@ -30,7 +30,7 @@ class Menu extends React.Component {
     // and then update the wait state to load the component.
     const { attributeAlias } = this.props;
     Axios
-      .get(Drupal.url(`facets-aliases/${attributeAlias}`))
+      .get(Drupal.url(`facets-aliases/${attributeAlias}?cacheable=1`))
       .then((response) => {
         setFacetStorage(attributeAlias, response.data);
         this.setState({ wait: false });
