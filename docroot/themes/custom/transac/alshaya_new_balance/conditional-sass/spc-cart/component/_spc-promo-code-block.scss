@@ -14,6 +14,13 @@
     }
   }
 
+  .promo-remove {
+    &.active {
+      top: rem(34);
+      #{$right}: rem(176);
+    }
+  }
+
   #promo-code,
   .promo-remove,
   .promo-submit {
