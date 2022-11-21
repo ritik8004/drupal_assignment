@@ -1848,22 +1848,18 @@ window.commerceBackend.addPaymentMethod = async (data) => {
  *   A promise object.
  */
 window.commerceBackend.getCartForCheckout = async () => {
-  const cartId = window.commerceBackend.getCartId();
-  logger.debug('Loading cart data for checkout page for cart: @cCartId.', {
-    '@cCartId': cartId,
-  });
+  logger.debug('Loading cart data for checkout page.');
 
   return getCart()
     .then(async (response) => {
       const cart = response;
+      const cartId = window.commerceBackend.getCartId();
 
       // Check if response itself is empty.
       // This could happen for multiple reasons,
       // For example isAnonymousUserWithoutCart or we got 404.
       if (!hasValue(cart) || !hasValue(cart.data)) {
-        logger.warning('Empty response received for getCart API call for cart: @cCartId.', {
-          '@cCartId': cartId,
-        });
+        logger.warning('Empty response received for getCart API call.');
 
         return {
           data: {
@@ -1900,10 +1896,9 @@ window.commerceBackend.getCartForCheckout = async () => {
       return cart;
     })
     .catch((error) => {
-      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @responseCode. Cart: @cartId', {
+      logger.error('Error while getCartForCheckout controller. Error: @message. Code: @responseCode.', {
         '@message': error.message,
         '@responseCode': error.status,
-        '@cartId': cartId,
       });
 
       return {

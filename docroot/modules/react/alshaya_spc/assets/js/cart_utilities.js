@@ -455,6 +455,9 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
         context.cCartIdInt = cartData.cart_id_int;
       }
     }
+    else {
+      context.cCartIdInt = Drupal.getItemFromLocalStorage('cart_int_id');
+    }
   });
 
   /**
