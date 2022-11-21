@@ -9,6 +9,9 @@
  * Implements hook_update_N().
  *
  * Hide grid toggle in plp and srp.
+ * Set google map marker for CNC.
+ * Set google map marker for store finder.
+ * set translation for store finder.
  */
 function alshaya_nb_transac_update_9401() {
   // Hide grid toggle option on listing pages.
@@ -19,6 +22,23 @@ function alshaya_nb_transac_update_9401() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('pdp_slider_items_settings.pdp_slider_items_number', 6)
     ->save();
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_nb_transac');
+  }
+  // Configure map marker on checkout for CnC.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('map_marker.active', '/modules/brands/alshaya_nb/images/nb-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_nb/images/nb-pin-inactive.svg')
+    ->save();
+  // Sets translation for the store list link label.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_list_label', 'قائمة بجميع متاجر نيو بالانس')
+    ->save();
+  // Set the default value for back to store list link.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all the New Balance stores');
+  $config->save();
 }
 
 /**
