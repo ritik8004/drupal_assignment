@@ -114,6 +114,7 @@ $footer-newsletter-border: $white;
 $footer-top-bg: $black;
 $lang_switch: $black;
 $footer_logo_blk_text: $nb-black;
+$newsletter_success: $nb-green;
 
 //Signup
 $user_form_text: $ada-gray;
@@ -217,7 +218,8 @@ $plp_all_filter_filter_arrow: $black;
 $plp_clear_all_btn_text: $nb-red;
 $plp_filter_txt: $ada-gray;
 $plp_filter_border: $gray2;
-$plp_promotion_link: $gray-97;
+$plp_promotion_link: $nb-red;
+$oos_btn_bg: $nb-red;
 
 // Product Detail Page
 $pdp_product_itemcode: $ada-gray;
@@ -235,6 +237,7 @@ $pdp_desc_wrapper_close_icon: $black;
 $pdp_desc_wrapper_close_bg: $white;
 $pdp_sidebar_label: $black;
 $pdp_desc_wrapper_border: $black;
+$pdp_product_discount_text: $nb-red;
 
 // Accordion
 $accordion_title: $black;
@@ -318,6 +321,10 @@ $spc-cnc-store-input-search-icon: $ada-gray;
 $spc-order-summary-product-area-bg: $white;
 $spc-order-summary-totals-bg: $white;
 $user_pwd_unmask: $black;
+$spc-checkout-title-bg: $white;
+$spc-checkout-product-content-bg: $white;
+$spc-checkout-section-border: $gainsboro;
+$spc-checkout-image-border-default: $gray2;
 
 //Wishlist
 $wishlist-header-notification-border: $nb-red;
