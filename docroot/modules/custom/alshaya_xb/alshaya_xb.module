@@ -169,7 +169,7 @@ function alshaya_xb_acq_sku_base_field_additions_alter(array &$fields = []) {
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
-  if ($product['extension']['xb_fixed_price']) {
+  if (isset($product['extension']['xb_fixed_price'])) {
     $fixed_prices = [];
     foreach ($product['extension']['xb_fixed_price'] as $fixed_price) {
       // If special price has value then use it with country code.
