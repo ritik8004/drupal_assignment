@@ -390,6 +390,14 @@
   }
 }
 
+html[lang=ar] {
+  .ladda-button[data-style="zoom-in"] {
+    .ladda-spinner {
+      right: 45%;
+    }
+  }
+}
+
 .alshaya-newsletter-subscribe {
   .form-item {
     label {
