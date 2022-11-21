@@ -322,7 +322,7 @@
       }
 
       &::after {
-        @include breakpoint($upto-desktop) {
+        @include breakpoint($only-mobile) {
           top: 50%;
           transform: translateY(-35%);
           display: inline;
