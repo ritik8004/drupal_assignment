@@ -14,8 +14,10 @@
    */
   Drupal.alshayaXbCheckoutGaPush = function (geData, step) {
     try {
-      // Populate drupal settings with details from GE data.
-      drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
+      if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
+        // Populate drupal settings with details from GE data.
+        drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
+      }
       Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
     }
     catch (error) {

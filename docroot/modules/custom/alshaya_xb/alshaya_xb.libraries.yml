@@ -9,3 +9,4 @@ alshaya_xb_checkout_seo:
     js/alshaya_xb_checkout_seo.js: {}
   dependencies:
     - core/drupal
+    - alshaya_master/common_functions
