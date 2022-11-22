@@ -400,11 +400,13 @@ window.commerceBackend = window.commerceBackend || {};
         : getProductUrls(product.url_key);
       // @todo Add code for commented keys.
       info[variantSku] = {
+        id: variant.product.id,
         cart_image: window.commerceBackend.getCartImage(variant.product),
         cart_title: product.name,
         click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
         color_attribute: Drupal.hasValue(variantInfo.color_attribute) ? variantInfo.color_attribute : '',
         color_value: Drupal.hasValue(variantInfo.color) ? variantInfo.color : '',
+        fit: Drupal.hasValue(variantInfo.fit) ? variantInfo.fit : '',
         sku: variantInfo.sku,
         parent_sku: variantParentSku,
         configurableOptions: getVariantConfigurableOptions(product, variant),

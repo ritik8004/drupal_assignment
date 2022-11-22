@@ -7,7 +7,6 @@ use Drupal\Core\File\FileSystemInterface;
 use Drush\Commands\DrushCommands;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Site\Settings;
 
 /**
  * A Drush commandfile for exporting product data.
@@ -418,7 +417,9 @@ class ProductExportCommands extends DrushCommands {
       return $store_code[$langcode];
     }
 
-    $store_code[$langcode] = Settings::get('magento_lang_prefix')[$langcode];
+    $store_code[$langcode] = \Drupal::configFactory()
+      ->get('alshaya_api.settings')
+      ->get('magento_lang_prefix')[$langcode];
 
     return $store_code[$langcode];
   }

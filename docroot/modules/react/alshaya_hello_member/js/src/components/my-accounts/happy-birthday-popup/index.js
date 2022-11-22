@@ -51,7 +51,21 @@ class HappyBirthdayPopup extends React.Component {
     this.setState({
       isModelOpen: false,
     });
+    // Push popup close event to gtm.
+    if (hasValue(this.data)) {
+      Drupal.alshayaSeoGtmPushBirtdayPopupClose(this.data.category_name);
+    }
   };
+
+  /**
+   * Tracking voucher click to gtm.
+   * */
+  trackVoucherClick = () => {
+    // Push popup close event to gtm.
+    if (hasValue(this.data)) {
+      Drupal.alshayaSeoGtmPushBirtdayPopupClick(this.data.category_name);
+    }
+  }
 
   render() {
     const { isModelOpen } = this.state;
@@ -63,6 +77,12 @@ class HappyBirthdayPopup extends React.Component {
     if (this.isAlreadyShown()) {
       return null;
     }
+
+    // Push birthday pop display to gtm.
+    if (isModelOpen) {
+      Drupal.alshayaSeoGtmPushBirthdayPopupView(this.data.category_name);
+    }
+
     return (
       <Popup
         open={isModelOpen}
@@ -84,7 +104,7 @@ class HappyBirthdayPopup extends React.Component {
             <div className="description">
               { this.data.description }
             </div>
-            <div className="happy-birthday-voucher-details">
+            <div className="happy-birthday-voucher-details" onClick={() => this.trackVoucherClick()}>
               <a className="avail-it" key={this.data.id || this.data.code} href={`${Drupal.url(`user/${uid}`)}/hello-member-benefits/${hasValue(this.data.id) ? `coupon/${this.data.id}` : `offer/${this.data.code}`}`}>
                 { Drupal.t('REDEEM IT', {}, { context: 'hello_member' }) }
               </a>

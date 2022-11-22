@@ -1051,6 +1051,20 @@ class AlshayaGtmManager {
       $loyalty_card = $order['extension']['loyalty_card'];
     }
 
+    $loyalty_type = '';
+    if (isset($order['extension'], $order['extension']['loyalty_type'])) {
+      $loyalty_type = $order['extension']['loyalty_type'];
+    }
+
+    $reward_types = [];
+    if (isset($order['extension'], $order['extension']['applied_hm_voucher_codes'])) {
+      array_push($reward_types, 'hmvoucher');
+    }
+
+    if (isset($order['extension'], $order['extension']['applied_hm_offer_code'])) {
+      array_push($reward_types, 'hmoffer');
+    }
+
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
     $current_user_id = $this->currentUser->id();
 
@@ -1099,6 +1113,8 @@ class AlshayaGtmManager {
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $first_time_transac,
       'privilegesCardNumber' => $loyalty_card,
+      'loyaltyType' => $loyalty_type,
+      'rewardType' => !empty($reward_types) ? implode('|', $reward_types) : '',
       'userId' => $customer_id,
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],

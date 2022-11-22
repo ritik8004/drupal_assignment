@@ -11,6 +11,7 @@ services:
       - '@alshaya_api.mdc_helper'
       - '@module_handler'
       - '@current_user'
+      - '@config.factory'
 
   alshaya_api.mdc_helper:
     class: Drupal\alshaya_api\Helper\MagentoApiHelper

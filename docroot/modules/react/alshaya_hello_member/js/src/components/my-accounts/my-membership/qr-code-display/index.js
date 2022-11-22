@@ -2,6 +2,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import QRCode from 'react-qr-code';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 
 class QrCodeDisplay extends React.Component {
   constructor(props) {
@@ -13,6 +14,11 @@ class QrCodeDisplay extends React.Component {
 
   openModal = (e) => {
     e.preventDefault();
+    const { benefitName, benefitType } = this.props;
+    // Push qr code click to gtm when user clicks on view qr link.
+    if (hasValue(benefitName) && hasValue(benefitType)) {
+      Drupal.alshayaSeoGtmPushBenefitQrData(benefitName, benefitType);
+    }
     document.body.classList.add('open-form-modal');
 
     this.setState({

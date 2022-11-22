@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Render\Markup;
-use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_page_attachments().
@@ -34,7 +33,7 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
   }
 
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $settings = Settings::get('magento_lang_prefix');
+  $settings = \Drupal::config('alshaya_api.settings')->get('magento_lang_prefix');
   $ge_store_code = $settings[$language];
   $config = \Drupal::config('alshaya_xb.settings');
   $ge_js_src = $config->get('globale_js_url') ?? '';
@@ -148,4 +147,12 @@ function alshaya_xb_alshaya_api_update_customer_api_request_alter(array &$reques
     && !empty($request_options['json']['customer']['addresses'])) {
     unset($request_options['json']['customer']['addresses']);
   }
+}
+
+/**
+ * Implements hook_alshaya_get_currency_code_alter().
+ */
+function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
+  $currency['xb']['en'] = 'AED';
+  $currency['xb']['ar'] = 'AED';
 }

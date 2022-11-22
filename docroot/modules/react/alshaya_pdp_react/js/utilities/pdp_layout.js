@@ -234,6 +234,8 @@ export const getProductValues = (productInfo, configurableCombinations,
   let expressDeliveryClass = '';
   let bigTickectProduct = false;
   let isProductBuyable = '';
+  let eligibleForReturn = false;
+  let fit = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -268,12 +270,14 @@ export const getProductValues = (productInfo, configurableCombinations,
     priceRaw = productInfo[skuItemCode].priceRaw;
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;
+    fit = productInfo[skuItemCode].fit;
     labels = hasValue(productLabels) ? productLabels[skuItemCode] : [];
     stockQty = productInfo[skuItemCode].stockQty;
     firstChild = skuItemCode;
     promotions = productInfo[skuItemCode].promotionsRaw;
     deliveryOptions = productInfo[skuItemCode].deliveryOptions;
     expressDeliveryClass = productInfo[skuItemCode].expressDeliveryClass;
+    eligibleForReturn = productInfo[skuItemCode].eligibleForReturn;
     if (productInfo[skuItemCode].bigTickectProduct) {
       bigTickectProduct = productInfo[skuItemCode].bigTickectProduct;
     }
@@ -287,12 +291,14 @@ export const getProductValues = (productInfo, configurableCombinations,
           priceRaw = variantInfo.priceRaw;
           finalPrice = variantInfo.finalPrice;
           pdpGallery = variantInfo.rawGallery;
+          fit = hasValue(variantInfo.fit) ? variantInfo.fit : fit;
           labels = hasValue(productLabels) ? productLabels[variant] : [];
           stockQty = variantInfo.stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
           promotions = variantInfo.promotionsRaw;
           deliveryOptions = variantInfo.deliveryOptions;
           expressDeliveryClass = variantInfo.expressDeliveryClass;
+          eligibleForReturn = variantInfo.eligibleForReturn;
           // free gift promotion variable from variant sku.
           if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
             freeGiftPromoType = variantInfo.freeGiftPromotion['#promo_type'];
@@ -327,6 +333,13 @@ export const getProductValues = (productInfo, configurableCombinations,
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
   const additionalAttributes = skuItemCode ? productInfo[skuItemCode].additionalAttributes : [];
 
+  if (hasValue(fit)) {
+    additionalAttributes.fit = {
+      value: fit,
+      label: Drupal.t('FIT'),
+    };
+  }
+
   const relatedProducts = [
     'crosssell',
     'upsell',
@@ -360,6 +373,7 @@ export const getProductValues = (productInfo, configurableCombinations,
     expressDeliveryClass,
     isProductBuyable,
     bigTickectProduct,
+    eligibleForReturn,
   };
 };
 

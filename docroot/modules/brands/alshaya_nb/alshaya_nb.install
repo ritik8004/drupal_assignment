@@ -6,6 +6,21 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Set the instagram option in the sharethis settings.
+ */
+function alshaya_nb_update_9401() {
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services = "'Facebook:facebook','Instagram:instagram','Twitter:twitter'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_nb_install() {
@@ -13,4 +28,12 @@ function alshaya_nb_install() {
 
   // Create default content for the site.
   alshaya_nb_create_default_content();
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services = "'Facebook:facebook','Instagram:instagram','Twitter:twitter'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
 }

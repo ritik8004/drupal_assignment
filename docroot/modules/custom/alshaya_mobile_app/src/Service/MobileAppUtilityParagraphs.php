@@ -31,6 +31,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Connection;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\Core\Routing\RequestContext;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -142,6 +143,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Path Validator service object.
    * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page
    *   Product Category Page service.
+   * @param \Drupal\Core\Routing\RequestContext $request_context
+   *   The request context.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -166,9 +169,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     Connection $database,
     AlshayaSuperCategoryManager $super_category_manager,
     PathValidatorInterface $path_validator,
-    ProductCategoryPage $product_category_page
+    ProductCategoryPage $product_category_page,
+    RequestContext $request_context
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper, $database, $super_category_manager, $path_validator, $product_category_page);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper, $database, $super_category_manager, $path_validator, $product_category_page, $request_context);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;

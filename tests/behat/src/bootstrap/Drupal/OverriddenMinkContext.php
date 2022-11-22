@@ -48,6 +48,12 @@ class OverriddenMinkContext extends MinkContext {
       return $key;
     }
 
+    $env_key = getenv('BEHAT_SECRET_KEY');
+    if ($env_key) {
+      $key = $env_key;
+      return $key;
+    }
+
     $filename = 'creds.json';
     $options = getopt('', ['profile:']);
     $profile_arr = explode('-', $options['profile']);
@@ -57,6 +63,9 @@ class OverriddenMinkContext extends MinkContext {
       $creds = json_decode(file_get_contents($filename), TRUE);
       $key = $creds[$env]['secret_key'] ?? '';
     }
+
+    print 'Behat secret key not available';
+    die();
 
     return $key;
   }

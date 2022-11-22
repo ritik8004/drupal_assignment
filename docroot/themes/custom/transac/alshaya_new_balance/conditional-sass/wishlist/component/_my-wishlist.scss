@@ -10,3 +10,11 @@
     }
   }
 }
+
+#wishlist-share {
+  > button {
+    .icon {
+      background: url('#{$brand_theme_img_directory_path}/icons/wishlist-share.svg') no-repeat;
+    }
+  }
+}

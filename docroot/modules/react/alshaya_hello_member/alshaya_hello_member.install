@@ -5,6 +5,23 @@
  * Contains install, update, uninstall hooks for alshaya_hello_member.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update hello member popup text for gtm tracking.
+ */
+function alshaya_hello_member_update_9404() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_hello_member.settings'],
+    'alshaya_hello_member',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE,
+  );
+}
+
 /**
  * Implements hook_update_N().
  *

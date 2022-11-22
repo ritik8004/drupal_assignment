@@ -118,6 +118,8 @@ class AddBenefitsToCart extends React.Component {
             document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
           }, 5000);
 
+          // Push add to basket data to gtm.
+          Drupal.alshayaSeoGtmPushBenefitAddToBag({ title, promotionType });
           const cartData = window.commerceBackend.getCart(true);
           if (cartData instanceof Promise) {
             cartData.then((result) => {
