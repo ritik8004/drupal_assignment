@@ -103,6 +103,22 @@
       }
 
       @include sticky-search-bar;
+
+      &.frontpage {
+        .block-alshaya-algolia-react-autocomplete {
+          .algolia-search-cleartext-icon {
+            top: rem(16);
+          }
+        }
+      }
+    }
+
+    &:not(.frontpage) {
+      .block-alshaya-algolia-react-autocomplete {
+        .algolia-search-cleartext-icon {
+          top: rem(16);
+        }
+      }
     }
 
     .block-alshaya-algolia-react-autocomplete {
