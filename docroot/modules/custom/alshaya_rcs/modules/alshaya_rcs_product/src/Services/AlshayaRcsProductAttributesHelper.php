@@ -79,23 +79,36 @@ class AlshayaRcsProductAttributesHelper {
     $query->condition('langcode', $langcode);
     $tids = $query->execute();
 
+    if (empty($tids)) {
+      return [];
+    }
+
     // Populate product options array.
     $items = [];
-    if ($tids) {
-      $product_option_entities = $this->entityTypeManager->getStorage('taxonomy_term')->loadMultiple($tids);
-      foreach ($product_option_entities as $product_option) {
-        $product_option = ($product_option->language()->getId() === $langcode)
-          ? $product_option
-          : $product_option->getTranslation($langcode);
-        $product_option_en = $product_option->getTranslation('en');
-        $items[$product_option->get('field_sku_attribute_code')->getString()][] = [
-          'attribute_code' => $product_option->get('field_sku_attribute_code')->getString(),
-          'label' => $product_option->getName(),
-          'gtm_label' => $product_option_en->getName(),
-          'value' => $product_option->get('field_sku_option_id')->getString(),
-          'weight' => $product_option->weight->value,
-        ];
-      }
+
+    $product_option_entities = $this->entityTypeManager->getStorage('taxonomy_term')->loadMultiple($tids);
+    foreach ($product_option_entities as $product_option) {
+      /** @var \Drupal\taxonomy\TermInterface $product_option */
+      $product_option = ($product_option->language()->getId() === $langcode)
+        ? $product_option
+        : $product_option->getTranslation($langcode);
+
+      $product_option_en = $product_option->getTranslation('en');
+
+      $attribute_code = $product_option->get('field_sku_attribute_code')->getString();
+
+      $items[$attribute_code][] = [
+        'attribute_code' => $attribute_code,
+        'value' => $product_option->get('field_sku_option_id')->getString(),
+        'label' => $product_option->label(),
+        'gtm_label' => $product_option_en->label(),
+        'weight' => intval($product_option->getWeight()),
+      ];
+    }
+
+    // Sort all the attributes.
+    foreach ($items as &$attribute_options) {
+      usort($attribute_options, fn($option1, $option2) => $option1['weight'] <=> $option2['weight']);
     }
 
     return $items;
