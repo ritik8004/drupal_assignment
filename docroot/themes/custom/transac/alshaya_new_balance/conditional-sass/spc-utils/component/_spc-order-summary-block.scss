@@ -37,6 +37,14 @@
     }
   }
 
+  @include breakpoint($only-mobile) {
+    .product-content {
+      .product-item {
+        margin-#{$right}: rem(20);
+      }
+    }
+  }
+
   @include breakpoint($tablet) {
     .product-content {
       .product-item {
@@ -60,7 +68,6 @@
             max-width: initial;
 
             img {
-              border: rem(1) solid $spc-checkout-image-border-default;
               width: rem(100);
               height: rem(100);
               object-fit: contain;
@@ -71,9 +78,11 @@
     }
 
     .totals {
-      & > .total-line-item {
-        border-top: rem(1) solid $spc-checkout-section-border;
-        padding-top: rem(32);
+      & > .total-line-item:first-child {
+        .path--checkout & {
+          border-top: rem(1) solid $spc-checkout-section-border;
+          padding-top: rem(32);
+        }
       }
     }
 

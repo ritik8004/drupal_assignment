@@ -14,6 +14,7 @@ $med-dark-red: #c00;
 $blue: #44a6ff;
 $nb-green: #60b257;
 $gainsboro: #dadada;
+$light-gray-f7-alpha-5: rgba(247, 247, 247, 0.5);
 
 // Global elements.
 $primary_text: $black;
@@ -324,7 +325,7 @@ $user_pwd_unmask: $black;
 $spc-checkout-title-bg: $white;
 $spc-checkout-product-content-bg: $white;
 $spc-checkout-section-border: $gainsboro;
-$spc-checkout-image-border-default: $gray2;
+$spc-checkout-product-light-bg: $light-gray-f7-alpha-5;
 
 //Wishlist
 $wishlist-header-notification-border: $nb-red;

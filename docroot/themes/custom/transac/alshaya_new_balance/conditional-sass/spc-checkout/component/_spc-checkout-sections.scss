@@ -19,6 +19,7 @@
         }
 
         @include breakpoint($tablet) {
+          padding-bottom: 0;
           background: $spc-checkout-product-content-bg;
           margin-bottom: 0;
 
