@@ -199,6 +199,11 @@ $my_acc_address_text: $black;
 $address_form_radio: $nb-red;
 $user_account_nav: $nb-black;
 $order_search_form_border: $white;
+$user_nav_mobile_link_icon: $black;
+$address_edit_cancel_text: $primary_link;
+
+// Header my account nav.
+$header_my_account_h3_title: $black;
 
 // PLP
 $plp_search_count: $ada-gray;
@@ -388,3 +393,10 @@ $online-return-status-green-label: $nb-green;
 $online-return-cancel-button-border: $nb-red;
 $online-return-order-detail-border: $gray;
 $online-return-request-section-border: $gainsboro;
+
+// Block Alshaya ACM customer .block-alshaya-acm-customer
+$block_acm_customer_txt: $primary_link;
+
+// Order detail, recent orders, order list page.
+$order_detail_td_light_content: $ada-gray;
+$order-detail_td_dark_content: $black;
