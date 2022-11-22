@@ -8,6 +8,20 @@
 /**
  * Implements hook_update_N().
  *
+ * Add product details string which is used in description.
+ */
+function alshaya_nb_transac_update_9402() {
+  $strings = [
+    'Product Details' => [
+      'ar' => 'تفاصيل المنتج',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Hide grid toggle in plp and srp.
  */
 function alshaya_nb_transac_update_9401() {
