@@ -9,24 +9,27 @@
       a,
       span {
         text-transform: unset;
+      }
 
-        &.lhn-3,
-        &.lhn-4 {
-          &.active {
-            font-family: $ay-nova-semibold;
-          }
-        }
+      a.lhn-3 {
+        text-transform: uppercase;
+        color: $primary_link;
       }
     }
   }
 
   > ul > li {
-    margin-bottom: 0;
+    margin-bottom: rem(30);
 
     > .lhn-2 {
       font-family: $alshaya-thin;
       text-transform: uppercase;
     }
+  }
+
+  // L4.
+  .lhn-4 {
+    display: block;
   }
 
   .lhn-3.active {
