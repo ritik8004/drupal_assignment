@@ -1853,7 +1853,6 @@ window.commerceBackend.getCartForCheckout = async () => {
   return getCart()
     .then(async (response) => {
       const cart = response;
-      const cartId = window.commerceBackend.getCartId();
 
       // Check if response itself is empty.
       // This could happen for multiple reasons,
@@ -1870,6 +1869,7 @@ window.commerceBackend.getCartForCheckout = async () => {
         };
       }
 
+      const cartId = window.commerceBackend.getCartId();
       if (hasValue(cart.data.error_message)) {
         logger.error('Error while getting cart: @cartId, Error: @message.', {
           '@cartId': cartId,

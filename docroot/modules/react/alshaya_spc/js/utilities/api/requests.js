@@ -142,7 +142,7 @@ export const fetchCartDataForCheckout = async () => {
   // Store cart int id before deleting cart data.
   const currentCart = await window.commerceBackend.getCart();
   if (Drupal.hasValue(currentCart)) {
-    Drupal.addItemInLocalStorage('cart_int_id', currentCart.data.cart_id_int);
+    globalThis.cartIdInt = currentCart.data.cart_id_int;
   }
 
   // Remove cart data from storage every-time we land on checkout page.
