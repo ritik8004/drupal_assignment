@@ -1,0 +1,25 @@
+.product-drawer-content-wrapper {
+  .price {
+    font-size: rem(15);
+  }
+
+  html[lang=en] & {
+    .configurable-product-form-wrapper {
+      .slick-dots {
+        li {
+          button {
+            &::before {
+              line-height: rem(16);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .attribute-wrapper_size {
+      float: none;
+    }
+  }
+}

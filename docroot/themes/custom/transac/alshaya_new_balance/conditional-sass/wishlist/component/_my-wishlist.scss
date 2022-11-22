@@ -15,8 +15,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    #my-wishlist,
-    .product-drawer-container {
+    #my-wishlist {
       .login-message {
         margin-bottom: rem(20);
       }
