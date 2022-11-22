@@ -6,6 +6,7 @@ import {
 import dispatchCustomEvent from '../events';
 import validateCartResponse from '../validation_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 export const fetchClicknCollectStores = (args) => {
@@ -137,6 +138,12 @@ export const fetchCartDataForCheckout = async () => {
   // First thing, load the guest cart id for association later if required.
   if (typeof window.commerceBackend.associateCartToCustomer !== 'undefined') {
     await window.commerceBackend.associateCartToCustomer('checkout');
+  }
+
+  // Store cart int id before deleting cart data.
+  const currentCart = await window.commerceBackend.getCart();
+  if (hasValue(currentCart)) {
+    globalThis.cartIdInt = currentCart.data.cart_id_int;
   }
 
   // Remove cart data from storage every-time we land on checkout page.
