@@ -11,6 +11,12 @@
   // Call event after entity load and process product data.
   RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
     var mainProduct = e.detail.entity;
+    var mainProductClone = null;
+    try {
+      mainProductClone = JSON.parse(JSON.stringify(mainProduct));
+    } catch (e) {
+      mainProductClone = mainProduct;
+    }
 
     if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
       mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
@@ -24,7 +30,7 @@
     processedProduct[mainProduct.sku] = {...productInfoV1, ...productInfoV2};
     if (mainProduct.type_id === 'configurable') {
       configurableCombinations[mainProduct.sku] = processConfigurableCombinations(mainProduct.sku);
-      configurableCombinations[mainProduct.sku].firstChild = getFirstChild(mainProduct);
+      configurableCombinations[mainProduct.sku].firstChild = getFirstChild(mainProductClone);
     }
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
@@ -41,13 +47,27 @@
    */
   function getFirstChild(product) {
     var firstChild = null;
-    var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
-    try {
-      var sortedVariants = Object.values(Object.values(combinations['attribute_sku'])[0])[0];
-      firstChild = sortedVariants[0];
-    } catch (e) {
-      // Do nothing.
+    // @todo Add a general way to figure out the first child instead of adding
+    // separate check for OOS products.
+    // We might need to investigate the method
+    // window.commerceBackend.getConfigurableCombinations() and see if the
+    // order of the attributes is the same as in V2.
+    if (window.commerceBackend.isProductInStock(product)) {
+      var firstVariant = product.variants.length > 0
+        ? Object.values(product.variants).shift()
+        : null;
+      return firstVariant ? firstVariant.product.sku : null;
     }
+    else {
+      var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
+      try {
+        var sortedVariants = Object.values(Object.values(combinations['attribute_sku'])[0])[0];
+        firstChild = sortedVariants[0];
+      } catch (e) {
+        // Do nothing.
+      }
+    }
+
     return firstChild;
   }
 
