@@ -561,14 +561,14 @@ window.commerceBackend = window.commerceBackend || {};
 
   function fetchAndProcessCustomAttributes() {
     var response = globalThis.RcsPhStaticStorage.get('product_options');
+
     // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata
-    && Object.entries(response.data.customAttributeMetadata).forEach(function eachCustomAttribute([attrCode, options]) {
+    response && Object.entries(response).forEach(function eachCustomAttribute([attrCode, options]) {
       var allOptionsForAttribute = {};
       // Proceed only if `attribute_options` exists.
       if (Drupal.hasValue(options)) {
         options.forEach(function (optionValue) {
-          allOptionsForAttribute[optionValue.value] = optionValue.label;
+          allOptionsForAttribute[optionValue.value] = optionValue;
         })
       }
       // Set to static storage.
@@ -606,14 +606,16 @@ window.commerceBackend = window.commerceBackend || {};
       var sortedValues = [];
       configurables[attributeName].values.forEach(function eachValue(value) {
         if (Drupal.hasValue(value.value_id) && Drupal.hasValue(allAttributes[attributeName])) {
-          var key = Object.keys(allAttributes[attributeName]).indexOf(String(value.value_id));
-          unsortedValues[key] = value;
+          var weight = allAttributes[attributeName][String(value.value_id)]
+            ? allAttributes[attributeName][String(value.value_id)].weight
+            : 99999;
+          unsortedValues[weight] = value;
         }
       });
 
       if (Drupal.hasValue(unsortedValues)) {
-        Object.keys(unsortedValues).sort().forEach(function eachElement(value, index) {
-          sortedValues.push(unsortedValues[value]);
+        Object.keys(unsortedValues).sort(function (a, b) {  return a - b;  }).forEach(function eachElement(value, ) {
+          sortedValues.push(unsortedValues[parseInt(value, 10)]);
         });
         configurablesClone[attributeName].values = sortedValues;
       }
@@ -986,17 +988,15 @@ window.commerceBackend = window.commerceBackend || {};
    *   The attribute label.
    */
   window.commerceBackend.getAttributeValueLabel = function (attrName, attrValue) {
-    if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])) {
-      return staticDataStore['attrLabels'][attrName][attrValue];
+    if (!(Drupal.hasValue(staticDataStore['attrLabels'])
+      || Drupal.hasValue(staticDataStore['attrLabels'][attrName]))) {
+      fetchAndProcessCustomAttributes();
     }
-
-    fetchAndProcessCustomAttributes();
 
     // Return the label.
     if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])
-      && Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue]))
-    {
-      return staticDataStore['attrLabels'][attrName][attrValue];
+      && Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue])) {
+      return staticDataStore['attrLabels'][attrName][attrValue]['label'];
     }
 
     return '';

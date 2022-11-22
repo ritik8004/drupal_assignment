@@ -21,11 +21,7 @@
       e.promises.push(jQuery.ajax({
         url: Drupal.url('rcs/product-attribute-options?cacheable=1'),
         success: function success (data) {
-          globalThis.RcsPhStaticStorage.set('product_options', {
-            data: {
-              customAttributeMetadata: data,
-            }
-          });
+          globalThis.RcsPhStaticStorage.set('product_options', data);
         }
       }));
     }
