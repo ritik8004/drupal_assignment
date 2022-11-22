@@ -1,11 +1,13 @@
 <?php
 
-namespace Drupal\rcs_placeholders;
+namespace Drupal\rcs_placeholders\Event;
+
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Event for processing/altering RCS paths.
  */
-class RcsPhPathProcessorEvent {
+class RcsPhPathProcessorEvent extends Event {
   public const EVENT_NAME = 'rcs_ph_path_processor_event';
 
   /**
@@ -13,7 +15,14 @@ class RcsPhPathProcessorEvent {
    *
    * @var array
    */
-  private $data = [];
+  private array $data = [
+    'entityType' => NULL,
+    'entityPath' => NULL,
+    'entityPathPrefix' => NULL,
+    'entityFullPath' => NULL,
+    'processedPaths' => NULL,
+    'entityData' => NULL,
+  ];
 
   /**
    * Gets data.

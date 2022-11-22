@@ -3,11 +3,10 @@
 namespace Drupal\rcs_placeholders\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
-use Drupal\rcs_placeholders\RcsPhPathProcessorEvent;
+use Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -78,20 +77,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public static $pageFullPath;
 
   /**
-   * The node storage.
-   *
-   * @var \Drupal\node\NodeStorageInterface
-   */
-  protected $nodeStorage;
-
-  /**
-   * The taxonomy storage.
-   *
-   * @var \Drupal\taxonomy\TermStorageInterface
-   */
-  protected $termStorage;
-
-  /**
    * The language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -122,8 +107,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   /**
    * Constructs a new RcsPhPathProcessor instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -137,14 +120,11 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
     ModuleHandlerInterface $module_handler,
     ConfigFactoryInterface $config_factory,
     EventDispatcherInterface $event_dispatcher
   ) {
-    $this->nodeStorage = $entity_type_manager->getStorage('node');
-    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
     $this->configFactory = $config_factory;
@@ -183,53 +163,21 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     self::$rcsPathToCheck = $rcs_path_to_check;
 
     $event = new RcsPhPathProcessorEvent($rcs_path_to_check);
+    $event->setData(['path' => $path, 'full_path' => $full_path]);
     $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::EVENT_NAME);
 
-    $config = $this->configFactory->get('rcs_placeholders.settings');
-
-    // Is it a category page?
-    $category_prefix = $this->getEntityPrefix('category');
-
-    if (str_starts_with($rcs_path_to_check, '/' . $category_prefix)) {
-      $this->processCategoryEntity();
-      return self::$processedPaths[$full_path];
-    }
-
-    // Is it a product page?
-    $product_prefix = $config->get('product.path_prefix');
-
-    $event = new RcsPhPathProcessorEvent();
-    $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::EVENT_NAME);
-
-    if (str_starts_with($rcs_path_to_check, '/' . $product_prefix)) {
-      self::$entityType = 'product';
-      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($product_prefix) + 1);
-      self::$entityPathPrefix = $product_prefix;
-      self::$entityFullPath = $full_path;
-
-      self::$processedPaths[$rcs_path_to_check] = '/node/' . $config->get('product.placeholder_nid');
-
-      $product = $config->get('product.enrichment') ? $this->getEnrichedEntity('product', $rcs_path_to_check) : NULL;
-      if (isset($product)) {
-        self::$entityData = $product->toArray();
-        self::$processedPaths[$rcs_path_to_check] = '/node/' . $product->id();
+    $event_data = $event->getData();
+    if (!empty($event_data['entityType'])) {
+      self::$entityType = $event_data['entityType'];
+      self::$entityPath = $event_data['entityPath'];
+      self::$entityPathPrefix = $event_data['entityPathPrefix'];
+      self::$entityFullPath = $event_data['entityFullPath'];
+      self::$processedPaths[$rcs_path_to_check] = $event_data['processedPaths'];
+      if (!empty($event_data['entityData'])) {
+        self::$entityData = $event_data['entityData'];
       }
 
-      return self::$processedPaths[$rcs_path_to_check];
-    }
-
-    // Is it a promotion page?
-    $promotion_prefix = $config->get('promotion.path_prefix');
-
-    if (str_starts_with($rcs_path_to_check, '/' . $promotion_prefix)) {
-      self::$entityType = 'promotion';
-      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($promotion_prefix) + 1);
-      self::$entityPathPrefix = $promotion_prefix;
-      self::$entityFullPath = $full_path;
-
-      self::$processedPaths[$rcs_path_to_check] = '/node/' . $config->get('promotion.placeholder_nid');
-
-      return self::$processedPaths[$rcs_path_to_check];
+      return self::$processedPaths[$full_path];
     }
 
     // Set current path as default so we do not process twice for same path.
@@ -279,9 +227,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     self::$entityFullPath = self::$pageFullPath;
     self::$processedPaths[self::$pageFullPath] = $entity_url_prefix . $placehodler_id;
 
-    $entity = $this->isEntityEnrichmentEnabled($entity_type)
-      ? $this->getEnrichedEntity($entity_type, self::$pageFullPath)
-      : NULL;
     if (isset($entity)) {
       self::$entityData = $entity->toArray();
       self::$processedPaths[self::$pageFullPath] = $entity_url_prefix . $entity->id();
@@ -329,41 +274,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   protected function isEntityEnrichmentEnabled($entity_type) {
     $config = $this->getRcsPhSettings();
     return $config->get("$entity_type.enrichment");
-  }
-
-  /**
-   * Returns enriched commerce entity based on the slug.
-   *
-   * @param string $type
-   *   The commerce entity type (product, category).
-   * @param string $slug
-   *   The slug (unique identifier) of the commerce entity.
-   *
-   * @return object|null
-   *   The loaded commerce entity if any matching the slug.
-   */
-  public function getEnrichedEntity(string $type, string $slug) {
-    $entity = NULL;
-    $storage = NULL;
-    // Filter out the front and back slash.
-    $slug = trim($slug, '/');
-
-    if ($type == 'product') {
-      $storage = $this->nodeStorage;
-    }
-    elseif ($type == 'category') {
-      $storage = $this->termStorage;
-    }
-
-    if (!is_null($storage)) {
-      $query = $storage->getQuery();
-      $query->condition('field_' . $type . '_slug', $slug);
-      $result = $query->execute();
-      if (!empty($result)) {
-        $entity = $storage->load(array_shift($result));
-      }
-    }
-    return $entity;
   }
 
   /**
