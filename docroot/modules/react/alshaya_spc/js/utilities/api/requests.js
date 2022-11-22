@@ -6,6 +6,7 @@ import {
 import dispatchCustomEvent from '../events';
 import validateCartResponse from '../validation_util';
 import { isEgiftCardEnabled } from '../../../../js/utilities/util';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 
 export const fetchClicknCollectStores = (args) => {
@@ -141,7 +142,7 @@ export const fetchCartDataForCheckout = async () => {
 
   // Store cart int id before deleting cart data.
   const currentCart = await window.commerceBackend.getCart();
-  if (Drupal.hasValue(currentCart)) {
+  if (hasValue(currentCart)) {
     globalThis.cartIdInt = currentCart.data.cart_id_int;
   }
 

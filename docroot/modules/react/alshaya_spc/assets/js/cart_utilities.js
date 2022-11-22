@@ -455,10 +455,8 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
         context.cCartIdInt = cartData.cart_id_int;
       }
     }
-    else {
-      if (Drupal.hasValue(globalThis.cartIdInt)) {
-        context.cCartIdInt = globalThis.cartIdInt;
-      }
+    else if (Drupal.hasValue(globalThis.cartIdInt)) {
+      context.cCartIdInt = globalThis.cartIdInt;
     }
   });
 
