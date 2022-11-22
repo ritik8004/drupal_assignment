@@ -148,6 +148,12 @@
                 }
               }
             }
+
+            a {
+              &::after {
+                color: $user_nav_mobile_link_icon;
+              }
+            }
           }
         }
       }
