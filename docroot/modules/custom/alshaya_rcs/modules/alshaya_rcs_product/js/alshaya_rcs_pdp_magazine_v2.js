@@ -22,8 +22,8 @@
       mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
     }
 
-    var processedProduct = [];
-    var configurableCombinations = [];
+    var processedProduct = {};
+    var configurableCombinations = {};
     // Prepare data for productinfo to be used in new pdp layout.
     const productInfoV1 = window.commerceBackend.getProductData(mainProduct.sku, false, true);
     const productInfoV2 = processProductMagV2(mainProduct, productInfoV1);
@@ -32,6 +32,7 @@
       configurableCombinations[mainProduct.sku] = processConfigurableCombinations(mainProduct.sku);
       configurableCombinations[mainProduct.sku].firstChild = getFirstChild(mainProductClone);
     }
+
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
   });
