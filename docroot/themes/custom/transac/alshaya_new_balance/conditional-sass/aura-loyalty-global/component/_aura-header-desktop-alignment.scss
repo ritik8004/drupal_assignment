@@ -1,0 +1,13 @@
+@include breakpoint($only-tablet) {
+  body.aura-enabled {
+    ul.menu--one__list.menu__list {
+      top: rem(40);
+    }
+
+    &.logged-in {
+      ul.menu--one__list.menu__list {
+        top: rem(54);
+      }
+    }
+  }
+}
