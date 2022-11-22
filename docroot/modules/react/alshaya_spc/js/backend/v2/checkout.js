@@ -1870,6 +1870,7 @@ window.commerceBackend.getCartForCheckout = async () => {
       }
 
       const cartId = window.commerceBackend.getCartId();
+
       if (hasValue(cart.data.error_message)) {
         logger.error('Error while getting cart: @cartId, Error: @message.', {
           '@cartId': cartId,
