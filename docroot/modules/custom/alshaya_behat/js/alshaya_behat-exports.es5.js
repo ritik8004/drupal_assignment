@@ -4,8 +4,8 @@
 // see https://github.com/testing-library/user-event
 import userEvent from '@testing-library/user-event';
 
-// Make userEvent functions available in the AlshayaBehat scope.
+// Make userEvent functions available in the alshayaBehat scope.
 // Usage example:
 //  let input = document.querySelector('.field input'); // get the input field
-//  AlshayaBehat.userEvent.type(input, '1') // change value
-global.AlshayaBehat = { userEvent };
+//  alshayaBehat.userEvent.type(input, '1') // change value
+global.alshayaBehat = { userEvent };

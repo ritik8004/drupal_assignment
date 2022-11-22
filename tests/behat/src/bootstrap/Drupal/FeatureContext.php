@@ -3098,19 +3098,22 @@ JS;
   }
 
   /**
-   * Helper to type in the OTP digits
+   * Helper to enter values on React input fields.
+   * It emulates a real user input and will make React update the states.
    *
-   * @param string $otp
-   *   The OTP.
+   * @param string $selector
+   *   The CSS selector.
+   * @param string $value
+   *   The input value.
    */
-  private function enterOtp($otp)
+  private function enterReactInput($selector, $value)
   {
-    $digits = str_split($otp);
+    $digits = str_split($value);
     $session = $this->getSession();
     for ($i=1; $i <= sizeof($digits); $i++) {
       $value = $digits[$i - 1];
       $locator = ".cod-mobile-otp__field:nth-child($i) input";
-      $session->executeScript("let input = document.querySelector('$locator'); AlshayaBehat.userEvent.type(input, '$value')");
+      $session->executeScript("let input = document.querySelector('$locator'); alshayaBehat.userEvent.type(input, '$value')");
     }
   }
 
@@ -3119,7 +3122,7 @@ JS;
    */
   public function iEnterAValidMobileOtp()
   {
-    $this->enterOtp(1234);
+    $this->enterReactInput(1234);
   }
 
   /**
@@ -3127,7 +3130,7 @@ JS;
    */
   public function iEnterInValidMobileOtp()
   {
-    $this->enterOtp(4321);
+    $this->enterReactInput(4321);
   }
 
   /**
