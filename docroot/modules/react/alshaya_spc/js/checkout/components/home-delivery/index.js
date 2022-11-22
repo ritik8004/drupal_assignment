@@ -134,6 +134,12 @@ export default class HomeDeliveryInfo extends React.Component {
                   {' '}
                   {address.lastname}
                 </div>
+                <div className="delivery-email mobile-only">
+                  {address.email}
+                </div>
+                <div className="delivery-mobile mobile-only">
+                  {address.telephone}
+                </div>
                 <div className="delivery-address">
                   {addressData.join(', ')}
                 </div>
