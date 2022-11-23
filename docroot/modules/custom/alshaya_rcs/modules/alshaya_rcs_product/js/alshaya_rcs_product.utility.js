@@ -586,7 +586,7 @@ window.commerceBackend = window.commerceBackend || {};
    * @returns {object}
    *  Custom attributes with values.
    */
-  getAllCustomAttributes = function() {
+  function getAllCustomAttributes() {
     if (!Drupal.hasValue(staticDataStore['attrLabels'])) {
       fetchAndProcessCustomAttributes();
     }
