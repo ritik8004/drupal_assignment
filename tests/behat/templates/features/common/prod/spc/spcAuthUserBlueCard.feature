@@ -14,7 +14,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     And I wait for the page to load
@@ -27,7 +27,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
     Then the promo code should be applied
     And I should see an "#promo-remove-button" element
     And I should see an ".total-line-item .discount-total" element
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -46,7 +46,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -68,7 +68,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     And I wait for the page to load
@@ -81,7 +81,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
     Then the promo code should be applied
     And I should see an "#promo-remove-button" element
     And I should see an ".total-line-item .discount-total" element
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -98,7 +98,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load

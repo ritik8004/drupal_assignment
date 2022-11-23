@@ -15,7 +15,7 @@ Feature: Testing new PLP-Add to cart functionality for Guest user
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the element "#block-alshayareactcartminicartblock .cart-link-total" should exist
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element "#spc-cart"
     Then I should be on "/cart" page
 
@@ -35,7 +35,7 @@ Feature: Testing new PLP-Add to cart functionality for Guest user
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the element "#block-alshayareactcartminicartblock .cart-link-total" should exist
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element "#spc-cart"
     Then I should be on "/cart" page
     
@@ -55,6 +55,6 @@ Feature: Testing new PLP-Add to cart functionality for Guest user
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the element "#block-alshayareactcartminicartblock .cart-link-total" should exist
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element "#spc-cart"
     Then I should be on "/cart" page

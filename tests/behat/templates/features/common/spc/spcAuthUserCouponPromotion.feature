@@ -17,8 +17,8 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
     And the element ".content__title_wrapper .promotions" should exist
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     And the element ".promotion-label" should exist
     And the element ".dynamic-promotion-wrapper" should exist
     And the element ".promotion-text" should exist
@@ -28,8 +28,8 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait for element ".totals .discount-total"
     Then the promo code should be applied
     And the element ".totals .discount-total" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait for element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link"
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -41,7 +41,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait for AJAX to finish
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait for element "#block-page-title"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
@@ -63,8 +63,8 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
     And the element ".content__title_wrapper .promotions" should exist
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     And the element ".promotion-label" should exist
     And the element ".dynamic-promotion-wrapper" should exist
     And the element ".promotion-text" should exist
@@ -74,8 +74,8 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait for element ".totals .discount-total"
     Then the promo code should be applied
     And the element ".totals .discount-total" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait for element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link"
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -87,7 +87,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait for AJAX to finish
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait for element "#block-page-title"
     And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
@@ -107,8 +107,8 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
     And the element ".content__title_wrapper .promotions" should exist
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     And the element ".promotion-label" should exist
     And the element ".dynamic-promotion-wrapper" should exist
     And the element ".promotion-text" should exist
@@ -118,8 +118,8 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait for element ".totals .discount-total"
     Then the promo code should be applied
     And the element ".totals .discount-total" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait for element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link"
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -131,7 +131,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait for AJAX to finish
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait for element "#block-page-title"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"

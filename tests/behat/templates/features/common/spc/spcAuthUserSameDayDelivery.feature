@@ -3,8 +3,7 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 10 seconds
-    Then I should be on "/user" page
+    And I wait for element "#block-page-title"
     When I am on "{spc_basket_page}"
     And I wait for the page to load
 
@@ -30,12 +29,12 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I click on "div.select-area-link" element
     And I wait 5 seconds
     Then I should see an "#pdp-area-select .delivery-area-name" element
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     And I wait for the page to load
     Then I should see an "#delivery-area-select" element
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -49,7 +48,7 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -82,12 +81,12 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I click on "div.select-area-link" element
     And I wait 5 seconds
     Then I should see an "#pdp-area-select .delivery-area-name" element
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     And I wait for the page to load
     Then I should see an "#delivery-area-select" element
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -101,7 +100,7 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -134,12 +133,12 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I click on "div.select-area-link" element
     And I wait 5 seconds
     Then I should see an "#pdp-area-select .delivery-area-name" element
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     And I wait for the page to load
     Then I should see an "#delivery-area-select" element
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -153,7 +152,7 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load

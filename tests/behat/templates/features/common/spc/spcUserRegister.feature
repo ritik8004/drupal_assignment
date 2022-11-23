@@ -3,7 +3,7 @@ Feature: Test the User Registration functionality
 
   Background:
     Given I am on "user/register"
-    And I wait 10 seconds
+    And I wait for element "#block-page-title"
 
   Scenario: Anonymous user should be able to see correct fields on user register page
     Then I should see "{create_account}"

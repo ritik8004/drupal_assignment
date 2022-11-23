@@ -14,7 +14,7 @@ Feature: Testing new PLP-Add to cart functionality for Guest user on simple prod
     And the product quantity should be "decreased"
     And the cart quantity should be "decreased"
     And I wait for AJAX to finish
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 2 seconds
     And I wait for element "#spc-cart"
     Then I should be on "/cart" page
@@ -34,7 +34,7 @@ Feature: Testing new PLP-Add to cart functionality for Guest user on simple prod
     And the product quantity should be "decreased"
     And the cart quantity should be "decreased"
     And I wait for AJAX to finish
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 2 seconds
     And I wait for element "#spc-cart"
     Then I should be on "/cart" page
@@ -56,7 +56,7 @@ Feature: Testing new PLP-Add to cart functionality for Guest user on simple prod
     And the product quantity should be "decreased"
     And the cart quantity should be "decreased"
     And I wait for AJAX to finish
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 2 seconds
     And I wait for element "#spc-cart"
     Then I should be on "/cart" page

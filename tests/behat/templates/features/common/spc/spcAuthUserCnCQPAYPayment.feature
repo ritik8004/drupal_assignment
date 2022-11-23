@@ -15,17 +15,17 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait for element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I select the collection store
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-methods div.payment-method-checkout_com_upapi_qpay" element on page
     And I wait for AJAX to finish
     And I add the billing address on checkout page
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for element "#block-page-title"
     Then I fill in "cardNumber" with "{spc_Qpay_card}"
     And I select "{spc_Qpay_month}" from "expiryDatemm"
@@ -47,10 +47,10 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait for element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I select the collection store
@@ -58,7 +58,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I wait for AJAX to finish
     And I scroll to the "#spc-payment-methods" element
     And I add the billing address on checkout page
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for element "#block-page-title"
     Then I fill in "cardNumber" with "{spc_Qpay_card}"
     And I select "{spc_Qpay_month}" from "expiryDatemm"
@@ -80,10 +80,10 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait for element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I select the collection store
@@ -91,7 +91,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-methods div.payment-method-checkout_com_upapi_qpay" element on page
     And I wait for AJAX to finish
     And I add the billing address on checkout page
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for element "#block-page-title"
     Then I fill in "cardNumber" with "{spc_Qpay_card}"
     And I select "{spc_Qpay_month}" from "expiryDatemm"

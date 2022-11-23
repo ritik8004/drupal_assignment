@@ -13,17 +13,17 @@ Feature: Test the BenefitPay payment feature functionality
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait for element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_benefitpay" element on page
     And I wait for AJAX to finish
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for element "#block-page-title"
     And I should save the order details in the file
     Then the element "#b_p iframe" should exist
@@ -39,17 +39,17 @@ Feature: Test the BenefitPay payment feature functionality
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait for element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_benefitpay" element on page
     And I wait for AJAX to finish
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for element "#block-page-title"
     And I should save the order details in the file
     Then the element "#b_p iframe" should exist
@@ -65,17 +65,17 @@ Feature: Test the BenefitPay payment feature functionality
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
     And I wait 3 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for element "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link"
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait for element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_benefitpay" element on page
     And I wait for AJAX to finish
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for element "#block-page-title"
     And I should save the order details in the file
     Then the element "#b_p iframe" should exist

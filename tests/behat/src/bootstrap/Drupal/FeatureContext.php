@@ -2577,8 +2577,6 @@ JS;
     if ($empty_delivery_info !== null) {
       $empty_delivery_info->click();
       $this->iWaitForAjaxToFinish();
-      $this->iWaitForElement('.spc-address-form');
-      $this->theElementShouldExist('.spc-cnc-stores-list-map');
       $this->iWaitForElement('.spc-cnc-stores-list-map');
       $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
       $this->iWaitForAjaxToFinish();

@@ -3,16 +3,16 @@ Feature: Test the Checkout Login functionality
 
   Scenario: As a user, I should be able to see cart content added as anonymous user once I log into the site
     Given I am on "{spc_basket_page}"
-    And I wait 10 seconds
+    And I wait for element "#block-page-title"
     When I select a product in stock on ".c-products__item"
     And I wait for the page to load
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     Given I am on "user/login"
     And I wait 10 seconds
@@ -21,7 +21,7 @@ Feature: Test the Checkout Login functionality
     Then I press "edit-submit"
     And I wait 10 seconds
     Then I should be on "/user" page
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for the page to load
     And I wait 10 seconds
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
