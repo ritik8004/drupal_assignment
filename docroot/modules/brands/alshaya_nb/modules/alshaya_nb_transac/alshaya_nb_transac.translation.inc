@@ -28,9 +28,6 @@ function _alshaya_nb_transac_translations() {
       'Product Description' => [
         'ar' => 'وصف المنتج',
       ],
-      'Product Details' => [
-        'ar' => 'تفاصيل المنتج',
-      ],
       'Product No:' => [
         'ar' => 'رمز المنتج',
       ],
