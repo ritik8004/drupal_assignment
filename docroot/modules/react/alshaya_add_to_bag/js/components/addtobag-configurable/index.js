@@ -87,7 +87,7 @@ export default class AddToBagConfigurable extends React.Component {
     const nextStatus = 'opened';
 
     // Trigger Product Details View GTM push.
-    Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'));
+    // Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'));
 
     this.setState({
       drawerStatus: nextStatus,

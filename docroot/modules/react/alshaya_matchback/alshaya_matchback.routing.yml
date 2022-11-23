@@ -1,0 +1,7 @@
+alshaya_matchback.settings_form:
+  path: '/admin/config/system/alshaya-matchback'
+  defaults:
+    _title: 'Alshaya Matchback settings'
+    _form: 'Drupal\alshaya_matchback\Form\SettingsForm'
+  requirements:
+    _permission: 'administer alshaya_matchback configuration'

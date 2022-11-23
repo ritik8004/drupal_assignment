@@ -1,0 +1,6 @@
+alshaya_matchback.settings_form:
+  title: Alshaya Matchback
+  description: Configure Alshaya Matchback.
+  parent: system.admin_config_system
+  route_name: alshaya_matchback.settings_form
+  weight: 10

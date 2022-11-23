@@ -1,0 +1,6 @@
+# Custom module library for general purposes.
+alshaya_matchback:
+  js:
+    dist/matchback_addtobag.bundle.js: {}
+  dependencies:
+    - core/jquery
