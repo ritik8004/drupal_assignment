@@ -15,6 +15,7 @@ $blue: #44a6ff;
 $nb-green: #60b257;
 $gainsboro: #dadada;
 $light-gray-f7-alpha-5: rgba(247, 247, 247, 0.5);
+$black-alpha-25: rgba(0, 0, 0, 0.25);
 
 // Global elements.
 $primary_text: $black;
@@ -226,6 +227,8 @@ $plp_filter_txt: $ada-gray;
 $plp_filter_border: $gray2;
 $plp_promotion_link: $nb-red;
 $oos_btn_bg: $nb-red;
+$plp-quick-view-product-size-border: $black;
+$plp-quick-view-product-size-text: $black;
 
 // Product Detail Page
 $pdp_product_itemcode: $ada-gray;
@@ -339,6 +342,13 @@ $wishlist-button-register-txt: $nb-red;
 $wishlist-button-bg-hover: $nb-red;
 $wishlist-oos: $black;
 $wishlist-button-bg: $nb-red;
+$wishlist-button-bg-hover: $nb-red;
+$wishlist-header-notification-border: $nb-red;
+$wishlist-header-notification-span: $nb-black;
+$wishlist-button-border: $nb-red;
+$wishlist-button-register-txt: $nb-red;
+$wishlist-basket-button-border: $nb-red;
+$wishlist-secondary-text: $nb-red;
 
 //eGift
 $advanced-page-banner-bg: $light-gray;
@@ -360,6 +370,8 @@ $minicart_notification_border: $nb-red;
 $minicart_notification_text: $nb-red;
 $minicart_notification_btn_bg: $nb-red;
 $primary_minicart_quantity_bg: $nb-red;
+$minicart_notification_bg: $white;
+$minicart_notification_shadow: $black-alpha-25;
 
 // Checkout confirmation.
 $progress-tracker-bg: $white;
