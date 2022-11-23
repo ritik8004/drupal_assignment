@@ -10,8 +10,34 @@
   }
 
   @include breakpoint($only-mobile) {
-    #{$right}: rem(-16);
+    #{$right}: rem(-5);
     top: rem(36);
+  }
+
+  &.has--notification {
+    &::before {
+      width: rem(12);
+      height: rem(12);
+      top: rem(-6);
+      border-bottom: none;
+      border-top: rem(1) solid $minicart_notification_border;
+      border-left: rem(1) solid $minicart_notification_border;
+      border-right: none;
+      transform: rotate(45deg);
+      background: $minicart_notification_bg;
+    }
+  }
+
+  .notification,
+  .error {
+    border: rem(1) solid $minicart_notification_border;
+    box-shadow: 0 rem(4) rem(4) 0 $minicart_notification_shadow;
+
+    .col-2 {
+      .name {
+        margin-bottom: rem(6);
+      }
+    }
   }
 }
 

@@ -202,6 +202,29 @@
     }
   }
 
+  @include breakpoint($only-mobile) {
+    .c-page-title {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin: rem(16) 0 rem(24);
+      text-align: center;
+      font-size: rem(24);
+    }
+
+    .c-products__item {
+      .promotions {
+        .sku-promotion-link {
+          color: $plp_promotion_link;
+        }
+
+        .sku-promotion-item {
+          font-size: rem(14);
+          margin-#{$left}: initial;
+        }
+      }
+    }
+  }
+
   @include breakpoint($tablet) {
     margin-top: rem(16);
 
