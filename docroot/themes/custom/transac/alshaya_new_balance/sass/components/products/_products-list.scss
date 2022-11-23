@@ -99,18 +99,19 @@
     }
 
     .swatches {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      column-gap: rem(6);
+
       .swatch-image {
         img {
           width: rem(40);
+          max-width: rem(40);
           aspect-ratio: 1;
           object-fit: contain;
+          border: rem(1) solid $plp-swatch-border;
         }
-      }
-
-      &:not(.slider-swatches) {
-        display: flex;
-        align-items: center;
-        column-gap: rem(6);
       }
     }
 
@@ -121,12 +122,16 @@
       }
 
       &-list {
-        width: rem(86);
+        width: rem(92);
       }
 
       &-track {
         display: flex;
-        column-gap: rem(6);
+      }
+
+      &-slide {
+        padding-left: rem(3);
+        padding-right: rem(3);
       }
 
       &-next,
@@ -276,6 +281,7 @@
         .swatch-image {
           img {
             width: rem(50);
+            max-width: rem(50);
           }
         }
       }

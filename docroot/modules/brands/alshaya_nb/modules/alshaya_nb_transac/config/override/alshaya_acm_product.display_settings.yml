@@ -19,3 +19,4 @@ size_group:
     -
       value: 'european_size'
       label: 'EU'
+swatch_plp_limit: 4
