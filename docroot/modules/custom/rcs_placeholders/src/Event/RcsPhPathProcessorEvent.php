@@ -44,4 +44,14 @@ class RcsPhPathProcessorEvent extends Event {
     $this->data = $value;
   }
 
+  /**
+   * Add data to the data array.
+   *
+   * @param array $value
+   *   Value to set.
+   */
+  public function addData(string $key, mixed $value) {
+    $this->data[$key] = $value;
+  }
+
 }

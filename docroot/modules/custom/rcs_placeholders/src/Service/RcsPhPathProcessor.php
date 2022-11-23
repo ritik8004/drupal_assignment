@@ -163,7 +163,11 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     self::$rcsPathToCheck = $rcs_path_to_check;
 
     $event = new RcsPhPathProcessorEvent($rcs_path_to_check);
-    $event->setData(['path' => $path, 'full_path' => $full_path]);
+    $event->setData([
+      'path' => $path,
+      'full_path' => $full_path,
+      'path_to_check' => $rcs_path_to_check,
+    ]);
     $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::EVENT_NAME);
 
     $event_data = $event->getData();
@@ -246,34 +250,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     }
     $static = $this->configFactory->get('rcs_placeholders.settings');
     return $static;
-  }
-
-  /**
-   * Gets the given entity type prefix from the config.
-   *
-   * @param string $entity_type
-   *   The entity type.
-   *
-   * @return string
-   *   The entity prefix.
-   */
-  protected function getEntityPrefix($entity_type) {
-    $config = $this->getRcsPhSettings();
-    return $config->get("$entity_type.path_prefix");
-  }
-
-  /**
-   * Checks if enrichment is enabled for the given entity type.
-   *
-   * @param string $entity_type
-   *   The entity type.
-   *
-   * @return bool
-   *   True if enrichment is enabled else false.
-   */
-  protected function isEntityEnrichmentEnabled($entity_type) {
-    $config = $this->getRcsPhSettings();
-    return $config->get("$entity_type.enrichment");
   }
 
   /**
