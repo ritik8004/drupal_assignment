@@ -225,12 +225,22 @@ window.commerceBackend = window.commerceBackend || {};
       var configColorAttribute = drupalSettings.alshayaRcs.colorAttributeConfig.configurable_color_attribute;
       var configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(product.sku);
     }
+    var allAttributes = window.commerceBackend.getAllCustomAttributes();
     product.configurable_options.forEach(function (option) {
       var isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
       var attribute_id = parseInt(atob(option.attribute_uid), 10);
       var optionValues = [];
-      // Filter and process the option values.
+      var sortedValues = [];
       option.values.forEach(function eachValue(option_value) {
+        if (Drupal.hasValue(allAttributes[option.attribute_code])) {
+          var weight = allAttributes[option.attribute_code][option_value.value_index]
+            ? allAttributes[option.attribute_code][option_value.value_index].weight
+            : 99999;
+          sortedValues[weight] = option_value;
+        }
+      });
+      // Filter and process the option values.
+      sortedValues.forEach(function eachValue(option_value) {
         // Disable unavailable options.
         if (!Drupal.hasValue(configurableCombinations.attribute_sku)
           || typeof configurableCombinations.attribute_sku[option.attribute_code][option_value.value_index] === 'undefined'

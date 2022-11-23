@@ -582,7 +582,7 @@ window.commerceBackend = window.commerceBackend || {};
    * @returns {object}
    *  Custom attributes with values.
    */
-  function getAllCustomAttributes() {
+  window.commerceBackend.getAllCustomAttributes = function() {
     if (!Drupal.hasValue(staticDataStore['attrLabels'])) {
       fetchAndProcessCustomAttributes();
     }
@@ -600,7 +600,7 @@ window.commerceBackend = window.commerceBackend || {};
    */
   function getSortedConfigurableAttributes(configurables) {
     var configurablesClone = JSON.parse(JSON.stringify(configurables));
-    var allAttributes = getAllCustomAttributes();
+    var allAttributes = window.commerceBackend.getAllCustomAttributes();
     Object.keys(configurables).forEach(function eachConfigurable(attributeName) {
       var unsortedValues = {};
       var sortedValues = [];
