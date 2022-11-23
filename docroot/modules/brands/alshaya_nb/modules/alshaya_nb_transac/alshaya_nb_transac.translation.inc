@@ -38,6 +38,11 @@ function _alshaya_nb_transac_translations() {
         'ar' => 'دليل المقاسات',
       ],
     ],
+    'v2' => [
+      'Product Details' => [
+        'ar' => 'تفاصيل المنتج',
+      ],
+    ],
   ];
 }
 

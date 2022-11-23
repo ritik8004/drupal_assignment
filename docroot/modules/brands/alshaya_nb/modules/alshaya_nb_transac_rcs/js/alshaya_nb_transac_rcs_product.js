@@ -37,7 +37,7 @@
   // Handle the product details section on PDP pages.
   Drupal.behaviors.rcsproductDeails = {
     attach: function () {
-      $(document).once('product-gallery-loaded').on('productGalleryLoaded', function () {
+      $(document).once('rcs-product-details').on('productGalleryLoaded', function () {
         const $desc = $('.gallery-wrapper .product-details-desc');
         $('.content--product-details .product-details-desc-mobile').html($desc.html());
       });
