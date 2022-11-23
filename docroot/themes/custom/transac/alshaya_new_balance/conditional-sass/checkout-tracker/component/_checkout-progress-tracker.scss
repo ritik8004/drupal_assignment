@@ -44,6 +44,7 @@
 
           html[lang=ar] & {
             transform: translate3d(0, rem(2), 0) scale(1);
+            padding-top: 0;
           }
 
           @include breakpoint($only-mobile) {
