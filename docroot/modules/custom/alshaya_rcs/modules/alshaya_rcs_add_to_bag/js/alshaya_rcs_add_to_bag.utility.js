@@ -230,6 +230,7 @@ window.commerceBackend = window.commerceBackend || {};
       var isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
       var attribute_id = parseInt(atob(option.attribute_uid), 10);
       var optionValues = [];
+      // Filter and process the option values.
       var sortedValues = [];
       option.values.forEach(function eachValue(option_value) {
         if (Drupal.hasValue(allAttributes[option.attribute_code])) {
