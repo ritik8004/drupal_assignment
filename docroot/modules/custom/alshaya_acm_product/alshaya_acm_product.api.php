@@ -132,12 +132,10 @@ function hook_alshaya_context_key_from_layout_alter(string $context, string $pdp
 /**
  * Allow other modules to alter the data in recommended skus list.
  *
- * @param string $type
- *   The type of the recommended product, eg. crosssel, upsell or related.
- * @param array $recommended_skus
- *   Array of related skus data keyed by sku.
+ * @param string $data
+ *   Contains all the necessary data to pass to the hook implementations.
  */
-function hook_alshaya_acm_product_recommended_products_data_alter(string $type, array &$recommended_skus) {
+function hook_alshaya_acm_product_recommended_products_data_alter(string $data) {
 
 }
 

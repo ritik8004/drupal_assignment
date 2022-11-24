@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Alshaya Matchback module.
+ */
+
+/**
+ * Implements hook_alshaya_acm_product_recommended_products_data_alter().
+ */
+function alshaya_matchback_alshaya_acm_product_recommended_products_data_alter(array &$data) {
+  if ($data['type'] !== 'crosssell' || $data['format'] === 'json') {
+    return;
+  }
+
+  $data['data']['section_title'] = t('Frequently Bought Together', [], ['context' => 'alshaya_static_text|pdp_matchback_title']);
+}
