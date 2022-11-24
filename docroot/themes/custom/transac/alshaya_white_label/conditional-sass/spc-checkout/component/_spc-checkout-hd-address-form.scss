@@ -196,58 +196,48 @@
       }
     }
   }
-
-  .address-form-mobile-only {
-    @include breakpoint($only-mobile) {
-      padding: rem(35) rem(21) rem(42) rem(21);
-      background: $spc-checkout-delivery-method-bg;
-    }
-
-    .spc-address-form-actions {
-      @include breakpoint($only-mobile) {
-        margin-top: rem(42);
-      }
-    }
-
-    .spc-address-form-submit {
-      @include breakpoint($only-mobile) {
-        width: 100%;
-        border-radius: 0;
-        padding: rem(13) 0;
-        font-size: rem(14);
-        border: none;
-        background: $primary_btn_bg;
-        color: $primary_btn_text;
-        font-family: $alshaya-bold;
-      }
-    }
-
-    .spc-address-locality-group {
-      @include breakpoint($only-mobile) {
-        display: flex;
-        justify-content: flex-start;
-      }
-
-      .delivery-address-fields {
-        &__block {
-          @include breakpoint($only-mobile) {
-            width: rem(53);
-            display: inline-block;
-          }
-        }
-
-        &__street {
-          @include breakpoint($only-mobile) {
-            width: rem(249);
-            display: inline-block;
-            margin-#{$left}: rem(31);
-          }
-        }
-      }
-    }
-  }
 }
 
 #spc-checkout-customer-login-link {
   text-decoration: underline;
+}
+
+.address-form-mobile-only {
+  @include breakpoint($only-mobile) {
+    padding: rem(35) rem(21) rem(42) rem(21);
+    background: $spc-checkout-delivery-method-bg;
+
+    .spc-address-form-actions {
+      margin-top: rem(42);
+    }
+
+    .spc-address-form-submit {
+      width: 100%;
+      border-radius: 0;
+      padding: rem(13) 0;
+      font-size: rem(14);
+      border: none;
+      background: $primary_btn_bg;
+      color: $primary_btn_text;
+      font-family: $alshaya-bold;
+    }
+
+    .spc-address-locality-group {
+      display: flex;
+      justify-content: flex-start;
+
+      .delivery-address-fields {
+        &__block {
+          width: rem(53);
+          display: inline-block;
+        }
+
+        &__street {
+          width: rem(249);
+          display: inline-block;
+          margin-#{$left}: rem(31);
+        }
+      }
+    }
+  }
 }
