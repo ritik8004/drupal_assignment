@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Alshaya Matchback module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_matchback_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id !== 'alshaya_wishlist_settings') {
+    return;
+  }
+
+  $form['show_wishlist_icon_on_matchback'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Show wishlist icon on Matchback teaser'),
+    '#description' => t('If checked, wishlist icon will be shown on matchback teasers.'),
+    '#default_value' => \Drupal::config('alshaya_matchback.settings')->get('show_wishlist_icon_on_matchback'),
+  ];
+
+  $form['#submit'][] = '_alshaya_matchback_form_submit';
+}
+
+/**
+ * Submit handler for alshaya_wishlist_settings form.
+ *
+ * @param array $form
+ *   Form element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Formstate object.
+ */
+function _alshaya_matchback_form_submit(array &$form, FormStateInterface &$form_state) {
+  \Drupal::configFactory()->getEditable('alshaya_matchback.settings')
+    ->set('show_wishlist_icon_on_matchback', $form_state->getValue('show_wishlist_icon_on_matchback'))
+    ->save();
+}
