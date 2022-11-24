@@ -334,7 +334,7 @@ export const getProductValues = (productInfo, configurableCombinations,
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
   const additionalAttributes = skuItemCode ? productInfo[skuItemCode].additionalAttributes : [];
 
-  if (hasValue(fit)) {
+  if (hasValue(fit) && hasValue(additionalAttributes)) {
     additionalAttributes.fit = {
       value: fit,
       label: Drupal.t('FIT'),
