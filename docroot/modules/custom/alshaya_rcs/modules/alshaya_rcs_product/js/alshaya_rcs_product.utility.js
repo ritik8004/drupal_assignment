@@ -605,13 +605,8 @@ window.commerceBackend = window.commerceBackend || {};
   function getSortedConfigurableAttributes(configurables) {
     var configurablesClone = JSON.parse(JSON.stringify(configurables));
     Object.keys(configurables).forEach(function eachConfigurable(attributeName) {
-      var unsortedValues = window.commerceBackend.getWeightBasedAttribute(configurables[attributeName].values, attributeName);
-      var sortedValues = [];
-
-      if (Drupal.hasValue(unsortedValues)) {
-        Object.keys(unsortedValues).sort(function (a, b) {  return a - b;  }).forEach(function eachElement(value, ) {
-          sortedValues.push(unsortedValues[parseInt(value, 10)]);
-        });
+      var sortedValues = window.commerceBackend.getSortedAttributeValues(configurables[attributeName].values, attributeName);
+      if (Drupal.hasValue(sortedValues)) {
         configurablesClone[attributeName].values = sortedValues;
       }
     });
@@ -1504,7 +1499,7 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
 
 
 /**
- * Utility function to get the the weight key based attributes.
+ * Utility function to get the the weight key based sorted attributes.
  *
  * @param {array} optionValues
  *   An array containing all the configurable attributes.
@@ -1512,22 +1507,29 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
  *   The machine name of the option attribute.
  *
  * @returns {array}
- *   Array containing the weight key based configurable attributes.
+ *   Array containing the weight key based sorted configurable attributes.
  */
-window.commerceBackend.getWeightBasedAttribute = function getWeightBasedAttribute(optionValues, attributeName) {
+window.commerceBackend.getSortedAttributeValues = function getSortedAttributeValues(optionValues, attributeName) {
   // Get the list of all the attributes and their values.
   var allAttributes = getAllCustomAttributes();
-  var weightedValues = [];
+  var unsortedValues = {};
+  var sortedValues  = [];
   optionValues.forEach(function eachValue(value) {
     if (Drupal.hasValue(value.value_index) && Drupal.hasValue(allAttributes[attributeName])) {
       var weight = allAttributes[attributeName][String(value.value_index)]
         ? allAttributes[attributeName][String(value.value_index)].weight
         : 99999;
-      weightedValues[weight] = value;
+      unsortedValues[weight] = value;
     }
   });
 
-  return weightedValues;
+  if (Drupal.hasValue(unsortedValues)) {
+    Object.keys(unsortedValues).sort(function (a, b) { return a - b; }).forEach(function eachElement(value,) {
+      sortedValues.push(unsortedValues[parseInt(value, 10)]);
+    });
+  }
+
+  return sortedValues;
 }
 
   // Event listener to update static promotion.

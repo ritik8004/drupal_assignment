@@ -231,7 +231,7 @@ window.commerceBackend = window.commerceBackend || {};
       var attribute_id = parseInt(atob(option.attribute_uid), 10);
       var optionValues = [];
       // Filter and process the option values.
-      var sortedValues = window.commerceBackend.getWeightBasedAttribute(option.values, option.attribute_code);
+      var sortedValues = window.commerceBackend.getSortedAttributeValues(option.values, option.attribute_code);
       sortedValues.forEach(function eachValue(option_value) {
         // Disable unavailable options.
         if (!Drupal.hasValue(configurableCombinations.attribute_sku)
