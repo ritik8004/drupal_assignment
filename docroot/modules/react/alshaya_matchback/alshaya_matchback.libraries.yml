@@ -4,3 +4,9 @@ alshaya_matchback:
     dist/matchback_addtobag.bundle.js: {}
   dependencies:
     - core/jquery
+
+alshaya_matchback_utility:
+  js:
+    js/assets/alshaya_matchback.utility.js: {}
+  dependencies:
+    - core/drupal
