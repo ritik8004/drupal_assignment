@@ -35,6 +35,8 @@ export default class UpdateEgiftCardAmount extends React.Component {
     // Set error message if errors is true.
     if (errors) {
       document.getElementById('egift_amount_error').innerHTML = message;
+      // Push error message to GTM.
+      Drupal.logJavascriptError('egiftcard-amount-update', message, GTM_CONSTANTS.CHECKOUT_ERRORS);
     } else {
       document.getElementById('egift_amount_error').innerHTML = '';
     }
@@ -53,6 +55,8 @@ export default class UpdateEgiftCardAmount extends React.Component {
       const result = await updateAmount(egiftAmount.value);
       if (result.error) {
         document.getElementById('egift_amount_error').innerHTML = result.message;
+        // Push error message to GTM.
+        Drupal.logJavascriptError('egiftcard-amount-update', result.message, GTM_CONSTANTS.CHECKOUT_ERRORS);
       }
     }
   }
