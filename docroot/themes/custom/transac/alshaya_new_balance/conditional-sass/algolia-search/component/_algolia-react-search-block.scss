@@ -219,4 +219,16 @@
       }
     }
   }
+
+  .block-alshaya-algolia-react-autocomplete {
+    #alshaya-algolia-autocomplete {
+      .react-autosuggest__container {
+        &--open {
+          #top-results {
+            padding: 0 rem(8);
+          }
+        }
+      }
+    }
+  }
 }
