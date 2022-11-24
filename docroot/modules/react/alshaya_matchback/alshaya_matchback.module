@@ -1,5 +1,6 @@
 <?php
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 
@@ -12,6 +13,9 @@ function alshaya_matchback_node_view(array &$build, EntityInterface $entity, Ent
   if ($entity->bundle() !== 'acq_product') {
     return;
   }
-
+  // @todo Alter the crossel build and add the settings and libraries.
   $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback';
+  /** @var \Drupal\alshaya_add_to_bag\Services\AddToBagHelper $add_to_bag_helper */
+  $add_to_bag_helper = \Drupal::service('alshaya_add_to_bag.helper');
+  $add_to_bag_helper->setAddToBagCommonSettingsToBuild($build);
 }

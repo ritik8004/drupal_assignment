@@ -4,3 +4,12 @@
  * @file
  * Install, update and uninstall functions for the Alshaya Matchback module.
  */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_matchback_install() {
+  if (!\Drupal::moduleHandler()->moduleExists('alshaya_add_to_bag')) {
+    \Drupal::service('module_installer')->install(['alshaya_add_to_bag']);
+  }
+}
