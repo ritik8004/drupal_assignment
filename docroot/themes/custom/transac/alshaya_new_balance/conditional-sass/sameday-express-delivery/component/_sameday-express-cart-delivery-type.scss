@@ -14,3 +14,11 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .alias--cart {
+    .spc-cart-shipping-methods {
+      padding-#{$right}: rem(16);
+    }
+  }
+}
