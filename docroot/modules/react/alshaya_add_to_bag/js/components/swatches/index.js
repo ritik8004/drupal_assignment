@@ -42,17 +42,15 @@ const Swatch = (props) => {
     // If swatch is a type of color.
     case 'color':
       return (
-        <li className="li-swatch-color" key={value}>
-          <span className="swatch-label">{label}</span>
-          <a
-            id={`value${value}`}
-            data-value={value}
-            className={classes}
-            href="#"
-            style={{ backgroundColor: data }}
-            onClick={(e) => onSwatchSelect(e, attributeName, onClick, type)}
-          />
-        </li>
+        <ColorSwatch
+          data={data}
+          type={type}
+          value={value}
+          label={label}
+          classes={classes}
+          onClick={onClick}
+          attributeName={attributeName}
+        />
       );
 
     // If swatch is a type of text.
@@ -91,6 +89,60 @@ const Swatch = (props) => {
     default:
       return null;
   }
+};
+
+const ColorSwatch = ({
+  data,
+  type,
+  value,
+  label,
+  classes,
+  onClick,
+  attributeName,
+}) => {
+  const values = data.split('|');
+  if (values.length > 1) {
+    return (
+      <li className="li-swatch-color" key={value}>
+        <span className="swatch-label">{label}</span>
+        <a
+          id={`value${value}`}
+          data-value={value}
+          className={classes}
+          href="#"
+          onClick={(e) => onSwatchSelect(e, attributeName, onClick, type)}
+        >
+          <div style={{
+            backgroundColor: values[0],
+            width: '50%',
+            borderTopLeftRadius: '50px',
+            borderBottomLeftRadius: '50px',
+          }}
+          />
+          <div style={{
+            backgroundColor: values[1],
+            width: '50%',
+            borderTopRightRadius: '50px',
+            borderBottomRightRadius: '50px',
+          }}
+          />
+        </a>
+      </li>
+    );
+  }
+  return (
+    <li className="li-swatch-color" key={value}>
+      <span className="swatch-label">{label}</span>
+      <a
+        id={`value${value}`}
+        data-value={value}
+        className={classes}
+        href="#"
+        style={{ backgroundColor: data }}
+        onClick={(e) => onSwatchSelect(e, attributeName, onClick, type)}
+      />
+    </li>
+  );
 };
 
 export default Swatch;
