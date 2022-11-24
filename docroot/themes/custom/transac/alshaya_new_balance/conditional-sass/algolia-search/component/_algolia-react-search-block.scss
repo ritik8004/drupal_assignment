@@ -14,12 +14,27 @@
     }
   }
 
+  .algolia-search-cleartext-icon {
+    background: url('#{$nb_theme_img_directory_path}/icons/ic-close.svg') no-repeat;
+    #{$right}: rem(10);
+    top: rem(29);
+    background-size: 30%;
+
+    html[lang=ar] & {
+      left: rem(34);
+    }
+  }
+
   .react-autosuggest__input {
     border-radius: 0;
     border-width: rem(1);
     background-color: $alg_search_bg;
     font-size: rem(16);
     height: rem(50);
+
+    &::placeholder {
+      text-transform: unset;
+    }
   }
 
   @include breakpoint($tablet) {
@@ -120,7 +135,13 @@
         }
 
         .algolia-search-cleartext-icon {
-          top: rem(7);
+          top: rem(16);
+          #{$right}: rem(30);
+          background-size: auto;
+
+          html[lang=ar] & {
+            left: rem(50);
+          }
         }
 
         #alshaya-algolia-autocomplete {
