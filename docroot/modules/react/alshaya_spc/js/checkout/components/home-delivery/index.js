@@ -134,10 +134,10 @@ export default class HomeDeliveryInfo extends React.Component {
                   {' '}
                   {address.lastname}
                 </div>
-                <div className="delivery-email mobile-only">
+                <div className="delivery-email mobile-only-show">
                   {address.email}
                 </div>
-                <div className="delivery-mobile mobile-only">
+                <div className="delivery-mobile mobile-only-show">
                   {address.telephone}
                 </div>
                 <div className="delivery-address">
