@@ -1,5 +1,4 @@
 import HTMLReactParser from 'html-react-parser';
-import moment from 'moment';
 import React from 'react';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
@@ -8,6 +7,7 @@ import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import Loading from '../../../../../../js/utilities/loading';
 import AddBenefitsToCart from './add-benefits-to-cart';
+import { formatDate } from '../../../utilities';
 
 class MyBenefitsPage extends React.Component {
   constructor(props) {
@@ -104,7 +104,7 @@ class MyBenefitsPage extends React.Component {
             {myBenefit.description}
           </div>
           <div className="expiry">
-            {getStringMessage('benefit_expire', { '@expire_date': moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY') })}
+            {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(myBenefit.expiry_date || myBenefit.end_date)) })}
           </div>
         </div>
         <div className="btn-wrapper">
@@ -131,7 +131,7 @@ class MyBenefitsPage extends React.Component {
             {getStringMessage('benefit_expire_no_date')}
             {':'}
           </h3>
-          {moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY')}
+          {formatDate(new Date(myBenefit.expiry_date || myBenefit.end_date))}
         </div>
         <div className="benefit-Tnc">
           {Drupal.t('Maximum one code per member, which can be used at one occasion for purchase of above stated models, directly from the online store in the UK. For more terms, please visit https://www2.hm.com/en', {}, { context: 'hello_member' })}
