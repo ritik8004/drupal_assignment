@@ -1,14 +1,16 @@
 <?php
 
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Entity\EntityInterface;
-
 /**
  * @file
  * Primary module hooks for Alshaya Matchback module.
  */
 
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_node_view().
+ */
 function alshaya_matchback_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() !== 'acq_product') {
     return;
