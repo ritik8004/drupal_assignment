@@ -1,3 +1,4 @@
+
 .product-desc-wrapper {
   .product-details {
     font-family: $alshaya-bold;
@@ -9,11 +10,13 @@
 
   .product-sku-title {
     display: inline;
+    font-size: rem(14);
   }
 
   .product-sku-id {
     display: inline;
     margin-#{$left}: rem(2);
+    font-size: rem(14);
   }
 
   .product-desc-value {
@@ -23,6 +26,18 @@
     p {
       margin-top: 0;
       margin-bottom: 0;
+    }
+
+    ul {
+      padding-#{$left}: rem(10);
+
+      li {
+        padding-#{$left}: rem(5);
+
+        &::marker {
+          font-size: rem(10);
+        }
+      }
     }
   }
 }
