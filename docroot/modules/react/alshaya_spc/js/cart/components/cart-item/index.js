@@ -29,6 +29,7 @@ import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -234,10 +235,9 @@ export default class CartItem extends React.Component {
         if (messageInfo !== null) {
           dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
           // Push error message to GTM.
-          if (messageInfo.type !== undefined
+          if (hasValue(messageInfo.type)
             && messageInfo.type === 'error'
-            && messageInfo.message !== undefined
-            && messageInfo.message !== '') {
+            && hasValue(messageInfo.message)) {
             Drupal.logJavascriptError(`update-cart-item-data-sku-${sku}`, messageInfo.message, GTM_CONSTANTS.CART_ERRORS);
           }
         }
@@ -278,12 +278,12 @@ export default class CartItem extends React.Component {
 
     // Out of stock error.
     if (inStock !== true) {
-      Drupal.logJavascriptError(`update-cart-item-data-sku-${sku}`, 'This product is out of stock. Please remove to proceed.', GTM_CONSTANTS.CART_ERRORS);
+      Drupal.logJavascriptError(`cart-item-data-sku-${sku}`, 'This product is out of stock. Please remove to proceed.', GTM_CONSTANTS.CART_ERRORS);
     }
 
     // Item quantity limit error.
     if (inStock && stock < qty) {
-      Drupal.logJavascriptError(`update-cart-item-data-sku-${sku}`, 'This product is not available in selected quantity. Please adjust the quantity to proceed.', GTM_CONSTANTS.CART_ERRORS);
+      Drupal.logJavascriptError(`cart-item-data-sku-${sku}`, 'This product is not available in selected quantity. Please adjust the quantity to proceed.', GTM_CONSTANTS.CART_ERRORS);
     }
   }
 
