@@ -22,7 +22,7 @@ function alshaya_matchback_form_alter(array &$form, FormStateInterface $form_sta
     '#default_value' => \Drupal::config('alshaya_matchback.settings')->get('show_wishlist_icon_on_matchback'),
   ];
 
-  $form['#submit'][] = '_alshaya_matchback_form_submit';
+  $form['#submit'][] = '_alshaya_matchback_wishlist_config_form_submit';
 }
 
 /**
@@ -33,7 +33,7 @@ function alshaya_matchback_form_alter(array &$form, FormStateInterface $form_sta
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   Formstate object.
  */
-function _alshaya_matchback_form_submit(array &$form, FormStateInterface &$form_state) {
+function _alshaya_matchback_wishlist_config_form_submit(array &$form, FormStateInterface &$form_state) {
   \Drupal::configFactory()->getEditable('alshaya_matchback.settings')
     ->set('show_wishlist_icon_on_matchback', $form_state->getValue('show_wishlist_icon_on_matchback'))
     ->save();
