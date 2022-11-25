@@ -466,7 +466,8 @@
   .read-more-description-link-mobile {
     line-height: rem(18);
     text-decoration: underline;
-    margin-top: rem(8);
+    margin-top: rem(12);
+    font-weight: normal;
   }
 
   @include breakpoint($only-mobile) {
