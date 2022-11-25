@@ -204,7 +204,6 @@
 
 @include breakpoint($only-mobile) {
   .address-form-mobile-only {
-    padding: rem(35) rem(21) rem(42) rem(21);
     background: $spc-checkout-delivery-method-bg;
 
     .spc-address-form-actions {
@@ -220,6 +219,10 @@
       background: $primary_btn_bg;
       color: $primary_btn_text;
       font-family: $alshaya-bold;
+    }
+
+    .spc-address-add {
+      padding: rem(35) rem(21) rem(42) rem(21);
     }
   }
 }
