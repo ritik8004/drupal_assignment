@@ -120,27 +120,19 @@ body[class*="return-confirmation"] {
         margin-#{$right}: 1.4375rem;
 
         @include breakpoint($tablet) {
-          margin-#{$left}: 1.4375rem;
+          margin-#{$left}: 0;
+          margin-#{$right}: rem(8);
+        }
+
+        @include breakpoint($desktop) {
+          margin-#{$left}: rem(23);
+          margin-#{$right}: rem(23);
         }
       }
 
-      @include breakpoint($only-mobile) {
-        .packitem {
-          width: rem(72);
-        }
-
-        .refund {
-          width: rem(118);
-        }
-
-        html[lang=ar] & {
-          .packitem {
-            width: rem(56);
-          }
-
-          .refund {
-            width: rem(76);
-          }
+      .whats-next-content {
+        @include breakpoint($only-mobile) {
+          flex-basis: 80%;
         }
       }
 
