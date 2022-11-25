@@ -845,6 +845,8 @@ function alshaya_seo_transac_preprocess_products_horizontal_slider(&$variables) 
  * Implements hook_alshaya_acm_product_recommended_products_data_alter().
  */
 function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter(array $data) {
+  // Here we only alter the data for magzazine V2 layout which uses json format.
+  // So if the format is not json, we return from here.
   if ($data['format'] !== 'json') {
     return;
   }
