@@ -290,7 +290,7 @@ export default class EmptyDeliveryText extends React.Component {
                 showEmail={drupalSettings.user.uid === 0}
                 default_val={defaultVal}
                 isExpressDeliveryAvailable={isExpressDeliveryAvailable}
-                isMobileView
+                isEmbeddedForm
               />
             </React.Suspense>
           </div>
@@ -329,7 +329,7 @@ export default class EmptyDeliveryText extends React.Component {
                           showEmail={drupalSettings.user.uid === 0}
                           default_val={defaultVal}
                           isExpressDeliveryAvailable={isExpressDeliveryAvailable}
-                          isMobileView={false}
+                          isEmbeddedForm={false}
                         />
                       </React.Suspense>
                     )}

@@ -81,9 +81,9 @@ export default class AddressForm extends React.Component {
       errorSuccessMessage: message,
       dismissButton: showDismissButton,
     });
-    const { isMobileView } = this.props;
+    const { isEmbeddedForm } = this.props;
     let errorClass = '.spc-address-form-sidebar';
-    if (!hasValue(isMobileView)) {
+    if (!hasValue(isEmbeddedForm)) {
       errorClass += ' .spc-checkout-section-title';
     }
     // Scroll to error.
@@ -204,7 +204,7 @@ export default class AddressForm extends React.Component {
       // Default value will be always be available to form.
       fillDefaultValue,
       enabledFieldsWithMessages,
-      isMobileView,
+      isEmbeddedForm,
     } = this.props;
 
     const {
@@ -251,7 +251,7 @@ export default class AddressForm extends React.Component {
     return (
       <div className="spc-address-form">
         <div className="spc-address-form-sidebar">
-          {!hasValue(isMobileView)
+          {!hasValue(isEmbeddedForm)
           && (
             <>
               <SectionTitle>{headingDeliveryText}</SectionTitle>

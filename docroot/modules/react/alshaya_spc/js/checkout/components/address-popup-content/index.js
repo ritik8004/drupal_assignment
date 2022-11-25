@@ -18,7 +18,7 @@ const AddressContent = (props) => {
     isExpressDeliveryAvailable,
     fillDefaultValue,
     enabledFieldsWithMessages,
-    isMobileView,
+    isEmbeddedForm,
   } = props;
 
   // For users who are logged in and have saved an address.
@@ -59,7 +59,7 @@ const AddressContent = (props) => {
       // be enabled in the form and values are default message on the field
       // example {mobile: Please update mobile number}
       enabledFieldsWithMessages={enabledFieldsWithMessages}
-      isMobileView={isMobileView}
+      isEmbeddedForm={isEmbeddedForm}
     />
   );
 };
