@@ -66,6 +66,10 @@
 
       // Trigger matchback color change on main product color change.
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
+        if (!drupalSettings.syncMatchbackProductColor) {
+          return false;
+        }
+
         var selected = $(this).val();
         var sku = $(this).parents('form').attr('data-sku');
         var productKey = Drupal.getProductKeyForProductViewMode('full');

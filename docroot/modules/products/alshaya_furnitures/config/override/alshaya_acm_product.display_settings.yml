@@ -14,3 +14,4 @@ hide_not_required_option: true
 plp_slider:
   item: 3
   margin: 3
+sync_matchback_color: false
