@@ -797,7 +797,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-        $build['#attached']['drupalSettings']['syncMatchbackProductColor'] = $display_settings->get('sync_matchback_color');
+        $build['#attached']['drupalSettings']['syncMatchbackProductColor'] = $display_settings->get('change_matchback_color');
       }
 
       // Process price block and gallery for modal,

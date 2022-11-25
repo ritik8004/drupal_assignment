@@ -56,6 +56,6 @@ alshaya_acm_product.display_settings:
               label:
                 type: label
                 label: 'Label'
-      sync_matchback_color:
+      change_matchback_color:
         type: boolean
         label: 'Change matchback color on main product color change'
