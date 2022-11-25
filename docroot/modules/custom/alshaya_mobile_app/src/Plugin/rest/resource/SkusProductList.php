@@ -362,7 +362,8 @@ class SkusProductList extends ResourceBase {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $this->cache['tags'] = Cache::mergeTags(
       $this->cache['tags'],
-      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags()
+      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags(),
+      $this->configFactory->get('alshaya_acm_product.settings')->getCacheTags()
     );
 
     return [
