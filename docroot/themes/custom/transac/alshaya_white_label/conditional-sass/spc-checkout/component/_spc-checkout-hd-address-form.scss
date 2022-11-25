@@ -221,23 +221,5 @@
       color: $primary_btn_text;
       font-family: $alshaya-bold;
     }
-
-    .spc-address-locality-group {
-      display: flex;
-      justify-content: flex-start;
-
-      .delivery-address-fields {
-        &__block {
-          width: rem(53);
-          display: inline-block;
-        }
-
-        &__street {
-          width: rem(249);
-          display: inline-block;
-          margin-#{$left}: rem(31);
-        }
-      }
-    }
   }
 }
