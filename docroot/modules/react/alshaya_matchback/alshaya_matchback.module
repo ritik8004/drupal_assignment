@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Alshaya Matchback module.
+ */
+
+/**
+ * Implements hook_alshaya_acm_product_recommended_products_data_alter().
+ */
+function alshaya_matchback_alshaya_acm_product_recommended_products_data_alter(array &$data) {
+  // We only want to alter the crossel products section title here.
+  // The json format is used by magazine v2 layout, so we don't want to alter
+  // that.
+  if ($data['type'] !== 'crosssell' || $data['format'] === 'json') {
+    return;
+  }
+
+  $data['data']['section_title'] = t('Frequently Bought Together', [], ['context' => 'alshaya_static_text|pdp_matchback_title']);
+}
