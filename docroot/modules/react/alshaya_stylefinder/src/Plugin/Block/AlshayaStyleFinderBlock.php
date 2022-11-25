@@ -5,6 +5,7 @@ namespace Drupal\alshaya_stylefinder\Plugin\Block;
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -135,7 +136,8 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
     $cache_tags = [];
     if (!empty($quiz_node_id)) {
       $quiz_node = $this->entityTypeManager->getStorage('node')->load($quiz_node_id);
-      if ($quiz_node->hasTranslation($current_langcode)) {
+      if ($quiz_node instanceof NodeInterface
+        && $quiz_node->hasTranslation($current_langcode)) {
         // Get the Translated node of the current language code.
         $quiz_node = $this->entityRepository->getTranslationFromContext($quiz_node, $current_langcode);
         $cache_tags = Cache::mergeTags($cache_tags, array_merge($quiz_node->getCacheTags()));
