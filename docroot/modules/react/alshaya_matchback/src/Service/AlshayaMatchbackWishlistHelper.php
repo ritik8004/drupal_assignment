@@ -15,8 +15,9 @@ class AlshayaMatchbackWishlistHelper extends WishListHelper {
    */
   public function showWishlistIconForProduct(NodeInterface $node, string $view_mode): bool {
     if ($view_mode === 'matchback') {
-      return $this->configFactory->get('alshaya_matchback.settings')
-        ->get('show_wishlist_icon_on_matchback');
+      return $this->isWishListEnabled()
+        && $this->configFactory->get('alshaya_matchback.settings')
+          ->get('show_wishlist_icon_on_matchback');
     }
 
     return parent::showWishlistIconForProduct($node, $view_mode);
