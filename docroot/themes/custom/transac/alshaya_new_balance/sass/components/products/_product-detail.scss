@@ -467,7 +467,7 @@
     line-height: rem(18);
     text-decoration: underline;
     margin-top: rem(12);
-    font-weight: 400;
+    font-weight: normal;
   }
 
   @include breakpoint($only-mobile) {
