@@ -5,3 +5,4 @@
 /feature
 /templates/variables/brands/*/env/local/
 /features/
+creds.json

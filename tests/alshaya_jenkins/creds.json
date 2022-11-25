@@ -1,0 +1,14 @@
+{
+  "local": {
+    "secret_key": "foo"
+  },
+  "uat": {
+    "secret_key": "bar"
+  },
+  "pprod": {
+    "secret_key": "foo"
+  },
+  "prod": {
+    "secret_key": "bar"
+  }
+}

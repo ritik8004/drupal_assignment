@@ -1,0 +1,58 @@
+# https://hub.docker.com/r/jenkins/jenkins/
+# https://github.com/jenkinsci/docker/blob/master/README.md
+version: '3'
+
+services:
+
+  jenkins:
+    container_name: jenkins
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      # Map jenkins_home to keep all data, reports, etc
+      - ./jenkins_home:/var/jenkins_home
+      # Map the behat folder
+#      - ../behat:/behat
+    environment:
+      # Disable setup wizard.
+      JAVA_OPTS: -Djenkins.install.runSetupWizard=false
+    ports:
+      - '8080:8080'
+      - '50000:50000'
+
+#  behat_browser:
+#    # https://github.com/SeleniumHQ/docker-selenium
+#    # Image to debug with vnc port 5900
+#    # Password: secret
+#    image: selenium/standalone-chrome:beta
+#    shm_size: 2gb
+#    depends_on:
+#      - selenium-hub
+#    container_name: jenkins_browser
+#    ports:
+#      - '5900:5900'
+#    environment:
+#      VNC_NO_PASSWORD: 1
+#      SE_EVENT_BUS_HOST: selenium-hub
+#      SE_EVENT_BUS_PUBLISH_PORT: 4442
+#      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+#
+#  selenium-hub:
+#    image: selenium/hub:latest
+#    container_name: jenkins_selenium_hub
+#    ports:
+#      - "4442:4442"
+#      - "4443:4443"
+#      - "4444:4444"
+
+#  php:
+#    image: php:8.1-apache
+#    container_name: jenkins_php
+#    environment:
+#      PHP_MEMORY_LIMIT: "1G"
+#      PHP_CLI_MEMORY_LIMIT: "1G"
+#      PHP_APCU_ENABLED: 1
+#      PHP_APCU_SHM_SIZE: 512M
+#    volumes:
+#      - ../behat:/behat
