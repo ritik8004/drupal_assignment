@@ -62,12 +62,11 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
          document.getElementsByTagName('head')[0].appendChild(s);
        };
 
-       var geStoreCode = '$ge_store_code';
-       var geStoreCodeInstance = document.location.hostname;
        if ('$page_type' !== 'checkout') {
          addInlineScripts();
          return;
        }
+
        window.addEventListener('DOMContentLoaded', (event) => {
          window.commerceBackend.associateCartToCustomer('checkout').then((response) => {
            addInlineScripts();
