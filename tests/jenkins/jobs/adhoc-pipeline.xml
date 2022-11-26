@@ -88,7 +88,7 @@ To exclude tags use ~@tag_b
     agent any
 
     environment {
-        CONTAINER = &apos;jenkins_standalone_appserver&apos;
+        CONTAINER = &apos;jenkins_appserver&apos;
     }
 
     stages {

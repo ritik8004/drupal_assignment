@@ -9,8 +9,7 @@ start:
 	@echo "Starting up containers"
 	docker-compose pull
 	docker-compose up -d --build --remove-orphans
-	# Don't forget to build the project
-#	make build
+	@echo You to build the project before using Jenkins, run: make build
 
 build:
 	# Install composer
@@ -26,10 +25,9 @@ open:
 	open "http://127.0.0.1:8080/"
 
 in:
-	make ssh
-ssh:
 	docker exec -it ${PROJECT_NAME} bash
 
 test:
+	# Run test outside Jenkins for debugging
 	docker exec -t ${PROJECT_NAME}_appserver sh -c 'cd /behat && ./behat-build.sh ---rebuild=TRUE --site=vs-ae-uat-en'
 	docker exec -t ${PROJECT_NAME}_appserver sh -c 'cd /behat && ./bin/behat --profile=vs-ae-uat-en-desktop --format cucumber_json --tags="@advanced-page"'
