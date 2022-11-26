@@ -18,7 +18,8 @@ FROM jenkins/jenkins:latest
 #RUN cd /behat && npm install
 
 # Install plugins.
-RUN jenkins-plugin-cli --plugins pipeline-model-definition github-branch-source cucumber-reports
+# @todo configure plugins
+RUN jenkins-plugin-cli --plugins pipeline-model-definition github-branch-source cucumber-reports blueocean
 
 # Add default jobs.
 COPY jobs/uat-smoke-scheduled.xml /usr/share/jenkins/ref/jobs/uat-smoke-scheduled/config.xml

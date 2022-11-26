@@ -5,11 +5,13 @@ version: '3'
 services:
 
   jenkins:
-    container_name: jenkins
+    container_name: ${PROJECT_NAME}
     build:
       context: ./
       dockerfile: Dockerfile
     volumes:
+      # https://devopscube.com/run-docker-in-docker/#:~:text=To%20run%20docker%20inside%20docker,sock%20as%20a%20volume.&text=Just%20a%20word%20of%20caution,privileges%20over%20your%20docker%20daemon.
+#      - /var/run/docker.sock:/var/run/docker.sock
       # Map jenkins_home to keep all data, reports, etc
       - ./jenkins_home:/var/jenkins_home
       # Map the behat folder
@@ -21,38 +23,16 @@ services:
       - '8080:8080'
       - '50000:50000'
 
-#  behat_browser:
-#    # https://github.com/SeleniumHQ/docker-selenium
-#    # Image to debug with vnc port 5900
-#    # Password: secret
+  browser:
+    # https://github.com/SeleniumHQ/docker-selenium
+    # Image to debug with vnc port 5900
+    # Password: secret
 #    image: selenium/standalone-chrome:beta
-#    shm_size: 2gb
+    image: selenium/standalone-chrome-debug:3.141.59-xenon
+    shm_size: 2gb
 #    depends_on:
 #      - selenium-hub
-#    container_name: jenkins_browser
-#    ports:
-#      - '5900:5900'
-#    environment:
-#      VNC_NO_PASSWORD: 1
-#      SE_EVENT_BUS_HOST: selenium-hub
-#      SE_EVENT_BUS_PUBLISH_PORT: 4442
-#      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
-#
-#  selenium-hub:
-#    image: selenium/hub:latest
-#    container_name: jenkins_selenium_hub
-#    ports:
-#      - "4442:4442"
-#      - "4443:4443"
-#      - "4444:4444"
-
-#  php:
-#    image: php:8.1-apache
-#    container_name: jenkins_php
-#    environment:
-#      PHP_MEMORY_LIMIT: "1G"
-#      PHP_CLI_MEMORY_LIMIT: "1G"
-#      PHP_APCU_ENABLED: 1
-#      PHP_APCU_SHM_SIZE: 512M
-#    volumes:
-#      - ../behat:/behat
+    container_name: ${PROJECT_NAME}_browser
+    ports:
+      - '4444:4444'
+      - '5900:5900'

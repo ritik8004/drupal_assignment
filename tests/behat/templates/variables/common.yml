@@ -25,3 +25,11 @@ variables:
   spc_mada_visa_card_expiry: '09/23'
   spc_mada_visa_card_cvv: '257'
   spc_mada_password: 'Checkout1!'
+  spc_auth_user_email: marcelo.vani+001@acquia.com
+  spc_auth_user_password: TTT@@@999
+#  spc_auth_user_email: admin1@example.com
+#  spc_auth_user_password: 1221
+  spc_admin_user_email: agnesh.tank+alshayaadmin@acquia.com
+  spc_admin_user_password: Test@222
+#  spc_admin_user_email: admin1@example.com
+#  spc_admin_user_password: 1221

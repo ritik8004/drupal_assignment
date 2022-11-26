@@ -1,3 +1,7 @@
+#!make
+include .env
+export $(shell sed 's/=.*//' .env)
+
 up:
 	make start
 
@@ -8,7 +12,7 @@ start:
 
 pass:
 	@echo Password
-	@docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+	@docker exec ${PROJECT_NAME} cat /var/jenkins_home/secrets/initialAdminPassword
 
 stop:
 	@echo "Stopping containers"
@@ -24,10 +28,10 @@ build:
 # @docker exec appserver sh -c "copy creds.json"
 
 open:
-	open "https://127.0.0.1:8080/"
+	open "https://localhost:8080/"
 
 in:
 	make ssh
 
 ssh:
-	docker-compose exec jenkins bash
+	docker-compose exec ${PROJECT_NAME} bash
