@@ -42,34 +42,16 @@ class DrushUserAuth {
   }
 
   /**
-   * Returns data from Environment variable for email.
-   *
-   * @return string
-   *   User Email from environment variable.
-   */
-  private function getUserEmail() {
-    return getenv('user_email');
-  }
-
-  /**
-   * Returns data from Environment variable for password.
-   *
-   * @return string
-   *   Password from environment variable.
-   */
-  private function getUserPassword() {
-    return getenv('user_password');
-  }
-
-  /**
    * Authenticate Drush User.
    *
    * @param string $command
    *   Command for logs.
+   * @param string $email
+   *   User Email.
+   * @param string $password
+   *   User Password.
    */
-  public function authenticateDrushUser(string $command) {
-    $email = $this->getUserEmail();
-    $password = $this->getUserPassword();
+  public function authenticateDrushUser(string $command, string $email, string $password) {
     if ($email && $password) {
       $user = user_load_by_mail($email);
       if ($user instanceof UserInterface && $user->isActive()) {
@@ -100,7 +82,7 @@ class DrushUserAuth {
       ]);
     }
 
-    throw new AccessDeniedHttpException('Please set Environment variables with correct values (user_email and password) to authenticate.');
+    throw new AccessDeniedHttpException('Unable to authenticate.');
   }
 
 }

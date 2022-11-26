@@ -5,6 +5,7 @@ namespace Drupal\alshaya_security\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Drupal\alshaya_security\Service\DrushUserAuth;
 use Drush\Commands\DrushCommands;
+use Drush\Exceptions\UserAbortException;
 
 /**
  * Class Alshaya Security Commands.
@@ -35,7 +36,6 @@ class AlshayaSecurityCommands extends DrushCommands {
     'config:edit',
     'user:password',
     'php:cli',
-    'php:eval',
   ];
 
   /**
@@ -72,12 +72,19 @@ class AlshayaSecurityCommands extends DrushCommands {
    * @throws Exception
    */
   public function preCommandAuthenticate(CommandData $commandData) {
+    $email = $this->io()->ask('Please enter your mail');
+    $password = $this->io()->askHidden('Please enter your password');
+
+    if (empty($email) || empty($password)) {
+      throw new UserAbortException();
+    }
+
     $command = $commandData->annotationData()->get('command');
     if (in_array($command, self::AUTHENTICATE_COMMANDS)) {
-      $this->drushUserAuth->authenticateDrushUser($command);
+      $this->drushUserAuth->authenticateDrushUser($command, $email, $password);
     }
     elseif (str_starts_with($command, 'role:')) {
-      $this->drushUserAuth->authenticateDrushUser($command);
+      $this->drushUserAuth->authenticateDrushUser($command, $email, $password);
     }
   }
 
