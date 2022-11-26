@@ -101,6 +101,8 @@
 
           .error {
             display: flex;
+            padding-#{$left}: rem(33);
+            padding-bottom: rem(16);
           }
         }
       }
@@ -124,6 +126,7 @@
         @include breakpoint($only-mobile) {
           position: relative;
           margin-top: rem(20);
+          top: rem(10);
         }
 
         @include breakpoint($tablet) {
@@ -268,6 +271,12 @@
           font-family: $alshaya-thin;
           text-transform: unset;
         }
+
+        &:first-child {
+          &::after {
+            display: none;
+          }
+        }
       }
     }
   }
@@ -404,6 +413,11 @@ html[lang=ar] {
       &#edit-email-error,
       &.error {
         background: transparent;
+
+        @include breakpoint($only-mobile) {
+          top: rem(26);
+          padding-#{$left}: rem(32);
+        }
       }
     }
   }
@@ -411,6 +425,47 @@ html[lang=ar] {
   .subscription-status {
     .success {
       padding: 0;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: rem(20);
+        padding-#{$left}: rem(32);
+      }
+    }
+  }
+}
+
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        padding-top: rem(8);
+
+        a {
+          text-decoration: none;
+        }
+
+        &.en a {
+          font-family: $alshaya-thin;
+        }
+
+        &.en.is-active a {
+          font-family: $alshaya-thin;
+        }
+
+        &:first-child {
+          padding-#{$right}: 0;
+
+          &::after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  .language-switcher-close {
+    &::after {
+      top: rem(3);
     }
   }
 }
