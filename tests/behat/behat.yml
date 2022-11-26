@@ -16,6 +16,8 @@ default:
             screenshotDir: '%paths.base%/build/html/behat/assets/screenshots'
   formatters:
     pretty: ~
+    cucumber_json: true
+
   extensions:
     Drupal\MinkExtension:
       files_path: "%paths.base%/media"
@@ -53,6 +55,10 @@ default:
       image_drivers:
         local:
           clear_screenshot_directory: true
+    Vanare\BehatCucumberJsonFormatter\Extension:
+      outputDir: '%paths.base%/build/cucumber'
+      fileNamePrefix: report
+      resultFilePerSuite: true
 
 imports:
   - build/profiles.yml

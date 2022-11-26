@@ -32,4 +32,4 @@ ssh:
 
 test:
 	docker exec -t ${PROJECT_NAME}_appserver sh -c 'cd /behat && ./behat-build.sh ---rebuild=TRUE --site=vs-ae-uat-en'
-	docker exec -t ${PROJECT_NAME}_appserver sh -c 'cd /behat && ./bin/behat --profile=vs-ae-uat-en-desktop --format pretty --tags="@advanced-page"'
+	docker exec -t ${PROJECT_NAME}_appserver sh -c 'cd /behat && ./bin/behat --profile=vs-ae-uat-en-desktop --format cucumber_json --tags="@advanced-page"'

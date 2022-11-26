@@ -16,8 +16,11 @@ RUN ssh-keygen -t rsa -P "" -f /root/.ssh/id_rsa
 RUN apt-get install openjdk-11-jdk -y
 
 # Install Jenkins plugins
+# Docs
+# https://packagist.org/packages/cawolf/behat-cucumber-json-formatter
+# https://plugins.jenkins.io/cucumber-reports/
 RUN jenkins-plugin-cli --plugins cucumber-reports rebuild
 
 # Copy default jobs.
-COPY jobs/local-smoke-pull-requests.xml /usr/share/jenkins/ref/jobs/local-smoke-pull-requests.xml/config.xml
-COPY jobs/parameterized.xml /usr/share/jenkins/ref/jobs/parameterized.xml/config.xml
+COPY jobs/local-smoke-pull-requests.xml /usr/share/jenkins/ref/jobs/local-smoke-pull-requests/config.xml
+COPY jobs/adhoc-pipeline.xml /usr/share/jenkins/ref/jobs/adhoc-pipeline/config.xml
