@@ -52,32 +52,25 @@ class DrushUserAuth {
    *   User Password.
    */
   public function authenticateDrushUser(string $command, string $email, string $password) {
-    if ($email && $password) {
-      $user = user_load_by_mail($email);
-      if ($user instanceof UserInterface && $user->isActive()) {
-        if ($this->userAuth->authenticate($user->getAccountName(), $password)) {
-          $this->drupalLogger->info('User with email @email authenticated successfully for command: @command.', [
-            '@email' => $user->getEmail(),
-            '@command' => $command,
-          ]);
-
-          return;
-        }
-
-        $this->drupalLogger->info('User with email @email authentication failed for command: @command.', [
+    $user = user_load_by_mail($email);
+    if ($user instanceof UserInterface && $user->isActive()) {
+      if ($this->userAuth->authenticate($user->getAccountName(), $password)) {
+        $this->drupalLogger->info('User with email @email authenticated successfully for command: @command.', [
           '@email' => $user->getEmail(),
           '@command' => $command,
         ]);
+
+        return;
       }
-      else {
-        $this->drupalLogger->info('User with email: @email either not found or blocked for command: @command.', [
-          '@email' => $email,
-          '@command' => $command,
-        ]);
-      }
+
+      $this->drupalLogger->info('User with email @email authentication failed for command: @command.', [
+        '@email' => $user->getEmail(),
+        '@command' => $command,
+      ]);
     }
     else {
-      $this->drupalLogger->info('Environment variables missing for command: @command.', [
+      $this->drupalLogger->info('User with email: @email either not found or blocked for command: @command.', [
+        '@email' => $email,
         '@command' => $command,
       ]);
     }
