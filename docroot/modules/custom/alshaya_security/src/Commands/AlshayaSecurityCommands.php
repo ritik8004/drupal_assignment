@@ -4,6 +4,7 @@ namespace Drupal\alshaya_security\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
 use Drupal\alshaya_security\Service\DrushUserAuth;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
@@ -13,6 +14,8 @@ use Drush\Exceptions\UserAbortException;
  * @package Drupal\alshaya_security\Commands
  */
 class AlshayaSecurityCommands extends DrushCommands {
+
+  use LoggerChannelTrait;
 
   /**
    * Drush commands to Authenticate.
@@ -72,18 +75,21 @@ class AlshayaSecurityCommands extends DrushCommands {
    * @throws Exception
    */
   public function preCommandAuthenticate(CommandData $commandData) {
-    $email = $this->io()->ask('Please enter your mail');
-    $password = $this->io()->askHidden('Please enter your password');
-
-    if (empty($email) || empty($password)) {
-      throw new UserAbortException();
-    }
-
     $command = $commandData->annotationData()->get('command');
+
+    $this->getLogger('AlshayaSecurityCommands')->info('Command @command executed by SSH User: @user', [
+      '@command' => $command,
+      '@user' => shell_exec('who -m'),
+    ]);
+
     if (in_array($command, self::AUTHENTICATE_COMMANDS)) {
-      $this->drushUserAuth->authenticateDrushUser($command, $email, $password);
-    }
-    elseif (str_starts_with($command, 'role:')) {
+      $email = $this->io()->ask('Please enter your mail');
+      $password = $this->io()->askHidden('Please enter your password');
+
+      if (empty($email) || empty($password)) {
+        throw new UserAbortException();
+      }
+
       $this->drushUserAuth->authenticateDrushUser($command, $email, $password);
     }
   }
