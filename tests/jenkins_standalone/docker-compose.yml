@@ -1,6 +1,5 @@
 # Stack used to run composer commands and behat tests
 # This will work only with remote sites
-# @todo add database/memcache containers to run tests locally and when PR is opened
 # References
 # https://github.com/cieplakm/playground/blob/d5150e10b63aec38694d4916cc56363ce1efc6b7/jenkins/Dockerfile
 # https://github.com/stevelle/jenkins-rpc/blob/40c3147643041e69574266a3453a8e1973ad616d/dockerfiles/jenkins/Dockerfile
@@ -20,7 +19,7 @@ services:
       # Map jenkins_home to keep all data
       - ./jenkins_home:/var/jenkins_home
       # Map for cucumber reports
-      - ../behat/build/cucumber:/var/jenkins_home/workspace/cucumber
+      - ../behat/build/cucumber:/tmp/cucumber
     environment:
       # Disable setup wizard.
       JAVA_OPTS: -Djenkins.install.runSetupWizard=false
@@ -40,8 +39,6 @@ services:
     ports:
       - '4444:4444'
       - '5901:5900'
-#    environment:
-#      VNC_NO_PASSWORD: 1
 
   appserver:
     build:
@@ -56,5 +53,3 @@ services:
       PHP_APCU_SHM_SIZE: 512M
     volumes:
       - ../behat:/behat
-##    command: echo "cd /behat && composer install"
-#    command: echo "cd /behat && npm install"

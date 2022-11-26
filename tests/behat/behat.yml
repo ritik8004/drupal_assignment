@@ -34,8 +34,8 @@ default:
           #                      w3c: false
           chrome:
             switches:
-#              - "--headless"
-#              - "--disable-gpu"
+              - "--headless"
+              - "--disable-gpu"
               - "--no-sandbox"
               # - "--window-size=1920,1080"
               - "--ignore-certificate-errors"
