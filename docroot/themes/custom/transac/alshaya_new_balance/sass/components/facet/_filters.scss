@@ -193,6 +193,7 @@
     justify-content: flex-start;
     padding: 0;
     background: none;
+    margin-bottom: rem(20);
 
     .filter-fixed-top & {
       top: rem(6);
