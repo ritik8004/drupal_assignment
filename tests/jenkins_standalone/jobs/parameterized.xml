@@ -1,0 +1,81 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Allows to run tests specifying parameters</description>
+  <displayName>Parameterized</displayName>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>Tags</name>
+          <description>Tags to run</description>
+          <defaultValue>@smoke</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Brand</name>
+          <description>Chose brand</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>vs</string>
+              <string>hm</string>
+              <string>cos</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Market</name>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>ae</string>
+              <string>kw</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Env</name>
+          <description>Environment</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>uat</string>
+              <string>local</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Device</name>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>desktop</string>
+              <string>mobile</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command># Create a dynamic script using the parameters selected for this build
+# This script is created and executed on the app server
+docker exec -t jenkins_standalone_appserver sh -c &quot;echo &apos;cd /behat &amp;&amp; ./behat-build.sh --rebuild=TRUE --site=${Brand}-${Market}-${Env}&apos; &gt; /tmp/behat-rebuild.sh&quot;
+# Run Behat rebuild script
+docker exec -t jenkins_standalone_appserver sh -c &quot;cd /tmp &amp;&amp; chmod +x behat-rebuild.sh &amp;&amp; ./behat-rebuild.sh&quot;
+# Create Behat run script
+docker exec -t jenkins_standalone_appserver sh -c &quot;echo &apos;cd /behat &amp;&amp; ./bin/behat --profile=${Brand}-${Market}-${Env}-en-${Device} --format pretty --tags=\&quot;${Tags}\&quot;&apos; &gt; /tmp/behat-run.sh&quot;
+# Run behat tests
+docker exec -t jenkins_standalone_appserver sh -c &quot;cd /tmp &amp;&amp; chmod +x behat-run.sh &amp;&amp; ./behat-run.sh&quot;</command>
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
