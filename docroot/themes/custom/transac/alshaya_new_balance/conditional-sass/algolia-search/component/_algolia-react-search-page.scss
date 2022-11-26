@@ -23,10 +23,11 @@
         text-transform: uppercase;
         font-size: rem(16);
         line-height: initial;
+        padding-#{$right}: rem(32);
 
         &::after {
           font-size: rem(32);
-          #{$right}: rem(5);
+          #{$right}: rem(-6);
         }
       }
     }

@@ -1,5 +1,5 @@
-@include breakpoint($only-tablet) {
-  body.aura-enabled {
+body.aura-enabled {
+  @include breakpoint($only-tablet) {
     ul.menu--one__list.menu__list {
       top: rem(40);
     }
@@ -7,6 +7,21 @@
     &.logged-in {
       ul.menu--one__list.menu__list {
         top: rem(54);
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .region__menu-secondary {
+      & > div,
+      & > nav {
+        height: rem(32);
+      }
+
+      #block-account-menu {
+        a {
+          line-height: rem(32);
+        }
       }
     }
   }
