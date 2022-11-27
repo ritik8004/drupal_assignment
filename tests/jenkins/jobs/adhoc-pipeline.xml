@@ -10,6 +10,7 @@
     </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
   </actions>
   <description>Runs pipeline with custom parameters</description>
+  <displayName>Adhoc Pipeline</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
     <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty>
@@ -121,7 +122,7 @@ To exclude tags use ~@tag_b
                             [key: &apos;Commit&apos;, value: &apos;&lt;a href=&quot;${GERRIT_CHANGE_URL}&quot;&gt;${GERRIT_PATCHSET_REVISION}&lt;/a&gt;&apos;],
                             [key: &apos;Submitter&apos;, value: &apos;${GERRIT_PATCHSET_UPLOADER_NAME}&apos;]
                     ],
-                    reportTitle: &apos;Final Report&apos;,
+                    reportTitle: &apos;Report&apos;,
                     jsonReportDirectory: &apos;cucumber&apos;,
                     fileIncludePattern: &apos;**/reportdefault.json&apos;,
                     sortingMethod: &apos;ALPHABETICAL&apos;,

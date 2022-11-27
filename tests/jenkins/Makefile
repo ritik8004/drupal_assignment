@@ -14,8 +14,6 @@ start:
 build:
 	# Install composer
 	docker exec -it ${PROJECT_NAME}_appserver sh -c "cd /behat && composer install"
-	# Install NPM
-	docker exec -it ${PROJECT_NAME}_appserver sh -c "cd /behat && npm install"
 
 stop:
 	@echo "Stopping containers"
