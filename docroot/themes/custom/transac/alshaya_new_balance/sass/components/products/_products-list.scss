@@ -223,6 +223,10 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
+
+      @include breakpoint($tablet) {
+        width: rem(205);
+      }
     }
   }
 
