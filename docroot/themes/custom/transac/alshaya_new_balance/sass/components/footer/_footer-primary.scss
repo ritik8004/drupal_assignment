@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     padding: 0;
-    height: rem(79);
+    height: rem(104);
 
     @include breakpoint($only-mobile) {
       height: auto;
@@ -270,6 +270,7 @@
         &.en.is-active a {
           font-family: $alshaya-thin;
           text-transform: unset;
+          text-decoration: none;
         }
 
         &:first-child {
@@ -345,6 +346,12 @@
       width: auto;
       #{$left}: 0;
 
+      @include breakpoint($tablet) {
+        html[lang=ar] & {
+          height: 0;
+        }
+      }
+
       @include breakpoint($only-mobile) {
         position: relative;
       }
@@ -353,6 +360,12 @@
     &::after {
       background: none;
       #{$right}: 0;
+
+      @include breakpoint($tablet) {
+        html[lang=ar] & {
+          height: 0;
+        }
+      }
     }
   }
 
@@ -425,11 +438,16 @@ html[lang=ar] {
   .subscription-status {
     .success {
       padding: 0;
+      margin-top: rem(8);
 
       @include breakpoint($only-mobile) {
         padding-bottom: rem(20);
         padding-#{$left}: rem(32);
       }
+    }
+
+    .error {
+      margin: 0.25rem 0;
     }
   }
 }
