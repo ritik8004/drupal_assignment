@@ -21,13 +21,18 @@
     .c-collapse-item {
       .c-collapse__title {
         text-transform: uppercase;
-        font-size: rem(16);
+        font-size: rem(14);
         line-height: initial;
         padding-#{$right}: rem(32);
+        padding-#{$left}: rem(12);
 
         &::after {
           font-size: rem(32);
           #{$right}: rem(-6);
+
+          @include breakpoint($only-mobile) {
+            #{$right}: rem(5);
+          }
         }
       }
     }
