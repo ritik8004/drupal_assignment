@@ -191,6 +191,10 @@
           height: rem(54);
           width: rem(54);
           #{$right}: rem(20);
+
+          html[lang=ar] & {
+            left: rem(45);
+          }
         }
       }
     }
