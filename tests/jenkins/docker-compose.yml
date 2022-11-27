@@ -16,7 +16,7 @@ services:
     volumes:
       # https://devopscube.com/run-docker-in-docker/#:~:text=To%20run%20docker%20inside%20docker,sock%20as%20a%20volume.&text=Just%20a%20word%20of%20caution,privileges%20over%20your%20docker%20daemon.
       - /var/run/docker.sock:/var/run/docker.sock
-      # Map jenkins_home to make backups of all data
+      # Map jenkins_home when debugging
       # - ./jenkins_home:/var/jenkins_home
       # Map for cucumber reports
       - ../behat/build/cucumber:/tmp/cucumber
