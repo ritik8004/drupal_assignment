@@ -204,6 +204,17 @@
         cursor: default;
       }
     }
+
+    .all-filters,
+    .all-filters-algolia {
+      .filter__foot {
+        .all-filters-close,
+        .facet-all-apply,
+        .facet-apply-all {
+          border: 0;
+        }
+      }
+    }
   }
 
   ul.js-pager__items {
