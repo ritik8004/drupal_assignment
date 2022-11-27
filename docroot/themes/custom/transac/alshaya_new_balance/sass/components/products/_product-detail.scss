@@ -537,3 +537,33 @@
     }
   }
 }
+
+.store-finder-form-wrapper {
+  .search-store {
+    input[type=text] {
+      border-color: $tertiary-border;
+    }
+  }
+}
+
+.click-collect-top-stores {
+  ul {
+    li {
+      border-color: $tertiary-border;
+    }
+  }
+}
+
+.click-collect-all-stores {
+  &.inline-modal-wrapper {
+    ul {
+      li {
+        border-color: $tertiary-border;
+      }
+    }
+  }
+}
+
+.other-stores-link {
+  border-color: $tertiary-border;
+}

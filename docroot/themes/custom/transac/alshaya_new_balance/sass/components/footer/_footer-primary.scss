@@ -47,8 +47,6 @@
       }
 
       @include breakpoint($tablet) {
-        padding-#{$left}: rem(18);
-
         #footer-newsletter-form-wrapper {
           width: auto;
         }
@@ -162,12 +160,9 @@
       }
 
       .accordion--body {
-        @include breakpoint($upto-tablet) {
-          padding-#{$left}: rem(8);
-        }
-
         @include breakpoint($only-mobile) {
           border-top-color: $footer_border_top;
+          padding-#{$left}: rem(25);
         }
       }
     }
@@ -222,8 +217,8 @@
       }
 
       .accordion--body {
-        @include breakpoint($upto-tablet) {
-          padding-#{$left}: rem(8);
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: rem(25);
         }
       }
 
