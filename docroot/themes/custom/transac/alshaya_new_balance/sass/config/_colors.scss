@@ -249,6 +249,17 @@ $pdp_sidebar_label: $black;
 $pdp_desc_wrapper_border: $black;
 $pdp_product_discount_text: $nb-red;
 $pdp_accordion_title: $black;
+$pdp_cc_btn_bg: $nb-red;
+$pdp_cc_storefinder_link: $nb-red;
+$pdp_cc_storefinder_label: $black;
+$pdp_cc_top_stores_list: $black;
+$pdp_cc_top_stores_list_name: $black;
+$pdp_cc_other_stores: $nb-red;
+$pdp_all_stores_modal_border: $black;
+$pdp_all_stores_modal_close_icon: $white;
+$pdp_all_stores_modal_close_bg: $black;
+$pdp_all_stores_modal_list_name: $black;
+
 
 // Accordion
 $accordion_title: $black;
@@ -279,6 +290,7 @@ $algolia_search_input_bg: $gray2;
 $algolia-search-icon: $black;
 $alg_search_bg: $gray2;
 $alg_search_mobile_bg: $white;
+$algolia-suggestion-text: $black;
 
 // plp add to cart
 $plp-primary-cta-hover-bg: rgba(207, 10, 44, 0.9);
