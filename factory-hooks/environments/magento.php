@@ -332,10 +332,10 @@ $magentos = [
     'url' => 'https://new-test.store.alshaya.com',
     'algolia_env' => 'nb_qa',
     'magento_secrets' => [
-      'consumer_key' => 'l8csj64bgzq0qx9swo8ucfpqlvbrdqm2',
-      'consumer_secret' => 'ankpwqyu26mwo64s27hvp5n4vskk0u1f',
-      'access_token' => 'v89se7nqofezmbr93tikchhh76zj2hrm',
-      'access_token_secret' => 'pl3yz25ojn466dhpi5d37ew11sbxjqyl',
+      'consumer_key' => 'rlzmc69ozpc7dlw58b2e4soaa5ghigen',
+      'consumer_secret' => 'mtyilckuorobxkszkqg4tx63iglfk0l0',
+      'access_token' => 'lvwv0wivd1fous59mbvwht73in867f96',
+      'access_token_secret' => 'nuyorpapmadb6vhkfk9v6vwgxdij5rny',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 39],
