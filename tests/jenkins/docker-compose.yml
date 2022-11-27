@@ -11,39 +11,38 @@ services:
   jenkins:
     container_name: ${PROJECT_NAME}
     build:
-      context: ./
-      dockerfile: Dockerfile-Jenkins
+      context: ./docker/jenkins
+      dockerfile: Dockerfile
     volumes:
       # https://devopscube.com/run-docker-in-docker/#:~:text=To%20run%20docker%20inside%20docker,sock%20as%20a%20volume.&text=Just%20a%20word%20of%20caution,privileges%20over%20your%20docker%20daemon.
       - /var/run/docker.sock:/var/run/docker.sock
       # Map jenkins_home so we don't loose all data when the images are provisioned
       - ./jenkins_home:/var/jenkins_home
       # Map for cucumber reports
-      - ../behat/build/cucumber:/tmp/cucumber
+      - ${BEHAT_PATH}/build/cucumber:/tmp/cucumber
     environment:
-      # Disable setup wizard.
+      # Disable setup wizard
       JAVA_OPTS: -Djenkins.install.runSetupWizard=false
       BEHAT_SECRET_KEY: ${BEHAT_SECRET_KEY}
     ports:
-      - '8080:8080'
       - '50000:50000'
 
-  browser:
-    # https://github.com/SeleniumHQ/docker-selenium
-    # Container can be viewed with VNC port 5901
-    # Password: secret
-    image: selenium/standalone-chrome:beta
-    shm_size: 2gb
-    container_name: ${PROJECT_NAME}_browser
+  nginx:
+    # Using Nginx as reverse proxy to serve screenshots
+    # https://www.jenkins.io/doc/book/system-administration/reverse-proxy-configuration-nginx/
+    container_name: ${PROJECT_NAME}_nginx
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
     ports:
-      - '4444:4444'
-      - '5901:5900'
+      - "8080:80"
 
   appserver:
-    build:
-      context: ./
-      dockerfile: Dockerfile-AppServer
+    # Used to build the PHP application and run Behat tests
     container_name: ${PROJECT_NAME}_appserver
+    build:
+      context: ./docker/appserver
+      dockerfile: Dockerfile
     environment:
       DOCKER_JENKINS: 1
       PHP_MEMORY_LIMIT: "1G"
@@ -51,4 +50,15 @@ services:
       PHP_APCU_ENABLED: 1
       PHP_APCU_SHM_SIZE: 512M
     volumes:
-      - ../behat:/behat
+      - ${BEHAT_PATH}:/behat
+
+  selenium:
+    # https://github.com/SeleniumHQ/docker-selenium
+    # Container can be viewed with VNC port 5901
+    # Password: secret
+    container_name: ${PROJECT_NAME}_browser
+    image: selenium/standalone-chrome:beta
+    shm_size: 2gb
+    ports:
+      - '4444:4444'
+      - '5901:5900'
