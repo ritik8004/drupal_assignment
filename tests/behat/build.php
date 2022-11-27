@@ -61,7 +61,7 @@ if (getenv('DOCKER_JENKINS') && getenv('DOCKER_JENKINS') == 1) {
   foreach (array_keys($behat_config) as $key) {
     $mink_extension = &$behat_config[$key]['extensions']['Drupal\MinkExtension'];
     // Change the selenium2 wd_host.
-    $mink_extension['selenium2']['wd_host'] = 'http://jenkins_standalone_browser:4444/wd/hub';
+    $mink_extension['selenium2']['wd_host'] = 'http://jenkins_browser:4444/wd/hub';
   }
 }
 $behat->dumpYaml(BUILD_DIR . '/profiles.yml', $behat_config);
