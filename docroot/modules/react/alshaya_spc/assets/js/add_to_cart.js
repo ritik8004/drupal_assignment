@@ -201,7 +201,7 @@
                     bubbles: true,
                     detail: {
                       context: 'pdp',
-                      cartData: response,
+                      sku: currentSelectedVariant,
                     }
                   });
                   document.dispatchEvent(event);
