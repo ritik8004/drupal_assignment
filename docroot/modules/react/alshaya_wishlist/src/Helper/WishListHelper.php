@@ -8,6 +8,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Utility\Token;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Helper class for Wishlist.
@@ -167,6 +168,34 @@ class WishListHelper {
 
     // Return false always, if not a wishlist page.
     return FALSE;
+  }
+
+  /**
+   * Determines whether to show/hide the wishlist icon.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Node entity.
+   * @param string $view_mode
+   *   View mode value.
+   *
+   * @return bool
+   *   True/false to show/hide wishlist icon.
+   */
+  public function showWishlistIconForProduct(NodeInterface $node, string $view_mode): bool {
+    if (!in_array($view_mode, ['matchback', 'pdp', 'modal'])
+      || !$this->isWishListEnabled()
+    ) {
+      return FALSE;
+    }
+
+    if ($view_mode === 'matchback'
+      && !$this->configFactory->get('alshaya_wishlist.settings')->get('show_wishlist_on_matchback')) {
+      return FALSE;
+    }
+
+    $product_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    $product_pdp_layout = $node->get('field_select_pdp_layout')->getString() ?? $product_pdp_layout;
+    return $product_pdp_layout !== 'magazine_v2';
   }
 
 }
