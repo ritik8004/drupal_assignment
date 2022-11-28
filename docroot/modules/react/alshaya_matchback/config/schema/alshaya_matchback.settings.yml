@@ -1,7 +1,0 @@
-alshaya_matchback.settings:
-  type: config_object
-  label: Alshaya Matchback settings
-  mapping:
-    show_wishlist_icon_on_matchback:
-      type: boolean
-      label: Show Wishlist icon on matchback
