@@ -464,10 +464,10 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
    * Redirects users to the cart page after they added a certain
    * number of variants to the cart.
    *
-   * @param {object} cartData
-   *   The cart data.
+   * @param {string} sku
+   *   The variant sku.
    */
-  function alshayaSpcRedirectToCart(cartData) {
+  function alshayaSpcRedirectToCart(sku) {
     // Check if drupal settings are present.
     var values = drupalSettings.alshaya_spc.redirectToCartThreshold || null;
     if (!values) {
