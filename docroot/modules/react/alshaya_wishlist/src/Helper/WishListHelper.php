@@ -188,6 +188,11 @@ class WishListHelper {
       return FALSE;
     }
 
+    if ($view_mode === 'matchback'
+      && !$this->configFactory->get('alshaya_wishlist.settings')->get('show_wishlist_on_matchback')) {
+      return FALSE;
+    }
+
     $product_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
     $product_pdp_layout = $node->get('field_select_pdp_layout')->getString() ?? $product_pdp_layout;
     return $product_pdp_layout !== 'magazine_v2';
