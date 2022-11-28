@@ -479,21 +479,29 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     // Get redirect threshold for the specific device.
     var redirectToCartThreshold = values[deviceType];
     // Check if redirection to cart is enabled i.e. >= 1.
-    if (redirectToCartThreshold < 1 || !Drupal.hasValue(cartData.items)) {
+    if (redirectToCartThreshold < 1 || !Drupal.hasValue(sku)) {
       return;
     }
 
-    // Count items, ignoring free gifts.
-    var count = 0;
-    for (const [sku, item] of Object.entries(cartData.items)) {
-      if (!Drupal.hasValue(item.freeItem)) {
-        count++;
-      }
+    // Key used to store skus in local storage when they are added to cart.
+    var storageKey = 'skus_added_from_pdp';
+
+    // Get skus from local storage.
+    var skus = Drupal.getItemFromLocalStorage(storageKey) || [];
+    // Check if current sku is already counted.
+    if (skus.includes(sku)) {
+      return;
     }
+
+    // Add current sku.
+    skus.push(sku);
+
+    // Update local storage.
+    Drupal.addItemInLocalStorage(storageKey, skus);
 
     // We will redirect if the number of items is multiple of threshold.
     // example: if threshold is 3, we will redirect at 3, 6, 9...
-    if (count % redirectToCartThreshold === 0) {
+    if (skus.length % redirectToCartThreshold === 0) {
       // Redirect to cart page.
       window.location = Drupal.url('cart');
     }
@@ -504,9 +512,9 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     const detail = e.detail;
     // Check if the event was triggered from PDP page.
     if (Drupal.hasValue(detail.context) && detail.context === 'pdp'
-      && Drupal.hasValue(detail.cartData)
+      && Drupal.hasValue(detail.sku)
     ) {
-      alshayaSpcRedirectToCart(detail.cartData);
+      alshayaSpcRedirectToCart(detail.sku);
     }
   });
 
