@@ -65,6 +65,7 @@
           span {
             position: absolute;
             transform: translate(-50%, -50%);
+            font-family: $alshaya-bold;
 
             html[lang=ar] & {
               transform: translate(-50%, -50%);
@@ -105,6 +106,26 @@
         .step {
           .step-label {
             white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    #checkout-progress {
+      &::before,
+      &::after {
+        margin-top: rem(-24);
+      }
+
+      .progress-bar {
+        .step {
+          // Reducing space between header and progress tracker for mobile.
+          margin-top: rem(-48);
+
+          .step-label {
+            min-width: rem(58);
           }
         }
       }
