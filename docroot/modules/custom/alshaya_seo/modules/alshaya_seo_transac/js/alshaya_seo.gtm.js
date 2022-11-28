@@ -465,32 +465,6 @@
       }
 
       /**
-       * Newsletter tracking GTM.
-       */
-      $('footer .edit-newsletter').click(function () {
-        footerNewsletterSubmiClicked = true;
-      });
-
-      // Trigger GTM push event on AJAX completion of add to cart button.
-      $(document).once('js-event').ajaxComplete(function (event, xhr, settings) {
-        gtm_execute_onetime_events = true;
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) && (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
-          var responseJSON = xhr.responseJSON;
-          var responseMessage = '';
-          $.each(responseJSON, function (key, obj) {
-            if (obj.method === 'newsletterHandleResponse') {
-              responseMessage = obj.args[0].message;
-              return false;
-            }
-          });
-
-          if ((responseMessage === 'success') && (footerNewsletterSubmiClicked)) {
-            Drupal.alshaya_seo_gtm_push_lead_type('footer');
-          }
-        }
-      });
-
-      /**
        * Quantity update in cart.
        */
       // Trigger removeFromCart & addToCart events based on the quantity update on cart page.
