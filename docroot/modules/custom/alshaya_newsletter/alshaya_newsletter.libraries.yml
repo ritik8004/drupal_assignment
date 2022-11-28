@@ -9,3 +9,4 @@ newsletter_js:
     - core/jquery
     - core/drupal
     - alshaya_master/ladda
+    - alshaya_seo_transac/gtm
