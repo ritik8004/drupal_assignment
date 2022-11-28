@@ -13,6 +13,7 @@
   <displayName>Adhoc Pipeline</displayName>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.8"/>
     <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty>
       <abortPrevious>false</abortPrevious>
     </org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty>
@@ -90,25 +91,23 @@ To exclude tags use ~@tag_b
 
     environment {
         CONTAINER = &apos;jenkins_appserver&apos;
+        SITE = &quot;${Brand}-${Market}-${TargetEnv}-${Language}&quot;
     }
 
     stages {
         stage(&apos;Preparation&apos;) {
-            environment {
-                SITE = &quot;${Brand}-${Market}-${TargetEnv}-${Language}&quot;
-            }
             steps {
-                // Run Behat rebuild script
-                sh &apos;docker exec -t ${CONTAINER} sh -c &quot;cd /behat &amp;&amp; ./behat-build.sh --rebuild=TRUE --site=${SITE}&quot;&apos;
+                // Prepare behat profiles.
+                sh &apos;sh /usr/share/jenkins/ref/scripts/behat-build.sh ${CONTAINER} ${SITE}&apos;
             }
         }
         stage(&apos;Test&apos;) {
             environment {
-                PROFILE = &quot;${Brand}-${Market}-${TargetEnv}-${Language}-${Device}&quot;
+                PROFILE = &quot;${SITE}-${Device}&quot;
             }
             steps {
                 // Run Behat tests
-                sh &apos;docker exec -t ${CONTAINER} sh -c \&quot;cd /behat &amp;&amp; ./bin/behat --profile=${PROFILE} --format cucumber_json --tags=\&quot;${Tags}\&quot; \&quot;&apos;
+                sh &apos;sh /usr/share/jenkins/ref/scripts/behat-run.sh ${CONTAINER} ${PROFILE} &quot;${Tags}&quot;&apos;
             }
         }
     }

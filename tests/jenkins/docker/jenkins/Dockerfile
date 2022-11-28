@@ -20,8 +20,11 @@ RUN apt-get install openjdk-11-jdk -y
 # https://packagist.org/packages/cawolf/behat-cucumber-json-formatter
 # https://plugins.jenkins.io/cucumber-reports/
 RUN jenkins-plugin-cli --plugins pipeline-model-definition github-branch-source cucumber-reports rebuild blueocean
-RUN jenkins-plugin-cli --plugins conditional-buildstep pipeline-graph-analysis pipeline-stage-view jira slack
+RUN jenkins-plugin-cli --plugins conditional-buildstep pipeline-graph-analysis pipeline-stage-view jira slack simple-theme-plugin
+
+# Copy scripts
+COPY scripts/behat-build.sh /usr/share/jenkins/ref/scripts/behat-build.sh
+COPY scripts/behat-run.sh /usr/share/jenkins/ref/scripts/behat-run.sh
 
 # Copy default jobs
-COPY jobs/local-smoke-pull-requests.xml /usr/share/jenkins/ref/jobs/local-smoke-pull-requests/config.xml
-COPY jobs/adhoc-pipeline.xml /usr/share/jenkins/ref/jobs/adhoc-pipeline/config.xml
+COPY jobs/adhoc-pipeline/config.xml /usr/share/jenkins/ref/jobs/adhoc-pipeline/config.xml

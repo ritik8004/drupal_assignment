@@ -37,6 +37,8 @@ services:
     volumes:
       # Map to serve screenshots
       - ${BEHAT_PATH}/features:/www/data/images
+      # Map to serve altered reports with screenshots
+      - ./jenkins_home/jobs:/www/data/reports
     ports:
       - "8080:80"
 
