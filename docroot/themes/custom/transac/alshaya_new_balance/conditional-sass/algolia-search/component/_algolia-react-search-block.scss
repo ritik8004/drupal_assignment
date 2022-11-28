@@ -225,7 +225,24 @@
       .react-autosuggest__container {
         &--open {
           #top-results {
-            padding: 0 rem(8);
+            padding: 0 rem(12) rem(12);
+
+            .top-suggestions-title {
+              padding-#{$left}: 0;
+            }
+
+            ul.ais-Hits-list {
+              grid-gap: rem(34) rem(10);
+
+              li.ais-Hits-item .c-products__item {
+                text-align: $left;
+                margin-bottom: 0;
+
+                .field--name-name {
+                  padding: 0;
+                }
+              }
+            }
           }
         }
       }
