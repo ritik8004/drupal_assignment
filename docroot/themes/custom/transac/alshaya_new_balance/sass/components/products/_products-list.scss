@@ -90,6 +90,23 @@
         }
       }
     }
+
+    .view-header {
+      &.search-count {
+        cursor: default;
+      }
+    }
+
+    .all-filters,
+    .all-filters-algolia {
+      .filter__foot {
+        .all-filters-close,
+        .facet-all-apply,
+        .facet-apply-all {
+          border: 0;
+        }
+      }
+    }
   }
 
   ul.js-pager__items {
@@ -98,6 +115,10 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
+
+      @include breakpoint($tablet) {
+        width: rem(205);
+      }
     }
   }
 
@@ -269,16 +290,6 @@
       min-height: initial;
     }
 
-    .c-page-title {
-      @include breakpoint($only-mobile) {
-        border-bottom: none;
-        padding-bottom: 0;
-        margin: rem(16) 0 rem(24);
-        text-align: center;
-        font-size: rem(24);
-      }
-    }
-
     .promotions {
       margin: rem(8) 0 0;
       display: flex;
@@ -287,79 +298,20 @@
       .sku-promotion-item {
         font-size: rem(16);
         margin: 0 0 rem(8);
-
-        @include breakpoint($only-mobile) {
-          font-size: rem(14);
-        }
-      }
-    }
-  }
-
-  .region__content {
-    .block-facets-summary-blockfilter-bar-promotions,
-    .block-facets-summary-blockfilter-bar-plp,
-    .block-facets-summary-blockfilter-bar-productlist,
-    .block-facets-summary-blockfilter-bar {
-      .filter-list-label {
-        text-transform: capitalize;
-      }
-
-      ul {
-        li {
-          a {
-            span {
-              &.facet-item__value {
-                text-transform: capitalize;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .block-page-title-block {
-      &.mobile {
-        h1 {
-          @include breakpoint($only-mobile) {
-            padding: rem(22) 0;
-          }
-        }
-      }
-    }
-
-    .view-header {
-      &.search-count {
-        cursor: default;
-      }
-    }
-
-    .all-filters,
-    .all-filters-algolia {
-      .filter__foot {
-        .all-filters-close,
-        .facet-all-apply,
-        .facet-apply-all {
-          border: 0;
-        }
-      }
-    }
-  }
-
-  ul.js-pager__items {
-    .pager__item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-
-      @include breakpoint($tablet) {
-        width: rem(205);
       }
     }
   }
 
   @include breakpoint($only-mobile) {
     .c-products__item {
+      .c-page-title {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin: rem(16) 0 rem(24);
+        text-align: center;
+        font-size: rem(24);
+      }
+
       .promotions {
         .sku-promotion-link {
           color: $plp_promotion_link;
