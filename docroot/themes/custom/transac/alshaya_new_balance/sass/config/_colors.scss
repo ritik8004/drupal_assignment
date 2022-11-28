@@ -223,12 +223,13 @@ $plp_clear_all_btn_disabled: $ada-gray;
 $plp_all_filter_title: $black;
 $plp_all_filter_filter_arrow: $black;
 $plp_clear_all_btn_text: $nb-red;
-$plp_filter_txt: $ada-gray;
+$plp_filter_txt: $black;
 $plp_filter_border: $gray2;
 $plp_promotion_link: $nb-red;
 $oos_btn_bg: $nb-red;
 $plp-quick-view-product-size-border: $black;
 $plp-quick-view-product-size-text: $black;
+$plp-swatch-border: $gray;
 
 // Product Detail Page
 $pdp_product_itemcode: $ada-gray;
@@ -247,10 +248,23 @@ $pdp_desc_wrapper_close_bg: $white;
 $pdp_sidebar_label: $black;
 $pdp_desc_wrapper_border: $black;
 $pdp_product_discount_text: $nb-red;
+$pdp_accordion_title: $black;
+$pdp_cc_btn_bg: $nb-red;
+$pdp_cc_storefinder_link: $nb-red;
+$pdp_cc_storefinder_label: $black;
+$pdp_cc_top_stores_list: $black;
+$pdp_cc_top_stores_list_name: $black;
+$pdp_cc_other_stores: $nb-red;
+$pdp_all_stores_modal_border: $black;
+$pdp_all_stores_modal_close_icon: $white;
+$pdp_all_stores_modal_close_bg: $black;
+$pdp_all_stores_modal_list_name: $black;
+
 
 // Accordion
 $accordion_title: $black;
 $accordion_title_icon: $black;
+$accordion_sub_title: $black;
 
 // Product Add to cart form.
 $pdp_sizeguide_link: $nb-red;
@@ -276,13 +290,14 @@ $algolia_search_input_bg: $gray2;
 $algolia-search-icon: $black;
 $alg_search_bg: $gray2;
 $alg_search_mobile_bg: $white;
+$algolia-suggestion-text: $black;
 
 // plp add to cart
 $plp-primary-cta-hover-bg: rgba(207, 10, 44, 0.9);
 $plp-secondary-cta-hover-bg: rgba(207, 10, 44, 0.1);
 
 //SPC
-$spc-order-summary-totals-bg: $light-gray;
+$spc-order-summary-totals-bg: $white;
 $spc-promo-code-border: $gray;
 $spc_promo_code_block_mob_bg: $light-gray;
 $spc-promo-code-input-text: $ada-gray;
@@ -292,6 +307,7 @@ $spc-product-attributes: $ada-gray;
 $spc-select-border: $gray;
 $spc-cart-background: $white;
 $spc-cart-promo-code-submit-enabled: $nb-red;
+$spc-promo-code-bg: $light-gray;
 
 // Checkout steps
 $cko-steps-active-bg: $nb-red;
@@ -304,6 +320,7 @@ $checkout_section_titles: $black;
 $checkout_guest_button_border: $nb-red;
 $checkout_guest_button_txt: $nb-red;
 $checkout_header_border-bottom : $gray;
+$checkout_footer_border-top: $black;
 
 // Checkout Login page.
 $checkout_login_submit_button_background: $nb-red;
@@ -416,3 +433,6 @@ $order-detail_td_dark_content: $black;
 // C-menu primary i:e Mobile and tablet header menu links.
 $header_c_menu_text: $black;
 $header_mobile_menu_arrow: $black;
+
+// Language Switcher
+$lang_switch_firsttime_bg: $nb-red;

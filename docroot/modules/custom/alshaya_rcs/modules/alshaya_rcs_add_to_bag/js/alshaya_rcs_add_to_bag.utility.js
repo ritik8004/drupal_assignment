@@ -225,12 +225,14 @@ window.commerceBackend = window.commerceBackend || {};
       var configColorAttribute = drupalSettings.alshayaRcs.colorAttributeConfig.configurable_color_attribute;
       var configurableColorDetails = window.commerceBackend.getConfigurableColorDetails(product.sku);
     }
+
     product.configurable_options.forEach(function (option) {
       var isOptionSwatch = drupalSettings.alshayaRcs.pdpSwatchAttributes.includes(option.attribute_code);
       var attribute_id = parseInt(atob(option.attribute_uid), 10);
       var optionValues = [];
       // Filter and process the option values.
-      option.values.forEach(function eachValue(option_value) {
+      var sortedValues = window.commerceBackend.getSortedAttributeValues(option.values, option.attribute_code);
+      sortedValues.forEach(function eachValue(option_value) {
         // Disable unavailable options.
         if (!Drupal.hasValue(configurableCombinations.attribute_sku)
           || typeof configurableCombinations.attribute_sku[option.attribute_code][option_value.value_index] === 'undefined'

@@ -141,16 +141,20 @@ export default class Cart extends React.Component {
           messageType: 'error',
           message: stockErrorMessage,
         });
+        Drupal.logJavascriptError('cart-refresh', stockErrorMessage, GTM_CONSTANTS.CART_ERRORS);
       } else if (data.message !== undefined) {
         this.setState({
           messageType: data.message.type,
           message: data.message.message,
         });
+        Drupal.logJavascriptError('cart-refresh', data.message.message, GTM_CONSTANTS.CART_ERRORS);
       } else if (data.in_stock === false) {
+        const errorMessage = 'Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.';
         this.setState({
           messageType: 'error',
           message: Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.'),
         });
+        Drupal.logJavascriptError('cart-refresh', errorMessage, GTM_CONSTANTS.CART_ERRORS);
       } else if (data.message === undefined && data.in_stock) {
         this.setState((prevState) => {
           if (prevState.message === null) return null;

@@ -12,7 +12,7 @@
 
   // Function to stop fullpage loader wherever we need.
   Drupal.cartNotification.spinner_stop = function () {
-    $('.checkout-ajax-progress-throbber').hide();
+    $('.checkout-ajax-progress-throbber').remove();
   }
 
   // Get markup for the cart notification.
