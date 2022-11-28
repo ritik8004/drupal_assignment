@@ -62,11 +62,10 @@ class OverriddenMinkContext extends MinkContext {
     if (file_exists($filename)) {
       $creds = json_decode(file_get_contents($filename), TRUE);
       $key = $creds[$env]['secret_key'] ?? '';
+      return $key;
     }
 
     print 'Behat secret key not available';
     die();
-
-    return $key;
   }
 }
