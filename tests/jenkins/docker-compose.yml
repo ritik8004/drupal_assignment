@@ -34,6 +34,9 @@ services:
     build:
       context: ./docker/nginx
       dockerfile: Dockerfile
+    volumes:
+      # Map to serve screenshots
+      - ${BEHAT_PATH}/features:/www/data/images
     ports:
       - "8080:80"
 
