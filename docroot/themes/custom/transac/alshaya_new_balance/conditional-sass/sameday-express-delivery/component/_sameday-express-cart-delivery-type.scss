@@ -1,0 +1,24 @@
+.alias--cart {
+  #delivery-area-select {
+    .delivery-area-name {
+      padding-#{$left}: rem(10);
+      padding-#{$right}: rem(33);
+    }
+
+    .delivery-area-button {
+      &::before {
+        font-size: rem(36);
+        #{$right}: rem(-6);
+        top: rem(9);
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .alias--cart {
+    .spc-cart-shipping-methods {
+      padding-#{$right}: rem(16);
+    }
+  }
+}

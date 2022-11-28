@@ -11,3 +11,15 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  #spc-cart {
+    padding-top: 0;
+  }
+
+  .spc-mobile-cart-preview {
+    &.sticky {
+      z-index: 2;
+    }
+  }
+}

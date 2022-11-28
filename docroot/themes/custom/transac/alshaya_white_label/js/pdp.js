@@ -89,6 +89,11 @@
       $('.content--dimensions-and-care', context).find('.dimensions-and-care').each(function () {
         Drupal.convertIntoAccordion($(this));
       });
+
+      // Accordion for product details section on PDP.
+      $('.content--product-details', context).find('.product-details').each(function () {
+        Drupal.convertIntoAccordion($(this));
+      });
     }
   };
 })(jQuery, Drupal);

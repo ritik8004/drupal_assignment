@@ -20,6 +20,8 @@ export default class ValidateEgiftCard extends React.Component {
       const response = await codeValidation(egiftCode.value);
       if (response.error) {
         document.getElementById('egift_verification_code_error').innerHTML = response.message;
+        // Push error message to GTM.
+        Drupal.logJavascriptError('egiftcard-code-verification', response.message, GTM_CONSTANTS.CHECKOUT_ERRORS);
       }
     }
   }
@@ -35,6 +37,8 @@ export default class ValidateEgiftCard extends React.Component {
     // If errors if true then display inline error message.
     if (result.error) {
       document.getElementById('egift_verification_code_error').innerHTML = result.message;
+      // Push error message to GTM.
+      Drupal.logJavascriptError('egiftcard-code-verification', result.message, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
   }
 

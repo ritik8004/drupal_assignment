@@ -47,7 +47,7 @@ export function makeFacetAliasApiRequest(facetName) {
   const facetInfo = getFacetStorage(facetName);
   if (facetInfo) return;
 
-  const requestUri = Drupal.url(`facets-aliases/${facetName}`);
+  const requestUri = Drupal.url(`facets-aliases/${facetName}?cacheable=1`);
   if (!apiReqeustInQueue[facetName]) {
     apiReqeustInQueue[facetName] = true;
     Axios.get(requestUri).then((response) => {
@@ -66,7 +66,7 @@ export async function asyncFacetValuesRequest(apiRequests, inverted = true) {
   const requestUrls = [];
   apiRequests.forEach((facetKey) => {
     apiReqeustInQueue[facetKey] = true;
-    requestUrls[facetKey] = Axios.get(Drupal.url(`facets-aliases/${facetKey}`));
+    requestUrls[facetKey] = Axios.get(Drupal.url(`facets-aliases/${facetKey}?cacheable=1`));
   });
   // fetch data from a url endpoint
   try {

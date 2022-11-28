@@ -123,6 +123,8 @@ export default class CartPromoBlock extends React.Component {
     document.getElementById('promo-code').classList.add('error');
     // Trigger cart update to remove any message on cart.
     dispatchCustomEvent('spcCartMessageUpdate', {});
+    // Push error message to GTM.
+    Drupal.logJavascriptError('promo-code', errorMessage, GTM_CONSTANTS.CART_ERRORS);
   }
 
   promoAction = (promoApplied, inStock, promoCoupons = null) => {
@@ -193,6 +195,8 @@ export default class CartPromoBlock extends React.Component {
             dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
             const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promoValue } });
             document.dispatchEvent(event);
+            // Push error message to GTM.
+            Drupal.logJavascriptError('promo-code', messageInfo.message, GTM_CONSTANTS.CART_ERRORS);
           }
           if (result.response_message.status === 'error_coupon'
             && !Advantagecard.isAllItemsExcludedForAdvCard(result.totals)) {
@@ -202,6 +206,8 @@ export default class CartPromoBlock extends React.Component {
             document.getElementById('promo-code').classList.add('error');
             // Dispatch event promoCodeFailed for GTM.
             document.dispatchEvent(event);
+            // Push error message to GTM.
+            Drupal.logJavascriptError('promo-code', result.response_message.msg, GTM_CONSTANTS.CART_ERRORS);
           } else if (result.response_message.status === 'success') {
             document.getElementById('promo-message').innerHTML = '';
             // Initially promoApplied was false, means promo is applied now.

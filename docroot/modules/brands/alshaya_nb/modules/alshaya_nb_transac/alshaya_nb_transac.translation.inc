@@ -28,14 +28,16 @@ function _alshaya_nb_transac_translations() {
       'Product Description' => [
         'ar' => 'وصف المنتج',
       ],
-      'Product Detail' => [
-        'ar' => 'تفاصيل المنتج',
-      ],
       'Product No:' => [
         'ar' => 'رمز المنتج',
       ],
       'size guide' => [
         'ar' => 'دليل المقاسات',
+      ],
+    ],
+    'v2' => [
+      'Product Details' => [
+        'ar' => 'تفاصيل المنتج',
       ],
     ],
   ];

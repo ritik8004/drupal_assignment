@@ -342,6 +342,10 @@ class AlshayaAlgoliaIndexHelper {
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
+
+    // Added SKU Fixed price to index object for XB.
+    $object['fixed_price'] = $prices['fixed_price'] ?? '';
+
     // Used for highest discount.
     $object['discount'] = $this->skuManager->getDiscountedPercent($object['price'], $object['final_price']);
     // Use max of selling prices for price in configurable products.

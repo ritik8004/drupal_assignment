@@ -1,0 +1,24 @@
+.dynamic-promotion-wrapper {
+  .inactive-promotions {
+    .promotion {
+      &.fixed_percentage_discount_order,
+      &.free_gift_order {
+        &[threshold=true] {
+          color: $basket_dynamic_promotion_fixed_percentage_discount_order_text;
+
+          svg #fill-value {
+            fill: $basket_dynamic_promotion_fixed_percentage_discount_order_text;
+          }
+        }
+      }
+
+      &.fixed_amount_discount_order {
+        background-color: $basket_fixed_percentage_inactive_header_promo_bg;
+
+        .promotion-text {
+          color: $basket_dynamic_promotion_fixed_percentage_discount_order_text;
+        }
+      }
+    }
+  }
+}

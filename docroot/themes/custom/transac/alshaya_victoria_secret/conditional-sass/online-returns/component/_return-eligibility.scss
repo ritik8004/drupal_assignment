@@ -1,0 +1,11 @@
+.image-data-wrapper {
+  &.in-eligible,
+  &.big-ticket-item {
+    .not-eligible-label,
+    .big-ticket-item-label {
+      font-family: $vs-bentonsans-medium;
+      font-size: rem(12);
+      line-height: 1.33;
+    }
+  }
+}

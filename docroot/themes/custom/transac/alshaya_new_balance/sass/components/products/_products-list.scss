@@ -99,19 +99,19 @@
     }
 
     .swatches {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      column-gap: rem(6);
+
       .swatch-image {
         img {
           width: rem(40);
+          max-width: rem(40);
           aspect-ratio: 1;
           object-fit: contain;
+          border: rem(1) solid $plp-swatch-border;
         }
-      }
-
-      &:not(.slider-swatches) {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        column-gap: rem(6);
       }
     }
 
@@ -119,16 +119,19 @@
       &-slider {
         display: flex;
         align-items: center;
-        justify-content: center;
       }
 
       &-list {
-        width: rem(86);
+        width: rem(92);
       }
 
       &-track {
         display: flex;
-        column-gap: rem(6);
+      }
+
+      &-slide {
+        padding-left: rem(3);
+        padding-right: rem(3);
       }
 
       &-next,
@@ -139,6 +142,28 @@
 
     @include breakpoint($mobile) {
       min-height: initial;
+    }
+
+    .c-page-title {
+      @include breakpoint($only-mobile) {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin: rem(16) 0 rem(24);
+        text-align: center;
+        font-size: rem(24);
+      }
+    }
+
+    .promotions {
+      .sku-promotion-item {
+        font-size: rem(16);
+        margin-left: 0;
+        margin-right: 0;
+
+        @include breakpoint($only-mobile) {
+          font-size: rem(14);
+        }
+      }
     }
   }
 
@@ -173,6 +198,23 @@
         }
       }
     }
+
+    .view-header {
+      &.search-count {
+        cursor: default;
+      }
+    }
+
+    .all-filters,
+    .all-filters-algolia {
+      .filter__foot {
+        .all-filters-close,
+        .facet-all-apply,
+        .facet-apply-all {
+          border: 0;
+        }
+      }
+    }
   }
 
   ul.js-pager__items {
@@ -181,6 +223,10 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
+
+      @include breakpoint($tablet) {
+        width: rem(205);
+      }
     }
   }
 
@@ -201,6 +247,7 @@
 
         .sku-promotion-item {
           font-size: rem(14);
+          margin-#{$left}: initial;
         }
       }
     }
@@ -240,20 +287,14 @@
     }
 
     .c-products__item {
-      .promotions {
-        color: $primary_link;
-
-        .sku-promotion-link {
-          color: $primary_link;
-        }
-      }
-
       .field--name-name {
-        margin-bottom: rem(12);
+        margin-top: rem(7);
+        margin-bottom: rem(2);
+        font-family: $nb-nova-semibold;
       }
 
       .price-block {
-        margin-bottom: rem(12);
+        margin-bottom: rem(8);
       }
 
       .price-type__wrapper,
@@ -265,6 +306,7 @@
         .swatch-image {
           img {
             width: rem(50);
+            max-width: rem(50);
           }
         }
       }

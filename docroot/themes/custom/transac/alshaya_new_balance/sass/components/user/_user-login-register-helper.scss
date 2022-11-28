@@ -17,6 +17,7 @@
     &.c-page-title {
       font-size: rem(14);
       color: $user_login_section_title;
+      text-transform: unset;
     }
   }
 
@@ -146,6 +147,12 @@
                 a {
                   border-top: none;
                 }
+              }
+            }
+
+            a {
+              &::after {
+                color: $user_nav_mobile_link_icon;
               }
             }
           }

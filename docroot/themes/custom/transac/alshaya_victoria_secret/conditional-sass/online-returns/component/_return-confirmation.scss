@@ -1,0 +1,153 @@
+.return-confirmation-wrapper {
+  .order-details-button-wrapper {
+    a {
+      color: $online-return-order-detail-btn-txt;
+    }
+  }
+
+  .light {
+    color: $online-return-light-text;
+  }
+
+  .dark {
+    color: $online-return-dark-text;
+  }
+
+  .refund-success-message {
+    .message-text {
+      color: $online-return-success-msg-txt;
+    }
+  }
+
+  .whats-next-section {
+    .whats-next-title {
+      font-family: $vs-bentonsans-medium;
+      padding-bottom: rem(10);
+      color: $online-return-dark-text;
+    }
+
+    .whats-next-label {
+      margin-bottom: rem(20);
+
+      @include breakpoint($tablet) {
+        margin-bottom: rem(32);
+      }
+    }
+
+    .whats-next-wrapper {
+      .item-list-wrapper {
+        margin-bottom: rem(20);
+
+        @include breakpoint($tablet) {
+          margin-bottom: rem(32);
+        }
+      }
+
+      .title {
+        color: $online-return-conf-label-txt;
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+
+  .return-details-section,
+  .return-items-wrapper {
+    .return-details-title,
+    .return-items-label {
+      font-family: $vs-bentonsans-medium;
+      padding-bottom: rem(10);
+      color: $online-return-dark-text;
+    }
+  }
+
+  .return-details-section {
+    margin-top: rem(32);
+    margin-bottom: rem(32);
+
+    @include breakpoint($tablet) {
+      margin-top: rem(40);
+      margin-bottom: rem(40);
+    }
+
+    .return-confirmation-detail-wrapper {
+      padding-top: rem(20);
+      padding-bottom: rem(20);
+
+      @include breakpoint($tablet) {
+        padding: rem(24);
+      }
+
+      > div {
+        @include breakpoint($only-mobile) {
+          margin-bottom: rem(20);
+        }
+      }
+
+      .return-id-label,
+      .refund-method-title,
+      .address-title,
+      .return-request-date {
+        font-size: rem(12);
+        line-height: 1.33;
+      }
+
+      .return-id-info,
+      .refund-method-wrapper {
+        > div {
+          margin-bottom: rem(4);
+
+          &:last-child {
+            margin-bottom: rem(0);
+          }
+        }
+      }
+
+      .return-confirmation-address {
+        margin-bottom: 0;
+
+        .address-title {
+          margin-bottom: rem(4);
+        }
+
+        .address-details {
+          margin-bottom: rem(2);
+          color: $online-return-dark-text;
+        }
+      }
+
+      .refund-method-wrapper {
+        .method-wrapper {
+          color: $online-return-dark-text;
+        }
+      }
+    }
+
+    .return-note-label {
+      margin-top: rem(20);
+    }
+  }
+
+  .return-items-wrapper {
+    .item-details {
+      padding: rem(20) rem(32);
+    }
+
+    .item-total-price {
+      margin-top: rem(12);
+
+      .price {
+        font-size: rem(14);
+
+        .price-currency.suffix {
+          margin-#{$right}: rem(6);
+        }
+      }
+    }
+
+    .order__details--summary {
+      .item-name {
+        font-size: rem(14);
+      }
+    }
+  }
+}

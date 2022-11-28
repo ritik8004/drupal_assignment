@@ -14,6 +14,8 @@ $med-dark-red: #c00;
 $blue: #44a6ff;
 $nb-green: #60b257;
 $gainsboro: #dadada;
+$light-gray-f7-alpha-5: rgba(247, 247, 247, 0.5);
+$black-alpha-25: rgba(0, 0, 0, 0.25);
 
 // Global elements.
 $primary_text: $black;
@@ -114,6 +116,7 @@ $footer-newsletter-border: $white;
 $footer-top-bg: $black;
 $lang_switch: $black;
 $footer_logo_blk_text: $nb-black;
+$newsletter_success: $nb-green;
 
 //Signup
 $user_form_text: $ada-gray;
@@ -147,10 +150,11 @@ $primary_dropdown_arrow_bg: transparent;
 $primary_dropdown_border: $gray;
 $primary_dropdown_option_hover: $black;
 $primary_dropdown_option_border: $gray;
-$primary_dropdown_option_disbled: $black;
+$primary_dropdown_option_disbled: $gray-97;
 $primary_dropdown_arrow_icon: $black;
 $select_drop_down_hover_bg: $gray2;
 $select_drop_down_hover_text: $black;
+$primary_dropdown_text: $black;
 
 // Form elements.
 $primary_form_selector_border: $black;
@@ -197,6 +201,11 @@ $my_acc_address_text: $black;
 $address_form_radio: $nb-red;
 $user_account_nav: $nb-black;
 $order_search_form_border: $white;
+$user_nav_mobile_link_icon: $black;
+$address_edit_cancel_text: $primary_link;
+
+// Header my account nav.
+$header_my_account_h3_title: $black;
 
 // PLP
 $plp_search_count: $ada-gray;
@@ -215,9 +224,13 @@ $plp_clear_all_btn_disabled: $ada-gray;
 $plp_all_filter_title: $black;
 $plp_all_filter_filter_arrow: $black;
 $plp_clear_all_btn_text: $nb-red;
-$plp_filter_txt: $ada-gray;
+$plp_filter_txt: $black;
 $plp_filter_border: $gray2;
-$plp_promotion_link: $gray-97;
+$plp_promotion_link: $nb-red;
+$oos_btn_bg: $nb-red;
+$plp-quick-view-product-size-border: $black;
+$plp-quick-view-product-size-text: $black;
+$plp-swatch-border: $gray;
 
 // Product Detail Page
 $pdp_product_itemcode: $ada-gray;
@@ -235,13 +248,27 @@ $pdp_desc_wrapper_close_icon: $black;
 $pdp_desc_wrapper_close_bg: $white;
 $pdp_sidebar_label: $black;
 $pdp_desc_wrapper_border: $black;
+$pdp_product_discount_text: $nb-red;
+$pdp_accordion_title: $black;
+$pdp_cc_btn_bg: $nb-red;
+$pdp_cc_storefinder_link: $nb-red;
+$pdp_cc_storefinder_label: $black;
+$pdp_cc_top_stores_list: $black;
+$pdp_cc_top_stores_list_name: $black;
+$pdp_cc_other_stores: $nb-red;
+$pdp_all_stores_modal_border: $black;
+$pdp_all_stores_modal_close_icon: $white;
+$pdp_all_stores_modal_close_bg: $black;
+$pdp_all_stores_modal_list_name: $black;
 
-// Product Add to cart form.
-$pdp_sizeguide_link: $nb-red;
 
 // Accordion
 $accordion_title: $black;
 $accordion_title_icon: $black;
+$accordion_sub_title: $black;
+
+// Product Add to cart form.
+$pdp_sizeguide_link: $nb-red;
 
 // Express Delivery
 $sameday-express-delivery-drawer-btn: $primary_btn_bg;
@@ -264,13 +291,14 @@ $algolia_search_input_bg: $gray2;
 $algolia-search-icon: $black;
 $alg_search_bg: $gray2;
 $alg_search_mobile_bg: $white;
+$algolia-suggestion-text: $black;
 
 // plp add to cart
 $plp-primary-cta-hover-bg: rgba(207, 10, 44, 0.9);
 $plp-secondary-cta-hover-bg: rgba(207, 10, 44, 0.1);
 
 //SPC
-$spc-order-summary-totals-bg: $light-gray;
+$spc-order-summary-totals-bg: $white;
 $spc-promo-code-border: $gray;
 $spc_promo_code_block_mob_bg: $light-gray;
 $spc-promo-code-input-text: $ada-gray;
@@ -279,6 +307,8 @@ $spc_cart_item_border_color: $gray;
 $spc-product-attributes: $ada-gray;
 $spc-select-border: $gray;
 $spc-cart-background: $white;
+$spc-cart-promo-code-submit-enabled: $nb-red;
+$spc-promo-code-bg: $light-gray;
 
 // Checkout steps
 $cko-steps-active-bg: $nb-red;
@@ -291,6 +321,7 @@ $checkout_section_titles: $black;
 $checkout_guest_button_border: $nb-red;
 $checkout_guest_button_txt: $nb-red;
 $checkout_header_border-bottom : $gray;
+$checkout_footer_border-top: $black;
 
 // Checkout Login page.
 $checkout_login_submit_button_background: $nb-red;
@@ -317,6 +348,10 @@ $spc-cnc-store-input-search-icon: $ada-gray;
 $spc-order-summary-product-area-bg: $white;
 $spc-order-summary-totals-bg: $white;
 $user_pwd_unmask: $black;
+$spc-checkout-title-bg: $white;
+$spc-checkout-product-content-bg: $white;
+$spc-checkout-section-border: $gainsboro;
+$spc-checkout-product-light-bg: $light-gray-f7-alpha-5;
 
 //Wishlist
 $wishlist-header-notification-border: $nb-red;
@@ -325,6 +360,13 @@ $wishlist-button-register-txt: $nb-red;
 $wishlist-button-bg-hover: $nb-red;
 $wishlist-oos: $black;
 $wishlist-button-bg: $nb-red;
+$wishlist-button-bg-hover: $nb-red;
+$wishlist-header-notification-border: $nb-red;
+$wishlist-header-notification-span: $nb-black;
+$wishlist-button-border: $nb-red;
+$wishlist-button-register-txt: $nb-red;
+$wishlist-basket-button-border: $nb-red;
+$wishlist-secondary-text: $nb-red;
 
 //eGift
 $advanced-page-banner-bg: $light-gray;
@@ -346,10 +388,21 @@ $minicart_notification_border: $nb-red;
 $minicart_notification_text: $nb-red;
 $minicart_notification_btn_bg: $nb-red;
 $primary_minicart_quantity_bg: $nb-red;
+$minicart_notification_bg: $white;
+$minicart_notification_shadow: $black-alpha-25;
 
 // Checkout confirmation.
 $progress-tracker-bg: $white;
 $spc-order-summary-text: $black;
+
+// Basket top promotions.
+$basket_fixed_percentage_inactive_header_promo_bg: $nb-red;
+$basket_fixed_percentage_active_header_promo_txt: $nb-red;
+$basket_free_delivery_active_header_promo_txt: $nb-red;
+$basket_fixed_percentage_threshold_reached_bg: $nb-red;
+$basket_dynamic_promotion_fixed_percentage_discount_order_text: $white;
+$basket_free_delivery_inactive_header_promo_bg: $nb-red;
+$basket_available_code: $nb-red;
 
 // Online returns
 $online-return-eligibility-message-bg: $black;
@@ -370,3 +423,17 @@ $online-return-status-green-label: $nb-green;
 $online-return-cancel-button-border: $nb-red;
 $online-return-order-detail-border: $gray;
 $online-return-request-section-border: $gainsboro;
+
+// Block Alshaya ACM customer .block-alshaya-acm-customer
+$block_acm_customer_txt: $primary_link;
+
+// Order detail, recent orders, order list page.
+$order_detail_td_light_content: $ada-gray;
+$order-detail_td_dark_content: $black;
+
+// C-menu primary i:e Mobile and tablet header menu links.
+$header_c_menu_text: $black;
+$header_mobile_menu_arrow: $black;
+
+// Language Switcher
+$lang_switch_firsttime_bg: $nb-red;

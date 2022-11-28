@@ -154,7 +154,9 @@ window.commerceBackend.setCartDataInStorage = (data) => Drupal.addItemInLocalSto
  */
 window.commerceBackend.removeCartDataFromStorage = () => {
   Drupal.removeItemFromLocalStorage('cart_data');
-  Drupal.removeItemFromLocalStorage('add_to_cart_skus');
+
+  // Remove Add to cart PDP count.
+  Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method

@@ -54,6 +54,7 @@
     h1 {
       margin-top: 0;
       margin-bottom: rem(8);
+      width: 100%;
 
       @include breakpoint($only-mobile) {
         margin-top: 0;
@@ -85,8 +86,7 @@
   margin-top: rem(38);
 
   .c-accordion-delivery-options {
-    padding-top: rem(18);
-    padding-bottom: rem(12);
+    padding: rem(18) rem(16) rem(12);
     border-top: rem(1) solid $pdp_title_section_border;
 
     .ui-accordion-header {
@@ -101,20 +101,15 @@
       }
     }
   }
+
+  @include breakpoint($only-mobile) {
+    margin-top: 0;
+  }
 }
 
 #pdp-store-click-collect-list {
   .delivery-options-wrapper {
     margin-top: rem(-1);
-  }
-}
-
-#lightSlider {
-  .slick-slide {
-    @include breakpoint($desktop) {
-      width: rem(86) !important;
-      height: rem(86) !important;
-    }
   }
 }
 
@@ -241,40 +236,46 @@
   }
 
   .form-item-configurables-size {
+    .select2Option {
+      h4 {
+        span:first-child {
+          font-family: $alshaya-thin;
+        }
+
+        .selected-text {
+          display: none;
+        }
+      }
+
+      .select-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: rem(13) rem(14);
+        column-gap: rem(13);
+        row-gap: rem(10);
+
+        li {
+          span,
+          a {
+            width: rem(84);
+            height: rem(44);
+            line-height: rem(16);
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      select.form-select.form-item-configurable-select {
+        height: rem(53);
+      }
+    }
+
     .group-wrapper {
       margin-top: rem(20);
 
       .group {
-        .select2Option {
-          h4 {
-            span:first-child {
-              font-family: $alshaya-thin;
-            }
-
-            .selected-text {
-              display: none;
-            }
-          }
-
-          .select-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: rem(13) rem(14);
-            column-gap: rem(13);
-            row-gap: rem(10);
-
-            li {
-              span,
-              a {
-                width: rem(84);
-                height: rem(44);
-                line-height: rem(16);
-                margin: 0;
-              }
-            }
-          }
-        }
-
         @include breakpoint($only-mobile) {
           select.form-select.form-item-configurable-select {
             height: rem(53);
@@ -302,6 +303,32 @@
         @include breakpoint($only-mobile) {
           width: rem(96);
           height: rem(36);
+        }
+      }
+    }
+
+    &:not(.form-type-configurable-select-group) {
+      h4.list-title {
+        margin-top: rem(12);
+
+        @include breakpoint($only-tablet) {
+          margin-top: rem(8);
+        }
+      }
+
+      select.form-select.form-item-configurable-select {
+        margin-top: rem(12);
+      }
+
+      .select-buttons {
+        margin-top: rem(14);
+      }
+
+      &::after {
+        @include breakpoint($only-mobile) {
+          top: 50%;
+          transform: translateY(-35%);
+          display: inline;
         }
       }
     }
@@ -439,7 +466,8 @@
   .read-more-description-link-mobile {
     line-height: rem(18);
     text-decoration: underline;
-    margin-top: rem(8);
+    margin-top: rem(12);
+    font-weight: normal;
   }
 
   @include breakpoint($only-mobile) {
@@ -478,4 +506,64 @@
       width: 32%;
     }
   }
+}
+
+@include breakpoint($only-mobile) {
+  .content--product-details {
+    margin-top: rem(40);
+
+    .product-details {
+      padding: rem(18) rem(16) rem(12);
+      border-top: rem(1) solid $pdp_title_section_border;
+
+      .ui-accordion-header {
+        padding-right: 0;
+        padding-left: 0;
+        margin-top: 0;
+
+        &::after {
+          position: absolute;
+          top: 50%;
+          transform: translate(0, -50%);
+          #{$right}: rem(6);
+        }
+      }
+
+      .ui-accordion-content {
+        font-size: rem(14);
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+  }
+}
+
+.store-finder-form-wrapper {
+  .search-store {
+    input[type=text] {
+      border-color: $tertiary-border;
+    }
+  }
+}
+
+.click-collect-top-stores {
+  ul {
+    li {
+      border-color: $tertiary-border;
+    }
+  }
+}
+
+.click-collect-all-stores {
+  &.inline-modal-wrapper {
+    ul {
+      li {
+        border-color: $tertiary-border;
+      }
+    }
+  }
+}
+
+.other-stores-link {
+  border-color: $tertiary-border;
 }
