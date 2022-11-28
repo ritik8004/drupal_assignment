@@ -5,6 +5,8 @@
  * Primary module hooks for Alshaya Matchback module.
  */
 
+use Drupal\acq_commerce\SKUInterface;
+
 /**
  * Implements hook_alshaya_acm_product_recommended_products_data_alter().
  */
@@ -17,4 +19,15 @@ function alshaya_matchback_alshaya_acm_product_recommended_products_data_alter(a
   }
 
   $data['data']['section_title'] = t('Frequently Bought Together', [], ['context' => 'alshaya_static_text|pdp_matchback_title']);
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_matchback_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  // Return if the feature is not enabled and applicable to display mode.
+  if ($context !== 'matchback') {
+    return;
+  }
+  $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback_gtm';
 }

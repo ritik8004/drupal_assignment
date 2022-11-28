@@ -1,0 +1,6 @@
+alshaya_matchback_gtm:
+  js:
+    assets/js/alshaya_matchback.gtm.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
