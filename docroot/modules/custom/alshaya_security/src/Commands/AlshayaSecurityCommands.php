@@ -5,6 +5,7 @@ namespace Drupal\alshaya_security\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Drupal\alshaya_security\Service\DrushUserAuth;
 use Drupal\Core\Logger\LoggerChannelTrait;
+use Drupal\Core\Site\Settings;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
@@ -19,6 +20,9 @@ class AlshayaSecurityCommands extends DrushCommands {
 
   /**
    * Drush commands to Authenticate.
+   *
+   * We do it only for some commands which are critical and not supposed to
+   * be used in scripts.
    */
   public const AUTHENTICATE_COMMANDS = [
     'alshaya_acm:sync-products',
@@ -82,7 +86,11 @@ class AlshayaSecurityCommands extends DrushCommands {
       '@user' => shell_exec('who -m'),
     ]);
 
-    if (in_array($command, self::AUTHENTICATE_COMMANDS)) {
+    // Authenticate drush command on if enabled.
+    // We do it only for some commands which are critical and not supposed to
+    // be used in scripts.
+    if (Settings::get('alshaya_drush_authenticate', FALSE)
+      &&  in_array($command, self::AUTHENTICATE_COMMANDS)) {
       $email = $this->io()->ask('Please enter your mail');
       $password = $this->io()->askHidden('Please enter your password');
 
