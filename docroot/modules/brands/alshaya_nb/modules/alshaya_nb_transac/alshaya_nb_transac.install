@@ -8,7 +8,9 @@
 /**
  * Implements hook_update_N().
  *
+ * Add product details string which is used in description.
  * Hide grid toggle in plp and srp.
+ * Add PDP gallery thumbnail image slider settings.
  */
 function alshaya_nb_transac_update_9401() {
   // Add translations.
