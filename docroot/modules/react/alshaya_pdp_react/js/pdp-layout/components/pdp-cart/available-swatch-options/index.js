@@ -12,7 +12,7 @@ const AvailableSwatchOptions = (props) => {
     swatchType,
   } = props;
 
-  const swatchClassName = (nextValues.indexOf(attr) !== -1)
+  const swatchClassName = (!hasValue(nextValues) || (nextValues.indexOf(attr) !== -1))
     ? 'in-active'
     : 'in-active disabled';
 
@@ -42,9 +42,9 @@ const AvailableSwatchOptions = (props) => {
     );
   }
 
-  const backgroundStyle = (swatchType === 'RGB'
-    ? `backgroundColor: ${value}`
-    : `backgroundImage: url(${value})`);
+  const backgroundStyle = (swatchType === 'RGB')
+    ? { backgroundColor: value }
+    : { backgroundImage: Drupal.url(value) };
 
   return (
     <li key={attr} id={`value${attr}`} className={swatchClassName} value={attr} data-attribute-label={label}>
