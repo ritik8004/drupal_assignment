@@ -512,9 +512,9 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     const detail = e.detail;
     // Check if the event was triggered from PDP page.
     if (Drupal.hasValue(detail.context) && detail.context === 'pdp'
-      && Drupal.hasValue(detail.sku)
+      && Drupal.hasValue(detail.productData.variant)
     ) {
-      alshayaSpcRedirectToCart(detail.sku);
+      alshayaSpcRedirectToCart(detail.productData.variant);
     }
   });
 
