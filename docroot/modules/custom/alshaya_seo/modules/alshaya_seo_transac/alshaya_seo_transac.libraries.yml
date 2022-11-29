@@ -136,3 +136,10 @@ gtm_hello_member:
   dependencies:
     - alshaya_seo_transac/gtm
     - core/drupal
+
+gtm_aura:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.aura_analytics.js: {}
+  dependencies:
+    - core/drupal
