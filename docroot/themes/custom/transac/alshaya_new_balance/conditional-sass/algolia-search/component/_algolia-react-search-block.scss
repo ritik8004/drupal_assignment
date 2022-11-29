@@ -55,6 +55,12 @@
     }
   }
 
+  .algolia-search-cleartext-icon {
+    background: url('#{$nb_theme_img_directory_path}/icons/ic-clear.svg') no-repeat;
+    #{$right}: rem(21);
+    top: 44%;
+  }
+
   .react-autosuggest__input {
     border-radius: 0;
     border-width: rem(1);
@@ -215,6 +221,35 @@
       &.focused {
         .react-autosuggest__input {
           padding-#{$left}: rem(48) !important; // CORE override.
+        }
+      }
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete {
+    #alshaya-algolia-autocomplete {
+      .react-autosuggest__container {
+        &--open {
+          #top-results {
+            padding: 0 rem(12) rem(12);
+
+            .top-suggestions-title {
+              padding-#{$left}: 0;
+            }
+
+            ul.ais-Hits-list {
+              grid-gap: rem(34) rem(10);
+
+              li.ais-Hits-item .c-products__item {
+                text-align: $left;
+                margin-bottom: 0;
+
+                .field--name-name {
+                  padding: 0;
+                }
+              }
+            }
+          }
         }
       }
     }

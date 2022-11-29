@@ -46,6 +46,10 @@
       @include breakpoint($desktop) {
         width: 41%;
       }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
     }
   }
 }
