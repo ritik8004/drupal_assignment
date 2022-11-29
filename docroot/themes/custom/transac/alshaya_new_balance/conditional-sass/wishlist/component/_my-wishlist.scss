@@ -27,8 +27,9 @@
   .empty-message {
     .actions {
       a {
-        padding: 0;
-        line-height: rem(40);
+        padding: rem(20) 0;
+        border-radius: unset;
+        height: auto;
 
         &:hover {
           background-color: $wishlist-button-bg;
