@@ -24,6 +24,7 @@ import {
   removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class AddressForm extends React.Component {
   isComponentMounted = true;
@@ -80,8 +81,13 @@ export default class AddressForm extends React.Component {
       errorSuccessMessage: message,
       dismissButton: showDismissButton,
     });
+    const { isEmbeddedForm } = this.props;
+    let errorClass = '.spc-address-form-sidebar';
+    if (!hasValue(isEmbeddedForm)) {
+      errorClass += ' .spc-checkout-section-title';
+    }
     // Scroll to error.
-    smoothScrollTo('.spc-address-form-sidebar .spc-checkout-section-title');
+    smoothScrollTo(errorClass);
   };
 
   hidePopUpError = (e) => {
@@ -198,6 +204,7 @@ export default class AddressForm extends React.Component {
       // Default value will be always be available to form.
       fillDefaultValue,
       enabledFieldsWithMessages,
+      isEmbeddedForm,
     } = this.props;
 
     const {
@@ -244,10 +251,15 @@ export default class AddressForm extends React.Component {
     return (
       <div className="spc-address-form">
         <div className="spc-address-form-sidebar">
-          <SectionTitle>{headingDeliveryText}</SectionTitle>
-          <a className="close" onClick={() => closeModal()}>
-            &times;
-          </a>
+          {!hasValue(isEmbeddedForm)
+          && (
+            <>
+              <SectionTitle>{headingDeliveryText}</SectionTitle>
+              <a className="close" onClick={() => closeModal()}>
+                &times;
+              </a>
+            </>
+          )}
           <div className="spc-address-form-wrapper">
             {errorSuccessMessage !== null
               && (
