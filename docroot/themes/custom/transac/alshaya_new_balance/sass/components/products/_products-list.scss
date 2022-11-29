@@ -259,6 +259,18 @@
           border: rem(1) solid $plp-swatch-border;
         }
       }
+
+      html[lang=ar] & {
+        .swatch-slider {
+          transform: scaleX(-1);
+
+          .swatch-image {
+            img {
+              transform: scaleX(-1);
+            }
+          }
+        }
+      }
     }
 
     .slick {
