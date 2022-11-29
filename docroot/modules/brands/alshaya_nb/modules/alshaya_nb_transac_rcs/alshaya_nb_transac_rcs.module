@@ -73,5 +73,6 @@ function alshaya_nb_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$f
     'weight_text',
     'uk_size',
     'european_size',
+    'article_number',
   );
 }
