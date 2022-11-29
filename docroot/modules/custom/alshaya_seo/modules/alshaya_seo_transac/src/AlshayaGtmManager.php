@@ -386,14 +386,15 @@ class AlshayaGtmManager {
     $skuId = $this->skuManager->getSkuForNode($product);
     $product_terms = $this->fetchProductCategories($product);
     $department_attributes = [];
+    $attributes['gtm-category'] = '';
     // Fetch department attributes only if product terms exists.
     if ($product_terms) {
       $department_attributes = $this->fetchDepartmentAttributes($product_terms);
+      $attributes['gtm-category'] = implode('/', $product_terms);
     }
     $skuAttributes = $this->fetchSkuAtttributes($skuId, $child);
 
     $attributes['gtm-type'] = 'gtm-product-link';
-    $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
     // Proceed only if we have some data in department attributes.
@@ -854,7 +855,8 @@ class AlshayaGtmManager {
         if ($productNode instanceof NodeInterface) {
           // Get product media.
           $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
-          $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
+          $product_terms = $this->fetchProductCategories($productNode);
+          $attributes[$skuId]['gtm-category'] = !empty($product_terms) ? implode('/', $product_terms) : '';
           $attributes[$skuId]['gtm-main-sku'] = $this->skuManager->getSkuForNode($productNode);
         }
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
@@ -1016,7 +1018,8 @@ class AlshayaGtmManager {
       }
       $productNode = $this->skuManager->getDisplayNode($item['sku']);
       if ($productNode instanceof NodeInterface) {
-        $product['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
+        $product_terms = $this->fetchProductCategories($productNode);
+        $product['gtm-category'] = !empty($product_terms) ? implode('/', $product_terms) : '';
         $product['gtm-main-sku'] = $this->skuManager->getSkuForNode($productNode);
       }
       $productExtras = [
