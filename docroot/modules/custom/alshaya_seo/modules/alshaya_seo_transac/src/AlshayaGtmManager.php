@@ -1239,8 +1239,9 @@ class AlshayaGtmManager {
             $page_dl_attributes['productOldPrice'] = '';
           }
         }
-
-        $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        if (!empty($product_terms)) {
+          $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        }
         break;
 
       case 'product listing page':
@@ -1262,8 +1263,9 @@ class AlshayaGtmManager {
             /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
             $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
           }
-
-          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+          if (!empty($terms)) {
+            $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+          }
         }
         break;
 
