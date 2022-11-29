@@ -7,8 +7,19 @@ export const Swatch = ({ swatch, url }) => {
     selectedImage = swatch.url;
   }
 
+  const handleSwatchClick = async (e) => {
+    e.preventDefault();
+    const productData = {
+      sku: swatch.child_sku_code,
+      gtm_name: swatch.display_label,
+      color: swatch.rgb_color,
+    };
+    Drupal.alshayaSeoGtmPushSwatchClick(productData);
+    window.location.href = selectedImage;
+  };
+
   return (
-    <a href={selectedImage}>
+    <a href="#" onClick={(e) => handleSwatchClick(e)}>
       <span className="swatch-block swatch-image">
         {swatch.product_image_url
           ? <ImageElement data-sku-image={swatch.product_image_url} src={swatch.image_url} loading="lazy" />
