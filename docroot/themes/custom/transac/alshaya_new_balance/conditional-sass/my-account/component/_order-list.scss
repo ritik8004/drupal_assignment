@@ -7,6 +7,9 @@
 
   .no--orders + a {
     line-height: rem(18);
+    font-size: rem(14);
+    padding: rem(19) 0;
+    font-family: $alshaya-bold;
   }
 }
 
