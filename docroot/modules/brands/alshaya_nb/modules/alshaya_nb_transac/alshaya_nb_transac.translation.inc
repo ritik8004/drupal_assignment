@@ -34,10 +34,50 @@ function _alshaya_nb_transac_translations() {
       'size guide' => [
         'ar' => 'دليل المقاسات',
       ],
-    ],
-    'v2' => [
       'Product Details' => [
         'ar' => 'تفاصيل المنتج',
+      ],
+      'Style' => [
+        'ar' => 'الستايل',
+      ],
+      'Meets New Balance\'s green leaf standard' => [
+        'ar' => 'يلبي معايير غرين ليف من نيو بالانس',
+      ],
+      'Color' => [
+        'ar' => 'اللون',
+      ],
+      'Gender' => [
+        'ar' => 'الجنس',
+      ],
+      'Line' => [
+        'ar' => 'التشكيلة',
+      ],
+      'Fit' => [
+        'ar' => 'القصة',
+      ],
+      'Sustainability' => [
+        'ar' => 'الاستدامة',
+      ],
+      'Width Description' => [
+        'ar' => 'مواصفات العرض',
+      ],
+      'Product type' => [
+        'ar' => 'نوع المنتج',
+      ],
+      'Closure type' => [
+        'ar' => 'نوع إبزيم الإغلاق',
+      ],
+      'Green leaf' => [
+        'ar' => 'غرين ليف',
+      ],
+      'Primary Material' => [
+        'ar' => 'المواد الأساسية',
+      ],
+      'Technologies' => [
+        'ar' => 'تقنيات التصميم',
+      ],
+      'Weight' => [
+        'ar' => 'الوزن',
       ],
     ],
   ];
