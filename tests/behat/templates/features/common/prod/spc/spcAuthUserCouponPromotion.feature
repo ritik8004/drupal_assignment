@@ -19,7 +19,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".content__title_wrapper .promotions" should exist
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait for the page to load
     And the element ".promotion-label" should exist
@@ -31,7 +31,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait 10 seconds
     Then the promo code should be applied
     And the element ".totals .discount-total" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
@@ -57,7 +57,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    Then the element ".checkout-link.submit" should exist
 
   @language @dynamic
   Scenario: As an Authenticated User, I should be able to add coupon promotions & get discount direct on Cart page
@@ -74,7 +74,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".content__title_wrapper .promotions" should exist
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait for the page to load
     And the element ".promotion-label" should exist
@@ -86,7 +86,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait 10 seconds
     Then the promo code should be applied
     And the element ".totals .discount-total" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
@@ -112,7 +112,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    Then the element ".checkout-link.submit" should exist
 
 
   @mobile @dynamic
@@ -127,7 +127,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".content__title_wrapper .promotions" should exist
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait for the page to load
     And the element ".promotion-label" should exist
@@ -139,7 +139,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I wait 10 seconds
     Then the promo code should be applied
     And the element ".totals .discount-total" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
@@ -165,4 +165,4 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    Then the element ".checkout-link.submit" should exist
