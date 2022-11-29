@@ -9,23 +9,16 @@
  * Implements hook_update_N().
  *
  * Add product details string which is used in description.
- */
-function alshaya_nb_transac_update_9402() {
-  // Add translations.
-  \Drupal::moduleHandler()
-    ->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
-  $translations = _alshaya_nb_transac_get_translations('v2');
-  if ($translations) {
-    alshaya_i18n_save_translations($translations);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Hide grid toggle in plp and srp.
+ * Add PDP gallery thumbnail image slider settings.
  */
 function alshaya_nb_transac_update_9401() {
+  // Add translations.
+  \Drupal::moduleHandler()->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations();
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
   // Hide grid toggle option on listing pages.
   \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
     ->set('hide_grid_toggle', TRUE)
