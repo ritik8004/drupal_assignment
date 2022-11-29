@@ -24,7 +24,6 @@
         font-size: rem(14);
         line-height: initial;
         padding-#{$right}: rem(32);
-        padding-#{$left}: rem(12);
 
         &::after {
           font-size: rem(32);
@@ -51,15 +50,6 @@
     li {
       a {
         font-size: rem(14);
-      }
-    }
-  }
-
-  .block-facet-blockcategory-facet-plp,
-  .block-facet-blockcategory-facet-search {
-    .c-accordion__title {
-      &.c-collapse__title {
-        text-transform: uppercase;
       }
     }
   }
