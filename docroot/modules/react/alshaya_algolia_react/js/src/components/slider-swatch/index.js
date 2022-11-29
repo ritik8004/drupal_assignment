@@ -10,7 +10,6 @@ const SliderSwatch = ({ swatches, url }) => {
   }
 
   const totalNoOfSwatches = swatches.length;
-  const { currentLanguage } = drupalSettings.path;
 
   // Swatch display slides limit, defaults to desktop - 4.
   // Mobile - 2; Tablets - 3.
@@ -23,7 +22,6 @@ const SliderSwatch = ({ swatches, url }) => {
     infinite: false,
     slidesToShow: limit,
     slidesToScroll: limit,
-    rtl: (currentLanguage === 'ar'),
   };
 
   let swatchContainer = null;
