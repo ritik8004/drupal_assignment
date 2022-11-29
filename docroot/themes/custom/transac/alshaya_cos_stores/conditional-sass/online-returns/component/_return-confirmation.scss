@@ -45,16 +45,6 @@
       .title {
         color: $online-return-dark-text;
       }
-
-      .print,
-      .packitem,
-      .refund {
-        margin-#{$right}: rem(16);
-
-        @include breakpoint($tablet) {
-          margin-#{$right}: rem(28);
-        }
-      }
     }
   }
 

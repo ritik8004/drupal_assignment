@@ -43,6 +43,12 @@
         margin-#{$right}: rem(20);
       }
     }
+
+    .block-content {
+      .actions {
+        padding-top: rem(24);
+      }
+    }
   }
 
   @include breakpoint($tablet) {
@@ -87,7 +93,7 @@
     }
 
     .block-content {
-      background: $spc-checkout-product-content-bg;
+      background: $spc-order-summary-totals-bg;
     }
   }
 }

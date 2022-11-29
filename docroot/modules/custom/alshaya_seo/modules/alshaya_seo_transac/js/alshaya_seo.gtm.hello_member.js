@@ -21,8 +21,7 @@
     var voucherClickData = {
       event: 'hellomember',
       eventCategory: "memberOffer",
-      eventAction: "discountVoucher",
-      eventLabel: "voucher_link",
+      eventAction: "discountVoucher link click",
     }
     // Proceed only if dataLayer exists.
     if (dataLayer) {

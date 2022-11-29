@@ -44,6 +44,10 @@ window.commerceBackend.getCartId = () => {
   if (hasValue(resumeCartId)) {
     Drupal.removeItemFromLocalStorage('cart_data');
     Drupal.addItemInLocalStorage('cart_id', resumeCartId);
+
+    // Remove Add to cart PDP count.
+    Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
+
     Cookies.remove('resume_cart_id');
   }
 
@@ -152,7 +156,9 @@ window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   StaticStorage.clear();
 
   Drupal.removeItemFromLocalStorage('cart_data');
-  Drupal.removeItemFromLocalStorage('add_to_cart_skus');
+
+  // Remove Add to cart PDP count.
+  Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method

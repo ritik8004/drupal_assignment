@@ -9,7 +9,14 @@
  * Implements hook_install().
  */
 function alshaya_matchback_install() {
-  if (!\Drupal::moduleHandler()->moduleExists('alshaya_add_to_bag')) {
-    \Drupal::service('module_installer')->install(['alshaya_add_to_bag']);
-  }
+  $strings = [
+    'Frequently Bought Together' => [
+      'en' => 'Frequently Bought Together',
+      // @todo Get the Arabic translation.
+      'ar' => 'Frequently Bought Together AR',
+      'context' => 'alshaya_static_text|pdp_matchback_title',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

@@ -20,7 +20,7 @@
     var productData = {
       event: gtmEvent,
       ecommerce: {
-        currencyCode: drupalSettings.alshaya_spc.currency_config.currency_code,
+        currencyCode: drupalSettings.gtm.currency,
         [action]: {
           products: []
         }

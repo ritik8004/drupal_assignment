@@ -29,3 +29,6 @@ alshaya_wishlist.settings:
     disable_quickview_wishlist_page:
       type: boolean
       label: 'Switch to enable or disable quick view drawer on wishlist pages.'
+    show_wishlist_on_matchback:
+      type: boolean
+      label: Show Wishlist icon on matchback

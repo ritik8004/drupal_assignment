@@ -124,10 +124,6 @@
   @include breakpoint($only-mobile) {
     padding-#{$left}: 0;
     border: rem(1) solid $tertiary-border;
-
-    &::before {
-      #{$right}: 0;
-    }
   }
 
   @include breakpoint($tablet) {
@@ -197,6 +193,7 @@
     justify-content: flex-start;
     padding: 0;
     background: none;
+    margin-bottom: rem(20);
 
     .filter-fixed-top & {
       top: rem(6);

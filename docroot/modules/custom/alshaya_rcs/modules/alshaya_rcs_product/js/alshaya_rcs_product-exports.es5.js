@@ -344,7 +344,7 @@ exports.render = function render(
             // Continue with the loop.
             return true;
           }
-          weight = Drupal.hasValue(variant.product.weight_text) ? variant.product.weight_text : '';
+          weight = Drupal.hasValue(variant.product.weight_text) && Drupal.hasValue(variant.product.weight)? variant.product.weight_text : '';
           variant.product.media.forEach(function setEntityVariantThumbnails(variantMedia, i) {
             mediaCollection.thumbnails = mediaCollection.thumbnails.concat(setMediaCollection(variantMedia, entity, i, length));
           });

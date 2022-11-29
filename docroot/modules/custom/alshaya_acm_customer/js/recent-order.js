@@ -26,7 +26,7 @@
 
         $(listOrder).hide();
 
-        $(parentOrder).on('click', function () {
+        $(parentOrder).once('expand-row').on('click', function () {
           var $ub = $(this).nextAll().stop(true, true).fadeToggle('slow');
           listOrder.not($ub).hide();
           $ub.parent().toggleClass('open--accordion');

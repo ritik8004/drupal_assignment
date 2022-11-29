@@ -39,17 +39,38 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
   $ge_store_code = $settings[$language];
   $config = \Drupal::config('alshaya_xb.settings');
   $ge_js_src = $config->get('globale_js_url') ?? '';
+  // Used to pass the page type to associateCartToCustomer().
+  $page_type = '';
+  if ($route_name === 'alshaya_spc.checkout') {
+    $page_type = 'checkout';
+  }
 
   // Dynamic js to be added on every page.
+  // We need to wait for associateCartToCustomer() to be available
+  // to be called before showing the checkout page, so we will delay
+  // the call until the page is loaded.
   $js = "
      var geStoreCode = '$ge_store_code';
      var geStoreCodeInstance = document.location.hostname;
      (function () {
-       var s = document.createElement('script');
-       s.type = 'text/javascript';
-       s.async = true;
-       s.src = '$ge_js_src';
-       document.getElementsByTagName('head')[0].appendChild(s);
+       function addInlineScripts() {
+         var s = document.createElement('script');
+         s.type = 'text/javascript';
+         s.async = true;
+         s.src = '$ge_js_src';
+         document.getElementsByTagName('head')[0].appendChild(s);
+       };
+
+       if ('$page_type' !== 'checkout') {
+         addInlineScripts();
+         return;
+       }
+
+       window.addEventListener('DOMContentLoaded', (event) => {
+         window.commerceBackend.associateCartToCustomer('checkout').then((response) => {
+           addInlineScripts();
+         });
+       });
      })();";
 
   // Add inline script to the page bottom.

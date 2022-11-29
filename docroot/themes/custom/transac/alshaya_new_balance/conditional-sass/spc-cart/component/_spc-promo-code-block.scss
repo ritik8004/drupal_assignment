@@ -8,7 +8,6 @@
     padding: rem(34);
 
     @include breakpoint($only-mobile) {
-      background-color: $spc-order-summary-totals-bg;
       padding-#{$left}: rem(16);
       padding-#{$right}: rem(28);
     }
@@ -47,6 +46,18 @@
 
     .totals {
       background: $checkout-login-promo-bg;
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .spc-order-summary-block {
+    .block-content {
+      background: none;
+
+      .totals {
+        background: none;
+      }
     }
   }
 }
