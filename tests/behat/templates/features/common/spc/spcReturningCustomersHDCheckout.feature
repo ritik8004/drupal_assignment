@@ -3,7 +3,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
 
   Background:
     Given I am on "{spc_product_listing_page}"
-    And I wait 10 seconds
+    And I wait for element "#block-page-title"
 
   @cc @hd @checkout_com
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com)
@@ -13,10 +13,10 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I fill in "edit-name" with "{spc_returning_user_email}"
@@ -37,7 +37,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 10 seconds
     And I wait for the page to load
     And I should save the order details in the file
@@ -72,10 +72,10 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I fill in "edit-name" with "{spc_returning_user_email}"
@@ -97,7 +97,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 10 seconds
     And I wait for the page to load
     And I should save the order details in the file
@@ -132,10 +132,10 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I fill in "edit-name" with "{spc_returning_user_email}"
@@ -156,7 +156,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 10 seconds
     And I wait for the page to load
     And I should save the order details in the file

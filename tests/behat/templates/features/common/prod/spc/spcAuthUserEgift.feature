@@ -41,11 +41,11 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/en/egift-card/purchase"
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then I should see an ".spc-content .spc-cart-items .egift-product-title" element
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I should see an ".redeem-egift-card" element
@@ -59,7 +59,7 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I add the billing address on checkout page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -127,7 +127,7 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I add the billing address on checkout page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -173,11 +173,11 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "ar/egift-card/purchase"
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then I should see an ".spc-content .spc-cart-items .egift-product-title" element
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I should see an ".redeem-egift-card" element
@@ -191,7 +191,7 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I add the billing address on checkout page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -269,7 +269,7 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I add the billing address on checkout page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load

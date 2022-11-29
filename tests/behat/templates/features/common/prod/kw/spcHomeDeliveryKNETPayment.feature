@@ -14,10 +14,10 @@ Feature: SPC Checkout Home Delivery of KNET payment for Guest User
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 50 seconds
     And I wait for the page to load
     Then I should be on "/cart/login" page
@@ -31,7 +31,7 @@ Feature: SPC Checkout Home Delivery of KNET payment for Guest User
     And I wait for AJAX to finish
     And I select the Knet payment method
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I select "Eidity [KNET]" from dropdown ".paymentselect"
@@ -56,10 +56,10 @@ Feature: SPC Checkout Home Delivery of KNET payment for Guest User
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 50 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
@@ -73,7 +73,7 @@ Feature: SPC Checkout Home Delivery of KNET payment for Guest User
     And I wait for AJAX to finish
     And I select the Knet payment method
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
@@ -97,10 +97,10 @@ Feature: SPC Checkout Home Delivery of KNET payment for Guest User
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 50 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
@@ -114,7 +114,7 @@ Feature: SPC Checkout Home Delivery of KNET payment for Guest User
     And I wait for AJAX to finish
     And I select the Knet payment method
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
