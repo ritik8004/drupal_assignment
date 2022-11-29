@@ -10,11 +10,11 @@
  *
  * Add product details string which is used in description.
  */
-function alshaya_nb_transac_update_9402() {
+function alshaya_nb_transac_update_9403() {
   // Add translations.
   \Drupal::moduleHandler()
     ->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
-  $translations = _alshaya_nb_transac_get_translations('v2');
+  $translations = _alshaya_nb_transac_get_translations('v3');
   if ($translations) {
     alshaya_i18n_save_translations($translations);
   }
