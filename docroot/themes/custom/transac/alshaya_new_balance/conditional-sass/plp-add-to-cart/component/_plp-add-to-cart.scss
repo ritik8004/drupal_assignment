@@ -23,12 +23,6 @@
     margin-bottom: 0;
   }
 
-  .attribute-wrapper_size {
-    & + .alshaya-select-wrapper {
-      width: 100%;
-    }
-  }
-
   .size-guide-link {
     html[lang=ar] & {
       line-height: 1;
