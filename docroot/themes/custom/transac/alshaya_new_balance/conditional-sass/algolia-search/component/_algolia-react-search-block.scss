@@ -55,6 +55,12 @@
     }
   }
 
+  .algolia-search-cleartext-icon {
+    background: url('#{$nb_theme_img_directory_path}/icons/ic-clear.svg') no-repeat;
+    #{$right}: rem(21);
+    top: 44%;
+  }
+
   .react-autosuggest__input {
     border-radius: 0;
     border-width: rem(1);
