@@ -7,6 +7,9 @@ export const Swatch = ({ swatch, url }) => {
     selectedImage = swatch.url;
   }
 
+  /**
+   * Push swatch gtm data on swatch click on plp.
+   */
   const handleSwatchClick = async (e) => {
     e.preventDefault();
     const productData = {
