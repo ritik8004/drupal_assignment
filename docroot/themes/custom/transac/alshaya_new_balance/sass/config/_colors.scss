@@ -77,6 +77,19 @@ $mm_l3_link_hover: $black;
 
 // Order detail, recent orders, order list page.
 $order_detail_td_light_content: $ada-gray;
+$order_detail_warm_white: $gray2;
+$order_detail_table_bg: $white;
+$order_detail_order_details_row: $light-gray;
+$order_detail_order_details_row_td_blend: $light-gray;
+$order_detail_order_summary_row_bg: $white;
+$order_detail_order_summary_row_td_blend: $light-gray;
+$order_detail_delivery_details_row_bg: $light-gray;
+$order_detail_delivery_details_row_border: $gray;
+$order_detail_delivery_details_row_content: $black;
+$order_detail_details_row_content: $ada-gray;
+
+// Order Print
+$order_print_dark_txt: $ada-gray;
 
 // Store Finder.
 $store-finder-border-hover: $nb-red;
