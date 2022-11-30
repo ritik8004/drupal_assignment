@@ -7,11 +7,14 @@ site.txt
 tests/apis/conductor_v2/settings.php
 tests/behat/local.yml
 tests/behat/templates
+tests/behat/screenshots
 *jenkins_home
 box/local.config.yml
 box/alshaya_acm*
 *.local
 local.blt.yml
+*.patch
+*package-lock.json
 
 # Ignore drupal core.
 docroot/core
