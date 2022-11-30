@@ -41,6 +41,12 @@ function _alshaya_nb_transac_translations() {
       ],
     ],
     'v3' => [
+      'Independent since 1906, we empower people through sport and craftsmanship to create positive change in communities around the world.' => [
+        'ar' => 'شركة مستقلة منذ عام 1906 لتمكين الجميع من خلال الرياضة والتصميم بحرفية، من أجل التغيير الإيجابي في المجتمعات حول العالم.',
+      ],
+      '© 2022 New Balance. All Rights Reserved' => [
+        'ar' => '© 2022 نيو بالانس. جميع الحقوق محفوظة.',
+      ],
       'Style' => [
         'ar' => 'الستايل',
       ],

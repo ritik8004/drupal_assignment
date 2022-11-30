@@ -8,7 +8,7 @@
 /**
  * Implements hook_update_N().
  *
- * Add translations for additional attributes..
+ * Add translations for additional attributes.
  */
 function alshaya_nb_transac_update_9403() {
   // Add translations.
