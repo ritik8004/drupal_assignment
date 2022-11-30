@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7686d9a931d4f522084d738867a0b99",
+    "content-hash": "f9c9ffcdbf6f2ad2e6797f93c66dd919",
     "packages": [
         {
             "name": "behat/mink",
@@ -264,12 +264,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "c6af896895475ca3bd9c00131eb563b5d78ace32"
+                "reference": "2f059c9172764ba1f1759b3679aca499b665330a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/c6af896895475ca3bd9c00131eb563b5d78ace32",
-                "reference": "c6af896895475ca3bd9c00131eb563b5d78ace32",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/2f059c9172764ba1f1759b3679aca499b665330a",
+                "reference": "2f059c9172764ba1f1759b3679aca499b665330a",
                 "shasum": ""
             },
             "require": {
@@ -287,6 +287,7 @@
             },
             "require-dev": {
                 "herrera-io/box": "~1.6.1",
+                "phpspec/prophecy": "^1.15",
                 "phpunit/phpunit": "^8.5 || ^9.0",
                 "symfony/process": "^4.4 || ^5.0 || ^6.0",
                 "vimeo/psalm": "^4.8"
@@ -341,9 +342,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Behat/Behat/issues",
-                "source": "https://github.com/Behat/Behat/tree/master"
+                "source": "https://github.com/Behat/Behat/tree/v3.12.0"
             },
-            "time": "2022-07-07T14:09:04+00:00"
+            "time": "2022-11-29T15:30:11+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -704,16 +705,16 @@
         },
         {
             "name": "bex/behat-screenshot",
-            "version": "dev-master",
+            "version": "dev-58-dispatch-event",
             "source": {
                 "type": "git",
-                "url": "https://github.com/elvetemedve/behat-screenshot.git",
-                "reference": "3df8d34224fd5f9307d31f133a25b58a39f5f709"
+                "url": "https://github.com/marcelovani/behat-screenshot.git",
+                "reference": "3fef9b4f3fb416107c7fc7292c23cec7ca826e3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elvetemedve/behat-screenshot/zipball/3df8d34224fd5f9307d31f133a25b58a39f5f709",
-                "reference": "3df8d34224fd5f9307d31f133a25b58a39f5f709",
+                "url": "https://api.github.com/repos/marcelovani/behat-screenshot/zipball/3fef9b4f3fb416107c7fc7292c23cec7ca826e3f",
+                "reference": "3fef9b4f3fb416107c7fc7292c23cec7ca826e3f",
                 "shasum": ""
             },
             "require": {
@@ -736,14 +737,20 @@
                 "bex/behat-screenshot-image-driver-unsee": "Allows to upload the screenshot to unsee.cc",
                 "bex/behat-screenshot-image-driver-uploadpie": "Allows to upload the screenshot to uploadpie.com"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
                     "Bex\\Behat\\ScreenshotExtension\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "post-install-cmd": [
+                    "PhantomInstaller\\Installer::installPhantomJS"
+                ],
+                "post-update-cmd": [
+                    "PhantomInstaller\\Installer::installPhantomJS"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -764,29 +771,28 @@
             "description": "Extension for behat to help debug failing scenarios",
             "homepage": "https://github.com/elvetemedve/behat-screenshot",
             "keywords": [
-                "BDD",
-                "Behat",
-                "TDD",
-                "behat-screenshot"
+                "bdd",
+                "behat",
+                "behat-screenshot",
+                "tdd"
             ],
             "support": {
-                "issues": "https://github.com/elvetemedve/behat-screenshot/issues",
-                "source": "https://github.com/elvetemedve/behat-screenshot/tree/master"
+                "source": "https://github.com/marcelovani/behat-screenshot/tree/58-dispatch-event"
             },
-            "time": "2022-07-22T11:23:32+00:00"
+            "time": "2022-11-29T22:10:43+00:00"
         },
         {
             "name": "cawolf/behat-cucumber-json-formatter",
-            "version": "v1.5.1",
+            "version": "dev-10-screenshots-support",
             "source": {
                 "type": "git",
-                "url": "https://github.com/cawolf/behat-cucumber-formatter.git",
-                "reference": "944c9f9895a7b70bfcb5bce21bb0a308e3509504"
+                "url": "https://github.com/marcelovani/behat-cucumber-formatter.git",
+                "reference": "6bf5ffb6fc2523d7109731fe5bc98790d08825a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cawolf/behat-cucumber-formatter/zipball/944c9f9895a7b70bfcb5bce21bb0a308e3509504",
-                "reference": "944c9f9895a7b70bfcb5bce21bb0a308e3509504",
+                "url": "https://api.github.com/repos/marcelovani/behat-cucumber-formatter/zipball/6bf5ffb6fc2523d7109731fe5bc98790d08825a3",
+                "reference": "6bf5ffb6fc2523d7109731fe5bc98790d08825a3",
                 "shasum": ""
             },
             "require": {
@@ -807,7 +813,13 @@
                     "Vanare\\BehatCucumberJsonFormatter\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "test": [
+                    "bin/phpstan analyse --no-progress -l 5 src",
+                    "bin/phpunit",
+                    "bin/behat"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -827,17 +839,16 @@
             "description": "Behat extension for generating json reports",
             "homepage": "https://github.com/cawolf/behat-cucumber-formatter",
             "keywords": [
-                "Behat",
-                "Cucumber",
+                "behat",
+                "cucumber",
                 "formatter",
                 "jenkins",
                 "json"
             ],
             "support": {
-                "issues": "https://github.com/cawolf/behat-cucumber-formatter/issues",
-                "source": "https://github.com/cawolf/behat-cucumber-formatter/tree/v1.5.1"
+                "source": "https://github.com/marcelovani/behat-cucumber-formatter/tree/10-screenshots-support"
             },
-            "time": "2021-01-15T07:00:32+00:00"
+            "time": "2022-11-29T23:00:00+00:00"
         },
         {
             "name": "drupal/core-utility",
@@ -1061,55 +1072,6 @@
                 }
             ],
             "time": "2022-04-26T19:55:44+00:00"
-        },
-        {
-            "name": "emuse/behat-html-formatter",
-            "version": "v0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dutchiexl/BehatHtmlFormatterPlugin.git",
-                "reference": "89340a6f9908e727374528d208c728e060f92315"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dutchiexl/BehatHtmlFormatterPlugin/zipball/89340a6f9908e727374528d208c728e060f92315",
-                "reference": "89340a6f9908e727374528d208c728e060f92315",
-                "shasum": ""
-            },
-            "require": {
-                "behat/behat": "~3.0",
-                "behat/gherkin": "~4.2",
-                "php": ">=5.3.0",
-                "twig/twig": "~1.5|~2.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.1",
-                "symfony/process": ">2.3,<4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "emuse\\BehatHTMLFormatter\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Neal Vanmeert",
-                    "email": "neal@emuse.be"
-                }
-            ],
-            "description": "This will create a html formatter for Behat.",
-            "support": {
-                "issues": "https://github.com/dutchiexl/BehatHtmlFormatterPlugin/issues",
-                "source": "https://github.com/dutchiexl/BehatHtmlFormatterPlugin/tree/v0.2.0"
-            },
-            "time": "2019-07-02T11:12:25+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1610,25 +1572,35 @@
         },
         {
             "name": "jakoch/phantomjs-installer",
-            "version": "2.1.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jakoch/phantomjs-installer.git",
-                "reference": "b8ee2aac9b95f9a9ee30a05a4df4a0984a8a8b85"
+                "reference": "4ba2bc95dd442fd4ad9159c45882aa372bbb51cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jakoch/phantomjs-installer/zipball/b8ee2aac9b95f9a9ee30a05a4df4a0984a8a8b85",
-                "reference": "b8ee2aac9b95f9a9ee30a05a4df4a0984a8a8b85",
+                "url": "https://api.github.com/repos/jakoch/phantomjs-installer/zipball/4ba2bc95dd442fd4ad9159c45882aa372bbb51cd",
+                "reference": "4ba2bc95dd442fd4ad9159c45882aa372bbb51cd",
                 "shasum": ""
             },
             "require": {
-                "ext-openssl": "*"
+                "ext-bz2": "*",
+                "ext-openssl": "*",
+                "php": ">5.3"
             },
+            "require-dev": {
+                "composer/composer": "^1.2",
+                "phpunit/phpunit": "^8"
+            },
+            "default-branch": true,
             "type": "custom-installer",
             "autoload": {
                 "psr-0": {
                     "PhantomInstaller\\": "src/"
+                },
+                "psr-4": {
+                    "PhantomInstaller\\Test\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1649,9 +1621,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jakoch/phantomjs-installer/issues",
-                "source": "https://github.com/jakoch/phantomjs-installer/tree/master"
+                "source": "https://github.com/jakoch/phantomjs-installer/tree/3.0.1"
             },
-            "time": "2016-01-25T16:30:30+00:00"
+            "time": "2021-09-03T18:54:42+00:00"
         },
         {
             "name": "psr/container",
@@ -1851,53 +1823,6 @@
                 "source": "https://github.com/ralouphie/getallheaders/tree/develop"
             },
             "time": "2019-03-08T08:55:37+00:00"
-        },
-        {
-            "name": "se/selenium-server-standalone",
-            "version": "3.141.59",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sveneisenschmidt/selenium-server-standalone.git",
-                "reference": "ae8e6ab8833a662328bfbdd52aa05d038c65fd5a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sveneisenschmidt/selenium-server-standalone/zipball/ae8e6ab8833a662328bfbdd52aa05d038c65fd5a",
-                "reference": "ae8e6ab8833a662328bfbdd52aa05d038c65fd5a",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "bin": [
-                "bin/selenium-server-standalone"
-            ],
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Sven Eisenschmidt",
-                    "email": "sven.eisenschmidt@gmail.com"
-                },
-                {
-                    "name": "James Titcumb",
-                    "email": "hello@jamestitcumb.com"
-                }
-            ],
-            "description": "Composer distribution of Selenium Server Standalone, the browser automation framework. Adds a executable to your composer bin directory.",
-            "homepage": "https://github.com/sveneisenschmidt/selenium-server-standalone",
-            "keywords": [
-                "selenium",
-                "testing"
-            ],
-            "support": {
-                "issues": "https://github.com/sveneisenschmidt/selenium-server-standalone/issues",
-                "source": "https://github.com/sveneisenschmidt/selenium-server-standalone/tree/3.141.59"
-            },
-            "time": "2019-12-23T12:37:36+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -3798,92 +3723,13 @@
                 }
             ],
             "time": "2022-11-25T16:04:03+00:00"
-        },
-        {
-            "name": "twig/twig",
-            "version": "2.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "0986e5468209a40279b1ae60b27be84844424907"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/0986e5468209a40279b1ae60b27be84844424907",
-                "reference": "0986e5468209a40279b1ae60b27be84844424907",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1.3",
-                "symfony/polyfill-ctype": "^1.8",
-                "symfony/polyfill-mbstring": "^1.3",
-                "symfony/polyfill-php72": "^1.8"
-            },
-            "require-dev": {
-                "psr/container": "^1.0",
-                "symfony/phpunit-bridge": "^4.4.9|^5.0.9|^6.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.15-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Twig_": "lib/"
-                },
-                "psr-4": {
-                    "Twig\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
-                },
-                {
-                    "name": "Twig Team",
-                    "role": "Contributors"
-                },
-                {
-                    "name": "Armin Ronacher",
-                    "email": "armin.ronacher@active-4.com",
-                    "role": "Project Founder"
-                }
-            ],
-            "description": "Twig, the flexible, fast, and secure template language for PHP",
-            "homepage": "https://twig.symfony.com",
-            "keywords": [
-                "templating"
-            ],
-            "support": {
-                "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/2.x"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/twig/twig",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2022-10-15T05:53:42+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "dennisdigital/behat-gtm": 20,
+        "cawolf/behat-cucumber-json-formatter": 20,
         "bex/behat-screenshot": 20
     },
     "prefer-stable": false,
@@ -3895,5 +3741,5 @@
     "platform-overrides": {
         "php": "8.0"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
