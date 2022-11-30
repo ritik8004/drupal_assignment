@@ -34,9 +34,13 @@ function _alshaya_nb_transac_translations() {
       'size guide' => [
         'ar' => 'دليل المقاسات',
       ],
+    ],
+    'v2' => [
       'Product Details' => [
         'ar' => 'تفاصيل المنتج',
       ],
+    ],
+    'v3' => [
       'Style' => [
         'ar' => 'الستايل',
       ],
