@@ -1,5 +1,4 @@
 import React from 'react';
-import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
 export const Swatch = ({ swatch, url, title }) => {
@@ -17,7 +16,7 @@ export const Swatch = ({ swatch, url, title }) => {
       sku: swatch.child_sku_code,
       gtm_name: title,
       color: swatch.display_label,
-    }
+    };
     Drupal.alshayaSeoGtmPushSwatchClick(productData);
     window.location.href = selectedImage;
   };
