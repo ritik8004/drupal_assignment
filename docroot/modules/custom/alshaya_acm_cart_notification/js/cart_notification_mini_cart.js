@@ -1,17 +1,17 @@
 (function ($, Drupal, document) {
 
     Drupal.cartNotification = Drupal.cartNotification || {};
-  
+
     Drupal.cartNotification.triggerNotification = function (data) {
       Drupal.cartNotification.spinner_stop();
       // Close the recommendation product modal if present.
       if ($('.ui-dialog').length > 0) {
         $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
       }
-  
+
       var cart_notification_data = {};
       var show_crosssell = '';
-  
+
       if ((typeof data.isTextNotification !== 'undefined') && data.isTextNotification) {
         cart_notification_data.text = data.text;
         cart_notification_data.class = (typeof data.type !== 'undefined') && (data.type === 'error')
@@ -28,11 +28,11 @@
           quantity: data.quantity,
           class: '',
         };
-        show_crosssell = drupalSettings.show_crosssell_as_matchback === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup';
+        show_crosssell = drupalSettings.use_matchback_cart_notification === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup';
       }
-  
-      var matchback_class = drupalSettings.show_crosssell_as_matchback === true ? 'matchback-cart-notification' : '';
-  
+
+      var matchback_class = drupalSettings.use_matchback_cart_notification === true ? 'matchback-cart-notification' : '';
+
       // #cart_notification for the default mini cart icon.
       // #magv2_cart_notification for New PDP layout mobile cart icon.
       // #static_minicart_notification for StaticMinicart notification.
@@ -45,7 +45,7 @@
             cart_notification_data
           )
         );
-  
+
       // We do not need a scroll if the noScroll option is set like when we add
       // to cart from listing pages.
       if (((typeof data.noScroll !== 'undefined') && data.noScroll === true)) {
@@ -53,7 +53,7 @@
         $.fn.cartNotificationScroll(scroll);
         return;
       }
-  
+
       $.fn.cartNotificationScroll(true);
     }
 
@@ -78,5 +78,5 @@
         });
       }
     };
-  
+
   })(jQuery, Drupal, document);

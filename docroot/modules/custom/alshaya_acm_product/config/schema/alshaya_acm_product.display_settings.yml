@@ -56,6 +56,9 @@ alshaya_acm_product.display_settings:
               label:
                 type: label
                 label: 'Label'
-      change_matchback_color:
-        type: boolean
-        label: 'Change matchback color on main product color change'
+    change_matchback_color:
+      type: boolean
+      label: 'Change matchback color on main product color change'
+    use_matchback_cart_notification:
+      type: boolean
+      label: 'On add to cart, show the matchback cart notification'
