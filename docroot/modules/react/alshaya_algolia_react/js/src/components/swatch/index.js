@@ -1,4 +1,5 @@
 import React from 'react';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
 export const Swatch = ({ swatch, url }) => {
@@ -10,14 +11,16 @@ export const Swatch = ({ swatch, url }) => {
   /**
    * Push swatch gtm data on swatch click on plp.
    */
-  const handleSwatchClick = async (e) => {
+  const handleSwatchClick = (e) => {
     e.preventDefault();
-    const productData = {
-      sku: swatch.child_sku_code,
-      gtm_name: swatch.display_label,
-      color: swatch.rgb_color,
-    };
-    Drupal.alshayaSeoGtmPushSwatchClick(productData);
+    if (hasValue(swatch.rgb_color)) {
+      const productData = {
+        sku: swatch.child_sku_code,
+        gtm_name: swatch.display_label,
+        color: swatch.rgb_color,
+      };
+      Drupal.alshayaSeoGtmPushSwatchClick(productData);
+    }
     window.location.href = selectedImage;
   };
 
