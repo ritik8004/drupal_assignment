@@ -8,7 +8,7 @@
 /**
  * Implements hook_update_N().
  *
- * Add product details string which is used in description for v2.
+ * Add translations for additional attributes..
  */
 function alshaya_nb_transac_update_9403() {
   // Add translations.
@@ -23,7 +23,7 @@ function alshaya_nb_transac_update_9403() {
 /**
  * Implements hook_update_N().
  *
- * Add product details string which is used in description for v2.
+ * Add product details string which is used in description.
  */
 function alshaya_nb_transac_update_9402() {
   // Add translations.
