@@ -9,3 +9,9 @@ https://www.jenkins.io/doc/book/pipeline/syntax/#stages
   - Arguments Brand, Env, Market, etc
 - Find a way to copy screenshots and show on UI
 - Uninstall plugins that comes from image but we don't need
+
+- Move Pipeline script into a Pipeline file
+
+TODO
+- Add build number to screenshots folder to avoid losing images when another test runs
+-
