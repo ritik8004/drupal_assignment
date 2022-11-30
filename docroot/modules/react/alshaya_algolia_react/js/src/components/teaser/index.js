@@ -342,7 +342,13 @@ const Teaser = ({
             <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
-            {showSwatches ? <Swatches swatches={attribute.swatches} url={url} /> : null}
+            {showSwatches ? (
+              <Swatches
+                swatches={attribute.swatches}
+                url={url}
+                title={title}
+              />
+            ) : null}
             {showSliderSwatch ? (
               <SliderSwatch
                 swatches={attribute.swatches}

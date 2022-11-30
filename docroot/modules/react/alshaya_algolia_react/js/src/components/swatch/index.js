@@ -32,7 +32,7 @@ export const Swatch = ({ swatch, url, title }) => {
   );
 };
 
-const Swatches = ({ swatches, url }) => {
+const Swatches = ({ swatches, url, title }) => {
   if (typeof swatches === 'undefined') {
     return null;
   }
@@ -65,7 +65,7 @@ const Swatches = ({ swatches, url }) => {
     swatcheContainer = (
       <div className="swatches">
         {swatches.slice(0, limit).map(
-          (swatch) => <Swatch swatch={swatch} key={swatch.id} url={url} />,
+          (swatch) => <Swatch swatch={swatch} key={swatch.id} url={url} title={title} />,
         )}
         {(diff > 0) ? <a className="swatch-more-link product-selected-url" href={url}>{swatchMoreText}</a> : null}
       </div>
