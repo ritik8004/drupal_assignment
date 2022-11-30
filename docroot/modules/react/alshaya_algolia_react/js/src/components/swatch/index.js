@@ -2,7 +2,7 @@ import React from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
-export const Swatch = ({ swatch, url }) => {
+export const Swatch = ({ swatch, url, title }) => {
   let selectedImage = `${url}?selected=${swatch.child_id}`;
   if (swatch.url !== undefined) {
     selectedImage = swatch.url;
@@ -13,14 +13,12 @@ export const Swatch = ({ swatch, url }) => {
    */
   const handleSwatchClick = (e) => {
     e.preventDefault();
-    if (hasValue(swatch.rgb_color)) {
-      const productData = {
-        sku: swatch.child_sku_code,
-        gtm_name: swatch.display_label,
-        color: swatch.rgb_color,
-      };
-      Drupal.alshayaSeoGtmPushSwatchClick(productData);
+    const productData = {
+      sku: swatch.child_sku_code,
+      gtm_name: title,
+      color: swatch.display_label,
     }
+    Drupal.alshayaSeoGtmPushSwatchClick(productData);
     window.location.href = selectedImage;
   };
 

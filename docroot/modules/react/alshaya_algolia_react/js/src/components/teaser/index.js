@@ -343,7 +343,11 @@ const Teaser = ({
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
             {showSwatches ? <Swatches swatches={attribute.swatches} url={url} /> : null}
-            {showSliderSwatch ? <SliderSwatch swatches={attribute.swatches} url={url} /> : null}
+            {showSliderSwatch ? <SliderSwatch
+              swatches={attribute.swatches}
+              url={url}
+              title={title} /> 
+            : null}
             {/* Render color swatches based on article/sku id */}
             {hasValue(attribute.article_swatches)
               ? (

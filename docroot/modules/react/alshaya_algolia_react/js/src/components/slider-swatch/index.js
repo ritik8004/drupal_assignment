@@ -4,7 +4,7 @@ import { Swatch } from '../swatch';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isDesktop, isMobile } from '../../../../../js/utilities/display';
 
-const SliderSwatch = ({ swatches, url }) => {
+const SliderSwatch = ({ swatches, url, title }) => {
   if (!hasValue(swatches)) {
     return null;
   }
@@ -29,7 +29,7 @@ const SliderSwatch = ({ swatches, url }) => {
   let swatchContainer = null;
   if (totalNoOfSwatches > 0) {
     const swatchItems = swatches.map(
-      (swatch) => <Swatch swatch={swatch} key={swatch.child_id} url={url} />,
+      (swatch) => <Swatch swatch={swatch} key={swatch.child_id} url={url} title={title} />,
     );
     let classSwatches = 'swatches';
     const hasSliderSwatch = totalNoOfSwatches > limit;
