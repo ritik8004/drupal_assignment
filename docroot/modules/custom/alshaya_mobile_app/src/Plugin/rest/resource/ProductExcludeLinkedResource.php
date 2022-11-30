@@ -381,7 +381,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     foreach ($media_contexts as $key => $context) {
       $data['media'][] = [
         'context' => $context,
-        'media' => $this->skuImagesManager->getProductMediaDataWithStyles($sku, $context),
+        'media' => $this->skuImagesManager->getProductMediaDataWithStyles($sku, $key),
       ];
     }
 
