@@ -1,4 +1,4 @@
-import AddToBagContainer from "../../../../js/utilities/components/addtobag-container";
+import AddToBagContainer from "../../../js/utilities/components/addtobag-container";
 
 function MatchbackAddToBag(props) {
   const {sku, url} = props;

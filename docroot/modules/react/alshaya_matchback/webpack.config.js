@@ -2,7 +2,7 @@ var path = require("path");
 var buildPath = '/modules/react/alshaya_matchback/dist/';
 var config = {
   entry: {
-    matchback_addtobag: './js/src/matchbackAddToBag',
+    matchback_addtobag: './js/matchbackAddToBag',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

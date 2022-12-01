@@ -1,5 +1,5 @@
-import { createConfigurableDrawer } from "../../../js/utilities/addToBagHelper";
-import { hasValue } from "../../../js/utilities/conditionsUtility";
+import { createConfigurableDrawer } from "../../js/utilities/addToBagHelper";
+import { hasValue } from "../../js/utilities/conditionsUtility";
 import MatchbackAddToBag from "./add_to_bag";
 
 
@@ -9,7 +9,9 @@ import MatchbackAddToBag from "./add_to_bag";
       if (hasValue(context.classList) && !context.classList.contains('crossell-title')) {
         return;
       }
+      // Add the drawer warpper markup to the dom.
       createConfigurableDrawer(true);
+      // Now add the Add to Bag button for each carousel item.
       var matchbackMobileElements = $('.matchback-add-to-bag');
       matchbackMobileElements.each(function eachElement(i, obj) {
         var $parent = $($(this).parents('article[data-vmode="matchback_mobile"]')[0]);
