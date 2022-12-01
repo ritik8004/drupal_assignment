@@ -11,6 +11,8 @@
 
       var cart_notification_data = {};
       var show_crosssell = '';
+      var showMatchbackNotification = drupalSettings.show_crosssell_as_matchback === true
+        && drupalSettings.use_matchback_cart_notification === true;
 
       if ((typeof data.isTextNotification !== 'undefined') && data.isTextNotification) {
         cart_notification_data.text = data.text;
@@ -28,10 +30,12 @@
           quantity: data.quantity,
           class: '',
         };
-        show_crosssell = drupalSettings.use_matchback_cart_notification === true ? 'matchBackCartNotificationMarkup' : 'cartNotificationMarkup';
+        show_crosssell = showMatchbackNotification
+          ? 'matchBackCartNotificationMarkup'
+          : 'cartNotificationMarkup';
       }
 
-      var matchback_class = drupalSettings.use_matchback_cart_notification === true ? 'matchback-cart-notification' : '';
+      var matchback_class = showMatchbackNotification ? 'matchback-cart-notification' : '';
 
       // #cart_notification for the default mini cart icon.
       // #magv2_cart_notification for New PDP layout mobile cart icon.
