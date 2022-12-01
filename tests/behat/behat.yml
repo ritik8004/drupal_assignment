@@ -45,7 +45,7 @@ default:
       screenshot_taking_mode: failed_steps
       image_drivers:
         local:
-          clear_screenshot_directory: true
+          clear_screenshot_directory: false
     Vanare\BehatCucumberJsonFormatter\Extension:
       outputDir: '%paths.base%/results/cucumber'
       fileNamePrefix: report
