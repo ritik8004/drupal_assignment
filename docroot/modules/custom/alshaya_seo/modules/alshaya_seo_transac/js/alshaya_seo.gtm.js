@@ -328,11 +328,13 @@
         if (window.name == 'ConnectWithSocialAuth') {
           var socialWindow = true;
         }
-
+        // Check if user is login or not.
+        var isUserLogin = Drupal.getItemFromLocalStorage('isUserLogin');
         // Check for user login type in cookies.
         var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
-        if (drupalSettings.user.uid && loginType === undefined && orderConfirmationPage.length === 0) {
+        if (drupalSettings.user.uid && loginType === undefined && isUserLogin == null) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , 'Email');
+          Drupal.addItemInLocalStorage('isUserLogin', true);
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
@@ -340,9 +342,10 @@
           && userDetails.userID !== undefined
           && userDetails.userID !== 0
           && loginType !== undefined
-          && orderConfirmationPage.length === 0) {
+          && isUserLogin == null) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
           Drupal.addItemInLocalStorage('userID', userDetails.userID);
+          Drupal.addItemInLocalStorage('isUserLogin', true);
         }
 
         // Fire logout success event on successful sign-in.
@@ -352,6 +355,7 @@
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           Drupal.addItemInLocalStorage('userID', userDetails.userID);
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_login_type', {path: '/'});
+          Drupal.removeItemFromLocalStorage('isUserLogin');
         }
 
         // Fire lead tracking on registration success/ user update.
