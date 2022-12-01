@@ -11,7 +11,9 @@
     const sku = $(node).attr('data-sku');
     const viewMode = $(node).attr('data-vmode');
     const productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-    const productInfo = window.commerceBackend.getProductData(sku, productKey);
+    const productInfo = (typeof window.commerceBackend.getProductData !== 'undefined')
+      ? window.commerceBackend.getProductData(sku, productKey)
+      : null;
 
     if (productInfo === null) {
       return;

@@ -10,5 +10,9 @@
         color: $address_edit_cancel_text;
       }
     }
+
+    .js-form-type-select label {
+      color: $primary_input_label;
+    }
   }
 }

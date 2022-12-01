@@ -218,7 +218,7 @@ window.commerceBackend = window.commerceBackend || {};
             value_id: option_value.value_index,
             // Adding this extra attribute because we are doing weight based
             // sorting and we need a fixed attribute name for the index value.
-            // @see window.commerceBackend.getWeightBasedAttribute().
+            // @see window.commerceBackend.getSortedAttributeValues().
             value_index: option_value.value_index
           };
         })
@@ -1560,6 +1560,8 @@ window.commerceBackend.getSortedAttributeValues = function getSortedAttributeVal
           product.configurable_options.forEach(function eachConfigurableOption(option) {
             if (option.attribute_code === attribute
               && !sortedConfigurableAttributes.includes(attribute)) {
+              // Get the sorted attribute values.
+              option.values = window.commerceBackend.getSortedAttributeValues(option.values, option.attribute_code);
               sortedConfigurableOptions.push(option);
               sortedConfigurableAttributes.push(attribute);
             }
@@ -1570,6 +1572,8 @@ window.commerceBackend.getSortedAttributeValues = function getSortedAttributeVal
         // config in the end.
         product.configurable_options.forEach(function eachConfigurableOption(option) {
           if (!sortedConfigurableAttributes.includes(option.attribute_code)) {
+            // Get the sorted attribute values.
+            option.values = window.commerceBackend.getSortedAttributeValues(option.values, option.attribute_code);
             sortedConfigurableOptions.push(option);
             sortedConfigurableAttributes.push(option.attribute_code);
           }
