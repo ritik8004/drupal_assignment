@@ -4,11 +4,6 @@
   .subtitle {
     &.crossell-title {
       color: $matchback-product-dark;
-
-      @include breakpoint($tablet) {
-        padding-#{$left}: 0;
-        padding-bottom: rem(31);
-      }
     }
   }
 }
@@ -21,10 +16,6 @@
 
 .cross-sell-product-components {
   .cross-sell-product-component-center {
-    @include breakpoint($desktop) {
-      padding-#{$right}: rem(35);
-    }
-
     h1 {
       font-size: rem(14);
       line-height: 1.29;
@@ -40,18 +31,6 @@
         .price {
           font-size: rem(14);
           line-height: 1.29;
-
-          @include breakpoint($tablet) {
-            margin-top: rem(4);
-          }
-        }
-      }
-
-      .special-price-block {
-        .price--discount {
-          @include breakpoint($tablet) {
-            margin-top: rem(4);
-          }
         }
       }
     }
@@ -59,20 +38,65 @@
     .content--item-code {
       font-size: rem(12);
       line-height: 1.33;
-
-      @include breakpoint($tablet) {
-        margin-top: rem(4);
-      }
     }
   }
 }
 
-#machbackSlider {
-  .slick-prev,
-  .slick-next {
-    @include breakpoint($tablet) {
+@include breakpoint($tablet) {
+  .cross-sell-product-components {
+    .cross-sell-product-component-center {
+      .price-block {
+        .price-wrapper {
+          .price {
+            margin-top: rem(4);
+          }
+        }
+
+        .special-price-block {
+          .price--discount {
+            margin-top: rem(4);
+          }
+        }
+      }
+
+      .content--item-code {
+        margin-top: rem(4);
+      }
+    }
+  }
+
+  #machbackSlider {
+    .slick-prev,
+    .slick-next {
       // Overriding inline css added by JS
       top: rem(9) !important;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .cross-sell-product-components {
+    .cross-sell-product-component-center {
+      padding-#{$right}: rem(35);
+    }
+  }
+
+  .matchback-processed {
+    .subtitle {
+      &.crossell-title {
+        padding-#{$left}: rem(44);
+        padding-bottom: rem(31);
+      }
+    }
+  }
+
+  .upsell-processed,
+  .related-processed {
+    .subtitle {
+      &.crossell-title {
+        padding-#{$left}: rem(56);
+        padding-bottom: rem(31);
+      }
     }
   }
 }
