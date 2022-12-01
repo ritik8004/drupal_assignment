@@ -17,5 +17,11 @@
         }
       }
     }
+
+    &.dual-color-tone {
+      a {
+        @include dual-tone-color;
+      }
+    }
   }
 }

@@ -90,7 +90,7 @@ const ArticleSwatch = ({
     return (
       <li
         type="button"
-        className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
+        className={selectedSwatch === swatch.article_sku_code ? 'article-swatch dual-color-tone active' : 'article-swatch dual-color-tone'}
         onClick={(e) => showSelectedSwatchProduct(e, swatch)}
       >
         <a href="#" style={{ backgroundColor: colors[0] }} />

@@ -103,7 +103,7 @@ const ColorSwatch = ({
   const values = data.split('|');
   if (values.length > 1) {
     return (
-      <li className="li-swatch-color" key={value}>
+      <li className="li-swatch-color dual-color-tone" key={value}>
         <span className="swatch-label">{label}</span>
         <a
           id={`value${value}`}
@@ -114,16 +114,10 @@ const ColorSwatch = ({
         >
           <div style={{
             backgroundColor: values[0],
-            width: '50%',
-            borderTopLeftRadius: '50px',
-            borderBottomLeftRadius: '50px',
           }}
           />
           <div style={{
             backgroundColor: values[1],
-            width: '50%',
-            borderTopRightRadius: '50px',
-            borderBottomRightRadius: '50px',
           }}
           />
         </a>
@@ -131,7 +125,7 @@ const ColorSwatch = ({
     );
   }
   return (
-    <li className="li-swatch-color" key={value}>
+    <li className="li-swatch-color dual-color-tone" key={value}>
       <span className="swatch-label">{label}</span>
       <a
         id={`value${value}`}
