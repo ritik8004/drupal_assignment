@@ -5,13 +5,9 @@ Automated pipelines
 https://www.jenkins.io/doc/book/pipeline/syntax/#stages
 
 ### TODO
+- Update Readme
 - Create library to reuse for executing pipelines https://www.jenkins.io/doc/book/pipeline/shared-libraries/
   - Arguments Brand, Env, Market, etc
-- Find a way to copy screenshots and show on UI
+  - Move Pipeline script into a Pipeline file
 - Uninstall plugins that comes from image but we don't need
-
-- Move Pipeline script into a Pipeline file
-
-TODO
 - Add build number to screenshots folder to avoid losing images when another test runs
--
