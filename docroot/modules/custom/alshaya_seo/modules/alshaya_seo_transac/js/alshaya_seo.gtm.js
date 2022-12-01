@@ -883,18 +883,31 @@
         productData.dimension5 = product.attr('gtm-dimension5');
       }
 
+      var listName = null;
       // If list variable is set in cookie, retrieve it.
       if ($.cookie('product-list') !== undefined) {
         var listValues = JSON.parse($.cookie('product-list'));
-        productData.list = ((Drupal.hasValue(listValues[productData.id]) && listValues[productData.id].indexOf('match back') > -1)
-          || listValues[productData.id] === 'Search Results Page'
-          || $('body').attr('gtm-list-name') === undefined
-        )
+        listName = (listValues[productData.id] === 'Search Results Page' || $('body').attr('gtm-list-name') === undefined)
           // For SRP, use list value 'Search Result Page'.
           ? listValues[productData.id]
           // For all other pages, use gtm-list-name html attribute.
           // Except in PDP, to define full path from PLP.
           : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+
+        // Dispatch custom event to get list name.
+        var gtmListNameEvent = new CustomEvent('getGtmListNameForProduct', {
+          detail: {
+            listName,
+            storedListValues: listValues,
+            sku: productData.id,
+          }
+        });
+        document.dispatchEvent(gtmListNameEvent);
+        listName = gtmListNameEvent.detail.listName;
+      }
+
+      if (listName) {
+        productData.list = listName;
       }
 
       // Fetch referrerPageType from localstorage.
