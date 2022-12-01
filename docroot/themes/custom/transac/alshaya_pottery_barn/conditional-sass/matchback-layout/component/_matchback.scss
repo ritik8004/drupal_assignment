@@ -1,6 +1,4 @@
-.matchback-processed,
-.upsell-processed,
-.related-processed {
+.matchback-processed {
   .subtitle {
     &.crossell-title {
       color: $matchback-product-dark;
@@ -85,16 +83,6 @@
     .subtitle {
       &.crossell-title {
         padding-#{$left}: rem(44);
-        padding-bottom: rem(31);
-      }
-    }
-  }
-
-  .upsell-processed,
-  .related-processed {
-    .subtitle {
-      &.crossell-title {
-        padding-#{$left}: rem(56);
         padding-bottom: rem(31);
       }
     }
