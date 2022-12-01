@@ -101,6 +101,10 @@ class AuraCheckoutRewards extends React.Component {
       ...states,
     });
 
+    // This will push aura common details in checkout page
+    // as component only renders in checkout page.
+    Drupal.alshayaSeoGtmPushAuraCommonData(states);
+
     // Get the aura points to earn from sales API.
     this.getAuraPoints();
   };
