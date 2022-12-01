@@ -46,7 +46,6 @@ import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/ca
 import CartPaymentMethodsLogos from '../payment-methods-logos';
 import Tamara from '../../../../../js/tamara/utilities/tamara';
 import FreeDeliveryUspBanner from '../free-delivery-usp-banner';
-import isFreeDeliveryUspEnabled from '../../../../../js/utilities/freeDeliveryUspHelper';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -527,9 +526,8 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-main">
           <div className="spc-content">
-            <ConditionalView condition={isFreeDeliveryUspEnabled() && hasValue(freeShippingText)}>
-              <FreeDeliveryUspBanner bannerText={freeShippingText} />
-            </ConditionalView>
+            {hasValue(freeShippingText)
+              && <FreeDeliveryUspBanner bannerText={freeShippingText} />}
             <div className="spc-title-wrapper">
               <SectionTitle animationDelayValue="0.4s">
                 <span>{`${Drupal.t('my shopping bag')} `}</span>

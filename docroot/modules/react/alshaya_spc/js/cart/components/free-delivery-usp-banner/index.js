@@ -5,8 +5,8 @@ const FreeDeliveryUspBanner = (props) => {
   const { bannerText } = props;
 
   return (
-    <div className="free-delivery-usp-banner">
-      <span>{parse(bannerText)}</span>
+    <div className="free-delivery-usp">
+      {parse(bannerText)}
     </div>
   );
 };
