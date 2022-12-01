@@ -88,8 +88,6 @@ function alshaya_add_to_bag_preprocess_page(&$variables) {
  * Implements hook_search_api_algolia_objects_alter().
  */
 function alshaya_add_to_bag_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
-  // @todo Check if we need to add check for add to bag feature status in here
-  // and other functions.
   foreach ($objects as $id => &$object) {
     if (empty($object['sku'])) {
       continue;
