@@ -4,8 +4,11 @@ USER root
 RUN apt-get update
 RUN apt-get install git -y
 
-# Install NPM
-RUN apt-get install nodejs npm -y
+# Install PHP Extensions
+RUN apt-get install -y \
+        libzip-dev \
+        zip \
+  && docker-php-ext-install zip
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php

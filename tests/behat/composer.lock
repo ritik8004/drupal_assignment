@@ -709,12 +709,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/marcelovani/behat-screenshot.git",
-                "reference": "3fef9b4f3fb416107c7fc7292c23cec7ca826e3f"
+                "reference": "8d1558d47dfaad44301278b83b8203950fc5cb70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/marcelovani/behat-screenshot/zipball/3fef9b4f3fb416107c7fc7292c23cec7ca826e3f",
-                "reference": "3fef9b4f3fb416107c7fc7292c23cec7ca826e3f",
+                "url": "https://api.github.com/repos/marcelovani/behat-screenshot/zipball/8d1558d47dfaad44301278b83b8203950fc5cb70",
+                "reference": "8d1558d47dfaad44301278b83b8203950fc5cb70",
                 "shasum": ""
             },
             "require": {
@@ -779,7 +779,7 @@
             "support": {
                 "source": "https://github.com/marcelovani/behat-screenshot/tree/58-dispatch-event"
             },
-            "time": "2022-11-29T22:10:43+00:00"
+            "time": "2022-12-01T11:10:33+00:00"
         },
         {
             "name": "cawolf/behat-cucumber-json-formatter",
@@ -787,12 +787,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/marcelovani/behat-cucumber-formatter.git",
-                "reference": "6bf5ffb6fc2523d7109731fe5bc98790d08825a3"
+                "reference": "643cb6c3b8e86f27acb75594a63862aff6cf900f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/marcelovani/behat-cucumber-formatter/zipball/6bf5ffb6fc2523d7109731fe5bc98790d08825a3",
-                "reference": "6bf5ffb6fc2523d7109731fe5bc98790d08825a3",
+                "url": "https://api.github.com/repos/marcelovani/behat-cucumber-formatter/zipball/643cb6c3b8e86f27acb75594a63862aff6cf900f",
+                "reference": "643cb6c3b8e86f27acb75594a63862aff6cf900f",
                 "shasum": ""
             },
             "require": {
@@ -848,7 +848,7 @@
             "support": {
                 "source": "https://github.com/marcelovani/behat-cucumber-formatter/tree/10-screenshots-support"
             },
-            "time": "2022-11-29T23:00:00+00:00"
+            "time": "2022-12-01T11:10:56+00:00"
         },
         {
             "name": "drupal/core-utility",
@@ -1572,35 +1572,25 @@
         },
         {
             "name": "jakoch/phantomjs-installer",
-            "version": "dev-master",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jakoch/phantomjs-installer.git",
-                "reference": "4ba2bc95dd442fd4ad9159c45882aa372bbb51cd"
+                "reference": "b8ee2aac9b95f9a9ee30a05a4df4a0984a8a8b85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jakoch/phantomjs-installer/zipball/4ba2bc95dd442fd4ad9159c45882aa372bbb51cd",
-                "reference": "4ba2bc95dd442fd4ad9159c45882aa372bbb51cd",
+                "url": "https://api.github.com/repos/jakoch/phantomjs-installer/zipball/b8ee2aac9b95f9a9ee30a05a4df4a0984a8a8b85",
+                "reference": "b8ee2aac9b95f9a9ee30a05a4df4a0984a8a8b85",
                 "shasum": ""
             },
             "require": {
-                "ext-bz2": "*",
-                "ext-openssl": "*",
-                "php": ">5.3"
+                "ext-openssl": "*"
             },
-            "require-dev": {
-                "composer/composer": "^1.2",
-                "phpunit/phpunit": "^8"
-            },
-            "default-branch": true,
             "type": "custom-installer",
             "autoload": {
                 "psr-0": {
                     "PhantomInstaller\\": "src/"
-                },
-                "psr-4": {
-                    "PhantomInstaller\\Test\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1621,9 +1611,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jakoch/phantomjs-installer/issues",
-                "source": "https://github.com/jakoch/phantomjs-installer/tree/3.0.1"
+                "source": "https://github.com/jakoch/phantomjs-installer/tree/master"
             },
-            "time": "2021-09-03T18:54:42+00:00"
+            "time": "2016-01-25T16:30:30+00:00"
         },
         {
             "name": "psr/container",
@@ -3741,5 +3731,5 @@
     "platform-overrides": {
         "php": "8.0"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

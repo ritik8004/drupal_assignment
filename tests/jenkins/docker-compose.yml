@@ -59,10 +59,10 @@ services:
 
   selenium:
     # https://github.com/SeleniumHQ/docker-selenium
-    # Container can be viewed with VNC port 5901
+    # Container can be viewed with vnc://127.0.0.1:5901
     # Password: secret
     container_name: ${PROJECT_NAME}_browser
-    image: selenium/standalone-chrome:beta
+    image: selenium/standalone-chrome:4.0.0-beta-1-20210215
     shm_size: 2gb
     ports:
       - '4444:4444'
