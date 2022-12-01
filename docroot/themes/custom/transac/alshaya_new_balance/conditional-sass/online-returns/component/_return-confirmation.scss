@@ -12,4 +12,16 @@
       font-family: $alshaya-bold;
     }
   }
+
+  .order-details-button-wrapper {
+    background: $online-return-button-bg;
+
+    @include breakpoint($tablet) {
+      top: rem(-5);
+    }
+
+    @include breakpoint($desktop) {
+      top: rem(-10);
+    }
+  }
 }
