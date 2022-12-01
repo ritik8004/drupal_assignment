@@ -27,6 +27,9 @@
   });
 
   document.addEventListener('getListNameEventForRecommendation', function onGetGtmListNameForProductRecommendation(e) {
+    if (e.detail.element.attr('data-vmode') !== 'matchback') {
+      return;
+    }
     e.detail.prefix = 'match back|'
   });
 }(jQuery, Drupal, drupalSettings));
