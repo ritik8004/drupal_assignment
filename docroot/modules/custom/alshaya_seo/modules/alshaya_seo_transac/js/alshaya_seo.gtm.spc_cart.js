@@ -198,6 +198,10 @@
     Object.assign(data.ecommerce.checkout, cartData.checkout);
     delete cartData.checkout;
     Object.assign(data, cartData);
+    // Add aura common data in checkout step 1 gtm event.
+    if (typeof drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled) {
+      Object.assign(data, Drupal.alshayaSeoGtmPrepareAuraCommonDataFromCart());
+    }
     setTimeout(() => {
       dataLayer.push(data);
     }, 500);
