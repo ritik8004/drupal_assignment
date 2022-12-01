@@ -1,0 +1,78 @@
+.matchback-processed,
+.upsell-processed,
+.related-processed {
+  .subtitle {
+    &.crossell-title {
+      color: $matchback-product-dark;
+
+      @include breakpoint($tablet) {
+        padding-#{$left}: 0;
+        padding-bottom: rem(31);
+      }
+    }
+  }
+}
+
+.matchback-processed {
+  .wishlist-pdp-matchback {
+    display: none;
+  }
+}
+
+.cross-sell-product-components {
+  .cross-sell-product-component-center {
+    @include breakpoint($desktop) {
+      padding-#{$right}: rem(35);
+    }
+
+    h1 {
+      font-size: rem(14);
+      line-height: 1.29;
+      font-weight: normal;
+
+      a.full-prod-link {
+        color: $matchback-product-dark;
+      }
+    }
+
+    .price-block {
+      .price-wrapper {
+        .price {
+          font-size: rem(14);
+          line-height: 1.29;
+
+          @include breakpoint($tablet) {
+            margin-top: rem(4);
+          }
+        }
+      }
+
+      .special-price-block {
+        .price--discount {
+          @include breakpoint($tablet) {
+            margin-top: rem(4);
+          }
+        }
+      }
+    }
+
+    .content--item-code {
+      font-size: rem(12);
+      line-height: 1.33;
+
+      @include breakpoint($tablet) {
+        margin-top: rem(4);
+      }
+    }
+  }
+}
+
+#machbackSlider {
+  .slick-prev,
+  .slick-next {
+    @include breakpoint($tablet) {
+      // Overriding inline css added by JS
+      top: rem(9) !important;
+    }
+  }
+}
