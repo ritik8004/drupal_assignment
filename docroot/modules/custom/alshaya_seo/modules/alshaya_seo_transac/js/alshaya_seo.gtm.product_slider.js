@@ -38,6 +38,15 @@
     }
   };
 
+  /**
+   * Get the list name for the recommended product.
+   *
+   * @param object element
+   *   The jquery object of the recommended product.
+   *
+   * @return string
+   *    The list name.
+   */
   Drupal.alshayaSeoGtmProductSlider.getRecommendationListName = function (element) {
     var label = element.closest('.views-element-container').siblings('.subtitle').text();
     var listName = $('body').attr('gtm-list-name');
