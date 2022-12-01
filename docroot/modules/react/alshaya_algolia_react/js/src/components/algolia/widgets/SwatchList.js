@@ -36,7 +36,7 @@ const SwatchColor = ({ swatchData }) => {
   const values = swatchData.split('|');
   if (values.length > 1) {
     return (
-      <div className={`swatch swatch-color swatch-color-${swatchData.substr(1)}`}>
+      <div className={`swatch swatch-color dual-color-tone swatch-color-${swatchData.substr(1)}`}>
         <div style={{ backgroundColor: values[0] }} />
         <div style={{ backgroundColor: values[1] }} />
       </div>

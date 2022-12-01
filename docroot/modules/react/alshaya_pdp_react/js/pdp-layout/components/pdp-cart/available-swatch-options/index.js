@@ -22,19 +22,13 @@ const AvailableSwatchOptions = (props) => {
   if (swatchType === 'RGB' && values.length > 1) {
     return (
       <li key={attr} id={`value${attr}`} className={swatchClassName} value={attr} data-attribute-label={label}>
-        <a href="#" onClick={(e) => handleLiClick(e, code)}>
+        <a className="dual-color-tone" href="#" onClick={(e) => handleLiClick(e, code)}>
           <div style={{
             backgroundColor: values[0],
-            width: '50%',
-            borderTopLeftRadius: '50px',
-            borderBottomLeftRadius: '50px',
           }}
           />
           <div style={{
             backgroundColor: values[1],
-            width: '50%',
-            borderTopRightRadius: '50px',
-            borderBottomRightRadius: '50px',
           }}
           />
         </a>
