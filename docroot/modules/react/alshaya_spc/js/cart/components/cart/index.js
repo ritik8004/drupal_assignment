@@ -45,6 +45,8 @@ import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/on
 import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
 import CartPaymentMethodsLogos from '../payment-methods-logos';
 import Tamara from '../../../../../js/tamara/utilities/tamara';
+import FreeDeliveryUspBanner from '../free-delivery-usp-banner';
+import isFreeDeliveryUspEnabled from '../../../../../js/utilities/freeDeliveryUspHelper';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -74,6 +76,8 @@ export default class Cart extends React.Component {
       // is applied the i.e. if this exclusive promo is applied on the basket,
       // the flag value will be true, and we don't render the dynamic promos.
       hasExclusiveCoupon: false,
+      // Text to show in free delivery usp banner.
+      freeShippingText: null,
     };
   }
 
@@ -101,6 +105,7 @@ export default class Cart extends React.Component {
           inStock: data.in_stock,
           hasExclusiveCoupon: data.has_exclusive_coupon,
           ...collectionPointsEnabled() && { collectionCharge: data.collection_charge || '' },
+          freeShippingText: data.free_shipping_text,
         }));
 
         // The cart is empty.
@@ -415,6 +420,7 @@ export default class Cart extends React.Component {
       auraDetails,
       showAreaAvailabilityStatusOnCart,
       hasExclusiveCoupon,
+      freeShippingText,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -521,6 +527,9 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-main">
           <div className="spc-content">
+            <ConditionalView condition={isFreeDeliveryUspEnabled() && hasValue(freeShippingText)}>
+              <FreeDeliveryUspBanner bannerText={freeShippingText} />
+            </ConditionalView>
             <div className="spc-title-wrapper">
               <SectionTitle animationDelayValue="0.4s">
                 <span>{`${Drupal.t('my shopping bag')} `}</span>

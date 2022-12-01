@@ -300,6 +300,14 @@ class AlshayaSpcController extends ControllerBase {
       $advantage_card_config->getCacheTags(),
       $collection_points_config->getCacheTags(),
     ));
+
+    // Add Free Delivery USP settings only available if it is enabled.
+    $free_delivery_usp_config = $this->config('alshaya_spc.free_delivery_usp');
+    if ($free_delivery_usp_config->get('free_delivery_usp_enabled')) {
+      $build['#attached']['drupalSettings']['freeDeliveryUspEnabled'] = $free_delivery_usp_config->get('free_delivery_usp_enabled');
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($cache_tags, $free_delivery_usp_config->getCacheTags());
+
     $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
 
     return $build;
