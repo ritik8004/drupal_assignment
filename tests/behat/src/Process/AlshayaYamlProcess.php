@@ -368,7 +368,7 @@ class AlshayaYamlProcess {
     // Setting the ScreenshotExtension configuration to capture the failed screenshots.
     $yaml['extensions']['Bex\Behat\ScreenshotExtension']['image_drivers'] = [
       'local' =>  [
-        'screenshot_directory' => "%paths.base%/screenshots/$profile-$viewport",
+        'screenshot_directory' => "%paths.base%/results/screenshots/$profile-$viewport",
       ],
     ];
 

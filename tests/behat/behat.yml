@@ -47,7 +47,7 @@ default:
         local:
           clear_screenshot_directory: true
     Vanare\BehatCucumberJsonFormatter\Extension:
-      outputDir: '%paths.base%/build/cucumber'
+      outputDir: '%paths.base%/results/cucumber'
       fileNamePrefix: report
       resultFilePerSuite: true
 
