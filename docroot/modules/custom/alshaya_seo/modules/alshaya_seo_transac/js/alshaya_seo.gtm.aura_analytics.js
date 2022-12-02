@@ -13,6 +13,10 @@
      AURA_FULL_ENROLLED : 'full enrolled', // Aura enrollment status for users above Tier1.
      AURA_POINTS_EMPTY : 'points empty', // Aura points is 0.
      AURA_POINTS_PRESENT : 'points present', // Aura points > 0.
+     AURA_POINTS_REDEEMED : 'redeemed', // Aura points redeemed during checkout.
+     AURA_POINTS_NOT_REDEEMED : 'not redeemed', // Aura points not redeemed during checkout.
+     AURA_BALANCE_MORE_THAN_ORDER_VALUE : 'balPoints > orderValue', // Total Aura points worth money > Order value.
+     AURA_BALANCE_LESS_THAN_ORDER_VALUE : 'balPoints < orderValue', // Total Aura points worth money < Order value.
    };
 
    /**
@@ -93,5 +97,44 @@
       Drupal.logJavascriptError('error-push-aura-data-gtm-all-pages', e);
     }
   };
+
+   /**
+    * This function prepares aura details dataset to be added
+    * to gtm checkout step 3 and 4 event specifically.
+    */
+   Drupal.alshayaSeoGtmPrepareAuraCheckoutStepDataFromCart = function (cartData) {
+     // Prepare the aura dataset.
+     var gtmData = {};
+     // These values will be used for anonymous users.
+     gtmData.aura_balRedemption = gtmData.aura_balPointsVSorderValue = GTM_AURA_VALUES.NON_AURA;
+     gtmData.aura_pointsUsed = 0;
+     gtmData.aura_pointsEarned = $('.spc-aura-checkout-rewards-block').attr('data-earn-aura-points') !== undefined ? parseInt($('.spc-aura-checkout-rewards-block').attr('data-earn-aura-points')) : 0;
+     try {
+       var userAPCDetails = window.spcStaticStorage.cart_raw.customer.custom_attributes;
+       if (drupalSettings.userDetails.userID > 0 && typeof userAPCDetails !== 'undefined') {
+         // These values will be used for logged-in users but not using Aura.
+         gtmData.aura_balRedemption = GTM_AURA_VALUES.AURA_POINTS_NOT_REDEEMED;
+         gtmData.aura_balPointsVSorderValue = GTM_AURA_VALUES.AURA_BALANCE_LESS_THAN_ORDER_VALUE;
+         var auraTier = userAPCDetails.filter(item => item.attribute_code === 'tier_code');
+         if (Drupal.hasValue(auraTier)) {
+           // These values will be used for logged-in users using Aura.
+           if (typeof cartData.totals.paidWithAura !== 'undefined' && cartData.totals.paidWithAura > 0) {
+             gtmData.aura_balRedemption = GTM_AURA_VALUES.AURA_POINTS_REDEEMED;
+             gtmData.aura_pointsUsed = $('.successful-redeem-msg').attr('data-aura-points-used');
+           }
+           if (typeof $('.spc-aura-highlight').attr('data-aura-money') !== 'undefined') {
+             gtmData.aura_balPointsVSorderValue = $('.spc-aura-highlight').attr('data-aura-money') > cartData.totals.base_grand_total
+               ? GTM_AURA_VALUES.AURA_BALANCE_MORE_THAN_ORDER_VALUE
+               : GTM_AURA_VALUES.AURA_BALANCE_LESS_THAN_ORDER_VALUE;
+           }
+         }
+       }
+     }
+     catch (e) {
+       Drupal.logJavascriptError('error-prepare-aura-data-from-cart-for-checkout-step-3-4', e);
+     }
+
+     return gtmData;
+   };
 
 })(jQuery, Drupal, dataLayer, drupalSettings);
