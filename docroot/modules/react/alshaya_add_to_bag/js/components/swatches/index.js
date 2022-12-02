@@ -8,7 +8,7 @@ import React from 'react';
  */
 const onSwatchSelect = (e, attributeName, onClick, type) => {
   e.preventDefault();
-  const swatchValue = (type !== 'image')
+  const swatchValue = (type !== 'image' && e.target.nodeName.toLowerCase() === 'a')
     ? e.target.dataset.value
     : e.target.parentElement.dataset.value;
   onClick(attributeName, swatchValue);
