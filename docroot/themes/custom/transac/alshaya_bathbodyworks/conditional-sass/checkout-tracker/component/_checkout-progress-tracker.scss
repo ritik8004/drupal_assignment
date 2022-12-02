@@ -12,10 +12,6 @@
         span {
           padding-top: rem(3);
 
-          // html[lang=ar] & {
-          //   padding-top: rem(4);
-          // }
-
           @include breakpoint($only-mobile) {
             font-size: rem(14);
           }
