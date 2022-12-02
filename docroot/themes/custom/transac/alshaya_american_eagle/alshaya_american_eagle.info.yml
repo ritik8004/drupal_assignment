@@ -220,3 +220,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css: css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css
+
+  alshaya_white_label/checkout-tracker:
+    css:
+      theme:
+        css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css
