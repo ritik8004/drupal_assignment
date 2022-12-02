@@ -62,10 +62,12 @@ class ProcessedItem extends React.Component {
           <div className="return-status-id-container">
             <div className="return-status">
               <span className={`status-label ${returnStatusClass}`}>{returnData.returnInfo.extension_attributes.customer_status}</span>
-              <span className="status-message">
-                {' - '}
-                {returnData.returnInfo.extension_attributes.description}
-              </span>
+              { returnData.returnInfo.extension_attributes.description && (
+                <span className="status-message">
+                  {' - '}
+                  {returnData.returnInfo.extension_attributes.description}
+                </span>
+              )}
             </div>
             <div className="return-id">
               {Drupal.t('Return ID: @return_id', { '@return_id': returnData.returnInfo.increment_id }, { context: 'online_returns' })}
