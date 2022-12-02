@@ -11,4 +11,3 @@ dependencies:
   - drupal:views
   - alshaya_master:alshaya_master
   - alshaya_user:alshaya_user
-  - alshaya_seo_transac:alshaya_seo_transac
