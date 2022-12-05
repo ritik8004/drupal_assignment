@@ -19,4 +19,7 @@ make open
 - Add build number to screenshots folder to avoid losing images when another test runs
 - Delete screenshots when builds are deleted
 - Move nginx configurations to jenkins or appserver container
+- Use Configuration Matrix to run the multiple builds
+- Make it possible to run builds in parallel. Reports and results need to be in to a folder that relates to the Job/build ID
+- The build command should always build all features for lando
 -

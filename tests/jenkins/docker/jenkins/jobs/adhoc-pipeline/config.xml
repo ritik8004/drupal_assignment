@@ -36,9 +36,24 @@ To exclude tags use ~@tag_b
           <name>Brand</name>
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
-              <string>vs</string>
-              <string>hm</string>
+              <string>aeo</string>
+              <string>ay</string>
+              <string>bbw</string>
+              <string>bp</string>
               <string>cos</string>
+              <string>dh</string>
+              <string>fl</string>
+              <string>hm</string>
+              <string>kz</string>
+              <string>mc</string>
+              <string>mu</string>
+              <string>nb</string>
+              <string>pb</string>
+              <string>pbk</string>
+              <string>tb</string>
+              <string>ve</string>
+              <string>vs</string>
+              <string>we</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
@@ -47,8 +62,15 @@ To exclude tags use ~@tag_b
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>ae</string>
+              <string>bh</string>
+              <string>ee</string>
+              <string>eg</string>
+              <string>eq</string>
+              <string>jo</string>
               <string>kw</string>
+              <string>qa</string>
               <string>sa</string>
+              <string>xb</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
@@ -58,9 +80,15 @@ To exclude tags use ~@tag_b
           <choices class="java.util.Arrays$ArrayList">
             <a class="string-array">
               <string>uat</string>
-              <string>qa</string>
+              <string>dev</string>
+              <string>dev2</string>
               <string>live</string>
-              <string>local</string>
+              <string>lando</string>
+              <string>pprod</string>
+              <string>prod</string>
+              <string>qa</string>
+              <string>qa2</string>
+              <string>test</string>
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
