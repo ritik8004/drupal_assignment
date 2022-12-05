@@ -45,7 +45,9 @@ import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/on
 import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
 import CartPaymentMethodsLogos from '../payment-methods-logos';
 import Tamara from '../../../../../js/tamara/utilities/tamara';
-import FreeDeliveryUspBanner from '../free-delivery-usp-banner';
+
+// Lazy load free delivery usp banner component.
+const FreeDeliveryUspBanner = React.lazy(() => import('../free-delivery-usp-banner' /* webpackChunkName: "free_delivery_usp" */));
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -526,8 +528,11 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-main">
           <div className="spc-content">
-            {hasValue(freeShippingText)
-              && <FreeDeliveryUspBanner bannerText={freeShippingText} />}
+            {hasValue(freeShippingText) && (
+              <React.Suspense fallback={<Loading />}>
+                <FreeDeliveryUspBanner bannerText={freeShippingText} />
+              </React.Suspense>
+            )}
             <div className="spc-title-wrapper">
               <SectionTitle animationDelayValue="0.4s">
                 <span>{`${Drupal.t('my shopping bag')} `}</span>
