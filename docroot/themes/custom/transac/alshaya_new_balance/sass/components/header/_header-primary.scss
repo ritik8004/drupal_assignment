@@ -574,6 +574,14 @@ body {
   }
 }
 
+@include breakpoint($only-tablet) {
+  .c-menu-primary {
+    ul.menu {
+      margin: 0;
+    }
+  }
+}
+
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     li.menu--one__list-item {
