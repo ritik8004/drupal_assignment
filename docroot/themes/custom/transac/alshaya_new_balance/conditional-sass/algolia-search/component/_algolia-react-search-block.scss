@@ -107,6 +107,12 @@
 @include breakpoint($only-mobile) {
   body {
     &:not(.no-sticky-algolia-search-bar) {
+      margin-top: rem(135);
+
+      html[lang="ar"] & {
+        margin-top: rem(135);
+      }
+
       header {
         .c-header__region {
           height: rem(68);
