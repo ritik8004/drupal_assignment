@@ -8,6 +8,8 @@ import React from 'react';
  */
 const onSwatchSelect = (e, attributeName, onClick, type) => {
   e.preventDefault();
+  // Get value from current element if its not image swatch or dual tone color swatch,
+  // else get value from parent element.
   const swatchValue = (type !== 'image' && e.target.nodeName.toLowerCase() === 'a')
     ? e.target.dataset.value
     : e.target.parentElement.dataset.value;
