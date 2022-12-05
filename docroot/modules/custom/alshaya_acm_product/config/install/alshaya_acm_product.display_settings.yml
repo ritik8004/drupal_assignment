@@ -45,3 +45,5 @@ color_attribute_config:
 change_matchback_color: true
 # Use the cart notification made specifically for matchback.
 use_matchback_cart_notification: true
+# Show add to bag button on mobile matchback
+display_mobile_matchback_add_to_bag_button: false

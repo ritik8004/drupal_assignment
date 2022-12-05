@@ -23,3 +23,13 @@ services:
       - '@config.factory'
     tags:
       - { name: drush.command }
+
+  alshaya_acm_product.matchback_add_to_bag:
+    class: Drupal\alshaya_acm_product\Commands\MatchbackAddToBagCommands
+    arguments:
+      - '@config.factory'
+      - '@module_installer'
+      - '@module_handler'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command }
