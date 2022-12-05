@@ -69,6 +69,12 @@
     }
   }
 
+  @include breakpoint($only-mobile) {
+    .c-page-title {
+      margin-top: rem(4);
+    }
+  }
+
   @include breakpoint($tablet) {
     .container-wrapper {
       position: relative;
