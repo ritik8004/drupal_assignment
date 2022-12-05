@@ -24,4 +24,12 @@
       top: rem(-10);
     }
   }
+
+  .return-details-section {
+    .return-confirmation-detail-wrapper {
+      @include breakpoint($tablet) {
+        padding: rem(24) rem(25);
+      }
+    }
+  }
 }
