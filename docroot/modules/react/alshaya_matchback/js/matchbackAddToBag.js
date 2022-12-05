@@ -18,10 +18,20 @@ import MatchbackAddToBag from './add_to_bag';
       const matchbackMobileElements = $('.matchback-add-to-bag');
       matchbackMobileElements.each(function eachElement() {
         const $parent = $($(this).parents('article[data-vmode="matchback_mobile"]')[0]);
+        // If stock is 0, then the attribute does not appear in the markup.
+        let stock = $parent.attr('data-stock');
+        stock = hasValue(stock) ? stock : '0';
+
         ReactDOM.render(
           <MatchbackAddToBag
             sku={$parent.attr('data-sku')}
             url={$parent.find('.full-prod-link').attr('href')}
+            stockQty={stock}
+            productData={{ sku_type: $parent.attr('data-sku_type') }}
+            isBuyable={$parent.attr('data-is_buyable')}
+            extraInfo={{ showAddToBag: true }}
+            wishListButtonRef={{}}
+            styleCode={null}
           />,
           this,
         );

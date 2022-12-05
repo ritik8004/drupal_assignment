@@ -1,18 +1,26 @@
-import AddToBagContainer from "../../../js/utilities/components/addtobag-container";
+import React from 'react';
+import AddToBagContainer from '../../../js/utilities/components/addtobag-container';
 
-function MatchbackAddToBag(props) {
-  const {sku, url} = props;
-  return <AddToBagContainer
-    url={url}
-    sku={sku}
-    stockQty='10'
-    productData={{sku_type: 'configurable'}}
-    isBuyable={true}
-    // Pass extra information to the component for update the behaviour.
-    extraInfo={{showAddToBag: true}}
-    wishListButtonRef={{}}
-    styleCode={null}
-  />
+function MatchbackAddToBag({
+  sku,
+  url,
+  stockQty,
+  isBuyable,
+  extraInfo,
+  productData,
+}) {
+  return (
+    <AddToBagContainer
+      url={url}
+      sku={sku}
+      stockQty={stockQty}
+      productData={productData}
+      isBuyable={isBuyable}
+      extraInfo={extraInfo}
+      wishListButtonRef={{}}
+      styleCode={null}
+    />
+  );
 }
 
 export default MatchbackAddToBag;
