@@ -28,7 +28,6 @@ jobs:
       blt: ${{ steps.changes.outputs.blt}}
       js: ${{ steps.changes.outputs.js }}
       scss: ${{ steps.changes.outputs.scss }}
-      css: ${{ steps.changes.outputs.scss }}
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
