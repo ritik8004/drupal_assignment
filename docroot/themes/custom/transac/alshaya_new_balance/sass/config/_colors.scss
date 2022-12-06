@@ -77,6 +77,19 @@ $mm_l3_link_hover: $black;
 
 // Order detail, recent orders, order list page.
 $order_detail_td_light_content: $ada-gray;
+$order_detail_warm_white: $gray2;
+$order_detail_table_bg: $white;
+$order_detail_order_details_row: $light-gray;
+$order_detail_order_details_row_td_blend: $light-gray;
+$order_detail_order_summary_row_bg: $white;
+$order_detail_order_summary_row_td_blend: $light-gray;
+$order_detail_delivery_details_row_bg: $light-gray;
+$order_detail_delivery_details_row_border: $gray;
+$order_detail_delivery_details_row_content: $black;
+$order_detail_details_row_content: $ada-gray;
+
+// Order Print
+$order_print_dark_txt: $ada-gray;
 
 // Store Finder.
 $store-finder-border-hover: $nb-red;
@@ -169,6 +182,9 @@ $checkout_login_separtor: $black;
 $checkout_login_separtor_txt_bg: $white;
 $checkout_login_separtor_txt: $black;
 
+// Form Items
+$formitem_label: $ada-gray;
+
 //Megamenu
 $mm_l1_desktop-border: $black;
 $mm_l1_link_hover: $black;
@@ -260,7 +276,7 @@ $pdp_all_stores_modal_border: $black;
 $pdp_all_stores_modal_close_icon: $white;
 $pdp_all_stores_modal_close_bg: $black;
 $pdp_all_stores_modal_list_name: $black;
-
+$modal_close_bg: $nb-black;
 
 // Accordion
 $accordion_title: $black;
@@ -292,6 +308,9 @@ $algolia-search-icon: $black;
 $alg_search_bg: $gray2;
 $alg_search_mobile_bg: $white;
 $algolia-suggestion-text: $black;
+$algolia-input-field-separator: $black;
+$algolia-input-separator-overlay: $white;
+$algolia-search-suggestion-hover-bg: $light-gray2;
 
 // plp add to cart
 $plp-primary-cta-hover-bg: rgba(207, 10, 44, 0.9);
@@ -309,6 +328,8 @@ $spc-select-border: $gray;
 $spc-cart-background: $white;
 $spc-cart-promo-code-submit-enabled: $nb-red;
 $spc-promo-code-bg: $light-gray;
+$spc-checkout-success-message-background: $nb-green;
+$spc-checkout-warning-message-background: $nb-red;
 
 // Checkout steps
 $cko-steps-active-bg: $nb-red;
@@ -332,8 +353,9 @@ $checkout-login-promo-bg: $light-gray;
 $social-network-text: $nb-red;
 
 // SPC checkout
-$spc-checkout-radio-empty: $nb-red;
-$spc-checkout-radio-filled: $nb-red;
+$spc-checkout-radio-empty: $black;
+$spc-checkout-radio-filled: $black;
+$spc-checkout-delivery-method-txt: $black;
 $spc-checkout-cart-background: $light-gray;
 $spc-deliver-button: $nb-red;
 $spc-deliver-button: $nb-red;
@@ -352,6 +374,9 @@ $spc-checkout-title-bg: $white;
 $spc-checkout-product-content-bg: $white;
 $spc-checkout-section-border: $gainsboro;
 $spc-checkout-product-light-bg: $light-gray-f7-alpha-5;
+$spc-cnc-store-item-text-impress: $black;
+$spc-cnc-store-list-distance: $black;
+$spc-cnc-toggle-bg-active: $nb-red;
 
 //Wishlist
 $wishlist-header-notification-border: $nb-red;
@@ -410,7 +435,7 @@ $online-return-eligibility-button-bg: $nb-red;
 $online-return-eligibility-button-txt: $white;
 $online-return-eligibility-button-hover: $nb-red;
 $online-return-dark-bg: $nb-black;
-$online-return-ineligible-label-bg: $med-dark-red;
+$online-return-ineligible-label-bg: $nb-red;
 $online-return-disable-button-bg: $gray;
 $online-return-disable-button-txt: $ada-gray;
 $online-return-refund-label-inactive-bg: $gray2;
@@ -423,6 +448,8 @@ $online-return-status-green-label: $nb-green;
 $online-return-cancel-button-border: $nb-red;
 $online-return-order-detail-border: $gray;
 $online-return-request-section-border: $gainsboro;
+$online-return-notification-cart-bg: $nb-black;
+$online-return-cancellation-reason: $nb-red;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $primary_link;
@@ -437,3 +464,6 @@ $header_mobile_menu_arrow: $black;
 
 // Language Switcher
 $lang_switch_firsttime_bg: $nb-red;
+
+// Messages and Errors
+$default_msg_bg: $nb-green;

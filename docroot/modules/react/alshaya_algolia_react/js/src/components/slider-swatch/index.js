@@ -4,13 +4,12 @@ import { Swatch } from '../swatch';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isDesktop, isMobile } from '../../../../../js/utilities/display';
 
-const SliderSwatch = ({ swatches, url }) => {
+const SliderSwatch = ({ swatches, url, title }) => {
   if (!hasValue(swatches)) {
     return null;
   }
 
   const totalNoOfSwatches = swatches.length;
-  const { currentLanguage } = drupalSettings.path;
 
   // Swatch display slides limit, defaults to desktop - 4.
   // Mobile - 2; Tablets - 3.
@@ -23,13 +22,12 @@ const SliderSwatch = ({ swatches, url }) => {
     infinite: false,
     slidesToShow: limit,
     slidesToScroll: limit,
-    rtl: (currentLanguage === 'ar'),
   };
 
   let swatchContainer = null;
   if (totalNoOfSwatches > 0) {
     const swatchItems = swatches.map(
-      (swatch) => <Swatch swatch={swatch} key={swatch.child_id} url={url} />,
+      (swatch) => <Swatch swatch={swatch} key={swatch.child_id} url={url} title={title} />,
     );
     let classSwatches = 'swatches';
     const hasSliderSwatch = totalNoOfSwatches > limit;

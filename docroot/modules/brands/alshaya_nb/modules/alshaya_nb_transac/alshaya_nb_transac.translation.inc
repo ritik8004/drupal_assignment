@@ -40,6 +40,56 @@ function _alshaya_nb_transac_translations() {
         'ar' => 'تفاصيل المنتج',
       ],
     ],
+    'v3' => [
+      'Independent since 1906, we empower people through sport and craftsmanship to create positive change in communities around the world.' => [
+        'ar' => 'شركة مستقلة منذ عام 1906 لتمكين الجميع من خلال الرياضة والتصميم بحرفية، من أجل التغيير الإيجابي في المجتمعات حول العالم.',
+      ],
+      '© 2022 New Balance. All Rights Reserved' => [
+        'ar' => '© 2022 نيو بالانس. جميع الحقوق محفوظة.',
+      ],
+      'Style' => [
+        'ar' => 'الستايل',
+      ],
+      'Meets New Balance\'s green leaf standard' => [
+        'ar' => 'يلبي معايير غرين ليف من نيو بالانس',
+      ],
+      'Color' => [
+        'ar' => 'اللون',
+      ],
+      'Gender' => [
+        'ar' => 'الجنس',
+      ],
+      'Line' => [
+        'ar' => 'التشكيلة',
+      ],
+      'Fit' => [
+        'ar' => 'القصة',
+      ],
+      'Sustainability' => [
+        'ar' => 'الاستدامة',
+      ],
+      'Width Description' => [
+        'ar' => 'مواصفات العرض',
+      ],
+      'Product type' => [
+        'ar' => 'نوع المنتج',
+      ],
+      'Closure type' => [
+        'ar' => 'نوع إبزيم الإغلاق',
+      ],
+      'Green leaf' => [
+        'ar' => 'غرين ليف',
+      ],
+      'Primary Material' => [
+        'ar' => 'المواد الأساسية',
+      ],
+      'Technologies' => [
+        'ar' => 'تقنيات التصميم',
+      ],
+      'Weight' => [
+        'ar' => 'الوزن',
+      ],
+    ],
   ];
 }
 

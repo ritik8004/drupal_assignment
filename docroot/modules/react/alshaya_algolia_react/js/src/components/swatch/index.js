@@ -1,14 +1,28 @@
 import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
-export const Swatch = ({ swatch, url }) => {
+export const Swatch = ({ swatch, url, title }) => {
   let selectedImage = `${url}?selected=${swatch.child_id}`;
   if (swatch.url !== undefined) {
     selectedImage = swatch.url;
   }
 
+  /**
+   * Push swatch gtm data on swatch click on plp.
+   */
+  const handleSwatchClick = (e) => {
+    e.preventDefault();
+    const productData = {
+      sku: swatch.child_sku_code,
+      gtm_name: title,
+      color: swatch.display_label,
+    };
+    Drupal.alshayaSeoGtmPushSwatchClick(productData);
+    window.location.href = selectedImage;
+  };
+
   return (
-    <a href={selectedImage}>
+    <a href="#" onClick={(e) => handleSwatchClick(e)}>
       <span className="swatch-block swatch-image">
         {swatch.product_image_url
           ? <ImageElement data-sku-image={swatch.product_image_url} src={swatch.image_url} loading="lazy" />
@@ -18,7 +32,7 @@ export const Swatch = ({ swatch, url }) => {
   );
 };
 
-const Swatches = ({ swatches, url }) => {
+const Swatches = ({ swatches, url, title }) => {
   if (typeof swatches === 'undefined') {
     return null;
   }
@@ -51,7 +65,7 @@ const Swatches = ({ swatches, url }) => {
     swatcheContainer = (
       <div className="swatches">
         {swatches.slice(0, limit).map(
-          (swatch) => <Swatch swatch={swatch} key={swatch.id} url={url} />,
+          (swatch) => <Swatch swatch={swatch} key={swatch.id} url={url} title={title} />,
         )}
         {(diff > 0) ? <a className="swatch-more-link product-selected-url" href={url}>{swatchMoreText}</a> : null}
       </div>

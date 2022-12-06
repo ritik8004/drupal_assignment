@@ -66,3 +66,13 @@ function alshaya_matchback_alshaya_acm_product_recommended_products_data_alter(a
 
   $data['data']['section_title'] = t('Frequently Bought Together', [], ['context' => 'alshaya_static_text|pdp_matchback_title']);
 }
+
+/**
+ * Implements hook_node_view_alter().
+ */
+function alshaya_matchback_node_view_alter(&$build, EntityInterface $entity) {
+  if ($entity->bundle() !== 'acq_product') {
+    return;
+  }
+  $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback.gtm';
+}

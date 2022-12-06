@@ -3,8 +3,7 @@ Feature: SPC to verify ratings on Bazaar Voice for Guest user
 
   Background:
     Given I am on "{spc_pdp_page}"
-    And I wait 5 seconds
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
 
   @desktop
   Scenario: As a Guest user, I should be able to write a review for a Product

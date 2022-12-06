@@ -60,7 +60,7 @@
         if (gtmContainer === 'product detail page') {
           const referrerData = Drupal.getItemFromLocalStorage('referrerData');
           const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
-          if (referrer === '' || (Drupal.hasValue(referrerData) && !referrerData.path.includes(referrer))) {
+          if (referrer === '' || (Drupal.hasValue(referrerData) && Drupal.hasValue(referrerData.path) && !referrerData.path.includes(referrer))) {
             if(isSearchActivated !== null && !isSearchActivated) {
               // Set PDP as referrerPageType only if referrer is not set,
               // Search is not active or
@@ -465,32 +465,6 @@
       }
 
       /**
-       * Newsletter tracking GTM.
-       */
-      $('footer .edit-newsletter').click(function () {
-        footerNewsletterSubmiClicked = true;
-      });
-
-      // Trigger GTM push event on AJAX completion of add to cart button.
-      $(document).once('js-event').ajaxComplete(function (event, xhr, settings) {
-        gtm_execute_onetime_events = true;
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) && (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
-          var responseJSON = xhr.responseJSON;
-          var responseMessage = '';
-          $.each(responseJSON, function (key, obj) {
-            if (obj.method === 'newsletterHandleResponse') {
-              responseMessage = obj.args[0].message;
-              return false;
-            }
-          });
-
-          if ((responseMessage === 'success') && (footerNewsletterSubmiClicked)) {
-            Drupal.alshaya_seo_gtm_push_lead_type('footer');
-          }
-        }
-      });
-
-      /**
        * Quantity update in cart.
        */
       // Trigger removeFromCart & addToCart events based on the quantity update on cart page.
@@ -883,15 +857,34 @@
         productData.dimension5 = product.attr('gtm-dimension5');
       }
 
+      var listName = null;
       // If list variable is set in cookie, retrieve it.
       if ($.cookie('product-list') !== undefined) {
         var listValues = JSON.parse($.cookie('product-list'));
-        productData.list = (listValues[productData.id] === 'Search Results Page' || $('body').attr('gtm-list-name') === undefined)
+        listName = (listValues[productData.id] === 'Search Results Page' || $('body').attr('gtm-list-name') === undefined)
           // For SRP, use list value 'Search Result Page'.
           ? listValues[productData.id]
           // For all other pages, use gtm-list-name html attribute.
           // Except in PDP, to define full path from PLP.
           : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+
+        // Dispatch custom event to get list name. For the default value we use
+        // the list name from the gtm attribute for the page. But for sections
+        // like matchback, we need "match back" prefix to be added instead of
+        // PDP/PLP, so this event will help us there.
+        var gtmListNameEvent = new CustomEvent('getGtmListNameForProduct', {
+          detail: {
+            listName,
+            storedListValues: listValues,
+            sku: productData.id,
+          }
+        });
+        document.dispatchEvent(gtmListNameEvent);
+        listName = gtmListNameEvent.detail.listName;
+      }
+
+      if (listName) {
+        productData.list = listName;
       }
 
       // Fetch referrerPageType from localstorage.
