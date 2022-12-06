@@ -82,7 +82,7 @@ jobs:
           echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
           echo "CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }}" >> $GITHUB_ENV
           echo "CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }}" >> $GITHUB_ENV
-          echo "CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.all }}" >> $GITHUB_ENV
+          echo "CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.react }}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
