@@ -182,5 +182,5 @@ jobs:
 
       - name: Run Tests
         run: |
-          echo 'Changed files are - ${{ needs.changedfiles.outputs.all }}'
+#          echo 'Changed files are - ${{ needs.changedfiles.outputs.all }}'
           bash $SCRIPT_DIR/run_tests.sh "${{ needs.changedfiles.outputs.all }}"
