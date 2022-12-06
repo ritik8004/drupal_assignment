@@ -31,7 +31,7 @@ jobs:
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           fetch-depth: 2
 
@@ -39,9 +39,9 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs) >> $GITHUB_OUTPUT
-          echo themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
-          echo react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)"
+          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
+          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
 
       - name: Check if changes are deployable
         # @todo Revert the code after 6.19.0 release.
@@ -55,6 +55,7 @@ jobs:
             echo "Changes not require deployment. Hence skipping the deployment."
             echo deployable_changes=false >> $GITHUB_OUTPUT
           fi
+          echo deployable_changes=true >> $GITHUB_OUTPUT
 
   deploy:
     name: Deploy
