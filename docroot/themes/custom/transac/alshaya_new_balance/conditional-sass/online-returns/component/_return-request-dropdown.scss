@@ -4,5 +4,14 @@
     .return-reason-label {
       font-family: $alshaya-thin;
     }
+
+    .reasonsSelect__control,
+    .qtySelect__control {
+      background: white;
+    }
+  }
+
+  .return-qty-select {
+    width: rem(108);
   }
 }

@@ -18,6 +18,14 @@
       }
     }
 
+    .return-initiated-item,
+    .returned-items-row {
+      .dark {
+        font-family: $alshaya-bold;
+        color: $order_detail_details_row_content;
+      }
+    }
+
     .print-return-label-wrapper,
     .cancel-return-button-wrapper {
       .print-label-button,

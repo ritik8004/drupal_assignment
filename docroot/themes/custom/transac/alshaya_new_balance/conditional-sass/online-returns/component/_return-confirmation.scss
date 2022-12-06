@@ -24,4 +24,16 @@
       top: rem(-10);
     }
   }
+
+  .item-price,
+  .item-total-price,
+  .order__details--summary {
+    & > div,
+    & > span {
+      &.dark {
+        font-family: $alshaya-bold;
+        color: $order_detail_details_row_content;
+      }
+    }
+  }
 }
