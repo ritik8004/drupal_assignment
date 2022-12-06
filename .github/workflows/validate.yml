@@ -28,6 +28,7 @@ jobs:
       blt: ${{ steps.changes.outputs.blt}}
       js: ${{ steps.changes.outputs.js }}
       scss: ${{ steps.changes.outputs.scss }}
+      feature: ${{ steps.changes.outputs.feature }}
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
@@ -96,6 +97,7 @@ jobs:
           echo ${{needs.changedfiles.outputs.docroot}}
           echo ${{needs.changedfiles.outputs.js}}
           echo ${{needs.changedfiles.outputs.scss}}
+          echo ${{needs.changedfiles.outputs.feature}}
 
       - name: Prepare environment variables
         run: |
