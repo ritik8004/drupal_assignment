@@ -46,7 +46,7 @@
         &.status-pending,
         &.status-processing,
         &.status-returned {
-          font-weight: 700;
+          font-family: $alshaya-bold;
 
           @include breakpoint($upto-desktop) {
             line-height: rem(30);
