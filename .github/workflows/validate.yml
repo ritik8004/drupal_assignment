@@ -28,7 +28,7 @@ jobs:
       blt: ${{ steps.changes.outputs.blt}}
       js: ${{ steps.changes.outputs.js }}
       scss: ${{ steps.changes.outputs.scss }}
-      feature: ${{ steps.changes.outputs.feature }}
+      css: ${{ steps.changes.outputs.scss }}
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
@@ -40,13 +40,12 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)" >> $GITHUB_OUTPUT
-          echo "composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs)" >> $GITHUB_OUTPUT
-          echo "docroot=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs)" >> $GITHUB_OUTPUT
-          echo "blt=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep blt | xargs)" >> $GITHUB_OUTPUT
-          echo "js=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs)" >> $GITHUB_OUTPUT
-          echo "scss=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs)" >> $GITHUB_OUTPUT
-          echo "feature=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .feature | xargs)" >> $GITHUB_OUTPUT
+          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs) >> $GITHUB_OUTPUT
+          echo composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs) >> $GITHUB_OUTPUT
+          echo docroot=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs) >> $GITHUB_OUTPUT
+          echo blt=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep blt | xargs) >> $GITHUB_OUTPUT
+          echo js=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs) >> $GITHUB_OUTPUT
+          echo scss=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs) >> $GITHUB_OUTPUT
       - name: Check if there are changes.
         run: |
           echo "No changes found in PR. This could also mean your branch is not updated, please rebase."
@@ -97,14 +96,13 @@ jobs:
           echo ${{needs.changedfiles.outputs.docroot}}
           echo ${{needs.changedfiles.outputs.js}}
           echo ${{needs.changedfiles.outputs.scss}}
-          echo ${{needs.changedfiles.outputs.feature}}
 
       - name: Prepare environment variables
         run: |
-          echo "GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-          echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
-          echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
-          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
+          echo GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/}) >> $GITHUB_ENV
+          echo COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin) >> $GITHUB_ENV
+          echo BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt) >> $GITHUB_ENV
+          echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -124,7 +122,7 @@ jobs:
       - name: Cache dependencies installed with Composer
         id: composer-cache
         run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo dir=$(composer config cache-files-dir) >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         with:
@@ -158,7 +156,7 @@ jobs:
         id: npm-cache-dir
         if: ${{ needs.changedfiles.outputs.js || needs.changedfiles.outputs.scss }}
         run: |
-          echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+          echo dir=$(npm config get cache) >> $GITHUB_OUTPUT
 
       # @todo check if this really works or we need one step per directory
       - uses: actions/cache@v3
