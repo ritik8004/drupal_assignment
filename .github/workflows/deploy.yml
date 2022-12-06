@@ -46,7 +46,7 @@ jobs:
       - name: Check if changes are deployable
         id: deployable_changes
         run: |
-          echo 'Changed files are - ${{ steps.changes.outputs.all }}'
+#          echo 'Changed files are - ${{ steps.changes.outputs.all }}'
           if [[ "${{ steps.changes.outputs.all }}" =~ "composer." || "${{ steps.changes.outputs.all }}" =~ "docroot/" || "${{ steps.changes.outputs.all }}" =~ "blt/" || "${{ steps.changes.outputs.all }}" =~ "factory-hooks/" || "${{ steps.changes.outputs.all }}" =~ "hooks/" || "${{ steps.changes.outputs.all }}" =~ "scripts/" ]]
           then
             echo "Changes require deployment."
