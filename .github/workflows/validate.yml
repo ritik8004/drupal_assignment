@@ -45,6 +45,7 @@ jobs:
           echo "blt=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep blt | xargs)" >> $GITHUB_OUTPUT
           echo "js=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs)" >> $GITHUB_OUTPUT
           echo "scss=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs)" >> $GITHUB_OUTPUT
+          echo "feature=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .feature | xargs)" >> $GITHUB_OUTPUT
       - name: Check if there are changes.
         run: |
           echo "No changes found in PR. This could also mean your branch is not updated, please rebase."
