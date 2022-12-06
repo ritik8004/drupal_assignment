@@ -107,6 +107,9 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       '#theme' => 'checkout_tracker_block',
       '#stepMap' => $stepMap,
       '#activeMapKey' => $route_name,
+      '#attributes' => [
+        'class' => ['hide-checkout-tracker'],
+      ],
     ];
 
   }
