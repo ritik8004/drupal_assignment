@@ -98,6 +98,8 @@ class AuraFormRedeemPoints extends React.Component {
 
   handleRedeemPointsEvent = (data) => {
     const { stateValues, action } = data.detail;
+    const { cart } = this.props;
+    let dispatchCheckoutStep3GTM = false;
 
     if (Object.keys(stateValues).length === 0 || stateValues.error) {
       showError('spc-aura-link-api-response-message', stateValues.message);
@@ -116,9 +118,19 @@ class AuraFormRedeemPoints extends React.Component {
       stateValues.auraTransaction = true;
       // Add a class for FE purposes.
       document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
+      // When full payment done by Aura refreshCartOnPaymentMethod event triggers checkout step 3.
+      // When partial payment is done by Aura, trigger checkout step 3 from here.
+      if (cartTotals.balancePayable > 0) {
+        dispatchCheckoutStep3GTM = true;
+      }
     } else if (action === 'remove points') {
       // Reset redemption input fields to initial value.
       this.resetInputs();
+      // When full payment done by Aura refreshCartOnPaymentMethod event triggers checkout step 3.
+      // When partial payment is done by Aura, trigger checkout step 3 from here.
+      if (cartTotals.balancePayable > 0) {
+        dispatchCheckoutStep3GTM = true;
+      }
 
       // Remove all aura related keys from totals if present.
       Object.entries(stateValues).forEach(([key]) => {
@@ -141,6 +153,10 @@ class AuraFormRedeemPoints extends React.Component {
 
     // Dispatch an event to update totals in cart object.
     dispatchCustomEvent('updateTotalsInCart', { totals: cartTotals });
+    // Dispatch GTM Checkout Step 3 event for partial aura payment.
+    if (dispatchCheckoutStep3GTM) {
+      dispatchCustomEvent('auraDataReceivedForGtmCheckoutStep3', { cart });
+    }
   };
 
   convertPointsToMoney = (e) => {
@@ -311,7 +327,7 @@ class AuraFormRedeemPoints extends React.Component {
               />
             </ConditionalView>
             <ConditionalView condition={auraTransaction}>
-              <div className="successful-redeem-msg">
+              <div className="successful-redeem-msg" data-aura-points-used={points}>
                 {this.getPointsRedeemedMessage()}
               </div>
             </ConditionalView>

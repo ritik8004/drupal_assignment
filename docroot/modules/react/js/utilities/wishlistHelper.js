@@ -157,7 +157,7 @@ export const getWishListData = (strgKey) => {
 /**
  * Utility function to check if product sku is already exist in wishlist.
  */
-export const isProductExistInWishList = (productSku, variant = null) => {
+export const isProductExistInWishList = (productSku) => {
   // Get existing wishlist data from storage.
   const wishListItems = getWishListData();
 
@@ -167,10 +167,6 @@ export const isProductExistInWishList = (productSku, variant = null) => {
     // We need to match the given sku with the sku property for each wishlist
     // item to verify if it exist.
     ifProductExist = wishListItems.find((product) => product.sku === productSku);
-
-    if (variant !== null && !ifProductExist) {
-      ifProductExist = wishListItems.find((product) => product.sku === variant);
-    }
   }
 
   // Return true/false based on the data.
