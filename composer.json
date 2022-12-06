@@ -382,7 +382,7 @@
             "drupal/sharethis": {
                 "Optimise library of sharethis module": "https://www.drupal.org/files/issues/2022-03-10/optimise-libraries-3268825-5.patch",
                 "ShareThis admin arrows are remotely hosted and missing": "https://www.drupal.org/files/issues/2022-03-29/sharethis-replace-missing-admin-arrows.patch",
-                "Execute setup picker only once.": "https://www.drupal.org/files/issues/2022-12-06/setup-picker-once-3319692-10.patch",
+                "Execute setup picker only once.": "https://www.drupal.org/files/issues/2022-12-06/setup-picker-once-3319692-12.patch",
                 "ReferenceError: stButtons is not defined": "https://www.drupal.org/files/issues/2022-12-06/sharethis-reference-error-stbutton-3324477-4.patch"
             },
             "acquia/lightning": {
