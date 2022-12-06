@@ -36,4 +36,10 @@
       margin-top: rem(36);
     }
   }
+
+  .user-form {
+    .form-email {
+      background: $default_bg;
+    }
+  }
 }
