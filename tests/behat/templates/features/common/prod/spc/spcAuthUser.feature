@@ -3,8 +3,10 @@
 Feature: Add address to new user account.
 
   Background:
-    Given I am logged in as an authenticated user "{spc_new_registered_user_email}" with password "{spc_new_registered_user_password}"
-    And I wait 10 seconds
+    Given I am on "user/login"
+    And I wait for the page to load
+    And I login with "{spc_new_registered_user_email}" using custom password
+    Then I press "edit-submit"
     Then I should be on "/user" page
 
   Scenario: Authenticated user should be able to login into the system
@@ -12,12 +14,12 @@ Feature: Add address to new user account.
     And the element "#block-userrecentorders" should exist
     And the element "#block-userrecentorders .no--orders" should exist
     And the element "#block-userrecentorders .subtitle" should exist
-    And the element "#block-userrecentorders .edit-account" should exist
+    And the element "a.edit-account-btn-button" should exist
     And I should see "You have no recent orders to display."
 
   @address @desktop
   Scenario: As an authenticated user, I should be able to add address to my address book
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
     Then I check the address-book form
@@ -34,7 +36,6 @@ Feature: Add address to new user account.
       | field_address[0][address][locality]                  | {locality}    |
       | field_address[0][address][address_line2]             | {floor}       |
     And I press "op"
-    When I wait for AJAX to finish
     And I wait for the page to load
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 
@@ -43,7 +44,7 @@ Feature: Add address to new user account.
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
+    When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
     Then I check the address-book form
@@ -60,6 +61,5 @@ Feature: Add address to new user account.
       | field_address[0][address][locality]                  | {locality}    |
       | field_address[0][address][address_line2]             | {floor}       |
     And I press "op"
-    When I wait for AJAX to finish
     And I wait for the page to load
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist

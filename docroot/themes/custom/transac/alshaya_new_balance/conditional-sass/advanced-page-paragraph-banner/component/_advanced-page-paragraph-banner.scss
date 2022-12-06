@@ -1,0 +1,34 @@
+.nodetype--advanced_page {
+  .paragraph_banner_block {
+    .paragraph_banner_title_subtitle {
+      .field--name-field-title {
+        font-family: $nb-didot-bold;
+        font-size: rem(26);
+
+        @include breakpoint($only-mobile) {
+          font-size: rem(20);
+        }
+      }
+
+      .field--name-field-sub-title {
+        font-size: rem(14);
+
+        @include breakpoint($only-mobile) {
+          font-size: rem(12);
+        }
+      }
+    }
+
+    .paragraph_banner_buttons {
+      .field--name-field-links {
+        .field--name-field-links {
+          a {
+            font-family: $alshaya-bold;
+            font-size: rem(14);
+            border-width: rem(2);
+          }
+        }
+      }
+    }
+  }
+}

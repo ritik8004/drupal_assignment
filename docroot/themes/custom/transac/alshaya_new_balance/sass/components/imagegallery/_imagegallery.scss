@@ -1,0 +1,17 @@
+.mobilegallery {
+  margin-bottom: rem(16);
+
+  #product-image-gallery-mobile {
+    .slick-track,
+    li.slick-slide {
+      min-height: auto;
+    }
+
+    ul.slick-dots {
+      position: absolute !important;
+      width: 100% !important;
+      margin-bottom: rem(20);
+      justify-content: center;
+    }
+  }
+}

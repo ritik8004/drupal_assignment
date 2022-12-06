@@ -1,0 +1,208 @@
+.cko-progress-tracker {
+  max-width: rem(1026);
+  margin: 0 auto rem(15);
+
+  .alias--checkout &,
+  .alias--checkout-confirmation & {
+    margin: 0 auto rem(84);
+
+    @include breakpoint($only-mobile) {
+      margin: 0 auto rem(44);
+    }
+  }
+
+  #checkout-progress {
+    width: 90%;
+    margin: 0 auto;
+    font-size: rem(14);
+    position: relative;
+
+    @include breakpoint($only-mobile) {
+      width: 78%;
+      font-size: rem(10);
+    }
+
+    &::before {
+      @extend %steps-border;
+
+      background-color: $cko-steps-inactive-border;
+      transform: translateY(-50%);
+    }
+
+    &::after {
+      @extend %steps-border;
+
+      background-color: $cko-steps-active-border;
+      transform: scaleX(0) translateY(-50%);
+      transform-origin: $left center;
+    }
+
+    &.step {
+      &-2 {
+        &::after {
+          transform: scaleX(0.333) translateY(-50%);
+        }
+      }
+
+      &-3 {
+        &::after {
+          transform: scaleX(0.666) translateY(-50%);
+        }
+
+        .step.step-2 {
+          .logged-in & {
+            pointer-events: none;
+          }
+        }
+      }
+
+      &-4 {
+        &::after {
+          transform: scaleX(1) translateY(-50%);
+        }
+
+        .step {
+          pointer-events: none;
+        }
+      }
+    }
+
+    .progress-bar {
+      width: 100%;
+      display: flex;
+      height: rem(100);
+      justify-content: space-between;
+      align-items: center;
+
+      .step {
+        z-index: 2;
+        position: relative;
+
+        .step-label {
+          position: absolute;
+          top: calc(100% + #{rem(18)});
+          white-space: nowrap;
+          #{$left}: 50%;
+          transform: translateX(-50%) perspective(rem(1000));
+          color: $cko-steps-label-txt;
+
+          html[lang=ar] & {
+            transform: translateX(50%) perspective(rem(1000));
+          }
+        }
+
+        span {
+          color: $cko-steps-label-txt;
+          transition: 0.3s ease;
+          display: block;
+          transform: translate3d(0, 0, 0) scale(1);
+          width: rem(20);
+          height: rem(20);
+          text-align: center;
+          padding-top: rem(2);
+
+          html[lang=ar] & {
+            padding-top: rem(4);
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: rem(14);
+          }
+        }
+
+        &.active {
+          span {
+            color: $cko-steps-active-txt;
+
+            @include breakpoint($only-mobile) {
+              font-family: $alshaya-bold;
+            }
+          }
+
+          .step-label {
+            color: $cko-steps-label-txt;
+            font-family: $alshaya-bold;
+          }
+
+          &::after {
+            border: rem(1) solid $cko-steps-active-border;
+            background-color: $cko-steps-active-bg;
+          }
+        }
+
+        &.completed {
+          span {
+            color: transparent;
+            transform: translate3d(0, 0, 0) scale(2);
+          }
+
+          .step-label {
+            color: $cko-steps-label-txt !important;
+            font-size: rem(14);
+            top: calc(100% + #{rem(20)});
+
+            @include breakpoint($only-mobile) {
+              font-size: rem(10);
+              top: calc(100% + #{rem(18)});
+            }
+          }
+
+          &::after {
+            border: rem(1) solid $cko-steps-active-border;
+            content: '';
+            background: url('#{$base_theme_img_directory_path}/icons/done-state.svg') no-repeat;
+            background-color: $cko-steps-active-bg;
+            background-position: 60%;
+          }
+        }
+
+        &.current {
+          &::after {
+            background-color: $cko-steps-active-bg;
+          }
+
+          span {
+            color: $cko-steps-active-txt;
+            pointer-events: none;
+          }
+
+          .step-label {
+            font-family: $alshaya-bold;
+            pointer-events: none;
+          }
+        }
+
+        &::after {
+          content: "";
+          position: absolute;
+          z-index: -1;
+          #{$left}: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: rem(32);
+          height: rem(32);
+          background-color: $cko-steps-inactive-bg;
+          border-radius: 50%;
+          border: rem(1) solid $cko-steps-active-border;
+
+          html[lang=ar] & {
+            transform: translate(50%, -50%);
+          }
+
+          @include breakpoint($only-mobile) {
+            width: rem(26);
+            height: rem(26);
+          }
+        }
+
+        &.step-4 {
+          &.completed {
+            .step-label {
+              font-family: $alshaya-bold;
+            }
+          }
+        }
+      }
+    }
+  }
+}

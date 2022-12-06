@@ -1,0 +1,171 @@
+.c-user-login,
+.c-user-register,
+.c-user-password {
+  .section-title,
+  #block-alshayasocialloginblock .section-title {
+    display: block;
+    font-size: rem(14);
+    font-family: $alshaya-bold;
+
+    @include breakpoint($only-mobile) {
+      font-size: rem(14);
+      padding-top: rem(40);
+    }
+  }
+
+  h1 {
+    &.c-page-title {
+      font-size: rem(14);
+      color: $user_login_section_title;
+      text-transform: unset;
+    }
+  }
+
+  .user-login-form,
+  .user-register-form,
+  .user-pass {
+    >a {
+      font-weight: normal;
+    }
+
+    label.form-required:not(.error),
+    .form-type-textfield label:not(.error) {
+      font-size: rem(14);
+      color: $user_form_text;
+    }
+
+    .form-email,
+    .form-text {
+      font-size: rem(14);
+    }
+
+    .form-submit {
+      @include primaryBtn;
+
+      @include breakpoint($tablet) {
+        html[lang=ar] & {
+          width: rem(192);
+        }
+      }
+    }
+  }
+
+  .c-content__region {
+    .user-form {
+      .field--name-field-subscribe-newsletter {
+        p {
+          a {
+            font-weight: 400;
+          }
+        }
+      }
+    }
+  }
+
+  .block-alshaya-signup-signin-buttons {
+    .link-button {
+      @include secondaryBtn;
+
+      @include breakpoint($tablet) {
+        width: rem(278);
+      }
+    }
+
+    .sub-text {
+      font-family: $alshaya-bold;
+    }
+  }
+
+  #unmask_password {
+    color: $primary_form_link;
+    font-size: rem(10);
+  }
+
+  &.user-page {
+    main {
+      .region__content {
+        .block-page-title-block {
+          h1 {
+            @include breakpoint($only-mobile) {
+              font-size: rem(14);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-user-password {
+  &.user-page {
+    main {
+      .block-system-main-block {
+        border-#{$right}: none;
+      }
+    }
+  }
+}
+
+.c-user-register,
+.c-user-login {
+  .section-title {
+    @include breakpoint($only-mobile) {
+      font-size: rem(14);
+      padding-top: rem(0);
+    }
+  }
+
+  main {
+    .user-register-form,
+    .user-login-form {
+      .form-submit {
+        padding: rem(20) 0;
+        height: auto;
+      }
+    }
+  }
+}
+
+.c-user--node {
+  &.l-two--sf {
+    aside {
+      &.c-sidebar-first {
+        @include breakpoint($upto-desktop) {
+          .my-account-mobile-title2 {
+            display: none;
+          }
+
+          .my-account-mobile-title1 {
+            border-bottom: rem(1) solid $primary_border;
+            padding-bottom: rem(16);
+            text-transform: capitalize;
+          }
+
+          li {
+            &.my-account {
+              + li {
+                a {
+                  border-top: none;
+                }
+              }
+            }
+
+            a {
+              &::after {
+                color: $user_nav_mobile_link_icon;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .c-sidebar-first {
+    .my-account-nav {
+      a {
+        border-bottom-color: $my_acc_mob_border_color;
+      }
+    }
+  }
+}

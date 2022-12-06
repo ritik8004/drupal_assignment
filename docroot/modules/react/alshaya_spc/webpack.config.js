@@ -6,6 +6,7 @@ var config = {
     cart: './js/cart',
     minicart: './js/minicart',
     expressdelivery: './js/expressdelivery',
+    cart_notification_drawer: './js/cart_notification_drawer',
     checkout: './js/checkout',
     order_details: './js/order-details',
     checkout_confirmation: './js/checkout-confirmation',

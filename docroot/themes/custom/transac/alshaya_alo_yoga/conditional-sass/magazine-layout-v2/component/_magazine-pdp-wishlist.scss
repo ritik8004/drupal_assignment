@@ -1,0 +1,36 @@
+.magv2-sidebar {
+  .wishlist-button-wrapper {
+    border-color: $primary_empty_btn_border !important;
+
+    body.wishlist-enabled.magazine-layout-v2 & {
+      @include breakpoint($only-tablet) {
+        height: auto;
+      }
+    }
+
+    .wishlist-link {
+      font-family: $ay-heavy !important;
+      font-size: rem(16) !important;
+      line-height: rem(20);
+      color: $primary_text !important;
+      text-transform: uppercase;
+
+      &::before {
+        content: "";
+        background: url(#{$ay_theme_img_directory_path}/icons/wishlist-empty-icon.svg?adsas) center/contain no-repeat;
+        width: rem(20);
+        height: rem(20);
+        display: inline-block;
+        vertical-align: middle;
+        margin-#{$right}: rem(17);
+        margin-top: rem(-4);
+
+        @include breakpoint($only-tablet) {
+          width: rem(21);
+          margin-left: unset;
+          margin-top: unset;
+        }
+      }
+    }
+  }
+}

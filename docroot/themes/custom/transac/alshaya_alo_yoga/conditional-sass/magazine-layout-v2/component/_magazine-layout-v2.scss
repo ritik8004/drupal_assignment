@@ -1,0 +1,32 @@
+.magazine-layout-v2 {
+  #pdp-layout {
+    background-color: $pdp_bg;
+  }
+}
+
+.nodetype--acq_product {
+  .page-wrapper,
+  .c-footer {
+    background-color: $pdp_bg;
+  }
+}
+
+.magv2-sidebar {
+  padding-left: rem(12);
+  padding-right: rem(12);
+  background-color: $pdp_bg;
+
+  .magv2-pdp-section-title {
+    color: $primary_text;
+  }
+}
+
+.hide-minimalistic-header {
+  &:not(.page-type-product) {
+    &.no-sticky-algolia-search-bar {
+      .block-alshaya-react-mini-cart {
+        transform: none;
+      }
+    }
+  }
+}

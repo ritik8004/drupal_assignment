@@ -189,16 +189,6 @@ $config['acq_commerce.conductor']['debug'] = FALSE;
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
 
-// Disable unwanted core views.
-$settings['views_to_disable'] = [
-  'frontpage',
-  'profiles',
-  'content_recent',
-  'taxonomy_term',
-  'who_s_new',
-  'who_s_online',
-];
-
 // Settings to serve empty response to bad bots.
 // @see Drupal/alshaya_facets_pretty_paths/EventSubscriber/AlshayaFacetsPrettyPathsKernelEventsSubscriber
 $settings['nonindexable_plp_filter_count'] = 2;
@@ -235,6 +225,9 @@ switch ($env_name) {
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'views_ui';
 
+    // Enable Mobile APP module on all new sites by default for non-prod.
+    $settings['additional_modules'][] = 'alshaya_mobile_app';
+
     // Increase autologout timeout on local so we are not always logged out.
     $config['autologout.settings']['timeout'] = 86400;
 
@@ -260,6 +253,9 @@ switch ($env_name) {
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
 
+    // Enable Mobile APP module on all new sites by default for non-prod.
+    $settings['additional_modules'][] = 'alshaya_mobile_app';
+
     // Log debug messages too.
     $settings['alshaya_performance_log_mode'] = 'developer';
 
@@ -268,6 +264,18 @@ switch ($env_name) {
 
     // Set this to 1 to make testing convenient.
     $config['alshaya_acm_product.settings']['local_storage_cache_time'] = 1;
+    break;
+
+  case 'uat':
+    // Enable Mobile APP module on all new sites by default for non-prod.
+    $settings['additional_modules'][] = 'alshaya_mobile_app';
+    break;
+
+  case 'pprod':
+    // Enable Mobile APP module on all new sites by default for non-prod.
+    $settings['additional_modules'][] = 'alshaya_mobile_app';
+
+    $settings['alshaya_use_proxy'] = TRUE;
     break;
 
   case 'live':

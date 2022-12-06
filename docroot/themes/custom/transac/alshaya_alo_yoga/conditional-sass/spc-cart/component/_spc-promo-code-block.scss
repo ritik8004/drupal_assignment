@@ -1,0 +1,36 @@
+.spc-promo-code-block {
+  .promo-submit {
+    @include primaryBtn(true);
+
+    min-width: auto;
+    min-height: rem(40);
+
+    @include breakpoint($only-mobile) {
+      min-width: rem(90);
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: rem(16);
+  }
+
+  .block-content {
+    @include breakpoint($tablet) {
+      padding: rem(34);
+      background-color: $spc-order-summary-bg;
+    }
+  }
+
+  #promo-code,
+  .promo-remove,
+  .promo-submit {
+    height: rem(40);
+  }
+
+  .promo-remove {
+    @include breakpoint($desktop) {
+      top: rem(34);
+      right: rem(176);
+    }
+  }
+}

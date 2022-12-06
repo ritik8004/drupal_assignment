@@ -1,0 +1,33 @@
+.configurable-product-form-wrapper {
+  .gallery-wrapper {
+    .slick-slider {
+      .slick-arrow {
+        bottom: rem(-16);
+
+        &::before {
+          font-size: rem(20);
+        }
+      }
+    }
+
+    .slick-dots {
+      li {
+        button {
+          &::before {
+            // proxima nova font family cut dots and descrese the size of the font so replacing with arial.
+            font-family: 'arial';
+            font-size: rem(32);
+          }
+        }
+
+        &.small {
+          button {
+            &::before {
+              font-size: rem(32);
+            }
+          }
+        }
+      }
+    }
+  }
+}

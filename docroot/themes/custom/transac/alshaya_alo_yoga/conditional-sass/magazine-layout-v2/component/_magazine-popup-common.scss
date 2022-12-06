@@ -1,0 +1,23 @@
+.magv2 {
+  &-select {
+    &-popup {
+      &-wrapper {
+        @include breakpoint($only-mobile) {
+          justify-content: flex-end;
+        }
+      }
+
+      &-content-wrapper {
+        @include breakpoint($only-mobile) {
+          flex-grow: initial;
+        }
+      }
+
+      &-header-wrapper {
+        @include breakpoint($tablet) {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}

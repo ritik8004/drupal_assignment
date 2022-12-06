@@ -12,7 +12,6 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\views\Views;
 use Drupal\user\Entity\Role;
 use Drupal\taxonomy\Entity\Term;
@@ -709,29 +708,6 @@ function alshaya_master_get_site_date_from_api_date($date, $format = '') {
 
   // Return formated date in site's timezone.
   return \Drupal::service('date.formatter')->format($dt->getTimestamp(), $format);
-}
-
-/**
- * Implements hook_alshaya_master_post_drupal_install().
- */
-function alshaya_master_alshaya_master_post_drupal_install() {
-  // Update default site-mail on prod.
-  if (alshaya_is_env_prod()) {
-    $config = \Drupal::configFactory()->getEditable('system.site');
-    $config->set('mail', 'no-reply@alshaya.com');
-    $config->save();
-  }
-
-  // Disable unwanted core views.
-  if ($views_to_disable = Settings::get('views_to_disable')) {
-    $view_storage = \Drupal::service('entity_type.manager')->getStorage('view');
-    foreach ($views_to_disable as $view_machine_name) {
-      // Disable the view.
-      if ($view = $view_storage->load($view_machine_name)) {
-        $view->disable()->save();
-      }
-    }
-  }
 }
 
 /**

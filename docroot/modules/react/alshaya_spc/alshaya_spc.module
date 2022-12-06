@@ -257,26 +257,6 @@ function alshaya_spc_alshaya_social_social_auth_google_alter(&$network, $route_n
 }
 
 /**
- * Implements hook_user_logout().
- */
-function alshaya_spc_user_logout(AccountInterface $account) {
-  $cookies = \Drupal::request()->cookies->all();
-  // Expire the cookie set by middleware on logout, So spc can not fetch
-  // existing cart related info.
-  if (isset($cookies['PHPSESSID'])) {
-    $requestTime = \Drupal::time()->getRequestTime();
-    setrawcookie('PHPSESSID', '', [
-      'expires' => $requestTime - 3600,
-      'path' => '/',
-    ]);
-    setrawcookie('PHPSESSID-legacy', '', [
-      'expires' => $requestTime - 3600,
-      'path' => '/',
-    ]);
-  }
-}
-
-/**
  * Global error message.
  *
  * @return string
@@ -303,6 +283,12 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // We proxy the requests via cloudflare, so we use the current domain as is
   // without any language suffix so HTTP_HOST is enough.
   $page['#attached']['drupalSettings']['cart']['url'] = 'https://' . $_SERVER['HTTP_HOST'];
+
+  // Get cart notification side drawer related setting.
+  // If cart notification side drawer is enabled, then cart
+  // is shown as side drawer and mini cart notification will be hidden.
+  $spcConfig = \Drupal::config('alshaya_spc.settings');
+  $page['#attached']['drupalSettings']['cart']['cartNotificationDrawer'] = $spcConfig->get('show_notification_drawer') ?? FALSE;
 
   // Use proxy on only specific environments.
   if (Settings::get('alshaya_use_proxy', FALSE)) {
@@ -376,6 +362,21 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
       }
 
       $settings['userDetails']['customerToken'] = $customerToken;
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_spc_preprocess_node(&$variables) {
+  if (in_array($variables['node']->bundle(), ['acq_product', 'rcs_product'])) {
+    // Add Redirect to cart threshold to Drupal settings.
+    $alshaya_spc_config = \Drupal::config('alshaya_spc.settings');
+    $values = $alshaya_spc_config->get('redirect_to_cart_threshold');
+    if ($values) {
+      $variables['#attached']['drupalSettings']['alshaya_spc']['redirectToCartThreshold'] = $alshaya_spc_config->get('redirect_to_cart_threshold');
+      $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $alshaya_spc_config->getCacheTags());
     }
   }
 }

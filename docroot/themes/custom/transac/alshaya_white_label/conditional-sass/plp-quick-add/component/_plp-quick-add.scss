@@ -1,0 +1,120 @@
+.quick-add {
+  @include breakpoint($desktop) {
+    display: none;
+  }
+
+  .addtobag-button-container {
+    margin: 0;
+
+    .addtobag-button {
+      @include breakpoint($upto-desktop) {
+        #{$right}: 0;
+        z-index: 3;
+
+        &::before {
+          bottom: rem(60);
+        }
+      }
+    }
+  }
+
+  .addtobag-config-button,
+  .is-not-buyable,
+  .addtobag-button {
+    @include breakpoint($upto-desktop) {
+      font-size: 0;
+      border: 0;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      background-color: transparent;
+      width: 100%;
+      height: 0;
+
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/quick-add-mobile.svg?gwrtq') center center no-repeat;
+        width: rem(45);
+        height: rem(45);
+        position: absolute;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        background-size: rem(20);
+        top: rem(-66);
+        #{$right}: rem(10);
+      }
+    }
+  }
+}
+
+.c-plp .c-products__item,
+.c-plp #my-wishlist .c-products__item {
+  article:hover {
+    @include breakpoint($desktop) {
+      .quick-add {
+        display: block;
+        position: absolute;
+        width: 100%;
+        top: rem(263);
+        z-index: 3;
+
+        .addtobag-config-button,
+        .is-not-buyable,
+        .addtobag-button {
+          background: $plp-quick-add-bg;
+          color: $plp-quick-add-txt;
+          height: rem(55);
+          border: 0;
+          margin: rem(24) rem(8) 0;
+          width: calc(100% - #{rem(16)});
+        }
+      }
+    }
+  }
+}
+
+#my-wishlist {
+  @include breakpoint($desktop) {
+    display: block;
+  }
+
+  .c-plp & {
+    .c-products__item {
+      article:hover {
+        .quick-add {
+          @include breakpoint($desktop) {
+            top: rem(271);
+          }
+
+          button {
+            border-radius: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.large-grid {
+  .c-plp {
+    .c-products__item article {
+      &:hover {
+        .quick-add {
+          top: rem(388);
+        }
+      }
+    }
+
+    .quick-add {
+      .addtobag-button,
+      .addtobag-config-button,
+      .is-not-buyable {
+        &::before {
+          @include breakpoint($only-mobile) {
+            top: rem(-55);
+          }
+        }
+      }
+    }
+  }
+}

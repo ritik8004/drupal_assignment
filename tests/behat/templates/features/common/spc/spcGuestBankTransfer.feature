@@ -1,4 +1,4 @@
-@javascript @guest @codPayment @homeDelivery @pbaeuat @hmaeuat @mcsauat
+@javascript @guest @checkoutPayment @codPayment @homeDelivery @pbaeuat @hmaeuat @mcsauat
 Feature: SPC Checkout Home Delivery using Bank Transfer method for Guest user
 
   Background:

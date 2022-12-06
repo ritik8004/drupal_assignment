@@ -1,0 +1,56 @@
+// Styles reset from CORE using 'initial' values.
+
+body {
+  &.wishlist-enabled {
+    #wishlist-header-wrapper {
+      position: initial;
+
+      .wishlist-link {
+        width: initial;
+      }
+
+      .wishlist-header {
+        padding-bottom: initial;
+
+        @include breakpoint($tablet) {
+          padding-#{$right}: initial;
+        }
+      }
+    }
+
+    .filter-fixed-top {
+      .sticky-filter-wrapper {
+        .wishlist-minicart-sticky-wrapper {
+          z-index: 11;
+        }
+      }
+    }
+
+    .wishlist-icon {
+      height: rem(24);
+      width: rem(24);
+    }
+
+    .wishlist-header {
+      padding-#{$right}: initial;
+    }
+
+    header {
+      .region__header {
+        .block-alshaya-wishlist {
+          flex-grow: initial;
+          margin-#{$right}: rem(11);
+
+          @include breakpoint($desktop) {
+            margin-#{$right}: rem(12);
+          }
+
+          @include breakpoint($desktop) {
+            margin-#{$right}: 0;
+            margin-#{$left}: rem(30);
+          }
+        }
+      }
+    }
+  }
+}

@@ -14,6 +14,9 @@ exports.render = function render(
       if (typeof globalThis.mainMenuProcessor !== 'undefined') {
         const menuData = globalThis.mainMenuProcessor.prepareData(
           drupalSettings.alshayaRcs.navigationMenu,
+          // Here we need to push the top level category + children
+          // as the top level categories has the information about
+          // Visual mobile menu.
           inputs
         )
         html = handlebarsRenderer.render('main_menu_level1', menuData);
@@ -23,8 +26,7 @@ exports.render = function render(
     case "shop_by_block":
       // Process and render shop by block menu.
       const shopByMenuData = globalThis.shopByMenuProcessor.prepareData(
-        settings,
-        inputs
+        inputs.children
       );
       html = handlebarsRenderer.render('shop_by_menu', shopByMenuData);
 
@@ -54,7 +56,7 @@ exports.render = function render(
       // Render lhn based block.
       const lhnData = globalThis.lhnProcessor.prepareData(
         settings,
-        inputs
+        inputs.children
       );
 
       html = handlebarsRenderer.render('lhn_menu', lhnData);
@@ -65,7 +67,7 @@ exports.render = function render(
       if (typeof globalThis.renderRcsSuperCategoryMenu !== 'undefined') {
         html += globalThis.renderRcsSuperCategoryMenu.render(
           settings,
-          inputs,
+          inputs.children,
           innerHtml
         );
       }
@@ -107,7 +109,6 @@ exports.render = function render(
       }
       break;
 
-    case "delivery-info-block":
     case "delivery-options":
     case 'mobile-upsell-products':
     case 'upsell-products':
@@ -142,7 +143,7 @@ exports.render = function render(
       if (typeof globalThis.renderRcsAppNavigation !== 'undefined') {
         html += globalThis.renderRcsAppNavigation.render(
           settings,
-          inputs,
+          inputs.children,
           innerHtml
         );
       }
@@ -163,7 +164,7 @@ exports.render = function render(
       if (typeof global.sitemapPageRenderer !== 'undefined') {
         html += global.sitemapPageRenderer.render(
           settings,
-          inputs,
+          inputs.children,
           innerHtml
         );
       }
@@ -203,6 +204,8 @@ exports.computePhFilters = function (input, filter) {
     case 'schema_stock':
     case 'brand_logo':
     case 'url':
+    case 'old-price':
+    case 'url_encode':
     case 'stock_qty':
     case 'name':
     case 'description':
@@ -210,6 +213,7 @@ exports.computePhFilters = function (input, filter) {
     case 'promotions':
     case 'teaser_image':
     case 'price_block_identifier':
+    case 'absolute_url':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
       }

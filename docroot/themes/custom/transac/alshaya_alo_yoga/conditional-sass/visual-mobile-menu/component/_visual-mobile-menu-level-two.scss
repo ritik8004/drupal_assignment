@@ -1,0 +1,12 @@
+.visual-mobile-level-two {
+  &__heading {
+    font-family: $ay-black;
+
+    html[lang=ar] & {
+      @include breakpoint($upto-desktop) {
+        margin-right: rem(192);
+        white-space: break-spaces;
+      }
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace Drupal\rcs_placeholders\Service;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -54,6 +55,27 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public static $entityData;
 
   /**
+   * RCS path to check.
+   *
+   * @var string
+   */
+  public static $rcsPathToCheck;
+
+  /**
+   * RCS Full Path.
+   *
+   * @var string
+   */
+  public static $entityFullPath;
+
+  /**
+   * RCS Full Path.
+   *
+   * @var string
+   */
+  public static $pageFullPath;
+
+  /**
    * The node storage.
    *
    * @var \Drupal\node\NodeStorageInterface
@@ -82,6 +104,13 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   protected $moduleHandler;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructs a new RcsPhPathProcessor instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -90,6 +119,8 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    *   The language manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -97,12 +128,14 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -123,45 +156,30 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    *   The processed path.
    */
   public function processInbound($path, Request $request) {
+    // @todo Move the whole logic to use Custom Event and Event Subscribers.
     // Use static cache to improve performance.
     if (isset(self::$processedPaths[$path])) {
       return self::$processedPaths[$path];
     }
+    if (!isset(self::$pageFullPath)) {
+      $this->processFullPagePath($request);
+    }
 
-    // The $path value has been processed in case the requested url is the alias
-    // of an existing technical path. For example, $path may be /node/12 if the
-    // requested url /buy-my-product is an alias for node 12.  For this reason,
-    // we use $request->getPathInfo() to get the real requested url instead of
-    // $path.
     // Remove language code from URL.
-    $rcs_path_to_check = str_replace(
-      '/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
-      '/',
-      $request->getPathInfo()
-    );
+    $full_path = $rcs_path_to_check = self::$pageFullPath;
 
     // Allow other modules to alter the path.
     $this->moduleHandler->alter('rcs_placeholders_processor_path', $rcs_path_to_check);
+    self::$rcsPathToCheck = $rcs_path_to_check;
 
-    $config = \Drupal::config('rcs_placeholders.settings');
+    $config = $this->configFactory->get('rcs_placeholders.settings');
 
     // Is it a category page?
-    $category_prefix = $config->get('category.path_prefix');
+    $category_prefix = $this->getEntityPrefix('category');
 
     if (str_starts_with($rcs_path_to_check, '/' . $category_prefix)) {
-      self::$entityType = 'category';
-      self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($category_prefix) + 1);
-      self::$entityPathPrefix = $category_prefix;
-
-      self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $config->get('category.placeholder_tid');
-
-      $category = $config->get('category.enrichment') ? $this->getEnrichedEntity('category', $rcs_path_to_check) : NULL;
-      if (isset($category)) {
-        self::$entityData = $category->toArray();
-        self::$processedPaths[$rcs_path_to_check] = '/taxonomy/term/' . $category->id();
-      }
-
-      return self::$processedPaths[$rcs_path_to_check];
+      $this->processCategoryEntity();
+      return self::$processedPaths[$full_path];
     }
 
     // Is it a product page?
@@ -171,6 +189,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       self::$entityType = 'product';
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($product_prefix) + 1);
       self::$entityPathPrefix = $product_prefix;
+      self::$entityFullPath = $full_path;
 
       self::$processedPaths[$rcs_path_to_check] = '/node/' . $config->get('product.placeholder_nid');
 
@@ -190,6 +209,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       self::$entityType = 'promotion';
       self::$entityPath = substr_replace($rcs_path_to_check, '', 0, strlen($promotion_prefix) + 1);
       self::$entityPathPrefix = $promotion_prefix;
+      self::$entityFullPath = $full_path;
 
       self::$processedPaths[$rcs_path_to_check] = '/node/' . $config->get('promotion.placeholder_nid');
 
@@ -202,6 +222,93 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     }
 
     return self::$processedPaths[$path];
+  }
+
+  /**
+   * Process the full page path from request and return it without the langcode.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   */
+  protected function processFullPagePath(Request $request) {
+    // The $path value has been processed in case the requested url is the alias
+    // of an existing technical path. For example, $path may be /node/12 if the
+    // requested url /buy-my-product is an alias for node 12.  For this reason,
+    // we use $request->getPathInfo() to get the real requested url instead of
+    // $path.
+    self::$pageFullPath = str_replace(
+      '/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+      '/',
+      $request->getPathInfo()
+    );
+  }
+
+  /**
+   * Process the entity and set the static variables.
+   */
+  protected function processCategoryEntity() {
+    $entity_type = 'category';
+    $config = $this->getRcsPhSettings();
+    $entity_prefix = $config->get("$entity_type.path_prefix");
+    $placehodler_id = $config->get("$entity_type.placeholder_tid");
+    $entity_url_prefix = '/taxonomy/term/';
+
+    self::$entityType = $entity_type;
+    self::$entityPath = substr_replace(self::$rcsPathToCheck, '', 0, strlen($entity_prefix) + 1);
+    self::$entityPathPrefix = $entity_prefix;
+    self::$entityFullPath = self::$pageFullPath;
+    self::$processedPaths[self::$pageFullPath] = $entity_url_prefix . $placehodler_id;
+
+    $entity = $this->isEntityEnrichmentEnabled($entity_type)
+      ? $this->getEnrichedEntity($entity_type, self::$pageFullPath)
+      : NULL;
+    if (isset($entity)) {
+      self::$entityData = $entity->toArray();
+      self::$processedPaths[self::$pageFullPath] = $entity_url_prefix . $entity->id();
+    }
+  }
+
+  /**
+   * Gets the RCS placeholders config.
+   *
+   * @return \Drupal\Core\Config\ImmutableConfig
+   *   The RCS placeholders config.
+   */
+  protected function getRcsPhSettings() {
+    $static = NULL;
+    if (isset($static)) {
+      return $static;
+    }
+    $static = $this->configFactory->get('rcs_placeholders.settings');
+    return $static;
+  }
+
+  /**
+   * Gets the given entity type prefix from the config.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   *
+   * @return string
+   *   The entity prefix.
+   */
+  protected function getEntityPrefix($entity_type) {
+    $config = $this->getRcsPhSettings();
+    return $config->get("$entity_type.path_prefix");
+  }
+
+  /**
+   * Checks if enrichment is enabled for the given entity type.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   *
+   * @return bool
+   *   True if enrichment is enabled else false.
+   */
+  protected function isEntityEnrichmentEnabled($entity_type) {
+    $config = $this->getRcsPhSettings();
+    return $config->get("$entity_type.enrichment");
   }
 
   /**
@@ -276,7 +383,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     if (empty(self::$entityType)) {
       return '';
     }
-    $url = self::$entityPathPrefix . self::$entityPath;
+    $url = self::$entityFullPath;
     // Trim the front slash.
     if ($trim) {
       $url = trim($url, '/');

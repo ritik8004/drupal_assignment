@@ -1,0 +1,39 @@
+.path--user {
+  .c-order-help {
+    .field--name-body {
+      p {
+        font-size: rem(14);
+        font-family: $alshaya-bold;
+      }
+
+      li {
+        font-size: rem(13);
+      }
+    }
+  }
+
+  .l-two--sf {
+    @include breakpoint($desktop) {
+      margin-top: rem(16);
+    }
+
+    &.c-user--node {
+      @include breakpoint($only-tablet) {
+        margin-top: rem(0);
+      }
+    }
+  }
+
+  .c-order-help .field--name-body {
+    margin-top: rem(30);
+    margin-bottom: rem(30);
+  }
+}
+
+.user-page {
+  .change-pwd-form {
+    .form-submit {
+      margin-top: rem(36);
+    }
+  }
+}

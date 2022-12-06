@@ -1,0 +1,25 @@
+#block-userrecentorders {
+  h2 {
+    &.subtitle {
+      border-bottom: rem(1) solid $user_acc_details_border;
+      font-size: rem(14);
+      text-transform: capitalize;
+    }
+  }
+
+  .order-summary-row td:first-child {
+    .light {
+      font-size: rem(13);
+    }
+
+    .dark {
+      font-size: rem(14);
+    }
+  }
+}
+
+.user__order--detail {
+  @include breakpoint($desktop) {
+    font-size: rem(13);
+  }
+}

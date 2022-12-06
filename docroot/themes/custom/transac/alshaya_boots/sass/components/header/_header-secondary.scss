@@ -92,7 +92,7 @@ body {
     .ar {
       a {
         @include breakpoint($desktop) {
-          padding-top: 0.3125rem;
+          padding-top: rem(8);
         }
       }
     }

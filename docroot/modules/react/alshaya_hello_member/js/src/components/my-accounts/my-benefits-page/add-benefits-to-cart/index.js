@@ -26,12 +26,13 @@ class AddBenefitsToCart extends React.Component {
 
   async getUpdatedCartInfo(addTobag = false) {
     const responseData = await callHelloMemberApi('getCartData', 'GET');
+
     if (hasValue(responseData.data)
       && !hasValue(responseData.data.error)
       && responseData.data.cart.items_count > 0
       && responseData.data.totals.grand_total > 0
     ) {
-      const { codeId, voucherType } = this.props;
+      const { codeId, promotionType } = this.props;
       let isVoucherCodeAdded = false;
       let voucherCodes = responseData.data.cart.extension_attributes.applied_hm_voucher_codes;
       if (hasValue(voucherCodes)) {
@@ -44,7 +45,7 @@ class AddBenefitsToCart extends React.Component {
       const appliedOfferCode = responseData.data.cart.extension_attributes.applied_hm_offer_code;
       const voucherDiscount = findArrayElement(responseData.data.totals.total_segments, 'voucher_discount');
 
-      if (voucherType === 'BONUS_VOUCHER'
+      if (promotionType === 'voucher'
         && hasValue(isVoucherCodeAdded)
         && hasValue(voucherDiscount)) {
         this.setState({
@@ -75,11 +76,11 @@ class AddBenefitsToCart extends React.Component {
       const params = getHelloMemberCustomerInfo();
       if (!hasValue(params.error)) {
         showFullScreenLoader();
-        const { title, codeId, voucherType } = this.props;
+        const { title, codeId, promotionType } = this.props;
         let isAddedToBag = false;
         let benefitType = 'offer';
         let response = null;
-        if (voucherType === 'BONUS_VOUCHER') {
+        if (promotionType === 'voucher') {
           const voucherCodes = await this.getUpdatedCartInfo(true);
           if (hasValue(voucherCodes)) {
             params.voucherCodes = voucherCodes;
@@ -95,7 +96,7 @@ class AddBenefitsToCart extends React.Component {
           }
         } else {
           params.offerCode = codeId;
-          params.offerType = voucherType;
+          params.offerType = promotionType;
           response = await callHelloMemberApi('addMemberOffersToCart', 'POST', params);
           if (hasValue(response.data) && !hasValue(response.data.error)) {
             isAddedToBag = true;
@@ -117,6 +118,8 @@ class AddBenefitsToCart extends React.Component {
             document.getElementById('hello-member-benefit-status-info').classList.remove('hello-member-benefit-status-info-active');
           }, 5000);
 
+          // Push add to basket data to gtm.
+          Drupal.alshayaSeoGtmPushBenefitAddToBag({ title, promotionType });
           const cartData = window.commerceBackend.getCart(true);
           if (cartData instanceof Promise) {
             cartData.then((result) => {

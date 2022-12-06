@@ -1281,6 +1281,9 @@ $magazine-pdp-description-separator: $grey-light;
 $magazine-pdp-description-first-color: $grey-light;
 $magazine-pdp-video-modal-bg: $white-five;
 $magazine-pdp-video-modal-close: $mothercare-black;
+$magazine-pdp-borders: $light-greyish;
+$magazine-pdp-borders-light: $cotton-grey;
+$magazine-pdp-secondary-text: $grey-light;
 
 // PLP Maschino layout.
 $plp-sub-menu-background-overlay: rgba(0, 0, 0, 0.5);
@@ -2073,6 +2076,10 @@ $plp-quick-view-product-size-text-disabled: $marine-blue;
 $plp-quick-view-product-success: $_spc-radio-filled;
 $plp-quick-view-product-group-size-active: $primary_link-active;
 
+// PLP Quick Add on Hover
+$plp-quick-add-bg: rgba(59, 59, 59, 0.8);
+$plp-quick-add-txt: $white-five;
+
 // Smart Agent colors.
 $smart-agent-banner-bg: $_smart_agent_banner;
 $smart-agent-banner-color: $white-five;
@@ -2374,9 +2381,30 @@ $shop-by-filter-attribute-item-bg: $white-smoke-light;
 $shop-by-filter-attribute-item-hover: $white-five;
 $shop-by-filter-attribute-item-bg-hover: $black;
 
+// Checkout steps
+$cko-steps-inactive-border: $light-greyish;
+$cko-steps-active-border: $mothercare-black;
+$cko-steps-label-txt: $mothercare-black;
+$cko-steps-inactive-bg: $white-five;
+$cko-steps-active-bg: $mothercare-black;
+$cko-steps-active-txt: $white-five;
+$cko-steps-inactive-txt: $mothercare-black;
+
 // Checkout OTP mobile verification.
 $spc-checkout-cod-otp-primary: $mothercare-black;
 $spc-checkout-cod-otp-secondary: $grey-light;
 $cod-otp-field-invalid: $red-error;
 $cod-otp-loader-overlay: $_white_five_alpha_60;
 $cod-otp-success: $_spc-radio-filled;
+
+// Drawer cart notification
+$drawer-cart-notification-bg: $white-five;
+$drawer-panel-close-icon: $marine-blue-two;
+
+// Mobile menu
+$menu_bg: $white-five;
+$mob_menu_link_txt: $_shilling;
+$mob_menu_active_link_txt: $mothercare-black;
+$mob_menu_one_border_color: $grey-light;
+$mob_menu_two_color_text: $white-five;
+$mob_menu_two_img_background: $light-greyish;

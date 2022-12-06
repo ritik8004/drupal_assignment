@@ -9,22 +9,7 @@ import { getPaymentDetails, getReturnReasons } from './return_request_util';
  * @return {Object}
  *   An object containing GTM info about the order.
  */
-function getOrderGtmInfo() {
-  if (hasValue(drupalSettings.onlineReturns)
-    && hasValue(drupalSettings.onlineReturns.returnInfo)
-    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo)
-    && hasValue(drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'])) {
-    return drupalSettings.onlineReturns.returnInfo.orderInfo['#gtm_info'];
-  }
-
-  // For order detail page, get the data from onlineReturns drupal settings.
-  if (hasValue(drupalSettings.onlineReturns)
-    && hasValue(drupalSettings.onlineReturns.gtm_info)) {
-    return drupalSettings.onlineReturns.gtm_info;
-  }
-
-  return {};
-}
+const getOrderGtmInfo = () => window.commerceBackend.getOrderGtmInfo();
 
 /**
  * Util function to get the product return reason text.
@@ -116,7 +101,7 @@ function getProductGtmInfo(itemsSelected) {
  * @returns {object}
  *   The return order GTM object.
  */
-function getPreparedOrderGtm(eventType, returnInfo) {
+async function getPreparedOrderGtm(eventType, returnInfo = []) {
   const gtmInfo = getOrderGtmInfo();
   let returnOrder = {};
   let paymentMethods = [];
@@ -134,7 +119,6 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     returnOrder = {
       orderTransactionId: transactionId,
       orderType: deliveryOption,
-      // @todo Will done in DIG-10167.
       orderFirstTimeTransaction: '',
     };
 
@@ -150,7 +134,15 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     }
   }
 
-  const orderDetails = getOrderDetails();
+  const orderDetails = await getOrderDetails();
+  // Extract the order information from order details.
+  if (Drupal.hasValue(orderDetails['#order_details'])
+    && Object.prototype.hasOwnProperty.call(orderDetails['#order_details'], 'orderFirstTimeTransaction')
+    && (typeof orderDetails['#order_details'].orderFirstTimeTransaction) === 'boolean') {
+    returnOrder.orderFirstTimeTransaction = orderDetails['#order_details'].orderFirstTimeTransaction
+      ? 'True' : 'False';
+  }
+
   // Get the payment details only if GTM payment info is not availble.
   if (!paymentMethods.length > 0) {
     let paymentDetails = getPaymentDetails(orderDetails);
@@ -199,8 +191,8 @@ function getPreparedOrderGtm(eventType, returnInfo) {
     returnOrder.refundAmount = refundAmount;
     returnOrder.refundMethods = paymentMethods.length > 0 ? paymentMethods.join('_') : '';
     returnOrder.returnId = returnInfo.increment_id;
-    // @Todo To add the firstTimeReturn info when available.
-    returnOrder.firstTimeReturn = '';
+    returnOrder.firstTimeReturn = returnInfo.extension_attributes.is_first_return
+      ? 'True' : 'False';
   }
 
   return returnOrder;

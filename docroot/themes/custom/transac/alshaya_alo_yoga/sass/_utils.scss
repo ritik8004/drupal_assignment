@@ -1,0 +1,208 @@
+$ay_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
+$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs/icons/ic-loader.svg';
+$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
+
+@mixin ic-social {
+  content: '';
+  background-repeat: no-repeat;
+  width: rem(24);
+  height: rem(24);
+  display: inline-block;
+  background-size: contain;
+  background-position: center;
+}
+
+@mixin primaryBtn($textTransform: false) {
+  text-transform: uppercase;
+  font-family: $ay-heavy;
+  font-size: rem(16);
+  min-height: rem(48);
+  min-width: rem(170);
+
+  @if $textTransform {
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    opacity: 0.65;
+  }
+}
+
+@mixin quaternaryBtn($textTransform: false) {
+  text-transform: uppercase;
+  background-color: $primary_brand_button;
+  color: $primary_btn_bg;
+  font-family: $ay-heavy;
+  font-size: rem(16);
+  min-height: rem(48);
+  min-width: rem(170);
+
+  &:hover {
+    opacity: 0.65;
+    background-color: $primary_brand_button;
+  }
+}
+
+@mixin secondaryBtn($textTransform: false) {
+  text-transform: uppercase;
+  background-color: $secondary_btn_bg;
+  color: $secondary_btn_text;
+  font-family: $ay-heavy;
+  font-size: rem(16);
+  justify-content: center;
+  border: rem(1) solid $secondary_btn_border;
+  min-height: rem(48);
+  min-width: rem(170);
+
+  @include breakpoint($tablet) {
+    width: rem(216);
+  }
+
+  &:hover {
+    background-color: $secondary_btn_bg_hover;
+  }
+}
+
+@mixin tertiaryBtn($textTransform: false) {
+  text-transform: uppercase;
+  background-color: $tertiary_btn_bg;
+  color: $tertiary_btn_text;
+  font-family: $ay-heavy;
+  font-size: rem(16);
+  border: rem(1) solid $tertiary_btn_border;
+  min-height: rem(48);
+  min-width: rem(170);
+
+  &:hover {
+    opacity: 0.65;
+    background-color: $tertiary_btn_bg;
+  }
+}
+
+@mixin userLoginSectionTitle() {
+  display: block;
+  font-size: rem(24);
+  font-family: $ay-bold;
+  text-transform: uppercase;
+}
+
+@mixin icon_img_styles($height, $width) {
+  speak: none;
+  content: "";
+  display: inline-block;
+  height: $height;
+  width: $width;
+  margin-bottom: rem(-6);
+  cursor: pointer;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $styles {
+      background: url($imgpath) $repeat;
+
+      @include icon_img_styles($height, $width);
+    }
+  }
+}
+
+
+// Apply Select Wrapper mixin for all resolutions.
+// Style it in two stages.
+// 1. Apply select-wrapper($wrapper-width) on form-item div.
+// 2. Then apply select2-style mixin on selec2-container div for desktop.
+// Above only true if using select2 on desktop.
+// 3. Apply select-style mixing for select tag on mobile and tablets.
+@mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: rem(12);
+  position: relative;
+
+  @include icon(chevrondown, after) {
+    font-size: rem(28);
+    line-height: rem(35);
+    pointer-events: none;
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
+    text-align: center;
+    background-color: $primary_dropdown_arrow_bg;
+    width: rem(35);
+    height: rem(52);
+
+    @include breakpoint($tablet) {
+      z-index: 3;
+    }
+  }
+}
+
+@mixin select-bg($select-width) {
+  &::before {
+    width: $select-width;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: rem(52);
+    z-index: 1;
+  }
+}
+
+// Style select2 container.
+@mixin select2-style($select-width) {
+  width: $select-width !important;
+
+  .select2-selection {
+    font-size: rem(14);
+    height: rem(52);
+    text-align: $left;
+    width: $select-width;
+    border: rem(1) solid $primary_dropdown_border;
+    border-radius: 0;
+    outline: none;
+
+    .select2-selection__rendered {
+      color: $primary_dropdown_text;
+      line-height: rem(52);
+
+      @include breakpoint($only-mobile) {
+        line-height: rem(24);
+      }
+    }
+  }
+
+  html[lang=ar] & {
+    .select2-selection--single .select2-selection__rendered {
+      width: 94%;
+    }
+  }
+
+  .select2-selection__arrow {
+    top: 0;
+    #{$right}: 0;
+    width: rem(35);
+    height: rem(52);
+    background: $primary_dropdown_arrow_bg;
+
+    &::after {
+      // IE10 needs this in px.
+      line-height: rem(52);
+      font-size: rem(28);
+      top: 0;
+      #{$left}: auto;
+      width: rem(35);
+      height: rem(52);
+      #{$right}: 0;
+      text-align: center;
+      display: inline-block;
+      background: $primary_dropdown_arrow_bg;
+    }
+  }
+}

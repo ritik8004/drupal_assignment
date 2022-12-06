@@ -1,0 +1,108 @@
+.c-address-book {
+  .profile-form {
+    padding-top: rem(16);
+
+    .form-submit {
+      @include primaryBtn(true);
+    }
+  }
+
+  .address-book-address {
+    .form-text,
+    .form-email,
+    .form-tel {
+      font-size: rem(14);
+      color: $address_add_form_text;
+    }
+
+    .form-type-textfield {
+      label {
+        &:not(.error) {
+          font-size: rem(14);
+        }
+      }
+    }
+
+    label {
+      &.form-required {
+        &:not(.error) {
+          font-size: rem(14);
+        }
+      }
+    }
+
+    .mobile-number-field {
+      .mobile-input--wrapper {
+        .prefix {
+          font-size: rem(14);
+          color: $user_field_link;
+        }
+      }
+
+      .country-select {
+        padding-bottom: rem(4);
+      }
+    }
+
+    input[type=text],
+    input[type=tel],
+    textarea,
+    .prefix {
+      font-size: rem(14) !important;
+    }
+
+    legend {
+      color: $user_form_text;
+    }
+
+    .js-form-type-select {
+      .select2-container {
+        .select2-selection {
+          .select2-selection__rendered {
+            font-size: rem(16);
+          }
+        }
+      }
+
+      &::after {
+        @include breakpoint($desktop) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .block-system > a {
+    @include secondaryBtn(true);
+
+    min-height: rem(48);
+    padding: rem(14);
+    margin-top: rem(-16);
+  }
+}
+
+#edit-billing-address,
+.alias--cart-checkout-payment,
+.c-add-address,
+.c-address-book,
+.checkout-login {
+  .address-book-address,
+  .profile-form {
+    .form-actions {
+      .form-submit {
+        min-width: rem(170);
+        font-size: rem(16);
+      }
+
+      .cancel-button {
+        @include secondaryBtn(true);
+
+        padding: rem(14);
+
+        @include breakpoint($tablet) {
+          width: auto;
+        }
+      }
+    }
+  }
+}

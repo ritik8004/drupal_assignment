@@ -65,6 +65,7 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical' => 'taxonomy term',
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.taxonomy_term.canonical:rcs_category' => 'product listing page',
+    'entity.node.canonical:product_list' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:rcs_product' => 'product detail page',
     'entity.node.canonical:advanced_page' => 'advanced page',
@@ -560,6 +561,9 @@ class AlshayaGtmManager {
       : 'out of stock';
 
     $attributes['gtm-magento-product-id'] = $sku->get('product_id')->getString();
+    $attributes['gtm-product-style-code'] = $sku->hasField('attr_style_code')
+      ? $sku->get('attr_style_code')->getString()
+      : NULL;
 
     // Override values from parent if parent sku available.
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId, 'en')) {
@@ -990,7 +994,9 @@ class AlshayaGtmManager {
       // If its a virtual product i.e egift card or egift topup.
       if ($item['type'] === 'virtual') {
         $products[$item['item_id']] = [
-          'name' => $item['name'] . '/' . $item['price'],
+          'name' => ($item['sku'] == 'giftcard_topup')
+          ? $item['extension_attributes']['topup_card_name'] . '/' . $item['price']
+          : $item['name'] . '/' . $item['price'],
           'id' => $item['item_id'],
           'price' => $item['price'],
           'variant' => $item['sku'],
@@ -1045,6 +1051,20 @@ class AlshayaGtmManager {
       $loyalty_card = $order['extension']['loyalty_card'];
     }
 
+    $loyalty_type = '';
+    if (isset($order['extension'], $order['extension']['loyalty_type'])) {
+      $loyalty_type = $order['extension']['loyalty_type'];
+    }
+
+    $reward_types = [];
+    if (isset($order['extension'], $order['extension']['applied_hm_voucher_codes'])) {
+      array_push($reward_types, 'hmvoucher');
+    }
+
+    if (isset($order['extension'], $order['extension']['applied_hm_offer_code'])) {
+      array_push($reward_types, 'hmoffer');
+    }
+
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
     $current_user_id = $this->currentUser->id();
 
@@ -1075,17 +1095,26 @@ class AlshayaGtmManager {
       }
     }
 
+    $first_time_transac = $orders_count > 1 ? 'False' : 'True';
+    // Fetch the info around first time transaction if available.
+    if (array_key_exists('order_first_time_transaction', $order['extension'])) {
+      $first_time_transac = $order['extension']['order_first_time_transaction']
+        ? 'True' : 'False';
+    }
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method'], '', FALSE)->getName(),
-      'egiftRedeemType' => !empty($additional_info) ? $additional_info->card_type : '',
+      'egiftRedeemType' => $additional_info->card_type ?? '',
       'isAdvantageCard' => isset($order['coupon_code']) && $order['coupon_code'] === 'advantage_card',
-      'redeemEgiftCardValue' => !empty($additional_info) ? $additional_info->amount : '',
+      'redeemEgiftCardValue' => $additional_info->amount ?? '',
       'discountAmount' => _alshaya_acm_format_price_with_decimal($order['totals']['discount'], '.', ''),
       'transactionId' => $order['increment_id'],
-      'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
+      'firstTimeTransaction' => $first_time_transac,
       'privilegesCardNumber' => $loyalty_card,
+      'loyaltyType' => $loyalty_type,
+      'rewardType' => !empty($reward_types) ? implode('|', $reward_types) : '',
       'userId' => $customer_id,
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
@@ -1215,15 +1244,27 @@ class AlshayaGtmManager {
         break;
 
       case 'product listing page':
-        $taxonomy_term = $current_route['route_params']['taxonomy_term'];
-        $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
-        foreach ($taxonomy_parents as $taxonomy_parent) {
-          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
-          /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
-          $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+        if (isset($current_route['route_params']['node'])) {
+          $node = $current_route['route_params']['node'];
+          if ($node->hasTranslation('en')) {
+            $node = $node->getTranslation('en');
+          }
+          $page_dl_attributes = [
+            'list' => $node->getTitle(),
+            'listingName' => $node->getTitle(),
+          ];
         }
+        else {
+          $taxonomy_term = $current_route['route_params']['taxonomy_term'];
+          $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+          foreach ($taxonomy_parents as $taxonomy_parent) {
+            $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, 'en');
+            /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
+            $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+          }
 
-        $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+        }
         break;
 
       case 'advanced page':

@@ -1,0 +1,13 @@
+#spc-cart {
+  padding-top: rem(48);
+
+  .spc-main {
+    padding-top: rem(0);
+  }
+
+  .spc-promotions.free-gift-container {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: rem(16);
+    }
+  }
+}

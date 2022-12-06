@@ -92,17 +92,27 @@
     }
   };
 
-  Drupal.alshayaPromotions.refreshDynamicLabels = function (sku, cartData) {
+  Drupal.alshayaPromotions.getDynamicLabel = function (sku, cartData, viewMode = 'links', type = 'product') {
+    let promotionsResponse = null;
+
     var cartDataUrl = Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData);
+
     // We set cacheable=1 so it is always treated as anonymous user request.
     jQuery.ajax({
       url: Drupal.url('rest/v1/promotions/dynamic-label-product/' + btoa(sku)) + '?cacheable=1&context=web&' + cartDataUrl,
       method: 'GET',
-      async: true,
+      async: false,
       success: function (response) {
-        Drupal.alshayaPromotions.updateDynamicLabel(sku, response);
+        promotionsResponse = response;
       }
     });
+
+    return promotionsResponse;
+  }
+
+  Drupal.alshayaPromotions.refreshDynamicLabels = async function (sku, cartData) {
+    var promotionsResponse = Drupal.alshayaPromotions.getDynamicLabel(sku, cartData);
+    Drupal.alshayaPromotions.updateDynamicLabel(sku, promotionsResponse);
   };
 
   Drupal.alshayaPromotions.displayDynamicLabels = function (sku) {

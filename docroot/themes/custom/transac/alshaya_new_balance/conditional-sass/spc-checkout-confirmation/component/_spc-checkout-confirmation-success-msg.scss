@@ -1,0 +1,21 @@
+.spc-pre-content {
+  .impress-msg {
+    font-family: $alshaya-bold;
+    font-size: rem(16);
+    text-transform: uppercase;
+
+    @include breakpoint($only-mobile) {
+      margin: auto;
+    }
+  }
+
+  .impress-subtitle {
+    font-family: $alshaya-thin;
+    font-size: rem(14);
+
+    @include breakpoint($only-mobile) {
+      max-width: rem(300);
+      margin: rem(10) auto;
+    }
+  }
+}

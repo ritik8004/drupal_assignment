@@ -66,9 +66,11 @@ const ReturnIndividualItem = ({
         <div className="order__details--summary order__details--description">
           <div className="item-name dark">{item.name}</div>
           {productAttributes && Object.keys(productAttributes).map((attribute) => (
-            <div key={productAttributes[attribute].label} className="attribute-detail light">
-              {Drupal.t('@attrLabel: @attrValue', { '@attrLabel': productAttributes[attribute].label, '@attrValue': productAttributes[attribute].value })}
-            </div>
+            productAttributes[attribute].label && productAttributes[attribute].value && (
+              <div key={productAttributes[attribute].label} className="attribute-detail light">
+                {Drupal.t('@attrLabel: @attrValue', { '@attrLabel': productAttributes[attribute].label, '@attrValue': productAttributes[attribute].value })}
+              </div>
+            )
           ))}
           <div className="item-code light">
             {Drupal.t('Item Code: @sku', { '@sku': item.sku })}
@@ -80,7 +82,7 @@ const ReturnIndividualItem = ({
 
         <ConditionalView condition={!isMobile()}>
           <div className="item-price">
-            <div className="light">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
+            <div className="light item-unit-price-label">{Drupal.t('Unit Price', {}, { context: 'online_returns' })}</div>
             <div className="dark">
               <Price
                 price={item.original_price.toString()}
@@ -92,7 +94,7 @@ const ReturnIndividualItem = ({
 
         <ConditionalView condition={isMobile()}>
           <div className="item-total-price">
-            <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
+            <div className="light item-total-price-label">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
             <span className="dark"><PriceElement amount={itemQuantity * priceIncTax} /></span>
           </div>
         </ConditionalView>
@@ -122,7 +124,7 @@ const ReturnIndividualItem = ({
 
       <ConditionalView condition={!isMobile()}>
         <div className="item-total-price">
-          <div className="light">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
+          <div className="light item-total-price-label">{Drupal.t('Total', {}, { context: 'online_returns' })}</div>
           <span className="dark"><PriceElement amount={itemQuantity * priceIncTax} /></span>
         </div>
       </ConditionalView>

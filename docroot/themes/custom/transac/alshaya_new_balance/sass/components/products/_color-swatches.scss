@@ -1,0 +1,48 @@
+.sku-base-form {
+  .form-wrapper {
+    .configurable-swatch {
+      .li-swatch-image {
+        a,
+        span {
+          height: auto;
+          margin-top: rem(10);
+          margin-bottom: 0;
+
+          &.picked,
+          &:hover {
+            &::after {
+              top: unset;
+              bottom: rem(1);
+              #{$left}: 0;
+              height: rem(4);
+              width: 100%;
+              background-color: $pdp_white_color_attribute_border;
+              border: 0;
+            }
+          }
+
+          &:hover {
+            &::after {
+              background-color: $pdp_white_color_attribute_hover_border;
+            }
+          }
+
+          @include breakpoint($only-mobile) {
+            margin-#{$right}: rem(6);
+          }
+        }
+
+        img {
+          height: rem(57);
+          width: rem(57);
+          padding: 0;
+
+          @include breakpoint($only-mobile) {
+            height: rem(48);
+            width: rem(48);
+          }
+        }
+      }
+    }
+  }
+}

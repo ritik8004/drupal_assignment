@@ -31,6 +31,7 @@ function alshaya_rcs_product_theme($existing, $type, $theme, $path) {
     ],
     'node__rcs_product__full_magazine_v2' => [
       'variables' => [],
+      'base hook' => 'node',
     ],
     'rcs_commerce_price' => [
       'variables' => [
@@ -92,6 +93,13 @@ function alshaya_rcs_product_page_attachments(array &$attachments) {
   // For assets data, this library is replaced by the assets processing
   // library in alshaya_media_assets module.
   $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_images';
+
+  /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
+  $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
+
+  // Adding the sequence of the configurable attributes based
+  // on order defined in config 'acq_sku.configurable_form_settings'.
+  $attachments['#attached']['drupalSettings']['configurableAttributes'] = $rcs_product_helper->getConfigurableAttributes();
 }
 
 /**
@@ -116,6 +124,8 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
       'gtm-product-sku-class-identifier',
       'gtm-sku-type',
       'gtm-main-sku',
+      'gtm-magento-product-id',
+      'gtm-old-price',
       'gtm-brand',
       'gtm-dimension4',
       'gtm-price',
@@ -126,6 +136,8 @@ function alshaya_rcs_product_page_attachments_alter(array &$attachments) {
       'data-drupal-form-fields',
       'data-main-sku',
       'data-rcs-sku',
+      'st_title',
+      'st_url',
     ],
   );
 
@@ -192,8 +204,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   // Attach required libraries.
   $build['#attached']['library'][] = 'alshaya_rcs_product/main';
-  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
-  $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
   $build['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   // Attach product carousel js for relate/US.
   $build['#attached']['library'][] = 'alshaya_white_label/product_carousel';
@@ -204,6 +214,15 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
   // Attach product dynamic yield js.
   $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_dynamic_yield';
+
+  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+  $pdp_layout = $sku_manager->getPdpLayout($entity, $view_mode);
+
+  if (!str_contains($pdp_layout, 'magazine_v2')) {
+    $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
+    $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
+  }
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());
@@ -257,6 +276,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdpSizeGroupAttribute'] = $product_display_settings->get('size_group.pdp');
+  $build['#attached']['drupalSettings']['alshayaRcs']['pdpSizeGroupAlternates'] = $product_display_settings->get('size_group.alternates');
   $build['#attached']['drupalSettings']['alshayaRcs']['shortDescLimit'] = $product_display_settings->get('short_desc_characters');
   $build['#attached']['drupalSettings']['show_configurable_boxes_after'] = $product_display_settings->get('show_configurable_boxes_after');
   $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
@@ -266,8 +287,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   $build['#attached']['drupalSettings']['alshayaRcs']['default_meta_image'] = \Drupal::token()->replace('[alshaya_seo:meta_image]');
 
-  /** @var  \Drupal\alshaya_acm_product\SkuManager $sku_manager **/
-  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
   $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $sku_manager->showImagesFromChildrenAfterAllOptionsSelected();
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpLayout'] = $sku_manager->getPdpLayout($entity);
   $build['#attached']['drupalSettings']['alshayaRcs']['quantityLimitEnabled'] = $isQuantityLimitEnabled;
@@ -276,6 +295,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $configurable_form_settings = \Drupal::config('acq_sku.configurable_form_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['showQuantity'] = $configurable_form_settings->get('show_quantity');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $configurable_form_settings->getCacheTags());
+
 
   $alshaya_master_settings = \Drupal::config('alshaya_master.settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
@@ -292,23 +312,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $config = \Drupal::config('alshaya_acm_product.home_delivery');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $config->getCacheTags());
 
-  // PDP Express Delivery.
-  $express_delivery_config = \Drupal::config('alshaya_spc.express_delivery');
-  $delivery_options_order = $express_delivery_config->get('delivery_options_order');
-  $delivery_options = [];
-  foreach ($delivery_options_order as $option) {
-    $delivery_options[] = [
-      'status' => $express_delivery_config->get($option . '_status'),
-      'id' => $option,
-      // @codingStandardsIgnoreLine
-      'label' => t($express_delivery_config->get($option . '_label'),
-        [],
-        ['context' => $option . '_label']
-      ),
-    ];
-  }
   $build['#attached']['library'][] = 'alshaya_spc/express_delivery';
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
 
   // Address fields configs for Delivery options side drawer.
   $build['#attached']['drupalSettings']['address_fields'] = _alshaya_spc_get_address_fields();
@@ -341,6 +345,45 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   ];
   // Attaching library for react component to show PDP express delivery labels.
   $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_rcs_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
+  if (!empty($build['sharethis'])) {
+    $build['sharethis']['#content']['m_path'] = \Drupal::request()->getUri();
+
+    // Remove the button JS library from the render array as the JS file will
+    // be directly loaded using custom js.
+    // @see Drupal.behaviors.shareThis in alshaya_rcs_product module.
+    if ($build['sharethis']['#attached']['library']) {
+      foreach ($build['sharethis']['#attached']['library'] as $key => &$library) {
+        if ($library === 'sharethis/sharethispickerexternalbuttons') {
+          unset($build['sharethis']['#attached']['library'][$key]);
+          $build['sharethis']['#attached']['library'] = array_values($build['sharethis']['#attached']['library']);
+          break;
+        }
+      }
+    }
+
+    foreach ($build['sharethis']['#content']['st_spans'] as &$span) {
+      $span['#attributes']['st_url'] = \Drupal::request()->getUri();
+    }
+
+    // Variable to store the sharethis block render output.
+    $renderedBuild = $build['sharethis'];
+    // Removing properties not needed for Drupal renderer service.
+    unset($renderedBuild['#attached']);
+    unset($renderedBuild['#weight']);
+
+    $build['sharethis']['#attached']['library'][] = 'alshaya_acm_product/sharethis';
+
+    // New drupalSettings variable to store the rendered output and to be used
+    // in pdp-layout.
+    $build['sharethis']['#attached']['drupalSettings']['sharethis']['contentRendered'] = \Drupal::service('renderer')->render($renderedBuild);
+  }
 }
 
 /**
@@ -554,34 +597,14 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
     'products(filter: {url_key: {eq: $url}})' => $product_query_fields,
   ];
 
-  $product_options_query_fields = $rcs_product_helper->getProductOptionsQueryFields();
-  $product_options_query_variables = [
-    'attributes' => $rcs_product_helper->getProductOptionsQueryVariables(),
-  ];
-  $product_options_query = [
-    'customAttributeMetadata(attributes: $attributes)' => $product_options_query_fields,
-  ];
-
-  // The query to fetch the product options data like color, size labels.
-  $query_fields['product_options'] = [
-    'query' => [
-      'query($attributes: [AttributeInput!]!)' => $product_options_query,
-    ],
-    'variables' => $product_options_query_variables,
-  ];
-
   // Make sure this happens in the end.
   if ($rcs_product_helper->isRcsPdp()) {
-    // Here we are doing a combined query for product data and product option
-    // data.
-    $product_and_custom_attributes_query = $product_query_by_url_key + $product_options_query;
-    $product_and_custom_attributes_variables = ['url' => $url_key] + $product_options_query_variables;
 
     $query_fields['pdp_product'] = [
       'query' => [
-        'query($url: String, $attributes: [AttributeInput!]!)' => $product_and_custom_attributes_query,
+        'query($url: String)' => $product_query_by_url_key,
       ],
-      'variables' => $product_and_custom_attributes_variables,
+      'variables' => ['url' => $url_key],
     ];
   }
 
@@ -662,6 +685,7 @@ function alshaya_rcs_product_rcs_placeholders_graphql_query() {
   }
 
   // Fetch additional product attributes.
+  $product_options_query_fields = $rcs_product_helper->getProductOptionsQueryFields();
   $attributes_fields = $rcs_product_helper->getProductAdditionalAttributesQueryFields();
   if (!empty($attributes_fields['items'])) {
     $query_fields['product_additional_attributes'] = [
@@ -797,6 +821,7 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
               'core/drupalSettings',
               'alshaya_master/common_functions',
               'alshaya_rcs_product/main',
+              'alshaya_rcs_product/product_attributes',
             ]
           );
 
@@ -825,6 +850,7 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       $libraries['product.order']['dependencies'] ??= [];
       array_push(
         $libraries['product.order']['dependencies'],
+        'alshaya_rcs_product/order_utility',
         'rcs_placeholders/helpers',
         'rcs_magento_placeholders/rcs_magento_placeholders',
         'alshaya_acm_product/product_utility',
@@ -875,6 +901,27 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
     unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
     $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
+  }
+  elseif ($extension === 'sharethis') {
+    if (isset($libraries['sharethis'])) {
+      foreach ($libraries['sharethis']['dependencies'] as $key => $dependency) {
+        // Remove addition of this JS as this will be added directly using JS.
+        // @see Drupal.behaviors.shareThis in alshaya_rcs_product module.
+        if ($dependency === 'sharethis/sharethispickerexternalbuttons') {
+          unset($libraries['sharethis']['dependencies'][$key]);
+          $libraries['sharethis']['dependencies'] = array_values($libraries['sharethis']['dependencies']);
+          break;
+        }
+      }
+      // Replace the contrib JS Sharethis file with custom JS file.
+      $options = $libraries['sharethis']['js']['js/sharethis.js'];
+      unset($libraries['sharethis']['js']['js/sharethis.js']);
+      $libraries['sharethis']['js']["/$self_module_path/js/alshaya_rcs_sharethis.js"] = $options;
+    }
+  }
+  elseif ($extension === 'alshaya_pdp_react'
+    && isset($libraries['pdp_magazine_v2_layout'])) {
+    $libraries['pdp_magazine_v2_layout']['js']["/$self_module_path/js/alshaya_rcs_pdp_magazine_v2.js"] = [];
   }
 }
 
@@ -1026,18 +1073,23 @@ function _alshaya_rcs_product_get_cnc_config(array &$build) {
 function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) {
   $current_language = NULL;
   // Return from here if input type is not textarea or text.
-  if ($attribute && !in_array($attribute['frontend_input'], ['text', 'textarea'])) {
+  if (empty($attribute)
+    || !isset($attribute['frontend_input'])
+    || !in_array($attribute['frontend_input'], ['text', 'textarea'])
+  ) {
     return;
   }
 
   $skuBaseFieldDefination = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   // Filter attributes fields having facets set as 1.
-  $skuBaseFieldDefination = array_filter($skuBaseFieldDefination, fn($field) => $field['parent'] == 'attributes' && in_array('facet', $field) && $field['facet'] == 1);
+  $skuBaseFieldDefination = array_filter($skuBaseFieldDefination, fn($field) => $field['parent'] == 'attributes' && isset($field['facet']) && $field['facet'] == 1);
   $attributes_used_as_facets = array_keys($skuBaseFieldDefination);
 
   // Return from here if attribute code is other than sku base fields which are
   // marked to be use as facets.
-  if ($attribute && !in_array($attribute['attribute_code'], $attributes_used_as_facets)) {
+  if (!isset($attribute['attribute_code'])
+    || !in_array($attribute['attribute_code'], $attributes_used_as_facets)
+  ) {
     return;
   }
   // Invoke GraphQL API and get the options list.

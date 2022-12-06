@@ -1,0 +1,22 @@
+.block-alshaya-grid-count-block {
+  #alshaya-algolia-plp &,
+  #alshaya-algolia-search & {
+    @include breakpoint($only-mobile) {
+      padding-top: rem(20);
+      height: rem(74);
+      align-items: unset;
+    }
+  }
+
+  .grid-buttons {
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: rem(12);
+    }
+  }
+
+  .total-result-count {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: rem(12);
+    }
+  }
+}

@@ -1,0 +1,19 @@
+name: Labels-on-pull-request
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - qa
+      - uat
+      - master
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+
+    steps:
+      # https://github.com/actions/labeler
+      - uses: actions/labeler@v4
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"

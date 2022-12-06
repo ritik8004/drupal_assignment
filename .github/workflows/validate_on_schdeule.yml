@@ -1,0 +1,131 @@
+name: Validate on Schedule
+
+on:
+  workflow_dispatch: # Remove this after testing
+  schedule:
+    # Run every day at 5AM IST.
+    - cron: '30 23 * * *'
+
+concurrency: schedule-validate-${{ github.ref }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'acquia-pso' }}
+
+    container:
+      image: devwithlando/php:8.0-fpm-4
+
+    services:
+      database:
+        image: mariadb
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 32574:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      memcache:
+        image: memcached:latest
+
+    env:
+      CI: GITHUB_ACTIONS
+      COMPOSER_MEMORY_LIMIT: -1
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER_PASSWORD: drupal
+      MYSQL_USER_NAME: drupal
+      MYSQL_DATABASE_NAME: drupal
+      MYSQL_HOST: database
+      INSTALL_TYPE: install
+
+    steps:
+      - name: Check for commits in branch
+        id: check-new-commits
+        uses: adriangl/check-new-commits-action@v1
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          # 24 hours 30m in seconds, when changing please update other places too.
+          seconds: 88200
+
+      - name: Prepare environment variables
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        run: |
+          echo GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/}) >> $GITHUB_ENV
+          echo COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin) >> $GITHUB_ENV
+          echo BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt) >> $GITHUB_ENV
+          echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+
+      - name: Run Composer install
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        run: |
+          composer self-update
+          composer self-update --2
+          composer validate --no-check-all --ansi
+          composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
+
+      - name: Prepare bin executables
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        run: |
+          ln -s ${GITHUB_WORKSPACE}/vendor/acquia/blt/bin/blt /usr/local/bin/blt
+          ln -s ${GITHUB_WORKSPACE}/vendor/drush/drush/drush /usr/local/bin/drush
+
+      - name: Cache dependencies installed with Composer
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        id: composer-cache
+        run: |
+          echo dir=$(composer config cache-files-dir) >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        with:
+          path: |
+            "${{ steps.composer-cache.outputs.dir }}"
+            ~/.drush/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+
+      - name: Setup environment
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        run: |
+          bash $SCRIPT_DIR/setup_env.sh
+          bash $SCRIPT_DIR/setup_mysql.sh
+
+      - name: Install Node
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.19.0"
+          cache: "npm"
+          cache-dependency-path: |
+            docroot/package-lock.json
+            docroot/modules/custom/package-lock.json
+            docroot/modules/react/package-lock.json
+            docroot/themes/custom/package-lock.json
+
+      - name: Cache node modules
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        id: npm-cache-dir
+        run: |
+          echo dir=$(npm config get cache) >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        with:
+          path: |
+            "${{ steps.npm-cache-dir.outputs.dir }}"
+            ~/.npm
+            ~/.nvm
+          key: ${{ runner.os }}-node
+
+      - name: React validate
+        if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
+        run: |
+          blt alshayafe:setup-react
+          blt alshayafe:test-react

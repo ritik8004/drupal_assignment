@@ -80,10 +80,13 @@
           if (Drupal.alshayaSeoSpc.isEgiftVirtualProduct(product)) {
             cartDataLayer.productStyleCode.push(product.id);
             cartDataLayer.productSKU.push(product.sku);
+            let productName = (product.sku === 'giftcard_topup')
+              ? product.productName
+              : product.title;
             // GTM product attributes for egift card.
             const productGtm = {
               id: product.id,
-              name: [product.title, product.price].join('/'),
+              name: [productName, product.price].join('/'),
               price: product.price,
               variant: product.sku,
               dimension2: 'virtual',
@@ -97,7 +100,7 @@
                 id: product.sku,
                 price: product.price,
                 count: 1,
-                title: product.title,
+                title: productName,
                 image: product.media,
               };
               cartDataLayer.cartItemsFlocktory.push(flocktory);

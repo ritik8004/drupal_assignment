@@ -1,0 +1,502 @@
+$black: #000;
+$white: #fff;
+$charcoal: #242424;
+$mine: #3b3b3b;
+$chicago: #636363;
+$dawn: #a3a3a3;
+$alto: #ccc;
+$mercury: #e1e1e1;
+$smoke: #f2f2f2;
+$alert-light: #e7cccf;
+$alert-main: #b00020;
+$alert-dark: #740031;
+$highlight-light: #f1e8dd;
+$highlight-main: #ceb18f;
+$highlight-dark: #826646;
+$success-light: #d8e1d5;
+$success-main: #758e6d;
+$success-dark: #3c4b37;
+$accent-light: #d7ddeb;
+$accent-main: #7183b0;
+$accent-dark: #384669;
+$purple: #cab9dc;
+$gray-light: #ededed;
+$gray-medium: #e0dfdf;
+$gray-three: #333;
+$gray-seven: #777;
+$lust-red: #e51b23;
+$gray-four: #d9d9d9;
+$gray-five: #dfdfdf;
+$gray-six: #979797;
+$gray-seven: #f5f5f5;
+$gray-eight: #e5e5e5;
+$green: #090;
+$orange: #e6591b;
+$gray-nine: #e9e9e9;
+$white1: #fafafa;
+$white-alpha4: rgba(255, 255, 255, 0.4);
+$info-1: #bbdfff;
+$green2: #9dd3ba;
+$yellow: #ede4d0;
+$sky_blue: #93cdff;
+
+
+//// Global elements.
+$primary_text: $black;
+$primary_link: $black;
+$content_pagetitle: $black;
+$content_pagetitle_border: $alto;
+$primary_link-hover: $black;
+$primary_link-active: $black;
+$primary_border: $alto;
+$content_link_color: $black;
+$secondary_link: $black;
+
+// Form elements.
+$primary_form_selector_border: $black;
+$primary_form_selector: $gray-three;
+$primary_form_link: $black;
+$primary_form_input_text: $gray-three;
+$primary_input_label: $dawn;
+$primary_input_border: $black;
+$primary_input_disabled: $alto;
+$primary_input_focus_border: $black;
+$primary_input_inline_error: $lust-red;
+
+// Form Items
+$formitem_label: $dawn;
+$select_drop_down_hover: $white;
+$select_drop_down_hover_bg: $smoke;
+$select_drop_down_hover_text: $black;
+
+//Buttons.
+$primary_btn_bg: $black;
+$primary_empty_btn: $white;
+$primary_brand_button_text: $white;
+$primary_empty_btn_border: $black;
+$primary_brand_button: $gray-medium;
+$primary_button_disabled: $alto;
+$secondary_btn_bg: $white;
+$secondary_btn_text: $black;
+$secondary_btn_bg_hover: $mercury;
+$secondary_btn_border: $charcoal;
+$tertiary_btn_bg: $white;
+$tertiary_btn_text: $black;
+$tertiary_btn_border: $charcoal;
+
+// Checkbox & Radio.
+$primary_checkbox_empty: $white;
+$primary_checkbox_filled: $gray-three;
+$primary_radiobtn_label: $gray-three;
+$primary_radiobtn_empty: $gray-three;
+$primary_radiobtn_filled: $gray-three;
+
+// User Form
+$user_field_link: $black;
+$user_form_text: $dawn;
+$my_account_nav: $gray-three;
+$my_account_nav_active: $gray-three;
+$my_account_nav_hover: $gray-three;
+$user_form_layout_divider_color: $black;
+$login_form_border: $alto;
+$user_form_inp_text: $gray-three;
+$user_pwd_unmask: $gray-three;
+
+// Dropdown.
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_border: $mercury;
+$primary_dropdown_option_hover: $black;
+$primary_dropdown_option_border: $alto;
+$primary_dropdown_option_disbled: $black;
+$primary_dropdown_arrow_icon: $black;
+$primary_dropdown_text: $black;
+
+// Footer
+$footer_border_top: $black;
+$footer_title_h3: $white;
+$primary_footer_input_label: $black;
+$footer_link_mobile: $white;
+$footer_link: $white;
+$footer_link_hover: $white;
+$social-icons-bg: $black;
+$footer-bg: $black;
+$footer-text: $white;
+$footer-secondary-bg-mobile: $white;
+$footer-newsletter-text: $chicago;
+$footer-text-mobile: $gray-three;
+
+// Titles.
+$page_title: $black;
+$block_title: $black;
+$title: $black;
+$sub_title: $black;
+$label_black: $black;
+$label_dark: $black;
+$user_sidebar_block_title: $black;
+
+// Copyright
+$copyright_footer_bg: $smoke;
+$copyright_footer_paragraph: $black;
+
+// Social links
+$social_links_h3: $white;
+
+// contact form.
+$webform_contact_dropdown_disable_text: $black;
+
+// Accordion
+$accordion_border: $black;
+
+// Language Switcher
+$lang_switch: $white;
+$lang_switch_active: $white;
+$lang_switch_firsttime_bg: $black;
+
+// Breadcrumb.
+$breadcrumb_bg: $white;
+$breadcrumb_link: $charcoal;
+$breadcrumb_link_hover: $black;
+$breadcrumb_link_active: $charcoal;
+
+// Social Auth
+$social-network-text: $black;
+$social-auth-bg: $gray-medium;
+$social-auth-bg-hover: $black;
+$social_auth_login_button_border: $gray-medium;
+$user_login_sub_text: $black;
+$user_login_link_btn_text: $black;
+$user_login_section_title: $black;
+
+// Header.
+$header_border: $gray-medium;
+$header_search_active_bg: $white;
+$header_mobile_menu_close_bg: $black;
+$header_toggle_sign_active_tab: $black;
+$header_toggle_sign_default: $gray-light;
+
+// Header secondary: ie: top header.
+$header_secondary_bg: $black;
+$header_secondary_bg_upto_desk: $black;
+$header_secondary_menu_link_mobile: $white;
+$header_secondary_menu_link: $white;
+$header_mobile_menu_arrow: $black;
+$header_c_menu_text: $black;
+$header_secondary_menu_link_active: $black;
+$header_my_account_h3_title: $white;
+$header_super_category_enabled_bg: $black;
+$header_super_cat_menu_text: $white;
+$header_super_cat_menu_active_text: $black;
+$header_super_category_menu_bg: $black;
+$header_super_category_menu_active_bg: $white;
+
+// Store finder page.
+// Store finder header form.
+$store_finder_header: $black;
+$store_finder_header_desktop: $black;
+$store_finder_subheader: $black;
+$store_finder_backbtn: $black;
+$store_finder_icon: $black;
+$store_finder_text: $black;
+$store_finder_label_location: $black;
+$store_finder_border: $black;
+$store_finder_text_hover: $black;
+$store_finder_border_hover: $mercury;
+$store_finder_search_label: $alto;
+$store_finder_search_input: $mercury;
+$store_finder_search_input_bg: $white;
+$store_finder_search_input_mobile_border: $mercury;
+$store_finder_glossary_btn_border: $mercury;
+$store_finder_glossary_title: $black;
+
+// Store finder gloassary.
+$store_finder_glossary_alphabet: $black;
+$store_finder_glossary_text: $black;
+$store_finder_glossary_icon: $black;
+$store_finder_glossary_text_hover: $black;
+$store_finder_glossary_text_border: $alto;
+$store_finder_glossary_border: $mercury;
+$store_finder_glossary_link: $black;
+
+// Store finder search results.
+$store_finder_search_results_label: $black;
+$store_finder_search_results_border: $alto;
+$store_finder_search_results_counter_text: $white;
+$store_finder_search_results_tile_bg: $white;
+$store_finder_search_results_tile_hover_bg: $white;
+$store_finder_search_results_tile_link: $black;
+$store_finder_search_results_tile_icon: $black;
+$store_finder_search_results_hour_label: $black;
+$store_finder_search_results_hour_icon_open: $black;
+$store_finder_storewrapper_bg: $smoke;
+$store_finder_map_border: $mercury;
+$store_finder_search_results_counter_bg: $black;
+
+// Mega menu.
+$mm_body_overlay: rgba(0, 0, 0, 0.5);
+$mm_l1_border: $alto;
+$mm_l1_desktop-border: $white;
+$mm_l1_link: $black;
+$mm_l1_link_hover: $black;
+$mm_l1_link_active_border: $black;
+$mm_l2_link: $black;
+$mm_l2_link_hover: $black;
+$mm_l3_link: $black;
+$mm_highlight_label: $black;
+$mm_highlight_title: $black;
+$mm_highlight_description: $black;
+$mm_l3_link_hover: $black;
+$vm_l2_mobile_border: $gray-light;
+
+//My Account
+$label_dark: $black;
+$label_black: $black;
+$user_order_help_bg: $gray-four;
+$user_order_help_text: $black;
+$user_order_help_text_links: $gray-three;
+$user_acc_details_border: $alto;
+$user_nav_mobile_link: $gray-three;
+$my_acc_mob_border_color: $gray-light;
+$user_account_wrapper_light: $black;
+$block_acm_customer_txt: $black;
+$order_recent_order_order_detail_link: $black;
+$order_detail_order_summary_row_bg: $white;
+$order_detail_td_light_content: $dawn;
+$order_detail_td_dark_content: $black;
+$order_detail_order_details_row: $smoke;
+$order_detail_order_details_row_td_blend: $alert-light;
+$order_detail_delivery_details_row_content: $black;
+$order_detail_delivery_details_row_bg: $green;
+$order_detail_delivery_details_row_text: $white;
+$order_detail_sub_total_row_text: $dawn;
+$order_detail_order_item_row_bg: $white;
+$order_detail_order_item_row_light_text: $alto;
+
+//Address Book
+$address_add_form_text: $gray-three;
+$windows-blue: $black;
+$address_text: $black;
+$address_form_radio: $charcoal;
+
+//Algolia search bar.
+$algolia-input-text: $black;
+$algolia-input-placeholder-text: $alto;
+$algolia-input-border: $mercury;
+$algolia-trending-title-text: $black;
+$algolia-react-progressbar: $mercury;
+$algolia-react-progressbar-text: $chicago;
+$algolia-react-progressbar-fill: $black;
+$algolia-react-search-page-title: $black;
+$algolia-react-sidebar-label-color: $black;
+$algolia-auto-complete-border: $gray-light;
+$algolia-search-icon-background: $white;
+$algolia-search-icon: $black;
+$algolia-search-clear-text-icon: $black;
+$algolia-react-facet-label: $black;
+$algolia_react-facet-item-color: $black;
+$algolia-search-lhn: $chicago;
+$algolia-top-search-result: $white;
+
+// PLP
+$plp_grid_active_color: $black;
+$plp_wishlist_icon_bg: $smoke;
+$plp_search_count: $black;
+$plp_tile_product_title: $black;
+$plp_tile_product_text: $black;
+$plp_facet_filter_bg: $black;
+$plp_facet_clear_text: $black;
+$plp_filter_active_item: $smoke;
+$plp_facet_count_number: $dawn;
+$plp_facet_border: $alto;
+$plp_filter_active_tick: $black;
+$plp_tile_product_title_hover: $black;
+$plp_product_price_txt: $chicago;
+$plp_filter_icon: $black;
+$plp_all_filter_button_color: $black;
+$plp_clear_all_btn_disabled: $alto;
+$plp_all_filter_title: $black;
+$plp_all_filter_filter_arrow: $black;
+$plp_clear_all_btn_text: $black;
+$plp_all_filter_title: $black;
+$plp_facet_summary_filter_icon: $white;
+$plp_facet_filter_link: $white;
+$spc-checkout-delivery-method-bg: $gray-seven;
+
+// Accordion
+$accordion_title: $black;
+$accordion_title_icon: $black;
+
+// Mini cart
+$primary_minicart_hover: $white;
+$primary_minicart_quantity_text: $black;
+$primary_minicart_quantity_bg: transparent;
+$minicart_notification_btn_bg: $white;
+$minicart_notification_btn_text: $black;
+$minicart_notification_border: $black;
+$minicart_notification_text: $black;
+
+//SPC
+$spc-order-summary-totals-bg: $white1;
+$spc-cart-background: $white;
+$spc-cart-promo-code-submit-enabled: $black;
+$spc_cart_item_border_color: $gray-five;
+$spc-product-attributes: $gray-six;
+$checkout_section_titles: $black;
+$checkout_login_link_text: $black;
+$checkout_login_submit_button_background: $black;
+$checkout_guest_button_border: $charcoal;
+$checkout_footer_bg: $black;
+$checkout_footer_border-top: $black;
+$checkout_footer_txt: $white;
+$checkout_header_border-bottom: $mercury;
+$spc_checkout_page_bg: $gray-seven;
+$spc-checkout-terms-conditions: $gray-three;
+$spc_co_address_form_btn_bg: $black;
+$spc-checkout-radio-filled: $gray-three;
+$spc-checkout-radio-empty: $gray-three;
+$spc-deliver-button: $black;
+$spc-checkout-confirmation-success-txt: $gray-three;
+$spc-checkout-order-detail-label: $gray-three;
+$spc_promo_code_block_mob_bg: $smoke;
+$spc_promo_code_block_mob_header_bg: $white;
+$spc-select-border: $gray-eight;
+$spc-basket-close-icon-bg: $gray-light;
+$spc-order-summary-item-bg: $white;
+$spc-order-summary-bg: $smoke;
+$spc_checkout_delivery_mob_bg: $white;
+$spc-cnc-toggle-bg: $white;
+$spc-cnc-toggle-bg-active: $black;
+$spc-cnc-store-search-icon: $black;
+$spc-checkout-success-message-background: $info-1;
+$spc-checkout-success-message-color: $black;
+$spc-promotion-link: $alert-main;
+$spc-checkout-error-message-background: $alert-main;
+$spc-checkout-success-message-background: $green;
+$spc-checkout-warning-message-background: $orange;
+$spc-checkout-success-message-color: $white;
+$spc-checkout-error-message-color: $white;
+$spc-checkout-delivery-method-bg: $white;
+$spc-checkout-footer-secondary-bg: $white;
+$spc-cart-sameday-delivery-border: $green2;
+$spc-cart-standard-delivery-border: $yellow;
+$spc-cart-express-delivery-border: $sky_blue;
+$spc-cart-delivery-tags: $gray-three;
+$spc-checkout-payment-method-desc: $dawn;
+
+// Wishlist
+$wishlist-header-notification-border: $black;
+$wishlist-button-bg: $primary_btn_bg;
+$wishlist-button-txt: $primary_brand_button_text;
+$wishlist-button-border: $secondary_btn_border;
+$wishlist-button-register-txt: $secondary_btn_text;
+$wishlist-button-bg-hover: $primary_btn_bg;
+$my-wishlist-share-modal-hover-bg: $black;
+
+// Product detail page.
+$pdp_product_price: $black;
+$pdp_product_itemcode: $chicago;
+$pdp_bg: $white;
+$pdp_card_bg: $smoke;
+$pdp_secondary_text: $chicago;
+$magazine-pdp-secondary-text: $chicago;
+$pdp_price_text: $black;
+
+// Product Add to cart form.
+$pdp_size_selected_text: $black;
+
+// PLP Quick view drawer.
+$plp-quick-view-product-size-active-bg: $charcoal;
+$plp-quick-view-product-size-border: $dawn;
+$plp-quick-view-product-size-border-hover: $dawn;
+$plp-quick-view-product-size-text: $black;
+$plp-quick-view-product-size-text-active: $white;
+$plp-view-full-product-text: $chicago;
+$plp-view-full-product-text-arrow: $black;
+$plp-quick-view-size-guide-text: $black;
+$plp-quick-view-product-size-text-disabled: $dawn;
+$plp-quick-view-product-color-border: $chicago;
+$plp_selected_filter_label_text: $mine;
+
+// PLP add to cart.
+$plp-primary-cta-hover-bg: $black;
+$plp-product-details-text: $mercury;
+$plp-secondary-cta-hover-bg: $white;
+$plp-quick-view-bg: $white;
+
+//PLP slider.
+$plp_slider_dots: rgba(0, 0, 0, 0.4);
+$plp-slider-icon-bg: $white;
+$hp_slider_dots: $black;
+$instagram_dots_default: rgba(0, 0, 0, 0.4);
+
+// Drawer cart notification
+$drawer-panel-close-icon: $black;
+
+// Alo static block.
+$static-info-bg: $smoke;
+$static-info-border: $mercury;
+
+// Mobile Multi Menu
+$menu_bg: $white;
+$mob_menu_link_txt: $dawn;
+$mob_menu_active_link_txt: $black;
+$mob_menu_one_border_color: $gray-nine;
+$mob_menu_two_img_background: $gray-four;
+$cart_filled_background: $black;
+$cart_filled_color: $white;
+
+// Out of stock button.
+$oos_btn_bg: $alert-main;
+
+// PDP and PLP promotions
+$pdp_product_discount_text: $alert-main;
+$pdp_product_special_price_text: $alert-main;
+$pdp_product_discount_price: $alert-main;
+
+//eGift
+$egift_form_ckt_text: $white;
+$egift-purchase-page-border: $alto;
+$advanced-page-banner-bg: $smoke;
+$egift-landing-page-one-row-two-col-box-bg: $smoke;
+$egift_accordian_active_title: $alert-dark;
+$egift_accordian_title_bg: $white;
+$egift_accordian_title_border: $alto;
+$egift_form_ckt_btn_border: $black;
+
+// highlighted banner
+$highlights_subtitle_hover: $black;
+
+// LHN
+$lhn_l2: $black;
+$lhn_l3: $chicago;
+
+// Base theme overrides
+$magv2-mobile-back-arrow: $charcoal;
+$magv2-slick-dots-active: $white;
+$magv2-slick-dots: $white-alpha4;
+$magv2-mobile-size-drawer-label: $primary_text;
+$magv2-popup-header-label: $primary_text;
+$magv2-size-radio-filled: $primary_text;
+$magv2-gallery-popup-cross: $black;
+$magv2-size-options: $charcoal;
+$magv2-size-btn-border: $smoke;
+$magv2-desc-popup-bg: $smoke;
+$magv2-desc-popup-title-border: $mercury;
+$magv2-size-guide-link: $black;
+$magv2-size-guide-link-border: $charcoal;
+// intentionally done for pinterest color which we don't have in color scheme.
+$magv2-pinterest-share-icon-hover: #bc091d;
+
+// Swatches
+$swatch-border: $mercury;
+
+// SDD and ED
+$sameday-express-delivery-drawer-btn: $primary_btn_bg;
+$del_opt_sub_title_txt: $chicago;
+$del_opt_title_text: $chicago;
+$magv2-share-icons-default-color: $black;
+$magv2-share-btn: $black;
+$magv2-text: $chicago;
+
+// Messages and Errors
+$default_msg_bg: $green;
+$content_error_msg_bg: $alert-main;

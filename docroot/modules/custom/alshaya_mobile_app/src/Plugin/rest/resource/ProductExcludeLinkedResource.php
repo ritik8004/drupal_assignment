@@ -25,6 +25,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides a resource to get product details excluding linked products.
@@ -131,6 +132,13 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected $optionsHelper;
 
   /**
+   * Stores the configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -165,6 +173,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   The request stack service.
    * @param \Drupal\alshaya_product_options\ProductOptionsHelper $options_helper
    *   Product Options Helper.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    */
   public function __construct(
     array $configuration,
@@ -182,7 +192,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     SkuInfoHelper $sku_info_helper,
     ProductCategoryHelper $product_category_helper,
     RequestStack $request_stack,
-    ProductOptionsHelper $options_helper
+    ProductOptionsHelper $options_helper,
+    ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -201,6 +212,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $this->productCategoryHelper = $product_category_helper;
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->optionsHelper = $options_helper;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -223,7 +235,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('alshaya_acm_product.category_helper'),
       $container->get('request_stack'),
-      $container->get('alshaya_product_options.helper')
+      $container->get('alshaya_product_options.helper'),
+      $container->get('config.factory')
     );
   }
 
@@ -368,7 +381,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     foreach ($media_contexts as $key => $context) {
       $data['media'][] = [
         'context' => $context,
-        'media' => $this->skuImagesManager->getProductMediaDataWithStyles($sku, $context),
+        'media' => $this->skuImagesManager->getProductMediaDataWithStyles($sku, $key),
       ];
     }
 
@@ -479,6 +492,11 @@ class ProductExcludeLinkedResource extends ResourceBase {
    */
   private function getDeliveryOptionsStatus(SKUInterface $sku) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $this->cache['tags'] = Cache::mergeTags(
+      $this->cache['tags'],
+      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags()
+    );
+
     return [
       'home_delivery' => [
         'status' => alshaya_acm_product_is_buyable($sku) && alshaya_acm_product_available_home_delivery($sku),

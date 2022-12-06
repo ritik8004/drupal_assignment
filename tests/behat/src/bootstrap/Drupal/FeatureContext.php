@@ -7,6 +7,7 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Exception;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Session;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
@@ -28,7 +29,6 @@ use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Drupal\node\Entity\Node;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 
-
 define("ORDER_ASC", 1);
 define("ORDER_DSC", 0);
 
@@ -39,6 +39,35 @@ class FeatureContext extends CustomMinkContext
 {
 
   private $parameters;
+
+  /**
+   * Removes banners and popups.
+   *
+   * @BeforeStep
+   */
+  public function hideBanners()
+  {
+    $classesToHide = [
+      '.block-content--marketing-popup',
+      '.exponea-subbox-banner',
+      '.exponea-subbox-subscription-dialog',
+    ];
+
+    try {
+      $session = $this->getSession();
+      if ($session instanceof Session) {
+        $driver = $session->getDriver();
+        if ($driver instanceof Selenium2Driver && $driver->getWebDriverSession()) {
+          $classes = implode(',', $classesToHide);
+          $script = 'var sheet = window.document.styleSheets[0];';
+          $script .= "sheet.insertRule('$classes { display: none!important; }', sheet.cssRules.length);";
+          $this->getSession()->executeScript($script);
+        }
+      }
+    } catch (\Exception) {
+      // Silently fail when there is an error in this event.
+    }
+  }
 
   /**
    * Storing URL of page.
@@ -66,7 +95,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iWaitForThePageToLoad()
   {
-    $this->getSession()->wait($this->parameters['ajax_waittime'] * 1000, "document.readyState === 'complete'");
+    $this->getSession()->wait($this->parameters['ajax_waittime'] * 3000, "document.readyState === 'complete'");
   }
 
   /**
@@ -1928,6 +1957,7 @@ class FeatureContext extends CustomMinkContext
    */
   public function iClickJqueryElementOnPage($element)
   {
+    $element = addslashes($element);
     $this->getSession()->executeScript("document.querySelector('$element').click();");
   }
 
@@ -2368,32 +2398,6 @@ JS;
   }
 
   /**
-   * @Then I book first available slot
-   */
-  public function firstAvailableSlotIsBooked()
-  {
-    $page = $this->getSession()->getPage();
-    $all_dates = $page->findAll('css','ul.calendar-wrapper li');
-    $total_dates = count($all_dates);
-    for ($x = 0; $x < $total_dates; $x++) {
-      if ($x == 0) {
-        $child = 'li:first-child';
-      }
-      else {
-        $child = "li:nth-child($x)";
-      }
-      $this->iClickOnElement(".appointment-datepicker ul.calendar-wrapper $child");
-      $this->iWaitSeconds('5');
-      if (empty($page->find('css','.appointment-timeslots-wrapper .appointment-time-slots .appointment-slots-empty'))) {
-        $this->inOfElementShouldContain(".appointment-datepicker ul.calendar-wrapper $child", "class", "active");
-        $this->iWaitSeconds('10');
-        $this->iClickOnElement('.appointment-timeslots-wrapper .appointment-time-slots .morning-items-wrapper ul.morning-items li:first-child');
-        break;
-      }
-    }
-  }
-
-  /**
    * @When I press :addCart button
    * @param $addCart
    */
@@ -2497,7 +2501,7 @@ JS;
   }
 
   /**
-   *  @Then the checkout payment checkbox should be checked
+   * @Then the checkout payment checkbox should be checked
    */
   public function checkoutPaymentMethodSelected () {
     $page = $this->getSession()->getPage();
@@ -2511,9 +2515,9 @@ JS;
   }
 
   /**
-   *  @Then the Knet payment checkbox should be checked
+   * @Then the Knet payment checkbox should be checked
    */
-  public function checkoutKNETPaymentMethodSelected () {
+  public function checkoutKNETPaymentMethodSelected() {
     $page = $this->getSession()->getPage();
     $checkoutField = $page->find('css', '#payment-method-checkout_com_upapi_knet');
     if (!empty($checkoutField)) {
@@ -2691,8 +2695,8 @@ JS;
       $element3->click();
     }
     else {
-        throw new \Exception(sprintf('Add to cart button not found.'));
-      }
+      throw new \Exception(sprintf('Add to cart button not found.'));
+    }
   }
 
   /**
@@ -2814,12 +2818,14 @@ JS;
     $session = $this->getSession();
     $email_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(0).text()');
     $order_id = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-preview .spc-value\').eq(1).text()');
-    $payment_method = $session->evaluateScript('return jQuery(\'.spc-main\').first().find(\'.spc-order-summary-order-detail .spc-value\').eq(4).text()');
+    $payment_method = $session->evaluateScript('return getPaymentMethod(); function getPaymentMethod() {var value=null; window.dataLayer.some(function eachObject(item) {if (item.event === \'purchaseSuccess\') {value=item.paymentOption; return true;} return false;}); return value;}');
+    $delivery_option = $session->evaluateScript('return getDeliveryMethod(); function getDeliveryMethod() {var value=null; window.dataLayer.some(function eachObject(item) {if (item.event === \'purchaseSuccess\') {value=item.deliveryOption; return true;} return false;}); return value;}');
     $order_detail = [
       'email' => $email_id,
       'order_id' => $order_id,
       'order_date' => date('Y-m-d'),
       'payment_method' => $payment_method,
+      'delivery_option' => $delivery_option,
     ];
     $filename = 'order_details.json';
     $orders = [];
@@ -3007,20 +3013,73 @@ JS;
   }
 
   /**
-   * @When /^I am on user registration page$/
+   * @Given /^I select "([^"]*)" from "([^"]*)" select2 field$/
    */
-  public function iAmOnUserRegistrationPage()
+  public function iSelectFromSelect2field($value, $selector)
   {
-    $filename = 'creds.json';
-    $options = getopt('', ['profile:']);
-    $profile_arr = explode('-', $options['profile']);
-    $env = $profile_arr[2];
-    $secret_key = '';
-    if (file_exists($filename)) {
-      $creds = json_decode(file_get_contents($filename), TRUE);
-      $secret_key = $creds[$env]['secret_key'] ?? '';
-    }
-    $this->visitPath('/user/register?behat=' . $secret_key);
+    $this->iFillInWithUsingJQuery($selector, $value);
   }
 
+  /**
+   * @Given /^I verify the wishlist popup block if enabled and remove the cart item$/
+   */
+  public function iVerifyTheWishlistPopupBlock()
+  {
+    $page = $this->getSession()->getPage();
+    $empty_cart = $page->find('css', '#spc-cart .spc-empty-text');
+
+    if (!empty($empty_cart)) {
+      throw new \Exception('Cart is empty!');
+    }
+
+    // Click the remove button.
+    $page->find('css', '#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn')->click();
+
+    // If Wishlist is enabled we will get the popup.
+    if ($this->getSession()->evaluateScript('return jQuery(".wishlist-enabled").length')) {
+      $page = $this->getSession()->getPage();
+
+      // For our tests, we don't want to move to wishlist.
+      // Click the no button to just remove the item.
+      $page->pressButton('wishlist-no');
+    }
+    $this->iWaitSeconds('5');
+  }
+
+  /**
+   * @Given /^I wait for element "([^"]*)"$/
+   */
+  public function iWaitForElement($arg1)
+  {
+    $found = $this->waitForElement($arg1);
+    if (!$found) {
+      throw new \Exception("Element {$arg1} not found.");
+    }
+  }
+
+  /**
+   * Dynamically wait for an element to be available on page.
+   */
+  private function waitForElement($selector, $time = 60): bool
+  {
+    while ($time > 0) {
+      if (!is_null($this->getSession()->getPage()->find('css', $selector))) {
+        return true;
+      } else {
+        sleep(1);
+        $time--;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * @Given /^I fill in "([^"]*)" with "([^"]*)" using jQuery$/
+   */
+  public function iFillInWithUsingJQuery($selector, $value){
+    $session = $this->getSession();
+    $selector = addslashes($selector);
+    $value = addslashes($value);
+    $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
+  }
 }

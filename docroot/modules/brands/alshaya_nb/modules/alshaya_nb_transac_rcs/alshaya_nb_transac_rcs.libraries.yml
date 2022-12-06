@@ -1,0 +1,26 @@
+product:
+  version: 1.x
+  js:
+    js/alshaya_nb_transac_rcs_product.js: {}
+  dependencies:
+    - rcs_placeholders/helpers
+
+product.block.description:
+  version: 1.x
+  js:
+    handlebars/product.block.description.handlebars: { }
+
+product.block.description_details:
+  version: 1.x
+  js:
+    handlebars/product.block.description_details.handlebars: { }
+
+product.block.short_description.pdp:
+  version: 1.x
+  js:
+    handlebars/product.block.short_description.pdp.handlebars: { }
+
+gallery.product.product_zoom:
+  version: 1.x
+  js:
+    handlebars/gallery.product.product_zoom.handlebars: {}

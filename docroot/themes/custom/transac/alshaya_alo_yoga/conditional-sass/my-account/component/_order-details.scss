@@ -1,0 +1,93 @@
+#block-userrecentorders {
+  h2 {
+    &.subtitle {
+      font-weight: 700;
+      border-bottom: rem(1) solid $user_acc_details_border;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.order-detail,
+.block-alshaya-user-recent-orders {
+  .user__order--detail {
+    div.order-item-row.delivered-items,
+    tr.order-item-row.delivered-items,
+    div.order-item-row.cancelled-items,
+    tr.order-item-row.cancelled-items {
+      > div,
+      td {
+        font-family: $ay-bold;
+      }
+    }
+
+    .order-summary-row {
+      .dark {
+        font-size: rem(18);
+        font-weight: 400;
+      }
+    }
+
+    .order-details-row {
+      .label {
+        font-family: $alshaya-bold;
+        font-size: rem(14);
+      }
+    }
+
+    .order-item-row {
+      background-color: $order_detail_order_item_row_bg;
+
+      .dark {
+        font-size: rem(18);
+        font-weight: 400;
+        line-height: 1.25;
+      }
+
+      .light {
+        color: $order_detail_order_item_row_light_text;
+        line-height: 1.285;
+      }
+    }
+
+    .delivery-details-row {
+      color: $order_detail_delivery_details_row_text;
+    }
+  }
+
+  .total-row {
+    font-size: rem(18);
+    font-weight: 400;
+
+    .upcase {
+      text-transform: none;
+    }
+  }
+
+  .sub-total-row,
+  .delivery-charge-row {
+    color: $order_detail_sub_total_row_text;
+  }
+}
+
+.order-detail {
+  .c-page-title {
+    @include breakpoint($desktop) {
+      margin-bottom: 0;
+    }
+  }
+
+  .print--button {
+    @include breakpoint($desktop) {
+      top: rem(12);
+    }
+  }
+
+  .download-invoice-wrapper {
+    text-transform: capitalize;
+
+    @include breakpoint($desktop) {
+      top: rem(21);
+    }
+  }
+}

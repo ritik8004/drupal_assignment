@@ -48,7 +48,7 @@ class TotalLineItems extends React.Component {
     }
 
     const {
-      applied_rules: cartPromo,
+      applied_rules_with_discounts: cartPromo,
       shipping_free: freeShipping,
     } = event.detail.cart_labels;
 

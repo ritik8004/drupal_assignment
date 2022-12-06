@@ -23,17 +23,27 @@ import { isWishlistPage } from '../../../../../js/utilities/wishlistHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import ExpressDeliveryLabel from './ExpressDeliveryLabel';
 import PriceRangeElement from '../price/PriceRangeElement';
+import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelper';
+import ArticleSwatches from '../article_swatch';
+import SliderSwatch from '../slider-swatch';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
   // 'extraInfo' is used to pass additional information that
   // we want to use in this component.
 }) => {
-  const { showSwatches } = drupalSettings.reactTeaserView.swatches;
+  const { showSwatches, showSliderSwatch } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
   const [slider, setSlider] = useState(false);
+  const [sku, setSkuCode] = useState(hit.sku);
+  const [media, setSkuMedia] = useState(hit.media);
+  const [updatedAttribute, setSwatchAttributeData] = useState({
+    title: null,
+    url: null,
+    renderProductPrice: null,
+  });
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
@@ -57,7 +67,7 @@ const Teaser = ({
       }
     }
   }
-  let overallRating = (hit.attr_bv_average_overall_rating !== undefined) ? hit.attr_bv_average_overall_rating : '';
+  let overallRating = (Drupal.hasValue(hit.attr_bv_average_overall_rating)) ? hit.attr_bv_average_overall_rating : '';
   if (pageType === 'plp' && productListIndexStatus()) {
     overallRating = overallRating[currentLanguage];
   }
@@ -66,13 +76,31 @@ const Teaser = ({
     labelItems = collectionLabel.map((d) => <li className={d.class} key={d.value}>{d.value}</li>);
   }
 
+  // Update product data as per selected color swatch.
+  const handleSwatchSelect = (productData) => {
+    setSkuCode(productData.sku);
+    setSkuMedia(productData.media);
+    const renderSkuPrice = (
+      <Price
+        price={productData.priceData.price}
+        finalPrice={productData.priceData.finalPrice}
+      />
+    );
+    setSwatchAttributeData({
+      ...updatedAttribute,
+      title: productData.name,
+      url: productData.url,
+      renderProductPrice: renderSkuPrice,
+    });
+  };
+
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
   const attribute = [];
   Object.entries(hit).forEach(([key, value]) => {
     if (pageType === 'plp'
       && productListIndexStatus()
       && value !== null) {
-      if (value[currentLanguage] !== undefined) {
+      if (Drupal.hasValue(value[currentLanguage])) {
         attribute[key] = value[currentLanguage];
       } else {
         // If the value for current language code does not exist
@@ -135,7 +163,7 @@ const Teaser = ({
     teaserClass = `${teaserClass} product-element-alignment`;
   }
 
-  const showRating = (hit.attr_bv_total_review_count !== undefined
+  const showRating = (Drupal.hasValue(hit.attr_bv_total_review_count)
     && hit.attr_bv_total_review_count > 0
     && showReviewsRating !== undefined
     && showReviewsRating === 1
@@ -157,9 +185,27 @@ const Teaser = ({
   if (!hasPriceRange(attribute.alshaya_price_range)) {
     renderPrice = hasValue(attribute.rendered_price)
       ? Parser(attribute.rendered_price)
-      : <Price price={attribute.original_price} final_price={attribute.final_price} />;
+      : (
+        <Price
+          price={attribute.original_price}
+          finalPrice={attribute.final_price}
+          fixedPrice={attribute.fixed_price}
+        />
+      );
   } else {
     renderPrice = <PriceRangeElement priceRange={attribute.alshaya_price_range} />;
+  }
+
+  let title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
+  title = title.toString();
+  const url = hasValue(updatedAttribute.url) ? updatedAttribute.url : attribute.url;
+  // Checking whether the green leaf attribute is present or not.
+  let greenLeaf = null;
+  if (hasValue(hit.attr_green_leaf)) {
+    // Determining the green leaf flag for PLP and wishlist page.
+    greenLeaf = typeof hit.attr_green_leaf[currentLanguage] !== 'undefined'
+      ? hit.attr_green_leaf[currentLanguage]
+      : hit.attr_green_leaf;
   }
 
   return (
@@ -167,7 +213,7 @@ const Teaser = ({
       <article
         className="node--view-mode-search-result"
         onClick={(event) => storeClickedItem(event, pageType)}
-        data-sku={hit.sku}
+        data-sku={sku}
         data-vmode="search_result"
         data-insights-object-id={hit.objectID}
         /* Dangling variable _state is coming from an external library here. */
@@ -195,31 +241,53 @@ const Teaser = ({
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
-            href={`${attribute.url}`}
-            data--original-url={`${attribute.url}`}
+            href={`${url}`}
+            data--original-url={`${url}`}
             className="list-product-gallery product-selected-url"
           >
             <Gallery
-
-              media={hit.media}
-              title={attribute.title}
+              media={media}
+              title={title}
               labels={labels}
-              sku={hit.sku}
+              sku={sku}
               initSlider={initSlider}
               setSlider={setSlider}
             />
+            {/* Render the green leaf icon for the sustainable products. */}
+            {hasValue(greenLeaf) && greenLeaf
+              && (
+                <div className="labels-container bottom-right">
+                  <span className="map-green-leaf" />
+                </div>
+              )}
           </a>
           {/* Render the component if the page isn't wishlist listing page. */}
           <ConditionalView condition={!isWishlistPage(extraInfo)}>
             <WishlistContainer
               context="wishlist"
               position="top-right"
-              sku={hit.sku}
-              title={attribute.title && Parser(attribute.title)}
+              sku={sku}
+              title={title && Parser(title)}
               format="icon"
               setWishListButtonRef={ref}
             />
           </ConditionalView>
+          {isAddToBagHoverEnabled()
+            && (
+            <div className="quick-add">
+              <AddToBagContainer
+                url={url}
+                sku={sku}
+                stockQty={hit.stock_quantity}
+                productData={attribute.atb_product_data}
+                isBuyable={attribute.is_buyable}
+                // Pass extra information to the component for update the behaviour.
+                extraInfo={extraInfo}
+                wishListButtonRef={ref}
+                styleCode={hit.attr_style_code ? hit.attr_style_code : null}
+              />
+            </div>
+            )}
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
@@ -229,7 +297,11 @@ const Teaser = ({
                 </ul>
               </div>
               )}
-            <ConditionalView condition={showBrandName && attribute.attr_brand_name !== undefined}>
+            <ConditionalView condition={
+                showBrandName
+                && Drupal.hasValue(attribute.attr_brand_name)
+              }
+            >
               <div className="listing-brand-name">
                 {attribute.attr_brand_name}
               </div>
@@ -238,10 +310,10 @@ const Teaser = ({
               <div className="alignment-placeholder" />
             </ConditionalView>
             <h2 className="field--name-name">
-              <a href={attribute.url} className="product-selected-url">
+              <a href={url} className="product-selected-url">
                 <div className="aa-suggestion">
-                  <span className="suggested-text" title={attribute.title && Parser(attribute.title)}>
-                    {attribute.title && Parser(attribute.title)}
+                  <span className="suggested-text" title={title && Parser(title)}>
+                    {title && Parser(title)}
                   </span>
                 </div>
               </a>
@@ -262,19 +334,31 @@ const Teaser = ({
               </div>
             </ConditionalView>
             {/* Render price based on range/single price conditionals */}
-            {renderPrice}
+            {hasValue(updatedAttribute.renderProductPrice)
+              ? updatedAttribute.renderProductPrice : renderPrice}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>
             <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
-            {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
+            {showSwatches ? <Swatches swatches={attribute.swatches} url={url} /> : null}
+            {showSliderSwatch ? <SliderSwatch swatches={attribute.swatches} url={url} /> : null}
+            {/* Render color swatches based on article/sku id */}
+            {hasValue(attribute.article_swatches)
+              ? (
+                <ArticleSwatches
+                  sku={sku}
+                  handleSwatchSelect={handleSwatchSelect}
+                  articleSwatches={attribute.article_swatches}
+                  url={url}
+                />
+              ) : null}
           </div>
           <ConditionalView condition={
               isExpressDeliveryEnabled()
               && checkExpressDeliveryStatus()
-              && hit.attr_express_delivery !== undefined
+              && Drupal.hasValue(hit.attr_express_delivery)
               && hit.attr_express_delivery[0] === '1'
             }
           >
@@ -284,7 +368,7 @@ const Teaser = ({
               isExpressDeliveryEnabled()
               && checkExpressDeliveryStatus()
               && pageType === 'plp'
-              && hit.attr_express_delivery !== undefined
+              && Drupal.hasValue(hit.attr_express_delivery)
               && hit.attr_express_delivery[currentLanguage][0] === '1'
             }
           >
@@ -292,10 +376,10 @@ const Teaser = ({
           </ConditionalView>
         </div>
         {/* Don't render component on wishlist page if product is OOS. */}
-        <ConditionalView condition={!showOOSButton}>
+        <ConditionalView condition={!showOOSButton && !isAddToBagHoverEnabled()}>
           <AddToBagContainer
-            url={attribute.url}
-            sku={hit.sku}
+            url={url}
+            sku={sku}
             stockQty={hit.stock_quantity}
             productData={attribute.atb_product_data}
             isBuyable={attribute.is_buyable}
@@ -318,7 +402,7 @@ const Teaser = ({
           <WishlistContainer
             context="wishlist_page"
             position="top-right"
-            sku={hit.sku}
+            sku={sku}
             format="link"
           />
         </ConditionalView>

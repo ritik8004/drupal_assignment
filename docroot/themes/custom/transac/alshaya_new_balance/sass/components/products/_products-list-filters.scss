@@ -1,0 +1,109 @@
+// Css for filters on products listing page and search page.
+.c-plp .c-content__region {
+  // Main all filters div theming.
+  .all-filters,
+  .all-filters-algolia {
+    .filter__inner {
+      .views-exposed-form,
+      .c-facet {
+        &.c-accordion,
+        &.c-collapse-item {
+          .c-accordion__title,
+          .c-collapse__title {
+            font-size: rem(12);
+            padding: rem(18) rem(24);
+            padding-#{$right}: rem(16);
+            border-bottom: rem(1) solid $plp_filter_border;
+
+            &::after {
+              font-size: rem(32);
+              #{$right}: rem(10);
+            }
+
+            .selected-facets {
+              margin-#{$right}: rem(24);
+            }
+          }
+        }
+      }
+
+      .block-facets-ajax,
+      .c-collapse-item {
+        & > ul {
+          .facet-item {
+            border-bottom: rem(1) solid $plp_filter_border;
+          }
+        }
+      }
+    }
+
+    .filter__head {
+      height: rem(92);
+      border-bottom: rem(1) solid $plp_filter_border;
+
+      .filter-sort-title {
+        text-transform: capitalize;
+        font-size: rem(32);
+        font-family: $alshaya-bold;
+      }
+    }
+
+    .filter__foot {
+      .all-filters-close,
+      .facet-all-apply,
+      .facet-apply-all,
+      .facet-all-clear,
+      .facet-clear-all {
+        height: rem(48);
+        font-family: $alshaya-bold;
+        font-size: rem(14);
+        text-transform: capitalize;
+      }
+
+      .facet-all-count {
+        text-transform: uppercase;
+        color: $plp_facet_count_number;
+      }
+
+      .facet-all-clear,
+      .facet-clear-all {
+        border-color: $secondary_border;
+        color: $secondary_btn_text;
+
+        a {
+          color: $secondary_btn_text;
+        }
+      }
+    }
+
+    @include breakpoint($tablet) {
+      .filter__inner {
+        .views-exposed-form,
+        .c-facet {
+          &.c-accordion,
+          &.c-collapse-item {
+            .c-accordion__title,
+            .c-collapse__title {
+              padding-#{$left}: rem(32);
+              padding-#{$right}: rem(24);
+            }
+          }
+        }
+      }
+
+      .filter__foot {
+        .all-filters-close,
+        .facet-all-apply,
+        .facet-apply-all,
+        .facet-all-clear,
+        .facet-clear-all {
+          height: rem(54);
+        }
+
+        .facet-all-count {
+          margin: rem(20) auto rem(30);
+        }
+      }
+    }
+  }
+}

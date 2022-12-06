@@ -1,0 +1,18 @@
+.c-breadcrumb {
+  li {
+    text-transform: capitalize;
+    font-size: rem(16);
+    line-height: rem(20);
+
+    &:last-of-type {
+      font-weight: 400;
+      color: $breadcrumb_link_active;
+    }
+
+    &::after {
+      content: '/';
+      padding-left: rem(2);
+      padding-right: rem(2);
+    }
+  }
+}

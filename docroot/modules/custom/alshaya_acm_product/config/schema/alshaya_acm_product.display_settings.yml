@@ -30,3 +30,29 @@ alshaya_acm_product.display_settings:
     show_brand_name_plp:
       type: boolean
       label: 'Flag to show brand name on plp/srp teaser view.'
+    swatch_plp_limit_mobile_view:
+      type: integer
+      label: 'Color swatch limit for mobile view in teaser.'
+    show_variants_thumbnail_plp_gallery2:
+      type: boolean
+      label: 'Show swatches in carousel view.'
+    size_group:
+      type: mapping
+      label: 'Configuration for size grouping.'
+      mapping:
+        pdp:
+          type: string
+          label: 'Attribute to identify for size grouping.'
+        alternates:
+          type: sequence
+          label: 'Attribute codes and labels to be used for grouping.'
+          sequence:
+            type: mapping
+            label: 'Group options value with label'
+            mapping:
+              value:
+                type: string
+                label: 'Value'
+              label:
+                type: label
+                label: 'Label'

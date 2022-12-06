@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_ay_transac
+  theme:
+    - alshaya_alo_yoga
+id: myaccounticonblock
+theme: alshaya_alo_yoga
+region: header
+weight: -30
+provider: null
+plugin: my_account_icon_block
+settings:
+  id: my_account_icon_block
+  label: 'My Account Icon block'
+  provider: alshaya_ay_transac
+  label_display: '0'
+visibility: { }

@@ -1,0 +1,81 @@
+// Some styles reset from CORE, using 'initial' values.
+
+body.wishlist-enabled {
+  .wishlist-header {
+    @include breakpoint($desktop) {
+      padding-#{$right}: 0;
+    }
+
+    .wishlist-icon {
+      background-position: center;
+      background-size: rem(18);
+    }
+
+    &.hide-minimalistic-header {
+      &:not(.frontpage) {
+        .wishlist-header {
+          .wishlist-icon {
+            @include breakpoint($upto-desktop) {
+              top: rem(-19);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #wishlist-header-wrapper {
+    .wishlist-header {
+      padding-bottom: initial;
+      padding-#{$right}: initial;
+    }
+  }
+}
+
+body {
+  &.wishlist-enabled {
+    // Resetting style of CORE theme
+    #wishlist-header-wrapper {
+      .wishlist-link {
+        display: initial;
+        vertical-align: initial;
+      }
+    }
+
+    header {
+      .region__header {
+        // Resetting style of CORE theme
+        .block-alshaya-wishlist {
+          display: initial;
+          flex-grow: initial;
+          margin-#{$right}: rem(12);
+
+          @include breakpoint($desktop) {
+            margin-#{$left}: rem(34);
+            margin-#{$right}: rem(19);
+          }
+        }
+
+        .block-alshaya-react-mini-cart {
+          @include breakpoint($desktop) {
+            top: rem(-2);
+          }
+        }
+      }
+    }
+
+    .filter-fixed-top {
+      .sticky-filter-wrapper {
+        .wishlist-minicart-sticky-wrapper {
+          #static-minicart-section {
+            .static-minicart-wrapper {
+              @include breakpoint($only-tablet) {
+                margin-top: rem(2);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

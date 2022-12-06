@@ -1,0 +1,113 @@
+.path--store-finder,
+.nodetype--store {
+  .geolocation-common-map-container {
+    [aria-hidden=true] {
+      padding-bottom: rem(18);
+      padding-#{$right}: rem(2);
+
+      html[lang=ar] & {
+        padding-left: 0;
+        margin-left: rem(-1);
+      }
+    }
+  }
+
+  .geolocation-google-map {
+    [aria-hidden=true] {
+      padding-bottom: rem(18);
+
+      html[lang=ar] & {
+        margin-left: rem(-1);
+      }
+    }
+  }
+
+  .current-location,
+  .cc-near-me {
+    width: auto;
+
+    &::before {
+      background-size: contain;
+      position: relative;
+      top: rem(-2);
+      margin-#{$right}: rem(3);
+    }
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        padding-right: rem(18) !important;
+        padding-top: 0;
+      }
+    }
+  }
+
+  .form--inline {
+    .current-location {
+      html[lang=ar] & {
+        @include breakpoint($only-tablet) {
+          line-height: 3.5;
+        }
+      }
+    }
+  }
+
+  .by--alphabet {
+    h3 {
+      font-size: rem(28);
+      font-family: $ay-nova-semibold;
+    }
+  }
+
+  .store-finder--wrapper {
+    .block-store-finder-form__input__wrapper {
+      overflow: hidden;
+    }
+
+    .input--wrapper [id^=edit-actions] {
+      border: 0;
+      background: transparent;
+    }
+
+    .form-item-geolocation-geocoder-google-places-api {
+      html[lang=ar] & {
+        padding-right: 0 !important;
+      }
+    }
+  }
+
+  .c-content__region,
+  .view-stores-finder {
+    max-width: rem(1232);
+
+    @include breakpoint($tablet) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .c-content__region {
+      @include breakpoint($only-tablet) {
+        padding-left: rem(24);
+        padding-right: rem(24);
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+
+  .c-content__region {
+    @include breakpoint($only-mobile) {
+      padding-left: rem(12);
+      padding-right: rem(12);
+    }
+  }
+
+  .view-stores-finder {
+    @include breakpoint($only-mobile) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}

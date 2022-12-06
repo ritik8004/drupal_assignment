@@ -6,3 +6,16 @@ cart_notification_js:
     - core/jquery
     - core/drupal
     - alshaya_seo/gtm
+
+cart_notification_drawer:
+  version: 1.x
+  js:
+    js/cart_notification_drawer.js: {}
+  dependencies:
+    - alshaya_spc/cart_notification_drawer
+    - alshaya_white_label/drawer-cart-notification
+
+cart_notification_mini_cart:
+  version: 1.x
+  js:
+    js/cart_notification_mini_cart.js: {}

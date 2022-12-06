@@ -47,13 +47,13 @@ jobs:
 
       - name: Prepare environment variables
         run: |
-          echo "GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-          echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
-          echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
-          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
+          echo GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/}) >> $GITHUB_ENV
+          echo COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin) >> $GITHUB_ENV
+          echo BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt) >> $GITHUB_ENV
+          echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run Composer install
         run: |
@@ -70,9 +70,9 @@ jobs:
       - name: Cache dependencies installed with Composer
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo dir=$(composer config cache-files-dir) >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             "${{ steps.composer-cache.outputs.dir }}"
@@ -85,9 +85,15 @@ jobs:
           bash $SCRIPT_DIR/setup_mysql.sh
 
       - name: Install Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "14.19.0"
+          cache: "npm"
+          cache-dependency-path: |
+            docroot/package-lock.json
+            docroot/modules/custom/package-lock.json
+            docroot/modules/react/package-lock.json
+            docroot/themes/custom/package-lock.json
 
       - name: Install CLI for working with YAML files
         run: npm install -g yaml-cli

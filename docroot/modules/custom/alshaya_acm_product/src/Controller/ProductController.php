@@ -244,6 +244,10 @@ class ProductController extends ControllerBase {
       'size-guide' => 'size_guide_modal_content_node',
       'delivery' => 'delivery_content_node',
     ];
+    // Redirect to 404 page if type is invalid.
+    if (!isset($types[$type])) {
+      throw new NotFoundHttpException();
+    }
     $content_nid = $this->config('alshaya_acm_product.pdp_modal_links')->get($types[$type]);
     $content = '';
     if (!empty($content_nid)) {

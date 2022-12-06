@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_rcs_product
+    - serialization
+    - user
+id: rcsproductoptions
+plugin_id: rcsproductoptions
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie

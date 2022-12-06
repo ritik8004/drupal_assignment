@@ -1,0 +1,17 @@
+.image-data-wrapper {
+  &.in-eligible,
+  &.big-ticket-item {
+    .not-eligible-label,
+    .big-ticket-item-label {
+      width: rem(118);
+
+      @include breakpoint($tablet) {
+        width: rem(105);
+      }
+
+      @include breakpoint($desktop) {
+        width: rem(104);
+      }
+    }
+  }
+}

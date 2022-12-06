@@ -31,7 +31,10 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     data.products = [];
     data.cart = {
       'subtotal': cartData.totals['subtotal_incl_tax'],
+      // Applicable promotion rule ids as comma seperated string based on the cart items.
       'applied_rules': cartData.appliedRules,
+      // Discount applied promotion rule ids as comma seperated string based on the cart items.
+      'applied_rules_with_discounts': cartData.appliedRulesWithDiscount,
     };
 
     for (var i in cartData.items) {
@@ -354,6 +357,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     // Store proper variant sku in gtm data now.
     gtmAttributes.variant = productDataSKU;
     Drupal.alshayaSpc.storeProductData({
+      id: productInfo.id,
       sku: productDataSKU,
       parentSKU: parentSKU,
       skuType: productInfo.type,
@@ -450,6 +454,67 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       if (cartData && typeof cartData.cart_id_int !== 'undefined') {
         context.cCartIdInt = cartData.cart_id_int;
       }
+    }
+    else if (Drupal.hasValue(globalThis.cartIdInt)) {
+      context.cCartIdInt = globalThis.cartIdInt;
+    }
+  });
+
+  /**
+   * Redirects users to the cart page after they added a certain
+   * number of variants to the cart.
+   *
+   * @param {string} sku
+   *   The variant sku.
+   */
+  function alshayaSpcRedirectToCart(sku) {
+    // Check if drupal settings are present.
+    var values = drupalSettings.alshaya_spc.redirectToCartThreshold || null;
+    if (!values) {
+      return;
+    }
+
+    // Detects device type.
+    var deviceType = window.innerWidth < 768 ? 'mobile' : 'desktop';
+    // Get redirect threshold for the specific device.
+    var redirectToCartThreshold = values[deviceType];
+    // Check if redirection to cart is enabled i.e. >= 1.
+    if (redirectToCartThreshold < 1 || !Drupal.hasValue(sku)) {
+      return;
+    }
+
+    // Key used to store skus in local storage when they are added to cart.
+    var storageKey = 'skus_added_from_pdp';
+
+    // Get skus from local storage.
+    var skus = Drupal.getItemFromLocalStorage(storageKey) || [];
+    // Check if current sku is already counted.
+    if (skus.includes(sku)) {
+      return;
+    }
+
+    // Add current sku.
+    skus.push(sku);
+
+    // Update local storage.
+    Drupal.addItemInLocalStorage(storageKey, skus);
+
+    // We will redirect if the number of items is multiple of threshold.
+    // example: if threshold is 3, we will redirect at 3, 6, 9...
+    if (skus.length % redirectToCartThreshold === 0) {
+      // Redirect to cart page.
+      window.location = Drupal.url('cart');
+    }
+  }
+
+  // Add an event listener to redirect users to cart page.
+  document.addEventListener('afterAddToCart', (e) => {
+    const detail = e.detail;
+    // Check if the event was triggered from PDP page.
+    if (Drupal.hasValue(detail.context) && detail.context === 'pdp'
+      && Drupal.hasValue(detail.productData.variant)
+    ) {
+      alshayaSpcRedirectToCart(detail.productData.variant);
     }
   });
 

@@ -1,0 +1,4 @@
+alshaya_xb.globale_settings:
+  route_name: alshaya_xb.globale_settings_form
+  title: 'Alshaya XB Global-e settings'
+  base_route: alshaya_xb.globale_settings_form

@@ -1,0 +1,21 @@
+.nodetype--advanced_page {
+  .paragraph_banner_block {
+    .paragraph_banner_title_subtitle {
+      .field--name-field-title {
+        font-family: $ay-heavy;
+        font-size: rem(32);
+      }
+    }
+
+    .paragraph_banner_buttons {
+      .field--name-field-links {
+        .field--name-field-links {
+          a {
+            font-family: $ay-heavy;
+            font-size: rem(16);
+          }
+        }
+      }
+    }
+  }
+}

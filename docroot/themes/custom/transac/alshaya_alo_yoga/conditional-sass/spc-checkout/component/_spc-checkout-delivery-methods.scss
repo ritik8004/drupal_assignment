@@ -1,0 +1,7 @@
+.spc-checkout-delivery-methods {
+  .delivery-method {
+    @include breakpoint($upto-desktop) {
+      background: $spc_checkout_delivery_mob_bg;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+.alias--cart,
+.alias--checkout,
+.alias--checkout-confirmation {
+  .spc-main,
+  .spc-pre-content,
+  .spc-post-content,
+  .spc-footer {
+    @include breakpoint($desktop) {
+      max-width: rem(1238);
+    }
+  }
+}
+
+.alias--checkout,
+.alias--checkout-confirmation {
+  .page-standard {
+    &:not(.l-two--sf) {
+      background-color: $spc-checkout-cart-background;
+    }
+  }
+}
+
+.alias--checkout,
+.alias--cart,
+.alias--checkout-confirmation {
+  .spc-sidebar.sticky {
+    position: initial;
+  }
+
+  @include breakpoint($only-mobile) {
+    .c-footer {
+      padding-bottom: rem(92);
+    }
+  }
+}
+
+.alias--cart {
+  .spc-main {
+    .spc-content {
+      @include breakpoint($desktop) {
+        width: 54.8%;
+      }
+    }
+  }
+}

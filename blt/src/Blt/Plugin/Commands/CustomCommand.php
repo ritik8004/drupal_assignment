@@ -239,7 +239,7 @@ class CustomCommand extends BltTasks {
    * @description Setup local dev environment.
    */
   public function refreshLocal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_sites.yml'));
     $sites = $data['sites'];
     $list = implode(', ', array_keys($sites));
     if ($site == NULL) {
@@ -287,7 +287,7 @@ class CustomCommand extends BltTasks {
    * @description Reinstall local dev environment.
    */
   public function refreshLocalDrupal($site = NULL) {
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_sites.yml'));
     $sites = $data['sites'];
     $list = implode(', ', array_keys($sites));
     if ($site == NULL) {
@@ -462,8 +462,14 @@ class CustomCommand extends BltTasks {
     $files = explode("\n", $file_list);
     // Filtering PHP files.
     $files = array_filter($files, fn($value) =>
-      // Only track files inside docroot.
-      str_starts_with($value, 'docroot') && (
+      (
+        // Only track required files inside docroot.
+        // Validate modules, profiles, proxy and themes folder only.
+        str_starts_with($value, 'docroot/modules')
+        || str_starts_with($value, 'docroot/profiles')
+        || str_starts_with($value, 'docroot/proxy')
+        || str_starts_with($value, 'docroot/themes')
+      ) && (
         // Only take php files for validation.
         str_ends_with($value, '.php')
         || str_ends_with($value, '.module')

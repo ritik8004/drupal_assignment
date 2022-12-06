@@ -1,0 +1,56 @@
+body.aura-enabled {
+  // This is only needed in desktop to align all blocks in same.
+  @include breakpoint($desktop) {
+    .region__menu-secondary {
+      > div,
+      > nav {
+        vertical-align: top;
+        height: unset;
+      }
+    }
+  }
+
+  &.menu--open {
+    &.super-category-enabled {
+      &.frontpage,
+      &:not(.frontpage) {
+        .branding__menu {
+          #block-alshayareactcartminicartblock {
+            @include breakpoint($upto-desktop) {
+              z-index: 14;
+            }
+          }
+        }
+      }
+
+      #block-alshayaalgoliareactautocomplete {
+        @include breakpoint($upto-desktop) {
+          z-index: 14;
+        }
+      }
+    }
+
+    &.wishlist-enabled {
+      header .region__header {
+        .block-alshaya-wishlist,
+        .block-system-branding-block {
+          @include breakpoint($upto-desktop) {
+            z-index: 14;
+          }
+        }
+      }
+    }
+
+    .c-header .block-my-account-icon-block {
+      @include breakpoint($upto-desktop) {
+        z-index: 14;
+      }
+    }
+  }
+
+  .aura-modal-form {
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(36);
+    }
+  }
+}

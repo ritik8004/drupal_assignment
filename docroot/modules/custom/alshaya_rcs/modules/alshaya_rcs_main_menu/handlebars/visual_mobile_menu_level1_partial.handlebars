@@ -1,0 +1,45 @@
+<div id="visual-mobile-menu-level1" class="no--desktop visual-mobile-menu">
+  <ul class="visual-mobile-menu__list visual-mobile-menu--one__list">
+  {{#each menu_items as |menu_item|}}
+    {{ addStyle 'level1_style' '' }}
+    {{ addClass 'level1_class' '' }}
+    {{#if background_color }}
+      {{ addStyle 'level1_style' 'background-color' background_color }}
+      {{ addClass 'level1_class' 'has-bg-color' }}
+    {{/if}}
+    {{#if overridden_path}}
+      {{ addClass 'level1_class' 'overridden-link' }}
+    {{/if}}
+    {{#if font_color }}
+      {{ addStyle 'level1_style' 'color' font_color }}
+    {{/if}}
+    {{#if menu_item.icon}}
+      {{ addClass 'level1_class' 'with-icon' }}
+    {{/if}}
+    <li class="visual-mobile-menu__list-item visual-mobile-menu--one__list-item {{ class }} {{ @root.level1_class }} {{ promopanel_class }} {{ menu_item.desktop_class }} {{ menu_item.mobile_tablet_class }}">
+      <div class="menu__link-wrapper menu-two__link-wrapper">
+      {{#if menu_item.icon }}
+          <{{@menu_item.tag}} class="visual-mobile-menu__link visual-mobile-menu--one__link {{ class }} {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" {{{ menu_item.tag_attr }}}>
+          <span class="icon"><img src="{{ menu_item.icon.icon_url }}" alt="{{ menu_item.name }}"/></span>
+        {{ menu_item.name }}
+        </{{@menu_item.tag}}>
+      {{else}}
+          <{{@menu_item.tag}} class="visual-mobile-menu__link visual-mobile-menu--one__link {{ class }} {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" href="#l1-{{ menu_item.id }}">{{ menu_item.name }}</{{@menu_item.tag}}>
+      {{/if}}
+      </div>
+    </li>
+  {{/each}}
+  </ul>
+  <div class="visual-mobile-level-two">
+    {{#each menu_items as |menu_item|}}
+      <div id="l1-{{menu_item.id}}" class="{{ menu_item.desktop_class }} {{ menu_item.mobile_tablet_class }}">
+        {{> visual_mobile_menu_level2_partial l1_name=menu_item.name menu_items=menu_item.children}}
+      </div>
+    {{/each}}
+     {{#if aura_enabled }}
+      <div class="no--desktop">
+        <div id="aura-mobile-header-shop"></div>
+      </div>
+    {{/if}}
+  </div>
+</div>

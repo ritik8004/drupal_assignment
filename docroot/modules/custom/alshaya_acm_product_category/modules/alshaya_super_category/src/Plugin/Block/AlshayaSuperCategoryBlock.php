@@ -153,10 +153,10 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function build() {
-
     // Don't need to build this block if status of super category settings
     // is false.
-    if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+    $super_category_settings = $this->configFactory->get('alshaya_super_category.settings');
+    if (!$super_category_settings->get('status')) {
       return [];
     }
 
@@ -233,6 +233,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
         'drupalSettings' => [
           'superCategory' => [
             'search_facet' => AlshayaSuperCategoryManager::SEARCH_FACET_NAME,
+            'show_brand_filter' => $super_category_settings->get('show_brand_filter'),
           ],
         ],
       ],

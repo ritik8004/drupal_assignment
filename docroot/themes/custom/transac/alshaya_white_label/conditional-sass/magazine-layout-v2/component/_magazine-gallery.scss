@@ -426,3 +426,17 @@ html[lang="ar"] {
     }
   }
 }
+
+#pdp-layout {
+  &.content-loading {
+    &::after {
+      content: '';
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      background: url(#{$base_theme_loader_img_directory_path}) no-repeat center center;
+      background-size: rem(30);
+    }
+  }
+}
+

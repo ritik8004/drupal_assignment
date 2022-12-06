@@ -1,0 +1,85 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_ay_transac.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Re-run translation strings update.
+ */
+function alshaya_ay_transac_update_9400() {
+  // Add translations.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_ay_transac', 'inc', 'alshaya_ay_transac.translation');
+  $translations = _alshaya_ay_transac_get_translations();
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+  // Update config for add to bag hover.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.settings'],
+    'alshaya_algolia_react'
+  );
+  // Add additional attributes and create facets specifict to AY.
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Invoke source config save for the override to be saved.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product', 'install');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_ay_transac_install() {
+  // Add translations.
+  \Drupal::moduleHandler()->loadInclude('alshaya_ay_transac', 'inc', 'alshaya_ay_transac.translation');
+  if ($translations = _alshaya_ay_transac_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_ay_transac', 'inc', 'alshaya_ay_transac.content');
+
+  // Create default content for the site.
+  alshaya_ay_transac_create_default_content();
+
+  // Set My account block
+  // to appear just above the mini cart block.
+  $config_factory = \Drupal::configFactory();
+  $my_account_links = (int) $config_factory->get('block.block.alshayareactcartminicartblock')->get('weight');
+  $config_factory->getEditable('block.block.myaccounticonblock')->set('weight', $my_account_links - 2)->save();
+
+  // Set Brand Purpose block
+  // to appear just below the content block.
+  $brand_purpose = (int) $config_factory->get('block.block.content')->get('weight');
+  $config_factory->getEditable('block.block.aloisabrandofpurpose')->set('weight', $brand_purpose + 1)->save();
+
+  // Add mobile navigation block to menu primary region.
+  alshaya_config_install_configs(['block.block.mobilenavigation'], 'alshaya_transac', 'optional');
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_ay_transac');
+  }
+
+  // Check if the sharethis module exists, then remove this from
+  // the Product CT as set in alshaya_transac.install by default.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    // Get the sharethis configuration.
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+    // Enable share this for Products.
+    $configFactory->set('node_types.acq_product', 'acq_product');
+    // Save the changes.
+    $configFactory->save();
+  }
+}

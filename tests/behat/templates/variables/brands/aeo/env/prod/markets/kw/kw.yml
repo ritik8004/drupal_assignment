@@ -1,8 +1,8 @@
 variables:
-  spc_product_listing_page: '/shop-women/tops/t-shirts/'
-  spc_basket_page: '/shop-women/tops/t-shirts/'
-  product_listing_page_url: "/shop-women/tops/t-shirts/"
-  np_plp_page: '/shop-women/tops/t-shirts/'
-  np_plp_product_page: '/buy-ae-v-rise-mom-jean-empire-blue.html/'
-  spc_pdp_page: '/buy-ae-v-rise-mom-jean-empire-blue.html/'
+  spc_product_listing_page: '/american-eagle/shop-women/accessories-footwear/hair-accessories/'
+  spc_basket_page: '/american-eagle/shop-women/accessories-footwear/hair-accessories/'
+  product_listing_page_url: "/american-eagle/shop-women/accessories-footwear/hair-accessories/"
+  np_plp_page: '/american-eagle/shop-women/accessories-footwear/hair-accessories/'
+  np_plp_product_page: '/american-eagle/buy-ae-super-soft-trim-boyfriend-sock-blue.html/'
+  spc_pdp_page: '/american-eagle/buy-ae-super-soft-trim-boyfriend-sock-blue.html/'
   spc_egift_page: '/egift/'

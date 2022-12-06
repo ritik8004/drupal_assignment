@@ -17,7 +17,7 @@
         data.productStyleCode = entity.sku;
         data.pageType = 'product detail page';
         data.stockStatus = (entity.stock_status === 'IN_STOCK') ? 'in stock' : 'out of stock';
-        data.productName = entity.name;
+        data.productName = entity.gtm_attributes.name;
         data.productBrand = entity.gtm_attributes.brand;
         data.productPrice = entity.gtm_attributes.price;
         const prices = window.commerceBackend.getPrices(entity, false);
@@ -74,7 +74,10 @@
     };
 
     // Get categories from breadcrumb.
-    var breadcrumbs = renderRcsBreadcrumb.normalize(entity);
+    var breadcrumbs = renderRcsBreadcrumb.normalize(entity, {
+      nameKey: 'gtm_name',
+      breadcrumbTermNameKey: 'category_gtm_name'
+    });
     var breadcrumbTitles = [];
     if (Array.isArray(breadcrumbs) && breadcrumbs.length) {
       // Remove the product from breadcrumb.

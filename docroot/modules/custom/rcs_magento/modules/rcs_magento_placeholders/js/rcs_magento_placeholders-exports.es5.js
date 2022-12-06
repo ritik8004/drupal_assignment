@@ -1,3 +1,11 @@
+const getMenuLocalStorageKey = (category_id) => {
+  return [
+    'navigation_menu',
+    drupalSettings.path.currentLanguage,
+    category_id,
+  ].join('_');
+}
+
 /**
  * Handle 404 case on initial request.
  *
@@ -83,6 +91,7 @@ exports.getEntity = async function getEntity(langcode) {
       ["Content-Type", "application/json"],
       ["Store", drupalSettings.rcs.commerceBackend.store],
     ],
+    rcsType: pageType,
   };
 
   let result = null;
@@ -100,8 +109,6 @@ exports.getEntity = async function getEntity(langcode) {
         result.context = 'pdp';
         // Store product data in static storage.
         globalThis.RcsPhStaticStorage.set('product_data_' + result.sku, result);
-        // Set product options data to static storage.
-        globalThis.RcsPhStaticStorage.set('product_options', {data: {customAttributeMetadata: response.data.customAttributeMetadata}});
       }
       else {
         await handleNoItemsInResponse(request, urlKey);
@@ -163,6 +170,11 @@ exports.getEntity = async function getEntity(langcode) {
       }
     });
 
+    if (pageType === 'product') {
+      // Store product data in static storage.
+      globalThis.RcsPhStaticStorage.set('product_data_' + updateResult.detail.result.sku, updateResult.detail.result);
+    }
+
     return updateResult.detail.result;
   }
 
@@ -218,20 +230,39 @@ exports.getData = async function getData(
         return staticNavigationData;
       }
 
+      // Check if it exists in localstorage.
+      var navigationMenuCacheTime = drupalSettings.rcs.navigationMenuCacheTime;
+      if (navigationMenuCacheTime !== 0) {
+        result = globalThis.RcsPhLocalStorage.get(
+          getMenuLocalStorageKey(rcsPhGraphqlQuery.navigationMenu.variables.categoryId)
+        );
+      }
+
       // Prepare request parameters.
       // Fetch categories for navigation menu using categories api.
-      request.data = prepareQuery(rcsPhGraphqlQuery.navigationMenu.query, rcsPhGraphqlQuery.navigationMenu.variables);
+      if (result === null) {
+        request.data = prepareQuery(rcsPhGraphqlQuery.navigationMenu.query, rcsPhGraphqlQuery.navigationMenu.variables);
 
-      response = await rcsCommerceBackend.invokeApi(request);
-      // Get exact data from response.
-      if (response !== null
-        && Array.isArray(response.data.categories.items)
-        && response.data.categories.items.length > 0
-      ) {
-        // Get children for root category.
-        result = response.data.categories.items[0].children;
-        // Store category data in static storage.
-        globalThis.RcsPhStaticStorage.set(placeholder + '_data', result);
+        response = await rcsCommerceBackend.invokeApi(request);
+        // Get exact data from response.
+        if (response !== null
+          && Array.isArray(response.data.categories.items)
+          && response.data.categories.items.length > 0
+        ) {
+          // Get first item from the response.
+          result = response.data.categories.items[0];
+          // Store category data in static storage.
+          globalThis.RcsPhStaticStorage.set(placeholder + '_data', result);
+
+          // Store category data in local storage.
+          if (navigationMenuCacheTime !== 0) {
+            globalThis.RcsPhLocalStorage.set(
+              getMenuLocalStorageKey(rcsPhGraphqlQuery.navigationMenu.variables.categoryId),
+              result,
+              navigationMenuCacheTime
+            );
+          }
+        }
       }
       break;
 
@@ -327,6 +358,15 @@ exports.getData = async function getData(
       singleProductQueryVariables.sku = params.sku;
       request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_sku.query, singleProductQueryVariables);
       result = rcsCommerceBackend.invokeApi(request);
+      break;
+
+    case 'single_product_by_color_sku' :
+      // Build query.
+      let singleProductByColorVariables = rcsPhGraphqlQuery.single_product_by_color_sku.variables;
+      singleProductByColorVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.single_product_by_color_sku.query, singleProductByColorVariables);
+      response = await rcsCommerceBackend.invokeApi(request);
+      result = response.data.products.items;
       break;
 
     case 'related-products':
@@ -467,21 +507,6 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
           });
         });
       }
-      break;
-
-    case 'product-option':
-      const staticKey = `product_options`;
-      const staticOption = globalThis.RcsPhStaticStorage.get(staticKey);
-
-      if (staticOption !== null) {
-        return staticOption;
-      }
-
-      request.data = prepareQuery(rcsPhGraphqlQuery.product_options.query, rcsPhGraphqlQuery.product_options.variables);
-
-      result = rcsCommerceBackend.invokeApiSynchronous(request);
-
-      globalThis.RcsPhStaticStorage.set(staticKey, result);
       break;
 
     case 'dynamic-promotion-label':

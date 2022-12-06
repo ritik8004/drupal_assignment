@@ -8,6 +8,40 @@
 /**
  * Implements hook_update_N().
  *
+ * [6.19.0] Add field for new attribute 'season_code' and
+ * enable 'alshaya_product_lpn'.
+ */
+function alshaya_cos_transac_update_9402() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Enable alshaya_product_lpn module.
+  \Drupal::service('module_installer')->install(['alshaya_product_lpn']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the translation store list link label if not present.
+ */
+function alshaya_cos_transac_update_9401() {
+  $store_config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config_translation = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings');
+  $list_link_label = $config_translation->get('store_list_label') ?? $store_config->get('store_list_label');
+  if ($list_link_label === 'List of all The COS Stores') {
+    $config_translation->set('store_list_label', 'جميع محلات كوس');
+    $config_translation->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add field mappings for search api indexes.
  */
 function alshaya_cos_transac_update_8002() {
@@ -90,6 +124,11 @@ function alshaya_cos_transac_install() {
   $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
   $config->set('store_list_label', 'List of all The COS Stores');
   $config->save();
+
+  // Sets translation for the store list link label.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_list_label', 'جميع محلات كوس')
+    ->save();
 
   // Setting all products buyable to be false by default.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')

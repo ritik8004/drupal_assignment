@@ -1,0 +1,84 @@
+/**
+ * @file
+ * Push SEO data to datalayer.
+ */
+
+(function (Drupal) {
+  /**
+   * Pushes Global-e data to Datalayer.
+   *
+   * @param {object} geData
+   *   The Global-e data.
+   * @param {integer} step.
+   *   The step number.
+   */
+  Drupal.alshayaXbCheckoutGaPush = function (geData, step) {
+    try {
+      if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
+        // Populate drupal settings with details from GE data.
+        drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
+      }
+      Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
+    }
+    catch (error) {
+      Drupal.logJavascriptError("Alshaya XB Checkout", error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+    }
+  }
+
+  /**
+   * Helper function to map the Global-e checkout data to cart data.
+   *
+   * @param {object} geData
+   *   Global-e checkout data.
+   *
+   * @return {object}
+   *   The cart data object.
+   */
+  Drupal.mapGlobaleCheckoutData = function (geData) {
+    let productGtm = [];
+    let cartItemsCount = 0;
+    if (geData.details.ProductInformation) {
+      Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
+        const product = productItem[1];
+        const productGtmData = {
+          "item_id": product.CartItemId,
+          "sku": product.SKU,
+          "qty": product.Quantity,
+          "name": product.ProductName,
+          "price": product.ProductPrices.MerchantTransaction.DiscountedPrice,
+          "finalPrice": product.ProductPrices.MerchantTransaction.DiscountedPrice,
+        };
+        cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
+        productGtm.push(productGtmData);
+      });
+    }
+
+    return {
+      "cart_id": window.commerceBackend.getCartId(),
+      "uid": drupalSettings.user.uid,
+      "items_qty": cartItemsCount,
+      "cart_total": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
+      "minicart_total": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
+      "surcharge": {
+        "amount": geData.details.OrderPrices.MerchantTransaction.RemoteAreaSurchargeFee,
+        "is_applied": (geData.details.OrderPrices.MerchantTransaction.RemoteAreaSurchargeFee > 0) ? true : false
+      },
+      "shipping": {
+        "type": geData.details.ShippingMethodType,
+        "methods": geData.details.ShippingMethodName,
+      },
+      "payment": {
+        "method": geData.OrderPaymentMethods
+      },
+      "totals": {
+        "subtotal_incl_tax": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
+        "base_grand_total": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
+        "base_grand_total_without_surcharge": geData.details.OrderPrices.MerchantTransaction.TotalProductsPrice,
+        "discount_amount": geData.details.OrderPrices.MerchantTransaction.TotalDiscountedProductsPrice,
+        "surcharge": 0, // @todo we need to check whether global-e has this field or not
+        "shipping_incl_tax": null // @todo we need to check whether global-e has this field or not
+      },
+      "items": productGtm,
+    };
+  };
+})(Drupal);

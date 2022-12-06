@@ -1,0 +1,12 @@
+alshaya_cross_border:
+ css:
+   theme:
+     # This URL is a placeholder and this is configurable, which is altered in the hook_library_info_alter.
+     '/intgepi.bglobale.com/includes/css/id': { type: external, attributes: { id: GEPIStyles, type: text/css } }
+
+alshaya_xb_checkout_seo:
+  js:
+    js/alshaya_xb_checkout_seo.js: {}
+  dependencies:
+    - core/drupal
+    - alshaya_master/common_functions

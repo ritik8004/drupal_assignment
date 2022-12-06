@@ -1,0 +1,111 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_nb.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add product details string which is used in description.
+ */
+function alshaya_nb_transac_update_9402() {
+  // Add translations.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations('v2');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Hide grid toggle in plp and srp.
+ */
+function alshaya_nb_transac_update_9401() {
+  // Hide grid toggle option on listing pages.
+  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
+    ->set('hide_grid_toggle', TRUE)
+    ->save();
+  // PDP gallery thumbnail image slider settings.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('pdp_slider_items_settings.pdp_slider_items_number', 6)
+    ->save();
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_nb_transac_install() {
+  // Enable and set alshaya_new_balance as default theme and set,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_new_balance');
+  $config_factory = \Drupal::configFactory();
+  // Set main menu block in the header region.
+  $config_factory
+    ->getEditable('block.block.alshayamainmenu')
+    ->set('region', 'header')
+    ->save();
+  $pri_menu = (int) $config_factory
+    ->get('block.block.branding')
+    ->get('weight');
+  $config_factory->getEditable('block.block.alshayamainmenu')
+    ->set('weight', $pri_menu - 1)
+    ->save();
+  // Reset theme logo.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  $current_theme = $active_theme->getName();
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  \Drupal::configFactory()
+    ->getEditable($current_theme . '.settings')
+    ->set('logo', [
+      'path' => $site_logo . '.svg',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $site_favicon . '.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+
+  // Add the site name.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('name', 'New Balance')
+    ->save();
+
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+        'url' => '',
+        'use_default' => FALSE,
+      ],
+    ])
+    ->save();
+
+  // Add translations.
+  \Drupal::moduleHandler()->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations();
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+  // Add content.
+  \Drupal::moduleHandler()->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.content');
+  // Create default content for custom block.
+  alshaya_nb_transac_create_default_content();
+
+  // Hide grid toggle option on listing pages.
+  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
+    ->set('hide_grid_toggle', TRUE)
+    ->save();
+}

@@ -92,6 +92,8 @@ function alshaya_acm_product_category_views_pre_view(ViewExecutable $view, $disp
     // We want to allow creation creation of page upto 3 level.
     $handler = [];
     if ($display_id === 'entity_reference_1') {
+      // Removes include in menu field filter.
+      $view->removeHandler($display_id, 'filter', 'field_category_include_menu_value');
       $handler = $view->getHandler($display_id, 'filter', 'depth_level');
       $handler['operator'] = '<=';
       $handler['value']['value'] = 4;
@@ -260,7 +262,9 @@ function alshaya_acm_product_category_form_views_exposed_form_alter(&$form, Form
 function alshaya_acm_product_category_entity_field_access_alter(array &$grants, array $context) {
   if ($context['operation'] === 'view' && $context['field_definition']->getTargetEntityTypeId() === 'taxonomy_term' && $context['field_definition']->getname() === 'field_plp_menu') {
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
-    if ($term instanceof TermInterface && $term->get('field_plp_layout')->value != ProductCategoryTree::PLP_LAYOUT_1) {
+    if ($term instanceof TermInterface
+      && $term->hasField('field_plp_layout')
+      && $term->get('field_plp_layout')->getString() != ProductCategoryTree::PLP_LAYOUT_1) {
       // Do not show this field on pages that are not campaign-plp-style-1.
       $grants[':default'] = AccessResult::forbidden()->inheritCacheability($grants[':default'])->addCacheableDependency($context['items']->getEntity());
     }

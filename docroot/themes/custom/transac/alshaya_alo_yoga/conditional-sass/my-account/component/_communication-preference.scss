@@ -1,0 +1,22 @@
+form.user-communication-preference {
+  .form-submit {
+    font-size: rem(16);
+  }
+
+  input[type=checkbox] {
+    & ~ label[for=edit-communication-preference-email],
+    & ~ label[for=edit-communication-preference-mobile] {
+      &::before {
+        @include breakpoint($only-mobile) {
+          top: rem(5);
+        }
+      }
+    }
+  }
+
+  legend {
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0;
+    }
+  }
+}

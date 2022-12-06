@@ -1,0 +1,14 @@
+.spc-promotions {
+  &:not(:empty) {
+    font-family: $ay-regular;
+    padding-#{$left}: 0;
+
+    span {
+      > a {
+        font-size: rem(16);
+        text-transform: uppercase;
+        font-weight: 900;
+      }
+    }
+  }
+}

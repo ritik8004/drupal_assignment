@@ -1,4 +1,4 @@
-@javascript @guest @pudo @clickCollect @flsauat
+@javascript @guest @checkoutPayment @pudo @clickCollect @flsauat
 Feature: SPC Checkout for PUDO testing for Guest User
 
   Background:

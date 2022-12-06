@@ -1,0 +1,44 @@
+.block-facet-blockcategory-facet-search.c-facet.c-accordion {
+  ul {
+    a.facet-item,
+    li:not(.category-all) label,
+    li.category-all {
+      span {
+        font-size: rem(14);
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: rem(26) !important;
+      }
+    }
+  }
+}
+
+.c-content__region {
+  .block-facet-blockcategory-facet-search,
+  .algolia-plp-category-facet {
+    @include breakpoint($only-mobile) {
+      display: flex !important;
+      border: rem(1) solid $tertiary-border;
+      align-items: center;
+
+      h3 {
+        &.active {
+          background: none;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .c-sidebar-first {
+    .c-facet__blocks {
+      .block-facet-blockcategory-facet-search {
+        & > ul {
+          margin-top: rem(11);
+        }
+      }
+    }
+  }
+}

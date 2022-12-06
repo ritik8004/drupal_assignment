@@ -78,11 +78,12 @@ class ReturnRefundDetails extends React.Component {
       // Push the required info to GTM.
       Drupal.alshayaSeoGtmPushReturn(
         getProductGtmInfo(itemsSelected),
-        getPreparedOrderGtm('refunddetails_confirmed', returnRequest.data),
+        await getPreparedOrderGtm('refunddetails_confirmed', returnRequest.data),
         'refunddetails_confirmed',
       );
       // On success, redirect to return confirmation page.
-      const { orderId } = getOrderDetails()['#order'];
+      const orderDetailsFresh = await getOrderDetails();
+      const { orderId } = orderDetailsFresh['#order'];
       const returnUrl = getReturnConfirmationUrl(orderId, returnId);
       if (hasValue(returnUrl)) {
         window.location.href = returnUrl;

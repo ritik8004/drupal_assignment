@@ -8,14 +8,19 @@ color_swatches: false
 color_swatches_hover: false
 color_swatches_show_product_image: false
 show_variants_thumbnail_plp_gallery: false
+show_variants_thumbnail_plp_gallery2: false
 show_configurable_boxes_after: 767
 plp_slider:
   item: 4
   margin: 5
 swatch_plp_limit: 3
+swatch_plp_limit_mobile_view: 3
 swatches:
   pdp: {  }
   plp: {  }
+size_group:
+  pdp: ''
+  alternates: {  }
 # Added swatch attibute specific media roles like
 # 'swatch_image' or 'configuration_attr_image'.
 swatches_roles: { }

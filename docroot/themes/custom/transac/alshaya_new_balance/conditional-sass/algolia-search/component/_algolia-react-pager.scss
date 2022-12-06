@@ -1,0 +1,41 @@
+#hits,
+#plp-hits {
+  .chrome & {
+    @include breakpoint($desktop) {
+      padding-top: rem(32);
+    }
+  }
+
+  .js-pager__items.pager {
+    margin-top: rem(45);
+    margin-bottom: rem(-30);
+    padding: 0 rem(12);
+
+    .progressbar-container {
+      margin-top: rem(8);
+      margin-bottom: rem(26);
+      width: rem(130);
+    }
+
+    li.pager__item {
+      button {
+        @include secondaryBtn;
+
+        width: 100%;
+        height: rem(53);
+        border: rem(1) solid;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: rem(107);
+      margin-bottom: 0;
+
+      li.pager__item {
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

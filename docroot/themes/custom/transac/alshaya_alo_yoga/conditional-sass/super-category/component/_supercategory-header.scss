@@ -1,0 +1,283 @@
+// Some styles reset from CORE, using 'initial' values.
+
+@include breakpoint($upto-desktop) {
+  .menu--mobile-navigation {
+    top: rem(36);
+  }
+
+  .super-category-enabled {
+    margin-top: rem(125);
+
+    html[lang=ar] & {
+      margin-top: rem(125);
+    }
+
+    &.frontpage {
+      margin-top: rem(125);
+
+      &.hide-minimalistic-header {
+        margin-top: rem(72);
+        transition: margin-top 0.3s;
+      }
+    }
+
+    &.frontpage {
+      .page-standard.c-front {
+        margin-top: 0;
+      }
+    }
+
+    .branding__menu {
+      .c-header__region {
+        .block-system-branding-block {
+          .site-brand-home {
+            display: initial;
+          }
+        }
+      }
+    }
+
+    &:not(.frontpage) {
+      .c-menu-primary {
+        .mobile--menu {
+          top: rem(43);
+        }
+      }
+
+      .branding__menu {
+        .block-alshaya-algolia-react-autocomplete {
+          top: rem(46);
+          visibility: visible;
+        }
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      top: rem(46);
+
+      html[lang="ar"] & {
+        top: rem(46);
+      }
+
+      .algolia-search-cleartext-icon {
+        #{$right}: 0;
+        top: rem(5);
+        z-index: 2;
+      }
+    }
+  }
+
+  .c-menu-primary .region__menu-primary {
+    #block-mobilenavigation,
+    .menu--mobile-navigation {
+      position: absolute;
+
+      .mobile--search {
+        display: none;
+      }
+
+      .store {
+        display: none;
+      }
+    }
+  }
+
+  body {
+    &.super-category-enabled {
+      &.aura-enabled {
+        .main--menu ul.menu--one__list,
+        .c-menu-secondary {
+          top: rem(127);
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .super-category-enabled {
+    header {
+      .c-header__region {
+        padding-top: rem(16);
+        padding-bottom: rem(16);
+
+        html[lang="ar"] & {
+          padding-bottom: rem(16);
+        }
+      }
+    }
+
+    &.frontpage {
+      header {
+        &.c-header {
+          .block-alshaya-react-mini-cart,
+          .block-cart-mini-block,
+          .wishlist-header-wrapper {
+            padding-top: 0;
+          }
+        }
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      #alshaya-algolia-autocomplete {
+        width: rem(280);
+      }
+    }
+
+    .branding__menu {
+      .c-header__region {
+        .block-system-branding-block {
+          .site-brand-home {
+            height: initial;
+
+            a {
+              min-width: initial;
+              height: initial;
+            }
+
+            img {
+              height: initial;
+              max-width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .super-category-enabled {
+    .c-menu-secondary,
+    .toggle--sign,
+    .main--menu,
+    .main--menu ul.menu--one__list {
+      width: 100%;
+      top: rem(125);
+    }
+
+    .c-menu-primary {
+      .mobile--menu {
+        position: fixed;
+        #{$left}: rem(8);
+        top: rem(43);
+
+        html[lang=ar] & {
+          top: rem(43);
+        }
+      }
+    }
+
+    .mobile--close {
+      background: transparent;
+      // Declaring the top position twice so it doesn't flash the wrong position in the closing transition.
+      top: rem(42) !important;
+    }
+
+    .menu--active {
+      .mobile--close {
+        #{$left}: rem(8);
+        top: rem(42) !important;
+        background: transparent;
+        height: rem(32);
+        width: rem(32);
+
+        span::before {
+          content: none;
+        }
+      }
+    }
+  }
+
+  // @TODO: This can be removed if we are not rendering this element in the markup
+  .super-category-enabled {
+    .toggle--sign {
+      display: none;
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .super-category-enabled {
+    .c-menu-secondary,
+    .toggle--sign,
+    .main--menu,
+    .main--menu ul.menu--one__list {
+      max-width: rem(500);
+      top: rem(90);
+    }
+
+    .c-menu-primary {
+      .mobile--menu {
+        position: absolute;
+        top: 0;
+        margin-#{$left}: rem(13);
+
+        html[lang=ar] & {
+          top: 0;
+        }
+      }
+    }
+
+    .menu--active {
+      .mobile--close {
+        text-align: $left;
+        top: rem(0) !important;
+        #{$left}: 0;
+        height: rem(40);
+        width: 100%;
+        max-width: rem(500);
+        padding-#{$left}: rem(18);
+        background-color: $menu_bg;
+        transition: none;
+      }
+    }
+
+    .block-system-breadcrumb-block {
+      top: rem(24);
+    }
+  }
+}
+
+.logged-in.super-category-enabled {
+  &.hide-minimalistic-header .c-menu-primary #block-mobilenavigation .mobile--menu,
+  &.hide-minimalistic-header .c-menu-primary .menu--mobile-navigation .mobile--menu,
+  &:not(.frontpage).hide-minimalistic-header .branding__menu,
+  &:not(.frontpage).hide-minimalistic-header .branding__menu #block-alshayareactcartminicartblock {
+    @include breakpoint($upto-desktop) {
+      top: 0;
+    }
+  }
+}
+
+.logged-out.super-category-enabled {
+  &.hide-minimalistic-header.frontpage .c-menu-primary #block-mobilenavigation .mobile--menu,
+  &.hide-minimalistic-header.frontpage .c-menu-primary .menu--mobile-navigation .mobile--menu,
+  &.hide-minimalistic-header:not(.frontpage) .c-menu-primary #block-mobilenavigation .mobile--menu,
+  &.hide-minimalistic-header:not(.frontpage) .c-menu-primary .menu--mobile-navigation .mobile--menu {
+    @include breakpoint($only-mobile) {
+      top: rem(8);
+    }
+  }
+
+  &:not(.frontpage).hide-minimalistic-header .branding__menu,
+  &:not(.frontpage) header.c-header .c-header__region,
+  &:not(.frontpage).hide-minimalistic-header .branding__menu #block-alshayareactcartminicartblock {
+    @include breakpoint($only-mobile) {
+      top: 0;
+    }
+  }
+}
+
+.super-category-enabled {
+  &.magazine-layout-v2 {
+    &.nodetype--acq_product {
+      html[lang=ar] & {
+        @include breakpoint($only-mobile) {
+          margin-top: rem(32);
+        }
+      }
+    }
+  }
+}

@@ -17,7 +17,7 @@ class MyBenefitsPage extends React.Component {
       myBenefit: null,
       codeId: null,
       couponId: null,
-      voucherType: null,
+      promotionType: null,
     };
   }
 
@@ -30,13 +30,19 @@ class MyBenefitsPage extends React.Component {
       if (type === 'coupon') {
         const response = await callHelloMemberApi('helloMemberCouponPage', 'GET', params);
         if (hasValue(response.data) && !hasValue(response.data.error)) {
+          const promotionType = response.data.coupons[0].promotion_type;
+          const { description } = response.data.coupons[0];
           this.setState({
             myBenefit: response.data.coupons[0],
             wait: true,
             codeId: response.data.coupons[0].code,
             couponId: `${response.data.coupons[0].type}|${response.data.coupons[0].code}`,
-            voucherType: response.data.coupons[0].type,
+            promotionType,
           });
+          // Push coupon data to gtm once it is loaded.
+          if (hasValue(promotionType) && hasValue(description)) {
+            Drupal.alshayaSeoGtmPushBenefitsOffer({ promotionType, description });
+          }
         } else {
           // If coupon details API is returning Error.
           logger.error('Error while calling the coupon details Api @params, @message', {
@@ -65,7 +71,7 @@ class MyBenefitsPage extends React.Component {
 
   render() {
     const {
-      wait, myBenefit, codeId, couponId, voucherType,
+      wait, myBenefit, codeId, couponId, promotionType,
     } = this.state;
 
     if (!wait) {
@@ -103,6 +109,8 @@ class MyBenefitsPage extends React.Component {
         </div>
         <div className="btn-wrapper">
           <QrCodeDisplay
+            benefitName={myBenefit.description}
+            benefitType={promotionType}
             memberId={myBenefit.member_identifier}
             qrCodeTitle={qrCodeTitle}
             codeId={couponId || codeId}
@@ -112,7 +120,7 @@ class MyBenefitsPage extends React.Component {
           <AddBenefitsToCart
             title={myBenefit.description}
             codeId={codeId}
-            voucherType={voucherType}
+            promotionType={promotionType}
           />
         </div>
         <div className="benefit-description">

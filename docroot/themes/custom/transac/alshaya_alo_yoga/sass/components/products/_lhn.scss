@@ -1,0 +1,42 @@
+.block-alshaya-category-lhn-block,
+.block-alshaya-product-list-lhn-block {
+  margin-top: rem(48);
+
+  ul {
+    li {
+      font-size: rem(14);
+
+      a,
+      span {
+        text-transform: unset;
+      }
+
+      a.lhn-3 {
+        text-transform: uppercase;
+        color: $primary_link;
+      }
+    }
+  }
+
+  > ul > li {
+    margin-bottom: rem(30);
+
+    > .lhn-2 {
+      font-family: $alshaya-thin;
+      text-transform: uppercase;
+    }
+  }
+
+  // L4.
+  .lhn-4 {
+    display: block;
+  }
+
+  .lhn-3.active {
+    + ul {
+      li {
+        padding-#{$left}: 0;
+      }
+    }
+  }
+}

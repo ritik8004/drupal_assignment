@@ -1,0 +1,33 @@
+.magv2-pdp-share-wrapper {
+  .pdp-share-panel {
+    padding-top: 0;
+
+    @include breakpoint($only-tablet) {
+      flex-flow: row wrap;
+    }
+  }
+
+  button {
+    font-family: $ay-nova-semibold;
+    font-size: rem(11);
+
+    @include breakpoint($only-tablet) {
+      margin-top: rem(12);
+    }
+  }
+
+  .sharethis-wrapper {
+    .st_pinterest_custom {
+      &::before {
+        height: rem(30) !important;
+        top: rem(-4);
+      }
+    }
+
+    & > span {
+      @include breakpoint($only-tablet) {
+        height: rem(20);
+      }
+    }
+  }
+}

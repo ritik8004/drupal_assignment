@@ -1,0 +1,19 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    .progress-bar {
+      .step {
+        span {
+          font-family: $ay-bold;
+        }
+      }
+    }
+  }
+}
+
+.block-alshaya-checkout-tracker {
+  &.hide-checkout-tracker {
+    .cko-progress-tracker {
+      display: none;
+    }
+  }
+}

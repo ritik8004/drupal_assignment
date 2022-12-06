@@ -1,3 +1,4 @@
+/* eslint-disable */
 (function ($, Drupal, document) {
 
   Drupal.behaviors.alshayaSpcAddToCart = {
@@ -194,6 +195,18 @@
                       )
                     );
                   }
+
+                  // Send notification after we finished adding to cart.
+                  var event = new CustomEvent('afterAddToCart', {
+                    bubbles: true,
+                    detail: {
+                      context: 'pdp',
+                      postData: post_data,
+                      productData: productData,
+                      cartData: response,
+                    }
+                  });
+                  document.dispatchEvent(event);
                 }
               })
               .catch (function() {

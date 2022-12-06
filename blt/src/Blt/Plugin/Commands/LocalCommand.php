@@ -278,7 +278,7 @@ class LocalCommand extends BltTasks {
       return $static[$env][$site];
     }
 
-    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_local_sites.yml'));
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('repo.root') . '/blt/alshaya_sites.yml'));
     $sites = $data['sites'];
 
     if (empty($site) || empty($sites[$site])) {

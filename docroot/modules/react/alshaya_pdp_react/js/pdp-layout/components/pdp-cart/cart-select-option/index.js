@@ -1,13 +1,15 @@
 import React from 'react';
 import GroupSelectOption from '../group-select-option';
+import GroupSwatchSelectOption from '../group-swatch-select-option';
 import NonGroupSelectOption from '../non-group-select-option';
 import SwatchSelectOption from '../swatch-select-option';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 class CartSelectOption extends React.Component {
   constructor(props) {
     super(props);
     const {
-      isGroup, configurables, isSwatch,
+      isGroup, configurables, isSwatch, isSwatchGroup,
     } = this.props;
     let defaultGroup = null;
 
@@ -22,6 +24,7 @@ class CartSelectOption extends React.Component {
       groupName: isGroup ? defaultGroup : null,
       groupStatus: isGroup,
       swatchStatus: isSwatch,
+      groupSwatchStatus: isSwatchGroup,
       selected: null,
     };
   }
@@ -31,9 +34,37 @@ class CartSelectOption extends React.Component {
       configurableCombinations, skuCode, configurables, context,
     } = this.props;
 
-    const { firstChild } = configurableCombinations[skuCode];
-    const { code } = configurables;
-    const value = configurableCombinations[skuCode].bySku[firstChild][code];
+    const { firstChild, combinations } = configurableCombinations[skuCode];
+    const { code, values } = configurables;
+    let value = configurableCombinations[skuCode].bySku[firstChild][code];
+    const { swatchStatus } = this.state;
+    let availableAttributeValues = null;
+
+    // Update the default value if needed.
+    if (!swatchStatus) {
+      const mainCode = Object.keys(combinations)[0];
+
+      // Get a list of available values for the current attribute combination.
+      if (code === mainCode) {
+        availableAttributeValues = Object.keys(combinations[code]);
+      } else {
+        const mainCodeValue = Object.keys(combinations[mainCode])[0];
+        availableAttributeValues = hasValue(combinations[mainCode][mainCodeValue][code])
+          ? Object.keys(combinations[mainCode][mainCodeValue][code])
+          : null;
+      }
+      Object.values(values).some((attrValue) => {
+        const currentAttributeValue = Object.keys(attrValue)[0];
+
+        if (hasValue(availableAttributeValues)
+          && availableAttributeValues.includes(currentAttributeValue)) {
+          value = currentAttributeValue;
+          return true;
+        }
+        return false;
+      });
+    }
+
     // Setting active class for the
     // default variant.
     const elem = document.querySelector(`#pdp-add-to-cart-form-${context} ul#${code} li#value${value}`);
@@ -191,6 +222,7 @@ class CartSelectOption extends React.Component {
       groupStatus,
       swatchStatus,
       selected,
+      groupSwatchStatus,
     } = this.state;
 
     const swatchSelectOption = (
@@ -204,6 +236,20 @@ class CartSelectOption extends React.Component {
         handleLiClick={this.handleLiClick}
       />
     );
+
+    const groupSwatchSelectOption = (
+      <GroupSwatchSelectOption
+        handleSelectionChanged={this.handleSelectionChanged}
+        configurables={configurables}
+        code={code}
+        nextCode={nextCode}
+        nextValues={nextValues}
+        selected={selected}
+        handleLiClick={this.handleLiClick}
+      />
+    );
+    // Set the current swatch option.
+    const currentSwatchSelectOption = (typeof groupSwatchStatus === 'undefined' && !groupSwatchStatus) ? swatchSelectOption : groupSwatchSelectOption;
 
     const selectOption = (!swatchStatus) ? (
       <div className="non-grouped-attr" onClick={(e) => (e.target.classList.contains('non-grouped-attr') ? this.closeModal(e) : null)}>
@@ -222,7 +268,7 @@ class CartSelectOption extends React.Component {
           context={context}
         />
       </div>
-    ) : swatchSelectOption;
+    ) : currentSwatchSelectOption;
 
     return (groupStatus) ? (
       <div className="grouped-attr" onClick={(e) => (e.target.classList.contains('grouped-attr') ? this.closeModal(e) : null)}>

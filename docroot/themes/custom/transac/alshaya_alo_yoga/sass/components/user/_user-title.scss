@@ -1,0 +1,127 @@
+@mixin pageTitle {
+  font-size: rem(28);
+  font-family: $ay-bold;
+  text-transform: uppercase;
+
+  @include breakpoint($only-mobile) {
+    font-size: rem(20);
+    padding-#{$left}: 0;
+  }
+}
+
+.c-user--node {
+  .subtitle {
+    border-bottom-color: $user_acc_details_border;
+    font-family: $ay-bold;
+    font-size: rem(18);
+    text-transform: uppercase;
+  }
+
+  &.l-two--sf {
+    aside {
+      &.c-sidebar-first {
+        .my-account-mobile-title1 {
+          @include pageTitle;
+
+          @include breakpoint($only-mobile) {
+            font-family: $ay-regular;
+            font-size: rem(24);
+          }
+        }
+      }
+    }
+  }
+
+  .c-page-title {
+    @include pageTitle;
+  }
+}
+
+.c-user-edit,
+.c-change-password,
+.order-detail,
+.c-communication-preferences,
+.c-order-list,
+.c-user--node,
+.c-address-book,
+.c-payment-cards,
+.c-loyalty-club-page,
+.c-my-egift {
+  .block-page-title-block {
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
+    h1 {
+      &.c-page-title {
+        @include pageTitle;
+      }
+    }
+
+    .back-link {
+      @include breakpoint($only-mobile) {
+        @include icon(chevronup, before) {
+          position: absolute;
+          #{$left}: rem(-8);
+          top: rem(5);
+          font-size: rem(34);
+          transform: rotate(270deg);
+
+          html[lang=ar] & {
+            transform: rotate(90deg);
+          }
+        }
+      }
+
+      h1 {
+        &.c-page-title {
+          @include pageTitle;
+        }
+      }
+    }
+  }
+}
+
+.order-detail {
+  .block-page-title-block {
+    @include breakpoint($tablet) {
+      border-bottom: none;
+    }
+  }
+}
+
+.user-page {
+  &.c-change-password {
+    .c-page-title {
+      @include breakpoint($tablet) {
+        @include pageTitle;
+      }
+    }
+  }
+}
+
+.c-user-login,
+.c-user-password,
+.c-user-register {
+  h1 {
+    @include pageTitle;
+
+    @include breakpoint($tablet) {
+      top: rem(-80);
+    }
+  }
+}
+
+.c-user-password {
+  h1 {
+    @include breakpoint($tablet) {
+      margin-top: rem(16);
+      top: rem(-72);
+    }
+
+    @include breakpoint($only-mobile) {
+      top: rem(-52);
+      width: 100%;
+    }
+  }
+}
