@@ -49,7 +49,7 @@
       // Execute the code to start sharethis. Wait for a second so that the
       // sharethis JS is loaded.
       var shareThisExecution = setInterval(function executeSharethisJs() {
-        if (typeof stLight === 'undefined' || typeof stButtons === 'undefined' || stLight.options === undefined || stButtons.locateElements === undefined) {
+        if (typeof stLight === 'undefined' || typeof stButtons === 'undefined') {
           // Wait until sharethis js is loaded.
           return;
         }
