@@ -54,10 +54,10 @@ jobs:
       - name: Prepare environment variables
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         run: |
-          echo "GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-          echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
-          echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
-          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
+          echo GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/}) >> $GITHUB_ENV
+          echo COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin) >> $GITHUB_ENV
+          echo BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt) >> $GITHUB_ENV
+          echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -81,7 +81,7 @@ jobs:
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         id: composer-cache
         run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo dir=$(composer config cache-files-dir) >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
@@ -113,7 +113,7 @@ jobs:
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         id: npm-cache-dir
         run: |
-          echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+          echo dir=$(npm config get cache) >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
