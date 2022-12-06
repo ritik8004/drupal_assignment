@@ -24,6 +24,10 @@
         font-family: $alshaya-bold;
         color: $order_detail_details_row_content;
       }
+
+      .item-list-wrapper {
+        border-color: $tertiary-border;
+      }
     }
 
     .print-return-label-wrapper,
