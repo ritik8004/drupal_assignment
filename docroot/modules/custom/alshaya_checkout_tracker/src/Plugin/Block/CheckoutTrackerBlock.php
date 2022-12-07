@@ -60,7 +60,12 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    * @param Drupal\alshaya_checkout_tracker\Helper\CheckoutTrackerHelper $checkoutTrackerHelper
    *   The Checkout Tracker service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_user, RouteMatchInterface $route_match, CheckoutTrackerHelper $checkoutTrackerHelper) {
+  public function __construct(array $configuration,
+  $plugin_id,
+  $plugin_definition,
+  AccountProxyInterface $current_user,
+  RouteMatchInterface $route_match,
+  CheckoutTrackerHelper $checkoutTrackerHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_user;
     $this->routeMatch = $route_match;
@@ -86,12 +91,6 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function build() {
     $route_name = $this->routeMatch->getRouteName();
-    if ($this->currentUser->isAuthenticated()) {
-      $deliveryurl = Url::fromRoute('alshaya_spc.checkout');
-    }
-    else {
-      $deliveryurl = '';
-    }
     $stepMap = [
       'acq_cart.cart' => [
         'label' => $this->t('Bag', [], ['context' => 'alshaya_checkout_tracker']),
@@ -106,7 +105,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       'alshaya_spc.checkout' => [
         'label' => $this->t('Delivery and Payment', [], ['context' => 'alshaya_checkout_tracker']),
         'stepcount' => 3,
-        'url' => $deliveryurl,
+        'url' => ($this->currentUser->isAuthenticated()) ? Url::fromRoute('alshaya_spc.checkout') : '',
       ],
       'alshaya_spc.checkout.confirmation' => [
         'label' => $this->t('Confirmation', [], ['context' => 'alshaya_checkout_tracker']),
