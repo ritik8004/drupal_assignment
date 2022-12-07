@@ -167,8 +167,12 @@ export default class Cart extends React.Component {
 
       const { items } = this.state;
       // If Checkout Tracker is enabled and cart is empty hide checkout tracker
-      if (isCheckoutTracker() && items.length === 0) {
-        document.getElementById('block-checkouttrackerblock').classList.add('hide-checkout-tracker');
+      if (isCheckoutTracker()) {
+        if (items.length !== 0) {
+          document.getElementById('block-checkouttrackerblock').classList.remove('hide-checkout-tracker');
+        } else {
+          document.getElementById('block-checkouttrackerblock').classList.add('hide-checkout-tracker');
+        }
       }
 
       // Call dynamic-yield spa api for cart context.
