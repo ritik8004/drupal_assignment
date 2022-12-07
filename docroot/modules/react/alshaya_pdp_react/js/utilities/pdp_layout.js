@@ -334,10 +334,11 @@ export const getProductValues = (productInfo, configurableCombinations,
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
   // The additional attribute sometime is empty and if it's empty then convert
   // it to array.
-  let additionalAttributes = [];
+  let additionalAttributes = {};
   if (hasValue(skuItemCode)
     && Object.keys(productInfo[skuItemCode].additionalAttributes).length > 0) {
-    additionalAttributes = productInfo[skuItemCode].additionalAttributes;
+    additionalAttributes = Object.assign(additionalAttributes,
+      productInfo[skuItemCode].additionalAttributes);
   }
 
   if (hasValue(fit)) {

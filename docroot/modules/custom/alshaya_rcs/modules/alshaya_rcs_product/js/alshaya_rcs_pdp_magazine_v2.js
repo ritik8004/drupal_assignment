@@ -94,7 +94,7 @@
       stockStatus: product.stock_status === 'IN_STOCK',
       title: {'label': product.name},
       rawGallery: updateGallery(product, product.name),
-      additionalAttributes: Object.keys(product.description.additional_attributes).length > 0 ? product.description.additional_attributes : '',
+      additionalAttributes: Object.keys(product.description.additional_attributes).length > 0 ? product.description.additional_attributes : {},
     }
     if (product.type_id === 'configurable') {
       productData.variants = getVariantsInfoMagV2(product, processedProduct.variants);
