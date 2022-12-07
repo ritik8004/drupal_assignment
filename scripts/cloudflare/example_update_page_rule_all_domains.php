@@ -1,5 +1,12 @@
 <?php
-// phpcs:ignoreFile
+// @codingStandardsIgnoreFile
+
+/**
+ * Example script to update a page rule on all the domains.
+ *
+ * It contains code for specific scenario where we wanted to update all the
+ * S3 bucket rules (/assets) and add browser cache ttl and edge cache ttl.
+ */
 
 require_once 'common.php';
 

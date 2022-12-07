@@ -1,5 +1,12 @@
 <?php
-// phpcs:ignoreFile
+// @codingStandardsIgnoreFile
+
+/**
+ * Example script to delete page rules for specific domain.
+ *
+ * It contains code to delete all the rules for PPROD environment
+ * from factory.alshaya.com domain.
+ */
 
 require_once 'common.php';
 
