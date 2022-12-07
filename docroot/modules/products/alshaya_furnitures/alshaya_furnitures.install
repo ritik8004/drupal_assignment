@@ -35,6 +35,10 @@ function alshaya_furnitures_update_9401() {
   }
   $sku_form_settings_config->set('sortable_options', $sortable_options);
   $sku_form_settings_config->save();
+
+  // Hide old attributes in form display.
+  $acq_sku_configurable_form_config = \Drupal::configFactory()->getEditable('core.entity_form_display.acq_sku.configurable.default');
+  $acq_sku_configurable_form_config->save();
 }
 
 /**
