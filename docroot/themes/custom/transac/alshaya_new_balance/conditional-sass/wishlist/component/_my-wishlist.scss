@@ -129,3 +129,15 @@
     margin-bottom: rem(8);
   }
 }
+
+.wishlist-share-popup-container {
+  .wishlist-share-content {
+    .actions {
+      button {
+        &.copy-share-link {
+          color: $secondary_btn_text;
+        }
+      }
+    }
+  }
+}
