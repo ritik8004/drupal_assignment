@@ -1,5 +1,7 @@
 services:
   alshaya_security.commands:
     class: \Drupal\alshaya_security\Commands\AlshayaSecurityCommands
+    arguments:
+      - '@alshaya_security.drush_user_auth'
     tags:
       - { name: drush.command }
