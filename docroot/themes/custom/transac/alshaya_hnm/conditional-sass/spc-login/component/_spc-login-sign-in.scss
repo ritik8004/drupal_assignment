@@ -100,7 +100,7 @@
     background-color: $block_acm_customer_txt;
   }
 
-  @include breakpoint($only-mobile) {
+  @include breakpoint($upto-desktop) {
     margin: 0 !important;
 
     .site-brand-home a {
