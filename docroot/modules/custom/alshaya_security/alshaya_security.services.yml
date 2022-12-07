@@ -29,3 +29,8 @@ services:
     class: Drupal\alshaya_security\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+
+  alshaya_security.drush_user_auth:
+    class: Drupal\alshaya_security\Service\DrushUserAuth
+    arguments:
+      - '@user.auth'
