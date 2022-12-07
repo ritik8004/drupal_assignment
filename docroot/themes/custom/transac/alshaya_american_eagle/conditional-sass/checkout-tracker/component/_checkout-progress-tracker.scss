@@ -1,0 +1,42 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    @include breakpoint($only-mobile) {
+      width: 80%;
+    }
+
+    .progress-bar {
+      .step {
+        z-index: 2;
+        position: relative;
+
+        span {
+          padding-top: rem(1);
+
+          html[lang=ar] & {
+            padding-top: rem(3);
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: rem(14);
+          }
+        }
+
+        &.current {
+          .step-label {
+            font-family: $alshaya-bold;
+          }
+        }
+
+        .step-label {
+          font-family: $alshaya-thin;
+
+          @include breakpoint($only-mobile) {
+            min-width: rem(58);
+            white-space: initial;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
