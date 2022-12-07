@@ -1,27 +1,58 @@
 .cko-progress-tracker {
   #checkout-progress {
+    font-size: rem(16);
+
     @include breakpoint($only-mobile) {
-      width: 90%;
+      font-size: rem(13);
     }
 
     .progress-bar {
-      .step {
-        z-index: 2;
-        position: relative;
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          margin-top: rem(40);
+          margin-bottom: rem(56);
+        }
+      }
 
+      .step {
         span {
-          padding-top: rem(0);
+          padding-top: 0;
+          margin-top: rem(-3);
 
           @include breakpoint($only-mobile) {
             font-size: rem(14);
+            margin-top: 0;
           }
         }
 
         .step-label {
+          font-size: rem(13);
+
           @include breakpoint($only-mobile) {
-            min-width: rem(58);
-            white-space: initial;
-            text-align: center;
+            font-size: rem(11);
+          }
+        }
+
+        &.current {
+          span {
+            font-family: $alshaya-bold;
+          }
+        }
+
+        &.completed {
+          .step-label {
+            top: calc(100% + #{rem(17)});
+
+            @include breakpoint($only-mobile) {
+              font-size: rem(11);
+            }
+          }
+
+          &::after {
+            background: url("#{$brand_theme_img_directory_path}/icons/done-state.svg") no-repeat;
+            background-color: $cko-steps-active-bg;
+            background-position: 60%;
+            border-color: $cko-steps-active-bg;
           }
         }
       }

@@ -18,8 +18,14 @@
     position: relative;
 
     @include breakpoint($only-mobile) {
-      width: 78%;
+      width: 80%;
       font-size: rem(10);
+
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          width: 90%;
+        }
+      }
     }
 
     &::before {
@@ -74,6 +80,14 @@
       justify-content: space-between;
       align-items: center;
 
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          height: auto;
+          margin-bottom: rem(40);
+          margin-top: rem(34);
+        }
+      }
+
       .step {
         z-index: 2;
         position: relative;
@@ -88,6 +102,12 @@
 
           html[lang=ar] & {
             transform: translateX(50%) perspective(rem(1000));
+          }
+
+          @include breakpoint($only-mobile) {
+            min-width: rem(58);
+            white-space: initial;
+            text-align: center;
           }
         }
 

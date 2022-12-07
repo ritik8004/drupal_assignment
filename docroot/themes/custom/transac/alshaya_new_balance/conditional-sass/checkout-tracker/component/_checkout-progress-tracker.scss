@@ -8,6 +8,12 @@
     .progress-bar {
       height: rem(108);
 
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          margin-top: rem(45);
+        }
+      }
+
       .step {
         margin-top: rem(-8);
 
@@ -29,12 +35,6 @@
           .step-label {
             top: calc(100% + #{rem(30)});
           }
-        }
-
-        .step-label {
-          white-space: initial;
-          text-align: center;
-          top: calc(100% + #{rem(12)});
         }
 
         span {
