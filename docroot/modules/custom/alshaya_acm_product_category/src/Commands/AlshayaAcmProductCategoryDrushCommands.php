@@ -169,16 +169,16 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    */
   public function exportProductCategoryData($options = ['limit' => 30]) {
     // Get tid of all the parent product category.
-    if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
-      $term_ids = array_keys($this->productCategoryTree->getChildTermIds());
-    }
-    else {
+    if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
       // Get all product category terms if supercategory is enabled.
       $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('acq_product_category');
       $term_ids = array_map(fn ($term) => $term->tid, $terms);
       $term_ids = !empty($term_ids)
         ? $term_ids
         : [];
+    }
+    else {
+      $term_ids = array_keys($this->productCategoryTree->getChildTermIds());
     }
 
     // Combine parent and child tids.
