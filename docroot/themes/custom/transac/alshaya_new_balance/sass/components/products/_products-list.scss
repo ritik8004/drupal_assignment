@@ -176,6 +176,15 @@
         padding-top: 0;
         margin-bottom: rem(28);
       }
+
+      .block-facets-summary-blockfilter-bar-promotions,
+      .block-facets-summary-blockfilter-bar-plp,
+      .block-facets-summary-blockfilter-bar-productlist,
+      .block-facets-summary-blockfilter-bar {
+        ul {
+          margin-bottom: rem(-12);
+        }
+      }
     }
 
     .c-page-title__description,
