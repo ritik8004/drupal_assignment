@@ -55,6 +55,13 @@ jobs:
             echo deployable_changes=false >> $GITHUB_OUTPUT
           fi
 
+      - name: Check if we are deploying a tag
+        id: deployable_tag
+        run: |
+          echo "Changes require deployment."
+          echo "deployable_changes=true" >> $GITHUB_OUTPUT
+        if: ${{ contains(github.ref, 'refs/heads') }}
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
