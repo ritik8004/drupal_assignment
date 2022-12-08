@@ -226,3 +226,11 @@
     }
   }
 }
+
+.block-alshaya-checkout-tracker {
+  &.hide-checkout-tracker {
+    .cko-progress-tracker {
+      display: none;
+    }
+  }
+}
