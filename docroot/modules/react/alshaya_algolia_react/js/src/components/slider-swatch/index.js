@@ -13,15 +13,23 @@ const SliderSwatch = ({ swatches, url, title }) => {
 
   // Swatch display slides limit, defaults to desktop - 4.
   // Mobile - 2; Tablets - 3.
-  let limit = parseInt(drupalSettings.reactTeaserView.swatches.swatchPlpLimit, 10);
+  let scrollLimit = parseInt(drupalSettings.reactTeaserView.swatches.swatchPlpLimit, 10);
+  let showLimit = scrollLimit;
+
   if (!isDesktop()) {
-    limit -= isMobile() ? 2 : 1;
+    if (isMobile()) {
+      scrollLimit -= 2;
+      showLimit = scrollLimit + 0.5;
+    } else {
+      scrollLimit -= 1;
+      showLimit = scrollLimit;
+    }
   }
 
   const sliderSettings = {
     infinite: false,
-    slidesToShow: limit,
-    slidesToScroll: limit,
+    slidesToShow: showLimit,
+    slidesToScroll: scrollLimit,
   };
 
   let swatchContainer = null;
@@ -30,7 +38,7 @@ const SliderSwatch = ({ swatches, url, title }) => {
       (swatch) => <Swatch swatch={swatch} key={swatch.child_id} url={url} title={title} />,
     );
     let classSwatches = 'swatches';
-    const hasSliderSwatch = totalNoOfSwatches > limit;
+    const hasSliderSwatch = totalNoOfSwatches > showLimit;
     if (hasSliderSwatch) {
       classSwatches += ' slider-swatches';
     }

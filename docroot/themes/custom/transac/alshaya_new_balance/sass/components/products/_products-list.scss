@@ -281,7 +281,7 @@
       }
 
       &-list {
-        width: rem(92);
+        width: rem(112);
       }
 
       &-track {
@@ -333,6 +333,15 @@
         .sku-promotion-item {
           font-size: rem(14);
           margin-#{$left}: initial;
+        }
+      }
+
+      .slick {
+        &-next,
+        &-prev {
+          &::before {
+            width: rem(24);
+          }
         }
       }
     }
