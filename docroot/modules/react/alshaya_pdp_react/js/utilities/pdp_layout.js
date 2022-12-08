@@ -332,9 +332,17 @@ export const getProductValues = (productInfo, configurableCombinations,
 
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
-  const additionalAttributes = skuItemCode ? productInfo[skuItemCode].additionalAttributes : [];
+  // The additional attribute sometimes is empty and if it's empty then convert
+  // it to array.
+  let additionalAttributes = {};
+  if (hasValue(skuItemCode)
+    && hasValue(productInfo[skuItemCode])
+    && productInfo[skuItemCode].additionalAttributes) {
+    additionalAttributes = Object.assign(additionalAttributes,
+      productInfo[skuItemCode].additionalAttributes);
+  }
 
-  if (hasValue(fit) && hasValue(additionalAttributes)) {
+  if (hasValue(fit)) {
     additionalAttributes.fit = {
       value: fit,
       label: Drupal.t('FIT'),
