@@ -8,6 +8,12 @@
     .progress-bar {
       height: rem(108);
 
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          margin-top: rem(45);
+        }
+      }
+
       .step {
         margin-top: rem(-8);
 
@@ -31,12 +37,6 @@
           }
         }
 
-        .step-label {
-          white-space: initial;
-          text-align: center;
-          top: calc(100% + #{rem(12)});
-        }
-
         span {
           font-size: rem(18);
           height: auto;
@@ -55,10 +55,10 @@
         &.current {
           .step-label {
             color: $cko-current-steps-label-txt;
-            top: calc(100% + #{rem(22)});
+            top: calc(100% + #{rem(29)});
 
             @include breakpoint($only-mobile) {
-              top: calc(100% + #{rem(20)});
+              top: calc(100% + #{rem(26)});
             }
           }
 
@@ -76,10 +76,6 @@
         }
 
         &.completed {
-          .step-label {
-            top: calc(100% + #{rem(12)});
-          }
-
           &::after {
             background: url('#{$brand_theme_img_directory_path}/icons/done-state.svg') no-repeat;
             background-color: $cko-steps-active-bg;
