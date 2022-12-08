@@ -30,7 +30,7 @@ jobs:
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 2
 
@@ -38,9 +38,9 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)"
-          echo "::set-output name=themes::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)"
-          echo "::set-output name=react::$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)"
+          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs) >> $GITHUB_OUTPUT
+          echo themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
+          echo react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
 
       - name: Check if changes are deployable
         id: deployable_changes
@@ -54,7 +54,6 @@ jobs:
             echo "Changes not require deployment. Hence skipping the deployment."
             echo deployable_changes=false >> $GITHUB_OUTPUT
           fi
-          echo deployable_changes=true >> $GITHUB_OUTPUT
 
   deploy:
     name: Deploy
@@ -74,14 +73,13 @@ jobs:
     steps:
       - name: Prepare environment variables
         run: |
-          echo "GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-          echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
-          echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
-          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
-          echo "CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }}" >> $GITHUB_ENV
-          echo "CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }}" >> $GITHUB_ENV
-          echo "CHANGED_SVG_FILES=${{ needs.changedfiles.outputs.svg }}" >> $GITHUB_ENV
-          echo "CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.all }}" >> $GITHUB_ENV
+          echo GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/}) >> $GITHUB_ENV
+          echo COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin) >> $GITHUB_ENV
+          echo BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt) >> $GITHUB_ENV
+          echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
+          echo CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }} >> $GITHUB_ENV
+          echo CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }} >> $GITHUB_ENV
+          echo CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.react }} >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
