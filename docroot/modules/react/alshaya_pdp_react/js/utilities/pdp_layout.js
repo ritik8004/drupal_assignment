@@ -332,11 +332,12 @@ export const getProductValues = (productInfo, configurableCombinations,
 
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
-  // The additional attribute sometime is empty and if it's empty then convert
+  // The additional attribute sometimes is empty and if it's empty then convert
   // it to array.
   let additionalAttributes = {};
   if (hasValue(skuItemCode)
-    && Object.keys(productInfo[skuItemCode].additionalAttributes).length > 0) {
+    && hasValue(productInfo[skuItemCode])
+    && productInfo[skuItemCode].additionalAttributes) {
     additionalAttributes = Object.assign(additionalAttributes,
       productInfo[skuItemCode].additionalAttributes);
   }
