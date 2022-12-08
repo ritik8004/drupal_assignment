@@ -27,8 +27,9 @@
   .empty-message {
     .actions {
       a {
-        padding: 0;
-        line-height: rem(40);
+        padding: rem(16) 0;
+        border-radius: unset;
+        height: auto;
 
         &:hover {
           background-color: $wishlist-button-bg;
@@ -126,5 +127,17 @@
     padding-bottom: 0;
     margin-top: rem(8);
     margin-bottom: rem(8);
+  }
+}
+
+.wishlist-share-popup-container {
+  .wishlist-share-content {
+    .actions {
+      button {
+        &.copy-share-link {
+          color: $secondary_btn_text;
+        }
+      }
+    }
   }
 }

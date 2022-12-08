@@ -34,22 +34,38 @@
         .step-label {
           white-space: initial;
           text-align: center;
+          top: calc(100% + #{rem(12)});
         }
 
         span {
+          font-size: rem(18);
+          height: auto;
+          padding-top: 0;
+
           html[lang=ar] & {
             transform: translate3d(0, rem(2), 0) scale(1);
+            padding-top: 0;
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: rem(14);
           }
         }
 
         &.current {
           .step-label {
             color: $cko-current-steps-label-txt;
+            top: calc(100% + #{rem(22)});
+
+            @include breakpoint($only-mobile) {
+              top: calc(100% + #{rem(20)});
+            }
           }
 
           span {
             position: absolute;
             transform: translate(-50%, -50%);
+            font-family: $alshaya-bold;
 
             html[lang=ar] & {
               transform: translate(-50%, -50%);
@@ -60,6 +76,10 @@
         }
 
         &.completed {
+          .step-label {
+            top: calc(100% + #{rem(12)});
+          }
+
           &::after {
             background: url('#{$brand_theme_img_directory_path}/icons/done-state.svg') no-repeat;
             background-color: $cko-steps-active-bg;
@@ -86,7 +106,26 @@
         .step {
           .step-label {
             white-space: nowrap;
-            top: calc(100% + #{rem(20)});
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    #checkout-progress {
+      &::before,
+      &::after {
+        margin-top: rem(-24);
+      }
+
+      .progress-bar {
+        .step {
+          // Reducing space between header and progress tracker for mobile.
+          margin-top: rem(-48);
+
+          .step-label {
+            min-width: rem(58);
           }
         }
       }
