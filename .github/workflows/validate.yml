@@ -180,7 +180,7 @@ jobs:
           blt alshayafe:setup-themes
           blt alshayafe:test-themes
 
-      # @todo Revert the code changes after deployment of 6.19.0
       - name: Run Tests
         run: |
-          bash $SCRIPT_DIR/run_tests.sh "docroot/.php.yaml.twig.module"
+          echo 'Changed files are - ${{ needs.changedfiles.outputs.all }}'
+          bash $SCRIPT_DIR/run_tests.sh "${{ needs.changedfiles.outputs.all }}"
