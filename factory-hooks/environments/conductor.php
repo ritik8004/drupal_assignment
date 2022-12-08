@@ -468,7 +468,7 @@ $conductors = [
     'hmac_secret' => 'NzY3OWU3YjItNmZiNS00',
     'site_id' => 228,
   ],
-  'pbkae_test' => [
+  'pbksa_test' => [
     'hmac_id' => '7d52c9c6ccd6453180986683000e833e',
     'hmac_secret' => 'MTgyYjM0ZTItZmMwZi00',
     'site_id' => 537,
@@ -484,7 +484,7 @@ $conductors = [
     'hmac_secret' => 'ODk1N2E1YTEtZmFhNS00',
     'site_id' => 227,
   ],
-  'pbksa_test' => [
+  'pbkae_test' => [
     'hmac_id' => 'acf9903307ca497296f8033769e6f942',
     'hmac_secret' => 'MjczM2QzMzItZGJmYS00',
     'site_id' => 538,
