@@ -584,6 +584,8 @@ body {
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
+    position: unset;
+
     li.menu--one__list-item {
       .menu--one__link {
         padding-#{$left}: 0;

@@ -24,5 +24,22 @@
     .return-collection-wrapper {
       border-color: $online-return-request-section-border;
     }
+
+    .items-table {
+      .order-item-row {
+        .image-data-wrapper,
+        .order__details--summary,
+        .item-price,
+        .item-total-price {
+          > div,
+          > span {
+            &.dark {
+              font-family: $alshaya-bold;
+              color: $order_detail_details_row_content;
+            }
+          }
+        }
+      }
+    }
   }
 }
