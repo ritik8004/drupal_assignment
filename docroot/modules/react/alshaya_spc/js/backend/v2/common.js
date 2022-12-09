@@ -609,6 +609,20 @@ const getProcessedCartData = async (cartData) => {
             data.items[itemKey].media = item.extension_attributes.product_media[0].file;
           }
 
+          // Get eGift product name for GTM datalayer.
+          // Since, we need to pass data to GTM only in English translation
+          // we use 'topup_card_name_en' field for eGift card topup and for
+          // eGift card use 'item_name_en'.
+          // See [CORE-42487] for API updates reference.
+          if (hasValue(item.extension_attributes.is_topup)
+            && item.extension_attributes.is_topup === '1') {
+            data.items[itemKey].itemGtmName = hasValue(item.extension_attributes.topup_card_name_en)
+              ? item.extension_attributes.topup_card_name_en : '';
+          } else {
+            data.items[itemKey].itemGtmName = hasValue(item.extension_attributes.item_name_en)
+              ? item.extension_attributes.item_name_en : '';
+          }
+
           // If eGift product is top-up card add check to the product item.
           if (typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
             data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
