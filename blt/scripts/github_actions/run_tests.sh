@@ -8,7 +8,7 @@ env
 echo ${CHANGED_FILES}
 CHANGED_FILES="$1"
 echo ${CHANGED_FILES}
-cat /tmp/changed_files.tmp
+cat ${GITHUB_WORKSPACE}/changed_files.tmp
 
 # Run tests.
 
