@@ -21,6 +21,10 @@ function alshaya_rcs_super_category_get_block_ids() {
  * Implements hook_install().
  */
 function alshaya_rcs_super_category_install() {
+  // Invalidate category root term cache.
+  $tags = array_map(fn ($lang) => 'product_category_tree_' . $lang, array_keys(\Drupal::languageManager()->getLanguages()));
+  \Drupal::service('cache_tags.invalidator')->invalidateTags($tags);
+
   // Sync L1 RCS Category terms from mdc.
   \Drupal::service('alshaya_rcs_super_category.super_categories_helper')->syncSuperCategories(TRUE);
 

@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update hooks for the module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_vs_transac_rcs_install() {
+  \Drupal::service('module_installer')->install(['alshaya_rcs']);
+}

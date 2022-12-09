@@ -12,6 +12,7 @@ use Drupal\node\NodeInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\Entity\File;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 
 /**
  * Rcs Super Category Helper.
@@ -80,7 +81,8 @@ class RcsSuperCategoryHelper {
     LanguageManagerInterface $language_manager,
     LoggerChannelFactoryInterface $logger_factory,
     AlshayaApiWrapper $api_wrapper,
-    FileSystemInterface $file_system
+    FileSystemInterface $file_system,
+    CacheTagsInvalidatorInterface $cache_tag_invalidator
   ) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
@@ -88,6 +90,7 @@ class RcsSuperCategoryHelper {
     $this->logger = $logger_factory->get('alshaya_rcs_super_category');
     $this->apiWrapper = $api_wrapper;
     $this->fileSystem = $file_system;
+    $this->cacheTagInvalidator = $cache_tag_invalidator;
   }
 
   /**
@@ -124,6 +127,7 @@ class RcsSuperCategoryHelper {
 
       // Sync categories.
       $this->synchronizeCategories($super_categories, $existing_super_categories, $language_code, $force_download);
+      $this->cacheTagInvalidator->invalidateTags(['product_category_tree_' . $language_code]);
     }
   }
 
