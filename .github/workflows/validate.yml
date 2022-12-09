@@ -109,13 +109,11 @@ jobs:
 
       # TEMPORARY test
       - name: Run Tests
+        id: test
         run: |
-          ALL=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs)
-          echo ${ALL}
-          echo ${{ ALL }}
-          CHANGED_FILES="foo "
-          if [[ ${ALL} == *".module"* ]]; then echo CHANGED_FILES=".module" >> $GITHUB_OUTPUT; fi
-          bash $SCRIPT_DIR/run_tests.sh ${CHANGED_FILES} ${{ CHANGED_FILES }}
+          echo files=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs) >> $GITHUB_OUTPUT
+          if [[ ${{needs.test.output.files}} == *".module"* ]]; then echo CHANGED_FILES=".module" >> $GITHUB_ENV; fi
+          bash $SCRIPT_DIR/run_tests.sh ${{needs.test.output.files}}
         if: ${{ needs.changedfiles.outputs.all }}
 
       - name: Run Composer install
