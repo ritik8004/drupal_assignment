@@ -39,7 +39,7 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs) >> $GITHUB_OUTPUT
+          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs) >> $GITHUB_OUTPUT
           echo composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs) >> $GITHUB_OUTPUT
           echo docroot=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs) >> $GITHUB_OUTPUT
           echo blt=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep blt | xargs) >> $GITHUB_OUTPUT
@@ -50,7 +50,7 @@ jobs:
         run: |
           echo "No changes found in PR. This could also mean your branch is not updated, please rebase."
           exit 1
-        if: ${{ (steps.changes.outputs.all == '0') }}
+        if: ${{ !(steps.changes.outputs.all) }}
 
   validate:
     name: Validate
@@ -111,9 +111,9 @@ jobs:
       - name: Run Tests
         id: test
         run: |
-          echo files=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs) >> $GITHUB_OUTPUT
-          if [[ ${{needs.test.output.files}} == *".module"* ]]; then echo CHANGED_FILES=".module" >> $GITHUB_ENV; fi
-          bash $SCRIPT_DIR/run_tests.sh ${{needs.test.output.files}}
+          if [[ ${{needs.changedfiles.outputs.all}} == *".module"* ]]; then echo CHANGED_FILES=".module" >> $GITHUB_ENV; fi
+          if [[ ${{needs.changedfiles.outputs.all}} == *".php"* ]]; then echo CHANGED_FILES=".php" >> $GITHUB_ENV; fi
+          bash $SCRIPT_DIR/run_tests.sh
         if: ${{ needs.changedfiles.outputs.all }}
 
       - name: Run Composer install

@@ -15,7 +15,7 @@ set -x
 
 echo DEBUG
 env
-CHANGED_FILES="$1"
+#CHANGED_FILES="$1"
 echo ${CHANGED_FILES}
 
 # Run tests.
