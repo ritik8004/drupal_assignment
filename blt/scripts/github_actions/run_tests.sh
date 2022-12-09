@@ -6,6 +6,8 @@ set -x
 # Get all changed files between two revisions.
 Rev1="$1"
 Rev2="$2"
+git diff --name-only
+git diff --name-only --diff-filter=ACMRTD ${Rev1} ${Rev2}
 CHANGED_FILES="$(git diff --name-only --diff-filter=ACMRTD ${Rev1} ${Rev2} | xargs)"
 
 echo DEBUG
