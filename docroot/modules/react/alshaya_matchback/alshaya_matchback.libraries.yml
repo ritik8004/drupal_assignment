@@ -7,7 +7,7 @@ alshaya_matchback:
 
 alshaya_matchback_utility:
   js:
-    js/assets/alshaya_matchback.utility.js: {}
+    assets/js/alshaya_matchback.utility.js: {}
   dependencies:
     - core/drupal
 
