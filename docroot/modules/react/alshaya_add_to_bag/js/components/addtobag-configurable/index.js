@@ -92,7 +92,6 @@ export default class AddToBagConfigurable extends React.Component {
         triggerButtonElement: this.buttonContainerRef.current,
       },
     });
-    // @todo Check if we need to subscribe for this in wishlist also.
     document.dispatchEvent(drawerOpenEvent);
 
     this.setState({

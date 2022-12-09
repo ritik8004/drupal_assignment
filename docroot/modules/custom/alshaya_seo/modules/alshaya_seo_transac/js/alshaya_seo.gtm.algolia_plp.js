@@ -73,9 +73,9 @@
 
   // Push to GTM when add to bag product drawer is opened.
   document.addEventListener('drawerOpenEvent', function onDrawerOpen(e) {
-    var element = e.detail.triggerButtonElement.closest('article.node--view-mode-search-result');
-    if (element.length) {
-      Drupal.alshayaSeoGtmPushProductDetailView(element);
+    var $element = $(e.detail.triggerButtonElement.closest('article.node--view-mode-search-result'));
+    if ($element.length) {
+      Drupal.alshayaSeoGtmPushProductDetailView($element);
     }
   });
 })(jQuery, Drupal, dataLayer, Drupal.debounce, drupalSettings);
