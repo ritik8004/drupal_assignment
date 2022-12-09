@@ -3,6 +3,7 @@ alshaya_matchback:
     dist/matchback_addtobag.bundle.js: {}
   dependencies:
     - core/jquery
+    - core/drupal
 
 alshaya_matchback_utility:
   js:
