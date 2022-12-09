@@ -767,7 +767,7 @@ class AlshayaBazaarVoice {
     $image_url = '';
 
     $sku_entity = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
-    if ($sku_entity === NULL && !empty($item)) {
+    if (($sku_entity === NULL || $this->skuManager->isSkuFreeGift($sku_entity)) && !empty($item)) {
       if (!empty($item['image'])) {
         $image_url = file_create_url($item['image']['#uri']);
       }
