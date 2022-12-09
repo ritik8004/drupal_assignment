@@ -3,7 +3,6 @@ services:
     class: Drupal\alshaya_add_to_bag\Services\AddToBagHelper
     arguments:
       - '@config.factory'
-      - '@acq_sku.cart_form_helper'
 
   alshaya_add_to_bag.index_helper:
     class: Drupal\alshaya_add_to_bag\Services\AddToBagIndexHelper

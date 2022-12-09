@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_add_to_bag\Services;
 
-use Drupal\acq_sku\CartFormHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
@@ -18,26 +17,15 @@ class AddToBagHelper {
   protected $configFactory;
 
   /**
-   * Cart form helper.
-   *
-   * @var \Drupal\acq_sku\CartFormHelper
-   */
-  protected $cartFormHelper;
-
-  /**
    * Constructor for the AddToBagHelper service.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
-   * @param \Drupal\acq_sku\CartFormHelper $cart_form_helper
-   *   Cart form helper.
    */
   public function __construct(
-    ConfigFactoryInterface $config_factory,
-    CartFormHelper $cart_form_helper
+    ConfigFactoryInterface $config_factory
   ) {
     $this->configFactory = $config_factory;
-    $this->cartFormHelper = $cart_form_helper;
   }
 
   /**
