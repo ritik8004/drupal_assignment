@@ -17,6 +17,12 @@
      AURA_POINTS_NOT_REDEEMED : 'not redeemed', // Aura points not redeemed during checkout.
      AURA_BALANCE_MORE_THAN_ORDER_VALUE : 'balPoints > orderValue', // Total Aura points worth money > Order value.
      AURA_BALANCE_LESS_THAN_ORDER_VALUE : 'balPoints < orderValue', // Total Aura points worth money < Order value.
+     AURA_EVENT_NAME : 'aura', // Aura event name.
+     AURA_EVENT_CATEGORY : 'aura', // Aura event category name.
+     AURA_EVENT_ACTION_USE_POINTS : 'use points', // Aura event action name when user redeems aura points during purchase in checkout page.
+     AURA_EVENT_ACTION_REMOVE_POINTS : 'remove points', // Aura event action name when user removes aura points during purchase in checkout page.
+     AURA_EVENT_ACTION_CLICK_APPSTORE : 'click appstore', // Aura event action name when user clicks on download IOS app button.
+     AURA_EVENT_ACTION_CLICK_PLAYSTORE : 'click playstore', // Aura event action name when user clicks on download Android app button.
    };
 
    /**
@@ -88,6 +94,10 @@
         gtmData.aura_pointsTotal = 0;
       }
 
+      // Adding Aura common details in localstorage to use in all Aura events.
+      // Check for events "event name: aura".
+      Drupal.addItemInLocalStorage('gtm_aura_common_data', gtmData);
+
       // Proceed only if dataLayer exists.
       if (dataLayer) {
         dataLayer.push(gtmData);
@@ -135,6 +145,30 @@
      }
 
      return gtmData;
+   };
+
+   /**
+    * This function pushes aura event details data to datalayer.
+    */
+   Drupal.alshayaSeoGtmPushAuraEventData = function (data) {
+     try {
+       // Get aura user common details from localstorage.
+       var auraGTMData = Drupal.getItemFromLocalStorage('gtm_aura_common_data');
+       auraGTMData = auraGTMData !== null ? auraGTMData : {};
+       // Merge localstorage data with aura specific event details.
+       auraGTMData['event name'] = GTM_AURA_VALUES.AURA_EVENT_NAME;
+       auraGTMData['event category'] = GTM_AURA_VALUES.AURA_EVENT_CATEGORY;
+       auraGTMData['event action'] = data.action !== undefined && GTM_AURA_VALUES[data.action] !== undefined ? GTM_AURA_VALUES[data.action] : null;
+       auraGTMData['event label'] = data.label !== undefined ? data.label : null;
+
+       // Proceed only if dataLayer exists.
+       if (dataLayer) {
+         dataLayer.push(auraGTMData);
+       }
+     }
+     catch (e) {
+       Drupal.logJavascriptError('error-push-aura-events', e);
+     }
    };
 
 })(jQuery, Drupal, dataLayer, drupalSettings);

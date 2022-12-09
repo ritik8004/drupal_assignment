@@ -123,6 +123,8 @@ class AuraFormRedeemPoints extends React.Component {
       if (cartTotals.balancePayable > 0) {
         dispatchCheckoutStep3GTM = true;
       }
+      // Trigger aura use points datalayer event.
+      Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_USE_POINTS' });
     } else if (action === 'remove points') {
       // Reset redemption input fields to initial value.
       this.resetInputs();
@@ -145,6 +147,8 @@ class AuraFormRedeemPoints extends React.Component {
 
       // Remove class.
       document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.remove('redeemed');
+      // Trigger aura remove points datalayer event.
+      Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_REMOVE_POINTS' });
     }
 
     this.setState({
