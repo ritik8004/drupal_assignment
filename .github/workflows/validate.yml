@@ -39,9 +39,10 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs) >> $GITHUB_OUTPUT
-          echo "foo" > ${GITHUB_WORKSPACE}/changed_files.txt
-          echo "CHANGED_FILES=${GITHUB_WORKSPACE}/changed_files.txt" >> $GITHUB_ENV
+          # Outputs the list of files changed on a temporary file to be shared with other jobs.
+          echo "$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs)" > ${GITHUB_WORKSPACE}/changed_files.tmp
+          # Store the number of files changed.
+          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs) >> $GITHUB_OUTPUT
           echo composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs) >> $GITHUB_OUTPUT
           echo docroot=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs) >> $GITHUB_OUTPUT
           echo blt=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep blt | xargs) >> $GITHUB_OUTPUT
@@ -53,6 +54,12 @@ jobs:
           echo "No changes found in PR. This could also mean your branch is not updated, please rebase."
           exit 1
         if: ${{ !(steps.changes.outputs.all) }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          # Make changed files available for other jobs.
+          name: changed_files
+          path: ${GITHUB_WORKSPACE}/changed_files.tmp
 
   validate:
     name: Validate
@@ -85,6 +92,10 @@ jobs:
       INSTALL_TYPE: install
 
     steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: changed_files
+
       - name: Repo check
         run: |
           echo "We should not run actions in forks."
@@ -108,6 +119,11 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Run Tests
+        run: |
+          bash $SCRIPT_DIR/run_tests.sh ${GITHUB_WORKSPACE}/changed_files.tmp
+        if: ${{ needs.changedfiles.outputs.all }}
 
       - name: Run Composer install
         run: |
