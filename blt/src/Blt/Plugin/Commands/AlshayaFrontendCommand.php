@@ -169,7 +169,7 @@ class AlshayaFrontendCommand extends BltTasks {
       // - we have some file changes at least.
       if (getenv('GITHUB_ACTIONS') == 'true'
         && getenv('GITHUB_EVENT_NAME') == 'push'
-        && (int) getenv('CHANGED_ALL_FILES') > 1
+        && (int) getenv('CHANGED_ALL_FILES') > 0
       ) {
         $themeChanges = getenv('CHANGED_THEME_FILES');
         // Build if theme is changed and tracked in CHANGED_THEME_FILES
@@ -320,7 +320,7 @@ class AlshayaFrontendCommand extends BltTasks {
       // - we have some file changes at least.
       if (getenv('GITHUB_ACTIONS') == 'true'
         && getenv('GITHUB_EVENT_NAME') == 'push'
-        && (int) getenv('CHANGED_ALL_FILES') > 1
+        && (int) getenv('CHANGED_ALL_FILES') > 0
       ) {
         $reactChanges = getenv('CHANGED_REACT_FILES');
         // Build if change in common (modules/react/js) folder.
