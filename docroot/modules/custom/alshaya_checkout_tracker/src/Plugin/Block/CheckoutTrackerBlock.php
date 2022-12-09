@@ -112,7 +112,6 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
         'stepcount' => 4,
       ],
     ];
-
     return [
       '#attached' => [
         'library' => [
@@ -124,7 +123,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       '#stepMap' => $stepMap,
       '#activeMapKey' => $route_name,
       '#attributes' => [
-        'class' => ['hide-checkout-tracker'],
+        'class' => ($route_name == 'acq_cart.cart') ? ['hide-checkout-tracker'] : '',
       ],
     ];
 
