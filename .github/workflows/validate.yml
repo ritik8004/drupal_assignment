@@ -40,6 +40,8 @@ jobs:
         # Set outputs using the command.
         run: |
           echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs) >> $GITHUB_OUTPUT
+          echo "foo" > ${GITHUB_WORKSPACE}/changed_files.txt
+          echo "CHANGED_FILES=${GITHUB_WORKSPACE}/changed_files.txt" >> $GITHUB_ENV
           echo composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs) >> $GITHUB_OUTPUT
           echo docroot=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs) >> $GITHUB_OUTPUT
           echo blt=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep blt | xargs) >> $GITHUB_OUTPUT
