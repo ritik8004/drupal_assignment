@@ -96,12 +96,6 @@ jobs:
         with:
           name: changed_files
 
-      - name: Run Tests
-        run: |
-          bash $SCRIPT_DIR/run_tests.sh ${GITHUB_WORKSPACE}/changed_files
-          exit 1
-        if: ${{ needs.changedfiles.outputs.all }}
-
       - name: Repo check
         run: |
           echo "We should not run actions in forks."
@@ -125,6 +119,12 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Run Tests
+        run: |
+          bash $SCRIPT_DIR/run_tests.sh ${GITHUB_WORKSPACE}/changed_files
+          exit 1
+        if: ${{ needs.changedfiles.outputs.all }}
 
       - name: Run Composer install
         run: |
