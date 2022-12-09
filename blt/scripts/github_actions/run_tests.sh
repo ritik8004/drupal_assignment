@@ -2,10 +2,14 @@
 
 set -e
 
+set -x
 # Get all changed files between two revisions.
 Rev1="$1"
 Rev2="$1"
-CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRTD ${Rev1} ${Rev2} | xargs)
+CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRTD -r ${Rev1} -r ${Rev2} | xargs)
+
+echo DEBUG
+echo ${CHANGED_FILES}
 
 # Run tests.
 

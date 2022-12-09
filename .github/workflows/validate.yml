@@ -183,5 +183,5 @@ jobs:
 
       - name: Run Tests
         run: |
-          bash $SCRIPT_DIR/run_tests.sh "${{ github.event.before }} ${{ github.event.after }}"
+          bash $SCRIPT_DIR/run_tests.sh ${{ github.event.before }} ${{ github.event.after }}
         if: ${{ needs.changedfiles.outputs.all }}
