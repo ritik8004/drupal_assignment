@@ -37,6 +37,8 @@
     }
 
     ul {
+      z-index: 4;
+
       @include breakpoint($upto-desktop) {
         width: auto;
         max-width: none;
