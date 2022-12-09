@@ -2,21 +2,8 @@
 
 set -e
 
-set -x
-# Get all changed files between two revisions.
-#Rev1="$1"
-#Rev2="$2"
-#pwd
-#cd ${APPLICATION_DIR}
-#ls -al
-#git diff --name-only
-#git diff --name-only --diff-filter=ACMRTD ${Rev1} ${Rev2}
-#CHANGED_FILES="$(git diff --name-only --diff-filter=ACMRTD ${Rev1} ${Rev2} | xargs)"
-
-echo DEBUG
-env
-#CHANGED_FILES="$1"
-echo ${CHANGED_FILES}
+# Get all changed files.
+CHANGED_FILES="$1"
 
 # Run tests.
 
