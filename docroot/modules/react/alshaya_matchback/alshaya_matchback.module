@@ -13,10 +13,11 @@ use Drupal\Core\Entity\EntityInterface;
  * Implements hook_node_view().
  */
 function alshaya_matchback_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() !== 'acq_product') {
+  if (!($entity->bundle() === 'acq_product'
+    && in_array($view_mode, ['matchback', 'matchback_mobile']))
+  ) {
     return;
   }
-  // @todo Alter the crossel build and add the settings and libraries.
   $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback';
   $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback_utility';
 }
@@ -43,7 +44,6 @@ function alshaya_matchback_preprocess_node(&$variables) {
 
   /** @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper */
   $sku_info_helper = \Drupal::service('alshaya_acm_product.sku_info');
-  // @todo Find out what to do when stock is 0.
   $variables['attributes']['data-stock']['#markup'] = strval($sku_info_helper->stockInfo($sku_entity)['stock']);
 
   // Display add to bag button.
