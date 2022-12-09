@@ -107,6 +107,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      # TEMPORARY test
+      - name: Run Tests
+        run: |
+          bash $SCRIPT_DIR/run_tests.sh ${{ github.event.before }} ${{ github.event.after }}
+        if: ${{ needs.changedfiles.outputs.all }}
+
       - name: Run Composer install
         run: |
           composer self-update
