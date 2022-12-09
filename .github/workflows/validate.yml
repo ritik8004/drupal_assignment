@@ -98,9 +98,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          ls -al .
-          ls -al ${GITHUB_WORKSPACE}
-          bash $SCRIPT_DIR/run_tests.sh /tmp/changed_files
+          bash $SCRIPT_DIR/run_tests.sh ${GITHUB_WORKSPACE}/changed_files
           exit 1
         if: ${{ needs.changedfiles.outputs.all }}
 
