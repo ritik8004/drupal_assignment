@@ -54,7 +54,7 @@ class MatchbackAddToBagCommands extends DrushCommands {
   }
 
   /**
-   * Disables matchback feature.
+   * Enables matchback feature.
    *
    * @param array $options
    *   Options supported with drush command.
