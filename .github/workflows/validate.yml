@@ -111,9 +111,9 @@ jobs:
       - name: Run Tests
         id: test
         run: |
-          if [[ ${{needs.changedfiles.outputs.all}} == *".module"* ]]; then echo CHANGED_FILES=".module" >> $GITHUB_ENV; fi
-          if [[ ${{needs.changedfiles.outputs.all}} == *".php"* ]]; then echo CHANGED_FILES=".php" >> $GITHUB_ENV; fi
-          if [[ ${{needs.changedfiles.outputs.all}} == *".yml"* ]]; then echo CHANGED_FILES=".yml" >> $GITHUB_ENV; fi
+          if [[ "${{needs.changedfiles.outputs.all}}" == *".module"* ]]; then echo CHANGED_FILES="${CHANGED_FILES} .module" >> $GITHUB_ENV; fi
+          if [[ "${{needs.changedfiles.outputs.all}}" == *".php"* ]]; then echo CHANGED_FILES="${CHANGED_FILES} .php" >> $GITHUB_ENV; fi
+          if [[ "${{needs.changedfiles.outputs.all}}" == *".yml"* ]]; then echo CHANGED_FILES="${CHANGED_FILES} .yml" >> $GITHUB_ENV; fi
           bash $SCRIPT_DIR/run_tests.sh
         if: ${{ needs.changedfiles.outputs.all }}
 
