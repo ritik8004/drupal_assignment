@@ -995,10 +995,18 @@ class AlshayaGtmManager {
 
       // If its a virtual product i.e egift card or egift topup.
       if ($item['type'] === 'virtual') {
+        // Since, we need to pass data to GTM only in English translation
+        // we use 'topup_card_name_en' field for eGift card topup
+        // and 'item_name_en' field for eGift card.
+        // See [CORE-42487] for API updates reference.
+        if ($item['sku'] === 'giftcard_topup') {
+          $product_name = $item['extension_attributes']['topup_card_name_en'] ?? '';
+        }
+        else {
+          $product_name = $item['extension_attributes']['item_name_en'] ?? '';
+        }
         $products[$item['item_id']] = [
-          'name' => ($item['sku'] == 'giftcard_topup')
-          ? $item['extension_attributes']['topup_card_name'] . '/' . $item['price']
-          : $item['name'] . '/' . $item['price'],
+          'name' => $product_name . '/' . $item['price'],
           'id' => $item['item_id'],
           'price' => $item['price'],
           'variant' => $item['sku'],

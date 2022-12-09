@@ -176,6 +176,15 @@
         padding-top: 0;
         margin-bottom: rem(28);
       }
+
+      .block-facets-summary-blockfilter-bar-promotions,
+      .block-facets-summary-blockfilter-bar-plp,
+      .block-facets-summary-blockfilter-bar-productlist,
+      .block-facets-summary-blockfilter-bar {
+        ul {
+          margin-bottom: rem(-12);
+        }
+      }
     }
 
     .c-page-title__description,
@@ -281,7 +290,7 @@
       }
 
       &-list {
-        width: rem(92);
+        width: rem(112);
       }
 
       &-track {
@@ -333,6 +342,15 @@
         .sku-promotion-item {
           font-size: rem(14);
           margin-#{$left}: initial;
+        }
+      }
+
+      .slick {
+        &-next,
+        &-prev {
+          &::before {
+            width: rem(24);
+          }
         }
       }
     }

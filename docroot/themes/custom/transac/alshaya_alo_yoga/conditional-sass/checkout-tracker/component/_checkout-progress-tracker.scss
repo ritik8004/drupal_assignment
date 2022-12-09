@@ -1,19 +1,23 @@
 .cko-progress-tracker {
   #checkout-progress {
+    @include breakpoint($only-tablet) {
+      .alias--cart-login & {
+        width: 96%;
+      }
+    }
+
     .progress-bar {
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          margin-top: rem(40);
+        }
+      }
+
       .step {
         span {
           font-family: $ay-bold;
         }
       }
-    }
-  }
-}
-
-.block-alshaya-checkout-tracker {
-  &.hide-checkout-tracker {
-    .cko-progress-tracker {
-      display: none;
     }
   }
 }

@@ -1,0 +1,61 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    @include breakpoint($only-mobile) {
+      font-size: rem(11);
+    }
+
+    .progress-bar {
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          margin-bottom: rem(48);
+        }
+      }
+
+      .step {
+        span {
+          @include breakpoint($only-mobile) {
+            font-size: rem(14);
+            padding-top: rem(4);
+          }
+
+          padding-top: rem(2);
+          font-size: rem(18);
+
+          html[lang=ar] & {
+            padding-top: rem(1);
+          }
+        }
+
+        &.current {
+          span {
+            font-family: $alshaya-bold;
+
+            @include breakpoint($only-mobile) {
+              padding-top: rem(3);
+              margin-top: rem(-3);
+
+              html[lang="ar"] & {
+                padding-top: rem(4);
+              }
+            }
+
+            @include breakpoint($tablet) {
+              padding-top: 0;
+              margin-top: rem(-1);
+            }
+          }
+        }
+
+        &.completed {
+          .step-label {
+            top: calc(100% + #{rem(18)});
+
+            @include breakpoint($only-mobile) {
+              font-size: rem(11);
+            }
+          }
+        }
+      }
+    }
+  }
+}
