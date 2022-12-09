@@ -39,17 +39,18 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs) >> $GITHUB_OUTPUT
+          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs) >> $GITHUB_OUTPUT
           echo composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs) >> $GITHUB_OUTPUT
           echo docroot=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs) >> $GITHUB_OUTPUT
           echo blt=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep blt | xargs) >> $GITHUB_OUTPUT
           echo js=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs) >> $GITHUB_OUTPUT
           echo scss=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs) >> $GITHUB_OUTPUT
+
       - name: Check if there are changes.
         run: |
           echo "No changes found in PR. This could also mean your branch is not updated, please rebase."
           exit 1
-        if: ${{ !(steps.changes.outputs.all) }}
+        if: ${{ (steps.changes.outputs.all == '0') }}
 
   validate:
     name: Validate
@@ -182,5 +183,5 @@ jobs:
 
       - name: Run Tests
         run: |
-          echo 'Changed files are - ${{ needs.changedfiles.outputs.all }}'
-          bash $SCRIPT_DIR/run_tests.sh "${{ needs.changedfiles.outputs.all }}"
+          bash $SCRIPT_DIR/run_tests.sh "${{ github.event.before }} ${{ github.event.after }}"
+        if: ${{ needs.changedfiles.outputs.all }}
