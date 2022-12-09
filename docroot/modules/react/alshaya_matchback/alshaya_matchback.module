@@ -19,9 +19,6 @@ function alshaya_matchback_node_view(array &$build, EntityInterface $entity, Ent
   // @todo Alter the crossel build and add the settings and libraries.
   $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback';
   $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback_utility';
-  /** @var \Drupal\alshaya_add_to_bag\Services\AddToBagHelper $add_to_bag_helper */
-  $add_to_bag_helper = \Drupal::service('alshaya_add_to_bag.helper');
-  $add_to_bag_helper->setAddToBagCommonSettingsToBuild($build);
 }
 
 /**
@@ -75,4 +72,11 @@ function alshaya_matchback_node_view_alter(&$build, EntityInterface $entity) {
     return;
   }
   $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback.gtm';
+}
+
+/**
+ * Implements hook_alshaya_add_to_bag_feature_status_alter().
+ */
+function alshaya_matchback_alshaya_add_to_bag_feature_status_alter(&$add_to_bag_feature_status) {
+  $add_to_bag_feature_status = TRUE;
 }
