@@ -103,6 +103,7 @@ jobs:
           echo COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin) >> $GITHUB_ENV
           echo BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt) >> $GITHUB_ENV
           echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
+          echo APPLICATION_DIR=$(echo ${GITHUB_WORKSPACE}) >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
