@@ -1,10 +1,9 @@
 <?php
 
-namespace Drupal\alshaya_acm_product\Commands;
+namespace Drupal\alshaya_matchback\Commands;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
@@ -19,13 +18,6 @@ class MatchbackAddToBagCommands extends DrushCommands {
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
-
-  /**
-   * Module installer.
-   *
-   * @var \Drupal\Core\Extension\ModuleInstallerInterface
-   */
-  protected $moduleInstaller;
 
   /**
    * Module handler.
@@ -46,8 +38,6 @@ class MatchbackAddToBagCommands extends DrushCommands {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
-   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
-   *   Module installer.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
@@ -55,14 +45,12 @@ class MatchbackAddToBagCommands extends DrushCommands {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    ModuleInstallerInterface $module_installer,
     ModuleHandlerInterface $module_handler,
     LoggerChannelFactoryInterface $logger_channel_factory
   ) {
     $this->configFactory = $config_factory;
-    $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
-    $this->drupalLogger = $logger_channel_factory->get('alshaya_acm_product');
+    $this->drupalLogger = $logger_channel_factory->get('alshaya_matchback');
   }
 
   /**
@@ -71,7 +59,7 @@ class MatchbackAddToBagCommands extends DrushCommands {
    * @param array $options
    *   Options supported with drush command.
    *
-   * @command alshaya_acm_product:disable-matchback-add-to-bag
+   * @command alshaya_matchback:enable-matchback-add-to-bag
    *
    * @option show_wishlist Whether to show wishlist button on matchback items.
    * @option change_matchback_color Whether to change matchback item color when PDP product color changes.
@@ -93,11 +81,6 @@ class MatchbackAddToBagCommands extends DrushCommands {
       'use_matchback_cart_notification' => 'false',
     ]
   ) {
-    if (!$this->moduleHandler->moduleExists('alshaya_matchback')) {
-      $this->moduleInstaller->install(['alshaya_matchback']);
-      $this->drupalLogger->notice(dt('Installed alshaya_matchback_module.'));
-    }
-
     $this->configFactory->getEditable('alshaya_acm.settings')
       ->set('display_crosssell', TRUE)
       ->set('show_crosssell_as_matchback', TRUE)
@@ -109,17 +92,19 @@ class MatchbackAddToBagCommands extends DrushCommands {
         ->save();
     }
 
-    $this->configFactory->getEditable('alshaya_acm_product.display_settings')
+    $this->configFactory->getEditable('alshaya_matchback.display_settings')
       ->set('change_matchback_color', $options['change_matchback_color'] === '')
       ->set('use_matchback_cart_notification', (bool) $options['use_matchback_cart_notification'])
       ->set('display_mobile_matchback_add_to_bag_button', (bool) $options['show_view_options'])
       ->save();
+
+    $this->drupalLogger->notice(dt('Enabled matchback add to bag feature.'));
   }
 
   /**
    * Disables matchback feature.
    *
-   * @command alshaya_acm_product:disable-matchback-add-to-bag
+   * @command alshaya_matchback:disable-matchback-add-to-bag
    *
    * @aliases mvod, matchback-view-options-disable
    *
@@ -129,11 +114,6 @@ class MatchbackAddToBagCommands extends DrushCommands {
    *   Disable matchback add to bag.
    */
   public function disableMatchbackAddToBag() {
-    if (!$this->moduleHandler->moduleExists('alshaya_matchback')) {
-      $this->moduleInstaller->uninstall(['alshaya_matchback']);
-      $this->drupalLogger->notice(dt('Un-installed alshaya_matchback_module.'));
-    }
-
     $this->configFactory->getEditable('alshaya_acm.settings')
       ->set('display_crosssell', FALSE)
       ->set('show_crosssell_as_matchback', FALSE)
@@ -145,11 +125,13 @@ class MatchbackAddToBagCommands extends DrushCommands {
         ->save();
     }
 
-    $this->configFactory->getEditable('alshaya_acm_product.display_settings')
+    $this->configFactory->getEditable('alshaya_matchback.display_settings')
       ->set('change_matchback_color', TRUE)
       ->set('use_matchback_cart_notification', TRUE)
       ->set('display_mobile_matchback_add_to_bag_button', FALSE)
       ->save();
+
+    $this->drupalLogger->notice(dt('Disabled matchback add to bag feature.'));
   }
 
 }
