@@ -60,7 +60,7 @@ jobs:
         run: |
           echo "Changes require deployment."
           echo "deployable_changes=true" >> $GITHUB_OUTPUT
-        if: ${{ contains(github.ref, 'refs/heads') }}
+        if: ${{ contains(github.ref, 'refs/tags') }}
 
   deploy:
     name: Deploy
