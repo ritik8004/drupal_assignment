@@ -1,0 +1,11 @@
+.aura-enabled {
+  .my-account-nav {
+    @include breakpoint($upto-desktop) {
+      li:nth-child(2) {
+        &::after {
+          color: $header_secondary_menu_link;
+        }
+      }
+    }
+  }
+}
