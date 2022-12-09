@@ -40,7 +40,7 @@ jobs:
         # Set outputs using the command.
         run: |
           # Outputs the list of files changed on a temporary file to be shared with other jobs.
-          echo "$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs)" > ${GITHUB_WORKSPACE}/changed_files.tmp
+          echo "$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs)" > /tmp/changed_files.tmp
           # Store the number of files changed.
           echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs) >> $GITHUB_OUTPUT
           echo composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs) >> $GITHUB_OUTPUT
@@ -59,7 +59,7 @@ jobs:
         with:
           # Make changed files available for other jobs.
           name: changed_files
-          path: ${GITHUB_WORKSPACE}/changed_files.tmp
+          path: /tmp/changed_files.tmp
 
   validate:
     name: Validate
@@ -122,7 +122,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          bash $SCRIPT_DIR/run_tests.sh ${GITHUB_WORKSPACE}/changed_files.tmp
+          bash $SCRIPT_DIR/run_tests.sh /tmp/changed_files.tmp
         if: ${{ needs.changedfiles.outputs.all }}
 
       - name: Run Composer install

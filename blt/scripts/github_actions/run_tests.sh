@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
-set -x
-env
 
 set -e
 
+set -x
+env
 # Get all changed files.
+echo ${CHANGED_FILES}
 CHANGED_FILES="$1"
 echo ${CHANGED_FILES}
-cat ${CHANGED_FILES}
+cat /tmp/changed_files.tmp
 
 # Run tests.
 
