@@ -44,6 +44,7 @@ jobs:
       - name: Check if changes are deployable
         id: deployable_changes
         run: |
+          set -x
           NAMES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
           echo "Changed files ${NAMES}"
           # Check if we are deploying a tag or the file names match the list below.
