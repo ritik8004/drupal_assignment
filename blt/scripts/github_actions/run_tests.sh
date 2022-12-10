@@ -8,6 +8,7 @@ env
 echo ${CHANGED_FILES}
 CHANGED_FILES="$1"
 echo ${CHANGED_FILES}
+ls -al /__w/alshaya/alshaya
 find / -name changed_files
 cat ${CHANGED_FILES}
 exit 1
