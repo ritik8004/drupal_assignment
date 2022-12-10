@@ -72,8 +72,7 @@ jobs:
 
       - name: Debug Info
         run: |
-          echo "Is tag: ${{ contains(github.ref, 'refs/tags') }}"
-          echo "Deployable: ${{ needs.changedfiles.outputs.deployable_changes }}"
+          echo "Is Deployable: ${{ needs.changedfiles.outputs.deployable_changes }}"
 
   deploy:
     name: Deploy
