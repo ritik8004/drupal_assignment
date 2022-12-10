@@ -47,8 +47,8 @@ jobs:
         if: ${{ contains(github.ref, 'refs/tags') }}
         run: |
           echo "Deploying tag."
-          echo "is_tag=true" >> $GITHUB_OUTPUT
-          echo "deployable_changes=true" >> $GITHUB_OUTPUT
+          echo is_tag=true >> $GITHUB_OUTPUT
+          echo deployable_changes=true >> $GITHUB_OUTPUT
 
       - name: Check if changes are deployable
         id: deployable_changes
