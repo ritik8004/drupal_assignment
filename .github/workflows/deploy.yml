@@ -41,12 +41,6 @@ jobs:
           echo themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
           echo react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
 
-      - name: Deploying tag
-        id: deploy_tag
-        run: |
-          echo is_tag=true >> $GITHUB_OUTPUT
-        if: ${{ contains(github.ref, 'refs/tags') }}
-
       - name: Check if changes are deployable
         id: deployable_changes
         run: |
@@ -72,6 +66,7 @@ jobs:
 
       - name: Debug Info
         run: |
+          echo "Owner: ${{ github.repository_owner }}"
           echo "Is Deployable: ${{ needs.changedfiles.outputs.deployable_changes }}"
 
   deploy:
