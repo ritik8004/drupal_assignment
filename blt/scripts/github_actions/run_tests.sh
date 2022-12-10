@@ -2,9 +2,8 @@
 
 set -e
 
-set -x
 # Get all changed files.
-echo CHANGED_FILES="$(cat $1)"
+CHANGED_FILES="$(cat $1)"
 
 # Run tests.
 
