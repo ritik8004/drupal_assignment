@@ -8,11 +8,9 @@ env
 echo ${CHANGED_FILES}
 CHANGED_FILES="$1"
 echo ${CHANGED_FILES}
-ls -al .
-ls -al ${RUNNER_WORKSPACE}
 find / -name changed_files
-ls -al ${CHANGED_FILES}
-
+cat ${CHANGED_FILES}
+exit 1
 # Run tests.
 
 # Composer check
