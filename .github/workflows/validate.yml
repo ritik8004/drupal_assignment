@@ -48,6 +48,10 @@ jobs:
           echo scss=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs) >> $GITHUB_OUTPUT
           echo "$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }})" > /tmp/changed_files.tmp
 
+      - name: Debug Info
+        run: |
+          echo "Number of files changed: ${{ steps.changes.outputs.all }}"
+
       - name: Check if there are changes.
         run: |
           echo "No changes found in PR. This could also mean your branch is not updated, please rebase."
