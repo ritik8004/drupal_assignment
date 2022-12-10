@@ -45,7 +45,8 @@ jobs:
       - name: Check if changes are deployable
         id: deployable_changes
         run: |
-          echo 'Changed files are - ${{ steps.changes.outputs.all }}'
+          all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
+          echo "DEBUG ${all}"
           if [[ "${{ steps.changes.outputs.all }}" =~ "composer." || "${{ steps.changes.outputs.all }}" =~ "docroot/" || "${{ steps.changes.outputs.all }}" =~ "blt/" || "${{ steps.changes.outputs.all }}" =~ "factory-hooks/" || "${{ steps.changes.outputs.all }}" =~ "hooks/" || "${{ steps.changes.outputs.all }}" =~ "scripts/" ]]
           then
             echo "Changes require deployment."
@@ -54,6 +55,7 @@ jobs:
             echo "Changes not require deployment. Hence skipping the deployment."
             echo deployable_changes=false >> $GITHUB_OUTPUT
           fi
+          all = null
 
       - name: Check if we are deploying a tag
         id: deployable_tag
