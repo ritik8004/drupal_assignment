@@ -41,6 +41,7 @@ jobs:
         run: |
           # Outputs the list of files changed on a temporary file to be shared with other jobs.
           echo "$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs)" > /tmp/changed_files
+          cat /tmp/changed_files
           # Store the number of files changed.
           echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs) >> $GITHUB_OUTPUT
           echo composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs) >> $GITHUB_OUTPUT
@@ -95,6 +96,10 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: changed_files
+
+      - name: Run Tests
+        run: |
+          find / -name changed_files*
 
       - name: Repo check
         run: |
