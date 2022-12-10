@@ -53,14 +53,14 @@ jobs:
           NAMES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
           echo "Changed files ${NAMES}"
           # Check if we are deploying a tag or the file names match the list below.
-          if [[ contains(github.ref, 'refs/tags')
-            || [ "${NAMES}" =~ "composer."
+          if [[ ${{ contains(github.ref, 'refs/tags') }}
+            || [[ "${NAMES}" =~ "composer."
               || "${NAMES}" =~ "docroot/"
               || "${NAMES}" =~ "blt/"
               || "${NAMES}" =~ "factory-hooks/"
               || "${NAMES}" =~ "hooks/"
               || "${NAMES}" =~ "scripts/"
-            ]
+            ]]
           ]]
           then
             echo "Changes require deployment."
