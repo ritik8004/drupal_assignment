@@ -25,8 +25,8 @@ jobs:
     outputs:
       themes: ${{ steps.changes.outputs.themes }}
       react: ${{ steps.changes.outputs.react }}
+      is_tag: ${{ steps.deploy_tag.outputs.is_tag }}
       deployable_changes: ${{ steps.deployable_changes.outputs.deployable_changes }}
-      is_tag: ${{ steps.changes.outputs.is_tag }}
 
     steps:
       # Make sure we have some code to diff.
@@ -41,17 +41,13 @@ jobs:
         run: |
           echo themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
           echo react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
-          echo is_tag=${{ contains(github.ref, 'refs/tags') }} >> $GITHUB_OUTPUT
-
-      - name: Debug Info
-        run: |
-          echo "Is tag: ${{ needs.changedfiles.outputs.is_tag }}"
 
       - name: Check if we are deploying a tag
         id: deploy_tag
-        if: ${{ needs.changedfiles.outputs.is_tag }}
+        if: ${{ contains(github.ref, 'refs/tags') }}
         run: |
           echo "Deploying tag."
+          echo "is_tag=true" >> $GITHUB_OUTPUT
           echo "deployable_changes=true" >> $GITHUB_OUTPUT
 
       - name: Check if changes are deployable
@@ -76,6 +72,11 @@ jobs:
             echo deployable_changes=false >> $GITHUB_OUTPUT
           fi
           NAMES=''
+
+      - name: Debug Info
+        run: |
+          echo "Is tag: ${{ needs.changedfiles.outputs.is_tag }}"
+          echo "Deployable: ${{ needs.changedfiles.outputs.deployable_changes }}"
 
   deploy:
     name: Deploy
