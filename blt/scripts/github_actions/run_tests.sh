@@ -4,6 +4,7 @@ set -e
 
 # Get all changed files.
 CHANGED_FILES="$(cat $1)"
+echo "Changed files: ${CHANGED_FILES}"
 
 # Run tests.
 
