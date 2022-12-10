@@ -44,25 +44,27 @@ jobs:
       - name: Check if changes are deployable
         id: deployable_changes
         run: |
-          set -x
-          NAMES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
-          echo "Changed files ${NAMES}"
-          # Check if we are deploying a tag or the file names match the list below.
-          if [[ ${{ contains(github.ref, 'refs/tags') }} ||
-            ( "${NAMES}" =~ "composer." ||
-              "${NAMES}" =~ "docroot/" ||
-              "${NAMES}" =~ "blt/" ||
-              "${NAMES}" =~ "factory-hooks/" ||
-              "${NAMES}" =~ "hooks/" ||
-              "${NAMES}" =~ "scripts/"
-            )
-          ]]
+          echo deployable_changes=false >> $GITHUB_OUTPUT
+          if [[ ${{ contains(github.ref, 'refs/tags') }} ]]
           then
-            echo "Changes require deployment."
+            echo "Deploying a tag."
             echo deployable_changes=true >> $GITHUB_OUTPUT
           else
-            echo "Changes not require deployment. Hence skipping the deployment."
-            echo deployable_changes=false >> $GITHUB_OUTPUT
+            # Get changed files.
+            NAMES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
+            echo "Changed files ${NAMES}"
+            # Check if the file names match the list below.
+            if [[ "${NAMES}" =~ "composer." ||
+                  "${NAMES}" =~ "docroot/" ||
+                  "${NAMES}" =~ "blt/" ||
+                  "${NAMES}" =~ "factory-hooks/" ||
+                  "${NAMES}" =~ "hooks/" ||
+                  "${NAMES}" =~ "scripts/"
+            ]]
+            then
+              echo "Changes require deployment."
+              echo deployable_changes=true >> $GITHUB_OUTPUT
+            fi
           fi
 
       - name: Debug Info
