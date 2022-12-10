@@ -45,7 +45,7 @@ jobs:
         id: deployable_changes
         run: |
           echo deployable_changes=false >> $GITHUB_OUTPUT
-          if [[ ${{ contains(github.ref, 'refs/tags') }} ]]
+          if [[ ${{ contains(github.ref, 'refs/tags') == true }} ]]
           then
             echo "Deploying a tag."
             echo deployable_changes=true >> $GITHUB_OUTPUT
