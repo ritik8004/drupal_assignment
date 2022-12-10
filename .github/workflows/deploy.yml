@@ -25,7 +25,6 @@ jobs:
     outputs:
       themes: ${{ steps.changes.outputs.themes }}
       react: ${{ steps.changes.outputs.react }}
-      is_tag: ${{ steps.deploy_tag.outputs.is_tag }}
       deployable_changes: ${{ steps.deployable_changes.outputs.deployable_changes }}
 
     steps:
@@ -46,20 +45,7 @@ jobs:
         id: deploy_tag
         run: |
           echo is_tag=true >> $GITHUB_OUTPUT
-          echo deployable_changes=true >> $GITHUB_OUTPUT
         if: ${{ contains(github.ref, 'refs/tags') }}
-
-      - name: Debug Info
-        run: |
-          echo "Is tag 1: ${{ contains(github.ref, 'refs/tags') }}"
-          echo "Is tag 2: ${{ needs.changedfiles.outputs.is_tag }}"
-          # Check if we are deploying a tag or the file names match the list below.
-          if [[ ${{ needs.changedfiles.outputs.is_tag }} == 'true' ]]
-          then
-            echo "It is a tag"
-          else
-            echo "It is not a tag"
-          fi
 
       - name: Check if changes are deployable
         id: deployable_changes
@@ -67,12 +53,14 @@ jobs:
           NAMES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
           echo "Changed files ${NAMES}"
           # Check if we are deploying a tag or the file names match the list below.
-          if [[ "${NAMES}" =~ "composer."
-            || "${NAMES}" =~ "docroot/"
-            || "${NAMES}" =~ "blt/"
-            || "${NAMES}" =~ "factory-hooks/"
-            || "${NAMES}" =~ "hooks/"
-            || "${NAMES}" =~ "scripts/"
+          if [[ contains(github.ref, 'refs/tags')
+            || [[ "${NAMES}" =~ "composer."
+              || "${NAMES}" =~ "docroot/"
+              || "${NAMES}" =~ "blt/"
+              || "${NAMES}" =~ "factory-hooks/"
+              || "${NAMES}" =~ "hooks/"
+              || "${NAMES}" =~ "scripts/"
+            ]]
           ]]
           then
             echo "Changes require deployment."
@@ -81,12 +69,10 @@ jobs:
             echo "Changes not require deployment. Hence skipping the deployment."
             echo deployable_changes=false >> $GITHUB_OUTPUT
           fi
-          NAMES=''
-        if: ${{ needs.changedfiles.outputs.is_tag != 'true' }}
 
       - name: Debug Info
         run: |
-          echo "Is tag: ${{ needs.changedfiles.outputs.is_tag }}"
+          echo "Is tag: ${{ contains(github.ref, 'refs/tags') }}"
           echo "Deployable: ${{ needs.changedfiles.outputs.deployable_changes }}"
 
   deploy:
@@ -192,4 +178,4 @@ jobs:
 
       - name: Deploy tag
         run: bash $SCRIPT_DIR/deploy_tag.sh
-        if: ${{ env.SSH_DEPLOYMENT_KEY && needs.changedfiles.outputs.is_tag }}
+        if: ${{ env.SSH_DEPLOYMENT_KEY && contains(github.ref, 'refs/tags') }}
