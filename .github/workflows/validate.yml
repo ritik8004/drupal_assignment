@@ -37,11 +37,10 @@ jobs:
 
       - name: Get changed files
         id: changes
+        # Outputs the list of files changed on a temporary file to be shared with other jobs using artifacts.
         # Set outputs using the command.
         run: |
-          # Outputs the list of files changed on a temporary file to be shared with other jobs.
           echo "$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }})" > /tmp/changed_files.tmp
-          # Store the number of files changed.
           echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs) >> $GITHUB_OUTPUT
           echo composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs) >> $GITHUB_OUTPUT
           echo docroot=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs) >> $GITHUB_OUTPUT
@@ -58,7 +57,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           # Make changed files available for other jobs.
-          name: changed_files
+          name: artifacts
           path: /tmp/changed_files.tmp
 
   validate:
@@ -118,13 +117,7 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
-          name: changed_files
-
-      - name: Run Tests
-        run: |
-          bash $SCRIPT_DIR/run_tests.sh ${GITHUB_WORKSPACE}/changed_files.tmp
-          exit 1
-        if: ${{ needs.changedfiles.outputs.all }}
+          name: artifacts
 
       - name: Run Composer install
         run: |
@@ -202,5 +195,5 @@ jobs:
 
       - name: Run Tests
         run: |
-          bash $SCRIPT_DIR/run_tests.sh ${{ needs.changedfiles.outputs.all }}
+          bash $SCRIPT_DIR/run_tests.sh ${GITHUB_WORKSPACE}/changed_files.tmp
         if: ${{ needs.changedfiles.outputs.all }}
