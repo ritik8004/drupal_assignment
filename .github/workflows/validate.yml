@@ -37,22 +37,22 @@ jobs:
 
       - name: Get changed files
         id: changes
-        # Outputs the list of files changed on a temporary file to be shared with other jobs using artifacts.
         # Set outputs using the command.
+        # Outputs the list of files changed on a temporary file to be shared with other jobs using artifacts.
         run: |
-          echo "$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }})" > /tmp/changed_files.tmp
           echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | wc -l | xargs) >> $GITHUB_OUTPUT
           echo composer=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep composer | xargs) >> $GITHUB_OUTPUT
           echo docroot=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep docroot | xargs) >> $GITHUB_OUTPUT
           echo blt=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep blt | xargs) >> $GITHUB_OUTPUT
           echo js=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .js$ | xargs) >> $GITHUB_OUTPUT
           echo scss=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .scss$ | xargs) >> $GITHUB_OUTPUT
+          echo "$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.pull_request.base.sha }} ${{ github.sha }})" > /tmp/changed_files.tmp
 
       - name: Check if there are changes.
         run: |
           echo "No changes found in PR. This could also mean your branch is not updated, please rebase."
           exit 1
-        if: ${{ !(steps.changes.outputs.all) }}
+        if: ${{ (steps.changes.outputs.all == '0') }}
 
       - uses: actions/upload-artifact@v2
         with:
@@ -196,4 +196,4 @@ jobs:
       - name: Run Tests
         run: |
           bash $SCRIPT_DIR/run_tests.sh ${GITHUB_WORKSPACE}/changed_files.tmp
-        if: ${{ needs.changedfiles.outputs.all }}
+        if: ${{ (needs.changedfiles.outputs.all != '0') }}
