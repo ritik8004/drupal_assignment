@@ -69,7 +69,6 @@ jobs:
 
       - name: Debug Info
         run: |
-          echo "Owner: ${{ github.repository_owner }}"
           echo "Is Deployable: ${{ needs.changedfiles.outputs.deployable_changes }}"
 
   deploy:
