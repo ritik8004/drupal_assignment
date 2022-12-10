@@ -26,7 +26,7 @@ jobs:
       themes: ${{ steps.changes.outputs.themes }}
       react: ${{ steps.changes.outputs.react }}
       deployable_changes: ${{ steps.deployable_changes.outputs.deployable_changes }}
-      is_tag: ${{ contains(github.ref, 'refs/tags') }}
+      is_tag: ${{ steps.changes.outputs.is_tag }}
 
     steps:
       # Make sure we have some code to diff.
@@ -41,6 +41,7 @@ jobs:
         run: |
           echo themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
           echo react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
+          echo is_tag=${{ contains(github.ref, 'refs/tags') }}
 
       - name: Debug Info
         run: |
