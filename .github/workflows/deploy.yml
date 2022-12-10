@@ -44,6 +44,7 @@ jobs:
       - name: Check if changes are deployable
         id: deployable_changes
         run: |
+          set -x
           echo deployable_changes=false >> $GITHUB_OUTPUT
           if [[ ${{ contains(github.ref, 'refs/tags') == true }} ]]
           then
