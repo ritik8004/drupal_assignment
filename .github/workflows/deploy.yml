@@ -41,7 +41,7 @@ jobs:
         run: |
           echo themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
           echo react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
-          echo is_tag=${{ contains(github.ref, 'refs/tags') }}
+          echo is_tag=${{ contains(github.ref, 'refs/tags') }} >> $GITHUB_OUTPUT
 
       - name: Debug Info
         run: |
