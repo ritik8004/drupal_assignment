@@ -53,10 +53,17 @@ jobs:
         run: |
           echo "Is tag 1: ${{ contains(github.ref, 'refs/tags') }}"
           echo "Is tag 2: ${{ needs.changedfiles.outputs.is_tag }}"
+          # Check if we are deploying a tag or the file names match the list below.
+          if [[ ${{ needs.changedfiles.outputs.is_tag }} == true ]]
+          then
+            echo "It is a tag"
+          else
+            echo "It is not a tag"
+          fi
 
       - name: Check if changes are deployable
         id: deployable_changes
-        if: ${{ !(needs.changedfiles.outputs.is_tag) }}
+        if: ${{ needs.changedfiles.outputs.is_tag != 'true' }}
         run: |
           NAMES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
           echo "Changed files ${NAMES}"
@@ -185,4 +192,4 @@ jobs:
 
       - name: Deploy tag
         run: bash $SCRIPT_DIR/deploy_tag.sh
-        if: ${{ env.SSH_DEPLOYMENT_KEY && needs.changedfiles.outputs.is_tag }}
+        if: ${{ env.SSH_DEPLOYMENT_KEY && needs.changedfiles.outputs.is_tag == 'true' }}
