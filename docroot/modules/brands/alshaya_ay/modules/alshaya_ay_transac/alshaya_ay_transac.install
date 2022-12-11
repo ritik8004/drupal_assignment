@@ -14,7 +14,7 @@ function alshaya_ay_transac_update_9401() {
   // Configure ShareThis defaults.
   $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
   $services = $configFactory->get('service_option');
-  $services = "'Facebook:facebook','Instagram:instagram','Pinterest:pinterest'";
+  $services = "'Facebook:facebook','Instagram:instagram'";
   $configFactory->set('service_option', $services);
   // Save the changes.
   $configFactory->save();
@@ -95,7 +95,7 @@ function alshaya_ay_transac_install() {
     // Enable share this for Products.
     $configFactory->set('node_types.acq_product', 'acq_product');
     $services = $configFactory->get('service_option');
-    $services = "'Facebook:facebook','Instagram:instagram','Pinterest:pinterest'";
+    $services = "'Facebook:facebook','Instagram:instagram'";
     $configFactory->set('service_option', $services);
 
     // Save the changes.
