@@ -16,6 +16,14 @@ Run `make build` to start the project. Wait few seconds for the containers to st
 ## Opening Jenkins on browser
 Run `make open` or open the browser on `http://127.0.0.1:8080/`
 
+## Viewing the execution on Browser
+- Open Finder and click menu Go -> Connect to server
+- Comment out these two lines from `behat.yml`
+  - "--headless"
+  - "--disable-gpu"
+- Enter address `vnc://127.0.0.1:5901`
+- Run the jobs and observe the browser
+
 ## Technical information
 
 ### Pipelines syntax
@@ -34,3 +42,6 @@ https://www.jenkins.io/doc/book/pipeline/syntax/#stages
 - Move Nginx configurations to Jenkins or Appserver container and remove Nginx container
 - Use Configuration Matrix to run the multiple builds
 - Make it work with Lando url for local development
+- Provide a way to turn on debug on browser via parameter on job. This would call the rebuild command with
+  argument --debug. Alter the build command to automatically remove the healess/disable-gpu lines.
+
