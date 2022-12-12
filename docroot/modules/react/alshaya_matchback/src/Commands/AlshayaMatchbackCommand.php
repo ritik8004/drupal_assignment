@@ -10,7 +10,7 @@ use Drush\Commands\DrushCommands;
 /**
  * Command for enabling matchabck add to bag.
  */
-class MatchbackAddToBagCommands extends DrushCommands {
+class AlshayaMatchbackCommand extends DrushCommands {
 
   /**
    * Config factory.
@@ -66,11 +66,11 @@ class MatchbackAddToBagCommands extends DrushCommands {
    * @option show_view_options Whether to show view options button for matchback items.
    * @option use_matchback_cart_notification Whether to use matchback cart notification or default one
    *
-   * @aliases mvoe, matchback-view-options-enable
+   * @aliases matbe, matchback-add-to-bag-enable
    *
-   * @usage drush matchback-view-options --show_wishlist=true --change_matchback_color=false --show_view_options=true --use_matchback_cart_notification=false
+   * @usage drush matchback-add-to-bag-enable --show_wishlist=true --change_matchback_color=false --show_view_options=true --use_matchback_cart_notification=false
    *   Enable matchback add to bag with above options.
-   * @usage drush mvoe
+   * @usage drush matbe
    *   Enable matchback add to bag with default options.
    */
   public function enableMatchbackAddToBag(
@@ -92,7 +92,7 @@ class MatchbackAddToBagCommands extends DrushCommands {
         ->save();
     }
 
-    $this->configFactory->getEditable('alshaya_matchback.display_settings')
+    $this->configFactory->getEditable('alshaya_acm_product.display_settings')
       ->set('change_matchback_color', $options['change_matchback_color'] === '')
       ->set('use_matchback_cart_notification', (bool) $options['use_matchback_cart_notification'])
       ->set('display_mobile_matchback_add_to_bag_button', (bool) $options['show_view_options'])
@@ -106,11 +106,11 @@ class MatchbackAddToBagCommands extends DrushCommands {
    *
    * @command alshaya_matchback:disable-matchback-add-to-bag
    *
-   * @aliases mvod, matchback-view-options-disable
+   * @aliases matbd, matchback-add-to-bag-disable
    *
-   * @usage drush matchback-view-options-disable
+   * @usage drush matchback-add-to-bag-disable
    *   Disable matchback add to bag.
-   * @usage drush mvod
+   * @usage drush matbd
    *   Disable matchback add to bag.
    */
   public function disableMatchbackAddToBag() {
@@ -125,7 +125,7 @@ class MatchbackAddToBagCommands extends DrushCommands {
         ->save();
     }
 
-    $this->configFactory->getEditable('alshaya_matchback.display_settings')
+    $this->configFactory->getEditable('alshaya_acm_product.display_settings')
       ->set('change_matchback_color', TRUE)
       ->set('use_matchback_cart_notification', TRUE)
       ->set('display_mobile_matchback_add_to_bag_button', FALSE)
