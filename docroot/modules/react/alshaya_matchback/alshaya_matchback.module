@@ -82,7 +82,7 @@ function alshaya_matchback_alshaya_add_to_bag_feature_status_alter(&$add_to_bag_
   $route_params = \Drupal::routeMatch()->getParameters();
   if ($route_params->get('node')
     && $route_params->get('node')->bundle('acq_product')
-    && $acm_settings->get('display_crosssell')) {
+    && $acm_settings->get('show_crosssell_as_matchback')) {
     $add_to_bag_feature_status = TRUE;
   }
 }
