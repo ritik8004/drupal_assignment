@@ -1,0 +1,7 @@
+@include breakpoint($desktop) {
+  #block-welcomeuser {
+    h3 {
+      font-size: rem(14);
+    }
+  }
+}

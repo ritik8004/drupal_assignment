@@ -14,8 +14,10 @@
    */
   Drupal.alshayaXbCheckoutGaPush = function (geData, step) {
     try {
-      // Populate drupal settings with details from GE data.
-      drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
+      if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
+        // Populate drupal settings with details from GE data.
+        drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
+      }
       Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
     }
     catch (error) {
@@ -43,8 +45,8 @@
           "sku": product.SKU,
           "qty": product.Quantity,
           "name": product.ProductName,
-          "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
-          "finalPrice": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
+          "price": product.ProductPrices.MerchantTransaction.DiscountedPrice,
+          "finalPrice": product.ProductPrices.MerchantTransaction.DiscountedPrice,
         };
         cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
         productGtm.push(productGtmData);
@@ -55,11 +57,11 @@
       "cart_id": window.commerceBackend.getCartId(),
       "uid": drupalSettings.user.uid,
       "items_qty": cartItemsCount,
-      "cart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
-      "minicart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
+      "cart_total": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
+      "minicart_total": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
       "surcharge": {
-        "amount": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency,
-        "is_applied": (geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency > 0) ? true : false
+        "amount": geData.details.OrderPrices.MerchantTransaction.RemoteAreaSurchargeFee,
+        "is_applied": (geData.details.OrderPrices.MerchantTransaction.RemoteAreaSurchargeFee > 0) ? true : false
       },
       "shipping": {
         "type": geData.details.ShippingMethodType,
@@ -69,10 +71,10 @@
         "method": geData.OrderPaymentMethods
       },
       "totals": {
-        "subtotal_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
-        "base_grand_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
-        "base_grand_total_without_surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
-        "discount_amount": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
+        "subtotal_incl_tax": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
+        "base_grand_total": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
+        "base_grand_total_without_surcharge": geData.details.OrderPrices.MerchantTransaction.TotalProductsPrice,
+        "discount_amount": geData.details.OrderPrices.MerchantTransaction.TotalDiscountedProductsPrice,
         "surcharge": 0, // @todo we need to check whether global-e has this field or not
         "shipping_incl_tax": null // @todo we need to check whether global-e has this field or not
       },

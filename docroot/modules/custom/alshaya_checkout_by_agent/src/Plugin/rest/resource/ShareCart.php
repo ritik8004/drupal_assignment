@@ -311,13 +311,9 @@ class ShareCart extends ResourceBase {
     $key = $this->configFactory->get('alshaya_api.settings');
     $encryptedData = SecureText::encrypt(json_encode($data), $key->get('consumer_secret'));
 
+    $cart_url = '';
     if ($this->spcHelper->getCommerceBackendVersion() == 2) {
       $cart_url = Url::fromRoute('alshaya_checkout_by_agent.resume', [], ['absolute' => TRUE])->toString();
-    }
-    else {
-      $cart_url = $this->currentRequest->getSchemeAndHttpHost();
-      $cart_url .= _alshaya_spc_get_middleware_url();
-      $cart_url .= '/cart/smart-agent-cart-resume';
     }
 
     // Add the encrypted data in query string.

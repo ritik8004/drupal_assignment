@@ -1,0 +1,47 @@
+.return-confirmation-wrapper {
+  .refund-success-message {
+    font-family: $alshaya-thin;
+  }
+
+  .whats-next-section,
+  .return-details-section,
+  .return-items-wrapper {
+    .return-details-title,
+    .return-items-label,
+    .whats-next-title {
+      font-family: $alshaya-bold;
+    }
+  }
+
+  .order-details-button-wrapper {
+    background: $online-return-button-bg;
+
+    @include breakpoint($tablet) {
+      top: rem(-5);
+    }
+
+    @include breakpoint($desktop) {
+      top: rem(-10);
+    }
+  }
+
+  .return-details-section {
+    .return-confirmation-detail-wrapper {
+      @include breakpoint($tablet) {
+        padding: rem(24) rem(25);
+      }
+    }
+  }
+
+  .item-price,
+  .item-total-price,
+  .order__details--summary {
+    & > div,
+    & > span {
+      &.dark {
+        font-family: $alshaya-bold;
+        color: $order_detail_details_row_content;
+      }
+    }
+  }
+}

@@ -231,8 +231,9 @@ class SyncForm extends FormBase {
           $all_orphan_terms = $to_be_delete_orphans_terms = $this->productCategoriesManager->getOrphanCategories($response);
           // If there is any orphan term.
           if (!empty($to_be_delete_orphans_terms)) {
+            $orphan_categories = array_keys($to_be_delete_orphans_terms);
             // Allow other modules to skipping the deleting of terms.
-            $this->moduleHandler->alter('acq_sku_sync_categories_delete', $to_be_delete_orphans_terms);
+            $this->moduleHandler->alter('acq_sku_sync_categories_delete', $orphan_categories);
 
             // If there are orphans which we not deleting (due to alter hook).
             if ((is_countable($all_orphan_terms) ? count($all_orphan_terms) : 0) != (is_countable($to_be_delete_orphans_terms) ? count($to_be_delete_orphans_terms) : 0)) {

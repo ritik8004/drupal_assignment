@@ -33,3 +33,23 @@
     }
   }
 }
+
+.alias--cart {
+  .spc-main {
+    .spc-content {
+      @include breakpoint($desktop) {
+        width: 54.8%;
+      }
+    }
+
+    .spc-sidebar {
+      @include breakpoint($desktop) {
+        width: 41%;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
+    }
+  }
+}

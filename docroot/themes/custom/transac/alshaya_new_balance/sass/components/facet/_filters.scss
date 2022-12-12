@@ -3,7 +3,7 @@
     .view-header {
       &.search-count {
         font-size: rem(16) !important;
-        color: $primary_text;
+        color: $plp_search_count;
       }
     }
   }
@@ -111,16 +111,20 @@
 
 .show-all-filters-algolia,
 .show-all-filters {
-  font-size: rem(16);
-  color: $primary_text;
+  font-size: rem(14);
+  color: $plp_search_count;
+
+  &::before {
+    content: '';
+    background: url(#{$nb_theme_img_directory_path}/icons/all-filter.svg) no-repeat;
+    height: rem(22);
+    width: rem(22);
+  }
 
   @include breakpoint($only-mobile) {
     padding-#{$left}: 0;
     border: rem(1) solid $tertiary-border;
-
-    &::before {
-      #{$right}: 0;
-    }
+    color: $plp_filter_txt;
   }
 
   @include breakpoint($tablet) {
@@ -190,9 +194,11 @@
     justify-content: flex-start;
     padding: 0;
     background: none;
+    margin-bottom: rem(20);
 
     .filter-fixed-top & {
       top: rem(6);
+      z-index: 1;
     }
   }
 

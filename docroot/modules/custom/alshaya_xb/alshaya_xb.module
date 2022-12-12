@@ -5,7 +5,9 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\TypedData\Exception\ReadOnlyException;
 
 /**
  * Implements hook_page_attachments().
@@ -37,17 +39,38 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
   $ge_store_code = $settings[$language];
   $config = \Drupal::config('alshaya_xb.settings');
   $ge_js_src = $config->get('globale_js_url') ?? '';
+  // Used to pass the page type to associateCartToCustomer().
+  $page_type = '';
+  if ($route_name === 'alshaya_spc.checkout') {
+    $page_type = 'checkout';
+  }
 
   // Dynamic js to be added on every page.
+  // We need to wait for associateCartToCustomer() to be available
+  // to be called before showing the checkout page, so we will delay
+  // the call until the page is loaded.
   $js = "
      var geStoreCode = '$ge_store_code';
      var geStoreCodeInstance = document.location.hostname;
      (function () {
-       var s = document.createElement('script');
-       s.type = 'text/javascript';
-       s.async = true;
-       s.src = '$ge_js_src';
-       document.getElementsByTagName('head')[0].appendChild(s);
+       function addInlineScripts() {
+         var s = document.createElement('script');
+         s.type = 'text/javascript';
+         s.async = true;
+         s.src = '$ge_js_src';
+         document.getElementsByTagName('head')[0].appendChild(s);
+       };
+
+       if ('$page_type' !== 'checkout') {
+         addInlineScripts();
+         return;
+       }
+
+       window.addEventListener('DOMContentLoaded', (event) => {
+         window.commerceBackend.associateCartToCustomer('checkout').then((response) => {
+           addInlineScripts();
+         });
+       });
      })();";
 
   // Add inline script to the page bottom.
@@ -147,4 +170,48 @@ function alshaya_xb_alshaya_api_update_customer_api_request_alter(array &$reques
     && !empty($request_options['json']['customer']['addresses'])) {
     unset($request_options['json']['customer']['addresses']);
   }
+}
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_xb_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_fixed_price_field = \Drupal::config('alshaya_xb.sku_base_fields')->get('fields');
+  if ($alshaya_fixed_price_field) {
+    $fields = array_merge($fields, $alshaya_fixed_price_field);
+  }
+  else {
+    \Drupal::logger('alshaya_xb')->error('The config alshaya_xb.sku_base_fields is empty.');
+  }
+}
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
+  if (isset($product['extension']['xb_fixed_price'])) {
+    $fixed_prices = [];
+    foreach ($product['extension']['xb_fixed_price'] as $fixed_price) {
+      // If special price has value then use it with country code.
+      $fixed_prices[$fixed_price['country_code']] = $fixed_price['special_price'] ?? $fixed_price['price'];
+    }
+
+    try {
+      // Set json in fixed price attribute in sku.
+      $sku->get('attr_fixed_price')->setValue(json_encode($fixed_prices));
+    }
+    catch (ReadOnlyException $e) {
+      \Drupal::logger('alshaya_xb')->error('Error occurred while storing fixed price attribute value in sku. @error_message', [
+        '@error_message' => $e->getMessage(),
+      ]);
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_get_currency_code_alter().
+ */
+function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
+  $currency['xb']['en'] = 'AED';
+  $currency['xb']['ar'] = 'AED';
 }

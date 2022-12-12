@@ -8,9 +8,15 @@
     padding: rem(34);
 
     @include breakpoint($only-mobile) {
-      background-color: $spc-order-summary-totals-bg;
       padding-#{$left}: rem(16);
       padding-#{$right}: rem(28);
+    }
+  }
+
+  .promo-remove {
+    &.active {
+      top: rem(34);
+      #{$right}: rem(176);
     }
   }
 
@@ -29,6 +35,7 @@
   }
 
   .promo-submit {
+    font-size: rem(14);
     font-weight: 700;
     text-transform: capitalize;
   }
@@ -40,6 +47,20 @@
 
     .totals {
       background: $checkout-login-promo-bg;
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .spc-order-summary-block {
+    .block-content {
+      background: none;
+      padding-top: rem(36);
+      padding-bottom: rem(36);
+
+      .totals {
+        background: none;
+      }
     }
   }
 }

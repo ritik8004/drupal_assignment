@@ -39,6 +39,7 @@ function alshaya_nb_transac_rcs_rcs_handlebars_templates_alter(&$templates, $ent
 
   $templates['product.block.description'] = 'alshaya_nb_transac_rcs';
   $templates['product.block.description_details'] = 'alshaya_nb_transac_rcs';
+  $templates['product.block.short_description.pdp'] = 'alshaya_nb_transac_rcs';
   $templates['gallery.product.product_zoom'] = 'alshaya_nb_transac_rcs';
 }
 
@@ -72,5 +73,6 @@ function alshaya_nb_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$f
     'weight_text',
     'uk_size',
     'european_size',
+    'article_number',
   );
 }

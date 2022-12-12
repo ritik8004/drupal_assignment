@@ -8,8 +8,26 @@
   }
 }
 
-@include breakpoint($desktop) {
-  .cloudzoom {
+
+.cloudzoom {
+  @include breakpoint($desktop) {
+    @for $i from 1 through 6 {
+      &.thumbnail-count-#{$i} {
+        #lightSlider.pager-yes,
+        #lightSlider.pager-no {
+          padding: 0;
+        }
+      }
+    }
+  }
+
+  .cloudzoom__thumbnails {
+    @include breakpoint($desktop) {
+      width: rem(92);
+    }
+  }
+
+  @include breakpoint($desktop) {
     #cloud-zoom-wrap {
       text-align: unset;
 
@@ -26,7 +44,110 @@
     }
 
     &__herocontainer {
-      width: calc(100% - #{rem(126)});
+      width: calc(100% - #{rem(108)});
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    &__image {
+      .img-wrap {
+        height: auto;
+      }
+    }
+  }
+}
+
+#lightSlider {
+  @include breakpoint($desktop) {
+    height: rem(676);
+    list-style: none;
+  }
+
+  @include breakpoint($only-tablet) {
+    height: rem(86);
+  }
+
+  .slick-slide {
+    @include breakpoint($desktop) {
+      width: rem(86) !important;
+      height: rem(86) !important;
+      padding: 0;
+      margin-top: 0;
+      margin-bottom: rem(20);
+    }
+
+    @include breakpoint($tablet) {
+      overflow: hidden;
+      border: none;
+
+      img {
+        // We are preventing cropping as NB has 1:1, landscape and portrait images.
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      // Matching the width to height in CORE so the container for images is 1:1.
+      width: rem(102) !important;
+    }
+  }
+
+  .slick-current {
+    border: 0;
+
+    &::after {
+      content: '';
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+      height: rem(4);
+      background: $gallery_arrows_border;
+      #{$left}: 0;
+      bottom: 0;
+
+      @include breakpoint($only-tablet) {
+        #{$right}: 0;
+        margin: 0 auto;
+        width: 96%;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      border: 0 !important;
+    }
+  }
+
+  &.pager-yes {
+    @include breakpoint($only-tablet) {
+      padding: 0 rem(48);
+    }
+
+    .slick-next,
+    .slick-prev {
+      &::before {
+        font-size: rem(48);
+      }
+
+      #drupal-modal & {
+        html[lang=ar] & {
+          @include breakpoint($desktop) {
+            transform: rotate(0deg);
+          }
+        }
+      }
+    }
+
+    .slick-next {
+      @include breakpoint($desktop) {
+        bottom: rem(-12);
+      }
+    }
+
+    .slick-prev {
+      @include breakpoint($desktop) {
+        top: rem(-10) !important;
+      }
     }
   }
 }

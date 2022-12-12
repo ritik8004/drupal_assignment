@@ -2,7 +2,17 @@
  * @file
  * JS code to integrate with GTM.
  */
- (function (Drupal, dataLayer) {
+
+ (function ($, Drupal, dataLayer) {
+
+  Drupal.behaviors.alshayaHelloMember = {
+    attach: function (context) {
+      $('.hello-membership-terms .contact-us',context).once('helloMemberTermsConditions').on('click', function () {
+        Drupal.alshayaSeoGtmPusHmAutoEnrollClickContact();
+      });
+    }
+  };
+
   /**
    * This function is called when the click on the discount voucher link.
    */
@@ -11,8 +21,7 @@
     var voucherClickData = {
       event: 'hellomember',
       eventCategory: "memberOffer",
-      eventAction: "discountVoucher",
-      eventLabel: "voucher_link",
+      eventAction: "discountVoucher link click",
     }
     // Proceed only if dataLayer exists.
     if (dataLayer) {
@@ -185,4 +194,119 @@
     }
   }
 
-})(Drupal, dataLayer);
+  /**
+   * This function is called when landed on the points view page.
+   */
+  Drupal.alshayaSeoGtmPushPoints = function () {
+    // Prepare the points view data.
+    var pointsData = {
+      event: 'my accounts',
+      eventCategory: "my accounts",
+      eventAction: "points - view",
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(pointsData);
+    }
+  }
+
+  /**
+   * This function is called when click on the points view all link.
+   */
+  Drupal.alshayaSeoGtmPushPointsViewAll = function () {
+    // Prepare the points view all click data.
+    var pointsViewAll = {
+      event: 'my accounts',
+      eventCategory: "my accounts",
+      eventAction: "points - view all",
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(pointsViewAll);
+    }
+  }
+
+  /**
+   * This function is called when birthday pop-up load.
+   */
+  Drupal.alshayaSeoGtmPushBirthdayPopupView = function (voucherName) {
+    // Prepare the popup event data.
+    var popUpData = {
+      event: 'popup',
+      eventCategory: "popup",
+      eventAction: "hmspecialvoucher - show",
+      eventLabel: voucherName,
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(popUpData);
+    }
+  }
+
+  /**
+   * This function is called when birthday pop-up close.
+   */
+  Drupal.alshayaSeoGtmPushBirtdayPopupClose = function (voucherName) {
+    // Prepare the popup event data.
+    var popUpData = {
+      event: 'popup',
+      eventCategory: "popup",
+      eventAction: "hmspecialvoucher - close",
+      eventLabel: voucherName,
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(popUpData);
+    }
+  }
+
+  /**
+   * This function is called when birthday pop-up click.
+   */
+  Drupal.alshayaSeoGtmPushBirtdayPopupClick = function (voucherName) {
+    // Prepare the popup event data.
+    var birthdayPopupClick = {
+      event: 'popup',
+      eventCategory: "popup",
+      eventAction: "hmspecialvoucher - click",
+      eventLabel: voucherName,
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(birthdayPopupClick);
+    }
+  }
+
+  /**
+   * This function is called when hello member welcome pop up is displayed.
+   */
+  Drupal.alshayaSeoGtmPushHmAutoEnrollView = function () {
+    // Prepare the Popup Data.
+    var popupData = {
+      event: 'popup',
+      eventAction: 'hmAutoEnroll - view',
+      eventCategory: 'pop-up',
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(popupData);
+    }
+  }
+
+  /**
+   * This function is called when user clics on contact us on popup.
+   */
+  Drupal.alshayaSeoGtmPusHmAutoEnrollClickContact = function () {
+    // Prepare the contact us onclick data.
+    var contactUsClick = {
+      event: 'popup',
+      eventAction: 'hmAutoEnroll-click-contact_us',
+      eventCategory: 'pop-up',
+    }
+    // Proceed only if dataLayer exists.
+    if (dataLayer) {
+      dataLayer.push(contactUsClick);
+    }
+  }
+
+})(jQuery, Drupal, dataLayer);

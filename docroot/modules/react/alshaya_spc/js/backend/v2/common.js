@@ -44,6 +44,10 @@ window.commerceBackend.getCartId = () => {
   if (hasValue(resumeCartId)) {
     Drupal.removeItemFromLocalStorage('cart_data');
     Drupal.addItemInLocalStorage('cart_id', resumeCartId);
+
+    // Remove Add to cart PDP count.
+    Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
+
     Cookies.remove('resume_cart_id');
   }
 
@@ -152,7 +156,9 @@ window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
   StaticStorage.clear();
 
   Drupal.removeItemFromLocalStorage('cart_data');
-  Drupal.removeItemFromLocalStorage('add_to_cart_skus');
+
+  // Remove Add to cart PDP count.
+  Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method
@@ -601,6 +607,20 @@ const getProcessedCartData = async (cartData) => {
           }
           if (typeof item.extension_attributes.product_media[0] !== 'undefined') {
             data.items[itemKey].media = item.extension_attributes.product_media[0].file;
+          }
+
+          // Get eGift product name for GTM datalayer.
+          // Since, we need to pass data to GTM only in English translation
+          // we use 'topup_card_name_en' field for eGift card topup and for
+          // eGift card use 'item_name_en'.
+          // See [CORE-42487] for API updates reference.
+          if (hasValue(item.extension_attributes.is_topup)
+            && item.extension_attributes.is_topup === '1') {
+            data.items[itemKey].itemGtmName = hasValue(item.extension_attributes.topup_card_name_en)
+              ? item.extension_attributes.topup_card_name_en : '';
+          } else {
+            data.items[itemKey].itemGtmName = hasValue(item.extension_attributes.item_name_en)
+              ? item.extension_attributes.item_name_en : '';
           }
 
           // If eGift product is top-up card add check to the product item.

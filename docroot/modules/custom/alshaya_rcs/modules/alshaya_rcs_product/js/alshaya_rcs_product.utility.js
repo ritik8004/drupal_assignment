@@ -215,7 +215,11 @@ window.commerceBackend = window.commerceBackend || {};
         values: option.values.map(function (option_value) {
           return {
             label: option_value.store_label,
-            value_id: option_value.value_index
+            value_id: option_value.value_index,
+            // Adding this extra attribute because we are doing weight based
+            // sorting and we need a fixed attribute name for the index value.
+            // @see window.commerceBackend.getSortedAttributeValues().
+            value_index: option_value.value_index
           };
         })
       };
@@ -400,11 +404,13 @@ window.commerceBackend = window.commerceBackend || {};
         : getProductUrls(product.url_key);
       // @todo Add code for commented keys.
       info[variantSku] = {
+        id: variant.product.id,
         cart_image: window.commerceBackend.getCartImage(variant.product),
         cart_title: product.name,
         click_collect: window.commerceBackend.isProductAvailableForClickAndCollect(variantInfo),
         color_attribute: Drupal.hasValue(variantInfo.color_attribute) ? variantInfo.color_attribute : '',
         color_value: Drupal.hasValue(variantInfo.color) ? variantInfo.color : '',
+        fit: Drupal.hasValue(variantInfo.fit) ? variantInfo.fit : '',
         sku: variantInfo.sku,
         parent_sku: variantParentSku,
         configurableOptions: getVariantConfigurableOptions(product, variant),
@@ -559,14 +565,14 @@ window.commerceBackend = window.commerceBackend || {};
 
   function fetchAndProcessCustomAttributes() {
     var response = globalThis.RcsPhStaticStorage.get('product_options');
+
     // Process the data to extract what we require and format it into an object.
-    response.data.customAttributeMetadata
-    && Object.entries(response.data.customAttributeMetadata).forEach(function eachCustomAttribute([attrCode, options]) {
+    response && Object.entries(response).forEach(function eachCustomAttribute([attrCode, options]) {
       var allOptionsForAttribute = {};
       // Proceed only if `attribute_options` exists.
       if (Drupal.hasValue(options)) {
         options.forEach(function (optionValue) {
-          allOptionsForAttribute[optionValue.value] = optionValue.label;
+          allOptionsForAttribute[optionValue.value] = optionValue;
         })
       }
       // Set to static storage.
@@ -598,21 +604,9 @@ window.commerceBackend = window.commerceBackend || {};
    */
   function getSortedConfigurableAttributes(configurables) {
     var configurablesClone = JSON.parse(JSON.stringify(configurables));
-    var allAttributes = getAllCustomAttributes();
     Object.keys(configurables).forEach(function eachConfigurable(attributeName) {
-      var unsortedValues = {};
-      var sortedValues = [];
-      configurables[attributeName].values.forEach(function eachValue(value) {
-        if (Drupal.hasValue(value.value_id) && Drupal.hasValue(allAttributes[attributeName])) {
-          var key = Object.keys(allAttributes[attributeName]).indexOf(String(value.value_id));
-          unsortedValues[key] = value;
-        }
-      });
-
-      if (Drupal.hasValue(unsortedValues)) {
-        Object.keys(unsortedValues).sort().forEach(function eachElement(value, index) {
-          sortedValues.push(unsortedValues[value]);
-        });
+      var sortedValues = window.commerceBackend.getSortedAttributeValues(configurables[attributeName].values, attributeName);
+      if (Drupal.hasValue(sortedValues)) {
         configurablesClone[attributeName].values = sortedValues;
       }
     });
@@ -984,17 +978,15 @@ window.commerceBackend = window.commerceBackend || {};
    *   The attribute label.
    */
   window.commerceBackend.getAttributeValueLabel = function (attrName, attrValue) {
-    if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])) {
-      return staticDataStore['attrLabels'][attrName][attrValue];
+    if (!(Drupal.hasValue(staticDataStore['attrLabels'])
+      || Drupal.hasValue(staticDataStore['attrLabels'][attrName]))) {
+      fetchAndProcessCustomAttributes();
     }
-
-    fetchAndProcessCustomAttributes();
 
     // Return the label.
     if (Drupal.hasValue(staticDataStore['attrLabels'][attrName])
-      && Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue]))
-    {
-      return staticDataStore['attrLabels'][attrName][attrValue];
+      && Drupal.hasValue(staticDataStore['attrLabels'][attrName][attrValue])) {
+      return staticDataStore['attrLabels'][attrName][attrValue]['label'];
     }
 
     return '';
@@ -1505,6 +1497,41 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
   return combinations.attribute_sku[attribute][option_id][0];
 }
 
+
+/**
+ * Utility function to get the the weight key based sorted attributes.
+ *
+ * @param {array} optionValues
+ *   An array containing all the configurable attributes.
+ * @param {string} attributeName
+ *   The machine name of the option attribute.
+ *
+ * @returns {array}
+ *   Array containing the weight key based sorted configurable attributes.
+ */
+window.commerceBackend.getSortedAttributeValues = function getSortedAttributeValues(optionValues, attributeName) {
+  // Get the list of all the attributes and their values.
+  var allAttributes = getAllCustomAttributes();
+  var unsortedValues = {};
+  var sortedValues  = [];
+  optionValues.forEach(function eachValue(value) {
+    if (Drupal.hasValue(value.value_index) && Drupal.hasValue(allAttributes[attributeName])) {
+      var weight = allAttributes[attributeName][String(value.value_index)]
+        ? allAttributes[attributeName][String(value.value_index)].weight
+        : 99999;
+      unsortedValues[weight] = value;
+    }
+  });
+
+  if (Drupal.hasValue(unsortedValues)) {
+    Object.keys(unsortedValues).sort(function (a, b) { return a - b; }).forEach(function eachElement(value,) {
+      sortedValues.push(unsortedValues[parseInt(value, 10)]);
+    });
+  }
+
+  return sortedValues;
+}
+
   // Event listener to update static promotion.
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty or event data is not for product.
@@ -1533,6 +1560,8 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
           product.configurable_options.forEach(function eachConfigurableOption(option) {
             if (option.attribute_code === attribute
               && !sortedConfigurableAttributes.includes(attribute)) {
+              // Get the sorted attribute values.
+              option.values = window.commerceBackend.getSortedAttributeValues(option.values, option.attribute_code);
               sortedConfigurableOptions.push(option);
               sortedConfigurableAttributes.push(attribute);
             }
@@ -1543,6 +1572,8 @@ window.commerceBackend.getChildSkuFromAttribute = function getChildSkuFromAttrib
         // config in the end.
         product.configurable_options.forEach(function eachConfigurableOption(option) {
           if (!sortedConfigurableAttributes.includes(option.attribute_code)) {
+            // Get the sorted attribute values.
+            option.values = window.commerceBackend.getSortedAttributeValues(option.values, option.attribute_code);
             sortedConfigurableOptions.push(option);
             sortedConfigurableAttributes.push(option.attribute_code);
           }

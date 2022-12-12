@@ -205,6 +205,7 @@ export const triggerAddToCart = (
       bubbles: true,
       detail: {
         context: 'pdp',
+        productData,
         cartData,
       },
     });
@@ -235,6 +236,7 @@ export const getProductValues = (productInfo, configurableCombinations,
   let bigTickectProduct = false;
   let isProductBuyable = '';
   let eligibleForReturn = false;
+  let fit = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -269,6 +271,7 @@ export const getProductValues = (productInfo, configurableCombinations,
     priceRaw = productInfo[skuItemCode].priceRaw;
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;
+    fit = productInfo[skuItemCode].fit;
     labels = hasValue(productLabels) ? productLabels[skuItemCode] : [];
     stockQty = productInfo[skuItemCode].stockQty;
     firstChild = skuItemCode;
@@ -289,6 +292,7 @@ export const getProductValues = (productInfo, configurableCombinations,
           priceRaw = variantInfo.priceRaw;
           finalPrice = variantInfo.finalPrice;
           pdpGallery = variantInfo.rawGallery;
+          fit = hasValue(variantInfo.fit) ? variantInfo.fit : fit;
           labels = hasValue(productLabels) ? productLabels[variant] : [];
           stockQty = variantInfo.stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
@@ -328,7 +332,21 @@ export const getProductValues = (productInfo, configurableCombinations,
 
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
-  const additionalAttributes = skuItemCode ? productInfo[skuItemCode].additionalAttributes : [];
+  // The additional attribute sometimes is empty and if it's empty then convert
+  // it to array.
+  let additionalAttributes = {};
+  if (hasValue(fit)) {
+    additionalAttributes.fit = {
+      value: fit,
+      label: Drupal.t('FIT'),
+    };
+  }
+  if (hasValue(skuItemCode)
+    && hasValue(productInfo[skuItemCode])
+    && productInfo[skuItemCode].additionalAttributes) {
+    additionalAttributes = Object.assign(additionalAttributes,
+      productInfo[skuItemCode].additionalAttributes);
+  }
 
   const relatedProducts = [
     'crosssell',

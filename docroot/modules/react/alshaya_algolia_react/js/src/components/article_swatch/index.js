@@ -41,6 +41,7 @@ const ArticleSwatches = ({
         sku: swatch.article_sku_code,
         media: response[0].article_media_gallery,
         name: response[0].name,
+        gtm_name: response[0].gtm_attributes.name,
         url: Drupal.url(response[0].end_user_url),
         priceData: price,
         color: swatch.rgb_color,
@@ -63,19 +64,48 @@ const ArticleSwatches = ({
       <div className="swatches">
         {articleSwatches.slice(0, limit).map(
           (swatch) => (
-            <button
-              onClick={(e) => showSelectedSwatchProduct(e, swatch)}
-              type="button"
-              className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
+            <ArticleSwatch
               key={swatch.article_sku_code}
-              style={{ backgroundColor: swatch.rgb_color }}
+              swatch={swatch}
+              selectedSwatch={selectedSwatch}
               disabled={disabled[swatch.article_sku_code]}
+              showSelectedSwatchProduct={showSelectedSwatchProduct}
             />
           ),
         )}
         {swatchMoreText}
       </div>
     </div>
+  );
+};
+
+const ArticleSwatch = ({
+  swatch,
+  selectedSwatch,
+  disabled,
+  showSelectedSwatchProduct,
+}) => {
+  const colors = swatch.rgb_color.split('|');
+  if (colors.length > 1) {
+    return (
+      <li
+        type="button"
+        className={selectedSwatch === swatch.article_sku_code ? 'article-swatch dual-color-tone active' : 'article-swatch dual-color-tone'}
+        onClick={(e) => showSelectedSwatchProduct(e, swatch)}
+      >
+        <a href="#" style={{ backgroundColor: colors[0] }} />
+        <a href="#" style={{ backgroundColor: colors[1] }} />
+      </li>
+    );
+  }
+  return (
+    <button
+      onClick={(e) => showSelectedSwatchProduct(e, swatch)}
+      type="button"
+      className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
+      style={{ backgroundColor: swatch.rgb_color }}
+      disabled={disabled}
+    />
   );
 };
 

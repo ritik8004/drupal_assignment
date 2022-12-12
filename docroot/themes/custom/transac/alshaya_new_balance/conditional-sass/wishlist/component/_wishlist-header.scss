@@ -18,6 +18,14 @@ body {
       }
     }
 
+    .filter-fixed-top {
+      .sticky-filter-wrapper {
+        .wishlist-minicart-sticky-wrapper {
+          z-index: 11;
+        }
+      }
+    }
+
     .wishlist-icon {
       height: rem(24);
       width: rem(24);
@@ -41,16 +49,6 @@ body {
             margin-#{$right}: 0;
             margin-#{$left}: rem(30);
           }
-        }
-      }
-    }
-  }
-
-  .wishlist-enabled {
-    .filter-fixed-top {
-      .sticky-filter-wrapper {
-        .wishlist-minicart-sticky-wrapper {
-          z-index: 11;
         }
       }
     }

@@ -15,11 +15,13 @@ const removeCartIdFromStorage = () => {
   // to-do at right place.
   Drupal.removeItemFromLocalStorage('cart_data');
 
-  // Remove guest Cart for merge from storage.
-  Drupal.removeItemFromLocalStorage('guestCartForMerge');
+  // Remove Add to cart PDP count.
+  Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
 
   if (isUserAuthenticated()) {
     Drupal.addItemInLocalStorage('cart_id', window.authenticatedUserCartId);
+    // Remove guest Cart for merge from storage.
+    Drupal.removeItemFromLocalStorage('guestCartForMerge');
     return;
   }
 

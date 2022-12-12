@@ -1,0 +1,21 @@
+.account--dashboard.joinclubblock {
+  .account-content-wrapper {
+    &.has-join-club {
+      li {
+        @include breakpoint($desktop) {
+          margin-bottom: rem(22);
+
+          &:first-child {
+            margin-top: rem(12);
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-sidebar-first {
+  .my-account-nav a {
+    text-transform: capitalize;
+  }
+}

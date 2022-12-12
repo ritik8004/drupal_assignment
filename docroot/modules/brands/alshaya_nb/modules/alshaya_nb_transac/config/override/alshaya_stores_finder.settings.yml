@@ -1,0 +1,7 @@
+store_list_label: 'List of all New Balance Store'
+marker:
+  path: modules/brands/alshaya_nb/modules/alshaya_nb_transac/images/google-map-marker.svg
+  url: /modules/brands/alshaya_nb/modules/alshaya_nb_transac/images/google-map-marker.svg
+map_marker:
+  active: /modules/brands/alshaya_nb/images/nb-pin-active.svg
+  in_active: /modules/brands/alshaya_nb/images/nb-pin-inactive.svg

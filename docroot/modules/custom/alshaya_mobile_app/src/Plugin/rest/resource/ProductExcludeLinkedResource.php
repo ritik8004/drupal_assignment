@@ -381,7 +381,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     foreach ($media_contexts as $key => $context) {
       $data['media'][] = [
         'context' => $context,
-        'media' => $this->skuImagesManager->getProductMediaDataWithStyles($sku, $context),
+        'media' => $this->skuImagesManager->getProductMediaDataWithStyles($sku, $key),
       ];
     }
 
@@ -494,7 +494,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $this->cache['tags'] = Cache::mergeTags(
       $this->cache['tags'],
-      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags()
+      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags(),
+      $this->configFactory->get('alshaya_acm_product.settings')->getCacheTags()
     );
 
     return [

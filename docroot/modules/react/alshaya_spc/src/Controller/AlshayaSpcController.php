@@ -1046,8 +1046,6 @@ class AlshayaSpcController extends ControllerBase {
       'decimal_points' => $currency_config->get('decimal_points'),
     ];
 
-    $settings['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
-
     $product_config = $this->config('alshaya_acm_product.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $product_config->getCacheTags());
 

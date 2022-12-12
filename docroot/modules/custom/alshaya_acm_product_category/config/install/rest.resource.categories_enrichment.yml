@@ -2,11 +2,11 @@ langcode: en
 status: true
 dependencies:
   module:
+    - alshaya_acm_product_category
     - serialization
-    - alshaya_rcs_main_menu
-    - simple_oauth
-id: rcscategories
-plugin_id: rcscategories
+    - user
+id: categories_enrichment
+plugin_id: categories_enrichment
 granularity: method
 configuration:
   GET:

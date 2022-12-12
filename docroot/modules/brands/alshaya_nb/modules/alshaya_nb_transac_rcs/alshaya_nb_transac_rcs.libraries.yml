@@ -15,6 +15,11 @@ product.block.description_details:
   js:
     handlebars/product.block.description_details.handlebars: { }
 
+product.block.short_description.pdp:
+  version: 1.x
+  js:
+    handlebars/product.block.short_description.pdp.handlebars: { }
+
 gallery.product.product_zoom:
   version: 1.x
   js:

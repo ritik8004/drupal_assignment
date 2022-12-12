@@ -1,0 +1,18 @@
+#edit-billing-address,
+.checkout-login,
+.c-add-address,
+.alias--cart-checkout-payment,
+.c-address-book {
+  .address-book-address,
+  .profile-form {
+    .form-actions {
+      .cancel-button {
+        color: $address_edit_cancel_text;
+      }
+    }
+
+    .js-form-type-select label {
+      color: $primary_input_label;
+    }
+  }
+}

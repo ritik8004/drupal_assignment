@@ -32,10 +32,9 @@ function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$orph
   $all_dpt_page = alshaya_advanced_page_get_pages();
 
   foreach ($orphan_categories as $index => $tid) {
-    $dpt_nid = $all_dpt_page[$tid] ?? 0;
-
     // If department page node exists for the given term, don't delete it.
-    if (!empty($dpt_nid)) {
+    if (!empty($all_dpt_page[$tid])) {
+      $dpt_nid = $all_dpt_page[$tid];
       $dpt_node = Node::load($dpt_nid);
 
       if ($dpt_node instanceof Node) {

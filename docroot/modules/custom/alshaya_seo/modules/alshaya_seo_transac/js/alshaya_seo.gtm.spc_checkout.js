@@ -94,7 +94,7 @@
     dataLayer.push(data);
   };
 
-  Drupal.alshayaSeoSpc.checkoutEvent = function (cartData, step, paymentMethod = '') {
+  Drupal.alshayaSeoSpc.checkoutEvent = function (cartData, step, paymentMethod = '', pushAboveStep2 = true) {
     var checkoutPaymentPage = 'checkout payment page';
     var data = {
       language: drupalSettings.gtm.language,
@@ -121,6 +121,10 @@
     Object.assign(data.ecommerce.checkout, additionalCartData.checkout);
     delete additionalCartData.checkout;
     Object.assign(data, additionalCartData);
+    // Add aura common data in checkout steps gtm event.
+    if (typeof drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled) {
+      Object.assign(data, Drupal.alshayaSeoGtmPrepareAuraCommonDataFromCart());
+    }
     if (step === 2) {
       dataLayer.push(data);
 
@@ -137,7 +141,8 @@
 
     // 1st condition is triggered when we refresh checkout page with payment
     // method selected. Next conditions are specifically for step 3 and 4.
-    if ((cartData.payment.method && step === 2) || step === 3 || step === 4) {
+    // pushAboveStep2 is only set to false in case of Aura since its handled differently from Aura, see checkoutCartUpdate event.
+    if (((cartData.payment.method && step === 2) || step === 3 || step === 4) && pushAboveStep2) {
       // Make a clone of the object.
       var stepData = JSON.parse(JSON.stringify(data));
       stepData.ecommerce.checkout.actionField.step = (step === 4) ? 4 : 3;
@@ -193,6 +198,10 @@
         }
       }
       stepData.pageType = checkoutPaymentPage;
+      // Add Checkout Step 3 and 4 specific Aura details.
+      if (typeof drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled === true) {
+        Object.assign(stepData, Drupal.alshayaSeoGtmPrepareAuraCheckoutStepDataFromCart(cartData));
+      }
       dataLayer.push(stepData);
     }
   };
@@ -213,7 +222,14 @@
 
   document.addEventListener('checkoutCartUpdate', function (e) {
     var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-    Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step);
+    // We handle GTM checkout step 3 event from Aura fully when enabled.
+    // So only push upto checkout step 2 by setting pushAboveStep2 false.
+    if (typeof drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled === true) {
+      Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step, '', false);
+    }
+    else {
+      Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step);
+    }
   });
 
   document.addEventListener('deliveryMethodChange', function (e) {
@@ -255,6 +271,22 @@
     // Change hps_payment to egift_card.
     if (payment_method == 'hps_payment') {
       payment_method = 'egiftcard';
+    }
+
+    // If aura is enabled add aura payment method to checkoutOption.
+    if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled === true) {
+      // When full payment is made by AURA.
+      if (payment_method === 'aura_payment') {
+        payment_method = 'auraRedeemed';
+      } else {
+        var totals = window.spcStaticStorage.cart_raw.totals;
+        var auraPayment = totals.total_segments.filter(item => item.code === 'aura_payment');
+        var auraPaymentValue = Drupal.hasValue(auraPayment) ? auraPayment[0].value : 0;
+        // Check if partial payment made by Aura then concatenate.
+        if (auraPaymentValue > 0) {
+          payment_method = [payment_method, 'auraRedeemed'].join('_');
+        }
+      }
     }
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(payment_method, 3);
   });
@@ -304,5 +336,34 @@
       });
     }
   };
+
+  // When the schedule for online booking is changed, trigger GTM event to note
+  // that.
+  document.addEventListener('viewDeliveryScheduleEvent', function viewDeliveryScheduleEvent() {
+    // Prepare data.
+    var data = {
+      event: 'delivery_schedule',
+      eventCategory: 'delivery_schedule',
+      eventAction: 'view',
+      eventLabel: '',
+    };
+    dataLayer.push(data);
+  });
+
+  // When the schedule for online booking is changed, trigger GTM event to note
+  // that.
+  document.addEventListener('holdBookingSlotEvent', function holdBookingSlotEvent(e) {
+    var status = e.detail.data.status;
+    if (status) {
+      // Prepare data.
+      var data = {
+        event: 'delivery_schedule',
+        eventCategory: 'delivery_schedule',
+        eventAction: 'change',
+        eventLabel: '',
+      };
+      dataLayer.push(data);
+    }
+  });
 
 })(jQuery, Drupal, dataLayer);

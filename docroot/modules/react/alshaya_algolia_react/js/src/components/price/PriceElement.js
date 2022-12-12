@@ -40,7 +40,7 @@ const PriceItem = ({ amount, maxAmount }) => {
   );
 };
 
-const PriceElement = ({ amount, maxAmount }) => {
+const PriceElement = ({ amount, maxAmount, fixedPrice = '' }) => {
   if (typeof amount === 'undefined') {
     return (null);
   }
@@ -54,7 +54,7 @@ const PriceElement = ({ amount, maxAmount }) => {
 
   return (
     <span className="price-wrapper">
-      <div className="price">
+      <div className="price" data-fp={fixedPrice}>
         {drupalSettings.reactTeaserView.price.currencyPosition === 'before' ? priceParts : priceParts.reverse()}
       </div>
     </span>
