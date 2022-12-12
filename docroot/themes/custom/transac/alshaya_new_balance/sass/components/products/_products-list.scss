@@ -280,6 +280,11 @@
           }
         }
       }
+
+      // If slider for swatches is enabled, we center align the swatches.
+      &.slider-swatches {
+        justify-content: center;
+      }
     }
 
     .slick {
