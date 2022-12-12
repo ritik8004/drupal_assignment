@@ -219,8 +219,3 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/online-returns/online-returns.ltr.css: css/conditional-sass/online-returns/online-returns.ltr.css
-
-  alshaya_white_label/aura-loyalty-global:
-    css:
-      theme:
-        css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
