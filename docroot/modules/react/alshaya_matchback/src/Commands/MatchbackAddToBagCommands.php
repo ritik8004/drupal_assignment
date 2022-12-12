@@ -66,11 +66,11 @@ class MatchbackAddToBagCommands extends DrushCommands {
    * @option show_view_options Whether to show view options button for matchback items.
    * @option use_matchback_cart_notification Whether to use matchback cart notification or default one
    *
-   * @aliases mvoe, matchback-view-options-enable
+   * @aliases matbe, matchback-add-to-bag-enable
    *
-   * @usage drush matchback-view-options --show_wishlist=true --change_matchback_color=false --show_view_options=true --use_matchback_cart_notification=false
+   * @usage drush matchback-add-to-bag-enable --show_wishlist=true --change_matchback_color=false --show_view_options=true --use_matchback_cart_notification=false
    *   Enable matchback add to bag with above options.
-   * @usage drush mvoe
+   * @usage drush matbe
    *   Enable matchback add to bag with default options.
    */
   public function enableMatchbackAddToBag(
@@ -106,11 +106,11 @@ class MatchbackAddToBagCommands extends DrushCommands {
    *
    * @command alshaya_matchback:disable-matchback-add-to-bag
    *
-   * @aliases mvod, matchback-view-options-disable
+   * @aliases matbd, matchback-add-to-bag-disable
    *
-   * @usage drush matchback-view-options-disable
+   * @usage drush matchback-add-to-bag-disable
    *   Disable matchback add to bag.
-   * @usage drush mvod
+   * @usage drush matbd
    *   Disable matchback add to bag.
    */
   public function disableMatchbackAddToBag() {
