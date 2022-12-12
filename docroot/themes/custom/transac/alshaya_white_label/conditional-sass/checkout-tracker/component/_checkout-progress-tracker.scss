@@ -100,7 +100,7 @@
           transform: translateX(-50%) perspective(rem(1000));
           color: $cko-steps-label-txt;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translateX(50%) perspective(rem(1000));
           }
 
@@ -121,7 +121,7 @@
           text-align: center;
           padding-top: rem(2);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             padding-top: rem(4);
           }
 
@@ -168,9 +168,8 @@
           }
 
           &::after {
-            border: rem(1) solid $cko-steps-active-border;
-            content: '';
-            background: url('#{$base_theme_img_directory_path}/icons/done-state.svg') no-repeat;
+            content: "";
+            background: url("#{$base_theme_img_directory_path}/icons/done-state.svg") no-repeat;
             background-color: $cko-steps-active-bg;
             background-position: 60%;
           }
@@ -192,6 +191,13 @@
           }
         }
 
+        &.completed,
+        &.current {
+          &::after {
+            border: 0;
+          }
+        }
+
         &::after {
           content: "";
           position: absolute;
@@ -205,7 +211,7 @@
           border-radius: 50%;
           border: rem(1) solid $cko-steps-active-border;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translate(50%, -50%);
           }
 
