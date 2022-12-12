@@ -47,13 +47,6 @@
               font-size: rem(11);
             }
           }
-
-          &::after {
-            background: url("#{$brand_theme_img_directory_path}/icons/done-state.svg") no-repeat;
-            background-color: $cko-steps-active-bg;
-            background-position: 60%;
-            border-color: $cko-steps-active-bg;
-          }
         }
       }
     }
