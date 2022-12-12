@@ -12,7 +12,7 @@
       var $body = $('body');
 
       // Tracking promotion block in body footer. (E.g. Today's Offers block in VS)
-      $('.block-promo-panel-wrapper h3.promo-panel-label, .slick-slider button.slick-arrow').once('js-event').on('click', function () {
+      $('.block-promo-panel-wrapper h3.promo-panel-label, .block-promo-panel-wrapper .slick-slider button.slick-arrow').once('js-event').on('click', function () {
         // Clicked on block label.
         if ($(this).find('a.mobile-link').length > 0) {
           // Do not trigger if promo block is already displayed.
