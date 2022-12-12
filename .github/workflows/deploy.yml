@@ -7,7 +7,6 @@ on:
       - uat
       - master
       - alo-yoga-qa
-      - CORE-49894-github-actions-develop-3
   create:
 
 concurrency: deploy-${{ github.ref }}
