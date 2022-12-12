@@ -15,7 +15,8 @@
     "drupal/drupal-extension": "^4",
     "jakoch/phantomjs-installer": "*",
     "cawolf/behat-cucumber-json-formatter": "dev-10-screenshots-support",
-    "bex/behat-screenshot": "dev-58-dispatch-event"
+    "bex/behat-screenshot": "dev-58-dispatch-event",
+    "se/selenium-server-standalone": "3.141.*"
   },
   "config": {
     "bin-dir": "bin",
