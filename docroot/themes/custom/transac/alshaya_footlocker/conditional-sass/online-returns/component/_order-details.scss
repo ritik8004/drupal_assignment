@@ -23,6 +23,16 @@
         }
       }
     }
+
+    .print-return-label-wrapper {
+      .print-label-button {
+        color: $online-return-dark-txt;
+
+        &:hover {
+          color: $online-return-dark-txt;
+        }
+      }
+    }
   }
 }
 
