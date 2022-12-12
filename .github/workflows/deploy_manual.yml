@@ -43,10 +43,6 @@ jobs:
           echo "react=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/modules/react | xargs)" >> $GITHUB_OUTPUT
           echo "svg=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep .svg | xargs)" >> $GITHUB_OUTPUT
 
-      - name: Debug Info
-        run: |
-          echo "Number of files changed: ${{ env.changes }}"
-
       - name: Artifact Build
         if: ${{ env.changes > 0 && env.SSH_DEPLOYMENT_KEY }}
         uses: ./.github/actions/deploy_build

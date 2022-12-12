@@ -66,10 +66,6 @@ jobs:
             fi
           fi
 
-      - name: Debug Info
-        run: |
-          echo "Is Deployable: ${{ needs.changedfiles.outputs.deployable_changes }}"
-
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -95,10 +91,6 @@ jobs:
           echo CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }} >> $GITHUB_ENV
           echo CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }} >> $GITHUB_ENV
           echo CHANGED_ALL_FILES=$(echo ${{ inputs.CHANGED_ALL_FILES }} | wc -l | xargs) >> $GITHUB_ENV
-
-      - name: Debug Info
-        run: |
-          echo "Number of files changed: ${{ env.CHANGED_ALL_FILES }}"
 
       - name: Checkout
         uses: actions/checkout@v3
