@@ -92,7 +92,7 @@ class AlshayaMatchbackCommand extends DrushCommands {
         ->save();
     }
 
-    $this->configFactory->getEditable('alshaya_matchback.display_settings')
+    $this->configFactory->getEditable('alshaya_acm_product.display_settings')
       ->set('change_matchback_color', $options['change_matchback_color'] === '')
       ->set('use_matchback_cart_notification', (bool) $options['use_matchback_cart_notification'])
       ->set('display_mobile_matchback_add_to_bag_button', (bool) $options['show_view_options'])
@@ -125,7 +125,7 @@ class AlshayaMatchbackCommand extends DrushCommands {
         ->save();
     }
 
-    $this->configFactory->getEditable('alshaya_matchback.display_settings')
+    $this->configFactory->getEditable('alshaya_acm_product.display_settings')
       ->set('change_matchback_color', TRUE)
       ->set('use_matchback_cart_notification', TRUE)
       ->set('display_mobile_matchback_add_to_bag_button', FALSE)
