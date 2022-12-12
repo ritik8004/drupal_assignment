@@ -5,39 +5,37 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait for element "#block-page-title"
     When I am on "{spc_basket_page}"
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
 
   @cc @hd @checkout_com
   Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com)
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
-    And I wait 30 seconds
-    And I wait for the page to load
+    And I wait for element ".cart-link .quantity"
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
-    And I wait 30 seconds
-    And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
+    And I wait for element ".checkout-link.submit"
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
+    And I wait for AJAX to finish
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
+    And I wait 10 seconds
     And I wait for AJAX to finish
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And I click the anchor link ".checkout-link.submit" on page
-    And I wait 50 seconds
-    And I wait for AJAX to finish
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait 10 seconds
+    And I wait for element "#block-page-title"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
