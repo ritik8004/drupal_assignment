@@ -40,14 +40,6 @@ var config = {
           rootMode: "upward"
         }
       },
-      {
-        test: /\.css$/,
-        loader: "style-loader!css-loader"
-      },
-      {
-        test: /\.(woff|woff2|ttf|otf|eot|svg|gif)$/,
-        use: [ 'file-loader' ],
-      }
     ]
   },
   optimization: {
