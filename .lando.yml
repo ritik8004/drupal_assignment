@@ -45,8 +45,6 @@ services:
           # Mac user: MacOS specific path is here as the variable default value, nothing to do.
           source: "${LANDO_SSH_AUTH_SOCK:-/run/host-services/ssh-auth.sock}"
           target: /run/host-services/ssh-auth.sock
-          # https://devopscube.com/run-docker-in-docker/#:~:text=To%20run%20docker%20inside%20docker,sock%20as%20a%20volume.&text=Just%20a%20word%20of%20caution,privileges%20over%20your%20docker%20daemon.
-        - /var/run/docker.sock:/var/run/docker.sock
 #  Uncomment following lines and lines in proxy to test with Varnish.
 #  For most of the time we don't need it in local so kept commented.
 #  edge:
