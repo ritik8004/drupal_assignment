@@ -12,7 +12,7 @@
     let cartId = Drupal.getItemFromLocalStorage('cart_id');
     if (cartId != 'NA' && Boolean(window.drupalSettings.userDetails.customerId))  {
       let userCartId = Drupal.getItemFromLocalStorage('guestCartForMerge');
-      if (typeof userCartId !== 'undefined') {
+      if (Drupal.hasValue(userCartId) && Drupal.hasValue(userCartId.active_quote)) {
         cartId = userCartId.active_quote;
       }
     }
