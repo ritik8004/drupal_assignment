@@ -13,7 +13,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    if: ${{ github.repository_owner == 'marcelovani' && contains(github.ref, 'refs/heads') }}
+    if: ${{ github.repository_owner == 'acquia-pso' && contains(github.ref, 'refs/heads') }}
 
     container:
       image: devwithlando/php:8.0-fpm-4

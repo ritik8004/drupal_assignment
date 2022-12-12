@@ -99,7 +99,7 @@ jobs:
         run: |
           echo "We should not run actions in forks."
           exit 1
-        if: ${{ github.repository_owner != 'marcelovani' }}
+        if: ${{ github.repository_owner != 'acquia-pso' }}
 
       - name: echo changed files
         run: |
