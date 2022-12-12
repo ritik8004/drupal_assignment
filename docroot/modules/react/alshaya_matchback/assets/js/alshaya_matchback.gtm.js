@@ -1,5 +1,5 @@
 (function alshayaMatchback($, Drupal, drupalSettings) {
-  Drupal.behaviors.alshayaMatchbackBehavior = {
+  Drupal.behaviors.alshayaMatchbackGtmBehavior = {
     attach: function alshayaMatchbackBehavior(context) {
       $('article[data-vmode="matchback"]', context)
         .once('matchback-click-handler-attached')
