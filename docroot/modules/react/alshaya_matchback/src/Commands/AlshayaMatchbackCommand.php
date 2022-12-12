@@ -10,7 +10,7 @@ use Drush\Commands\DrushCommands;
 /**
  * Command for enabling matchabck add to bag.
  */
-class MatchbackAddToBagCommands extends DrushCommands {
+class AlshayaMatchbackCommand extends DrushCommands {
 
   /**
    * Config factory.
