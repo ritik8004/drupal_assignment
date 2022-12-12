@@ -2,7 +2,12 @@
   .gallery-wrapper {
     .slick-slider {
       .slick-slide {
-        min-height: rem(1);
+        min-height: auto;
+
+        img {
+          aspect-ratio: 1;
+          object-fit: contain;
+        }
       }
     }
   }
