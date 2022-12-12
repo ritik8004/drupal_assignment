@@ -173,38 +173,40 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
         : 0;
 
       $group_sub_category_enabled = $term->hasField('field_group_by_sub_categories')
-        ? $term->get('field_group_by_sub_categories')->getValue()
+        ? $term->get('field_group_by_sub_categories')->getString()
         : FALSE;
       if ($group_sub_category_enabled) {
         $sub_categories = $term->get('field_select_sub_categories_plp')->getValue();
         $subcategories = [];
         foreach ($sub_categories as $term_id) {
           $subcategory = $this->termStorage->load($term_id['value']);
-          $subcategory = $this->entityRepository->getTranslationFromContext($subcategory);
+          if ($subcategory instanceof TermInterface) {
+            $subcategory = $this->entityRepository->getTranslationFromContext($subcategory);
 
-          $data = [];
-          $data['tid'] = $subcategory->id();
+            $data = [];
+            $data['tid'] = $subcategory->id();
 
-          $data['title'] = $subcategory->get('field_plp_group_category_title')->getString();
-          if (empty($data['title'])) {
-            $data['title'] = $subcategory->label();
+            $data['title'] = $subcategory->get('field_plp_group_category_title')->getString();
+            if (empty($data['title'])) {
+              $data['title'] = $subcategory->label();
+            }
+
+            $data['weight'] = $subcategory->getWeight();
+            $data['description'] = $subcategory->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '';
+
+            $value = $subcategory->get('field_plp_group_category_img')->getValue()[0] ?? [];
+            $image = (!empty($value)) ? $this->fileStorage->load($value['target_id']) : NULL;
+            if ($image instanceof FileInterface) {
+              $data['image']['url'] = file_url_transform_relative(file_create_url($image->getFileUri()));
+              $data['image']['alt'] = $value['alt'];
+            }
+
+            // Get category level informartion.
+            // We use only EN lang-code for the category filters.
+            $data['category'] = $this->productCategoryPage->getCurrentSelectedCategory('en', $subcategory->id());
+
+            $subcategories[$subcategory->id()] = $data;
           }
-
-          $data['weight'] = $subcategory->getWeight();
-          $data['description'] = $subcategory->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '';
-
-          $value = $subcategory->get('field_plp_group_category_img')->getValue()[0] ?? [];
-          $image = (!empty($value)) ? $this->fileStorage->load($value['target_id']) : NULL;
-          if ($image instanceof FileInterface) {
-            $data['image']['url'] = file_url_transform_relative(file_create_url($image->getFileUri()));
-            $data['image']['alt'] = $value['alt'];
-          }
-
-          // Get category level informartion.
-          // We use only EN lang-code for the category filters.
-          $data['category'] = $this->productCategoryPage->getCurrentSelectedCategory('en', $subcategory->id());
-
-          $subcategories[$subcategory->id()] = $data;
         }
         uasort($subcategories, [Utility::class, 'weightArraySort']);
 

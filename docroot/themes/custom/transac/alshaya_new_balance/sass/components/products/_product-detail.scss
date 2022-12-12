@@ -132,6 +132,10 @@
     }
   }
 
+  .selected-text {
+    font-weight: 400;
+  }
+
   .select-buttons {
     li {
       span,
@@ -466,7 +470,8 @@
   .read-more-description-link-mobile {
     line-height: rem(18);
     text-decoration: underline;
-    margin-top: rem(8);
+    margin-top: rem(12);
+    font-weight: normal;
   }
 
   @include breakpoint($only-mobile) {
@@ -535,4 +540,34 @@
       }
     }
   }
+}
+
+.store-finder-form-wrapper {
+  .search-store {
+    input[type=text] {
+      border-color: $tertiary-border;
+    }
+  }
+}
+
+.click-collect-top-stores {
+  ul {
+    li {
+      border-color: $tertiary-border;
+    }
+  }
+}
+
+.click-collect-all-stores {
+  &.inline-modal-wrapper {
+    ul {
+      li {
+        border-color: $tertiary-border;
+      }
+    }
+  }
+}
+
+.other-stores-link {
+  border-color: $tertiary-border;
 }

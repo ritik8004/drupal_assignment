@@ -11,24 +11,20 @@
   <div class="product-desc-wrapper no--mobile">
     <div class="product-details">{{t 'Product Details' }}</div>
     <div class="product-details-desc">
-        {{#if description.sku }}
+        {{#if description.article_number }}
           <div class="product-sku-title">{{t 'Style' }}</div>
           <div class="product-sku-id">
             {{ description.article_number }}
           </div>
         {{/if}}
-        {{#if description.weight }}
-          <p>{{ description.weight }}</p>
-        {{/if}}
         <div class="product-desc-value">
-          {{#if description.primary_material }}
-            <p>{{ description.primary_material }}</p>
-          {{/if}}
-          {{#if description.technologies }}
-            <p>{{ description.technologies }}</p>
-          {{/if}}
+          <ul class="additional-desc">
+            {{#if description.weight }}
+              <li>{{ description.weight }}</li>
+            {{/if}}
+          </ul>
           {{#if description.feature_bullets }}
-            <p>{{{description.feature_bullets}}}</p>
+            {{{ description.feature_bullets }}}
           {{/if}}
         </div>
     </div>

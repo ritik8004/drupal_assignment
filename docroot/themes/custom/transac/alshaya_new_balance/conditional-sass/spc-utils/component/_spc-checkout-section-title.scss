@@ -59,3 +59,26 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .alias--cart {
+    .spc-sidebar {
+      .spc-promo-code-block,
+      .spc-order-summary-block {
+        .spc-checkout-section-title {
+          text-align: $left;
+          padding-right: rem(16);
+          padding-left: rem(16);
+          padding-bottom: 0;
+        }
+      }
+
+      .spc-promo-code-block {
+        .spc-checkout-section-title {
+          font-family: $alshaya-bold;
+          padding-top: rem(24);
+        }
+      }
+    }
+  }
+}
