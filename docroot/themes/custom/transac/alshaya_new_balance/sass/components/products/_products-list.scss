@@ -280,11 +280,6 @@
           }
         }
       }
-
-      // If slider for swatches is enabled, we center align the swatches.
-      &.slider-swatches {
-        justify-content: center;
-      }
     }
 
     .slick {
@@ -419,6 +414,18 @@
     &.view-search {
       padding-left: 0;
       padding-right: 0;
+    }
+  }
+
+  .c-plp,
+  .block-alshaya-algolia-react-autocomplete {
+    .c-products__item {
+      .swatches {
+        // If slider for swatches is enabled, we center align the swatches.
+        &.slider-swatches {
+          justify-content: center;
+        }
+      }
     }
   }
 }
