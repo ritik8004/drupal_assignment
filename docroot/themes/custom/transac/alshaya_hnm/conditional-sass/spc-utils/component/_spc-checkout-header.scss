@@ -10,5 +10,11 @@
         height: 2.77rem;
       }
     }
+
+    a {
+      @include breakpoint($tablet) {
+        text-align: center;
+      }
+    }
   }
 }

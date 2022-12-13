@@ -25,6 +25,14 @@
     }
   }
 
+  .return-details-section {
+    .return-confirmation-detail-wrapper {
+      @include breakpoint($tablet) {
+        padding: rem(24) rem(25);
+      }
+    }
+  }
+
   .item-price,
   .item-total-price,
   .order__details--summary {

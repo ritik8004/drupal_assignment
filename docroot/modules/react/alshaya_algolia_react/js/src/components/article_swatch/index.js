@@ -64,19 +64,48 @@ const ArticleSwatches = ({
       <div className="swatches">
         {articleSwatches.slice(0, limit).map(
           (swatch) => (
-            <button
-              onClick={(e) => showSelectedSwatchProduct(e, swatch)}
-              type="button"
-              className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
+            <ArticleSwatch
               key={swatch.article_sku_code}
-              style={{ backgroundColor: swatch.rgb_color }}
+              swatch={swatch}
+              selectedSwatch={selectedSwatch}
               disabled={disabled[swatch.article_sku_code]}
+              showSelectedSwatchProduct={showSelectedSwatchProduct}
             />
           ),
         )}
         {swatchMoreText}
       </div>
     </div>
+  );
+};
+
+const ArticleSwatch = ({
+  swatch,
+  selectedSwatch,
+  disabled,
+  showSelectedSwatchProduct,
+}) => {
+  const colors = swatch.rgb_color.split('|');
+  if (colors.length > 1) {
+    return (
+      <li
+        type="button"
+        className={selectedSwatch === swatch.article_sku_code ? 'article-swatch dual-color-tone active' : 'article-swatch dual-color-tone'}
+        onClick={(e) => showSelectedSwatchProduct(e, swatch)}
+      >
+        <a href="#" style={{ backgroundColor: colors[0] }} />
+        <a href="#" style={{ backgroundColor: colors[1] }} />
+      </li>
+    );
+  }
+  return (
+    <button
+      onClick={(e) => showSelectedSwatchProduct(e, swatch)}
+      type="button"
+      className={selectedSwatch === swatch.article_sku_code ? 'article-swatch active' : 'article-swatch'}
+      style={{ backgroundColor: swatch.rgb_color }}
+      disabled={disabled}
+    />
   );
 };
 

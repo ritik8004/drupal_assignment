@@ -1,0 +1,221 @@
+.return-requests-wrapper {
+  .products-list-wrapper,
+  .refund-details-wrapper {
+    .select-items-label,
+    .refund-detail-label {
+      margin-top: rem(9);
+      padding: rem(15) rem(12);
+      font-size: rem(18);
+      line-height: 1.22;
+      font-family: $vs-bentonsans-medium;
+      border-radius: rem(3);
+
+      @include breakpoint($tablet) {
+        margin-top: rem(12);
+        padding: rem(15) rem(32);
+      }
+
+      .select-items-header,
+      .refund-detail-header {
+        &::before {
+          #{$right}: 0;
+
+          @include breakpoint($tablet) {
+            #{$right}: rem(14);
+          }
+        }
+      }
+    }
+  }
+
+  .products-list-wrapper {
+    .item-list-wrapper {
+      &:first-child {
+        .items-table {
+          border-top: none;
+        }
+      }
+    }
+
+    .items-table {
+      margin-bottom: 0;
+      border-bottom: 0;
+      border-top: 1px solid $content_pagetitle_border;
+
+      .order-item-row {
+        .order__details--summary {
+          padding-bottom: 0;
+          padding-#{$left}: rem(16);
+
+          @include breakpoint($desktop) {
+            padding-#{$right}: 0;
+          }
+
+          .item-name {
+            color: $online-return-dark-text;
+            font-size: rem(14);
+            line-height: 1.29;
+          }
+
+          .item-quantity {
+            margin-bottom: 0;
+          }
+        }
+
+        .item-total-price {
+          padding-top: rem(12);
+          padding-#{$left}: rem(16);
+
+          @include breakpoint($tablet) {
+            padding-top: rem(24);
+          }
+
+          .price {
+            color: $online-return-dark-text;
+            font-size: rem(14);
+            line-height: 1.29;
+
+            .price-currency.suffix {
+              margin-#{$right}: rem(6);
+            }
+          }
+        }
+
+        .item-price {
+          @include breakpoint($desktop-wide) {
+            padding-#{$right}: rem(48);
+          }
+        }
+      }
+    }
+
+    .return-address-title {
+      @include breakpoint($only-mobile) {
+        margin-bottom: rem(4) !important;
+      }
+    }
+  }
+
+  .continue-button-wrapper,
+  .confirm-return-button-wrapper {
+    button {
+      span {
+        font-family: $vs-bentonsans-medium;
+        border-radius: rem(3);
+      }
+
+      &[disabled] {
+        span {
+          color: $online-return-disabled-txt;
+        }
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: rem(32);
+      }
+    }
+  }
+
+  .refund-details-wrapper {
+    .return-address-wrapper {
+      // Core theme !important is used so using here
+      .return-address-title {
+        @include breakpoint($only-mobile) {
+          margin-bottom: rem(4) !important;
+        }
+      }
+
+      .return-address-desc {
+        margin-bottom: rem(16);
+
+        @include breakpoint($tablet) {
+          margin-bottom: 0;
+        }
+      }
+
+      .return-address-details {
+        .address-line-content,
+        .spc-phone-number {
+          margin-bottom: 0;
+        }
+      }
+
+      .customer-name {
+        font-family: $vs-bentonsans-medium;
+        margin-bottom: rem(4);
+      }
+    }
+
+    .refund-method-wrapper,
+    .refund-amount-wrapper,
+    .return-collection-wrapper,
+    .return-address-wrapper {
+      padding: rem(28) 0 0 0;
+
+      @include breakpoint($tablet) {
+        padding-left: rem(32);
+        padding-right: rem(32);
+      }
+    }
+
+    .Collapsible__contentInner {
+      >div:first-child {
+        margin-top: 0;
+      }
+
+      >div:nth-child(2n) {
+        margin-bottom: rem(27);
+
+        @include breakpoint($tablet) {
+          margin-bottom: rem(48);
+        }
+      }
+    }
+
+    div[class$="-title"] {
+      margin-bottom: rem(16);
+
+      @include breakpoint($tablet) {
+        margin-bottom: 0;
+      }
+    }
+
+    .refund-method-wrapper {
+      padding-bottom: 0;
+
+      @include breakpoint($tablet) {
+        padding-top: rem(36);
+      }
+
+      .method-listing-label {
+        margin-bottom: rem(20);
+
+        @include breakpoint($tablet) {
+          margin-bottom: rem(24);
+        }
+      }
+
+      .method-wrapper {
+        .card-detail {
+          margin-#{$left}: rem(18);
+        }
+      }
+
+      .refund-message {
+        margin-top: rem(16);
+
+        @include breakpoint($tablet) {
+          margin-top: rem(20);
+        }
+      }
+    }
+
+    .refund-amount-wrapper,
+    .return-collection-wrapper,
+    .return-address-wrapper {
+      @include breakpoint($tablet) {
+        padding-top: rem(48);
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <?php
-// phpcs:ignoreFile
+// @codingStandardsIgnoreFile
 
 require_once 'common.php';
 

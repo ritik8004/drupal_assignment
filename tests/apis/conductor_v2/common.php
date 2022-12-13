@@ -319,3 +319,23 @@ function update_queue_status($site_id, bool $status = FALSE) {
 function purge_queue($site_id) {
   return invoke_api('config/site/' . $site_id . '/queue/purge', 'POST');
 }
+
+/**
+ * Wrapper function to get first and last values.
+ *
+ * @param string $conductor_env
+ *   Array key from conductor.php file.
+ *
+ * @return array
+ *   Array containing two required values.
+ */
+function get_brand_country_and_env(string $conductor_env): array {
+  $info = explode('_', $conductor_env);
+
+  // Get the first and last values.
+  // Support cases like wekw_sit_dev2.
+  $country_brand = $info[0];
+  $base_env = end($info);
+
+  return [$country_brand, $base_env];
+}

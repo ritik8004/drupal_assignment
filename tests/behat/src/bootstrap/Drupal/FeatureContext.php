@@ -51,6 +51,9 @@ class FeatureContext extends CustomMinkContext
       '.block-content--marketing-popup',
       '.exponea-subbox-banner',
       '.exponea-subbox-subscription-dialog',
+      '.subbox-banner-backdrop',
+      '.subbox-banner',
+      '.subbox-wrap',
     ];
 
     try {
@@ -2577,13 +2580,11 @@ JS;
     if ($empty_delivery_info !== null) {
       $empty_delivery_info->click();
       $this->iWaitForAjaxToFinish();
-      $this->iWaitSeconds('20');
-      $this->theElementShouldExist('.spc-cnc-stores-list-map');
-      $this->iWaitSeconds('50');
+      $this->iWaitForElement('.spc-cnc-stores-list-map');
       $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
       $this->iWaitForAjaxToFinish();
-      $this->iWaitSeconds('20');
       $page->find('css', 'button.select-store')->click();
+      $this->iWaitForElement('#click-and-collect-selected-store');
       $script = <<<JS
         jQuery("input#fullname").val("Test User");
         var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
@@ -2603,7 +2604,7 @@ JS;
       }
       $page->find('css', 'button#save-address')->click();
       $this->iWaitForAjaxToFinish();
-      $this->iWaitSeconds('20');
+      $this->iWaitForElement('.delivery-information-preview');
     }
     $this->theElementShouldExist('.delivery-information-preview');
   }
@@ -3081,5 +3082,16 @@ JS;
     $selector = addslashes($selector);
     $value = addslashes($value);
     $session->executeScript("jQuery('$selector').val('$value').trigger('change')");
+  }
+
+  /**
+   *
+   * @Given /^I edit the page$/
+   */
+  public function iEditPage() {
+    $edit = $this->getSession()
+      ->getPage()
+      ->find('css', "#block-local-tasks ul li a[href$= 'edit']");
+    $edit->click();
   }
 }

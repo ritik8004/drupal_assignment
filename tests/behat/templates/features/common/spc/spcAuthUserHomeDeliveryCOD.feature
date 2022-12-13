@@ -3,8 +3,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 10 seconds
-    Then I should be on "/user" page
+    And I wait for element "#block-page-title"
     When I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
@@ -17,10 +16,10 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -32,7 +31,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "checkout/confirmation" page
@@ -80,10 +79,10 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -96,7 +95,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
@@ -146,10 +145,10 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock #cart_notification div.matchback-cart-notification-close" element
     And I wait 10 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -162,7 +161,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
@@ -183,10 +182,10 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock #cart_notification div.matchback-cart-notification-close" element
     And I wait 10 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -202,7 +201,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "checkout/confirmation" page

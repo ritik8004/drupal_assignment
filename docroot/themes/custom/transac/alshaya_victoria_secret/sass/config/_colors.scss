@@ -109,6 +109,8 @@ $_grey_two: #f3f3f3;
 $_pink_one: #636363;
 $_grey_three: #e1e1e1;
 $_grey_four: #f5f5f6;
+$_grey_five: rgba(34, 29, 29, 0.07);
+$_grey_six: #958f8f;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1229,3 +1231,28 @@ $rr-switchOn-active-txt: $matterhorn;
 // Advanced Page components.
 $advanced-page-accordion-active-title: $mothercare-black;
 $advanced-page-banner-bg: $_egift_landing_page_banner_bg;
+
+// Online Returns
+$content_pagetitle_border: $light-orange;
+$online-return-light-text: $zambezi;
+$online-return-dark-text: $black;
+$online-return-bg: $_grey_four;
+$online-return-button-delievered-text: $vanilla;
+$online-return-dark-bg: $brilliant-rose;
+$online-return-label-txt: $black;
+$online-return-detail-bg: $vanilla;
+$online-return-select-txt-color: $zambezi;
+$online-return-select-bg: $cultured;
+$online-return-request-button-bg: $_grey_five;
+$online-return-disable-button-bg: $cultured;
+$online-return-steps-label-txt: $matterhorn;
+$online-return-button-bg: $brilliant-rose;
+$online-return-refund-label-inactive-bg: $cultured;
+$online-return-disabled-txt: $_grey_six;
+$online-return-refund-grey-txt: $zambezi;
+$online-return-success-msg-txt: $vanilla;
+$online-return-conf-label-txt: $black;
+$online-return-confirmation-border: $light-orange;
+$online-return-confirmation-note-txt: $zambezi;
+$online-return-order-detail-btn-txt: $matterhorn;
+$online-return-ineligible-label-bg: $red-error;

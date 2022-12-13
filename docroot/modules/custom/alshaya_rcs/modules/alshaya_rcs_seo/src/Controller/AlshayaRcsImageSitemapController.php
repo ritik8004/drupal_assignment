@@ -4,7 +4,6 @@ namespace Drupal\alshaya_rcs_seo\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
-use Drupal\Core\Site\Settings;
 
 /**
  * Class Alshaya Rcs Image Sitemap Controller.
@@ -19,7 +18,7 @@ class AlshayaRcsImageSitemapController extends ControllerBase {
     $config = $this->config('alshaya_rcs_seo.settings');
     $sitemap_domain = $config->get('sitemap_domain_to_use');
     if ($sitemap_domain == 'magento') {
-      $sitemap_domain_url = Settings::get('alshaya_api.settings')['magento_host'];
+      $sitemap_domain_url = $this->config('alshaya_api.settings')->get('magento_host');
     }
     else {
       global $base_url;

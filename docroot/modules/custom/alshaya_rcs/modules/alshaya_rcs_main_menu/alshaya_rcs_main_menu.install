@@ -5,6 +5,30 @@
  * Functions around module install.
  */
 
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Delete rcs categories resource and permissions.
+ */
+function alshaya_rcs_main_menu_update_9401() {
+  // Deleting the rcs categories rest config.
+  \Drupal::configFactory()->getEditable('rest.resource.rcscategories')->delete();
+  // Disable the resource related permissions.
+  $role = Role::load('anonymous');
+  if ($role->hasPermission('restful get rcscategories')) {
+    $role->revokePermission('restful get rcscategories');
+  }
+  $role->save();
+
+  $role = Role::load('authenticated');
+  if ($role->hasPermission('restful get rcscategories')) {
+    $role->revokePermission('restful get rcscategories');
+  }
+  $role->save();
+}
+
 /**
  * Get list of blocks which needs to be enabled/disabled.
  *

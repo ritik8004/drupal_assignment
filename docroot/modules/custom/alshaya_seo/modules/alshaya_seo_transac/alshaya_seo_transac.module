@@ -116,6 +116,13 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       }
     }
 
+    // Add gtm library for aura if feature is enabled.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_aura_react')) {
+      if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled()) {
+        $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_aura';
+      }
+    }
+
     // Settings from the setting form for the module.
     $seo_transac_settings = \Drupal::config('alshaya_seo_transac.settings');
     $page['#attached']['drupalSettings']['gtm']['productImpressionDefaultItemsInQueue'] = $seo_transac_settings->get('product_impressions_default_items_in_queue');
@@ -353,6 +360,9 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       }
 
       $data_layer['event'] = 'purchaseSuccess';
+      $data_layer['with_delivery_schedule'] = !empty($order['extension']['hfd_booking_information']['is_hfd_booking_order'])
+      ? 'yes'
+      : 'no';
       $data_layer['ecommerce'] = [
         'currencyCode' => $gtm_manager->getGtmCurrency(),
         'purchase' => [

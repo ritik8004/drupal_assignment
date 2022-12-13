@@ -147,16 +147,15 @@ libraries-override:
       theme:
         css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css: css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css
 
-  alshaya_white_label/egift-card-checkout:
-    css:
-      theme:
-        css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css
-
   alshaya_white_label/egift-myaccount:
     css:
       theme:
         css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css: css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css
 
+  alshaya_white_label/egift-card-checkout:
+    css:
+      theme:
+        css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css
   alshaya_white_label/megamenu-fullwidth-layout:
     css:
       theme:

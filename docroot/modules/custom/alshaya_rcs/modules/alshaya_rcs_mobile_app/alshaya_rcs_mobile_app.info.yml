@@ -1,0 +1,7 @@
+name: Alshaya RCS Mobile App
+type: module
+description: Mobile app overrides for RCS.
+core_version_requirement: ^9
+dependencies:
+  - alshaya_mobile_app:alshaya_mobile_app
+  - alshaya_rcs:alshaya_rcs

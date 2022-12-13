@@ -335,18 +335,17 @@ export const getProductValues = (productInfo, configurableCombinations,
   // The additional attribute sometimes is empty and if it's empty then convert
   // it to array.
   let additionalAttributes = {};
-  if (hasValue(skuItemCode)
-    && hasValue(productInfo[skuItemCode])
-    && productInfo[skuItemCode].additionalAttributes) {
-    additionalAttributes = Object.assign(additionalAttributes,
-      productInfo[skuItemCode].additionalAttributes);
-  }
-
   if (hasValue(fit)) {
     additionalAttributes.fit = {
       value: fit,
       label: Drupal.t('FIT'),
     };
+  }
+  if (hasValue(skuItemCode)
+    && hasValue(productInfo[skuItemCode])
+    && productInfo[skuItemCode].additionalAttributes) {
+    additionalAttributes = Object.assign(additionalAttributes,
+      productInfo[skuItemCode].additionalAttributes);
   }
 
   const relatedProducts = [
