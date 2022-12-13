@@ -7,6 +7,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     mobileMenuMaxDepth,
     highlightTiming,
     mobileMenuLayout,
+    showL2InSeparateColumn,
   } = settings;
 
   // Clone the input data.
@@ -37,7 +38,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     case 'default':
     default:
       // Distribute L3 items into columns.
-      menuItems = splitIntoCols(menuItems, maxNbCol, idealMaxColLength);
+      menuItems = splitIntoCols(menuItems, maxNbCol, idealMaxColLength, showL2InSeparateColumn);
   }
 
   let auraEnabled = Drupal.hasValue(drupalSettings.aura)
@@ -188,10 +189,13 @@ const processData = function (data, maxLevel, mobileMenuMaxDepth) {
  * @param {integer} maxRows
  *   Max number of rows.
  *
+ * @param {boolean} showL2InSeparateColumn
+ *   show L2 items in separate columns.
+ *
  * @return {object}
  *   The menu data distributed into columns.
  */
-function splitIntoCols(data, maxCols = 6, maxRows = 10) {
+function splitIntoCols(data, maxCols = 6, maxRows = 10, showL2InSeparateColumn) {
   // Initialize flags.
   let reprocess, col, col_total, columns = null;
   // Convert arrays to objects;
@@ -201,37 +205,15 @@ function splitIntoCols(data, maxCols = 6, maxRows = 10) {
     // Reset ajustableMaxRows before looping L2 items.
     let adjustableMaxRows = maxRows;
     if (typeof value.children !== 'undefined' && Object.keys(value.children).length) {
-      // Loop L2 items.
-      do {
-        // Reset flags;
+      // Divide items in separate columns.
+      if (showL2InSeparateColumn) {
         columns = [];
-        col_total = 0;
         col = 0;
-        reprocess = false;
 
-        // Loop L2 items.
         for (const [key, child] of Object.entries(value.children)) {
-          // Calculate the rows needed for L3 items + 2
-          // 2 means L2 item + one blank line for spacing).
-          l2_cost = 2 + Object.keys(child.children).length;
-
-          // If we are detecting a longer rows than the expected size
-          // we iterate with new max.
-          if (l2_cost > adjustableMaxRows) {
-            adjustableMaxRows = l2_cost;
-            reprocess = true;
-            break;
-          }
-
-          if (col_total + l2_cost > adjustableMaxRows) {
-            col++;
-            col_total = 0;
-          }
-
-          // If we have too many columns we try with more items per column.
-          if (col >= adjustableMaxRows) {
-            adjustableMaxRows++;
-            reprocess = true;
+          // Check if the column length is more than we support and break. Thus
+          // we will endup showing maximum columns defined in settings.
+          if (col >= maxCols) {
             break;
           }
 
@@ -239,11 +221,57 @@ function splitIntoCols(data, maxCols = 6, maxRows = 10) {
             columns[col] = [];
           }
 
-          // Push L3 items into column.
+          // Assign the L3s with L2 in one column.
           columns[col].push(child);
-          col_total += l2_cost;
+
+          // Increase the column count.
+          col++;
         }
-      } while (reprocess || col >= adjustableMaxRows);
+      } else {
+        // Loop L2 items.
+        do {
+          // Reset flags;
+          columns = [];
+          col_total = 0;
+          col = 0;
+          reprocess = false;
+
+          // Loop L2 items.
+          for (const [key, child] of Object.entries(value.children)) {
+            // Calculate the rows needed for L3 items + 2
+            // 2 means L2 item + one blank line for spacing).
+            l2_cost = 2 + Object.keys(child.children).length;
+
+            // If we are detecting a longer rows than the expected size
+            // we iterate with new max.
+            if (l2_cost > adjustableMaxRows) {
+              adjustableMaxRows = l2_cost;
+              reprocess = true;
+              break;
+            }
+
+            if (col_total + l2_cost > adjustableMaxRows) {
+              col++;
+              col_total = 0;
+            }
+
+            // If we have too many columns we try with more items per column.
+            if (col >= adjustableMaxRows) {
+              adjustableMaxRows++;
+              reprocess = true;
+              break;
+            }
+
+            if (typeof columns[col] == 'undefined') {
+              columns[col] = [];
+            }
+
+            // Push L3 items into column.
+            columns[col].push(child);
+            col_total += l2_cost;
+          }
+        } while (reprocess || col >= adjustableMaxRows);
+      }
       // Replace child items.
       data[key]['children'] = columns;
       // Children are moved into columns and can be deleted now.
