@@ -290,7 +290,7 @@ header {
 
 .menu--two__list {
   margin-top: 0 !important;
-  padding-top: rem(17);
+  padding-top: rem(16);
 
   &::before {
     content: '';
@@ -445,6 +445,18 @@ header {
 
     .branding__menu {
       box-shadow: none;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    li.menu--one__list-item {
+      height: auto;
+
+      .menu--one__link {
+        margin-top: initial;
+      }
     }
   }
 }
