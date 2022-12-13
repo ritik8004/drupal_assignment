@@ -376,6 +376,11 @@ const getProcessedCartData = async (cartData) => {
     // is applied we will get the has_exclusive_coupon flag value as true from MDC,
     // and we will not render the dynamic promos.
     has_exclusive_coupon: (typeof cartData.cart.extension_attributes.has_exclusive_coupon !== 'undefined') ? cartData.cart.extension_attributes.has_exclusive_coupon : false,
+    // Free shipping text which is used to show the message on free delivery
+    // usp banner in the cart, if free delivery usp is enabled. If the key
+    // "free_shipping_text" is either missing or has an empty value in magento api,
+    // we consider that free delivery usp feature is disabled from MDC.
+    free_shipping_text: (typeof cartData.cart.extension_attributes.free_shipping_text !== 'undefined') ? cartData.cart.extension_attributes.free_shipping_text : null,
     stale_cart: (typeof cartData.stale_cart !== 'undefined') ? cartData.stale_cart : false,
     totals: {
       subtotal_incl_tax: cartData.totals.subtotal_incl_tax,
