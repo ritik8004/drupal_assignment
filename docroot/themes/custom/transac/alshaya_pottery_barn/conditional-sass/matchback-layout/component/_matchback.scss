@@ -14,7 +14,9 @@
       font-weight: normal;
 
       a.full-prod-link {
-        color: $matchback-product-dark;
+        @include breakpoint($tablet) {
+          color: $matchback-product-dark;
+        }
       }
     }
 
@@ -79,6 +81,31 @@
         padding-#{$left}: rem(44);
         padding-bottom: rem(31);
       }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .matchback-processed {
+    .matchback-image-wrapper {
+      min-height: rem(125);
+    }
+
+    .view-product-slider {
+      .c-products__item__label {
+        margin-top: rem(10);
+        margin-bottom: rem(10);
+
+        a {
+          color: $matchback-slider-title-text;
+        }
+      }
+    }
+
+    .price--discount {
+      margin-top: rem(2);
+      font-size: rem(12);
+      line-height: 1.33;
     }
   }
 }
