@@ -426,7 +426,7 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value, context) => {
     searchResponse = await searchUserDetails(inputData.type, inputData.value, context);
 
     if (hasValue(searchResponse.error)) {
-      logger.warning('Error while trying to set loyalty card in cart. No card found. Request Data: @data.', {
+      logger.warning('Warning while trying to set loyalty card in cart. No card found. Request Data: @data.', {
         '@data': JSON.stringify(inputData),
       });
       return { data: searchResponse };
