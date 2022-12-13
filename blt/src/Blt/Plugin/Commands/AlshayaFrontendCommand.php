@@ -4,6 +4,7 @@ namespace Alshaya\Blt\Plugin\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Symfony\Component\Finder\Finder;
+use Robo\Exception\TaskException;
 
 /**
  * Defines commands in the "alshayafe" namespace.
@@ -436,7 +437,7 @@ class AlshayaFrontendCommand extends BltTasks {
       $tasks->stopOnFail();
 
       // Process all svg files inside docroot/modules folder.
-      $tasks = $this->processSvgFiles(
+      $this->processSvgFiles(
         $tasks,
         'modules',
         [
@@ -446,14 +447,19 @@ class AlshayaFrontendCommand extends BltTasks {
           'products',
         ]);
       // Process all svg files inside docroot/themes/custom folder.
-      $tasks = $this->processSvgFiles(
+      $this->processSvgFiles(
         $tasks,
         'themes/custom',
         self::$themeTypes
       );
 
-      $tasks->stopOnFail();
-      $processOutput = $tasks->run();
+      try {
+        $tasks->stopOnFail();
+        $processOutput = $tasks->run();
+      }
+      catch (TaskException $e) {
+        // Ignore TaskException, we might simply be copying everything.
+      }
     }
     else {
       $this->say('No need to minify svg files outside Github CI as we do it during deployments.');
@@ -471,11 +477,8 @@ class AlshayaFrontendCommand extends BltTasks {
    *   Folder where its running like modules or themes.
    * @param array $subFolders
    *   Sub-folders inside modules or themes like custom, brands, non-transac.
-   *
-   * @return object
-   *   Executable task object.
    */
-  private function processSvgFiles(object $tasks, string $containingFolderPath, array $subFolders): object {
+  private function processSvgFiles(object $tasks, string $containingFolderPath, array $subFolders) {
     $docroot = $this->getConfigValue('docroot');
     // Ignore these directories.
     $ignoredDirs = [
@@ -535,8 +538,6 @@ class AlshayaFrontendCommand extends BltTasks {
         }
       }
     }
-
-    return $tasks;
   }
 
   /**
