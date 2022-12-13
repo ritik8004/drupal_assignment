@@ -16,7 +16,7 @@ function alshaya_super_category_update_9404() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
-  // Update super category settings for brand facet.
+  // Add super category settings for site logo url.
   $manager->updateConfigs(
     ['alshaya_super_category.settings'],
     'alshaya_super_category'
