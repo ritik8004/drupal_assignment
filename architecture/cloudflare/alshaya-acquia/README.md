@@ -1,14 +1,10 @@
 # Cloudflare Worker for Pausing ACM Queues
 
-We publish the route `https://www.mothercare.com.kw/panic-on` from here to allow using it as Webhook in New Relic to pause ACM queues for specific sites whenever the sites are slow.
+Cloudflare Worker code in this folder publishes the route `https://www.mothercare.com.kw/panic-on`.
 
-It is divided in three parts:
-* Cloudflare Worker JavaScript Code (this folder)
-* Secret information in Cloudflare KV NameSpace AlshayaAcquiaStability
-  * To access or update the data utility scripts are available [here](../../../tests/apis/cloudflare)
-* New Relic Webhook
+Code invoked on this route takes care of pausing the ACM queues for specific sites whenever the sites are slow.
 
-[Check this recording to understand more about the same](https://acquiamagentoal.slack.com/files/UDEB422D7/F04EC8YGCET/alshaya_-_devops.mp4)
+More details available [here](../../../README.md#cloudflare-worker-for-pausing-acm-queues)
 
 ## 🔋 Getting Started
 
