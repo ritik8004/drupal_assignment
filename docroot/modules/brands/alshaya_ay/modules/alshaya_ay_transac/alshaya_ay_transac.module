@@ -63,7 +63,8 @@ function alshaya_ay_transac_preprocess_block(&$variables) {
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
     if ($term instanceof TermInterface) {
       // Default block label is Shop By.
-      // Only update block values for other super categories.
+      // Only update block label for footer menu
+      // block as per current super category.
       if ($term->getName() !== 'Shop') {
         $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
         if ($term->hasTranslation($current_langcode)) {
