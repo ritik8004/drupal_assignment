@@ -168,9 +168,9 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *   Process 50 terms per batch and output to the file. Default is 30.
    */
   public function exportProductCategoryData($options = ['limit' => 30]) {
-    // Get tid of all the parent product category.
+    // Get all product category terms if supercategory is enabled
+    // else get child terms.
     if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
-      // Get all product category terms if supercategory is enabled.
       $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('acq_product_category');
       $term_ids = array_map(fn ($term) => $term->tid, $terms);
       $term_ids = !empty($term_ids)
