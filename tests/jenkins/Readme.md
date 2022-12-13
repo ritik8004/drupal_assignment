@@ -11,7 +11,7 @@ Edit `.env` and specify the path to the behat folder. Defaults to relative path 
 but it can be an absolute path.
 
 ## Running
-Run `make build` to start the project. Wait few seconds for the containers to start.
+Run `make start build` to start the project. Wait few seconds for the containers to start.
 
 ## Opening Jenkins on browser
 Run `make open` or open the browser on `http://127.0.0.1:8080/`
