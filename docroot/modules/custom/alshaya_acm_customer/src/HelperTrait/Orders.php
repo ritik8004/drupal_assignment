@@ -91,9 +91,7 @@ trait Orders {
       if ($cancelled_quantity) {
         $processed_item['is_item_cancelled'] = TRUE;
         $processed_item['cancelled_quantity'] = $cancelled_quantity;
-
         $processed_item['refund_amount'] = $item['extension_attributes']['oms_amount_refunded'] ?? 0.0;
-
         $total_cancelled_quantity += $cancelled_quantity;
       }
       else {
