@@ -377,7 +377,7 @@ Download and add [xhprof](https://www.drupal.org/project/xhprof) in docroot/modu
   - vendor/mglaman/drupal-check/drupal-check -a docroot/modules/custom
 
 ### General Notes
-#### Issue with accesing cloud urls from Linux Systems
+#### Issue with accessing cloud urls from Linux Systems
 There is an issue observered when trying to access dev/uat etc website urls from linux systems.
 The issue happens because CloudFlare blocks the request and we see the message `Site can't be reached` in the browser.
 In such a situation, we need to add the following  mapping to the `/etc/hosts` file in the local system and then access the website again (the IP address can be the same for all the domains)
@@ -385,3 +385,22 @@ In such a situation, we need to add the following  mapping to the `/etc/hosts` f
 104.16.65.106	hmkw5-pprod.factory.alshaya.com
 104.16.65.106	weae2-test.factory.alshaya.com
 ```
+
+#### Cloudflare Worker for Pausing ACM Queues
+
+We observed that combination of high traffic and ACM pushes (push for sync from MDC to Drupal) slows down the sites heavily. This leads to increased pushes from ACM as it considers request as failed if the response time is greater than 2 seconds.
+
+To solve this we came up with 3 part solution:
+* Secret information in Cloudflare KV NameSpace AlshayaAcquiaStability
+  * To access or update the data utility scripts are available [here](tests/apis/cloudflare)
+* Cloudflare Worker JavaScript Code available [here](architecture/cloudflare/alshaya-acquia)
+  * Code here accesses the ACM secret information based on the parameters sent via request headers by New Relic
+  * It pauses the ACM queues for all the Site IDs available for particular stack as per the data available in secrets
+  * It sends a message to [#server-loaded](https://app.slack.com/client/T4ARH3F8D/CQNGAKD16) Slack channel.
+* New Relic Webhook
+  * We invoke the panic-on URL from New Relic whenever average response time in last 5 minutes is > XX seconds (1.5 for Stack 5)
+  * This Webhook is invoked in both cases today (when the incident is triggerred and when it is resolved)
+
+It is then BAU team responsibility to check if queues can be resumed using [script](tests/apis/conductor_v2/pauseQueues.php) or must be processed individually before resuming [script](tests/apis/conductor_v2/processQueues.php).
+
+[Check this recording to understand more about the same](https://acquiamagentoal.slack.com/files/UDEB422D7/F04EC8YGCET/alshaya_-_devops.mp4)
