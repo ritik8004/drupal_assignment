@@ -29,7 +29,7 @@ runs:
         echo CHANGED_THEME_FILES=${{ inputs.CHANGED_THEMES_FILES }} >> $GITHUB_ENV
         echo CHANGED_REACT_FILES=${{ inputs.CHANGED_REACT_FILES }} >> $GITHUB_ENV
         echo CHANGED_SVG_FILES=${{ inputs.CHANGED_SVG_FILES }} >> $GITHUB_ENV
-        echo CHANGED_ALL_FILES=${{ inputs.CHANGED_ALL_FILES }} >> $GITHUB_ENV
+        echo CHANGED_ALL_FILES=$(echo ${{ inputs.CHANGED_ALL_FILES }} | wc -l | xargs) >> $GITHUB_ENV
 
     - name: Run Composer install
       shell: bash
