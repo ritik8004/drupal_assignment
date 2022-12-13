@@ -92,9 +92,7 @@ trait Orders {
         $processed_item['is_item_cancelled'] = TRUE;
         $processed_item['cancelled_quantity'] = $cancelled_quantity;
 
-        $processed_item['refund_amount'] = $this->moduleHandler->moduleExists('alshaya_xb')
-          ? $item['amount_refunded']
-          : $item['extension_attributes']['oms_amount_refunded'] ?? 0.0;
+        $processed_item['refund_amount'] = $item['extension_attributes']['oms_amount_refunded'] ?? 0.0;
 
         $total_cancelled_quantity += $cancelled_quantity;
       }
