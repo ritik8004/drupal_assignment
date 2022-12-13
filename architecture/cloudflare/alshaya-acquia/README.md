@@ -1,6 +1,14 @@
-# ʕ •́؈•̀) `worker-typescript-template`
+# Cloudflare Worker for Pausing ACM Queues
 
-A batteries included template for kick starting a TypeScript Cloudflare worker project.
+We publish the route `https://www.mothercare.com.kw/panic-on` from here to allow using it as Webhook in New Relic to pause ACM queues for specific sites whenever the sites are slow.
+
+It is divided in three parts:
+* Cloudflare Worker JavaScript Code (this folder)
+* Secret information in Cloudflare KV NameSpace AlshayaAcquiaStability
+  * To access or update the data utility scripts are available [here](../../../tests/apis/cloudflare)
+* New Relic Webhook
+
+[Check this recording to understand more about the same](https://acquiamagentoal.slack.com/files/UDEB422D7/F04EC8YGCET/alshaya_-_devops.mp4)
 
 ## 🔋 Getting Started
 
