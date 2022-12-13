@@ -24,6 +24,7 @@ regions:
 libraries:
   - alshaya_alo_yoga/global_styles
   - alshaya_alo_yoga/color_styles
+  - alshaya_alo_yoga/alo-hamburgermenu
 
 ckeditor_stylesheets:
   - css/ckeditor.css

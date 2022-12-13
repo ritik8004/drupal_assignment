@@ -21,3 +21,7 @@ alo-static-info:
       css/conditional-sass/alo-static-info/alo-static-info.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-accordion
+
+alo-hamburgermenu:
+  js:
+    js/hamburgermenu.js: {}
