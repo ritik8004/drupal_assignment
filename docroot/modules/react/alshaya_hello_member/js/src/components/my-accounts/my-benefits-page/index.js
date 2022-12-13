@@ -17,6 +17,7 @@ class MyBenefitsPage extends React.Component {
       myBenefit: null,
       codeId: null,
       couponId: null,
+      offerType: null,
       promotionType: null,
     };
   }
@@ -37,6 +38,7 @@ class MyBenefitsPage extends React.Component {
             wait: true,
             codeId: response.data.coupons[0].code,
             couponId: `${response.data.coupons[0].type}|${response.data.coupons[0].code}`,
+            offerType: response.data.coupons[0].type,
             promotionType,
           });
           // Push coupon data to gtm once it is loaded.
@@ -71,7 +73,7 @@ class MyBenefitsPage extends React.Component {
 
   render() {
     const {
-      wait, myBenefit, codeId, couponId, promotionType,
+      wait, myBenefit, codeId, couponId, offerType, promotionType,
     } = this.state;
 
     if (!wait) {
@@ -120,6 +122,7 @@ class MyBenefitsPage extends React.Component {
           <AddBenefitsToCart
             title={myBenefit.description}
             codeId={codeId}
+            offerType={offerType}
             promotionType={promotionType}
           />
         </div>
