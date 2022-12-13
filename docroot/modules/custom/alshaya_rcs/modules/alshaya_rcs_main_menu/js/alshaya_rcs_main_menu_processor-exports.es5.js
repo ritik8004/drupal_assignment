@@ -38,7 +38,7 @@ exports.prepareData = function prepareData(settings, inputs) {
     case 'default':
     default:
       // Distribute L3 items into columns.
-      menuItems = splitIntoCols(menuItems, maxNbCol, idealMaxColLength, showL2InSeparateColumn);
+      menuItems = splitIntoCols(menuItems, showL2InSeparateColumn, maxNbCol, idealMaxColLength);
   }
 
   let auraEnabled = Drupal.hasValue(drupalSettings.aura)
@@ -183,19 +183,19 @@ const processData = function (data, maxLevel, mobileMenuMaxDepth) {
  * @param {object} data
  *   The menu data.
  *
+ * @param {boolean} showL2InSeparateColumn
+ *   show L2 items in separate columns.
+ *
  * @param {integer} maxCols
  *   Max number of columns.
  *
  * @param {integer} maxRows
  *   Max number of rows.
  *
- * @param {boolean} showL2InSeparateColumn
- *   show L2 items in separate columns.
- *
  * @return {object}
  *   The menu data distributed into columns.
  */
-function splitIntoCols(data, maxCols = 6, maxRows = 10, showL2InSeparateColumn) {
+function splitIntoCols(data, showL2InSeparateColumn, maxCols = 6, maxRows = 10) {
   // Initialize flags.
   let reprocess, col, col_total, columns = null;
   // Convert arrays to objects;
@@ -205,7 +205,9 @@ function splitIntoCols(data, maxCols = 6, maxRows = 10, showL2InSeparateColumn) 
     // Reset ajustableMaxRows before looping L2 items.
     let adjustableMaxRows = maxRows;
     if (typeof value.children !== 'undefined' && Object.keys(value.children).length) {
-      // Divide items in separate columns.
+      // Check if the show L2 items in column flag is set, if 'YES' then we
+      // divide all the L2 items in separate columns.
+      // This flag we are getting from alshaya_main_menu.settings.
       if (showL2InSeparateColumn) {
         columns = [];
         col = 0;
