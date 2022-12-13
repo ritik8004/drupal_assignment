@@ -6,6 +6,22 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Override setting for super cateogory logo url.
+ */
+function alshaya_ay_transac_rcs_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  // Update super category settings for brand facet.
+  $manager->updateConfigs(
+    ['alshaya_super_category.settings'],
+    'alshaya_super_category'
+  );
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_ay_transac_rcs_install() {
