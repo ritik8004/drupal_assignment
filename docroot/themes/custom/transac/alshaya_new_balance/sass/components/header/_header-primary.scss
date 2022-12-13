@@ -515,6 +515,10 @@ header {
   }
 }
 
+.toggle--sign {
+  width: calc(100% - #{rem(50)});
+}
+
 body {
   .branding__menu {
     @include breakpoint($upto-desktop) {
