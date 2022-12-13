@@ -64,13 +64,12 @@ class MyAccountIconBlock extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function build() {
-    $user_id = $this->currentUser->id();
-    if (empty($user_id) || $this->currentUser->isAnonymous()) {
+    if ($this->currentUser->isAnonymous()) {
       $url = Url::fromRoute('user.login')->toString();
       $data = "<a class='user-login' href=" . $url . "></a>";
     }
     else {
-      $url = Url::fromRoute('entity.user.canonical', ['user' => $user_id])->toString();
+      $url = Url::fromRoute('user.page')->toString();
       $data = "<a class='user-account' href=" . $url . "></a>";
     }
 
