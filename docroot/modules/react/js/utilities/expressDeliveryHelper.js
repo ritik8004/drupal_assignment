@@ -135,7 +135,7 @@ async function getExpressDeliveryStatus() {
   try {
     const response = await callMagentoApi(url, 'POST', params);
     if (!hasValue(response.data) || hasValue(response.data.error)) {
-      logger.error('Error occurred while fetching the express-delivery config for listing., Response: @response.', {
+      logger.error('Warning occurred while fetching the express-delivery config for listing., Response: @response.', {
         '@response': JSON.stringify(response.data),
       });
       // Dispatch event for delivery label component with default true as
