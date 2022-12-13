@@ -114,6 +114,16 @@
       }
     }
   }
+
+  .addtobag-config-button-container {
+    margin-right: 0;
+    margin-left: 0;
+
+    @include breakpoint($tablet) {
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
 }
 
 #wishlist-share {
