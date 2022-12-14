@@ -6,10 +6,10 @@
 (function ($, Drupal) {
 
   document.addEventListener('DOMContentLoaded', function () {
-    const imageObserver = new IntersectionObserver((entries, imgObserver) => {
+    var imageObserver = new IntersectionObserver((entries, imgObserver) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const lazyImage = entry.target
+          var lazyImage = entry.target
           // Check if data-src value is present.
           if (Drupal.hasValue(lazyImage.dataset)
             && Drupal.hasValue(lazyImage.dataset.src)) {
@@ -19,7 +19,7 @@
       })
     });
     // Filter out all the img tags having data-src attribute.
-    const arr = jQuery('img').once().filter(function () {
+    var arr = jQuery('img').once('rcs-lazy-load').filter(function () {
       return jQuery(this).attr('data-src') && $(this).attr('data-src') != "";
     });
     arr.map((index, item) => {

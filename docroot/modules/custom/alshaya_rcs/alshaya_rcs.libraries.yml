@@ -14,3 +14,4 @@ alshaya_rcs_lazyload:
     - core/drupal
     - core/jquery
     - core/jquery.once
+    - alshaya_master/common_functions
