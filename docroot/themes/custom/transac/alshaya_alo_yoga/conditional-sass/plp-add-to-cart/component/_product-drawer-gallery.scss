@@ -15,7 +15,8 @@
     }
 
     .slick-dots {
-      li {
+      li,
+      li.small {
         button {
           &::before {
             // uses 'ProximaNova-Regular' font.
@@ -26,18 +27,6 @@
               // uses 'Arquitecta Regular' font.
               font-size: rem(52);
               line-height: rem(4);
-            }
-          }
-        }
-
-        &.small {
-          button {
-            &::before {
-              font-size: rem(36);
-
-              html[lang="ar"] & {
-                font-size: rem(52);
-              }
             }
           }
         }
