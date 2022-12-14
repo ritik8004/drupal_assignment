@@ -55,6 +55,7 @@ visual_mobile_menu_level1_partial:
   dependencies:
     - alshaya_rcs_main_menu/main_menu_level1
     - alshaya_rcs_main_menu/visual_mobile_menu_ui
+    - alshaya_rcs/alshaya_rcs_lazyload
 
 visual_mobile_menu_level2_partial:
   version: 1.x
@@ -62,6 +63,7 @@ visual_mobile_menu_level2_partial:
     handlebars/visual_mobile_menu_level2_partial.handlebars: {}
   dependencies:
     - alshaya_rcs_main_menu/visual_mobile_menu_level1_partial
+    - alshaya_rcs/alshaya_rcs_lazyload
 
 visual_mobile_menu_level3_partial:
   version: 1.x
@@ -69,6 +71,7 @@ visual_mobile_menu_level3_partial:
     handlebars/visual_mobile_menu_level3_partial.handlebars: {}
   dependencies:
     - alshaya_rcs_main_menu/visual_mobile_menu_level2_partial
+    - alshaya_rcs/alshaya_rcs_lazyload
 
 visual_mobile_menu_ui:
   version: 1.x
@@ -84,3 +87,4 @@ visual_mobile_menu_carousel_partial:
     handlebars/visual_mobile_menu_carousel_partial.handlebars: {}
   dependencies:
     - alshaya_rcs_main_menu/visual_mobile_menu_level2_partial
+    - alshaya_rcs/alshaya_rcs_lazyload

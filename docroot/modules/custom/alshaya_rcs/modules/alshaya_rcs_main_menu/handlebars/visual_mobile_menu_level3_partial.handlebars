@@ -1,6 +1,6 @@
 {{#each menu_items as |l3_item|}}
   <{{@l3_item.tag}} class="visual-mobile-level-three__link {{ l3_item.mobile_tablet_class }}" {{{l3_item.tag_attr}}}>
-    <img class="visual-mobile-level_three__image" src="{{l3_item.image}}">
+    <img class="visual-mobile-level_three__image" data-src="{{l3_item.image}}">
     <div class="visual-mobile-level-three__heading">{{l3_item.name}}</div>
   </{{@l3_item.tag}}>
 {{/each}}
