@@ -1132,24 +1132,7 @@ $magentos = [
   ],
   // Pottery Barn Kids.
   'pbk_qa' => [
-    'url' => 'https://integration-5ojmyuq-pyudokdb2kumk.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => '8spkmhz5rst8etwcc7w5qg92dabku51w',
-      'consumer_secret' => 'jp5ml3y30lqqxxfxnqj19vcsf5apywkh',
-      'access_token' => '9px4kesgmj6vnjkujhnk8nyxa7m667i4',
-      'access_token_secret' => 'b8dkngbd1uami6kep2a2yafirkdrr6jp',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-  ],
-  'pbk_test' => [
+    'algolia_env' => 'pbk_test',
     'url' => 'https://pbk-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'ywgq9ebmjec2ctq9q9wl2ygocab9tzwz',
@@ -1595,33 +1578,7 @@ $magentos = [
     ],
   ],
   'we_qa' => [
-    'url' => 'https://integration-5ojmyuq-xj72gv64n7kci.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => '2dobu86iimp9x3oc2n0qitc03ypcyud3',
-      'consumer_secret' => 'nqnmmvijrx3gmwpag73hbws67sfil94s',
-      'access_token' => 'j06xgfwz2p99scbwsc6eiil20l3ser2f',
-      'access_token_secret' => '8efr0c8hev5tkas1s5yj555o5in1vf4p',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'bh' => [
-      'store_id' => ['en' => 10, 'ar' => 9],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-  ],
-  'we_test' => [
+    'algolia_env' => 'wes_test',
     'url' => 'https://wes-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => '4xtw4osc8e7fv45cy187xhhobr6xt59e',
@@ -1734,36 +1691,7 @@ $magentos = [
     ],
   ],
   'aeo_qa' => [
-    'url' => 'https://integration-5ojmyuq-tw5uijob6hir2.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
-      'consumer_secret' => 'k63ke42x62x1hssrtxy1e33c5vmyqgwy',
-      'access_token' => '00u0i30wuospgbybw44d7nmstcbko8v7',
-      'access_token_secret' => 'gykb39mpih9std58phenahd5v6zrmw7g',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'bh' => [
-      'store_id' => ['en' => 10, 'ar' => 9],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-    'jo' => [
-      'store_id' => ['en' => 14, 'ar' => 13],
-    ],
-  ],
-  'aeo_test' => [
+    'algolia_env' => 'aeo_test',
     'url' => 'https://aeo-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'yyt9xtlfaaxw55c1h9xbw0mlff8j8ovt',
@@ -1793,7 +1721,7 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
     'jo' => [
-      'store_id' => ['en' => 14, 'ar' => 13],
+      'store_id' => ['en' => 16, 'ar' => 13],
     ],
   ],
   'aeo_apc' => [
