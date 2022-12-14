@@ -42,10 +42,8 @@
             }
           }
 
-          & > {
-            .menu-two__link-wrapper {
-              padding-#{$right}: rem(45);
-            }
+          & > .menu-two__link-wrapper {
+            padding-#{$right}: rem(45);
           }
         }
 
