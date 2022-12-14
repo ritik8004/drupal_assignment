@@ -75,10 +75,10 @@ class AlshayaMatchbackCommand extends DrushCommands {
    */
   public function enableMatchbackAddToBag(
     array $options = [
-      'show_wishlist' => 'false',
-      'change_matchback_color' => 'false',
-      'show_view_options' => 'true',
-      'use_matchback_cart_notification' => 'false',
+      'show_wishlist' => FALSE,
+      'change_matchback_color' => FALSE,
+      'show_view_options' => TRUE,
+      'use_matchback_cart_notification' => FALSE,
     ]
   ) {
     $this->configFactory->getEditable('alshaya_acm.settings')
