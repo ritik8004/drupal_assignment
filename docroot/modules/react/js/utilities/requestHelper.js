@@ -425,6 +425,7 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
           logger.warning('Drupal page no longer available.', { ...params });
           return null;
         }
+
         if (responseCode === 400) {
           logger.warning('Drupal API call failed.', {
             responseCode,
