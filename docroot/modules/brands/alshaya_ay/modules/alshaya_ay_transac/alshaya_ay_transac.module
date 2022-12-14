@@ -66,7 +66,7 @@ function alshaya_ay_transac_preprocess_block(&$variables) {
       // Only update block label for footer menu
       // block as per current super category.
       $term_name = $term->getName();
-      if ($term->get('langcode')->value !== 'en' && $term->hasTranslation('en')) {
+      if ($term->language()->getId() !== 'en' && $term->hasTranslation('en')) {
         $term = $term->getTranslation('en');
         $term_name = $term->getName();
       }
