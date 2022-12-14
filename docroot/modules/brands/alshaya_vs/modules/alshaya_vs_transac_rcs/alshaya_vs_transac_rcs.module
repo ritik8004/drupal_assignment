@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Module file with hooks specific to VS brand.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_vs_transac_rcs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'rcs_product') {
+    $build['#attached']['library'][] = 'alshaya_vs_transac_rcs/product';
+  }
+}
