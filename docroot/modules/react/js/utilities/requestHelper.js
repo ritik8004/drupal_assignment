@@ -421,16 +421,15 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
         logApiStats(error.response);
         const responseCode = parseInt(error.response.status, 10);
 
-        if (responseCode === 404) {
+        if (responseCode === 400) {
           logger.warning('Drupal page no longer available.', { ...params });
+        } else {
+          logger.error('Drupal API call failed.', {
+            responseCode,
+            ...params,
+          });
           return null;
         }
-
-        logger.warning('Drupal API call failed.', {
-          responseCode,
-          ...params,
-        });
-        return null;
       }
 
       logger.error('Something happened in setting up the request that triggered an error: @message.', {
