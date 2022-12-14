@@ -1553,6 +1553,7 @@ window.commerceBackend.getSortedAttributeValues = function getSortedAttributeVal
 
       // Logic to sort the sequencing of configurable attributes as per
       // the sequence mentioned in configurable form settings.
+      const configurableAttributeWeights = drupalSettings.configurableAttributes;
       if (Drupal.hasValue(configurableAttributeWeights) && Drupal.hasValue(product.configurable_options)) {
         // Add all the attributes as per config.
         configurableAttributeWeights.forEach(function eachConfigurableAttribute(attribute) {
