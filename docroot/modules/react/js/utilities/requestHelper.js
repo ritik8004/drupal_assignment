@@ -421,8 +421,15 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
         logApiStats(error.response);
         const responseCode = parseInt(error.response.status, 10);
 
-        if (responseCode === 400) {
+        if (responseCode === 404) {
           logger.warning('Drupal page no longer available.', { ...params });
+          return null;
+        }
+        if (responseCode === 400) {
+          logger.warning('Drupal API call failed.', {
+            responseCode,
+            ...params,
+          });
         } else {
           logger.error('Drupal API call failed.', {
             responseCode,
