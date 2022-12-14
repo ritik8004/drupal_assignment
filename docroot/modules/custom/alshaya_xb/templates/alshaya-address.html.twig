@@ -3,7 +3,7 @@
     {{ address.given_name }} {{ address.family_name }}
   </div>
 {% endif %}
-{% for key, item in address|without('given_name', 'family_name', 'country', 'mobile_number') %}
+{% for key, item in address|without('given_name', 'family_name', 'country_code', 'mobile_number') %}
   {% if item is not empty %}
       {% if item is iterable %}
         {% for key, value in item %}
@@ -14,7 +14,7 @@
       {% endif %}
   {% endif %}
 {% endfor %}
-<div class="address--content">{{ address.country }}</div>
+<div class="address--content">{{ address.country_code }}</div>
 <div class="address--contact">
   {{ 'Mobile Number' | t }}: <div class="no-direction">{{ address.mobile_number|replace({' ':''}) }}</div>
 </div>
