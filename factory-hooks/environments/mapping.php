@@ -594,8 +594,20 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
     ],
     'pbkae' => [
       'qa2' => [
-        'magento' => 'pbk_test',
+        'magento' => 'pbk_qa',
         'conductor' => 'pbkae_test',
+      ],
+    ],
+    'pbksa' => [
+      'qa2' => [
+        'magento' => 'pbk_qa',
+        'conductor' => 'pbksa_test',
+      ],
+    ],
+    'pbkkw' => [
+      'qa2' => [
+        'magento' => 'pbk_qa',
+        'conductor' => 'pbkkw_test',
       ],
     ],
     'dhkw' => [
