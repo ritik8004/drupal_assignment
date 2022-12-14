@@ -124,10 +124,6 @@
           font-family: $alshaya-bold;
           font-size: rem(14);
           display: block;
-
-          &::first-letter {
-            text-transform: uppercase;
-          }
         }
       }
 
