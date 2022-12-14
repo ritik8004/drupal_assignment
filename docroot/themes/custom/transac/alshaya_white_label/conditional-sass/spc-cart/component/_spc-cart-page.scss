@@ -17,6 +17,7 @@
       background-color: $spc-cart-free-delivery-message-bg;
       color: $spc-cart-free-delivery-txt;
       line-height: rem(20);
+      margin-bottom: rem(19);
 
       @include breakpoint($tablet) {
         margin-bottom: rem(30);
