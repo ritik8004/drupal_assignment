@@ -436,8 +436,8 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
             responseCode,
             ...params,
           });
-          return null;
         }
+        return null;
       }
 
       logger.error('Something happened in setting up the request that triggered an error: @message.', {
