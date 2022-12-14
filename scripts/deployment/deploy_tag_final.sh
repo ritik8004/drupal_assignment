@@ -75,10 +75,10 @@ log_message_and_details()
 check_code_deployed()
 {
   check_code_deployed_response=`$blt_dir/bin/blt cloud-check-code-deployed $tag`
-  log_message_and_details "Check code deployed on all Webs response: $check_code_deployed_response."
+  log_message_and_details "Response for BLT command to check if code deployed on all web servers: $check_code_deployed_response."
   if [ $? -ne 0 ]
   then
-    log_message_and_details "Error occurred while checking if code deployed on all the webs, aborting."
+    log_message_and_details "Error occurred while checking if code deployed on all the web servers, aborting."
     exit
   fi
 }
@@ -176,7 +176,7 @@ then
 fi
 
 # Taking backup now.
-log_message_and_details "Take DB backup."
+log_message_and_details "Taking DB backup now."
 mkdir -p "$backup_directory"
 drush --root=$docroot acsf-tools-dump --result-folder=$backup_directory -y -v --gzip &>> ${log_file}
 if [ $? -ne 0 ]
