@@ -426,7 +426,7 @@ const callDrupalApi = (url, method = 'GET', data = {}) => {
           return null;
         }
 
-        logger.error('Drupal API call failed.', {
+        logger.warning('Drupal API call failed.', {
           responseCode,
           ...params,
         });
