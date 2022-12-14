@@ -66,3 +66,13 @@
     }
   }
 }
+
+.alshaya-social {
+  .auth-link {
+    html[lang="ar"] & {
+      @include breakpoint($only-mobile) {
+        padding-right: 0;
+      }
+    }
+  }
+}
