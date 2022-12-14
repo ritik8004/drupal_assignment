@@ -164,9 +164,6 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
     foreach($super_categories as $super_category) {
       $category = $term_storage->load($super_category['id']);
 
-      if (!($category instanceof TermInterface)) {
-        continue;
-      }
       $mdc_id = $category->get('field_commerce_id')->getString();
 
       $category_en = ($category->hasTranslation('en'))
