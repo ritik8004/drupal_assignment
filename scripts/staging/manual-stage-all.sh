@@ -37,3 +37,7 @@ do
 done
 
 sh $slack_file "Manual staging finished for environment ${target_env} for all the sites in mode ${mode}"
+
+if [[ "$mode" == "iso" ]]; then
+  sh $slack_file "Please run \`drush updb\` now on ${user}.${target_env}."
+fi
