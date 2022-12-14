@@ -46,6 +46,7 @@ checkout:
     - alshaya_react/react
     - alshaya_spc/cart_utilities
     - alshaya_spc/dynamic_promotion_label
+    - alshaya_spc/react_datepicker_css
 
 order_details:
   version: 1.x
@@ -106,6 +107,12 @@ googlemapapi:
 commerce_backend.cart.v1:
   js:
     dist/backend_cart_v1.bundle.js: {}
+
+# The CSS file needs to be updated if we update the react-datepicker library version, check README file for more information.
+react_datepicker_css:
+  css:
+    theme:
+      assets/css/react-datepicker.min.css: {}
 
 commerce_backend.checkout.v1:
   js:

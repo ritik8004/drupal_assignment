@@ -1,6 +1,5 @@
 import React from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
-import '../../../../../../node_modules/react-datepicker/dist/react-datepicker.css';
 import moment from 'moment-timezone';
 import { Swipeable } from 'react-swipeable';
 import en from '../../../../../../node_modules/date-fns/locale/en-US';
