@@ -175,3 +175,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css: css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css
+
+  alshaya_white_label/matchback_layout:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/matchback-layout/matchback-layout.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/matchback-layout/matchback-layout.ltr.css
