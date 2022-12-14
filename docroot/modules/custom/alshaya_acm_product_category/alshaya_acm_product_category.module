@@ -677,6 +677,9 @@ function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_fo
     'visible' => [
       ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
     ],
+    'disabled' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => FALSE],
+    ],
   ];
   $form['field_target_link']['widget'][0]['uri']['#states'] = [
     'required' => [
@@ -697,6 +700,28 @@ function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_fo
   ];
 
   $form['path']['widget']['#after_build'][] = 'alshaya_acm_product_category_after_build';
+  // Adding a validator to check target link value.
+  $form['#validate'][] = '_alshaya_acm_product_category_validate_target_link';
+}
+
+/**
+ * Target link validation callback for categories.
+ */
+function _alshaya_acm_product_category_validate_target_link(&$form, FormStateInterface $form_state) {
+  // While overriding target link, link value should not be empty.
+  if ($form_state->hasValue('field_override_target_link') && !empty($form_state->getValue('field_override_target_link')['value'])) {
+    $target_link = $form_state->getValue('field_target_link')[0]['uri'];
+    if (empty($target_link)) {
+      $form_state->setErrorByName(
+        'field_target_link',
+        t('@title field is required.',
+          [
+            '@title' => $form['field_target_link']['widget']['#title'],
+          ]
+        )
+      );
+    }
+  }
 }
 
 /**
