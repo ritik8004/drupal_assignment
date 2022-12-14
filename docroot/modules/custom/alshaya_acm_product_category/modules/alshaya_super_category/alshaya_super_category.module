@@ -194,8 +194,11 @@ function alshaya_super_category_preprocess_block(&$variables) {
       // Set image Alt based on current brand.
       $variables['content']['site_logo']['#alt'] = $super_category->label();
       $variables['content']['site_name']['#markup'] = $meta_title;
-      // Set the site path to brand page.
-      if ($parent->id() != alshaya_super_category_get_default_term()) {
+      // Set the site path to brand page if config for super
+      // category url is set as true else set it as home page by default.
+      if ($parent->id() != alshaya_super_category_get_default_term()
+        && $config->get('use_super_category_url_for_logo')
+      ) {
         $variables['content']['site_path']['#markup'] = $super_category->toUrl()->toString();
       }
       break;
