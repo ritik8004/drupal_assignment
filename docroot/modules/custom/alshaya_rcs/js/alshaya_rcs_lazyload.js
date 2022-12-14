@@ -19,8 +19,8 @@
       })
     });
     // Filter out all the img tags having data-src attribute.
-    var arr = jQuery('img').once('rcs-lazy-load').filter(function () {
-      return jQuery(this).attr('data-src') && $(this).attr('data-src') != "";
+    var arr = jQuery('img[data-src]').once('rcs-lazy-load').filter(function () {
+      return $(this).attr('data-src') != "";
     });
     arr.map((index, item) => {
       imageObserver.observe(item);
