@@ -41,8 +41,9 @@ services:
   alshaya_rcs_super_category.rcs_ph_path_process_subscriber:
     class: Drupal\alshaya_rcs_super_category\EventSubscriber\AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber
     tags:
-      - { name: 'event_subscriber' }
+      - { name: 'event_subscriber', priority: 100 }
     arguments:
       - '@alshaya_rcs.enrichment_helper'
       - '@config.factory'
       - '@alshaya_advanced_page.department_page_helper'
+      - '@alshaya_acm_product_category.product_category_tree'

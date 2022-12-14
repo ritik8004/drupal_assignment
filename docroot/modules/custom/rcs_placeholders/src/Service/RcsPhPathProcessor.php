@@ -216,43 +216,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   }
 
   /**
-   * Process the entity and set the static variables.
-   */
-  protected function processCategoryEntity() {
-    $entity_type = 'category';
-    $config = $this->getRcsPhSettings();
-    $entity_prefix = $config->get("$entity_type.path_prefix");
-    $placehodler_id = $config->get("$entity_type.placeholder_tid");
-    $entity_url_prefix = '/taxonomy/term/';
-
-    self::$entityType = $entity_type;
-    self::$entityPath = substr_replace(self::$rcsPathToCheck, '', 0, strlen($entity_prefix) + 1);
-    self::$entityPathPrefix = $entity_prefix;
-    self::$entityFullPath = self::$pageFullPath;
-    self::$processedPaths[self::$pageFullPath] = $entity_url_prefix . $placehodler_id;
-
-    if (isset($entity)) {
-      self::$entityData = $entity->toArray();
-      self::$processedPaths[self::$pageFullPath] = $entity_url_prefix . $entity->id();
-    }
-  }
-
-  /**
-   * Gets the RCS placeholders config.
-   *
-   * @return \Drupal\Core\Config\ImmutableConfig
-   *   The RCS placeholders config.
-   */
-  protected function getRcsPhSettings() {
-    $static = NULL;
-    if (isset($static)) {
-      return $static;
-    }
-    $static = $this->configFactory->get('rcs_placeholders.settings');
-    return $static;
-  }
-
-  /**
    * Returns TRUE if we are on RCS page.
    *
    * @return bool

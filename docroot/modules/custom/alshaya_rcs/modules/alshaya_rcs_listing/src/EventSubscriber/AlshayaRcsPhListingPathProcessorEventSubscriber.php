@@ -65,10 +65,10 @@ class AlshayaRcsPhListingPathProcessorEventSubscriber implements EventSubscriber
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $category_prefix = $config->get('category.path_prefix');
 
-    // if (!str_starts_with($path, '/' . $category_prefix)
-    // || (isset($data['is_department_page']) && !$data['is_department_page'])) {
-    //   return;
-    // }
+    if (!str_starts_with($path, '/' . $category_prefix)
+    || (isset($data['is_department_page']) && !$data['is_department_page'])) {
+      return;
+    }
 
     $category = $config->get('category.enrichment')
       ? $this->enrichmentHelper->getEnrichedEntity('category', $path)
