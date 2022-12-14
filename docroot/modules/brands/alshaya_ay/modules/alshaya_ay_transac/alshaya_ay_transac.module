@@ -65,20 +65,15 @@ function alshaya_ay_transac_preprocess_block(&$variables) {
       // Default block label is Shop By.
       // Only update block label for footer menu
       // block as per current super category.
-      $site_default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
       $term_name = $term->getName();
-      if ($site_default_langcode !== 'en') {
-        if ($term->hasTranslation('en')) {
-          $term = $term->getTranslation('en');
-          $term_name = $term->getName();
-        }
+      if ($term->get('langcode')->value !== 'en' && $term->hasTranslation('en')) {
+        $term = $term->getTranslation('en');
+        $term_name = $term->getName();
       }
-      if ($term_name !== 'Shop') {
-        $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-        if ($term->hasTranslation($current_langcode)) {
-          $term = $term->getTranslation($current_langcode);
-          $variables['label'] = $term->getName();
-        }
+      $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      if ($term_name !== 'Shop' && $term->hasTranslation($current_langcode)) {
+        $term = $term->getTranslation($current_langcode);
+        $variables['label'] = $term->getName();
       }
     }
   }
