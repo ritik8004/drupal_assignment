@@ -4,9 +4,12 @@ import { createConfigurableDrawer } from '../../js/utilities/addToBagHelper';
 import { hasValue } from '../../js/utilities/conditionsUtility';
 import AddToBagContainer from '../../js/utilities/components/addtobag-container';
 
-(function alshayaMatchbackAddToBag($, Drupal) {
+(function alshayaMatchbackAddToBag($, Drupal, drupalSettings) {
   Drupal.behaviors.alshayaMatchbackAddToBagBehavior = { // eslint-disable-line no-param-reassign
     attach: function attach(context) {
+      if (!drupalSettings.displayMatchbackAddToBag) {
+        return;
+      }
       // We only want to proceed when the AJAX call to fetch matchback items
       // is done and Drupal behaviors is called.
       if (hasValue(context.classList) && !context.classList.contains('crossell-title')) {
@@ -38,4 +41,4 @@ import AddToBagContainer from '../../js/utilities/components/addtobag-container'
       });
     },
   };
-}(jQuery, Drupal));
+}(jQuery, Drupal, drupalSettings));
