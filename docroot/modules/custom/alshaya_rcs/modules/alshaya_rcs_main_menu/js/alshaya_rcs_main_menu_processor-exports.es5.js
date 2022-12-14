@@ -184,7 +184,7 @@ const processData = function (data, maxLevel, mobileMenuMaxDepth) {
  *   The menu data.
  *
  * @param {boolean} showL2InSeparateColumn
- *   show L2 items in separate columns.
+ *   Show L2 items in separate columns.
  *
  * @param {integer} maxCols
  *   Max number of columns.
