@@ -3,7 +3,7 @@ const buildPath = './dist/';
 
 const config = {
   entry: {
-    alshaya_behat: './js/alshaya_behat.es5.js',
+    alshaya_behat_user_event: './js/alshaya_behat_user_event.es5.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
