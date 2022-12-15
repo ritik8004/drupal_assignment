@@ -8,22 +8,25 @@
           font-size: rem(20);
         }
       }
+
+      .magic-dots {
+        bottom: rem(13);
+      }
     }
 
     .slick-dots {
-      li {
+      li,
+      li.small {
         button {
           &::before {
-            // proxima nova font family cut dots and descrese the size of the font so replacing with arial.
-            font-family: 'arial';
-            font-size: rem(32);
-          }
-        }
+            // uses 'ProximaNova-Regular' font.
+            font-size: rem(36);
+            line-height: rem(14);
 
-        &.small {
-          button {
-            &::before {
-              font-size: rem(32);
+            html[lang="ar"] & {
+              // uses 'Arquitecta Regular' font.
+              font-size: rem(52);
+              line-height: rem(4);
             }
           }
         }
