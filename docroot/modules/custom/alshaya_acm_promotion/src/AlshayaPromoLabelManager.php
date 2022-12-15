@@ -857,13 +857,18 @@ class AlshayaPromoLabelManager {
 
       $free_sku_media = $this->imagesManager->getFirstImage($free_sku_entity);
 
-      // If free gift sku has no media, then we check from the default
-      // image from the configuration.
+      // If free gift sku has no media, then we check for the default image
+      // from the configuration.
       if (empty($free_sku_media) && !empty($default_image = $this->imagesManager->getProductDefaultImage())) {
         $free_sku_media = [
           'label' => $free_sku_entity->label(),
           'file' => $default_image,
           'drupal_uri' => $default_image->getFileUri(),
+          'pims_image' => [
+            'styles' => [
+              SkuImagesHelper::STYLE_PRODUCT_TEASER => $default_image->getFileUri(),
+            ],
+          ],
         ];
         $free_sku_image_url = file_create_url($default_image->getFileUri());
       }
@@ -874,11 +879,15 @@ class AlshayaPromoLabelManager {
           SkuImagesHelper::STYLE_PRODUCT_TEASER
         );
         $return['#sku_image'] = $this->renderer->renderPlain($free_sku_image);
-        $free_sku_image_url = file_create_url($free_sku_media['drupal_uri']);
       }
 
       // Context to expose free gift data in mobile api.
       if ($context == 'app') {
+
+        // Use the default image if set already, else use the free-gift media.
+        $free_sku_image_url ??= $this->skuImagesHelper->getImageStyleUrl(
+          $free_sku_media,
+          SkuImagesHelper::STYLE_PRODUCT_TEASER);
 
         $return = [
           'free_sku_code' => $free_sku_entity->getSku(),
@@ -888,8 +897,6 @@ class AlshayaPromoLabelManager {
           'sku_image' => $free_sku_image_url,
           'coupon' => $coupon,
         ];
-
-        return $return;
       }
     }
 
