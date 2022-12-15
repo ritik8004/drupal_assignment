@@ -24,7 +24,7 @@
     });
     // Filter out all the img tags having data-src attribute.
     jQuery('img[data-src]').once('rcs-lazy-load').each(function (index, item) {
-      if ($(this).attr('data-src') != "") {
+      if ($(this).attr('data-src') != '') {
         imageObserver.observe(item);
       }
     });
