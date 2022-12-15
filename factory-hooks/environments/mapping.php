@@ -335,17 +335,29 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'we_pprod',
         'conductor' => 'wekw_dev2',
       ],
+      'qa2' => [
+        'magento' => 'we_qa',
+        'conductor' => 'wekw_test',
+      ],
     ],
     'wesa' => [
       'dev2' => [
         'magento' => 'we_pprod',
         'conductor' => 'wesa_dev2',
       ],
+      'qa2' => [
+        'magento' => 'we_qa',
+        'conductor' => 'wesa_test',
+      ],
     ],
     'weae' => [
       'dev2' => [
         'magento' => 'we_pprod',
         'conductor' => 'weae_dev2',
+      ],
+      'qa2' => [
+        'magento' => 'we_qa',
+        'conductor' => 'weae_test',
       ],
     ],
     'aeoxb' => [
