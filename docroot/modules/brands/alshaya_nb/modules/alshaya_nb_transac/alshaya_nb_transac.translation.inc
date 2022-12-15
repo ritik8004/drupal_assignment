@@ -50,7 +50,7 @@ function _alshaya_nb_transac_translations() {
       'Style' => [
         'ar' => 'الستايل',
       ],
-      'Meets New Balance\'s green leaf standard' => [
+      'Meets the New Balance green leaf standard' => [
         'ar' => 'يلبي معايير غرين ليف من نيو بالانس',
       ],
       'Color' => [
