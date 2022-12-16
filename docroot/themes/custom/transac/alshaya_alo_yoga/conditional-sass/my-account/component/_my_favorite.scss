@@ -5,11 +5,7 @@
         &.product-small {
           .alshaya_search_gallery {
             @include breakpoint($desktop) {
-              height: rem(448);
-            }
-
-            @include breakpoint($only-mobile) {
-              height: rem(259);
+              height: initial;
             }
           }
         }
@@ -17,40 +13,6 @@
     }
 
     #my-wishlist {
-      .c-products__item {
-        article {
-          &:hover {
-            .quick-add {
-              @include breakpoint($desktop) {
-                top: rem(352);
-              }
-            }
-          }
-        }
-      }
-
-      .quick-add {
-        .addtobag-button,
-        .addtobag-config-button,
-        .is-not-buyable {
-          @include breakpoint($only-mobile) {
-            width: rem(56);
-            height: rem(56);
-            position: absolute;
-            #{$right}: rem(10);
-            #{$left}: unset;
-            margin-top: 0;
-          }
-
-          &::before {
-            @include breakpoint($only-mobile) {
-              bottom: rem(12);
-              #{$right}: 0;
-            }
-          }
-        }
-      }
-
       #plp-hits {
         @include breakpoint($only-mobile) {
           padding-top: rem(48);
