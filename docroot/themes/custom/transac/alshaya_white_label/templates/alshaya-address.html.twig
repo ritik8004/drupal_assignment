@@ -9,6 +9,12 @@
       <div class="address--contact">
         {{ 'Mobile Number' | t }}: <div class="no-direction">{{ item|replace({' ':''}) }}</div>
       </div>
+    {% elseif key == 'address_line_multiple' %}
+      {% if item is iterable %}
+        {% for value in item %}
+          <div class="address--content">{{ value }}</div>
+        {% endfor %}
+      {% endif %}
     {% else %}
       <div class="address--content">{{ item }}</div>
     {% endif %}
