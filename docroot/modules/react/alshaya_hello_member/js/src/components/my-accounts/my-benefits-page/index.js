@@ -99,7 +99,7 @@ class MyBenefitsPage extends React.Component {
           <img src={myBenefit.large_image} />
         </div>
         <div className="category-name">
-          <div>{myBenefit.category_name}</div>
+          {myBenefit.category_name}
         </div>
         <div className="voucher-wrapper">
           <div className="title">
