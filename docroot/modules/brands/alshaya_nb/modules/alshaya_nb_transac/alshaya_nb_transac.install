@@ -8,6 +8,21 @@
 /**
  * Implements hook_update_N().
  *
+ * Update translation for green leaf header.
+ */
+function alshaya_nb_transac_update_9404() {
+  // Add translations.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations('v3');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for additional attributes.
  */
 function alshaya_nb_transac_update_9403() {
