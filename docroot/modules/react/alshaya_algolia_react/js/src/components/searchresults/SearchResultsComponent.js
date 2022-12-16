@@ -203,7 +203,7 @@ const SearchResultsComponent = ({
         && (
           <BecomeHelloMember />
         )}
-        <div id="hits" className="c-products-list product-small view-search">
+        <div id="hits" className={`c-products-list product-${drupalSettings.algoliaSearch.defaultColgrid} view-search`}>
           <SearchResultInfiniteHits
             defaultpageRender={defaultpageRender}
             pageType="search"

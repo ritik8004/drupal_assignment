@@ -248,7 +248,7 @@ const PlpApp = ({
       && (
         <BecomeHelloMember />
       )}
-      <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
+      <div id="plp-hits" className={`c-products-list product-${drupalSettings.algoliaSearch.defaultColgrid} view-algolia-plp`}>
         <PlpResultInfiniteHits
           defaultpageRender={defaultpageRender || false}
           gtmContainer="product listing page"
