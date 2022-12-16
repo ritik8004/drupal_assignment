@@ -8,6 +8,7 @@
 use Drupal\Core\Cache\Cache;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\user\UserInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_theme().
@@ -48,7 +49,8 @@ function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface 
   $acm_product_config = \Drupal::config('alshaya_acm_product.settings');
   $product_pdp_layout = $acm_product_config->get('pdp_layout');
 
-  if (!empty($productNode->get('field_select_pdp_layout')->getValue()[0]['value'])) {
+  if ($productNode instanceof NodeInterface
+    && !empty($productNode->get('field_select_pdp_layout')->getValue()[0]['value'])) {
     $product_pdp_layout = $productNode->get('field_select_pdp_layout')->getValue()[0]['value'];
   }
   // Attach wishlist libraries and add a wishlist markup for FE icon rendering.
