@@ -145,14 +145,15 @@ async function getExpressDeliveryStatus() {
       });
       document.dispatchEvent(event);
     }
-
-    response.data.forEach((label) => {
-      if (label.carrier_code === 'SAMEDAY') {
-        showExpressDeliveryLabel.sameDayDelivery = label.status;
-      } else if (label.carrier_code === 'EXPRESS') {
-        showExpressDeliveryLabel.expressDelivery = label.status;
-      }
-    });
+    if (Array.isArray(response.data)) {
+      response.data.forEach((label) => {
+        if (label.carrier_code === 'SAMEDAY') {
+          showExpressDeliveryLabel.sameDayDelivery = label.status;
+        } else if (label.carrier_code === 'EXPRESS') {
+          showExpressDeliveryLabel.expressDelivery = label.status;
+        }
+      });
+    }
 
     // Dispatch event for delivery label component on teaser with API response
     // in event details.

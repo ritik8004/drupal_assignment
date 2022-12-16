@@ -329,12 +329,6 @@ class SkusProductList extends ResourceBase {
     $data = array_merge($data, $images);
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
     $data['promotions'] = $this->getPromotions($sku);
-    $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
-    if ($promo_label) {
-      $data['promotions'][] = [
-        'text' => $promo_label,
-      ];
-    }
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
     $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
