@@ -8,7 +8,7 @@
 /**
  * Implements hook_update_N().
  *
- * Update translations for additional attributes.
+ * Update translation for green leaf header.
  */
 function alshaya_nb_transac_update_9404() {
   // Add translations.
