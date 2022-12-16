@@ -195,22 +195,22 @@ $magentos = [
       'access_token_secret' => 'bjp2mcotraje0uolzm2dda2g672wwl9h',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 26],
+      'store_id' => ['en' => 1, 'ar' => 64],
     ],
     'sa' => [
-      'store_id' => ['en' => 35, 'ar' => 38],
+      'store_id' => ['en' => 52, 'ar' => 55],
     ],
     'ae' => [
-      'store_id' => ['en' => 41, 'ar' => 44],
+      'store_id' => ['en' => 58, 'ar' => 61],
     ],
     'eg' => [
-      'store_id' => ['en' => 23, 'ar' => 20],
+      'store_id' => ['en' => 7, 'ar' => 4],
     ],
     'bh' => [
-      'store_id' => ['en' => 17, 'ar' => 14],
+      'store_id' => ['en' => 13, 'ar' => 10],
     ],
     'qa' => [
-      'store_id' => ['en' => 32, 'ar' => 29],
+      'store_id' => ['en' => 19, 'ar' => 16],
     ],
   ],
   'cos_prod' => [
