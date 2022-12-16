@@ -562,9 +562,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
     }
 
-    // Allow other modules to alter address.
-    $this->moduleHandler->alter('alshaya_addressbook_address_from_magento_address', $address, $magento_address, $mapping);
-
     return $address;
   }
 
