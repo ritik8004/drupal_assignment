@@ -40,8 +40,29 @@ const calculateDiscount = (price, finalPrice) => {
   return parseFloat(Math.round((discount * 100) / floatPrice));
 };
 
+/**
+ * Gets data attribute for xb price.
+ *
+ * @param {object} fixedPrice
+ *   Fixed prices object with country code and prices.
+ * @param {string} field
+ *   Price or special price to retrivee from fixedPrice json.
+ *
+ * @returns {object}
+ *   Country code and its fixed or special price.
+ */
+const getDataAttributePrices = (fixedPrice, field) => {
+  const prices = {};
+  Object.entries(fixedPrice).forEach(([key, value]) => {
+    prices[key] = value[field];
+  });
+
+  return prices;
+};
+
 export {
   formatPrice,
   calculateDiscount,
   getPriceRangeLabel,
+  getDataAttributePrices,
 };
