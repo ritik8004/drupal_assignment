@@ -35,6 +35,9 @@ alshaya_algolia_react.settings:
     top_facets_limit:
       type: integer
       label: 'Number of filters to show on srp/plp page top.'
+    default_col_grid:
+      type: string
+      label: 'Default col grid value.'  
 
 alshaya_algolia_react.product_frames:
   type: config_object
