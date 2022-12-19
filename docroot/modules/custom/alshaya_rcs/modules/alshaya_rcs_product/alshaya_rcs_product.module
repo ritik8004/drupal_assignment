@@ -222,6 +222,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
     $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
   }
+  // Add the product labels library.
+  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_labels';
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());
