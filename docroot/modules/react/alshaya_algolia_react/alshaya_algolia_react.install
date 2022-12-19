@@ -31,6 +31,7 @@ function alshaya_algolia_react_update_9402() {
  */
 function alshaya_algolia_react_update_9403() {
   $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  // Updateing config defult_col_grid for PLP & SLP pages.
   $config->set('default_col_grid', 'small')->save();
 }
 
