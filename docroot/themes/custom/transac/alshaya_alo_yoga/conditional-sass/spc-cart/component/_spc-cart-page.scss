@@ -18,4 +18,16 @@ body {
       }
     }
   }
+
+  .spc-free-delivery-container {
+    @include breakpoint($desktop) {
+      max-width: rem(1236);
+    }
+
+    .free-delivery-usp {
+      @include breakpoint($desktop) {
+        width: 55%;
+      }
+    }
+  }
 }
