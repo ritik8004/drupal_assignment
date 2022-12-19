@@ -11,13 +11,11 @@
     }
   }
 
-  .spc-free-delivery-container {
-    @include breakpoint($desktop) {
+  @include breakpoint($desktop) {
+    .spc-free-delivery-container {
       max-width: rem(1238);
-    }
 
-    .free-delivery-usp {
-      @include breakpoint($desktop) {
+      .free-delivery-usp {
         width: 54.8%;
       }
     }
