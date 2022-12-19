@@ -104,7 +104,10 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                 { Drupal.t('Already an Aura member?') }
                 <div
                   className="btn"
-                  onClick={() => this.toggleLinkCardModal(true)}
+                  onClick={() => {
+                    this.toggleLinkCardModal(true);
+                    Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_ALREADY_MEMBER', label: 'initiated' });
+                  }}
                 >
                   { Drupal.t('Link your account') }
                 </div>
@@ -114,7 +117,10 @@ class AuraMyAccountNoLinkedCard extends React.Component {
               { Drupal.t('Ready to be rewarded?') }
               <div
                 className="btn"
-                onClick={() => this.toggleOTPModal(true)}
+                onClick={() => {
+                  this.toggleOTPModal(true);
+                  Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'initiated' });
+                }}
               >
                 { Drupal.t('Join now') }
               </div>

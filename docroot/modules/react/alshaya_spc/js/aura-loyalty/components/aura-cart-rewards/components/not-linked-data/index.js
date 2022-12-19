@@ -119,9 +119,12 @@ class AuraNotLinkedData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                  onClick={() => this.setState({
-                    openLinkOldCardModal: true,
-                  })}
+                  onClick={() => {
+                    this.setState({
+                      openLinkOldCardModal: true,
+                    });
+                    Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'initiated' });
+                  }}
                 >
                   {getStringMessage('aura_link_aura')}
                 </a>
