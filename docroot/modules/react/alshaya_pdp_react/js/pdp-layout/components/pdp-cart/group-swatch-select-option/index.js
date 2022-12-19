@@ -1,7 +1,6 @@
 import React from 'react';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import AvailableSwatchOptions from '../available-swatch-options';
-import DefaultSwatchOptions from '../default-swatch-options';
 
 const GroupSwatchSelectOption = ({
   configurables, code, handleSelectionChanged, nextCode, nextValues, handleLiClick, selected,
@@ -15,7 +14,9 @@ const GroupSwatchSelectOption = ({
         if (hasValue(colorLabelId)) {
           colorLabelId.innerHTML = '';
         }
-
+        const processedNextValues = (code === nextCode)
+          ? nextValues
+          : null;
         return (
           <div className="group-swatch-option" key={attr}>
             <span className="group-swatch-text">
@@ -30,22 +31,9 @@ const GroupSwatchSelectOption = ({
                 && colorLabel === configurables.values[attr][item].label) {
                   colorLabelId.innerHTML = `: ${colorLabel}`;
                 }
-                if (code === nextCode) {
-                  return (
-                    <AvailableSwatchOptions
-                      nextValues={nextValues}
-                      attr={attrVal}
-                      value={configurables.values[attr][item].swatch_color}
-                      key={attrVal}
-                      handleLiClick={handleLiClick}
-                      code={code}
-                      label={configurables.values[attr][item].label}
-                      swatchType={configurables.values[attr][item].swatch_type}
-                    />
-                  );
-                }
                 return (
-                  <DefaultSwatchOptions
+                  <AvailableSwatchOptions
+                    nextValues={processedNextValues}
                     attr={attrVal}
                     value={configurables.values[attr][item].swatch_color}
                     key={attrVal}

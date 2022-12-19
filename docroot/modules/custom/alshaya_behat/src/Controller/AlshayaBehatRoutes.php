@@ -65,12 +65,7 @@ class AlshayaBehatRoutes extends ControllerBase {
    *   The access result.
    */
   public function checkAccess(): AccessResult {
-    $behat_key_in_settings = Settings::get('behat_secret_key');
-    if (empty($behat_key_in_settings)) {
-      return AccessResult::forbidden('Secret key not provided in settings');
-    }
-    $behat_key_in_url = $this->request->query->get('behat');
-    return AccessResult::allowedIf($behat_key_in_settings === $behat_key_in_url);
+    return AccessResult::allowedIf(Settings::get('is_behat_request'));
   }
 
   /**
@@ -129,6 +124,28 @@ class AlshayaBehatRoutes extends ControllerBase {
     // If no SKU is found which is in stock or category not available
     // then redirect to 400 page.
     throw new BadRequestHttpException('No PLP with in stock products found.');
+  }
+
+  /**
+   * Provides the in-stock Product having a promotion.
+   *
+   * @param string $type
+   *   Promotion types like groupn, groupn_disc etc.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirects to PDP page if found else redirects to 404 page.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+   */
+  public function inStockProductWithPromo(string $type): RedirectResponse {
+    $result = $this->alshayaBehat->getWorkingProductWithPromo($type);
+    if ($result instanceof NodeInterface) {
+      // Redirect to the node page.
+      return new RedirectResponse($result->toUrl()->toString());
+    }
+
+    // If no in-stock product found with promotion, then redirect to 400 page.
+    throw new BadRequestHttpException(is_string($result) ? $result : 'No in-stock products found with given promotion type.');
   }
 
 }

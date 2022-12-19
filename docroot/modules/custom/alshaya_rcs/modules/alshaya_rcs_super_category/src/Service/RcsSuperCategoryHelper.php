@@ -325,7 +325,7 @@ class RcsSuperCategoryHelper {
    *   Force download logos.
    */
   protected function setLogoImages(&$term, $category, $force_download) {
-    $mdc_url = Settings::get('alshaya_api.settings')['magento_host'];
+    $mdc_url = $this->configFactory->get('alshaya_api.settings')->get('magento_host');
     $mdc_url = rtrim($mdc_url, '/') . '/';
 
     $directory = $this->configFactory->get('system.file')->get('default_scheme') . '://category-images';

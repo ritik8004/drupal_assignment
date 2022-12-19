@@ -8,7 +8,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 20 seconds
     And the element "#block-content #spc-cart .spc-pre-content .dynamic-promotion-wrapper div.inactive-promotions" should exist
@@ -19,7 +19,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     Then I should see "3"
     And I wait 5 seconds
     And the element ".total-line-item .delivery-total" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     When I click the anchor link ".edit-checkout-as-guest" on page
@@ -37,7 +37,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I should save the order details in the file
@@ -54,7 +54,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 20 seconds
     And the element "#block-content #spc-cart .spc-pre-content .dynamic-promotion-wrapper div.inactive-promotions" should exist
@@ -65,7 +65,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     Then I should see "3"
     And I wait 5 seconds
     And the element ".total-line-item .delivery-total" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     When I click the anchor link ".edit-checkout-as-guest" on page
@@ -81,7 +81,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
@@ -95,7 +95,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 20 seconds
     And the element "#block-content #spc-cart .spc-pre-content .dynamic-promotion-wrapper div.inactive-promotions" should exist
@@ -106,7 +106,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     Then I should see "3"
     And I wait 5 seconds
     And the element ".total-line-item .delivery-total" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     When I click the anchor link ".edit-checkout-as-guest" on page
@@ -123,7 +123,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"

@@ -4,6 +4,7 @@ namespace Drupal\alshaya_bazaar_voice\Service;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_acm_product\SkuImagesHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\mysql\Driver\Database\mysql\Connection;
@@ -767,10 +768,15 @@ class AlshayaBazaarVoice {
     $image_url = '';
 
     $sku_entity = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
-    if ($sku_entity === NULL && !empty($item)) {
-      if (!empty($item['image'])) {
-        $image_url = file_create_url($item['image']['#uri']);
+    if (($sku_entity === NULL || $this->skuManager->isSkuFreeGift($sku_entity)) && !empty($item)) {
+      if (empty($item['image'])) {
+        $item['image'] = alshaya_acm_get_product_display_image(
+          $item['sku'],
+          SkuImagesHelper::STYLE_PRODUCT_TEASER,
+          'cart'
+        );
       }
+      $image_url = $item['image'] ? file_create_url($item['image']['#uri']) : '';
       $product_label = $item['name'];
     }
     else {

@@ -7,6 +7,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Proxy\Filter\FilterInterface;
 use Laminas\Diactoros\Uri;
+use Laminas\Diactoros\ResponseFactory;
 
 /**
  * Updates the request Url.
@@ -61,8 +62,8 @@ class ProxyFilter implements FilterInterface {
 
     // If url does not have magento host then return response with 404 code.
     if (!$has_magento_host) {
-      $response = $next($request);
-      return $response->withStatus(404, 'Page not found');
+      return (new ResponseFactory())
+        ->createResponse(404, 'Page not found');
     }
 
     // Collect arguments from query string.

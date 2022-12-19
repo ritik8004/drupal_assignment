@@ -89,6 +89,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
     $variables['max_nb_col'] = (int) $main_menu_settings->get('max_nb_col');
     $variables['ideal_max_col_length'] = (int) $main_menu_settings->get('ideal_max_col_length');
     $variables['menu_layout'] = $main_menu_settings->get('desktop_main_menu_layout');
+    $variables['show_l2_in_separate_column'] = $main_menu_settings->get('show_l2_in_separate_column');
 
     // Get the alshaya mobile main menu config object.
     $mobile_menu_settings = $this->configFactory->get('alshaya_main_menu.settings');
@@ -131,6 +132,7 @@ class AlshayaRcsMainMenuBlock extends BlockBase implements ContainerFactoryPlugi
               'menuLayout' => $variables['menu_layout'],
               'highlightTiming' => $variables['highlight_timing'],
               'mobileMenuLayout' => $variables['mobile_menu_layout'],
+              'showL2InSeparateColumn' => $variables['show_l2_in_separate_column'],
             ],
           ],
         ],

@@ -5,6 +5,7 @@ import ShippingMethods from '../shipping-methods';
 import Loading from '../../../utilities/loading';
 import {
   showFullScreenLoader,
+  cleanMobileNumber,
 } from '../../../utilities/checkout_util';
 import {
   checkoutAddressProcess,
@@ -133,6 +134,13 @@ export default class HomeDeliveryInfo extends React.Component {
                   {address.firstname}
                   {' '}
                   {address.lastname}
+                </div>
+                <div className="delivery-email mobile-only-show">
+                  {address.email}
+                </div>
+                <div className="delivery-mobile mobile-only-show">
+                  {`+${drupalSettings.country_mobile_code} `}
+                  { cleanMobileNumber(address.telephone) }
                 </div>
                 <div className="delivery-address">
                   {addressData.join(', ')}

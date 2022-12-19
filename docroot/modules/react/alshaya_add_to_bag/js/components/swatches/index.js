@@ -6,9 +6,11 @@ import React from 'react';
  * @param {object} e
  *   The event object.
  */
-const onSwatchSelect = (e, attributeName, onClick, type) => {
+const onSwatchSelect = (e, attributeName, onClick) => {
   e.preventDefault();
-  const swatchValue = (type !== 'image')
+  // Get value from current element if its not image swatch or dual tone color swatch,
+  // else get value from parent element.
+  const swatchValue = (e.target.nodeName.toLowerCase() === 'a')
     ? e.target.dataset.value
     : e.target.parentElement.dataset.value;
   onClick(attributeName, swatchValue);
@@ -42,17 +44,14 @@ const Swatch = (props) => {
     // If swatch is a type of color.
     case 'color':
       return (
-        <li className="li-swatch-color" key={value}>
-          <span className="swatch-label">{label}</span>
-          <a
-            id={`value${value}`}
-            data-value={value}
-            className={classes}
-            href="#"
-            style={{ backgroundColor: data }}
-            onClick={(e) => onSwatchSelect(e, attributeName, onClick, type)}
-          />
-        </li>
+        <ColorSwatch
+          data={data}
+          value={value}
+          label={label}
+          classes={classes}
+          onClick={onClick}
+          attributeName={attributeName}
+        />
       );
 
     // If swatch is a type of text.
@@ -64,7 +63,7 @@ const Swatch = (props) => {
             data-value={value}
             className={classes}
             href="#"
-            onClick={(e) => onSwatchSelect(e, attributeName, onClick, type)}
+            onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
           >
             {label}
           </a>
@@ -80,7 +79,7 @@ const Swatch = (props) => {
             data-value={value}
             className={classes}
             href="#"
-            onClick={(e) => onSwatchSelect(e, attributeName, onClick, type)}
+            onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
           >
             <img loading="lazy" src={data} />
           </a>
@@ -91,6 +90,53 @@ const Swatch = (props) => {
     default:
       return null;
   }
+};
+
+const ColorSwatch = ({
+  data,
+  value,
+  label,
+  classes,
+  onClick,
+  attributeName,
+}) => {
+  const values = data.split('|');
+  if (values.length > 1) {
+    return (
+      <li className="li-swatch-color dual-color-tone" key={value}>
+        <span className="swatch-label">{label}</span>
+        <a
+          id={`value${value}`}
+          data-value={value}
+          className={classes}
+          href="#"
+          onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
+        >
+          <div style={{
+            backgroundColor: values[0],
+          }}
+          />
+          <div style={{
+            backgroundColor: values[1],
+          }}
+          />
+        </a>
+      </li>
+    );
+  }
+  return (
+    <li className="li-swatch-color dual-color-tone" key={value}>
+      <span className="swatch-label">{label}</span>
+      <a
+        id={`value${value}`}
+        data-value={value}
+        className={classes}
+        href="#"
+        style={{ backgroundColor: data }}
+        onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
+      />
+    </li>
+  );
 };
 
 export default Swatch;

@@ -18,3 +18,10 @@ alshaya_behat.first_plp_with_products:
     _controller: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::firstPlpWithInStockProduct'
   requirements:
     _custom_access: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::checkAccess'
+
+alshaya_behat.product_with_promotion:
+  path: /behat/product-with-promotion/{type}
+  defaults:
+    _controller: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::inStockProductWithPromo'
+  requirements:
+    _custom_access: '\Drupal\alshaya_behat\Controller\AlshayaBehatRoutes::checkAccess'

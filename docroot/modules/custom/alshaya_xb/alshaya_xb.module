@@ -7,7 +7,6 @@
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Render\Markup;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\TypedData\Exception\ReadOnlyException;
 
 /**
@@ -36,7 +35,7 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
   }
 
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $settings = Settings::get('magento_lang_prefix');
+  $settings = \Drupal::config('alshaya_api.settings')->get('magento_lang_prefix');
   $ge_store_code = $settings[$language];
   $config = \Drupal::config('alshaya_xb.settings');
   $ge_js_src = $config->get('globale_js_url') ?? '';
@@ -215,4 +214,24 @@ function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $e
 function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
   $currency['xb']['en'] = 'AED';
   $currency['xb']['ar'] = 'AED';
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  if (empty($build["#cancelled_products"])) {
+    return;
+  }
+
+  foreach ($build["#cancelled_products"] as &$item) {
+    if (!$item['is_item_cancelled']) {
+      continue;
+    }
+
+    // Update refund product price from amount_refunded.
+    $item['refund_amount'] = $item['amount_refunded'];
+    // Update refund total for product.
+    $item['total'] = alshaya_acm_price_format($item['refund_amount'], [], '', $order['order_currency_code']);
+  }
 }

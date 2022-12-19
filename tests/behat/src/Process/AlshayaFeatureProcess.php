@@ -44,6 +44,7 @@ class AlshayaFeatureProcess {
     $environment = explode('-', $parameters['site']);
     $this->suiteLocators = [];
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'exclusiveCouponCode';
+    $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'ContentCreation';
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPLPAddtocart';
     if (isset($parameters['variables']['new_pdp_enabled'])) {
       $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPDP';

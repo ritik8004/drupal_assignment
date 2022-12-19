@@ -31,6 +31,7 @@
     "build": "node_modules/gulp/bin/gulp.js performance-build",
     "build:dev": "node_modules/gulp/bin/gulp.js performance-build:dev",
     "svg-minify": "node_modules/.bin/svgo -f ${npm_config_folderPath} -r",
+    "svg-minify-specific": "node_modules/.bin/svgo ${npm_config_filePath}",
     "preinstall": "npx npm-force-resolutions"
   },
   "resolutions": {

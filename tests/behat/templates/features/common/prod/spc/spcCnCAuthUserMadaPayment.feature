@@ -18,10 +18,10 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
@@ -37,7 +37,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I add the billing address on checkout page
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I click jQuery "#authsubmit" element on page
@@ -56,10 +56,10 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
@@ -76,7 +76,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait 10 seconds
     And I wait for the page to load
     And I add the billing address on checkout page
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I click jQuery "#authsubmit" element on page
@@ -95,10 +95,10 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
@@ -116,7 +116,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait for the page to load
     And I add the billing address on checkout page
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I click jQuery "#authsubmit" element on page
@@ -132,10 +132,10 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
@@ -151,7 +151,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 20 seconds
     And I add the billing address on checkout page
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I click jQuery "#authsubmit" element on page
@@ -170,10 +170,10 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
@@ -191,7 +191,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I add the billing address on checkout page
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I click jQuery "#authsubmit" element on page
@@ -210,10 +210,10 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
@@ -230,7 +230,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait 10 seconds
     And I wait for the page to load
     And I add the billing address on checkout page
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I click jQuery "#authsubmit" element on page

@@ -4,3 +4,13 @@
     background-color: $block_acm_customer_txt;
   }
 }
+
+.alias--cart,
+.alias--checkout,
+.alias--checkout-confirmation {
+  .spc-sidebar.sticky {
+    @include breakpoint($tablet) {
+      position: initial;
+    }
+  }
+}

@@ -3,8 +3,7 @@ Feature: SPC Classic PDP block for desktop
 
   Background:
     Given I am on "{spc_pdp_page}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
 
   @pdp @desktop
   Scenario: To verify user is able to see product details on the PDP page

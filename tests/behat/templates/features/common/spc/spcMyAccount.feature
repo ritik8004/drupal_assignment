@@ -3,8 +3,7 @@ Feature: Test the My Account functionality
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 10 seconds
-    Then I should be on "/user" page
+    And I wait for element "#block-page-title"
 
   Scenario: Authenticated user should be able to login into the system
     And the element "#block-page-title .c-page-title" should exist

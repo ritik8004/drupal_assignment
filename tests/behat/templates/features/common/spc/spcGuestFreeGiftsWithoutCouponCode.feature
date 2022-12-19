@@ -24,7 +24,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -46,7 +46,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I should see "(3 items)" in the "#block-content .spc-content .spc-checkout-section-title" element
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 50 seconds
     And I wait for the page to load
     Then I fill in "edit-name" with "{spc_auth_user_email}"
@@ -77,7 +77,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -114,7 +114,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -134,7 +134,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 50 seconds
     And I wait for the page to load
     Then I fill in "edit-name" with "{spc_auth_user_email}"
@@ -151,7 +151,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -185,7 +185,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -206,7 +206,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 50 seconds
     And I wait for the page to load
     Then I fill in "edit-name" with "{spc_auth_user_email}"
@@ -222,7 +222,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And  I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load

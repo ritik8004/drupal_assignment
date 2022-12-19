@@ -11,7 +11,6 @@ use Drupal\metatag\MetatagManagerInterface;
 use Drupal\metatag\MetatagToken;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -157,6 +156,23 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *   Process 50 terms per batch and output to the file. Default is 30.
    */
   public function exportProductCategoryData($options = ['limit' => 30]) {
+    // Get tid of all the parent product category.
+    $term_ids = array_keys($this->productCategoryTree->getChildTermIds());
+
+    // Combine parent and child tids.
+    $tids = [];
+    foreach ($term_ids as $term_id) {
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
+      $child_tids = $this->productCategoryTree->getNestedChildrenTids($term);
+      $tids = array_merge($tids, [$term_id], $child_tids);
+    }
+
+    // Return if no product category term found.
+    if (empty($tids)) {
+      $this->drupalLogger->notice('Product category terms not found, no data exported.');
+      return;
+    }
+
     $path = self::PATH;
     $output_directory = $this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY);
     if (!$output_directory) {
@@ -186,16 +202,6 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
         ]));
         return;
       }
-    }
-    // Get tid of all the parent product category.
-    $term_ids = array_keys($this->productCategoryTree->getChildTermIds());
-
-    // Combine parent and child tids.
-    $tids = [];
-    foreach ($term_ids as $term_id) {
-      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
-      $child_tids = $this->productCategoryTree->getNestedChildrenTids($term);
-      $tids = array_merge($tids, [$term_id], $child_tids);
     }
 
     $batch = [
@@ -239,6 +245,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     foreach ($tids as $tid) {
       try {
         // Export the translated term data as well.
+        /** @var \Drupal\taxonomy\TermInterface $term */
         $term = $term_storage->load($tid);
         foreach ($term->getTranslationLanguages() as $langcode => $language) {
           $translated_term = $term->getTranslation($langcode);
@@ -329,6 +336,9 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
       'field_plp_group_category_desc',
       'field_group_by_sub_categories',
       'field_meta_tags',
+      'field_logo_active_image',
+      'field_logo_header_image',
+      'field_logo_inactive_image',
     ];
   }
 
@@ -366,13 +376,17 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
           case 'field_plp_group_category_img':
           case 'field_promotion_banner':
           case 'field_promotion_banner_mobile':
+          case 'field_logo_active_image':
+          case 'field_logo_header_image':
+          case 'field_logo_inactive_image':
             $value = $term->get($field)->getValue();
             if (!empty($value) && array_key_exists('target_id', $value[0])) {
               $target_id = $value[0]['target_id'];
               // Load file and get the Image URL.
+              /** @var \Drupal\file\FileInterface $image */
               $image = \Drupal::entityTypeManager()->getStorage('file')->load($target_id);
               if ($image) {
-                $data[$field] = $image->createFileUrl();
+                $data[$field] = $image->createFileUrl(FALSE);
               }
             }
             break;
@@ -478,7 +492,9 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
       return $store_code[$langcode];
     }
 
-    $store_code[$langcode] = Settings::get('magento_lang_prefix')[$langcode];
+    $store_code[$langcode] = \Drupal::configFactory()
+      ->get('alshaya_api.settings')
+      ->get('magento_lang_prefix')[$langcode];
 
     return $store_code[$langcode];
   }

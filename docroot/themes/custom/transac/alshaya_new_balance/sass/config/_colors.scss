@@ -94,7 +94,7 @@ $order_print_dark_txt: $ada-gray;
 // Store Finder.
 $store-finder-border-hover: $nb-red;
 $store_finder_text_hover: $nb-red;
-$store_finder_text:$black;
+$store_finder_text: $black;
 $store_finder_icon: $black;
 $store_finder_search_label: $black;
 $store_finder_header: $black;
@@ -105,7 +105,7 @@ $store_finder_search_results_tile_link: $black;
 $store_finder_search_input: $gray;
 $store_finder_search_input_border: $gray;
 $store_finder_glossary_alphabet: $black;
-$store_finder_search_results_hour_label :$black;
+$store_finder_search_results_hour_label: $black;
 $store_finder_search_results_tile_icon: $black;
 $store_finder_search_results_hour_icon_open: $black;
 $store_finder_glossary_icon: $black;
@@ -210,7 +210,7 @@ $label_black: $ada-gray;
 $user_order_help_bg: $light-gray;
 $user_order_help_text: $black;
 $user_order_help_text_links: $ada-gray;
-$user_acc_details_border:$gray;
+$user_acc_details_border: $gray;
 $user_nav_mobile_link: $ada-gray;
 $my_acc_mob_border_color: $gray2;
 $my_acc_address_text: $black;
@@ -288,6 +288,7 @@ $pdp_sizeguide_link: $nb-red;
 
 // Express Delivery
 $sameday-express-delivery-drawer-btn: $primary_btn_bg;
+$express-delivery-menu-list-border: $gray;
 
 //Algolia search bar.
 $algolia-input-text: $black;
@@ -330,6 +331,8 @@ $spc-cart-promo-code-submit-enabled: $nb-red;
 $spc-promo-code-bg: $light-gray;
 $spc-checkout-success-message-background: $nb-green;
 $spc-checkout-warning-message-background: $nb-red;
+$spc-cart-free-delivery-message-bg: $gray;
+$spc-cart-free-delivery-txt: $black;
 
 // Checkout steps
 $cko-steps-active-bg: $nb-red;
@@ -341,7 +344,7 @@ $cko-current-steps-label-txt: $nb-red;
 $checkout_section_titles: $black;
 $checkout_guest_button_border: $nb-red;
 $checkout_guest_button_txt: $nb-red;
-$checkout_header_border-bottom : $gray;
+$checkout_header_border-bottom: $gray;
 $checkout_footer_border-top: $black;
 
 // Checkout Login page.
@@ -436,8 +439,8 @@ $online-return-eligibility-button-bg: $nb-red;
 $online-return-eligibility-button-txt: $white;
 $online-return-eligibility-button-hover: $nb-red;
 $online-return-dark-bg: $nb-black;
+$online-return-ineligible-label-bg: $nb-red;
 $online-return-detail-bg: $white;
-$online-return-ineligible-label-bg: $med-dark-red;
 $online-return-disable-button-bg: $gray;
 $online-return-disable-button-txt: $ada-gray;
 $online-return-refund-label-inactive-bg: $gray2;
@@ -451,6 +454,7 @@ $online-return-cancel-button-border: $nb-red;
 $online-return-order-detail-border: $gray;
 $online-return-request-section-border: $gainsboro;
 $online-return-notification-cart-bg: $nb-black;
+$online-return-cancellation-reason: $nb-red;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $primary_link;
