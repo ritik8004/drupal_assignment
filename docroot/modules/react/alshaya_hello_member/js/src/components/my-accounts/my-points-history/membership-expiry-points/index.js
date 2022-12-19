@@ -66,6 +66,11 @@ export default class PointsInfoSummary extends React.PureComponent {
                 { '@points': pointsEarned.purchase })}
             />
             <EarnedPointsItem
+              itemTitle={getStringMessage('submit_review')}
+              itemPoints={getStringMessage('earned_points',
+                { '@points': pointsEarned.rating_review })}
+            />
+            <EarnedPointsItem
               itemTitle={getStringMessage('profile_complete')}
               itemPoints={getStringMessage('earned_points',
                 { '@points': pointsEarned.profile_complete })}
@@ -80,6 +85,11 @@ export default class PointsInfoSummary extends React.PureComponent {
                   '@currency_code': pointsSummary.conversion.currency_code,
                   '@points_value': pointsSummary.conversion.points_value,
                 })}
+            />
+            <EarnedPointsInfo
+              infoTitle={getStringMessage('submit_review')}
+              infoSubtitle={getStringMessage('write_review_message',
+                { '@review_points': pointsSummary.rating_review })}
             />
             <EarnedPointsInfo
               infoTitle={getStringMessage('profile_complete')}
