@@ -62,14 +62,20 @@ function alshaya_api_update_9402() {
   foreach ($overridding_settings_files as $file) {
     $file = $file . '.yml';
     if (file_exists($file)) {
+      \Drupal::logger('alshaya_api')->notice('Deleting file @file, existing contents of the file @content in JSON string', [
+        '@file' => $file,
+        '@content' => file_get_contents($file),
+      ]);
       unlink($file);
     }
   }
 
-  // Reset alshaya_api.settings.
-  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
-  $config_check = \Drupal::service('alshaya_acm.config_check');
-  $config_check->checkConfig(TRUE, 'alshaya_api.settings');
+  if (!alshaya_is_env_prod()) {
+    // Reset alshaya_api.settings.
+    /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+    $config_check = \Drupal::service('alshaya_acm.config_check');
+    $config_check->checkConfig(TRUE, 'alshaya_api.settings');
+  }
 }
 
 /**
