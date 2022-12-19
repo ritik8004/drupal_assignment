@@ -63,7 +63,6 @@ class AlshayaRcsSuperCategoryPathProcessor extends RcsPhPathProcessor {
       return self::$processedPaths[$path];
     }
 
-    $this->processFullPagePath($request);
     $department_node = $this->departmentPageHelper->getDepartmentPageNode();
     // Return from the parent function in case the current page is not a
     // department page.
@@ -72,7 +71,7 @@ class AlshayaRcsSuperCategoryPathProcessor extends RcsPhPathProcessor {
     }
 
     $this->processCategoryEntity();
-    return self::$processedPaths[self::$pageFullPath];
+    return self::$processedPaths[self::getFullPagePath()];
   }
 
 }
