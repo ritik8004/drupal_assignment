@@ -90,6 +90,11 @@ function _alshaya_nb_transac_translations() {
         'ar' => 'الوزن',
       ],
     ],
+    'v4' => [
+      'Meets the New Balance green leaf standard' => [
+        'ar' => 'يلبي معايير غرين ليف من نيو بالانس',
+      ],
+    ],
   ];
 }
 
