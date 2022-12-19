@@ -2,20 +2,16 @@
   .c-products-list {
     &.product-small {
       .alshaya_search_gallery {
-        @include breakpoint($desktop) {
-          height: auto;
+        height: auto;
 
-          img {
-            height: auto;
-            aspect-ratio: 2/3;
-            object-fit: contain;
-          }
+        img {
+          height: auto;
+          aspect-ratio: 2/3;
+          object-fit: contain;
         }
 
         .alshaya_search_mainimage {
-          @include breakpoint($only-mobile) {
-            height: auto;
-          }
+          height: auto;
         }
       }
 

@@ -48,4 +48,17 @@
       }
     }
   }
+
+  #block-page-title {
+    margin-top: rem(24);
+    margin-bottom: initial;
+
+    .c-page-title {
+      margin-top: initial;
+    }
+
+    #wishlist-share {
+      padding-bottom: initial;
+    }
+  }
 }

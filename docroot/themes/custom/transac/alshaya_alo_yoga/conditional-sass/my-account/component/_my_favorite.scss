@@ -11,28 +11,30 @@
         }
       }
     }
+  }
 
-    #my-wishlist {
-      #plp-hits {
-        @include breakpoint($only-mobile) {
+  @include breakpoint($only-mobile) {
+    &.c-plp {
+      #my-wishlist {
+        #plp-hits {
           padding-top: rem(48);
         }
       }
-    }
 
-    .block-page-title-block {
-      .back-link {
-        @include breakpoint($only-mobile) {
+      .block-page-title-block {
+        .back-link {
           width: 100%;
+        }
+
+        &#block-page-title {
+          margin-top: rem(16);
         }
       }
     }
-  }
 
-  .c-products-list {
-    &.view-algolia-plp,
-    &.view-search {
-      @include breakpoint($only-mobile) {
+    .c-products-list {
+      &.view-algolia-plp,
+      &.view-search {
         padding-#{$left}: 0;
         padding-#{$right}: 0;
       }

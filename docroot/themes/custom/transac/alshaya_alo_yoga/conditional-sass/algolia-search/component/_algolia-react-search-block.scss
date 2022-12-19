@@ -156,14 +156,6 @@
               }
             }
 
-            .quick-add .addtobag-button,
-            .quick-add .addtobag-config-button,
-            .quick-add .is-not-buyable {
-              @include breakpoint($only-mobile) {
-                top: rem(215);
-              }
-            }
-
             .alshaya_search_hoverimage,
             .alshaya_search_mainimage {
               @include breakpoint($only-mobile) {
