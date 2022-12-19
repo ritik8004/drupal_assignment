@@ -8,6 +8,8 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
+use Drupal\Core\Serialization\Yaml;
+
 require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
 $env = alshaya_get_site_environment();
 
@@ -62,10 +64,26 @@ $overridding_settings_files = [
   $settings_path . '-' . $acsf_site_code . $country_code,
 ];
 
-foreach ($overridding_settings_files as $file) {
-  $file = $file . '.php';
-  if (file_exists($file)) {
-    include_once $file;
+$extensions = ['yml', 'php'];
+
+foreach ($extensions as $extension) {
+  foreach ($overridding_settings_files as $file) {
+    $file = $file . ".$extension";
+    switch ($extension) {
+      case 'yml':
+        if (file_exists($file)) {
+          $overridden_settings = Yaml::decode(file_get_contents($file));
+          $settings = (!empty($overridden_settings))
+            ? array_replace_recursive($settings, $overridden_settings)
+            : $settings;
+        }
+        break;
+      case 'php':
+        if (file_exists($file)) {
+          include_once $file;
+        }
+        break;
+    }
   }
 }
 
