@@ -5,72 +5,36 @@
         &.product-small {
           .alshaya_search_gallery {
             @include breakpoint($desktop) {
-              height: rem(448);
-            }
-
-            @include breakpoint($only-mobile) {
-              height: rem(259);
+              height: initial;
             }
           }
-        }
-      }
-    }
-
-    #my-wishlist {
-      .c-products__item {
-        article {
-          &:hover {
-            .quick-add {
-              @include breakpoint($desktop) {
-                top: rem(352);
-              }
-            }
-          }
-        }
-      }
-
-      .quick-add {
-        .addtobag-button,
-        .addtobag-config-button,
-        .is-not-buyable {
-          @include breakpoint($only-mobile) {
-            width: rem(56);
-            height: rem(56);
-            position: absolute;
-            #{$right}: rem(10);
-            #{$left}: unset;
-            margin-top: 0;
-          }
-
-          &::before {
-            @include breakpoint($only-mobile) {
-              bottom: rem(12);
-              #{$right}: 0;
-            }
-          }
-        }
-      }
-
-      #plp-hits {
-        @include breakpoint($only-mobile) {
-          padding-top: rem(48);
-        }
-      }
-    }
-
-    .block-page-title-block {
-      .back-link {
-        @include breakpoint($only-mobile) {
-          width: 100%;
         }
       }
     }
   }
 
-  .c-products-list {
-    &.view-algolia-plp,
-    &.view-search {
-      @include breakpoint($only-mobile) {
+  @include breakpoint($only-mobile) {
+    &.c-plp {
+      #my-wishlist {
+        #plp-hits {
+          padding-top: rem(48);
+        }
+      }
+
+      .block-page-title-block {
+        .back-link {
+          width: 100%;
+        }
+
+        &#block-page-title {
+          margin-top: rem(16);
+        }
+      }
+    }
+
+    .c-products-list {
+      &.view-algolia-plp,
+      &.view-search {
         padding-#{$left}: 0;
         padding-#{$right}: 0;
       }

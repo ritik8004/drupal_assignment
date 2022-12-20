@@ -2,20 +2,21 @@
   .c-products-list {
     &.product-small {
       .alshaya_search_gallery {
-        @include breakpoint($desktop) {
-          height: rem(358);
-        }
+        height: auto;
 
-        @include breakpoint($only-mobile) {
-          height: rem(256);
-          margin-bottom: rem(10);
+        img {
+          height: auto;
+          aspect-ratio: 2/3;
+          object-fit: contain;
         }
 
         .alshaya_search_mainimage {
-          @include breakpoint($only-mobile) {
-            height: rem(264);
-          }
+          height: auto;
         }
+      }
+
+      .product-plp-detail-wrapper {
+        margin-top: rem(10);
       }
 
       .c-products__item {
@@ -41,7 +42,7 @@
       &.product-small {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            height: rem(358);
+            height: auto;
           }
         }
       }
