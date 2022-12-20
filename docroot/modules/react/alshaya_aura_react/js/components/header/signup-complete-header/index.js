@@ -99,6 +99,7 @@ class SignUpCompleteHeader extends React.Component {
     // Open already a member popup.
     this.setState({
       openLinkCardModal: true,
+      clickedOnNotYou: true,
     });
   };
 
@@ -148,6 +149,7 @@ class SignUpCompleteHeader extends React.Component {
       chosenUserMobile,
       openLinkCardModal,
       active,
+      clickedOnNotYou,
     } = this.state;
 
     const {
@@ -204,7 +206,10 @@ class SignUpCompleteHeader extends React.Component {
                           <span className="aura-user-name">{profileInfo.profileName}</span>
                           <span
                             className="not-you"
-                            onClick={() => this.handleNotYou()}
+                            onClick={() => {
+                              this.handleNotYou();
+                              Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU', label: 'initiated' });
+                            }}
                           >
                             {getNotYouLabel(notYouFailed)}
                           </span>
@@ -240,7 +245,10 @@ class SignUpCompleteHeader extends React.Component {
                         <div className="error-placeholder" />
                         <div
                           className="not-you"
-                          onClick={() => this.handleNotYou()}
+                          onClick={() => {
+                            this.handleNotYou();
+                            Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU', label: 'initiated' });
+                          }}
                         >
                           {getNotYouLabel(notYouFailed)}
                         </div>
@@ -249,7 +257,10 @@ class SignUpCompleteHeader extends React.Component {
                     <ConditionalView condition={hasValue(userId)}>
                       <div
                         className="link-aura-link"
-                        onClick={() => this.handleLinkAura()}
+                        onClick={() => {
+                          Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'initiated' });
+                          this.handleLinkAura();
+                        }}
                       >
                         {getStringMessage('aura_link_aura')}
                       </div>
@@ -337,6 +348,7 @@ class SignUpCompleteHeader extends React.Component {
             })}
             setChosenCountryCode={this.setChosenCountryCode}
             chosenCountryCode={chosenCountryCode}
+            clickedOnNotYou={clickedOnNotYou}
           />
         </Popup>
       </>
