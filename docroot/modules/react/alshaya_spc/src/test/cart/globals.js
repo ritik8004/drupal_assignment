@@ -11,15 +11,15 @@ export const drupalSettings = {
       country_code: 'kw',
     },
     addressFields: {
-      "default": {
-        "kw": [
-          "area",
-          "address_apartment_segment",
-        ]
-      }
+      default: {
+        kw: [
+          'area',
+          'address_apartment_segment',
+        ],
+      },
     },
     exceptionMessages: {
-      "This product is out of stock.": "OOS",
+      'This product is out of stock.': 'OOS',
     },
   },
   path: {
@@ -40,35 +40,36 @@ export const drupalSettings = {
 window.commerceBackend = window.commerceBackend || {};
 window.staticStorage = window.spcStaticStorage || {};
 window.spcStaticStorage = window.spcStaticStorage || {};
-window.commerceBackend.getProductStatus = function () {};
-window.commerceBackend.getCartId = function () {};
-window.commerceBackend.getCartIdFromStorage = function () {};
-window.commerceBackend.removeCartIdFromStorage = function () {};
+window.commerceBackend.getProductStatus = function getProductStatus() {};
+window.commerceBackend.getCartId = function getCartId() {};
+window.commerceBackend.getCartIdFromStorage = function getCartIdFromStorage() {};
+window.commerceBackend.removeCartIdFromStorage = function removeCartIdFromStorage() {};
 
-window.staticStorage.clear = function () {
+window.staticStorage.clear = function clear() {
   window.spcStaticStorage = {};
-}
-window.staticStorage.set = function (key, value) {
+};
+window.staticStorage.set = function set(key, value) {
   window.spcStaticStorage[key] = value;
 };
-window.staticStorage.get = function (key) {
+window.staticStorage.get = function get(key) {
   if (typeof window.spcStaticStorage[key] === 'undefined') {
     return null;
   }
 
   return window.spcStaticStorage[key];
 };
-window.staticStorage.remove = function (key) {
+window.staticStorage.remove = function remove(key) {
   window.spcStaticStorage[key] = null;
-}
+};
 
 // Start copiying functions from alshaya_master/js/local_storage_manager.js
 // to help running the npm tests.
 // Duplicate of function `Drupal.addItemInLocalStorage`.
-global.Drupal.addItemInLocalStorage = function (
+global.Drupal.addItemInLocalStorage = function addItemInLocalStorage(
   storageKey,
   storageData = null,
-  expireAfterTime = null) {
+  expireAfterTime = null,
+) {
   // Return if data to store is not provided, or
   // the local storage key is not set, of
   // storage expiry time is zero.
@@ -88,7 +89,7 @@ global.Drupal.addItemInLocalStorage = function (
 
   // If this is null, we don't set any expiry to the data storage in the local storage.
   if (expireAfterTime) {
-    dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime) * 1000);
+    dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime, 10) * 1000);
   }
 
   // Store data in the local storage with the expiry time.
@@ -99,7 +100,7 @@ global.Drupal.addItemInLocalStorage = function (
 };
 
 // Duplicate of function `Drupal.removeItemFromLocalStorage`.
-global.Drupal.removeItemFromLocalStorage = function (storageKey) {
+global.Drupal.removeItemFromLocalStorage = function removeItemFromLocalStorage(storageKey) {
   // Remove item from the local storage if key is set.
   return (storageKey)
     ? localStorage.removeItem(storageKey)
@@ -107,7 +108,7 @@ global.Drupal.removeItemFromLocalStorage = function (storageKey) {
 };
 
 // Duplicate of function `Drupal.getItemFromLocalStorage`.
-global.Drupal.getItemFromLocalStorage = function (storageKey) {
+global.Drupal.getItemFromLocalStorage = function getItemFromLocalStorage(storageKey) {
   // Return if the local storage key is not set.
   if (!storageKey) {
     return null;
@@ -147,7 +148,7 @@ global.Drupal.getItemFromLocalStorage = function (storageKey) {
 // to help running the npm tests.
 
 // Duplicate of function `Drupal.hasValue`.
-global.Drupal.hasValue = function (storageKey) {
+global.Drupal.hasValue = function hasValue(value) {
   if (typeof value === 'undefined') {
     return false;
   }
