@@ -34,8 +34,7 @@ runs:
     - name: Run Composer install
       shell: bash
       run: |
-        composer self-update
-        composer self-update --2
+        composer self-update 2.4.4
         composer validate --no-check-all --ansi
         composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
