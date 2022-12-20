@@ -164,8 +164,12 @@ class SkuPriceHelper {
     $data_attribute_special_price = [];
     if (!empty($prices['fixed_price'])) {
       foreach (json_decode($prices['fixed_price'], TRUE) as $key => $value) {
-        $data_attribute_price[$key] = $value['price'];
-        $data_attribute_special_price[$key] = $value['special_price'];
+        if (!empty($value['price'])) {
+          $data_attribute_price[$key] = $value['price'];
+        }
+        if (!empty($value['special_price'])) {
+          $data_attribute_special_price[$key] = $value['special_price'];
+        }
       }
     }
 
