@@ -54,7 +54,7 @@
     }
 
     @include breakpoint($only-tablet) {
-      max-width: calc(100% - rem(40));
+      max-width: calc(100% - #{rem(40)});
     }
 
     @include breakpoint($desktop) {
