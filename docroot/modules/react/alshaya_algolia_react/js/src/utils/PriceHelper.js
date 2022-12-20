@@ -1,3 +1,5 @@
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
+
 const formatPrice = (price) => {
   const priceParts = [
     drupalSettings.reactTeaserView.price.currency.toUpperCase(),
@@ -40,8 +42,32 @@ const calculateDiscount = (price, finalPrice) => {
   return parseFloat(Math.round((discount * 100) / floatPrice));
 };
 
+/**
+ * Gets data attribute for fixed price.
+ *
+ * @param {object} data
+ *   Fixed prices object with country code and prices.
+ * @param {string} field
+ *   Price or special price to retrieve from data json.
+ *
+ * @returns {object|string}
+ *   Country code and its fixed or special price.
+ */
+const getDataAttributePrices = (data, field) => {
+  if (hasValue(data)) {
+    return '';
+  }
+  const prices = {};
+  Object.entries(data).forEach(([key, value]) => {
+    prices[key] = value[field];
+  });
+
+  return prices;
+};
+
 export {
   formatPrice,
   calculateDiscount,
   getPriceRangeLabel,
+  getDataAttributePrices,
 };
