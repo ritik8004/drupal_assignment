@@ -40,7 +40,7 @@
         border-radius: 50%;
         background-color: rgba(255, 255, 255, 0.5);
         background-size: rem(20);
-        top: rem(-66);
+        bottom: rem(10);
         #{$right}: rem(10);
       }
     }
@@ -53,10 +53,8 @@
     @include breakpoint($desktop) {
       .quick-add {
         display: block;
-        position: absolute;
-        width: 100%;
-        top: rem(263);
-        z-index: 3;
+        position: relative;
+        margin: 0 rem(10);
 
         .addtobag-config-button,
         .is-not-buyable,
@@ -65,8 +63,9 @@
           color: $plp-quick-add-txt;
           height: rem(55);
           border: 0;
-          margin: rem(24) rem(8) 0;
-          width: calc(100% - #{rem(16)});
+          margin: initial;
+          position: absolute;
+          bottom: rem(10);
         }
       }
     }
@@ -82,10 +81,6 @@
     .c-products__item {
       article:hover {
         .quick-add {
-          @include breakpoint($desktop) {
-            top: rem(271);
-          }
-
           button {
             border-radius: 0;
           }

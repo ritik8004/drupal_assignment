@@ -8,28 +8,9 @@
     }
   }
 
-  .quick-add {
-    .addtobag-button,
-    .addtobag-config-button,
-    .is-not-buyable {
-      &::before {
-        @include breakpoint($upto-desktop) {
-          bottom: rem(80);
-          #{$right}: rem(16);
-        }
-
-        @include breakpoint($only-tablet) {
-          bottom: rem(112);
-        }
-      }
-    }
-  }
-
   .addtobag-config-button-container {
-    @include breakpoint($tablet) {
-      margin-#{$right}: 0;
-      margin-#{$left}: 0;
-    }
+    margin-right: 0;
+    margin-left: 0;
   }
 
   .empty-message {
@@ -65,6 +46,19 @@
       .actions {
         display: flex;
       }
+    }
+  }
+
+  #block-page-title {
+    margin-top: rem(24);
+    margin-bottom: initial;
+
+    .c-page-title {
+      margin-top: initial;
+    }
+
+    #wishlist-share {
+      padding-bottom: initial;
     }
   }
 }
