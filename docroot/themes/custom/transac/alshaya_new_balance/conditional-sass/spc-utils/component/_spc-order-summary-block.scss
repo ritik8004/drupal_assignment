@@ -41,6 +41,19 @@
     .product-content {
       .product-item {
         margin-#{$right}: rem(20);
+        grid-template-columns: rem(125) 1fr;
+
+        .spc-product-image {
+          max-width: none;
+          height: rem(125);
+
+          img {
+            height: 100%;
+            // Horizontally aligning the image and preventing a skewed image.
+            margin: 0 auto;
+            object-fit: contain;
+          }
+        }
       }
     }
 
