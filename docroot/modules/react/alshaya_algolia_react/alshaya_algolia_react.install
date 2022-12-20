@@ -27,17 +27,6 @@ function alshaya_algolia_react_update_9402() {
 /**
  * Implements hook_update_N().
  *
- * Added default_col_grid to alshaya_algolia_react.settings config.
- */
-function alshaya_algolia_react_update_9403() {
-  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
-  // Updateing config defult_col_grid for PLP & SLP pages.
-  $config->set('default_col_grid', 'small')->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Added top_facets limit to alshaya_algolia_react.settings config.
  */
 function alshaya_algolia_react_update_8007() {
