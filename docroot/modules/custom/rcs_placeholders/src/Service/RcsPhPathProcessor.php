@@ -161,12 +161,9 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     if (isset(self::$processedPaths[$path])) {
       return self::$processedPaths[$path];
     }
-    if (!isset(self::$pageFullPath)) {
-      $this->processFullPagePath($request);
-    }
 
     // Remove language code from URL.
-    $full_path = $rcs_path_to_check = self::$pageFullPath;
+    $full_path = $rcs_path_to_check = self::getFullPagePath();
 
     // Allow other modules to alter the path.
     $this->moduleHandler->alter('rcs_placeholders_processor_path', $rcs_path_to_check);
@@ -227,20 +224,24 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   /**
    * Process the full page path from request and return it without the langcode.
    *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
+   * @return string
+   *   Page Full Path.
    */
-  protected function processFullPagePath(Request $request) {
-    // The $path value has been processed in case the requested url is the alias
-    // of an existing technical path. For example, $path may be /node/12 if the
-    // requested url /buy-my-product is an alias for node 12.  For this reason,
-    // we use $request->getPathInfo() to get the real requested url instead of
-    // $path.
-    self::$pageFullPath = str_replace(
-      '/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
-      '/',
-      $request->getPathInfo()
-    );
+  public static function getFullPagePath(): string {
+    if (empty(RcsPhPathProcessor::$pageFullPath)) {
+      // The $path value has been processed in case the requested url is the
+      // alias of an existing technical path. For example, $path may be /node/12
+      // if the requested url /buy-my-product is an alias for node 12.
+      // For this reason, we use $request->getPathInfo() to get the real
+      // requested url instead of $path.
+      RcsPhPathProcessor::$pageFullPath = str_replace(
+        '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . '/',
+        '/',
+        \Drupal::request()->getPathInfo()
+      );
+    }
+
+    return RcsPhPathProcessor::$pageFullPath;
   }
 
   /**
