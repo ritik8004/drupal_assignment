@@ -128,7 +128,7 @@ class DeeplinkResourceV3 extends DeeplinkResource {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
-    $response = $this->getDeeplink($alias);
+    $response = $this->mobileAppUtility->getDeeplinkForResource($alias);
     return new ModifiedResourceResponse($response);
   }
 
