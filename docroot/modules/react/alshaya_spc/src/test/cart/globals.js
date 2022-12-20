@@ -38,7 +38,29 @@ export const drupalSettings = {
 // This is most likely because this function is included by Drupal and is not a
 // part of react.
 window.commerceBackend = window.commerceBackend || {};
-window.commerceBackend.getProductStatus = function () {}
+window.staticStorage = window.spcStaticStorage || {};
+window.spcStaticStorage = window.spcStaticStorage || {};
+window.commerceBackend.getProductStatus = function () {};
+window.commerceBackend.getCartId = function () {};
+window.commerceBackend.getCartIdFromStorage = function () {};
+window.commerceBackend.removeCartIdFromStorage = function () {};
+
+window.staticStorage.clear = function () {
+  window.spcStaticStorage = {};
+}
+window.staticStorage.set = function (key, value) {
+  window.spcStaticStorage[key] = value;
+};
+window.staticStorage.get = function (key) {
+  if (typeof window.spcStaticStorage[key] === 'undefined') {
+    return null;
+  }
+
+  return window.spcStaticStorage[key];
+};
+window.staticStorage.remove = function (key) {
+  window.spcStaticStorage[key] = null;
+}
 
 // Start copiying functions from alshaya_master/js/local_storage_manager.js
 // to help running the npm tests.
