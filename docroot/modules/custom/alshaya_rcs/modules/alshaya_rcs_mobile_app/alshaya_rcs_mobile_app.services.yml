@@ -2,35 +2,7 @@ services:
   logger.channel.alshaya_rcs_mobile_app:
     parent: logger.channel_base
     arguments: ['alshaya_rcs_mobile_app']
-  alshaya_rcs_mobile_app.v3_utility:
-    class: Drupal\alshaya_rcs_mobile_app\Service\RcsMobileAppUtility
-    decorates: alshaya_mobile_app.utility
-    # Here the priority should be more than what we have for
-    # alshaya_mobile_app.utility.paragraphs because we rely on a function
-    # getEntityBundleInfo() to make this service work.
-    decoration_priority: 10
-    public: false
-    arguments:
-      - '@cache.data'
-      - '@language_manager'
-      - '@request_stack'
-      - '@path_alias.manager'
-      - '@entity_type.manager'
-      - '@entity.repository'
-      - '@alshaya_acm_product.skumanager'
-      - '@alshaya_acm_product.sku_images_manager'
-      - '@module_handler'
-      - '@alshaya_acm_product_category.product_category_tree'
-      - '@config.factory'
-      - '@alshaya_api.api'
-      - '@renderer'
-      - '@redirect.repository'
-      - '@alshaya_acm_product.sku_info'
-      - '@database'
-      - '@alshaya_super_category.super_category_feature_manager'
-      - '@path.validator'
-      - '@alshaya_acm_product_category.page'
-      - '@router.request_context'
+
   alshaya_rcs_mobile_app.categories_enrichment_subscriber:
     class: Drupal\alshaya_rcs_mobile_app\EventSubscriber\AlshayaRcsMobileAppCategoryDataAlterEventSubscriber
     tags:

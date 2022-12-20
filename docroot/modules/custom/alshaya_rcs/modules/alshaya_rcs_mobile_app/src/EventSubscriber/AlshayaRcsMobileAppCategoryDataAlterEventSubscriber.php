@@ -54,7 +54,7 @@ class AlshayaRcsMobileAppCategoryDataAlterEventSubscriber implements EventSubscr
     foreach ($term_data as $url => &$term) {
       $deeplink = NULL;
       try {
-        $deeplink = $this->mobileAppUtility->getDeeplinkForResource($url);
+        $deeplink = $this->mobileAppUtility->getDeeplinkForResourceV3($url);
       }
       catch (\Exception $e) {
         $this->logger->info('Deeplink could not be generated for the term_id: @term_id, term url: @term_url, message: @message', [
