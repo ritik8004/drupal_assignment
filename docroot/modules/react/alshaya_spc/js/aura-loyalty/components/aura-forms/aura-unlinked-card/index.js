@@ -57,7 +57,13 @@ class AuraFormUnlinkedCard extends React.Component {
               />
             </div>
             <div className="no-link-message">
-              <a href="#" onClick={() => openLinkCardModal()}>
+              <a
+                href="#"
+                onClick={() => {
+                  openLinkCardModal();
+                  Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU', label: 'initiated' });
+                }}
+              >
                 {Drupal.t('Not you?')}
               </a>
             </div>
@@ -67,7 +73,10 @@ class AuraFormUnlinkedCard extends React.Component {
         <div className="aura-modal-form-actions">
           <div
             className="spc-aura-link-card-submit spc-aura-button"
-            onClick={() => this.linkYourCard(cardNumber)}
+            onClick={() => {
+              Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'initiated' });
+              this.linkYourCard(cardNumber);
+            }}
           >
             {Drupal.t('Submit')}
           </div>
