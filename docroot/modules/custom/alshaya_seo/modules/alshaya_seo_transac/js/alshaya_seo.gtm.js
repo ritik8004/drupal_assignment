@@ -1238,14 +1238,26 @@
    * @param loginType
    */
   Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction, loginType = null) {
-    dataLayer.push({
+    var data = {
       event: 'eventTracker',
       eventCategory: 'Login & Register',
       eventAction: eventAction,
       eventLabel: loginType,
       eventValue: 0,
       nonInteraction: 0
-    });
+    };
+    // Add additional GTM variables for User registration.
+    if (eventAction == 'Registration Success') {
+      var data_additional = {};
+      data_additional.registration_method = 'Email';
+      data_additional.gender_selection = drupalSettings.alshaya_gtm_create_user_gender !== undefined ?
+        drupalSettings.alshaya_gtm_create_user_gender : '';
+      data_additional.email_preference = drupalSettings.alshaya_gtm_create_user_newsletter !== undefined ?
+        drupalSettings.alshaya_gtm_create_user_newsletter : '';
+      Object.assign(data, data_additional);
+    }
+
+    dataLayer.push(data);
   };
 
   /**
