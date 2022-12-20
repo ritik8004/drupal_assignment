@@ -42,13 +42,13 @@
        if (gtmData.aura_Status !== undefined && gtmData.aura_Status !== GTM_AURA_VALUES.NON_AURA && typeof userAPCDetails !== 'undefined') {
          // These values will be used for Aura signed up anonymous users
          // and logged-in users but not using Aura.
-         gtmData.aura_Status = drupalSettings.aura.allAuraTier.shortValue[GTM_AURA_VALUES.AURA_DEFAULT_TIER].toLowerCase();
+         gtmData.aura_Status = drupalSettings.aura.gtmAllAuraTier.shortValue[GTM_AURA_VALUES.AURA_DEFAULT_TIER].toLowerCase();
          gtmData.aura_enrollmentStatus = GTM_AURA_VALUES.AURA_QUICK_ENROLLED;
          var auraTier = userAPCDetails.filter(item => item.attribute_code === 'tier_code');
          if (Drupal.hasValue(auraTier)) {
            // These values will be used for logged-in users using Aura.
            auraTier = auraTier[0].value;
-           gtmData.aura_Status = drupalSettings.aura.allAuraTier.shortValue[auraTier].toLowerCase();
+           gtmData.aura_Status = drupalSettings.aura.gtmAllAuraTier.shortValue[auraTier].toLowerCase();
            gtmData.aura_enrollmentStatus = auraTier === GTM_AURA_VALUES.AURA_DEFAULT_TIER ? GTM_AURA_VALUES.AURA_QUICK_ENROLLED : GTM_AURA_VALUES.AURA_FULL_ENROLLED;
            var auraPoints = userAPCDetails.filter(item => item.attribute_code === 'apc_points')[0].value;
            gtmData.aura_balStatus = auraPoints > 0 ? GTM_AURA_VALUES.AURA_POINTS_PRESENT : GTM_AURA_VALUES.AURA_POINTS_EMPTY;
@@ -83,7 +83,7 @@
         gtmData.aura_Status = gtmData.aura_enrollmentStatus = GTM_AURA_VALUES.NON_AURA;
       } else {
         data.tier = typeof data.tier === 'undefined' ? GTM_AURA_VALUES.AURA_DEFAULT_TIER : data.tier;
-        gtmData.aura_Status = drupalSettings.aura.allAuraTier.shortValue[data.tier].toLowerCase();
+        gtmData.aura_Status = drupalSettings.aura.gtmAllAuraTier.shortValue[data.tier].toLowerCase();
         gtmData.aura_enrollmentStatus = data.tier === GTM_AURA_VALUES.AURA_DEFAULT_TIER ? GTM_AURA_VALUES.AURA_QUICK_ENROLLED : GTM_AURA_VALUES.AURA_FULL_ENROLLED;
       }
 
