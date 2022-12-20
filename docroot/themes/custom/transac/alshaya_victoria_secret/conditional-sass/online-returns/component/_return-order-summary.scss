@@ -73,9 +73,7 @@
       }
 
       .order-summary-details {
-        @include breakpoint($tablet) {
-          align-items: flex-start;
-        }
+        align-items: flex-start;
 
         @include breakpoint($tablet) {
           flex-basis: rem(320);
