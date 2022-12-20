@@ -11,7 +11,6 @@ Feature: Test the User Registeration functionality
     And the element "#user-register-form #edit-full-name" should exist
     And the element "#user-register-form #edit-mail" should exist
     And the element "#user-register-form #edit-pass" should exist
-    And the element "#user-register-form .captcha" should exist
     And the element "#user-register-form #edit-field-subscribe-newsletter-value" should exist
     And the element "#user-register-form #edit-actions #edit-submit" should exist
     And the element ".c-content__region .region__content #block-alshayasocialloginblock" should exist
@@ -28,7 +27,6 @@ Feature: Test the User Registeration functionality
     And the element "#user-register-form #edit-full-name" should exist
     And the element "#user-register-form #edit-mail" should exist
     And the element "#user-register-form #edit-pass" should exist
-    And the element "#user-register-form .captcha" should exist
     And the element "#user-register-form #edit-field-subscribe-newsletter-value" should exist
     And the element "#user-register-form #edit-actions #edit-submit" should exist
     And the element ".c-content__region .region__content #block-alshayasocialloginblock" should exist
@@ -45,7 +43,6 @@ Feature: Test the User Registeration functionality
     And the element "#user-register-form #edit-full-name" should exist
     And the element "#user-register-form #edit-mail" should exist
     And the element "#user-register-form #edit-pass" should exist
-    And the element "#user-register-form .captcha" should exist
     And the element "#user-register-form #edit-field-subscribe-newsletter-value" should exist
     And the element "#user-register-form #edit-actions #edit-submit" should exist
     And the element ".c-content__region .region__content #block-alshayasocialloginblock" should exist
