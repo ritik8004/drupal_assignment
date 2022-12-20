@@ -78,7 +78,10 @@ class AuraNotLinkedNoData extends React.Component {
             <span className="spc-join-aura-link-wrapper submit">
               <a
                 className="spc-join-aura-link"
-                onClick={() => this.toggleOTPModal(true)}
+                onClick={() => {
+                  this.toggleOTPModal(true);
+                  Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'initiated' });
+                }}
               >
                 {getStringMessage('aura_join_aura')}
               </a>
@@ -88,7 +91,10 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                  onClick={() => this.toggleLinkCardModal(true)}
+                  onClick={() => {
+                    this.toggleLinkCardModal(true);
+                    Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'initiated' });
+                  }}
                 >
                   {getStringMessage('aura_link_aura')}
                 </a>
@@ -98,7 +104,10 @@ class AuraNotLinkedNoData extends React.Component {
               <span className="spc-link-aura-link-wrapper submit">
                 <a
                   className="spc-link-aura-link"
-                  onClick={() => this.toggleLinkCardModal(true)}
+                  onClick={() => {
+                    this.toggleLinkCardModal(true);
+                    Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_ALREADY_MEMBER', label: 'initiated' });
+                  }}
                 >
                   {getStringMessage('aura_sign_in')}
                 </a>

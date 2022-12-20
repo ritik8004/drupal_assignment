@@ -57,9 +57,16 @@ function processCheckoutCart(data) {
     : data.value;
 
   const apiData = window.auraBackend.updateLoyaltyCard(data.action, data.type, value);
+  const actionType = data.clickedOnNotYou ? 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU' : 'AURA_EVENT_ACTION_SIGN_IN_ALREADY_MEMBER';
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
+      if (hasValue(data.gtmLinkCardOption)) {
+        Drupal.alshayaSeoGtmPushAuraEventData({
+          action: actionType,
+          label: data.gtmLinkCardOption,
+        });
+      }
       if (result.data !== undefined && result.data.error === undefined) {
         if (result.data.status) {
           // For remove action.
@@ -86,8 +93,18 @@ function processCheckoutCart(data) {
             stateValues.mobile = data.value;
             stateValues.userCountryCode = data.countryCode;
           }
+
+          if (hasValue(data.gtmLinkCardOption)) {
+            Drupal.alshayaSeoGtmPushAuraEventData({
+              action: actionType,
+              label: 'success',
+            });
+          }
         }
       } else {
+        if (hasValue(data.gtmLinkCardOption)) {
+          Drupal.alshayaSeoGtmPushAuraEventData({ action: actionType, label: 'fail' });
+        }
         stateValues = result.data;
       }
       dispatchCustomEvent('loyaltyDetailsSearchComplete', { stateValues, searchData: data });
