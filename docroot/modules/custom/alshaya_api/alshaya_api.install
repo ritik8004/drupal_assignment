@@ -25,13 +25,8 @@ function alshaya_api_update_9402() {
     ->save();
 
   if (!alshaya_is_env_prod()) {
-    if (!empty($alshaya_api_settings['magento_lang_prefix'])) {
-      $alshaya_api_config->set('magento_lang_prefix', $alshaya_api_settings['magento_lang_prefix']);
-    }
-    else {
-      foreach (\Drupal::service('language_manager')->getLanguages() as $langcode => $language) {
-        $alshaya_api_config->set("magento_lang_prefix.$langcode", Settings::get('magento_lang_prefix')['langcode']);
-      }
+    foreach (\Drupal::service('language_manager')->getLanguages() as $langcode => $language) {
+      $alshaya_api_config->set("magento_lang_prefix.$langcode", Settings::get('magento_lang_prefix')['langcode']);
     }
 
     $alshaya_api_config
