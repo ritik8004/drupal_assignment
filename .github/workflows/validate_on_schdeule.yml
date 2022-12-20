@@ -66,8 +66,7 @@ jobs:
       - name: Run Composer install
         if: ${{ steps.check-new-commits.outputs.has-new-commits == 'true' }}
         run: |
-          composer self-update
-          composer self-update --2
+          composer self-update 2.4.4
           composer validate --no-check-all --ansi
           composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
