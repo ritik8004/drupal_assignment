@@ -59,6 +59,10 @@ const SearchResultsComponent = ({
   if (storedvalues !== null && storedvalues.page !== null) {
     defaultpageRender = storedvalues.page;
   }
+  let defaultcolgrid = 'small';
+  if (drupalSettings.algoliaSearch.defaultColgrid !== null) {
+    defaultcolgrid = drupalSettings.algoliaSearch.defaultColgrid;
+  }
 
   const optionalFilter = getSuperCategoryOptionalFilter();
   const { maximumDepthLhn } = drupalSettings.algoliaSearch;
@@ -203,7 +207,7 @@ const SearchResultsComponent = ({
         && (
           <BecomeHelloMember />
         )}
-        <div id="hits" className="c-products-list product-small view-search">
+        <div id="hits" className={`c-products-list product-${defaultcolgrid} view-search`}>
           <SearchResultInfiniteHits
             defaultpageRender={defaultpageRender}
             pageType="search"
