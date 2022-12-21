@@ -225,9 +225,11 @@ function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
  */
 function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
   // Set delivery method for XB order.
-  $build['#order_details']['delivery_method'] = t('@shipping_method_name', [
-    '@shipping_method_name' => $order['extension']['globale']['shipping_method'],
-  ]);
+  if (!empty($order['extension']['globale']['shipping_method'])) {
+    $build['#order_details']['delivery_method'] = t('@shipping_method_name', [
+      '@shipping_method_name' => $order['extension']['globale']['shipping_method'],
+    ]);
+  }
 
   if (empty($build["#cancelled_products"])) {
     return;
