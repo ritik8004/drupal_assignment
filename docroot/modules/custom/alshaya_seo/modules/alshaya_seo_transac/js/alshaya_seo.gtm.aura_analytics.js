@@ -37,8 +37,9 @@
    Drupal.alshayaSeoGtmPrepareAuraCommonDataFromCart = function () {
      // Prepare the aura dataset.
      var gtmData = Drupal.getItemFromLocalStorage('gtm_aura_common_data');
+     var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
      try {
-       var userAPCDetails = window.spcStaticStorage.cart_raw.customer.custom_attributes;
+       var userAPCDetails = rawCartData.customer.custom_attributes;
        if (gtmData.aura_Status !== undefined && gtmData.aura_Status !== GTM_AURA_VALUES.NON_AURA && typeof userAPCDetails !== 'undefined') {
          // These values will be used for Aura signed up anonymous users
          // and logged-in users but not using Aura.
@@ -123,7 +124,8 @@
      try {
        // User's Aura status.
        var auraStatus = Drupal.getItemFromLocalStorage('gtm_aura_common_data') ? Drupal.getItemFromLocalStorage('gtm_aura_common_data').aura_Status : null;
-       var userAPCDetails = window.spcStaticStorage.cart_raw.customer.custom_attributes;
+       var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
+       var userAPCDetails = rawCartData.customer.custom_attributes;
        if (Drupal.hasValue(auraStatus) && auraStatus !== GTM_AURA_VALUES.NON_AURA && typeof userAPCDetails !== 'undefined') {
          // These values will be used for Aura signed up anonymous users
          // and logged-in users but not using Aura.

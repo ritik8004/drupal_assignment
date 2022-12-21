@@ -14,7 +14,7 @@ describe('Checkout Shipping', () => {
 
     afterEach(() => {
       // Clear and reset any mocks set by other tests.
-      window.staticStorage.clear();
+      global.Drupal.alshayaSpc.staticStorage.clear();
       jest.clearAllMocks();
       jest.resetAllMocks();
     });

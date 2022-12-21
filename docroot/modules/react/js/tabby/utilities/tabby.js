@@ -21,7 +21,7 @@ const Tabby = {
     }
 
     const { cart } = that.props;
-    let tabbyStatus = window.staticStorage.get('tabbyStatus');
+    let tabbyStatus = Drupal.alshayaSpc.staticStorage.get('tabbyStatus');
     const total = cart.cart.totals.base_grand_total_without_surcharge;
     if (tabbyStatus && typeof tabbyStatus[total] !== 'undefined') {
       return tabbyStatus[total];
@@ -37,7 +37,7 @@ const Tabby = {
       if (installment.is_available) {
         tabbyStatus[total] = true;
       }
-      window.staticStorage.set('tabbyStatus', tabbyStatus);
+      Drupal.alshayaSpc.staticStorage.set('tabbyStatus', tabbyStatus);
     }
 
     if (hasValue(response.statusText) && response.statusText === 'error') {

@@ -151,7 +151,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
   const key = md5(JSON.stringify(formattedAddress.custom_attributes));
 
   // Get shipping methods from static.
-  const staticShippingMethods = window.staticStorage.get('shipping_methods') || {};
+  const staticShippingMethods = Drupal.alshayaSpc.staticStorage.get('shipping_methods') || {};
 
   if (!hasValue(staticShippingMethods[key])) {
     staticShippingMethods[key] = [];
@@ -186,7 +186,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
 
     // Set shipping methods in static.
     staticShippingMethods[key] = Object.values(methods);
-    window.staticStorage.set('shipping_methods', staticShippingMethods);
+    Drupal.alshayaSpc.staticStorage.set('shipping_methods', staticShippingMethods);
   }
 
   return {

@@ -58,7 +58,7 @@ gtm_spc_checkout:
     js/alshaya_seo.gtm.spc_checkout.js: {}
   dependencies:
     - alshaya_seo_transac/gtm_spc
-    - alshaya_spc/spc_static_storage
+    - alshaya_spc/static_storage
 
 gtm_spc:
   js:
@@ -145,4 +145,4 @@ gtm_aura:
     js/alshaya_seo.gtm.aura_analytics.js: {}
   dependencies:
     - core/drupal
-    - alshaya_spc/spc_static_storage
+    - alshaya_spc/static_storage

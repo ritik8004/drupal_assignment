@@ -10,7 +10,7 @@ describe('Cart', () => {
   });
 
   afterEach(() => {
-    window.staticStorage.clear();
+    global.Drupal.alshayaSpc.staticStorage.clear();
     jest.clearAllMocks();
   });
 

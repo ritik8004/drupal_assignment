@@ -9,7 +9,7 @@ cart_utilities:
     - alshaya_react/react_pollyfill
     - alshaya_acm_product/product_utility
     - alshaya_master/common_functions
-    - alshaya_spc/spc_static_storage
+    - alshaya_spc/static_storage
 
 mini_cart:
   version: 1.x
@@ -161,7 +161,7 @@ pdp_express_delivery_labels:
     - alshaya_react/react
     - core/drupalSettings
 
-spc_static_storage:
+static_storage:
   version: 1.x
   js:
     assets/js/static_storage.js: {}

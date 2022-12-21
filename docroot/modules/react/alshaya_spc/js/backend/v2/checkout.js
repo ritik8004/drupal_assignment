@@ -73,7 +73,7 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
  *    The CNC status.
  */
 const getCncStatusForCart = async (data) => {
-  const staticStatus = window.staticStorage.get('cnc_status');
+  const staticStatus = Drupal.alshayaSpc.staticStorage.get('cnc_status');
 
   if (staticStatus !== null) {
     return staticStatus;
@@ -107,12 +107,12 @@ const getCncStatusForCart = async (data) => {
     if (hasValue(productStatus)
       && isBoolean(productStatus.cnc_enabled) && !productStatus.cnc_enabled
     ) {
-      window.staticStorage.set('cnc_status', false);
+      Drupal.alshayaSpc.staticStorage.set('cnc_status', false);
       return false;
     }
   }
 
-  window.staticStorage.set('cnc_status', true);
+  Drupal.alshayaSpc.staticStorage.set('cnc_status', true);
   return true;
 };
 
@@ -235,7 +235,7 @@ const getLastOrder = async (customerId, force = false) => {
     return {};
   }
 
-  const staticOrder = window.staticStorage.get('last_order');
+  const staticOrder = Drupal.alshayaSpc.staticStorage.get('last_order');
   if (!force && staticOrder !== null) {
     return staticOrder;
   }
@@ -248,12 +248,12 @@ const getLastOrder = async (customerId, force = false) => {
         '@customerId': customerId,
       });
 
-      window.staticStorage.set('last_order', {});
+      Drupal.alshayaSpc.staticStorage.set('last_order', {});
       return {};
     }
 
     const processedOrder = processLastOrder(order.data);
-    window.staticStorage.set('last_order', processedOrder);
+    Drupal.alshayaSpc.staticStorage.set('last_order', processedOrder);
     return processedOrder;
   } catch (error) {
     logger.error('Error while fetching last order of customer. CustomerId: @customerId, Message: @message.', {
@@ -262,7 +262,7 @@ const getLastOrder = async (customerId, force = false) => {
     });
   }
 
-  window.staticStorage.set('last_order', {});
+  Drupal.alshayaSpc.staticStorage.set('last_order', {});
   return {};
 };
 
@@ -466,7 +466,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
     return [];
   }
 
-  let staticStoresData = window.staticStorage.get('cartStores');
+  let staticStoresData = Drupal.alshayaSpc.staticStorage.get('cartStores');
   if (staticStoresData === null) {
     staticStoresData = {};
   }
@@ -483,7 +483,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
 
   // If no stores available, return empty.
   if (!hasValue(response.data)) {
-    window.staticStorage.set('cartStores', staticStoresData);
+    Drupal.alshayaSpc.staticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
@@ -494,7 +494,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
       '@response': JSON.stringify(response.data),
     });
 
-    window.staticStorage.set('cartStores', staticStoresData);
+    Drupal.alshayaSpc.staticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
@@ -505,7 +505,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
       '@response': JSON.stringify(response.data),
     });
 
-    window.staticStorage.set('cartStores', staticStoresData);
+    Drupal.alshayaSpc.staticStorage.set('cartStores', staticStoresData);
     return [];
   }
 
@@ -541,7 +541,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
     }
 
     staticStoresData[staticStorageKey] = stores;
-    window.staticStorage.set('cartStores', staticStoresData);
+    Drupal.alshayaSpc.staticStorage.set('cartStores', staticStoresData);
     return staticStoresData[staticStorageKey];
   } catch (error) {
     logger.warning('Error occurred while fetching stores for cart id @cartId, API Response: @message.', {
@@ -550,7 +550,7 @@ const getCartStores = async (lat, lon, cncStoresLimit = 0) => {
     });
   }
 
-  window.staticStorage.set('cartStores', staticStoresData);
+  Drupal.alshayaSpc.staticStorage.set('cartStores', staticStoresData);
   return [];
 };
 
@@ -1539,7 +1539,7 @@ const processPaymentData = (paymentData, data) => {
  *   A promise object.
  */
 const paymentUpdate = async (data) => {
-  window.staticStorage.remove('payment_method');
+  Drupal.alshayaSpc.staticStorage.remove('payment_method');
 
   const paymentData = data.payment_info.payment;
   const params = {

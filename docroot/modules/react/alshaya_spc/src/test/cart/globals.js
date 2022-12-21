@@ -2,6 +2,7 @@ import Drupal from '../../../../../../core/misc/drupal.es6';
 // Bridge to make Drupal Underscore available while running tests.
 global._ = require('underscore');
 
+let staticStorage = {};
 export const drupalSettings = {
   jest: 1,
   cart: {
@@ -38,28 +39,31 @@ export const drupalSettings = {
 // This is most likely because this function is included by Drupal and is not a
 // part of react.
 window.commerceBackend = window.commerceBackend || {};
-window.staticStorage = window.spcStaticStorage || {};
-window.spcStaticStorage = window.spcStaticStorage || {};
 window.commerceBackend.getProductStatus = function getProductStatus() {};
 window.commerceBackend.getCartId = function getCartId() {};
 window.commerceBackend.getCartIdFromStorage = function getCartIdFromStorage() {};
 window.commerceBackend.removeCartIdFromStorage = function removeCartIdFromStorage() {};
 
-window.staticStorage.clear = function clear() {
-  window.spcStaticStorage = {};
+// Mock implementation of static storage.
+global.Drupal.alshayaSpc = Drupal.alshayaSpc || {};
+global.Drupal.alshayaSpc.staticStorage = global.Drupal.alshayaSpc || {};
+// Mock function from alshaya_spc/assets/js/static_storage.js to help running
+// the npm tests.
+global.Drupal.alshayaSpc.staticStorage.clear = function clear() {
+  staticStorage = {};
 };
-window.staticStorage.set = function set(key, value) {
-  window.spcStaticStorage[key] = value;
+global.Drupal.alshayaSpc.staticStorage.set = function set(key, value) {
+  staticStorage[key] = value;
 };
-window.staticStorage.get = function get(key) {
-  if (typeof window.spcStaticStorage[key] === 'undefined') {
+global.Drupal.alshayaSpc.staticStorage.get = function get(key) {
+  if (typeof staticStorage[key] === 'undefined') {
     return null;
   }
 
-  return window.spcStaticStorage[key];
+  return staticStorage[key];
 };
-window.staticStorage.remove = function remove(key) {
-  window.spcStaticStorage[key] = null;
+global.Drupal.alshayaSpc.staticStorage.remove = function remove(key) {
+  staticStorage[key] = null;
 };
 
 // Start copiying functions from alshaya_master/js/local_storage_manager.js

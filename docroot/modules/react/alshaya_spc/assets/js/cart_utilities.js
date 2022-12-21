@@ -152,7 +152,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     let cartId = window.commerceBackend.getCartIdFromStorage();
     if (!Drupal.hasValue(cartId)) {
       // For authenticated users we get the cart id from the cart.
-      const data = window.spcStaticStorage.cart_raw;
+      const data = window.commerceBackend.getRawCartDataFromStorage();;
       if (Drupal.hasValue(data)
         && Drupal.hasValue(data.cart)
         && Drupal.hasValue(data.cart.id)

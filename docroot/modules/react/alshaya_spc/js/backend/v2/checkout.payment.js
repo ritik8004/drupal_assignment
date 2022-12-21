@@ -45,7 +45,7 @@ const getPaymentMethods = async () => {
 
   // Change the payment methods based on shipping method.
   const staticCacheKey = `payment_methods_${cart.data.shipping.type}_${cart.data.shipping.method}`;
-  const cached = window.staticStorage.get(staticCacheKey);
+  const cached = Drupal.alshayaSpc.staticStorage.get(staticCacheKey);
   if (hasValue(cached)) {
     return cached;
   }
@@ -59,7 +59,7 @@ const getPaymentMethods = async () => {
 
   if (hasValue(response.data)) {
     paymentMethods = response.data;
-    window.staticStorage.set(staticCacheKey, paymentMethods);
+    Drupal.alshayaSpc.staticStorage.set(staticCacheKey, paymentMethods);
   }
 
   return paymentMethods;
@@ -79,7 +79,7 @@ const getPaymentMethodSetOnCart = async () => {
     return null;
   }
 
-  const cached = window.staticStorage.get('payment_method');
+  const cached = Drupal.alshayaSpc.staticStorage.get('payment_method');
   if (hasValue(cached)) {
     return cached;
   }
@@ -89,7 +89,7 @@ const getPaymentMethodSetOnCart = async () => {
   };
   const response = await callMagentoApi(getApiEndpoint('selectedPaymentMethod', params), 'GET', {});
   if (hasValue(response) && hasValue(response.data) && hasValue(response.data.method)) {
-    window.staticStorage.set('payment_method', response.data.method);
+    Drupal.alshayaSpc.staticStorage.set('payment_method', response.data.method);
     return response.data.method;
   }
 

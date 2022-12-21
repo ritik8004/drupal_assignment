@@ -257,12 +257,12 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
         // Remove the cart id from storage.
         window.commerceBackend.removeCartDataFromStorage(true);
 
-        const apiCallAttempts = window.staticStorage.get('apiCallAttempts') || 0;
+        const apiCallAttempts = Drupal.alshayaSpc.staticStorage.get('apiCallAttempts') || 0;
 
         // Create new one and retry but only if user is trying to add item to cart.
         if (data.action === 'add item'
           && parseInt(getCartSettings('retryMaxAttempts'), 10) > apiCallAttempts) {
-          window.staticStorage.set('apiCallAttempts', (apiCallAttempts + 1));
+          Drupal.alshayaSpc.staticStorage.set('apiCallAttempts', (apiCallAttempts + 1));
 
           // Create a new cart.
           cartId = await window.commerceBackend.createCart();
@@ -290,7 +290,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   }
 
   // Reset counter.
-  window.staticStorage.remove('apiCallAttempts');
+  Drupal.alshayaSpc.staticStorage.remove('apiCallAttempts');
 
   const cartData = await window.commerceBackend.getCart(true);
   // Remove redemption of egift when feature is enabled and redemption is
@@ -450,7 +450,7 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
     return;
   }
 
-  window.staticStorage.set('associating_cart', true);
+  Drupal.alshayaSpc.staticStorage.set('associating_cart', true);
 
   if (document.referrer.indexOf('cart/login') > -1 && pageType === 'checkout') {
     // If the user is authenticated and we have cart_id in the local storage
@@ -464,7 +464,7 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
     await mergeGuestCartToCustomer();
   }
 
-  window.staticStorage.remove('associating_cart');
+  Drupal.alshayaSpc.staticStorage.remove('associating_cart');
 };
 
 /**

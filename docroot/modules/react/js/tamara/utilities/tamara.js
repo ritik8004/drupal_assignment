@@ -19,7 +19,7 @@ const Tamara = {
 
     // Check if the tamaraStatus for current cart value exist in the Static
     // Storage and return.
-    let tamaraStatus = window.staticStorage.get('tamaraStatus');
+    let tamaraStatus = Drupal.alshayaSpc.staticStorage.get('tamaraStatus');
     if (tamaraStatus && typeof tamaraStatus[total] !== 'undefined') {
       return tamaraStatus[total];
     }
@@ -50,7 +50,7 @@ const Tamara = {
     }
 
     // We storage the statuc in Static storage to avoid multiple API calls.
-    window.staticStorage.set('tamaraStatus', tamaraStatus);
+    Drupal.alshayaSpc.staticStorage.set('tamaraStatus', tamaraStatus);
 
     // Return the tamara status from the Static Storage for the cart value.
     return tamaraStatus[total];

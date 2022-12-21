@@ -16,7 +16,7 @@ describe('Common', () => {
 
     afterEach(() => {
       // Clear all mocks.
-      window.staticStorage.clear();
+      global.Drupal.alshayaSpc.staticStorage.clear();
       jest.clearAllMocks();
     });
 

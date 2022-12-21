@@ -1,22 +1,24 @@
-window.staticStorage = window.spcStaticStorage || {};
-window.spcStaticStorage = window.spcStaticStorage || {}
+Drupal.alshayaSpc = Drupal.alshayaSpc || {};
+Drupal.alshayaSpc.staticStorage = Drupal.alshayaSpc.staticStorage || {}
+// Empty object to store the info.
+var staticStorage = {};
 
-window.staticStorage.get = (key) => {
-  if (typeof window.spcStaticStorage[key] === 'undefined') {
+Drupal.alshayaSpc.staticStorage.get = (key) => {
+  if (typeof staticStorage[key] === 'undefined') {
     return null;
   }
 
-  return window.spcStaticStorage[key];
+  return staticStorage[key];
 };
 
-window.staticStorage.set = (key, value) => {
-  window.spcStaticStorage[key] = value;
+Drupal.alshayaSpc.staticStorage.set = (key, value) => {
+  staticStorage[key] = value;
 };
 
-window.staticStorage.remove = (key) => {
-  window.spcStaticStorage[key] = null;
+Drupal.alshayaSpc.staticStorage.remove = (key) => {
+  staticStorage[key] = null;
 };
 
-window.staticStorage.clear = () => {
-  window.spcStaticStorage = {};
+Drupal.alshayaSpc.staticStorage.clear = () => {
+  staticStorage = {};
 };

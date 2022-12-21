@@ -23,7 +23,7 @@ describe('Checkout', () => {
     });
 
     afterEach(() => {
-      window.staticStorage.clear();
+      global.Drupal.alshayaSpc.staticStorage.clear();
       localStorage.clear();
       // Clear and reset any mocks set by other tests.
       jest.clearAllMocks();
@@ -795,7 +795,7 @@ describe('Checkout', () => {
       const getHomeDeliveryShippingMethods = utilsRewire.__get__('getHomeDeliveryShippingMethods');
 
       beforeEach(() => {
-        window.staticStorage.set('shipping_methods', null);
+        global.Drupal.alshayaSpc.staticStorage.set('shipping_methods', null);
       });
 
       it('With no data or country_id not provided', async () => {
@@ -824,7 +824,7 @@ describe('Checkout', () => {
 
         // Without static cache.
         let result = await getHomeDeliveryShippingMethods({ country_id: 'EG' });
-        let cache = window.staticStorage.get('shipping_methods');
+        let cache = global.Drupal.alshayaSpc.staticStorage.get('shipping_methods');
 
         // Check results.
         expect(cache[Object.keys(cache)[0]]).toEqual(result.methods);
