@@ -823,7 +823,6 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
               'alshaya_master/common_functions',
               'alshaya_rcs_product/main',
               'alshaya_rcs_product/product_attributes',
-              'alshaya_spc/cart_utilities',
             ]
           );
 
