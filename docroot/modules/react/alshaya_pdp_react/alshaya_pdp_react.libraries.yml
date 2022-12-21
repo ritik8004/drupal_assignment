@@ -8,6 +8,7 @@ pdp_magazine_v2_layout:
     - core/drupal.debounce
     - alshaya_seo/gtm
     - alshaya_pdp_react/slick_slider_css
+    - alshaya_spc/static_storage
 
 pdp_size_guide_utility:
   version: 1.x
