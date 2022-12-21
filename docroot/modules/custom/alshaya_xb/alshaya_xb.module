@@ -193,10 +193,10 @@ function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $e
     $fixed_prices = [];
     foreach ($product['extension']['xb_fixed_price'] as $fixed_price) {
       if (!empty($fixed_price['price'])) {
-        $fixed_prices[$fixed_price['country_code']]['price'] = $fixed_price['price'];
+        $fixed_prices[$fixed_price['country_code']]['price'] = _alshaya_acm_format_price_with_decimal($fixed_price['price']);
       }
       if (!empty($fixed_price['special_price'])) {
-        $fixed_prices[$fixed_price['country_code']]['special_price'] = $fixed_price['special_price'];
+        $fixed_prices[$fixed_price['country_code']]['special_price'] = _alshaya_acm_format_price_with_decimal($fixed_price['special_price']);
       }
     }
 
