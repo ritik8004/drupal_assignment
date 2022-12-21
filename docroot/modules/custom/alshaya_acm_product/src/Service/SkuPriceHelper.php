@@ -159,13 +159,25 @@ class SkuPriceHelper {
     $prices = $this->skuManager->getMinPrices($sku, $color);
     $price = $prices['price'];
     $final_price = $prices['final_price'];
-    $fixed_price = $prices['fixed_price'] ?? NULL;
+
+    $data_attribute_price = [];
+    $data_attribute_special_price = [];
+    if (!empty($prices['fixed_price'])) {
+      foreach (json_decode($prices['fixed_price'], TRUE) as $key => $value) {
+        if (!empty($value['price'])) {
+          $data_attribute_price[$key] = $value['price'];
+        }
+        if (!empty($value['special_price'])) {
+          $data_attribute_special_price[$key] = $value['special_price'];
+        }
+      }
+    }
 
     if ($price) {
       $this->build['#price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $price,
-        '#fixed_price' => $fixed_price,
+        '#fixed_price' => json_encode($data_attribute_price),
       ];
 
       // Get the discounted price.
@@ -178,7 +190,7 @@ class SkuPriceHelper {
         $this->build['#final_price'] = [
           '#theme' => 'acq_commerce_price',
           '#price' => $final_price,
-          '#fixed_price' => $fixed_price,
+          '#fixed_price' => json_encode($data_attribute_special_price),
         ];
 
         // Get discount if discounted price available.
@@ -191,7 +203,7 @@ class SkuPriceHelper {
       $this->build['#price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $final_price,
-        '#fixed_price' => $fixed_price,
+        '#fixed_price' => json_encode($data_attribute_price),
       ];
     }
   }

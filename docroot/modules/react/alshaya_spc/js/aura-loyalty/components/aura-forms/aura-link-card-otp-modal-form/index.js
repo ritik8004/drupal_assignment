@@ -278,7 +278,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
   addCard = () => {
     this.resetModalMessages();
     const { linkCardOption } = this.state;
-    const { chosenCountryCode } = this.props;
+    const { chosenCountryCode, clickedOnNotYou } = this.props;
 
     // Check if Field contains valid value.
     const isValid = validateElementValueByType(linkCardOption, '.aura-modal-form', 'link_card');
@@ -297,6 +297,8 @@ class AuraFormLinkCardOTPModal extends React.Component {
       fieldData.type = 'phone';
     }
     fieldData.action = 'add';
+    fieldData.gtmLinkCardOption = linkCardOption === 'cardNumber' ? 'a/c number' : linkCardOption;
+    fieldData.clickedOnNotYou = clickedOnNotYou;
     showFullScreenLoader();
 
     // Send fieldData to set loyalty card to current cart.
@@ -439,7 +441,13 @@ class AuraFormLinkCardOTPModal extends React.Component {
               </ConditionalView>
             </ConditionalView>
             <div className="aura-modal-footer">
-              <div className="join-aura" onClick={() => openOTPModal()}>
+              <div
+                className="join-aura"
+                onClick={() => {
+                  openOTPModal();
+                  Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'initiated' });
+                }}
+              >
                 {getStringMessage('aura_join_aura')}
               </div>
             </div>

@@ -92,6 +92,7 @@ function handleNotYou(cardNumber) {
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
+      Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU', label: 'email' });
       if (result.data !== undefined && result.data.error === undefined) {
         if (result.data.status) {
           stateValues = {
@@ -99,11 +100,13 @@ function handleNotYou(cardNumber) {
             loyaltyStatus: auraStatus,
             signUpComplete: false,
           };
+          Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU', label: 'success' });
         }
       } else {
         stateValues = {
           notYouFailed: true,
         };
+        Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU', label: 'fail' });
         showInlineError('.error-placeholder', Drupal.t('Unexpected error occured.'));
       }
       dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
@@ -124,6 +127,7 @@ function handleLinkYourCard(cardNumber) {
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
+      Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'aura card number' });
       if (result.data !== undefined && result.data.error === undefined) {
         if (result.data.status && result.data.data.auraStatus) {
           const {
@@ -148,6 +152,7 @@ function handleLinkYourCard(cardNumber) {
             firstName: firstName || '',
             lastName: lastName || '',
           };
+          Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'success' });
         }
       } else {
         stateValues = {
@@ -157,6 +162,7 @@ function handleLinkYourCard(cardNumber) {
         // We don't want to show congratulations popup in case if linking is failed.
         showCongratulations = false;
         showInlineError('.error-placeholder', Drupal.t('Unexpected error occured.'));
+        Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'fail' });
       }
 
       // Dispatch loyaltyStatusUpdated as loyalty status is updated.

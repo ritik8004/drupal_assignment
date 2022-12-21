@@ -43,6 +43,7 @@ class Header extends React.Component {
   componentDidMount() {
     const {
       loyaltyStatus,
+      signUpComplete,
     } = this.state;
 
     // Event listener to listen to customer data API call event.
@@ -52,8 +53,15 @@ class Header extends React.Component {
     document.addEventListener('loyaltyStatusUpdated', this.updateState, false);
 
     // Push aura common details to gtm data event sooner when not logged-in.
+    // Or when Aura is not signed in.
     if (drupalSettings.userDetails.userID === 0) {
-      Drupal.alshayaSeoGtmPushAuraCommonData({});
+      if (signUpComplete) {
+        // Anonymous users can also sign in to aura without logging in to site.
+        Drupal.alshayaSeoGtmPushAuraCommonData(this.state);
+      } else {
+        // Anonymous users who did not sign in.
+        Drupal.alshayaSeoGtmPushAuraCommonData({ nonAura: true });
+      }
     }
 
     // No API call to fetch points for anonymous users or user with

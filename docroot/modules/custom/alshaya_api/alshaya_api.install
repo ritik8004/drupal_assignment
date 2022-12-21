@@ -26,7 +26,7 @@ function alshaya_api_update_9402() {
 
   if (!alshaya_is_env_prod()) {
     foreach (\Drupal::service('language_manager')->getLanguages() as $langcode => $language) {
-      $alshaya_api_config->set("magento_lang_prefix.$langcode", Settings::get('magento_lang_prefix')['langcode']);
+      $alshaya_api_config->set("magento_lang_prefix.$langcode", Settings::get('magento_lang_prefix')[$langcode]);
     }
 
     $alshaya_api_config

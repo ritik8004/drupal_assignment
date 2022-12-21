@@ -30,15 +30,14 @@ runs:
         echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
         echo CHANGED_THEME_FILES=${{ inputs.CHANGED_THEMES_FILES }} >> $GITHUB_ENV
         echo CHANGED_REACT_FILES=${{ inputs.CHANGED_REACT_FILES }} >> $GITHUB_ENV
-        echo CHANGED_SVG_FILES=${{ inputs.CHANGED_SVG_FILES }} >> $GITHUB_ENV
         echo CHANGED_JS_FILES=${{ inputs.CHANGED_JS_FILES }} >> $GITHUB_ENV
+        echo CHANGED_SVG_FILES=${{ inputs.CHANGED_SVG_FILES }} >> $GITHUB_ENV
         echo CHANGED_ALL_FILES=$(echo ${{ inputs.CHANGED_ALL_FILES }} | wc -l | xargs) >> $GITHUB_ENV
 
     - name: Run Composer install
       shell: bash
       run: |
-        composer self-update
-        composer self-update --2
+        composer self-update 2.4.4
         composer validate --no-check-all --ansi
         composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
