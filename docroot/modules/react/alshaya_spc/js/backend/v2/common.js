@@ -1,7 +1,5 @@
-import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
-  getCartIdFromStorage,
   isUserAuthenticated,
   removeCartIdFromStorage,
   isRequestFromSocialAuthPopup,
@@ -11,7 +9,6 @@ import {
   getDefaultErrorMessage,
   getExceptionMessageType,
 } from '../../../../js/utilities/error';
-import StaticStorage from './staticStorage';
 import {
   hasValue,
   isObject,
@@ -31,58 +28,19 @@ window.authenticatedUserCartId = 'NA';
 window.commerceBackend = window.commerceBackend || {};
 
 /**
- * Gets the cart ID for existing cart.
- *
- * @returns {string|integer|null}
- *   The cart id or null if not available.
- */
-window.commerceBackend.getCartId = () => {
-  // This is for ALX InStorE feature.
-  // We want to be able to resume guest carts from URL,
-  // we pass that id from backend via Cookie to Browser.
-  const resumeCartId = Cookies.get('resume_cart_id');
-  if (hasValue(resumeCartId)) {
-    Drupal.removeItemFromLocalStorage('cart_data');
-    Drupal.addItemInLocalStorage('cart_id', resumeCartId);
-
-    // Remove Add to cart PDP count.
-    Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
-
-    Cookies.remove('resume_cart_id');
-  }
-
-  let cartId = getCartIdFromStorage();
-  if (!hasValue(cartId)) {
-    // For authenticated users we get the cart id from the cart.
-    const data = window.commerceBackend.getRawCartDataFromStorage();
-    if (hasValue(data)
-      && hasValue(data.cart)
-      && hasValue(data.cart.id)
-    ) {
-      cartId = data.cart.id;
-    }
-  }
-
-  if (typeof cartId === 'string' || typeof cartId === 'number') {
-    return cartId;
-  }
-  return null;
-};
-
-/**
  * Stores the raw cart data object into the storage.
  *
  * @param {object} data
  *   The raw cart data object.
  */
 window.commerceBackend.setRawCartDataInStorage = (data) => {
-  StaticStorage.set('cart_raw', data);
+  Drupal.alshayaSpc.staticStorage.set('cart_raw', data);
 };
 
 /**
  * Fetches the raw cart data object from the static storage.
  */
-window.commerceBackend.getRawCartDataFromStorage = () => StaticStorage.get('cart_raw');
+window.commerceBackend.getRawCartDataFromStorage = () => Drupal.alshayaSpc.staticStorage.get('cart_raw');
 
 /**
  * Stores skus and quantities.
@@ -107,7 +65,7 @@ const matchStockQuantity = (sku, quantity = 0) => {
  * @returns {object|null}
  *   Processed cart data else null.
  */
-window.commerceBackend.getCartDataFromStorage = () => StaticStorage.get('cart');
+window.commerceBackend.getCartDataFromStorage = () => Drupal.alshayaSpc.staticStorage.get('cart');
 
 /**
  * Sets the cart data to storage.
@@ -118,7 +76,7 @@ window.commerceBackend.getCartDataFromStorage = () => StaticStorage.get('cart');
 window.commerceBackend.setCartDataInStorage = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
-  StaticStorage.set('cart', cartInfo);
+  Drupal.alshayaSpc.staticStorage.set('cart', cartInfo);
 
   // Store masked cart id for Global-e integration for checkout page.
   // We need to keep this data on a dedicated key because cart_data is
@@ -153,7 +111,7 @@ window.commerceBackend.setCartDataInStorage = (data) => {
  *  Whether we should remove all items.
  */
 window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
-  StaticStorage.clear();
+  Drupal.alshayaSpc.staticStorage.clear();
 
   Drupal.removeItemFromLocalStorage('cart_data');
 
@@ -687,8 +645,8 @@ const isAnonymousUserWithoutCart = () => {
 };
 
 const clearInvalidCart = () => {
-  const isAssociatingCart = StaticStorage.get('associating_cart') || false;
-  if (getCartIdFromStorage() && !isAssociatingCart) {
+  const isAssociatingCart = Drupal.alshayaSpc.staticStorage.get('associating_cart') || false;
+  if (window.commerceBackend.getCartIdFromStorage() && !isAssociatingCart) {
     logger.warning('Removing cart from local storage and reloading.');
 
     // Remove cart_id from storage.
@@ -806,7 +764,7 @@ const associateCartToCustomer = async (guestCartId) => {
 
     // Clear local storage and let the customer continue without association.
     removeCartIdFromStorage();
-    StaticStorage.clear();
+    Drupal.alshayaSpc.staticStorage.clear();
     return;
   }
 
@@ -817,7 +775,7 @@ const associateCartToCustomer = async (guestCartId) => {
 
   // Clear local storage.
   removeCartIdFromStorage();
-  StaticStorage.clear();
+  Drupal.alshayaSpc.staticStorage.clear();
 
   // Reload cart.
   const cartData = await getCart(true);
@@ -871,7 +829,7 @@ const mergeGuestCartToCustomer = async () => {
 
     // Clear local storage and let the customer continue without association.
     removeCartIdFromStorage();
-    StaticStorage.clear();
+    Drupal.alshayaSpc.staticStorage.clear();
     return;
   }
 
@@ -883,7 +841,7 @@ const mergeGuestCartToCustomer = async () => {
 
   // Clear local storage.
   removeCartIdFromStorage();
-  StaticStorage.clear();
+  Drupal.alshayaSpc.staticStorage.clear();
 
   // Reload cart.
   await getCart(true);
@@ -1131,7 +1089,7 @@ window.commerceBackend.pushAgentDetailsInCart = async () => {
  *   Return customer email or null.
  */
 const getCartCustomerEmail = async () => {
-  let email = StaticStorage.get('cartCustomerEmail');
+  let email = Drupal.alshayaSpc.staticStorage.get('cartCustomerEmail');
   if (email !== null) {
     return email;
   }
@@ -1149,7 +1107,7 @@ const getCartCustomerEmail = async () => {
     }
   }
 
-  StaticStorage.set('cartCustomerEmail', email);
+  Drupal.alshayaSpc.staticStorage.set('cartCustomerEmail', email);
   return email;
 };
 

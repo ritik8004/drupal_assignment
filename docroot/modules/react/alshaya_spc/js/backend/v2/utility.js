@@ -31,26 +31,6 @@ const removeCartIdFromStorage = () => {
   Drupal.removeItemFromLocalStorage('cart_id');
 };
 
-const getCartIdFromStorage = () => {
-  let cartId = Drupal.getItemFromLocalStorage('cart_id');
-
-  // Check if cartId is of authenticated user.
-  if (cartId === window.authenticatedUserCartId) {
-    // Reload the page if user is not authenticated based on settings.
-    if (!isUserAuthenticated()) {
-      removeCartIdFromStorage();
-
-      // eslint-disable-next-line no-self-assign
-      window.location.href = window.location.href;
-    }
-
-    // Replace with null so we don't need to add conditions everywhere.
-    cartId = null;
-  }
-
-  return cartId;
-};
-
 /**
  * Gets magento api endpoint by user role.
  *
@@ -238,7 +218,6 @@ export {
   getApiEndpoint,
   isUserAuthenticated,
   getIp,
-  getCartIdFromStorage,
   removeCartIdFromStorage,
   isRequestFromSocialAuthPopup,
 };

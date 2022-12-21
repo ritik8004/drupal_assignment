@@ -3,7 +3,6 @@ import axios from 'axios';
 import utilsRewire  from '../../../../js/backend/v2/checkout.shipping';
 import { getCart } from '../../../../js/backend/v2/common';
 import { drupalSettings, Drupal } from '../globals';
-import StaticStorage from '../../../../js/backend/v2/staticStorage';
 import * as cartData from '../data/cart.json';
 
 describe('Checkout Shipping', () => {
@@ -15,7 +14,7 @@ describe('Checkout Shipping', () => {
 
     afterEach(() => {
       // Clear and reset any mocks set by other tests.
-      StaticStorage.clear();
+      global.Drupal.alshayaSpc.staticStorage.clear();
       jest.clearAllMocks();
       jest.resetAllMocks();
     });
