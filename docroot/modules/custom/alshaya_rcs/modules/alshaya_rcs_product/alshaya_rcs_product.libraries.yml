@@ -4,7 +4,7 @@ main:
   dependencies:
     - rcs_magento_placeholders/rcs_magento_placeholders
     - alshaya_rcs_magento_placeholders/main
-    - alshaya_master/common_functions
+    - alshaya_rcs/utility
 
 rcs_product_info:
   version: 1.x

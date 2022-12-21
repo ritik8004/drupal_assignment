@@ -7,6 +7,7 @@ renderer:
     - core/drupalSettings
     - alshaya_rcs_magento_placeholders/main
     - rcs_magento_placeholders/rcs_magento_placeholders
+    - alshaya_rcs/utility
 
 rcs_listing_dynamic_yield:
   js:

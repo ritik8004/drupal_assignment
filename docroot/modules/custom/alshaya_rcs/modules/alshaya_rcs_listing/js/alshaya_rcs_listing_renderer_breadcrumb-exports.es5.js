@@ -55,14 +55,7 @@ exports.normalize = function normalize(
   }
 
   // Prepare the breadcrumb array.
-  Object.keys(data.breadcrumbs).forEach(function (i) {
-    normalized.push({
-      url: data.breadcrumbs[i].category_url_path,
-      text: data.breadcrumbs[i][keys.breadcrumbTermNameKey],
-      data_url: data.breadcrumbs[i].category_url_path,
-      id: data.breadcrumbs[i].category_id,
-    });
-  });
+  normalized = window.commerceBackend.getNormalizedBreadcrumbs(normalized, data, keys);
 
   // Push the last crumb without a url.
   normalized.push({

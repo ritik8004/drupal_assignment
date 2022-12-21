@@ -63,33 +63,21 @@ exports.normalize = function normalize(
 
   // Build the breadcrumb using the root category, that has the deepest level.
   // If they are all at same level, use the first entry.
-  let max = 0;
-  let deepestCategory = null;
+  let deepestCategory = [];
+  let deepestCategoryId = data.breadcrumb_category_id;
   Object.keys(categories).forEach(function (i) {
     // Check if the first category in the breadcrumb is the same as the root category.
-    if (Array.isArray(categories[i].breadcrumbs)
-      && typeof categories[i].breadcrumbs[0].category_id !== 'undefined'
-      && categories[i].breadcrumbs[0].category_id === rootCategoryId
+    if (Drupal.hasValue(categories[i])
+      && typeof categories[i].id !== 'undefined'
+      && categories[i].id === parseInt(deepestCategoryId, 10)
     ) {
-      const depth = categories[i].level;
-      // Find the category with deepest depth and breadcrumbs.
-      if (depth > max && categories[i].breadcrumbs !== null) {
-        deepestCategory = categories[i];
-        max = depth;
-      }
+      deepestCategory = categories[i];
     }
   });
 
   // Build the breadcrumb array.
   if (deepestCategory) {
-    Object.keys(deepestCategory.breadcrumbs).forEach(function (i) {
-      normalized.push({
-        url: deepestCategory.breadcrumbs[i].category_url_path,
-        text: deepestCategory.breadcrumbs[i][keys.breadcrumbTermNameKey],
-        data_url: deepestCategory.breadcrumbs[i].category_url_path,
-        id: deepestCategory.breadcrumbs[i].category_id,
-      });
-    });
+    normalized = window.commerceBackend.getNormalizedBreadcrumbs(normalized, deepestCategory, keys);
 
     // Push the last part of the normalized.
     normalized.push({
