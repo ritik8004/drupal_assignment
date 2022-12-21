@@ -45,7 +45,7 @@ import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/on
 import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
 import CartPaymentMethodsLogos from '../payment-methods-logos';
 import Tamara from '../../../../../js/tamara/utilities/tamara';
-import DeliveryPropositions from '../delivery-propositions';
+import DeliveryPropositions from '../../../delivery-propositions/components/delivery-propositions';
 
 // Lazy load free delivery usp banner component.
 const FreeDeliveryUspBanner = React.lazy(() => import('../free-delivery-usp-banner' /* webpackChunkName: "free_delivery_usp" */));

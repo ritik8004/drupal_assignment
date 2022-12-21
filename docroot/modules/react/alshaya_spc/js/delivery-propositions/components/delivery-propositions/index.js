@@ -1,14 +1,13 @@
 import React from 'react';
-import { getApiEndpoint } from '../../../backend/v2/utility';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import DeliveryPropositionItem from './DeliveryPropositionItem';
+import DeliveryPropositionItem from '../delivery-proposition-item';
 import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 
 class DeliveryPropositions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      deliveryPropositionItems: null,
+      deliveryPropositionItems: [],
     };
   }
 
@@ -24,7 +23,7 @@ class DeliveryPropositions extends React.Component {
     const deliveryPropositionItems = [];
     // Get delivery propositions response.
     const response = await callMagentoApi(
-      getApiEndpoint('getDeliveryPropositions'),
+      '/V1/checkout/get-delivery-proposition',
       'GET',
       {},
       false,
@@ -32,21 +31,21 @@ class DeliveryPropositions extends React.Component {
     // Process response data if it is valid and expected response.
     if (typeof response.data !== 'undefined' && Array.isArray(response.data)) {
       response.data.forEach((responseData, key) => {
-        const data = { ...responseData };
-        data.id = key;
-        deliveryPropositionItems.push(data);
+        deliveryPropositionItems.push(
+          { ...responseData, key },
+        );
+      });
+      // Set delivery propositions data in state.
+      this.setState({
+        deliveryPropositionItems,
       });
     }
-    // Set delivery propositions data in state.
-    this.setState({
-      deliveryPropositionItems,
-    });
   };
 
   render() {
     const { deliveryPropositionItems } = this.state;
     if (!hasValue(deliveryPropositionItems)) {
-      return '';
+      return null;
     }
 
     return (
@@ -54,7 +53,7 @@ class DeliveryPropositions extends React.Component {
         {
           deliveryPropositionItems.map((item) => (
             <DeliveryPropositionItem
-              key={item.id}
+              key={item.key}
               data={item}
             />
           ))
