@@ -3,7 +3,3 @@ services:
     class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexConfigOverrider
     tags:
       - { name: config.factory.override, priority: -1 }
-
-  alshaya_rcs.enrichment_helper:
-    class: Drupal\alshaya_rcs\Service\AlshayaRcsEnrichmentHelper
-    arguments: ['@entity_type.manager']

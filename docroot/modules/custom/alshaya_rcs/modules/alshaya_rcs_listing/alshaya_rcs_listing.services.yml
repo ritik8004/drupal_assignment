@@ -73,5 +73,5 @@ services:
     tags:
       - { name: 'event_subscriber' }
     arguments:
-      - '@alshaya_rcs.enrichment_helper'
+      - '@rcs_placeholders.enrichment_helper'
       - '@config.factory'

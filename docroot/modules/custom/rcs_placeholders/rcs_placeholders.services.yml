@@ -29,3 +29,7 @@ services:
     class: Drupal\rcs_placeholders\Service\RcsPhPathPrefixHelper
     arguments:
       - '@config.factory'
+
+  rcs_placeholders.enrichment_helper:
+    class: Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper
+    arguments: ['@entity_type.manager']

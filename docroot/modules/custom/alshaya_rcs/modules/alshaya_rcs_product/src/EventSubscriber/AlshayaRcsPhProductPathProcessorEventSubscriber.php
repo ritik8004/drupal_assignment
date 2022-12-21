@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_rcs_product\EventSubscriber;
 
-use Drupal\alshaya_rcs\Service\AlshayaRcsEnrichmentHelper;
+use Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,7 +15,7 @@ class AlshayaRcsPhProductPathProcessorEventSubscriber implements EventSubscriber
   /**
    * Enrichment helper.
    *
-   * @var \Drupal\alshaya_rcs\Service\AlshayaRcsEnrichmentHelper
+   * @var \Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper
    */
   protected $enrichmentHelper;
 
@@ -30,7 +30,7 @@ class AlshayaRcsPhProductPathProcessorEventSubscriber implements EventSubscriber
    * Constructs an AlshayaRcsPhProductPathProcessorEventSubscriber object.
    */
   public function __construct(
-    AlshayaRcsEnrichmentHelper $enrichment_helper,
+    RcsPhEnrichmentHelper $enrichment_helper,
     ConfigFactoryInterface $config_factory
   ) {
     $this->enrichmentHelper = $enrichment_helper;
@@ -56,12 +56,12 @@ class AlshayaRcsPhProductPathProcessorEventSubscriber implements EventSubscriber
    */
   public function onPathProcess(RcsPhPathProcessorEvent $event): void {
     $data = $event->getData();
-    if (empty($data['path']) || empty($data['full_path'])) {
+    if (empty($data['path']) || empty($data['fullPath'])) {
       return;
     }
 
     $path = $data['path'];
-    $full_path = $data['full_path'];
+    $full_path = $data['fullPath'];
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $product_prefix = $config->get('product.path_prefix');
 

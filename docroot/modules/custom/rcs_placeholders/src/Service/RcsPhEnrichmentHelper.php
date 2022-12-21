@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\alshaya_rcs\Service;
+namespace Drupal\rcs_placeholders\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Provides helper services for enrichments.
  */
-class AlshayaRcsEnrichmentHelper {
+class RcsPhEnrichmentHelper {
 
   /**
    * The entity type manager.
@@ -31,7 +31,7 @@ class AlshayaRcsEnrichmentHelper {
   protected $termStorage;
 
   /**
-   * Constructs an AlshayaRcsEnrichmentHelper object.
+   * Constructs an RcsPhEnrichmentHelper object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.

@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_rcs_super_category\EventSubscriber;
 
 use Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper;
-use Drupal\alshaya_rcs\Service\AlshayaRcsEnrichmentHelper;
+use Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -18,7 +18,7 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
   /**
    * Enrichment helper.
    *
-   * @var \Drupal\alshaya_rcs\Service\AlshayaRcsEnrichmentHelper
+   * @var \Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper
    */
   protected $enrichmentHelper;
 
@@ -46,7 +46,7 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
   /**
    * Constructs an AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber object.
    *
-   * @param \Drupal\alshaya_rcs\Service\AlshayaRcsEnrichmentHelper $enrichment_helper
+   * @param \Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper $enrichment_helper
    *   Enrichment helper.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
@@ -56,7 +56,7 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
    *   Product category tree service.
    */
   public function __construct(
-    AlshayaRcsEnrichmentHelper $enrichment_helper,
+    RcsPhEnrichmentHelper $enrichment_helper,
     ConfigFactoryInterface $config_factory,
     AlshayaDepartmentPageHelper $alshaya_department_page_helper,
     ProductCategoryTree $product_category_tree
@@ -86,7 +86,7 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
    */
   public function onPathProcess(RcsPhPathProcessorEvent $event): void {
     $data = $event->getData();
-    if (empty($data['path']) || empty($data['full_path'])) {
+    if (empty($data['path']) || empty($data['fullPath'])) {
       return;
     }
 

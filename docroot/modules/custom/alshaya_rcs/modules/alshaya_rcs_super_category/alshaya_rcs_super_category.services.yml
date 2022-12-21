@@ -43,7 +43,7 @@ services:
     tags:
       - { name: 'event_subscriber', priority: 100 }
     arguments:
-      - '@alshaya_rcs.enrichment_helper'
+      - '@rcs_placeholders.enrichment_helper'
       - '@config.factory'
       - '@alshaya_advanced_page.department_page_helper'
       - '@alshaya_acm_product_category.product_category_tree'
