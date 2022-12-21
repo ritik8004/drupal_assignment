@@ -81,6 +81,21 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
   }
 
   /**
+   * Utility function to check if user is authenticated.
+   *
+   * @returns {bool}
+   *   Return true if user is authenticated else false.
+   */
+  function isUserAuthenticated() {
+    if (Drupal.hasValue(window.drupalSettings.userDetails)
+      && Drupal.hasValue(window.drupalSettings.userDetails.customerId)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Utility function to remove the card id from the storage.
    */
   window.commerceBackend.removeCartIdFromStorage = () => {
@@ -91,8 +106,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     // Remove Add to cart PDP count.
     Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
 
-    if (Drupal.hasValue(window.drupalSettings.userDetails)
-      && Drupal.hasValue(window.drupalSettings.userDetails.customerId)) {
+    if (isUserAuthenticated()) {
       Drupal.addItemInLocalStorage('cart_id', window.authenticatedUserCartId);
       // Remove guest Cart for merge from storage.
       Drupal.removeItemFromLocalStorage('guestCartForMerge');
