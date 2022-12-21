@@ -78,15 +78,11 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('hide_grid_toggle'),
     ];
 
-    $options = [
-      'small' => $this->t('Small'),
-      'large' => $this->t('Large'),
-    ];
     $form['default_col_grid'] = [
       '#type' => 'radios',
       '#title' => $this->t('Default col grid'),
       '#default_value' => $config->get('default_col_grid'),
-      '#options' => $options,
+      '#options' => ['small' => $this->t('Small'), 'large' => $this->t('Large')],
       '#description' => $this->t('Set value for default col grid.'),
     ];
 
