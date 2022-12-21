@@ -12,10 +12,17 @@
       .sku-base-form {
         .form-item {
           padding-top: 0;
+          padding-bottom: 0;
+          margin-bottom: rem(21);
         }
 
         button[type=submit] {
           margin-#{$left}: rem(26);
+
+          html[lang='ar'] & {
+            margin-right: 0;
+            margin-left: rem(26);
+          }
         }
       }
     }
@@ -23,6 +30,17 @@
     .matchback-container {
       & > .views-row {
         margin-bottom: rem(32);
+      }
+    }
+
+    .field--name-field-skus {
+      .sku-base-form {
+        .form-item.form-type-select.form-item-quantity {
+          label {
+            padding: 0;
+            top: rem(-24);
+          }
+        }
       }
     }
   }
