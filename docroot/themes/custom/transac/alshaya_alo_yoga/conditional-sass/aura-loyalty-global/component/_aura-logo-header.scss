@@ -21,8 +21,11 @@
 
     #aura-header-modal {
       a.join-aura {
+        background: url('#{$base_theme_img_directory_path}/aura/aura-logo-horizontal-mono.png') no-repeat center/#{rem(56)};
+
         svg {
-          // Footlocker needs a white logo as header is black.
+          opacity: 0;
+
           .letter {
             fill: #bcc9ff;
           }
@@ -33,10 +36,12 @@
         }
 
         &:hover {
-          background: #fff;
+          background-image: none;
+          background-color: $header_secondary_menu_link;
 
           svg {
-            // Footlocker needs a white logo as header is black.
+            opacity: 1;
+
             .letter {
               fill: #1e2749;
             }
