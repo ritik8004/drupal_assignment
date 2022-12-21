@@ -174,6 +174,10 @@ const getApiEndpoint = (action, params = {}) => {
       endpoint = '/V1/checkoutcomupapi/getTokenList';
       break;
 
+    case 'getDeliveryPropositions':
+      endpoint = '/V1/checkout/get-delivery-proposition';
+      break;
+
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,
