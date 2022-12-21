@@ -50,22 +50,7 @@ body.nodetype--acq_product {
         height: rem(30);
         margin-#{$right}: rem(12);
         padding: 0;
-
-        @include breakpoint($only-tablet) {
-          width: rem(48);
-        }
-
-        html[lang="ar"] & {
-          width: rem(42);
-
-          @include breakpoint($tablet) {
-            width: rem(72);
-          }
-
-          @include breakpoint($desktop) {
-            width: rem(40);
-          }
-        }
+        flex-shrink: 0;
       }
     }
   }
