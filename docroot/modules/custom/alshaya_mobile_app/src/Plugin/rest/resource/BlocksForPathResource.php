@@ -226,10 +226,11 @@ class BlocksForPathResource extends ResourceBase {
           $content_block = $this->entityRepository->loadEntityByUuid('block_content', $block_uuid);
           if ($content_block) {
             $content_block = $this->entityRepository->getTranslationFromContext($content_block);
-
+            // Getting the first input value of the body field.
+            $body_value = $content_block->get('body')->first();
             $response_data[$block->id()] = [
               'title' => $content_block->label(),
-              'body' => !empty($content_block->get('body')) ? $content_block->get('body')->first()->getValue()['value'] : NULL,
+              'body' => !empty($body_value) ? $body_value->getValue()['value'] : NULL,
               'type' => 'custom',
             ];
           }
