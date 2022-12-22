@@ -445,6 +445,26 @@
       };
       pushNavigationData(navigationData);
     });
+
+    // Push navigation events in dataLayer for 3rd Level shop by filter attribute.
+    $(document).on('click', '.menu--two__list-item .shop-by-filter-attribute__list-item a' , function() {
+      var eventName = 'L3 Navigation';
+      var menuLabel = '';
+      // Create the event label with parent menu item and current target link text.
+      let parentLink = $(this).closest('.menu--one__list-item').find('.menu--one__link');
+      // Getting GTM menu label for L1 menu items.
+      let parentLabel = (typeof parentLink.attr('gtm-menu-title') !== 'undefined' && parentLink.attr('gtm-menu-title') !== false) ? parentLink.attr('gtm-menu-title') : parentLink.text();
+      // Getting GTM menu label for L2 menu items.
+      let nextChildLabel = $(this).closest('.menu--two__list-item').find('.shop-by-filter-attribute__label').text();
+
+      // Getting GTM menu label for L3 menu items and appending L1 + L2.
+      menuLabel = parentLabel + ' > ' + nextChildLabel + ' > ' + $(this).text();
+      var navigationData = {
+        event: eventName,
+        eventLabel: menuLabel
+      };
+      pushNavigationData(navigationData);
+    });
   }
 
   /**
