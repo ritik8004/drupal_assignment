@@ -101,9 +101,7 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
           unset($path_parts[$index]);
         }
       }
-
       $path = implode('/', array_values($path_parts));
-
       $event->addData('path', $path);
     }
 
