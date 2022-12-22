@@ -44,7 +44,7 @@ window.commerceBackend = window.commerceBackend || {};
       : null;
 
     return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }, null, null, null, false, authenticationToken).then(function processStock(response) {
-      const cartKey = isAuthUser ? 'customerCart' : 'cart';
+      var cartKey = isAuthUser ? 'customerCart' : 'cart';
       // Do not proceed if for some reason there are no cart items.
       if (!response[cartKey].items.length) {
         return;
