@@ -13,7 +13,6 @@ window.commerceBackend = window.commerceBackend || {};
     cnc_status: {},
     configurableColorData: {},
     attrLabels: {},
-    cartItemsStock: {},
     configurableCombinations: {},
     configurables: {},
     // This will prevent multiple requests to fetch same product data.
@@ -21,16 +20,6 @@ window.commerceBackend = window.commerceBackend || {};
     recentOrdersData: {},
     orderDetailsData: {},
   };
-
-  /**
-   * Checks if current user is authenticated or not.
-   *
-   * @returns {bool}
-   *   True if user is authenticated, else false.
-   */
-  function isUserAuthenticated() {
-    return Boolean(window.drupalSettings.userDetails.customerId);
-  }
 
   /**
    * Utility function to check if an item is an object or not.

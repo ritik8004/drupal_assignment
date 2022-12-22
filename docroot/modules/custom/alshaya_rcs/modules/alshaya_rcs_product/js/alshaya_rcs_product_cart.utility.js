@@ -14,16 +14,6 @@ window.commerceBackend = window.commerceBackend || {};
   };
 
   /**
-   * Checks if current user is authenticated or not.
-   *
-   * @returns {bool}
-   *   True if user is authenticated, else false.
-   */
-  function isUserAuthenticated() {
-    return Boolean(window.drupalSettings.userDetails.customerId);
-  }
-
-  /**
    * Gets the stock data for cart items.
    *
    * @param {string} sku
@@ -38,7 +28,7 @@ window.commerceBackend = window.commerceBackend || {};
     if (Drupal.hasValue(staticDataStore.cartItemsStock[sku])) {
       return staticDataStore.cartItemsStock[sku];
     }
-    var isAuthUser = isUserAuthenticated();
+    var isAuthUser = Drupal.isUserAuthenticated();
     var authenticationToken = isAuthUser
       ? 'Bearer ' + window.drupalSettings.userDetails.customerToken
       : null;
