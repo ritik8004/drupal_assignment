@@ -11,3 +11,4 @@ alshaya_xb_checkout_seo:
     - core/drupal
     - alshaya_master/common_functions
     - alshaya_spc/cart_utilities
+    - datalayer/datapush
