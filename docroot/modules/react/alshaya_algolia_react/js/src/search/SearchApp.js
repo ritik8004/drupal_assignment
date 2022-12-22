@@ -30,6 +30,7 @@ class SearchApp extends React.PureComponent {
     super(props);
     this.state = {
       query: getCurrentSearchQuery(),
+      sddEdStatus: null,
     };
     // Call createSearchResultDiv() in constructor so that when we
     // check for searchResultsDiv in render(),
@@ -37,18 +38,11 @@ class SearchApp extends React.PureComponent {
     createSearchResultDiv();
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { query } = this.state;
     if (query !== '') {
       redirectToOtherLang(query);
     }
-
-    // Listing pages product teaser have only express delivery label.
-    // This label on teaser is switched on and off by configuration on drupal at
-    // global level. However here we call a Magento API to control the display
-    // of the label as per magento configuration. We set global variable to avoid
-    // this API call again and used on filters and instant search.
-    window.sddEdStatus = await getExpressDeliveryStatus();
   }
 
   setQueryValue = (queryValue, inputTag = null) => {
@@ -69,6 +63,19 @@ class SearchApp extends React.PureComponent {
 
   onChange = (newValue, inputTag) => {
     this.setQueryValue(newValue, inputTag);
+
+    const { sddEdStatus } = this.state;
+    if (sddEdStatus === null) {
+      // Listing pages product teaser have only express delivery label.
+      // This label on teaser is switched on and off by configuration on drupal at
+      // global level. However here we call a Magento API to control the display
+      // of the label as per magento configuration. We set global variable to avoid
+      // this API call again and used on filters and instant search.
+      getExpressDeliveryStatus().then((status) => {
+        window.sddEdStatus = status;
+        this.setState({ sddEdStatus: status });
+      });
+    }
   };
 
   render() {
