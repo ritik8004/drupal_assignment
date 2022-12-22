@@ -2628,14 +2628,14 @@ JS;
     $page = $session->getPage();
     $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
     if ($empty_delivery_info !== null) {
-      $empty_delivery_info->click();
+      $this->iClickJqueryElementOnPage("div.spc-empty-delivery-information span");
       $this->iWaitForAjaxToFinish();
-      $this->iWaitSeconds('20');
+      $this->iWaitForElement('.address-list-content');
       if ($page->find('css', 'header.spc-change-address') !== null) {
         if ($page->find('css', 'div.spc-address-tile:first-child button')) {
           $page->find('css', 'div.spc-address-tile:first-child button')->click();
           $this->iWaitForAjaxToFinish();
-          $this->iWaitSeconds('20');
+          $this->iWaitForElement('.delivery-information-preview');
         }
       } else {
         $this->fillFormAndSubmit($session, $page);
