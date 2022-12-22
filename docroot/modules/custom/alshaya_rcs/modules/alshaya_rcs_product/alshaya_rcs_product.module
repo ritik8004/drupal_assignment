@@ -896,12 +896,16 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     $aura_module_path = drupal_get_path('module', 'alshaya_aura_react');
     $libraries['alshaya_aura_pdp']['js']["/$aura_module_path/dist/pdpRcs.bundle.js"] = $options;
   }
-  elseif ($extension === 'alshaya_spc'
-    && isset($libraries['express_delivery'])) {
-    // Replace Alshaya SPC Express Delivery library with RCS supported one.
-    $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
-    unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
-    $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
+  elseif ($extension === 'alshaya_spc') {
+    if (isset($libraries['express_delivery'])) {
+      // Replace Alshaya SPC Express Delivery library with RCS supported one.
+      $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
+      unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
+      $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
+    }
+    if (isset($libraries['cart_utilities'])) {
+      $libraries['cart_utilities']['js']["/$self_module_path/js/alshaya_rcs_product_cart.utility.js"] = [];
+    }
   }
   elseif ($extension === 'sharethis') {
     if (isset($libraries['sharethis'])) {
