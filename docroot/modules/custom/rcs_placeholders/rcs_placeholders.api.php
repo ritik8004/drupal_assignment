@@ -60,13 +60,3 @@ function hook_rcs_placeholders_graphql_query_alter(array &$queries) {
   $queries['categories']['items'][] = 'id';
   unset($queries['categories']['items']['image']);
 }
-
-/**
- * Allow other modules to alter the processor path.
- *
- * @param string $path
- *   The path to alter.
- */
-function hook_rcs_placeholders_processor_path_alter(string &$path) {
-
-}
