@@ -2628,7 +2628,7 @@ JS;
     $page = $session->getPage();
     $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
     if ($empty_delivery_info !== null) {
-      $session->executeScript('jQuery("div.spc-empty-delivery-information span").click()');
+      $this->iClickJqueryElementOnPage("div.spc-empty-delivery-information span");
       $this->iWaitForAjaxToFinish();
       $this->iWaitForElement('.address-list-content');
       if ($page->find('css', 'header.spc-change-address') !== null) {
