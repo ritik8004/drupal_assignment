@@ -5,63 +5,38 @@ Feature: SPC Checkout for PUDO testing for Guest User
     Given I am on "{spc_basket_page}"
     And I wait for element "#block-page-title"
     And I scroll to the ".plp-facet-product-filter" element
-    And I wait 5 seconds
 
   @cc @cnc @desktop @pudo
   Scenario: As a Guest, I should be able to check PUDO feature on the site
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait for element ".cart-link .quantity"
+    And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
-    And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/cart/login" page
-    And I wait 10 seconds
+    And I wait for element ".checkout-login-wrapper"
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
     And I wait for the page to load
+    And I wait for element "#delivery-method-click_and_collect"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
-    And I wait 20 seconds
     And I select the collection store
-    And I wait 30 seconds
     And I should see an ".pickup-point-title" element
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
-    And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | locality                      | {locality}    |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click the anchor link ".checkout-link.submit" on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I add the billing address on checkout page
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{anon_email}"
@@ -97,26 +72,21 @@ Feature: SPC Checkout for PUDO testing for Guest User
   Scenario: As a Guest, I should be able to check PUDO testing on second language
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait for element ".cart-link .quantity"
+    And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
-    And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
-    And I wait 10 seconds
+    And I wait for element ".checkout-login-wrapper"
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait for the page to load
+    And I wait for element "#delivery-method-click_and_collect"
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I select the collection store
     And I should see an ".pickup-point-title" element
     And I scroll to the "#spc-payment-methods" element
@@ -127,53 +97,30 @@ Feature: SPC Checkout for PUDO testing for Guest User
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | locality                      | {locality}    |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click the anchor link ".checkout-link.submit" on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
+    And I add the billing address on checkout page
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
 
   @cc @cnc @language @mobile @pudo
   Scenario: As a Guest, I should be able to check PUDO testing on mobile
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
-    And I wait 10 seconds
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait for element ".cart-link .quantity"
+    And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
-    And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
-    And I wait 10 seconds
+    And I wait for element ".checkout-login-wrapper"
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait for element "#delivery-method-click_and_collect"
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I select the collection store
     And I should see an ".pickup-point-title" element
     And I scroll to the "#spc-payment-methods" element
@@ -184,24 +131,7 @@ Feature: SPC Checkout for PUDO testing for Guest User
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the ".spc-section-billing-address" element
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
-    And I wait 10 seconds
-    And I wait for AJAX to finish
-    When fill in billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | address_line2                 | {floor}       |
-      | locality                      | {locality}    |
-    Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click the anchor link ".checkout-link.submit" on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
+    And I add the billing address on checkout page
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
