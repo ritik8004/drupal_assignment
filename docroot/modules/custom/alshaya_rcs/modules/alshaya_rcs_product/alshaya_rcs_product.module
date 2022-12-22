@@ -903,12 +903,9 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
       $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
     }
-    if (isset($libraries['cart_utilities'])) {
-      $libraries['cart_utilities']['js'] = array_merge($libraries['cart_utilities']['js'] ?? [],
-        [
-          "/$self_module_path/js/alshaya_rcs_product_cart.utility.js" => [],
-        ],
-      );
+    if (isset($libraries['cart_utilities'])
+      && isset($libraries['cart_utilities']['js'])) {
+      $libraries['cart_utilities']['js']["/$self_module_path/js/alshaya_rcs_product_cart.utility.js"] = [];
     }
   }
   elseif ($extension === 'sharethis') {
