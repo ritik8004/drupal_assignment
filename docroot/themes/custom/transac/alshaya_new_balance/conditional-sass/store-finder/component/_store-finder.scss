@@ -38,6 +38,33 @@
     }
   }
 
+  .list-view-link,
+  .map-view-link {
+    @include breakpoint($tablet) {
+      height: rem(35);
+      line-height: rem(20);
+      margin-top: rem(5);
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: rem(18);
+    }
+  }
+
+  .map-view-link {
+    @include breakpoint($tablet) {
+      padding: rem(2);
+    }
+
+    @include breakpoint($desktop) {
+      padding: rem(5);
+
+      html[lang="ar"] & {
+        line-height: rem(26);
+      }
+    }
+  }
+
   .list-view-link {
     &::before {
       line-height: 0.6;
@@ -48,6 +75,10 @@
       &::before {
         margin-#{$right}: rem(5);
       }
+    }
+
+    @include breakpoint($tablet) {
+      padding: rem(6);
     }
   }
 
