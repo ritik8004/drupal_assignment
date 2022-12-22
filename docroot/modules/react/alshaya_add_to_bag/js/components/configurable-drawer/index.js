@@ -136,7 +136,7 @@ class ConfigurableProductDrawer extends React.Component {
                 <span className="field__value">{parentSku}</span>
               </div>
             </ConditionalView>
-            <Promotions promotions={productData.promotions} />
+            <Promotions promotions={selectedVariantData.promotions} />
             <ConfigurableForm
               sku={sku}
               productData={productData}

@@ -334,6 +334,12 @@ class ProductInfoResource extends ResourceBase {
           $child_data['stock']['qty'] = $stock_info['stock'];
           $child_data['stock']['status'] = $stock_info['in_stock'];
 
+          // Set the promotions for the variants.
+          $child_data['promotions'] = array_map(fn($promotion) => [
+            'label' => $promotion['text'],
+            'url' => $promotion['promo_web_url'],
+          ], $this->skuManager->getPromotions($child));
+
           $data['variants'][] = $child_data;
 
           // Update the mapping array.
@@ -376,12 +382,6 @@ class ProductInfoResource extends ResourceBase {
         }
         // Set product title.
         $data['title'] = $this->productInfoHelper->getTitle($sku, 'modal');
-
-        // Set the promotions for the product.
-        $data['promotions'] = array_map(fn($promotion) => [
-          'label' => $promotion['text'],
-          'url' => $promotion['promo_web_url'],
-        ], $this->skuManager->getPromotions($sku));
 
         // Set the size guide data.
         $category = NULL;
