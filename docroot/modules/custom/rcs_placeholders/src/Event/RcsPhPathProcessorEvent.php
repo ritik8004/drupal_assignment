@@ -8,6 +8,10 @@ use Symfony\Contracts\EventDispatcher\Event;
  * Event for processing/altering RCS paths.
  */
 class RcsPhPathProcessorEvent extends Event {
+
+  /**
+   * Rcs path process alter event.
+   */
   public const EVENT_NAME = 'rcs_ph_path_processor_event';
 
   /**

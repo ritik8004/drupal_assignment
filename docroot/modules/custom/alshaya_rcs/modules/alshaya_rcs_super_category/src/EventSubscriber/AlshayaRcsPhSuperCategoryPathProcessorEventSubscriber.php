@@ -92,7 +92,6 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
 
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
     if ($term instanceof TermInterface) {
-
       $path_parts = explode('/', $data['path']);
 
       // Remove the super category from path.

@@ -59,14 +59,14 @@ class RcsPhEnrichmentHelper {
     // Filter out the front and back slash.
     $slug = trim($slug, '/');
 
-    if ($type == 'product') {
+    if ($type === 'product' || $type === 'promotion') {
       $storage = $this->nodeStorage;
     }
-    elseif ($type == 'category') {
+    elseif ($type === 'category') {
       $storage = $this->termStorage;
     }
 
-    if (!is_null($storage)) {
+    if ($storage) {
       $query = $storage->getQuery();
       $query->condition('field_' . $type . '_slug', $slug);
       $result = $query->execute();

@@ -33,3 +33,27 @@ services:
   rcs_placeholders.enrichment_helper:
     class: Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper
     arguments: ['@entity_type.manager']
+
+  rcs_placeholders.rcs_product_path_process_subscriber:
+    class: \Drupal\rcs_placeholders\EventSubscriber\RcsPhProductPathProcessorEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+    arguments:
+      - '@rcs_placeholders.enrichment_helper'
+      - '@config.factory'
+
+  rcs_placeholders.rcs_listing_path_process_subscriber:
+    class: Drupal\rcs_placeholders\EventSubscriber\RcsPhListingPathProcessorEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+    arguments:
+      - '@rcs_placeholders.enrichment_helper'
+      - '@config.factory'
+
+  rcs_placeholders.rcs_promotion_path_process_subscriber:
+    class: \Drupal\rcs_placeholders\EventSubscriber\RcsPhPromotionPathProcessorEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+    arguments:
+      - '@rcs_placeholders.enrichment_helper'
+      - '@config.factory'

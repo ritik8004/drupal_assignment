@@ -3,11 +3,3 @@ services:
     class: \Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper
     arguments:
       - '@current_route_match'
-
-  alshaya_rcs_promotion.rcs_ph_path_process_subscriber:
-    class: \Drupal\alshaya_rcs_promotion\EventSubscriber\AlshayaRcsPhPromotionPathProcessorEventSubscriber
-    tags:
-      - { name: 'event_subscriber' }
-    arguments:
-      - '@rcs_placeholders.enrichment_helper'
-      - '@config.factory'

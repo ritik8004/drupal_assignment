@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_rcs_product\EventSubscriber;
+namespace Drupal\rcs_placeholders\EventSubscriber;
 
 use Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -8,9 +8,9 @@ use Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Provides a path processor subscriber for rcs products.
+ * Provides a path processor subscriber for rcs categories.
  */
-class AlshayaRcsPhProductPathProcessorEventSubscriber implements EventSubscriberInterface {
+class RcsPhListingPathProcessorEventSubscriber implements EventSubscriberInterface {
 
   /**
    * Enrichment helper.
@@ -27,7 +27,7 @@ class AlshayaRcsPhProductPathProcessorEventSubscriber implements EventSubscriber
   protected $configFactory;
 
   /**
-   * Constructs an AlshayaRcsPhProductPathProcessorEventSubscriber object.
+   * Constructs an AlshayaRcsPhListingPathProcessorEventSubscriber object.
    */
   public function __construct(
     RcsPhEnrichmentHelper $enrichment_helper,
@@ -43,13 +43,13 @@ class AlshayaRcsPhProductPathProcessorEventSubscriber implements EventSubscriber
   public static function getSubscribedEvents(): array {
     return [
       RcsPhPathProcessorEvent::EVENT_NAME => [
-        ['onPathProcess'],
+        ['onPathProcess', 9],
       ],
     ];
   }
 
   /**
-   * Processes product path.
+   * Processes list page path.
    *
    * @param \Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent $event
    *   Event object.
@@ -63,27 +63,33 @@ class AlshayaRcsPhProductPathProcessorEventSubscriber implements EventSubscriber
     $path = $data['path'];
     $full_path = $data['fullPath'];
     $config = $this->configFactory->get('rcs_placeholders.settings');
-    $product_prefix = $config->get('product.path_prefix');
+    $category_prefix = $config->get('category.path_prefix');
 
-    if (!str_starts_with($path, '/' . $product_prefix)) {
+    if (!str_starts_with($path, '/' . $category_prefix)
+    || (isset($data['isDepartmentPage']) && !$data['isDepartmentPage'])) {
       return;
     }
 
-    $product = $config->get('product.enrichment')
-      ? $this->enrichmentHelper->getEnrichedEntity('product', $path)
+    // Remove the facets params based of the /-- prefix.
+    if (stripos($path, '/--', 0) !== FALSE) {
+      $path = substr($path, 0, stripos($path, '/--'));
+    }
+
+    $category = $config->get('category.enrichment')
+      ? $this->enrichmentHelper->getEnrichedEntity('category', $path)
       : NULL;
     $entityData = NULL;
-    $processed_paths = '/node/' . $config->get('product.placeholder_nid');
+    $processed_paths = '/taxonomy/term/' . $config->get('category.placeholder_tid');
 
-    if (isset($product)) {
-      $entityData = $product->toArray();
-      $processed_paths = '/node/' . $product->id();
+    if (isset($category)) {
+      $entityData = $category->toArray();
+      $processed_paths = '/taxonomy/term/' . $category->id();
     }
 
     $event->setData([
-      'entityType' => 'product',
-      'entityPath' => substr_replace($path, '', 0, strlen($product_prefix) + 1),
-      'entityPathPrefix' => $product_prefix,
+      'entityType' => 'category',
+      'entityPath' => substr_replace($path, '', 0, strlen($category_prefix) + 1),
+      'entityPathPrefix' => $category_prefix,
       'entityFullPath' => $full_path,
       'processedPaths' => $processed_paths,
       'entityData' => $entityData,

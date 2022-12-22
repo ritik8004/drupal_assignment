@@ -68,10 +68,3 @@ services:
     tags:
       - { name: event_subscriber }
       - { name: backend_overridable }
-  alshaya_rcs_listing.rcs_ph_path_process_subscriber:
-    class: Drupal\alshaya_rcs_listing\EventSubscriber\AlshayaRcsPhListingPathProcessorEventSubscriber
-    tags:
-      - { name: 'event_subscriber' }
-    arguments:
-      - '@rcs_placeholders.enrichment_helper'
-      - '@config.factory'

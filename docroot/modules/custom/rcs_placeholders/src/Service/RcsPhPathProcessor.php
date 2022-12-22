@@ -158,8 +158,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     // Remove language code from URL.
     $full_path = $rcs_path_to_check = self::getFullPagePath();
 
-    // Allow other modules to alter the path.
-    $this->moduleHandler->alter('rcs_placeholders_processor_path', $rcs_path_to_check);
     self::$rcsPathToCheck = $rcs_path_to_check;
 
     $event = new RcsPhPathProcessorEvent($rcs_path_to_check);
