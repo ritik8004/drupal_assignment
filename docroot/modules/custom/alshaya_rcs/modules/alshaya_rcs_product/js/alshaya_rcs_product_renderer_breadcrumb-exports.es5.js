@@ -45,31 +45,24 @@ exports.normalize = function normalize(
     return data.category_ids_in_admin.includes(e.id.toString());
   });
 
-  // Filter out the categories array based on the deepest category id. In our
-  // case we are getting the deepest category from breadcrumb_category_id
-  // attribute.
-  let deepestCategory = null;
-  let deepestCategoryId = parseInt(data.breadcrumb_category_id, 10);
-  Object.keys(categories).forEach(function (i) {
-    if (Drupal.hasValue(categories[i].id)
-      && categories[i].id === deepestCategoryId
-    ) {
-      deepestCategory = categories[i];
-      // Return from here once we have the deepest category object.
-      return;
-    }
+  // Get the category based on the breadcrumb category id from the categories
+  // array.
+  let breadcrumbCategoryId = parseInt(data.breadcrumb_category_id, 10);
+  let category = categories.filter((e) => {
+    return e.id == breadcrumbCategoryId;
   });
 
-  // Build the breadcrumb array.
-  if (deepestCategory) {
-    normalized = rcsPhBreadcrumb.getNormalizedBreadcrumbs(normalized, deepestCategory, keys);
+  if (category.length > 0) {
+    // Filter function returns an array. So getting item at first position.
+    category = category.shift();
+    normalized = rcsPhBreadcrumb.getNormalizedBreadcrumbs(normalized, category.breadcrumbs, keys);
 
     // Push the last part of the normalized.
     normalized.push({
-      url: deepestCategory.url_path,
-      text: deepestCategory[keys.nameKey],
-      data_url: deepestCategory.url_path,
-      id: deepestCategory.id,
+      url: category.url_path,
+      text: category[keys.nameKey],
+      data_url: category.url_path,
+      id: category.id,
     });
   }
 

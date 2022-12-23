@@ -55,7 +55,7 @@ exports.normalize = function normalize(
   }
 
   // Prepare the breadcrumb array.
-  normalized = rcsPhBreadcrumb.getNormalizedBreadcrumbs(normalized, data, keys);
+  normalized = rcsPhBreadcrumb.getNormalizedBreadcrumbs(normalized, data.breadcrumbs, keys);
 
   // Push the last crumb without a url.
   normalized.push({

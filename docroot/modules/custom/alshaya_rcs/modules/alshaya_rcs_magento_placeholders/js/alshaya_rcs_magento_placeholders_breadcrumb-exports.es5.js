@@ -76,21 +76,21 @@ exports.render = function render(
  *
  * @param {array} normalized
  *   An array containing the normalized breadcrumb items.
- * @param {object} deepestCategory
- *   The deepest category object.
+ * @param {array} breadcrumbs
+ *   The breadcrumb array.
  * @param {object} keys
  *   An object containing the breadcrumb keys.
  *
  * @returns {array}
  *   The updated normalized breadcrumb array.
  */
-exports.getNormalizedBreadcrumbs = function getNormalizedBreadcrumbs(normalized, deepestCategory, keys) {
-  Object.keys(deepestCategory.breadcrumbs).forEach(function (i) {
+exports.getNormalizedBreadcrumbs = function getNormalizedBreadcrumbs(normalized, breadcrumbs, keys) {
+  breadcrumbs.forEach(function (item) {
     normalized.push({
-      url: deepestCategory.breadcrumbs[i].category_url_path,
-      text: deepestCategory.breadcrumbs[i][keys.breadcrumbTermNameKey],
-      data_url: deepestCategory.breadcrumbs[i].category_url_path,
-      id: deepestCategory.breadcrumbs[i].category_id,
+      url: item.category_url_path,
+      text: item[keys.breadcrumbTermNameKey],
+      data_url: item.category_url_path,
+      id: item.category_id,
     });
   });
 
