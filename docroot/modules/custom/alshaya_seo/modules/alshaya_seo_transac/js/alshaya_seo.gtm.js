@@ -1605,6 +1605,11 @@
       nonInteraction: 0,
     };
 
+    if (category == GTM_CONSTANTS.PAYMENT_ERRORS || category == GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS) {
+      var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
+      errorData.cartTotalValue = Drupal.hasValue(rawCartData.totals.subtotal_incl_tax) ?
+        rawCartData.totals.subtotal_incl_tax : 0;
+    }
     try {
       // Log error on console.
       if (drupalSettings.gtm.log_errors_to_console !== undefined
