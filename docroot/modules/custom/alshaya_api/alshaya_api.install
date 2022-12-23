@@ -19,24 +19,23 @@ use Symfony\Component\Yaml\Yaml;
 function alshaya_api_update_9402() {
   $alshaya_api_settings = Settings::get('alshaya_api.settings');
   $alshaya_api_config = \Drupal::configFactory()->getEditable('alshaya_api.settings');
-  $alshaya_api_config
-    ->set('magento_host', $alshaya_api_settings['magento_host'])
-    ->set('verify_ssl', $alshaya_api_settings['verify_ssl'])
-    ->save();
+
+  $alshaya_api_config->set('magento_host', $alshaya_api_settings['magento_host']);
+  $alshaya_api_config->set('verify_ssl', $alshaya_api_settings['verify_ssl']);
+  $alshaya_api_config->set('magento_api_base', $alshaya_api_settings['magento_api_base']);
+
+  foreach (\Drupal::service('language_manager')->getLanguages() as $langcode => $language) {
+    $alshaya_api_config->set("magento_lang_prefix.$langcode", Settings::get('magento_lang_prefix')[$langcode]);
+  }
 
   if (!alshaya_is_env_prod()) {
-    foreach (\Drupal::service('language_manager')->getLanguages() as $langcode => $language) {
-      $alshaya_api_config->set("magento_lang_prefix.$langcode", Settings::get('magento_lang_prefix')[$langcode]);
-    }
-
-    $alshaya_api_config
-      ->set('consumer_key', $alshaya_api_settings['consumer_key'])
-      ->set('consumer_secret', $alshaya_api_settings['consumer_secret'])
-      ->set('access_token', $alshaya_api_settings['access_token'])
-      ->set('access_token_secret', $alshaya_api_settings['access_token_secret'])
-      ->set('magento_api_base', $alshaya_api_settings['magento_api_base'])
-      ->save();
+    $alshaya_api_config->set('consumer_key', $alshaya_api_settings['consumer_key']);
+    $alshaya_api_config->set('consumer_secret', $alshaya_api_settings['consumer_secret']);
+    $alshaya_api_config->set('access_token', $alshaya_api_settings['access_token']);
+    $alshaya_api_config->set('access_token_secret', $alshaya_api_settings['access_token_secret']);
   }
+
+  $alshaya_api_config->save();
 
   require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
   $env = alshaya_get_site_environment();
