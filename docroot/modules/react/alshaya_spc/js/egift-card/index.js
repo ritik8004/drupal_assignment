@@ -105,6 +105,7 @@ export default class RedeemEgiftCard extends React.Component {
     let result = {
       error: false,
       message: '',
+      gtmMessage: '',
     };
     if (code) {
       // Extract cart to get card_id.
@@ -156,7 +157,20 @@ export default class RedeemEgiftCard extends React.Component {
         result = {
           error: true,
           message: response.data.response_message,
+          gtmMessage: hasValue(response.data.gtm_response_message)
+            ? response.data.gtm_response_message
+            : response.data.response_message,
         };
+        // If 'gtm_response_message' attribute is missing log warning in
+        // datadog for debugging, in this case event action is sent in
+        // 'Arabic' to GTM datalayer for Arabic site.
+        if (!hasValue(response.data.gtm_response_message)) {
+          logger.warning('Missing field in eGiftRedemption API response. Action: @action Response: @response', {
+            '@action': 'set_points',
+            '@response': response.data,
+          });
+        }
+
         // Log error in datadog.
         logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
           '@action': 'set_points',
@@ -169,6 +183,7 @@ export default class RedeemEgiftCard extends React.Component {
         result = {
           error: true,
           message: getDefaultErrorMessage(),
+          gtmMessage: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         };
         // Log error in datadog.
         logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
@@ -191,6 +206,7 @@ export default class RedeemEgiftCard extends React.Component {
     let result = {
       error: false,
       message: '',
+      gtmMessage: '',
     };
     // Call api endpoint to send OTP.
     if (egiftCardNumber) {
@@ -219,7 +235,20 @@ export default class RedeemEgiftCard extends React.Component {
         result = {
           error: true,
           message: response.data.response_message,
+          gtmMessage: hasValue(response.data.gtm_response_message)
+            ? response.data.gtm_response_message
+            : response.data.response_message,
         };
+        // If 'gtm_response_message' attribute is missing log warning in
+        // datadog for debugging, in this case event action is sent in
+        // 'Arabic' to GTM datalayer for Arabic site.
+        if (!hasValue(response.data.gtm_response_message)) {
+          logger.warning('Missing field in eGiftRedemption API response. Action: @action Response: @response', {
+            '@action': 'send_otp',
+            '@response': response.data,
+          });
+        }
+
         // Log error in datadog.
         logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
           '@action': 'send_otp',
@@ -230,6 +259,7 @@ export default class RedeemEgiftCard extends React.Component {
         result = {
           error: true,
           message: getDefaultErrorMessage(),
+          gtmMessage: 'Sorry, something went wrong and we are unable to process your request right now. Please try again later.',
         };
         // Log error in datadog.
         logger.error('Error Response in eGiftRedemption for guest card. Action: @action CardNumber: @cardNumber Response: @response', {
