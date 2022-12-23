@@ -983,10 +983,10 @@ $magentos = [
       'store_id' => ['en' => 42, 'ar' => 39],
     ],
     'magento_secrets' => [
-      'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
-      'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
-      'access_token' => 'ncevhsnmxu35fln4fq3c009lo09frfgm',
-      'access_token_secret' => 'dm4h99kjd387rv29ivthpbatx7dn5g1b',
+      'consumer_key' => '8str6aieegm7mkzkfeikltzjco3b4ul8',
+      'consumer_secret' => '6tiqcouxag7s8d1j2f83zpmgp10rhqih',
+      'access_token' => 'vtg7uxp0xy7y28z91ol7gq6jxpbkb7l8',
+      'access_token_secret' => 'udlde3j3ury4d3kqpzm8ipffa3ygd1zf',
     ],
   ],
   'hm_uat' => [
