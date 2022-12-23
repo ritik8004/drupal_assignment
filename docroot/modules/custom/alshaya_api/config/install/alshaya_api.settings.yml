@@ -7,3 +7,6 @@ access_token: null
 access_token_secret: null
 magento_host: null
 verify_ssl: 1
+magento_lang_prefix:
+  en: kwt_en
+  ar: kwt_ar
