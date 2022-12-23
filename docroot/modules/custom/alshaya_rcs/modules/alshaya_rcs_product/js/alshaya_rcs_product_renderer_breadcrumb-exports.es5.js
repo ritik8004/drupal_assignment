@@ -1,4 +1,4 @@
-const rcsPhBreadcrumbRenderer = require('../../alshaya_rcs_magento_placeholders/js/alshaya_rcs_magento_placeholders_breadcrumb-exports.es5');
+const rcsPhBreadcrumb = require('../../alshaya_rcs_magento_placeholders/js/alshaya_rcs_magento_placeholders_breadcrumb-exports.es5');
 
 /**
  * Breadcrumb renderer for product pages.
@@ -18,7 +18,7 @@ exports.render = function render(
   innerHtml
 ) {
   const breadcrumbs = this.normalize(entity);
-  return rcsPhBreadcrumbRenderer.render(settings, breadcrumbs, innerHtml);
+  return rcsPhBreadcrumb.render(settings, breadcrumbs, innerHtml);
 };
 
 /**
@@ -77,7 +77,7 @@ exports.normalize = function normalize(
 
   // Build the breadcrumb array.
   if (deepestCategory) {
-    normalized = window.commerceBackend.getNormalizedBreadcrumbs(normalized, deepestCategory, keys);
+    normalized = rcsPhBreadcrumb.getNormalizedBreadcrumbs(normalized, deepestCategory, keys);
 
     // Push the last part of the normalized.
     normalized.push({
