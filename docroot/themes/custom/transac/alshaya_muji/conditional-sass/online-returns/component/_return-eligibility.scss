@@ -9,6 +9,10 @@
         .return-items-button {
           font-family: $muji-demibold;
         }
+
+        .return-message {
+          padding-#{$left}: rem(38);
+        }
       }
     }
   }
