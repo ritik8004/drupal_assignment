@@ -13,4 +13,26 @@
 function alshaya_xb_install($is_syncing) {
   // Add fixed price attribute to SKU entity.
   \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Enable error container block.
+  // Move error container block from white label to active theme.
+  $manager->updateConfigs(
+    [
+      'block.block.errorcontainerblock',
+    ],
+    'alshaya_xb',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Remove configuration for alshaya_xb.
+ */
+function alshaya_xb_uninstall() {
+  \Drupal::configFactory()->getEditable('block.block.errorcontainerblock')->delete();
 }

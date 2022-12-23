@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_xb
+    - system
+  theme:
+    - alshaya_white_label
+id: errorcontainerblock
+theme: alshaya_white_label
+region: hero_content
+weight: 5
+provider: null
+plugin: error_container_block
+settings:
+  id: error_container_block
+  label: 'Error Container Block'
+  label_display: '0'
+  provider: alshaya_xb
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*'
