@@ -14,6 +14,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -63,12 +64,12 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
   Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
     When I select a product in stock on ".c-products__item"
     And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     When I follow "continue to checkout"
@@ -122,6 +123,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"

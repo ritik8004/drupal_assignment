@@ -15,6 +15,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     And the element ".content__title_wrapper .promotions" should exist
     When I click on "#mini-cart-wrapper a.cart-link" element
@@ -61,6 +62,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     And the element ".content__title_wrapper .promotions" should exist
     When I click on "#mini-cart-wrapper a.cart-link" element
@@ -105,6 +107,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     And the element ".content__title_wrapper .promotions" should exist
     When I click on "#mini-cart-wrapper a.cart-link" element

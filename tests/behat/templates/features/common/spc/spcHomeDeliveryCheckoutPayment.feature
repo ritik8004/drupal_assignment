@@ -13,6 +13,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -27,6 +28,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
@@ -72,6 +74,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -131,6 +134,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
