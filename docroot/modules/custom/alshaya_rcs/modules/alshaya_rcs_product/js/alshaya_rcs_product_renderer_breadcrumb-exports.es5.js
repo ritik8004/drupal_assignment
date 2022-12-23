@@ -45,21 +45,6 @@ exports.normalize = function normalize(
     return data.category_ids_in_admin.includes(e.id.toString());
   });
 
-  // Detect the root category.
-  Object.keys(categories).some(function (i) {
-    const c = categories[i];
-    // Top level categories will not have breadcrumbs and the level is always 2.
-    if (c.level === 2 && c.breadcrumbs === null) {
-      return c.id;
-    } else {
-      // If we could not find a top level category, we get it from the breadcrumb
-      // on the next category.
-      if (Array.isArray(c.breadcrumbs) && typeof c.breadcrumbs[0].category_id !== 'undefined') {
-        return c.breadcrumbs[0].category_id;
-      }
-    }
-  });
-
   // Build the breadcrumb using the root category, that has the deepest level.
   // If they are all at same level, use the first entry.
   let deepestCategory = [];
