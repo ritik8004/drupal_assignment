@@ -23,7 +23,7 @@ class AlshayaRcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessor
   }
 
   /**
-   * Processes list page path.
+   * Removes facet params from the path.
    *
    * @param \Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent $event
    *   Event object.
