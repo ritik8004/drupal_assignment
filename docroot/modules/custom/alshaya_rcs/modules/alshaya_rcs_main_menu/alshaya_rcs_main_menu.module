@@ -175,7 +175,7 @@ function alshaya_rcs_main_menu_node_delete(EntityInterface $node) {
  *   Product node object.
  */
 function _alshaya_rcs_main_menu_invalidate_enriched_term_cache(EntityInterface $node) {
-  $path_processor = \Drupal::service('rcs_placeholders.path_processor');
+  $path_processor = \Drupal::service('rcs_placeholders.enrichment_helper');
   $category_slug = $node->get('field_category_slug')->getString();
   // Proceed only if category slug is present.
   if ($category_slug) {
