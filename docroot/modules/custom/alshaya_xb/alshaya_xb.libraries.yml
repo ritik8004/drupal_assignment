@@ -12,3 +12,12 @@ alshaya_xb_checkout_seo:
     - alshaya_master/common_functions
     - alshaya_spc/cart_utilities
     - datalayer/datapush
+
+alshaya_xb_js:
+  js:
+    js/alshaya_xb.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/once
