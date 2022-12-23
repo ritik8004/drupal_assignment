@@ -47,12 +47,12 @@ exports.normalize = function normalize(
 
   // Build the breadcrumb using the root category, that has the deepest level.
   // If they are all at same level, use the first entry.
-  let deepestCategory = [];
-  let deepestCategoryId = data.breadcrumb_category_id;
+  let deepestCategory = null;
+  let deepestCategoryId = parseInt(data.breadcrumb_category_id, 10);
   Object.keys(categories).forEach(function (i) {
     // Check if the first category in the breadcrumb is the same as the root category.
     if (Drupal.hasValue(categories[i].id)
-      && categories[i].id === parseInt(deepestCategoryId, 10)
+      && categories[i].id === deepestCategoryId
     ) {
       deepestCategory = categories[i];
       // Return from here once we have the deepest category object.
