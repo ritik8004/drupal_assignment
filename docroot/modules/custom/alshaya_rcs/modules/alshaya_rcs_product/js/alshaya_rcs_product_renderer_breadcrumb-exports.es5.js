@@ -72,6 +72,8 @@ exports.normalize = function normalize(
       && categories[i].id === parseInt(deepestCategoryId, 10)
     ) {
       deepestCategory = categories[i];
+      // Return from here once we have the deepest category object.
+      return;
     }
   });
 
