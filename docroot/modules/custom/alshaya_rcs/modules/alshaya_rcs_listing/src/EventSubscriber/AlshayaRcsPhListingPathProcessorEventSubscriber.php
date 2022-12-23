@@ -39,6 +39,7 @@ class AlshayaRcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessor
     if (stripos($path, '/--', 0) !== FALSE) {
       $path = substr($path, 0, stripos($path, '/--'));
       $event->addData('path', $path);
+      $event->addData('fullPath', $path);
     }
   }
 
@@ -58,8 +59,7 @@ class AlshayaRcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessor
     $full_path = $data['fullPath'];
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $category_prefix = $config->get('category.path_prefix');
-    if (!str_starts_with($path, '/' . $category_prefix)
-    || (isset($data['isDepartmentPage']) && !$data['isDepartmentPage'])) {
+    if (!str_starts_with($path, '/' . $category_prefix)) {
       return;
     }
 
