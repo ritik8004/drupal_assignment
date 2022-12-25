@@ -382,7 +382,9 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
    *   An object containing some processed product data.
    */
   window.commerceBackend.processAndStoreProductData = function (parentSku, variantSku, viewMode) {
-    var productInfo = window.commerceBackend.getProductData(parentSku, viewMode);
+    var path = window.location.pathname;
+    var productKey = (Drupal.hasValue(path) && path.toString().includes('cart')) ? 'cart' : viewMode;
+    var productInfo = window.commerceBackend.getProductData(parentSku, productKey);
     var options = [];
     var productUrl = productInfo.url;
     var price = productInfo.priceRaw;
@@ -399,7 +401,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     var stock = productInfo.stock;
     var cncEnabled = productInfo.click_collect;
 
-    if (productInfo.type === 'configurable') {
+    if (productInfo.type === 'configurable' && Drupal.hasValue(productInfo['variants'][variantSku])) {
       var productVariantInfo = productInfo['variants'][variantSku];
       productDataSKU = variantSku;
       price = productVariantInfo.priceRaw;
