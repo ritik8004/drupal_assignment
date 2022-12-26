@@ -165,7 +165,7 @@ export default class RedeemEgiftCard extends React.Component {
         // datadog for debugging, in this case event action is sent in
         // 'Arabic' to GTM datalayer for Arabic site.
         if (!hasValue(response.data.gtm_response_message)) {
-          logger.warning('Missing field in eGiftRedemption API response. Action: @action Response: @response', {
+          logger.warning('Missing field gtm_response_message in eGiftRedemption API response. Action: @action Response: @response', {
             '@action': 'set_points',
             '@response': response.data,
           });
@@ -243,7 +243,7 @@ export default class RedeemEgiftCard extends React.Component {
         // datadog for debugging, in this case event action is sent in
         // 'Arabic' to GTM datalayer for Arabic site.
         if (!hasValue(response.data.gtm_response_message)) {
-          logger.warning('Missing field in eGiftRedemption API response. Action: @action Response: @response', {
+          logger.warning('Missing field gtm_response_message in eGiftRedemption API response. Action: @action Response: @response', {
             '@action': 'send_otp',
             '@response': response.data,
           });
