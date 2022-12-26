@@ -435,6 +435,12 @@ class AlshayaRcsProductHelper {
                   ],
                 ],
               ],
+              'promotions' => [
+                'context',
+                'url',
+                'label',
+                'type',
+              ],
             ],
             'attributes' => [
               'label',
