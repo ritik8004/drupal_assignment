@@ -1,0 +1,7 @@
+@include breakpoint($only-mobile) {
+  .matchback-processed {
+    .matchback-image-wrapper {
+      min-height: rem(141);
+    }
+  }
+}

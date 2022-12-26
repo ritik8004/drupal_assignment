@@ -1,0 +1,9 @@
+.is-not-buyable,
+.addtobag-config-button {
+  color: $matchback-view-options-btn-text;
+  background-color: $matchback-view-options-btn-bg;
+
+  @include breakpoint($only-mobile) {
+    margin-top: rem(14);
+  }
+}
