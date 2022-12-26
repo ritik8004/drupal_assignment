@@ -1,0 +1,13 @@
+.is-not-buyable,
+.addtobag-config-button {
+  color: $matchback-view-options-btn-text;
+  line-height: 1.29;
+  background-color: $matchback-view-options-btn-bg;
+
+  @include breakpoint($only-mobile) {
+    padding: rem(16) rem(10);
+    height: rem(50);
+    white-space: nowrap;
+    margin-top: rem(17);
+  }
+}
