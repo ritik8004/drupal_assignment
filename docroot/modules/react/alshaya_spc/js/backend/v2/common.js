@@ -1361,6 +1361,17 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
  *  returns list of governates.
  */
 const getProductShippingMethods = async (currentArea, sku = undefined, cartId = null) => {
+  const staticKey = [
+    JSON.stringify(currentArea || {}),
+    sku || '',
+    cartId || '',
+  ].join('|');
+
+  const staticData = Drupal.alshayaSpc.staticStorage.get(staticKey);
+  if (staticData) {
+    return staticData;
+  }
+
   let cartIdInt = cartId;
   let cartData = null;
   if (sku === undefined && cartId === null) {
@@ -1405,6 +1416,8 @@ const getProductShippingMethods = async (currentArea, sku = undefined, cartId = 
     if (!hasValue(response.data)) {
       return null;
     }
+
+    Drupal.alshayaSpc.staticStorage.set(staticKey, response.data);
     return response.data;
   } catch (error) {
     logger.error('Error occurred while fetching governates data. Message: @message.', {
