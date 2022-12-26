@@ -90,7 +90,11 @@ class UserController extends ControllerBase {
 
     $gender_selection = '';
     if ($account->hasField('field_gender')) {
-      $allowed_values = $account->getFieldDefinition('field_gender')->getFieldStorageDefinition()->getSetting('allowed_values');
+      $allowed_values = [
+        'm' => 'Male',
+        'f' => 'Female',
+        'ns' => 'Prefer not to say',
+      ];
       $gender = $account->get('field_gender')->value;
       $gender_selection = $allowed_values[$gender] ?? '';
     }
