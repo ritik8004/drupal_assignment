@@ -8,6 +8,7 @@
    // GTM values to be used for Aura Analytics.
    const GTM_AURA_VALUES = {
      NON_AURA : 'non aura', // Used for anonymous users.
+     AURA_USER : 'aura user', // Used for email matching but not aura linked users.
      AURA_DEFAULT_TIER : 'Tier1', // Default Aura Tier for authenticated non-aura users.
      AURA_QUICK_ENROLLED : 'quick enrolled', // Aura enrollment status for Tier1 users.
      AURA_FULL_ENROLLED : 'full enrolled', // Aura enrollment status for users above Tier1.
@@ -42,13 +43,13 @@
        if (gtmData.aura_Status !== undefined && gtmData.aura_Status !== GTM_AURA_VALUES.NON_AURA && typeof userAPCDetails !== 'undefined') {
          // These values will be used for Aura signed up anonymous users
          // and logged-in users but not using Aura.
-         gtmData.aura_Status = drupalSettings.aura.gtmAllAuraTier.shortValue[GTM_AURA_VALUES.AURA_DEFAULT_TIER].toLowerCase();
+         gtmData.aura_Status = gtmData.aura_Status === GTM_AURA_VALUES.AURA_USER ? GTM_AURA_VALUES.AURA_USER : drupalSettings.aura.gtmAllAuraTier.shortValue[GTM_AURA_VALUES.AURA_DEFAULT_TIER].toLowerCase();
          gtmData.aura_enrollmentStatus = GTM_AURA_VALUES.AURA_QUICK_ENROLLED;
          var auraTier = userAPCDetails.filter(item => item.attribute_code === 'tier_code');
          if (Drupal.hasValue(auraTier)) {
            // These values will be used for logged-in users using Aura.
            auraTier = auraTier[0].value;
-           gtmData.aura_Status = drupalSettings.aura.gtmAllAuraTier.shortValue[auraTier].toLowerCase();
+           gtmData.aura_Status = gtmData.aura_Status === GTM_AURA_VALUES.AURA_USER ? GTM_AURA_VALUES.AURA_USER : drupalSettings.aura.gtmAllAuraTier.shortValue[auraTier].toLowerCase();
            gtmData.aura_enrollmentStatus = auraTier === GTM_AURA_VALUES.AURA_DEFAULT_TIER ? GTM_AURA_VALUES.AURA_QUICK_ENROLLED : GTM_AURA_VALUES.AURA_FULL_ENROLLED;
            var auraPoints = userAPCDetails.filter(item => item.attribute_code === 'apc_points')[0].value;
            gtmData.aura_balStatus = auraPoints > 0 ? GTM_AURA_VALUES.AURA_POINTS_PRESENT : GTM_AURA_VALUES.AURA_POINTS_EMPTY;
@@ -67,7 +68,7 @@
    * This function is called when pushing aura common details
    * to gtm data event in all pages except Checkout page.
    */
-  Drupal.alshayaSeoGtmPushAuraCommonData = function (data) {
+  Drupal.alshayaSeoGtmPushAuraCommonData = function (data, loyaltyStatus = null) {
     // Prepare the aura dataset.
     var gtmData = {};
 
@@ -79,11 +80,12 @@
      *  - logged-in users using aura
      */
     try {
-      if (drupalSettings.userDetails.userID === 0 && data.nonAura) {
+      if (data.nonAura) {
         gtmData.aura_Status = gtmData.aura_enrollmentStatus = GTM_AURA_VALUES.NON_AURA;
       } else {
         data.tier = typeof data.tier === 'undefined' ? GTM_AURA_VALUES.AURA_DEFAULT_TIER : data.tier;
-        gtmData.aura_Status = drupalSettings.aura.gtmAllAuraTier.shortValue[data.tier].toLowerCase();
+        // For users with matching email but not linked aura status should be 'aura user'.
+        gtmData.aura_Status = loyaltyStatus === drupalSettings.aura.allAuraStatus.APC_NOT_LINKED_DATA ? GTM_AURA_VALUES.AURA_USER : drupalSettings.aura.gtmAllAuraTier.shortValue[data.tier].toLowerCase();
         gtmData.aura_enrollmentStatus = data.tier === GTM_AURA_VALUES.AURA_DEFAULT_TIER ? GTM_AURA_VALUES.AURA_QUICK_ENROLLED : GTM_AURA_VALUES.AURA_FULL_ENROLLED;
       }
 
@@ -119,18 +121,22 @@
      // These values will be used for anonymous users.
      gtmData.aura_balRedemption = gtmData.aura_balPointsVSorderValue = GTM_AURA_VALUES.NON_AURA;
      gtmData.aura_pointsUsed = 0;
-     gtmData.aura_pointsEarned = $('.spc-aura-checkout-rewards-block').attr('data-earn-aura-points') !== undefined ? parseInt($('.spc-aura-checkout-rewards-block').attr('data-earn-aura-points')) : 0;
+     const auraBlock = $('.spc-aura-checkout-rewards-block');
+     // Aura points earned should only be available for Aura users.
+     gtmData.aura_pointsEarned = auraBlock.attr('data-earn-aura-points') !== undefined
+       && auraBlock.attr('data-aura-loyalty-status') !== undefined
+       && parseInt(auraBlock.attr('data-aura-loyalty-status'))
+       ? parseInt(auraBlock.attr('data-earn-aura-points')) : 0;
      try {
        // User's Aura status.
        var auraStatus = Drupal.getItemFromLocalStorage('gtm_aura_common_data') ? Drupal.getItemFromLocalStorage('gtm_aura_common_data').aura_Status : null;
-       var userAPCDetails = window.spcStaticStorage.cart_raw.customer.custom_attributes;
-       if (Drupal.hasValue(auraStatus) && auraStatus !== GTM_AURA_VALUES.NON_AURA && typeof userAPCDetails !== 'undefined') {
+       if (Drupal.hasValue(auraStatus) && auraStatus !== GTM_AURA_VALUES.NON_AURA) {
          // These values will be used for Aura signed up anonymous users
          // and logged-in users but not using Aura.
          gtmData.aura_balRedemption = GTM_AURA_VALUES.AURA_POINTS_NOT_REDEEMED;
          gtmData.aura_balPointsVSorderValue = GTM_AURA_VALUES.AURA_BALANCE_LESS_THAN_ORDER_VALUE;
-         var auraTier = userAPCDetails.filter(item => item.attribute_code === 'tier_code');
-         if (Drupal.hasValue(auraTier)) {
+         var userAPCDetails = window.spcStaticStorage.cart_raw.customer.custom_attributes;
+         if (typeof userAPCDetails !== 'undefined' && Drupal.hasValue(userAPCDetails.filter(item => item.attribute_code === 'tier_code'))) {
            // These values will be used for logged-in users using Aura.
            if (typeof cartData.totals.paidWithAura !== 'undefined' && cartData.totals.paidWithAura > 0) {
              gtmData.aura_balRedemption = GTM_AURA_VALUES.AURA_POINTS_REDEEMED;

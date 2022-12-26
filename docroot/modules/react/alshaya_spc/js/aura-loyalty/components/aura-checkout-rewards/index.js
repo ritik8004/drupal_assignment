@@ -112,7 +112,15 @@ class AuraCheckoutRewards extends React.Component {
 
     // This will push aura common details in checkout page
     // as component only renders in checkout page.
-    Drupal.alshayaSeoGtmPushAuraCommonData(states);
+    if (states.loyaltyStatus !== undefined
+      && states.loyaltyStatus !== getAllAuraStatus().APC_NOT_LINKED_NO_DATA
+    ) {
+      // For Aura signed-in users.
+      Drupal.alshayaSeoGtmPushAuraCommonData(states, states.loyaltyStatus);
+    } else {
+      // For non Aura users.
+      Drupal.alshayaSeoGtmPushAuraCommonData({ nonAura: true });
+    }
 
     // Get the aura points to earn from sales API.
     this.getAuraPoints();
@@ -214,7 +222,7 @@ class AuraCheckoutRewards extends React.Component {
     }
 
     return (
-      <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }} data-earn-aura-points={auraPointsToEarn}>
+      <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }} data-earn-aura-points={auraPointsToEarn} data-aura-loyalty-status={loyaltyStatus}>
 
         {/* Guest - Show aura section only when card data is available. */}
         <ConditionalView condition={!isUserAuthenticated()
