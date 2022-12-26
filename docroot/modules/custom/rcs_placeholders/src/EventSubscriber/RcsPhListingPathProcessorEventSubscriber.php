@@ -33,6 +33,7 @@ class RcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
     }
 
     $path = $data['path'];
+    $full_path = $data['fullPath'];
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $category_prefix = $config->get('category.path_prefix');
 
@@ -40,6 +41,7 @@ class RcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
       return;
     }
 
+    $processed_paths = '/taxonomy/term/' . $config->get('category.placeholder_tid');
     $category = $config->get('category.enrichment')
       ? $this->enrichmentHelper->getEnrichedEntity('category', $path)
       : NULL;
@@ -47,9 +49,15 @@ class RcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
     if (isset($category)) {
       $entityData = $category->toArray();
       $processed_paths = '/taxonomy/term/' . $category->id();
-      $event->addData('processedPaths', $processed_paths);
-      $event->addData('entityData', $entityData);
     }
+
+    $event->setData([
+      'entityType' => 'category',
+      'entityPath' => substr_replace($path, '', 0, strlen($category_prefix) + 1),
+      'entityPathPrefix' => $category_prefix,
+      'entityFullPath' => $full_path,
+      'processedPaths' => $processed_paths,
+    ]);
 
     $event->stopPropagation();
   }
