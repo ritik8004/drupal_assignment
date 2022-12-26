@@ -17,6 +17,7 @@
   var gtm_execute_onetime_events = true;
   var productImpressions = [];
   var productImpressionsTimer = null;
+  window.productListStorageKey = 'gtm_product_list';
 
   /**
    * Drupal Behaviour to set ReferrerInfo Data to storage.
@@ -861,15 +862,23 @@
         productData.dimension5 = product.attr('gtm-dimension5');
       }
 
-      // If list variable is set in cookie, retrieve it.
-      if ($.cookie('product-list') !== undefined) {
-        var listValues = JSON.parse($.cookie('product-list'));
-        productData.list = (listValues[productData.id] === 'Search Results Page' || $('body').attr('gtm-list-name') === undefined)
-          // For SRP, use list value 'Search Result Page'.
-          ? listValues[productData.id]
-          // For all other pages, use gtm-list-name html attribute.
-          // Except in PDP, to define full path from PLP.
-          : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+      productData.list = '';
+
+      if ($('body').hasAttr('gtm-list-name')) {
+        // For all other pages, use gtm-list-name html attribute.
+        // Except in PDP, to define full path from PLP.
+        productData.list = $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+      }
+
+      // If list variable is set in local storage, retrieve it.
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey);
+      if (typeof listValues === 'object'
+        && Object.keys(listValues).length
+        && typeof listValues[productData.id] !== 'undefined') {
+        // For SRP, use list value 'Search Result Page'.
+        if (listValues[productData.id] === 'Search Results Page' || !$('body').hasAttr('gtm-list-name')) {
+          productData.list = listValues[productData.id];
+        }
       }
 
       // Fetch referrerPageType from localstorage.
@@ -1150,13 +1159,13 @@
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(null, null, null, {'type': 'product-click'});
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
 
-    // On productClick, add list variable to cookie.
-    var listValues = {};
-    if ($.cookie('product-list') !== undefined) {
-      listValues = JSON.parse($.cookie('product-list'));
+    // On productClick, add product to product list in local storage.
+    if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
+      listValues[product.id] = product.list = listName;
+      Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
     }
-    listValues[product.id] = product.list = listName;
-    $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
+
     product.variant = '';
     if (position) {
       product.position = position;
@@ -1556,13 +1565,17 @@
       }
     };
 
-    // Delete list from cookie.
-    var listValues = {};
-    if ($.cookie('product-list') !== undefined) {
-      listValues = JSON.parse($.cookie('product-list'));
+    // Delete product from product list in local storage.
+    if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
+
+      if (typeof listValues === 'object'
+        && Object.keys(listValues).length
+        && typeof listValues[productData.id] !== 'undefined') {
+        delete listValues[product.id];
+        Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
+      }
     }
-    delete listValues[product.id];
-    $.cookie('product-list', JSON.stringify(listValues), { path: '/' });
 
     dataLayer.push(productData);
   }

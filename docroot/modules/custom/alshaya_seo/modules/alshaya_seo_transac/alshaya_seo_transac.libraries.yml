@@ -68,6 +68,7 @@ gtm_spc:
     - core/Drupal
     - alshaya_spc/cart_utilities
     - alshaya_master/local_storage_manager
+    - alshaya_seo_transac/gtm
 
 product_list:
   version: 1.x
