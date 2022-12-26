@@ -1370,6 +1370,21 @@ const getProductShippingMethods = async (currentArea, sku = undefined, cartId = 
     }
   }
 
+  // Example key: "{}|0984692002|".
+  // Example key when area is set:
+  // "{\"label\":{\"en\":\"Abbasiya\"},\"value\":{\"area\":6759,\"governate\":6756}}|0984692002|".
+  const staticKey = [
+    JSON.stringify(currentArea || {}),
+    sku || '',
+    cartIdInt || '',
+  ].join('|');
+
+  // Invoke API only once per page request.
+  const staticData = Drupal.alshayaSpc.staticStorage.get(staticKey);
+  if (staticData) {
+    return staticData;
+  }
+
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
   const attributes = [];
   if (currentArea !== null) {
@@ -1405,6 +1420,8 @@ const getProductShippingMethods = async (currentArea, sku = undefined, cartId = 
     if (!hasValue(response.data)) {
       return null;
     }
+
+    Drupal.alshayaSpc.staticStorage.set(staticKey, response.data);
     return response.data;
   } catch (error) {
     logger.error('Error occurred while fetching governates data. Message: @message.', {

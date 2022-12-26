@@ -32,7 +32,8 @@ services:
 
   rcs_placeholders.enrichment_helper:
     class: Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper
-    arguments: ['@entity_type.manager']
+    arguments:
+      - '@entity_type.manager'
 
   rcs_placeholders.rcs_product_path_process_subscriber:
     class: \Drupal\rcs_placeholders\EventSubscriber\RcsPhProductPathProcessorEventSubscriber
