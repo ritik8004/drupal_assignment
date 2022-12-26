@@ -1361,21 +1361,6 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
  *  returns list of governates.
  */
 const getProductShippingMethods = async (currentArea, sku = undefined, cartId = null) => {
-  // Example key: "{}|0984692002|".
-  // Example key when area is set:
-  // "{\"label\":{\"en\":\"Abbasiya\"},\"value\":{\"area\":6759,\"governate\":6756}}|0984692002|".
-  const staticKey = [
-    JSON.stringify(currentArea || {}),
-    sku || '',
-    cartId || '',
-  ].join('|');
-
-  // Invoke API only once per page request.
-  const staticData = Drupal.alshayaSpc.staticStorage.get(staticKey);
-  if (staticData) {
-    return staticData;
-  }
-
   let cartIdInt = cartId;
   let cartData = null;
   if (sku === undefined && cartId === null) {
@@ -1383,6 +1368,21 @@ const getProductShippingMethods = async (currentArea, sku = undefined, cartId = 
     if (cartData.cart.cart_id !== null) {
       cartIdInt = cartData.cart.cart_id_int;
     }
+  }
+
+  // Example key: "{}|0984692002|".
+  // Example key when area is set:
+  // "{\"label\":{\"en\":\"Abbasiya\"},\"value\":{\"area\":6759,\"governate\":6756}}|0984692002|".
+  const staticKey = [
+    JSON.stringify(currentArea || {}),
+    sku || '',
+    cartIdInt || '',
+  ].join('|');
+
+  // Invoke API only once per page request.
+  const staticData = Drupal.alshayaSpc.staticStorage.get(staticKey);
+  if (staticData) {
+    return staticData;
   }
 
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
