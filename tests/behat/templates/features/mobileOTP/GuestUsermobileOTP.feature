@@ -1,4 +1,4 @@
-@javascript @smoke @guest @hmsauat @hmaeuat @coskwlocal
+@javascript @smoke @guest @hmsauat @hmaeuat @coskwlocal @aeokwdev
 Feature: To verify the mobile OTP functionality on COD payment method for Guest user
 
   Background:
