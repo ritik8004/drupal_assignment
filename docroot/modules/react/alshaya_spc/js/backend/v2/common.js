@@ -1361,12 +1361,16 @@ window.commerceBackend.getDeliveryAreaValue = async (areaId) => {
  *  returns list of governates.
  */
 const getProductShippingMethods = async (currentArea, sku = undefined, cartId = null) => {
+  // Example key: "{}|0984692002|".
+  // Example key when area is set:
+  // "{\"label\":{\"en\":\"Abbasiya\"},\"value\":{\"area\":6759,\"governate\":6756}}|0984692002|".
   const staticKey = [
     JSON.stringify(currentArea || {}),
     sku || '',
     cartId || '',
   ].join('|');
 
+  // Invoke API only once per page request.
   const staticData = Drupal.alshayaSpc.staticStorage.get(staticKey);
   if (staticData) {
     return staticData;
