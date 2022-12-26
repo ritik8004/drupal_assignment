@@ -140,7 +140,8 @@ window.commerceBackend = window.commerceBackend || {};
       stock: {
         qty: variantData.stock_data.qty,
         status: (variantData.stock_status === "IN_STOCK") ? true : false,
-      }
+      },
+      promotions: variantData.promotions,
     }
   };
 
