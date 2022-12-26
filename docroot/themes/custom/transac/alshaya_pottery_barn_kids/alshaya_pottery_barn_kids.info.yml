@@ -175,3 +175,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css: css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css
+
+  alshaya_white_label/advanced-page-paragraph-banner:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css
+
+  alshaya_white_label/advanced-page-paragraph-accordion:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/advanced-page-paragraph-accordion/advanced-page-paragraph-accordion.ltr.css
