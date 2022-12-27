@@ -10,7 +10,7 @@ import isAuraEnabled from '../../../../../../js/utilities/helper';
 import { isProductBuyable } from '../../../../../../js/utilities/display';
 import SizeGuide from '../size-guide';
 import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
-import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import QuickFitAttribute from '../quick-fit-attribute';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -298,13 +298,10 @@ class ConfigurableProductForm extends React.Component {
             context={context}
           />
         </div>
-        { hasValue(productInfo[skuCode].quickFit)
-          ? (
-            <div className="product-quickfit">
-              { productInfo[skuCode].quickFit }
-            </div>
-          )
-          : null}
+        <QuickFitAttribute
+          productInfo={productInfo}
+          skuCode={skuCode}
+        />
         {(isProductBuyable(productInfo[skuCode].is_product_buyable)) ? (
           <>
             <div className="magv2-add-to-basket-container" ref={this.button}>
