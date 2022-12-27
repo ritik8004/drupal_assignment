@@ -69,7 +69,7 @@
    * This function is called when pushing aura common details
    * to gtm data event in all pages except Checkout page.
    */
-  Drupal.alshayaSeoGtmPushAuraCommonData = function (data, loyaltyStatus = null) {
+  Drupal.alshayaSeoGtmPushAuraCommonData = function (data, loyaltyStatus = null, pushDatalayer = true) {
     // Prepare the aura dataset.
     var gtmData = {};
 
@@ -103,7 +103,7 @@
       Drupal.addItemInLocalStorage('gtm_aura_common_data', gtmData);
 
       // Proceed only if dataLayer exists.
-      if (dataLayer) {
+      if (dataLayer && pushDatalayer) {
         dataLayer.push(gtmData);
       }
     }

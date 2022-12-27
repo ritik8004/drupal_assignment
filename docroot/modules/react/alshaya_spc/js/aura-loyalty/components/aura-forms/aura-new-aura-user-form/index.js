@@ -115,7 +115,21 @@ class AuraFormNewAuraUserModal extends React.Component {
             // Once we get a success response that quick enrollment is done, we close the modal.
             if (result.data.status) {
               handleSignUp(result.data);
-              Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'success' });
+              try {
+                // Update localstorage with the latest aura details before pushing success event.
+                Drupal.alshayaSeoGtmPushAuraCommonData(
+                  {
+                    tier: result.data.data.tier_info || '',
+                    points: result.data.data.apc_points || 0,
+                  },
+                  parseInt(result.data.data.apc_link || '0', 10),
+                  false,
+                );
+                // Push success event.
+                Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'success' });
+              } catch (e) {
+                Drupal.logJavascriptError('error-push-aura-sign-up-event', e);
+              }
               // Close the modals.
               closeNewUserModal();
             }
