@@ -22,6 +22,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides a resource to node data of advanced page.
@@ -93,6 +94,13 @@ class AdvancedPageResource extends ResourceBase {
   protected $renderContext;
 
   /**
+   * Module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -117,6 +125,8 @@ class AdvancedPageResource extends ResourceBase {
    *   Entity repository.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module services.
    */
   public function __construct(
     array $configuration,
@@ -129,7 +139,8 @@ class AdvancedPageResource extends ResourceBase {
     EntityTypeManagerInterface $entity_type_manager,
     ConfigFactoryInterface $config_factory,
     EntityRepositoryInterface $entityRepository,
-    RendererInterface $renderer
+    RendererInterface $renderer,
+    ModuleHandlerInterface $module_handler
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
@@ -138,6 +149,7 @@ class AdvancedPageResource extends ResourceBase {
     $this->configFactory = $config_factory;
     $this->entityRepository = $entityRepository;
     $this->renderer = $renderer;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -155,7 +167,8 @@ class AdvancedPageResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('config.factory'),
       $container->get('entity.repository'),
-      $container->get('renderer')
+      $container->get('renderer'),
+      $container->get('module_handler')
     );
   }
 
@@ -265,6 +278,9 @@ class AdvancedPageResource extends ResourceBase {
     }
 
     $response_data['blocks'] = $blocks;
+    // Allow other modules to alter response data.
+    $this->moduleHandler->alter('advanced_page_resource_response', $response_data);
+
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
     foreach ($this->mobileAppUtility->getCacheableEntities() as $cacheable_entity) {
