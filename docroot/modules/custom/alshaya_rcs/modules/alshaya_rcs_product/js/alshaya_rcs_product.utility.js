@@ -375,17 +375,11 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {object} productKey
    *   The product key.
    */
-  function getVariantsInfo(product, variantParentProduct, productKey) {
+  function getVariantsInfo(product, variantParentProduct) {
     const info = {};
-    var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
       const variantSku = variantInfo.sku;
-      // Do not process data for OOS variants.
-      if (!Drupal.hasValue(combinations.bySku[variantSku])
-        && (Drupal.hasValue(productKey) && productKey !== 'cart')) {
-        return;
-      }
       const variantParentSku = variantInfo.parent_sku;
       // Use URL from parent if not available in child - we add in variants only for styled products.
       const productUrl = Drupal.hasValue(variantInfo.url_key)
@@ -502,10 +496,8 @@ window.commerceBackend = window.commerceBackend || {};
     setMaxSaleQty(productData, product.stock_data.max_sale_qty);
 
     if (productData.type === 'configurable') {
-      var path = window.location.pathname;
-      var productKey = (Drupal.hasValue(path) && path.toString().includes('cart')) ? 'cart' : 'productinfo';
       productData.configurables = getConfigurables(product);
-      productData.variants = getVariantsInfo(product, productData, productKey);
+      productData.variants = getVariantsInfo(product, productData);
     }
 
     // Add general bazaar voice data to product data if present.

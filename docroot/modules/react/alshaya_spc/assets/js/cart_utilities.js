@@ -399,7 +399,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     var stock = productInfo.stock;
     var cncEnabled = productInfo.click_collect;
 
-    if (productInfo.type === 'configurable' && Drupal.hasValue(productInfo['variants'][variantSku])) {
+    if (productInfo.type === 'configurable') {
       var productVariantInfo = productInfo['variants'][variantSku];
       productDataSKU = variantSku;
       price = productVariantInfo.priceRaw;
