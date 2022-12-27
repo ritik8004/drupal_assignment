@@ -24,6 +24,7 @@ jobs:
     outputs:
       themes: ${{ steps.changes.outputs.themes }}
       react: ${{ steps.changes.outputs.react }}
+      svg: ${{ steps.changes.outputs.svg }}
       deployable_changes: ${{ steps.deployable_changes.outputs.deployable_changes }}
 
     steps:
