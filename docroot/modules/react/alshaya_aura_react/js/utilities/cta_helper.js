@@ -152,6 +152,9 @@ function handleLinkYourCard(cardNumber) {
             firstName: firstName || '',
             lastName: lastName || '',
           };
+          // Update localstorage with the latest aura details before pushing success event.
+          Drupal.alshayaSeoGtmPushAuraCommonData(stateValues, auraStatus, false);
+          // Push success event.
           Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'success' });
         }
       } else {

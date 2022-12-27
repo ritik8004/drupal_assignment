@@ -95,6 +95,9 @@ function processCheckoutCart(data) {
           }
 
           if (hasValue(data.gtmLinkCardOption)) {
+            // Update localstorage with the latest aura details before pushing success event.
+            Drupal.alshayaSeoGtmPushAuraCommonData(stateValues, stateValues.loyaltyStatus, false);
+            // Push success event.
             Drupal.alshayaSeoGtmPushAuraEventData({
               action: actionType,
               label: 'success',
