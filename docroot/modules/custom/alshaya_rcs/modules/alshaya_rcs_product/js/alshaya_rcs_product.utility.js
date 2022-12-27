@@ -96,7 +96,7 @@ window.commerceBackend = window.commerceBackend || {};
       Object.keys(allStorageData).forEach(function (key) {
         if (key.startsWith('product_data_')) {
           if (typeof processed === 'undefined' || processed) {
-            productData[allStorageData[key].sku] = processProduct(allStorageData[key], productKey);
+            productData[allStorageData[key].sku] = processProduct(allStorageData[key]);
           }
           else {
             productData[allStorageData[key].sku] = allStorageData[key];
@@ -110,7 +110,7 @@ window.commerceBackend = window.commerceBackend || {};
     var product = globalThis.RcsPhStaticStorage.get('product_data_' + sku);
     if (product) {
       if (typeof processed === 'undefined' || processed) {
-        return processProduct(product, productKey);
+        return processProduct(product);
       }
       else {
         return product;
@@ -370,9 +370,10 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {object} product
    *   The product entity.
-   *
    * @param {object} variantParentProduct
    *   The variant parent.
+   * @param {object} productKey
+   *   The product key.
    */
   function getVariantsInfo(product, variantParentProduct, productKey) {
     const info = {};
@@ -469,7 +470,7 @@ window.commerceBackend = window.commerceBackend || {};
    * @returns {Object}
    *    The processed product data.
    */
-  function processProduct(product, productKey) {
+  function processProduct(product) {
     var productData = {
       id: product.id,
       sku: product.sku,
@@ -501,6 +502,8 @@ window.commerceBackend = window.commerceBackend || {};
     setMaxSaleQty(productData, product.stock_data.max_sale_qty);
 
     if (productData.type === 'configurable') {
+      var path = window.location.pathname;
+      var productKey = (Drupal.hasValue(path) && path.toString().includes('cart')) ? 'cart' : 'productinfo';
       productData.configurables = getConfigurables(product);
       productData.variants = getVariantsInfo(product, productData, productKey);
     }

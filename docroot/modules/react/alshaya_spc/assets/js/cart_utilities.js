@@ -382,9 +382,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
    *   An object containing some processed product data.
    */
   window.commerceBackend.processAndStoreProductData = function (parentSku, variantSku, viewMode) {
-    var path = window.location.pathname;
-    var productKey = (Drupal.hasValue(path) && path.toString().includes('cart')) ? 'cart' : viewMode;
-    var productInfo = window.commerceBackend.getProductData(parentSku, productKey);
+    var productInfo = window.commerceBackend.getProductData(parentSku, viewMode);
     var options = [];
     var productUrl = productInfo.url;
     var price = productInfo.priceRaw;
