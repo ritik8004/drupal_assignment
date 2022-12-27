@@ -166,7 +166,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       'fullPath' => $full_path,
       'pathToCheck' => $rcs_path_to_check,
     ]);
-    $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::EVENT_NAME);
+    $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::ALTER);
 
     $event_data = $event->getData();
     if (!empty($event_data['entityType'])) {
