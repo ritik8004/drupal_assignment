@@ -231,3 +231,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css: css/conditional-sass/advanced-page-paragraph-banner/advanced-page-paragraph-banner.ltr.css
+
+  alshaya_white_label/matchback_layout:
+    css:
+      theme:
+        css/conditional-sass/matchback-layout/matchback-layout.ltr.css: css/conditional-sass/matchback-layout/matchback-layout.ltr.css
