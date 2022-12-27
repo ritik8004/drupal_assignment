@@ -372,8 +372,6 @@ window.commerceBackend = window.commerceBackend || {};
    *   The product entity.
    * @param {object} variantParentProduct
    *   The variant parent.
-   * @param {object} productKey
-   *   The product key.
    */
   function getVariantsInfo(product, variantParentProduct) {
     const info = {};
