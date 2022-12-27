@@ -5,9 +5,11 @@ cart_utilities:
     - core/jquery
     - core/drupal
     - core/jquery.once
+    - core/jquery.cookie
     - alshaya_react/react_pollyfill
     - alshaya_acm_product/product_utility
     - alshaya_master/common_functions
+    - alshaya_spc/static_storage
 
 mini_cart:
   version: 1.x
@@ -127,6 +129,7 @@ commerce_backend.cart.v2:
     dist/backend_cart_v2.bundle.js: {}
   dependencies:
     - alshaya_spc/security
+    - alshaya_spc/cart_utilities
 
 commerce_backend.checkout.v2:
   js:
@@ -157,3 +160,8 @@ pdp_express_delivery_labels:
   dependencies:
     - alshaya_react/react
     - core/drupalSettings
+
+static_storage:
+  version: 1.x
+  js:
+    assets/js/static_storage.js: {}

@@ -5,8 +5,10 @@ const FreeDeliveryUspBanner = (props) => {
   const { bannerText } = props;
 
   return (
-    <div className="free-delivery-usp">
-      {parse(bannerText)}
+    <div className="spc-free-delivery-container">
+      <div className="free-delivery-usp">
+        {parse(bannerText)}
+      </div>
     </div>
   );
 };

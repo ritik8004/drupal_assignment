@@ -17,6 +17,10 @@ sites:
     module: alshaya_mc
     type: alshaya_transac
     country: qa
+  mceg:
+    module: alshaya_mc
+    type: alshaya_transac
+    country: eg
   hmkw:
     module: alshaya_hm
     type: alshaya_transac

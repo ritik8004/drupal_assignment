@@ -38,19 +38,12 @@ services:
       - '@module_handler'
       - '@theme.manager'
 
-  alshaya_rcs_super_category.path_processor:
-    class: Drupal\alshaya_rcs_super_category\Service\AlshayaRcsSuperCategoryPathProcessor
-    decorates: rcs_placeholders.path_processor
-    public: false
+  alshaya_rcs_super_category.rcs_ph_path_process_subscriber:
+    class: Drupal\alshaya_rcs_super_category\EventSubscriber\AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber
     tags:
-      # PathProcessorAlias has priority 100. So if we do processing more late,
-      # then the alias will not be available to us. Also priority of
-      # LanguageNegotiationUrl processor is 300, which removes the langcode from
-      # the url. So we need to keep priority between 100 and 300.
-      - { name: 'path_processor_inbound', priority: 101 }
+      - { name: 'event_subscriber', priority: 100 }
     arguments:
-      - '@entity_type.manager'
-      - '@language_manager'
-      - '@module_handler'
+      - '@rcs_placeholders.enrichment_helper'
       - '@config.factory'
-      - '@alshaya_rcs_listing.department_pages_helper'
+      - '@alshaya_advanced_page.department_page_helper'
+      - '@alshaya_acm_product_category.product_category_tree'

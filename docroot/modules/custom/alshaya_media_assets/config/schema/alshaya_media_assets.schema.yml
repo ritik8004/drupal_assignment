@@ -1,0 +1,41 @@
+alshaya_media_assets.settings:
+  type: config_object
+  label: 'Alshaya Media Assets settings'
+  mapping:
+    pims_base_url:
+      type: string
+      label: 'PIMS Base URL'
+    pims_directory:
+      type: string
+      label: 'PIMS Directory'
+    swatch_plp_limit:
+      type: integer
+      label: 'Number of Swatches to display on Listing pages'
+    swatch_asset_type:
+      type: string
+      label: 'Asset Type to be used for Swatch'
+    weights:
+      type: mapping
+      label: 'Weights for each asset type per context'
+      mapping:
+        plp:
+          type: ignore
+          label: 'Weights for each asset type for PLP context'
+        plp_hover:
+          type: ignore
+          label: 'Weights for each asset type for PLP Hover image context'
+        pdp:
+          type: ignore
+          label: 'Weights for each asset type for PDP context'
+        teaser:
+          type: ignore
+          label: 'Weights for each asset type for Teaser context'
+        swatch:
+          type: ignore
+          label: 'Weights for each asset type for Swatch context'
+        cart:
+          type: ignore
+          label: 'Weights for each asset type for Cart context'
+        angle:
+          type: ignore
+          label: 'Sorting order for Angles'

@@ -530,13 +530,13 @@ export default class Cart extends React.Component {
             />
           </ConditionalView>
         </div>
+        {hasValue(freeShippingText) && (
+          <React.Suspense fallback={<Loading />}>
+            <FreeDeliveryUspBanner bannerText={freeShippingText} />
+          </React.Suspense>
+        )}
         <div className="spc-main">
           <div className="spc-content">
-            {hasValue(freeShippingText) && (
-              <React.Suspense fallback={<Loading />}>
-                <FreeDeliveryUspBanner bannerText={freeShippingText} />
-              </React.Suspense>
-            )}
             <div className="spc-title-wrapper">
               <SectionTitle animationDelayValue="0.4s">
                 <span>{`${Drupal.t('my shopping bag')} `}</span>

@@ -1,41 +1,7 @@
-base_url: 'https://lp2.hm.com/hmgoepprod'
 pims_base_url: 'http://34.249.182.88:3020'
 pims_directory: 'website/var/assets'
-fallback_to_liquidpixel: 1
-origin: 'dam'
-# For any new key in 'dimension', update 'style_identifiers' with appropriate
-# file path.
-dimensions:
-  plp:
-    desktop: z
-    mobile: z
-  pdp_thumbnail:
-    desktop: y
-    mobile: m
-  pdp_main: &common_pdp
-    desktop: y
-    mobile: w
-  pdp_zoom:
-    <<: *common_pdp
-  pdp_fullscreen:
-    <<: *common_pdp
-  teaser:
-    desktop: z
-    mobile: q
-  swatch: &common_cart
-    desktop: q
-    mobile: q
-  cart:
-    <<: *common_cart
-  product_category_carousel:
-    <<: *common_cart
-  cart_notification:
-    <<: *common_cart
-  order_detail:
-    <<: *common_cart
-  checkout_summary:
-    desktop: m
-    mobile: q
+swatch_plp_limit: 3
+swatch_asset_type: 'StillMedia/DescriptiveStillLife'
 # Weights are used to sort asset-types. Items with lower weight get precedence
 # while displaying them.
 # Image Types:
@@ -108,18 +74,3 @@ weights:
     - 9L
     - 9R
     - NO_ANGLE
-style_identifiers:
-  plp: 'file:/product/listing'
-  pdp_main: 'file:/product/main'
-  pdp_thumbnail: 'file:/product/thumb'
-  pdp_zoom: 'file:/product/zoom'
-  pdp_fullscreen: 'file:/product/fullscreen'
-  teaser: 'file:/product/style'
-  product_category_carousel: 'file:/product/style'
-  swatch: 'file:/product/miniature'
-  cart: 'file:/product/thumb'
-  cart_notification: 'file:/product/thumb'
-  order_detail: 'file:/product/thumb'
-  checkout_summary: 'file:/product/thumb'
-swatch_plp_limit: 3
-swatch_asset_type: 'StillMedia/DescriptiveStillLife'

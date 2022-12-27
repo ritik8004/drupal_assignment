@@ -159,16 +159,6 @@ function alshaya_rcs_listing_field_widget_entity_reference_paragraphs_form_alter
 }
 
 /**
- * Implements hook_rcs_placeholders_processor_path_alter().
- */
-function alshaya_rcs_listing_rcs_placeholders_processor_path_alter(string &$path) {
-  // Remove the facets params based of the /-- prefix.
-  if (stripos($path, '/--', 0) !== FALSE) {
-    $path = substr($path, 0, stripos($path, '/--'));
-  }
-}
-
-/**
  * Implements hook_library_info_alter().
  */
 function alshaya_rcs_listing_library_info_alter(&$libraries, $extension) {

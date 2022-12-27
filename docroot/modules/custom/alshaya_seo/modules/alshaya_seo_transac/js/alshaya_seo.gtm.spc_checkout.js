@@ -156,7 +156,7 @@
       }
 
       if (step === 4) {
-        var totals = (window.spcStaticStorage.cart_raw && window.spcStaticStorage.cart_raw.totals) ? window.spcStaticStorage.cart_raw.totals : '';
+        var totals = (rawCartData && rawCartData.totals) ? rawCartData.totals : '';
         var auraPaymentAmount = totals.total_segments ? totals.total_segments.filter(item => item.code === 'aura_payment') : null;
         auraPaymentAmount = (auraPaymentAmount && typeof auraPaymentAmount[0] !== 'undefined') ? auraPaymentAmount[0].value : null;
         var gtmPaymentName = drupalSettings.payment_methods[cartData.payment.method] ?
@@ -257,9 +257,10 @@
 
   document.addEventListener('orderPaymentMethod', function (e) {
     var payment_method = e.detail.payment_method;
+    var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
     // Get the cart data to check if some payment is done via E-Gift card.
     if (drupalSettings.hasOwnProperty('egiftCard') && drupalSettings.egiftCard.enabled) {
-      var totals = window.spcStaticStorage.cart_raw.totals;
+      var totals = rawCartData.totals;
       // If some amount is paid via egift then hps_redeemed_amount will be
       // present.
       if (totals
@@ -279,7 +280,7 @@
       if (payment_method === 'aura_payment') {
         payment_method = 'auraRedeemed';
       } else {
-        var totals = window.spcStaticStorage.cart_raw.totals;
+        var totals = rawCartData.totals;
         var auraPayment = totals.total_segments.filter(item => item.code === 'aura_payment');
         var auraPaymentValue = Drupal.hasValue(auraPayment) ? auraPayment[0].value : 0;
         // Check if partial payment made by Aura then concatenate.

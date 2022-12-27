@@ -1,4 +1,4 @@
-const rcsPhBreadcrumbRenderer = require('../../alshaya_rcs_magento_placeholders/js/alshaya_rcs_magento_placeholders_breadcrumb-exports.es5');
+const rcsPhBreadcrumb = require('../../alshaya_rcs_magento_placeholders/js/alshaya_rcs_magento_placeholders_breadcrumb-exports.es5');
 
 /**
  * Breadcrumb renderer for listing pages.
@@ -18,7 +18,7 @@ exports.render = function render(
   innerHtml
 ) {
   const breadcrumbs = this.normalize(entity);
-  return rcsPhBreadcrumbRenderer.render(settings, breadcrumbs, innerHtml);
+  return rcsPhBreadcrumb.render(settings, breadcrumbs, innerHtml);
 };
 
 /**
@@ -55,14 +55,7 @@ exports.normalize = function normalize(
   }
 
   // Prepare the breadcrumb array.
-  Object.keys(data.breadcrumbs).forEach(function (i) {
-    normalized.push({
-      url: data.breadcrumbs[i].category_url_path,
-      text: data.breadcrumbs[i][keys.breadcrumbTermNameKey],
-      data_url: data.breadcrumbs[i].category_url_path,
-      id: data.breadcrumbs[i].category_id,
-    });
-  });
+  normalized = rcsPhBreadcrumb.getNormalizedBreadcrumbs(normalized, data.breadcrumbs, keys);
 
   // Push the last crumb without a url.
   normalized.push({

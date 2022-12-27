@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Used to implement hooks and provide functionalities.
+ */
+
+/**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ *
+ * Attach libraries to use with Behat.
+ */
+function alshaya_behat_alshaya_spc_checkout_build_alter(array &$build) {
+  // Check if it is a Behat session before adding js.
+  $tempstore = \Drupal::service('tempstore.private');
+  $store = $tempstore->get('alshaya_behat');
+  if ($store->get('is_behat_session')) {
+    $build['#attached']['library'][] = 'alshaya_behat/main';
+  }
+}

@@ -33,6 +33,13 @@
       configurableCombinations[mainProduct.sku].firstChild = getFirstChild(mainProductClone);
     }
 
+    // Get the product labels.
+    processedProduct[mainProduct.sku].labels = {};
+    if (Drupal.hasValue(window.commerceBackend.getProductLabels)) {
+      Object.assign(processedProduct[mainProduct.sku].labels,
+        await window.commerceBackend.getProductLabels(mainProduct.sku));
+    }
+
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
   });

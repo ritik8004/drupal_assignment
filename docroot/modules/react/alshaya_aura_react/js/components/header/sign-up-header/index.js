@@ -106,7 +106,10 @@ class SignUpHeader extends React.Component {
             <div className="aura-popup-footer">
               <div
                 className="join-aura"
-                onClick={() => this.openOTPModal()}
+                onClick={() => {
+                  this.openOTPModal();
+                  Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'initiated' });
+                }}
               >
                 {Drupal.t('Join Aura', {}, {
                   context: 'aura',

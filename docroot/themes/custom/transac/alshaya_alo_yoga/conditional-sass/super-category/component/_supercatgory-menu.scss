@@ -226,6 +226,7 @@
       .branding__menu {
         @include breakpoint($upto-desktop) {
           top: rem(46);
+          height: auto;
         }
       }
     }

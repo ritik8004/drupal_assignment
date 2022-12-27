@@ -40,6 +40,8 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
 
   $settings['allAuraTier'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig([AuraDictionaryApiConstants::APC_TIER_TYPES], \Drupal::languageManager()->getCurrentLanguage()->getId())[AuraDictionaryApiConstants::APC_TIER_TYPES];
+  // Only english values will be used for GTM.
+  $settings['gtmAllAuraTier'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig([AuraDictionaryApiConstants::APC_TIER_TYPES], 'en')[AuraDictionaryApiConstants::APC_TIER_TYPES];
   $settings['allAuraStatus'] = AuraStatus::ALL_AURA_STATUS;
   $current_route = \Drupal::routeMatch();
   $current_route_name = $current_route->getRouteName();

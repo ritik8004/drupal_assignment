@@ -192,8 +192,12 @@ function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $e
   if (isset($product['extension']['xb_fixed_price'])) {
     $fixed_prices = [];
     foreach ($product['extension']['xb_fixed_price'] as $fixed_price) {
-      // If special price has value then use it with country code.
-      $fixed_prices[$fixed_price['country_code']] = $fixed_price['special_price'] ?? $fixed_price['price'];
+      if (!empty($fixed_price['price'])) {
+        $fixed_prices[$fixed_price['country_code']]['price'] = _alshaya_acm_format_price_with_decimal($fixed_price['price']);
+      }
+      if (!empty($fixed_price['special_price'])) {
+        $fixed_prices[$fixed_price['country_code']]['special_price'] = _alshaya_acm_format_price_with_decimal($fixed_price['special_price']);
+      }
     }
 
     try {
@@ -220,6 +224,16 @@ function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
  * Implements hook_alshaya_acm_customer_orders_details_build_alter().
  */
 function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Set delivery method for XB order.
+  if (!empty($order['extension']['globale']['shipping_method'])) {
+    $build['#order_details']['delivery_method'] = $order['extension']['globale']['shipping_method'];
+  }
+
+  // Set billing method for XB order.
+  if (!empty($order['extension']['globale']['billing_method'])) {
+    $build['#order_details']['payment_method'] = $order['extension']['globale']['billing_method'];
+  }
+
   if (empty($build["#cancelled_products"])) {
     return;
   }
