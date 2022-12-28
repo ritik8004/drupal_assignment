@@ -833,7 +833,7 @@ const mergeGuestCartToCustomer = async () => {
     Drupal.alshayaSpc.staticStorage.clear();
 
     // Dispatch event with error details on cart merge.
-    dispatchCustomEvent('onCartMergeError', response.data);
+    dispatchCustomEvent('onCartMergeError', response);
 
     return;
   }
