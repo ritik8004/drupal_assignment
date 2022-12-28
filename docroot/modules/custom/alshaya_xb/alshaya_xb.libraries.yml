@@ -20,4 +20,3 @@ alshaya_xb_merge_cart_error_handler:
     - core/jquery
     - core/drupal
     - core/drupalSettings
-    - core/once
