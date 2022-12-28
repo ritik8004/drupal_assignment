@@ -75,6 +75,7 @@ class AuraPDP extends React.Component {
     // Fetch Product price using selector.
     const productPrice = (selector !== null) ? selector.innerText.replace(/,/g, '') : 0;
 
+    // Return price as aura points.
     return getPriceToPoint(productPrice);
   };
 

@@ -2,3 +2,4 @@
 alshaya_bazaar_voice
 alshaya_spc
 alshaya_wishlist
+alshaya_aura_react
