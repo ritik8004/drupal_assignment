@@ -864,7 +864,7 @@
 
       productData.list = '';
 
-      if ($('body').hasAttr('gtm-list-name')) {
+      if ($('body').is('[gtm-list-name]')) {
         // For all other pages, use gtm-list-name html attribute.
         // Except in PDP, to define full path from PLP.
         productData.list = $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
@@ -876,7 +876,7 @@
         && Object.keys(listValues).length
         && typeof listValues[productData.id] !== 'undefined') {
         // For SRP, use list value 'Search Result Page'.
-        if (listValues[productData.id] === 'Search Results Page' || !$('body').hasAttr('gtm-list-name')) {
+        if (listValues[productData.id] === 'Search Results Page' || !$('body').is('[gtm-list-name]')) {
           productData.list = listValues[productData.id];
         }
       }
