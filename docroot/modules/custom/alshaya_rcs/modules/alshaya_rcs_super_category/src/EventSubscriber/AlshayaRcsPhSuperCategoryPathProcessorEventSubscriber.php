@@ -90,7 +90,9 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
       return;
     }
 
-    $term = $this->productCategoryTree->getCategoryTermFromRoute();
+    $part = explode('/', $data['path']);
+    $term = $this->productCategoryTree->getTermByPath($part[1]);
+
     if ($term instanceof TermInterface) {
       $path_parts = explode('/', $data['path']);
 
