@@ -872,7 +872,8 @@
 
       // If list variable is set in local storage, retrieve it.
       var listValues = Drupal.getItemFromLocalStorage(productListStorageKey);
-      if (typeof listValues === 'object'
+      if (listValues
+        && typeof listValues === 'object'
         && Object.keys(listValues).length
         && typeof listValues[productData.id] !== 'undefined') {
         // For SRP, use list value 'Search Result Page'.
@@ -1569,7 +1570,8 @@
     if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
       var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
 
-      if (typeof listValues === 'object'
+      if (listValues
+        && typeof listValues === 'object'
         && Object.keys(listValues).length
         && typeof listValues[productData.id] !== 'undefined') {
         delete listValues[product.id];
