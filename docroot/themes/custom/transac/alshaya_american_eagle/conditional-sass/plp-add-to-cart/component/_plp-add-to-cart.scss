@@ -5,9 +5,12 @@
   background-color: $matchback-view-options-btn-bg;
 
   @include breakpoint($only-mobile) {
-    padding: rem(16) rem(10);
+    padding: rem(18) rem(10);
     height: rem(50);
     white-space: nowrap;
-    margin-top: rem(17);
+    margin-top: rem(7);
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
   }
 }

@@ -1,0 +1,36 @@
+@include breakpoint($only-mobile) {
+  .matchback-processed {
+    padding-#{$left}: rem(18);
+
+    // Core theme has !important
+    .price--discount span,
+    .special--price .price-amount,
+    .special--price .price-currency,
+    .special--price .price-wrapper,
+    .special--price {
+      color: $matchback-special-price-txt !important;
+    }
+
+    .price--discount {
+      color: $matchback-special-price-txt;
+    }
+
+    &.horizontal-crossell {
+      .view-product-slider {
+        .owl-carousel {
+          .views-row {
+            margin-#{$right}: rem(10);
+          }
+        }
+
+        .c-products__item__label {
+          margin-#{$left}: 0;
+        }
+
+        .price-block {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+  }
+}
