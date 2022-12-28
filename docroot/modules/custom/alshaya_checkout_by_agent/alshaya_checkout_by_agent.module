@@ -9,6 +9,7 @@ use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_user_login().
@@ -125,5 +126,17 @@ function alshaya_checkout_by_agent_mail($key, &$message, $params) {
       $body = \Drupal::token()->replace($body);
       $message['body'][] = $body;
       break;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_checkout_by_agent_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'user_form') {
+    $user = \Drupal::routeMatch()->getParameter('user');
+    if (in_array('smartagent', $user->getRoles())) {
+      $form['field_agent_store_id']['widget'][0]['value']['#required'] = TRUE;
+    }
   }
 }
