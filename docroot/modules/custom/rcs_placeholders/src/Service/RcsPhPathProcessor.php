@@ -193,6 +193,9 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   /**
    * Process the full page path from request and return it without the langcode.
    *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Optional request object of the page.
+   *
    * @return string
    *   Page Full Path.
    */
