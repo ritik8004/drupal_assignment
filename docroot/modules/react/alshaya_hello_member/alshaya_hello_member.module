@@ -513,6 +513,9 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
   // Attach the library for Aura backend based on the commerce backend version.
   $build['#attached']['library'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
 
+  // Add gtm library for aura.
+  $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_aura';
+
   // Preaparing aura settings required for hello member integration.
   $settings['config'] = \Drupal::service('alshaya_aura_react.aura_helper')->getAuraConfig();
   $settings['userDetails']['id'] = \Drupal::currentUser()->id();
@@ -544,6 +547,8 @@ function alshaya_hello_member_alshaya_spc_checkout_confirmation_order_build_alte
     return;
   }
 
+  // Add gtm library for aura.
+  $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_aura';
   $build['#attached']['library'][] = 'alshaya_white_label/hello-member-aura-loyalty';
 }
 
