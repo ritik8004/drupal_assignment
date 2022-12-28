@@ -831,7 +831,10 @@ const mergeGuestCartToCustomer = async () => {
     // Clear local storage and let the customer continue without association.
     removeCartIdFromStorage();
     Drupal.alshayaSpc.staticStorage.clear();
-    dispatchCustomEvent('mergeCartError', response.data);
+
+    // Dispatch event with error details on cart merge.
+    dispatchCustomEvent('cartMerge', response.data);
+
     return;
   }
 

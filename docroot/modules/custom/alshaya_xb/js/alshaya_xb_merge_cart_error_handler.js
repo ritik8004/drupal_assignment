@@ -7,7 +7,7 @@
   Drupal.behaviors.alshayaXbMergeCartErrorhandler = {
     attach: function (context) {
       // Display error received from MDC on cart merge for XB.
-      document.addEventListener('mergeCartError',  (e) => {
+      document.addEventListener('cartMerge',  (e) => {
         var data = e.detail;
         if (typeof data.error_message !== 'undefined') {
           var wrapper = $('[data-drupal-messages-fallback]');
