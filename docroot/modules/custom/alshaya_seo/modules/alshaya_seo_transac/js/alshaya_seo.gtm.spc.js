@@ -38,7 +38,7 @@
     }
 
     var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
-    if (typeof listValues === 'object' && listValues[product.parentSKU]) {
+    if (listValues && typeof listValues === 'object' && listValues[product.parentSKU]) {
       productDetails.list = listValues[product.parentSKU];
     }
     return productDetails;
