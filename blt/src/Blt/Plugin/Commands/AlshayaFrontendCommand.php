@@ -531,11 +531,12 @@ class AlshayaFrontendCommand extends BltTasks {
             $minify = TRUE;
             // Checks to ensure to run the minify command only
             // to the files which are modified and failed during copy.
-            if (empty($svgFiles) || !in_array($file->getRealPath(), $svgFiles)) {
+            $filePath = substr($file, strpos($file, 'docroot'));
+            if (empty($svgFiles) || !in_array($filePath, $svgFiles)) {
               // Copy the unchanged files from cloud where
               // those files are already in minify state.
               try {
-                $svgCloudFilePath = '/tmp/blt-deploy/' . substr($file, strpos($file, 'docroot'));
+                $svgCloudFilePath = '/tmp/blt-deploy/' . $filePath;
                 // Copy step.
                 $this->say('Copying ' . $file . ' from ' . $svgCloudFilePath . ' to ' . $file);
                 $result = $this->taskFilesystemStack()->copy($svgCloudFilePath, $file, TRUE)->run();
