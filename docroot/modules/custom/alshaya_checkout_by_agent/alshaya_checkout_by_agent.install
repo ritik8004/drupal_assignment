@@ -109,6 +109,15 @@ function alshaya_checkout_by_agent_uninstall() {
   if (!empty($field_storage)) {
     $field_storage->delete();
   }
+
+  $field = FieldConfig::loadByName('user', 'user', 'field_agent_store_id');
+  if (!empty($field)) {
+    $field->delete();
+  }
+  $field_storage = FieldStorageConfig::loadByName('user', 'field_agent_store_id');
+  if (!empty($field_storage)) {
+    $field_storage->delete();
+  }
 }
 
 /**

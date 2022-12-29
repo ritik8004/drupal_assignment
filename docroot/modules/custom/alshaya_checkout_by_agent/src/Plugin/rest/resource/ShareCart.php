@@ -267,20 +267,7 @@ class ShareCart extends ResourceBase {
     $to = $data['value'];
 
     // Validating the SmartAgent info with the user object info.
-    $storeCode = '';
-    $storeField = $user->get('field_agent_store')->first();
-    // Validate if there is value in store field.
-    if (empty($storeField)) {
-      $error_message = 'Agent store is empty.';
-      return $this->prepareResourceResponse($error_message);
-    }
-
-    $store = $storeField->get('entity')->getValue();
-    if (empty($store)) {
-      $error_message = 'The store that is assigned is missing or deleted.';
-      return $this->prepareResourceResponse($error_message);
-    }
-    $storeCode = $store->get('field_store_locator_id')->getString();
+    $storeCode = $user->get('field_agent_store_id')->getString();
     // Flag value to track update status.
     $updated = FALSE;
     if (!empty($storeCode) && $smart_agent_details_array['storeCode'] != $storeCode) {
