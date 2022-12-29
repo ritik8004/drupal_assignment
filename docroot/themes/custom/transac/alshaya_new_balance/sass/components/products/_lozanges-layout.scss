@@ -1,16 +1,9 @@
 .labels-wrapper {
   > .labels-container {
     > .label {
-      &::before {
-        content: "";
-        background: url(#{$nb_theme_img_directory_path}/icons/new.svg) center/contain no-repeat;
-        height: rem(24);
-        width: rem(48);
-        display: block;
-      }
-
       img {
-        display: none;
+        width: rem(48);
+        height: rem(24);
       }
     }
   }
