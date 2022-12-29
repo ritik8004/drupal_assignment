@@ -18,17 +18,15 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
-    When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for the page to load
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
-    And I wait for AJAX to finish
     And I select the home delivery address
     And I wait for AJAX to finish
     And I wait for the page to load
     And I select the Knet payment method
     And I wait for AJAX to finish
-    And I click the anchor link ".checkout-link.submit" on page
+    And I click the anchor link ".checkout-link.submit a" on page
     And I wait for AJAX to finish
     And I wait for element "#paypage"
     And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
@@ -66,7 +64,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait for the page to load
     And I select the Knet payment method
     And I wait for AJAX to finish
-    And I click the anchor link ".checkout-link.submit" on page
+    And I click the anchor link ".checkout-link.submit a" on page
     And I wait for AJAX to finish
     And I wait for element "#paypage"
     And I select "بنك اختبار كي نت [KNET1]" from dropdown ".paymentselect"
@@ -101,7 +99,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait for the page to load
     And I select the Knet payment method
     And I wait for AJAX to finish
-    And I click the anchor link ".checkout-link.submit" on page
+    And I click the anchor link ".checkout-link.submit a" on page
     And I wait for AJAX to finish
     And I wait for element "#paypage"
     And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"

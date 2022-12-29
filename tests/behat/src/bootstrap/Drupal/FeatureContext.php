@@ -430,8 +430,12 @@ class FeatureContext extends CustomMinkContext
 
   /**
    * @Given /^I wait (\d+) seconds$/
+   * @Then /^I wait for the cart notification popup$/
+   * @Then /^I wait for the product quantity loader$/
+   * @Then /^I wait for the promo code applied$/
+   *
    */
-  public function iWaitSeconds($seconds)
+  public function iWaitSeconds($seconds = 3)
   {
     sleep($seconds);
   }
@@ -2622,20 +2626,19 @@ JS;
   /**
    * @Then /^I select the home delivery address$/
    */
-  public function iSelectTheHomeDeliveryAddress()
-  {
+  public function iSelectTheHomeDeliveryAddress() {
     $session = $this->getSession();
     $page = $session->getPage();
     $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
     if ($empty_delivery_info !== null) {
-      $this->iClickJqueryElementOnPage("div.spc-empty-delivery-information span");
+      $empty_delivery_info->click();
       $this->iWaitForAjaxToFinish();
-      $this->iWaitForElement('.address-list-content');
+      $this->iWaitSeconds('20');
       if ($page->find('css', 'header.spc-change-address') !== null) {
         if ($page->find('css', 'div.spc-address-tile:first-child button')) {
           $page->find('css', 'div.spc-address-tile:first-child button')->click();
           $this->iWaitForAjaxToFinish();
-          $this->iWaitForElement('.delivery-information-preview');
+          $this->iWaitSeconds('20');
         }
       } else {
         $this->fillFormAndSubmit($session, $page);
