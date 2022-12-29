@@ -37,12 +37,12 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "changes=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only | wc -l | xargs)" >> $GITHUB_ENV
-          echo "all=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | wc -l | xargs)" >> $GITHUB_OUTPUT
-          echo "themes=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/themes/custom | xargs)" >> $GITHUB_OUTPUT
-          echo "react=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/modules/react | xargs)" >> $GITHUB_OUTPUT
-          echo "svg=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep .svg | xargs)" >> $GITHUB_OUTPUT
-          echo "js=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep .js | xargs | wc -c | xargs)" >> $GITHUB_OUTPUT
+          echo changes=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only | wc -l | xargs) >> $GITHUB_ENV
+          echo all=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | wc -l | xargs) >> $GITHUB_OUTPUT
+          echo themes=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
+          echo react=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
+          echo svg=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep .svg | xargs) >> $GITHUB_OUTPUT
+          echo js=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep .js | xargs | wc -c | xargs) >> $GITHUB_OUTPUT
 
       - name: Artifact Build
         if: ${{ env.changes > 0 && env.SSH_DEPLOYMENT_KEY }}
