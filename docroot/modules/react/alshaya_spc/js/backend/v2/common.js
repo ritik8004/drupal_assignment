@@ -22,7 +22,7 @@ import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
 import { isFreeGiftProduct } from '../../../../js/utilities/price';
-import dispatchCustomEvent from '../../utilities/events';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 window.authenticatedUserCartId = 'NA';
 
