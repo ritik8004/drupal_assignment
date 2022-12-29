@@ -114,6 +114,10 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
           $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_hello_member';
         }
       }
+      // Add gtm library for aura if aura integration with hm is enabled.
+      if ($helloMemberHelper->isAuraIntegrationEnabled()) {
+        $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_aura';
+      }
     }
 
     // Add gtm library for aura if feature is enabled.
