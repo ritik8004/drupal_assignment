@@ -16,6 +16,10 @@ function alshaya_xb_page_attachments(array &$attachments) {
   if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
     $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_cross_border';
   }
+
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.user.canonical') {
+    $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_xb_merge_cart_error_handler';
+  }
 }
 
 /**
