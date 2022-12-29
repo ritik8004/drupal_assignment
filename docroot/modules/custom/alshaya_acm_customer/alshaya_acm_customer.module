@@ -246,6 +246,8 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
       $form['acq_customer_id']['#access'] = $has_administer_user_permissions;
       $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
 
+      // Hide store field for non-admin users.
+      $form['field_agent_store']['#access'] = $has_administer_user_permissions;
       // Hide store id field for non-admin users.
       $form['field_agent_store_id']['#access'] = $has_administer_user_permissions;
     }
