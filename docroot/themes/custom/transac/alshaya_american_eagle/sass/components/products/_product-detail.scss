@@ -417,3 +417,15 @@
     }
   }
 }
+
+.errors-container {
+  .error {
+    &::before {
+      top: initial;
+    }
+
+    html[lang="ar"] & {
+      line-height: initial;
+    }
+  }
+}
