@@ -10,3 +10,5 @@ modern_browser_detector:
   version: 1
   js:
     js/modern_browser_detector.js: { preprocess: false }
+  dependencies:
+    - core/drupal
