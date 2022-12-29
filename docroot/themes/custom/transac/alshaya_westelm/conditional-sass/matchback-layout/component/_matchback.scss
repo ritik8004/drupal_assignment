@@ -3,6 +3,14 @@
     .matchback-image-wrapper {
       min-height: rem(141);
     }
+
+    // View option button is only on mobile
+    .is-not-buyable,
+    .addtobag-config-button {
+      color: $matchback-view-options-btn-text;
+      background-color: $matchback-view-options-btn-bg;
+      margin-top: rem(14);
+    }
   }
 }
 
