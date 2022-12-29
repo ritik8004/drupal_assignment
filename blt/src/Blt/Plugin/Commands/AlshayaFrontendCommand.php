@@ -525,7 +525,7 @@ class AlshayaFrontendCommand extends BltTasks {
           && (new Finder())->name('*.svg')->in($subDir->getRealpath())->hasResults()) {
           // Preparing the SVG files array which are present
           // in the latest commit.
-          $svgFiles = !empty(getenv('CHANGED_SVG_FILES')) ? explode(PHP_EOL, getenv('CHANGED_SVG_FILES')) : [];
+          $svgFiles = !empty(getenv('CHANGED_SVG_FILES')) ? explode(" ", getenv('CHANGED_SVG_FILES')) : [];
           // Finding and looping through all the SVG files present in code-base.
           foreach (Finder::create()->followLinks()->files()->in($subDir->getRealpath())->name('/\.(svg)$/') as $file) {
             $minify = TRUE;
