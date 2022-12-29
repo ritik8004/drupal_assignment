@@ -79,12 +79,14 @@
     globalContext.pageLoadTime = new Date().getTime();
 
     // Log what error caused failure determining modern browser.
-    if (window.isModernBrowser !== undefined && window.isModernBrowser === false) {
+    var browserType = Drupal.isModernBrowser();
+    if (!browserType.isModernBrowser) {
+      console.log(browserType);
       var errorData = {
         event: 'eventTracker',
         eventCategory: 'unknown errors',
         eventLabel: 'error-checking-modern-browser',
-        eventAction: window.isModernBrowserError,
+        eventAction: browserType.isModernBrowserError,
         eventPlace: 'Error occurred on ' + window.location.href,
         eventValue: 0,
         nonInteraction: 0,
