@@ -2,19 +2,6 @@
   .matchback-processed {
     padding-#{$left}: rem(18);
 
-    // Core theme has !important
-    .price--discount span,
-    .special--price .price-amount,
-    .special--price .price-currency,
-    .special--price .price-wrapper,
-    .special--price {
-      color: $matchback-special-price-txt !important;
-    }
-
-    .price--discount {
-      color: $matchback-special-price-txt;
-    }
-
     &.horizontal-crossell {
       .view-product-slider {
         .owl-carousel {
@@ -31,6 +18,20 @@
           margin-#{$left}: 0;
         }
       }
+    }
+
+    .is-not-buyable,
+    .addtobag-config-button {
+      color: $matchback-view-options-btn-text;
+      line-height: 1.29;
+      background-color: $matchback-view-options-btn-bg;
+      padding: rem(18) rem(10);
+      height: rem(50);
+      white-space: nowrap;
+      margin-top: rem(7);
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
     }
   }
 }
