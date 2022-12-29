@@ -13,7 +13,7 @@
           var wrapper = $('[data-drupal-messages-fallback]');
           if (wrapper.length) {
             // Show error message from event data.
-            wrapper.html('<div class="errors-container"><div class="error">' + data.error_message + '</div></div>');
+            wrapper.html('<div class="errors-container xb-errors"><div class="error">' + data.error_message + '</div></div>');
             wrapper.removeClass('hidden');
           }
         }
