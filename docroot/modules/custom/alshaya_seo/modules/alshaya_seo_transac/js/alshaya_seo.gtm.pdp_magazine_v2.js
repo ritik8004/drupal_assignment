@@ -29,7 +29,7 @@
 
   // Push home delivery click event to GTM.
   // Trigger only when accordion header is clicked.
-  $('.pdp-express-delivery-wrapper .express-delivery-title-wrapper').once('home-delivery-click').on('click', function () {
+  $(document).once('home-delivery-click').on('click', '.pdp-express-delivery-wrapper .express-delivery-title-wrapper', function () {
     Drupal.alshayaSeoGtmPushEcommerceEvents({
       eventAction: 'pdp clicks',
       eventLabel: 'home delivery',
@@ -37,7 +37,7 @@
   });
 
   // Push cnc click event to GTM.
-  $('.magv2-pdp-click-and-collect-wrapper .magv2-click-collect-title-wrapper').once('home-delivery-click').on('click', function () {
+  $(document).once('cnc-click').on('click', '.magv2-pdp-click-and-collect-wrapper .magv2-click-collect-title-wrapper', function () {
     Drupal.alshayaSeoGtmPushEcommerceEvents({
       eventAction: 'pdp clicks',
       eventLabel: 'click and collect',
@@ -45,7 +45,7 @@
   });
 
   // Push share this page open event to GTM.
-  $('.magv2-share-title-wrapper').once('share-this-open').on('click', function () {
+  $(document).once('share-this-open').on('click', '.magv2-share-title-wrapper', function () {
     Drupal.alshayaSeoGtmPushEcommerceEvents({
       eventAction: 'share this page',
       eventLabel: 'open',
@@ -53,7 +53,7 @@
   });
 
   // Push share this page click event to GTM.
-  $('.sharethis-wrapper > span, .sharethis-wrapper > button').once('share-this').on('click', function () {
+  $(document).once('share-this').on('click', '.pdp-share-panel span, .pdp-share-panel button', function () {
     // Set sharing medium based on the element clicked.
     var sharingMedium = $(this).attr('displaytext') ? $(this).attr('displaytext') : '';
     if ($(this).hasClass('copy-button')) {

@@ -89,7 +89,7 @@
   });
 
   $('#alshaya-algolia-plp').once('bind-loadmore-button-click').on('click', '.pager button', function () {
-    var statsText = $(this).siblings('.ais-Stats-text').attr('gtm-pagination-stats');
+    var statsText = $('.pager .ais-Stats-text').attr('gtm-pagination-stats');
     // Push load more products click event to GTM.
     Drupal.alshayaSeoGtmPushEcommerceEvents({
       eventAction: 'plp clicks',
