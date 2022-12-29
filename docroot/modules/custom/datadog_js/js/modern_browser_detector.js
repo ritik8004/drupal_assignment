@@ -2,6 +2,12 @@
  * Detect browser is modern or not and add variable to window object
  */
 (function (Drupal) {
+  
+  /**
+   * Detect browser is modern or not
+   *
+   * @return {Object}.
+   */
   Drupal.isModernBrowser = function () {
     try {
       () => { };
