@@ -295,7 +295,7 @@
         // Trigger an event on SKU base form load.
         var data = {
           sku: sku,
-          variantSelected: $('[name="selected_variant_sku"]').val() || $('form.sku-base-form').attr('variantselected'),
+          variantSelected: $('[name="selected_variant_sku"]', $(this)).val() || $('form.sku-base-form').attr('variantselected'),
         };
 
         // If Online Returns feature is enabled, add eligibleForReturn to event.
