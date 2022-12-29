@@ -75,12 +75,17 @@ class AlshayaMatchbackCommand extends DrushCommands {
    */
   public function enableMatchbackAddToBag(
     array $options = [
-      'show_wishlist' => FALSE,
-      'change_matchback_color' => FALSE,
-      'show_view_options' => TRUE,
-      'use_matchback_cart_notification' => FALSE,
+      'show_wishlist' => 0,
+      'change_matchback_color' => 0,
+      'show_view_options' => 1,
+      'use_matchback_cart_notification' => 0,
     ]
   ) {
+    // Numbers are passed as default arguments for the options since on passing
+    // FALSE, we get error on running the command that the argument is not
+    // accepted.
+    // So now we convert it from number to boolean before saving it to config.
+    $options = array_map(fn($option) => (bool) $option, $options);
     $this->configFactory->getEditable('alshaya_acm.settings')
       ->set('display_crosssell', TRUE)
       ->set('show_crosssell_as_matchback', TRUE)
@@ -93,7 +98,7 @@ class AlshayaMatchbackCommand extends DrushCommands {
     }
 
     $this->configFactory->getEditable('alshaya_acm_product.display_settings')
-      ->set('change_matchback_color', $options['change_matchback_color'] === '')
+      ->set('change_matchback_color', $options['change_matchback_color'] === TRUE)
       ->set('use_matchback_cart_notification', (bool) $options['use_matchback_cart_notification'])
       ->set('display_mobile_matchback_add_to_bag_button', (bool) $options['show_view_options'])
       ->save();
