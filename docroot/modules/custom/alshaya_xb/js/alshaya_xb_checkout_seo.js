@@ -107,13 +107,13 @@
         const productGtmData = {
           "name": product.ProductName,
           "id": product.CartItemId,
-          "price": product.ProductPrices.MerchantTransaction.DiscountedPrice,
+          "price": product.ProductPrices.MerchantTransaction.TotalPrice,
           "brand": product.Brand,
           "category": null, // @todo We need to ask Global-e to get this information.
           "variant": product.ProductGroupCode,
           "dimension2": null, // @todo This is not directly coming from global-e. We need to find a way to get this value.
           "dimension4": null, // @todo This is not directly coming from global-e. We need to find a way to get this value.
-          "dimension3": null, // @todo This is not directly coming from global-e. We need to find a way to get this value.
+          "dimension3": (product.ProductPrices.MerchantTransaction.TotalPrice !== product.ProductPrices.MerchantTransaction.DiscountedPrice) ? 'Discounted Product' : 'Regular Product',
           "quantity": product.Quantity
         };
         productGtm.push(productGtmData);

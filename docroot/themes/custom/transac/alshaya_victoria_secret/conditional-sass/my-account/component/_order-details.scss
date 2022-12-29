@@ -141,6 +141,21 @@
   }
 }
 
+.user__order--detail,
+.order-list-wrapper-container {
+  .button {
+    &.status-pending,
+    &.status-delivered,
+    &.status-complete,
+    &.status-processing,
+    &.status-returned {
+      color: $order_detail_btn_txt;
+      letter-spacing: rem(0.56);
+      border-radius: rem(3);
+    }
+  }
+}
+
 .order-detail {
   .user__order--detail {
     #cancelled-items {

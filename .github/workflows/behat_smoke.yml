@@ -71,6 +71,19 @@ jobs:
             docroot/modules/react/package-lock.json
             docroot/themes/custom/package-lock.json
 
+      - name: Cache node modules
+        id: npm-cache-dir
+        run: |
+          echo dir=$(npm config get cache) >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            "${{ steps.npm-cache-dir.outputs.dir }}"
+            ~/.npm
+            ~/.nvm
+          key: ${{ runner.os }}-node
+
       - name: Setup ChromeDriver
         uses: nanasess/setup-chromedriver@v1
 

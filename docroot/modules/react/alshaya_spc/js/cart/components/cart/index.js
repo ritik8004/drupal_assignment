@@ -45,6 +45,7 @@ import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/on
 import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
 import CartPaymentMethodsLogos from '../payment-methods-logos';
 import Tamara from '../../../../../js/tamara/utilities/tamara';
+import DeliveryPropositions from '../../../delivery-propositions/components/delivery-propositions';
 
 // Lazy load free delivery usp banner component.
 const FreeDeliveryUspBanner = React.lazy(() => import('../free-delivery-usp-banner' /* webpackChunkName: "free_delivery_usp" */));
@@ -598,6 +599,9 @@ export default class Cart extends React.Component {
             display_cart_payment_icons is set to true. */}
             {drupalSettings.alshaya_spc.display_cart_payment_icons
               && <CartPaymentMethodsLogos paymentMethods={drupalSettings.payment_methods} />}
+            {/* Display all delivery propositions icons/text on the cart page
+            below the continue to checkout button. */}
+            <DeliveryPropositions />
           </div>
         </div>
         <div className="spc-post-content">
