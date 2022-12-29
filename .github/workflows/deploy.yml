@@ -53,7 +53,6 @@ jobs:
           else
             # Get changed files.
             NAMES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
-            echo "Changed files ${NAMES}"
             # Check if the file names match the list below.
             if [[ "${NAMES}" =~ "composer." ||
                   "${NAMES}" =~ "docroot/" ||
