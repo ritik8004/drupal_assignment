@@ -22,3 +22,94 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+
+  .product-drawer-container {
+    .product-drawer-header-wrapper {
+      label {
+        font-family: $aeo-regular;
+        font-size: rem(20);
+        color: $drawer-label-text;
+      }
+    }
+    .product-details-wrapper {
+      padding: rem(9) rem(15) rem(29);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .product-title {
+        width: calc(100% - #{rem(70)});
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+        padding-bottom: 0;
+        margin: 0 rem(9);
+      }
+
+      .price-block {
+        text-align: center;
+        .has--special--price {
+          .price {
+            .price-currency.suffix,
+            .price-amount {
+              font-size: rem(18);
+            }
+          }
+        }
+
+        .special--price {
+          .price-wrapper {
+            .price {
+              .price-currency.suffix,
+              .price-amount {
+                font-size: rem(18);
+              }
+            }
+          }
+        }
+      }
+
+      .sku-form,
+      .pdp-link {
+        width: 100%;
+      }
+
+      .sku-form {
+
+        .attribute-wrapper_size {
+          & + .alshaya-select-wrapper{
+            width: rem(89);
+          }
+        }
+
+        .alshaya-select {
+          .alshayaSelect__control {
+            height: rem(50);
+
+            .alshayaSelect__single-value {
+              font-size: rem(18);
+              color: $drawer-select-label-txt;
+            }
+          }
+        }
+
+        .swatch-list {
+          justify-content: center;
+
+          > li {
+            margin-#{$right}: rem(19);
+          }
+        }
+
+        .config-form-addtobag-button-wrapper {
+          button {
+            margin-bottom: rem(8);
+          }
+        }
+      }
+
+    }
+  }
+}
