@@ -102,6 +102,7 @@
       title: {'label': product.name},
       rawGallery: updateGallery(product, product.name),
       additionalAttributes: Object.keys(product.description.additional_attributes).length > 0 ? product.description.additional_attributes : {},
+      quickFit: Drupal.hasValue(product.quick_fit) ? product.quick_fit : '',
     }
     if (product.type_id === 'configurable') {
       productData.variants = getVariantsInfoMagV2(product, processedProduct.variants);
