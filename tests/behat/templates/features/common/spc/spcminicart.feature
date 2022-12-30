@@ -8,7 +8,8 @@ Feature: Test MiniCart page
   Scenario: As a Guest, I should be able minicart
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait for element ".checkout-link.submit"
+    And I wait for AJAX to finish
+    Then I wait for element "#block-content #spc-cart"
 
   @desktop
   Scenario: As a Guest, I should be able add content in minicart
@@ -25,7 +26,7 @@ Feature: Test MiniCart page
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount" element
     Then the price and currency matches the content of product having promotional code set as "{cart_promotional}"
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait for element ".checkout-link.submit"
+    Then I should be on "/cart"
 
   @desktop @language
   Scenario: As a Guest, I should be able minicart in second language
@@ -34,7 +35,7 @@ Feature: Test MiniCart page
     And I wait for AJAX to finish
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait for element ".checkout-link.submit"
+    Then I wait for element "#block-content #spc-cart"
 
   @desktop @language
   Scenario: As a Guest, I should be able add content in minicart in second language
@@ -54,7 +55,7 @@ Feature: Test MiniCart page
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount" element
     Then the price and currency matches the content of product having promotional code set as "{cart_promotional}"
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait for element ".checkout-link.submit"
+    Then I wait for element "#block-content #spc-cart"
 
   @mobile @language
   Scenario: As a Guest, I should be able minicart in second language
@@ -63,7 +64,7 @@ Feature: Test MiniCart page
     And I wait for AJAX to finish
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait for element ".checkout-link.submit"
+    Then I wait for element "#block-content #spc-cart"
 
   @mobile @language
   Scenario: As a Guest, I should be able add content in minicart in second language
@@ -83,7 +84,7 @@ Feature: Test MiniCart page
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount" element
     Then the price and currency matches the content of product having promotional code set as "{cart_promotional}"
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait for element ".checkout-link.submit"
+    Then I wait for element "#block-content #spc-cart"
 
   @mobile
   Scenario: As a Guest, I should be able add content in minicart
@@ -98,4 +99,4 @@ Feature: Test MiniCart page
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency" element
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait for element ".checkout-link.submit"
+    Then I wait for element "#block-content #spc-cart"

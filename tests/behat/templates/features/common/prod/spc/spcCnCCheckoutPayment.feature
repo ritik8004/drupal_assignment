@@ -17,7 +17,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
     And I wait for element ".edit-checkout-as-guest"
-    Then I follow "checkout as guest"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-click_and_collect"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
@@ -49,7 +49,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait for element ".checkout-link.submit"
     When I follow "إتمام الشراء بأمان"
     And I wait for element ".edit-checkout-as-guest"
-    Then I follow "سجل الإشتراك هنا"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-click_and_collect"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
@@ -83,7 +83,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait for element ".checkout-link.submit"
     When I follow "إتمام الشراء بأمان"
     And I wait for element ".edit-checkout-as-guest"
-    Then I follow "سجل الإشتراك هنا"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-click_and_collect"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
@@ -117,7 +117,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait for element ".checkout-link.submit"
     When I follow "إتمام الشراء بأمان"
     And I wait for element ".edit-checkout-as-guest"
-    Then I follow "سجل الإشتراك هنا"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-click_and_collect"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
