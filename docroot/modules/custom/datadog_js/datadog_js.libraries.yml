@@ -7,6 +7,8 @@ logger:
     - datadog_js/modern_browser_detector
 
 modern_browser_detector:
-  version: 1
+  version: 1.x
   js:
     js/modern_browser_detector.js: { preprocess: false }
+  dependencies:
+    - core/drupal
