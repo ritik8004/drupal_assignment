@@ -24,7 +24,6 @@
 }
 
 @include breakpoint($only-mobile) {
-
   .product-drawer-container {
     .product-drawer-header-wrapper {
       label {
@@ -33,6 +32,7 @@
         color: $drawer-label-text;
       }
     }
+
     .product-details-wrapper {
       padding: rem(9) rem(15) rem(29);
       display: flex;
@@ -43,13 +43,13 @@
         width: calc(100% - #{rem(70)});
         text-align: center;
         display: block;
-        margin: 0 auto;
         padding-bottom: 0;
         margin: 0 rem(9);
       }
 
       .price-block {
         text-align: center;
+
         .has--special--price {
           .price {
             .price-currency.suffix,
@@ -77,11 +77,36 @@
       }
 
       .sku-form {
-
         .attribute-wrapper_size {
-          & + .alshaya-select-wrapper{
+          & + .alshaya-select-wrapper {
             width: rem(89);
+            margin-top: rem(30);
+            padding-top: 0;
+
+            label {
+              font-size: rem(12);
+              color: $drawer-select-quantity-label-text;
+              margin-bottom: rem(9);
+            }
           }
+
+          .size-guide-link {
+            top: 0;
+            font-size: rem(12);
+          }
+
+          .form-select-wrapper {
+            padding-top: rem(6);
+          }
+        }
+
+        .attribute-wrapper {
+          &:first-child {
+            margin-top: rem(18);
+          }
+
+          margin-top: rem(30);
+          margin-bottom: 0;
         }
 
         .alshaya-select {
@@ -97,6 +122,7 @@
 
         .swatch-list {
           justify-content: center;
+          margin-bottom: 0;
 
           > li {
             margin-#{$right}: rem(19);
@@ -106,10 +132,22 @@
         .config-form-addtobag-button-wrapper {
           button {
             margin-bottom: rem(8);
+            font-size: rem(14);
           }
         }
       }
 
+      .pdp-link {
+        height: rem(50);
+        font-size: rem(14);
+        line-height: 1;
+
+        a {
+          padding-#{$left}: 0;
+          text-align: center;
+          font-size: rem(14);
+        }
+      }
     }
   }
 }

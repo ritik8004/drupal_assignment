@@ -23,6 +23,7 @@ $white_smoke : #f2f2f2;
 $bright_gray: #eaeaea;
 $dark_gray: #222;
 $black_one: #333;
+$black_two: #777;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -753,8 +754,8 @@ $advanced-page-banner-title: $dark_gray;
 // Matchback
 $matchback-view-options-btn-bg: $black;
 $matchback-view-options-btn-text: $white;
-$matchback-special-price-txt: $alizarin-crimson;
 
 // Drawer
 $drawer-label-text: $cod-gray;
-$drawer-select-label-txt: $black
+$drawer-select-label-txt: $black;
+$drawer-select-quantity-label-text: $black_two;
