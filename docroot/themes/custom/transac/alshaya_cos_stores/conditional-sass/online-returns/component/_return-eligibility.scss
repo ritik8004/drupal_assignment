@@ -15,15 +15,3 @@
     }
   }
 }
-
-.user__order--detail {
-  .order-item-row {
-    &.online-returns-eligibility-message {
-      #online-returns-eligibility-window {
-        .return-message {
-          padding-#{$left}: rem(38);
-        }
-      }
-    }
-  }
-}
