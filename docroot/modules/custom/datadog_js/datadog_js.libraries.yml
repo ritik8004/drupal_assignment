@@ -7,7 +7,7 @@ logger:
     - datadog_js/modern_browser_detector
 
 modern_browser_detector:
-  version: 1.x
+  version: 1.1.0
   js:
     js/modern_browser_detector.js: { preprocess: false }
   dependencies:
