@@ -25,6 +25,7 @@ jobs:
       themes: ${{ steps.changes.outputs.themes }}
       react: ${{ steps.changes.outputs.react }}
       svg: ${{ steps.changes.outputs.svg }}
+      all: ${{ steps.changes.outputs.all}}
       deployable_changes: ${{ steps.deployable_changes.outputs.deployable_changes }}
 
     steps:
@@ -41,6 +42,7 @@ jobs:
           echo themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
           echo react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
           echo svg=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep .svg | xargs) >> $GITHUB_OUTPUT
+          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | wc -l | xargs) >> $GITHUB_OUTPUT
 
       - name: Check if changes are deployable
         id: deployable_changes
@@ -92,7 +94,7 @@ jobs:
           echo CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }} >> $GITHUB_ENV
           echo CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }} >> $GITHUB_ENV
           echo CHANGED_SVG_FILES=${{ needs.changedfiles.outputs.svg }} >> $GITHUB_ENV
-          echo CHANGED_ALL_FILES=$(echo ${{ inputs.CHANGED_ALL_FILES }} | wc -l | xargs) >> $GITHUB_ENV
+          echo CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.all }} >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
