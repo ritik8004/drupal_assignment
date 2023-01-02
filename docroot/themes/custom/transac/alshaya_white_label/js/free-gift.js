@@ -112,7 +112,7 @@
         var sku = $(this).attr('data-sku');
         var selected = $('[name="selected_variant_sku"]', $(this)).val();
         var productKey = 'productInfo';
-        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        var variantInfo = Drupal.hasValue(drupalSettings[productKey]) ? drupalSettings[productKey][sku]['variants'][variant] : undefined;
 
         if (typeof variantInfo === 'undefined') {
           return;
