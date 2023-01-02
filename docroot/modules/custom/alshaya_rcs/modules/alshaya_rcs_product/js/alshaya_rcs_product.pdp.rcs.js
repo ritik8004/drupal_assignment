@@ -173,14 +173,14 @@ window.commerceBackend = window.commerceBackend || {};
     const freeGiftPromotion = mainProduct.free_gift_promotion;
     if (freeGiftPromotion.length > 0
       // We support displaying only one free gift promotion for now.
-      && freeGiftPromotion[0].total_items > 0) {
+      && freeGiftPromotion[3].total_items > 0) {
       // Get the first free gift product info. In case there are multiple free
       // gift items, then we will load the product info during modal view.
-      var giftItemSku = freeGiftPromotion[0].gifts[0].sku;
-      var product = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', { sku: giftItemSku });
+      var giftItemSku = freeGiftPromotion[3].gifts[0].sku;
+      var freeGiftProduct = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', { sku: giftItemSku });
 
-      if (Drupal.hasValue(product.sku)) {
-        window.commerceBackend.setRcsProductToStorage(product, 'free_gift', giftItemSku);
+      if (Drupal.hasValue(freeGiftProduct.sku)) {
+        window.commerceBackend.setRcsProductToStorage(freeGiftProduct, 'free_gift', giftItemSku);
       }
 
       // Render the free gift item.

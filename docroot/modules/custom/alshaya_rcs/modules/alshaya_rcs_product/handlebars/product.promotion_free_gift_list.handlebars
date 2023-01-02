@@ -14,15 +14,18 @@
         {{t 'One item of choice from' }}
         {{link freeGiftPromotionTitle href=freeGiftPromoUrl
           data-sku=freeGiftSku
+          data-promotion-title=freeGiftPromotionTitle
           class="free-gift-modal"
           data-dialog-type="modal"
           data-dialog-options='{"width":"auto"}'}}
         {{t 'with this product' }}
     </div>
 
-    {{#if coupon }}
+    {{#if freeGiftCoupon }}
     <div class="free-gift-coupon-code">
-      {{ coupon }}
+      {{t "Use Code " }}
+      <span class="coupon-code">{{ freeGiftCoupon }}</span>
+      {{t 'in basket' }}
     </div>
     {{/if}}
   </div>

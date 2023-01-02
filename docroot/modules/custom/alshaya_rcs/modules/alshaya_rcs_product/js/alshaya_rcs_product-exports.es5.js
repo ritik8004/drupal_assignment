@@ -798,16 +798,18 @@ exports.computePhFilters = function (input, filter) {
     case 'promotion_free_gift':
       const freeGiftPromotions = input.free_gift_promotion;
       // Proceed only if we have free gift promotion items.
+      // We support displaying only one free gift promotion for now.
       if (freeGiftPromotions.length > 0) {
-        data.freeGiftType = freeGiftPromotions[0].rule_type;
-        data.freeGiftCoupon = freeGiftPromotions[0].coupon_code;
-        data.freeGiftPromoUrl = Drupal.url(freeGiftPromotions[0].rule_web_url);
+        const freeGiftPromotion = freeGiftPromotions[3];
+        data.freeGiftType = freeGiftPromotion.rule_type;
+        data.freeGiftCoupon = freeGiftPromotion.coupon_code;
+        data.freeGiftPromoUrl = Drupal.url(freeGiftPromotion.rule_web_url);
         data.freeGiftTitle = '';
         data.freeGiftImage = '';
 
-        const giftItems = freeGiftPromotions[0].gifts;
+        const giftItems = freeGiftPromotion.gifts;
         // Get the image of first free gift item.
-        if (freeGiftPromotions[0].total_items > 0) {
+        if (freeGiftPromotion.total_items > 0) {
           // Get the free gift sku info.
           const giftItemProductInfo = window.commerceBackend.getProductData(giftItems[0].sku, null, false);
           if (giftItemProductInfo) {
@@ -823,21 +825,19 @@ exports.computePhFilters = function (input, filter) {
 
         // Do processing of free gift items.
         // @see Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager::getFreeGiftDisplay().
-        if (freeGiftPromotions[0].total_items > 1
-          && freeGiftPromotions[0].rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+        if (freeGiftPromotion.total_items > 1
+          && freeGiftPromotion.rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
           // Load all the free gift items.
           var freeGiftSkus = [];
           giftItems.forEach((item) => {
             freeGiftSkus.push(item.sku);
           });
-          // @todo Add more logic here for the promotion with multiple gift
-          // items.
           data.freeGiftSku = freeGiftSkus;
-          data.freeGiftPromotionTitle = freeGiftPromotions[0].rule_name;
+          data.freeGiftPromotionTitle = freeGiftPromotion.rule_name;
 
           // Render handlebars plugin.
           value = handlebarsRenderer.render(`product.${filter}_list`, data);
-        } else if (freeGiftPromotions[0].total_items > 0) {
+        } else if (freeGiftPromotion.total_items > 0) {
           const freeGift = giftItems[0];
           data.freeGiftSku = freeGift.sku;
 

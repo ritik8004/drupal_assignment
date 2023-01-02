@@ -3,8 +3,8 @@
   data-sku="{{ item_code }}"
   data-insights-object-id="entity:node/{{ entity.id }}:{{ language }}"
   data-vmode="modal">
-  {{#if sku.back_to_collection }}
-    {{ sku.back_to_collection }}
+  {{#if back_to_collection }}
+    {{link "Back to Collection" href="" class="free-gift-back-to-collection" }}
   {{/if}}
 
     <div class="acq-content-product-modal">
@@ -42,6 +42,7 @@
     </div>
 
     <div class="content__sidebar">
+      <div class="add_to_cart_form" data-rcs-sku="{{ item_code }}"></div>
       <div class="short-description-wrapper">
         <div class="content--short-description">
           {{#if entity.description }}
