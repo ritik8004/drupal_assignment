@@ -3,8 +3,7 @@ Feature: Test the My Account functionality
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 5 seconds
-    Then I should be on "/user" page
+    And I wait for element "#block-page-title"
 
   Scenario: Authenticated user should be able to login into the system
     And the element "#block-page-title .c-page-title" should exist
@@ -38,7 +37,6 @@ Feature: Test the My Account functionality
   Scenario: As an authenticated user, I should be able to view the Need help section and access the links under Need
   help in another language
     When I follow "{language_link}"
-    And I wait 10 seconds
     And I wait for the page to load
     Then the element "#block-myaccountneedhelp" should exist
     And the element "#block-myaccountneedhelp .field--type-text-with-summary" should exist
@@ -48,15 +46,12 @@ Feature: Test the My Account functionality
   @address
   Scenario: As an authenticated user, I should be able to edit address to my address book
     When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
-    And I wait 10 seconds
     And I wait for the page to load
     Then I check the address-book form
     When I fill in "full_name" with "{spc_full_name}"
     And I fill in "field_address[0][address][mobile_number][mobile]" with "{mobile}"
     And I select "City" option from "field_address[0][address][area_parent]"
-    And I wait 2 seconds
     And I select "Area" option from "field_address[0][address][administrative_area]"
-    And I wait 2 seconds
     When I scroll to the ".country-field-wrapper" element
     When fill in billing address with following:
       | field_address[0][address][address_line1]             | {street}      |
@@ -64,20 +59,18 @@ Feature: Test the My Account functionality
       | field_address[0][address][locality]                  | {locality}    |
       | field_address[0][address][address_line2]             | {floor}       |
     And I press "op"
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 
   @cancel
   Scenario: As an authenticated user, I should be able to perform Cancel action on add/edit address pages
     When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
-    And I wait 10 seconds
     And I wait for the page to load
     Then I click on "#block-content a" element
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for AJAX to finish
     And I scroll to the "a.button.cancel-button" element
     Then I click on "a.button.cancel-button" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     Then the element "div.view-id-address_book .user__address--column div.address.default" should exist
     Then the element "div.view-id-address_book .user__address--column div.address.default .address--delete" should not exist
     Then the element "div.view-id-address_book .user__address--column div.address.default .address--edit" should exist
@@ -85,7 +78,7 @@ Feature: Test the My Account functionality
     Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" should exist
     Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--edit" should exist
     Then I click on "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     Then I click on "form.profile-address-book-delete-form.profile-confirm-form div.form-actions a.button.dialog-cancel" element
     Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" should exist
 
@@ -93,23 +86,21 @@ Feature: Test the My Account functionality
   Scenario: As an authenticated user, I should not be able to delete my primary address but should be able to delete any
   other address
     When I click the label for "#block-alshayamyaccountlinks a.my-account-address-book"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for AJAX to finish
     Then the element "div.view-id-address_book .user__address--column div.address.default" should exist
     Then the element "div.view-id-address_book .user__address--column div.address.default .address--delete" should not exist
     Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address" should exist
     Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" should exist
     Then I click on "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     Then I click on "form.profile-address-book-delete-form.profile-confirm-form div.form-actions button" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 
   @change-password
   Scenario: As an authenticated user, I should see the options to change my password
     When I click the label for "#block-alshayamyaccountlinks a.my-account-change-password"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for AJAX to finish
     And I should see an "#block-page-title" element
     And I should see an "#edit-current-pass" element
     And I should see an "#edit-pass" element
