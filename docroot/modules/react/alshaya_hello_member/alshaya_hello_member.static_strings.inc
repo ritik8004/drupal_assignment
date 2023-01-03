@@ -146,6 +146,14 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'plus',
       'value' => t('Plus', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'your_cart_empty',
+      'value' => t('Your cart is empty', [], ['context' => 'hello_member']),
+    ],
+    [
+      'key' => 'offer_added_to_bag',
+      'value' => t('This offer has been added to your bag', [], ['context' => 'hello_member']),
+    ],
   ];
 }
 

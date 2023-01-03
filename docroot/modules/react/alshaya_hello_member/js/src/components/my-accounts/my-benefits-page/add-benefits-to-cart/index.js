@@ -187,13 +187,13 @@ class AddBenefitsToCart extends React.Component {
       <>
         {(!appliedAlready && isEmptyCart) && (
           <div className="button-wide inactive">
-            {Drupal.t('Your cart is empty', { context: 'hello_member' })}
+            {getStringMessage('your_cart_empty')}
           </div>
         )}
         {(appliedAlready) && (
           <>
             <div className="button-wide inactive">
-              {Drupal.t('This offer has been added to your bag', { context: 'hello_member' })}
+              {getStringMessage('offer_added_to_bag')}
             </div>
             <div className="hello-member-benefit-status-info" id="hello-member-benefit-status-info">
               <div id="status-msg" />
