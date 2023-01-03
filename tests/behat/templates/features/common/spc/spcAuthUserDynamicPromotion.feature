@@ -16,6 +16,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     And I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -23,6 +24,8 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-3" element
     And I wait for AJAX to finish
+    #-Product quantity loader
+    And I wait 2 seconds
     And the element ".totals .discount-total" should exist
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -64,6 +67,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     And I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -72,6 +76,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-3" element
     And I wait for element ".spc-product-tile-actions .spc-select .spcSelect__control"
     And I wait for AJAX to finish
+    #-Product quantity loader
     And I wait 2 seconds
     And the element ".totals .discount-total" should exist
     When I click on "#mini-cart-wrapper a.cart-link" element
@@ -112,6 +117,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     And I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -121,6 +127,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And I wait for AJAX to finish
     And I wait for element ".spc-product-tile-actions .spc-select .spcSelect__control"
     And I wait for AJAX to finish
+    #-Product quantity loader
     And I wait 2 seconds
     And the element ".totals .discount-total" should exist
     When I click on "#mini-cart-wrapper a.cart-link" element

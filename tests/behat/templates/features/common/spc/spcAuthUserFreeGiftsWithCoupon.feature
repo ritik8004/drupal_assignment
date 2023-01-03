@@ -18,6 +18,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page and cart with coupo
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -66,7 +67,6 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page and cart with coupo
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
 
-
   @language @single_product
   Scenario: As a Guest, I should be able to checkout promotions on PDP and cart page with coupon-code for single product in second language
     Given I am on "{spc_single_product_detail_page_coupon}"
@@ -80,8 +80,11 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page and cart with coupo
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     And the element "#block-content .free-gift-promotions .free-gift-coupon-code" should exist
-    Then I press "{language_add_to_cart_link}"
-    And I wait for the page to load
+    And I click on Add-to-cart button
+    And I wait for AJAX to finish
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
@@ -129,7 +132,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page and cart with coupo
     Then I should see "{spc_auth_user_email}"
     Then I should see "{language_order_detail}"
 
-  @desktop @multiple_products
+  @desktop @multiple_product
   Scenario: As an Authenticated user, I should be able to checkout promotions on PDP and cart page with coupon-code for multiple products
     Given I am on "{spc_multiple_product_detail_page_coupon}"
     And I wait for the page to load
@@ -142,6 +145,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page and cart with coupo
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -196,6 +200,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page and cart with coupo
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -245,6 +250,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page and cart with coupo
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"

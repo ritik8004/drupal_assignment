@@ -12,6 +12,7 @@ Feature: SPC to add Free shipping promotion on cart for Authenticated user
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -19,6 +20,7 @@ Feature: SPC to add Free shipping promotion on cart for Authenticated user
     And I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I wait for AJAX to finish
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-3" element
+    #-Product quantity loader
     And I wait 2 seconds
     Then I should see "3"
     And the element ".total-line-item .delivery-total" should exist
@@ -53,12 +55,14 @@ Feature: SPC to add Free shipping promotion on cart for Authenticated user
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
     And the element "#block-content #spc-cart .spc-pre-content .dynamic-promotion-wrapper div.inactive-promotions" should exist
     And I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-3" element
+    #-Product quantity loader
     And I wait 2 seconds
     Then I should see "3"
     And the element ".total-line-item .delivery-total" should exist
@@ -93,6 +97,7 @@ Feature: SPC to add Free shipping promotion on cart for Authenticated user
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -100,6 +105,7 @@ Feature: SPC to add Free shipping promotion on cart for Authenticated user
     And I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I wait for AJAX to finish
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-3" element
+    #-Product quantity loader
     And I wait 2 seconds
     Then I should see "3"
     And the element ".total-line-item .delivery-total" should exist
