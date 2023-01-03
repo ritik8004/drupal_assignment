@@ -10,3 +10,5 @@ alshaya_xb_checkout_seo:
   dependencies:
     - core/drupal
     - alshaya_master/common_functions
+    - alshaya_spc/cart_utilities
+    - datalayer/datapush
