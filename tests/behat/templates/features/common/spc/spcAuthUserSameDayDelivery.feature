@@ -31,7 +31,6 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I wait for element ".checkout-link.submit"
     Then I should see an "#delivery-area-select" element
     When I follow "continue to checkout"
-    And I wait 30 seconds
     And I wait for the page to load
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
@@ -124,8 +123,7 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
     And I wait for element ".checkout-link.submit"
     Then I should see an "#delivery-area-select" element
     When I follow "continue to checkout"
-    And I wait 30 seconds
-    And I wait for the page to load
+    And I wait for AJAX to finish
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish

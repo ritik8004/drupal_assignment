@@ -14,6 +14,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -31,7 +32,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I select "{spc_Qpay_month}" from "expiryDatemm"
     And I select "{spc_Qpay_year}" from "expiryDateyy"
     Then I press "btnSubmit"
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I fill in Qpay pin code
     And I click jQuery "#pay" element on page
     And I wait for element "#block-page-title"
@@ -46,6 +47,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -64,7 +66,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I select "{spc_Qpay_month}" from "expiryDatemm"
     And I select "{spc_Qpay_year}" from "expiryDateyy"
     Then I press "btnSubmit"
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I fill in Qpay pin code
     And I click jQuery "#pay" element on page
     And I wait for element "#block-page-title"
@@ -79,6 +81,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -97,7 +100,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     And I select "{spc_Qpay_month}" from "expiryDatemm"
     And I select "{spc_Qpay_year}" from "expiryDateyy"
     Then I press "btnSubmit"
-    And I wait 2 seconds
+    And I wait for AJAX to finish
     And I fill in Qpay pin code
     And I click jQuery "#pay" element on page
     And I wait for element "#block-page-title"
