@@ -3107,7 +3107,7 @@ JS;
    * @param string $value
    *   The input value.
    */
-  private function enterReactInput($selector, $value)
+  private function enterReactInput($value)
   {
     $digits = str_split($value);
     $session = $this->getSession();
