@@ -113,6 +113,10 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
         if ($route_match->getRouteName() == 'entity.user.canonical') {
           $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_hello_member';
         }
+        // Add gtm library for aura if aura integration with hm is enabled.
+        if ($helloMemberHelper->isAuraIntegrationEnabled()) {
+          $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_aura';
+        }
       }
     }
 
@@ -128,6 +132,10 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     $page['#attached']['drupalSettings']['gtm']['productImpressionDefaultItemsInQueue'] = $seo_transac_settings->get('product_impressions_default_items_in_queue');
     $page['#attached']['drupalSettings']['gtm']['productImpressionQueueSize'] = $seo_transac_settings->get('product_impression_queue_size');
     $page['#attached']['drupalSettings']['gtm']['productImpressionTimer'] = $seo_transac_settings->get('product_impression_timer_time');
+
+    $product_list_expiration_days = $seo_transac_settings->get('product_list_expiration_days') ?? 31;
+    $page['#attached']['drupalSettings']['gtm']['productListExpirationMinutes'] = intval($product_list_expiration_days) * 24 * 60;
+
     $page['#cache'] ??= [];
     $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $seo_transac_settings->getCacheTags());
   }

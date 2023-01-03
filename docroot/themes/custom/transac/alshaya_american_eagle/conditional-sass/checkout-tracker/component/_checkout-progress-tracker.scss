@@ -15,15 +15,21 @@
         span {
           @include breakpoint($only-mobile) {
             font-size: rem(14);
-            padding-top: rem(4);
+            padding-top: rem(3);
           }
 
-          padding-top: rem(2);
+          @include breakpoint($tablet) {
+            body:not(.chrome) & {
+              padding-top: initial;
+              margin-top: rem(-2);
+            }
+
+            html[lang="ar"] & {
+              padding-top: rem(1);
+            }
+          }
+
           font-size: rem(18);
-
-          html[lang=ar] & {
-            padding-top: rem(1);
-          }
         }
 
         &.current {
@@ -32,7 +38,7 @@
 
             @include breakpoint($only-mobile) {
               padding-top: rem(3);
-              margin-top: rem(-3);
+              margin-top: rem(-4);
 
               html[lang="ar"] & {
                 padding-top: rem(4);
@@ -41,17 +47,19 @@
 
             @include breakpoint($tablet) {
               padding-top: 0;
-              margin-top: rem(-1);
+              margin-top: rem(-3);
             }
           }
         }
 
         &.completed {
           .step-label {
-            top: calc(100% + #{rem(18)});
-
             @include breakpoint($only-mobile) {
               font-size: rem(11);
+            }
+
+            @include breakpoint($tablet) {
+              top: calc(100% + #{rem(20)});
             }
           }
         }

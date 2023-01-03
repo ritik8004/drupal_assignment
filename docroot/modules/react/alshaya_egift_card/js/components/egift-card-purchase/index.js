@@ -102,9 +102,13 @@ export default class EgiftCardPurchase extends React.Component {
       // Show minicart notification.
       Drupal.cartNotification.triggerNotification(productData);
 
+      const productName = (typeof response.data.items[productInfo.sku] !== 'undefined')
+        ? response.data.items[productInfo.sku].itemGtmName
+        : productData.product_name;
+
       // GTM product attributes.
       const productGtm = {
-        name: `${productData.product_name}/${productData.price}`,
+        name: `${productName}/${productData.price}`,
         price: productData.price,
         variant: productData.sku,
         category: 'eGift Card',

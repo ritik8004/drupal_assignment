@@ -139,10 +139,21 @@ class RcsProductCategoryTree extends ProductSuperCategoryTree {
     $query->condition('field_category_slug', $names, 'IN');
     $query->condition('langcode', $langcode);
     $tids = $query->execute();
-    if (!empty($tids)) {
-      $term = $this->termStorage->load(current($tids));
-      return (!empty($term)) ? $term->id() : NULL;
+    return (!empty($tids)) ? current($tids) : NULL;
+  }
+
+  /**
+   * Get rcs category term by path.
+   *
+   * @param string $path
+   *   Rcs category slug.
+   */
+  public function getTermByPath($path) {
+    $term = NULL;
+    if ($tid = $this->getTermByName($path)) {
+      $term = $this->termStorage->load($tid);
     }
+    return ($term instanceof TermInterface) ? $term : NULL;
   }
 
 }

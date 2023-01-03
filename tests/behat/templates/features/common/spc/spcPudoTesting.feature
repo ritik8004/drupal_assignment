@@ -13,6 +13,7 @@ Feature: SPC Checkout for PUDO testing for Guest User
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -42,7 +43,7 @@ Feature: SPC Checkout for PUDO testing for Guest User
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
-    And I wait 2 seconds
+    And I wait for AJAX to finish
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
@@ -51,7 +52,7 @@ Feature: SPC Checkout for PUDO testing for Guest User
     Then I should see "{payment_type_text}"
     Then I should see "{cc_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
-    And I wait 2 seconds
+    And I wait for AJAX to finish
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -77,6 +78,7 @@ Feature: SPC Checkout for PUDO testing for Guest User
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -91,8 +93,8 @@ Feature: SPC Checkout for PUDO testing for Guest User
     And I should see an ".pickup-point-title" element
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
-    And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
@@ -111,6 +113,7 @@ Feature: SPC Checkout for PUDO testing for Guest User
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -125,8 +128,8 @@ Feature: SPC Checkout for PUDO testing for Guest User
     And I should see an ".pickup-point-title" element
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
-    And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"

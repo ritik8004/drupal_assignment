@@ -17,6 +17,8 @@ fields:
     label: 'Fragrance'
     cardinality: -1
     configurable: 1
+    index: 1
+    facet: 1
 
   actual_color_label_code:
     label: 'Color'

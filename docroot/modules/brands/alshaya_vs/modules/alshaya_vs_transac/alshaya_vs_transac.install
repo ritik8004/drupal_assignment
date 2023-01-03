@@ -12,6 +12,48 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Add 'fragrance' facets.
+ */
+function alshaya_vs_transac_update_9401() {
+  // Add string translations.
+  $strings = [
+    'Fragrance' => [
+      'en' => 'Fragrance',
+      'ar' => 'العطر',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
+  // Adding 'index', 'facet' key to the '*.sku_base_fields' for facets.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_vs_transac.sku_base_fields'],
+    'alshaya_vs_transac',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->updateFieldMetaInfo('fragrance', [
+    'index' => 1,
+    'facet' => 1,
+  ]);
+
+  // Update the config to add 'fragrance' facet.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+
+  // Add 'fragrance' facet in Drupal and Algolia.
+  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->resetBaseFields();
+
+  // Queue all products for re-indexing.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.3.0] Reindex to update the attributes.
  */
 function alshaya_vs_transac_update_8017() {
@@ -325,6 +367,11 @@ function alshaya_vs_transac_install() {
       'en' => "Victoria's Secret",
       'ar' => 'فيكتوريا سيكريت',
     ],
+    'Fragrance' => [
+      'en' => 'Fragrance',
+      'ar' => 'العطر',
+    ],
+
   ];
   alshaya_i18n_save_translations($strings);
 

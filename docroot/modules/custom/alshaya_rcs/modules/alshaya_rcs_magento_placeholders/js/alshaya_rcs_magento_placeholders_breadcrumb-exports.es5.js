@@ -72,6 +72,32 @@ exports.render = function render(
 }
 
 /**
+ * Utility function to get the normalized breadcrumb items.
+ *
+ * @param {array} normalized
+ *   An array containing the normalized breadcrumb items.
+ * @param {array} breadcrumbs
+ *   The breadcrumb array.
+ * @param {object} keys
+ *   An object containing the breadcrumb keys.
+ *
+ * @returns {array}
+ *   The updated normalized breadcrumb array.
+ */
+exports.getNormalizedBreadcrumbs = function getNormalizedBreadcrumbs(normalized, breadcrumbs, keys) {
+  breadcrumbs.forEach(function (item) {
+    normalized.push({
+      url: item.category_url_path,
+      text: item[keys.breadcrumbTermNameKey],
+      data_url: item.category_url_path,
+      id: item.category_id,
+    });
+  });
+
+  return normalized;
+};
+
+/**
  *
  * @param {object} breadcrumb
  * @param {string} innerHtmlObj

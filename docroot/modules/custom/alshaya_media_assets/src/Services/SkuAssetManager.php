@@ -711,7 +711,7 @@ class SkuAssetManager {
    * @return bool
    *   TRUE if supported.
    */
-  private function validateFileExtension(string $sku, string $url) {
+  protected function validateFileExtension(string $sku, string $url) {
     // Using multiple function to get extension to avoid cases with query
     // string and hash in URLs.
     $extension = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));

@@ -72,7 +72,7 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
    */
   public static function getSubscribedEvents(): array {
     return [
-      RcsPhPathProcessorEvent::EVENT_NAME => [
+      RcsPhPathProcessorEvent::ALTER => [
         ['onPathProcess', 10],
       ],
     ];
@@ -90,7 +90,9 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
       return;
     }
 
-    $term = $this->productCategoryTree->getCategoryTermFromRoute();
+    $part = explode('/', $data['path']);
+    $term = $this->productCategoryTree->getTermByPath($part[1]);
+
     if ($term instanceof TermInterface) {
       $path_parts = explode('/', $data['path']);
 
@@ -109,7 +111,8 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
     // Return in case the current page is not a
     // department page.
     if ($department_node) {
-      $event->addData('is_department_page', TRUE);
+      $event->addData('isDepartmentPage', TRUE);
+      $event->stopPropagation();
     }
   }
 

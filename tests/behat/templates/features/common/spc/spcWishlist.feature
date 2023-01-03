@@ -58,11 +58,8 @@ Feature: SPC Checkout Wishlist feature for Guest user
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait for AJAX to finish
-    And I click on ".checkout-link.submit" element
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for element ".checkout-link.submit"
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{anon_email}"

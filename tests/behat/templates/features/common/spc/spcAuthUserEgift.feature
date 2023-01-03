@@ -36,6 +36,7 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I click on ".action-buttons .egift-purchase-add-to-cart-button" element
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -156,6 +157,7 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I click on ".action-buttons .egift-purchase-add-to-cart-button" element
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
@@ -226,7 +228,6 @@ Feature: SPC Checkout Egift feature for Authenticated user
   Scenario: As an authenticated user, I should be able to use Top up card feature on Egift page for second language
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
     When I click on ".c-content__container a" element
     And I wait for element "#egift-topup-wrapper"
     Then I should be on "en/egift-card/topup"

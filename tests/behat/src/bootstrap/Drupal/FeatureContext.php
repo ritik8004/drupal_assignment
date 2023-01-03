@@ -430,8 +430,12 @@ class FeatureContext extends CustomMinkContext
 
   /**
    * @Given /^I wait (\d+) seconds$/
+   * @Then /^I wait for the cart notification popup$/
+   * @Then /^I wait for the product quantity loader$/
+   * @Then /^I wait for the promo code applied$/
+   *
    */
-  public function iWaitSeconds($seconds)
+  public function iWaitSeconds($seconds = 3)
   {
     sleep($seconds);
   }
@@ -2629,7 +2633,6 @@ JS;
     if ($empty_delivery_info !== null) {
       $empty_delivery_info->click();
       $this->iWaitForAjaxToFinish();
-      $this->iWaitForElement('.spc-address-form-sidebar');
       $this->iWaitSeconds('20');
       if ($page->find('css', 'header.spc-change-address') !== null) {
         if ($page->find('css', 'div.spc-address-tile:first-child button')) {

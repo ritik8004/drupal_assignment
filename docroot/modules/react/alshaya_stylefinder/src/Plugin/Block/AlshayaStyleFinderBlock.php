@@ -215,7 +215,8 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
     $answer_details = [];
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     $answer_node = $this->entityTypeManager->getStorage('node')->load($a_nid);
-    if ($answer_node->hasTranslation($current_langcode)) {
+    if ($answer_node instanceof NodeInterface
+      && $answer_node->hasTranslation($current_langcode)) {
       // Get the Translated node of the current language code.
       $answer_node = $this->entityRepository->getTranslationFromContext($answer_node, $current_langcode);
       // To get the Product Image URL.
