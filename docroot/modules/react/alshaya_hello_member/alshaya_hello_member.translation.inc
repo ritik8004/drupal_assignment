@@ -41,9 +41,6 @@ function _alshaya_hello_member_react_translations() {
       'Gender' => [
         'ar' => 'الجنس',
       ],
-      '- Select Gender -' => [
-        'ar' => 'اختر نوع الجنس',
-      ],
       'Male' => [
         'ar' => 'ذكر',
       ],
@@ -139,9 +136,6 @@ function _alshaya_hello_member_react_translations() {
       'Add More Get More' => [
         'ar' => 'أضف المزيد واحصل على المزيد',
         'context' => 'hello_member',
-      ],
-      'Select Gender' => [
-        'ar' => 'حدد الجنس',
       ],
       'H&M Membership' => [
         'ar' => 'عضوية اتش اند ام',
@@ -493,6 +487,16 @@ function _alshaya_hello_member_react_translations() {
       ],
       'Continue with H&M Points' => [
         'ar' => 'المتابعة مع نقاط اتش آند ام',
+        'context' => 'hello_member',
+      ],
+    ],
+    'v4' => [
+      '- Select Gender -' => [
+        'ar' => 'اختر نوع الجنس',
+        'context' => 'hello_member',
+      ],
+      'Select Gender' => [
+        'ar' => 'حدد الجنس',
         'context' => 'hello_member',
       ],
     ],
