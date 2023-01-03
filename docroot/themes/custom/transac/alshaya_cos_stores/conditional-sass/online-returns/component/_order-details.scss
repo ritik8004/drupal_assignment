@@ -2,19 +2,14 @@
   .user__order--detail {
     .cancel-return-button-wrapper {
       button {
-        padding-top: 0;
-        padding-bottom: 0;
+        padding: 0 rem(13);
+        padding-#{$left}: 0;
       }
 
       .cancel-button-text {
         &::before {
           font-size: rem(40);
-          width: rem(16);
-          height: rem(16);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-#{$right}: rem(12);
+          margin-#{$right}: 0;
         }
       }
     }
