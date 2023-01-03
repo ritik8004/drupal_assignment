@@ -581,6 +581,11 @@ export const getEgiftCartTotal = (cart) => {
  *   The cart object.
  */
 export const removeRedemptionOnCartUpdate = async (cart) => {
+  // Cart response validation is handled in seperate function.
+  // If cart.totals present then proceed, else return.
+  if (!hasValue(cart.totals)) {
+    return;
+  }
   // Remove Redemption if any applied in the cart as we have updated the cart
   // items.
   if (isEgiftCardEnabled() && isEgiftRedemptionDone(cart, cart.totals.egiftRedemptionType)) {

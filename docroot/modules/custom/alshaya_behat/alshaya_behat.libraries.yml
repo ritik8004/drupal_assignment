@@ -1,0 +1,5 @@
+main:
+  js:
+    js/alshaya_behat_user_event.bundle.js: {}
+  dependencies:
+    - core/drupal

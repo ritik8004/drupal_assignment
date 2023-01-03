@@ -12,7 +12,7 @@ class RcsPhPathProcessorEvent extends Event {
   /**
    * Rcs path process alter event.
    */
-  public const EVENT_NAME = 'rcs_ph_path_processor_event';
+  public const ALTER = 'rcs_ph_path_processor_event';
 
   /**
    * Data for the event.

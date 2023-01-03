@@ -121,6 +121,12 @@ class AuraFormRedeemPoints extends React.Component {
       // When full payment done by Aura refreshCartOnPaymentMethod event triggers checkout step 3.
       // When partial payment is done by Aura, trigger checkout step 3 from here.
       if (cartTotals.balancePayable > 0) {
+        // Update aura partial payment information in static storage.
+        Drupal.alshayaSpc.staticStorage.get('cart_raw').totals.total_segments.push({
+          code: 'aura_payment',
+          title: 'Paid By Aura',
+          value: cartTotals.paidWithAura,
+        });
         dispatchCheckoutStep3GTM = true;
       }
       // Trigger aura use points datalayer event.
@@ -131,6 +137,10 @@ class AuraFormRedeemPoints extends React.Component {
       // When full payment done by Aura refreshCartOnPaymentMethod event triggers checkout step 3.
       // When partial payment is done by Aura, trigger checkout step 3 from here.
       if (cartTotals.balancePayable > 0) {
+        // Update aura partial payment information in static storage.
+        const rawCart = Drupal.alshayaSpc.staticStorage.get('cart_raw');
+        rawCart.totals.total_segments = rawCart.totals.total_segments.filter((item) => item.code !== 'aura_payment');
+        Drupal.alshayaSpc.staticStorage.set('cart_raw', rawCart);
         dispatchCheckoutStep3GTM = true;
       }
 

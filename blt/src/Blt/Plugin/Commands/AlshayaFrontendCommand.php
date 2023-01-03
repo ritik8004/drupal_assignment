@@ -525,17 +525,18 @@ class AlshayaFrontendCommand extends BltTasks {
           && (new Finder())->name('*.svg')->in($subDir->getRealpath())->hasResults()) {
           // Preparing the SVG files array which are present
           // in the latest commit.
-          $svgFiles = !empty(getenv('CHANGED_SVG_FILES')) ? explode(PHP_EOL, getenv('CHANGED_SVG_FILES')) : [];
+          $svgFiles = !empty(getenv('CHANGED_SVG_FILES')) ? explode(" ", getenv('CHANGED_SVG_FILES')) : [];
           // Finding and looping through all the SVG files present in code-base.
           foreach (Finder::create()->followLinks()->files()->in($subDir->getRealpath())->name('/\.(svg)$/') as $file) {
             $minify = TRUE;
             // Checks to ensure to run the minify command only
             // to the files which are modified and failed during copy.
-            if (empty($svgFiles) || !in_array($file->getRealPath(), $svgFiles)) {
+            $filePath = substr($file, strpos($file, 'docroot'));
+            if (empty($svgFiles) || !in_array($filePath, $svgFiles)) {
               // Copy the unchanged files from cloud where
               // those files are already in minify state.
               try {
-                $svgCloudFilePath = '/tmp/blt-deploy/' . substr($file, strpos($file, 'docroot'));
+                $svgCloudFilePath = '/tmp/blt-deploy/' . $filePath;
                 // Copy step.
                 $this->say('Copying ' . $file . ' from ' . $svgCloudFilePath . ' to ' . $file);
                 $result = $this->taskFilesystemStack()->copy($svgCloudFilePath, $file, TRUE)->run();

@@ -301,11 +301,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       // Fetching GTM label in english.
       if ($langcode != $defaultLangcode) {
         $termEntity = $this->termStorage->load($term->tid);
-        $translatedEntity = $this->entityRepository->getTranslationFromContext($termEntity, $defaultLangcode);
-        $gtmLabel = $translatedEntity->getName();
+        if ($termEntity instanceof TermInterface) {
+          $translatedEntity = $this->entityRepository->getTranslationFromContext($termEntity, $defaultLangcode);
+          $gtmLabel = $translatedEntity->getName();
 
-        // Destroy the variable once the required data is fetched.
-        $translatedEntity = NULL;
+          // Destroy the variable once the required data is fetched.
+          $translatedEntity = NULL;
+        }
       }
       $lhn = match ($cache_name) {
         'product_list' => is_null($term->field_show_in_product_list_lhn_value) ? (int) $term->field_show_in_lhn_value : (int) $term->field_show_in_product_list_lhn_value,

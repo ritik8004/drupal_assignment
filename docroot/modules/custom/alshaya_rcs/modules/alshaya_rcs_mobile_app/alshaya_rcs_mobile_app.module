@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_advanced_page_resource_response_alter().
+ */
+function alshaya_rcs_mobile_app_advanced_page_resource_response_alter(array &$resource_data) {
+  // Traverse through all the promo blocks and add the `url_path` new attribute
+  // for product_carousel_category.
+  foreach ($resource_data['blocks'] ?? [] as $key => $item) {
+    if ($item['type'] === 'product_carousel_category'
+      && array_key_exists('field_category_carousel_slug', $item)) {
+      $resource_data['blocks'][$key]['url_path'] = $item['field_category_carousel_slug'][0]['value'];
+    }
+  }
+}

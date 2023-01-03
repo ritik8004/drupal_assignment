@@ -2,47 +2,19 @@
 
 namespace Drupal\rcs_placeholders\EventSubscriber;
 
-use Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Provides a path processor subscriber for rcs promotions.
  */
-class RcsPhPromotionPathProcessorEventSubscriber implements EventSubscriberInterface {
-
-  /**
-   * Enrichment helper.
-   *
-   * @var \Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper
-   */
-  protected $enrichmentHelper;
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * Constructs an RcsPhPromotionPathProcessorEventSubscriber object.
-   */
-  public function __construct(
-    RcsPhEnrichmentHelper $enrichment_helper,
-    ConfigFactoryInterface $config_factory
-  ) {
-    $this->enrichmentHelper = $enrichment_helper;
-    $this->configFactory = $config_factory;
-  }
+class RcsPhPromotionPathProcessorEventSubscriber extends RcsPhPathProcessorEventSubscriber {
 
   /**
    * {@inheritDoc}
    */
   public static function getSubscribedEvents(): array {
     return [
-      RcsPhPathProcessorEvent::EVENT_NAME => [
+      RcsPhPathProcessorEvent::ALTER => [
         ['onPathProcess'],
       ],
     ];

@@ -25,6 +25,7 @@ jobs:
       themes: ${{ steps.changes.outputs.themes }}
       react: ${{ steps.changes.outputs.react }}
       js: ${{ steps.changes.outputs.js }}
+      svg: ${{ steps.changes.outputs.svg }}
       deployable_changes: ${{ steps.deployable_changes.outputs.deployable_changes }}
 
     steps:
@@ -54,7 +55,6 @@ jobs:
           else
             # Get changed files.
             NAMES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
-            echo "Changed files ${NAMES}"
             # Check if the file names match the list below.
             if [[ "${NAMES}" =~ "composer." ||
                   "${NAMES}" =~ "docroot/" ||

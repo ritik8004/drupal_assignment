@@ -28,6 +28,23 @@ function alshaya_rcs_main_menu_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_rcs_main_menu_form_taxonomy_term_rcs_category_form_alter(&$form, FormStateInterface $form_state) {
+  $form['field_target_link']['#states'] = [
+    'visible' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+    ],
+    'disabled' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => FALSE],
+    ],
+  ];
+
+  // Adding a validator to check target link value.
+  $form['#validate'][] = '_alshaya_acm_product_category_validate_target_link';
+}
+
+/**
  * Implements hook_form_alter().
  */
 function alshaya_rcs_main_menu_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -175,11 +192,11 @@ function alshaya_rcs_main_menu_node_delete(EntityInterface $node) {
  *   Product node object.
  */
 function _alshaya_rcs_main_menu_invalidate_enriched_term_cache(EntityInterface $node) {
-  $path_processor = \Drupal::service('rcs_placeholders.path_processor');
+  $enrichment_helper = \Drupal::service('rcs_placeholders.enrichment_helper');
   $category_slug = $node->get('field_category_slug')->getString();
   // Proceed only if category slug is present.
   if ($category_slug) {
-    $term = $path_processor->getEnrichedEntity('category', $category_slug);
+    $term = $enrichment_helper->getEnrichedEntity('category', $category_slug);
     if ($term instanceof TermInterface) {
       Cache::invalidateTags($term->getCacheTags());
     }

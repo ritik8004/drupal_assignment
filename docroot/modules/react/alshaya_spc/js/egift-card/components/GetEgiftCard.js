@@ -56,7 +56,7 @@ const handleSubmit = async (e, props) => {
     if (result.error) {
       document.getElementById('egift_card_number_error').innerHTML = result.message;
       // Push error message to GTM.
-      Drupal.logJavascriptError('egiftcard-number-verification', result.message, GTM_CONSTANTS.CHECKOUT_ERRORS);
+      Drupal.logJavascriptError('egiftcard-number-verification', result.gtmMessage, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
   }
 };

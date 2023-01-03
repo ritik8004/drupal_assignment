@@ -60,7 +60,7 @@ function _alshaya_quiz_get_translated_terms(array $attribute) {
  */
 function alshaya_quiz_allowed_choice_1_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
-  return _alshaya_quiz_get_translated_terms($attribute['choice_1_attribute']);
+  return _alshaya_quiz_get_translated_terms([$attribute['choice_1_attribute']]);
 }
 
 /**
@@ -78,7 +78,7 @@ function alshaya_quiz_allowed_choice_1_values(FieldStorageConfig $definition, Co
  */
 function alshaya_quiz_allowed_choice_2_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
-  return _alshaya_quiz_get_translated_terms($attribute['choice_2_attribute']);
+  return _alshaya_quiz_get_translated_terms([$attribute['choice_2_attribute']]);
 }
 
 /**
@@ -96,5 +96,5 @@ function alshaya_quiz_allowed_choice_2_values(FieldStorageConfig $definition, Co
  */
 function alshaya_quiz_allowed_choice_3_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
-  return _alshaya_quiz_get_translated_terms($attribute['choice_3_attribute']);
+  return _alshaya_quiz_get_translated_terms([$attribute['choice_3_attribute']]);
 }

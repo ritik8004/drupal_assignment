@@ -16,6 +16,10 @@ function alshaya_xb_page_attachments(array &$attachments) {
   if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
     $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_cross_border';
   }
+
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.user.canonical') {
+    $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_xb_merge_cart_error_handler';
+  }
 }
 
 /**
@@ -227,6 +231,11 @@ function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$orde
   // Set delivery method for XB order.
   if (!empty($order['extension']['globale']['shipping_method'])) {
     $build['#order_details']['delivery_method'] = $order['extension']['globale']['shipping_method'];
+  }
+
+  // Set billing method for XB order.
+  if (!empty($order['extension']['globale']['billing_method'])) {
+    $build['#order_details']['payment_method'] = $order['extension']['globale']['billing_method'];
   }
 
   if (empty($build["#cancelled_products"])) {
