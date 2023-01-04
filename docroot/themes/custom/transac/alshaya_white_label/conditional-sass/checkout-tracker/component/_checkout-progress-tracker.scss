@@ -167,11 +167,11 @@
             }
           }
 
-          &::after {
-            content: "";
-            background: url("#{$base_theme_img_directory_path}/icons/done-state.svg?v=2") no-repeat;
+          @include icon(check, after) {
+            font-size: rem(32);
+            font-weight: 600;
+            color: $cko-steps-active-txt;
             background-color: $cko-steps-active-bg;
-            background-position: 60%;
           }
         }
 
