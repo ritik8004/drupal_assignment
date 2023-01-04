@@ -1,6 +1,8 @@
 mapping:
   address_line1: ''
   address_line_multiple: street
+  area_parent: city
+  postal_code: postcode
 sort_order:
   address_line_multiple: 1
   country_code: 10

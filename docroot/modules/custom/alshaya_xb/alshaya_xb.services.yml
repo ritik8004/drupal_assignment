@@ -17,3 +17,21 @@ services:
     arguments:
       - '@config.factory'
       - '@request_stack'
+
+  alshaya_xb.alshaya_api:
+    class: Drupal\alshaya_xb\Service\AlshayaApiWrapperXb
+    decorates: alshaya_api.api
+    decoration_priority: 9
+    arguments:
+      - '@alshaya_xb.alshaya_api.inner'
+      - '@request_stack'
+      - '@language_manager'
+      - '@datetime.time'
+      - '@cache.data'
+      - '@logger.factory'
+      - '@state'
+      - '@file_system'
+      - '@alshaya_api.mdc_helper'
+      - '@module_handler'
+      - '@current_user'
+      - '@config.factory'
