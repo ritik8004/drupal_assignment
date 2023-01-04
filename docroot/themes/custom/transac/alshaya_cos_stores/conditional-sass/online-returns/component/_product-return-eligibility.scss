@@ -1,0 +1,15 @@
+body.nodetype--acq_product {
+  div[id*="online-returns-pdp"],
+  .online-returns-pdp {
+    span,
+    span::before {
+      font-weight: bold;
+      color: $online-return-dark-text;
+    }
+  }
+
+  #online-returns-pdp-desktop {
+    padding-top: rem(4);
+    margin-bottom: rem(28);
+  }
+}
