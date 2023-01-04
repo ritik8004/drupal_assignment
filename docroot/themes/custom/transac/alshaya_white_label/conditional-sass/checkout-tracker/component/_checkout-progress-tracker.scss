@@ -168,10 +168,13 @@
           }
 
           @include icon(check, after) {
-            font-size: rem(32);
-            font-weight: 600;
+            font-size: rem(26);
             color: $cko-steps-active-txt;
             background-color: $cko-steps-active-bg;
+
+            @include breakpoint($tablet) {
+              font-size: rem(32);
+            }
           }
         }
 
