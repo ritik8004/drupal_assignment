@@ -40,6 +40,10 @@ function alshaya_rcs_mobile_app_advanced_page_resource_response_alter(array &$re
               break;
           }
         }
+        // Remove the duplicate attributes having different name.
+        if (!in_array($attr_key, ['type', 'parent_type'])) {
+          unset($resource_data['blocks'][$key][$attr_key]);
+        }
       }
       // Add an empty array for items as we don't have list of SKUs in Drupal
       // now.
