@@ -803,19 +803,6 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
  * Implements hook_library_info_alter().
  */
 function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
-  /** @var \Drupal\Core\Extension\ExtensionPathResolver $extension_path_resolver */
-  $extension_path_resolver = \Drupal::service('extension.path.resolver');
-  $this_module_path = NULL;
-  try {
-    $this_module_path = $extension_path_resolver->getPath('module', 'alshaya_rcs_product');
-  }
-  catch (\Exception $e) {
-    \Drupal::logger('alshaya_rcs_product')->notice('Error while trying to fetch path for alshaya_rcs_product module. Error: @message', [
-      '@message' => $e->getMessage(),
-    ]);
-    return;
-  }
-  // @todo Replace all drupal_get_path occurences with $extension_path_resolver.
   $self_module_path = drupal_get_path('module', 'alshaya_rcs_product');
 
   if ($extension === 'alshaya_acm_product') {
@@ -940,7 +927,7 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       // size guide utility provided by this module.
       $options = $libraries['pdp_size_guide_utility']['js']['assets/js/size_guide_utility.js'];
       unset($libraries['pdp_size_guide_utility']['js']['assets/js/size_guide_utility.js']);
-      $libraries['pdp_size_guide_utility']['js']["/$this_module_path/js/alshaya_rcs_product.size_guide_utility.js"] = $options;
+      $libraries['pdp_size_guide_utility']['js']["/$self_module_path/js/alshaya_rcs_product.size_guide_utility.js"] = $options;
     }
   }
 }
