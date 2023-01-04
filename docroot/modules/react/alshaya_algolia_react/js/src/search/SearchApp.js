@@ -43,6 +43,11 @@ class SearchApp extends React.PureComponent {
     if (query !== '') {
       redirectToOtherLang(query);
     }
+    // For search page, this value is true on page load. So we make the API
+    // call to fetch SDD/ED status and store it globally.
+    if (window.algoliaSearchActivityStarted) {
+      this.setSddEdStatus();
+    }
   }
 
   setQueryValue = (queryValue, inputTag = null) => {
@@ -62,15 +67,22 @@ class SearchApp extends React.PureComponent {
   };
 
   onChange = (newValue, inputTag) => {
-    this.setQueryValue(newValue, inputTag);
-
     const { sddEdStatus } = this.state;
     if (sddEdStatus === null) {
-      // Listing pages product teaser have only express delivery label.
-      // This label on teaser is switched on and off by configuration on drupal at
-      // global level. However here we call a Magento API to control the display
-      // of the label as per magento configuration. We set global variable to avoid
-      // this API call again and used on filters and instant search.
+      this.setSddEdStatus();
+    }
+
+    this.setQueryValue(newValue, inputTag);
+  };
+
+  setSddEdStatus = () => {
+    const { sddEdStatus } = this.state;
+    // Listing pages product teaser have only express delivery label.
+    // This label on teaser is switched on and off by configuration on drupal at
+    // global level. However here we call a Magento API to control the display
+    // of the label as per magento configuration. We set global variable to avoid
+    // this API call again and used on filters and instant search.
+    if (sddEdStatus === null) {
       getExpressDeliveryStatus().then((status) => {
         window.sddEdStatus = status;
         this.setState({ sddEdStatus: status });
