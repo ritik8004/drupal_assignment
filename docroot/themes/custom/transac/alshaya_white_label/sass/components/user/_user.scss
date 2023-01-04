@@ -766,7 +766,7 @@
 
           @include breakpoint($only-tablet) {
             width: 28%;
-            text-align: left;
+            text-align: $left;
           }
 
           @include breakpoint($desktop) {
@@ -794,6 +794,10 @@
         .first {
           @include breakpoint($desktop) {
             width: 7.8125rem;
+
+            html[lang="ar"] & {
+              width: rem(160);
+            }
           }
         }
 
