@@ -48,7 +48,7 @@
       &.has-aura-points {
         @include breakpoint($desktop) {
           html[lang="ar"] & {
-            padding-right: rem(8);
+            padding-#{$left}: 0;
           }
         }
       }
