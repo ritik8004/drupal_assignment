@@ -49,6 +49,8 @@
     }
 
     & > a {
+      text-transform: unset;
+
       @include breakpoint($only-mobile) {
         margin-top: 0;
       }
