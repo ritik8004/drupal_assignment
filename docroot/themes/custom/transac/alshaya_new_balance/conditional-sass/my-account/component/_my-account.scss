@@ -25,4 +25,14 @@
       }
     }
   }
+
+  main {
+    .block-system-main-block {
+      .form-actions {
+        .button {
+          text-transform: unset;
+        }
+      }
+    }
+  }
 }
