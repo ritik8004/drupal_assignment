@@ -23,19 +23,20 @@ function alshaya_rcs_mobile_app_advanced_page_resource_response_alter(array &$re
       // `product_carousel_category`.
       foreach ($item as $attr_key => $attr_value) {
         // Proceed only if attr_value is having some value.
-        if ($attr_value) {
+        $mapped_key = $mapping[$attr_key] ?? NULL;
+        if ($attr_value && $mapped_key) {
           switch ($attr_key) {
-            case 'field_category_carousel_limit':
             case 'field_category_carousel_slug':
             case 'field_category_carousel_title':
-              $mapped_key = $mapping[$attr_key] ?? NULL;
-              if ($mapped_key) {
-                $resource_data['blocks'][$key][$mapped_key] = $attr_value[0]['value'];
-              }
+              $resource_data['blocks'][$key][$mapped_key] = $attr_value[0]['value'];
+              break;
+
+            case 'field_category_carousel_limit':
+              $resource_data['blocks'][$key][$mapped_key] = intval($attr_value[0]['value']);
               break;
 
             case 'field_use_as_accordion':
-              $resource_data['blocks'][$key]['accordion'] = $attr_value[0]['value'] ? TRUE : FALSE;
+              $resource_data['blocks'][$key][$mapped_key] = $attr_value[0]['value'] ? TRUE : FALSE;
               break;
           }
         }
