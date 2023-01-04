@@ -22,24 +22,3 @@ function alshaya_pdp_react_node_view(array &$build, EntityInterface $entity, Ent
     $build['#attached']['drupalSettings']['showRelatedProductsFromDrupal'] = $alshaya_pdp_react_config->get('show_related_products_from_drupal');
   }
 }
-
-/**
- * Implements hook_library_info_alter().
- */
-function alshaya_pdp_react_library_info_alter(&$libraries, $extension) {
-  if ($extension === 'alshaya_pdp_react' && isset($libraries['pdp_magazine_v2_layout'])) {
-    $route_match = \Drupal::routeMatch();
-    if ($route_match->getRouteName() == 'entity.node.canonical') {
-      /** @var \Drupal\node\Entity\Node $node */
-      $node = $route_match->getParameter('node');
-      if (!$node) {
-        return;
-      }
-      // Including size utility only if v2 product.
-      // Do not need this utility in case of v3.
-      if ($node->getType() === 'acq_product') {
-        $libraries['pdp_magazine_v2_layout']['dependencies'][] = 'alshaya_pdp_react/pdp_size_guide_utility';
-      }
-    }
-  }
-}
