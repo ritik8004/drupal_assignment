@@ -67,7 +67,12 @@
       .contact-info-label {
         font-family: $alshaya-bold;
         color: $spc-delivery-customer-info-highlight;
-        margin-bottom: 0.3125rem;
+        margin-bottom: rem(5);
+      }
+
+      .delivery-email,
+      .delivery-mobile {
+        margin-bottom: rem(5);
       }
 
       .store-name {
@@ -91,6 +96,10 @@
         line-height: 1.5;
       }
     }
+  }
+
+  .spc-delivery-customer-info {
+    line-height: rem(18);
   }
 
   #delivery-information-error {
