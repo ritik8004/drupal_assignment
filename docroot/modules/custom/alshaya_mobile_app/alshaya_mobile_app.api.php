@@ -49,7 +49,7 @@ function hook_categories_all_response_alter(array &$data, TermInterface $term) {
 }
 
 /**
- * Alter the output of "promo_block" (/rest/v1/page/advanced) resource.
+ * Alter the output of /rest/v1/page/advanced resource.
  *
  * @param array $response_data
  *   The output of the API.
