@@ -14,7 +14,7 @@
         margin-#{$left}: 3rem;
 
         html[lang="ar"] & {
-          margin-#{$left}: rem(18);
+          margin-right: rem(18);
         }
       }
 
@@ -30,7 +30,7 @@
 
           html[lang="ar"] & {
             min-width: rem(120);
-            margin-#{$right}: rem(4);
+            margin-left: rem(4);
           }
         }
       }
@@ -48,7 +48,7 @@
       &.has-aura-points {
         @include breakpoint($desktop) {
           html[lang="ar"] & {
-            padding-#{$left}: 0;
+            padding-right: 0;
           }
         }
       }

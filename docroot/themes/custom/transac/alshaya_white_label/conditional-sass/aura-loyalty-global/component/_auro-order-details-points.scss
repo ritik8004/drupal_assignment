@@ -45,7 +45,7 @@
           padding-#{$left}: 3.75rem;
 
           html[lang="ar"] & {
-            padding-#{$left}: rem(16);
+            padding-right: rem(16);
           }
         }
 
@@ -65,7 +65,7 @@
             margin-#{$left}: 1.25rem;
 
             html[lang="ar"] & {
-              margin-#{$left}: rem(18);
+              margin-right: rem(18);
             }
           }
         }
@@ -91,7 +91,7 @@
 
             html[lang="ar"] & {
               min-width: rem(120);
-              margin-#{$right}: rem(4);
+              margin-left: rem(4);
             }
           }
         }
