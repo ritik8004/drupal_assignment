@@ -14,6 +14,9 @@ use Drupal\Core\Cache\Cache;
  */
 class AlshayaRcsProductAttributesHelper {
 
+  /**
+   * Constant for product attributes cahe id.
+   */
   public const RCS_PRODUCT_ATTRIBUTES_KEY = 'rcs_product_attributes';
 
   /**
