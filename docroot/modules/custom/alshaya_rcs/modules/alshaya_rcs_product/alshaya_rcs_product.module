@@ -924,9 +924,17 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       $libraries['sharethis']['js']["/$self_module_path/js/alshaya_rcs_sharethis.js"] = $options;
     }
   }
-  elseif ($extension === 'alshaya_pdp_react'
-    && isset($libraries['pdp_magazine_v2_layout'])) {
-    $libraries['pdp_magazine_v2_layout']['js']["/$self_module_path/js/alshaya_rcs_pdp_magazine_v2.js"] = [];
+  elseif ($extension === 'alshaya_pdp_react') {
+    if (isset($libraries['pdp_magazine_v2_layout'])) {
+      $libraries['pdp_magazine_v2_layout']['js']["/$self_module_path/js/alshaya_rcs_pdp_magazine_v2.js"] = [];
+    }
+    if (isset($libraries['pdp_size_guide_utility'])) {
+      // Alter the pdp size guide utility to replace the base JS file with the
+      // size guide utility provided by this module.
+      $options = $libraries['pdp_size_guide_utility']['js']['assets/js/size_guide_utility.js'];
+      unset($libraries['pdp_size_guide_utility']['js']['assets/js/size_guide_utility.js']);
+      $libraries['pdp_size_guide_utility']['js']["/$self_module_path/js/alshaya_rcs_product.size_guide_utility.js"] = $options;
+    }
   }
 }
 

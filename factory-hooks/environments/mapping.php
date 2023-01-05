@@ -98,7 +98,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   $mapping = [
     'hmkw' => [
       'dev' => [
-        'magento' => 'hm_qa',
+        'magento' => 'hm_test',
         'conductor' => 'hmkw_dev',
       ],
       'test' => [
@@ -116,7 +116,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'hmsa_qa2',
       ],
       'dev' => [
-        'magento' => 'hm_qa',
+        'magento' => 'hm_test',
         'conductor' => 'hmsa_dev',
       ],
       'test' => [
