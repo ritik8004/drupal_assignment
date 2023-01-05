@@ -54,7 +54,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
         isVoucherRemoved: true,
       });
     } else if (document.getElementById('offer-err-msg') !== null
-      && typeof data.totals.applied_hm_offer_code === 'undefined') {
+      && !hasValue(data.totals.hmOfferCode)) {
       // Handle errors from offer section.
       const { isVoucherRemoved } = this.state;
       const offers = document.getElementsByName('radios');

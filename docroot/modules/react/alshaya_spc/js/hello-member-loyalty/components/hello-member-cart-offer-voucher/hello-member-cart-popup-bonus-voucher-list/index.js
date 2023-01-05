@@ -99,7 +99,6 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
                 type="checkbox"
                 id={`voucher${index}`}
                 value={voucher.code}
-                voucherDescription={voucher.description}
                 name="vouchersBonus[]"
                 defaultChecked={typeof totals.hmAppliedVoucherCodes !== 'undefined' ? totals.hmAppliedVoucherCodes.split(',').includes(voucher.code) : false}
                 onChange={handleChange}
