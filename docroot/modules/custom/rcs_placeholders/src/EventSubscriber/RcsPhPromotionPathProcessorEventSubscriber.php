@@ -42,7 +42,7 @@ class RcsPhPromotionPathProcessorEventSubscriber extends RcsPhPathProcessorEvent
     }
 
     $promotion = $config->get('promotion.enrichment')
-      ? $this->enrichmentHelper->getEnrichedEntity('promotion', $path)
+      ? $this->enrichmentHelper->getEnrichedEntity('promotion', $full_path)
       : NULL;
     $entityData = NULL;
     $processed_paths = '/node/' . $config->get('promotion.placeholder_nid');
