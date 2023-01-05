@@ -22,15 +22,6 @@ services:
     public: false
     class: Drupal\alshaya_xb\Service\AlshayaApiWrapperXbDecorator
     decorates: alshaya_api.api
-    arguments:
-      - '@alshaya_xb.domain_config_overrides'
-      - '@language_manager'
-      - '@datetime.time'
-      - '@cache.data'
-      - '@logger.factory'
-      - '@state'
-      - '@file_system'
-      - '@alshaya_api.mdc_helper'
-      - '@module_handler'
-      - '@current_user'
-      - '@config.factory'
+    parent: 'alshaya_api.api'
+    calls:
+      - [ setDomainConfigOverrides, [ '@alshaya_xb.domain_config_overrides' ] ]
