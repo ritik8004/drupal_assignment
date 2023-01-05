@@ -250,7 +250,7 @@
         .configurable-swatch {
           .select2Option {
             .list-title {
-              text-align: #{$left};
+              text-align: $left;
             }
 
             .select-buttons {
