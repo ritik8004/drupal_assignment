@@ -249,6 +249,10 @@
       .form-wrapper {
         .configurable-swatch {
           .select2Option {
+            .list-title {
+              text-align: $left;
+            }
+
             .select-buttons {
               justify-content: flex-start;
 
