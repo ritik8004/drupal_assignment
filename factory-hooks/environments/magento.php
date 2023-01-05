@@ -923,10 +923,10 @@ $magentos = [
       'store_id' => ['en' => 30, 'ar' => 27],
     ],
     'bh' => [
-      'store_id' => ['en' => 35, 'ar' => 32],
+      'store_id' => ['en' => 36, 'ar' => 33],
     ],
     'qa' => [
-      'store_id' => ['en' => 41, 'ar' => 38],
+      'store_id' => ['en' => 42, 'ar' => 39],
     ],
     'magento_secrets' => [
       'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
