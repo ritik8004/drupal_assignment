@@ -19,12 +19,12 @@ services:
       - '@request_stack'
 
   alshaya_xb.alshaya_api:
-    class: Drupal\alshaya_xb\Service\AlshayaApiWrapperXb
+    public: false
+    class: Drupal\alshaya_xb\Service\AlshayaApiWrapperXbDecorator
     decorates: alshaya_api.api
     decoration_priority: 9
     arguments:
-      - '@alshaya_xb.alshaya_api.inner'
-      - '@request_stack'
+      - '@alshaya_xb.domain_config_overrides'
       - '@language_manager'
       - '@datetime.time'
       - '@cache.data'

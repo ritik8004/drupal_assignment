@@ -16,30 +16,22 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
 
 /**
- * Class AlshayaApiWrapperXb decorates AlshayaApiWrapper.
+ * Class AlshayaApiWrapperXbDecorator decorates AlshayaApiWrapper.
  */
-class AlshayaApiWrapperXb extends AlshayaApiWrapper {
-  /**
-   * Inner service AlshayaApiWrapper.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuImagesManager
-   */
-  protected $innerService;
+class AlshayaApiWrapperXbDecorator extends AlshayaApiWrapper {
 
   /**
-   * Request Stack.
+   * Domain config overrides.
    *
-   * @var \Drupal\Core\Http\RequestStack
+   * @var \Drupal\alshaya_xb\Service\DomainConfigOverrides
    */
-  protected $requestStack;
+  protected $configOverrides;
 
   /**
-   * Constructs a new AlshayaApiWrapperXb object.
+   * Constructs a new AlshayaApiWrapperXbDecorator object.
    *
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
-   *   Alshaya API wrapper.
-   * @param \Drupal\Core\Http\RequestStack $request_stack
-   *   Request stack.
+   * @param \Drupal\alshaya_xb\Service\DomainConfigOverrides $config_overrides
+   *   Domain config overrides.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
@@ -62,8 +54,7 @@ class AlshayaApiWrapperXb extends AlshayaApiWrapper {
    *   Config factory.
    */
   public function __construct(
-    AlshayaApiWrapper $alshaya_api,
-    RequestStack $request_stack,
+    DomainConfigOverrides $config_overrides,
     LanguageManagerInterface $language_manager,
     TimeInterface $date_time,
     CacheBackendInterface $cache,
@@ -75,8 +66,7 @@ class AlshayaApiWrapperXb extends AlshayaApiWrapper {
     AccountInterface $current_user,
     ConfigFactoryInterface $config_factory
   ) {
-    $this->innerService = $alshaya_api;
-    $this->requestStack = $request_stack;
+    $this->configOverrides = $config_overrides;
     parent::__construct(
       $language_manager,
       $date_time,
@@ -97,49 +87,16 @@ class AlshayaApiWrapperXb extends AlshayaApiWrapper {
    * @inerhitDoc
    */
   public function getCustomerAddressForm() {
-    $country_code = strtoupper(_alshaya_custom_get_site_level_country_code());
+    // Get domain overrides.
+    $configOverrides = $this->configOverrides->getConfigByDomain();
 
-    $domainMappings = $this->innerService->configFactory->get('alshaya_xb.settings')->get('domain_mapping');
+    // Get country code from domain overrides, if not available then
+    // use site level country code.
+    $country_code = (isset($configOverrides['code']))
+      ? $configOverrides['code']
+      : strtoupper(_alshaya_custom_get_site_level_country_code());
 
-    // Get current base url.
-    $base_url = $this->requestStack->getCurrentRequest()->getHost();
-
-    $configOverrides = [];
-
-    foreach ($domainMappings as $domainMapping) {
-      // Get domain and prefix comma separated.
-      $domains = explode(',', $domainMapping['domains']);
-      foreach ($domains as $domain) {
-        // Check if base_url has domain or the site prefix.
-        if (strstr($base_url, $domain)) {
-          $configOverrides = $domainMapping;
-          break 2;
-        }
-      }
-    }
-
-    if (isset($configOverrides['code'])) {
-      $endpoint = 'deliverymatrix/address-structure/country/' . strtoupper($configOverrides['code']);
-    }
-    else {
-      $endpoint = 'deliverymatrix/address-structure/country/' . $country_code;
-    }
-
-    $request_options = [
-      'timeout' => $this->innerService->mdcHelper->getPhpTimeout('dm_structure_get'),
-    ];
-
-    $response = $this->innerService->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
-
-    if ($response && is_string($response)) {
-      $form = json_decode($response, TRUE);
-
-      if ($form && is_array($form)) {
-        return $form;
-      }
-    }
-
-    return [];
+    return $this->getCustomerAddressFormByCountryCode($country_code);
   }
 
 }
