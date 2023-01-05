@@ -43,7 +43,7 @@ class RcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
 
     $processed_paths = '/taxonomy/term/' . $config->get('category.placeholder_tid');
     $category = $config->get('category.enrichment')
-      ? $this->enrichmentHelper->getEnrichedEntity('category', $path)
+      ? $this->enrichmentHelper->getEnrichedEntity('category', $full_path)
       : NULL;
 
     $entityData = NULL;
