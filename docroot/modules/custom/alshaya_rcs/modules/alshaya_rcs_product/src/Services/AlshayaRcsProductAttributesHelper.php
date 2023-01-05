@@ -67,8 +67,10 @@ class AlshayaRcsProductAttributesHelper {
   /**
    * Returns  product attributes options.
    */
-  public function getProductAttributesOptions() {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+  public function getProductAttributesOptions($langcode = NULL) {
+    if (!$langcode) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
 
     // Fetch product options.
     $product_attributes = $this->rcsProductHelper->getProductOptionsQueryVariables();
@@ -78,32 +80,35 @@ class AlshayaRcsProductAttributesHelper {
     $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
     $query->condition('langcode', $langcode);
     $tids = $query->execute();
-
     if (empty($tids)) {
       return [];
     }
 
     // Populate product options array.
     $items = [];
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    foreach (array_chunk($tids, 100) as $tid_chunk) {
+      $product_option_entities = $term_storage->loadMultiple($tid_chunk);
+      foreach ($product_option_entities as $product_option) {
+        /** @var \Drupal\taxonomy\TermInterface $product_option */
+        $product_option = ($product_option->language()->getId() === $langcode)
+          ? $product_option
+          : $product_option->getTranslation($langcode);
 
-    $product_option_entities = $this->entityTypeManager->getStorage('taxonomy_term')->loadMultiple($tids);
-    foreach ($product_option_entities as $product_option) {
-      /** @var \Drupal\taxonomy\TermInterface $product_option */
-      $product_option = ($product_option->language()->getId() === $langcode)
-        ? $product_option
-        : $product_option->getTranslation($langcode);
+        $product_option_en = $product_option->getTranslation('en');
 
-      $product_option_en = $product_option->getTranslation('en');
+        $attribute_code = $product_option->get('field_sku_attribute_code')->getString();
 
-      $attribute_code = $product_option->get('field_sku_attribute_code')->getString();
-
-      $items[$attribute_code][] = [
-        'attribute_code' => $attribute_code,
-        'value' => $product_option->get('field_sku_option_id')->getString(),
-        'label' => $product_option->label(),
-        'gtm_label' => $product_option_en->label(),
-        'weight' => intval($product_option->getWeight()),
-      ];
+        $items[$attribute_code][] = [
+          'attribute_code' => $attribute_code,
+          'value' => $product_option->get('field_sku_option_id')->getString(),
+          'label' => $product_option->label(),
+          'gtm_label' => $product_option_en->label(),
+          'weight' => intval($product_option->getWeight()),
+        ];
+      }
+      // Release entities from memory.
+      $term_storage->resetCache($tid_chunk);
     }
 
     // Sort all the attributes.
