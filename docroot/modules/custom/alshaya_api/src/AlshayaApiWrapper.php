@@ -804,7 +804,7 @@ class AlshayaApiWrapper {
    * @return array
    *   The Form array from API response OR empty array.
    */
-  protected function getCustomerAddressFormByCountryCode($country_code) {
+  public function getCustomerAddressFormByCountryCode($country_code) {
     $endpoint = 'deliverymatrix/address-structure/country/' . $country_code;
 
     $request_options = [
