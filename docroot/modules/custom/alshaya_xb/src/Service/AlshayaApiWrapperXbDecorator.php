@@ -81,9 +81,7 @@ class AlshayaApiWrapperXbDecorator extends AlshayaApiWrapper {
   }
 
   /**
-   * Function to get customer address form.
-   *
-   * @inerhitDoc
+   * {@inheritDoc}
    */
   public function getCustomerAddressForm() {
     // Get domain overrides.
