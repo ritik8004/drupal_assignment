@@ -6,11 +6,15 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Contains helper methods to fetch product options.
  */
 class AlshayaRcsProductAttributesHelper {
+
+  public const RCS_PRODUCT_ATTRIBUTES_KEY = 'rcs_product_attributes';
 
   /**
    * RCS Product Helper.
@@ -41,6 +45,13 @@ class AlshayaRcsProductAttributesHelper {
   protected $entityTypeManager;
 
   /**
+   * Cache backend service.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * Constructs RCS Product Attribute Helper service.
    *
    * @param \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper
@@ -51,25 +62,32 @@ class AlshayaRcsProductAttributesHelper {
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The cache backend service.
    */
   public function __construct(
     AlshayaRcsProductHelper $rcs_product_helper,
     LoggerChannelFactoryInterface $logger_factory,
     LanguageManagerInterface $language_manager,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    CacheBackendInterface $cache
   ) {
     $this->rcsProductHelper = $rcs_product_helper;
     $this->logger = $logger_factory->get('alshaya_rcs_product');
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->cache = $cache;
   }
 
   /**
    * Returns  product attributes options.
    */
-  public function getProductAttributesOptions($langcode = NULL) {
-    if (!$langcode) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+  public function getProductAttributesOptions() {
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    $cid = self::RCS_PRODUCT_ATTRIBUTES_KEY . '_' . $langcode;
+    if ($cache = $this->cache->get($cid)) {
+      return $cache->data;
     }
 
     // Fetch product options.
@@ -116,6 +134,9 @@ class AlshayaRcsProductAttributesHelper {
       usort($attribute_options, fn($option1, $option2) => $option1['weight'] <=> $option2['weight']);
     }
 
+    $this->cache->set($cid, $items, Cache::PERMANENT, [
+      'taxonomy_term:sku_product_option',
+    ]);
     return $items;
   }
 
