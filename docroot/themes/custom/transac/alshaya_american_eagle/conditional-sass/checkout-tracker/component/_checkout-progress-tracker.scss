@@ -57,10 +57,6 @@
             @include breakpoint($only-mobile) {
               font-size: rem(11);
             }
-
-            @include breakpoint($tablet) {
-              top: calc(100% + #{rem(20)});
-            }
           }
         }
       }
