@@ -532,7 +532,8 @@ class AlshayaFrontendCommand extends BltTasks {
             // Checks to ensure to run the minify command only
             // to the files which are modified and failed during copy.
             $filePath = substr($file, strpos($file, 'docroot'));
-            if (empty($svgFiles) || !in_array($filePath, $svgFiles)) {
+            // Try to copy unchanged svg files only in github action push event.
+            if (getenv('GITHUB_EVENT_NAME') == 'push' && (empty($svgFiles) || !in_array($filePath, $svgFiles))) {
               // Copy the unchanged files from cloud where
               // those files are already in minify state.
               try {
