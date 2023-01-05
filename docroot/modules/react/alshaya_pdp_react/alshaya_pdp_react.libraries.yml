@@ -1,5 +1,5 @@
 pdp_magazine_v2_layout:
-  version: 1.x
+  version: 1.1.0
   js:
     dist/pdp_layout.bundle.js: { }
   dependencies:
@@ -9,11 +9,7 @@ pdp_magazine_v2_layout:
     - alshaya_seo/gtm
     - alshaya_pdp_react/slick_slider_css
     - alshaya_spc/static_storage
-
-pdp_size_guide_utility:
-  version: 1.x
-  js:
-    js/size_guide_utility.js: { }
+    - alshaya_pdp_react/pdp_size_guide_utility
 
 # The magic-dots CSS file needs to be updated if we update the react-magic-slider-dots library version, check README file for more information.
 slick_slider_css:
@@ -22,3 +18,10 @@ slick_slider_css:
       /libraries/slick-carousel/slick/slick.css: {}
       /libraries/slick-carousel/slick/slick-theme.css: {}
       assets/css/magic-dots.css: {}
+
+pdp_size_guide_utility:
+  version: 1.1.0
+  js:
+    assets/js/size_guide_utility.js: { }
+  dependencies:
+    - core/drupal
