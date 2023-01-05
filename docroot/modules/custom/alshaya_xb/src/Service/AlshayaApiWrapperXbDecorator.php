@@ -9,7 +9,6 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Http\RequestStack;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -92,9 +91,7 @@ class AlshayaApiWrapperXbDecorator extends AlshayaApiWrapper {
 
     // Get country code from domain overrides, if not available then
     // use site level country code.
-    $country_code = (isset($configOverrides['code']))
-      ? $configOverrides['code']
-      : strtoupper(_alshaya_custom_get_site_level_country_code());
+    $country_code = $configOverrides['code'] ?? strtoupper(_alshaya_custom_get_site_level_country_code());
 
     return $this->getCustomerAddressFormByCountryCode($country_code);
   }
