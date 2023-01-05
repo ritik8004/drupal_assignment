@@ -12,6 +12,10 @@
 
       @include breakpoint($desktop) {
         margin-#{$left}: 3rem;
+
+        html[lang="ar"] & {
+          margin-right: rem(18);
+        }
       }
 
       .points-earned,
@@ -23,6 +27,11 @@
           display: inline-block;
           line-height: 1.4;
           margin-#{$right}: 1.125rem;
+
+          html[lang="ar"] & {
+            min-width: rem(120);
+            margin-left: rem(4);
+          }
         }
       }
     }
@@ -33,6 +42,16 @@
 
     &.toggle--icon.has-aura-points {
       width: 38%;
+    }
+
+    #block-userrecentorders & {
+      &.has-aura-points {
+        @include breakpoint($desktop) {
+          html[lang="ar"] & {
+            padding-right: 0;
+          }
+        }
+      }
     }
   }
 }
