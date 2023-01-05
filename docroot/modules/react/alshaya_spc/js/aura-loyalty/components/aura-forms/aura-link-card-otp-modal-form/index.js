@@ -358,15 +358,18 @@ class AuraFormLinkCardOTPModal extends React.Component {
                   ]}
               </div>
             </ConditionalView>
-            <ConditionalView condition={otpRequested}>
-              <div className="otp-sent-to-mobile-label">
-                <span>
-                  {getStringMessage('aura_otp_sent_to_mobile', {
-                    '@mobile': mobile,
-                  })}
-                </span>
-              </div>
-            </ConditionalView>
+            { otpRequested
+              ? (
+                <div className="otp-sent-to-mobile-label">
+                  <span>
+                    {getStringMessage('aura_otp_sent_to_mobile', {
+                      '@mobile': mobile,
+                    })}
+                  </span>
+                </div>
+              )
+              : ''}
+
             <ConditionalView condition={!otpRequested}>
               <AuraFormLinkCardOptions
                 selectedOption={linkCardOption}
