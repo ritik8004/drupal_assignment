@@ -1,0 +1,16 @@
+alshaya_sprinklr.settings:
+  type: config_object
+  label: 'Alshaya sprinklr settings'
+  mapping:
+    sprinklr_enabled:
+      type: boolean
+      label: 'Config to enable/disable sprinklr chatbot'
+    allowed_urls:
+      type: text
+      label: 'List of URLs for sprinklr chatbot integration'
+    app_id_en:
+      type: string
+      label: 'App id required to connect with sprinklr English version'
+    app_id_ar:
+      type: string
+      label: 'App id required to connect with sprinklr Arabic version'

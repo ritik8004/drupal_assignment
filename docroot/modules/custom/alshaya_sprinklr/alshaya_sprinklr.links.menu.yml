@@ -1,0 +1,5 @@
+alshaya_sprinklr.sprinklr_config:
+  route_name: alshaya_sprinklr.sprinklr_config
+  title: 'Alshaya Sprinklr settings'
+  description: 'Configure Alshaya Sprinklr settings.'
+  parent: alshaya_master.alshaya_admin

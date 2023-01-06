@@ -1,0 +1,5 @@
+services:
+  alshaya_sprinklr.helper:
+    class: Drupal\alshaya_sprinklr\Services\SprinklrHelper
+    arguments:
+      - '@config.factory'

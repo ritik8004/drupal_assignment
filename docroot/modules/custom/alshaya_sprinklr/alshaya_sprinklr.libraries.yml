@@ -1,0 +1,8 @@
+# Custom library for sprinklr chatbot.
+alshaya_sprinklr:
+  version: 1.x
+  js:
+    js/alshaya_sprinklr.js: {}
+    js/sprinklr.min.js: {}
+  dependencies:
+    - core/drupalSettings

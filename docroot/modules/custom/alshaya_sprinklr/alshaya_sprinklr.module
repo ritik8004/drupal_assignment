@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_sprinklr_page_attachments_alter(array &$page) {
+  $sprinklr_settings = \Drupal::config('alshaya_sprinklr.settings');
+  $sprinklr_helper = \Drupal::service('alshaya_sprinklr.helper');
+  // Skip the processing of sprinklr chatbot if sprinklr feature is disabled.
+  if (!$sprinklr_helper->isSprinklrFeatureEnabled()) {
+    return;
+  }
+
+  // Get Current language.
+  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $app_id = $sprinklr_settings->get('app_id_' . $current_language);
+  // Skip the processing of sprinklr chatbot if app id is not provided.
+  if (empty($app_id)) {
+    return;
+  }
+
+  $current_path = \Drupal::service('path.current')->getPath();
+  $alias_manager = \Drupal::service('path_alias.manager');
+  // Get url alias for the current page to compare with allowed urls list.
+  $alias = $alias_manager->getAliasByPath($current_path);
+  $allowed_urls = $sprinklr_helper->getAllowedUrlsForSprinklr();
+  // Attach alshaya_sprinklr library to the allowed urls only if
+  // sprinklr app id is provided.
+  if (in_array($alias, $allowed_urls)) {
+    $page['#attached']['drupalSettings']['alshaya_sprinklr']['appId'] = $app_id;
+    $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $sprinklr_settings->getCacheTags());
+
+    $page['#attached']['library'][] = 'alshaya_sprinklr/alshaya_sprinklr';
+  }
+}

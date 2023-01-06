@@ -1,0 +1,7 @@
+alshaya_sprinklr.sprinklr_config:
+  path: '/admin/config/alshaya/sprinklr'
+  defaults:
+    _title: 'Alshaya Sprinklr Chatbot Configurations'
+    _form: 'Drupal\alshaya_sprinklr\Form\AlshayaSprinklrSettingsForm'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,6 @@
+name: alshaya_sprinklr
+type: module
+description: Provides integrations for sprinklr chatbot.
+package: Alshaya
+core: 8.x
+core_version_requirement: ^8 || ^9
