@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_sprinklr\Services;
+namespace Drupal\alshaya_sprinklr\Helper;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 
@@ -37,7 +37,7 @@ class SprinklrHelper {
   }
 
   /**
-   * Get product's info local storage expiration time.
+   * Get the list of URLs where sprinklr chatbot is enabled.
    *
    * @return array
    *   The list of urls allowed for sprinklr chatbot.
