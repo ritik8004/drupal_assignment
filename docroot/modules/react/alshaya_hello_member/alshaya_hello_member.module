@@ -106,6 +106,9 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     if (isset($form['field_gender'])) {
       $form['field_gender']['#access'] = FALSE;
     }
+    if (isset($form['field_mobile_number'])) {
+      $form['field_mobile_number']['#access'] = FALSE;
+    }
     return;
   }
   if (\Drupal::currentUser()->isAnonymous()) {
