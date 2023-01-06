@@ -95,26 +95,6 @@ function _alshaya_hello_member_static_strings() {
       'value' => t('Load more', [], ['context' => 'hello_member']),
     ],
     [
-      'key' => 'sent_otp_message',
-      'value' => t('Please enter the OTP sent to', [], ['context' => 'hello_member']),
-    ],
-    [
-      'key' => 'resend_otp_desc',
-      'value' => t('Not recieved the code?', [], ['context' => 'hello_member']),
-    ],
-    [
-      'key' => 'resend_code_label',
-      'value' => t('Resend Code', [], ['context' => 'hello_member']),
-    ],
-    [
-      'key' => 'verify_label',
-      'value' => t('Verify', [], ['context' => 'hello_member']),
-    ],
-    [
-      'key' => 'send_otp_label',
-      'value' => t('Send OTP', [], ['context' => 'hello_member']),
-    ],
-    [
       'key' => 'benefit_expire',
       'value' => t('Expires on @expire_date', [], ['context' => 'hello_member']),
     ],
