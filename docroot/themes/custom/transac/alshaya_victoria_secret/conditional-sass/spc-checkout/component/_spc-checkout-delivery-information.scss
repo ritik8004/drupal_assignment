@@ -25,3 +25,13 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .address-form-mobile-only {
+    .spc-address-form-submit {
+      font-weight: normal;
+      font-family: $vs-bold;
+      text-transform: uppercase;
+    }
+  }
+}
