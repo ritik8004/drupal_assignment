@@ -37,7 +37,7 @@ class WishlistButton extends React.Component {
     // Setting variant selected for current variant.
     // Options are selected attribute options for default product.
     this.state = {
-      addedInWishList: isProductExistInWishList(skuCode, variant),
+      addedInWishList: isProductExistInWishList(skuCode),
       skuCode,
       variant, // Variant sku used for simple product with parent sku.
       options: props.options ? props.options : [],

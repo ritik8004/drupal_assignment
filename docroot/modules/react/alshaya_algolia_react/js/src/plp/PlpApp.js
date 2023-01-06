@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Configure,
   InstantSearch,
@@ -25,6 +25,7 @@ import ConditionalView from '../../common/components/conditional-view';
 import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../js/utilities/components/become-hello-member';
+import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -52,6 +53,12 @@ const PlpApp = ({
   categoryField,
   promotionNodeId,
 }) => {
+  useEffect(() => {
+    getExpressDeliveryStatus().then((status) => {
+      window.sddEdStatus = status;
+    });
+  }, []);
+
   const plpCategoryRef = useRef();
   const allFiltersRef = useRef();
 
@@ -69,6 +76,10 @@ const PlpApp = ({
   let context = [];
   if (ruleContext !== undefined && ruleContext.length > 0) {
     context = ruleContext.split(',');
+  }
+  let defaultcolgrid = 'small';
+  if (drupalSettings.algoliaSearch.defaultColgrid !== null) {
+    defaultcolgrid = drupalSettings.algoliaSearch.defaultColgrid;
   }
 
   const { indexName } = drupalSettings.algoliaSearch.listing;
@@ -248,7 +259,7 @@ const PlpApp = ({
       && (
         <BecomeHelloMember />
       )}
-      <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
+      <div id="plp-hits" className={`c-products-list product-${defaultcolgrid} view-algolia-plp`}>
         <PlpResultInfiniteHits
           defaultpageRender={defaultpageRender || false}
           gtmContainer="product listing page"

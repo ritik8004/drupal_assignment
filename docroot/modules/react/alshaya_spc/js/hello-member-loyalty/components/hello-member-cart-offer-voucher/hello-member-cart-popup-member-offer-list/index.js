@@ -13,24 +13,30 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
   // Get formatted expiry date.
   moment.locale(drupalSettings.path.currentLanguage);
 
-  const handleChange = () => {
+  const handleChange = (e) => {
     const memberOffers = document.getElementsByName('radios');
     resetBenefitOptions(memberOffers, 'benefit_offer', 'change');
+    if (e.target.type === 'radio' && e.target.checked === true) {
+      Drupal.alshayaSeoGtmPushVoucherOfferSelect(e.target.getAttribute('offerDescription'), 'selected-offer-voucher');
+    }
   };
 
   // handle submit.
   const handleSubmit = async (e) => {
     e.preventDefault();
     let seletedOffer = '';
+    const offerDescriptionData = [];
     showFullScreenLoader();
     // get the list of user selected vouchers from voucher form.
     Object.entries(e.target).forEach(
       ([, value]) => {
         if (value.checked) {
           seletedOffer = value;
+          offerDescriptionData.push(value.getAttribute('offerDescription'));
         }
       },
     );
+
     // api call to update the selected offers.
     const response = await callHelloMemberApi('addMemberOffersToCart', 'POST', {
       offerCode: seletedOffer.value,
@@ -66,6 +72,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
             dispatchCustomEvent('refreshCart', {
               data: () => result.data,
             });
+            Drupal.alshayaSeoGtmPushVoucherOfferSelectedApply(offerDescriptionData.join(' | '), 'applied-offer-voucher');
           }
         });
       }

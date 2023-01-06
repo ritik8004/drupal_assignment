@@ -27,6 +27,7 @@ import {
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isMobile } from '../../../../../js/utilities/display';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -278,47 +279,66 @@ export default class EmptyDeliveryText extends React.Component {
       : 'spc-address-form-guest';
 
     return (
-      <WithModal modalStatusKey="deliveryType">
-        {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
-          <div className="spc-empty-delivery-information">
-            <div onClick={() => this.openModal(triggerOpenModal)} className="spc-checkout-empty-delivery-text">
-              <span>
-                {deliveryType === 'click_and_collect'
-                  ? getCncSectionDescription()
-                  : Drupal.t('please add your contact details and address.')}
-              </span>
-            </div>
-            <Popup
-              open={isModalOpen}
-              className={deliveryType === 'click_and_collect' ? '' : popupClassName}
-              closeOnEscape={false}
-              closeOnDocumentClick={false}
-            >
-              {deliveryType === 'click_and_collect'
-                ? (
-                  <ClickCollectContainer
-                    closeModal={() => this.closeModal(triggerCloseModal)}
-                  />
-                )
-                : (
-                  <React.Suspense fallback={<Loading />}>
-                    <AddressContent
-                      closeModal={() => this.closeModal(triggerCloseModal)}
-                      cart={mainCart}
-                      showEditButton
-                      headingText={Drupal.t('delivery information')}
-                      processAddress={this.processAddress}
-                      type="shipping"
-                      showEmail={drupalSettings.user.uid === 0}
-                      default_val={defaultVal}
-                      isExpressDeliveryAvailable={isExpressDeliveryAvailable}
-                    />
-                  </React.Suspense>
-                )}
-            </Popup>
+      <>
+        {isMobile() && deliveryType !== 'click_and_collect' ? (
+          <div className="address-form-mobile-only">
+            <React.Suspense fallback={<Loading />}>
+              <AddressContent
+                cart={mainCart}
+                processAddress={this.processAddress}
+                type="shipping"
+                showEmail={drupalSettings.user.uid === 0}
+                default_val={defaultVal}
+                isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+                isEmbeddedForm
+              />
+            </React.Suspense>
           </div>
+        ) : (
+          <WithModal modalStatusKey="deliveryType">
+            {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+              <div className="spc-empty-delivery-information">
+                <div onClick={() => this.openModal(triggerOpenModal)} className="spc-checkout-empty-delivery-text">
+                  <span>
+                    {deliveryType === 'click_and_collect'
+                      ? getCncSectionDescription()
+                      : Drupal.t('please add your contact details and address.')}
+                  </span>
+                </div>
+                <Popup
+                  open={isModalOpen}
+                  className={deliveryType === 'click_and_collect' ? '' : popupClassName}
+                  closeOnEscape={false}
+                  closeOnDocumentClick={false}
+                >
+                  {deliveryType === 'click_and_collect'
+                    ? (
+                      <ClickCollectContainer
+                        closeModal={() => this.closeModal(triggerCloseModal)}
+                      />
+                    )
+                    : (
+                      <React.Suspense fallback={<Loading />}>
+                        <AddressContent
+                          closeModal={() => this.closeModal(triggerCloseModal)}
+                          cart={mainCart}
+                          showEditButton
+                          headingText={Drupal.t('delivery information')}
+                          processAddress={this.processAddress}
+                          type="shipping"
+                          showEmail={drupalSettings.user.uid === 0}
+                          default_val={defaultVal}
+                          isExpressDeliveryAvailable={isExpressDeliveryAvailable}
+                          isEmbeddedForm={false}
+                        />
+                      </React.Suspense>
+                    )}
+                </Popup>
+              </div>
+            )}
+          </WithModal>
         )}
-      </WithModal>
+      </>
     );
   }
 }

@@ -4,9 +4,10 @@ import EligibleForReturn from '../eligible-for-return';
 
 class OnlineReturnsPDP extends React.Component {
   constructor(props) {
+    const { eligibleForReturn } = props;
     super(props);
     this.state = {
-      eligibleForReturn: true,
+      eligibleForReturn,
     };
   }
 

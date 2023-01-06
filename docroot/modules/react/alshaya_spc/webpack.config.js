@@ -48,15 +48,6 @@ var config = {
               'plugins': ['@babel/plugin-proposal-class-properties']}]
         }
       },
-      // Added below rules for parsing react datepicker css in components.
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.(woff|woff2|ttf|otf|eot|svg|gif)$/,
-        use: ['file-loader'],
-      },
     ]
   }
 };

@@ -126,3 +126,37 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css: css/conditional-sass/egift-purchase-page/egift-purchase-page.ltr.css
+
+  alshaya_white_label/sameday-express-delivery:
+    css:
+      theme:
+        css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css: css/conditional-sass/sameday-express-delivery/sameday-express-delivery.ltr.css
+
+  alshaya_white_label/online-returns:
+    css:
+      theme:
+        css/conditional-sass/online-returns/online-returns.ltr.css: css/conditional-sass/online-returns/online-returns.ltr.css
+
+  alshaya_white_label/aura-loyalty-global:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css
+
+  alshaya_white_label/aura-loyalty-myaccount:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css: css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css
+
+  alshaya_white_label/egift-myaccount:
+    css:
+      theme:
+        css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css: css/conditional-sass/egift-myaccount/egift-myaccount.ltr.css
+
+  alshaya_white_label/egift-card-checkout:
+    css:
+      theme:
+        css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css
+  alshaya_white_label/megamenu-fullwidth-layout:
+    css:
+      theme:
+        css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css: css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css

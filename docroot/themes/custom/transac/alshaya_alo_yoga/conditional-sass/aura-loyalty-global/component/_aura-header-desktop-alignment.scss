@@ -47,4 +47,10 @@ body.aura-enabled {
       }
     }
   }
+
+  .aura-modal-form {
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(36);
+    }
+  }
 }

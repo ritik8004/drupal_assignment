@@ -16,6 +16,43 @@
           }
         }
       }
+
+      // The first column has unique styles for New Balance.
+      .column:nth-of-type(1) {
+        position: relative;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          #{$right}: rem(24);
+          height: calc(100% - #{rem(30)});
+          width: rem(2);
+          background-color: $tertiary-border;
+        }
+
+        li.menu--two__list-item {
+          .menu__link {
+            font-family: $alshaya-bold;
+          }
+
+          .menu--three__list {
+            li {
+              padding-#{$right}: rem(16);
+            }
+          }
+
+          & > .menu-two__link-wrapper {
+            padding-#{$right}: rem(45);
+          }
+        }
+
+        li.menu--three__list-item > .menu-two__link-wrapper {
+          .menu__link {
+            font-family: $alshaya-bold !important;
+          }
+        }
+      }
     }
 
     .menu--three__list-item {

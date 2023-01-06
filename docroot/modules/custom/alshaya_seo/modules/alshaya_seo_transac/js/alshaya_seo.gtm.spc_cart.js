@@ -20,7 +20,7 @@
     var productData = {
       event: gtmEvent,
       ecommerce: {
-        currencyCode: drupalSettings.alshaya_spc.currency_config.currency_code,
+        currencyCode: drupalSettings.gtm.currency,
         [action]: {
           products: []
         }
@@ -30,11 +30,11 @@
     // Get product info from storage.
     var key = 'product:' + drupalSettings.path.currentLanguage + ':' + product.sku;
     var productInfo = Drupal.getItemFromLocalStorage(key);
-    // Add inStock infor only for removeFromCart event.
-    if(action === 'remove') {
-      productInfo['inStock'] = product['in_stock'];
-    }
     if (productInfo !== null) {
+      // Add inStock infor only for removeFromCart event.
+      if (action === 'remove') {
+        productInfo['inStock'] = product['in_stock'];
+      }
       var productDetails = Drupal.alshayaSeoSpc.gtmProduct(productInfo, product.qty);
       // metric value will be negative in case of product removal from cart.
       productDetails.metric2 = gtmEvent === 'removeFromCart' ? -1 * product.finalPrice : product.finalPrice;
@@ -198,6 +198,10 @@
     Object.assign(data.ecommerce.checkout, cartData.checkout);
     delete cartData.checkout;
     Object.assign(data, cartData);
+    // Add aura common data in checkout step 1 gtm event.
+    if (typeof drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled) {
+      Object.assign(data, Drupal.alshayaSeoGtmPrepareAuraCommonDataFromCart());
+    }
     setTimeout(() => {
       dataLayer.push(data);
     }, 500);

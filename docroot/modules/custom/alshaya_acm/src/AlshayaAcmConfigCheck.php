@@ -177,6 +177,7 @@ class AlshayaAcmConfigCheck {
 
     $reset = [
       'acq_commerce.conductor',
+      'alshaya_api.settings',
       'recaptcha.settings',
       'geolocation_google_maps.settings',
       'exponea.settings',
@@ -238,9 +239,6 @@ class AlshayaAcmConfigCheck {
     $config->set('handlers.email.settings.to_mail', 'no-reply@acquia.com');
     $config->save();
 
-    // Reset the magento settings.
-    $this->configManager->replaceYamlSettingsOverrides(NULL, TRUE);
-
     // Save config again to ensure overrides are taken into consideration.
     alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'optional');
 
@@ -254,6 +252,16 @@ class AlshayaAcmConfigCheck {
     // Reset store id - AR.
     $this->languageManager->getLanguageConfigOverride('ar', 'acq_commerce.store')
       ->set('store_id', Settings::get('store_id')['ar'])
+      ->save();
+
+    // Reset magento_lang_prefix - EN.
+    $this->configFactory->getEditable('alshaya_api.settings')
+      ->set('magento_lang_prefix.en', Settings::get('magento_lang_prefix')['en'])
+      ->save();
+
+    // Reset magento_lang_prefix - AR.
+    $this->configFactory->getEditable('alshaya_api.settings')
+      ->set('magento_lang_prefix.ar', Settings::get('magento_lang_prefix')['ar'])
       ->save();
 
     // Reset log mode when resetting config.

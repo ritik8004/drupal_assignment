@@ -8,6 +8,7 @@
   width: 100%;
   overflow: auto;
   background: $menu_bg;
+  border-top: rem(1) solid $mob_menu_one_border_color;
 
   .back--link {
     display: flex;

@@ -243,16 +243,19 @@ class SkusProductList extends ResourceBase {
     foreach ($sku_cache_tags as $sku_cache_tag) {
       $cacheable_metadata->addCacheTags($sku_cache_tag);
     }
-    if (!empty($this->cache['tags'])) {
-      $cacheable_metadata->addCacheTags($this->cache['tags']);
-    }
 
     // Set max-age if API request contains invalid/disabled SKUs.
     if (in_array(NULL, $data)) {
-      $max_age = $this->configFactory->get('alshaya_mobile_app.settings')->get('no_product_cache_ttl');
+      $mobile_app_settings = $this->configFactory->get('alshaya_mobile_app.settings');
+      $max_age = $mobile_app_settings->get('no_product_cache_ttl');
+      $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $mobile_app_settings->getCacheTags());
+
       $cacheable_metadata->mergeCacheMaxAge($max_age);
     }
 
+    if (!empty($this->cache['tags'])) {
+      $cacheable_metadata->addCacheTags($this->cache['tags']);
+    }
     if (!empty($this->cache['contexts'])) {
       $cacheable_metadata->addCacheContexts($this->cache['contexts']);
     }
@@ -326,12 +329,6 @@ class SkusProductList extends ResourceBase {
     $data = array_merge($data, $images);
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
     $data['promotions'] = $this->getPromotions($sku);
-    $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
-    if ($promo_label) {
-      $data['promotions'][] = [
-        'text' => $promo_label,
-      ];
-    }
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
     $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
@@ -359,7 +356,8 @@ class SkusProductList extends ResourceBase {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $this->cache['tags'] = Cache::mergeTags(
       $this->cache['tags'],
-      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags()
+      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags(),
+      $this->configFactory->get('alshaya_acm_product.settings')->getCacheTags()
     );
 
     return [

@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_xb module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Install new SKU field fixed_price.
+ */
+function alshaya_xb_install($is_syncing) {
+  // Add fixed price attribute to SKU entity.
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}

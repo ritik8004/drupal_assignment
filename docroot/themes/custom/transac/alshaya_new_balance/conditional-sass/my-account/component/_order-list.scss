@@ -4,6 +4,14 @@
       border-top: 1px solid $user_acc_details_border;
     }
   }
+
+  .no--orders + a {
+    line-height: rem(18);
+    font-size: rem(14);
+    padding: rem(19) 0;
+    font-family: $alshaya-bold;
+    text-transform: unset;
+  }
 }
 
 .alshaya-acm-customer-order-list-search {

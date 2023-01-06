@@ -2,8 +2,8 @@
   bottom: rem(60);
 
   @include breakpoint($only-mobile) {
-    bottom: rem(119);
-    #{$right}: rem(17);
+    bottom: rem(81);
+    #{$right}: rem(-7);
   }
 
   @include breakpoint($only-tablet) {
@@ -15,7 +15,9 @@
     background: url(#{$nb_theme_img_directory_path}/icons/backtop.svg) no-repeat;
     background-size: contain;
     border-radius: 0;
-    top: 0;
+    top: rem(1);
     #{$right}: rem(27);
+    width: rem(30);
+    height: rem(30);
   }
 }

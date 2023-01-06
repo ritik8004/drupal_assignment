@@ -29,6 +29,7 @@ import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -56,6 +57,8 @@ export default class CartItem extends React.Component {
       // Add event listener for add to wishlist action.
       document.addEventListener('productAddedToWishlist', this.handleAddToWishList, false);
     }
+    // Push error messages to GTM datalayer.
+    this.pushGtmErrors(this.props);
   }
 
   componentDidUpdate() {
@@ -231,6 +234,12 @@ export default class CartItem extends React.Component {
         // Trigger message.
         if (messageInfo !== null) {
           dispatchCustomEvent('spcCartMessageUpdate', messageInfo);
+          // Push error message to GTM.
+          if (hasValue(messageInfo.type)
+            && messageInfo.type === 'error'
+            && hasValue(messageInfo.message)) {
+            Drupal.logJavascriptError(`update-cart-item-data-sku-${sku}`, messageInfo.message, GTM_CONSTANTS.CART_ERRORS);
+          }
         }
 
         // Trigger recommended products refresh.
@@ -251,6 +260,30 @@ export default class CartItem extends React.Component {
 
         return null;
       });
+    }
+  }
+
+  /**
+   * Handler to push error messages to GTM datalayer.
+   */
+  pushGtmErrors = (props) => {
+    const {
+      item: {
+        sku,
+        qty,
+        stock,
+        in_stock: inStock,
+      },
+    } = props;
+
+    // Out of stock error.
+    if (inStock !== true) {
+      Drupal.logJavascriptError(`cart-item-data-sku-${sku}`, 'This product is out of stock. Please remove to proceed.', GTM_CONSTANTS.CART_ERRORS);
+    }
+
+    // Item quantity limit error.
+    if (inStock && stock < qty) {
+      Drupal.logJavascriptError(`cart-item-data-sku-${sku}`, 'This product is not available in selected quantity. Please adjust the quantity to proceed.', GTM_CONSTANTS.CART_ERRORS);
     }
   }
 

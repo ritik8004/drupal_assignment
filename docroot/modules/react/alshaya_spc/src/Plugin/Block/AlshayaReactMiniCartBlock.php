@@ -89,8 +89,6 @@ class AlshayaReactMiniCartBlock extends BlockBase implements ContainerFactoryPlu
       'decimal_points' => $currency_config->get('decimal_points'),
     ];
 
-    $settings['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
-
     $cart_config = $this->configFactory->get('alshaya_acm.cart_config');
     $cache_tags = Cache::mergeTags($cache_tags, $cart_config->getCacheTags());
     $settings['alshaya_spc']['cart_storage_expiration'] = $cart_config->get('cart_storage_expiration') ?? 15;

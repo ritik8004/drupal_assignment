@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     padding: 0;
-    height: rem(79);
+    height: rem(104);
 
     @include breakpoint($only-mobile) {
       height: auto;
@@ -47,8 +47,6 @@
       }
 
       @include breakpoint($tablet) {
-        padding-#{$left}: rem(18);
-
         #footer-newsletter-form-wrapper {
           width: auto;
         }
@@ -101,16 +99,19 @@
 
           .error {
             display: flex;
+            padding-#{$left}: rem(33);
+            padding-bottom: rem(16);
           }
         }
       }
 
       .form-email {
         color: $footer-newsletter-text;
-        margin-top: rem(4);
+        margin-top: 0;
         font-size: rem(14);
         padding-#{$left}: rem(8);
         background: none;
+        height: rem(30);
       }
 
       .form-item {
@@ -123,11 +124,12 @@
         @include breakpoint($only-mobile) {
           position: relative;
           margin-top: rem(20);
+          top: rem(10);
         }
 
         @include breakpoint($tablet) {
           #{$right}: rem(-20);
-          bottom: rem(-3);
+          bottom: rem(-8);
         }
       }
     }
@@ -158,12 +160,9 @@
       }
 
       .accordion--body {
-        @include breakpoint($upto-tablet) {
-          padding-#{$left}: rem(8);
-        }
-
         @include breakpoint($only-mobile) {
           border-top-color: $footer_border_top;
+          padding-#{$left}: rem(25);
         }
       }
     }
@@ -218,8 +217,8 @@
       }
 
       .accordion--body {
-        @include breakpoint($upto-tablet) {
-          padding-#{$left}: rem(8);
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: rem(25);
         }
       }
 
@@ -266,6 +265,13 @@
         &.en.is-active a {
           font-family: $alshaya-thin;
           text-transform: unset;
+          text-decoration: none;
+        }
+
+        &:first-child {
+          &::after {
+            display: none;
+          }
         }
       }
     }
@@ -335,6 +341,12 @@
       width: auto;
       #{$left}: 0;
 
+      @include breakpoint($tablet) {
+        html[lang=ar] & {
+          height: 0;
+        }
+      }
+
       @include breakpoint($only-mobile) {
         position: relative;
       }
@@ -343,6 +355,12 @@
     &::after {
       background: none;
       #{$right}: 0;
+
+      @include breakpoint($tablet) {
+        html[lang=ar] & {
+          height: 0;
+        }
+      }
     }
   }
 
@@ -385,5 +403,82 @@
 .ladda-button[data-style="zoom-in"] {
   .ladda-spinner {
     top: rem(22);
+    left: 62%;
+  }
+}
+
+html[lang=ar] {
+  .ladda-button[data-style="zoom-in"] {
+    .ladda-spinner {
+      right: 45%;
+    }
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  .form-item {
+    label {
+      &#edit-email-error,
+      &.error {
+        background: transparent;
+
+        @include breakpoint($only-mobile) {
+          top: rem(26);
+          padding-#{$left}: rem(32);
+        }
+      }
+    }
+  }
+
+  .subscription-status {
+    .success {
+      padding: 0;
+      margin-top: rem(8);
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: rem(20);
+        padding-#{$left}: rem(32);
+      }
+    }
+
+    .error {
+      margin: 0.25rem 0;
+    }
+  }
+}
+
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        padding-top: rem(8);
+
+        a {
+          text-decoration: none;
+        }
+
+        &.en a {
+          font-family: $alshaya-thin;
+        }
+
+        &.en.is-active a {
+          font-family: $alshaya-thin;
+        }
+
+        &:first-child {
+          padding-#{$right}: 0;
+
+          &::after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  .language-switcher-close {
+    &::after {
+      top: rem(3);
+    }
   }
 }

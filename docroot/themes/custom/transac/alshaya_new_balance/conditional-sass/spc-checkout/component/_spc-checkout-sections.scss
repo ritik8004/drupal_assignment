@@ -2,13 +2,12 @@
   .spc-sidebar {
     .spc-order-summary-block {
       .product-content {
-        padding: 0;
+        padding: rem(20);
+        margin-bottom: rem(6);
+        background: none;
 
         .product-item {
           .spc-product-title-price {
-            display: flex;
-            justify-content: inherit;
-
             .spc-product-price {
               font-family: $alshaya-bold;
             }
@@ -18,19 +17,31 @@
             font-size: rem(14);
           }
         }
+
+        @include breakpoint($tablet) {
+          padding-bottom: 0;
+          background: $spc-checkout-product-content-bg;
+          margin-bottom: 0;
+
+          .product-item {
+            .spc-product-title-price {
+              display: flex;
+              justify-content: space-between;
+              padding-#{$right}: rem(6);
+            }
+
+            .spc-product-attribute {
+              margin-top: rem(4);
+            }
+          }
+        }
       }
     }
   }
-}
 
-#spc-checkout {
   .spc-content {
     .spc-checkout-delivery-information {
       padding-top: rem(30);
-
-      .spc-checkout-section-title {
-        margin-bottom: rem(27);
-      }
     }
   }
 }

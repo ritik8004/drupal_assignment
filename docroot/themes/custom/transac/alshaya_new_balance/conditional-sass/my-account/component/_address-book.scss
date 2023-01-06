@@ -21,6 +21,14 @@
   .address--label {
     font-family: $alshaya-bold;
   }
+
+  .address--primary {
+    letter-spacing: 0;
+
+    @include breakpoint($desktop) {
+      padding-#{$right}: rem(30);
+    }
+  }
 }
 
 .address {
@@ -41,12 +49,40 @@
     }
 
     & > a {
+      text-transform: unset;
+
       @include breakpoint($only-mobile) {
         margin-top: 0;
       }
 
       @include breakpoint($only-tablet) {
         margin-top: rem(28);
+      }
+    }
+  }
+}
+
+.address-book-address .form-type-select {
+  .select2-selection {
+    border-color: $primary_form_selector_border;
+  }
+}
+
+#address_wrapper .address-book-address,
+#address-book-form-open .address-book-address,
+.address_wrapper .address-book-address {
+  .country-name {
+    color: $primary_form_input_text;
+  }
+}
+
+.user-form,
+.address-book-address,
+#selected-store-wrapper {
+  .mobile-number-field {
+    .mobile-input--wrapper {
+      .prefix {
+        color: $primary_input_label;
       }
     }
   }

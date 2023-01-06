@@ -1,6 +1,6 @@
 var glegem = glegem || function () {
-  (window["glegem"].q = window["glegem"].q || []).push(arguments)
-}
+  (window["glegem"].q = window["glegem"].q || []).push(arguments);
+};
 
 glegem("OnCheckoutStepLoaded", function (data) {
   switch (data.StepId) {

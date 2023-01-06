@@ -3,43 +3,37 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
 
   Background:
     Given I am on "{spc_product_listing_page}"
-    And I wait 10 seconds
+    And I wait for element "#block-page-title"
 
   @cc @hd @checkout_com
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com)
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
-    And I wait 10 seconds
+    And I wait for AJAX to finish
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I fill in "edit-name" with "{spc_returning_user_email}"
-    And I fill in "edit-pass" with "{spc_returning_user_password}"
-    Then I press "edit-submit"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element ".checkout-login-wrapper"
+    Given I am logged in as an authenticated user "{spc_returning_user_email}" with password "{spc_returning_user_password}"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
-    And I wait 10 seconds
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
-    And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -67,39 +61,32 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I wait for AJAX to finish
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
-    And I wait 10 seconds
+    And I wait for AJAX to finish
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I fill in "edit-name" with "{spc_returning_user_email}"
-    And I fill in "edit-pass" with "{spc_returning_user_password}"
-    Then I press "edit-submit"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element ".checkout-login-wrapper"
+    Given I am logged in as an authenticated user "{spc_returning_user_email}" with password "{spc_returning_user_password}"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
-    And I wait 10 seconds
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
-    And I wait 5 seconds
-    And print current URL
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -124,39 +111,32 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
   @cc @hd @language @mobile @checkout_com @test34
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
-    And I wait 10 seconds
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
-    And I wait 10 seconds
+    And I wait for AJAX to finish
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I fill in "edit-name" with "{spc_returning_user_email}"
-    And I fill in "edit-pass" with "{spc_returning_user_password}"
-    Then I press "edit-submit"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element ".checkout-login-wrapper"
+    Given I am logged in as an authenticated user "{spc_returning_user_email}" with password "{spc_returning_user_password}"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
-    And I wait 10 seconds
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
-    And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file

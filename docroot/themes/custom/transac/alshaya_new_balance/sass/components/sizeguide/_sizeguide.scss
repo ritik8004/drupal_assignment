@@ -1,0 +1,27 @@
+.size-guide-form-and-link-wrapper {
+  position: relative;
+}
+
+.size-guide-link {
+  top: rem(-10);
+  font-size: rem(14);
+  line-height: rem(18);
+  text-decoration: underline;
+}
+
+@include breakpoint($only-tablet) {
+  .size-guide-link {
+    top: rem(16);
+  }
+}
+
+@include breakpoint($desktop) {
+  .size-guide-link {
+    top: rem(12);
+    z-index: 1;
+
+    &:hover {
+      color: $pdp_sizeguide_link;
+    }
+  }
+}

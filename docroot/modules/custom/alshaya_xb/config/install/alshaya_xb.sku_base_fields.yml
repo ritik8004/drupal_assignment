@@ -1,0 +1,6 @@
+fields:
+  fixed_price:
+    label: 'Fixed price'
+    type: 'text_long'
+    description: 'Sku fixed price details'
+    translatable: 0

@@ -98,6 +98,7 @@ class MyAccountsHelloMemberBlock extends BlockBase implements ContainerFactoryPl
         'library' => [
           'alshaya_white_label/my-accounts-hello-member',
           'alshaya_hello_member/alshaya_hello_member_my_accounts',
+          'alshaya_seo_transac/gtm_hello_member',
         ],
       ],
     ];

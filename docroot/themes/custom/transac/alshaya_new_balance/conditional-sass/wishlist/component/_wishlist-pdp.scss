@@ -1,0 +1,24 @@
+.wishlist-enabled {
+  &.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+    .wishlist-pdp-full {
+      @include breakpoint($desktop) {
+        #{$right}: rem(57);
+        top: rem(32);
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$right}: rem(25);
+        top: rem(20);
+      }
+
+      .wishlist-button-wrapper {
+        .wishlist-icon {
+          @include breakpoint($tablet) {
+            height: rem(32);
+            width: rem(32);
+          }
+        }
+      }
+    }
+  }
+}

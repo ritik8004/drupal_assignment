@@ -352,3 +352,14 @@ function alshaya_vs_transac_sku_product_attribute_alter(array &$attributes, SKUI
     $attributes[] = $extra_row;
   }
 }
+
+/**
+ * Implements hook_alshaya_search_algolia_object_alter().
+ */
+function alshaya_vs_transac_alshaya_search_algolia_object_alter(array &$object) {
+  $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
+  $attr_fragrance = $sku->get('attr_fragrance')->getString();
+  if ($attr_fragrance) {
+    $object['attr_fragrance'] = $attr_fragrance;
+  }
+}

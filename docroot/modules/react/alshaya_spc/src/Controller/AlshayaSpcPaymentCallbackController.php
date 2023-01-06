@@ -9,7 +9,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -97,10 +96,12 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     $redirect = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString(), 302);
     $redirect->setMaxAge(0);
     $redirect->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
+    $consumer_secret = $this->config('alshaya_api.settings')->get('consumer_secret');
+
     if ($encrypted_order_id) {
       $order_id = SecureText::decrypt(
         $encrypted_order_id,
-        Settings::get('alshaya_api.settings')['consumer_secret']
+        $consumer_secret,
       );
     }
     elseif ($order_id
@@ -155,7 +156,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
       $order['secure_order_id'] = SecureText::encrypt(
         json_encode(['order_id' => $order_id, 'email' => $email]),
-        Settings::get('alshaya_api.settings')['consumer_secret']
+        $consumer_secret
       );
 
       // Redirect user to confirmation page.
@@ -214,6 +215,8 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
           'transaction_id' => $request->query->get('knet_transaction_id', ''),
           'payment_id' => $request->query->get('knet_payment_id', ''),
           'result_code' => $request->query->get('knet_result', ''),
+          'transaction_date' => date("d M Y", strtotime($request->query->get('requested_on', ''))),
+          'transaction_time' => date("h:i:s A", strtotime($request->query->get('requested_on', ''))),
         ];
         break;
 

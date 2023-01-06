@@ -1,5 +1,6 @@
 .block-alshaya-grid-count-block {
   height: auto;
+  width: auto;
 
   .total-result-count {
     @include breakpoint($only-mobile) {

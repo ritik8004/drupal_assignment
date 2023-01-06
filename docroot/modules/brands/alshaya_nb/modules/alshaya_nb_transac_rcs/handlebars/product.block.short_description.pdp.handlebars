@@ -1,0 +1,24 @@
+<div class="content--short-description">
+  <h2 class="field__label">{{t 'Product Description' }}</h2>
+  <div class="field__content-wrapper">
+    <div class="field__content">
+      <div class="desc-wrapper">
+        {{#if label }}
+          <div class="desc-label">
+            {{ label }}
+          </div>
+        {{/if}}
+        {{#if value }}
+          <div class="desc-value">
+            {{ value }}
+          </div>
+        {{/if}}
+      </div>
+      {{{ render 'product.block.description_details' description }}}
+    </div>
+    {{#if read_more }}
+      <span class="read-more-description-link">{{t 'Read more' }}</span>
+      <span class="read-more-description-link-mobile">{{t 'Read more' }}</span>
+    {{/if}}
+  </div>
+</div>

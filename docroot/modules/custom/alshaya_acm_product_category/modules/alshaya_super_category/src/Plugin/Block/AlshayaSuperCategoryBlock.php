@@ -198,7 +198,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
 
       $term_info_en = $term_data_en[$term_id];
       $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(mb_strtolower($term_info_en['label']));
-      if ($term_id == $current_term['id']) {
+      if (isset($current_term['id']) && $term_id == $current_term['id']) {
         $term_info['class'] .= ' active';
         $term_info['gtm_menu_title'] = $term_info_en['label'];
       }

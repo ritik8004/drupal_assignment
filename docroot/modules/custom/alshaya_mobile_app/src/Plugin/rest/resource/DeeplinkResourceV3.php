@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\rest\ModifiedResourceResponse;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Path\PathValidatorInterface;
 use Psr\Log\LoggerInterface;
@@ -13,9 +12,7 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Routing\RequestContext;
-use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a resource to get deeplink in v3.
@@ -96,7 +93,7 @@ class DeeplinkResourceV3 extends DeeplinkResource {
     PathValidatorInterface $path_validator,
     EntityTypeManagerInterface $entity_type_manager
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger, $language_manager, $alias_manager, $mobile_app_utility, $request_stack, $request_context, $entity_type_manager);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger, $mobile_app_utility, $request_stack, $request_context, $entity_type_manager);
     $this->configFactory = $config;
     $this->pathValidator = $path_validator;
     $this->entityTypeManager = $entity_type_manager;
@@ -131,98 +128,8 @@ class DeeplinkResourceV3 extends DeeplinkResource {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
-    $response = $this->getDeeplink($alias);
+    $response = $this->mobileAppUtility->getDeeplinkForResourceV3($alias);
     return new ModifiedResourceResponse($response);
-  }
-
-  /**
-   * Helper function to get deeplink.
-   *
-   * @param string $alias
-   *   Url alias.
-   *
-   * @return array
-   *   Returns V3 deeplink response.
-   */
-  protected function getDeeplink($alias) {
-    // Check if its mdc url.
-    if ($this->checkMdcUrl($alias)) {
-      return [
-        'deeplink' => '',
-        'source' => 'magento',
-      ];
-    }
-
-    $url = parent::getDeeplink($alias);
-    return [
-      'deeplink' => $url,
-      'source' => 'drupal',
-    ];
-  }
-
-  /**
-   * Preprocess the alias.
-   *
-   * @param string $alias
-   *   Path alias.
-   */
-  private function preprocessAlias(&$alias) {
-    // Remove the base url from the alias.
-    $alias = str_replace($this->baseUrl, '', $alias);
-    // Append .html in the end if it is a product url without .html.
-    if (str_contains($alias, 'buy-') && !str_contains($alias, '.html')) {
-      $alias = "$alias.html";
-    }
-  }
-
-  /**
-   * Check if its MDC url.
-   *
-   * @param string $alias
-   *   Url alias.
-   *
-   * @return bool
-   *   Returns true if its MDC url.
-   */
-  protected function checkMdcUrl($alias) {
-    $this->preprocessAlias($alias);
-
-    if (empty($alias) || UrlHelper::isExternal($alias)) {
-      return $this->mobileAppUtility->throwException();
-    }
-    // Get route name for the url.
-    $url_object = $this->pathValidator->getUrlIfValid($alias);
-    if ($url_object === FALSE) {
-      return FALSE;
-    }
-
-    $route_name = $url_object->getRouteName();
-    $route_parameters = $url_object->getRouteParameters();
-    // Check if its PLP route.
-    if ($route_name == 'entity.taxonomy_term.canonical') {
-      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($route_parameters['taxonomy_term']);
-      if ($term instanceof TermInterface
-        && in_array($term->bundle(), ['acq_product_category', 'rcs_category'])
-      ) {
-        return TRUE;
-      }
-    }
-    elseif ($route_name == 'entity.node.canonical') {
-      // Check if its PDP route.
-      $node = $this->entityTypeManager->getStorage('node')->load($route_parameters['node']);
-      if ($node instanceof NodeInterface
-        && in_array($node->bundle(), [
-          'acq_product',
-          'rcs_product',
-          'acq_promotion',
-          'rcs_promotion',
-        ])
-      ) {
-        return TRUE;
-      }
-    }
-
-    return FALSE;
   }
 
 }

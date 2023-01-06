@@ -9,3 +9,13 @@ alshaya_xb_checkout_seo:
     js/alshaya_xb_checkout_seo.js: {}
   dependencies:
     - core/drupal
+    - alshaya_master/common_functions
+    - alshaya_spc/cart_utilities
+    - datalayer/datapush
+
+alshaya_xb_merge_cart_error_handler:
+  js:
+    js/alshaya_xb_merge_cart_error_handler.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

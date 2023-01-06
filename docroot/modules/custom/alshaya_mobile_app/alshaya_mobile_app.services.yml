@@ -21,6 +21,7 @@ services:
       - '@alshaya_super_category.super_category_feature_manager'
       - '@path.validator'
       - '@alshaya_acm_product_category.page'
+      - '@router.request_context'
   alshaya_mobile_app.utility.paragraphs:
     class: Drupal\alshaya_mobile_app\Service\MobileAppUtilityParagraphs
     decorates: alshaya_mobile_app.utility
@@ -50,6 +51,7 @@ services:
       - '@alshaya_super_category.super_category_feature_manager'
       - '@path.validator'
       - '@alshaya_acm_product_category.page'
+      - '@router.request_context'
   alshaya_mobile_app.alshaya_search_api_query_execute:
     class: Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute
     arguments:
@@ -66,3 +68,12 @@ services:
       - '@alshaya_acm_product.price_helper'
       - '@alshaya_product_options.swatches'
       - '@config.factory'
+  alshaya_mobile_app.categories_enrichment_subscriber:
+    class: Drupal\alshaya_mobile_app\EventSubscriber\CategoriesEnrichmentEventSubscriber
+    tags:
+      - {name: 'event_subscriber'}
+    arguments:
+      - '@alshaya_mobile_app.utility'
+      - '@database'
+      - '@entity_type.manager'
+      - '@language_manager'

@@ -1,9 +1,108 @@
+.order-detail {
+  .c-page-title {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .download-invoice-wrapper {
+    .download-invoice {
+      color: $primary_link;
+    }
+  }
+
+  .user__order--detail {
+    .total-row {
+      font-family: $alshaya-bold;
+    }
+  }
+}
+
 #block-userrecentorders {
   h2 {
     &.subtitle {
       border-bottom: rem(1) solid $user_acc_details_border;
       font-size: rem(14);
       text-transform: capitalize;
+    }
+  }
+
+  .order-summary-row td:first-child {
+    .light {
+      font-size: rem(13);
+    }
+
+    .dark {
+      font-size: rem(14);
+    }
+  }
+}
+
+.user__order--detail {
+  @include breakpoint($desktop) {
+    font-size: rem(13);
+  }
+
+  .font-small {
+    font-size: rem(14);
+    font-family: $alshaya-bold;
+  }
+
+  .order-details-row {
+    color: $order_detail_details_row_content;
+  }
+
+  .order-item-row {
+    border-color: $order_detail_delivery_details_row_border;
+
+    .dark {
+      color: $order_detail_details_row_content;
+      font-family: $alshaya-bold;
+      line-height: rem(18);
+      margin-bottom: rem(6);
+    }
+  }
+
+  > div {
+    > div {
+      &.above-mobile.blend,
+      .mobile-only {
+        .dark {
+          color: $order_detail_details_row_content;
+        }
+      }
+    }
+  }
+
+  .store-name-and-address {
+    .store-address {
+      p {
+        margin: 0;
+      }
+    }
+
+    .store-map-link {
+      a {
+        color: $order_detail_delivery_details_row_content;
+
+        &::before {
+          color: $order_detail_delivery_details_row_content;
+        }
+      }
+    }
+  }
+}
+
+.order-detail,
+.block-alshaya-user-recent-orders {
+  .user__order--detail {
+    div.order-item-row.delivered-items,
+    tr.order-item-row.delivered-items,
+    div.order-item-row.cancelled-items,
+    tr.order-item-row.cancelled-items {
+      > div,
+      td {
+        font-size: rem(16);
+      }
     }
   }
 }

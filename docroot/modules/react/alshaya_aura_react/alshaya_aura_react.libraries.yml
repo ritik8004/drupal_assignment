@@ -17,6 +17,7 @@ aura_header_library:
   dependencies:
     - alshaya_react/react
     - alshaya_aura_react/aura_backend.v2
+    - alshaya_seo_transac/gtm_aura
 
 # Header library for cart page.
 aura_header_library_cart:
@@ -54,3 +55,5 @@ aura_backend.v1:
 aura_backend.v2:
   js:
     dist/aura_backend_v2.bundle.js: {}
+  dependencies:
+   - alshaya_spc/cart_utilities

@@ -103,6 +103,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     freeGiftPromoType,
     isProductBuyable,
     bigTickectProduct,
+    eligibleForReturn,
   } = productValues;
 
   const emptyRes = (
@@ -326,6 +327,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
             <PdpDescription
               skuCode={skuMainCode}
               pdpDescription={description}
+              eligibleForReturn={eligibleForReturn}
               pdpShortDesc={shortDesc}
               title={title}
               pdpProductPrice={priceRaw}
@@ -337,7 +339,9 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
           {(pdpDescriptionContainerType === 2 && isOnlineReturnsEnabled())
             && (
             <div className="online-returns-pdp">
-              <OnlineReturnsPDP />
+              <OnlineReturnsPDP
+                eligibleForReturn={eligibleForReturn}
+              />
             </div>
             )}
           <ConditionalView

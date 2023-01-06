@@ -12,7 +12,8 @@
         top: initial;
         height: rem(48);
         margin: 0 !important;
-        border-#{$right}: none;
+        border-right: 0;
+        border-left: 0;
       }
 
       .show-all-filters-algolia {
@@ -21,6 +22,7 @@
         position: relative;
         height: rem(48);
         margin: 0;
+        border-#{$right}: 0;
       }
     }
   }

@@ -334,6 +334,12 @@ class ProductInfoResource extends ResourceBase {
           $child_data['stock']['qty'] = $stock_info['stock'];
           $child_data['stock']['status'] = $stock_info['in_stock'];
 
+          // Set the promotions for the variants.
+          $child_data['promotions'] = array_map(fn($promotion) => [
+            'label' => $promotion['text'],
+            'url' => $promotion['promo_web_url'],
+          ], $this->skuManager->getPromotions($child));
+
           $data['variants'][] = $child_data;
 
           // Update the mapping array.
@@ -377,12 +383,6 @@ class ProductInfoResource extends ResourceBase {
         // Set product title.
         $data['title'] = $this->productInfoHelper->getTitle($sku, 'modal');
 
-        // Set the promotions for the product.
-        $data['promotions'] = array_map(fn($promotion) => [
-          'label' => $promotion['text'],
-          'url' => $promotion['promo_web_url'],
-        ], $this->skuManager->getPromotions($sku));
-
         // Set the size guide data.
         $category = NULL;
         $field_category = $node->get('field_category')->first();
@@ -403,8 +403,10 @@ class ProductInfoResource extends ResourceBase {
 
         // Get the first child from attribute_sku which has values sorted
         // same as add to cart form.
-        $sorted_variants = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
-        $data['configurable_combinations']['firstChild'] = reset($sorted_variants);
+        if (array_key_exists('attribute_sku', $product_tree['combinations'])) {
+          $sorted_variants = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
+          $data['configurable_combinations']['firstChild'] = reset($sorted_variants);
+        }
 
         // Get the first child from variants of selected parent.
         foreach (Configurable::getChildSkus($product_tree['parent']) as $child_sku) {

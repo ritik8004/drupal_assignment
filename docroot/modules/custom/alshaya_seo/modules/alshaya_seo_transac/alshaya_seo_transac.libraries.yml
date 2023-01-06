@@ -58,6 +58,7 @@ gtm_spc_checkout:
     js/alshaya_seo.gtm.spc_checkout.js: {}
   dependencies:
     - alshaya_seo_transac/gtm_spc
+    - alshaya_spc/static_storage
 
 gtm_spc:
   js:
@@ -67,6 +68,7 @@ gtm_spc:
     - core/Drupal
     - alshaya_spc/cart_utilities
     - alshaya_master/local_storage_manager
+    - alshaya_seo_transac/gtm
 
 product_list:
   version: 1.x
@@ -120,6 +122,7 @@ gtm_initial_data_push:
     - core/drupal
     - core/jquery
     - alshaya_master/local_storage_manager
+    - alshaya_master/common_functions
 
 gtm_online_returns:
   version: 1.x
@@ -128,3 +131,19 @@ gtm_online_returns:
   dependencies:
     - alshaya_seo_transac/gtm
     - core/drupal
+
+gtm_hello_member:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.hello_member.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal
+
+gtm_aura:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.aura_analytics.js: {}
+  dependencies:
+    - core/drupal
+    - alshaya_spc/static_storage

@@ -3,47 +3,40 @@ Feature: SPC Checkout Home Delivery COD
 
   Background:
     Given I am on "{spc_basket_page}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
 
   @cod @hd
   Scenario: As a Guest, I should be able to checkout using COD
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
-    And I wait 10 seconds
+    And I wait for AJAX to finish
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/cart/login" page
+    And I wait for element ".checkout-login-wrapper"
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
     And I wait for the page to load
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
-    And I wait 10 seconds
-    Then the "payment-method-cashondelivery" checkbox should be checked
+    And I wait for element "input#payment-method-cashondelivery[checked]"
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
-    And I wait 2 seconds
+    And I wait for AJAX to finish
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
@@ -52,7 +45,7 @@ Feature: SPC Checkout Home Delivery COD
     Then I should see "{payment_type_text}"
     Then I should see "{payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
-    And I wait 2 seconds
+    And I wait for AJAX to finish
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -73,44 +66,36 @@ Feature: SPC Checkout Home Delivery COD
   Scenario: As a Guest, I should be able to checkout using COD in second language
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
-    And I wait 10 seconds
+    And I wait for AJAX to finish
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    And print current URL
-    Then I should be on "/{language_short}/cart/login" page
+    And I wait for element ".checkout-login-wrapper"
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
     And I wait for the page to load
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
-    And I wait 10 seconds
-    Then the "payment-method-cashondelivery" checkbox should be checked
+    And I wait for element "input#payment-method-cashondelivery[checked]"
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
-    And I wait 2 seconds
+    And I wait for AJAX to finish
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item" should exist
     Then the element "#spc-checkout-confirmation .spc-main .spc-content .spc-order-summary-order-detail .spc-detail-content .spc-order-summary-address-item .spc-value .spc-address-name" should exist
@@ -119,7 +104,7 @@ Feature: SPC Checkout Home Delivery COD
     Then I should see "{language_payment_type_text}"
     Then I should see "{language_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
-    And I wait 2 seconds
+    And I wait for AJAX to finish
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -139,38 +124,31 @@ Feature: SPC Checkout Home Delivery COD
   @cod @hd @language @mobile
   Scenario: As a Guest, I should be able to checkout using COD in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
-    And I wait 10 seconds
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
-    And I wait 10 seconds
+    And I wait for AJAX to finish
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
+    When I follow "continue to checkout"
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
+    And I wait for element ".checkout-login-wrapper"
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 10 seconds
     And I wait for the page to load
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
-    And I wait 10 seconds
-    Then the "payment-method-cashondelivery" checkbox should be checked
+    And I wait for element "input#payment-method-cashondelivery[checked]"
     And I scroll to the "#spc-payment-methods" element
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{anon_email}"

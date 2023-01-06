@@ -1,0 +1,71 @@
+.user-wishlist.c-plp {
+  .block-page-title-block {
+    &#block-page-title {
+      width: auto;
+      padding-bottom: rem(16);
+    }
+
+    h1.c-page-title {
+      margin-top: 0;
+    }
+
+    .back-link::before {
+      top: rem(-2);
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-left: 0;
+    padding-right: 0;
+
+    .block-page-title-block {
+      &#block-page-title {
+        margin: 0 rem(12);
+      }
+
+      #wishlist-share {
+        top: rem(48);
+      }
+    }
+
+    #my-wishlist {
+      #plp-hits {
+        padding-top: rem(54);
+      }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .block-page-title-block {
+      &#block-page-title {
+        margin-top: rem(-16);
+      }
+    }
+
+    #my-wishlist {
+      .c-products-list {
+        &.product-small {
+          .c-products__item {
+            width: calc((100% - #{rem(52)}) / 3);
+
+            &:nth-of-type(4n + 1) {
+              margin-#{$left}: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: auto;
+          }
+        }
+      }
+    }
+  }
+}

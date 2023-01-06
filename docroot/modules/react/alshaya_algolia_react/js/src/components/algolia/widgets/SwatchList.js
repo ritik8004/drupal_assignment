@@ -11,7 +11,11 @@ export default function SwatchList({ swatch, label }) {
 
   switch (swatchType) {
     case 'swatch_color':
-      return (<span className={`swatch swatch-color swatch-color-${swatchData.substr(1)}`} style={{ backgroundColor: swatchData }} />);
+      return (
+        <SwatchColor
+          swatchData={swatchData}
+        />
+      );
 
     case 'swatch_image':
       return (
@@ -27,3 +31,16 @@ export default function SwatchList({ swatch, label }) {
       );
   }
 }
+
+const SwatchColor = ({ swatchData }) => {
+  const values = swatchData.split('|');
+  if (values.length > 1) {
+    return (
+      <div className={`swatch swatch-color dual-color-tone swatch-color-${swatchData.substr(1)}`}>
+        <div style={{ backgroundColor: values[0] }} />
+        <div style={{ backgroundColor: values[1] }} />
+      </div>
+    );
+  }
+  return (<span className={`swatch swatch-color swatch-color-${swatchData.substr(1)}`} style={{ backgroundColor: swatchData }} />);
+};

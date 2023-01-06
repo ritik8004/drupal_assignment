@@ -93,6 +93,9 @@ class AuraLoyaltyForm extends React.Component {
         type: 'failure',
         message: getStringMessage(stateValues.error_message) || stateValues.error_message,
       });
+
+      // Push error events to gtm.
+      Drupal.alshayaSeoGtmLoyaltyOptionsError('aura', stateValues.error_message);
       return;
     }
 

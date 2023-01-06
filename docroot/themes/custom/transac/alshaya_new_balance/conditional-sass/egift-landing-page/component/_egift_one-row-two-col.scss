@@ -16,6 +16,7 @@
               font-family: $alshaya-bold;
               text-transform: unset;
               font-size: rem(14);
+              border-width: rem(2);
             }
           }
 
@@ -37,6 +38,8 @@
           .field--name-field-button-link {
             font-family: $alshaya-bold;
             font-size: rem(16);
+            border-width: rem(2);
+            padding-top: rem(14);
           }
         }
       }

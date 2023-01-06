@@ -386,14 +386,15 @@ class AlshayaGtmManager {
     $skuId = $this->skuManager->getSkuForNode($product);
     $product_terms = $this->fetchProductCategories($product);
     $department_attributes = [];
+    $attributes['gtm-category'] = '';
     // Fetch department attributes only if product terms exists.
     if ($product_terms) {
       $department_attributes = $this->fetchDepartmentAttributes($product_terms);
+      $attributes['gtm-category'] = implode('/', $product_terms);
     }
     $skuAttributes = $this->fetchSkuAtttributes($skuId, $child);
 
     $attributes['gtm-type'] = 'gtm-product-link';
-    $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
     // Proceed only if we have some data in department attributes.
@@ -854,7 +855,8 @@ class AlshayaGtmManager {
         if ($productNode instanceof NodeInterface) {
           // Get product media.
           $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
-          $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
+          $product_terms = $this->fetchProductCategories($productNode);
+          $attributes[$skuId]['gtm-category'] = !empty($product_terms) ? implode('/', $product_terms) : '';
           $attributes[$skuId]['gtm-main-sku'] = $this->skuManager->getSkuForNode($productNode);
         }
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
@@ -993,10 +995,18 @@ class AlshayaGtmManager {
 
       // If its a virtual product i.e egift card or egift topup.
       if ($item['type'] === 'virtual') {
+        // Since, we need to pass data to GTM only in English translation
+        // we use 'topup_card_name_en' field for eGift card topup
+        // and 'item_name_en' field for eGift card.
+        // See [CORE-42487] for API updates reference.
+        if ($item['sku'] === 'giftcard_topup') {
+          $product_name = $item['extension_attributes']['topup_card_name_en'] ?? '';
+        }
+        else {
+          $product_name = $item['extension_attributes']['item_name_en'] ?? '';
+        }
         $products[$item['item_id']] = [
-          'name' => ($item['sku'] == 'giftcard_topup')
-          ? $item['extension_attributes']['topup_card_name'] . '/' . $item['price']
-          : $item['name'] . '/' . $item['price'],
+          'name' => $product_name . '/' . $item['price'],
           'id' => $item['item_id'],
           'price' => $item['price'],
           'variant' => $item['sku'],
@@ -1016,7 +1026,8 @@ class AlshayaGtmManager {
       }
       $productNode = $this->skuManager->getDisplayNode($item['sku']);
       if ($productNode instanceof NodeInterface) {
-        $product['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
+        $product_terms = $this->fetchProductCategories($productNode);
+        $product['gtm-category'] = !empty($product_terms) ? implode('/', $product_terms) : '';
         $product['gtm-main-sku'] = $this->skuManager->getSkuForNode($productNode);
       }
       $productExtras = [
@@ -1049,6 +1060,20 @@ class AlshayaGtmManager {
 
     if (isset($order['extension'], $order['extension']['loyalty_card'])) {
       $loyalty_card = $order['extension']['loyalty_card'];
+    }
+
+    $loyalty_type = '';
+    if (isset($order['extension'], $order['extension']['loyalty_type'])) {
+      $loyalty_type = $order['extension']['loyalty_type'];
+    }
+
+    $reward_types = [];
+    if (isset($order['extension'], $order['extension']['applied_hm_voucher_codes'])) {
+      array_push($reward_types, 'hmvoucher');
+    }
+
+    if (isset($order['extension'], $order['extension']['applied_hm_offer_code'])) {
+      array_push($reward_types, 'hmoffer');
     }
 
     /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
@@ -1099,6 +1124,8 @@ class AlshayaGtmManager {
       'transactionId' => $order['increment_id'],
       'firstTimeTransaction' => $first_time_transac,
       'privilegesCardNumber' => $loyalty_card,
+      'loyaltyType' => $loyalty_type,
+      'rewardType' => !empty($reward_types) ? implode('|', $reward_types) : '',
       'userId' => $customer_id,
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
@@ -1223,8 +1250,9 @@ class AlshayaGtmManager {
             $page_dl_attributes['productOldPrice'] = '';
           }
         }
-
-        $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        if (!empty($product_terms)) {
+          $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        }
         break;
 
       case 'product listing page':
@@ -1246,8 +1274,9 @@ class AlshayaGtmManager {
             /** @var \Drupal\taxonomy\Entity\Term $taxonomy_parent */
             $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
           }
-
-          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+          if (!empty($terms)) {
+            $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+          }
         }
         break;
 

@@ -4,6 +4,7 @@ namespace Alshaya\Blt\Plugin\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Symfony\Component\Finder\Finder;
+use Robo\Exception\TaskException;
 
 /**
  * Defines commands in the "alshayafe" namespace.
@@ -169,7 +170,7 @@ class AlshayaFrontendCommand extends BltTasks {
       // - we have some file changes at least.
       if (getenv('GITHUB_ACTIONS') == 'true'
         && getenv('GITHUB_EVENT_NAME') == 'push'
-        && !empty(getenv('CHANGED_ALL_FILES'))
+        && (int) getenv('CHANGED_ALL_FILES') > 0
       ) {
         $themeChanges = getenv('CHANGED_THEME_FILES');
         // Build if theme is changed and tracked in CHANGED_THEME_FILES
@@ -210,12 +211,19 @@ class AlshayaFrontendCommand extends BltTasks {
 
           // Copy step.
           $this->say('Copying unchanged ' . $themeName . ' theme from ' . $cssFromDir . ' to ' . $cssToDir);
-          $result = $this->taskCopyDir([$cssFromDir => $cssToDir])
-            ->overwrite(TRUE)
-            ->run();
-          // If copying failed preparing for build.
-          if (!$result->wasSuccessful()) {
+          try {
+            $result = $this->taskCopyDir([$cssFromDir => $cssToDir])
+              ->overwrite(TRUE)
+              ->run();
+            // If copying failed preparing for build.
+            if (!$result->wasSuccessful()) {
+              $this->say('Unable to copy css files from cloud. Building theme ' . $themeName);
+              $build = TRUE;
+            }
+          }
+          catch (\Throwable $e) {
             $this->say('Unable to copy css files from cloud. Building theme ' . $themeName);
+            $this->say('Error: ' . $e->getMessage());
             $build = TRUE;
           }
         }
@@ -313,7 +321,7 @@ class AlshayaFrontendCommand extends BltTasks {
       // - we have some file changes at least.
       if (getenv('GITHUB_ACTIONS') == 'true'
         && getenv('GITHUB_EVENT_NAME') == 'push'
-        && !empty(getenv('CHANGED_ALL_FILES'))
+        && (int) getenv('CHANGED_ALL_FILES') > 0
       ) {
         $reactChanges = getenv('CHANGED_REACT_FILES');
         // Build if change in common (modules/react/js) folder.
@@ -345,11 +353,19 @@ class AlshayaFrontendCommand extends BltTasks {
 
           // Copy step.
           $this->say('Copying unchanged ' . $file->getRelativePath() . ' react module from ' . $reactFromDir . ' to ' . $reactToDir);
-          $result = $this->taskCopyDir([$reactFromDir => $reactToDir])
-            ->overwrite(TRUE)
-            ->run();
-          if (!$result->wasSuccessful()) {
+
+          try {
+            $result = $this->taskCopyDir([$reactFromDir => $reactToDir])
+              ->overwrite(TRUE)
+              ->run();
+            if (!$result->wasSuccessful()) {
+              $this->say('Unable to copy react files from cloud. Building react module ' . $file->getRelativePath());
+              $build = TRUE;
+            }
+          }
+          catch (\Throwable $e) {
             $this->say('Unable to copy react files from cloud. Building react module ' . $file->getRelativePath());
+            $this->say('Error: ' . $e->getMessage());
             $build = TRUE;
           }
         }
@@ -387,21 +403,45 @@ class AlshayaFrontendCommand extends BltTasks {
     $cmd = 'npm run build';
 
     // Build specific paths instead of whole docroot.
-    if (!empty($path)) {
-      // Set path relative to docroot.
-      $relative = explode('docroot/', $path, 2);
-      if (count($relative) === 2) {
-        $path = $relative[1];
+    if (getenv('GITHUB_ACTIONS') == 'true' && (int) getenv('CHANGED_JS_FILES') < 1) {
+      // Copy existing folder from acquia repo if build is not needed.
+      // Preparing folder paths for copying.
+      $jsFromDir = '/tmp/blt-deploy/' . substr($dir, strpos($dir, 'docroot')) . '/build';
+      $jsToDir = $dir . '/build';
+      // Copy step.
+      $this->say('Copying build folder from ' . $jsFromDir . ' to ' . $jsToDir);
+      try {
+        $result = $this->taskCopyDir([$jsFromDir => $jsToDir])
+          ->overwrite(TRUE)
+          ->run();
+        // If copying failed preparing for build.
+        if (!$result->wasSuccessful()) {
+          $this->say('Unable to copy build files from cloud.');
+        }
       }
-      $cmd = $cmd . ' -- --path=' . $path;
+      catch (\Throwable $e) {
+        $this->say('Error: Unable to copy build files from cloud.');
+        $this->say('Error message: ' . $e->getMessage());
+      }
     }
-
-    $task = $this->taskExec($cmd);
-    $task->dir($dir);
-    $result = $task->run();
-    $this->say($result->getOutputData());
-    $this->say($result->getMessage());
-    return $result;
+    else {
+      $cmd = 'npm run build';
+      // Build specific paths instead of whole docroot.
+      if (!empty($path)) {
+        // Set path relative to docroot.
+        $relative = explode('docroot/', $path, 2);
+        if (count($relative) === 2) {
+          $path = $relative[1];
+        }
+        $cmd = $cmd . ' -- --path=' . $path;
+      }
+      $task = $this->taskExec($cmd);
+      $task->dir($dir);
+      $result = $task->run();
+      $this->say($result->getOutputData());
+      $this->say($result->getMessage());
+      return $result;
+    }
   }
 
   /**
@@ -421,7 +461,7 @@ class AlshayaFrontendCommand extends BltTasks {
       $tasks->stopOnFail();
 
       // Process all svg files inside docroot/modules folder.
-      $tasks = $this->processSvgFiles(
+      $this->processSvgFiles(
         $tasks,
         'modules',
         [
@@ -431,14 +471,19 @@ class AlshayaFrontendCommand extends BltTasks {
           'products',
         ]);
       // Process all svg files inside docroot/themes/custom folder.
-      $tasks = $this->processSvgFiles(
+      $this->processSvgFiles(
         $tasks,
         'themes/custom',
         self::$themeTypes
       );
 
-      $tasks->stopOnFail();
-      $processOutput = $tasks->run();
+      try {
+        $tasks->stopOnFail();
+        $processOutput = $tasks->run();
+      }
+      catch (TaskException $e) {
+        // Ignore TaskException, we might simply be copying everything.
+      }
     }
     else {
       $this->say('No need to minify svg files outside Github CI as we do it during deployments.');
@@ -456,11 +501,8 @@ class AlshayaFrontendCommand extends BltTasks {
    *   Folder where its running like modules or themes.
    * @param array $subFolders
    *   Sub-folders inside modules or themes like custom, brands, non-transac.
-   *
-   * @return object
-   *   Executable task object.
    */
-  private function processSvgFiles(object $tasks, string $containingFolderPath, array $subFolders): object {
+  private function processSvgFiles(object $tasks, string $containingFolderPath, array $subFolders) {
     $docroot = $this->getConfigValue('docroot');
     // Ignore these directories.
     $ignoredDirs = [
@@ -481,13 +523,47 @@ class AlshayaFrontendCommand extends BltTasks {
           && !$subDir->isDot()
           && !in_array($baseFolder, $ignoredDirs)
           && (new Finder())->name('*.svg')->in($subDir->getRealpath())->hasResults()) {
-          // Minify command.
-          $tasks->exec("cd $docroot; npm run svg-minify --folderPath=$containingFolderPath/$singleFolder/$baseFolder");
+          // Preparing the SVG files array which are present
+          // in the latest commit.
+          $svgFiles = !empty(getenv('CHANGED_SVG_FILES')) ? explode(" ", getenv('CHANGED_SVG_FILES')) : [];
+          // Finding and looping through all the SVG files present in code-base.
+          foreach (Finder::create()->followLinks()->files()->in($subDir->getRealpath())->name('/\.(svg)$/') as $file) {
+            $minify = TRUE;
+            // Checks to ensure to run the minify command only
+            // to the files which are modified and failed during copy.
+            $filePath = substr($file, strpos($file, 'docroot'));
+            // Try to copy unchanged svg files only in github action push event.
+            if (getenv('GITHUB_EVENT_NAME') == 'push' && (empty($svgFiles) || !in_array($filePath, $svgFiles))) {
+              // Copy the unchanged files from cloud where
+              // those files are already in minify state.
+              try {
+                $svgCloudFilePath = '/tmp/blt-deploy/' . $filePath;
+                // Copy step.
+                $this->say('Copying ' . $file . ' from ' . $svgCloudFilePath . ' to ' . $file);
+                $result = $this->taskFilesystemStack()->copy($svgCloudFilePath, $file, TRUE)->run();
+                // If copy is successful change minify flag as
+                // false, as we don't need to execute minify command.
+                if ($result->wasSuccessful()) {
+                  $minify = FALSE;
+                }
+                else {
+                  $this->say('Unable to copy following svg file from cloud: ' . $file);
+                }
+              }
+              catch (\Throwable $e) {
+                $this->say('Error: Unable to copy the following file - ' . $file . ', from ' . $svgCloudFilePath . ' to ' . $file);
+                $this->say('Error Message: ' . $e->getMessage());
+              }
+            }
+            // Execute minify command if it is true.
+            if ($minify) {
+              // Minify command.
+              $tasks->exec("cd $docroot; npm run svg-minify-specific --filePath=" . $file->getRealPath());
+            }
+          }
         }
       }
     }
-
-    return $tasks;
   }
 
   /**

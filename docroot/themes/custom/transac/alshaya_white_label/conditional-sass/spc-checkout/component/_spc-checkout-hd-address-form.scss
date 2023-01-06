@@ -201,3 +201,28 @@
 #spc-checkout-customer-login-link {
   text-decoration: underline;
 }
+
+@include breakpoint($only-mobile) {
+  .address-form-mobile-only {
+    background: $spc-checkout-delivery-method-bg;
+
+    .spc-address-form-actions {
+      margin-top: rem(42);
+    }
+
+    .spc-address-form-submit {
+      width: 100%;
+      border-radius: 0;
+      padding: rem(13) 0;
+      font-size: rem(14);
+      border: none;
+      background: $primary_btn_bg;
+      color: $primary_btn_text;
+      font-family: $alshaya-bold;
+    }
+
+    .spc-address-add {
+      padding: rem(35) rem(21) rem(42) rem(21);
+    }
+  }
+}

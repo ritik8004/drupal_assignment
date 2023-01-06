@@ -76,8 +76,6 @@
   }
 
   .toggle--sign {
-    width: calc(100% - #{rem(50)});
-
     .one {
       font-size: rem(12);
       text-transform: uppercase;
@@ -89,7 +87,9 @@
     }
 
     .menu--active & {
-      #{$left}: rem(-1);
+      @include breakpoint($only-mobile) {
+        #{$left}: rem(-1);
+      }
 
       html[lang=ar] & {
         right: 0;

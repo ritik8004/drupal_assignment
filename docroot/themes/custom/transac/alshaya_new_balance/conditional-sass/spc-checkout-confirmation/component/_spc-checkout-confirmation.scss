@@ -49,26 +49,77 @@
     .spc-sidebar {
       @include breakpoint($only-mobile) {
         margin-top: rem(0);
+
+        .spc-order-summary-block {
+          .product-content {
+            .product-item {
+              margin-#{$right}: rem(12);
+            }
+          }
+        }
       }
 
       .spc-order-summary-block {
         .product-content {
-          padding: rem(11) rem(15);
-          margin-bottom: rem(5);
+          padding: rem(12);
+          margin-bottom: rem(6);
 
           .product-item {
             .spc-product-title-price {
               display: flex;
-              justify-content: inherit;
+              justify-content: space-between;
+              padding-#{$right}: rem(8);
 
               .spc-product-price {
                 font-family: $alshaya-bold;
+              }
+
+              @include breakpoint($only-mobile) {
+                flex-direction: column;
               }
             }
           }
 
           &:empty {
             display: none;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .spc-main {
+      .spc-sidebar {
+        .spc-order-summary-block {
+          .product-content {
+            .product-item {
+              background: $spc-checkout-product-light-bg;
+              padding: rem(10);
+            }
+          }
+
+          .block-content {
+            background: $spc-checkout-product-content-bg;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .totals {
+      & > .total-line-item:first-child {
+        padding-top: rem(20);
+      }
+    }
+
+    .spc-main {
+      .spc-sidebar {
+        .spc-order-summary-block {
+          .product-content {
+            padding: rem(24) rem(24) 0;
+            margin-bottom: 0;
           }
         }
       }

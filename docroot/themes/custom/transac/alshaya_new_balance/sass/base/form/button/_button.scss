@@ -4,3 +4,7 @@
     border-color: $primary_empty_btn_border;
   }
 }
+
+.button-wide {
+  @include primaryBtn;
+}

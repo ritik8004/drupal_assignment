@@ -61,6 +61,7 @@ class HelloMemberBenefitsPageController extends ControllerBase {
           'alshaya_hello_member/alshaya_hello_member_benefits_page',
           'alshaya_white_label/hello-member-benefit-landing-page',
           'alshaya_white_label/hello-member-qr-code',
+          'alshaya_seo_transac/gtm_hello_member',
         ],
         'drupalSettings' => [
           'helloMemberBenefits' => [

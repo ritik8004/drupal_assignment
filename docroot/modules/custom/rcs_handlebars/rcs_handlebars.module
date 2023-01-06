@@ -34,7 +34,9 @@ function rcs_handlebars_library_info_alter(&$libraries, $extension) {
  * Implements hook_page_attachments_alter().
  */
 function rcs_handlebars_page_attachments_alter(array &$attachments) {
-  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+  if (\Drupal::theme()->getActiveTheme()->getName()
+    !== \Drupal::config('system.theme')->get('default')
+  ) {
     return;
   }
 

@@ -36,6 +36,7 @@ import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHe
 import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -58,6 +59,10 @@ const SearchResultsComponent = ({
   if (storedvalues !== null && storedvalues.page !== null) {
     defaultpageRender = storedvalues.page;
   }
+  let defaultcolgrid = 'small';
+  if (drupalSettings.algoliaSearch.defaultColgrid !== null) {
+    defaultcolgrid = drupalSettings.algoliaSearch.defaultColgrid;
+  }
 
   const optionalFilter = getSuperCategoryOptionalFilter();
   const { maximumDepthLhn } = drupalSettings.algoliaSearch;
@@ -69,6 +74,10 @@ const SearchResultsComponent = ({
   const showCategoryFacets = () => {
     parentRef.current.classList.toggle('category-facet-open');
   };
+
+  const showBrandFilter = hasValue(drupalSettings.superCategory)
+    ? drupalSettings.superCategory.show_brand_filter
+    : false;
 
   // Add the drawer markup for add to bag feature.
   createConfigurableDrawer();
@@ -116,8 +125,8 @@ const SearchResultsComponent = ({
               />
               {!isDesktop() && (
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
-                  {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined)
-                    && (drupalSettings.superCategory.show_brand_filter) && (
+                  {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined
+                    && showBrandFilter) && (
                     <div>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
                         {Drupal.t('Brands/Category')}
@@ -148,7 +157,8 @@ const SearchResultsComponent = ({
                       </div>
                     </div>
                   )}
-                  {(drupalSettings.algoliaSearch.search.filters.super_category === undefined) && (
+                  {(drupalSettings.algoliaSearch.search.filters.super_category === undefined
+                    || !showBrandFilter) && (
                     <>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                       <HierarchicalMenu
@@ -197,7 +207,7 @@ const SearchResultsComponent = ({
         && (
           <BecomeHelloMember />
         )}
-        <div id="hits" className="c-products-list product-small view-search">
+        <div id="hits" className={`c-products-list product-${defaultcolgrid} view-search`}>
           <SearchResultInfiniteHits
             defaultpageRender={defaultpageRender}
             pageType="search"

@@ -171,7 +171,7 @@ function alshaya_fl_transac_acq_sku_commerce_category_alter(TermInterface $term,
 /**
  * Implements hook_alshaya_acm_product_category_tree_data_alter().
  */
-function alshaya_fl_transac_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+function alshaya_fl_transac_alshaya_acm_product_category_tree_data_alter(&$data, $term, $langcode) {
   // Return if the is_underlined parameter is not set or false.
   if (!isset($term->is_underlined)
     || !((bool) $term->is_underlined)) {

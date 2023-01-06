@@ -79,6 +79,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                     this.setState({
                       otpRequested: true,
                     });
+                    Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'mobile' });
                   }
                 } else if (result.data.error_code === 'mobile_already_registered') {
                   showError(getInlineErrorSelector('signUpOtpMobile').signUpOtpMobile, getStringMessage(result.data.error_message));
@@ -137,6 +138,7 @@ class AuraFormSignUpOTPModal extends React.Component {
           if (result.data.status) {
             // Close the OTP Modal.
             closeOTPModal();
+            Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'verify otp' });
             // Open modal for the new user.
             openNewUserModal();
           }

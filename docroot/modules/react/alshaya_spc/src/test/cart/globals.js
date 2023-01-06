@@ -2,6 +2,7 @@ import Drupal from '../../../../../../core/misc/drupal.es6';
 // Bridge to make Drupal Underscore available while running tests.
 global._ = require('underscore');
 
+let staticStorage = {};
 export const drupalSettings = {
   jest: 1,
   cart: {
@@ -11,15 +12,15 @@ export const drupalSettings = {
       country_code: 'kw',
     },
     addressFields: {
-      "default": {
-        "kw": [
-          "area",
-          "address_apartment_segment",
-        ]
-      }
+      default: {
+        kw: [
+          'area',
+          'address_apartment_segment',
+        ],
+      },
     },
     exceptionMessages: {
-      "This product is out of stock.": "OOS",
+      'This product is out of stock.': 'OOS',
     },
   },
   path: {
@@ -38,15 +39,41 @@ export const drupalSettings = {
 // This is most likely because this function is included by Drupal and is not a
 // part of react.
 window.commerceBackend = window.commerceBackend || {};
-window.commerceBackend.getProductStatus = function () {}
+window.commerceBackend.getProductStatus = function getProductStatus() {};
+window.commerceBackend.getCartId = function getCartId() {};
+window.commerceBackend.getCartIdFromStorage = function getCartIdFromStorage() {};
+window.commerceBackend.removeCartIdFromStorage = function removeCartIdFromStorage() {};
+
+// Mock implementation of static storage.
+global.Drupal.alshayaSpc = Drupal.alshayaSpc || {};
+global.Drupal.alshayaSpc.staticStorage = global.Drupal.alshayaSpc || {};
+// Mock function from alshaya_spc/assets/js/static_storage.js to help running
+// the npm tests.
+global.Drupal.alshayaSpc.staticStorage.clear = function clear() {
+  staticStorage = {};
+};
+global.Drupal.alshayaSpc.staticStorage.set = function set(key, value) {
+  staticStorage[key] = value;
+};
+global.Drupal.alshayaSpc.staticStorage.get = function get(key) {
+  if (typeof staticStorage[key] === 'undefined') {
+    return null;
+  }
+
+  return staticStorage[key];
+};
+global.Drupal.alshayaSpc.staticStorage.remove = function remove(key) {
+  staticStorage[key] = null;
+};
 
 // Start copiying functions from alshaya_master/js/local_storage_manager.js
 // to help running the npm tests.
 // Duplicate of function `Drupal.addItemInLocalStorage`.
-global.Drupal.addItemInLocalStorage = function (
+global.Drupal.addItemInLocalStorage = function addItemInLocalStorage(
   storageKey,
   storageData = null,
-  expireAfterTime = null) {
+  expireAfterTime = null,
+) {
   // Return if data to store is not provided, or
   // the local storage key is not set, of
   // storage expiry time is zero.
@@ -66,7 +93,7 @@ global.Drupal.addItemInLocalStorage = function (
 
   // If this is null, we don't set any expiry to the data storage in the local storage.
   if (expireAfterTime) {
-    dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime) * 1000);
+    dataToStore.expiry_time = new Date().getTime() + (parseInt(expireAfterTime, 10) * 1000);
   }
 
   // Store data in the local storage with the expiry time.
@@ -77,7 +104,7 @@ global.Drupal.addItemInLocalStorage = function (
 };
 
 // Duplicate of function `Drupal.removeItemFromLocalStorage`.
-global.Drupal.removeItemFromLocalStorage = function (storageKey) {
+global.Drupal.removeItemFromLocalStorage = function removeItemFromLocalStorage(storageKey) {
   // Remove item from the local storage if key is set.
   return (storageKey)
     ? localStorage.removeItem(storageKey)
@@ -85,7 +112,7 @@ global.Drupal.removeItemFromLocalStorage = function (storageKey) {
 };
 
 // Duplicate of function `Drupal.getItemFromLocalStorage`.
-global.Drupal.getItemFromLocalStorage = function (storageKey) {
+global.Drupal.getItemFromLocalStorage = function getItemFromLocalStorage(storageKey) {
   // Return if the local storage key is not set.
   if (!storageKey) {
     return null;
@@ -125,7 +152,7 @@ global.Drupal.getItemFromLocalStorage = function (storageKey) {
 // to help running the npm tests.
 
 // Duplicate of function `Drupal.hasValue`.
-global.Drupal.hasValue = function (storageKey) {
+global.Drupal.hasValue = function hasValue(value) {
   if (typeof value === 'undefined') {
     return false;
   }

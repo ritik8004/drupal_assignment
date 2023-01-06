@@ -7,7 +7,6 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\alshaya_acm\AlshayaMdcQueueManager;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
-use Drupal\Core\Site\Settings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Datetime\TimeInterface;
 
@@ -160,16 +159,16 @@ class AlshayaAcmDashboardController extends ControllerBase {
       ],
     ];
 
-    $mdc_settings = Settings::get('alshaya_api.settings');
+    $mdc_settings = $this->configFactory->get('alshaya_api.settings');
     $rows = [
-      ['URL', $mdc_settings['magento_host']],
-      ['Consumer key', $mdc_settings['consumer_key']],
-      ['Access token', $mdc_settings['access_token']],
-      ['Magento API base', $mdc_settings['magento_api_base']],
-      ['Verify SSL', empty($mdc_settings['verify_ssl']) ? 'Disabled' : 'Enabled'],
+      ['URL', $mdc_settings->get('magento_host')],
+      ['Consumer key', $mdc_settings->get('consumer_key')],
+      ['Access token', $mdc_settings->get('access_token')],
+      ['Magento API base', $mdc_settings->get('magento_api_base')],
+      ['Verify SSL', empty($mdc_settings->get('verify_ssl')) ? 'Disabled' : 'Enabled'],
     ];
     $store_language_mapping = $this->i18nHelper->getStoreLanguageMapping();
-    $mdc_language_prefixes = Settings::get('magento_lang_prefix');
+    $mdc_language_prefixes = $mdc_settings->get('magento_lang_prefix');
     foreach ($store_language_mapping as $key => $value) {
       $rows[] = ['Langcode | Prefix | Store ID', "$key | $mdc_language_prefixes[$key] | $value"];
     }

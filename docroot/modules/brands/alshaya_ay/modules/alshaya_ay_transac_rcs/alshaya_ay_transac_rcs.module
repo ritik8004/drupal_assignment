@@ -35,10 +35,12 @@ function alshaya_ay_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$f
     'fit',
     'fabrication',
     'color_way',
+    'quick_fit',
     'how_to_use',
     'why_we_love_it',
   );
   array_push($fields['items']['... on ConfigurableProduct']['variants']['product'],
     'color_way',
+    'fit',
   );
 }

@@ -1,2 +1,3 @@
 # Write the react module name one per line for which this module needs a rebuild.
 alshaya_add_to_bag
+alshaya_algolia_react

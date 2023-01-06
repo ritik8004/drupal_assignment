@@ -7,7 +7,6 @@ use Drupal\alshaya_spc\Helper\SecureText;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\kaleyra\MessageApiAdapter;
@@ -268,20 +267,11 @@ class ShareCart extends ResourceBase {
     $to = $data['value'];
 
     // Validating the SmartAgent info with the user object info.
-    $storeCode = '';
-    $storeField = $user->get('field_agent_store')->first();
-    // Validate if there is value in store field.
-    if (empty($storeField)) {
-      $error_message = 'Agent store is empty.';
-      return $this->prepareResourceResponse($error_message);
-    }
-
-    $store = $storeField->get('entity')->getValue();
-    if (empty($store)) {
+    $storeCode = $user->get('field_agent_store_id')->getString();
+    if (empty($storeCode)) {
       $error_message = 'The store that is assigned is missing or deleted.';
       return $this->prepareResourceResponse($error_message);
     }
-    $storeCode = $store->get('field_store_locator_id')->getString();
     // Flag value to track update status.
     $updated = FALSE;
     if (!empty($storeCode) && $smart_agent_details_array['storeCode'] != $storeCode) {
@@ -309,16 +299,12 @@ class ShareCart extends ResourceBase {
       'langcode' => $langcode,
     ];
 
-    $key = Settings::get('alshaya_api.settings');
-    $encryptedData = SecureText::encrypt(json_encode($data), $key['consumer_secret']);
+    $key = $this->configFactory->get('alshaya_api.settings');
+    $encryptedData = SecureText::encrypt(json_encode($data), $key->get('consumer_secret'));
 
+    $cart_url = '';
     if ($this->spcHelper->getCommerceBackendVersion() == 2) {
       $cart_url = Url::fromRoute('alshaya_checkout_by_agent.resume', [], ['absolute' => TRUE])->toString();
-    }
-    else {
-      $cart_url = $this->currentRequest->getSchemeAndHttpHost();
-      $cart_url .= _alshaya_spc_get_middleware_url();
-      $cart_url .= '/cart/smart-agent-cart-resume';
     }
 
     // Add the encrypted data in query string.

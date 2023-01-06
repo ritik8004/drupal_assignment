@@ -1,10 +1,9 @@
 import React from 'react';
-import moment from 'moment';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import logger from '../../../../../../js/utilities/logger';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getHelloMemberPointsHistory } from '../../../hello_member_api_helper';
-import { getPointstHistoryPageSize } from '../../../utilities';
+import { formatDate, getPointstHistoryPageSize } from '../../../utilities';
 import MemberPointsSummary from './member-points-summary';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 
@@ -22,6 +21,8 @@ class MyPointsHistory extends React.Component {
   componentDidMount() {
     // Get transactions data purchased via hello member points.
     this.getPointsHistoryData();
+    // Push points view data to gtm.
+    Drupal.alshayaSeoGtmPushPoints();
   }
 
   /**
@@ -31,6 +32,8 @@ class MyPointsHistory extends React.Component {
     const { pageSize } = this.state;
     this.setState((prev) => ({ firstPage: prev.firstPage + pageSize }), () => {
       this.getPointsHistoryData();
+      // Push points view all button click to gtm.
+      Drupal.alshayaSeoGtmPushPointsViewAll();
     });
   }
 
@@ -87,7 +90,7 @@ class MyPointsHistory extends React.Component {
                   <p className="history-light-title">{data.location_name}</p>
                 )}
               </div>
-              <div className="points-date">{moment(new Date(data.date)).format('DD/MM/YYYY')}</div>
+              <div className="points-date">{formatDate(new Date(data.date), 'YYYY-MM-DD')}</div>
               <div className="points-earned">
                 <p className="history-light-title">{getStringMessage('points_earned')}</p>
                 <p>{data.points}</p>

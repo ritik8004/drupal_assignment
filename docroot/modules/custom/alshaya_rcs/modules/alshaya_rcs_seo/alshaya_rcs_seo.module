@@ -5,8 +5,6 @@
  * Module file for RCS Seo.
  */
 
-use Drupal\Core\Site\Settings;
-
 /**
  * Implements hook_library_info_alter().
  */
@@ -58,7 +56,7 @@ function alshaya_rcs_seo_simple_sitemap_links_alter(array &$links, $sitemap_vari
     switch ($sitemap_domain) {
       case 'magento':
         // Prepare the sitemap domain URL.
-        $sitemap_domain_url = Settings::get('alshaya_api.settings')['magento_host'];
+        $sitemap_domain_url = \Drupal::config('alshaya_api.settings')->get('magento_host');
         break;
 
       default:
@@ -99,9 +97,41 @@ function alshaya_rcs_seo_alshaya_rcs_category_query_fields_alter(&$fields) {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_rcs_seo_module_implements_alter(&$implementations, $hook) {
+  // To call the alshaya_rcs_seo_rcs_placeholders_graphql_query_alter at the end
+  // for RCS Seo specific changes.
+  if ($hook == 'rcs_placeholders_graphql_query_alter'
+    && isset($implementations['alshaya_rcs_seo'])) {
+    $group = $implementations['alshaya_rcs_seo'];
+    unset($implementations['alshaya_rcs_seo']);
+    $implementations['alshaya_rcs_seo'] = $group;
+  }
+}
+
+/**
  * Implements hook_rcs_placeholders_graphql_query_alter().
  */
 function alshaya_rcs_seo_rcs_placeholders_graphql_query_alter(&$query_fields) {
-  array_push($query_fields['categories']['query']['query($urlKey: [String])']['categories(filters: { url_path: { in: $urlKey }})']['items'], 'gtm_name');
-  array_push($query_fields['categories']['query']['query($urlKey: [String])']['categories(filters: { url_path: { in: $urlKey }})']['items']['breadcrumbs'], 'category_gtm_name');
+  // Adding a check for categories just in case if categories doesn't exists.
+  if (array_key_exists('categories', $query_fields)) {
+    array_push($query_fields['categories']['query']['query($urlKey: [String])']['categories(filters: { url_path: { in: $urlKey }})']['items'], 'gtm_name');
+    array_push($query_fields['categories']['query']['query($urlKey: [String])']['categories(filters: { url_path: { in: $urlKey }})']['items']['breadcrumbs'], 'category_gtm_name');
+  }
+  // Add the GTM attributes for pdp product query as well.
+  if (array_key_exists('pdp_product', $query_fields)) {
+    array_push($query_fields['pdp_product']['query']['query($url: String)']['products(filter: {url_key: {eq: $url}})']['items']['categories'], 'gtm_name');
+    array_push($query_fields['pdp_product']['query']['query($url: String)']['products(filter: {url_key: {eq: $url}})']['items']['categories']['breadcrumbs'], 'category_gtm_name');
+  }
+  // Get the GTM attributes in single_product_by_color_sku.
+  if (array_key_exists('single_product_by_color_sku', $query_fields)) {
+    $items = $query_fields['single_product_by_color_sku']['query']['query($sku: String)']['products(filter: {sku: {eq: $sku}})']['items'];
+    $items = array_merge($items, [
+      'gtm_attributes' => [
+        'name',
+      ],
+    ]);
+    $query_fields['single_product_by_color_sku']['query']['query($sku: String)']['products(filter: {sku: {eq: $sku}})']['items'] = $items;
+  }
 }

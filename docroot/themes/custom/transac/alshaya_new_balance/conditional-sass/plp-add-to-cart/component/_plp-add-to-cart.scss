@@ -1,0 +1,43 @@
+.product-drawer-content-wrapper {
+  .price {
+    font-size: rem(15);
+  }
+
+  html[lang=en] & {
+    .configurable-product-form-wrapper {
+      .slick-dots {
+        li {
+          button {
+            &::before {
+              line-height: rem(16);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .attribute-wrapper,
+  .alshaya-select-wrapper {
+    margin-top: rem(14);
+    margin-bottom: 0;
+  }
+
+  .size-guide-link {
+    html[lang=ar] & {
+      line-height: 1;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .attribute-wrapper_size {
+      float: none;
+      width: 100%;
+
+      & + .alshaya-select-wrapper {
+        float: none;
+        margin-#{$left}: 0;
+      }
+    }
+  }
+}

@@ -8,6 +8,8 @@
     .auth-link {
       @include secondaryBtn;
 
+      height: rem(56);
+
       @include breakpoint($tablet) {
         @include social-link-width;
 
@@ -50,6 +52,8 @@
 
 .block-alshaya-signup-signin-buttons {
   .link-button {
+    height: rem(56);
+
     &::before {
       background-image: url(#{$nb_theme_img_directory_path}/icons/user.svg);
       background-size: contain;
@@ -58,6 +62,16 @@
 
       @include breakpoint($upto-tablet) {
         position: relative;
+      }
+    }
+  }
+}
+
+.alshaya-social {
+  .auth-link {
+    html[lang="ar"] & {
+      @include breakpoint($only-mobile) {
+        padding-right: 0;
       }
     }
   }

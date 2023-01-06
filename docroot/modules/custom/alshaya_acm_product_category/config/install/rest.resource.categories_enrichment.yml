@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_acm_product_category
+    - serialization
+    - user
+id: categories_enrichment
+plugin_id: categories_enrichment
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

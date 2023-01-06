@@ -6,7 +6,10 @@ import getStringMessage from '../../../../../../../js/utilities/strings';
 import AuraFormRedeemPoints from '../../../aura-forms/aura-redeem-points';
 import { getAllAuraStatus } from '../../../../../../../alshaya_aura_react/js/utilities/helper';
 import ConditionalView from '../../../../../../../js/utilities/components/conditional-view';
-import { getTooltipPointsOnHoldMsg } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import {
+  getPointToPrice,
+  getTooltipPointsOnHoldMsg,
+} from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import ToolTip from '../../../../../utilities/tooltip';
 import { formatDate } from '../../../../../../../alshaya_aura_react/js/utilities/reward_activity_helper';
 
@@ -38,12 +41,14 @@ export default class AuraLinkedCheckout extends React.Component {
       formActive,
       loyaltyStatus,
       methodActive,
+      cart,
     } = this.props;
     // Prepare the props based on the state values.
     const { active } = this.state;
     const allAuraStatus = getAllAuraStatus();
     // Show accordion expandad, if payment method is active on checkout page.
     const activeClass = (active && methodActive) ? 'active' : '';
+    const totalAuraMoney = getPointToPrice(pointsInAccount);
 
     return (
       <div>
@@ -61,7 +66,7 @@ export default class AuraLinkedCheckout extends React.Component {
               <div className="current-available-points">
                 <span>
                   {parse(parse(getStringMessage('checkout_you_have_pts', {
-                    '@pts': `<span class="spc-aura-highlight">${pointsInAccount}</span>`,
+                    '@pts': `<span class="spc-aura-highlight" data-aura-money=${totalAuraMoney}>${pointsInAccount}</span>`,
                   })))}
                   <ConditionalView condition={expiringPoints !== 0}>,</ConditionalView>
                 </span>
@@ -90,6 +95,7 @@ export default class AuraLinkedCheckout extends React.Component {
                 totals={totals}
                 paymentMethodInCart={paymentMethodInCart}
                 formActive={formActive}
+                cart={cart}
               />
             </ConditionalView>
           </div>

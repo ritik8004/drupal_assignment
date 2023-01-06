@@ -18,8 +18,14 @@
     position: relative;
 
     @include breakpoint($only-mobile) {
-      width: 78%;
+      width: 80%;
       font-size: rem(10);
+
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          width: 90%;
+        }
+      }
     }
 
     &::before {
@@ -74,6 +80,14 @@
       justify-content: space-between;
       align-items: center;
 
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          height: auto;
+          margin-bottom: rem(40);
+          margin-top: rem(34);
+        }
+      }
+
       .step {
         z-index: 2;
         position: relative;
@@ -86,8 +100,14 @@
           transform: translateX(-50%) perspective(rem(1000));
           color: $cko-steps-label-txt;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translateX(50%) perspective(rem(1000));
+          }
+
+          @include breakpoint($only-mobile) {
+            min-width: rem(58);
+            white-space: initial;
+            text-align: center;
           }
         }
 
@@ -101,7 +121,7 @@
           text-align: center;
           padding-top: rem(2);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             padding-top: rem(4);
           }
 
@@ -147,12 +167,14 @@
             }
           }
 
-          &::after {
-            border: rem(1) solid $cko-steps-active-border;
-            content: '';
-            background: url('#{$base_theme_img_directory_path}/icons/done-state.svg') no-repeat;
+          @include icon(check, after) {
+            font-size: rem(26);
+            color: $cko-steps-active-txt;
             background-color: $cko-steps-active-bg;
-            background-position: 60%;
+
+            @include breakpoint($tablet) {
+              font-size: rem(32);
+            }
           }
         }
 
@@ -172,6 +194,13 @@
           }
         }
 
+        &.completed,
+        &.current {
+          &::after {
+            border: 0;
+          }
+        }
+
         &::after {
           content: "";
           position: absolute;
@@ -185,7 +214,7 @@
           border-radius: 50%;
           border: rem(1) solid $cko-steps-active-border;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translate(50%, -50%);
           }
 
@@ -203,6 +232,14 @@
           }
         }
       }
+    }
+  }
+}
+
+.block-alshaya-checkout-tracker {
+  &.hide-checkout-tracker {
+    .cko-progress-tracker {
+      display: none;
     }
   }
 }

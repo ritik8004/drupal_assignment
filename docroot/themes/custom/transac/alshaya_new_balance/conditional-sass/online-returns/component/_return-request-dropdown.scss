@@ -1,0 +1,17 @@
+.return-requests-wrapper {
+  .return-qty-row,
+  .return-reasons-row {
+    .return-reason-label {
+      font-family: $alshaya-thin;
+    }
+
+    .reasonsSelect__control,
+    .qtySelect__control {
+      background: $primary_dropdown_bg;
+    }
+  }
+
+  .return-qty-select {
+    width: rem(108);
+  }
+}

@@ -2,14 +2,12 @@ services:
   alshaya_rcs_main_menu.rcs_category_helper:
     class: Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryHelper
     arguments:
-      - '@entity_type.manager'
-      - '@config.factory'
-      - '@renderer'
       - '@language_manager'
       - '@path_alias.manager'
       - '@cache.data'
       - '@database'
       - '@module_handler'
+      - '@event_dispatcher'
     calls:
       - [setDepartmentHelper, ['@?alshaya_rcs_listing.department_pages_helper']]
   alshaya_rcs_main_menu.category_data_migration:
@@ -20,3 +18,15 @@ services:
       - '@language_manager'
       - '@database'
       - '@path_alias.manager'
+  alshaya_rcs_main_menu.categories_enrichment_subscriber:
+    class: Drupal\alshaya_rcs_main_menu\EventSubscriber\AlshayaRcsCategoriesEnrichmentEventSubscriber
+    tags:
+      - {name: 'event_subscriber'}
+    arguments:
+      - '@renderer'
+      - '@language_manager'
+      - '@alshaya_rcs_main_menu.rcs_category_helper'
+      - '@alshaya_acm_product.context_manager'
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@event_dispatcher'

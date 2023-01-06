@@ -29,6 +29,7 @@ function acq_commerce_theme($existing, $type, $theme, $path) {
         'price' => '',
         'currency_format' => '',
         'currency_code_position' => '',
+        'fixed_price' => NULL,
       ],
     ],
   ];

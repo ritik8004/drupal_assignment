@@ -1,0 +1,17 @@
+@include breakpoint($only-mobile) {
+  #spc-checkout {
+    .product-content {
+      .product-item {
+        .spc-product-attributes {
+          .spc-cart-product-attribute-value {
+            input {
+              html[lang=ar] & {
+                max-width: rem(144);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,6 @@
 name: Deploy
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - qa
@@ -23,9 +22,11 @@ jobs:
 
     # Map a step output to a job output
     outputs:
-      all: ${{ steps.changes.outputs.all }}
       themes: ${{ steps.changes.outputs.themes }}
       react: ${{ steps.changes.outputs.react }}
+      js: ${{ steps.changes.outputs.js }}
+      svg: ${{ steps.changes.outputs.svg }}
+      all: ${{ steps.changes.outputs.all}}
       deployable_changes: ${{ steps.deployable_changes.outputs.deployable_changes }}
 
     steps:
@@ -39,21 +40,35 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)" >> $GITHUB_OUTPUT
-          echo "themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs)" >> $GITHUB_OUTPUT
-          echo "react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs)" >> $GITHUB_OUTPUT
+          echo themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
+          echo react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
+          echo js=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep .js | xargs | wc -c | xargs) >> $GITHUB_OUTPUT
+          echo svg=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep .svg | xargs) >> $GITHUB_OUTPUT
+          echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | wc -l | xargs) >> $GITHUB_OUTPUT
 
       - name: Check if changes are deployable
         id: deployable_changes
         run: |
-          echo 'Changed files are - ${{ steps.changes.outputs.all }}'
-          if [[ "${{ steps.changes.outputs.all }}" =~ "composer." || "${{ steps.changes.outputs.all }}" =~ "docroot/" || "${{ steps.changes.outputs.all }}" =~ "blt/" || "${{ steps.changes.outputs.all }}" =~ "factory-hooks/" || "${{ steps.changes.outputs.all }}" =~ "hooks/" || "${{ steps.changes.outputs.all }}" =~ "scripts/" ]]
+          echo deployable_changes=false >> $GITHUB_OUTPUT
+          if [[ ${{ contains(github.ref, 'refs/tags') }} == true ]]
           then
-            echo "Changes require deployment."
-            echo "deployable_changes=true" >> $GITHUB_OUTPUT
+            echo "Deploying a tag."
+            echo deployable_changes=true >> $GITHUB_OUTPUT
           else
-            echo "Changes not require deployment. Hence skipping the deployment."
-            echo "deployable_changes=false" >> $GITHUB_OUTPUT
+            # Get changed files.
+            NAMES=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | xargs)
+            # Check if the file names match the list below.
+            if [[ "${NAMES}" =~ "composer." ||
+                  "${NAMES}" =~ "docroot/" ||
+                  "${NAMES}" =~ "blt/" ||
+                  "${NAMES}" =~ "factory-hooks/" ||
+                  "${NAMES}" =~ "hooks/" ||
+                  "${NAMES}" =~ "scripts/"
+            ]]
+            then
+              echo "Changes require deployment."
+              echo deployable_changes=true >> $GITHUB_OUTPUT
+            fi
           fi
 
   deploy:
@@ -74,21 +89,22 @@ jobs:
     steps:
       - name: Prepare environment variables
         run: |
-          echo "GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-          echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
-          echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
-          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
-          echo "CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }}" >> $GITHUB_ENV
-          echo "CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }}" >> $GITHUB_ENV
-          echo "CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.all }}" >> $GITHUB_ENV
+          echo GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/}) >> $GITHUB_ENV
+          echo COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin) >> $GITHUB_ENV
+          echo BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt) >> $GITHUB_ENV
+          echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
+          echo CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }} >> $GITHUB_ENV
+          echo CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }} >> $GITHUB_ENV
+          echo CHANGED_JS_FILES=${{ needs.changedfiles.outputs.js }} >> $GITHUB_ENV
+          echo CHANGED_SVG_FILES=${{ needs.changedfiles.outputs.svg }} >> $GITHUB_ENV
+          echo CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.all }} >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Run Composer install
         run: |
-          composer self-update
-          composer self-update --2
+          composer self-update 2.4.4
           composer validate --no-check-all --ansi
           composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
@@ -103,7 +119,7 @@ jobs:
       - name: Cache dependencies installed with Composer
         id: composer-cache
         run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo dir=$(composer config cache-files-dir) >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         with:
@@ -132,7 +148,7 @@ jobs:
       - name: Cache node modules
         id: npm-cache-dir
         run: |
-          echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+          echo dir=$(npm config get cache) >> $GITHUB_OUTPUT
 
       # @todo check if this really works or we need one step per directory
       - uses: actions/cache@v3

@@ -16,6 +16,25 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Add new Categories enrichment resource and updated user permissions.
+ */
+function alshaya_acm_product_category_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'rest.resource.categories_enrichment',
+  ],
+    'alshaya_acm_product_category',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new field `all_categories_department_page`.
  */
 function alshaya_acm_product_category_update_8048() {

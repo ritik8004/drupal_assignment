@@ -1,5 +1,4 @@
 import HTMLReactParser from 'html-react-parser';
-import moment from 'moment';
 import React from 'react';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
@@ -8,6 +7,7 @@ import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import Loading from '../../../../../../js/utilities/loading';
 import AddBenefitsToCart from './add-benefits-to-cart';
+import { formatDate } from '../../../utilities';
 
 class MyBenefitsPage extends React.Component {
   constructor(props) {
@@ -17,6 +17,7 @@ class MyBenefitsPage extends React.Component {
       myBenefit: null,
       codeId: null,
       couponId: null,
+      offerType: null,
       promotionType: null,
     };
   }
@@ -30,13 +31,20 @@ class MyBenefitsPage extends React.Component {
       if (type === 'coupon') {
         const response = await callHelloMemberApi('helloMemberCouponPage', 'GET', params);
         if (hasValue(response.data) && !hasValue(response.data.error)) {
+          const promotionType = response.data.coupons[0].promotion_type;
+          const { description } = response.data.coupons[0];
           this.setState({
             myBenefit: response.data.coupons[0],
             wait: true,
             codeId: response.data.coupons[0].code,
             couponId: `${response.data.coupons[0].type}|${response.data.coupons[0].code}`,
-            promotionType: response.data.coupons[0].promotion_type,
+            offerType: response.data.coupons[0].type,
+            promotionType,
           });
+          // Push coupon data to gtm once it is loaded.
+          if (hasValue(promotionType) && hasValue(description)) {
+            Drupal.alshayaSeoGtmPushBenefitsOffer({ promotionType, description });
+          }
         } else {
           // If coupon details API is returning Error.
           logger.error('Error while calling the coupon details Api @params, @message', {
@@ -65,7 +73,7 @@ class MyBenefitsPage extends React.Component {
 
   render() {
     const {
-      wait, myBenefit, codeId, couponId, promotionType,
+      wait, myBenefit, codeId, couponId, offerType, promotionType,
     } = this.state;
 
     if (!wait) {
@@ -90,6 +98,9 @@ class MyBenefitsPage extends React.Component {
         <div className="image-container">
           <img src={myBenefit.large_image} />
         </div>
+        <div className="category-name">
+          {myBenefit.category_name}
+        </div>
         <div className="voucher-wrapper">
           <div className="title">
             {myBenefit.name}
@@ -98,11 +109,13 @@ class MyBenefitsPage extends React.Component {
             {myBenefit.description}
           </div>
           <div className="expiry">
-            {getStringMessage('benefit_expire', { '@expire_date': moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY') })}
+            {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(myBenefit.expiry_date || myBenefit.end_date)) })}
           </div>
         </div>
         <div className="btn-wrapper">
           <QrCodeDisplay
+            benefitName={myBenefit.description}
+            benefitType={promotionType}
             memberId={myBenefit.member_identifier}
             qrCodeTitle={qrCodeTitle}
             codeId={couponId || codeId}
@@ -112,6 +125,7 @@ class MyBenefitsPage extends React.Component {
           <AddBenefitsToCart
             title={myBenefit.description}
             codeId={codeId}
+            offerType={offerType}
             promotionType={promotionType}
           />
         </div>
@@ -123,7 +137,7 @@ class MyBenefitsPage extends React.Component {
             {getStringMessage('benefit_expire_no_date')}
             {':'}
           </h3>
-          {moment(new Date(myBenefit.expiry_date || myBenefit.end_date)).format('DD MMMM YYYY')}
+          {formatDate(new Date(myBenefit.expiry_date || myBenefit.end_date))}
         </div>
         <div className="benefit-Tnc">
           {Drupal.t('Maximum one code per member, which can be used at one occasion for purchase of above stated models, directly from the online store in the UK. For more terms, please visit https://www2.hm.com/en', {}, { context: 'hello_member' })}

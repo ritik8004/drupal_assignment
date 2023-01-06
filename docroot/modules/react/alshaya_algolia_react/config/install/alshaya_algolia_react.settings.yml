@@ -6,3 +6,4 @@ items_per_page: 36
 hide_grid_toggle: false
 top_facets_limit: 5
 add_to_bag_hover: false
+default_col_grid: 'small'

@@ -1,0 +1,7 @@
+%page-title {
+  text-transform: unset;
+}
+
+.c-page-title {
+  @extend %page-title;
+}

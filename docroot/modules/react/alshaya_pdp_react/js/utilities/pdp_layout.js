@@ -11,6 +11,31 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 export const updateCart = (postData) => window.commerceBackend.addUpdateRemoveCartItem(postData);
 
 /**
+ * Get the product label list.
+ *
+ * @param {object} productInfo
+ *   Product info object.
+ * @param {string} skuItemCode
+ *   The main product sku.
+ *
+ * @return {object}
+ *   List of product labels.
+ */
+export const getProductLabels = (productInfo, skuItemCode) => {
+  let labels = {};
+  // For V3, we are passing the product label in the productInfo object itself.
+  if (hasValue(productInfo[skuItemCode])
+    && hasValue(productInfo[skuItemCode].labels)) {
+    labels = productInfo[skuItemCode].labels;
+  } else if (hasValue(drupalSettings.productLabels)) {
+    // This is for V2 sites, where we get the data from Drupal settings.
+    labels = drupalSettings.productLabels;
+  }
+
+  return labels;
+};
+
+/**
  * Get post data on add to cart.
  */
 export const getPostData = (skuCode, variantSelected, parentSKU) => {
@@ -205,6 +230,7 @@ export const triggerAddToCart = (
       bubbles: true,
       detail: {
         context: 'pdp',
+        productData,
         cartData,
       },
     });
@@ -221,7 +247,7 @@ export const getProductValues = (productInfo, configurableCombinations,
   let freeGiftPromoType;
   const { variants } = productInfo[skuItemCode];
   const { stockStatus } = productInfo[skuItemCode];
-  const { productLabels } = drupalSettings;
+  const productLabels = getProductLabels(productInfo, skuItemCode);
   let title = '';
   let priceRaw = '';
   let finalPrice = '';
@@ -234,6 +260,8 @@ export const getProductValues = (productInfo, configurableCombinations,
   let expressDeliveryClass = '';
   let bigTickectProduct = false;
   let isProductBuyable = '';
+  let eligibleForReturn = false;
+  let fit = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -268,12 +296,14 @@ export const getProductValues = (productInfo, configurableCombinations,
     priceRaw = productInfo[skuItemCode].priceRaw;
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;
+    fit = productInfo[skuItemCode].fit;
     labels = hasValue(productLabels) ? productLabels[skuItemCode] : [];
     stockQty = productInfo[skuItemCode].stockQty;
     firstChild = skuItemCode;
     promotions = productInfo[skuItemCode].promotionsRaw;
     deliveryOptions = productInfo[skuItemCode].deliveryOptions;
     expressDeliveryClass = productInfo[skuItemCode].expressDeliveryClass;
+    eligibleForReturn = productInfo[skuItemCode].eligibleForReturn;
     if (productInfo[skuItemCode].bigTickectProduct) {
       bigTickectProduct = productInfo[skuItemCode].bigTickectProduct;
     }
@@ -287,12 +317,14 @@ export const getProductValues = (productInfo, configurableCombinations,
           priceRaw = variantInfo.priceRaw;
           finalPrice = variantInfo.finalPrice;
           pdpGallery = variantInfo.rawGallery;
+          fit = hasValue(variantInfo.fit) ? variantInfo.fit : fit;
           labels = hasValue(productLabels) ? productLabels[variant] : [];
           stockQty = variantInfo.stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
           promotions = variantInfo.promotionsRaw;
           deliveryOptions = variantInfo.deliveryOptions;
           expressDeliveryClass = variantInfo.expressDeliveryClass;
+          eligibleForReturn = variantInfo.eligibleForReturn;
           // free gift promotion variable from variant sku.
           if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
             freeGiftPromoType = variantInfo.freeGiftPromotion['#promo_type'];
@@ -325,7 +357,21 @@ export const getProductValues = (productInfo, configurableCombinations,
 
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
-  const additionalAttributes = skuItemCode ? productInfo[skuItemCode].additionalAttributes : [];
+  // The additional attribute sometimes is empty and if it's empty then convert
+  // it to array.
+  let additionalAttributes = {};
+  if (hasValue(fit)) {
+    additionalAttributes.fit = {
+      value: fit,
+      label: Drupal.t('FIT'),
+    };
+  }
+  if (hasValue(skuItemCode)
+    && hasValue(productInfo[skuItemCode])
+    && productInfo[skuItemCode].additionalAttributes) {
+    additionalAttributes = Object.assign(additionalAttributes,
+      productInfo[skuItemCode].additionalAttributes);
+  }
 
   const relatedProducts = [
     'crosssell',
@@ -360,6 +406,7 @@ export const getProductValues = (productInfo, configurableCombinations,
     expressDeliveryClass,
     isProductBuyable,
     bigTickectProduct,
+    eligibleForReturn,
   };
 };
 

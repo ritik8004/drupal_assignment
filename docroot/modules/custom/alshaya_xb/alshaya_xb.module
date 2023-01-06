@@ -5,8 +5,9 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Render\Markup;
-use Drupal\Core\Site\Settings;
+use Drupal\Core\TypedData\Exception\ReadOnlyException;
 
 /**
  * Implements hook_page_attachments().
@@ -14,6 +15,10 @@ use Drupal\Core\Site\Settings;
 function alshaya_xb_page_attachments(array &$attachments) {
   if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
     $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_cross_border';
+  }
+
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.user.canonical') {
+    $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_xb_merge_cart_error_handler';
   }
 }
 
@@ -34,21 +39,42 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
   }
 
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $settings = Settings::get('magento_lang_prefix');
+  $settings = \Drupal::config('alshaya_api.settings')->get('magento_lang_prefix');
   $ge_store_code = $settings[$language];
   $config = \Drupal::config('alshaya_xb.settings');
   $ge_js_src = $config->get('globale_js_url') ?? '';
+  // Used to pass the page type to associateCartToCustomer().
+  $page_type = '';
+  if ($route_name === 'alshaya_spc.checkout') {
+    $page_type = 'checkout';
+  }
 
   // Dynamic js to be added on every page.
+  // We need to wait for associateCartToCustomer() to be available
+  // to be called before showing the checkout page, so we will delay
+  // the call until the page is loaded.
   $js = "
      var geStoreCode = '$ge_store_code';
      var geStoreCodeInstance = document.location.hostname;
      (function () {
-       var s = document.createElement('script');
-       s.type = 'text/javascript';
-       s.async = true;
-       s.src = '$ge_js_src';
-       document.getElementsByTagName('head')[0].appendChild(s);
+       function addInlineScripts() {
+         var s = document.createElement('script');
+         s.type = 'text/javascript';
+         s.async = true;
+         s.src = '$ge_js_src';
+         document.getElementsByTagName('head')[0].appendChild(s);
+       };
+
+       if ('$page_type' !== 'checkout') {
+         addInlineScripts();
+         return;
+       }
+
+       window.addEventListener('DOMContentLoaded', (event) => {
+         window.commerceBackend.associateCartToCustomer('checkout').then((response) => {
+           addInlineScripts();
+         });
+       });
      })();";
 
   // Add inline script to the page bottom.
@@ -147,5 +173,83 @@ function alshaya_xb_alshaya_api_update_customer_api_request_alter(array &$reques
   if (isset($request_options['json']['customer']['addresses'])
     && !empty($request_options['json']['customer']['addresses'])) {
     unset($request_options['json']['customer']['addresses']);
+  }
+}
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_xb_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_fixed_price_field = \Drupal::config('alshaya_xb.sku_base_fields')->get('fields');
+  if ($alshaya_fixed_price_field) {
+    $fields = array_merge($fields, $alshaya_fixed_price_field);
+  }
+  else {
+    \Drupal::logger('alshaya_xb')->error('The config alshaya_xb.sku_base_fields is empty.');
+  }
+}
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
+  if (isset($product['extension']['xb_fixed_price'])) {
+    $fixed_prices = [];
+    foreach ($product['extension']['xb_fixed_price'] as $fixed_price) {
+      if (!empty($fixed_price['price'])) {
+        $fixed_prices[$fixed_price['country_code']]['price'] = _alshaya_acm_format_price_with_decimal($fixed_price['price']);
+      }
+      if (!empty($fixed_price['special_price'])) {
+        $fixed_prices[$fixed_price['country_code']]['special_price'] = _alshaya_acm_format_price_with_decimal($fixed_price['special_price']);
+      }
+    }
+
+    try {
+      // Set json in fixed price attribute in sku.
+      $sku->get('attr_fixed_price')->setValue(json_encode($fixed_prices));
+    }
+    catch (ReadOnlyException $e) {
+      \Drupal::logger('alshaya_xb')->error('Error occurred while storing fixed price attribute value in sku. @error_message', [
+        '@error_message' => $e->getMessage(),
+      ]);
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_get_currency_code_alter().
+ */
+function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
+  $currency['xb']['en'] = 'AED';
+  $currency['xb']['ar'] = 'AED';
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Set delivery method for XB order.
+  if (!empty($order['extension']['globale']['shipping_method'])) {
+    $build['#order_details']['delivery_method'] = $order['extension']['globale']['shipping_method'];
+  }
+
+  // Set billing method for XB order.
+  if (!empty($order['extension']['globale']['billing_method'])) {
+    $build['#order_details']['payment_method'] = $order['extension']['globale']['billing_method'];
+  }
+
+  if (empty($build["#cancelled_products"])) {
+    return;
+  }
+
+  foreach ($build["#cancelled_products"] as &$item) {
+    if (!$item['is_item_cancelled']) {
+      continue;
+    }
+
+    // Update refund product price from amount_refunded.
+    $item['refund_amount'] = $item['amount_refunded'];
+    // Update refund total for product.
+    $item['total'] = alshaya_acm_price_format($item['refund_amount'], [], '', $order['order_currency_code']);
   }
 }

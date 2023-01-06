@@ -8,6 +8,21 @@
 /**
  * Implements hook_update_N().
  *
+ * Reset sharethis services settings.
+ */
+function alshaya_ay_transac_update_9401() {
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services = "'Facebook:facebook','Instagram:instagram'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-run translation strings update.
  */
 function alshaya_ay_transac_update_9400() {
@@ -79,6 +94,10 @@ function alshaya_ay_transac_install() {
     $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
     // Enable share this for Products.
     $configFactory->set('node_types.acq_product', 'acq_product');
+    $services = $configFactory->get('service_option');
+    $services = "'Facebook:facebook','Instagram:instagram'";
+    $configFactory->set('service_option', $services);
+
     // Save the changes.
     $configFactory->save();
   }

@@ -29,14 +29,14 @@ jobs:
 
       - name: Prepare environment variables
         run: |
-          echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/scripts)" >> $GITHUB_ENV
+          echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/scripts) >> $GITHUB_ENV
 
       - name: Prepare SSH
         run: |
           mkdir -p ~/.ssh
           touch ~/.ssh/config
           chmod 600 ~/.ssh/config
-          printf "Host *.enterprise-g1.hosting.acquia.com\n  StrictHostKeyChecking no\n" >> ~/.ssh/config
+          printf "Host *.enterprise-g1.hosting.acquia.com\n StrictHostKeyChecking no\n" >> ~/.ssh/config
 
       - name: Prepare ACSF API credentials
         run: |

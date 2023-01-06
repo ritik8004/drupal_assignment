@@ -1,0 +1,14 @@
+.configurable-product-form-wrapper {
+  .gallery-wrapper {
+    .slick-slider {
+      .slick-slide {
+        min-height: auto;
+
+        img {
+          aspect-ratio: 1;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+}

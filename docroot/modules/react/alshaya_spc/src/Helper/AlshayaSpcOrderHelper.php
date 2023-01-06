@@ -20,7 +20,6 @@ use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\node\NodeInterface;
@@ -310,7 +309,7 @@ class AlshayaSpcOrderHelper {
     if (!empty($id)) {
       $data = json_decode(SecureText::decrypt(
         $id,
-        Settings::get('alshaya_api.settings')['consumer_secret']
+        $this->configFactory->get('alshaya_api.settings')->get('consumer_secret')
       ), TRUE);
     }
 

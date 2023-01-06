@@ -1,0 +1,12 @@
+services:
+  logger.channel.alshaya_rcs_mobile_app:
+    parent: logger.channel_base
+    arguments: ['alshaya_rcs_mobile_app']
+
+  alshaya_rcs_mobile_app.categories_enrichment_subscriber:
+    class: Drupal\alshaya_rcs_mobile_app\EventSubscriber\AlshayaRcsMobileAppCategoryDataAlterEventSubscriber
+    tags:
+      - {name: 'event_subscriber'}
+    arguments:
+      - '@alshaya_mobile_app.utility'
+      - '@logger.channel.alshaya_rcs_mobile_app'

@@ -3,8 +3,9 @@
 namespace Drupal\alshaya_facets_pretty_paths\Controller;
 
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases;
+use Drupal\Core\Cache\CacheableJsonResponse;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -46,12 +47,21 @@ class AlshayaFacetsPrettyPathsController extends ControllerBase {
    * @param string $facet_alias
    *   The facet alias for which we have to return the list of values.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   * @return \Drupal\Core\Cache\CacheableJsonResponse
    *   Return the json response.
    */
   public function getAliases(string $facet_alias) {
     $aliases = $this->prettyAliases->getAliasesForFacet($facet_alias);
-    return new JsonResponse($aliases);
+    $response = new CacheableJsonResponse($aliases);
+    // Add cacheable dependeny for the term bundle cache, which is executed
+    // only when the taxonomy term is inserted or updated and this cache tag is
+    // queued and processed.
+    $cacheable_metadata = new CacheableMetadata();
+    $cacheable_metadata->addCacheTags(['taxonomy_term:sku_product_option']);
+
+    $response->addCacheableDependency($cacheable_metadata);
+
+    return $response;
   }
 
 }

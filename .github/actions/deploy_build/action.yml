@@ -11,6 +11,10 @@ inputs:
     required: true
   CHANGED_REACT_FILES:
     required: true
+  CHANGED_SVG_FILES:
+    required: true
+  CHANGED_JS_FILES:
+    required: true
   CHANGED_ALL_FILES:
     required: true
 
@@ -20,19 +24,20 @@ runs:
     - name: Prepare environment variables
       shell: bash
       run: |
-        echo "GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-        echo "COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin)" >> $GITHUB_ENV
-        echo "BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt)" >> $GITHUB_ENV
-        echo "SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions)" >> $GITHUB_ENV
-        echo "CHANGED_THEME_FILES=${{ inputs.CHANGED_THEMES_FILES }}" >> $GITHUB_ENV
-        echo "CHANGED_REACT_FILES=${{ inputs.CHANGED_REACT_FILES }}" >> $GITHUB_ENV
-        echo "CHANGED_ALL_FILES=${{ inputs.CHANGED_ALL_FILES }}" >> $GITHUB_ENV
+        echo GITHUB_REF_NAME=$(echo ${GITHUB_REF##*/}) >> $GITHUB_ENV
+        echo COMPOSER_BIN=$(echo ${GITHUB_WORKSPACE}/vendor/bin) >> $GITHUB_ENV
+        echo BLT_DIR=$(echo ${GITHUB_WORKSPACE}/vendor/acquia/blt) >> $GITHUB_ENV
+        echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
+        echo CHANGED_THEME_FILES=${{ inputs.CHANGED_THEMES_FILES }} >> $GITHUB_ENV
+        echo CHANGED_REACT_FILES=${{ inputs.CHANGED_REACT_FILES }} >> $GITHUB_ENV
+        echo CHANGED_JS_FILES=${{ inputs.CHANGED_JS_FILES }} >> $GITHUB_ENV
+        echo CHANGED_SVG_FILES=${{ inputs.CHANGED_SVG_FILES }} >> $GITHUB_ENV
+        echo CHANGED_ALL_FILES=$(echo ${{ inputs.CHANGED_ALL_FILES }} | wc -l | xargs) >> $GITHUB_ENV
 
     - name: Run Composer install
       shell: bash
       run: |
-        composer self-update
-        composer self-update --2
+        composer self-update 2.4.4
         composer validate --no-check-all --ansi
         composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
@@ -50,7 +55,7 @@ runs:
       shell: bash
       id: composer-cache
       run: |
-        echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        echo dir=$(composer config cache-files-dir) >> $GITHUB_OUTPUT
 
     - uses: actions/cache@v3
       with:
@@ -82,7 +87,7 @@ runs:
       shell: bash
       id: npm-cache-dir
       run: |
-        echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+        echo dir=$(npm config get cache) >> $GITHUB_OUTPUT
 
     # @todo check if this really works or we need one step per directory
     - uses: actions/cache@v3

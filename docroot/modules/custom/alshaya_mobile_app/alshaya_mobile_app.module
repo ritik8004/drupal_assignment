@@ -123,7 +123,7 @@ function alshaya_mobile_app_options_list_resource_response_alter(&$data) {
  *
  * Add deep_link to lhn category tree.
  */
-function alshaya_mobile_app_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+function alshaya_mobile_app_alshaya_acm_product_category_tree_data_alter(&$data, $term, $langcode) {
   try {
     $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
     $data[$term->tid]['deep_link'] = $mobile_app_utility->getDeepLink($term);

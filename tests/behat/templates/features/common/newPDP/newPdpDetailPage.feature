@@ -3,11 +3,9 @@ Feature: Testing new PDP page for desktop
 
   Background:
     Given I am on "{np_plp_page}"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
 
   Scenario: To verify user is able to see the Product info with size drawer
     Then I should see a ".magv2-main .magv2-pdp-title-wrapper" element on page
@@ -15,20 +13,19 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".magv2-size-btn-wrapper" element on page
     And I should see a ".magv2-qty-container .magv2-qty-btn--up" element on page
     And I click jQuery ".magv2-qty-container .magv2-qty-btn--up" element on page
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I click jQuery ".magv2-qty-container .magv2-qty-btn--down" element on page
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I click the element ".magv2-size-btn-wrapper" on page
     And I wait for AJAX to finish
     Then I should see a ".overlay-select" element on page
     And I should see a ".overlay-select .size-guide" element on page
     And I click jQuery ".magv2-select-popup-content-wrapper .size-guide a" element on page
     And I wait for AJAX to finish
-    And I wait 2 seconds
     Then I should see a ".ui-dialog-content .modal-content" element on page
     And I click jQuery ".ui-dialog-titlebar-close" element on page
     And I wait for AJAX to finish
-    And I wait 2 seconds
+    And I wait for element ".overlay-select .magv2-confirm-size-btn"
     And I should see a ".overlay-select .magv2-confirm-size-btn" element on page
     And I click jQuery ".magv2-select-popup-content-wrapper .magv2-confirm-size-btn" element on page
     And I wait for AJAX to finish
@@ -50,7 +47,7 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".magv2-pdp-description-wrapper" element on page
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
     When I click on ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element
-    And I wait 5 seconds
+    And I wait for element ".magv2-popup-panel .magv2-pdp-popup-content .magv2-desc-popup-container .magv2-desc-popup-wrapper"
     Then I should see a ".magv2-popup-panel .magv2-pdp-popup-content .magv2-desc-popup-container .magv2-desc-popup-wrapper" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper" element on page
@@ -67,7 +64,7 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-pdp-item-code-attribute .magv2-desc-popup-pdp-item-code-value" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-description-wrapper" element on page
     When I click on ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" element
-    And I wait 5 seconds
+    And I wait for element ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper"
     Then the element ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" should not exist
     Then the element ".magv2-popup-panel .magv2-pdp-popup-content .magv2-desc-popup-container .magv2-desc-popup-wrapper" should not exist
 
@@ -84,15 +81,15 @@ Feature: Testing new PDP page for desktop
     Then I should see the link for ".sharethis-wrapper .st_facebook_custom"
     Then I should see the link for ".sharethis-wrapper .st_twitter_custom"
     And I click jQuery ".copy-button" element on page
-    And I wait 5 seconds
-    And I navigate to the copied URL
     And I wait for the page to load
+    And I navigate to the copied URL
+    And I wait for element ".magv2-pdp-description-wrapper"
     Then I should see a ".magv2-pdp-description-wrapper" element on page
 
   Scenario: To verify, add to cart button is visible and is sticky
     Then I should see a "#add-to-cart-main" element on page
     When I scroll to the ".c-footer" element
-    And I wait 3 seconds
+    And I wait for element ".magv2-pdp-sticky-header .magv2-header-wrapper #sticky-header-btn #add-to-cart-sticky"
     Then I should see a ".magv2-pdp-sticky-header .magv2-header-wrapper #sticky-header-btn #add-to-cart-sticky" element on page
 
   @language
@@ -109,11 +106,11 @@ Feature: Testing new PDP page for desktop
     And I should see a ".overlay-select .size-guide" element on page
     And I click jQuery ".magv2-select-popup-content-wrapper .size-guide a" element on page
     And I wait for AJAX to finish
-    And I wait 2 seconds
+    And I wait for element ".ui-dialog-content .modal-content"
     Then I should see a ".ui-dialog-content .modal-content" element on page
     And I click jQuery ".ui-dialog-titlebar-close" element on page
     And I wait for AJAX to finish
-    And I wait 2 seconds
+    And I wait for element ".overlay-select .magv2-confirm-size-btn"
     And I should see a ".overlay-select .magv2-confirm-size-btn" element on page
     And I click jQuery ".magv2-select-popup-content-wrapper .magv2-confirm-size-btn" element on page
     And I wait for AJAX to finish
@@ -143,7 +140,7 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".magv2-pdp-description-wrapper" element on page
     And the element ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" should exist
     When I click on ".magv2-pdp-description-wrapper .magv2-desc-readmore-link" element
-    And I wait 5 seconds
+    And I wait for element ".magv2-popup-panel .magv2-pdp-popup-content .magv2-desc-popup-container .magv2-desc-popup-wrapper"
     Then I should see a ".magv2-popup-panel .magv2-pdp-popup-content .magv2-desc-popup-container .magv2-desc-popup-wrapper" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper" element on page
@@ -160,7 +157,7 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-pdp-item-code-attribute .magv2-desc-popup-pdp-item-code-value" element on page
     Then I should see a ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-content-wrapper .magv2-desc-popup-description-wrapper" element on page
     When I click on ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" element
-    And I wait 5 seconds
+    And I wait for element ".magv2-popup-panel .magv2-pdp-popup-content .magv2-desc-popup-container .magv2-desc-popup-wrapper"
     Then the element ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" should not exist
     Then the element ".magv2-popup-panel .magv2-pdp-popup-content .magv2-desc-popup-container .magv2-desc-popup-wrapper" should not exist
 
@@ -183,7 +180,7 @@ Feature: Testing new PDP page for desktop
     Then I should see the link for ".sharethis-wrapper .st_facebook_custom"
     Then I should see the link for ".sharethis-wrapper .st_twitter_custom"
     And I click jQuery ".copy-button" element on page
-    And I wait 5 seconds
-    And I navigate to the copied URL
     And I wait for the page to load
+    And I navigate to the copied URL
+    And I wait for element ".magv2-pdp-description-wrapper"
     Then I should see a ".magv2-pdp-description-wrapper" element on page

@@ -1,0 +1,12 @@
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu.megamenu-fullwidth-layout {
+    ul.menu--one__list {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          width: 100vw;
+          #{$left}: 0;
+        }
+      }
+    }
+  }
+}

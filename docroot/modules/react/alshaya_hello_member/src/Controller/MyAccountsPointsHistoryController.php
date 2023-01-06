@@ -81,6 +81,7 @@ class MyAccountsPointsHistoryController extends ControllerBase {
       '#strings' => _alshaya_hello_member_static_strings(),
       '#attached' => [
         'library' => [
+          'alshaya_seo_transac/gtm_hello_member',
           'alshaya_hello_member/alshaya_hello_member_my_accounts_points_history',
           'alshaya_white_label/hello-member-points-history',
         ],

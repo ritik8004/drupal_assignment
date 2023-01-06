@@ -98,7 +98,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   $mapping = [
     'hmkw' => [
       'dev' => [
-        'magento' => 'hm_qa',
+        'magento' => 'hm_test',
         'conductor' => 'hmkw_dev',
       ],
       'test' => [
@@ -116,7 +116,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'hmsa_qa2',
       ],
       'dev' => [
-        'magento' => 'hm_qa',
+        'magento' => 'hm_test',
         'conductor' => 'hmsa_dev',
       ],
       'test' => [
@@ -335,17 +335,29 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'we_pprod',
         'conductor' => 'wekw_dev2',
       ],
+      'qa2' => [
+        'magento' => 'we_qa',
+        'conductor' => 'wekw_test',
+      ],
     ],
     'wesa' => [
       'dev2' => [
         'magento' => 'we_pprod',
         'conductor' => 'wesa_dev2',
       ],
+      'qa2' => [
+        'magento' => 'we_qa',
+        'conductor' => 'wesa_test',
+      ],
     ],
     'weae' => [
       'dev2' => [
         'magento' => 'we_pprod',
         'conductor' => 'weae_dev2',
+      ],
+      'qa2' => [
+        'magento' => 'we_qa',
+        'conductor' => 'weae_test',
       ],
     ],
     'aeoxb' => [
@@ -356,6 +368,14 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'test' => [
         'magento' => 'aeo_test',
         'conductor' => 'aeoxb_test',
+      ],
+      'dev' => [
+        'magento' => 'aeo_apc',
+        'conductor' => 'aeoxb_dev3',
+      ],
+      'local' => [
+        'magento' => 'aeo_apc',
+        'conductor' => 'aeoxb_dev3',
       ],
     ],
     'aeokw' => [
@@ -586,8 +606,20 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
     ],
     'pbkae' => [
       'qa2' => [
-        'magento' => 'pbk_test',
+        'magento' => 'pbk_qa',
         'conductor' => 'pbkae_test',
+      ],
+    ],
+    'pbksa' => [
+      'qa2' => [
+        'magento' => 'pbk_qa',
+        'conductor' => 'pbksa_test',
+      ],
+    ],
+    'pbkkw' => [
+      'qa2' => [
+        'magento' => 'pbk_qa',
+        'conductor' => 'pbkkw_test',
       ],
     ],
     'dhkw' => [

@@ -17,6 +17,7 @@
     &.c-page-title {
       font-size: rem(14);
       color: $user_login_section_title;
+      text-transform: unset;
     }
   }
 
@@ -105,11 +106,22 @@
   }
 }
 
-.c-user-register {
+.c-user-register,
+.c-user-login {
   .section-title {
     @include breakpoint($only-mobile) {
       font-size: rem(14);
       padding-top: rem(0);
+    }
+  }
+
+  main {
+    .user-register-form,
+    .user-login-form {
+      .form-submit {
+        padding: rem(18) 0;
+        height: auto;
+      }
     }
   }
 }
@@ -135,6 +147,12 @@
                 a {
                   border-top: none;
                 }
+              }
+            }
+
+            a {
+              &::after {
+                color: $user_nav_mobile_link_icon;
               }
             }
           }

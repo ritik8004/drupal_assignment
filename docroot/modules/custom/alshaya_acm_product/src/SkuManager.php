@@ -523,10 +523,17 @@ class SkuManager {
     $prices = [
       'price' => 0,
       'final_price' => 0,
+      'fixed_price' => 0,
     ];
     if ($sku_entity->bundle() == 'simple') {
       $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
       $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
+
+      // Set fixed price for XB.
+      $fixed_price = $sku_entity->hasField('attr_fixed_price')
+        ? $sku_entity->get('attr_fixed_price')->getString()
+        : NULL;
+
       if ((empty($price) && $final_price > 0) || ($final_price >= $price)) {
         $price = $final_price;
       }
@@ -537,6 +544,8 @@ class SkuManager {
       $prices = [
         'price' => $price,
         'final_price' => $final_price,
+        // Add fixed price rendered in data attribute for XB.
+        'fixed_price' => $fixed_price,
       ];
       $this->productCacheManager->set($sku_entity, $cache_key, $prices);
       return $prices;
@@ -563,12 +572,17 @@ class SkuManager {
         if ($child_sku_entity instanceof SKU) {
           $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity);
           $price = $prices['children'][$child_sku_code]['price'];
+
+          // Get fixed price from child SKU.
+          $fixed_price = $prices['children'][$child_sku_code]['fixed_price'] ?? NULL;
+
           $final_price = $prices['children'][$child_sku_code]['final_price'];
           if ($prices['children'][$child_sku_code]['final_price'] == $price) {
             $prices['children'][$child_sku_code]['final_price'] = 0;
           }
           $prices['children'][$child_sku_code]['selling_price'] = min($price, $final_price);
           $prices['children'][$child_sku_code]['discount'] = $this->getDiscountedPercent($price, $final_price);
+          $prices['children'][$child_sku_code]['fixed_price'] = $fixed_price;
 
           $new_sku_price = 0;
           if ($final_price > 0) {
@@ -585,6 +599,9 @@ class SkuManager {
               $sku_price = $new_sku_price;
               $prices['price'] = $price;
               $prices['final_price'] = $final_price;
+
+              // Pass fixed price data to render in data attribute for XB.
+              $prices['fixed_price'] = $fixed_price;
             }
             // Is the difference between initial an final bigger?
             elseif ($price != 0
@@ -595,6 +612,9 @@ class SkuManager {
             ) {
               $prices['price'] = $price;
               $prices['final_price'] = $final_price;
+
+              // Pass fixed price data to render in data attribute for XB.
+              $prices['fixed_price'] = $fixed_price;
             }
           }
         }

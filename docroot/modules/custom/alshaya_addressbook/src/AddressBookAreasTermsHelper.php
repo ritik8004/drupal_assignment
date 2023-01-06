@@ -89,12 +89,17 @@ class AddressBookAreasTermsHelper {
    *
    * @param bool $location_key
    *   Determines if use location id as the array key or tid as array key.
+   * @param bool $default_lang
+   *   If true, return governates in english.
    *
    * @return array
    *   List or governates.
    */
-  public function getAllGovernates(bool $location_key = FALSE) {
+  public function getAllGovernates(bool $location_key = FALSE, bool $default_lang = FALSE) {
     $cache_key = $location_key ? 'getAllGovernatesKeyedLocation' : 'getAllGovernates';
+    if ($default_lang) {
+      $cache_key = $location_key ? 'getAllGovernatesKeyedLocationGtm' : 'getAllGovernatesGtm';
+    }
     $governate = $this->getAddressCachedData($cache_key);
     if (is_array($governate)) {
       return $governate;
@@ -108,6 +113,11 @@ class AddressBookAreasTermsHelper {
       foreach ($term_tree as $term) {
         /* \Drupal\taxonomy\Entity\Term $term */
         $term = $this->entityRepository->getTranslationFromContext($term);
+
+        if ($default_lang) {
+          $term = $this->entityRepository->getTranslationFromContext($term, 'en');
+        }
+
         if ($location_key) {
           $term_list[$term->get('field_location_id')->getString()] = $term->getName();
         }
@@ -186,12 +196,17 @@ class AddressBookAreasTermsHelper {
    *
    * @param bool $location_key
    *   Determines if use the term location id as key or tid as key.
+   * @param bool $default_lang
+   *   If true, return areas in english.
    *
    * @return array
    *   List or areas.
    */
-  public function getAllAreas(bool $location_key = FALSE) {
+  public function getAllAreas(bool $location_key = FALSE, bool $default_lang = FALSE) {
     $cache_key = $location_key ? 'getAllAreasKeyedByLocation' : 'getAllAreas';
+    if ($default_lang) {
+      $cache_key = $location_key ? 'getAllAreasKeyedByLocationGtm' : 'getAllAreasGtm';
+    }
     $area = $this->getAddressCachedData($cache_key);
     if (is_array($area)) {
       return $area;
@@ -211,6 +226,10 @@ class AddressBookAreasTermsHelper {
 
         /* \Drupal\taxonomy\Entity\Term $term */
         $term = $this->entityRepository->getTranslationFromContext($term);
+
+        if ($default_lang) {
+          $term = $this->entityRepository->getTranslationFromContext($term, 'en');
+        }
         if ($location_key) {
           $term_list[$term->get('field_location_id')->getString()] = $term->label();
         }

@@ -13,6 +13,7 @@
         #header {border-bottom: 1px solid #ccc; padding: 25px 25px 40px 25px; margin-bottom: 23px;}
         .footer {margin-top: 50px;}
         .footer p img { display: none;}
+        .footer p { color: #fff !important;}
         u + #mimemail-body a {color: #000;}
         u + #mimemail-body .button {color: #fff !important;}
         #mimemail-body.ar {text-align: right;}
@@ -26,7 +27,7 @@
   </head>
   <body id="mimemail-body" class="{{ lang }}" {% if ( module | length > 0 ) and ( key | length > 0 ) %}  {% set class = 'class="' ~ module ~ '-' ~ key ~ '"' %} {% endif %} >
     <div id="header">
-      <img src="{{ email_logo }}" alt="logo" title="logo"/>
+      <img src="{{ email_logo }}" width="64px" alt="logo" title="logo"/>
     </div>
     <div id="center">
       <div id="main">

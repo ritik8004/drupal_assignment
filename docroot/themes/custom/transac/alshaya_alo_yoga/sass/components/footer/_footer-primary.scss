@@ -30,7 +30,7 @@
         font-size: rem(16);
         margin-top: rem(16);
         margin-bottom: rem(18);
-        text-transform: none;
+        text-transform: uppercase;
 
         @include breakpoint($only-mobile) {
           display: flex;

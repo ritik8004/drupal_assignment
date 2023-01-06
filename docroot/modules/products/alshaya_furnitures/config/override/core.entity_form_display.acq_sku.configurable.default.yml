@@ -1,0 +1,4 @@
+hidden:
+  attr_material: true
+  attr_style: true
+  attr_product_type: true

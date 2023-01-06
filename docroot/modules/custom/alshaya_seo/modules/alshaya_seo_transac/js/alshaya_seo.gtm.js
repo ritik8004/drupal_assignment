@@ -17,6 +17,7 @@
   var gtm_execute_onetime_events = true;
   var productImpressions = [];
   var productImpressionsTimer = null;
+  window.productListStorageKey = 'gtm_product_list';
 
   /**
    * Drupal Behaviour to set ReferrerInfo Data to storage.
@@ -60,7 +61,7 @@
         if (gtmContainer === 'product detail page') {
           const referrerData = Drupal.getItemFromLocalStorage('referrerData');
           const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
-          if (referrer === '' || (Drupal.hasValue(referrerData) && !referrerData.path.includes(referrer))) {
+          if (referrer === '' || (Drupal.hasValue(referrerData) && Drupal.hasValue(referrerData.path) && !referrerData.path.includes(referrer))) {
             if(isSearchActivated !== null && !isSearchActivated) {
               // Set PDP as referrerPageType only if referrer is not set,
               // Search is not active or
@@ -328,11 +329,13 @@
         if (window.name == 'ConnectWithSocialAuth') {
           var socialWindow = true;
         }
-
+        // Check if user is login or not.
+        var isUserLogin = Drupal.getItemFromLocalStorage('isUserLogin');
         // Check for user login type in cookies.
         var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
-        if (drupalSettings.user.uid && loginType === undefined && orderConfirmationPage.length === 0) {
+        if (drupalSettings.user.uid && loginType === undefined && isUserLogin == null) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , 'Email');
+          Drupal.addItemInLocalStorage('isUserLogin', true);
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
@@ -340,9 +343,10 @@
           && userDetails.userID !== undefined
           && userDetails.userID !== 0
           && loginType !== undefined
-          && orderConfirmationPage.length === 0) {
+          && isUserLogin == null) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
           Drupal.addItemInLocalStorage('userID', userDetails.userID);
+          Drupal.addItemInLocalStorage('isUserLogin', true);
         }
 
         // Fire logout success event on successful sign-in.
@@ -352,6 +356,7 @@
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           Drupal.addItemInLocalStorage('userID', userDetails.userID);
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_login_type', {path: '/'});
+          Drupal.removeItemFromLocalStorage('isUserLogin');
         }
 
         // Fire lead tracking on registration success/ user update.
@@ -463,32 +468,6 @@
           Drupal.alshaya_seo_gtm_push_store_finder_search(keyword, 'checkout', resultCount);
         }
       }
-
-      /**
-       * Newsletter tracking GTM.
-       */
-      $('footer .edit-newsletter').click(function () {
-        footerNewsletterSubmiClicked = true;
-      });
-
-      // Trigger GTM push event on AJAX completion of add to cart button.
-      $(document).once('js-event').ajaxComplete(function (event, xhr, settings) {
-        gtm_execute_onetime_events = true;
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) && (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
-          var responseJSON = xhr.responseJSON;
-          var responseMessage = '';
-          $.each(responseJSON, function (key, obj) {
-            if (obj.method === 'newsletterHandleResponse') {
-              responseMessage = obj.args[0].message;
-              return false;
-            }
-          });
-
-          if ((responseMessage === 'success') && (footerNewsletterSubmiClicked)) {
-            Drupal.alshaya_seo_gtm_push_lead_type('footer');
-          }
-        }
-      });
 
       /**
        * Quantity update in cart.
@@ -883,15 +862,24 @@
         productData.dimension5 = product.attr('gtm-dimension5');
       }
 
-      // If list variable is set in cookie, retrieve it.
-      if ($.cookie('product-list') !== undefined) {
-        var listValues = JSON.parse($.cookie('product-list'));
-        productData.list = (listValues[productData.id] === 'Search Results Page' || $('body').attr('gtm-list-name') === undefined)
-          // For SRP, use list value 'Search Result Page'.
-          ? listValues[productData.id]
-          // For all other pages, use gtm-list-name html attribute.
-          // Except in PDP, to define full path from PLP.
-          : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+      productData.list = '';
+
+      if ($('body').is('[gtm-list-name]')) {
+        // For all other pages, use gtm-list-name html attribute.
+        // Except in PDP, to define full path from PLP.
+        productData.list = $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+      }
+
+      // If list variable is set in local storage, retrieve it.
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey);
+      if (listValues
+        && typeof listValues === 'object'
+        && Object.keys(listValues).length
+        && typeof listValues[productData.id] !== 'undefined') {
+        // For SRP, use list value 'Search Result Page'.
+        if (listValues[productData.id] === 'Search Results Page' || !$('body').is('[gtm-list-name]')) {
+          productData.list = listValues[productData.id];
+        }
       }
 
       // Fetch referrerPageType from localstorage.
@@ -1172,13 +1160,13 @@
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(null, null, null, {'type': 'product-click'});
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
 
-    // On productClick, add list variable to cookie.
-    var listValues = {};
-    if ($.cookie('product-list') !== undefined) {
-      listValues = JSON.parse($.cookie('product-list'));
+    // On productClick, add product to product list in local storage.
+    if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
+      listValues[product.id] = product.list = listName;
+      Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
     }
-    listValues[product.id] = product.list = listName;
-    $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
+
     product.variant = '';
     if (position) {
       product.position = position;
@@ -1217,7 +1205,7 @@
         event: 'colorInteraction',
         eventCategory: 'colorSwatch',
         eventAction: 'clicked-' + productData.color,
-        eventLabel: productData.name + '_' + productData.sku,
+        eventLabel: productData.gtm_name + '_' + productData.sku,
         eventValue: 0,
         nonInteraction: 0,
       };
@@ -1241,14 +1229,26 @@
    * @param loginType
    */
   Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction, loginType = null) {
-    dataLayer.push({
+    var data = {
       event: 'eventTracker',
       eventCategory: 'Login & Register',
       eventAction: eventAction,
       eventLabel: loginType,
       eventValue: 0,
       nonInteraction: 0
-    });
+    };
+    // Add additional GTM variables for User registration.
+    if (eventAction == 'Registration Success') {
+      var data_additional = {};
+      data_additional.registration_method = 'Email';
+      data_additional.gender_selection = drupalSettings.alshaya_gtm_create_user_gender !== undefined ?
+        drupalSettings.alshaya_gtm_create_user_gender : '';
+      data_additional.email_preference = drupalSettings.alshaya_gtm_create_user_newsletter !== undefined ?
+        drupalSettings.alshaya_gtm_create_user_newsletter : '';
+      Object.assign(data, data_additional);
+    }
+
+    dataLayer.push(data);
   };
 
   /**
@@ -1566,13 +1566,18 @@
       }
     };
 
-    // Delete list from cookie.
-    var listValues = {};
-    if ($.cookie('product-list') !== undefined) {
-      listValues = JSON.parse($.cookie('product-list'));
+    // Delete product from product list in local storage.
+    if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
+
+      if (listValues
+        && typeof listValues === 'object'
+        && Object.keys(listValues).length
+        && typeof listValues[productData.id] !== 'undefined') {
+        delete listValues[product.id];
+        Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
+      }
     }
-    delete listValues[product.id];
-    $.cookie('product-list', JSON.stringify(listValues), { path: '/' });
 
     dataLayer.push(productData);
   }
@@ -1615,6 +1620,11 @@
       nonInteraction: 0,
     };
 
+    if (category == GTM_CONSTANTS.PAYMENT_ERRORS || category == GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS) {
+      var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
+      errorData.cartTotalValue = Drupal.hasValue(rawCartData.totals.subtotal_incl_tax) ?
+        rawCartData.totals.subtotal_incl_tax : 0;
+    }
     try {
       // Log error on console.
       if (drupalSettings.gtm.log_errors_to_console !== undefined

@@ -8,3 +8,4 @@ dependencies:
   - alshaya_aura_react:alshaya_aura_react
   - alshaya_react:alshaya_react
   - alshaya_master:alshaya_master
+  - alshaya_seo_transac:alshaya_seo_transac

@@ -1,11 +1,5 @@
 #hits,
 #plp-hits {
-  .chrome & {
-    @include breakpoint($desktop) {
-      padding-top: rem(32);
-    }
-  }
-
   .js-pager__items.pager {
     margin-top: rem(45);
     margin-bottom: rem(-30);
@@ -19,11 +13,12 @@
 
     li.pager__item {
       button {
-        @include secondaryBtn;
+        @include primaryBtn;
 
         width: 100%;
         height: rem(53);
         border: rem(1) solid;
+        padding: rem(14) rem(16);
       }
     }
 

@@ -182,9 +182,11 @@
                   var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: (function () { return response; })}});
                   document.dispatchEvent(event);
 
+                  var eventContext = 'pdp';
                   // We want to refresh Recommended product on add to cart
                   // functionality but only on cart page.
                   if ($('#spc-cart').length > 0) {
+                    eventContext = 'cart';
                     document.dispatchEvent(
                       new CustomEvent(
                         'spcRefreshCartRecommendation',
@@ -200,7 +202,9 @@
                   var event = new CustomEvent('afterAddToCart', {
                     bubbles: true,
                     detail: {
-                      context: 'pdp',
+                      context: eventContext,
+                      postData: post_data,
+                      productData: productData,
                       cartData: response,
                     }
                   });

@@ -1,7 +1,5 @@
-import Cookies from 'js-cookie';
 import {
   getApiEndpoint,
-  getCartIdFromStorage,
   isUserAuthenticated,
   removeCartIdFromStorage,
   isRequestFromSocialAuthPopup,
@@ -11,7 +9,6 @@ import {
   getDefaultErrorMessage,
   getExceptionMessageType,
 } from '../../../../js/utilities/error';
-import StaticStorage from './staticStorage';
 import {
   hasValue,
   isObject,
@@ -25,45 +22,11 @@ import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
 import { isFreeGiftProduct } from '../../../../js/utilities/price';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 window.authenticatedUserCartId = 'NA';
 
 window.commerceBackend = window.commerceBackend || {};
-
-/**
- * Gets the cart ID for existing cart.
- *
- * @returns {string|integer|null}
- *   The cart id or null if not available.
- */
-window.commerceBackend.getCartId = () => {
-  // This is for ALX InStorE feature.
-  // We want to be able to resume guest carts from URL,
-  // we pass that id from backend via Cookie to Browser.
-  const resumeCartId = Cookies.get('resume_cart_id');
-  if (hasValue(resumeCartId)) {
-    Drupal.removeItemFromLocalStorage('cart_data');
-    Drupal.addItemInLocalStorage('cart_id', resumeCartId);
-    Cookies.remove('resume_cart_id');
-  }
-
-  let cartId = getCartIdFromStorage();
-  if (!hasValue(cartId)) {
-    // For authenticated users we get the cart id from the cart.
-    const data = window.commerceBackend.getRawCartDataFromStorage();
-    if (hasValue(data)
-      && hasValue(data.cart)
-      && hasValue(data.cart.id)
-    ) {
-      cartId = data.cart.id;
-    }
-  }
-
-  if (typeof cartId === 'string' || typeof cartId === 'number') {
-    return cartId;
-  }
-  return null;
-};
 
 /**
  * Stores the raw cart data object into the storage.
@@ -72,13 +35,13 @@ window.commerceBackend.getCartId = () => {
  *   The raw cart data object.
  */
 window.commerceBackend.setRawCartDataInStorage = (data) => {
-  StaticStorage.set('cart_raw', data);
+  Drupal.alshayaSpc.staticStorage.set('cart_raw', data);
 };
 
 /**
  * Fetches the raw cart data object from the static storage.
  */
-window.commerceBackend.getRawCartDataFromStorage = () => StaticStorage.get('cart_raw');
+window.commerceBackend.getRawCartDataFromStorage = () => Drupal.alshayaSpc.staticStorage.get('cart_raw');
 
 /**
  * Stores skus and quantities.
@@ -103,7 +66,7 @@ const matchStockQuantity = (sku, quantity = 0) => {
  * @returns {object|null}
  *   Processed cart data else null.
  */
-window.commerceBackend.getCartDataFromStorage = () => StaticStorage.get('cart');
+window.commerceBackend.getCartDataFromStorage = () => Drupal.alshayaSpc.staticStorage.get('cart');
 
 /**
  * Sets the cart data to storage.
@@ -114,7 +77,7 @@ window.commerceBackend.getCartDataFromStorage = () => StaticStorage.get('cart');
 window.commerceBackend.setCartDataInStorage = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
-  StaticStorage.set('cart', cartInfo);
+  Drupal.alshayaSpc.staticStorage.set('cart', cartInfo);
 
   // Store masked cart id for Global-e integration for checkout page.
   // We need to keep this data on a dedicated key because cart_data is
@@ -149,10 +112,12 @@ window.commerceBackend.setCartDataInStorage = (data) => {
  *  Whether we should remove all items.
  */
 window.commerceBackend.removeCartDataFromStorage = (resetAll = false) => {
-  StaticStorage.clear();
+  Drupal.alshayaSpc.staticStorage.clear();
 
   Drupal.removeItemFromLocalStorage('cart_data');
-  Drupal.removeItemFromLocalStorage('add_to_cart_skus');
+
+  // Remove Add to cart PDP count.
+  Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
 
   // Remove last selected payment on page load.
   // We use this to ensure we trigger events for payment method
@@ -370,6 +335,11 @@ const getProcessedCartData = async (cartData) => {
     // is applied we will get the has_exclusive_coupon flag value as true from MDC,
     // and we will not render the dynamic promos.
     has_exclusive_coupon: (typeof cartData.cart.extension_attributes.has_exclusive_coupon !== 'undefined') ? cartData.cart.extension_attributes.has_exclusive_coupon : false,
+    // Free shipping text which is used to show the message on free delivery
+    // usp banner in the cart, if free delivery usp is enabled. If the key
+    // "free_shipping_text" is either missing or has an empty value in magento api,
+    // we consider that free delivery usp feature is disabled from MDC.
+    free_shipping_text: (typeof cartData.cart.extension_attributes.free_shipping_text !== 'undefined') ? cartData.cart.extension_attributes.free_shipping_text : null,
     stale_cart: (typeof cartData.stale_cart !== 'undefined') ? cartData.stale_cart : false,
     totals: {
       subtotal_incl_tax: cartData.totals.subtotal_incl_tax,
@@ -603,6 +573,20 @@ const getProcessedCartData = async (cartData) => {
             data.items[itemKey].media = item.extension_attributes.product_media[0].file;
           }
 
+          // Get eGift product name for GTM datalayer.
+          // Since, we need to pass data to GTM only in English translation
+          // we use 'topup_card_name_en' field for eGift card topup and for
+          // eGift card use 'item_name_en'.
+          // See [CORE-42487] for API updates reference.
+          if (hasValue(item.extension_attributes.is_topup)
+            && item.extension_attributes.is_topup === '1') {
+            data.items[itemKey].itemGtmName = hasValue(item.extension_attributes.topup_card_name_en)
+              ? item.extension_attributes.topup_card_name_en : '';
+          } else {
+            data.items[itemKey].itemGtmName = hasValue(item.extension_attributes.item_name_en)
+              ? item.extension_attributes.item_name_en : '';
+          }
+
           // If eGift product is top-up card add check to the product item.
           if (typeof item.extension_attributes.is_topup !== 'undefined' && item.extension_attributes.is_topup) {
             data.items[itemKey].isTopUp = (item.extension_attributes.is_topup === '1');
@@ -662,8 +646,8 @@ const isAnonymousUserWithoutCart = () => {
 };
 
 const clearInvalidCart = () => {
-  const isAssociatingCart = StaticStorage.get('associating_cart') || false;
-  if (getCartIdFromStorage() && !isAssociatingCart) {
+  const isAssociatingCart = Drupal.alshayaSpc.staticStorage.get('associating_cart') || false;
+  if (window.commerceBackend.getCartIdFromStorage() && !isAssociatingCart) {
     logger.warning('Removing cart from local storage and reloading.');
 
     // Remove cart_id from storage.
@@ -781,7 +765,7 @@ const associateCartToCustomer = async (guestCartId) => {
 
     // Clear local storage and let the customer continue without association.
     removeCartIdFromStorage();
-    StaticStorage.clear();
+    Drupal.alshayaSpc.staticStorage.clear();
     return;
   }
 
@@ -792,7 +776,7 @@ const associateCartToCustomer = async (guestCartId) => {
 
   // Clear local storage.
   removeCartIdFromStorage();
-  StaticStorage.clear();
+  Drupal.alshayaSpc.staticStorage.clear();
 
   // Reload cart.
   const cartData = await getCart(true);
@@ -846,7 +830,11 @@ const mergeGuestCartToCustomer = async () => {
 
     // Clear local storage and let the customer continue without association.
     removeCartIdFromStorage();
-    StaticStorage.clear();
+    Drupal.alshayaSpc.staticStorage.clear();
+
+    // Dispatch event with error details on cart merge.
+    dispatchCustomEvent('onCartMergeError', response);
+
     return;
   }
 
@@ -858,7 +846,7 @@ const mergeGuestCartToCustomer = async () => {
 
   // Clear local storage.
   removeCartIdFromStorage();
-  StaticStorage.clear();
+  Drupal.alshayaSpc.staticStorage.clear();
 
   // Reload cart.
   await getCart(true);
@@ -1106,7 +1094,7 @@ window.commerceBackend.pushAgentDetailsInCart = async () => {
  *   Return customer email or null.
  */
 const getCartCustomerEmail = async () => {
-  let email = StaticStorage.get('cartCustomerEmail');
+  let email = Drupal.alshayaSpc.staticStorage.get('cartCustomerEmail');
   if (email !== null) {
     return email;
   }
@@ -1124,7 +1112,7 @@ const getCartCustomerEmail = async () => {
     }
   }
 
-  StaticStorage.set('cartCustomerEmail', email);
+  Drupal.alshayaSpc.staticStorage.set('cartCustomerEmail', email);
   return email;
 };
 
@@ -1387,6 +1375,21 @@ const getProductShippingMethods = async (currentArea, sku = undefined, cartId = 
     }
   }
 
+  // Example key: "{}|0984692002|".
+  // Example key when area is set:
+  // "{\"label\":{\"en\":\"Abbasiya\"},\"value\":{\"area\":6759,\"governate\":6756}}|0984692002|".
+  const staticKey = [
+    JSON.stringify(currentArea || {}),
+    sku || '',
+    cartIdInt || '',
+  ].join('|');
+
+  // Invoke API only once per page request.
+  const staticData = Drupal.alshayaSpc.staticStorage.get(staticKey);
+  if (staticData) {
+    return staticData;
+  }
+
   const url = '/V1/deliverymatrix/get-applicable-shipping-methods';
   const attributes = [];
   if (currentArea !== null) {
@@ -1422,6 +1425,8 @@ const getProductShippingMethods = async (currentArea, sku = undefined, cartId = 
     if (!hasValue(response.data)) {
       return null;
     }
+
+    Drupal.alshayaSpc.staticStorage.set(staticKey, response.data);
     return response.data;
   } catch (error) {
     logger.error('Error occurred while fetching governates data. Message: @message.', {

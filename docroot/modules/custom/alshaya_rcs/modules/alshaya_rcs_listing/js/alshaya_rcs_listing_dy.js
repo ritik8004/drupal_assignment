@@ -7,9 +7,12 @@
   document.addEventListener('alterInitialDynamicYield', (e) => {
     // Alter the DY recommendationContext.
     if (e.detail.type === 'category') {
+      e.detail.data.recommendationContext = e.detail.data.recommendationContext || {};
       e.detail.data.recommendationContext['type'] = 'CATEGORY';
+
       var category = e.detail.page_entity;
-      // Get the list of of all the ancestors.
+
+      // Get the list of all the ancestors.
       // @see ProductCategoryDyPageTypeEventSubscriber
       var data = [];
       if (Drupal.hasValue(category.breadcrumbs)) {

@@ -1,3 +1,12 @@
 langcode: en
 #This can be a comma separated list of multiple values like 2, 3, 4 etc. Values will be MDC category IDs.
 ignored_mdc_cats_on_sanity_check: 2
+consumer_key: null
+consumer_secret: null
+access_token: null
+access_token_secret: null
+magento_host: null
+verify_ssl: 1
+magento_lang_prefix:
+  en: kwt_en
+  ar: kwt_ar

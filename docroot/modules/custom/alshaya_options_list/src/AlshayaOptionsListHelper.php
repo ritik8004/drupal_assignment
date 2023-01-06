@@ -484,6 +484,13 @@ class AlshayaOptionsListHelper {
                 unset($options_list[$attribute_key][$no]['options_markup']['#option']['terms'][$group_key][$group_term_key]);
               }
             }
+
+            // To prevent array conversion when count is 1 and index is 0.
+            $term_details = $options_list[$attribute_key][$no]['options_markup']['#option']['terms'][$group_key];
+            if ((is_countable($term_details) ? count($term_details) : 0) === 1 && array_key_first($term_details) === 0) {
+              $options_list[$attribute_key][$no]['options_markup']['#option']['terms'][$group_key][] = $term_details[0];
+              unset($options_list[$attribute_key][$no]['options_markup']['#option']['terms'][$group_key][0]);
+            }
           }
           $options_list[$attribute_key][$no]['options_markup']['#option']['terms'] = array_filter($options_list[$attribute_key][$no]['options_markup']['#option']['terms']);
         }

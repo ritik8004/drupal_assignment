@@ -38,7 +38,7 @@ header {
           }
 
           .menu__link {
-            font-size: rem(17);
+            font-size: rem(14);
             letter-spacing: 0.025px;
             border: none;
             font-family: $alshaya-bold;
@@ -61,7 +61,8 @@ header {
     .block-alshaya-react-mini-cart {
       @include breakpoint($desktop) {
         width: auto;
-        margin-#{$left}: rem(40);
+        margin-#{$left}: rem(28);
+        flex-shrink: 0;
       }
     }
 
@@ -92,6 +93,8 @@ header {
           display: inline-flex;
 
           @include breakpoint($upto-tablet) {
+            position: relative;
+            top: rem(-2);
             margin-top: 0;
             margin-#{$left}: rem(56);
             z-index: 2;
@@ -224,10 +227,6 @@ header {
 .block-cart-mini-block,
 .block-alshaya-react-mini-cart,
 .static-minicart-wrapper {
-  .cart-link-total {
-    display: none;
-  }
-
   .cart-link {
     width: rem(24);
     height: rem(24);
@@ -335,6 +334,7 @@ header {
     @include breakpoint($only-tablet) {
       position: absolute;
       #{$left}: rem(18);
+      top: rem(30);
     }
 
     &::before {
@@ -366,7 +366,7 @@ header {
         width: auto;
         margin-#{$right}: 0;
         #{$left}: unset;
-        top: rem(22);
+        top: rem(20);
         #{$right}: rem(93);
       }
 
@@ -510,10 +510,13 @@ header {
 }
 
 .menu__in {
-  @include breakpoint($upto-tablet) {
+  @include breakpoint($upto-desktop) {
     margin-top: rem(-40);
-    #{$right}: rem(20);
   }
+}
+
+.toggle--sign {
+  width: calc(100% - #{rem(50)});
 }
 
 body {
@@ -559,5 +562,39 @@ body {
   .column {
     padding-#{$left}: rem(24);
     padding-#{$right}: rem(10);
+  }
+
+  .logged-in {
+    .c-menu-primary {
+      .my-account-nav a {
+        padding-#{$left}: rem(14);
+        font-size: rem(14);
+      }
+    }
+  }
+
+  .back--link {
+    font-size: rem(14);
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .c-menu-primary {
+    ul.menu {
+      margin: 0;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    position: unset;
+
+    li.menu--one__list-item {
+      .menu--one__link {
+        padding-#{$left}: 0;
+        padding-#{$right}: rem(20);
+      }
+    }
   }
 }

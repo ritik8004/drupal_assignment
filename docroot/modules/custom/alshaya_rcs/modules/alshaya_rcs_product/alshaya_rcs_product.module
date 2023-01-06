@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_theme().
@@ -93,6 +92,13 @@ function alshaya_rcs_product_page_attachments(array &$attachments) {
   // For assets data, this library is replaced by the assets processing
   // library in alshaya_media_assets module.
   $attachments['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_images';
+
+  /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
+  $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
+
+  // Adding the sequence of the configurable attributes based
+  // on order defined in config 'acq_sku.configurable_form_settings'.
+  $attachments['#attached']['drupalSettings']['configurableAttributes'] = $rcs_product_helper->getConfigurableAttributes();
 }
 
 /**
@@ -216,6 +222,8 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
     $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_info';
     $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
   }
+  // Add the product labels library.
+  $build['#attached']['library'][] = 'alshaya_rcs_product/rcs_product_labels';
 
   $acm_settings = \Drupal::config('alshaya_acm.settings');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $acm_settings->getCacheTags());
@@ -289,12 +297,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $build['#attached']['drupalSettings']['alshayaRcs']['showQuantity'] = $configurable_form_settings->get('show_quantity');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $configurable_form_settings->getCacheTags());
 
-  /** @var \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper */
-  $rcs_product_helper = \Drupal::service('alshaya_rcs_product.helper');
-
-  // Adding the sequence of the configurable attributes based
-  // on order defined in config 'acq_sku.configurable_form_settings'.
-  $build['#attached']['drupalSettings']['configurableAttributes'] = $rcs_product_helper->getConfigurableAttributes();
 
   $alshaya_master_settings = \Drupal::config('alshaya_master.settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
@@ -894,12 +896,16 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
     $aura_module_path = drupal_get_path('module', 'alshaya_aura_react');
     $libraries['alshaya_aura_pdp']['js']["/$aura_module_path/dist/pdpRcs.bundle.js"] = $options;
   }
-  elseif ($extension === 'alshaya_spc'
-    && isset($libraries['express_delivery'])) {
-    // Replace Alshaya SPC Express Delivery library with RCS supported one.
-    $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
-    unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
-    $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
+  elseif ($extension === 'alshaya_spc') {
+    if (isset($libraries['express_delivery'])) {
+      // Replace Alshaya SPC Express Delivery library with RCS supported one.
+      $options = $libraries['express_delivery']['js']['dist/expressdelivery.bundle.js'];
+      unset($libraries['express_delivery']['js']['dist/expressdelivery.bundle.js']);
+      $libraries['express_delivery']['js']["dist/PdpRcsExpressDelivery.bundle.js"] = $options;
+    }
+    if (isset($libraries['cart_utilities'])) {
+      $libraries['cart_utilities']['js']["/$self_module_path/js/alshaya_rcs_product_cart.utility.js"] = [];
+    }
   }
   elseif ($extension === 'sharethis') {
     if (isset($libraries['sharethis'])) {
@@ -918,9 +924,17 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       $libraries['sharethis']['js']["/$self_module_path/js/alshaya_rcs_sharethis.js"] = $options;
     }
   }
-  elseif ($extension === 'alshaya_pdp_react'
-    && isset($libraries['pdp_magazine_v2_layout'])) {
-    $libraries['pdp_magazine_v2_layout']['js']["/$self_module_path/js/alshaya_rcs_pdp_magazine_v2.js"] = [];
+  elseif ($extension === 'alshaya_pdp_react') {
+    if (isset($libraries['pdp_magazine_v2_layout'])) {
+      $libraries['pdp_magazine_v2_layout']['js']["/$self_module_path/js/alshaya_rcs_pdp_magazine_v2.js"] = [];
+    }
+    if (isset($libraries['pdp_size_guide_utility'])) {
+      // Alter the pdp size guide utility to replace the base JS file with the
+      // size guide utility provided by this module.
+      $options = $libraries['pdp_size_guide_utility']['js']['assets/js/size_guide_utility.js'];
+      unset($libraries['pdp_size_guide_utility']['js']['assets/js/size_guide_utility.js']);
+      $libraries['pdp_size_guide_utility']['js']["/$self_module_path/js/alshaya_rcs_product.size_guide_utility.js"] = $options;
+    }
   }
 }
 
@@ -1093,7 +1107,7 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   }
   // Invoke GraphQL API and get the options list.
   $attribute_code = $attribute['attribute_code'];
-  $settings = Settings::get('alshaya_api.settings');
+  $settings = \Drupal::config('alshaya_api.settings');
 
   // In Array attribute will only be added for materials attribute code.
   $is_array = '';
@@ -1103,12 +1117,12 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   }
   $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '"' . $is_array . '){attribute_code store_id attribute_values{key,value}}}';
   // Magento URL to get the product option attributes.
-  $request_url = $settings['magento_host'] . '/graphql?query=' . $query;
+  $request_url = $settings->get('magento_host') . '/graphql?query=' . $query;
 
   try {
     $response = Json::decode(\Drupal::httpClient()->get($request_url, [
       'headers' => [
-        'store' => Settings::get('magento_lang_prefix')[$current_language],
+        'store' => $settings->get('magento_lang_prefix')[$current_language],
       ],
     ])->getBody());
   }

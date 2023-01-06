@@ -53,7 +53,7 @@
 
         button {
           font-size: rem(14);
-          padding: rem(20) rem(94);
+          padding: rem(18) rem(94);
           font-family: $alshaya-bold;
           height: auto;
           width: 100%;
@@ -70,6 +70,12 @@
       .request-password-link {
         font-weight: 400;
         margin-top: rem(50);
+
+        @include breakpoint($only-mobile) {
+          margin-top: rem(22);
+          height: auto;
+          line-height: rem(18);
+        }
 
         @include breakpoint($only-tablet) {
           margin-top: rem(10);
@@ -115,9 +121,9 @@
         }
 
         .social-network-text {
-          font-family: $alshaya-thin;
+          font-family: $alshaya-bold;
           font-size: rem(14);
-          font-weight: 700;
+          display: block;
         }
       }
 
@@ -157,7 +163,7 @@
     }
 
     @include breakpoint($only-mobile) {
-      height: rem(52);
+      height: rem(46);
 
       .site-brand-home {
         width: auto;
@@ -177,14 +183,10 @@
       > span {
         @include breakpoint($only-mobile) {
           text-transform: none;
+          margin-top: rem(28);
+          margin-bottom: rem(28);
         }
       }
-    }
-  }
-
-  .c-post-content {
-    .l-container {
-      max-width: unset;
     }
   }
 }

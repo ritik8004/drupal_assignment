@@ -20,7 +20,7 @@
       <div class="menu__link-wrapper menu-two__link-wrapper">
       {{#if menu_item.icon }}
           <{{@menu_item.tag}} class="visual-mobile-menu__link visual-mobile-menu--one__link {{ class }} {{ @root.level1_class }}" style="{{@root.level1_style}}" title="{{ menu_item.name }}" gtm-menu-title="{{ menu_item.name }}" {{{ menu_item.tag_attr }}}>
-          <span class="icon"><img src="{{ menu_item.icon.icon_url }}" alt="{{ menu_item.name }}"/></span>
+          <span class="icon"><img data-src="{{ menu_item.icon.icon_url }}" alt="{{ menu_item.name }}"/></span>
         {{ menu_item.name }}
         </{{@menu_item.tag}}>
       {{else}}

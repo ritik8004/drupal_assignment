@@ -80,6 +80,92 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     });
   }
 
+  /**
+   * Utility function to remove the card id from the storage.
+   */
+  window.commerceBackend.removeCartIdFromStorage = () => {
+    // Always remove cart_data, we have added this as workaround with
+    // to-do at right place.
+    Drupal.removeItemFromLocalStorage('cart_data');
+
+    // Remove Add to cart PDP count.
+    Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
+
+    if (Drupal.isUserAuthenticated()) {
+      Drupal.addItemInLocalStorage('cart_id', window.authenticatedUserCartId);
+      // Remove guest Cart for merge from storage.
+      Drupal.removeItemFromLocalStorage('guestCartForMerge');
+      return;
+    }
+
+    // Remove user cart id if user is not authenticated.
+    Drupal.removeItemFromLocalStorage('user_cart_id');
+
+    Drupal.removeItemFromLocalStorage('cart_id');
+  };
+
+  /**
+   * Utility function to get the cart id from the local storage.
+   */
+  window.commerceBackend.getCartIdFromStorage = () => {
+    let cartId = Drupal.getItemFromLocalStorage('cart_id');
+
+    // Check if cartId is of authenticated user.
+    if (cartId === window.authenticatedUserCartId) {
+      // Reload the page if user is not authenticated based on settings.
+      if (!Drupal.isUserAuthenticated()) {
+        window.commerceBackend.removeCartIdFromStorage();
+
+        // eslint-disable-next-line no-self-assign
+        window.location.href = window.location.href;
+      }
+
+      // Replace with null so we don't need to add conditions everywhere.
+      cartId = null;
+    }
+
+    return cartId;
+  };
+
+  /**
+   * Gets the cart ID for existing cart.
+   *
+   * @returns {string|integer|null}
+   *   The cart id or null if not available.
+   */
+  window.commerceBackend.getCartId = () => {
+    // This is for ALX InStorE feature.
+    // We want to be able to resume guest carts from URL,
+    // we pass that id from backend via Cookie to Browser.
+    const resumeCartId = $.cookie('resume_cart_id');
+    if (Drupal.hasValue(resumeCartId)) {
+      Drupal.removeItemFromLocalStorage('cart_data');
+      Drupal.addItemInLocalStorage('cart_id', resumeCartId);
+
+      // Remove Add to cart PDP count.
+      Drupal.removeItemFromLocalStorage('skus_added_from_pdp');
+
+      $.removeCookie('resume_cart_id');
+    }
+
+    let cartId = window.commerceBackend.getCartIdFromStorage();
+    if (!Drupal.hasValue(cartId)) {
+      // For authenticated users we get the cart id from the cart.
+      const data = window.commerceBackend.getRawCartDataFromStorage();;
+      if (Drupal.hasValue(data)
+        && Drupal.hasValue(data.cart)
+        && Drupal.hasValue(data.cart.id)
+      ) {
+        cartId = data.cart.id;
+      }
+    }
+
+    if (typeof cartId === 'string' || typeof cartId === 'number') {
+      return cartId;
+    }
+    return null;
+  };
+
   Drupal.alshayaSpc.getProductData = function (sku, callback, extraData) {
     extraData = extraData || {};
 
@@ -455,16 +541,19 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
         context.cCartIdInt = cartData.cart_id_int;
       }
     }
+    else if (Drupal.hasValue(globalThis.cartIdInt)) {
+      context.cCartIdInt = globalThis.cartIdInt;
+    }
   });
 
   /**
    * Redirects users to the cart page after they added a certain
    * number of variants to the cart.
    *
-   * @param {object} cartData
-   *   The cart data.
+   * @param {string} sku
+   *   The variant sku.
    */
-  function alshayaSpcRedirectToCart(cartData) {
+  function alshayaSpcRedirectToCart(sku) {
     // Check if drupal settings are present.
     var values = drupalSettings.alshaya_spc.redirectToCartThreshold || null;
     if (!values) {
@@ -476,21 +565,29 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     // Get redirect threshold for the specific device.
     var redirectToCartThreshold = values[deviceType];
     // Check if redirection to cart is enabled i.e. >= 1.
-    if (redirectToCartThreshold < 1 || !Drupal.hasValue(cartData.items)) {
+    if (redirectToCartThreshold < 1 || !Drupal.hasValue(sku)) {
       return;
     }
 
-    // Count items, ignoring free gifts.
-    var count = 0;
-    for (const [sku, item] of Object.entries(cartData.items)) {
-      if (!Drupal.hasValue(item.freeItem)) {
-        count++;
-      }
+    // Key used to store skus in local storage when they are added to cart.
+    var storageKey = 'skus_added_from_pdp';
+
+    // Get skus from local storage.
+    var skus = Drupal.getItemFromLocalStorage(storageKey) || [];
+    // Check if current sku is already counted.
+    if (skus.includes(sku)) {
+      return;
     }
+
+    // Add current sku.
+    skus.push(sku);
+
+    // Update local storage.
+    Drupal.addItemInLocalStorage(storageKey, skus);
 
     // We will redirect if the number of items is multiple of threshold.
     // example: if threshold is 3, we will redirect at 3, 6, 9...
-    if (count % redirectToCartThreshold === 0) {
+    if (skus.length % redirectToCartThreshold === 0) {
       // Redirect to cart page.
       window.location = Drupal.url('cart');
     }
@@ -501,9 +598,9 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     const detail = e.detail;
     // Check if the event was triggered from PDP page.
     if (Drupal.hasValue(detail.context) && detail.context === 'pdp'
-      && Drupal.hasValue(detail.cartData)
+      && Drupal.hasValue(detail.productData.variant)
     ) {
-      alshayaSpcRedirectToCart(detail.cartData);
+      alshayaSpcRedirectToCart(detail.productData.variant);
     }
   });
 

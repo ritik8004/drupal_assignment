@@ -1,79 +1,59 @@
 .cko-progress-tracker {
-  margin: 0;
-  background-color: $progress-tracker-bg;
-
   #checkout-progress {
-    width: 80%;
+    @include breakpoint($only-mobile) {
+      font-size: rem(11);
+    }
 
     .progress-bar {
-      height: rem(108);
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          margin-bottom: rem(48);
+        }
+      }
 
       .step {
-        margin-top: rem(-8);
-
-        &.current,
-        &.completed {
-          &::after {
-            border-color: $cko-steps-current-active-border;
+        span {
+          @include breakpoint($only-mobile) {
+            font-size: rem(14);
+            padding-top: rem(2);
           }
 
-          .step-label {
-            top: rem(21);
+          padding-top: 0;
+          font-size: rem(18);
+
+          html[lang="ar"] & {
+            padding-top: rem(5);
+            margin-top: rem(-1);
 
             @include breakpoint($only-mobile) {
-              width: rem(75);
-              text-align: center;
+              padding-top: rem(6);
             }
-          }
-        }
-
-        .step-label {
-          white-space: initial;
-          text-align: center;
-        }
-
-        span {
-          html[lang=ar] & {
-            transform: translate3d(0, rem(2), 0) scale(1);
           }
         }
 
         &.current {
-          .step-label {
-            color: $cko-current-steps-label-txt;
-          }
-
           span {
-            position: absolute;
-            transform: translate(-50%, -50%);
+            font-family: $alshaya-bold;
 
-            html[lang=ar] & {
-              transform: translate(-50%, -50%);
-              top: rem(2);
-              left: 0;
+            @include breakpoint($only-mobile) {
+              padding-top: rem(3);
+              margin-top: rem(-3);
+            }
+
+            @include breakpoint($tablet) {
+              padding-top: 0;
+              margin-top: rem(-1);
             }
           }
         }
-      }
-    }
 
-    &::before,
-    &::after {
-      margin-top: rem(-4);
-    }
-  }
-
-  @include breakpoint($tablet) {
-    margin: 0 auto;
-    background-color: initial;
-
-    #checkout-progress {
-      .progress-bar {
-        height: rem(134);
-
-        .step {
+        &.completed {
           .step-label {
-            white-space: nowrap;
+            top: calc(100% + #{rem(18)});
+
+            @include breakpoint($only-mobile) {
+              font-size: rem(11);
+            }
           }
         }
       }

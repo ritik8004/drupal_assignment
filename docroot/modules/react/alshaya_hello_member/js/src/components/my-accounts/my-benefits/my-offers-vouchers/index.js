@@ -1,8 +1,8 @@
 import React from 'react';
-import moment from 'moment';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { isMobile } from '../../../../../../../js/utilities/display';
+import { formatDate } from '../../../../utilities';
 
 const { showMoreLimit } = drupalSettings.helloMember;
 class MyOffersAndVouchers extends React.Component {
@@ -14,6 +14,15 @@ class MyOffersAndVouchers extends React.Component {
     this.state = {
       expanded: viewAllBenefits || display,
     };
+  }
+
+  handleShowMoreClick = () => {
+    const { expanded } = this.state;
+    this.setState({
+      expanded: !expanded,
+    });
+    // Push show more click data to gtm.
+    Drupal.alshayaSeoGtmPushBenefitShowmore(expanded);
   }
 
   getShowBenefitsLink = () => {
@@ -31,10 +40,7 @@ class MyOffersAndVouchers extends React.Component {
     if (myBenefitsList.length > showMoreLimit) {
       const { expanded } = this.state;
       return (
-        <a onClick={() => this.setState({
-          expanded: !expanded,
-        })}
-        >
+        <a onClick={() => this.handleShowMoreClick()}>
           {expanded ? getStringMessage('show_less') : getStringMessage('show_all')}
         </a>
       );
@@ -62,7 +68,7 @@ class MyOffersAndVouchers extends React.Component {
                 {data.description}
               </div>
               <div className="expiry">
-                {getStringMessage('benefit_expire', { '@expire_date': moment(new Date(data.expiry_date || data.end_date)).format('DD MMMM YYYY') })}
+                {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(data.expiry_date || data.end_date)) })}
               </div>
             </div>
           </a>

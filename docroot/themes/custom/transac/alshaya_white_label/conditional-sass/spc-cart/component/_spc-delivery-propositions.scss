@@ -1,0 +1,28 @@
+.delivery-propositions-wrapper {
+  background: $spc-delivery-propositions-bg;
+  margin-top: rem(16);
+  font-size: rem(14);
+
+  .delivery-proposition-item {
+    display: flex;
+    height: rem(64);
+    margin-#{$right}: rem(21);
+    margin-#{$left}: rem(20);
+    border-bottom: rem(1) solid $spc-delivery-propositions-border;
+    align-items: center;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .delivery-proposition-icon {
+    flex-shrink: 0;
+  }
+
+  .delivery-proposition-text {
+    padding-#{$left}: rem(15);
+    line-height: rem(18);
+    color: $spc-cart-payment-method-logos-block-title;
+  }
+}

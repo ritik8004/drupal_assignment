@@ -14,6 +14,14 @@
             color: $select_drop_down_hover_text;
             background-color: $select_drop_down_hover_bg;
           }
+
+          &[aria-disabled=true] {
+            background-color: $select_drop_down_hover_bg;
+
+            &:hover {
+              color: $primary_dropdown_option_disbled;
+            }
+          }
         }
       }
     }

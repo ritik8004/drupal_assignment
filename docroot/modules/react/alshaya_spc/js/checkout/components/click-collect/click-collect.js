@@ -47,6 +47,7 @@ class ClickCollect extends React.Component {
 
     this.mapStoreList = React.createRef();
     this.autocomplete = null;
+    this.autocompleteInit = false;
     this.searchplaceInput = null;
     this.nearMeBtn = null;
     this.googleMap = globalGmap.create();
@@ -112,6 +113,8 @@ class ClickCollect extends React.Component {
 
     if (outsideCountryError) {
       smoothScrollTo('.spc-cnc-address-form-sidebar .spc-checkout-section-title');
+    } else {
+      this.resetListHeight();
     }
 
     if (locationAccess === false || outsideCountryError === true) {
@@ -147,7 +150,7 @@ class ClickCollect extends React.Component {
     }
   };
 
-  resetListHeightWhenLocationError = () => {
+  resetListHeight = () => {
     // Remove the height set in dynamicListHeightWhenLocationError(), on error dismissal.
     if (window.innerWidth >= 768) {
       document.getElementById('click-and-collect-list-view').style.removeProperty('height');
@@ -158,7 +161,7 @@ class ClickCollect extends React.Component {
    * Keyup handler for the search input.
    */
   keyUpHandler = (e) => {
-    if (e.target.value.length >= 2 && !this.autocomplete) {
+    if (e.target.value.length >= 2 && !this.autocompleteInit) {
       this.autocomplete = new window.google.maps.places.Autocomplete(
         this.searchplaceInput,
         {
@@ -171,6 +174,12 @@ class ClickCollect extends React.Component {
         'place_changed',
         this.placesAutocompleteHandler,
       );
+      this.autocompleteInit = true;
+    } else if (e.target.value.length < 2) {
+      e.preventDefault();
+      jQuery('.pac-container').remove();
+      google.maps.event.clearInstanceListeners(this.autocomplete);
+      this.autocompleteInit = false;
     }
   };
 
@@ -535,7 +544,7 @@ class ClickCollect extends React.Component {
       if (type === 'locationAccessDenied') {
         updateLocationAccess(true);
       }
-      this.resetListHeightWhenLocationError();
+      this.resetListHeight();
     }, 200);
   }
 

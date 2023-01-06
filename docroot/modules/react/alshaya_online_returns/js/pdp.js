@@ -9,13 +9,17 @@ if (isOnlineReturnsEnabled()) {
   if ((isMobile())
     && document.querySelector('#online-returns-pdp-mobile')) {
     ReactDOM.render(
-      <OnlineReturnsPDP />,
+      <OnlineReturnsPDP
+        eligibleForReturn
+      />,
       document.querySelector('#online-returns-pdp-mobile'),
     );
   } else if (document.querySelector('#online-returns-pdp-desktop')) {
     // For tablet & desktop view.
     ReactDOM.render(
-      <OnlineReturnsPDP />,
+      <OnlineReturnsPDP
+        eligibleForReturn
+      />,
       document.querySelector('#online-returns-pdp-desktop'),
     );
   }

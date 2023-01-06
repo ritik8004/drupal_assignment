@@ -36,11 +36,10 @@
     if(typeof product.inStock !== 'undefined') {
       productDetails['stockStatus'] = product.inStock ? 'in stock' : 'out of stock';
     }
-    if ($.cookie('product-list') !== undefined) {
-      var listValues = JSON.parse($.cookie('product-list'));
-      if (listValues.hasOwnProperty(product.parentSKU)) {
-        productDetails.list = listValues[product.parentSKU];
-      }
+
+    var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
+    if (listValues && typeof listValues === 'object' && listValues[product.parentSKU]) {
+      productDetails.list = listValues[product.parentSKU];
     }
     return productDetails;
   };
@@ -80,9 +79,7 @@
           if (Drupal.alshayaSeoSpc.isEgiftVirtualProduct(product)) {
             cartDataLayer.productStyleCode.push(product.id);
             cartDataLayer.productSKU.push(product.sku);
-            let productName = (product.sku === 'giftcard_topup')
-              ? product.productName
-              : product.title;
+            let productName = product.itemGtmName;
             // GTM product attributes for egift card.
             const productGtm = {
               id: product.id,

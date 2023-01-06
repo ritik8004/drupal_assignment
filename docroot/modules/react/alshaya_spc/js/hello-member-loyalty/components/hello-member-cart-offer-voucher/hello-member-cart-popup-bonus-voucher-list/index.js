@@ -16,6 +16,11 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
   const handleChange = () => {
     const vouchersBonus = document.getElementsByName('vouchersBonus[]');
     resetBenefitOptions(vouchersBonus, 'benefit_voucher', 'change');
+    const selectBox = [];
+    for (let i = 0; i < vouchersBonus.length; i++) {
+      if (vouchersBonus[i].type === 'checkbox' && vouchersBonus[i].checked === true) { selectBox.push(vouchersBonus[i].getAttribute('voucherDescription')); }
+    }
+    Drupal.alshayaSeoGtmPushVoucherOfferSelect(selectBox.join(' | '), 'selected-bonus-voucher');
   };
 
   // handle submit.
@@ -23,11 +28,13 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
     e.preventDefault();
     showFullScreenLoader();
     const seletedVouchers = [];
+    const voucherDescriptionData = [];
     // get the list of user selected vouchers from voucher form.
     Object.entries(e.target).forEach(
       ([, value]) => {
         if (value.checked) {
           seletedVouchers.push(value.value);
+          voucherDescriptionData.push(value.getAttribute('voucherDescription'));
         }
       },
     );
@@ -63,6 +70,7 @@ const HelloMemberCartPopupBonusVouchersList = (props) => {
             dispatchCustomEvent('refreshCart', {
               data: () => result.data,
             });
+            Drupal.alshayaSeoGtmPushVoucherOfferSelectedApply(voucherDescriptionData.join(' | '), 'applied-bonus-voucher');
           }
         });
       }

@@ -31,7 +31,9 @@
       color: $breadcrumb_link;
 
       &:hover {
-        text-decoration: underline;
+        span {
+          text-decoration: underline;
+        }
       }
 
       &.no-link {

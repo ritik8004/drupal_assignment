@@ -1,0 +1,53 @@
+.product-drawer {
+  &-content-wrapper {
+    .product-title {
+      font-family: $alshaya-bold;
+      font-size: rem(32);
+    }
+
+    .price {
+      font-family: $alshaya-bold;
+      font-size: rem(18);
+    }
+
+    .content--item-code {
+      font-size: rem(14);
+    }
+
+    .alshaya-select-wrapper,
+    .attribute-wrapper {
+      label {
+        font-size: rem(16);
+        display: inline-block;
+        margin-bottom: rem(4);
+      }
+    }
+
+    .attribute-wrapper {
+      &_color {
+        label {
+          span:first-child {
+            font-family: $alshaya-bold;
+          }
+        }
+      }
+    }
+
+    .alshaya-select-wrapper,
+    .form-select-wrapper {
+      padding-top: rem(28);
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .product-drawer {
+    &-content-wrapper {
+      .product-details-wrapper {
+        .size-guide-link {
+          top: 0;
+        }
+      }
+    }
+  }
+}

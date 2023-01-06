@@ -8,3 +8,31 @@ alshaya_api.settings:
     ignored_mdc_cats_on_sanity_check:
       type: string
       label: 'Ignored MDC categories on sanity check'
+    magento_host:
+      type: string
+      label: 'Magento host'
+    consumer_key:
+      type: string
+      label: 'Consumer key'
+    consumer_secret:
+      type: string
+      label: 'Consumer secret'
+    access_token:
+      type: string
+      label: 'Access token'
+    access_token_secret:
+      type: string
+      label: 'Access token secret'
+    verify_ssl:
+      type: integer
+      label: 'Verify SSL'
+    magento_lang_prefix:
+      type: mapping
+      label: 'Magento lang prefixes'
+      mapping:
+        en:
+          type: string
+          label: 'Magento lang prefix for English'
+        ar:
+          type: string
+          label: 'Magento lang prefix for Arabic'

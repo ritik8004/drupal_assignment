@@ -5,6 +5,8 @@ namespace Drupal\alshaya_stylefinder\Plugin\Block;
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -135,7 +137,8 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
     $cache_tags = [];
     if (!empty($quiz_node_id)) {
       $quiz_node = $this->entityTypeManager->getStorage('node')->load($quiz_node_id);
-      if ($quiz_node->hasTranslation($current_langcode)) {
+      if ($quiz_node instanceof NodeInterface
+        && $quiz_node->hasTranslation($current_langcode)) {
         // Get the Translated node of the current language code.
         $quiz_node = $this->entityRepository->getTranslationFromContext($quiz_node, $current_langcode);
         $cache_tags = Cache::mergeTags($cache_tags, array_merge($quiz_node->getCacheTags()));
@@ -183,7 +186,8 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
     $question_details = [];
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     $question_node = $this->entityTypeManager->getStorage('node')->load($q_nid);
-    if ($question_node->hasTranslation($current_langcode)) {
+    if ($question_node instanceof NodeInterface
+      && $question_node->hasTranslation($current_langcode)) {
       // Get the Translated node of the current language code.
       $question_node = $this->entityRepository->getTranslationFromContext($question_node, $current_langcode);
       $question_details['ques_instruction'] = strip_tags($question_node->field_instruction->value) ?? NULL;
@@ -211,7 +215,8 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
     $answer_details = [];
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     $answer_node = $this->entityTypeManager->getStorage('node')->load($a_nid);
-    if ($answer_node->hasTranslation($current_langcode)) {
+    if ($answer_node instanceof NodeInterface
+      && $answer_node->hasTranslation($current_langcode)) {
       // Get the Translated node of the current language code.
       $answer_node = $this->entityRepository->getTranslationFromContext($answer_node, $current_langcode);
       // To get the Product Image URL.
@@ -239,13 +244,14 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
         $term_id = $answer_node->field_choice_4->target_id;
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
 
-        if ($term->hasTranslation($current_langcode)) {
+        if ($term instanceof TermInterface
+          && $term->hasTranslation($current_langcode)) {
           $taxonomy_term_trans = $this->entityRepository->getTranslationFromContext($term, $current_langcode);
+          $choice = $taxonomy_term_trans->getName();
+          $answer_details['attrCode'] = $taxonomy_term_trans->get('field_sku_attribute_code')->value;
         }
 
-        $choice = $taxonomy_term_trans->getName();
         $answer_details['choice'] = $choice;
-        $answer_details['attrCode'] = $taxonomy_term_trans->get('field_sku_attribute_code')->value;
       }
       else {
         if ($answer_node->field_choice_1->value) {

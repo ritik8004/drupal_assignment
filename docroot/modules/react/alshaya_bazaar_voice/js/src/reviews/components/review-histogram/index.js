@@ -8,7 +8,11 @@ import DisplayStar from '../../../rating/components/stars';
 import { getPercentVal } from '../../../utilities/validate';
 
 const ReviewHistogram = ({
-  overallSummary, isNewPdpLayout, reviewedByCurrentUser, isWriteReview,
+  overallSummary,
+  isNewPdpLayout,
+  reviewedByCurrentUser,
+  isWriteReview,
+  productId,
 }) => {
   if (overallSummary === undefined) {
     return null;
@@ -29,6 +33,7 @@ const ReviewHistogram = ({
                   reviewedByCurrentUser={reviewedByCurrentUser}
                   newPdp={newPdp}
                   isWriteReview={isWriteReview}
+                  productId={productId}
                 />
               </ConditionalView>
               <DisplayStar
@@ -82,6 +87,7 @@ const ReviewHistogram = ({
                 <WriteReviewButton
                   reviewedByCurrentUser={reviewedByCurrentUser}
                   isWriteReview={isWriteReview}
+                  productId={productId}
                 />
                 <CombineDisplay
                   starSliderCombine={

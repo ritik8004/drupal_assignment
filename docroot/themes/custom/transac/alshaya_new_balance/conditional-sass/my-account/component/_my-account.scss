@@ -14,3 +14,25 @@
     }
   }
 }
+
+.path--user {
+  .dialog-off-canvas-main-canvas {
+    .c-hero-content {
+      .messages__wrapper {
+        .messages.messages--status {
+          margin-bottom: rem(30);
+        }
+      }
+    }
+  }
+
+  main {
+    .block-system-main-block {
+      .form-actions {
+        .button {
+          text-transform: unset;
+        }
+      }
+    }
+  }
+}

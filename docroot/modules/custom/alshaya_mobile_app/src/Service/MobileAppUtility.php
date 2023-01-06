@@ -34,7 +34,9 @@ use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\redirect\RedirectRepository;
 use Drupal\Core\Database\Connection;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\Core\Routing\RequestContext;
 use Drupal\Core\Site\Settings;
 
 /**
@@ -221,6 +223,13 @@ class MobileAppUtility {
   protected $productCategoryPage;
 
   /**
+   * Base url of current site.
+   *
+   * @var string
+   */
+  protected $baseUrl;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -261,6 +270,8 @@ class MobileAppUtility {
    *   Path Validator service object.
    * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page
    *   Product Category Page service.
+   * @param \Drupal\Core\Routing\RequestContext $request_context
+   *   The request context.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -280,7 +291,8 @@ class MobileAppUtility {
                               Connection $database,
                               AlshayaSuperCategoryManager $super_category_manager,
                               PathValidatorInterface $path_validator,
-                              ProductCategoryPage $product_category_page) {
+                              ProductCategoryPage $product_category_page,
+                              RequestContext $request_context) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -302,6 +314,7 @@ class MobileAppUtility {
     $this->superCategoryManager = $super_category_manager;
     $this->pathValidator = $path_validator;
     $this->productCategoryPage = $product_category_page;
+    $this->baseUrl = $request_context->getCompleteBaseUrl();
   }
 
   /**
@@ -1229,6 +1242,162 @@ class MobileAppUtility {
       'filter_field' => $filter_field,
       'filter_value' => $term_details['hierarchy'],
       'rule_contexts' => $term_details['ruleContext'],
+    ];
+  }
+
+  /**
+   * Helper function to get deeplink.
+   *
+   * @param string $alias
+   *   Alias value.
+   */
+  public function getDeeplinkForResource($alias) {
+    $alias = str_replace($this->baseUrl, '', $alias);
+
+    if (empty($alias) || UrlHelper::isExternal($alias)) {
+      return $this->throwException();
+    }
+
+    if (str_contains($alias, 'search')) {
+      $query_string_array = $this->requestStack->query->all();
+      // Search url may have url like,
+      // rest/v1/deeplink?url=search?keywords=dress&f[0]=category
+      // %3A10711&sort_bef_combine=search_api_relevance DESC&show_on_load=12
+      // So, the $alias contains query string like search?keywords=dress
+      // Which further needs to be parsed and "keywords" needs to be added
+      // back to query string array to generate complete search deep link.
+      $parse = parse_url($alias);
+      [$key, $value] = explode('=', $parse['query']);
+      $query_string_array = array_merge($query_string_array, [$key => $value]);
+      unset($query_string_array['url']);
+      unset($query_string_array['_format']);
+      $internal_url = Url::fromUri("internal:/rest/v1/{$parse['path']}", ['query' => $query_string_array])->toString(TRUE);
+      $url = $internal_url->getGeneratedUrl();
+    }
+    else {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      $internal_path = $this->aliasManager->getPathByAlias(
+        rtrim(str_replace("/{$langcode}", '', $alias), '/'),
+        $langcode
+      );
+      if (strpos($internal_path, 'taxonomy/term')) {
+        $redirect_url = $this->getRedirectUrl("/{$langcode}" . $internal_path);
+        // Append '/' if it does not exist.
+        $redirect_url = (!str_starts_with($redirect_url, '/')) ? ('/' . $redirect_url) : $redirect_url;
+        if ($redirect_url !== $internal_path) {
+          $internal_path = $this->aliasManager->getPathByAlias(
+            rtrim(str_replace("/{$langcode}", '', $redirect_url), '/'),
+            $langcode
+          );
+        }
+      }
+      else {
+        $redirect_url = $this->getRedirectUrl($alias);
+        // Get the internal path of given alias and get route object.
+        // If $redirect_url is "/" or "/?xyz" we dont find its path.
+        $internal_path = (preg_match('/^\/(\?.*)?$/', $redirect_url))
+          ? $redirect_url
+          : $this->aliasManager->getPathByAlias('/' . $redirect_url, $langcode);
+      }
+
+      // Get the internal path of given alias and get route object.
+      $url_obj = Url::fromUri("internal:" . $internal_path);
+      if (!$url_obj->isRouted()) {
+        return $this->throwException();
+      }
+      $url = $this->getDeepLinkFromUrl($url_obj);
+    }
+
+    return $url;
+  }
+
+  /**
+   * Preprocess the alias.
+   *
+   * @param string $alias
+   *   Path alias.
+   */
+  private function preprocessAlias(&$alias) {
+    // Remove the base url from the alias.
+    $alias = str_replace($this->baseUrl, '', $alias);
+    // Append .html in the end if it is a product url without .html.
+    if (str_contains($alias, 'buy-') && !str_contains($alias, '.html')) {
+      $alias = "$alias.html";
+    }
+  }
+
+  /**
+   * Check if its MDC url.
+   *
+   * @param string $alias
+   *   Url alias.
+   *
+   * @return bool
+   *   Returns true if its MDC url.
+   */
+  protected function checkMdcUrl($alias) {
+    $this->preprocessAlias($alias);
+
+    if (empty($alias) || UrlHelper::isExternal($alias)) {
+      return $this->throwException();
+    }
+    // Get route name for the url.
+    $url_object = $this->pathValidator->getUrlIfValid($alias);
+    if ($url_object === FALSE) {
+      return FALSE;
+    }
+
+    $route_name = $url_object->getRouteName();
+    $route_parameters = $url_object->getRouteParameters();
+    // Check if its PLP route.
+    if ($route_name == 'entity.taxonomy_term.canonical') {
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($route_parameters['taxonomy_term']);
+      if ($term instanceof TermInterface
+        && in_array($term->bundle(), ['acq_product_category', 'rcs_category'])
+      ) {
+        return TRUE;
+      }
+    }
+    elseif ($route_name == 'entity.node.canonical') {
+      // Check if its PDP route.
+      $node = $this->entityTypeManager->getStorage('node')->load($route_parameters['node']);
+      if ($node instanceof NodeInterface
+        && in_array($node->bundle(), [
+          'acq_product',
+          'rcs_product',
+          'acq_promotion',
+          'rcs_promotion',
+        ])
+      ) {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Helper function to get deeplink.
+   *
+   * @param string $alias
+   *   Url alias.
+   *
+   * @return array
+   *   Returns V3 deeplink response.
+   */
+  public function getDeeplinkForResourceV3($alias) {
+    // Check if its mdc url.
+    if ($this->checkMdcUrl($alias)) {
+      return [
+        'deeplink' => '',
+        'source' => 'magento',
+      ];
+    }
+
+    $url = self::getDeeplinkForResource($alias);
+    return [
+      'deeplink' => $url,
+      'source' => 'drupal',
     ];
   }
 

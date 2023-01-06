@@ -11,19 +11,35 @@
   // Call event after entity load and process product data.
   RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
     var mainProduct = e.detail.entity;
+    var mainProductClone = null;
+    try {
+      mainProductClone = JSON.parse(JSON.stringify(mainProduct));
+    } catch (e) {
+      mainProductClone = mainProduct;
+    }
+
     if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
       mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
     }
-    var processedProduct = [];
-    var configurableCombinations = [];
+
+    var processedProduct = {};
+    var configurableCombinations = {};
     // Prepare data for productinfo to be used in new pdp layout.
     const productInfoV1 = window.commerceBackend.getProductData(mainProduct.sku, false, true);
     const productInfoV2 = processProductMagV2(mainProduct, productInfoV1);
     processedProduct[mainProduct.sku] = {...productInfoV1, ...productInfoV2};
     if (mainProduct.type_id === 'configurable') {
       configurableCombinations[mainProduct.sku] = processConfigurableCombinations(mainProduct.sku);
-      configurableCombinations[mainProduct.sku].firstChild = getFirstChild(productInfoV2);
+      configurableCombinations[mainProduct.sku].firstChild = getFirstChild(mainProductClone);
     }
+
+    // Get the product labels.
+    processedProduct[mainProduct.sku].labels = {};
+    if (Drupal.hasValue(window.commerceBackend.getProductLabels)) {
+      Object.assign(processedProduct[mainProduct.sku].labels,
+        await window.commerceBackend.getProductLabels(mainProduct.sku));
+    }
+
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
   });
@@ -38,8 +54,29 @@
    *   SKU value or null.
    */
   function getFirstChild(product) {
-    var variantSkus = Object.keys(product.variants);
-    return variantSkus.length ? variantSkus.pop() : null;
+    var firstChild = null;
+    // @todo Add a general way to figure out the first child instead of adding
+    // separate check for OOS products.
+    // We might need to investigate the method
+    // window.commerceBackend.getConfigurableCombinations() and see if the
+    // order of the attributes is the same as in V2.
+    if (window.commerceBackend.isProductInStock(product)) {
+      var firstVariant = product.variants.length > 0
+        ? Object.values(product.variants).shift()
+        : null;
+      return firstVariant ? firstVariant.product.sku : null;
+    }
+    else {
+      var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
+      try {
+        var sortedVariants = Object.values(Object.values(combinations['attribute_sku'])[0])[0];
+        firstChild = sortedVariants[0];
+      } catch (e) {
+        // Do nothing.
+      }
+    }
+
+    return firstChild;
   }
 
   /**
@@ -64,7 +101,8 @@
       stockStatus: product.stock_status === 'IN_STOCK',
       title: {'label': product.name},
       rawGallery: updateGallery(product, product.name),
-      additionalAttributes: (Object.keys(product.description.additional_attributes).length > 0) ? product.description.additional_attributes : '',
+      additionalAttributes: Object.keys(product.description.additional_attributes).length > 0 ? product.description.additional_attributes : {},
+      quickFit: Drupal.hasValue(product.quick_fit) ? product.quick_fit : '',
     }
     if (product.type_id === 'configurable') {
       productData.variants = getVariantsInfoMagV2(product, processedProduct.variants);

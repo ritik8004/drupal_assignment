@@ -12,77 +12,49 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     When I click on ".free-gift-message a" element
     And I wait for AJAX to finish
-    And I wait 5 seconds
     Then I should see an ".content--short-description" element
     And I click on "span.read-more-description-link-gift" element
-    And I wait 5 seconds
+    And I wait for element "span.show-less-link"
     Then I should see an "span.show-less-link" element
     And I click on "span.show-less-link" element
-    And I wait 5 seconds
+    And I wait for element ".ui-dialog-titlebar-close"
     And I click on ".ui-dialog-titlebar-close" element
-    And I wait 5 seconds
-    When I press "{add_to_cart_link}"
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/cart"
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     And the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-cart-item .spc-product-tile-actions .qty .spcSelect__control--is-disabled" should exist
     And the element ".spc-content .spc-cart-items .spc-cart-item:nth-child(2) .spc-product-tile" should exist
-    And I wait 10 seconds
     And I wait for AJAX to finish
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
-    And I wait 15 seconds
+    #-Product quantity loader
+    And I wait 2 seconds
     Then I should see "2"
-    And I wait 5 seconds
-    Then the price for product should be doubled
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I should see "(3 items)" in the "#block-content .spc-content .spc-checkout-section-title" element
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 50 seconds
-    And I wait for the page to load
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait for the page to load
-    And I wait 10 seconds
-    When I add in the billing address with following:
-      | mobile   | {mobile}        |
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 5 seconds
-    And I wait for the page to load
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
-    And I wait 10 seconds
-    Then I should see "{order_summary}"
-    And I wait 10 seconds
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-login-wrapper"
+    And I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
-    Then the "payment-method-checkout_com_upapi" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_checkout_card}"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
+    And I select the home delivery address
     And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait for the page to load
+    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
+    Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
+    And I wait for AJAX to finish
+    Then the checkout payment checkbox should be checked
+    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
@@ -94,7 +66,6 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And I wait for the page to load
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
     And the element "#block-content .free-gift-promotions" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
@@ -102,61 +73,53 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     When I click on ".free-gift-message a" element
     And I wait for AJAX to finish
-    And I wait 5 seconds
     Then I should see an ".content--short-description" element
     And I click on "span.read-more-description-link-gift" element
-    And I wait 5 seconds
+    And I wait for AJAX to finish
     Then I should see an "span.show-less-link" element
     And I click on "span.show-less-link" element
-    And I wait 5 seconds
+    And I wait for element ".ui-dialog-titlebar-close"
     And I click on ".ui-dialog-titlebar-close" element
-    And I wait 5 seconds
-    When I press "{add_to_cart_link}"
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     And the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
-    And the element "#block-content .spc-main .spc-cart-item .spc-product-tile-actions .qty .spcSelect__control--is-disabled" should exist
-    And the element ".spc-content .spc-cart-items .spc-cart-item:nth-child(2) .spc-product-tile" should exist
-    And I wait 10 seconds
     And I wait for AJAX to finish
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
-    And I wait 15 seconds
+    #-Product quantity loader
+    And I wait 2 seconds
     Then I should see "2"
-    And I wait 5 seconds
-    Then the price for product should be doubled
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for AJAX to finish
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
+    And the element "#block-content .spc-main .spc-cart-item .spc-product-tile-actions .qty .spcSelect__control--is-disabled" should exist
+    And the element ".spc-content .spc-cart-items .spc-cart-item:nth-child(2) .spc-product-tile" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 50 seconds
-    And I wait for the page to load
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait 30 seconds
-    And I wait for the page to load
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-login-wrapper"
+    And I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
+    And I wait for AJAX to finish
     Then I should see "{language_order_summary}"
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
-    Then the "payment-method-checkout_com_upapi" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_checkout_card}"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
+    And I select the home delivery address
     And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
-    And I wait for the page to load
+    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
+    Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
+    And I wait for AJAX to finish
+    Then the checkout payment checkbox should be checked
+    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
@@ -173,61 +136,53 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without co
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     When I click on ".free-gift-message a" element
     And I wait for AJAX to finish
-    And I wait 5 seconds
     Then I should see an ".content--short-description" element
     And I click on "span.read-more-description-link-gift" element
-    And I wait 5 seconds
+    And I wait for AJAX to finish
     Then I should see an "span.show-less-link" element
     And I click on "span.show-less-link" element
-    And I wait 5 seconds
+    And I wait for element ".ui-dialog-titlebar-close"
     And I click on ".ui-dialog-titlebar-close" element
-    And I wait 5 seconds
-    When I press "{add_to_cart_link}"
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
     And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/cart"
+    And I click on Add-to-cart button
+    And I wait for AJAX to finish
+    And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
+    And I wait 3 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     And the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-cart-item .spc-product-tile-actions .qty .spcSelect__control--is-disabled" should exist
     And the element ".spc-content .spc-cart-items .spc-cart-item:nth-child(2) .spc-product-tile" should exist
-    And I wait 10 seconds
     And I wait for AJAX to finish
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
-    And I wait 15 seconds
+    #-Product quantity loader
+    And I wait 2 seconds
     Then I should see "2"
-    And I wait 5 seconds
-    Then the price for product should be doubled
-    And I wait 10 seconds
-    And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 50 seconds
-    And I wait for the page to load
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait for the page to load
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-login-wrapper"
+    And I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
+    And I wait for AJAX to finish
     Then I should see "{language_order_summary}"
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
-    Then the "payment-method-checkout_com_upapi" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_checkout_card}"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
+    And I select the home delivery address
     And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait for the page to load
+    And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
+    Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
+    And I wait for AJAX to finish
+    Then the checkout payment checkbox should be checked
+    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"

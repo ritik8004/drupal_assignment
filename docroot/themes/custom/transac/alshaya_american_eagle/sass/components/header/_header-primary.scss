@@ -1072,6 +1072,14 @@ body {
     .branding__menu {
       z-index: 14;
     }
+
+    &.header-sticky-filter {
+      .branding__menu {
+        @include breakpoint($only-mobile) {
+          z-index: 11;
+        }
+      }
+    }
   }
 }
 

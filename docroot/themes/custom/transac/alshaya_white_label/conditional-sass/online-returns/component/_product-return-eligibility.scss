@@ -41,6 +41,18 @@ body.nodetype--acq_product {
         display: none;
       }
     }
+
+    .return-eligibility-pdp {
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/style-icons-ui-return.svg') no-repeat;
+        width: rem(30);
+        height: rem(30);
+        margin-#{$right}: rem(12);
+        padding: 0;
+        flex-shrink: 0;
+      }
+    }
   }
 
   &.magazine-layout-v2 {
@@ -60,15 +72,6 @@ body.nodetype--acq_product {
     .return-eligibility-pdp {
       font-size: rem(15);
       line-height: rem(20);
-
-      &::before {
-        content: '';
-        background: url('#{$base_theme_img_directory_path}/icons/style-icons-ui-return.svg') no-repeat;
-        width: rem(30);
-        height: rem(30);
-        margin-#{$right}: rem(12);
-        padding: 0;
-      }
     }
   }
 }

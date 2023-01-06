@@ -1,0 +1,13 @@
+.acq-content-product {
+  .express-delivery-title-wrapper {
+    &.ui-state-active {
+      .c-accordion__title {
+        @include icon(close, after) {
+          font-size: rem(32);
+          #{$right}: rem(-2);
+          transform: translate(0, -50%);
+        }
+      }
+    }
+  }
+}

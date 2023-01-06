@@ -185,7 +185,13 @@ const Teaser = ({
   if (!hasPriceRange(attribute.alshaya_price_range)) {
     renderPrice = hasValue(attribute.rendered_price)
       ? Parser(attribute.rendered_price)
-      : <Price price={attribute.original_price} finalPrice={attribute.final_price} />;
+      : (
+        <Price
+          price={attribute.original_price}
+          finalPrice={attribute.final_price}
+          fixedPrice={attribute.fixed_price}
+        />
+      );
   } else {
     renderPrice = <PriceRangeElement priceRange={attribute.alshaya_price_range} />;
   }
@@ -336,8 +342,20 @@ const Teaser = ({
             <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
-            {showSwatches ? <Swatches swatches={attribute.swatches} url={url} /> : null}
-            {showSliderSwatch ? <SliderSwatch swatches={attribute.swatches} url={url} /> : null}
+            {showSwatches ? (
+              <Swatches
+                swatches={attribute.swatches}
+                url={url}
+                title={title}
+              />
+            ) : null}
+            {showSliderSwatch ? (
+              <SliderSwatch
+                swatches={attribute.swatches}
+                url={url}
+                title={title}
+              />
+            ) : null}
             {/* Render color swatches based on article/sku id */}
             {hasValue(attribute.article_swatches)
               ? (

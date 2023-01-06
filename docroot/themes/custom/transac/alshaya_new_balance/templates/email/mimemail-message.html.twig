@@ -26,7 +26,7 @@
   </head>
   <body id="mimemail-body" class="{{ lang }}" {% if ( module | length > 0 ) and ( key | length > 0 ) %}  {% set class = 'class="' ~ module ~ '-' ~ key ~ '"' %} {% endif %} >
     <div id="header">
-      <img src="{{ email_logo }}" width="464px" alt="logo" title="logo"/>
+      <img src="{{ email_logo }}" width="69px" alt="logo" title="logo"/>
     </div>
     <div id="center">
       <div id="main">
@@ -37,7 +37,7 @@
       <div style="padding-top: 30px; padding-bottom: 50px;">
         {% for name, link in links %}
           <a href="{{ link }}" target="_blank" style="text-decoration: none;">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/icons/{{ name }}-icon.png" alt="{{ name|t }}" width="40px" title="{{ name|t }}" />
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/icons/{{ name }}-icon.png" alt="{{ name|t }}" width="26px" title="{{ name|t }}" />
           </a>
         {% endfor %}
       </div>

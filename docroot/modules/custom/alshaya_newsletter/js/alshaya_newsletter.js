@@ -77,13 +77,13 @@
        * and Remove ajax error if present to prevent both inline and ajax error
        * being displayed at the same time.
        */
-      $('#alshaya-newsletter-subscribe .form-type-email input').once().on('keyup', function () {
+      $('#alshaya-newsletter-subscribe .form-type-email input').once().on('keyup', function (event) {
         var ajaxWrapper = '#alshaya-newsletter-subscribe #footer-newsletter-form-wrapper';
         if ($('#alshaya-newsletter-subscribe .form-type-email label.error').is(':visible') === true) {
           $(ajaxWrapper).empty();
         }
-
-        if ($(ajaxWrapper).find('span.message').hasClass('error')) {
+        // The "enter" key is represent by code "13". Checks added to not execute this code on pressing enter.
+        if ($(ajaxWrapper).find('span.message').hasClass('error') && (event.which !== 13)) {
           $(ajaxWrapper).find('.subscription-status').remove();
         }
       });
@@ -93,6 +93,10 @@
         l.ladda('stop');
 
         if (data.message === 'success') {
+          // Tracking newsletter in gtm.
+          if (Drupal.alshaya_seo_gtm_push_lead_type !== undefined) {
+            Drupal.alshaya_seo_gtm_push_lead_type('footer');
+          }
           $('#alshaya-newsletter-subscribe .form-type-email input').val('');
           setTimeout(Drupal.clearNewsletterForm, parseInt(data.interval));
         }

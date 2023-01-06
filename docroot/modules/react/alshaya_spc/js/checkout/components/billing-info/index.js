@@ -12,6 +12,7 @@ import WithModal from '../with-modal';
 import dispatchCustomEvent from '../../../utilities/events';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { cartContainsOnlyVirtualProduct } from '../../../utilities/egift_util';
+import { cleanMobileNumber } from '../../../utilities/checkout_util';
 
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
@@ -95,6 +96,13 @@ export default class BillingInfo extends React.Component {
             {billing.firstname}
             {' '}
             {billing.lastname}
+          </div>
+          <div className="billing-email mobile-only-show">
+            {billing.email}
+          </div>
+          <div className="billing-mobile mobile-only-show">
+            {`+${drupalSettings.country_mobile_code} `}
+            { cleanMobileNumber(billing.telephone) }
           </div>
           <div className="spc-billing-address">{addressData.join(', ')}</div>
         </div>

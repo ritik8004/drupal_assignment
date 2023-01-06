@@ -1,0 +1,10 @@
+.button {
+  &.status-pending,
+  &.status-delivered,
+  &.status-complete,
+  &.status-processing,
+  &.status-returned {
+    font-family: $alshaya-bold;
+    font-weight: 700;
+  }
+}

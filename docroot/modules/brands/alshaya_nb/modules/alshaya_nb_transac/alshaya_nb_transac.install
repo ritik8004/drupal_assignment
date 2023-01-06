@@ -6,6 +6,68 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update translation for green leaf header.
+ */
+function alshaya_nb_transac_update_9404() {
+  // Add translations.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations('v4');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add translations for additional attributes.
+ */
+function alshaya_nb_transac_update_9403() {
+  // Add translations.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations('v3');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add product details string which is used in description.
+ */
+function alshaya_nb_transac_update_9402() {
+  // Add translations.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations('v2');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Hide grid toggle in plp and srp.
+ * Add PDP gallery thumbnail image slider settings.
+ */
+function alshaya_nb_transac_update_9401() {
+  // Hide grid toggle option on listing pages.
+  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
+    ->set('hide_grid_toggle', TRUE)
+    ->save();
+  // PDP gallery thumbnail image slider settings.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('pdp_slider_items_settings.pdp_slider_items_number', 6)
+    ->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_nb_transac_install() {
@@ -72,4 +134,9 @@ function alshaya_nb_transac_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.content');
   // Create default content for custom block.
   alshaya_nb_transac_create_default_content();
+
+  // Hide grid toggle option on listing pages.
+  \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
+    ->set('hide_grid_toggle', TRUE)
+    ->save();
 }

@@ -109,7 +109,10 @@ window.commerceBackend = window.commerceBackend || {};
   function getProcessedStyleProducts(product, styleProducts) {
     var mainProduct = null;
     // Use main product on PDP to display product attributes.
-    if (globalThis.rcsPhGetPageType() === 'product') {
+    if (globalThis.rcsPhGetPageType() === 'product'
+      // Adding this check of of product id to confirm if product is containing
+      // the proper product object.
+      && Drupal.hasValue(product.id)) {
       mainProduct = product;
     }
     else {

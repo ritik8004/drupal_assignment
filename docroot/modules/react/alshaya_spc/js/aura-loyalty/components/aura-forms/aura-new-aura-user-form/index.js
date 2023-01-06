@@ -73,11 +73,15 @@ class AuraFormNewAuraUserModal extends React.Component {
     // Validate full name.
     if (!validateElementValueByType('fullName')) {
       hasError = true;
+    } else {
+      Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'name' });
     }
 
     // Validate email.
     if (!validateElementValueByType('signUpEmail')) {
       hasError = true;
+    } else {
+      Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'email' });
     }
 
     return hasError;
@@ -111,12 +115,29 @@ class AuraFormNewAuraUserModal extends React.Component {
             // Once we get a success response that quick enrollment is done, we close the modal.
             if (result.data.status) {
               handleSignUp(result.data);
+              try {
+                // Update localstorage with the latest aura details before pushing success event.
+                Drupal.alshayaSeoGtmPushAuraCommonData(
+                  {
+                    tier: result.data.data.tier_info || '',
+                    points: result.data.data.apc_points || 0,
+                  },
+                  parseInt(result.data.data.apc_link || '0', 10),
+                  false,
+                );
+                // Push success event.
+                Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'success' });
+              } catch (e) {
+                Drupal.logJavascriptError('error-push-aura-sign-up-event', e);
+              }
               // Close the modals.
               closeNewUserModal();
             }
             removeFullScreenLoader();
             return;
           }
+
+          Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_UP', label: 'fail' });
 
           if (result.data.error_code === 'mobile_already_registered') {
             showError(getInlineErrorSelector('signUpMobile').signUpMobile, getStringMessage(result.data.error_message));
@@ -214,7 +235,13 @@ class AuraFormNewAuraUserModal extends React.Component {
             </div>
             <ConditionalView condition={hasValue(showAlreadyMember)}>
               <div className="aura-modal-form-footer">
-                <div className="already-a-member-link" onClick={() => openLinkCardModal()}>
+                <div
+                  className="already-a-member-link"
+                  onClick={() => {
+                    Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_ALREADY_MEMBER', label: 'initiated' });
+                    openLinkCardModal();
+                  }}
+                >
                   {Drupal.t('Already a member?', {}, { context: 'aura' })}
                 </div>
               </div>

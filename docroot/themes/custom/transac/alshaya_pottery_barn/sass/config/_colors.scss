@@ -24,6 +24,7 @@ $scarlet: #d0011b;
 $tomato: #e6591a;
 $medium-green: #3ab549;
 $_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
+$PB_grey_six: #f1efe9;
 
 // Colors for which variables are not present in Zeplin but colors are used.
 $_black_two: #333;
@@ -618,6 +619,8 @@ $spc-deliver-button: $_black_two;
 $spc-cnc-toggle-bg-active: $_black_two;
 $spc-checkout-cnc-map-expand: $_black_two;
 $spc-cart-free-gifts-link: $PB_grey_one;
+$spc-cart-free-delivery-txt: $PB_black_one;
+$spc-cart-free-delivery-message-bg: $PB_grey_six;
 
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $PB_black_one;

@@ -42,9 +42,9 @@ class HelloMemberCartOffersVouchers extends React.Component {
     const data = e.detail.data();
     // Handle errors from bonus voucher section.
     const vouchers = document.getElementsByName('vouchersBonus[]');
-    if (document.getElementById('voucher-err-msg').innerHTML !== ''
+    if (document.getElementById('voucher-err-msg') !== null
       && typeof data.totals.hmAppliedVoucherCodes === 'undefined') {
-      document.getElementById('voucher-err-msg').innerHTML = '';
+      document.getElementById('voucher-err-msg').innerHTML = null;
       resetBenefitOptions(vouchers, 'benefit_voucher', 'submit');
     } else if (data.totals.isHmAppliedVoucherRemoved) {
       // Unset all coupon vouchers if reached to max limit.
@@ -53,12 +53,12 @@ class HelloMemberCartOffersVouchers extends React.Component {
       this.setState({
         isVoucherRemoved: true,
       });
-    } else if (document.getElementById('offer-err-msg').innerHTML !== ''
-      && typeof data.totals.applied_hm_offer_code === 'undefined') {
+    } else if (document.getElementById('offer-err-msg') !== null
+      && !hasValue(data.totals.hmOfferCode)) {
       // Handle errors from offer section.
       const { isVoucherRemoved } = this.state;
       const offers = document.getElementsByName('radios');
-      document.getElementById('offer-err-msg').innerHTML = '';
+      document.getElementById('offer-err-msg').innerHTML = null;
       if (!isVoucherRemoved) {
         resetBenefitOptions(offers, 'benefit_offer', 'submit');
         this.setState({
@@ -122,6 +122,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       openModal,
     });
     removeFullScreenLoader();
+    Drupal.alshayaSeoGtmPushVoucherLinkClick();
   };
 
   // on click close symbol close the popup.

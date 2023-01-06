@@ -3,9 +3,7 @@ Feature: Test Footer on the site
 
   Background:
     Given I am on "{spc_basket_page}"
-    And I wait 2 seconds
-    Then I scroll to the ".region__highlighted " element
-    And I wait 2 seconds
+    And I wait for element "#block-page-title"
 
   @desktop @footer
   Scenario: As a Guest, I should be able to see the footer
@@ -18,7 +16,6 @@ Feature: Test Footer on the site
     And the element "#edit-email" should exist
     And I fill in an element having class "#edit-email" with "test111@user.com"
     And I press "edit-newsletter"
-    And I wait 10 seconds
     And I wait for AJAX to finish
     Then I should see an "#footer-newsletter-form-wrapper" element
     And the element ".c-footer-secondary" should exist
@@ -27,7 +24,6 @@ Feature: Test Footer on the site
   @desktop @footer @language
   Scenario: As a Guest, I should be able to see the footer
     When I follow "{language_link}"
-    And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
@@ -38,7 +34,6 @@ Feature: Test Footer on the site
     And the element "#edit-email" should exist
     And I fill in an element having class "#edit-email" with "test111@user.com"
     And I press "edit-newsletter"
-    And I wait 10 seconds
     And I wait for AJAX to finish
     Then I should see an "#footer-newsletter-form-wrapper" element
     And the element ".c-footer-secondary" should exist
@@ -47,16 +42,14 @@ Feature: Test Footer on the site
   @language @mobile
   Scenario: As a Guest, I should be able to remove products from the basket in second language (mobile)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
-    And I wait 5 seconds
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
     And I click on Add-to-cart button
-    And I wait 15 seconds
-    And I wait for the page to load
-    Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait for element ".cart-link .quantity"
+    And I wait for the cart notification popup
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     And I scroll to the ".c-footer" element
     And the element ".c-footer-primary" should exist
     And the element ".c-footer-secondary" should exist
@@ -66,7 +59,6 @@ Feature: Test Footer on the site
     And the element "#edit-email" should exist
     And I fill in an element having class "#edit-email" with "test111@user.com"
     And I press "edit-newsletter"
-    And I wait 10 seconds
     And I wait for AJAX to finish
     Then I should see an "#footer-newsletter-form-wrapper" element
     And the element ".c-footer-secondary" should exist

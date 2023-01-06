@@ -435,6 +435,12 @@ class AlshayaRcsProductHelper {
                   ],
                 ],
               ],
+              'promotions' => [
+                'context',
+                'url',
+                'label',
+                'type',
+              ],
             ],
             'attributes' => [
               'label',
@@ -444,6 +450,7 @@ class AlshayaRcsProductHelper {
           ],
         ],
         'category_ids_in_admin',
+        'breadcrumb_category_id',
         'categories' => [
           'id',
           'name',

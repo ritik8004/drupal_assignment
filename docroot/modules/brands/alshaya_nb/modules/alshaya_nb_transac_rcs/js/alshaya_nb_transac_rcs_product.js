@@ -1,7 +1,7 @@
 /**
  * Listens to the 'rcsUpdateResults' event and updated the result object.
  */
-(function main(RcsEventManager) {
+(function main($, Drupal, RcsEventManager) {
   // Event listener to update the data layer object with the proper product
   // data.
   RcsEventManager.addListener('rcsUpdateResults', function updateProductData(e) {
@@ -33,4 +33,15 @@
     short_description.html += (data.green_leaf_notice) ? '' + data.green_leaf_notice : '';
     e.detail.result.short_description = short_description;
   });
-})(RcsEventManager);
+
+  // Handle the product details section on PDP pages.
+  Drupal.behaviors.rcsproductDeails = {
+    attach: function () {
+      $(document).once('rcs-product-details').on('productGalleryLoaded', function () {
+        $('.content--product-details .product-details-desc-mobile').html(
+          $('.gallery-wrapper .product-details-desc').html()
+        );
+      });
+    }
+  };
+})(jQuery, Drupal, RcsEventManager);

@@ -17,3 +17,11 @@ services:
     arguments:
       - '@config.factory'
       - '@request_stack'
+
+  alshaya_xb.alshaya_api:
+    public: false
+    class: Drupal\alshaya_xb\Service\AlshayaApiWrapperXbDecorator
+    decorates: alshaya_api.api
+    parent: 'alshaya_api.api'
+    calls:
+      - [ setDomainConfigOverrides, [ '@alshaya_xb.domain_config_overrides' ] ]
