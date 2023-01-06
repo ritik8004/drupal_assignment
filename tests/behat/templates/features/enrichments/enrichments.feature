@@ -1,8 +1,8 @@
 @javascript @enrichments @desktop @rcs @v3 @coskwlocal @nbkwlocal @aykwlocal @aykwlando @nbkwuat
 Feature: Enrichments
-  In order to customise the look and feel of navigation
+  In order to customise the look and feel of the page
   As a editor
-  I want to add enrichments to terms
+  I want enrich products and categories
 
   Background:
     Given I am logged in as an authenticated user "{spc_admin_user_email}" with password "{spc_admin_user_password}"
