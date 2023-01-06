@@ -12,32 +12,30 @@ use Drupal\Core\Cache\Cache;
  */
 function alshaya_sprinklr_page_attachments_alter(array &$page) {
   $sprinklr_settings = \Drupal::config('alshaya_sprinklr.settings');
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $sprinklr_settings->getCacheTags());
+
   $sprinklr_helper = \Drupal::service('alshaya_sprinklr.helper');
   // Skip the processing of sprinklr chatbot if sprinklr feature is disabled.
   if (!$sprinklr_helper->isSprinklrFeatureEnabled()) {
     return;
   }
 
-  // Get Current language.
   $app_id = $sprinklr_settings->get('app_id');
   // Skip the processing of sprinklr chatbot if app id is not provided.
   if (empty($app_id)) {
     return;
   }
 
-  $current_path = \Drupal::service('path.current')->getPath();
-  $alias_manager = \Drupal::service('path_alias.manager');
-  // Get url alias for the current page to compare with allowed urls list.
-  $alias = $alias_manager->getAliasByPath($current_path);
-  $allowed_urls = $sprinklr_helper->getAllowedUrlsForSprinklr();
+  // Return if sprinklr is not enabled on current path.
+  if (!$sprinklr_helper->isEnabledOnCurrentPath()) {
+    return;
+  }
+
   // Attach alshaya_sprinklr library to the allowed urls only if
   // sprinklr app id is provided.
-  if (in_array($alias, $allowed_urls)) {
-    $page['#attached']['drupalSettings']['alshaya_sprinklr']['appId'] = $app_id;
-    Cache::mergeTags($page['#cache']['tags'] ?? [], $sprinklr_settings->getCacheTags());
-    // Attach custom library for sprinklr chatbot feature.
-    $page['#attached']['library'][] = 'alshaya_sprinklr/alshaya_sprinklr';
-    // Attach sprinklr chatbot js script.
-    $page['#attached']['library'][] = 'alshaya_sprinklr/sprinklr_chatbot';
-  }
+  $page['#attached']['drupalSettings']['alshaya_sprinklr']['appId'] = $app_id;
+  // Attach custom library for sprinklr chatbot feature.
+  $page['#attached']['library'][] = 'alshaya_sprinklr/alshaya_sprinklr';
+  // Attach sprinklr chatbot js script.
+  $page['#attached']['library'][] = 'alshaya_sprinklr/sprinklr_chatbot';
 }

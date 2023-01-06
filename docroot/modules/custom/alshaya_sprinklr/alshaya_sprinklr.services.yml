@@ -3,3 +3,5 @@ services:
     class: Drupal\alshaya_sprinklr\Helper\SprinklrHelper
     arguments:
       - '@config.factory'
+      - '@path.current'
+      - '@path_alias.manager'

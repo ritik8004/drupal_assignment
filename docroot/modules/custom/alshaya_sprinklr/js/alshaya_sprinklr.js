@@ -6,7 +6,7 @@
 (function (drupalSettings) {
   window.sprChatSettings = window.sprChatSettings || {};
   window.sprChatSettings = {
-    "appId": drupalSettings.alshaya_sprinklr.appId,
-    "skin":"MODERN"
+    'appId': drupalSettings.alshaya_sprinklr.appId,
+    'skin':'MODERN',
   };
 })(drupalSettings);
