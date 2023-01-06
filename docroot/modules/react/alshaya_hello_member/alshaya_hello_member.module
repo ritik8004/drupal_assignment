@@ -138,7 +138,7 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     unset($form['field_gender']['widget']['#options']['_none']);
     $form['hello_member']['field_gender'] = $form['field_gender'];
     $form['hello_member']['field_gender']['#prefix'] = '<div class="hello-member-gender">';
-    $form['hello_member']['field_gender']['#suffix'] = '</div></div>';
+    $form['hello_member']['field_gender']['#suffix'] = '</div>';
     $form['hello_member']['field_gender']['#weight'] = 11;
     $form['hello_member']['field_mobile_number'] = $form['field_mobile_number'];
     $form['hello_member']['field_mobile_number']['#prefix'] = '<div class="mobile-otp-wrapper">';
@@ -150,6 +150,8 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     ];
     $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
     unset($form['field_gender']);
+    $form['field_subscribe_newsletter']['widget']['value']['#title'] = t('Yes, email me offers, style updates, and special invites to sales and events.', [], ['context' => 'hello_member']);
+    $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
     unset($form['field_mobile_number']);
     $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
     $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
