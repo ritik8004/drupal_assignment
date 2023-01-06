@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://cosae7-uat.factory.alshaya.com/ar/'
+  url_base_uri: 'https://nbae.alshaya.lndo.site/ar/'
   language_collection_filter: 'Collection'
   language_sort_filter: 'sort by'
   language_price_filter: ''
