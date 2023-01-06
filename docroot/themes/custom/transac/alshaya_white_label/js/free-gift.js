@@ -61,7 +61,7 @@
       });
 
       // On dialog close remove the free gift overlay related classes.
-      $(document).once().on('dialogclose', function () {
+      $('.free-gifts-modal-overlay #drupal-modal').once().on('dialogclose', function () {
         if ($('body').hasClass('free-gift-promo-list-overlay')) {
           $('body').removeClass('free-gift-promo-list-overlay');
         }

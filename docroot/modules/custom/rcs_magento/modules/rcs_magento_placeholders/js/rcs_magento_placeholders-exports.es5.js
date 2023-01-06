@@ -498,11 +498,10 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
 
-      let updatedResult = null;
       result = [];
       if (response && response.data.products.total_count) {
         response.data.products.items.forEach(function (product) {
-          updatedResult = RcsEventManager.fire('rcsUpdateResults', {
+          let updatedResult = RcsEventManager.fire('rcsUpdateResults', {
             detail: {
               result: product,
             }

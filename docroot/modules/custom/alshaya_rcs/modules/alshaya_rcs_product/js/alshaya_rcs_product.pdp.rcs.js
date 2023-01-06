@@ -149,45 +149,6 @@ window.commerceBackend = window.commerceBackend || {};
     window.commerceBackend.renderAddToCartForm(mainProduct);
   });
 
-  /**
-   * Renders free gift for the given product.
-   *
-   * @param {object} product
-   *   The main product object.
-   */
-  window.commerceBackend.renderFreeGift = function renderFreeGift(product) {
-    var freeGiftWrapper = jQuery('.free-gift-promotions');
-    var freeGiftHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'promotion_free_gift');
-    // Render the HTML in the free gift wrapper.
-    freeGiftWrapper.html(freeGiftHtml);
-    freeGiftWrapper.addClass('rcs-loaded');
-    globalThis.rcsPhApplyDrupalJs(document);
-  }
-
-  /**
-   * Event listener of page entity to get the free gift product info.
-   */
-  RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
-    var mainProduct = e.detail.entity;
-    // Get the list of all the available Free gifts.
-    const freeGiftPromotion = mainProduct.free_gift_promotion;
-    if (freeGiftPromotion.length > 0
-      // We support displaying only one free gift promotion for now.
-      && freeGiftPromotion[0].total_items > 0) {
-      // Get the first free gift product info. In case there are multiple free
-      // gift items, then we will load the product info during modal view.
-      var giftItemSku = freeGiftPromotion[0].gifts[0].sku;
-      var freeGiftProduct = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', { sku: giftItemSku });
-
-      if (Drupal.hasValue(freeGiftProduct.sku)) {
-        window.commerceBackend.setRcsProductToStorage(freeGiftProduct, 'free_gift', giftItemSku);
-      }
-
-      // Render the free gift item.
-      window.commerceBackend.renderFreeGift(mainProduct);
-    }
-  });
-
   Drupal.behaviors.rcsProductPdpBehavior = {
     attach: function rcsProductPdpBehavior(context) {
       // Once the main product node is ready, we will immediately display the

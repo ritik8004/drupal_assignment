@@ -211,12 +211,17 @@ exports.computePhFilters = function (input, filter) {
     case 'description':
     case 'short_description':
     case 'promotions':
-    case 'promotion_free_gift':
     case 'teaser_image':
     case 'price_block_identifier':
     case 'absolute_url':
       if (typeof globalThis.renderRcsProduct !== 'undefined') {
         value += globalThis.renderRcsProduct.computePhFilters(input, filter);
+      }
+      break;
+
+    case 'promotion_free_gift':
+      if (typeof globalThis.renderRcsProductFreeGift !== 'undefined') {
+        value += globalThis.renderRcsProductFreeGift.computePhFilters(input, filter);
       }
       break;
 

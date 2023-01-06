@@ -65,47 +65,6 @@ product.promotions:
   js:
     handlebars/product.promotions.handlebars: {}
 
-product.promotion_free_gift:
-  version: 1.x
-  js:
-    handlebars/product.promotion_free_gift.handlebars: {}
-  dependencies:
-    - alshaya_white_label/free_gifts
-    - alshaya_rcs_product/rcs_free_gift
-
-product.promotion_free_gift_list:
-  version: 1.x
-  js:
-    handlebars/product.promotion_free_gift_list.handlebars: {}
-  dependencies:
-    - alshaya_white_label/free_gifts
-    - alshaya_rcs_product/rcs_free_gift
-
-product.promotion_free_gift_modal:
-  version: 1.x
-  js:
-    handlebars/product.promotion_free_gift_modal.handlebars: {}
-  dependencies:
-    - alshaya_white_label/attribute
-    - alshaya_white_label/free_gifts
-    - alshaya_rcs_product/rcs_free_gift
-
-product.promotion_free_gift_item:
-  version: 1.x
-  js:
-    handlebars/product.promotion_free_gift_item.handlebars: {}
-  dependencies:
-    - alshaya_white_label/free_gifts
-    - alshaya_rcs_product/rcs_free_gift
-
-product.promotion_free_gift_items:
-  version: 1.x
-  js:
-    handlebars/product.promotion_free_gift_items.handlebars: {}
-  dependencies:
-    - alshaya_white_label/free_gifts
-    - alshaya_rcs_product/rcs_free_gift
-
 product.sku_base_form:
   version: 1.x
   js:
@@ -252,12 +211,3 @@ order_utility:
   version: 1.x
   js:
     js/alshaya_rcs_order_utility.js: {}
-
-rcs_free_gift:
-  version: 1.x
-  js:
-    js/alshaya_rcs_free_gift.js: {}
-  dependencies:
-    - core/jquery
-    - alshaya_spc/add_to_cart
-    - alshaya_acm_cart_notification/cart_notification_js

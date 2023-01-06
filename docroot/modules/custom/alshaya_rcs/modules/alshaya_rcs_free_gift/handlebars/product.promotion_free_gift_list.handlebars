@@ -12,12 +12,16 @@
     </div>
     <div class="free-gift-message">
         {{t 'One item of choice from' }}
-        {{link freeGiftPromotionTitle href=freeGiftPromoUrl
-          data-sku=freeGiftSku
-          data-promotion-title=freeGiftPromotionTitle
+        <a
+          href="{{ freeGiftPromoUrl }}"
+          data-sku="{{ freeGiftSku }}"
+          data-promotion-title="{{ freeGiftPromotionTitle }}"
           class="free-gift-modal"
           data-dialog-type="modal"
-          data-dialog-options='{"width":"auto"}'}}
+          data-dialog-options='{"width":"auto"}'
+        >
+          {{ freeGiftPromotionTitle }}
+        </a>
         {{t 'with this product' }}
     </div>
 
