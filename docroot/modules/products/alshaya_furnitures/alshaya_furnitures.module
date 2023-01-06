@@ -20,7 +20,7 @@ function alshaya_furnitures_node_view(array &$build, EntityInterface $entity, En
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
-    if ($sku_entity instanceof SKU && in_array($view_mode, ['full', 'matchback'])) {
+    if ($sku_entity instanceof SKU && $view_mode == 'full') {
       /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
       $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
