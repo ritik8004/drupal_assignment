@@ -10,25 +10,6 @@ import {
 } from '../checkout_util';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import dispatchCustomEvent from '../events';
-
-/**
- * Handles OOS for idle cart pages when product is updated in MDC.
- */
-const handleOutOfStock = (cartResult) => {
-  const response = (cartResult || {}).response_message || {};
-  if (response.status === 'json_error' && response.msg.indexOf('out of stock') > -1) {
-    const errMsg = 'Sorry, one or more products in your basket are no longer available.';
-    // Dispatch event for error to show.
-    dispatchCustomEvent('spcCartMessageUpdate', {
-      type: 'error',
-      message: Drupal.t('@errMsg', { '@errMsg': errMsg }),
-    });
-    Drupal.logJavascriptError('continue to checkout', errMsg, GTM_CONSTANTS.CART_ERRORS);
-    return false;
-  }
-  return true;
-};
 
 /**
  * Click handler for `continue checkout`.
@@ -48,7 +29,6 @@ const continueCheckout = (e, inStock) => {
       // Remove loader.
       removeFullScreenLoader();
       cartValidationOnUpdate(cartResult, true);
-      handleOutOfStock(cartResult);
     });
   }
 };
