@@ -15,6 +15,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -95,6 +96,13 @@ class AlshayaBehatHelper {
   protected const SKUS_LIMIT = 10;
 
   /**
+   * The request stacks service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * Constructor for Handlebars Service.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -113,6 +121,8 @@ class AlshayaBehatHelper {
    *   The acm api wrapper.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
    *   The mdc api wrapper.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   The request stack service.
    */
   public function __construct(
     Connection $connection,
@@ -122,7 +132,8 @@ class AlshayaBehatHelper {
     EntityRepositoryInterface $entity_repository,
     EntityTypeManagerInterface $entity_type_manager,
     APIWrapper $api_wrapper,
-    AlshayaApiWrapper $alshaya_api
+    AlshayaApiWrapper $alshaya_api,
+    RequestStack $requestStack
   ) {
     $this->database = $connection;
     $this->httpKernel = $http_kernel;
@@ -132,6 +143,7 @@ class AlshayaBehatHelper {
     $this->entityTypeManager = $entity_type_manager;
     $this->apiWrapper = $api_wrapper;
     $this->alshayaApi = $alshaya_api;
+    $this->requestStack = $requestStack;
   }
 
   /**
@@ -147,6 +159,7 @@ class AlshayaBehatHelper {
     $request = Request::create($path);
 
     try {
+      $request->setSession($this->requestStack->getCurrentRequest()->getSession());
       $res = $this->httpKernel->handle($request, HttpKernelInterface::SUB_REQUEST);
       $request_success = $res->getStatusCode() === 200;
     }
@@ -347,25 +360,32 @@ class AlshayaBehatHelper {
     }
 
     // List of products having the promotion associated with.
-    $products = $promotions[array_search($type, $promo_types)]['products'] ?? [];
+    $products = [];
+    foreach ($promo_types as $key => $promo) {
+      if ($promo === $type && is_array($promotions[$key]['products'])) {
+        foreach ($promotions[$key]['products'] as $item) {
+          if (!empty($item['product_sku'])) {
+            $products[] = $item;
+          }
+        }
+      }
+    }
     foreach ($products as $item) {
-      if (!empty($item['product_sku'])) {
-        // MDC API to fetch SKU details.
-        $product_details = $this->alshayaApi->getSku($item['product_sku']);
-        if (!empty($product_details)
-          && !empty($product_details['name'])
-          && !empty($product_details['custom_attributes'])
-          && $product_details['status'] === 1
-          && $product_details['extension_attributes']['stock_item']['is_in_stock'] === TRUE
-        ) {
-          // @todo Build product url from MDC API for V3 using GraphQL, independent of drupal DB.
-          $node = $this->skuManager->getDisplayNode($item['product_sku'], FALSE);
-          if ($node instanceof NodeInterface && $this->isEntityPageLoading($node->toUrl()->toString())) {
-            return $node;
-          }
-          else {
-            return 'Available product not found in Drupal Application. Probable sync issue.';
-          }
+      // MDC API to fetch SKU details.
+      $product_details = $this->alshayaApi->getSku($item['product_sku']);
+      if (!empty($product_details)
+        && !empty($product_details['name'])
+        && !empty($product_details['custom_attributes'])
+        && $product_details['status'] === 1
+        && $product_details['extension_attributes']['stock_item']['is_in_stock'] === TRUE
+      ) {
+        // @todo Build product url from MDC API for V3 using GraphQL, independent of drupal DB.
+        $node = $this->skuManager->getDisplayNode($item['product_sku']);
+        if ($node instanceof NodeInterface && $this->isEntityPageLoading($node->toUrl()->toString())) {
+          return $node;
+        }
+        else {
+          return 'Available product not found in Drupal Application. Probable sync issue.';
         }
       }
     }
