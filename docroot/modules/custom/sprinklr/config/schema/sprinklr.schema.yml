@@ -1,6 +1,6 @@
-alshaya_sprinklr.settings:
+sprinklr.settings:
   type: config_object
-  label: 'Alshaya sprinklr settings'
+  label: 'Sprinklr settings'
   mapping:
     sprinklr_enabled:
       type: boolean

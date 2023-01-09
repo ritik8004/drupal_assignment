@@ -1,0 +1,5 @@
+sprinklr.sprinklr_config:
+  title: 'Sprinklr Chatbot Configurations'
+  base_route_name: sprinklr.sprinklr_config
+  names:
+    - sprinklr.settings

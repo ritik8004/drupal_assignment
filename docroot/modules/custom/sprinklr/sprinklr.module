@@ -10,11 +10,11 @@ use Drupal\Core\Cache\Cache;
 /**
  * Implements hook_page_attachments_alter().
  */
-function alshaya_sprinklr_page_attachments_alter(array &$page) {
-  $sprinklr_settings = \Drupal::config('alshaya_sprinklr.settings');
+function sprinklr_page_attachments_alter(array &$page) {
+  $sprinklr_settings = \Drupal::config('sprinklr.settings');
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $sprinklr_settings->getCacheTags());
 
-  $sprinklr_helper = \Drupal::service('alshaya_sprinklr.helper');
+  $sprinklr_helper = \Drupal::service('sprinklr.helper');
   // Skip the processing of sprinklr chatbot if sprinklr feature is disabled.
   if (!$sprinklr_helper->isSprinklrFeatureEnabled()) {
     return;
@@ -27,15 +27,12 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
   }
 
   // Return if sprinklr is not enabled on current path.
-  if (!$sprinklr_helper->isEnabledOnCurrentPath()) {
+  if (!$sprinklr_helper->isSprinklrEnabledOnCurrentPath()) {
     return;
   }
 
-  // Attach alshaya_sprinklr library to the allowed urls only if
+  // Attach sprinklr library to the allowed urls only if
   // sprinklr app id is provided.
-  $page['#attached']['drupalSettings']['alshaya_sprinklr']['appId'] = $app_id;
-  // Attach custom library for sprinklr chatbot feature.
-  $page['#attached']['library'][] = 'alshaya_sprinklr/alshaya_sprinklr';
-  // Attach sprinklr chatbot js script.
-  $page['#attached']['library'][] = 'alshaya_sprinklr/sprinklr_chatbot';
+  $page['#attached']['drupalSettings']['sprinklr']['appId'] = $app_id;
+  $page['#attached']['library'][] = 'sprinklr/sprinklr';
 }

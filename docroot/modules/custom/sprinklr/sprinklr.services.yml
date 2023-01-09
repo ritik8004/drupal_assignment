@@ -1,6 +1,6 @@
 services:
-  alshaya_sprinklr.helper:
-    class: Drupal\alshaya_sprinklr\Helper\SprinklrHelper
+  sprinklr.helper:
+    class: Drupal\sprinklr\Helper\SprinklrHelper
     arguments:
       - '@config.factory'
       - '@path.current'

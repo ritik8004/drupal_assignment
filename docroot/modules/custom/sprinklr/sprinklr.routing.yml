@@ -1,0 +1,7 @@
+sprinklr.sprinklr_config:
+  path: '/admin/config/system/sprinklr'
+  defaults:
+    _title: 'Sprinklr Chatbot Configurations'
+    _form: 'Drupal\sprinklr\Form\SprinklrSettingsForm'
+  requirements:
+    _permission: 'administer site configuration'

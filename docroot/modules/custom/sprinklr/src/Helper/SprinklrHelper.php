@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_sprinklr\Helper;
+namespace Drupal\sprinklr\Helper;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Path\CurrentPathStack;
@@ -59,7 +59,7 @@ class SprinklrHelper {
    *   Boolean TRUE if sprinklr feature is enabled and FALSE if not.
    */
   public function isSprinklrFeatureEnabled() {
-    return $this->configFactory->get('alshaya_sprinklr.settings')->get('sprinklr_enabled');
+    return $this->configFactory->get('sprinklr.settings')->get('sprinklr_enabled');
   }
 
   /**
@@ -69,11 +69,11 @@ class SprinklrHelper {
    *   TRUE if sprinklr is enabled for the current path and
    *   FALSE if not.
    */
-  public function isEnabledOnCurrentPath() {
+  public function isSprinklrEnabledOnCurrentPath() {
     $current_path = $this->currentPath->getPath();
     // Get url alias for the current page to compare with allowed urls list.
     $alias = $this->aliasManager->getAliasByPath($current_path);
-    $allowed_urls = $this->configFactory->get('alshaya_sprinklr.settings')->get('allowed_urls');
+    $allowed_urls = $this->configFactory->get('sprinklr.settings')->get('allowed_urls');
     if (empty($allowed_urls)) {
       return FALSE;
     }
