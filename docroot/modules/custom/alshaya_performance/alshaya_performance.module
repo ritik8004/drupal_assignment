@@ -169,6 +169,11 @@ function alshaya_performance_page_attachments_alter(array &$attachments) {
     if (stripos($request->getPathInfo(), '/checkout') === FALSE) {
       $attachments['#attached']['library'][] = 'alshaya_white_label/cls-initial-layout-common';
     }
+
+    // Attach cls slp styles to search list page.
+    if (\Drupal::service('path.current')->getPath() == '/search') {
+      $attachments['#attached']['library'][] = 'alshaya_white_label/cls-initial-layout-slp';
+    }
   }
 
   // No preloads if param present.
