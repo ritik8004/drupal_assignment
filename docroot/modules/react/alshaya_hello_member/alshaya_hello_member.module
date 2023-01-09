@@ -132,10 +132,6 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['hello_member']['field_birth_date'] = $form['field_birth_date'];
     $form['hello_member']['field_birth_date']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
     $form['hello_member']['field_birth_date']['#weight'] = 10;
-    // Disallow user to edit date of birth on edit profile form.
-    if ($form['field_birth_date']['widget'][0]['value']['#default_value']) {
-      $form['hello_member']['field_birth_date']['#disabled'] = TRUE;
-    }
     unset($form['field_birth_date']);
     $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
     unset($form['field_gender']['widget']['#options']['_none']);
