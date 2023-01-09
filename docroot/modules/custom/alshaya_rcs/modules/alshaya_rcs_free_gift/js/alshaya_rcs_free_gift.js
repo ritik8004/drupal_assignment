@@ -34,10 +34,10 @@
     var freeGiftPromotion = mainProduct.free_gift_promotion;
     if (freeGiftPromotion.length > 0
       // We support displaying only one free gift promotion for now.
-      && freeGiftPromotion[3].total_items > 0) {
+      && freeGiftPromotion[0].total_items > 0) {
       // Get the first free gift product info. In case there are multiple free
       // gift items, then we will load the product info during modal view.
-      var giftItemSku = freeGiftPromotion[3].gifts[0].sku;
+      var giftItemSku = freeGiftPromotion[0].gifts[0].sku;
       var freeGiftProduct = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', { sku: giftItemSku });
 
       if (Drupal.hasValue(freeGiftProduct) && Drupal.hasValue(freeGiftProduct.sku)) {

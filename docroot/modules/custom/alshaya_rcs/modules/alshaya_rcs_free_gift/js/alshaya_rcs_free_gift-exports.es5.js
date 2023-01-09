@@ -8,7 +8,7 @@ exports.computePhFilters = function (input, filter) {
       // Proceed only if we have free gift promotion items.
       // We support displaying only one free gift promotion for now.
       if (freeGiftPromotions.length > 0) {
-        const freeGiftPromotion = freeGiftPromotions[3];
+        const freeGiftPromotion = freeGiftPromotions[0];
         data.freeGiftType = freeGiftPromotion.rule_type;
         data.freeGiftCoupon = freeGiftPromotion.coupon_code;
         data.freeGiftPromoUrl = Drupal.url(freeGiftPromotion.rule_web_url);
