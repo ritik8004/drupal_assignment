@@ -604,6 +604,16 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
     ],
+    'v8' => [
+      'Aura membership number' => [
+        'ar' => 'Aura membership number',
+        'context' => 'aura',
+      ],
+      'an Aura loyalty account no. @card_number is associated with your email address. It just takes one click to link.' => [
+        'ar' => 'an Aura loyalty account no. @card_number is associated with your email address. It just takes one click to link.',
+        'context' => 'aura',
+      ],
+    ],
   ];
 }
 
