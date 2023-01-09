@@ -871,8 +871,8 @@ const getCartWithProcessedData = async (force = false) => {
 
   cart.data = await getProcessedCartData(cart.data);
 
-  if (hasValue(cart.data) && typeof cart.data.items === 'undefined') {
-    logger.warning('Error updating cart. cartData.items is undefined. cart: @cartData', {
+  if (hasValue(cart.data) && !hasValue(cart.data.items)) {
+    logger.error('Error updating cart. cartData.items is undefined. cart: @cartData', {
       '@cartData': cart,
     });
   }
