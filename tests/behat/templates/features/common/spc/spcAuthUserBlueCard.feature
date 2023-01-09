@@ -26,7 +26,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
     And I should see an "#promo-remove-button" element
     And I should see an ".total-line-item .discount-total" element
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -74,7 +74,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
     And I should see an "#promo-remove-button" element
     And I should see an ".total-line-item .discount-total" element
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
