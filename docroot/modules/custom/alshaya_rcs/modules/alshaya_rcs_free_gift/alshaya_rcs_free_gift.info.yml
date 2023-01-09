@@ -1,0 +1,11 @@
+name: Alshaya RCS Free Gift
+type: module
+description: Alshaya implementation of RCS Free Gift. Check RCS module.
+core_version_requirement: ^9
+dependencies:
+  - alshaya_rcs_magento_placeholders:alshaya_rcs_magento_placeholders
+  - rcs_handlebars:rcs_handlebars
+  - alshaya_rcs_handlebars:alshaya_rcs_handlebars
+  - alshaya_spc:alshaya_spc
+  - alshaya_acm_cart_notification:alshaya_acm_cart_notification
+
