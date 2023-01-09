@@ -12,12 +12,6 @@
       font-size: rem(14);
       line-height: 1.29;
       font-weight: normal;
-
-      a.full-prod-link {
-        @include breakpoint($tablet) {
-          color: $matchback-product-dark;
-        }
-      }
     }
 
     .price-block {
@@ -39,6 +33,12 @@
 @include breakpoint($tablet) {
   .cross-sell-product-components {
     .cross-sell-product-component-center {
+      h1 {
+        a.full-prod-link {
+          color: $matchback-product-dark;
+        }
+      }
+
       .price-block {
         .price-wrapper {
           .price {
