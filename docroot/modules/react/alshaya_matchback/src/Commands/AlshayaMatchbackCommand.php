@@ -93,7 +93,7 @@ class AlshayaMatchbackCommand extends DrushCommands {
 
     if ($this->moduleHandler->moduleExists('alshaya_wishlist')) {
       $this->configFactory->getEditable('alshaya_wishlist.settings')
-        ->set('show_wishlist_on_matchback', $options['show_wishlist'] === 'true')
+        ->set('show_wishlist_on_matchback', $options['show_wishlist'] === TRUE)
         ->save();
     }
 
