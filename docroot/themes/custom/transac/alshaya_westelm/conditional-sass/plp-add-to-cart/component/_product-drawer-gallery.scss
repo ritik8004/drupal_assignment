@@ -1,0 +1,11 @@
+.configurable-product-form-wrapper {
+  .gallery-wrapper {
+    position: relative;
+
+    .slick-slider {
+      .slick-slide {
+        min-height: rem(375);
+      }
+    }
+  }
+}
