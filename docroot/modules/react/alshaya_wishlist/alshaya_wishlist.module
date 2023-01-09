@@ -7,6 +7,7 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -39,6 +40,9 @@ function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface 
   /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
   $product_node = $sku_manager->getDisplayNode($sku->getSku());
+  if (!($product_node instanceof NodeInterface)) {
+    return;
+  }
   /** @var \Drupal\alshaya_wishlist\Helper\WishListHelper $wishlist_helper */
   $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
 
