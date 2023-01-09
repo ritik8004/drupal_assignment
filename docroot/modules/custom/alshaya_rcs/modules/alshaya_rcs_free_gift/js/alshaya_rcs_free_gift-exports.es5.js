@@ -26,6 +26,7 @@ exports.computePhFilters = function (input, filter) {
             data.freeGiftImage = Drupal.hasValue(skuImage)
               ? skuImage.url
               : drupalSettings.alshayaRcs.default_meta_image;
+            data.styleCode = giftItemProductInfo.style_code;
           }
           // Set the first free gift title.
           data.freeGiftTitle = giftItems[0].name;

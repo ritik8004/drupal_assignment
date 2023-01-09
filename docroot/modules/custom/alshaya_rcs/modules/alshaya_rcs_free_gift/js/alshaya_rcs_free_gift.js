@@ -42,10 +42,10 @@
 
       if (Drupal.hasValue(freeGiftProduct) && Drupal.hasValue(freeGiftProduct.sku)) {
         window.commerceBackend.setRcsProductToStorage(freeGiftProduct, 'free_gift', giftItemSku);
-      }
 
-      // Render the free gift item.
-      renderFreeGift(mainProduct);
+        // Render the free gift item.
+        renderFreeGift(mainProduct);
+      }
     }
   });
 
@@ -64,7 +64,7 @@
       // 2. Collection of item modal ( List of free gift items )
 
       // Modal view for the free gift.
-      $('.free-gift-promotions .free-gift-wrapper .free-gift-message a, a.free-gift-modal').once('free-gift-processed').on('click', function (e) {
+      $('.free-gift-promotions .free-gift-wrapper .free-gift-message a, a.free-gift-modal').once('free-gift-processed').on('click', async function (e) {
         e.preventDefault();
 
         // Close any other modal that is open.
@@ -93,21 +93,9 @@
         } else if (skus.length > 1) {
           // Get the free gift promotion title.
           var promotionTitle = $(this).data('promotion-title');
-          // Check if the data is already there in the static storage and filter
-          // out the skus that are not available and then call the API.
-          var filteredSkus = [];
-          skus.forEach((sku) => {
-            var freeGiftProduct = window.commerceBackend.getProductData(sku, null, false);
-            if (!Drupal.hasValue(freeGiftProduct)) {
-              filteredSkus.push(sku);
-            }
-          });
-          var freeGiftProducts = [];
-          if (filteredSkus) {
-            freeGiftProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('multiple_products_by_sku', {
-              sku: filteredSkus,
-            });
-          }
+          var styleCode = $(this).data('style-code');
+
+          var freeGiftProduct = await window.commerceBackend.getProductsInStyle({ sku: skus[0], style_code: styleCode });
 
           var elm = document.createElement('div');
           var data = {
@@ -118,23 +106,19 @@
           skus.forEach((freeGiftSku) => {
             // Traverse through all the products and validate the freeGiftSku
             // with parent and child sku.
-            freeGiftProducts.forEach((freeGiftProduct) => {
-              if (freeGiftProduct.sku === freeGiftSku) {
+            // @todo To use the parent product only to get the free gift
+            // details.
+            freeGiftProduct.variants.forEach((freeGiftVariant) => {
+              if (freeGiftVariant.product.sku === freeGiftSku) {
                 window.commerceBackend.setRcsProductToStorage(freeGiftProduct, 'free_gift', freeGiftSku);
-              } else {
-                freeGiftProduct.variants.forEach((freeGiftVariant) => {
-                  if (freeGiftVariant.product.sku === freeGiftSku) {
-                    window.commerceBackend.setRcsProductToStorage(freeGiftProduct, 'free_gift', freeGiftSku);
-                  }
-                });
               }
             });
             // Prepare the data items.
-            var freeGiftProduct = window.commerceBackend.getProductData(freeGiftSku, null, false);
-            if (freeGiftProduct) {
-              var freeGiftImage = window.commerceBackend.getFirstImage(freeGiftProduct);
+            var freeGiftItem = window.commerceBackend.getProductData(freeGiftSku, null, false);
+            if (freeGiftItem) {
+              var freeGiftImage = window.commerceBackend.getFirstImage(freeGiftItem);
               data.items.push({
-                title: freeGiftProduct.name,
+                title: freeGiftItem.name,
                 freeGiftImage: Drupal.hasValue(freeGiftImage.url) ? freeGiftImage.url : '',
                 freeGiftSku,
                 backToCollection: true,
