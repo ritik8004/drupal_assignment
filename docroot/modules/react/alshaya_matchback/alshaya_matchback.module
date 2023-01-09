@@ -31,6 +31,7 @@ function alshaya_matchback_node_view(array &$build, EntityInterface $entity, Ent
   }
 
   $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback_utility';
+  $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback.gtm';
 }
 
 /**
@@ -81,19 +82,6 @@ function alshaya_matchback_alshaya_acm_product_recommended_products_data_alter(a
   }
 
   $data['data']['section_title'] = t('Frequently Bought Together', [], ['context' => 'alshaya_static_text|pdp_matchback_title']);
-}
-
-/**
- * Implements hook_node_view_alter().
- */
-function alshaya_matchback_node_view_alter(&$build, EntityInterface $entity) {
-  $alshaya_acm_settings = \Drupal::config('alshaya_acm.settings');
-  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_acm_settings->getCacheTags());
-
-  if ($entity->bundle() !== 'acq_product' || !$alshaya_acm_settings->get('show_crosssell_as_matchback')) {
-    return;
-  }
-  $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback.gtm';
 }
 
 /**
