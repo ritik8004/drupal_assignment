@@ -219,6 +219,12 @@ exports.computePhFilters = function (input, filter) {
       }
       break;
 
+    case 'promotion_free_gift':
+      if (typeof globalThis.renderRcsProductFreeGift !== 'undefined') {
+        value += globalThis.renderRcsProductFreeGift.computePhFilters(input, filter);
+      }
+      break;
+
     default:
       Drupal.alshayaLogger('debug', 'Unknown JS filter @filter.', {'@filter': filter});
   }
