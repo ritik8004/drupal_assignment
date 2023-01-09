@@ -17,11 +17,10 @@
         }
 
         button[type="submit"] {
-          margin-#{$left}: rem(26);
+          margin-left: rem(26);
 
           html[lang="ar"] & {
             margin-right: 0;
-            margin-left: rem(26);
           }
         }
       }
