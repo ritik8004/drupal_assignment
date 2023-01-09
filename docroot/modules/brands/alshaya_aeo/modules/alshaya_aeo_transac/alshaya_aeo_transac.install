@@ -11,6 +11,23 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Set configs for showing search banner in super category home pages
+ * for mobile view.
+ */
+function alshaya_aeo_transac_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_super_category.settings'],
+    'alshaya_super_category',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for super category feature.
  */
 function alshaya_aeo_transac_update_8006() {

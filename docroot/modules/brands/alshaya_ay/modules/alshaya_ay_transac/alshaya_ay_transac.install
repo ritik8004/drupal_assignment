@@ -5,6 +5,25 @@
  * Install, uninstall and update for alshaya_ay_transac.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set configs for showing search banner in super category home pages
+ * for mobile view.
+ */
+function alshaya_ay_transac_update_9402() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_super_category.settings'],
+    'alshaya_super_category',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
 /**
  * Implements hook_update_N().
  *
