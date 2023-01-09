@@ -19,7 +19,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-click_and_collect"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I select the collection store
@@ -52,7 +52,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-click_and_collect"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I select the collection store
@@ -86,7 +86,7 @@ Feature: SPC Checkout Click and Collect using QPay Payment method as Auth User
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-click_and_collect"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I select the collection store

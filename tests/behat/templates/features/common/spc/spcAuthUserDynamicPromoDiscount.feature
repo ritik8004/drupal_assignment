@@ -35,7 +35,7 @@ Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Authe
     And the element ".promotion-label" should exist
     And the element ".totals .discount-total" should exist
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -87,7 +87,7 @@ Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Authe
     And the element ".promotion-label" should exist
     And the element ".totals .discount-total" should exist
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -137,7 +137,7 @@ Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Authe
     And the element ".promotion-label" should exist
     And the element ".totals .discount-total" should exist
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
