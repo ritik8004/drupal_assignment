@@ -320,6 +320,11 @@ libraries-override:
       theme:
         css/conditional-sass/cls-initial-layout-slp/cls-initial-layout-slp.ltr.css: css/conditional-sass/cls-initial-layout-slp/cls-initial-layout-slp.ltr.css
 
+  alshaya_white_label/cls-initial-layout-plp:
+    css:
+      theme:
+        css/conditional-sass/cls-initial-layout-plp/cls-initial-layout-plp.ltr.css: css/conditional-sass/cls-initial-layout-plp/cls-initial-layout-plp.ltr.css
+
   alshaya_white_label/hello-member-promotion:
     css:
       theme:
