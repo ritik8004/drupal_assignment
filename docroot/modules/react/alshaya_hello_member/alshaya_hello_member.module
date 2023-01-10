@@ -96,22 +96,6 @@ function alshaya_hello_member_theme() {
  */
 function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
-  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
-  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
-  // Only add if hello member enabled.
-  if (!$helloMemberHelper->isHelloMemberEnabled()) {
-    // For user registration form if we have the field, we remove it.
-    if (isset($form['field_birth_date'])) {
-      $form['field_birth_date']['#access'] = FALSE;
-    }
-    if (isset($form['field_gender'])) {
-      $form['field_gender']['#access'] = FALSE;
-    }
-    if (isset($form['field_mobile_number'])) {
-      $form['field_mobile_number']['#access'] = FALSE;
-    }
-    return;
-  }
   if ($form_id == "user_register_form") {
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
@@ -137,6 +121,22 @@ function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state,
   }
 
   if ($form_id == "user_register_form" or $form_id == "user_form") {
+    /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+    $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+    // Only add if hello member enabled.
+    if (!$helloMemberHelper->isHelloMemberEnabled()) {
+      // For user registration form if we have the field, we remove it.
+      if (isset($form['field_birth_date'])) {
+        $form['field_birth_date']['#access'] = FALSE;
+      }
+      if (isset($form['field_gender'])) {
+        $form['field_gender']['#access'] = FALSE;
+      }
+      if (isset($form['field_mobile_number'])) {
+        $form['field_mobile_number']['#access'] = FALSE;
+      }
+      return;
+    }
     $form['hello_member']['teasing'] = [
       '#type' => 'markup',
       '#markup' => t('Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?', [], ['context' => 'hello_member']),
