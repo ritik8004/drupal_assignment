@@ -120,6 +120,7 @@ gtm_initial_data_push:
     - core/drupal
     - core/jquery
     - alshaya_master/local_storage_manager
+    - alshaya_master/common_functions
 
 gtm_online_returns:
   version: 1.x
@@ -135,4 +136,11 @@ gtm_hello_member:
     js/alshaya_seo.gtm.hello_member.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
+    - core/drupal
+
+gtm_aura:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.aura_analytics.js: {}
+  dependencies:
     - core/drupal

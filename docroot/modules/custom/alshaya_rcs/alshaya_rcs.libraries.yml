@@ -5,3 +5,13 @@ utility:
     - core/drupal
     - rcs_placeholders/helpers
     - alshaya_master/common_functions
+
+alshaya_rcs_lazyload:
+  version: 1.x
+  js:
+    js/alshaya_rcs_lazyload.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - alshaya_master/common_functions

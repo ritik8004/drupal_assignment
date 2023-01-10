@@ -18,6 +18,7 @@ import { makeFullName } from '../../../utilities/cart_customer_util';
 import { cartContainsOnlyVirtualProduct, isFullPaymentDoneByEgift } from '../../../utilities/egift_util';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import { isMobile } from '../../../../../js/utilities/display';
 
 const AddressContent = React.lazy(() => import('../address-popup-content'));
 
@@ -124,43 +125,64 @@ export default class CnCBillingAddress extends React.Component {
     // If user has not added billing address.
     if (!billingAddressAddedByUser) {
       return (
-        <div className={`spc-section-billing-address cnc-flow ${activeClass}`}>
-          <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
-          <WithModal modalStatusKey="cncBillingInfo">
-            {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
-              <div className="spc-billing-address-wrapper">
-                <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={() => triggerOpenModal()}>
-                  {Drupal.t('please add your billing address.')}
-                </div>
-                <Popup
-                  className={`spc-billing-address-form-no-saved-address ${getAddressPopupClassName()}`}
-                  open={isModalOpen}
-                  closeOnEscape={false}
-                  closeOnDocumentClick={false}
-                >
-                  <React.Suspense fallback={<Loading />}>
-                    <AddressContent
-                      closeModal={triggerCloseModal}
-                      cart={cart}
-                      processAddress={this.processAddress}
-                      // Show email id field in case of egift card is enabled,
-                      // cart contains only virtual products and anonymous user.
-                      showEmail={
-                        !isUserAuthenticated()
-                        && cartContainsOnlyVirtualProduct(cart.cart)
-                      }
-                      showEditButton={false}
-                      type="billing"
-                      formContext="billing"
-                      headingText={Drupal.t('billing information')}
-                      default_val={editAddressData}
-                    />
-                  </React.Suspense>
-                </Popup>
+        <>
+          <div className={`spc-section-billing-address cnc-flow ${activeClass}`}>
+            <SectionTitle>{Drupal.t('Billing address')}</SectionTitle>
+            {isMobile() ? (
+              <div className="address-form-mobile-only">
+                <React.Suspense fallback={<Loading />}>
+                  <AddressContent
+                    cart={cart}
+                    processAddress={this.processAddress}
+                    type="billing"
+                    showEmail={
+                      !isUserAuthenticated()
+                      && cartContainsOnlyVirtualProduct(cart.cart)
+                    }
+                    default_val={editAddressData}
+                    isEmbeddedForm
+                  />
+                </React.Suspense>
               </div>
+            ) : (
+              <WithModal modalStatusKey="cncBillingInfo">
+                {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+                  <div className="spc-billing-address-wrapper">
+                    <div className="spc-billing-top-panel spc-billing-cc-panel" onClick={() => triggerOpenModal()}>
+                      {Drupal.t('please add your billing address.')}
+                    </div>
+                    <Popup
+                      className={`spc-billing-address-form-no-saved-address ${getAddressPopupClassName()}`}
+                      open={isModalOpen}
+                      closeOnEscape={false}
+                      closeOnDocumentClick={false}
+                    >
+                      <React.Suspense fallback={<Loading />}>
+                        <AddressContent
+                          closeModal={triggerCloseModal}
+                          cart={cart}
+                          processAddress={this.processAddress}
+                          // Show email id field in case of egift card is enabled,
+                          // cart contains only virtual products and anonymous user.
+                          showEmail={
+                            !isUserAuthenticated()
+                            && cartContainsOnlyVirtualProduct(cart.cart)
+                          }
+                          showEditButton={false}
+                          type="billing"
+                          formContext="billing"
+                          headingText={Drupal.t('billing information')}
+                          default_val={editAddressData}
+                          isEmbeddedForm={false}
+                        />
+                      </React.Suspense>
+                    </Popup>
+                  </div>
+                )}
+              </WithModal>
             )}
-          </WithModal>
-        </div>
+          </div>
+        </>
       );
     }
 

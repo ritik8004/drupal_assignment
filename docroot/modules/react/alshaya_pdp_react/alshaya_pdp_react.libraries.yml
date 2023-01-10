@@ -1,5 +1,5 @@
 pdp_magazine_v2_layout:
-  version: 1.x
+  version: 1.1.0
   js:
     dist/pdp_layout.bundle.js: { }
   dependencies:
@@ -7,8 +7,11 @@ pdp_magazine_v2_layout:
     - core/drupalSettings
     - core/drupal.debounce
     - alshaya_seo/gtm
+    - alshaya_pdp_react/pdp_size_guide_utility
 
 pdp_size_guide_utility:
-  version: 1.x
+  version: 1.1.0
   js:
-    js/size_guide_utility.js: { }
+    assets/js/size_guide_utility.js: { }
+  dependencies:
+    - core/drupal

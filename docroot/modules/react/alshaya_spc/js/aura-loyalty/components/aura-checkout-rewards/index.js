@@ -18,6 +18,7 @@ import { isEgiftCardEnabled, isFullPaymentDoneByPseudoPaymentMedthods } from '..
 import { cartContainsAnyVirtualProduct } from '../../../utilities/egift_util';
 import AuraLinkedCheckout from './components/aura-card';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import dispatchCustomEvent from '../../../utilities/events';
 
 
 class AuraCheckoutRewards extends React.Component {
@@ -33,6 +34,11 @@ class AuraCheckoutRewards extends React.Component {
     document.addEventListener('loyaltyStatusUpdated', this.updateState, false);
     // Listener to get the updated aura points.
     document.addEventListener('auraPointsToEarnApiInvoked', this.handleAuraPointsToEarn, false);
+    // Listener to GTM checkout step 3 event.
+    document.addEventListener('auraDataReceivedForGtmCheckoutStep3', (e) => {
+      Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart.cart, 3);
+    });
+
     let localStorageValues = Drupal.getItemFromLocalStorage(getAuraLocalStorageKey());
 
     // Logged in user.
@@ -88,7 +94,10 @@ class AuraCheckoutRewards extends React.Component {
     this.setState({
       ...states,
     });
-  }
+    // Dispatches Checkout step 3 GTM event.
+    const { cart } = this.props;
+    dispatchCustomEvent('auraDataReceivedForGtmCheckoutStep3', { cart });
+  };
 
   // Event listener callback to update states.
   updateState = (data) => {
@@ -100,6 +109,18 @@ class AuraCheckoutRewards extends React.Component {
     this.setState({
       ...states,
     });
+
+    // This will push aura common details in checkout page
+    // as component only renders in checkout page.
+    if (states.loyaltyStatus !== undefined
+      && states.loyaltyStatus !== getAllAuraStatus().APC_NOT_LINKED_NO_DATA
+    ) {
+      // For Aura signed-in users.
+      Drupal.alshayaSeoGtmPushAuraCommonData(states, states.loyaltyStatus);
+    } else {
+      // For non Aura users.
+      Drupal.alshayaSeoGtmPushAuraCommonData({ nonAura: true });
+    }
 
     // Get the aura points to earn from sales API.
     this.getAuraPoints();
@@ -201,7 +222,7 @@ class AuraCheckoutRewards extends React.Component {
     }
 
     return (
-      <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }}>
+      <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }} data-earn-aura-points={auraPointsToEarn} data-aura-loyalty-status={loyaltyStatus}>
 
         {/* Guest - Show aura section only when card data is available. */}
         <ConditionalView condition={!isUserAuthenticated()
@@ -227,6 +248,7 @@ class AuraCheckoutRewards extends React.Component {
             expiryDate={expiryDate}
             cardNumber={cardNumber}
             totals={cart.cart.totals}
+            cart={cart}
             // Flag to verify if redeem aura points form is accessible or not.
             formActive={formActive}
             paymentMethodInCart={cart.cart.payment.method || ''}

@@ -17,11 +17,11 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     And the element "div.tabby-promo-snippet" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
@@ -36,7 +36,7 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
     And I wait 30 seconds
     And I wait for AJAX to finish
     Then the element "#tabby-card-checkout" should exist
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -54,11 +54,11 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     And the element "div.tabby-promo-snippet" should exist
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
@@ -73,7 +73,7 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
     And I wait 30 seconds
     And I wait for AJAX to finish
     Then the element "#tabby-card-checkout" should exist
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
     And I wait for the page to load

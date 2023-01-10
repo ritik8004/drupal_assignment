@@ -3,8 +3,7 @@ Feature: Test MiniCart page
 
   Background:
     Given I am on "{spc_basket_page}"
-    And I wait for the page to load
-    And I wait for AJAX to finish
+    And I wait for element "#block-page-title"
 
   Scenario: As a Guest, I should be able minicart
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element

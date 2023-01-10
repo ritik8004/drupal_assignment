@@ -3,7 +3,7 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
 
   Background:
     Given I am on "{spc_basket_page}"
-    And I wait 10 seconds
+    And I wait for element "#block-page-title"
     And I wait for the page to load
 
   @cc @hd @Qpay
@@ -14,10 +14,10 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/cart/login" page
@@ -30,7 +30,7 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
     And I select the home delivery address
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-methods div.payment-method-checkout_com_upapi_qpay" element on page
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then I fill in "cardNumber" with "{spc_Qpay_card}"
@@ -53,10 +53,10 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
     And I wait for the page to load
     And I click on Add-to-cart button
     And I wait 10 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     When I click the anchor link ".edit-checkout-as-guest" on page
@@ -68,7 +68,7 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
     And I select the home delivery address
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-methods div.payment-method-checkout_com_upapi_qpay" element on page
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then I fill in "cardNumber" with "{spc_Qpay_card}"
@@ -91,10 +91,10 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
     And I wait for the page to load
     And I click on Add-to-cart button
     And I wait 10 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
@@ -107,7 +107,7 @@ Feature: SPC Checkout Home Delivery QPAy payment for guest users
     And I select the home delivery address
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-methods div.payment-method-checkout_com_upapi_qpay" element on page
     And I wait 10 seconds
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then I fill in "cardNumber" with "{spc_Qpay_card}"

@@ -166,8 +166,12 @@ export default class CompletePurchase extends React.Component {
   /**
    * To determine whether complete purchase button
    * should be active and clickable or not.
+   *
+   * @param {boolean}
+   *  To determine if this is called when rendering the component
+   *  or when placing the order.
    */
-  completePurchaseButtonActive = () => {
+  completePurchaseButtonActive = (showErrors = true) => {
     const { cart } = this.props;
 
     // If delivery method selected same as what in cart.
@@ -184,6 +188,23 @@ export default class CompletePurchase extends React.Component {
         // For CnC, user needs to actually fill the billing address.
         isBillingSet = true;
       }
+    }
+
+    // If showErrors is false and delivery info is not set return
+    // false and don't show any error messages.
+    if (!showErrors
+      && ((!deliverSameAsInCart
+      || !isShippingSet)
+      || !isBillingSet)) {
+      return false;
+    }
+    // If showErrors is false and delivery info is set return
+    // true immediately.
+    if (!showErrors
+      && deliverSameAsInCart
+      && isShippingSet
+      && isBillingSet) {
+      return true;
     }
 
     // Scroll to the delivery information section.
@@ -294,6 +315,12 @@ export default class CompletePurchase extends React.Component {
       ? cart.cart.payment.method
       : '';
 
+    // Check if complete purchase button should be active or not
+    // pass 'false' to ignore inline error messages.
+    const activeClass = this.completePurchaseButtonActive(false)
+      ? 'active'
+      : 'in-active';
+
     let buttonText = '';
 
     switch (paymentMethod) {
@@ -314,7 +341,7 @@ export default class CompletePurchase extends React.Component {
     }
 
     return (
-      <div className={`checkout-link complete-purchase complete-purchase-cta fadeInUp notInMobile submit active ${paymentMethod}`} style={{ animationDelay: '0.5s' }}>
+      <div className={`checkout-link complete-purchase complete-purchase-cta fadeInUp notInMobile submit ${activeClass} ${paymentMethod}`} style={{ animationDelay: '0.5s' }}>
         <ConditionalView condition={paymentMethod === 'checkout_com_applepay' || paymentMethod === 'checkout_com_upapi_applepay'}>
           <ApplePayButton isaActive="active" text={Drupal.t('Buy with')} lang={drupalSettings.path.currentLanguage} placeOrder={(e) => this.placeOrder(e)} />
         </ConditionalView>

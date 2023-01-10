@@ -14,10 +14,10 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/cart/login" page
@@ -36,7 +36,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    Then the element ".checkout-link.submit" should exist
 
   @hd @language @desktop @fawry
   Scenario: As a Guest, I should be able to checkout using Fawry payment in second language
@@ -49,10 +49,10 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
@@ -70,7 +70,7 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    Then the element ".checkout-link.submit" should exist
 
 
   @hd @language @mobile @fawry
@@ -84,10 +84,10 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
@@ -105,5 +105,5 @@ Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
     And the element "input[name=fawry-email]" should exist
     And the element "input[name=fawry-mobile-number]" should exist
     Then the "payment-method-checkout_com_upapi_fawry" checkbox should be checked
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    Then the element ".checkout-link.submit" should exist
 

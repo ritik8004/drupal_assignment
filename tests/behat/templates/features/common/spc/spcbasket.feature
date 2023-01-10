@@ -3,15 +3,15 @@ Feature: Test basket page
 
   Background:
     Given I am on "{spc_basket_page}"
-    And I wait 2 seconds
+    And I wait for element "#block-page-title"
 
   @desktop
   Scenario: As a Guest, I should be able to add more quantity
     When I select a product in stock on ".c-products__item"
-    And I wait 5 seconds
+    And I wait for element "#block-page-title"
     And I click on Add-to-cart button
     And I wait 5 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
@@ -55,7 +55,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 5 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
@@ -84,7 +84,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 5 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
@@ -103,7 +103,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 5 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for the page to load
     And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
@@ -124,7 +124,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
-    Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    Then I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
@@ -145,7 +145,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
-    Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    Then I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
@@ -198,7 +198,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
-    Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    Then I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     And I should see an ".totals" element
@@ -218,7 +218,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
-    Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    Then I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
@@ -240,7 +240,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
-    Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    Then I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for the page to load
     And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load
@@ -260,7 +260,7 @@ Feature: Test basket page
     And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
-    Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    Then I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for the page to load
     And I verify the wishlist popup block if enabled and remove the cart item
     And I wait for the page to load

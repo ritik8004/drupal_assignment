@@ -1,5 +1,5 @@
 <?php
-// phpcs:ignoreFile
+// @codingStandardsIgnoreFile
 
 if (file_exists(__DIR__ . '/settings.php')) {
   require_once 'settings.php';
@@ -10,13 +10,13 @@ else {
 }
 
 function invoke_api(string $api_url, string $method = 'GET', array $data = NULL) {
-//  if (getenv('debug')) {
+  if (getenv('debug')) {
     print_r([
       $api_url,
       $method,
       json_encode($data, JSON_THROW_ON_ERROR),
     ]);
-//  }
+  }
 
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -268,8 +268,12 @@ function create_page_rule_for_zone(string $zone, array $rule) {
   return invoke_api($api_url, 'POST', $rule);
 }
 
+function update_page_rule_for_zone(string $zone, array $rule) {
+  $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/pagerules/' . $rule['id'];
+  return invoke_api($api_url, 'PATCH', $rule);
+}
+
 function delete_page_rule_for_zone(string $zone, string $id) {
   $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/pagerules/' . $id;
   return invoke_api($api_url, 'DELETE');
 }
-

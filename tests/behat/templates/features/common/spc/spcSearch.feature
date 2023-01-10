@@ -3,7 +3,7 @@ Feature: Test search functionality
 
   Background:
     Given I am on "{spc_basket_page}"
-    And I wait 10 seconds
+    And I wait for element "#block-page-title"
 
   @desktop
   Scenario: Verify user should be able to search with valid keyword and see relevant results

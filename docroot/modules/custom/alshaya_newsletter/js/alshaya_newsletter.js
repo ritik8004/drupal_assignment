@@ -93,6 +93,10 @@
         l.ladda('stop');
 
         if (data.message === 'success') {
+          // Tracking newsletter in gtm.
+          if (Drupal.alshaya_seo_gtm_push_lead_type !== undefined) {
+            Drupal.alshaya_seo_gtm_push_lead_type('footer');
+          }
           $('#alshaya-newsletter-subscribe .form-type-email input').val('');
           setTimeout(Drupal.clearNewsletterForm, parseInt(data.interval));
         }

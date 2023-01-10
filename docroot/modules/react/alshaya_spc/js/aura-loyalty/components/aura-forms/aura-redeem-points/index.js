@@ -18,6 +18,7 @@ import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveF
 import dispatchCustomEvent from '../../../../utilities/events';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { isEgiftCardEnabled } from '../../../../../../js/utilities/util';
+import StaticStorage from '../../../../backend/v2/staticStorage';
 
 class AuraFormRedeemPoints extends React.Component {
   constructor(props) {
@@ -98,6 +99,8 @@ class AuraFormRedeemPoints extends React.Component {
 
   handleRedeemPointsEvent = (data) => {
     const { stateValues, action } = data.detail;
+    const { cart } = this.props;
+    let dispatchCheckoutStep3GTM = false;
 
     if (Object.keys(stateValues).length === 0 || stateValues.error) {
       showError('spc-aura-link-api-response-message', stateValues.message);
@@ -116,9 +119,31 @@ class AuraFormRedeemPoints extends React.Component {
       stateValues.auraTransaction = true;
       // Add a class for FE purposes.
       document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
+      // When full payment done by Aura refreshCartOnPaymentMethod event triggers checkout step 3.
+      // When partial payment is done by Aura, trigger checkout step 3 from here.
+      if (cartTotals.balancePayable > 0) {
+        // Update aura partial payment information in static storage.
+        StaticStorage.get('cart_raw').totals.total_segments.push({
+          code: 'aura_payment',
+          title: 'Paid By Aura',
+          value: cartTotals.paidWithAura,
+        });
+        dispatchCheckoutStep3GTM = true;
+      }
+      // Trigger aura use points datalayer event.
+      Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_USE_POINTS' });
     } else if (action === 'remove points') {
       // Reset redemption input fields to initial value.
       this.resetInputs();
+      // When full payment done by Aura refreshCartOnPaymentMethod event triggers checkout step 3.
+      // When partial payment is done by Aura, trigger checkout step 3 from here.
+      if (cartTotals.balancePayable > 0) {
+        // Update aura partial payment information in static storage.
+        const rawCart = StaticStorage.get('cart_raw');
+        rawCart.totals.total_segments = rawCart.totals.total_segments.filter((item) => item.code !== 'aura_payment');
+        StaticStorage.set('cart_raw', rawCart);
+        dispatchCheckoutStep3GTM = true;
+      }
 
       // Remove all aura related keys from totals if present.
       Object.entries(stateValues).forEach(([key]) => {
@@ -133,6 +158,8 @@ class AuraFormRedeemPoints extends React.Component {
 
       // Remove class.
       document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.remove('redeemed');
+      // Trigger aura remove points datalayer event.
+      Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_REMOVE_POINTS' });
     }
 
     this.setState({
@@ -141,6 +168,10 @@ class AuraFormRedeemPoints extends React.Component {
 
     // Dispatch an event to update totals in cart object.
     dispatchCustomEvent('updateTotalsInCart', { totals: cartTotals });
+    // Dispatch GTM Checkout Step 3 event for partial aura payment.
+    if (dispatchCheckoutStep3GTM) {
+      dispatchCustomEvent('auraDataReceivedForGtmCheckoutStep3', { cart });
+    }
   };
 
   convertPointsToMoney = (e) => {
@@ -311,7 +342,7 @@ class AuraFormRedeemPoints extends React.Component {
               />
             </ConditionalView>
             <ConditionalView condition={auraTransaction}>
-              <div className="successful-redeem-msg">
+              <div className="successful-redeem-msg" data-aura-points-used={points}>
                 {this.getPointsRedeemedMessage()}
               </div>
             </ConditionalView>

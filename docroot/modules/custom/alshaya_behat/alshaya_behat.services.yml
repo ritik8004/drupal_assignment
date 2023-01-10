@@ -8,3 +8,6 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@entity.repository'
       - '@entity_type.manager'
+      - '@acq_commerce.api'
+      - '@alshaya_api.api'
+      - '@request_stack'

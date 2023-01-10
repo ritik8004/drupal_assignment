@@ -62,6 +62,8 @@ class WishlistShare extends React.Component {
    * redirect user to login page else the modal popup will open.
    */
   onShareAllClick = () => {
+    // Push share all button click to gtm.
+    Drupal.alshayaSeoGtmPushShareWishlist('share all');
     // Redirect to login page if custom is not logged in.
     if (isAnonymousUser()) {
       window.location = Drupal.url(`user/login?destination=/${drupalSettings.path.pathPrefix}${drupalSettings.path.currentPath}`);

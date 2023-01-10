@@ -7,7 +7,7 @@ default:
       contexts:
         - Alshaya\BehatContexts\FeatureContext:
             parameters:
-              ajax_waittime : 60
+              ajax_waittime : 600
         - Alshaya\BehatContexts\OverriddenMinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -23,18 +23,17 @@ default:
           verify: false
       javascript_session: selenium2
       selenium2:
-        wd_host: http://127.0.0.1:4444/wd/hub
+        wd_host: http://127.0.0.1:9515/wd/hub
         capabilities:
-          #                  extra_capabilities:
-          #                    goog:chromeOptions:
-          #                      w3c: false
           chrome:
             switches:
-              - "--headless"
-              - "--disable-gpu"
               - "--no-sandbox"
-              # - "--window-size=1920,1080"
+              - "--disable-dev-shm-usage"
+              - "--disable-gpu"
               - "--ignore-certificate-errors"
+              - "--headless"
+#              - "--enable-javascript"
+              # - "--window-size=1920,1080"
     Drupal\DrupalExtension:
       blackbox: ~
     emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:

@@ -1,15 +1,6 @@
 .aura-enabled {
   .my-account-nav {
     @include breakpoint($upto-desktop) {
-      li:nth-child(2) {
-        &::after {
-          top: 50%;
-          transform: translateY(-50%);
-          margin-top: 0;
-          color: $aura-purple;
-        }
-      }
-
       .my-account-my-aura {
         height: 3rem;
         border-radius: 0.625rem;

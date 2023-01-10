@@ -46,7 +46,12 @@
       swatchData = e.detail.combinations.configurables[colorAttribute].values;
       if (swatchData.length > 0) {
         // Group array based on color group attribute.
-        var result = swatchData.reduce(function (r, a) {
+        var result = swatchData.filter(function filterColorConfigurables(item) {
+          if (!Drupal.hasValue(item.color_group)) {
+            return false;
+          }
+          return true;
+        }).reduce(function (r, a) {
           r[a.color_group] = r[a.color_group] || [];
           r[a.color_group].push(a);
           return r;

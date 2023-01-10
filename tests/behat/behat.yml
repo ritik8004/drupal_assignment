@@ -18,7 +18,7 @@ default:
     pretty: ~
   extensions:
     Drupal\MinkExtension:
-      files_path: "%paths.base%/files"
+      files_path: "%paths.base%/media"
       browser_name: chrome
       goutte:
         guzzle_parameters:
@@ -39,6 +39,8 @@ default:
               - "--ignore-certificate-errors"
     Drupal\DrupalExtension:
       blackbox: ~
+      region_map:
+        local_tasks: "#block-local-tasks"
     emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
       name: html
       renderer: Twig,Behat2

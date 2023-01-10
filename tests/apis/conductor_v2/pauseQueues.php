@@ -48,12 +48,7 @@ $env_map = [
 ];
 
 foreach ($conductors as $key => $value) {
-  $info = explode('_', $key);
-
-  // Get the first and last values.
-  // Support cases like wekw_sit_dev2.
-  $country_brand = $info[0];
-  $base_env = end($info);
+  [$country_brand, $base_env] = get_brand_country_and_env($key);
 
   $base_env = $env_map[$base_env] ?? $base_env;
 

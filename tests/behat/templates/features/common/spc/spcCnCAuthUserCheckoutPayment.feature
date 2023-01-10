@@ -3,8 +3,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 10 seconds
-    Then I should be on "/user" page
+    And I wait for element "#block-page-title"
     When I am on "{spc_product_listing_page}"
     And I wait 10 seconds
 
@@ -16,10 +15,10 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
@@ -38,7 +37,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 90 seconds
     Then I should be on "/checkout/" page
@@ -52,10 +51,10 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
@@ -74,7 +73,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 90 seconds
     And I wait for the page to load
@@ -92,10 +91,10 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
@@ -113,7 +112,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I add the billing address on checkout page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 90 seconds
     And I wait for the page to load
@@ -131,10 +130,10 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
@@ -152,7 +151,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I add the billing address on checkout page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 90 seconds
     And I wait for the page to load

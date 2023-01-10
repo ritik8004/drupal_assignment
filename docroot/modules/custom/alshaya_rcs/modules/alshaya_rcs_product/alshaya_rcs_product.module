@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_theme().
@@ -919,9 +918,17 @@ function alshaya_rcs_product_library_info_alter(&$libraries, $extension) {
       $libraries['sharethis']['js']["/$self_module_path/js/alshaya_rcs_sharethis.js"] = $options;
     }
   }
-  elseif ($extension === 'alshaya_pdp_react'
-    && isset($libraries['pdp_magazine_v2_layout'])) {
-    $libraries['pdp_magazine_v2_layout']['js']["/$self_module_path/js/alshaya_rcs_pdp_magazine_v2.js"] = [];
+  elseif ($extension === 'alshaya_pdp_react') {
+    if (isset($libraries['pdp_magazine_v2_layout'])) {
+      $libraries['pdp_magazine_v2_layout']['js']["/$self_module_path/js/alshaya_rcs_pdp_magazine_v2.js"] = [];
+    }
+    if (isset($libraries['pdp_size_guide_utility'])) {
+      // Alter the pdp size guide utility to replace the base JS file with the
+      // size guide utility provided by this module.
+      $options = $libraries['pdp_size_guide_utility']['js']['assets/js/size_guide_utility.js'];
+      unset($libraries['pdp_size_guide_utility']['js']['assets/js/size_guide_utility.js']);
+      $libraries['pdp_size_guide_utility']['js']["/$self_module_path/js/alshaya_rcs_product.size_guide_utility.js"] = $options;
+    }
   }
 }
 
@@ -1094,7 +1101,7 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   }
   // Invoke GraphQL API and get the options list.
   $attribute_code = $attribute['attribute_code'];
-  $settings = Settings::get('alshaya_api.settings');
+  $settings = \Drupal::config('alshaya_api.settings');
 
   // In Array attribute will only be added for materials attribute code.
   $is_array = '';
@@ -1104,12 +1111,12 @@ function alshaya_rcs_product_product_attribute_options_alter(array &$attribute) 
   }
   $query = '{attributeValueResolver(attribute_code:"' . $attribute_code . '"' . $is_array . '){attribute_code store_id attribute_values{key,value}}}';
   // Magento URL to get the product option attributes.
-  $request_url = $settings['magento_host'] . '/graphql?query=' . $query;
+  $request_url = $settings->get('magento_host') . '/graphql?query=' . $query;
 
   try {
     $response = Json::decode(\Drupal::httpClient()->get($request_url, [
       'headers' => [
-        'store' => Settings::get('magento_lang_prefix')[$current_language],
+        'store' => $settings->get('magento_lang_prefix')[$current_language],
       ],
     ])->getBody());
   }

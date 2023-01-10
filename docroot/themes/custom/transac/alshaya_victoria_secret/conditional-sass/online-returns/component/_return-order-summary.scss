@@ -1,0 +1,88 @@
+.return-requests-wrapper {
+  .light {
+    color: $online-return-light-text;
+  }
+
+  .dark {
+    color: $online-return-dark-text;
+  }
+
+  .order-details-wrapper {
+    .order-summary-row {
+      align-items: flex-start;
+
+      .order-transaction,
+      .order-quantity,
+      .order-status,
+      .order-total-column {
+        padding-top: rem(16);
+        padding-bottom: rem(16);
+
+        @include breakpoint($desktop) {
+          padding: rem(24);
+        }
+
+        >div {
+          margin-bottom: rem(4);
+        }
+      }
+
+      .order-id {
+        font-family: $alshaya-bold;
+        font-size: rem(14);
+        line-height: 1.29;
+      }
+
+      .order--items {
+        font-size: rem(14);
+        line-height: 1.29;
+      }
+
+      .order-status {
+        display: flex;
+        justify-content: flex-end;
+
+        @include breakpoint($tablet) {
+          justify-content: flex-start;
+        }
+
+        .button.status-delivered {
+          border-radius: rem(3);
+          font-size: rem(12);
+          font-family: $alshaya-bold;
+          color: $online-return-button-delievered-text;
+        }
+      }
+
+      .order-total-column {
+        @include breakpoint($desktop) {
+          padding-#{$left}: rem(52);
+        }
+
+        .price {
+          .price-currency.suffix {
+            @include breakpoint($tablet) {
+              margin-#{$right}: rem(2);
+            }
+
+            @include breakpoint($desktop) {
+              margin-#{$right}: rem(3);
+            }
+          }
+        }
+      }
+
+      .order-summary-details {
+        align-items: flex-start;
+
+        @include breakpoint($tablet) {
+          flex-basis: rem(320);
+        }
+
+        @include breakpoint($desktop) {
+          flex-basis: rem(368);
+        }
+      }
+    }
+  }
+}

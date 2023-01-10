@@ -312,7 +312,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
     $address_index = FALSE;
     if ($address_id) {
-      $address_index = array_search($address_id, array_column($customer['addresses'], 'address_id'));
+      $address_index = array_search($address_id, array_column($customer['addresses'] ?? [], 'address_id'));
       if ($address_index !== FALSE) {
         $customer['addresses'][$address_index] = $new_address;
       }

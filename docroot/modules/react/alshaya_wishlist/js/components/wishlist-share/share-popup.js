@@ -31,6 +31,9 @@ export default class SharePopup extends React.Component {
    * Handler to copy the share link on clipboard.
    */
   copyShareLink = () => {
+    // Push copy link button click to gtm.
+    Drupal.alshayaSeoGtmPushShareWishlist('copy link');
+
     const { wishlistShareLink } = this.props;
     // Set the copyLinkStatus to true when link is copied.
     navigator.clipboard.writeText(wishlistShareLink);
@@ -60,6 +63,9 @@ export default class SharePopup extends React.Component {
    * Handler to open the email client with share link.
    */
   emailClickHandler = (e) => {
+    // Push email button click to gtm.
+    Drupal.alshayaSeoGtmPushShareWishlist('email');
+
     e.preventDefault();
     const { wishlistShareLink } = this.props;
     const shareEmailSubject = drupalSettings.wishlist.config.shareEmailSubject || '';

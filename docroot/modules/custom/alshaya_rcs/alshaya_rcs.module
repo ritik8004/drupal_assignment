@@ -5,7 +5,11 @@
  * Module file for Alshaya RCS.
  */
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Implements hook_library_info_alter().
@@ -15,6 +19,20 @@ function alshaya_rcs_library_info_alter(&$libraries, $extension) {
     $libraries['rcs_placeholders']['dependencies'][] = 'alshaya_white_label/rcs-placeholders';
     $libraries['rcs_placeholders']['dependencies'][] = 'alshaya_rcs/utility';
   }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_rcs_page_attachments_alter(array &$attachments) {
+  if (\Drupal::theme()->getActiveTheme()->getName()
+    !== \Drupal::config('system.theme')->get('default')
+  ) {
+    return;
+  }
+
+  // Add the library to lazy load images.
+  $attachments['#attached']['library'][] = 'alshaya_rcs/alshaya_rcs_lazyload';
 }
 
 /**
@@ -107,6 +125,7 @@ function _alshaya_rcs_get_modules_mapping() {
     'alshaya_product_lpn' => 'alshaya_rcs_product_lpn',
     'alshaya_olapic' => 'alshaya_rcs_olapic',
     'alshaya_dynamic_yield' => 'alshaya_rcs_dynamic_yield',
+    'alshaya_mobile_app' => 'alshaya_rcs_mobile_app',
   ];
 }
 
@@ -122,5 +141,27 @@ function alshaya_rcs_alshaya_super_category_status_update($status, $default_pare
   }
   elseif (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_super_category')) {
     $module_installer->uninstall(['alshaya_rcs_super_category']);
+  }
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function alshaya_rcs_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  // Restricting acq_product_category entity operations in V3.
+  if ($entity->bundle() === 'acq_product_category') {
+    throw new AccessDeniedHttpException();
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_rcs_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Restricting acq_product_category entity operations in V3.
+  switch ($form_id) {
+    case 'taxonomy_term_acq_product_category_form':
+    case 'taxonomy_term_acq_product_category_delete_form':
+      throw new AccessDeniedHttpException();
   }
 }

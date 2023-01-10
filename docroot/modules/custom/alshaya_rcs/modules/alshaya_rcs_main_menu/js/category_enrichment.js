@@ -28,7 +28,7 @@ globalThis.rcsGetEnrichedCategories = () => {
     var rcsType = e.request.rcsType || '';
     if (rcsType === 'navigation_menu') {
       e.promises.push(jQuery.ajax({
-        url: Drupal.url('rest/v2/categories'),
+        url: Drupal.url('rest/v3/categories'),
         success: function success (data) {
           globalThis.RcsPhStaticStorage.set('enriched_categories', data);
           if (drupalSettings.rcs.navigationMenuCacheTime !== 0) {

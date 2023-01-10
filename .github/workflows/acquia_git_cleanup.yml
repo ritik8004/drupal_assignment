@@ -36,13 +36,13 @@ jobs:
           mkdir -p ~/.ssh
           touch ~/.ssh/config
           chmod 600 ~/.ssh/config
-          printf Host *.enterprise-g1.hosting.acquia.com\n  StrictHostKeyChecking no\n >> ~/.ssh/config
+          printf "Host *.enterprise-g1.hosting.acquia.com\n StrictHostKeyChecking no\n" >> ~/.ssh/config
 
       - name: Prepare ACSF API credentials
         run: |
           touch $HOME/acsf_api_settings
           chmod 600 $HOME/acsf_api_settings
-          printf 'username="%s"\napi_key="%s"' ${{ env.ACSF_API_USERNAME }} ${{ env.ACSF_API_KEY }} >> $HOME/acsf_api_settings
+          printf 'username="%s"\napi_key="%s"' "${{ env.ACSF_API_USERNAME }}" "${{ env.ACSF_API_KEY }}" >> $HOME/acsf_api_settings
 
       - name: Tag cleanup
         run: yes | bash ${SCRIPT_DIR}/git_cleanup/remove-old-tags.sh

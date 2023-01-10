@@ -1,0 +1,60 @@
+name: Deploy Manual
+
+on:
+  workflow_dispatch:
+
+concurrency: deploy-${{ github.ref }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'acquia-pso' && contains(github.ref, 'refs/heads') }}
+
+    container:
+      image: devwithlando/php:8.0-fpm-4
+
+    env:
+      CI: GITHUB_ACTIONS
+      COMPOSER_MEMORY_LIMIT: -1
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      SSH_DEPLOYMENT_KEY: ${{ secrets.BLT_SSH_DEPLOYMENT_KEY }}
+
+    steps:
+      # Make sure we have some code to diff.
+      - name: Checkout branch
+        if: ${{ env.SSH_DEPLOYMENT_KEY }}
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        if: ${{ env.SSH_DEPLOYMENT_KEY }}
+        id: changes
+        # Set outputs using the command.
+        run: |
+          echo changes=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only | wc -l | xargs) >> $GITHUB_ENV
+          echo all=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | wc -l | xargs) >> $GITHUB_OUTPUT
+          echo themes=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
+          echo react=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
+          echo svg=$(git diff $(git rev-list -n1 --before="7 hours ago" HEAD) --name-only --diff-filter=ACMRTD | grep .svg | xargs) >> $GITHUB_OUTPUT
+
+      - name: Artifact Build
+        if: ${{ env.changes > 0 && env.SSH_DEPLOYMENT_KEY }}
+        uses: ./.github/actions/deploy_build
+        with:
+          SCRIPT_DIR: ${SCRIPT_DIR}
+          SSH_AUTH_SOCK: ${SSH_AUTH_SOCK}
+          SSH_DEPLOYMENT_KEY: ${SSH_DEPLOYMENT_KEY}
+          CHANGED_ALL_FILES: ${{ needs.changes.outputs.all }}
+          CHANGED_THEMES_FILES: ${{ steps.changes.outputs.themes }}
+          CHANGED_REACT_FILES: ${{ steps.changes.outputs.react }}
+          CHANGED_SVG_FILES: ${{ steps.changes.outputs.svg }}
+
+      - name: Deploy branch
+        if: ${{ env.changes > 0 && env.SSH_DEPLOYMENT_KEY }}
+        run: bash $SCRIPT_DIR/deploy_branch.sh

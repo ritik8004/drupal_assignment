@@ -1,8 +1,8 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import moment from 'moment';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { formatDate } from '../../../utilities';
 
 class HappyBirthdayPopup extends React.Component {
   constructor(props) {
@@ -110,7 +110,7 @@ class HappyBirthdayPopup extends React.Component {
               </a>
             </div>
             <div className="expiry">
-              {getStringMessage('benefit_expire', { '@expire_date': moment(new Date(this.data.expiry_date || this.data.end_date)).format('DD MMMM YYYY') })}
+              {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(this.data.expiry_date || this.data.end_date)) })}
             </div>
           </div>
         </div>

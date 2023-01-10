@@ -60,7 +60,7 @@
         if (gtmContainer === 'product detail page') {
           const referrerData = Drupal.getItemFromLocalStorage('referrerData');
           const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
-          if (referrer === '' || (Drupal.hasValue(referrerData) && !referrerData.path.includes(referrer))) {
+          if (referrer === '' || (Drupal.hasValue(referrerData) && Drupal.hasValue(referrerData.path) && !referrerData.path.includes(referrer))) {
             if(isSearchActivated !== null && !isSearchActivated) {
               // Set PDP as referrerPageType only if referrer is not set,
               // Search is not active or
@@ -328,11 +328,13 @@
         if (window.name == 'ConnectWithSocialAuth') {
           var socialWindow = true;
         }
-
+        // Check if user is login or not.
+        var isUserLogin = Drupal.getItemFromLocalStorage('isUserLogin');
         // Check for user login type in cookies.
         var loginType = $.cookie('Drupal.visitor.alshaya_gtm_user_login_type');
-        if (drupalSettings.user.uid && loginType === undefined && orderConfirmationPage.length === 0) {
+        if (drupalSettings.user.uid && loginType === undefined && isUserLogin == null) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success' , 'Email');
+          Drupal.addItemInLocalStorage('isUserLogin', true);
         }
 
         // Fire sign-in success event on successful sign-in from parent window.
@@ -340,9 +342,10 @@
           && userDetails.userID !== undefined
           && userDetails.userID !== 0
           && loginType !== undefined
-          && orderConfirmationPage.length === 0) {
+          && isUserLogin == null) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success', loginType);
           Drupal.addItemInLocalStorage('userID', userDetails.userID);
+          Drupal.addItemInLocalStorage('isUserLogin', true);
         }
 
         // Fire logout success event on successful sign-in.
@@ -352,6 +355,7 @@
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           Drupal.addItemInLocalStorage('userID', userDetails.userID);
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_login_type', {path: '/'});
+          Drupal.removeItemFromLocalStorage('isUserLogin');
         }
 
         // Fire lead tracking on registration success/ user update.
@@ -463,32 +467,6 @@
           Drupal.alshaya_seo_gtm_push_store_finder_search(keyword, 'checkout', resultCount);
         }
       }
-
-      /**
-       * Newsletter tracking GTM.
-       */
-      $('footer .edit-newsletter').click(function () {
-        footerNewsletterSubmiClicked = true;
-      });
-
-      // Trigger GTM push event on AJAX completion of add to cart button.
-      $(document).once('js-event').ajaxComplete(function (event, xhr, settings) {
-        gtm_execute_onetime_events = true;
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData.hasOwnProperty('_triggering_element_value')) && (settings.extraData._triggering_element_value.toLowerCase() === Drupal.t('sign up').toLowerCase())) {
-          var responseJSON = xhr.responseJSON;
-          var responseMessage = '';
-          $.each(responseJSON, function (key, obj) {
-            if (obj.method === 'newsletterHandleResponse') {
-              responseMessage = obj.args[0].message;
-              return false;
-            }
-          });
-
-          if ((responseMessage === 'success') && (footerNewsletterSubmiClicked)) {
-            Drupal.alshaya_seo_gtm_push_lead_type('footer');
-          }
-        }
-      });
 
       /**
        * Quantity update in cart.
@@ -1241,14 +1219,26 @@
    * @param loginType
    */
   Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction, loginType = null) {
-    dataLayer.push({
+    var data = {
       event: 'eventTracker',
       eventCategory: 'Login & Register',
       eventAction: eventAction,
       eventLabel: loginType,
       eventValue: 0,
       nonInteraction: 0
-    });
+    };
+    // Add additional GTM variables for User registration.
+    if (eventAction == 'Registration Success') {
+      var data_additional = {};
+      data_additional.registration_method = 'Email';
+      data_additional.gender_selection = drupalSettings.alshaya_gtm_create_user_gender !== undefined ?
+        drupalSettings.alshaya_gtm_create_user_gender : '';
+      data_additional.email_preference = drupalSettings.alshaya_gtm_create_user_newsletter !== undefined ?
+        drupalSettings.alshaya_gtm_create_user_newsletter : '';
+      Object.assign(data, data_additional);
+    }
+
+    dataLayer.push(data);
   };
 
   /**

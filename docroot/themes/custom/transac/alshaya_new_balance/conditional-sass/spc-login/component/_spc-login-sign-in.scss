@@ -157,7 +157,7 @@
     }
 
     @include breakpoint($only-mobile) {
-      height: rem(52);
+      height: rem(46);
 
       .site-brand-home {
         width: auto;

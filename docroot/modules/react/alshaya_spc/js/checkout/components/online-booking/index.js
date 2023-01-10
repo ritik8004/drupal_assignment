@@ -85,6 +85,14 @@ export default class OnlineBooking extends React.Component {
         }
       }
     }
+
+    // If there is no api error, then we are rendering the component. Then we
+    // trigger the view event.
+    if (!hasValue(result.api_error)) {
+      const viewDeliveryScheduleEvent = new CustomEvent('viewDeliveryScheduleEvent');
+      document.dispatchEvent(viewDeliveryScheduleEvent);
+    }
+
     // Set booking Details response and wait to false.
     this.setState({ bookingDetails: result, wait: false });
   }
@@ -266,6 +274,15 @@ export default class OnlineBooking extends React.Component {
       // so that user can select different slot.
       result.hfd_appointment_details = bookingDetails.hfd_appointment_details;
     }
+
+    const holdBookingSlotEvent = new CustomEvent('holdBookingSlotEvent', {
+      detail: {
+        data: {
+          status: result.status,
+        },
+      },
+    });
+    document.dispatchEvent(holdBookingSlotEvent);
 
     // Set booking Details response and close the modal.
     this.setState({ bookingDetails: result, isModalOpen: false });

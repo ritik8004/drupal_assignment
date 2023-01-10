@@ -3,10 +3,9 @@ Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 10 seconds
-    Then I should be on "/user" page
+    And I wait for element "#block-page-title"
     When I am on "{spc_pdp_page}"
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
 
   @desktop
   Scenario: As an Authenticated user, I should be able to write a review for a Product
@@ -21,7 +20,7 @@ Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
     And the element "#reviews-section div.histogram-wrapper .inline-star:first-child" should exist
     And the element ".sorting-filter-wrapper" should exist
     And I click on "a#closed-review-submit" element
-    And I wait 15 seconds
+    And I wait for element ".write-review-form"
     And the element ".write-review-form" should exist
     And the element "#rating .star-counter" should exist
     And I click jQuery "#rating-error > label:nth-child(1) > span" element on page
@@ -41,7 +40,7 @@ Feature: SPC to verify ratings on Bazaar Voice for Authenticated user
   @language
   Scenario: As an Authenticated user, I should be able to write a review for a Product in second language
     When I follow "{language_link}"
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
     Then the element ".content__title_wrapper" should exist
     And the element "#reviews-rating" should exist
     And the element "div.bazaarvoice-strings" should exist

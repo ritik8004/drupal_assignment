@@ -25,6 +25,7 @@ import { cartContainsOnlyVirtualProduct } from '../../utilities/egift_util';
 import { getTopUpQuote } from '../../../../js/utilities/egiftCardHelper';
 import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../js/utilities/helloMemberHelper';
 import { isFreeGiftProduct } from '../../../../js/utilities/price';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 window.authenticatedUserCartId = 'NA';
 
@@ -376,6 +377,11 @@ const getProcessedCartData = async (cartData) => {
     // is applied we will get the has_exclusive_coupon flag value as true from MDC,
     // and we will not render the dynamic promos.
     has_exclusive_coupon: (typeof cartData.cart.extension_attributes.has_exclusive_coupon !== 'undefined') ? cartData.cart.extension_attributes.has_exclusive_coupon : false,
+    // Free shipping text which is used to show the message on free delivery
+    // usp banner in the cart, if free delivery usp is enabled. If the key
+    // "free_shipping_text" is either missing or has an empty value in magento api,
+    // we consider that free delivery usp feature is disabled from MDC.
+    free_shipping_text: (typeof cartData.cart.extension_attributes.free_shipping_text !== 'undefined') ? cartData.cart.extension_attributes.free_shipping_text : null,
     stale_cart: (typeof cartData.stale_cart !== 'undefined') ? cartData.stale_cart : false,
     totals: {
       subtotal_incl_tax: cartData.totals.subtotal_incl_tax,
@@ -607,6 +613,20 @@ const getProcessedCartData = async (cartData) => {
           }
           if (typeof item.extension_attributes.product_media[0] !== 'undefined') {
             data.items[itemKey].media = item.extension_attributes.product_media[0].file;
+          }
+
+          // Get eGift product name for GTM datalayer.
+          // Since, we need to pass data to GTM only in English translation
+          // we use 'topup_card_name_en' field for eGift card topup and for
+          // eGift card use 'item_name_en'.
+          // See [CORE-42487] for API updates reference.
+          if (hasValue(item.extension_attributes.is_topup)
+            && item.extension_attributes.is_topup === '1') {
+            data.items[itemKey].itemGtmName = hasValue(item.extension_attributes.topup_card_name_en)
+              ? item.extension_attributes.topup_card_name_en : '';
+          } else {
+            data.items[itemKey].itemGtmName = hasValue(item.extension_attributes.item_name_en)
+              ? item.extension_attributes.item_name_en : '';
           }
 
           // If eGift product is top-up card add check to the product item.
@@ -853,6 +873,10 @@ const mergeGuestCartToCustomer = async () => {
     // Clear local storage and let the customer continue without association.
     removeCartIdFromStorage();
     StaticStorage.clear();
+
+    // Dispatch event with error details on cart merge.
+    dispatchCustomEvent('onCartMergeError', response);
+
     return;
   }
 

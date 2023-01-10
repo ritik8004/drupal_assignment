@@ -49,5 +49,15 @@ function hook_categories_all_response_alter(array &$data, TermInterface $term) {
 }
 
 /**
+ * Alter the output of /rest/v1/page/advanced resource.
+ *
+ * @param array $response_data
+ *   The output of the API.
+ */
+function hook_advanced_page_resource_response_alter(array &$response_data) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

@@ -133,9 +133,13 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
       return;
     }
     // Set selected payment method for GTM push.
-    let cardType = data.scheme;
+    let cardType;
     if (data.card_type !== undefined && data.scheme !== undefined) {
       cardType = ` ${data.card_type} - ${data.scheme}`;
+    } else {
+      cardType = drupalSettings.payment_methods.checkout_com_upapi !== undefined
+        ? drupalSettings.payment_methods.checkout_com_upapi.gtm_name
+        : 'Credit / Debit Card';
     }
     // Dispatch the event to push into dataLayer for
     // checkoutOut upapi payment method

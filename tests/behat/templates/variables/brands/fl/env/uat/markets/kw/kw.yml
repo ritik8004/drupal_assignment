@@ -6,3 +6,4 @@ variables:
   np_plp_product_page: '/buy-adidas-continental-80-mens-shoes-white-white-white.html/'
   np_plp_page: '/shop-kids/upto-4-years/shoes/'
   spc_egift_page: '/egift/'
+  new_pdp_enabled: 'TRUE'

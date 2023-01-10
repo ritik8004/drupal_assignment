@@ -2,9 +2,11 @@
 
 namespace Drupal\alshaya_behat\Service;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\StockManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityBase;
 use Drupal\Core\Entity\EntityInterface;
@@ -13,6 +15,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -71,11 +74,33 @@ class AlshayaBehatHelper {
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
+   * The api wrapper.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  protected $apiWrapper;
+
+  /**
+   * The api wrapper.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $alshayaApi;
+
+
+  /**
    * Number of skus to fetch.
    *
    * @var int
    */
   protected const SKUS_LIMIT = 10;
+
+  /**
+   * The request stacks service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
 
   /**
    * Constructor for Handlebars Service.
@@ -92,6 +117,12 @@ class AlshayaBehatHelper {
    *   Entity repository.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity storage.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   The acm api wrapper.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
+   *   The mdc api wrapper.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   The request stack service.
    */
   public function __construct(
     Connection $connection,
@@ -99,7 +130,10 @@ class AlshayaBehatHelper {
     StockManager $stock_manager,
     SkuManager $sku_manager,
     EntityRepositoryInterface $entity_repository,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    APIWrapper $api_wrapper,
+    AlshayaApiWrapper $alshaya_api,
+    RequestStack $requestStack
   ) {
     $this->database = $connection;
     $this->httpKernel = $http_kernel;
@@ -107,6 +141,9 @@ class AlshayaBehatHelper {
     $this->skuManager = $sku_manager;
     $this->entityRepository = $entity_repository;
     $this->entityTypeManager = $entity_type_manager;
+    $this->apiWrapper = $api_wrapper;
+    $this->alshayaApi = $alshaya_api;
+    $this->requestStack = $requestStack;
   }
 
   /**
@@ -114,18 +151,17 @@ class AlshayaBehatHelper {
    *
    * @param string $path
    *   Path to entity.
-   * @param int|string $id
-   *   Entity ID.
    *
    * @return bool
    *   TRUE if node loads successfully else false.
    */
-  private function isEntityPageLoading(string $path, int|string $id): bool {
-    $request = Request::create("/$path/$id");
-    $request_success = TRUE;
+  private function isEntityPageLoading(string $path): bool {
+    $request = Request::create($path);
 
     try {
-      $this->httpKernel->handle($request, HttpKernelInterface::SUB_REQUEST);
+      $request->setSession($this->requestStack->getCurrentRequest()->getSession());
+      $res = $this->httpKernel->handle($request, HttpKernelInterface::SUB_REQUEST);
+      $request_success = $res->getStatusCode() === 200;
     }
     catch (\Exception) {
       $request_success = FALSE;
@@ -221,7 +257,7 @@ class AlshayaBehatHelper {
         // Request the node and check if there is any error when loading the
         // node.
         // If there is an error we check the next sku.
-        if (!$this->isEntityPageLoading('node', $node->id())) {
+        if (!$this->isEntityPageLoading('/node/' . $node->id())) {
           continue;
         }
         return $node;
@@ -283,7 +319,7 @@ class AlshayaBehatHelper {
       }
       foreach ($categories as $category) {
         // Skip if category is a parent or if its not loading properly.
-        if (in_array($category, $all_parent_term_ids) || !$this->isEntityPageLoading('taxonomy/term', $category)) {
+        if (in_array($category, $all_parent_term_ids) || !$this->isEntityPageLoading("/taxonomy/term/$category")) {
           continue;
         }
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category);
@@ -301,6 +337,60 @@ class AlshayaBehatHelper {
     }
 
     return NULL;
+  }
+
+  /**
+   * Provides the in-stock Product having a promotion.
+   *
+   * @param string $type
+   *   Promotion types like groupn, groupn_disc etc.
+   *
+   * @return \Drupal\node\NodeInterface|string
+   *   The node object else error message.
+   */
+  public function getWorkingProductWithPromo(string $type): NodeInterface|string {
+    // ACM API to fetch all promotion details.
+    $promotions = $this->apiWrapper->getPromotions('cart');
+    $promotions = is_array($promotions) ? $promotions : [];
+    $promo_types = array_column($promotions, 'action');
+
+    // If no promotion available of given type.
+    if (empty($promotions) || !in_array($type, $promo_types)) {
+      return 'No in-stock products found with given promotion type.';
+    }
+
+    // List of products having the promotion associated with.
+    $products = [];
+    foreach ($promo_types as $key => $promo) {
+      if ($promo === $type && is_array($promotions[$key]['products'])) {
+        foreach ($promotions[$key]['products'] as $item) {
+          if (!empty($item['product_sku'])) {
+            $products[] = $item;
+          }
+        }
+      }
+    }
+    foreach ($products as $item) {
+      // MDC API to fetch SKU details.
+      $product_details = $this->alshayaApi->getSku($item['product_sku']);
+      if (!empty($product_details)
+        && !empty($product_details['name'])
+        && !empty($product_details['custom_attributes'])
+        && $product_details['status'] === 1
+        && $product_details['extension_attributes']['stock_item']['is_in_stock'] === TRUE
+      ) {
+        // @todo Build product url from MDC API for V3 using GraphQL, independent of drupal DB.
+        $node = $this->skuManager->getDisplayNode($item['product_sku']);
+        if ($node instanceof NodeInterface && $this->isEntityPageLoading($node->toUrl()->toString())) {
+          return $node;
+        }
+        else {
+          return 'Available product not found in Drupal Application. Probable sync issue.';
+        }
+      }
+    }
+
+    return 'No in-stock products found with given promotion type.';
   }
 
 }

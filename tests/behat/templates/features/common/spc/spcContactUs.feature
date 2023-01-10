@@ -1,14 +1,14 @@
-@javascript @account @smoke @guest @contact-us @mujikwuat @coskwuat @mujisauat @cosaeuat @coskwuat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @bpaeuat @tbseguat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @bpaeqa @tbskwuat @bbwsauat @mcsaqa @flsauat @hmaeuat @vskwqa @vsaeqa @flkwuat @hmkwqa @mckwuat @vsaeuat @vssauat @bbwkwuat @bbwaeuat @hmkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
+@javascript @account @guest @contact-us @mujikwuat @coskwuat @mujisauat @cosaeuat @coskwuat @mujiaeuat @pbkkwuat @pbksauat @pbkaeuat @bpaeuat @tbseguat @bpkwuat @bpsauat @pbsauat @aeoaeuat @aeokwuat @aeosauat @westelmaeuat @westelmsauat @westelmkwuat @bpaeqa @tbskwuat @bbwsauat @mcsaqa @flsauat @hmaeuat @vskwqa @vsaeqa @flkwuat @hmkwqa @mckwuat @vsaeuat @vssauat @bbwkwuat @bbwaeuat @hmkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
 Feature: Verify the Contact Us page on the site as a guest user
 
   Background:
     When I go to "/contact"
-    And I wait for the page to load
+    And I wait for element "#block-page-title h1.c-page-title"
     Then I should see an "#block-page-title h1.c-page-title" element
 
-  @desktop
+  @desktop @smoke
   Scenario: Verify contact us form is filled successfully and validation message shows up for required fields
-    When I click on "#edit-submit" element
+    Then I click on "#edit-submit" element
     Then I should see an "#edit-first-name-error" element
     Then I should see an "#edit-last-name-error" element
     Then I should see an "#edit-email-error" element
@@ -41,7 +41,7 @@ Feature: Verify the Contact Us page on the site as a guest user
     Then I click on "#edit-submit" element
     Then I should see a ".webform-confirmation__message" element on page
 
-  @desktop
+  @desktop @smoke
   Scenario: Verify contact us form is filled successfully for Email by the user without mobile number
     When I fill in "first_name" with "Test"
     And I fill in "last_name" with "User"

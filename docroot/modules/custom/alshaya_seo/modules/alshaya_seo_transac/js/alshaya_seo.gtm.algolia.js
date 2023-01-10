@@ -111,7 +111,7 @@
           if (e.target !== cartRemoveElement) {
             Drupal.alshaya_seo_gtm_push_product_clicks(
               $(this),
-              drupalSettings.reactTeaserView.price.currency,
+              drupalSettings.gtm.currency,
               'Search Results Page',
               $(this).attr('data-insights-position')
             );

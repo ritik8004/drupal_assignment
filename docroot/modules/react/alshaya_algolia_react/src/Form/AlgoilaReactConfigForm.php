@@ -78,6 +78,14 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('hide_grid_toggle'),
     ];
 
+    $form['default_col_grid'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Default col grid'),
+      '#default_value' => $config->get('default_col_grid'),
+      '#options' => ['small' => $this->t('Small'), 'large' => $this->t('Large')],
+      '#description' => $this->t('Set value for default col grid.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -92,6 +100,7 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       ->set('top_results', $form_state->getValue('top_results'))
       ->set('items_per_page', $form_state->getValue('items_per_page'))
       ->set('hide_grid_toggle', $form_state->getValue('hide_grid_toggle'))
+      ->set('default_col_grid', $form_state->getValue('default_col_grid'))
       ->save();
 
     parent::submitForm($form, $form_state);

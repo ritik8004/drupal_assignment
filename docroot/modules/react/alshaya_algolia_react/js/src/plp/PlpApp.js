@@ -70,6 +70,10 @@ const PlpApp = ({
   if (ruleContext !== undefined && ruleContext.length > 0) {
     context = ruleContext.split(',');
   }
+  let defaultcolgrid = 'small';
+  if (drupalSettings.algoliaSearch.defaultColgrid !== null) {
+    defaultcolgrid = drupalSettings.algoliaSearch.defaultColgrid;
+  }
 
   const { indexName } = drupalSettings.algoliaSearch.listing;
 
@@ -248,7 +252,7 @@ const PlpApp = ({
       && (
         <BecomeHelloMember />
       )}
-      <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
+      <div id="plp-hits" className={`c-products-list product-${defaultcolgrid} view-algolia-plp`}>
         <PlpResultInfiniteHits
           defaultpageRender={defaultpageRender || false}
           gtmContainer="product listing page"

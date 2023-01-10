@@ -9,6 +9,73 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add magento settings back in config.
+ */
+function alshaya_api_update_9402() {
+  $alshaya_api_settings = Settings::get('alshaya_api.settings');
+  $alshaya_api_config = \Drupal::configFactory()->getEditable('alshaya_api.settings');
+
+  $alshaya_api_config->set('magento_host', $alshaya_api_settings['magento_host']);
+  $alshaya_api_config->set('verify_ssl', $alshaya_api_settings['verify_ssl']);
+  $alshaya_api_config->set('magento_api_base', $alshaya_api_settings['magento_api_base']);
+
+  foreach (\Drupal::service('language_manager')->getLanguages() as $langcode => $language) {
+    $alshaya_api_config->set("magento_lang_prefix.$langcode", Settings::get('magento_lang_prefix')[$langcode]);
+  }
+
+  if (!alshaya_is_env_prod()) {
+    $alshaya_api_config->set('consumer_key', $alshaya_api_settings['consumer_key']);
+    $alshaya_api_config->set('consumer_secret', $alshaya_api_settings['consumer_secret']);
+    $alshaya_api_config->set('access_token', $alshaya_api_settings['access_token']);
+    $alshaya_api_config->set('access_token_secret', $alshaya_api_settings['access_token_secret']);
+  }
+
+  $alshaya_api_config->save();
+
+  require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
+  $env = alshaya_get_site_environment();
+
+  if ($env === 'local') {
+    // @codingStandardsIgnoreLine
+    global $host_site_code;
+    $home = '/home/vagrant';
+    if (getenv('LANDO')) {
+      $home = '/app/local_home';
+    }
+    $site_country_code = alshaya_get_site_country_code($host_site_code);
+  }
+  else {
+    global $_acsf_site_name;
+    $home = $_SERVER['HOME'];
+    $site_country_code = alshaya_get_site_country_code($_acsf_site_name);
+  }
+
+  $acsf_site_code = $site_country_code['site_code'];
+  $country_code = $site_country_code['country_code'];
+  $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
+  $overridding_settings_files = [
+    $settings_path,
+    $settings_path . '-' . $acsf_site_code,
+    $settings_path . '-' . $acsf_site_code . $country_code,
+  ];
+
+  foreach ($overridding_settings_files as $file) {
+    $file = $file . '.yml';
+    if (file_exists($file)) {
+      \Drupal::logger('alshaya_api')->notice('Deleting file @file, existing contents of the file @content in JSON string', [
+        '@file' => $file,
+        '@content' => json_encode(Yaml::parse((file_get_contents($file)))),
+      ]);
+      unlink($file);
+    }
+  }
+
+}
 
 /**
  * Implements hook_update_N().

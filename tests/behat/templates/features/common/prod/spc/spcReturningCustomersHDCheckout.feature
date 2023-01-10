@@ -14,10 +14,10 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/cart/login" page
@@ -40,7 +40,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element
@@ -57,10 +57,10 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
@@ -83,7 +83,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element
@@ -100,10 +100,10 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
@@ -126,7 +126,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I click the anchor link ".checkout-link.submit" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element

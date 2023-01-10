@@ -7,7 +7,6 @@
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Render\Markup;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\TypedData\Exception\ReadOnlyException;
 
 /**
@@ -16,6 +15,10 @@ use Drupal\Core\TypedData\Exception\ReadOnlyException;
 function alshaya_xb_page_attachments(array &$attachments) {
   if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
     $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_cross_border';
+  }
+
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.user.canonical') {
+    $attachments['#attached']['library'][] = 'alshaya_xb/alshaya_xb_merge_cart_error_handler';
   }
 }
 
@@ -36,7 +39,7 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
   }
 
   $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $settings = Settings::get('magento_lang_prefix');
+  $settings = \Drupal::config('alshaya_api.settings')->get('magento_lang_prefix');
   $ge_store_code = $settings[$language];
   $config = \Drupal::config('alshaya_xb.settings');
   $ge_js_src = $config->get('globale_js_url') ?? '';
@@ -193,8 +196,12 @@ function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $e
   if (isset($product['extension']['xb_fixed_price'])) {
     $fixed_prices = [];
     foreach ($product['extension']['xb_fixed_price'] as $fixed_price) {
-      // If special price has value then use it with country code.
-      $fixed_prices[$fixed_price['country_code']] = $fixed_price['special_price'] ?? $fixed_price['price'];
+      if (!empty($fixed_price['price'])) {
+        $fixed_prices[$fixed_price['country_code']]['price'] = _alshaya_acm_format_price_with_decimal($fixed_price['price']);
+      }
+      if (!empty($fixed_price['special_price'])) {
+        $fixed_prices[$fixed_price['country_code']]['special_price'] = _alshaya_acm_format_price_with_decimal($fixed_price['special_price']);
+      }
     }
 
     try {
@@ -215,4 +222,34 @@ function alshaya_xb_acq_sku_product_sku_alter(SKU $sku, array $product, array $e
 function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
   $currency['xb']['en'] = 'AED';
   $currency['xb']['ar'] = 'AED';
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  // Set delivery method for XB order.
+  if (!empty($order['extension']['globale']['shipping_method'])) {
+    $build['#order_details']['delivery_method'] = $order['extension']['globale']['shipping_method'];
+  }
+
+  // Set billing method for XB order.
+  if (!empty($order['extension']['globale']['billing_method'])) {
+    $build['#order_details']['payment_method'] = $order['extension']['globale']['billing_method'];
+  }
+
+  if (empty($build["#cancelled_products"])) {
+    return;
+  }
+
+  foreach ($build["#cancelled_products"] as &$item) {
+    if (!$item['is_item_cancelled']) {
+      continue;
+    }
+
+    // Update refund product price from amount_refunded.
+    $item['refund_amount'] = $item['amount_refunded'];
+    // Update refund total for product.
+    $item['total'] = alshaya_acm_price_format($item['refund_amount'], [], '', $order['order_currency_code']);
+  }
 }

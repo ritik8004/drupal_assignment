@@ -22,6 +22,7 @@ $_plp_secondary_cta_hover: rgba(0, 0, 0, 0.1);
 $white_smoke : #f2f2f2;
 $bright_gray: #eaeaea;
 $dark_gray: #222;
+$black_one: #333;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -607,6 +608,8 @@ $autocomplete_text: $grey;
 $spc-deliver-button: $royal-blue;
 $spc-edit-button: $black;
 $spc-shipping-price: $grey-light;
+$spc-cart-free-delivery-message-bg: $black_one;
+$spc-cart-free-delivery-txt: $white;
 
 //Algolia search bar.
 $algolia-input-text: $black;

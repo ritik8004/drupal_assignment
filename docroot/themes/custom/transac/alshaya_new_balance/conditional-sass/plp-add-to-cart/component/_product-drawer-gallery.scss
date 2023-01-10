@@ -3,6 +3,11 @@
     .slick-slider {
       .slick-slide {
         min-height: auto;
+
+        img {
+          aspect-ratio: 1;
+          object-fit: contain;
+        }
       }
     }
   }

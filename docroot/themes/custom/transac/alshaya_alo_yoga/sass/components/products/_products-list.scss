@@ -264,6 +264,10 @@ article[data-vmode=search_result] {
           top: rem(8);
         }
       }
+
+      &.dual-color-tone {
+        @include dual-tone-color;
+      }
     }
 
     .more-color-swatch {

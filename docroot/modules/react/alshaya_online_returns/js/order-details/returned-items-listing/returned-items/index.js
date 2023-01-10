@@ -16,10 +16,12 @@ const ReturnedItems = ({
           <div className="return-status-wrapper">
             <div className="return-status">
               <span className={`status-label ${returnStatusClass}`}>{returnData.returnInfo.extension_attributes.customer_status}</span>
-              <span className="status-message">
-                {' - '}
-                {returnData.returnInfo.extension_attributes.description}
-              </span>
+              { returnData.returnInfo.extension_attributes.description && (
+                <span className="status-message">
+                  {' - '}
+                  {returnData.returnInfo.extension_attributes.description}
+                </span>
+              )}
             </div>
           </div>
         )}

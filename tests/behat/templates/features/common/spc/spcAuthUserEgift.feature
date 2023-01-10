@@ -3,8 +3,7 @@ Feature: SPC Checkout Egift feature for Authenticated user
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 10 seconds
-    Then I should be on "/user" page
+    And I wait for element "#block-page-title"
     When I am on "{spc_egift_page}"
     And I wait for the page to load
 
@@ -41,13 +40,11 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "/en/egift-card/purchase"
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait for AJAX to finish
-    And I wait 30 seconds
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     Then I should see an ".spc-content .spc-cart-items .egift-product-title" element
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 30 seconds
-    And I wait for the page to load
+    When I follow "continue to checkout"
+    And I wait for element ".checkout-link.submit"
     And I should see an ".redeem-egift-card" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -55,19 +52,16 @@ Feature: SPC Checkout Egift feature for Authenticated user
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And I add the billing address on checkout page
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
     And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
+    And I add the billing address on checkout page
+    And I click the anchor link ".checkout-link.submit" on page
+    And I wait for element "#block-page-title"
     And I wait for the page to load
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
+    Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
+    Then the element ".discount-total" should exist
 
   @egift-card-link
   Scenario: As an authenticated user, I should be able to use Link Account option for Egift feature
@@ -126,19 +120,16 @@ Feature: SPC Checkout Egift feature for Authenticated user
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And I add the billing address on checkout page
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
     And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
+    And I add the billing address on checkout page
+    And I click the anchor link ".checkout-link.submit" on page
+    And I wait for element "#block-page-title"
     And I wait for the page to load
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
+    Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
+    Then the element ".discount-total" should exist
 
   @language @desktop
   Scenario: As an Authenticated user, I should be able to see the E-gift section on the arabic page
@@ -179,11 +170,11 @@ Feature: SPC Checkout Egift feature for Authenticated user
     And I wait 10 seconds
     And I wait for the page to load
     Then I should be on "ar/egift-card/purchase"
-    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then I should see an ".spc-content .spc-cart-items .egift-product-title" element
-    When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    When I follow "continue to checkout"
     And I wait 30 seconds
     And I wait for the page to load
     And I should see an ".redeem-egift-card" element
@@ -193,16 +184,16 @@ Feature: SPC Checkout Egift feature for Authenticated user
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And I add the billing address on checkout page
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
     And I wait for AJAX to finish
+    And I add the billing address on checkout page
+    And I click the anchor link ".checkout-link.submit" on page
+    And I wait for element "#block-page-title"
     And I wait for the page to load
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
+    Then I should see "{spc_auth_user_email}"
+    Then I should see "{order_detail}"
+    Then the element ".discount-total" should exist
 
   @language @desktop @egift-card-link
   Scenario: As an authenticated user, I should be able to use Link Account option for Egift feature for second language
@@ -271,16 +262,13 @@ Feature: SPC Checkout Egift feature for Authenticated user
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And I add the billing address on checkout page
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
     And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
+    And I add the billing address on checkout page
+    And I click the anchor link ".checkout-link.submit" on page
+    And I wait for element "#block-page-title"
     And I wait for the page to load
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
+    Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
+    Then the element ".discount-total" should exist

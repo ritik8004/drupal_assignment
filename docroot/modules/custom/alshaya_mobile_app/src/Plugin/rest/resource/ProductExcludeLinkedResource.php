@@ -397,13 +397,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     }
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
     $data['promotions'] = $this->getPromotions($sku);
-    $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
-    if ($promo_label) {
-      $data['promotions'][] = [
-        'text' => $promo_label,
-      ];
-    }
-
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
 
     if ($sku->bundle() === 'configurable') {
@@ -494,7 +487,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $this->cache['tags'] = Cache::mergeTags(
       $this->cache['tags'],
-      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags()
+      $this->configFactory->get('alshaya_click_collect.settings')->getCacheTags(),
+      $this->configFactory->get('alshaya_acm_product.settings')->getCacheTags()
     );
 
     return [

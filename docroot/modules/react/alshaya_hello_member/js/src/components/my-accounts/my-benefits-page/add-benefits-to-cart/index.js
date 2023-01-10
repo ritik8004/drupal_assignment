@@ -76,7 +76,9 @@ class AddBenefitsToCart extends React.Component {
       const params = getHelloMemberCustomerInfo();
       if (!hasValue(params.error)) {
         showFullScreenLoader();
-        const { title, codeId, promotionType } = this.props;
+        const {
+          title, codeId, offerType, promotionType,
+        } = this.props;
         let isAddedToBag = false;
         let benefitType = 'offer';
         let response = null;
@@ -96,7 +98,7 @@ class AddBenefitsToCart extends React.Component {
           }
         } else {
           params.offerCode = codeId;
-          params.offerType = promotionType;
+          params.offerType = offerType;
           response = await callHelloMemberApi('addMemberOffersToCart', 'POST', params);
           if (hasValue(response.data) && !hasValue(response.data.error)) {
             isAddedToBag = true;

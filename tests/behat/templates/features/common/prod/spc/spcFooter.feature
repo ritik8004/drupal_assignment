@@ -54,7 +54,7 @@ Feature: Test Footer on the site
     And I click on Add-to-cart button
     And I wait 15 seconds
     And I wait for the page to load
-    Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    Then I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
     And I wait for the page to load
     And I scroll to the ".c-footer" element

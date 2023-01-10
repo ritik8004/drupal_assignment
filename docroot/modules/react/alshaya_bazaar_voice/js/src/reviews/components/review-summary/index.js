@@ -27,7 +27,7 @@ export default class ReviewSummary extends React.Component {
 
   constructor(props) {
     super(props);
-    bazaarVoiceSettings = getbazaarVoiceSettings();
+    bazaarVoiceSettings = getbazaarVoiceSettings(props.productId);
     this.state = {
       reviewsSummary: '',
       reviewsProduct: '',
@@ -400,6 +400,7 @@ export default class ReviewSummary extends React.Component {
     const {
       isNewPdpLayout,
       isWriteReview,
+      productId,
     } = this.props;
 
     let newPdp = isNewPdpLayout;
@@ -425,6 +426,7 @@ export default class ReviewSummary extends React.Component {
                   reviewedByCurrentUser={userDetails.productReview !== null}
                   newPdp={newPdp}
                   isWriteReview={isWriteReview || false}
+                  productId={productId}
                 />
               </div>
             </div>
@@ -445,6 +447,7 @@ export default class ReviewSummary extends React.Component {
               isNewPdpLayout={isNewPdpLayout}
               reviewedByCurrentUser={userDetails.productReview !== null}
               isWriteReview={isWriteReview || false}
+              productId={productId}
             />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>

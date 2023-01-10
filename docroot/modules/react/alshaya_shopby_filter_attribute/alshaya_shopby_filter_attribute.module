@@ -77,7 +77,7 @@ function alshaya_shopby_filter_attribute_acq_sku_commerce_category_alter(TermInt
 /**
  * Implements hook_alshaya_acm_product_category_tree_data_alter().
  */
-function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_alter(&$data, $term) {
+function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_alter(&$data, $term, $langcode) {
   // Load shop by filter attribute module's configs.
   $shopby_filter_attribute_configs = \Drupal::service('alshaya_shopby_filter_attribute.helper')->getShopByFilterAttributeConfigs();
 
@@ -140,7 +140,7 @@ function alshaya_shopby_filter_attribute_alshaya_acm_product_category_tree_data_
   $path = Url::fromRoute(
     'entity.taxonomy_term.canonical',
     ['taxonomy_term' => $parent_target_id],
-    ['language' => \Drupal::languageManager()->getCurrentLanguage()]
+    ['language' => \Drupal::languageManager()->getLanguage($langcode)]
   )->toString(TRUE)->getGeneratedUrl();
 
   $data[$term->tid]['data_target_url'] = $path ?? '';

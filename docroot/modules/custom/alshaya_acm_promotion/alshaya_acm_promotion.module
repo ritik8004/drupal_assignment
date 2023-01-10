@@ -496,7 +496,8 @@ function alshaya_acm_promotion_alshaya_acm_product_light_product_data_alter(SKU 
 function alshaya_acm_promotion_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
-  $data['free_gift_promotion'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift', 'app');
+  $free_gift = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift', 'app');
+  $data['free_gift_promotion'] = !empty($free_gift) ? $free_gift : (object) $free_gift;
 }
 
 /**

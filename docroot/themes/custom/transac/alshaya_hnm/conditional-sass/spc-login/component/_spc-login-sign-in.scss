@@ -5,6 +5,8 @@
 
       @include arabic-letter-spacing;
     }
+
+    display: none;
   }
 
   .multistep-login {
@@ -98,11 +100,32 @@
     background-color: $block_acm_customer_txt;
   }
 
-  @include breakpoint($only-mobile) {
+  @include breakpoint($upto-desktop) {
     margin: 0 !important;
 
     .site-brand-home a {
       margin-#{$left}: 0;
+    }
+  }
+
+  .page-standard {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .site-brand-wrapper {
+    @include breakpoint($only-mobile) {
+      border-color: $spc-checkout-header-border;
+      height: rem(56);
+    }
+
+    @include breakpoint($tablet) {
+      height: rem(99);
+      border-bottom: rem(1) solid $spc-checkout-header-border;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: none;
     }
   }
 }

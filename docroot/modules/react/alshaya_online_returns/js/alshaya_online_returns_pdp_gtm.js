@@ -11,7 +11,12 @@
     const sku = $(node).attr('data-sku');
     const viewMode = $(node).attr('data-vmode');
     const productKey = Drupal.getProductKeyForProductViewMode(viewMode);
-    const productInfo = window.commerceBackend.getProductData(sku, productKey);
+
+    // On non-buyable PDPs, 'alshaya_acm_product.utility.js' is not getting
+    // attached.
+    const productInfo = (typeof window.commerceBackend.getProductData !== 'undefined')
+      ? window.commerceBackend.getProductData(sku, productKey)
+      : null;
 
     if (productInfo === null) {
       return;

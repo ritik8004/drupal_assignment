@@ -2,9 +2,9 @@ name: Behat Smoke Tests
 
 on:
   workflow_dispatch:
-#  schedule:
+  schedule:
     # Run every day at 8AM IST.
-#    - cron: '30 2 * * *'
+    - cron: '30 2 * * *'
 
 defaults:
   run:
@@ -15,12 +15,6 @@ jobs:
     name: Validate Smoke Tests
 
     runs-on: ubuntu-latest
-    container:
-      image: devwithlando/php:8.0-fpm-4
-
-    services:
-      selenium:
-        image: selenium/standalone-chrome
 
     env:
       CI: GITHUB_ACTIONS
@@ -77,25 +71,29 @@ jobs:
             docroot/modules/react/package-lock.json
             docroot/themes/custom/package-lock.json
 
+      - name: Cache node modules
+        id: npm-cache-dir
+        run: |
+          echo dir=$(npm config get cache) >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            "${{ steps.npm-cache-dir.outputs.dir }}"
+            ~/.npm
+            ~/.nvm
+          key: ${{ runner.os }}-node
+
       - name: Setup ChromeDriver
         uses: nanasess/setup-chromedriver@v1
 
-#      - name: Run ChromeDriver
-#        run: |
-#          export DISPLAY=:99
-#          chromedriver --url-base=/wd/hub &
-#
-#      - name: Setup Chrome
-#        uses: browser-actions/setup-chrome@latest
+      - name: Run ChromeDriver
+        run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
 
-#      - name: Verify Chrome
-#        run: chrome --version
-
-      - name: Setup environment
-        run: bash ${SCRIPT_DIR}/setup_env.sh
-
-      - name: Setup Behat credentials
-        run: echo "${{ env.BEHAT_SECRET_KEY }}" > ${GITHUB_WORKSPACE}/tests/behat/creds.json
+      - name: Setup Tests
+        run: bash ${SCRIPT_DIR}/setup_smoke_tests.sh
 
       - name: Test app
         run: bash ${SCRIPT_DIR}/test_smoke.sh

@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Install alshaya_rcs_mobile_app module.
+ */
+function alshaya_rcs_update_9402() {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_mobile_app')) {
+    \Drupal::service('module_installer')->install(['alshaya_rcs_mobile_app']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install all required modules.
  */
 function alshaya_rcs_update_9401(&$sandbox) {
