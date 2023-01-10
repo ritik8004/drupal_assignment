@@ -613,6 +613,10 @@ function _alshaya_aura_react_translations() {
         'ar' => 'an Aura loyalty account no. @card_number is associated with your email address. It just takes one click to link.',
         'context' => 'aura',
       ],
+      'An Aura loyalty card is associated with your email adress. It just takes one click to link.' => [
+        'ar' => 'An Aura loyalty card is associated with your email adress. It just takes one click to link.',
+        'context' => 'aura',
+      ],
     ],
   ];
 }

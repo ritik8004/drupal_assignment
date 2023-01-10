@@ -82,7 +82,7 @@ const AuraMyAccountOldCardFound = (props) => {
       </div>
       <div className="aura-myaccount-no-linked-card-description old-card-found">
         <div className="header">
-          { Drupal.t('An Aura loyalty card is associated with your email adress. It just a takes one click to link.', {}, { context: 'aura' })}
+          { Drupal.t('An Aura loyalty card is associated with your email adress. It just takes one click to link.', {}, { context: 'aura' })}
           <span className="bold">{Drupal.t('Do you want to link now?')}</span>
           <button type="button" onClick={onClickArrowHead}>
             <span className={`arrowHead ${wrapperClass}`}>&nbsp;</span>
