@@ -1,3 +1,9 @@
+.configurable-product-form-wrapper {
+  .gallery-wrapper {
+    position: relative;
+  }
+}
+
 @include breakpoint($only-mobile) {
   .matchback-processed {
     .matchback-image-wrapper {
