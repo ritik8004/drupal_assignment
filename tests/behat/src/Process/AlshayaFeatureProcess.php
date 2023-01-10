@@ -47,6 +47,7 @@ class AlshayaFeatureProcess {
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'mobileOTP';
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'ContentCreation';
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPLPAddtocart';
+    $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'aura';
     if (isset($parameters['variables']['new_pdp_enabled'])) {
       $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPDP';
     }
