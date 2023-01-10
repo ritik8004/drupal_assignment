@@ -1,0 +1,94 @@
+// 404 and Maintenance.
+
+.maintenance-page {
+  .maintenance__logo {
+    float: none;
+    text-align: center;
+  }
+
+  .not-found {
+    padding: 1.25rem;
+    margin: 1.6875rem auto;
+    border: 0.0625rem solid $maintenance_container_border;
+    width: 95%;
+    background-color: $maintenance_container_bg;
+
+    @include breakpoint($only-mobile) {
+      padding: 0.5rem;
+    }
+
+    &::after {
+      display: none;
+    }
+
+    .not-found__body {
+      color: $maintenance_container_text;
+      font-family: $alshaya-thin;
+      background-color: $maintenance_info_bg;
+      width: 100%;
+      text-align: center;
+
+      @include breakpoint($only-mobile) {
+        height: 20rem;
+      }
+
+      .en-title {
+        color: $maintenance_info_title-text;
+        font-size: 1.75rem;
+        font-family: $alshaya-bold;
+        margin-bottom: 1.5rem;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1.125rem;
+        }
+      }
+
+      .ar-title {
+        font-size: 1.875rem;
+        font-family: $alshaya-arabic-thin-nodir;
+        color: $maintenance_info_title-text;
+        font-weight: bold;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1.25rem;
+        }
+      }
+
+      .ar-msg {
+        font-size: 1.5rem;
+        font-family: $alshaya-arabic-thin-nodir;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.75rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          font-size: 1.25rem;
+        }
+      }
+
+      .en-msg {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.75rem;
+        }
+      }
+
+      @include breakpoint($tablet) {
+        position: static;
+      }
+
+      .not-found__body__container {
+        @include breakpoint($desktop) {
+          padding: 7.3125rem 17.1875rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          padding: 7.3125rem 3.5rem;
+        }
+      }
+    }
+  }
+}
