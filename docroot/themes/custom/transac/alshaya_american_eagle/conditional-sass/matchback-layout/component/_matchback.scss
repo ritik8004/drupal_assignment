@@ -38,6 +38,16 @@
 
 @include breakpoint($tablet) {
   .matchback-processed {
+    .wishlist-pdp-matchback {
+      top: rem(6);
+      #{$right}: rem(6);
+
+      .wishlist-icon {
+        width: rem(22);
+        height: rem(21);
+      }
+    }
+
     .subtitle.crossell-title {
       padding-bottom: 0;
       margin-bottom: rem(45);
@@ -228,6 +238,10 @@
 
 @include breakpoint($desktop) {
   .matchback-processed {
+    .wishlist-pdp-matchback {
+      #{$right}: rem(16);
+    }
+
     &.horizontal-crossell {
       .basic-details-wrapper {
         .field--name-field-skus {
