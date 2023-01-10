@@ -14,7 +14,6 @@
       .step {
         span {
           @include breakpoint($only-mobile) {
-            font-size: rem(14);
             padding-top: rem(3);
           }
 
