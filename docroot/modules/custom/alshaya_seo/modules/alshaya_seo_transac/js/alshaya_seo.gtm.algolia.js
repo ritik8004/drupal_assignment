@@ -104,7 +104,7 @@
 
     // Push load more products click event to GTM.
     $('.show-algolia-result').once('bind-loadmore-button-click').on('click', '.pager button', function () {
-      var statsText = $('.pager .ais-Stats-text').attr('gtm-pagination-stats');
+      let statsText = $('.pager .ais-Stats-text').attr('gtm-pagination-stats');
       Drupal.alshayaSeoGtmPushEcommerceEvents({
         eventAction: 'plp clicks',
         eventLabel: 'load more products',

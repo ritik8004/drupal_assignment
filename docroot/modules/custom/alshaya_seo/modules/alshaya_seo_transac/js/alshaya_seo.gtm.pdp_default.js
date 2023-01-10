@@ -53,7 +53,7 @@
       // Push share this page click event to GTM.
       $('.sharethis-wrapper').once('share-this').on('click', 'span', function () {
         // Set sharing medium based on the element clicked.
-        var sharingMedium = $(this).attr('displaytext') ? $(this).attr('displaytext') : '';
+        let sharingMedium = $(this).attr('displaytext') ? $(this).attr('displaytext') : '';
 
         Drupal.alshayaSeoGtmPushEcommerceEvents({
           eventAction: 'share this page',
