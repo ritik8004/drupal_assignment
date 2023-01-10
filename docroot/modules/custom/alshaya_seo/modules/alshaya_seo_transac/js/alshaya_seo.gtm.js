@@ -1214,6 +1214,25 @@
   };
 
   /**
+   * Helper function to push PLP and PDP ecommerce events to GTM.
+   *
+   * @param eventData
+   *  Contains event details eg: 'eventLabel', 'eventAction' etc.
+   */
+  Drupal.alshayaSeoGtmPushEcommerceEvents = function (eventData) {
+    if (Drupal.hasValue(eventData)) {
+      var data = {
+        event: 'ecommerce',
+        eventCategory: 'ecommerce',
+        eventAction: eventData.eventAction,
+        eventLabel: eventData.eventLabel,
+        eventLabel2: Drupal.hasValue(eventData.eventLabel2) ? eventData.eventLabel2 : '',
+      };
+      dataLayer.push(data);
+    }
+  };
+
+  /**
    * Helper function to push lead events.
    *
    * @param leadType
