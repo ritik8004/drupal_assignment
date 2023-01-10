@@ -109,7 +109,7 @@ function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state,
     ];
     $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
   }
-  if ($form_id == "user_form") {
+  if ($form_id === 'user_form') {
     $form['#title'] = t('My Details', [], ['context' => 'hello_member']);
     $form['hello_member'] = [
       '#type' => 'details',
@@ -119,7 +119,7 @@ function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state,
     ];
   }
 
-  if ($form_id == "user_register_form" or $form_id == "user_form") {
+  if ($form_id === 'user_register_form' or $form_id === 'user_form') {
     /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
     $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
     // Only add if hello member enabled.
