@@ -95,7 +95,7 @@ function alshaya_hello_member_theme() {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id == "user_register_form") {
+  if ($form_id === 'user_register_form') {
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
       '#weight' => -12,
