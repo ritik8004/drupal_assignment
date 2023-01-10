@@ -171,7 +171,7 @@ function alshaya_performance_page_attachments_alter(array &$attachments) {
     }
 
     // Attach cls slp styles to search list page.
-    if (\Drupal::service('path.current')->getPath() == '/search') {
+    if (\Drupal::routeMatch()->getRouteName() == 'alshaya_algolia_react.search') {
       $attachments['#attached']['library'][] = 'alshaya_white_label/cls-initial-layout-slp';
     }
   }

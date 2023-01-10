@@ -18,18 +18,14 @@
             }
 
             .view-search {
-              .view-content {
-                .views-row {
-                  .product-plp-detail-wrapper {
-                    .field--name-name {
-                      height: rem(20);
-                      margin-top: rem(22);
-                    }
+              .product-plp-detail-wrapper {
+                .field--name-name {
+                  height: rem(20);
+                  margin-top: rem(22);
+                }
 
-                    .special-price-block {
-                      height: rem(19);
-                    }
-                  }
+                .special-price-block {
+                  height: rem(20);
                 }
               }
 
@@ -52,23 +48,15 @@
 
         .show-algolia-result {
           .c-content__region {
-            .container-wrapper {
-              height: rem(6374);
+            .view-content {
+              height: rem(6110);
 
-              .view-search {
-                height: rem(6280);
+              .views-row {
+                height: rem(312);
+                margin-bottom: rem(28);
 
-                .view-content {
-                  height: rem(6104);
-
-                  .views-row {
-                    height: rem(312);
-                    margin-bottom: rem(27);
-
-                    .alshaya_search_mainimage {
-                      height: rem(247);
-                    }
-                  }
+                .alshaya_search_mainimage {
+                  height: rem(250);
                 }
               }
             }
@@ -83,30 +71,22 @@
       .page-wrapper {
         height: rem(5867);
 
-        .show-algolia-result {
-          height: rem(5843);
+        .container-wrapper {
+          height: rem(5770);
 
-          .container-wrapper {
-            height: rem(5769);
+          .block-alshaya-grid-count-block {
+            height: rem(48);
+          }
 
-            .block-alshaya-grid-count-block {
-              height: rem(47);
-            }
+          .view-content {
+            height: rem(5546);
 
-            .view-search {
-              height: rem(5722);
+            .views-row {
+              height: rem(420);
+              margin-bottom: rem(50);
 
-              .view-content {
-                height: rem(5546);
-
-                .views-row {
-                  height: rem(414);
-                  margin-bottom: rem(49);
-
-                  .alshaya_search_mainimage {
-                    height: rem(349);
-                  }
-                }
+              .alshaya_search_mainimage {
+                height: rem(350);
               }
             }
           }
@@ -120,54 +100,42 @@
       .page-wrapper {
         height: rem(4548);
 
-        .show-algolia-result {
-          height: rem(4524);
+        .ais-InstantSearch__root {
+          height: rem(4450);
 
-          .ais-InstantSearch__root {
-            height: rem(4450);
+          .c-sidebar-first {
+            .c-facet__blocks {
+              height: rem(464);
 
-            .c-sidebar-first {
-              .c-facet__blocks {
-                height: rem(463);
+              .c-accordion {
+                height: rem(450);
+                margin-top: rem(16);
 
-                .c-accordion {
-                  height: rem(447);
-                  margin-top: rem(16);
+                .active {
+                  height: rem(47);
+                }
 
-                  .active {
-                    height: rem(47);
-                  }
+                ul {
+                  height: rem(380);
 
-                  ul {
-                    height: rem(380);
-
-                    li {
-                      height: rem(20);
-                      margin-bottom: rem(20);
-                    }
+                  li {
+                    height: rem(20);
+                    margin-bottom: rem(20);
                   }
                 }
               }
             }
+          }
 
-            .container-wrapper {
-              height: rem(4450);
+          .view-content {
+            height: rem(4227);
 
-              .view-search {
-                height: rem(4403);
+            .views-row {
+              height: rem(420);
+              margin-bottom: rem(50);
 
-                .view-content {
-                  height: rem(4227);
-
-                  .views-row {
-                    height: rem(420);
-                    margin-bottom: rem(50);
-
-                    .alshaya_search_mainimage {
-                      height: rem(355);
-                    }
-                  }
-                }
+              .alshaya_search_mainimage {
+                height: rem(355);
               }
             }
           }
