@@ -1,4 +1,4 @@
-library: 'https://www.datadoghq-browser-agent.com/datadog-logs.js'
+library: 'https://www.datadoghq-browser-agent.com/datadog-logs-v4.js'
 token: ''
 application: 'datadoghq.eu'
 admin_pages: 'hidden'
