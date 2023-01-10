@@ -153,43 +153,6 @@ function alshaya_aeo_transac_alshaya_performance_preload_alter(array &$preload) 
 }
 
 /**
- * Implements hook_preprocess_html().
- */
-function alshaya_aeo_transac_preprocess_html(&$variables) {
-  $config = \Drupal::config('alshaya_super_category.settings');
-  // Check super category feature status.
-  if (!$config->get('status')) {
-    return;
-  }
-
-  // Add class to body tag if super-category feature is enabled.
-  $variables['attributes']['class'][] = 'super-category-enabled';
-  // Add super category css library to show super catgeory menus.
-  $variables['#attached']['library'][] = 'alshaya_white_label/super-category';
-
-  // We need an additional class on body tag for showing search input field
-  // expanded when the current page is a super category home page except the
-  // site home page. For example, in AEO, we have two super categories for now
-  // i.e. Americal Eagle and Aerie so we need new class on Aerie home page only
-  // as Americal Eagle home page is set to site home page.
-  // Get the root or super categories.
-  /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
-  $super_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-
-  // Get the product category term from the URL.
-  $term_from_route = $super_category_tree->getCategoryTermFromRoute();
-
-  // Get all root terms or super categories.
-  $super_categories = $super_category_tree->getCategoryRootTerms();
-
-  // Check if we have term from route exist in super/root category list and add
-  // a helper class for FE to update styles.
-  if (!empty($term_from_route) && isset($super_categories[$term_from_route->id()])) {
-    $variables['attributes']['class'][] = 'super-category-home';
-  }
-}
-
-/**
  * Implements hook_alshaya_super_category_status_update().
  */
 function alshaya_aeo_transac_alshaya_super_category_status_update($status, $default_parent, $path_alter) {

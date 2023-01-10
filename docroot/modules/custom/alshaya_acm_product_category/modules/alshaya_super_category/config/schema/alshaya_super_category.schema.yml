@@ -26,3 +26,6 @@ alshaya_super_category.settings:
     use_super_category_url_for_logo:
       type: boolean
       label: 'Enable/Disable use of super category url for logo.'
+    show_search_banner_in_super_category_page:
+      type: boolean
+      label: 'Enable/Disable search banner in all super category home pages.'
