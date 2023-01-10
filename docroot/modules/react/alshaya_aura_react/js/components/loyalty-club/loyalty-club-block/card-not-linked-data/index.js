@@ -19,7 +19,7 @@ const AuraMyAccountOldCardFound = (props) => {
     }
   };
 
-  if (drupalSettings.path.currentPath === 'user/loyalty-club') {
+  if (drupalSettings.aura.context === 'my_aura') {
     return (
       <div className="aura-myaccount-no-linked-card-wrapper old-card-found fadeInUp">
         <div className="aura-logo">
