@@ -104,14 +104,18 @@ const AuraMyAccountOldCardFound = (props) => {
             <div className="error-placeholder" />
             <div
               className="not-you"
+              onClick={() => {
+                handleNotYou(cardNumber);
+                Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU', label: 'initiated' });
+              }}
             >
               { getNotYouLabel(notYouFailed) }
             </div>
             <div
               className="link-your-card"
               onClick={() => {
-                handleNotYou(cardNumber);
-                Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU', label: 'initiated' });
+                Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'initiated' });
+                handleLinkYourCard(cardNumber);
               }}
             >
               { Drupal.t('Link your card', {}, { context: 'aura' }) }
