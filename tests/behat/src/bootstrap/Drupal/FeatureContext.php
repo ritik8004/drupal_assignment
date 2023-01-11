@@ -3149,4 +3149,12 @@ JS;
     $this->iWaitForElement('.cod-mobile-otp__verified_message');
   }
 
+  /**
+   * @When I scroll to the specific element with class :selector
+   */
+  public function scrollToElementV2($selector) {
+    // Check if we have OTP fields on the page.
+    $this->getSession()->executeScript('const element = document.getElementsByClassName("' . addslashes($selector) . '")[0]; window.scrollTo({top: element.offsetTop})');
+  }
+
 }
