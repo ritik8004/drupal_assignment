@@ -90,13 +90,3 @@
     }
   }
 }
-
-.alias--cart,
-.alias--checkout,
-.alias--checkout-confirmation {
-  .spc-sidebar.sticky {
-    @include breakpoint($tablet) {
-      position: initial;
-    }
-  }
-}
