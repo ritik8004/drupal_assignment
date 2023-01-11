@@ -61,32 +61,4 @@
       }
     }
   }
-
-  .site-brand-wrapper {
-    @include breakpoint($only-mobile) {
-      height: rem(56);
-    }
-
-    @include breakpoint($tablet) {
-      height: rem(99);
-    }
-
-    .site-brand-home {
-      a {
-        @include breakpoint($tablet) {
-          width: auto;
-          max-width: none;
-        }
-      }
-    }
-  }
-
-  .block-page-title-block {
-    display: none;
-  }
-
-  .page-standard {
-    margin-top: 0;
-    padding-top: 0;
-  }
 }
