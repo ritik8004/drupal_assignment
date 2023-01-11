@@ -152,6 +152,14 @@ function alshaya_white_label_preprocess_html(&$variables) {
     $variables['attributes']['class'][] = 'supermenu';
   }
 
+  // Add brand specific class to body.
+  $brand_module = \Drupal::config('alshaya.installed_brand')->get('module');
+  $brand_name = str_replace('alshaya_', '', $brand_module);
+  $brand_name_prefix = strstr($brand_name, '_', TRUE);
+
+  if (isset($brand_name_prefix)) {
+    $variables['attributes']['class'][] = $brand_name_prefix;
+  }
 }
 
 /**
