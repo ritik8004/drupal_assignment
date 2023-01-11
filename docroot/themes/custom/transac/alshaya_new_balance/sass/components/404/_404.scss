@@ -1,0 +1,49 @@
+// 404 and Maintenance.
+
+.maintenance-page {
+  .maintenance__logo {
+    float: none;
+    text-align: center;
+  }
+
+  .not-found {
+    padding: rem(20);
+    margin: rem(27) auto;
+    border: rem(1) solid $maintenance_container_border;
+    width: 95%;
+    background-color: $maintenance_container_bg;
+
+    @include breakpoint($only-mobile) {
+      padding: rem(8);
+    }
+
+    &::after {
+      display: none;
+    }
+
+    .not-found__body {
+      color: $maintenance_container_text;
+      font-family: $alshaya-thin;
+      background-color: $maintenance_info_bg;
+      width: 100%;
+
+      @include breakpoint($only-mobile) {
+        height: rem(320);
+      }
+
+      @include breakpoint($tablet) {
+        position: static;
+      }
+
+      .not-found__body__container {
+        @include breakpoint($desktop) {
+          padding: rem(117) rem(275);
+        }
+
+        @include breakpoint($only-tablet) {
+          padding: rem(117) rem(56);
+        }
+      }
+    }
+  }
+}
