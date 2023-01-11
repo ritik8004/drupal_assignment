@@ -38,7 +38,7 @@ const AvailableSwatchOptions = (props) => {
 
   const backgroundStyle = (swatchType === 'RGB')
     ? { backgroundColor: value }
-    : { backgroundImage: Drupal.url(value) };
+    : { backgroundImage: `url(${value})` };
 
   return (
     <li key={attr} id={`value${attr}`} className={swatchClassName} value={attr} data-attribute-label={label}>
