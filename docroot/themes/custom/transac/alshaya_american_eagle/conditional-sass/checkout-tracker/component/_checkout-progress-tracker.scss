@@ -14,7 +14,9 @@
       .step {
         span {
           @include breakpoint($only-mobile) {
-            padding-top: rem(3);
+            html[lang="ar"] & {
+              padding-top: rem(3);
+            }
           }
 
           @include breakpoint($tablet) {
@@ -27,8 +29,6 @@
               padding-top: rem(1);
             }
           }
-
-          font-size: rem(18);
         }
 
         &.current {
