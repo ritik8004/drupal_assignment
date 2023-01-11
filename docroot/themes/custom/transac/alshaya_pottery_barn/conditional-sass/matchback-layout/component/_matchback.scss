@@ -1,0 +1,122 @@
+.matchback-processed {
+  .subtitle {
+    &.crossell-title {
+      color: $matchback-product-dark;
+    }
+  }
+}
+
+.cross-sell-product-components {
+  .cross-sell-product-component-center {
+    h1 {
+      font-size: rem(14);
+      line-height: 1.29;
+      font-weight: normal;
+    }
+
+    .price-block {
+      .price-wrapper {
+        .price {
+          font-size: rem(14);
+          line-height: 1.29;
+        }
+      }
+    }
+
+    .content--item-code {
+      font-size: rem(12);
+      line-height: 1.33;
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .cross-sell-product-components {
+    .cross-sell-product-component-center {
+      h1 {
+        a.full-prod-link {
+          color: $matchback-product-dark;
+        }
+      }
+
+      .price-block {
+        .price-wrapper {
+          .price {
+            margin-top: rem(4);
+          }
+        }
+
+        .special-price-block {
+          .price--discount {
+            margin-top: rem(4);
+          }
+        }
+      }
+
+      .content--item-code {
+        margin-top: rem(4);
+      }
+    }
+  }
+
+  #machbackSlider {
+    .slick-prev,
+    .slick-next {
+      // Overriding inline css added by JS
+      top: rem(9) !important;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .cross-sell-product-components {
+    .cross-sell-product-component-center {
+      padding-#{$right}: rem(35);
+    }
+  }
+
+  .matchback-processed {
+    .subtitle {
+      &.crossell-title {
+        padding-#{$left}: rem(44);
+        padding-bottom: rem(31);
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .matchback-processed {
+    .is-not-buyable,
+    .addtobag-config-button {
+      color: $matchback-view-options-btn-text;
+      line-height: 1.29;
+      background-color: $matchback-view-options-btn-bg;
+      padding: rem(16) rem(10);
+      height: rem(50);
+      white-space: nowrap;
+      margin-top: rem(17);
+    }
+
+    .matchback-image-wrapper {
+      min-height: rem(125);
+    }
+
+    .view-product-slider {
+      .c-products__item__label {
+        margin-top: rem(10);
+        margin-bottom: rem(10);
+
+        a {
+          color: $matchback-slider-title-text;
+        }
+      }
+    }
+
+    .price--discount {
+      margin-top: rem(2);
+      font-size: rem(12);
+      line-height: 1.33;
+    }
+  }
+}

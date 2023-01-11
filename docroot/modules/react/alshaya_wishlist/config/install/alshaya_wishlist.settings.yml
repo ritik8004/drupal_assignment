@@ -21,3 +21,4 @@ enabled_share: true
 langcode: en
 # Enable or disable quick view drawer on wishlist pages.
 disable_quickview_wishlist_page: false
+show_wishlist_on_matchback: true

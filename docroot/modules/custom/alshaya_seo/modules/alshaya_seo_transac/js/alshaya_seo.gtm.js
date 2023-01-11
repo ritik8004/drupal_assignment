@@ -882,6 +882,20 @@
         }
       }
 
+      // Dispatch custom event to get list name. For the default value we use
+      // the list name from the gtm attribute for the page. But for sections
+      // like matchback, we need "match back" prefix to be added instead of
+      // PDP/PLP, so this event will help us there.
+      var gtmListNameEvent = new CustomEvent('getGtmListNameForProduct', {
+        detail: {
+          listName: productData.list,
+          storedListValues: listValues,
+          sku: productData.id,
+        }
+      });
+      document.dispatchEvent(gtmListNameEvent);
+      productData.list = gtmListNameEvent.detail.listName;
+
       // Fetch referrerPageType from localstorage.
       const referrerData = Drupal.getItemFromLocalStorage('referrerData');
       if(referrerData !== null) {

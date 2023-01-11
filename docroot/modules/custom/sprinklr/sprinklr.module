@@ -11,6 +11,11 @@ use Drupal\Core\Cache\Cache;
  * Implements hook_page_attachments_alter().
  */
 function sprinklr_page_attachments_alter(array &$page) {
+  // Ignore admin paths.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
   $sprinklr_settings = \Drupal::config('sprinklr.settings');
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $sprinklr_settings->getCacheTags());
 
