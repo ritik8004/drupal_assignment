@@ -249,3 +249,11 @@
     display: none;
   }
 }
+
+.alias--checkout,
+.alias--cart,
+.alias--checkout-confirmation {
+  .spc-sidebar.sticky {
+    position: initial;
+  }
+}
