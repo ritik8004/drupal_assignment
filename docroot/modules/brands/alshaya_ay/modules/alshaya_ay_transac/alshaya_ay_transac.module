@@ -74,4 +74,25 @@ function alshaya_ay_transac_preprocess_block(&$variables) {
       }
     }
   }
+  if ($variables['base_plugin_id'] == 'alshaya_rcs_super_category_menu') {
+    $variables['#cache']['contexts'][] = 'url.path';
+    $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    // Load L1 supercategories.
+    $super_categories = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
+    foreach ($super_categories as $super_category) {
+      $category = $term_storage->load($super_category['id']);
+      $mdc_id = $category->get('field_commerce_id')->getString();
+
+      $field_target_link = $category->get('field_target_link')->uri;
+      $current_path = \Drupal::service('path.current')->getPath();
+      // Remove active class from any other super category on store finder page.
+      // Also, add active class to stores super category on store finder page.
+      if ($current_path === '/store-finder' && str_contains($variables['content']['#term_tree'][$mdc_id]['class'], 'active')) {
+        $variables['content']['#term_tree'][$mdc_id]['class'] = str_replace('active', '', $variables['content']['#term_tree'][$mdc_id]['class']);
+      }
+      elseif ($field_target_link !== NULL && $field_target_link === 'internal:' . $current_path) {
+        $variables['content']['#term_tree'][$mdc_id]['class'] .= ' active';
+      }
+    }
+  }
 }
