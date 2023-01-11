@@ -137,4 +137,12 @@
     }
     dataLayer.push(shareWishlistData);
   }
+
+  // Push to GTM when add to bag product drawer is opened.
+  document.addEventListener('drawerOpenEvent', function onDrawerOpen(e) {
+    var $element = e.detail.triggerButtonElement.closest('article.node--view-mode-search-result');
+    if ($element) {
+      Drupal.alshayaSeoGtmPushProductDetailView($element);
+    }
+  });
 }(jQuery, Drupal, dataLayer));

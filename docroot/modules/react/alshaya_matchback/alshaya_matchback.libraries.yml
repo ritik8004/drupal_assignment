@@ -1,0 +1,20 @@
+alshaya_matchback:
+  js:
+    dist/matchback_addtobag.bundle.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+alshaya_matchback_utility:
+  js:
+    assets/js/alshaya_matchback.utility.js: {}
+  dependencies:
+    - core/drupal
+
+alshaya_matchback.gtm:
+  version: 1.0.0
+  js:
+    assets/js/alshaya_matchback.gtm.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

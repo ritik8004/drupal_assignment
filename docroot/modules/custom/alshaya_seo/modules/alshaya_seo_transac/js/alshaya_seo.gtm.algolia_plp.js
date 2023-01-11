@@ -70,6 +70,14 @@
     }
   });
 
+  // Push to GTM when add to bag product drawer is opened.
+  document.addEventListener('drawerOpenEvent', function onDrawerOpen(e) {
+    var $element = $(e.detail.triggerButtonElement.closest('article.node--view-mode-search-result'));
+    if ($element.length) {
+      Drupal.alshayaSeoGtmPushProductDetailView($element);
+    }
+  });
+
   // Push search result grid buttons click event to GTM.
   $('#alshaya-algolia-plp').once('bind-grid-button-click').on('click', '.large-col-grid, .small-col-grid', function () {
     // Track large column grid click.
@@ -97,5 +105,4 @@
       eventLabel2: Drupal.hasValue(statsText) ? statsText : '',
     });
   });
-
 })(jQuery, Drupal, dataLayer, Drupal.debounce, drupalSettings);

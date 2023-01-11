@@ -41,3 +41,9 @@ color_attribute_config:
   configurable_color_attribute: ''
   configurable_color_label_attribute: ''
   configurable_color_code_attribute: ''
+# Whether to change matchback color when main product color changes.
+change_matchback_color: true
+# Use the cart notification made specifically for matchback.
+use_matchback_cart_notification: true
+# Show add to bag button on mobile matchback
+display_mobile_matchback_add_to_bag_button: false
