@@ -189,6 +189,12 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
         $inactive_path = $brand_icons['inactive_image'];
       }
 
+      $field_target_link = $category->get('field_target_link')->uri;
+      
+      $path = isset($field_target_link)
+        ? Url::fromUri($field_target_link)
+        : Url::fromUserInput('/' . $category->get('field_category_slug')->getString())->toString();
+
       $term_data[$mdc_id] = [
         'label' => $category->getName(),
         'meta_title' => $category->getName(),
@@ -196,7 +202,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
         'gtm_menu_title' => $gtm_menu_title,
         'imgPath' => $img_path,
         'inactive_path' => $inactive_path,
-        'path' => Url::fromUserInput('/' . $category->get('field_category_slug')->getString())->toString(),
+        'path' => $path,
       ];
 
       $cache_tags = Cache::mergeTags(
