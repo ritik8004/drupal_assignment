@@ -26,54 +26,9 @@
       font-family: $alshaya-thin;
       background-color: $maintenance_info_bg;
       width: 100%;
-      text-align: center;
 
       @include breakpoint($only-mobile) {
         height: rem(320);
-      }
-
-      .en-title {
-        color: $maintenance_info_title-text;
-        font-size: rem(28);
-        font-family: $alshaya-bold;
-        margin-bottom: rem(24);
-
-        @include breakpoint($only-mobile) {
-          font-size: rem(18);
-        }
-      }
-
-      .ar-title {
-        font-size: rem(30);
-        font-family: $alshaya-arabic-thin-nodir;
-        color: $maintenance_info_title-text;
-        font-weight: bold;
-
-        @include breakpoint($only-mobile) {
-          font-size: rem(20);
-        }
-      }
-
-      .ar-msg {
-        font-size: rem(24);
-        font-family: $alshaya-arabic-thin-nodir;
-
-        @include breakpoint($only-mobile) {
-          font-size: rem(12);
-        }
-
-        @include breakpoint($only-tablet) {
-          font-size: rem(20);
-        }
-      }
-
-      .en-msg {
-        font-size: rem(24);
-        margin-bottom: rem(24);
-
-        @include breakpoint($only-mobile) {
-          font-size: rem(12);
-        }
       }
 
       @include breakpoint($tablet) {
