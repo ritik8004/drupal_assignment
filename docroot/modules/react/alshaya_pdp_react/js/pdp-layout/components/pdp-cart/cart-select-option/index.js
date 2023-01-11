@@ -194,6 +194,15 @@ class CartSelectOption extends React.Component {
         }
       });
     }
+
+    // Push product color and size click event to GTM.
+    if (code === 'color' || code === 'size') {
+      const eventLabel = e.currentTarget.parentElement.dataset.attributeLabel;
+      Drupal.alshayaSeoGtmPushEcommerceEvents({
+        eventAction: `pdp ${code} click`,
+        eventLabel,
+      });
+    }
     this.handleSelectionChanged(e, code);
   };
 
