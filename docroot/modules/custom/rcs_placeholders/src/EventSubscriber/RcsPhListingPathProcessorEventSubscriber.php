@@ -37,6 +37,7 @@ class RcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $category_prefix = $config->get('category.path_prefix');
     $placeholder_tid = $config->get('category.placeholder_tid');
+
     if (!str_starts_with($path, '/' . $category_prefix) || !$placeholder_tid) {
       return;
     }
