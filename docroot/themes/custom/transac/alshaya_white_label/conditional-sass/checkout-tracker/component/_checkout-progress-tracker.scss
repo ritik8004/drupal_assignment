@@ -254,6 +254,8 @@
 .alias--cart,
 .alias--checkout-confirmation {
   .spc-sidebar.sticky {
-    position: initial;
+    @include breakpoint($tablet) {
+      position: initial;
+    }
   }
 }
