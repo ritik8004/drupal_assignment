@@ -7,14 +7,14 @@
   }
 
   .not-found {
-    padding: 1.25rem;
-    margin: 1.6875rem auto;
-    border: 0.0625rem solid $maintenance_container_border;
+    padding: rem(20);
+    margin: rem(27) auto;
+    border: rem(1) solid $maintenance_container_border;
     width: 95%;
     background-color: $maintenance_container_bg;
 
     @include breakpoint($only-mobile) {
-      padding: 0.5rem;
+      padding: rem(8);
     }
 
     &::after {
@@ -29,50 +29,50 @@
       text-align: center;
 
       @include breakpoint($only-mobile) {
-        height: 20rem;
+        height: rem(320);
       }
 
       .en-title {
         color: $maintenance_info_title-text;
-        font-size: 1.75rem;
+        font-size: rem(28);
         font-family: $alshaya-bold;
-        margin-bottom: 1.5rem;
+        margin-bottom: rem(24);
 
         @include breakpoint($only-mobile) {
-          font-size: 1.125rem;
+          font-size: rem(18);
         }
       }
 
       .ar-title {
-        font-size: 1.875rem;
+        font-size: rem(30);
         font-family: $alshaya-arabic-thin-nodir;
         color: $maintenance_info_title-text;
         font-weight: bold;
 
         @include breakpoint($only-mobile) {
-          font-size: 1.25rem;
+          font-size: rem(20);
         }
       }
 
       .ar-msg {
-        font-size: 1.5rem;
+        font-size: rem(24);
         font-family: $alshaya-arabic-thin-nodir;
 
         @include breakpoint($only-mobile) {
-          font-size: 0.75rem;
+          font-size: rem(12);
         }
 
         @include breakpoint($only-tablet) {
-          font-size: 1.25rem;
+          font-size: rem(20);
         }
       }
 
       .en-msg {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
+        font-size: rem(24);
+        margin-bottom: rem(24);
 
         @include breakpoint($only-mobile) {
-          font-size: 0.75rem;
+          font-size: rem(12);
         }
       }
 
@@ -82,11 +82,11 @@
 
       .not-found__body__container {
         @include breakpoint($desktop) {
-          padding: 7.3125rem 17.1875rem;
+          padding: rem(117) rem(275);
         }
 
         @include breakpoint($only-tablet) {
-          padding: 7.3125rem 3.5rem;
+          padding: rem(117) rem(56);
         }
       }
     }
