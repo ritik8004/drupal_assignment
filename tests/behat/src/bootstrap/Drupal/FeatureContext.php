@@ -3149,4 +3149,20 @@ JS;
     $this->iWaitForElement('.cod-mobile-otp__verified_message');
   }
 
+  /**
+   * Delete an enrichment prior to running the step that clicks on "Enrich" link.
+   *
+   * @Then I make sure there are no enrichments
+   */
+  public function iMakeSureThereAreNoEnrichments()
+  {
+    try {
+      $mink = $this->getSession()->getPage();
+      $mink->clickLink('Delete the enrichment');
+      $mink->pressButton('Delete');
+    } catch (\Exception) {
+      // Silently fail when there is no link to click.
+    }
+  }
+
 }
