@@ -37,6 +37,7 @@ class RcsPhPromotionPathProcessorEventSubscriber extends RcsPhPathProcessorEvent
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $promotion_prefix = $config->get('promotion.path_prefix');
     $placeholder_nid = $config->get('promotion.placeholder_nid');
+
     if (!str_starts_with($path, '/' . $promotion_prefix) || !$placeholder_nid) {
       return;
     }
