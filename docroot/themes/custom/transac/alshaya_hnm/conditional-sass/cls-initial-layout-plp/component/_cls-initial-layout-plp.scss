@@ -66,8 +66,6 @@
         height: rem(5880);
 
         .view-algolia-plp {
-          height: rem(5722);
-
           .view-content {
             height: rem(5546);
 
@@ -94,17 +92,13 @@
           .c-facet__blocks {
             height: rem(900);
 
-            ul {
-              margin: 0 rem(16);
+            .block-alshaya-acm-product-category {
+              & > ul {
+                margin: 0 rem(16);
 
-              li {
-                height: rem(114);
-                margin-bottom: rem(30);
-
-                ul {
-                  li {
-                    height: rem(26);
-                  }
+                li {
+                  height: rem(114);
+                  margin-bottom: rem(30);
                 }
               }
             }
@@ -112,8 +106,6 @@
         }
 
         .view-algolia-plp {
-          height: rem(4410);
-
           .view-content {
             height: rem(4232);
 
