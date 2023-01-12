@@ -14,7 +14,7 @@
       margin-bottom: 5%;
       margin-#{$left}: 2%;
 
-      &:nth-of-type(3n+1) {
+      &:nth-of-type(3n + 1) {
         margin-#{$left}: 0;
       }
     }

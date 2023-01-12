@@ -55,7 +55,7 @@
       align-items: center;
       justify-content: center;
 
-      @include icon('chevrondown') {
+      @include icon("chevrondown") {
         font-size: 1.25rem;
         position: absolute;
         top: 50%;
@@ -119,7 +119,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .appointment-companion-wrapper {
     .fitCalcSelect__value-container {
       input {

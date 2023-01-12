@@ -206,7 +206,7 @@
 
           .fabric-color-icon {
             content: "";
-            background: url('#{$base_theme_img_directory_path}/icons/fabric-color-icon.svg') no-repeat;
+            background: url("#{$base_theme_img_directory_path}/icons/fabric-color-icon.svg") no-repeat;
             background-size: contain;
             display: inline-block;
             height: 2.5rem;

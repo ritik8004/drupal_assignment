@@ -44,7 +44,7 @@
     font-family: $alshaya-bold;
     font-size: 1rem;
 
-    @include componentLoader($primary_btn_bg, 'after');
+    @include componentLoader($primary_btn_bg, "after");
 
     &:disabled {
       opacity: 0.3;
@@ -71,13 +71,13 @@
     &.active {
       display: block;
 
-      @include icon('close', after) {
+      @include icon("close", after) {
         font-size: 2rem;
       }
     }
 
     &.loading {
-      @include componentLoader(transparent, 'after') {
+      @include componentLoader(transparent, "after") {
         width: 2.5rem;
       }
     }

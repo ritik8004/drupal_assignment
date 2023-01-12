@@ -15,7 +15,7 @@
   background-image: $aura-loyalty-club-no-card-block-link-card-btn;
   cursor: pointer;
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     background-image: $aura-loyalty-club-no-card-block-link-card-btn-ar;
   }
 }
@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     background-image: $aura-loyalty-club-no-card-block-bg-ar;
   }
 
@@ -39,7 +39,7 @@
     flex-direction: column;
     background-image: $aura-loyalty-club-no-card-block-bg-mobile;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       background-image: $aura-loyalty-club-no-card-block-bg-mobile-ar;
     }
   }
@@ -145,7 +145,7 @@
           background-origin: border-box;
           background-clip: content-box, border-box;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             border-image-source: $aura-loyalty-club-no-card-block-sign-up-border-ar;
             background-image: $aura-loyalty-club-no-card-block-sign-up-bg-ar;
           }

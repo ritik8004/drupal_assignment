@@ -48,7 +48,7 @@
         color: $rr-review-summary-txt;
       }
 
-      input[type=checkbox] ~ label::before {
+      input[type="checkbox"] ~ label::before {
         font-size: 1.125rem;
         margin-#{$right}: 0.625rem;
       }
@@ -147,7 +147,7 @@
 
       &-nickname {
         &:not(:only-child)::after {
-          content: ',';
+          content: ",";
         }
 
         &.admin {

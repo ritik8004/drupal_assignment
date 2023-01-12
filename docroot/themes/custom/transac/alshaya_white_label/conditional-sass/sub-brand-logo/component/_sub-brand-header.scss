@@ -63,7 +63,7 @@ $header-height: 7.125rem;
   }
 
   &::before {
-    content: '';
+    content: "";
     background: $sub_brand_logo_separator;
     width: 1px;
     height: 1.625rem;
@@ -200,7 +200,7 @@ body.sub-brand-logo {
         margin-bottom: 0;
 
         img {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             margin-right: 0;
           }
         }
@@ -241,7 +241,7 @@ body.sub-brand-logo {
   }
 
   &.alias--cart-login {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 0;
 
       .site-brand-wrapper {
@@ -268,7 +268,7 @@ body.sub-brand-logo {
         height: $row-height;
 
         .logo:not(.sub-brand-logo) {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             max-width: 7.5rem;
           }
         }
@@ -300,7 +300,7 @@ body.sub-brand-logo {
         }
 
         a.logo {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             margin-top: 0;
             margin-bottom: 0;
           }
@@ -309,7 +309,7 @@ body.sub-brand-logo {
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .site-brand-home {
       margin-right: 0;
 

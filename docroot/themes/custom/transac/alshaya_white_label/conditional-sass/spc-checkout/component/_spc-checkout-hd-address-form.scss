@@ -142,7 +142,7 @@
           margin: 0 1.25rem;
           border: none;
 
-          @include componentLoader($primary_btn_bg, 'after');
+          @include componentLoader($primary_btn_bg, "after");
         }
 
         @include breakpoint($tablet) {
@@ -179,7 +179,7 @@
         }
 
         &::after {
-          content: '';
+          content: "";
           #{$right}: 0;
           top: 0;
           bottom: 0;
@@ -189,7 +189,7 @@
           position: absolute;
           background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(41, 41, 41, 0.22) 100%);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, rgba(41, 41, 41, 0.22) 100%);
           }
         }

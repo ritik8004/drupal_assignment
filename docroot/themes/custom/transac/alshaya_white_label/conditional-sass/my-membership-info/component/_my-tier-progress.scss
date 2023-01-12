@@ -3,7 +3,7 @@
   align-items: center;
   margin-top: rem(8);
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     margin-top: rem(14);
   }
 
@@ -35,7 +35,7 @@
           position: relative;
 
           &::after {
-            content: '';
+            content: "";
             height: rem(8);
             width: rem(8);
             background: $hello-member-points-block-tier-progress;
@@ -46,7 +46,7 @@
             position: absolute;
             z-index: 1;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               top: rem(-16);
             }
           }

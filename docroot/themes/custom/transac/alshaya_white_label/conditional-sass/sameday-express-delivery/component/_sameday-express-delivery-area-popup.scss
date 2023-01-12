@@ -1,6 +1,6 @@
 .select-area-popup-content {
   &::before {
-    content: '';
+    content: "";
     position: fixed;
     width: 100vw;
     background-color: $delivery-modal-overlay;
@@ -82,7 +82,7 @@ body.overlay-delivery-area {
     width: 24.0625rem;
     max-width: 24.0625rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       transform: translateX(-100%);
     }
   }
@@ -155,7 +155,7 @@ body.overlay-delivery-area {
     margin-top: 0;
 
     &::before {
-      content: '';
+      content: "";
       display: block;
       border-top: 0.625rem solid $delivery-modal-bg;
     }
@@ -195,7 +195,7 @@ body.overlay-delivery-area {
       .spcSelect__dropdown-indicator {
         &::before {
           position: absolute;
-          content: '';
+          content: "";
           border-style: solid;
           height: 0;
           width: 0;
@@ -268,7 +268,7 @@ body.overlay-delivery-area {
       padding: 0;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding: 0;
       justify-content: space-between;
     }
@@ -284,7 +284,7 @@ body.overlay-delivery-area {
       }
 
       &::before {
-        content: '';
+        content: "";
         width: 1.5rem;
         height: 1.5rem;
         display: inline-block;
@@ -297,19 +297,19 @@ body.overlay-delivery-area {
 
       &.sameday-delivery {
         &::before {
-          background: url('#{$base_theme_img_directory_path}/icons/same-day-delivery.svg') no-repeat;
+          background: url("#{$base_theme_img_directory_path}/icons/same-day-delivery.svg") no-repeat;
         }
       }
 
       &.express-delivery {
         &::before {
-          background: url('#{$base_theme_img_directory_path}/icons/express-delivery.svg') no-repeat;
+          background: url("#{$base_theme_img_directory_path}/icons/express-delivery.svg") no-repeat;
         }
       }
 
       &.standard-delivery {
         &::before {
-          background: url('#{$base_theme_img_directory_path}/icons/standard-delivery.svg') no-repeat;
+          background: url("#{$base_theme_img_directory_path}/icons/standard-delivery.svg") no-repeat;
         }
       }
     }
@@ -350,7 +350,7 @@ body.overlay-delivery-area {
       width: 100%;
 
       &::before {
-        content: '';
+        content: "";
         position: relative;
         width: 1.5rem;
         height: 1.25rem;
@@ -382,7 +382,7 @@ body.overlay-delivery-area {
 
       span {
         &::before {
-          content: '';
+          content: "";
           width: 1.375rem;
           height: 1.375rem;
           display: inline-block;
@@ -393,19 +393,19 @@ body.overlay-delivery-area {
       span.active {
         &.area-select-standard-delivery {
           &::before {
-            background: url('#{$base_theme_img_directory_path}/icons/standard-delivery.svg') no-repeat;
+            background: url("#{$base_theme_img_directory_path}/icons/standard-delivery.svg") no-repeat;
           }
         }
 
         &.area-select-sameday-delivery {
           &::before {
-            background: url('#{$base_theme_img_directory_path}/icons/same-day-delivery.svg') no-repeat;
+            background: url("#{$base_theme_img_directory_path}/icons/same-day-delivery.svg") no-repeat;
           }
         }
 
         &.area-select-express-delivery {
           &::before {
-            background: url('#{$base_theme_img_directory_path}/icons/express-delivery.svg') no-repeat;
+            background: url("#{$base_theme_img_directory_path}/icons/express-delivery.svg") no-repeat;
           }
         }
       }
@@ -413,13 +413,13 @@ body.overlay-delivery-area {
       span.disabled {
         &.area-select-sameday-delivery {
           &::before {
-            background: url('#{$base_theme_img_directory_path}/icons/same-day-delivery-disabled.svg') no-repeat;
+            background: url("#{$base_theme_img_directory_path}/icons/same-day-delivery-disabled.svg") no-repeat;
           }
         }
 
         &.area-select-express-delivery {
           &::before {
-            background: url('#{$base_theme_img_directory_path}/icons/express-delivery-disabled.svg') no-repeat;
+            background: url("#{$base_theme_img_directory_path}/icons/express-delivery-disabled.svg") no-repeat;
           }
         }
       }
@@ -478,7 +478,7 @@ body.overlay-delivery-area {
 
 .delivery-loader {
   &.loading {
-    @include componentLoader(transparent, 'after') {
+    @include componentLoader(transparent, "after") {
       background-position: $left;
     }
   }

@@ -91,7 +91,7 @@
         align-items: center;
         justify-content: center;
 
-        @include icon('chevrondown') {
+        @include icon("chevrondown") {
           font-size: 1.75rem;
           position: absolute;
           top: 50%;
@@ -172,7 +172,7 @@
       display: block;
     }
 
-    button[type=submit][disabled]::after {
+    button[type="submit"][disabled]::after {
       background-image: none;
     }
   }

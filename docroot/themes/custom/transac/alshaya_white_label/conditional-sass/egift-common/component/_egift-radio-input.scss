@@ -8,13 +8,13 @@
         margin-#{$right}: 4.375rem;
       }
 
-      input[type=radio] {
+      input[type="radio"] {
         display: none;
       }
 
-      input[type=radio] ~ label {
+      input[type="radio"] ~ label {
         &::before {
-          content: '';
+          content: "";
           width: 0.875rem;
           height: 0.875rem;
           background: $egift-input-radio-background;
@@ -27,11 +27,11 @@
         }
       }
 
-      input[type=radio]:checked ~ label::before {
+      input[type="radio"]:checked ~ label::before {
         border: 0.25rem solid $primary_radiobtn_filled;
       }
 
-      input[type=checkbox] ~ label::before {
+      input[type="checkbox"] ~ label::before {
         line-height: 1.3125rem;
         display: inline-block;
         vertical-align: bottom;
@@ -39,7 +39,7 @@
         margin-#{$right}: 0.4rem;
       }
 
-      input[type=checkbox]:checked ~ label::before {
+      input[type="checkbox"]:checked ~ label::before {
         line-height: 1.3125rem;
       }
 

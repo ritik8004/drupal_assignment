@@ -3,7 +3,7 @@
 .configurable-product-form-wrapper {
   /* Slider */
   .slick-loading .slick-list {
-    background: #fff url('./ajax-loader.gif') center center no-repeat;
+    background: #fff url("./ajax-loader.gif") center center no-repeat;
   }
 
   /* Arrows */
@@ -25,14 +25,14 @@
     background: transparent;
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .slick-prev {
       right: -1.5625rem;
       left: auto;
     }
 
     .slick-prev::before {
-      content: '→';
+      content: "→";
     }
 
     .slick-next {
@@ -41,7 +41,7 @@
     }
 
     .slick-next::before {
-      content: '←';
+      content: "←";
     }
   }
 
@@ -101,7 +101,7 @@
           #{$left}: 0;
           width: 1.25rem;
           height: 1.25rem;
-          content: '•';
+          content: "•";
           text-align: center;
           opacity: 0.25;
           color: black;

@@ -50,7 +50,7 @@
             -webkit-text-fill-color: $egift-checkout-card-number;
             opacity: 1;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               direction: ltr;
               text-align: right;
               max-width: 10rem;

@@ -29,14 +29,14 @@
       align-items: center;
 
       &::before {
-        content: '';
+        content: "";
         width: rem(28);
         height: rem(35);
-        background: url('#{$brand_theme_img_directory_path}/icons/chevronleft.svg') no-repeat;
+        background: url("#{$brand_theme_img_directory_path}/icons/chevronleft.svg") no-repeat;
         position: absolute;
         #{$left}: 0;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(180deg);
         }
       }

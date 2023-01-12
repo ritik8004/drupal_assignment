@@ -98,7 +98,7 @@
         background: $magazine-article-title-overflow-shadow;
         background: linear-gradient(to left, $magazine-article-title-overflow-shadow 30%, rgba(34, 34, 34, 0));
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background: linear-gradient(to right, $magazine-article-title-overflow-shadow 30%, rgba(34, 34, 34, 0));
         }
       }

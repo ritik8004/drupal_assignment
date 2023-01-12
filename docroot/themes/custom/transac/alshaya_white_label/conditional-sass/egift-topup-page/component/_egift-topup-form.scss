@@ -2,7 +2,7 @@
   .card-details {
     margin: 1.0625rem 0 1.5rem;
 
-    html[lang=en] & {
+    html[lang="en"] & {
       letter-spacing: 0.65px;
     }
 
@@ -32,7 +32,7 @@
             opacity: 1;
           }
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             direction: ltr;
             text-align: right;
           }
@@ -113,7 +113,7 @@
     min-height: 15rem;
 
     .loader-icon {
-      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      background: url("#{$base_theme_loader_img_directory_path}") #{$left} center no-repeat;
       padding-#{$left}: 2.5rem;
       background-size: contain;
       color: $spc-loader-text;

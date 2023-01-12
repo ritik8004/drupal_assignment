@@ -2,9 +2,7 @@
 @font-face {
   font-family: "PTSans";
   src: url("#{$base_theme_fonts_directory_path}/PTSans-Regular.eot");
-  src:
-    url("#{$base_theme_fonts_directory_path}/PTSans-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PTSans-Regular.woff") format("woff");
+  src: url("#{$base_theme_fonts_directory_path}/PTSans-Regular.ttf") format("truetype"), url("#{$base_theme_fonts_directory_path}/PTSans-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -13,9 +11,7 @@
 @font-face {
   font-family: "PTSans-Bold";
   src: url("#{$base_theme_fonts_directory_path}/PTSans-Bold.eot");
-  src:
-    url("#{$base_theme_fonts_directory_path}/PTSans-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PTSans-Bold.woff") format("woff");
+  src: url("#{$base_theme_fonts_directory_path}/PTSans-Bold.ttf") format("truetype"), url("#{$base_theme_fonts_directory_path}/PTSans-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -40,9 +36,7 @@
 // PTSans Caption font.
 @font-face {
   font-family: "PTSans-Caption-Bold";
-  src:
-    url("#{$base_theme_fonts_directory_path}/PTSans-Caption-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PTSans-Caption-Bold.woff") format("woff");
+  src: url("#{$base_theme_fonts_directory_path}/PTSans-Caption-Bold.woff2") format("woff2"), url("#{$base_theme_fonts_directory_path}/PTSans-Caption-Bold.woff") format("woff");
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -50,9 +44,7 @@
 
 @font-face {
   font-family: "PTSans-Caption-Regular";
-  src:
-    url("#{$base_theme_fonts_directory_path}/PTSans-Caption-Regular.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PTSans-Caption-Regular.woff") format("woff");
+  src: url("#{$base_theme_fonts_directory_path}/PTSans-Caption-Regular.woff2") format("woff2"), url("#{$base_theme_fonts_directory_path}/PTSans-Caption-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

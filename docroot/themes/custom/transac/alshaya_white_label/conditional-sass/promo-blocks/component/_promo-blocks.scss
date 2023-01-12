@@ -283,12 +283,12 @@
   }
 }
 
-[class*='position-bottom-'] {
+[class*="position-bottom-"] {
   padding-bottom: 0.75rem;
   bottom: 1.5625rem;
 }
 
-[class*='position-top-'] {
+[class*="position-top-"] {
   top: 1.5625rem;
 }
 
@@ -392,7 +392,7 @@
   justify-content: center;
 
   &::before {
-    content: '';
+    content: "";
     border-top: 1px solid $section_divider_border;
     width: 100%;
     display: inline-block;

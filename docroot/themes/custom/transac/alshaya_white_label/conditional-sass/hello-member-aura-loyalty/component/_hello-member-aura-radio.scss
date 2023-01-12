@@ -1,18 +1,18 @@
 //radio button for aura options
-input[type=radio].linking-option-radio {
+input[type="radio"].linking-option-radio {
   display: none;
 
   ~ .radio-sim::before {
-    content: '';
+    content: "";
     display: inline-block;
     width: rem(38);
     height: rem(38);
-    background: url('#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-empty.svg') no-repeat;
+    background: url("#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-empty.svg") no-repeat;
   }
 
   &:checked {
     ~ .radio-sim::before {
-      background: url('#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-filled.svg') no-repeat;
+      background: url("#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-filled.svg") no-repeat;
       color: transparent !important;
     }
   }

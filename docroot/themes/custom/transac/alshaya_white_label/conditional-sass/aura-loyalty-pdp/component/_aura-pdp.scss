@@ -40,7 +40,7 @@
       &::after {
         margin-#{$left}: rem(56);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-left: auto;
           margin-right: auto;
           left: rem(10);
@@ -55,7 +55,7 @@
   }
 
   .tooltip-anchor.tooltip-box {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       transform: translateX(0);
     }
   }

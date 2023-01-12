@@ -76,7 +76,7 @@
             max-width: 12.5rem;
           }
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             text-align: right;
           }
         }
@@ -107,7 +107,7 @@
           }
 
           .magv2-meta-data-wrapper {
-            html[lang=ar] & {
+            html[lang="ar"] & {
               flex-direction: row-reverse;
             }
           }
@@ -421,7 +421,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .slider-nav {
     flex-direction: row-reverse;
     justify-content: flex-end;

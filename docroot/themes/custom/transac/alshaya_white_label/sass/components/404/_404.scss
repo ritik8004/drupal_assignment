@@ -7,20 +7,20 @@
   max-width: 76.375rem;
   margin: 0 auto 2rem;
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     line-height: 1.125;
   }
 
   .maintenance-page & {
     line-height: normal;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       direction: ltr;
     }
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 20%;
     bottom: -1px;
@@ -122,7 +122,7 @@
     min-height: auto;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       bottom: -1px;
@@ -161,7 +161,7 @@
   border-top: 24px solid $maintenance_container_border_top;
   margin-top: 0;
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     margin-top: 0;
   }
 

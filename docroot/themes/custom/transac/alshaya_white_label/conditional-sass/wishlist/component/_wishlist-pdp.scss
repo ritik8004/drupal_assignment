@@ -24,7 +24,7 @@
       &:hover {
         .wishlist-icon {
           @include breakpoint($desktop) {
-            background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled-icon.svg?adsas');
+            background-image: url("#{$brand_theme_img_directory_path}/icons/wishlist-filled-icon.svg?adsas");
           }
         }
       }

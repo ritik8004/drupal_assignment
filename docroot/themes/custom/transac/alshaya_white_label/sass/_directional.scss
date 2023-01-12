@@ -11,9 +11,7 @@ $dir: ltr !default;
 @function if-ltr($if, $else: null) {
   @if $dir != rtl {
     @return $if;
-  }
-
-  @else {
+  } @else {
     @return $else;
   }
 }
@@ -38,9 +36,7 @@ $last-child: if-ltr(":last-child", ":first-child");
   @if $dir == rtl and length($values) >= 4 {
     // Reorder right and left positions in list
     @return nth($values, 1) nth($values, 4) nth($values, 3) nth($values, 2);
-  }
-
-  @else {
+  } @else {
     @return $values;
   }
 }
@@ -48,8 +44,7 @@ $last-child: if-ltr(":last-child", ":first-child");
 @function negate-value($value) {
   @if $dir == rtl and $value < 0 {
     @return #{$value * -1};
-  }
-  @else {
+  } @else {
     @return $value;
   }
 }
@@ -59,24 +54,20 @@ $last-child: if-ltr(":last-child", ":first-child");
     // Reorder right and left positions in list
     @if length($values) == 2 {
       @return nth($values, 2) nth($values, 1);
-    }
-    @else if length($values) == 3 {
+    } @else if length($values) == 3 {
       @return nth($values, 2) nth($values, 1) nth($values, 2) nth($values, 3);
-    }
-    @else {
+    } @else {
       @return nth($values, 2) nth($values, 1) nth($values, 4) nth($values, 3);
     }
-  }
-  @else {
+  } @else {
     @return $values;
   }
 }
 
 @function percent-value($value) {
   @if $dir == rtl {
-     @return (100 - $value);
-  }
-  @else {
+    @return (100 - $value);
+  } @else {
     @return $value;
   }
 }

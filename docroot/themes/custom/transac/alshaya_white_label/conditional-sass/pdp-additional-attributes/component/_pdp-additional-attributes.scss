@@ -16,7 +16,7 @@
   visibility: hidden;
   text-align: $left;
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     transform: translateX(-100%);
   }
 
@@ -53,7 +53,7 @@
     align-items: center;
     cursor: pointer;
 
-    @include icon('close') {
+    @include icon("close") {
       font-size: 2.0625rem;
       line-height: 1;
       width: auto;
@@ -95,7 +95,7 @@
           line-height: 1.6;
 
           &::after {
-            content: '';
+            content: "";
           }
         }
       }

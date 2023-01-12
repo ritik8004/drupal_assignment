@@ -1,33 +1,33 @@
 // Define Fonts
-$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fonts';
+$base_theme_fonts_directory_path: "/themes/custom/transac/alshaya_white_label/fonts";
 
-$aura-regular: 'PTSans', 'Almarai-Regular', 'Arial';
-$aura-bold: 'PTSans-Bold', 'Almarai-Bold', 'Arial';
+$aura-regular: "PTSans", "Almarai-Regular", "Arial";
+$aura-bold: "PTSans-Bold", "Almarai-Bold", "Arial";
 
-$aura-arabic-regular: 'PTSans', 'Almarai-Regular', 'Arial';
-$aura-arabic-bold: 'PTSans-Bold', 'Almarai-Bold', 'Arial';
+$aura-arabic-regular: "PTSans", "Almarai-Regular", "Arial";
+$aura-arabic-bold: "PTSans-Bold", "Almarai-Bold", "Arial";
 
-$aura-caption-regular: 'PTSans-Caption-Regular','Almarai-Regular', 'Arial';
-$aura-caption-bold: 'PTSans-Caption-bold', 'Almarai-Regular', 'Arial';
+$aura-caption-regular: "PTSans-Caption-Regular", "Almarai-Regular", "Arial";
+$aura-caption-bold: "PTSans-Caption-bold", "Almarai-Regular", "Arial";
 
 // Check alshaya_white_label/font-face for font-face declarations.
 // Font Family
-$alshaya-bold: 'Mothercare', 'Arial';
-$alshaya-bold-nodir: 'Mothercare', 'Arial';
+$alshaya-bold: "Mothercare", "Arial";
+$alshaya-bold-nodir: "Mothercare", "Arial";
 
-$alshaya-thin: 'MothercareThin', 'Arial';
-$alshaya-thin-nodir: 'MothercareThin', 'Arial';
+$alshaya-thin: "MothercareThin", "Arial";
+$alshaya-thin-nodir: "MothercareThin", "Arial";
 
-$alshaya-arabic-bold: 'Cairo-bold', 'Mothercare', 'Arial';
-$alshaya-arabic-bold-nodir: 'Cairo-bold', 'Mothercare', 'Arial';
+$alshaya-arabic-bold: "Cairo-bold", "Mothercare", "Arial";
+$alshaya-arabic-bold-nodir: "Cairo-bold", "Mothercare", "Arial";
 
-$alshaya-arabic-thin: 'Cairo-300', 'MothercareThin', 'Arial';
-$alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin', 'Arial';
+$alshaya-arabic-thin: "Cairo-300", "MothercareThin", "Arial";
+$alshaya-arabic-thin-nodir: "Cairo-300", "MothercareThin", "Arial";
 
-$alshaya-icons: 'alshaya-icons';
-$arial: 'arialmt', 'arial', 'sans-serif';
-$arial-nodir: 'arialmt', 'arial', 'sans-serif';
-$open-sans: "Open Sans", 'Cairo', 'Arial';
+$alshaya-icons: "alshaya-icons";
+$arial: "arialmt", "arial", "sans-serif";
+$arial-nodir: "arialmt", "arial", "sans-serif";
+$open-sans: "Open Sans", "Cairo", "Arial";
 $body_font: $arial;
 
 // campaign-plp-style-1 font family.
@@ -35,7 +35,7 @@ $campaign-plp-style-1-font: $alshaya-bold;
 $campaign-plp-style-1-arabic-font: $alshaya-arabic-bold;
 
 // Postpay font family
-$postpay-font: 'GreycliffCF-Bold','MothercareThin', 'Arial';
+$postpay-font: "GreycliffCF-Bold", "MothercareThin", "Arial";
 $postpay-arabic-font: $alshaya-arabic-bold;
 
 // Icon Fonts
@@ -136,7 +136,7 @@ $icons: (
 
 @mixin icon($icon: false, $position: before, $styles: true) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {

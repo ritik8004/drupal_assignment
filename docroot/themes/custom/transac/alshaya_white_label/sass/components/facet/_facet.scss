@@ -9,9 +9,9 @@
     text-transform: lowercase;
   }
 
-  ul[data-drupal-facet-id=category],
-  ul[data-drupal-facet-id=promotion_category_facet],
-  ul[data-drupal-facet-id=plp_category_facet] {
+  ul[data-drupal-facet-id="category"],
+  ul[data-drupal-facet-id="promotion_category_facet"],
+  ul[data-drupal-facet-id="plp_category_facet"] {
     a {
       font-weight: normal;
       line-height: 2;
@@ -93,7 +93,7 @@
     display: inline-block;
   }
 
-  &:not(#block-category,#block-plpcategoryfacet) {
+  &:not(#block-category, #block-plpcategoryfacet) {
     .js-facets-checkbox-links,
     .item-list__swatch_list {
       .facet-item {
@@ -158,9 +158,9 @@
   }
 }
 
-ul[data-drupal-facet-id=category],
-ul[data-drupal-facet-id=plp_category_facet],
-ul[data-drupal-facet-id=promotion_category_facet] {
+ul[data-drupal-facet-id="category"],
+ul[data-drupal-facet-id="plp_category_facet"],
+ul[data-drupal-facet-id="promotion_category_facet"] {
   &.js-facets-checkbox-links {
     display: block;
     max-height: none;
@@ -178,7 +178,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
       }
     }
 
-    > input[type=checkbox] {
+    > input[type="checkbox"] {
       &:checked {
         ~ label {
           span {
@@ -200,7 +200,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
           }
         }
 
-        > input[type=checkbox] {
+        > input[type="checkbox"] {
           &:checked {
             ~ label {
               span {
@@ -237,7 +237,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
           margin-#{$left}: 0.625rem;
         }
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-left: 0;
         }
       }
@@ -267,7 +267,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
       }
     }
 
-    > input[type=checkbox]:checked {
+    > input[type="checkbox"]:checked {
       ~ label {
         @include icon(chevron#{$left}, before) {
           top: 0.875rem;
@@ -301,7 +301,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
   }
 }
 
-ul[data-drupal-facet-id=category] {
+ul[data-drupal-facet-id="category"] {
   .facet-item--expanded {
     &.facet-item--active-trail {
       > label {
@@ -356,8 +356,8 @@ ul[data-drupal-facet-id=category] {
   }
 }
 
-ul[data-drupal-facet-id=plp_category_facet],
-ul[data-drupal-facet-id=promotion_category_facet] {
+ul[data-drupal-facet-id="plp_category_facet"],
+ul[data-drupal-facet-id="promotion_category_facet"] {
   li {
     label {
       &::before {
@@ -379,7 +379,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
           }
         }
 
-        > input[type=checkbox]:checked {
+        > input[type="checkbox"]:checked {
           ~ label {
             @include icon(checkboxfull) {
               color: $primary_checkbox_filled;
@@ -407,7 +407,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
       }
     }
 
-    > input[type=checkbox]:checked {
+    > input[type="checkbox"]:checked {
       ~ label {
         @include icon(checkboxfull) {
           color: $primary_checkbox_filled;

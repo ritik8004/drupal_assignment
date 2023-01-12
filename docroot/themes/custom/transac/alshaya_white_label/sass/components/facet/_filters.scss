@@ -115,7 +115,7 @@
     }
   }
 
-  input[type=text] {
+  input[type="text"] {
     display: none;
   }
 
@@ -261,7 +261,7 @@
           }
         }
 
-        input[checked='checked'] ~ label {
+        input[checked="checked"] ~ label {
           font-family: $alshaya-bold;
         }
       }
@@ -296,7 +296,7 @@
     }
 
     .ajax-progress.ajax-progress-throbber {
-      background-image: url(#{$base_theme_loader_img_directory_path});
+      background-image: url("#{$base_theme_loader_img_directory_path}");
       background-repeat: no-repeat;
       background-color: rgba(255, 255, 255, 0.5);
       background-size: 4.5rem;
@@ -423,7 +423,7 @@
       justify-content: $left;
       height: 2rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 7.25rem;
       }
     }
@@ -432,7 +432,7 @@
       ul {
         width: calc(100% - 6.25rem) !important;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: calc(100% - 7.25rem) !important;
         }
       }
@@ -511,7 +511,7 @@
         position: relative;
 
         &::before {
-          content: '+';
+          content: "+";
         }
 
         @include icon(chevrondown, after) {
@@ -598,7 +598,7 @@
     .block-alshaya-plp-facets-block-all,
     .block-alshaya-productlist-facets-block-all,
     .block-alshaya-promo-facets-block-all {
-      @include breakpoint ($only-mobile) {
+      @include breakpoint($only-mobile) {
         width: 100% !important;
       }
 
@@ -616,7 +616,7 @@
     }
 
     .block-alshaya-search-facets-block-all {
-      @include breakpoint ($only-mobile) {
+      @include breakpoint($only-mobile) {
         width: 100% !important;
       }
     }
@@ -626,7 +626,7 @@
 .path--search {
   .c-plp .c-content__region {
     .block-alshaya-search-facets-block-all.empty-category {
-      @include breakpoint ($only-mobile) {
+      @include breakpoint($only-mobile) {
         width: 100% !important;
       }
     }

@@ -24,7 +24,7 @@
           height: 0.875rem;
           margin-bottom: 0.5rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             height: 0.75rem;
 
             @include breakpoint($tablet) {
@@ -40,7 +40,7 @@
         .special-price-block {
           height: 1.75rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             height: 1.5rem;
 
             @include breakpoint($tablet) {

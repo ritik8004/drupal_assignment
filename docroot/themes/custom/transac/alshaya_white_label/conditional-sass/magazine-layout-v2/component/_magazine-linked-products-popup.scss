@@ -25,7 +25,7 @@ body {
         padding: 1.25rem;
 
         &::before {
-          content: '';
+          content: "";
           display: block;
           border-top: 0.625rem solid $magv2-desc-popup-grey-border;
           margin: -1.25rem -1.25rem 0;
@@ -39,7 +39,7 @@ body {
             .magv2-pdp-image {
               position: relative;
 
-              html[lang=ar] & {
+              html[lang="ar"] & {
                 position: static;
               }
             }
@@ -133,7 +133,7 @@ body {
           position: relative;
           font-size: 0.875rem;
 
-          @include icon('arrow-#{$right}', before) {
+          @include icon("arrow-#{$right}", before) {
             position: absolute;
             #{$right}: 0.875rem;
             font-size: 2rem;
@@ -144,7 +144,7 @@ body {
             animation: bounceRight 1.4s infinite;
             animation-timing-function: ease-in-out;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               animation: bounceLeft 1.4s infinite;
             }
           }
@@ -178,7 +178,7 @@ body {
               width: 2rem;
               color: $magv2-mobile-back-arrow;
 
-              html[lang=ar] & {
+              html[lang="ar"] & {
                 transform: rotate(90deg);
               }
             }
@@ -212,7 +212,7 @@ body {
           &__inner--bottom-right {
             padding: 0 0.9375rem 1.5rem 1.25rem;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               padding: 0 1.25rem 1.5rem 0.9375rem;
             }
           }
@@ -220,7 +220,7 @@ body {
           &__inner--bottom-left {
             padding: 0 1.25rem 1.5rem 0.9375rem;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               padding: 0 0.9375rem 1.5rem 1.25rem;
             }
           }

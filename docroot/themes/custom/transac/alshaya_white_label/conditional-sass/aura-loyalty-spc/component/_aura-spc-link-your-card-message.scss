@@ -11,7 +11,7 @@
     cursor: pointer;
   }
 
-  @include icon('infomation') {
+  @include icon("infomation") {
     width: 2rem;
     height: 2rem;
     color: $aura-item-upgrade-highlight;

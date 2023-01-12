@@ -7,7 +7,7 @@
     padding-bottom: 0.625rem;
 
     &::before {
-      content: '';
+      content: "";
       width: 1.25rem;
       height: 1.25rem;
       display: inline-block;
@@ -18,28 +18,28 @@
 
   .top-contributor {
     &::before {
-      background: url('#{$base_theme_img_directory_path}/icons/ic-top-contributor.svg') no-repeat;
+      background: url("#{$base_theme_img_directory_path}/icons/ic-top-contributor.svg") no-repeat;
       top: 0.1875rem;
     }
   }
 
   .featured {
     &::before {
-      background: url('#{$base_theme_img_directory_path}/icons/ic-feature.svg') no-repeat;
+      background: url("#{$base_theme_img_directory_path}/icons/ic-feature.svg") no-repeat;
       top: 0.4375rem;
     }
   }
 
   .Expert {
     &::before {
-      background: url('#{$base_theme_img_directory_path}/icons/ic-expert.svg') no-repeat;
+      background: url("#{$base_theme_img_directory_path}/icons/ic-expert.svg") no-repeat;
       top: 0.25rem;
     }
   }
 
   .Staff {
     &::before {
-      background: url('#{$base_theme_img_directory_path}/icons/ic-staff.svg') no-repeat;
+      background: url("#{$base_theme_img_directory_path}/icons/ic-staff.svg") no-repeat;
       top: 0.1875rem;
     }
   }
@@ -56,7 +56,7 @@
       position: relative;
       top: 0.1875rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         unicode-bidi: isolate;
         direction: ltr;
       }

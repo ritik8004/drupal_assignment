@@ -12,8 +12,8 @@
   }
 
   &::after {
-    content: '';
-    background-image: url('#{$base_theme_img_directory_path}/aura/aura-mobile.png');
+    content: "";
+    background-image: url("#{$base_theme_img_directory_path}/aura/aura-mobile.png");
     background-repeat: no-repeat;
     background-size: 8.5625rem;
     // Intentionally non Rtl.
@@ -25,12 +25,12 @@
     z-index: -1;
     width: 15.625rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       transform: scaleX(-1);
     }
 
     @include breakpoint($desktop) {
-      background-image: url('#{$base_theme_img_directory_path}/aura/aura.png');
+      background-image: url("#{$base_theme_img_directory_path}/aura/aura.png");
       background-repeat: no-repeat;
       background-size: 9.875rem;
       background-position: 1px -1px;
@@ -38,7 +38,7 @@
   }
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     bottom: 0;
@@ -48,14 +48,14 @@
     border-radius: 0.625rem;
     background: $aura-loyalty-club-no-card-block-pending-enroll-bg;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       background: $aura-loyalty-club-no-card-block-pending-enroll-bg-ar;
     }
 
     @include breakpoint($desktop) {
       background: $aura-loyalty-club-no-card-block-pending-enroll-bg-desktop;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         background: $aura-loyalty-club-no-card-block-pending-enroll-bg-desktop-ar;
       }
     }
@@ -92,7 +92,7 @@
       font-size: 1.375rem;
       padding-bottom: 0.8125rem;
 
-      @include arabic-line-height('nomral');
+      @include arabic-line-height("nomral");
 
       @include breakpoint($upto-desktop) {
         font-size: 1.125rem;
@@ -104,7 +104,7 @@
       font-size: 1.125rem;
       padding-bottom: 1.1875rem;
 
-      @include arabic-line-height('nomral');
+      @include arabic-line-height("nomral");
 
       @include breakpoint($upto-desktop) {
         font-size: 1rem;
@@ -120,7 +120,7 @@
     overflow: hidden;
     z-index: -1;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       transform: scaleX(-1);
     }
 

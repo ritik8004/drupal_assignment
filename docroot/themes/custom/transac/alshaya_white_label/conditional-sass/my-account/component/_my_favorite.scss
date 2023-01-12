@@ -22,21 +22,21 @@
         }
 
         @include breakpoint($only-tablet) {
-          .c-products__item:nth-of-type(3n+1) {
+          .c-products__item:nth-of-type(3n + 1) {
             margin-#{$left}: 1.797%;
           }
 
-          .c-products__item:nth-of-type(2n+1) {
+          .c-products__item:nth-of-type(2n + 1) {
             margin-#{$left}: 0;
           }
         }
 
         @include breakpoint($desktop) {
-          .c-products__item:nth-of-type(4n+1) {
+          .c-products__item:nth-of-type(4n + 1) {
             margin-#{$left}: 1.797%;
           }
 
-          .c-products__item:nth-of-type(3n+1) {
+          .c-products__item:nth-of-type(3n + 1) {
             margin-#{$left}: 0;
           }
         }

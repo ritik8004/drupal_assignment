@@ -15,7 +15,7 @@
   }
 
   &.has--notification::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 0;
     height: 0;
@@ -124,7 +124,7 @@ header {
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   #cart_notification,
   #static_minicart_notification {
     @include breakpoint($tablet) {

@@ -88,7 +88,7 @@ header,
       position: fixed !important;
       top: 6.75rem !important;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: 7.25rem !important;
       }
     }
@@ -120,7 +120,7 @@ header,
 
 .ajax-progress.ajax-progress-fullscreen,
 .fullscreen-loader {
-  background-image: url(#{$base_theme_loader_img_directory_path}) !important;
+  background-image: url("#{$base_theme_loader_img_directory_path}") !important;
   background-repeat: no-repeat !important;
   background-color: rgba(255, 255, 255, 0.5) !important;
   background-size: 4.5rem;

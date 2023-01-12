@@ -33,7 +33,7 @@
         background-color: $magv2-desc-popup-content-bg;
 
         &::before {
-          content: '';
+          content: "";
           display: block;
           border-top: 0.625rem solid $magv2-desc-popup-grey-border;
           margin: -1.25rem -1.875rem 0;

@@ -134,7 +134,7 @@
     z-index: 2;
 
     .loader-icon {
-      background: url(#{$base_theme_loader_img_directory_path}) center/contain no-repeat;
+      background: url("#{$base_theme_loader_img_directory_path}") center/contain no-repeat;
       width: rem(48);
       height: rem(48);
     }

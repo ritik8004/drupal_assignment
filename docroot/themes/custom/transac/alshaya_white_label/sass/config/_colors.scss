@@ -1907,7 +1907,7 @@ $aura-accordion-border-bottom: $_light-border-bottom;
 
 // Aura PDP.
 $aura-pdp-string: $mothercare-black;
-$aura-pdp-points-bg : $aura-gradient-27;
+$aura-pdp-points-bg: $aura-gradient-27;
 $aura-pdp-points-bg-ar: $aura-gradient-27-ar;
 
 // Aura Progress.
@@ -2148,12 +2148,7 @@ $loader-gradient-1: $white;
 $loader-gradient-2: $_screeching_white;
 $loader-text-ph: $white-six;
 $text-loader-gradient: linear-gradient($loader-text-ph 1rem, $no-color 0);
-$plain-loader-gradient: linear-gradient(
-  90deg,
-  $loader-gradient-1,
-  $loader-gradient-2,
-  $loader-gradient-1
-);
+$plain-loader-gradient: linear-gradient(90deg, $loader-gradient-1, $loader-gradient-2, $loader-gradient-1);
 
 // eGift purchase page.
 $egift-purchase-page-border: $warm-grey-two;

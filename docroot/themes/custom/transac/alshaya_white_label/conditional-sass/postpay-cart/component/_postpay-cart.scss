@@ -57,7 +57,7 @@
     font-family: $postpay-font;
     color: $postpay_eligibility-text;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       font-family: $postpay-arabic-font;
     }
   }

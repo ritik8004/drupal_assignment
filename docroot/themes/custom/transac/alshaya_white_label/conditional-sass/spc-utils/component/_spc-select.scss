@@ -2,7 +2,7 @@
   width: 100%;
   height: 1.5rem;
 
-  @include componentLoader(transparent, 'after') {
+  @include componentLoader(transparent, "after") {
     background-position: $right;
   }
 
@@ -69,7 +69,7 @@
       align-items: center;
       justify-content: center;
 
-      @include icon('chevrondown') {
+      @include icon("chevrondown") {
         font-size: 1.75rem;
         position: absolute;
         top: 50%;
