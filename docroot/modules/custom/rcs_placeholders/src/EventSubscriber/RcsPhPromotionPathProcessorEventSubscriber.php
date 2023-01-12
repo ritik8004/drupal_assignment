@@ -36,8 +36,9 @@ class RcsPhPromotionPathProcessorEventSubscriber extends RcsPhPathProcessorEvent
     $full_path = $data['fullPath'];
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $promotion_prefix = $config->get('promotion.path_prefix');
+    $placeholder_nid = $config->get('promotion.placeholder_nid');
 
-    if (!str_starts_with($path, '/' . $promotion_prefix)) {
+    if (!str_starts_with($path, '/' . $promotion_prefix) || !$placeholder_nid) {
       return;
     }
 
@@ -45,7 +46,7 @@ class RcsPhPromotionPathProcessorEventSubscriber extends RcsPhPathProcessorEvent
       ? $this->enrichmentHelper->getEnrichedEntity('promotion', $full_path)
       : NULL;
     $entityData = NULL;
-    $processed_paths = '/node/' . $config->get('promotion.placeholder_nid');
+    $processed_paths = '/node/' . $placeholder_nid;
 
     if (isset($promotion)) {
       $entityData = $promotion->toArray();
