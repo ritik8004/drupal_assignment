@@ -100,3 +100,9 @@ body.nodetype--acq_product.ucbrowser .dialog-product-image-gallery-container-mob
 .ie .filter-fixed-top .sticky-filter-wrapper .site-brand-home a img {
   width: 3rem;
 }
+
+html[lang=ar] .safari #edit-hello-member .mobile-number-field .mobile-input--wrapper .prefix {
+  @include breakpoint($only-mobile) {
+    line-height: 1.6;
+  }
+}
