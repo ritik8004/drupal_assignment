@@ -8,6 +8,26 @@
 use Drupal\Core\File\FileSystemInterface;
 
 /**
+ * Implements hook_update_n().
+ *
+ * Uninstall amp contrib and custom modules.
+ */
+function alshaya_update_9402() {
+  // Remove amptheme theme.
+  if (\Drupal::service('theme_handler')->themeExists('amptheme')) {
+    \Drupal::service('theme_installer')->uninstall(['amptheme']);
+  }
+  // Remove alshaya_amp module.
+  if (\Drupal::service('module_handler')->moduleExists('alshaya_amp')) {
+    \Drupal::service('module_installer')->uninstall(['alshaya_amp']);
+  }
+  // Remove amp module.
+  if (\Drupal::service('module_handler')->moduleExists('amp')) {
+    \Drupal::service('module_installer')->uninstall(['amp']);
+  }
+}
+
+/**
  * Implements hook_update_N().
  *
  * Uninstall unnecessary modules.
