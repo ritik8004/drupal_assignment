@@ -13,7 +13,7 @@ $base_theme_fonts_directory_path: "/themes/custom/transac/alshaya_white_label/fo
 
 @font-face {
   font-family: "MothercareThin";
-  src: 
+  src:
     url("#{$base_theme_fonts_directory_path}/alshaya-thin.woff2") format("woff2"),
     url("#{$base_theme_fonts_directory_path}/alshaya-thin.woff") format("woff");
   font-weight: normal;
