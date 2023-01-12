@@ -13,6 +13,11 @@ use Drupal\Core\File\FileSystemInterface;
  * Uninstall amp contrib and custom modules.
  */
 function alshaya_update_9402() {
+  // Remove alshaya_amp_white_label theme.
+  if (\Drupal::service('theme_handler')->themeExists('alshaya_amp_white_label')) {
+    \Drupal::service('theme_installer')->uninstall(['alshaya_amp_white_label']);
+  }
+
   // Remove amptheme theme.
   if (\Drupal::service('theme_handler')->themeExists('amptheme')) {
     \Drupal::service('theme_installer')->uninstall(['amptheme']);
