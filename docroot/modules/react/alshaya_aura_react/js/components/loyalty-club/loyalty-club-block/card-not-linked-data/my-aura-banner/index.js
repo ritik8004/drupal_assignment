@@ -1,20 +1,15 @@
 import React from 'react';
-import Cleave from 'cleave.js/react';
+import AuraLogo from '../../../../../svg-component/aura-logo';
+import {
+  handleLinkYourCard,
+  handleNotYou,
+} from '../../../../../utilities/cta_helper';
+import { getNotYouLabel } from '../../../../../utilities/aura_utils';
 import ConditionalView
-  from '../../../../../../alshaya_spc/js/common/components/conditional-view';
-import AuraLogo from '../../../../svg-component/aura-logo';
-import { handleNotYou, handleLinkYourCard } from '../../../../utilities/cta_helper';
-import { getNotYouLabel } from '../../../../utilities/aura_utils';
-import MyAuraBanner from './my-aura-banner';
+  from '../../../../../../../js/utilities/components/conditional-view';
 
-const AuraMyAccountOldCardFound = (props) => {
+const MyAuraBanner = (props) => {
   const { cardNumber, notYouFailed } = props;
-
-  if (drupalSettings.aura.context === 'my_aura') {
-    return (
-      <MyAuraBanner cardNumber={cardNumber} notYouFailed={notYouFailed} />
-    );
-  }
 
   return (
     <div className="aura-myaccount-no-linked-card-wrapper old-card-found fadeInUp">
@@ -28,17 +23,13 @@ const AuraMyAccountOldCardFound = (props) => {
       </div>
       <div className="aura-myaccount-no-linked-card-description old-card-found">
         <div className="header">
-          { Drupal.t('An Aura card is already associated with your email address. Link your card in just one click.') }
+          <span className="bold">{ `${drupalSettings.userDetails.userName} `}</span>
+          {Drupal.t('an Aura loyalty account no. @card_number is associated with your email adress. It just takes one click to link.', {
+            '@card_number': cardNumber,
+          }, { context: 'aura' })}
           <span className="bold">{Drupal.t('Do you want to link now?')}</span>
         </div>
         <div className="card-number-wrapper">
-          <Cleave
-            name="aura-my-account-link-card"
-            className="aura-my-account-link-card"
-            disabled
-            value={cardNumber}
-            options={{ blocks: [4, 4, 4, 4] }}
-          />
           <div className="link-card-wrapper">
             <div className="link-card-loader-placeholder" />
             <div
@@ -48,7 +39,7 @@ const AuraMyAccountOldCardFound = (props) => {
                 handleLinkYourCard(cardNumber);
               }}
             >
-              { Drupal.t('Link your account') }
+              { Drupal.t('Link your card', {}, { context: 'aura' }) }
             </div>
           </div>
           <div className="not-you-wrapper">
@@ -70,4 +61,4 @@ const AuraMyAccountOldCardFound = (props) => {
   );
 };
 
-export default AuraMyAccountOldCardFound;
+export default MyAuraBanner;
