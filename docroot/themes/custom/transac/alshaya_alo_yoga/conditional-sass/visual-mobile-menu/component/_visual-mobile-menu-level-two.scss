@@ -2,7 +2,7 @@
   &__heading {
     font-family: $ay-black;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($upto-desktop) {
         margin-right: rem(192);
         white-space: break-spaces;

@@ -46,7 +46,7 @@
         padding: 0 rem(56);
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-top: rem(5);
       }
     }
@@ -74,10 +74,10 @@
   .view-on--map {
     @include breakpoint($only-mobile) {
       &::after {
-        content: '';
+        content: "";
         display: inline-block;
         position: absolute;
-        background: url(#{$ay_theme_img_directory_path}/icons/ic-directions.svg);
+        background: url("#{$ay_theme_img_directory_path}/icons/ic-directions.svg");
         width: rem(18);
         height: rem(18);
         background-size: contain;
@@ -153,7 +153,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .path--store-finder,
   .nodetype--store {
     .list-view-locator {

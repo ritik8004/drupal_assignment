@@ -2,7 +2,7 @@
   .order-total-column {
     .aura-points {
       @include breakpoint($desktop) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-right: rem(16);
           margin-top: rem(3);
         }

@@ -146,7 +146,7 @@
                 text-transform: capitalize;
                 padding-top: 0.125rem;
 
-                html[lang=ar] & {
+                html[lang="ar"] & {
                   border-radius: 0 rem(21) rem(21) 0;
                 }
               }
@@ -154,7 +154,7 @@
               &.js-facet-deactivate {
                 border-radius: 0 rem(21) rem(21) 0;
 
-                html[lang=ar] & {
+                html[lang="ar"] & {
                   border-radius: rem(21) 0 0 rem(21);
                 }
 
@@ -202,7 +202,7 @@
   z-index: 1;
 }
 
-article[data-vmode=search_result] {
+article[data-vmode="search_result"] {
   &:hover {
     .alshaya_search_hoverimage {
       transition: opacity 0.2s ease-in;
@@ -238,8 +238,8 @@ article[data-vmode=search_result] {
 
       &.active::before,
       &:hover::before {
-        content: '';
-        border: rem(1) solid  $plp-quick-view-product-color-border;
+        content: "";
+        border: rem(1) solid $plp-quick-view-product-color-border;
         position: absolute;
         display: inline-block;
         width: rem(24);
@@ -254,7 +254,7 @@ article[data-vmode=search_result] {
         pointer-events: none;
 
         &::before {
-          content: '';
+          content: "";
           height: rem(2);
           width: rem(19);
           background-color: $swatch-border;
