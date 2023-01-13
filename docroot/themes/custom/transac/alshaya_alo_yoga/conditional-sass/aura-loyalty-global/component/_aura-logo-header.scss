@@ -21,9 +21,7 @@
 
     #aura-header-modal {
       a.join-aura {
-        background: url("#{$base_theme_img_directory_path}/aura/aura-logo-horizontal-mono.png") no-repeat center/#{rem(
-            56
-          )};
+        background: url("#{$base_theme_img_directory_path}/aura/aura-logo-horizontal-mono.png") no-repeat center/#{rem(56)};
 
         svg {
           opacity: 0;
