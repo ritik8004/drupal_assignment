@@ -2,35 +2,36 @@
 
 /////////// English fonts ///////////
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
-$vs-bold: 'BentonSans-Bold', 'DroidArabicKufi-Bold', 'Arial';
-$vs-regular: 'BentonSans-Book', 'DroidArabicKufi', 'Arial';
-$vspromo: 'HarrietDisplay', 'DroidArabicKufi', 'Arial';
-$vspromo-regular: 'BentonSans-Book', 'GESSTwoLight-Light', 'Arial';
+$vs-bold: "BentonSans-Bold", "DroidArabicKufi-Bold", "Arial";
+$vs-regular: "BentonSans-Book", "DroidArabicKufi", "Arial";
+$vspromo: "HarrietDisplay", "DroidArabicKufi", "Arial";
+$vspromo-regular: "BentonSans-Book", "GESSTwoLight-Light", "Arial";
 
 // Extra fonts for PDP and Today's Offer
-$vs-bentonsans-medium: 'BentonSans-Medium', 'DroidArabicKufi-Bold', 'Arial';
-$vs-bentonsans-light: 'BentonSans-Light', 'DroidArabicKufi', 'Arial';
-$vs-bentonsans-regular: 'BentonSans-Regular', 'DroidArabicKufi', 'Arial';
-$vs-bentonsanscomp-medium: 'BentonSansCompMedium', 'DroidArabicKufi-Bold', 'Arial';
+$vs-bentonsans-medium: "BentonSans-Medium", "DroidArabicKufi-Bold", "Arial";
+$vs-bentonsans-light: "BentonSans-Light", "DroidArabicKufi", "Arial";
+$vs-bentonsans-regular: "BentonSans-Regular", "DroidArabicKufi", "Arial";
+$vs-bentonsanscomp-medium: "BentonSansCompMedium", "DroidArabicKufi-Bold",
+  "Arial";
 
 // Extra cursive fonts for Stylefinder
-$vs-gotcha-regular: 'Gotcha Crush Regular', 'DroidArabicKufi', 'Arial';
+$vs-gotcha-regular: "Gotcha Crush Regular", "DroidArabicKufi", "Arial";
 
 /////////// Arabic fonts ///////////
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$vs-arabic-bold: 'DroidArabicKufi-Bold', 'BentonSans-Bold', 'Arial';
-$vs-arabic-regular: 'DroidArabicKufi', 'BentonSans-Book', 'Arial';
-$vspromo-arabic: 'DroidArabicKufi', 'HarrietDisplay', 'Arial';
-$vspromo-arabic-regular: 'GESSTwoLight-Light', 'BentonSans-Book', 'Arial';
+$vs-arabic-bold: "DroidArabicKufi-Bold", "BentonSans-Bold", "Arial";
+$vs-arabic-regular: "DroidArabicKufi", "BentonSans-Book", "Arial";
+$vspromo-arabic: "DroidArabicKufi", "HarrietDisplay", "Arial";
+$vspromo-arabic-regular: "GESSTwoLight-Light", "BentonSans-Book", "Arial";
 
 // Icon fonts
-$alshaya-icons: 'alshaya-icons';
+$alshaya-icons: "alshaya-icons";
 $body_font: $vs-regular;
 
 // Used for victoria's pink super category content.
-$pink-pinksans: 'PinkSans', 'DroidArabicKufi', 'Arial';
-$pink-pinksans-130: 'PinkSans-130', 'DroidArabicKufi', 'Arial';
-$pink-pinkslab: 'PinkSlab', 'DroidArabicKufi-Bold', 'Arial';
+$pink-pinksans: "PinkSans", "DroidArabicKufi", "Arial";
+$pink-pinksans-130: "PinkSans-130", "DroidArabicKufi", "Arial";
+$pink-pinkslab: "PinkSlab", "DroidArabicKufi-Bold", "Arial";
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in VS theme.
 $arial: $vs-regular;

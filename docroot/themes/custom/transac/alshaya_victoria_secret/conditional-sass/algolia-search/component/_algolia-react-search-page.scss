@@ -56,7 +56,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   body.ie[class*="super-category"] {
     #alshaya-algolia-search {
       .block-facet-blockcategory-facet-search {
@@ -115,18 +115,26 @@ html[lang=ar] {
       }
 
       .large-col-grid {
-        background: url('#{$brand_theme_img_directory_path}/icons/large-grid-inactive.svg') no-repeat center;
+        background:
+          url("#{$brand_theme_img_directory_path}/icons/large-grid-inactive.svg")
+          no-repeat center;
 
         &.active {
-          background: url('#{$brand_theme_img_directory_path}/icons/large-grid-active.svg') no-repeat center;
+          background:
+            url("#{$brand_theme_img_directory_path}/icons/large-grid-active.svg")
+            no-repeat center;
         }
       }
 
       .small-col-grid {
-        background: url('#{$brand_theme_img_directory_path}/icons/small-grid-inactive.svg') no-repeat center;
+        background:
+          url("#{$brand_theme_img_directory_path}/icons/small-grid-inactive.svg")
+          no-repeat center;
 
         &.active {
-          background: url('#{$brand_theme_img_directory_path}/icons/small-grid-active.svg') no-repeat center;
+          background:
+            url("#{$brand_theme_img_directory_path}/icons/small-grid-active.svg")
+            no-repeat center;
         }
       }
     }

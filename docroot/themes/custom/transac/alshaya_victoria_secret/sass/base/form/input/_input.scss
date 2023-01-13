@@ -1,4 +1,4 @@
-input[type=checkbox] ~ label::before {
+input[type="checkbox"] ~ label::before {
   color: $primary_checkbox_empty;
   position: relative;
 }

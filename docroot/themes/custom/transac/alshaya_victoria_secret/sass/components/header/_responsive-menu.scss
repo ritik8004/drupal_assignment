@@ -27,7 +27,7 @@ header {
       position: fixed;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($upto-tablet) {
         top: 5.3rem;
       }
@@ -65,7 +65,7 @@ header {
       padding-bottom: 0;
       height: auto;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: auto;
       }
     }
@@ -74,7 +74,7 @@ header {
       padding-top: 0;
       padding-bottom: rem(30);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-top: 1.625rem;
         padding-bottom: 2.5rem;
       }
@@ -181,7 +181,7 @@ header {
       width: 49.5%;
 
       &::after {
-        content: '';
+        content: "";
         float: $right;
         margin-#{$right}: rem(-35);
         border-#{$right}: rem(1) solid $header_toggle_sign_divider;
@@ -189,7 +189,7 @@ header {
         position: relative;
         top: rem(-8);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-left: rem(-22);
         }
       }
@@ -293,7 +293,7 @@ header {
   .toggle--sign {
     .account {
       @include breakpoint($only-tablet) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           display: none;
         }
       }

@@ -69,7 +69,7 @@
       margin-top: 2.125rem;
 
       @include breakpoint($desktop) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-right: rem(32);
           font-size: 1rem;
         }
@@ -92,7 +92,7 @@
           margin-#{$left}: 1.25rem;
         }
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           padding: 0.725rem 0.5rem;
           margin-right: 0.75rem;
         }

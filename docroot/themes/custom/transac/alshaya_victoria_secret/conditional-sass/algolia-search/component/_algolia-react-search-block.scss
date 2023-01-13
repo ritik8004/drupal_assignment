@@ -247,7 +247,7 @@
 }
 
 @include breakpoint($only-mobile) {
-  html[lang=ar] {
+  html[lang="ar"] {
     .block-alshaya-algolia-react-autocomplete {
       top: 5.625rem;
       padding: 0;

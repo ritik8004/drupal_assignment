@@ -53,7 +53,7 @@
         padding: 0 3.5rem;
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-top: 0.375rem;
       }
     }
@@ -85,10 +85,10 @@
   .view-on--map {
     @include breakpoint($only-mobile) {
       &::after {
-        content: '';
+        content: "";
         display: inline-block;
         position: absolute;
-        background: url(../../../imgs/icons/ic-directions.svg);
+        background: url("../../../imgs/icons/ic-directions.svg");
         #{$right}: 0.6875rem;
         width: 1.875rem;
         height: 1.875rem;
@@ -158,7 +158,7 @@
   }
 
   .field__label::after {
-    content: '\003A';
+    content: "\003A";
   }
 }
 
@@ -209,7 +209,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .path--store-finder,
   .nodetype--store {
     .list-view-locator {
