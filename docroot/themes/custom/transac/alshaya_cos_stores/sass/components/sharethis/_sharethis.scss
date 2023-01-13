@@ -8,11 +8,11 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/facebook.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/facebook.svg");
     }
 
     &:hover::before {
-      background: url(#{$cos_theme_img_directory_path}/icons/facebook.svg) no-repeat;
+      background: url("#{$cos_theme_img_directory_path}/icons/facebook.svg") no-repeat;
     }
   }
 
@@ -20,11 +20,11 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/twitter.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/twitter.svg");
     }
 
     &:hover::before {
-      background: url(#{$cos_theme_img_directory_path}/icons/twitter.svg) no-repeat;
+      background: url("#{$cos_theme_img_directory_path}/icons/twitter.svg") no-repeat;
     }
   }
 
@@ -32,11 +32,11 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/pinterest.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/pinterest.svg");
     }
 
     &:hover::before {
-      background: url(#{$cos_theme_img_directory_path}/icons/pinterest.svg) no-repeat;
+      background: url("#{$cos_theme_img_directory_path}/icons/pinterest.svg") no-repeat;
     }
   }
 
@@ -44,11 +44,11 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/instagram.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/instagram.svg");
     }
 
     &:hover::before {
-      background: url(#{$cos_theme_img_directory_path}/icons/instagram.svg) no-repeat;
+      background: url("#{$cos_theme_img_directory_path}/icons/instagram.svg") no-repeat;
     }
   }
 }

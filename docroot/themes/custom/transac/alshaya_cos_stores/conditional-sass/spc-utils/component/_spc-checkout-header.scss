@@ -17,14 +17,14 @@
         margin: 0 auto;
         margin-top: 0.1875rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           height: 1.875rem;
         }
       }
 
       img {
         @include breakpoint($only-mobile) {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             max-height: 100%;
             width: 100%;
           }

@@ -3,7 +3,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/facebook.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/facebook.svg");
     }
   }
 
@@ -15,7 +15,7 @@
         margin-#{$right}: 1.25rem;
       }
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/instagram.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/instagram.svg");
     }
   }
 
@@ -23,7 +23,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/twitter.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/twitter.svg");
     }
   }
 
@@ -31,7 +31,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/spotify.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/spotify.svg");
     }
   }
 
@@ -39,7 +39,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/pinterest.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/pinterest.svg");
     }
   }
 
@@ -47,7 +47,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$cos_theme_img_directory_path}/icons/tumbler.svg);
+      background-image: url("#{$cos_theme_img_directory_path}/icons/tumbler.svg");
     }
   }
 }

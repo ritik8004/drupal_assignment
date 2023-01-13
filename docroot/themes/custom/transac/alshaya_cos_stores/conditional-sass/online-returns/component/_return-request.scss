@@ -6,7 +6,6 @@
     }
   }
 
-
   .products-list-wrapper,
   .refund-details-wrapper {
     margin-left: rem(-8);
@@ -126,7 +125,7 @@
             padding-#{$right}: rem(39);
           }
 
-          >div {
+          > div {
             margin-bottom: rem(3);
           }
 
@@ -143,7 +142,7 @@
             font-size: rem(12);
             line-height: 1.33;
 
-            @include breakpoint( $tablet) {
+            @include breakpoint($tablet) {
               margin-bottom: rem(3);
             }
           }
@@ -232,7 +231,6 @@
         margin-right: rem(20);
       }
 
-
       @include breakpoint($tablet) {
         padding: rem(48) 0 0 0;
         margin-left: rem(32);
@@ -258,7 +256,6 @@
       margin-bottom: rem(20);
       color: $online-return-refund-msg-txt;
     }
-
 
     .refund-method-wrapper {
       @include breakpoint($tablet) {
