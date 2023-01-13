@@ -56,7 +56,7 @@
 
   .light {
     &.no-direction {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         display: inline-block;
         direction: ltr;
       }

@@ -10,7 +10,7 @@
       border-bottom: none;
 
       &::after {
-        content: '';
+        content: "";
       }
     }
   }
@@ -31,8 +31,8 @@
       }
 
       &::after {
-        content: ' ';
-        background: url('../imgs/icons/forward-arrow.svg') center #{$right}/100% no-repeat;
+        content: " ";
+        background: url("../imgs/icons/forward-arrow.svg") center #{$right}/ 100% no-repeat;
         display: block;
         height: 100%;
         position: absolute;
@@ -40,7 +40,7 @@
         top: 0;
         width: 1rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(180deg);
         }
       }
@@ -69,7 +69,7 @@
         font-family: $hnm-arabic-regular !important;
         letter-spacing: normal;
 
-        html[lang='ar'] & {
+        html[lang="ar"] & {
           letter-spacing: 0.8px;
           font-family: $hnm-regular !important;
         }
@@ -251,7 +251,7 @@ body {
   }
 }
 
-html[lang='ar'] {
+html[lang="ar"] {
   .c-menu-secondary {
     a {
       font-family: $hnm-arabic-regular;

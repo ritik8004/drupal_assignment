@@ -97,7 +97,7 @@
   }
 
   .label--location::before {
-    background: url(#{$dh_theme_img_directory_path}/icons/search.svg) no-repeat no-repeat;
+    background: url("#{$dh_theme_img_directory_path}/icons/search.svg") no-repeat no-repeat;
     width: 1.625rem;
     height: 1.625rem;
 
@@ -415,7 +415,7 @@
       content: "";
       display: inline-block;
       position: absolute;
-      background: url(#{$dh_theme_img_directory_path}/icons/ic-directions.svg) no-repeat;
+      background: url("#{$dh_theme_img_directory_path}/icons/ic-directions.svg") no-repeat;
       #{$right}: 0.125rem;
       width: 2.125rem;
       height: 2.1875rem;
@@ -427,7 +427,7 @@
   }
 
   + .ajax-progress-fullscreen {
-    background-image: url(#{$dh_theme_img_directory_path}/icons/ic-loader.svg) no-repeat;
+    background-image: url("#{$dh_theme_img_directory_path}/icons/ic-loader.svg") no-repeat;
     background-size: 4.5rem;
   }
 

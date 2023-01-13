@@ -5,9 +5,9 @@
     font-weight: normal;
   }
 
-  ul[data-drupal-facet-id=category],
-  ul[data-drupal-facet-id=promotion_category_facet],
-  ul[data-drupal-facet-id=plp_category_facet] {
+  ul[data-drupal-facet-id="category"],
+  ul[data-drupal-facet-id="promotion_category_facet"],
+  ul[data-drupal-facet-id="plp_category_facet"] {
     a {
       margin: 0.25rem;
       text-transform: capitalize;
@@ -75,16 +75,16 @@
 
   .facet-item--expanded {
     ul {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-top: 0;
       }
     }
   }
 }
 
-ul[data-drupal-facet-id=category],
-ul[data-drupal-facet-id=plp_category_facet],
-ul[data-drupal-facet-id=promotion_category_facet] {
+ul[data-drupal-facet-id="category"],
+ul[data-drupal-facet-id="plp_category_facet"],
+ul[data-drupal-facet-id="promotion_category_facet"] {
   > .facet-item--expanded {
     > label {
       &::before {
@@ -109,15 +109,15 @@ ul[data-drupal-facet-id=promotion_category_facet] {
   .block-facet-blockcategory,
   .block-facet-blockplp-category-facet {
     .facet-item {
-      input[type=checkbox] ~ label::before {
+      input[type="checkbox"] ~ label::before {
         top: 0;
       }
     }
   }
 }
 
-ul[data-drupal-facet-id=plp_category_facet],
-ul[data-drupal-facet-id=promotion_category_facet] {
+ul[data-drupal-facet-id="plp_category_facet"],
+ul[data-drupal-facet-id="promotion_category_facet"] {
   > li {
     > ul {
       > li {
@@ -129,7 +129,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
           }
         }
 
-        > input[type=checkbox]:checked {
+        > input[type="checkbox"]:checked {
           ~ label {
             @include icon(check-box-filled) {
               color: $primary_checkbox_filled;
@@ -160,7 +160,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
       }
     }
 
-    > input[type=checkbox]:checked {
+    > input[type="checkbox"]:checked {
       ~ label {
         @include icon(check-box-filled) {
           color: $primary_checkbox_filled;
@@ -175,7 +175,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
     &.facet-item__count {
       margin-top: -0.375rem !important;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: -0.25rem !important;
       }
     }

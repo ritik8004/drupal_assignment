@@ -423,14 +423,14 @@
     width: calc(100% - 5.7rem);
     float: $left;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       width: calc(100% - 5.55rem);
     }
 
     @include breakpoint($upto-desktop) {
       width: calc(100% - 5.45rem);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: calc(100% - 5.3rem);
       }
     }
@@ -565,12 +565,12 @@
     }
   }
 
-  .edit-newsletter[data-style=zoom-in][data-loading] {
+  .edit-newsletter[data-style="zoom-in"][data-loading] {
     background: $footer_link;
   }
 
   .ladda-spinner {
-    background: url(#{$base_theme_loader_img_directory_path}) no-repeat;
+    background: url("#{$base_theme_loader_img_directory_path}") no-repeat;
     background-size: cover;
     height: 2.1875rem;
     width: 2.1875rem;
@@ -611,7 +611,7 @@
   #edit-email {
     padding-#{$right}: 0;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding-left: 0;
     }
   }

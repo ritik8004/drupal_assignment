@@ -28,14 +28,14 @@ header {
       margin: 0.625rem 0;
       height: 2.25rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: 2.25rem;
       }
     }
 
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           top: 3rem;
         }
       }
@@ -190,14 +190,14 @@ header {
 
     #edit-submit-search,
     #edit-submit-search--2 {
-      background: url('../imgs/assets/ic-search.svg') 15px 10px no-repeat;
+      background: url("../imgs/assets/ic-search.svg") 15px 10px no-repeat;
       border-bottom: 1px solid $primary_border;
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: -0.3125rem;
         background-position-y: 0.4375rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-position-x: 0.625rem;
         }
       }
@@ -338,7 +338,7 @@ header {
       font-size: 0;
 
       &::before {
-        background: url('../imgs/icons/ic-menu.svg?123') no-repeat;
+        background: url("../imgs/icons/ic-menu.svg?123") no-repeat;
         width: 1.5rem;
         height: 1rem;
       }
@@ -516,7 +516,7 @@ header {
       &:hover {
         .menu--one__link {
           &::after {
-            content: '';
+            content: "";
             height: 2px;
             background: $mm_l1_link_active;
             display: inherit;
@@ -527,7 +527,7 @@ header {
 
         & > ul.menu--two__list {
           &::after {
-            content: '';
+            content: "";
             height: 1px;
             width: 100%;
             background: $mm_mobile_icon;
@@ -546,7 +546,7 @@ header {
       .menu--one__link {
         &.active {
           &::after {
-            content: '';
+            content: "";
             height: 2px;
             background: $mm_l1_link_active;
             display: inherit;
@@ -567,7 +567,7 @@ header {
         &:hover {
           .menu--one__link {
             &::after {
-              content: '';
+              content: "";
               height: 2px;
               background: $primary_border;
               display: inherit;
@@ -629,12 +629,12 @@ header {
           }
 
           &::after {
-            background: url('../imgs/icons/icon-chevron-next--hover.svg');
+            background: url("../imgs/icons/icon-chevron-next--hover.svg");
           }
         }
 
         &::after {
-          background: url('../imgs/icons/icon-chevron-next.svg');
+          background: url("../imgs/icons/icon-chevron-next.svg");
         }
       }
 
@@ -724,8 +724,8 @@ header {
               margin-#{$right}: 1rem;
 
               &::after {
-                content: ' ';
-                background: url(../imgs/icons/forward-arrow.svg) center #{$right}/100% no-repeat;
+                content: " ";
+                background: url(../imgs/icons/forward-arrow.svg) center #{$right}/ 100% no-repeat;
                 display: block;
                 height: 100%;
                 position: absolute;
@@ -743,7 +743,7 @@ header {
             color: $mm_l3_link;
 
             &::after {
-              content: '';
+              content: "";
             }
           }
         }
@@ -759,8 +759,8 @@ header {
 
       .menu__in {
         &::after {
-          content: ' ';
-          background: url('../imgs/icons/forward-arrow.svg') center #{$right}/100% no-repeat;
+          content: " ";
+          background: url("../imgs/icons/forward-arrow.svg") center #{$right}/ 100% no-repeat;
           display: block;
           height: 100%;
           position: absolute;
@@ -768,7 +768,7 @@ header {
           top: -0.5rem;
           width: 1rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: rotate(180deg);
             top: 0;
           }
@@ -781,7 +781,7 @@ header {
     ul.menu--one__list {
       background: $default_background_color;
 
-      @include breakpoint ($only-tablet) {
+      @include breakpoint($only-tablet) {
         width: 20rem;
       }
     }
@@ -877,7 +877,7 @@ header {
       #{$left}: 0.25rem;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       &::after {
         top: 0.75rem;
       }
@@ -902,7 +902,7 @@ header {
     height: auto !important;
     background: $mm_bg;
 
-    @include breakpoint ($only-tablet) {
+    @include breakpoint($only-tablet) {
       width: 20rem;
     }
   }
@@ -930,7 +930,7 @@ header {
   letter-spacing: 1px;
   text-transform: uppercase;
 
-  @include breakpoint ($only-tablet) {
+  @include breakpoint($only-tablet) {
     width: 20rem;
   }
 
@@ -951,7 +951,7 @@ header {
         padding: 0.9rem 0.25rem;
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding: 0.9rem 0;
 
         &.shop {
@@ -976,7 +976,7 @@ header {
       padding: 0.9rem 2.05rem;
       width: 39%;
 
-      @include breakpoint ($only-tablet) {
+      @include breakpoint($only-tablet) {
         width: 6.4375rem;
       }
     }
@@ -988,7 +988,7 @@ header {
   .menu--active .toggle--sign {
     #{$left}: 0;
 
-    @include breakpoint ($only-tablet) {
+    @include breakpoint($only-tablet) {
       width: 20rem;
     }
   }
@@ -997,20 +997,20 @@ header {
     background-color: transparent;
 
     span {
-      background: url('../imgs/icons/close-icon.svg') center center no-repeat;
+      background: url("../imgs/icons/close-icon.svg") center center no-repeat;
     }
   }
 
   .menu--active .mobile--close {
     #{$left}: 87.375%;
 
-    @include breakpoint ($only-tablet) {
+    @include breakpoint($only-tablet) {
       #{$left}: 20.5rem;
     }
   }
 
   .main--menu ul.menu--one__list {
-    @include breakpoint ($only-tablet) {
+    @include breakpoint($only-tablet) {
       width: 20rem;
     }
   }
@@ -1048,7 +1048,7 @@ header {
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .block-system-branding-block {
     .site-brand-home {
       img {
@@ -1104,7 +1104,7 @@ html[lang=ar] {
   }
 }
 
-html[lang='ar'] {
+html[lang="ar"] {
   .block-system-branding-block {
     .site-brand-home {
       a {

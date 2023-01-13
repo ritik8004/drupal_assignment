@@ -2,7 +2,7 @@
   label {
     text-transform: capitalize;
 
-    @include icon('chevrondown', 'after') {
+    @include icon("chevrondown", "after") {
       font-size: 0.525rem;
     }
   }

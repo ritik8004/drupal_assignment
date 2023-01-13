@@ -3,7 +3,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$fl_theme_img_directory_path}/social-icons/facebook.svg);
+      background-image: url("#{$fl_theme_img_directory_path}/social-icons/facebook.svg");
     }
   }
 
@@ -11,7 +11,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$fl_theme_img_directory_path}/social-icons/instagram.svg);
+      background-image: url("#{$fl_theme_img_directory_path}/social-icons/instagram.svg");
     }
   }
 
@@ -19,7 +19,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$fl_theme_img_directory_path}/social-icons/twitter.svg);
+      background-image: url("#{$fl_theme_img_directory_path}/social-icons/twitter.svg");
     }
   }
 }

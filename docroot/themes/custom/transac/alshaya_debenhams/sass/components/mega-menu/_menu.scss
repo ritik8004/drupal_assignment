@@ -228,7 +228,7 @@
   }
 
   .menu__back {
-    background: url(#{$dh_theme_img_directory_path}/icons/ic-chevron-#{$left}.svg) no-repeat;
+    background: url("#{$dh_theme_img_directory_path}/icons/ic-chevron-#{$left}.svg") no-repeat;
     margin-#{$left}: 0;
     width: 1.375rem;
     height: 1.375rem;

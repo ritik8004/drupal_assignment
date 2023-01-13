@@ -209,7 +209,7 @@
     }
 
     .form-item-field-address-0-address-address-line2 {
-      input[type=text] ~ label:not(.active-label) {
+      input[type="text"] ~ label:not(.active-label) {
         color: $primary_input !important;
         font-size: 0.8125rem !important;
       }
@@ -284,7 +284,7 @@
     }
 
     input {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         font-family: $hnm-regular-nodir;
       }
     }

@@ -356,7 +356,7 @@
       }
 
       &::before {
-        background-image: url(#{$fl_theme_img_directory_path}/icons/my-location.svg);
+        background-image: url("#{$fl_theme_img_directory_path}/icons/my-location.svg");
         background-size: 100%;
         height: 1.9375rem;
         width: 2rem;
