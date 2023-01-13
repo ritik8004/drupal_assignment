@@ -10,7 +10,7 @@
       text-align: center;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       width: auto;
 
       @include breakpoint($only-mobile) {
@@ -41,7 +41,7 @@
       max-width: 10.9375rem;
       margin: auto 0;
 
-      html[lang='ar'] & {
+      html[lang="ar"] & {
         @include breakpoint($tablet) {
           max-width: 12.75rem;
         }
@@ -50,7 +50,7 @@
       @include breakpoint($upto-desktop) {
         margin: 0.5rem auto 0;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin: 0.125rem auto 0;
         }
       }
@@ -58,7 +58,7 @@
       @include breakpoint($only-mobile) {
         max-width: 11rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           max-width: 7.5rem;
           margin-top: 0.625rem;
         }
@@ -108,7 +108,7 @@ header.c-header {
             font-size: 0.75rem;
           }
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             bottom: -2.0625rem;
           }
         }
@@ -118,7 +118,7 @@ header.c-header {
     @include breakpoint($only-mobile) {
       top: 3.125rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: 3.125rem;
       }
     }
@@ -142,7 +142,7 @@ header.c-header {
       background-position: -0.25rem;
       #{$left}: -2.75rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         background-position: 0.25rem;
       }
     }
@@ -153,7 +153,7 @@ header.c-header {
       top: -0.1875rem;
       #{$left}: -0.5rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         right: -3.625rem;
         top: 0.125rem;
       }
@@ -162,7 +162,7 @@ header.c-header {
     @include breakpoint($only-tablet) {
       bottom: -3.35rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         bottom: -2.0625rem;
       }
     }
@@ -239,11 +239,11 @@ header.c-header {
   .block-cart-mini-block,
   .block-alshaya-react-mini-cart {
     .cart-link {
-      background: url(#{$aeo_theme_img_directory_path}/icons/basket.svg) no-repeat;
+      background: url("#{$aeo_theme_img_directory_path}/icons/basket.svg") no-repeat;
       margin-bottom: 0;
 
       &:hover {
-        background: url(#{$aeo_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
+        background: url("#{$aeo_theme_img_directory_path}/icons/basket-filled.svg") no-repeat;
 
         .quantity {
           color: $primary_minicart_hover;
@@ -256,7 +256,7 @@ header.c-header {
         width: 1.6875rem;
         #{$left}: 0.3125rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           right: -0.25rem;
           top: 0.1875rem;
         }
@@ -266,7 +266,7 @@ header.c-header {
         margin-#{$left}: 16%;
         margin-bottom: rem(15);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-bottom: rem(-2);
         }
       }
@@ -277,7 +277,7 @@ header.c-header {
         margin-#{$right}: -0.3125rem;
         margin-top: 0.9375rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-top: 0.9375rem;
           margin-left: 0.25rem;
         }
@@ -295,7 +295,7 @@ header.c-header {
       }
 
       @include breakpoint($only-tablet) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           right: 0.625rem;
         }
       }
@@ -304,7 +304,7 @@ header.c-header {
         bottom: 0.5625rem;
         #{$left}: 0.1825rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           right: 0.8125rem;
         }
       }
@@ -326,7 +326,7 @@ header.c-header {
       top: 0.625rem;
       #{$right}: -0.4375rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: 0;
         left: 0.0625rem;
       }
@@ -338,7 +338,7 @@ header.c-header {
       height: 3rem;
       margin: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: 3rem;
       }
     }
@@ -391,7 +391,7 @@ header.c-header {
   }
 
   .site-brand-home {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-tablet) {
         width: auto;
       }
@@ -401,7 +401,7 @@ header.c-header {
       @include breakpoint($only-tablet) {
         max-width: 17.5625rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           max-width: none;
         }
       }
@@ -418,7 +418,7 @@ header {
       #{$left}: 1.125rem;
       font-size: 0.625rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         right: 0.25rem;
       }
 
@@ -435,7 +435,7 @@ header {
       padding-top: 1.625rem;
       padding-bottom: 1.125rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-bottom: 1.5rem;
       }
     }
@@ -481,7 +481,7 @@ header {
         margin-top: 0;
         text-transform: capitalize;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           font-size: 0.875rem;
           line-height: 0.9;
         }
@@ -509,7 +509,7 @@ header {
 
 .c-menu-primary {
   .mobile--menu {
-    @include icon_img('#{$aeo_theme_img_directory_path}/icons/mobile-menu.svg', 2.125rem, 2.125rem);
+    @include icon_img("#{$aeo_theme_img_directory_path}/icons/mobile-menu.svg", 2.125rem, 2.125rem);
 
     &::before {
       @include breakpoint($only-mobile) {
@@ -556,7 +556,7 @@ header {
       top: 0.6rem;
       #{$left}: 4rem;
 
-      @include icon_img('#{$aeo_theme_img_directory_path}/assets/search.svg', 2rem, 2rem);
+      @include icon_img("#{$aeo_theme_img_directory_path}/assets/search.svg", 2rem, 2rem);
 
       &::before {
         @include breakpoint($only-mobile) {
@@ -590,13 +590,13 @@ header {
   }
 
   .store {
-    @include icon_img('#{$aeo_theme_img_directory_path}/icons/store-finder.svg', 2rem, 2rem);
+    @include icon_img("#{$aeo_theme_img_directory_path}/icons/store-finder.svg", 2rem, 2rem);
 
     &::before {
-      content: '';
+      content: "";
       #{$left}: -0.1875rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         @include breakpoint($only-mobile) {
           #{$left}: 0;
         }
@@ -681,7 +681,7 @@ header {
         padding: 1rem 1.5rem 0;
 
         &::after {
-          content: '';
+          content: "";
           height: 0.125rem;
           width: 1.5625rem;
           transition: all 0.3s ease-out;
@@ -704,7 +704,7 @@ header {
           border-top: 1px solid $mm_l1_border;
 
           &::after {
-            content: '';
+            content: "";
             height: 1px;
             width: 100%;
             background: $mm_l1_link_bg;
@@ -804,7 +804,7 @@ header {
 
   .main--menu {
     ul.menu--one__list {
-      @include breakpoint ($only-tablet) {
+      @include breakpoint($only-tablet) {
         width: 20rem;
       }
     }
@@ -880,7 +880,7 @@ header {
   .menu--two__list,
   .menu--three__list,
   .menu--four__list {
-    @include breakpoint ($only-tablet) {
+    @include breakpoint($only-tablet) {
       width: 20rem;
     }
   }
@@ -909,7 +909,7 @@ header {
   text-transform: uppercase;
   display: flex;
 
-  @include breakpoint ($only-tablet) {
+  @include breakpoint($only-tablet) {
     width: 20rem;
     display: flex;
   }
@@ -943,7 +943,7 @@ header {
       width: 100%;
       color: $header_c_menu_icon_text;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding: 0.9rem 0;
 
         &.shop {
@@ -963,7 +963,7 @@ header {
     letter-spacing: 0;
 
     &.shop {
-      @include breakpoint ($only-tablet) {
+      @include breakpoint($only-tablet) {
         width: 100%;
       }
     }
@@ -977,7 +977,7 @@ header {
 // Tablet Specific menu width
 @include breakpoint($upto-desktop) {
   .menu--active .toggle--sign {
-    @include breakpoint ($only-tablet) {
+    @include breakpoint($only-tablet) {
       width: 20rem;
     }
   }
@@ -985,13 +985,13 @@ header {
   .menu--active .mobile--close {
     #{$left}: 87.375%;
 
-    @include breakpoint ($only-tablet) {
+    @include breakpoint($only-tablet) {
       #{$left}: 20.5rem;
     }
   }
 
   .main--menu ul.menu--one__list {
-    @include breakpoint ($only-tablet) {
+    @include breakpoint($only-tablet) {
       width: 20rem;
     }
   }
