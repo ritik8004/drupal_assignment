@@ -21,7 +21,7 @@
     @include breakpoint($only-mobile) {
       top: 6.375rem !important;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: 6.375rem !important;
       }
     }
