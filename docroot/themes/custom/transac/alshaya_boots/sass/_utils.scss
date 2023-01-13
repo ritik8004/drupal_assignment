@@ -1,9 +1,9 @@
-$bp_theme_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs';
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs/icons/BP-loader.svg';
-$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs';
+$bp_theme_img_directory_path: "/themes/custom/transac/alshaya_boots/imgs";
+$base_theme_loader_img_directory_path: "/themes/custom/transac/alshaya_boots/imgs/icons/BP-loader.svg";
+$brand_theme_img_directory_path: "/themes/custom/transac/alshaya_boots/imgs";
 
 @mixin ic-social {
-  content: '';
+  content: "";
   background-repeat: no-repeat;
   width: 2.76rem;
   height: 2.59rem;
@@ -32,7 +32,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs';
 
 @mixin icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {
@@ -58,22 +58,27 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs';
   pointer-events: none;
 }
 
-@mixin facet-arrow ($position, $direction: false, $topborder: false, $rightborder:false, $bottomborder:false, $leftborder:false) {
+@mixin facet-arrow(
+  $position,
+  $direction: false,
+  $topborder: false,
+  $rightborder: false,
+  $bottomborder: false,
+  $leftborder: false
+) {
   &:#{$position} {
     position: absolute;
     top: 1.1875rem;
     #{$right}: 0;
     font-size: 0;
-    content: '';
+    content: "";
     border-style: solid;
     height: 0;
     width: 0;
 
     @if $topborder == false and $rightborder == false and $bottomborder == false and $leftborder == false {
       border-width: 0.25rem 0 0.25rem 0.4rem;
-    }
-
-    @else {
+    } @else {
       border-width: $topborder $rightborder $bottomborder $leftborder;
     }
 
@@ -83,7 +88,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs';
       @if $position == after {
         transform: rotate(0deg);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(180deg);
         }
       }
@@ -91,13 +96,11 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs';
       @if $position == before {
         transform: rotate(180deg);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(0deg);
         }
       }
-    }
-
-    @else {
+    } @else {
       @if $direction == up {
         transform: rotate(270deg);
       }
@@ -133,9 +136,16 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs';
   -moz-osx-font-smoothing: grayscale;
 }
 
-@mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
+@mixin pdp_icon_img(
+  $imgpath: false,
+  $height: 0,
+  $width: 0,
+  $position: before,
+  $repeat: no-repeat center,
+  $styles: true
+) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {
@@ -162,7 +172,16 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_boots/imgs';
 
 $border-default: 0.125rem solid $promo_block_border;
 
-@mixin style-font($family: false, $size_d: false, $size_m: false, $pd_top: false, $pd_bottom: false, $colour: false, $weight: false, $lh: false) {
+@mixin style-font(
+  $family: false,
+  $size_d: false,
+  $size_m: false,
+  $pd_top: false,
+  $pd_bottom: false,
+  $colour: false,
+  $weight: false,
+  $lh: false
+) {
   letter-spacing: normal;
 
   @if $family {
@@ -238,7 +257,7 @@ $border-default: 0.125rem solid $promo_block_border;
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     width: 100%;
     height: 0.125rem;
     background: $primary_empty_btn;
@@ -278,7 +297,7 @@ $border-default: 0.125rem solid $promo_block_border;
   }
 
   // Arabic font is longer so it gets clipped from bottom.
-  html[lang=ar] & {
+  html[lang="ar"] & {
     line-height: 1.2;
   }
 }
@@ -336,7 +355,7 @@ $border-default: 0.125rem solid $promo_block_border;
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .select2-selection--single .select2-selection__rendered {
       width: 94%;
     }

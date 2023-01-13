@@ -3,7 +3,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$bp_theme_img_directory_path}/icons/facebook.svg);
+      background-image: url("#{$bp_theme_img_directory_path}/icons/facebook.svg");
     }
   }
 
@@ -11,7 +11,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$bp_theme_img_directory_path}/icons/instagram.png);
+      background-image: url("#{$bp_theme_img_directory_path}/icons/instagram.png");
       background-size: 60%;
     }
   }
@@ -20,7 +20,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$bp_theme_img_directory_path}/icons/twitter.svg);
+      background-image: url("#{$bp_theme_img_directory_path}/icons/twitter.svg");
     }
   }
 
@@ -28,7 +28,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$bp_theme_img_directory_path}/icons/youtube.svg);
+      background-image: url("#{$bp_theme_img_directory_path}/icons/youtube.svg");
     }
   }
 
@@ -36,7 +36,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$bp_theme_img_directory_path}/icons/pinterest.svg);
+      background-image: url("#{$bp_theme_img_directory_path}/icons/pinterest.svg");
     }
   }
 }

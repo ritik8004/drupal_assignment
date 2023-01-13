@@ -1,6 +1,5 @@
 .spc-delivery-area {
   .spc-filter-panel-search-form-item {
-    @include icon_img('#{$bp_theme_img_directory_path}/assets/search.svg', 2.5rem, 2.5rem, after);
+    @include icon_img("#{$bp_theme_img_directory_path}/assets/search.svg", 2.5rem, 2.5rem, after);
   }
 }
-

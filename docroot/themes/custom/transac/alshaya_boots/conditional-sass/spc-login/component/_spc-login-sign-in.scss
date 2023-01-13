@@ -2,7 +2,7 @@
   @include breakpoint($upto-desktop) {
     margin-top: 0.5rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 0.5rem;
     }
   }
