@@ -10,7 +10,7 @@ Feature: Test search functionality
     And I should see an "#alshaya-algolia-autocomplete" element
     When I fill in "search" with "{spc_search_keyword}"
     And I wait for AJAX to finish
-    And I should see "Search results"
+    And I wait for element "#block-page-title .c-page-title"
     Then I should see an ".c-products-list" element
     And I should see "{spc_search_keyword}" in the "#hits" element
     And the element ".alshaya_search_gallery" should exist
