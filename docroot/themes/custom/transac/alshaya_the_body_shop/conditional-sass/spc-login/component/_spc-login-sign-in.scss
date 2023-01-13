@@ -21,7 +21,7 @@
     }
 
     @include breakpoint($desktop) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: 7rem;
 
         a {

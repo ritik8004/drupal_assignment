@@ -33,13 +33,13 @@
 
   .label--location {
     &::before {
-      background: url('../../../imgs/icons/store-search.svg') no-repeat;
+      background: url("../../../imgs/icons/store-search.svg") no-repeat;
     }
   }
 }
 
 .geolocation-common-map-container {
-  [aria-hidden=true] {
+  [aria-hidden="true"] {
     color: $store_finder_map_marker_text !important;
     padding-top: rem(17);
     font-weight: bold;
@@ -49,12 +49,12 @@
 .path--store-finder,
 .nodetype--store {
   .geolocation-google-map {
-    [aria-hidden='true'] {
+    [aria-hidden="true"] {
       color: $store_finder_map_marker_text !important;
       font-weight: bold;
       padding-bottom: 0;
 
-      html[lang='ar'] & {
+      html[lang="ar"] & {
         padding-right: rem(1);
       }
     }

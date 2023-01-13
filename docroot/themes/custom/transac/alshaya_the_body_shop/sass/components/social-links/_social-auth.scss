@@ -1,7 +1,7 @@
 .block-alshaya-signup-signin-buttons {
   .link-button {
     &::before {
-      mask-image: url(#{$base_theme_img_directory_path}/icons/profile-icon.svg);
+      mask-image: url("#{$base_theme_img_directory_path}/icons/profile-icon.svg");
       mask-position: center;
       mask-repeat: no-repeat;
       mask-size: 2.9375rem;
