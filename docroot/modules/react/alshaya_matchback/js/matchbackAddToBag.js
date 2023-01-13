@@ -10,8 +10,6 @@ import AddToBagContainer from '../../js/utilities/components/addtobag-container'
       if (!drupalSettings.displayMatchbackAddToBag) {
         return;
       }
-      // Adding class identifier on wrapper where add to bag is enabled.
-      $('.matchback-processed').addClass('add-to-bag-enabled');
       // We only want to proceed when the AJAX call to fetch matchback items
       // is done and Drupal behaviors is called.
       if (hasValue(context.classList) && !context.classList.contains('crossell-title')) {
