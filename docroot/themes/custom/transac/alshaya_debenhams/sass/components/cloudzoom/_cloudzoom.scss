@@ -25,7 +25,7 @@
 
   .slick-current {
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: -0.125rem;
       bottom: -0.125rem;
@@ -251,7 +251,7 @@
   }
 
   #lightSlider {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       .slick-next,
       .slick-prev {
         top: 0 !important;

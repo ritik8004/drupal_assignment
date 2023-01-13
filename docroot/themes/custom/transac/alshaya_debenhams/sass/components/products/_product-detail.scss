@@ -143,7 +143,7 @@
       }
     }
 
-    input[type='text'] {
+    input[type="text"] {
       width: calc(100% - 8rem);
     }
   }
@@ -231,7 +231,7 @@
         margin-#{$left}: 1.25rem;
         min-width: 10.0625rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: 10.0625rem;
           margin-right: 0.5rem;
           float: left;

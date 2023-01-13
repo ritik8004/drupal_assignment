@@ -1,10 +1,10 @@
 // Stylesheet mixins.
-$dh_theme_img_directory_path: '/themes/custom/transac/alshaya_debenhams/imgs';
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_debenhams/imgs/icons/ic-loader.svg';
-$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_debenhams/imgs';
+$dh_theme_img_directory_path: "/themes/custom/transac/alshaya_debenhams/imgs";
+$base_theme_loader_img_directory_path: "/themes/custom/transac/alshaya_debenhams/imgs/icons/ic-loader.svg";
+$brand_theme_img_directory_path: "/themes/custom/transac/alshaya_debenhams/imgs";
 
 @mixin ic-social {
-  content: '';
+  content: "";
   background-repeat: no-repeat;
   width: 1.375rem;
   height: 1.375rem;
@@ -16,7 +16,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_debenhams/imgs'
     width: 1rem;
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     background-position: right;
   }
 
@@ -38,7 +38,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_debenhams/imgs'
 
 @mixin icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {
@@ -63,9 +63,16 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_debenhams/imgs'
   font-family: $dh-light;
 }
 
-@mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
+@mixin pdp_icon_img(
+  $imgpath: false,
+  $height: 0,
+  $width: 0,
+  $position: before,
+  $repeat: no-repeat center,
+  $styles: true
+) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {

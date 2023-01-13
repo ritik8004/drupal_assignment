@@ -57,7 +57,7 @@
   }
 
   .site-brand-wrapper {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($desktop) {
         height: 7rem;
       }
