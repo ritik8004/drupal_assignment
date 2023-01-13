@@ -243,7 +243,7 @@ body:not(.frontpage) {
 }
 
 @include breakpoint($only-mobile) {
-  html[lang=ar] {
+  html[lang="ar"] {
     .block-alshaya-algolia-react-autocomplete {
       top: 2.9375rem;
       padding: 0;
@@ -277,7 +277,7 @@ body {
       @include breakpoint($only-mobile) {
         margin-top: 5.9375rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-top: 5.9375rem;
         }
       }

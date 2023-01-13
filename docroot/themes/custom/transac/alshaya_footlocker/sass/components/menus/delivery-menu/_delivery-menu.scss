@@ -3,14 +3,14 @@
   box-shadow: none;
   background-color: $delivery_menu_bg;
 
-  html[lang='ar'] & {
+  html[lang="ar"] & {
     padding: 0.25rem 0 0.875rem;
   }
 
   .field--name-field-title {
     text-transform: uppercase;
 
-    html[lang='ar'] & {
+    html[lang="ar"] & {
       font-size: 1rem;
     }
   }
@@ -18,7 +18,7 @@
   .field--name-field-sub-title {
     font-size: 0.875rem;
 
-    html[lang='ar'] & {
+    html[lang="ar"] & {
       line-height: 1;
     }
   }

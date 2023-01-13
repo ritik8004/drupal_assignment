@@ -3,7 +3,7 @@
   @include breakpoint($mobile) {
     margin: 0.875rem auto;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin: 0 auto;
     }
   }

@@ -13,7 +13,7 @@
 
 @mixin icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {
@@ -26,7 +26,7 @@
 }
 
 @mixin ic-social {
-  content: '';
+  content: "";
   background-repeat: no-repeat;
   width: 1.875rem;
   height: 1.5625rem;
@@ -54,9 +54,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-@mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
+@mixin pdp_icon_img(
+  $imgpath: false,
+  $height: 0,
+  $width: 0,
+  $position: before,
+  $repeat: no-repeat center,
+  $styles: true
+) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {
@@ -99,7 +106,7 @@
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .select2-selection--single .select2-selection__rendered {
       width: 94%;
     }
@@ -179,12 +186,12 @@
   }
 
   // Arabic font is longer so it gets clipped from bottom.
-  html[lang=ar] & {
+  html[lang="ar"] & {
     line-height: 1.2;
     height: 2.5rem;
   }
 }
 
-$fl_theme_img_directory_path: '/themes/custom/transac/alshaya_footlocker/imgs';
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_footlocker/imgs/icons/FL-loader.svg';
-$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_footlocker/imgs';
+$fl_theme_img_directory_path: "/themes/custom/transac/alshaya_footlocker/imgs";
+$base_theme_loader_img_directory_path: "/themes/custom/transac/alshaya_footlocker/imgs/icons/FL-loader.svg";
+$brand_theme_img_directory_path: "/themes/custom/transac/alshaya_footlocker/imgs";

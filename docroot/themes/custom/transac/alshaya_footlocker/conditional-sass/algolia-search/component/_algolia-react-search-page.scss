@@ -40,7 +40,7 @@
           transform: translateY(-50%);
           #{$left}: 1.125rem;
           font-size: 1.875rem;
-          content: '';
+          content: "";
           width: 0.875rem;
           height: 0.875rem;
           display: inline-block;
@@ -161,7 +161,7 @@
     .alshaya_search_gallery {
       .alshaya_search_slider {
         .slick-dots {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             padding-left: 0;
           }
         }
