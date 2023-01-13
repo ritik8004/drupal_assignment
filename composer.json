@@ -123,6 +123,7 @@
         "drupal/social_auth": "^3.0",
         "drupal/social_auth_facebook": "^3.0",
         "drupal/social_auth_google": "^3.0",
+        "drupal/sprinklr": "^1.0",
         "drupal/stage_file_proxy": "^1.2",
         "drupal/svg_image": "^1.9",
         "drupal/taxonomy_access_fix": "^3.1",
