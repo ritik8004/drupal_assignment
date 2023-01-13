@@ -1,10 +1,12 @@
-$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/fonts';
+$base_theme_fonts_directory_path: "/themes/custom/transac/alshaya_pottery_barn/fonts";
 
 @font-face {
-  font-family: 'alshaya-icons';
+  font-family: "alshaya-icons";
   src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?3ajdht') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?3ajdhn') format('woff');
+    url("#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?3ajdht")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/alshaya-icons.woff?3ajdhn")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -14,8 +16,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Montserrat-Bold";
   src:
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -24,8 +28,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Montserrat-Medium";
   src:
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -34,8 +40,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Montserrat-Regular";
   src:
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -44,8 +52,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Montserrat-SemiBold";
   src:
-    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -54,8 +64,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "NunitoSans-Regular";
   src:
-    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -64,18 +76,22 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "SweetSansPro-Medium";
   src:
-    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'FranklinGothicLTPro-BkCm';
+  font-family: "FranklinGothicLTPro-BkCm";
   src:
-    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -83,8 +99,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "NeutrafaceDisplay-Light";
   src:
-    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -92,7 +110,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/f
 @font-face {
   font-family: "Canela-Thin";
   src:
-    url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff2")
+    format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff") format("woff");
   font-weight: normal;
   font-style: normal;

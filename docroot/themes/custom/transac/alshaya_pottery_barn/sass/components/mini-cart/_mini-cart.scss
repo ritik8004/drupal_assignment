@@ -12,7 +12,7 @@ header .block-alshaya-react-mini-cart {
     font-size: 0.625rem;
     line-height: 1.5 !important;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       right: -0.3125rem;
     }
 
@@ -45,7 +45,7 @@ header .block-alshaya-react-mini-cart {
   }
 
   #cart_notification {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       left: 0.1875rem;
     }
 
@@ -53,7 +53,7 @@ header .block-alshaya-react-mini-cart {
       #{$right}: -0.8125rem;
       top: 2.8125rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         left: -0.4375rem;
       }
     }
@@ -61,7 +61,7 @@ header .block-alshaya-react-mini-cart {
     @include breakpoint($only-tablet) {
       top: 2.5rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: 3.125rem;
       }
     }
@@ -96,7 +96,7 @@ header .block-alshaya-react-mini-cart {
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .price-amount,
     .quantity {
       font-family: $body_font;
