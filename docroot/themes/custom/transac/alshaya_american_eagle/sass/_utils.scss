@@ -54,14 +54,7 @@ $brand_theme_img_directory_path: "/themes/custom/transac/alshaya_american_eagle/
   -moz-osx-font-smoothing: grayscale;
 }
 
-@mixin pdp_icon_img(
-  $imgpath: false,
-  $height: 0,
-  $width: 0,
-  $position: before,
-  $repeat: no-repeat center,
-  $styles: true
-) {
+@mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
   @if $position == both {
     $position: "before, &:after";
   }
@@ -86,14 +79,7 @@ $brand_theme_img_directory_path: "/themes/custom/transac/alshaya_american_eagle/
   @content;
 }
 
-@mixin facet-arrow(
-  $position,
-  $direction: false,
-  $topborder: false,
-  $rightborder: false,
-  $bottomborder: false,
-  $leftborder: false
-) {
+@mixin facet-arrow($position, $direction: false, $topborder: false, $rightborder: false, $bottomborder: false, $leftborder: false) {
   &:#{$position} {
     position: absolute;
     top: 1.1875rem;

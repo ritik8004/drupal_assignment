@@ -48,16 +48,7 @@ $brand_theme_img_directory_path: "/themes/custom/transac/alshaya_cos_stores/imgs
 
 $border-default: 0.0625rem solid $promo_block_border;
 
-@mixin style-font(
-  $family: false,
-  $size_d: false,
-  $size_m: false,
-  $pd_top: false,
-  $pd_bottom: false,
-  $colour: false,
-  $weight: false,
-  $lh: false
-) {
+@mixin style-font($family: false, $size_d: false, $size_m: false, $pd_top: false, $pd_bottom: false, $colour: false, $weight: false, $lh: false) {
   letter-spacing: normal;
 
   @if $family {

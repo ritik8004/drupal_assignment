@@ -63,14 +63,7 @@ $brand_theme_img_directory_path: "/themes/custom/transac/alshaya_debenhams/imgs"
   font-family: $dh-light;
 }
 
-@mixin pdp_icon_img(
-  $imgpath: false,
-  $height: 0,
-  $width: 0,
-  $position: before,
-  $repeat: no-repeat center,
-  $styles: true
-) {
+@mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
   @if $position == both {
     $position: "before, &:after";
   }

@@ -54,14 +54,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-@mixin pdp_icon_img(
-  $imgpath: false,
-  $height: 0,
-  $width: 0,
-  $position: before,
-  $repeat: no-repeat center,
-  $styles: true
-) {
+@mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
   @if $position == both {
     $position: "before, &:after";
   }
