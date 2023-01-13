@@ -153,7 +153,6 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
   public function build() {
     $super_category_settings = $this->configFactory->get('alshaya_super_category.settings');
     $current_super_term = $this->superCategoryManager->getCategoryTermFromRoute();
-    ksm($current_super_term->id());
     $current_tid = ($current_super_term instanceof TermInterface)
       ? $current_super_term->id()
       : NULL;
