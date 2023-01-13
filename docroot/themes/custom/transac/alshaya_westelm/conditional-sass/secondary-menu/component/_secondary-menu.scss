@@ -14,7 +14,7 @@
               position: initial;
 
               &::after {
-                content: '';
+                content: "";
                 width: 0;
                 height: 0;
                 border-left: 0.25rem solid transparent;
@@ -24,7 +24,7 @@
                 position: absolute;
                 right: -0.8rem;
 
-                html[lang=ar] & {
+                html[lang="ar"] & {
                   top: 45%;
                   transform: translateY(-50%);
                 }

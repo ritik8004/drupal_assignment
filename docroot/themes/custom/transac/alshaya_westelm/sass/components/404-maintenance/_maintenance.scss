@@ -47,7 +47,7 @@
     }
 
     &::after {
-      content: '';
+      content: "";
       border: 1px solid $maintenance_container_border;
       position: absolute;
       top: -1.3125rem;

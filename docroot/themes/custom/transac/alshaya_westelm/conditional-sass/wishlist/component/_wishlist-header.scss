@@ -44,7 +44,7 @@ body.wishlist-enabled {
       top: 0.75rem;
       #{$right}: 3rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         left: 2.5rem;
       }
     }
