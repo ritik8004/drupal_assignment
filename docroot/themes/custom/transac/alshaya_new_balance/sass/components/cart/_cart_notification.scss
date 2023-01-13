@@ -41,7 +41,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   #cart_notification,
   #static_minicart_notification {
     @include breakpoint($desktop) {

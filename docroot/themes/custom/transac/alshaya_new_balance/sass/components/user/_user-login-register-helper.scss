@@ -24,7 +24,7 @@
   .user-login-form,
   .user-register-form,
   .user-pass {
-    >a {
+    > a {
       font-weight: normal;
     }
 
@@ -43,7 +43,7 @@
       @include primaryBtn;
 
       @include breakpoint($tablet) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: rem(192);
         }
       }

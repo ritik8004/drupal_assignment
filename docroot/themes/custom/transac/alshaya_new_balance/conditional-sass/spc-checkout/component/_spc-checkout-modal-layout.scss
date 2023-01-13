@@ -3,7 +3,7 @@
     .spc-address-form {
       .spc-cnc-address-form-sidebar {
         .close {
-          @include icon('close') {
+          @include icon("close") {
             background: $spc-checkout-close-icon-bg;
             color: $spc-checkout-close-map-icon;
           }

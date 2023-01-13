@@ -2,7 +2,7 @@
   padding-top: rem(30);
 
   .spc-checkout-empty-delivery-text {
-    @include icon('chevron#{$right}', before) {
+    @include icon("chevron#{$right}", before) {
       #{$right}: rem(5);
     }
   }

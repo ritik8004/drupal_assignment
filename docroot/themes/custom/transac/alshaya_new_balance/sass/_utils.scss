@@ -1,9 +1,9 @@
-$nb_theme_img_directory_path: '/themes/custom/transac/alshaya_new_balance/imgs';
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_new_balance/imgs/icons/ic-loader.svg';
-$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_new_balance/imgs';
+$nb_theme_img_directory_path: "/themes/custom/transac/alshaya_new_balance/imgs";
+$base_theme_loader_img_directory_path: "/themes/custom/transac/alshaya_new_balance/imgs/icons/ic-loader.svg";
+$brand_theme_img_directory_path: "/themes/custom/transac/alshaya_new_balance/imgs";
 
 @mixin ic-social {
-  content: '';
+  content: "";
   background-repeat: no-repeat;
   width: rem(26);
   height: rem(26);
@@ -60,9 +60,16 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_new_balance/img
   -moz-osx-font-smoothing: grayscale;
 }
 
-@mixin icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
+@mixin icon_img(
+  $imgpath: false,
+  $height: 0,
+  $width: 0,
+  $position: before,
+  $repeat: no-repeat center,
+  $styles: true
+) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {
@@ -88,9 +95,16 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_new_balance/img
   -moz-osx-font-smoothing: grayscale;
 }
 
-@mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
+@mixin pdp_icon_img(
+  $imgpath: false,
+  $height: 0,
+  $width: 0,
+  $position: before,
+  $repeat: no-repeat center,
+  $styles: true
+) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {
