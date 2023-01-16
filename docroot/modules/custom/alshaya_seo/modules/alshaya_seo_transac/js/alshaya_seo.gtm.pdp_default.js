@@ -15,6 +15,36 @@
         Drupal.alshayaSeoGtmPushProductDetailView(node);
       }
 
+      // Push product size click event to GTM.
+      // For default and magazine pdp layouts.
+      $(document).once('product-size-click').on('click', 'div.form-item-configurables-size .select2Option ul a', function () {
+        let size = $(this).attr('data-value');
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'pdp size click',
+          eventLabel: size,
+        });
+      });
+
+      // Push product color click event to GTM.
+      // For default pdp layout only.
+      $(document).once('product-color-click').on('click', '.form-item-configurables-color .select2Option ul a', function () {
+        let color = $(this).attr('data-value');
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'pdp color click',
+          eventLabel: color,
+        });
+      });
+
+      // Push product color click event to GTM.
+      // For magazine pdp layout only.
+      $(document).once('product-color-click').on('click', '.colour-swatch .select2Option ul a', function () {
+        let color = $(this).attr('data-color-label');
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'pdp color click',
+          eventLabel: color,
+        });
+      });
+
       // Push details click event to GTM.
       $('div.pdp-overlay-details').once('product-details-click').on('click', function () {
         Drupal.alshayaSeoGtmPushEcommerceEvents({

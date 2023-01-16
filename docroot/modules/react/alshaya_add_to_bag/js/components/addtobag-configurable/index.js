@@ -65,6 +65,12 @@ export default class AddToBagConfigurable extends React.Component {
         this.openDrawer(response);
         Drupal.cartNotification.spinner_stop();
 
+        // Push quick add event to GTM.
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'plp quick add clicks',
+          eventLabel: 'quick add open',
+        });
+
         // Store info in storage.
         addProductInfoInStorage(response, sku);
       }).catch((error) => {
