@@ -114,6 +114,16 @@
       }
     }
   }
+
+  .addtobag-config-button-container {
+    margin-right: 0;
+    margin-left: 0;
+
+    @include breakpoint($tablet) {
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
 }
 
 #wishlist-share {
@@ -127,5 +137,17 @@
     padding-bottom: 0;
     margin-top: rem(8);
     margin-bottom: rem(8);
+  }
+}
+
+.wishlist-share-popup-container {
+  .wishlist-share-content {
+    .actions {
+      button {
+        &.copy-share-link {
+          color: $secondary_btn_text;
+        }
+      }
+    }
   }
 }

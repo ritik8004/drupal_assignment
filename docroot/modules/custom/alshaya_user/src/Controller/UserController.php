@@ -87,6 +87,24 @@ class UserController extends ControllerBase {
     $build['#markup'] = str_replace('[email]', $account->getEmail(), $text);
 
     $build['#cache'] = ['max-age' => 0];
+
+    $gender_selection = '';
+    if ($account->hasField('field_gender')) {
+      $allowed_values = [
+        'm' => 'Male',
+        'f' => 'Female',
+        'ns' => 'Prefer not to say',
+      ];
+      $gender = $account->get('field_gender')->value;
+      $gender_selection = $allowed_values[$gender] ?? '';
+    }
+
+    $email_preference = $account->hasField('field_subscribe_newsletter') ?
+      $account->get('field_subscribe_newsletter')->value : '';
+
+    $build['#attached']['drupalSettings']['alshaya_gtm_create_user_gender'] = $gender_selection;
+    $build['#attached']['drupalSettings']['alshaya_gtm_create_user_newsletter'] = $email_preference == 1 ? 'Yes' : 'No';
+
     if ($account->get('field_subscribe_newsletter')->getString()) {
       $build['#attached']['drupalSettings']['alshaya_gtm_create_user_lead'] = $account->id();
       $build['#attached']['drupalSettings']['alshaya_gtm_create_user_pagename'] = 'registration';

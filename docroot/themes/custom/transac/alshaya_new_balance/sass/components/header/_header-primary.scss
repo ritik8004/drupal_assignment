@@ -38,7 +38,7 @@ header {
           }
 
           .menu__link {
-            font-size: rem(17);
+            font-size: rem(14);
             letter-spacing: 0.025px;
             border: none;
             font-family: $alshaya-bold;
@@ -515,6 +515,10 @@ header {
   }
 }
 
+.toggle--sign {
+  width: calc(100% - #{rem(50)});
+}
+
 body {
   .branding__menu {
     @include breakpoint($upto-desktop) {
@@ -574,8 +578,18 @@ body {
   }
 }
 
+@include breakpoint($only-tablet) {
+  .c-menu-primary {
+    ul.menu {
+      margin: 0;
+    }
+  }
+}
+
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
+    position: unset;
+
     li.menu--one__list-item {
       .menu--one__link {
         padding-#{$left}: 0;

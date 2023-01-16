@@ -75,10 +75,10 @@ log_message_and_details()
 check_code_deployed()
 {
   check_code_deployed_response=`$blt_dir/bin/blt cloud-check-code-deployed $tag`
-  log_message_and_details "Cloud Task response: $check_code_deployed_response"
+  log_message_and_details "Response for BLT command to check if code deployed on all web servers: $check_code_deployed_response."
   if [ $? -ne 0 ]
   then
-    log_message_and_details "Error occurred while fetching cloud task, aborting."
+    log_message_and_details "Error occurred while checking if code deployed on all the web servers, aborting."
     exit
   fi
 }
@@ -92,8 +92,8 @@ log_message "Docroot: $docroot"
 log_message "Log file: $log_file"
 log_message "Base URI: $base_uri"
 
-log_message_and_details "Starting release in mode $mode"
-sh $slack_file "Release started in mode $mode for tag $tag"
+log_message_and_details "Starting release in mode $mode."
+sh $slack_file "Release started in mode $mode for tag $tag."
 
 backup_directory="${HOME}/${AH_SITE_ENVIRONMENT}/backup/pre-$tag"
 directory="${HOME}/${AH_SITE_ENVIRONMENT}/repo"
@@ -101,7 +101,7 @@ directory="${HOME}/${AH_SITE_ENVIRONMENT}/repo"
 # Create folder and clone if not available
 if [ ! -d "$directory/$stack" ]
 then
-  log_message_and_details "Repo directory $directory not available, creating and cloning"
+  log_message_and_details "Repo directory $directory not available, creating and cloning."
 
   mkdir -p $directory
   cd $directory
@@ -109,51 +109,58 @@ then
 
   if [ $? -ne 0 ]
   then
-    log_message_and_details "Failed to clone repo, aborting"
+    log_message_and_details "Failed to clone repo, aborting."
     exit
   else
-    log_message_and_details "Repo cloned successfully"
+    log_message_and_details "Repo cloned successfully."
   fi
 fi
 
 if [ ! -d "$directory/$stack" ]
 then
-  log_message_and_details "Repo directory not available still, aborting"
+  log_message_and_details "Repo directory not available even after trying to clone, aborting."
   exit
 fi
 
 cd "$directory/$stack"
 
 # Fetch all tags.
-log_message_and_details "Fetching tags"
+log_message_and_details "Fetching tags."
 git fetch origin --tags &>> ${log_file}
 
 # Validate if tag exists.
 if [ ! $(git tag -l "$tag") ]; then
-  log_message_and_details "Error: Tag not found, aborting"
+  log_message_and_details "Error: Tag not found, aborting."
   exit
 fi
 
 # Checkout deployment branch used for deployment.
-log_message_and_details "Checkout $branch"
+log_message_and_details "Checkout $branch."
 git checkout $branch &>> ${log_file}
 if [ $? -ne 0 ]
 then
-  log_message_and_details "Failed to checkout branch $branch, aborting"
+  log_message_and_details "Failed to checkout branch $branch, aborting."
   exit
 fi
 
 # Reset the code to match the tag.
-log_message_and_details "Reset to $tag"
+log_message_and_details "Reset to $tag."
 git reset --hard $tag &>> ${log_file}
 if [ $? -ne 0 ]
 then
-  log_message_and_details "Failed to reset to tag, aborting"
+  log_message_and_details "Failed to reset to tag, aborting."
+  exit
+fi
+
+if [ "$mode" = "prep" ]
+then
+  log_message_and_details "Release preparation completed."
+  sh $slack_file "Release preparation completed for tag $tag."
   exit
 fi
 
 # Create an orphan commit.
-log_message_and_details "Reset $branch git history"
+log_message_and_details "Resetting $branch git history."
 git config user.name "Deployment Script"
 git config user.email "noreply@acquia-deployer.com"
 git checkout --orphan $branch-tmp &>> ${log_file}
@@ -168,67 +175,60 @@ then
   exit
 fi
 
-if [ "$mode" = "prep" ]
-then
-  log_message_and_details "Release preparation completed"
-  sh $slack_file "Release preparation completed for tag $tag"
-  exit
-fi
-
 # Taking backup now.
-log_message_and_details "Take DB backup"
+log_message_and_details "Taking DB backup now."
 mkdir -p "$backup_directory"
 drush --root=$docroot acsf-tools-dump --result-folder=$backup_directory -y -v --gzip &>> ${log_file}
 if [ $? -ne 0 ]
 then
-  log_message_and_details "Failed to take backup, aborting"
+  log_message_and_details "Failed to take backup, aborting."
   exit
 fi
 
 # Enable maintenance mode if mode is updb.
 if [ "$mode" = "updb" ]
 then
-  log_message_and_details "Turning maintenance on"
+  log_message_and_details "Turning maintenance on all the sites."
   $clear_caches_post_command alshaya-enable-maintenance 0 &>> ${log_file}
   if [ $? -ne 0 ]
   then
-    log_message_and_details "Failed to enable maintenance mode, aborting"
+    log_message_and_details "Failed to enable maintenance mode, aborting."
     exit
   fi
 fi
 
 # Force the push to avoid issues with previous commit history.
-log_message_and_details "Pushing changes"
+log_message_and_details "Pushing changes to the branch."
 git push origin $branch --force &>> ${log_file}
 if [ $? -ne 0 ]
 then
-  log_message_and_details "Failed to deploy code, aborting"
+  log_message_and_details "Failed to deploy code, aborting."
   exit
 fi
 
 # Wait for code to be available on server before moving forward.
 while [ "${deployment_identifier}" != "${tag}" ]
 do
-  log_message_and_details "Waiting for code to be deployed on server (current=$deployment_identifier)"
+  log_message_and_details "Waiting for code to be deployed on server (current=$deployment_identifier)."
   sleep 5
   deployment_identifier=$(cat "$server_root/deployment_identifier")
 done
 
-log_message_and_details "Checking cloud tasks if deployment is still in process."
+log_message_and_details "Checking on all the webs if deployment is still in process."
 check_code_deployed
 
 while [ "${check_code_deployed_response}" != "0" ]
 do
-  log_message_and_details "Cloud Task: Waiting for code to be deployed on all servers."
+  log_message_and_details "Waiting for code to be deployed on all web servers."
   sleep 15
   check_code_deployed
 done
 
-log_message_and_details "Code deployment finished"
+log_message_and_details "Code deployment finished."
 
 if [ "$mode" = "updb" ]
 then
-  log_message_and_details "Running updates"
+  log_message_and_details "Running updates on all the sites, one at a time."
   for site in `drush --root=$docroot acsf-tools-list | grep "1: " | tr "1: " " " | tr -d " "`
   do
     log_message_and_details "Running updates on $site"
@@ -236,16 +236,16 @@ then
     drush --root=$docroot -l "${site}" updb -y &>> ${log_file}
     if [ $? -ne 0 ]
     then
-      log_message_and_details "$site: UPDB FAILED, site kept offline still, please check logs"
-      sh $slack_file "$site: UPDB FAILED, site kept offline still, please check logs"
+      log_message_and_details "$site: UPDB FAILED, site kept offline still, please check logs."
+      sh $slack_file "$site: UPDB FAILED, site kept offline still, please check logs."
     else
       drush --root=$docroot -l "${site}" alshaya-disable-maintenance &>> ${log_file}
-      log_message_and_details "$site: UPDB done and site put back online"
+      log_message_and_details "$site: UPDB done and site put back online."
 
       $clear_caches_post_command_site $site cr 5 &>> ${log_file}
-      log_message_and_details "$site: CR done"
+      log_message_and_details "$site: CR done."
 
-      sh $slack_file "$site: UPDB done and site put back online"
+      sh $slack_file "$site: UPDB done and site put back online."
     fi
   done
 
@@ -254,15 +254,15 @@ fi
 
 if [ "$mode" = "hotfix_crf" ]
 then
-  log_message_and_details "Doing CRF now as requested"
+  log_message_and_details "Doing CRF now as requested on all the sites."
   $clear_caches_post_command crf 20 &>> ${log_file}
 fi
 
 if [ "$mode" = "hotfix_cr" ]
 then
-  log_message_and_details "Doing CR now as requested"
+  log_message_and_details "Doing CR now as requested on all the sites."
   $clear_caches_post_command cr 30 &>> ${log_file}
 fi
 
-log_message_and_details "Release completed"
-sh $slack_file "Release completed in mode $mode for tag $tag"
+log_message_and_details "Release completed."
+sh $slack_file "Release completed in mode $mode for tag $tag."

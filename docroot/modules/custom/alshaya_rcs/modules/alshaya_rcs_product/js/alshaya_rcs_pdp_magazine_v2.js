@@ -33,6 +33,13 @@
       configurableCombinations[mainProduct.sku].firstChild = getFirstChild(mainProductClone);
     }
 
+    // Get the product labels.
+    processedProduct[mainProduct.sku].labels = {};
+    if (Drupal.hasValue(window.commerceBackend.getProductLabels)) {
+      Object.assign(processedProduct[mainProduct.sku].labels,
+        await window.commerceBackend.getProductLabels(mainProduct.sku));
+    }
+
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
   });
@@ -94,8 +101,8 @@
       stockStatus: product.stock_status === 'IN_STOCK',
       title: {'label': product.name},
       rawGallery: updateGallery(product, product.name),
-      additionalAttributes: (Drupal.hasValue(product.description.additional_attributes)
-        && Object.keys(product.description.additional_attributes).length > 0) ? product.description.additional_attributes : '',
+      additionalAttributes: Object.keys(product.description.additional_attributes).length > 0 ? product.description.additional_attributes : {},
+      quickFit: Drupal.hasValue(product.quick_fit) ? product.quick_fit : '',
     }
     if (product.type_id === 'configurable') {
       productData.variants = getVariantsInfoMagV2(product, processedProduct.variants);

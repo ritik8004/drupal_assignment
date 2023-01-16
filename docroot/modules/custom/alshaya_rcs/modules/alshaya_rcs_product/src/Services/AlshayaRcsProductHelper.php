@@ -280,7 +280,8 @@ class AlshayaRcsProductHelper {
       }
     }
 
-    return array_unique($attributes);
+    // Return unique attributes in a non-associative array.
+    return array_values(array_unique($attributes));
   }
 
   /**
@@ -314,6 +315,22 @@ class AlshayaRcsProductHelper {
         'ship_to_store',
         'is_returnable',
         'reserve_and_collect',
+        'free_gift_promotion' => [
+          'rule_id',
+          'rule_type',
+          'rule_web_url',
+          'rule_name',
+          'rule_description',
+          'auto_add',
+          'max_gift',
+          'coupon_code',
+          'total_items',
+          'gifts' => [
+            'id',
+            'sku',
+            'name',
+          ],
+        ],
         'price_range' => [
           'maximum_price' => [
             'regular_price' => [
@@ -399,6 +416,22 @@ class AlshayaRcsProductHelper {
               'swatch_data' => [
                 'swatch_type',
               ],
+              'free_gift_promotion' => [
+                'rule_id',
+                'rule_type',
+                'rule_web_url',
+                'rule_name',
+                'rule_description',
+                'auto_add',
+                'max_gift',
+                'coupon_code',
+                'total_items',
+                'gifts' => [
+                  'id',
+                  'sku',
+                  'name',
+                ],
+              ],
               'price_range' => [
                 'maximum_price' => [
                   'regular_price' => [
@@ -435,6 +468,12 @@ class AlshayaRcsProductHelper {
                   ],
                 ],
               ],
+              'promotions' => [
+                'context',
+                'url',
+                'label',
+                'type',
+              ],
             ],
             'attributes' => [
               'label',
@@ -444,6 +483,7 @@ class AlshayaRcsProductHelper {
           ],
         ],
         'category_ids_in_admin',
+        'breadcrumb_category_id',
         'categories' => [
           'id',
           'name',

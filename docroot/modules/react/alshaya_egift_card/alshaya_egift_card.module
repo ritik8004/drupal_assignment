@@ -12,6 +12,25 @@ use Drupal\Core\Cache\Cache;
 use Drupal\node\NodeInterface;
 
 /**
+ * Implements hook_alshaya_mobile_app_payment_method_api_response_alter().
+ */
+function alshaya_egift_card_alshaya_mobile_app_payment_method_api_response_alter(array &$response_data, array $exclude_payment_methods) {
+  // Add e-gift payment to the payment-methods resource.
+  // pseudo payment methods are handled in code, not as plugin.
+  $egift_enabled = \Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled();
+  $order_manager = \Drupal::service('alshaya_acm_customer.orders_manager');
+  $response_data[] = [
+    'name' => 'hps_payment',
+    'description' => NULL,
+    'code' => 'hps_payment',
+    'default' => FALSE,
+    'visibility' => !isset($exclude_payment_methods['hps_payment']) && $egift_enabled,
+    'refund_text' => $order_manager->getRefundText('hps_payment'),
+    'weight' => 0,
+  ];
+}
+
+/**
  * Implements hook_alshaya_spc_checkout_build_alter().
  */
 function alshaya_egift_card_alshaya_spc_checkout_build_alter(array &$build) {

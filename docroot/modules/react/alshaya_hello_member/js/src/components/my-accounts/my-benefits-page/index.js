@@ -17,6 +17,7 @@ class MyBenefitsPage extends React.Component {
       myBenefit: null,
       codeId: null,
       couponId: null,
+      offerType: null,
       promotionType: null,
     };
   }
@@ -37,6 +38,7 @@ class MyBenefitsPage extends React.Component {
             wait: true,
             codeId: response.data.coupons[0].code,
             couponId: `${response.data.coupons[0].type}|${response.data.coupons[0].code}`,
+            offerType: response.data.coupons[0].type,
             promotionType,
           });
           // Push coupon data to gtm once it is loaded.
@@ -71,7 +73,7 @@ class MyBenefitsPage extends React.Component {
 
   render() {
     const {
-      wait, myBenefit, codeId, couponId, promotionType,
+      wait, myBenefit, codeId, couponId, offerType, promotionType,
     } = this.state;
 
     if (!wait) {
@@ -95,6 +97,9 @@ class MyBenefitsPage extends React.Component {
       <div className="my-benefit-page-wrapper">
         <div className="image-container">
           <img src={myBenefit.large_image} />
+        </div>
+        <div className="category-name">
+          {myBenefit.category_name}
         </div>
         <div className="voucher-wrapper">
           <div className="title">
@@ -120,6 +125,7 @@ class MyBenefitsPage extends React.Component {
           <AddBenefitsToCart
             title={myBenefit.description}
             codeId={codeId}
+            offerType={offerType}
             promotionType={promotionType}
           />
         </div>

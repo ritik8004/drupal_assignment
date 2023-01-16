@@ -73,6 +73,10 @@
               .spc-product-price {
                 font-family: $alshaya-bold;
               }
+
+              @include breakpoint($only-mobile) {
+                flex-direction: column;
+              }
             }
           }
 

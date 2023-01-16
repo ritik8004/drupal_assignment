@@ -5,6 +5,7 @@ namespace Drupal\alshaya_checkout_tracker\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Url;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -21,6 +22,13 @@ use Drupal\alshaya_checkout_tracker\Helper\CheckoutTrackerHelper;
  * )
  */
 class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The current user service.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
 
   /**
    * The current route match.
@@ -45,13 +53,21 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   Private temp store service.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   Current user.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
    * @param Drupal\alshaya_checkout_tracker\Helper\CheckoutTrackerHelper $checkoutTrackerHelper
    *   The Checkout Tracker service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, CheckoutTrackerHelper $checkoutTrackerHelper) {
+  public function __construct(array $configuration,
+  $plugin_id,
+  $plugin_definition,
+  AccountProxyInterface $current_user,
+  RouteMatchInterface $route_match,
+  CheckoutTrackerHelper $checkoutTrackerHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->currentUser = $current_user;
     $this->routeMatch = $route_match;
     $this->checkoutTrackerHelper = $checkoutTrackerHelper;
   }
@@ -64,6 +80,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('current_user'),
       $container->get('current_route_match'),
       $container->get('alshaya_checkout_tracker.checkout_tracker_helper')
     );
@@ -74,7 +91,6 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function build() {
     $route_name = $this->routeMatch->getRouteName();
-
     $stepMap = [
       'acq_cart.cart' => [
         'label' => $this->t('Bag', [], ['context' => 'alshaya_checkout_tracker']),
@@ -89,14 +105,13 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       'alshaya_spc.checkout' => [
         'label' => $this->t('Delivery and Payment', [], ['context' => 'alshaya_checkout_tracker']),
         'stepcount' => 3,
-        'url' => Url::fromRoute('alshaya_spc.checkout'),
+        'url' => ($this->currentUser->isAuthenticated()) ? Url::fromRoute('alshaya_spc.checkout') : '',
       ],
       'alshaya_spc.checkout.confirmation' => [
         'label' => $this->t('Confirmation', [], ['context' => 'alshaya_checkout_tracker']),
         'stepcount' => 4,
       ],
     ];
-
     return [
       '#attached' => [
         'library' => [
@@ -107,6 +122,9 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       '#theme' => 'checkout_tracker_block',
       '#stepMap' => $stepMap,
       '#activeMapKey' => $route_name,
+      '#attributes' => [
+        'class' => ($route_name == 'acq_cart.cart') ? ['hide-checkout-tracker'] : '',
+      ],
     ];
 
   }

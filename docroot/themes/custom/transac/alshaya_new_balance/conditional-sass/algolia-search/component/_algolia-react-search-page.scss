@@ -37,6 +37,8 @@
     }
 
     ul {
+      z-index: 4;
+
       @include breakpoint($upto-desktop) {
         width: auto;
         max-width: none;
@@ -66,6 +68,12 @@
         justify-content: flex-start;
         margin: 0 rem(12);
       }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .c-page-title {
+      margin-top: rem(4);
     }
   }
 

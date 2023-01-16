@@ -1,8 +1,4 @@
 (function (Drupal) {
-  // Initial a variable with page load timestamp to identify the actual time.
-  // This time will remain unchanged within the context of window.
-  window.pageLoadTime = window.pageLoadTime || new Date().getTime();
-  var pageUuid = '';
 
   Drupal.logViaDataDog = function (severity, message, context) {
     try {
@@ -14,19 +10,6 @@
       context = context || {};
 
       context.logSource = 'drupal_module';
-
-      // Pass the actual page load time upon user request to Datadog log for
-      // better monitoring.
-      context.pageLoadTime = window.pageLoadTime;
-
-      // Pass flag weather browser is mordern or not
-      context.isModernBrowser = !!window.isModernBrowser;
-
-      // Generate the unique ID only once for a page and pass to Datadog log for better monitoring.
-      if (!pageUuid) {
-        pageUuid = generateUUID();
-      }
-      context.pageUuid = pageUuid;
 
       // Let other modules alter contexts.
       document.dispatchEvent(new CustomEvent('dataDogContextAlter', {
@@ -83,5 +66,37 @@
 
     return uuid;
   };
+
+  if (window.DD_LOGS) {
+    var globalContext = window.DD_LOGS.getLoggerGlobalContext();
+
+    // Generate the unique ID only once for a page and pass to Datadog log
+    // for better monitoring.
+    globalContext.pageUuid = generateUUID();
+
+    // Pass the actual page load time upon user request to Datadog log for
+    // better monitoring.
+    globalContext.pageLoadTime = new Date().getTime();
+
+    // Pass flag weather browser is modern or not.
+    var browserType = Drupal.isModernBrowser();
+    globalContext.isModernBrowser = !!browserType.isModernBrowser;
+
+    window.DD_LOGS.setLoggerGlobalContext(globalContext);
+
+    if (!browserType.isModernBrowser) {
+      var errorData = {
+        event: 'eventTracker',
+        eventCategory: 'unknown errors',
+        eventLabel: 'error-checking-modern-browser',
+        eventAction: browserType.isModernBrowserError,
+        eventPlace: 'Error occurred on ' + window.location.href,
+        eventValue: 0,
+        nonInteraction: 0,
+      };
+      // Log what error caused failure determining modern browser.
+      Drupal.logViaDataDog('error', 'Error occurred checking modern browser.', errorData);
+    }
+  }
 
 })(Drupal);

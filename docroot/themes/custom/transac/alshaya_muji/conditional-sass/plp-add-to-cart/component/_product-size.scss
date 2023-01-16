@@ -5,6 +5,13 @@
       float: none;
       margin: 0;
       width: auto;
+
+      + .alshaya-select-wrapper {
+        float: none;
+        margin-#{$left}: 0;
+        margin-top: rem(14);
+        width: auto;
+      }
     }
   }
 

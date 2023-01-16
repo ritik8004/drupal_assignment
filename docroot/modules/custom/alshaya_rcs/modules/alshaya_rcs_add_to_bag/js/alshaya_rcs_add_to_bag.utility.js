@@ -125,6 +125,9 @@ window.commerceBackend = window.commerceBackend || {};
     var parentSku = variantData.parent_sku;
     var prices = window.commerceBackend.getPrices(variantData);
     var productLabels = await getProductLabels(variantData.parent_sku, variantData.sku);
+    // Get the promotion from variant if available else get it from parent.
+    var variantPromotions = Drupal.hasValue(variantData.promotions)
+      ? variantData.promotions : product.promotions;
 
     return {
       sku: variantData.sku,
@@ -140,7 +143,8 @@ window.commerceBackend = window.commerceBackend || {};
       stock: {
         qty: variantData.stock_data.qty,
         status: (variantData.stock_status === "IN_STOCK") ? true : false,
-      }
+      },
+      promotions: variantPromotions,
     }
   };
 
@@ -185,6 +189,15 @@ window.commerceBackend = window.commerceBackend || {};
     // fetch from static storage only.
     await getProductLabels(product.sku, product.sku);
 
+    // Set product promotion info.
+    productInfo.promotions = [];
+    product.promotions.forEach(function (promotion) {
+      productInfo.promotions.push({
+        label: promotion.text,
+        url: promotion.promo_web_url
+      });
+    });
+
     // Process product variants.
     productInfo.variants = [];
     var variantInfoPromises = [];
@@ -199,15 +212,6 @@ window.commerceBackend = window.commerceBackend || {};
         '@sku': product.sku,
       });
     }
-
-    // Set product promotion info.
-    productInfo.promotions = [];
-    product.promotions.forEach(function (promotion) {
-      productInfo.promotions.push({
-        label: promotion.text,
-        url: promotion.promo_web_url
-      });
-    });
 
     // Display size guide information in product configurable drawer.
     // @see _alshaya_acm_product_get_size_guide_info()

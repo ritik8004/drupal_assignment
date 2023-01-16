@@ -38,6 +38,7 @@ $_we_gray_one: #666;
 $_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
 $WE_light_yellow: #f2eee5;
 $WE_metallic_gold: #d4af37;
+$WE_gray_fifteen: #f8f8f8;
 
 // Overrides for variables.
 // Global elements.
@@ -636,6 +637,8 @@ $spc-deliver-button: $WE_grey_three;
 $spc-cnc-toggle-bg-active: $WE_grey_three;
 $spc-checkout-cnc-map-expand: $WE_deep_blue;
 $spc-cart-free-gifts-link: $WE_grey_three;
+$spc-cart-free-delivery-message-bg: $WE_gray_fifteen;
+$spc-cart-free-delivery-txt: $WE_black_two;
 
 //Algolia search bar.
 $algolia-input-text: $WE_grey_two;
@@ -690,3 +693,7 @@ $plp-quick-view-product-size-border: $WE_grey_three;
 $plp-quick-view-product-size-border-hover: $WE_grey_three;
 $plp-quick-view-product-size-active-bg: $WE_grey_three;
 $plp-quick-view-product-size-text-disabled: $WE_grey_three;
+
+// Matchback
+$matchback-view-options-btn-bg: $WE_grey_three;
+$matchback-view-options-btn-text: $WE_white;

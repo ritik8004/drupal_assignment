@@ -55,18 +55,18 @@ jobs:
         id: validate-req
         run: |
           if [[ "${{ secrets.BOT_TOKEN }}" != '' ]];  then
-            echo "valid_req=true" >> $GITHUB_OUTPUT
+            echo valid_req=true >> $GITHUB_OUTPUT
           else
-            echo "valid_req=false" >> $GITHUB_OUTPUT
+            echo valid_req=false >> $GITHUB_OUTPUT
           fi
 
       - name: Check for Slack secrets
         id: validate-slack
         run: |
           if [[ "${{ secrets.SLACK_WEBHOOK_URL }}" != '' ]];  then
-            echo "valid_slack=true" >> $GITHUB_OUTPUT
+            echo valid_slack=true >> $GITHUB_OUTPUT
           else
-            echo "valid_slack=false" >> $GITHUB_OUTPUT
+            echo valid_slack=false >> $GITHUB_OUTPUT
           fi
 
   matrix:
@@ -119,12 +119,12 @@ jobs:
           matrix+=$branch
           matrix+='] }'
           echo $matrix
-          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+          echo matrix=$matrix >> $GITHUB_OUTPUT
 
           if [[ "$branch" == "" ]]; then
-            echo "empty_matrix=true" >> $GITHUB_OUTPUT
+            echo empty_matrix=true >> $GITHUB_OUTPUT
           else
-            echo "empty_matrix=false" >> $GITHUB_OUTPUT
+            echo empty_matrix=false >> $GITHUB_OUTPUT
           fi
 
 

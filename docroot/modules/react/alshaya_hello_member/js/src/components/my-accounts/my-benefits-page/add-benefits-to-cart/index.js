@@ -76,7 +76,9 @@ class AddBenefitsToCart extends React.Component {
       const params = getHelloMemberCustomerInfo();
       if (!hasValue(params.error)) {
         showFullScreenLoader();
-        const { title, codeId, promotionType } = this.props;
+        const {
+          title, codeId, offerType, promotionType,
+        } = this.props;
         let isAddedToBag = false;
         let benefitType = 'offer';
         let response = null;
@@ -96,7 +98,7 @@ class AddBenefitsToCart extends React.Component {
           }
         } else {
           params.offerCode = codeId;
-          params.offerType = promotionType;
+          params.offerType = offerType;
           response = await callHelloMemberApi('addMemberOffersToCart', 'POST', params);
           if (hasValue(response.data) && !hasValue(response.data.error)) {
             isAddedToBag = true;
@@ -185,13 +187,13 @@ class AddBenefitsToCart extends React.Component {
       <>
         {(!appliedAlready && isEmptyCart) && (
           <div className="button-wide inactive">
-            {Drupal.t('Your cart is empty', { context: 'hello_member' })}
+            {getStringMessage('your_cart_empty')}
           </div>
         )}
         {(appliedAlready) && (
           <>
             <div className="button-wide inactive">
-              {Drupal.t('This offer has been added to your bag', { context: 'hello_member' })}
+              {getStringMessage('offer_added_to_bag')}
             </div>
             <div className="hello-member-benefit-status-info" id="hello-member-benefit-status-info">
               <div id="status-msg" />

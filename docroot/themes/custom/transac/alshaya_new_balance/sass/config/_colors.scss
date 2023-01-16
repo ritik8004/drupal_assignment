@@ -94,7 +94,7 @@ $order_print_dark_txt: $ada-gray;
 // Store Finder.
 $store-finder-border-hover: $nb-red;
 $store_finder_text_hover: $nb-red;
-$store_finder_text:$black;
+$store_finder_text: $black;
 $store_finder_icon: $black;
 $store_finder_search_label: $black;
 $store_finder_header: $black;
@@ -105,7 +105,7 @@ $store_finder_search_results_tile_link: $black;
 $store_finder_search_input: $gray;
 $store_finder_search_input_border: $gray;
 $store_finder_glossary_alphabet: $black;
-$store_finder_search_results_hour_label :$black;
+$store_finder_search_results_hour_label: $black;
 $store_finder_search_results_tile_icon: $black;
 $store_finder_search_results_hour_icon_open: $black;
 $store_finder_glossary_icon: $black;
@@ -210,7 +210,7 @@ $label_black: $ada-gray;
 $user_order_help_bg: $light-gray;
 $user_order_help_text: $black;
 $user_order_help_text_links: $ada-gray;
-$user_acc_details_border:$gray;
+$user_acc_details_border: $gray;
 $user_nav_mobile_link: $ada-gray;
 $my_acc_mob_border_color: $gray2;
 $my_acc_address_text: $black;
@@ -288,6 +288,7 @@ $pdp_sizeguide_link: $nb-red;
 
 // Express Delivery
 $sameday-express-delivery-drawer-btn: $primary_btn_bg;
+$express-delivery-menu-list-border: $gray;
 
 //Algolia search bar.
 $algolia-input-text: $black;
@@ -308,6 +309,9 @@ $algolia-search-icon: $black;
 $alg_search_bg: $gray2;
 $alg_search_mobile_bg: $white;
 $algolia-suggestion-text: $black;
+$algolia-input-field-separator: $black;
+$algolia-input-separator-overlay: $white;
+$algolia-search-suggestion-hover-bg: $light-gray2;
 
 // plp add to cart
 $plp-primary-cta-hover-bg: rgba(207, 10, 44, 0.9);
@@ -327,6 +331,8 @@ $spc-cart-promo-code-submit-enabled: $nb-red;
 $spc-promo-code-bg: $light-gray;
 $spc-checkout-success-message-background: $nb-green;
 $spc-checkout-warning-message-background: $nb-red;
+$spc-cart-free-delivery-message-bg: $gray;
+$spc-cart-free-delivery-txt: $black;
 
 // Checkout steps
 $cko-steps-active-bg: $nb-red;
@@ -338,7 +344,7 @@ $cko-current-steps-label-txt: $nb-red;
 $checkout_section_titles: $black;
 $checkout_guest_button_border: $nb-red;
 $checkout_guest_button_txt: $nb-red;
-$checkout_header_border-bottom : $gray;
+$checkout_header_border-bottom: $gray;
 $checkout_footer_border-top: $black;
 
 // Checkout Login page.
@@ -389,6 +395,7 @@ $wishlist-button-border: $nb-red;
 $wishlist-button-register-txt: $nb-red;
 $wishlist-basket-button-border: $nb-red;
 $wishlist-secondary-text: $nb-red;
+$my-wishlist-share-modal-hover-bg: $nb-red;
 
 //eGift
 $advanced-page-banner-bg: $light-gray;
@@ -433,6 +440,7 @@ $online-return-eligibility-button-txt: $white;
 $online-return-eligibility-button-hover: $nb-red;
 $online-return-dark-bg: $nb-black;
 $online-return-ineligible-label-bg: $nb-red;
+$online-return-detail-bg: $white;
 $online-return-disable-button-bg: $gray;
 $online-return-disable-button-txt: $ada-gray;
 $online-return-refund-label-inactive-bg: $gray2;
@@ -464,3 +472,12 @@ $lang_switch_firsttime_bg: $nb-red;
 
 // Messages and Errors
 $default_msg_bg: $nb-green;
+
+// Mobile Gallery
+$gallery_arrows_border: $nb-red;
+
+// 404 and maintenance
+$maintenance_container_border: $nb-red;
+$maintenance_container_bg: $white;
+$maintenance_container_text: $nb-black;
+$maintenance_info_bg: $white;

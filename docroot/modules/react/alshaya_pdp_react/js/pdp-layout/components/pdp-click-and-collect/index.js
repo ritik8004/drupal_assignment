@@ -15,6 +15,7 @@ export default class PdpClickCollect extends React.PureComponent {
     this.searchRef = React.createRef();
     this.expandRef = React.createRef();
     this.autocomplete = null;
+    this.autocompleteInit = false;
     this.searchplaceInput = null;
     this.state = {
       stores: [],
@@ -39,17 +40,7 @@ export default class PdpClickCollect extends React.PureComponent {
           }
         }, 100);
       })).then(() => {
-        this.autocomplete = new window.google.maps.places.Autocomplete(
-          this.searchplaceInput,
-          {
-            types: ['geocode'],
-            componentRestrictions: { country: drupalSettings.clickNCollect.countryCode },
-          },
-        );
-        this.autocomplete.addListener(
-          'place_changed',
-          this.placesAutocompleteHandler,
-        );
+        this.searchplaceInput.addEventListener('keyup', this.keyUpHandler);
       });
     }
   }
@@ -86,6 +77,12 @@ export default class PdpClickCollect extends React.PureComponent {
             showMore: false,
           });
           document.getElementById('click-n-collect-search-field').classList.add('hidden');
+          // Push pdp search stores event to GTM if store is available
+          // and selected successfully.
+          Drupal.alshayaSeoGtmPushEcommerceEvents({
+            eventAction: 'pdp search stores',
+            eventLabel: place.formatted_address,
+          });
         } else {
           // Show no result div.
           this.setState({
@@ -129,6 +126,32 @@ export default class PdpClickCollect extends React.PureComponent {
     }
 
     this.updateHeightOnAjax();
+  };
+
+  /**
+   * Keyup handler for the search input.
+   */
+  keyUpHandler = (e) => {
+    if (e.target.value.length >= 2 && !this.autocompleteInit) {
+      this.autocomplete = new window.google.maps.places.Autocomplete(
+        this.searchplaceInput,
+        {
+          types: ['geocode'],
+          componentRestrictions: { country: window.drupalSettings.country_code },
+        },
+      );
+
+      this.autocomplete.addListener(
+        'place_changed',
+        this.placesAutocompleteHandler,
+      );
+      this.autocompleteInit = true;
+    } else if (e.target.value.length < 2) {
+      e.preventDefault();
+      jQuery('.pac-container').remove();
+      google.maps.event.clearInstanceListeners(this.autocomplete);
+      this.autocompleteInit = false;
+    }
   };
 
   render() {

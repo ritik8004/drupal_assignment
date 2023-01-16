@@ -436,6 +436,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['class'][] = 'megamenu-fullwidth-layout';
       $variables['#attached']['library'][] = 'alshaya_white_label/megamenu-fullwidth-layout';
     }
+
+    if (\Drupal::config('alshaya_main_menu.settings')->get('mobile_main_menu_layout') === AlshayaMainMenuConfigForm::MOBILE_MENU_VISUAL) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/visual-mobile-menu';
+    }
   }
 
   if ($variables['plugin_id'] == 'system_menu_block:super-menu') {
@@ -454,10 +458,6 @@ function alshaya_white_label_preprocess_block(&$variables) {
   ];
   if (in_array($variables['plugin_id'], $category_facets)) {
     $variables['attributes']['class'][] = 'category-facet';
-  }
-
-  if (\Drupal::config('alshaya_main_menu.settings')->get('mobile_main_menu_layout') === AlshayaMainMenuConfigForm::MOBILE_MENU_VISUAL) {
-    $variables['#attached']['library'][] = 'alshaya_white_label/visual-mobile-menu';
   }
 }
 

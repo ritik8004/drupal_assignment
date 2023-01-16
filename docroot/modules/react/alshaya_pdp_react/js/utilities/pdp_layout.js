@@ -11,6 +11,31 @@ import { hasValue } from '../../../js/utilities/conditionsUtility';
 export const updateCart = (postData) => window.commerceBackend.addUpdateRemoveCartItem(postData);
 
 /**
+ * Get the product label list.
+ *
+ * @param {object} productInfo
+ *   Product info object.
+ * @param {string} skuItemCode
+ *   The main product sku.
+ *
+ * @return {object}
+ *   List of product labels.
+ */
+export const getProductLabels = (productInfo, skuItemCode) => {
+  let labels = {};
+  // For V3, we are passing the product label in the productInfo object itself.
+  if (hasValue(productInfo[skuItemCode])
+    && hasValue(productInfo[skuItemCode].labels)) {
+    labels = productInfo[skuItemCode].labels;
+  } else if (hasValue(drupalSettings.productLabels)) {
+    // This is for V2 sites, where we get the data from Drupal settings.
+    labels = drupalSettings.productLabels;
+  }
+
+  return labels;
+};
+
+/**
  * Get post data on add to cart.
  */
 export const getPostData = (skuCode, variantSelected, parentSKU) => {
@@ -222,7 +247,7 @@ export const getProductValues = (productInfo, configurableCombinations,
   let freeGiftPromoType;
   const { variants } = productInfo[skuItemCode];
   const { stockStatus } = productInfo[skuItemCode];
-  const { productLabels } = drupalSettings;
+  const productLabels = getProductLabels(productInfo, skuItemCode);
   let title = '';
   let priceRaw = '';
   let finalPrice = '';
@@ -332,13 +357,20 @@ export const getProductValues = (productInfo, configurableCombinations,
 
   const shortDesc = skuItemCode ? productInfo[skuItemCode].shortDesc : [];
   const description = skuItemCode ? productInfo[skuItemCode].description : [];
-  const additionalAttributes = skuItemCode ? productInfo[skuItemCode].additionalAttributes : [];
-
-  if (hasValue(fit) && hasValue(additionalAttributes)) {
+  // The additional attribute sometimes is empty and if it's empty then convert
+  // it to array.
+  let additionalAttributes = {};
+  if (hasValue(fit)) {
     additionalAttributes.fit = {
       value: fit,
       label: Drupal.t('FIT'),
     };
+  }
+  if (hasValue(skuItemCode)
+    && hasValue(productInfo[skuItemCode])
+    && productInfo[skuItemCode].additionalAttributes) {
+    additionalAttributes = Object.assign(additionalAttributes,
+      productInfo[skuItemCode].additionalAttributes);
   }
 
   const relatedProducts = [

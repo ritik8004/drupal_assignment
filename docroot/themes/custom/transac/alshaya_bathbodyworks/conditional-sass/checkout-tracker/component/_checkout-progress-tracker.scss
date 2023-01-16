@@ -1,0 +1,46 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    .progress-bar {
+      .step {
+        span {
+          @include breakpoint($only-mobile) {
+            padding-top: rem(4);
+          }
+
+          padding-top: rem(3);
+          font-size: rem(16);
+        }
+
+        &.current {
+          span {
+            font-family: $alshaya-bold;
+
+            @include breakpoint($only-mobile) {
+              padding-top: rem(3);
+              margin-top: 0;
+
+              html[lang="ar"] & {
+                padding-top: rem(4);
+              }
+            }
+
+            @include breakpoint($tablet) {
+              padding-top: rem(3);
+              margin-top: rem(-1);
+            }
+          }
+
+          &::after {
+            border-color: $cko-steps-active-bg;
+          }
+        }
+
+        &.completed {
+          .step-label {
+            top: calc(100% + #{rem(18)});
+          }
+        }
+      }
+    }
+  }
+}

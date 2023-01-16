@@ -284,6 +284,9 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
                 $swatch_image = file_url_transform_relative($swatch_image_url);
                 $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['values'][$value]['swatch_image'] = $swatch_image;
               }
+              // Get the product label for the swatch sku. This will be required
+              // on the PDP layout when user selects the different variants.
+              $this->getProductLabels($swatch_sku->getSku(), $swatch_sku, $vars);
             }
           }
         }

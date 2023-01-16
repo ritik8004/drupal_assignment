@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_advanced_page_resource_response_alter().
+ */
+function alshaya_rcs_mobile_app_advanced_page_resource_response_alter(array &$resource_data) {
+  // Traverse through all the promo blocks and add the `url_path` new attribute
+  // for product_carousel_category.
+  foreach ($resource_data['blocks'] ?? [] as $key => $item) {
+    if ($item['type'] === 'product_carousel_category') {
+      $mapping = [
+        'field_category_carousel_limit' => 'limit',
+        'field_category_carousel_slug' => 'url_path',
+        'field_category_carousel_title' => 'title',
+        'field_use_as_accordion' => 'accordion',
+      ];
+      // Traverse through all the fields available in
+      // `product_carousel_category`.
+      foreach ($item as $attr_key => $attr_value) {
+        // Proceed only if attr_value is having some value.
+        $mapped_key = $mapping[$attr_key] ?? NULL;
+        if ($attr_value && $mapped_key) {
+          switch ($attr_key) {
+            case 'field_category_carousel_slug':
+            case 'field_category_carousel_title':
+              $resource_data['blocks'][$key][$mapped_key] = $attr_value[0]['value'];
+              break;
+
+            case 'field_category_carousel_limit':
+              $resource_data['blocks'][$key][$mapped_key] = intval($attr_value[0]['value']);
+              break;
+
+            case 'field_use_as_accordion':
+              $resource_data['blocks'][$key][$mapped_key] = $attr_value[0]['value'] ? TRUE : FALSE;
+              break;
+          }
+        }
+        // Remove the duplicate attributes having different name.
+        if (!in_array($attr_key, ['type', 'parent_type'])) {
+          unset($resource_data['blocks'][$key][$attr_key]);
+        }
+      }
+      // Add an empty array for items as we don't have list of SKUs in Drupal
+      // now.
+      $resource_data['blocks'][$key]['items'] = [];
+    }
+  }
+}

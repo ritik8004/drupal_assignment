@@ -49,14 +49,14 @@
       // Execute the code to start sharethis. Wait for a second so that the
       // sharethis JS is loaded.
       var shareThisExecution = setInterval(function executeSharethisJs() {
-        if (typeof stLight !== 'undefined') {
-          stLight.options(drupalSettings.sharethis);
-        }
-        else {
+        if (typeof stLight === 'undefined' || typeof stButtons === 'undefined') {
           // Wait until sharethis js is loaded.
           return;
         }
-        stButtons.locateElements();
+        else {
+          stLight.options(drupalSettings.sharethis);
+          stButtons.locateElements();
+        }
         clearInterval(shareThisExecution);
       }, 1000);
     }

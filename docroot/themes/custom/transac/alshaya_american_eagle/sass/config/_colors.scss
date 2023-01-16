@@ -22,6 +22,8 @@ $_plp_secondary_cta_hover: rgba(0, 0, 0, 0.1);
 $white_smoke : #f2f2f2;
 $bright_gray: #eaeaea;
 $dark_gray: #222;
+$black_one: #333;
+$black_two: #777;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -607,6 +609,8 @@ $autocomplete_text: $grey;
 $spc-deliver-button: $royal-blue;
 $spc-edit-button: $black;
 $spc-shipping-price: $grey-light;
+$spc-cart-free-delivery-message-bg: $black_one;
+$spc-cart-free-delivery-txt: $white;
 
 //Algolia search bar.
 $algolia-input-text: $black;
@@ -746,3 +750,17 @@ $online-return-cancel-button-border: $warm-grey-two;
 $advanced-page-accordion-active-title: $black;
 $advanced-page-banner-bg: $bright_gray;
 $advanced-page-banner-title: $dark_gray;
+
+// Matchback
+$matchback-view-options-btn-bg: $black;
+$matchback-view-options-btn-text: $white;
+$matchback-product-link-text: $black;
+$matchback-product-desc-txt: $black;
+$matchback-product-show-less-txt: $black;
+$matchback-select-quantity-label-text: $black_two;
+$matchback-tap-to-enlarge-text: $black;
+
+// Product Drawer
+$drawer-label-text: $cod-gray;
+$drawer-select-label-txt: $black;
+$drawer-select-quantity-label-text: $black_two;

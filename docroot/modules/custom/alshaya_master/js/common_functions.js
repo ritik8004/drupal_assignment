@@ -3,7 +3,7 @@
  * Common functions.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
 
   Drupal.removeURLParameter = function (url, parameter) {
     var urlparts = url.split('?');
@@ -133,4 +133,19 @@
     return cleanedIdentifier.toLowerCase();
   }
 
-})(jQuery, Drupal);
+  /**
+   * Helper function to check if user is authenticated.
+   *
+   * @return {boolean}
+   *   Return true if user is authenticated else false.
+   */
+  Drupal.isUserAuthenticated = function () {
+    if (Drupal.hasValue(drupalSettings.userDetails)
+      && Drupal.hasValue(drupalSettings.userDetails.customerId)) {
+      return true;
+    }
+
+    return false;
+  };
+
+})(jQuery, Drupal, drupalSettings);

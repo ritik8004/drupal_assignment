@@ -2,7 +2,7 @@ variables:
   url_product_page: '/buy-shea-butter-richly-replenishing-hair-mask.html/'
   product_listing_page_url: '/shop-frizz-prone-hair/'
   spc_product_listing_page: '/shop-frizz-prone-hair/'
-  spc_basket_page: '/shop-bestsellers/'
+  spc_basket_page: '/shop-new/'
   spc_pdp_page: '/buy-shea-butter-richly-replenishing-hair-mask.html/'
   spc_promotion_listing_page: ''
   spc_plp_add_to_cart: '/shop-face-masks/'

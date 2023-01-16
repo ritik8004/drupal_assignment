@@ -5,7 +5,7 @@
     {{> visual_mobile_menu_carousel_partial menu_items=l2_item.children class=l2_item.mobile_tablet_class}}
   {{else}}
     <{{@l2_item.tag}} class="visual-mobile-level-two__link {{ l2_item.mobile_tablet_class }}" {{#if (gt l2_item.children.length 1) }} href="#l2-{{l2_item.id}}" {{else}} {{{l2_item.tag_attr}}} {{/if}}>
-      <img class="visual-mobile-level-two__image" src="{{l2_item.image}}">
+      <img class="visual-mobile-level-two__image" data-src="{{l2_item.image}}">
       <div class="visual-mobile-level-two__heading">{{l2_item.name}}</div>
     </{{@l2_item.tag}}>
     {{#if l2_item.children.length }}
@@ -15,7 +15,7 @@
           <a href="#l2-{{l2_item.id}}">{{@root.l1_name}}</a>
         </span>
         <div class="l2-header">
-          <img class="visual-mobile-level-two__image" src="{{l2_item.image}}">
+          <img class="visual-mobile-level-two__image" data-src="{{l2_item.image}}">
           <div class="visual-mobile-level-two__heading">{{l2_item.name}}</div>
         </div>
         {{> visual_mobile_menu_level3_partial menu_items=l2_item.children}}

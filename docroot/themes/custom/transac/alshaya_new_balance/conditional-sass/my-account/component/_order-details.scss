@@ -3,6 +3,18 @@
     border-bottom: none;
     margin-bottom: 0;
   }
+
+  .download-invoice-wrapper {
+    .download-invoice {
+      color: $primary_link;
+    }
+  }
+
+  .user__order--detail {
+    .total-row {
+      font-family: $alshaya-bold;
+    }
+  }
 }
 
 #block-userrecentorders {

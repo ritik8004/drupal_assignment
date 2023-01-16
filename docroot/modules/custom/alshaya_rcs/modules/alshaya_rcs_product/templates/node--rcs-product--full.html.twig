@@ -69,7 +69,9 @@ set classes = [
             </div>
           {% endif %}
 
-          <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
+          {% if free_gift_status is defined and free_gift_status %}
+            <div class="free-gift-promotions free-gift-promotions-full-view-mode"></div>
+          {% endif %}
 
           {% if express_delivery_enabled is defined and express_delivery_enabled %}
             <div id="sdd-ed-labels-desktop" class="express-delivery"></div>

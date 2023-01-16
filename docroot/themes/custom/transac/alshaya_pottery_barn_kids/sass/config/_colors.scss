@@ -36,6 +36,7 @@ $_grey_seventeen: #b4b3b3;
 $_grey_eighteen: #4a4a4a;
 $_grey_nineteen: #1a1a1a;
 $_grey_twenty: #ccc;
+$_grey_twenty_one: #434343;
 
 $transparent: transparent;
 
@@ -191,6 +192,8 @@ $section_divider_bg: $white-two;
 $spc-select-border: $_gray_eleven;
 $spc-product-title: $_gray_ten;
 $spc-product-price: $PBK_grey_one;
+$spc-cart-free-delivery-message-bg: $PBK_white;
+$spc-cart-free-delivery-txt: $_grey_twenty_one;
 
 // Minicart
 $primary_minicart_quantity_bg: $PBK_confirmation_blue;
@@ -207,3 +210,10 @@ $delivery_usp_background: $PBK_white;
 
 // Country Switcher
 $country-switcher-label: $PBK_grey_one;
+
+// Matchback
+$matchback-view-options-btn-text: $white-two;
+$matchback-view-options-btn-bg: $PBK_red;
+
+// PLP add to cart.
+$plp-primary-cta-hover-bg: rgba(153, 0, 0, 0.8);

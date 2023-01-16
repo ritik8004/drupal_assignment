@@ -14,6 +14,7 @@ const AuraAppLinks = () => {
         href={appleAppStoreLink}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_CLICK_APPSTORE' })}
       >
         <AppStoreSVG store="appstore" />
       </a>
@@ -21,6 +22,7 @@ const AuraAppLinks = () => {
         href={googlePlayStoreLink}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_CLICK_PLAYSTORE' })}
       >
         <AppStoreSVG store="playstore" />
       </a>

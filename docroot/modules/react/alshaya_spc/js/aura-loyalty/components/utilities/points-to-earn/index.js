@@ -75,6 +75,7 @@ const PointsToEarnMessage = (props) => {
                   href={appleAppStoreLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_CLICK_APPSTORE' })}
                 >
                   {getStringMessage('app_store_link_text')}
                 </a>
@@ -84,6 +85,7 @@ const PointsToEarnMessage = (props) => {
                   href={googlePlayStoreLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_CLICK_PLAYSTORE' })}
                 >
                   {getStringMessage('play_store_link_text')}
                 </a>

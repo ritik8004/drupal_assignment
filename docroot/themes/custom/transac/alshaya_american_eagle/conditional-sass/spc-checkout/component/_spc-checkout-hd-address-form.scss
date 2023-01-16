@@ -10,3 +10,12 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .address-form-mobile-only {
+    .spc-address-form-submit {
+      text-transform: capitalize;
+      background: $checkout-delivery-popup-button;
+    }
+  }
+}

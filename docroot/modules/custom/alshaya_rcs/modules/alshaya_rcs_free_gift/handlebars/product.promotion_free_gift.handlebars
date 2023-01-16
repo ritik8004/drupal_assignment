@@ -1,0 +1,34 @@
+<div class="free-gift-promo-wrapper free-gift-promo-list">
+  {{#if freeGiftImage }}
+    <div class="free-gift-image">
+      <img src="{{ freeGiftImage }}" title="{{ freeGiftTitle }}" alt="{{ freeGiftTitle }}" typeof="foaf:Image"
+        loading="lazy">
+    </div>
+  {{/if}}
+
+  <div class="free-gift-wrapper">
+    <div class="free-gift-title">
+      {{t "Free Gift" }}
+    </div>
+    <div class="free-gift-message">
+      <a
+        href="{{ freeGiftPromoUrl }}"
+        data-sku="{{ freeGiftSku }}"
+        class="free-gift-modal"
+        data-dialog-type="modal"
+        data-dialog-options='{"width":"auto"}'
+      >
+        {{ freeGiftTitle }}
+      </a>
+      {{t 'with this product' }}
+    </div>
+
+    {{#if freeGiftCoupon }}
+      <div class="free-gift-coupon-code">
+        {{t "Use Code " }}
+          <span class="coupon-code">{{ freeGiftCoupon }}</span>
+        {{t 'with this product' }}
+      </div>
+    {{/if}}
+  </div>
+</div>

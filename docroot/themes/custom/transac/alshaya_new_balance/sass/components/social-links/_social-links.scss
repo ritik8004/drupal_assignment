@@ -22,4 +22,12 @@
       background-image: url(#{$nb_theme_img_directory_path}/icons/twitter.svg);
     }
   }
+
+  &-youtube {
+    &::before {
+      @include ic-social;
+
+      background-image: url("#{$brand_theme_img_directory_path}/icons/youtube.svg");
+    }
+  }
 }

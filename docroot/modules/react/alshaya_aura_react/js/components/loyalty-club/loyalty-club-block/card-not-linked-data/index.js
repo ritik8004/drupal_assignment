@@ -36,7 +36,10 @@ const AuraMyAccountOldCardFound = (props) => {
             <div className="link-card-loader-placeholder" />
             <div
               className="link-your-card"
-              onClick={() => handleLinkYourCard(cardNumber)}
+              onClick={() => {
+                Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_LINK_YOUR_CARD', label: 'initiated' });
+                handleLinkYourCard(cardNumber);
+              }}
             >
               { Drupal.t('Link your account') }
             </div>
@@ -46,7 +49,10 @@ const AuraMyAccountOldCardFound = (props) => {
             <div className="error-placeholder" />
             <div
               className="not-you"
-              onClick={() => handleNotYou(cardNumber)}
+              onClick={() => {
+                handleNotYou(cardNumber);
+                Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_SIGN_IN_NOT_YOU', label: 'initiated' });
+              }}
             >
               { getNotYouLabel(notYouFailed) }
             </div>

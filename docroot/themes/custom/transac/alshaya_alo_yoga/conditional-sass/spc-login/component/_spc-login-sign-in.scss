@@ -61,12 +61,4 @@
       }
     }
   }
-
-  .site-brand-wrapper {
-    html[lang=ar] & {
-      @include breakpoint($desktop) {
-        height: rem(112);
-      }
-    }
-  }
 }

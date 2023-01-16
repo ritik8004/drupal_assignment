@@ -12,6 +12,7 @@ use Drupal\metatag\MetatagToken;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Expose drush commands for alshaya_acm_product_category.
@@ -75,6 +76,13 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
   protected $langugageManager;
 
   /**
+   * Config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * The export directory path.
    *
    * @var string
@@ -107,6 +115,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *   LoggerFactory object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory service.
    */
   public function __construct(
     ProductCategorySyncManager $category_sync_manager,
@@ -116,7 +126,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     MetatagManagerInterface $metatag_manager,
     MetatagToken $metatag_token,
     LoggerChannelFactoryInterface $logger_factory,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    ConfigFactoryInterface $config_factory
     ) {
     parent::__construct();
     $this->categorySyncManager = $category_sync_manager;
@@ -127,6 +138,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
     $this->metatagToken = $metatag_token;
     $this->drupalLogger = $logger_factory->get('alshaya_acm_product_category');
     $this->languageManager = $language_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -156,8 +168,18 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *   Process 50 terms per batch and output to the file. Default is 30.
    */
   public function exportProductCategoryData($options = ['limit' => 30]) {
-    // Get tid of all the parent product category.
-    $term_ids = array_keys($this->productCategoryTree->getChildTermIds());
+    // Get all product category terms if supercategory is enabled
+    // else get child terms.
+    if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('acq_product_category');
+      $term_ids = array_map(fn ($term) => $term->tid, $terms);
+      $term_ids = !empty($term_ids)
+        ? $term_ids
+        : [];
+    }
+    else {
+      $term_ids = array_keys($this->productCategoryTree->getChildTermIds());
+    }
 
     // Combine parent and child tids.
     $tids = [];

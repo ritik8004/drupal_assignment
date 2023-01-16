@@ -2,9 +2,11 @@
 
 namespace Drupal\alshaya_bazaar_voice\Plugin\rest\resource;
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
+use Drupal\Core\Cache\Cache;
 use Drupal\node\NodeInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
@@ -79,6 +81,10 @@ class WriteReviewConfigResource extends ResourceBase {
     $this->alshayaBazaarVoice = $alshaya_bazaar_voice;
     $this->skuManager = $sku_manager;
     $this->mobileAppUtility = $mobile_app_utility;
+    $this->cache = [
+      'tags' => [],
+      'contexts' => [],
+    ];
   }
 
   /**
@@ -113,25 +119,39 @@ class WriteReviewConfigResource extends ResourceBase {
     if (empty($main_sku)) {
       $this->mobileAppUtility->throwException();
     }
-    // Load the node object.
-    $productNode = $this->skuManager->getDisplayNode($main_sku);
-    if (!$productNode instanceof NodeInterface) {
-      $this->mobileAppUtility->throwException();
-    }
-    // Get category based configs for write review.
-    $category_based_config = $this->alshayaBazaarVoice->getCategoryBasedConfig($productNode);
 
-    if (empty($category_based_config) || !$category_based_config['show_rating_reviews']) {
+    $skuEntity = SKU::loadFromSku($main_sku);
+
+    if (!($skuEntity instanceof SKU)) {
       $this->mobileAppUtility->throwException();
     }
+
+    // Load the node object.
+    $productNode = $this->skuManager->getDisplayNode($skuEntity);
+    if ($productNode instanceof NodeInterface) {
+      // Get category based configs for write review.
+      $category_based_config = $this->alshayaBazaarVoice->getCategoryBasedConfig($productNode);
+
+      if (empty($category_based_config) || !$category_based_config['show_rating_reviews']) {
+        $this->mobileAppUtility->throwException();
+      }
+      $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $productNode->getCacheTags());
+      $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $productNode->getCacheContexts());
+    }
+    elseif (!$this->skuManager->isSkuFreeGift($skuEntity)) {
+      $this->mobileAppUtility->throwException();
+    }
+
+    $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $skuEntity->getCacheTags());
+    $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $skuEntity->getCacheContexts());
 
     $data['write_review_form'] = $this->alshayaBazaarVoice->getWriteReviewFieldsConfig();
-    $data['hide_fields_write_review'] = $category_based_config['hide_fields_write_review'];
+    $data['hide_fields_write_review'] = $category_based_config['hide_fields_write_review'] ?? [];
 
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
-    $cacheableMetadata->addCacheTags($productNode->getCacheTags());
-    $cacheableMetadata->addCacheContexts($productNode->getCacheContexts());
+    $cacheableMetadata->addCacheTags($this->cache['tags']);
+    $cacheableMetadata->addCacheContexts($this->cache['contexts']);
     $response->addCacheableDependency($cacheableMetadata);
 
     return $response;

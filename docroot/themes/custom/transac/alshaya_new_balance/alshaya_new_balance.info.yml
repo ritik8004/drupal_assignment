@@ -156,3 +156,7 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css: css/conditional-sass/egift-card-checkout/egift-card-checkout.ltr.css
+  alshaya_white_label/megamenu-fullwidth-layout:
+    css:
+      theme:
+        css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css: css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css

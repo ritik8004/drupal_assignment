@@ -79,6 +79,17 @@
     @include breakpoint($tablet) {
       overflow: hidden;
       border: none;
+
+      img {
+        // We are preventing cropping as NB has 1:1, landscape and portrait images.
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      // Matching the width to height in CORE so the container for images is 1:1.
+      width: rem(102) !important;
     }
   }
 
@@ -90,7 +101,7 @@
       pointer-events: none;
       position: absolute;
       width: 100%;
-      height: rem(3);
+      height: rem(4);
       background: $gallery_arrows_border;
       #{$left}: 0;
       bottom: 0;

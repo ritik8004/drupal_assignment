@@ -102,7 +102,6 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
                 id={`offer${index}`}
                 data-offer={typeof offer.type !== 'undefined' ? offer.type : 'offer'}
                 name="radios"
-                offerDescription={offer.description}
                 value={offer.code}
                 defaultChecked={typeof totals.hmOfferCode !== 'undefined' ? totals.hmOfferCode === offer.code : false}
                 onChange={handleChange}

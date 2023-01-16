@@ -30,6 +30,8 @@ $_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
 $ripe-lemon: #f0d51f;
 $egift-pink: #fabecc;
 $_egift_landing_page_banner_bg: $egift-pink;
+$light-blue: #e7effc;
+$dark-blue: #035699;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -615,6 +617,8 @@ $spc-checkout-cnc-map-expand: $peacock-blue;
 $spc-select-border: $warm-grey-two;
 $spc-select-text: $peacock-blue;
 $spc-cart-free-gifts-link: $black;
+$spc-cart-free-delivery-message-bg: $light-blue;
+$spc-cart-free-delivery-txt: $dark-blue;
 
 // Review and Rating
 
@@ -685,3 +689,9 @@ $advanced-page-banner-bg: $_egift_landing_page_banner_bg;
 
 // Exclusive Coupon Code
 $exclusive-promo-message-text: $peacock-blue;
+
+// Checkout steps
+$cko-steps-active-bg: $peacock-blue;
+$cko-steps-active-border: $black;
+$cko-steps-label-txt: $black;
+$cko-steps-inactive-border: $warm-grey-two;

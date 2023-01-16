@@ -248,6 +248,8 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 
       // Hide store field for non-admin users.
       $form['field_agent_store']['#access'] = $has_administer_user_permissions;
+      // Hide store id field for non-admin users.
+      $form['field_agent_store_id']['#access'] = $has_administer_user_permissions;
     }
     else {
       // Add markup for terms and conditions.

@@ -27,6 +27,44 @@
     Drupal.alshaya_seo_gtm_push_product_clicks($(this), drupalSettings.gtm.currency, subListName, position);
   });
 
+  // Push home delivery click event to GTM.
+  // Trigger only when accordion header is clicked.
+  $(document).once('home-delivery-click').on('click', '.pdp-express-delivery-wrapper .express-delivery-title-wrapper', function () {
+    Drupal.alshayaSeoGtmPushEcommerceEvents({
+      eventAction: 'pdp clicks',
+      eventLabel: 'home delivery',
+    });
+  });
+
+  // Push cnc click event to GTM.
+  $(document).once('cnc-click').on('click', '.magv2-pdp-click-and-collect-wrapper .magv2-click-collect-title-wrapper', function () {
+    Drupal.alshayaSeoGtmPushEcommerceEvents({
+      eventAction: 'pdp clicks',
+      eventLabel: 'click and collect',
+    });
+  });
+
+  // Push share this page open event to GTM.
+  $(document).once('share-this-open').on('click', '.magv2-share-title-wrapper', function () {
+    Drupal.alshayaSeoGtmPushEcommerceEvents({
+      eventAction: 'share this page',
+      eventLabel: 'open',
+    });
+  });
+
+  // Push share this page click event to GTM.
+  $(document).once('share-this').on('click', '.pdp-share-panel span, .pdp-share-panel button', function () {
+    // Set sharing medium based on the element clicked.
+    var sharingMedium = $(this).attr('displaytext') ? $(this).attr('displaytext') : '';
+    if ($(this).hasClass('copy-button')) {
+      sharingMedium = 'copy link';
+    }
+    Drupal.alshayaSeoGtmPushEcommerceEvents({
+      eventAction: 'share this page',
+      eventLabel: sharingMedium,
+    });
+  });
+
   /**
    * Prepares the impression list to send to Product Impressions event.
    *

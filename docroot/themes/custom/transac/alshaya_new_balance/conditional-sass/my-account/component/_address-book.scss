@@ -21,6 +21,14 @@
   .address--label {
     font-family: $alshaya-bold;
   }
+
+  .address--primary {
+    letter-spacing: 0;
+
+    @include breakpoint($desktop) {
+      padding-#{$right}: rem(30);
+    }
+  }
 }
 
 .address {
@@ -41,6 +49,8 @@
     }
 
     & > a {
+      text-transform: unset;
+
       @include breakpoint($only-mobile) {
         margin-top: 0;
       }

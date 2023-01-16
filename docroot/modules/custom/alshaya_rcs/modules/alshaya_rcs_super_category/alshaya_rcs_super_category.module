@@ -8,39 +8,6 @@
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Implements hook_rcs_placeholders_processor_path_alter().
- */
-function alshaya_rcs_super_category_rcs_placeholders_processor_path_alter(string &$path) {
-  $mapping = &drupal_static(__FUNCTION__, []);
-
-  if (isset($mapping[$path])) {
-    $path = $mapping[$path];
-    return;
-  }
-
-  // Get current super category term from route.
-  $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
-
-  if ($term instanceof TermInterface) {
-    // We need original path for storing in static cache.
-    $original_path = $path;
-
-    $path_parts = explode('/', $path);
-
-    // Remove the super category from path.
-    $slug = trim($term->get('field_category_slug')->getString(), '/');
-    foreach ($path_parts as $index => $path_part) {
-      if ($path_part === $slug) {
-        unset($path_parts[$index]);
-      }
-    }
-
-    $path = implode('/', array_values($path_parts));
-    $mapping[$original_path] = $path;
-  }
-}
-
-/**
  * Implements hook_alshaya_rcs_main_menu_alter().
  */
 function alshaya_rcs_super_category_alshaya_rcs_main_menu_alter(array &$variables) {

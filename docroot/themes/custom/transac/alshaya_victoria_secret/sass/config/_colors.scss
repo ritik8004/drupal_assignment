@@ -102,6 +102,7 @@ $light-orange: #e0dad5;
 $platinum: #e8e3df;
 $matterhorn: #4e3844;
 $zambezi: #605858;
+$light-pink: #f9e2e7;
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
@@ -111,6 +112,8 @@ $_grey_three: #e1e1e1;
 $_grey_four: #f5f5f6;
 $_grey_five: rgba(34, 29, 29, 0.07);
 $_grey_six: #958f8f;
+$_grey_seven: #221d1d;
+
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1057,6 +1060,7 @@ $order_no_orders_txt_mobile: $black;
 $order_no_orders_txt: $brownish-grey;
 $order_accordion_open_bg: $whisper-dark;
 $order_edit_account_link: $matterhorn;
+$order_detail_btn_txt: $vanilla;
 
 // Order print.
 $order_print_order_details_row_bg: $white-smoke-light;
@@ -1156,6 +1160,8 @@ $spc-select-border: $cultured;
 $spc-select-arrow-bg: $cultured;
 $spc-checkout-add-new-address-bg: $vanilla;
 $spc-checkout-btn-hover-bg: $brilliant-rose;
+$spc-cart-free-delivery-message-bg: $light-pink;
+$spc-cart-free-delivery-txt: $_grey_seven;
 
 // Fit Calculator.
 $fit-calc-select-border: $_grey_three;

@@ -294,6 +294,11 @@ export default class PaymentMethods extends React.Component {
     paymentDiv.checked = true;
 
     // Dispatch event for GTM checkout step 3.
+    // When full payment is made by Aura, this event gets triggered
+    // as payment_method changes to aura_payment.
+    // This does not trigger GTM checkout step 3 when partial payment done by Aura.
+    // Triggering Checkout step 3 for Aura partial payment is handled
+    // by auraDataReceivedForGtmCheckoutStep3 event.
     dispatchCustomEvent('refreshCartOnPaymentMethod', {
       cart: cartData.cart,
     });

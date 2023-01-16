@@ -1,19 +1,54 @@
 .cko-progress-tracker {
   #checkout-progress {
+    @include breakpoint($only-tablet) {
+      .alias--cart-login & {
+        width: 96%;
+      }
+    }
+
     .progress-bar {
+      .alias--cart-login & {
+        @include breakpoint($only-mobile) {
+          margin-top: rem(40);
+        }
+      }
+
       .step {
         span {
           font-family: $ay-bold;
+          font-size: rem(14);
         }
       }
     }
   }
 }
 
-.block-alshaya-checkout-tracker {
-  &.hide-checkout-tracker {
-    .cko-progress-tracker {
-      display: none;
+.alias--cart-login {
+  .site-brand-wrapper {
+    @include breakpoint($only-mobile) {
+      height: rem(56);
     }
+
+    @include breakpoint($tablet) {
+      height: rem(99);
+    }
+
+    .site-brand-home {
+      a {
+        @include breakpoint($tablet) {
+          width: auto;
+          max-width: none;
+        }
+      }
+    }
+  }
+
+  .block-page-title-block {
+    display: none;
+  }
+
+  .page-standard {
+    margin-top: 0;
+    padding-top: 0;
   }
 }

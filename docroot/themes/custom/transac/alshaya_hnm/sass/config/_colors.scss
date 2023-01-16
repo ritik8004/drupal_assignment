@@ -737,6 +737,7 @@ $spc-cart-delivery-popup-bg: $seashell_grey;
 $spc-cart-delivery-popup-border: $grey7;
 $spc-cart-delivery-popup-search-border: $hnm-black-three;
 $spc-cart-delivery-popup-search-placeholder: $light_grey;
+$spc-cart-free-delivery-message-bg: $hnm-black-two;
 
 // SPC Checkout
 $spc-checkout-page-title-border: $hnm-black;
@@ -898,3 +899,7 @@ $hello-member-bd-pop-title: $_hm_global_red;
 
 // Checkout OTP mobile verification.
 $cod-otp-field-invalid: $error;
+
+// Checkout steps
+$cko-steps-active-bg: $hnm-black-three;
+$cko-steps-active-border: $hnm-black-three;

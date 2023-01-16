@@ -7,6 +7,7 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -34,28 +35,23 @@ function alshaya_wishlist_alshaya_acm_product_build_alter(&$build, SKUInterface 
   // Add cache tag.
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['config:alshaya_wishlist.settings']);
 
-  // Return if the feature is not enabled and applicable to display mode.
-  if (!in_array($context, ['matchback', 'pdp', 'modal']) || !\Drupal::service('alshaya_wishlist.helper')->isWishListEnabled()) {
-    return;
-  }
   $vmode = $context === 'pdp' ? 'full' : $context;
 
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $productNode = $skuManager->getDisplayNode($sku->getSku());
-
-  // Get the current pdp layout.
-  $acm_product_config = \Drupal::config('alshaya_acm_product.settings');
-  $product_pdp_layout = $acm_product_config->get('pdp_layout');
-
-  if (!empty($productNode->get('field_select_pdp_layout')->getValue()[0]['value'])) {
-    $product_pdp_layout = $productNode->get('field_select_pdp_layout')->getValue()[0]['value'];
+  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+  $product_node = $sku_manager->getDisplayNode($sku->getSku());
+  if (!($product_node instanceof NodeInterface)) {
+    return;
   }
+  /** @var \Drupal\alshaya_wishlist\Helper\WishListHelper $wishlist_helper */
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.helper');
+
   // Attach wishlist libraries and add a wishlist markup for FE icon rendering.
-  if ($product_pdp_layout !== 'magazine_v2') {
+  if ($wishlist_helper->showWishlistIconForProduct($product_node, $vmode)) {
     $build['wishlist_enabled']['#markup'] = '<div class="wishlist-pdp-' . $vmode . '"></div>';
     $build['#attached']['library'][] = 'alshaya_wishlist/wishlist';
   }
+
 }
 
 /**

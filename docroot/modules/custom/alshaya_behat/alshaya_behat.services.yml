@@ -10,3 +10,12 @@ services:
       - '@entity_type.manager'
       - '@acq_commerce.api'
       - '@alshaya_api.api'
+      - '@request_stack'
+
+  alshaya_behat.response_subscriber:
+    class: Drupal\alshaya_behat\EventSubscriber\AlshayaBehatResponseSubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments:
+      - '@request_stack'
+      - '@tempstore.private'

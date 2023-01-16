@@ -124,6 +124,7 @@
   @include breakpoint($only-mobile) {
     padding-#{$left}: 0;
     border: rem(1) solid $tertiary-border;
+    color: $plp_filter_txt;
   }
 
   @include breakpoint($tablet) {

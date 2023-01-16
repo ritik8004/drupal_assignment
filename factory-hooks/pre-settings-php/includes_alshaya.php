@@ -281,6 +281,7 @@ switch ($env_name) {
   case 'live':
     // We want to timeout linked skus API call in 1 second on prod.
     $settings['linked_skus_timeout'] = 1;
+    $settings['alshaya_drush_authenticate'] = TRUE;
     break;
 
 }

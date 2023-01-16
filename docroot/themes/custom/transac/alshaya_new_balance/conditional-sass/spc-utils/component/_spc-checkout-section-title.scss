@@ -67,9 +67,7 @@
       .spc-order-summary-block {
         .spc-checkout-section-title {
           text-align: $left;
-          padding-right: rem(16);
-          padding-left: rem(16);
-          padding-bottom: 0;
+          padding: 0 rem(16);
         }
       }
 
@@ -77,6 +75,21 @@
         .spc-checkout-section-title {
           font-family: $alshaya-bold;
           padding-top: rem(24);
+        }
+      }
+
+      .spc-order-summary-block {
+        .block-content {
+          padding-top: 0;
+          padding-bottom: 0;
+        }
+
+        .totals {
+          padding-top: rem(18);
+        }
+
+        .total-line-item {
+          font-size: rem(14);
         }
       }
     }

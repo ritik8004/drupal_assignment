@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Alshaya Matchback module.
+ */
+
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_node_view().
+ */
+function alshaya_matchback_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
+  $alshaya_acm_settings = \Drupal::config('alshaya_acm.settings');
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_acm_settings->getCacheTags());
+
+  if (!($alshaya_acm_settings->get('show_crosssell_as_matchback')
+    && $entity->bundle() === 'acq_product'
+    && in_array($view_mode, ['matchback', 'matchback_mobile']))
+  ) {
+    return;
+  }
+
+  if ($product_display_settings->get('display_mobile_matchback_add_to_bag_button')) {
+    $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback';
+  }
+
+  $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback_utility';
+  $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback.gtm';
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_matchback_preprocess_node(&$variables) {
+  $alshaya_acm_settings = \Drupal::config('alshaya_acm.settings');
+  $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $alshaya_acm_settings->getCacheTags());
+  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
+
+  $is_matchback_for_acq_product = $alshaya_acm_settings->get('show_crosssell_as_matchback') && $variables['node']->bundle() === 'acq_product';
+  if ($is_matchback_for_acq_product && $variables['view_mode'] === 'full') {
+    $variables['display_matchback_add_to_bag'] = $product_display_settings->get('display_mobile_matchback_add_to_bag_button');
+  }
+
+  if (!($is_matchback_for_acq_product && $variables['view_mode'] === 'matchback_mobile')) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $sku = $skuManager->getSkuForNode($variables['node']);
+  $sku_entity = SKU::loadFromSku($sku);
+
+  $variables['attributes']['data-sku_type']['#markup'] = $sku_entity->bundle();
+  $variables['attributes']['data-is_buyable']['#markup'] = alshaya_acm_product_is_buyable($sku_entity)
+    ? 'true'
+    : 'false';
+  $variables['attributes']['data-sku_type']['#markup'] = $sku_entity->bundle();
+
+  /** @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper */
+  $sku_info_helper = \Drupal::service('alshaya_acm_product.sku_info');
+  $variables['attributes']['data-stock']['#markup'] = strval($sku_info_helper->stockInfo($sku_entity)['stock']);
+
+  // Display add to bag button.
+  $variables['content']['show_matchback_add_to_bag'] = TRUE;
+  $variables['#attached']['drupalSettings']['displayMatchbackAddToBag'] = $product_display_settings->get('display_mobile_matchback_add_to_bag_button');
+}
+
+/**
+ * Implements hook_alshaya_acm_product_recommended_products_data_alter().
+ */
+function alshaya_matchback_alshaya_acm_product_recommended_products_data_alter(array &$data) {
+  // We only want to alter the crossel products section title here.
+  // The json format is used by magazine v2 layout, so we don't want to alter
+  // that.
+  if ($data['type'] !== 'crosssell' || $data['format'] === 'json') {
+    return;
+  }
+
+  $data['data']['section_title'] = t('Frequently Bought Together', [], ['context' => 'alshaya_static_text|pdp_matchback_title']);
+}
+
+/**
+ * Implements hook_alshaya_add_to_bag_feature_status_alter().
+ */
+function alshaya_matchback_alshaya_add_to_bag_feature_status_alter(&$add_to_bag_feature_status) {
+  $acm_settings = \Drupal::config('alshaya_acm.settings');
+  $route_params = \Drupal::routeMatch()->getParameters();
+  if ($route_params->get('node')
+    && $route_params->get('node')->bundle('acq_product')
+    && $acm_settings->get('show_crosssell_as_matchback')) {
+    $add_to_bag_feature_status = TRUE;
+  }
+}

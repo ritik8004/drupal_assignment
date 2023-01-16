@@ -18,19 +18,15 @@
           </div>
         {{/if}}
         <div class="product-desc-value">
-          <ul class="additional-desc">
-            {{#if description.weight }}
-              <li>{{ description.weight }}</li>
-            {{/if}}
-            {{#if description.primary_material }}
-              <li>{{ description.primary_material }}</li>
-            {{/if}}
-            {{#if description.technologies }}
-              <li>{{ description.technologies }}</li>
-            {{/if}}
-          </ul>
           {{#if description.feature_bullets }}
-            {{{description.feature_bullets}}}
+          <div class="product-features">{{t 'Features' }}</div>
+            {{{ description.feature_bullets }}}
+          {{/if}}
+          {{#if description.weight }}
+            <div class="product-weight">{{t 'Weight' }}</div>
+            <ul class="additional-desc">
+            <li>{{ description.weight }}</li>
+            </ul>
           {{/if}}
         </div>
     </div>

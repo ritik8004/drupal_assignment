@@ -119,4 +119,30 @@
 
     dataLayer.push(productData);
   };
+
+  /**
+   * Function to push Share wishlist event to data layer.
+   *
+   * @param {string} linkLabel
+   *  Title of the link clicked.
+   */
+  Drupal.alshayaSeoGtmPushShareWishlist = function (linkLabel) {
+    // Prepare the share wishlist data.
+    var shareWishlistData = {
+      event: 'share',
+      eventCategory: 'share',
+      eventAction: 'share wishlist',
+      eventLabel: linkLabel,
+      eventValue: 0,
+    }
+    dataLayer.push(shareWishlistData);
+  }
+
+  // Push to GTM when add to bag product drawer is opened.
+  document.addEventListener('drawerOpenEvent', function onDrawerOpen(e) {
+    var $element = e.detail.triggerButtonElement.closest('article.node--view-mode-search-result');
+    if ($element) {
+      Drupal.alshayaSeoGtmPushProductDetailView($element);
+    }
+  });
 }(jQuery, Drupal, dataLayer));

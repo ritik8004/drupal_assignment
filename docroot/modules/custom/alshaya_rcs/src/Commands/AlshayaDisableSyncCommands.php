@@ -14,14 +14,21 @@ class AlshayaDisableSyncCommands extends DrushCommands {
    * Overidden drush commands.
    */
   public const OVERRIDE_COMMANDS = [
-    "alshaya_acm:offline-product-sync",
-    "alshaya_acm:sync-products",
-    "acq_promotion:sync-promotions",
-    "acq_promotion:sync-and-process-promotions",
-    "acq_sku:sync-products",
-    "acq_sku:sync-categories",
-    "acq_sku:sync-products-test",
-    "bv_attr_val_algolia:index",
+    'alshaya_acm:offline-product-sync',
+    'alshaya_acm:sync-products',
+    'acq_promotion:sync-promotions',
+    'acq_promotion:sync-and-process-promotions',
+    'acq_sku:sync-products',
+    'acq_sku:sync-categories',
+    'acq_sku:sync-products-test',
+    'bv_attr_val_algolia:index',
+    'alshaya_api:sanity-check',
+    'alshaya_api:sanity-check-category-mapping',
+    'alshaya_api:sanity-check-price',
+    'alshaya_api:sanity-check-sku-diff',
+    'alshaya_api:sanity-check-status',
+    'alshaya_api:sanity-check-stock',
+    'alshaya_api:sanity-check-visibility',
   ];
 
   /**

@@ -7,3 +7,5 @@ footer_menu_blocks:
   - social-links
   - help
 show_brand_filter: true
+use_super_category_url_for_logo: true
+show_search_banner_in_super_category_page: false

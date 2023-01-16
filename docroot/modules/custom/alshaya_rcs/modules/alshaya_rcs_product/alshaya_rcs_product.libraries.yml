@@ -18,6 +18,7 @@ rcs_product_info:
     # This library's JS is dynamically replaced with V3 JS.
     - alshaya_acm_product/product_utility
     - alshaya_rcs_product/product_attributes
+    - alshaya_rcs_product/rcs_product_labels
 
 product_attributes:
   version: 1.x
@@ -180,6 +181,13 @@ rcs_product_process_images:
     js/alshaya_rcs_product.rcs_product_process_images.js: {}
   dependencies:
     - rcs_placeholders/helpers
+
+rcs_product_labels:
+  js:
+    js/alshaya_rcs_product.rcs_product_labels.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_acm_product/product_utility
 
 rcs_product_images:
   version: 1.x

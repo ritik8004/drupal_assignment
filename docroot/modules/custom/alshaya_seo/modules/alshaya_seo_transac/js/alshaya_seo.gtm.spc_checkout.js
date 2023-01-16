@@ -94,7 +94,7 @@
     dataLayer.push(data);
   };
 
-  Drupal.alshayaSeoSpc.checkoutEvent = function (cartData, step, paymentMethod = '') {
+  Drupal.alshayaSeoSpc.checkoutEvent = function (cartData, step, paymentMethod = '', pushAboveStep2 = true) {
     var checkoutPaymentPage = 'checkout payment page';
     var data = {
       language: drupalSettings.gtm.language,
@@ -141,7 +141,8 @@
 
     // 1st condition is triggered when we refresh checkout page with payment
     // method selected. Next conditions are specifically for step 3 and 4.
-    if ((cartData.payment.method && step === 2) || step === 3 || step === 4) {
+    // pushAboveStep2 is only set to false in case of Aura since its handled differently from Aura, see checkoutCartUpdate event.
+    if (((cartData.payment.method && step === 2) || step === 3 || step === 4) && pushAboveStep2) {
       // Make a clone of the object.
       var stepData = JSON.parse(JSON.stringify(data));
       stepData.ecommerce.checkout.actionField.step = (step === 4) ? 4 : 3;
@@ -155,7 +156,7 @@
       }
 
       if (step === 4) {
-        var totals = (window.spcStaticStorage.cart_raw && window.spcStaticStorage.cart_raw.totals) ? window.spcStaticStorage.cart_raw.totals : '';
+        var totals = (rawCartData && rawCartData.totals) ? rawCartData.totals : '';
         var auraPaymentAmount = totals.total_segments ? totals.total_segments.filter(item => item.code === 'aura_payment') : null;
         auraPaymentAmount = (auraPaymentAmount && typeof auraPaymentAmount[0] !== 'undefined') ? auraPaymentAmount[0].value : null;
         var gtmPaymentName = drupalSettings.payment_methods[cartData.payment.method] ?
@@ -197,6 +198,10 @@
         }
       }
       stepData.pageType = checkoutPaymentPage;
+      // Add Checkout Step 3 and 4 specific Aura details.
+      if (typeof drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled === true) {
+        Object.assign(stepData, Drupal.alshayaSeoGtmPrepareAuraCheckoutStepDataFromCart(cartData));
+      }
       dataLayer.push(stepData);
     }
   };
@@ -217,7 +222,14 @@
 
   document.addEventListener('checkoutCartUpdate', function (e) {
     var step = Drupal.alshayaSeoSpc.getStepFromContainer();
-    Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step);
+    // We handle GTM checkout step 3 event from Aura fully when enabled.
+    // So only push upto checkout step 2 by setting pushAboveStep2 false.
+    if (typeof drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled === true) {
+      Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step, '', false);
+    }
+    else {
+      Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, step);
+    }
   });
 
   document.addEventListener('deliveryMethodChange', function (e) {
@@ -245,9 +257,10 @@
 
   document.addEventListener('orderPaymentMethod', function (e) {
     var payment_method = e.detail.payment_method;
+    var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
     // Get the cart data to check if some payment is done via E-Gift card.
     if (drupalSettings.hasOwnProperty('egiftCard') && drupalSettings.egiftCard.enabled) {
-      var totals = window.spcStaticStorage.cart_raw.totals;
+      var totals = rawCartData.totals;
       // If some amount is paid via egift then hps_redeemed_amount will be
       // present.
       if (totals
@@ -259,6 +272,22 @@
     // Change hps_payment to egift_card.
     if (payment_method == 'hps_payment') {
       payment_method = 'egiftcard';
+    }
+
+    // If aura is enabled add aura payment method to checkoutOption.
+    if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled === true) {
+      // When full payment is made by AURA.
+      if (payment_method === 'aura_payment') {
+        payment_method = 'auraRedeemed';
+      } else {
+        var totals = rawCartData.totals;
+        var auraPayment = totals.total_segments.filter(item => item.code === 'aura_payment');
+        var auraPaymentValue = Drupal.hasValue(auraPayment) ? auraPayment[0].value : 0;
+        // Check if partial payment made by Aura then concatenate.
+        if (auraPaymentValue > 0) {
+          payment_method = [payment_method, 'auraRedeemed'].join('_');
+        }
+      }
     }
     Drupal.alshayaSeoSpc.gtmPushCheckoutOption(payment_method, 3);
   });

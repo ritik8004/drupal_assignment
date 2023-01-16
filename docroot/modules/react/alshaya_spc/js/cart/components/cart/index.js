@@ -45,6 +45,10 @@ import { isOnlineReturnsCartBannerEnabled } from '../../../../../js/utilities/on
 import OnlineReturnsCartBanner from '../../../../../alshaya_online_returns/js/cart/online-returns-cart-banner';
 import CartPaymentMethodsLogos from '../payment-methods-logos';
 import Tamara from '../../../../../js/tamara/utilities/tamara';
+import DeliveryPropositions from '../../../delivery-propositions/components/delivery-propositions';
+
+// Lazy load free delivery usp banner component.
+const FreeDeliveryUspBanner = React.lazy(() => import('../free-delivery-usp-banner' /* webpackChunkName: "free_delivery_usp" */));
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -74,6 +78,8 @@ export default class Cart extends React.Component {
       // is applied the i.e. if this exclusive promo is applied on the basket,
       // the flag value will be true, and we don't render the dynamic promos.
       hasExclusiveCoupon: false,
+      // Text to show in free delivery usp banner.
+      freeShippingText: null,
     };
   }
 
@@ -101,6 +107,7 @@ export default class Cart extends React.Component {
           inStock: data.in_stock,
           hasExclusiveCoupon: data.has_exclusive_coupon,
           ...collectionPointsEnabled() && { collectionCharge: data.collection_charge || '' },
+          freeShippingText: data.free_shipping_text,
         }));
 
         // The cart is empty.
@@ -167,8 +174,12 @@ export default class Cart extends React.Component {
 
       const { items } = this.state;
       // If Checkout Tracker is enabled and cart is empty hide checkout tracker
-      if (isCheckoutTracker() && items.length === 0) {
-        document.getElementById('block-checkouttrackerblock').classList.add('hide-checkout-tracker');
+      if (isCheckoutTracker()) {
+        if (items.length !== 0) {
+          document.getElementById('block-checkouttrackerblock').classList.remove('hide-checkout-tracker');
+        } else {
+          document.getElementById('block-checkouttrackerblock').classList.add('hide-checkout-tracker');
+        }
       }
 
       // Call dynamic-yield spa api for cart context.
@@ -415,6 +426,7 @@ export default class Cart extends React.Component {
       auraDetails,
       showAreaAvailabilityStatusOnCart,
       hasExclusiveCoupon,
+      freeShippingText,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -519,6 +531,11 @@ export default class Cart extends React.Component {
             />
           </ConditionalView>
         </div>
+        {hasValue(freeShippingText) && (
+          <React.Suspense fallback={<Loading />}>
+            <FreeDeliveryUspBanner bannerText={freeShippingText} />
+          </React.Suspense>
+        )}
         <div className="spc-main">
           <div className="spc-content">
             <div className="spc-title-wrapper">
@@ -582,6 +599,9 @@ export default class Cart extends React.Component {
             display_cart_payment_icons is set to true. */}
             {drupalSettings.alshaya_spc.display_cart_payment_icons
               && <CartPaymentMethodsLogos paymentMethods={drupalSettings.payment_methods} />}
+            {/* Display all delivery propositions icons/text on the cart page
+            below the continue to checkout button. */}
+            <DeliveryPropositions />
           </div>
         </div>
         <div className="spc-post-content">

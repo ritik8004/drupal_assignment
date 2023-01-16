@@ -28,13 +28,18 @@
   }
 
   #promo-code {
-    padding-#{$left}: rem(11);
+    padding-#{$left}: rem(8);
     font-size: rem(14);
     border: rem(1) solid $spc-promo-code-border;
     color: $spc-promo-code-input-text;
   }
 
+  #promo-message {
+    padding-#{$left}: rem(8);
+  }
+
   .promo-submit {
+    font-size: rem(14);
     font-weight: 700;
     text-transform: capitalize;
   }
