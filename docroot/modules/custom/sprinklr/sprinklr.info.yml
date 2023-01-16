@@ -1,5 +1,0 @@
-name: sprinklr
-type: module
-description: Provides integrations for sprinklr chatbot.
-package: Custom
-core_version_requirement: ^9 || ^10

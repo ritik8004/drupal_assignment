@@ -1,0 +1,23 @@
+/**
+ * @file
+ * Theme specific scss file.
+ */
+
+body {
+  font-family: $alshaya-regular;
+}
+
+.menu-icon {
+  background: url('/themes/custom/transac/alshaya_pottery_barn/imgs/icons/mobile-menu.svg') center center no-repeat;
+  padding: 2.5rem 1.25rem;
+}
+
+.amp-footer__content {
+  background: $light-grey;
+  padding: 2rem 1.25rem;
+  margin-top: -0.0625rem;
+
+  p {
+    margin: 0;
+  }
+}

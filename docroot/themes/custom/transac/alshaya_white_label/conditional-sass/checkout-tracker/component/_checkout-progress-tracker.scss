@@ -112,6 +112,10 @@
         }
 
         span {
+          @include breakpoint($only-mobile) {
+            font-size: rem(14) !important;
+          }
+
           color: $cko-steps-label-txt;
           transition: 0.3s ease;
           display: block;
@@ -120,13 +124,10 @@
           height: rem(20);
           text-align: center;
           padding-top: rem(2);
+          font-size: rem(18);
 
           html[lang="ar"] & {
             padding-top: rem(4);
-          }
-
-          @include breakpoint($only-mobile) {
-            font-size: rem(14);
           }
         }
 
@@ -240,6 +241,22 @@
   &.hide-checkout-tracker {
     .cko-progress-tracker {
       display: none;
+    }
+  }
+}
+
+.alias--checkout {
+  .block-page-title-block {
+    display: none;
+  }
+}
+
+.alias--checkout,
+.alias--cart,
+.alias--checkout-confirmation {
+  .spc-sidebar.sticky {
+    @include breakpoint($tablet) {
+      position: initial;
     }
   }
 }

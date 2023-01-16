@@ -882,6 +882,20 @@
         }
       }
 
+      // Dispatch custom event to get list name. For the default value we use
+      // the list name from the gtm attribute for the page. But for sections
+      // like matchback, we need "match back" prefix to be added instead of
+      // PDP/PLP, so this event will help us there.
+      var gtmListNameEvent = new CustomEvent('getGtmListNameForProduct', {
+        detail: {
+          listName: productData.list,
+          storedListValues: listValues,
+          sku: productData.id,
+        }
+      });
+      document.dispatchEvent(gtmListNameEvent);
+      productData.list = gtmListNameEvent.detail.listName;
+
       // Fetch referrerPageType from localstorage.
       const referrerData = Drupal.getItemFromLocalStorage('referrerData');
       if(referrerData !== null) {
@@ -966,8 +980,10 @@
   Drupal.alshaya_seo_gtm_push_impressions = function (currencyCode, impressions) {
     // To avoid max size in POST data issue we do it in batches of 10.
     while (impressions.length > 0) {
+      let statsText = $('.total-result-count .ais-Stats-text').text();
       var data = {
         event: 'productImpression',
+        eventLabel2: Drupal.hasValue(statsText) ? statsText : '',
         ecommerce: {
           currencyCode: currencyCode,
           impressions: impressions.splice(0, 10)
@@ -1208,6 +1224,25 @@
         eventLabel: productData.gtm_name + '_' + productData.sku,
         eventValue: 0,
         nonInteraction: 0,
+      };
+      dataLayer.push(data);
+    }
+  };
+
+  /**
+   * Helper function to push PLP and PDP ecommerce events to GTM.
+   *
+   * @param eventData
+   *  Contains event details eg: 'eventLabel', 'eventAction' etc.
+   */
+  Drupal.alshayaSeoGtmPushEcommerceEvents = function (eventData) {
+    if (Drupal.hasValue(eventData)) {
+      var data = {
+        event: 'ecommerce',
+        eventCategory: 'ecommerce',
+        eventAction: eventData.eventAction,
+        eventLabel: eventData.eventLabel,
+        eventLabel2: Drupal.hasValue(eventData.eventLabel2) ? eventData.eventLabel2 : '',
       };
       dataLayer.push(data);
     }

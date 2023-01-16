@@ -1,0 +1,68 @@
+@include breakpoint($only-mobile) {
+  .matchback-processed {
+    .matchback-image-wrapper {
+      min-height: rem(141);
+    }
+
+    // View option button is only on mobile
+    .is-not-buyable,
+    .addtobag-config-button {
+      color: $matchback-view-options-btn-text;
+      background-color: $matchback-view-options-btn-bg;
+      margin-top: rem(14);
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .matchback-processed {
+    .basic-details-wrapper {
+      .field--name-field-skus {
+        .sku-base-form {
+          button[type="submit"] {
+            width: 60%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .matchback-processed {
+    .field--name-field-skus {
+      .sku-base-form {
+        .form-item {
+          padding-top: 0;
+          padding-bottom: 0;
+          margin-bottom: rem(21);
+        }
+      }
+    }
+
+    .matchback-container {
+      & > .views-row {
+        margin-bottom: rem(32);
+      }
+    }
+
+    .field--name-field-skus {
+      .sku-base-form {
+        .form-item.form-type-select.form-item-quantity {
+          label {
+            padding: 0;
+            top: rem(-24);
+          }
+        }
+      }
+    }
+  }
+
+  #machbackSlider {
+    .slick-prev,
+    .slick-next {
+      // Overriding inline css added by JS
+      top: rem(9) !important;
+    }
+  }
+}

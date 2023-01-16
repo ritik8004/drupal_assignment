@@ -36,8 +36,9 @@ class RcsPhProductPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
     $full_path = $data['fullPath'];
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $product_prefix = $config->get('product.path_prefix');
+    $placeholder_nid = $config->get('product.placeholder_nid');
 
-    if (!str_starts_with($path, '/' . $product_prefix)) {
+    if (!str_starts_with($path, '/' . $product_prefix) || !$placeholder_nid) {
       return;
     }
 
@@ -45,7 +46,7 @@ class RcsPhProductPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
       ? $this->enrichmentHelper->getEnrichedEntity('product', $full_path)
       : NULL;
     $entityData = NULL;
-    $processed_paths = '/node/' . $config->get('product.placeholder_nid');
+    $processed_paths = '/node/' . $placeholder_nid;
 
     if (isset($product)) {
       $entityData = $product->toArray();

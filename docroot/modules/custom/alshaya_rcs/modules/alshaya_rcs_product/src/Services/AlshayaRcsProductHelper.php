@@ -280,7 +280,8 @@ class AlshayaRcsProductHelper {
       }
     }
 
-    return array_unique($attributes);
+    // Return unique attributes in a non-associative array.
+    return array_values(array_unique($attributes));
   }
 
   /**

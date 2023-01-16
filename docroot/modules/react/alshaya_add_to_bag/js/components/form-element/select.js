@@ -22,7 +22,7 @@ const SelectList = (props) => {
   const { isGroup } = groupData;
 
   // Event handler for select list value change.
-  const onSelect = ({ value }) => onChange(attributeName, value);
+  const onSelect = ({ value, optionLabel }) => onChange(attributeName, value, optionLabel);
 
   let selectedOption = null;
   const listOptions = options.map((option) => {

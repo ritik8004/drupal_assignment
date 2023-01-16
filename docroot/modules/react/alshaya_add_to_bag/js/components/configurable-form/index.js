@@ -22,6 +22,7 @@ import getStringMessage from '../../../../alshaya_spc/js/utilities/strings';
 import WishlistContainer from '../../../../js/utilities/components/wishlist-container';
 import { isWishlistEnabled, isWishlistPage } from '../../../../js/utilities/wishlistHelper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export default class ConfigurableForm extends React.Component {
   constructor(props) {
@@ -105,8 +106,19 @@ export default class ConfigurableForm extends React.Component {
    *  The name of the attribute.
    * @param {string} value
    *  The attribute value.
+   * @param {string} swatchLabel
+   *  Label of the selected option.
    */
-  onSwatchClick = (name, value) => this.setAttribute(name, value);
+  onSwatchClick = (name, value, swatchLabel) => {
+    this.setAttribute(name, value);
+
+    // Push quick add size click event to GTM.
+    Drupal.alshayaSeoGtmPushEcommerceEvents({
+      eventAction: 'plp color click',
+      eventLabel: hasValue(swatchLabel) ? swatchLabel : '',
+      eventLabel2: 'quick add',
+    });
+  }
 
   /**
    * Event handler for change of value in the unordered list component.
@@ -115,8 +127,19 @@ export default class ConfigurableForm extends React.Component {
    *  The name of the attribute.
    * @param {string} value
    *  The attribute value.
+   * @param {string} optionLabel
+   *  Label of the selected option.
    */
-  onListItemChange = (name, value) => this.setAttribute(name, value);
+  onListItemChange = (name, value, optionLabel) => {
+    this.setAttribute(name, value);
+
+    // Push quick add size click event to GTM.
+    Drupal.alshayaSeoGtmPushEcommerceEvents({
+      eventAction: 'plp size click',
+      eventLabel: hasValue(optionLabel) ? optionLabel : '',
+      eventLabel2: 'quick add',
+    });
+  };
 
   /**
    * Updates the state when user selects a quantity.

@@ -45,6 +45,7 @@ class AlshayaFeatureProcess {
     $this->suiteLocators = [];
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'exclusiveCouponCode';
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'mobileOTP';
+    $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'enrichments';
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'ContentCreation';
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPLPAddtocart';
     $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'aura';
@@ -54,7 +55,7 @@ class AlshayaFeatureProcess {
     else {
       $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'oldPDP';
     }
-    if (in_array($environment[2], ['dev3', 'local', 'dev', 'qa', 'uat'])) {
+    if (in_array($environment[2], ['dev3', 'local', 'dev', 'dev2', 'qa', 'qa2', 'test', 'uat'])) {
       if ($environment[0] == 'bp' || $environment[0] == 'hm') {
         $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'boots';
       }

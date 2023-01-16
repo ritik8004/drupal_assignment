@@ -1,0 +1,13 @@
+name: Alshaya AMP White Label
+type: theme
+base theme: amptheme
+description: 'Base theme for AMP Alshaya brands.'
+package: Custom
+core: '8.x'
+core_version_requirement: ^8 || ^9
+alshaya_theme_type: amp
+
+regions:
+  header: Header
+  content: Content
+  footer: Footer

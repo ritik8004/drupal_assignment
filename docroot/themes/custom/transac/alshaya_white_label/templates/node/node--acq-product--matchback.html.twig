@@ -27,6 +27,9 @@
         </div>
       {% endif %}
       <h1><a class="full-prod-link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ label }}</a></h1>
+      <div class="price-block {{ content.price_block_identifier }}">
+        {{ content.price_block }}
+      </div>
       <div class="short-description-wrapper matchback-description-wrapper">
         <div class="content--short-description">
           <div class="field__content-wrapper">
@@ -87,9 +90,6 @@
           </div>
         </div>
         <div class="gradient-holder"></div>
-      </div>
-      <div class="price-block {{ content.price_block_identifier }}">
-        {{ content.price_block }}
       </div>
       <div class="content--item-code">
         <span class="field__label">{{ 'Item Code'|t }}:</span>
