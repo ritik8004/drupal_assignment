@@ -54,6 +54,11 @@ class FeatureContext extends CustomMinkContext
       '.subbox-banner-backdrop',
       '.subbox-banner',
       '.subbox-wrap',
+      '.dy-modal-container',
+      '.dy-modal-wrapper',
+      '.dytmpl-form-section',
+      '.atc-overlay_content',
+      '.dynotifyjs-corner',
     ];
 
     try {
