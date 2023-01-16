@@ -92,6 +92,11 @@ function _alshaya_nb_transac_translations() {
         'ar' => 'يلبي معايير غرين ليف من نيو بالانس',
       ],
     ],
+    'v5' => [
+      'Features' => [
+        'ar' => 'المميزات',
+      ],
+    ],
   ];
 }
 
