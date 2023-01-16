@@ -107,6 +107,11 @@ window.commerceBackend = window.commerceBackend || {};
    * @returns {void}
    */
   function getProcessedStyleProducts(product, styleProducts) {
+    // Return from here if the product is not configurable.
+    if (product.type_id !== 'configurable') {
+      return product;
+    }
+
     var mainProduct = null;
     // Use main product on PDP to display product attributes.
     if (globalThis.rcsPhGetPageType() === 'product'
