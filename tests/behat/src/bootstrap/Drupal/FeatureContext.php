@@ -795,7 +795,7 @@ class FeatureContext extends CustomMinkContext
   public function scrollToElement($selector)
   {
     $this->getSession()
-      ->executeScript('document.querySelector("' . addslashes($selector) . '").scrollIntoView()');
+      ->executeScript('const element = document.querySelector("' . addslashes($selector) . '"); window.scrollTo({top: element.offsetTop});');
   }
 
   /**
