@@ -192,6 +192,8 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
       }
 
       $path = Url::fromUserInput('/' . $category->get('field_category_slug')->getString())->toString();
+      // Get path from target link field
+      // Return this path with term details.
       $field_target_link_uri = $category->get('field_target_link')->getString();
       if ($category->get('field_override_target_link')->getString() && $field_target_link_uri) {
         $path = UrlHelper::isExternal($field_target_link_uri)
@@ -203,7 +205,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
       $term_data[$mdc_id] = [
         'label' => $category->getName(),
         'meta_title' => $category->getName(),
-        'class' => implode(" ", $classes),
+        'class' => implode(' ', $classes),
         'gtm_menu_title' => $gtm_menu_title,
         'imgPath' => $img_path,
         'inactive_path' => $inactive_path,

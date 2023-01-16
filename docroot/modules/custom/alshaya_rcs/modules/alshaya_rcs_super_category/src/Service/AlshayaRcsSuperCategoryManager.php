@@ -97,6 +97,8 @@ class AlshayaRcsSuperCategoryManager extends AlshayaSuperCategoryManager {
 
     if (empty($term)) {
       // Get enriched entity by current path.
+      // Fallback logic to get first term.
+      // If current path matches the term overridden path, we return that term.
       $term = RcsPhPathProcessor::getEnrichedEntityByPath('category', 'internal:'. $this->currentPath->getPath());
       if ($term !== NULL && $term instanceof TermInterface
         && $term->get('field_override_target_link')->getString()) {
