@@ -40,10 +40,15 @@ function alshaya_matchback_node_view(array &$build, EntityInterface $entity, Ent
 function alshaya_matchback_preprocess_node(&$variables) {
   $alshaya_acm_settings = \Drupal::config('alshaya_acm.settings');
   $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $alshaya_acm_settings->getCacheTags());
+  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
 
-  if (!($alshaya_acm_settings->get('show_crosssell_as_matchback')
-    && $variables['node']->bundle() === 'acq_product'
-    && $variables['view_mode'] === 'matchback_mobile')) {
+  $is_matchback_for_acq_product = $alshaya_acm_settings->get('show_crosssell_as_matchback') && $variables['node']->bundle() === 'acq_product';
+  if ($is_matchback_for_acq_product && $variables['view_mode'] === 'full') {
+    $variables['display_matchback_add_to_bag'] = $product_display_settings->get('display_mobile_matchback_add_to_bag_button');
+  }
+
+  if (!($is_matchback_for_acq_product && $variables['view_mode'] === 'matchback_mobile')) {
     return;
   }
 
@@ -64,10 +69,7 @@ function alshaya_matchback_preprocess_node(&$variables) {
 
   // Display add to bag button.
   $variables['content']['show_matchback_add_to_bag'] = TRUE;
-
-  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $variables['#attached']['drupalSettings']['displayMatchbackAddToBag'] = $product_display_settings->get('display_mobile_matchback_add_to_bag_button');
-  $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $product_display_settings->getCacheTags());
 }
 
 /**

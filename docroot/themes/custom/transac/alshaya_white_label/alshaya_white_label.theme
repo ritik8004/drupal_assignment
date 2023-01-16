@@ -690,11 +690,6 @@ function alshaya_white_label_preprocess_node(&$variables) {
       $variables['#attached']['library'][] = 'alshaya_stores_finder/store_finder_preserve_history';
     }
   }
-
-  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  if (isset($product_display_settings)) {
-    $variables['display_matchback_add_to_bag'] = $product_display_settings->get('display_mobile_matchback_add_to_bag_button');
-  }
 }
 
 /**
