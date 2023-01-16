@@ -2,6 +2,10 @@
   max-width: rem(1026);
   margin: 0 auto rem(15);
 
+  @include breakpoint($only-mobile) {
+    margin: 0 auto rem(25);
+  }
+
   .alias--checkout &,
   .alias--checkout-confirmation & {
     margin: 0 auto rem(84);
@@ -19,7 +23,6 @@
 
     @include breakpoint($only-mobile) {
       width: 80%;
-      font-size: rem(10);
 
       .alias--cart-login & {
         @include breakpoint($only-mobile) {
@@ -105,9 +108,11 @@
           }
 
           @include breakpoint($only-mobile) {
-            min-width: rem(58);
+            min-width: rem(61);
             white-space: initial;
+            font-size: rem(10);
             text-align: center;
+            top: calc(100% + #{rem(11)});
           }
         }
 

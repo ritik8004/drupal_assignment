@@ -1,11 +1,5 @@
 .cko-progress-tracker {
   #checkout-progress {
-    font-size: rem(16);
-
-    @include breakpoint($only-mobile) {
-      font-size: rem(13);
-    }
-
     .progress-bar {
       .alias--cart-login & {
         @include breakpoint($only-mobile) {
@@ -29,7 +23,7 @@
           font-size: rem(13);
 
           @include breakpoint($only-mobile) {
-            font-size: rem(11);
+            font-size: rem(10);
           }
         }
 
