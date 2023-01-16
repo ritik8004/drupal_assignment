@@ -7,6 +7,8 @@
 
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Link;
 
 /**
  * Implements hook_library_info_alter().
@@ -74,4 +76,31 @@ function alshaya_ay_transac_preprocess_breadcrumb(&$variables) {
     $variables['links'] = [];
   }
   $variables['#cache']['contexts'][] = 'url.path';
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ */
+function alshaya_ay_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+  $breadcrumb_links = [];
+  if ($route_match->getRouteName() == 'entity.node.canonical') {
+    $node = $route_match->getParameter('node');
+    if ($field_product_category = $node->get('field_product_category')) {
+      $term_list = $field_product_category->getValue();
+      $entity_repository = \Drupal::service('entity.repository');
+      $product_category_helper = \Drupal::service('alshaya_acm_product.category_helper');
+      if ($parents = $product_category_helper->getBreadcrumbTermList($term_list)) {
+        foreach (array_reverse($parents) as $term) {
+          $term = $entity_repository->getTranslationFromContext($term);
+          $breadcrumb_links[] = Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]);
+        }
+      }
+      else {
+        $title = \Drupal::service('title_resolver')->getTitle(\Drupal::service('request_stack')->getCurrentRequest(), $route_match->getRouteObject());
+        $breadcrumb_links[] = Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]);
+      }
+    }
+    // Setting breadcrumb links.
+    $breadcrumb = _alshaya_ay_transac_set_breadcrumb_links($breadcrumb_links);
+  }
 }
