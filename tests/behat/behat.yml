@@ -12,6 +12,8 @@ default:
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
         - DennisDigital\Behat\Gtm\Context\GtmContext
+        - emuse\BehatHTMLFormatter\Context\ScreenshotContext:
+            screenshotDir: '%paths.base%/build/html/behat/assets/screenshots'
   formatters:
     pretty: ~
     cucumber_json: true
@@ -41,6 +43,13 @@ default:
       blackbox: ~
       region_map:
         local_tasks: "#block-local-tasks"
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+      name: html
+      renderer: Twig,Behat2
+      file_name: index
+      print_args: true
+      print_outp: true
+      loop_break: true
     Bex\Behat\ScreenshotExtension:
       screenshot_taking_mode: failed_steps
       image_drivers:

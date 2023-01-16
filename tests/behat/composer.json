@@ -16,7 +16,8 @@
     "jakoch/phantomjs-installer": "*",
     "cawolf/behat-cucumber-json-formatter": "dev-10-screenshots-support",
     "bex/behat-screenshot": "dev-58-dispatch-event",
-    "se/selenium-server-standalone": "3.141.*"
+    "se/selenium-server-standalone": "3.141.*",
+    "emuse/behat-html-formatter": "^0.2.0"
   },
   "config": {
     "bin-dir": "bin",

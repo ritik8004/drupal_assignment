@@ -395,6 +395,15 @@ class AlshayaYamlProcess {
     }
     $yaml['suites']['default']['filters']['tags'] = $tags;
 
+    // Setting the folder for report.
+    if (!empty($profile)) {
+      $yaml['formatters'] = [
+        'html' => [
+          'output_path' => "%paths.base%/features/$profile-$viewport/reports/html/behat",
+        ],
+      ];
+    }
+
     return $yaml;
   }
 
