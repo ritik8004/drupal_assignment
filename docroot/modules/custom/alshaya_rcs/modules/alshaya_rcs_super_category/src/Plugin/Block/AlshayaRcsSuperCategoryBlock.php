@@ -14,6 +14,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\alshaya_rcs_super_category\Service\AlshayaRcsSuperCategoryManager;
 use Drupal\alshaya_rcs_super_category\Service\RcsProductCategoryTree;
 use Drupal\Core\Access\AccessResult;
@@ -162,6 +163,7 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
     // Load L1 supercategories.
     $super_categories = $this->productCategoryTree->getCategoryRootTerms();
     foreach($super_categories as $super_category) {
+      $classes = [];
       $category = $term_storage->load($super_category['id']);
 
       $mdc_id = $category->get('field_commerce_id')->getString();
@@ -170,11 +172,11 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
         ? $category->getTranslation('en')
         : $category;
 
-      $class = ' brand-' . Html::cleanCssIdentifier(mb_strtolower($category_en->getName()));
+      $classes[] = 'brand-' . Html::cleanCssIdentifier(mb_strtolower($category_en->getName()));
 
       $gtm_menu_title = NULL;
       if ($current_tid === $category->id()) {
-        $class .= ' active';
+        $classes[] = 'active';
         $gtm_menu_title = $category_en->getName();
       }
 
@@ -182,21 +184,32 @@ class AlshayaRcsSuperCategoryBlock extends BlockBase implements ContainerFactory
       $img_path = $inactive_path = NULL;
       $brand_icons = $this->productCategoryTree->getBrandIcons($super_category['id']);
       if (!empty($brand_icons['active_image']) && !empty($brand_icons['inactive_image'])) {
-        $img_path = (str_contains($class, 'active'))
+        $img_path = (in_array('active', $classes))
           ? $brand_icons['active_image']
           : $brand_icons['inactive_image'];
 
         $inactive_path = $brand_icons['inactive_image'];
       }
 
+      $path = Url::fromUserInput('/' . $category->get('field_category_slug')->getString())->toString();
+      // Get path from target link field
+      // Return this path with term details.
+      $field_target_link_uri = $category->get('field_target_link')->getString();
+      if ($category->get('field_override_target_link')->getString() && $field_target_link_uri) {
+        $path = UrlHelper::isExternal($field_target_link_uri)
+          ? $field_target_link_uri
+          : Url::fromUri($field_target_link_uri)->toString(TRUE)->getGeneratedUrl();
+        $classes[] = 'overridden-link';
+      }
+
       $term_data[$mdc_id] = [
         'label' => $category->getName(),
         'meta_title' => $category->getName(),
-        'class' => $class,
+        'class' => implode(' ', $classes),
         'gtm_menu_title' => $gtm_menu_title,
         'imgPath' => $img_path,
         'inactive_path' => $inactive_path,
-        'path' => Url::fromUserInput('/' . $category->get('field_category_slug')->getString())->toString(),
+        'path' => $path,
       ];
 
       $cache_tags = Cache::mergeTags(
