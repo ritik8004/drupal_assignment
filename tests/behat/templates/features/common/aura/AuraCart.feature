@@ -17,7 +17,7 @@ Feature: Aura Cart
     And I wait for the cart notification popup
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".spc-aura-cart-rewards-block"
-    And I scroll to the specific element with class "spc-aura-cart-rewards-block"
+    And I scroll to the ".spc-aura-cart-rewards-block" element
     And I wait for element ".spc-aura-cart-content"
     And I wait for element ".spc-aura-points-to-earn"
     When I click on ".spc-join-aura-link" element
@@ -39,7 +39,7 @@ Feature: Aura Cart
     And I wait for the cart notification popup
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".spc-aura-cart-rewards-block"
-    And I scroll to the specific element with class "spc-aura-cart-rewards-block"
+    And I scroll to the ".spc-aura-cart-rewards-block" element
     And I wait for element ".spc-aura-cart-content"
     And I wait for element ".spc-aura-points-to-earn"
     When I click on ".spc-join-aura-link" element
@@ -60,7 +60,7 @@ Feature: Aura Cart
     And I wait for the cart notification popup
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".spc-aura-cart-rewards-block"
-    And I scroll to the specific element with class "spc-aura-cart-rewards-block"
+    And I scroll to the ".spc-aura-cart-rewards-block" element
     And I wait for element ".spc-aura-cart-content"
     And I wait for element ".spc-aura-points-to-earn"
     When I click on ".spc-join-aura-link" element

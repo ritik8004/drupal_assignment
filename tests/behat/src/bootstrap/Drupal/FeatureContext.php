@@ -795,7 +795,7 @@ class FeatureContext extends CustomMinkContext
   public function scrollToElement($selector)
   {
     $this->getSession()
-      ->executeScript('document.querySelector("' . addslashes($selector) . '").scrollIntoView()');
+      ->executeScript('const element = document.querySelector("' . addslashes($selector) . '"); window.scrollTo({top: element.offsetTop});');
   }
 
   /**
@@ -3163,14 +3163,6 @@ JS;
     } catch (\Exception) {
       // Silently fail when there is no link to click.
     }
-  }
-
-  /**
-   * @When I scroll to the specific element with class :selector
-   */
-  public function scrollToElementV2($selector) {
-    // Check if we have OTP fields on the page.
-    $this->getSession()->executeScript('const element = document.getElementsByClassName("' . addslashes($selector) . '")[0]; window.scrollTo({top: element.offsetTop})');
   }
 
 }
