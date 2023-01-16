@@ -3,6 +3,10 @@
     .matchback-image-wrapper {
       min-height: rem(130);
     }
+
+    .subtitle.crossell-title {
+      padding-#{$right}: 0;
+    }
   }
 }
 

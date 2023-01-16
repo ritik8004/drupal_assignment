@@ -87,6 +87,12 @@
 
 @include breakpoint($only-mobile) {
   .matchback-processed {
+    margin-#{$left}: rem(8);
+
+    .subtitle.crossell-title {
+      padding-#{$left}: 0;
+    }
+
     .is-not-buyable,
     .addtobag-config-button {
       color: $matchback-view-options-btn-text;
