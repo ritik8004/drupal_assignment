@@ -17,7 +17,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
     And I wait for element ".checkout-login-wrapper"
-    When I click the anchor link ".edit-checkout-as-guest" on page
+    Then I follow "checkout as guest"
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
@@ -51,7 +51,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait for element ".checkout-link.submit"
     When I follow "إتمام الشراء بأمان"
     And I wait for element ".checkout-login-wrapper"
-    When I click the anchor link ".edit-checkout-as-guest" on page
+    Then I follow "إتمام عملية الشراء كزبون زائر"
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
@@ -85,7 +85,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait for element ".checkout-link.submit"
     When I follow "إتمام الشراء بأمان"
     And I wait for element ".checkout-login-wrapper"
-    When I click the anchor link ".edit-checkout-as-guest" on page
+    Then I follow "إتمام عملية الشراء كزبون زائر"
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
@@ -117,7 +117,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait for element ".checkout-link.submit"
     When I follow "continue to checkout"
     And I wait for element ".checkout-login-wrapper"
-    When I click the anchor link ".edit-checkout-as-guest" on page
+    Then I follow "checkout as guest"
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
@@ -151,7 +151,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait for element ".checkout-link.submit"
     When I follow "إتمام الشراء بأمان"
     And I wait for element ".checkout-login-wrapper"
-    When I click the anchor link ".edit-checkout-as-guest" on page
+    Then I follow "إتمام عملية الشراء كزبون زائر"
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
@@ -185,7 +185,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     And I wait for element ".checkout-link.submit"
     When I follow "إتمام الشراء بأمان"
     And I wait for element ".checkout-login-wrapper"
-    When I click the anchor link ".edit-checkout-as-guest" on page
+    Then I follow "إتمام عملية الشراء كزبون زائر"
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method.home-delivery" element on page
     And I wait for AJAX to finish
