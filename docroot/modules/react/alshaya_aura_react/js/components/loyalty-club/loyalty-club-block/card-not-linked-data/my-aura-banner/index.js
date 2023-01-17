@@ -56,10 +56,12 @@ class MyAuraBanner extends React.Component {
       isLinkCardModalOpen,
       chosenCountryCode,
     } = this.state;
-    const { cardNumber, notYouFailed } = this.props;
+    const { cardNumber, notYouFailed, tier } = this.props;
+
+    const tierClass = tier || 'no-tier';
 
     return (
-      <div className="aura-myaccount-no-linked-card-wrapper old-card-found fadeInUp">
+      <div className={`aura-myaccount-no-linked-card-wrapper old-card-found fadeInUp aura-level-${tierClass}`}>
         <div className="aura-logo">
           <ConditionalView condition={window.innerWidth > 1024}>
             <AuraLogo stacked="vertical" />

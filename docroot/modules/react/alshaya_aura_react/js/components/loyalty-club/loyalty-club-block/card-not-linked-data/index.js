@@ -3,12 +3,12 @@ import MyAuraBanner from './my-aura-banner';
 import MyAccountBanner from './my-account-banner';
 
 const AuraMyAccountOldCardFound = (props) => {
-  const { cardNumber, notYouFailed } = props;
+  const { cardNumber, notYouFailed, tier } = props;
 
   if (typeof drupalSettings.aura.context !== 'undefined'
     && drupalSettings.aura.context === 'my_aura') {
     return (
-      <MyAuraBanner cardNumber={cardNumber} notYouFailed={notYouFailed} />
+      <MyAuraBanner cardNumber={cardNumber} notYouFailed={notYouFailed} tier={tier} />
     );
   }
 

@@ -59,6 +59,7 @@ const LoyaltyClubBlock = (props) => {
           cardNumber={cardNumber}
           notYouFailed={notYouFailed}
           linkCardFailed={linkCardFailed}
+          tier={tier}
         />
       );
     }
