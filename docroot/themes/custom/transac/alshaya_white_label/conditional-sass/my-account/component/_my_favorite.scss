@@ -113,3 +113,38 @@
     }
   }
 }
+
+// size guide in My Account when wishlist is enabled.
+.path--user {
+  &.wishlist-enabled {
+    &.overlay-product-modal {
+      &.sizeguide-modal-overlay {
+        .ui-dialog {
+          .ui-dialog-titlebar {
+            @include breakpoint($tablet) {
+              height: rem(50);
+              top: rem(50);
+            }
+
+            &-close {
+              font-size: 0;
+              #{$right}: rem(10);
+
+              &::after {
+                content: none;
+              }
+
+              @include icon(close) {
+                top: 0;
+
+                @include breakpoint($only-mobile) {
+                  position: fixed;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
