@@ -120,6 +120,10 @@
     &.overlay-product-modal {
       &.sizeguide-modal-overlay {
         .ui-dialog {
+          html[lang="ar"] & {
+            padding-right: calc((100vw - #{rem(1026)})/ 2)
+          }
+
           .ui-dialog-titlebar {
             @include breakpoint($tablet) {
               height: rem(50);
