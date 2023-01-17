@@ -121,7 +121,7 @@
       &.sizeguide-modal-overlay {
         .ui-dialog {
           html[lang="ar"] & {
-            padding-right: calc((100vw - #{rem(1026)})/ 2)
+            padding-right: calc((100vw - #{rem(1026)}) / 2);
           }
 
           .ui-dialog-titlebar {
