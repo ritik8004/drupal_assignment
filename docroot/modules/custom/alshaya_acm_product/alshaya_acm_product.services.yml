@@ -118,6 +118,7 @@ services:
     arguments:
       - '@alshaya_acm_product.sku_images_manager'
       - '@alshaya_acm_product.skumanager'
+      - '@config.factory'
     tags:
       - { name: 'event_subscriber' }
   alshaya_acm_product.product_updated_event:

@@ -6,6 +6,17 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Uninstalls alshaya_api module if enabled.
+ */
+function alshaya_transac_lite_update_9401() {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_api')) {
+    \Drupal::service('module_installer')->uninstall(['alshaya_api']);
+  }
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_transac_lite_install() {
