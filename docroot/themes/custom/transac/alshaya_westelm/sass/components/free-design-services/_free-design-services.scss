@@ -201,10 +201,7 @@
             .js-form-type-tel {
               position: unset;
               margin-top: 1.25rem;
-              width:
-                calc(
-                  100% - 43px
-                ); // here we keep 'px' unit to work in IE also
+              width: calc(100% - #{rem(43)});
 
               input {
                 padding-bottom: 0 !important;
