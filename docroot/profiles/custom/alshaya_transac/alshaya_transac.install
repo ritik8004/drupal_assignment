@@ -1080,6 +1080,7 @@ function alshaya_transac_install() {
     'alshaya_social_google',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',
+    'alshaya_geolocation',
     'alshaya_super_category',
     'alshaya_user',
     'alshaya_acm_checkoutcom',

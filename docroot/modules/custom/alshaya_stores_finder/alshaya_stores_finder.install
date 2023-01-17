@@ -11,6 +11,17 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Removing unused store finder configs.
+ */
+function alshaya_stores_finder_update_9402() {
+  $config_factory = \Drupal::service('config.factory');
+  $config_factory->getEditable('block.block.exposedformstores_finderpage_1')->delete();
+  $config_factory->getEditable('views.view.stores_finder')->delete();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the translation store list link label if not present.
  */
 function alshaya_stores_finder_update_9401() {
