@@ -368,7 +368,7 @@ class AlshayaYamlProcess {
     // Setting the ScreenshotExtension configuration to capture the failed screenshots.
     $yaml['extensions']['Bex\Behat\ScreenshotExtension']['image_drivers'] = [
       'local' =>  [
-        'screenshot_directory' => "%paths.base%/features/$profile-$viewport/screenshots",
+        'screenshot_directory' => "%paths.base%/results/screenshots/$profile-$viewport",
       ],
     ];
 
@@ -381,6 +381,11 @@ class AlshayaYamlProcess {
     else {
       $yaml['extensions']['Drupal\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = ["--window-size=1440,960"];
       $tags = "~@mobile";
+    }
+
+    // When running inside Docker/Jenkins we need to change the host so that App container can be accessed directly.
+    if (getenv('DOCKER_JENKINS') && getenv('DOCKER_JENKINS') == 1) {
+      $yaml['extensions']['Drupal\MinkExtension']['selenium2']['wd_host'] = 'http://jenkins_browser:4444/wd/hub';
     }
 
     // Running specific tags on uat and prod environment on test executions
@@ -398,6 +403,7 @@ class AlshayaYamlProcess {
         ],
       ];
     }
+
     return $yaml;
   }
 

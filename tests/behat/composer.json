@@ -1,12 +1,19 @@
 {
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/marcelovani/behat-cucumber-formatter.git"
+    }
+  ],
   "require-dev": {
     "php": "^8.0",
     "behat/mink-browserkit-driver": "*",
     "drupal/drupal-extension": "^4",
     "jakoch/phantomjs-installer": "*",
+    "cawolf/behat-cucumber-json-formatter": "dev-10-screenshots-support",
+    "bex/behat-screenshot": "dev-master#e4661f274abdb273eae8562e62ac2176bc4804b0",
     "se/selenium-server-standalone": "3.141.*",
-    "emuse/behat-html-formatter": "^0.2.0",
-    "bex/behat-screenshot": "dev-master"
+    "emuse/behat-html-formatter": "^0.2.0"
   },
   "config": {
     "bin-dir": "bin",

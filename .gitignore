@@ -6,6 +6,8 @@ local.services.yml
 site.txt
 tests/apis/conductor_v2/settings.php
 tests/behat/local.yml
+tests/behat/results
+*jenkins_home
 box/local.config.yml
 box/alshaya_acm*
 *.local

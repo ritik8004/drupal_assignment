@@ -1,0 +1,67 @@
+# Stack used to run composer commands and behat tests
+# This will work only with remote sites
+# References
+# https://github.com/cieplakm/playground/blob/d5150e10b63aec38694d4916cc56363ce1efc6b7/jenkins/Dockerfile
+# https://github.com/stevelle/jenkins-rpc/blob/40c3147643041e69574266a3453a8e1973ad616d/dockerfiles/jenkins/Dockerfile
+# https://github.com/search?l=&o=desc&q=from+ubuntu+jenkins+filename%3ADockerfile+language%3ADockerfile+language%3ADockerfile%22&s=indexed&type=Code
+version: '3'
+
+services:
+
+  jenkins:
+    container_name: ${PROJECT_NAME}
+    build:
+      context: ./docker/jenkins
+      dockerfile: Dockerfile
+    volumes:
+      # https://devopscube.com/run-docker-in-docker/#:~:text=To%20run%20docker%20inside%20docker,sock%20as%20a%20volume.&text=Just%20a%20word%20of%20caution,privileges%20over%20your%20docker%20daemon.
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Map jenkins_home so we don't loose all data when the images are provisioned
+      - ./jenkins_home:/var/jenkins_home
+      # Map for cucumber reports
+      - ${BEHAT_PATH}/results/cucumber:/tmp/cucumber
+    environment:
+      # Disable setup wizard
+      JAVA_OPTS: -Djenkins.install.runSetupWizard=false
+      BEHAT_SECRET_KEY: ${BEHAT_SECRET_KEY}
+    ports:
+      - '50000:50000'
+
+  nginx:
+    # Using Nginx as reverse proxy to serve results and screenshots
+    # https://www.jenkins.io/doc/book/system-administration/reverse-proxy-configuration-nginx/
+    container_name: ${PROJECT_NAME}_nginx
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    volumes:
+      # Map to serve results
+      - ${BEHAT_PATH}/results:/www/data/results
+    ports:
+      - "8080:80"
+
+  appserver:
+    # Used to build the PHP application and run Behat tests
+    container_name: ${PROJECT_NAME}_appserver
+    build:
+      context: ./docker/appserver
+      dockerfile: Dockerfile
+    environment:
+      DOCKER_JENKINS: 1
+      PHP_MEMORY_LIMIT: "1G"
+      PHP_CLI_MEMORY_LIMIT: "1G"
+      PHP_APCU_ENABLED: 1
+      PHP_APCU_SHM_SIZE: 512M
+    volumes:
+      - ${BEHAT_PATH}:/behat
+
+  selenium:
+    # https://github.com/SeleniumHQ/docker-selenium
+    # Container can be viewed with vnc://127.0.0.1:5901
+    # Password: secret
+    container_name: ${PROJECT_NAME}_browser
+    image: selenium/standalone-chrome:4.0.0-beta-1-20210215
+    shm_size: 2gb
+    ports:
+      - '4444:4444'
+      - '5901:5900'
