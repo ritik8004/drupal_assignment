@@ -19,7 +19,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     When I follow "continue to checkout"
     And I wait for the page to load
     And I wait for element ".checkout-login-wrapper"
-    And I am logged in as an authenticated user "{spc_returning_user_email}" with password "{spc_returning_user_password}"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
@@ -72,7 +72,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     When I follow "continue to checkout"
     And I wait for the page to load
     And I wait for element ".checkout-login-wrapper"
-    And I am logged in as an authenticated user "{spc_returning_user_email}" with password "{spc_returning_user_password}"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
@@ -124,7 +124,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     When I follow "continue to checkout"
     And I wait for the page to load
     And I wait for element ".checkout-login-wrapper"
-    Given I am logged in as an authenticated user "{spc_returning_user_email}" with password "{spc_returning_user_password}"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
@@ -155,7 +155,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     When I follow "continue to checkout"
     And I wait for the page to load
     And I wait for element ".checkout-login-wrapper"
-    And I am logged in as an authenticated user "{spc_returning_user_email}" with password "{spc_returning_user_password}"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
@@ -208,7 +208,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     When I follow "continue to checkout"
     And I wait for the page to load
     And I wait for element ".checkout-login-wrapper"
-    And I am logged in as an authenticated user "{spc_returning_user_email}" with password "{spc_returning_user_password}"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
@@ -260,7 +260,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers
     When I follow "continue to checkout"
     And I wait for the page to load
     And I wait for element ".checkout-login-wrapper"
-    And I am logged in as an authenticated user "{spc_returning_user_email}" with password "{spc_returning_user_password}"
+    When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
