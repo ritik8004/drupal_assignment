@@ -21,10 +21,6 @@
 
         .step-label {
           font-size: rem(13);
-
-          @include breakpoint($only-mobile) {
-            font-size: rem(10);
-          }
         }
 
         &.current {
@@ -40,10 +36,6 @@
         &.completed {
           .step-label {
             top: calc(100% + #{rem(17)});
-
-            @include breakpoint($only-mobile) {
-              font-size: rem(11);
-            }
           }
         }
       }

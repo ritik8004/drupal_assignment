@@ -46,14 +46,6 @@
             }
           }
         }
-
-        &.completed {
-          .step-label {
-            @include breakpoint($only-mobile) {
-              font-size: rem(11);
-            }
-          }
-        }
       }
     }
   }

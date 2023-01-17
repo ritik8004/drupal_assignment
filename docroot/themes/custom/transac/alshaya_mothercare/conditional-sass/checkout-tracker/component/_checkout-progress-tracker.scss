@@ -50,10 +50,6 @@
         &.completed {
           .step-label {
             top: calc(100% + #{rem(18)});
-
-            @include breakpoint($only-mobile) {
-              font-size: rem(11);
-            }
           }
         }
       }

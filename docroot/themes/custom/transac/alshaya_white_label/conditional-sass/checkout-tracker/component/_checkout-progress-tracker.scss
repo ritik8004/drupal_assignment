@@ -110,7 +110,7 @@
           @include breakpoint($only-mobile) {
             min-width: rem(61);
             white-space: initial;
-            font-size: rem(10);
+            font-size: rem(10) !important;
             text-align: center;
             top: calc(100% + #{rem(11)});
           }
