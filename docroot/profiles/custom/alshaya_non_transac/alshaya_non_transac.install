@@ -126,6 +126,7 @@ function alshaya_non_transac_install() {
     'alshaya_permissions',
     'alshaya_seo',
     'alshaya_stores_finder',
+    'alshaya_geolocation',
     'alshaya_user',
     'alshaya_static_html',
   ];

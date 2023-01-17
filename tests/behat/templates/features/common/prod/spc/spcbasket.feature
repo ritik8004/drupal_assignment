@@ -8,7 +8,7 @@ Feature: Test basket page
   @desktop
   Scenario: As a Guest, I should be able to add more quantity
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
@@ -51,7 +51,7 @@ Feature: Test basket page
   @desktop
   Scenario: As a Guest, I should be able to see the products added to basket and the header
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
@@ -79,7 +79,7 @@ Feature: Test basket page
   @mobile
   Scenario: As a Guest, I should be able to see the products added to basket and the header (mobile)
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I wait for the page to load
     And I click on Add-to-cart button
     And I wait for element "#block-page-title"
@@ -100,7 +100,7 @@ Feature: Test basket page
 
   Scenario: As a Guest, I should be able to remove products from the basket
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
@@ -120,7 +120,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
@@ -139,7 +139,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
@@ -188,7 +188,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
@@ -206,7 +206,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
@@ -226,7 +226,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
@@ -246,7 +246,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait for element "#block-page-title"
+    And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"

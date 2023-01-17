@@ -379,12 +379,6 @@ function alshaya_vs_transac_install() {
     ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 
-  $view_store_finder = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.stores_finder');
-  $view_store_finder->set('display.attachment_1.display_options.fields.field_brand.label', 'المحل يشمل');
-  $view_store_finder->set('display.page_1.display_options.fields.field_brand.label', 'المحل يشمل');
-  $view_store_finder->set('display.page_3.display_options.fields.field_brand.label', 'المحل يشمل');
-  $view_store_finder->save();
-
   $field_brand = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.node.store.field_brand');
   $field_brand->set('label', 'المحل يشمل');
   $field_brand->save();

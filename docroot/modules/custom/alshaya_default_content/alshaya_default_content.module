@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\block_content\Entity\BlockContent;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 
 /**
@@ -58,5 +59,46 @@ function alshaya_default_content_add_menu_link_with_translations(array $link) {
       $language_menu->title->value = $link[$langcode];
       $language_menu->save();
     }
+  }
+}
+
+/**
+ * Helper function to create default copyright block on site install.
+ *
+ * @param array $translations
+ *   Default copyright block translations.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ * @throws Exception
+ */
+function alshaya_default_content_add_copyright_with_translations(array $translations) {
+  $eng_label = $translations['en'];
+  if (empty($eng_label) || gettype($eng_label) !== 'string') {
+    throw new Exception('Default copyright translation provided not in expected format.');
+  }
+  // Create copyright block content.
+  $block_content = BlockContent::create([
+    'uuid' => '340b823b-e16c-457a-bc03-4a096f8ae171',
+    'info' => 'Copyright',
+    'machine_name' => 'copyright',
+    'body' => [
+      'value' => "$eng_label",
+      'format' => 'rich_text',
+    ],
+    'type' => 'basic',
+    'langcode' => 'en',
+  ]);
+  $block_content->save();
+  // Create copyright block translation.
+  unset($translations['en']);
+  foreach ($translations as $lang_code => $translation) {
+    $translated_block_content = $block_content->addTranslation($lang_code, [
+      'info' => 'Copyright',
+      'body' => [
+        'value' => "$translation",
+        'format' => 'rich_text',
+      ],
+    ]);
+    $translated_block_content->save();
   }
 }

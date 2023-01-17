@@ -9,10 +9,11 @@
  * Implements hook_install().
  */
 function alshaya_ay_install() {
-  \Drupal::moduleHandler()->loadInclude('alshaya_ay', 'inc', 'alshaya_ay.content');
-
-  // Create default content for the site.
-  alshaya_ay_create_default_content();
+  // Create default copyright block for the site.
+  alshaya_default_content_add_copyright_with_translations([
+    'en' => "<p>&copy; 2022 Alo, LLC. All Rights Reserved.</p>",
+    'ar' => "&copy; 2022 ذ م م. كل الحقوق محفوظة",
+  ]);
 
   // Enable and set alshaya_ay as default theme and set the site logo,
   // favicon icon and email logo path.
@@ -22,55 +23,25 @@ function alshaya_ay_install() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
     ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
     ->save();
+
   // Set the default value for back to store list link.
   $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
   $config->set('store_list_label', 'List of all The Alo Yoga');
   $config->save();
+
   // Configure map marker on checkout for CnC.
   \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
     ->set('map_marker.active', '/modules/brands/alshaya_ay/images/ay-pin-active.svg')
     ->set('map_marker.in_active', '/modules/brands/alshaya_ay/images/ay-pin-inactive.svg')
     ->save();
-  // Reset theme logo.
-  $active_theme = \Drupal::theme()->getActiveTheme();
-  $current_theme = $active_theme->getName();
-  $site_logo = $active_theme->getPath() . '/site-logo';
-  $site_favicon = $active_theme->getPath() . '/favicon';
-
-  \Drupal::configFactory()
-    ->getEditable($current_theme . '.settings')
-    ->set('logo', [
-      'path' => $site_logo . '.svg',
-      'url' => '',
-      'use_default' => FALSE,
-    ])
-    ->set('favicon', [
-      'mimetype' => 'image/vnd.microsoft.icon',
-      'path' => $site_favicon . '.ico',
-      'url' => '',
-      'use_default' => FALSE,
-    ])
-    ->save(TRUE);
 
   // Add the site name.
   \Drupal::configFactory()->getEditable('system.site')
     ->set('name', 'ALO')
     ->save();
 
-  // Save arabic site logo.
-  \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
-    ->setData([
-      'logo' => [
-        'path' => $site_logo . '-ar.svg',
-        'url' => '',
-        'use_default' => FALSE,
-      ],
-    ])
-    ->save();
-
   // Add translations.
-  module_load_include('inc', 'alshaya_ay', 'alshaya_ay.translation');
+  \Drupal::moduleHandler()->loadInclude('alshaya_ay', 'inc', 'alshaya_ay.translation');
   if ($translations = _alshaya_ay_get_translations()) {
     alshaya_i18n_save_translations($translations);
   }

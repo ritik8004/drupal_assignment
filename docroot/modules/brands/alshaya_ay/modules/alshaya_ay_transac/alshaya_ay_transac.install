@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Install `alshaya_mobile_app` module.
+ */
+function alshaya_ay_transac_update_9402() {
+  \Drupal::service('module_installer')->install(['alshaya_mobile_app']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Reset sharethis services settings.
  */
 function alshaya_ay_transac_update_9401() {
@@ -90,15 +99,6 @@ function alshaya_ay_transac_install() {
   // Check if the sharethis module exists, then remove this from
   // the Product CT as set in alshaya_transac.install by default.
   if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
-    // Get the sharethis configuration.
-    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-    // Enable share this for Products.
-    $configFactory->set('node_types.acq_product', 'acq_product');
-    $services = $configFactory->get('service_option');
-    $services = "'Facebook:facebook','Instagram:instagram'";
-    $configFactory->set('service_option', $services);
-
-    // Save the changes.
-    $configFactory->save();
+    alshaya_master_add_sharethis_settings("'Facebook:facebook','Instagram:instagram'");
   }
 }

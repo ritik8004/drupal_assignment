@@ -15,7 +15,6 @@ Feature: Test the Checkout Login functionality
     When I follow "continue to checkout"
     And I wait for the page to load
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait for element "#delivery-method-home_delivery"
     When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for element ".checkout-link.submit"
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist

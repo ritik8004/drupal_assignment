@@ -54,6 +54,11 @@ class FeatureContext extends CustomMinkContext
       '.subbox-banner-backdrop',
       '.subbox-banner',
       '.subbox-wrap',
+      '.dy-modal-container',
+      '.dy-modal-wrapper',
+      '.dytmpl-form-section',
+      '.atc-overlay_content',
+      '.dynotifyjs-corner',
     ];
 
     try {
@@ -795,7 +800,7 @@ class FeatureContext extends CustomMinkContext
   public function scrollToElement($selector)
   {
     $this->getSession()
-      ->executeScript('document.querySelector("' . addslashes($selector) . '").scrollIntoView()');
+      ->executeScript('const element = document.querySelector("' . addslashes($selector) . '"); window.scrollTo({top: element.offsetTop});');
   }
 
   /**

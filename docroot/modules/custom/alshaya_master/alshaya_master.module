@@ -878,6 +878,8 @@ function _alshaya_master_initialize_brand_theme($brand_theme) {
     ->setData([
       'logo' => [
         'path' => $site_logo . '.svg',
+        'url' => '',
+        'use_default' => FALSE,
       ],
     ])
     ->save();
@@ -887,13 +889,20 @@ function _alshaya_master_initialize_brand_theme($brand_theme) {
     ->setData([
       'logo' => [
         'path' => $site_logo . '-ar.svg',
+        'url' => '',
+        'use_default' => FALSE,
       ],
     ])
     ->save();
 
   // Save default site favicon.
   \Drupal::configFactory()->getEditable($current_theme . '.settings')
-    ->set('favicon', ['path' => $site_favicon . '.ico'])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $site_favicon . '.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
     ->save();
 
   // Save default logo for email.
@@ -985,4 +994,25 @@ function alshaya_master_node_view(array &$build, EntityInterface $entity, Entity
       exit;
     }
   }
+}
+
+/**
+ * Helper function to create default sharethis settings on site install.
+ *
+ * @param string $services
+ *   Service to use for share.
+ * @param bool $enableProductShare
+ *   Set to true to enable sharethis for products.
+ */
+function alshaya_master_add_sharethis_settings(string $services, bool $enableProductShare = TRUE) {
+  // Get the sharethis configuration.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  // Enable share this for Products.
+  if ($enableProductShare) {
+    $configFactory->set('node_types.acq_product', 'acq_product');
+  }
+  $configFactory->set('service_option', $services);
+
+  // Save the changes.
+  $configFactory->save();
 }
