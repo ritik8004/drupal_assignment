@@ -14,13 +14,14 @@
           }
 
           padding-top: 0;
+          font-size: rem(16);
 
           html[lang="ar"] & {
-            padding-top: rem(5);
+            padding-top: rem(3);
             margin-top: rem(-1);
 
             @include breakpoint($only-mobile) {
-              padding-top: rem(6);
+              padding-top: rem(5);
             }
           }
         }

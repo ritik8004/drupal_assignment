@@ -1,9 +1,5 @@
 .cko-progress-tracker {
   #checkout-progress {
-    @include breakpoint($only-mobile) {
-      font-size: rem(11);
-    }
-
     .progress-bar {
       .alias--cart-login & {
         @include breakpoint($only-mobile) {
@@ -47,14 +43,6 @@
             @include breakpoint($tablet) {
               padding-top: 0;
               margin-top: rem(-3);
-            }
-          }
-        }
-
-        &.completed {
-          .step-label {
-            @include breakpoint($only-mobile) {
-              font-size: rem(11);
             }
           }
         }

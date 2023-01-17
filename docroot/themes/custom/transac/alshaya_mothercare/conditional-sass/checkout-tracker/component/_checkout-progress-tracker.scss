@@ -13,16 +13,22 @@
             padding-top: rem(2);
           }
 
-          padding-top: 0;
+          padding-top: rem(1);
+          font-size: rem(16);
+          color: $cko-steps-circle-txt;
 
           html[lang="ar"] & {
-            padding-top: rem(5);
+            padding-top: rem(3);
             margin-top: rem(-1);
 
             @include breakpoint($only-mobile) {
-              padding-top: rem(6);
+              padding-top: rem(4);
             }
           }
+        }
+
+        .step-label {
+          font-family: $alshaya-thin;
         }
 
         &.current {
