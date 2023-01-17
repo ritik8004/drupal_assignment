@@ -359,7 +359,7 @@ function _alshaya_aura_react_translations() {
       'About Aura' => [
         'ar' => 'حول أورا',
       ],
-      'Join Aura to earn and spend points every time you shop at your favourite brands and to enjoy rewarding experiences.' => [
+      'Join Aura to earn and spend points while you shop and enjoy exclusive benefits.' => [
         'ar' => 'اشترك في أورا واستمتع بتجميع النقاط وإنفاقها أثناء التسوق واحصل على مميزات حصرية.',
       ],
       'You currently have no Aura linked transactions.' => [

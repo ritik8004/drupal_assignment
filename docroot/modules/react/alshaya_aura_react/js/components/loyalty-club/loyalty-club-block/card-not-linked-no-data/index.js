@@ -96,7 +96,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
         </div>
         <div className="aura-myaccount-no-linked-card-description no-card-found">
           <div className="banner-title">
-            { Drupal.t('Join Aura to earn and spend points every time you shop at your favourite brands and to enjoy rewarding experiences.') }
+            { Drupal.t('Join Aura to earn and spend points while you shop and enjoy exclusive benefits.') }
           </div>
           <div className="action-wrapper">
             <ConditionalView condition={isUserAuthenticated()}>

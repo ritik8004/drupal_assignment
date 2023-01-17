@@ -233,3 +233,61 @@
     }
   }
 }
+
+#my-loyalty-club {
+  // @TODO: Move common code to generic styles after implementation of redesign on My Account page.
+  .aura-myaccount-no-linked-card-wrapper.no-card-found {
+    background-image: $aura-gradient-28;
+
+    html[lang="ar"] & {
+      background-image: $aura-gradient-28-ar;
+    }
+
+    .aura-myaccount-no-linked-card-description.no-card-found {
+      .action-wrapper {
+        > .link-your-card {
+          > div.btn {
+            background-image: $aura-gradient-29;
+
+            html[lang="ar"] & {
+              background-image: $aura-gradient-29-ar;
+            }
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: rem(42) rem(40);
+
+      .aura-logo {
+        svg {
+          height: rem(64);
+        }
+      }
+
+      .aura-myaccount-no-linked-card-description.no-card-found {
+        .action-wrapper {
+          > .link-your-card,
+          > .sign-up {
+            margin-top: rem(30);
+          }
+        }
+
+        .banner-title {
+          font-family: $aura-regular;
+          font-size: rem(22);
+          line-height: rem(32);
+          margin-top: rem(38);
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .aura-myaccount-no-linked-card-description.no-card-found {
+        margin-#{$left}: rem(45);
+        max-width: none;
+      }
+    }
+  }
+}
