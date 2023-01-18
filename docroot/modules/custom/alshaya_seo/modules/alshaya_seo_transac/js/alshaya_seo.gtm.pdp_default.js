@@ -17,12 +17,20 @@
 
       // Push product size click event to GTM.
       // For default and magazine pdp layouts.
-      $(document).once('product-size-click').on('click', 'div.form-item-configurables-size .select2Option ul a', function () {
-        let size = $(this).attr('data-value');
-        Drupal.alshayaSeoGtmPushEcommerceEvents({
-          eventAction: 'pdp size click',
-          eventLabel: size,
-        });
+      $(document).once('product-size-click').on('click', '.configurable-select .select2Option ul a', function () {
+        // We have different configurable size options available.
+        // For eg: VS has band_size and cup_size also.
+        var sizeWrapper = $(this).closest('.configurable-select');
+        var code = sizeWrapper.find('select').attr('data-configurable-code');
+        // Available size options for size click.
+        var sizeCodes = ['band_size', 'cup_size', 'size'];
+        if (Drupal.hasValue(code) && sizeCodes.includes(code)) {
+          var eventLabel = $(this).attr('data-value');
+          Drupal.alshayaSeoGtmPushEcommerceEvents({
+            eventAction: 'pdp size click',
+            eventLabel,
+          });
+        }
       });
 
       // Push product color click event to GTM.
@@ -37,7 +45,7 @@
 
       // Push product color click event to GTM.
       // For magazine pdp layout only.
-      $(document).once('product-color-click').on('click', '.colour-swatch .select2Option ul a', function () {
+      $(document).once('pdp-color-click').on('click', '.colour-swatch .select2Option ul a', function () {
         let color = $(this).attr('data-color-label');
         Drupal.alshayaSeoGtmPushEcommerceEvents({
           eventAction: 'pdp color click',
