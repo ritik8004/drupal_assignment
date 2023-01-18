@@ -37,6 +37,7 @@ import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper'
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isMobile } from '../../../../../js/utilities/display';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -59,9 +60,18 @@ const SearchResultsComponent = ({
   if (storedvalues !== null && storedvalues.page !== null) {
     defaultpageRender = storedvalues.page;
   }
-  let defaultcolgrid = 'small';
-  if (drupalSettings.algoliaSearch.defaultColgrid !== null) {
-    defaultcolgrid = drupalSettings.algoliaSearch.defaultColgrid;
+
+  const {
+    defaultColgrid,
+    defaultColGridMobile,
+  } = drupalSettings.algoliaSearch;
+  let defaultcolgrid = '';
+  // Set default col grid for mobile view.
+  if (isMobile()) {
+    defaultcolgrid = hasValue(defaultColGridMobile) ? defaultColGridMobile : 'small';
+  } else {
+    // Set default col grid for desktop view.
+    defaultcolgrid = hasValue(defaultColgrid) ? defaultColgrid : 'small';
   }
 
   const optionalFilter = getSuperCategoryOptionalFilter();

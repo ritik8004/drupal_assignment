@@ -7,3 +7,5 @@ hide_grid_toggle: false
 top_facets_limit: 5
 add_to_bag_hover: false
 default_col_grid: 'small'
+# Default column grid for mobile view.
+default_col_grid_mobile: 'small'
