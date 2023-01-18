@@ -57,7 +57,6 @@ class MyAuraBanner extends React.Component {
       chosenCountryCode,
     } = this.state;
     const { cardNumber, notYouFailed, tier } = this.props;
-
     const tierClass = tier || 'no-tier';
 
     return (
