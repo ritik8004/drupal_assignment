@@ -1,7 +1,6 @@
 variables:
   url_product_page: 'buy-soap-glory-rushower-dry-shampoo-200ml.html'
   product_listing_page_url: '/shop-bestsellers-skincare/'
-  spc_basket_page: '/shop-bestsellers-skincare/'
   spc_promotion_listing_page: '/shop-offers-summer-essentials-buy-1-get-1-free/'
   spc_single_product_detail_page_coupon: '/buy-inecto-naturals-moisturising-coconut-hair-mask.html/'
   spc_multiple_product_detail_page_coupon: '/buy-inecto-naturals-moisturising-coconut-hair-mask.html/'

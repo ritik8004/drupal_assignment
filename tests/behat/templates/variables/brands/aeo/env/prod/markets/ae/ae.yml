@@ -1,5 +1,4 @@
 variables:
-  spc_basket_page: '/american-eagle/shop-featured/women/new-arrivals/'
   product_listing_page_url: "/american-eagle/shop-featured/women/new-arrivals/"
   np_plp_page: '/american-eagle/shop-featured/women/new-arrivals/'
   np_plp_product_page: '/buy-ae-next-level-high-waisted-jegging-true-rinse.html/'

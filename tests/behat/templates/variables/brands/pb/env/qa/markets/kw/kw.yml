@@ -2,4 +2,3 @@ variables:
   var_username: 'bharat.ahuja@acquia.com'
   var_password: 'tester@123'
   url_product_page: '/buy-elephant-baby-gift-basket.html'
-  spc_basket_page: '/shop-body-care/featured/'

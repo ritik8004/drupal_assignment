@@ -1,5 +1,4 @@
 variables:
-  spc_basket_page: '/shop-men/'
   product_listing_page_url: "/shop-men/"
   np_plp_page: '/shop-men/'
   np_plp_product_page: '/buy-ae-active-24-7-jogger-burgundy-ivy-0.html/'

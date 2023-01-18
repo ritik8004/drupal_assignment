@@ -10,7 +10,7 @@ Feature: SPC to verify Smart Agent user functionality for authenticated user
     Given the element ".smart-agent-header-wrapper" should exist
     And the element ".agent-logged-in" should exist
     And the element ".smart-agent-header-wrapper .smart-agent-logout-link" should exist
-    When I am on "{spc_basket_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
     When I select a product in stock on ".c-products__item"
     And I wait for element "#block-content"
@@ -73,7 +73,7 @@ Feature: SPC to verify Smart Agent user functionality for authenticated user
 
   @language
   Scenario: As an Authenticated user, I should be able to verify the smart agent checkout functionality in second language
-    When I am on "{spc_basket_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
     When I follow "{language_link}"
     And I wait for the page to load
@@ -141,7 +141,7 @@ Feature: SPC to verify Smart Agent user functionality for authenticated user
 
   @mobile
   Scenario: As an Authenticated user, I should be able to verify the smart agent checkout functionality for mobile
-    When I am on "{spc_basket_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
     Given the element ".smart-agent-header-wrapper" should exist
     And the element ".agent-logged-in" should exist

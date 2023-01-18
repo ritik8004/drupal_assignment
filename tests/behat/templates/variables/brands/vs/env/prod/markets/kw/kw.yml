@@ -1,7 +1,6 @@
 variables:
   url_product_page: '/victorias-secret/buy-natural-beauty-fragrance-mist-lavender-vanilla.html/'
   product_listing_page_url: '/beauty/shop-mist-body/categories/body-mists/'
-  spc_basket_page: '/beauty/shop-mist-body/categories/body-mists/'
   spc_plp_add_to_cart_single: '/beauty/shop-bags-accessories/bags/shoulder-bags/'
   spc_plp_add_to_cart: '/victorias-secret/shop-lingerie/styles/slips/'
   spc_egift_page: '/egift/'

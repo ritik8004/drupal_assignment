@@ -1,7 +1,6 @@
 variables:
   url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
   product_listing_page_url: "/beauty/shop-fragrance/"
-  spc_basket_page: '/beauty/shop-fragrance/'
   spc_plp_add_to_cart_single: '/beauty/shop-fragrance/categories/rollerballs-travel-size/'
   spc_plp_add_to_cart: '/victorias-secret/shop-bras/styles/t-shirt-bra/'
   spc_egift_page: '/egift/'

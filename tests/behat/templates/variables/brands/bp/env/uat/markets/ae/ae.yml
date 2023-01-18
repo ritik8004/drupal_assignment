@@ -1,7 +1,6 @@
 variables:
   url_product_page: 'buy-boots-tea-tree-witch-hazel-charcoal-facial-wash.html'
   product_listing_page_url: '/shop-creams-and-haircare/'
-  spc_basket_page: '/shop-creams-and-haircare/'
   spc_promotion_listing_page: ''
   spc_single_product_detail_page_coupon: ''
   spc_multiple_product_detail_page_coupon: ''

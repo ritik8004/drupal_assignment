@@ -2,7 +2,7 @@
 Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
 
   @same-dayDelivery

@@ -1,7 +1,6 @@
 variables:
   url_product_page: 'buy-lavender-vanilla-bubble-bath.html'
   product_listing_page_url: "/shop-body-care/featured/new-arrivals/"
-  spc_basket_page: '/shop-body-care/featured/new-arrivals/'
   spc_plp_add_to_cart: '/shop-body-care/moisturizers/hand-care/'
   spc_plp_add_to_cart_single: '/shop-candles/featured/white-barn-shop/'
   spc_egift_page: '/egift/'

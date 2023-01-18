@@ -28,7 +28,6 @@ variables:
   language_vat: 'Inclusive of VAT'
   language_checkout_link: 'continue to checkout'
   collection_filter: ''
-  spc_basket_page: '/shop-pbqa/'
   sort_filter: 'رتب حسب'
   price_filter: 'السعر'
   brand_filter: ''

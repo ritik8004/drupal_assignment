@@ -1,5 +1,4 @@
 variables:
-  spc_basket_page: '/beauty/shop-pink-beauty/body/body-mists/'
   product_listing_page_url: '/beauty/shop-pink-beauty/body/body-mists/'
   spc_plp_add_to_cart_single: '/beauty/shop-bags-accessories/bags/travel-luggage/'
   spc_plp_add_to_cart: '/victorias-secret/shop-bras/styles/wireless/'

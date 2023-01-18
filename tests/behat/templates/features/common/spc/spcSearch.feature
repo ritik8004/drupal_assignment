@@ -2,7 +2,7 @@
 Feature: Test search functionality
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
 
   @desktop

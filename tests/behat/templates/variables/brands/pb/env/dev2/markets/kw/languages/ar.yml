@@ -1,7 +1,6 @@
 variables:
   url_base_uri: 'https://pbkw-dev2.factory.alshaya.com/ar'
   product_listing_page_url: '/shop-wooden-furniture/dining-room/'
-  spc_basket_page: '/shop-table-top/'
   language_collection_filter: ''
   language_sort_filter: 'sort by'
   language_price_filter: 'Price'

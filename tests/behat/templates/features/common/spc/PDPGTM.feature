@@ -2,7 +2,7 @@
 Feature: Test GTm tracking
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait 2 seconds
 
   @desktop

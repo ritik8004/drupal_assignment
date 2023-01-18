@@ -1,5 +1,4 @@
 variables:
   url_product_page: 'buy-relaxed-fit-t-shirt-blue.html'
   product_listing_page_url: "/shop-new-main-category/"
-  spc_basket_page: '/shop-new-main-category/'
   spc_egift_page: '/egift/'

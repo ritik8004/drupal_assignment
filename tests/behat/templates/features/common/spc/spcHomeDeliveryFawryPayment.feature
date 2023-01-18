@@ -2,7 +2,7 @@
 Feature: SPC Checkout Home Delivery using Fawry payment method for guest user
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
     And I wait for the page to load
 

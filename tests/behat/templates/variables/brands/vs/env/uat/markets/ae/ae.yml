@@ -1,5 +1,4 @@
 variables:
-  spc_basket_page: '/victorias-secret/shop-mapp/'
   product_listing_page_url: '/victorias-secret/shop-mapp/'
   spc_egift_page: '/egift/'
   spc_plp_add_to_cart: '/victorias-secret/shop-mapp/mapp-l3/'

@@ -1,5 +1,4 @@
 variables:
   url_product_page: 'buy-slub-jersey-t-shirt-white.html'
   product_listing_page_url: "/shop-women/"
-  spc_basket_page: '/shop-women/'
   spc_egift_page: '/egift/'

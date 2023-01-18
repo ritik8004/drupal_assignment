@@ -15,4 +15,3 @@ variables:
   ar_brand_filter: ''
   ar_color_filter: ''
   ar_promotional_filter: 'Promotions'
-  spc_basket_page: '/shop-oms/sit/non-big-ticket-items/'
