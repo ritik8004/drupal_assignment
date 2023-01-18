@@ -1,5 +1,4 @@
 variables:
-  spc_product_listing_page: '/american-eagle/shop-jeans/'
   spc_basket_page: '/american-eagle/shop-jeans/'
   product_listing_page_url: "/american-eagle/shop-jeans/"
   np_plp_page: '/american-eagle/shop-jeans/'

@@ -1,7 +1,6 @@
 variables:
   url_product_page: 'buy-fluted-swirl-decorative-glass-trees-clear.html'
   product_listing_page_url: '/shop-holiday/holiday-decor/decor-cushions/'
-  spc_product_listing_page: '/shop-holiday/holiday-decor/decor-cushions/'
   spc_basket_page: '/shop-holiday/holiday-decor/decor-cushions/'
   spc_sofa_page: '/shop-furniture/living-room-furniture/sofas-sectionals/'
   spc_egift_page: '/egift/'

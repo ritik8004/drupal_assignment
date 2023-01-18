@@ -1,6 +1,5 @@
 variables:
   url_product_page: 'buy-long-sleeved-blouse-black.html'
   product_listing_page_url: '/shop-men/new-arrivals/shoes-accessories/'
-  spc_product_listing_page: '/shop-men/new-arrivals/shoes-accessories/'
   spc_basket_page: '/shop-men/new-arrivals/shoes-accessories/'
   spc_egift_page: '/egift/'

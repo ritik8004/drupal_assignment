@@ -1,5 +1,4 @@
 variables:
   url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  spc_product_listing_page: '/shop-mens/shoes/'
   spc_basket_page: '/shop-mens/shoes/'
   product_listing_page_url: "/shop-mens/shoes/"

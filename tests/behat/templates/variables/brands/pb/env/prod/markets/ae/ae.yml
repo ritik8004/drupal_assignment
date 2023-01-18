@@ -1,5 +1,4 @@
 variables:
-  spc_product_listing_page: '/shop-furniture/home-office/bookcases-shelves/'
   spc_basket_page: '/shop-furniture/home-office/bookcases-shelves/'
   product_listing_page_url: "/shop-furniture/home-office/bookcases-shelves/"
   spc_egift_page: '/egift/'

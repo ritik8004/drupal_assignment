@@ -1,5 +1,4 @@
 variables:
-  spc_product_listing_page: '/shop-fashion-t-shirts/'
   spc_basket_page: '/shop-fashion-t-shirts/'
   product_listing_page_url: "/shop-fashion-t-shirts/"
   spc_plp_add_to_cart_single: '/shop-fashion-t-shirts/'
