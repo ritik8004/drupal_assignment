@@ -249,6 +249,15 @@ export default class AddToBagSimple extends React.Component {
       // We only dispatch event if item is added or updated in cart.
       if (action === 'add item' || action === 'update item') {
         dispatchCustomEvent('product-add-to-cart-success', { sku });
+        // Trigger Algolia Insight event for add to cart on success.
+        const insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
+        if (insightsClickData.queryId && insightsClickData.objectId) {
+          Drupal.pushAlshayaAlgoliaInsightsAddToCart(
+            insightsClickData.queryId,
+            insightsClickData.objectId,
+            insightsClickData.indexName,
+          );
+        }
       }
     });
   };
