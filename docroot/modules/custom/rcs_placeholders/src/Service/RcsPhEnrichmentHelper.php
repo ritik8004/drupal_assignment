@@ -104,7 +104,6 @@ class RcsPhEnrichmentHelper {
       $result = $query->execute();
       if (!empty($result)) {
         $entity = $storage->load(array_shift($result));
-
       }
     }
     return $entity;
