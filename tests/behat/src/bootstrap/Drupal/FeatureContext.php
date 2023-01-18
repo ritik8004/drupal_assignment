@@ -2,31 +2,11 @@
 
 namespace Alshaya\BehatContexts;
 
-use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Exception;
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Session;
-use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Behat\Tester\Exception\PendingException;
-use Behat\Behat\Context\BehatContext;
-use Behat\Mink;
-use Behat\MinkExtension\Context;
-use Behat\MinkExtension\Context\MinkContext;
-use Behat\Mink\Element\Element;
-use Behat\Mink\WebAssert;
-use Behat\Mink\Exception\ExpectationException;
-use Behat\Mink\Driver\GoutteDriver;
-use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
-use Drupal\DrupalExtension\Context\MinkExtension;
-use Drupal\DrupalExtension\Context\DrupalContext;
-use Behat\Behat\Hook\Scope\BeforeStepScope;
-use Behat\Behat\Hook\Scope\BeforeFeatureScope;
-use Drupal\node\Entity\Node;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 
 define("ORDER_ASC", 1);

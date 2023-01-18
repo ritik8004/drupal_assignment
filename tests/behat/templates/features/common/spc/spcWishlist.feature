@@ -22,7 +22,7 @@ Feature: SPC Checkout Wishlist feature for Guest user
     Then I should see an "#spc-cart .spc-empty-text" element
 
   Scenario: As a Guest User, I should be able to see and add Wishlist product from PDP page and place an order
-    Given I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element ".content__sidebar"
     When I click on "div.wishlist-icon" element
     And I wait for element ".wishlist-header a"

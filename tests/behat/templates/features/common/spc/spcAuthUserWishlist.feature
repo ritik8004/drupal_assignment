@@ -30,7 +30,7 @@ Feature: SPC Checkout Wishlist feature for Authenticated user
     And I should see a ".empty-message" element
 
   Scenario: As an Authenticated User, I should be able to see and add Wishlist product from PDP page and place an order
-    Given I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element ".content__sidebar"
     And I click on "div.wishlist-icon" element
     And I wait for AJAX to finish
