@@ -2,7 +2,6 @@ variables:
   var_username: 'bharat.ahuja@acquia.com'
   var_password: 'tester@123'
   url_product_page: '/buy-mothercare-travel-changing-mat.html'
-  product_listing_page_url: "/shop-end-kids-clothing-test-end/kids-boys/"
   collection_filter: ''
   sort_filter: 'sort by'
   price_filter: 'Price'
