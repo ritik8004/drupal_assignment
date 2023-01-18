@@ -5,15 +5,21 @@
  * Contains install, update, uninstall hooks for datadog_js.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
 /**
  * Implements hook_update_N().
  *
  * Update Datadog library.
  */
 function datadog_js_update_9402() {
-  $config = \Drupal::configFactory()->getEditable('datadog_js.settings');
-  $config->set('library', 'https://www.datadoghq-browser-agent.com/datadog-logs-v4.js');
-  $config->save();
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['datadog_js.settings'],
+    'datadog_js',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE_KEY,
+    ['replace_keys' => ['library']]
+  );
 }
 
 /**
