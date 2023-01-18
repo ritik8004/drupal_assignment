@@ -1,7 +1,6 @@
 variables:
   spc_product_listing_page: '/shop-fashion-dresses/'
   spc_basket_page: '/shop-fashion-dresses/'
-  spc_pdp_page: 'buy-steel-measure-etc.html'
   product_listing_page_url: "/shop-fashion-dresses/"
   spc_plp_add_to_cart_single: '/shop-fashion-dresses/'
   spc_promotion_listing_page: '//'

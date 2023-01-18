@@ -2,5 +2,4 @@ variables:
   spc_product_listing_page: '/shop-sale/women/tops/'
   spc_basket_page: '/shop-sale/women/tops/'
   product_listing_page_url: "/shop-sale/women/tops/"
-  spc_pdp_page: 'buy-airy-t-shirt-black.html'
 

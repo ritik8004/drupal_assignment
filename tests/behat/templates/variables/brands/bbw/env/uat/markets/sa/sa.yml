@@ -3,7 +3,6 @@ variables:
   product_listing_page_url: "/shop-body-care/bath-shower/body-wash-shower-gel/"
   spc_product_listing_page: "/shop-body-care/bath-shower/body-wash-shower-gel/"
   spc_basket_page: "/shop-body-care/bath-shower/body-wash-shower-gel/"
-  spc_pdp_page: "/buy-atlantic-travel-size-shower-gel.html/"
   spc_single_product_detail_page_coupon: '/buy-atlantic-travel-size-shower-gel.html/'
   spc_multiple_product_detail_page_coupon: '/buy-atlantic-travel-size-shower-gel.html/'
   spc_single_product_detail_page_no_coupon: '/buy-atlantic-travel-size-shower-gel.html/'

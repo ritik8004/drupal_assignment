@@ -3,5 +3,4 @@ variables:
   product_listing_page_url: "/shop-new-arrivals/women-new-arrivals/"
   spc_product_listing_page: '/shop-new-arrivals/women-new-arrivals/'
   spc_basket_page: '/shop-new-arrivals/women-new-arrivals/'
-  spc_pdp_page: 'buy-oversized-gathered-dress-beige.html'
   spc_egift_page: '/egift/'

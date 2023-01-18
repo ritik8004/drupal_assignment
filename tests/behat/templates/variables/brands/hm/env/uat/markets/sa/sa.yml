@@ -3,6 +3,5 @@ variables:
   product_listing_page_url: "/shop-men/shop-product/underwear/"
   spc_product_listing_page: '/shop-men/shop-product/underwear/'
   spc_basket_page: '/shop-men/shop-product/underwear/'
-  spc_pdp_page: '/buy-nail-polish-mauve.html/'
   spc_promotion_listing_page: '/buy-linen-blend-t-shirt-beige.html/'
   spc_egift_page: '/egift/'

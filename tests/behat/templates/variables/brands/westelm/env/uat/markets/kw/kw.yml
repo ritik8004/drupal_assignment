@@ -3,6 +3,5 @@ variables:
   product_listing_page_url: '/#query=sofa'
   spc_product_listing_page: '/#query=sofa/'
   spc_basket_page: '/#query=sofa'
-  spc_pdp_page: '/buy-mid-century-upholstered-dining-chair-metal-legs.html/'
   spc_sofa_page: '/buy-auburn-sofa-70-1.html/'
   spc_egift_page: '/egift/'

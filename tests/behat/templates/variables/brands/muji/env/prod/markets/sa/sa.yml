@@ -1,7 +1,6 @@
 variables:
   spc_product_listing_page: '/shop-fashion-boxers-briefs/'
   spc_basket_page: '/shop-fashion-boxers-briefs/'
-  spc_pdp_page: '/buy-cotton-broad-1-2-sleeve-blouse-white.html/'
   product_listing_page_url: "/shop-fashion-sneakers/"
   spc_plp_add_to_cart_single: '/shop-fashion-sneakers/'
   spc_promotion_listing_page: '//'

@@ -3,7 +3,6 @@ variables:
   product_listing_page_url: '/shop-new-in/'
   spc_product_listing_page: '/shop-new-in/'
   spc_basket_page: '/shop-new-in/'
-  spc_pdp_page: 'buy-boots-bio-cleansing-wipes-micellar-25pk.html'
   spc_promotion_listing_page: '/buy-boots-bio-cleansing-wipes-micellar-25pk.html/'
   spc_single_product_detail_page_coupon: '/buy-boots-bio-cleansing-wipes-micellar-25pk.html/'
   spc_multiple_product_detail_page_coupon: '/buy-boots-bio-cleansing-wipes-micellar-25pk.html/'

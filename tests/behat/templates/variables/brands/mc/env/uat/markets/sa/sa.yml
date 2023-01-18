@@ -1,7 +1,6 @@
 variables:
   spc_product_listing_page: '/shop-newborn-clothing/'
   spc_basket_page: '/shop-newborn-clothing/'
-  spc_pdp_page: 'buy-babyzen-yoyo-stroller-set-color-pack-6-black-and-black-frame.html'
   product_listing_page_url: "/shop-newborn-clothing/"
   spc_plp_add_to_cart_single: '/shop-newborn-clothing/'
   spc_promotion_listing_page: '/promotion/buy-1-get-1-free-en/'

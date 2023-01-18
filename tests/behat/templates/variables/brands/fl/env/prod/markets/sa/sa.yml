@@ -2,7 +2,6 @@ variables:
   url_product_page: 'buy-champion-mens-t-shirt-grey.html'
   spc_product_listing_page: '/shop-mens/clothing/t-shirts/'
   spc_basket_page: '/shop-mens/clothing/t-shirts/'
-  spc_pdp_page: 'buy-champion-mens-t-shirt-grey.html'
   product_listing_page_url: '/shop-mens/clothing/t-shirts/'
   np_plp_product_page: '/shop-womens/shoes/slides/'
   np_plp_page: '/shop-mens/accessories/underwear/'

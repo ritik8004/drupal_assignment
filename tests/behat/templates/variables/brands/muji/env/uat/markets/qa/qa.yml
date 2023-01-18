@@ -1,5 +1,4 @@
 variables:
   spc_product_listing_page: '/shop-accessories/'
   spc_basket_page: '/shop-accessories/'
-  spc_pdp_page: '/buy-porcelain-beige-bowl-l-165cm.html/'
   product_listing_page_url: "/shop-accessories/"
