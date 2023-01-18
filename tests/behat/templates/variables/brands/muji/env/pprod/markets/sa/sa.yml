@@ -5,4 +5,3 @@ variables:
   spc_plp_add_to_cart_single: '/shop-new/'
   spc_promotion_listing_page: '//'
   spc_single_product_detail_page_coupon: 'buy-indian-cotton-poplin-short-pants.html'
-  spc_bank_product: '/shop-new/'

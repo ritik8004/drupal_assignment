@@ -76,4 +76,11 @@ class OverriddenMinkContext extends MinkContext {
     $this->visit($this->getMinkParameters()['base_url'] . '/behat/first-in-stock-product');
   }
 
+  /**
+   * @Given I go to in stock category page
+   */
+  public function iGoToInStockCategoryPage() {
+    $this->visit($this->getMinkParameters()['base_url'] . '/behat/product-listing-page');
+  }
+
 }

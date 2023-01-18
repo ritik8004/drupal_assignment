@@ -4,7 +4,7 @@ Feature: SPC Checkout Home Delivery using Bank Transfer method for Authenticated
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait for element "#block-page-title"
-    When I am on "{spc_bank_product}"
+    Given I go to in stock category page
     And I wait for element "#block-content"
 
   @hd @desktop

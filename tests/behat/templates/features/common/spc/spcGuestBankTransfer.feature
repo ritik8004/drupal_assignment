@@ -2,7 +2,7 @@
 Feature: SPC Checkout Home Delivery using Bank Transfer method for Guest user
 
   Background:
-    Given I am on "{spc_bank_product}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
 
   @cod @hd
