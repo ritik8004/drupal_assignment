@@ -13,4 +13,10 @@
 function alshaya_xb_install($is_syncing) {
   // Add fixed price attribute to SKU entity.
   \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Remove payment logos from footer on XB site.
+  $logos = \Drupal::entityTypeManager()->getStorage('menu_link_content')->loadByProperties(['menu_name' => 'footer-logos']);
+  foreach ($logos as $logo) {
+    $logo->delete();
+  }
 }
