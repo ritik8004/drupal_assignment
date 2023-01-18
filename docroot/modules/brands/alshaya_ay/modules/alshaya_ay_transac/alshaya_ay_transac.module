@@ -77,16 +77,3 @@ function alshaya_ay_transac_preprocess_breadcrumb(&$variables) {
   $variables['#cache']['contexts'][] = 'url.path';
 }
 
-/**
- * Implements hook_system_breadcrumb_alter().
- */
-function alshaya_ay_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
-  $super_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-  // Get all root terms or super categories.
-  $super_categories = $super_category_tree->getCategoryRootTerms();
-  // Checking here route name and super categories is available then breadcrumb.
-  if ($route_match->getRouteName() == 'entity.node.canonical' && (is_countable($super_categories) ? count($super_categories) : 0) > 0) {
-    // Setting breadcrumb links empty.
-    $breadcrumb = _alshaya_ay_transac_set_breadcrumb_links([]);
-  }
-}
