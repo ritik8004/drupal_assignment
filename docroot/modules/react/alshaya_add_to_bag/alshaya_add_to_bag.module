@@ -193,6 +193,6 @@ function _alshaya_add_to_bag_get_language_specific_data($lang, $sku_data, $node)
 function alshaya_add_to_bag_library_info_alter(&$libraries, $extension) {
   // Added add to bag utility as dependency.
   if ($extension === 'alshaya_algolia_react') {
-    $libraries['autocomplete']['dependencies'][] = 'alshaya_acm_product/add_to_bag_utility';
+    array_push($libraries['autocomplete']['dependencies'], 'alshaya_acm_product/add_to_bag_utility', 'alshaya_algolia_react/search_insights_detail');
   }
 }
