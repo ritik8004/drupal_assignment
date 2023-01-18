@@ -42,7 +42,7 @@ class RcsPhProductPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
     }
 
     $product = $config->get('product.enrichment')
-      ? $this->enrichmentHelper->getEnrichedEntity('product', $path)
+      ? $this->enrichmentHelper->getEnrichedEntity('product', $full_path)
       : NULL;
     $entityData = NULL;
     $processed_paths = '/node/' . $config->get('product.placeholder_nid');
