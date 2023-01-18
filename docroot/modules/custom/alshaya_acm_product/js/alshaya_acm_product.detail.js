@@ -66,6 +66,12 @@
 
       // Trigger matchback color change on main product color change.
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
+        // For HFD matchback, we do not want matchback product color change on
+        // main product color change.
+        if (!drupalSettings.changeMatchbackProductColor) {
+          return false;
+        }
+
         var selected = $(this).val();
         var sku = $(this).parents('form').attr('data-sku');
         var productKey = Drupal.getProductKeyForProductViewMode('full');
@@ -255,12 +261,15 @@
 
         if (typeof productData.variants !== 'undefined' && Drupal.hasValue(productData.variants)) {
           var variants = productData.variants;
-
+          // Use first sku comes with stock in settings if available.
+          var firstInStockVariant = Object.values(variants).find((variant) => {
+            return parseInt(variant.stock.qty, 10) > 0;
+          });
           // Use first child provided in settings if available.
           // Use the first variant otherwise.
           var configurableCombinations = window.commerceBackend.getConfigurableCombinations(sku);
           var selectedSku = (typeof configurableCombinations.firstChild === 'undefined')
-            ? Object.keys(variants)[0]
+            ? firstInStockVariant.sku
             : configurableCombinations.firstChild;
 
           var selectedSkuFromQueryParam = Drupal.getSelectedProductFromQueryParam(viewMode, productData);
@@ -272,7 +281,7 @@
             // Try to get first child with parent sku matching. This could go
             // in color split but is generic enough so added here.
             for (var i in variants) {
-              if (variants[i]['parent_sku'] === sku) {
+              if (variants[i]['parent_sku'] === sku && parseInt(variants[i].stock.qty, 10) > 0) {
                 selectedSku = variants[i]['sku'];
                 break;
               }
@@ -289,7 +298,7 @@
         // Trigger an event on SKU base form load.
         var data = {
           sku: sku,
-          variantSelected: $('[name="selected_variant_sku"]').val() || $('form.sku-base-form').attr('variantselected'),
+          variantSelected: $('[name="selected_variant_sku"]', $(this)).val() || $('form.sku-base-form').attr('variantselected'),
         };
 
         // If Online Returns feature is enabled, add eligibleForReturn to event.

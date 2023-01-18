@@ -54,6 +54,11 @@ class FeatureContext extends CustomMinkContext
       '.subbox-banner-backdrop',
       '.subbox-banner',
       '.subbox-wrap',
+      '.dy-modal-container',
+      '.dy-modal-wrapper',
+      '.dytmpl-form-section',
+      '.atc-overlay_content',
+      '.dynotifyjs-corner',
     ];
 
     try {
@@ -430,8 +435,12 @@ class FeatureContext extends CustomMinkContext
 
   /**
    * @Given /^I wait (\d+) seconds$/
+   * @Then /^I wait for the cart notification popup$/
+   * @Then /^I wait for the product quantity loader$/
+   * @Then /^I wait for the promo code applied$/
+   *
    */
-  public function iWaitSeconds($seconds)
+  public function iWaitSeconds($seconds = 3)
   {
     sleep($seconds);
   }
@@ -791,7 +800,7 @@ class FeatureContext extends CustomMinkContext
   public function scrollToElement($selector)
   {
     $this->getSession()
-      ->executeScript('document.querySelector("' . addslashes($selector) . '").scrollIntoView()');
+      ->executeScript('const element = document.querySelector("' . addslashes($selector) . '"); window.scrollTo({top: element.offsetTop});');
   }
 
   /**
@@ -2622,8 +2631,7 @@ JS;
   /**
    * @Then /^I select the home delivery address$/
    */
-  public function iSelectTheHomeDeliveryAddress()
-  {
+  public function iSelectTheHomeDeliveryAddress() {
     $session = $this->getSession();
     $page = $session->getPage();
     $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
@@ -3094,4 +3102,72 @@ JS;
       ->find('css', "#block-local-tasks ul li a[href$= 'edit']");
     $edit->click();
   }
+
+  /**
+   * Helper to enter values on React input fields.
+   * It emulates a real user input and will make React update the states.
+   *
+   * @param string $selector
+   *   The CSS selector.
+   * @param string $value
+   *   The input value.
+   */
+  private function enterReactInput($value)
+  {
+    $digits = str_split($value);
+    $session = $this->getSession();
+    for ($i=1; $i <= sizeof($digits); $i++) {
+      $value = $digits[$i - 1];
+      $locator = ".cod-mobile-otp__field:nth-child($i) input";
+      $session->executeScript("let input = document.querySelector('$locator'); alshayaBehat.userEvent.type(input, '$value')");
+    }
+  }
+
+  /**
+   * @Given /^I enter a valid mobile otp$/
+   */
+  public function iEnterAValidMobileOtp()
+  {
+    $this->enterReactInput(1234);
+  }
+
+  /**
+   * @Given /^I enter an invalid mobile otp$/
+   */
+  public function iEnterInValidMobileOtp()
+  {
+    $this->enterReactInput(4321);
+  }
+
+  /**
+   * @Given /^the mobile OTP is verified$/
+   */
+  public function theMobileOTPIsVerified()
+  {
+    // Check if we have OTP fields on the page.
+    $page = $this->getSession()->getPage();
+    $hasOtpFields = $page->find('css', '.cod-mobile-otp__field');
+    if ($hasOtpFields) {
+      $this->iEnterAValidMobileOtp();
+    }
+    // Wait for the verified message.
+    $this->iWaitForElement('.cod-mobile-otp__verified_message');
+  }
+
+  /**
+   * Delete an enrichment prior to running the step that clicks on "Enrich" link.
+   *
+   * @Then I make sure there are no enrichments
+   */
+  public function iMakeSureThereAreNoEnrichments()
+  {
+    try {
+      $mink = $this->getSession()->getPage();
+      $mink->clickLink('Delete the enrichment');
+      $mink->pressButton('Delete');
+    } catch (\Exception) {
+      // Silently fail when there is no link to click.
+    }
+  }
+
 }

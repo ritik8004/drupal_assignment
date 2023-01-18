@@ -113,6 +113,8 @@ class ClickCollect extends React.Component {
 
     if (outsideCountryError) {
       smoothScrollTo('.spc-cnc-address-form-sidebar .spc-checkout-section-title');
+    } else {
+      this.resetListHeight();
     }
 
     if (locationAccess === false || outsideCountryError === true) {
@@ -148,7 +150,7 @@ class ClickCollect extends React.Component {
     }
   };
 
-  resetListHeightWhenLocationError = () => {
+  resetListHeight = () => {
     // Remove the height set in dynamicListHeightWhenLocationError(), on error dismissal.
     if (window.innerWidth >= 768) {
       document.getElementById('click-and-collect-list-view').style.removeProperty('height');
@@ -542,7 +544,7 @@ class ClickCollect extends React.Component {
       if (type === 'locationAccessDenied') {
         updateLocationAccess(true);
       }
-      this.resetListHeightWhenLocationError();
+      this.resetListHeight();
     }, 200);
   }
 

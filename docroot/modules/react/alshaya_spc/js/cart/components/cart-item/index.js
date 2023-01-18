@@ -40,6 +40,8 @@ export default class CartItem extends React.Component {
       showWishlistPopup: false,
       // wishlistResponse tracks if user has responded in wishlist popup.
       wishlistResponse: false,
+      isItemError: false,
+      errorMessage: null,
     };
   }
 
@@ -62,6 +64,18 @@ export default class CartItem extends React.Component {
   }
 
   componentDidUpdate() {
+    const {
+      item: {
+        error_msg: itemErrorMsg,
+      },
+    } = this.props;
+    if (itemErrorMsg !== undefined) {
+      this.state.isItemError = true;
+      this.state.errorMessage = itemErrorMsg;
+    } else {
+      this.state.isItemError = false;
+      this.state.errorMessage = null;
+    }
     Drupal.ajax.bindAjaxLinks(document.getElementById('spc-cart'));
   }
 

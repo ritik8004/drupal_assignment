@@ -1,0 +1,28 @@
+<div class="free-gift-view">
+  <a
+    href="{{ url }}"
+    data-sku="{{ freeGiftSku }}"
+    data-back-to-collection="{{ backToCollection }}"
+    class="free-gift-modal"
+    data-dialog-type="modal"
+    data-dialog-options="{'width': 'auto'}">
+    <div class="item-wrapper">
+      {{#if freeGiftImage }}
+        <div class="free-gift-image">
+          <img src="{{ freeGiftImage }}" title="{{ title }}" alt="{{ title }}"
+            typeof="foaf:Image" loading="lazy">
+        </div>
+      {{/if}}
+      {{#if title }}
+        <div class="free-gift-title">
+          {{ title }}
+        </div>
+      {{/if}}
+    </div>
+  </a>
+  {{#if select_link }}
+    <div class="select-free-gift-link">
+      {{ select_link }}
+    </div>
+  {{/if}}
+</div>

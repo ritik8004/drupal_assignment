@@ -1,0 +1,32 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_rcs_handlebars_templates().
+ */
+function alshaya_rcs_free_gift_rcs_handlebars_templates(EntityInterface $entity) {
+  if ($entity->bundle() !== 'rcs_product') {
+    return;
+  }
+
+  // Libraries to attach.
+  $libraries = [
+    'product.promotion_free_gift' => 'alshaya_rcs_free_gift',
+    'product.promotion_free_gift_list' => 'alshaya_rcs_free_gift',
+    'product.promotion_free_gift_modal' => 'alshaya_rcs_free_gift',
+    'product.promotion_free_gift_item' => 'alshaya_rcs_free_gift',
+    'product.promotion_free_gift_items' => 'alshaya_rcs_free_gift',
+  ];
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_rcs_free_gift_preprocess_node(&$variables) {
+  if ($variables['node']->bundle() === 'rcs_product') {
+    $variables['free_gift_status'] = TRUE;
+  }
+}

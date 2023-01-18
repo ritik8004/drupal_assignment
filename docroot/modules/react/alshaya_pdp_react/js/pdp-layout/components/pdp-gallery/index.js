@@ -4,9 +4,6 @@ import Popup from 'reactjs-popup';
 import { sliderSettings, fullScreenSliderSettings } from '../../../common/components/utilities/slider_settings';
 import PdpImageElement from '../pdp-image-element';
 import PdpAsset from '../pdp-asset';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import 'react-magic-slider-dots/dist/magic-dots.css';
 
 export default class PdpGallery extends React.PureComponent {
   constructor(props) {

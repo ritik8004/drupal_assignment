@@ -665,7 +665,7 @@ class SkuInfoHelper {
         $query->addExpression('SUM(stock.quantity)', 'final_quantity');
         $query->condition('stock.sku', $child_skus, 'IN');
         $query->condition('stock.status', 1);
-        $static[$sku_string] = $query->execute()->fetchField();
+        $static[$sku_string] = (int) $query->execute()->fetchField();
         break;
 
       case 'simple':

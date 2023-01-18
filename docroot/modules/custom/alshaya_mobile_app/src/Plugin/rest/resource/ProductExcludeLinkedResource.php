@@ -398,9 +398,22 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
     $data['promotions'] = $this->getPromotions($sku);
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
+    if (!empty($data['configurable_values'])) {
+      $data['configurable_values'] = array_map(function ($option) {
+        $option['option_id'] = (int) $option['option_id'];
+        return $option;
+      }, $data['configurable_values']);
+    }
 
     if ($sku->bundle() === 'configurable') {
       $data['swatch_data'] = $this->getSwatchData($sku);
+      if (!empty($data['swatch_data']['swatches'])) {
+        $data['swatch_data']['swatches'] = array_map(function ($swatch) {
+          $swatch['child_sku_code'] = strval($swatch['child_sku_code']);
+          return $swatch;
+        }, $data['swatch_data']['swatches']);
+      }
+
       $data['cart_combinations'] = $this->getConfigurableCombinations($sku);
       foreach ($data['cart_combinations']['by_sku'] ?? [] as $values) {
         $child = SKU::loadFromSku($values['sku']);
@@ -409,6 +422,13 @@ class ProductExcludeLinkedResource extends ResourceBase {
         }
         $variant = $this->getSkuData($child, '', $with_parent_details);
         $variant['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($child, $values['attributes']);
+        if (!empty($variant['configurable_values'])) {
+          $variant['configurable_values'] = array_map(function ($variant_option) {
+            $variant_option['option_id'] = (int) $variant_option['option_id'];
+            return $variant_option;
+          }, $variant['configurable_values']);
+        }
+
         $data['variants'][] = $variant;
       }
 
@@ -553,7 +573,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
 
     foreach ($combinations['by_sku'] ?? [] as $child_sku => $attributes) {
       $combinations['by_sku'][$child_sku] = [
-        'sku' => $child_sku,
+        'sku' => strval($child_sku),
       ];
 
       foreach ($attributes as $attribute_code => $value) {
@@ -574,7 +594,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
       foreach ($attribute_data as $value => $skus) {
         $attr_value = [
           'value' => $value,
-          'skus' => $skus,
+          'skus' => array_map('strval', $skus),
         ];
 
         // Labels for all attribute codes.

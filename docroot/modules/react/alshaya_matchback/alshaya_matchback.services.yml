@@ -1,0 +1,4 @@
+services:
+  logger.channel.alshaya_matchback:
+    parent: logger.channel_base
+    arguments: ['alshaya_matchback']

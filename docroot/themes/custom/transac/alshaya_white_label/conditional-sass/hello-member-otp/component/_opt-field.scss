@@ -8,8 +8,6 @@
 
 #edit-hello-member {
   .mobile-otp-wrapper {
-    padding: 0 rem(20) rem(28);
-
     .field--type-mobile-number {
       #user-form & {
         margin-top: 0;
@@ -28,8 +26,9 @@
           padding: rem(7) rem(11);
           position: absolute;
           right: 0; // For both lang we need button on the same place since it is mobile field.
-          top: rem(-43);
+          top: rem(-44);
           z-index: 1;
+          border: none;
         }
 
         &.in-active {
@@ -99,6 +98,27 @@
       .error {
         background: $primary_bg !important;
       }
+    }
+  }
+
+  .mobile-number-field {
+    margin-bottom: rem(7);
+
+    .country-select {
+      @include country-select;
+    }
+
+    .mobile-input--wrapper {
+      @include mobile-input-style;
+
+      .form-type-select,
+      .form-type-tel {
+        margin-top: rem(4);
+      }
+    }
+
+    input {
+      @include mobile-number-input-style;
     }
   }
 }

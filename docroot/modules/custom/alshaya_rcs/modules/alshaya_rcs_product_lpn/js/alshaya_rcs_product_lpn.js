@@ -22,7 +22,8 @@
   RcsEventManager.addListener('rcsUpdateResults', (e) => {
     // Return if result is empty.
     if (typeof e.detail.result === 'undefined'
-      || (e.detail.pageType !== 'product'
+      || (typeof e.detail.placeholder !== 'undefined'
+      && e.detail.pageType !== 'product'
       && e.detail.placeholder !== 'product_by_sku'
       && e.detail.placeholder !== 'products-in-style')) {
       return;

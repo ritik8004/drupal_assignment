@@ -563,7 +563,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         : array_merge(['type' => $entity->bundle()], $result);
       }
     }
-    return !empty($field_output) ? $field_output : [];
+    return !empty($field_output['items']) ? $field_output : [];
   }
 
   /**

@@ -4,7 +4,6 @@ import {
   isRequestFromSocialAuthPopup,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
-import StaticStorage from './staticStorage';
 import { addPaymentMethodInCart } from '../../utilities/update_cart';
 import cartActions from '../../utilities/cart_actions';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
@@ -46,7 +45,7 @@ const getPaymentMethods = async () => {
 
   // Change the payment methods based on shipping method.
   const staticCacheKey = `payment_methods_${cart.data.shipping.type}_${cart.data.shipping.method}`;
-  const cached = StaticStorage.get(staticCacheKey);
+  const cached = Drupal.alshayaSpc.staticStorage.get(staticCacheKey);
   if (hasValue(cached)) {
     return cached;
   }
@@ -60,7 +59,7 @@ const getPaymentMethods = async () => {
 
   if (hasValue(response.data)) {
     paymentMethods = response.data;
-    StaticStorage.set(staticCacheKey, paymentMethods);
+    Drupal.alshayaSpc.staticStorage.set(staticCacheKey, paymentMethods);
   }
 
   return paymentMethods;
@@ -80,7 +79,7 @@ const getPaymentMethodSetOnCart = async () => {
     return null;
   }
 
-  const cached = StaticStorage.get('payment_method');
+  const cached = Drupal.alshayaSpc.staticStorage.get('payment_method');
   if (hasValue(cached)) {
     return cached;
   }
@@ -90,7 +89,7 @@ const getPaymentMethodSetOnCart = async () => {
   };
   const response = await callMagentoApi(getApiEndpoint('selectedPaymentMethod', params), 'GET', {});
   if (hasValue(response) && hasValue(response.data) && hasValue(response.data.method)) {
-    StaticStorage.set('payment_method', response.data.method);
+    Drupal.alshayaSpc.staticStorage.set('payment_method', response.data.method);
     return response.data.method;
   }
 

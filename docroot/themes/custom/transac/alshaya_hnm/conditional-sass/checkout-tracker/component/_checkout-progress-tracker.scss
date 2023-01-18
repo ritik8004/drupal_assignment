@@ -1,11 +1,5 @@
 .cko-progress-tracker {
   #checkout-progress {
-    font-size: rem(16);
-
-    @include breakpoint($only-mobile) {
-      font-size: rem(13);
-    }
-
     .progress-bar {
       .alias--cart-login & {
         @include breakpoint($only-mobile) {
@@ -18,19 +12,15 @@
         span {
           padding-top: 0;
           margin-top: rem(-3);
+          font-size: rem(16);
 
           @include breakpoint($only-mobile) {
-            font-size: rem(14);
             margin-top: rem(-1);
           }
         }
 
         .step-label {
           font-size: rem(13);
-
-          @include breakpoint($only-mobile) {
-            font-size: rem(11);
-          }
         }
 
         &.current {
@@ -46,13 +36,44 @@
         &.completed {
           .step-label {
             top: calc(100% + #{rem(17)});
-
-            @include breakpoint($only-mobile) {
-              font-size: rem(11);
-            }
           }
         }
       }
+    }
+  }
+}
+
+.alias--cart-login {
+  .block-page-title-block {
+    display: none;
+  }
+
+  @include breakpoint($upto-desktop) {
+    margin: 0 !important;
+
+    .site-brand-home a {
+      margin-#{$left}: 0;
+    }
+  }
+
+  .page-standard {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .site-brand-wrapper {
+    @include breakpoint($only-mobile) {
+      border-color: $spc-checkout-header-border;
+      height: rem(56);
+    }
+
+    @include breakpoint($tablet) {
+      height: rem(99);
+      border-bottom: rem(1) solid $spc-checkout-header-border;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: none;
     }
   }
 }

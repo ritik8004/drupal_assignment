@@ -36,14 +36,15 @@ class RcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
     $full_path = $data['fullPath'];
     $config = $this->configFactory->get('rcs_placeholders.settings');
     $category_prefix = $config->get('category.path_prefix');
+    $placeholder_tid = $config->get('category.placeholder_tid');
 
-    if (!str_starts_with($path, '/' . $category_prefix)) {
+    if (!str_starts_with($path, '/' . $category_prefix) || !$placeholder_tid) {
       return;
     }
 
-    $processed_paths = '/taxonomy/term/' . $config->get('category.placeholder_tid');
+    $processed_paths = '/taxonomy/term/' . $placeholder_tid;
     $category = $config->get('category.enrichment')
-      ? $this->enrichmentHelper->getEnrichedEntity('category', $path)
+      ? $this->enrichmentHelper->getEnrichedEntity('category', $full_path)
       : NULL;
 
     $entityData = NULL;

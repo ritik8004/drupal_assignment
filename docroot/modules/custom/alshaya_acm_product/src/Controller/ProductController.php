@@ -363,16 +363,32 @@ class ProductController extends ControllerBase {
         if ($this->request->query->get('type') == 'json') {
           $related_products = $this->getRelatedProductsJson($related_skus, $data);
           if (!empty($related_products)) {
-            $this->moduleHandler->alter('alshaya_acm_product_recommended_products_data', $type, $related_products);
+            $hook_data = [
+              'type' => $type,
+              'products' => $related_products,
+              'format' => 'json',
+            ];
+            $this->moduleHandler->alter('alshaya_acm_product_recommended_products_data', $hook_data);
           }
           return new JsonResponse($related_products);
         }
+
+        $hook_data = [
+          'type' => $type,
+          'products' => $related_skus,
+          'format' => NULL,
+          'data' => $data,
+        ];
+        if (!empty($related_skus)) {
+          $this->moduleHandler->alter('alshaya_acm_product_recommended_products_data', $hook_data);
+        }
+
         $build['related'] = [
           '#theme' => 'products_horizontal_slider',
           '#data' => $related_skus,
-          '#section_title' => $data['section_title'],
+          '#section_title' => $hook_data['data']['section_title'],
           '#views_name' => 'product_slider',
-          '#views_display_id' => $data['views_display_id'],
+          '#views_display_id' => $hook_data['data']['views_display_id'],
         ];
         $response->addCommand(new ReplaceCommand($selector . '.' . $type . '-products', render($build)));
       }

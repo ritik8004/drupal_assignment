@@ -1,28 +1,28 @@
 attribute_weights:
   default:
-    option: 1
+    options_container: 1
     subset_name: 2
     color: 3
     fabric: 4
-    material: 5
+    material_lhn: 5
     finish: 6
     furniture_finish: 7
-    style: 8
-    product_type: 9
+    style_lhn: 8
+    product_type_lhn: 9
     size: 10
     height: 11
     length: 12
 show_quantity: TRUE
 sortable_options:
-  - option
+  - options_container
   - subset_name
   - color
   - size
   - finish
   - furniture_finish
-  - material
-  - style
-  - product_type
+  - material_lhn
+  - style_lhn
+  - product_type_lhn
   - height
   - length
   - fabric

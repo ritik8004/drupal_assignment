@@ -1,0 +1,6 @@
+name: Alshaya Matchback
+type: module
+description: Provides matchback feature enhancements.
+core_version_requirement: ^9
+dependencies:
+  - alshaya_react:alshaya_react

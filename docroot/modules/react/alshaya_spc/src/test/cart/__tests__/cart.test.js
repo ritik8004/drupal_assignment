@@ -1,6 +1,5 @@
 jest.mock('axios');
 import axios from 'axios';
-import StaticStorage from '../../../../js/backend/v2/staticStorage';
 import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 import { drupalSettings, Drupal } from '../globals';
 import * as cart from '../../../../js/backend/v2/cart';
@@ -11,7 +10,7 @@ describe('Cart', () => {
   });
 
   afterEach(() => {
-    StaticStorage.clear();
+    global.Drupal.alshayaSpc.staticStorage.clear();
     jest.clearAllMocks();
   });
 

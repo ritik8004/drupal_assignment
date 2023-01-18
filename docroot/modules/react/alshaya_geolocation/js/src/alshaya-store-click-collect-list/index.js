@@ -61,6 +61,12 @@ export class StoreClickCollectList extends React.PureComponent {
         showListingView: true,
         showAutomcomplete: false,
       });
+      // Push pdp search stores event to GTM if store is available
+      // and selected successfully.
+      Drupal.alshayaSeoGtmPushEcommerceEvents({
+        eventAction: 'pdp search stores',
+        eventLabel: place.formatted_address,
+      });
     }
   }
 

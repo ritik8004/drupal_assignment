@@ -1,0 +1,17 @@
+.order-detail {
+  .user__order--detail {
+    .cancel-return-button-wrapper {
+      button {
+        padding: 0 rem(13);
+        padding-#{$left}: 0;
+      }
+
+      .cancel-button-text {
+        &::before {
+          font-size: rem(40);
+          margin-#{$right}: 0;
+        }
+      }
+    }
+  }
+}

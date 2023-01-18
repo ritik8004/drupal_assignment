@@ -4,7 +4,7 @@ Feature: Create new user account on the site
 
   Background:
     Given I am on "/user/register"
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
 
   Scenario: As an authenticated user, I should be able to sign in after providing valid credentials
     Given I fill in "edit-full-name" with "Nikita Jain"
@@ -15,7 +15,7 @@ Feature: Create new user account on the site
     And I wait for the page to load
     Then I should be on homepage
     And I am on "user/login"
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
     And I login with "{spc_new_registered_user_email}" using custom password
-    And I wait for the page to load
+    And I wait for element "#block-page-title"
     Then I should be on "/user" page

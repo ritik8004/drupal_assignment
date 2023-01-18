@@ -5,6 +5,7 @@ namespace Drupal\alshaya_hello_member\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
@@ -22,10 +23,13 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
   /**
    * Constructs a new Block.
    *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($config_factory);
     $this->entityTypeManager = $entity_type_manager;
   }
 
@@ -34,6 +38,7 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('config.factory'),
       $container->get('entity_type.manager')
     );
   }
@@ -150,6 +155,22 @@ class AlshayaHelloMemberSettingsForm extends ConfigFormBase {
       ->set('show_default_benefits', $form_state->getValue('show_default_benefits'))
       ->set('brand_membership_text', $form_state->getValue('brand_membership_text'))
       ->save();
+
+    $config_factory = $this->configFactory();
+    $nid = $form_state->getValue('membership_info_content_node');
+
+    $userConfig = $config_factory->getEditable('alshaya_user.settings');
+    // @codingStandardsIgnoreLine
+    $alshaya_hello_member = unserialize($userConfig->get('my_account_enabled_links'));
+    if (is_numeric($nid)) {
+      $alshaya_hello_member['membership_info'] = 'membership_info';
+    }
+    else {
+      unset($alshaya_hello_member['membership_info']);
+    }
+
+    $userConfig->set('my_account_enabled_links', serialize($alshaya_hello_member));
+    $userConfig->save();
 
     parent::submitForm($form, $form_state);
   }

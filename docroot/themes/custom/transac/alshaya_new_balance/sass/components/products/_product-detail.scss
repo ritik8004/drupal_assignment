@@ -42,9 +42,9 @@
 
     h1,
     h1 span {
-      font-size: rem(32);
+      font-size: rem(26);
       line-height: rem(40);
-      font-family: $alshaya-bold;
+      font-family: $nb-nova-semibold;
 
       @include breakpoint($only-mobile) {
         font-size: rem(24);
@@ -546,6 +546,10 @@
   .search-store {
     input[type=text] {
       border-color: $tertiary-border;
+    }
+
+    button {
+      text-transform: unset;
     }
   }
 }

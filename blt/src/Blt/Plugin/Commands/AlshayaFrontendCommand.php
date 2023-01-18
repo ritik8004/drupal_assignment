@@ -403,21 +403,45 @@ class AlshayaFrontendCommand extends BltTasks {
     $cmd = 'npm run build';
 
     // Build specific paths instead of whole docroot.
-    if (!empty($path)) {
-      // Set path relative to docroot.
-      $relative = explode('docroot/', $path, 2);
-      if (count($relative) === 2) {
-        $path = $relative[1];
+    if (getenv('GITHUB_ACTIONS') == 'true' && (int) getenv('CHANGED_JS_FILES') < 1) {
+      // Copy existing folder from acquia repo if build is not needed.
+      // Preparing folder paths for copying.
+      $jsFromDir = '/tmp/blt-deploy/' . substr($dir, strpos($dir, 'docroot')) . '/build';
+      $jsToDir = $dir . '/build';
+      // Copy step.
+      $this->say('Copying build folder from ' . $jsFromDir . ' to ' . $jsToDir);
+      try {
+        $result = $this->taskCopyDir([$jsFromDir => $jsToDir])
+          ->overwrite(TRUE)
+          ->run();
+        // If copying failed preparing for build.
+        if (!$result->wasSuccessful()) {
+          $this->say('Unable to copy build files from cloud.');
+        }
       }
-      $cmd = $cmd . ' -- --path=' . $path;
+      catch (\Throwable $e) {
+        $this->say('Error: Unable to copy build files from cloud.');
+        $this->say('Error message: ' . $e->getMessage());
+      }
     }
-
-    $task = $this->taskExec($cmd);
-    $task->dir($dir);
-    $result = $task->run();
-    $this->say($result->getOutputData());
-    $this->say($result->getMessage());
-    return $result;
+    else {
+      $cmd = 'npm run build';
+      // Build specific paths instead of whole docroot.
+      if (!empty($path)) {
+        // Set path relative to docroot.
+        $relative = explode('docroot/', $path, 2);
+        if (count($relative) === 2) {
+          $path = $relative[1];
+        }
+        $cmd = $cmd . ' -- --path=' . $path;
+      }
+      $task = $this->taskExec($cmd);
+      $task->dir($dir);
+      $result = $task->run();
+      $this->say($result->getOutputData());
+      $this->say($result->getMessage());
+      return $result;
+    }
   }
 
   /**

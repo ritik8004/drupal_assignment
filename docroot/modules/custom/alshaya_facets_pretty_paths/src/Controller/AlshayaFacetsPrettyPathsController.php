@@ -6,6 +6,7 @@ use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Language\LanguageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -58,6 +59,7 @@ class AlshayaFacetsPrettyPathsController extends ControllerBase {
     // queued and processed.
     $cacheable_metadata = new CacheableMetadata();
     $cacheable_metadata->addCacheTags(['taxonomy_term:sku_product_option']);
+    $cacheable_metadata->addCacheContexts(['languages:' . LanguageInterface::TYPE_INTERFACE]);
 
     $response->addCacheableDependency($cacheable_metadata);
 

@@ -46,7 +46,7 @@ const UnorderedList = (props) => {
           value={option.value}
           className={classes.join(' ')}
           selected="selected"
-          onClick={(e) => onClick(attributeName, e.target.value)}
+          onClick={(e) => onClick(attributeName, e.target.value, optionLabel)}
         >
           {optionLabel}
         </li>
@@ -56,7 +56,7 @@ const UnorderedList = (props) => {
         <li
           key={option.value}
           value={option.value}
-          onClick={(e) => onClick(attributeName, e.target.value)}
+          onClick={(e) => onClick(attributeName, e.target.value, optionLabel)}
           className={classes.join(' ')}
         >
           {optionLabel}

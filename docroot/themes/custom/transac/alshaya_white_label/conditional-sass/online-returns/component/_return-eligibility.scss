@@ -65,15 +65,7 @@
       .return-message {
         font-size: 0.75rem;
         line-height: 1rem;
-        padding-#{$left}: 2.375rem;
-
-        @include breakpoint($tablet) {
-          padding-#{$left}: 2.5rem;
-        }
-
-        @include breakpoint($desktop) {
-          padding-#{$left}: 0.125rem;
-        }
+        padding-#{$left}: rem(38);
 
         span {
           &:nth-child(1) {

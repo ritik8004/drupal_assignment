@@ -6,14 +6,14 @@ import React from 'react';
  * @param {object} e
  *   The event object.
  */
-const onSwatchSelect = (e, attributeName, onClick) => {
+const onSwatchSelect = (e, attributeName, swatchLabel, onClick) => {
   e.preventDefault();
   // Get value from current element if its not image swatch or dual tone color swatch,
   // else get value from parent element.
   const swatchValue = (e.target.nodeName.toLowerCase() === 'a')
     ? e.target.dataset.value
     : e.target.parentElement.dataset.value;
-  onClick(attributeName, swatchValue);
+  onClick(attributeName, swatchValue, swatchLabel);
 };
 
 const Swatch = (props) => {
@@ -63,7 +63,7 @@ const Swatch = (props) => {
             data-value={value}
             className={classes}
             href="#"
-            onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
+            onClick={(e) => onSwatchSelect(e, attributeName, label, onClick)}
           >
             {label}
           </a>
@@ -79,7 +79,7 @@ const Swatch = (props) => {
             data-value={value}
             className={classes}
             href="#"
-            onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
+            onClick={(e) => onSwatchSelect(e, attributeName, label, onClick)}
           >
             <img loading="lazy" src={data} />
           </a>
@@ -110,7 +110,7 @@ const ColorSwatch = ({
           data-value={value}
           className={classes}
           href="#"
-          onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
+          onClick={(e) => onSwatchSelect(e, attributeName, label, onClick)}
         >
           <div style={{
             backgroundColor: values[0],
@@ -133,7 +133,7 @@ const ColorSwatch = ({
         className={classes}
         href="#"
         style={{ backgroundColor: data }}
-        onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
+        onClick={(e) => onSwatchSelect(e, attributeName, label, onClick)}
       />
     </li>
   );

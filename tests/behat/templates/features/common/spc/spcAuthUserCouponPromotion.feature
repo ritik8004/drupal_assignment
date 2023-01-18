@@ -15,6 +15,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     And the element ".content__title_wrapper .promotions" should exist
     When I click on "#mini-cart-wrapper a.cart-link" element
@@ -29,7 +30,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     Then the promo code should be applied
     And the element ".totals .discount-total" should exist
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -61,6 +62,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     And the element ".content__title_wrapper .promotions" should exist
     When I click on "#mini-cart-wrapper a.cart-link" element
@@ -75,7 +77,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     Then the promo code should be applied
     And the element ".totals .discount-total" should exist
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address
@@ -105,6 +107,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait for element ".cart-link .quantity"
+    #-Cart Notification popup animation time
     And I wait 3 seconds
     And the element ".content__title_wrapper .promotions" should exist
     When I click on "#mini-cart-wrapper a.cart-link" element
@@ -119,7 +122,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     Then the promo code should be applied
     And the element ".totals .discount-total" should exist
     When I follow "continue to checkout"
-    And I wait for element ".checkout-link.submit"
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     And I select the home delivery address

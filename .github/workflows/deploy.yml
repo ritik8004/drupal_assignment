@@ -24,6 +24,7 @@ jobs:
     outputs:
       themes: ${{ steps.changes.outputs.themes }}
       react: ${{ steps.changes.outputs.react }}
+      js: ${{ steps.changes.outputs.js }}
       svg: ${{ steps.changes.outputs.svg }}
       all: ${{ steps.changes.outputs.all}}
       deployable_changes: ${{ steps.deployable_changes.outputs.deployable_changes }}
@@ -41,6 +42,7 @@ jobs:
         run: |
           echo themes=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/themes/custom | xargs) >> $GITHUB_OUTPUT
           echo react=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep docroot/modules/react | xargs) >> $GITHUB_OUTPUT
+          echo js=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep .js | xargs | wc -c | xargs) >> $GITHUB_OUTPUT
           echo svg=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | grep .svg | xargs) >> $GITHUB_OUTPUT
           echo all=$(git diff --name-only --diff-filter=ACMRTD ${{ github.event.before }} ${{ github.event.after }} | wc -l | xargs) >> $GITHUB_OUTPUT
 
@@ -93,6 +95,7 @@ jobs:
           echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
           echo CHANGED_THEME_FILES=${{ needs.changedfiles.outputs.themes }} >> $GITHUB_ENV
           echo CHANGED_REACT_FILES=${{ needs.changedfiles.outputs.react }} >> $GITHUB_ENV
+          echo CHANGED_JS_FILES=${{ needs.changedfiles.outputs.js }} >> $GITHUB_ENV
           echo CHANGED_SVG_FILES=${{ needs.changedfiles.outputs.svg }} >> $GITHUB_ENV
           echo CHANGED_ALL_FILES=${{ needs.changedfiles.outputs.all }} >> $GITHUB_ENV
 

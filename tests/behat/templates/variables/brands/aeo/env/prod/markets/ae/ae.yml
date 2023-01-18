@@ -3,6 +3,6 @@ variables:
   spc_basket_page: '/american-eagle/shop-featured/women/new-arrivals/'
   product_listing_page_url: "/american-eagle/shop-featured/women/new-arrivals/"
   np_plp_page: '/american-eagle/shop-featured/women/new-arrivals/'
-  np_plp_product_page: '/buy-ae-true-tee-peach.html/'
-  spc_pdp_page: '/buy-ae-true-tee-peach.html/'
+  np_plp_product_page: '/buy-ae-next-level-high-waisted-jegging-true-rinse.html/'
+  spc_pdp_page: '/buy-ae-next-level-high-waisted-jegging-true-rinse.html/'
   np_promotion: 0

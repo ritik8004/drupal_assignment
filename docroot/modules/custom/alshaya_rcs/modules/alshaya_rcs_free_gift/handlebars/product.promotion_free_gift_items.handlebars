@@ -1,0 +1,16 @@
+{{#if items }}
+  <div class="item-list">
+    {{#if title }}
+      <h3>{{ title }}</h3>
+    {{/if}}
+    {{#if items }}
+      <ul class="item-list__ul">
+        {{#each items as | item |}}
+          <li id="item{{ @index }}">
+            {{{render 'product.promotion_free_gift_item' item}}}
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  </div>
+{{/if}}
