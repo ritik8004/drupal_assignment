@@ -73,10 +73,8 @@ export default class CartItem extends React.Component {
       this.state.isItemError = true;
       this.state.errorMessage = itemErrorMsg;
     } else {
-      this.state = {
-        isItemError: false,
-        errorMessage: null,
-      };
+      this.state.isItemError = false;
+      this.state.errorMessage = null;
     }
     Drupal.ajax.bindAjaxLinks(document.getElementById('spc-cart'));
   }
