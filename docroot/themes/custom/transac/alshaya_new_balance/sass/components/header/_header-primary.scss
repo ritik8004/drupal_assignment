@@ -99,7 +99,7 @@ header {
             margin-#{$left}: rem(56);
             z-index: 2;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               text-align: center;
             }
           }
@@ -110,7 +110,7 @@ header {
           }
 
           img {
-            html[lang=ar] & {
+            html[lang="ar"] & {
               width: auto;
               height: auto;
               margin-top: auto;
@@ -119,7 +119,7 @@ header {
             @include breakpoint($upto-desktop) {
               width: rem(48);
 
-              html[lang=ar] & {
+              html[lang="ar"] & {
                 width: rem(48);
               }
             }
@@ -141,7 +141,7 @@ header {
       align-items: center;
       padding-#{$right}: rem(16);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: rem(68);
       }
     }
@@ -185,7 +185,7 @@ header {
   }
 
   .block-system-branding-block & {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($upto-desktop) {
         width: auto;
 
@@ -216,7 +216,7 @@ header {
       top: 0;
       margin-#{$left}: rem(56);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         max-width: rem(80);
         top: rem(6);
       }
@@ -233,7 +233,7 @@ header {
     margin: 0;
     position: initial;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 0;
     }
   }
@@ -326,7 +326,7 @@ header {
       #{$left}: rem(16);
       margin-top: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         right: rem(16);
       }
     }
@@ -370,7 +370,11 @@ header {
         #{$right}: rem(93);
       }
 
-      @include icon_img('#{$nb_theme_img_directory_path}/icons/search.svg', rem(32), rem(32));
+      @include icon_img(
+        "#{$nb_theme_img_directory_path}/icons/search.svg",
+        rem(32),
+        rem(32)
+      );
 
       &::before {
         background-size: rem(24);
@@ -418,7 +422,7 @@ header {
       #{$right}: rem(64);
       height: rem(20);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         left: rem(66);
       }
     }
@@ -436,16 +440,20 @@ header {
       top: rem(27);
     }
 
-    @include icon_img('#{$nb_theme_img_directory_path}/icons/store-finder.svg', rem(32), rem(32));
+    @include icon_img(
+      "#{$nb_theme_img_directory_path}/icons/store-finder.svg",
+      rem(32),
+      rem(32)
+    );
 
     &::before {
-      content: '';
+      content: "";
       #{$left}: rem(-3);
       width: rem(16);
       height: rem(18);
       margin-#{$right}: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         @include breakpoint($only-mobile) {
           #{$left}: rem(-8);
         }
@@ -485,11 +493,13 @@ header {
 
 .menu__back {
   @include breakpoint($upto-desktop) {
-    background: url('#{$nb_theme_img_directory_path}/icons/ic-chevronleft.svg') no-repeat;
+    background:
+      url("#{$nb_theme_img_directory_path}/icons/ic-chevronleft.svg")
+      no-repeat;
     margin-#{$left}: 0;
     height: rem(20);
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       transform: rotate(180deg);
     }
   }

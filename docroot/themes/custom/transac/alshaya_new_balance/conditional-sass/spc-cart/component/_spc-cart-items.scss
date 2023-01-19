@@ -37,7 +37,7 @@
         height: rem(23);
         display: inline-block;
         margin-#{$left}: 0;
-        background: url('#{$nb_theme_img_directory_path}/icons/spc-close.svg');
+        background: url("#{$nb_theme_img_directory_path}/icons/spc-close.svg");
 
         svg {
           display: none;

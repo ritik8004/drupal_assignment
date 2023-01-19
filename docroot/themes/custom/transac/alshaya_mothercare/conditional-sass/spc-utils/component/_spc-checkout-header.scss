@@ -2,7 +2,7 @@
 .alias--checkout-confirmation {
   .site-brand-home {
     a {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         @include breakpoint($tablet) {
           max-width: 12rem;
           width: 12rem;

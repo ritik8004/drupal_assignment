@@ -1,11 +1,13 @@
 // Define Fonts
-$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts';
+$base_theme_fonts_directory_path: "/themes/custom/transac/alshaya_westelm/fonts";
 
 @font-face {
   font-family: "GTEestiDisplay-Light";
   src:
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -14,8 +16,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts'
 @font-face {
   font-family: "GTEestiDisplay-Medium";
   src:
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -24,8 +28,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts'
 @font-face {
   font-family: "GEDinarTwoMedium";
   src:
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -34,8 +40,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts'
 @font-face {
   font-family: "GEDinarOneMedium";
   src:
-    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -45,8 +53,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts'
 @font-face {
   font-family: "GTEestiDisplay-Bold";
   src:
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Bold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Bold.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Bold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -55,8 +65,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts'
 @font-face {
   font-family: "GTEestiDisplay-Regular";
   src:
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Regular.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Regular.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Regular.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Regular.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -65,7 +77,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts'
 @font-face {
   font-family: "Sanomat-Light";
   src:
-    url("#{$base_theme_fonts_directory_path}/Sanomat-Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Sanomat-Light.woff2")
+    format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Sanomat-Light.woff") format("woff");
   font-weight: normal;
   font-style: normal;
@@ -75,8 +88,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts'
 @font-face {
   font-family: "Sanomat-Medium";
   src:
-    url("#{$base_theme_fonts_directory_path}/Sanomat-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Sanomat-Medium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Sanomat-Medium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Sanomat-Medium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

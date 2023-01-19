@@ -37,16 +37,16 @@
 
         &::before {
           display: inline-block;
-          background: transparent url(../imgs/assets/vs-sizeguide.svg) no-repeat;
+          background: transparent url("../imgs/assets/vs-sizeguide.svg") no-repeat;
           background-position: center;
           text-indent: -9999px;
           width: 1.0625rem;
           height: 0.5rem;
-          content: '';
+          content: "";
           margin-#{$right}: 0.2875rem;
         }
 
-        @include icon('chevron#{$right}', after) {
+        @include icon("chevron#{$right}", after) {
           font-size: 1rem;
           font-weight: bold;
           margin-#{$left}: 0;

@@ -44,7 +44,7 @@
         }
 
         @include breakpoint($desktop) {
-          content: '';
+          content: "";
         }
       }
     }

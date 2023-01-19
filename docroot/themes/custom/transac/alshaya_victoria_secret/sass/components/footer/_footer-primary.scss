@@ -65,7 +65,7 @@
       flex-basis: 24%;
 
       .c-footer-menu--help {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: auto;
         }
       }
@@ -94,8 +94,8 @@
       padding-left: 0.75rem;
     }
 
-    html[lang=en] &,
-    html[lang=ar] {
+    html[lang="en"] &,
+    html[lang="ar"] {
       width: auto;
       margin-#{$left}: 0;
 
@@ -186,7 +186,7 @@
 }
 
 .c-footer-menu--help {
-  @include breakpoint ($only-mobile) {
+  @include breakpoint($only-mobile) {
     margin-bottom: 1.5rem;
     border-bottom: 0;
   }
@@ -273,20 +273,22 @@
       #{$right}: 0;
     }
 
-    &.ladda-button[data-style=zoom-in] {
+    &.ladda-button[data-style="zoom-in"] {
       .ladda-label {
         font-size: 0;
 
         &::after {
-          content: '';
-          background: url('#{$brand_theme_img_directory_path}/assets/arrow.svg') no-repeat;
+          content: "";
+          background:
+            url("#{$brand_theme_img_directory_path}/assets/arrow.svg")
+            no-repeat;
           display: inline-block;
           vertical-align: middle;
           width: rem(20);
           height: rem(20);
           transform: rotate(180deg);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: rotate(0deg);
           }
         }
@@ -300,7 +302,10 @@
     }
   }
 
-  form:not(.alshaya-acm-customer-order-list-search, .alshaya-stores-available-stores, .store-finder-exposed-form) {
+  form:not(
+  .alshaya-acm-customer-order-list-search,
+  .alshaya-stores-available-stores,
+  .store-finder-exposed-form) {
     input[type="email"] {
       color: $footer_input_text;
     }
@@ -401,7 +406,7 @@
       li {
         &:first-child {
           &::after {
-            html[lang=ar] & {
+            html[lang="ar"] & {
               top: rem(4);
             }
           }
@@ -411,7 +416,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .c-footer-menu--about {
     @include breakpoint($tablet) {
       width: auto;

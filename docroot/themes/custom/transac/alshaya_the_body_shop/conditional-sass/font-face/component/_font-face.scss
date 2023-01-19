@@ -1,10 +1,11 @@
 // Define Fonts
-$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/fonts';
+$base_theme_fonts_directory_path: "/themes/custom/transac/alshaya_the_body_shop/fonts";
 
 @font-face {
   font-family: "Druk-Bold-Web";
   src:
-    url("#{$base_theme_fonts_directory_path}/Druk-Bold-Web.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Druk-Bold-Web.woff2")
+    format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Druk-Bold-Web.woff") format("woff");
   font-weight: normal;
   font-style: normal;
@@ -14,8 +15,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "DrukCond-Super-Cy-Web";
   src:
-    url("#{$base_theme_fonts_directory_path}/DrukCond-Super-Cy-Web.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/DrukCond-Super-Cy-Web.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/DrukCond-Super-Cy-Web.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DrukCond-Super-Cy-Web.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -24,8 +27,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "DrukWide-Bold-Cy-Web";
   src:
-    url("#{$base_theme_fonts_directory_path}/DrukWide-Bold-Cy-Web.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/DrukWide-Bold-Cy-Web.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/DrukWide-Bold-Cy-Web.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DrukWide-Bold-Cy-Web.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -34,8 +39,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "DrukWide-Super-Web";
   src:
-    url("#{$base_theme_fonts_directory_path}/DrukWide-Super-Web.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/DrukWide-Super-Web.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/DrukWide-Super-Web.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DrukWide-Super-Web.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -44,8 +51,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Recoleta-Medium";
   src:
-    url("#{$base_theme_fonts_directory_path}/Recoleta-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Recoleta-Medium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Recoleta-Medium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Recoleta-Medium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -54,8 +63,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Recoleta-SemiBold";
   src:
-    url("#{$base_theme_fonts_directory_path}/Recoleta-SemiBold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Recoleta-SemiBold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Recoleta-SemiBold.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Recoleta-SemiBold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -64,8 +75,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-Regular";
   src:
-    url("#{$base_theme_fonts_directory_path}/WorkSans-Regular.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/WorkSans-Regular.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/WorkSans-Regular.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/WorkSans-Regular.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -74,8 +87,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-Light";
   src:
-    url("#{$base_theme_fonts_directory_path}/WorkSans-Light.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/WorkSans-Light.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/WorkSans-Light.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/WorkSans-Light.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -84,8 +99,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-Medium";
   src:
-    url("#{$base_theme_fonts_directory_path}/WorkSans-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/WorkSans-Medium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/WorkSans-Medium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/WorkSans-Medium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -94,8 +111,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-SemiBold";
   src:
-    url("#{$base_theme_fonts_directory_path}/WorkSans-SemiBold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/WorkSans-SemiBold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/WorkSans-SemiBold.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/WorkSans-SemiBold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -104,7 +123,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "WorkSans-Bold";
   src:
-    url("#{$base_theme_fonts_directory_path}/WorkSans-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/WorkSans-Bold.woff2")
+    format("woff2"),
     url("#{$base_theme_fonts_directory_path}/WorkSans-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
@@ -114,8 +134,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "29LT-Bukra-Condensed-Bold";
   src:
-    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Condensed-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Condensed-Bold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Condensed-Bold.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Condensed-Bold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -124,8 +146,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "29LT-Bukra-Wide-Bold";
   src:
-    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Wide-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Wide-Bold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Wide-Bold.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Wide-Bold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -134,8 +158,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "MizanAR-Medium";
   src:
-    url("#{$base_theme_fonts_directory_path}/MizanAR-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/MizanAR-Medium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/MizanAR-Medium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/MizanAR-Medium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -144,7 +170,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Mada-Bold";
   src:
-    url("#{$base_theme_fonts_directory_path}/Mada-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Mada-Bold.woff2")
+    format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Mada-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
@@ -154,7 +181,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Mada-SemiBold";
   src:
-    url("#{$base_theme_fonts_directory_path}/Mada-SemiBold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Mada-SemiBold.woff2")
+    format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Mada-SemiBold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
@@ -164,7 +192,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Mada-Medium";
   src:
-    url("#{$base_theme_fonts_directory_path}/Mada-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Mada-Medium.woff2")
+    format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Mada-Medium.woff") format("woff");
   font-weight: normal;
   font-style: normal;
@@ -174,7 +203,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 @font-face {
   font-family: "Mada-Regular";
   src:
-    url("#{$base_theme_fonts_directory_path}/Mada-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Mada-Regular.woff2")
+    format("woff2"),
     url("#{$base_theme_fonts_directory_path}/Mada-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
@@ -182,10 +212,12 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 }
 
 @font-face {
-  font-family: 'alshaya-icons';
+  font-family: "alshaya-icons";
   src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?D7b5id') format('woff2'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5ir') format('woff');
+    url("#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?D7b5id")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5ir")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

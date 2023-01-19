@@ -4,7 +4,7 @@
       @include breakpoint($desktop) {
         flex-basis: 42%;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           flex-basis: 40%;
         }
       }

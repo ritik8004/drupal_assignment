@@ -4,7 +4,7 @@
   @include breakpoint($only-mobile) {
     margin-top: -1.75rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-bottom: 1.25rem;
     }
   }

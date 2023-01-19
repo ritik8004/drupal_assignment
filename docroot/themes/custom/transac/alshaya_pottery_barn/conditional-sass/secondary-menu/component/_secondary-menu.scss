@@ -4,7 +4,7 @@
       ul.menu--one__list {
         .back--link {
           &::before {
-            html[lang=en] & {
+            html[lang="en"] & {
               top: 1rem;
             }
           }

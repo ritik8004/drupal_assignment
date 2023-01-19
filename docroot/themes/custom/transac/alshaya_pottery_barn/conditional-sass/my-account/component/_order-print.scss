@@ -12,7 +12,7 @@
 
 body {
   &.alias--confirmation-print {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-mobile) {
         margin-top: 0;
       }

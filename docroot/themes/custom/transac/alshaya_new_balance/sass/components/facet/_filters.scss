@@ -44,7 +44,8 @@
       }
     }
 
-    &:not(.block-facet-blockcategory-facet-search):not(.block-facet-blockcategory-facet-plp),
+    &:not(.block-facet-blockcategory-facet-search):not(
+    .block-facet-blockcategory-facet-plp),
     &:not(.block-facet-blockcategory-facet-search) {
       ul {
         padding: 0;
@@ -115,8 +116,10 @@
   color: $plp_search_count;
 
   &::before {
-    content: '';
-    background: url(#{$nb_theme_img_directory_path}/icons/all-filter.svg) no-repeat;
+    content: "";
+    background:
+      url("#{$nb_theme_img_directory_path}/icons/all-filter.svg")
+      no-repeat;
     height: rem(22);
     width: rem(22);
   }

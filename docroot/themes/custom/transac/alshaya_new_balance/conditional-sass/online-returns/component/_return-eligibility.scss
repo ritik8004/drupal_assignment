@@ -34,7 +34,9 @@
 
   span {
     &::before {
-      background: url("#{$nb_theme_img_directory_path}/icons/style-icons-ui-return.svg") no-repeat;
+      background:
+        url("#{$nb_theme_img_directory_path}/icons/style-icons-ui-return.svg")
+        no-repeat;
     }
   }
 }

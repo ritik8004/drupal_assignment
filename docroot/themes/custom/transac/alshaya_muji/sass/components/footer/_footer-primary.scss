@@ -161,17 +161,22 @@
         #{$right}: 1rem;
       }
 
-      @include pdp_icon_img('#{$muji_theme_img_directory_path}/icons/plus.svg', 2rem, 2rem, after);
+      @include pdp_icon_img(
+        "#{$muji_theme_img_directory_path}/icons/plus.svg",
+        2rem,
+        2rem,
+        after
+      );
     }
   }
 
-  @include breakpoint ($only-mobile) {
+  @include breakpoint($only-mobile) {
     border-top-color: $footer_border_top;
     border-bottom-color: $footer_border_top;
   }
 
   li.c-footer-menu__tab:not(:last-child) {
-    @include breakpoint ($only-mobile) {
+    @include breakpoint($only-mobile) {
       border-bottom: none;
     }
   }
@@ -204,7 +209,7 @@
 .c-footer-menu--category {
   text-transform: none;
 
-  @include breakpoint ($only-mobile) {
+  @include breakpoint($only-mobile) {
     border-top-color: $footer_light_border;
     border-bottom-color: $footer_light_border;
   }
@@ -248,7 +253,7 @@
     @include breakpoint($only-tablet) {
       padding-#{$right}: 40% !important;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-#{$right}: 44% !important;
       }
     }
@@ -278,7 +283,7 @@
     }
   }
 
-  .edit-newsletter[data-style=zoom-in][data-loading] {
+  .edit-newsletter[data-style="zoom-in"][data-loading] {
     background-color: $primary_btn_bg;
 
     .ladda-spinner {
@@ -472,7 +477,12 @@
 }
 
 .open--accordion .is-accordion {
-  @include pdp_icon_img('#{$muji_theme_img_directory_path}/icons/minus.svg', 2rem, 2rem, after);
+  @include pdp_icon_img(
+    "#{$muji_theme_img_directory_path}/icons/minus.svg",
+    2rem,
+    2rem,
+    after
+  );
 }
 
 .c-footer {

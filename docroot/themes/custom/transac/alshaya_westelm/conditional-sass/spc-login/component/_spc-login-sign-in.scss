@@ -49,14 +49,14 @@
 
 // Only Cart login.
 body.alias--cart-login {
-  html[lang=ar] & {
+  html[lang="ar"] & {
     @include breakpoint($only-mobile) {
       margin-top: 0;
     }
   }
 
   .site-brand-wrapper {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-mobile) {
         height: 7rem;
       }

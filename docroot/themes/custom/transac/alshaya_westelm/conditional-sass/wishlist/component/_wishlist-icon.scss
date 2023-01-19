@@ -5,13 +5,17 @@
 
 #wishlist-header-wrapper {
   .wishlist-icon {
-    background: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty-icon-black.svg') no-repeat;
+    background:
+      url("#{$brand_theme_img_directory_path}/icons/wishlist-empty-icon-black.svg")
+      no-repeat;
     background-size: cover;
   }
 
   .wishlist-link.wishlist-active {
     .wishlist-icon {
-      background: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled-icon-black.svg') no-repeat;
+      background:
+        url("#{$brand_theme_img_directory_path}/icons/wishlist-filled-icon-black.svg")
+        no-repeat;
       background-size: cover;
     }
   }

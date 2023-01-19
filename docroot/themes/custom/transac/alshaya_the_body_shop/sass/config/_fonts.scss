@@ -1,27 +1,28 @@
 // TBS specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
-$tbs-regular: 'WorkSans-Regular', 'Mada-Regular', 'Arial';
-$tbs-light: 'WorkSans-Light', 'Mada-Regular', 'Arial';
-$tbs-medium: 'WorkSans-Medium', 'Mada-Medium', 'Arial';
-$tbs-semibold: 'WorkSans-SemiBold', 'Mada-SemiBold', 'Arial';
-$tbs-bold: 'WorkSans-Bold', 'Mada-Bold', 'Arial';
-$tbs-recoleta-medium: 'Recoleta-Medium', 'MizanAR-Medium', 'Arial';
-$tbs-recoleta-semibold: 'Recoleta-SemiBold', 'MizanAR-Medium', 'Arial';
-$tbs-dw-bold: 'DrukWide-Bold-Cy-Web', '29LT-Bukra-Wide-Bold', 'Arial';
-$tbs-dw-super: 'DrukWide-Super-Web', '29LT-Bukra-Wide-Bold', 'Arial';
-$tbs-dc-super: 'DrukCond-Super-Cy-Web', '29LT-Bukra-Condensed-Bold', 'Arial';
-$tbs-druk-bold: 'Druk-Bold-Web', '29LT-Bukra-Condensed-Bold', 'Arial';
+$tbs-regular: "WorkSans-Regular", "Mada-Regular", "Arial";
+$tbs-light: "WorkSans-Light", "Mada-Regular", "Arial";
+$tbs-medium: "WorkSans-Medium", "Mada-Medium", "Arial";
+$tbs-semibold: "WorkSans-SemiBold", "Mada-SemiBold", "Arial";
+$tbs-bold: "WorkSans-Bold", "Mada-Bold", "Arial";
+$tbs-recoleta-medium: "Recoleta-Medium", "MizanAR-Medium", "Arial";
+$tbs-recoleta-semibold: "Recoleta-SemiBold", "MizanAR-Medium", "Arial";
+$tbs-dw-bold: "DrukWide-Bold-Cy-Web", "29LT-Bukra-Wide-Bold", "Arial";
+$tbs-dw-super: "DrukWide-Super-Web", "29LT-Bukra-Wide-Bold", "Arial";
+$tbs-dc-super: "DrukCond-Super-Cy-Web", "29LT-Bukra-Condensed-Bold", "Arial";
+$tbs-druk-bold: "Druk-Bold-Web", "29LT-Bukra-Condensed-Bold", "Arial";
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$tbs-arabic-regular: 'Mada-Regular', 'WorkSans-Regular', 'Arial';
-$tbs-arabic-medium: 'Mada-Medium', 'WorkSans-Medium', 'Arial';
-$tbs-arabic-semibold: 'Mada-SemiBold', 'WorkSans-SemiBold', 'Arial';
-$tbs-arabic-bold: 'Mada-Bold', 'WorkSans-Bold', 'Arial';
-$tbs-recoleta-arabic-medium: 'MizanAR-Medium', 'Recoleta-Medium', 'Arial';
-$tbs-dw-arabic-bold: '29LT-Bukra-Wide-Bold', 'DrukWide-Bold-Cy-Web', 'Arial';
-$tbs-dc-arabic-super: '29LT-Bukra-Condensed-Bold', 'DrukCond-Super-Cy-Web', 'Arial';
+$tbs-arabic-regular: "Mada-Regular", "WorkSans-Regular", "Arial";
+$tbs-arabic-medium: "Mada-Medium", "WorkSans-Medium", "Arial";
+$tbs-arabic-semibold: "Mada-SemiBold", "WorkSans-SemiBold", "Arial";
+$tbs-arabic-bold: "Mada-Bold", "WorkSans-Bold", "Arial";
+$tbs-recoleta-arabic-medium: "MizanAR-Medium", "Recoleta-Medium", "Arial";
+$tbs-dw-arabic-bold: "29LT-Bukra-Wide-Bold", "DrukWide-Bold-Cy-Web", "Arial";
+$tbs-dc-arabic-super: "29LT-Bukra-Condensed-Bold", "DrukCond-Super-Cy-Web",
+  "Arial";
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in TBS theme.
 $arial: $tbs-regular;
@@ -34,7 +35,7 @@ $alshaya-arabic-thin: $tbs-arabic-regular;
 $alshaya-thin-nodir: $tbs-regular;
 $alshaya-super-bold: $tbs-dw-bold;
 
-$alshaya-icons: 'alshaya-icons';
+$alshaya-icons: "alshaya-icons";
 
 // Icon Fonts
 $icons: (
@@ -121,5 +122,5 @@ $icons: (
   store-locator: "\e94d",
   dropdown-collapse: "\e94e",
   dropdown-expand: "\e94f",
-  ic-arrow-left: "\e950"
+  ic-arrow-left: "\e950",
 );

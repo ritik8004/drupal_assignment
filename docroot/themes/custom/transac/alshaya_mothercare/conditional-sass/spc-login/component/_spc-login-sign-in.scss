@@ -2,14 +2,14 @@
   @include breakpoint($upto-desktop) {
     margin-top: 0.5rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 0.5rem;
     }
   }
 
   .site-brand-wrapper {
     @include breakpoint($only-mobile) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: auto;
       }
     }

@@ -115,7 +115,7 @@
         height: 1.625rem;
         width: 6.625rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: 5.875rem;
         }
       }
@@ -124,7 +124,7 @@
         @include breakpoint($tablet) {
           width: calc(100% - 6.625rem) !important;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             width: calc(100% - 5.875rem) !important;
           }
         }

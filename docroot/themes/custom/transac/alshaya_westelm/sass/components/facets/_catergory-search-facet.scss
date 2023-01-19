@@ -3,7 +3,7 @@
     .facet-item {
       &.is-active:not(.facet-item--expanded):not(.sale-item) {
         span {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             font-family: $we-bold;
           }
         }
