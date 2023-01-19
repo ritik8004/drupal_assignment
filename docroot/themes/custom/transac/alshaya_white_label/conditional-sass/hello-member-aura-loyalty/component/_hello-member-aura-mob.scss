@@ -101,7 +101,7 @@
     .spcAuraSelect__indicator {
       padding: 0;
 
-      @include icon('chevrondown') {
+      @include icon("chevrondown") {
         font-size: rem(8);
         color: $hello-member-loyalty-aura-icon;
         transition: transform 0.3s ease-in-out;

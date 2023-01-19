@@ -9,7 +9,7 @@
     background: none;
     border: none;
 
-    @include icon('close', after) {
+    @include icon("close", after) {
       font-size: 1.5rem;
       color: $magazine-pdp-video-modal-close;
     }
@@ -70,7 +70,7 @@
     transition: opacity 0.4s ease-in-out;
 
     .control {
-      content: '';
+      content: "";
       display: block;
       top: 50%;
       #{$left}: 50%;
@@ -88,7 +88,7 @@
       transform: translateX(-50%);
       pointer-events: none;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: translateX(50%);
       }
     }

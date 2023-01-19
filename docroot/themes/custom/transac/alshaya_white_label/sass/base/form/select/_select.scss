@@ -34,17 +34,17 @@ form select.error {
       }
 
       &.select2-results__option--highlighted,
-      &[aria-selected=true] {
+      &[aria-selected="true"] {
         background-color: $primary_dropdown_bg;
       }
 
-      &[aria-disabled=true],
+      &[aria-disabled="true"],
       &:hover {
         color: $primary_dropdown_text;
         background: $primary_dropdown_option_hover;
       }
 
-      &[aria-disabled=true] {
+      &[aria-disabled="true"] {
         color: $primary_dropdown_option_disbled;
       }
     }

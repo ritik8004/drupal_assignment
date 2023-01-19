@@ -1,8 +1,8 @@
-input[type=radio] {
+input[type="radio"] {
   display: none;
 
-  ~.radio-sim::before {
-    content: '';
+  ~ .radio-sim::before {
+    content: "";
     position: absolute;
     #{$left}: 0;
     top: 50%;
@@ -13,7 +13,7 @@ input[type=radio] {
     cursor: pointer;
   }
 
-  ~.radio-sim {
+  ~ .radio-sim {
     cursor: pointer;
 
     @include icon(radio-empty, before) {
@@ -24,14 +24,14 @@ input[type=radio] {
   &:checked {
     cursor: pointer;
 
-    ~.radio-sim {
+    ~ .radio-sim {
       @include icon(radio-filled, before) {
         color: $hello-member-promo-radio-btn;
       }
     }
   }
 
-  ~.radio-label {
+  ~ .radio-label {
     font-size: rem(14);
     font-family: $alshaya-thin;
     color: $hello-member-promo-radio-btn;

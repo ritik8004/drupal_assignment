@@ -12,7 +12,7 @@
     min-height: 15rem;
 
     .loader-icon {
-      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      background: url("#{$base_theme_loader_img_directory_path}") #{$left} center no-repeat;
       padding-#{$left}: 2.5rem;
       background-size: contain;
       color: $spc-loader-text;
@@ -86,7 +86,7 @@
     }
 
     @include breakpoint($only-mobile) {
-      html[lang='ar'] & {
+      html[lang="ar"] & {
         margin-top: rem(6);
       }
     }
@@ -151,7 +151,7 @@
           width: 100%;
         }
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           direction: ltr;
           text-align: right;
         }
@@ -278,4 +278,3 @@
     }
   }
 }
-

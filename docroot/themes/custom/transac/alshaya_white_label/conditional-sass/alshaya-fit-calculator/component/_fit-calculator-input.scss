@@ -15,7 +15,7 @@
   color: $fit-calc-form-input;
   z-index: 1;
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     transform: translateY(-110%);
   }
 }
@@ -59,7 +59,7 @@
 #fit-calculator-container,
 #fit-cal-modal {
   .fitCalc-type-textfield {
-    input[type=text] {
+    input[type="text"] {
       border: 1px solid $fit-calc-select-border;
       font-size: 1rem;
       width: 100%;
@@ -67,7 +67,7 @@
       color: $fit-calc-form-input;
       background-color: $fit-calc-input-bg;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 1.125rem;
       }
     }

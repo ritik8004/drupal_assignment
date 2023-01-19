@@ -105,7 +105,7 @@
           color: $aura-order-confirmation-points-tooltip-txt;
           #{$left}: rem(-127);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             @include breakpoint($desktop) {
               right: rem(-10);
             }
@@ -116,7 +116,7 @@
             border-top-color: $aura-order-confirmation-points-tooltip-bg;
             margin-#{$left}: rem(37);
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               @include breakpoint($upto-desktop) {
                 left: 22%;
               }
@@ -162,7 +162,7 @@
       padding-#{$left}: rem(24);
       padding-#{$right}: rem(32);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         background-image: $aura-block-bg-mobile-ar;
       }
     }
@@ -185,7 +185,7 @@
         line-height: rem(20);
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         min-width: 12rem;
         background-image: $aura-join-link-ar;
         text-align: center;
@@ -205,7 +205,7 @@
     .spc-join-aura-link,
     .spc-link-aura-link,
     .spc-link-play-store {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         background: none;
       }
     }
@@ -242,7 +242,7 @@
         }
 
         &::before {
-          content: '!';
+          content: "!";
           color: $aura-spc-checkout-block-bg;
           background-color: $aura-spc-cart-expiry-block-color;
           width: rem(20);
@@ -305,7 +305,7 @@
         display: flex;
         align-items: center;
 
-        input[type=text] {
+        input[type="text"] {
           height: 3.125rem;
           padding: 0;
           border: none;

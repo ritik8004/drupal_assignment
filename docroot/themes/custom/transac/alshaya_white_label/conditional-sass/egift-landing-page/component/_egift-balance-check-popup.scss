@@ -36,7 +36,7 @@
     padding: 0 !important;
     border: none !important;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       max-width: 25.5rem !important;
     }
 
@@ -100,7 +100,7 @@
         }
       }
 
-      input[type=text] {
+      input[type="text"] {
         width: 100%;
         border: none;
         border-bottom: 1px solid $egift-input-border;
@@ -186,7 +186,7 @@
     margin-bottom: 2.375rem;
     line-height: normal;
 
-    input[type=text] {
+    input[type="text"] {
       height: 1.5rem;
       font-size: 0.875rem;
       color: $egift-form-input;

@@ -70,7 +70,7 @@
       transform: translateX(-50%);
       background: $aura-block-bg-desktop;
 
-      html[lang='ar'] & {
+      html[lang="ar"] & {
         transform: translateX(50%);
       }
 
@@ -122,7 +122,7 @@ body.aura-enabled {
       text-align: #{$left};
       line-height: normal;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 2.25rem;
       }
 
@@ -302,7 +302,7 @@ body.aura-enabled {
       background-clip: content-box, border-box;
       cursor: pointer;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         border-image-source: $aura-loyalty-club-no-card-block-sign-up-border-ar;
         background-image: $aura-loyalty-club-no-card-block-sign-up-bg-ar;
       }

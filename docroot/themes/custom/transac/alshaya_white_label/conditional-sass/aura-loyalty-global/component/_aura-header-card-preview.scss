@@ -119,7 +119,7 @@
           background-image: $aura-hello-tier-mobile;
           border-radius: rem(10);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             background-image: $aura-hello-tier-mobile-ar;
           }
         }
@@ -170,7 +170,7 @@
       }
 
       .accordion-icon {
-        background: url('#{$base_theme_img_directory_path}/aura/aura-chevron-down-shape.svg') center center no-repeat;
+        background: url("#{$base_theme_img_directory_path}/aura/aura-chevron-down-shape.svg") center center no-repeat;
         width: rem(32);
         height: rem(32);
         position: absolute;

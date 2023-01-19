@@ -170,7 +170,7 @@
     z-index: 1;
     opacity: 0;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       width: 2.125rem;
     }
   }
@@ -461,7 +461,7 @@
       max-width: 9.2rem;
       text-overflow: ellipsis;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         position: relative;
         display: inline-block;
       }
@@ -570,7 +570,7 @@
   }
 
   .order--items {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($tablet) {
         &::after {
           background-color: $order_accordion_open_bg;

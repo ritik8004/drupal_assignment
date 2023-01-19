@@ -1,5 +1,5 @@
 .ui-autocomplete-loading {
-  background-image: url(#{$base_theme_loader_img_directory_path}) !important;
+  background-image: url("#{$base_theme_loader_img_directory_path}") !important;
   background-size: contain;
   background-position: $right center !important;
   background-repeat: no-repeat !important;

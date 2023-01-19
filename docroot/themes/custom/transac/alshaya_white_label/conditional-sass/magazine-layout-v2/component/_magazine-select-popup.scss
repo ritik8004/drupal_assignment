@@ -7,7 +7,7 @@
           background-color: transparent;
           #{$left}: 0;
 
-          html[lang='ar'] & {
+          html[lang="ar"] & {
             transform: translateY(100%);
           }
         }
@@ -43,7 +43,7 @@
             transform: none;
             top: 0;
 
-            @include icon('close') {
+            @include icon("close") {
               padding-#{$left}: 0;
               font-size: 3.125rem;
               position: absolute;
@@ -55,7 +55,7 @@
               height: auto;
               transform: translate(-50%, -50%);
 
-              html[lang=ar] & {
+              html[lang="ar"] & {
                 transform: translate(50%, -50%);
               }
             }
@@ -164,8 +164,8 @@
             top: 0;
 
             &::before {
-              content: '';
-              background: url('#{$base_theme_img_directory_path}/icons/new-pdp-size-guide-icon.svg') center center no-repeat;
+              content: "";
+              background: url("#{$base_theme_img_directory_path}/icons/new-pdp-size-guide-icon.svg") center center no-repeat;
               width: 1.5625rem;
               height: 1.5625rem;
               display: inline-block;
@@ -223,7 +223,7 @@ body.overlay-select {
   .grouped-attr,
   .non-grouped-attr {
     &::before {
-      content: '';
+      content: "";
       position: fixed;
       width: 100vw;
       background-color: rgba(0, 0, 0, 0.48);

@@ -44,17 +44,17 @@
           margin-#{$right}: 0.8125rem;
 
           &.visa {
-            background: url(#{$base_theme_img_directory_path}/cards/card-visa-logo.svg) no-repeat;
+            background: url("#{$base_theme_img_directory_path}/cards/card-visa-logo.svg") no-repeat;
             background-size: contain;
           }
 
           &.mastercard {
-            background: url(#{$base_theme_img_directory_path}/cards/card-mastercard-logo.svg) no-repeat;
+            background: url("#{$base_theme_img_directory_path}/cards/card-mastercard-logo.svg") no-repeat;
             background-size: contain;
           }
 
           &.amex {
-            background: url(#{$base_theme_img_directory_path}/cards/card-amex-logo.svg) no-repeat;
+            background: url("#{$base_theme_img_directory_path}/cards/card-amex-logo.svg") no-repeat;
             background-size: contain;
           }
         }
@@ -89,7 +89,7 @@
           height: 1.875rem;
 
           &::after {
-            content: '';
+            content: "";
             display: inline-block;
             width: 18px;
             height: 24px;
@@ -97,7 +97,7 @@
             #{$right}: 0;
             position: absolute;
             transform: translateY(-50%);
-            background-image: url(#{$base_theme_img_directory_path}/icons/ic-trashbin.svg);
+            background-image: url("#{$base_theme_img_directory_path}/icons/ic-trashbin.svg");
             background-size: contain;
             background-repeat: no-repeat;
           }

@@ -1,9 +1,9 @@
 /**
   * Image path
  */
-$base_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/imgs';
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_white_label/imgs/icons/MC-loader.svg';
-$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/imgs';
+$base_theme_img_directory_path: "/themes/custom/transac/alshaya_white_label/imgs";
+$base_theme_loader_img_directory_path: "/themes/custom/transac/alshaya_white_label/imgs/icons/MC-loader.svg";
+$brand_theme_img_directory_path: "/themes/custom/transac/alshaya_white_label/imgs";
 
 /**
  * ALIGNMENT
@@ -77,7 +77,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
     position: relative;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       bottom: 0;
@@ -96,7 +96,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
   width: 100%;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     bottom: 0;
@@ -124,13 +124,13 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
   }
 
   &::after {
-    content: '';
+    content: "";
     position: fixed;
     top: 50%;
     right: 0;
     left: 0;
     transform: translateY(-50%);
-    background-image: url(#{$base_theme_loader_img_directory_path});
+    background-image: url("#{$base_theme_loader_img_directory_path}");
     background-repeat: no-repeat;
     background-size: contain;
     margin: 0 auto;
@@ -153,7 +153,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
   display: block; /* Fallback for non-webkit */
   font-size: $font-size;
   line-height: $line-height;
-  height: $font-size * $lines * $line-height;  /* Fallback for non-webkit */
+  height: $font-size * $lines * $line-height; /* Fallback for non-webkit */
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -196,7 +196,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
     #{$right}: 0;
     top: 0;
     z-index: 100;
-    background: url(#{$base_theme_loader_img_directory_path}) center no-repeat !important;
+    background: url("#{$base_theme_loader_img_directory_path}") center no-repeat !important;
     background-size: 5.5rem !important;
     padding-#{$left}: 0.625rem;
     padding-#{$right}: 0.625rem;
@@ -208,7 +208,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 // Mixin to add a spinner.
 // Can be used anywhere when you need a loader
 @mixin throbberLoader() {
-  background-image: url(#{$base_theme_loader_img_directory_path}) !important;
+  background-image: url("#{$base_theme_loader_img_directory_path}") !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
   background-size: 1.5rem;
@@ -243,7 +243,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 // When you need to block any user action until a AJAX is finished.
 @mixin fullPageTransparentOverlay($pseudo-element: after) {
   &::#{$pseudo-element} {
-    content: '';
+    content: "";
     background: transparent;
     position: fixed;
     top: 0;
@@ -259,7 +259,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 @mixin componentLoader($background-color, $pseudo-element) {
   &.loading {
     color: transparent;
-    background: $background-color url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+    background: $background-color url("#{$base_theme_loader_img_directory_path}") center center no-repeat;
     background-size: contain;
     // Prevent clicks and selection.
     pointer-events: none;
@@ -271,13 +271,13 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 }
 
 @mixin arabic-letter-spacing {
-  html[lang='ar'] & {
+  html[lang="ar"] & {
     letter-spacing: normal;
   }
 }
 
 @mixin arabic-line-height($value) {
-  html[lang='ar'] & {
+  html[lang="ar"] & {
     line-height: $value;
   }
 }
@@ -326,7 +326,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 
 // Force ltr on a element in arabic.
 @mixin force-ltr {
-  html[lang=ar] & {
+  html[lang="ar"] & {
     direction: ltr;
     display: inline-block;
 
@@ -391,7 +391,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
   }
 
   // Arabic font is longer so it gets clipped from bottom.
-  html[lang=ar] & {
+  html[lang="ar"] & {
     line-height: 1.2;
   }
 }
@@ -461,7 +461,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .select2-selection--single .select2-selection__rendered {
       width: 94%;
     }
@@ -527,11 +527,11 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
     line-height: 1.5;
     color: $greyish;
 
-    html[lang=ar] .safari & {
+    html[lang="ar"] .safari & {
       line-height: 1.2;
     }
 
-    html[lang=ar] .ie & {
+    html[lang="ar"] .ie & {
       line-height: 1.3;
     }
   }
@@ -592,7 +592,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
     color: transparent;
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     direction: ltr;
   }
 }
@@ -606,7 +606,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 
 // Online Booking Delivery Schedule Block Icons
 @mixin online-booking-icon($icon, $width: 18, $height: 18) {
-  content: '';
+  content: "";
   position: relative;
   display: inline-block;
   min-width: rem($width);
@@ -615,7 +615,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
   align-self: flex-start;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url('#{$base_theme_img_directory_path}/icons/#{$icon}');
+  background-image: url("#{$base_theme_img_directory_path}/icons/#{$icon}");
 
   @content;
 }

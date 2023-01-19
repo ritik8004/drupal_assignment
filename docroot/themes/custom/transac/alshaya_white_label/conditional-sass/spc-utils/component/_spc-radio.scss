@@ -1,9 +1,9 @@
-input[type=radio] {
+input[type="radio"] {
   display: none;
 
   ~ .radio-sim::before,
   ~ .payment-method-label-wrapper .radio-sim::before {
-    content: '';
+    content: "";
     position: absolute;
     #{$left}: 0;
     top: 50%;
@@ -47,7 +47,7 @@ input[type=radio] {
 .payment-method.payment-method-checkout_com_upapi {
   .payment-method-bottom-panel {
     .spc-checkout-card-option {
-      @include icon('check', after) {
+      @include icon("check", after) {
         position: absolute;
         font-size: 1.75rem;
         #{$left}: 0;

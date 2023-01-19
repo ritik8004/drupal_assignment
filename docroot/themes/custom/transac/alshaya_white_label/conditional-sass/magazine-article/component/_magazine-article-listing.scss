@@ -65,7 +65,7 @@
       text-decoration: underline;
       cursor: pointer;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding: 0.5rem 1.1875rem 0.4375rem 0.5625rem;
       }
 
@@ -78,7 +78,7 @@
         transform: rotate(270deg);
         color: $magazine-article-read-more-icon-color;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           top: 0;
           transform: rotate(90deg);
         }
@@ -116,14 +116,14 @@
       position: relative;
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         top: 1.375rem;
         #{$right}: 0;
         #{$left}: auto;
         width: 0.875rem;
         height: 0.875rem;
-        background: url('#{$base_theme_img_directory_path}/icons/sprites-life.svg') center center no-repeat;
+        background: url("#{$base_theme_img_directory_path}/icons/sprites-life.svg") center center no-repeat;
         transform: none;
         opacity: 1;
       }

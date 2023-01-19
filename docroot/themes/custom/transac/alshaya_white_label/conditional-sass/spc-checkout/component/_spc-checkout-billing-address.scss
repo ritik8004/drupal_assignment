@@ -118,7 +118,7 @@
       padding-#{$left}: 1.25rem;
       font-size: 0.875rem;
 
-      @include icon('chevron#{$right}', before) {
+      @include icon("chevron#{$right}", before) {
         position: absolute;
         #{$right}: 0.875rem;
         top: 50%;
@@ -138,7 +138,7 @@
       position: relative;
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         bottom: 0;

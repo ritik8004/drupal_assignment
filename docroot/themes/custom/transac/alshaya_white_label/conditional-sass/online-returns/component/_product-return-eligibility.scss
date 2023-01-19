@@ -44,8 +44,8 @@ body.nodetype--acq_product {
 
     .return-eligibility-pdp {
       &::before {
-        content: '';
-        background: url('#{$base_theme_img_directory_path}/icons/style-icons-ui-return.svg') no-repeat;
+        content: "";
+        background: url("#{$base_theme_img_directory_path}/icons/style-icons-ui-return.svg") no-repeat;
         width: rem(30);
         height: rem(30);
         margin-#{$right}: rem(12);

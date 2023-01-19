@@ -110,7 +110,7 @@
         transform: translateX(-50%);
         min-width: 16.625rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: translateX(50%);
         }
       }
@@ -190,7 +190,7 @@
           width: 10.8125rem;
 
           &::after {
-            content: '';
+            content: "";
             position: absolute;
             width: 0.625rem;
             height: 0.625rem;
@@ -204,7 +204,7 @@
             transform: rotate(45deg);
             background: $spc-tooltip-bg;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               transform: rotate(-45deg);
             }
           }
@@ -307,8 +307,8 @@
 
     .same-day-delivery {
       &::before {
-        content: '';
-        background: url('#{$base_theme_img_directory_path}/icons/same-day.svg') no-repeat;
+        content: "";
+        background: url("#{$base_theme_img_directory_path}/icons/same-day.svg") no-repeat;
         width: 3rem;
         height: 2.125rem;
       }
@@ -1097,7 +1097,7 @@
         color: $pdp_cc_storefinder_input;
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: calc(100% - 7.563rem);
       }
     }
@@ -1119,7 +1119,7 @@
       border: none;
       border-radius: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 7.563rem;
       }
     }
@@ -1685,7 +1685,7 @@
       }
 
       .ladda-button .ladda-spinner {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-left: -1rem;
         }
       }
@@ -1783,7 +1783,7 @@
     font-weight: bold;
     display: inline-block;
 
-    html[lang=ar] .safari & {
+    html[lang="ar"] .safari & {
       font-weight: normal;
     }
   }
@@ -1818,7 +1818,7 @@
           color: $pdp_size_option_selected_text;
           background: $pdp_size_option_selected_bg;
 
-          html[lang=ar] .safari & {
+          html[lang="ar"] .safari & {
             font-weight: normal;
           }
         }
@@ -1831,7 +1831,7 @@
       &.disabled {
         a,
         span {
-          background: url('#{$base_theme_img_directory_path}/icons/disabled.png') no-repeat;
+          background: url("#{$base_theme_img_directory_path}/icons/disabled.png") no-repeat;
           background-size: 100% 100%;
         }
       }
@@ -1906,7 +1906,7 @@ article[gtm-sku-type="simple"] {
           height: 2.188rem;
           text-align: center;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             float: none;
             margin-top: 0.5rem;
           }
@@ -1931,7 +1931,7 @@ article[gtm-sku-type="simple"] {
       content: " ";
       width: 1.25rem;
       height: 1.25rem;
-      background: url(#{$base_theme_loader_img_directory_path}) no-repeat;
+      background: url("#{$base_theme_loader_img_directory_path}") no-repeat;
       background-size: contain;
       display: inline-block;
       vertical-align: middle;
@@ -2081,7 +2081,7 @@ article.product-out-of-stock {
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .fake-apply-button {
     padding: 0.1rem 1rem 0.2rem;
     margin-right: 1rem;

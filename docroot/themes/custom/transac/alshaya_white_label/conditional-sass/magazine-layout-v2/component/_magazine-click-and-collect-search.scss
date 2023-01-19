@@ -48,8 +48,8 @@ input {
 
 .location-field-icon {
   &::before {
-    content: '';
-    background: url('#{$base_theme_img_directory_path}/icons/new-pdp-click-collect-location-icon.svg') center center no-repeat;
+    content: "";
+    background: url("#{$base_theme_img_directory_path}/icons/new-pdp-click-collect-location-icon.svg") center center no-repeat;
     width: 1.625rem;
     height: 1.625rem;
     display: block;

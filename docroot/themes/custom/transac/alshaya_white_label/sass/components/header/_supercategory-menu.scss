@@ -2,7 +2,7 @@
   .region__menu-primary {
     margin: 0;
 
-    @include breakpoint ($desktop) {
+    @include breakpoint($desktop) {
       background: $header_top_bg;
     }
 
@@ -11,7 +11,7 @@
         font-size: 0.75rem;
         padding: 0.625rem;
 
-        @include breakpoint ($desktop) {
+        @include breakpoint($desktop) {
           padding: 0.5rem 1rem;
           height: auto;
         }

@@ -5,14 +5,14 @@
       &::before {
         background-image: $aura-myaccount-vip;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-image: $aura-myaccount-vip-ar;
         }
 
         @include breakpoint($upto-desktop) {
           background-image: $aura-myaccount-vip-mobile;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             background-image: $aura-myaccount-vip-mobile-ar;
           }
         }
@@ -35,25 +35,25 @@
       &::before {
         background-image: $aura-myaccount-star;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-image: $aura-myaccount-star-ar;
         }
 
         @include breakpoint($upto-desktop) {
           background-image: $aura-myaccount-star-mobile;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             background-image: $aura-myaccount-star-mobile-ar;
           }
         }
       }
 
       &::after {
-        background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop-50.svg');
+        background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop-50.svg");
         mix-blend-mode: darken;
 
         @include breakpoint($upto-desktop) {
-          background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile-50.svg');
+          background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile-50.svg");
         }
       }
     }
@@ -70,8 +70,8 @@
     border-radius: 0.625rem;
 
     &::after {
-      content: '';
-      background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop.svg');
+      content: "";
+      background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop.svg");
       background-repeat: no-repeat;
       background-size: 27.9375rem;
       background-position: -10.625rem -8.125rem;
@@ -82,13 +82,13 @@
       height: 100%;
       z-index: -1;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: scaleX(-1);
       }
 
       @include breakpoint($upto-desktop) {
         background-size: 28.125rem;
-        background-image: url('#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile.svg');
+        background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile.svg");
         background-position-y: -8.1875rem;
         background-position-x: calc(50% - 3rem);
         width: 100%;
@@ -96,7 +96,7 @@
         #{$left}: 50%;
         transform: translateX(-50%);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: translateX(50%) scaleX(-1);
         }
       }
@@ -111,7 +111,7 @@
     }
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       #{$left}: 0;
@@ -121,14 +121,14 @@
       border-radius: 0.625rem;
       z-index: -1;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         background-image: $aura-loyalty-club-verified-user-ar;
       }
 
       @include breakpoint($upto-desktop) {
         background-image: $aura-loyalty-club-verified-user-mobile;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-image: $aura-loyalty-club-verified-user-mobile-ar;
         }
       }
@@ -183,7 +183,7 @@
         color: $aura-loyalty-club-verified-user-banner-text;
 
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           left: 0;

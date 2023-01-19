@@ -78,8 +78,8 @@
       }
 
       &::before {
-        content: '';
-        background: url('#{$brand_theme_img_directory_path}/icons/free-delivery.svg') no-repeat;
+        content: "";
+        background: url("#{$brand_theme_img_directory_path}/icons/free-delivery.svg") no-repeat;
         display: inline-block;
         width: rem(36);
         height: rem(24);

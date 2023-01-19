@@ -75,7 +75,7 @@
         display: inline-block;
         white-space: nowrap;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           padding-top: 0.1875rem;
           padding-bottom: 0.25rem;
         }
@@ -112,7 +112,7 @@
       padding: 0.125rem 1.5rem 0.1875rem 0.4375rem;
       display: inline-block;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding: 0.125rem 0.4375rem 0.1875rem 1.5rem;
       }
     }
@@ -124,7 +124,7 @@
         #{$right}: 0.25rem;
         top: 0;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           @include breakpoint($only-mobile) {
             top: -0.125rem;
           }
@@ -183,7 +183,7 @@
             text-align: center;
 
             &::before {
-              content: '';
+              content: "";
               position: absolute;
               width: 0.75rem;
               height: 0.75rem;
@@ -197,7 +197,7 @@
               #{$right}: 0.625rem;
               border-radius: 0.125rem;
 
-              html[lang=ar] & {
+              html[lang="ar"] & {
                 transform: rotate(135deg);
               }
             }
@@ -291,7 +291,7 @@
     .delivery-area-button {
       font-size: 0;
 
-      @include icon('chevrondown') {
+      @include icon("chevrondown") {
         font-size: 1.25rem;
         padding-#{$left}: 0.3125rem;
         position: absolute;

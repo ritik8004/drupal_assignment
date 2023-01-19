@@ -32,8 +32,8 @@
     position: relative;
     margin-bottom: 1.5rem;
 
-    input[type=text],
-    input[type=email] {
+    input[type="text"],
+    input[type="email"] {
       height: 1.5rem;
       font-size: 0.875rem;
     }
@@ -173,7 +173,7 @@
 
       &.radio-error {
         .form-type-radio {
-          input[type=radio] {
+          input[type="radio"] {
             & ~ label {
               &::before {
                 border: 1px solid $rr-form-error-border;
@@ -196,7 +196,7 @@
           margin-#{$right}: 0;
         }
 
-        input[type=radio] {
+        input[type="radio"] {
           & ~ label {
             &::before {
               width: 1.5rem;
@@ -249,14 +249,14 @@
     }
 
     &.radio-error {
-      input[type=checkbox] {
+      input[type="checkbox"] {
         & ~ label {
           border: 1px solid $rr-form-error-border;
         }
       }
     }
 
-    input[type=checkbox] {
+    input[type="checkbox"] {
       & ~ label {
         border: 1px solid $rr-tag-label-border;
         padding: 0.5rem;

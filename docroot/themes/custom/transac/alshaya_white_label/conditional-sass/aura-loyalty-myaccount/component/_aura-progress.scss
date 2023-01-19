@@ -48,7 +48,7 @@
       .start .fill {
         background-image: $aura-progress-hello;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-image: $aura-progress-hello-ar;
         }
       }
@@ -58,7 +58,7 @@
       .start .fill {
         background-image: $aura-progress-star;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-image: $aura-progress-star-ar;
         }
       }
@@ -68,7 +68,7 @@
       .start .fill {
         background-image: $aura-progress-vip-end;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-image: $aura-progress-vip-end-ar;
         }
       }
@@ -109,7 +109,7 @@
       &.next-tier-Tier2 {
         background-image: $aura-progress-star-end;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-image: $aura-progress-star-end-ar;
         }
       }
@@ -117,7 +117,7 @@
       &.next-tier-Tier3 {
         background-image: $aura-progress-vip-end;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-image: $aura-progress-vip-end-ar;
         }
       }
@@ -185,7 +185,7 @@
       padding-#{$right}: 0.375rem;
 
       &::after {
-        content: ':';
+        content: ":";
       }
     }
   }

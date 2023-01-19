@@ -104,7 +104,7 @@
         margin-#{$right}: rem(0);
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: translateX(-100%);
       }
 
@@ -174,7 +174,7 @@
 
     @include breakpoint($upto-desktop) {
       body,
-      html[lang=ar] & body {
+      html[lang="ar"] & body {
         margin-top: 0 !important;
       }
     }
@@ -191,7 +191,7 @@
       font-size: rem(16);
       letter-spacing: 0.8px;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-bottom: rem(8);
       }
     }

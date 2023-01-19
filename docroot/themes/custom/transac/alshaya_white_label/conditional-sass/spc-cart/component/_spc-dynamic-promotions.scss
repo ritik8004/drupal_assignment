@@ -17,7 +17,7 @@
           }
         }
 
-        &[threshold=true] {
+        &[threshold="true"] {
           background: $basket_fixed_percentage_threshold_reached_bg;
           color: $basket_fixed_percentage_inactive_header_promo_bg;
           border: 2px solid $basket_fixed_percentage_inactive_header_promo_bg;
@@ -142,7 +142,7 @@
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     line-height: normal;
   }
 }

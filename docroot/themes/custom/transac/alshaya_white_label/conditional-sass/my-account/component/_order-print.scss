@@ -28,7 +28,7 @@ body {
       margin: rem(28) 0;
       height: rem(42);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: rem(65);
       }
     }
@@ -137,7 +137,7 @@ body {
       direction: ltr;
       width: 100%;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         text-align: right;
       }
     }
@@ -359,7 +359,7 @@ body.path--confirmation.alias--confirmation-print {
       color: $order_print_dark_txt;
       font-weight: bold;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         font-weight: normal;
         font-family: $alshaya-arabic-bold;
       }

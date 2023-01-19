@@ -18,7 +18,7 @@
       #{$left}: 50%;
       transform: translateX(-50%);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: translateX(50%);
       }
 
@@ -38,7 +38,7 @@
           margin-#{$left}: rem(50);
         }
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           left: 10%;
 
           @include breakpoint($tablet) {
@@ -72,7 +72,7 @@
         }
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: translateX(80%);
 
         &::before,
@@ -103,7 +103,7 @@
           }
         }
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: translateX(50%);
 
           &::before,
@@ -134,7 +134,7 @@
             margin-#{$left}: rem(-13);
           }
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             left: 50%;
 
             @include breakpoint($only-mobile) {
@@ -150,7 +150,7 @@
 .aura-pdp-points-section {
   .tooltip-anchor {
     .tooltip-box {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: translateX(0);
       }
     }
@@ -164,14 +164,13 @@
       bottom: rem(32);
       transform: translateX(-75%);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         left: rem(-10);
         right: unset;
         transform: none;
       }
     }
   }
-
 
   .points-expiring {
     @include breakpoint($only-mobile) {

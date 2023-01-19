@@ -10,7 +10,7 @@
     transition: max-height 0.25s ease-in;
   }
 
-  input[type=date] {
+  input[type="date"] {
     background-color: $hello-member-registration-fields-bg;
     border: 0;
     border-bottom: rem(1) solid currentColor;
@@ -21,12 +21,12 @@
       display: none;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       text-align: right;
     }
   }
 
-  input[type=date] ~ label:not(.active-label) {
+  input[type="date"] ~ label:not(.active-label) {
     font-size: rem(12) !important;
     color: $hello-member-registration-labels-txt !important;
     position: absolute !important;
@@ -34,7 +34,7 @@
     top: rem(-16) !important;
   }
 
-  input[type=date]:focus ~ label {
+  input[type="date"]:focus ~ label {
     top: rem(-16) !important;
     bottom: 0 !important;
     #{$left}: 0 !important;
@@ -42,7 +42,7 @@
     font-size: rem(12) !important;
   }
 
-  input[type=date] ~ label.error {
+  input[type="date"] ~ label.error {
     font-size: rem(12) !important;
     color: $primary_input_inline_error !important;
     position: relative !important;
@@ -66,11 +66,11 @@
       position: absolute;
     }
 
-    &[aria-expanded='false'] {
+    &[aria-expanded="false"] {
       @include icon(plus, after);
     }
 
-    &[aria-expanded='true'] {
+    &[aria-expanded="true"] {
       @include icon(minus, after);
     }
   }
