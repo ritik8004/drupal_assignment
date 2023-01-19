@@ -123,8 +123,8 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
    */
   public function checkoutEvent(Request $request) {
     $action = $request->request->get('action');
-    $cart = $request->request->get('cart');
-    $skus_quantity = $request->request->get('skus_quantity');
+    $cart = json_decode($request->request->get('cart'), TRUE);
+    $skus_quantity = json_decode($request->request->get('skus_quantity'), TRUE);
     if (empty($action) || (empty($cart) && empty($skus_quantity))) {
       throw new BadRequestHttpException('Missing required parameters');
     }
@@ -136,7 +136,6 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
     switch ($action) {
       case 'place order success':
         $order_id = $request->request->get('order_id');
-        $cart = $request->request->get('cart');
         $payment_method = $request->get('payment_method');
         $customer_id = $request->get('customer_id');
         $account_id = 0;
