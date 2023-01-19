@@ -1,4 +1,4 @@
-input[type=radio] {
+input[type="radio"] {
   ~ .radio-label,
   ~ .payment-method-label-wrapper .radio-label {
     .impress {
@@ -11,7 +11,7 @@ input[type=radio] {
 .payment-method.payment-method-checkout_com_upapi {
   .payment-method-bottom-panel {
     .spc-checkout-card-option {
-      @include icon('check', after) {
+      @include icon("check", after) {
         position: absolute;
         font-size: 1.75rem;
         #{$left}: 0;

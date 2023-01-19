@@ -5,7 +5,7 @@
     padding: 0;
     box-shadow: none;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding: 0;
       top: 2.75rem;
     }
@@ -18,12 +18,12 @@
     .frontpage & {
       bottom: -4.25rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         bottom: -4.625rem;
       }
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       bottom: -0.25rem;
     }
 
@@ -108,7 +108,7 @@
         background-color: transparent;
       }
 
-      @include icon_img('#{$cos_theme_img_directory_path}/icons/search.svg', 2.5rem, 2.5rem, after);
+      @include icon_img("#{$cos_theme_img_directory_path}/icons/search.svg", 2.5rem, 2.5rem, after);
 
       &::after {
         height: 2.5rem;
@@ -337,7 +337,7 @@ body {
       }
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-mobile) {
         margin-top: 6.8125rem;
       }

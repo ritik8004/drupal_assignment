@@ -1,8 +1,8 @@
 // Type = Telephone.
 .spc-type-tel {
   .field-wrapper {
-    input[type=text],
-    input[type=tel] {
+    input[type="text"],
+    input[type="tel"] {
       // No rtl.
       padding-left: 2.5rem !important;
     }

@@ -16,7 +16,7 @@
         margin-right: rem(3);
 
         &::before {
-          content: '';
+          content: "";
           border: 1px solid $magv2-product-swatch-active-border;
           position: absolute;
           top: -3px;
@@ -31,4 +31,3 @@
     }
   }
 }
-

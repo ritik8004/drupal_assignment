@@ -45,7 +45,7 @@
   }
 
   .form-actions {
-    @include pdp_icon_img('#{$aeo_theme_img_directory_path}/assets/search.svg', 2.1875rem, 2.1875rem, after);
+    @include pdp_icon_img("#{$aeo_theme_img_directory_path}/assets/search.svg", 2.1875rem, 2.1875rem, after);
 
     &::after {
       border-#{$left}: 0;

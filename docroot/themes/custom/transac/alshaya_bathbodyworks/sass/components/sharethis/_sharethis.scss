@@ -5,42 +5,42 @@
   }
 
   .st_facebook_custom {
-    @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-facebook-share.svg', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img("#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-facebook-share.svg", 1.6875rem, 1.6875rem);
 
     &:hover {
-      @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-facebook-sharehover.svg', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img("#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-facebook-sharehover.svg", 1.6875rem, 1.6875rem);
     }
   }
 
   .st_twitter_custom {
-    @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-twitter-share.svg', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img("#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-twitter-share.svg", 1.6875rem, 1.6875rem);
 
     &:hover {
-      @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-twitter-sharehover.svg', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img("#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-twitter-sharehover.svg", 1.6875rem, 1.6875rem);
     }
   }
 
   .st_pinterest_custom {
-    @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-pinterest-share.svg', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img("#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-pinterest-share.svg", 1.6875rem, 1.6875rem);
 
     &:hover {
-      @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-pinterest-sharehover.svg', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img("#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-pinterest-sharehover.svg", 1.6875rem, 1.6875rem);
     }
   }
 
   .st_instagram_custom {
-    @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-instagram-share.svg', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img("#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-instagram-share.svg", 1.6875rem, 1.6875rem);
 
     &:hover {
-      @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-instagram-sharehover.svg', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img("#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-instagram-sharehover.svg", 1.6875rem, 1.6875rem);
     }
   }
 
   .st_youtube_custom {
-    @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-youtube.png', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img("#{$base_theme_img_directory_path}/social-icons/pdp/ic-youtube.png", 1.6875rem, 1.6875rem);
 
     &:hover {
-      @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-youtubeselect.png', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img("#{$base_theme_img_directory_path}/social-icons/pdp/ic-youtubeselect.png", 1.6875rem, 1.6875rem);
     }
   }
 

@@ -39,11 +39,11 @@ header {
         li.menu--one__list-item {
           margin-#{$right}: rem(10);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             float: right;
           }
 
-          html[lang=en] & {
+          html[lang="en"] & {
             float: left;
           }
 
@@ -86,7 +86,7 @@ header {
       height: rem(48);
       margin-top: rem(9);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: rem(48);
       }
     }
@@ -108,21 +108,21 @@ header {
         top: rem(10);
         #{$right}: rem(-7);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           top: 0;
           left: rem(1);
         }
       }
 
       .cart-link {
-        background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) center no-repeat;
+        background: url("#{$ay_theme_img_directory_path}/icons/basket.svg?v1") center no-repeat;
         width: rem(24);
         height: rem(24);
         background-size: rem(14) rem(18);
 
         @include breakpoint($desktop) {
           &:hover {
-            background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1);
+            background-image: url("#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1");
 
             .quantity {
               color: $primary_minicart_hover;
@@ -137,7 +137,7 @@ header {
         color: $cart_filled_color;
         padding-top: rem(4);
         border-radius: 0;
-        background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1);
+        background-image: url("#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1");
         width: rem(20);
         height: rem(20);
         background-size: 68%;
@@ -173,12 +173,12 @@ header {
   }
 
   .cart-link {
-    background: url(#{$ay_theme_img_directory_path}/icons/basket.svg?v1) center no-repeat;
+    background: url("#{$ay_theme_img_directory_path}/icons/basket.svg?v1") center no-repeat;
     background-size: rem(14) rem(18);
 
     @include breakpoint($desktop) {
       &:hover {
-        background-image: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg);
+        background-image: url("#{$ay_theme_img_directory_path}/icons/basket-filled.svg");
 
         .quantity {
           color: $primary_minicart_hover;
@@ -193,7 +193,7 @@ header {
     color: $cart_filled_color;
     padding-top: rem(4);
     border-radius: 0;
-    background: url(#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1) center no-repeat;
+    background: url("#{$ay_theme_img_directory_path}/icons/basket-filled.svg?v1") center no-repeat;
     width: rem(24);
     height: rem(24);
     background-size: rem(14) rem(18);
@@ -259,7 +259,7 @@ header {
         width: rem(32);
         margin-#{$right}: 0;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(180deg);
         }
       }
@@ -293,7 +293,7 @@ header {
   padding-top: rem(16);
 
   &::before {
-    content: '';
+    content: "";
     width: 100%;
     position: absolute;
     border-top: rem(1) solid $header_border;
@@ -400,7 +400,7 @@ header {
     @include breakpoint($only-tablet) {
       .site-brand-home {
         img {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             width: 100%;
             height: auto;
           }

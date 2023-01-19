@@ -18,7 +18,7 @@
           margin-#{$right}: 3%;
         }
 
-        input[type=radio] {
+        input[type="radio"] {
           & ~ label {
             &::before {
               width: 4rem;

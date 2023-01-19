@@ -1,10 +1,10 @@
-input[type=checkbox] ~ label {
+input[type="checkbox"] ~ label {
   @include icon(check-box-empty);
 
   color: $primary_checkbox_empty;
 }
 
-input[type=checkbox]:checked ~ label {
+input[type="checkbox"]:checked ~ label {
   @include icon(check-box-filled) {
     color: $primary_checkbox_filled;
   }

@@ -15,7 +15,7 @@
   .slick-prev,
   .slick-next {
     &::before {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: rotate(0deg);
       }
     }

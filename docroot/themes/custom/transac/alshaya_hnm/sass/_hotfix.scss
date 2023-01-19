@@ -46,7 +46,7 @@ body.chrome {
 
     .price--discount {
       @include breakpoint($tablet) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           display: inline;
         }
       }
@@ -54,7 +54,7 @@ body.chrome {
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .acq-cart-summary {
     .price-wrapper {
       .price-amount {
@@ -101,7 +101,7 @@ body.nodetype--acq_product.ucbrowser .dialog-product-image-gallery-container-mob
   width: 3rem;
 }
 
-html[lang=ar] .safari #edit-hello-member .mobile-number-field .mobile-input--wrapper .prefix {
+html[lang="ar"] .safari #edit-hello-member .mobile-number-field .mobile-input--wrapper .prefix {
   @include breakpoint($only-mobile) {
     line-height: 1.6;
   }

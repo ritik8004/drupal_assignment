@@ -58,7 +58,7 @@
       width: 24%;
 
       .c-footer-menu--help {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: auto;
         }
       }
@@ -87,8 +87,8 @@
       padding-#{$left}: 0.75rem;
     }
 
-    html[lang=en] &,
-    html[lang=ar] {
+    html[lang="en"] &,
+    html[lang="ar"] {
       width: auto;
       margin-#{$left}: 0;
 
@@ -106,7 +106,7 @@
       padding-bottom: 1rem;
       padding-#{$left}: 0.5rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-right: 0;
       }
     }
@@ -148,14 +148,14 @@
     }
   }
 
-  @include breakpoint ($only-mobile) {
+  @include breakpoint($only-mobile) {
     border-top-color: $accordion_border;
     border-bottom-color: $accordion_border;
   }
 }
 
 .c-footer-menu--help {
-  @include breakpoint ($only-mobile) {
+  @include breakpoint($only-mobile) {
     margin-bottom: 1.5rem;
   }
 }
@@ -212,7 +212,7 @@
       font-size: 0.875rem;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding: 0.875rem 1.125rem;
     }
 
@@ -323,7 +323,7 @@
   @include breakpoint($only-mobile) {
     #{$left}: -1.25rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       right: -1.75rem;
     }
   }

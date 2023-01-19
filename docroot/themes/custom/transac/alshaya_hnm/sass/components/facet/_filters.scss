@@ -118,7 +118,7 @@
             background: $plp_filter_active_item;
           }
 
-          input[checked='checked'] ~ label {
+          input[checked="checked"] ~ label {
             font-family: $hnm-regular;
             background-color: $filter_hover;
           }
@@ -182,7 +182,7 @@
     > .block-facet-blockcategory-facet-plp,
     > .block-facet-blockcategory-facet-promo,
     > .block-facet-blockcategory-facet-search {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: 3.625rem;
       }
     }

@@ -48,7 +48,7 @@
       width: 68%;
       display: inline-flex;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 64%;
       }
     }
@@ -59,8 +59,8 @@
   }
 
   .c-footer-menu--about {
-    html[lang=en] &,
-    html[lang=ar] & {
+    html[lang="en"] &,
+    html[lang="ar"] & {
       @include breakpoint($desktop) {
         width: 45%;
         margin-#{$left}: 4%;
@@ -96,7 +96,7 @@
 }
 
 .c-footer-menu--help {
-  html[lang=ar] & {
+  html[lang="ar"] & {
     @include breakpoint($desktop) {
       width: 45%;
     }
@@ -139,7 +139,7 @@
     padding-#{$right}: 0;
     border: 1px solid $primary_input_border;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding-left: 0;
     }
 
@@ -209,7 +209,7 @@
       max-width: 12.5rem;
       margin-#{$right}: 0.625rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         @include breakpoint($desktop) {
           max-width: 14rem;
         }
@@ -236,7 +236,7 @@
     text-transform: unset;
     width: 100%;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       font-family: $dh-arabic-medium;
     }
 

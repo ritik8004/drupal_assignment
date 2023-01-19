@@ -36,7 +36,7 @@
         }
 
         @include breakpoint($desktop) {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             margin-top: rem(2);
           }
         }

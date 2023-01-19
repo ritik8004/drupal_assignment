@@ -6,7 +6,7 @@ body.sub-brand-logo {
           width: 10.25rem;
           height: 0.6875rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             width: 7.5rem;
             height: 2rem;
 
@@ -39,7 +39,7 @@ body.sub-brand-logo {
       z-index: 14;
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;

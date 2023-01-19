@@ -8,7 +8,7 @@
   .super-category-enabled {
     margin-top: rem(125);
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: rem(125);
     }
 
@@ -163,7 +163,7 @@
         #{$left}: rem(8);
         top: rem(43);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           top: rem(43);
         }
       }
@@ -214,7 +214,7 @@
         top: 0;
         margin-#{$left}: rem(13);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           top: 0;
         }
       }
@@ -273,7 +273,7 @@
 .super-category-enabled {
   &.magazine-layout-v2 {
     &.nodetype--acq_product {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         @include breakpoint($only-mobile) {
           margin-top: rem(32);
         }

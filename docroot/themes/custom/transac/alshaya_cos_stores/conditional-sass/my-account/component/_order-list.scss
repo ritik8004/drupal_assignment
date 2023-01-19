@@ -26,7 +26,7 @@
 
 .alshaya-acm-customer-order-list-search {
   .form-actions {
-    @include icon_img('#{$cos_theme_img_directory_path}/icons/search.svg', 2.1875rem, 2.1875rem, after);
+    @include icon_img("#{$cos_theme_img_directory_path}/icons/search.svg", 2.1875rem, 2.1875rem, after);
 
     &::after {
       border-#{$left}: 0;

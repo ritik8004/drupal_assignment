@@ -27,7 +27,7 @@
 }
 
 @include breakpoint($only-mobile) {
-  html[lang=ar] {
+  html[lang="ar"] {
     body[class*="-return-confirmation"] {
       .block-page-title-block {
         .back-link {
