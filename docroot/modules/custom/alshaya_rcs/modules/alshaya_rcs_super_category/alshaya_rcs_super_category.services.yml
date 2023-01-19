@@ -18,6 +18,8 @@ services:
       - '@entity_type.manager'
       - '@module_handler'
       - '@alshaya_config.manager'
+      - '@path.current'
+      - '@rcs_placeholders.enrichment_helper'
   alshaya_rcs_super_category.product_category_tree:
     class: Drupal\alshaya_rcs_super_category\Service\RcsProductCategoryTree
     decorates: alshaya_acm_product_category.product_category_tree
