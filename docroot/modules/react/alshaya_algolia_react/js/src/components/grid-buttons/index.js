@@ -4,17 +4,16 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../../js/utilities/display';
 
 const {
-  defaultColgrid,
+  defaultColgrid: defaultColGridDesktop,
   defaultColGridMobile,
 } = drupalSettings.algoliaSearch;
-let defaultcolgrid = '';
-// Set default col grid for mobile view.
-if (isMobile()) {
-  defaultcolgrid = hasValue(defaultColGridMobile) ? defaultColGridMobile : 'small';
-} else {
-  // Set default col grid for desktop view.
-  defaultcolgrid = hasValue(defaultColgrid) ? defaultColgrid : 'small';
+
+let defaultcolgrid = isMobile() ? defaultColGridMobile : defaultColGridDesktop;
+// Set default value for col grid.
+if (!hasValue(defaultcolgrid)) {
+  defaultcolgrid = 'small';
 }
+
 const GridButtons = ({
   toggle,
 }) => (

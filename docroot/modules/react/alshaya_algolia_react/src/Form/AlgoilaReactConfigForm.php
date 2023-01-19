@@ -80,10 +80,10 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
 
     $form['default_col_grid'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Default col grid'),
+      '#title' => $this->t('Default col grid for desktop'),
       '#default_value' => $config->get('default_col_grid'),
       '#options' => ['small' => $this->t('Small'), 'large' => $this->t('Large')],
-      '#description' => $this->t('Set value for default col grid.'),
+      '#description' => $this->t('Set value for default col grid for desktop view.'),
     ];
 
     $form['default_col_grid_mobile'] = [

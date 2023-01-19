@@ -72,7 +72,7 @@ const PlpApp = ({
     max_category_tree_depth: categoryDepth,
     subCategories,
     categoryFacetEnabled,
-    defaultColgrid,
+    defaultColgrid: defaultColGridDesktop,
     defaultColGridMobile,
   } = drupalSettings.algoliaSearch;
 
@@ -81,13 +81,11 @@ const PlpApp = ({
   if (ruleContext !== undefined && ruleContext.length > 0) {
     context = ruleContext.split(',');
   }
-  let defaultcolgrid = '';
-  // Set default col grid for mobile view.
-  if (isMobile()) {
-    defaultcolgrid = hasValue(defaultColGridMobile) ? defaultColGridMobile : 'small';
-  } else {
-    // Set default col grid for desktop view.
-    defaultcolgrid = hasValue(defaultColgrid) ? defaultColgrid : 'small';
+
+  let defaultcolgrid = isMobile() ? defaultColGridMobile : defaultColGridDesktop;
+  // Set default value for col grid.
+  if (!hasValue(defaultcolgrid)) {
+    defaultcolgrid = 'small';
   }
 
   const { indexName } = drupalSettings.algoliaSearch.listing;
