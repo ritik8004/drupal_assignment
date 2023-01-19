@@ -116,10 +116,10 @@ class AlshayaRcsSuperCategoryManager extends AlshayaSuperCategoryManager {
 
     if (empty($term)) {
       // Get enriched entity by current path.
-      // Fallback logic to get first term.
       // If current path matches the term overridden path, we return that term.
       $term = $this->enrichmentHelper->getEnrichedEntityByPath('category', 'internal:'. $this->currentPath->getPath());
       if ($term === NULL) {
+        // Fallback logic to get first term.
         $categories = $this->productCategoryTree->getCategoryRootTerms();
         $category = reset($categories);
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category['id']);
