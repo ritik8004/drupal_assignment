@@ -903,8 +903,6 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {object} data
    *   The object of sku values and their requested quantity, like {sku1: qty1}.
    *   Pass null here to refresh stock for all products in the cart.
-   * @returns {Promise}
-   *   The stock status for all skus.
    */
   window.commerceBackend.triggerStockRefresh = async function (data) {
     const cartData = Drupal.alshayaSpc.getCartData();

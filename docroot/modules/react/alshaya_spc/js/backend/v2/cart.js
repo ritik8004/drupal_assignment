@@ -23,7 +23,6 @@ import {
   isNumber,
 } from '../../../../js/utilities/conditionsUtility';
 import {
-  callDrupalApi,
   callMagentoApi,
   getCartSettings,
 } from '../../../../js/utilities/requestHelper';
@@ -281,9 +280,9 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
     const exceptionType = getExceptionMessageType(response.data.error_message);
     if (exceptionType === 'OOS') {
-      await window.commerceBackend.triggerStockRefresh({ [sku]: 0 }, callDrupalApi);
+      window.commerceBackend.triggerStockRefresh({ [sku]: 0 });
     } else if (exceptionType === 'not_enough') {
-      await window.commerceBackend.triggerStockRefresh({ [sku]: quantity }, callDrupalApi);
+      window.commerceBackend.triggerStockRefresh({ [sku]: quantity });
     }
 
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
@@ -369,7 +368,7 @@ window.commerceBackend.refreshCart = async (data) => {
         clearProductStatusStaticCache();
         window.commerceBackend.clearStockStaticCache();
         // Refresh stock for all items in the cart.
-        window.commerceBackend.triggerStockRefresh(null, callDrupalApi);
+        window.commerceBackend.triggerStockRefresh(null);
       }
       // Process cart data.
       response.data = await getProcessedCartData(response.data);

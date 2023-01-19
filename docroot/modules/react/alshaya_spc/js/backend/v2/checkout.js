@@ -35,7 +35,11 @@ import {
   isArray,
 } from '../../../../js/utilities/conditionsUtility';
 import { cartErrorCodes, getDefaultErrorMessage } from '../../../../js/utilities/error';
-import { callDrupalApi, callMagentoApi, getCartSettings } from '../../../../js/utilities/requestHelper';
+import {
+  callDrupalApi,
+  callMagentoApi,
+  getCartSettings,
+} from '../../../../js/utilities/requestHelper';
 import collectionPointsEnabled from '../../../../js/utilities/pudoAramaxCollection';
 import { isCollectionPoint } from '../../utilities/cnc_util';
 import {
@@ -2102,24 +2106,35 @@ window.commerceBackend.addShippingMethod = async (data) => {
  *   The action.
  * @param {object} data
  *   The params for checkout event.
- *
- * @returns {Promise<AxiosPromise<Object>>}
  */
-const triggerCheckoutEvent = (event, data) => callDrupalApi(
-  '/spc/checkout-event',
-  'POST',
-  {
-    form_params: {
-      ...data,
-      action: event,
-    },
-  },
-).catch((error) => {
-  logger.error('Error occurred while triggering checkout event @event. Message: @message', {
-    '@event': event,
-    '@message': error.message,
+const triggerCheckoutEvent = (event, data) => {
+  const params = new URLSearchParams();
+  Object.entries(data).forEach(([key, value]) => {
+    let stringVal = value;
+    if (typeof value === 'object') {
+      try {
+        stringVal = JSON.stringify(value);
+      } catch (e) {
+        logger.warning('Could not stringify object for checkout: @data.', {
+          '@data': value,
+        });
+      }
+    }
+    params.append(key, stringVal);
   });
-});
+  params.append('action', event);
+
+  const retVal = navigator.sendBeacon(
+    '/spc/checkout-event',
+    params,
+  );
+
+  if (!retVal) {
+    logger.error('Error occurred while triggering checkout event @event.', {
+      '@event': event,
+    });
+  }
+};
 
 /**
  * Process operations post order placed.
@@ -2152,7 +2167,7 @@ const processPostOrderPlaced = async (cart, orderId, paymentMethod) => {
     customer_id: customerId,
   };
 
-  await triggerCheckoutEvent('place order success', data);
+  triggerCheckoutEvent('place order success', data);
 };
 
 /**
