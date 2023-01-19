@@ -19,6 +19,8 @@ $silver: #f4f4f4;
 $grey: #e1e1e1;
 $grey-two: #aaa;
 $grey-three: #888;
+$grey-four: #ddd;
+$grey-five: #dadada;
 $metal: #626262;
 $black: #000;
 $black_two: #333;
@@ -38,7 +40,6 @@ $surf-crest: #c5ccc1;
 $white-smoke: #f6f6f6;
 $success-green: #39b54a;
 $alizarin: #e51b23;
-$grey-four: #ddd;
 $green-two: #357a74;
 $green-three: #004435;
 $frangipani: #ffd1a1;
@@ -592,3 +593,11 @@ $country-switcher-dropdown: $cyprus;
 // Advanced Page components.
 $advanced-page-accordion-active-title: $cyprus;
 $advanced-page-accordion-bg: $nourishing-white;
+
+// Checkout steps
+$cko-steps-connector-complete: $grey-three;
+$cko-steps-connector-incomplete: $grey-five;
+$cko-steps-active-border: $cyprus;
+$cko-steps-active-bg: $cyprus;
+$cko-steps-active-txt: $nourishing-white;
+$cko-steps-label-txt: $cyprus;
