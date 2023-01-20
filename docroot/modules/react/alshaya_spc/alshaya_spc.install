@@ -15,16 +15,16 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Enable settings for cart notification to be displayed as side drawer.
+ * Add scree width padding config.
  */
 function alshaya_spc_update_9406() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['alshaya_spc.settings'],
+    ['alshaya_spc.screen_width_padding'],
     'alshaya_spc',
     'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
+    AlshayaConfigManager::MODE_REPLACE
   );
 }
 

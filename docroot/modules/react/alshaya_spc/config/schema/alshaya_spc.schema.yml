@@ -82,3 +82,11 @@ alshaya_spc.express_delivery:
     express_delivery_label:
       type: string
       label: 'Express Delivery Label'
+
+alshaya_spc.screen_width_padding:
+  type: config_object
+  label: 'Screen Width Padding Configuration'
+  mapping:
+    screen_width_padding_status:
+      type: boolean
+      label: 'Screen Width Padding status'
