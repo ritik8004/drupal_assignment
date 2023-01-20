@@ -2,6 +2,11 @@ var glegem = glegem || function () {
   (window["glegem"].q = window["glegem"].q || []).push(arguments);
 };
 
+glegem("OnClientEvent", function (source, data) {
+  console.log(GEMerchantUtils.ClientEvents.BILLING_DETAILS_COMPLETED);
+  console.log(source, data);
+});
+
 glegem("OnCheckoutStepLoaded", function (data) {
   switch (data.StepId) {
     case data.Steps.LOADED:
