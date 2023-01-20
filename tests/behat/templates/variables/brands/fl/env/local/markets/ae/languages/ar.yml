@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://flae.alshaya.lndo.site/ar/'
+  url_base_uri: 'https://flae.alshaya.lndo.site/ar'
   product_listing_page_url: '/shop-body-care/featured/'
   language_collection_filter: 'Collection'
   language_sort_filter: 'sort by'

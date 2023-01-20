@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://pbkw.alshaya.lndo.site/ar/'
+  url_base_uri: 'https://pbkw.alshaya.lndo.site/ar'
   language_collection_filter: 'Collection'
   language_sort_filter: 'رتب حسب'
   language_price_filter: 'السعر'

@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://hmkw.alshaya.lndo.site/ar/'
+  url_base_uri: 'https://hmkw.alshaya.lndo.site/ar'
   language_collection_filter: 'Collection'
   language_sort_filter: 'sort by'
   language_price_filter: 'Price'

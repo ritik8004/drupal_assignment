@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://hmae.alshaya.lndo.site/en/'
+  url_base_uri: 'https://hmae.alshaya.lndo.site/en'
   collection_filter: ''
   sort_filter: 'sort by'
   price_filter: 'Price'

@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://mckw.alshaya.lndo.site/en/'
+  url_base_uri: 'https://mckw.alshaya.lndo.site/en'
   spc_basket_page: '/shop-baby-clothing/baby-newborn-18-months/'
   collection_filter: 'Collection'
   sort_filter: 'sort by'
