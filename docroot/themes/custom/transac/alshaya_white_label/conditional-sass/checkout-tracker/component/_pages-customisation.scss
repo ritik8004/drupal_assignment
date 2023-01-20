@@ -10,11 +10,6 @@
     margin-bottom: rem(4);
   }
 
-  .alias--checkout &,
-  .alias--checkout-confirmation & {
-    margin-bottom: (64);
-  }
-
   .hide-checkout-tracker & {
     display: none;
   }
@@ -29,7 +24,7 @@
 
     .alias--checkout &,
     .alias--checkout-confirmation & {
-      margin-bottom: (104);
+      margin-bottom: rem(48);
     }
   }
 
