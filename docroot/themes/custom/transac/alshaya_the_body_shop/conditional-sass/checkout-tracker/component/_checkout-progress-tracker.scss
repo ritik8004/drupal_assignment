@@ -3,8 +3,11 @@
     .progress-bar {
       .step {
         span {
-          font-size: rem(13);
           font-family: $tbs-recoleta-medium;
+
+          @include breakpoint($only-mobile) {
+            font-size: rem(13);
+          }
 
           html[lang="ar"] & {
             font-size: rem(16);
