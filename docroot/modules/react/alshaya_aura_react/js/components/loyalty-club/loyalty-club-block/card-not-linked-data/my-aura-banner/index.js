@@ -9,6 +9,7 @@ import ConditionalView
   from '../../../../../../../js/utilities/components/conditional-view';
 import AuraFormLinkCardOTPModal
   from '../../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 class MyAuraBanner extends React.Component {
   constructor(props) {
@@ -72,10 +73,10 @@ class MyAuraBanner extends React.Component {
         <div className="aura-myaccount-no-linked-card-description old-card-found">
           <div className="header">
             <span className="bold">{ `${drupalSettings.userDetails.userName} `}</span>
-            {Drupal.t('an Aura loyalty account no. @card_number is associated with your email adress. It just takes one click to link.', {
+            {Drupal.t('an Aura loyalty account no. @card_number is associated with your email address. It just takes one click to link.', {
               '@card_number': cardNumber,
             }, { context: 'aura' })}
-            <span className="bold">{Drupal.t('Do you want to link now?')}</span>
+            <span className="bold">{getStringMessage('aura_link_unlinked_card_body_sub_title')}</span>
           </div>
           <div className="card-number-wrapper">
             <div className="link-card-wrapper">

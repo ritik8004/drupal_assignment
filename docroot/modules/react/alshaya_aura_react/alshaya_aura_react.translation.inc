@@ -606,7 +606,7 @@ function _alshaya_aura_react_translations() {
     ],
     'v8' => [
       'an Aura loyalty account no. @card_number is associated with your email address. It just takes one click to link.' => [
-        'ar' => 'an Aura loyalty account no. @card_number is associated with your email address. It just takes one click to link.',
+        'ar' => ' رقم حساب مكافآت أورا @card_number مرتبط ببريدك الإلكتروني. خطوة واحدة تفصلك عن ربط حسابك.',
         'context' => 'aura',
       ],
     ],
