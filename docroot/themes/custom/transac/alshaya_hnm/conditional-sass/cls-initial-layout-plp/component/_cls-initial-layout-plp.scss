@@ -1,0 +1,125 @@
+.cls-initial-layout {
+  // Common styles between different viewports
+  .dialog-off-canvas-main-canvas {
+    .block-page-title-block {
+      height: rem(48);
+      padding-top: rem(12);
+      margin-bottom: rem(30);
+    }
+
+    .block-alshaya-algolia-react-plp {
+      .ais-InstantSearch__root {
+        .sticky-filter-wrapper {
+          .container-without-product {
+            height: rem(47);
+          }
+        }
+
+        .view-algolia-plp {
+          .product-plp-detail-wrapper {
+            .field--name-name {
+              height: rem(20);
+              margin-top: rem(22);
+            }
+
+            .special-price-block {
+              height: rem(20);
+            }
+          }
+
+          .pager {
+            height: rem(92);
+            margin-top: rem(50);
+            margin-bottom: rem(18);
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .dialog-off-canvas-main-canvas {
+      .page-wrapper {
+        height: rem(6570);
+
+        .view-algolia-plp {
+          .view-content {
+            height: rem(6110);
+
+            .views-row {
+              height: rem(312);
+              margin-bottom: rem(28);
+
+              .alshaya_search_mainimage {
+                height: rem(250);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    .dialog-off-canvas-main-canvas {
+      .page-wrapper {
+        height: rem(5880);
+
+        .view-algolia-plp {
+          .view-content {
+            height: rem(5546);
+
+            .views-row {
+              height: rem(420);
+              margin-bottom: rem(50);
+
+              .alshaya_search_mainimage {
+                height: rem(350);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .dialog-off-canvas-main-canvas {
+      .page-wrapper {
+        height: rem(4570);
+
+        .c-sidebar-first {
+          .c-facet__blocks {
+            height: rem(900);
+
+            .block-alshaya-acm-product-category {
+              & > ul {
+                margin: 0 rem(16);
+
+                li {
+                  height: rem(114);
+                  margin-bottom: rem(30);
+                }
+              }
+            }
+          }
+        }
+
+        .view-algolia-plp {
+          .view-content {
+            height: rem(4232);
+
+            .views-row {
+              height: rem(420);
+              margin-bottom: rem(50);
+
+              .alshaya_search_mainimage {
+                height: rem(355);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

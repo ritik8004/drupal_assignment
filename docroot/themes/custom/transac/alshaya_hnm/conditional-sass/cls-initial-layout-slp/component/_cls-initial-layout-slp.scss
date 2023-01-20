@@ -1,0 +1,148 @@
+.cls-initial-layout {
+  // Common styles between different viewports
+  .dialog-off-canvas-main-canvas {
+    .show-algolia-result {
+      div {
+        .block-page-title-block {
+          .c-page-title {
+            height: rem(74);
+            padding-top: rem(22);
+            padding-bottom: rem(28);
+          }
+        }
+
+        .ais-InstantSearch__root {
+          .container-wrapper {
+            .sticky-filter-wrapper {
+              .container-without-product {
+                height: rem(47);
+              }
+            }
+
+            .view-search {
+              .product-plp-detail-wrapper {
+                .field--name-name {
+                  height: rem(20);
+                  margin-top: rem(22);
+                }
+
+                .special-price-block {
+                  height: rem(20);
+                }
+              }
+
+              .pager {
+                height: rem(92);
+                margin-top: rem(50);
+                margin-bottom: rem(18);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .dialog-off-canvas-main-canvas {
+      .page-wrapper {
+        height: rem(6448);
+
+        .show-algolia-result {
+          .c-content__region {
+            .view-content {
+              height: rem(6110);
+
+              .views-row {
+                height: rem(312);
+                margin-bottom: rem(28);
+
+                .alshaya_search_mainimage {
+                  height: rem(250);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    .dialog-off-canvas-main-canvas {
+      .page-wrapper {
+        height: rem(5867);
+
+        .container-wrapper {
+          height: rem(5770);
+
+          .block-alshaya-grid-count-block {
+            height: rem(48);
+          }
+
+          .view-content {
+            height: rem(5546);
+
+            .views-row {
+              height: rem(420);
+              margin-bottom: rem(50);
+
+              .alshaya_search_mainimage {
+                height: rem(350);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .dialog-off-canvas-main-canvas {
+      .page-wrapper {
+        height: rem(4548);
+
+        .ais-InstantSearch__root {
+          height: rem(4450);
+
+          .c-sidebar-first {
+            .c-facet__blocks {
+              height: rem(464);
+
+              .c-accordion {
+                height: rem(450);
+                margin-top: rem(16);
+
+                .active {
+                  height: rem(47);
+                }
+
+                & > ul {
+                  height: rem(380);
+
+                  li {
+                    height: rem(20);
+                    margin-bottom: rem(20);
+                  }
+                }
+              }
+            }
+          }
+
+          .view-content {
+            height: rem(4227);
+
+            .views-row {
+              height: rem(420);
+              margin-bottom: rem(50);
+
+              .alshaya_search_mainimage {
+                height: rem(355);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -830,6 +830,16 @@ cls-initial-layout-common:
     theme:
       css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: {}
 
+cls-initial-layout-slp:
+  css:
+    theme:
+      css/conditional-sass/cls-initial-layout-slp/cls-initial-layout-slp.ltr.css: {}
+
+cls-initial-layout-plp:
+  css:
+    theme:
+      css/conditional-sass/cls-initial-layout-plp/cls-initial-layout-plp.ltr.css: {}
+
 hello-member-aura-loyalty:
   css:
     theme:
