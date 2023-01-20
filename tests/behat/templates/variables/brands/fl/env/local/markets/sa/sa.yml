@@ -1,0 +1,8 @@
+variables:
+  spc_product_listing_page: '/shop-womens/'
+  spc_basket_page: '/shop-womens/'
+  spc_pdp_page: 'buy-nike-pg-3-mens-shoes-black-black-white.html'
+  product_listing_page_url: '/shop-womens/'
+  np_plp_product_page: 'buy-nike-pg-3-mens-shoes-black-black-white.html'
+  np_plp_page: '/shop-womens/'
+  spc_egift_page: '/egift/'
