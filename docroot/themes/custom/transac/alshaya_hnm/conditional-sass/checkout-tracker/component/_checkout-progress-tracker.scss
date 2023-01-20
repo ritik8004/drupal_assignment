@@ -1,79 +1,29 @@
 .cko-progress-tracker {
   #checkout-progress {
     .progress-bar {
-      .alias--cart-login & {
-        @include breakpoint($only-mobile) {
-          margin-top: rem(40);
-          margin-bottom: rem(56);
-        }
-      }
-
       .step {
         span {
-          padding-top: 0;
-          margin-top: rem(-3);
-          font-size: rem(16);
-
-          @include breakpoint($only-mobile) {
-            margin-top: rem(-1);
-          }
-        }
-
-        .step-label {
           font-size: rem(13);
         }
 
-        &.current {
-          span {
-            font-family: $alshaya-bold;
-
-            @include breakpoint($tablet) {
-              margin-top: rem(-4);
+        @include breakpoint($only-mobile) {
+          &.current {
+            .step-label {
+              font-family: $hnm-demibold;
             }
           }
         }
 
-        &.completed {
+        @include breakpoint($tablet) {
+          span {
+            font-size: rem(16);
+          }
+
           .step-label {
-            top: calc(100% + #{rem(17)});
+            font-size: rem(13);
           }
         }
       }
-    }
-  }
-}
-
-.alias--cart-login {
-  .block-page-title-block {
-    display: none;
-  }
-
-  @include breakpoint($upto-desktop) {
-    margin: 0 !important;
-
-    .site-brand-home a {
-      margin-#{$left}: 0;
-    }
-  }
-
-  .page-standard {
-    margin-top: 0;
-    padding-top: 0;
-  }
-
-  .site-brand-wrapper {
-    @include breakpoint($only-mobile) {
-      border-color: $spc-checkout-header-border;
-      height: rem(56);
-    }
-
-    @include breakpoint($tablet) {
-      height: rem(99);
-      border-bottom: rem(1) solid $spc-checkout-header-border;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      max-width: none;
     }
   }
 }
