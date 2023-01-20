@@ -2,7 +2,7 @@
 Feature: SPC Checkout using Click & Collect store for returning customer
 
   Background:
-    Given I am on "{spc_product_listing_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
 
   @cc @hd @checkout_com @visa @mada

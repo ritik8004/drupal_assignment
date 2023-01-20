@@ -4,7 +4,7 @@ Feature: SPC Checkout Home Delivery of Tabby payment for Authenticated user
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait for element "#block-page-title"
-    When I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element ".content__sidebar"
 
   @hd @tabby

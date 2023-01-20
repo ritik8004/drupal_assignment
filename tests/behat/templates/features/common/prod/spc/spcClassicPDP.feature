@@ -2,7 +2,7 @@
 Feature: SPC Classic PDP block for desktop
 
   Background:
-    Given I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element ".content__sidebar"
 
   @pdp @desktop

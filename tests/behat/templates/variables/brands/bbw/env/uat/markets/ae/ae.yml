@@ -1,8 +1,4 @@
 variables:
-  spc_product_listing_page: '/shop-body-care/body-care-offers/buy-2-get-1-free-beauty-go/'
-  spc_pdp_page: '/buy-saltwater-breeze-travel-size-shower-gel.html/'
-  spc_basket_page: '/shop-body-care/bath-shower/all-bath-shower/'
-  product_listing_page_url: '/shop-body-care/bath-shower/all-bath-shower/'
   spc_single_product_detail_page_coupon: '/buy-orange-ginger-pumice-body-scrub.html/'
   spc_multiple_product_detail_page_coupon: '/buy-orange-ginger-pumice-body-scrub.html/'
   spc_single_product_detail_page_no_coupon: '/buy-orange-ginger-pumice-body-scrub.html/'

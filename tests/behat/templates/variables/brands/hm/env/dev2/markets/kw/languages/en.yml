@@ -16,7 +16,6 @@ variables:
   ar_promotional_filter: 'Promotions'
   ar_size_filter: 'Size'
   ar_filters: 'all filters'
-  spc_basket_page: '/shop-default-category/men/'
   create_account: 'create an account'
   sign_in: 'Sign in'
   find_store: 'Find Store'

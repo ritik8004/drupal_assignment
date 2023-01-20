@@ -5,7 +5,7 @@ Feature: Aura Cart
   Validate the point displaying for the different layouts on PDP
 
   Background:
-    When I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for the page to load
 
   @desktop

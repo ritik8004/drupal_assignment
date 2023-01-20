@@ -2,7 +2,7 @@
 Feature: Test the BenefitPay payment feature functionality
 
   Background:
-    When I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element "#block-page-title"
 
   Scenario: As a Guest user, I should be able to place an order using BenefitPay payment method

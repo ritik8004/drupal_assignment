@@ -52,7 +52,7 @@ Feature: SPC to add Exclusive coupon & get discount in cart page for Authenticat
 
   @desktop @bbw-exclusive
   Scenario: As an Authenticated User, I should be able to add Exclusive coupon promotions & get discount directly on the Cart page
-    When I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish
@@ -220,7 +220,7 @@ Feature: SPC to add Exclusive coupon & get discount in cart page for Authenticat
 
   @language @bbw-exclusive
   Scenario: As an Authenticated User, I should be able to add Exclusive coupon promotions & get discount directly on the Cart page in Arabic
-    When I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element "#block-content"
     When I follow "{language_link}"
     And I wait for element "#block-content"
@@ -390,7 +390,7 @@ Feature: SPC to add Exclusive coupon & get discount in cart page for Authenticat
 
   @mobile @bbw-exclusive
   Scenario: As an Authenticated User, I should be able to add Exclusive coupon promotions & get discount directly on the Cart page in Mobile
-    When I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element "#block-content"
     And I click on Add-to-cart button
     And I wait for AJAX to finish

@@ -2,7 +2,7 @@
 Feature: SPC Checkout Home Delivery MADA Card Payment
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-content"
 
   @cc @hd @checkout_com @visa @mada
