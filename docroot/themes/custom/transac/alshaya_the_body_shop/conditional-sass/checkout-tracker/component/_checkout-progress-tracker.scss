@@ -11,9 +11,11 @@
 
           html[lang="ar"] & {
             font-size: rem(16);
+            line-height: rem(26);
 
             @include breakpoint($tablet) {
               font-size: rem(18);
+              line-height: rem(32);
             }
           }
         }

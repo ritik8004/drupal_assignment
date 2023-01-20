@@ -2,10 +2,6 @@
   #checkout-progress {
     .progress-bar {
       .step {
-        span {
-          font-size: rem(13);
-        }
-
         @include breakpoint($only-mobile) {
           &.current {
             .step-label {
@@ -14,9 +10,21 @@
           }
         }
 
+        span {
+          font-size: rem(13);
+
+          html[lang="en"] & {
+            line-height: rem(26);
+          }
+        }
+
         @include breakpoint($tablet) {
           span {
             font-size: rem(16);
+
+            html[lang="en"] & {
+              line-height: rem(32);
+            }
           }
 
           .step-label {
