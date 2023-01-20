@@ -281,7 +281,9 @@ class AlshayaBehatHelper {
   private function getCategories(int $page): array {
     // Query the database to fetch categories with in-stock products.
     $query = $this->database->select('taxonomy_term__field_commerce_status', 'fcs');
+    $query->leftJoin('taxonomy_term__field_category_include_menu', 'fcim', 'fcs.entity_id = fcim.entity_id');
     $query->leftJoin('node__field_category', 'fc', 'fcs.entity_id = fc.field_category_target_id');
+    $query->leftJoin('node_field_data', 'nfd', 'nfd.nid = fc.entity_id');
     $query->leftJoin('node__field_skus', 'fs', 'fc.entity_id = fs.entity_id');
     $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = fs.field_skus_value');
 
@@ -289,12 +291,21 @@ class AlshayaBehatHelper {
     $query->condition('fcs.field_commerce_status_value', '1');
 
     // Category has in-stock SKUs.
-    $query->condition('stock.status', '1');
+    $query->condition('stock.status', 1);
+    $query->condition('nfd.status', NodeInterface::PUBLISHED);
+    $query->condition('stock.quantity', 0, '>');
+    $query->condition('fcim.field_category_include_menu_value', 1);
+    // Group by the number of skus related to each category.
+    $query->groupBy('fcs.entity_id');
+    $query->addExpression('COUNT(sku)', 'sku_count');
+    $query->having('COUNT(sku) > :matches', [':matches' => 1]);
+    // Order by the terms having the highest number of products.
+    $query->orderBy('sku_count', 'DESC');
 
     $query->fields('fcs', ['entity_id']);
     $query->range($page * self::SKUS_LIMIT, self::SKUS_LIMIT);
 
-    return $query->distinct()->execute()->fetchCol();
+    return $query->execute()->fetchCol();
   }
 
   /**
