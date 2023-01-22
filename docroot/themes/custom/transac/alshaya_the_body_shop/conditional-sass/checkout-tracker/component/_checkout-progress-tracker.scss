@@ -3,75 +3,33 @@
     .progress-bar {
       .step {
         span {
-          font-size: rem(13) !important;
           font-family: $tbs-recoleta-medium;
-          width: rem(26);
-          height: rem(26);
-          line-height: rem(26);
-          padding-top: 0;
+
+          @include breakpoint($only-mobile) {
+            font-size: rem(13);
+          }
 
           html[lang="ar"] & {
-            padding-top: 0;
-            font-size: rem(16) !important;
+            font-size: rem(16);
+            line-height: rem(26);
+
+            @include breakpoint($tablet) {
+              font-size: rem(18);
+              line-height: rem(32);
+            }
           }
         }
 
-        .step-label {
-          font-size: rem(10) !important;
-          top: calc(100% + #{rem(7)});
-        }
-
         &.current {
+          span {
+            font-family: $tbs-recoleta-semibold;
+          }
+
           .step-label {
             font-family: $tbs-semibold;
           }
         }
-
-        &.completed {
-          span {
-            transform: none;
-          }
-
-          .step-label {
-            top: calc(100% + #{rem(7)});
-          }
-        }
-
-        @include breakpoint($tablet) {
-          .step-label,
-          span {
-            font-size: rem(14) !important;
-          }
-
-          span {
-            width: rem(32);
-            height: rem(32);
-            line-height: rem(32);
-
-            html[lang="ar"] & {
-              font-size: rem(18) !important;
-            }
-          }
-
-          .step-label {
-            top: calc(100% + #{rem(9)});
-          }
-
-          &.completed {
-            .step-label {
-              top: calc(100% + #{rem(9)});
-            }
-          }
-        }
       }
-    }
-
-    &::after {
-      background-color: $cko-steps-connector-complete;
-    }
-
-    &::before {
-      background-color: $cko-steps-connector-incomplete;
     }
   }
 }
