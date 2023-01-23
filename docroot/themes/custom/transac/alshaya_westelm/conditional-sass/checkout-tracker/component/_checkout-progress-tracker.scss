@@ -3,31 +3,13 @@
     .progress-bar {
       .step {
         span {
-          font-size: rem(14);
-          line-height: rem(27);
+          line-height: rem(26);
 
           @include breakpoint($tablet) {
-            line-height: rem(32);
-          }
-        }
-
-        .step-label {
-          color: $cko-steps-label-txt;
-          font-size: rem(10);
-
-          @include breakpoint($tablet) {
-            font-size: rem(14);
+            line-height: rem(33);
           }
         }
       }
-    }
-
-    &::after {
-      background-color: $cko-steps-connector-complete;
-    }
-
-    &::before {
-      background-color: $cko-steps-connector-incomplete;
     }
   }
 }
