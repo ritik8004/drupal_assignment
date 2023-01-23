@@ -609,6 +609,14 @@ function _alshaya_aura_react_translations() {
         'ar' => ' رقم حساب مكافآت أورا @card_number مرتبط ببريدك الإلكتروني. خطوة واحدة تفصلك عن ربط حسابك.',
         'context' => 'aura',
       ],
+      'An Aura loyalty card is already associated with your email address. It just takes one click to link.' => [
+        'ar' => 'حساب ولاء أورا مرتبط بالفعل بعنوان بريدك الإلكتروني. يمكنك ربط الحساب بضغطة واحدة.',
+        'context' => 'aura',
+      ],
+      'Aura membership number' => [
+        'ar' => 'رقم عضوية أورا',
+        'context' => 'aura',
+      ],
     ],
   ];
 }
