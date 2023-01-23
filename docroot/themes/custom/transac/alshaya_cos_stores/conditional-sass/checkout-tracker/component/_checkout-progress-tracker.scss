@@ -1,0 +1,13 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    .progress-bar {
+      .step {
+        &.current {
+          .step-label {
+            color: $cko-steps-active-label-txt;
+          }
+        }
+      }
+    }
+  }
+}
