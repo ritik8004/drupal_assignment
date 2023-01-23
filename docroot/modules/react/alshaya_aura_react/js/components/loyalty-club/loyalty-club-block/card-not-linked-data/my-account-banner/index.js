@@ -12,7 +12,7 @@ import ConditionalView
 
 const AuraWrapperHeader = () => (
   <div className="header">
-    { Drupal.t('An Aura loyalty card is already associated with your email address. It just takes one click to link.') }
+    { Drupal.t('An Aura loyalty card is already associated with your email address. It just takes one click to link.', {}, { context: 'aura' }) }
     <span className="bold">{Drupal.t('Do you want to link now?')}</span>
   </div>
 );
@@ -38,7 +38,7 @@ const MyAccountBanner = (props) => {
           <div className="my-account-aura-card-wrapper">
             <div className="card-number-wrapper">
               <div className="card-number-label">
-                { Drupal.t('Aura membership number') }
+                { Drupal.t('Aura membership number', {}, { context: 'aura' })}
               </div>
               <Cleave
                 name="aura-my-account-link-card"
