@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_sprinklr module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_sprinklr_install() {
+  // Set default URLs for sprinklr chatbot feature.
+  $config_factory = \Drupal::configFactory()->getEditable('sprinklr.settings');
+  $config_factory->set('allowed_urls', "<front>\n/faqs\n/contact");
+  $config_factory->set('urls_negate', 1);
+  $config_factory->save();
+}
