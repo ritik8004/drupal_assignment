@@ -383,20 +383,14 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {object} product
    *   The product entity.
-   *
    * @param {object} variantParentProduct
    *   The variant parent.
    */
   function getVariantsInfo(product, variantParentProduct) {
     const info = {};
-    var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
       const variantSku = variantInfo.sku;
-      // Do not process data for OOS variants.
-      if (!Drupal.hasValue(combinations.bySku[variantSku])) {
-        return;
-      }
       const variantParentSku = variantInfo.parent_sku;
       // Use URL from parent if not available in child - we add in variants only for styled products.
       const productUrl = Drupal.hasValue(variantInfo.url_key)
