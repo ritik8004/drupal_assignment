@@ -1,0 +1,7 @@
+name: alshaya_sprinklr
+type: module
+description: 'Contains Alshaya sepcific implementation for sprinklr chatbot.'
+package: Alshaya
+core_version_requirement: ^9 || ^10
+dependencies:
+  - sprinklr:sprinklr

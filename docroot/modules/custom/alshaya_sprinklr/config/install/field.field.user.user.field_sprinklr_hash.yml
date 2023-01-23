@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_sprinklr_hash
+  module:
+    - user
+id: user.user.field_sprinklr_hash
+field_name: field_sprinklr_hash
+entity_type: user
+bundle: user
+label: 'Sprinklr Customer Hash'
+description: 'Used for customer authentication by sprinklr chatbot.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
+skip_translation_check: 0
