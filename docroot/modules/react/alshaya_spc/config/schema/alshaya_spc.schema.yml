@@ -90,3 +90,21 @@ alshaya_spc.screen_width_padding:
     screen_width_padding_status:
       type: boolean
       label: 'Screen Width Padding status'
+    screen_width_320:
+      type: string
+      label: 'Screen Width 320'
+    screen_width_480:
+      type: string
+      label: 'Screen Width 480'
+    screen_width_720:
+      type: string
+      label: 'Screen Width 720'
+    screen_width_1024:
+      type: string
+      label: 'Screen Width 1024'
+    screen_width_1680:
+      type: string
+      label: 'Screen Width 1680'
+    screen_width_2560:
+      type: string
+      label: 'Screen Width 2560'
