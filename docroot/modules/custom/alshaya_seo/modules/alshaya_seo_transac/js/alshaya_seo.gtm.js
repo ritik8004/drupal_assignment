@@ -983,7 +983,7 @@
       let statsText = $('.total-result-count .ais-Stats-text').text();
       var data = {
         event: 'productImpression',
-        eventLabel2: Drupal.hasValue(statsText) ? statsText : '',
+        eventLabel2: Drupal.hasValue(statsText) ? statsText.match(/\d+/) + ' items' : '',
         ecommerce: {
           currencyCode: currencyCode,
           impressions: impressions.splice(0, 10)
