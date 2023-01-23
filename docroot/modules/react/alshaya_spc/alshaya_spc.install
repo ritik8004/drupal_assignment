@@ -24,7 +24,7 @@ function alshaya_spc_update_9407() {
     ['alshaya_spc.screen_width_padding'],
     'alshaya_spc',
     'install',
-    AlshayaConfigManager::MODE_REPLACE
+    AlshayaConfigManager::MODE_ADD_MISSING
   );
 }
 
