@@ -2,30 +2,9 @@
   #checkout-progress {
     .progress-bar {
       .step {
-        &::after {
-          border-color: $cko-steps-active-bg;
-        }
-
-        span {
-          font-size: rem(14);
-          padding-top: rem(1);
-
-          html[lang="ar"] & {
-            padding-top: rem(4);
-          }
-        }
-
         &.current {
           .step-label {
             color: $cko-steps-active-label-txt;
-          }
-        }
-
-        &.completed {
-          .step-label {
-            @include breakpoint($only-mobile) {
-              top: calc(100% + #{rem(11)});
-            }
           }
         }
       }
