@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeFullName } from '../../../../alshaya_spc/js/utilities/cart_customer_util';
 import { validateInfo } from '../../../../alshaya_spc/js/utilities/checkout_util';
+import { smoothScrollTo } from '../../../../alshaya_spc/js/utilities/smoothScroll';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
 import { updateCustomerDetails } from '../../utilities/addressbook_api_helper';
@@ -50,11 +51,31 @@ export default class AddAddressForm extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const {
+      areaParents,
+      areaParentsOptionMapping,
+    } = this.props;
+
+    // Update the states only if the props are changed.
+    if ((areaParents !== prevProps.areaParents)
+      && (areaParentsOptionMapping !== prevProps.areaParentsOptionMapping)) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        areaParents: this.getProcessedAreaParents(areaParents),
+        areaParentsOptionMapping: this.getProcessAreaOptions(areaParentsOptionMapping),
+      });
+    }
+  }
+
   /**
    * Get the processed area parents.
    *
    * @param {object} areaParents
    *   The areaParents object.
+   *
+   * @return {array}
+   *   An array containing the processed area parents.
    */
   getProcessedAreaParents = (areaParents) => {
     const processedAreaParents = [];
@@ -74,21 +95,26 @@ export default class AddAddressForm extends React.Component {
    * Get the processed area options.
    *
    * @param {object} areaParentsOptionMapping
-   * @returns
+   *   Object containing the area options.
+   *
+   * @returns {array}
+   *   An array containing the process list of area options.
    */
   getProcessAreaOptions = (areaParentsOptionMapping) => {
     const processedAreaOptions = [];
     // Process the area option data.
-    Object.keys(areaParentsOptionMapping).forEach((key) => {
-      const items = areaParentsOptionMapping[key];
-      if (!Array.isArray(processedAreaOptions[key])) {
-        processedAreaOptions[key] = [];
-      }
+    if (areaParentsOptionMapping) {
+      Object.keys(areaParentsOptionMapping).forEach((key) => {
+        const items = areaParentsOptionMapping[key];
+        if (!Array.isArray(processedAreaOptions[key])) {
+          processedAreaOptions[key] = [];
+        }
 
-      processedAreaOptions[key].push(Object.keys(items).map((index) => (
-        { value: index, label: items[index] }
-      )));
-    });
+        processedAreaOptions[key].push(Object.keys(items).map((index) => (
+          { value: index, label: items[index] }
+        )));
+      });
+    }
 
     return processedAreaOptions;
   }
@@ -135,6 +161,7 @@ export default class AddAddressForm extends React.Component {
             document.getElementById(`${name}-error`).innerHTML = Drupal.t('Please enter your @title.', { '@title': label });
           }
         }
+        smoothScrollTo('#alshaya-user-address-page');
       });
 
       return false;
@@ -142,6 +169,40 @@ export default class AddAddressForm extends React.Component {
 
     return true;
   };
+
+  /**
+   * Checks if the response from the validateInfo api is valid or not.
+   *
+   * @param {object} data
+   *   An object containing the response of validate API.
+   *
+   * @return {boolean}
+   *   Returns TRUE/FALSE based on the validation.
+   */
+  validateResponse = (data) => {
+    // Flag to determine if there any error.
+    let isValid = true;
+
+    if (!data.fullname) {
+      isValid = false;
+      document.getElementById('fullname-error').innerHTML = Drupal.t('Please enter your @title.', {
+        '@title': document.getElementsByName('fullname').getAttribute('message'),
+      });
+      smoothScrollTo('#alshaya-user-address-page');
+    } else {
+      document.getElementById('fullname-error').innerHTML = '';
+    }
+
+    if (!data.mobile) {
+      isValid = false;
+      smoothScrollTo('#alshaya-user-address-page');
+      document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+    } else {
+      document.getElementById('mobile-error').innerHTML = '';
+    }
+
+    return isValid;
+  }
 
   // Submit handler for form.
   handleSubmit = (e) => {
@@ -161,10 +222,14 @@ export default class AddAddressForm extends React.Component {
       if (Object.keys(processedData).length > 0) {
         // Show full screen loader.
         showFullScreenLoader();
-        const validationRequest = validateInfo(processedData);
+        // Remove the unnecessary info for validation.
+        const { fullname, address, mobile } = processedData;
+        const validationRequest = validateInfo({ fullname, address, mobile });
         if (validationRequest instanceof Promise) {
           validationRequest.then((result) => {
-            if (result.status === 200 && result.data.status) {
+            if (result.status === 200
+              && result.data.status
+              && this.validateResponse(result.data)) {
               // Before calling the API, convert the address in Magento API
               // required format.
               let addressItemId = null;
@@ -201,18 +266,21 @@ export default class AddAddressForm extends React.Component {
                         drupalSettings.globalErrorMessage,
                         'error',
                       );
+                      // Remove the loader.
+                      removeFullScreenLoader();
                     }
                   });
                 }
               }
-            } else if (result.status === 200 && !result.data.status) {
-              // @todo Handle the BE validation here.
-            } else if (result.status !== 200) {
+            } else if (result.status !== 200 || !result.data.status) {
               // Show the error message.
               Drupal.alshayaAddressBookReactShowGlobalMessage(
                 drupalSettings.globalErrorMessage,
                 'error',
               );
+              smoothScrollTo('#alshaya-user-address-page');
+              // Remove the loader.
+              removeFullScreenLoader();
             }
           });
         }
@@ -323,7 +391,10 @@ export default class AddAddressForm extends React.Component {
 
     const { toggleAddressForm, addressFields, formButtonText } = this.props;
 
-    const { country } = drupalSettings.gtm;
+    const { country_name: country } = drupalSettings.addressbook;
+
+    // Remove the existing message wrapper before the rendering of the form.
+    Drupal.alshayaAddressBookReactRemoveGlobalMessage();
 
     return (
       <form
@@ -345,7 +416,7 @@ export default class AddAddressForm extends React.Component {
               name="mobile"
               required
               defaultValue={this.getDefaultValue('mobile')}
-              label={Drupal.t('Mobile number')}
+              label={Drupal.t('Mobile Number')}
             />
 
             <div className="country-field-wrapper">

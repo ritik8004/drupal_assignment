@@ -5,6 +5,7 @@ import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import IndividualAddressItem from '../../components/individual-address-item';
 import AddAddressForm from '../add-address-form';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
+import { smoothScrollTo } from '../../../../alshaya_spc/js/utilities/smoothScroll';
 
 class UserAddressBook extends React.Component {
   constructor(props) {
@@ -105,7 +106,7 @@ class UserAddressBook extends React.Component {
    *   The id of the selected address item.
    */
   toggleAddressForm = (actionType, id = null) => {
-    const { showAddForm } = this.state;
+    const { showAddForm, userAddressItems } = this.state;
     // Toggle the add form flag.
     if (actionType === 'add') {
       this.setState({
@@ -119,11 +120,14 @@ class UserAddressBook extends React.Component {
         defaultAddressValue: this.getAddressItem(id),
         formButtonText: Drupal.t('save'),
       });
-    } else {
+    } else if (userAddressItems.length > 0) {
+      // Toggle only if we have atleast one address item in the list.
       this.setState({
         showAddForm: !showAddForm,
       });
     }
+    // Scroll to the top of form wrapper.
+    smoothScrollTo('#alshaya-user-address-page');
   };
 
   /**
@@ -168,7 +172,9 @@ class UserAddressBook extends React.Component {
 
     return (
       <>
-        <a onClick={() => this.toggleAddressForm('add')}>{Drupal.t('Add new Address')}</a>
+        {userAddressItems.length > 0 && (
+          <a onClick={() => this.toggleAddressForm('add')}>{Drupal.t('Add new Address')}</a>
+        )}
         <div className="address-book-form-wrapper">
           {showAddForm && (
             <AddAddressForm

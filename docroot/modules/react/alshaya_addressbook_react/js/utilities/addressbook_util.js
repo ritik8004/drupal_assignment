@@ -93,7 +93,7 @@ const getDataInMagentoFormat = (processedData, customerInfo, addressItemId) => {
     }
     const { firstname, lastname } = processedData.fullname;
     if (!hasValue(customerData.addresses)) {
-      customerData.addresses = {};
+      customerData.addresses = [];
     }
     address.firstname = firstname;
     address.lastname = lastname;

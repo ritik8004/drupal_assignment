@@ -6,7 +6,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Controller\UserController;
 use Drupal\user\UserInterface;
-use Drupal\profile\Entity\ProfileTypeInterface;
+use Drupal\token\TokenInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,13 +22,23 @@ class AlshayaAddressBookController extends UserController {
   protected $mobileUtil;
 
   /**
+   * Token service.
+   *
+   * @var \Drupal\token\TokenInterface
+   */
+  protected $token;
+
+  /**
    * AlshayaAddressBookController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
+   * @param \Drupal\token\TokenInterface $token
+   *   Token service.
    */
-  public function __construct(MobileNumberUtilInterface $mobile_util) {
+  public function __construct(MobileNumberUtilInterface $mobile_util, TokenInterface $token) {
     $this->mobileUtil = $mobile_util;
+    $this->token = $token;
   }
 
   /**
@@ -36,7 +46,8 @@ class AlshayaAddressBookController extends UserController {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('mobile_number.util')
+      $container->get('mobile_number.util'),
+      $container->get('token')
     );
   }
 
@@ -47,15 +58,11 @@ class AlshayaAddressBookController extends UserController {
    *   The route match.
    * @param \Drupal\user\UserInterface $user
    *   The user account.
-   * @param \Drupal\profile\Entity\ProfileTypeInterface $profile_type
-   *   The profile type entity for the profile.
    *
    * @return array
    *   Returns form array.
    */
-  public function userProfileForm(RouteMatchInterface $route_match, UserInterface $user, ProfileTypeInterface $profile_type) {
-    // Get country code.
-    $country_code = _alshaya_custom_get_site_level_country_code();
+  public function userProfileForm(RouteMatchInterface $route_match, UserInterface $user) {
 
     return [
       '#type' => 'markup',
@@ -67,7 +74,8 @@ class AlshayaAddressBookController extends UserController {
         ],
         'drupalSettings' => [
           'addressbook' => [
-            'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+            'country_mobile_code' => $this->mobileUtil->getCountryCode(_alshaya_custom_get_site_level_country_code()),
+            'country_name' => $this->token->replace('[alshaya_seo:country]'),
             'mobile_max_limit' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           ],
         ],
