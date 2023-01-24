@@ -8,10 +8,10 @@ services:
       # the url. So we need to keep priority between 100 and 300.
       - { name: 'path_processor_inbound', priority: 101 }
     arguments:
-      - '@entity_type.manager'
       - '@language_manager'
       - '@module_handler'
       - '@config.factory'
+      - '@event_dispatcher'
 
   rcs_placeholders.entity_helper:
     class: Drupal\rcs_placeholders\Service\RcsPhEntityHelper
@@ -28,4 +28,33 @@ services:
   rcs_placeholders.path_prefix_helper:
     class: Drupal\rcs_placeholders\Service\RcsPhPathPrefixHelper
     arguments:
+      - '@config.factory'
+
+  rcs_placeholders.enrichment_helper:
+    class: Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper
+    arguments:
+      - '@entity_type.manager'
+
+  rcs_placeholders.rcs_product_path_process_subscriber:
+    class: \Drupal\rcs_placeholders\EventSubscriber\RcsPhProductPathProcessorEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+    arguments:
+      - '@rcs_placeholders.enrichment_helper'
+      - '@config.factory'
+
+  rcs_placeholders.rcs_listing_path_process_subscriber:
+    class: Drupal\rcs_placeholders\EventSubscriber\RcsPhListingPathProcessorEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+    arguments:
+      - '@rcs_placeholders.enrichment_helper'
+      - '@config.factory'
+
+  rcs_placeholders.rcs_promotion_path_process_subscriber:
+    class: \Drupal\rcs_placeholders\EventSubscriber\RcsPhPromotionPathProcessorEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+    arguments:
+      - '@rcs_placeholders.enrichment_helper'
       - '@config.factory'
