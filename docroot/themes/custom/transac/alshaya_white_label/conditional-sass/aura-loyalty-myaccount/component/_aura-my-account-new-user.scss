@@ -236,57 +236,162 @@
 
 #my-loyalty-club {
   // @TODO: Move common code to generic styles after implementation of redesign on My Account page.
-  .aura-myaccount-no-linked-card-wrapper.no-card-found {
-    background-image: $aura-gradient-28;
+  .aura-myaccount-no-linked-card-wrapper {
+    &.no-card-found {
+      background-image: $aura-gradient-28;
 
-    html[lang="ar"] & {
-      background-image: $aura-gradient-28-ar;
-    }
-
-    .aura-myaccount-no-linked-card-description.no-card-found {
-      .action-wrapper {
-        > .link-your-card {
-          > div.btn {
-            background-image: $aura-gradient-29;
-
-            html[lang="ar"] & {
-              background-image: $aura-gradient-29-ar;
-            }
-          }
-        }
-      }
-    }
-
-    @include breakpoint($only-mobile) {
-      padding: rem(42) rem(40);
-
-      .aura-logo {
-        svg {
-          height: rem(64);
-        }
+      html[lang="ar"] & {
+        background-image: $aura-gradient-28-ar;
       }
 
       .aura-myaccount-no-linked-card-description.no-card-found {
         .action-wrapper {
-          > .link-your-card,
-          > .sign-up {
-            margin-top: rem(30);
+          > .link-your-card {
+            > div.btn {
+              background-image: $aura-gradient-29;
+
+              html[lang="ar"] & {
+                background-image: $aura-gradient-29-ar;
+              }
+            }
+          }
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        padding: rem(42) rem(40);
+
+        .aura-logo {
+          svg {
+            height: rem(64);
           }
         }
 
-        .banner-title {
-          font-family: $aura-regular;
-          font-size: rem(22);
-          line-height: rem(32);
-          margin-top: rem(38);
+        .aura-myaccount-no-linked-card-description.no-card-found {
+          .action-wrapper {
+            > .link-your-card,
+            > .sign-up {
+              margin-top: rem(30);
+            }
+          }
+
+          .banner-title {
+            font-family: $aura-regular;
+            font-size: rem(22);
+            line-height: rem(32);
+            margin-top: rem(38);
+          }
+        }
+      }
+
+      @include breakpoint($desktop) {
+        .aura-myaccount-no-linked-card-description.no-card-found {
+          margin-#{$left}: rem(45);
+          max-width: none;
         }
       }
     }
 
-    @include breakpoint($desktop) {
-      .aura-myaccount-no-linked-card-description.no-card-found {
-        margin-#{$left}: rem(45);
-        max-width: none;
+    &.old-card-found {
+      padding-top: rem(42);
+      padding-bottom: rem(36);
+
+      @include breakpoint($desktop) {
+        padding-top: rem(30);
+        padding-bottom: rem(30);
+      }
+
+      &.aura-level {
+        &-Tier1 {
+          background-image: $aura-loyalty-club-verified-user-mobile;
+
+          html[lang="ar"] & {
+            background-image: $aura-loyalty-club-verified-user-mobile-ar;
+          }
+
+          @include breakpoint($desktop) {
+            background-image: $aura-loyalty-club-verified-user;
+
+            html[lang="ar"] & {
+              background-image: $aura-loyalty-club-verified-user-ar;
+            }
+          }
+        }
+
+        &-Tier2 {
+          background-image: $aura-myaccount-star-mobile;
+
+          html[lang="ar"] & {
+            background-image: $aura-myaccount-star-mobile-ar;
+          }
+
+          @include breakpoint($desktop) {
+            background-image: $aura-myaccount-star;
+
+            html[lang="ar"] & {
+              background-image: $aura-myaccount-star-ar;
+            }
+          }
+        }
+
+        &-Tier3 {
+          background-image: $aura-myaccount-vip-mobile;
+
+          html[lang="ar"] & {
+            background-image: $aura-myaccount-vip-mobile-ar;
+          }
+
+          @include breakpoint($desktop) {
+            background-image: $aura-myaccount-vip;
+
+            html[lang="ar"] & {
+              background-image: $aura-myaccount-vip-ar;
+            }
+          }
+        }
+      }
+
+      .aura-logo {
+        svg {
+          height: rem(56);
+
+          @include breakpoint($desktop) {
+            height: rem(92);
+          }
+        }
+      }
+
+      .aura-myaccount-no-linked-card-description.old-card-found {
+        .header {
+          width: rem(500);
+
+          .bold:nth-of-type(2) {
+            display: block;
+          }
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+            margin-top: rem(36);
+
+            .bold:nth-of-type(2) {
+              margin-top: 0;
+            }
+          }
+        }
+      }
+
+      .card-number-wrapper {
+        margin-top: rem(30);
+      }
+
+      div.link-your-card {
+        @include linkCardBtnWhite;
+
+        margin-#{$left}: 0;
+      }
+
+      div.not-you {
+        font-family: $aura-bold;
       }
     }
   }
