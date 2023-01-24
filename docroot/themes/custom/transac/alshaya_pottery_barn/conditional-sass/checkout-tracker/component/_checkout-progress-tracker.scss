@@ -1,0 +1,22 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    .progress-bar {
+      .step {
+        &.completed {
+          &.step-4 {
+            .step-label {
+              font-weight: 600;
+            }
+          }
+        }
+
+        &.current {
+          span,
+          .step-label {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+}
