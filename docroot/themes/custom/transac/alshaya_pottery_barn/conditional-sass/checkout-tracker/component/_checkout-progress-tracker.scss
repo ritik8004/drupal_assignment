@@ -2,6 +2,14 @@
   #checkout-progress {
     .progress-bar {
       .step {
+        span {
+          line-height: rem(26);
+
+          @include breakpoint($tablet) {
+            line-height: rem(32);
+          }
+        }
+
         &.completed {
           &.step-4 {
             .step-label {
