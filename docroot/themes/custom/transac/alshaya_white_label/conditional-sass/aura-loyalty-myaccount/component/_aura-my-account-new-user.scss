@@ -58,7 +58,59 @@
     padding: 1.875rem 2.5rem;
 
     @include breakpoint($tablet) {
-      padding: 1.875rem 1rem 1.875rem 2.5rem;
+      padding: rem(27);
+      padding-#{$right}: rem(16);
+      padding-#{$left}: rem(40);
+    }
+
+    &.aura-level {
+      &-Tier1 {
+        background-image: $aura-loyalty-club-verified-user-mobile;
+
+        html[lang="ar"] & {
+          background-image: $aura-loyalty-club-verified-user-mobile-ar;
+        }
+
+        @include breakpoint($desktop) {
+          background-image: $aura-loyalty-club-verified-user;
+
+          html[lang="ar"] & {
+            background-image: $aura-loyalty-club-verified-user-ar;
+          }
+        }
+      }
+
+      &-Tier2 {
+        background-image: $aura-myaccount-star-mobile;
+
+        html[lang="ar"] & {
+          background-image: $aura-myaccount-star-mobile-ar;
+        }
+
+        @include breakpoint($desktop) {
+          background-image: $aura-myaccount-star;
+
+          html[lang="ar"] & {
+            background-image: $aura-myaccount-star-ar;
+          }
+        }
+      }
+
+      &-Tier3 {
+        background-image: $aura-myaccount-vip-mobile;
+
+        html[lang="ar"] & {
+          background-image: $aura-myaccount-vip-mobile-ar;
+        }
+
+        @include breakpoint($desktop) {
+          background-image: $aura-myaccount-vip;
+
+          html[lang="ar"] & {
+            background-image: $aura-myaccount-vip-ar;
+          }
+        }
+      }
     }
   }
 
@@ -192,7 +244,6 @@
         width: 14.0625rem;
         height: 2.875rem;
         border-radius: 1.75rem;
-        background-color: $aura-loyalty-club-old-card-text-bg;
         border: none;
         color: $aura-loyalty-club-old-card-text;
         font-family: $aura-regular;
@@ -230,6 +281,173 @@
         margin-#{$left}: 1.875rem;
         margin-top: 0;
       }
+    }
+  }
+}
+
+#my-accounts-aura,
+#my-accounts-aura-mobile {
+  .aura-myaccount-no-linked-card {
+    &-wrapper {
+      @include breakpoint($upto-desktop) {
+        position: relative;
+
+        &.old-card-found {
+          padding: rem(24);
+        }
+      }
+
+      @include breakpoint($desktop) {
+        min-height: unset;
+
+        &.open {
+          align-items: normal;
+        }
+      }
+
+      .aura-logo {
+        max-width: rem(131);
+
+        @include breakpoint($desktop) {
+          display: block;
+          max-width: rem(140);
+        }
+      }
+
+      &.open {
+        .not-you {
+          @include breakpoint($upto-desktop) {
+            margin-bottom: rem(40);
+          }
+        }
+
+        .aura-myaccount-no-linked-card-accordion-icon {
+          @include breakpoint($upto-desktop) {
+            bottom: rem(10);
+          }
+        }
+      }
+
+      div.link-your-card {
+        @include linkCardBtnWhite;
+      }
+    }
+
+    &-description {
+      &.old-card-found {
+        margin: 0 rem(33);
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        @include breakpoint($desktop) {
+          position: relative;
+        }
+
+        .Collapsible {
+          width: 100%;
+          cursor: pointer;
+        }
+
+        .header {
+          line-height: rem(26);
+
+          @include breakpoint($upto-desktop) {
+            margin-top: rem(15);
+            font-size: rem(16);
+            line-height: rem(22);
+
+            .bold {
+              margin-top: rem(20);
+              margin-bottom: rem(25);
+            }
+          }
+        }
+
+        .is-open {
+          .aura-myaccount-no-linked-card-accordion-icon {
+            transform: translateY(-50%) rotate(180deg);
+            transform: rotate(180deg);
+          }
+        }
+
+        .card-number-wrapper {
+          flex-direction: column;
+          margin-top: rem(5);
+
+          @include breakpoint($desktop) {
+            margin-top: 0;
+          }
+
+          .card-number-label {
+            margin-bottom: rem(14);
+            color: $aura-loyalty-club-no-card-label;
+            letter-spacing: rem(0.53);
+
+            @include breakpoint($desktop) {
+              margin-bottom: rem(12);
+            }
+          }
+        }
+
+        .link-card-wrapper {
+          display: flex;
+          flex-direction: column-reverse;
+          align-items: center;
+
+          @include breakpoint($desktop) {
+            flex-direction: column;
+          }
+
+          .not-you-wrapper {
+            @include breakpoint($desktop) {
+              margin-top: 0;
+              margin-bottom: rem(12);
+            }
+          }
+
+          .link-your-card {
+            @include breakpoint($upto-desktop) {
+              margin-top: rem(28);
+            }
+          }
+        }
+
+        div.not-you {
+          @include breakpoint($upto-desktop) {
+            margin-top: rem(25);
+          }
+        }
+      }
+    }
+
+    &-accordion-icon {
+      position: absolute;
+      bottom: 0;
+      #{$right}: calc(50% - #{rem(20)});
+      transition: transform 0.4s ease-in-out;
+      transform: rotate(0deg);
+
+      @include icon(chevrondown, after) {
+        font-size: rem(40);
+        color: $aura-loyalty-club-no-card-block-icon;
+      }
+
+      @include breakpoint($desktop) {
+        top: 0;
+        bottom: unset;
+        #{$right}: 0;
+      }
+    }
+  }
+
+  .my-account-aura-card-wrapper {
+    margin-top: rem(15);
+    font-family: $aura-regular;
+
+    @include breakpoint($desktop) {
+      display: flex;
+      margin-top: rem(30);
     }
   }
 }
@@ -299,56 +517,6 @@
       @include breakpoint($desktop) {
         padding-top: rem(30);
         padding-bottom: rem(30);
-      }
-
-      &.aura-level {
-        &-Tier1 {
-          background-image: $aura-loyalty-club-verified-user-mobile;
-
-          html[lang="ar"] & {
-            background-image: $aura-loyalty-club-verified-user-mobile-ar;
-          }
-
-          @include breakpoint($desktop) {
-            background-image: $aura-loyalty-club-verified-user;
-
-            html[lang="ar"] & {
-              background-image: $aura-loyalty-club-verified-user-ar;
-            }
-          }
-        }
-
-        &-Tier2 {
-          background-image: $aura-myaccount-star-mobile;
-
-          html[lang="ar"] & {
-            background-image: $aura-myaccount-star-mobile-ar;
-          }
-
-          @include breakpoint($desktop) {
-            background-image: $aura-myaccount-star;
-
-            html[lang="ar"] & {
-              background-image: $aura-myaccount-star-ar;
-            }
-          }
-        }
-
-        &-Tier3 {
-          background-image: $aura-myaccount-vip-mobile;
-
-          html[lang="ar"] & {
-            background-image: $aura-myaccount-vip-mobile-ar;
-          }
-
-          @include breakpoint($desktop) {
-            background-image: $aura-myaccount-vip;
-
-            html[lang="ar"] & {
-              background-image: $aura-myaccount-vip-ar;
-            }
-          }
-        }
       }
 
       .aura-logo {
