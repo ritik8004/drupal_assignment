@@ -12,6 +12,22 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update cardinality for promo block in main menu.
+ */
+function alshaya_acm_product_category_update_9405() {
+
+  // Update cardinality for promo blocks.
+  $config = \Drupal::configFactory()
+    ->getEditable('field.storage.taxonomy_term.field_main_menu_highlight');
+  $config->set('cardinality', 5);
+  $config->save(TRUE);
+  $field_storage = FieldStorageConfig::loadByName('taxonomy_term', 'field_main_menu_highlight')->save();
+}
 
 /**
  * Implements hook_update_N().
