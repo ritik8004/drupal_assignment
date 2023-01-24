@@ -14,8 +14,6 @@ use Drupal\Core\Cache\Cache;
  */
 function alshaya_sprinklr_page_attachments_alter(array &$page) {
   $alshaya_sprinklr_settings = \Drupal::config('alshaya_sprinklr.settings');
-  // Add user cache contexts.
-  $page['#cache']['contexts'][] = 'user';
   // Add cache tags for the module's settings.
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_sprinklr_settings->getCacheTags());
   $sprinklr_helper = \Drupal::service('sprinklr.helper');
@@ -46,6 +44,8 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
     return;
   }
 
+  // Add user cache contexts.
+  $page['#cache']['contexts'][] = 'user';
   $user = \Drupal::entityTypeManager()
     ->getStorage('user')
     ->load($current_user->id());
