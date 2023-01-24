@@ -577,16 +577,3 @@ function alshaya_hm_alshaya_search_algolia_object_alter(array &$object) {
     ];
   }
 }
-
-/**
- * Implements function alshaya_hm_preprocess_html(&$variables)().
- */
-function alshaya_hm_preprocess_html(&$variables) {
-  // Get screen_width_padding_status var status.
-  $screenSetting = \Drupal::config('alshaya_spc.screen_width_padding')->get('screen_width_padding_status');
-  // Check setting is enable.
-  if ($screenSetting) {
-    // Add Class is body tag.
-    $variables['attributes']['class'][] = 'screenSettingClass';
-  }
-}

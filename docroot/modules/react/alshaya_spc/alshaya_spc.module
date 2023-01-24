@@ -487,3 +487,16 @@ function alshaya_spc_alshaya_acm_customer_orders_details_build_alter(array &$ord
     $build['#attached']['library'][] = 'alshaya_spc/order_details';
   }
 }
+
+/**
+ * Implements hook_alshaya_spc_preprocess_html().
+ */
+function alshaya_spc_preprocess_html(&$variables) {
+  // Get screen_width_padding_status var status.
+  $screenSetting = \Drupal::config('alshaya_spc.screen_width_padding')->get('screen_width_padding_status');
+  // Check setting is enable.
+  if ($screenSetting) {
+    // Add Class is body tag.
+    $variables['attributes']['class'][] = 'show-full-width';
+  }
+}
