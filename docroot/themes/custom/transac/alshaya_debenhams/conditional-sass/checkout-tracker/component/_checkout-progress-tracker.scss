@@ -19,6 +19,14 @@
           }
         }
 
+        &.completed {
+          &.step-4 {
+            .step-label {
+              font-family: $dh-semibold;
+            }
+          }
+        }
+
         .step-label,
         span {
           @include breakpoint($only-mobile) {
