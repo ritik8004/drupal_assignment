@@ -8,6 +8,31 @@
 /**
  * Implements hook_update_N().
  *
+ * Remove Layered Navigation from all Furnitures brands.
+ */
+function alshaya_furnitures_update_9402() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_spc.show_listing_sidebar');
+  $config->set('show_plp_sidebar', FALSE);
+  $config->set('show_srp_sidebar', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_furnitures_update_dependencies() {
+  return [
+    'alshaya_furnitures' => [
+      9402 => [
+        'alshaya_spc' => 9407,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_update_N().
+ *
  *  Update configurable product attributes.
  */
 function alshaya_furnitures_update_9401() {
