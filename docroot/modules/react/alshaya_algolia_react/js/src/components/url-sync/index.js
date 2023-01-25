@@ -58,7 +58,7 @@ const withURLSync = (SearchResultsComponent) => class WithURLSync extends Compon
         return;
       }
 
-      const { state: historyState } = event.state;
+      const { state: historyState } = event;
       if (!historyState.action || historyState.action !== 'search') {
         return;
       }
