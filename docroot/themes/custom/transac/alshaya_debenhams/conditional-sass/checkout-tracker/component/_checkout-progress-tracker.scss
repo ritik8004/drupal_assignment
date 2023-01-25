@@ -1,0 +1,35 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    .progress-bar {
+      .step {
+        span {
+          html[lang="ar"] & {
+            line-height: rem(31);
+
+            @include breakpoint($tablet) {
+              line-height: rem(38);
+            }
+          }
+        }
+
+        &.current {
+          .step-label,
+          span {
+            font-family: $dh-semibold;
+          }
+        }
+
+        .step-label,
+        span {
+          @include breakpoint($only-mobile) {
+            font-family: $dh-light;
+          }
+        }
+
+        &::after {
+          border-width: rem(2);
+        }
+      }
+    }
+  }
+}
