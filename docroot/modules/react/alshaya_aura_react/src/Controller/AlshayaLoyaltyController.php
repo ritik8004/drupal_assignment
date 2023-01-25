@@ -127,6 +127,8 @@ class AlshayaLoyaltyController extends ControllerBase {
       )[AuraDictionaryApiConstants::APC_BRANDS],
       'loyaltyBenefitsContent' => $loyalty_benefits_content ? $this->token->replace($loyalty_benefits_content['value']) : '',
       'config' => $this->auraHelper->getAuraConfig(),
+      // Set context for the Aura banner.
+      'context' => 'my_aura',
     ];
 
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());

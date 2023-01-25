@@ -692,3 +692,23 @@ $brand_theme_img_directory_path: "/themes/custom/transac/alshaya_white_label/img
     }
   }
 }
+
+// Aura white button with gradient border for unlinked card banner.
+@mixin linkCardBtnWhite() {
+  color: $aura-join-link-text;
+  background-color: $aura-loyalty-club-old-card-text-bg;
+  border-style: solid;
+  border-width: rem(2);
+  border-radius: rem(28);
+  border-image-slice: 0;
+  border-image-source: $aura-loyalty-club-old-card-block-sign-up-border;
+  background-image: $aura-loyalty-club-old-card-block-sign-up-bg;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  cursor: pointer;
+
+  html[lang="ar"] & {
+    border-image-source: $aura-loyalty-club-old-card-block-sign-up-border-ar;
+    background-image: $aura-loyalty-club-old-card-block-sign-up-bg-ar;
+  }
+}
