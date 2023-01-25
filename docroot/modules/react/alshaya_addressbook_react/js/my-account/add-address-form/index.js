@@ -281,6 +281,9 @@ export default class AddAddressForm extends React.Component {
               smoothScrollTo('#alshaya-user-address-page');
               // Remove the loader.
               removeFullScreenLoader();
+            } else {
+              // Just remove the loader.
+              removeFullScreenLoader();
             }
           });
         }

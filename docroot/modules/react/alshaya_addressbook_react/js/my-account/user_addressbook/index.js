@@ -173,7 +173,7 @@ class UserAddressBook extends React.Component {
     return (
       <>
         {userAddressItems.length > 0 && (
-          <a onClick={() => this.toggleAddressForm('add')}>{Drupal.t('Add new Address')}</a>
+          <a onClick={() => this.toggleAddressForm('add')}>{Drupal.t('add new address')}</a>
         )}
         <div className="address-book-form-wrapper">
           {showAddForm && (
