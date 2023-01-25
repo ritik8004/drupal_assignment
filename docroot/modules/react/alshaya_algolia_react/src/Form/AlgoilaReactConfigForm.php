@@ -35,14 +35,12 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#title' => $this->t('Application id'),
       '#type' => 'textfield',
       '#default_value' => $config->get('application_id') ?? '',
-      '#required' => TRUE,
     ];
 
     $form['search_api_key'] = [
       '#title' => $this->t('Search api key.'),
       '#type' => 'textfield',
       '#default_value' => $config->get('search_api_key') ?? '',
-      '#required' => TRUE,
     ];
 
     $form['hits'] = [
