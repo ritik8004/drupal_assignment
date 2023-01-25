@@ -15,6 +15,12 @@
         }
 
         span {
+          @include breakpoint($only-mobile) {
+            html[lang="ar"] body.safari & {
+              line-height: rem(24);
+            }
+          }
+
           html[lang="ar"] & {
             line-height: rem(26);
 

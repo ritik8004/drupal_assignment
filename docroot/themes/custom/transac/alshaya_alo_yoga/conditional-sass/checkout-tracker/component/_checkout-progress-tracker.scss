@@ -11,8 +11,10 @@
         span {
           font-family: $ay-regular;
 
-          html[lang="en"] & {
-            line-height: rem(26);
+          @include breakpoint($only-mobile) {
+            html[lang="en"] body:not(.safari) & {
+              line-height: rem(26);
+            }
           }
 
           @include breakpoint($tablet) {
@@ -20,6 +22,10 @@
 
             html[lang="en"] & {
               line-height: rem(32);
+            }
+
+            html[lang="en"] body.safari & {
+              line-height: rem(36);
             }
           }
         }
