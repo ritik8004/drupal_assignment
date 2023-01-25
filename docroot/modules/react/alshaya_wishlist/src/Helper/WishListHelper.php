@@ -182,7 +182,7 @@ class WishListHelper {
    *   True/false to show/hide wishlist icon.
    */
   public function showWishlistIconForProduct(NodeInterface $node, string $view_mode): bool {
-    if (!in_array($view_mode, ['matchback', 'pdp', 'modal'])
+    if (!in_array($view_mode, ['matchback', 'full', 'modal'])
       || !$this->isWishListEnabled()
     ) {
       return FALSE;
