@@ -1,0 +1,13 @@
+alshaya_addressbook_react_user_profile:
+  version: 1.x
+  js:
+    dist/user_addressbook.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
+
+alshaya_addressbook_react_util:
+  version: 1.x
+  js:
+    assets/alshaya_addressbook_react.util.js: {}
+  dependencies:
+    - core/jquery
