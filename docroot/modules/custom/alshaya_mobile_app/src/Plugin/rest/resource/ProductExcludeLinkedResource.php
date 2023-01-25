@@ -397,6 +397,13 @@ class ProductExcludeLinkedResource extends ResourceBase {
     }
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
     $data['promotions'] = $this->getPromotions($sku);
+    $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
+    if ($promo_label) {
+      $data['promotions'][] = [
+        'text' => $promo_label,
+      ];
+    }
+
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
     if (!empty($data['configurable_values'])) {
       $data['configurable_values'] = array_map(function ($option) {
