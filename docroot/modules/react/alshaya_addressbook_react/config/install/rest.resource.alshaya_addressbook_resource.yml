@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_addressbook_react
+    - serialization
+    - user
+id: alshaya_addressbook_resource
+plugin_id: alshaya_addressbook_resource
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie
