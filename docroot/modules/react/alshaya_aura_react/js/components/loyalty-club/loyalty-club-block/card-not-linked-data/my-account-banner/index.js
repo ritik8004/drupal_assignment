@@ -7,13 +7,12 @@ import {
   handleNotYou,
 } from '../../../../../utilities/cta_helper';
 import { getNotYouLabel } from '../../../../../utilities/aura_utils';
-import ConditionalView
-  from '../../../../../../../js/utilities/components/conditional-view';
 
 const AuraWrapperHeader = () => (
   <div className="header">
     { Drupal.t('An Aura loyalty card is already associated with your email address. It just takes one click to link.', {}, { context: 'aura' }) }
     <span className="bold">{Drupal.t('Do you want to link now?')}</span>
+    <span className="aura-myaccount-no-linked-card-accordion-icon" />
   </div>
 );
 
@@ -23,12 +22,7 @@ const MyAccountBanner = (props) => {
   return (
     <div className="aura-myaccount-no-linked-card-wrapper old-card-found fadeInUp">
       <div className="aura-logo">
-        <ConditionalView condition={window.innerWidth > 1024}>
-          <AuraLogo stacked="vertical" />
-        </ConditionalView>
-        <ConditionalView condition={window.innerWidth < 1025}>
-          <AuraLogo stacked="horizontal" />
-        </ConditionalView>
+        <AuraLogo />
       </div>
       <div className="aura-myaccount-no-linked-card-description old-card-found">
         <Collapsible
