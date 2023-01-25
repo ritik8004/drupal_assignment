@@ -194,4 +194,4 @@ libraries-override:
   alshaya_white_label/checkout-tracker:
     css:
       theme:
-        css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css
