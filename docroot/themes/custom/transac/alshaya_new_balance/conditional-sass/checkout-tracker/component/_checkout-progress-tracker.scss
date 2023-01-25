@@ -13,6 +13,12 @@
             line-height: rem(30);
           }
 
+          @include breakpoint($only-mobile) {
+            html[lang="en"] body.chrome & {
+              line-height: rem(27);
+            }
+          }
+
           @include breakpoint($tablet) {
             font-size: rem(18);
 

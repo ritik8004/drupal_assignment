@@ -8,6 +8,14 @@
               font-family: $hnm-demibold;
             }
           }
+
+          &.completed {
+            &.step-4 {
+              .step-label {
+                font-family: $hnm-demibold;
+              }
+            }
+          }
         }
 
         span {

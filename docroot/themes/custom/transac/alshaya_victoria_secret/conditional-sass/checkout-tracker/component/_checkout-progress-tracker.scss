@@ -9,6 +9,14 @@
           }
         }
 
+        &.completed {
+          &.step-4 {
+            .step-label {
+              font-family: $vs-bentonsans-medium;
+            }
+          }
+        }
+
         @include breakpoint($only-mobile) {
           span {
             html[lang="en"] & {
