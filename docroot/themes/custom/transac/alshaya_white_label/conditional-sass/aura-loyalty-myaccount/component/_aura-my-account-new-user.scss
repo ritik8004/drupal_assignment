@@ -58,8 +58,7 @@
     padding: 1.875rem 2.5rem;
 
     @include breakpoint($tablet) {
-      padding: rem(27);
-      padding-#{$right}: rem(16);
+      padding: rem(27) rem(16);
       padding-#{$left}: rem(40);
     }
 
@@ -287,14 +286,11 @@
 
 #my-accounts-aura,
 #my-accounts-aura-mobile {
-  .aura-myaccount-no-linked-card {
-    &-wrapper {
+  .aura-myaccount-no-linked-card-wrapper {
+    &.old-card-found {
       @include breakpoint($upto-desktop) {
         position: relative;
-
-        &.old-card-found {
-          padding: rem(24);
-        }
+        padding: rem(24);
       }
 
       @include breakpoint($desktop) {
@@ -331,123 +327,122 @@
       div.link-your-card {
         @include linkCardBtnWhite;
       }
-    }
 
-    &-description {
-      &.old-card-found {
-        margin: 0 rem(33);
-        display: flex;
-        align-items: center;
-        width: 100%;
-
-        @include breakpoint($desktop) {
-          position: relative;
-        }
-
-        .Collapsible {
-          width: 100%;
-          cursor: pointer;
-        }
-
-        .header {
-          line-height: rem(26);
-
-          @include breakpoint($upto-desktop) {
-            margin-top: rem(15);
-            font-size: rem(16);
-            line-height: rem(22);
-
-            .bold {
-              margin-top: rem(20);
-              margin-bottom: rem(25);
-            }
-          }
-        }
-
-        .is-open {
-          .aura-myaccount-no-linked-card-accordion-icon {
-            transform: translateY(-50%) rotate(180deg);
-            transform: rotate(180deg);
-          }
-        }
-
-        .card-number-wrapper {
-          flex-direction: column;
-          margin-top: rem(5);
-
-          @include breakpoint($desktop) {
-            margin-top: 0;
-          }
-
-          .card-number-label {
-            margin-bottom: rem(14);
-            color: $aura-loyalty-club-no-card-label;
-            letter-spacing: rem(0.53);
-
-            @include breakpoint($desktop) {
-              margin-bottom: rem(12);
-            }
-          }
-        }
-
-        .link-card-wrapper {
+      .aura-myaccount-no-linked-card-description {
+        &.old-card-found {
+          margin: 0 rem(33);
           display: flex;
-          flex-direction: column-reverse;
           align-items: center;
+          width: 100%;
 
           @include breakpoint($desktop) {
-            flex-direction: column;
+            position: relative;
           }
 
-          .not-you-wrapper {
+          .Collapsible {
+            width: 100%;
+            cursor: pointer;
+          }
+
+          .header {
+            line-height: rem(26);
+
+            @include breakpoint($upto-desktop) {
+              margin-top: rem(15);
+              font-size: rem(16);
+              line-height: rem(22);
+
+              .bold {
+                margin-top: rem(20);
+                margin-bottom: rem(25);
+              }
+            }
+          }
+
+          .is-open {
+            .aura-myaccount-no-linked-card-accordion-icon {
+              transform: rotate(180deg);
+            }
+          }
+
+          .card-number-wrapper {
+            flex-direction: column;
+            margin-top: rem(5);
+
             @include breakpoint($desktop) {
               margin-top: 0;
-              margin-bottom: rem(12);
+            }
+
+            .card-number-label {
+              margin-bottom: rem(14);
+              color: $aura-loyalty-club-no-card-label;
+              letter-spacing: rem(0.53);
+
+              @include breakpoint($desktop) {
+                margin-bottom: rem(12);
+              }
             }
           }
 
-          .link-your-card {
+          .link-card-wrapper {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+
+            @include breakpoint($desktop) {
+              flex-direction: column;
+            }
+
+            .not-you-wrapper {
+              @include breakpoint($desktop) {
+                margin-top: 0;
+                margin-bottom: rem(12);
+              }
+            }
+
+            .link-your-card {
+              @include breakpoint($upto-desktop) {
+                margin-top: rem(28);
+              }
+            }
+          }
+
+          div.not-you {
             @include breakpoint($upto-desktop) {
-              margin-top: rem(28);
+              margin-top: rem(25);
             }
           }
         }
+      }
 
-        div.not-you {
-          @include breakpoint($upto-desktop) {
-            margin-top: rem(25);
-          }
+      .aura-myaccount-no-linked-card-accordion-icon {
+        position: absolute;
+        bottom: 0;
+        #{$right}: calc(50% - #{rem(20)});
+        transition: transform 0.4s ease-in-out;
+        transform: rotate(0deg);
+
+        @include icon(chevrondown, after) {
+          font-size: rem(40);
+          color: $aura-loyalty-club-no-card-block-icon;
+        }
+
+        @include breakpoint($desktop) {
+          top: 0;
+          bottom: unset;
+          #{$right}: 0;
         }
       }
-    }
 
-    &-accordion-icon {
-      position: absolute;
-      bottom: 0;
-      #{$right}: calc(50% - #{rem(20)});
-      transition: transform 0.4s ease-in-out;
-      transform: rotate(0deg);
+      .my-account-aura-card-wrapper {
+        margin-top: rem(15);
+        font-family: $aura-regular;
 
-      @include icon(chevrondown, after) {
-        font-size: rem(40);
-        color: $aura-loyalty-club-no-card-block-icon;
+        @include breakpoint($desktop) {
+          display: flex;
+          margin-top: rem(30);
+        }
       }
-
-      @include breakpoint($desktop) {
-        top: 0;
-        bottom: unset;
-        #{$right}: 0;
-      }
-    }
-  }
-
-  .my-account-aura-card-wrapper {
-    margin-top: rem(15);
-    font-family: $aura-regular;
-
-    @include breakpoint($desktop) {
-      display: flex;
-      margin-top: rem(30);
     }
   }
 }

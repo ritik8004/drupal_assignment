@@ -22,7 +22,7 @@ const MyAccountBanner = (props) => {
   return (
     <div className="aura-myaccount-no-linked-card-wrapper old-card-found fadeInUp">
       <div className="aura-logo">
-        <AuraLogo stacked="horizontal" />
+        <AuraLogo />
       </div>
       <div className="aura-myaccount-no-linked-card-description old-card-found">
         <Collapsible
