@@ -10,6 +10,7 @@ import AuraFormNewAuraUserModal
 import AuraFormLinkCardOTPModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 class AuraMyAccountNoLinkedCard extends React.Component {
   constructor(props) {
@@ -95,9 +96,12 @@ class AuraMyAccountNoLinkedCard extends React.Component {
           </ConditionalView>
         </div>
         <div className="aura-myaccount-no-linked-card-description no-card-found">
-          <div className="banner-title">
-            { Drupal.t('Join Aura to earn and spend points while you shop and enjoy exclusive benefits.') }
-          </div>
+          {(hasValue(drupalSettings.aura.context)
+            && drupalSettings.aura.context === 'my_aura') && (
+            <div className="banner-title">
+              { Drupal.t('Join Aura to earn and spend points while you shop and enjoy exclusive benefits.') }
+            </div>
+          )}
           <div className="action-wrapper">
             <ConditionalView condition={isUserAuthenticated()}>
               <div className="link-your-card">
