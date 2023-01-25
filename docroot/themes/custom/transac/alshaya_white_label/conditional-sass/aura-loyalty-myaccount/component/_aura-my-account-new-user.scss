@@ -110,12 +110,44 @@
           }
         }
       }
+
+      &-no-tier {
+        background-image: $aura-gradient-28-mobile;
+
+        html[lang="ar"] & {
+          background-image: $aura-gradient-28-ar-mobile;
+        }
+
+        @include breakpoint($desktop) {
+          background-image: $aura-gradient-28;
+
+          html[lang="ar"] & {
+            background-image: $aura-gradient-28-ar;
+          }
+        }
+      }
     }
   }
 
   &.old-card-found .aura-logo {
     @include breakpoint($desktop) {
       margin-#{$right}: 3.625rem;
+    }
+  }
+
+  &.no-card-found {
+    background-image: $aura-gradient-28-mobile;
+
+    html[lang="ar"] & {
+      background-image: $aura-gradient-28-ar-mobile;
+    }
+
+    @include breakpoint($desktop) {
+      background-image: $aura-gradient-28;
+
+      html[lang="ar"] & {
+        background-image: $aura-gradient-28-ar;
+      }
     }
   }
 
@@ -183,6 +215,12 @@
 
           > div.btn {
             @include linkCardBtn;
+
+            background-image: $aura-gradient-29;
+
+            html[lang="ar"] & {
+              background-image: $aura-gradient-29-ar;
+            }
           }
         }
 
@@ -444,38 +482,62 @@
         }
       }
     }
-  }
-}
 
-#my-loyalty-club {
-  // @TODO: Move common code to generic styles after implementation of redesign on My Account page.
-  .aura-myaccount-no-linked-card-wrapper {
     &.no-card-found {
-      background-image: $aura-gradient-28;
+      min-height: unset;
+      padding: rem(40);
 
-      html[lang="ar"] & {
-        background-image: $aura-gradient-28-ar;
+      .aura-logo {
+        max-width: rem(170);
       }
 
-      .aura-myaccount-no-linked-card-description.no-card-found {
-        .action-wrapper {
-          > .link-your-card {
-            > div.btn {
-              background-image: $aura-gradient-29;
+      .aura-myaccount-no-linked-card-description {
+        &.no-card-found {
+          .action-wrapper {
+            > .link-your-card,
+            > .sign-up {
+              font-size: rem(14);
 
-              html[lang="ar"] & {
-                background-image: $aura-gradient-29-ar;
+              > div.btn {
+                margin-top: rem(10);
               }
             }
           }
         }
       }
 
+      @include breakpoint($desktop) {
+        padding: rem(25) rem(40);
+
+        .aura-logo {
+          max-width: rem(141);
+          margin: 0 rem(20);
+        }
+
+        .aura-myaccount-no-linked-card-description {
+          &.no-card-found {
+            margin-#{$left}: rem(88);
+
+            .action-wrapper {
+              > .link-your-card {
+                margin-#{$right}: rem(31);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#my-loyalty-club {
+  .aura-myaccount-no-linked-card-wrapper {
+    &.no-card-found {
       @include breakpoint($only-mobile) {
         padding: rem(42) rem(40);
 
         .aura-logo {
-          svg {
+          img {
             height: rem(64);
           }
         }
@@ -515,7 +577,7 @@
       }
 
       .aura-logo {
-        svg {
+        img {
           height: rem(56);
 
           @include breakpoint($desktop) {
