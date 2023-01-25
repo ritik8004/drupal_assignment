@@ -26,12 +26,12 @@ class IndividualAddressItem extends React.Component {
     const addressList = [];
     customerInfo.addresses.forEach((item) => {
       const individualItem = { ...item };
+      individualItem.default_shipping = false;
+      individualItem.default_billing = false;
+
       if (individualItem.id === addressItem.id) {
         individualItem.default_shipping = true;
         individualItem.default_billing = true;
-      } else {
-        individualItem.default_shipping = false;
-        individualItem.default_billing = false;
       }
       addressList.push(individualItem);
     });
