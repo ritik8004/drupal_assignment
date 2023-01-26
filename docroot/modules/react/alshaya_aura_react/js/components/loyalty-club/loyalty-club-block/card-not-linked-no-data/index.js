@@ -88,12 +88,20 @@ class AuraMyAccountNoLinkedCard extends React.Component {
     return (
       <div className="aura-myaccount-no-linked-card-wrapper no-card-found fadeInUp">
         <div className="aura-logo">
-          <ConditionalView condition={window.innerWidth > 1024}>
-            <AuraLogo stacked="vertical" />
-          </ConditionalView>
-          <ConditionalView condition={window.innerWidth < 1025}>
-            <AuraLogo stacked="horizontal" />
-          </ConditionalView>
+          {(hasValue(drupalSettings.aura.context)
+            && drupalSettings.aura.context === 'my_aura') && (
+            <>
+              <ConditionalView condition={window.innerWidth > 1024}>
+                <AuraLogo stacked="vertical" />
+              </ConditionalView>
+              <ConditionalView condition={window.innerWidth < 1025}>
+                <AuraLogo stacked="horizontal" />
+              </ConditionalView>
+            </>
+          )}
+          {(!hasValue(drupalSettings.aura.context)) && (
+            <AuraLogo />
+          )}
         </div>
         <div className="aura-myaccount-no-linked-card-description no-card-found">
           {(hasValue(drupalSettings.aura.context)
