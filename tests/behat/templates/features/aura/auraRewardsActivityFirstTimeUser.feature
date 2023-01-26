@@ -47,3 +47,43 @@ Feature: AURA Rewards Activity
     Then I should see a ".link-your-card .btn" element
     Then I should see a ".sign-up .btn" element
     Then I should see a "#my-loyalty-club .loyalty-club-tabs-content" element
+
+  @desktop
+  Scenario: To validate the click on join now opens up a Modal for the user to sign up for the card
+    When I click on "#block-alshayamyaccountlinks .my-aura-link a" element
+    And I wait for element "#my-loyalty-club .banner-title"
+    When I click on "#my-loyalty-club .sign-up .btn" element
+    And I wait for element ".aura-otp-form"
+    Then I should see a ".aura-modal-header .spc-checkout-section-title" element
+    Then I should see a ".spc-aura-mobile-number .spcAuraSelect__single-value" element
+    Then I should see a ".spc-aura-mobile-number #otp-mobile-number" element
+    Then I should see a ".aura-otp-submit-description" element
+    Then I should see a ".aura-otp-form .aura-modal-form-submit" element
+
+
+  @desktop @language
+  Scenario: To validate the click on join now opens up a Modal for the user to sign up for the card
+    When I follow "{language_link}"
+    When I click on "#block-alshayamyaccountlinks .my-aura-link a" element
+    And I wait for element "#my-loyalty-club .banner-title"
+    When I click on "#my-loyalty-club .sign-up .btn" element
+    And I wait for element ".aura-otp-form"
+    Then I should see a ".aura-modal-header .spc-checkout-section-title" element
+    Then I should see a ".spc-aura-mobile-number .spcAuraSelect__single-value" element
+    Then I should see a ".spc-aura-mobile-number #otp-mobile-number" element
+    Then I should see a ".aura-otp-submit-description" element
+    Then I should see a ".aura-otp-form .aura-modal-form-submit" element
+
+
+  @mobile
+  Scenario: To validate the click on join now opens up a Modal for the user to sign up for the card
+    When I click on "#block-alshayamyaccountlinks .my-aura-link a" element
+    And I wait for element "#my-loyalty-club .banner-title"
+    When I click on "#my-loyalty-club .sign-up .btn" element
+    And I wait for element ".aura-otp-form"
+    Then I should see a ".aura-modal-header .spc-checkout-section-title" element
+    Then I should see a ".spc-aura-mobile-number .spcAuraSelect__single-value" element
+    Then I should see a ".spc-aura-mobile-number #otp-mobile-number" element
+    Then I should see a ".aura-otp-submit-description" element
+    Then I should see a ".aura-otp-form .aura-modal-form-submit" element
+
