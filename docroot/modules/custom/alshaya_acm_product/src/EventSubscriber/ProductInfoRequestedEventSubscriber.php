@@ -154,13 +154,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   private function getSolidColorLabel(SKUInterface $sku): array {
     $multiple_attributes_for_color = $this->configFactory->get('alshaya_acm_product.display_settings')->get('color_attribute_config');
     // If site uses multiple attributes for color.
-    $is_multiple_color_attribute_used = FALSE;
     if ($multiple_attributes_for_color && $multiple_attributes_for_color['support_multiple_attributes']) {
-      $is_multiple_color_attribute_used = TRUE;
-    }
-
-    // Check if the product is configurable.
-    if ($is_multiple_color_attribute_used) {
       // Attribute key which will be used for label.
       $config_color_label_attribute = $multiple_attributes_for_color['configurable_color_label_attribute'];
       // Attribute key which will be used for the swatch code.
