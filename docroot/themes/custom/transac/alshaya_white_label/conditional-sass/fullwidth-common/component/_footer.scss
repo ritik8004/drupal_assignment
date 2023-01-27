@@ -1,0 +1,15 @@
+.region__footer-secondary,
+.footer_primary-right-block {
+  padding-left: var(--side-padding-mobile);
+  padding-right: var(--side-padding-mobile);
+}
+
+.c-footer-primary {
+  .c-footer-is-accordion {
+    .is-accordion,
+    .accordion--body {
+      padding-left: var(--side-padding-mobile);
+      padding-right: var(--side-padding-mobile);
+    }
+  }
+}

@@ -1,9 +1,35 @@
-.c-menu-primary .mobile--menu {
-  #{$left}: 0;
-  padding-#{$left}: var(--side-padding-mobile);
+.c-menu-primary {
+  .mobile--menu {
+    #{$left}: 0;
+    padding-#{$left}: var(--side-padding-mobile);
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: var(--side-padding-tablet);
+    }
+  }
 }
 
 .menu__list-item {
   margin-left: var(--side-padding-mobile);
   margin-right: var(--side-padding-mobile);
+
+  @include breakpoint($tablet) {
+    margin-left: var(--side-padding-tablet);
+    margin-right: var(--side-padding-tablet);
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-menu-secondary {
+    .c-menu-secondary__region {
+      max-width: none;
+    }
+  }
+
+  .block-alshaya-main-menu {
+    ul.menu--one__list {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
 }

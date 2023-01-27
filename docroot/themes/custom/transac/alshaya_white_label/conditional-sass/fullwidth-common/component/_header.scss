@@ -1,4 +1,42 @@
-header .c-header__region {
-  padding-left: var(--side-padding-mobile);
-  padding-right: var(--side-padding-mobile);
+header {
+  .c-header__region {
+    padding-left: var(--side-padding-mobile);
+    padding-right: var(--side-padding-mobile);
+
+    @include breakpoint($tablet) {
+      padding-left: var(--side-padding-tablet);
+      padding-right: var(--side-padding-tablet);
+    }
+
+    @include breakpoint($desktop) {
+      max-width: none;
+      padding-left: var(--side-padding-desktop);
+      padding-right: var(--side-padding-desktop);
+    }
+
+    @include breakpoint($desktop-wide-1680) {
+      padding-left: var(--side-padding-desktop-wide);
+      padding-right: var(--side-padding-desktop-wide);
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  #block-cartminiblock,
+  .block-alshaya-react-mini-cart,
+  .static-minicart-wrapper {
+    .cart-link::before {
+      #{$right}: 0;
+    }
+  }
+
+  body.wishlist-enabled {
+    header {
+      .region__header {
+        .block-alshaya-react-mini-cart {
+          margin-#{$left}: rem(8);
+        }
+      }
+    }
+  }
 }
