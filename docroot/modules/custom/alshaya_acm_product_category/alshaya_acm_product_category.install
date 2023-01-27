@@ -20,7 +20,6 @@ use Drupal\field\Entity\FieldStorageConfig;
  * Update cardinality for promo block in main menu.
  */
 function alshaya_acm_product_category_update_9402() {
-
   // Update cardinality for promo blocks.
   $config = \Drupal::configFactory()
     ->getEditable('field.storage.taxonomy_term.field_main_menu_highlight');
