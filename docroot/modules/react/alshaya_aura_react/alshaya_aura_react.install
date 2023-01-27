@@ -13,8 +13,8 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Update Aura banner strings.
  */
 function alshaya_aura_react_update_9402() {
-  $translations = _alshaya_aura_react_get_translations('v8');
-  if ($translations) {
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  if ($translations = _alshaya_aura_react_get_translations('v8')) {
     alshaya_i18n_save_translations($translations);
   }
 }
