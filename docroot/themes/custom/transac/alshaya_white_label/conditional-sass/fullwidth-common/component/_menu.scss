@@ -1,0 +1,9 @@
+.c-menu-primary .mobile--menu {
+  #{$left}: 0;
+  padding-#{$left}: var(--side-padding-mobile);
+}
+
+.menu__list-item {
+  margin-left: var(--side-padding-mobile);
+  margin-right: var(--side-padding-mobile);
+}

@@ -1,0 +1,13 @@
+:root {
+  /* viewport width <= 767px */
+  --side-padding-mobile: #{rem(12)};
+
+  /* viewport width <= 1024px */
+  --side-padding-tablet: #{rem(16)};
+
+  /* viewport width <= 1679px */
+  --side-padding-desktop: #{rem(24)};
+
+  /* viewport width >= 1680px */
+  --side-padding-desktop-wide: #{rem(40)};
+}
