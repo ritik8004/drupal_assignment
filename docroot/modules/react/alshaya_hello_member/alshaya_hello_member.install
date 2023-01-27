@@ -16,17 +16,17 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 function alshaya_hello_member_update_9405() {
   // Enable membership info link in the menu.
   $config_factory = \Drupal::configFactory();
-  $helloMemberConfig = $config_factory->getEditable('alshaya_hello_member.settings');
-  if ($helloMemberConfig->get('membership_info_content_node')) {
+  $hello_member_config = $config_factory->getEditable('alshaya_hello_member.settings');
+  if ($hello_member_config->get('membership_info_content_node')) {
     // Get the node ID from config.
-    $nid = $helloMemberConfig->get('membership_info_content_node');
+    $nid = $hello_member_config->get('membership_info_content_node');
     if (is_numeric($nid)) {
-      $userConfig = $config_factory->getEditable('alshaya_user.settings');
+      $user_config = $config_factory->getEditable('alshaya_user.settings');
       // @codingStandardsIgnoreLine
-      $alshaya_hello_member = unserialize($userConfig->get('my_account_enabled_links'));
+      $alshaya_hello_member = unserialize($user_config->get('my_account_enabled_links'));
       $alshaya_hello_member['membership_info'] = 'membership_info';
-      $userConfig->set('my_account_enabled_links', serialize($alshaya_hello_member));
-      $userConfig->save();
+      $user_config->set('my_account_enabled_links', serialize($alshaya_hello_member));
+      $user_config->save();
     }
   }
   // Update translations.

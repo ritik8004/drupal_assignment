@@ -17,8 +17,8 @@ class DeliveryPropositions extends React.Component {
   }
 
   /**
-  * Helper function to fetch delivery proposition data.
-  */
+   * Helper function to fetch delivery proposition data.
+   */
   getDeliveryPropositionData = async () => {
     const deliveryPropositionItems = [];
     // Get delivery propositions response.
