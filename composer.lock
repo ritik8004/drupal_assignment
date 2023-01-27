@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a15d7f0e6a242723045ee3b7c5c51402",
+    "content-hash": "b1fc3823eed3ad08187cece31797786f",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -338,48 +338,6 @@
                 "source": "https://github.com/acquia/blt-drupal-test/tree/v1.0.0"
             },
             "time": "2020-11-03T23:25:11+00:00"
-        },
-        {
-            "name": "acquia/blt-drupal-vm",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/acquia/blt-vm.git",
-                "reference": "ca1d520ef48b7c55064f66e3b15ce87b9f99f523"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/acquia/blt-vm/zipball/ca1d520ef48b7c55064f66e3b15ce87b9f99f523",
-                "reference": "ca1d520ef48b7c55064f66e3b15ce87b9f99f523",
-                "shasum": ""
-            },
-            "require": {
-                "geerlingguy/drupal-vm": "~5.0 || ~6.0"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Acquia\\BltDrupalVm\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Acquia Engineering",
-                    "homepage": "https://www.acquia.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "Drupal VM integration for Acquia BLT",
-            "support": {
-                "issues": "https://github.com/acquia/blt-vm/issues",
-                "source": "https://github.com/acquia/blt-vm/tree/master"
-            },
-            "time": "2021-09-13T14:24:40+00:00"
         },
         {
             "name": "acquia/drupal-environment-detector",
@@ -16476,60 +16434,6 @@
             "time": "2021-12-13T10:41:57+00:00"
         },
         {
-            "name": "geerlingguy/drupal-vm",
-            "version": "5.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/geerlingguy/drupal-vm.git",
-                "reference": "f8bb9218f068994f731647997c7ace195f6ee193"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/geerlingguy/drupal-vm/zipball/f8bb9218f068994f731647997c7ace195f6ee193",
-                "reference": "f8bb9218f068994f731647997c7ace195f6ee193",
-                "shasum": ""
-            },
-            "type": "vm",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeff Geerling",
-                    "homepage": "https://www.jeffgeerling.com"
-                },
-                {
-                    "name": "Oskar Schöldström",
-                    "homepage": "http://oxy.fi"
-                }
-            ],
-            "description": "A VM for local Drupal development, built with Vagrant + Ansible",
-            "homepage": "https://www.drupalvm.com",
-            "keywords": [
-                "drupal",
-                "vagrant",
-                "virtual machine",
-                "vm"
-            ],
-            "support": {
-                "docs": "http://docs.drupalvm.com",
-                "issues": "https://github.com/geerlingguy/drupal-vm/issues",
-                "source": "https://github.com/geerlingguy/drupal-vm"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/geerlingguy",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/geerlingguy",
-                    "type": "patreon"
-                }
-            ],
-            "time": "2020-03-20T19:32:20+00:00"
-        },
-        {
             "name": "giggsey/libphonenumber-for-php",
             "version": "8.12.46",
             "source": {
@@ -29703,7 +29607,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "acquia/blt-drupal-vm": 20,
         "drupal/block_field": 15,
         "drupal/clientside_validation": 5,
         "drupal/conditional_fields": 15,
