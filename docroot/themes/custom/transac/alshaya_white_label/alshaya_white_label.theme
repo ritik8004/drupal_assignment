@@ -151,7 +151,9 @@ function alshaya_white_label_preprocess_html(&$variables) {
   if (isset($variables['page']['menu_secondary']['supermenu'])) {
     $variables['attributes']['class'][] = 'supermenu';
   }
-
+  // Adding body class and library for full width , need to remove.
+  $variables['attributes']['class'][] = 'full-width';
+  $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-spc';
 }
 
 /**
