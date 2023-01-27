@@ -568,12 +568,11 @@
     }
 
     &.old-card-found {
-      padding-top: rem(42);
-      padding-bottom: rem(36);
+      padding: rem(42) rem(26) rem(36);
 
       @include breakpoint($desktop) {
-        padding-top: rem(30);
-        padding-bottom: rem(30);
+        padding: rem(25) rem(41) rem(30);
+        padding-#{$left}: rem(46);
       }
 
       .aura-logo {
@@ -584,11 +583,16 @@
             height: rem(92);
           }
         }
+
+        @include breakpoint($desktop) {
+          margin-#{$right}: rem(62);
+        }
       }
 
       .aura-myaccount-no-linked-card-description.old-card-found {
         .header {
           width: rem(500);
+          line-height: rem(26);
 
           .bold:nth-of-type(2) {
             display: block;
@@ -617,6 +621,14 @@
 
       div.not-you {
         font-family: $aura-bold;
+
+        @include breakpoint($upto-desktop) {
+          margin-top: rem(25);
+        }
+
+        @include breakpoint($desktop) {
+          margin-#{$left}: rem(33);
+        }
       }
     }
   }
