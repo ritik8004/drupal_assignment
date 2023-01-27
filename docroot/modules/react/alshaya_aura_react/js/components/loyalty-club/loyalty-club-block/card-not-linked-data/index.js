@@ -14,7 +14,7 @@ const AuraMyAccountOldCardFound = (props) => {
   }
 
   return (
-    <MyAccountBanner cardNumber={cardNumber} notYouFailed={notYouFailed} />
+    <MyAccountBanner cardNumber={cardNumber} notYouFailed={notYouFailed} tier={tier} />
   );
 };
 
