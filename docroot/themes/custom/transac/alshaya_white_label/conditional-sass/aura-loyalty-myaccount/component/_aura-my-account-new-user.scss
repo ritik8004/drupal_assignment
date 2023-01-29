@@ -199,12 +199,13 @@
         > div.btn {
           cursor: pointer;
           outline: none;
-          margin-top: 0.875rem;
+          margin-top: rem(17);
 
           @include linkBtnDimensions;
 
           @include breakpoint($upto-desktop) {
             width: 15.9375rem;
+            margin-top: rem(12);
           }
         }
 
@@ -555,14 +556,22 @@
             font-size: rem(22);
             line-height: rem(32);
             margin-top: rem(38);
+            margin-bottom: rem(5);
           }
         }
       }
 
       @include breakpoint($desktop) {
+        padding-#{$left}: rem(45);
+        padding-#{$right}: rem(45);
+
         .aura-myaccount-no-linked-card-description.no-card-found {
           margin-#{$left}: rem(45);
           max-width: none;
+        }
+
+        .aura-logo {
+          margin-#{$left}: rem(27);
         }
       }
     }
