@@ -107,13 +107,6 @@ class AlshayaRcsPhSuperCategoryPathProcessorEventSubscriber implements EventSubs
       $event->addData('path', $path);
     }
 
-    $department_node = $this->departmentPageHelper->getDepartmentPageNode();
-    // Return in case the current page is not a
-    // department page.
-    if ($department_node) {
-      $event->addData('isDepartmentPage', TRUE);
-      $event->stopPropagation();
-    }
   }
 
 }
