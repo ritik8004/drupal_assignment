@@ -78,24 +78,6 @@
     }
   });
 
-  // Push search result grid buttons click event to GTM.
-  $('#alshaya-algolia-plp').once('bind-grid-button-click').on('click', '.large-col-grid, .small-col-grid', function () {
-    // Track large column grid click.
-    if ($(this).hasClass('large-col-grid')) {
-      Drupal.alshayaSeoGtmPushEcommerceEvents({
-        eventAction: 'plp clicks',
-        eventLabel: 'plp layout - large grid',
-      });
-    }
-    // Track small column grid click.
-    if ($(this).hasClass('small-col-grid')) {
-      Drupal.alshayaSeoGtmPushEcommerceEvents({
-        eventAction: 'plp clicks',
-        eventLabel: 'plp layout - small grid',
-      });
-    }
-  });
-
   $('#alshaya-algolia-plp').once('bind-loadmore-button-click').on('click', '.pager button', function () {
     var statsText = $('.pager .ais-Stats-text').attr('gtm-pagination-stats');
     // Push load more products click event to GTM.

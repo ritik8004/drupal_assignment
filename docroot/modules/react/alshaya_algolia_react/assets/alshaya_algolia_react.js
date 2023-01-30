@@ -122,18 +122,36 @@
     // Grid switch for PLP and Search pages.
     $('#alshaya-algolia-search .small-col-grid').once('algolia-search').on('click', function () {
       var algolia_wrapper = $(this).parents('#alshaya-algolia-search');
+      var isActive = $(this).hasClass('active');
       $('.large-col-grid', algolia_wrapper).removeClass('active');
       $(this).addClass('active');
       $('body').removeClass('large-grid')
       $('.c-products-list', algolia_wrapper).removeClass('product-large').addClass('product-small');
+
+      // Push small column grid click event to GTM.
+      if (!isActive) {
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'plp clicks',
+          eventLabel: 'plp layout - small grid',
+        });
+      }
     });
 
     $('#alshaya-algolia-search .large-col-grid').once('algolia-search').on('click', function () {
       var algolia_wrapper = $(this).parents('#alshaya-algolia-search');
+      var isActive = $(this).hasClass('active');
       $('.small-col-grid', algolia_wrapper).removeClass('active');
       $(this).addClass('active');
       $('body').addClass('large-grid');
       $('.c-products-list', algolia_wrapper).removeClass('product-small').addClass('product-large');
+
+      // Push large column grid click event to GTM.
+      if (!isActive) {
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'plp clicks',
+          eventLabel: 'plp layout - large grid',
+        });
+      }
     });
 
     // Add dropdown effect for facets filters.
