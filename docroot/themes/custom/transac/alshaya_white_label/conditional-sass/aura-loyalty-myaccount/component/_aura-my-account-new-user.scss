@@ -495,12 +495,46 @@
       .aura-myaccount-no-linked-card-description {
         &.no-card-found {
           .action-wrapper {
+            flex-direction: row-reverse;
+
             > .link-your-card,
             > .sign-up {
               font-size: rem(14);
 
               > div.btn {
                 margin-top: rem(10);
+              }
+            }
+          }
+        }
+      }
+
+      @include breakpoint($upto-desktop) {
+        padding: rem(42) rem(40);
+
+        .aura-myaccount-no-linked-card-description {
+          &.no-card-found {
+            display: block;
+
+            .action-wrapper {
+              display: flex;
+              flex-direction: column-reverse;
+
+              > .link-your-card,
+              > .sign-up {
+                font-size: rem(20);
+
+                div.btn {
+                  margin-top: rem(12);
+                }
+              }
+
+              > .link-your-card {
+                margin-top: rem(30);
+              }
+
+              > .sign-up {
+                margin-top: rem(37);
               }
             }
           }
@@ -521,6 +555,10 @@
 
             .action-wrapper {
               > .link-your-card {
+                margin-#{$right}: 0;
+              }
+
+              > .sign-up {
                 margin-#{$right}: rem(31);
               }
             }
