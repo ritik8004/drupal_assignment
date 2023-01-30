@@ -3,7 +3,7 @@
     #spc-checkout {
       .spc-main {
         @include breakpoint($tablet) {
-          @include sideSpaces(0,'margin');
+          @include sideSpaces(0, 'margin');
 
           max-width: none;
         }
