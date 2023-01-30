@@ -1,95 +1,32 @@
-///////--- @TODO  Code need to remove after merge----///////
-:root {
-  /* viewport width <= 767px */
-  --side-padding-mobile: #{rem(12)};
+.alias--checkout.full-width {
+  #block-content {
+    #spc-checkout {
+      .spc-main {
+        @include breakpoint($tablet) {
+          @include sideSpaces(0,'margin');
 
-  /* viewport width <= 1024px */
-  --side-padding-tablet: #{rem(16)};
+          max-width: none;
+        }
 
-  /* viewport width <= 1679px */
-  --side-padding-desktop: #{rem(24)};
-
-  /* viewport width >= 1680px */
-  --side-padding-desktop-wide: #{rem(40)};
-}
-
-$desktop-wide-1680: 1680px !default;
-
-$only-desktop: $desktop $desktop-wide-1680 - 1;
-
-//////--------------------//////////
-
-@include breakpoint($upto-tablet) {
-  .full-width {
-    .dynamic-promotion-wrapper .promotion {
-      width: 100%;
-      margin-left: 0;
-      margin-right: 0;
-    }
-
-    .spc-order-summary-block .block-content .actions,
-    .spc-mobile-cart-preview.sticky {
-      #{$left}: 0;
+        @include fullWidthSideSpaces(
+          $is_mobile: true,
+          $is_tablet: true,
+          $is_desktop: true,
+          $is_desktop_wide: true
+        );
+      }
     }
   }
-}
 
-@include breakpoint($only-mobile) {
-  .full-width.alias--cart {
-    .spc-pre-content,
-    .spc-pre-content-sticky,
-    .spc-free-delivery-container,
-    .spc-main,
-    .spc-post-content {
-      padding-left: var(--side-padding-mobile);
-      padding-right: var(--side-padding-mobile);
-    }
-  }
-}
+  #block-page-title {
+    max-width: none;
 
-@include breakpoint($only-tablet) {
-  .full-width.alias--cart {
-    .spc-pre-content,
-    .spc-free-delivery-container,
-    .spc-main,
-    #spc-cart .spc-free-delivery-container {
-      padding-left: var(--side-padding-tablet);
-      padding-right: var(--side-padding-tablet);
-    }
-  }
-}
-
-@include breakpoint($tablet) {
-  .full-width.alias--cart {
-    .spc-pre-content,
-    .spc-free-delivery-container,
-    .spc-main,
-    #spc-cart .spc-free-delivery-container {
-      max-width: unset;
-    }
-  }
-}
-
-@include breakpoint($only-desktop) {
-  .full-width.alias--cart {
-    .spc-pre-content,
-    .spc-free-delivery-container,
-    .spc-main,
-    #spc-cart .spc-free-delivery-container {
-      padding-left: var(--side-padding-desktop);
-      padding-right: var(--side-padding-desktop);
-    }
-  }
-}
-
-@include breakpoint($desktop-wide-1680) {
-  .full-width.alias--cart {
-    .spc-pre-content,
-    .spc-free-delivery-container,
-    .spc-main,
-    #spc-cart .spc-free-delivery-container {
-      padding-left: var(--side-padding-desktop-wide);
-      padding-right: var(--side-padding-desktop-wide);
-    }
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true,
+      $type: 'margin'
+    );
   }
 }

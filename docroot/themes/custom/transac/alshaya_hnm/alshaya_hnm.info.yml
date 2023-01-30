@@ -369,3 +369,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css
+
+  alshaya_white_label/fullwidth-spc:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-spc/fullwidth-spc.ltr.css: css/conditional-sass/fullwidth-spc/fullwidth-spc.ltr.css
