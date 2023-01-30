@@ -1,7 +1,7 @@
 Drupal.alshayaSpc = Drupal.alshayaSpc || {};
 Drupal.alshayaSpc.staticStorage = Drupal.alshayaSpc.staticStorage || {};
 
-(function () {
+(function (Drupal) {
   // Object to store the info in static cache.
   var staticStorage = {};
 
@@ -24,4 +24,4 @@ Drupal.alshayaSpc.staticStorage = Drupal.alshayaSpc.staticStorage || {};
   Drupal.alshayaSpc.staticStorage.clear = () => {
     staticStorage = {};
   };
-})();
+})(Drupal);

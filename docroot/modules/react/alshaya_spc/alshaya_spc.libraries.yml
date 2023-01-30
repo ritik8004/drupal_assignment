@@ -165,3 +165,5 @@ static_storage:
   version: 1.x
   js:
     assets/js/static_storage.js: {}
+  dependencies:
+    - core/drupal
