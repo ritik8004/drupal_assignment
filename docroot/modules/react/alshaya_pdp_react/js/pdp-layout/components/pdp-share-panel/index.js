@@ -33,6 +33,13 @@ class PdpSharePanel extends React.Component {
       });
       this.expandRef.current.classList.remove('close-card');
     }
+
+    const action = open === true ? 'close' : 'open';
+    // Push share this page open/close event to GTM.
+    Drupal.alshayaSeoGtmPushEcommerceEvents({
+      eventAction: 'share this page',
+      eventLabel: action,
+    });
   };
 
   render() {
