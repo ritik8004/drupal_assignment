@@ -46,9 +46,10 @@
 
   // Push share this page open event to GTM.
   $(document).once('share-this-open').on('click', '.magv2-share-title-wrapper', function () {
+    var action = $(this).hasClass('show') ? 'close' : 'open';
     Drupal.alshayaSeoGtmPushEcommerceEvents({
       eventAction: 'share this page',
-      eventLabel: 'open',
+      eventLabel: action,
     });
   });
 
