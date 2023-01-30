@@ -1,22 +1,14 @@
 header {
   .c-header__region {
-    padding-left: var(--side-padding-mobile);
-    padding-right: var(--side-padding-mobile);
-
-    @include breakpoint($tablet) {
-      padding-left: var(--side-padding-tablet);
-      padding-right: var(--side-padding-tablet);
-    }
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
 
     @include breakpoint($desktop) {
       max-width: none;
-      padding-left: var(--side-padding-desktop);
-      padding-right: var(--side-padding-desktop);
-    }
-
-    @include breakpoint($desktop-wide-1680) {
-      padding-left: var(--side-padding-desktop-wide);
-      padding-right: var(--side-padding-desktop-wide);
     }
   }
 }

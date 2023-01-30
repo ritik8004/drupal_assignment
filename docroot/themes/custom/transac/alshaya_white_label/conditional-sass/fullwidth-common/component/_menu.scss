@@ -1,22 +1,21 @@
 .c-menu-primary {
   .mobile--menu {
     #{$left}: 0;
-    padding-#{$left}: var(--side-padding-mobile);
 
-    @include breakpoint($tablet) {
-      padding-#{$left}: var(--side-padding-tablet);
-    }
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $side: $left
+    );
   }
 }
 
 .menu__list-item {
-  margin-left: var(--side-padding-mobile);
-  margin-right: var(--side-padding-mobile);
-
-  @include breakpoint($tablet) {
-    margin-left: var(--side-padding-tablet);
-    margin-right: var(--side-padding-tablet);
-  }
+  @include fullWidthSideSpaces(
+    $is_mobile: true,
+    $is_tablet: true,
+    $type: margin
+  );
 }
 
 @include breakpoint($desktop) {
@@ -28,8 +27,7 @@
 
   .block-alshaya-main-menu {
     ul.menu--one__list {
-      padding-left: 0;
-      padding-right: 0;
+      @include sideSpaces(0);
     }
   }
 }
