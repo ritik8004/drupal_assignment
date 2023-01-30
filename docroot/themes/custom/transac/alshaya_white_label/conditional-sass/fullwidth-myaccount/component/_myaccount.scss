@@ -8,7 +8,7 @@
         max-width: 100%;
       }
     }
-  
+
     main {
       @include breakpoint($tablet) {
         max-width: 100%;
@@ -21,10 +21,10 @@
   &.c-change-password,
   &.c-user-edit {
     @include fullWidthSideSpaces(
-    $is_mobile: true,
-    $is_tablet: true,
-    $is_desktop: true,
-    $is_desktop_wide: true
-  );
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
   }
 }
