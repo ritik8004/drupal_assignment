@@ -1,0 +1,11 @@
+#my-wishlist {
+  a.is-not-buyable {
+    background: $wishlist-button-bg;
+    color: $my-wishlist-non-buyable-btn-txt;
+    border: none;
+
+    &:hover {
+      background: $my-wishlist-non-buyable-btn-hover;
+    }
+  }
+}
