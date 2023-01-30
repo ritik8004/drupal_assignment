@@ -44,15 +44,6 @@
     });
   });
 
-  // Push share this page open event to GTM.
-  $(document).once('share-this-open').on('click', '.magv2-share-title-wrapper', function () {
-    var action = $(this).hasClass('show') ? 'close' : 'open';
-    Drupal.alshayaSeoGtmPushEcommerceEvents({
-      eventAction: 'share this page',
-      eventLabel: action,
-    });
-  });
-
   // Push share this page click event to GTM.
   $(document).once('share-this').on('click', '.pdp-share-panel span, .pdp-share-panel button', function () {
     // Set sharing medium based on the element clicked.
