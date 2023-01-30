@@ -714,6 +714,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // Set size guide information in drupal settings.
         $build['#attached']['drupalSettings']['isSizeGuideEnabled'] = FALSE;
 
+        // Set 'show_pre_selected_variant_on_pdp' settings value to check if
+        // a variant has to be pre selected on PDP page load or not.
+        $build['#attached']['drupalSettings']['showPreSelectedVariantOnPdp'] = $display_settings->get('show_pre_selected_variant_on_pdp');
+
         // Get size guide link information.
         $field_category = $entity->get('field_category')->first();
         if (!empty($field_category)) {

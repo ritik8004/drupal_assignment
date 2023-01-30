@@ -6,6 +6,23 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set show_pre_selected_variant_on_pdp to false so that
+ * no variant is pre selected on PDP page load.
+ */
+function alshaya_we_transac_update_8004() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+}
 
 /**
  * Implements hook_update_N().
