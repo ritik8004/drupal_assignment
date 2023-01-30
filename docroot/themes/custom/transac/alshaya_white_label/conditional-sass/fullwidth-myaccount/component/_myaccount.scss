@@ -1,0 +1,30 @@
+.c-order-list,
+.c-user--node,
+.user-page,
+.c-change-password {
+  &.l-two--sf {
+    .c-sidebar-first {
+      @include breakpoint($tablet) {
+        max-width: 100%;
+      }
+    }
+  
+    main {
+      @include breakpoint($tablet) {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+.user-page {
+  &.c-change-password,
+  &.c-user-edit {
+    @include fullWidthSideSpaces(
+    $is_mobile: true,
+    $is_tablet: true,
+    $is_desktop: true,
+    $is_desktop_wide: true
+  );
+  }
+}
