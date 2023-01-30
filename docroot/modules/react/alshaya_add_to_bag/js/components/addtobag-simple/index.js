@@ -13,9 +13,9 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
 import { isProductBuyable } from '../../../../js/utilities/display';
 import NotBuyableButton from '../buttons/not-buyable';
 import getStringMessage from '../../../../js/utilities/strings';
-import logger from '../../../../js/utilities/logger';
 import { isWishlistPage } from '../../../../js/utilities/wishlistHelper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export default class AddToBagSimple extends React.Component {
   constructor(props) {
@@ -91,36 +91,27 @@ export default class AddToBagSimple extends React.Component {
     const { cartQty, cartId } = this.state;
     const stateData = {};
 
-    if (cartData) {
-      if (typeof cartData.items === 'undefined') {
-        logger.warning('Error updating cart. cartData.items is undefined. cart: @cartData', {
-          '@cartData': cartData,
-        });
-        return [];
+    if (cartData && typeof cartData.cart_id !== 'undefined') {
+      // If the cart ID is different than change the current state value.
+      if (cartData.cart_id !== cartId) {
+        stateData.cartId = cartData.cart_id;
       }
 
-      if (typeof cartData.cart_id !== 'undefined') {
-        // If the cart ID is different than change the current state value.
-        if (cartData.cart_id !== cartId) {
-          stateData.cartId = cartData.cart_id;
+      // If product have different qty in cart compare to current state.
+      if (hasValue(cartData.items) && typeof cartData.items[sku] !== 'undefined') {
+        const cartItem = cartData.items[sku];
+        if (cartItem.qty !== cartQty) {
+          stateData.cartQty = cartItem.qty;
         }
+      } else if (cartQty > 0) {
+        // If product is removed from the cart, set state
+        // quantity to zero for add button to display.
+        stateData.cartQty = 0;
+      }
 
-        // If product have different qty in cart compare to current state.
-        if (typeof cartData.items[sku] !== 'undefined') {
-          const cartItem = cartData.items[sku];
-          if (cartItem.qty !== cartQty) {
-            stateData.cartQty = cartItem.qty;
-          }
-        } else if (cartQty > 0) {
-          // If product is removed from the cart, set state
-          // quantity to zero for add button to display.
-          stateData.cartQty = 0;
-        }
-
-        // Check if we have something to change in state.
-        if (Object.keys(stateData).length) {
-          this.setState(stateData);
-        }
+      // Check if we have something to change in state.
+      if (Object.keys(stateData).length) {
+        this.setState(stateData);
       }
     }
 
@@ -258,6 +249,15 @@ export default class AddToBagSimple extends React.Component {
       // We only dispatch event if item is added or updated in cart.
       if (action === 'add item' || action === 'update item') {
         dispatchCustomEvent('product-add-to-cart-success', { sku });
+        // Trigger Algolia Insight event for add to cart on success.
+        const insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
+        if (insightsClickData.queryId && insightsClickData.objectId) {
+          Drupal.pushAlshayaAlgoliaInsightsAddToCart(
+            insightsClickData.queryId,
+            insightsClickData.objectId,
+            insightsClickData.indexName,
+          );
+        }
       }
     });
   };

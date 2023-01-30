@@ -39,6 +39,7 @@ $_plp_secondary_cta_hover: rgba(51, 51, 51, 0.1);
 $WE_light_yellow: #f2eee5;
 $WE_metallic_gold: #d4af37;
 $WE_gray_fifteen: #f8f8f8;
+$WE_gray_sixteen: #54514d;
 
 // Overrides for variables.
 // Global elements.
@@ -693,3 +694,12 @@ $plp-quick-view-product-size-border: $WE_grey_three;
 $plp-quick-view-product-size-border-hover: $WE_grey_three;
 $plp-quick-view-product-size-active-bg: $WE_grey_three;
 $plp-quick-view-product-size-text-disabled: $WE_grey_three;
+
+// Matchback
+$matchback-view-options-btn-bg: $WE_grey_three;
+$matchback-view-options-btn-text: $WE_white;
+
+// Checkout steps
+$cko-steps-active-border: $WE_gray_sixteen;
+$cko-steps-label-txt: $WE_grey_three;
+$cko-steps-inactive-border: $WE_gray_eight;

@@ -1,9 +1,19 @@
 import React from 'react';
 
-let defaultcolgrid = 'small';
-if (drupalSettings.algoliaSearch.defaultColgrid !== null) {
-  defaultcolgrid = drupalSettings.algoliaSearch.defaultColgrid;
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isMobile } from '../../../../../js/utilities/display';
+
+const {
+  defaultColgrid: defaultColGridDesktop,
+  defaultColGridMobile,
+} = drupalSettings.algoliaSearch;
+
+let defaultcolgrid = isMobile() ? defaultColGridMobile : defaultColGridDesktop;
+// Set default value for col grid.
+if (!hasValue(defaultcolgrid)) {
+  defaultcolgrid = 'small';
 }
+
 const GridButtons = ({
   toggle,
 }) => (

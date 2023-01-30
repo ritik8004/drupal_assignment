@@ -1,0 +1,9 @@
+services:
+  alshaya_matchback.add_to_bag:
+    class: Drupal\alshaya_matchback\Commands\AlshayaMatchbackCommand
+    arguments:
+      - '@config.factory'
+      - '@module_handler'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command }

@@ -1,0 +1,43 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    .progress-bar {
+      .step {
+        span {
+          font-family: $tbs-recoleta-medium;
+
+          @include breakpoint($only-mobile) {
+            font-size: rem(13);
+          }
+
+          html[lang="ar"] & {
+            font-size: rem(16);
+            line-height: rem(26);
+
+            @include breakpoint($tablet) {
+              font-size: rem(18);
+              line-height: rem(32);
+            }
+          }
+        }
+
+        &.current {
+          span {
+            font-family: $tbs-recoleta-semibold;
+          }
+
+          .step-label {
+            font-family: $tbs-semibold;
+          }
+        }
+
+        &.completed {
+          &.step-4 {
+            .step-label {
+              font-family: $tbs-semibold;
+            }
+          }
+        }
+      }
+    }
+  }
+}

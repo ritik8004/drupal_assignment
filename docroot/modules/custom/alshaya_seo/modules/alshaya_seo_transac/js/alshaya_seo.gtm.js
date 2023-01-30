@@ -17,6 +17,7 @@
   var gtm_execute_onetime_events = true;
   var productImpressions = [];
   var productImpressionsTimer = null;
+  window.productListStorageKey = 'gtm_product_list';
 
   /**
    * Drupal Behaviour to set ReferrerInfo Data to storage.
@@ -861,16 +862,39 @@
         productData.dimension5 = product.attr('gtm-dimension5');
       }
 
-      // If list variable is set in cookie, retrieve it.
-      if ($.cookie('product-list') !== undefined) {
-        var listValues = JSON.parse($.cookie('product-list'));
-        productData.list = (listValues[productData.id] === 'Search Results Page' || $('body').attr('gtm-list-name') === undefined)
-          // For SRP, use list value 'Search Result Page'.
-          ? listValues[productData.id]
-          // For all other pages, use gtm-list-name html attribute.
-          // Except in PDP, to define full path from PLP.
-          : $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
+      productData.list = '';
+
+      if ($('body').is('[gtm-list-name]')) {
+        // For all other pages, use gtm-list-name html attribute.
+        // Except in PDP, to define full path from PLP.
+        productData.list = $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
       }
+
+      // If list variable is set in local storage, retrieve it.
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey);
+      if (listValues
+        && typeof listValues === 'object'
+        && Object.keys(listValues).length
+        && typeof listValues[productData.id] !== 'undefined') {
+        // For SRP, use list value 'Search Result Page'.
+        if (listValues[productData.id] === 'Search Results Page' || !$('body').is('[gtm-list-name]')) {
+          productData.list = listValues[productData.id];
+        }
+      }
+
+      // Dispatch custom event to get list name. For the default value we use
+      // the list name from the gtm attribute for the page. But for sections
+      // like matchback, we need "match back" prefix to be added instead of
+      // PDP/PLP, so this event will help us there.
+      var gtmListNameEvent = new CustomEvent('getGtmListNameForProduct', {
+        detail: {
+          listName: productData.list,
+          storedListValues: listValues,
+          sku: productData.id,
+        }
+      });
+      document.dispatchEvent(gtmListNameEvent);
+      productData.list = gtmListNameEvent.detail.listName;
 
       // Fetch referrerPageType from localstorage.
       const referrerData = Drupal.getItemFromLocalStorage('referrerData');
@@ -956,8 +980,10 @@
   Drupal.alshaya_seo_gtm_push_impressions = function (currencyCode, impressions) {
     // To avoid max size in POST data issue we do it in batches of 10.
     while (impressions.length > 0) {
+      var statsText = $('.total-result-count .ais-Stats-text').text();
       var data = {
         event: 'productImpression',
+        eventLabel2: Drupal.hasValue(statsText) ? statsText.match(/\d+/) + ' items' : '',
         ecommerce: {
           currencyCode: currencyCode,
           impressions: impressions.splice(0, 10)
@@ -1150,13 +1176,13 @@
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(null, null, null, {'type': 'product-click'});
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
 
-    // On productClick, add list variable to cookie.
-    var listValues = {};
-    if ($.cookie('product-list') !== undefined) {
-      listValues = JSON.parse($.cookie('product-list'));
+    // On productClick, add product to product list in local storage.
+    if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
+      listValues[product.id] = product.list = listName;
+      Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
     }
-    listValues[product.id] = product.list = listName;
-    $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
+
     product.variant = '';
     if (position) {
       product.position = position;
@@ -1198,6 +1224,25 @@
         eventLabel: productData.gtm_name + '_' + productData.sku,
         eventValue: 0,
         nonInteraction: 0,
+      };
+      dataLayer.push(data);
+    }
+  };
+
+  /**
+   * Helper function to push PLP and PDP ecommerce events to GTM.
+   *
+   * @param eventData
+   *  Contains event details eg: 'eventLabel', 'eventAction' etc.
+   */
+  Drupal.alshayaSeoGtmPushEcommerceEvents = function (eventData) {
+    if (Drupal.hasValue(eventData)) {
+      var data = {
+        event: 'ecommerce',
+        eventCategory: 'ecommerce',
+        eventAction: eventData.eventAction,
+        eventLabel: eventData.eventLabel,
+        eventLabel2: Drupal.hasValue(eventData.eventLabel2) ? eventData.eventLabel2 : '',
       };
       dataLayer.push(data);
     }
@@ -1556,13 +1601,18 @@
       }
     };
 
-    // Delete list from cookie.
-    var listValues = {};
-    if ($.cookie('product-list') !== undefined) {
-      listValues = JSON.parse($.cookie('product-list'));
+    // Delete product from product list in local storage.
+    if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
+
+      if (listValues
+        && typeof listValues === 'object'
+        && Object.keys(listValues).length
+        && typeof listValues[productData.id] !== 'undefined') {
+        delete listValues[product.id];
+        Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
+      }
     }
-    delete listValues[product.id];
-    $.cookie('product-list', JSON.stringify(listValues), { path: '/' });
 
     dataLayer.push(productData);
   }
@@ -1605,6 +1655,11 @@
       nonInteraction: 0,
     };
 
+    if (category == GTM_CONSTANTS.PAYMENT_ERRORS || category == GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS) {
+      var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
+      errorData.cartTotalValue = Drupal.hasValue(rawCartData.totals.subtotal_incl_tax) ?
+        rawCartData.totals.subtotal_incl_tax : 0;
+    }
     try {
       // Log error on console.
       if (drupalSettings.gtm.log_errors_to_console !== undefined

@@ -40,7 +40,6 @@ Feature: SPC Checkout Wishlist feature for Authenticated user
     And I wait for element "#my-wishlist"
     And I should not see an ".empty-message" element
     And I click on Add-to-cart button
-    And I wait 2 seconds
     And I wait for AJAX to finish
     And I wait for element ".empty-message"
     And I wait for element ".cart-link .quantity"
@@ -64,11 +63,8 @@ Feature: SPC Checkout Wishlist feature for Authenticated user
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait for AJAX to finish
-    And I click on ".checkout-link.submit" element
-    And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for element ".checkout-link.submit"
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
 

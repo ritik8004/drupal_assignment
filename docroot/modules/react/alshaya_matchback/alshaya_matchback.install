@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Alshaya Matchback module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_matchback_install() {
+  $strings = [
+    'Frequently Bought Together' => [
+      'en' => 'Frequently Bought Together',
+      'ar' => 'يتم شراؤها دائماً مع',
+      'context' => 'alshaya_static_text|pdp_matchback_title',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

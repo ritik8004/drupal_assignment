@@ -35,14 +35,12 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#title' => $this->t('Application id'),
       '#type' => 'textfield',
       '#default_value' => $config->get('application_id') ?? '',
-      '#required' => TRUE,
     ];
 
     $form['search_api_key'] = [
       '#title' => $this->t('Search api key.'),
       '#type' => 'textfield',
       '#default_value' => $config->get('search_api_key') ?? '',
-      '#required' => TRUE,
     ];
 
     $form['hits'] = [
@@ -80,10 +78,18 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
 
     $form['default_col_grid'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Default col grid'),
+      '#title' => $this->t('Default col grid for desktop'),
       '#default_value' => $config->get('default_col_grid'),
       '#options' => ['small' => $this->t('Small'), 'large' => $this->t('Large')],
-      '#description' => $this->t('Set value for default col grid.'),
+      '#description' => $this->t('Set value for default col grid for desktop view.'),
+    ];
+
+    $form['default_col_grid_mobile'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Default col grid for mobile'),
+      '#default_value' => $config->get('default_col_grid_mobile'),
+      '#options' => ['small' => $this->t('Small'), 'large' => $this->t('Large')],
+      '#description' => $this->t('Set value for default col grid for mobile view.'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -101,6 +107,7 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       ->set('items_per_page', $form_state->getValue('items_per_page'))
       ->set('hide_grid_toggle', $form_state->getValue('hide_grid_toggle'))
       ->set('default_col_grid', $form_state->getValue('default_col_grid'))
+      ->set('default_col_grid_mobile', $form_state->getValue('default_col_grid_mobile'))
       ->save();
 
     parent::submitForm($form, $form_state);

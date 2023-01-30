@@ -88,7 +88,9 @@
           </div>
         {% endif %}
 
-        <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
+        {% if free_gift_status is defined and free_gift_status %}
+          <div class="free-gift-promotions free-gift-promotions-full-view-mode"></div>
+        {% endif %}
 
         {% if content.reviews_rating %}
           {{content.reviews_rating}}
@@ -128,10 +130,6 @@
             <div class="order-quantity-limit-message"></div>
           {% endif %}
         </div>
-
-        {% if online_returns_status is defined and online_returns_status %}
-          <div id="online-returns-pdp-desktop" class="desktop-only"></div>
-        {% endif %}
       </div>
     {% endblock %}
 
@@ -160,6 +158,10 @@
 
           {% block afterDescription %}
           {% endblock %}
+
+          {% if online_returns_status is defined and online_returns_status %}
+            <div id="online-returns-pdp-desktop" class="desktop-only"></div>
+          {% endif %}
 
           {% if online_returns_status is defined and online_returns_status %}
             <div id="online-returns-pdp-mobile" class="mobile-only"></div>

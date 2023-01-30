@@ -77,4 +77,36 @@ class RcsPhEnrichmentHelper {
     return $entity;
   }
 
+  /**
+   * Returns enriched commerce entity based on current path.
+   *
+   * @param string $type
+   *   The commerce entity type (product, category).
+   * @param string $path
+   *   The overridden path url of the entity.
+   *
+   * @return object|null
+   *   The loaded commerce entity if field matching the current path.
+   */
+  public function getEnrichedEntityByPath(string $type, string $path) {
+    $entity = NULL;
+    $storage = NULL;
+    if ($type == 'product') {
+      $storage = $this->nodeStorage;
+    }
+    elseif ($type == 'category') {
+      $storage = $this->termStorage;
+    }
+    if ($storage) {
+      $query = $storage->getQuery();
+      $query->condition('field_target_link', $path);
+      $query->condition('field_override_target_link', 1);
+      $result = $query->execute();
+      if (!empty($result)) {
+        $entity = $storage->load(array_shift($result));
+      }
+    }
+    return $entity;
+  }
+
 }

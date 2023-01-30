@@ -72,6 +72,16 @@ function alshaya_geolocation_update_8004() {
 }
 
 /**
+ * Implements hook_install().
+ */
+function alshaya_geolocation_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_geolocation', 'inc', 'alshaya_geolocation.translations');
+  if ($translations = _alshaya_geolocation_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
  * Implements hook_update_dependencies().
  *
  * Have clearance for geolocation_google_maps update hooks to run.

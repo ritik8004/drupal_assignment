@@ -63,8 +63,11 @@
       padding-#{$right}: 0.1875rem;
 
       &:hover {
-        text-decoration: none;
         color: $breadcrumb_link_hover;
+
+        span {
+          text-decoration: none;
+        }
       }
     }
 

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Configure,
   InstantSearch,
@@ -8,7 +8,7 @@ import {
 import { searchClient } from '../config/SearchClient';
 
 import { productListIndexStatus } from '../utils/indexUtils';
-import { getSuperCategoryOptionalFilter, isMobile } from '../utils';
+import { getSuperCategoryOptionalFilter } from '../utils';
 import Filters from '../components/filters';
 import PlpResultInfiniteHits from '../components/plp/PlpResultInfiniteHits';
 import PlpPagination from '../components/plp/PlpPagination';
@@ -25,6 +25,9 @@ import ConditionalView from '../../common/components/conditional-view';
 import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../js/utilities/components/become-hello-member';
+import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { isMobile } from '../../../../js/utilities/display';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -52,6 +55,12 @@ const PlpApp = ({
   categoryField,
   promotionNodeId,
 }) => {
+  useEffect(() => {
+    getExpressDeliveryStatus().then((status) => {
+      window.sddEdStatus = status;
+    });
+  }, []);
+
   const plpCategoryRef = useRef();
   const allFiltersRef = useRef();
 
@@ -63,6 +72,8 @@ const PlpApp = ({
     max_category_tree_depth: categoryDepth,
     subCategories,
     categoryFacetEnabled,
+    defaultColgrid: defaultColGridDesktop,
+    defaultColGridMobile,
   } = drupalSettings.algoliaSearch;
 
   // Split ruleContext into array of strings.
@@ -70,9 +81,11 @@ const PlpApp = ({
   if (ruleContext !== undefined && ruleContext.length > 0) {
     context = ruleContext.split(',');
   }
-  let defaultcolgrid = 'small';
-  if (drupalSettings.algoliaSearch.defaultColgrid !== null) {
-    defaultcolgrid = drupalSettings.algoliaSearch.defaultColgrid;
+
+  let defaultcolgrid = isMobile() ? defaultColGridMobile : defaultColGridDesktop;
+  // Set default value for col grid.
+  if (!hasValue(defaultcolgrid)) {
+    defaultcolgrid = 'small';
   }
 
   const { indexName } = drupalSettings.algoliaSearch.listing;

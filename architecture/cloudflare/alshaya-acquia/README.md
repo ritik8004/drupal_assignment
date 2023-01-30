@@ -1,6 +1,10 @@
-# ʕ •́؈•̀) `worker-typescript-template`
+# Cloudflare Worker for Pausing ACM Queues
 
-A batteries included template for kick starting a TypeScript Cloudflare worker project.
+Cloudflare Worker code in this folder publishes the route `https://www.mothercare.com.kw/panic-on`.
+
+Code invoked on this route takes care of pausing the ACM queues for specific sites whenever the sites are slow.
+
+More details available [here](../../../README.md#cloudflare-worker-for-pausing-acm-queues)
 
 ## 🔋 Getting Started
 

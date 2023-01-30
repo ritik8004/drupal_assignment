@@ -37,7 +37,10 @@ alshaya_algolia_react.settings:
       label: 'Number of filters to show on srp/plp page top.'
     default_col_grid:
       type: string
-      label: 'Default col grid value.'  
+      label: 'Default col grid value.'
+    default_col_grid_mobile:
+      type: string
+      label: 'Default col grid for mobile view.'
 
 alshaya_algolia_react.product_frames:
   type: config_object

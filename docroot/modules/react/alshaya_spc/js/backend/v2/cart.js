@@ -11,21 +11,18 @@ import {
 } from './common';
 import {
   getApiEndpoint,
-  getCartIdFromStorage,
   isUserAuthenticated,
   removeCartIdFromStorage,
   isRequestFromSocialAuthPopup,
 } from './utility';
 import logger from '../../../../js/utilities/logger';
 import cartActions from '../../utilities/cart_actions';
-import StaticStorage from './staticStorage';
 import {
   hasValue,
   isString,
   isNumber,
 } from '../../../../js/utilities/conditionsUtility';
 import {
-  callDrupalApi,
   callMagentoApi,
   getCartSettings,
 } from '../../../../js/utilities/requestHelper';
@@ -259,12 +256,12 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
         // Remove the cart id from storage.
         window.commerceBackend.removeCartDataFromStorage(true);
 
-        const apiCallAttempts = StaticStorage.get('apiCallAttempts') || 0;
+        const apiCallAttempts = Drupal.alshayaSpc.staticStorage.get('apiCallAttempts') || 0;
 
         // Create new one and retry but only if user is trying to add item to cart.
         if (data.action === 'add item'
           && parseInt(getCartSettings('retryMaxAttempts'), 10) > apiCallAttempts) {
-          StaticStorage.set('apiCallAttempts', (apiCallAttempts + 1));
+          Drupal.alshayaSpc.staticStorage.set('apiCallAttempts', (apiCallAttempts + 1));
 
           // Create a new cart.
           cartId = await window.commerceBackend.createCart();
@@ -283,16 +280,16 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
     const exceptionType = getExceptionMessageType(response.data.error_message);
     if (exceptionType === 'OOS') {
-      await window.commerceBackend.triggerStockRefresh({ [sku]: 0 }, callDrupalApi);
+      window.commerceBackend.triggerStockRefresh({ [sku]: 0 });
     } else if (exceptionType === 'not_enough') {
-      await window.commerceBackend.triggerStockRefresh({ [sku]: quantity }, callDrupalApi);
+      window.commerceBackend.triggerStockRefresh({ [sku]: quantity });
     }
 
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
   }
 
   // Reset counter.
-  StaticStorage.remove('apiCallAttempts');
+  Drupal.alshayaSpc.staticStorage.remove('apiCallAttempts');
 
   const cartData = await window.commerceBackend.getCart(true);
   // Remove redemption of egift when feature is enabled and redemption is
@@ -371,7 +368,7 @@ window.commerceBackend.refreshCart = async (data) => {
         clearProductStatusStaticCache();
         window.commerceBackend.clearStockStaticCache();
         // Refresh stock for all items in the cart.
-        window.commerceBackend.triggerStockRefresh(null, callDrupalApi);
+        window.commerceBackend.triggerStockRefresh(null);
       }
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
@@ -445,14 +442,14 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
     return;
   }
 
-  const guestCartId = getCartIdFromStorage();
+  const guestCartId = window.commerceBackend.getCartIdFromStorage();
 
   // No further checks required if card id not available in storage.
   if (!hasValue(guestCartId)) {
     return;
   }
 
-  StaticStorage.set('associating_cart', true);
+  Drupal.alshayaSpc.staticStorage.set('associating_cart', true);
 
   if (document.referrer.indexOf('cart/login') > -1 && pageType === 'checkout') {
     // If the user is authenticated and we have cart_id in the local storage
@@ -466,7 +463,7 @@ window.commerceBackend.associateCartToCustomer = async (pageType) => {
     await mergeGuestCartToCustomer();
   }
 
-  StaticStorage.remove('associating_cart');
+  Drupal.alshayaSpc.staticStorage.remove('associating_cart');
 };
 
 /**

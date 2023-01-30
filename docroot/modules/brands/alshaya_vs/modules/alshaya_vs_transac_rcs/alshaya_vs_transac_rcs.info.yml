@@ -1,0 +1,6 @@
+name: Alshaya VS Transac RCS
+description: Enables RCS for VS.
+type: module
+core_version_requirement: ^9
+dependencies:
+  - alshaya_vs:alshaya_vs_transac

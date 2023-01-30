@@ -77,6 +77,12 @@ export default class PdpClickCollect extends React.PureComponent {
             showMore: false,
           });
           document.getElementById('click-n-collect-search-field').classList.add('hidden');
+          // Push pdp search stores event to GTM if store is available
+          // and selected successfully.
+          Drupal.alshayaSeoGtmPushEcommerceEvents({
+            eventAction: 'pdp search stores',
+            eventLabel: place.formatted_address,
+          });
         } else {
           // Show no result div.
           this.setState({

@@ -18,11 +18,19 @@
   }
 
   &:not(.frontpage) {
-    &.alias--cart {
-      .page-standard {
-        &.l-container {
-          @include breakpoint($upto-desktop) {
+    @include breakpoint($upto-desktop) {
+      &.alias--cart {
+        .page-standard {
+          &.l-container {
             margin-top: 0 !important;
+          }
+        }
+      }
+
+      &.alias--cart-login {
+        .page-standard {
+          &.l-container {
+            margin-top: rem(24);
           }
         }
       }
@@ -226,6 +234,7 @@
       .branding__menu {
         @include breakpoint($upto-desktop) {
           top: rem(46);
+          height: auto;
         }
       }
     }

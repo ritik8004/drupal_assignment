@@ -336,9 +336,6 @@ $spc-cart-free-delivery-txt: $black;
 
 // Checkout steps
 $cko-steps-active-bg: $nb-red;
-$cko-steps-current-active-border: $nb-red;
-$cko-steps-active-border: $black;
-$cko-current-steps-label-txt: $nb-red;
 
 // Checkout Global.
 $checkout_section_titles: $black;
@@ -475,3 +472,9 @@ $default_msg_bg: $nb-green;
 
 // Mobile Gallery
 $gallery_arrows_border: $nb-red;
+
+// 404 and maintenance
+$maintenance_container_border: $nb-red;
+$maintenance_container_bg: $white;
+$maintenance_container_text: $nb-black;
+$maintenance_info_bg: $white;

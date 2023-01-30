@@ -3,7 +3,7 @@
   text-align: $left;
 
   > span {
-    margin-#{$right}: rem(22);
+    margin-#{$right}: rem(10);
     margin-top: rem(22);
 
     @include breakpoint($tablet) {
@@ -12,7 +12,7 @@
   }
 
   .st_facebook_custom {
-    @include pdp_icon_img('#{$brand_theme_img_directory_path}/social-icons/pdp/facebook.svg', rem(30), rem(30));
+    @include pdp_icon_img('#{$brand_theme_img_directory_path}/social-icons/pdp/facebook.svg', rem(20), rem(20));
 
     &:hover {
       opacity: 0.5;
@@ -20,7 +20,7 @@
   }
 
   .st_twitter_custom {
-    @include pdp_icon_img('#{$brand_theme_img_directory_path}/social-icons/pdp/twitter.svg', rem(30), rem(30));
+    @include pdp_icon_img('#{$brand_theme_img_directory_path}/social-icons/pdp/twitter.svg', rem(20), rem(20));
 
     &:hover {
       opacity: 0.5;
@@ -28,7 +28,7 @@
   }
 
   .st_instagram_custom {
-    @include pdp_icon_img('#{$brand_theme_img_directory_path}/social-icons/pdp/instagram.svg', rem(30), rem(30));
+    @include pdp_icon_img('#{$brand_theme_img_directory_path}/social-icons/pdp/instagram.svg', rem(20), rem(20));
 
     &:hover {
       opacity: 0.5;

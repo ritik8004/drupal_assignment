@@ -14,6 +14,7 @@ import Loading from '../../../../js/utilities/loading';
 import { smoothScrollTo } from '../../../../alshaya_spc/js/utilities/smoothScroll';
 import isAuraEnabled, { getAuraUserDetails } from '../../../../js/utilities/helper';
 import { redeemAuraPoints } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 export default class EgiftCardPurchase extends React.Component {
   constructor(props) {
@@ -102,9 +103,19 @@ export default class EgiftCardPurchase extends React.Component {
       // Show minicart notification.
       Drupal.cartNotification.triggerNotification(productData);
 
+      let productName = productData.product_name;
+
+      if (hasValue(response.data.items)) {
+        Object.keys(response.data.items).forEach((element) => {
+          if (response.data.items[element].title === productData.product_name) {
+            productName = response.data.items[element].itemGtmName;
+          }
+        });
+      }
+
       // GTM product attributes.
       const productGtm = {
-        name: `${productData.product_name}/${productData.price}`,
+        name: `${productName}/${productData.price}`,
         price: productData.price,
         variant: productData.sku,
         category: 'eGift Card',

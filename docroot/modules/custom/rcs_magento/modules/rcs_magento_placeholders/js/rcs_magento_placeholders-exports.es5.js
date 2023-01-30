@@ -498,13 +498,17 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
 
       response = rcsCommerceBackend.invokeApiSynchronous(request);
 
+      result = [];
       if (response && response.data.products.total_count) {
         response.data.products.items.forEach(function (product) {
-          RcsEventManager.fire('rcsUpdateResults', {
+          let updatedResult = RcsEventManager.fire('rcsUpdateResults', {
             detail: {
               result: product,
             }
           });
+          // Store the data in static storage.
+          globalThis.RcsPhStaticStorage.set('product_data_' + updatedResult.sku, updatedResult);
+          result.push(updatedResult.detail.result);
         });
       }
       break;

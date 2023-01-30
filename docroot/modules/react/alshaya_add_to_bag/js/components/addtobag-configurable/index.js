@@ -65,6 +65,12 @@ export default class AddToBagConfigurable extends React.Component {
         this.openDrawer(response);
         Drupal.cartNotification.spinner_stop();
 
+        // Push quick add event to GTM.
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'plp quick add clicks',
+          eventLabel: 'quick add open',
+        });
+
         // Store info in storage.
         addProductInfoInStorage(response, sku);
       }).catch((error) => {
@@ -87,7 +93,12 @@ export default class AddToBagConfigurable extends React.Component {
     const nextStatus = 'opened';
 
     // Trigger Product Details View GTM push.
-    Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'));
+    const drawerOpenEvent = new CustomEvent('drawerOpenEvent', {
+      detail: {
+        triggerButtonElement: this.buttonContainerRef.current,
+      },
+    });
+    document.dispatchEvent(drawerOpenEvent);
 
     this.setState({
       drawerStatus: nextStatus,

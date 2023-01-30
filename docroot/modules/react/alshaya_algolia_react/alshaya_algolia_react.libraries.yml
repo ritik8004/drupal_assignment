@@ -18,7 +18,7 @@ vendor:
 
 search_insights_listing:
   js:
-    js/search-insights.listing.js: {}
+    assets/search-insights.listing.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
@@ -26,7 +26,7 @@ search_insights_listing:
 
 search_insights_detail:
   js:
-    js/search-insights.detail.js: {}
+    assets/search-insights.detail.js: {}
   dependencies:
     - core/jquery.once
     - alshaya_master/common_functions
@@ -35,7 +35,7 @@ search_insights_detail:
 search_insights:
   js:
     js/algolia/search-insights.js: { scope: footer }
-    js/search-insights.common.js: {}
+    assets/search-insights.common.js: {}
   dependencies:
     - core/drupalSettings
     - core/jquery.cookie

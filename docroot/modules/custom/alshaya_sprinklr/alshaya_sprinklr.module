@@ -1,0 +1,89 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\user\Entity\User;
+use Drupal\Core\Url;
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_sprinklr_page_attachments_alter(array &$page) {
+  $alshaya_sprinklr_settings = \Drupal::config('alshaya_sprinklr.settings');
+  // Add cache tags for the module's settings.
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_sprinklr_settings->getCacheTags());
+  $sprinklr_helper = \Drupal::service('sprinklr.helper');
+  // Skip the processing of sprinklr chatbot if sprinklr feature
+  // itself is disabled or disabled for current page.
+  if (!$sprinklr_helper->isSprinklrFeatureEnabled()
+    || !$sprinklr_helper->isSprinklrEnabledOnCurrentPath()) {
+    return;
+  }
+
+  // Set value for skin field.
+  $page['#attached']['drupalSettings']['alshayaSprinklr']['skin'] = $alshaya_sprinklr_settings->get('skin');
+  $current_user = \Drupal::currentUser();
+  // If user is anonymous.
+  if (!$current_user->isAuthenticated()) {
+    $login_url = \Drupal::request()->getSchemeAndHttpHost() . Url::fromRoute('user.login')->toString();
+    // Set key for userContext field.
+    $page['#attached']['drupalSettings']['alshayaSprinklr']['userContext'] = [
+      $alshaya_sprinklr_settings->get('user_context_key') => [
+        $login_url,
+      ],
+    ];
+    return;
+  }
+
+  // If user is not a customer.
+  if (!alshaya_acm_customer_is_customer($current_user)) {
+    return;
+  }
+
+  // Add user cache contexts.
+  $page['#cache']['contexts'][] = 'user';
+  $user = \Drupal::entityTypeManager()
+    ->getStorage('user')
+    ->load($current_user->id());
+
+  $phone_number = '';
+  if (!empty($user->get('field_mobile_number')->getValue())) {
+    $phone_number = $user->get('field_mobile_number')->getValue()[0]['value'];
+  }
+
+  // Prepare data for sprinklr user fields.
+  $user_details = [
+    'id' => $user->get('acq_customer_id')->getString(),
+    'firstName' => $user->get('field_first_name')->getString() ?? '',
+    'lastName' => $user->get('field_last_name')->getString() ?? '',
+    'phoneNo' => $phone_number,
+    'email' => $user->get('mail')->getString(),
+    'hash' => $user->get('field_sprinklr_hash')->getString() ?? '',
+  ];
+  $page['#attached']['drupalSettings']['alshayaSprinklr']['userDetails'] = $user_details;
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_update_account_alter().
+ */
+function alshaya_sprinklr_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
+  // Update sprinklr user hash value.
+  if (isset($customer['extension_attributes'], $customer['extension_attributes']['sprinklr_hash'])) {
+    $user->get('field_sprinklr_hash')->setValue($customer['extension_attributes']['sprinklr_hash']);
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_sprinklr_library_info_alter(&$libraries, $extension) {
+  // Attach alshaya specific sprinklr library when the sprinklr
+  // library is loaded.
+  if ($extension === 'sprinklr' && isset($libraries['sprinklr_chatbot'])) {
+    $libraries['sprinklr_chatbot']['dependencies'][] = 'alshaya_sprinklr/alshaya_sprinklr';
+  }
+}

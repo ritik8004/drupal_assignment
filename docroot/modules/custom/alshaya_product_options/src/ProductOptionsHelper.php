@@ -15,6 +15,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Site\Settings;
 
 /**
  * Class Product Options Helper.
@@ -180,6 +181,17 @@ class ProductOptionsHelper {
     });
 
     $sync_options = array_column($fields, 'source');
+
+    // Conditionally increase memory limit to double the current limit.
+    $new_limit = (((int) ini_get('memory_limit')) * 2) . 'M';
+
+    // We still let that be overridden via settings.
+    $new_limit = Settings::get('acq_sku_sync_product_options_memory_limit', $new_limit);
+
+    ini_set('memory_limit', $new_limit);
+    $this->logger->notice('Memory limit increased for sync-product-options to @limit', [
+      '@limit' => ini_get('memory_limit'),
+    ]);
 
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       foreach ($sync_options as $attribute_code) {

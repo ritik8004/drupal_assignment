@@ -1,0 +1,7 @@
+# User context key is passed to userContext field with the login link
+# for the site in alshaya_sprinklr.js for anonymous users.
+# Sprinklr doesn't support dynamic keys as of now so static
+# key provided by sprinklr is used.
+user_context_key: '_c_63b6a6587e86835dfdcc0ed9'
+# Value for skin field used by sprinklr chatbot library.
+skin: 'MODERN'

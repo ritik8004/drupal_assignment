@@ -1,0 +1,10 @@
+.labels-wrapper {
+  > .labels-container {
+    > .label {
+      img {
+        width: rem(48);
+        height: rem(24);
+      }
+    }
+  }
+}

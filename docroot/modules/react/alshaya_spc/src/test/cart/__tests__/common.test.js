@@ -5,7 +5,6 @@ import _cloneDeep from 'lodash/cloneDeep';
 import utilsRewire from '../../../../js/backend/v2/common';
 import { drupalSettings, Drupal } from '../globals';
 import cartActions from '../../../../js/utilities/cart_actions';
-import StaticStorage from '../../../../js/backend/v2/staticStorage';
 import * as cartData from '../data/cart.json';
 
 describe('Common', () => {
@@ -17,7 +16,7 @@ describe('Common', () => {
 
     afterEach(() => {
       // Clear all mocks.
-      StaticStorage.clear();
+      global.Drupal.alshayaSpc.staticStorage.clear();
       jest.clearAllMocks();
     });
 

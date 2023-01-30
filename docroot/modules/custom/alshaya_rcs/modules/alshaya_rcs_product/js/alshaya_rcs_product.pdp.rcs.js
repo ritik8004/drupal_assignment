@@ -7,37 +7,6 @@ window.commerceBackend = window.commerceBackend || {};
 (function ($, Drupal, drupalSettings, RcsEventManager){
 
   /**
-   * Get the labels data for the selected SKU.
-   *
-   * @param {object} product
-   *   The product wrapper jQuery object.
-   * @param {string} sku
-   *   The sku for which labels is to be retreived.
-   * @param {string} mainSku
-   *   The main sku for the PDP.
-   */
-  function renderProductLabels(product, sku, mainSku) {
-    window.commerceBackend.getProductLabelsData(mainSku, sku).then(function (labelsData) {
-      globalThis.rcsPhRenderingEngine.render(
-        drupalSettings,
-        'product-labels',
-        {
-          sku,
-          mainSku,
-          type: 'pdp',
-          labelsData,
-          product,
-        },
-      );
-    }).catch(function(e) {
-      Drupal.alshayaLogger('error', 'Failed to fetch Product Labels for sku @sku. Message @message.', {
-        '@sku': sku,
-        '@message': e.message,
-      });
-    });
-  }
-
-  /**
    * Renders the gallery for the given SKU.
    *
    * @param {object} product
@@ -95,7 +64,7 @@ window.commerceBackend = window.commerceBackend || {};
     // while the labels are fetched from the API.
     // This causes discrepancy in the flow, since in V1 the updateGallery()
     // executes completely in one flow.
-    renderProductLabels(product, selectedSku, pageMainSku);
+    window.commerceBackend.renderProductLabels(product, selectedSku, pageMainSku);
 
     if ($(product).find('.gallery-wrapper').length > 0) {
       // Since matchback products are also inside main PDP, when we change the variant

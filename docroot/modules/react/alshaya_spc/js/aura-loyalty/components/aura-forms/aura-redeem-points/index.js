@@ -18,7 +18,6 @@ import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveF
 import dispatchCustomEvent from '../../../../utilities/events';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { isEgiftCardEnabled } from '../../../../../../js/utilities/util';
-import StaticStorage from '../../../../backend/v2/staticStorage';
 
 class AuraFormRedeemPoints extends React.Component {
   constructor(props) {
@@ -123,7 +122,7 @@ class AuraFormRedeemPoints extends React.Component {
       // When partial payment is done by Aura, trigger checkout step 3 from here.
       if (cartTotals.balancePayable > 0) {
         // Update aura partial payment information in static storage.
-        StaticStorage.get('cart_raw').totals.total_segments.push({
+        Drupal.alshayaSpc.staticStorage.get('cart_raw').totals.total_segments.push({
           code: 'aura_payment',
           title: 'Paid By Aura',
           value: cartTotals.paidWithAura,
@@ -139,9 +138,9 @@ class AuraFormRedeemPoints extends React.Component {
       // When partial payment is done by Aura, trigger checkout step 3 from here.
       if (cartTotals.balancePayable > 0) {
         // Update aura partial payment information in static storage.
-        const rawCart = StaticStorage.get('cart_raw');
+        const rawCart = Drupal.alshayaSpc.staticStorage.get('cart_raw');
         rawCart.totals.total_segments = rawCart.totals.total_segments.filter((item) => item.code !== 'aura_payment');
-        StaticStorage.set('cart_raw', rawCart);
+        Drupal.alshayaSpc.staticStorage.set('cart_raw', rawCart);
         dispatchCheckoutStep3GTM = true;
       }
 

@@ -792,6 +792,19 @@ class AlshayaApiWrapper {
    */
   public function getCustomerAddressForm() {
     $country_code = strtoupper(_alshaya_custom_get_site_level_country_code());
+    return $this->getCustomerAddressFormByCountryCode($country_code);
+  }
+
+  /**
+   * Get customer address form by country code.
+   *
+   * @param string $country_code
+   *   Country code.
+   *
+   * @return array
+   *   The Form array from API response OR empty array.
+   */
+  public function getCustomerAddressFormByCountryCode($country_code) {
     $endpoint = 'deliverymatrix/address-structure/country/' . $country_code;
 
     $request_options = [
