@@ -980,7 +980,7 @@
   Drupal.alshaya_seo_gtm_push_impressions = function (currencyCode, impressions) {
     // To avoid max size in POST data issue we do it in batches of 10.
     while (impressions.length > 0) {
-      let statsText = $('.total-result-count .ais-Stats-text').text();
+      var statsText = $('.total-result-count .ais-Stats-text').text();
       var data = {
         event: 'productImpression',
         eventLabel2: Drupal.hasValue(statsText) ? statsText.match(/\d+/) + ' items' : '',
