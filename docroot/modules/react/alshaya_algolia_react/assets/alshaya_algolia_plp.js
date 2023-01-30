@@ -64,17 +64,35 @@
 
     // Grid switch for PLP and Search pages.
     $('.small-col-grid', context).once('algolia-plp').on('click', function () {
+      var isActive = $(this).hasClass('active');
       $('.large-col-grid', context).removeClass('active');
       $(this).addClass('active');
       $('body').removeClass('large-grid')
       $('.c-products-list', context).removeClass('product-large').addClass('product-small');
+
+      // Push small column grid click event to GTM.
+      if (!isActive) {
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'plp clicks',
+          eventLabel: 'plp layout - small grid',
+        });
+      }
     });
 
     $('.large-col-grid', context).once('algolia-plp').on('click', function () {
+      var isActive = $(this).hasClass('active');
       $('.small-col-grid', context).removeClass('active');
       $(this).addClass('active');
       $('body').addClass('large-grid');
       $('.c-products-list', context).removeClass('product-small').addClass('product-large');
+
+      // Push large column grid click event to GTM.
+      if (!isActive) {
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'plp clicks',
+          eventLabel: 'plp layout - large grid',
+        });
+      }
     });
 
     // Add dropdown effect for facets filters.
