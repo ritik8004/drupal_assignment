@@ -1,0 +1,13 @@
+.region__footer-secondary,
+.footer_primary-right-block {
+  @include fullWidthSideSpaces($is_mobile: true);
+}
+
+.c-footer-primary {
+  .c-footer-is-accordion {
+    .is-accordion,
+    .accordion--body {
+      @include fullWidthSideSpaces($is_mobile: true);
+    }
+  }
+}

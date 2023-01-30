@@ -1,0 +1,33 @@
+.c-menu-primary {
+  .mobile--menu {
+    #{$left}: 0;
+
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $side: $left
+    );
+  }
+}
+
+.menu__list-item {
+  @include fullWidthSideSpaces(
+    $is_mobile: true,
+    $is_tablet: true,
+    $type: margin
+  );
+}
+
+@include breakpoint($desktop) {
+  .c-menu-secondary {
+    .c-menu-secondary__region {
+      max-width: none;
+    }
+  }
+
+  .block-alshaya-main-menu {
+    ul.menu--one__list {
+      @include sideSpaces(0);
+    }
+  }
+}

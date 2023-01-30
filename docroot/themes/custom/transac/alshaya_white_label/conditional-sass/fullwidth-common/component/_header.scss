@@ -1,0 +1,34 @@
+header {
+  .c-header__region {
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+
+    @include breakpoint($desktop) {
+      max-width: none;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  #block-cartminiblock,
+  .block-alshaya-react-mini-cart,
+  .static-minicart-wrapper {
+    .cart-link::before {
+      #{$right}: 0;
+    }
+  }
+
+  body.wishlist-enabled {
+    header {
+      .region__header {
+        .block-alshaya-react-mini-cart {
+          margin-#{$left}: rem(8);
+        }
+      }
+    }
+  }
+}
