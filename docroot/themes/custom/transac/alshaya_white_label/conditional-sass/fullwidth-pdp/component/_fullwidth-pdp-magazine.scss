@@ -22,7 +22,7 @@ body.nodetype--acq_product {
 
     @include breakpoint($desktop) {
       .content-sidebar-wrapper.sidebar-fixed {
-        right: 0;
+        #{$right}: 0;
         width: 30%;
         padding-#{$left}: rem(6);
 
@@ -46,7 +46,7 @@ body.nodetype--acq_product {
         width: 33%;
 
         &.sidebar-fixed {
-          right: 0;
+          #{$right}: 0;
           width: 33%;
           padding-#{$left}: rem(2);
         }
