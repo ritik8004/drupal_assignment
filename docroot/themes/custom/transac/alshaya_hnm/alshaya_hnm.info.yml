@@ -364,3 +364,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css
+
+  alshaya_white_label/fullwidth-pdp:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css
