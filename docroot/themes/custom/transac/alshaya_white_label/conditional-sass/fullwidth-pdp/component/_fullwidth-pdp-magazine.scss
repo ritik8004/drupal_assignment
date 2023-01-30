@@ -1,0 +1,56 @@
+body.nodetype--acq_product {
+  .magazine-layout-node {
+    .content__title_wrapper.fixed {
+      @include fullWidthSideSpaces(
+        $is_mobile: true,
+      );
+    }
+
+    .content-sidebar-wrapper.sidebar-fixed {
+      @include fullWidthSideSpaces(
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $side: $right,
+      );
+    }
+
+    @include breakpoint($only-mobile) {
+      .content__title_wrapper.fixed {
+        margin: 0 calc(#{$full_width_padding_mobile} * -1);
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .content-sidebar-wrapper.sidebar-fixed {
+        right: 0;
+        width: 30%;
+        padding-#{$left}: rem(6);
+
+        &.contain {
+          padding-#{$right}: 0;
+          padding-#{$left}: rem(16);
+        }
+      }
+    }
+
+    @include breakpoint($desktop-wide-1680) {
+      .content__main {
+        width: 66%;
+      }
+
+      .magazine__gallery--container {
+        grid-gap: rem(32);
+      }
+
+      .content-sidebar-wrapper {
+        width: 33%;
+
+        &.sidebar-fixed {
+          right: 0;
+          width: 33%;
+          padding-#{$left}: rem(2);
+        }
+      }
+    }
+  }
+}
