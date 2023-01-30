@@ -14,7 +14,8 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  */
 function alshaya_aura_react_update_9402() {
   module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
-  if ($translations = _alshaya_aura_react_get_translations('v8')) {
+  $translations = _alshaya_aura_react_get_translations('v8');
+  if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
   }
 }
