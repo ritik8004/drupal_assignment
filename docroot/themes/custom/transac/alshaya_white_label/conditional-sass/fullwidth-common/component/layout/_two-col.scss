@@ -10,12 +10,7 @@
     max-width: none;
   }
 
-  .c-sidebar-first {
-    @include breakpoint($desktop) {
-      max-width: 100%;
-    }
-  }
-
+  .c-sidebar-first,
   main {
     @include breakpoint($desktop) {
       max-width: 100%;
@@ -23,15 +18,17 @@
   }
 }
 
-.c-hero-content .l-container {
-  @include fullWidthSideSpaces(
-    $is_mobile: true,
-    $is_tablet: true,
-    $is_desktop: true,
-    $is_desktop_wide: true
-  );
+.c-hero-content {
+  .l-container {
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
 
-  @include breakpoint($desktop) {
-    max-width: none;
+    @include breakpoint($desktop) {
+      max-width: none;
+    }
   }
 }
