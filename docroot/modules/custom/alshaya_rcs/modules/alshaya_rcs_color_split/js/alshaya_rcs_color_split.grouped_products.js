@@ -108,7 +108,7 @@ window.commerceBackend = window.commerceBackend || {};
    */
   function getProcessedStyleProducts(product, styleProducts) {
     // Return from here if the product is not configurable.
-    if (product.type_id !== 'configurable') {
+    if (Drupal.hasValue(product.type_id) && product.type_id !== 'configurable') {
       return product;
     }
 
