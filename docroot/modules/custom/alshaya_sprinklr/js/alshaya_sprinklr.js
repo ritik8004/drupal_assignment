@@ -3,23 +3,23 @@
  * Contains Alshaya Sprinklr chatbot functionality.
  */
 
-(function (Drupal, drupalSettings) {
+(function (drupalSettings) {
   document.addEventListener('sprChatSettingsAlter', (e) => {
-    if (!Drupal.hasValue(drupalSettings.alshayaSprinklr)) {
+    if (typeof drupalSettings.alshayaSprinklr === 'undefined') {
       return;
     }
     var sprChatData = e.detail;
     // Set skin value.
-    if (Drupal.hasValue(drupalSettings.alshayaSprinklr.skin)) {
+    if (typeof drupalSettings.alshayaSprinklr.skin !== 'undefined') {
       sprChatData.skin = drupalSettings.alshayaSprinklr.skin;
     }
     // For authenticated users.
-    if (Drupal.hasValue(drupalSettings.alshayaSprinklr.userDetails)) {
+    if (typeof drupalSettings.alshayaSprinklr.userDetails !== 'undefined') {
       sprChatData.user = drupalSettings.alshayaSprinklr.userDetails;
     }
     // For anonymous users.
-    if (Drupal.hasValue(drupalSettings.alshayaSprinklr.userContext)) {
+    if (typeof drupalSettings.alshayaSprinklr.userContext !== 'undefined') {
       sprChatData.userContext = drupalSettings.alshayaSprinklr.userContext;
     }
   });
-})(Drupal, drupalSettings);
+})(drupalSettings);
