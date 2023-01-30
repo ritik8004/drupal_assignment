@@ -36,7 +36,7 @@
       // Push product color click event to GTM.
       // For default pdp layout only.
       $(document).once('product-color-click').on('click', '.form-item-configurables-color .select2Option ul a', function () {
-        let color = $(this).attr('data-value');
+        var color = $(this).attr('data-value');
         Drupal.alshayaSeoGtmPushEcommerceEvents({
           eventAction: 'pdp color click',
           eventLabel: color,
@@ -46,7 +46,7 @@
       // Push product color click event to GTM.
       // For magazine pdp layout only.
       $(document).once('pdp-color-click').on('click', '.colour-swatch .select2Option ul a', function () {
-        let color = $(this).attr('data-color-label');
+        var color = $(this).attr('data-color-label');
         Drupal.alshayaSeoGtmPushEcommerceEvents({
           eventAction: 'pdp color click',
           eventLabel: color,
@@ -91,7 +91,7 @@
       // Push share this page click event to GTM.
       $('.sharethis-wrapper').once('share-this').on('click', 'span', function () {
         // Set sharing medium based on the element clicked.
-        let sharingMedium = $(this).attr('displaytext') ? $(this).attr('displaytext') : '';
+        var sharingMedium = $(this).attr('displaytext') ? $(this).attr('displaytext') : '';
 
         Drupal.alshayaSeoGtmPushEcommerceEvents({
           eventAction: 'share this page',
