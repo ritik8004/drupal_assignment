@@ -838,7 +838,6 @@ header {
 
       .term-image__wrapper {
         background: $mm_bg;
-        flex-shrink: 0;
         max-width: none;
       }
     }
@@ -1128,6 +1127,7 @@ header {
     .highlighted {
       display: inline-block;
       vertical-align: top;
+      margin-#{$right}: rem(24);
 
       &.title_subtitle {
         max-width: 9.75rem;
