@@ -3,9 +3,3 @@ alshaya_spc.alshaya_delivery_options_settings:
   title: 'Alshaya Same Day/Express Delivery Configuration'
   description: 'Alshaya Configuration For Same Day and Express Delivery.'
   parent: alshaya_master.alshaya_admin
-
-alshaya_spc.screen_width_padding:
-  route_name: alshaya_spc.screen_width_padding
-  title: 'Alshaya Screen Width Padding Configuration'
-  description: 'Alshaya Screen Width Padding Configuration Setting.'
-  parent: alshaya_master.alshaya_admin

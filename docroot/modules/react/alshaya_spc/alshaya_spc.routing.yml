@@ -110,11 +110,3 @@ alshaya_spc.alshaya_delivery_options_settings:
     _title: 'Alshaya Same Day/Express Delivery Configuration'
   requirements:
     _permission: 'administer site configuration'
-    
-alshaya_spc.screen_width_padding:
-  path: '/admin/config/alshaya/screen-width-padding'
-  defaults:
-    _form: '\Drupal\alshaya_spc\Form\AlshayaScreenWidthPaddingConfigForm'
-    _title: 'Alshaya Screen Width Padding Configuration'
-  requirements:
-    _permission: 'administer site configuration'
