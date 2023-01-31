@@ -198,11 +198,26 @@ class CartSelectOption extends React.Component {
     // Push product color and size click event to GTM.
     if (code === 'color' || code === 'size') {
       const eventLabel = e.currentTarget.parentElement.dataset.attributeLabel;
+      const sizeLabel = code === 'color' ? 'Color' : 'Size';
       Drupal.alshayaSeoGtmPushEcommerceEvents({
         eventAction: `pdp ${code} click`,
-        eventLabel,
+        eventLabel: `${sizeLabel}: ${eventLabel}`,
       });
     }
+
+    // Push product size click event with size group label to GTM.
+    let eventLabel = e.currentTarget.parentElement.dataset.attributeLabel;
+    const { groupName, groupStatus } = this.state;
+    // If size group is available, in this case code is not
+    // 'size' eg: 'size_shoe_eu' for FL brand.
+    if (groupStatus && hasValue(groupName)) {
+      eventLabel = `${groupName}, ${eventLabel}`;
+      Drupal.alshayaSeoGtmPushEcommerceEvents({
+        eventAction: 'pdp size click',
+        eventLabel: `Size: ${eventLabel}`,
+      });
+    }
+
     this.handleSelectionChanged(e, code);
   };
 
