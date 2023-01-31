@@ -15,19 +15,11 @@ body.nodetype--advanced_page {
   }
 
   @include breakpoint($only-mobile) {
-    .block-page-title-block {
-      padding: 0;
-    }
-
+    .block-page-title-block,
     .c-content__banner,
-    .c-content__container {
+    .c-content__container,
+    .c-department .term-description-mobile-only {
       padding: 0;
-    }
-
-    .c-department {
-      .term-description-mobile-only {
-        padding: 0;
-      }
     }
   }
 
@@ -39,18 +31,14 @@ body.nodetype--advanced_page {
   }
 
   @include breakpoint($desktop) {
+    .c-department,
     main {
       max-width: none;
     }
 
     .c-department {
-      max-width: none;
-
       .c-content__region {
-        .block-page-title-block {
-          max-width: none;
-        }
-
+        .block-page-title-block,
         .term-description-mobile-only {
           max-width: none;
         }
