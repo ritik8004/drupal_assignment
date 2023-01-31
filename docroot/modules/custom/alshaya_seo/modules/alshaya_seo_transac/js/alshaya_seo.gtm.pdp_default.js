@@ -21,16 +21,40 @@
         // We have different configurable size options available.
         // For eg: VS has band_size and cup_size also.
         var sizeWrapper = $(this).closest('.configurable-select');
-        var code = sizeWrapper.find('select').attr('data-configurable-code');
+        var sizeLabel = sizeWrapper.find('select').attr('data-selected-title');
         // Available size options for size click.
-        var sizeCodes = ['band_size', 'cup_size', 'size'];
-        if (Drupal.hasValue(code) && sizeCodes.includes(code)) {
+        // To make sure that only size click events are tracked and
+        // not other configurable options.
+        var availableSizeLabels = ['Band Size', 'Cup Size', 'Size'];
+        if (Drupal.hasValue(sizeLabel) && availableSizeLabels.includes(sizeLabel)) {
+          // Set size in '{size_label}: {size_value}' format.
           var eventLabel = $(this).attr('data-value');
           Drupal.alshayaSeoGtmPushEcommerceEvents({
             eventAction: 'pdp size click',
-            eventLabel,
+            eventLabel: `${sizeLabel}: ${eventLabel}`,
           });
         }
+      });
+
+      // Push product size click event to GTM.
+      // For the products which have size groups available.
+      $(document).once('pdp-size-click').on('click', '.group-wrapper .select2Option ul a', function () {
+        // We have different configurable size options available.
+        // For eg: VS has band_size and cup_size also.
+        var sizeWrapper = $(this).closest('.group-wrapper');
+        var sizeLabel = sizeWrapper.find('select').attr('data-selected-title');
+        var eventLabel = $(this).attr('data-value');
+        var groupLabel = '';
+        if ($('.group-anchor-wrapper').length) {
+          groupLabel = $('.group-anchor-wrapper').find('a.active').text();
+        }
+        eventLabel = Drupal.hasValue(groupLabel)
+          ? `${sizeLabel}: ${groupLabel}, ${eventLabel}`
+          : `${sizeLabel}: ${eventLabel}`;
+        Drupal.alshayaSeoGtmPushEcommerceEvents({
+          eventAction: 'pdp size click',
+          eventLabel,
+        });
       });
 
       // Push product color click event to GTM.
