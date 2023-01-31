@@ -102,6 +102,10 @@
     }
   }
 
+  .c-accordion__title {
+    border-top: none;
+  }
+
   @include breakpoint($only-mobile) {
     margin-top: 0;
   }
