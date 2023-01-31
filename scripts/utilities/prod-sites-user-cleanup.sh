@@ -38,16 +38,15 @@ if [ -z "$valid_sites" ]; then
 fi
 
 cd /var/www/html/${AH_SITE_NAME}/docroot
-blocked_emails=""
-active_emails=""
+
 # Call ACSF API to get users which are not active.
-response=$(curl -sk "https://www.alshaya.acsitefactory.com/api/v1/users?limit=500" -u ${username}:${api_key})
+response=$(curl -sk "https://www.alshaya.acsitefactory.com/api/v1/users?limit=500&status=blocked" -u ${username}:${api_key})
+acsf_users=$(php -r '$json = '"'$response'"'; echo (array)json_decode($json)->users;')
+
 # In case no result found, stop here.
-if [ -z "$response" ]; then
+if [ -z "$acsf_users" ]; then
   exit
 fi
-
-acsf_users=$(php -r '$json = '"'$response'"'; $acsf_users = (array)json_decode($json)->users; echo implode(" ", array_keys($acsf_users));')
 # Start user/permission cleanup now for each site.
 for current_site in $(echo ${valid_sites:1} | tr "," "\n") ; do
   for user in acsf_users ; do
@@ -59,13 +58,9 @@ for current_site in $(echo ${valid_sites:1} | tr "," "\n") ; do
       continue 1
     fi
     if [ user.status == "blocked" ]; then
-      echo "Cancelling user with email: $user_email"
+      echo "Cancelling inactive user with email: $user_email"
       drush -l $current_site.$source_domain user:cancel username
-      echo "User with email: $user_email is removed"
-    else
-      echo "Removing administrator role for user with email: $user_email"
-      drush -l $current_site.$source_domain user:role:remove 'administrator' username
-      echo "Removing administrator role for user with email: $user_email"
+      echo "User with email: $user_email is removed from site"
     fi
   done
 done
