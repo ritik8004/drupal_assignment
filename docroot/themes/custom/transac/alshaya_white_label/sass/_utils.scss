@@ -720,19 +720,25 @@ $full_width_padding_desktop: rem(24); /* viewport width <= 1679px */
 $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
 
 // Set side spaces.
-// $type: padding || margin
+// $type: padding || margin || position
 // $side: both || left || right
 @mixin sideSpaces($value, $type: padding, $side: both) {
+  $prefix: '';
+
+  @if $type != position {
+    $prefix: "#{$type}-";
+  }
+
   @if $side == both {
-    #{$type}-left: $value;
-    #{$type}-right: $value;
+    #{$prefix}left: $value;
+    #{$prefix}right: $value;
   } @else {
-    #{$type}-#{$side}: $value;
+    #{$prefix}#{$side}: $value;
   }
 }
 
 // Set side spaces across all viewports.
-// $type: padding || margin
+// $type: padding || margin || position
 // $side: both || left || right
 @mixin fullWidthSideSpaces(
   $is_mobile: false,

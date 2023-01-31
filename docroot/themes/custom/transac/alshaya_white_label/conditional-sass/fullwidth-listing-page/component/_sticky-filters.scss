@@ -17,13 +17,13 @@
 .filter-fixed-top {
   .sticky-filter-wrapper {
     .site-brand-home {
-      @include breakpoint($desktop) {
-        #{$left}: $full_width_padding_desktop;
-      }
-
-      @include breakpoint($desktop-wide-1680) {
-        #{$left}: $full_width_padding_desktop_wide;
-      }
+      @include fullWidthSideSpaces(
+        $is_tablet: true,
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $type: "position",
+        $side: $left
+      );
     }
   }
 }
@@ -32,13 +32,13 @@ body.wishlist-enabled {
   .filter-fixed-top {
     .sticky-filter-wrapper {
       .wishlist-minicart-sticky-wrapper {
-        @include breakpoint($desktop) {
-          #{$right}: $full_width_padding_desktop;
-        }
-
-        @include breakpoint($desktop-wide-1680) {
-          #{$right}: $full_width_padding_desktop_wide;
-        }
+        @include fullWidthSideSpaces(
+          $is_tablet: true,
+          $is_desktop: true,
+          $is_desktop_wide: true,
+          $type: "position",
+          $side: $right
+        );
       }
     }
   }
