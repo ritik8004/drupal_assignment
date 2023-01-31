@@ -340,6 +340,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
       $variables['enable_lhn_tree'] = 1;
     }
   }
+  $srp_sidebar_status = \Drupal::config('alshaya_spc.show_listing_sidebar')->get('show_srp_sidebar');
+  $variables['#attached']['drupalSettings']['show_srp_sidebar'] = $srp_sidebar_status;
 }
 
 /**
