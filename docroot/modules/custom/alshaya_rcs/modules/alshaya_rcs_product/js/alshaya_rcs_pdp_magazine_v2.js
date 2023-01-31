@@ -60,11 +60,16 @@
     // We might need to investigate the method
     // window.commerceBackend.getConfigurableCombinations() and see if the
     // order of the attributes is the same as in V2.
-    if (window.commerceBackend.isProductInStock(product)) {
-      var firstVariant = product.variants.length > 0
-        ? Object.values(product.variants).shift()
-        : null;
-      return firstVariant ? firstVariant.product.sku : null;
+    if (window.commerceBackend.isProductInStock(product)
+      && product.variants.length
+    ) {
+      product.variants.some(function eachVariant(variant) {
+        if (window.commerceBackend.isProductInStock(variant.product)) {
+          firstChild = variant.product.sku;
+          return true;
+        }
+        return false;
+      });
     }
     else {
       var combinations = window.commerceBackend.getConfigurableCombinations(product.sku);
