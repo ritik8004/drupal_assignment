@@ -76,3 +76,11 @@ services:
     arguments:
       - '@rcs_placeholders.enrichment_helper'
       - '@config.factory'
+
+  alshaya_rcs_listing.rcs_ph_department_page_path_process_subscriber:
+    class: Drupal\alshaya_rcs_listing\EventSubscriber\AlshayaRcsDepartmentPageEventSubscriber
+    tags:
+      - { name: 'event_subscriber', priority: 100 }
+    arguments:
+      - '@alshaya_advanced_page.department_page_helper'
+      - '@entity_type.manager'
