@@ -161,9 +161,29 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
   // Adding a variable for html direction.
   $variables['html_direction'] = $direction;
-
-  // Check if page is panel pages.
+  // Get route name.
   $routematch = \Drupal::routeMatch();
+  // Get current theme name.
+  $current_theme = \Drupal::theme()->getActiveTheme()->getName();
+  if (\Drupal::configFactory()->getEditable($current_theme . '.settings')->get('site_full_width')) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-common';
+    // Add library on SLP, PLP and Wishlist page.
+    if ($routematch->getRouteName() === 'alshaya_algolia_react.search' || $routematch->getRouteName() === 'alshaya_wishlist.users_wishlist' || $routematch->getRouteName() === 'alshaya_main_menu.category_view_all') {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-home';
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-advanced-page';
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
+    }
+    // Add library on all sub-pages of user’s my account.
+    if ($routematch->getRouteName() === 'entity.user.canonical') {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-pdp';
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-myaccount';
+    }
+    // Add library on all pages in SPC Flow.
+    if ($routematch->getRouteName() === 'acq_cart.cart' || $routematch->getRouteName() === 'alshaya_spc.checkout.login' || $routematch->getRouteName() === 'alshaya_spc.checkout' || $routematch->getRouteName() === 'alshaya_spc.checkout.confirmation') {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-spc';
+    }
+  }
+  // Check if page is panel pages.
   $route_options = $routematch->getRouteObject()->getOptions();
   if (isset($route_options['parameters']['page_manager_page'])) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('page-panel');
