@@ -16,7 +16,6 @@ variables:
   filters: ''
   language_filters: ''
   promotional_filter: ''
-  spc_basket_page: '/shop-default-category/men/'
   language_link: 'العربية'
   checkout_link: 'continue to checkout'
   create_account: 'تسجيل مستخدم جديد'
