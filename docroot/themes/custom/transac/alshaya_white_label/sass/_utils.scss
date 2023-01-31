@@ -719,7 +719,7 @@ $full_width_padding_tablet: rem(16); /* viewport width <= 1024px */
 $full_width_padding_desktop: rem(24); /* viewport width <= 1679px */
 $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
 
-// Set equal side spaces.
+// Set side spaces.
 // $type: padding || margin
 // $side: both || left || right
 @mixin sideSpaces($value, $type: padding, $side: both) {
