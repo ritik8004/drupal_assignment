@@ -1,0 +1,42 @@
+.alias--checkout-confirmation {
+  #block-content {
+    #spc-checkout-confirmation {
+      .spc-main {
+        @include breakpoint($tablet) {
+          max-width: none;
+        }
+
+        @include fullWidthSideSpaces(
+          $is_mobile: true,
+          $is_tablet: true,
+          $is_desktop: true,
+          $is_desktop_wide: true
+        );
+      }
+
+      .spc-pre-content {
+        max-width: none;
+
+        @include fullWidthSideSpaces(
+          $is_mobile: true,
+          $is_tablet: true,
+          $is_desktop: true,
+          $is_desktop_wide: true,
+          $type: 'margin'
+        );
+      }
+    }
+  }
+
+  #block-page-title {
+    max-width: none;
+
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true,
+      $type: 'margin'
+    );
+  }
+}
