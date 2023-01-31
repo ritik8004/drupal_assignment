@@ -1,8 +1,6 @@
 @include breakpoint($upto-tablet) {
-  .full-width {
     .dynamic-promotion-wrapper .promotion {
       width: 100%;
-
       @include sideSpaces(0, 'margin');
     }
 
@@ -10,35 +8,21 @@
     .spc-mobile-cart-preview.sticky {
       #{$left}: 0;
     }
+}
+
+.alias--cart {
+  .spc-pre-content,
+  .spc-pre-content-sticky,
+  .spc-free-delivery-container,
+  .spc-main,
+  .spc-post-content {
+    @include fullWidthSideSpaces(
+      $is_mobile: true
+    );
   }
 }
 
-@include breakpoint($only-mobile) {
-  .full-width.alias--cart {
-    .spc-pre-content,
-    .spc-pre-content-sticky,
-    .spc-free-delivery-container,
-    .spc-main,
-    .spc-post-content {
-      @include fullWidthSideSpaces(
-        $is_mobile: true
-      );
-    }
-  }
-}
-
-@include breakpoint($tablet) {
-  .full-width.alias--cart {
-    .spc-pre-content,
-    .spc-free-delivery-container,
-    .spc-main,
-    #spc-cart .spc-free-delivery-container {
-      max-width: unset;
-    }
-  }
-}
-
-.full-width.alias--cart {
+.alias--cart {
   .spc-pre-content,
   .spc-free-delivery-container,
   .spc-main,
@@ -48,6 +32,10 @@
       $is_desktop: true,
       $is_desktop_wide: true
     );
+
+    @include breakpoint($tablet) {
+      max-width: unset;
+    }
   }
 }
 

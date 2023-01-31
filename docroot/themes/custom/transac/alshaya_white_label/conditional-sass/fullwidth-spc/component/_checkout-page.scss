@@ -1,10 +1,9 @@
-.alias--checkout.full-width {
+.alias--checkout {
   #block-content {
     #spc-checkout {
       .spc-main {
         @include breakpoint($tablet) {
           @include sideSpaces(0, 'margin');
-
           max-width: none;
         }
 
