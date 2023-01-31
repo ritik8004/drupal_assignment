@@ -28,16 +28,24 @@ class AuraVerifyOTP extends React.Component {
     showFullScreenLoader();
     callMagentoApi(`/V1/verifyotp/phonenumber/${mobile.replace('+', '')}/otp/${otp}/type/link`, 'GET')
       .then((response) => {
-        if (response.data) {
-          this.setState({
-            otpVerified: response.data,
-          });
+        if (!hasValue(response.data.error)) {
+          if (response.data) {
+            this.setState({
+              otpVerified: response.data,
+            });
 
-          dispatchCustomEvent('onCustomerVerification', response.data);
+            dispatchCustomEvent('onCustomerVerification', response.data);
+          } else {
+            showError(getInlineErrorSelector('otp').otp, getStringMessage('form_error_invalid_otp'));
+            logger.notice('Error while trying to verify otp for mobile number @mobile. OTP: @otp. Message: @message', {
+              '@mobile': mobile,
+              '@otp': otp,
+              '@message': 'Invalid OTP entered.',
+            });
+          }
         }
-        showError(getInlineErrorSelector('otp').otp, getStringMessage('form_error_invalid_otp'));
         if (response.data.error) {
-          logger.notice('Error while trying to verify otp for mobile number @mobile. OTP: @otp. Type: @type. Message: @message', {
+          logger.notice('Error while trying to verify otp for mobile number @mobile. OTP: @otp. Message: @message', {
             '@mobile': mobile,
             '@otp': otp,
             '@message': response.data.error_message,
