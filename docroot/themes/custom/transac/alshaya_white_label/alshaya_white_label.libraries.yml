@@ -913,31 +913,43 @@ fullwidth-home:
   css:
     theme:
       css/conditional-sass/fullwidth-home/fullwidth-home.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/fullwidth-common
 
 fullwidth-advanced-page:
   css:
     theme:
       css/conditional-sass/fullwidth-advanced-page/fullwidth-advanced-page.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/fullwidth-common
 
 fullwidth-listing-page:
   css:
     theme:
       css/conditional-sass/fullwidth-listing-page/fullwidth-listing-page.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/fullwidth-common
 
 fullwidth-myaccount:
   css:
     theme:
       css/conditional-sass/fullwidth-myaccount/fullwidth-myaccount.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/fullwidth-common
 
 fullwidth-pdp:
   css:
     theme:
       css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/fullwidth-common
 
 fullwidth-spc:
   css:
     theme:
       css/conditional-sass/fullwidth-spc/fullwidth-spc.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/fullwidth-common
 
 alshaya-accordion:
   js:
