@@ -14,7 +14,8 @@
 .alias--cart {
   .spc-pre-content,
   .spc-main,
-  .spc-post-content {
+  .spc-post-content,
+  #spc-cart .spc-free-delivery-container {
     @include fullWidthSideSpaces(
       $is_mobile: true,
       $is_tablet: true,
@@ -31,20 +32,5 @@
     @include fullWidthSideSpaces(
       $is_mobile: true
     );
-  }
-
-  #spc-cart {
-    .spc-free-delivery-container {
-      @include fullWidthSideSpaces(
-        $is_mobile: true,
-        $is_tablet: true,
-        $is_desktop: true,
-        $is_desktop_wide: true
-      );
-
-      @include breakpoint($tablet) {
-        max-width: unset;
-      }
-    }
   }
 }
