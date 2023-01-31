@@ -182,12 +182,18 @@ function alshaya_master_form_system_theme_settings_alter(&$form, FormStateInterf
           '#description' => t("If you don't have direct file access to the server, use this field to upload your logo."),
         ];
       }
-
+      $form['site_full_width'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Show Full Width'),
+        '#description' => t('Show full width  enabled if checkbox is checked.'),
+        '#default_value' => \Drupal::config($theme . '.settings')->get('show_full_width'),
+      ];
       $key = array_search('::validateForm', $form['#validate']);
       $form['#validate'][$key] = 'alshaya_master_override_default_validate_system_theme_settings_form';
       array_unshift($form['#submit'], 'alshaya_master_save_system_theme_settings');
     }
   }
+
 }
 
 /**
@@ -342,6 +348,14 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
       $config->set($type . '_logo_path', $logo_path);
       $config->set($type . '_logo_url', file_create_url($logo_path));
     }
+  }
+
+  $current_full_width_config = \Drupal::configFactory()->getEditable($theme . '.settings');
+  $current_full_width = $current_full_width_config->get('show_full_width');
+  $new_value = $values['site_full_width'];
+  if ($current_full_width != $new_value) {
+    $config_save = TRUE;
+    $config->set('site_full_width', $new_value);
   }
 
   if ($config_save) {
