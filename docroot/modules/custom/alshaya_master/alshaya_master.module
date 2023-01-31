@@ -186,7 +186,7 @@ function alshaya_master_form_system_theme_settings_alter(&$form, FormStateInterf
         '#type' => 'checkbox',
         '#title' => t('Show Full Width'),
         '#description' => t('Show full width  enabled if checkbox is checked.'),
-        '#default_value' => \Drupal::config($theme . '.settings')->get('show_full_width'),
+        '#default_value' => \Drupal::config($theme . '.settings')->get('site_full_width'),
       ];
       $key = array_search('::validateForm', $form['#validate']);
       $form['#validate'][$key] = 'alshaya_master_override_default_validate_system_theme_settings_form';
