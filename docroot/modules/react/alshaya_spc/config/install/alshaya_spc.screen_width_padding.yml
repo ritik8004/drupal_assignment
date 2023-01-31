@@ -1,8 +1,0 @@
-#  Screen width padding status is to check if  Screen width padding feature is enabled.
-screen_width_padding_status: false
-screen_width_320: 12
-screen_width_480: 16
-screen_width_720: 20
-screen_width_1024: 24
-screen_width_1680: 40
-screen_width_2560: 48
