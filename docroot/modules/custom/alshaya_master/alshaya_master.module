@@ -182,7 +182,13 @@ function alshaya_master_form_system_theme_settings_alter(&$form, FormStateInterf
           '#description' => t("If you don't have direct file access to the server, use this field to upload your logo."),
         ];
       }
-      $form['site_full_width'] = [
+      $form['full_width_form'] = [
+        '#type' => 'details',
+        '#title' => t('Show Full Width', ['@field' => 'site_full_width']),
+        '#open' => TRUE,
+        '#tree' => FALSE,
+      ];
+      $form['full_width_form']['site_full_width'] = [
         '#type' => 'checkbox',
         '#title' => t('Show Full Width'),
         '#description' => t('Show full width  enabled if checkbox is checked.'),
