@@ -112,7 +112,7 @@ export default class ConfigurableForm extends React.Component {
   onSwatchClick = (name, value, swatchLabel) => {
     this.setAttribute(name, value);
 
-    // Push quick add size click event to GTM.
+    // Push quick add color click event to GTM.
     Drupal.alshayaSeoGtmPushEcommerceEvents({
       eventAction: 'plp color click',
       eventLabel: hasValue(swatchLabel) ? swatchLabel : '',
