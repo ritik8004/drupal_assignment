@@ -5,16 +5,11 @@ $brand_theme_img_directory_path: "/themes/custom/transac/alshaya_new_balance/img
 @mixin ic-social {
   content: "";
   background-repeat: no-repeat;
-  width: rem(26);
-  height: rem(26);
+  width: rem(20);
+  height: rem(20);
   display: inline-block;
   background-size: contain;
   background-position: center;
-
-  @include breakpoint($only-mobile) {
-    width: rem(30);
-    height: rem(30);
-  }
 }
 
 @mixin primaryBtn {
