@@ -28,6 +28,15 @@ const UnorderedList = (props) => {
       ? option.label[groupData.defaultGroup]
       : option.label;
 
+    // Get selected size label for GTM size click event.
+    // Set size in '{size_label}: {size_value}' format.
+    // Eg for VS brand, 'Band Size: 32', 'Cup Size: D'.
+    // If size goup is available we need to push the size
+    // group also eg for FL brand, 'Size: US,12'.
+    const selectedOptionLabel = isGroup
+      ? `${label}: ${groupData.defaultGroup}, ${optionLabel}`
+      : `${label}: ${optionLabel}`;
+
     if (allowedValues.length > 0
       && !allowedValues.includes(option.value)
       && !allowedValues.includes(parseInt(option.value, 10))) {
@@ -46,7 +55,7 @@ const UnorderedList = (props) => {
           value={option.value}
           className={classes.join(' ')}
           selected="selected"
-          onClick={(e) => onClick(attributeName, e.target.value, optionLabel)}
+          onClick={(e) => onClick(attributeName, e.target.value, selectedOptionLabel)}
         >
           {optionLabel}
         </li>
@@ -56,7 +65,7 @@ const UnorderedList = (props) => {
         <li
           key={option.value}
           value={option.value}
-          onClick={(e) => onClick(attributeName, e.target.value, optionLabel)}
+          onClick={(e) => onClick(attributeName, e.target.value, selectedOptionLabel)}
           className={classes.join(' ')}
         >
           {optionLabel}
