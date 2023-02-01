@@ -10,7 +10,7 @@ use Drupal\rcs_placeholders\EventSubscriber\RcsPhPathProcessorEventSubscriber;
 /**
  * Provides a path processor subscriber for rcs categories.
  */
-class AlshayaRcsDepartmentPageEventSubscriber extends RcsPhPathProcessorEventSubscriber {
+class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProcessorEventSubscriber {
 
 
   /**
@@ -28,7 +28,7 @@ class AlshayaRcsDepartmentPageEventSubscriber extends RcsPhPathProcessorEventSub
   protected $entityTypeManager;
 
   /**
-   * Constructs an AlshayaRcsDepartmentPageEventSubscriber object.
+   * Constructs an AlshayaRcsDepartmentPagePathProcessorEventSubscriber object.
    *
    * @param \Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper $alshaya_department_page_helper
    *   Department page helper.
