@@ -20,6 +20,10 @@ header {
     .cart-link::before {
       #{$right}: 0;
     }
+
+    .quantity {
+      #{$left}: rem(-14);
+    }
   }
 
   body.wishlist-enabled {

@@ -24,6 +24,12 @@
         $type: "position",
         $side: $left
       );
+
+      a {
+        @include breakpoint($tablet) {
+          margin-#{$left}: 0;
+        }
+      }
     }
   }
 }
