@@ -70,6 +70,15 @@
         }
       }
 
+      .error,
+      .error-aura-message {
+        color: $primary_input_inline_error;
+      }
+
+      .error-aura-message {
+        padding-bottom: rem(15);
+      }
+
       .aura-verify-otp {
         order: 2;
 
