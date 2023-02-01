@@ -74,7 +74,7 @@ class AlshayaRcsDepartmentPageEventSubscriber extends RcsPhPathProcessorEventSub
     }
 
     $department_node_entity = $this->entityTypeManager->getStorage('node')->load($department_node);
-    $event->addData('path', $department_node_entity->toUrl()->toString());
+    $event->addData('path', $department_node_entity->toUrl()->toString(TRUE)->getGeneratedUrl());
     $event->stopPropagation();
   }
 
