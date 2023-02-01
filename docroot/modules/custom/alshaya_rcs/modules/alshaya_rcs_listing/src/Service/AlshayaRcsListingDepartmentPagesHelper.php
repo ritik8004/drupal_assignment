@@ -77,8 +77,21 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
    * {@inheritDoc}
    */
   public function getDepartmentPageNode($request = NULL) {
-    $filtered_path = NULL;
     $path = RcsPhPathProcessor::getFullPagePath();
+    $data = [];
+    $cid = 'alshaya_rcs_listing:slug:nodes';
+
+    // Check for cache first.
+    $cache = $this->cache->get($cid);
+    if ($cache) {
+      $data = $cache->data;
+      // If cache hit.
+      if (!empty($data[$path])) {
+        return $data[$path];
+      }
+    }
+
+    $filtered_path = NULL;
 
     if (!empty($request)) {
       $filtered_path = trim($request->getPathInfo(), '/');
@@ -98,17 +111,6 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
       return FALSE;
     }
 
-    $data = [];
-    // Check for cache first.
-    $cache = $this->cache->get('alshaya_rcs_listing:slug:nodes');
-    if ($cache) {
-      $data = $cache->data;
-      // If cache hit.
-      if (!empty($data[$path])) {
-        return $data[$path];
-      }
-    }
-
     // Get all department pages.
     $department_pages = $this->getDepartmentPages();
     // If there is department page available for given term.
@@ -118,7 +120,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
       $node = $this->entityTypeManager->getStorage('node')->load($nid);
       if ($node instanceof NodeInterface && $node->isPublished()) {
         $data[$filtered_path] = $nid;
-        $this->cache->set('alshaya_rcs_listing:slug:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
+        $this->cache->set($cid, $data, Cache::PERMANENT, ['node_type:advanced_page']);
         return $nid;
       }
     }
