@@ -49,7 +49,7 @@ class AlshayaRcsDepartmentPageEventSubscriber extends RcsPhPathProcessorEventSub
   public static function getSubscribedEvents(): array {
     return [
       RcsPhPathProcessorEvent::ALTER => [
-        ['onPathProcess', 50],
+        ['onPathProcess', 12],
       ],
     ];
   }
