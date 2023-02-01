@@ -15,7 +15,8 @@
   .spc-pre-content,
   .spc-main,
   .spc-post-content,
-  #spc-cart .spc-free-delivery-container {
+  #spc-cart .spc-free-delivery-container,
+  .spc-empty-container {
     @include fullWidthSideSpaces(
       $is_mobile: true,
       $is_tablet: true,
