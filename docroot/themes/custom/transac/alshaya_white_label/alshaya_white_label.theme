@@ -158,29 +158,49 @@ function alshaya_white_label_preprocess_html(&$variables) {
  * Implements hook_preprocess_page().
  */
 function alshaya_white_label_preprocess_page(&$variables) {
+
   $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
   // Adding a variable for html direction.
   $variables['html_direction'] = $direction;
   // Get route name.
   $routematch = \Drupal::routeMatch();
+  // Create array of all my account sub pages.
+  $myAccountSubpages = ['profile.user_page.multiple', 'acq_customer.orders', 'alshaya_egift_card.my_egift_card', 'entity.user.edit_form', 'alshaya_hello_member.hello_member_points_history', 'alshaya_bazaar_voice.user_reviews',
+    'alshaya_wishlist.user_account_wishlist', 'alshaya_user.user_communication_preference', 'change_pwd_page.change_password_form', 'entity.user.canonical',
+  ];
   // Get current theme name.
   $current_theme = \Drupal::theme()->getActiveTheme()->getName();
+  // Check the site full width enable.
   if (\Drupal::configFactory()->getEditable($current_theme . '.settings')->get('site_full_width')) {
+    // Add common library.
     $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-common';
+    if ($routematch->getRouteName() === 'entity.node.canonical') {
+      // Get current node.
+      $node = \Drupal::request()->attributes->get('node');
+      // Add library on advance page.
+      if ($node->bundle() == 'advanced_page') {
+        $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-advanced-page';
+      }
+      // Add library on PDP.
+      if ($node->bundle() == 'acq_product') {
+        $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-pdp';
+      }
+    }
     // Add library on SLP, PLP and Wishlist page.
-    if ($routematch->getRouteName() === 'alshaya_algolia_react.search' || $routematch->getRouteName() === 'alshaya_wishlist.users_wishlist' || $routematch->getRouteName() === 'alshaya_main_menu.category_view_all') {
-      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-home';
-      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-advanced-page';
+    if ($routematch->getRouteName() === 'alshaya_algolia_react.search' || $routematch->getRouteName() === 'alshaya_main_menu.category_view_all') {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
     }
     // Add library on all sub-pages of user’s my account.
-    if ($routematch->getRouteName() === 'entity.user.canonical') {
-      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-pdp';
+    if (in_array($routematch->getRouteName(), $myAccountSubpages)) {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-myaccount';
     }
     // Add library on all pages in SPC Flow.
     if ($routematch->getRouteName() === 'acq_cart.cart' || $routematch->getRouteName() === 'alshaya_spc.checkout.login' || $routematch->getRouteName() === 'alshaya_spc.checkout' || $routematch->getRouteName() === 'alshaya_spc.checkout.confirmation') {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-spc';
+    }
+    // Add library on wish list page.
+    if ($routematch->getRouteName() === 'alshaya_wishlist.users_wishlist') {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-wishlist';
     }
   }
   // Check if page is panel pages.
