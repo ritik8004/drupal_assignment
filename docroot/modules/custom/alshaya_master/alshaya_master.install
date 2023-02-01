@@ -11,27 +11,37 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * Remove unnecessary occurrences for 'Search' string in Algolia context.
+ * Remove duplicate occurrences of 'You may also like' and 'Search' string
+ * in Algolia context.
  */
 function alshaya_master_update_9403() {
   // In some sites (like AEO) has duplicate keys.
   $conditions = [
-    'source' => 'Search',
-    'context' => 'alshaya_static_text|algolia_search_block_placeholder',
+    [
+      'source' => 'Search',
+      'context' => 'alshaya_static_text|algolia_search_block_placeholder',
+    ],
+    [
+      'source' => 'You may also like',
+      'context' => 'alshaya_static_text|pdp_upsell_title',
+    ],
   ];
-
   /** @var \Drupal\locale\StringDatabaseStorage $storage */
   $storage = \Drupal::service('locale.storage');
-  $strings = $storage->getStrings($conditions);
-  $count = is_countable($strings) ? count($strings) : 0;
 
-  // // Delete only if more than one 'Search' strings exist, else ignore.
-  if ($count > 1) {
+  foreach ($conditions as $condition) {
+    $strings = $storage->getStrings($condition);
+    $count = is_countable($strings) ? count($strings) : 0;
 
-    // Keep one string from the list and delete the rest.
-    array_pop($strings);
-    foreach ($strings as $string) {
-      $string->delete();
+    // Delete if there exists more than one occurrence of the string, else
+    // ignore.
+    if ($count > 1) {
+
+      // Keep one string from the list and delete the rest.
+      array_pop($strings);
+      foreach ($strings as $string) {
+        $string->delete();
+      }
     }
   }
 }
