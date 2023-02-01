@@ -191,7 +191,7 @@ function alshaya_master_form_system_theme_settings_alter(&$form, FormStateInterf
       $form['full_width_form']['site_full_width'] = [
         '#type' => 'checkbox',
         '#title' => t('Show Full Width'),
-        '#description' => t('Show full width enabled if checkbox is checked.'),
+        '#description' => t('Show full width on PDP, PLP, SRP, account page, advanced pages if checkbox is checked .'),
         '#default_value' => \Drupal::config($theme . '.settings')->get('site_full_width'),
       ];
       $key = array_search('::validateForm', $form['#validate']);
@@ -361,7 +361,7 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
   $new_value = $values['site_full_width'];
   if ($current_full_width != $new_value) {
     $config_save = TRUE;
-    $config->set('site_full_width', $new_value);
+    $current_full_width_config->set('site_full_width', $new_value);
   }
 
   if ($config_save) {
