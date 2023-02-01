@@ -379,8 +379,3 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/fullwidth-advanced-page/fullwidth-advanced-page.ltr.css: css/conditional-sass/fullwidth-advanced-page/fullwidth-advanced-page.ltr.css
-
-  alshaya_white_label/fullwidth-wishlist:
-    css:
-      theme:
-        css/conditional-sass/fullwidth-wishlist/fullwidth-wishlist.ltr.css: css/conditional-sass/fullwidth-wishlist/fullwidth-wishlist.ltr.css
