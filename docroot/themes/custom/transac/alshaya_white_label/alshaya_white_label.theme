@@ -186,7 +186,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
         $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-pdp';
       }
     }
-    // Add library on SLP, PLP and Wishlist page.
+    // Add library on SLP, PLP.
     if ($routematch->getRouteName() === 'alshaya_algolia_react.search' || $routematch->getRouteName() === 'alshaya_main_menu.category_view_all') {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
     }
