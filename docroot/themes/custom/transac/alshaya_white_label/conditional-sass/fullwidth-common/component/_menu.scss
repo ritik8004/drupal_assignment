@@ -11,11 +11,13 @@
 }
 
 .menu__list-item {
-  @include fullWidthSideSpaces(
-    $is_mobile: true,
-    $is_tablet: true,
-    $type: margin
-  );
+  @include breakpoint($only-mobile) {
+    @include sideSpaces($full_width_padding_mobile, $type: "margin");
+  }
+
+  @include breakpoint($only-tablet) {
+    @include sideSpaces($full_width_padding_tablet, $type: "margin");
+  }
 }
 
 @include breakpoint($desktop) {
