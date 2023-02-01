@@ -2125,7 +2125,7 @@ const triggerCheckoutEvent = (event, data) => {
   params.append('action', event);
 
   const retVal = navigator.sendBeacon(
-    '/spc/checkout-event',
+    Drupal.url('spc/checkout-event'),
     params,
   );
 
