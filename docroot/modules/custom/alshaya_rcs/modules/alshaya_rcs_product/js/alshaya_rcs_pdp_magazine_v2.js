@@ -152,7 +152,9 @@
     const info = {};
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
-      if (Drupal.hasValue(processedVariants[variantInfo.sku])) {
+      if (window.commerceBackend.isProductInStock(variantInfo)
+        && Drupal.hasValue(processedVariants[variantInfo.sku])
+      ) {
         info[variantInfo.sku] = processedVariants[variantInfo.sku];
         info[variantInfo.sku]['rawGallery'] = updateGallery(variantInfo, product.name);
       }
