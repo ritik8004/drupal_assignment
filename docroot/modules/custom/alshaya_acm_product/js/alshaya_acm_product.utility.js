@@ -169,7 +169,7 @@ window.commerceBackend = window.commerceBackend || {};
     params.append('action', 'refresh stock');
 
     var returnVal = navigator.sendBeacon(
-      '/spc/checkout-event',
+      Drupal.url('spc/checkout-event'),
       params,
     );
 
