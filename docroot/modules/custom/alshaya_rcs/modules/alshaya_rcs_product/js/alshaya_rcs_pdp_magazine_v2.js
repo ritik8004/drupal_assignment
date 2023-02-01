@@ -7,7 +7,6 @@
   const staticDataStore = {
     pdpPromotion: [],
   };
-  const inStock = 'IN_STOCK';
 
   // Call event after entity load and process product data.
   RcsEventManager.addListener('alshayaPageEntityLoaded', async function pageEntityLoaded(e) {
@@ -93,6 +92,8 @@
    */
   function getProductStockStatus(product) {
     var status = false;
+    var inStock = 'IN_STOCK';
+
     if (product.type_id === 'configurable'
       && Drupal.hasValue(product.variants)
     ) {
