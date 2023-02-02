@@ -249,6 +249,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $term = $routematch->getParameter('taxonomy_term');
     if ($term->bundle() == 'acq_product_category') {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+
       // Check the site full width enable.
       if ($width_enable_feature) {
         $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
@@ -312,6 +313,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
       }
     }
   }
+
   if ($node_bundle == 'advanced_page') {
     // Check the site full width enable.
     if ($width_enable_feature) {
@@ -338,6 +340,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
       }
     }
   }
+
   // Attach the plp search js library to Search page.
   if ($routematch->getRouteName() == 'view.search.page') {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
