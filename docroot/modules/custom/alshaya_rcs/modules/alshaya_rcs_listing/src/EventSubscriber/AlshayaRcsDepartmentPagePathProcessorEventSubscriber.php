@@ -47,6 +47,9 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
    */
   public static function getSubscribedEvents(): array {
     return [
+      // This needs to be executed before
+      // AlshayaRcsPhListingPathProcessorEventSubscriber which has a priority
+      // of 11, so priority 12 is given.
       RcsPhPathProcessorEvent::ALTER => [
         ['onPathProcess', 12],
       ],
