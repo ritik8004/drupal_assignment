@@ -1,0 +1,22 @@
+body.nodetype--acq_product {
+  .page-standard.c-pdp {
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true,
+    );
+
+    .content__title_wrapper.fixed {
+      @include fullWidthSideSpaces(
+        $is_mobile: true,
+      );
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .page-standard.c-pdp {
+      max-width: none;
+    }
+  }
+}

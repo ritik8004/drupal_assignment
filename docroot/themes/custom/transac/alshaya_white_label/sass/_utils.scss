@@ -712,3 +712,61 @@ $brand_theme_img_directory_path: "/themes/custom/transac/alshaya_white_label/img
     background-image: $aura-loyalty-club-old-card-block-sign-up-bg-ar;
   }
 }
+
+// Full width configs and mixins.
+$full_width_padding_mobile: rem(12); /* viewport width <= 767px */
+$full_width_padding_tablet: rem(16); /* viewport width <= 1024px */
+$full_width_padding_desktop: rem(24); /* viewport width <= 1679px */
+$full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
+
+// Set side spaces.
+// $type: padding || margin || position
+// $side: both || left || right
+@mixin sideSpaces($value, $type: padding, $side: both) {
+  $prefix: '';
+
+  @if $type != position {
+    $prefix: "#{$type}-";
+  }
+
+  @if $side == both {
+    #{$prefix}left: $value;
+    #{$prefix}right: $value;
+  } @else {
+    #{$prefix}#{$side}: $value;
+  }
+}
+
+// Set side spaces across all viewports.
+// $type: padding || margin || position
+// $side: both || left || right
+@mixin fullWidthSideSpaces(
+  $is_mobile: false,
+  $is_tablet: false,
+  $is_desktop: false,
+  $is_desktop_wide: false,
+  $type: padding,
+  $side: both,
+) {
+  @if $is_mobile {
+    @include sideSpaces($full_width_padding_mobile, $type, $side);
+  }
+
+  @if $is_tablet {
+    @include breakpoint($tablet) {
+      @include sideSpaces($full_width_padding_tablet, $type, $side);
+    }
+  }
+
+  @if $is_desktop {
+    @include breakpoint($desktop) {
+      @include sideSpaces($full_width_padding_desktop, $type, $side);
+    }
+  }
+
+  @if $is_desktop_wide {
+    @include breakpoint($desktop-wide-1680) {
+      @include sideSpaces($full_width_padding_desktop_wide, $type, $side);
+    }
+  }
+}

@@ -1,0 +1,31 @@
+@include breakpoint($only-mobile) {
+  #alshaya-algolia-plp .total-result-count,
+  #alshaya-algolia-search .total-result-count,
+  .block-alshaya-grid-count-block .grid-buttons {
+    margin-#{$right}: 0;
+  }
+
+  .block-alshaya-grid-count-block .total-result-count {
+    padding-#{$left}: 0;
+  }
+
+  .c-products-list.view-algolia-plp,
+  .c-products-list.view-search {
+    @include sideSpaces(0);
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-plp {
+    &.l-two--sf {
+      .c-products-list {
+        &.product-small,
+        &.product-large {
+          .alshaya_search_gallery {
+            height: auto;
+          }
+        }
+      }
+    }
+  }
+}
