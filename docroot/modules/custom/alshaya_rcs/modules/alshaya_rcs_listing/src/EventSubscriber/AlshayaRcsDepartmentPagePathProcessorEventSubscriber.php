@@ -12,7 +12,6 @@ use Drupal\rcs_placeholders\EventSubscriber\RcsPhPathProcessorEventSubscriber;
  */
 class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProcessorEventSubscriber {
 
-
   /**
    * Department page helper.
    *
