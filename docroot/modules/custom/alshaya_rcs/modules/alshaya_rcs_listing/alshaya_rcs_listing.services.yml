@@ -84,3 +84,4 @@ services:
     arguments:
       - '@alshaya_advanced_page.department_page_helper'
       - '@entity_type.manager'
+      - '@path_alias.manager'
