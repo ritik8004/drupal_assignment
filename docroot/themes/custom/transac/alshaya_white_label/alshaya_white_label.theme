@@ -198,10 +198,6 @@ function alshaya_white_label_preprocess_page(&$variables) {
     if ($routematch->getRouteName() === 'acq_cart.cart' || $routematch->getRouteName() === 'alshaya_spc.checkout.login' || $routematch->getRouteName() === 'alshaya_spc.checkout' || $routematch->getRouteName() === 'alshaya_spc.checkout.confirmation') {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-spc';
     }
-    // Add library on wish list page.
-    if ($routematch->getRouteName() === 'alshaya_wishlist.users_wishlist') {
-      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-wishlist';
-    }
   }
   // Check if page is panel pages.
   $route_options = $routematch->getRouteObject()->getOptions();
