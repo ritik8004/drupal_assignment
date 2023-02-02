@@ -951,13 +951,6 @@ fullwidth-spc:
   dependencies:
     - alshaya_white_label/fullwidth-common
 
-fullwidth-wishlist:
-  css:
-    theme:
-      css/conditional-sass/fullwidth-wishlist/fullwidth-wishlist.ltr.css: {}
-  dependencies:
-    - alshaya_white_label/fullwidth-common
-
 alshaya-accordion:
   js:
     js/alshaya-accordion.js: {}
