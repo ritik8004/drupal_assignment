@@ -161,32 +161,31 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
   // Adding a variable for html direction.
   $variables['html_direction'] = $direction;
-  // Get route name.
   $routematch = \Drupal::routeMatch();
-  // Create array of all my account sub pages.
-  $my_account_subpages = [
-    'profile.user_page.multiple',
-    'acq_customer.orders',
-    'alshaya_egift_card.my_egift_card',
-    'entity.user.edit_form',
-    'alshaya_hello_member.hello_member_points_history',
-    'alshaya_bazaar_voice.user_reviews',
-    'alshaya_wishlist.user_account_wishlist',
-    'alshaya_user.user_communication_preference',
-    'change_pwd_page.change_password_form',
-    'entity.user.canonical',
-  ];
-  // Create array of Spc Flow Pages.
-  $spc_flow_Pages = [
-    'acq_cart.cart',
-    'alshaya_spc.checkout.login',
-    'alshaya_spc.checkout',
-    'alshaya_spc.checkout.confirmation',
-  ];
   // Get current theme name.
   $current_theme = \Drupal::theme()->getActiveTheme()->getName();
   // Check the site full width enable.
   if (\Drupal::config($current_theme . '.settings')->get('site_full_width')) {
+    // Create array of all my account sub pages.
+    $my_account_subpages = [
+      'profile.user_page.multiple',
+      'acq_customer.orders',
+      'alshaya_egift_card.my_egift_card',
+      'entity.user.edit_form',
+      'alshaya_hello_member.hello_member_points_history',
+      'alshaya_bazaar_voice.user_reviews',
+      'alshaya_wishlist.user_account_wishlist',
+      'alshaya_user.user_communication_preference',
+      'change_pwd_page.change_password_form',
+      'entity.user.canonical',
+    ];
+    // Create array of Spc Flow Pages.
+    $spc_flow_Pages = [
+      'acq_cart.cart',
+      'alshaya_spc.checkout.login',
+      'alshaya_spc.checkout',
+      'alshaya_spc.checkout.confirmation',
+    ];
     // Add common library on home page.
     if (\Drupal::service('path.matcher')->isFrontPage()) {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-common';
