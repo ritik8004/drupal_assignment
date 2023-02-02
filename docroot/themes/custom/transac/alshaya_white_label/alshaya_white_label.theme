@@ -191,13 +191,13 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-common';
     if ($routematch->getRouteName() === 'entity.node.canonical') {
       // Get current node.
-      $node = \Drupal::request()->attributes->get('node');
+      $node = $routematch->getParameter('node');
       // Add library on advance page.
-      if ($node->bundle() == 'advanced_page') {
+      if (is_object($node) && $node->bundle() == 'advanced_page') {
         $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-advanced-page';
       }
       // Add library on PDP.
-      if ($node->bundle() == 'acq_product') {
+      if (is_object($node) && $node->bundle() == 'acq_product') {
         $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-pdp';
       }
     }
