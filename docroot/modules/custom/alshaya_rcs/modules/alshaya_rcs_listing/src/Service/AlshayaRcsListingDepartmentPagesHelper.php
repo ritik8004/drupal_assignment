@@ -76,31 +76,39 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
   /**
    * {@inheritDoc}
    */
-  public function getDepartmentPageNode() {
+  public function getDepartmentPageNode($request = NULL) {
     $path = RcsPhPathProcessor::getFullPagePath();
-
-    // With V2 we use slug and not not term reference so we need the original
-    // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
-    // For this RCS provides a way to get original path if it had processed
-    // and converted the value available in $path. We use it to get the
-    // original path and check from slug.
-    $filtered_path = RcsPhPathProcessor::getOrignalPathFromProcessed($path);
-    preg_match('/^\/(.*)\/$/', $filtered_path, $matches);
-    $filtered_path = $matches[1] ?? '';
-
-    if (empty($filtered_path)) {
-      return FALSE;
-    }
-
     $data = [];
+    $cid = 'alshaya_rcs_listing:slug:nodes';
+
     // Check for cache first.
-    $cache = $this->cache->get('alshaya_rcs_listing:slug:nodes');
+    $cache = $this->cache->get($cid);
     if ($cache) {
       $data = $cache->data;
       // If cache hit.
       if (!empty($data[$path])) {
         return $data[$path];
       }
+    }
+
+    $filtered_path = NULL;
+
+    if (!empty($request)) {
+      $filtered_path = trim($request->getPathInfo(), '/');
+    }
+    else {
+      // With V3 we use slug and not not term reference so we need the original
+      // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
+      // For this RCS provides a way to get original path if it had processed
+      // and converted the value available in $path. We use it to get the
+      // original path and check from slug.
+      $filtered_path = RcsPhPathProcessor::getOrignalPathFromProcessed($path);
+      preg_match('/^\/(.*)\/$/', $filtered_path, $matches);
+      $filtered_path = $matches[1] ?? '';
+    }
+
+    if (empty($filtered_path)) {
+      return FALSE;
     }
 
     // Get all department pages.
@@ -112,7 +120,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
       $node = $this->entityTypeManager->getStorage('node')->load($nid);
       if ($node instanceof NodeInterface && $node->isPublished()) {
         $data[$filtered_path] = $nid;
-        $this->cache->set('alshaya_rcs_listing:slug:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
+        $this->cache->set($cid, $data, Cache::PERMANENT, ['node_type:advanced_page']);
         return $nid;
       }
     }
