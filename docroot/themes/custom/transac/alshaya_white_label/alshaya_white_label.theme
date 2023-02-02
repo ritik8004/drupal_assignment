@@ -164,7 +164,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Get route name.
   $routematch = \Drupal::routeMatch();
   // Create array of all my account sub pages.
-  $myAccountSubpages = [
+  $my_account_subpages = [
     'profile.user_page.multiple',
     'acq_customer.orders',
     'alshaya_egift_card.my_egift_card',
@@ -177,7 +177,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
     'entity.user.canonical',
   ];
   // Create array of Spc Flow Pages.
-  $spcFlowPages = [
+  $spc_flow_Pages = [
     'acq_cart.cart',
     'alshaya_spc.checkout.login',
     'alshaya_spc.checkout',
@@ -186,32 +186,22 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Get current theme name.
   $current_theme = \Drupal::theme()->getActiveTheme()->getName();
   // Check the site full width enable.
-  if (\Drupal::configFactory()->getEditable($current_theme . '.settings')->get('site_full_width')) {
-    // Add common library.
-    $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-common';
-    if ($routematch->getRouteName() === 'entity.node.canonical') {
-      // Get current node.
-      $node = $routematch->getParameter('node');
-      // Add library on advance page.
-      if (is_object($node) && $node->bundle() == 'advanced_page') {
-        $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-advanced-page';
-      }
-      // Add library on PDP.
-      if (is_object($node) && $node->bundle() == 'acq_product') {
-        $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-pdp';
-      }
-    }
-    // Add library on SLP, PLP.
-    if ($routematch->getRouteName() === 'alshaya_algolia_react.search' || $routematch->getRouteName() === 'alshaya_main_menu.category_view_all') {
-      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
+  if (\Drupal::config($current_theme . '.settings')->get('site_full_width')) {
+    // Add common library on home page.
+    if (\Drupal::service('path.matcher')->isFrontPage()) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-common';
     }
     // Add library on all sub-pages of user’s my account.
-    if (in_array($routematch->getRouteName(), $myAccountSubpages)) {
+    if (in_array($routematch->getRouteName(), $my_account_subpages)) {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-myaccount';
     }
     // Add library on all pages in SPC Flow.
-    if (in_array($routematch->getRouteName(), $spcFlowPages)) {
+    if (in_array($routematch->getRouteName(), $spc_flow_Pages)) {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-spc';
+    }
+    // Add library on SLP.
+    if ($routematch->getRouteName() === 'alshaya_algolia_react.search') {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
     }
   }
   // Check if page is panel pages.
@@ -238,6 +228,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
   if ($node_bundle === 'acq_product') {
     $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
+    // Check the site full width enable.
+    if (\Drupal::config($current_theme . '.settings')->get('site_full_width')) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-pdp';
+    }
   }
 
   $variables['nojs_message'] = [
@@ -255,7 +249,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $term = $routematch->getParameter('taxonomy_term');
     if ($term->bundle() == 'acq_product_category') {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
-
+      // Check the site full width enable.
+      if (\Drupal::config($current_theme . '.settings')->get('site_full_width')) {
+        $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
+      }
       // Taking the sidebar visibility check from config for PLP.
       $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
 
@@ -315,7 +312,12 @@ function alshaya_white_label_preprocess_page(&$variables) {
       }
     }
   }
-
+  if ($node_bundle == 'advanced_page') {
+    // Check the site full width enable.
+    if (\Drupal::config($current_theme . '.settings')->get('site_full_width')) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-advanced-page';
+    }
+  }
   if ($node_bundle == 'advanced_page' && $variables['node']->get('field_use_as_department_page')->value == 1) {
     $term_id = $variables['node']->get('field_product_category')->first();
     if ($term_id) {
@@ -336,7 +338,6 @@ function alshaya_white_label_preprocess_page(&$variables) {
       }
     }
   }
-
   // Attach the plp search js library to Search page.
   if ($routematch->getRouteName() == 'view.search.page') {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
