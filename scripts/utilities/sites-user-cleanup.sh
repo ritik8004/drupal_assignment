@@ -14,8 +14,6 @@ else
   env_suffix="$env_suffix-"
 fi
 
-echo $domain_alias
-
 # Load the ACSF API credentials.
 FILE=$HOME/acsf_api_settings
 if [ -f $FILE ]; then
@@ -40,7 +38,7 @@ done
 echo "Final list of sites: $valid_sites"
 echo
 
-# In case not site id have been found, stop here.
+# In case no site id has been found, stop here.
 if [ -z "$valid_sites" ]; then
   exit
 fi
