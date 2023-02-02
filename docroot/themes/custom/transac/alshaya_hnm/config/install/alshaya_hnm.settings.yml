@@ -1,3 +1,5 @@
 logo:
   path: 'themes/custom/transac/alshaya_hnm/site-logo.svg'
   use_default: false
+# Config to determine/use the full width on the site.
+show_full_width: false
