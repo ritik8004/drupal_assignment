@@ -909,13 +909,6 @@ fullwidth-common:
     theme:
       css/conditional-sass/fullwidth-common/fullwidth-common.ltr.css: {}
 
-fullwidth-home:
-  css:
-    theme:
-      css/conditional-sass/fullwidth-home/fullwidth-home.ltr.css: {}
-  dependencies:
-    - alshaya_white_label/fullwidth-common
-
 fullwidth-advanced-page:
   css:
     theme:
