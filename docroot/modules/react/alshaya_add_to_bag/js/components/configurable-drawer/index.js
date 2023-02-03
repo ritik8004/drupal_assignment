@@ -13,6 +13,7 @@ import getStringMessage from '../../../../js/utilities/strings';
 import { isWishlistPage, getFirstChildWithWishlistData } from '../../../../js/utilities/wishlistHelper';
 import LoginMessage from '../../../../js/utilities/components/login-message';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 class ConfigurableProductDrawer extends React.Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class ConfigurableProductDrawer extends React.Component {
 
     // Check for the firstChild is set for the default variant otherwise
     // set the first variant in the list as the default variant.
-    let firstChild = (productData.configurable_combinations.firstChild !== 'undefined')
+    let firstChild = (hasValue(productData.configurable_combinations.firstChild))
       ? productData.configurable_combinations.firstChild
       : productData.variants[0].sku;
 
