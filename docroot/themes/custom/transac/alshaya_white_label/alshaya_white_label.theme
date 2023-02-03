@@ -164,7 +164,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $routematch = \Drupal::routeMatch();
   // Get current theme name.
   $current_theme = \Drupal::theme()->getActiveTheme()->getName();
-  $is_full_width_feature_enabled = \Drupal::config($current_theme . '.settings')->get('site_full_width') ?? FALSE;
+  $is_full_width_feature_enabled = \Drupal::config($current_theme . '.settings')->get('show_full_width') ?? FALSE;
   // Check the site full width enable.
   if ($is_full_width_feature_enabled) {
     // List of my account sub pages.
