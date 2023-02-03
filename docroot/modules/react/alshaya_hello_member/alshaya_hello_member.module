@@ -282,12 +282,13 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
       if (!empty($user_gender)) {
         $request_options['json']['customer']['extension_attributes']['customer_gender'] = $user_gender;
       }
-      $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
-      // Set the key/value pair.
-      if ($temp_store->get('otpVerifiedPhone')) {
+      $session = \Drupal::request()->getSession();
+      // Get otp verified data from session variables.
+      // Delete session data once we process it.
+      if ($session->get('otp_verified_phone')) {
         $request_options['json']['customer']['extension_attributes']['is_verified'] = "Y";
-        // Set otp verified unchecked to update in future.
-        $temp_store->delete('otpVerifiedPhone');
+
+        $session->remove('otp_verified_phone');
       }
       else {
         // If Hello member enable and Mobile number not verified
@@ -406,14 +407,14 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
 }
 
 /**
- * User Form Submit handler to set temp setting for otp verified.
+ * User Form Submit handler to set session data for otp verified.
  */
 function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterface $form_state) {
-  // If Otp is successfully verified store temp varialble.
+  // If Otp is successfully verified store session varialble.
   if ($form_state->getValue('otp_verified')) {
-    $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
-    // Set the key/value pair.
-    $temp_store->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
+    $session = \Drupal::request()->getSession();
+    // Set the otp verified phone number data in session.
+    $session->set('otp_verified_phone', $form_state->getValue('field_mobile_number')[0]['mobile']);
   }
 }
 
