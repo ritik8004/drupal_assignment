@@ -9,7 +9,10 @@ body.nodetype--advanced_page {
   }
 
   .node--type-advanced-page {
-    .c-content__primary {
+    .c-content__primary,
+    .c-content__container,
+    .c-content__banner,
+    .l-column--two.l-container {
       max-width: none;
     }
   }
@@ -20,13 +23,6 @@ body.nodetype--advanced_page {
     .c-content__container,
     .c-department .term-description-mobile-only {
       padding: 0;
-    }
-  }
-
-  @include breakpoint($only-tablet) {
-    .c-content__banner,
-    .c-content__container {
-      max-width: none;
     }
   }
 
