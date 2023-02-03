@@ -59,6 +59,9 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
   $user_details = Json::decode($user_data);
   // If sprinklr user fields contains invalid json.
   if (empty($user_details)) {
+    \Drupal::logger('alshaya_sprinklr')->warning('Invalid JSON provided for sprinklr user data fields: @user_data', [
+      '@user_data' => $user_data,
+    ]);
     return;
   }
   $user_details['hash'] = $user->get('field_sprinklr_hash')->getString() ?? '';
