@@ -21,6 +21,13 @@ function alshaya_hello_member_module_implements_alter(&$implementations, $hook) 
     unset($implementations['alshaya_hello_member']);
     $implementations['alshaya_hello_member'] = $group;
   }
+  // To call the alshaya_hello_member_form_alter first.
+  // We want to call register submit handler.
+  if ($hook == 'form_alter') {
+    $group = $implementations['alshaya_hello_member'];
+    unset($implementations['alshaya_hello_member']);
+    $implementations = ['alshaya_hello_member' => $group] + $implementations;
+  }
 }
 
 /**
