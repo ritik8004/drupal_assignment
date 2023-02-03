@@ -31,7 +31,7 @@ class ReviewSortSettingsForm extends ConfigFormBase {
     // Get form values.
     $sort_options = $form_state->getValue('sort_options');
     // Sort the options based on weight.
-    uasort($sort_options, [$this, 'weightArraySort']);
+    uasort($sort_options, $this->weightArraySort(...));
     $result = [];
     // Prepare sort option array for saving in config.
     foreach ($sort_options as $key => $sort_option) {

@@ -195,10 +195,7 @@ function alshaya_aura_react_block_view_alter(&$build, $block) {
   }
 
   if ($block->getPluginId() === 'alshaya_my_account_links') {
-    $build['#pre_render'][] = [
-      AuraBlockViewBuilder::class,
-      'myAccountBlockPreRender',
-    ];
+    $build['#pre_render'][] = AuraBlockViewBuilder::myAccountBlockPreRender(...);
   }
 }
 
@@ -223,10 +220,7 @@ function alshaya_aura_react_block_view_page_title_block_alter(&$build, $block) {
 
   // Add edit account link beside page title block.
   if ($route_name === 'entity.user.canonical') {
-    $build['#pre_render'][] = [
-      AuraBlockViewBuilder::class,
-      'auraPageTitleBlockPreRender',
-    ];
+    $build['#pre_render'][] = AuraBlockViewBuilder::auraPageTitleBlockPreRender(...);
   }
 }
 
