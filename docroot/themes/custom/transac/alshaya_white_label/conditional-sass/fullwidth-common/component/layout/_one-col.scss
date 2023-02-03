@@ -1,8 +1,3 @@
-.l-one--w,
-.c-department.l-one--w {
-  @include fullWidthSideSpaces($is_mobile: true);
-}
-
 .l-one--w {
   @include fullWidthSideSpaces(
     $is_mobile: true,
@@ -13,5 +8,9 @@
 
   @include breakpoint($desktop) {
     max-width: none;
+  }
+
+  &.c-department {
+    @include fullWidthSideSpaces($is_mobile: true);
   }
 }
