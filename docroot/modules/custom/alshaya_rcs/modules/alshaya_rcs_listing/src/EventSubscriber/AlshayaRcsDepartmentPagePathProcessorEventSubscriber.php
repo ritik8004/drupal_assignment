@@ -4,6 +4,7 @@ namespace Drupal\alshaya_rcs_listing\EventSubscriber;
 
 use Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent;
 use Drupal\rcs_placeholders\EventSubscriber\RcsPhPathProcessorEventSubscriber;
 
@@ -27,19 +28,31 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
   protected $entityTypeManager;
 
   /**
+   * Alias manager interface.
+   *
+   * @var \Drupal\path_alias\AliasManagerInterface
+   */
+  protected $aliasManager;
+
+  /**
    * Constructs an AlshayaRcsDepartmentPagePathProcessorEventSubscriber object.
    *
    * @param \Drupal\alshaya_advanced_page\Service\AlshayaDepartmentPageHelper $alshaya_department_page_helper
    *   Department page helper.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
+   *   Alias manager.
    */
   public function __construct(
     AlshayaDepartmentPageHelper $alshaya_department_page_helper,
     EntityTypeManagerInterface $entity_type_manager,
+    AliasManagerInterface $alias_manager
     ) {
     $this->departmentPageHelper = $alshaya_department_page_helper;
     $this->entityTypeManager = $entity_type_manager;
+    $this->aliasManager = $alias_manager;
+
   }
 
   /**
@@ -75,8 +88,8 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
       return;
     }
 
-    $department_node_entity = $this->entityTypeManager->getStorage('node')->load($department_node);
-    $event->addData('path', $department_node_entity->toUrl()->toString(TRUE)->getGeneratedUrl());
+    // Get the actual path alias of the node object.
+    $event->addData('path', $this->aliasManager->getAliasByPath('/node/' . $department_node, $data['langcode']));
     $event->stopPropagation();
   }
 
