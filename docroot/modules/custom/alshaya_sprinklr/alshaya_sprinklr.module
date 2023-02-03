@@ -8,6 +8,7 @@
 use Drupal\user\Entity\User;
 use Drupal\Core\Url;
 use Drupal\Core\Cache\Cache;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -50,20 +51,17 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
     ->getStorage('user')
     ->load($current_user->id());
 
-  $phone_number = '';
-  if (!empty($user->get('field_mobile_number')->getValue())) {
-    $phone_number = $user->get('field_mobile_number')->getValue()[0]['value'];
+  $user_data = $user->get('field_sprinklr_user_fields')->getString();
+  // If sprinklr user fields is empty.
+  if (empty($user_data)) {
+    return;
   }
-
-  // Prepare data for sprinklr user fields.
-  $user_details = [
-    'id' => $user->get('acq_customer_id')->getString(),
-    'firstName' => $user->get('field_first_name')->getString() ?? '',
-    'lastName' => $user->get('field_last_name')->getString() ?? '',
-    'phoneNo' => $phone_number,
-    'email' => $user->get('mail')->getString(),
-    'hash' => $user->get('field_sprinklr_hash')->getString() ?? '',
-  ];
+  $user_details = Json::decode($user_data);
+  // If sprinklr user fields contains invalid json.
+  if (empty($user_details)) {
+    return;
+  }
+  $user_details['hash'] = $user->get('field_sprinklr_hash')->getString() ?? '';
   $page['#attached']['drupalSettings']['alshayaSprinklr']['userDetails'] = $user_details;
 }
 
@@ -74,6 +72,10 @@ function alshaya_sprinklr_alshaya_acm_customer_update_account_alter(User $user, 
   // Update sprinklr user hash value.
   if (isset($customer['extension_attributes'], $customer['extension_attributes']['sprinklr_hash'])) {
     $user->get('field_sprinklr_hash')->setValue($customer['extension_attributes']['sprinklr_hash']);
+  }
+  // Update sprinklr user data fields value.
+  if (isset($customer['extension_attributes'], $customer['extension_attributes']['sprinklr_user_data_fields'])) {
+    $user->get('field_sprinklr_user_fields')->setValue($customer['extension_attributes']['sprinklr_user_data_fields']);
   }
 }
 
