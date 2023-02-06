@@ -24,8 +24,7 @@
         }
       }
     } catch (e) {
-      // Log the error message.
-      Drupal.logJavascriptError('error-getting-algolia-insights-from-local-storage', e);
+      console.error(e);
       return null;
     }
   };

@@ -31,7 +31,6 @@ search_insights_detail:
     - core/jquery.once
     - alshaya_master/common_functions
     - alshaya_algolia_react/search_insights
-    - alshaya_seo_transac/gtm
 
 search_insights:
   js:
