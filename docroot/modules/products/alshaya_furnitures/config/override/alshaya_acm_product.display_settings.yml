@@ -16,3 +16,5 @@ plp_slider:
   margin: 3
 # Don't show any pre selected variant on PDP page load.
 show_pre_selected_variant_on_pdp: false
+# Enable gallery show hover image feature.
+gallery_show_hover_image: true
