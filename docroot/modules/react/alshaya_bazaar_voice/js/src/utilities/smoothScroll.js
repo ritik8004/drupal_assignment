@@ -10,8 +10,9 @@ smoothscroll.polyfill();
  * @param selector
  * @param request
  * @param context
+ * @param behavior
  */
-export function smoothScrollTo(e, selector, request, context) {
+export function smoothScrollTo(e, selector, request, context, behavior) {
   if (request === 'post_review') {
     // Prevents React from resetting its properties.
     e.persist();
@@ -31,8 +32,11 @@ export function smoothScrollTo(e, selector, request, context) {
       }
     }
   }
+
+  // If behavior is specified as 'auto' then use the default behavior else
+  // use the 'smooth' behavior.
   document.querySelector(element).scrollIntoView({
-    behavior: 'smooth',
+    behavior: behavior || 'smooth',
   });
 }
 
