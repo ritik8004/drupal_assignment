@@ -10,10 +10,10 @@
         }
 
         @include breakpoint($upto-desktop) {
-          background-image: $aura-myaccount-vip-mobile;
+          background: $aura-myaccount-vip-mobile;
 
           html[lang="ar"] & {
-            background-image: $aura-myaccount-vip-mobile-ar;
+            background: $aura-myaccount-vip-mobile-ar;
           }
         }
       }
@@ -40,10 +40,10 @@
         }
 
         @include breakpoint($upto-desktop) {
-          background-image: $aura-myaccount-star-mobile;
+          background: $aura-myaccount-star-mobile;
 
           html[lang="ar"] & {
-            background-image: $aura-myaccount-star-mobile-ar;
+            background: $aura-myaccount-star-mobile-ar;
           }
         }
       }
