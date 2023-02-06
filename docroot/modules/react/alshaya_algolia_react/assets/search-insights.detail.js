@@ -38,7 +38,9 @@
         var sku = $(this).attr('data-sku');
         var insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
 
-        if (insightsClickData.queryId && insightsClickData.objectId) {
+        if (Drupal.hasValue(insightsClickData)
+          && insightsClickData.queryId
+          && insightsClickData.objectId) {
           Drupal.pushAlshayaAlgoliaInsightsAddToCart(
             insightsClickData.queryId,
             insightsClickData.objectId,
