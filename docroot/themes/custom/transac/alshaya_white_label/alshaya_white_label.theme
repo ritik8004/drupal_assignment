@@ -179,6 +179,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
       'alshaya_user.user_communication_preference',
       'change_pwd_page.change_password_form',
       'entity.user.canonical',
+      'alshaya_acm_customer.orders_detail',
+      'acq_checkoutcom.payment_cards',
     ];
 
     // List of checkout pages.
