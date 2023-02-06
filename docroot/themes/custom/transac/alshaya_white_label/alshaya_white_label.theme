@@ -1841,7 +1841,9 @@ function alshaya_white_label_theme_registry_alter(array &$theme_registry) {
  * Implements hook_library_info_alter().
  */
 function alshaya_white_label_library_info_alter(&$libraries, $extension) {
-  // Adding dependecies to libraries dynamically for fullwidth css feature.
+  // Both LTR and RTL libraries added as dependency because this hook is
+  // cached and thus not works with language when attaching
+  // library based on language.
   if ($extension === 'alshaya_white_label' && isset($libraries['fullwidth-common'])) {
     $current_theme = \Drupal::theme()->getActiveTheme()->getName();
     $libraries['fullwidth-common']['dependencies'][] = $current_theme . '/rtl_styles';
@@ -1853,6 +1855,8 @@ function alshaya_white_label_library_info_alter(&$libraries, $extension) {
  * Implements hook_css_alter().
  */
 function alshaya_white_label_css_alter(&$css) {
+  // We are un - setting the not required library which is added
+  // here in hook_css_alter() based on language.
   $current_theme = \Drupal::theme()->getActiveTheme()->getName();
   $direction = \Drupal::languageManager()->getCurrentLanguage()->getDirection();
   if ($direction === 'rtl') {
