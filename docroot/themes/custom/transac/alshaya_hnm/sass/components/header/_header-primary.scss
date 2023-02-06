@@ -339,7 +339,7 @@ header {
 
       &::before {
         background: url("../imgs/icons/ic-menu.svg?123") no-repeat;
-        width: 1.5rem;
+        width: rem(20);
         height: 1rem;
       }
     }
