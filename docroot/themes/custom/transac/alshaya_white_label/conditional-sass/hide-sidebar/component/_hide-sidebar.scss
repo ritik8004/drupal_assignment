@@ -1,0 +1,28 @@
+.hide-sidebar {
+  @include breakpoint($desktop) {
+    // Common styles between SRP and PLP.
+    .c-plp.l-two--sf .c-products-list {
+      &.product-small,
+      &.product-large {
+        .alshaya_search_gallery {
+          height: auto;
+        }
+      }
+    }
+
+    // SRP styles.
+    #alshaya-algolia-search {
+      .c-content__region {
+        width: unset;
+      }
+    }
+
+    // PLP styles.
+    .c-plp {
+      main {
+        width: unset;
+        max-width: none;
+      }
+    }
+  }
+}
