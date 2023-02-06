@@ -24,7 +24,8 @@
         }
       }
     } catch (e) {
-      console.error(e);
+      // Log the error message.
+      Drupal.logJavascriptError('error-getting-algolia-insights-from-local-storage', e);
       return null;
     }
   };
@@ -38,7 +39,7 @@
         var sku = $(this).attr('data-sku');
         var insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
 
-        if (insightsClickData.queryId && insightsClickData.objectId) {
+        if (Drupal.hasValue(insightsClickData) && insightsClickData.queryId && insightsClickData.objectId) {
           Drupal.pushAlshayaAlgoliaInsightsAddToCart(
             insightsClickData.queryId,
             insightsClickData.objectId,
