@@ -251,7 +251,9 @@ export default class AddToBagSimple extends React.Component {
         dispatchCustomEvent('product-add-to-cart-success', { sku });
         // Trigger Algolia Insight event for add to cart on success.
         const insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
-        if (insightsClickData.queryId && insightsClickData.objectId) {
+        if (Drupal.hasValue(insightsClickData)
+          && insightsClickData.queryId
+          && insightsClickData.objectId) {
           Drupal.pushAlshayaAlgoliaInsightsAddToCart(
             insightsClickData.queryId,
             insightsClickData.objectId,
