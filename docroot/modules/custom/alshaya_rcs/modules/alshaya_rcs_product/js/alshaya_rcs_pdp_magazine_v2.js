@@ -85,6 +85,34 @@
   }
 
   /**
+   * Get stock status for the product.
+   *
+   * @param {Object} product
+   *   Product object.
+   */
+  function getProductStockStatus(product) {
+    var status = false;
+    var inStock = 'IN_STOCK';
+
+    if (product.type_id === 'configurable'
+      && Drupal.hasValue(product.variants)
+    ) {
+      product.variants.some(function eachVariant(variant) {
+        if (variant.product.stock_status === inStock) {
+          status = true;
+          return true;
+        }
+        return false;
+      });
+    }
+    else if (product.type_id === 'simple' && product.stock_status === inStock) {
+      status = true;
+    }
+
+    return status;
+  }
+
+  /**
    * Process product data as per maganize v2 data format.
    *
    * @param {object} product
@@ -103,7 +131,7 @@
       is_product_buyable: product.is_buyable,
       shortDesc: Drupal.hasValue(product.short_description) ? product.short_description.html : '',
       stockQty: product.stock_data.qty,
-      stockStatus: product.stock_status === 'IN_STOCK',
+      stockStatus: getProductStockStatus(product),
       title: {'label': product.name},
       rawGallery: updateGallery(product, product.name),
       additionalAttributes: Object.keys(product.description.additional_attributes).length > 0 ? product.description.additional_attributes : {},
@@ -152,7 +180,9 @@
     const info = {};
     product.variants.forEach(function (variant) {
       const variantInfo = variant.product;
-      if (Drupal.hasValue(processedVariants[variantInfo.sku])) {
+      if (window.commerceBackend.isProductInStock(variantInfo)
+        && Drupal.hasValue(processedVariants[variantInfo.sku])
+      ) {
         info[variantInfo.sku] = processedVariants[variantInfo.sku];
         info[variantInfo.sku]['rawGallery'] = updateGallery(variantInfo, product.name);
       }

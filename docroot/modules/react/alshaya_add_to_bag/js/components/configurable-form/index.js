@@ -112,7 +112,7 @@ export default class ConfigurableForm extends React.Component {
   onSwatchClick = (name, value, swatchLabel) => {
     this.setAttribute(name, value);
 
-    // Push quick add size click event to GTM.
+    // Push quick add color click event to GTM.
     Drupal.alshayaSeoGtmPushEcommerceEvents({
       eventAction: 'plp color click',
       eventLabel: hasValue(swatchLabel) ? swatchLabel : '',
@@ -358,7 +358,9 @@ export default class ConfigurableForm extends React.Component {
       dispatchCustomEvent('product-add-to-cart-success', { sku: parentSku });
       // Trigger Algolia Insight event for add to cart on success.
       const insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
-      if (insightsClickData.queryId && insightsClickData.objectId) {
+      if (Drupal.hasValue(insightsClickData)
+        && insightsClickData.queryId
+        && insightsClickData.objectId) {
         Drupal.pushAlshayaAlgoliaInsightsAddToCart(
           insightsClickData.queryId,
           insightsClickData.objectId,

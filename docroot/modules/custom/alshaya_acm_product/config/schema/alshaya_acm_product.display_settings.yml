@@ -65,3 +65,6 @@ alshaya_acm_product.display_settings:
     display_mobile_matchback_add_to_bag_button:
       type: boolean
       label: 'Show add to bag button on mathcback mobile'
+    show_pre_selected_variant_on_pdp:
+      type: boolean
+      label: 'Show a pre selected variant on PDP page load'

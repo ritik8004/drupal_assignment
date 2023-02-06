@@ -1,0 +1,35 @@
+.c-menu-primary {
+  .mobile--menu {
+    #{$left}: 0;
+
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $side: $left
+    );
+  }
+}
+
+.menu__list-item {
+  @include breakpoint($only-mobile) {
+    @include sideSpaces($full_width_padding_mobile, $type: "margin");
+  }
+
+  @include breakpoint($only-tablet) {
+    @include sideSpaces($full_width_padding_tablet, $type: "margin");
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-menu-secondary {
+    .c-menu-secondary__region {
+      max-width: none;
+    }
+  }
+
+  .block-alshaya-main-menu {
+    ul.menu--one__list {
+      @include sideSpaces(0);
+    }
+  }
+}

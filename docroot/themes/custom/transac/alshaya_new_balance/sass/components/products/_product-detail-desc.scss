@@ -25,8 +25,19 @@
 
   .product-desc-value {
     line-height: 1.5;
-    margin-top: rem(12);
+    margin-top: rem(30);
     padding-#{$right}: rem(32);
+
+    .product-features,
+    .product-weight {
+      font-family: $alshaya-bold;
+      padding-bottom: rem(10);
+      font-weight: 700;
+    }
+
+    .product-weight {
+      padding-top: rem(30);
+    }
 
     p {
       margin-top: 0;
@@ -38,6 +49,8 @@
       margin: 0;
 
       li {
+        margin-#{$left}: rem(10);
+
         &::marker {
           font-size: rem(10);
         }

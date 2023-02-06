@@ -15,6 +15,31 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Add arabic configurations for bazaar voice write review form.
+ */
+function alshaya_hm_update_9404() {
+  if (\Drupal::service('module_handler')->moduleExists('alshaya_bazaar_voice')) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_hm', 'inc', 'alshaya_hm.bazaar_voice_content');
+    $config = alshaya_hm_bazaar_voice_content();
+    \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_bv_write_review')->set('elements', $config['ar'])->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_hm_update_9403() {
+  // Save default site favicon and logo.
+  $config = \Drupal::configFactory()->getEditable('alshaya_hnm.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add field for new attribute.
  */
 function alshaya_hm_update_9402() {
@@ -1360,6 +1385,16 @@ function alshaya_hm_install() {
 
   // Install metatag transalations.
   _alshaya_hm_get_metatag_translations();
+
+  // Bazaar Voice Configurations.
+  if (\Drupal::service('module_handler')->moduleExists('alshaya_bazaar_voice')) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_hm', 'inc', 'alshaya_hm.bazaar_voice_content');
+    $config = alshaya_hm_bazaar_voice_content();
+    // Set english config.
+    \Drupal::configFactory()->getEditable('webform.webform.alshaya_bv_write_review')->set('elements', $config['en'])->save();
+    // Set arabic config.
+    \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_bv_write_review')->set('elements', $config['ar'])->save();
+  }
 }
 
 /**

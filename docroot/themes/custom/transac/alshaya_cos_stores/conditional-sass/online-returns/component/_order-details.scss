@@ -7,10 +7,18 @@
       }
 
       .cancel-button-text {
+        color: $online-return-cancel-button-txt;
+
         &::before {
           font-size: rem(40);
           margin-#{$right}: 0;
         }
+      }
+    }
+
+    .print-return-label-wrapper {
+      .print-label-button {
+        color: $online-return-print-button-txt;
       }
     }
   }
