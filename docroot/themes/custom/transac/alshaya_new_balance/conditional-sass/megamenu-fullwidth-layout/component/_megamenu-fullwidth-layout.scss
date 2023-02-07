@@ -5,6 +5,10 @@
         ul.menu--two__list {
           width: 100vw;
           #{$left}: 0;
+
+          .menu__links__wrapper {
+            width: auto;
+          }
         }
       }
     }
