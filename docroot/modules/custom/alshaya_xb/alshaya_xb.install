@@ -5,6 +5,8 @@
  * Contains install, update, uninstall hooks for alshaya_xb module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
 /**
  * Implements hook_install().
  *
@@ -13,4 +15,19 @@
 function alshaya_xb_install($is_syncing) {
   // Add fixed price attribute to SKU entity.
   \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable addressbook postcode and city configuration.
+ */
+function alshaya_xb_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_addressbook.settings'],
+    'alshaya_addressbook',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
 }
