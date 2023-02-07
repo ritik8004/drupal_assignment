@@ -9,6 +9,9 @@ source_site="$2"
 target_env="$3"
 target_site="$4"
 
+# Move to docroot directory from home.
+drush_directory="/var/www/html/${source_env}/docroot"
+
 if [[ -z "$source_env" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration-prepare.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
   echo "Example: ./scripts/utilities/stack-migration-prepare.sh alshaya.01live vskw alshaya2.02live vskw2"
@@ -33,6 +36,8 @@ if [[ -z "$target_site" ]]; then
   exit
 fi
 
+cd $drush_directory
+
 # Remove trailing numbers to get exact site code.
 site_code=${source_site//[0-9]/}
 
@@ -51,12 +56,12 @@ if [[ -z "$target_alias" ]]; then
   exit
 fi
 
-source_root=`drush sa $source_alias | grep root | head -1 | cut -d"'" -f4`
-target_root=`drush sa $target_alias | grep root | head -1 | cut -d"'" -f4`
-target_remote_user=`drush sa $target_alias | grep remote-user | cut -d"'" -f4`
-target_remote_host=`drush sa $target_alias | grep remote-host | cut -d"'" -f4`
+source_root=`drush sa $source_alias | grep root | head -1 | awk '{print $2}'`
+target_root=`drush sa $target_alias | grep root | head -1 | awk '{print $2}'`
+target_remote_user=`drush sa $target_alias | grep user | awk '{print $2}'`
+target_remote_host=`drush sa $target_alias | grep host | awk '{print $2}'`
 target="$target_remote_user@$target_remote_host"
-target_stack=`drush sa $target_alias | grep ac-site | cut -d"'" -f4`
+target_stack=`drush sa $target_alias | grep ac-site | awk '{print $2}'`
 
 cd $source_root
 
@@ -69,10 +74,6 @@ target_files_folder="$target_root/$target_files_folder"
 echo "Target folder $target_files_folder"
 
 rsync -auv $source_files_folder $target:$target_files_folder
-
-source_brand_files_folder="${source_root}/sites/g/files/$brand_code"
-target_brand_files_folder="${target_root}/sites/g/files/"
-rsync -auv $source_brand_files_folder $target:$target_brand_files_folder
 
 echo
 echo "Copying settings folder from source stack to target stack"
