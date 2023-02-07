@@ -2,6 +2,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import OtpInput from 'react-otp-input';
 import { sendOtp, verifyOtp } from '../../../../../js/utilities/otp_helper';
+import getStringMessage from '../../../../../js/utilities/strings';
 import { helloMemberCustomerPhoneSearch } from '../../hello_member_api_helper';
 import { validateInfo } from '../../../../../alshaya_spc/js/utilities/checkout_util';
 import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
@@ -172,7 +173,7 @@ class SendOtpPopup extends React.Component {
     return (
       <>
         <div className="btn-wrapper in-active">
-          <button onClick={(e) => this.onClickSendOtp(e)} type="button">{Drupal.t('Send OTP')}</button>
+          <button onClick={(e) => this.onClickSendOtp(e)} type="button">{getStringMessage('send_otp_label')}</button>
         </div>
         <div id="mobile-number-error" />
         <div className="mb-verifier">
@@ -187,7 +188,7 @@ class SendOtpPopup extends React.Component {
             <div className="hello-member-otp-popup-form">
               <a className="close-modal" onClick={() => this.toggleSendOtpPopup(false)} />
               <div className="opt-title">
-                <p>{Drupal.t('Please enter the OTP sent to')}</p>
+                <p>{ getStringMessage('sent_otp_message') }</p>
                 <p>{ document.getElementById('edit-field-mobile-number-0-mobile').value }</p>
               </div>
               <OtpInput
@@ -203,10 +204,10 @@ class SendOtpPopup extends React.Component {
               <label id="input-otp-error" className="error" />
             </div>
             <div className="hello-member-modal-form-actions">
-              <div id="hello-member-modal-form-verify" className="hello-member-modal-form-submit in-active" onClick={() => this.onClickVerify()}>{ Drupal.t('Verify') }</div>
+              <div id="hello-member-modal-form-verify" className="hello-member-modal-form-submit in-active" onClick={() => this.onClickVerify()}>{ getStringMessage('verify_label') }</div>
               <div className="hello-member-otp-submit-description">
-                <span>{ Drupal.t('Not recieved the code?')}</span>
-                <a className="hello-member-modal-form-resend-otp" onClick={() => this.callSendOtpApi()}>{ Drupal.t('Resend Code') }</a>
+                <span>{ getStringMessage('resend_otp_desc') }</span>
+                <a className="hello-member-modal-form-resend-otp" onClick={() => this.callSendOtpApi()}>{ getStringMessage('resend_code_label') }</a>
               </div>
             </div>
           </Popup>
