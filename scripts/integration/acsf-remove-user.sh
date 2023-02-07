@@ -2,7 +2,7 @@
 
 # This script is used to remove the ACSF user with the help of email ids.
 # Usage: scripts/integration/acsf-remove-user.sh
-# Example: scripts/integration/acsf-remove-user.sh test@web.com,test@web.com blocked
+# Example: scripts/integration/acsf-remove-user.sh test@web.com,test@web.com
 
 # Load the ACSF API credentials.
 FILE=$HOME/acsf_api_settings
