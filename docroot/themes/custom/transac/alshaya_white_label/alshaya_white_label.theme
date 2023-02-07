@@ -229,9 +229,11 @@ function alshaya_white_label_preprocess_page(&$variables) {
   }
 
   $node_bundle = '';
+  $node = NULL;
   if (isset($variables['node'])) {
     if (is_object($variables['node'])) {
       $node_bundle = $variables['node']->bundle();
+      $node = $variables['node'];
     }
   }
 
@@ -325,8 +327,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
   }
 
   // Add full width feature for all advanced pages except eGift landing page.
-  $node = $variables['node'];
-  if ($node instanceof NodeInterface && $node->bundle() === 'advanced_page' && $is_full_width_feature_enabled) {
+  if ($node instanceof NodeInterface && $node_bundle === 'advanced_page' && $is_full_width_feature_enabled) {
     $is_egift_landing_page = (!empty($node->get('field_use_as_egift_landing_page')->getValue()) && $node->get('field_use_as_egift_landing_page')->getValue()[0]['value'] == 1);
 
     if (!$is_egift_landing_page) {
