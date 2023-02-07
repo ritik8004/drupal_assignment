@@ -324,9 +324,14 @@ function alshaya_white_label_preprocess_page(&$variables) {
     }
   }
 
-  // Add full width feature for advance page.
-  if ($node_bundle == 'advanced_page' && $is_full_width_feature_enabled) {
-    $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-advanced-page';
+  // Add full width feature for all advanced pages except eGift landing page.
+  $node = $variables['node'];
+  if ($node instanceof NodeInterface && $node->bundle() === 'advanced_page' && $is_full_width_feature_enabled) {
+    $is_egift_landing_page = (!empty($node->get('field_use_as_egift_landing_page')->getValue()) && $node->get('field_use_as_egift_landing_page')->getValue()[0]['value'] == 1);
+
+    if (!$is_egift_landing_page) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-advanced-page';
+    }
   }
 
   if ($node_bundle == 'advanced_page' && $variables['node']->get('field_use_as_department_page')->value == 1) {
