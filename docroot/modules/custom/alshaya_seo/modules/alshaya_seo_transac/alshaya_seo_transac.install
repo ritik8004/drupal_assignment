@@ -12,6 +12,22 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Add new config for available product size options for GTM.
+ */
+function alshaya_seo_transac_update_9404() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_seo_transac.settings'],
+    'alshaya_seo_transac',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new config key for product list expiration time.
  */
 function alshaya_seo_transac_update_9403() {

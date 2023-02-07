@@ -3,7 +3,7 @@
  * JS code to integrate with GTM for Product into product list.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
 
   var productDetailViewTriggered = false;
   Drupal.behaviors.alshayaSeoGtmPdpBehavior = {
@@ -21,13 +21,14 @@
         // We have different configurable size options available.
         // For eg: VS has band_size and cup_size also.
         var sizeWrapper = $(this).closest('.configurable-select');
-        var sizeLabel = sizeWrapper.find('select').attr('data-selected-title');
+        var sizeCode = sizeWrapper.find('select').attr('data-configurable-code');
         // Available size options for size click.
         // To make sure that only size click events are tracked and
         // not other configurable options.
-        var availableSizeLabels = ['Band Size', 'Cup Size', 'Size'];
-        if (Drupal.hasValue(sizeLabel) && availableSizeLabels.includes(sizeLabel)) {
+        var availableSizeLabels = drupalSettings.productSizeOptions;
+        if (Drupal.hasValue(availableSizeLabels) && availableSizeLabels.hasOwnProperty(sizeCode)) {
           // Set size in '{size_label}: {size_value}' format.
+          var sizeLabel = availableSizeLabels[sizeCode];
           var eventLabel = $(this).attr('data-value');
           Drupal.alshayaSeoGtmPushEcommerceEvents({
             eventAction: 'pdp size click',
@@ -39,18 +40,14 @@
       // Push product size click event to GTM.
       // For the products which have size groups available.
       $(document).once('pdp-size-click').on('click', '.group-wrapper .select2Option ul a', function () {
-        // We have different configurable size options available.
-        // For eg: VS has band_size and cup_size also.
-        var sizeWrapper = $(this).closest('.group-wrapper');
-        var sizeLabel = sizeWrapper.find('select').attr('data-selected-title');
         var eventLabel = $(this).attr('data-value');
         var groupLabel = '';
         if ($('.group-anchor-wrapper').length) {
           groupLabel = $('.group-anchor-wrapper').find('a.active').text();
         }
         eventLabel = Drupal.hasValue(groupLabel)
-          ? `${sizeLabel}: ${groupLabel}, ${eventLabel}`
-          : `${sizeLabel}: ${eventLabel}`;
+          ? `Size: ${groupLabel}, ${eventLabel}`
+          : `Size: ${eventLabel}`;
         Drupal.alshayaSeoGtmPushEcommerceEvents({
           eventAction: 'pdp size click',
           eventLabel,
@@ -124,4 +121,4 @@
       });
     }
   }
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
