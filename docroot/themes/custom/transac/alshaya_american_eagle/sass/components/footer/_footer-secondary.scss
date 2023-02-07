@@ -69,14 +69,10 @@
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  padding-#{$left}: rem(27);
+  justify-content: center;
 
   @include breakpoint($only-tablet) {
-    padding-#{$left}: rem(7);
-  }
-
-  @include breakpoint($only-mobile) {
-    padding-#{$left}: rem(0);
+    justify-content: space-between;
   }
 
   .c-footer__copy {

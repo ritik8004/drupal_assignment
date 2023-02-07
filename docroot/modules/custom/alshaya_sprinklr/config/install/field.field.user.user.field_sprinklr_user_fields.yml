@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_sprinklr_user_fields
+  module:
+    - user
+id: user.user.field_sprinklr_user_fields
+field_name: field_sprinklr_user_fields
+entity_type: user
+bundle: user
+label: 'Sprinklr User Fields'
+description: 'Used to store user data foor sprinklr chatbot feature.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long
+skip_translation_check: 0

@@ -8,7 +8,7 @@ import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 function clickHandler(e, callbackFn) {
   if (callbackFn === undefined) {
-    smoothScrollTo(e, '#reviews-section');
+    smoothScrollTo(e, '#reviews-section', '', '', 'auto');
   } else {
     e.preventDefault();
     callbackFn(e);

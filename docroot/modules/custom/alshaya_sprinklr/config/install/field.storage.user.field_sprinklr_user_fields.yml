@@ -3,14 +3,12 @@ status: true
 dependencies:
   module:
     - user
-id: user.field_sprinklr_hash
-field_name: field_sprinklr_hash
+id: user.field_sprinklr_user_fields
+field_name: field_sprinklr_user_fields
 entity_type: user
-type: string
+type: string_long
 settings:
-  max_length: 255
   case_sensitive: false
-  is_ascii: false
 module: core
 locked: false
 cardinality: 1

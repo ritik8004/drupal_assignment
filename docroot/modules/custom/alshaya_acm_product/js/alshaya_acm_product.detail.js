@@ -259,9 +259,17 @@
           }
         });
 
+        var preSelectVariant = true;
+        // Pre select a variant only if it is allowed to show pre
+        // selected variant or there is exactly one variant available.
+        if (!Drupal.hasValue(drupalSettings.showPreSelectedVariantOnPdp)
+          && Drupal.hasValue(productData.variants)
+          && Object.keys(productData.variants).length > 1) {
+          preSelectVariant = false;
+        }
         // Proceed to get variant and trigger variant change event only if
         // it is allowed to show pre selected variant on PDP page load.
-        if (Drupal.hasValue(drupalSettings.showPreSelectedVariantOnPdp) && Drupal.hasValue(productData.variants)) {
+        if (preSelectVariant && Drupal.hasValue(productData.variants)) {
           var variants = productData.variants;
           // Use first sku comes with stock in settings if available.
           var firstInStockVariant = Object.values(variants).find((variant) => {
@@ -299,7 +307,7 @@
 
         // Disable add to cart button if it is disabled to show pre selected
         // variant on PDP page load.
-        if (!Drupal.hasValue(drupalSettings.showPreSelectedVariantOnPdp)) {
+        if (!preSelectVariant) {
           $('.add-to-cart-button').prop('disabled', true);
         }
 

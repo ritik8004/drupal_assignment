@@ -14,3 +14,9 @@ alshaya_seo_transac.settings:
     product_list_expiration_days:
       type: integer
       label: 'Number of days for which product list should be stored in local storage.'
+    product_size_options:
+      label: 'Available size options for product'
+      type: sequence
+      sequence:
+        type: string
+        label: Size options
