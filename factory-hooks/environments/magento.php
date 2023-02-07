@@ -1843,6 +1843,9 @@ $magentos = [
     'jo' => [
       'store_id' => ['en' => 39, 'ar' => 36],
     ],
+    'xb' => [
+      'store_id' => ['en' => 44, 'ar' => 41],
+    ],
   ],
   'mu_qa' => [
     'algolia_env' => 'mu_test',
