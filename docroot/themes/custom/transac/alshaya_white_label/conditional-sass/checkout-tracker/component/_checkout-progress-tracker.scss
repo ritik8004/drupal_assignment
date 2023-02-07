@@ -141,7 +141,7 @@
 
   @include breakpoint($tablet) {
     margin-top: rem(36);
-    margin-bottom: rem(36);
+    margin-bottom: rem(15);
 
     #checkout-progress {
       width: rem(780);
