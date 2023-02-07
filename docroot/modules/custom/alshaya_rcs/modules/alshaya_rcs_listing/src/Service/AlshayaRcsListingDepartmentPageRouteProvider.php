@@ -101,7 +101,7 @@ class AlshayaRcsListingDepartmentPageRouteProvider extends RouteProvider {
       $filtered_path = $matches[1] ?? '';
       if ($filtered_path) {
         // Get list of department pages.
-        $department_node = $this->departmentPageHelper->getDepartmentPageNode();
+        $department_node = $this->departmentPageHelper->getDepartmentPageNode($filtered_path);
         $collection = $this->setRouteOptions($collection, $exploded_path, $department_node, TRUE);
       }
     }

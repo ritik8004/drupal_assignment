@@ -76,17 +76,22 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
   /**
    * {@inheritDoc}
    */
-  public function getDepartmentPageNode() {
-    $path = RcsPhPathProcessor::getFullPagePath();
-
-    // With V2 we use slug and not not term reference so we need the original
-    // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
-    // For this RCS provides a way to get original path if it had processed
-    // and converted the value available in $path. We use it to get the
-    // original path and check from slug.
-    $filtered_path = RcsPhPathProcessor::getOrignalPathFromProcessed($path);
-    preg_match('/^\/(.*)\/$/', $filtered_path, $matches);
-    $filtered_path = $matches[1] ?? '';
+  public function getDepartmentPageNode($path = NULL) {
+    $filtered_path = $path;
+    if (!empty($filtered_path)) {
+      $filtered_path = trim($filtered_path, '/');
+    }
+    else {
+      $path = RcsPhPathProcessor::getFullPagePath();
+      // With V2 we use slug and not not term reference so we need the original
+      // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
+      // For this RCS provides a way to get original path if it had processed
+      // and converted the value available in $path. We use it to get the
+      // original path and check from slug.
+      $filtered_path = RcsPhPathProcessor::getOrignalPathFromProcessed($path);
+      preg_match('/^\/(.*)\/$/', $filtered_path, $matches);
+      $filtered_path = $matches[1] ?? '';
+    }
 
     if (empty($filtered_path)) {
       return FALSE;
@@ -98,8 +103,8 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
     if ($cache) {
       $data = $cache->data;
       // If cache hit.
-      if (!empty($data[$path])) {
-        return $data[$path];
+      if (!empty($data[$filtered_path])) {
+        return $data[$filtered_path];
       }
     }
 
