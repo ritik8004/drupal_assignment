@@ -179,6 +179,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
       'alshaya_user.user_communication_preference',
       'change_pwd_page.change_password_form',
       'entity.user.canonical',
+      'alshaya_acm_customer.orders_detail',
+      'acq_checkoutcom.payment_cards',
     ];
 
     // List of checkout pages.
@@ -1835,4 +1837,34 @@ function alshaya_white_label_preprocess_image_style(&$variables) {
 function alshaya_white_label_theme_registry_alter(array &$theme_registry) {
   $theme_registry['image']['variables']['skip_lazy_loading'] = NULL;
   $theme_registry['image_style']['variables']['skip_lazy_loading'] = NULL;
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_white_label_library_info_alter(&$libraries, $extension) {
+  // Both LTR and RTL libraries added as dependency because this hook is
+  // cached and thus not works with language when attaching
+  // library based on language.
+  // We are un - setting the not required library which is added
+  // here in hook_css_alter() based on language.
+  if ($extension === 'alshaya_white_label' && isset($libraries['fullwidth-common'])) {
+    $current_theme = \Drupal::theme()->getActiveTheme()->getName();
+    $libraries['fullwidth-common']['dependencies'][] = $current_theme . '/rtl_styles';
+    $libraries['fullwidth-common']['dependencies'][] = $current_theme . '/ltr_styles';
+  }
+}
+
+/**
+ * Implements hook_css_alter().
+ */
+function alshaya_white_label_css_alter(&$css) {
+  $current_theme = \Drupal::theme()->getActiveTheme()->getName();
+  $direction = \Drupal::languageManager()->getCurrentLanguage()->getDirection();
+  if ($direction === 'rtl' && isset($css['themes/custom/transac/' . $current_theme . '/css/ltr.css'])) {
+    unset($css['themes/custom/transac/' . $current_theme . '/css/ltr.css']);
+  }
+  if ($direction === 'ltr'&& isset($css['themes/custom/transac/' . $current_theme . '/css/rtl.css'])) {
+    unset($css['themes/custom/transac/' . $current_theme . '/css/rtl.css']);
+  }
 }
