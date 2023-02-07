@@ -116,7 +116,7 @@ export default class ConfigurableForm extends React.Component {
     Drupal.alshayaSeoGtmPushEcommerceEvents({
       eventAction: 'plp color click',
       eventLabel: hasValue(swatchLabel) ? swatchLabel : '',
-      eventLabel2: 'quick add',
+      eventLabel2: 'plp_quickview',
     });
   }
 
@@ -137,7 +137,7 @@ export default class ConfigurableForm extends React.Component {
     Drupal.alshayaSeoGtmPushEcommerceEvents({
       eventAction: 'plp size click',
       eventLabel: hasValue(optionLabel) ? optionLabel : '',
-      eventLabel2: 'quick add',
+      eventLabel2: 'plp_quickview',
     });
   };
 
