@@ -165,8 +165,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       'path' => $path,
       'fullPath' => $full_path,
       'pathToCheck' => $rcs_path_to_check,
-      'request' => $request,
-      'langcode' => $this->languageManager->getCurrentLanguage()->getId(),
     ]);
     $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::ALTER);
 
@@ -186,7 +184,7 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
 
     // Set current path as default so we do not process twice for same path.
     if (empty(self::$processedPaths[$path])) {
-      self::$processedPaths[$path] = $event_data['path'] ?? $path;
+      self::$processedPaths[$path] = $path;
     }
 
     return self::$processedPaths[$path];
