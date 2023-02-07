@@ -55,7 +55,6 @@ function alshaya_ay_transac_preprocess_breadcrumb(&$variables) {
   if (empty($super_categories)) {
     return;
   }
-  $current_path = \Drupal::service('path.current')->getPath();
   $current_path = \Drupal::request()->getRequestUri();
   // Explode string to array.
   $path_parts = explode('/', trim($current_path, '/'));
@@ -65,7 +64,6 @@ function alshaya_ay_transac_preprocess_breadcrumb(&$variables) {
     : $path_parts[0];
   // Get the product category term from the Path.
   $term_from_route = $super_category_tree->getTermByPath($tid);
-  // dump($term_from_route);
   // Checking here category ID available and current value not equal ID.
   if ($term_from_route instanceof TermInterface
     && isset($super_categories[$term_from_route->id()])
