@@ -1128,6 +1128,7 @@ header {
       display: inline-block;
       vertical-align: top;
       margin-#{$right}: rem(24);
+      padding-bottom: rem(20);
 
       &.title_subtitle {
         max-width: 9.75rem;
