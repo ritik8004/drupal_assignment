@@ -350,6 +350,11 @@ function alshaya_white_label_preprocess_page(&$variables) {
     }
   }
 
+  // Add full width feature for static page.
+  if ($node_bundle == 'static_html' && $is_full_width_feature_enabled) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-static';
+  }
+
   // Attach the plp search js library to Search page.
   if ($routematch->getRouteName() == 'view.search.page') {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
