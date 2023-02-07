@@ -64,6 +64,12 @@
         // Overriding inline css added by JS
         top: rem(9) !important;
       }
+
+      .imagezoom-wrap {
+        img {
+          max-width: 220px;
+        }
+      }
     }
 
     .matchback-container {
@@ -239,7 +245,7 @@
 @include breakpoint($desktop) {
   .matchback-processed {
     .wishlist-pdp-matchback {
-      #{$right}: rem(16);
+      #{$right}: rem(18);
     }
 
     &.horizontal-crossell {
