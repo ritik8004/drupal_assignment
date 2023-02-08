@@ -15,6 +15,18 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_hm_update_9403() {
+  // Save default site favicon and logo.
+  $config = \Drupal::configFactory()->getEditable('alshaya_hnm.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add field for new attribute.
  */
 function alshaya_hm_update_9402() {

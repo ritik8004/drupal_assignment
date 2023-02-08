@@ -1,0 +1,46 @@
+@include breakpoint($only-mobile) {
+  #alshaya-algolia-plp .total-result-count,
+  #alshaya-algolia-search .total-result-count,
+  .block-alshaya-grid-count-block .grid-buttons {
+    margin-#{$right}: 0;
+  }
+
+  .block-alshaya-grid-count-block .total-result-count {
+    padding-#{$left}: 0;
+  }
+
+  .c-products-list.view-algolia-plp,
+  .c-products-list.view-search {
+    @include sideSpaces(0);
+  }
+
+  .c-plp {
+    .c-products-list.product-small {
+      .c-products__item {
+        width: calc(50% - #{rem(6)});
+        margin-#{$left}: rem(12);
+      }
+    }
+  }
+}
+
+.alshaya_search_hoverimage {
+  img {
+    width: 100%;
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-plp {
+    &.l-two--sf {
+      .c-products-list {
+        &.product-small,
+        &.product-large {
+          .alshaya_search_gallery {
+            height: auto;
+          }
+        }
+      }
+    }
+  }
+}
