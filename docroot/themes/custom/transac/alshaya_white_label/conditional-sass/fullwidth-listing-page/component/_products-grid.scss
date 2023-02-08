@@ -13,6 +13,15 @@
   .c-products-list.view-search {
     @include sideSpaces(0);
   }
+
+  .c-plp {
+    .c-products-list.product-small {
+      .c-products__item {
+        width: calc(50% - #{rem(6)});
+        margin-#{$left}: rem(12);
+      }
+    }
+  }
 }
 
 @include breakpoint($desktop) {
