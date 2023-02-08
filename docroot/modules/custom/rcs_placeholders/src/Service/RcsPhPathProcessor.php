@@ -165,7 +165,6 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       'path' => $path,
       'fullPath' => $full_path,
       'pathToCheck' => $rcs_path_to_check,
-      'request' => $request,
       'langcode' => $this->languageManager->getCurrentLanguage()->getId(),
     ]);
     $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::ALTER);

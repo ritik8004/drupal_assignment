@@ -128,6 +128,7 @@ class DeeplinkResourceV3 extends DeeplinkResource {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
+    drupal_static('deeplink_api', TRUE);
     $response = $this->mobileAppUtility->getDeeplinkForResourceV3($alias);
     return new ModifiedResourceResponse($response);
   }
