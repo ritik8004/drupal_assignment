@@ -54,3 +54,11 @@ body.nodetype--acq_product {
     }
   }
 }
+
+.magazine__gallery--container {
+  figure {
+    .magazine-image-zoom-placeholder {
+      background-size: cover;
+    }
+  }
+}
