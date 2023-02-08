@@ -61,7 +61,7 @@ class AuraProgressBar extends React.Component {
 
     return (
       <>
-        <div className="aura-tier-progress-string">{Drupal.t('Your Tier Progress')}</div>
+        <div className="aura-tier-progress-string">{Drupal.t('Your Tier Progress', {}, { context: 'aura' })}</div>
         <div className={`aura-progress ${showDotClass} fill-${tierClass.replace(/ /g, '')}`}>
           <span className="under">{getAllAuraTier('value')[currentTierLevel]}</span>
           <div className="start">
