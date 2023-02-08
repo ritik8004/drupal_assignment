@@ -9,7 +9,6 @@ use Drupal\path_alias\AliasManagerInterface;
 use Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent;
 use Drupal\rcs_placeholders\EventSubscriber\RcsPhPathProcessorEventSubscriber;
 use Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a path processor subscriber for rcs categories.
@@ -92,17 +91,6 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
     }
 
     $path_to_process = $data['fullPath'];
-    // If we get the internal Drupal taxonomy path, we fetch the corresponding
-    // slug field value for that term since we use the slug value to compare
-    // with the slug field of the department page and determine if department
-    // page exists for the category.
-    if (preg_match('/term\/(\d+)/', $data['fullPath'], $matches)) {
-      /** @var \Drupal\taxonomy\TermInterface $term  */
-      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($matches[1]);
-      if ($term instanceof TermInterface && $term->bundle() === 'rcs_category') {
-        $path_to_process = $term->get('field_category_slug')->getString();
-      }
-    }
 
     $department_nid = $this->departmentPageHelper->getDepartmentPageNode($path_to_process);
     // Return in case the current page is not a
