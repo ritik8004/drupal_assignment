@@ -137,6 +137,10 @@ function alshaya_white_label_preprocess_html(&$variables) {
       if (!empty($term->get('field_plp_layout')->value)) {
         $variables['attributes']['class'][] = $term->get('field_plp_layout')->value . '-plp-layout';
       }
+      // Add class to hide the sidebar for PLP pages.
+      if (!\Drupal::config('alshaya_spc.show_listing_sidebar')->get('show_plp_sidebar')) {
+        $variables['attributes']['class'][] = 'hide-plp-sidebar';
+      }
     }
   }
 
@@ -326,6 +330,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
       if (!\Drupal::config('alshaya_spc.show_listing_sidebar')->get('show_plp_sidebar')) {
         unset($variables['page']['sidebar_first']);
         unset($variables['page']['sidebar_second']);
+        $variables['#attached']['library'][] = 'alshaya_white_label/hide-sidebar';
       }
     }
   }
@@ -405,6 +410,9 @@ function alshaya_white_label_preprocess_page(&$variables) {
     }
   }
   $srp_sidebar_status = \Drupal::config('alshaya_spc.show_listing_sidebar')->get('show_srp_sidebar');
+  if ($srp_sidebar_status) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/hide-sidebar';
+  }
   $variables['#attached']['drupalSettings']['show_srp_sidebar'] = $srp_sidebar_status;
 }
 
