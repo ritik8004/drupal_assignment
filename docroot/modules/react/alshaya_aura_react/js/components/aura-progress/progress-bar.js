@@ -60,24 +60,27 @@ class AuraProgressBar extends React.Component {
     const { widthFinalFill } = this.state;
 
     return (
-      <div className={`aura-progress ${showDotClass} fill-${tierClass.replace(/ /g, '')}`}>
-        <span className="under">{getAllAuraTier('value')[currentTierLevel]}</span>
-        <div className="start">
-          <div id="aura-fill" className="fill" style={{ width: widthFinalFill }}>
-            <span className="over">{getAllAuraTier('value')[currentTierLevel]}</span>
+      <>
+        <div className="aura-tier-progress-string">{Drupal.t('Your Tier Progress')}</div>
+        <div className={`aura-progress ${showDotClass} fill-${tierClass.replace(/ /g, '')}`}>
+          <span className="under">{getAllAuraTier('value')[currentTierLevel]}</span>
+          <div className="start">
+            <div id="aura-fill" className="fill" style={{ width: widthFinalFill }}>
+              <span className="over">{getAllAuraTier('value')[currentTierLevel]}</span>
+            </div>
+            <ConditionalView condition={showDotClass === 'pointer'}>
+              <span
+                className="dot"
+                id="aura-pointer"
+                style={getDotPosition(progress)}
+              />
+            </ConditionalView>
           </div>
-          <ConditionalView condition={showDotClass === 'pointer'}>
-            <span
-              className="dot"
-              id="aura-pointer"
-              style={getDotPosition(progress)}
-            />
-          </ConditionalView>
+          <div className={`end next-tier-${nextTierLevel}`}>
+            <span>{getAllAuraTier('value')[nextTierLevel]}</span>
+          </div>
         </div>
-        <div className={`end next-tier-${nextTierLevel}`}>
-          <span>{getAllAuraTier('value')[nextTierLevel]}</span>
-        </div>
-      </div>
+      </>
     );
   }
 }
