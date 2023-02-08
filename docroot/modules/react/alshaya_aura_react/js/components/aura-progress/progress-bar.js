@@ -1,7 +1,5 @@
 import React from 'react';
 import { getAllAuraTier } from '../../utilities/helper';
-import ConditionalView
-  from '../../../../alshaya_spc/js/common/components/conditional-view';
 
 class AuraProgressBar extends React.Component {
   constructor(props) {
@@ -53,34 +51,25 @@ class AuraProgressBar extends React.Component {
       tierClass,
       currentTierLevel,
       nextTierLevel,
-      progress,
-      getDotPosition,
     } = this.props;
 
     const { widthFinalFill } = this.state;
 
     return (
-      <div className="aura-progress-bar">
+      <>
         <div className="aura-tier-progress-string">{Drupal.t('Your Tier Progress', {}, { context: 'aura' })}</div>
-        <div className={`aura-progress ${showDotClass} fill-${tierClass.replace(/ /g, '')}`}>
-          <span className="under">{getAllAuraTier('value')[currentTierLevel]}</span>
-          <div className="start">
-            <div id="aura-fill" className="fill" style={{ width: widthFinalFill }}>
-              <span className="over">{getAllAuraTier('value')[currentTierLevel]}</span>
+        <div className="aura-progress-bar">
+          <div className="under">{getAllAuraTier('value')[currentTierLevel]}</div>
+          <div className={`aura-progress ${showDotClass} fill-${tierClass.replace(/ /g, '')}`}>
+            <div className="start">
+              <div id="aura-fill" className="fill" style={{ width: widthFinalFill }} />
             </div>
-            <ConditionalView condition={showDotClass === 'pointer'}>
-              <span
-                className="dot"
-                id="aura-pointer"
-                style={getDotPosition(progress)}
-              />
-            </ConditionalView>
           </div>
           <div className={`end next-tier-${nextTierLevel}`}>
             <span>{getAllAuraTier('value')[nextTierLevel]}</span>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
