@@ -25,6 +25,10 @@ function showSearchResultContainer() {
   const searchQuery = getSearchQuery();
   const searchResultDiv = document.getElementById('alshaya-algolia-search');
 
+  const showSidebar = drupalSettings.show_srp_sidebar || false;
+  if (!showSidebar) {
+    body.classList.add('hide-srp-sidebar');
+  }
   // On search page, we always show search results. So need to hide header on VS
   // only when there is search query.
   if (searchQuery !== '' && searchQuery !== null) {

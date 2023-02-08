@@ -19,6 +19,7 @@ use Drupal\node\NodeInterface;
 use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\Core\Site\Settings;
 use Drupal\file\Entity\File;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_preprocess_html().
@@ -135,6 +136,10 @@ function alshaya_white_label_preprocess_html(&$variables) {
       $variables['attributes']['class'][] = 'plp-page-only';
       if (!empty($term->get('field_plp_layout')->value)) {
         $variables['attributes']['class'][] = $term->get('field_plp_layout')->value . '-plp-layout';
+      }
+      // Add class to hide the sidebar for PLP pages.
+      if (!\Drupal::config('alshaya_spc.show_listing_sidebar')->get('show_plp_sidebar')) {
+        $variables['attributes']['class'][] = 'hide-plp-sidebar';
       }
     }
   }
@@ -255,6 +260,9 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['enable_lhn_tree'] = 0;
   }
 
+  // Initialising the variable for enabling/disabling sidebar.
+  $show_sidebar = \Drupal::config('alshaya_spc.show_listing_sidebar');
+
   // Attach the plp search js library to PLP page.
   if ($routematch->getRouteName() === 'entity.taxonomy_term.canonical' || $routematch->getRouteName() === 'alshaya_main_menu.category_view_all') {
     $term = $routematch->getParameter('taxonomy_term');
@@ -322,6 +330,12 @@ function alshaya_white_label_preprocess_page(&$variables) {
       if (isset($description)) {
         $variables['category_term_name'] = $term->getName();
         $variables['category_term_description'] = $description;
+      }
+      // Enable/Disable the sidebar on PLP pages.
+      if (!$show_sidebar->get('show_plp_sidebar')) {
+        unset($variables['page']['sidebar_first']);
+        unset($variables['page']['sidebar_second']);
+        $variables['#attached']['library'][] = 'alshaya_white_label/hide-sidebar';
       }
     }
   }
@@ -409,6 +423,13 @@ function alshaya_white_label_preprocess_page(&$variables) {
       $variables['enable_lhn_tree'] = 1;
     }
   }
+
+  // Attaching hide-sidebar library on SRP if sidebar is disabled.
+  $show_srp_sidebar = $show_sidebar->get('show_srp_sidebar');
+  if (!$show_srp_sidebar) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/hide-sidebar';
+  }
+  $variables['#attached']['drupalSettings']['show_srp_sidebar'] = $show_srp_sidebar;
 }
 
 /**
@@ -996,6 +1017,9 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
       }
     }
   }
+
+  $show_listing_sidebar_config = \Drupal::config('alshaya_spc.show_listing_sidebar');
+  $attachments['#cache']['tags'] = Cache::mergeTags($attachments['#cache']['tags'] ?? [], $show_listing_sidebar_config->getCacheTags());
 }
 
 /**

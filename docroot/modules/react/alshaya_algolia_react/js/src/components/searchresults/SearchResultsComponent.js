@@ -87,6 +87,7 @@ const SearchResultsComponent = ({
     ? drupalSettings.superCategory.show_brand_filter
     : false;
 
+  const showSidebar = drupalSettings.show_srp_sidebar || false;
   // Add the drawer markup for add to bag feature.
   createConfigurableDrawer();
 
@@ -105,22 +106,24 @@ const SearchResultsComponent = ({
         query={query}
       />
       {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}
-      <SideBar>
-        {hasSuperCategoryFilter() && isDesktop() && (
-          <Menu
-            transformItems={(items) => getSortedItems(items, 'supercategory')}
-            attribute="super_category"
-          />
-        )}
-        {hasCategoryFilter() && isDesktop() && (
-          <HierarchicalMenu
-            transformItems={(items) => getSortedItems(items, 'category')}
-            attributes={attributes}
-            facetLevel={1}
-            showParentLevel
-          />
-        )}
-      </SideBar>
+      {showSidebar && (
+        <SideBar>
+          {hasSuperCategoryFilter() && isDesktop() && (
+            <Menu
+              transformItems={(items) => getSortedItems(items, 'supercategory')}
+              attribute="super_category"
+            />
+          )}
+          {hasCategoryFilter() && isDesktop() && (
+            <HierarchicalMenu
+              transformItems={(items) => getSortedItems(items, 'category')}
+              attributes={attributes}
+              facetLevel={1}
+              showParentLevel
+            />
+          )}
+        </SideBar>
+      )}
       <MainContent>
         <StickyFilter>
           {(callback) => (

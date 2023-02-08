@@ -78,7 +78,18 @@ function alshaya_sprinklr_alshaya_acm_customer_update_account_alter(User $user, 
   }
   // Update sprinklr user data fields value.
   if (isset($customer['extension_attributes'], $customer['extension_attributes']['sprinklr_user_data_fields'])) {
-    $user_data_fields = Json::encode($customer['extension_attributes']['sprinklr_user_data_fields']);
+    $user_data_fields = [];
+    foreach ($customer['extension_attributes']['sprinklr_user_data_fields'] as $key => $value) {
+      // Convert field keys from snake case to camel case.
+      // We need to convert field keys to camel case as we
+      // receive field keys in snake case in API response like "phone_no",
+      // "first_name" but sprinklr requires these in camel case like
+      // "phoneNo", "fistName" etc.
+      $user_data_fields[lcfirst(str_replace('_', '', ucwords($key, '_')))] = $value;
+    }
+    $user_data_fields = !empty($user_data_fields)
+      ? Json::encode($user_data_fields)
+      : '';
     $user->get('field_sprinklr_user_fields')->setValue($user_data_fields);
   }
 }
