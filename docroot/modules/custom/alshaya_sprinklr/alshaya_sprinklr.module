@@ -78,7 +78,8 @@ function alshaya_sprinklr_alshaya_acm_customer_update_account_alter(User $user, 
   }
   // Update sprinklr user data fields value.
   if (isset($customer['extension_attributes'], $customer['extension_attributes']['sprinklr_user_data_fields'])) {
-    $user->get('field_sprinklr_user_fields')->setValue($customer['extension_attributes']['sprinklr_user_data_fields']);
+    $user_data_fields = Json::encode($customer['extension_attributes']['sprinklr_user_data_fields']);
+    $user->get('field_sprinklr_user_fields')->setValue($user_data_fields);
   }
 }
 
