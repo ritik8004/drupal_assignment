@@ -83,7 +83,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
     }
     else {
       $path = RcsPhPathProcessor::getFullPagePath();
-      // With V2 we use slug and not not term reference so we need the original
+      // With V3 we use slug and not not term reference so we need the original
       // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
       // For this RCS provides a way to get original path if it had processed
       // and converted the value available in $path. We use it to get the
