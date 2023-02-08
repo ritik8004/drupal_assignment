@@ -2,10 +2,9 @@ import React from 'react';
 import AuraMyAccountOldCardFound from './card-not-linked-data';
 import AuraMyAccountPendingFullEnrollment from './pending-full-enrollment';
 import AuraMyAccountNoLinkedCard from './card-not-linked-no-data';
-import AuraMyAccountVerifiedUser from './linked-verified';
+import AuraVerifiedUser from './linked-verified';
 import { getAllAuraStatus } from '../../../utilities/helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
-import AuraProgressWrapper from '../../aura-progress';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { getAuraLocalStorageKey } from '../../../utilities/aura_utils';
 
@@ -67,19 +66,16 @@ const LoyaltyClubBlock = (props) => {
     if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
       return (
         <>
-          <AuraMyAccountVerifiedUser
+          <AuraVerifiedUser
             tier={tier}
             points={points}
             pointsOnHold={pointsOnHold}
             cardNumber={cardNumber}
             firstName={firstName}
             lastName={lastName}
-          />
-          <AuraProgressWrapper
             upgradeMsg={upgradeMsg}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
-            tier={tier}
           />
         </>
       );
