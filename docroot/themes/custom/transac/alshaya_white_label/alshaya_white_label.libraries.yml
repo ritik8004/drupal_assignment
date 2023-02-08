@@ -951,6 +951,11 @@ fullwidth-static:
   dependencies:
     - alshaya_white_label/fullwidth-common
 
+hide-sidebar:
+  css:
+    theme:
+      css/conditional-sass/hide-sidebar/hide-sidebar.ltr.css: {}
+
 alshaya-accordion:
   js:
     js/alshaya-accordion.js: {}
