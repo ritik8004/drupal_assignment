@@ -146,8 +146,7 @@
         "oomphinc/composer-installers-extender": "^2.0",
         "psy/psysh": "v0.10.12",
         "springimport/magento2-api-v1": "^1.0",
-        "typhonius/acquia-php-sdk-v2": "^2",
-        "zumba/amplitude-php": "^1.0.3"
+        "typhonius/acquia-php-sdk-v2": "^2"
     },
     "require-dev": {
         "acquia/blt-drupal-check": "dev-master",
