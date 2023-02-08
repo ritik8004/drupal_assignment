@@ -23,7 +23,9 @@ function _alshaya_checkout_tracker_translations() {
         'ar' => 'الدفع والتوصيل',
         'context' => 'alshaya_checkout_tracker',
       ],
-      'confirmation' => [
+    ],
+    'v2' => [
+      'Confirmation' => [
         'ar' => 'التأكيد',
         'context' => 'alshaya_checkout_tracker',
       ],
@@ -37,7 +39,7 @@ function _alshaya_checkout_tracker_translations() {
  * Get translations for given version.
  *
  * @param string $version
- *   Version number like 'v1' etc.
+ *   Version number like 'v1', 'v2' etc.
  *
  * @return array
  *   Translations.
