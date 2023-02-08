@@ -76,27 +76,13 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
   /**
    * {@inheritDoc}
    */
-  public function getDepartmentPageNode($request = NULL) {
-    $path = RcsPhPathProcessor::getFullPagePath();
-    $data = [];
-    $cid = 'alshaya_rcs_listing:slug:nodes';
-
-    // Check for cache first.
-    $cache = $this->cache->get($cid);
-    if ($cache) {
-      $data = $cache->data;
-      // If cache hit.
-      if (!empty($data[$path])) {
-        return $data[$path];
-      }
-    }
-
-    $filtered_path = NULL;
-
-    if (!empty($request)) {
-      $filtered_path = trim($request->getPathInfo(), '/');
+  public function getDepartmentPageNid($path = NULL) {
+    $filtered_path = $path;
+    if (!empty($filtered_path)) {
+      $filtered_path = trim($filtered_path, '/');
     }
     else {
+      $path = RcsPhPathProcessor::getFullPagePath();
       // With V3 we use slug and not not term reference so we need the original
       // path (example: shop-kids) and not internal one (taxonomy/term/[tid]).
       // For this RCS provides a way to get original path if it had processed
@@ -109,6 +95,18 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
 
     if (empty($filtered_path)) {
       return FALSE;
+    }
+
+    $data = [];
+    $cid = 'alshaya_rcs_listing:slug:nids';
+    // Check for cache first.
+    $cache = $this->cache->get($cid);
+    if ($cache) {
+      $data = $cache->data;
+      // If cache hit.
+      if (!empty($data[$filtered_path])) {
+        return $data[$filtered_path];
+      }
     }
 
     // Get all department pages.
