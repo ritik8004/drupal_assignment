@@ -98,7 +98,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
     }
 
     $data = [];
-    $cid = 'alshaya_rcs_listing:slug:nodes';
+    $cid = 'alshaya_rcs_listing:slug:nids';
     // Check for cache first.
     $cache = $this->cache->get($cid);
     if ($cache) {
