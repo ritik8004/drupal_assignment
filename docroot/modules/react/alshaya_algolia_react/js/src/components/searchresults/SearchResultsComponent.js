@@ -100,12 +100,18 @@ const SearchResultsComponent = ({
       onSearchStateChange={onSearchStateChange}
     >
       <Configure
+        userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
         hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage}
         filters={stockFilter}
         query={query}
       />
-      {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}
+      {optionalFilter ? (
+        <Configure
+          optionalFilters={optionalFilter}
+          userToken={Drupal.getAlgoliaUserToken()}
+        />
+      ) : null}
       {showSidebar && (
         <SideBar>
           {hasSuperCategoryFilter() && isDesktop() && (
