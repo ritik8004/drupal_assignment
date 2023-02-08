@@ -5,7 +5,6 @@ namespace Drupal\alshaya_advanced_page\Service;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\Entity\Node;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Helper class for Department pages.
@@ -65,13 +64,13 @@ class AlshayaDepartmentPageHelper {
   /**
    * Get the department node object based on current route.
    *
-   * @param Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
+   * @param string $path
+   *   Path value.
    *
-   * @return mixed|false
-   *   Return Node object if department page, else FALSE.
+   * @return string|false
+   *   Return Node id if department page, else FALSE.
    */
-  public function getDepartmentPageNode(Request $request = NULL) {
+  public function getDepartmentPageNid($path = NULL) {
     $result = &drupal_static(__FUNCTION__);
     // Return if the static cache is set.
     if (isset($result)) {
@@ -86,7 +85,7 @@ class AlshayaDepartmentPageHelper {
       // Check if the current node type is department_page. For revision related
       // pages $node will have nid.
       if ($node instanceof Node && $node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString()) {
-        $result = $node;
+        $result = $node->id();
       }
     }
 
