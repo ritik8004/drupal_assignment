@@ -87,9 +87,7 @@ const SearchResultsComponent = ({
     ? drupalSettings.superCategory.show_brand_filter
     : false;
 
-  const showSidebar = hasValue(drupalSettings.show_srp_sidebar)
-    ? drupalSettings.show_srp_sidebar
-    : false;
+  const showSidebar = drupalSettings.show_srp_sidebar || false;
   // Add the drawer markup for add to bag feature.
   createConfigurableDrawer();
 
