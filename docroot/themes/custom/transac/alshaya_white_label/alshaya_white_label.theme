@@ -409,11 +409,11 @@ function alshaya_white_label_preprocess_page(&$variables) {
       $variables['enable_lhn_tree'] = 1;
     }
   }
-  $srp_sidebar_status = \Drupal::config('alshaya_spc.show_listing_sidebar')->get('show_srp_sidebar');
-  if ($srp_sidebar_status) {
+  $show_srp_sidebar = \Drupal::config('alshaya_spc.show_listing_sidebar')->get('show_srp_sidebar');
+  if (!$show_srp_sidebar) {
     $variables['#attached']['library'][] = 'alshaya_white_label/hide-sidebar';
   }
-  $variables['#attached']['drupalSettings']['show_srp_sidebar'] = $srp_sidebar_status;
+  $variables['#attached']['drupalSettings']['show_srp_sidebar'] = $show_srp_sidebar;
 }
 
 /**
