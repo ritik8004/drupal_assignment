@@ -10,6 +10,18 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Remove Layered Navigation from all Furnitures brands.
+ */
+function alshaya_furnitures_update_9403() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_spc.show_listing_sidebar');
+  $config->set('show_plp_sidebar', FALSE);
+  $config->set('show_srp_sidebar', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set show_pre_selected_variant_on_pdp to false so that
  * no variant is pre selected on PDP page load.
  */
@@ -33,28 +45,8 @@ function alshaya_furnitures_update_dependencies() {
         'alshaya_acm_product' => 9403,
       ],
     ],
-  ];
-}
-
-/**
- * Implements hook_update_N().
- *
- * Remove Layered Navigation from all Furnitures brands.
- */
-function alshaya_furnitures_update_9402() {
-  $config = \Drupal::configFactory()->getEditable('alshaya_spc.show_listing_sidebar');
-  $config->set('show_plp_sidebar', FALSE);
-  $config->set('show_srp_sidebar', FALSE);
-  $config->save();
-}
-
-/**
- * Implements hook_update_dependencies().
- */
-function alshaya_furnitures_update_dependencies() {
-  return [
     'alshaya_furnitures' => [
-      9402 => [
+      9403 => [
         'alshaya_spc' => 9407,
       ],
     ],
