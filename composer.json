@@ -145,7 +145,7 @@
         "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "oomphinc/composer-installers-extender": "^2.0",
         "psy/psysh": "v0.10.12",
-        "springimport/magento2-api-v1": "^1.0",
+        "springimport/magento2-api-v1": "^2.0",
         "typhonius/acquia-php-sdk-v2": "^2"
     },
     "require-dev": {
@@ -192,6 +192,10 @@
         "nuvoleweb": {
             "type": "git",
             "url": "https://github.com/nuvoleweb/search_api_spellcheck.git"
+        },
+        "springimport": {
+            "type": "git",
+            "url": "https://github.com/milind-kagdelwar/magento2-api-v1.git"
         },
         "asset-packagist": {
             "type": "composer",
@@ -433,9 +437,6 @@
             },
             "drupal/rate_limits": {
                 "Add option to skip rate limit for GET requests": "https://www.drupal.org/files/issues/2022-09-07/3308397-2.patch"
-            },
-            "springimport/magento2-api-v1": {
-                "Added support for signature method as configuration": "https://patch-diff.githubusercontent.com/raw/springimport/magento2-api-v1/pull/2.patch"
             }
         },
         "installer-paths": {
