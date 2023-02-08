@@ -126,7 +126,7 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
       return;
     }
 
-    $tid = array_pop($tid);
+    $tid = reset($tid);
 
     $category = $this->enrichmentHelper->getEnrichedEntity('category', $category_slug);
     $entityData = NULL;

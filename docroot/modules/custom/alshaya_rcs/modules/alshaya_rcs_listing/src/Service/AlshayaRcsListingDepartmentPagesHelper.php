@@ -98,8 +98,9 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
     }
 
     $data = [];
+    $cid = 'alshaya_rcs_listing:slug:nodes';
     // Check for cache first.
-    $cache = $this->cache->get('alshaya_rcs_listing:slug:nodes');
+    $cache = $this->cache->get($cid);
     if ($cache) {
       $data = $cache->data;
       // If cache hit.
@@ -117,7 +118,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
       $node = $this->entityTypeManager->getStorage('node')->load($nid);
       if ($node instanceof NodeInterface && $node->isPublished()) {
         $data[$filtered_path] = $nid;
-        $this->cache->set('alshaya_rcs_listing:slug:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
+        $this->cache->set($cid, $data, Cache::PERMANENT, ['node_type:advanced_page']);
         return $nid;
       }
     }
