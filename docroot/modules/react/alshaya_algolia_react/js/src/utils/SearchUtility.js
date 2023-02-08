@@ -31,8 +31,6 @@ function showSearchResultContainer() {
     : false;
   if (!showSidebar) {
     body.classList.add('hide-srp-sidebar');
-  } else {
-    body.classList.remove('hide-srp-sidebar');
   }
   // On search page, we always show search results. So need to hide header on VS
   // only when there is search query.
