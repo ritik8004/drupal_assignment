@@ -630,3 +630,21 @@
 .c-post-content + .c-footer {
   padding-top: 0;
 }
+
+@include breakpoint($only-tablet) {
+  .c-footer-primary__region {
+    margin: 0 rem(9);
+
+    .c-footer-primary__region {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .c-footer-primary {
+    .c-footer-menu--about {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
