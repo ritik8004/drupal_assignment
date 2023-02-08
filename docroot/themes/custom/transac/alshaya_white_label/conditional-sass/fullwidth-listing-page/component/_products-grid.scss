@@ -24,6 +24,12 @@
   }
 }
 
+.alshaya_search_hoverimage {
+  img {
+    width: 100%;
+  }
+}
+
 @include breakpoint($desktop) {
   .c-plp {
     &.l-two--sf {
