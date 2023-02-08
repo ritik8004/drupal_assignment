@@ -31,4 +31,3 @@ function alshaya_xb_install($is_syncing) {
   // Add fixed price attribute to SKU entity.
   \Drupal::service('acq_sku.fields_manager')->addFields();
 }
-
