@@ -76,7 +76,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
   /**
    * {@inheritDoc}
    */
-  public function getDepartmentPageNode($path = NULL) {
+  public function getDepartmentPageNid($path = NULL) {
     $filtered_path = $path;
     if (!empty($filtered_path)) {
       $filtered_path = trim($filtered_path, '/');

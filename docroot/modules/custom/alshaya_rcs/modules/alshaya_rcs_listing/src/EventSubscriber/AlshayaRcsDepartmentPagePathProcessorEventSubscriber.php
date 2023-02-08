@@ -92,7 +92,7 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
 
     $path_to_process = $data['fullPath'];
 
-    $department_nid = $this->departmentPageHelper->getDepartmentPageNode($path_to_process);
+    $department_nid = $this->departmentPageHelper->getDepartmentPageNid($path_to_process);
     // Return in case the current page is not a
     // department page.
     if (!$department_nid) {

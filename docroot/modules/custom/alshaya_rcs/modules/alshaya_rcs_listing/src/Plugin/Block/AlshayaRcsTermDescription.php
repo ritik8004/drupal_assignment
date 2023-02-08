@@ -77,7 +77,7 @@ class AlshayaRcsTermDescription extends BlockBase implements ContainerFactoryPlu
    */
   public function access(AccountInterface $account, $return_as_object = FALSE) {
     // Do not render this block on Department pages.
-    $is_department_page = $this->departmentPageHelper->getDepartmentPageNode();
+    $is_department_page = $this->departmentPageHelper->getDepartmentPageNid();
     return AccessResult::allowedIf(empty($is_department_page));
   }
 
