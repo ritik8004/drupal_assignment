@@ -8,6 +8,21 @@
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Enable addressbook postcode and city configuration.
+ */
+function alshaya_xb_update_9001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_addressbook.settings'],
+    'alshaya_addressbook',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
  * Implements hook_install().
  *
  * Install new SKU field fixed_price.
@@ -17,17 +32,3 @@ function alshaya_xb_install($is_syncing) {
   \Drupal::service('acq_sku.fields_manager')->addFields();
 }
 
-/**
- * Implements hook_update_N().
- *
- * Enable addressbook postcode and city configuration.
- */
-function alshaya_xb_update_8001() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_addressbook.settings'],
-    'alshaya_addressbook',
-    'install',
-    AlshayaConfigManager::MODE_MERGE
-  );
-}
