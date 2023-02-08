@@ -119,18 +119,12 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
       return;
     }
 
-    $term_query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
-    $term_query->condition('field_category_slug', $category_slug);
-    $tid = $term_query->execute();
-    if (empty($tid)) {
+    $category = $this->enrichmentHelper->getEnrichedEntity('category', $category_slug);
+    if (empty($category)) {
       return;
     }
 
-    $tid = reset($tid);
-
-    $category = $this->enrichmentHelper->getEnrichedEntity('category', $category_slug);
     $entityData = NULL;
-
     if (isset($category)) {
       $entityData = $category->toArray();
     }
