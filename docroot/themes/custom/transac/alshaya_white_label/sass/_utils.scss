@@ -770,3 +770,36 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
     }
   }
 }
+
+// Listing pages product hover images.
+@mixin alshayaSearchHoverImage {
+  .alshaya_search_gallery {
+    position: relative;
+  }
+
+  .alshaya_search_mainimage,
+  .alshaya_search_hoverimage {
+    img {
+      object-fit: contain;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .alshaya_search_hoverimage {
+    display: flex;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.2s ease-out;
+
+    article[data-vmode="search_result"]:hover & {
+      opacity: 1;
+      z-index: 1;
+      transition-timing-function: ease-in;
+    }
+  }
+}
