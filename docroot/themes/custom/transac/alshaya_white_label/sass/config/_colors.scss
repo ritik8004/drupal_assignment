@@ -299,6 +299,7 @@ $aura-myaccount-vip-full-enrolled: linear-gradient(to right, #7f2482 -27%, #2503
 $aura-myaccount-vip-full-enrolled-ar: linear-gradient(to left, #7f2482 -27%, #25035a 7%, #170237 77%, #160235 139%);
 $aura-myaccount-user-dp-star: #4a90e2;
 $aura-myaccount-user-dp-vip: #bd10e0;
+$aura-gradient-expiry-points: linear-gradient(to bottom, rgba(152, 34, 163, 0.16) -44%, rgba(240, 171, 128, 0.16) -37%, rgba(252, 190, 123, 0.16) -37%, rgba(251, 168, 106, 0.16) -37%, rgba(251, 170, 105, 0.16) 50%, rgba(242, 73, 132, 0.16) 131%, rgba(243, 89, 127, 0.16) 138%, rgba(240, 54, 137, 0.16) 138%);
 $aura-modal-link: #8f1c7d;
 $_aura-disabled: #979797;
 $_aura-disabled-desc: #31281b;
@@ -1840,6 +1841,8 @@ $aura-join-now-submit-button-bg: $aura-gradient-25;
 $aura-join-now-submit-bg-src: $aura-gradient-26;
 $aura-congratulation-highlight-text: $musical-silk;
 $auro-join-signin-text: $musical-silk;
+$aura-expiry-points-txt: $_aura_expiry_red;
+$aura-expiry-points-txt-bg: $aura-gradient-expiry-points;
 
 // Aura My Account.
 $aura-loyalty-club-title-1: $aura-blue;
