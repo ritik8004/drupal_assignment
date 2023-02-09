@@ -46,6 +46,7 @@ const ProductCategoryCarousel = ({
       onSearchStateChange={onSearchStateChange}
     >
       <Configure
+        userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
         hitsPerPage={itemsPerPage}
         filters={finalFilter}
