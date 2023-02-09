@@ -212,6 +212,7 @@ class AlshayaApiWrapper {
     $configuration->setConsumerSecret($settings->get('consumer_secret'));
     $configuration->setToken($settings->get('access_token'));
     $configuration->setTokenSecret($settings->get('access_token_secret'));
+    $configuration->setSignatureMethod($settings->get('signature_method'));
 
     return (new ApiFactory($configuration))->getApiClient();
   }

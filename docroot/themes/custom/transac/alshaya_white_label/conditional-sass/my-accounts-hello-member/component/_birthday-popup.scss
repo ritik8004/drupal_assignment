@@ -1,6 +1,6 @@
 #my-accounts-hello-member {
   .hello_member_happy_birthday_popup-content {
-    width: rem(653) !important;
+    width: rem(512) !important;
     padding: 0 !important;
     border: 0 !important;
 
@@ -10,6 +10,8 @@
 
     @include breakpoint($only-mobile) {
       width: 100% !important;
+      position: fixed !important;
+      bottom: 0;
     }
 
     .hello-member-happy-birthday-popup {
@@ -27,8 +29,8 @@
 
         .close {
           display: flex;
-          #{$right}: rem(8);
-          top: rem(8);
+          #{$right}: rem(14);
+          top: rem(14);
           position: absolute;
           background: transparent;
           padding: rem(8);
@@ -36,21 +38,20 @@
           @include icon(close) {
             color: $hello-member-bd-close-icon;
             position: relative;
-            font-size: rem(16);
+            font-size: rem(19);
             background: transparent;
-            font-weight: 600;
           }
         }
       }
 
       .happy-birthday-popup-body {
-        padding-bottom: rem(48);
+        padding-bottom: rem(19);
 
         .title {
           font-size: rem(18);
           font-family: $alshaya-bold;
-          letter-spacing: 0.9px;
-          padding: rem(48) 0 rem(10);
+          letter-spacing: rem(0.9);
+          padding: rem(24) 0 rem(10);
           color: $hello-member-bd-title;
 
           @include breakpoint($only-mobile) {
@@ -60,9 +61,10 @@
 
         .description {
           font-size: rem(18);
-          letter-spacing: 0.2px;
+          letter-spacing: rem(0.3);
           color: $hello-member-bd-sub-title;
           line-height: 1.45;
+          padding-top: rem(6);
 
           @include breakpoint($only-mobile) {
             font-size: rem(14);
@@ -70,15 +72,16 @@
         }
 
         .happy-birthday-voucher-details {
-          padding: rem(42) 0;
+          padding: rem(26) 0;
 
           .avail-it {
             @extend %button-wide;
 
             cursor: pointer;
-            font-size: rem(16);
-            letter-spacing: 1.14px;
-            padding: rem(10) rem(86);
+            font-size: rem(13);
+            letter-spacing: rem(1.14);
+            padding: rem(14) rem(86);
+            min-width: rem(285);
           }
         }
 

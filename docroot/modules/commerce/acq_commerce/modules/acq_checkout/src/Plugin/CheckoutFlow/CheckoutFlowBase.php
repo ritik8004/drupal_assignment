@@ -187,7 +187,7 @@ abstract class CheckoutFlowBase extends PluginBase implements CheckoutFlowInterf
   /**
    * {@inheritdoc}
    */
-  public function redirectToStep($step_id) {
+  public function redirectToStep($step_id): never {
     $cart = $this->cartStorage->getCart();
     $cart->setCheckoutStep($step_id);
     throw new NeedsRedirectException(Url::fromRoute('acq_checkout.form', [

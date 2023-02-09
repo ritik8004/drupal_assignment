@@ -106,7 +106,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#value' => $this->t('deliver to this address'),
       '#executes_submit_callback' => FALSE,
       '#ajax' => [
-        'callback' => [$this, 'saveAddressAjaxCallback'],
+        'callback' => $this->saveAddressAjaxCallback(...),
       ],
     ];
 

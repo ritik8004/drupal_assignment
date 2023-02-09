@@ -178,7 +178,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
           '#default_value' => $payment_card,
           '#required' => TRUE,
           '#ajax' => [
-            'callback' => [$this, 'renderSelectedCardFields'],
+            'callback' => $this->renderSelectedCardFields(...),
             'wrapper' => 'payment_details_checkout_com',
             'method' => 'replace',
             'effect' => 'fade',

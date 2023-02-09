@@ -101,7 +101,7 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
       '#default_value' => $country,
       '#required' => TRUE,
       '#ajax' => [
-        'callback' => [$this, 'addressAjaxCallback'],
+        'callback' => $this->addressAjaxCallback(...),
         'wrapper' => 'dynamic_parts',
       ],
     ];

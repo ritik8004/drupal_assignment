@@ -67,7 +67,7 @@ class AlshayaSecurityCommands extends DrushCommands {
    *
    * @hook post-command user:login
    */
-  public function postUserLogin() {
+  public function postUserLogin(): never {
     throw new \Exception('Use of this command is not allowed.');
   }
 

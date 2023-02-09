@@ -618,6 +618,12 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
     ],
+    'v9' => [
+      'Your Tier Progress' => [
+        'ar' => 'تم التقدم في المستوى',
+        'context' => 'aura',
+      ],
+    ],
   ];
 }
 

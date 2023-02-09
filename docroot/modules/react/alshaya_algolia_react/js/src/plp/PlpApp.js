@@ -180,6 +180,7 @@ const PlpApp = ({
       onSearchStateChange={onSearchStateChange}
     >
       <Configure
+        userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
         hitsPerPage={groupEnabled ? 1000 : itemsPerPage}
         filters={finalFilter}

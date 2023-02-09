@@ -599,7 +599,7 @@ class MobileAppUtility {
    *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
-  public function throwException($message = NULL) {
+  public function throwException($message = NULL): never {
     throw new NotFoundHttpException($message ?? "page not found");
   }
 
