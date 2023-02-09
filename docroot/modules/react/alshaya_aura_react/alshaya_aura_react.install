@@ -10,6 +10,19 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Update Aura banner Tier Progress strings.
+ */
+function alshaya_aura_react_update_9403() {
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  $translations = _alshaya_aura_react_get_translations('v9');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update Aura banner strings.
  */
 function alshaya_aura_react_update_9402() {
