@@ -37,11 +37,11 @@
       <div style="padding-top: 30px; padding-bottom: 50px;">
         {% for name, link in links %}
           <a href="{{ link }}" target="_blank" style="text-decoration: none;">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/icons/{{ name }}-icon.png" alt="{{ name|t }}" width="26px" title="{{ name|t }}" />
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/icons/{{ name }}-icon.png" alt="{{ name|t }}" title="{{ name|t }}" />
           </a>
         {% endfor %}
       </div>
-      <div style="font-family: Arial, helvetica; font-size: 11px; color: #000; line-height: 1.55; background: #fff; padding: 16px; text-align: center;">
+      <div style="font-family: Arial, helvetica; font-size: 11px; color: #000; line-height: 1.55; background: #cf0a2c; padding: 16px; text-align: center;">
         <p style="margin:0; color: #000; font-size: 11px;">
           {{ email_footer }}
         </p>
