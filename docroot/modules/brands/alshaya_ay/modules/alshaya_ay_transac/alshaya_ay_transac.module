@@ -25,9 +25,6 @@ function alshaya_ay_transac_library_info_alter(&$libraries, $extension) {
 function alshaya_ay_transac_preprocess_block(&$variables) {
   if ($variables['base_plugin_id'] == 'alshaya_rcs_shop_by_block') {
     $variables['#cache']['contexts'][] = 'super_category';
-    $variables['#cache']['tags'] = !empty($variables['#cache']['tags'])
-      ? $variables['#cache']['tags']
-      : [];
     // Get current super category term from route.
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
     if ($term instanceof TermInterface) {
