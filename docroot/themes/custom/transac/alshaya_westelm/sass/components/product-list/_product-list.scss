@@ -193,3 +193,38 @@
     }
   }
 }
+
+.alshaya_search_hoverimage {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  line-height: 0;
+  height: 100%;
+  width: 100%;
+}
+
+article[data-vmode="search_result"] {
+  // Placing wishlist icon on top of hover image.
+  .wishlist-icon {
+    z-index: 3 !important;
+  }
+
+  // Fixed image height going out of container.
+  .alshaya_search_mainimage,
+  .alshaya_search_hoverimage {
+    > img {
+      height: 100%;
+    }
+  }
+
+  .alshaya_search_gallery {
+    position: relative;
+  }
+
+  &:hover {
+    .alshaya_search_hoverimage {
+      opacity: 1;
+      z-index: 2;
+    }
+  }
+}
