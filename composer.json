@@ -5,7 +5,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-dom": "*",
         "acquia/acsf-tools": "^10.1",
         "acquia/blt": "^13.2",
@@ -555,7 +555,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.0"
+            "php": "8.1"
         },
         "sort-packages": true,
         "discard-changes": true,

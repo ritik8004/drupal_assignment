@@ -370,7 +370,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         'class' => ['cc-action'],
       ],
       '#ajax' => [
-        'callback' => [$this, 'submitGuestDeliveryCollect'],
+        'callback' => $this->submitGuestDeliveryCollect(...),
         'wrapper' => 'selected-store-elements-wrapper',
       ],
       // This is required for limit_validation_errors to work.

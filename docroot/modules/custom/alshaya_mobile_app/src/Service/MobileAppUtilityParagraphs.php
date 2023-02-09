@@ -578,10 +578,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The converted array with necessary fields.
    */
   protected function paragraphDeliveryUspBlock(ParagraphInterface $entity, array $fields) {
-    $data = call_user_func_array([
-      $this,
-      'paragraphPrepareData',
-    ], [
+    $data = call_user_func_array($this->paragraphPrepareData(...), [
       $entity,
       $fields,
     ]);
@@ -822,10 +819,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The converted array with necessary fields.
    */
   protected function paragraphBlockReference(ParagraphInterface $entity, array $fields) {
-    $data = call_user_func_array([
-      $this,
-      'paragraphPrepareData',
-    ], [
+    $data = call_user_func_array($this->paragraphPrepareData(...), [
       $entity,
       $fields,
     ]);
@@ -852,10 +846,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     if ($category_id === NULL) {
       return FALSE;
     }
-    $data = call_user_func_array([
-      $this,
-      'paragraphPrepareData',
-    ], [
+    $data = call_user_func_array($this->paragraphPrepareData(...), [
       $entity,
       $fields,
     ]);

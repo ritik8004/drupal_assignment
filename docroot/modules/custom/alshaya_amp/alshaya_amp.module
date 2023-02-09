@@ -77,10 +77,7 @@ function alshaya_amp_form_system_theme_settings_submit(&$form, FormStateInterfac
  */
 function alshaya_amp_element_info_alter(array &$info) {
   if (isset($info['processed_text']['#pre_render'])) {
-    $info['processed_text']['#pre_render'][] = [
-      AlshayaAmpPreRenderer::class,
-      'ampBodyPreRender',
-    ];
+    $info['processed_text']['#pre_render'][] = AlshayaAmpPreRenderer::ampBodyPreRender(...);
   }
 }
 
