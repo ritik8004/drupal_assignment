@@ -64,10 +64,13 @@ class AlshayaDepartmentPageHelper {
   /**
    * Get the department node object based on current route.
    *
-   * @return mixed|false
-   *   Return Node object if department page, else FALSE.
+   * @param string $path
+   *   Path value.
+   *
+   * @return string|false
+   *   Return Node id if department page, else FALSE.
    */
-  public function getDepartmentPageNode() {
+  public function getDepartmentPageNid($path = NULL) {
     $result = &drupal_static(__FUNCTION__);
     // Return if the static cache is set.
     if (isset($result)) {
@@ -75,14 +78,14 @@ class AlshayaDepartmentPageHelper {
     }
 
     $result = FALSE;
-    $node = $this->route_match->getParameter('node');
+    $node = $this->routeMatch->getParameter('node');
 
     // Load the processed parameter.
     if ($node) {
       // Check if the current node type is department_page. For revision related
       // pages $node will have nid.
       if ($node instanceof Node && $node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->getString()) {
-        $result = $node;
+        $result = $node->id();
       }
     }
 
