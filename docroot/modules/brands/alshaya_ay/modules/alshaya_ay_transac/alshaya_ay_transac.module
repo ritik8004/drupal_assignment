@@ -40,7 +40,7 @@ function alshaya_ay_transac_preprocess_block(&$variables) {
       if (strtolower($term_en->label()) !== 'shop') {
         $term = $entity_repository->getTranslationFromContext($term);
         $variables['label'] = $term->label();
-        $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'], $term->getCacheTags());
+        $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $term->getCacheTags());
       }
     }
   }
