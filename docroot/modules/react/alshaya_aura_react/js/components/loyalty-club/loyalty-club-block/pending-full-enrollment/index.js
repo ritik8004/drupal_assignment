@@ -5,6 +5,7 @@ import { isMobile } from '../../../../../../js/utilities/display';
 import AuraLogo from '../../../../svg-component/aura-logo';
 import { isMyAuraContext } from '../../../../utilities/aura_utils';
 import AuraAppDownload from '../../../aura-app-download';
+import AuraProgressWrapper from '../../../aura-progress';
 import MyAuraBanner from '../my-aura-banner';
 
 const AuraMyAccountPendingFullEnrollment = (props) => {
@@ -16,6 +17,9 @@ const AuraMyAccountPendingFullEnrollment = (props) => {
     firstName,
     lastName,
     loyaltyStatusInt,
+    upgradeMsg,
+    expiringPoints,
+    expiryDate,
   } = props;
 
   if (isMyAuraContext()) {
@@ -29,6 +33,12 @@ const AuraMyAccountPendingFullEnrollment = (props) => {
           firstName={firstName}
           lastName={lastName}
           loyaltyStatusInt={loyaltyStatusInt}
+        />
+        <AuraProgressWrapper
+          upgradeMsg={upgradeMsg}
+          expiringPoints={expiringPoints}
+          expiryDate={expiryDate}
+          tier={tier}
         />
       </>
     );
