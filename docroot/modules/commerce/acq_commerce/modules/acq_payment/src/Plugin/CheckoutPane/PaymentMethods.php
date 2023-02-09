@@ -110,7 +110,7 @@ class PaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#default_value' => $plugin_id,
       '#ajax' => [
         'wrapper' => 'payment_details',
-        'callback' => [$this, 'rebuildPaymentDetails'],
+        'callback' => $this->rebuildPaymentDetails(...),
       ],
     ];
 

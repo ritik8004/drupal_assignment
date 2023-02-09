@@ -119,7 +119,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
         ],
         '#attributes' => ['class' => ['same-as-shipping']],
         '#ajax' => [
-          'callback' => [$this, 'updateAddressAjaxCallback'],
+          'callback' => $this->updateAddressAjaxCallback(...),
         ],
         '#default_value' => $same_as_shipping,
       ];

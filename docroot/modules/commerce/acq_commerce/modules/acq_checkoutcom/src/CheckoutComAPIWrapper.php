@@ -361,7 +361,7 @@ class CheckoutComAPIWrapper {
   /**
    * Redirect to payment page.
    */
-  public function redirectToPayment() {
+  public function redirectToPayment(): never {
     $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString());
     $response->send();
     exit;

@@ -309,7 +309,7 @@ class AlshayaSearchApiFacetsManager {
         /** @var \Drupal\block\Entity\Block[] $block*/
         $blocks_list = $this->entityTypeManager->getStorage('block')->loadMultiple($block_ids);
         // Sort the blocks.
-        uasort($blocks_list, [$this, 'sortBlocksByWeight']);
+        uasort($blocks_list, $this->sortBlocksByWeight(...));
         foreach ($blocks_list as $block) {
           // If block is enabled.
           if ($block instanceof BlockInterface && $block->status() && $block->access('view')) {

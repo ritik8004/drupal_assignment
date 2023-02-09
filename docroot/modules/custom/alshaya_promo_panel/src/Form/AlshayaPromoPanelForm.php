@@ -114,7 +114,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
       '#multiple' => TRUE,
       '#default_value' => array_keys($promo_panel_blocks),
       '#ajax' => [
-        'callback' => [$this, 'buildAjaxConfigForm'],
+        'callback' => $this->buildAjaxConfigForm(...),
         'wrapper' => 'page-urls',
         'effect' => 'fade',
       ],

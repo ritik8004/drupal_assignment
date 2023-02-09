@@ -355,7 +355,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
         'class' => ['cc-action'],
       ],
       '#ajax' => [
-        'callback' => [$this, 'submitMemberDeliveryCollect'],
+        'callback' => $this->submitMemberDeliveryCollect(...),
         'wrapper' => 'selected-store-wrapper',
       ],
       // This is required for limit_validation_errors to work.
