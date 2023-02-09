@@ -1,8 +1,8 @@
 import React from 'react';
-import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { getAuraContext } from '../../../../utilities/aura_utils';
 import AuraProgressWrapper from '../../../aura-progress';
+import MyAuraBanner from '../my-aura-banner';
 import MyAccountVerifiedUser from './my-account-verified-user';
-import MyAuraVerifiedUser from './my-aura-verified-user';
 
 const AuraVerifiedUser = (props) => {
   const {
@@ -15,19 +15,20 @@ const AuraVerifiedUser = (props) => {
     upgradeMsg,
     expiringPoints,
     expiryDate,
+    loyaltyStatusInt,
   } = props;
 
-  if (hasValue(drupalSettings.aura.context)
-    && drupalSettings.aura.context === 'my_aura') {
+  if (getAuraContext() === 'my_aura') {
     return (
       <>
-        <MyAuraVerifiedUser
+        <MyAuraBanner
           tier={tier}
           points={points}
           pointsOnHold={pointsOnHold}
           cardNumber={cardNumber}
           firstName={firstName}
           lastName={lastName}
+          loyaltyStatusInt={loyaltyStatusInt}
         />
         <AuraProgressWrapper
           upgradeMsg={upgradeMsg}

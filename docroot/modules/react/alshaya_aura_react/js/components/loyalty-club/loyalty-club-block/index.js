@@ -41,7 +41,15 @@ const LoyaltyClubBlock = (props) => {
     // Guest user and pending enrollment.
     if (localStorageValues !== null && !isUserAuthenticated()) {
       return (
-        <AuraMyAccountPendingFullEnrollment />
+        <AuraMyAccountPendingFullEnrollment
+          cardNumber={cardNumber}
+          tier={tier}
+          points={points}
+          pointsOnHold={pointsOnHold}
+          firstName={firstName}
+          lastName={lastName}
+          loyaltyStatusInt={loyaltyStatusInt}
+        />
       );
     }
     // When user has no card associated with him.
@@ -76,13 +84,24 @@ const LoyaltyClubBlock = (props) => {
             upgradeMsg={upgradeMsg}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
+            loyaltyStatusInt={loyaltyStatusInt}
           />
         </>
       );
     }
     // When user has a card but enrollment is pending.
     if (loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
-      return <AuraMyAccountPendingFullEnrollment />;
+      return (
+        <AuraMyAccountPendingFullEnrollment
+          cardNumber={cardNumber}
+          tier={tier}
+          points={points}
+          pointsOnHold={pointsOnHold}
+          firstName={firstName}
+          lastName={lastName}
+          loyaltyStatusInt={loyaltyStatusInt}
+        />
+      );
     }
   }
 
