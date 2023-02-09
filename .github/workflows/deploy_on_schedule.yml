@@ -18,7 +18,7 @@ jobs:
     if: ${{ github.repository_owner == 'acquia-pso' && contains(github.ref, 'refs/heads') }}
 
     container:
-      image: devwithlando/php:8.0-fpm-4
+      image: devwithlando/php:8.1-fpm-4
 
     env:
       CI: GITHUB_ACTIONS

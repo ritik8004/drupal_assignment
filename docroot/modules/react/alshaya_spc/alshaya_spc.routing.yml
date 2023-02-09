@@ -110,3 +110,11 @@ alshaya_spc.alshaya_delivery_options_settings:
     _title: 'Alshaya Same Day/Express Delivery Configuration'
   requirements:
     _permission: 'administer site configuration'
+
+alshaya_spc.show_listing_sidebar:
+  path: '/admin/config/alshaya/layered-navigation'
+  defaults:
+    _form: '\Drupal\alshaya_spc\Form\AlshayaShowHideSidebarConfigForm'
+    _title: 'Alshaya Show Sidebar on Listing pages Configuration'
+  requirements:
+    _permission: 'administer site configuration'
