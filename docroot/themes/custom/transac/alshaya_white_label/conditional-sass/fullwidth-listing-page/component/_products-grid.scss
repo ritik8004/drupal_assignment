@@ -31,15 +31,22 @@
 }
 
 @include breakpoint($desktop) {
-  .c-plp {
-    &.l-two--sf {
-      .c-products-list {
-        &.product-small,
-        &.product-large {
-          .alshaya_search_gallery {
-            height: auto;
-          }
+  .c-plp,
+  .c-plp.l-two--sf {
+    .c-products-list {
+      &.product-small,
+      &.product-large {
+        .alshaya_search_gallery {
+          height: auto;
         }
+      }
+    }
+  }
+
+  .subcategory-listing-enabled {
+    .c-plp {
+      .c-products__item {
+        height: auto;
       }
     }
   }
