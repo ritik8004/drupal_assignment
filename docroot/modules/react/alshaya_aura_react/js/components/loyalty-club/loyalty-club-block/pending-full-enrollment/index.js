@@ -1,19 +1,13 @@
 import Cleave from 'cleave.js/react';
 import React from 'react';
-import AppStoreSVG
-  from '../../../../../../alshaya_spc/js/svg-component/app-store-svg';
+import AuraAppLinks from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/aura-app-links';
 import { isMobile } from '../../../../../../js/utilities/display';
 import AuraLogo from '../../../../svg-component/aura-logo';
-import { getAuraContext } from '../../../../utilities/aura_utils';
-import { getAuraConfig } from '../../../../utilities/helper';
+import { isMyAuraContext } from '../../../../utilities/aura_utils';
+import AuraAppDownload from '../../../aura-app-download';
 import MyAuraBanner from '../my-aura-banner';
 
 const AuraMyAccountPendingFullEnrollment = (props) => {
-  const {
-    appStoreLink: appleAppStoreLink,
-    googlePlayLink: googlePlayStoreLink,
-  } = getAuraConfig();
-
   const {
     cardNumber,
     tier,
@@ -24,7 +18,7 @@ const AuraMyAccountPendingFullEnrollment = (props) => {
     loyaltyStatusInt,
   } = props;
 
-  if (getAuraContext() === 'my_aura') {
+  if (isMyAuraContext()) {
     return (
       <>
         <MyAuraBanner
@@ -58,29 +52,10 @@ const AuraMyAccountPendingFullEnrollment = (props) => {
         />
       </div>
       <div className="pending-full-enrollment-description">
-        <div className="description">
-          {Drupal.t('To spend your points online, please download Aura Mena app available both on App Store and Play Store.', {}, { context: 'aura' })}
-        </div>
+        <AuraAppDownload />
 
         {isMobile() && (
-          <div className="app-links">
-            <a
-              href={appleAppStoreLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_CLICK_APPSTORE' })}
-            >
-              <AppStoreSVG store="appstore" />
-            </a>
-            <a
-              href={googlePlayStoreLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => Drupal.alshayaSeoGtmPushAuraEventData({ action: 'AURA_EVENT_ACTION_CLICK_PLAYSTORE' })}
-            >
-              <AppStoreSVG store="playstore" />
-            </a>
-          </div>
+          <AuraAppLinks />
         )}
       </div>
       <div className="aura-model">

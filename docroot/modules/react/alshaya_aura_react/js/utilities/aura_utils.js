@@ -185,12 +185,13 @@ function getTooltipPointsOnHoldMsg() {
 /**
  * Utility function to get aura context.
  */
-function getAuraContext() {
-  if (hasValue(drupalSettings.aura.context)) {
-    return drupalSettings.aura.context;
+function isMyAuraContext() {
+  if (hasValue(drupalSettings.aura.context)
+    && drupalSettings.aura.context === 'my_aura') {
+    return true;
   }
 
-  return null;
+  return false;
 }
 
 export {
@@ -209,5 +210,5 @@ export {
   getNotYouLabel,
   getAuraCheckoutLocalStorageKey,
   getTooltipPointsOnHoldMsg,
-  getAuraContext,
+  isMyAuraContext,
 };

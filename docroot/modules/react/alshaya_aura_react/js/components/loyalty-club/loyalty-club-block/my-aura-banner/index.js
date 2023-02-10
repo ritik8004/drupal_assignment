@@ -3,6 +3,7 @@ import Cleave from 'cleave.js/react';
 import { getAllAuraStatus, getAllAuraTier, getUserProfileInfo } from '../../../../utilities/helper';
 import { getTooltipPointsOnHoldMsg } from '../../../../utilities/aura_utils';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
+import AuraAppDownload from '../../../aura-app-download';
 
 const MyAuraBanner = (props) => {
   const {
@@ -60,9 +61,7 @@ const MyAuraBanner = (props) => {
             <span className="aura-blend">{`${pointsOnHold} ${Drupal.t('pts')}`}</span>
           </div>
           {loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED ? (
-            <div className="description">
-              {Drupal.t('To spend your points online, please download Aura Mena app available both on App Store and Play Store.', {}, { context: 'aura' })}
-            </div>
+            <AuraAppDownload />
           ) : ''}
         </div>
       </div>

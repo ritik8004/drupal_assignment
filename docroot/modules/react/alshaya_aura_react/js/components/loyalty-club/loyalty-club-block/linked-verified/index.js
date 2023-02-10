@@ -1,5 +1,5 @@
 import React from 'react';
-import { getAuraContext } from '../../../../utilities/aura_utils';
+import { isMyAuraContext } from '../../../../utilities/aura_utils';
 import AuraProgressWrapper from '../../../aura-progress';
 import MyAuraBanner from '../my-aura-banner';
 import MyAccountVerifiedUser from './my-account-verified-user';
@@ -18,7 +18,7 @@ const AuraVerifiedUser = (props) => {
     loyaltyStatusInt,
   } = props;
 
-  if (getAuraContext() === 'my_aura') {
+  if (isMyAuraContext()) {
     return (
       <>
         <MyAuraBanner
