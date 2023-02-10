@@ -1268,10 +1268,10 @@ $magentos = [
   'bbw_qa' => [
     'url' => 'https://bbw-test.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => '42eno838ymyoge2lntfa23z8d5a5xdn1',
+      'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
       'consumer_secret' => 'uss4yeg62ye0y1tk4xqw0reiluxgy1x2',
-      'access_token' => '55njn7zeteonp9t1ly4hjn8wbilazjby',
-      'access_token_secret' => 'gy7qsug16b6vlesdz6wnwoyni3zd2tqs',
+      'access_token' => 'xdu9og1dshp8k6gs2rti98m7qmirkpul',
+      'access_token_secret' => '8fw0m2k89dkqbqllw3582k2hj7dgkip9',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 2],
