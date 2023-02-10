@@ -6,7 +6,7 @@ import { isMyAuraContext } from '../../../../utilities/aura_utils';
 const AuraMyAccountOldCardFound = (props) => {
   const { cardNumber, notYouFailed, tier } = props;
 
-  if (isMyAuraContext) {
+  if (isMyAuraContext()) {
     return (
       <MyAuraBanner cardNumber={cardNumber} notYouFailed={notYouFailed} tier={tier} />
     );
