@@ -182,6 +182,18 @@ function getTooltipPointsOnHoldMsg() {
   return Drupal.t('Your points will be credited to your Aura account. You will be able to redeem these a day after your order is delivered.', {}, { context: 'aura' });
 }
 
+/**
+ * Utility function to get aura context.
+ */
+function isMyAuraContext() {
+  if (hasValue(drupalSettings.aura.context)
+    && drupalSettings.aura.context === 'my_aura') {
+    return true;
+  }
+
+  return false;
+}
+
 export {
   getElementValue,
   showError,
@@ -198,4 +210,5 @@ export {
   getNotYouLabel,
   getAuraCheckoutLocalStorageKey,
   getTooltipPointsOnHoldMsg,
+  isMyAuraContext,
 };
