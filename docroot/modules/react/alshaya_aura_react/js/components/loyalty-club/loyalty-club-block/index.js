@@ -38,10 +38,20 @@ const LoyaltyClubBlock = (props) => {
   const localStorageValues = Drupal.getItemFromLocalStorage(getAuraLocalStorageKey());
 
   if (loyaltyStatusInt !== '') {
-    // Guest user and pending enrollment.
-    if (localStorageValues !== null && !isUserAuthenticated()) {
+    // Guest user and pending enrollment or when user has a card but enrollment
+    // is pending.
+    if ((localStorageValues !== null && !isUserAuthenticated())
+      || loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
       return (
-        <AuraMyAccountPendingFullEnrollment />
+        <AuraMyAccountPendingFullEnrollment
+          cardNumber={cardNumber}
+          tier={tier}
+          points={points}
+          pointsOnHold={pointsOnHold}
+          firstName={firstName}
+          lastName={lastName}
+          loyaltyStatusInt={loyaltyStatusInt}
+        />
       );
     }
     // When user has no card associated with him.
@@ -76,13 +86,10 @@ const LoyaltyClubBlock = (props) => {
             upgradeMsg={upgradeMsg}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
+            loyaltyStatusInt={loyaltyStatusInt}
           />
         </>
       );
-    }
-    // When user has a card but enrollment is pending.
-    if (loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
-      return <AuraMyAccountPendingFullEnrollment />;
     }
   }
 

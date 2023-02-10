@@ -11,6 +11,7 @@ import AuraFormLinkCardOTPModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { isMyAuraContext } from '../../../../utilities/aura_utils';
 
 class AuraMyAccountNoLinkedCard extends React.Component {
   constructor(props) {
@@ -88,8 +89,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
     return (
       <div className="aura-myaccount-no-linked-card-wrapper no-card-found fadeInUp">
         <div className="aura-logo">
-          {(hasValue(drupalSettings.aura.context)
-            && drupalSettings.aura.context === 'my_aura') && (
+          {isMyAuraContext() && (
             <>
               <ConditionalView condition={window.innerWidth > 1024}>
                 <AuraLogo stacked="vertical" />
@@ -104,8 +104,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
           )}
         </div>
         <div className="aura-myaccount-no-linked-card-description no-card-found">
-          {(hasValue(drupalSettings.aura.context)
-            && drupalSettings.aura.context === 'my_aura') && (
+          {isMyAuraContext() && (
             <div className="banner-title">
               { Drupal.t('Join Aura to earn and spend points while you shop and enjoy exclusive benefits.') }
             </div>
