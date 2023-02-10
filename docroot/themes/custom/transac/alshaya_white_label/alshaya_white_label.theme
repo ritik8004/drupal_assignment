@@ -167,10 +167,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Adding a variable for html direction.
   $variables['html_direction'] = $direction;
   $routematch = \Drupal::routeMatch();
-  // Get current theme name.
-  $current_theme = \Drupal::theme()->getActiveTheme()->getName();
-  $is_full_width_feature_enabled = \Drupal::config($current_theme . '.settings')->get('show_full_width') ?? FALSE;
-  // Check the site full width enable.
+
+  $is_full_width_feature_enabled = _alshaya_white_label_is_full_width_enabled();
   if ($is_full_width_feature_enabled) {
     // List of my account sub pages.
     $my_account_subpages = [
@@ -554,6 +552,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
   ];
   if (in_array($variables['plugin_id'], $category_facets)) {
     $variables['attributes']['class'][] = 'category-facet';
+  }
+
+  if (_alshaya_white_label_is_full_width_enabled() && $variables['plugin_id'] === 'alshaya_algolia_react_autocomplete') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
   }
 }
 
@@ -1902,4 +1904,21 @@ function alshaya_white_label_css_alter(&$css) {
   if ($direction === 'ltr'&& isset($css['themes/custom/transac/' . $current_theme . '/css/rtl.css'])) {
     unset($css['themes/custom/transac/' . $current_theme . '/css/rtl.css']);
   }
+}
+
+/**
+ * Helper function to check if full width is enabled.
+ *
+ * @param string $current_theme
+ *   The current active theme.
+ *
+ * @return bool
+ *   Flag denoting the status of full width feature.
+ */
+function _alshaya_white_label_is_full_width_enabled($current_theme = NULL) {
+  if (empty($current_theme)) {
+    $current_theme = \Drupal::theme()->getActiveTheme()->getName();
+  }
+  $is_full_width_enabled = \Drupal::config($current_theme . '.settings')->get('show_full_width') ?? FALSE;
+  return $is_full_width_enabled;
 }

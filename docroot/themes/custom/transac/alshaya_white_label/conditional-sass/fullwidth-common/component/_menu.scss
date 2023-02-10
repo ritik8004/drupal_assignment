@@ -8,6 +8,12 @@
       $side: $left
     );
   }
+
+  .hamburger--menu {
+    .logged-in & {
+      @include fullWidthSideSpaces($is_mobile: true, $is_tablet: true);
+    }
+  }
 }
 
 .menu__list-item {
