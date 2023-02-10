@@ -468,8 +468,8 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
-    // Check if the tabby is enabled.
-    if (Tabby.isTabbyEnabled()) {
+    // Show 5K tabby limit widget only when grand total is over 5000.
+    if (Tabby.isTabbyEnabled() && totals.base_grand_total > 5000) {
       preContentActive = 'visible';
     }
 
