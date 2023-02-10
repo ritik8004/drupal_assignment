@@ -1819,7 +1819,7 @@ $magentos = [
       'store_id' => ['en' => 38, 'ar' => 35],
     ],
     'xb' => [
-      'store_id' => ['en' => 44, 'ar' => 41],
+      'store_id' => ['en' => 42, 'ar' => 39],
     ],
   ],
   'aeo_prod' => [
