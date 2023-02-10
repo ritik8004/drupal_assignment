@@ -617,10 +617,13 @@ function _alshaya_aura_react_translations() {
         'ar' => 'رقم عضوية أورا',
         'context' => 'aura',
       ],
-    ],
-    'v9' => [
       'Your Tier Progress' => [
         'ar' => 'تم التقدم في المستوى',
+        'context' => 'aura',
+      ],
+      'To spend your points online, please download Aura Mena app available both on App Store and Play Store.' => [
+        // @todo Need to update the translation once it's available.
+        'ar' => 'To spend your points online, please download Aura Mena app available both on App Store and Play Store.',
         'context' => 'aura',
       ],
     ],
