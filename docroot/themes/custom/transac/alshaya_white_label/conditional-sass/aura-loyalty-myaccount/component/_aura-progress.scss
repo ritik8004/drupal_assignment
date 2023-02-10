@@ -37,23 +37,17 @@
 
   .spc-aura-points-upgrade-item,
   .spc-aura-points-expiry-item {
+    margin-top: rem(10);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: rem(12);
-    line-height: 1.5;
-    background: unset;
-    background-image: $aura-expiry-points-txt-bg;
-    color: $aura-expiry-points-txt;
-    margin-top: rem(22);
-    padding: rem(10);
 
-    @include breakpoint($upto-desktop) {
-      margin-top: rem(15);
+    @include breakpoint($only-mobile) {
+      justify-content: flex-start;
     }
 
     b {
-      padding: 0 rem(3);
+      padding: 0 rem(5);
     }
 
     &::before {
@@ -170,6 +164,47 @@
 
       &::after {
         content: ":";
+      }
+    }
+  }
+}
+
+.aura-my-account-verified-wrapper,
+.aura-progressbar-wrapper {
+  .spc-aura-points-expiry-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: rem(12);
+    line-height: 1.5;
+    background: unset;
+    background-image: $aura-expiry-points-txt-bg;
+    color: $aura-expiry-points-txt;
+    margin-top: rem(22);
+    padding: rem(10);
+
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(15);
+    }
+
+    b {
+      padding: 0 rem(3);
+    }
+
+    @include icon("exclamation-icon");
+  }
+}
+
+.aura-my-account-verified-wrapper {
+  .spc-aura-points-expiry-item {
+    &::before {
+      position: relative;
+      transform: none;
+      #{$left}: 0;
+      margin-#{$right}: rem(10);
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: rem(5);
       }
     }
   }
