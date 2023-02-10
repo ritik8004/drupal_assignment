@@ -51,6 +51,9 @@ const LoyaltyClubBlock = (props) => {
           firstName={firstName}
           lastName={lastName}
           loyaltyStatusInt={loyaltyStatusInt}
+          upgradeMsg={upgradeMsg}
+          expiringPoints={expiringPoints}
+          expiryDate={expiryDate}
         />
       );
     }
