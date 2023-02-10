@@ -571,7 +571,7 @@ export default class Cart extends React.Component {
               hasExclusiveCoupon={hasExclusiveCoupon}
             />
             <ConditionalView condition={isAuraEnabled()}>
-              <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
+              <AuraCartContainer totals={totals} auraDetails={auraDetails} />
             </ConditionalView>
             {/* This will be used for the order summary section on cart page,
             where we will show the coupon code on the discount tooltip

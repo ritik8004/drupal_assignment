@@ -205,9 +205,9 @@ function isUnsupportedPaymentMethod(paymentMethod) {
 /**
  * Helper function to get aura points to earn from sales api.
  */
-function getAuraPointsToEarn(items, cardNumber) {
+function getAuraPointsToEarn(cardNumber) {
   let stateValues = {};
-  const apiData = window.auraBackend.getAuraPointsToEarn(items, cardNumber);
+  const apiData = window.auraBackend.getAuraPointsToEarn(cardNumber);
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
