@@ -287,3 +287,82 @@
     }
   }
 }
+
+#my-accounts-aura {
+  .aura-card-linked-verified-wrapper {
+    &-content {
+      @include breakpoint($desktop) {
+        height: rem(134);
+      }
+    }
+
+    .aura-logo {
+      top: rem(20);
+
+      .aura-user-name {
+        padding-#{$left}: 0;
+      }
+    }
+
+    .aura-card-linked-verified-description {
+      padding-top: rem(28);
+
+      @include breakpoint($desktop) {
+        padding-#{$right}: rem(77);
+      }
+
+      .aura-points-on-hold {
+        .tooltip-anchor {
+          margin-#{$left}: rem(8);
+        }
+      }
+    }
+  }
+
+  .spc-aura-points-expiry-item {
+    margin-top: rem(8);
+  }
+}
+
+#my-accounts-aura-mobile {
+  .aura-card-linked-verified-wrapper-content {
+    padding: rem(17) rem(20) rem(20);
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+
+    .aura-logo {
+      align-items: flex-start;
+    }
+
+    .aura-user-name {
+      font-size: rem(24);
+      text-align: $left;
+    }
+
+    .aura-card-number {
+      padding-top: rem(20);
+
+      span:first-child {
+        font-size: rem(12);
+      }
+
+      input {
+        letter-spacing: rem(0.71);
+      }
+    }
+
+    .aura-card-linked-verified-mobile {
+      .aura-blend {
+        font-family: $aura-bold;
+        color: $aura-loyalty-club-verified-user-banner-text;
+        font-size: rem(16);
+        letter-spacing: rem(0.71);
+      }
+    }
+  }
+
+  .spc-aura-points-expiry-item {
+    margin-top: rem(8);
+  }
+}
