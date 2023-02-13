@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4307bfeaa843d94771b4ba1157adfd5f",
+    "content-hash": "92923a6c4a3216ae002652993d17e471",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -3992,6 +3992,10 @@
                 {
                     "name": "japerry",
                     "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "kaynen",
+                    "homepage": "https://www.drupal.org/user/733308"
                 },
                 {
                     "name": "mglaman",
@@ -8120,8 +8124,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.4+11-dev",
-                    "datestamp": "1651261757",
+                    "version": "8.x-1.6+2-dev",
+                    "datestamp": "1674866787",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -10318,8 +10322,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.1+9-dev",
-                    "datestamp": "1650896584",
+                    "version": "8.x-1.2+13-dev",
+                    "datestamp": "1667909257",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -22569,43 +22573,6 @@
             "time": "2022-01-31T15:37:35+00:00"
         },
         {
-            "name": "springimport/magento2-api-v1",
-            "version": "v2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/milind-kagdelwar/magento2-api-v1.git",
-                "reference": "4c6bc945f45bb69b939d21d1fc07a429443a6a3c"
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.2",
-                "guzzlehttp/oauth-subscriber": "0.6.*",
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "springimport\\magento2\\apiv1\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mykhailo Shatilov",
-                    "email": "mykhailo@springimport.com"
-                }
-            ],
-            "description": "Base Rest API v1",
-            "keywords": [
-                "api",
-                "extension",
-                "magento 2",
-                "rest"
-            ],
-            "time": "2023-02-08T14:13:26+00:00"
-        },
-        {
             "name": "squizlabs/php_codesniffer",
             "version": "3.7.1",
             "source": {
@@ -27401,27 +27368,25 @@
         },
         {
             "name": "zumba/amplitude-php",
-            "version": "1.0.6",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zumba/amplitude-php.git",
-                "reference": "99d776d1b60d2a4d8bb26e4039e368edd3d89aac"
+                "reference": "144da6e648b21a95e5bc67e711af6858f7dae38e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zumba/amplitude-php/zipball/99d776d1b60d2a4d8bb26e4039e368edd3d89aac",
-                "reference": "99d776d1b60d2a4d8bb26e4039e368edd3d89aac",
+                "url": "https://api.github.com/repos/zumba/amplitude-php/zipball/144da6e648b21a95e5bc67e711af6858f7dae38e",
+                "reference": "144da6e648b21a95e5bc67e711af6858f7dae38e",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "ext-json": "*",
                 "php": ">=7.2",
-                "psr/log": "^1.0 | ^2.0 | ^3.0"
+                "psr/log": "^1.0"
             },
             "require-dev": {
-                "php-coveralls/php-coveralls": "^2.4",
-                "phpunit/phpunit": "8.3.* | ^9",
+                "phpunit/phpunit": "8.3.*",
                 "squizlabs/php_codesniffer": "3.4.*"
             },
             "type": "library",
@@ -27456,9 +27421,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zumba/amplitude-php/issues",
-                "source": "https://github.com/zumba/amplitude-php/tree/1.0.6"
+                "source": "https://github.com/zumba/amplitude-php/tree/1.0.2"
             },
-            "time": "2022-09-09T13:49:49+00:00"
+            "time": "2021-01-26T15:42:42+00:00"
         }
     ],
     "packages-dev": [
