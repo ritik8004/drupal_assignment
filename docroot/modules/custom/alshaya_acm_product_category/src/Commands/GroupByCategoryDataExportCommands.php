@@ -79,7 +79,7 @@ class GroupByCategoryDataExportCommands extends DrushCommands {
   protected static $isFieldsSet = 0;
 
   /**
-   * AlshayaRcsCategoryCommands constructor.
+   * GroupByCategoryDataExportCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger channel factory.
@@ -99,7 +99,7 @@ class GroupByCategoryDataExportCommands extends DrushCommands {
     FileSystemInterface $file_system,
     FileUrlGeneratorInterface $file_url_generator
     ) {
-    $this->drupalLogger = $logger_factory->get('alshaya_rcs_listing');
+    $this->drupalLogger = $logger_factory->get('alshaya_acm_product_category');
     $this->languageManager = $language_manager;
     $this->connection = $connection;
     $this->fileSystem = $file_system;
@@ -151,9 +151,9 @@ class GroupByCategoryDataExportCommands extends DrushCommands {
       }
     }
 
-    // Set rcs category migrate batch.
+    // Set category migrate batch.
     $this->setProductCategoryMigrationBatch($options['batch_size']);
-    $this->drupalLogger->notice(dt('RCS Category export completed.'));
+    $this->drupalLogger->notice(dt('Group by category data export completed.'));
   }
 
   /**
