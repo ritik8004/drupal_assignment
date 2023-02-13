@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_vs_transac\Commands;
+namespace Drupal\alshaya_acm_product_category\Commands;
 
 use Drush\Commands\DrushCommands;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -11,9 +11,9 @@ use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\file\Entity\File;
 
 /**
- * VS panty guide data export commands class.
+ * Group by category data export commands class.
  */
-class VsPantyGuideDataExportCommands extends DrushCommands {
+class GroupByCategoryDataExportCommands extends DrushCommands {
 
   /**
    * Logger.
@@ -62,7 +62,7 @@ class VsPantyGuideDataExportCommands extends DrushCommands {
    *
    * @var string
    */
-  public const FILE_NAME_PREFIX = 'panty-guide-data';
+  public const FILE_NAME_PREFIX = 'group-by-category-data';
 
   /**
    * CSV top level fields names.
@@ -107,18 +107,18 @@ class VsPantyGuideDataExportCommands extends DrushCommands {
   }
 
   /**
-   * Command callback to export required data for panty guide.
+   * Command callback to export required data for group by category data.
    *
-   * @command export-panty-guide-data
+   * @command export-group-by-category-data
    *
-   * @aliases epgd
+   * @aliases egbcd
    *
    * @options batch_size
    *   The number of terms to migrate per batch.
    *
-   * @usage drush epgd --batch_size=30
+   * @usage drush egbcd --batch_size=30
    */
-  public function exportPantyGuideData($options = ['batch_size' => 50]) {
+  public function exportGroupByCategoryData($options = ['batch_size' => 50]) {
     $path = self::PATH;
     $output_directory = $this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY);
 
@@ -211,10 +211,10 @@ class VsPantyGuideDataExportCommands extends DrushCommands {
       }
 
       $batch = [
-        'title' => dt('VS category data export for panty guide'),
-        'init_message' => dt('Starting data export for panty guide...'),
+        'title' => dt('Group by product category data export'),
+        'init_message' => dt('Starting data export for group by category data...'),
         'operations' => $operations,
-        'error_message' => dt('Unexpected error while exporting panty guide data.'),
+        'error_message' => dt('Unexpected error while exporting group by category data.'),
         'finished' => [self::class, 'batchFinished'],
       ];
       batch_set($batch);
@@ -396,7 +396,7 @@ class VsPantyGuideDataExportCommands extends DrushCommands {
    *   A list of all the operations that had not been completed by batch API.
    */
   public static function batchFinished($success, array $results, array $operations) {
-    $logger = \Drupal::logger('alshaya_vs_transac');
+    $logger = \Drupal::logger('alshaya_acm_product_category');
 
     if ($success) {
       foreach (\Drupal::languageManager()->getLanguages() as $langcode => $language) {
