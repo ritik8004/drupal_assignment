@@ -9,16 +9,15 @@
    *
    * @param customerType
    */
-    Drupal.algolia_insights_query_pdp = function () {
+    Drupal.fetchSkuAlgoliaInsightsClickData = function () {
         var algoliaClicks = Drupal.getItemFromLocalStorage('algolia_search_clicks');
         var sku= $('#data-insights-query-id').attr('data-sku');
         if (algoliaClicks && algoliaClicks[sku] !== undefined  && algoliaClicks[sku] !== null
           && typeof algoliaClicks[sku] !== 'string') {
         var dataInsightsQueryId = algoliaClicks[sku]['query-id'];
-        $('#data-insights-query-id').attr('data-insights-query-id');
         $('#data-insights-query-id').attr('data-insights-query-id',dataInsightsQueryId);
       }
       
     };
-    Drupal.algolia_insights_query_pdp();
+    Drupal.fetchSkuAlgoliaInsightsClickData();
 })(jQuery, Drupal);
