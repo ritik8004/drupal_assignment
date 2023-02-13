@@ -199,9 +199,9 @@ function isMyAuraContext() {
  * Utility function to get the static HTML of AURA landing page.
  *
  * @returns {object|boolean}
- *   The address book info.
+ *   The aura landing page content.
  */
-const getStaticHtmlOfAuraLanding = async () => {
+const getLoyaltyPageContent = async () => {
   const response = await callDrupalApi('/rest/v1/page/simple?url=aura-info', 'GET');
   if (hasValue(response)
     && hasValue(response.data)) {
@@ -227,5 +227,5 @@ export {
   getAuraCheckoutLocalStorageKey,
   getTooltipPointsOnHoldMsg,
   isMyAuraContext,
-  getStaticHtmlOfAuraLanding,
+  getLoyaltyPageContent,
 };

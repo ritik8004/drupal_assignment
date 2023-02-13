@@ -3,7 +3,7 @@ import LoyaltyClubBlock from './loyalty-club-block';
 import LoyaltyClubTabs from './loyalty-club-tabs';
 import { getAllAuraStatus } from '../../utilities/helper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
-import { getAuraDetailsDefaultState, getStaticHtmlOfAuraLanding, isMyAuraContext } from '../../utilities/aura_utils';
+import { getAuraDetailsDefaultState, getLoyaltyPageContent, isMyAuraContext } from '../../utilities/aura_utils';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import LoyaltyPageContent from './loyalty-page-content';
@@ -41,7 +41,8 @@ class LoyaltyClub extends React.Component {
       });
     }
 
-    const auraInfo = getStaticHtmlOfAuraLanding();
+    // Get the static html content from the api.
+    const auraInfo = getLoyaltyPageContent();
     if (auraInfo instanceof Promise) {
       auraInfo.then((response) => {
         // Update state only if html value is available.
