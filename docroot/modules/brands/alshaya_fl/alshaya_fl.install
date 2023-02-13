@@ -10,9 +10,8 @@
  *
  * Provides default setting for `show_full_width` for theme.
  */
-function alshaya_hm_update_9403() {
-  // Save default site favicon and logo.
-  $config = \Drupal::configFactory()->getEditable('alshaya_fl.settings');
+function alshaya_fl_update_9403() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_footlocker.settings');
   $config->set('show_full_width', FALSE);
   $config->save();
 }

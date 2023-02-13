@@ -27,6 +27,6 @@
   #block-page-title {
     max-width: none;
 
-    @include sideSpaces(0, 'margin');
+    @include sideSpaces(0, "margin");
   }
 }
