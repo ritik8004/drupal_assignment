@@ -401,7 +401,7 @@ function alshaya_bazaar_voice_library_info_alter(&$libraries, $extension) {
 }
 
 /**
- * Alter a webform element's translatable properties.
+ * Implements hook_webform_element_translatable_properties_alter().
  */
 function alshaya_bazaar_voice_webform_element_translatable_properties_alter(array &$properties, array &$definition) {
   $properties[] = 'text';
