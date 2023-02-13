@@ -184,6 +184,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
       'entity.user.canonical',
       'alshaya_acm_customer.orders_detail',
       'acq_checkoutcom.payment_cards',
+      'alshaya_aura_react.my_loyalty_club',
     ];
 
     // List of checkout pages.

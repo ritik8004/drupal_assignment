@@ -15,4 +15,18 @@
       }
     }
   }
+
+  .ashaya-spc-login-form {
+    .js-form-item {
+      @include breakpoint($desktop) {
+        max-width: rem(210);
+      }
+    }
+  }
+
+  #block-page-title {
+    max-width: none;
+
+    @include sideSpaces(0, 'margin');
+  }
 }
