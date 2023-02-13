@@ -622,8 +622,7 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
       'To spend your points online, please download Aura Mena app available both on App Store and Play Store.' => [
-        // @todo Need to update the translation once it's available.
-        'ar' => 'To spend your points online, please download Aura Mena app available both on App Store and Play Store.',
+        'ar' => 'للاستفادة من نقاطك عبر الأونلاين، يرجى تحميل تطبيق أورا الشرق الأوسط المتوفر على أبل ستور، وسوق بلاي.',
         'context' => 'aura',
       ],
     ],
