@@ -1,4 +1,5 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
+import { callDrupalApi } from '../../../js/utilities/requestHelper';
 import {
   getPointToPriceRatio,
   getPriceToPointRatio,
@@ -194,6 +195,21 @@ function isMyAuraContext() {
   return false;
 }
 
+/**
+ * Utility function to get the static HTML of AURA landing page.
+ *
+ * @returns {object|boolean}
+ *   The address book info.
+ */
+const getStaticHtmlOfAuraLanding = async () => {
+  const response = await callDrupalApi('/rest/v1/page/simple?url=aura-info', 'GET');
+  if (hasValue(response)
+    && hasValue(response.data)) {
+    return response.data;
+  }
+  return false;
+};
+
 export {
   getElementValue,
   showError,
@@ -211,4 +227,5 @@ export {
   getAuraCheckoutLocalStorageKey,
   getTooltipPointsOnHoldMsg,
   isMyAuraContext,
+  getStaticHtmlOfAuraLanding,
 };
