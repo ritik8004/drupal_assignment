@@ -63,7 +63,7 @@ const ArticleSwatches = ({
     <div className="article-swatch-wrapper">
       <div className="swatches">
         {articleSwatches.slice(0, limit).map(
-          (swatch) => (Drupal.hasValue(swatch.rgb_color) ? (
+          (swatch) => (hasValue(swatch.rgb_color) ? (
             <ArticleSwatch
               key={swatch.article_sku_code}
               swatch={swatch}
