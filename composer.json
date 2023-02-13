@@ -138,6 +138,7 @@
         "drupal/webform_rest": "^2.0",
         "drush/drush": "10.6.2",
         "endroid/qr-code": "^3.6",
+        "guzzlehttp/oauth-subscriber": "^0.6.0",
         "hgoebl/mobile-detect": "^1.4.2",
         "jquery-validation/jquery-validation": "^1.19",
         "mobiledetect/mobiledetectlib": "^2.8",
@@ -145,7 +146,6 @@
         "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "oomphinc/composer-installers-extender": "^2.0",
         "psy/psysh": "v0.10.12",
-        "springimport/magento2-api-v1": "^2.0",
         "typhonius/acquia-php-sdk-v2": "^2"
     },
     "require-dev": {
@@ -192,10 +192,6 @@
         "nuvoleweb": {
             "type": "git",
             "url": "https://github.com/nuvoleweb/search_api_spellcheck.git"
-        },
-        "springimport": {
-            "type": "git",
-            "url": "https://github.com/milind-kagdelwar/magento2-api-v1.git"
         },
         "asset-packagist": {
             "type": "composer",
