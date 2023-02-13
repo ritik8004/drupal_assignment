@@ -22,9 +22,10 @@ const MyAuraBanner = (props) => {
   const currentTierLevel = tier;
   const tierClass = currentTierLevel || 'no-tier';
   const allAuraStatus = getAllAuraStatus();
+  const auraUserClass = loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED ? 'aura-not-verified' : 'aura-verified';
 
   return (
-    <div className={`aura-card-linked-verified-wrapper fadeInUp aura-level-${tierClass}`}>
+    <div className={`aura-card-linked-verified-wrapper fadeInUp aura-level-${tierClass} ${auraUserClass}`}>
       <div className="aura-card-linked-verified-wrapper-content">
         <div className="aura-logo">
           <div className="aura-user-avatar">{profileInfo.avatar}</div>
