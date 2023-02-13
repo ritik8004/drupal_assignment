@@ -50,6 +50,13 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
       '#default_value' => $this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_benefits_content.value'),
     ];
 
+    $form['alshaya_aura_react']['loyalty_static_content_url'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('AURA Loyalty Static Content URL'),
+      '#description' => $this->t('AURA Loyalty Static Content URL, which provides the static html for Aura landing page. The URL should only contain the URL alias of the page without front slash.'),
+      '#default_value' => $this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_url'),
+    ];
+
     // Display token UI required for currency.
     $form['token_help'] = [
       '#theme' => 'token_tree_link',
@@ -147,6 +154,7 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
       ->set('loyalty_benefits_title1', $form_state->getValue('loyalty_benefits_title1'))
       ->set('loyalty_benefits_title2', $form_state->getValue('loyalty_benefits_title2'))
       ->set('loyalty_benefits_content', $form_state->getValue('loyalty_benefits_content'))
+      ->set('loyalty_static_content_url', $form_state->getValue('loyalty_static_content_url'))
       ->save();
 
     parent::submitForm($form, $form_state);

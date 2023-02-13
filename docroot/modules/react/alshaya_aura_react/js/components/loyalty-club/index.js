@@ -117,7 +117,7 @@ class LoyaltyClub extends React.Component {
           updateLoyaltyStatus={this.updateLoyaltyStatus}
         />
 
-        {isMyAuraContext() && (
+        {isMyAuraContext() && drupalSettings.user.uid === 0 && (
           <LoyaltyPageContent
             htmlContent={htmlContent}
           />

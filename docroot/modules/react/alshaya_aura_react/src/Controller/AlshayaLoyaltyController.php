@@ -129,6 +129,7 @@ class AlshayaLoyaltyController extends ControllerBase {
       'config' => $this->auraHelper->getAuraConfig(),
       // Set context for the Aura banner.
       'context' => 'my_aura',
+      'loyaltyStaticPageUrl' => $loyalty_benefits_config->get('loyalty_static_content_url'),
     ];
 
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());

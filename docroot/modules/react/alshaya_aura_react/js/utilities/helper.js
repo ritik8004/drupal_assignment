@@ -1,3 +1,4 @@
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getAuraUserDetails } from '../../../js/utilities/helper';
 
 /**
@@ -128,6 +129,21 @@ function getRecognitionAccrualRatio() {
   return recognitionAccrualRatio;
 }
 
+/**
+ * Helper function to get the static page url.
+ *
+ * @returns {string|null}
+ *   The url of the page or null.
+ */
+function getLoyaltyStaticPageUrl() {
+  if (hasValue(drupalSettings.aura)
+    && hasValue(drupalSettings.aura.loyaltyStaticPageUrl)) {
+    return drupalSettings.aura.loyaltyStaticPageUrl;
+  }
+
+  return null;
+}
+
 export {
   getAllAuraStatus,
   getAllAuraTier,
@@ -139,4 +155,5 @@ export {
   getPointToPriceRatio,
   getPriceToPointRatio,
   getRecognitionAccrualRatio,
+  getLoyaltyStaticPageUrl,
 };
