@@ -796,7 +796,7 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
     z-index: -1;
     transition: opacity 0.2s ease-out;
 
-    article[data-vmode="search_result"]:hover & {
+    article[data-vmode="search_result"] .alshaya_search_gallery:hover & {
       opacity: 1;
       z-index: 1;
       transition-timing-function: ease-in;
