@@ -255,6 +255,9 @@ class VsPantyGuideDataExportCommands extends DrushCommands {
     $product_category_page = \Drupal::service('alshaya_acm_product_category.page');
     /** @var \Drupal\taxonomy\TermInterface */
     $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
+    if (empty($term)) {
+      return $data;
+    }
 
     if ($term->language()->getId() !== $langcode) {
       /** @var \Drupal\taxonomy\TermInterface */
