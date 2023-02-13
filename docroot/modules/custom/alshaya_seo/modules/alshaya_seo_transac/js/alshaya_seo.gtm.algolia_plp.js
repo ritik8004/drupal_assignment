@@ -13,8 +13,10 @@
         $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', $('#alshaya-algolia-plp')).once('product-list-clicked').on('click', function (e) {
           var cartRemoveElement = $(this).find('button.qty-sel-btn--down') !== undefined ? $(this).find('button.qty-sel-btn--down')[0] : null;
           // Product Click GTM event should not be triggered
-          // when removing from cart.
-          if (e.target !== cartRemoveElement) {
+          // when removing from cart and when color swatch
+          // is clicked.
+          if (e.target !== cartRemoveElement
+            && !$(e.target).closest('.swatches').length) {
             Drupal.alshaya_seo_gtm_push_product_clicks(
               $(this),
               drupalSettings.gtm.currency,
