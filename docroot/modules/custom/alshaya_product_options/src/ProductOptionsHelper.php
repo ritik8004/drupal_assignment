@@ -182,13 +182,21 @@ class ProductOptionsHelper {
 
     $sync_options = array_column($fields, 'source');
 
-    // Conditionally increase memory limit to double the current limit.
-    $new_limit = (((int) ini_get('memory_limit')) * 2) . 'M';
+    // Get the current memory limit.
+    $current_limit = ini_get('memory_limit');
+
+    // Check if the current memory limit is not set to unlimited.
+    if ($current_limit != -1) {
+      preg_match('/(\d+)(\w+)/', $current_limit, $matches);
+
+      // Double the amount of memory.
+      $current_limit = ($matches[1] * 2) . $matches[2];
+    }
 
     // We still let that be overridden via settings.
-    $new_limit = Settings::get('acq_sku_sync_product_options_memory_limit', $new_limit);
+    $current_limit = Settings::get('acq_sku_sync_product_options_memory_limit', $current_limit);
 
-    ini_set('memory_limit', $new_limit);
+    ini_set('memory_limit', $current_limit);
     $this->logger->notice('Memory limit increased for sync-product-options to @limit', [
       '@limit' => ini_get('memory_limit'),
     ]);
