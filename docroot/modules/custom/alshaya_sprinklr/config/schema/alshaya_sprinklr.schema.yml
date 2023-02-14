@@ -10,3 +10,6 @@ alshaya_sprinklr.settings:
     skin:
       type: string
       label: 'Value for skin field.'
+    client_context_key:
+      type: string
+      label: 'Key for client context field.'
