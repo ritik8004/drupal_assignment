@@ -1,0 +1,53 @@
+.c-menu-primary {
+  .mobile--menu {
+    &::before {
+      margin-#{$left}: rem(-6);
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 0;
+    }
+  }
+}
+
+.back--link,
+.c-menu-secondary li,
+// Existing white label styles override selector.
+.main--menu ul.menu--one__list.menu__list > li > .menu__link-wrapper {
+  @include breakpoint($only-mobile) {
+    @include sideSpaces($full_width_padding_mobile, $type: "margin");
+  }
+
+  @include breakpoint($only-tablet) {
+    @include sideSpaces($full_width_padding_tablet, $type: "margin");
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .c-menu-secondary a {
+    padding-#{$right}: 0;
+  }
+}
+
+@include breakpoint($desktop) {
+  .block-alshaya-options-list-menu {
+    position: absolute;
+    top: 0;
+    #{$right}: $full_width_padding_desktop;
+
+    a {
+      @include sideSpaces(0);
+    }
+  }
+
+  .aura-rewards-wrapper .aura-header-link a {
+    width: auto;
+    @include sideSpaces(rem(15));
+  }
+}
+
+@include breakpoint($desktop-wide-1680) {
+  .block-alshaya-options-list-menu {
+    #{$right}: $full_width_padding_desktop_wide;
+  }
+}

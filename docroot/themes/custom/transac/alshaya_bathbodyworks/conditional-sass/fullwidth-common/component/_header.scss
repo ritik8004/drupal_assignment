@@ -1,0 +1,32 @@
+.block-alshaya-react-mini-cart,
+.block-cart-mini-block,
+.static-minicart-wrapper {
+  .cart-link {
+    margin-#{$right}: rem(-4);
+  }
+}
+
+@include breakpoint($only-tablet) {
+  header {
+    .block-alshaya-react-mini-cart,
+    .block-cart-mini-block {
+      #{$right}: $full_width_padding_tablet;
+    }
+  }
+
+  body.wishlist-enabled #wishlist-header-wrapper .wishlist-header {
+    padding-#{$right}: rem(13);
+  }
+}
+
+@include breakpoint($desktop) {
+  body.wishlist-enabled {
+    header {
+      .region__header {
+        .block-alshaya-react-mini-cart {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+  }
+}

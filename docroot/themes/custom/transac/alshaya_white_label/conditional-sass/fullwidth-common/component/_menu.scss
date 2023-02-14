@@ -26,6 +26,19 @@
   }
 }
 
+// Existing white label styles override selector.
+body.aura-enabled {
+  #aura-mobile-header-shop:not(:empty) {
+    .aura-header-guest-tooltip {
+      @include fullWidthSideSpaces(
+        $is_mobile: true,
+        $is_tablet: true,
+        $type: "margin"
+      );
+    }
+  }
+}
+
 @include breakpoint($desktop) {
   .c-menu-secondary {
     .c-menu-secondary__region {
