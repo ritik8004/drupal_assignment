@@ -5,3 +5,8 @@
 user_context_key: '_c_63b6a6587e86835dfdcc0ed9'
 # Value for skin field used by sprinklr chatbot library.
 skin: 'CLASSIC'
+# Client context key is passed to clientContext field with the value
+# 'True'/'False' to determine if the user in logged in or not.
+# Sprinklr doesn't support dynamic keys as of now so static
+# key provided by sprinklr is used.
+client_context_key: '_c_63bcf8d81e28737162edd703'

@@ -37,6 +37,12 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
         $login_url,
       ],
     ];
+    // Set key for clientContext field.
+    $page['#attached']['drupalSettings']['alshayaSprinklr']['clientContext'] = [
+      $alshaya_sprinklr_settings->get('client_context_key') => [
+        'False',
+      ],
+    ];
     return;
   }
 
@@ -66,6 +72,12 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
   }
   $user_details['hash'] = $user->get('field_sprinklr_hash')->getString() ?? '';
   $page['#attached']['drupalSettings']['alshayaSprinklr']['userDetails'] = $user_details;
+  // Set key for clientContext field.
+  $page['#attached']['drupalSettings']['alshayaSprinklr']['clientContext'] = [
+    $alshaya_sprinklr_settings->get('client_context_key') => [
+      'True',
+    ],
+  ];
 }
 
 /**

@@ -10,6 +10,19 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Set gallery_show_hover_image to true so that
+ * lifestyle image 2 is displayed on hovering
+ * the product image on SRP and PLP.
+ */
+function alshaya_furnitures_update_9404() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product.display_settings');
+  $config->set('gallery_show_hover_image', TRUE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove Layered Navigation from all Furnitures brands.
  */
 function alshaya_furnitures_update_9403() {
