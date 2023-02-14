@@ -96,3 +96,5 @@ back_to_search:
 insights_query_pdp:
   js:
     assets/alshaya_algolia_insights_query_pdp.js: {}
+  dependencies:
+    - alshaya_master/local_storage_manager
