@@ -96,10 +96,10 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
   // be executed or not.
   $cookies = \Drupal::request()->cookies;
   if ($cookies->get('Drupal_visitor_update_conversation_context')) {
-    // Check if this is not a social login window and remove the merge
-    // wishlist cookies. Otherwise, we will wait for next page refresh
-    // remove this and let the FE action processed.
-    if (!$cookies->get('Drupal_visitor_alshaya_sprinklr_social_login')) {
+    // Check if this is not a social login window and remove the update
+    // conversation context cookie. Otherwise, we will wait for next page
+    // refresh to remove this and let the FE action processed.
+    if (!$cookies->get('Drupal_visitor_sprinklr_social_login')) {
       // This flag indicates that whether we should make a call to
       // the sprinklr update conversation context SDK or not.
       $page['#attached']['drupalSettings']['sprinklr']['updateConversationContext'] = TRUE;
@@ -107,7 +107,7 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
     }
     // Delete this one time cookie as if this is set, it means we are in
     // social login callback popup.
-    user_cookie_delete('alshaya_sprinklr_social_login');
+    user_cookie_delete('sprinklr_social_login');
   }
 }
 
@@ -153,7 +153,7 @@ function alshaya_sprinklr_library_info_alter(&$libraries, $extension) {
  */
 function alshaya_sprinklr_user_login(UserInterface $account) {
   $sprinklr_helper = \Drupal::service('sprinklr.helper');
-  // Check if the wishlist feature is enabled.
+  // Check if the sprinklr chatbot feature is enabled.
   if ($sprinklr_helper->isSprinklrFeatureEnabled()) {
     // Set a one time cookie when user logs in. We will
     // use this above in hook_page_attachments_alter to set

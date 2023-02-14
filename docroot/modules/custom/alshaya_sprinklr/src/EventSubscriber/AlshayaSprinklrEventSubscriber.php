@@ -32,7 +32,7 @@ class AlshayaSprinklrEventSubscriber implements EventSubscriberInterface {
     // on FE and then remove this in second time.
     // This is because, first time page loads in the social callback
     // popup where we need to avoid such actions.
-    user_cookie_save(['alshaya_sprinklr_social_login' => 'social_login']);
+    user_cookie_save(['sprinklr_social_login' => 'social_login']);
   }
 
 }
