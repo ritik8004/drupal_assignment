@@ -18,6 +18,15 @@ function alshaya_aura_react_update_9402() {
   if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
   }
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_aura_react.loyalty_benefits'],
+    'alshaya_aura_react',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE,
+  );
 }
 
 /**
