@@ -1,0 +1,5 @@
+services:
+  alshaya_sprinklr.event_subscriber:
+    class: Drupal\alshaya_sprinklr\EventSubscriber\AlshayaSprinklrEventSubscriber
+    tags:
+      - { name: event_subscriber }
