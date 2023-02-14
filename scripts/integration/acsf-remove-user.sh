@@ -14,13 +14,14 @@ else
 fi
 
 user_emails="$1"
+acsf_base_url="https://www.alshaya.acsitefactory.com"
 
 if [ -z "$user_emails" ] ; then
   echo "Argument validation failed, please check and try again"
   exit 1
 fi
 
-response=$(curl -sk "https://www.alshaya.acsitefactory.com/api/v1/users?limit=500&fields=mail,uid" -u ${username}:${api_key})
+response=$(curl -sk "$acsf_base_url/api/v1/users?limit=500&fields=mail,uid" -u ${username}:${api_key})
 acsf_users=$(php -r '$json = '"'$response'"'; $acsf_users = (array)json_decode($json)->users; echo json_encode($acsf_users);')
 for user_email in $(echo $user_emails | tr "," "\n")
 do
@@ -29,7 +30,7 @@ do
     echo "Impossible to find user in ACSF with email: $user_email"
     continue
   else
-    response=$(curl --request DELETE "https://www.alshaya.acsitefactory.com/api/v1/users/$user_acsf_uid" -u ${username}:${api_key})
+    response=$(curl --request DELETE "$acsf_base_url/api/v1/users/$user_acsf_uid" -u ${username}:${api_key})
     if [[ "$response" == *'"deleted":true'* ]]; then
       echo "\n User removed from ACSF with email: $user_email"
     else

@@ -46,21 +46,21 @@ class CloudRemoveMemberCommand extends BltTasks {
     $connector = new Connector($config);
     $client = Client::factory($connector);
     $client->addQuery('limit', 500);
-    $organizations = new Organizations($client);
+    $organization = new Organizations($client);
     $organization_uuid = $this->getConfigValue('cloud.organization_uuid');
-    $response = $organizations->getMembers($organization_uuid);
+    $response = $organization->getMembers($organization_uuid);
     $removed_members = [];
     $user_emails = explode(',', $user_emails);
     foreach ($response->getArrayCopy() as $member) {
       // Check if found the user in members list then delete the member.
       if (in_array($member->mail, $user_emails)) {
-        $organizations->deleteMember($organization_uuid, $member->uuid);
+        $organization->deleteMember($organization_uuid, $member->uuid);
         $removed_members[$member->mail] = 'Organization member removed.';
         echo "User deleted from Acquia cloud with Email: $member->mail \n";
       }
     }
 
-    // Check if user is not exists in Acquia cloud and echo the list.
+    // Check if user doesn't exist in acquia cloud and echo the list.
     if (count($removed_members) != count($user_emails)) {
       foreach (array_diff($user_emails, $removed_members) as $mail) {
         echo "User not found in Acquia cloud with Email: $mail \n";
