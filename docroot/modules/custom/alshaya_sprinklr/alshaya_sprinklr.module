@@ -9,6 +9,7 @@ use Drupal\user\Entity\User;
 use Drupal\Core\Url;
 use Drupal\Core\Cache\Cache;
 use Drupal\Component\Serialization\Json;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -26,19 +27,27 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
   }
 
   // Set value for skin field.
-  $page['#attached']['drupalSettings']['alshayaSprinklr']['skin'] = $alshaya_sprinklr_settings->get('skin');
+  $page['#attached']['drupalSettings']['sprinklr']['skin'] = $alshaya_sprinklr_settings->get('skin');
   $current_user = \Drupal::currentUser();
+
   // If user is anonymous.
   if (!$current_user->isAuthenticated()) {
     $login_url = \Drupal::request()->getSchemeAndHttpHost() . Url::fromRoute('user.login')->toString();
+    $current_path = \Drupal::service('path.current')->getPath();
+    $redirect_url = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+    // Add current url as destination url to redirect
+    // the user back to the same page where the chat
+    // was initiated after login.
+    $login_url = "$login_url?destination=$redirect_url";
+
     // Set key for userContext field.
-    $page['#attached']['drupalSettings']['alshayaSprinklr']['userContext'] = [
+    $page['#attached']['drupalSettings']['sprinklr']['userContext'] = [
       $alshaya_sprinklr_settings->get('user_context_key') => [
         $login_url,
       ],
     ];
     // Set key for clientContext field.
-    $page['#attached']['drupalSettings']['alshayaSprinklr']['clientContext'] = [
+    $page['#attached']['drupalSettings']['sprinklr']['clientContext'] = [
       $alshaya_sprinklr_settings->get('client_context_key') => [
         'False',
       ],
@@ -71,13 +80,35 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
     return;
   }
   $user_details['hash'] = $user->get('field_sprinklr_hash')->getString() ?? '';
-  $page['#attached']['drupalSettings']['alshayaSprinklr']['userDetails'] = $user_details;
+  $page['#attached']['drupalSettings']['sprinklr']['userDetails'] = $user_details;
   // Set key for clientContext field.
-  $page['#attached']['drupalSettings']['alshayaSprinklr']['clientContext'] = [
+  $page['#attached']['drupalSettings']['sprinklr']['clientContext'] = [
     $alshaya_sprinklr_settings->get('client_context_key') => [
       'True',
     ],
   ];
+
+  // Check if one time user login identification cookie is set and
+  // set update conversation context value in drupal settings.
+  // After that remove cookie so that update conversation context is
+  // executed only once in FE. We will use this drupal setting variable
+  // at FE to determine if sprinklr update conversation context should
+  // be executed or not.
+  $cookies = \Drupal::request()->cookies;
+  if ($cookies->get('Drupal_visitor_update_conversation_context')) {
+    // Check if this is not a social login window and remove the update
+    // conversation context cookie. Otherwise, we will wait for next page
+    // refresh to remove this and let the FE action processed.
+    if (!$cookies->get('Drupal_visitor_sprinklr_social_login')) {
+      // This flag indicates that whether we should make a call to
+      // the sprinklr update conversation context SDK or not.
+      $page['#attached']['drupalSettings']['sprinklr']['updateConversationContext'] = TRUE;
+      user_cookie_delete('update_conversation_context');
+    }
+    // Delete this one time cookie as if this is set, it means we are in
+    // social login callback popup.
+    user_cookie_delete('sprinklr_social_login');
+  }
 }
 
 /**
@@ -114,5 +145,21 @@ function alshaya_sprinklr_library_info_alter(&$libraries, $extension) {
   // library is loaded.
   if ($extension === 'sprinklr' && isset($libraries['sprinklr_chatbot'])) {
     $libraries['sprinklr_chatbot']['dependencies'][] = 'alshaya_sprinklr/alshaya_sprinklr';
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_sprinklr_user_login(UserInterface $account) {
+  $sprinklr_helper = \Drupal::service('sprinklr.helper');
+  // Check if the sprinklr chatbot feature is enabled.
+  if ($sprinklr_helper->isSprinklrFeatureEnabled()) {
+    // Set a one time cookie when user logs in. We will
+    // use this above in hook_page_attachments_alter to set
+    // a drupal settings variable to perform action on FE.
+    // For example, we will set client context and open
+    // conversation context values in drupal settings.
+    user_cookie_save(['update_conversation_context' => TRUE]);
   }
 }
