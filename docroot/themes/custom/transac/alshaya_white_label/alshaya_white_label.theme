@@ -25,12 +25,12 @@ use Drupal\Core\Cache\Cache;
  * Implements hook_preprocess_html().
  */
 function alshaya_white_label_preprocess_region(&$variables) {
-  if ($variables['region'] === 'footer_secondary') {
+  if ($variables['region'] == 'footer_secondary') {
     // Add the block ids as classes for each block displayed in this region.
     $elements = $variables['elements'];
-    foreach ($elements as $item) {
-      if (is_array($item) && isset($item['#theme']) && $item['#theme'] == 'block') {
-        $variables['attributes']['class'][] = $item['#theme'] . '-' . $item['#id'];
+    foreach ($elements as $key => $item) {
+      if (is_array($item) && isset($item['#markup']) && !empty($item['#markup'])) {
+        $variables['attributes']['class'][] = 'element-' . $key;
       }
     }
   }
