@@ -4,7 +4,11 @@ import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/bv-auth-confirmation';
-import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
+import {
+  getbazaarVoiceSettings,
+  getBazaarVoiceSettingsFromMdc,
+  getUserDetails,
+} from '../../../utilities/api/request';
 import ConditionalView from '../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getProductReviewStats } from '../../../utilities/user_util';
@@ -27,9 +31,51 @@ export default class Rating extends React.Component {
   /**
    * Get Average Overall ratings and total reviews count.
    */
-  componentDidMount() {
+  componentDidMount = async () => {
     showFullScreenLoader();
+
+    // Call MDC for bazaarvoice settings.
+    const bazaarVoiceConfig = await getBazaarVoiceSettingsFromMdc();
+
+    if (typeof bazaarVoiceConfig === 'undefined' || bazaarVoiceConfig === null) {
+      return;
+    }
+
     const { bazaarVoiceSettings } = this.state;
+
+    // Intialize bazaarvoice settings from MDC response.
+    bazaarVoiceSettings.reviews.bazaar_voice.error_messages = {};
+    bazaarVoiceSettings.reviews.bazaar_voice.sorting_options = {};
+    bazaarVoiceSettings.reviews.bazaar_voice.filter_options = {};
+
+    // Add basic configurations from MDC response.
+    Object.assign(
+      bazaarVoiceSettings.reviews.bazaar_voice,
+      bazaarVoiceConfig.basic,
+    );
+
+    // Add error messages configurations from MDC response.
+    Object.assign(
+      bazaarVoiceSettings.reviews.bazaar_voice.error_messages,
+      bazaarVoiceConfig.bv_error_messages,
+    );
+
+    // Add sorting options configurations from MDC response.
+    Object.assign(
+      bazaarVoiceSettings.reviews.bazaar_voice.sorting_options,
+      bazaarVoiceConfig.sorting_options,
+    );
+
+    // Add filter options configurations from MDC response.
+    Object.assign(
+      bazaarVoiceSettings.reviews.bazaar_voice.filter_options,
+      bazaarVoiceConfig.pdp_filter_options,
+    );
+
+    this.setState({
+      bazaarVoiceSettings,
+    });
+
     // Check reviews setting exist.
     if (bazaarVoiceSettings.reviews !== undefined) {
       getProductReviewStats(bazaarVoiceSettings.productid).then((result) => {
@@ -60,9 +106,10 @@ export default class Rating extends React.Component {
     const { reviewsData, bazaarVoiceSettings, userDetails } = this.state;
 
     // Return empty if reviews settings unavailable.
-    if (bazaarVoiceSettings.reviews === undefined) {
+    if (typeof bazaarVoiceSettings.reviews.bazaar_voice.Include === 'undefined') {
       return null;
     }
+
     const {
       childClickHandler,
       renderLinkDirectly,

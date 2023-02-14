@@ -12,7 +12,12 @@ import EmptyMessage from '../../../utilities/empty-message';
 import ReviewRatingsFilter from '../review-ratings-filter';
 import PostReviewMessage from '../reviews-full-submit/post-review-message';
 import Pagination from '../review-pagination';
-import { getbazaarVoiceSettings, getUserDetails, fetchAPIData } from '../../../utilities/api/request';
+import {
+  getbazaarVoiceSettings,
+  getUserDetails,
+  fetchAPIData,
+  getBazaarVoiceSettingsFromMdc,
+} from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
@@ -60,7 +65,43 @@ export default class ReviewSummary extends React.Component {
   /**
    * Get Review results and product statistical data.
    */
-  componentDidMount() {
+  componentDidMount = async () => {
+    // Call MDC for bazaarvoice settings.
+    const bazaarVoiceConfig = await getBazaarVoiceSettingsFromMdc();
+
+    if (typeof bazaarVoiceConfig === 'undefined' || bazaarVoiceConfig === null) {
+      return;
+    }
+
+    // Intialize bazaarvoice settings from MDC response.
+    bazaarVoiceSettings.reviews.bazaar_voice.error_messages = {};
+    bazaarVoiceSettings.reviews.bazaar_voice.sorting_options = {};
+    bazaarVoiceSettings.reviews.bazaar_voice.filter_options = {};
+
+    // Add basic configurations from MDC response.
+    Object.assign(
+      bazaarVoiceSettings.reviews.bazaar_voice,
+      bazaarVoiceConfig.basic,
+    );
+
+    // Add error messages configurations from MDC response.
+    Object.assign(
+      bazaarVoiceSettings.reviews.bazaar_voice.error_messages,
+      bazaarVoiceConfig.bv_error_messages,
+    );
+
+    // Add sorting options configurations from MDC response.
+    Object.assign(
+      bazaarVoiceSettings.reviews.bazaar_voice.sorting_options,
+      bazaarVoiceConfig.sorting_options,
+    );
+
+    // Add filter options configurations from MDC response.
+    Object.assign(
+      bazaarVoiceSettings.reviews.bazaar_voice.filter_options,
+      bazaarVoiceConfig.pdp_filter_options,
+    );
+
     getUserDetails().then((result) => {
       this.setState({ userDetails: result }, () => {
         const { userDetails } = this.state;
@@ -379,6 +420,11 @@ export default class ReviewSummary extends React.Component {
   }
 
   render() {
+    // Return empty if reviews settings unavailable.
+    if (typeof bazaarVoiceSettings.reviews.bazaar_voice.Include === 'undefined') {
+      return null;
+    }
+
     const {
       reviewsSummary,
       reviewsProduct,

@@ -488,29 +488,6 @@ class AlshayaBazaarVoice {
       $basic_configs['google_api_endpoint'] = $google_translations_api['endpoint'] ?? '';
       $basic_configs['google_api_key'] = $google_translations_api['api_key'] ?? '';
     }
-    $basic_configs['api_version'] = $config->get('api_version');
-    $basic_configs['locale'] = $config->get('locale');
-    $basic_configs['content_locale'] = $config->get('content_locale');
-    $basic_configs['Include'] = $config->get('bv_content_types');
-    $basic_configs['reviews_pagination_type'] = $config->get('reviews_pagination_type');
-    $basic_configs['reviews_initial_load'] = $config->get('reviews_initial_load');
-    $basic_configs['reviews_on_loadmore'] = $config->get('reviews_on_loadmore');
-    $basic_configs['reviews_per_page'] = $config->get('reviews_per_page');
-    $basic_configs['write_review_submission'] = $config->get('write_review_submission');
-    $basic_configs['write_review_tnc'] = $config->get('write_review_tnc');
-    $basic_configs['write_review_guidlines'] = $config->get('write_review_guidlines');
-    $basic_configs['comment_form_tnc'] = $config->get('comment_form_tnc');
-    $basic_configs['comment_box_min_length'] = $config->get('comment_box_min_length');
-    $basic_configs['comment_box_max_length'] = $config->get('comment_box_max_length');
-    $basic_configs['screen_name_min_length'] = $config->get('screen_name_min_length');
-    $basic_configs['notify_comment_published'] = $config->get('notify_comment_published');
-    $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
-    $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
-    $basic_configs['plp_rating_reviews'] = $config->get('plp_rating_reviews');
-    $basic_configs['show_location_filter'] = $config->get('show_location_filter');
-    $basic_configs['enable_google_translation'] = $config->get('enable_google_translation');
-    $basic_configs['translate_chars_limit'] = $config->get('translate_chars_limit');
-    $basic_configs['comment_submission'] = $config->get('comment_submission');
 
     return $basic_configs;
   }
@@ -797,13 +774,6 @@ class AlshayaBazaarVoice {
       }
     }
 
-    // Get avalable sorting options from config.
-    $sorting_options = $this->getSortingOptions();
-    // Get avalable BazaarVoice error messages from config.
-    $bv_error_messages = $this->getBazaarVoiceErrorMessages();
-    // Get the filter options to be rendered on review summary.
-    $filter_options = $this->getPdpFilterOptions();
-
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
 
@@ -815,10 +785,7 @@ class AlshayaBazaarVoice {
       ],
       'bazaar_voice' => [
         'stats' => 'Reviews',
-        'sorting_options' => $sorting_options,
-        'filter_options' => $filter_options,
         'country_code' => $country_code,
-        'error_messages' => $bv_error_messages,
       ],
       'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
       'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),

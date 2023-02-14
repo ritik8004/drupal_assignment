@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
+import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
 
 window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
 
@@ -139,6 +140,32 @@ function postRequest(url, data) {
     });
 }
 
+/**
+ * Get Bazaarvoice config from MDC.
+ *
+ * @returns {array|null}
+ *   Bazaarvoice object or null.
+ */
+function getBazaarVoiceSettingsFromMdc() {
+  if (Drupal.getItemFromLocalStorage('bazaarVoiceSettings')) {
+    return Drupal.getItemFromLocalStorage('bazaarVoiceSettings');
+  }
+
+  const url = '/V1/bv/configs';
+
+  return callMagentoApi(url).then((response) => {
+    let config = null;
+    if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
+      Drupal.addItemInLocalStorage('bazaarVoiceSettings', response.data[0]);
+      const { data } = response;
+      config = data.find(true);
+    }
+
+    // Magento passes required config object inside an array.
+    return config;
+  });
+}
+
 export {
   getLanguageCode,
   doRequest,
@@ -148,4 +175,5 @@ export {
   postAPIPhoto,
   getbazaarVoiceSettings,
   getUserBazaarVoiceSettings,
+  getBazaarVoiceSettingsFromMdc,
 };
