@@ -13,6 +13,9 @@
     if (typeof drupalSettings.alshayaSprinklr.skin !== 'undefined') {
       sprChatData.skin = drupalSettings.alshayaSprinklr.skin;
     }
+    if (typeof drupalSettings.alshayaSprinklr.clientContext !== 'undefined') {
+      sprChatData.clientContext = drupalSettings.alshayaSprinklr.clientContext;
+    }
     // For authenticated users.
     if (typeof drupalSettings.alshayaSprinklr.userDetails !== 'undefined') {
       sprChatData.user = drupalSettings.alshayaSprinklr.userDetails;
