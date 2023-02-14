@@ -26,7 +26,7 @@ function alshaya_ay_transac_preprocess_block(&$variables) {
   if ($variables['base_plugin_id'] == 'alshaya_rcs_shop_by_block') {
     $variables['#cache']['contexts'][] = 'super_category';
     // Get current super category term from route.
-    $term = \Drupal::service('alshaya_rcs_super_category.product_category_tree')->getCategoryTermFromRoute();
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
     if ($term instanceof TermInterface) {
       /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
       $entity_repository = \Drupal::service('entity.repository');
@@ -49,7 +49,7 @@ function alshaya_ay_transac_preprocess_block(&$variables) {
 function alshaya_ay_transac_preprocess_breadcrumb(&$variables) {
 
   // Get all root terms or super categories.
-  $super_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  $super_category_tree = \Drupal::service('alshaya_rcs_super_category.product_category_tree');
   $super_categories = $super_category_tree->getCategoryRootTerms();
   if (empty($super_categories)) {
     return;
