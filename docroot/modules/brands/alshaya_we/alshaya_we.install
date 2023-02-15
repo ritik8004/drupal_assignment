@@ -6,6 +6,17 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_we_update_8001() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_westelm.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_we_install() {
