@@ -92,7 +92,7 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
         'target_bundles' => ['static_html'],
       ],
       '#default_value' => $node,
-      '#description' => $this->t('Please select the Aura landing page which will be used to get static HTML content.'),
+      '#description' => $this->t('Please select the static content which will be used as an Aura landing page.'),
     ];
 
     // Display token UI required for currency.
