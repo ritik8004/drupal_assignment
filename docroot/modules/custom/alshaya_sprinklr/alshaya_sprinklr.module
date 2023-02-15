@@ -35,10 +35,12 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
     $login_url = \Drupal::request()->getSchemeAndHttpHost() . Url::fromRoute('user.login')->toString();
     $current_path = \Drupal::service('path.current')->getPath();
     $redirect_url = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+    // Current language.
+    $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
     // Add current url as destination url to redirect
     // the user back to the same page where the chat
     // was initiated after login.
-    $login_url = "$login_url?destination=$redirect_url";
+    $login_url = "$login_url?destination=/$current_language$redirect_url";
 
     // Set key for userContext field.
     $page['#attached']['drupalSettings']['sprinklr']['userContext'] = [
