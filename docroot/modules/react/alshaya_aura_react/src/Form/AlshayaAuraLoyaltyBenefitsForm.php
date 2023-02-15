@@ -86,13 +86,13 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
 
     $form['alshaya_aura_react']['loyalty_static_content_node'] = [
       '#type' => 'entity_autocomplete',
-      '#title' => $this->t('Aura landing page node'),
+      '#title' => $this->t('Aura landing page'),
       '#target_type' => 'node',
       '#selection_setttings' => [
         'target_bundles' => ['static_html'],
       ],
       '#default_value' => $node,
-      '#description' => $this->t('Please select the node which will be used to get static HTML content.'),
+      '#description' => $this->t('Please select the Aura landing page which will be used to get static HTML content.'),
     ];
 
     // Display token UI required for currency.
