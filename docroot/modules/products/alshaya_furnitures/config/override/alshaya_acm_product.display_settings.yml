@@ -14,5 +14,3 @@ hide_not_required_option: true
 plp_slider:
   item: 3
   margin: 3
-# Don't show any pre selected variant on PDP page load.
-show_pre_selected_variant_on_pdp: false
