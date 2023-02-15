@@ -240,6 +240,7 @@
         width: 6.3125rem;
         height: 6.3125rem;
         border-radius: 50%;
+        text-transform: uppercase;
 
         @include breakpoint($upto-desktop) {
           margin-bottom: 1.25rem;
