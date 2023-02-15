@@ -4,11 +4,39 @@ namespace Drupal\alshaya_aura_react\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configure Alshaya AURA Loyalty Benefits.
  */
 class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityManager;
+
+  /**
+   * Constructs a EntityManager object.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
+   *   A list of entity definition objects.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_manager) {
+    $this->entityManager = $entity_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -50,11 +78,21 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
       '#default_value' => $this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_benefits_content.value'),
     ];
 
-    $form['alshaya_aura_react']['loyalty_static_content_url'] = [
-      '#type' => 'url',
-      '#title' => $this->t('AURA Loyalty Static Content URL'),
-      '#description' => $this->t('AURA Loyalty Static Content URL, which provides the static html for Aura landing page.'),
-      '#default_value' => $this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_url'),
+    $node = NULL;
+    if ($this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node')) {
+      $node_storage = $this->entityManager->getStorage('node');
+      $node = $node_storage->load($this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node'));
+    }
+
+    $form['alshaya_aura_react']['loyalty_static_content_node'] = [
+      '#type' => 'entity_autocomplete',
+      '#title' => $this->t('Aura landing page node'),
+      '#target_type' => 'node',
+      '#selection_setttings' => [
+        'target_bundles' => ['static_html'],
+      ],
+      '#default_value' => $node,
+      '#description' => $this->t('Please select the node which will be used to get static HTML content.'),
     ];
 
     // Display token UI required for currency.
@@ -154,7 +192,7 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
       ->set('loyalty_benefits_title1', $form_state->getValue('loyalty_benefits_title1'))
       ->set('loyalty_benefits_title2', $form_state->getValue('loyalty_benefits_title2'))
       ->set('loyalty_benefits_content', $form_state->getValue('loyalty_benefits_content'))
-      ->set('loyalty_static_content_url', $form_state->getValue('loyalty_static_content_url'))
+      ->set('loyalty_static_content_node', $form_state->getValue('loyalty_static_content_node'))
       ->save();
 
     parent::submitForm($form, $form_state);
