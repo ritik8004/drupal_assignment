@@ -68,9 +68,6 @@ const AuraMyAccountPendingFullEnrollment = (props) => {
           <AuraAppLinks />
         )}
       </div>
-      <div className="aura-model">
-        <img loading="lazy" src="/modules/react/alshaya_aura_react/design-assets/model-image@3x.png" />
-      </div>
     </div>
   );
 };
