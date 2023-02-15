@@ -1,0 +1,13 @@
+@include breakpoint($only-mobile) {
+  .content__title_wrapper {
+    margin: 0;
+  }
+}
+
+@include breakpoint($desktop) {
+  #configurable_ajax .form-item-configurables-color .select2Option li.li-swatch-image:first-child {
+    a.picked {
+      margin-#{$left}: rem(3);
+    }
+  }
+}

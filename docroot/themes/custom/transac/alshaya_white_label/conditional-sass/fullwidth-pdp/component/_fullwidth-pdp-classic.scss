@@ -1,0 +1,65 @@
+body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+  @include breakpoint($only-mobile) {
+    .page-standard.c-pdp {
+      padding: 0;
+    }
+
+    .content__title_wrapper,
+    .content__sidebar .content--size-volume,
+    .content__sidebar .mobile-content-wrapper {
+      @include fullWidthSideSpaces($is_mobile: true);
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .content__title_wrapper,
+    .content__sidebar {
+      margin-#{$right}: 0;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .page-standard.c-pdp {
+      padding: 0 rem(115);
+
+      .acq-content-product {
+        max-width: rem(1280);
+        margin: 0 auto;
+
+        .content__main {
+          width: 68.2%;
+          max-width: rem(730);
+        }
+
+        .content__title_wrapper,
+        .content__sidebar {
+          float: none;
+          overflow: hidden;
+          width: auto;
+        }
+
+        .express-delivery-text {
+          margin-#{$right}: rem(20);
+        }
+
+        .description-wrapper.desc-open {
+          width: 31.8%;
+        }
+      }
+    }
+
+    .basic-details-wrapper .field--name-field-skus .sku-base-form button[type=submit] {
+      width: calc(100% - #{rem(106)})
+    }
+  }
+
+  @include breakpoint($desktop-wide) {
+    .page-standard.c-pdp {
+      .acq-content-product {
+        .description-wrapper.desc-open {
+          width: calc(100% - #{rem(730)});
+        }
+      }
+    }
+  }
+}
