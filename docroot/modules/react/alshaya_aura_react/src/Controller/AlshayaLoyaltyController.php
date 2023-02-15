@@ -150,8 +150,7 @@ class AlshayaLoyaltyController extends ControllerBase {
     if ($staticPageNodeId) {
       $node = $this->entityTypeManager()->getStorage('node')->load($staticPageNodeId);
       if ($node instanceof NodeInterface) {
-        $path = $this->aliasManager->getAliasByPath('/node/' . $node->id(),
-        $this->languageManager->getCurrentLanguage()->getId());
+        $path = $this->aliasManager->getAliasByPath('/node/' . $node->id());
         // If path is valid then update the settings.
         if ($path) {
           $settings['loyaltyStaticPageUrl'] = trim($path, '/');
