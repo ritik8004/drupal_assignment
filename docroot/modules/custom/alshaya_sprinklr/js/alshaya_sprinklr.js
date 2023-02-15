@@ -25,25 +25,5 @@
     if (typeof drupalSettings.sprinklr.userContext !== 'undefined') {
       sprChatData.userContext = drupalSettings.sprinklr.userContext;
     }
-    if (typeof drupalSettings.sprinklr.updateConversationContext !== 'undefined'
-      && drupalSettings.sprinklr.updateConversationContext === true) {
-      triggerConversationContextUpdate();
-    }
   });
-
-  // Function to handle conversation context update and
-  // auto open chatbot for the first time.
-  function triggerConversationContextUpdate() {
-    // Trigger updateConversationContext SDK to let
-    // sprinklr chatbot know that the anonymous user
-    // has now logged in.
-    sprChat('updateConversationContext', {
-      context: typeof drupalSettings.sprinklr.clientContext !== 'undefined'
-        ? drupalSettings.sprinklr.clientContext
-        : {},
-    });
-    // Trigger chatbot open SDK to auto-open the chatbot
-    // with when user logs in.
-    sprChat('openExistingConversation');
-  }
 })(drupalSettings);
