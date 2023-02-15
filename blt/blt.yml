@@ -85,6 +85,7 @@ validate:
     functions: [alshaya_main_menu, alshaya_secondary_main_menu]
 cloud:
   appId: f8ab35c4-f119-4acd-b080-d3014358e5b8
+  organization_uuid: 3d4eaa90-e4a2-4376-9a21-85e4389524a7
 disable-targets:
   tests:
     behat: { all: true, run: true }
