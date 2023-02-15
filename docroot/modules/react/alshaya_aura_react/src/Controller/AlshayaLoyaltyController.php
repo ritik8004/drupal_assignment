@@ -129,8 +129,20 @@ class AlshayaLoyaltyController extends ControllerBase {
       'config' => $this->auraHelper->getAuraConfig(),
       // Set context for the Aura banner.
       'context' => 'my_aura',
-      'loyaltyStaticPageUrl' => $loyalty_benefits_config->get('loyalty_static_content_url'),
     ];
+
+    // Get the static page url for the loyalty page.
+    $staticPageUrl = $loyalty_benefits_config->get('loyalty_static_content_url');
+    $parsedPageUrl = [];
+    if ($staticPageUrl) {
+      $parsedPageUrl = parse_url($staticPageUrl);
+    }
+
+    if (isset($parsedPageUrl['path'])) {
+      // Remove the '/' from start & end.
+      $parsedPageUrl['path'] = trim($parsedPageUrl['path'], '/');
+      $settings['loyaltyStaticPageUrl'] = $parsedPageUrl['path'];
+    }
 
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());
     $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');

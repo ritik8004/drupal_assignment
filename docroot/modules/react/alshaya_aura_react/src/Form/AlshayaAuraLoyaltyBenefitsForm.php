@@ -51,9 +51,9 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
     ];
 
     $form['alshaya_aura_react']['loyalty_static_content_url'] = [
-      '#type' => 'textfield',
+      '#type' => 'url',
       '#title' => $this->t('AURA Loyalty Static Content URL'),
-      '#description' => $this->t('AURA Loyalty Static Content URL, which provides the static html for Aura landing page. The URL should only contain the URL alias of the page without front slash.'),
+      '#description' => $this->t('AURA Loyalty Static Content URL, which provides the static html for Aura landing page.'),
       '#default_value' => $this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_url'),
     ];
 
