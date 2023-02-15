@@ -11,6 +11,7 @@ use Drupal\rest\ResourceResponse;
 use Drupal\views\Views;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\RendererInterface;
@@ -62,6 +63,13 @@ class MagazineBlock extends ResourceBase {
   protected $renderer;
 
   /**
+   * Module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -82,10 +90,8 @@ class MagazineBlock extends ResourceBase {
    *   The factory for configuration objects.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
-   */
-
-  /**
-   * {@inheritdoc}
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler service.
    */
   public function __construct(
     array $configuration,
@@ -96,13 +102,15 @@ class MagazineBlock extends ResourceBase {
     MobileAppUtility $mobile_app_utility,
     EntityRepositoryInterface $entity_repository,
     ConfigFactoryInterface $config_factory,
-    RendererInterface $renderer
+    RendererInterface $renderer,
+    ModuleHandlerInterface $module_handler
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->entityRepository = $entity_repository;
     $this->configFactory = $config_factory;
     $this->renderer = $renderer;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -118,7 +126,8 @@ class MagazineBlock extends ResourceBase {
       $container->get('alshaya_mobile_app.utility'),
       $container->get('entity.repository'),
       $container->get('config.factory'),
-      $container->get('renderer')
+      $container->get('renderer'),
+      $container->get('module_handler')
     );
   }
 
@@ -131,6 +140,12 @@ class MagazineBlock extends ResourceBase {
   public function get() {
     $view_id = 'magazine_articles';
     $display_id = 'homepage_block';
+
+    // Return if the module 'alshaya_magazine' isn't enabled.
+    if (!$this->moduleHandler->moduleExists('alshaya_magazine')) {
+      $this->mobileAppUtility->throwException();
+    }
+
     $magazine_listing_page_url_obj = Url::fromRoute('view.' . $view_id . '.list')->toString(TRUE);
     $magazine_listing_page_url = $magazine_listing_page_url_obj->getGeneratedUrl();
     $magazine_array_render = [];

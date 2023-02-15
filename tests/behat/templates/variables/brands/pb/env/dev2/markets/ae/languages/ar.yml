@@ -1,6 +1,5 @@
 variables:
   url_base_uri: 'https://pbae-dev2.factory.alshaya.com/ar'
-  product_listing_page_url: '/shop-pbqa/'
   ar_collection_filter: ''
   ar_sort_filter: 'رتب حسب'
   ar_price_filter: 'السعر'
@@ -28,7 +27,6 @@ variables:
   language_vat: 'Inclusive of VAT'
   language_checkout_link: 'continue to checkout'
   collection_filter: ''
-  spc_basket_page: '/shop-pbqa/'
   sort_filter: 'رتب حسب'
   price_filter: 'السعر'
   brand_filter: ''

@@ -24,7 +24,7 @@
     .slick-next,
     .slick-prev {
       #drupal-modal & {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           @include breakpoint($desktop) {
             transform: rotate(0deg);
           }

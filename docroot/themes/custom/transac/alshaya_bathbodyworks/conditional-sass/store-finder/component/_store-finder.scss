@@ -13,14 +13,14 @@
     text-transform: uppercase;
     color: $store_finder_text;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding: 0.125rem 0 0;
     }
 
     @include breakpoint($only-tablet) {
       width: 36%;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 35%;
       }
     }
@@ -31,7 +31,7 @@
       position: relative;
       top: -0.125rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: 0;
       }
 
@@ -42,7 +42,7 @@
   }
 
   .get--directions a::after {
-    background: url('../../../imgs/icons/ic-directions.svg') no-repeat;
+    background: url("../../../imgs/icons/ic-directions.svg") no-repeat;
     width: 1.875rem;
     height: 1.875rem;
     position: static;
@@ -55,7 +55,7 @@
     #{$left}: 19%;
     overflow: hidden !important;
 
-    [id^=edit-actions] {
+    [id^="edit-actions"] {
       top: 0;
       height: 2.5rem;
       padding-top: 0.5rem;
@@ -95,7 +95,7 @@
       width: 57% !important;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       right: 12%;
 
       @include breakpoint($desktop) {
@@ -130,7 +130,7 @@
   .view-stores-finder {
     .region__content {
       @include breakpoint($only-mobile) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-top: 2rem;
         }
       }
@@ -148,7 +148,7 @@
     }
 
     &::before {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: 0 !important;
       }
 
@@ -158,13 +158,13 @@
     }
 
     @include breakpoint($only-tablet) {
-      html[lang=en] & {
+      html[lang="en"] & {
         padding-#{$right}: 0;
         padding-#{$left}: 0.5rem;
         text-indent: 0;
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-#{$left}: 0.625rem;
         padding-#{$right}: 0;
         width: 30%;
@@ -191,7 +191,7 @@
   }
 
   button {
-    &[id^=edit-submit-stores-finder] {
+    &[id^="edit-submit-stores-finder"] {
       background: none;
       width: auto;
 
@@ -229,7 +229,7 @@
     }
 
     @include breakpoint($desktop) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-top: 0.25rem;
       }
     }
@@ -242,7 +242,7 @@
       @include breakpoint($only-tablet) {
         margin-#{$right}: 0.5rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-top: -0.4375rem;
         }
       }
@@ -251,14 +251,14 @@
     @include breakpoint($tablet) {
       margin-right: 0.625rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-right: 0;
         margin-left: 0.625rem;
       }
     }
 
     @include breakpoint($only-tablet) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-right: -0.5rem;
       }
     }
@@ -269,7 +269,7 @@
         margin-#{$left}: 0;
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-right: 0;
         margin-left: 0.625rem;
       }
@@ -282,7 +282,7 @@
     padding: 0.6875rem;
     line-height: 1.5;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding: 0.619rem 0 0;
     }
   }
@@ -295,7 +295,7 @@
       margin-#{$right}: 0.125rem;
       margin-top: -0.1875rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 0.125rem;
       }
     }
@@ -303,7 +303,7 @@
     @include breakpoint($only-tablet) {
       padding: 0.5rem 0 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding: 0.3rem 0 0;
       }
     }
@@ -311,7 +311,7 @@
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
   .form-item-geolocation-geocoder-google-places-api {
-    [id^=edit-geolocation-geocoder-google-places-api] {
+    [id^="edit-geolocation-geocoder-google-places-api"] {
       font-size: 0.875rem;
       height: 2.5rem;
       padding: 0.875rem 0.6rem 0.5rem;
@@ -355,7 +355,7 @@
     .store-finder--wrapper {
       width: 45%;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 46%;
       }
 
@@ -364,7 +364,7 @@
         .form-item-geolocation-geocoder-google-places-api {
           width: 60% !important;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             width: 62% !important;
           }
         }
@@ -384,7 +384,7 @@
     .label--location {
       padding-top: 0.875rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-top: 0.5rem;
         text-indent: 0;
         padding-right: 0;
@@ -395,7 +395,7 @@
       }
 
       @include breakpoint($desktop) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: 26.6% !important;
           padding-top: 0.875rem;
           border-right: none;
@@ -442,7 +442,7 @@
     @include breakpoint($tablet) {
       margin: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 0;
       }
     }
@@ -450,7 +450,7 @@
     @include breakpoint($desktop) {
       margin: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 0;
       }
     }
@@ -479,7 +479,7 @@
           padding-#{$right}: 0;
           padding-#{$left}: 0;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             width: 72% !important;
           }
         }
@@ -505,7 +505,7 @@
   }
 }
 
-.path--store-finder .store-finder--wrapper .input--wrapper [id^=edit-actions] {
+.path--store-finder .store-finder--wrapper .input--wrapper [id^="edit-actions"] {
   @include breakpoint($desktop) {
     #{$right}: 0;
   }
@@ -517,7 +517,7 @@
 
 .individual--store .view-content {
   @include breakpoint($desktop) {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding-#{$right}: 1%;
       padding-#{$left}: 0;
     }
@@ -541,13 +541,13 @@
     color: $store_finder_search_results_down_arrow;
   }
 
-  [aria-hidden=true] {
+  [aria-hidden="true"] {
     padding-top: rem(5);
   }
 }
 
 .geolocation-google-map {
-  [aria-hidden='true'] {
+  [aria-hidden="true"] {
     padding-top: rem(5);
   }
 }

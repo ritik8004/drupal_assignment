@@ -12,6 +12,19 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Add arabic configurations for bazaar voice write review form.
+ */
+function alshaya_vs_transac_update_9402() {
+  if (\Drupal::service('module_handler')->moduleExists('alshaya_bazaar_voice')) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.bazaar_voice_content');
+    $config = alshaya_vs_transac_bazaar_voice_content();
+    \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_bv_write_review')->set('elements', $config['ar'])->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add 'fragrance' facets.
  */
 function alshaya_vs_transac_update_9401() {
@@ -405,6 +418,16 @@ function alshaya_vs_transac_install() {
 
   // Install metatag translations.
   _alshaya_vs_transac_save_metatag_translations();
+
+  // Bazaar Voice Configurations.
+  if (\Drupal::service('module_handler')->moduleExists('alshaya_bazaar_voice')) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.bazaar_voice_content');
+    $config = alshaya_vs_transac_bazaar_voice_content();
+    // Set english config.
+    \Drupal::configFactory()->getEditable('webform.webform.alshaya_bv_write_review')->set('elements', $config['en'])->save();
+    // Set arabic config.
+    \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_bv_write_review')->set('elements', $config['ar'])->save();
+  }
 }
 
 /**

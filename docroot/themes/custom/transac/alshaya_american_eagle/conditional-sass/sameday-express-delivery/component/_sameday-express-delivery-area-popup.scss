@@ -1,8 +1,8 @@
 .spc-delivery-area {
   .spc-filter-panel-search-form-item {
     &::after {
-      content: '';
-      background: url('../../../imgs/assets/search.svg') no-repeat;
+      content: "";
+      background: url("../../../imgs/assets/search.svg") no-repeat;
       background-position: center;
       top: 0.3125rem;
       display: block;

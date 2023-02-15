@@ -68,4 +68,19 @@ class OverriddenMinkContext extends MinkContext {
     print 'Behat secret key not available';
     die();
   }
+
+  /**
+   * @Given I go to in stock product page
+   */
+  public function iGoToInStockProductPage() {
+    $this->visit('/behat/first-in-stock-product');
+  }
+
+  /**
+   * @Given I go to in stock category page
+   */
+  public function iGoToInStockCategoryPage() {
+    $this->visit('/behat/product-listing-page');
+  }
+
 }

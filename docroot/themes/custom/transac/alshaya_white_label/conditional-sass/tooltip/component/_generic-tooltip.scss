@@ -14,7 +14,7 @@
   opacity: 0;
   visibility: hidden;
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     #{$left}: -3.7rem;
   }
 
@@ -23,13 +23,13 @@
     top: 100%;
     left: 50%;
     border: solid transparent;
-    content: '';
+    content: "";
     height: 0;
     width: 0;
     position: absolute;
     pointer-events: none;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       left: 61%;
     }
   }
@@ -68,8 +68,8 @@
 
   &.question {
     &::before {
-      content: '?';
-      font-family: 'arial', 'sans-serif' !important;
+      content: "?";
+      font-family: "arial", "sans-serif" !important;
       color: $spc_tooltip_icon;
       border: 1px solid $spc_tooltip_icon;
       border-radius: 50%;

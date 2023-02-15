@@ -72,7 +72,7 @@
     }
 
     &::after {
-      content: '/';
+      content: "/";
       padding-#{$right}: 0;
       padding-#{$left}: 0;
       color: $breadcrumb_link;

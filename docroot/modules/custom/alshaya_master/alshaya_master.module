@@ -836,35 +836,6 @@ function alshaya_master_convert_amount_to_float($amount) {
 }
 
 /**
- * Enable brand AMP theme and set AMP page logo and favicon.
- *
- * @param string $theme_name
- *   AMP theme name to enable.
- */
-function _alshaya_master_initialize_amp($theme_name) {
-  // Enable alshaya_amp module.
-  \Drupal::service('module_installer')->install(['alshaya_amp']);
-
-  // Enable and set default amp theme.
-  \Drupal::service('theme_installer')->install([$theme_name], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', $theme_name)->save();
-
-  // Get the current theme settings.
-  $config = \Drupal::configFactory()->get(\Drupal::theme()->getActiveTheme()->getName() . '.settings')->get();
-  // Set same to installed AMP theme.
-  \Drupal::configFactory()->getEditable($theme_name . '.settings')->setData($config)->save();
-
-  \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', $theme_name . '.settings')
-    ->setData([
-      'logo' => [
-        'path' => \Drupal::theme()->getActiveTheme()->getPath() . '/site-logo-ar.svg',
-      ],
-    ])
-    ->save();
-}
-
-/**
  * Enable brand theme and set the site logo, favicon icon and email logo path.
  *
  * @param string $brand_theme

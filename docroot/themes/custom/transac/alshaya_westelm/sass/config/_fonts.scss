@@ -1,21 +1,23 @@
 // Font Family
-$we-bold: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
-$we-bold-nodir: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
+$we-bold: "GTEestiDisplay-Medium", "GEDinarTwoMedium", "Arial";
+$we-bold-nodir: "GTEestiDisplay-Medium", "GEDinarTwoMedium", "Arial";
 
-$we-thin: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
-$we-thin-nodir: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
+$we-thin: "GTEestiDisplay-Light", "GEDinarOneMedium", "Arial";
+$we-thin-nodir: "GTEestiDisplay-Light", "GEDinarOneMedium", "Arial";
 
-$we-arabic-bold: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
-$we-arabic-bold-nodir: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
+$we-arabic-bold: "GTEestiDisplay-Medium", "GEDinarTwoMedium", "Arial";
+$we-arabic-bold-nodir: "GTEestiDisplay-Medium", "GEDinarTwoMedium", "Arial";
 
-$we-arabic-thin: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
-$we-arabic-thin-nodir: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
+$we-arabic-thin: "GTEestiDisplay-Light", "GEDinarOneMedium", "Arial";
+$we-arabic-thin-nodir: "GTEestiDisplay-Light", "GEDinarOneMedium", "Arial";
 
-$we-regular: 'GTEestiDisplay-Regular', 'GEDinarTwoMedium', 'Arial';
+$we-regular: "GTEestiDisplay-Regular", "GEDinarTwoMedium", "Arial";
 
 // Postpay font family
-$postpay-font: 'GreycliffCF-Bold', 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
-$postpay-arabic-font: 'Cairo-Bold', 'GEDinarTwoMedium', 'GTEestiDisplay-Medium', 'Arial';
+$postpay-font: "GreycliffCF-Bold", "GTEestiDisplay-Light", "GEDinarOneMedium",
+  "Arial";
+$postpay-arabic-font: "Cairo-Bold", "GEDinarTwoMedium", "GTEestiDisplay-Medium",
+  "Arial";
 
 $arial: $we-thin;
 $arial-nodir: $we-thin-nodir;

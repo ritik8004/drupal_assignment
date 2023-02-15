@@ -34,7 +34,7 @@
     .egift-input-textfield-item {
       flex: 1;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         @include breakpoint($only-mobile) {
           flex: 0 0 78%;
         }
@@ -144,7 +144,7 @@
       height: 3rem;
       line-height: 1rem;
 
-      html[lang=en] & {
+      html[lang="en"] & {
         letter-spacing: 1px;
       }
 

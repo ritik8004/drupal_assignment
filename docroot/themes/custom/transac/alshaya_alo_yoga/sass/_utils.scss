@@ -1,9 +1,9 @@
-$ay_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs/icons/ic-loader.svg';
-$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
+$ay_theme_img_directory_path: "/themes/custom/transac/alshaya_alo_yoga/imgs";
+$base_theme_loader_img_directory_path: "/themes/custom/transac/alshaya_alo_yoga/imgs/icons/ic-loader.svg";
+$brand_theme_img_directory_path: "/themes/custom/transac/alshaya_alo_yoga/imgs";
 
 @mixin ic-social {
-  content: '';
+  content: "";
   background-repeat: no-repeat;
   width: rem(24);
   height: rem(24);
@@ -101,7 +101,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
 
 @mixin icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {
@@ -112,7 +112,6 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
     }
   }
 }
-
 
 // Apply Select Wrapper mixin for all resolutions.
 // Style it in two stages.
@@ -178,7 +177,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_alo_yoga/imgs';
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .select2-selection--single .select2-selection__rendered {
       width: 94%;
     }

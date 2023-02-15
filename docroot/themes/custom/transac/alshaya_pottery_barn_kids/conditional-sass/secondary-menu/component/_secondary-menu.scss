@@ -3,15 +3,15 @@
     div.secondary--main--menu {
       ul.menu--one__list {
         .menu__in {
-          html[lang=en] &,
-          html[lang=ar] &, {
+          html[lang="en"] &,
+          html[lang="ar"] & {
             margin-top: -2.0625rem;
           }
         }
 
         .back--link {
           &::before {
-            html[lang=en] & {
+            html[lang="en"] & {
               top: 0.75rem;
             }
           }

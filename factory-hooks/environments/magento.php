@@ -8,38 +8,7 @@
 global $magentos;
 
 $magentos = [
-  // Debenhams.
   'dh_qa' => [
-    'url' => 'https://integration-5ojmyuq-gqhhjajenogck.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'akr2k4q7g3eipb6fm7loh07zt2zi3xrk',
-      'consumer_secret' => '60vh9v008i8z6be31mt7wp8bg9jyfe2j',
-      'access_token' => 'c87n6i81vbkzqb5txbt0834fwppdmqye',
-      'access_token_secret' => 's54ks6jdfpw6uhbs4utjxusb1ha9114b',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'bh' => [
-      'store_id' => ['en' => 10, 'ar' => 9],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-    'jo' => [
-      'store_id' => ['en' => 14, 'ar' => 13],
-    ],
-  ],
-  'dh_test' => [
     'url' => 'https://deb-test.store.alshaya.com',
     'algolia_env' => 'dh_qa',
     'magento_secrets' => [

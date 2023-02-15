@@ -8,7 +8,7 @@
     font-size: 0.875rem;
     line-height: 1.29;
 
-    html[lang='ar'] & {
+    html[lang="ar"] & {
       line-height: 1.5;
     }
   }
@@ -46,7 +46,7 @@
 
     &-icon {
       &::before {
-        @include online-booking-icon('online-booking-calendar.svg');
+        @include online-booking-icon("online-booking-calendar.svg");
 
         top: rem(4);
       }
@@ -100,8 +100,8 @@
 
     &-icon {
       &::before {
-        @include online-booking-icon('wall-clock.svg') {
-          html[lang='ar'] & {
+        @include online-booking-icon("wall-clock.svg") {
+          html[lang="ar"] & {
             top: rem(3);
           }
         }
@@ -121,8 +121,8 @@
 
     &-icon {
       &::before {
-        @include online-booking-icon('wall-clock-red.svg') {
-          html[lang='ar'] & {
+        @include online-booking-icon("wall-clock-red.svg") {
+          html[lang="ar"] & {
             top: rem(3);
           }
         }
@@ -147,7 +147,7 @@
         #{$left}: rem(-3);
         top: rem(-2);
 
-        html[lang='ar'] & {
+        html[lang="ar"] & {
           top: 0;
         }
       }

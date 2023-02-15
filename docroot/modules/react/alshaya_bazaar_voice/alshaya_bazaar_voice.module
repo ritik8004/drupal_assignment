@@ -399,3 +399,10 @@ function alshaya_bazaar_voice_library_info_alter(&$libraries, $extension) {
     $libraries['order_details']['dependencies'][] = 'alshaya_acm_product/acq_product_info';
   }
 }
+
+/**
+ * Implements hook_webform_element_translatable_properties_alter().
+ */
+function alshaya_bazaar_voice_webform_element_translatable_properties_alter(array &$properties, array &$definition) {
+  $properties[] = 'text';
+}

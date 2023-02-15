@@ -248,7 +248,7 @@
         padding-#{$right}: 3.5rem;
 
         &::after {
-          content: '';
+          content: "";
           height: 125%;
           width: 1px;
           background: $checkout_login_border_background;
@@ -505,7 +505,7 @@
   @include breakpoint($upto-desktop) {
     margin: 0;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 0;
     }
   }
@@ -522,7 +522,7 @@
     }
 
     @include breakpoint($desktop) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: auto;
       }
     }
@@ -539,7 +539,7 @@
       }
 
       @include breakpoint($desktop) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           height: auto;
           margin: 0.5rem 0;
         }

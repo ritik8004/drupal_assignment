@@ -2,15 +2,15 @@
 .spc-delivery-store-info {
   .store-icon {
     &::before {
-      content: '';
-      background: url(#{$brand_theme_img_directory_path}/assets/brand-store-icon.svg) no-repeat;
+      content: "";
+      background: url("#{$brand_theme_img_directory_path}/assets/brand-store-icon.svg") no-repeat;
     }
   }
 
   .collection-point-icon {
     &::before {
-      content: '';
-      background: url(#{$brand_theme_img_directory_path}/assets/brand-collection-icon.svg) no-repeat;
+      content: "";
+      background: url("#{$brand_theme_img_directory_path}/assets/brand-collection-icon.svg") no-repeat;
     }
   }
 

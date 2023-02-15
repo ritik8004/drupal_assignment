@@ -12,6 +12,7 @@ services:
       - '@module_handler'
       - '@config.factory'
       - '@event_dispatcher'
+      - '@request_stack'
 
   rcs_placeholders.entity_helper:
     class: Drupal\rcs_placeholders\Service\RcsPhEntityHelper

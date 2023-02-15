@@ -5,17 +5,17 @@
       .block-facets-ajax > ul,
       .c-collapse-item > ul {
         .facet-item {
-          input[type=checkbox] {
+          input[type="checkbox"] {
             & ~ label {
               &::before {
-                html[lang=ar] & {
+                html[lang="ar"] & {
                   top: -0.0625rem;
                 }
 
                 @include breakpoint($only-mobile) {
                   top: -0.0625rem;
 
-                  html[lang=ar] & {
+                  html[lang="ar"] & {
                     top: 0;
                   }
                 }

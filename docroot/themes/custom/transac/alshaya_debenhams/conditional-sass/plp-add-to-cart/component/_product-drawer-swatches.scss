@@ -11,7 +11,7 @@
 
       &:hover {
         &::after {
-          content: '';
+          content: "";
           border: 1px solid $plp_quick_color_variant_hover_border;
           border-radius: 1.375rem;
           position: absolute;

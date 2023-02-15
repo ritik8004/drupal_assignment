@@ -1,7 +1,3 @@
 variables:
   url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  product_listing_page_url: "/shop-women/new-arrivals/clothes/"
-  spc_product_listing_page: '/sshop-women/new-arrivals/clothes/'
-  spc_basket_page: '/shop-beauty/shop-product/eyes/'
-  spc_pdp_page: '/buy-short-sequined-dress-black-silver-coloured.html/'
   spc_egift_page: '/egift/'

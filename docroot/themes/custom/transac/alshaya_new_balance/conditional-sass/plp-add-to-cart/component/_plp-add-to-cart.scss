@@ -3,7 +3,7 @@
     font-size: rem(15);
   }
 
-  html[lang=en] & {
+  html[lang="en"] & {
     .configurable-product-form-wrapper {
       .slick-dots {
         li {
@@ -24,7 +24,7 @@
   }
 
   .size-guide-link {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       line-height: 1;
     }
   }

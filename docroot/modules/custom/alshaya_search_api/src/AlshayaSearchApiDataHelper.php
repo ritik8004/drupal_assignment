@@ -74,7 +74,7 @@ class AlshayaSearchApiDataHelper {
    * This is no longer supported but function is not removed to avoid issues
    * as it was used once in an update hook.
    */
-  public function getProductsWithDataInField() {
+  public function getProductsWithDataInField(): never {
     throw new \Exception('This is no longer supported.');
   }
 

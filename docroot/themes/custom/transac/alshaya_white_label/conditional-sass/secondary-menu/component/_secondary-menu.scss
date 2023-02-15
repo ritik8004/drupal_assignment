@@ -19,7 +19,7 @@
     @include breakpoint($desktop) {
       margin-bottom: -0.125rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-bottom: 0;
       }
     }
@@ -247,7 +247,7 @@
         position: relative;
 
         &::after {
-          content: '';
+          content: "";
           width: 0;
           height: 0;
           border-left: 0.4rem solid transparent;
@@ -285,7 +285,7 @@
         .menu__in {
           #{$right}: -0.8rem;
 
-          html[lang=en] & {
+          html[lang="en"] & {
             margin-top: -2.25rem;
           }
         }
@@ -530,7 +530,7 @@
         }
 
         .menu__links__wrapper .column {
-          &:nth-child(n+3) {
+          &:nth-child(n + 3) {
             margin-#{$left}: 3.75rem;
           }
         }
@@ -604,7 +604,7 @@
         #{$left}: auto;
         transform: translateX(50%);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: translateX(-50%);
         }
       }

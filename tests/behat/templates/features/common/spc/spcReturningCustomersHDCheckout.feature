@@ -2,7 +2,7 @@
 Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2D) Card Payment Method
 
   Background:
-    Given I am on "{spc_product_listing_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
 
   @cc @hd @checkout_com

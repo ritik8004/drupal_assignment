@@ -20,9 +20,10 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use GuzzleHttp\TransferStats;
-use springimport\magento2\apiv1\ApiFactory;
-use springimport\magento2\apiv1\Configuration;
 
 /**
  * Class Alshaya Api Wrapper.
@@ -204,16 +205,25 @@ class AlshayaApiWrapper {
    *   Client object.
    */
   private function getClient($url) {
-    $settings = $this->configFactory->get('alshaya_api.settings');
+    $config = $this->configFactory->get('alshaya_api.settings');
+    $stack = HandlerStack::create();
+    $middleware = new Oauth1([
+      'consumer_key' => $config->get('consumer_key'),
+      'consumer_secret' => $config->get('consumer_secret'),
+      'token' => $config->get('access_token'),
+      'token_secret' => $config->get('access_token_secret'),
+      'signature_method' => $config->get('signature_method'),
+    ]);
+    $stack->push($middleware);
 
-    $configuration = new Configuration();
-    $configuration->setBaseUri($url);
-    $configuration->setConsumerKey($settings->get('consumer_key'));
-    $configuration->setConsumerSecret($settings->get('consumer_secret'));
-    $configuration->setToken($settings->get('access_token'));
-    $configuration->setTokenSecret($settings->get('access_token_secret'));
-
-    return (new ApiFactory($configuration))->getApiClient();
+    return new Client([
+      'base_uri' => $url,
+      'handler' => $stack,
+      'auth' => 'oauth',
+      'headers' => [
+        'Content-Type' => 'application/json',
+      ],
+    ]);
   }
 
   /**

@@ -604,6 +604,28 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
     ],
+    'v8' => [
+      'an Aura loyalty account no. @card_number is associated with your email address. It just takes one click to link.' => [
+        'ar' => ' رقم حساب مكافآت أورا @card_number مرتبط ببريدك الإلكتروني. خطوة واحدة تفصلك عن ربط حسابك.',
+        'context' => 'aura',
+      ],
+      'An Aura loyalty card is already associated with your email address. It just takes one click to link.' => [
+        'ar' => 'حساب ولاء أورا مرتبط بالفعل بعنوان بريدك الإلكتروني. يمكنك ربط الحساب بضغطة واحدة.',
+        'context' => 'aura',
+      ],
+      'Aura membership number' => [
+        'ar' => 'رقم عضوية أورا',
+        'context' => 'aura',
+      ],
+      'Your Tier Progress' => [
+        'ar' => 'تم التقدم في المستوى',
+        'context' => 'aura',
+      ],
+      'To spend your points online, please download Aura Mena app available both on App Store and Play Store.' => [
+        'ar' => 'للاستفادة من نقاطك عبر الأونلاين، يرجى تحميل تطبيق أورا الشرق الأوسط المتوفر على أبل ستور، وسوق بلاي.',
+        'context' => 'aura',
+      ],
+    ],
   ];
 }
 

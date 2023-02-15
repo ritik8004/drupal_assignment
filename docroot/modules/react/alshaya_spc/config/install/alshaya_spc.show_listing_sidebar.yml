@@ -1,0 +1,4 @@
+# PLP pages status is to check if Sidebar feature is enabled.
+show_plp_sidebar: true
+# SRP pages status is to check if Sidebar feature is enabled.
+show_srp_sidebar: true

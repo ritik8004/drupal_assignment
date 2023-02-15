@@ -259,7 +259,17 @@
           }
         });
 
-        if (typeof productData.variants !== 'undefined' && Drupal.hasValue(productData.variants)) {
+        var preSelectVariant = true;
+        // Pre select a variant only if it is allowed to show pre
+        // selected variant or there is exactly one variant available.
+        if (!Drupal.hasValue(drupalSettings.showPreSelectedVariantOnPdp)
+          && Drupal.hasValue(productData.variants)
+          && Object.keys(productData.variants).length > 1) {
+          preSelectVariant = false;
+        }
+        // Proceed to get variant and trigger variant change event only if
+        // it is allowed to show pre selected variant on PDP page load.
+        if (preSelectVariant && Drupal.hasValue(productData.variants)) {
           var variants = productData.variants;
           // Use first sku comes with stock in settings if available.
           var firstInStockVariant = Object.values(variants).find((variant) => {
@@ -293,6 +303,12 @@
           $(firstAttribute).removeProp('selected').removeAttr('selected');
           $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
           $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
+        }
+
+        // Disable add to cart button if it is disabled to show pre selected
+        // variant on PDP page load.
+        if (!preSelectVariant) {
+          $('.add-to-cart-button').prop('disabled', true);
         }
 
         // Trigger an event on SKU base form load.

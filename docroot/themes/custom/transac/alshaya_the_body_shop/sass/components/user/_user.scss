@@ -5,11 +5,11 @@
         transform: rotate(-90deg);
         padding-#{$left}: 0.125rem;
 
-        @include icon('dropdown-expand', after) {
+        @include icon("dropdown-expand", after) {
           font-size: 2rem;
         }
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(90deg);
         }
       }

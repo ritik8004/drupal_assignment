@@ -3,7 +3,7 @@
     visibility: hidden;
     padding: 0;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding: 0;
     }
   }
@@ -103,7 +103,10 @@
       }
 
       &::after {
-        background: $algolia-search-icon url('#{$muji_theme_img_directory_path}/assets/search.svg') 0 0 no-repeat;
+        background:
+          $algolia-search-icon
+          url("#{$muji_theme_img_directory_path}/assets/search.svg") 0 0
+          no-repeat;
 
         @include breakpoint($upto-desktop) {
           top: 0.7rem;
@@ -120,7 +123,7 @@
           transform: none;
           #{$left}: 1rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: none;
             #{$left}: 0.8125rem;
           }
@@ -132,7 +135,7 @@
           height: 2.1875rem;
           #{$right}: 0.6875rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translateY(-50%);
           }
         }
@@ -229,7 +232,7 @@ body {
     @include breakpoint($only-mobile) {
       margin-top: 6.625rem;
 
-      html[lang='ar'] & {
+      html[lang="ar"] & {
         margin-top: 7.3367rem;
       }
     }

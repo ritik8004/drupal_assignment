@@ -4,7 +4,7 @@
       background: $spc-cnc-store-search-icon-bg;
       height: rem(40);
 
-      @include icon('mylocation', before) {
+      @include icon("mylocation", before) {
         color: $spc-cnc-store-search-icon-color;
       }
     }

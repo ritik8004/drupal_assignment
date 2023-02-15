@@ -75,7 +75,7 @@
         &::before {
           #{$left}: 2.3%;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             right: -1%;
           }
         }
@@ -102,7 +102,7 @@
       &::before {
         @extend %range-slider-radio;
 
-        background: url('#{$base_theme_img_directory_path}/icons/icon-sliderRadioOff.svg') no-repeat;
+        background: url("#{$base_theme_img_directory_path}/icons/icon-sliderRadioOff.svg") no-repeat;
       }
 
       &.active,
@@ -110,7 +110,7 @@
         &::before {
           @extend %range-slider-radio;
 
-          background: url('#{$base_theme_img_directory_path}/icons/icon-sliderRadioOn.svg') no-repeat;
+          background: url("#{$base_theme_img_directory_path}/icons/icon-sliderRadioOn.svg") no-repeat;
         }
       }
 
@@ -164,7 +164,7 @@
     }
 
     &::after {
-      content: '';
+      content: "";
       display: table;
       width: 100%;
       clear: both;
@@ -179,7 +179,7 @@
         &:nth-of-type(1) ~ label:last-of-type::after {
           #{$left}: 2.3%;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             right: -1%;
           }
         }
@@ -230,7 +230,7 @@
         font-style: italic;
         padding-#{$left}: 0.1875rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           padding-right: 0.3125rem;
         }
       }

@@ -96,7 +96,7 @@
 .alias--user-password {
   .user-page {
     .user-pass {
-      input[type=submit] {
+      input[type="submit"] {
         @include breakpoint($tablet) {
           width: auto;
         }

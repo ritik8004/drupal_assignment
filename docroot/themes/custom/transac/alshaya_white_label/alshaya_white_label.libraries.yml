@@ -830,6 +830,16 @@ cls-initial-layout-common:
     theme:
       css/conditional-sass/cls-initial-layout-common/cls-initial-layout-common.ltr.css: {}
 
+cls-initial-layout-slp:
+  css:
+    theme:
+      css/conditional-sass/cls-initial-layout-slp/cls-initial-layout-slp.ltr.css: {}
+
+cls-initial-layout-plp:
+  css:
+    theme:
+      css/conditional-sass/cls-initial-layout-plp/cls-initial-layout-plp.ltr.css: {}
+
 hello-member-aura-loyalty:
   css:
     theme:
@@ -940,6 +950,11 @@ fullwidth-static:
       css/conditional-sass/fullwidth-static/fullwidth-static.ltr.css: {}
   dependencies:
     - alshaya_white_label/fullwidth-common
+
+hide-sidebar:
+  css:
+    theme:
+      css/conditional-sass/hide-sidebar/hide-sidebar.ltr.css: {}
 
 alshaya-accordion:
   js:

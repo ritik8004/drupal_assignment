@@ -57,13 +57,13 @@ form.user-communication-preference {
     font-weight: bold;
   }
 
-  input[checked=checked]:checked + label {
+  input[checked="checked"]:checked + label {
     font-weight: bold;
   }
 
-  input[type=checkbox] {
-    ~ label[for=edit-communication-preference-email],
-    ~ label[for=edit-communication-preference-mobile] {
+  input[type="checkbox"] {
+    ~ label[for="edit-communication-preference-email"],
+    ~ label[for="edit-communication-preference-mobile"] {
       font-size: 0.875rem;
 
       &::before {
@@ -83,13 +83,13 @@ form.user-communication-preference {
     }
   }
 
-  input[type=checkbox]:checked {
+  input[type="checkbox"]:checked {
     ~ label {
       font-weight: bold;
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .form-item-communication-preference-email,
     .form-item-communication-preference-mobile {
       span {

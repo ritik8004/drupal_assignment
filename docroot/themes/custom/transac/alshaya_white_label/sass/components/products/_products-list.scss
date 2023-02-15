@@ -152,7 +152,7 @@
                   color: $plp_facet_summary_filter_icon;
                   font-size: 1.25rem;
 
-                  html[lang=ar] & {
+                  html[lang="ar"] & {
                     transform: translateX(50%) translateY(-50%);
                   }
                 }
@@ -287,7 +287,7 @@
       margin-top: 0;
       margin-bottom: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 1.75;
       }
     }
@@ -315,7 +315,7 @@
           margin-bottom: 5%;
           margin-#{$left}: 2%;
 
-          &:nth-of-type(3n+1) {
+          &:nth-of-type(3n + 1) {
             margin-#{$left}: 0;
           }
         }
@@ -325,7 +325,7 @@
           margin-bottom: 6.75%;
           margin-#{$left}: 3.334%;
 
-          &:nth-of-type(2n+1) {
+          &:nth-of-type(2n + 1) {
             margin-#{$left}: 0;
           }
         }
@@ -350,7 +350,7 @@
           margin-bottom: 5%;
           margin-#{$left}: 1.797%;
 
-          &:nth-of-type(4n+1) {
+          &:nth-of-type(4n + 1) {
             margin-#{$left}: 0;
             clear: both;
           }
@@ -361,7 +361,7 @@
           margin-bottom: 6.75%;
           margin-#{$left}: 1.528%;
 
-          &:nth-of-type(3n+1) {
+          &:nth-of-type(3n + 1) {
             margin-#{$left}: 0;
             clear: both;
           }
@@ -372,7 +372,7 @@
           margin-bottom: 8%;
           margin-#{$left}: 1.875%;
 
-          &:nth-of-type(2n+1) {
+          &:nth-of-type(2n + 1) {
             margin-#{$left}: 0;
           }
         }
@@ -483,7 +483,7 @@
       font-size: 0.875rem;
       padding: 0 1.25rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 1.5;
       }
 
@@ -542,7 +542,7 @@
         }
 
         &::after {
-          content: '';
+          content: "";
           top: -0.75rem;
           left: -0.75rem;
           right: -0.75rem;
@@ -661,7 +661,7 @@ body {
 }
 
 // Brands wont be translated.
-html[lang=ar] {
+html[lang="ar"] {
   .block-facet-blockbrand,
   .block-facet-blockskus-sku-reference-collection,
   .block-facet-blockskus-sku-reference-brand {

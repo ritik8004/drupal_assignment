@@ -45,7 +45,7 @@
       top: 50%;
       transform: translateY(-50%);
 
-      @include icon('chevron#{$left}', before) {
+      @include icon("chevron#{$left}", before) {
         font-size: 2.25rem;
         color: $spc-checkout-area-panel-back-icon;
       }
@@ -150,7 +150,7 @@
   padding: 0.3125rem 0;
   position: relative;
 
-  @include icon('chevrondown', after) {
+  @include icon("chevrondown", after) {
     position: absolute;
     font-size: 1.75rem;
     top: 50%;

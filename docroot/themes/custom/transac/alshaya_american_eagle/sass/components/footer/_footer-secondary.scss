@@ -43,7 +43,7 @@
 
   .c-footer-secondary & {
     .country-ae & {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding: 1.875rem 0;
       }
     }
@@ -61,6 +61,17 @@
 
     .path--cart & {
       @include container(77rem);
+    }
+  }
+
+  .element-copyright:not(.element-footerlogos) {
+    .block-content--copyright {
+      .field--name-body {
+        p {
+          text-align: center;
+          margin-#{$right}: 0;
+        }
+      }
     }
   }
 }

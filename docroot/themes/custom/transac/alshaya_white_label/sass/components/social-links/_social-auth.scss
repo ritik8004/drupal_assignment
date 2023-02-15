@@ -12,7 +12,7 @@
     border: 1px solid $social_auth_login_button_border;
     transition: background-color 0.2s ease-in-out;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-mobile) {
         padding-#{$left}: 2.8125rem;
       }
@@ -27,7 +27,7 @@
     }
 
     @include breakpoint($tablet) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: auto;
         max-width: fit-content;
       }
@@ -57,7 +57,7 @@
     }
 
     &::before {
-      content: '';
+      content: "";
       height: 2.875rem;
       width: 2.875rem;
       background-size: 2.9375rem;
@@ -74,13 +74,13 @@
 
 .social_auth_facebook {
   &::before {
-    background: url(#{$base_theme_img_directory_path}/social-icons/facebook-login-logo.svg) no-repeat center;
+    background: url("#{$base_theme_img_directory_path}/social-icons/facebook-login-logo.svg") no-repeat center;
   }
 }
 
 .social_auth_google {
   &::before {
-    background: url(#{$base_theme_img_directory_path}/social-icons/google-login-logo.svg) no-repeat center;
+    background: url("#{$base_theme_img_directory_path}/social-icons/google-login-logo.svg") no-repeat center;
   }
 }
 
@@ -90,7 +90,7 @@
       > a {
         bottom: 5rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           @include breakpoint($desktop) {
             right: 10rem;
           }
@@ -213,7 +213,7 @@
       @include breakpoint($only-tablet) {
         width: 10.9375rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: 9.25rem;
         }
       }
@@ -256,7 +256,7 @@
         background-color: $social-auth-bg-hover;
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         @include breakpoint($tablet) {
           width: auto;
           padding: 0 0.5rem;
@@ -407,7 +407,7 @@
     font-family: $alshaya-thin;
     transition: background-color 0.2s ease-in-out;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-mobile) {
         padding-#{$left}: 2.8125rem;
         line-height: 1.2;
@@ -430,10 +430,10 @@
     }
 
     &::before {
-      content: '';
+      content: "";
       height: 2.875rem;
       width: 2.875rem;
-      background: url(#{$base_theme_img_directory_path}/icons/profile-icon.svg) no-repeat center;
+      background: url("#{$base_theme_img_directory_path}/icons/profile-icon.svg") no-repeat center;
       background-size: 2.9375rem;
       display: inline-block;
 
@@ -457,7 +457,7 @@
     margin: 2rem 0;
 
     &::after {
-      content: '';
+      content: "";
       width: 100%;
       background: $checkout_login_separtor;
       height: 1px;

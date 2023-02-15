@@ -45,14 +45,14 @@
 
         &::before {
           content: "";
-          background: url(#{$ay_theme_img_directory_path}/icons/delivery-store-search.svg?v1) center/contain no-repeat;
+          background: url("#{$ay_theme_img_directory_path}/icons/delivery-store-search.svg?v1") center/contain no-repeat;
           height: rem(20);
           width: rem(20);
           top: 50%;
           position: absolute;
           transform: translate(50%, -50%);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translate(-50%, -50%);
           }
         }

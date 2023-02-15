@@ -630,11 +630,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'pbkkw_test',
       ],
     ],
-    'dhkw' => [
-      'qa2' => [
-        'magento' => 'dh_test',
-      ],
-    ],
   ];
 
   // All 01update should match 01live.

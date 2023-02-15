@@ -6,7 +6,7 @@
     align-items: flex-start;
   }
 
-  @include icon('infomation') {
+  @include icon("infomation") {
     font-size: 1.75rem;
     margin-#{$left}: 1rem;
   }

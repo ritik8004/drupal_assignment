@@ -210,7 +210,7 @@
 .alias--user-password {
   .user-page {
     .user-pass {
-      input[type=submit] {
+      input[type="submit"] {
         @include breakpoint($tablet) {
           min-width: 5.688rem;
           width: auto;
@@ -244,7 +244,7 @@
         }
 
         .date {
-          html[lang='ar'] & {
+          html[lang="ar"] & {
             direction: ltr;
             text-align: right;
           }
@@ -329,7 +329,7 @@
 
 .c-change-password {
   input {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       font-family: $hnm-regular-nodir;
     }
   }
@@ -387,7 +387,7 @@
 }
 
 .c-input__privilege-card {
-  html[lang=ar] & {
+  html[lang="ar"] & {
     font-family: $hnm-regular-nodir;
   }
 }

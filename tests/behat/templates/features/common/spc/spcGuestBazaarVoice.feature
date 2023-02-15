@@ -2,7 +2,7 @@
 Feature: SPC to verify ratings on Bazaar Voice for Guest user
 
   Background:
-    Given I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element "#block-page-title"
 
   @desktop

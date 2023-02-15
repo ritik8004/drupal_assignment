@@ -79,7 +79,7 @@
     box-shadow: none;
     margin-top: -1px;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       top: 3rem;
       padding: 0;
     }
@@ -146,7 +146,7 @@
           @include breakpoint($only-mobile) {
             line-height: 3.5625rem;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               line-height: 3.5625rem;
             }
           }
@@ -233,7 +233,7 @@
       @include breakpoint($only-mobile) {
         margin-top: 7.25rem !important;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-top: 7.25rem !important;
         }
       }

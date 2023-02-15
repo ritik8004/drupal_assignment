@@ -1,8 +1,8 @@
-input[type=checkbox] {
+input[type="checkbox"] {
   display: none;
 }
 
-input[type=checkbox] ~ label {
+input[type="checkbox"] ~ label {
   @include icon(checkboxempty);
 
   &::before {
@@ -14,7 +14,7 @@ input[type=checkbox] ~ label {
   }
 }
 
-input[type=checkbox]:checked ~ label {
+input[type="checkbox"]:checked ~ label {
   @include icon(checkboxfull);
 
   &::before {
@@ -24,7 +24,7 @@ input[type=checkbox]:checked ~ label {
 
 // Fix for facets without translations.
 .c-facet {
-  input[type=checkbox] ~ label {
+  input[type="checkbox"] ~ label {
     &::before {
       float: $left;
       position: relative;

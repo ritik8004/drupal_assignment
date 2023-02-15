@@ -63,7 +63,7 @@ const ArticleSwatches = ({
     <div className="article-swatch-wrapper">
       <div className="swatches">
         {articleSwatches.slice(0, limit).map(
-          (swatch) => (
+          (swatch) => (hasValue(swatch.rgb_color) ? (
             <ArticleSwatch
               key={swatch.article_sku_code}
               swatch={swatch}
@@ -71,7 +71,7 @@ const ArticleSwatches = ({
               disabled={disabled[swatch.article_sku_code]}
               showSelectedSwatchProduct={showSelectedSwatchProduct}
             />
-          ),
+          ) : null),
         )}
         {swatchMoreText}
       </div>

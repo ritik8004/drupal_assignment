@@ -43,7 +43,7 @@
       width: 100%;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       input {
         direction: ltr;
         text-align: right;
@@ -60,7 +60,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: 85%;
       }
     }
@@ -129,7 +129,7 @@
       }
     }
 
-    input[type=checkbox]:checked ~ label::before {
+    input[type="checkbox"]:checked ~ label::before {
       color: $spc-checkout-radio-filled;
     }
   }

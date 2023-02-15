@@ -48,8 +48,8 @@
   }
 
   .c-footer-menu--about {
-    html[lang=en] &,
-    html[lang=ar] & {
+    html[lang="en"] &,
+    html[lang="ar"] & {
       @include breakpoint($desktop) {
         width: 45%;
         margin-#{$left}: 4%;
@@ -85,7 +85,7 @@
 }
 
 .c-footer-menu--help {
-  html[lang=ar] & {
+  html[lang="ar"] & {
     @include breakpoint($desktop) {
       width: 45%;
     }

@@ -7,7 +7,7 @@
   }
 
   button {
-    &[id^=edit-submit-stores-finder] {
+    &[id^="edit-submit-stores-finder"] {
       height: rem(34);
       width: rem(34);
     }
@@ -23,7 +23,7 @@
       top: rem(-2);
       margin-#{$right}: rem(3);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         position: static;
       }
     }
@@ -33,7 +33,7 @@
       padding-#{$left}: rem(16) !important;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-tablet) {
         width: 26.5%;
         padding-right: rem(8) !important;
@@ -84,7 +84,7 @@
       height: rem(40);
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-tablet) {
         width: 38.5%;
       }
@@ -106,7 +106,7 @@
       padding-#{$left}: rem(16) !important;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($tablet) {
         margin: 0;
       }
@@ -131,7 +131,7 @@
       width: 17.7%;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($desktop) {
         padding-top: 0;
         padding-bottom: 0;
@@ -161,7 +161,7 @@
       border: rem(2) solid $store_finder_border;
       line-height: 1.4;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 1.35;
       }
     }
@@ -169,7 +169,7 @@
     @include breakpoint($tablet) {
       width: 20.25%;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 19.25%;
       }
     }
@@ -179,7 +179,7 @@
       font-family: $ay-heavy;
       margin-#{$left}: rem(10);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 14.25%;
       }
     }
@@ -242,7 +242,7 @@
     @include breakpoint($only-tablet) {
       width: 37%;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 29%;
         margin-right: rem(10);
         margin-left: rem(10);
@@ -253,12 +253,12 @@
       width: 65%;
       padding-#{$right}: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 53%;
       }
     }
 
-    .input--wrapper [id^=edit-actions] {
+    .input--wrapper [id^="edit-actions"] {
       padding: rem(9) rem(5);
       height: rem(48);
 
@@ -276,7 +276,7 @@
       }
 
       @include breakpoint($desktop) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           padding-right: 0;
         }
       }
@@ -285,7 +285,7 @@
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
   .form-item-geolocation-geocoder-google-places-api {
-    [id^=edit-geolocation-geocoder-google-places-api] {
+    [id^="edit-geolocation-geocoder-google-places-api"] {
       height: rem(48);
 
       @include breakpoint($tablet) {

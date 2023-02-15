@@ -37,7 +37,7 @@ header {
       @include breakpoint($only-tablet) {
         bottom: -3.35rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           bottom: -2.0625rem;
         }
       }
@@ -45,7 +45,7 @@ header {
       @include breakpoint($only-mobile) {
         top: 3.5rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           top: 4rem;
         }
       }
@@ -69,7 +69,7 @@ header {
           height: 1.75rem;
           width: 2.1875rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             top: 0.25rem;
           }
         }
@@ -99,7 +99,7 @@ header {
         top: 0.625rem;
         #{$right}: -0.4375rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           top: 0;
           left: 1px;
         }
@@ -109,7 +109,7 @@ header {
     .block-alshaya-react-mini-cart {
       .cart-link {
         @include breakpoint($only-mobile) {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             top: -0.125rem;
             margin-top: 0;
           }
@@ -118,7 +118,7 @@ header {
     }
 
     .site-brand-home {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         @include breakpoint($only-tablet) {
           width: 19rem;
         }
@@ -136,7 +136,7 @@ header {
         @include breakpoint($only-tablet) {
           max-width: 17.5625rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             max-width: none;
           }
         }
@@ -147,14 +147,14 @@ header {
           font-size: 1rem;
           line-height: 2.3;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             margin-top: 0.5rem;
           }
         }
       }
 
       img {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           @include breakpoint($desktop) {
             width: 25.94rem;
             margin-top: -1.25rem;
@@ -236,7 +236,7 @@ body {
   @include breakpoint($only-tablet) {
     margin-top: 9rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 8rem;
     }
   }
@@ -280,7 +280,7 @@ body {
     margin-#{$right}: 1.375rem;
     top: 0.625rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       top: 0.625rem;
       width: 3.25rem;
     }
@@ -288,7 +288,7 @@ body {
 }
 
 .c-menu-primary .mobile--search {
-  html[lang=ar] & {
+  html[lang="ar"] & {
     top: 0.625rem;
   }
 

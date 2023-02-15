@@ -55,5 +55,5 @@ function alshaya_transac_lite_install() {
   $config->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)->save();
 
   // Invoke the function in profile to inform sub profile is installed.
-  alshaya_sub_profile_installed('alshaya_transac_lite', $modules);
+  alshaya_sub_profile_installed('alshaya_transac_lite');
 }

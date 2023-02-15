@@ -8,7 +8,7 @@
         }
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         .slick-next {
           &::before {
             transform: rotate(360deg);

@@ -126,17 +126,17 @@
 
         text-transform: none;
 
-        @include breakpoint ($desktop) {
+        @include breakpoint($desktop) {
           width: 69%;
           margin-#{$left}: 0.5rem;
         }
 
-        @include breakpoint ($tablet) {
+        @include breakpoint($tablet) {
           float: $right;
           margin-top: 1.375rem;
         }
 
-        @include breakpoint ($only-tablet) {
+        @include breakpoint($only-tablet) {
           width: 64%;
           min-width: 9.5rem;
         }
@@ -395,7 +395,7 @@ article[gtm-sku-type="simple"] {
         @include breakpoint($only-tablet) {
           height: 2.5rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             float: left;
             margin-top: 2rem;
           }

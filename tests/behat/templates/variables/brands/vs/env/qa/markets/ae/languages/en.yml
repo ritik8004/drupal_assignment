@@ -1,6 +1,5 @@
 variables:
   url_base_uri: 'https://vsae3-test.factory.alshaya.com/en'
-  product_listing_page_url: '/victorias-secret/shop-bras/collections/uattest/'
   collection_filter: 'Collection'
   sort_filter: 'sort by'
   price_filter: 'Price'

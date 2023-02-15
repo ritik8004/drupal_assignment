@@ -76,7 +76,7 @@
     .field__label {
       margin: 0.875rem 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 1.3;
       }
     }
@@ -394,24 +394,24 @@
     }
 
     .sku-base-form {
-      @include breakpoint ($only-mobile) {
+      @include breakpoint($only-mobile) {
         position: relative;
       }
 
       button[type="submit"] {
         height: 3.125rem;
 
-        @include breakpoint ($desktop) {
+        @include breakpoint($desktop) {
           width: 69%;
           margin-#{$left}: 0.625rem;
         }
 
-        @include breakpoint ($only-tablet) {
+        @include breakpoint($only-tablet) {
           width: 62%;
           margin-#{$left}: 0.5rem;
         }
 
-        @include breakpoint ($only-mobile) {
+        @include breakpoint($only-mobile) {
           position: absolute;
           #{$left}: 0;
           bottom: 0;
@@ -460,7 +460,13 @@
 }
 
 .gradient-holder {
-  background: linear-gradient(to bottom, rgba(235, 235, 235, 0), rgba(235, 235, 235, 0.93) 30%, $gradient-holder 97%);
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(235, 235, 235, 0),
+      rgba(235, 235, 235, 0.93) 30%,
+      $gradient-holder 97%
+    );
 }
 
 .content--dimensions-and-care {
@@ -491,7 +497,7 @@
 
 .pdp-description-accordion {
   .c-accordion_content {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       line-height: 1.5;
     }
   }

@@ -3,9 +3,9 @@ form.user-communication-preference {
     font-size: rem(16);
   }
 
-  input[type=checkbox] {
-    & ~ label[for=edit-communication-preference-email],
-    & ~ label[for=edit-communication-preference-mobile] {
+  input[type="checkbox"] {
+    & ~ label[for="edit-communication-preference-email"],
+    & ~ label[for="edit-communication-preference-mobile"] {
       &::before {
         @include breakpoint($only-mobile) {
           top: rem(5);

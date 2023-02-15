@@ -1,53 +1,53 @@
 // AY specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
-$ay-regular: 'Arquitecta Regular', 'NotoSansArabic Regular', 'sans-serif', 'Arial';
-$ay-regular-nodir: 'Arquitecta Regular', 'NotoSansArabic Regular', 'sans-serif', 'Arial';
+$ay-regular: "Arquitecta Regular", "NotoSansArabic Regular", "sans-serif", "Arial";
+$ay-regular-nodir: "Arquitecta Regular", "NotoSansArabic Regular", "sans-serif", "Arial";
 
-$ay-bold: 'Arquitecta Bold', 'NotoSansArabic Medium', 'sans-serif', 'Arial';
-$ay-bold-nodir: 'Arquitecta Bold', 'NotoSansArabic Medium', 'sans-serif', 'Arial';
+$ay-bold: "Arquitecta Bold", "NotoSansArabic Medium", "sans-serif", "Arial";
+$ay-bold-nodir: "Arquitecta Bold", "NotoSansArabic Medium", "sans-serif", "Arial";
 
-$ay-heavy: 'Arquitecta Heavy', 'NotoSansArabic Bold', 'sans-serif', 'Arial';
-$ay-heavy-nodir: 'Arquitecta Heavy', 'NotoSansArabic Bold', 'sans-serif', 'Arial';
+$ay-heavy: "Arquitecta Heavy", "NotoSansArabic Bold", "sans-serif", "Arial";
+$ay-heavy-nodir: "Arquitecta Heavy", "NotoSansArabic Bold", "sans-serif", "Arial";
 
-$ay-black: 'Arquitecta Black', 'NotoSansArabic Black', 'sans-serif', 'Arial';
-$ay-black-nodir: 'Arquitecta Black', 'NotoSansArabic Black', 'sans-serif', 'Arial';
+$ay-black: "Arquitecta Black", "NotoSansArabic Black", "sans-serif", "Arial";
+$ay-black-nodir: "Arquitecta Black", "NotoSansArabic Black", "sans-serif", "Arial";
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$ay-arabic-regular: 'NotoSansArabic Regular', 'Arquitecta Regular', 'sans-serif', 'Arial';
-$ay-arabic-regular-nodir: 'NotoSansArabic Regular', 'Arquitecta Regular', 'sans-serif', 'Arial';
+$ay-arabic-regular: "NotoSansArabic Regular", "Arquitecta Regular", "sans-serif", "Arial";
+$ay-arabic-regular-nodir: "NotoSansArabic Regular", "Arquitecta Regular", "sans-serif", "Arial";
 
-$ay-arabic-bold: 'NotoSansArabic Medium', 'Arquitecta Bold', 'sans-serif', 'Arial';
-$ay-arabic-bold-nodir: 'NotoSansArabic Medium', 'Arquitecta Bold', 'sans-serif', 'Arial';
+$ay-arabic-bold: "NotoSansArabic Medium", "Arquitecta Bold", "sans-serif", "Arial";
+$ay-arabic-bold-nodir: "NotoSansArabic Medium", "Arquitecta Bold", "sans-serif", "Arial";
 
-$ay-arabic-heavy: 'NotoSansArabic Bold', 'Arquitecta Heavy', 'sans-serif', 'Arial';
-$ay-arabic-heavy-nodir: 'NotoSansArabic Bold', 'Arquitecta Heavy', 'sans-serif', 'Arial';
+$ay-arabic-heavy: "NotoSansArabic Bold", "Arquitecta Heavy", "sans-serif", "Arial";
+$ay-arabic-heavy-nodir: "NotoSansArabic Bold", "Arquitecta Heavy", "sans-serif", "Arial";
 
-$ay-arabic-black: 'NotoSansArabic Heavy', 'Arquitecta Black', 'sans-serif', 'Arial';
-$ay-arabic-black-nodir: 'NotoSansArabic Heavy', 'Arquitecta Black', 'sans-serif', 'Arial';
+$ay-arabic-black: "NotoSansArabic Heavy", "Arquitecta Black", "sans-serif", "Arial";
+$ay-arabic-black-nodir: "NotoSansArabic Heavy", "Arquitecta Black", "sans-serif", "Arial";
 
 //Proxima Nova
-$ay-nova-regular: 'ProximaNova-Regular', 'NotoSansArabic Regular', 'sans-serif', 'Arial';
-$ay-nova-regular-nodir: 'ProximaNova-Regular', 'NotoSansArabic Regular', 'sans-serif', 'Arial';
+$ay-nova-regular: "ProximaNova-Regular", "NotoSansArabic Regular", "sans-serif", "Arial";
+$ay-nova-regular-nodir: "ProximaNova-Regular", "NotoSansArabic Regular", "sans-serif", "Arial";
 
-$ay-nova-semibold: 'ProximaNova-Semibold', 'NotoSansArabic Semi Bold', 'sans-serif', 'Arial';
-$ay-nova-semibold-nodir: 'ProximaNova-Semibold', 'NotoSansArabic Semi Bold', 'sans-serif', 'Arial';
+$ay-nova-semibold: "ProximaNova-Semibold", "NotoSansArabic Semi Bold", "sans-serif", "Arial";
+$ay-nova-semibold-nodir: "ProximaNova-Semibold", "NotoSansArabic Semi Bold", "sans-serif", "Arial";
 
-$ay-nova-bold: 'ProximaNova-Bold', 'NotoSansArabic Bold', 'sans-serif', 'Arial';
-$ay-nova-bold-nodir: 'ProximaNova-Bold', 'NotoSansArabic Bold', 'sans-serif', 'Arial';
+$ay-nova-bold: "ProximaNova-Bold", "NotoSansArabic Bold", "sans-serif", "Arial";
+$ay-nova-bold-nodir: "ProximaNova-Bold", "NotoSansArabic Bold", "sans-serif", "Arial";
 
 //Proxima Nova to Arabic
-$ay-nova-arabic-regular: 'NotoSansArabic Regular', 'ProximaNova-Regular', 'sans-serif', 'Arial';
-$ay-nova-arabic-regular-nodir: 'NotoSansArabic Regular', 'ProximaNova-Regular', 'sans-serif', 'Arial';
+$ay-nova-arabic-regular: "NotoSansArabic Regular", "ProximaNova-Regular", "sans-serif", "Arial";
+$ay-nova-arabic-regular-nodir: "NotoSansArabic Regular", "ProximaNova-Regular", "sans-serif", "Arial";
 
-$ay-nova-arabic-semibold: 'NotoSansArabic Semi Bold', 'ProximaNova-Semibold', 'sans-serif', 'Arial';
-$ay-nova-arabic-semibold-nodir: 'NotoSansArabic Semi Bold', 'ProximaNova-Semibold', 'sans-serif', 'Arial';
+$ay-nova-arabic-semibold: "NotoSansArabic Semi Bold", "ProximaNova-Semibold", "sans-serif", "Arial";
+$ay-nova-arabic-semibold-nodir: "NotoSansArabic Semi Bold", "ProximaNova-Semibold", "sans-serif", "Arial";
 
-$ay-nova-arabic-bold: 'NotoSansArabic Bold', 'ProximaNova-Bold', 'sans-serif', 'Arial';
-$ay-nova-arabic-bold-nodir: 'NotoSansArabic Bold', 'ProximaNova-Bold', 'sans-serif', 'Arial';
+$ay-nova-arabic-bold: "NotoSansArabic Bold", "ProximaNova-Bold", "sans-serif", "Arial";
+$ay-nova-arabic-bold-nodir: "NotoSansArabic Bold", "ProximaNova-Bold", "sans-serif", "Arial";
 
-$alshaya-icons: 'alshaya-icons';
+$alshaya-icons: "alshaya-icons";
 $body_font: $ay-regular;
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in AY theme.

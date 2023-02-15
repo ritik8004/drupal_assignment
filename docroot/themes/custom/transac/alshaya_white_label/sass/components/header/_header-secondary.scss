@@ -288,7 +288,7 @@
 
   &::before {
     @include breakpoint($upto-desktop) {
-      content: '';
+      content: "";
       background-color: transparent;
       position: absolute;
       left: 0;
@@ -329,7 +329,7 @@
 .block-alshaya-algolia-react-autocomplete {
   &::before {
     @include breakpoint($only-mobile) {
-      content: '';
+      content: "";
       background: transparent;
       position: absolute;
       z-index: -1;
@@ -368,7 +368,7 @@ body {
   @include breakpoint($only-mobile) {
     margin-top: 3.6875rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 4.0625rem;
     }
 
@@ -376,7 +376,7 @@ body {
       margin-top: 6.25rem;
       padding-top: 0 !important;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 6.5rem;
       }
     }
@@ -389,7 +389,7 @@ body {
   @include breakpoint($only-tablet) {
     margin-top: 9.5625rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 10.25rem;
     }
 
@@ -397,7 +397,7 @@ body {
       margin-top: 11rem;
       padding-top: 0 !important;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 12.6875rem;
       }
     }

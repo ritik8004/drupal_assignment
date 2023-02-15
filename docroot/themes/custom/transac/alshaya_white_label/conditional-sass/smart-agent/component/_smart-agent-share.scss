@@ -61,7 +61,7 @@
       top: 50%;
       transform: translateY(-50%);
 
-      @include icon('close') {
+      @include icon("close") {
         font-size: 2rem;
         width: 2rem;
         height: 2rem;
@@ -73,8 +73,8 @@
   .smart-agent-share-modal-content-region {
     padding: 2rem 1.25rem;
 
-    input[type=email],
-    input[type=tel] {
+    input[type="email"],
+    input[type="tel"] {
       width: 100%;
       border: none;
       border-bottom: 1px solid $primary_input_border;
@@ -96,7 +96,7 @@
       width: 100%;
       border: none;
 
-      @include componentLoader($primary_btn_bg, 'after');
+      @include componentLoader($primary_btn_bg, "after");
     }
   }
 }

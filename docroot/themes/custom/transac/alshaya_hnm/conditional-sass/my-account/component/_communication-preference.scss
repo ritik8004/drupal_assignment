@@ -1,8 +1,8 @@
 form {
   &.user-communication-preference {
-    input[type=checkbox] {
-      ~ label[for=edit-communication-preference-email],
-      ~ label[for=edit-communication-preference-mobile] {
+    input[type="checkbox"] {
+      ~ label[for="edit-communication-preference-email"],
+      ~ label[for="edit-communication-preference-mobile"] {
         &::before {
           top: 0.25rem;
 

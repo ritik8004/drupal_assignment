@@ -33,7 +33,7 @@ body.wishlist-enabled {
       #{$right}: 1.5rem;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-tablet) {
         left: 1.75rem;
       }

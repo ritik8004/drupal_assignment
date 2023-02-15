@@ -4,7 +4,7 @@ recipe: drupal9
 config:
   webroot: 'docroot'
   xdebug: true
-  php: '8.0'
+  php: '8.1'
 
 services:
   database:
@@ -17,7 +17,7 @@ services:
     xdebug: true
     app_mount: delegated
     ssl: true
-    type: php:8.0
+    type: php:8.1
     composer_version: 2-latest
     build_as_root:
       - apt-get update -y

@@ -44,7 +44,7 @@
           user-select: none;
 
           &::before {
-            content: '';
+            content: "";
             top: 0;
             left: 0;
             right: 0;
@@ -61,6 +61,6 @@
 
 .complete-purchase {
   a.checkout-link.loading {
-    @include componentLoader($primary_btn_bg, 'after');
+    @include componentLoader($primary_btn_bg, "after");
   }
 }

@@ -1,9 +1,5 @@
 variables:
   url_product_page: '/buy-cactus-blossom-3-wick-candle-0.html/'
-  product_listing_page_url: '/shop-home-fragrance/featured/white-barn-shop/'
-  spc_product_listing_page: '/shop-home-fragrance/featured/white-barn-shop/'
-  spc_basket_page: '/shop-home-fragrance/featured/white-barn-shop/'
-  spc_pdp_page: '/buy-kitchen-lemon-gentle-gel-hand-soap.html/'
   spc_promotion_listing_page: '/shop-hand-soaps-sanitizers/hand-sanitizers/pocketbac-hand-sanitizers/'
   spc_plp_add_to_cart: '/shop-home-fragrance/featured/white-barn-shop/'
   spc_egift_page: '/egift/'

@@ -342,7 +342,7 @@
       #{$left}: 0;
 
       @include breakpoint($tablet) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           height: 0;
         }
       }
@@ -357,7 +357,7 @@
       #{$right}: 0;
 
       @include breakpoint($tablet) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           height: 0;
         }
       }
@@ -407,7 +407,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .ladda-button[data-style="zoom-in"] {
     .ladda-spinner {
       right: 45%;

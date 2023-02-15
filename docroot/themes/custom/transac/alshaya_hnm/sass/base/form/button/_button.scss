@@ -29,9 +29,9 @@
 }
 
 button.edit-add-to-cart {
-  &.ladda-button[data-style=zoom-in][data-loading] {
+  &.ladda-button[data-style="zoom-in"][data-loading] {
     .ladda-spinner {
-      background-image: url(#{$base_theme_loader_img_directory_path});
+      background-image: url("#{$base_theme_loader_img_directory_path}");
       background-size: contain;
       top: 2px;
       #{$left}: 42%;

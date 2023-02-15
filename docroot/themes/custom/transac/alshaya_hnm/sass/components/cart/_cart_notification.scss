@@ -49,7 +49,7 @@
         letter-spacing: 1px;
         font-size: 0.8125rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: auto;
         }
       }
@@ -71,7 +71,7 @@
         font-size: 0.6875rem;
         margin-#{$left}: 0.25rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-left: 0.25rem;
         }
       }
@@ -86,7 +86,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   #cart_notification,
   #static_minicart_notification {
     @include breakpoint($tablet) {

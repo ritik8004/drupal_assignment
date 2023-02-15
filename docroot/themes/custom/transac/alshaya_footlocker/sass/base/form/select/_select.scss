@@ -6,7 +6,7 @@
   &::after {
     color: $plp_facet_dropdown_icon;
 
-    @include breakpoint ($desktop) {
+    @include breakpoint($desktop) {
       display: none;
     }
   }

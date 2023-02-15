@@ -31,7 +31,7 @@
         height: rem(28);
         display: inline-block;
         margin-#{$left}: 0;
-        background: url('#{$ay_theme_img_directory_path}/icons/spc-close.svg') $spc-basket-close-icon-bg no-repeat 50% 50%;
+        background: url("#{$ay_theme_img_directory_path}/icons/spc-close.svg") $spc-basket-close-icon-bg no-repeat 50% 50%;
 
         svg {
           display: none;

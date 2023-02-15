@@ -13,7 +13,7 @@
       @include breakpoint($tablet) {
         @include social-link-width;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           @include social-link-width;
         }
       }
@@ -38,13 +38,13 @@
 
     .social_auth_facebook {
       &::before {
-        background-image: url(#{$nb_theme_img_directory_path}/icons/facebook.svg);
+        background-image: url("#{$nb_theme_img_directory_path}/icons/facebook.svg");
       }
     }
 
     .social_auth_google {
       &::before {
-        background-image: url(#{$nb_theme_img_directory_path}/icons/google.svg);
+        background-image: url("#{$nb_theme_img_directory_path}/icons/google.svg");
       }
     }
   }
@@ -55,7 +55,7 @@
     height: rem(56);
 
     &::before {
-      background-image: url(#{$nb_theme_img_directory_path}/icons/user.svg);
+      background-image: url("#{$nb_theme_img_directory_path}/icons/user.svg");
       background-size: contain;
       height: rem(30);
       width: rem(20);

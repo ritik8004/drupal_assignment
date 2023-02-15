@@ -150,7 +150,7 @@
     }
 
     .star-icon {
-      @include icon('ratingfull') {
+      @include icon("ratingfull") {
         display: block;
         height: 1.5rem;
         width: 1.5rem;
@@ -165,7 +165,7 @@
     }
 
     .tick-icon {
-      @include icon('check') {
+      @include icon("check") {
         display: block;
         width: 3.375rem;
         height: 3.375rem;

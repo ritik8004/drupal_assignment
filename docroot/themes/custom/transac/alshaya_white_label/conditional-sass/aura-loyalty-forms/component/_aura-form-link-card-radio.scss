@@ -1,17 +1,17 @@
-input[type=radio].linking-option-radio {
+input[type="radio"].linking-option-radio {
   display: none;
 
   ~ .aura-radio-sim::before {
-    content: '';
+    content: "";
     display: inline-block;
     width: 2.375rem;
     height: 2.375rem;
-    background: url('#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-empty.svg') no-repeat;
+    background: url("#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-empty.svg") no-repeat;
   }
 
   &:checked {
     ~ .aura-radio-sim::before {
-      background: url('#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-filled.svg') no-repeat;
+      background: url("#{$base_theme_img_directory_path}/aura/style-icons-ui-radio-filled.svg") no-repeat;
     }
   }
 

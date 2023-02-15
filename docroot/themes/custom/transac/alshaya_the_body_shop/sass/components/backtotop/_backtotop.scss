@@ -2,7 +2,7 @@
   font-size: 0;
   border: none;
 
-  @include icon('chevronup', after) {
+  @include icon("chevronup", after) {
     border-radius: 0;
     height: 2.75rem;
     width: 3.4375rem;
@@ -19,7 +19,7 @@
   }
 
   @include breakpoint($tablet) {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       &::after {
         right: 2.1875rem;
       }

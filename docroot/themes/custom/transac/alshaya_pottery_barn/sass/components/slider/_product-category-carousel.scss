@@ -85,7 +85,7 @@
             }
           }
 
-          @include breakpoint ($tablet) {
+          @include breakpoint($tablet) {
             width: 14.875rem !important;
             margin: 0 0.1875rem !important;
           }

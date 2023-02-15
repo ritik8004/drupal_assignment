@@ -1,6 +1,6 @@
 .c-footer-primary {
   @include breakpoint($only-mobile) {
-    html[lang=en] & {
+    html[lang="en"] & {
       padding-top: 0.625rem;
     }
   }
@@ -172,7 +172,7 @@
     @include breakpoint($only-tablet) {
       padding-#{$right}: 40% !important;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-#{$right}: 44% !important;
       }
     }
@@ -196,7 +196,7 @@
     }
   }
 
-  .edit-newsletter[data-style=zoom-in][data-loading] {
+  .edit-newsletter[data-style="zoom-in"][data-loading] {
     background-color: $primary_btn_bg;
 
     .ladda-spinner {
@@ -238,7 +238,7 @@
   @include breakpoint($only-mobile) {
     padding: 0 0.875rem 0.875rem;
 
-    html[lang=en] & {
+    html[lang="en"] & {
       padding-bottom: 0.5rem;
     }
   }

@@ -20,7 +20,7 @@
                 font-family: $dh-light;
                 padding-top: 0.125rem;
 
-                html[lang=ar] & {
+                html[lang="ar"] & {
                   border-radius: 0 1.3125rem 1.3125rem 0;
                 }
               }
@@ -28,7 +28,7 @@
               &.js-facet-deactivate {
                 border-radius: 0 1.3125rem 1.3125rem 0;
 
-                html[lang=ar] & {
+                html[lang="ar"] & {
                   border-radius: 1.3125rem 0 0 1.3125rem;
                 }
               }

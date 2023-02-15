@@ -2,7 +2,7 @@
   .magv2-header-wrapper {
     .cart-link {
       &::before {
-        background: url(#{$aeo_theme_img_directory_path}/icons/basket.svg) center center no-repeat;
+        background: url("#{$aeo_theme_img_directory_path}/icons/basket.svg") center center no-repeat;
       }
 
       .quantity {
@@ -27,7 +27,7 @@
 
     .back-button.back-to-home {
       &::after {
-        background: url('#{$brand_theme_img_directory_path}/icons/home.svg') center no-repeat;
+        background: url("#{$brand_theme_img_directory_path}/icons/home.svg") center no-repeat;
       }
     }
   }

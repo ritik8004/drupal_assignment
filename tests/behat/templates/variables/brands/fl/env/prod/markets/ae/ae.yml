@@ -1,8 +1,4 @@
 variables:
-  spc_product_listing_page: '/shop-mens/clothing/t-shirts/'
-  spc_basket_page: '/shop-mens/clothing/t-shirts/'
-  spc_pdp_page: '/buy-champion-womens-t-shirt-black-0.html/'
-  product_listing_page_url: '/shop-mens/clothing/t-shirts/'
   np_plp_product_page: '/buy-champion-womens-t-shirt-black-0.html/'
   np_plp_page: '/shop-mens/shoes/basketball/'
   new_pdp_enabled: TRUE

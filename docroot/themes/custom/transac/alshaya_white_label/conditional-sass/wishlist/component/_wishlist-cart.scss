@@ -9,7 +9,7 @@
 
     .wishlist-loader {
       &.loading {
-        @include componentLoader(transparent, 'after');
+        @include componentLoader(transparent, "after");
 
         position: absolute;
       }

@@ -23,7 +23,7 @@
 
       &:hover {
         &::after {
-          content: '';
+          content: "";
           border: rem(1) solid $plp_quick_color_variant_hover_border;
           border-radius: 50%;
           position: absolute;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 /**
  * Click handler for the swatch item.
@@ -100,7 +101,9 @@ const ColorSwatch = ({
   onClick,
   attributeName,
 }) => {
-  const values = data.split('|');
+  const values = hasValue(data)
+    ? data.split('|')
+    : [];
   if (values.length > 1) {
     return (
       <li className="li-swatch-color dual-color-tone" key={value}>

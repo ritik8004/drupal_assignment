@@ -5,7 +5,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
   Scenario: As an Authenticated user, I should be able to use Blue card discount on the products
     Given I am logged in as an authenticated user "{spc_blue_card_email}" with password "{spc_advantage_card_password}"
     And I wait for element "#block-page-title"
-    When I am on "{spc_basket_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
     When I select a product in stock on ".c-products__item"
     And I wait for element "#block-content"
@@ -50,7 +50,7 @@ Feature: SPC Checkout for Advantage/Blue card feature for Authenticated user
   Scenario: As an Authenticated user, I should be able to use Blue card discount on the products in second language
     Given I am logged in as an authenticated user "{spc_blue_card_email}" with password "{spc_advantage_card_password}"
     And I wait for element "#block-page-title"
-    When I am on "{spc_basket_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
     When I follow "{language_link}"
     And I wait for the page to load

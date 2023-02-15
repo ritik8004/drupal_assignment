@@ -159,11 +159,11 @@
     }
 
     .Collapsible__contentInner {
-      >div:first-child {
+      > div:first-child {
         margin-top: 0;
       }
 
-      >div:nth-child(2n) {
+      > div:nth-child(2n) {
         margin-bottom: rem(27);
 
         @include breakpoint($tablet) {

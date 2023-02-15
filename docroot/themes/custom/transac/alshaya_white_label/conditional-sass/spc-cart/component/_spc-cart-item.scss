@@ -111,7 +111,7 @@
           pointer-events: none;
         }
 
-        @include componentLoader(transparent, 'after');
+        @include componentLoader(transparent, "after");
       }
     }
 
@@ -128,7 +128,7 @@
       font-size: 0.75rem;
       color: $spc-product-attributes;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: normal;
       }
 

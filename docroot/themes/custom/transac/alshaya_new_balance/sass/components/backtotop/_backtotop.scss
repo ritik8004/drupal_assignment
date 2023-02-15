@@ -11,8 +11,8 @@
   }
 
   &::after {
-    content: '';
-    background: url(#{$nb_theme_img_directory_path}/icons/backtop.svg) no-repeat;
+    content: "";
+    background: url("#{$nb_theme_img_directory_path}/icons/backtop.svg") no-repeat;
     background-size: contain;
     border-radius: 0;
     top: rem(1);

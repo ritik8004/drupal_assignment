@@ -1,5 +1,5 @@
 .payment-method-checkout_com_egift_linked_card {
-  input[type=checkbox] ~ label {
+  input[type="checkbox"] ~ label {
     font-size: 0.875rem;
 
     &::before {
@@ -10,9 +10,9 @@
     }
   }
 
-  input[type=checkbox]:checked ~ label::before {
-    content: '';
-    background: url('#{$base_theme_img_directory_path}/icons/checkbox-filled.svg') no-repeat;
+  input[type="checkbox"]:checked ~ label::before {
+    content: "";
+    background: url("#{$base_theme_img_directory_path}/icons/checkbox-filled.svg") no-repeat;
     height: 2.5rem;
     width: 2.5rem;
     #{$left}: 0.3125rem;
@@ -29,7 +29,7 @@
       display: block;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-mobile) {
         line-height: 1.25rem;
       }
@@ -45,7 +45,7 @@
         padding-#{$left}: 0;
       }
 
-      html[lang='ar'] & {
+      html[lang="ar"] & {
         margin-top: rem(6);
 
         @include breakpoint($only-mobile) {
@@ -114,7 +114,7 @@
     position: relative;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       bottom: 0;
@@ -137,7 +137,7 @@
     min-height: 3.5rem;
 
     .loader-icon {
-      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      background: url("#{$base_theme_loader_img_directory_path}") #{$left} center no-repeat;
       padding-#{$left}: 2.5rem;
       background-size: contain;
       color: $spc-loader-text;
@@ -152,7 +152,7 @@
   .payment-method-label-wrapper {
     padding-top: 1.4rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-mobile) {
         padding-top: 1.25rem;
       }

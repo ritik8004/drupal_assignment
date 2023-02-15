@@ -5,7 +5,7 @@
   @include breakpoint($only-mobile) {
     top: 2.75rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       top: 3rem;
     }
   }
@@ -13,7 +13,7 @@
   @include breakpoint($tablet) {
     top: -0.3125rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       top: -0.25rem;
     }
   }
@@ -21,13 +21,13 @@
   @include breakpoint($desktop) {
     top: 3rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       top: 3rem;
     }
   }
 
   &.has--notification::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 0.75rem;
     height: 0.75rem;
@@ -41,7 +41,7 @@
     transform: rotate(45deg);
     background: $cart_notification_arrow_bg;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       transform: rotate(-45deg);
     }
   }
@@ -60,7 +60,7 @@
   }
 }
 
-html[lang=ar] #cart_notification {
+html[lang="ar"] #cart_notification {
   .notification,
   .error {
     &::before {

@@ -1,10 +1,6 @@
 variables:
   url_product_page: '/buy-mothercare-all-we-know-baby-liquid-talc-125ml.html/'
-  spc_product_listing_page: '/shop-boys-clothing/tops/tee-polo/'
-  spc_basket_page: '/shop-girls-clothing/accessories/jewelry/'
-  product_listing_page_url: '/shop-boys-clothing/bottoms/denim/'
   np_plp_product_page: '/buy-mothercare-all-we-know-baby-liquid-talc-125ml.html/'
-  spc_pdp_page: '/buy-mothercare-all-we-know-baby-liquid-talc-125ml.html/'
   np_plp_page: '/shop-girls-clothing/sets/sets/'
   new_pdp_enabled: TRUE
   spc_egift_page: '/egift/'

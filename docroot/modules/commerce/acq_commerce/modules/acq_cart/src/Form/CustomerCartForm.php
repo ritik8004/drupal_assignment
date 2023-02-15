@@ -232,7 +232,7 @@ class CustomerCartForm extends FormBase {
     elseif ($this->isAjax() && $form_state->getTemporaryValue('reload_page')) {
       $form_state->setTriggeringElement([
         '#ajax' => [
-          'callback' => [$this, 'reloadCallback'],
+          'callback' => $this->reloadCallback(...),
         ],
       ]);
 

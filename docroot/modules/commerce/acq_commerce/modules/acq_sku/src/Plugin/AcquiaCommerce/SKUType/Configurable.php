@@ -128,7 +128,7 @@ class Configurable extends SKUPluginBase {
           '#options' => $sorted_options,
           '#required' => TRUE,
           '#ajax' => [
-            'callback' => [$this, 'configurableAjaxCallback'],
+            'callback' => $this->configurableAjaxCallback(...),
             'progress' => [
               'type' => 'throbber',
               'message' => NULL,

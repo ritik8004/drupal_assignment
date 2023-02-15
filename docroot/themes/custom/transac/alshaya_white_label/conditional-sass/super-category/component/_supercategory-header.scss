@@ -354,7 +354,7 @@
             margin-bottom: rem(0);
             margin-#{$left}: 0;
 
-            html[lang='ar'] & {
+            html[lang="ar"] & {
               margin-bottom: 0;
             }
           }
@@ -506,7 +506,7 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .super-category-enabled {
     &.super-category-american-eagle {
       .branding__menu {

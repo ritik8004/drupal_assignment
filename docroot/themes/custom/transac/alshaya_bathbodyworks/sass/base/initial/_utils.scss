@@ -10,7 +10,7 @@
 .modal-overlay--spinner {
   &::after {
     content: "";
-    background-image: url(#{$base_theme_loader_img_directory_path});
+    background-image: url("#{$base_theme_loader_img_directory_path}");
     width: 2rem;
     height: 1.7rem;
   }

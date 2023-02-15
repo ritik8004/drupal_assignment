@@ -3,7 +3,7 @@
     text-transform: none;
   }
 
-  .edit-newsletter[data-style=zoom-in][data-loading] {
+  .edit-newsletter[data-style="zoom-in"][data-loading] {
     background: $primary_btn_bg;
   }
 }
@@ -19,7 +19,7 @@
   }
 
   .form-item {
-    input[type=email]::placeholder {
+    input[type="email"]::placeholder {
       color: $newsletter_input_placeholder;
     }
 

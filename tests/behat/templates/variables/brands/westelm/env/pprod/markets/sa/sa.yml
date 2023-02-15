@@ -1,7 +1,2 @@
 variables:
   url_product_page: 'buy-eddy-reversible-sectional-large.html'
-  product_listing_page_url: '/shop-furniture/living-room-furniture/sofas-sectionals/'
-  spc_product_listing_page: '/shop-furniture/living-room-furniture/sofas-sectionals/'
-  spc_basket_page: '/shop-furniture/living-room-furniture/sofas-sectionals/'
-  spc_pdp_page: 'buy-eddy-reversible-sectional-large.html'
-  spc_bank_product: 'buy-eddy-reversible-sectional-large.html'
