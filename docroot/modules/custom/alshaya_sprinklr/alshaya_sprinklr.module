@@ -87,6 +87,10 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
       'True',
     ],
   ];
+  // Attach alshaya sprinklr events library that triggers the
+  // the sprinklr chatbot events. Eg: 'openExistingConversation'
+  // to auto open the popup after login.
+  $page['#attached']['library'][] = 'alshaya_sprinklr/alshaya_sprinklr_events';
 
   // Check if one time user login identification cookie is set and
   // set update conversation context value in drupal settings.
