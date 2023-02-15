@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides a resource to get payment methods data.
@@ -69,6 +70,13 @@ class PaymentMethodResource extends ResourceBase {
   protected $ordersManager;
 
   /**
+   * Module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * PaymentMethodResource constructor.
    *
    * @param array $configuration
@@ -91,6 +99,8 @@ class PaymentMethodResource extends ResourceBase {
    *   The config factory service.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   The orders manager service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler service.
    */
   public function __construct(
     array $configuration,
@@ -102,7 +112,8 @@ class PaymentMethodResource extends ResourceBase {
     CheckoutOptionsManager $checkout_option_manager,
     AlshayaSpcPaymentMethodManager $payment_plugins,
     ConfigFactoryInterface $config_factory,
-    OrdersManager $orders_manager
+    OrdersManager $orders_manager,
+    ModuleHandlerInterface $module_handler
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityRepository = $entity_repository;
@@ -110,6 +121,7 @@ class PaymentMethodResource extends ResourceBase {
     $this->paymentMethodManager = $payment_plugins;
     $this->configFactory = $config_factory;
     $this->ordersManager = $orders_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -126,7 +138,8 @@ class PaymentMethodResource extends ResourceBase {
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('plugin.manager.alshaya_spc_payment_method'),
       $container->get('config.factory'),
-      $container->get('alshaya_acm_customer.orders_manager')
+      $container->get('alshaya_acm_customer.orders_manager'),
+      $container->get('module_handler')
     );
   }
 
@@ -188,6 +201,9 @@ class PaymentMethodResource extends ResourceBase {
         $this->paymetMethodTerms[] = $payment_method_term;
       }
     }
+
+    // Hook implementation to add pseudo payments like egift, aura.
+    $this->moduleHandler->alter('alshaya_mobile_app_payment_method_api_response', $response_data, $exclude_payment_methods);
 
     $weight_data = array_column($response_data, 'weight');
     array_multisort($weight_data, SORT_ASC, $response_data);

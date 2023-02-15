@@ -12,6 +12,76 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Create field field_agent_store_id.
+ * Migrate store locator ids into agent store ids.
+ */
+function alshaya_checkout_by_agent_update_9401() {
+  // Create field field_agent_store_id.
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'field.storage.user.field_agent_store_id',
+        'field.field.user.user.field_agent_store_id',
+      ],
+      'alshaya_checkout_by_agent'
+    );
+  // Initiate the batch process to update the store locator ids with
+  // proper agent store ids.
+  $batch = [
+    'title' => 'Migrate store locator ids into agent store ids field.',
+    'operations' => [
+      ['_alshaya_checkout_by_agent_user_batch_operation', []],
+    ],
+    'init' => t('Starting processing of agent store ids update'),
+    'file' => drupal_get_path('module', 'alshaya_checkout_by_agent') . '/alshaya_checkout_by_agent.install',
+    'error_message' => t('An error occurred during processing'),
+  ];
+
+  batch_set($batch);
+}
+
+/**
+ * Batch function to migrate the store locator ids to agent store ids.
+ */
+function _alshaya_checkout_by_agent_user_batch_operation(&$sandbox) {
+  // Bulk update all the users entity with new field value of agent store id.
+  $entity_storage = \Drupal::entityTypeManager()->getStorage('user');
+  $entityQuery = $entity_storage->getQuery();
+  $uids = $entityQuery->condition('roles', ['smartagent'], 'IN')->execute();
+  // Use the sandbox to store the information needed to track progression.
+  if (!isset($sandbox['current'])) {
+    $sandbox['current'] = 0;
+    $sandbox['max'] = is_countable($uids) ? count($uids) : 0;
+  }
+  // Process uids by groups of 10.
+  $limit = 10;
+  $result = array_slice($uids, $sandbox['current'], $limit);
+  foreach ($uids as $uid) {
+    $entity = $entity_storage->load($uid);
+    if (!empty($entity)) {
+      $storeField = $entity->get('field_agent_store')->first();
+      if (!empty($storeField)) {
+        $store = $storeField->get('entity')->getValue();
+        if (!empty($store)) {
+          $storeCode = $store->get('field_store_locator_id')->getString();
+          $entity->set('field_agent_store_id', $storeCode);
+          $entity->save();
+        }
+      }
+    }
+    // Update our progress information.
+    $sandbox['current']++;
+  }
+
+  $sandbox['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['current'] / $sandbox['max']);
+  if ($sandbox['#finished'] >= 1) {
+    return 'Stores locator ids migration to agent store ids is finished.';
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set api_request_limit for smartagent API.
  */
 function alshaya_checkout_by_agent_update_8001() {
@@ -36,6 +106,15 @@ function alshaya_checkout_by_agent_uninstall() {
     $field->delete();
   }
   $field_storage = FieldStorageConfig::loadByName('user', 'field_agent_store');
+  if (!empty($field_storage)) {
+    $field_storage->delete();
+  }
+
+  $field = FieldConfig::loadByName('user', 'user', 'field_agent_store_id');
+  if (!empty($field)) {
+    $field->delete();
+  }
+  $field_storage = FieldStorageConfig::loadByName('user', 'field_agent_store_id');
   if (!empty($field_storage)) {
     $field_storage->delete();
   }

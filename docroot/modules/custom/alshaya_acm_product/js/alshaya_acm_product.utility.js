@@ -162,25 +162,20 @@ window.commerceBackend = window.commerceBackend || {};
    *   The object of sku values and their requested quantity, like {sku1: qty1}.
    * @param function
    *   Function to Call Drupal API.
-   *
-   * @returns {Promise}
-   *   The stock status for all skus.
    */
-  window.commerceBackend.triggerStockRefresh = async function (data, callDrupalApi) {
-    return callDrupalApi(
-      '/spc/checkout-event',
-      'POST',
-      {
-        form_params: {
-          action: 'refresh stock',
-          skus_quantity: data,
-        },
-      },
-    ).catch((error) => {
-      logger.error('Error occurred while triggering checkout event refresh stock. Message: @message', {
-        '@message': error.message,
-      });
-    });
+  window.commerceBackend.triggerStockRefresh = function (data) {
+    var params = new URLSearchParams();
+    params.append('skus_quantity', JSON.stringify(data));
+    params.append('action', 'refresh stock');
+
+    var returnVal = navigator.sendBeacon(
+      Drupal.url('spc/checkout-event'),
+      params,
+    );
+
+    if (!returnVal) {
+      logger.error('Error occurred while triggering checkout event refresh stock.');
+    }
   }
 
   /**

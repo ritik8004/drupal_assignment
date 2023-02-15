@@ -67,6 +67,11 @@ function alshaya_final_common_install_task($profile) {
     $additional_modules[] = 'purge_queuer_coretags';
   }
 
+  // Enable Mobile APP module on all new transac sites by default.
+  if ($profile === 'alshaya_transac') {
+    $additional_modules[] = 'alshaya_mobile_app';
+  }
+
   foreach ($additional_modules as $module) {
     \Drupal::service('module_installer')->install([$module]);
   }

@@ -43,6 +43,10 @@
         @include breakpoint($desktop) {
           width: 19.6875rem;
           padding-#{$left}: 3.75rem;
+
+          html[lang="ar"] & {
+            padding-right: rem(16);
+          }
         }
 
         .order-total-wrapper,
@@ -59,6 +63,10 @@
 
           @include breakpoint($desktop) {
             margin-#{$left}: 1.25rem;
+
+            html[lang="ar"] & {
+              margin-right: rem(18);
+            }
           }
         }
       }
@@ -80,6 +88,11 @@
             min-width: 6rem;
             display: inline-block;
             margin-#{$right}: 1.125rem;
+
+            html[lang="ar"] & {
+              min-width: rem(120);
+              margin-left: rem(4);
+            }
           }
         }
       }

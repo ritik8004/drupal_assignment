@@ -225,9 +225,6 @@ switch ($env_name) {
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'views_ui';
 
-    // Enable Mobile APP module on all new sites by default for non-prod.
-    $settings['additional_modules'][] = 'alshaya_mobile_app';
-
     // Increase autologout timeout on local so we are not always logged out.
     $config['autologout.settings']['timeout'] = 86400;
 
@@ -253,9 +250,6 @@ switch ($env_name) {
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
 
-    // Enable Mobile APP module on all new sites by default for non-prod.
-    $settings['additional_modules'][] = 'alshaya_mobile_app';
-
     // Log debug messages too.
     $settings['alshaya_performance_log_mode'] = 'developer';
 
@@ -267,13 +261,9 @@ switch ($env_name) {
     break;
 
   case 'uat':
-    // Enable Mobile APP module on all new sites by default for non-prod.
-    $settings['additional_modules'][] = 'alshaya_mobile_app';
     break;
 
   case 'pprod':
-    // Enable Mobile APP module on all new sites by default for non-prod.
-    $settings['additional_modules'][] = 'alshaya_mobile_app';
 
     $settings['alshaya_use_proxy'] = TRUE;
     break;

@@ -580,6 +580,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     // Non-refundable.
     $is_non_refundable = NULL;
 
+    $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+    $build['#attached']['drupalSettings']['use_matchback_cart_notification'] = $display_settings->get('use_matchback_cart_notification');
+
     if ($sku_entity instanceof SKU) {
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
       $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $entity->getCacheTags());
@@ -795,6 +798,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             }
           }
         }
+
+        $build['#attached']['drupalSettings']['changeMatchbackProductColor'] = $display_settings->get('change_matchback_color');
       }
 
       // Process price block and gallery for modal,

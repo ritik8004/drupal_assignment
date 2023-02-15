@@ -1,0 +1,11 @@
+# Not adding 'sprinklr' library dependencies to avoid
+# loading of custom library after the libraries
+# attached by 'sprinklr' module, which causes the issue
+# with working of 'alshaya_sprinklr' module.
+# Custom Library for sprinklr chatbot.
+alshaya_sprinklr:
+  version: 1.0.0
+  js:
+    js/alshaya_sprinklr.js: {}
+  dependencies:
+    - core/drupalSettings

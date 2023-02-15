@@ -28,7 +28,12 @@ class PimsSkuAssetManager extends SkuAssetManager {
         continue;
       }
 
-      $asset['drupal_uri'] = $asset['pims_image']['url'] ?? '';
+      if (isset($asset['pims_image']['url']) && $this->validateFileExtension($sku->getSku(), $asset['pims_image']['url'])) {
+        $asset['drupal_uri'] = $asset['pims_image']['url'];
+      }
+      else {
+        unset($assets[$index]);
+      }
     }
 
     return $assets;

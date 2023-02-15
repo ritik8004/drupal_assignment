@@ -15,7 +15,10 @@ const PaginationStats = connectStats(({ nbHits, currentResults }) => {
 
   return (
     <>
-      <span className="ais-Stats-text">
+      <span
+        className="ais-Stats-text"
+        gtm-pagination-stats={`showing ${currentResults} of ${nbHits} items`}
+      >
         {
           Drupal.t('showing @current of @total items', {
             '@current': currentResults,

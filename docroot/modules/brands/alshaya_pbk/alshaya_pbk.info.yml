@@ -8,4 +8,3 @@ dependencies:
   - alshaya_block:alshaya_block
   - alshaya_i18n:alshaya_i18n
   - alshaya_block:alshaya_paragraph_block
-  - alshaya_stores_finder:alshaya_stores_migrate

@@ -10,6 +10,36 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Enable membership info link in user account menu.
+ * Update hello member translations.
+ */
+function alshaya_hello_member_update_9405() {
+  // Enable membership info link in the menu.
+  $config_factory = \Drupal::configFactory();
+  $hello_member_config = $config_factory->getEditable('alshaya_hello_member.settings');
+  if ($hello_member_config->get('membership_info_content_node')) {
+    // Get the node ID from config.
+    $nid = $hello_member_config->get('membership_info_content_node');
+    if (is_numeric($nid)) {
+      $user_config = $config_factory->getEditable('alshaya_user.settings');
+      // @codingStandardsIgnoreLine
+      $alshaya_hello_member = unserialize($user_config->get('my_account_enabled_links'));
+      $alshaya_hello_member['membership_info'] = 'membership_info';
+      $user_config->set('my_account_enabled_links', serialize($alshaya_hello_member));
+      $user_config->save();
+    }
+  }
+  // Update translations.
+  module_load_include('inc', 'alshaya_hello_member', 'alshaya_hello_member.translation');
+  $translations = _alshaya_hello_member_get_translations('v4');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update hello member popup text for gtm tracking.
  */
 function alshaya_hello_member_update_9404() {
@@ -80,6 +110,14 @@ function alshaya_hello_member_install() {
   // @codingStandardsIgnoreLine
   $alshaya_hello_member = unserialize($config->get('my_account_enabled_links'));
   $alshaya_hello_member['hello_member_points_history'] = 'hello_member_points_history';
+  $helloMemberConfig = $config_factory->getEditable('alshaya_hello_member.settings');
+  if ($helloMemberConfig->get('membership_info_content_node')) {
+    // Get the node ID from config.
+    $nid = $helloMemberConfig->get('membership_info_content_node');
+    if (is_numeric($nid)) {
+      $alshaya_hello_member['membership_info'] = 'membership_info';
+    }
+  }
   $config->set('my_account_enabled_links', serialize($alshaya_hello_member));
   $config->save();
 

@@ -219,6 +219,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'hideGridToggle' => $alshaya_algolia_react_setting_values->get('hide_grid_toggle') ?? 0,
       'topFacetsLimit' => $alshaya_algolia_react_setting_values->get('top_facets_limit'),
       'defaultColgrid' => $alshaya_algolia_react_setting_values->get('default_col_grid'),
+      'defaultColGridMobile' => $alshaya_algolia_react_setting_values->get('default_col_grid_mobile'),
     ];
 
     // Set product elements alignment to true only

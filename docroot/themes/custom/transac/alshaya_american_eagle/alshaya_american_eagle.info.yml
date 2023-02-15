@@ -225,3 +225,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css
+
+  alshaya_white_label/matchback_layout:
+    css:
+      theme:
+        css/conditional-sass/matchback-layout/matchback-layout.ltr.css: css/conditional-sass/matchback-layout/matchback-layout.ltr.css

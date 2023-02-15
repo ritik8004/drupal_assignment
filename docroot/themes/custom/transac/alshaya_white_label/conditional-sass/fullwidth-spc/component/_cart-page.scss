@@ -1,0 +1,37 @@
+@include breakpoint($upto-tablet) {
+  .dynamic-promotion-wrapper .promotion {
+    width: 100%;
+
+    @include sideSpaces(0, 'margin');
+  }
+
+  .spc-order-summary-block .block-content .actions,
+  .spc-mobile-cart-preview.sticky {
+    #{$left}: 0;
+  }
+}
+
+.alias--cart {
+  .spc-pre-content,
+  .spc-main,
+  .spc-post-content,
+  #spc-cart .spc-free-delivery-container,
+  .spc-empty-container {
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+
+    @include breakpoint($tablet) {
+      max-width: unset;
+    }
+  }
+
+  .spc-pre-content-sticky {
+    @include fullWidthSideSpaces(
+      $is_mobile: true
+    );
+  }
+}

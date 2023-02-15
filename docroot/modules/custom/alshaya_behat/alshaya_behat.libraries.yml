@@ -1,0 +1,5 @@
+main:
+  js:
+    js/user_events.bundle.js: {}
+  dependencies:
+    - core/drupal

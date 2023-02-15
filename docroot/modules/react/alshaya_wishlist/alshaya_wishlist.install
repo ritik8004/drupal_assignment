@@ -12,6 +12,18 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ *  Add config to show/hide wishlist icon on matchback.
+ */
+function alshaya_wishlist_update_9402() {
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['alshaya_wishlist.settings'],
+    'alshaya_wishlist'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  *  Disables quick view drawer on wishlist pages.
  */
 function alshaya_wishlist_update_9401() {

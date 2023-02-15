@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_behat\Service;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\StockManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -281,20 +282,36 @@ class AlshayaBehatHelper {
   private function getCategories(int $page): array {
     // Query the database to fetch categories with in-stock products.
     $query = $this->database->select('taxonomy_term__field_commerce_status', 'fcs');
+    $query->leftJoin('taxonomy_term__field_category_include_menu', 'fcim', 'fcs.entity_id = fcim.entity_id');
     $query->leftJoin('node__field_category', 'fc', 'fcs.entity_id = fc.field_category_target_id');
+    $query->leftJoin('node_field_data', 'nfd', 'nfd.nid = fc.entity_id');
     $query->leftJoin('node__field_skus', 'fs', 'fc.entity_id = fs.entity_id');
     $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = fs.field_skus_value');
 
     // Category is enabled.
     $query->condition('fcs.field_commerce_status_value', '1');
 
-    // Category has in-stock SKUs.
-    $query->condition('stock.status', '1');
+    // Check that node type is product(to prevent department pages).
+    $query->condition('nfd.type', 'acq_product');
+
+    // Category has enabled SKUs.
+    // For in-stock check, we will do it once we have a list of all the
+    // SKUs assgined to each category.
+    $query->condition('stock.status', 1);
+    $query->condition('nfd.status', NodeInterface::PUBLISHED);
+    $query->condition('fcim.field_category_include_menu_value', 1);
+    // Group by the number of skus related to each category.
+    $query->groupBy('fcs.entity_id');
+    $query->addExpression('COUNT(sku)', 'sku_count');
+    $query->addExpression('GROUP_CONCAT(fs.field_skus_value)', 'skus');
+    $query->having('COUNT(sku) > :matches', [':matches' => 1]);
+    // Order by the terms having the highest number of products.
+    $query->orderBy('sku_count', 'DESC');
 
     $query->fields('fcs', ['entity_id']);
     $query->range($page * self::SKUS_LIMIT, self::SKUS_LIMIT);
 
-    return $query->distinct()->execute()->fetchCol();
+    return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
   }
 
   /**
@@ -319,10 +336,33 @@ class AlshayaBehatHelper {
       }
       foreach ($categories as $category) {
         // Skip if category is a parent or if its not loading properly.
-        if (in_array($category, $all_parent_term_ids) || !$this->isEntityPageLoading("/taxonomy/term/$category")) {
+        if (in_array($category['entity_id'], $all_parent_term_ids)
+          || !$this->isEntityPageLoading("/taxonomy/term/" . $category['entity_id'])
+        ) {
           continue;
         }
-        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category);
+
+        // Check if the SKUs linked to the category have some stock. Only then
+        // move forward.
+        $is_product_with_stock_available = FALSE;
+        $skus = explode(',', $category['skus']);
+        foreach ($skus as $sku) {
+          $sku_entity = SKU::loadFromSku($sku);
+          if (!($sku_entity instanceof SKUInterface)
+            || !$this->stockManager->isProductInStock($sku_entity)
+          ) {
+            continue;
+          }
+          $is_product_with_stock_available = TRUE;
+          // Break if we have found at least one in-stock product for category.
+          break;
+        }
+
+        if (!$is_product_with_stock_available) {
+          break;
+        }
+
+        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category['entity_id']);
         // Get the current language translated category.
         if (!empty($term)) {
           $taxonomy_term_trans = $this->entityRepository->getTranslationFromContext($term);

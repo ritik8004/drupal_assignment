@@ -14,3 +14,11 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .address-form-mobile-only {
+    .spc-address-form-submit {
+      @include btn;
+    }
+  }
+}

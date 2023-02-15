@@ -25,6 +25,7 @@ function alshaya_rcs_add_to_bag_library_info_alter(&$libraries, $extension) {
         'rcs_magento_placeholders/rcs_magento_placeholders',
         'alshaya_master/common_functions',
         'alshaya_rcs_product/product_attributes',
+        'alshaya_rcs_product/rcs_product_labels',
       ];
       // Get color swatch in product drawer.
       if (\Drupal::service('module_handler')->moduleExists('alshaya_rcs_color_split')) {

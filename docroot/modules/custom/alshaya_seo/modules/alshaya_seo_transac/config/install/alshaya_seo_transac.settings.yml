@@ -2,3 +2,11 @@ product_impressions_default_items_in_queue: 4
 product_impression_queue_size: 10
 # The time is in milliseconds.
 product_impression_timer_time: 30000
+## Number of days for which product list should be stored in local storage.
+product_list_expiration_days: 31
+# Product size options contains size code and label
+# used for GTM product size click event.
+product_size_options:
+  size: 'Size'
+  band_size: 'Band Size'
+  cup_size: 'Cup Size'

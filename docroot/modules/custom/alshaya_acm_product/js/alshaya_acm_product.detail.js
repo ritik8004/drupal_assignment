@@ -66,6 +66,12 @@
 
       // Trigger matchback color change on main product color change.
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
+        // For HFD matchback, we do not want matchback product color change on
+        // main product color change.
+        if (!drupalSettings.changeMatchbackProductColor) {
+          return false;
+        }
+
         var selected = $(this).val();
         var sku = $(this).parents('form').attr('data-sku');
         var productKey = Drupal.getProductKeyForProductViewMode('full');
@@ -292,7 +298,7 @@
         // Trigger an event on SKU base form load.
         var data = {
           sku: sku,
-          variantSelected: $('[name="selected_variant_sku"]').val() || $('form.sku-base-form').attr('variantselected'),
+          variantSelected: $('[name="selected_variant_sku"]', $(this)).val() || $('form.sku-base-form').attr('variantselected'),
         };
 
         // If Online Returns feature is enabled, add eligibleForReturn to event.

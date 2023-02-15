@@ -13,9 +13,6 @@ window.commerceBackend = window.commerceBackend || {};
     cnc_status: {},
     configurableColorData: {},
     attrLabels: {},
-    cartItemsStock: {},
-    labels: {},
-    parent: {},
     configurableCombinations: {},
     configurables: {},
     // This will prevent multiple requests to fetch same product data.
@@ -23,16 +20,6 @@ window.commerceBackend = window.commerceBackend || {};
     recentOrdersData: {},
     orderDetailsData: {},
   };
-
-  /**
-   * Checks if current user is authenticated or not.
-   *
-   * @returns {bool}
-   *   True if user is authenticated, else false.
-   */
-  function isUserAuthenticated() {
-    return Boolean(window.drupalSettings.userDetails.customerId);
-  }
 
   /**
    * Utility function to check if an item is an object or not.
@@ -83,10 +70,13 @@ window.commerceBackend = window.commerceBackend || {};
    *   The raw product object.
    * @param {string} context
    *   Context in which the product data was fetched.
+   * @param {string} productSku
+   *   The product SKU.
    */
-  window.commerceBackend.setRcsProductToStorage = function setRcsProductToStorage(product, context) {
+  window.commerceBackend.setRcsProductToStorage = function setRcsProductToStorage(product, context, productSku = null) {
+    var sku = Drupal.hasValue(productSku) ? productSku : product.sku;
     product.context = Drupal.hasValue(context) ? context : null;
-    globalThis.RcsPhStaticStorage.set('product_data_' + product.sku, product);
+    globalThis.RcsPhStaticStorage.set('product_data_' + sku, product);
   }
 
   /**
@@ -423,8 +413,7 @@ window.commerceBackend = window.commerceBackend || {};
         finalPrice: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
         priceRaw: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.regular_price.value),
         promotionsRaw: product.promotions,
-        // @todo Add free gift promotion value here.
-        freeGiftPromotion: [],
+        freeGiftPromotion: variantInfo.free_gift_promotion,
         url: productUrl,
         gtm_price: globalThis.renderRcsProduct.getFormattedAmount(variantInfo.price_range.maximum_price.final_price.value),
         deliveryOptions: variantInfo.deliveryOptions,
@@ -492,8 +481,7 @@ window.commerceBackend = window.commerceBackend || {};
       finalPrice: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.final_price.value),
       priceRaw: globalThis.renderRcsProduct.getFormattedAmount(product.price_range.maximum_price.regular_price.value),
       promotionsRaw: product.promotions,
-      // @todo Add free gift promotion value here.
-      freeGiftPromotion: [],
+      freeGiftPromotion: product.free_gift_promotion,
       is_non_refundable: product.non_refundable_products,
       stock: {
         qty: product.stock_data.qty,
@@ -849,7 +837,7 @@ window.commerceBackend = window.commerceBackend || {};
       if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
         await window.commerceBackend.getProductsInStyle(response, loadStyles);
       }
-      window.commerceBackend.setRcsProductToStorage(response);
+      window.commerceBackend.setRcsProductToStorage(response, null, mainSKU);
       window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
     });
 
@@ -915,8 +903,6 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {object} data
    *   The object of sku values and their requested quantity, like {sku1: qty1}.
    *   Pass null here to refresh stock for all products in the cart.
-   * @returns {Promise}
-   *   The stock status for all skus.
    */
   window.commerceBackend.triggerStockRefresh = async function (data) {
     const cartData = Drupal.alshayaSpc.getCartData();
@@ -1115,204 +1101,10 @@ window.commerceBackend = window.commerceBackend || {};
   };
 
   /**
-   * Gets the siblings and parent of the given sku.
-   *
-   * @param {string} sku
-   *   The given sku.
-   *
-   * @returns
-   *   An object containing the product skus in the keys and the product entities
-   * in the values.
-   * If sku is simple and is the main product, then sku is returned.
-   * If sku is simple a child product, then all the siblings and parent are
-   * returned.
-   * If sku is configurable, then the sku and its children are returned.
-   */
-  function getSkuSiblingsAndParent(sku) {
-    const allProducts = window.commerceBackend.getProductData(null, null, false);
-    const data = {};
-
-    Object.keys(allProducts).forEach(function eachMainProduct(mainProductSku) {
-      const mainProduct = allProducts[mainProductSku];
-
-      if (mainProduct.sku === sku) {
-        data[sku] = mainProduct;
-        if (mainProduct.type_id === 'configurable') {
-          mainProduct.variants.forEach(function eachVariantProduct(variant) {
-            data[variant.product.sku] = variant.product;
-          });
-        }
-      }
-      else {
-        if (mainProduct.type_id === 'configurable') {
-          mainProduct.variants.forEach(function eachVariantProduct(variant) {
-            if (variant.product.sku === sku) {
-              data[mainProduct.sku] = mainProduct;
-              mainProduct.variants.forEach(function eachVariantProduct(variant) {
-                data[variant.product.sku] = variant.product;
-              });
-            }
-          });
-        }
-      }
-    });
-
-    return data;
-  }
-
-  /**
-   * Gets the parent SKU for the given SKU.
-   *
-   * @param {string} mainSku
-   *   The main sku. This will be used to fetch the product data from static
-   *   storage.
-   * @param {string} sku
-   *   SKU value.
-   *
-   * @returns {string}
-   *   The parent SKU value.
-   */
-  function getParentSkuBySku(mainSku, sku) {
-    if (Drupal.hasValue(staticDataStore.parent[sku])) {
-      return staticDataStore.parent[sku];
-    }
-    staticDataStore.parent[sku] = null;
-    var productData = window.commerceBackend.getProductData(mainSku);
-    if (Drupal.hasValue(productData.variants)
-      && Drupal.hasValue(productData.variants[sku])
-      && Drupal.hasValue(productData.variants[sku].parent_sku)
-    ) {
-      staticDataStore.parent[sku] = productData.variants[sku].parent_sku;
-    }
-
-    return staticDataStore.parent[sku];
-  }
-
-  /**
-   * Fetches product labels from backend, processes and stores them in storage.
-   *
-   * @param {string} mainSku
-   *   Main sku value.
-   */
-  async function processAllLabels(mainSku) {
-    // If labels have already been fetched for mainSku, they will be available
-    // in static storage. Hence no need to process them again.
-    if (Drupal.hasValue(staticDataStore.labels[mainSku])) {
-      return;
-    }
-
-    // Fetch the parent and siblings of the product.
-    const products = getSkuSiblingsAndParent(mainSku);
-    const productIds = {};
-    Object.keys(products).forEach(function (sku) {
-      staticDataStore.labels[sku] = [];
-      productIds[products[sku].id] = sku;
-    });
-
-    // Fetch all sku values, both for the main product and the styled products.
-    var allProductsData = window.commerceBackend.getProductData();
-    Object.keys(allProductsData).forEach(function eachProduct(productSku) {
-      staticDataStore.labels[productSku] = [];
-      productIds[allProductsData[productSku].id] = productSku;
-    });
-
-    const labels = await globalThis.rcsPhCommerceBackend.getData(
-      'labels',
-      { productIds: Object.keys(productIds) },
-      null,
-      drupalSettings.path.currentLanguage,
-      ''
-    );
-
-    if (Array.isArray(labels) && labels.length) {
-      labels.forEach(function (productLabels) {
-        if (!productLabels.items.length) {
-          return;
-        }
-        const productId = productLabels.items[0].product_id;
-        const sku = productIds[productId];
-        staticDataStore.labels[sku] = productLabels.items;
-      });
-    }
-  }
-
-  /**
-   * Gets the labels data for the given product ID.
-   *
-   * @param mainSku
-   *   The sku value.
-   *
-   * @returns object
-   *   The labels data for the given product ID.
-   */
-  window.commerceBackend.getProductLabelsData = async function getProductLabelsData(mainSku, skuForLabel) {
-    await processAllLabels(mainSku);
-    // Check if its simple product.
-    if (!Drupal.hasValue(skuForLabel)) {
-      return staticDataStore.labels[mainSku];
-    }
-    // If it is a child product not having any label, we display the labels
-    // from the parent.
-    var parentSku = getParentSkuBySku(mainSku, skuForLabel);
-    if (Drupal.hasValue(parentSku)) {
-      Object.assign(staticDataStore.labels[skuForLabel], staticDataStore.labels[parentSku]);
-    }
-
-    return staticDataStore.labels[skuForLabel];
-  }
-
-  /**
    * Clears static cache for stock data.
    */
   window.commerceBackend.clearStockStaticCache = function clearStockStaticCache() {
     staticDataStore.cartItemsStock = {};
-  }
-
-  /**
-   * Gets the stock data for cart items.
-   *
-   * @param {string} sku
-   *   SKU value for which stock is to be returned.
-   *
-   * @returns {Promise}
-   *   Returns a promise so that await executes on the calling function.
-   */
-  window.commerceBackend.loadProductStockDataFromCart = async function loadProductStockDataFromCart(sku) {
-    // Load the stock data.
-    var cartId = window.commerceBackend.getCartId();
-    if (Drupal.hasValue(staticDataStore.cartItemsStock[sku])) {
-      return staticDataStore.cartItemsStock[sku];
-    }
-    var isAuthUser = isUserAuthenticated();
-    var authenticationToken = isAuthUser
-      ? 'Bearer ' + window.drupalSettings.userDetails.customerToken
-      : null;
-
-    return rcsPhCommerceBackend.getData('cart_items_stock', { cartId }, null, null, null, false, authenticationToken).then(function processStock(response) {
-      const cartKey = isAuthUser ? 'customerCart' : 'cart';
-      // Do not proceed if for some reason there are no cart items.
-      if (!response[cartKey].items.length) {
-        return;
-      }
-      response[cartKey].items.forEach(function eachCartItem(cartItem) {
-        if (!Drupal.hasValue(cartItem)) {
-          return;
-        }
-        var stockData = null;
-        if (cartItem.product.type_id === 'configurable') {
-          stockData = cartItem.configured_variant.stock_data;
-          stockData.status = cartItem.configured_variant.stock_status;
-          staticDataStore.cartItemsStock[cartItem.configured_variant.sku] = stockData;
-        }
-        else if (cartItem.product.type_id === 'simple') {
-          stockData = cartItem.product.stock_data;
-          stockData.status = cartItem.product.stock_status;
-          staticDataStore.cartItemsStock[cartItem.product.sku] = stockData;
-        }
-      });
-
-      return staticDataStore.cartItemsStock[sku];
-    });
   }
 
   /**

@@ -182,12 +182,24 @@ function alshaya_master_form_system_theme_settings_alter(&$form, FormStateInterf
           '#description' => t("If you don't have direct file access to the server, use this field to upload your logo."),
         ];
       }
-
+      $form['full_width_form'] = [
+        '#type' => 'details',
+        '#title' => t('Show Full Width'),
+        '#open' => TRUE,
+        '#tree' => FALSE,
+      ];
+      $form['full_width_form']['show_full_width'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Show Full Width'),
+        '#description' => t('When full width feature is enable. it will added the full width library on PDP, PLP, SRP, account page, advanced pages.'),
+        '#default_value' => \Drupal::config($theme . '.settings')->get('show_full_width') ?? FALSE,
+      ];
       $key = array_search('::validateForm', $form['#validate']);
       $form['#validate'][$key] = 'alshaya_master_override_default_validate_system_theme_settings_form';
       array_unshift($form['#submit'], 'alshaya_master_save_system_theme_settings');
     }
   }
+
 }
 
 /**
@@ -343,7 +355,6 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
       $config->set($type . '_logo_url', file_create_url($logo_path));
     }
   }
-
   if ($config_save) {
     $config->save();
   }
@@ -878,6 +889,8 @@ function _alshaya_master_initialize_brand_theme($brand_theme) {
     ->setData([
       'logo' => [
         'path' => $site_logo . '.svg',
+        'url' => '',
+        'use_default' => FALSE,
       ],
     ])
     ->save();
@@ -887,13 +900,20 @@ function _alshaya_master_initialize_brand_theme($brand_theme) {
     ->setData([
       'logo' => [
         'path' => $site_logo . '-ar.svg',
+        'url' => '',
+        'use_default' => FALSE,
       ],
     ])
     ->save();
 
   // Save default site favicon.
   \Drupal::configFactory()->getEditable($current_theme . '.settings')
-    ->set('favicon', ['path' => $site_favicon . '.ico'])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $site_favicon . '.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
     ->save();
 
   // Save default logo for email.
@@ -985,4 +1005,25 @@ function alshaya_master_node_view(array &$build, EntityInterface $entity, Entity
       exit;
     }
   }
+}
+
+/**
+ * Helper function to create default sharethis settings on site install.
+ *
+ * @param string $services
+ *   Service to use for share.
+ * @param bool $enableProductShare
+ *   Set to true to enable sharethis for products.
+ */
+function alshaya_master_add_sharethis_settings(string $services, bool $enableProductShare = TRUE) {
+  // Get the sharethis configuration.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  // Enable share this for Products.
+  if ($enableProductShare) {
+    $configFactory->set('node_types.acq_product', 'acq_product');
+  }
+  $configFactory->set('service_option', $services);
+
+  // Save the changes.
+  $configFactory->save();
 }

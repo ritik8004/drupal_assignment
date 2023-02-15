@@ -1,0 +1,40 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    .progress-bar {
+      .step {
+        &.current {
+          span,
+          .step-label {
+            font-family: $vs-bentonsans-medium;
+          }
+        }
+
+        &.completed {
+          &.step-4 {
+            .step-label {
+              font-family: $vs-bentonsans-medium;
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          span {
+            html[lang="en"] & {
+              line-height: rem(27);
+            }
+          }
+
+          .step-label {
+            top: calc(100% + #{rem(8)});
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      &::before {
+        background-color: $cko-steps-inactive-border-mobi;
+      }
+    }
+  }
+}

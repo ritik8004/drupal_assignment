@@ -70,4 +70,21 @@
     }
   });
 
+  // Push to GTM when add to bag product drawer is opened.
+  document.addEventListener('drawerOpenEvent', function onDrawerOpen(e) {
+    var $element = $(e.detail.triggerButtonElement.closest('article.node--view-mode-search-result'));
+    if ($element.length) {
+      Drupal.alshayaSeoGtmPushProductDetailView($element);
+    }
+  });
+
+  $('#alshaya-algolia-plp').once('bind-loadmore-button-click').on('click', '.pager button', function () {
+    var statsText = $('.pager .ais-Stats-text').attr('gtm-pagination-stats');
+    // Push load more products click event to GTM.
+    Drupal.alshayaSeoGtmPushEcommerceEvents({
+      eventAction: 'plp clicks',
+      eventLabel: 'load more products',
+      eventLabel2: Drupal.hasValue(statsText) ? statsText : '',
+    });
+  });
 })(jQuery, Drupal, dataLayer, Drupal.debounce, drupalSettings);

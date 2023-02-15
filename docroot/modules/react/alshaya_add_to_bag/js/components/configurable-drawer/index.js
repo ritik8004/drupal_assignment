@@ -58,6 +58,17 @@ class ConfigurableProductDrawer extends React.Component {
     }
   }
 
+  /**
+   * Click event handler for the product details link.
+   */
+  handleProductDetailsClick = () => {
+    // Push quick add event to GTM.
+    Drupal.alshayaSeoGtmPushEcommerceEvents({
+      eventAction: 'plp quick add clicks',
+      eventLabel: 'quick add - view full product details',
+    });
+  }
+
   render() {
     const {
       status,
@@ -148,7 +159,7 @@ class ConfigurableProductDrawer extends React.Component {
               wishListButtonRef={wishListButtonRef}
             />
             <div className="pdp-link">
-              <a href={url}>{getStringMessage('view_full_product_details')}</a>
+              <a href={url} onClick={this.handleProductDetailsClick}>{getStringMessage('view_full_product_details')}</a>
             </div>
           </div>
         </div>

@@ -1,0 +1,23 @@
+.cko-progress-tracker {
+  #checkout-progress {
+    .progress-bar {
+      .step {
+        span {
+          line-height: rem(26);
+
+          html[lang="ar"] & {
+            line-height: rem(31);
+          }
+
+          @include breakpoint($tablet) {
+            line-height: rem(33);
+
+            html[lang="ar"] & {
+              line-height: rem(38);
+            }
+          }
+        }
+      }
+    }
+  }
+}

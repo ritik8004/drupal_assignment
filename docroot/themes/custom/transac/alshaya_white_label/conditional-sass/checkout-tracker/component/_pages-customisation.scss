@@ -1,0 +1,38 @@
+.alias--checkout {
+  .block-page-title-block {
+    display: none;
+  }
+}
+
+.cko-progress-tracker {
+  .alias--cart-login & {
+    margin-top: rem(4);
+    margin-bottom: rem(4);
+  }
+
+  .hide-checkout-tracker & {
+    display: none;
+  }
+}
+
+@include breakpoint($tablet) {
+  .cko-progress-tracker {
+    .alias--cart-login & {
+      margin-top: rem(36);
+      margin-bottom: rem(36);
+    }
+
+    .alias--checkout &,
+    .alias--checkout-confirmation & {
+      margin-bottom: rem(48);
+    }
+  }
+
+  .alias--checkout,
+  .alias--cart,
+  .alias--checkout-confirmation {
+    .spc-sidebar.sticky {
+      position: initial;
+    }
+  }
+}

@@ -20,6 +20,9 @@
       <div class="price-block {{ content.price_block_identifier }}">
         {{ content.price_block }}
       </div>
+      {% if content.show_matchback_add_to_bag %}
+        <div class="matchback-add-to-bag"></div>
+      {% endif %}
     </div>
 
     <div class="cross-sell-product-component-right">

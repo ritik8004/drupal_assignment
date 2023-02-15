@@ -9,7 +9,7 @@ autocomplete:
 vendor:
   js:
     dist/algolia.bundle.js: {}
-    js/alshaya_algolia_react.js: {}
+    assets/alshaya_algolia_react.js: {}
   dependencies:
     - core/jquery.once
     - alshaya_react/react
@@ -18,7 +18,7 @@ vendor:
 
 search_insights_listing:
   js:
-    js/search-insights.listing.js: {}
+    assets/search-insights.listing.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
@@ -26,7 +26,7 @@ search_insights_listing:
 
 search_insights_detail:
   js:
-    js/search-insights.detail.js: {}
+    assets/search-insights.detail.js: {}
   dependencies:
     - core/jquery.once
     - alshaya_master/common_functions
@@ -35,7 +35,7 @@ search_insights_detail:
 search_insights:
   js:
     js/algolia/search-insights.js: { scope: footer }
-    js/search-insights.common.js: {}
+    assets/search-insights.common.js: {}
   dependencies:
     - core/drupalSettings
     - core/jquery.cookie
@@ -44,7 +44,7 @@ search_insights:
 plp:
   js:
     dist/plp.js: {}
-    js/alshaya_algolia_plp.js: {}
+    assets/alshaya_algolia_plp.js: {}
     assets/alshaya_algolia_subcategory_scroll.js: {}
   dependencies:
     - core/drupalSettings
@@ -54,7 +54,7 @@ plp:
 plpv2:
   js:
     dist/plpv2.js: {}
-    js/alshaya_algolia_plp.js: {}
+    assets/alshaya_algolia_plp.js: {}
   dependencies:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common

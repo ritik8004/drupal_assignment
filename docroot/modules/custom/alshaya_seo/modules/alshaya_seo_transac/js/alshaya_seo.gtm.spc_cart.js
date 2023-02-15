@@ -30,11 +30,11 @@
     // Get product info from storage.
     var key = 'product:' + drupalSettings.path.currentLanguage + ':' + product.sku;
     var productInfo = Drupal.getItemFromLocalStorage(key);
-    // Add inStock infor only for removeFromCart event.
-    if(action === 'remove') {
-      productInfo['inStock'] = product['in_stock'];
-    }
     if (productInfo !== null) {
+      // Add inStock infor only for removeFromCart event.
+      if (action === 'remove') {
+        productInfo['inStock'] = product['in_stock'];
+      }
       var productDetails = Drupal.alshayaSeoSpc.gtmProduct(productInfo, product.qty);
       // metric value will be negative in case of product removal from cart.
       productDetails.metric2 = gtmEvent === 'removeFromCart' ? -1 * product.finalPrice : product.finalPrice;

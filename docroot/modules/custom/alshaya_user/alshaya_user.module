@@ -122,6 +122,7 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
 
     // Hide store field for anonymous users.
     $form['field_agent_store']['#access'] = FALSE;
+    $form['field_agent_store_id']['#access'] = FALSE;
   }
 
   $form['#attached']['library'][] = 'alshaya_user/clear_autofill';

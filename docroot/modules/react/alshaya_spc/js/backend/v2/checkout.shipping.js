@@ -5,7 +5,6 @@ import {
 } from './utility';
 import logger from '../../../../js/utilities/logger';
 import { getFormattedError } from './common';
-import StaticStorage from './staticStorage';
 import { hasValue, isString } from '../../../../js/utilities/conditionsUtility';
 import { callMagentoApi } from '../../../../js/utilities/requestHelper';
 
@@ -152,7 +151,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
   const key = md5(JSON.stringify(formattedAddress.custom_attributes));
 
   // Get shipping methods from static.
-  const staticShippingMethods = StaticStorage.get('shipping_methods') || {};
+  const staticShippingMethods = Drupal.alshayaSpc.staticStorage.get('shipping_methods') || {};
 
   if (!hasValue(staticShippingMethods[key])) {
     staticShippingMethods[key] = [];
@@ -187,7 +186,7 @@ const getHomeDeliveryShippingMethods = async (data) => {
 
     // Set shipping methods in static.
     staticShippingMethods[key] = Object.values(methods);
-    StaticStorage.set('shipping_methods', staticShippingMethods);
+    Drupal.alshayaSpc.staticStorage.set('shipping_methods', staticShippingMethods);
   }
 
   return {

@@ -170,7 +170,7 @@ function alshaya_hello_member_alshaya_my_account_links_alter(array &$links) {
     'route' => 'entity.user.edit_form',
     'weight' => 30,
   ];
-  // Add Membership info link.
+  // Add/Remove Membership info link.
   if (is_numeric($nid)) {
     $links['membership_info'] = [
       'text' => t('Membership Info', [], ['context' => 'hello_member']),
@@ -327,7 +327,6 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
       }
     }
   }
-
 }
 
 /**
@@ -402,8 +401,10 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
   // - applied_hm_voucher_codes
   // - hm_voucher_discount
   // - applied_hm_offer_code.
-  if (isset($order['extension']['applied_hm_voucher_codes'])
-    && isset($order['extension']['hm_voucher_discount'])) {
+  if (
+    isset($order['extension']['applied_hm_voucher_codes'])
+    && isset($order['extension']['hm_voucher_discount'])
+  ) {
     $settings['order_details']['totals']['hmAppliedVoucherCodes'] = $order['extension']['applied_hm_voucher_codes'];
     $settings['order_details']['totals']['hmVoucherDiscount'] = $order['extension']['hm_voucher_discount'];
   }

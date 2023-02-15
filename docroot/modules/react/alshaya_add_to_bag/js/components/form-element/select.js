@@ -22,7 +22,20 @@ const SelectList = (props) => {
   const { isGroup } = groupData;
 
   // Event handler for select list value change.
-  const onSelect = ({ value }) => onChange(attributeName, value);
+  const onSelect = ({
+    value,
+    label: optionLabel,
+  }) => {
+    // Get selected size label for GTM size click event.
+    // Set size in '{size_label}: {size_value}' format.
+    // Eg for VS brand, 'Band Size: 32', 'Cup Size: D'.
+    // If size goup is available we need to push the size
+    // group also eg for FL brand, 'Size: US,12'.
+    const selectedOptionLabel = isGroup
+      ? `${label}: ${groupData.defaultGroup}, ${optionLabel}`
+      : `${label}: ${optionLabel}`;
+    return onChange(attributeName, value, selectedOptionLabel);
+  };
 
   let selectedOption = null;
   const listOptions = options.map((option) => {

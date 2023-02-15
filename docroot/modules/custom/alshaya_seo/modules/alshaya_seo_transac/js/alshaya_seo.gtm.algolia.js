@@ -84,6 +84,15 @@
       }
     });
 
+    // Push load more products click event to GTM.
+    $('.show-algolia-result').once('bind-loadmore-button-click').on('click', '.pager button', function () {
+      var statsText = $('.pager .ais-Stats-text').attr('gtm-pagination-stats');
+      Drupal.alshayaSeoGtmPushEcommerceEvents({
+        eventAction: 'plp clicks',
+        eventLabel: 'load more products',
+        eventLabel2: Drupal.hasValue(statsText) ? statsText : '',
+      });
+    });
   }, drupalSettings.gtm.algolia_trigger_ga_after));
 
   Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function (context, eventType) {

@@ -23,10 +23,6 @@
 .alias--checkout,
 .alias--cart,
 .alias--checkout-confirmation {
-  .spc-sidebar.sticky {
-    position: initial;
-  }
-
   @include breakpoint($only-mobile) {
     .c-footer {
       padding-bottom: rem(92);
@@ -36,6 +32,10 @@
 
 .alias--cart {
   .spc-main {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+    }
+
     .spc-content {
       @include breakpoint($desktop) {
         width: 54.8%;
@@ -50,6 +50,13 @@
       @include breakpoint($only-mobile) {
         margin-top: 0;
       }
+    }
+  }
+
+  .spc-post-content {
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+      margin-bottom: 0;
     }
   }
 }

@@ -110,6 +110,10 @@
             font-weight: normal;
             font-size: rem(14);
             line-height: 1.29;
+
+            @include breakpoint($desktop) {
+              white-space: nowrap;
+            }
           }
         }
 

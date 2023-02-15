@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove all the obsolete configurations from Liquid Pixel era.
+ */
+function alshaya_media_assets_update_9401(&$sandbox) {
+  $config = \Drupal::configFactory()->getEditable('alshaya_media_assets.settings');
+
+  $config->clear('base_url');
+  $config->clear('fallback_to_liquidpixel');
+  $config->clear('origin');
+  $config->clear('dam');
+  $config->clear('dimensions');
+  $config->clear('style_identifiers');
+
+  $config->save();
+}

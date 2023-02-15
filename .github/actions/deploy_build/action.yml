@@ -13,6 +13,8 @@ inputs:
     required: true
   CHANGED_SVG_FILES:
     required: true
+  CHANGED_JS_FILES:
+    required: true
   CHANGED_ALL_FILES:
     required: true
 
@@ -28,6 +30,7 @@ runs:
         echo SCRIPT_DIR=$(echo ${GITHUB_WORKSPACE}/blt/scripts/github_actions) >> $GITHUB_ENV
         echo CHANGED_THEME_FILES=${{ inputs.CHANGED_THEMES_FILES }} >> $GITHUB_ENV
         echo CHANGED_REACT_FILES=${{ inputs.CHANGED_REACT_FILES }} >> $GITHUB_ENV
+        echo CHANGED_JS_FILES=${{ inputs.CHANGED_JS_FILES }} >> $GITHUB_ENV
         echo CHANGED_SVG_FILES=${{ inputs.CHANGED_SVG_FILES }} >> $GITHUB_ENV
         echo CHANGED_ALL_FILES=$(echo ${{ inputs.CHANGED_ALL_FILES }} | wc -l | xargs) >> $GITHUB_ENV
 

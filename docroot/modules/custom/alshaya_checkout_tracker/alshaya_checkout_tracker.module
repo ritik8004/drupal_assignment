@@ -27,7 +27,8 @@ function alshaya_checkout_tracker_theme() {
  */
 function alshaya_checkout_tracker_preprocess_page_title(&$variables) {
   $route_name = \Drupal::routeMatch()->getRouteName();
-  if (in_array($route_name, [
+  $checkoutTrackerSettings = \Drupal::service('alshaya_checkout_tracker.checkout_tracker_helper');
+  if ($checkoutTrackerSettings->isCheckoutTrackerEnabled() && in_array($route_name, [
     'acq_cart.cart',
     'alshaya_spc.checkout.login',
     'alshaya_spc.checkout',

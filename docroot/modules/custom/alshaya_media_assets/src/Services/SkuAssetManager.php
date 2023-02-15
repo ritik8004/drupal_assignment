@@ -15,7 +15,6 @@ use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
-use Drupal\Core\Url;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
@@ -412,123 +411,6 @@ class SkuAssetManager {
   }
 
   /**
-   * Download image from Liquid Pixel to Drupal.
-   *
-   * @param array $asset
-   *   Asset data.
-   * @param string $sku
-   *   SKU of asset.
-   *
-   * @return \Drupal\file\FileInterface|null|string
-   *   File entity download successful.
-   */
-  private function downloadLiquidPixelImage(array &$asset, string $sku) {
-    $file_data = NULL;
-    // If image is blacklisted, block download.
-    if (isset($asset['blacklist_expiry']) && time() < $asset['blacklist_expiry']) {
-      return NULL;
-    }
-
-    $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
-    $cache = $this->cachePimsFiles->get($skipped_key);
-    if (isset($cache, $cache->data)) {
-      return NULL;
-    }
-
-    // We expect FilePath to be string only.
-    if (!is_string($asset['Data']['FilePath'])) {
-      return NULL;
-    }
-
-    // Prepare the directory path.
-    $directory = 'brand://assets-lp-shared/' . trim(dirname($asset['Data']['FilePath']), '/');
-    $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
-
-    // Check if file already exists in the directory.
-    $file = $this->getFileIfTargetExists($target);
-    if ($file instanceof FileInterface) {
-      return $file;
-    }
-
-    $url = $this->getSkuAssetUrlLiquidPixel($asset);
-
-    if (!$this->validateFileExtension($sku, $url)) {
-      return FALSE;
-    }
-
-    // Download the file contents.
-    try {
-      $file_stream = $this->downloadFile($url);
-      $file_data = $file_stream->getBody();
-      $file_data_length = $file_stream->getHeader('Content-Length');
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to download asset file for sku @sku from @url, error: @message', [
-        '@sku' => $sku,
-        '@url' => $url,
-        '@message' => $e->getMessage(),
-      ]);
-    }
-
-    // Check to ensure empty file is not saved in SKU.
-    // Using Content-Length Header to check for valid image data, sometimes we
-    // also get a 0 byte image with response 200 instead of 404.
-    // So only checking $file_data is not enough.
-    if (!isset($file_data_length) || $file_data_length[0] === '0') {
-      // @todo SAVE blacklist info in a way so it does not have dependency on SKU.
-      // Blacklist this image URL to prevent subsequent downloads for 1 day.
-      $asset['blacklist_expiry'] = strtotime('+1 day');
-      // Leave a message for developers to find out why this happened.
-      $this->logger->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
-        '@url' => $url,
-        '@sku' => $sku,
-        '@remote_id' => $asset['Data']['AssetId'],
-        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), JSON_THROW_ON_ERROR),
-      ]);
-      return 'blacklisted';
-    }
-
-    // Check if image was blacklisted, remove it from blacklist.
-    if (isset($asset['blacklist_expiry'])) {
-      unset($asset['blacklist_expiry']);
-    }
-
-    $file_data = (string) $file_data;
-    if (strlen($file_data) <= Settings::get('hm_grey_image_size', 24211)) {
-      $this->logger->error('Skipping grey image. File: @file, Size: @size, Asset id: @id', [
-        '@file' => $url,
-        '@size' => strlen($file_data),
-        '@id' => $asset['Data']['AssetId'],
-      ]);
-
-      // Cache it for a day so we can check for it again after one day.
-      $this->cachePimsFiles->set($skipped_key, $this->time->getCurrentTime() + 86400);
-
-      return NULL;
-    }
-
-    // Prepare the directory.
-    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
-
-    try {
-      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
-
-      if (!($file instanceof FileInterface)) {
-        throw new \Exception('Failed to save asset file: ' . $url);
-      }
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
-        '@sku' => $sku,
-        '@uri' => $target,
-        '@message' => $e->getMessage(),
-      ]);
-    }
-
-    return $file ?? NULL;
-  }
-
-  /**
    * Download Drupal file for Asset.
    *
    * @param array $asset
@@ -573,12 +455,8 @@ class SkuAssetManager {
     }
 
     $file = NULL;
-    $image_settings = $this->getImageSettings();
     if (isset($asset['pims_' . $type]) && is_array($asset['pims_' . $type])) {
       $file = $this->downloadPimsAsset($asset['pims_' . $type], $sku, $type);
-    }
-    elseif ($image_settings->get('fallback_to_liquidpixel')) {
-      $file = $this->downloadLiquidPixelImage($asset, $sku);
     }
 
     if ($file instanceof FileInterface) {
@@ -645,95 +523,6 @@ class SkuAssetManager {
     }
 
     return $return;
-  }
-
-  /**
-   * Utility function to construct CDN url for the asset.
-   *
-   * @param array $asset
-   *   Asset data.
-   *
-   * @return string
-   *   Asset url.
-   */
-  private function getSkuAssetUrlLiquidPixel(array $asset) {
-    $image_settings = $this->getImageSettings();
-    $base_url = $image_settings->get('base_url');
-    $asset_attributes = $this->getAssetAttributes($asset, 'pdp_fullscreen');
-    $query_options = $this->getAssetQueryString(
-      $asset_attributes['set'],
-      $asset_attributes['image_location_identifier']
-    );
-    return Url::fromUri($base_url, ['query' => $query_options])->toString();
-  }
-
-  /**
-   * Prepare query string for assets.
-   *
-   * @param array $set
-   *   Set data.
-   * @param string $image_location_identifier
-   *   Image location identifier.
-   *
-   * @return array
-   *   Query string.
-   */
-  private function getAssetQueryString(array $set, string $image_location_identifier): array {
-    $query_options = [];
-    // Prepare query options for image url.
-    if (isset($set['url'])) {
-      $url_parts = parse_url(urldecode($set['url']));
-      if (!empty($url_parts['query'])) {
-        parse_str($url_parts['query'], $query_options);
-        // Overwrite the product style coming from season 5 image url with
-        // the one based on context in which the image is being rendered.
-        $query_options['call'] = 'url[' . $image_location_identifier . ']';
-      }
-    }
-    else {
-      $query_options = [
-        'set' => implode(',', $set),
-        'call' => 'url[' . $image_location_identifier . ']',
-      ];
-    }
-
-    return $query_options;
-  }
-
-  /**
-   * Helper function to fetch asset attributes.
-   *
-   * @param array $asset
-   *   Asset array with all metadata.
-   * @param string $location_image
-   *   Location on page e.g., main image, thumbnails etc.
-   *
-   * @return array
-   *   Array of asset attributes.
-   */
-  private function getAssetAttributes(array $asset, $location_image) {
-    $set = [];
-    $image_settings = $this->getImageSettings();
-    $image_location_identifier = $image_settings->get('style_identifiers')[$location_image];
-
-    if (isset($asset['is_old_format']) && $asset['is_old_format']) {
-      return [['url' => $asset['Url']], $image_location_identifier];
-    }
-    else {
-      $origin = $image_settings->get('origin');
-
-      $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
-      $set['origin'] = "origin[" . $origin . "]";
-      $set['type'] = "type[" . $asset['sortAssetType'] . "]";
-      $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
-
-      $set['res'] = "res[" . $image_settings->get('dimensions')[$location_image]['desktop'] . "]";
-    }
-
-    return [
-      'set' => $set,
-      'image_location_identifier' => $image_location_identifier,
-    ];
   }
 
   /**
@@ -922,7 +711,7 @@ class SkuAssetManager {
    * @return bool
    *   TRUE if supported.
    */
-  private function validateFileExtension(string $sku, string $url) {
+  protected function validateFileExtension(string $sku, string $url) {
     // Using multiple function to get extension to avoid cases with query
     // string and hash in URLs.
     $extension = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));

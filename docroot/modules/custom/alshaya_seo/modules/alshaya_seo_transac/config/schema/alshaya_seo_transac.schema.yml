@@ -1,0 +1,22 @@
+alshaya_seo_transac.settings:
+  type: config_object
+  label: 'Alshaya SEO Settings for Transactional sites'
+  mapping:
+    product_impressions_default_items_in_queue:
+      type: integer
+      label: 'Number of items in queue for Product Impressions'
+    product_impression_queue_size:
+      type: integer
+      label: 'Queue size for Product Impressions'
+    product_impression_timer_time:
+      type: integer
+      label: 'Time in seconds for Product Impressions Timer'
+    product_list_expiration_days:
+      type: integer
+      label: 'Number of days for which product list should be stored in local storage.'
+    product_size_options:
+      label: 'Available size options for product'
+      type: sequence
+      sequence:
+        type: string
+        label: Size options

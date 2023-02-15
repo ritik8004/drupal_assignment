@@ -11,6 +11,17 @@ use Drupal\user\UserInterface;
 /**
  * Implements hook_update_N().
  *
+ * Uninstalls alshaya_api module if enabled.
+ */
+function alshaya_non_transac_update_9401() {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_api')) {
+    \Drupal::service('module_installer')->uninstall(['alshaya_api']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Installs jquery_ui_accordion module if it is not enabled.
  */
 function alshaya_non_transac_update_8107() {
@@ -115,6 +126,7 @@ function alshaya_non_transac_install() {
     'alshaya_permissions',
     'alshaya_seo',
     'alshaya_stores_finder',
+    'alshaya_geolocation',
     'alshaya_user',
     'alshaya_static_html',
   ];

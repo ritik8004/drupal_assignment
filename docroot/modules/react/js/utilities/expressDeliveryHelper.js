@@ -135,7 +135,7 @@ async function getExpressDeliveryStatus() {
   try {
     const response = await callMagentoApi(url, 'POST', params);
     if (!hasValue(response.data) || hasValue(response.data.error)) {
-      logger.error('Error occurred while fetching the express-delivery config for listing., Response: @response.', {
+      logger.warning('Error occurred while fetching the express-delivery config for listing., Response: @response.', {
         '@response': JSON.stringify(response.data),
       });
       // Dispatch event for delivery label component with default true as
@@ -145,14 +145,15 @@ async function getExpressDeliveryStatus() {
       });
       document.dispatchEvent(event);
     }
-
-    response.data.forEach((label) => {
-      if (label.carrier_code === 'SAMEDAY') {
-        showExpressDeliveryLabel.sameDayDelivery = label.status;
-      } else if (label.carrier_code === 'EXPRESS') {
-        showExpressDeliveryLabel.expressDelivery = label.status;
-      }
-    });
+    if (Array.isArray(response.data)) {
+      response.data.forEach((label) => {
+        if (label.carrier_code === 'SAMEDAY') {
+          showExpressDeliveryLabel.sameDayDelivery = label.status;
+        } else if (label.carrier_code === 'EXPRESS') {
+          showExpressDeliveryLabel.expressDelivery = label.status;
+        }
+      });
+    }
 
     // Dispatch event for delivery label component on teaser with API response
     // in event details.
@@ -161,7 +162,7 @@ async function getExpressDeliveryStatus() {
     });
     document.dispatchEvent(event);
   } catch (error) {
-    logger.error('Error occurred while fetching the express-delivery config for listing. Message: @message.', {
+    logger.warning('Error occurred while fetching the express-delivery config for listing. Message: @message.', {
       '@message': error.message,
     });
     // Dispatch event for delivery label component with default true as

@@ -5,6 +5,23 @@
  * Contains install, update, uninstall hooks for alshaya_xb module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable addressbook postcode and city configuration.
+ */
+function alshaya_xb_update_9001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_addressbook.settings'],
+    'alshaya_addressbook',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
 /**
  * Implements hook_install().
  *

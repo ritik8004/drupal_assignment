@@ -1,0 +1,51 @@
+@include breakpoint($only-mobile) {
+  #alshaya-algolia-search,
+  .block-alshaya-algolia-listing-v2,
+  .block-alshaya-algolia-react-plp,
+  .block-alshaya-algolia-react-product-list,
+  .block-alshaya-algolia-react-promotion,
+  .block-alshaya-algolia-react-promotion-v2 {
+    .filter-fixed-top {
+      .block-facet-blockcategory-facet-plp,
+      .block-facet-blockcategory-facet-search {
+        #{$left}: 0;
+      }
+    }
+  }
+}
+
+.filter-fixed-top {
+  .sticky-filter-wrapper {
+    .site-brand-home {
+      @include fullWidthSideSpaces(
+        $is_tablet: true,
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $type: "position",
+        $side: $left
+      );
+
+      a {
+        @include breakpoint($tablet) {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+  }
+}
+
+body.wishlist-enabled {
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .wishlist-minicart-sticky-wrapper {
+        @include fullWidthSideSpaces(
+          $is_tablet: true,
+          $is_desktop: true,
+          $is_desktop_wide: true,
+          $type: "position",
+          $side: $right
+        );
+      }
+    }
+  }
+}

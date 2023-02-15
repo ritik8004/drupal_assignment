@@ -1,33 +1,43 @@
 /**
  * Detect browser is modern or not and add variable to window object
  */
-(function () {
-  window.isModernBrowser = false;
-	try {
-		() => { };
+(function (Drupal) {
 
-		// Class support
-		class __ES6Test { }
+  /**
+   * Detect browser is modern or not
+   *
+   * @return {Object}.
+   */
+  Drupal.isModernBrowser = function () {
+    try {
+      () => { };
 
-		// Object initializer property and method shorthands
-		let a = true;
-		let b = {
-			a,
-			c() {
-				return true;
-			},
-			d: [1, 2, 3],
-		};
-	  const g = true;
+      // Class support
+      class __ES6Test { }
 
-		// Object destructuring
-		let { c, d } = b;
+      // Object initializer property and method shorthands
+      let a = true;
+      let b = {
+        a,
+        c() {
+          return true;
+        },
+        d: [1, 2, 3],
+      };
+      const g = true;
 
-		// Spread operator
-		let e = [...d, 4];
+      // Object destructuring
+      let { c, d } = b;
 
-		window.isModernBrowser = true;
-	} catch (error) {
-		window.isModernBrowser = false;
-	}
-}());
+      // Spread operator
+      let e = [...d, 4];
+
+      return { isModernBrowser: true };
+    } catch (error) {
+      return {
+        isModernBrowser: false,
+        isModernBrowserError: error.name !== undefined && error.message !== undefined ? error.name + ': ' + error.message : error,
+      };
+    }
+  };
+})(Drupal);

@@ -10,15 +10,13 @@ Feature: SPC Checkout Home Delivery on Sofa-sectional feature for Authenticated 
   @hd @sofa-sectional
   Scenario: As an Authenticated user, I should be able to check sofa-sectional feature on pdp page
     When I select a product in stock on ".c-products__item"
-    And I wait 15 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     Then I should not see an ".sofa-section-card.sofa-selection-summary-wrapper" element
     Then I should see an ".sofa-section-select-option-wrapper" element
     Then I should see an ".sofa-section-clear-option-btn" element
     Then I should see an ".form-swatch-list-wrapper" element
     And I click on ".sofa-section-card.attribute-wrapper_configuration ul.swatch-list li:first-child" element
-    And I wait for AJAX to finish
-    And I wait 2 seconds
+    And I wait for element ".sofa-section-card.attribute-wrapper_size ul li.active"
     Then I should see an ".sofa-section-card.attribute-wrapper_size ul li.active" element
     Then I should see an "" element
     Then I should see an ".sofa-section-card ul.attribute-options-list.width li.active" element
@@ -27,36 +25,28 @@ Feature: SPC Checkout Home Delivery on Sofa-sectional feature for Authenticated 
     Then I should see an ".sofa-section-card.sofa-selection-summary-wrapper" element
     And I scroll to the ".sofa-sectional-addtobag-button" element
     And I click on ".sofa-sectional-addtobag-button" element
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element ".sofa-section-select-option-wrapper"
     And I scroll to the ".sofa-section-select-option-wrapper" element
     And I click on ".sofa-section-clear-option-btn" element
     When I click on "#mini-cart-wrapper a.cart-link" element
-    And I wait for AJAX to finish
-    And I wait 30 seconds
-    And I wait for the page to load
+    And I wait for element ".checkout-link.submit"
     Then I should see an "#spc-cart .spc-main .spc-content div.spc-product-attributes-wrapper" element
     When I follow "continue to checkout"
-    And I wait 30 seconds
     And I wait for the page to load
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
-    And I wait 10 seconds
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And I click the anchor link ".checkout-link.submit" on page
-    And I wait 50 seconds
-    And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
@@ -66,17 +56,14 @@ Feature: SPC Checkout Home Delivery on Sofa-sectional feature for Authenticated 
   Scenario: As an Authenticated user, I should be able to check sofa-sectional feature on pdp page in second language
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
     When I select a product in stock on ".c-products__item"
-    And I wait 15 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     Then I should not see an ".sofa-section-card.sofa-selection-summary-wrapper" element
     Then I should see an ".sofa-section-select-option-wrapper" element
     Then I should see an ".sofa-section-clear-option-btn" element
     Then I should see an ".form-swatch-list-wrapper" element
     And I click on ".sofa-section-card.attribute-wrapper_configuration ul.swatch-list li:first-child" element
-    And I wait for AJAX to finish
-    And I wait 2 seconds
+    And I wait for element ".sofa-section-card.attribute-wrapper_size ul li.active"
     Then I should see an ".sofa-section-card.attribute-wrapper_size ul li.active" element
     Then I should see an "" element
     Then I should see an ".sofa-section-card ul.attribute-options-list.width li.active" element
@@ -85,34 +72,27 @@ Feature: SPC Checkout Home Delivery on Sofa-sectional feature for Authenticated 
     Then I should see an ".sofa-section-card.sofa-selection-summary-wrapper" element
     And I scroll to the ".sofa-sectional-addtobag-button" element
     And I click on ".sofa-sectional-addtobag-button" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
-    And I wait 30 seconds
-    And I wait for the page to load
+    And I wait for element ".cart-link .quantity"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     Then I should see an "#spc-cart .spc-main .spc-content div.spc-product-attributes-wrapper" element
     When I follow "continue to checkout"
-    And I wait 30 seconds
     And I wait for the page to load
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
-    And I wait 10 seconds
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And I click the anchor link ".checkout-link.submit" on page
-    And I wait 50 seconds
-    And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
@@ -121,18 +101,15 @@ Feature: SPC Checkout Home Delivery on Sofa-sectional feature for Authenticated 
   @mobile @sofa-sectional
   Scenario: As an Authenticated user, I should be able to check sofa-sectional feature on pdp page for mobile
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
-    And I wait 10 seconds
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
-    And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for element "#block-content"
     Then I should not see an ".sofa-section-card.sofa-selection-summary-wrapper" element
     Then I should see an ".sofa-section-select-option-wrapper" element
     Then I should see an ".sofa-section-clear-option-btn" element
     Then I should see an ".form-swatch-list-wrapper" element
     And I click on ".sofa-section-card.attribute-wrapper_configuration ul.swatch-list li:first-child" element
-    And I wait for AJAX to finish
-    And I wait 2 seconds
+    And I wait for element ".sofa-section-card.attribute-wrapper_size ul li.active"
     Then I should see an ".sofa-section-card.attribute-wrapper_size ul li.active" element
     Then I should see an "" element
     Then I should see an ".sofa-section-card ul.attribute-options-list.width li.active" element
@@ -141,34 +118,27 @@ Feature: SPC Checkout Home Delivery on Sofa-sectional feature for Authenticated 
     Then I should see an ".sofa-section-card.sofa-selection-summary-wrapper" element
     And I scroll to the ".sofa-sectional-addtobag-button" element
     And I click on ".sofa-sectional-addtobag-button" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    When I click on "#mini-cart-wrapper a.cart-link" element
     And I wait for AJAX to finish
-    And I wait 30 seconds
-    And I wait for the page to load
+    And I wait for element ".cart-link .quantity"
+    When I click on "#mini-cart-wrapper a.cart-link" element
+    And I wait for element ".checkout-link.submit"
     Then I should see an "#spc-cart .spc-main .spc-content div.spc-product-attributes-wrapper" element
     When I follow "continue to checkout"
-    And I wait 30 seconds
     And I wait for the page to load
+    And I wait for element "#delivery-method-home_delivery"
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
-    And I wait 10 seconds
     And I wait for AJAX to finish
     And I select the home delivery address
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
+    And I wait for element "input#payment-method-checkout_com_upapi[checked]"
     And I wait for AJAX to finish
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
-    And I wait 10 seconds
-    And I click the anchor link ".checkout-link.submit" on page
-    And I wait 50 seconds
-    And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait for the page to load
+    And I click the anchor link ".checkout-link.submit a" on page
+    And I wait for element "#spc-checkout-confirmation"
     And I should save the order details in the file
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"

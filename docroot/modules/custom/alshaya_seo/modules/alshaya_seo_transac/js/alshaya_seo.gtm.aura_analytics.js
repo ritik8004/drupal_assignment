@@ -38,8 +38,9 @@
    Drupal.alshayaSeoGtmPrepareAuraCommonDataFromCart = function () {
      // Prepare the aura dataset.
      var gtmData = Drupal.getItemFromLocalStorage('gtm_aura_common_data');
+     var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
      try {
-       var userAPCDetails = window.spcStaticStorage.cart_raw.customer.custom_attributes;
+       var userAPCDetails = rawCartData.customer.custom_attributes;
        if (gtmData.aura_Status !== undefined && gtmData.aura_Status !== GTM_AURA_VALUES.NON_AURA && typeof userAPCDetails !== 'undefined') {
          // These values will be used for Aura signed up anonymous users
          // and logged-in users but not using Aura.
@@ -135,7 +136,8 @@
          // and logged-in users but not using Aura.
          gtmData.aura_balRedemption = GTM_AURA_VALUES.AURA_POINTS_NOT_REDEEMED;
          gtmData.aura_balPointsVSorderValue = GTM_AURA_VALUES.AURA_BALANCE_LESS_THAN_ORDER_VALUE;
-         var userAPCDetails = window.spcStaticStorage.cart_raw.customer.custom_attributes;
+         var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
+         var userAPCDetails = rawCartData.customer.custom_attributes;
          if (typeof userAPCDetails !== 'undefined' && Drupal.hasValue(userAPCDetails.filter(item => item.attribute_code === 'tier_code'))) {
            // These values will be used for logged-in users using Aura.
            if (typeof cartData.totals.paidWithAura !== 'undefined' && cartData.totals.paidWithAura > 0) {

@@ -19,8 +19,8 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for element ".edit-checkout-as-guest"
     When I click the anchor link ".edit-checkout-as-guest" on page
     # Wait and select the Click and Collect delivery method in checkout page.
-    And I wait for element "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)"
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
+    And I wait for element "#delivery-method-click_and_collect"
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I select the collection store
     And I scroll to the "#spc-payment-methods" element
@@ -59,8 +59,8 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     When I follow "continue to checkout"
     And I wait for element ".edit-checkout-as-guest"
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait for element "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)"
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
+    And I wait for element "#delivery-method-click_and_collect"
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I select the collection store
     And I scroll to the "#spc-payment-methods" element
@@ -95,8 +95,8 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     When I follow "continue to checkout"
     And I wait for element ".edit-checkout-as-guest"
     When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait for element "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)"
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
+    And I wait for element "#delivery-method-click_and_collect"
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I select the collection store
     And I scroll to the "#spc-payment-methods" element

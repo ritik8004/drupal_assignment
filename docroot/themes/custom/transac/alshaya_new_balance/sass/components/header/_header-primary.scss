@@ -38,7 +38,7 @@ header {
           }
 
           .menu__link {
-            font-size: rem(17);
+            font-size: rem(14);
             letter-spacing: 0.025px;
             border: none;
             font-family: $alshaya-bold;
@@ -513,6 +513,10 @@ header {
   @include breakpoint($upto-desktop) {
     margin-top: rem(-40);
   }
+}
+
+.toggle--sign {
+  width: calc(100% - #{rem(50)});
 }
 
 body {

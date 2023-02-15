@@ -11,6 +11,7 @@ $PBK_red: #900;
 $PBK_deep_red: #c00;
 $PBK_confirmation_blue: #7292be;
 $PBK_box_shadow_gray: rgba(0, 0, 0, 0.19);
+$PBK_grey_three: #54514d;
 
 $_black_two: $PBK_grey_one;
 $_black_three: #353132;
@@ -211,5 +212,13 @@ $delivery_usp_background: $PBK_white;
 // Country Switcher
 $country-switcher-label: $PBK_grey_one;
 
+// Matchback
+$matchback-view-options-btn-text: $white-two;
+$matchback-view-options-btn-bg: $PBK_red;
+
 // PLP add to cart.
 $plp-primary-cta-hover-bg: rgba(153, 0, 0, 0.8);
+
+// Checkout steps
+$cko-steps-active-border: $PBK_grey_three;
+$cko-steps-inactive-border: $_gray_two;

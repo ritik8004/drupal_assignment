@@ -13,6 +13,18 @@ use Drupal\acq_commerce\SKUInterface;
  */
 
 /**
+ * Alter the output of (payment-methods) resource.
+ *
+ * @param array $response_data
+ *   The output of the API.
+ * @param array $exclude_payment_methods
+ *   Array of excluded payments.
+ */
+function hook_alshaya_mobile_app_payment_method_api_response_alter(array &$response_data, array $exclude_payment_methods) {
+
+}
+
+/**
  * Alter product data to match brand needs.
  *
  * @param array $data

@@ -8,6 +8,42 @@
 /**
  * Implements hook_update_N().
  *
+ *  Update configurable product attributes.
+ */
+function alshaya_furnitures_update_9401() {
+  $sku_form_settings_config = \Drupal::configFactory()->getEditable('acq_sku.configurable_form_settings');
+  // Unset in attribute weights.
+  $attribute_weights = $sku_form_settings_config->get('attribute_weights');
+  unset(
+    $attribute_weights['default']['option'],
+    $attribute_weights['default']['material'],
+    $attribute_weights['default']['style'],
+    $attribute_weights['default']['product_type']
+  );
+  $sku_form_settings_config->set('attribute_weights', $attribute_weights);
+  // Unset in attribute weights.
+  $old_attributes = [
+    'option',
+    'material',
+    'style',
+    'product_type',
+  ];
+  $sortable_options = $sku_form_settings_config->get('sortable_options');
+  foreach ($old_attributes as $attr) {
+    $key = array_search($attr, $sortable_options);
+    unset($sortable_options[$key]);
+  }
+  $sku_form_settings_config->set('sortable_options', $sortable_options);
+  $sku_form_settings_config->save();
+
+  // Hide old attributes in form display.
+  $acq_sku_configurable_form_config = \Drupal::configFactory()->getEditable('core.entity_form_display.acq_sku.configurable.default');
+  $acq_sku_configurable_form_config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install new SKU field - big_ticket.
  */
 function alshaya_furnitures_update_8007() {

@@ -17,6 +17,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -113,6 +114,10 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
         if ($route_match->getRouteName() == 'entity.user.canonical') {
           $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_hello_member';
         }
+        // Add gtm library for aura if aura integration with hm is enabled.
+        if ($helloMemberHelper->isAuraIntegrationEnabled()) {
+          $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_aura';
+        }
       }
     }
 
@@ -128,6 +133,10 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     $page['#attached']['drupalSettings']['gtm']['productImpressionDefaultItemsInQueue'] = $seo_transac_settings->get('product_impressions_default_items_in_queue');
     $page['#attached']['drupalSettings']['gtm']['productImpressionQueueSize'] = $seo_transac_settings->get('product_impression_queue_size');
     $page['#attached']['drupalSettings']['gtm']['productImpressionTimer'] = $seo_transac_settings->get('product_impression_timer_time');
+
+    $product_list_expiration_days = $seo_transac_settings->get('product_list_expiration_days') ?? 31;
+    $page['#attached']['drupalSettings']['gtm']['productListExpirationMinutes'] = intval($product_list_expiration_days) * 24 * 60;
+
     $page['#cache'] ??= [];
     $page['#cache']['tags'] = array_merge($page['#cache']['tags'] ?? [], $seo_transac_settings->getCacheTags());
   }
@@ -591,23 +600,30 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
 function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   $gtm_disabled_vars = \Drupal::config('alshaya_seo.disabled_gtm_vars')
     ->get('disabled_vars');
-  if ($entity->bundle() == 'acq_product' && $view_mode == 'full' && !in_array('dimension6', $gtm_disabled_vars)) {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
+    if (!in_array('dimension6', $gtm_disabled_vars)) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-    $sku = $skuManager->getSkuForNode($entity);
-    if (!empty($sku)) {
-      // Always load the en values for GTM.
-      $sku_entity = SKU::loadFromSku($sku);
-      if ($sku_entity instanceof SKU) {
-        // We always use en for tracking.
-        if ($sku_entity->hasTranslation('en')) {
-          $sku_entity = $sku_entity->getTranslation('en');
-          $alshaya_product_size_config = $sku_entity->get('attr_size');
-          $build['#attached']['drupalSettings']['alshaya_product_size_config'] = $alshaya_product_size_config;
+      $sku = $skuManager->getSkuForNode($entity);
+      if (!empty($sku)) {
+        // Always load the en values for GTM.
+        $sku_entity = SKU::loadFromSku($sku);
+        if ($sku_entity instanceof SKU) {
+          // We always use en for tracking.
+          if ($sku_entity->hasTranslation('en')) {
+            $sku_entity = $sku_entity->getTranslation('en');
+            $alshaya_product_size_config = $sku_entity->get('attr_size');
+            $build['#attached']['drupalSettings']['alshaya_product_size_config'] = $alshaya_product_size_config;
+          }
         }
       }
     }
+    // Add available size options for the products, setting
+    // size code and label. This is used for GTM product size click event.
+    $product_gtm_settings = \Drupal::config('alshaya_seo_transac.settings');
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_gtm_settings->getCacheTags());
+    $build['#attached']['drupalSettings']['productSizeOptions'] = $product_gtm_settings->get('product_size_options');
   }
 }
 
@@ -851,7 +867,13 @@ function alshaya_seo_transac_preprocess_products_horizontal_slider(&$variables) 
 /**
  * Implements hook_alshaya_acm_product_recommended_products_data_alter().
  */
-function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter(string $type, array &$recommended_skus) {
+function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter(array $data) {
+  // Here we only alter the data for magzazine V2 layout which uses json format.
+  // So if the format is not json, we return from here.
+  if ($data['format'] !== 'json') {
+    return;
+  }
+  $recommended_skus = &$data['products'];
   if (!empty($recommended_skus) && isset($recommended_skus['products']) && !empty($recommended_skus['products'])) {
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $list_item_position = 1;
