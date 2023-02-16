@@ -35,8 +35,15 @@ class LoyaltyClubBenefits extends React.Component {
       htmlContent,
     } = this.state;
 
+    // For anonymous user, we don't show the tabs, So we will have to make sure
+    // that we manage the active props properly.
+    let activeClass = active;
+    if (!hasValue(active)) {
+      activeClass = '';
+    }
+
     return (
-      <div className={`loyalty-club-details-wrapper loyalty-tab-content fadeInUp${active}`} style={{ animationDelay: '0.4s' }}>
+      <div className={`loyalty-club-details-wrapper loyalty-tab-content fadeInUp${activeClass}`} style={{ animationDelay: '0.4s' }}>
         {isMyAuraContext() && (
           <LoyaltyPageContent
             htmlContent={htmlContent}
