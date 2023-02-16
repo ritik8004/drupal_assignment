@@ -1,19 +1,50 @@
 import React from 'react';
-import { getLoyaltyBenefitsTitle } from '../../../utilities/helper';
-import ToolTip from '../../../../../alshaya_spc/js/utilities/tooltip';
+import { getLoyaltyPageContent, isMyAuraContext } from '../../../utilities/aura_utils';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import LoyaltyPageContent from '../loyalty-page-content';
 
-const LoyaltyClubBenefits = ({ active }) => {
-  const loyaltyBenefitsTitle = getLoyaltyBenefitsTitle();
+class LoyaltyClubBenefits extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      htmlContent: null,
+    };
+  }
 
-  return (
-    <div className={`loyalty-club-details-wrapper loyalty-tab-content fadeInUp${active}`} style={{ animationDelay: '0.4s' }}>
-      <div className="title">
-        <span className="title-1">{loyaltyBenefitsTitle.title1}</span>
-        <span className="title-2">{loyaltyBenefitsTitle.title2}</span>
-        <ToolTip enable question>{ Drupal.t('As an Aura member, collect points every time you shop to spend on future purchases, and to unlock exclusive rewards.') }</ToolTip>
+  componentDidMount() {
+    // Get the static html content from the api.
+    const auraInfo = getLoyaltyPageContent();
+    if (auraInfo instanceof Promise) {
+      auraInfo.then((response) => {
+        // Update state only if html value is available.
+        if (hasValue(response) && hasValue(response.html)) {
+          this.setState({
+            htmlContent: response.html,
+          });
+        }
+      });
+    }
+  }
+
+  render() {
+    const {
+      active,
+    } = this.props;
+
+    const {
+      htmlContent,
+    } = this.state;
+
+    return (
+      <div className={`loyalty-club-details-wrapper loyalty-tab-content fadeInUp${active}`} style={{ animationDelay: '0.4s' }}>
+        {isMyAuraContext() && (
+          <LoyaltyPageContent
+            htmlContent={htmlContent}
+          />
+        )}
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default LoyaltyClubBenefits;
