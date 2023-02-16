@@ -9,3 +9,15 @@ alshaya_sprinklr:
     js/alshaya_sprinklr.js: {}
   dependencies:
     - core/drupalSettings
+# Custom library to trigger sprinklr chatbot events.
+# This library contains the operations that need to
+# to be run after all the required sprinklr scripts
+# are executed therefore we are adding dependency on
+# sprinklr library here.
+alshaya_sprinklr_events:
+  version: 1.0.0
+  js:
+    js/alshaya_sprinklr_events.js: {}
+  dependencies:
+    - core/drupalSettings
+    - sprinklr/sprinklr
