@@ -44,11 +44,11 @@ body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
         .express-delivery-text {
           margin-#{$right}: rem(20);
         }
-
-        .description-wrapper.desc-open {
-          width: 31.8%;
-        }
       }
+    }
+
+    .description-wrapper.desc-open {
+      width: 31.8%;
     }
 
     .basic-details-wrapper .field--name-field-skus .sku-base-form button[type=submit] {
@@ -58,12 +58,8 @@ body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
 
   // Changing description popup width implementation after 1284px viewport.
   @include breakpoint($desktop-wide) {
-    .page-standard.c-pdp {
-      .acq-content-product {
-        .description-wrapper.desc-open {
-          width: calc(100% - #{rem(730)});
-        }
-      }
+    .description-wrapper.desc-open {
+      width: calc(100% - #{rem(730)});
     }
   }
 }
