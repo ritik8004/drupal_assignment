@@ -9,7 +9,7 @@
    *
    * @param customerType
    */
-    Drupal.fetchSkuAlgoliaInsightsClickData = function (e) {
+    Drupal.dataInsightsQuery= function (e) {
         if (Drupal.getItemFromLocalStorage('algolia_search_clicks') !== null) {
           var algoliaClicks = Drupal.getItemFromLocalStorage('algolia_search_clicks');
           var sku= $('article.data-insights-query-class').attr('data-sku');
@@ -23,5 +23,5 @@
         }
       }
     };
-    Drupal.fetchSkuAlgoliaInsightsClickData();
+    Drupal.dataInsightsQuery();
 })(jQuery, Drupal, drupalSettings);
