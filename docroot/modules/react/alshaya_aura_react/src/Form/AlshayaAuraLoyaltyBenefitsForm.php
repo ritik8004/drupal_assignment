@@ -138,7 +138,6 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
     $this->config('alshaya_aura_react.loyalty_benefits')
       ->set('loyalty_benefits_title1', $form_state->getValue('loyalty_benefits_title1'))
       ->set('loyalty_benefits_title2', $form_state->getValue('loyalty_benefits_title2'))
-      ->set('loyalty_benefits_content', $form_state->getValue('loyalty_benefits_content'))
       ->save();
 
     parent::submitForm($form, $form_state);
