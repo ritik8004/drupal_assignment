@@ -2,12 +2,10 @@
  * @file
  * This file add the data-insights-query-id on PDP.
  */
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal) {
 
-    /**
+  /**
    * Helper function fetch Sku Algolia Insights Click Data.
-   *
-   * @param customerType
    */
     Drupal.dataInsightsQuery= function (e) {
         if (Drupal.getItemFromLocalStorage('algolia_search_clicks') !== null) {
@@ -24,4 +22,4 @@
       }
     };
     Drupal.dataInsightsQuery();
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal);
