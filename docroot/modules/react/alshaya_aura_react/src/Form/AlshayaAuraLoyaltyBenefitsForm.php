@@ -75,7 +75,7 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
       $node_storage = $this->entityManager->getStorage('node');
       $node = $node_storage->load($this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node'));
     }
-    
+
     $form['alshaya_aura_react']['loyalty_static_content_node'] = [
       '#type' => 'entity_autocomplete',
       '#title' => $this->t('Aura landing page'),
@@ -88,7 +88,7 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
       '#size' => '60',
       '#maxlength' => '60',
     ];
-    
+
     // Display token UI required for currency.
     $form['token_help'] = [
       '#theme' => 'token_tree_link',
