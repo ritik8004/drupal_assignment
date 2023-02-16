@@ -1,22 +1,18 @@
-.c-menu-primary {
-  .mobile--menu {
-    @include breakpoint($only-tablet) {
-      @include sideSpaces(0 , "padding", $left);
+@include breakpoint($only-tablet) {
+  .c-menu-primary {
+    .mobile--menu {
+      padding-#{$left}: 0;
     }
-  }
 
-  .hamburger--menu {
-    .logged-in & {
-      @include breakpoint($only-tablet) {
-        @include sideSpaces(0 , "padding", $left);
+    .hamburger--menu {
+      .logged-in & {
+        padding-#{$left}: 0;
       }
     }
   }
-}
 
-.block-alshaya-algolia-react-autocomplete {
-  .react-autosuggest__input {
-    @include breakpoint($only-tablet) {
+  .block-alshaya-algolia-react-autocomplete {
+    .react-autosuggest__input {
       border-width: rem(8) rem(16);
     }
   }
