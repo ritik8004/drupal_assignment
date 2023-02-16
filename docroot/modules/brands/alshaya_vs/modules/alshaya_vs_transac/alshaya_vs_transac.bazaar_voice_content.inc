@@ -395,6 +395,7 @@ photo_upload:
 usernickname:
   '#title': 'اللقب'
   '#value': null
+  '#text': 'معلومات المستخدم الأساسية.'
 useremail:
   '#title': 'البريد الإلكتروني'
   '#value': null
@@ -409,6 +410,7 @@ contextdatavalue_age:
     45to54: 45-54
     55to64: 55-64
     65orOver: 'أكبر من 64'
+  '#text': المستخدم
 contextdatavalue_height:
   '#title': 'الطول'
   '#default_value': ''
