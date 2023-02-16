@@ -128,7 +128,6 @@ class AlshayaLoyaltyController extends ControllerBase {
   public function loyaltyClub() {
     $cache_tags = [];
     $loyalty_benefits_config = $this->config('alshaya_aura_react.loyalty_benefits');
-    $loyalty_benefits_content = $loyalty_benefits_config->get('loyalty_benefits_content');
 
     $settings = [
       'loyaltyBenefitsTitle' => [
@@ -139,7 +138,6 @@ class AlshayaLoyaltyController extends ControllerBase {
         [AuraDictionaryApiConstants::APC_BRANDS],
         $this->languageManager->getCurrentLanguage()->getId(),
       )[AuraDictionaryApiConstants::APC_BRANDS],
-      'loyaltyBenefitsContent' => $loyalty_benefits_content ? $this->token->replace($loyalty_benefits_content['value']) : '',
       'config' => $this->auraHelper->getAuraConfig(),
       // Set context for the Aura banner.
       'context' => 'my_aura',
