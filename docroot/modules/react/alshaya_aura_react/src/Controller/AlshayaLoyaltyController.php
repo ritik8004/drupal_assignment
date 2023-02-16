@@ -146,9 +146,9 @@ class AlshayaLoyaltyController extends ControllerBase {
     ];
 
     // Get the static page url for the loyalty page.
-    $staticPageNodeId = $this->configFactory->getEditable('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node');
-    if ($staticPageNodeId) {
-      $node = $this->entityTypeManager()->getStorage('node')->load($staticPageNodeId);
+    $static_page_nid = $this->configFactory->getEditable('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node');
+    if ($static_page_nid) {
+      $node = $this->entityTypeManager()->getStorage('node')->load($static_page_nid);
       if ($node instanceof NodeInterface) {
         $path = $this->aliasManager->getAliasByPath('/node/' . $node->id());
         // If path is valid then update the settings.

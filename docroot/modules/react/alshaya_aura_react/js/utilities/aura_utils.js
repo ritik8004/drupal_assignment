@@ -4,7 +4,6 @@ import {
   getPointToPriceRatio,
   getPriceToPointRatio,
   getAuraConfig,
-  getLoyaltyStaticPageUrl,
 } from './helper';
 
 /**
@@ -203,7 +202,11 @@ function isMyAuraContext() {
  *   The aura landing page content.
  */
 const getLoyaltyPageContent = async () => {
-  const staticPageUrl = getLoyaltyStaticPageUrl();
+  let staticPageUrl = '';
+  if (hasValue(drupalSettings.aura)
+    && hasValue(drupalSettings.aura.loyaltyStaticPageUrl)) {
+    staticPageUrl = drupalSettings.aura.loyaltyStaticPageUrl;
+  }
   // Call API only if the static page url is available.
   if (staticPageUrl) {
     const response = await callDrupalApi(`/rest/v1/page/simple?url=${staticPageUrl}`, 'GET');
