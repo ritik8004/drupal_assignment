@@ -70,14 +70,6 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
       '#default_value' => $this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_benefits_title2'),
     ];
 
-    $form['alshaya_aura_react']['loyalty_benefits_content'] = [
-      '#type' => 'text_format',
-      '#format' => 'rich_text',
-      '#title' => $this->t('AURA Loyalty Benefits Content - ONLY HTML for TABLE CONTENT - CHECK HELP'),
-      '#description' => $this->t('Enter HTML as per guidelines defined in HELP section. This field doesnt support CSS or JS. This content is passed to React for rendering entering anything other than approved HTML will break the layout of the page.'),
-      '#default_value' => $this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_benefits_content.value'),
-    ];
-
     $node = NULL;
     if ($this->config('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node')) {
       $node_storage = $this->entityManager->getStorage('node');
@@ -193,7 +185,6 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
     $this->config('alshaya_aura_react.loyalty_benefits')
       ->set('loyalty_benefits_title1', $form_state->getValue('loyalty_benefits_title1'))
       ->set('loyalty_benefits_title2', $form_state->getValue('loyalty_benefits_title2'))
-      ->set('loyalty_benefits_content', $form_state->getValue('loyalty_benefits_content'))
       ->set('loyalty_static_content_node', $form_state->getValue('loyalty_static_content_node'))
       ->save();
 
