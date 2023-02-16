@@ -10,7 +10,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Update Aura translation strings.
+ * Update Aura translation strings & aura loyalty benefits settings.
  */
 function alshaya_aura_react_update_9402() {
   module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
@@ -25,7 +25,7 @@ function alshaya_aura_react_update_9402() {
     ['alshaya_aura_react.loyalty_benefits'],
     'alshaya_aura_react',
     'install',
-    AlshayaConfigManager::MODE_REPLACE,
+    AlshayaConfigManager::USE_FROM_REPLACE,
   );
 }
 

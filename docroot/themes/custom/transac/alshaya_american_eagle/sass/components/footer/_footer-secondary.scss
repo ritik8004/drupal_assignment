@@ -63,6 +63,17 @@
       @include container(77rem);
     }
   }
+
+  .element-copyright:not(.element-footerlogos) {
+    .block-content--copyright {
+      .field--name-body {
+        p {
+          text-align: center;
+          margin-#{$right}: 0;
+        }
+      }
+    }
+  }
 }
 
 .region__footer-secondary {
