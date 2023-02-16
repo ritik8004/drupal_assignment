@@ -23,16 +23,19 @@ body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
       padding: 0 rem(115);
 
       .acq-content-product {
+        // Restricting width of main container of Classic PDP even in fullwidth.
         max-width: rem(1280);
         margin: 0 auto;
 
         .content__main {
           width: 68.2%;
+          // Limiting width of gallery to preserve image resolution.
           max-width: rem(730);
         }
 
         .content__title_wrapper,
         .content__sidebar {
+          // Applying fix to make these containers take up remaining space after gallery.
           float: none;
           overflow: hidden;
           width: auto;
@@ -53,6 +56,7 @@ body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
     }
   }
 
+  // Changing description popup width implementation after 1284px viewport.
   @include breakpoint($desktop-wide) {
     .page-standard.c-pdp {
       .acq-content-product {

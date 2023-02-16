@@ -5,8 +5,9 @@
 }
 
 @include breakpoint($desktop) {
-  #configurable_ajax .form-item-configurables-color .select2Option li.li-swatch-image:first-child {
+  #configurable_ajax .form-item-configurables-color .select2Option li.li-swatch-image:nth-child(2) {
     a.picked {
+      // Preventing the swatch border being cut if first color is selected.
       margin-#{$left}: rem(3);
     }
   }
