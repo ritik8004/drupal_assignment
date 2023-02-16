@@ -12,12 +12,12 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
-* Provides default setting for `show_full_width` for theme.
-*/
+ * Provides default setting for `show_full_width` for theme.
+ */
 function alshaya_vs_transac_update_9403() {
- $config = \Drupal::configFactory()->getEditable('alshaya_victoria_secret.settings');
- $config->set('show_full_width', FALSE);
- $config->save();
+  $config = \Drupal::configFactory()->getEditable('alshaya_victoria_secret.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
 }
 
 /**
