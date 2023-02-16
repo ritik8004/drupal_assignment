@@ -152,10 +152,15 @@ function getBazaarVoiceSettingsFromMdc() {
   return callMagentoApi(url).then((response) => {
     let config = null;
     if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
-      Drupal.addItemInLocalStorage('bazaarVoiceSettings', response.data[0]);
+      Drupal.addItemInLocalStorage(
+        'bazaarVoiceSettings',
+        response.data[0],
+        parseInt(drupalSettings.alshaya_bazaar_voice.bazaar_voice.bazaarvoice_settings_expiry, 10),
+      );
       const { data } = response;
       // Response data has object inside array.
-      [config] = data;
+      const [item] = data;
+      config = item;
     }
 
     // Magento passes required config object inside an array.
