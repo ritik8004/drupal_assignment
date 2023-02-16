@@ -1,0 +1,15 @@
+@include breakpoint($only-mobile) {
+  #alshaya-algolia-search {
+    .block-page-title-block {
+      .c-page-title {
+        border-bottom: none;
+      }
+    }
+  }
+
+  .sticky-filter-wrapper {
+    border-top: rem(1) solid $plp_facet_border;
+
+    @include sideSpaces(-$full_width_padding_mobile, "margin");
+  }
+}
