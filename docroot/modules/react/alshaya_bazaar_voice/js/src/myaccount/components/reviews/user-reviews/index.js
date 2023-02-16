@@ -3,14 +3,17 @@ import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import DisplayStar from '../../../../rating/components/stars';
-import { fetchAPIData, getUserBazaarVoiceSettings } from '../../../../utilities/api/request';
+import {
+  fetchAPIData,
+  getUserBazaarVoiceSettings,
+} from '../../../../utilities/api/request';
 import IndividualReviewSlider from '../../../../reviews/components/individual-review-slider';
 import ConditionalView from '../../../../common/components/conditional-view';
 import EmptyMessage from '../../../../utilities/empty-message';
 import UserReviewsProducts from '../user-reviews-products';
 import UserReviewsDescription from '../user-reviews-desc';
 
-const bazaarVoiceSettings = getUserBazaarVoiceSettings();
+let bazaarVoiceSettings = getUserBazaarVoiceSettings();
 export default class UserReviews extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +22,7 @@ export default class UserReviews extends React.Component {
       reviewsProduct: '',
       noResultmessage: '',
       totalReviewCount: '',
-      initialLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
+      // initialLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
     };
     this.loadMore = this.loadMore.bind(this);
   }
@@ -27,7 +30,13 @@ export default class UserReviews extends React.Component {
   /**
    * Get Review results and product statistical data.
    */
-  componentDidMount() {
+  componentDidMount = async () => {
+    bazaarVoiceSettings = await getUserBazaarVoiceSettings();
+
+    this.setState({
+      initialLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
+    });
+
     this.getUserReviews();
   }
 
@@ -72,6 +81,12 @@ export default class UserReviews extends React.Component {
   }
 
   render() {
+    // In case of v3 we get bazaarvoice settings from MDC.
+    // If Promise is not resolved then return null.
+    if (bazaarVoiceSettings instanceof Promise) {
+      return null;
+    }
+
     const {
       reviewsSummary,
       reviewsProduct,

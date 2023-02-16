@@ -16,7 +16,6 @@ import {
   getbazaarVoiceSettings,
   getUserDetails,
   fetchAPIData,
-  getBazaarVoiceSettingsFromMdc,
 } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
@@ -50,8 +49,8 @@ export default class ReviewSummary extends React.Component {
       prevButtonDisabled: true,
       nextButtonDisabled: false,
       analyticsState: false,
-      loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
-      paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
+      // loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
+      // paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
       userDetails: {
         productReview: null,
       },
@@ -66,41 +65,12 @@ export default class ReviewSummary extends React.Component {
    * Get Review results and product statistical data.
    */
   componentDidMount = async () => {
-    // Call MDC for bazaarvoice settings.
-    const bazaarVoiceConfig = await getBazaarVoiceSettingsFromMdc();
+    bazaarVoiceSettings = await getbazaarVoiceSettings();
 
-    if (typeof bazaarVoiceConfig === 'undefined' || bazaarVoiceConfig === null) {
-      return;
-    }
-
-    // Intialize bazaarvoice settings from MDC response.
-    bazaarVoiceSettings.reviews.bazaar_voice.error_messages = {};
-    bazaarVoiceSettings.reviews.bazaar_voice.sorting_options = {};
-    bazaarVoiceSettings.reviews.bazaar_voice.filter_options = {};
-
-    // Add basic configurations from MDC response.
-    Object.assign(
-      bazaarVoiceSettings.reviews.bazaar_voice,
-      bazaarVoiceConfig.basic,
-    );
-
-    // Add error messages configurations from MDC response.
-    Object.assign(
-      bazaarVoiceSettings.reviews.bazaar_voice.error_messages,
-      bazaarVoiceConfig.bv_error_messages,
-    );
-
-    // Add sorting options configurations from MDC response.
-    Object.assign(
-      bazaarVoiceSettings.reviews.bazaar_voice.sorting_options,
-      bazaarVoiceConfig.sorting_options,
-    );
-
-    // Add filter options configurations from MDC response.
-    Object.assign(
-      bazaarVoiceSettings.reviews.bazaar_voice.filter_options,
-      bazaarVoiceConfig.pdp_filter_options,
-    );
+    this.setState({
+      loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
+      paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
+    });
 
     getUserDetails().then((result) => {
       this.setState({ userDetails: result }, () => {
@@ -420,8 +390,9 @@ export default class ReviewSummary extends React.Component {
   }
 
   render() {
-    // Return empty if reviews settings unavailable.
-    if (typeof bazaarVoiceSettings.reviews.bazaar_voice.Include === 'undefined') {
+    // In case of v3 we get bazaarvoice settings from MDC.
+    // If Promise is not resolved then return null.
+    if (bazaarVoiceSettings instanceof Promise) {
       return null;
     }
 

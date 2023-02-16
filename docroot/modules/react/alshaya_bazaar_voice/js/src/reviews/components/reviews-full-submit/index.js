@@ -21,10 +21,17 @@ export default class WriteReviewButton extends React.Component {
       buttonClass: 'write_review',
       validateCurrentEmail: false,
       userDetails: null,
+      bazaarVoiceSettings: {},
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const bazaarVoiceConfig = await getbazaarVoiceSettings();
+
+    this.setState({
+      bazaarVoiceSettings: bazaarVoiceConfig,
+    });
+
     const { productId, reviewedByCurrentUser } = this.props;
     // To open write a review on page load.
     isOpenWriteReviewForm(productId).then((status) => {
@@ -120,6 +127,7 @@ export default class WriteReviewButton extends React.Component {
       buttonClass,
       validateCurrentEmail,
       userDetails,
+      bazaarVoiceSettings,
     } = this.state;
     const {
       reviewedByCurrentUser,
@@ -129,7 +137,11 @@ export default class WriteReviewButton extends React.Component {
       isWriteReview,
       isInline,
     } = this.props;
-    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+
+    if (bazaarVoiceSettings instanceof Promise) {
+      return (null);
+    }
+
     if (userDetails && Object.keys(userDetails).length !== 0) {
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
       if (userDetails.user.userId === 0

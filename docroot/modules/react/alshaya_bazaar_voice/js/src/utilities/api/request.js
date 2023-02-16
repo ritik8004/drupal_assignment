@@ -25,17 +25,13 @@ function getbazaarVoiceSettings(productId = undefined) {
 }
 
 function getUserBazaarVoiceSettings() {
-  const settings = [];
-  if (drupalSettings.userInfo) {
-    settings.reviews = drupalSettings.userInfo;
-  }
-  return settings;
+  return window.alshayaBazaarVoice.getUserBazaarVoiceSettings();
 }
 
-function fetchAPIData(apiUri, params, context = '') {
+async function fetchAPIData(apiUri, params, context = '') {
   const bazaarVoiceSettings = context === 'user'
-    ? getUserBazaarVoiceSettings()
-    : getbazaarVoiceSettings();
+    ? await getUserBazaarVoiceSettings()
+    : await getbazaarVoiceSettings();
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(
     bazaarVoiceSettings,
   )}${getPassKey(bazaarVoiceSettings)}${getLocale(
@@ -158,13 +154,16 @@ function getBazaarVoiceSettingsFromMdc() {
     if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
       Drupal.addItemInLocalStorage('bazaarVoiceSettings', response.data[0]);
       const { data } = response;
-      config = data.find(true);
+      // Response data has object inside array.
+      [config] = data;
     }
 
     // Magento passes required config object inside an array.
     return config;
   });
 }
+
+window.alshayaBazaarVoice.getBazaarVoiceSettingsFromMdc = getBazaarVoiceSettingsFromMdc;
 
 export {
   getLanguageCode,

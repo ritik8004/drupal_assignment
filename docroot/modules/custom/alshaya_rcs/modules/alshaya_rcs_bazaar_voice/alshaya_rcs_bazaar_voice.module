@@ -38,7 +38,7 @@ function alshaya_rcs_bazaar_voice_page_attachments_schema_data_alter(array &$att
     // If 'product' node.
     if ($bundle === 'rcs_product') {
       // Get the request parameters with a placeholder SKU value.
-      $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics('SKU_VAL');
+      $productReviewStats = $alshayaBazaarVoice->getProductReviewSchema('SKU_VAL');
       $attachments['#attached']['drupalSettings']['alshaya_bazaar_voice']['product_review_schema_request_data'] = $productReviewStats;
     }
   }

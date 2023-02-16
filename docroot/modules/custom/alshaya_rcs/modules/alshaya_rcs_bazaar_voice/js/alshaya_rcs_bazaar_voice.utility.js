@@ -16,7 +16,7 @@
    *   The product review data.
    */
   window.alshayaBazaarVoice.getProductReviewForCurrrentUser = async function getProductReviewForCurrrentUser(productIdentifier) {
-    const bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
+    const bazaarVoiceSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
     const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
     const userId = bazaarVoiceSettings.reviews.customer_id;
     const staticStorageKey = `${userId}_${productId}`;
@@ -99,14 +99,24 @@
    * @returns {Object}
    *   Bazaar voice settings.
    */
-  window.alshayaBazaarVoice.getbazaarVoiceSettings = function getbazaarVoiceSettings(productId) {
+  window.alshayaBazaarVoice.getbazaarVoiceSettings = async function getbazaarVoiceSettings(productId) {
     var settings = {};
+    var product_id = '';
     if (Drupal.hasValue(staticStorage.bvSettings[productId])) {
       return staticStorage.bvSettings[productId];
     }
 
-    if (Drupal.hasValue(productId)) {
-      var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('bv_product', {sku: productId});
+    if (typeof productId === 'undefined') {
+      var productInfo = window.commerceBackend.getProductData(null, 'productInfo');
+      Object.entries(productInfo).forEach(([key]) => {
+        product_id = key;
+      });
+    }
+
+    product_id = (typeof productId === 'undefined') ? product_id : productId;
+
+    if (Drupal.hasValue(product_id)) {
+      var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('bv_product', {sku: product_id});
       if (response.data.products.total_count) {
         try {
           var product = response.data.products.items[0];
@@ -119,19 +129,69 @@
           };
         } catch(e) {
           Drupal.alshayaLogger('warning', 'Could not parse BV settings for SKU @sku', {
-            '@sku': productId,
+            '@sku': product_id,
           });
         }
       }
     }
 
-    settings = Object.assign(settings, drupalSettings.alshaya_bazaar_voice);
+    if (drupalSettings.alshaya_bazaar_voice) {
+      settings = Object.assign(settings, drupalSettings.alshaya_bazaar_voice);
+    } else {
+      settings = Object.assign(settings, drupalSettings.userInfo);
+    }
 
-    staticStorage.bvSettings[productId] = {
-      productid: productId,
+    // Call MDC for bazaarvoice settings.
+    const bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromMdc();
+
+    if (typeof bazaarVoiceConfig.basic.api_version !== 'undefined') {
+      // Add basic configurations from MDC response.
+      Object.assign(
+        settings.bazaar_voice,
+        bazaarVoiceConfig.basic,
+      );
+
+      settings.bazaar_voice.error_messages = {};
+      settings.bazaar_voice.sorting_options = {};
+      settings.bazaar_voice.filter_options = {};
+
+      // Add error messages configurations from MDC response.
+      Object.assign(
+        settings.bazaar_voice.error_messages,
+        bazaarVoiceConfig.bv_error_messages,
+      );
+
+      // Add sorting options configurations from MDC response.
+      Object.assign(
+        settings.bazaar_voice.sorting_options,
+        bazaarVoiceConfig.sorting_options,
+      );
+
+      // Add filter options configurations from MDC response.
+      Object.assign(
+        settings.bazaar_voice.filter_options,
+        bazaarVoiceConfig.pdp_filter_options,
+      );
+    }
+
+    staticStorage.bvSettings[product_id] = {
+      productid: product_id,
       reviews: settings,
     };
 
-    return staticStorage.bvSettings[productId];
-  }
+    return staticStorage.bvSettings[product_id];
+  };
+
+  window.alshayaBazaarVoice.getUserBazaarVoiceSettings = async function getUserBazaarSettings() {
+    const settings = [];
+    if (drupalSettings.userInfo) {
+      settings.reviews = drupalSettings.userInfo;
+    }
+
+    const bazaarVoiceCommonSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings();
+
+    Object.assign(settings.reviews, bazaarVoiceCommonSettings.reviews);
+
+    return settings;
+  };
 })(drupalSettings, Drupal);
