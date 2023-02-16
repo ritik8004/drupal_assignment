@@ -10,6 +10,17 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_we_transac_update_9001() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_westelm.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translation for the Category string.
  */
 function alshaya_we_transac_update_8003() {
