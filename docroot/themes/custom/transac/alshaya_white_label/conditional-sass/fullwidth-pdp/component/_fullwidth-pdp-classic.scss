@@ -52,7 +52,7 @@ body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
     }
 
     .basic-details-wrapper .field--name-field-skus .sku-base-form button[type=submit] {
-      width: calc(100% - #{rem(106)})
+      width: calc(100% - #{rem(106)});
     }
   }
 
