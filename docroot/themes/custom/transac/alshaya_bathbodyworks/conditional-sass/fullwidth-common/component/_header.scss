@@ -1,7 +1,10 @@
 .block-alshaya-react-mini-cart,
-.block-cart-mini-block {
+.block-cart-mini-block,
+.static-minicart-wrapper {
   .cart-link {
     margin-#{$right}: rem(-4);
+    background-size: contain;
+    background-position: center;
   }
 }
 

@@ -36,10 +36,6 @@
     position: absolute;
     top: 0;
     #{$right}: $full_width_padding_desktop;
-
-    a {
-      @include sideSpaces(0);
-    }
   }
 
   .aura-rewards-wrapper .aura-header-link a {
