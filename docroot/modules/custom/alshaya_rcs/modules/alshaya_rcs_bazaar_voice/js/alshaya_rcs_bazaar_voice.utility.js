@@ -17,7 +17,7 @@
    */
   window.alshayaBazaarVoice.getProductReviewForCurrrentUser = async function getProductReviewForCurrrentUser(productIdentifier) {
     const bazaarVoiceSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
-    const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
+    const productId = productIdentifier || bazaarVoiceSettings.productid;
     const userId = bazaarVoiceSettings.reviews.customer_id;
     const staticStorageKey = `${userId}_${productId}`;
     let productReviewData = Drupal.hasValue(staticStorage[staticStorageKey])
@@ -106,7 +106,7 @@
       return staticStorage.bvSettings[productId];
     }
 
-    if (typeof productId === 'undefined') {
+    if (!Drupal.hasValue(productId)) {
       var productInfo = window.commerceBackend.getProductData(null, 'productInfo');
       Object.entries(productInfo).forEach(([key]) => {
         product_id = key;
@@ -135,38 +135,41 @@
       }
     }
 
-    if (drupalSettings.alshaya_bazaar_voice) {
-      settings = Object.assign(settings, drupalSettings.alshaya_bazaar_voice);
-    } else {
-      settings = Object.assign(settings, drupalSettings.userInfo);
-    }
+    // Merge product and bazaar voice settings.
+    settings = drupalSettings.alshaya_bazaar_voice ? Object.assign(settings, drupalSettings.alshaya_bazaar_voice) : Object.assign(settings, drupalSettings.userInfo);
 
-    // Call MDC for bazaarvoice settings.
-    const bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromMdc();
+    // Call commerceBackend for Bazaar voice settings.
+    const bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
 
-    if (typeof bazaarVoiceConfig.basic.api_version !== 'undefined') {
+    if (Drupal.hasValue(bazaarVoiceConfig.basic)) {
       // Add basic configurations from MDC response.
       Object.assign(
         settings.bazaar_voice,
         bazaarVoiceConfig.basic,
       );
+    }
 
-      settings.bazaar_voice.error_messages = {};
-      settings.bazaar_voice.sorting_options = {};
-      settings.bazaar_voice.filter_options = {};
+    settings.bazaar_voice.error_messages = {};
+    settings.bazaar_voice.sorting_options = {};
+    settings.bazaar_voice.filter_options = {};
 
+    if (Drupal.hasValue(bazaarVoiceConfig.bv_error_messages)) {
       // Add error messages configurations from MDC response.
       Object.assign(
         settings.bazaar_voice.error_messages,
         bazaarVoiceConfig.bv_error_messages,
       );
+    }
 
+    if (Drupal.hasValue(bazaarVoiceConfig.sorting_options)) {
       // Add sorting options configurations from MDC response.
       Object.assign(
         settings.bazaar_voice.sorting_options,
         bazaarVoiceConfig.sorting_options,
       );
+    }
 
+    if (Drupal.hasValue(bazaarVoiceConfig.pdp_filter_options)) {
       // Add filter options configurations from MDC response.
       Object.assign(
         settings.bazaar_voice.filter_options,
@@ -179,6 +182,8 @@
       reviews: settings,
     };
 
+    // Return Bazaar voice config from commerceBackend with product Id
+    // using static variable.
     return staticStorage.bvSettings[product_id];
   };
 

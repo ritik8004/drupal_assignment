@@ -151,7 +151,7 @@ function getBazaarVoiceSettingsFromMdc() {
 
   return callMagentoApi(url).then((response) => {
     let config = null;
-    if (typeof response.data !== 'undefined' && typeof response.data.error === 'undefined') {
+    if (Drupal.hasValue(response.data) && typeof response.data.error === 'undefined') {
       Drupal.addItemInLocalStorage(
         'bazaarVoiceSettings',
         response.data[0],
@@ -168,7 +168,7 @@ function getBazaarVoiceSettingsFromMdc() {
   });
 }
 
-window.alshayaBazaarVoice.getBazaarVoiceSettingsFromMdc = getBazaarVoiceSettingsFromMdc;
+window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend = getBazaarVoiceSettingsFromMdc;
 
 export {
   getLanguageCode,
