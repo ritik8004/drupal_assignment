@@ -1,0 +1,11 @@
+@include breakpoint($only-mobile) {
+  #reviews-rating,
+  #reviews-section .histogram-data-section,
+  #reviews-section .review-summary {
+    @include sideSpaces($full_width_padding_mobile);
+  }
+
+  .aggregate-rating {
+    padding-#{$left}: 0;
+  }
+}
