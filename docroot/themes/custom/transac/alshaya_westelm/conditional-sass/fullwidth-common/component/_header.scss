@@ -21,12 +21,12 @@ header {
     .block-alshaya-react-mini-cart,
     .block-cart-mini-block {
       @include breakpoint($only-tablet) {
-        $right: rem(-3);
+        #{$right}: rem(-3);
       }
 
       .cart-link {
         @include breakpoint($upto-tablet) {
-          width: rem(31);
+          width: rem(32);
         }
       }
     }
@@ -41,6 +41,14 @@ header {
           );
         }
       }
+    }
+  }
+}
+
+body.wishlist-enabled {
+  #wishlist-header-wrapper {
+    @include breakpoint($only-mobile) {
+      #{$right}: rem(45);
     }
   }
 }

@@ -1,0 +1,32 @@
+@include breakpoint($only-mobile) {
+  #alshaya-algolia-plp,
+  #alshaya-algolia-search {
+    .c-page-title {
+      @include sideSpaces(rem(-12), $type: "margin");
+    }
+
+    .show-all-filters-algolia {
+      &::before {
+        #{$right}: rem(5);
+      }
+
+      margin-#{$right}: rem(-12);
+      display: block;
+
+      .upto-desktop {
+        padding-#{$left}: rem(20);
+      }
+    }
+
+    .sticky-filter-wrapper .c-collapse-item .c-collapse__title {
+      padding-#{$left}: $full_width_padding_mobile;
+    }
+  }
+
+  .c-content__region {
+    .algolia-plp-category-facet,
+    .block-facet-blockcategory-facet-search {
+      margin-#{$left}: rem(-12) !important;
+    }
+  }
+}

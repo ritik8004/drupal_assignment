@@ -1,13 +1,12 @@
 body {
-	&.supermenu {
-		&:not(.mobile--overlay) {
+  &.supermenu {
+    &:not(.mobile--overlay) {
       .header--wrapper {
         .c-menu-secondary {
           .menu--super-menu {
             ul {
               li {
                 &:first-child {
-
                   @include breakpoint($only-tablet) {
                     @include sideSpaces($full_width_padding_tablet, "padding", "left");
                   }
@@ -27,8 +26,8 @@ body {
           }
         }
       }
-		}
-	}
+    }
+  }
 }
 
 .c-menu-secondary {
