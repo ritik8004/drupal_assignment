@@ -191,7 +191,13 @@
       padding: 0 rem(3);
     }
 
-    @include icon("exclamation-icon");
+    &::before {
+      content: "";
+      background: url("#{$base_theme_img_directory_path}/aura/exclamation.svg") no-repeat;
+      width: rem(20);
+      height: rem(20);
+      background-size: 100%;
+    }
   }
 }
 
@@ -201,11 +207,7 @@
       position: relative;
       transform: none;
       #{$left}: 0;
-      margin-#{$right}: rem(10);
-
-      @include breakpoint($only-mobile) {
-        margin-#{$right}: rem(5);
-      }
+      margin-#{$right}: rem(5);
     }
   }
 }
