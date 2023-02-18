@@ -1,0 +1,24 @@
+header {
+  &.c-header {
+    .c-header__region {
+      @include fullWidthSideSpaces(
+        $is_mobile: true,
+        $is_tablet: true,
+        $is_desktop: true,
+        $is_desktop_wide: true
+      );
+    }
+  }
+}
+
+.c-menu-secondary {
+  .language-switcher-language-url {
+    .language-link {
+      @include fullWidthSideSpaces(
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $side: $right,
+      );
+    }
+  }
+}
