@@ -117,6 +117,7 @@ function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state,
       '#open' => FALSE,
       '#weight' => '5',
     ];
+    $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
   }
 
   if ($form_id === 'user_register_form' or $form_id === 'user_form') {
@@ -164,7 +165,6 @@ function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state,
     $form['otp_verified'] = [
       '#type' => 'hidden',
     ];
-    $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
     unset($form['field_gender']);
     $form['field_subscribe_newsletter']['widget']['value']['#title'] = t('Yes, email me offers, style updates, and special invites to sales and events.', [], ['context' => 'hello_member']);
     unset($form['field_mobile_number']);
@@ -282,7 +282,7 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
       if (!empty($user_gender)) {
         $request_options['json']['customer']['extension_attributes']['customer_gender'] = $user_gender;
       }
-      $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
+      $temp_store = \Drupal::service('tempstore.shared')->get('alshaya_hello_member', $user->id());
       // Set the key/value pair.
       if ($temp_store->get('otpVerifiedPhone')) {
         $request_options['json']['customer']['extension_attributes']['is_verified'] = "Y";
@@ -411,7 +411,7 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
 function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterface $form_state) {
   // If Otp is successfully verified store temp varialble.
   if ($form_state->getValue('otp_verified')) {
-    $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
+    $temp_store = \Drupal::service('tempstore.shared')->get('alshaya_hello_member');
     // Set the key/value pair.
     $temp_store->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
   }
@@ -558,5 +558,19 @@ function alshaya_hello_member_alshaya_acm_customer_update_account_alter($user, $
   // Update gender details coming from magento to drupal.
   if (isset($customer['extension_attributes']['customer_gender'])) {
     $user->get('field_gender')->setValue($customer['extension_attributes']['customer_gender']);
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function alshaya_hello_member_user_insert(UserInterface $user) {
+  // If user is getting created that means the user OTP verification was
+  // successful. So check if the user is having value in mobile number field and
+  // proceed with updating the flag value in shared temp store.
+  if ($user->hasField('field_mobile_number') && $user->get('field_mobile_number')) {
+    $temp_store = \Drupal::service('tempstore.shared')->get('alshaya_hello_member', $user->id());
+    // Set the key/value pair.
+    $temp_store->set('otpVerifiedPhone', $user->get('field_mobile_number')->getValue());
   }
 }
