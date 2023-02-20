@@ -1,9 +1,43 @@
 .aura-progressbar-wrapper {
-  margin-top: 0.625rem;
+  margin-top: rem(25);
+
+  @include breakpoint($desktop) {
+    margin-top: rem(34);
+  }
+
+  .aura-tier-progress-string {
+    text-align: center;
+    font-size: rem(12);
+    color: $aura-normal-text;
+    font-family: $aura-regular;
+
+    @include breakpoint($desktop) {
+      font-size: rem(13);
+    }
+  }
+
+  .aura-progress-bar {
+    display: flex;
+    align-items: center;
+    padding-top: rem(8);
+
+    @include breakpoint($desktop) {
+      padding-top: rem(11);
+    }
+  }
+
+  .under {
+    margin-#{$right}: rem(10);
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: rem(20);
+      margin-#{$left}: rem(98);
+    }
+  }
 
   .spc-aura-points-upgrade-item,
   .spc-aura-points-expiry-item {
-    margin-top: 0.625rem;
+    margin-top: rem(10);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -13,7 +47,7 @@
     }
 
     b {
-      padding: 0 0.3125rem;
+      padding: 0 rem(5);
     }
 
     &::before {
@@ -29,16 +63,14 @@
   }
 
   .aura-progress {
-    height: 3.125rem;
+    height: rem(5);
     border-radius: 0.625rem;
     background-color: $aura-progress;
     display: grid;
     grid-template-columns: 1fr 5.125rem;
     grid-template-areas: "start end";
     align-items: center;
-    font-family: $aura-bold;
-    font-size: 1rem;
-    position: relative;
+    flex-grow: 1;
 
     > div {
       height: 100%;
@@ -75,17 +107,7 @@
     }
 
     .start {
-      padding-#{$left}: 1.875rem;
-      display: flex;
-      align-items: center;
-      border-radius: 0.625rem 0 0 0.625rem;
-      position: relative;
-      grid-area: start;
-
       .fill {
-        position: absolute;
-        top: 0;
-        #{$left}: 0;
         height: 100%;
         border-top-#{$left}-radius: 0.625rem;
         border-bottom-#{$left}-radius: 0.625rem;
@@ -95,83 +117,39 @@
         animation-fill-mode: forwards;
       }
     }
+  }
 
-    .end {
-      border-top-#{$right}-radius: 0.625rem;
-      border-bottom-#{$right}-radius: 0.625rem;
-      grid-area: end;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: $aura-progress-tier-text;
-      font-size: 1rem;
+  .end {
+    margin-#{$left}: rem(10);
 
-      &.next-tier-Tier2 {
-        background-image: $aura-progress-star-end;
-
-        html[lang="ar"] & {
-          background-image: $aura-progress-star-end-ar;
-        }
-      }
-
-      &.next-tier-Tier3 {
-        background-image: $aura-progress-vip-end;
-
-        html[lang="ar"] & {
-          background-image: $aura-progress-vip-end-ar;
-        }
-      }
+    @include breakpoint($desktop) {
+      margin-#{$right}: rem(105);
+      margin-#{$left}: rem(20);
     }
+  }
 
-    .under {
-      position: absolute;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      #{$left}: 1.875rem;
-      color: $aura-progress-under;
-      white-space: nowrap;
-      font-size: 1rem;
+  .under,
+  .end {
+    color: $aura-normal-text;
+    font-size: rem(11);
+    font-family: $aura-regular;
 
-      @include breakpoint($only-mobile) {
-        #{$left}: 1.25rem;
-      }
-    }
-
-    .over {
-      padding-#{$left}: 1.875rem;
-      color: $aura-progress-tier-text;
-      white-space: nowrap;
-      font-size: 1rem;
-
-      @include breakpoint($only-mobile) {
-        padding-#{$left}: 1.25rem;
-      }
-    }
-
-    &.pointer {
-      .dot {
-        width: 1.25rem;
-        height: 1.25rem;
-        display: block;
-        background: $aura-progress-dot;
-        z-index: 1;
-        border-radius: 50%;
-        position: absolute;
-        border: 2px solid $aura-progress-tier-text;
-        visibility: hidden;
-        transition: visibility 0.2s ease-in-out;
-      }
+    @include breakpoint($desktop) {
+      font-size: rem(14);
     }
   }
 
   .aura-progress-string {
     font-family: $aura-regular;
-    font-size: 0.875rem;
     text-align: center;
     color: $aura-progress-string;
-    margin-top: 0.625rem;
     padding-bottom: 0.625rem;
+    margin-top: rem(7);
+    font-size: rem(9);
+
+    @include breakpoint($desktop) {
+      font-size: rem(12);
+    }
 
     @include breakpoint($only-mobile) {
       max-width: 70%;
@@ -187,6 +165,49 @@
       &::after {
         content: ":";
       }
+    }
+  }
+}
+
+.aura-my-account-verified-wrapper,
+.aura-progressbar-wrapper {
+  .spc-aura-points-expiry-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: rem(12);
+    line-height: 1.5;
+    background: unset;
+    background-image: $aura-expiry-points-txt-bg;
+    color: $aura-expiry-points-txt;
+    margin-top: rem(22);
+    padding: rem(10);
+
+    @include breakpoint($upto-desktop) {
+      margin-top: rem(15);
+    }
+
+    b {
+      padding: 0 rem(3);
+    }
+
+    &::before {
+      content: "";
+      background: url("#{$base_theme_img_directory_path}/aura/exclamation.svg") no-repeat;
+      width: rem(20);
+      height: rem(20);
+      background-size: 100%;
+    }
+  }
+}
+
+.aura-my-account-verified-wrapper {
+  .spc-aura-points-expiry-item {
+    &::before {
+      position: relative;
+      transform: none;
+      #{$left}: 0;
+      margin-#{$right}: rem(5);
     }
   }
 }

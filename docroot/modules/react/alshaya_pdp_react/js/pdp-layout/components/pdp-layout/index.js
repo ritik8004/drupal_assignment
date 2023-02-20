@@ -279,7 +279,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
               <PdpSddEd />
             </div>
           </ConditionalView>
-          {checkBazaarVoiceAvailableForPdp(skuItemCode) ? (
+          {checkBazaarVoiceAvailableForPdp() ? (
             <PpdRatingsReviews
               getPanelData={getPanelData}
               removePanelData={removePanelData}

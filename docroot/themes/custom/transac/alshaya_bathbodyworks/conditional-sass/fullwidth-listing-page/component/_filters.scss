@@ -1,0 +1,36 @@
+@include breakpoint($only-mobile) {
+  .block-facet-blockcategory-facet-search.c-facet.c-accordion ul {
+    a.facet-item,
+    li.category-all,
+    li:not(.category-all) label {
+      padding-#{$left}: $full_width_padding_mobile !important;
+    }
+  }
+
+  .c-facet {
+    &.c-accordion,
+    &.c-collapse-item {
+      .c-accordion__title,
+      .c-collapse__title {
+        padding-#{$left}: $full_width_padding_mobile;
+      }
+    }
+  }
+
+  .show-all-filters,
+  .show-all-filters-algolia {
+    padding-#{$left}: $full_width_padding_mobile;
+
+    &::before {
+      #{$right}: rem(4);
+    }
+  }
+
+  .sticky-filter-wrapper {
+    #alshaya-algolia-search & {
+      border-top: rem(1) solid $plp_facet_border;
+    }
+
+    @include sideSpaces(-$full_width_padding_mobile, "margin");
+  }
+}

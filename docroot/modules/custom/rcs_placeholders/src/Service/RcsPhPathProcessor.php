@@ -9,6 +9,7 @@ use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Drupal\rcs_placeholders\Event\RcsPhPathProcessorEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides a path processor to detect the commerce entities page types.
@@ -105,6 +106,13 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   protected $eventDispatcher;
 
   /**
+   * Request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * Constructs a new RcsPhPathProcessor instance.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -115,6 +123,8 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
    *   The config factory.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -123,12 +133,14 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
     LanguageManagerInterface $language_manager,
     ModuleHandlerInterface $module_handler,
     ConfigFactoryInterface $config_factory,
-    EventDispatcherInterface $event_dispatcher
+    EventDispatcherInterface $event_dispatcher,
+    RequestStack $request_stack
   ) {
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
     $this->configFactory = $config_factory;
     $this->eventDispatcher = $event_dispatcher;
+    $this->requestStack = $request_stack;
   }
 
   /**
@@ -165,13 +177,15 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
       'path' => $path,
       'fullPath' => $full_path,
       'pathToCheck' => $rcs_path_to_check,
-      'request' => $request,
       'langcode' => $this->languageManager->getCurrentLanguage()->getId(),
     ]);
     $this->eventDispatcher->dispatch($event, RcsPhPathProcessorEvent::ALTER);
 
     $event_data = $event->getData();
-    if (!empty($event_data['entityType'])) {
+
+    if (!empty($event_data['entityType'])
+      && $this->requestStack->getMainRequest()->getUri() === $request->getUri()
+    ) {
       self::$entityType = $event_data['entityType'];
       self::$entityPath = $event_data['entityPath'];
       self::$entityPathPrefix = $event_data['entityPathPrefix'];

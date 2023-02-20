@@ -104,7 +104,10 @@ class SearchApp extends React.PureComponent {
     return (
       <div>
         <InstantSearch indexName={`${indexName}_query`} searchClient={algoliaSearchClient}>
-          <Configure hitsPerPage={drupalSettings.autocomplete.hits} />
+          <Configure
+            hitsPerPage={drupalSettings.autocomplete.hits}
+            userToken={Drupal.getAlgoliaUserToken()}
+          />
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
             onSuggestionCleared={this.onSuggestionCleared}
@@ -121,8 +124,17 @@ class SearchApp extends React.PureComponent {
               indexName={indexName}
               searchClient={algoliaSearchClient}
             >
-              {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}
-              <Configure hitsPerPage={drupalSettings.autocomplete.hits} query={query} />
+              {optionalFilter ? (
+                <Configure
+                  optionalFilters={optionalFilter}
+                  userToken={Drupal.getAlgoliaUserToken()}
+                />
+              ) : null}
+              <Configure
+                hitsPerPage={drupalSettings.autocomplete.hits}
+                userToken={Drupal.getAlgoliaUserToken()}
+                query={query}
+              />
               <Hits hitComponent={Teaser} />
             </InstantSearch>
           </Portal>

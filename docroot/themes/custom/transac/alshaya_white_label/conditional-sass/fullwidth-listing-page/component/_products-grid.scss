@@ -13,15 +13,62 @@
   .c-products-list.view-search {
     @include sideSpaces(0);
   }
+
+  .c-plp {
+    .c-products-list.product-small {
+      .c-products__item {
+        width: calc(50% - #{rem(6)});
+        margin-#{$left}: rem(12);
+      }
+    }
+  }
+}
+
+.alshaya_search_hoverimage {
+  img {
+    width: 100%;
+  }
 }
 
 @include breakpoint($desktop) {
-  .c-plp {
-    &.l-two--sf {
+  .c-plp,
+  .c-plp.l-two--sf,
+  .c-plp.lhn-without-sidebar {
+    .c-products-list {
+      &.product-small,
+      &.product-large {
+        .alshaya_search_gallery {
+          height: auto;
+        }
+      }
+    }
+  }
+
+  .c-plp.lhn-without-sidebar {
+    .c-products-list {
+      &.product-small,
+      &.product-large {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            height: auto;
+          }
+        }
+      }
+
+      &.product-small {
+        .c-products__item article:hover .alshaya_search_gallery .img-wrapper {
+          max-height: none;
+        }
+      }
+    }
+  }
+
+  .subcategory-listing-enabled {
+    .c-plp {
       .c-products-list {
         &.product-small,
         &.product-large {
-          .alshaya_search_gallery {
+          .c-products__item {
             height: auto;
           }
         }

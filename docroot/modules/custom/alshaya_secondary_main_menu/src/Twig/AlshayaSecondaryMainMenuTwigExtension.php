@@ -51,10 +51,7 @@ class AlshayaSecondaryMainMenuTwigExtension extends \Twig_Extension {
    */
   public function getFunctions() {
     return [
-      new \Twig_SimpleFunction('alshaya_secondary_main_menu', [
-        $this,
-        'alshayaSecondaryMainMenu',
-      ]),
+      new \Twig_SimpleFunction('alshaya_secondary_main_menu', $this->alshayaSecondaryMainMenu(...)),
     ];
   }
 

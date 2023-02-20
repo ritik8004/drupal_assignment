@@ -51,7 +51,7 @@ class AlshayaMainMenuTwigExtension extends \Twig_Extension {
    */
   public function getFunctions() {
     return [
-      new \Twig_SimpleFunction('alshaya_main_menu', [$this, 'alshayaMainMenu']),
+      new \Twig_SimpleFunction('alshaya_main_menu', $this->alshayaMainMenu(...)),
     ];
   }
 

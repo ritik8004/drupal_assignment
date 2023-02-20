@@ -5,21 +5,25 @@
 
 (function (drupalSettings) {
   document.addEventListener('sprChatSettingsAlter', (e) => {
-    if (typeof drupalSettings.alshayaSprinklr === 'undefined') {
+    if (typeof drupalSettings.sprinklr === 'undefined') {
       return;
     }
     var sprChatData = e.detail;
     // Set skin value.
-    if (typeof drupalSettings.alshayaSprinklr.skin !== 'undefined') {
-      sprChatData.skin = drupalSettings.alshayaSprinklr.skin;
+    if (typeof drupalSettings.sprinklr.skin !== 'undefined') {
+      sprChatData.skin = drupalSettings.sprinklr.skin;
+    }
+    // Set client context.
+    if (typeof drupalSettings.sprinklr.clientContext !== 'undefined') {
+      sprChatData.clientContext = drupalSettings.sprinklr.clientContext;
     }
     // For authenticated users.
-    if (typeof drupalSettings.alshayaSprinklr.userDetails !== 'undefined') {
-      sprChatData.user = drupalSettings.alshayaSprinklr.userDetails;
+    if (typeof drupalSettings.sprinklr.userDetails !== 'undefined') {
+      sprChatData.user = drupalSettings.sprinklr.userDetails;
     }
     // For anonymous users.
-    if (typeof drupalSettings.alshayaSprinklr.userContext !== 'undefined') {
-      sprChatData.userContext = drupalSettings.alshayaSprinklr.userContext;
+    if (typeof drupalSettings.sprinklr.userContext !== 'undefined') {
+      sprChatData.userContext = drupalSettings.sprinklr.userContext;
     }
   });
 })(drupalSettings);

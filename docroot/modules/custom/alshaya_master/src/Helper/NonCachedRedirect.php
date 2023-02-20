@@ -21,7 +21,7 @@ class NonCachedRedirect {
    * @param string $url
    *   URL to redirect to.
    */
-  public static function redirect(string $url) {
+  public static function redirect(string $url): never {
     $response = new CacheableRedirectResponse($url);
 
     $request = \Drupal::request();

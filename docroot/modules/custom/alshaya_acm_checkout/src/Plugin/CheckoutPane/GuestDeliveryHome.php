@@ -209,7 +209,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#type' => 'button',
       '#value' => $this->t('deliver to this address'),
       '#ajax' => [
-        'callback' => [$this, 'updateAddressAjaxCallback'],
+        'callback' => $this->updateAddressAjaxCallback(...),
         'wrapper' => 'address_wrapper',
       ],
       '#submit' => [],

@@ -8,6 +8,12 @@
       $side: $left
     );
   }
+
+  .hamburger--menu {
+    .logged-in & {
+      @include fullWidthSideSpaces($is_mobile: true, $is_tablet: true);
+    }
+  }
 }
 
 .menu__list-item {
@@ -17,6 +23,19 @@
 
   @include breakpoint($only-tablet) {
     @include sideSpaces($full_width_padding_tablet, $type: "margin");
+  }
+}
+
+// Existing white label styles override selector.
+body.aura-enabled {
+  #aura-mobile-header-shop:not(:empty) {
+    .aura-header-guest-tooltip {
+      @include fullWidthSideSpaces(
+        $is_mobile: true,
+        $is_tablet: true,
+        $type: "margin"
+      );
+    }
   }
 }
 

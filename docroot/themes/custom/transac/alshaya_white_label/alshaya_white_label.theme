@@ -19,6 +19,22 @@ use Drupal\node\NodeInterface;
 use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\Core\Site\Settings;
 use Drupal\file\Entity\File;
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_white_label_preprocess_region(&$variables) {
+  if ($variables['region'] == 'footer_secondary') {
+    // Add the block ids as classes for each block displayed in this region.
+    $elements = $variables['elements'];
+    foreach ($elements as $key => $item) {
+      if (is_array($item) && isset($item['#markup']) && !empty($item['#markup'])) {
+        $variables['attributes']['class'][] = 'element-' . $key;
+      }
+    }
+  }
+}
 
 /**
  * Implements hook_preprocess_html().
@@ -136,6 +152,10 @@ function alshaya_white_label_preprocess_html(&$variables) {
       if (!empty($term->get('field_plp_layout')->value)) {
         $variables['attributes']['class'][] = $term->get('field_plp_layout')->value . '-plp-layout';
       }
+      // Add class to hide the sidebar for PLP pages.
+      if (!\Drupal::config('alshaya_spc.show_listing_sidebar')->get('show_plp_sidebar')) {
+        $variables['attributes']['class'][] = 'hide-plp-sidebar';
+      }
     }
   }
 
@@ -162,10 +182,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Adding a variable for html direction.
   $variables['html_direction'] = $direction;
   $routematch = \Drupal::routeMatch();
-  // Get current theme name.
-  $current_theme = \Drupal::theme()->getActiveTheme()->getName();
-  $is_full_width_feature_enabled = \Drupal::config($current_theme . '.settings')->get('show_full_width') ?? FALSE;
-  // Check the site full width enable.
+
+  $is_full_width_feature_enabled = _alshaya_white_label_is_full_width_enabled();
   if ($is_full_width_feature_enabled) {
     // List of my account sub pages.
     $my_account_subpages = [
@@ -181,6 +199,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
       'entity.user.canonical',
       'alshaya_acm_customer.orders_detail',
       'acq_checkoutcom.payment_cards',
+      'alshaya_aura_react.my_loyalty_club',
     ];
 
     // List of checkout pages.
@@ -255,6 +274,9 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['enable_lhn_tree'] = 0;
   }
 
+  // Initialising the variable for enabling/disabling sidebar.
+  $show_sidebar = \Drupal::config('alshaya_spc.show_listing_sidebar');
+
   // Attach the plp search js library to PLP page.
   if ($routematch->getRouteName() === 'entity.taxonomy_term.canonical' || $routematch->getRouteName() === 'alshaya_main_menu.category_view_all') {
     $term = $routematch->getParameter('taxonomy_term');
@@ -322,6 +344,12 @@ function alshaya_white_label_preprocess_page(&$variables) {
       if (isset($description)) {
         $variables['category_term_name'] = $term->getName();
         $variables['category_term_description'] = $description;
+      }
+      // Enable/Disable the sidebar on PLP pages.
+      if (!$show_sidebar->get('show_plp_sidebar')) {
+        unset($variables['page']['sidebar_first']);
+        unset($variables['page']['sidebar_second']);
+        $variables['#attached']['library'][] = 'alshaya_white_label/hide-sidebar';
       }
     }
   }
@@ -409,6 +437,13 @@ function alshaya_white_label_preprocess_page(&$variables) {
       $variables['enable_lhn_tree'] = 1;
     }
   }
+
+  // Attaching hide-sidebar library on SRP if sidebar is disabled.
+  $show_srp_sidebar = $show_sidebar->get('show_srp_sidebar');
+  if (!$show_srp_sidebar) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/hide-sidebar';
+  }
+  $variables['#attached']['drupalSettings']['show_srp_sidebar'] = $show_srp_sidebar;
 }
 
 /**
@@ -534,6 +569,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
   if (in_array($variables['plugin_id'], $category_facets)) {
     $variables['attributes']['class'][] = 'category-facet';
   }
+
+  if (_alshaya_white_label_is_full_width_enabled() && $variables['plugin_id'] === 'alshaya_algolia_react_autocomplete') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
+  }
 }
 
 /**
@@ -588,7 +627,9 @@ function alshaya_white_label_theme_suggestions_views_view_unformatted_alter(arra
 
   if ($variables['view']->id() == 'alshaya_product_list' && $variables['view']->current_display == 'block_1') {
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+    if ($term instanceof TermInterface
+      && $term->bundle() === 'acq_product_category'
+      && $term->get('field_group_by_sub_categories')->getString()) {
       $suggestions[] = 'views_view_unformatted__alshaya_product_list_sub_cat';
     }
   }
@@ -996,6 +1037,9 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
       }
     }
   }
+
+  $show_listing_sidebar_config = \Drupal::config('alshaya_spc.show_listing_sidebar');
+  $attachments['#cache']['tags'] = Cache::mergeTags($attachments['#cache']['tags'] ?? [], $show_listing_sidebar_config->getCacheTags());
 }
 
 /**
@@ -1878,4 +1922,21 @@ function alshaya_white_label_css_alter(&$css) {
   if ($direction === 'ltr'&& isset($css['themes/custom/transac/' . $current_theme . '/css/rtl.css'])) {
     unset($css['themes/custom/transac/' . $current_theme . '/css/rtl.css']);
   }
+}
+
+/**
+ * Helper function to check if full width is enabled.
+ *
+ * @param string $current_theme
+ *   The current active theme.
+ *
+ * @return bool
+ *   Flag denoting the status of full width feature.
+ */
+function _alshaya_white_label_is_full_width_enabled($current_theme = NULL) {
+  if (empty($current_theme)) {
+    $current_theme = \Drupal::theme()->getActiveTheme()->getName();
+  }
+  $is_full_width_enabled = \Drupal::config($current_theme . '.settings')->get('show_full_width') ?? FALSE;
+  return $is_full_width_enabled;
 }

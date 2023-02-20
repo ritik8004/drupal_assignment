@@ -40,14 +40,6 @@
   @include breakpoint($only-mobile) {
     padding: 1rem 1.25rem;
   }
-
-  .c-footer-secondary & {
-    .country-ae & {
-      html[lang="ar"] & {
-        padding: 1.875rem 0;
-      }
-    }
-  }
 }
 
 .c-footer-secondary {
@@ -61,6 +53,41 @@
 
     .path--cart & {
       @include container(77rem);
+    }
+  }
+
+  .element-copyright {
+    &:not(.element-footerlogos) {
+      .block-content--copyright {
+        padding: rem(32) rem(16);
+
+        html[lang="ar"] & {
+          padding: rem(32) rem(16);
+        }
+
+        @include breakpoint($only-tablet) {
+          padding: rem(20) 0;
+
+          html[lang="ar"] & {
+            padding: rem(20) 0;
+          }
+        }
+
+        @include breakpoint($desktop) {
+          padding: rem(10) 0;
+
+          html[lang="ar"] & {
+            padding: rem(10) 0;
+          }
+        }
+
+        .field--name-body {
+          p {
+            text-align: center;
+            margin-#{$right}: 0;
+          }
+        }
+      }
     }
   }
 }

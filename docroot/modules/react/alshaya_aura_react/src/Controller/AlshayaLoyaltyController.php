@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_aura_react\Helper\AuraHelper;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\node\NodeInterface;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\alshaya_aura_react\Helper\AuraApiHelper;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
@@ -63,6 +65,13 @@ class AlshayaLoyaltyController extends ControllerBase {
   protected $token;
 
   /**
+   * The path alias manager.
+   *
+   * @var \Drupal\path_alias\AliasManagerInterface
+   */
+  protected $aliasManager;
+
+  /**
    * AlshayaLoyaltyController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
@@ -77,6 +86,8 @@ class AlshayaLoyaltyController extends ControllerBase {
    *   The form builder.
    * @param \Drupal\token\TokenInterface $token
    *   Token interface.
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
+   *   The path alias manager.
    */
   public function __construct(
     MobileNumberUtilInterface $mobile_util,
@@ -84,7 +95,8 @@ class AlshayaLoyaltyController extends ControllerBase {
     ModuleHandlerInterface $module_handler,
     AuraApiHelper $api_helper,
     LanguageManagerInterface $language_manager,
-    TokenInterface $token
+    TokenInterface $token,
+    AliasManagerInterface $alias_manager
   ) {
     $this->mobileUtil = $mobile_util;
     $this->auraHelper = $aura_helper;
@@ -92,6 +104,7 @@ class AlshayaLoyaltyController extends ControllerBase {
     $this->apiHelper = $api_helper;
     $this->languageManager = $language_manager;
     $this->token = $token;
+    $this->aliasManager = $alias_manager;
   }
 
   /**
@@ -105,6 +118,7 @@ class AlshayaLoyaltyController extends ControllerBase {
       $container->get('alshaya_aura_react.aura_api_helper'),
       $container->get('language_manager'),
       $container->get('token'),
+      $container->get('path_alias.manager'),
     );
   }
 
@@ -114,7 +128,6 @@ class AlshayaLoyaltyController extends ControllerBase {
   public function loyaltyClub() {
     $cache_tags = [];
     $loyalty_benefits_config = $this->config('alshaya_aura_react.loyalty_benefits');
-    $loyalty_benefits_content = $loyalty_benefits_config->get('loyalty_benefits_content');
 
     $settings = [
       'loyaltyBenefitsTitle' => [
@@ -125,11 +138,25 @@ class AlshayaLoyaltyController extends ControllerBase {
         [AuraDictionaryApiConstants::APC_BRANDS],
         $this->languageManager->getCurrentLanguage()->getId(),
       )[AuraDictionaryApiConstants::APC_BRANDS],
-      'loyaltyBenefitsContent' => $loyalty_benefits_content ? $this->token->replace($loyalty_benefits_content['value']) : '',
       'config' => $this->auraHelper->getAuraConfig(),
       // Set context for the Aura banner.
       'context' => 'my_aura',
     ];
+
+    // Get the static page url for the loyalty page.
+    $static_page_nid = $this->configFactory->getEditable('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node');
+    if ($static_page_nid) {
+      $node = $this->entityTypeManager()->getStorage('node')->load($static_page_nid);
+      if ($node instanceof NodeInterface) {
+        $path = $this->aliasManager->getAliasByPath('/node/' . $node->id());
+        // If path is valid then update the settings.
+        if ($path) {
+          $settings['loyaltyStaticPageUrl'] = trim($path, '/');
+          // Adding cache tag of aura landing page.
+          $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTags());
+        }
+      }
+    }
 
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());
     $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');

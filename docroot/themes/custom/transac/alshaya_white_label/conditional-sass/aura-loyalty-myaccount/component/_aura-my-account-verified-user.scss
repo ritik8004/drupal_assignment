@@ -3,10 +3,10 @@
   &.aura-level-Tier3 {
     .aura-card-linked-verified-wrapper-content {
       &::before {
-        background-image: $aura-myaccount-vip;
+        background-image: $aura-myaccount-vip-full-enrolled;
 
         html[lang="ar"] & {
-          background-image: $aura-myaccount-vip-ar;
+          background-image: $aura-myaccount-vip-full-enrolled-ar;
         }
 
         @include breakpoint($upto-desktop) {
@@ -19,7 +19,11 @@
       }
 
       &::after {
-        mix-blend-mode: color-dodge;
+        background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-vip-desktop.svg?sjfks");
+
+        @include breakpoint($upto-desktop) {
+          background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-vip-mobile.svg?dkala");
+        }
       }
     }
 
@@ -33,10 +37,10 @@
   &.aura-level-Tier2 {
     .aura-card-linked-verified-wrapper-content {
       &::before {
-        background-image: $aura-myaccount-star;
+        background-image: $aura-myaccount-star-full-enrolled;
 
         html[lang="ar"] & {
-          background-image: $aura-myaccount-star-ar;
+          background-image: $aura-myaccount-star-full-enrolled-ar;
         }
 
         @include breakpoint($upto-desktop) {
@@ -49,11 +53,10 @@
       }
 
       &::after {
-        background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop-50.svg");
-        mix-blend-mode: darken;
+        background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-star-desktop.svg?sjdks");
 
         @include breakpoint($upto-desktop) {
-          background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile-50.svg");
+          background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-star-mobile.svg?gkdns");
         }
       }
     }
@@ -71,7 +74,7 @@
 
     &::after {
       content: "";
-      background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop.svg");
+      background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-desktop.svg?sddfs");
       background-repeat: no-repeat;
       background-size: 27.9375rem;
       background-position: -10.625rem -8.125rem;
@@ -88,7 +91,7 @@
 
       @include breakpoint($upto-desktop) {
         background-size: 28.125rem;
-        background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile.svg");
+        background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-hello-mobile.svg?fsksh");
         background-position-y: -8.1875rem;
         background-position-x: calc(50% - 3rem);
         width: 100%;
@@ -117,19 +120,19 @@
       #{$left}: 0;
       width: 100%;
       height: 100%;
-      background-image: $aura-loyalty-club-verified-user;
+      background-image: $aura-loyalty-club-verified-user-full-enrolled;
       border-radius: 0.625rem;
       z-index: -1;
 
       html[lang="ar"] & {
-        background-image: $aura-loyalty-club-verified-user-ar;
+        background-image: $aura-loyalty-club-verified-user-full-enrolled-ar;
       }
 
       @include breakpoint($upto-desktop) {
-        background-image: $aura-loyalty-club-verified-user-mobile;
+        background-image: $aura-loyalty-club-verified-user-full-enrolled-mobile;
 
         html[lang="ar"] & {
-          background-image: $aura-loyalty-club-verified-user-mobile-ar;
+          background-image: $aura-loyalty-club-verified-user-full-enrolled-mobile-ar;
         }
       }
     }
@@ -140,7 +143,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
-    padding-#{$right}: 3.125rem;
+    padding-#{$right}: rem(38);
     padding-top: 4rem;
     font-family: $aura-regular;
 
@@ -151,6 +154,10 @@
       > div {
         margin-#{$left}: 0;
         margin-top: 1.25rem;
+      }
+
+      .aura-tier {
+        margin-top: rem(29);
       }
     }
 
@@ -169,7 +176,7 @@
         color: $aura-loyalty-club-verified-user-banner-text;
         font-size: 0.875rem;
         display: block;
-        margin-bottom: 0.625rem;
+        margin-bottom: rem(11);
       }
 
       .aura-blend {
@@ -181,6 +188,7 @@
         height: 2.875rem;
         position: relative;
         color: $aura-loyalty-club-verified-user-banner-text;
+        letter-spacing: rem(0.71);
 
         &::before {
           content: "";
@@ -194,6 +202,12 @@
           border-radius: 1.75rem;
           background-color: $aura-loyalty-club-verified-user-blend;
         }
+      }
+    }
+
+    .aura-points-on-hold {
+      .tooltip-anchor {
+        margin-#{$left}: rem(2);
       }
     }
   }
@@ -226,6 +240,7 @@
         width: 6.3125rem;
         height: 6.3125rem;
         border-radius: 50%;
+        text-transform: uppercase;
 
         @include breakpoint($upto-desktop) {
           margin-bottom: 1.25rem;
@@ -253,12 +268,15 @@
         font-family: $aura-regular;
         display: flex;
         flex-direction: column;
+        padding-top: rem(11);
 
         input:disabled {
           padding: 0;
           background: none;
           border: none;
-          width: 9.5625rem;
+          font-family: $aura-bold;
+          padding-top: rem(6);
+          width: rem(160);
 
           @include force-ltr;
         }
@@ -266,15 +284,115 @@
 
       @include breakpoint($upto-desktop) {
         text-align: center;
+      }
+    }
+  }
 
-        .aura-card-number {
-          flex-direction: row;
+  &.aura-not-verified {
+    .aura-card-linked-verified-wrapper-content {
+      height: rem(261);
 
-          > span:first-child {
-            margin-#{$right}: 0.625rem;
-          }
+      @include breakpoint($upto-desktop) {
+        padding-bottom: rem(32);
+        height: auto;
+
+        .aura-card-linked-verified-description {
+          flex-wrap: nowrap;
+        }
+      }
+
+      .aura-app-download-wrapper {
+        color: $aura-loyalty-club-verified-user-banner-text;
+        font-size: rem(14);
+        line-height: rem(22);
+        text-align: center;
+        margin: rem(28) rem(43) 0;
+
+        @include breakpoint($desktop) {
+          font-size: rem(16);
+          width: rem(470);
+          margin: rem(40) 0 0;
         }
       }
     }
+  }
+}
+
+#my-accounts-aura {
+  .aura-card-linked-verified-wrapper {
+    &-content {
+      @include breakpoint($desktop) {
+        height: rem(134);
+      }
+    }
+
+    .aura-logo {
+      top: rem(20);
+
+      .aura-user-name {
+        padding-#{$left}: 0;
+      }
+    }
+
+    .aura-card-linked-verified-description {
+      padding-top: rem(28);
+
+      @include breakpoint($desktop) {
+        padding-#{$right}: rem(77);
+      }
+
+      .aura-points-on-hold {
+        .tooltip-anchor {
+          margin-#{$left}: rem(8);
+        }
+      }
+    }
+  }
+
+  .spc-aura-points-expiry-item {
+    margin-top: rem(8);
+  }
+}
+
+#my-accounts-aura-mobile {
+  .aura-card-linked-verified-wrapper-content {
+    padding: rem(17) rem(20) rem(20);
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+
+    .aura-logo {
+      align-items: flex-start;
+    }
+
+    .aura-user-name {
+      font-size: rem(24);
+      text-align: $left;
+    }
+
+    .aura-card-number {
+      padding-top: rem(20);
+
+      span:first-child {
+        font-size: rem(12);
+      }
+
+      input {
+        letter-spacing: rem(0.71);
+      }
+    }
+
+    .aura-card-linked-verified-mobile {
+      .aura-blend {
+        font-family: $aura-bold;
+        color: $aura-loyalty-club-verified-user-banner-text;
+        font-size: rem(16);
+        letter-spacing: rem(0.71);
+      }
+    }
+  }
+
+  .spc-aura-points-expiry-item {
+    margin-top: rem(8);
   }
 }
