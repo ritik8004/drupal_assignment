@@ -166,3 +166,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css: css/conditional-sass/alshaya-vat-certificate/alshaya-vat-certificate.ltr.css
+
+  alshaya_white_label/aura-loyalty-spc:
+    css:
+      theme:
+        css/conditional-sass/aura-loyalty-spc/aura-loyalty-spc.ltr.css: css/conditional-sass/aura-loyalty-spc/aura-loyalty-spc.ltr.css

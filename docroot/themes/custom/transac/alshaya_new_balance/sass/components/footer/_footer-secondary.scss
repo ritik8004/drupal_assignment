@@ -64,3 +64,41 @@
     }
   }
 }
+
+.c-footer__copy {
+  .c-footer-secondary & {
+    .country-ae & {
+      @include breakpoint($only-mobile) {
+        html[lang="ar"] & {
+          padding: rem(32) rem(20);
+        }
+      }
+
+      @include breakpoint($desktop) {
+        html[lang="ar"] & {
+          padding: rem(30) 0;
+        }
+      }
+
+      @include breakpoint($tablet) {
+        width: auto;
+        float: $left;
+
+        html[lang="ar"] & {
+          padding: rem(30) 0;
+        }
+      }
+    }
+  }
+}
+
+.menu--customer-rights-logo {
+  float: none;
+  display: inline-block;
+
+  @include breakpoint($tablet) {
+    ul {
+      margin-top: 0;
+    }
+  }
+}
