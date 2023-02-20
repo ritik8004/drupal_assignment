@@ -33,6 +33,10 @@ export default class UserReviews extends React.Component {
   componentDidMount = async () => {
     bazaarVoiceSettings = await getUserBazaarVoiceSettings();
 
+    if (!Drupal.hasValue(bazaarVoiceSettings)) {
+      return;
+    }
+
     this.setState({
       initialLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
     });
@@ -83,7 +87,7 @@ export default class UserReviews extends React.Component {
   render() {
     // In case of v3 we get bazaarvoice settings from MDC.
     // If Promise is not resolved then return null.
-    if (bazaarVoiceSettings instanceof Promise) {
+    if (bazaarVoiceSettings instanceof Promise || bazaarVoiceSettings === null) {
       return null;
     }
 

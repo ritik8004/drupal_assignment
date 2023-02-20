@@ -41,7 +41,7 @@ export default class Rating extends React.Component {
     const { bazaarVoiceSettings } = this.state;
 
     // Check reviews setting exist.
-    if (bazaarVoiceSettings.reviews !== undefined) {
+    if (Drupal.hasValue(bazaarVoiceSettings)) {
       getProductReviewStats(bazaarVoiceSettings.productid).then((result) => {
         removeFullScreenLoader();
         if (result !== null) {
@@ -50,6 +50,8 @@ export default class Rating extends React.Component {
           });
         }
       });
+    } else {
+      removeFullScreenLoader();
     }
 
     getUserDetails().then((userDetails) => {
@@ -70,7 +72,7 @@ export default class Rating extends React.Component {
     const { reviewsData, bazaarVoiceSettings, userDetails } = this.state;
 
     // Return empty if reviews settings unavailable.
-    if (bazaarVoiceSettings instanceof Promise) {
+    if (bazaarVoiceSettings instanceof Promise || bazaarVoiceSettings === null) {
       return null;
     }
 

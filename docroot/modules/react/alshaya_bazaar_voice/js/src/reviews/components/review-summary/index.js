@@ -67,6 +67,10 @@ export default class ReviewSummary extends React.Component {
   componentDidMount = async () => {
     bazaarVoiceSettings = await getbazaarVoiceSettings();
 
+    if (!Drupal.hasValue(bazaarVoiceSettings)) {
+      return;
+    }
+
     this.setState({
       loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
       paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
@@ -392,7 +396,7 @@ export default class ReviewSummary extends React.Component {
   render() {
     // In case of v3 we get bazaarvoice settings from MDC.
     // If Promise is not resolved then return null.
-    if (bazaarVoiceSettings instanceof Promise) {
+    if (bazaarVoiceSettings instanceof Promise || bazaarVoiceSettings === null) {
       return null;
     }
 

@@ -17,6 +17,9 @@
    */
   window.alshayaBazaarVoice.getProductReviewForCurrrentUser = async function getProductReviewForCurrrentUser(productIdentifier) {
     const bazaarVoiceSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
+    if (!Drupal.hasValue(bazaarVoiceSettings)) {
+      return;
+    }
     const productId = productIdentifier || bazaarVoiceSettings.productid;
     const userId = bazaarVoiceSettings.reviews.customer_id;
     const staticStorageKey = `${userId}_${productId}`;
@@ -140,6 +143,10 @@
 
     // Call commerceBackend for Bazaar voice settings.
     const bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
+
+    if (bazaarVoiceConfig === null) {
+      return bazaarVoiceConfig;
+    }
 
     if (Drupal.hasValue(bazaarVoiceConfig.basic)) {
       // Add basic configurations from MDC response.
