@@ -408,6 +408,8 @@ class AlshayaGtmManager {
     }
 
     $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
+    // Add data-insights-query-id attribute on pdp page.
+    $attributes['data-insights-query-id'] = '';
     $attributes = array_merge($attributes, $skuAttributes);
     return $attributes;
   }
