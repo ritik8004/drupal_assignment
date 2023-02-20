@@ -11,12 +11,13 @@
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_impressions, $('#alshaya-algolia-plp'), drupalSettings, event);
 
         $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', $('#alshaya-algolia-plp')).once('product-list-clicked').on('click', function (e) {
-          var cartRemoveElement = $(this).find('button.qty-sel-btn--down') !== undefined ? $(this).find('button.qty-sel-btn--down')[0] : null;
           // Product Click GTM event should not be triggered
-          // when removing from cart and when color swatch
-          // is clicked.
-          if (e.target !== cartRemoveElement
-            && !$(e.target).closest('.swatches').length) {
+          // when adding/removing from cart, when color swatch or
+          // add to cart button is clicked and when adding/removing
+          // product from wishlist.
+          if (!$(e.target).closest('.swatches').length
+            && !$(e.target).closest('.addtobag-button-container').length
+            && !$(e.target).closest('.wishlist-button-wrapper').length) {
             Drupal.alshaya_seo_gtm_push_product_clicks(
               $(this),
               drupalSettings.gtm.currency,

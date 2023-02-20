@@ -627,7 +627,9 @@ function alshaya_white_label_theme_suggestions_views_view_unformatted_alter(arra
 
   if ($variables['view']->id() == 'alshaya_product_list' && $variables['view']->current_display == 'block_1') {
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+    if ($term instanceof TermInterface
+      && $term->bundle() === 'acq_product_category'
+      && $term->get('field_group_by_sub_categories')->getString()) {
       $suggestions[] = 'views_view_unformatted__alshaya_product_list_sub_cat';
     }
   }
