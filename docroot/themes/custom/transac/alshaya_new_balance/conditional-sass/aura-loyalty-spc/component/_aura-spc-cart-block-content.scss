@@ -5,15 +5,16 @@
   .block-content.registered-user-linked {
     .spc-aura-cart-content {
       max-width: 100%;
+    }
 
+    .spc-aura-cart-icon {
       html[lang="ar"] & {
-        max-width: calc(80% - #{rem(30)});
+        margin-left: rem(13);
       }
     }
 
     @include breakpoint($only-mobile) {
-      padding-#{$right}: rem(9);
-      padding-#{$left}: rem(9);
+      @include sideSpaces(rem(9));
     }
   }
 }
