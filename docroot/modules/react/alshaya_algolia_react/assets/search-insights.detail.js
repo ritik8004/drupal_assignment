@@ -16,8 +16,6 @@
           && algoliaClicks[sku] !== undefined
           && algoliaClicks[sku] !== null
           && typeof algoliaClicks[sku] !== 'string') {
-          var dataInsightsQueryId = algoliaClicks[sku]['query-id'];
-          $('article.data-insights-query-class').attr('data-insights-query-id',dataInsightsQueryId);
           return {
             queryId: algoliaClicks[sku]['query-id'],
             objectId: algoliaClicks[sku]['object-id'],
