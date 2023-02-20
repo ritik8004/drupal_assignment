@@ -17,7 +17,7 @@ class MembershipPopup extends React.Component {
 
     const contactUsElement = document.querySelector("a[classname='contact-us']");
 
-    document.addEventListener("mousedown", (e) => {
+    document.addEventListener('mousedown', (e) => {
       if (contactUsElement.contains(e.target)) {
         this.contactUsClick();
       }
@@ -49,9 +49,9 @@ class MembershipPopup extends React.Component {
     window.dataLayer.push({
       event: 'pop-up',
       eventProps: {
-          category: 'pop-up',
-          action: 'hmAutoEnroll-click-contact_us'
-      }
+        category: 'pop-up',
+        action: 'hmAutoEnroll-click-contact_us',
+      },
     });
   };
 
