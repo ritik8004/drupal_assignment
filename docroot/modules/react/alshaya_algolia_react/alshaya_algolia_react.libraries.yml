@@ -92,3 +92,9 @@ back_to_search:
   dependencies:
     - alshaya_algolia_react/algolia_common
     - alshaya_master/jquery_is_in_viewport
+
+insights_query_pdp:
+  js:
+    assets/alshaya_algolia_insights_query_pdp.js: {}
+  dependencies:
+    - alshaya_algolia_react/search_insights_detail
