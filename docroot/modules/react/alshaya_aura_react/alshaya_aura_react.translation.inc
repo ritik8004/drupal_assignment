@@ -617,10 +617,16 @@ function _alshaya_aura_react_translations() {
         'ar' => 'رقم عضوية أورا',
         'context' => 'aura',
       ],
-    ],
-    'v9' => [
       'Your Tier Progress' => [
         'ar' => 'تم التقدم في المستوى',
+        'context' => 'aura',
+      ],
+      'To spend your points online, please download Aura Mena app available both on App Store and Play Store.' => [
+        'ar' => 'للاستفادة من نقاطك عبر الأونلاين، يرجى تحميل تطبيق أورا الشرق الأوسط المتوفر على أبل ستور، وسوق بلاي.',
+        'context' => 'aura',
+      ],
+      'Start spending to earn points' => [
+        'ar' => 'ابدأ الشراء لكسب النقاط',
         'context' => 'aura',
       ],
     ],
