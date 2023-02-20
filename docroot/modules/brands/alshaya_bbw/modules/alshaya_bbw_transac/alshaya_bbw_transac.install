@@ -11,6 +11,17 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_bbw_transac_update_9402() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_bathbodyworks.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add arabic configurations for bazaar voice write review form.
  */
 function alshaya_bbw_transac_update_9401() {

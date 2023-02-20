@@ -1,0 +1,7 @@
+@include breakpoint($only-mobile) {
+  .alias--cart {
+    .spc-pre-content-sticky {
+      @include sideSpaces($full_width_padding_mobile, "margin");
+    }
+  }
+}
