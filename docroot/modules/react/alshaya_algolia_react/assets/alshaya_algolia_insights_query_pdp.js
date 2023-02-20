@@ -11,7 +11,7 @@
          var sku = $('article.data-insights-query-class').attr('data-sku');
          if (sku !== null) {
           var insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
-          if (insightsClickData.queryId !== null) {
+          if (insightsClickData && insightsClickData.queryId !== null) {
             $('article.data-insights-query-class').attr('data-insights-query-id',insightsClickData.queryId);
           }
         }
