@@ -97,4 +97,4 @@ insights_query_pdp:
   js:
     assets/alshaya_algolia_insights_query_pdp.js: {}
   dependencies:
-    - alshaya_master/local_storage_manager
+    - alshaya_algolia_react/search_insights_detail
