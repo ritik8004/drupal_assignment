@@ -7,12 +7,12 @@
   /**
    * Helper function fetch Sku Algolia Insights Click Data.
    */
-    Drupal.dataInsightsQuery= function (e) {
+    Drupal.dataInsightsQuery= function () {
          var sku = $('article.data-insights-query-class').attr('data-sku');
-         if (sku !== null) {
+         if (Drupal.hasValue(sku)) {
           var insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
-          if (insightsClickData && insightsClickData.queryId !== null) {
-            $('article.data-insights-query-class').attr('data-insights-query-id',insightsClickData.queryId);
+          if (insightsClickData && Drupal.hasValue(insightsClickData.queryId)) {
+            $('article.data-insights-query-class').attr('data-insights-query-id', insightsClickData.queryId);
           }
         }
     };
