@@ -469,7 +469,9 @@ export default class Cart extends React.Component {
     }
 
     // Show 5K tabby limit widget only when grand total is over 5000.
-    if (Tabby.isTabbyEnabled() && totals.base_grand_total > 5000) {
+    if (Tabby.isTabbyEnabled()
+      && totals.base_grand_total > drupalSettings.tabby.cart_widget_limit
+    ) {
       preContentActive = 'visible';
     }
 

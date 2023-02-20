@@ -142,6 +142,8 @@ class AlshayaTabbyWidgetHelper {
         $build['tabby'] = $this->getTabbyWidgetMarkup('cart');
         $build['#attached']['library'][] = 'alshaya_tabby/tabby_cart';
         $build['#attached']['library'][] = 'alshaya_white_label/tabby';
+        $tabby_config = $this->configFactory->get('alshaya_tabby.settings');
+        $build['#attached']['drupalSettings']['tabby']['cart_widget_limit'] = $tabby_config->get('cart_widget_limit');
         break;
 
       case 'checkout':
