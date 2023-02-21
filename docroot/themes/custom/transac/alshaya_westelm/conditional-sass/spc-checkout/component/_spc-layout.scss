@@ -9,7 +9,7 @@
     }
 
     @include breakpoint($only-mobile) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: 7rem;
       }
     }

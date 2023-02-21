@@ -44,7 +44,9 @@
     .print-return-label-wrapper {
       .print-label-button {
         &::before {
-          background: url('#{$brand_theme_img_directory_path}/icons/print-icon.svg') no-repeat;
+          background:
+            url("#{$brand_theme_img_directory_path}/icons/print-icon.svg")
+            no-repeat;
         }
       }
     }

@@ -200,7 +200,7 @@
     @include breakpoint($only-mobile) {
       padding: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         p {
           line-height: 1.5;
         }

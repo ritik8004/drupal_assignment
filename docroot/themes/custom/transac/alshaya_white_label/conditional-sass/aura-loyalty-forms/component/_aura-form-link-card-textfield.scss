@@ -15,7 +15,7 @@
         pointer-events: none;
       }
 
-      @include icon('check') {
+      @include icon("check") {
         display: inline-flex;
         font-size: 1.8125rem;
         position: absolute;

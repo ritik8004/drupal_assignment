@@ -1,7 +1,7 @@
 .egift-input-field {
   &-wrapper {
     .egift-input-field-item {
-      input[type=radio] ~ label {
+      input[type="radio"] ~ label {
         @include icon(radio-empty, before) {
           margin-#{$right}: 1rem;
           position: relative;
@@ -15,7 +15,7 @@
         }
       }
 
-      input[type=radio]:checked ~ label {
+      input[type="radio"]:checked ~ label {
         @include icon(radio-filled, before) {
           border: none;
         }

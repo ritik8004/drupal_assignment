@@ -130,7 +130,7 @@
   .c-products__item {
     font-size: 0.875rem;
 
-    @include breakpoint ($desktop) {
+    @include breakpoint($desktop) {
       margin-bottom: 2rem;
     }
 
@@ -296,7 +296,7 @@
   .block-facet-blockcategory,
   .block-facet-blockplp-category-facet {
     .facet-item {
-      input[type=checkbox] ~ label::before {
+      input[type="checkbox"] ~ label::before {
         @include breakpoint($only-mobile) {
           top: 0;
         }

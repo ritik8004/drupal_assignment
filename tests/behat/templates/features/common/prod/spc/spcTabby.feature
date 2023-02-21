@@ -2,7 +2,7 @@
 Feature: SPC Checkout Home Delivery of Tabby payment for Guest user
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
 
   @hd @tabby

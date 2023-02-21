@@ -66,7 +66,7 @@
       border-top: 1px solid $secondary_border;
       padding-top: 0.9375rem;
 
-      @include breakpoint ($tablet) {
+      @include breakpoint($tablet) {
         margin-top: 0;
       }
     }
@@ -81,17 +81,17 @@
 
         background: $secondary_btn_bg;
 
-        @include breakpoint ($desktop) {
+        @include breakpoint($desktop) {
           width: 70%;
           margin-#{$left}: 1.25rem;
         }
 
-        @include breakpoint ($tablet) {
+        @include breakpoint($tablet) {
           float: $right;
           margin-top: 1.375rem;
         }
 
-        @include breakpoint ($only-tablet) {
+        @include breakpoint($only-tablet) {
           width: 64%;
         }
       }
@@ -126,7 +126,7 @@
       &.form-item-quantity {
         float: $left;
 
-        @include breakpoint ($only-mobile) {
+        @include breakpoint($only-mobile) {
           width: 100%;
 
           select.form-select {
@@ -138,7 +138,7 @@
           color: $primary_input_label;
           font-size: 0.875rem;
 
-          @include breakpoint ($only-mobile) {
+          @include breakpoint($only-mobile) {
             padding-top: 0;
           }
         }
@@ -146,7 +146,7 @@
     }
 
     .form-type-configurable-select-group label {
-      @include breakpoint ($only-mobile) {
+      @include breakpoint($only-mobile) {
         font-size: 0.875rem;
         color: $primary_input_label;
       }
@@ -188,7 +188,7 @@
         text-transform: uppercase;
         line-height: normal;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           line-height: 1.3;
         }
 
@@ -223,7 +223,7 @@
       a {
         &:hover {
           &::after {
-            content: '';
+            content: "";
             background: $pdp_thumbimage_hover_bg;
             position: absolute;
             left: 0;

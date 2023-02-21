@@ -36,12 +36,12 @@
     }
 
     .c-footer__logo--mastercard {
-      background-image: url(#{$nb_theme_img_directory_path}/icons/mastercard.svg);
+      background-image: url("#{$nb_theme_img_directory_path}/icons/mastercard.svg");
       width: rem(42);
     }
 
     .c-footer__logo--visa {
-      background-image: url(#{$nb_theme_img_directory_path}/icons/visa.svg);
+      background-image: url("#{$nb_theme_img_directory_path}/icons/visa.svg");
       width: rem(40);
     }
 
@@ -61,6 +61,44 @@
     @include breakpoint($desktop) {
       max-width: rem(1284);
       padding: 0 rem(24);
+    }
+  }
+}
+
+.c-footer__copy {
+  .c-footer-secondary & {
+    .country-ae & {
+      @include breakpoint($only-mobile) {
+        html[lang="ar"] & {
+          padding: rem(32) rem(20);
+        }
+      }
+
+      @include breakpoint($desktop) {
+        html[lang="ar"] & {
+          padding: rem(30) 0;
+        }
+      }
+
+      @include breakpoint($tablet) {
+        width: auto;
+        float: $left;
+
+        html[lang="ar"] & {
+          padding: rem(30) 0;
+        }
+      }
+    }
+  }
+}
+
+.menu--customer-rights-logo {
+  float: none;
+  display: inline-block;
+
+  @include breakpoint($tablet) {
+    ul {
+      margin-top: 0;
     }
   }
 }

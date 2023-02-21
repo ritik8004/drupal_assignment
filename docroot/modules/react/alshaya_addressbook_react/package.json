@@ -1,0 +1,12 @@
+{
+  "name": "alshaya_addressbook_react",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:dev": "../node_modules/.bin/webpack --mode=development",
+    "build": "../node_modules/.bin/webpack",
+    "watch": "../node_modules/.bin/webpack --watch",
+    "lint": "../node_modules/.bin/webpack --mode=development && ../node_modules/.bin/eslint js/**/**/*.js",
+    "lint:fix": "../node_modules/.bin/webpack --mode=development && ../node_modules/.bin/eslint js/**/**/*.js --fix"
+  }
+}

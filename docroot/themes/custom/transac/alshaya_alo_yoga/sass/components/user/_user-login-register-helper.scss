@@ -13,7 +13,7 @@
   .user-login-form,
   .user-register-form,
   .user-pass {
-    >a {
+    > a {
       font-weight: normal;
     }
 
@@ -32,7 +32,7 @@
       @include primaryBtn(true);
 
       @include breakpoint($tablet) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: rem(192);
         }
       }
@@ -105,7 +105,7 @@
 .block-alshaya-signup-signin-buttons {
   .link-button {
     @include breakpoint($only-mobile) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-right: 0;
       }
     }

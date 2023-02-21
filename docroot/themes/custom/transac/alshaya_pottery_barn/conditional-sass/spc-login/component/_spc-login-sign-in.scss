@@ -30,7 +30,7 @@
       font-size: 0;
       margin: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         max-width: 13.5rem;
       }
     }
@@ -81,7 +81,7 @@
   }
 }
 
-html[lang=ar] body {
+html[lang="ar"] body {
   &.alias--cart-login {
     @include breakpoint($upto-desktop) {
       margin-top: 0;

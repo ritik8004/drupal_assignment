@@ -1,0 +1,36 @@
+@include breakpoint($only-mobile) {
+  .region__footer-secondary,
+  .footer_primary-right-block {
+    @include sideSpaces(0);
+  }
+
+  .c-footer-primary {
+    .c-footer-is-accordion {
+      .is-accordion,
+      .accordion--body {
+        @include sideSpaces(0);
+      }
+    }
+  }
+
+  .c-footer-primary .footer--menu,
+  .alshaya-newsletter-subscribe {
+    @include sideSpaces($full_width_padding_mobile, "margin");
+  }
+}
+
+@include breakpoint($tablet) {
+  .c-footer__copy,
+  .block-alshaya-vat-certificate-block {
+    margin-#{$right}: 0;
+  }
+}
+
+.c-footer-primary,
+.c-footer-secondary {
+  @include fullWidthSideSpaces(
+    $is_tablet: true,
+    $is_desktop: true,
+    $is_desktop_wide: true
+  );
+}

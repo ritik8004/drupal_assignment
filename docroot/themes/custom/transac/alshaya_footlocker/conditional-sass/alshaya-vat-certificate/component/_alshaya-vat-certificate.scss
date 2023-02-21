@@ -7,14 +7,14 @@
   @include breakpoint($tablet) {
     text-align: $right;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: -1.25rem;
       margin-bottom: 1rem;
     }
   }
 
   @include breakpoint($desktop) {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-bottom: 0;
     }
   }

@@ -15,7 +15,7 @@
             background-color: $select_drop_down_hover_bg;
           }
 
-          &[aria-disabled=true] {
+          &[aria-disabled="true"] {
             background-color: $select_drop_down_hover_bg;
 
             &:hover {

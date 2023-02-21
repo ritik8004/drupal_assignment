@@ -16,7 +16,7 @@
       }
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       a {
         @include breakpoint($tablet) {
           height: auto;

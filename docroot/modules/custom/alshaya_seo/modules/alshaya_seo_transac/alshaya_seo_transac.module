@@ -161,6 +161,10 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $product_node = $gtm_manager->fetchProductGtmAttributes($entity, $view_mode);
     $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($product_node);
+    if ($view_mode === 'full') {
+      // Add the class data-insights-query-class on PDP page.
+      $variables['attributes']['class'][] = 'data-insights-query-class';
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 // Fix for facets without translations.
 .c-facet {
-  input[type=checkbox] ~ label {
+  input[type="checkbox"] ~ label {
     &::before {
       color: $primary_checkbox_empty;
     }

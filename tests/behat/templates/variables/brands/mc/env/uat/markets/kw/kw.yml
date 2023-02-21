@@ -1,8 +1,4 @@
 variables:
-  spc_product_listing_page: '/shop-newborn-clothing/'
-  spc_basket_page: '/shop-newborn-clothing/'
-  spc_pdp_page: 'buy-zebra-sleepsuits-3-pack.html'
-  product_listing_page_url: '/shop-newborn-clothing/'
   spc_plp_add_to_cart_single: '/shop-newborn-clothing/'
   spc_promotion_listing_page: '/buy-3-get-1-free-en/'
   spc_single_product_detail_page_coupon: '/buy-zebra-sleepsuits-3-pack.html/'

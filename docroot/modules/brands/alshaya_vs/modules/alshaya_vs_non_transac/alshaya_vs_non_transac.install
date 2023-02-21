@@ -80,7 +80,4 @@ function alshaya_vs_non_transac_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
-
-  \Drupal::service('theme_installer')->install(['alshaya_amp_victoria_secret'], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_victoria_secret')->save();
 }

@@ -33,7 +33,7 @@
           }
         }
 
-        input[checked='checked'] ~ label {
+        input[checked="checked"] ~ label {
           font-family: $alshaya-bold;
         }
       }

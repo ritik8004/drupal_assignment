@@ -172,7 +172,7 @@
           @include breakpoint($only-mobile) {
             padding: 1rem 0.5rem;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               padding: 1rem 1.5rem;
             }
           }
@@ -221,7 +221,7 @@
         @include breakpoint($only-mobile) {
           border-#{$right}: 0;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             padding: 1rem 1.5rem;
           }
         }

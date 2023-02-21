@@ -1,0 +1,11 @@
+name: 'Alshaya Addressbook React'
+type: module
+description: 'Manages user address details in React'
+core_version_requirement: ^9
+dependencies:
+  - alshaya_addressbook:alshaya_addressbook
+  - alshaya_spc:alshaya_spc
+  - alshaya_geolocation:alshaya_geolocation
+  - alshaya_seo_transac:alshaya_seo_transac
+  - alshaya_master:alshaya_master
+  - drupal:rest

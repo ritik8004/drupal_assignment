@@ -89,7 +89,7 @@
     border-radius: 0.125rem;
 
     &::before {
-      content: '';
+      content: "";
     }
   }
 
@@ -168,7 +168,7 @@
 
     .icon {
       padding-#{$left}: 0.3125rem;
-      background: url('#{$base_theme_img_directory_path}/icons/wishlist-share.svg') no-repeat;
+      background: url("#{$base_theme_img_directory_path}/icons/wishlist-share.svg") no-repeat;
       width: 2rem;
       height: 2rem;
       display: block;
@@ -396,7 +396,7 @@
   min-height: 15rem;
 
   .loader-icon {
-    background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+    background: url("#{$base_theme_loader_img_directory_path}") #{$left} center no-repeat;
     padding-#{$left}: 2.5rem;
     background-size: contain;
     color: $spc-loader-text;

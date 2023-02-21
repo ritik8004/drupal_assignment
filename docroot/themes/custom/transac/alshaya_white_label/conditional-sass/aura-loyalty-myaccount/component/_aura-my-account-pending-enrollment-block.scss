@@ -1,44 +1,55 @@
 .aura-pending-full-enrollment-wrapper {
   border-radius: 0.625rem;
   margin: 1.5rem 0 0;
-  padding: 1.75rem 0 1.25rem;
   color: $aura-loyalty-club-pending-enrollment-banner-text;
   position: relative;
-  min-height: 15.625rem;
+  font-family: $aura-regular;
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: rem(20) rem(20) rem(10);
+  min-height: rem(328);
+  justify-items: center;
 
-  @include breakpoint($upto-desktop) {
-    padding: 1.25rem 1.25rem 0.625rem;
-    min-height: 16.1875rem;
+  @include breakpoint($desktop) {
+    align-items: center;
+    grid-template-columns: 1fr 1.5fr 2fr;
+    min-height: rem(120);
+    padding: rem(22) rem(43);
   }
 
-  &::after {
-    content: '';
-    background-image: url('#{$base_theme_img_directory_path}/aura/aura-mobile.png');
-    background-repeat: no-repeat;
-    background-size: 8.5625rem;
-    // Intentionally non Rtl.
-    background-position: top left;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    #{$left}: 0;
-    z-index: -1;
-    width: 15.625rem;
+  @include breakpoint($only-mobile) {
+    font-size: rem(12);
+  }
 
-    html[lang=ar] & {
-      transform: scaleX(-1);
-    }
+  .aura-logo {
+    width: rem(125);
 
     @include breakpoint($desktop) {
-      background-image: url('#{$base_theme_img_directory_path}/aura/aura.png');
-      background-repeat: no-repeat;
-      background-size: 9.875rem;
-      background-position: 1px -1px;
+      width: rem(120);
+    }
+  }
+
+  .card-number-wrapper {
+    text-align: center;
+
+    .card-number-label {
+      margin-bottom: rem(12);
+      letter-spacing: rem(0.71);
+    }
+
+    .aura-my-account-link-card {
+      border: 0;
+      border-radius: rem(24);
+      padding: rem(12) rem(26);
+      text-align: center;
+      letter-spacing: rem(1);
+      font-family: $aura-bold;
+      font-size: rem(16);
     }
   }
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     bottom: 0;
@@ -48,34 +59,37 @@
     border-radius: 0.625rem;
     background: $aura-loyalty-club-no-card-block-pending-enroll-bg;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       background: $aura-loyalty-club-no-card-block-pending-enroll-bg-ar;
     }
 
     @include breakpoint($desktop) {
       background: $aura-loyalty-club-no-card-block-pending-enroll-bg-desktop;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         background: $aura-loyalty-club-no-card-block-pending-enroll-bg-desktop-ar;
       }
     }
   }
 
   .pending-full-enrollment-description {
-    text-align: center;
-
-    @include breakpoint($desktop) {
-      width: 75%;
-      padding-#{$left}: 11.4375rem;
-      text-align: $left;
-
-      .app-links {
-        margin-#{$left}: -0.625rem;
-      }
-    }
-
     @include breakpoint($only-mobile) {
       @include arabic-line-height(normal);
+
+      text-align: center;
+    }
+
+    .app-links {
+      @include breakpoint($desktop) {
+        margin-#{$left}: rem(-10);
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-top: rem(16);
+        display: flex;
+        width: 81%;
+        margin: 0 auto;
+      }
     }
 
     .app-links {
@@ -92,7 +106,7 @@
       font-size: 1.375rem;
       padding-bottom: 0.8125rem;
 
-      @include arabic-line-height('nomral');
+      @include arabic-line-height("nomral");
 
       @include breakpoint($upto-desktop) {
         font-size: 1.125rem;
@@ -104,33 +118,11 @@
       font-size: 1.125rem;
       padding-bottom: 1.1875rem;
 
-      @include arabic-line-height('nomral');
+      @include arabic-line-height("nomral");
 
       @include breakpoint($upto-desktop) {
         font-size: 1rem;
       }
-    }
-  }
-
-  .aura-model {
-    position: absolute;
-    #{$right}: 0;
-    top: 0;
-    height: 100%;
-    overflow: hidden;
-    z-index: -1;
-
-    html[lang=ar] & {
-      transform: scaleX(-1);
-    }
-
-    @include breakpoint($upto-desktop) {
-      display: none;
-    }
-
-    img {
-      height: 100%;
-      object-fit: contain;
     }
   }
 }

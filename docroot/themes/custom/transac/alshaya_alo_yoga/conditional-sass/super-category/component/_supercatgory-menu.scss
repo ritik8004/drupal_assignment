@@ -53,7 +53,7 @@
           height: rem(36);
 
           @include breakpoint($desktop) {
-            html[lang=ar] & {
+            html[lang="ar"] & {
               padding-right: 0;
             }
           }
@@ -137,7 +137,7 @@
 
     @include breakpoint($only-tablet) {
       &,
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: rem(62);
       }
     }

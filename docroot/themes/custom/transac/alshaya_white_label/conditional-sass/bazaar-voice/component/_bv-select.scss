@@ -49,7 +49,7 @@
       align-items: center;
       justify-content: center;
 
-      @include icon('chevrondown') {
+      @include icon("chevrondown") {
         font-size: 1.75rem;
         position: absolute;
         top: 50%;

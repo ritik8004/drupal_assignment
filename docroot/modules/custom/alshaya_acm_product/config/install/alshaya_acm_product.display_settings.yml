@@ -47,3 +47,7 @@ change_matchback_color: true
 use_matchback_cart_notification: true
 # Show add to bag button on mobile matchback
 display_mobile_matchback_add_to_bag_button: false
+# Show a pre selected variant on PDP page load.
+# Setting it to 'false' means no product variant will be selected
+# by default and parent product image gallery will be displayed.
+show_pre_selected_variant_on_pdp: true

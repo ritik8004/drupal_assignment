@@ -59,8 +59,8 @@
 .cloudzoom__thumbnails__video,
 .imagegallery__thumbnails__video {
   &::before {
-    content: '';
-    background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 50% 50% no-repeat;
+    content: "";
+    background: url("#{$base_theme_img_directory_path}/icons/ic-video.svg") 50% 50% no-repeat;
     width: inherit;
     height: inherit;
     position: absolute;

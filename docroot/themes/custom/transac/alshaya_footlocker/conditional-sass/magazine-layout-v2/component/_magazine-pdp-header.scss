@@ -2,8 +2,8 @@
   .magv2-header-wrapper {
     .cart-link {
       &::before {
-        content: '';
-        mask-image: url('#{$fl_theme_img_directory_path}/icons/shopping-bag-v2.svg');
+        content: "";
+        mask-image: url("#{$fl_theme_img_directory_path}/icons/shopping-bag-v2.svg");
         background-color: $header_c_menu_icon_color;
         background-position: center center;
         background-repeat: no-repeat;

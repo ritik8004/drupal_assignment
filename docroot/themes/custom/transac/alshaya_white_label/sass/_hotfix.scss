@@ -70,7 +70,7 @@ body.ucbrowser {
   // Fix for direction attribute support for UC browser.
   // Select elements for size and quantity.
   .c-pdp {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       .form-item-configurables-size select {
         padding-left: 42px;
       }
@@ -82,7 +82,7 @@ body.ucbrowser {
   }
 
   .c-plp {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       .form-item-sort-bef-combine select {
         padding-left: 40px;
       }
@@ -120,7 +120,7 @@ body.ucbrowser {
     .c-menu-primary {
       .mobile--search,
       .store {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           font-size: 0;
         }
       }
@@ -156,7 +156,7 @@ body.chrome {
  */
 .samsung {
   &.s-tab2:not(.chrome) {
-    html[lang=en] & {
+    html[lang="en"] & {
       .webform-submission-alshaya-contact-form,
       form.user-form {
         .form-item-mobile-number-mobile {
@@ -165,7 +165,7 @@ body.chrome {
       }
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       .webform-submission-alshaya-contact-form,
       form.user-form {
         .form-item-mobile-number-mobile {
@@ -176,7 +176,7 @@ body.chrome {
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .delivery-options-tooltip-wrapper {
     @include breakpoint($only-mobile) {
       right: 8.5rem;

@@ -26,7 +26,7 @@
 
       .sub-menu-btn {
         display: inline-block;
-        background: url(#{$base_theme_img_directory_path}/icons/campaign-plp-style-1-sub-menu.svg) no-repeat center center;
+        background: url("#{$base_theme_img_directory_path}/icons/campaign-plp-style-1-sub-menu.svg") no-repeat center center;
         width: 2.3125rem;
         height: 2.3125rem;
         cursor: pointer;
@@ -114,7 +114,7 @@
           transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
           transform-origin: $right center;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translateX(24rem) scale(1.9);
           }
         }
@@ -171,7 +171,7 @@
             color: $plp-sub-menu-heading-link-active;
           }
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             @include breakpoint($tablet) {
               font-size: 4.375rem;
             }
@@ -190,7 +190,7 @@
           font-family: $campaign-plp-style-1-font;
           line-height: 1.1;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             @include breakpoint($desktop) {
               line-height: 1.3;
             }
@@ -235,7 +235,7 @@
           display: none;
         }
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           #{$left}: 58%;
         }
 
@@ -260,7 +260,7 @@
         #{$left}: 1.25rem;
         cursor: pointer;
 
-        @include icon('close') {
+        @include icon("close") {
           font-size: 2.1875rem;
           background: $plp-sub-menu-cls-btn-bg;
           border-radius: 50%;
@@ -280,7 +280,7 @@
         > .field--name-field-plp-menu .mos-menu-heading {
           transform: none;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: none;
           }
         }

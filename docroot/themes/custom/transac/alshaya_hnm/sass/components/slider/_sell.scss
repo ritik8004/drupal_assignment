@@ -87,7 +87,7 @@
     font-size: 1.25rem;
     line-height: 1.5rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       font-size: 0.875rem;
     }
   }
@@ -135,7 +135,7 @@
             width: 40%;
             margin-top: 1rem;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               &::after {
                 #{left}: -0.4375rem;
               }

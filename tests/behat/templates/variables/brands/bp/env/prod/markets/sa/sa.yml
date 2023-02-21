@@ -1,9 +1,5 @@
 variables:
   url_product_page: 'buy-boots-tea-tree-witch-hazel-cleansing-toning-lotion-150ml.html'
-  product_listing_page_url: '/shop-new-in/'
-  spc_product_listing_page: '/shop-new-in/'
-  spc_basket_page: '/shop-new-in/'
-  spc_pdp_page: 'buy-boots-tea-tree-witch-hazel-cleansing-toning-lotion-150ml.html'
   spc_promotion_listing_page: '/buy-boots-tea-tree-witch-hazel-cleansing-toning-lotion-150ml.html'
   spc_single_product_detail_page_coupon: '/buy-boots-tea-tree-witch-hazel-cleansing-toning-lotion-150ml.html/'
   spc_multiple_product_detail_page_coupon: '/buy-boots-tea-tree-witch-hazel-cleansing-toning-lotion-150ml.html/'

@@ -100,7 +100,7 @@
     .spcAuraSelect__indicator {
       padding: 0;
 
-      @include icon('chevrondown') {
+      @include icon("chevrondown") {
         font-size: 1.5rem;
         color: #000;
         transition: transform 0.3s ease-in-out;

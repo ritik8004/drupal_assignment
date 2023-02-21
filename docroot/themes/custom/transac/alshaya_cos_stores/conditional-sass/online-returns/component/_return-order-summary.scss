@@ -89,7 +89,7 @@
         }
 
         .order-total-wrapper {
-          >div {
+          > div {
             @include breakpoint($tablet) {
               margin-bottom: rem(2);
             }

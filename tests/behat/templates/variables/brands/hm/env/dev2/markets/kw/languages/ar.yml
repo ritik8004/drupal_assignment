@@ -16,7 +16,6 @@ variables:
   promotional_filter: 'Promotions'
   size_filter: 'Size'
   filters: 'all filters'
-  spc_basket_page: '/shop-default-category/men/'
   language_link: 'العربية'
   checkout_link: 'continue to checkout'
   create_account: 'تسجيل مستخدم جديد'

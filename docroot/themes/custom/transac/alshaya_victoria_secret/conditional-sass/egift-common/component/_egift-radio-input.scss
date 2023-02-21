@@ -1,6 +1,6 @@
 .egift-input-field-wrapper {
   .egift-input-field-item {
-    input[type=radio]:checked ~ label {
+    input[type="radio"]:checked ~ label {
       &::before {
         border: 0.1875rem solid $primary_radiobtn_filled;
       }

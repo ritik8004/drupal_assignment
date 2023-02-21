@@ -468,8 +468,10 @@ export default class Cart extends React.Component {
       preContentActive = 'visible';
     }
 
-    // Check if the tabby is enabled.
-    if (Tabby.isTabbyEnabled()) {
+    // Show 5K tabby limit widget only when grand total is over cart widget limit config.
+    if (Tabby.isTabbyEnabled()
+      && totals.base_grand_total > drupalSettings.tabby.cart_widget_limit
+    ) {
       preContentActive = 'visible';
     }
 
@@ -571,7 +573,7 @@ export default class Cart extends React.Component {
               hasExclusiveCoupon={hasExclusiveCoupon}
             />
             <ConditionalView condition={isAuraEnabled()}>
-              <AuraCartContainer totals={totals} items={items} auraDetails={auraDetails} />
+              <AuraCartContainer totals={totals} auraDetails={auraDetails} />
             </ConditionalView>
             {/* This will be used for the order summary section on cart page,
             where we will show the coupon code on the discount tooltip

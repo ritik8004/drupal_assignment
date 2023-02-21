@@ -3,7 +3,7 @@
     li .order-list-wrapper-container.has-aura-points {
       .fourth {
         @include breakpoint($desktop) {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             padding-right: rem(32);
           }
         }

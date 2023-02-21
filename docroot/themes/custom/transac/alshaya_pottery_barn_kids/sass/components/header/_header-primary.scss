@@ -9,7 +9,9 @@ header.c-header {
     }
 
     #edit-submit-search {
-      background: $primary_search_btn_icon url('../imgs/assets/search.svg') 0.25rem 0.25rem no-repeat;
+      background:
+        $primary_search_btn_icon url("../imgs/assets/search.svg")
+        0.25rem 0.25rem no-repeat;
       background-size: 1.9rem 1.9rem;
       width: 2.125rem;
       height: 2.125rem;
@@ -128,7 +130,7 @@ header.c-header {
   .block-alshaya-react-mini-cart {
     .cart-link {
       @include breakpoint($only-mobile) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           top: 0.125rem;
           margin-top: 0;
           margin-bottom: 0.8875rem;
@@ -228,7 +230,7 @@ body {
     }
 
     &:not(.supermenu) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 8.6875rem;
       }
     }

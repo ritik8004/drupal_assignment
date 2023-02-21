@@ -18,7 +18,7 @@
           }
         }
 
-        &[class*='swatch-color-fffff'] {
+        &[class*="swatch-color-fffff"] {
           -webkit-appearance: none;
           box-shadow: 0 0 0 1px $plp_facet_white_color_attribute;
         }
@@ -27,7 +27,7 @@
       &.is-active {
         .swatch {
           &::before {
-            content: '';
+            content: "";
             border: 1px solid $color_facet_active_border;
             position: absolute;
             top: -0.125rem;

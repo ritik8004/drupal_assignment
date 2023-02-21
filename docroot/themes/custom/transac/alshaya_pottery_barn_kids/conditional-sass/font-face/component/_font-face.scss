@@ -1,12 +1,14 @@
 // PBK fonts are same as PB so we have only additional fonts here.
-$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_kids/fonts';
+$base_theme_fonts_directory_path: "/themes/custom/transac/alshaya_pottery_barn_kids/fonts";
 
 //DY fonts.
 @font-face {
   font-family: "Realist-Medium";
   src:
-    url("#{$base_theme_fonts_directory_path}/Realist-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Realist-Medium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Realist-Medium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Medium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -15,8 +17,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_k
 @font-face {
   font-family: "Realist-Regular";
   src:
-    url("#{$base_theme_fonts_directory_path}/Realist-Regular.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Realist-Regular.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Realist-Regular.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Regular.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -25,8 +29,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_k
 @font-face {
   font-family: "Realist-SemiLight";
   src:
-    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

@@ -28,7 +28,7 @@
   }
 
   .c-footer-menu--about {
-    html[lang=en] & {
+    html[lang="en"] & {
       @include breakpoint($desktop) {
         margin-#{$left}: 4%;
         width: 70%;
@@ -170,7 +170,7 @@
     #{$right}: 0;
   }
 
-  .edit-newsletter[data-style=zoom-in][data-loading] {
+  .edit-newsletter[data-style="zoom-in"][data-loading] {
     background: $newsletter_submit_btn;
   }
 }
@@ -248,7 +248,7 @@
       li {
         &:first-child {
           &::after {
-            html[lang=en] & {
+            html[lang="en"] & {
               top: 0.25rem;
             }
           }
@@ -293,7 +293,7 @@
       &.en {
         a {
           @include breakpoint($only-tablet) {
-            html[lang=en] & {
+            html[lang="en"] & {
               margin-left: 0;
             }
           }
@@ -303,7 +303,7 @@
       &.ar {
         a {
           @include breakpoint($only-tablet) {
-            html[lang=ar] & {
+            html[lang="ar"] & {
               margin-right: 0;
             }
           }

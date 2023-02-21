@@ -1,7 +1,7 @@
 .spc-area-select-selected {
   text-transform: capitalize;
 
-  @include icon('chevrondown', after) {
+  @include icon("chevrondown", after) {
     font-size: 0.525rem;
   }
 }
@@ -21,12 +21,12 @@
       justify-content: center;
       display: inline-flex;
 
-      @include icon('chevrondown', 'after') {
+      @include icon("chevrondown", "after") {
         font-size: 0.525rem;
         transform: rotate(90deg);
         display: inline-block;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(-90deg);
         }
       }

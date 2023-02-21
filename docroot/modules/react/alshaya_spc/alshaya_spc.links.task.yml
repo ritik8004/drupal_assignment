@@ -2,3 +2,8 @@ alshaya_spc.alshaya_delivery_options_settings:
   route_name: alshaya_spc.alshaya_delivery_options_settings
   title: 'Alshaya Same Day/Express Delivery Configuration'
   base_route: alshaya_spc.alshaya_delivery_options_settings
+
+alshaya_spc.show_listing_sidebar:
+  route_name: alshaya_spc.show_listing_sidebar
+  title: 'Alshaya Show Sidebar on Listing pages Configuration'
+  base_route: alshaya_spc.show_listing_sidebar

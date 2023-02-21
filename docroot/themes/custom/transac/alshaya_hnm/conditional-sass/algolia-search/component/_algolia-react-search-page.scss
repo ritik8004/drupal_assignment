@@ -402,18 +402,18 @@
       }
 
       .large-col-grid {
-        background: url('../../../imgs/icons/large-grid-inactive.svg') no-repeat center;
+        background: url("../../../imgs/icons/large-grid-inactive.svg") no-repeat center;
 
         &.active {
-          background: url('../../../imgs/icons/large-grid-active.svg') no-repeat center;
+          background: url("../../../imgs/icons/large-grid-active.svg") no-repeat center;
         }
       }
 
       .small-col-grid {
-        background: url('../../../imgs/icons/small-grid-inactive.svg') no-repeat center;
+        background: url("../../../imgs/icons/small-grid-inactive.svg") no-repeat center;
 
         &.active {
-          background: url('../../../imgs/icons/small-grid-active.svg') no-repeat center;
+          background: url("../../../imgs/icons/small-grid-active.svg") no-repeat center;
         }
       }
     }

@@ -5,7 +5,7 @@
     padding: 0;
     box-shadow: none;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       padding: 0;
       top: 3.6875rem;
     }
@@ -136,8 +136,8 @@
       }
 
       &::after {
-        content: '';
-        background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 10px 7px no-repeat;
+        content: "";
+        background: $primary_search_btn_icon url("../../../imgs/assets/search.svg") 10px 7px no-repeat;
         background-position: center;
         display: block;
         width: 2.625rem;
@@ -166,7 +166,7 @@
           transform: translateY(-50%);
           #{$right}: 0;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translateY(-50%) rotate(90deg);
           }
         }
@@ -262,7 +262,7 @@ body {
       margin-top: 7.875rem;
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($upto-desktop) {
         margin-top: 7.875rem;
       }

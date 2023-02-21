@@ -1,6 +1,2 @@
 variables:
   url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  product_listing_page_url: "/victorias-secret/shop-new/"
-  spc_product_listing_page: '/victorias-secret/shop-new/'
-  spc_basket_page: '/victorias-secret/shop-new/'
-  spc_pdp_page: 'victorias-secret/buy-satin-long-pj-set-green-iconic-stripe.html'

@@ -9,7 +9,9 @@
   .egift-open-amount-wrapper {
     button {
       &::after {
-        background: url('#{$brand_theme_img_directory_path}/icons/new-pdp-tick-icon.svg') center center no-repeat;
+        background:
+          url("#{$brand_theme_img_directory_path}/icons/new-pdp-tick-icon.svg")
+          center center no-repeat;
       }
     }
   }

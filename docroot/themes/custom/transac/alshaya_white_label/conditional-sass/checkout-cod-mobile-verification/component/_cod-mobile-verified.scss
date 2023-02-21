@@ -25,8 +25,8 @@
     padding: 0;
 
     &::before {
-      content: '';
-      background: url('#{$base_theme_img_directory_path}/icons/edit-pencil.svg') no-repeat;
+      content: "";
+      background: url("#{$base_theme_img_directory_path}/icons/edit-pencil.svg") no-repeat;
       width: rem(13);
       height: rem(13);
       display: inline-block;

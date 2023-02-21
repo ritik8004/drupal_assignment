@@ -200,7 +200,7 @@
   }
 
   .content__sidebar .field--name-field-skus .ladda-button .ladda-spinner {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-tablet) {
         position: absolute;
         top: 1rem;

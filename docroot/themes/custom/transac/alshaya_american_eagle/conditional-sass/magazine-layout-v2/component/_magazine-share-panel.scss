@@ -3,7 +3,7 @@
     margin-top: -0.3rem;
 
     .st_pinterest_custom {
-      @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/pinterest.svg', 2rem, 2rem);
+      @include pdp_icon_img("#{$aeo_theme_img_directory_path}/icons/pinterest.svg", 2rem, 2rem);
     }
   }
 }

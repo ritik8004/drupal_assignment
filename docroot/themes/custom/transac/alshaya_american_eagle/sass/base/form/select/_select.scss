@@ -3,7 +3,7 @@
 
   ul.select2-results__options {
     li.select2-results__option:not(:first-of-type) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         direction: ltr;
       }
     }
@@ -26,4 +26,3 @@
     }
   }
 }
-

@@ -1,7 +1,7 @@
 .path--store-finder,
 .nodetype--store {
   .form-item-geolocation-geocoder-google-places-api {
-    input[type=text] {
+    input[type="text"] {
       &::placeholder {
         color: $store_finder_location_search_text_placeholder;
       }
@@ -18,7 +18,7 @@
   }
 
   .label--location::before {
-    background: url(../../../imgs/icons/store-search.svg) no-repeat;
+    background: url("../../../imgs/icons/store-search.svg") no-repeat;
   }
 
   .list-view-locator {

@@ -18,14 +18,14 @@
         top: -4.5rem;
         #{$left}: 20rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           right: 20rem;
         }
       }
 
       &::before {
-        content: '';
-        background: url('#{$cos_theme_img_directory_path}/icons/share.svg') center center no-repeat;
+        content: "";
+        background: url("#{$cos_theme_img_directory_path}/icons/share.svg") center center no-repeat;
         border: 1px solid $primary_border;
         width: 3rem;
         height: 3rem;

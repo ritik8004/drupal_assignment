@@ -14,7 +14,7 @@
   }
 
   .st_facebook_custom {
-    @include pdp_icon_img('#{$dh_theme_img_directory_path}/icons/facebook.svg', 1.75rem, 1.75rem) {
+    @include pdp_icon_img("#{$dh_theme_img_directory_path}/icons/facebook.svg", 1.75rem, 1.75rem) {
       opacity: 0.15;
     }
 
@@ -24,7 +24,7 @@
   }
 
   .st_twitter_custom {
-    @include pdp_icon_img('#{$dh_theme_img_directory_path}/icons/twitter.svg', 1.75rem, 1.75rem) {
+    @include pdp_icon_img("#{$dh_theme_img_directory_path}/icons/twitter.svg", 1.75rem, 1.75rem) {
       opacity: 0.15;
     }
 
@@ -34,7 +34,7 @@
   }
 
   .st_pinterest_custom {
-    @include pdp_icon_img('#{$dh_theme_img_directory_path}/icons/pinterest.svg', 1.75rem, 1.75rem) {
+    @include pdp_icon_img("#{$dh_theme_img_directory_path}/icons/pinterest.svg", 1.75rem, 1.75rem) {
       opacity: 0.15;
     }
 
@@ -44,7 +44,7 @@
   }
 
   .st_instagram_custom {
-    @include pdp_icon_img('#{$dh_theme_img_directory_path}/icons/instagram.svg', 1.75rem, 1.75rem) {
+    @include pdp_icon_img("#{$dh_theme_img_directory_path}/icons/instagram.svg", 1.75rem, 1.75rem) {
       opacity: 0.15;
     }
 
@@ -54,7 +54,7 @@
   }
 
   .st_email_custom {
-    @include pdp_icon_img('#{$dh_theme_img_directory_path}/icons/ic-email-share.svg', 1.75rem, 1.75rem) {
+    @include pdp_icon_img("#{$dh_theme_img_directory_path}/icons/ic-email-share.svg", 1.75rem, 1.75rem) {
       opacity: 0.15;
     }
 

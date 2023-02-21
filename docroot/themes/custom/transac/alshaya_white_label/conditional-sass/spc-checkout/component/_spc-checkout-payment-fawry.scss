@@ -1,8 +1,8 @@
 .payment-method.payment-method-checkout_com_upapi_fawry {
   .payment-method-bottom-panel.checkout_com_upapi_fawry {
     .payment-form-wrapper {
-      input[type=email],
-      input[type=tel] {
+      input[type="email"],
+      input[type="tel"] {
         width: 100%;
         border: none;
         border-bottom: 1px solid $primary_input_border;

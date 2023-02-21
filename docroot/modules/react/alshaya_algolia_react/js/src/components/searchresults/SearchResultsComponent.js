@@ -87,6 +87,7 @@ const SearchResultsComponent = ({
     ? drupalSettings.superCategory.show_brand_filter
     : false;
 
+  const showSidebar = drupalSettings.show_srp_sidebar || false;
   // Add the drawer markup for add to bag feature.
   createConfigurableDrawer();
 
@@ -99,28 +100,36 @@ const SearchResultsComponent = ({
       onSearchStateChange={onSearchStateChange}
     >
       <Configure
+        userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
         hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage}
         filters={stockFilter}
         query={query}
       />
-      {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}
-      <SideBar>
-        {hasSuperCategoryFilter() && isDesktop() && (
-          <Menu
-            transformItems={(items) => getSortedItems(items, 'supercategory')}
-            attribute="super_category"
-          />
-        )}
-        {hasCategoryFilter() && isDesktop() && (
-          <HierarchicalMenu
-            transformItems={(items) => getSortedItems(items, 'category')}
-            attributes={attributes}
-            facetLevel={1}
-            showParentLevel
-          />
-        )}
-      </SideBar>
+      {optionalFilter ? (
+        <Configure
+          optionalFilters={optionalFilter}
+          userToken={Drupal.getAlgoliaUserToken()}
+        />
+      ) : null}
+      {showSidebar && (
+        <SideBar>
+          {hasSuperCategoryFilter() && isDesktop() && (
+            <Menu
+              transformItems={(items) => getSortedItems(items, 'supercategory')}
+              attribute="super_category"
+            />
+          )}
+          {hasCategoryFilter() && isDesktop() && (
+            <HierarchicalMenu
+              transformItems={(items) => getSortedItems(items, 'category')}
+              attributes={attributes}
+              facetLevel={1}
+              showParentLevel
+            />
+          )}
+        </SideBar>
+      )}
       <MainContent>
         <StickyFilter>
           {(callback) => (

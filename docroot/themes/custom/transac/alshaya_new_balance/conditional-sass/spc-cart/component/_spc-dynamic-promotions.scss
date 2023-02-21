@@ -3,7 +3,7 @@
     .promotion {
       &.fixed_percentage_discount_order,
       &.free_gift_order {
-        &[threshold=true] {
+        &[threshold="true"] {
           color: $basket_dynamic_promotion_fixed_percentage_discount_order_text;
 
           svg #fill-value {

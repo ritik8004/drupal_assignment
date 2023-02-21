@@ -145,7 +145,7 @@
       pointer-events: none;
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         bottom: 0;
@@ -202,7 +202,7 @@
     padding-#{$left}: 2rem !important;
     position: relative;
 
-    @include icon('infomation') {
+    @include icon("infomation") {
       width: 1.25rem;
       height: 1.25rem;
       color: $egift-card-redeem-icon;
@@ -220,7 +220,7 @@
     justify-content: flex-end;
     flex-grow: 1;
 
-    @include icon('chevrondown') {
+    @include icon("chevrondown") {
       font-size: 2rem;
       position: absolute;
       top: 50%;
@@ -259,7 +259,7 @@
       }
     }
 
-    input[type=checkbox]:checked ~ label::before {
+    input[type="checkbox"]:checked ~ label::before {
       color: $spc-checkout-radio-filled;
     }
 

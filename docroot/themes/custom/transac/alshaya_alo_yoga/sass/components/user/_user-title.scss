@@ -67,7 +67,7 @@
           font-size: rem(34);
           transform: rotate(270deg);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: rotate(90deg);
           }
         }

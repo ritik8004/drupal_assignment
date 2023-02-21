@@ -2,41 +2,51 @@
 // English fonts.
 
 //Proxima Nova
-$nb-nova-regular: 'ProximaNova-Regular', 'sans-serif', 'Arial';
-$nb-nova-regular-nodir: 'ProximaNova-Regular', 'sans-serif', 'Arial';
+$nb-nova-regular: "ProximaNova-Regular", "sans-serif", "Arial";
+$nb-nova-regular-nodir: "ProximaNova-Regular", "sans-serif", "Arial";
 
-$nb-nova-semibold: 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
-$nb-nova-semibold-nodir: 'ProximaNova-Semi-Bold', 'sans-serif', 'Arial';
+$nb-nova-semibold: "ProximaNova-SemiBold", "sans-serif", "Arial";
+$nb-nova-semibold-nodir: "ProximaNova-Semi-Bold", "sans-serif", "Arial";
 
-$nb-nova-bold: 'ProximaNova-Bold', 'sans-serif', 'Arial';
-$nb-nova-bold-nodir: 'ProximaNova-Bold', 'sans-serif', 'Arial';
+$nb-nova-bold: "ProximaNova-Bold", "sans-serif", "Arial";
+$nb-nova-bold-nodir: "ProximaNova-Bold", "sans-serif", "Arial";
 
 // Didot
-$nb-didot-regular: 'Didot-Regular', 'sans-serif', 'Arial';
-$nb-didot-regular-nodir: 'Didot-Regular', 'sans-serif', 'Arial';
+$nb-didot-regular: "Didot-Regular", "sans-serif", "Arial";
+$nb-didot-regular-nodir: "Didot-Regular", "sans-serif", "Arial";
 
-$nb-didot-medium: 'Didot-Medium', 'sans-serif', 'Arial';
-$nb-didot-medium-nodir: 'Didot-Medium', 'sans-serif', 'Arial';
+$nb-didot-medium: "Didot-Medium", "sans-serif", "Arial";
+$nb-didot-medium-nodir: "Didot-Medium", "sans-serif", "Arial";
 
-$nb-didot-bold: 'Didot-Bold', 'sans-serif', 'Arial';
-$nb-didot-bold-nodir: 'Didot-Medium', 'sans-serif', 'Arial';
+$nb-didot-bold: "Didot-Bold", "sans-serif", "Arial";
+$nb-didot-bold-nodir: "Didot-Medium", "sans-serif", "Arial";
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$nb-arabic-regular: 'NotoNaskhArabic-Regular', 'ProximaNova-Regular', 'sans-serif', 'Arial';
-$nb-arabic-regular-nodir: 'NotoNaskhArabic-Regular', 'ProximaNova-Regular', 'sans-serif', 'Arial';
+$nb-arabic-regular: "NotoNaskhArabic-Regular", "ProximaNova-Regular",
+  "sans-serif", "Arial";
+$nb-arabic-regular-nodir: "NotoNaskhArabic-Regular", "ProximaNova-Regular",
+  "sans-serif", "Arial";
 
-$nb-arabic-semibold: 'NotoNaskhArabic-SemiBold', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
-$nb-arabic-semibold-nodir: 'NotoNaskhArabic-SemiBold', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
+$nb-arabic-semibold: "NotoNaskhArabic-SemiBold", "ProximaNova-SemiBold",
+  "sans-serif", "Arial";
+$nb-arabic-semibold-nodir: "NotoNaskhArabic-SemiBold", "ProximaNova-SemiBold",
+  "sans-serif", "Arial";
 
-$nb-arabic-bold: 'NotoNaskhArabic-Bold', 'ProximaNova-Bold', 'sans-serif', 'Arial';
-$nb-arabic-bold-nodir: 'NotoNaskhArabic-Bold', 'ProximaNova-Bold', 'sans-serif', 'Arial';
+$nb-arabic-bold: "NotoNaskhArabic-Bold", "ProximaNova-Bold", "sans-serif",
+  "Arial";
+$nb-arabic-bold-nodir: "NotoNaskhArabic-Bold", "ProximaNova-Bold", "sans-serif",
+  "Arial";
 
-$nb-arabic-medium: 'NotoNaskhArabic-Medium', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
-$nb-arabic-medium-nodir: 'NotoNaskhArabic-Medium', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
+$nb-arabic-medium: "NotoNaskhArabic-Medium", "ProximaNova-SemiBold",
+  "sans-serif", "Arial";
+$nb-arabic-medium-nodir: "NotoNaskhArabic-Medium", "ProximaNova-SemiBold",
+  "sans-serif", "Arial";
 
-$nb-arabic-variablefont: 'NotoNaskhArabic-Variable', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
-$nb-arabic-variablefont-nodir: 'NotoNaskhArabic-Variable', 'ProximaNova-SemiBold', 'sans-serif', 'Arial';
+$nb-arabic-variablefont: "NotoNaskhArabic-Variable", "ProximaNova-SemiBold",
+  "sans-serif", "Arial";
+$nb-arabic-variablefont-nodir: "NotoNaskhArabic-Variable",
+  "ProximaNova-SemiBold", "sans-serif", "Arial";
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in NB theme.
 $arial: $nb-nova-regular;

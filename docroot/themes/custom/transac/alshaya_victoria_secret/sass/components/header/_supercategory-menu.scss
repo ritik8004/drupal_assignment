@@ -25,7 +25,7 @@
           line-height: 1;
         }
 
-        @include breakpoint ($desktop) {
+        @include breakpoint($desktop) {
           padding: rem(8) rem(24);
         }
 
@@ -149,7 +149,7 @@
   .block-alshaya-super-category-menu {
     @include breakpoint($only-tablet) {
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         bottom: 0;
@@ -169,7 +169,7 @@
   .block-alshaya-react-mini-cart {
     @include breakpoint($only-tablet) {
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         bottom: 0;

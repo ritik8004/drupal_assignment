@@ -31,7 +31,7 @@
     border: 0;
 
     &::after {
-      content: '';
+      content: "";
       pointer-events: none;
       position: absolute;
       width: 100%;
@@ -57,7 +57,7 @@
     .slick-next,
     .slick-prev {
       #drupal-modal & {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           @include breakpoint($desktop) {
             transform: rotate(0deg);
           }

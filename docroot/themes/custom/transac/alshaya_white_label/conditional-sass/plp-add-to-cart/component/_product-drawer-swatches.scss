@@ -25,7 +25,7 @@
 
       &.active {
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           display: inline-block;
           z-index: 1;

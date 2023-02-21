@@ -26,6 +26,9 @@ alshaya_api.settings:
     verify_ssl:
       type: integer
       label: 'Verify SSL'
+    signature_method:
+      type: string
+      label: 'Signature Method'
     magento_lang_prefix:
       type: mapping
       label: 'Magento lang prefixes'

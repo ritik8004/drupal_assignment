@@ -38,7 +38,7 @@
         margin-bottom: 0;
         box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
 
-        html[lang='ar'] & {
+        html[lang="ar"] & {
           padding: rem(0) rem(38);
         }
       }
@@ -51,11 +51,11 @@
         top: 0.7rem;
         z-index: 99;
 
-        html[lang='ar'] & {
+        html[lang="ar"] & {
           #{$right}: rem(-4);
         }
 
-        @include icon('close') {
+        @include icon("close") {
           font-size: 2rem;
           width: 2rem;
           height: 2rem;

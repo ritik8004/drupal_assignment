@@ -4,7 +4,7 @@
     top: 2.5rem;
     #{$right}: 1.125rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       top: 2.5rem;
       left: 1.125rem;
     }
@@ -14,7 +14,7 @@
     top: 2.25rem;
     #{$right}: 2.0625rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       top: 2.25rem;
       left: 2.125rem;
     }
@@ -24,14 +24,14 @@
     top: 1.75rem;
     #{$right}: 0.75rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       top: 1.75rem;
       left: 0.75rem;
     }
   }
 
   &.has--notification::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 0.75rem;
     height: 0.75rem;
@@ -45,7 +45,7 @@
     transform: rotate(45deg);
     background: $cart_notification_arrow_bg;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       transform: rotate(-45deg);
     }
   }
@@ -68,7 +68,7 @@
   }
 }
 
-html[lang=ar] #cart_notification {
+html[lang="ar"] #cart_notification {
   .notification,
   .error {
     &::before {

@@ -1,10 +1,6 @@
 variables:
-  spc_product_listing_page: '/shop-bathing/changing/changing-bags/'
-  spc_basket_page: '/shop-bathing/changing/changing-bags/'
-  product_listing_page_url: '/shop-bathing/family-health-care/wipes-cotton-buds/'
   spc_promotion_listing_page: '/buy-shark-t-shirts-3-pack.html/'
   np_plp_product_page: '/buy-tommee-tippee-baby-food-blender.html/'
   np_plp_page: '/shop-bathing/family-health-care/wipes-cotton-buds/'
-  spc_pdp_page: '/buy-mothercare-fragrance-free-water-wipes-56-pack.html/'
   new_pdp_enabled: TRUE
   spc_egift_page: '/egift/'

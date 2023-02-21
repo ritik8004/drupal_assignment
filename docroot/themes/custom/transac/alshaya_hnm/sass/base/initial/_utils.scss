@@ -31,7 +31,7 @@
     right: 0;
     left: 0;
     transform: translateY(-50%);
-    background-image: url(#{$base_theme_loader_img_directory_path});
+    background-image: url("#{$base_theme_loader_img_directory_path}");
     background-repeat: no-repeat;
     background-size: contain;
     margin: 0 auto;

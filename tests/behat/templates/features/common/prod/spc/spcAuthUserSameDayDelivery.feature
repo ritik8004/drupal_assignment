@@ -4,7 +4,7 @@ Feature: SPC Checkout Same Day Delivery feature testing for Authenticated user
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait for element "#block-page-title"
-    When I am on "{spc_basket_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
 
   @same-dayDelivery

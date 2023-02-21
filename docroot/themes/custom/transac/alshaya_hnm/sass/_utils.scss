@@ -1,5 +1,5 @@
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs/icons/ic-loader.svg?sA1Tu82';
-$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs';
+$base_theme_loader_img_directory_path: "/themes/custom/transac/alshaya_hnm/imgs/icons/ic-loader.svg?sA1Tu82";
+$brand_theme_img_directory_path: "/themes/custom/transac/alshaya_hnm/imgs";
 
 %modal-overlay {
   height: initial;
@@ -7,7 +7,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs';
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     bottom: 0;
@@ -28,13 +28,13 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs';
   }
 
   &::after {
-    content: '';
+    content: "";
     position: fixed;
     top: 50%;
     right: 0;
     left: 0;
     transform: translateY(-50%);
-    background-image: url(#{$base_theme_loader_img_directory_path});
+    background-image: url("#{$base_theme_loader_img_directory_path}");
     background-repeat: no-repeat;
     background-size: contain;
     margin: 0 auto;
@@ -70,7 +70,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs';
   }
 
   // Arabic font is longer so it gets clipped from bottom.
-  html[lang=ar] & {
+  html[lang="ar"] & {
     line-height: 1.2;
   }
 }
@@ -136,7 +136,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_hnm/imgs';
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .select2-selection--single .select2-selection__rendered {
       width: 94%;
     }

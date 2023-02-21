@@ -1,26 +1,26 @@
 // Stylesheet mixins.
-$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/imgs';
+$brand_theme_img_directory_path: "/themes/custom/transac/alshaya_bathbodyworks/imgs";
 
 %modal-overlay {
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     top: -3.75rem;
   }
 }
 
 %modal-overlay-spinner {
   &::after {
-    content: '';
-    background-image: url(#{$base_theme_loader_img_directory_path});
+    content: "";
+    background-image: url("#{$base_theme_loader_img_directory_path}");
     width: 2rem;
     height: 1.7rem;
   }
 }
 
 @mixin arabic-letter-spacing {
-  html[lang='ar'] & {
+  html[lang="ar"] & {
     letter-spacing: normal;
   }
 }
@@ -41,7 +41,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/i
 
 @mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
   @if $position == both {
-    $position: 'before, &:after';
+    $position: "before, &:after";
   }
 
   &:#{$position} {
@@ -61,4 +61,4 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/i
   }
 }
 
-$bbw_theme_img_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/imgs';
+$bbw_theme_img_directory_path: "/themes/custom/transac/alshaya_bathbodyworks/imgs";

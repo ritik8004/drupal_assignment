@@ -25,7 +25,7 @@
       opacity: 0.2;
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         bottom: 0;
@@ -43,7 +43,7 @@
   .sub-text {
     color: $aura-spc-checkout-text-content;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       line-height: normal;
     }
 
@@ -135,7 +135,7 @@
       .title {
         background-image: $aura-spc-checkout-block-bg-gradient;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           background-image: $aura-spc-checkout-block-bg-gradient-ar;
         }
       }
@@ -221,7 +221,7 @@
       padding: 1.25rem;
       font-family: $aura-regular;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         background: $aura-spc-checkout-block-bg-gradient-ar;
       }
 
@@ -420,7 +420,7 @@
           flex-grow: 1;
           cursor: pointer;
 
-          @include icon('chevrondown') {
+          @include icon("chevrondown") {
             font-size: rem(32);
             position: absolute;
             top: 50%;
@@ -461,7 +461,7 @@
           font-size: rem(14);
           border-radius: rem(10);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             background: $aura-spc-checkout-block-bg-gradient-ar;
           }
 
@@ -481,7 +481,7 @@
               color: $aura-spc-checkout-text-content;
 
               &::before {
-                content: '';
+                content: "";
               }
 
               b {
@@ -520,7 +520,7 @@
         width: rem(16);
         height: rem(16);
         margin-#{$right}: rem(8);
-        background-image: url('#{$base_theme_img_directory_path}/icons/exclamation-circle-icon.svg');
+        background-image: url("#{$base_theme_img_directory_path}/icons/exclamation-circle-icon.svg");
         background-position: top;
       }
 

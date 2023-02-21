@@ -2,7 +2,7 @@
 Feature: SPC Checkout Click and Collect using QPay Payment method
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
 
   @cc @cnc @desktop @Qpay

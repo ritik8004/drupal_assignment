@@ -1,4 +1,5 @@
 import { hasValue } from '../../../js/utilities/conditionsUtility';
+import { callDrupalApi } from '../../../js/utilities/requestHelper';
 import {
   getPointToPriceRatio,
   getPriceToPointRatio,
@@ -182,6 +183,42 @@ function getTooltipPointsOnHoldMsg() {
   return Drupal.t('Your points will be credited to your Aura account. You will be able to redeem these a day after your order is delivered.', {}, { context: 'aura' });
 }
 
+/**
+ * Utility function to get aura context.
+ */
+function isMyAuraContext() {
+  if (hasValue(drupalSettings.aura.context)
+    && drupalSettings.aura.context === 'my_aura') {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Utility function to get the static HTML of AURA landing page.
+ *
+ * @returns {object|boolean}
+ *   The aura landing page content.
+ */
+const getLoyaltyPageContent = async () => {
+  let staticPageUrl = '';
+  if (hasValue(drupalSettings.aura)
+    && hasValue(drupalSettings.aura.loyaltyStaticPageUrl)) {
+    staticPageUrl = drupalSettings.aura.loyaltyStaticPageUrl;
+  }
+  // Call API only if the static page url is available.
+  if (staticPageUrl) {
+    const response = await callDrupalApi(`/rest/v1/page/simple?url=${staticPageUrl}`, 'GET');
+    if (hasValue(response)
+      && hasValue(response.data)) {
+      return response.data;
+    }
+  }
+
+  return false;
+};
+
 export {
   getElementValue,
   showError,
@@ -198,4 +235,6 @@ export {
   getNotYouLabel,
   getAuraCheckoutLocalStorageKey,
   getTooltipPointsOnHoldMsg,
+  isMyAuraContext,
+  getLoyaltyPageContent,
 };

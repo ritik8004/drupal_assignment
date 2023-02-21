@@ -4,7 +4,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait for element "#block-page-title"
-    When I am on "{spc_basket_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
 
   @cod @hd @desktop

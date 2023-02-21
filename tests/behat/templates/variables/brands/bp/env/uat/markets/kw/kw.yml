@@ -1,9 +1,5 @@
 variables:
   url_product_page: 'buy-banana-boat-deep-tanning-oil-sunscreen-pump-spray-spf8-236ml.html'
-  product_listing_page_url: '/shop-creams-and-haircare/'
-  spc_product_listing_page: '/shop-creams-and-haircare/'
-  spc_basket_page: '/shop-creams-and-haircare/'
-  spc_pdp_page: '/buy-boots-kids-fragrance-free-biodegradable-toilet-wipes-single-pack-60-wipes.html/'
   spc_promotion_listing_page: '/promotion/buy-1-and-get-20/'
   spc_single_product_detail_page_coupon: ''
   spc_multiple_product_detail_page_coupon: ''

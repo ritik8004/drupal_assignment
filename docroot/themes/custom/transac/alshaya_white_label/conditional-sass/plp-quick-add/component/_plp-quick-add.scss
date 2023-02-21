@@ -32,8 +32,8 @@
       height: 0;
 
       &::before {
-        content: '';
-        background: url('#{$base_theme_img_directory_path}/icons/quick-add-mobile.svg?gwrtq') center center no-repeat;
+        content: "";
+        background: url("#{$base_theme_img_directory_path}/icons/quick-add-mobile.svg?gwrtq") center center no-repeat;
         width: rem(45);
         height: rem(45);
         position: absolute;

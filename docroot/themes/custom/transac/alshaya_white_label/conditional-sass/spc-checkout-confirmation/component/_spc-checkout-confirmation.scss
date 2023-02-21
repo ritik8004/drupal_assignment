@@ -78,7 +78,7 @@
   }
 
   &::after {
-    content: '';
+    content: "";
     width: calc(100% - 1rem);
     position: absolute;
     bottom: 0;
@@ -105,7 +105,7 @@
       margin-bottom: 1.875rem;
 
       &::after {
-        content: '';
+        content: "";
         display: block;
         height: 0.0625rem;
         background: $order_summary_section_border;

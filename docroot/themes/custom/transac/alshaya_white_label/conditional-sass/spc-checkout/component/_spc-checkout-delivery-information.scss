@@ -20,7 +20,7 @@
       border-color: $spc-checkout-delivery-info-error-border;
     }
 
-    @include icon('arrow-#{$right}', before) {
+    @include icon("arrow-#{$right}", before) {
       position: absolute;
       #{$right}: 0.875rem;
       font-size: 2rem;
@@ -31,7 +31,7 @@
       animation: bounceRight 1.4s infinite;
       animation-timing-function: ease-in-out;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         animation: bounceLeft 1.4s infinite;
       }
     }
@@ -92,7 +92,7 @@
         width: calc(100% - 7.1875rem);
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 1.5;
       }
     }

@@ -16,7 +16,7 @@ const AuraProgressString = (props) => {
       <>
         <div className="aura-progress-string">
           <span className="aura-progress-string--string">
-            {Drupal.t('Start spending to earn points')}
+            {Drupal.t('Start spending to earn points', {}, { context: 'aura' })}
           </span>
         </div>
       </>

@@ -2,7 +2,7 @@ body {
   @include breakpoint($only-mobile) {
     margin-top: 3.5rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 3.5rem;
     }
   }
@@ -10,7 +10,7 @@ body {
   @include breakpoint($only-tablet) {
     margin-top: 5rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 5rem;
     }
   }
@@ -46,7 +46,7 @@ body {
       line-height: 1.35;
       text-transform: capitalize;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-right: 0;
       }
     }

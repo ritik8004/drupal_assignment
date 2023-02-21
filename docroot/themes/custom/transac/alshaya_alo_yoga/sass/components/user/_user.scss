@@ -9,7 +9,7 @@
         @include breakpoint($desktop) {
           width: 26.5%;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             margin-left: 0;
           }
         }
@@ -29,7 +29,7 @@
             text-align: $left;
             padding-#{$left}: rem(20);
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               text-align: center;
             }
           }

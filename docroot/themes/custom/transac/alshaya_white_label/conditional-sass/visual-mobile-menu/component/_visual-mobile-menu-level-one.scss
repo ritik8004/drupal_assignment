@@ -28,7 +28,7 @@
 
         @include psuedo-element-underline($mob_menu_active_link_txt, rem(1), rem(-1));
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           @include psuedo-element-underline($mob_menu_active_link_txt, rem(1), rem(-4));
         }
       }

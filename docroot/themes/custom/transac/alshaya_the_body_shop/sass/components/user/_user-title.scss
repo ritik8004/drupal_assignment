@@ -20,7 +20,7 @@
       @include icon(arrowup, before) {
         top: 0.5rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           top: 0.3125rem;
         }
       }

@@ -1,0 +1,17 @@
+.alias--checkout {
+  .spc-footer,
+  .spc-post-content,
+  .spc-pre-content {
+    max-width: none;
+
+    @include fullWidthSideSpaces(
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+  }
+
+  .c-footer-secondary .l-container {
+    max-width: none;
+  }
+}

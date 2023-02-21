@@ -1,6 +1,6 @@
 .cart-drawer-popup-content {
   &::before {
-    content: '';
+    content: "";
     position: fixed;
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.48);
@@ -89,7 +89,7 @@ body {
   padding: rem(6) rem(24);
   width: rem(330);
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     transform: translateX(-100%);
   }
 
@@ -116,7 +116,7 @@ body {
         overflow: unset !important;
       }
 
-      @include icon('close') {
+      @include icon("close") {
         font-size: rem(40);
         width: rem(32);
         height: rem(32);
@@ -172,7 +172,7 @@ body {
         display: inline-flex;
         justify-content: center;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           max-width: rem(96);
         }
       }

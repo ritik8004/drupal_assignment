@@ -2,7 +2,7 @@
 Feature: SPC Checkout Click & Collect
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait 5 seconds
     And I wait for the page to load
 

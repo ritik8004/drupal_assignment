@@ -1,9 +1,4 @@
 variables:
-  spc_product_listing_page: '/shop-fashion-slippers/'
-  spc_basket_page: '/shop-fashion-slippers/'
-  spc_pdp_page: 'buy-linen-cotton-room-shoes-l-grey.html'
-  product_listing_page_url: "/shop-fashion-slippers/"
   spc_plp_add_to_cart_single: '/shop-fashion-slippers/'
   spc_promotion_listing_page: '//'
   spc_single_product_detail_page_coupon: 'buy-linen-cotton-room-shoes-l-grey.html'
-  spc_bank_product: '/shop-fashion-slippers/'

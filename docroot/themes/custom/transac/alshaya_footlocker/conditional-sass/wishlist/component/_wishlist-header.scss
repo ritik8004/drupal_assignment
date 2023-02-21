@@ -1,12 +1,12 @@
 body.wishlist-enabled {
   .wishlist-header {
     .wishlist-icon {
-      background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-empty-header.svg');
+      background-image: url("#{$brand_theme_img_directory_path}/icons/wishlist-empty-header.svg");
     }
 
     .wishlist-active {
       .wishlist-icon {
-        background-image: url('#{$brand_theme_img_directory_path}/icons/wishlist-filled-icon.svg?adsas');
+        background-image: url("#{$brand_theme_img_directory_path}/icons/wishlist-filled-icon.svg?adsas");
       }
     }
   }

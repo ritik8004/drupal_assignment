@@ -62,7 +62,7 @@ class ShippingInformation extends AddressFormBase {
       '#title' => $this->t('Use same address as billing'),
       '#default_value' => '',
       '#ajax' => [
-        'callback' => [$this, 'updateAddressAjaxCallback'],
+        'callback' => $this->updateAddressAjaxCallback(...),
         'wrapper' => 'address_wrapper',
       ],
     ];
@@ -96,7 +96,7 @@ class ShippingInformation extends AddressFormBase {
       '#type' => 'button',
       '#value' => $this->t('Estimate Shipping'),
       '#ajax' => [
-        'callback' => [$this, 'updateAddressAjaxCallback'],
+        'callback' => $this->updateAddressAjaxCallback(...),
         'wrapper' => 'address_wrapper',
       ],
       '#weight' => -50,

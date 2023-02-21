@@ -84,7 +84,7 @@
   align-items: center;
 
   &::before {
-    content: '';
+    content: "";
     width: 0.9375rem;
     height: 0.9375rem;
     display: inline-block;
@@ -94,20 +94,20 @@
   &.style {
     &-N::before,
     &-W::before {
-      background: url(#{$base_theme_img_directory_path}/aura/aura-pending.svg) no-repeat center center;
+      background: url("#{$base_theme_img_directory_path}/aura/aura-pending.svg") no-repeat center center;
     }
 
     &-S::before {
-      background: url(#{$base_theme_img_directory_path}/aura/aura-circle.svg) no-repeat center center;
+      background: url("#{$base_theme_img_directory_path}/aura/aura-circle.svg") no-repeat center center;
     }
 
     &-B::before {
-      background: url(#{$base_theme_img_directory_path}/aura/aura-check.svg) no-repeat center center;
+      background: url("#{$base_theme_img_directory_path}/aura/aura-check.svg") no-repeat center center;
     }
 
     &-E::before,
     &-C::before {
-      background: url(#{$base_theme_img_directory_path}/aura/aura-warning.svg) no-repeat center center;
+      background: url("#{$base_theme_img_directory_path}/aura/aura-warning.svg") no-repeat center center;
     }
   }
 }

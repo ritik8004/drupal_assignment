@@ -1,7 +1,3 @@
 variables:
-  spc_product_listing_page: '/victorias-secret/shop-mapp/'
-  spc_basket_page: '/victorias-secret/shop-mapp/'
-  product_listing_page_url: '/victorias-secret/shop-mapp/'
-  spc_pdp_page: '/buy-lightly-lined-wireless-bra-mermaid-teal-wide-shine-logo-straps-0.html/'
   spc_egift_page: '/egift/'
   spc_plp_add_to_cart: '/victorias-secret/shop-mapp/mapp-l3/'

@@ -8,7 +8,7 @@
   @include breakpoint($only-tablet) {
     bottom: -3.1875rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       bottom: -2.1875rem;
     }
   }
@@ -79,7 +79,7 @@
         height: 3.6875rem;
 
         // For PB arabic, header height is different.
-        html[lang=ar] & {
+        html[lang="ar"] & {
           height: 4.0625rem;
         }
       }
@@ -118,19 +118,23 @@
         @include breakpoint($only-mobile) {
           width: 2.125rem;
           height: 2.125rem;
-          background: transparent url('../../../imgs/assets/search.svg') no-repeat;
+          background:
+            transparent url("../../../imgs/assets/search.svg")
+            no-repeat;
           background-position: center;
           #{$right}: unset;
           #{$left}: 0.5rem;
           opacity: 1;
           transition: opacity 0.2s;
           top: 0.9rem;
-          content: '';
+          content: "";
         }
 
         @include breakpoint($tablet) {
           display: block;
-          background: transparent url('../../../imgs/assets/search.svg') no-repeat;
+          background:
+            transparent url("../../../imgs/assets/search.svg")
+            no-repeat;
           background-position: center;
           border: none;
           text-indent: -9999px;
@@ -141,13 +145,13 @@
           height: 2.125rem;
           margin-#{$left}: 0.5rem;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translateY(-52%);
           }
         }
 
         @include breakpoint($desktop) {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translateY(-50%);
           }
         }
@@ -170,7 +174,7 @@
         padding: 0.625rem !important;
         font-weight: 600;
 
-        @include breakpoint ($desktop) {
+        @include breakpoint($desktop) {
           font-size: 0.75rem;
         }
       }
@@ -246,7 +250,7 @@ body {
     @include breakpoint($only-mobile) {
       margin-top: 7.125rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 7.6367rem;
       }
     }

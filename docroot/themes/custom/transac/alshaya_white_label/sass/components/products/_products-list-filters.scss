@@ -1,6 +1,6 @@
 html {
   &::before {
-    content: '';
+    content: "";
     position: fixed;
     width: 100vw;
     box-shadow: 0 9999px 0 9999px rgba(0, 0, 0, 0.5);
@@ -47,7 +47,7 @@ $all-filter-height-desktop: calc(100% - 5.3125rem - 8.25rem);
     display: flex;
     flex-direction: column;
 
-    html[lang='ar'] & {
+    html[lang="ar"] & {
       transform: translateX(-100%);
     }
 
@@ -396,7 +396,7 @@ $all-filter-height-desktop: calc(100% - 5.3125rem - 8.25rem);
             padding: 2px 1.5rem !important;
           }
 
-          input[type=checkbox] {
+          input[type="checkbox"] {
             & ~ label {
               &::before {
                 font-size: 1.3125rem;
@@ -464,7 +464,7 @@ $all-filter-height-desktop: calc(100% - 5.3125rem - 8.25rem);
         cursor: pointer;
         line-height: 1;
 
-        @include icon('close') {
+        @include icon("close") {
           font-size: 3rem;
           line-height: 1.5rem;
           width: auto;
@@ -615,7 +615,7 @@ $all-filter-height-desktop: calc(100% - 5.3125rem - 8.25rem);
   }
 }
 
-html[lang='ar'] {
+html[lang="ar"] {
   &.js .js-bef-hide {
     right: -99999px;
     left: auto;

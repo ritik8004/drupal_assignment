@@ -24,13 +24,17 @@
     .promotion {
       &.free_shipping_order {
         font-family: $tbs-semibold;
-        border: 0.125rem solid $basket_free_delivery_inactive_header_promo_border;
+        border:
+          0.125rem solid
+          $basket_free_delivery_inactive_header_promo_border;
       }
 
       &.fixed_percentage_discount_order,
       &.free_gift_order {
         font-family: $tbs-semibold;
-        border: 0.125rem solid $basket_fixed_percentage_inactive_header_promo_border;
+        border:
+          0.125rem solid
+          $basket_fixed_percentage_inactive_header_promo_border;
 
         .promotion-available-code {
           .promotion-coupon-code {
@@ -39,7 +43,7 @@
           }
         }
 
-        &[threshold=true] {
+        &[threshold="true"] {
           border-color: $basket_fixed_percentage_inactive_header_promo_border;
           color: $basket_fixed_percentage_inactive_header_promo_color;
 

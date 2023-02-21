@@ -13,6 +13,34 @@ header {
   }
 }
 
+// Styles for Super Category header.
+body[class*="super-category"] {
+  .c-menu-primary {
+    .block-alshaya-super-category {
+      .menu--one__list {
+        @include fullWidthSideSpaces(
+          $is_desktop: true,
+          $is_desktop_wide: true,
+          $side: $left,
+        );
+      }
+    }
+  }
+
+  .c-menu-secondary {
+    .block-language-blocklanguage-interface {
+      a {
+        @include fullWidthSideSpaces(
+          $is_desktop: true,
+          $is_desktop_wide: true,
+          $side: $right,
+          $type: "margin",
+        );
+      }
+    }
+  }
+}
+
 @include breakpoint($desktop) {
   #block-cartminiblock,
   .block-alshaya-react-mini-cart,
@@ -31,6 +59,21 @@ header {
       .region__header {
         .block-alshaya-react-mini-cart {
           margin-#{$left}: rem(8);
+        }
+      }
+    }
+  }
+
+  // Styles for Super Category header.
+  body[class*="super-category"] {
+    .c-header__wrapper--inner {
+      max-width: none;
+    }
+
+    .c-menu-secondary {
+      .block-language-blocklanguage-interface {
+        a {
+          padding-#{$right}: 0;
         }
       }
     }

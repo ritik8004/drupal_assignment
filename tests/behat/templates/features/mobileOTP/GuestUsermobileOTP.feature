@@ -2,7 +2,7 @@
 Feature: To verify the mobile OTP functionality on COD payment method for Guest user
 
   Background:
-    Given I visit "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for the page to load
     And I wait for AJAX to finish
 
