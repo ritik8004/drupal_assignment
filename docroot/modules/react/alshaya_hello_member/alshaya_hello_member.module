@@ -96,6 +96,13 @@ function alshaya_hello_member_theme() {
  * Implements hook_form_alter().
  */
 function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  // Do not proceed if hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
   if ($form_id === 'user_register_form') {
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
@@ -122,8 +129,6 @@ function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state,
   }
 
   if ($form_id === 'user_register_form' || $form_id === 'user_form') {
-    /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
-    $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
     // Only add if hello member enabled.
     if (!$helloMemberHelper->isHelloMemberEnabled()) {
       // For user registration form if we have the field, we remove it.
@@ -283,7 +288,7 @@ function alshaya_hello_member_alshaya_api_update_customer_api_request_alter(arra
       if (!empty($user_gender)) {
         $request_options['json']['customer']['extension_attributes']['customer_gender'] = $user_gender;
       }
-      $temp_store = \Drupal::service('tempstore.shared')->get('alshaya_hello_member', $user->id());
+      $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
       // Set the key/value pair.
       if ($temp_store->get('otpVerifiedPhone')) {
         $request_options['json']['customer']['extension_attributes']['is_verified'] = "Y";
@@ -413,7 +418,7 @@ function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterfa
   $user = user_load_by_mail(\Drupal::currentUser()->getEmail());
   // Proceed only if we have a valid user object.
   if ($user instanceof userInterface) {
-    _alshaya_hello_member_store_otp_status($user, $form_state);
+    \Drupal::service('alshaya_hello_member.hello_member_helper')->storeMobileVerificationStatus($user, $form_state);
   }
 }
 
@@ -565,29 +570,15 @@ function alshaya_hello_member_alshaya_acm_customer_update_account_alter($user, $
  * Implements hook_entity_insert().
  */
 function alshaya_hello_member_user_insert(UserInterface $user) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  // Do not proceed if hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
   // If user is getting created that means the user OTP verification was
   // successful. So check if the user is having value in mobile number field and
   // proceed with updating the flag value in shared temp store.
-  _alshaya_hello_member_store_otp_status($user);
-}
-
-/**
- * Function to store the OTP verification status in temp store.
- *
- * @param \Drupal\user\UserInterface $user
- *   The user entity object.
- * @param \Drupal\Core\Form\FormStateInterface|null $form_state
- *   The form state object.
- */
-function _alshaya_hello_member_store_otp_status(UserInterface $user, $form_state = NULL) {
-  $temp_store = \Drupal::service('tempstore.shared')->get('alshaya_hello_member', $user->id());
-  // If we have the info in form state then use that else check for the user
-  // object.
-  if ($form_state instanceof FormStateInterface && $form_state->getValue('otp_verified')) {
-    // Set the key/value pair.
-    $temp_store->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
-  }
-  elseif ($user->hasField('field_mobile_number') && $user->get('field_mobile_number')) {
-    $temp_store->set('otpVerifiedPhone', $user->get('field_mobile_number')->getValue());
-  }
+  $helloMemberHelper->storeMobileVerificationStatus($user);
 }
