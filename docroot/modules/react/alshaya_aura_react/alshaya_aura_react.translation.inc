@@ -625,6 +625,10 @@ function _alshaya_aura_react_translations() {
         'ar' => 'للاستفادة من نقاطك عبر الأونلاين، يرجى تحميل تطبيق أورا الشرق الأوسط المتوفر على أبل ستور، وسوق بلاي.',
         'context' => 'aura',
       ],
+      'Start spending to earn points' => [
+        'ar' => 'ابدأ الشراء لكسب النقاط',
+        'context' => 'aura',
+      ],
     ],
   ];
 }
