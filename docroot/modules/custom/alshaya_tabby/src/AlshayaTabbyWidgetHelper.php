@@ -8,6 +8,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Helper class for Tabby.
@@ -142,6 +143,9 @@ class AlshayaTabbyWidgetHelper {
         $build['tabby'] = $this->getTabbyWidgetMarkup('cart');
         $build['#attached']['library'][] = 'alshaya_tabby/tabby_cart';
         $build['#attached']['library'][] = 'alshaya_white_label/tabby';
+        $tabby_config = $this->configFactory->get('alshaya_tabby.settings');
+        $build['#attached']['drupalSettings']['tabby']['cart_widget_limit'] = $tabby_config->get('cart_widget_limit');
+        $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $tabby_config->getCacheTags());
         break;
 
       case 'checkout':
