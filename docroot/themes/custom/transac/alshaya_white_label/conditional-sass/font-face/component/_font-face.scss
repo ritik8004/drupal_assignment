@@ -44,8 +44,8 @@ $base_theme_fonts_directory_path: "/themes/custom/transac/alshaya_white_label/fo
 @font-face {
   font-family: "alshaya-icons";
   src:
-    url("#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?D7b5if") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5id") format("woff");
+    url("#{$base_theme_fonts_directory_path}/alshaya-icons.woff2?v1") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/alshaya-icons.woff?v1") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
