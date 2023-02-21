@@ -5,6 +5,23 @@
  * Contains install, update, uninstall hooks for alshaya_tabby module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new configuration for Tabby.
+ */
+function alshaya_tabby_update_9401() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_tabby.settings'],
+    'alshaya_tabby',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE,
+  );
+}
+
 /**
  * Implements hook_install().
  */

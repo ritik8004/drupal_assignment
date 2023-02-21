@@ -125,7 +125,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
     $action = $request->request->get('action');
     $cart = json_decode($request->request->get('cart'), TRUE);
     $skus_quantity = json_decode($request->request->get('skus_quantity'), TRUE);
-    if (empty($action) || (empty($cart) && empty($skus_quantity))) {
+    if (empty($action) || (empty($cart) && !isset($skus_quantity))) {
       throw new BadRequestHttpException('Missing required parameters');
     }
 

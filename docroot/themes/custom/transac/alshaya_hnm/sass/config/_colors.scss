@@ -639,6 +639,7 @@ $individual_store_hours_label_border: $white;
 // Homepage Slider
 $hp_slider_dots: $hnm-black-three;
 $hp_slider_arrows_dark: $hnm-black-three;
+$plp_slider_dots: $venetian_red;
 
 // Section divider
 $section_divider_border: $hnm-black-three;
@@ -806,6 +807,9 @@ $plp-quick-view-product-size-text-disabled: $pdp_swatch_disabled;
 // PLP add to cart.
 $plp-primary-cta-hover-bg: $gray44;
 $plp-secondary-cta-hover-bg: $_plp_secondary_cta_hover;
+$plp-hover-slider-dot-container-bg-color: $seashell_grey;
+$plp-hover-slider-dot-color: $_sofa-section-grey;
+$plp-hover-slider-dot-border: $hnm-black-three;
 
 // Express delivery
 $pdp-delivery-section-subtitle: $gray44;
