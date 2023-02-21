@@ -1,0 +1,6 @@
+bazaar_voice.settings:
+  type: config_object
+  mapping:
+    bazaarvoice_settings_expiry:
+      type: integer
+      label: 'Expiry in seconds for localstorage of settings.'

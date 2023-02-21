@@ -104,19 +104,17 @@
    */
   window.alshayaBazaarVoice.getbazaarVoiceSettings = async function getbazaarVoiceSettings(productId) {
     var settings = {};
-    var product_id = '';
-    if (Drupal.hasValue(staticStorage.bvSettings[productId])) {
-      return staticStorage.bvSettings[productId];
+    var product_id = productId || '';
+    if (Drupal.hasValue(staticStorage.bvSettings[product_id])) {
+      return staticStorage.bvSettings[product_id];
     }
 
-    if (!Drupal.hasValue(productId)) {
+    if (!Drupal.hasValue(product_id)) {
       var productInfo = window.commerceBackend.getProductData(null, 'productInfo');
       Object.entries(productInfo).forEach(([key]) => {
         product_id = key;
       });
     }
-
-    product_id = (typeof productId === 'undefined') ? product_id : productId;
 
     if (Drupal.hasValue(product_id)) {
       var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('bv_product', {sku: product_id});
@@ -148,41 +146,15 @@
       return bazaarVoiceConfig;
     }
 
-    if (Drupal.hasValue(bazaarVoiceConfig.basic)) {
-      // Add basic configurations from MDC response.
-      Object.assign(
-        settings.bazaar_voice,
-        bazaarVoiceConfig.basic,
-      );
-    }
-
-    settings.bazaar_voice.error_messages = {};
-    settings.bazaar_voice.sorting_options = {};
-    settings.bazaar_voice.filter_options = {};
-
-    if (Drupal.hasValue(bazaarVoiceConfig.bv_error_messages)) {
-      // Add error messages configurations from MDC response.
-      Object.assign(
-        settings.bazaar_voice.error_messages,
-        bazaarVoiceConfig.bv_error_messages,
-      );
-    }
-
-    if (Drupal.hasValue(bazaarVoiceConfig.sorting_options)) {
-      // Add sorting options configurations from MDC response.
-      Object.assign(
-        settings.bazaar_voice.sorting_options,
-        bazaarVoiceConfig.sorting_options,
-      );
-    }
-
-    if (Drupal.hasValue(bazaarVoiceConfig.pdp_filter_options)) {
-      // Add filter options configurations from MDC response.
-      Object.assign(
-        settings.bazaar_voice.filter_options,
-        bazaarVoiceConfig.pdp_filter_options,
-      );
-    }
+    Object.entries(bazaarVoiceConfig).forEach((item) => {
+      if (item[0] === 'basic') {
+        // Merge drupalSettings and basic configurations from commerceBackend.
+        Object.assign(settings.bazaar_voice, item[1]);
+      } else {
+        // Add other common configurations from commerceBackend.
+        settings.bazaar_voice[item[0]] = item[1];
+      }
+    });
 
     staticStorage.bvSettings[product_id] = {
       productid: product_id,

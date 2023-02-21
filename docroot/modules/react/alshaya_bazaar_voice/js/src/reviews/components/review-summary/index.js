@@ -49,8 +49,8 @@ export default class ReviewSummary extends React.Component {
       prevButtonDisabled: true,
       nextButtonDisabled: false,
       analyticsState: false,
-      // loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
-      // paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
+      loadMoreLimit: '',
+      paginationLimit: '',
       userDetails: {
         productReview: null,
       },

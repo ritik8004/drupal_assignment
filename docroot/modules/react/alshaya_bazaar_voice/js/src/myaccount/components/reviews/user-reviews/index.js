@@ -22,7 +22,7 @@ export default class UserReviews extends React.Component {
       reviewsProduct: '',
       noResultmessage: '',
       totalReviewCount: '',
-      // initialLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
+      initialLimit: '',
     };
     this.loadMore = this.loadMore.bind(this);
   }

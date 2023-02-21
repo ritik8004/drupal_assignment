@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Functions around module install.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_bazaar_voice_install() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['bazaar_voice.settings'],
+    'alshaya_rcs_bazaar_voice',
+    'optional',
+  );
+}
