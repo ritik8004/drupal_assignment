@@ -218,7 +218,9 @@ export const placeOrder = (paymentMethod) => {
         });
 
         // Push error to GTM.
-        Drupal.logJavascriptError(`place-order | ${paymentMethodsInfo.[paymentMethod]}`, `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        // Fetching the error response message.
+        const errorResponse = JSON.parse(response.data.error_message);
+        Drupal.logJavascriptError(`place-order | ${paymentMethodsInfo.[paymentMethod]} | Decline Reason: ${errorResponse.payment_error_message}`, `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
         controlPlaceOrderCTA('enable');
 
