@@ -506,7 +506,7 @@ class AlshayaGtmManager {
       $final_price = $prices['final_price'];
     }
 
-    if ($child) {
+    if ($child instanceof SKUInterface && isset($prices['children'][$child->getSku()])) {
       $final_price = !empty($prices['children'][$child->getSku()]['final_price'])
         ? $prices['children'][$child->getSku()]['final_price']
         : $prices['children'][$child->getSku()]['price'];
