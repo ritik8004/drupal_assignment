@@ -94,7 +94,7 @@ class HappyBirthdayPopup extends React.Component {
           <div className="happy-birthday-popup-header">
             <button type="button" className="close" onClick={() => this.closeModal()} />
             <div className="image-container">
-              <img src={this.data.small_image} />
+              <img src={this.data.large_image} />
             </div>
           </div>
           <div className="happy-birthday-popup-body">
