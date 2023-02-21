@@ -210,7 +210,7 @@ const Teaser = ({
 
   let dataVmode = null;
   if (pageType === 'search') {
-    dataVmode = { 'data-vmode': 'search result' };
+    dataVmode = { 'data-vmode': 'search_result' };
   }
   return (
     <div className={teaserClass}>
