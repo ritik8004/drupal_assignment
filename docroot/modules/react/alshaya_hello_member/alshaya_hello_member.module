@@ -93,7 +93,7 @@ function alshaya_hello_member_theme() {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_alter().
  */
 function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id === 'user_register_form') {
@@ -121,7 +121,7 @@ function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state,
     $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
   }
 
-  if ($form_id === 'user_register_form' or $form_id === 'user_form') {
+  if ($form_id === 'user_register_form' || $form_id === 'user_form') {
     /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
     $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
     // Only add if hello member enabled.
