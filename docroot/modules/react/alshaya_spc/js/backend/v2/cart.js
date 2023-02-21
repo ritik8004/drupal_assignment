@@ -368,7 +368,7 @@ window.commerceBackend.refreshCart = async (data) => {
         clearProductStatusStaticCache();
         window.commerceBackend.clearStockStaticCache();
         // Refresh stock for all items in the cart.
-        window.commerceBackend.triggerStockRefresh(null);
+        window.commerceBackend.triggerStockRefresh({});
       }
       // Process cart data.
       response.data = await getProcessedCartData(response.data);
