@@ -39,6 +39,12 @@ header {
             $is_desktop: true,
             $is_desktop_wide: true,
           );
+
+          .menu--one__list {
+            @include breakpoint($desktop) {
+              @include sideSpaces(0);
+            }
+          }
         }
       }
     }
