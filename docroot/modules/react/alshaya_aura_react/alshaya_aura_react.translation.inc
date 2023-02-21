@@ -629,6 +629,14 @@ function _alshaya_aura_react_translations() {
         'ar' => 'ابدأ الشراء لكسب النقاط',
         'context' => 'aura',
       ],
+      'Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]' => [
+        'ar' => 'اشترى الأن واحصل على عروض حصرية من اورا | [alshaya_seo:brand_name]',
+        'context' => 'aura',
+      ],
+      'Download AURA now to get personalized offers and rewards for each purchase you make from [alshaya_seo:brand_name] online or instore in [alshaya_seo:cities] and all of [alshaya_seo:country]' => [
+        'ar' => 'حمل تطبيق اورا الان واحصل على عروض خاصة بك و نقاط استرجاع على كل عملية شراء تقوم بها من [alshaya_seo:brand_name] اونلاين او من خلال اى من متاجرنا فى [alshaya_seo:cities] و فى حمع انحاء [alshaya_seo:country]',
+        'context' => 'aura',
+      ],
     ],
   ];
 }

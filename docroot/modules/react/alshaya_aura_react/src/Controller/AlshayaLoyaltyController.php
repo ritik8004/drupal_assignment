@@ -114,6 +114,7 @@ class AlshayaLoyaltyController extends ControllerBase {
    */
   public function loyaltyClub() {
     $cache_tags = [];
+    $html_head = [];
     $loyalty_benefits_config = $this->config('alshaya_aura_react.loyalty_benefits');
     $loyalty_benefits_content = $loyalty_benefits_config->get('loyalty_benefits_content');
 
@@ -135,6 +136,27 @@ class AlshayaLoyaltyController extends ControllerBase {
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());
     $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
 
+    // Add the required meta tags for the page.
+    $description = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'description',
+        'content' => $this->token->replace($this->t('Download AURA now to get personalized offers and rewards for each purchase you make from [alshaya_seo:brand_name] online or instore in [alshaya_seo:cities] and all of [alshaya_seo:country]', [], [
+          'context' => 'aura',
+        ])),
+      ],
+    ];
+
+    $title = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'name' => 'title',
+        'content' => $this->token->replace($this->t('Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]', [], [
+          'context' => 'aura',
+        ])),
+      ],
+    ];
+
     return [
       '#theme' => 'my_loyalty_club',
       '#strings' => _alshaya_aura_static_strings(),
@@ -145,6 +167,10 @@ class AlshayaLoyaltyController extends ControllerBase {
         ],
         'drupalSettings' => [
           'aura' => $settings,
+        ],
+        'html_head' => [
+          [$description, 'description'],
+          [$title, 'title'],
         ],
       ],
       '#cache' => [
