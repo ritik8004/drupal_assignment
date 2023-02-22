@@ -362,6 +362,7 @@ const Teaser = ({
             ) : null}
             {/* Render color swatches based on article/sku id */}
             {hasValue(attribute.article_swatches)
+              && drupalSettings.reactTeaserView.swatches.showArticleSwatches
               ? (
                 <ArticleSwatches
                   sku={sku}
