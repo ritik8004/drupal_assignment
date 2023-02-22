@@ -10,7 +10,7 @@
   display: none;
 }
 
-article[data-vmode="search_result"]:hover .alshaya_search_hoverimage {
+.alshaya_search_gallery:hover .alshaya_search_hoverimage {
   transition: opacity 0.2s ease-in;
   opacity: 1;
 }
