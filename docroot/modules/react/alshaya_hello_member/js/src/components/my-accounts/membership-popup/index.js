@@ -14,6 +14,14 @@ class MembershipPopup extends React.Component {
   componentDidMount() {
     // Listen to `helloMemberPointsLoaded` event which will return if customer is new hello member.
     document.addEventListener('helloMemberPointsLoaded', this.getCustomerData, false);
+
+    const contactUsElement = document.querySelector("div.hello-member-popup-form a[classname='contact-us']");
+
+    document.addEventListener('mousedown', (e) => {
+      if (contactUsElement.contains(e.target)) {
+        this.contactUsClick();
+      }
+    });
   }
 
   getCustomerData = (e) => {
@@ -34,6 +42,16 @@ class MembershipPopup extends React.Component {
 
     this.setState({
       isModelOpen: false,
+    });
+  };
+
+  contactUsClick = () => {
+    window.dataLayer.push({
+      event: 'pop-up',
+      eventProps: {
+        category: 'pop-up',
+        action: 'hmAutoEnroll-click-contact_us',
+      },
     });
   };
 
