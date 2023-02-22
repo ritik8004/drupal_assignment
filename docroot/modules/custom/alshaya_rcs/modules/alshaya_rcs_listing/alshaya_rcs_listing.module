@@ -192,8 +192,7 @@ function alshaya_rcs_listing_rcs_handlebars_templates(EntityInterface $entity) {
  */
 function alshaya_rcs_listing_metatags_attachments_alter(array &$attachments) {
   // Alter canonical url metatag if its department page.
-  $is_department_page = \Drupal::service('alshaya_advanced_page.department_page_helper')->getDepartmentPageNode();
-  if ($is_department_page) {
+  if (\Drupal::service('alshaya_advanced_page.department_page_helper')->getDepartmentPageNid()) {
     $front_url = Url::fromRoute('<front>')->setAbsolute()->toString();
     foreach ($attachments['#attached']['html_head'] as &$tag) {
       if ($tag[1] === 'canonical_url') {
