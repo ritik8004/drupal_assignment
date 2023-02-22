@@ -212,6 +212,15 @@ const Teaser = ({
   if (pageType === 'search') {
     dataVmode = { 'data-vmode': 'search_result' };
   }
+  // Check for valid article swatch data attribute from Magento.
+  let articleSwatchCount = 0;
+  if (hasValue(attribute.article_swatches)) {
+    articleSwatchCount = attribute.article_swatches.map(
+      (swatch) => hasValue(swatch.rgb_color),
+    ).filter(
+      (value) => value === true,
+    ).length;
+  }
   return (
     <div className={teaserClass}>
       <article
@@ -361,7 +370,7 @@ const Teaser = ({
               />
             ) : null}
             {/* Render color swatches based on article/sku id */}
-            {hasValue(attribute.article_swatches)
+            {articleSwatchCount > 0
               ? (
                 <ArticleSwatches
                   sku={sku}
