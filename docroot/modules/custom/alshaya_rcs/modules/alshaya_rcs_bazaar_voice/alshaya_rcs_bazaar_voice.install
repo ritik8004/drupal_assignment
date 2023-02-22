@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Contains install hook for alshaya_rcs_bazaar_voice.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_rcs_bazaar_voice_install() {
+  $config = \Drupal::configFactory()->getEditable('rest.resource.write_review_config');
+  // If the rest resource is not installed, we do proceed further.
+  if ($config->isNew()) {
+    return;
+  }
+  $config->set('status', FALSE);
+  $config->save();
+}
