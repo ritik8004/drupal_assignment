@@ -10,6 +10,7 @@ import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
 import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
 import HelloMemberCartOffersVouchers from '../../../hello-member-loyalty/components/hello-member-cart-offer-voucher';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export default class CartPromoBlock extends React.Component {
   constructor(props) {
@@ -279,8 +280,8 @@ export default class CartPromoBlock extends React.Component {
         } = dynamicPromoLabelsCart.next_eligible;
 
         if (thresholdReached === true
-          && coupon !== undefined
-          && couponDiscount !== undefined) {
+          && hasValue(coupon)
+          && hasValue(couponDiscount)) {
           couponCode = coupon;
           couponLabel = Drupal.t('Use and get @percent% off', { '@percent': couponDiscount });
         }
