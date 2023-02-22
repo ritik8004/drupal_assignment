@@ -6,7 +6,6 @@ on:
       - qa
       - uat
       - master
-      - alo-yoga-qa
       - develop-adyen
       - develop-egift-return
   create:
