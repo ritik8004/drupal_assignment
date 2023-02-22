@@ -19,7 +19,7 @@
       }
 
       &::after {
-        background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-vip-desktop.svg?sjfks");
+        background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-vip-desktop.svg?sjfsd");
 
         @include breakpoint($upto-desktop) {
           background-image: url("#{$base_theme_img_directory_path}/aura/atoms-graphics-aura-vip-mobile.svg?dkala");
@@ -276,9 +276,13 @@
           border: none;
           font-family: $aura-bold;
           padding-top: rem(6);
-          width: rem(160);
+          opacity: 1;
 
           @include force-ltr;
+
+          @include breakpoint($upto-desktop) {
+            text-align: center;
+          }
         }
       }
 
@@ -379,6 +383,7 @@
 
       input {
         letter-spacing: rem(0.71);
+        text-align: unset;
       }
     }
 
