@@ -38,8 +38,7 @@ export const nearByStores = (stores, currentLocation) => {
   const nearbyStores = stores.filter((store) => {
     const otherLocation = { lat: +store.latitude, lng: +store.longitude };
     const distance = getDistanceBetween(currentLocation, otherLocation);
-    const proximity = drupalSettings.storeLabels.search_proximity_radius
-      ? drupalSettings.storeLabels.search_proximity_radius : 5;
+    const proximity = drupalSettings.storeLabels.search_proximity_radius || 5;
     return (distance < proximity) ? store : null;
   });
   return nearbyStores;

@@ -43,7 +43,8 @@ export class StoreFinderList extends React.PureComponent {
         const nearbyStores = stores.items.filter((store) => {
           const otherLocation = { lat: +store.latitude, lng: +store.longitude };
           const distance = getDistanceBetween(currentLocation, otherLocation);
-          return (distance < 5) ? store : null;
+          const proximity = drupalSettings.storeLabels.search_proximity_radius || 5;
+          return (distance < proximity) ? store : null;
         });
         const sorter = (a, b) => (a.store_name.toLowerCase() > b.store_name.toLowerCase() ? 1 : -1);
         nearbyStores.sort(sorter);
