@@ -22,7 +22,7 @@ class MyAccountBanner extends React.Component {
   getAuraWrapperHeader = () => (
     <div className="header">
       { Drupal.t('An Aura loyalty card is already associated with your email address. It just takes one click to link.', {}, { context: 'aura' }) }
-      <span className="bold">{Drupal.t('Do you want to link now?')}</span>
+      <span className="bold">{Drupal.t('Do you want to link now?', {}, { context: 'aura' })}</span>
       <span className="aura-myaccount-no-linked-card-accordion-icon" />
     </div>
   );
