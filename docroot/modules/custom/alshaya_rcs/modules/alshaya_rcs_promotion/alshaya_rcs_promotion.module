@@ -169,13 +169,6 @@ function _alshaya_rcs_promotion_update_library(
 function alshaya_rcs_promotion_metatags_attachments_alter(array &$attachments) {
   $promotion_node = \Drupal::routeMatch()->getParameter('node');
   if ($promotion_node instanceof NodeInterface && $promotion_node->bundle() === 'rcs_promotion') {
-    foreach ($attachments['#attached']['html_head'] as &$tag) {
-      if ($tag[1] === 'canonical_url') {
-        $tag[0]['#attributes']['href'] = '#rcs.promotion.url_path#';
-      }
-      if ($tag[1] === 'twitter_cards_page_url') {
-        $tag[0]['#attributes']['content'] = '#rcs.promotion.url_path#';
-      }
-    }
+    \Drupal::service('alshaya_rcs_seo.metatag_helper')->getCanonicalMetatags($attachments, '#rcs.promotion.url_path#');
   }
 }
