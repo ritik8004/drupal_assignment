@@ -68,11 +68,16 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
     ->getStorage('user')
     ->load($current_user->id());
 
+  if (!$user instanceof UserInterface) {
+    return;
+  }
+
   $user_data = $user->get('field_sprinklr_user_fields')->getString();
   // If sprinklr user fields is empty.
   if (empty($user_data)) {
     return;
   }
+
   $user_details = Json::decode($user_data);
   // If sprinklr user fields contains invalid json.
   if (empty($user_details)) {
@@ -81,9 +86,10 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
     ]);
     return;
   }
+
   // Get sprinklr hash for the current language.
-  $user_details['hash'] = $user->getTranslation(\Drupal::languageManager()->getCurrentLanguage()->getId())
-    ->get('field_sprinklr_hash')->getString() ?? '';
+  $user = \Drupal::service('entity.repository')->getTranslationFromContext($user, \Drupal::languageManager()->getCurrentLanguage()->getId());
+  $user_details['hash'] = $user->get('field_sprinklr_hash')->getString() ?? '';
   $page['#attached']['drupalSettings']['sprinklr']['userDetails'] = $user_details;
   // Set key for clientContext field.
   $page['#attached']['drupalSettings']['sprinklr']['clientContext'] = [
@@ -145,7 +151,7 @@ function alshaya_sprinklr_alshaya_acm_customer_update_account_alter(User $user, 
       }
       // Iterate over all the available language prefixes.
       foreach ($lang_prefixes as $lang_code => $lang_prefix) {
-        // Store the has as per the magento language prefix.
+        // Store the hash as per the magento language prefix.
         if ($lang_prefix == $hash[0]) {
           $user = $user->hasTranslation($lang_code)
             ? $user->getTranslation($lang_code)
