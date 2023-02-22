@@ -98,8 +98,6 @@
           if ((previousLabel === '') || (previousLabel !== label)) {
             previousLabel = label;
           }
-          console.log('prior list');
-          console.log(impression);
           impression.list = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
           impression.position = parseInt($(this).closest('.views-row').data('list-item-position'));
           // Keep variant empty for impression pages. Populated only post add to cart action.
