@@ -17,3 +17,4 @@ services:
       - '@module_handler'
       - '@file_system'
       - '@logger.factory'
+      - '@rcs_placeholders.entity_helper'
