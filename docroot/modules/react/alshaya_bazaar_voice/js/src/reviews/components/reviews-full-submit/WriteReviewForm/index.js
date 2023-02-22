@@ -7,7 +7,7 @@ import { removeFullScreenLoader, showFullScreenLoader }
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import FormLinks from '../DynamicFormField/Fields/FormLinks';
 import {
-  getLanguageCode, doRequest, getbazaarVoiceSettings, getUserDetails, postAPIData,
+  getbazaarVoiceSettings, getUserDetails, postAPIData,
 } from '../../../../utilities/api/request';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
@@ -54,8 +54,8 @@ export default class WriteReviewForm extends React.Component {
       this.setState({ userDetails });
     });
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-    const apiUri = `/${getLanguageCode()}/get-write-review-fields-configs`;
-    const apiData = doRequest(apiUri);
+
+    const apiData = window.commerceBackend.getWriteReviewFieldsConfigs();
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.status === 200) {

@@ -1,4 +1,4 @@
-(function (drupalSettings) {
+(function (Drupal, drupalSettings) {
   // Initialize the global object.
   window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
 
@@ -63,4 +63,33 @@
     }
     return settings;
   };
-}(drupalSettings));
+
+  /**
+   * Gets the write review form configurations.
+   *
+   * @returns {Promise}
+   *   Promise of the response object of the API call to fetch form configs.
+   */
+  window.commerceBackend.getWriteReviewFieldsConfigs = function () {
+    return jQuery.ajax({
+      url: Drupal.url('get-write-review-fields-configs'),
+      type: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        const event = new CustomEvent('showMessage', {
+          bubbles: true,
+          detail: { data: response },
+        });
+        document.dispatchEvent(event);
+      },
+      error: function (error) {
+        const event = new CustomEvent('showMessage', {
+          bubbles: true,
+          detail: { data: error },
+        });
+        document.dispatchEvent(event);
+      }
+    });
+  }
+
+})(Drupal, drupalSettings);
