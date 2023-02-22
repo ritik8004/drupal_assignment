@@ -3,7 +3,7 @@ services:
     class: Drupal\alshaya_hello_member\Helper\HelloMemberHelper
     arguments:
       - '@config.factory'
-      - '@mobile_number.util'
+      - '@tempstore.private'
   alshaya_hello_member.breadcrumb:
     class: Drupal\alshaya_hello_member\Breadcrumb\HelloMemberBenefitsPageBreadcrumbBuilder
     tags:
