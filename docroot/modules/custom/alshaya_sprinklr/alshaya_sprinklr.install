@@ -6,6 +6,18 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Updating sprinklr hash field config.
+ */
+function alshaya_sprinklr_update_9001() {
+  // Make sprinklr hash field translatable.
+  $config_factory = \Drupal::configFactory()->getEditable('field.field.user.user.field_sprinklr_hash');
+  $config_factory->set('translatable', 'true');
+  $config_factory->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_sprinklr_install() {
