@@ -724,7 +724,7 @@ window.auraBackend.getAuraPointsToEarn = async (cardNumber) => {
   }
 
   let endpoint = '/V1/apc/guest/simulate/sales';
-  if (!hasValue(cardNumber)) {
+  if (hasValue(cardNumber)) {
     endpoint = isUserAuthenticated()
       ? `/V1/apc/${cardNumber}/simulate/sales`
       : `/V1/apc/${cardNumber}/guest/simulate/sales`;
