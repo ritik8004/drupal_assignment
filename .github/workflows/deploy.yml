@@ -7,6 +7,8 @@ on:
       - uat
       - master
       - alo-yoga-qa
+      - develop-adyen
+      - develop-egift-return
   create:
 
 concurrency: deploy-${{ github.ref }}
