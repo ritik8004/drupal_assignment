@@ -5,6 +5,8 @@
  * Module file.
  */
 
+use Drupal\node\NodeInterface;
+
 /**
  * Implements hook_theme().
  */
@@ -156,4 +158,17 @@ function _alshaya_rcs_promotion_update_library(
   $libraries[$existing_library_name]['js']["/$self_module_path/$new_js_path"] = $options;
   // Check if dependency array exists.
   $libraries[$existing_library_name]['dependencies'] = array_merge($libraries[$existing_library_name]['dependencies'] ?? [], $dependencies);
+}
+
+/**
+ * Alter the meta tags for any page prior to page attachment.
+ *
+ * @param array $attachments
+ *   An array of metatag objects to be attached to the current page.
+ */
+function alshaya_rcs_promotion_metatags_attachments_alter(array &$attachments) {
+  $promotion_node = \Drupal::routeMatch()->getParameter('node');
+  if ($promotion_node instanceof NodeInterface && $promotion_node->bundle() === 'rcs_promotion') {
+    \Drupal::service('alshaya_rcs_seo.metatag_helper')->getCanonicalMetatags($attachments, '#rcs.promotion.url_path#');
+  }
 }
