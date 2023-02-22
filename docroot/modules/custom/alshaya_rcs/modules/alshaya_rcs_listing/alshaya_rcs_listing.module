@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_preprocess_page().
@@ -181,4 +182,18 @@ function alshaya_rcs_listing_rcs_handlebars_templates(EntityInterface $entity) {
   ];
 
   return $libraries;
+}
+
+/**
+ * Alter the meta tags for any page prior to page attachment.
+ *
+ * @param array $attachments
+ *   An array of metatag objects to be attached to the current page.
+ */
+function alshaya_rcs_listing_metatags_attachments_alter(array &$attachments) {
+  // Alter canonical url metatag if its department page.
+  if (\Drupal::service('alshaya_advanced_page.department_page_helper')->getDepartmentPageNid()) {
+    $category_url = Url::fromRoute('<front>')->setAbsolute()->toString() . '#rcs.category.url_path#';
+    \Drupal::service('alshaya_rcs_seo.metatag_helper')->getCanonicalMetatags($attachments, $category_url);
+  }
 }
