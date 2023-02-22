@@ -3,6 +3,9 @@
 namespace Drupal\alshaya_hello_member\Helper;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Helper class for Hello Member.
@@ -19,15 +22,26 @@ class HelloMemberHelper {
   protected $configFactory;
 
   /**
+   * Temp storage to keep session values.
+   *
+   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   */
+  protected $tempStorage;
+
+  /**
    * Hello Member constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_storage
+   *   Used as temporary storage.
    */
   public function __construct(
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    PrivateTempStoreFactory $temp_storage
   ) {
     $this->configFactory = $config_factory;
+    $this->tempStorage = $temp_storage->get('alshaya_hello_member');
   }
 
   /**
@@ -74,6 +88,26 @@ class HelloMemberHelper {
     }
 
     return $config;
+  }
+
+  /**
+   * Helper function to store the OTP status in temp store.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The user entity object.
+   * @param \Drupal\Core\Form\FormStateInterface|null $form_state
+   *   The form state object.
+   */
+  public function storeMobileVerificationStatus(UserInterface $user, $form_state = NULL) {
+    // If we have the info in form state then use that else check for the user
+    // object.
+    if ($form_state instanceof FormStateInterface && $form_state->getValue('otp_verified')) {
+      // Set the key/value pair.
+      $this->tempStorage->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
+    }
+    elseif ($user->hasField('field_mobile_number') && $user->get('field_mobile_number')) {
+      $this->tempStorage->set('otpVerifiedPhone', $user->get('field_mobile_number')->getValue());
+    }
   }
 
 }
