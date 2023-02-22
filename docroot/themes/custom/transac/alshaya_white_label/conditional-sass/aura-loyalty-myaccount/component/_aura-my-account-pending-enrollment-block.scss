@@ -45,6 +45,8 @@
       letter-spacing: rem(1);
       font-family: $aura-bold;
       font-size: rem(16);
+      opacity: 1;
+      background-color: $aura-my-account-link-card-bg;
     }
   }
 
@@ -57,17 +59,17 @@
     right: 0;
     z-index: -1;
     border-radius: 0.625rem;
-    background: $aura-loyalty-club-no-card-block-pending-enroll-bg;
+    background-image: $aura-loyalty-club-verified-user-full-enrolled-mobile;
 
     html[lang="ar"] & {
-      background: $aura-loyalty-club-no-card-block-pending-enroll-bg-ar;
+      background-image: $aura-loyalty-club-verified-user-full-enrolled-mobile-ar;
     }
 
     @include breakpoint($desktop) {
-      background: $aura-loyalty-club-no-card-block-pending-enroll-bg-desktop;
+      background-image: $aura-loyalty-club-verified-user-full-enrolled;
 
       html[lang="ar"] & {
-        background: $aura-loyalty-club-no-card-block-pending-enroll-bg-desktop-ar;
+        background-image: $aura-loyalty-club-verified-user-full-enrolled-ar;
       }
     }
   }
@@ -122,6 +124,42 @@
 
       @include breakpoint($upto-desktop) {
         font-size: 1rem;
+      }
+    }
+  }
+
+  &.aura-level-Tier2 {
+    &::before {
+      background: $aura-myaccount-star-mobile;
+
+      html[lang="ar"] & {
+        background: $aura-myaccount-star-mobile-ar;
+      }
+
+      @include breakpoint($desktop) {
+        background-image: $aura-myaccount-star-full-enrolled;
+
+        html[lang="ar"] & {
+          background-image: $aura-myaccount-star-full-enrolled-ar;
+        }
+      }
+    }
+  }
+
+  &.aura-level-Tier3 {
+    &::before {
+      background: $aura-myaccount-vip-mobile;
+
+      html[lang="ar"] & {
+        background: $aura-myaccount-vip-mobile-ar;
+      }
+
+      @include breakpoint($desktop) {
+        background-image: $aura-myaccount-vip-full-enrolled;
+
+        html[lang="ar"] & {
+          background-image: $aura-myaccount-vip-full-enrolled-ar;
+        }
       }
     }
   }

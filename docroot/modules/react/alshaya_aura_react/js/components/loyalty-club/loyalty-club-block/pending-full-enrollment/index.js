@@ -22,6 +22,8 @@ const AuraMyAccountPendingFullEnrollment = (props) => {
     expiryDate,
   } = props;
 
+  const tierClass = tier || 'no-tier';
+
   if (isMyAuraContext()) {
     return (
       <>
@@ -45,7 +47,7 @@ const AuraMyAccountPendingFullEnrollment = (props) => {
   }
 
   return (
-    <div className="aura-pending-full-enrollment-wrapper fadeInUp">
+    <div className={`aura-pending-full-enrollment-wrapper fadeInUp aura-level-${tierClass}`}>
       <div className="aura-logo">
         <AuraLogo />
       </div>
