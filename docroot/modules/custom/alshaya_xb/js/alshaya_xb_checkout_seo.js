@@ -3,6 +3,8 @@
  * Push SEO data to datalayer.
  */
 
+ import { hasValue } from "../../../react/js/utilities/conditionsUtility";
+
 (function (Drupal, dataLayer) {
   /**
    * Pushes Global-e data to Datalayer.
@@ -41,6 +43,7 @@
   Drupal.mapGlobaleCheckoutData = function (geData) {
     let productGtm = [];
     let cartItemsCount = 0;
+    let CustomerPriceInMerchantCurrency = 0;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         const product = productItem[1];
@@ -56,6 +59,13 @@
         productGtm.push(productGtmData);
       });
     }
+
+    //Added logic for discount_amount DiscountTypeId == 1 then add up each amount of CustomerPriceInMerchantCurrency
+    geData.details.Discounts.forEach((item) => {
+      if(hasValue(item.DiscountTypeId) && hasValue(item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency)) {
+        CustomerPriceInMerchantCurrency += (item.DiscountTypeId == 1) ? item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency : 0;
+      }
+    });
 
     return {
       "cart_id": window.commerceBackend.getCartId(),
@@ -78,7 +88,7 @@
         "subtotal_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
         "base_grand_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
         "base_grand_total_without_surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
-        "discount_amount": (geData.details.Discounts.DiscountTypeId == 1) ? geData.details.Discounts.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency : null,
+        "discount_amount": CustomerPriceInMerchantCurrency,
         "surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency,
         "shipping_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerShippingPriceInMerchantCurrency + geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerVATInMerchantCurrency
       },
