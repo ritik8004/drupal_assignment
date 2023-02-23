@@ -11,6 +11,9 @@ import ConditionalView from '../../../common/components/conditional-view';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import PostReviewMessage from './post-review-message';
 import { trackFeaturedAnalytics } from '../../../utilities/analytics';
+import {
+  checkBazaarVoiceSettingsAvailable,
+} from '../../../../../../js/utilities/helper';
 
 export default class WriteReviewButton extends React.Component {
   constructor(props) {
@@ -138,8 +141,9 @@ export default class WriteReviewButton extends React.Component {
       isInline,
     } = this.props;
 
-    if (bazaarVoiceSettings instanceof Promise) {
-      return (null);
+    // Return null if reviews settings unavailable.
+    if (!checkBazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
+      return null;
     }
 
     if (userDetails && Object.keys(userDetails).length !== 0) {

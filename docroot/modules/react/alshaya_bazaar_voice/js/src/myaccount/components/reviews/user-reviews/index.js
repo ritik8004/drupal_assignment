@@ -12,6 +12,9 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import EmptyMessage from '../../../../utilities/empty-message';
 import UserReviewsProducts from '../user-reviews-products';
 import UserReviewsDescription from '../user-reviews-desc';
+import {
+  checkBazaarVoiceSettingsAvailable,
+} from '../../../../../../../js/utilities/helper';
 
 let bazaarVoiceSettings = getUserBazaarVoiceSettings();
 export default class UserReviews extends React.Component {
@@ -85,9 +88,8 @@ export default class UserReviews extends React.Component {
   }
 
   render() {
-    // In case of v3 we get bazaarvoice settings from MDC.
-    // If Promise is not resolved then return null.
-    if (bazaarVoiceSettings instanceof Promise || bazaarVoiceSettings === null) {
+    // Return null if reviews settings unavailable.
+    if (!checkBazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
       return null;
     }
 
