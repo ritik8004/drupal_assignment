@@ -55,13 +55,14 @@ export default class WriteReviewForm extends React.Component {
     });
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
 
-    const apiData = window.commerceBackend.getWriteReviewFieldsConfigs();
+    const apiData = window.commerceBackend.getWriteReviewFieldsConfigs(productId);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.status === 200) {
           removeFullScreenLoader();
           let fieldsData = result.data;
           // Hide fields on write a review form based on category configurations.
+          let hiddenFields = window.commerceBackend.getHiddenWriteReviewFields(fieldsData);
           if (bazaarVoiceSettings.reviews.hide_fields_write_review.length > 0) {
             const hideFields = bazaarVoiceSettings.reviews.hide_fields_write_review;
             fieldsData = this.getProcessedFields(fieldsData, hideFields);

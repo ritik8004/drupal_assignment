@@ -92,4 +92,17 @@
     });
   }
 
+  /**
+   * Get the names of fields to hide in write review form.
+   *
+   * @param {string} productId
+   *   Product sku value.
+   *
+   * @returns {Array}
+   *   Array of hidden fields.
+   */
+  window.commerceBackend.getHiddenWriteReviewFields = function getHiddenWriteReviewFields(productId) {
+    var bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings(productId);
+    return bazaarVoiceSettings.reviews.hide_fields_write_review;
+  }
 })(Drupal, drupalSettings);

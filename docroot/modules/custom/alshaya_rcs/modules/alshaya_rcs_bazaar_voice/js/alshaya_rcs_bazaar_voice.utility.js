@@ -4,6 +4,7 @@
 
   var staticStorage = {
     bvSettings: {},
+    writeReviewFormHiddenFields: [],
   };
 
   /**
@@ -189,4 +190,43 @@
 
     return settings;
   };
+
+  window.commerceBackend.getWriteReviewFieldsConfigs = function getWriteReviewFieldsConfigs(productId) {
+    return jQuery.ajax({
+      url: 'https://vsae.alshaya.lndo.site/proxy/?url=https://vs-test.store.alshaya.com/rest/kwt_ar' + '/V1/bv/config/write-review/' + productId,
+      // url: drupalSettings.cart.url + '/V1/bv/config/write-review/' + productId,
+      type: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        staticStorage.writeReviewFormHiddenFields = response[0].hide_fields_write_review;
+        response = response[0].write_review_form;
+
+        const event = new CustomEvent('showMessage', {
+          bubbles: true,
+          detail: { data: response },
+        });
+        document.dispatchEvent(event);
+      },
+      error: function (error) {
+        const event = new CustomEvent('showMessage', {
+          bubbles: true,
+          detail: { data: error },
+        });
+        document.dispatchEvent(event);
+      }
+    });
+  }
+
+  /**
+   * Get the names of fields to hide in write review form.
+   *
+   * @param {string} productId
+   *   Product sku value.
+   *
+   * @returns {Array}
+   *   Array of hidden fields.
+   */
+  window.commerceBackend.getHiddenWriteReviewFields = function getHiddenWriteReviewFields(productId) {
+    return staticStorage.writeReviewFormHiddenFields;
+  }
 })(drupalSettings, Drupal);
