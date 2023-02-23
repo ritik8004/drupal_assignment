@@ -15,7 +15,7 @@ class HappyBirthdayPopup extends React.Component {
   }
 
   /**
-  * Checks if popup was shown earlier for the current date.
+  * Checks if birthday popup was shown earlier for the current date.
   * */
   isAlreadyShown = () => {
     let expires = new Date();
