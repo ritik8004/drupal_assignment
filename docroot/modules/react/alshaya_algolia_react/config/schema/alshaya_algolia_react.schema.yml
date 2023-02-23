@@ -41,6 +41,9 @@ alshaya_algolia_react.settings:
     default_col_grid_mobile:
       type: string
       label: 'Default col grid for mobile view.'
+    show_article_swatches:
+      type: boolean
+      label: 'Enable article swatches on PLP and SRP product teasers.'
 
 alshaya_algolia_react.product_frames:
   type: config_object
