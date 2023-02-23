@@ -16,7 +16,7 @@ use Drupal\user\UserInterface;
  */
 function alshaya_sprinklr_page_attachments_alter(array &$page) {
   $alshaya_sprinklr_settings = \Drupal::config('alshaya_sprinklr.settings');
-  // Add cache tags for the module's settings.
+  // Add cache tags for the module's config.
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_sprinklr_settings->getCacheTags());
   $sprinklr_helper = \Drupal::service('sprinklr.helper');
   // Skip the processing of sprinklr chatbot if sprinklr feature
