@@ -5,6 +5,10 @@
  * Module file for RCS Seo.
  */
 
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Url;
+use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
+
 /**
  * Implements hook_library_info_alter().
  */
@@ -35,7 +39,9 @@ function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
-  $route_name = \Drupal::routeMatch()->getRouteName();
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+
   if ($route_name === 'alshaya_spc.checkout.confirmation') {
     // This adds the library to the top of the array and above the
     // datalayer/datapush library.
@@ -44,6 +50,61 @@ function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
     // Hence we follow this approach.
     array_unshift($attachments['#attached']['library'], 'alshaya_rcs_seo/order_confirmation');
   }
+
+  // This adds 'hreflang' to 'rcs_category' and 'rcs_product' page.
+  if ($route_name === 'entity.taxonomy_term.canonical' || $route_name === 'entity.node.canonical') {
+
+    // If the current route has no parameters, return.
+    $route = $route_match->getRouteObject();
+    $parameters = $route ? $route->getOption('parameters') : [];
+    if (empty($parameters)) {
+      return;
+    }
+
+    // Determine if the current route represents an entity.
+    foreach ($parameters as $name => $options) {
+      if (!isset($options['type']) || !str_starts_with($options['type'], 'entity:')) {
+        continue;
+      }
+
+      $entity = $route_match->getParameter($name);
+
+      if ($entity instanceof ContentEntityInterface &&
+        ($entity->bundle() === 'rcs_category' || $entity->bundle() === 'rcs_product')) {
+
+        foreach ($entity->getTranslationLanguages() as $language) {
+          $hreflang = $language->getId();
+
+          $url = Url::fromRoute(
+            '<front>',
+            [],
+            ['absolute' => TRUE, 'language' => $language]
+          )->toString();
+
+          // Add the URL as is, RCS expects the URL to be same in all languages.
+          $url .= RcsPhPathProcessor::getFullPath();
+
+          // Unset "html_head_link" structure coming from 'content_translation'.
+          foreach ($attachments['#attached']['html_head_link'] as $key => $element) {
+            if (isset($element[0]['hreflang']) && $element[0]['hreflang'] === $hreflang) {
+              unset($attachments['#attached']['html_head_link'][$key]);
+
+              break;
+            }
+          }
+
+          $attachments['#attached']['html_head_link'][] = [
+            [
+              'rel' => 'alternate',
+              'hreflang' => $hreflang,
+              'href' => $url,
+            ],
+          ];
+        }
+      }
+    }
+  }
+
 }
 
 /**
