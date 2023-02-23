@@ -46,3 +46,15 @@ export const checkBazaarVoiceAvailableForPdp = (skuItemCode) => hasValue(drupalS
  */
 export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
   && hasValue(drupalSettings.checkoutTracker.enabled);
+
+/**
+ * Checks if Bazaar voice settings are loaded.
+ */
+export const checkBazaarVoiceSettingsAvailable = (settings) => {
+  const { reviews } = settings;
+  if (hasValue(reviews)) {
+    return true;
+  }
+
+  return false;
+};

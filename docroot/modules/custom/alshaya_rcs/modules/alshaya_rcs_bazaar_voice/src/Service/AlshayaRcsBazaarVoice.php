@@ -138,8 +138,10 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
       $basic_configs['google_api_endpoint'] = $google_translations_api['endpoint'] ?? '';
       $basic_configs['google_api_key'] = $google_translations_api['api_key'] ?? '';
       $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
+      $basic_configs['plp_rating_reviews'] = $config->get('plp_rating_reviews');
       $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
-      $basic_configs['bazaarvoice_settings_expiry'] = $this->configFactory->get('alshaya_rcs_bazaar_voice.settings')->get('bazaarvoice_settings_expiry');
+      $basic_configs['bazaarvoice_settings_expiry'] = $this->configFactory->get('alshaya_rcs_bazaar_voice.settings')
+        ->get('alshaya_rcs_bazaarvoice_settings_expiry');
     }
     return $basic_configs;
   }
