@@ -10,3 +10,5 @@ add_to_bag_hover: false
 default_col_grid: 'small'
 # Default column grid for mobile.
 default_col_grid_mobile: 'small'
+# This config shows article swatches in product teasers in PLP and SRP.
+show_article_swatches: false
