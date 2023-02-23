@@ -172,7 +172,7 @@ class SendOtpPopup extends React.Component {
     return (
       <>
         <div className="btn-wrapper in-active">
-          <button onClick={(e) => this.onClickSendOtp(e)} type="button">{Drupal.t('Send OTP')}</button>
+          <button onClick={(e) => this.onClickSendOtp(e)} type="button">{Drupal.t('Send OTP', {}, { context: 'hello_member' })}</button>
         </div>
         <div id="mobile-number-error" />
         <div className="mb-verifier">
@@ -187,7 +187,7 @@ class SendOtpPopup extends React.Component {
             <div className="hello-member-otp-popup-form">
               <a className="close-modal" onClick={() => this.toggleSendOtpPopup(false)} />
               <div className="opt-title">
-                <p>{Drupal.t('Please enter the OTP sent to')}</p>
+                <p>{Drupal.t('Please enter the OTP sent to', {}, { context: 'hello_member' })}</p>
                 <p>{ document.getElementById('edit-field-mobile-number-0-mobile').value }</p>
               </div>
               <OtpInput
@@ -205,8 +205,8 @@ class SendOtpPopup extends React.Component {
             <div className="hello-member-modal-form-actions">
               <div id="hello-member-modal-form-verify" className="hello-member-modal-form-submit in-active" onClick={() => this.onClickVerify()}>{ Drupal.t('Verify') }</div>
               <div className="hello-member-otp-submit-description">
-                <span>{ Drupal.t('Not recieved the code?')}</span>
-                <a className="hello-member-modal-form-resend-otp" onClick={() => this.callSendOtpApi()}>{ Drupal.t('Resend Code') }</a>
+                <span>{Drupal.t('Not received the code?', {}, { context: 'hello_member' })}</span>
+                <a className="hello-member-modal-form-resend-otp" onClick={() => this.callSendOtpApi()}>{ Drupal.t('Resend Code', {}, { context: 'hello_member' }) }</a>
               </div>
             </div>
           </Popup>
