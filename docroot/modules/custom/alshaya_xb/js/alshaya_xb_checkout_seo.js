@@ -3,8 +3,6 @@
  * Push SEO data to datalayer.
  */
 
- import { hasValue } from "../../../react/js/utilities/conditionsUtility";
-
 (function (Drupal, dataLayer) {
   /**
    * Pushes Global-e data to Datalayer.
@@ -59,13 +57,10 @@
       });
     }
 
-    /**
-    * Added logic for discount_amount DiscountTypeId == 1 then add up each amount of CustomerPriceInMerchantCurrency.
-    * Loop the Discounts array and calculate the discount amount.
-    */
+    // Loop the Discounts array and calculate the discount amount.
     let discountAmount = 0;
     geData.details.Discounts.forEach((item) => {
-      if (hasValue(item.DiscountTypeId) && hasValue(item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency) && item.DiscountTypeId == 1) {
+      if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
         discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
       }
     });
