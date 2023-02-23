@@ -6,6 +6,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\taxonomy\TermInterface;
 
@@ -52,6 +53,13 @@ class ProductOptionsManager {
   private $connection;
 
   /**
+   * Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  private $languageManager;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -64,15 +72,18 @@ class ProductOptionsManager {
    *   I18nHelper object.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, I18nHelper $i18n_helper, Connection $connection) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, I18nHelper $i18n_helper, Connection $connection, LanguageManagerInterface $language_manager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_sku');
     $this->i18nHelper = $i18n_helper;
     $this->connection = $connection;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -187,6 +198,14 @@ class ProductOptionsManager {
         $save_term = TRUE;
       }
 
+      // Also update term in case facets_pretty_path table not
+      // having term's pretty path data.
+      $facet_pretty_aliases = $this->getFacetAliases($attribute_code, $langcode);
+      if (!array_key_exists($option_value, $facet_pretty_aliases)) {
+        $term->setName($option_value);
+        $save_term = TRUE;
+      }
+
       if ($save_term) {
         $term->setWeight($weight);
         $term->save();
@@ -279,6 +298,40 @@ class ProductOptionsManager {
         }
       }
     }
+  }
+
+  /**
+   * Get facet aliases.
+   *
+   * @param string $facet_alias
+   *   Facet alias to get all the filter values.
+   * @param string $langCode
+   *   The language codes.
+   *
+   * @return array
+   *   Aliases array with value as key.
+   */
+  private function getFacetAliases(string $facet_alias, string $langCode): array {
+    $static = &drupal_static('facets_pretty_path', []);
+
+    if (empty($langCode)) {
+      $langCode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    if (isset($static[$facet_alias][$langCode])) {
+      return $static[$facet_alias][$langCode];
+    }
+
+    $select = $this->connection->select('facets_pretty_path');
+    $select->fields('facets_pretty_path', ['facet_alias', 'value', 'alias']);
+    $select->condition('language', $langCode);
+    $result = $select->execute()->fetchAll();
+
+    foreach ($result as $row) {
+      $static[$row->facet_alias][$langCode][trim($row->value)] = trim($row->alias);
+    }
+
+    return $static[$facet_alias][$langCode] ?? [];
   }
 
 }
