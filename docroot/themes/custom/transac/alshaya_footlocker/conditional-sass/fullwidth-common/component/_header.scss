@@ -24,9 +24,11 @@ header {
 }
 
 .block-system-branding-block {
-  .site-brand-home a {
-    @include breakpoint($only-tablet) {
-      padding-#{$left}: rem(32);
+  .site-brand-home {
+    a {
+      @include breakpoint($only-tablet) {
+        padding-#{$left}: rem(32);
+      }
     }
   }
 }
