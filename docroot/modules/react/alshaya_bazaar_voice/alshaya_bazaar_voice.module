@@ -23,7 +23,8 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
 
   // Disable BazaarVoice Rating and Review in PDP
   // if checkbox is checked in bazaarVoice Settings Form.
-  if (empty($basic_configs['endpoint']) || empty($basic_configs['passkey'])) {
+  if ($basic_configs['pdp_rating_reviews']
+    || (empty($basic_configs['endpoint']) || empty($basic_configs['passkey']))) {
     return;
   }
 

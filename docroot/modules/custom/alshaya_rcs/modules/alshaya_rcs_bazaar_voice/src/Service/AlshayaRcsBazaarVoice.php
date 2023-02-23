@@ -139,7 +139,7 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
       $basic_configs['google_api_key'] = $google_translations_api['api_key'] ?? '';
       $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
       $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
-      $basic_configs['bazaarvoice_settings_expiry'] = $config->get('bazaarvoice_settings_expiry');
+      $basic_configs['bazaarvoice_settings_expiry'] = $this->configFactory->get('alshaya_rcs_bazaar_voice.settings')->get('bazaarvoice_settings_expiry');
     }
     return $basic_configs;
   }
