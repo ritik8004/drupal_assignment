@@ -50,6 +50,7 @@ plp:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common
     - core/jquery.once
+    - alshaya_algolia_react/search_insights
 
 plpv2:
   js:
