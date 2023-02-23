@@ -60,8 +60,10 @@
     });
     document.dispatchEvent(getListNameEvent);
     prefix = getListNameEvent.detail.prefix;
-
-    if (listName.indexOf('placeholder') > -1) {
+    if (prefix.indexOf('match back') > -1 && listName.indexOf('PDP-placeholder') > -1 ) {
+      return listName.replace('PDP-placeholder', prefix);
+    }
+     else if (listName.indexOf('placeholder') > -1) {
       return prefix + listName.replace('placeholder', label).toLowerCase();
     }
     else {
@@ -96,7 +98,8 @@
           if ((previousLabel === '') || (previousLabel !== label)) {
             previousLabel = label;
           }
-
+          console.log('prior list');
+          console.log(impression);
           impression.list = Drupal.alshayaSeoGtmProductSlider.getRecommendationListName($(this));
           impression.position = parseInt($(this).closest('.views-row').data('list-item-position'));
           // Keep variant empty for impression pages. Populated only post add to cart action.

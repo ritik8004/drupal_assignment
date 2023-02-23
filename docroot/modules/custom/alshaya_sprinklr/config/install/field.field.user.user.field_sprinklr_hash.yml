@@ -12,7 +12,7 @@ bundle: user
 label: 'Sprinklr Customer Hash'
 description: 'Used for customer authentication by sprinklr chatbot.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

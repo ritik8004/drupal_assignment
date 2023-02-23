@@ -210,7 +210,7 @@ const Teaser = ({
 
   let dataVmode = null;
   if (pageType === 'search') {
-    dataVmode = { 'data-vmode': 'search result' };
+    dataVmode = { 'data-vmode': 'search_result' };
   }
   return (
     <div className={teaserClass}>
@@ -362,6 +362,7 @@ const Teaser = ({
             ) : null}
             {/* Render color swatches based on article/sku id */}
             {hasValue(attribute.article_swatches)
+              && drupalSettings.reactTeaserView.swatches.showArticleSwatches
               ? (
                 <ArticleSwatches
                   sku={sku}
