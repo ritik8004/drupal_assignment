@@ -17,8 +17,10 @@
  *   The current product.
  * @param array $attributes
  *   SKU attributes.
+ * @param bool $is_indexing
+ *   Identifier of the product is indexing to algloia.
  */
-function hook_gtm_product_attributes_alter(array &$product, array &$attributes) {
+function hook_gtm_product_attributes_alter(array &$product, array &$attributes, bool $is_indexing) {
 }
 
 /**
