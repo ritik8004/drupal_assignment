@@ -13,7 +13,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  *
  * Provides default setting for `show_full_width` for theme.
  */
-function alshaya_fl_transac_update_9403() {
+function alshaya_fl_transac_update_9402() {
   $config = \Drupal::configFactory()->getEditable('alshaya_footlocker.settings');
   $config->set('show_full_width', FALSE);
   $config->save();
