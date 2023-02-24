@@ -37,9 +37,6 @@ alshaya_aura_react.loyalty_benefits:
     loyalty_benefits_title2:
       type: text
       label: 'AURA Loyalty Benefits Title 2'
-    loyalty_static_content_node:
-      type: string
-      label: 'AURA Landing Page Node'
     loyalty_benefits_content:
       type: text_format
       label: 'AURA Loyalty Benefits Content'
