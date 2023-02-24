@@ -21,18 +21,6 @@
   }
 }
 
-.c-breadcrumb {
-  ol {
-    max-width: none;
-
-    @include fullWidthSideSpaces(
-      $is_tablet: true,
-      $is_desktop: true,
-      $is_desktop_wide: true
-    );
-  }
-}
-
 @include breakpoint($desktop) {
   body.wishlist-enabled {
     header {
