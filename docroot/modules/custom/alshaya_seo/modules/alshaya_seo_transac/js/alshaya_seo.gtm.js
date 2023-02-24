@@ -877,7 +877,9 @@
         && Object.keys(listValues).length
         && typeof listValues[productData.id] !== 'undefined') {
         // For SRP, use list value 'Search Result Page'.
+        if (listValues[productData.id] === 'Search Results Page' || !$('body').is('[gtm-list-name]') || listValues[productData.id].indexOf('match back') > -1) {
           productData.list = listValues[productData.id];
+        }
       }
 
       // Dispatch custom event to get list name. For the default value we use

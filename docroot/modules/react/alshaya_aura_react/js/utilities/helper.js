@@ -44,6 +44,19 @@ function getLoyaltyBenefitsTitle() {
 }
 
 /**
+ * Helper function to get loyalty benefits content.
+ */
+function getLoyaltyBenefitsContent() {
+  let loyaltyBenefitsContent = '';
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'loyaltyBenefitsContent')) {
+    loyaltyBenefitsContent = drupalSettings.aura.loyaltyBenefitsContent;
+  }
+
+  return loyaltyBenefitsContent;
+}
+
+/**
  * Get User Profile info.
  */
 function getUserProfileInfo(firstName, lastName) {
@@ -119,6 +132,7 @@ export {
   getAllAuraStatus,
   getAllAuraTier,
   getLoyaltyBenefitsTitle,
+  getLoyaltyBenefitsContent,
   getUserProfileInfo,
   getUserDetails,
   getAuraConfig,
