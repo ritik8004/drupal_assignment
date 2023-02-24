@@ -1182,8 +1182,6 @@
     if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
       var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
       listValues[product.id] = product.list = listName;
-      console.log('list values1');
-      console.log(listValues);
       Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
     }
 
@@ -1614,8 +1612,6 @@
         && Object.keys(listValues).length
         && typeof listValues[productData.id] !== 'undefined') {
         delete listValues[product.id];
-        console.log('list values2');
-        console.log(listValues);
         Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
       }
     }
