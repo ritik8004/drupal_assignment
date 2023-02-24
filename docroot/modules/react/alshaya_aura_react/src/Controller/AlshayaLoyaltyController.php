@@ -154,8 +154,6 @@ class AlshayaLoyaltyController extends ControllerBase {
         // If path is valid then update the settings.
         if ($path) {
           $settings['loyaltyStaticPageUrl'] = trim($path, '/');
-          // Adding cache tag of aura landing page.
-          $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTags());
         }
       }
     }
