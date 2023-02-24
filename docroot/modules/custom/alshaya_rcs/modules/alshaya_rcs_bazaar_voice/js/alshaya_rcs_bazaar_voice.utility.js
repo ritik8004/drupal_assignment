@@ -113,7 +113,7 @@
     if (!Drupal.hasValue(productId)) {
       var productInfo = window.commerceBackend.getProductData(null, 'productInfo');
       var ids = Object.keys(productInfo);
-      productId = ids[0];
+      productId = Drupal.hasValue(ids) ? ids[0] : productId;
     }
 
     if (Drupal.hasValue(productId)) {
