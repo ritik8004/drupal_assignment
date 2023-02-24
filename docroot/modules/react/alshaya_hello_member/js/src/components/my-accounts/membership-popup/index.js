@@ -14,11 +14,10 @@ class MembershipPopup extends React.Component {
   componentDidMount() {
     // Listen to `helloMemberPointsLoaded` event which will return if customer is new hello member.
     document.addEventListener('helloMemberPointsLoaded', this.getCustomerData, false);
-
-    const contactUsElement = document.querySelector("div.hello-member-popup-form a[classname='contact-us']");
-
     document.addEventListener('mousedown', (e) => {
-      if (contactUsElement.contains(e.target)) {
+      // Get the hello member form popup dom.
+      const contactUsElement = document.querySelector("div.hello-member-popup-form a[classname='contact-us']");
+      if (contactUsElement && contactUsElement.contains(e.target)) {
         this.contactUsClick();
       }
     });
