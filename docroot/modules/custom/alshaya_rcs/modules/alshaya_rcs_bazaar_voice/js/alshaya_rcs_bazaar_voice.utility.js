@@ -178,7 +178,7 @@
    *   Bazaar voice user settings.
    */
   window.alshayaBazaarVoice.getUserBazaarVoiceSettings = async function getUserBazaarSettings() {
-    var settings = [];
+    var settings = {};
     if (drupalSettings.userInfo) {
       settings.reviews = drupalSettings.userInfo;
     }
