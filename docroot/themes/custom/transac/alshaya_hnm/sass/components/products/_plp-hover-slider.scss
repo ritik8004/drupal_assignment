@@ -22,6 +22,7 @@
               border: rem(1) solid $plp-hover-slider-dot-border;
               background: none;
 
+              // 50% background color opacity on non-active slider dots.
               &::before {
                 content: "";
                 display: inline-block;
