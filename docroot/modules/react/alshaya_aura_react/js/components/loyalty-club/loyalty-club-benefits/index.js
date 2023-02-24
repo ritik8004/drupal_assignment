@@ -1,5 +1,7 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import { getLoyaltyPageContent, isMyAuraContext } from '../../../utilities/aura_utils';
+import { getLoyaltyBenefitsContent } from '../../../utilities/helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import LoyaltyPageContent from '../loyalty-page-content';
 
@@ -49,6 +51,9 @@ class LoyaltyClubBenefits extends React.Component {
             htmlContent={htmlContent}
           />
         )}
+        <div className="details">
+          {parse(getLoyaltyBenefitsContent())}
+        </div>
       </div>
     );
   }
