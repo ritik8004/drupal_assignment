@@ -929,6 +929,7 @@ fullwidth-myaccount:
       css/conditional-sass/fullwidth-myaccount/fullwidth-myaccount.ltr.css: {}
   dependencies:
     - alshaya_white_label/fullwidth-common
+    - alshaya_white_label/fullwidth-layouts
 
 fullwidth-pdp:
   css:
@@ -943,11 +944,19 @@ fullwidth-spc:
       css/conditional-sass/fullwidth-spc/fullwidth-spc.ltr.css: {}
   dependencies:
     - alshaya_white_label/fullwidth-common
+    - alshaya_white_label/fullwidth-layouts
 
 fullwidth-static:
   css:
     theme:
       css/conditional-sass/fullwidth-static/fullwidth-static.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/fullwidth-common
+
+fullwidth-layouts:
+  css:
+    theme:
+      css/conditional-sass/fullwidth-layouts/fullwidth-layouts.ltr.css: {}
   dependencies:
     - alshaya_white_label/fullwidth-common
 

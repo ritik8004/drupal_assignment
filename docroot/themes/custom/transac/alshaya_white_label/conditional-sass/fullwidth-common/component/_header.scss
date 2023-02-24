@@ -41,6 +41,18 @@ body[class*="super-category"] {
   }
 }
 
+.c-breadcrumb {
+  ol {
+    max-width: none;
+
+    @include fullWidthSideSpaces(
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+  }
+}
+
 @include breakpoint($desktop) {
   #block-cartminiblock,
   .block-alshaya-react-mini-cart,
