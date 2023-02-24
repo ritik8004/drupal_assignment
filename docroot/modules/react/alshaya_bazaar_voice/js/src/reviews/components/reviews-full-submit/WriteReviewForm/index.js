@@ -53,29 +53,25 @@ export default class WriteReviewForm extends React.Component {
       }
       this.setState({ userDetails });
     });
-    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
 
     const apiData = window.commerceBackend.getWriteReviewFieldsConfigs(productId);
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.status === 200) {
-          removeFullScreenLoader();
-          let fieldsData = result.data;
-          // Hide fields on write a review form based on category configurations.
-          let hiddenFields = window.commerceBackend.getHiddenWriteReviewFields(fieldsData);
-          if (bazaarVoiceSettings.reviews.hide_fields_write_review.length > 0) {
-            const hideFields = bazaarVoiceSettings.reviews.hide_fields_write_review;
-            fieldsData = this.getProcessedFields(fieldsData, hideFields);
-          }
-          this.setState({
-            fieldsConfig: fieldsData,
-          });
-        } else {
-          removeFullScreenLoader();
-          Drupal.logJavascriptError('review-write-review-form', result.error);
+    apiData.then((result) => {
+      if (result.status === 200) {
+        removeFullScreenLoader();
+        let fieldsData = result.data;
+        // Hide fields on write a review form based on category configurations.
+        const hiddenFields = window.commerceBackend.getHiddenWriteReviewFields(productId);
+        if (hiddenFields.length > 0) {
+          fieldsData = this.getProcessedFields(fieldsData, hiddenFields);
         }
-      });
-    }
+        this.setState({
+          fieldsConfig: fieldsData,
+        });
+      } else {
+        removeFullScreenLoader();
+        Drupal.logJavascriptError('review-write-review-form', result.error);
+      }
+    });
   }
 
   componentWillUnmount() {

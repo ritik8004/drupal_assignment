@@ -75,21 +75,26 @@
       url: Drupal.url('get-write-review-fields-configs'),
       type: 'GET',
       dataType: 'json',
-      success: function (response) {
-        const event = new CustomEvent('showMessage', {
-          bubbles: true,
-          detail: { data: response },
-        });
-        document.dispatchEvent(event);
-      },
-      error: function (error) {
+    }).then((response, status, xhr) => {
+      var data = {
+        data: response,
+        status: xhr.status,
+      };
+      const event = new CustomEvent('showMessage', {
+        bubbles: true,
+        detail: {
+          data
+        }
+      });
+      document.dispatchEvent(event);
+      return data;
+    }).catch((error) => {
         const event = new CustomEvent('showMessage', {
           bubbles: true,
           detail: { data: error },
         });
         document.dispatchEvent(event);
-      }
-    });
+      });
   }
 
   /**
