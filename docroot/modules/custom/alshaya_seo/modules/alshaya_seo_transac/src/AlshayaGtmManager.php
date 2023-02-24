@@ -367,11 +367,13 @@ class AlshayaGtmManager {
    *   View mode in which we trying to render the product.
    * @param \Drupal\acq_commerce\SKUInterface|null $child
    *   The child sku object or null.
+   * @param bool $is_indexing
+   *   (Optional) Identifier of the product is indexing to algloia.
    *
    * @return array
    *   Array of attributes to be exposed to GTM.
    */
-  public function fetchProductGtmAttributes(Node $product, $view_mode, SKUInterface $child = NULL) {
+  public function fetchProductGtmAttributes(Node $product, $view_mode, SKUInterface $child = NULL, $is_indexing = FALSE) {
     $attributes = [];
     static $gtm_container = NULL;
 
@@ -392,7 +394,7 @@ class AlshayaGtmManager {
       $department_attributes = $this->fetchDepartmentAttributes($product_terms);
       $attributes['gtm-category'] = implode('/', $product_terms);
     }
-    $skuAttributes = $this->fetchSkuAtttributes($skuId, $child);
+    $skuAttributes = $this->fetchSkuAtttributes($skuId, $child, NULL, $is_indexing);
 
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-container'] = $gtm_container;
@@ -474,13 +476,15 @@ class AlshayaGtmManager {
    *   The child sku object or null.
    * @param string|null $parentSku
    *   Parent product SKU value.
+   * @param bool $is_indexing
+   *   (Optional) Identifier of the product is indexing to algloia.
    *
    * @return array
    *   Attributes on sku to be exposed to GTM.
    *
    * @throws \InvalidArgumentException
    */
-  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL, $parentSku = NULL) {
+  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL, $parentSku = NULL, $is_indexing = FALSE) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
@@ -585,6 +589,7 @@ class AlshayaGtmManager {
       [
         &$product_node,
         &$attributes,
+        $is_indexing,
       ]
     );
     return $attributes;

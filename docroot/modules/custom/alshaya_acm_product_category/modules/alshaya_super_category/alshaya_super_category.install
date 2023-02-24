@@ -10,6 +10,16 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Adds products to reindex queue as we have to update brand attribute
+ * for super category.
+ */
+function alshaya_super_category_update_9406() {
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set configs for showing search banner in super category home pages
  * for mobile view.
  */
