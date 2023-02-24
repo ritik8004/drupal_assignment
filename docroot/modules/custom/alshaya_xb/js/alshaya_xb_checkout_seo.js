@@ -57,15 +57,23 @@
       });
     }
 
+    // Loop the Discounts array and calculate the discount amount.
+    let discountAmount = 0;
+    geData.details.Discounts.forEach((item) => {
+      if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
+        discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
+      }
+    });
+
     return {
       "cart_id": window.commerceBackend.getCartId(),
       "uid": drupalSettings.user.uid,
       "items_qty": cartItemsCount,
-      "cart_total": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
-      "minicart_total": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
+      "cart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
+      "minicart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
       "surcharge": {
-        "amount": geData.details.OrderPrices.MerchantTransaction.RemoteAreaSurchargeFee,
-        "is_applied": (geData.details.OrderPrices.MerchantTransaction.RemoteAreaSurchargeFee > 0) ? true : false
+        "amount": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency,
+        "is_applied": (geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency > 0) ? true : false
       },
       "shipping": {
         "type": geData.details.ShippingMethodType,
@@ -75,12 +83,12 @@
         "method": geData.OrderPaymentMethods
       },
       "totals": {
-        "subtotal_incl_tax": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
-        "base_grand_total": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
-        "base_grand_total_without_surcharge": geData.details.OrderPrices.MerchantTransaction.TotalProductsPrice,
-        "discount_amount": geData.details.OrderPrices.MerchantTransaction.TotalDiscountedProductsPrice,
-        "surcharge": 0, // @todo we need to check whether global-e has this field or not
-        "shipping_incl_tax": null // @todo we need to check whether global-e has this field or not
+        "subtotal_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
+        "base_grand_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
+        "base_grand_total_without_surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
+        "discount_amount": discountAmount,
+        "surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency,
+        "shipping_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerShippingPriceInMerchantCurrency + geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerVATInMerchantCurrency
       },
       "items": productGtm,
     };
@@ -177,7 +185,7 @@
           "actionField": {
             "id": null, // @todo We need to ask Global-e top get this information.
             "affiliation": "Online Store",
-            "revenue": geData.details.OrderPrices.MerchantTransaction.EstimatedTotalPrice,
+            "revenue": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
             "tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerDutiesAndTaxesInMerchantCurrency,
             "shipping": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerShippingPriceInMerchantCurrency,
             "coupon": geData.details.Discounts[0].coupon,
