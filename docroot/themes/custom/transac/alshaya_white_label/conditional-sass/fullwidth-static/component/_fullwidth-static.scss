@@ -11,8 +11,7 @@ body.nodetype--static_html {
   @include breakpoint($only-mobile) {
     .c-content__banner,
     .c-content__container {
-      padding-left: 0;
-      padding-right: 0;
+      @include sideSpaces(0);
     }
   }
 }
