@@ -138,6 +138,7 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
       [
         &$rcs_product,
         &$attributes,
+        $is_indexing,
       ]
     );
     return $attributes;
