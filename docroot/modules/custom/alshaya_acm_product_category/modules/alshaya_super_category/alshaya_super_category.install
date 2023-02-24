@@ -14,7 +14,9 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * for super category.
  */
 function alshaya_super_category_update_9406() {
-  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+  if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+  }
 }
 
 /**
