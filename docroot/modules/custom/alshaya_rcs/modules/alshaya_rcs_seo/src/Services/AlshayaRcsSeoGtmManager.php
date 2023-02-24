@@ -17,7 +17,7 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
   /**
    * {@inheritDoc}
    */
-  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL, $parentSku = NULL) {
+  public function fetchSkuAtttributes($skuId, SKUInterface $child = NULL, $parentSku = NULL, $is_indexing = FALSE) {
     $attributes = [];
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
@@ -75,11 +75,13 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
    *   View mode in which we trying to render the product.
    * @param \Drupal\acq_commerce\SKUInterface|null $child
    *   The child sku object or null.
+   * @param bool $is_indexing
+   *   (Optional) Identifier of the product is indexing to algloia.
    *
    * @return array
    *   Array of attributes to be exposed to GTM.
    */
-  public function fetchProductGtmAttributes(Node $rcs_product, $view_mode, SKUInterface $child = NULL) {
+  public function fetchProductGtmAttributes(Node $rcs_product, $view_mode, SKUInterface $child = NULL, $is_indexing = FALSE) {
     $attributes = [];
     static $gtm_container = NULL;
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
