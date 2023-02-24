@@ -33,8 +33,8 @@
    *   Bazaar voice settings.
    */
   window.alshayaBazaarVoice.getbazaarVoiceSettings = function getbazaarVoiceSettings(productId) {
-    let productInfo = window.commerceBackend.getProductData(productId);
-    const settings = {};
+    var productInfo = window.commerceBackend.getProductData(productId);
+    var settings = {};
 
     if (typeof productId !== 'undefined' && productInfo !== null) {
       settings.productid = productId;
@@ -57,7 +57,7 @@
    *   Bazaar voice settings for user.
    */
   window.alshayaBazaarVoice.getUserBazaarVoiceSettings = function getUserBazaarSettings() {
-    const settings = [];
+    var settings = [];
     if (drupalSettings.userInfo) {
       settings.reviews = drupalSettings.userInfo;
     }
