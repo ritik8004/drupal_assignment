@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_rcs_bazaar_voice\Service;
 
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
+use Drupal\Core\Site\Settings;
 
 /**
  * Integrates RCS with AlshayaBazaarVoice.
@@ -50,7 +51,7 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
   /**
    * {@inheritDoc}
    */
-  public function getProductReviewStatistics(string $product_id) {
+  public function getProductReviewSchema(string $product_id) {
     static $response = [];
     $config = $this->configFactory->get('bazaar_voice.settings');
     $pdp_reviews_seo_limit = $config->get('pdp_reviews_seo_limit');
@@ -114,6 +115,35 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
 
     $this->moduleHandler->alter('alshaya_rcs_product_bv_product_fields', $fields);
     return $fields;
+  }
+
+  /**
+   * Get basic configurations defined for bazaar voice.
+   *
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   BazaarVoice basic configurations.
+   */
+  public function getBasicConfigurations($context = 'web') {
+    $basic_configs = [];
+    $config = $this->configFactory->get('bazaar_voice.settings');
+    if ($context === 'web') {
+      $basic_configs['endpoint'] = $config->get('api_base_url');
+      $basic_configs['passkey'] = $config->get('conversations_apikey');
+      $basic_configs['max_age'] = $config->get('max_age');
+      // Get Configs for Google translation API.
+      $google_translations_api = Settings::get('google_translations_api');
+      $basic_configs['google_api_endpoint'] = $google_translations_api['endpoint'] ?? '';
+      $basic_configs['google_api_key'] = $google_translations_api['api_key'] ?? '';
+      $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
+      $basic_configs['plp_rating_reviews'] = $config->get('plp_rating_reviews');
+      $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
+      $basic_configs['bazaarvoice_settings_expiry'] = $this->configFactory->get('alshaya_rcs_bazaar_voice.settings')
+        ->get('alshaya_rcs_bazaarvoice_settings_expiry');
+    }
+    return $basic_configs;
   }
 
 }

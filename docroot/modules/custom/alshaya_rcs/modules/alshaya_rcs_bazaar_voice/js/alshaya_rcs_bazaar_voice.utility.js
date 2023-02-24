@@ -16,8 +16,11 @@
    *   The product review data.
    */
   window.alshayaBazaarVoice.getProductReviewForCurrrentUser = async function getProductReviewForCurrrentUser(productIdentifier) {
-    const bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
-    const productId = typeof productIdentifier !== 'undefined' ? productIdentifier : bazaarVoiceSettings.productid;
+    const bazaarVoiceSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
+    if (!Drupal.hasValue(bazaarVoiceSettings)) {
+      return;
+    }
+    const productId = productIdentifier || bazaarVoiceSettings.productid;
     const userId = bazaarVoiceSettings.reviews.customer_id;
     const staticStorageKey = `${userId}_${productId}`;
     let productReviewData = Drupal.hasValue(staticStorage[staticStorageKey])
@@ -93,19 +96,28 @@
   /**
    * Gets bazaar voice settings.
    *
-   * (optional) @param {string} productId
-   * Product SKU value.
+   * @param {string} productIdParam
+   *   Product SKU value.
    *
-   * @returns {Object}
-   *   Bazaar voice settings.
+   * @returns {Object|null}
+   *   Bazaar voice settings object or null.
    */
-  window.alshayaBazaarVoice.getbazaarVoiceSettings = function getbazaarVoiceSettings(productId) {
+  window.alshayaBazaarVoice.getbazaarVoiceSettings = async function getbazaarVoiceSettings(productIdParam) {
     var settings = {};
+    var productId = productIdParam || '';
     if (Drupal.hasValue(staticStorage.bvSettings[productId])) {
       return staticStorage.bvSettings[productId];
     }
 
+    // Get the first product id from the product info.
+    if (!Drupal.hasValue(productId)) {
+      var productInfo = window.commerceBackend.getProductData(null, 'productInfo');
+      var ids = Object.keys(productInfo);
+      productId = Drupal.hasValue(ids) ? ids[0] : productId;
+    }
+
     if (Drupal.hasValue(productId)) {
+      // Get bv product details with field assets_teaser.
       var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('bv_product', {sku: productId});
       if (response.data.products.total_count) {
         try {
@@ -125,13 +137,56 @@
       }
     }
 
-    settings = Object.assign(settings, drupalSettings.alshaya_bazaar_voice);
+    // For anonymous user merge common settings in alshaya_bazaar_voice key
+    // and for authenticated user merge common settings in userInfo key
+    // when user is viewing reviews page in my account.
+    settings = drupalSettings.alshaya_bazaar_voice
+      ? Object.assign(settings, drupalSettings.alshaya_bazaar_voice)
+      : Object.assign(settings, drupalSettings.userInfo);
+
+    // Call commerceBackend for Bazaar voice configurations.
+    var bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
+
+    if (bazaarVoiceConfig === null) {
+      return null;
+    }
+
+    Object.entries(bazaarVoiceConfig).forEach((item) => {
+      if (item[0] === 'basic') {
+        // Merge drupalSettings and basic configurations from commerceBackend.
+        Object.assign(settings.bazaar_voice, item[1]);
+      } else {
+        // Add other common configurations from commerceBackend.
+        settings.bazaar_voice[item[0]] = item[1];
+      }
+    });
 
     staticStorage.bvSettings[productId] = {
       productid: productId,
       reviews: settings,
     };
 
+    // Return Bazaar voice config from commerceBackend with product Id
+    // using static variable.
     return staticStorage.bvSettings[productId];
-  }
+  };
+
+  /**
+   * Get user bazaar voice settings from drupalSettings and commerceBackend.
+   *
+   * @returns {Promise<*[]>}
+   *   Bazaar voice user settings.
+   */
+  window.alshayaBazaarVoice.getUserBazaarVoiceSettings = async function getUserBazaarSettings() {
+    var settings = {};
+    if (drupalSettings.userInfo) {
+      settings.reviews = drupalSettings.userInfo;
+    }
+
+    var bazaarVoiceCommonSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings();
+
+    Object.assign(settings.reviews, bazaarVoiceCommonSettings.reviews);
+
+    return settings;
+  };
 })(drupalSettings, Drupal);

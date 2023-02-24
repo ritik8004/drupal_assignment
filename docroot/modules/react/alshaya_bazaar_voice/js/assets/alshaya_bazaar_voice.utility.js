@@ -21,7 +21,7 @@
       }
     }
     return null;
-  }
+  };
 
   /**
    * Gets bazaar voice settings.
@@ -48,5 +48,19 @@
     }
 
     return settings;
-  }
-})(drupalSettings);
+  };
+
+  /**
+   * Get user bazaar voice settings.
+   *
+   * @returns {*[]}
+   *   Bazaar voice settings for user.
+   */
+  window.alshayaBazaarVoice.getUserBazaarVoiceSettings = function getUserBazaarSettings() {
+    var settings = [];
+    if (drupalSettings.userInfo) {
+      settings.reviews = drupalSettings.userInfo;
+    }
+    return settings;
+  };
+}(drupalSettings));

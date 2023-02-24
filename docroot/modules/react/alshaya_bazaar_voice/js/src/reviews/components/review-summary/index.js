@@ -12,13 +12,18 @@ import EmptyMessage from '../../../utilities/empty-message';
 import ReviewRatingsFilter from '../review-ratings-filter';
 import PostReviewMessage from '../reviews-full-submit/post-review-message';
 import Pagination from '../review-pagination';
-import { getbazaarVoiceSettings, getUserDetails, fetchAPIData } from '../../../utilities/api/request';
+import {
+  getbazaarVoiceSettings,
+  getUserDetails,
+  fetchAPIData,
+} from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 import { createUserStorage } from '../../../utilities/user_util';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { trackPassiveAnalytics, trackFeaturedAnalytics, trackContentImpression } from '../../../utilities/analytics';
+import { bazaarVoiceSettingsAvailable } from '../../../../../../js/utilities/helper';
 
 let bazaarVoiceSettings = null;
 
@@ -45,8 +50,8 @@ export default class ReviewSummary extends React.Component {
       prevButtonDisabled: true,
       nextButtonDisabled: false,
       analyticsState: false,
-      loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
-      paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
+      loadMoreLimit: '',
+      paginationLimit: '',
       userDetails: {
         productReview: null,
       },
@@ -60,7 +65,18 @@ export default class ReviewSummary extends React.Component {
   /**
    * Get Review results and product statistical data.
    */
-  componentDidMount() {
+  componentDidMount = async () => {
+    bazaarVoiceSettings = await getbazaarVoiceSettings();
+
+    if (!Drupal.hasValue(bazaarVoiceSettings)) {
+      return;
+    }
+
+    this.setState({
+      loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
+      paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
+    });
+
     getUserDetails().then((result) => {
       this.setState({ userDetails: result }, () => {
         const { userDetails } = this.state;
@@ -379,6 +395,11 @@ export default class ReviewSummary extends React.Component {
   }
 
   render() {
+    // Return null if reviews settings unavailable.
+    if (!bazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
+      return null;
+    }
+
     const {
       reviewsSummary,
       reviewsProduct,
