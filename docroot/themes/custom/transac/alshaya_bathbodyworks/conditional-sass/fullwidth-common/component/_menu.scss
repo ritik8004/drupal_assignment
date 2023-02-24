@@ -13,7 +13,7 @@
 .back--link,
 .c-menu-secondary li,
 // Existing white label styles override selector.
-.main--menu ul.menu--one__list.menu__list > li > .menu__link-wrapper {
+.block-alshaya-main-menu .main--menu ul.menu--one__list.menu__list > li > .menu__link-wrapper {
   @include breakpoint($only-mobile) {
     @include sideSpaces($full_width_padding_mobile, $type: "margin");
   }
