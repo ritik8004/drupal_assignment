@@ -2,3 +2,18 @@
 .c-content__container {
   max-width: none;
 }
+
+.c-hero-content {
+  .l-container {
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+
+    @include breakpoint($desktop) {
+      max-width: none;
+    }
+  }
+}
