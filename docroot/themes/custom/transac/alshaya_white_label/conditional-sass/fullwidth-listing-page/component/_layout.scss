@@ -9,4 +9,9 @@
   @include breakpoint($desktop) {
     max-width: none;
   }
+
+  .c-sidebar-first,
+  main {
+    max-width: 100%;
+  }
 }
