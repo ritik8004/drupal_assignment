@@ -20,18 +20,6 @@
 
             &:not(.slick-active) {
               border: rem(1) solid $plp-hover-slider-dot-border;
-              background: none;
-
-              // 50% background color opacity on non-active slider dots.
-              &::before {
-                content: "";
-                display: inline-block;
-                width: 100%;
-                height: 100%;
-                background: $plp-hover-slider-dot-color;
-                border-radius: 50%;
-                opacity: 50%;
-              }
             }
           }
         }
