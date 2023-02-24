@@ -66,11 +66,8 @@
     height: rem(5);
     border-radius: 0.625rem;
     background-color: $aura-progress;
-    display: grid;
-    grid-template-columns: 1fr 5.125rem;
-    grid-template-areas: "start end";
-    align-items: center;
     flex-grow: 1;
+    overflow: hidden;
 
     > div {
       height: 100%;
@@ -109,8 +106,6 @@
     .start {
       .fill {
         height: 100%;
-        border-top-#{$left}-radius: 0.625rem;
-        border-bottom-#{$left}-radius: 0.625rem;
         display: flex;
         align-items: center;
         overflow: hidden;
