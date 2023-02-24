@@ -691,7 +691,7 @@ function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, I
     }
 
     // Add GTM data.
-    $product_gtm_attributes = $gtmManager->fetchProductGtmAttributes($node, 'search_result');
+    $product_gtm_attributes = $gtmManager->fetchProductGtmAttributes($node, 'search_result', NULL, TRUE);
     $product_node = \Drupal::service('entity.repository')->getTranslationFromContext($node, 'en');
     $term_list = $product_node->get('field_category')->getValue();
     $parents = \Drupal::service('alshaya_acm_product.category_helper')->getBreadcrumbTermList($term_list);

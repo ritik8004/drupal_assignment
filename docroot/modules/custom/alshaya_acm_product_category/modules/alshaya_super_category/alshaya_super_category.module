@@ -881,12 +881,24 @@ function alshaya_super_category_views_query_alter(ViewExecutable $view, QueryPlu
 /**
  * Implements hook_gtm_product_attributes_alter().
  */
-function alshaya_super_category_gtm_product_attributes_alter($product, array &$attributes) {
+function alshaya_super_category_gtm_product_attributes_alter($product, array &$attributes, $is_indexing) {
   $super_category_feature_enabled = \Drupal::config('alshaya_super_category.settings')->get('status');
 
   // If super category feature is enabled and brand attribute is enabled.
   if ($super_category_feature_enabled && !empty($attributes['gtm-brand'])) {
-    $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired(NULL, 'en');
+    // Alter the gtm-brand attributes of product in case of Indexing.
+    if ($is_indexing) {
+      $term_list = $product->get('field_category')->getValue();
+      if ((is_countable($term_list) ? count($term_list) : 0) > 0) {
+        $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_list[0]['target_id']);
+        if (!empty($term)) {
+          $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired($term, 'en');
+        }
+      }
+    }
+    else {
+      $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired(NULL, 'en');
+    }
     if (!empty($super_category)) {
       $attributes['gtm-brand'] = $super_category['label'];
     }
