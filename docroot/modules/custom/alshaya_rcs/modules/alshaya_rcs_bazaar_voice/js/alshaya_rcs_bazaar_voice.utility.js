@@ -96,29 +96,29 @@
   /**
    * Gets bazaar voice settings.
    *
-   * (optional) @param {string} productId
-   * Product SKU value.
+   * @param {string} productIdParam
+   *   Product SKU value.
    *
-   * @returns {Object}
-   *   Bazaar voice settings.
+   * @returns {Object|null}
+   *   Bazaar voice settings object or null.
    */
-  window.alshayaBazaarVoice.getbazaarVoiceSettings = async function getbazaarVoiceSettings(productId) {
+  window.alshayaBazaarVoice.getbazaarVoiceSettings = async function getbazaarVoiceSettings(productIdParam) {
     var settings = {};
-    var product_id = productId || '';
-    if (Drupal.hasValue(staticStorage.bvSettings[product_id])) {
-      return staticStorage.bvSettings[product_id];
+    var productId = productIdParam || '';
+    if (Drupal.hasValue(staticStorage.bvSettings[productId])) {
+      return staticStorage.bvSettings[productId];
     }
 
-    if (!Drupal.hasValue(product_id)) {
+    // @todo add comment.
+    if (!Drupal.hasValue(productId)) {
       var productInfo = window.commerceBackend.getProductData(null, 'productInfo');
-      Object.entries(productInfo).forEach(([key]) => {
-        product_id = key;
-      });
+      var ids = Object.keys(productInfo);
+      productId = ids[0];
     }
 
-    if (Drupal.hasValue(product_id)) {
+    if (Drupal.hasValue(productId)) {
       // Get bv product details with field assets_teaser.
-      var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('bv_product', {sku: product_id});
+      var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('bv_product', {sku: productId});
       if (response.data.products.total_count) {
         try {
           var product = response.data.products.items[0];
@@ -131,22 +131,24 @@
           };
         } catch(e) {
           Drupal.alshayaLogger('warning', 'Could not parse BV settings for SKU @sku', {
-            '@sku': product_id,
+            '@sku': productId,
           });
         }
       }
     }
 
-    // Merge product and bazaar voice settings
-    // for anonymous user merge common settings in alshaya_bazaar_voice key and
-    // for authenticated user merge common settings in userInfo key.
-    settings = drupalSettings.alshaya_bazaar_voice ? Object.assign(settings, drupalSettings.alshaya_bazaar_voice) : Object.assign(settings, drupalSettings.userInfo);
+    // For anonymous user merge common settings in alshaya_bazaar_voice key
+    // and for authenticated user merge common settings in userInfo key
+    // when user is viewing reviews page in my account.
+    settings = drupalSettings.alshaya_bazaar_voice
+      ? Object.assign(settings, drupalSettings.alshaya_bazaar_voice)
+      : Object.assign(settings, drupalSettings.userInfo);
 
     // Call commerceBackend for Bazaar voice configurations.
-    const bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
+    var bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
 
     if (bazaarVoiceConfig === null) {
-      return bazaarVoiceConfig;
+      return null;
     }
 
     Object.entries(bazaarVoiceConfig).forEach((item) => {
@@ -159,14 +161,14 @@
       }
     });
 
-    staticStorage.bvSettings[product_id] = {
-      productid: product_id,
+    staticStorage.bvSettings[productId] = {
+      productid: productId,
       reviews: settings,
     };
 
     // Return Bazaar voice config from commerceBackend with product Id
     // using static variable.
-    return staticStorage.bvSettings[product_id];
+    return staticStorage.bvSettings[productId];
   };
 
   /**
@@ -176,12 +178,12 @@
    *   Bazaar voice user settings.
    */
   window.alshayaBazaarVoice.getUserBazaarVoiceSettings = async function getUserBazaarSettings() {
-    const settings = [];
+    var settings = [];
     if (drupalSettings.userInfo) {
       settings.reviews = drupalSettings.userInfo;
     }
 
-    const bazaarVoiceCommonSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings();
+    var bazaarVoiceCommonSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings();
 
     Object.assign(settings.reviews, bazaarVoiceCommonSettings.reviews);
 
