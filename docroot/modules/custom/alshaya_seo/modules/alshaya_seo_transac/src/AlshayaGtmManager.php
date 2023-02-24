@@ -883,6 +883,7 @@ class AlshayaGtmManager {
           [
             &$productNode,
             &$attributes[$skuId],
+            FALSE,
           ]
         );
       }
