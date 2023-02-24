@@ -109,7 +109,7 @@
       return staticStorage.bvSettings[productId];
     }
 
-    // @todo add comment.
+    // Get the first product id from the product info.
     if (!Drupal.hasValue(productId)) {
       var productInfo = window.commerceBackend.getProductData(null, 'productInfo');
       var ids = Object.keys(productInfo);
