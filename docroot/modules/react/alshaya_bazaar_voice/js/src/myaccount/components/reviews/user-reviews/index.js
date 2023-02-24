@@ -12,9 +12,7 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import EmptyMessage from '../../../../utilities/empty-message';
 import UserReviewsProducts from '../user-reviews-products';
 import UserReviewsDescription from '../user-reviews-desc';
-import {
-  checkBazaarVoiceSettingsAvailable,
-} from '../../../../../../../js/utilities/helper';
+import { bazaarVoiceSettingsAvailable } from '../../../../../../../js/utilities/helper';
 
 let bazaarVoiceSettings = getUserBazaarVoiceSettings();
 export default class UserReviews extends React.Component {
@@ -89,7 +87,7 @@ export default class UserReviews extends React.Component {
 
   render() {
     // Return null if reviews settings unavailable.
-    if (!checkBazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
+    if (!bazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
       return null;
     }
 

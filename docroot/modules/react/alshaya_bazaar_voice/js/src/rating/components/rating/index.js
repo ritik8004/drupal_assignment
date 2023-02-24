@@ -14,9 +14,7 @@ import { getProductReviewStats } from '../../../utilities/user_util';
 import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
 import { hasValue }
   from '../../../../../../js/utilities/conditionsUtility';
-import {
-  checkBazaarVoiceSettingsAvailable,
-} from '../../../../../../js/utilities/helper';
+import { bazaarVoiceSettingsAvailable } from '../../../../../../js/utilities/helper';
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -75,7 +73,7 @@ export default class Rating extends React.Component {
     const { reviewsData, bazaarVoiceSettings, userDetails } = this.state;
 
     // Return null if reviews settings unavailable.
-    if (!checkBazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
+    if (!bazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
       return null;
     }
 

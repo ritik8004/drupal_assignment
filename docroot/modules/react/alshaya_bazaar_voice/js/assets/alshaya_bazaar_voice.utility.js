@@ -50,6 +50,12 @@
     return settings;
   };
 
+  /**
+   * Get user bazaar voice settings.
+   *
+   * @returns {*[]}
+   *   Bazaar voice settings for user.
+   */
   window.alshayaBazaarVoice.getUserBazaarVoiceSettings = function getUserBazaarSettings() {
     const settings = [];
     if (drupalSettings.userInfo) {

@@ -23,9 +23,7 @@ import DisplayStar from '../../../rating/components/stars';
 import { createUserStorage } from '../../../utilities/user_util';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { trackPassiveAnalytics, trackFeaturedAnalytics, trackContentImpression } from '../../../utilities/analytics';
-import {
-  checkBazaarVoiceSettingsAvailable,
-} from '../../../../../../js/utilities/helper';
+import { bazaarVoiceSettingsAvailable } from '../../../../../../js/utilities/helper';
 
 let bazaarVoiceSettings = null;
 
@@ -398,7 +396,7 @@ export default class ReviewSummary extends React.Component {
 
   render() {
     // Return null if reviews settings unavailable.
-    if (!checkBazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
+    if (!bazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
       return null;
     }
 

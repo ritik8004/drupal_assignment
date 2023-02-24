@@ -118,7 +118,7 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
   }
 
   /**
-   * Get basic cofigurations defined for BazaarVoice.
+   * Get basic configurations defined for bazaar voice.
    *
    * @param string $context
    *   Context.
