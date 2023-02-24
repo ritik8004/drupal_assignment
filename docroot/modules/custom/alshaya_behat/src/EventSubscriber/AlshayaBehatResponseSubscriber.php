@@ -21,26 +21,15 @@ class AlshayaBehatResponseSubscriber implements EventSubscriberInterface {
   protected $request;
 
   /**
-   * Temp storage to keep session values.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
-   */
-  protected $tempStorage;
-
-  /**
    * Constructs a new RouteNameResponseSubscriber.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Used to get request stack.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_storage
-   *   Used as temporary storage.
    */
   public function __construct(
     RequestStack $request_stack,
-    PrivateTempStoreFactory $temp_storage
   ) {
     $this->request = $request_stack->getCurrentRequest();
-    $this->tempStorage = $temp_storage->get('alshaya_behat');
   }
 
   /**
@@ -51,8 +40,9 @@ class AlshayaBehatResponseSubscriber implements EventSubscriberInterface {
    */
   public function onRequest(RequestEvent $event) {
     $request = $event->getRequest();
-    if ($request->query->get('behat')) {
-      $this->tempStorage->set('is_behat_session', TRUE);
+    $session = $request->getSession();
+    if ($request->get('behat')) {
+      $session->set('is_behat_session', TRUE);
     }
   }
 
