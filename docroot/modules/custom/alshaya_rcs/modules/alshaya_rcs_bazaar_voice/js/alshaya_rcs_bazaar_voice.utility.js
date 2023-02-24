@@ -197,28 +197,31 @@
       // url: drupalSettings.cart.url + '/V1/bv/config/write-review/' + productId,
       type: 'GET',
       dataType: 'json',
-      success: function (response) {
-        staticStorage.writeReviewFormHiddenFields = response[0].hide_fields_write_review;
-        response = response[0].write_review_form;
-
-        const event = new CustomEvent('showMessage', {
-          bubbles: true,
-          detail: { data: response },
-        });
-        document.dispatchEvent(event);
-      },
-      error: function (error) {
-        const event = new CustomEvent('showMessage', {
-          bubbles: true,
-          detail: { data: error },
-        });
-        document.dispatchEvent(event);
-      }
+    }).then(function (response, status, xhr) {
+      staticStorage.writeReviewFormHiddenFields = response[0].hide_fields_write_review;
+      response = response[0].write_review_form;
+      var data = {
+        data: Object.values(response),
+        status: xhr.status,
+      };
+      const event = new CustomEvent('showMessage', {
+        bubbles: true,
+        detail: { data },
+      });
+      document.dispatchEvent(event);
+      return data;
+    }).catch(function (error) {
+      const event = new CustomEvent('showMessage', {
+        bubbles: true,
+        detail: { data: error },
+      });
+      document.dispatchEvent(event);
     });
   }
 
   /**
-   * Get the names of fields to hide in write review form.
+   * Get the names of field
+      document.dispatchEvent(event);s to hide in write review form.
    *
    * @param {string} productId
    *   Product sku value.
