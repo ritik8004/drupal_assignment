@@ -13,9 +13,14 @@ fi
 
 user_emails="$1"
 
+if [ -z "$user_emails" ] ; then
+  echo "Argument validation failed, please check and try again"
+  exit
+fi
+
 domain_alias=factory.alshaya.com
-blt_dir="${server_root}/vendor/acquia/blt"
 server_root="/var/www/html/$AH_SITE_NAME"
+blt_dir="${server_root}/vendor/acquia/blt"
 
 cd /var/www/html/${AH_SITE_NAME}/docroot
 
@@ -57,8 +62,8 @@ then
   done
   # Start removing users from ACSF.
   echo "Removing user from ACSF console for given emails."
-  sh $acsf_remove_user $user_emails
-
+  $acsf_remove_user $user_emails
+  echo
   # Start removing user from Acquia cloud.
   echo "Removing user from Acquia cloud for given emails."
   $blt_dir/bin/blt acquia-cloud-remove-member $user_emails
