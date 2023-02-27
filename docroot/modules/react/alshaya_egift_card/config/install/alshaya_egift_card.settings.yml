@@ -1,4 +1,5 @@
 egift_card_enabled: false # Config to enable/disable egift card feature.
+egift_card_refund_enabled: false # Config to enable/disable egift refund feature.
 link_card_for_topup: false # Config to enable/disable linking card on checkout page for top-up.
 payment_methods_not_supported:
   cashondelivery: cashondelivery
