@@ -91,9 +91,13 @@ class AuraCheckoutRewards extends React.Component {
     this.setState({
       ...states,
     });
-    // Dispatches Checkout step 3 GTM event.
+    // Dispatches Checkout step 3 GTM event if
+    // payment method is selected.
     const { cart } = this.props;
-    dispatchCustomEvent('auraDataReceivedForGtmCheckoutStep3', { cart });
+    if (hasValue(cart.cart.payment)
+      && hasValue(cart.cart.payment.method)) {
+      dispatchCustomEvent('auraDataReceivedForGtmCheckoutStep3', { cart });
+    }
   };
 
   // Event listener callback to update states.
