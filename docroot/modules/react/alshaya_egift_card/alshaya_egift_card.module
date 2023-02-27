@@ -158,12 +158,15 @@ function alshaya_egift_card_page_attachments(array &$page) {
   // Add egift settings config tags to make it work on config change.
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], \Drupal::config('alshaya_egift_card.settings')->getCacheTags());
   // Attach the egift topup library.
-  $egift_enabled = \Drupal::service('alshaya_egift_card.egift_card_helper')->isEgiftCardEnabled();
+  $egift_settings = \Drupal::service('alshaya_egift_card.egift_card_helper');
+  $egift_enabled = $egift_settings->isEgiftCardEnabled();
   if ($egift_enabled) {
     $page['#attached']['library'][] = 'alshaya_egift_card/alshaya_egift_topup';
     // Add the topup quote expiration time in drupalSettings.
     $page['#attached']['drupalSettings']['egiftCard']['topupQuoteExpirationTime'] = \Drupal::service('alshaya_egift_card.egift_card_helper')->getTopupQuoteExpirationTime();
     $page['#attached']['drupalSettings']['egiftCard']['enabled'] = $egift_enabled;
+    // Add egift card refund settings in drupalSettings.
+    $page['#attached']['drupalSettings']['egiftCardRefund']['enabled'] = $egift_settings->isEgiftRefundEnabled();
   }
 }
 

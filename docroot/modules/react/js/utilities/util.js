@@ -29,6 +29,18 @@ export const isEgiftCardEnabled = () => {
   return egiftCardStatus;
 };
 
+/**
+ * Helper function to check if egift card refund is enabled.
+ */
+export const isEgiftRefundEnabled = () => {
+  if (hasValue(drupalSettings.egiftCardRefund)
+    && hasValue(drupalSettings.egiftCardRefund.enabled)) {
+    return drupalSettings.egiftCardRefund.enabled;
+  }
+
+  return false;
+};
+
 /*
  * Checks if full payment is done by egift and Aura.
  *

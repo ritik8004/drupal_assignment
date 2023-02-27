@@ -15,6 +15,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/
 import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
+import { isEgiftRefundEnabled } from '../../../../../js/utilities/util';
 
 class ReturnRefundDetails extends React.Component {
   constructor(props) {
@@ -30,17 +31,24 @@ class ReturnRefundDetails extends React.Component {
 
   componentDidMount = () => {
     document.addEventListener('updateRefundAccordionState', this.updateRefundAccordionState, false);
-
-    if (isUserAuthenticated()) {
-      // Call to get customer linked card details.
-      const result = callEgiftApi('eGiftCardList', 'GET', {});
-      if (result instanceof Promise) {
-        result.then((response) => {
-          if (response.data.card_list && typeof response.data.card_list !== 'undefined') {
-            this.setState({
-              cardList: response.data.card_list ? response.data.card_list : null,
-            });
-          }
+    // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
+    if (isUserAuthenticated() && isEgiftRefundEnabled()) {
+      const { paymentInfo } = this.state;
+      if (!hasValue(paymentInfo.aura)) {
+        // Call to get customer linked eGift card details.
+        const result = callEgiftApi('eGiftCardList', 'GET', {});
+        if (result instanceof Promise) {
+          result.then((response) => {
+            if (response.data.card_list && hasValue(response.data.card_list)) {
+              this.setState({
+                cardList: response.data.card_list ? response.data.card_list : null,
+              });
+            }
+          });
+        }
+      } else if (paymentInfo.aura && hasValue(paymentInfo.aura)) {
+        this.setState({
+          paymentInfo: { aura: paymentInfo.aura },
         });
       }
     }
@@ -125,7 +133,12 @@ class ReturnRefundDetails extends React.Component {
     return (
       <div className="refund-details-wrapper">
         <Collapsible trigger={this.refundDetailsHeader()} open={open} triggerDisabled={!open}>
-          <ReturnRefundMethod paymentDetails={paymentInfo} cardList={cardList} />
+          {/* If the eGift card refund feature is enabled, and we are getting the eGift cards
+          info from MDC API, then we are passing the cardList variable and listing that info. */}
+          {cardList
+            ? (
+              <ReturnRefundMethod paymentDetails={paymentInfo} cardList={cardList} />
+            ) : <ReturnRefundMethod paymentDetails={paymentInfo} />}
           <ReturnAmountWrapper />
           <ReturnCollectionDetails />
           <ReturnCollectionAddress shippingAddress={address} />

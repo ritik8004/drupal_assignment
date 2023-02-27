@@ -26,7 +26,15 @@ const ReturnRefundMethod = ({
                 { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
               </div>
             </div>
-          ) : <CardDetails paymentDetails={paymentDetails} showCardIcon />}
+          )
+          : (
+            <div className="refund-method-listing">
+              <CardDetails paymentDetails={paymentDetails} showCardIcon />
+              <div className="refund-message">
+                { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
+              </div>
+            </div>
+          )}
       </div>
     </>
   );
