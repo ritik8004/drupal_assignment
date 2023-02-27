@@ -193,8 +193,7 @@
 
   window.commerceBackend.getWriteReviewFieldsConfigs = function getWriteReviewFieldsConfigs(productId) {
     return jQuery.ajax({
-      url: 'https://vsae.alshaya.lndo.site/proxy/?url=https://vs-test.store.alshaya.com/rest/kwt_ar' + '/V1/bv/config/write-review/' + productId,
-      // url: drupalSettings.cart.url + '/V1/bv/config/write-review/' + productId,
+      url: drupalSettings.cart.url + '/V1/bv/config/write-review/' + productId,
       type: 'GET',
       dataType: 'json',
     }).then(function (response, status, xhr) {
