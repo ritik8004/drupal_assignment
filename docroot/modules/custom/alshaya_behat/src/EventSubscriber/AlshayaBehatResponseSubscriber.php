@@ -5,7 +5,6 @@ namespace Drupal\alshaya_behat\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
