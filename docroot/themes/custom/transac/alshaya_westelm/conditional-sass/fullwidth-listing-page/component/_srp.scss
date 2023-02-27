@@ -2,7 +2,7 @@
   #alshaya-algolia-plp,
   #alshaya-algolia-search {
     .c-page-title {
-      @include sideSpaces(rem(-12), $type: "margin");
+      @include sideSpaces(-#{$full_width_padding_mobile}, $type: "margin");
     }
 
     .show-all-filters-algolia {
@@ -10,7 +10,7 @@
         #{$right}: rem(5);
       }
 
-      margin-#{$right}: rem(-12);
+      margin-#{$right}: -#{$full_width_padding_mobile};
       display: block;
 
       .upto-desktop {
@@ -26,7 +26,7 @@
   .c-content__region {
     .algolia-plp-category-facet,
     .block-facet-blockcategory-facet-search {
-      margin-#{$left}: rem(-12) !important;
+      margin-#{$left}: -#{$full_width_padding_mobile} !important;
     }
   }
 }
