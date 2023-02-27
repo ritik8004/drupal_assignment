@@ -15,6 +15,10 @@
       $('.visual-mobile-level-two__link').once('visual-mobile-l2-click').click(function (event) {
         event.preventDefault();
         var target = $(this).attr('href');
+        // If L2 is last child and doesn't have any L3, open L2 link directly.
+        if ($(this).attr('data-link-accessible') === 'enabled') {
+          window.location.href = target;
+        }
         // Show L3 menu.
         $(target).show();
         // hide L3 menus.
