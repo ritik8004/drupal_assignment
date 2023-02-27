@@ -99,7 +99,6 @@ class LoyaltyClub extends React.Component {
           linkCardFailed={linkCardFailed}
           updateLoyaltyStatus={this.updateLoyaltyStatus}
         />
-
         <LoyaltyClubTabs loyaltyStatus={loyaltyStatus} />
       </>
     );
