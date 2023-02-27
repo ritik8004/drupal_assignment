@@ -143,7 +143,7 @@
       "isAdvantageCard": null, // @todo We need to ask Global-e to get this information.
       "redeemEgiftCardValue": null, // @todo We need to ask Global-e to get this information.
       "discountAmount": discountAmount,
-      "transactionId": null, // @todo We need to ask Global-e to get this information.
+      "transactionId": geData.OrderId,
       "globaleId": geData.OrderId,
       "firstTimeTransaction": null, // @todo We need to expose this via drupalSettings.
       "privilegesCardNumber": null, // @todo We need to ask Global-e to get this information.
@@ -183,7 +183,7 @@
         "currencyCode": geData.details.MerchantCurrencyCode,
         "purchase": {
           "actionField": {
-            "id": null, // @todo We need to ask Global-e top get this information.
+            "id": geData.OrderId,
             "affiliation": "Online Store",
             "revenue": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
             "tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerDutiesAndTaxesInMerchantCurrency,
