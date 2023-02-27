@@ -1,33 +1,3 @@
-body {
-  &.supermenu {
-    &:not(.mobile--overlay) {
-      .header--wrapper {
-        .c-menu-secondary {
-          .menu--super-menu {
-            ul {
-              li {
-                &:first-child {
-                  @include breakpoint($only-tablet) {
-                    padding-#{$left}: $full_width_padding_tablet;
-                  }
-
-                  a {
-                    @include fullWidthSideSpaces(
-                      $is_desktop: true,
-                      $is_desktop_wide: true,
-                      $side: $left,
-                    );
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
 .c-menu-secondary {
   .language-switcher-language-url {
     .language-link {
