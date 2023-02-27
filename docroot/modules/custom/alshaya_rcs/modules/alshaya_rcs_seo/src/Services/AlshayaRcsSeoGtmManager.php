@@ -141,6 +141,9 @@ class AlshayaRcsSeoGtmManager extends AlshayaGtmManager {
         $is_indexing,
       ]
     );
+    
+    // Add data-insights-query-id attribute for the V3 Layout on PDP.
+    $attributes['data-insights-query-id'] = '';
     return $attributes;
   }
 
