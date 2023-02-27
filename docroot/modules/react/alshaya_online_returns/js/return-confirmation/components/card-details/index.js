@@ -22,7 +22,9 @@ const CardDetails = ({
               ) : null}
             <div className="card-detail">
               <ConditionalView condition={hasValue(paymentDetails[method].card_type)}>
-                <span className="payment-type bold-text">{ paymentDetails[method].card_type }</span>
+                <span className="payment-type bold-text">
+                  { Drupal.t('Refund to your original @card_type', { '@card_type': paymentDetails[method].card_type }, {}, { context: 'online_returns' }) }
+                </span>
               </ConditionalView>
               <ConditionalView condition={hasValue(paymentDetails[method].card_number)}>
                 <span>

@@ -131,6 +131,10 @@ function _alshaya_online_returns_translations() {
         'ar' => 'سيتم إخطارك بالمبلغ المسترد عبر البريد الإلكتروني بمجرد استلام المنتج في المستودع',
         'context' => 'online_returns',
       ],
+      'Your refund will be credited immediately after the item is returned to warehouse' => [
+        'ar' => 'سيتم إخطارك بالمبلغ المسترد عبر البريد الإلكتروني بمجرد استلام المنتج في المستودع',
+        'context' => 'online_returns',
+      ],
       'Pick-up Details' => [
         'ar' => 'تفاصيل استلام المنتج',
         'context' => 'online_returns',

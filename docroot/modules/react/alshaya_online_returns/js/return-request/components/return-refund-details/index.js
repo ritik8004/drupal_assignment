@@ -13,6 +13,8 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getReturnConfirmationUrl, getOrderDetails, isReturnWindowClosed } from '../../../utilities/online_returns_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
 
 class ReturnRefundDetails extends React.Component {
   constructor(props) {
@@ -22,11 +24,26 @@ class ReturnRefundDetails extends React.Component {
       address: getDeliveryAddress(orderDetails),
       paymentInfo: getPaymentDetails(orderDetails),
       open: false,
+      cardList: null, // eGift cards linked to a User.
     };
   }
 
   componentDidMount = () => {
     document.addEventListener('updateRefundAccordionState', this.updateRefundAccordionState, false);
+
+    if (isUserAuthenticated()) {
+      // Call to get customer linked card details.
+      const result = callEgiftApi('eGiftCardList', 'GET', {});
+      if (result instanceof Promise) {
+        result.then((response) => {
+          if (response.data.card_list && typeof response.data.card_list !== 'undefined') {
+            this.setState({
+              cardList: response.data.card_list ? response.data.card_list : null,
+            });
+          }
+        });
+      }
+    }
   };
 
   /**
@@ -102,11 +119,13 @@ class ReturnRefundDetails extends React.Component {
   }
 
   render() {
-    const { paymentInfo, address, open } = this.state;
+    const {
+      paymentInfo, address, open, cardList,
+    } = this.state;
     return (
       <div className="refund-details-wrapper">
         <Collapsible trigger={this.refundDetailsHeader()} open={open} triggerDisabled={!open}>
-          <ReturnRefundMethod paymentDetails={paymentInfo} />
+          <ReturnRefundMethod paymentDetails={paymentInfo} cardList={cardList} />
           <ReturnAmountWrapper />
           <ReturnCollectionDetails />
           <ReturnCollectionAddress shippingAddress={address} />
