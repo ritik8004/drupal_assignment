@@ -43,6 +43,7 @@ class AlshayaSecurityCommands extends DrushCommands {
     'config:edit',
     'user:password',
     'php:cli',
+    'sql:cli',
   ];
 
   /**
