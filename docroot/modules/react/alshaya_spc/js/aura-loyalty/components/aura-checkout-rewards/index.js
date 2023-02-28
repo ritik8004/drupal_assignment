@@ -107,10 +107,6 @@ class AuraCheckoutRewards extends React.Component {
     // Attach aura card to cart.
     this.attachCardInCart();
 
-    this.setState({
-      ...states,
-    });
-
     // This will push aura common details in checkout page
     // as component only renders in checkout page.
     if (states.loyaltyStatus !== undefined
@@ -123,8 +119,12 @@ class AuraCheckoutRewards extends React.Component {
       Drupal.alshayaSeoGtmPushAuraCommonData({ nonAura: true });
     }
 
-    // Get the aura points to earn from sales API.
-    this.getAuraPoints();
+    this.setState({
+      ...states,
+    }, () => {
+      // Get the aura points to earn from sales API.
+      this.getAuraPoints();
+    });
   };
 
   attachCardInCart = () => {
