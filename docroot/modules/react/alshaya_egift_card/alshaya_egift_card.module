@@ -167,6 +167,11 @@ function alshaya_egift_card_page_attachments(array &$page) {
     $page['#attached']['drupalSettings']['egiftCard']['enabled'] = $egift_enabled;
     // Add egift card refund settings in drupalSettings.
     $page['#attached']['drupalSettings']['egiftCardRefund']['enabled'] = $egift_settings->isEgiftRefundEnabled();
+    // Fetching the BNPL payment methods as configured in back-end.
+    $bnpl_payment_settings = \Drupal::service('acq_payment.bnpl_payment_methods');
+    if ($bnpl_payment_settings) {
+      $page['#attached']['drupalSettings']['egiftCardRefund']['bnplmethods'] = $bnpl_payment_settings->getBnplPaymentMethods();
+    }
   }
 }
 
