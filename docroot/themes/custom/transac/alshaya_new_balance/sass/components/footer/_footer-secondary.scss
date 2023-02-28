@@ -69,8 +69,11 @@
   .c-footer-secondary & {
     .country-ae & {
       @include breakpoint($only-mobile) {
+        padding-bottom: rem(10);
+
         html[lang="ar"] & {
           padding: rem(32) rem(20);
+          padding-bottom: rem(10);
         }
       }
 
@@ -99,6 +102,20 @@
   @include breakpoint($tablet) {
     ul {
       margin-top: 0;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    order: 2;
+  }
+}
+
+#block-copyright {
+  .region__footer-secondary & {
+    .country-ae & {
+      @include breakpoint($only-mobile) {
+        order: 1;
+      }
     }
   }
 }
