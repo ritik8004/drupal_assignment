@@ -635,9 +635,9 @@
   .c-footer-primary__region {
     .footer--menu {
       display: grid;
-      grid-template-columns: rem(100) rem(248) rem(66) auto;
+      grid-template-columns: minmax(min-content, 1fr) minmax(min-content, 2fr) rem(64) auto;
       grid-template-rows: auto auto;
-      grid-column-gap: rem(7);
+      grid-column-gap: rem(20);
 
       #block-shopby {
         grid-row: 1/3;
@@ -655,7 +655,7 @@
       #block-shopby,
       #block-aboutbrand,
       #block-alshaya-help {
-        word-break: break-all;
+        word-break: break-word;
       }
 
       .footer_primary-right-block {
