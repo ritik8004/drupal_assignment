@@ -630,3 +630,38 @@
 .c-post-content + .c-footer {
   padding-top: 0;
 }
+
+@include breakpoint($only-tablet) {
+  .c-footer-primary__region {
+    .footer--menu {
+      display: grid;
+      grid-template-columns: rem(100) rem(248) rem(66) auto;
+      grid-template-rows: auto auto;
+      grid-column-gap: rem(7);
+
+      #block-shopby {
+        grid-row: 1/3;
+      }
+
+      #block-aboutbrand {
+        grid-row: 1/2;
+      }
+
+      #block-alshaya-help {
+        margin-top: rem(24);
+        grid-row: 2/3;
+      }
+
+      #block-shopby,
+      #block-aboutbrand,
+      #block-alshaya-help {
+        word-break: break-all;
+      }
+
+      .footer_primary-right-block {
+        grid-row: 1/3;
+        grid-column: 4/5;
+      }
+    }
+  }
+}
