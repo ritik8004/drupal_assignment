@@ -28,27 +28,4 @@
       return null;
     }
   };
-
-  /**
-   * Trigger Algolia Insight add to cart event from PDP.
-   */
-  Drupal.behaviors.alshayaAlgoliaInsightsDetail = {
-    attach: function (context) {
-      $('.sku-base-form').once('alshayaAlgoliaInsightsDetail').on('product-add-to-cart-success', function () {
-        var sku = $(this).attr('data-sku');
-        var insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
-
-        if (Drupal.hasValue(insightsClickData)
-          && insightsClickData.queryId
-          && insightsClickData.objectId) {
-          Drupal.pushAlshayaAlgoliaInsightsAddToCart(
-            insightsClickData.queryId,
-            insightsClickData.objectId,
-            insightsClickData.indexName
-          );
-        }
-      });
-    }
-  };
-
 })(jQuery, Drupal);
