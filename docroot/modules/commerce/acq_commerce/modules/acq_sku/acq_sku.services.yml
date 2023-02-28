@@ -23,7 +23,7 @@ services:
       - '@logger.factory'
       - '@acq_commerce.i18n_helper'
       - '@database'
-      - '@language_manager'
+      - '@module_handler'
 
   acq_sku.category_repo:
     class: Drupal\acq_sku\ConductorCategoryRepository
