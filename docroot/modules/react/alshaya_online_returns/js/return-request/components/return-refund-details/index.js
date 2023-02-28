@@ -34,6 +34,7 @@ class ReturnRefundDetails extends React.Component {
     // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
     if (isUserAuthenticated() && isEgiftRefundEnabled()) {
       const { paymentInfo } = this.state;
+      const bnplPaymentMethods = ['tabby', 'postpay', 'tamara'];
       if (!hasValue(paymentInfo.aura)) {
         // Call to get customer linked eGift card details.
         const result = callEgiftApi('eGiftCardList', 'GET', {});
@@ -49,6 +50,15 @@ class ReturnRefundDetails extends React.Component {
       } else if (paymentInfo.aura && hasValue(paymentInfo.aura)) {
         this.setState({
           paymentInfo: { aura: paymentInfo.aura },
+        });
+      } else {
+        bnplPaymentMethods.forEach((method) => {
+          // Set state for the BNPL payment method.
+          if (hasValue(paymentInfo[method])) {
+            this.setState({
+              paymentInfo: { method: paymentInfo[method] },
+            });
+          }
         });
       }
     }
