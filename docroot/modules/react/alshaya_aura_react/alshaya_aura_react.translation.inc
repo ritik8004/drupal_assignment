@@ -629,6 +629,8 @@ function _alshaya_aura_react_translations() {
         'ar' => 'ابدأ الشراء لكسب النقاط',
         'context' => 'aura',
       ],
+    ],
+    'v9' => [
       'Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]' => [
         'ar' => 'اشترى الأن واحصل على عروض حصرية من اورا | [alshaya_seo:brand_name]',
         'context' => 'aura',
