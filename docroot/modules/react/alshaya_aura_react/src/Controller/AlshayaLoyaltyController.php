@@ -114,7 +114,6 @@ class AlshayaLoyaltyController extends ControllerBase {
    */
   public function loyaltyClub() {
     $cache_tags = [];
-    $html_head = [];
     $loyalty_benefits_config = $this->config('alshaya_aura_react.loyalty_benefits');
     $loyalty_benefits_content = $loyalty_benefits_config->get('loyalty_benefits_content');
 
@@ -146,6 +145,7 @@ class AlshayaLoyaltyController extends ControllerBase {
       ]),
     ];
 
+    $html_head = [];
     // Loop through the meta array.
     foreach ($meta as $tag_name => $tag_value) {
       $meta_tag = [
