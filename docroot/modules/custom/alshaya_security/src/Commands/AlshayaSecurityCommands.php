@@ -43,6 +43,7 @@ class AlshayaSecurityCommands extends DrushCommands {
     'config:edit',
     'user:password',
     'php:cli',
+    'sql:cli',
   ];
 
   /**
@@ -79,6 +80,14 @@ class AlshayaSecurityCommands extends DrushCommands {
    * @throws Exception
    */
   public function preCommandAuthenticate(CommandData $commandData) {
+
+    // Check if the command is executed via cron.
+    // We need to by-pass the security check.
+    $ssh_user = shell_exec('who -m');
+    if (empty($ssh_user)) {
+      return;
+    }
+
     $command = $commandData->annotationData()->get('command');
 
     $this->getLogger('AlshayaSecurityCommands')->info('Command @command executed by SSH User: @user', [
@@ -86,11 +95,16 @@ class AlshayaSecurityCommands extends DrushCommands {
       '@user' => shell_exec('who -m'),
     ]);
 
+    // Get if any of command is mentioned in settings.
+    // let's include them as part of authentication.
+    $extra_commands = Settings::get('alshaya_drush_authenticate_commands', []);
+    $commands = array_merge(self::AUTHENTICATE_COMMANDS, $extra_commands);
+
     // Authenticate drush command on if enabled.
     // We do it only for some commands which are critical and not supposed to
     // be used in scripts.
     if (Settings::get('alshaya_drush_authenticate', FALSE)
-      &&  in_array($command, self::AUTHENTICATE_COMMANDS)) {
+      &&  in_array($command, $commands)) {
       $email = $this->io()->ask('Please enter your mail');
       $password = $this->io()->askHidden('Please enter your password');
 
