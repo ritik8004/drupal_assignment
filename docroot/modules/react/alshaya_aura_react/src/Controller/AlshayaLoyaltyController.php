@@ -137,25 +137,26 @@ class AlshayaLoyaltyController extends ControllerBase {
     $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
 
     // Add the required meta tags for the page.
-    $description = [
-      '#tag' => 'meta',
-      '#attributes' => [
-        'name' => 'description',
-        'content' => $this->token->replace($this->t('Download AURA now to get personalized offers and rewards for each purchase you make from [alshaya_seo:brand_name] online or instore in [alshaya_seo:cities] and all of [alshaya_seo:country]', [], [
-          'context' => 'aura',
-        ])),
-      ],
+    $meta = [
+      'description' => $this->t('Download AURA now to get personalized offers and rewards for each purchase you make from [alshaya_seo:brand_name] online or instore in [alshaya_seo:cities] and all of [alshaya_seo:country]', [], [
+        'context' => 'aura',
+      ]),
+      'title' => $this->t('Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]', [], [
+        'context' => 'aura',
+      ]),
     ];
 
-    $title = [
-      '#tag' => 'meta',
-      '#attributes' => [
-        'name' => 'title',
-        'content' => $this->token->replace($this->t('Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]', [], [
-          'context' => 'aura',
-        ])),
-      ],
-    ];
+    // Loop through the meta array.
+    foreach ($meta as $tag_name => $tag_value) {
+      $meta_tag = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => $tag_name,
+          'content' => $this->token->replace($tag_value),
+        ],
+      ];
+      $html_head[] = [$meta_tag, $tag_name];
+    }
 
     return [
       '#theme' => 'my_loyalty_club',
@@ -168,10 +169,7 @@ class AlshayaLoyaltyController extends ControllerBase {
         'drupalSettings' => [
           'aura' => $settings,
         ],
-        'html_head' => [
-          [$description, 'description'],
-          [$title, 'title'],
-        ],
+        'html_head' => $html_head,
       ],
       '#cache' => [
         'tags' => $cache_tags,
