@@ -59,6 +59,7 @@ function alshaya_geolocation_node_view_alter(array &$build, EntityInterface $ent
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     $config = alshaya_click_collect_get_config();
+    $store_labels = \Drupal::service('alshaya_geolocation.store_utility')->storeLabels();
 
     // Click and collect availability for given sku.
     $state = alshaya_acm_product_available_click_collect($sku);
@@ -82,6 +83,7 @@ function alshaya_geolocation_node_view_alter(array &$build, EntityInterface $ent
             'help_text' => $config['help_text'],
             'available_at_title' => '',
             'select_option_text' => $config['select_option_text'],
+            'search_proximity_radius' => $store_labels['search_proximity_radius'],
           ],
         ],
         'library' => [
