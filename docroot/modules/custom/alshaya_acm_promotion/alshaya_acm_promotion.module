@@ -484,6 +484,7 @@ function alshaya_acm_promotion_alshaya_acm_product_light_product_data_alter(SKU 
 
   if (!empty($context) && $context == 'mapp') {
     $data['free_gift_promotion'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift', 'app');
+    $data['free_gift_promotion'] = !empty($data['free_gift_promotion']) ? $data['free_gift_promotion'] : new stdClass();
   }
   else {
     $data['freeGiftPromotion'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift', 'web');
