@@ -78,7 +78,7 @@ const PdpInfo = ({
       {postpay}
       <ConditionalView condition={context === 'main'
         && Tabby.isTabbyEnabled()
-        && !isTamaraEnabled}
+        && isTamaraEnabled}
       >
         <TabbyWidget
           classNames=""

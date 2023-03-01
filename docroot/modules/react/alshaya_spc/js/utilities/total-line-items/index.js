@@ -233,9 +233,9 @@ class TotalLineItems extends React.Component {
             />
           </ConditionalView>
           {postpay}
-          {/** We don't show tabby if tamara is enabled. */}
+          {/** We show tabby if tamara is enabled. */}
           <ConditionalView
-            condition={isCartPage && Tabby.isTabbyEnabled() && !Tamara.isTamaraEnabled()}
+            condition={isCartPage && Tabby.isTabbyEnabled() && Tamara.isTamaraEnabled()}
           >
             <TabbyWidget
               pageType="cart"
