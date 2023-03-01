@@ -918,7 +918,7 @@
           // IF listName contains placeholder remove it.
           if (productData.list.indexOf('match back') === '-1') {
             productData.list = listName.replace('PDP-placeholder', referrerData.pageType);
-           }
+          }
         }
       }
     }
