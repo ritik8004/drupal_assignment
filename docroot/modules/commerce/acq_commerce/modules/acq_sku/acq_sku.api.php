@@ -154,5 +154,18 @@ function hook_acq_sku_indexes_alter(array &$indexes) {
 }
 
 /**
+ * Allow other modules to add/alter product options when syncing.
+ *
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   Taxonomy term to alter.
+ * @param bool $save_term
+ *   Determine if term needs to be saved/updated.
+ * @param array $option_data
+ *   Facet pretty path data to check if exists.
+ */
+function hook_acq_sku_sync_product_options_alter(TermInterface $term, bool &$save_term, array $option_data) {
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
