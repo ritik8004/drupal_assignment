@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import ImageElement from '../imageHelper/ImageElement';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import Lozenges
   from '../../../../common/components/lozenges';
 
@@ -21,7 +22,9 @@ const sliderSettings = {
   arrows: false,
   touchThreshold: 1750,
   variableWidth: false,
-  autoplaySpeed: 1750,
+  autoplaySpeed: hasValue(drupalSettings.reactTeaserView.gallery.image_slide_timing)
+    ? drupalSettings.reactTeaserView.gallery.image_slide_timing * 1000
+    : 2000,
   autoplay: true,
   pauseOnHover: false,
 };

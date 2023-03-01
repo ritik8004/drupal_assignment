@@ -12,5 +12,9 @@
     // Adding name in place of title so that RCS replace the placeholder
     // properly.
     e.detail.result.name = e.detail.result.title;
+    var url_path = window.location.href.split('?')[0];
+    e.detail.result.url_path = url_path.endsWith('/')
+      ? url_path.slice(0, -1)
+      : url_path;
   });
 })(RcsEventManager);

@@ -505,7 +505,7 @@ class PromotionController extends ControllerBase {
           'label' => $promotion_data['label'],
           'threshold_reached' => !empty($promotion_data['threshold_reached']),
           'coupon' => $promotion_data['coupon'] ?? '',
-          'couponDiscount' => $promotion_data['couponDiscount'] ?? 0,
+          'couponDiscount' => (int) $promotion_data['couponDiscount'] ?? 0,
         ];
       }
     }
@@ -514,6 +514,9 @@ class PromotionController extends ControllerBase {
       'cart_labels' => $cartLabels,
       'products_labels' => $productLabels,
     ]);
+    // Enures we get empty object '{}' instead of an empty array '[]'.
+    $response->setEncodingOptions(JSON_FORCE_OBJECT);
+
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
     return $response;
   }

@@ -66,9 +66,9 @@
   }
 
   @include breakpoint($only-tablet) {
-    #{$right}: 6.5625rem;
-    #{$left}: auto;
+    left: 50%;
     bottom: 1.5rem;
+    transform: translateX(-50%);
   }
 
   @include breakpoint($only-mobile) {
@@ -88,6 +88,10 @@
   #alshaya-algolia-autocomplete {
     @include breakpoint($tablet) {
       padding: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: rem(216);
     }
 
     .react-autosuggest__container {

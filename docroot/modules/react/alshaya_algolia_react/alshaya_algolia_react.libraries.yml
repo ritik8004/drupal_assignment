@@ -101,3 +101,10 @@ insights_query_pdp:
     assets/alshaya_algolia_insights_query_pdp.js: {}
   dependencies:
     - alshaya_algolia_react/search_insights_detail
+
+insights_query_pdpV3:
+  js:
+    assets/alshaya_algolia_insights_query_pdpV3.js: {}
+  dependencies:
+    - alshaya_algolia_react/search_insights_detail
+    - rcs_placeholders/helpers
