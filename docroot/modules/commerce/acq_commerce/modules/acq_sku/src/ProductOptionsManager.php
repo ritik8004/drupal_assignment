@@ -198,14 +198,13 @@ class ProductOptionsManager {
         $save_term = TRUE;
       }
 
+      $attribute_data = [
+        'attribute_code' => $attribute_code,
+        'option_value' => $option_value,
+        'langcode' => $langcode,
+      ];
       // Allow other modules to alter product options.
-      $this->moduleHandler->invokeAll('acq_sku_sync_product_options_alter', [&$term, &$save_term,
-        [
-          'attribute_code' => $attribute_code,
-          'option_value' => $option_value,
-          'langcode' => $langcode,
-        ],
-      ]);
+      $this->moduleHandler->alter('acq_sku_sync_product_options', $term, $save_term, $attribute_data);
 
       if ($save_term) {
         $term->setWeight($weight);

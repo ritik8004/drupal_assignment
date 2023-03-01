@@ -163,7 +163,7 @@ function hook_acq_sku_indexes_alter(array &$indexes) {
  * @param array $option_data
  *   Facet pretty path data to check if exists.
  */
-function hook_acq_sku_sync_product_options_alter(TermInterface &$term, bool &$save_term, array $option_data) {
+function hook_acq_sku_sync_product_options_alter(TermInterface $term, bool &$save_term, array $option_data) {
 }
 
 /**
