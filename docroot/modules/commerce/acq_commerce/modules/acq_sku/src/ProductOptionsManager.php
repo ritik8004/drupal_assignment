@@ -198,8 +198,7 @@ class ProductOptionsManager {
         $save_term = TRUE;
       }
 
-      // Also update term in case facets_pretty_path table not
-      // having term's pretty path data.
+      // Allow other modules to alter product options.
       $this->moduleHandler->invokeAll('acq_sku_sync_product_options_alter', [&$term, &$save_term,
         [
           'attribute_code' => $attribute_code,
