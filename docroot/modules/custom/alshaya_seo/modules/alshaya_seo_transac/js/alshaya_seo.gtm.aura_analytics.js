@@ -159,28 +159,21 @@
      return gtmData;
    };
 
-   /**
+  /**
     * This function pushes aura event details data to datalayer.
-    */
-   Drupal.alshayaSeoGtmPushAuraEventData = function (data) {
-     try {
-       // Get aura user common details from localstorage.
-       var auraGTMData = Drupal.getItemFromLocalStorage('gtm_aura_common_data');
-       auraGTMData = auraGTMData !== null ? auraGTMData : {};
-       // Merge localstorage data with aura specific event details.
-       auraGTMData['event name'] = GTM_AURA_VALUES.AURA_EVENT_NAME;
-       auraGTMData['event category'] = GTM_AURA_VALUES.AURA_EVENT_CATEGORY;
-       auraGTMData['event action'] = data.action !== undefined && GTM_AURA_VALUES[data.action] !== undefined ? GTM_AURA_VALUES[data.action] : null;
-       auraGTMData['event label'] = data.label !== undefined ? data.label : null;
-
-       // Proceed only if dataLayer exists.
-       if (dataLayer) {
-         dataLayer.push(auraGTMData);
-       }
-     }
-     catch (e) {
-       Drupal.logJavascriptError('error-push-aura-events', e);
-     }
-   };
+  */
+  Drupal.alshayaSeoGtmPushAuraEventData = function (data) {
+    try {
+      window.dataLayer.push({
+        event: GTM_AURA_VALUES.AURA_EVENT_NAME,
+        eventCategory: GTM_AURA_VALUES.AURA_EVENT_CATEGORY,
+        eventAction: data.action !== undefined && GTM_AURA_VALUES[data.action] !== undefined ? GTM_AURA_VALUES[data.action] : null,
+        eventLabel: data.label !== undefined ? data.label : null,
+      });
+    }
+    catch (e) {
+      Drupal.logJavascriptError('error-push-aura-events', e);
+    }
+  };
 
 })(jQuery, Drupal, dataLayer, drupalSettings);
