@@ -612,6 +612,7 @@ header {
     .mobile--menu {
       margin-#{$left}: 0.25rem;
       top: 0.9375rem;
+      position: fixed;
     }
 
     .store {
@@ -649,6 +650,7 @@ header {
     @include breakpoint($only-mobile) {
       top: 0.75rem;
       #{$left}: 11.5%;
+      position: fixed;
     }
   }
 
