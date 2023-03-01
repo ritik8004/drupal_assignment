@@ -499,7 +499,7 @@ export default class Cart extends React.Component {
           {postPayData.postpayEligibilityMessage}
           {/* Displaying tabby widget only if tabby is enabled and
           tamara is enabled */}
-          <ConditionalView condition={Tabby.isTabbyEnabled() && Tamara.isTamaraEnabled()}>
+          <ConditionalView condition={Tabby.isTabbyEnabled()}>
             <TabbyWidget
               pageType="cart"
               classNames="spc-tabby-info"
@@ -519,7 +519,7 @@ export default class Cart extends React.Component {
           {postPayData.postpay}
           {/* Displaying tabby widget only if tabby is enabled and
           tamara is disabled */}
-          <ConditionalView condition={Tabby.isTabbyEnabled() && Tamara.isTamaraEnabled()}>
+          <ConditionalView condition={Tabby.isTabbyEnabled()}>
             <TabbyWidget
               pageType="cart"
               classNames="spc-tabby-mobile-preview"
