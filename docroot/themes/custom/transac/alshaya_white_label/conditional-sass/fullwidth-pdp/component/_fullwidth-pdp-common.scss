@@ -1,5 +1,9 @@
 body.nodetype--acq_product {
   .page-standard.c-pdp {
+    @include breakpoint($desktop) {
+      max-width: none;
+    }
+
     @include fullWidthSideSpaces(
       $is_mobile: true,
       $is_tablet: true,
@@ -12,11 +16,16 @@ body.nodetype--acq_product {
         $is_mobile: true,
       );
     }
-  }
 
-  @include breakpoint($desktop) {
-    .page-standard.c-pdp {
-      max-width: none;
+    .acq-content-product,
+    .magv2-sidebar {
+      .express-delivery-text {
+        &:nth-child(2) {
+          @include breakpoint($desktop) {
+            margin-top: 0;
+          }
+        }
+      }
     }
   }
 }
