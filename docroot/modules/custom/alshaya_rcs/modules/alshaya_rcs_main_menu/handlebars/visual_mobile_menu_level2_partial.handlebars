@@ -4,7 +4,7 @@
     <div class="visual-mobile-level-three__heading {{ l2_item.mobile_tablet_class }}">{{l2_item.name}}</div>
     {{> visual_mobile_menu_carousel_partial menu_items=l2_item.children class=l2_item.mobile_tablet_class}}
   {{else}}
-    <{{@l2_item.tag}} class="visual-mobile-level-two__link {{ l2_item.mobile_tablet_class }}" {{#if (gt l2_item.children.length 1) }} href="#l2-{{l2_item.id}}" {{else}} {{{l2_item.tag_attr}}} {{/if}}>
+    <{{@l2_item.tag}} class="visual-mobile-level-two__link {{ l2_item.mobile_tablet_class }}" {{#if (gt l2_item.children.length 1) }} href="#l2-{{l2_item.id}}" data-children="{{l2_item.children.length}}" {{else}} {{{l2_item.tag_attr}}} {{/if}}>
       <img class="visual-mobile-level-two__image" data-src="{{l2_item.image}}">
       <div class="visual-mobile-level-two__heading">{{l2_item.name}}</div>
     </{{@l2_item.tag}}>

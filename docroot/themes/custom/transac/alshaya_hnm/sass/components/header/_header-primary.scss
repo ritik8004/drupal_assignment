@@ -127,6 +127,12 @@ header {
       .block-alshaya-hello-member {
         text-align: #{$right};
         padding-#{$right}: rem(16);
+        width: auto;
+        flex-grow: 1;
+        height: rem(36);
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
       }
 
       .membership-info-link {
@@ -1199,6 +1205,20 @@ html[lang="ar"] {
 
   @include breakpoint($desktop) {
     top: -0.25rem;
+  }
+
+  .acq-mini-cart {
+    @include breakpoint($desktop) {
+      height: rem(36);
+      display: flex;
+      align-items: center;
+    }
+
+    .cart-link-total {
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
+    }
   }
 }
 

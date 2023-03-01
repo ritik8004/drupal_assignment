@@ -26,6 +26,7 @@ function alshaya_rcs_geolocation_node_view_alter(array &$build, EntityInterface 
   $config = alshaya_click_collect_get_config();
 
   $build['#attached']['library'][] = 'alshaya_geolocation/alshaya-store-click-collect-list';
+  $store_labels = \Drupal::service('alshaya_geolocation.store_utility')->storeLabels();
   $build['#attached']['drupalSettings']['storeLabels'] = [
     'apiUrl' => $api_url,
     'title' => $config['title'],
@@ -38,6 +39,7 @@ function alshaya_rcs_geolocation_node_view_alter(array &$build, EntityInterface 
     'available_at_title' => '',
     'select_option_text' => $config['select_option_text'],
     'state' => $config['feature_status'],
+    'search_proximity_radius' => $store_labels['search_proximity_radius'],
   ];
 }
 

@@ -29,6 +29,12 @@ body.wishlist-enabled {
     @include breakpoint($only-tablet) {
       top: 0;
     }
+
+    .wishlist-header {
+      @include breakpoint($desktop) {
+        padding-bottom: 0;
+      }
+    }
   }
 
   @include breakpoint($desktop) {
@@ -38,6 +44,10 @@ body.wishlist-enabled {
           #mini-cart-wrapper {
             min-width: max-content;
           }
+        }
+        // Apply only when hello member block is present.
+        .block-alshaya-hello-member + .block-alshaya-wishlist {
+          flex-grow: 0;
         }
       }
     }
