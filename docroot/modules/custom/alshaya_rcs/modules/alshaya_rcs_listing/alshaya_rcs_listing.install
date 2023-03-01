@@ -9,6 +9,15 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration;
 
 /**
+ * Implements hook_update_n().
+ *
+ * Update meta tag for rcs category canonical url.
+ */
+function alshaya_rcs_listing_update_9401() {
+  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__rcs_category')->save();
+}
+
+/**
  * Get list of blocks which needs to be enabled/disabled.
  *
  * @return array
