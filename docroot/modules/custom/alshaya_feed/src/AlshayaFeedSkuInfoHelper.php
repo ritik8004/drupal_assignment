@@ -272,7 +272,6 @@ class AlshayaFeedSkuInfoHelper {
         $parentProduct['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
       if ($sku->hasField('attr_product_brand') && $sku->get('attr_product_brand')->getString() != NULL) {
-        $extra_row = [];
         $extra_row['key'] = 'brand';
         $extra_row['value'] = $sku->get('attr_product_brand')->getString();
         $parentProduct['attributes'][] = $extra_row;
