@@ -3,11 +3,11 @@ points_history_page_size: 5 # Config to store page size for points history data.
 minimum_age: 18 # Config to store minimum age for users registration
 aura_integration_status: false # Config to enable/disable aura integration with hello member.
 membership_popup_text_above:
-  value: '<p classname="hello-membership-sub-title">Your experience just got better! With the updated <a href="/terms-and-conditions-sale">Terms & Conditions</a> you are now a Member and can enjoy a wide range of benefits and new features. Come and get 10% off your next purchase!</p>'
+  value: '<p className="hello-membership-sub-title">Your experience just got better! With the updated <a href="/">Terms &amp; Conditions</a> you are now a Member and can enjoy a wide range of benefits and new features. Come and get free delivery and 20% off your next purchase!</p>'
   format: full_text
 membership_popup_text_below:
-  value: '<p classname="hello-membership-terms">Please <a href="/membership-info">Click here</a> to read more about Hello Member programme.</p><p classname="hello-membership-terms">Read the updated <a href="/terms-and-conditions-sale">Terms and Conditions</a> and <a href="/privacy-policy">Privacy Policy</a></p><p classname="hello-membership-terms">If you do not want to be part of the programme, <a href="/contact">contact us.</a></p>'
+  value: '<p className="hello-membership-terms">Please <a href="/">Click here</a> to read more about Hello Member programme.</p><p className="hello-membership-terms">Read the updated <a href="/">Terms and Conditions</a> and <a href="/">Privacy Policy</a></p><p className="hello-membership-terms">If you do not want to be part of the programme, <a href="/" className="contact-us">contact us.</a></p>'
   format: full_text
 show_default_benefits: 3 # Config to store number of default benifits to be shown.
-brand_membership_text: "H&M membership"
+brand_membership_text: 'H&M membership'
 langcode: en

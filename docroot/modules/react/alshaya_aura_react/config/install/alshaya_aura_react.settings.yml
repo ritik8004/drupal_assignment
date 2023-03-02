@@ -1,6 +1,6 @@
 aura_enabled: false # Config to enable/disable AURA.
-aura_app_store_link: 'https://apps.apple.com/us/app/bath-bodyworks/id1541576878'
-aura_google_play_link: 'https://play.google.com/store/apps/details?id=com.bbw.mena'
+aura_app_store_link: 'https://aura-mena.com/en'
+aura_google_play_link: 'https://aura-mena.com/en'
 aura_rewards_header_learn_more_link: 'user/loyalty-club'
 aura_reward_activity_time_limit_in_months: 12
 aura_signup_terms_and_conditions_link: ''

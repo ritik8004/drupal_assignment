@@ -231,7 +231,7 @@ class RegisteredUserLoyalty extends React.Component {
           && (
           <div className="loyalty-option hello-member-loyalty fadeInUp" style={{ animationDelay }}>
             <div className="loyalty-option-text">
-              {parse(parse(Drupal.t('@hm_icon You’re earning @points points as an H&M member', {
+              {parse(parse(Drupal.t('@hm_icon Member earns @points points', {
                 '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
                 '@points': helloMemberPoints,
               }, { context: 'hello_member' })))}
