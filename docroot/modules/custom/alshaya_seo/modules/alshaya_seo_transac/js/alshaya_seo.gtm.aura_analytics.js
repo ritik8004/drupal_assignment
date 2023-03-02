@@ -172,10 +172,8 @@
         auraGTMData['eventLabel'] = data.label !== undefined ? data.label : null;
       }
 
-      if (Object.keys(auraGTMData).length !== 0) {
-        if (dataLayer) {
-          dataLayer.push(auraGTMData);
-        }
+      if (dataLayer && Object.keys(auraGTMData).length !== 0) {
+        dataLayer.push(auraGTMData);
       }
     }
     catch (e) {
