@@ -20,6 +20,15 @@
   }
 }
 
+@mixin appStoreLink() {
+  color: $aura-loyalty-club-verified-user-banner-text;
+  text-decoration: underline;
+
+  @include breakpoint($desktop) {
+    text-decoration: none;
+  }
+}
+
 .aura-myaccount-no-linked-card-wrapper {
   border-radius: 0.625rem;
   background-image: $aura-loyalty-club-no-card-block-bg;
