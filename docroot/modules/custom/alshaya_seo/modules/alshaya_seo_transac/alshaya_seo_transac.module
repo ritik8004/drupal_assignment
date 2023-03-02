@@ -18,6 +18,7 @@ use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Cache\Cache;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -126,6 +127,45 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
       if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled()) {
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_aura';
       }
+    }
+
+    // Add gtm library for DY.
+    // DY content is available on some pages/content
+    // types like Homepage, advanced page, cart page etc.
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    $dy_enabled = FALSE;
+    if (\Drupal::service('path.matcher')->isFrontPage()
+      || $route_name == 'acq_cart.cart') {
+      $dy_enabled = TRUE;
+    }
+    elseif ($route_name == 'entity.node.canonical') {
+      // PDP, promotion, static and advanced pages.
+      $node = \Drupal::routeMatch()->getParameter('node');
+      if ($node instanceof NodeInterface) {
+        $dy_enabled = in_array($node->bundle(), [
+          'advanced_page',
+          'acq_product',
+          'rcs_product',
+          'acq_promotion',
+          'rcs_promotion',
+          'static_html',
+        ]);
+      }
+    }
+    elseif ($route_name == 'entity.taxonomy_term.canonical') {
+      // Product category pages.
+      $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+      if ($term instanceof TermInterface) {
+        $dy_enabled = in_array($term->bundle(), [
+          'acq_product_category',
+          'rcs_category',
+        ]);
+      }
+    }
+
+    // Attach GTM library for DY.
+    if ($dy_enabled) {
+      $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_dy';
     }
 
     // Settings from the setting form for the module.
