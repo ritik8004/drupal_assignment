@@ -128,8 +128,9 @@
     promotions.forEach(promotion => {
       // If promotion impression is not tracked for this banner
       //  and banner is visible to user.
+      var bannerWrapper = $('#' + promotion.bannerId).closest('.dy_unit');
       if (!promotion.impressionProcessed
-        && $('#' + promotion.bannerId).isElementInViewPort(0,0)) {
+        && bannerWrapper.isElementInViewPort(0,0)) {
           var promotionImpression = {
             id : promotion.id,
             name: promotion.name,
