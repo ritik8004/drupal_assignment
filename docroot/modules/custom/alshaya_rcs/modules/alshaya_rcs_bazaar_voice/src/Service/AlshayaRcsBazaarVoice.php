@@ -15,7 +15,6 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxy;
-use Drupal\node\NodeInterface;
 use Drupal\rcs_placeholders\Service\RcsPhEntityHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -109,17 +108,6 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
 
     $config = $this->configFactory->get('bazaar_voice.settings');
 
-    // Disable BazaarVoice Rating and Review in PDP
-    // if checkbox is checked for any categories or its Parent Categories.
-    $product_node = $this->rcsPhEntityHelper->getRcsPhProduct();
-    $category_based_config = [];
-    if ($product_node instanceof NodeInterface) {
-      $category_based_config = $this->getCategoryBasedConfig($product_node);
-      if (empty($category_based_config) || !$category_based_config['show_rating_reviews']) {
-        return NULL;
-      }
-    }
-
     $settings = [
       'bazaar_voice' => [
         'stats' => 'Reviews',
@@ -131,7 +119,6 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
       'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
       'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),
       'customer_id' => alshaya_acm_customer_is_customer($this->currentUser, TRUE),
-      'hide_fields_write_review' => $category_based_config['hide_fields_write_review'] ?? [],
       'myaccount_reviews_limit' => $config->get('myaccount_reviews_limit'),
     ];
     $settings['bazaar_voice'] = array_merge($settings['bazaar_voice'], $basic_configs);
@@ -193,6 +180,9 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
             'styles',
           ],
         ],
+        'categories' => [
+          'rating_review',
+        ],
         '... on ConfigurableProduct' => [
           'variants' => [
             'product' => [
@@ -244,30 +234,6 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
     // For V3 we return an empty array since we get the configs from the
     // MDC graphql API call.
     return [];
-  }
-
-  /**
-   * Get category based conifgurations will be applied in write review form.
-   *
-   * @param \Drupal\node\NodeInterface $productNode
-   *   Product node.
-   *
-   * @return array|null
-   *   Write a review fields configs.
-   */
-  public function getCategoryBasedConfig(NodeInterface $productNode) {
-    // This is the only place where the write review config is being used.
-    $config = $this->configFactory->get('bazaar_voice.settings');
-    if ($config->get('pdp_rating_reviews')) {
-      return NULL;
-    }
-
-    // By default we show ratings/reviews section and display all fields.
-    // The actual category based override is done from the front end.
-    return [
-      'show_rating_reviews' => TRUE,
-      'hide_fields_write_review' => [],
-    ];
   }
 
 }
