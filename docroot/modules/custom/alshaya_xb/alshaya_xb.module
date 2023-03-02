@@ -6,7 +6,6 @@
  */
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\TypedData\Exception\ReadOnlyException;
 
@@ -253,40 +252,4 @@ function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$orde
     // Update refund total for product.
     $item['total'] = alshaya_acm_price_format($item['refund_amount'], [], '', $order['order_currency_code']);
   }
-}
-
-/**
- * Implements hook_field_widget_form_alter().
- */
-function alshaya_xb_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
-  $field_definition = $context['items']->getFieldDefinition();
-  if ($field_definition->getName() == 'attr_fixed_price') {
-    // Set allowed format to mail_text.
-    $element['#allowed_formats'] = ['mail_text'];
-    // Add after build to remove the help wrapper and text.
-    $element['#after_build'][] = '_field_text_content_after_build';
-  }
-}
-
-/**
- * After build callback for field_text_content.
- *
- * @param array $element
- *   Array element.
- * @param object $form_state
- *   Form state.
- *
- * @return array
- *   New element.
- */
-function _field_text_content_after_build(array $element, object $form_state) {
-  if (isset($element['format'])) {
-    // Remove any guidelines and help text and theme wrapper
-    // as user should not change the format.
-    unset($element['format']['help']);
-    unset($element['format']['guidelines']);
-    unset($element['format']['#type']);
-    unset($element['format']['#theme_wrappers']);
-  }
-  return $element;
 }

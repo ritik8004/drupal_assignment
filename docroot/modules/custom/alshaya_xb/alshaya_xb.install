@@ -10,6 +10,66 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Update fixed_price attribute field type in Sku entity.
+ */
+function alshaya_xb_update_9004() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_xb.sku_base_fields'],
+    'alshaya_xb',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
+
+  // Get Sku field manager service.
+  $sku_field_manager = \Drupal::service('acq_sku.fields_manager');
+
+  try {
+    // Fetch and store existing attribute data in temporary variable.
+    $source_column = 'attr_fixed_price__value';
+    $query = \Drupal::database()->select('acq_sku_field_data', 'asfd');
+    $query->fields('asfd', ['id', 'type', 'langcode', $source_column]);
+    $query->isNotNull('asfd.' . $source_column);
+    $result = $query->execute()->fetchAll();
+
+    // First remove the field from field additions config.
+    $sku_field_manager->removeField('fixed_price');
+
+    // Remove unused field from table acq_sku_field_data.
+    \Drupal::database()->schema()->dropField('acq_sku_field_data', $source_column);
+    \Drupal::database()->schema()->dropField('acq_sku_field_data', 'attr_fixed_price__format');
+
+    // Then re-add the sku base field.
+    $sku_field_manager->addFields();
+
+    // If data is available in temporary variable,
+    // then re-store it in new table.
+    if (!empty($result)) {
+      $destination_table = 'acq_sku_field_data';
+      $destination_column = 'attr_fixed_price';
+
+      // Update data for new field.
+      foreach ($result as $rs) {
+        // Update data in new destination attribute.
+        $query = \Drupal::database()->update($destination_table)->fields([
+          $destination_column => $rs->{$source_column},
+        ])
+          ->condition('id', $rs->id, '=')
+          ->condition('langcode', $rs->langcode, '=');
+        $query->execute();
+      }
+    }
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_xb')->warning('Failed to migrate records for updated fields: @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable addressbook postcode and city configuration.
  */
 function alshaya_xb_update_9001() {
