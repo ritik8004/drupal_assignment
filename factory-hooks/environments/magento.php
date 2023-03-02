@@ -1137,6 +1137,24 @@ $magentos = [
       'store_id' => ['en' => 10, 'ar' => 13],
     ],
   ],
+  'pbk_oms_qa' => [
+    'url' => 'https://pbk-qa.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'bw7krzf0k6rskjqf6ogay6jc9sghd0uw',
+      'consumer_secret' => 'jerjz5fjkx00bddc5evimnqvqapzi06l',
+      'access_token' => 'wpae2yyddmknylfk590z40eon5qkq0zh',
+      'access_token_secret' => 'sw29c87f5njwbgkilyrluu5dmhkpsio3',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+  ],
   'pbk_uat' => [
     'url' => 'https://pbk-uat.store.alshaya.com',
     'magento_secrets' => [
