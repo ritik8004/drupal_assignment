@@ -502,6 +502,48 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
     ],
+    'v6' => [
+      'Points History' => [
+        'ar' => 'سجّل النقاط',
+        'context' => 'hello_member',
+      ],
+      'Added to your bag' => [
+        'ar' => 'تم الإضافة إلى حقيبة التسوق',
+        'context' => 'hello_member',
+      ],
+      'Your cart is empty' => [
+        'ar' => 'سلة التسوق فارغة',
+        'context' => 'hello_member',
+      ],
+      'This offer has been added to your bag' => [
+        'ar' => 'تم إضافة هذا العرض إلى حقيبة التسوق',
+        'context' => 'hello_member',
+      ],
+      'This Phone number is already in use.' => [
+        'ar' => 'الهاتف المحمول مستخدم بالفعل.',
+        'context' => 'hello_member',
+      ],
+      'Select Gender' => [
+        'ar' => 'اختر نوع الجنس',
+        'context' => 'hello_member',
+      ],
+      '<span>Members get</span> <span>free delivery and 10% off on your first purchase.</span>' => [
+        'ar' => '<span>يحصل الأعضاء على </span><span>خصم 10% على عملية الشراء الأولى!</span>',
+        'context' => 'hello_member',
+      ],
+      'Members earn @pointValue point(s)' => [
+        'ar' => 'يكسب الأعضاء @pointValue نقطة/نقاط',
+        'context' => 'hello_member',
+      ],
+      'Plus Member' => [
+        'ar' => 'عضوية مميزه',
+        'context' => 'hello_member',
+      ],
+      '@hm_icon You’re earning @points points as an H&M member' => [
+        'ar' => '@hm_icon لقد حصلت على @points نقطة لكونك عضو في اتش آند ام',
+        'context' => 'hello_member',
+      ],
+    ],
   ];
 }
 
