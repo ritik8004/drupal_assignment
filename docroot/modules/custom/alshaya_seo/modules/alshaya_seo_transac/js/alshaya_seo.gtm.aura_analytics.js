@@ -165,12 +165,14 @@
   Drupal.alshayaSeoGtmPushAuraEventData = function (data) {
     try {
       var auraGTMData = {};
-      auraGTMData['event'] = GTM_AURA_VALUES.AURA_EVENT_NAME;
-      auraGTMData['eventCategory'] = GTM_AURA_VALUES.AURA_EVENT_CATEGORY;
-      auraGTMData['eventAction'] = data.action !== undefined && GTM_AURA_VALUES[data.action] !== undefined ? GTM_AURA_VALUES[data.action] : null;
-      auraGTMData['eventLabel'] = data.label !== undefined ? data.label : null;
-
       if (data.action !== undefined || data.label !== undefined) {
+        auraGTMData['event'] = GTM_AURA_VALUES.AURA_EVENT_NAME;
+        auraGTMData['eventCategory'] = GTM_AURA_VALUES.AURA_EVENT_CATEGORY;
+        auraGTMData['eventAction'] = data.action !== undefined && GTM_AURA_VALUES[data.action] !== undefined ? GTM_AURA_VALUES[data.action] : null;
+        auraGTMData['eventLabel'] = data.label !== undefined ? data.label : null;
+      }
+
+      if (Object.keys(auraGTMData).length !== 0) {
         if (dataLayer) {
           dataLayer.push(auraGTMData);
         }
