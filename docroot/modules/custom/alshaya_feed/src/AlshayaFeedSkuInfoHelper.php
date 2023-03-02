@@ -273,7 +273,7 @@ class AlshayaFeedSkuInfoHelper {
       }
       if ($sku->hasField('attr_product_brand') && $sku->get('attr_product_brand')->getString() != NULL) {
         $extra_row = [];
-        $extra_row['key'] = 'product_brand';
+        $extra_row['key'] = 'brand';
         $extra_row['value'] = $sku->get('attr_product_brand')->getString();
         $parentProduct['attributes'][] = $extra_row;
       }
