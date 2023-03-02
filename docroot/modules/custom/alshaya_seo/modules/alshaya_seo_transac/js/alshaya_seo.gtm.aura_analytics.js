@@ -159,28 +159,26 @@
      return gtmData;
    };
 
-   /**
+  /**
     * This function pushes aura event details data to datalayer.
-    */
-   Drupal.alshayaSeoGtmPushAuraEventData = function (data) {
-     try {
-       // Get aura user common details from localstorage.
-       var auraGTMData = Drupal.getItemFromLocalStorage('gtm_aura_common_data');
-       auraGTMData = auraGTMData !== null ? auraGTMData : {};
-       // Merge localstorage data with aura specific event details.
-       auraGTMData['event name'] = GTM_AURA_VALUES.AURA_EVENT_NAME;
-       auraGTMData['event category'] = GTM_AURA_VALUES.AURA_EVENT_CATEGORY;
-       auraGTMData['event action'] = data.action !== undefined && GTM_AURA_VALUES[data.action] !== undefined ? GTM_AURA_VALUES[data.action] : null;
-       auraGTMData['event label'] = data.label !== undefined ? data.label : null;
+  */
+  Drupal.alshayaSeoGtmPushAuraEventData = function (data) {
+    try {
+      var auraGTMData = {};
+      if (data.action !== undefined || data.label !== undefined) {
+        auraGTMData['event'] = GTM_AURA_VALUES.AURA_EVENT_NAME;
+        auraGTMData['eventCategory'] = GTM_AURA_VALUES.AURA_EVENT_CATEGORY;
+        auraGTMData['eventAction'] = data.action !== undefined && GTM_AURA_VALUES[data.action] !== undefined ? GTM_AURA_VALUES[data.action] : null;
+        auraGTMData['eventLabel'] = data.label !== undefined ? data.label : null;
+      }
 
-       // Proceed only if dataLayer exists.
-       if (dataLayer) {
-         dataLayer.push(auraGTMData);
-       }
-     }
-     catch (e) {
-       Drupal.logJavascriptError('error-push-aura-events', e);
-     }
-   };
+      if (dataLayer && Object.keys(auraGTMData).length !== 0) {
+        dataLayer.push(auraGTMData);
+      }
+    }
+    catch (e) {
+      Drupal.logJavascriptError('error-push-aura-events', e);
+    }
+  };
 
 })(jQuery, Drupal, dataLayer, drupalSettings);
