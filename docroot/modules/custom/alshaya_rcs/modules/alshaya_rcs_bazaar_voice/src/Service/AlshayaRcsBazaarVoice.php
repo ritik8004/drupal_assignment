@@ -181,7 +181,7 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
           ],
         ],
         'categories' => [
-          'rating_review',
+          'write_review_form_fields',
         ],
         '... on ConfigurableProduct' => [
           'variants' => [
