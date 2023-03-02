@@ -86,11 +86,26 @@
    */
   function processProduct(product) {
     window.commerceBackend.setMediaData(product);
+    var hide_fields_write_review = [];
+
+    product.categories.forEach(function eachCategory(category) {
+      if (Drupal.hasValue(category.rating_review)) {
+        var hidden_fields_for_category = category.rating_review.split(',');
+        if (Drupal.hasValue(hidden_fields_for_category)) {
+          hidden_fields_for_category.forEach(function eachCat(hiddenCat) {
+            if (!hide_fields_write_review.includes(hiddenCat)) {
+              hide_fields_write_review.push(hiddenCat);
+            }
+          });
+        }
+      }
+    });
 
     return {
       url: Drupal.url(product.url_key + '.html'),
       title: product.name,
       image_url: window.commerceBackend.getTeaserImage(product),
+      hide_fields_write_review: hide_fields_write_review,
     }
   }
 
@@ -147,6 +162,13 @@
 
     // Call commerceBackend for Bazaar voice configurations.
     var bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
+    if (bazaarVoiceConfig.basic.pdp_rating_reviews) {
+      return null;
+    }
+
+    if (Drupal.hasValue(product)) {
+      bazaarVoiceConfig.basic.hide_fields_write_review = settings.product.hide_fields_write_review;
+    }
 
     if (bazaarVoiceConfig === null) {
       return null;
