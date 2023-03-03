@@ -1,11 +1,13 @@
 @include breakpoint($desktop) {
-  body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2)
-    .page-standard.c-pdp
-    .acq-content-product {
-    max-width: rem(1360);
+  body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+    .page-standard.c-pdp {
+      .acq-content-product {
+        max-width: rem(1360);
 
-    .content__main {
-      max-width: rem(810);
+        .content__main {
+          max-width: rem(810);
+        }
+      }
     }
   }
 
