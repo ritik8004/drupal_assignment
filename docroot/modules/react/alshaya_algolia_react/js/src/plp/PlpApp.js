@@ -55,6 +55,7 @@ const PlpApp = ({
   categoryField,
   promotionNodeId,
 }) => {
+  let subCategories = {};
   useEffect(() => {
     getExpressDeliveryStatus().then((status) => {
       window.sddEdStatus = status;
@@ -70,7 +71,6 @@ const PlpApp = ({
     pageSubType,
     hierarchy_lhn: lhnCategoryFilter,
     max_category_tree_depth: categoryDepth,
-    subCategories,
     categoryFacetEnabled,
     defaultColgrid: defaultColGridDesktop,
     defaultColGridMobile,
@@ -106,7 +106,9 @@ const PlpApp = ({
     if (productListIndexStatus()) {
       currentLanguage = 'en';
     }
-    if (typeof subCategories !== 'undefined' && Object.keys(subCategories).length > 0) {
+    // Get subcategories data.
+    subCategories = window.commerceBackend.getSubcategoryData();
+    if (Object.keys(subCategories).length > 0) {
       filterOperator = ' OR ';
       groupEnabled = true;
       // Set all the filters selected in sub category.
@@ -272,6 +274,7 @@ const PlpApp = ({
           gtmContainer="product listing page"
           pageType={pageType}
           pageNumber={searchState.page || 1}
+          subCategories={subCategories}
         >
           {(paginationArgs) => (
             <PlpPagination {...paginationArgs}>
