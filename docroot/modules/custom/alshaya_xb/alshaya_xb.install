@@ -10,6 +10,44 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Update fixed_price attribute field type in Sku entity.
+ */
+function alshaya_xb_update_9002() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_xb.sku_base_fields'],
+    'alshaya_xb',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE
+  );
+
+  // Get Sku field manager service.
+  $sku_field_manager = \Drupal::service('acq_sku.fields_manager');
+
+  try {
+    // First remove the field from field additions config.
+    $sku_field_manager->removeField('fixed_price');
+
+    // Remove unused field from table acq_sku_field_data.
+    \Drupal::database()->schema()->dropField('acq_sku_field_data', 'attr_fixed_price__value');
+    \Drupal::database()->schema()->dropField('acq_sku_field_data', 'attr_fixed_price__format');
+
+    // Then re-add the sku base field.
+    $sku_field_manager->addFields();
+
+    // Queue all products.
+    \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_xb')->warning('Failed to update field type for fixed price field: @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable addressbook postcode and city configuration.
  */
 function alshaya_xb_update_9001() {
