@@ -373,6 +373,14 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
       }
 
       $data_layer['event'] = 'purchaseSuccess';
+      // This logger is used to identify whether a purchase success.
+      // Executed or not for debugging purposes.
+      \Drupal::logger('alshaya_seo_transac')->notice('Purchase success triggered for order_id:@order_id increment_order_id:@increment_order_id cart_id:@cart_id', [
+        '@order_id' => $order['order_id'],
+        '@increment_order_id' => $order['increment_id'],
+        '@cart_id' => $order['quote_id'],
+      ]);
+
       $data_layer['with_delivery_schedule'] = !empty($order['extension']['hfd_booking_information']['is_hfd_booking_order'])
       ? 'yes'
       : 'no';
