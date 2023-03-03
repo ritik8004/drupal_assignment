@@ -7,7 +7,6 @@
         }
 
         @include fullWidthSideSpaces(
-          $is_mobile: true,
           $is_tablet: true,
           $is_desktop: true,
           $is_desktop_wide: true
@@ -18,7 +17,6 @@
         max-width: none;
 
         @include fullWidthSideSpaces(
-          $is_mobile: true,
           $is_tablet: true,
           $is_desktop: true,
           $is_desktop_wide: true,
@@ -32,7 +30,6 @@
     max-width: none;
 
     @include fullWidthSideSpaces(
-      $is_mobile: true,
       $is_tablet: true,
       $is_desktop: true,
       $is_desktop_wide: true,
