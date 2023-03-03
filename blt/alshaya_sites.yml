@@ -85,6 +85,10 @@ sites:
     module: alshaya_vs
     type: alshaya_transac
     country: sa
+  vsxb:
+    module: alshaya_vs
+    type: alshaya_transac
+    country: ae
   bbme:
     module: alshaya_bb
     type: alshaya_non_transac
