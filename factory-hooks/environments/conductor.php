@@ -833,9 +833,9 @@ $conductors = [
   ],
   // VictoriaSecret XB.
   'vsxb_dev3' => [
-    'hmac_id' => '???',
-    'hmac_secret' => '???',
-    'site_id' => 000,
+    'hmac_id' => '7d5de94cfc6e452b8e6b9d071a522444',
+    'hmac_secret' => 'ZWZjMmUwMzktYzBkMS00',
+    'site_id' => 657,
   ],
   // FootLocker KW.
   'flkw_dev' => [
