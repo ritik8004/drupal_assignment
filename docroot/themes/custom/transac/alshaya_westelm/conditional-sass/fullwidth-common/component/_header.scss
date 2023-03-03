@@ -27,6 +27,16 @@ header {
       .cart-link {
         @include breakpoint($upto-tablet) {
           width: rem(32);
+
+          html[lang="ar"] & {
+            width: rem(32);
+          }
+        }
+      }
+
+      .quantity {
+        @include breakpoint($only-mobile) {
+          #{$left}: rem(22);
         }
       }
     }
