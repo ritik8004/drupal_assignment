@@ -8,6 +8,18 @@
 /**
  * Implements hook_update_N().
  *
+ * Set show_pre_selected_variant_on_pdp to false so that
+ * no variant is pre selected on PDP page load.
+ */
+function alshaya_furnitures_update_9402() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product.display_settings');
+  $config->set('show_pre_selected_variant_on_pdp', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  *  Update configurable product attributes.
  */
 function alshaya_furnitures_update_9401() {
