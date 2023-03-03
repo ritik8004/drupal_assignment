@@ -1,7 +1,7 @@
 body.wishlist-enabled {
   #wishlist-header-wrapper {
     @include breakpoint($only-mobile) {
-      top: 1.125rem;
+      top: rem(16);
     }
 
     @include breakpoint($only-tablet) {
