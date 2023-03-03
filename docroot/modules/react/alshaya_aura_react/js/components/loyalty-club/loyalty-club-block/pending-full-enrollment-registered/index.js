@@ -8,7 +8,7 @@ import AuraAppDownload from '../../../aura-app-download';
 import AuraProgressWrapper from '../../../aura-progress';
 import MyAuraBanner from '../my-aura-banner';
 
-const AuraMyAccountPendingFullEnrollment = (props) => {
+const MyAuraPendingFullEnrollmentRegistered = (props) => {
   const {
     cardNumber,
     tier,
@@ -47,7 +47,7 @@ const AuraMyAccountPendingFullEnrollment = (props) => {
   }
 
   return (
-    <div className={`aura-pending-full-enrollment-wrapper fadeInUp aura-level-${tierClass}`}>
+    <div className={`aura-pending-full-enrollment-wrapper registered fadeInUp aura-level-${tierClass}`}>
       <div className="aura-logo">
         <AuraLogo />
       </div>
@@ -74,4 +74,4 @@ const AuraMyAccountPendingFullEnrollment = (props) => {
   );
 };
 
-export default AuraMyAccountPendingFullEnrollment;
+export default MyAuraPendingFullEnrollmentRegistered;
