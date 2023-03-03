@@ -39,7 +39,7 @@
           margin: auto;
           text-align: center;
           width: auto;
-          height: rem(42);
+          height: auto;
         }
 
         @include breakpoint($only-tablet) {
@@ -89,7 +89,7 @@
 
         html[lang="ar"] & {
           max-width: 7.5rem;
-          margin-top: 0;
+          margin-top: rem(8);
         }
       }
     }
@@ -463,10 +463,6 @@ header {
     @include breakpoint($desktop) {
       padding-top: 1.625rem;
       padding-bottom: rem(43);
-
-      html[lang="ar"] & {
-        padding-bottom: rem(43);
-      }
     }
   }
 
