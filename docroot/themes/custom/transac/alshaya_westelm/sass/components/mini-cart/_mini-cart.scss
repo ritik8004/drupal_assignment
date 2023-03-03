@@ -25,7 +25,7 @@ header .block-alshaya-react-mini-cart {
 
     @include breakpoint($only-mobile) {
       bottom: 0.9375rem;
-      #{$left}: rem(22);
+      #{$left}: 2.25rem;
     }
   }
 
