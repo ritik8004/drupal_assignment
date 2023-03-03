@@ -21,14 +21,14 @@ const EgiftCardDetails = ({
               name={`${cardList[key].card_number}`}
               checked={selected === `${cardList[key].card_number}`}
             />
-            <div className="card-icon">
+            <label className="radio-sim radio-label">
               <CardTypeSVG type="egift" class={`${cardList[key].card_number} is-active`} />
-            </div>
-            <div className="egift-card-detail">
-              <span>
-                {Drupal.t('eGift Card', {}, { context: 'online_returns' })}
-              </span>
-            </div>
+              <div className="egift-card-detail">
+                <span>
+                  {Drupal.t('eGift Card', {}, { context: 'online_returns' })}
+                </span>
+              </div>
+            </label>
           </div>
         ))}
       </div>
