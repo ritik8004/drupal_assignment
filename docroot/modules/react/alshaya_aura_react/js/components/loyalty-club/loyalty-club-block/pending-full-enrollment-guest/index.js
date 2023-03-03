@@ -10,7 +10,7 @@ const MyAuraPendingFullEnrollmenttGuest = () => {
   } = getAuraConfig();
 
   return (
-    <div className="aura-pending-full-enrollment-wrapper fadeInUp">
+    <div className="aura-pending-full-enrollment-wrapper guest fadeInUp">
       <div className="pending-full-enrollment-description">
         <div className="title">
           {Drupal.t('Congratulations! You are now part of Aura, the loyalty experience personalised for you. You can now earn points when you shop online or instore.', {}, { context: 'aura' })}

@@ -47,7 +47,7 @@ const MyAuraPendingFullEnrollmentRegistered = (props) => {
   }
 
   return (
-    <div className={`aura-pending-full-enrollment-wrapper fadeInUp aura-level-${tierClass}`}>
+    <div className={`aura-pending-full-enrollment-wrapper registered fadeInUp aura-level-${tierClass}`}>
       <div className="aura-logo">
         <AuraLogo />
       </div>
