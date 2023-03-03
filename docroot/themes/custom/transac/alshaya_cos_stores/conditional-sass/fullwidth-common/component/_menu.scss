@@ -1,0 +1,12 @@
+.c-menu-primary {
+  .mobile--menu {
+    @include breakpoint($only-mobile) {
+      #{$left}: rem(-3);
+
+      html[lang="ar"] & {
+        padding-right: 0;
+        right: rem(8);
+      }
+    }
+  }
+}

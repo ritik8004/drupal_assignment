@@ -1,4 +1,4 @@
-body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+body.nodetype--acq_product:not(.magazine-layout-v2) {
   @include breakpoint($only-mobile) {
     .page-standard.c-pdp {
       padding: 0;

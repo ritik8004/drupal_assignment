@@ -16,7 +16,8 @@
   .spc-main,
   .spc-post-content,
   #spc-cart .spc-free-delivery-container,
-  .spc-empty-container {
+  .spc-empty-container,
+  .block-alshaya-checkout-tracker {
     @include fullWidthSideSpaces(
       $is_tablet: true,
       $is_desktop: true,

@@ -1,0 +1,53 @@
+header {
+  &.c-header {
+    .c-header__region {
+      .block-alshaya-main-menu {
+        @include breakpoint($desktop-wide-1680) {
+          width: 67%;
+        }
+      }
+
+      .block-alshayawishlistheaderblock {
+        @include breakpoint($desktop-wide-1680) {
+          flex-grow: 0;
+        }
+      }
+
+      #block-cartminiblock,
+      .block-alshaya-react-mini-cart,
+      .static-minicart-wrapper {
+        .cart-link {
+          @include breakpoint($only-mobile) {
+            #{$left}: rem(4);
+
+            html[lang="ar"] & {
+              right: rem(1);
+            }
+          }
+        }
+
+        .quantity {
+          @include breakpoint($only-mobile) {
+            #{$left}: rem(-18);
+          }
+
+          @include breakpoint($desktop) {
+            #{$left}: rem(-17);
+          }
+
+          html[lang="ar"] & {
+            @include breakpoint($desktop) {
+              #{$left}: rem(-14);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+body.wishlist-enabled {
+  .wishlist-header {
+    padding-#{$right}: rem(2);
+  }
+}

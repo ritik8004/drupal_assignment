@@ -255,7 +255,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
     }
   }
 
-  if ($node_bundle === 'acq_product') {
+  if ($node_bundle === 'acq_product' || $node_bundle === 'rcs_product') {
     $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
     // Check the site full width enable.
     if ($is_full_width_feature_enabled) {

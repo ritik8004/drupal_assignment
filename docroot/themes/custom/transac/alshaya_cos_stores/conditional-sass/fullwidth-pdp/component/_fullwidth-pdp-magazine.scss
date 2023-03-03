@@ -1,0 +1,13 @@
+body.nodetype--acq_product {
+  .magazine-layout-node {
+    @include breakpoint($only-mobile) {
+      .content__title_wrapper.fixed {
+        margin: unset;
+      }
+    }
+
+    .magazine__gallery--container {
+      @include fullWidthSideSpaces($is_mobile: true);
+    }
+  }
+}
