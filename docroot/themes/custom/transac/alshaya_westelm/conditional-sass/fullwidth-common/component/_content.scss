@@ -1,0 +1,12 @@
+.region__pre-content {
+  .block-alshaya-main-menu {
+    @include breakpoint($desktop) {
+      max-width: none;
+    }
+
+    @include fullWidthSideSpaces(
+      $is_desktop: true,
+      $is_desktop_wide: true,
+    );
+  }
+}

@@ -1,7 +1,7 @@
 tags:
   title: '#rcs.category.meta_title#'
   description: '#rcs.category.meta_description#'
-  canonical_url: '[site:url]#rcs.category.url_path#'
+  canonical_url: '[site:url]#rcs.category.url_path#/'
   keywords: '#rcs.category.meta_keyword#'
   og_title: '#rcs.category.meta_title#'
   og_site_name: '[site:name]'

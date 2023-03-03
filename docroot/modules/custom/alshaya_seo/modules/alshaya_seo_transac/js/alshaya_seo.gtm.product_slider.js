@@ -63,7 +63,7 @@
     if (prefix.indexOf('match back') > -1 && listName.indexOf('PDP-placeholder') > -1 ) {
       return listName.replace('PDP-placeholder', prefix);
     }
-     else if (listName.indexOf('placeholder') > -1) {
+    else if (listName.indexOf('placeholder') > -1) {
       return prefix + listName.replace('placeholder', label).toLowerCase();
     }
     else {

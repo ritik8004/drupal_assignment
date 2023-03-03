@@ -169,6 +169,6 @@ function _alshaya_rcs_promotion_update_library(
 function alshaya_rcs_promotion_metatags_attachments_alter(array &$attachments) {
   $promotion_node = \Drupal::routeMatch()->getParameter('node');
   if ($promotion_node instanceof NodeInterface && $promotion_node->bundle() === 'rcs_promotion') {
-    \Drupal::service('alshaya_rcs_seo.metatag_helper')->getCanonicalMetatags($attachments, '#rcs.promotion.url_path#');
+    \Drupal::service('alshaya_rcs_seo.metatag_helper')->getCanonicalMetatags($attachments, '#rcs.promotion.url_path#/');
   }
 }

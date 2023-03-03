@@ -356,17 +356,6 @@ export default class ConfigurableForm extends React.Component {
 
       // Dispatch add to cart event for product drawer components.
       dispatchCustomEvent('product-add-to-cart-success', { sku: parentSku });
-      // Trigger Algolia Insight event for add to cart on success.
-      const insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
-      if (Drupal.hasValue(insightsClickData)
-        && insightsClickData.queryId
-        && insightsClickData.objectId) {
-        Drupal.pushAlshayaAlgoliaInsightsAddToCart(
-          insightsClickData.queryId,
-          insightsClickData.objectId,
-          insightsClickData.indexName,
-        );
-      }
     });
   }
 
