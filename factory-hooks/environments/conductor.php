@@ -831,6 +831,12 @@ $conductors = [
   'vsqa_prod' => [
     'site_id' => 381,
   ],
+  // VictoriaSecret XB.
+  'vsxb_dev3' => [
+    'hmac_id' => '???',
+    'hmac_secret' => '???',
+    'site_id' => 000,
+  ],
   // FootLocker KW.
   'flkw_dev' => [
     'hmac_id' => '582a73e8a0534b77970fa38e525f62a1',
