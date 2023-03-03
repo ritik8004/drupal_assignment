@@ -6,7 +6,7 @@ import { getAllAuraStatus } from '../../../utilities/helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { getAuraLocalStorageKey } from '../../../utilities/aura_utils';
-import MyAuraPendingFullEnrollmenttGuest from './pending-full-enrollment-guest';
+import MyAuraPendingFullEnrollmentGuest from './pending-full-enrollment-guest';
 import MyAuraPendingFullEnrollmentRegistered from './pending-full-enrollment-registered';
 
 const LoyaltyClubBlock = (props) => {
@@ -42,7 +42,7 @@ const LoyaltyClubBlock = (props) => {
     // Guest user and pending enrollment.
     if (localStorageValues !== null && !isUserAuthenticated()) {
       return (
-        <MyAuraPendingFullEnrollmenttGuest />
+        <MyAuraPendingFullEnrollmentGuest />
       );
     }
     // Logged in user and pending enrollment.

@@ -3,7 +3,7 @@ import AppStoreSVG
   from '../../../../../../alshaya_spc/js/svg-component/app-store-svg';
 import { getAuraConfig } from '../../../../utilities/helper';
 
-const MyAuraPendingFullEnrollmenttGuest = () => {
+const MyAuraPendingFullEnrollmentGuest = () => {
   const {
     appStoreLink: appleAppStoreLink,
     googlePlayLink: googlePlayStoreLink,
@@ -44,4 +44,4 @@ const MyAuraPendingFullEnrollmenttGuest = () => {
   );
 };
 
-export default MyAuraPendingFullEnrollmenttGuest;
+export default MyAuraPendingFullEnrollmentGuest;
