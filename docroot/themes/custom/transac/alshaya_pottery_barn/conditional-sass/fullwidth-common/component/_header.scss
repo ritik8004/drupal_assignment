@@ -1,41 +1,18 @@
-body {
-  &.supermenu {
-    &:not(.mobile--overlay) {
-      .header--wrapper {
-        .c-menu-secondary {
-          .menu--super-menu {
-            ul {
-              li {
-                &:first-child {
-                  @include breakpoint($only-tablet) {
-                    padding-#{$left}: $full_width_padding_tablet;
-                  }
+header.c-header {
+  .block-alshaya-react-mini-cart,
+  .block-cart-mini-block {
+    .cart-link {
+      margin-#{$right}: rem(-4);
 
-                  a {
-                    @include fullWidthSideSpaces(
-                      $is_desktop: true,
-                      $is_desktop_wide: true,
-                      $side: $left,
-                    );
-                  }
-                }
-              }
-            }
-          }
-        }
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: rem(2);
       }
     }
   }
-}
 
-.c-menu-secondary {
-  .language-switcher-language-url {
-    .language-link {
-      @include fullWidthSideSpaces(
-        $is_desktop: true,
-        $is_desktop_wide: true,
-        $side: $right,
-      );
+  @include breakpoint($only-tablet) {
+    .c-header__region {
+      padding-#{$left}: $full_width_padding_tablet;
     }
   }
 }
