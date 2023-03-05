@@ -1197,7 +1197,6 @@ $magentos = [
   ],
   // Victoria Secret.
   'vs_qa' => [
-    'algolia_env' => 'vs_test',
     'url' => 'https://vs-test.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'x7perq2khr9t52qeg2rv6ly5uakgv5lw',
