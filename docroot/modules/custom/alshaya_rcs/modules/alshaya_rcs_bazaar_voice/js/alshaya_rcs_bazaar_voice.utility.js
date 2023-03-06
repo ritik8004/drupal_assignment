@@ -162,7 +162,7 @@
 
     // Call commerceBackend for Bazaar voice configurations.
     var bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
-    if (bazaarVoiceConfig.basic.pdp_rating_reviews) {
+    if (Drupal.hasValue(bazaarVoiceConfig.basic.pdp_rating_reviews)) {
       return null;
     }
 
