@@ -2,10 +2,10 @@
 
 namespace Drupal\alshaya_behat\EventSubscriber;
 
+use Drupal\Core\Site\Settings;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
@@ -21,26 +21,26 @@ class AlshayaBehatResponseSubscriber implements EventSubscriberInterface {
   protected $request;
 
   /**
-   * Temp storage to keep session values.
+   * Drupal settings.
    *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   * @var \Drupal\Core\Site\Settings
    */
-  protected $tempStorage;
+  protected $settings;
 
   /**
    * Constructs a new RouteNameResponseSubscriber.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Used to get request stack.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_storage
-   *   Used as temporary storage.
+   * @param \Drupal\Core\Site\Settings $settings
+   *   Drupal site settings object.
    */
   public function __construct(
     RequestStack $request_stack,
-    PrivateTempStoreFactory $temp_storage
+    Settings $settings,
   ) {
     $this->request = $request_stack->getCurrentRequest();
-    $this->tempStorage = $temp_storage->get('alshaya_behat');
+    $this->settings = $settings;
   }
 
   /**
@@ -50,9 +50,20 @@ class AlshayaBehatResponseSubscriber implements EventSubscriberInterface {
    *   The event to process.
    */
   public function onRequest(RequestEvent $event) {
+    // Check if functionality is disabled.
+    if ($this->settings::get('alshaya_behat_disabled', FALSE)) {
+      return;
+    }
+
+    // Check if there is behat argument in the query string
+    // and it matches the secret key.
     $request = $event->getRequest();
-    if ($request->query->get('behat')) {
-      $this->tempStorage->set('is_behat_session', TRUE);
+    if ($request->get('behat')
+      && $request->get('behat') === $this->settings->get('behat_secret_key')
+    ) {
+      $session = $request->getSession();
+      // Flag it as behat session.
+      $session->set('is_behat_session', TRUE);
     }
   }
 
