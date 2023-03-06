@@ -55,7 +55,7 @@ class AddressbookResource extends ResourceBase {
   protected $configFactory;
 
   /**
-   * AlshayaRcsCategoryResource constructor.
+   * AddressBookResource constructor.
    *
    * @param array $configuration
    *   Configuration array.
