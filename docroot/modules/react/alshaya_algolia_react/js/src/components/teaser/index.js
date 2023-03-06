@@ -215,7 +215,7 @@ const Teaser = ({
   return (
     <div className={teaserClass}>
       <article
-        className="node--view-mode-search-result"
+        className="node--view-mode-search-result quick-view"
         onClick={(event) => storeClickedItem(event, pageType)}
         data-sku={sku}
         {...dataVmode}
