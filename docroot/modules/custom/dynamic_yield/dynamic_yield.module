@@ -68,6 +68,12 @@ function dynamic_yield_page_attachments(array &$page) {
       if (!empty($event->getDyContextData())) {
         $context['data'] = $event->getDyContextData();
       }
+      else {
+        // Add the empty data for the basket page.
+        if (\Drupal::routeMatch()->getRouteName() === 'acq_cart.cart') {
+          $context['data'] = $event->getDyContextData();
+        }
+      }
     }
     // Allow other module to alter the DY context.
     \Drupal::moduleHandler()->alter('dynamic_yield_context', $context['lng']);
