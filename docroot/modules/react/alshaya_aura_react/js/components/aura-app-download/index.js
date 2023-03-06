@@ -10,7 +10,7 @@ const AuraAppDownload = () => {
 
   return (
     <div className="aura-app-download-wrapper">
-      { parse(Drupal.t('To spend your points online test, please download Aura Mena app available both on <a href="@appStoreLink">App Store</a> and <a href="@googlePlayLink">Play Store</a>.', { '@appStoreLink': (appleAppStoreLink), '@googlePlayLink': googlePlayStoreLink }, { context: 'aura' })) }
+      { parse(Drupal.t('To spend your points online, please download Aura Mena app available both on <a href="@appStoreLink">App Store</a> and <a href="@googlePlayLink">Play Store</a>.', { '@appStoreLink': (appleAppStoreLink), '@googlePlayLink': googlePlayStoreLink }, { context: 'aura' })) }
     </div>
   );
 };
