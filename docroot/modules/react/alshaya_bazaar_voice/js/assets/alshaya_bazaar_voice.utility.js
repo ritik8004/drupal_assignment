@@ -1,4 +1,4 @@
-(function (Drupal, drupalSettings) {
+(function (jQuery, Drupal, drupalSettings) {
   // Initialize the global object.
   window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
 
@@ -80,7 +80,7 @@
         data: response,
         status: xhr.status,
       };
-      const event = new CustomEvent('showMessage', {
+      var event = new CustomEvent('showMessage', {
         bubbles: true,
         detail: {
           data
@@ -89,7 +89,7 @@
       document.dispatchEvent(event);
       return data;
     }).catch((error) => {
-        const event = new CustomEvent('showMessage', {
+        var event = new CustomEvent('showMessage', {
           bubbles: true,
           detail: { data: error },
         });
@@ -110,4 +110,4 @@
     var bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings(productId);
     return bazaarVoiceSettings.reviews.hide_fields_write_review;
   }
-})(Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings);

@@ -1,4 +1,4 @@
-(function (drupalSettings, Drupal) {
+(function (jQuery, drupalSettings, Drupal) {
     // Initialize the global object.
   window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
 
@@ -162,6 +162,8 @@
 
     // Call commerceBackend for Bazaar voice configurations.
     var bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
+    // If ratings_reviews is set to 1, we do not show the write review form as
+    // the same logic is implemented in the back-end.
     if (Drupal.hasValue(bazaarVoiceConfig.basic.pdp_rating_reviews)) {
       return null;
     }
@@ -231,14 +233,14 @@
         data: Object.values(response),
         status: xhr.status,
       };
-      const event = new CustomEvent('showMessage', {
+      var event = new CustomEvent('showMessage', {
         bubbles: true,
         detail: { data },
       });
       document.dispatchEvent(event);
       return data;
     }).catch(function (error) {
-      const event = new CustomEvent('showMessage', {
+      var event = new CustomEvent('showMessage', {
         bubbles: true,
         detail: { data: error },
       });
@@ -259,4 +261,4 @@
   window.commerceBackend.getHiddenWriteReviewFields = function getHiddenWriteReviewFields(productId) {
     return staticStorage.writeReviewFormHiddenFields;
   }
-})(drupalSettings, Drupal);
+})(jQuery, drupalSettings, Drupal);
