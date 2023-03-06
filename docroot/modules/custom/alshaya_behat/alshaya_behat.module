@@ -5,12 +5,19 @@
  * Used to implement hooks and provide functionalities.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_alshaya_spc_checkout_build_alter().
  *
  * Attach libraries to use with Behat.
  */
 function alshaya_behat_alshaya_spc_checkout_build_alter(array &$build) {
+  // Check if functionality is disabled.
+  if (Settings::get('alshaya_behat_disabled', FALSE)) {
+    return;
+  }
+
   // Check if it is a Behat session before adding js.
   $session = \Drupal::request()->getSession();
   if ($session->get('is_behat_session')) {
