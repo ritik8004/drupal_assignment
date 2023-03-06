@@ -1,0 +1,25 @@
+<?php
+
+use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_shoeai_page_attachments_alter(array &$page) {
+    $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.config_form');
+    $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
+    if ($alshaya_shoeai_settings->get('enable_shoeai') == '1') {
+      $page['#attached']['drupalSettings']['shoeai']['status'] = 'enabled';
+      $page['#attached']['drupalSettings']['shoeai']['shopId'] = $alshaya_shoeai_settings->get('shop_id');
+      $page['#attached']['drupalSettings']['shoeai']['scale'] = 'eu';
+      $current_user = \Drupal::currentUser();
+      // If user is anonymous.
+      if ($current_user->isAuthenticated()) {
+        $page['#attached']['drupalSettings']['shoeai']['zeroHash'] = md5($current_user->getEmail());
+      } else {
+        $page['#attached']['drupalSettings']['shoeai']['zeroHash'] = '';
+      }
+      $page['#attached']['drupalSettings']['shoeai']['locale'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $page['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
+    }
+}
