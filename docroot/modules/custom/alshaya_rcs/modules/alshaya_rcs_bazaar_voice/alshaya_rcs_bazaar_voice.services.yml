@@ -18,8 +18,3 @@ services:
       - '@file_system'
       - '@logger.factory'
       - '@rcs_placeholders.entity_helper'
-
-  alshaya_rcs_bazaar_voice.route_subscriber:
-    class: Drupal\alshaya_rcs_bazaar_voice\Routing\AlshayaRcsBazaarVoiceRouteSubscriber
-    tags:
-      - { name: event_subscriber }
