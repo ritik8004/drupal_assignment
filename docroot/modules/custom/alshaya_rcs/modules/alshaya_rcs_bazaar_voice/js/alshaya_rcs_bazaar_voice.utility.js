@@ -226,7 +226,7 @@
       url: drupalSettings.cart.url + '/V1/bv/config/write-review/' + productId,
       type: 'GET',
       dataType: 'json',
-    }).then(function (response, status, xhr) {
+    }).then(function getData(response, status, xhr) {
       staticStorage.writeReviewFormHiddenFields = response[0].hide_fields_write_review;
       response = response[0].write_review_form;
       var data = {

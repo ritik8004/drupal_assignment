@@ -75,7 +75,7 @@
       url: Drupal.url('get-write-review-fields-configs'),
       type: 'GET',
       dataType: 'json',
-    }).then((response, status, xhr) => {
+    }).then(function getData(response, status, xhr) {
       var data = {
         data: response,
         status: xhr.status,
@@ -88,7 +88,7 @@
       });
       document.dispatchEvent(event);
       return data;
-    }).catch((error) => {
+    }).catch(function err(error) {
         var event = new CustomEvent('showMessage', {
           bubbles: true,
           detail: { data: error },
