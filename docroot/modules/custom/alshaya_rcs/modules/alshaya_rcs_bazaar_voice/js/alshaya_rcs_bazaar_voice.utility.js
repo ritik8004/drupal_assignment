@@ -213,6 +213,12 @@
     return settings;
   };
 
+  /**
+   * Gets the write review form configurations.
+   *
+   * @returns {Promise}
+   *   Promise of the response object of the API call to fetch form configs.
+   */
   window.commerceBackend.getWriteReviewFieldsConfigs = function getWriteReviewFieldsConfigs(productId) {
     return jQuery.ajax({
       url: drupalSettings.cart.url + '/V1/bv/config/write-review/' + productId,

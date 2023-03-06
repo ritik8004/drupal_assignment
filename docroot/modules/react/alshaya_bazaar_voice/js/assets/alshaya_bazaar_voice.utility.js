@@ -70,7 +70,7 @@
    * @returns {Promise}
    *   Promise of the response object of the API call to fetch form configs.
    */
-  window.commerceBackend.getWriteReviewFieldsConfigs = function () {
+  window.commerceBackend.getWriteReviewFieldsConfigs = function getWriteReviewFieldsConfigs() {
     return jQuery.ajax({
       url: Drupal.url('get-write-review-fields-configs'),
       type: 'GET',
