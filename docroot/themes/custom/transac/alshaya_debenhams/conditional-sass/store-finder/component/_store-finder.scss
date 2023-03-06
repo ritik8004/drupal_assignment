@@ -2,12 +2,12 @@
 .nodetype--store {
   .store-finder--wrapper {
     @include breakpoint($desktop) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 51.7%;
       }
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-tablet) {
         width: 48%;
       }
@@ -53,7 +53,7 @@
   }
 
   .input--wrapper {
-    .icon-search[id^=edit-actions] {
+    .icon-search[id^="edit-actions"] {
       @include breakpoint($tablet) {
         #{$right}: 1.75rem;
       }
@@ -70,21 +70,21 @@
   }
 
   button {
-    &[id^=edit-submit-stores-finder] {
-      background: url('../../../imgs/icons/search.svg') no-repeat;
+    &[id^="edit-submit-stores-finder"] {
+      background: url("../../../imgs/icons/search.svg") no-repeat;
     }
   }
 
   .current-location,
   .cc-near-me {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($desktop) {
         width: 18%;
       }
     }
 
     &::before {
-      background: url('../../../imgs/icons/ic-mylocation.svg') no-repeat;
+      background: url("../../../imgs/icons/ic-mylocation.svg") no-repeat;
       width: 1.625rem;
       height: 1.625rem;
     }
@@ -97,7 +97,7 @@
   }
 
   .label--location::before {
-    background: url(#{$dh_theme_img_directory_path}/icons/search.svg) no-repeat no-repeat;
+    background: url("#{$dh_theme_img_directory_path}/icons/search.svg") no-repeat no-repeat;
     width: 1.625rem;
     height: 1.625rem;
 
@@ -144,7 +144,7 @@
     line-height: 1.2;
 
     @include breakpoint($desktop) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 38%;
       }
     }
@@ -209,7 +209,7 @@
     .views-field-field-store-address {
       padding-top: 1.25rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 1.5;
       }
 
@@ -246,7 +246,7 @@
         margin-#{$left}: 1.5rem;
         line-height: 2;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           line-height: 1;
           margin-right: 0;
 
@@ -258,7 +258,7 @@
     }
 
     .store-finder--wrapper {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 49%;
       }
 
@@ -276,7 +276,7 @@
       line-height: 1.2;
       padding-#{$left}: 0.125rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-right: 0;
       }
     }
@@ -291,7 +291,7 @@
     }
 
     .label--location {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         &::before {
           top: 0.75rem;
 
@@ -302,7 +302,7 @@
       }
 
       @include breakpoint($only-tablet) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           padding-right: 2.5rem;
         }
 
@@ -311,7 +311,7 @@
       }
 
       @include breakpoint($desktop) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           padding-top: 0;
           padding-bottom: 0;
           border-right: none;
@@ -324,7 +324,7 @@
   .cc-near-me,
   .label--location {
     @include breakpoint($tablet) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-bottom: 0.25rem;
       }
 
@@ -336,7 +336,7 @@
     @include breakpoint($desktop) {
       margin: 1.4375rem 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin: 1.375rem 0;
       }
     }
@@ -369,7 +369,7 @@
         padding-#{$right}: 0;
         padding-#{$left}: 2rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           padding-right: 1rem;
         }
       }
@@ -378,7 +378,7 @@
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
   .form-item-geolocation-geocoder-google-places-api {
-    [id^=edit-geolocation-geocoder-google-places-api] {
+    [id^="edit-geolocation-geocoder-google-places-api"] {
       @include breakpoint($only-mobile) {
         height: 2.5rem;
       }
@@ -390,7 +390,7 @@
       &::after {
         transform: none;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: none;
         }
       }
@@ -404,7 +404,7 @@
       font-size: 2.25rem;
       top: 0.5625rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: rotate(-90deg);
       }
     }
@@ -412,22 +412,22 @@
 
   .view-on--map {
     &::after {
-      content: '';
+      content: "";
       display: inline-block;
       position: absolute;
-      background: url(#{$dh_theme_img_directory_path}/icons/ic-directions.svg) no-repeat;
+      background: url("#{$dh_theme_img_directory_path}/icons/ic-directions.svg") no-repeat;
       #{$right}: 0.125rem;
       width: 2.125rem;
       height: 2.1875rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: scaleX(-1);
       }
     }
   }
 
   + .ajax-progress-fullscreen {
-    background-image: url(#{$dh_theme_img_directory_path}/icons/ic-loader.svg) no-repeat;
+    background-image: url("#{$dh_theme_img_directory_path}/icons/ic-loader.svg") no-repeat;
     background-size: 4.5rem;
   }
 
@@ -491,7 +491,7 @@
         &::after {
           transform: rotate(180deg);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: rotate(180deg);
           }
         }
@@ -502,7 +502,7 @@
         color: $store_finder_icon;
         top: 0.25rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: none;
         }
       }

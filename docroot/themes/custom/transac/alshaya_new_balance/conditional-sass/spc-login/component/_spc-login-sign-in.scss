@@ -23,7 +23,7 @@
         margin-top: rem(45);
 
         &::after {
-          content: '';
+          content: "";
           width: 100%;
           background: $spc-login-seprator-bg;
           height: rem(1);
@@ -129,14 +129,14 @@
 
       .social_auth_facebook {
         &::before {
-          background-image: url(#{$nb_theme_img_directory_path}/icons/facebook.svg);
+          background-image: url("#{$nb_theme_img_directory_path}/icons/facebook.svg");
           background-size: contain;
         }
       }
 
       .social_auth_google {
         &::before {
-          background-image: url(#{$nb_theme_img_directory_path}/icons/google.svg);
+          background-image: url("#{$nb_theme_img_directory_path}/icons/google.svg");
         }
       }
     }
@@ -172,7 +172,7 @@
     }
 
     @include breakpoint($desktop) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: rem(80);
       }
     }

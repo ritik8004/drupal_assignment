@@ -18,7 +18,7 @@
       width: 23.4375rem;
     }
 
-    html[lang='ar'] & {
+    html[lang="ar"] & {
       transform: translateX(-100%);
     }
   }
@@ -42,7 +42,7 @@
       background: 0;
       width: 2.5rem;
 
-      @include icon('close') {
+      @include icon("close") {
         font-size: 2.5rem;
         width: 2rem;
         height: 2rem;
@@ -191,7 +191,7 @@
       position: relative;
       font-size: 0.875rem;
 
-      @include icon('arrow-#{$right}', before) {
+      @include icon("arrow-#{$right}", before) {
         position: absolute;
         #{$right}: 0.875rem;
         font-size: 2rem;
@@ -202,7 +202,7 @@
         animation: bounceRight 1.4s infinite;
         animation-timing-function: ease-in-out;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           animation: bounceLeft 1.4s infinite;
         }
       }
@@ -269,7 +269,7 @@ body {
 
 #configurable-drawer {
   &::before {
-    content: '';
+    content: "";
     position: fixed;
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.48);

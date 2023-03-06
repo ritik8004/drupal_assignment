@@ -8,7 +8,7 @@ Feature: SPC Checkout Wishlist feature for Authenticated user
     And I wait for element "#block-page-title"
 
   Scenario: As an Authenticated user, I should be able to see and add Wishlist products from PLP page
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
     And I wait for element ".c-products__item"
     And I should see the Wishlist icon
@@ -32,7 +32,7 @@ Feature: SPC Checkout Wishlist feature for Authenticated user
     And I should see a ".empty-message" element
 
   Scenario: As an Authenticated User, I should be able to see and add Wishlist product from PDP page and place an order
-    Given I am on "{spc_pdp_page}"
+    When I go to in stock product page
     And I wait for element ".content__sidebar"
     And I click on "div.wishlist-icon" element
     And I wait for AJAX to finish
@@ -71,7 +71,7 @@ Feature: SPC Checkout Wishlist feature for Authenticated user
     And I should see an ".spc-checkout-error-message" element
 
   Scenario: As an Authenticated User, I want to share the Wishlist through copying url or email
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element ".c-products__item"
     And I click on the Wishlist icon
     Then I should see the Wishlist icon active

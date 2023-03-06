@@ -52,7 +52,7 @@
           padding-bottom: 0;
 
           &::after {
-            content: '';
+            content: "";
             height: rem(2);
             width: auto;
             transition: all 0.3s ease-out;
@@ -73,7 +73,7 @@
             transform: none;
 
             &::after {
-              content: '';
+              content: "";
               height: rem(1);
               width: 100%;
               background: $mm_l1_link_active_border;
@@ -153,7 +153,7 @@
     }
 
     .menu--active & {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         right: 0;
       }
     }
@@ -174,7 +174,6 @@
     @include menuListItem;
   }
 }
-
 
 .menu__list-item {
   @include breakpoint($upto-desktop) {

@@ -61,7 +61,7 @@
             padding: 0.3125rem 0.625rem;
           }
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             &::before {
               transform: rotate(180deg);
             }
@@ -83,7 +83,7 @@
                 @extend %all-filter-arrow;
               }
 
-              html[lang=ar] & {
+              html[lang="ar"] & {
                 &::after {
                   transform: rotate(0deg);
                   top: 1.25rem;
@@ -106,7 +106,7 @@
                 @extend %all-filter-arrow;
               }
 
-              html[lang=ar] & {
+              html[lang="ar"] & {
                 &::after {
                   transform: rotate(0deg);
                   top: 1.25rem;

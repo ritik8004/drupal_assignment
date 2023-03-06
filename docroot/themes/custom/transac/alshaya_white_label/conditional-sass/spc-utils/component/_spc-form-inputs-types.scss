@@ -35,7 +35,7 @@
     }
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -61,10 +61,10 @@
 
 // Type = Text.
 .spc-type-textfield {
-  input[type=text],
-  input[type=tel],
-  input[type=email],
-  input[type=password] {
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="password"] {
     height: 1.5rem;
     font-size: 0.875rem;
     color: $spc-form-input;
@@ -90,7 +90,7 @@
   .field-wrapper {
     position: relative;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       direction: ltr;
     }
 
@@ -108,8 +108,8 @@
       color: $spc-mobile-code;
     }
 
-    input[type=text],
-    input[type=tel] {
+    input[type="text"],
+    input[type="tel"] {
       height: 1.5rem;
       // No rtl.
       padding-left: 2.25rem !important;

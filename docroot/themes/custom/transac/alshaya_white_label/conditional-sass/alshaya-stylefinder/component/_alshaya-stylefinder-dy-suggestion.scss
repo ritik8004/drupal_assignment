@@ -23,8 +23,8 @@
       background-color: $stylefinder-card-bg;
       flex: 0 0 11.25rem;
 
-      &:nth-child(-n+2),
-      &:nth-last-of-type(-n+2) {
+      &:nth-child(-n + 2),
+      &:nth-last-of-type(-n + 2) {
         display: none;
       }
 
@@ -100,7 +100,7 @@
       }
 
       .slick-slide {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           float: left;
         }
       }
@@ -149,7 +149,7 @@
             border-width: 0.5625rem 0.75rem 0.5625rem 0;
             border-color: transparent $stylefinder-slider-arrow transparent transparent;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               transform: translateX(-50%) translateX(0.525rem) translateY(-50%);
             }
           }
@@ -164,7 +164,7 @@
             border-width: 0.5625rem 0 0.5625rem 0.75rem;
             border-color: transparent transparent transparent $stylefinder-slider-arrow;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               transform: translateX(-50%) translateX(0.825rem) translateY(-50%);
             }
           }

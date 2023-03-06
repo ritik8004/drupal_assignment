@@ -86,7 +86,7 @@
           display: inline-flex;
           align-items: center;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             line-height: normal;
           }
 
@@ -149,7 +149,7 @@
   pointer-events: none;
 
   &::before {
-    content: '';
+    content: "";
     top: 0;
     left: 0;
     right: 0;
@@ -168,7 +168,7 @@
     }
   }
 
-  &[data-selected-stored=true] {
+  &[data-selected-stored="true"] {
     display: none;
   }
 

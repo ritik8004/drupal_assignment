@@ -432,7 +432,7 @@
       }
 
       &::before {
-        content: '';
+        content: "";
         display: table;
         border-top: 1px solid $rr-reviews-summary-border;
         width: 4.25rem;
@@ -538,11 +538,11 @@
 
 .back-to-original {
   &::before {
-    content: '';
+    content: "";
     width: 7.75rem;
     height: 2.5rem;
     display: block;
-    background: url('#{$base_theme_img_directory_path}/icons/google-translate.png') no-repeat;
+    background: url("#{$base_theme_img_directory_path}/icons/google-translate.png") no-repeat;
     background-size: 100%;
   }
 }

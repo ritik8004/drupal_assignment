@@ -4,7 +4,7 @@
       &.disabled {
         border-color: $pdp_size_option_border;
         color: $pdp_size_option_text;
-        background: url('#{$brand_theme_img_directory_path}/icons/disabled.png') no-repeat;
+        background: url("#{$brand_theme_img_directory_path}/icons/disabled.png") no-repeat;
         background-size: 100% 100%;
       }
     }

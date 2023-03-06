@@ -3,7 +3,7 @@
     @include breakpoint($upto-desktop) {
       li:nth-child(2) {
         &::after {
-          html[lang='ar'] & {
+          html[lang="ar"] & {
             transform: translateY(-50%) rotate(180deg);
           }
         }

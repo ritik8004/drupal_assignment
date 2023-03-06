@@ -6,7 +6,7 @@
     min-height: rem(32);
 
     .spc-loader {
-      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      background: url("#{$base_theme_loader_img_directory_path}") #{$left} center no-repeat;
       padding-#{$left}: rem(40);
       background-size: contain;
       color: $spc-loader-text;
@@ -64,7 +64,7 @@
   .aura {
     .Collapsible {
       &::before {
-        content: '';
+        content: "";
         border-top: rem(1) solid $hello-member-loyalty-options-border;
         width: 100%;
         position: absolute;
@@ -77,7 +77,7 @@
       }
 
       .linking-option {
-        input[type=radio] {
+        input[type="radio"] {
           & ~ .radio-sim::before,
           &:checked ~ .radio-sim::before {
             @include breakpoint($only-mobile) {
@@ -121,7 +121,7 @@
 
   .loyalty-option {
     &.aura {
-      input[type=radio] {
+      input[type="radio"] {
         & ~ .radio-sim::before,
         &:checked ~ .radio-sim::before {
           top: rem(31);
@@ -155,7 +155,7 @@
       }
     }
 
-    input[type=radio] {
+    input[type="radio"] {
       &:checked ~ .radio-sim {
         @include icon(radio-empty, before) {
           color: $spc-checkout-radio-empty;

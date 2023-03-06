@@ -329,9 +329,11 @@ class AlshayaSpcOrderHelper {
     }
 
     // Security checks.
-    $current_user_email = strtolower(trim($this->currentUser->getEmail()));
-    if ($this->currentUser->isAuthenticated() && $current_user_email !== $data_email) {
-      throw new AccessDeniedHttpException();
+    if ($this->currentUser->isAuthenticated()) {
+      $current_user_email = strtolower(trim($this->currentUser->getEmail()));
+      if ($current_user_email !== $data_email) {
+        throw new AccessDeniedHttpException();
+      }
     }
     elseif ($this->currentUser->isAnonymous() && !empty(user_load_by_mail($data_email))) {
       throw new AccessDeniedHttpException();

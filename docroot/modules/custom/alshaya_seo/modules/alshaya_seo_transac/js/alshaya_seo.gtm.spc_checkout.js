@@ -94,6 +94,19 @@
     dataLayer.push(data);
   };
 
+  /**
+   * Helper function to push Place order gtm events to datalayer.
+   */
+  Drupal.alshayaSeoSpc.gtmPlaceOrderEvent = function () {
+    var data = {
+      event: 'placeOrderButtonClick',
+      eventCategory: 'Payment Page',
+      eventAction: 'Button Click',
+      eventLabel: 'Place Order',
+    };
+    dataLayer.push(data);
+  };
+
   Drupal.alshayaSeoSpc.checkoutEvent = function (cartData, step, paymentMethod = '', pushAboveStep2 = true) {
     var checkoutPaymentPage = 'checkout payment page';
     var data = {
@@ -297,6 +310,8 @@
     if (e.detail.cart) {
       var paymentMethod = e.detail.cartPaymentMethod ? e.detail.cartPaymentMethod : '';
       Drupal.alshayaSeoSpc.checkoutEvent(e.detail.cart, 4, paymentMethod);
+      // Push Complete Purchase button click to gtm.
+      Drupal.alshayaSeoSpc.gtmPlaceOrderEvent();
     }
   });
 

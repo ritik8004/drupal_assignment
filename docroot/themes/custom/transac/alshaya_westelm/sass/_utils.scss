@@ -1,6 +1,6 @@
 // Stylesheet mixins.
-$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs/icons/WE-loader.svg';
-$brand_theme_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs';
+$base_theme_loader_img_directory_path: "/themes/custom/transac/alshaya_westelm/imgs/icons/WE-loader.svg";
+$brand_theme_img_directory_path: "/themes/custom/transac/alshaya_westelm/imgs";
 
 @mixin mm-l1-highlight {
   background: $mm_l1_link_active_bg;
@@ -16,9 +16,9 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs';
   box-shadow: 2px 2px 6px 0 $plp_facet_wrapper_shadow;
 }
 
-@mixin mm-mob-arrow ($position, $direction: false) {
+@mixin mm-mob-arrow($position, $direction: false) {
   &:#{$position} {
-    content: '';
+    content: "";
     width: 0;
     height: 0;
     border-style: solid;
@@ -29,7 +29,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs';
       @if $position == after {
         transform: rotate(0deg);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(180deg);
         }
       }
@@ -37,13 +37,11 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs';
       @if $position == before {
         transform: rotate(180deg);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(0deg);
         }
       }
-    }
-
-    @else {
+    } @else {
       @if $direction == up {
         transform: rotate(270deg);
       }
@@ -57,22 +55,27 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs';
   }
 }
 
-@mixin facet-arrow ($position, $direction: false, $topborder: false, $rightborder:false, $bottomborder:false, $leftborder:false) {
+@mixin facet-arrow(
+  $position,
+  $direction: false,
+  $topborder: false,
+  $rightborder: false,
+  $bottomborder: false,
+  $leftborder: false
+) {
   &:#{$position} {
     position: absolute;
     top: 1.1875rem;
     #{$right}: 0;
     font-size: 0;
-    content: '';
+    content: "";
     border-style: solid;
     height: 0;
     width: 0;
 
     @if $topborder == false and $rightborder == false and $bottomborder == false and $leftborder == false {
       border-width: 0.25rem 0 0.25rem 0.4rem;
-    }
-
-    @else {
+    } @else {
       border-width: $topborder $rightborder $bottomborder $leftborder;
     }
 
@@ -82,7 +85,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs';
       @if $position == after {
         transform: rotate(0deg);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(180deg);
         }
       }
@@ -90,13 +93,11 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs';
       @if $position == before {
         transform: rotate(180deg);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(0deg);
         }
       }
-    }
-
-    @else {
+    } @else {
       @if $direction == up {
         transform: rotate(270deg);
       }
@@ -136,7 +137,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs';
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     .select2-selection--single .select2-selection__rendered {
       width: 94%;
     }
@@ -216,7 +217,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs';
   }
 
   // Arabic font is longer so it gets clipped from bottom.
-  html[lang=ar] & {
+  html[lang="ar"] & {
     line-height: 1.5;
   }
 }

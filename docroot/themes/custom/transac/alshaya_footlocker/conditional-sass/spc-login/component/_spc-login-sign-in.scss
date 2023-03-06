@@ -57,7 +57,7 @@
       }
     }
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       a {
         @include breakpoint($tablet) {
           height: auto;
@@ -71,7 +71,7 @@
     }
   }
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     margin: 0;
   }
 }

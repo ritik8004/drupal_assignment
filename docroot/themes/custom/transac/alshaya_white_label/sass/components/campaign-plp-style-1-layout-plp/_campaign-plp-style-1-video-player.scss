@@ -16,7 +16,7 @@
   }
 
   .vjs-big-play-button {
-    background: url(#{$base_theme_img_directory_path}/icons/play-campaign-plp-style-1.png) no-repeat !important;
+    background: url("#{$base_theme_img_directory_path}/icons/play-campaign-plp-style-1.png") no-repeat !important;
     margin-top: -2.5rem !important;
     height: 6rem !important;
     width: 6rem !important;

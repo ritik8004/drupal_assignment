@@ -11,6 +11,7 @@ import { isProductBuyable } from '../../../../../../js/utilities/display';
 import SizeGuide from '../size-guide';
 import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 import QuickFitAttribute from '../quick-fit-attribute';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -73,7 +74,15 @@ class ConfigurableProductForm extends React.Component {
     const { combinations } = configurableCombinations[skuCode];
     const attributes = configurableCombinations[skuCode].configurables;
     const code = Object.keys(combinations)[0];
-    const codeValue = Object.keys(combinations[code])[0];
+    let codeValue = Object.keys(combinations[code])[0];
+    if (hasValue(configurableCombinations[skuCode].firstChild)
+      && hasValue(configurableCombinations[skuCode].bySku)) {
+      // Fetch attribute code value of current child if exists.
+      const { firstChild } = configurableCombinations[skuCode];
+      codeValue = hasValue(configurableCombinations[skuCode].bySku[firstChild])
+        ? configurableCombinations[skuCode].bySku[firstChild][code]
+        : codeValue;
+    }
     this.refreshConfigurables(code, codeValue, null);
     Object.keys(attributes).forEach((key) => {
       if (attributes[key].isSwatch) {

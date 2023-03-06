@@ -32,7 +32,8 @@
 
 @include breakpoint($desktop) {
   .c-plp,
-  .c-plp.l-two--sf {
+  .c-plp.l-two--sf,
+  .c-plp.lhn-without-sidebar {
     .c-products-list {
       &.product-small,
       &.product-large {
@@ -43,10 +44,34 @@
     }
   }
 
+  .c-plp.lhn-without-sidebar {
+    .c-products-list {
+      &.product-small,
+      &.product-large {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            height: auto;
+          }
+        }
+      }
+
+      &.product-small {
+        .c-products__item article:hover .alshaya_search_gallery .img-wrapper {
+          max-height: none;
+        }
+      }
+    }
+  }
+
   .subcategory-listing-enabled {
     .c-plp {
-      .c-products__item {
-        height: auto;
+      .c-products-list {
+        &.product-small,
+        &.product-large {
+          .c-products__item {
+            height: auto;
+          }
+        }
       }
     }
   }

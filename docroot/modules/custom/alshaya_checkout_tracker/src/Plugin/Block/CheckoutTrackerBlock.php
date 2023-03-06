@@ -123,7 +123,7 @@ class CheckoutTrackerBlock extends BlockBase implements ContainerFactoryPluginIn
       '#stepMap' => $stepMap,
       '#activeMapKey' => $route_name,
       '#attributes' => [
-        'class' => ($route_name == 'acq_cart.cart') ? ['hide-checkout-tracker'] : '',
+        'class' => ($route_name == 'acq_cart.cart') ? ['hide-checkout-tracker'] : [],
       ],
     ];
 

@@ -19,7 +19,7 @@ header {
         background-size: cover;
         margin-#{$right}: 0.75rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           margin-top: 1.125rem;
         }
       }
@@ -82,7 +82,7 @@ header {
       height: 3.5rem !important;
       margin-top: 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         height: 3.5rem;
       }
     }
@@ -247,32 +247,32 @@ header {
 
   .menu__in {
     margin-#{$right}: 1rem;
-    background: url('../imgs/icons/ic-arrow-right.svg') no-repeat;
+    background: url("../imgs/icons/ic-arrow-right.svg") no-repeat;
 
-    html[lang=ar] & {
-      background: url('../imgs/icons/ic-arrow-left.svg?1234') no-repeat;
+    html[lang="ar"] & {
+      background: url("../imgs/icons/ic-arrow-left.svg?1234") no-repeat;
       top: 0.125rem;
       margin-left: 1.5rem;
     }
 
     &::after {
-      content: '';
+      content: "";
     }
   }
 
   .menu__back {
     margin-#{$left}: 1.25rem;
     margin-#{$right}: 0.625rem;
-    background: url('../imgs/icons/ic-arrow-left.svg?1234') no-repeat;
+    background: url("../imgs/icons/ic-arrow-left.svg?1234") no-repeat;
     width: 0.75rem;
     height: 1.0625rem;
 
-    html[lang=ar] & {
-      background: url('../imgs/icons/ic-arrow-right.svg') no-repeat;
+    html[lang="ar"] & {
+      background: url("../imgs/icons/ic-arrow-right.svg") no-repeat;
     }
 
     &::after {
-      content: '';
+      content: "";
     }
   }
 
@@ -317,7 +317,7 @@ header {
   }
 }
 
-html[lang='ar'] {
+html[lang="ar"] {
   .cart-link-total .price-currency.suffix {
     padding-right: 0;
   }
@@ -437,7 +437,7 @@ html[lang='ar'] {
             text-decoration: none;
 
             &::after {
-              content: '';
+              content: "";
               width: 100%;
               height: 0.0625rem;
               position: absolute;
@@ -477,7 +477,7 @@ html[lang='ar'] {
     color: $minicart-total;
     font-size: rem(16);
 
-    html[lang='ar'] & {
+    html[lang="ar"] & {
       margin-top: rem(8);
     }
   }

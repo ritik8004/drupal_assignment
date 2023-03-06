@@ -1,6 +1,6 @@
 form.user-communication-preference {
-  input[checked=checked]:checked + label,
-  input[type=checkbox]:checked ~ label {
+  input[checked="checked"]:checked + label,
+  input[type="checkbox"]:checked ~ label {
     font-weight: normal;
   }
 

@@ -14,6 +14,16 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add signature method in config.
+ */
+function alshaya_api_update_9403() {
+  $alshaya_api_config = \Drupal::configFactory()->getEditable('alshaya_api.settings');
+  $alshaya_api_config->set('signature_method', 'HMAC-SHA256')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add magento settings back in config.
  */
 function alshaya_api_update_9402() {

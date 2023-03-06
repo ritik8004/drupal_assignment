@@ -114,10 +114,13 @@
         searchImpressions.push(impression);
 
         $(this).once('js-event').on('click', function (e) {
-          var cartRemoveElement = $(this).find('button.qty-sel-btn--down') !== undefined ? $(this).find('button.qty-sel-btn--down')[0] : null;
           // Product Click GTM event should not be triggered
-          // when removing from cart.
-          if (e.target !== cartRemoveElement) {
+          // when adding/removing from cart, when color swatch or
+          // add to cart button is clicked and when adding/removing
+          // product from wishlist.
+          if (!$(e.target).closest('.swatches').length
+            && !$(e.target).closest('.addtobag-button-container').length
+            && !$(e.target).closest('.wishlist-button-wrapper').length) {
             Drupal.alshaya_seo_gtm_push_product_clicks(
               $(this),
               drupalSettings.gtm.currency,

@@ -9,7 +9,7 @@ body:not(.frontpage) {
         @include breakpoint($only-mobile) {
           top: 3.6875rem + 1.875rem; // Super category menu height added.
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             top: 4.0625rem + 1.875rem;
           }
         }

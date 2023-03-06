@@ -3,7 +3,7 @@
   top: 3.25rem;
   #{$right}: 0;
 
-  html[lang=ar] & {
+  html[lang="ar"] & {
     top: 3.25rem;
 
     @include breakpoint($upto-desktop) {
@@ -60,7 +60,7 @@
       font-weight: normal;
       margin-#{$left}: 0.9375rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         font-size: 0.75rem;
       }
 

@@ -82,3 +82,14 @@ alshaya_spc.express_delivery:
     express_delivery_label:
       type: string
       label: 'Express Delivery Label'
+
+alshaya_spc.show_listing_sidebar:
+  type: config_object
+  label: 'Show hide sidebar on PLP/SRP pages'
+  mapping:
+    show_plp_sidebar:
+      type: boolean
+      label: 'Enable PLP sidebar'
+    show_srp_sidebar:
+      type: boolean
+      label: 'Enable SRP sidebar'

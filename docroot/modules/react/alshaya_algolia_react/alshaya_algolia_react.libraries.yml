@@ -50,6 +50,7 @@ plp:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common
     - core/jquery.once
+    - alshaya_algolia_react/search_insights
 
 plpv2:
   js:
@@ -58,6 +59,7 @@ plpv2:
   dependencies:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common
+    - alshaya_algolia_react/search_insights
 
 product_category_carousel:
   js:
@@ -65,6 +67,7 @@ product_category_carousel:
   dependencies:
     - core/drupalSettings
     - alshaya_acm_product_category/product_carousel_utility
+    - alshaya_algolia_react/search_insights
 
 product_category_carousel_rcs:
   js:
@@ -92,3 +95,9 @@ back_to_search:
   dependencies:
     - alshaya_algolia_react/algolia_common
     - alshaya_master/jquery_is_in_viewport
+
+insights_query_pdp:
+  js:
+    assets/alshaya_algolia_insights_query_pdp.js: {}
+  dependencies:
+    - alshaya_algolia_react/search_insights_detail

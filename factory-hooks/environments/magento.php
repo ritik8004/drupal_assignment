@@ -8,38 +8,7 @@
 global $magentos;
 
 $magentos = [
-  // Debenhams.
   'dh_qa' => [
-    'url' => 'https://integration-5ojmyuq-gqhhjajenogck.eu-3.magentosite.cloud',
-    'magento_secrets' => [
-      'consumer_key' => 'akr2k4q7g3eipb6fm7loh07zt2zi3xrk',
-      'consumer_secret' => '60vh9v008i8z6be31mt7wp8bg9jyfe2j',
-      'access_token' => 'c87n6i81vbkzqb5txbt0834fwppdmqye',
-      'access_token_secret' => 's54ks6jdfpw6uhbs4utjxusb1ha9114b',
-    ],
-    'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 6],
-    ],
-    'sa' => [
-      'store_id' => ['en' => 2, 'ar' => 3],
-    ],
-    'ae' => [
-      'store_id' => ['en' => 4, 'ar' => 5],
-    ],
-    'eg' => [
-      'store_id' => ['en' => 8, 'ar' => 7],
-    ],
-    'bh' => [
-      'store_id' => ['en' => 10, 'ar' => 9],
-    ],
-    'qa' => [
-      'store_id' => ['en' => 12, 'ar' => 11],
-    ],
-    'jo' => [
-      'store_id' => ['en' => 14, 'ar' => 13],
-    ],
-  ],
-  'dh_test' => [
     'url' => 'https://deb-test.store.alshaya.com',
     'algolia_env' => 'dh_qa',
     'magento_secrets' => [
@@ -1100,6 +1069,24 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 15],
     ],
   ],
+  'pb_oms_qa' => [
+    'url' => 'https://pb-qa.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'vnnce9kfvum71lvxq5uczwaj0xr23yfa',
+      'consumer_secret' => 'ogkhfg9clkwh4z9p4qnajyim8fdqza9j',
+      'access_token' => '91p34ormxe7wjna75uid34k2idsqa9co',
+      'access_token_secret' => 'pqhj583quo8uhc69jnbf23leaxpf9rhc',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 18],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 6, 'ar' => 9],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 12, 'ar' => 15],
+    ],
+  ],
   'pb_uat' => [
     'url' => 'https://pb-uat2.store.alshaya.com',
     'magento_secrets' => [
@@ -1139,6 +1126,24 @@ $magentos = [
       'consumer_secret' => 'ml3j38568na78y1os6byg94pb1aq96dv',
       'access_token' => 'ye5cargyshiyfu63nmvmgy7auqeupc0r',
       'access_token_secret' => '460ockhivjys2m8ngf1ynd17xs7jc872',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+  ],
+  'pbk_oms_qa' => [
+    'url' => 'https://pbk-qa.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'bw7krzf0k6rskjqf6ogay6jc9sghd0uw',
+      'consumer_secret' => 'jerjz5fjkx00bddc5evimnqvqapzi06l',
+      'access_token' => 'wpae2yyddmknylfk590z40eon5qkq0zh',
+      'access_token_secret' => 'sw29c87f5njwbgkilyrluu5dmhkpsio3',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 16],

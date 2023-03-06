@@ -109,7 +109,7 @@
 }
 
 .c-footer__logo--verisign {
-  background-image: url(#{$base_theme_img_directory_path}/cards/card-verisign.svg);
+  background-image: url("#{$base_theme_img_directory_path}/cards/card-verisign.svg");
   background-size: contain;
   background-repeat: no-repeat;
   width: 4.375rem;
@@ -117,7 +117,7 @@
 }
 
 .c-footer__logo--apple-pay {
-  background-image: url(#{$base_theme_img_directory_path}/cards/apple-pay.svg);
+  background-image: url("#{$base_theme_img_directory_path}/cards/apple-pay.svg");
   background-size: contain;
   background-repeat: no-repeat;
   width: 4.375rem;
@@ -130,7 +130,7 @@
 }
 
 .c-footer__logo--visa {
-  background-image: url(#{$base_theme_img_directory_path}/cards/card-visa.svg);
+  background-image: url("#{$base_theme_img_directory_path}/cards/card-visa.svg");
   background-size: contain;
   background-repeat: no-repeat;
   width: 4.0625rem;
@@ -138,13 +138,13 @@
 }
 
 .c-footer__logo--mastercard {
-  background-image: url(#{$base_theme_img_directory_path}/cards/card-mastercard.svg);
+  background-image: url("#{$base_theme_img_directory_path}/cards/card-mastercard.svg");
   width: 5.3125rem;
   height: 1.625rem;
 }
 
 .c-footer__logo--qpay {
-  background-image: url(#{$base_theme_img_directory_path}/cards/card-qpay.svg);
+  background-image: url("#{$base_theme_img_directory_path}/cards/card-qpay.svg");
   width: 4.5625rem;
   height: 2.4375rem;
   background-size: 100%;
@@ -152,7 +152,7 @@
 }
 
 .c-footer__logo--fawry {
-  background-image: url(#{$base_theme_img_directory_path}/cards/fawry.png);
+  background-image: url("#{$base_theme_img_directory_path}/cards/fawry.png");
   width: 4.25rem;
   height: 1.25rem;
   background-size: 100%;
@@ -160,7 +160,7 @@
 }
 
 .c-footer__logo--mada {
-  background-image: url(#{$base_theme_img_directory_path}/cards/card-mada-logo.svg);
+  background-image: url("#{$base_theme_img_directory_path}/cards/card-mada-logo.svg");
   width: 4.5625rem;
   height: 1.5rem;
   background-size: 100%;
@@ -168,7 +168,7 @@
 }
 
 .c-footer__logo--customer-rights {
-  background-image: url(#{$base_theme_img_directory_path}/cards/customer-right.svg);
+  background-image: url("#{$base_theme_img_directory_path}/cards/customer-right.svg");
   width: 18.1875rem;
   height: 2.0625rem;
 }
@@ -182,7 +182,7 @@
       padding: 1.875rem 0;
       display: inline-block;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding: 0.875rem 0;
       }
     }

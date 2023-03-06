@@ -20,7 +20,7 @@
   &.badge-no-tier {
     background-image: $aura-hello-tier;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       background-image: $aura-hello-tier-ar;
     }
   }
@@ -28,7 +28,7 @@
   &.badge-Tier2 {
     background-image: $aura-stars-tier;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       background-image: $aura-stars-tier-ar;
     }
   }
@@ -36,7 +36,7 @@
   &.badge-Tier3 {
     background-image: $aura-vip-tier;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       background-image: $aura-vip-tier-ar;
     }
   }

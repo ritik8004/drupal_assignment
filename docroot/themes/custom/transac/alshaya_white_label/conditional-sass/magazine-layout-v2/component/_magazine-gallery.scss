@@ -46,7 +46,7 @@
         margin-bottom: 1.25rem;
         display: block;
 
-        &:nth-child(2n +1) {
+        &:nth-child(2n + 1) {
           width: calc(50% - 0.5rem);
           float: $left;
         }
@@ -399,7 +399,7 @@ html[lang="ar"] {
     .magv2-pdp-image {
       margin-bottom: 1.5rem;
 
-      &:nth-child(2n+1) {
+      &:nth-child(2n + 1) {
         width: calc(50% - 0.75rem);
         float: #{$left};
       }
@@ -430,13 +430,12 @@ html[lang="ar"] {
 #pdp-layout {
   &.content-loading {
     &::after {
-      content: '';
+      content: "";
       width: 100%;
       min-height: 100vh;
       display: flex;
-      background: url(#{$base_theme_loader_img_directory_path}) no-repeat center center;
+      background: url("#{$base_theme_loader_img_directory_path}") no-repeat center center;
       background-size: rem(30);
     }
   }
 }
-

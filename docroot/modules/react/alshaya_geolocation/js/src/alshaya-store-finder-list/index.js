@@ -25,7 +25,7 @@ export class StoreFinderList extends React.PureComponent {
       showingInfoWindow: false,
       center: {},
       zoom: 10,
-      loadmore: true,
+      loadmore: false,
       page: 10,
       locationName: '',
     };
@@ -57,7 +57,7 @@ export class StoreFinderList extends React.PureComponent {
               lat: +params.latitude ? +params.latitude : stores.items[0].latitude,
               lng: +params.longitude ? +params.longitude : stores.items[0].longitude,
             },
-            loadmore: true,
+            loadmore: stores.items.length > drupalSettings.storeLabels.load_more_item_limit,
             page: drupalSettings.storeLabels.load_more_item_limit,
             locationName: params.location ? params.location : '',
           },

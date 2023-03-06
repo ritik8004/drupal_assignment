@@ -3,7 +3,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$muji_theme_img_directory_path}/icons/facebook.svg?v=25062020312);
+      background-image: url("#{$muji_theme_img_directory_path}/icons/facebook.svg?v=25062020312");
     }
   }
 
@@ -11,7 +11,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$muji_theme_img_directory_path}/icons/instagram.png);
+      background-image: url("#{$muji_theme_img_directory_path}/icons/instagram.png");
     }
   }
 
@@ -19,7 +19,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$muji_theme_img_directory_path}/icons/twitter.svg);
+      background-image: url("#{$muji_theme_img_directory_path}/icons/twitter.svg");
     }
   }
 
@@ -27,7 +27,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$muji_theme_img_directory_path}/icons/youtube.svg?v=25062020312);
+      background-image: url("#{$muji_theme_img_directory_path}/icons/youtube.svg?v=25062020312");
     }
   }
 
@@ -35,7 +35,7 @@
     &::before {
       @include ic-social;
 
-      background-image: url(#{$muji_theme_img_directory_path}/icons/pinterest.svg);
+      background-image: url("#{$muji_theme_img_directory_path}/icons/pinterest.svg");
     }
   }
 }

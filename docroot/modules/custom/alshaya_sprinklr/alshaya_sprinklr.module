@@ -9,13 +9,14 @@ use Drupal\user\Entity\User;
 use Drupal\Core\Url;
 use Drupal\Core\Cache\Cache;
 use Drupal\Component\Serialization\Json;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_page_attachments_alter().
  */
 function alshaya_sprinklr_page_attachments_alter(array &$page) {
   $alshaya_sprinklr_settings = \Drupal::config('alshaya_sprinklr.settings');
-  // Add cache tags for the module's settings.
+  // Add cache tags for the module's config.
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_sprinklr_settings->getCacheTags());
   $sprinklr_helper = \Drupal::service('sprinklr.helper');
   // Skip the processing of sprinklr chatbot if sprinklr feature
@@ -26,19 +27,29 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
   }
 
   // Set value for skin field.
-  $page['#attached']['drupalSettings']['alshayaSprinklr']['skin'] = $alshaya_sprinklr_settings->get('skin');
+  $page['#attached']['drupalSettings']['sprinklr']['skin'] = $alshaya_sprinklr_settings->get('skin');
   $current_user = \Drupal::currentUser();
+
   // If user is anonymous.
   if (!$current_user->isAuthenticated()) {
     $login_url = \Drupal::request()->getSchemeAndHttpHost() . Url::fromRoute('user.login')->toString();
+    $current_path = \Drupal::service('path.current')->getPath();
+    $redirect_url = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+    // Current language.
+    $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    // Add current url as destination url to redirect
+    // the user back to the same page where the chat
+    // was initiated after login.
+    $login_url = "$login_url?destination=/$current_language$redirect_url";
+
     // Set key for userContext field.
-    $page['#attached']['drupalSettings']['alshayaSprinklr']['userContext'] = [
+    $page['#attached']['drupalSettings']['sprinklr']['userContext'] = [
       $alshaya_sprinklr_settings->get('user_context_key') => [
         $login_url,
       ],
     ];
     // Set key for clientContext field.
-    $page['#attached']['drupalSettings']['alshayaSprinklr']['clientContext'] = [
+    $page['#attached']['drupalSettings']['sprinklr']['clientContext'] = [
       $alshaya_sprinklr_settings->get('client_context_key') => [
         'False',
       ],
@@ -57,11 +68,16 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
     ->getStorage('user')
     ->load($current_user->id());
 
+  if (!$user instanceof UserInterface) {
+    return;
+  }
+
   $user_data = $user->get('field_sprinklr_user_fields')->getString();
   // If sprinklr user fields is empty.
   if (empty($user_data)) {
     return;
   }
+
   $user_details = Json::decode($user_data);
   // If sprinklr user fields contains invalid json.
   if (empty($user_details)) {
@@ -70,14 +86,43 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
     ]);
     return;
   }
+
+  // Get sprinklr hash for the current language.
+  $user = \Drupal::service('entity.repository')->getTranslationFromContext($user, \Drupal::languageManager()->getCurrentLanguage()->getId());
   $user_details['hash'] = $user->get('field_sprinklr_hash')->getString() ?? '';
-  $page['#attached']['drupalSettings']['alshayaSprinklr']['userDetails'] = $user_details;
+  $page['#attached']['drupalSettings']['sprinklr']['userDetails'] = $user_details;
   // Set key for clientContext field.
-  $page['#attached']['drupalSettings']['alshayaSprinklr']['clientContext'] = [
+  $page['#attached']['drupalSettings']['sprinklr']['clientContext'] = [
     $alshaya_sprinklr_settings->get('client_context_key') => [
       'True',
     ],
   ];
+  // Attach alshaya sprinklr events library that triggers the
+  // the sprinklr chatbot events. Eg: 'openExistingConversation'
+  // to auto open the popup after login.
+  $page['#attached']['library'][] = 'alshaya_sprinklr/alshaya_sprinklr_events';
+
+  // Check if one time user login identification cookie is set and
+  // set update conversation context value in drupal settings.
+  // After that remove cookie so that update conversation context is
+  // executed only once in FE. We will use this drupal setting variable
+  // at FE to determine if sprinklr update conversation context should
+  // be executed or not.
+  $cookies = \Drupal::request()->cookies;
+  if ($cookies->get('Drupal_visitor_update_conversation_context')) {
+    // Check if this is not a social login window and remove the update
+    // conversation context cookie. Otherwise, we will wait for next page
+    // refresh to remove this and let the FE action processed.
+    if (!$cookies->get('Drupal_visitor_sprinklr_social_login')) {
+      // This flag indicates that whether we should make a call to
+      // the sprinklr update conversation context SDK or not.
+      $page['#attached']['drupalSettings']['sprinklr']['updateConversationContext'] = TRUE;
+      user_cookie_delete('update_conversation_context');
+    }
+    // Delete this one time cookie as if this is set, it means we are in
+    // social login callback popup.
+    user_cookie_delete('sprinklr_social_login');
+  }
 }
 
 /**
@@ -86,7 +131,41 @@ function alshaya_sprinklr_page_attachments_alter(array &$page) {
 function alshaya_sprinklr_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
   // Update sprinklr user hash value.
   if (isset($customer['extension_attributes'], $customer['extension_attributes']['sprinklr_hash'])) {
-    $user->get('field_sprinklr_hash')->setValue($customer['extension_attributes']['sprinklr_hash']);
+    // Get magento language prefix array.
+    $lang_prefixes = \Drupal::config('alshaya_api.settings')->get('magento_lang_prefix');
+    // Iterate over the sprinklr hash array and set the hash values
+    // for all the available languages.
+    foreach ($customer['extension_attributes']['sprinklr_hash'] as $sprinklr_hash) {
+      // Split the hash by '-' first and then fetch the value for
+      // each language. We recieve the hash value with a prefix
+      // that contains store id and language with hyphen '-'.
+      // Eg: prefix 'kwt_en-'.
+      $hash = explode('-', $sprinklr_hash);
+      // Skip to next iteration if hash array is empty
+      // or invalid as per the expectation.
+      if (empty($hash) || count($hash) < 2) {
+        \Drupal::logger('alshaya_sprinklr')->warning('Invalid hash provided for sprinklr hash. Hash: @hash', [
+          '@hash' => $sprinklr_hash,
+        ]);
+        continue;
+      }
+      // Iterate over all the available language prefixes.
+      foreach ($lang_prefixes as $lang_code => $lang_prefix) {
+        // Store the hash as per the magento language prefix.
+        if ($lang_prefix == $hash[0]) {
+          $user = $user->hasTranslation($lang_code)
+            ? $user->getTranslation($lang_code)
+            : $user->addTranslation($lang_code);
+          if (!$user instanceof UserInterface) {
+            \Drupal::logger('alshaya_sprinklr')->warning('User translation not found for the langcode: @lang_code ', [
+              '@lang_code' => $lang_code,
+            ]);
+            continue;
+          }
+          $user->get('field_sprinklr_hash')->setValue($hash[1] ?? '');
+        }
+      }
+    }
   }
   // Update sprinklr user data fields value.
   if (isset($customer['extension_attributes'], $customer['extension_attributes']['sprinklr_user_data_fields'])) {
@@ -114,5 +193,21 @@ function alshaya_sprinklr_library_info_alter(&$libraries, $extension) {
   // library is loaded.
   if ($extension === 'sprinklr' && isset($libraries['sprinklr_chatbot'])) {
     $libraries['sprinklr_chatbot']['dependencies'][] = 'alshaya_sprinklr/alshaya_sprinklr';
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_sprinklr_user_login(UserInterface $account) {
+  $sprinklr_helper = \Drupal::service('sprinklr.helper');
+  // Check if the sprinklr chatbot feature is enabled.
+  if ($sprinklr_helper->isSprinklrFeatureEnabled()) {
+    // Set a one time cookie when user logs in. We will
+    // use this above in hook_page_attachments_alter to set
+    // a drupal settings variable to perform action on FE.
+    // For example, we will set client context and open
+    // conversation context values in drupal settings.
+    user_cookie_save(['update_conversation_context' => TRUE]);
   }
 }

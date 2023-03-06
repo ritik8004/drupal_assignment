@@ -23,7 +23,7 @@ body.wishlist-enabled {
         &.sign-in {
           @include btn;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             padding: rem(10) rem(4) rem(6);
           }
 
@@ -35,7 +35,7 @@ body.wishlist-enabled {
         &.register {
           @include button-brand;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             padding: rem(10) rem(4) rem(6);
           }
 

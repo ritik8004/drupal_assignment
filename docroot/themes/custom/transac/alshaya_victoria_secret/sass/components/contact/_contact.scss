@@ -51,10 +51,10 @@
   }
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   form.user-form {
     .form-type-email {
-      input[type=email] {
+      input[type="email"] {
         margin-top: rem(5);
 
         & ~ label {
@@ -65,7 +65,7 @@ html[lang=ar] {
 
     .field--name-field-first-name,
     .field--name-field-last-name {
-      input[type=text] {
+      input[type="text"] {
         font-family: $arial-nodir;
       }
     }

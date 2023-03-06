@@ -35,7 +35,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
       {% endif %}
 
-      {% if (tamara_enabled is not defined or tamara_enabled is empty) and content.tabby %}
+      {% if content.tabby %}
         <div class="tabby"> {{ content.tabby }} </div>
       {% endif %}
 

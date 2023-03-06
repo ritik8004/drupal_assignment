@@ -57,7 +57,7 @@
 }
 
 .c-footer__logo--mastercard {
-  mask-image: url(#{$base_theme_img_directory_path}/cards/master-card-secure-code-black.svg);
+  mask-image: url("#{$base_theme_img_directory_path}/cards/master-card-secure-code-black.svg");
   width: 4.25rem;
   height: 1.25rem;
   background-color: #fff;
@@ -67,13 +67,13 @@
 }
 
 .c-footer__logo--visa {
-  background-image: url(#{$tbs_theme_img_directory_path}/cards/card-visa.svg);
+  background-image: url("#{$tbs_theme_img_directory_path}/cards/card-visa.svg");
   width: 3.25rem;
   height: 1.25rem;
 }
 
 .c-footer__logo--verisign {
-  background-image: url(#{$tbs_theme_img_directory_path}/cards/card-verisign.svg);
+  background-image: url("#{$tbs_theme_img_directory_path}/cards/card-verisign.svg");
   width: 3.5rem;
   height: 1.625rem;
 }

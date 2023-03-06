@@ -39,14 +39,14 @@
     @include breakpoint($tablet) {
       top: -4.5rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         width: 100%;
       }
     }
   }
 
   .form-item-pass > label {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       width: 100%;
     }
   }
@@ -111,7 +111,7 @@
         font-size: 2.125rem;
         transform: rotate(270deg);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(90deg);
         }
       }

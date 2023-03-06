@@ -2,7 +2,7 @@
 Feature: SPC Checkout Express Delivery feature testing for Guest user
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
 
   @expressDelivery

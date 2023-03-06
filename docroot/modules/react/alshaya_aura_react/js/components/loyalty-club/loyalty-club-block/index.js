@@ -1,13 +1,13 @@
 import React from 'react';
 import AuraMyAccountOldCardFound from './card-not-linked-data';
-import AuraMyAccountPendingFullEnrollment from './pending-full-enrollment';
 import AuraMyAccountNoLinkedCard from './card-not-linked-no-data';
-import AuraMyAccountVerifiedUser from './linked-verified';
+import AuraVerifiedUser from './linked-verified';
 import { getAllAuraStatus } from '../../../utilities/helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
-import AuraProgressWrapper from '../../aura-progress';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { getAuraLocalStorageKey } from '../../../utilities/aura_utils';
+import MyAuraPendingFullEnrollmentGuest from './pending-full-enrollment-guest';
+import MyAuraPendingFullEnrollmentRegistered from './pending-full-enrollment-registered';
 
 const LoyaltyClubBlock = (props) => {
   const allAuraStatus = getAllAuraStatus();
@@ -42,7 +42,25 @@ const LoyaltyClubBlock = (props) => {
     // Guest user and pending enrollment.
     if (localStorageValues !== null && !isUserAuthenticated()) {
       return (
-        <AuraMyAccountPendingFullEnrollment />
+        <MyAuraPendingFullEnrollmentGuest />
+      );
+    }
+    // Logged in user and pending enrollment.
+    if (isUserAuthenticated()
+      && loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
+      return (
+        <MyAuraPendingFullEnrollmentRegistered
+          cardNumber={cardNumber}
+          tier={tier}
+          points={points}
+          pointsOnHold={pointsOnHold}
+          firstName={firstName}
+          lastName={lastName}
+          loyaltyStatusInt={loyaltyStatusInt}
+          upgradeMsg={upgradeMsg}
+          expiringPoints={expiringPoints}
+          expiryDate={expiryDate}
+        />
       );
     }
     // When user has no card associated with him.
@@ -59,6 +77,7 @@ const LoyaltyClubBlock = (props) => {
           cardNumber={cardNumber}
           notYouFailed={notYouFailed}
           linkCardFailed={linkCardFailed}
+          tier={tier}
         />
       );
     }
@@ -66,26 +85,20 @@ const LoyaltyClubBlock = (props) => {
     if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
       return (
         <>
-          <AuraMyAccountVerifiedUser
+          <AuraVerifiedUser
             tier={tier}
             points={points}
             pointsOnHold={pointsOnHold}
             cardNumber={cardNumber}
             firstName={firstName}
             lastName={lastName}
-          />
-          <AuraProgressWrapper
             upgradeMsg={upgradeMsg}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
-            tier={tier}
+            loyaltyStatusInt={loyaltyStatusInt}
           />
         </>
       );
-    }
-    // When user has a card but enrollment is pending.
-    if (loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
-      return <AuraMyAccountPendingFullEnrollment />;
     }
   }
 

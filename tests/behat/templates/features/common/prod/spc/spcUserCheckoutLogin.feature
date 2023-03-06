@@ -2,7 +2,7 @@
 Feature: Test the Checkout Login functionality
 
   Scenario: As a user, I should be able to see cart content added as anonymous user once I log into the site
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
     When I select a product in stock on ".c-products__item"
     And I wait for element "#block-content"

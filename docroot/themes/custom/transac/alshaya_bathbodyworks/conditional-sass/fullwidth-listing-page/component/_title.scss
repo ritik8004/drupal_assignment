@@ -1,0 +1,19 @@
+@include breakpoint($only-mobile) {
+  .c-plp {
+    .region__content {
+      .block-page-title-block.mobile {
+        h1 {
+          @include sideSpaces(-$full_width_padding_mobile, "margin");
+        }
+      }
+    }
+  }
+
+  #alshaya-algolia-search {
+    .block-page-title-block {
+      .c-page-title {
+        border-bottom: none;
+      }
+    }
+  }
+}

@@ -200,7 +200,7 @@
             .js-form-type-tel {
               position: unset;
               margin-top: 1.25rem;
-              width: calc(100% - 43px); // here we keep 'px' unit to work in IE also
+              width: calc(100% - #{rem(43)});
 
               input {
                 padding-bottom: 0 !important;
@@ -282,8 +282,8 @@
         width: 47%;
         display: inline-block;
 
-        label[for=edit-address-dependent-locality],
-        label[for=edit-address-address-line2] {
+        label[for="edit-address-dependent-locality"],
+        label[for="edit-address-address-line2"] {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -522,7 +522,7 @@
           }
         }
 
-        input[type=checkbox] ~ label::before {
+        input[type="checkbox"] ~ label::before {
           margin-#{$right}: 1rem;
           float: $left;
         }

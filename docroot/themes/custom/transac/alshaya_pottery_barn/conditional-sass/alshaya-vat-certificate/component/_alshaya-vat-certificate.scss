@@ -4,7 +4,7 @@
   }
 
   @include breakpoint($only-tablet) {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: -1.25rem;
     }
   }

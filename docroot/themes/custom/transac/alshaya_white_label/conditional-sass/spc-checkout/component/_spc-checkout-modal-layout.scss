@@ -20,7 +20,7 @@
       }
 
       &.overlay::before {
-        content: '';
+        content: "";
         background: $header_mobile_menu_overlay;
         position: absolute;
         z-index: 3;
@@ -62,7 +62,7 @@
         color: transparent;
         top: 0.7rem;
 
-        @include icon('close') {
+        @include icon("close") {
           font-size: 2rem;
           width: 2rem;
           height: 2rem;

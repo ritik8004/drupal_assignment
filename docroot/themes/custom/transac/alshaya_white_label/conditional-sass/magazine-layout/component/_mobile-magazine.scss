@@ -239,7 +239,7 @@
         margin-#{$right}: 0.1875rem;
 
         &::after {
-          content: ',';
+          content: ",";
           width: 0.125rem;
           height: 0.125rem;
         }
@@ -295,7 +295,7 @@
           align-items: center;
           justify-content: center;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             max-width: 13.7rem;
           }
         }
@@ -303,7 +303,7 @@
 
       @include breakpoint($only-tablet) {
         button[type="submit"] {
-          html[lang=ar] & {
+          html[lang="ar"] & {
             padding: 0.5rem 0.4375rem;
             max-width: 11.75rem;
 
@@ -374,7 +374,7 @@
           grid-column: 2 / -1;
           padding: 0.65rem 0;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             padding: 0.65rem;
           }
         }
@@ -492,7 +492,7 @@
       .promotions {
         .promotions-dynamic-label {
           a {
-            @include icon('chevron#{$right}', 'after') {
+            @include icon("chevron#{$right}", "after") {
               display: block !important;
               width: auto;
               height: auto;

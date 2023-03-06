@@ -2,7 +2,7 @@
 Feature: SPC Checkout Home Delivery of KNET payment for Guest User
 
   Background:
-    Given I am on "{spc_product_listing_page}"
+    When I go to in stock category page
     And I wait for element "#block-page-title"
 
   @cc @hd @Knet

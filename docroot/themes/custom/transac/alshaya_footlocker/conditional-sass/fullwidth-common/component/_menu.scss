@@ -1,0 +1,19 @@
+@include breakpoint($only-tablet) {
+  .c-menu-primary {
+    .mobile--menu {
+      padding-#{$left}: 0;
+    }
+
+    .hamburger--menu {
+      .logged-in & {
+        padding-#{$left}: 0;
+      }
+    }
+  }
+
+  .block-alshaya-algolia-react-autocomplete {
+    .react-autosuggest__input {
+      border-width: rem(8) rem(16);
+    }
+  }
+}

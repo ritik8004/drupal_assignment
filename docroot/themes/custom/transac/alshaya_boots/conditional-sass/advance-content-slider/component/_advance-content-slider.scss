@@ -16,7 +16,7 @@
         #{$left}: 3rem;
       }
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         @include breakpoint($upto-desktop) {
           left: 0;
         }
@@ -55,7 +55,7 @@
       #{$left}: auto;
       transform: none;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         left: auto;
       }
 

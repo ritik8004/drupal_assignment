@@ -101,7 +101,7 @@
 
     li[class^="attr_product_"]::before {
       color: $collection_label_default;
-      content: '•';
+      content: "•";
       display: inline-block;
       text-align: center;
       width: 21px;
@@ -129,10 +129,10 @@
     margin-bottom: 0.5rem !important;
     line-height: 1rem;
 
-    div[class*='-label'] + div[class*='-value']:not([hidden='hidden']) {
+    div[class*="-label"] + div[class*="-value"]:not([hidden="hidden"]) {
       &::before {
         background-color: $gray44;
-        content: '';
+        content: "";
         display: inline-block;
         height: 0.125rem;
         margin-#{$left}: 0.3125rem;

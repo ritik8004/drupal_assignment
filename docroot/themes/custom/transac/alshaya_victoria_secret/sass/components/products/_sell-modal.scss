@@ -12,7 +12,7 @@
           margin-top: 2.125rem;
 
           @include breakpoint($only-tablet) {
-            html[lang=ar] & {
+            html[lang="ar"] & {
               padding: 0.725rem 0.125rem;
               margin-right: 0.5rem;
             }

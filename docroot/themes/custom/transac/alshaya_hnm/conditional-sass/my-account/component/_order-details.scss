@@ -151,7 +151,7 @@
 
     .order--date--time,
     .order-transaction > .light:nth-child(3) {
-      html[lang='ar'] & {
+      html[lang="ar"] & {
         direction: ltr;
         text-align: right;
       }
@@ -293,7 +293,7 @@
   #{$left}: 0.125rem;
 }
 
-html[lang=ar] {
+html[lang="ar"] {
   .user__order--detail {
     .total-row > .right--align {
       padding: 0 0 0 0.75rem;

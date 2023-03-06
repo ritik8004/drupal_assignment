@@ -6,7 +6,7 @@
   @include breakpoint($only-tablet) {
     margin-top: 0.5rem;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 0.5rem;
     }
   }
@@ -19,7 +19,7 @@
     width: 55%;
     margin-top: 0;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: 0;
     }
   }

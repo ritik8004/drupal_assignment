@@ -11,7 +11,7 @@ body.wishlist-enabled {
 
         .wishlist-button-wrapper {
           @include breakpoint($only-tablet) {
-            html[lang=ar] & {
+            html[lang="ar"] & {
               height: auto;
               padding-bottom: rem(10);
             }

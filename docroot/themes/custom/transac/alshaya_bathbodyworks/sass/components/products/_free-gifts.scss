@@ -4,7 +4,7 @@
       a {
         padding: 0.6rem 1.3701rem 0.3rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           padding-top: 0.45rem;
           padding-bottom: 0.45rem;
         }
@@ -56,7 +56,7 @@ body.ie {
       #{$left}: -2rem;
       #{$right}: auto;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         #{$left}: -1rem;
       }
     }
@@ -65,7 +65,7 @@ body.ie {
       #{$right}: -1rem;
       #{$left}: auto;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         #{$right}: -2rem;
       }
     }

@@ -29,7 +29,7 @@
       .cart-shipping-method {
         .information-icon {
           &::after {
-            html[lang=ar] & {
+            html[lang="ar"] & {
               @include breakpoint($upto-desktop) {
                 top: 0.1875rem;
               }

@@ -9,7 +9,7 @@ Feature: SPC Checkout Home Delivery CC for Authenticated Users
     Then I press "edit-submit"
     And I wait 10 seconds
     Then I should be on "/user" page
-    When I am on "{spc_basket_page}"
+    When I go to in stock category page
     And I wait 10 seconds
     And I wait for the page to load
 

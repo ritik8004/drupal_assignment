@@ -285,12 +285,12 @@
 
       @include breakpoint($tablet) {
         display: grid;
-        grid-template: "a b"/ rem(208) rem(304);
+        grid-template: "a b" / rem(208) rem(304);
         padding-bottom: 1.5625rem;
       }
 
       @include breakpoint($desktop) {
-        grid-template: "a b"/ rem(320) rem(448);
+        grid-template: "a b" / rem(320) rem(448);
       }
     }
 
@@ -442,7 +442,7 @@
           #{$right}: 0.875rem;
           font-size: rem(32);
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             left: 2.25rem;
           }
         }

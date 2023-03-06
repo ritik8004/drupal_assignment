@@ -117,7 +117,7 @@
         -ms-grid-column: 2;
       }
 
-      @include icon('mylocation', before) {
+      @include icon("mylocation", before) {
         font-size: 2rem;
         color: $spc-cnc-store-search-icon;
         transition: color 0.2s ease-in-out;
@@ -131,7 +131,7 @@
       &:hover {
         background: $spc-cnc-store-search-icon;
 
-        @include icon('mylocation', before) {
+        @include icon("mylocation", before) {
           color: $spc-cnc-store-search-icon-active;
         }
       }

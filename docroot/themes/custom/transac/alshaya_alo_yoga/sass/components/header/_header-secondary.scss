@@ -68,7 +68,7 @@
 
 body {
   @include breakpoint($upto-desktop) {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       margin-top: rem(60);
     }
   }
@@ -90,7 +90,7 @@ body {
 .block-alshaya-algolia-react-autocomplete {
   &::before {
     @include breakpoint($only-tablet) {
-      content: '';
+      content: "";
       background: transparent;
       position: absolute;
       z-index: -1;

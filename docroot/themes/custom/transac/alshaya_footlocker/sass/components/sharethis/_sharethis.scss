@@ -5,26 +5,26 @@
   }
 
   .st_facebook_custom {
-    @include pdp_icon_img('#{$fl_theme_img_directory_path}/social-icons/facebook.svg', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img("#{$fl_theme_img_directory_path}/social-icons/facebook.svg", 1.6875rem, 1.6875rem);
 
     &:hover::before {
-      @include pdp_icon_img('#{$fl_theme_img_directory_path}/social-icons/facebook.svg', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img("#{$fl_theme_img_directory_path}/social-icons/facebook.svg", 1.6875rem, 1.6875rem);
     }
   }
 
   .st_twitter_custom {
-    @include pdp_icon_img('#{$fl_theme_img_directory_path}/social-icons/twitter.svg', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img("#{$fl_theme_img_directory_path}/social-icons/twitter.svg", 1.6875rem, 1.6875rem);
 
     &:hover::before {
-      @include pdp_icon_img('#{$fl_theme_img_directory_path}/social-icons/twitter.svg', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img("#{$fl_theme_img_directory_path}/social-icons/twitter.svg", 1.6875rem, 1.6875rem);
     }
   }
 
   .st_instagram_custom {
-    @include pdp_icon_img('#{$fl_theme_img_directory_path}/social-icons/instagram.svg', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img("#{$fl_theme_img_directory_path}/social-icons/instagram.svg", 1.6875rem, 1.6875rem);
 
     &:hover::before {
-      @include pdp_icon_img('#{$fl_theme_img_directory_path}/social-icons/instagram.svg', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img("#{$fl_theme_img_directory_path}/social-icons/instagram.svg", 1.6875rem, 1.6875rem);
     }
   }
 }

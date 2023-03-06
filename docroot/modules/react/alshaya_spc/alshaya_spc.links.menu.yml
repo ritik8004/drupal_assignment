@@ -3,3 +3,9 @@ alshaya_spc.alshaya_delivery_options_settings:
   title: 'Alshaya Same Day/Express Delivery Configuration'
   description: 'Alshaya Configuration For Same Day and Express Delivery.'
   parent: alshaya_master.alshaya_admin
+
+alshaya_spc.show_listing_sidebar:
+  route_name: alshaya_spc.show_listing_sidebar
+  title: 'Alshaya Show Sidebar on Listing pages Configuration'
+  description: 'Alshaya Show Sidebar Configuration Setting for PLP/SRP pages.'
+  parent: alshaya_master.alshaya_admin

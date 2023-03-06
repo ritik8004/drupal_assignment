@@ -145,7 +145,7 @@
           font-size: 0.75rem;
         }
 
-        select[id^=edit-quantity] {
+        select[id^="edit-quantity"] {
           height: 3.125rem !important;
           font-size: 1.125rem;
           font-weight: normal;
@@ -186,7 +186,7 @@
       .sku-base-form {
         position: relative;
 
-        button[type='submit'] {
+        button[type="submit"] {
           height: 3.1875rem;
           text-transform: uppercase;
           width: 68%;
@@ -372,7 +372,7 @@
   .basic-details-wrapper {
     .field--name-field-skus {
       .sku-base-form {
-        button[type='submit'] {
+        button[type="submit"] {
           @include breakpoint($only-tablet) {
             padding: 0.5rem 1.25rem;
             #{$left}: 0;

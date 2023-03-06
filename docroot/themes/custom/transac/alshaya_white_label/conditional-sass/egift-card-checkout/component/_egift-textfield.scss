@@ -19,9 +19,9 @@
 .egift-input-item {
   position: relative;
 
-  input[type=text],
-  input[type=email],
-  input[type=number],
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
   textarea {
     height: 1.5rem;
     font-size: 0.875rem;
@@ -48,7 +48,7 @@
   }
 
   /* Firefox */
-  input[type=number] {
+  input[type="number"] {
     -moz-appearance: textfield;
     padding-#{$left}: 2.5rem !important;
   }

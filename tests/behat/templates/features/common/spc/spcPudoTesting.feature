@@ -2,7 +2,7 @@
 Feature: SPC Checkout for PUDO testing for Guest User
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
     And I scroll to the ".plp-facet-product-filter" element
 

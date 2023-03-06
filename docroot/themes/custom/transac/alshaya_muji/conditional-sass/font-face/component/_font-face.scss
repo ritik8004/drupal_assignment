@@ -1,5 +1,5 @@
 // Define Fonts
-$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
+$base_theme_fonts_directory_path: "/themes/custom/transac/alshaya_muji/fonts";
 
 @font-face {
   font-family: "Helvetica";
@@ -16,8 +16,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
   font-family: "Helvetica-Light";
   src:
     local("Helvetica Light"),
-    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Light.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -27,8 +29,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
   font-family: "Helvetica-Bold";
   src:
     local("Helvetica Bold"),
-    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Helvetica-Bold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -38,7 +42,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
   font-family: "HelveticaNeue";
   src:
     local("Helvetica Neue"),
-    url("#{$base_theme_fonts_directory_path}/HelveticaNeue.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue.woff2")
+    format("woff2"),
     url("#{$base_theme_fonts_directory_path}/HelveticaNeue.woff") format("woff");
   font-weight: normal;
   font-style: normal;
@@ -49,8 +54,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
   font-family: "HelveticaNeue-Medium";
   src:
     local("Helvetica Neue Medium"),
-    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Medium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -60,8 +67,10 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_muji/fonts';
   font-family: "HelveticaNeue-Bold";
   src:
     local("Helvetica Neue Bold"),
-    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff2")
+    format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/HelveticaNeue-Bold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

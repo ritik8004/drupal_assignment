@@ -10,6 +10,8 @@ import AuraFormNewAuraUserModal
 import AuraFormLinkCardOTPModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { isMyAuraContext } from '../../../../utilities/aura_utils';
 
 class AuraMyAccountNoLinkedCard extends React.Component {
   constructor(props) {
@@ -87,17 +89,26 @@ class AuraMyAccountNoLinkedCard extends React.Component {
     return (
       <div className="aura-myaccount-no-linked-card-wrapper no-card-found fadeInUp">
         <div className="aura-logo">
-          <ConditionalView condition={window.innerWidth > 1024}>
-            <AuraLogo stacked="vertical" />
-          </ConditionalView>
-          <ConditionalView condition={window.innerWidth < 1025}>
-            <AuraLogo stacked="horizontal" />
-          </ConditionalView>
+          {isMyAuraContext() && (
+            <>
+              <ConditionalView condition={window.innerWidth > 1024}>
+                <AuraLogo stacked="vertical" />
+              </ConditionalView>
+              <ConditionalView condition={window.innerWidth < 1025}>
+                <AuraLogo stacked="horizontal" />
+              </ConditionalView>
+            </>
+          )}
+          {(!hasValue(drupalSettings.aura.context)) && (
+            <AuraLogo />
+          )}
         </div>
         <div className="aura-myaccount-no-linked-card-description no-card-found">
-          <div className="banner-title">
-            { Drupal.t('Join Aura to earn and spend points while you shop and enjoy exclusive benefits.') }
-          </div>
+          {isMyAuraContext() && (
+            <div className="banner-title">
+              { Drupal.t('Join Aura to earn and spend points while you shop and enjoy exclusive benefits.') }
+            </div>
+          )}
           <div className="action-wrapper">
             <ConditionalView condition={isUserAuthenticated()}>
               <div className="link-your-card">

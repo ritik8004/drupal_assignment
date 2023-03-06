@@ -15,7 +15,7 @@
         z-index: 14;
         opacity: 0;
 
-        html[lang='ar'] & {
+        html[lang="ar"] & {
           transform: translateX(-100%);
         }
 
@@ -48,7 +48,7 @@
           top: 50%;
           transform: translateY(-50%);
 
-          @include icon('close') {
+          @include icon("close") {
             font-size: 2.5rem;
             width: 2rem;
             height: 2rem;

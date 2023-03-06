@@ -1,0 +1,20 @@
+.spc-aura-cart-rewards-block {
+  .block-content.guest-user,
+  .block-content.registered-user-linked-pending-enrollment,
+  .block-content.registered-user-unlinked-card,
+  .block-content.registered-user-linked {
+    .spc-aura-cart-content {
+      max-width: 100%;
+    }
+
+    .spc-aura-cart-icon {
+      html[lang="ar"] & {
+        margin-left: rem(13);
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      @include sideSpaces(rem(9));
+    }
+  }
+}

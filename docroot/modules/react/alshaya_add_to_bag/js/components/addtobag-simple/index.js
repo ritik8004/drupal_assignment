@@ -161,8 +161,6 @@ export default class AddToBagSimple extends React.Component {
     if (action === 'increase' || action === 'add') {
       cartAction = (cartQty === 0) ? 'add item' : 'update item';
       cartQty += 1;
-      // Trigger Product Details View GTM push only while adding to cart.
-      Drupal.alshayaSeoGtmPushProductDetailView(this.buttonContainerRef.current.closest('article.node--view-mode-search-result'));
     } else if (action === 'decrease') {
       // Show add button when trying to decrease the quantity
       // while product is not in cart.
@@ -251,7 +249,9 @@ export default class AddToBagSimple extends React.Component {
         dispatchCustomEvent('product-add-to-cart-success', { sku });
         // Trigger Algolia Insight event for add to cart on success.
         const insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
-        if (insightsClickData.queryId && insightsClickData.objectId) {
+        if (Drupal.hasValue(insightsClickData)
+          && insightsClickData.queryId
+          && insightsClickData.objectId) {
           Drupal.pushAlshayaAlgoliaInsightsAddToCart(
             insightsClickData.queryId,
             insightsClickData.objectId,

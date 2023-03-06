@@ -1,7 +1,7 @@
 .egifts-form-wrapper {
   .action-buttons {
-    button[type=submit],
-    button[type=button]:not(.my-topup-cancel-btn) {
+    button[type="submit"],
+    button[type="button"]:not(.my-topup-cancel-btn) {
       text-transform: unset;
       font-size: rem(16);
 

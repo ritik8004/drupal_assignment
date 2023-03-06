@@ -10,7 +10,7 @@
 
       &:hover {
         &::after {
-          content: '';
+          content: "";
           border: 1px solid $plp_quick_color_variant_border;
           border-radius: 100%;
           position: absolute;

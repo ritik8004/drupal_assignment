@@ -123,13 +123,13 @@
       position: relative;
 
       &::before {
-        content: '' !important;
+        content: "" !important;
         display: inline-block;
         width: 1.5rem !important;
         height: 1.5rem !important;
         position: absolute;
         top: -0.0625rem;
-        mask-image: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-pintrest-default.svg') !important;
+        mask-image: url("#{$base_theme_img_directory_path}/social-icons/new-pdp-pintrest-default.svg") !important;
         background-color: $magv2-share-icons-default-color;
         mask-position: center;
         mask-size: cover;
@@ -156,7 +156,7 @@
     font-family: $alshaya-bold;
     transition: all 0.3s ease-in-out;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       @include breakpoint($only-tablet) {
         max-height: 2.25rem;
       }

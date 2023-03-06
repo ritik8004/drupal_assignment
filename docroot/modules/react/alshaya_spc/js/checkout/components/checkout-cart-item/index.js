@@ -81,6 +81,7 @@ class CheckoutCartItem extends React.Component {
         price: originalPrice,
         promotions,
         sku,
+        parentSKU,
         isNonRefundable,
       },
     } = this.state;
@@ -92,9 +93,10 @@ class CheckoutCartItem extends React.Component {
     };
 
     const freeGift = freeItem === true ? 'free-gift' : '';
+    const psku = parentSKU !== 'undefined' ? sku : parentSKU;
 
     return (
-      <div className={`product-item ${freeGift}`}>
+      <div className={`product-item ${freeGift}`} data-insights-object-id={psku}>
         <div className="spc-product-image">
           <CheckoutItemImage img_data={cartImage} />
         </div>

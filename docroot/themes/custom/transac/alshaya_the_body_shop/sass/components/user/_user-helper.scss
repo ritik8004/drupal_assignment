@@ -22,11 +22,11 @@
     .my-account-nav {
       a {
         @include breakpoint($upto-tablet) {
-          @include icon('dropdown-expand', after) {
+          @include icon("dropdown-expand", after) {
             font-size: 2rem;
             transform: translateY(-50%) rotate(-90deg);
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               transform: translateY(-50%) rotate(90deg);
             }
           }

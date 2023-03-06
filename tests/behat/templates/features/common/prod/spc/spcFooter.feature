@@ -2,7 +2,7 @@
 Feature: Test Footer on the site
 
   Background:
-    Given I am on "{spc_basket_page}"
+    Given I go to in stock category page
     And I wait for element "#block-page-title"
 
   @desktop @footer

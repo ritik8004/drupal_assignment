@@ -21,7 +21,7 @@
         position: relative;
         padding-#{$right}: 0.9375rem;
 
-        @include icon('chevrondown') {
+        @include icon("chevrondown") {
           font-size: 1.25rem;
           position: absolute;
           top: 42%;
@@ -31,7 +31,7 @@
           #{$right}: 0;
           bottom: 0;
 
-          html[lang=ar] & {
+          html[lang="ar"] & {
             transform: translateY(-50%) rotate(90deg);
             #{$right}: 0.1875rem;
           }

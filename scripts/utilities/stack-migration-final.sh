@@ -9,6 +9,9 @@ source_site="$2"
 target_env="$3"
 target_site="$4"
 
+# Move to docroot directory from home.
+drush_directory="/var/www/html/${source_env}/docroot"
+
 # Remove trailing numbers to get exact site code.
 site_code=${source_site//[0-9]/}
 
@@ -39,6 +42,8 @@ if [[ -z "$target_site" ]]; then
   exit
 fi
 
+cd $drush_directory
+
 echo
 source_alias=`drush sa | grep "$source_env\$"`
 if [[ -z "$source_alias" ]]; then
@@ -52,13 +57,13 @@ if [[ -z "$target_alias" ]]; then
   exit
 fi
 
-source_root=`drush sa $source_alias | grep root | head -1 | cut -d"'" -f4`
-target_root=`drush sa $target_alias | grep root | head -1 | cut -d"'" -f4`
-target_remote_user=`drush sa $target_alias | grep remote-user | cut -d"'" -f4`
-target_remote_host=`drush sa $target_alias | grep remote-host | cut -d"'" -f4`
+source_root=`drush sa $source_alias | grep root | head -1 | awk '{print $2}'`
+target_root=`drush sa $target_alias | grep root | head -1 | awk '{print $2}'`
+target_remote_user=`drush sa $target_alias | grep user | awk '{print $2}'`
+target_remote_host=`drush sa $target_alias | grep host | awk '{print $2}'`
 target="$target_remote_user@$target_remote_host"
-target_stack=`drush sa $target_alias | grep ac-site | cut -d"'" -f4`
-target_env=`drush sa $target_alias | grep ac-env | cut -d"'" -f4`
+target_stack=`drush sa $target_alias | grep ac-site | awk '{print $2}'`
+target_env=`drush sa $target_alias | grep ac-env | awk '{print $2}'`
 
 cd $source_root
 
@@ -79,26 +84,22 @@ echo "Target folder $target_files_folder"
 
 screen -S rsync_${source_site}_${target_site} -dm bash -c "rsync -auv --exclude 'styles' $source_files_folder $target:$target_files_folder"
 
-source_brand_files_folder="${source_root}/sites/g/files/$brand_code"
-target_brand_files_folder="${target_root}/sites/g/files/"
-screen -S rsync_brand_${source_site}_${target_site} -dm bash -c "rsync -auv --exclude 'styles' $source_brand_files_folder $target:$target_brand_files_folder"
-
 echo
 echo "Dumping database..."
-mkdir -p /tmp/migrate
+mkdir -p ~/stack_migration/migrate
 
 echo
 echo "Dumping databases for $source_site"
-drush -l $source_site.factory.alshaya.com sql-dump --result-file=/tmp/migrate/$source_site.sql --skip-tables-key=common
+drush -l $source_site.factory.alshaya.com sql-dump --result-file=~/stack_migration/migrate/$source_site.sql --skip-tables-key=common
 
 echo "Replacing site identifier in database search: $search, replace: $replace"
-echo "s#$search#$replace#g" > /tmp/migrate/$source_site.sed
-sed -i -f /tmp/migrate/$source_site.sed /tmp/migrate/$source_site.sql
+echo "s#$search#$replace#g" > ~/stack_migration/migrate/$source_site.sed
+sed -i -f ~/stack_migration/migrate/$source_site.sed ~/stack_migration/migrate/$source_site.sql
 
 echo
 echo "Copying the dump to $target_env env..."
-ssh $target 'mkdir -p /tmp/migrate'
-scp /tmp/migrate/* $target:/tmp/migrate/
+ssh $target 'mkdir -p ~/stack_migration/migrate'
+scp ~/stack_migration/migrate/* $target:~/stack_migration/migrate
 
 echo
 echo "Clearing caches for $target_site"
@@ -106,7 +107,7 @@ ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com cr"
 
 echo
 echo "Dropping and importing database again for $target_site"
-ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com sql-drop -y; drush -l $target_site.factory.alshaya.com sql-cli < /tmp/migrate/$source_site.sql"
+ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com sql-drop -y; drush -l $target_site.factory.alshaya.com sql-cli < ~/stack_migration/migrate/$source_site.sql"
 
 echo
 echo "Clearing caches for $target_site"
@@ -128,8 +129,8 @@ ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com sset sys
 
 echo
 echo "Removing temp directories for sql dumps in source and target envs"
-rm -rf /tmp/migrate
-ssh $target 'rm -rf /tmp/migrate'
+rm -rf ~/stack_migration/migrate
+ssh $target 'rm -rf ~/stack_migration/migrate'
 
 echo
 

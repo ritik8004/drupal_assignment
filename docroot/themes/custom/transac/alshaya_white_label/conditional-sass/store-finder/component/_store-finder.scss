@@ -67,10 +67,10 @@
   }
 
   .geolocation-google-map {
-    [aria-hidden='true'] {
+    [aria-hidden="true"] {
       padding-bottom: rem(18);
 
-      html[lang='en'] & {
+      html[lang="en"] & {
         padding-right: rem(2);
       }
     }
@@ -152,7 +152,7 @@
   .input--wrapper {
     position: relative;
 
-    [id^=edit-actions] {
+    [id^="edit-actions"] {
       position: absolute;
       #{$right}: 0;
       top: 0;
@@ -244,8 +244,8 @@
       font-size: 12px;
     }
 
-    &[id^=edit-submit-stores-finder] {
-      background: url('../../../imgs/icons/store-search.svg');
+    &[id^="edit-submit-stores-finder"] {
+      background: url("../../../imgs/icons/store-search.svg");
       border: none;
       background-repeat: no-repeat;
       text-indent: -9999px;
@@ -262,7 +262,7 @@
   .label--location,
   .list-view-link {
     &::before {
-      content: '';
+      content: "";
       display: inline-block;
       vertical-align: middle;
       margin-#{$right}: 0.6875rem;
@@ -284,19 +284,19 @@
     }
 
     @include breakpoint($tablet) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         padding-top: 0.5rem;
       }
     }
 
     &::before {
-      background: url('../../../imgs/icons/current.svg') no-repeat;
+      background: url("../../../imgs/icons/current.svg") no-repeat;
       width: 26px;
       height: 26px;
     }
 
     @include breakpoint($desktop) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 1.2rem;
         padding-top: 0;
         padding-right: 3.4rem;
@@ -306,13 +306,13 @@
   }
 
   .label--location::before {
-    background: url('../../../imgs/icons/ic-search-store.svg') no-repeat;
+    background: url("../../../imgs/icons/ic-search-store.svg") no-repeat;
     width: 25px;
     height: 25px;
     margin-#{$right}: 0.4rem;
 
     @include breakpoint($tablet) {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         position: relative;
         top: 0.4rem;
       }
@@ -429,7 +429,7 @@
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
   .form-item-geolocation-geocoder-google-places-api {
-    [id^=edit-geolocation-geocoder-google-places-api] {
+    [id^="edit-geolocation-geocoder-google-places-api"] {
       background: none;
       border: 1px solid $store_finder_glossary_border;
       padding: 0.6rem;
@@ -586,7 +586,7 @@
       border-bottom: 1px solid $store_finder_search_results_border;
       padding-bottom: 1.5rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 1.2;
         padding-top: 0.125rem;
       }
@@ -601,14 +601,14 @@
       }
 
       .field--name-field-store-address {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           padding-top: 0.125rem;
           line-height: 1.2;
         }
       }
 
       .field--name-field-store-phone {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           direction: ltr;
           display: inline-block;
           padding-top: 0.25rem;
@@ -767,7 +767,7 @@
       border-radius: 50%;
       padding-top: 2px;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: 1.22;
       }
     }
@@ -826,14 +826,14 @@
       max-width: 100%;
       float: $left;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         &::before {
           transform: scaleX(-1);
         }
       }
 
       @include breakpoint($only-tablet) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: 45%;
         }
 
@@ -841,7 +841,7 @@
       }
 
       @include breakpoint($desktop) {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: 37.6%;
           padding-top: 0.5rem;
           padding-bottom: 0.5rem;
@@ -907,7 +907,7 @@
     @include breakpoint($tablet) {
       margin: 0.8rem 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 0.2rem;
       }
     }
@@ -915,7 +915,7 @@
     @include breakpoint($desktop) {
       margin: 1.625rem 0;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 0.8rem;
       }
     }
@@ -976,7 +976,7 @@
         padding-#{$right}: 0.5rem;
         padding-#{$left}: 1.375rem;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: 62.4%;
         }
       }
@@ -1006,7 +1006,7 @@
     z-index: 3;
 
     div {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         text-align: right;
       }
     }
@@ -1044,7 +1044,7 @@
     &::after {
       position: absolute;
       background-repeat: no-repeat;
-      content: '';
+      content: "";
       display: inline-block;
       top: 0;
       #{$right}: 0;
@@ -1105,15 +1105,15 @@
   }
 
   .get--directions a::after {
-    content: '';
+    content: "";
     display: inline-block;
     position: absolute;
-    background: url('../../../imgs/icons/ic-directions.svg');
+    background: url("../../../imgs/icons/ic-directions.svg");
     #{$right}: rem(32);
     width: 18px;
     height: 18px;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       transform: scaleX(-1);
     }
   }
@@ -1138,7 +1138,7 @@
   }
 
   + .ajax-progress-fullscreen {
-    background-image: url(#{$base_theme_loader_img_directory_path});
+    background-image: url("#{$base_theme_loader_img_directory_path}");
   }
 
   #views-exposed-form-stores-finder-page-1,
@@ -1219,8 +1219,8 @@
 
       &::after {
         position: absolute;
-        content: '';
-        background: url('../../../imgs/icons/store--down.svg');
+        content: "";
+        background: url("../../../imgs/icons/store--down.svg");
         display: inline-block;
         width: 17px;
         height: 7px;
@@ -1435,7 +1435,7 @@
   }
 
   &-c {
-    html[lang='ar'] & {
+    html[lang="ar"] & {
       padding-left: 0 !important;
       padding-right: rem(12) !important;
     }
@@ -1443,13 +1443,13 @@
 }
 
 .gm-ui-hover-effect {
-  html[lang='ar'] & {
+  html[lang="ar"] & {
     left: rem(-6) !important;
     right: unset !important;
   }
 }
 
-.path--store-finder .store-finder--wrapper .input--wrapper [id^=edit-actions] {
+.path--store-finder .store-finder--wrapper .input--wrapper [id^="edit-actions"] {
   @include breakpoint($desktop) {
     #{$right}: 0.5rem;
   }

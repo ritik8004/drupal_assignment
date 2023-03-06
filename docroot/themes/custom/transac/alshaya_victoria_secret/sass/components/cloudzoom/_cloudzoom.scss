@@ -19,7 +19,7 @@
 
   .slick-current {
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: -2px;
       bottom: -2px;
@@ -85,7 +85,7 @@
           padding-#{$right}: 0;
           position: relative;
           font-size: 0.6875rem;
-          background: url(../imgs/icons/magnifier-wth-plus.svg) $left no-repeat;
+          background: url("../imgs/icons/magnifier-wth-plus.svg") $left no-repeat;
           background-size: 1.1875rem 1.0625rem;
           display: inline-block;
           float: $right;
@@ -183,7 +183,7 @@
   }
 
   #lightSlider {
-    html[lang=ar] & {
+    html[lang="ar"] & {
       .slick-next,
       .slick-prev {
         top: 0 !important;

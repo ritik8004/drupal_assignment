@@ -54,7 +54,7 @@
 }
 
 .cloud-zoom-loading {
-  background: transparent url(#{$base_theme_loader_img_directory_path}) center no-repeat;
+  background: transparent url("#{$base_theme_loader_img_directory_path}") center no-repeat;
   background-size: 2rem 2rem;
 }
 

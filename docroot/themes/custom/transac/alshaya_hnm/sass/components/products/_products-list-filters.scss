@@ -131,7 +131,7 @@
 
             &.is-active {
               &::after {
-                content: '';
+                content: "";
               }
             }
           }
@@ -235,7 +235,7 @@
               }
             }
 
-            input[checked='checked'] ~ label {
+            input[checked="checked"] ~ label {
               font-family: $hnm-regular;
               background-color: $filter_hover;
             }

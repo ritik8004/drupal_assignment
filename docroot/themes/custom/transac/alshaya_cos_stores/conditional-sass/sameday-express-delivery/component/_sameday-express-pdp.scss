@@ -2,7 +2,7 @@
   .cart-shipping-method {
     &.standard {
       &::before {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           @include breakpoint($only-tablet) {
             width: 2rem;
           }
@@ -12,7 +12,7 @@
 
     &.sameday {
       &::before {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: 1.5rem;
 
           @include breakpoint($only-tablet) {
@@ -24,7 +24,7 @@
 
     &.express {
       &::before {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           width: 1.75rem;
 
           @include breakpoint($only-tablet) {

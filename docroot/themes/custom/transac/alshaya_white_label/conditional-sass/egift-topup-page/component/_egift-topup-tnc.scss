@@ -17,7 +17,7 @@
     line-height: 1.25rem;
     margin-bottom: 0.875rem;
 
-    html[lang=en] & {
+    html[lang="en"] & {
       letter-spacing: 1px;
     }
   }
@@ -29,7 +29,7 @@
       font-size: 0.8125rem;
       line-height: 1.25rem;
 
-      html[lang=en] & {
+      html[lang="en"] & {
         letter-spacing: 0.65px;
       }
     }

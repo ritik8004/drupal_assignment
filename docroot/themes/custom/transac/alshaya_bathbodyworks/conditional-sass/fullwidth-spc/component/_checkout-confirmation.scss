@@ -1,0 +1,16 @@
+.alias--checkout-confirmation {
+  .c-post-content,
+  .c-footer-secondary {
+    .l-container {
+      max-width: none;
+    }
+  }
+
+  .block-customer-service-block {
+    @include fullWidthSideSpaces(
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+  }
+}

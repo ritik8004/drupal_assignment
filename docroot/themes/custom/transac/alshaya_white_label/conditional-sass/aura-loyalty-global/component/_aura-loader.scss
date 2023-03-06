@@ -14,7 +14,7 @@
     min-height: 2rem;
 
     .spc-loader {
-      background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
+      background: url("#{$base_theme_loader_img_directory_path}") #{$left} center no-repeat;
       padding-#{$left}: 2.5rem;
       background-size: contain;
       color: $spc-loader-text;
@@ -71,7 +71,7 @@
     .link-card-loader-placeholder,
     .not-you-loader-placeholder {
       color: transparent;
-      background: transparent url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+      background: transparent url("#{$base_theme_loader_img_directory_path}") center center no-repeat;
       background-size: contain;
       // Prevent clicks and selection.
       pointer-events: none;
@@ -83,7 +83,7 @@
       transform: translateY(-50%) translateX(-50%);
       #{$left}: 50%;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: translateY(-50%) translateX(50%);
       }
     }
@@ -94,12 +94,12 @@
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    background: $_white_five_alpha_80 url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+    background: $_white_five_alpha_80 url("#{$base_theme_loader_img_directory_path}") center center no-repeat;
     z-index: 1;
     position: absolute;
     background-size: 8%;
@@ -114,7 +114,7 @@
       &.link-card-wrapper.loading {
         button.spc-aura-link-card-submit {
           color: transparent;
-          background: url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+          background: url("#{$base_theme_loader_img_directory_path}") center center no-repeat;
           background-size: 2rem;
           // Prevent clicks and selection.
           pointer-events: none;

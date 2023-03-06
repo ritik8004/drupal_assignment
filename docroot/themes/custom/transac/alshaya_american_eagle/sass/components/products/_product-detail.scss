@@ -256,7 +256,7 @@
           &::after {
             #{$right}: 1.5rem;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               right: 1.5rem;
             }
           }
@@ -269,7 +269,7 @@
             color: $pdp_product_volume_value;
             padding-#{$left}: 1rem;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               direction: ltr;
             }
           }

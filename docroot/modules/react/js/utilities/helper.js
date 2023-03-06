@@ -35,11 +35,17 @@ export const getAuraUserDetails = () => {
 };
 
 /**
- * Helper function to check if Bazaar voice is available on PDP for a given SKU.
+ * Helper function to check if Bazaar voice is available on PDP for the SKU.
  */
-export const checkBazaarVoiceAvailableForPdp = (skuItemCode) => hasValue(drupalSettings.productInfo)
-  && hasValue(drupalSettings.productInfo[skuItemCode])
-  && hasValue(drupalSettings.productInfo[skuItemCode].alshaya_bazaar_voice);
+export const checkBazaarVoiceAvailableForPdp = () => {
+  if (hasValue(drupalSettings.productReviewStats)) {
+    const sanitizedSku = drupalSettings.productReviewStats.productId;
+
+    return hasValue(drupalSettings.productInfo[sanitizedSku])
+      && hasValue(drupalSettings.productInfo[sanitizedSku].alshaya_bazaar_voice);
+  }
+  return false;
+};
 
 /**
  * Helper function to check if Checkout Tracker is enabled.

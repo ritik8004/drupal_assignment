@@ -263,13 +263,13 @@
       text-align: center;
       padding: 0 1.5rem;
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         line-height: normal;
       }
     }
   }
 
-  @include breakpoint ($only-mobile) {
+  @include breakpoint($only-mobile) {
     .acq-content-product-modal {
       display: flex;
       flex-flow: row wrap;
@@ -519,7 +519,7 @@
         top: 0;
         transform: rotate(90deg);
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(-90deg);
         }
 
@@ -529,7 +529,7 @@
       }
 
       &::before {
-        content: '';
+        content: "";
         width: calc(100% - 1.125rem);
         height: 0.0625rem;
         background: $free-gifts-title-text;
@@ -891,7 +891,7 @@ body {
   .slick-prev,
   .slick-next {
     &::before {
-      html[lang=ar] & {
+      html[lang="ar"] & {
         transform: rotate(180deg);
       }
     }

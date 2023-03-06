@@ -35,7 +35,7 @@
     .ui-accordion-header:not(.ui-accordion-header-active) {
       .c-accordion__title {
         &::after {
-          background: url(#{$brand_theme_img_directory_path}/icons/plus-icon.svg) no-repeat;
+          background: url("#{$brand_theme_img_directory_path}/icons/plus-icon.svg") no-repeat;
           width: 0.75rem;
           height: 0.75rem;
         }
@@ -45,7 +45,7 @@
     .click-collect {
       .ui-accordion-header:not(.ui-accordion-header-active) {
         &::after {
-          background: url(#{$brand_theme_img_directory_path}/icons/plus-icon.svg) no-repeat;
+          background: url("#{$brand_theme_img_directory_path}/icons/plus-icon.svg") no-repeat;
           width: 0.75rem;
           height: 0.75rem;
         }
@@ -80,7 +80,7 @@
       &.disabled {
         a,
         span {
-          background: url('#{$cos_theme_img_directory_path}/icons/disabled.png') no-repeat;
+          background: url("#{$cos_theme_img_directory_path}/icons/disabled.png") no-repeat;
           background-size: 100% 100%;
         }
       }
@@ -107,7 +107,7 @@
       width: 8.5625rem;
     }
 
-    input[type='text'] {
+    input[type="text"] {
       width: calc(100% - 8.5625rem);
     }
   }

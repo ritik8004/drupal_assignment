@@ -26,7 +26,7 @@
       overflow-wrap: break-word;
 
       &.phone-number {
-        html[lang=ar] & {
+        html[lang="ar"] & {
           direction: ltr;
         }
       }
@@ -134,7 +134,7 @@
       display: none;
     }
 
-    @include icon('chevrondown', 'after') {
+    @include icon("chevrondown", "after") {
       font-size: 2rem;
       display: inline-block;
       transition: tansform 0.3s ease-in-out;
@@ -147,7 +147,7 @@
     transition: all 0.5s ease-in-out;
   }
 
-  input[type=checkbox]:checked {
+  input[type="checkbox"]:checked {
     ~ .spc-detail-content {
       height: auto;
     }

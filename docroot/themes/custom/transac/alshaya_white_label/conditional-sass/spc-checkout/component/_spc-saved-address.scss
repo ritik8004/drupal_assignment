@@ -112,7 +112,7 @@
             > button {
               cursor: default;
 
-              @include icon('check', before) {
+              @include icon("check", before) {
                 font-size: 1.75rem;
                 color: $spc-checkout-radio-filled;
               }

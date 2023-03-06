@@ -10,7 +10,7 @@
       font-size: 1.125rem;
     }
 
-    html[lang='ar'] & {
+    html[lang="ar"] & {
       line-height: 1.21;
 
       @include breakpoint($only-tablet) {
@@ -31,7 +31,7 @@
       font-size: 1.125rem;
     }
 
-    html[lang='ar'] & {
+    html[lang="ar"] & {
       font-size: 0.875rem;
       line-height: 1.8;
     }

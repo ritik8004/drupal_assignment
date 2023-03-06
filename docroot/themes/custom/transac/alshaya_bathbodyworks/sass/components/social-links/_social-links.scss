@@ -1,9 +1,8 @@
-
 // Todo Temp png icons - needs to convert to font
 $path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
 
 @mixin ic-social {
-  content: '';
+  content: "";
   background-repeat: no-repeat;
   width: 1.76rem;
   height: 1.59rem;
@@ -22,7 +21,7 @@ $path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
     &::before {
       @include ic-social;
 
-      background-image: url(#{$path-social-icons}/ic-facebookselect.png);
+      background-image: url("#{$path-social-icons}/ic-facebookselect.png");
     }
   }
 
@@ -30,7 +29,7 @@ $path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
     &::before {
       @include ic-social;
 
-      background-image: url(#{$path-social-icons}/ic-instagramselect.png);
+      background-image: url("#{$path-social-icons}/ic-instagramselect.png");
     }
   }
 
@@ -38,7 +37,7 @@ $path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
     &::before {
       @include ic-social;
 
-      background-image: url(#{$path-social-icons}/ic-twitterselect.png);
+      background-image: url("#{$path-social-icons}/ic-twitterselect.png");
     }
   }
 
@@ -46,7 +45,7 @@ $path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
     &::before {
       @include ic-social;
 
-      background-image: url(#{$path-social-icons}/ic-youtubeselect.png);
+      background-image: url("#{$path-social-icons}/ic-youtubeselect.png");
     }
   }
 
@@ -54,7 +53,7 @@ $path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
     &::before {
       @include ic-social;
 
-      background-image: url(#{$path-social-icons}/ic-pinterestselect.png);
+      background-image: url("#{$path-social-icons}/ic-pinterestselect.png");
     }
   }
 }

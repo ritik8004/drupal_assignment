@@ -31,7 +31,9 @@
   }
 
   .algolia-search-cleartext-icon {
-    background: url('#{$brand_theme_img_directory_path}/icons/ic-close.svg') center/#{rem(12)} no-repeat;
+    background:
+      url("#{$brand_theme_img_directory_path}/icons/ic-close.svg")
+      center/#{rem(12)} no-repeat;
     #{$right}: rem(4);
     top: rem(4);
     height: rem(24);
@@ -296,7 +298,7 @@
     .block-alshaya-algolia-react-autocomplete {
       top: rem(68);
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         top: rem(68);
       }
 

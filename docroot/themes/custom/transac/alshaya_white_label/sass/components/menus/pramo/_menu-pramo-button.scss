@@ -42,16 +42,16 @@
     line-height: 1.5;
 
     &::after {
-      content: '';
+      content: "";
       width: 0.5rem;
       height: 1rem;
       margin-#{$left}: 0.5rem;
       position: absolute;
-      background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next.svg') center no-repeat;
+      background: url("#{$base_theme_img_directory_path}/icons/icon-chevron-next.svg") center no-repeat;
       background-size: 0.4rem;
 
-      html[lang=ar] & {
-        background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-prev.svg') center no-repeat;
+      html[lang="ar"] & {
+        background: url("#{$base_theme_img_directory_path}/icons/icon-chevron-prev.svg") center no-repeat;
         background-size: 0.4rem;
       }
     }

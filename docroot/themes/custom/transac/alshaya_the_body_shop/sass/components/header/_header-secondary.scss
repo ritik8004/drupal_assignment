@@ -23,18 +23,20 @@
       padding: 1rem 1.25rem;
       text-transform: capitalize;
       margin-#{$right}: 1rem;
-      background: url('../imgs/icons/ic-arrow-right.svg') no-repeat;
+      background: url("../imgs/icons/ic-arrow-right.svg") no-repeat;
       background-position: 96.25%;
       line-height: 1.1;
 
       &:hover,
       &.is-active {
         color: $header_secondary_menu_link_mobile;
-        background: $header_secondary_menu_link url("../imgs/icons/ic-arrow-right.svg") no-repeat 96.25%;
+        background:
+          $header_secondary_menu_link
+          url("../imgs/icons/ic-arrow-right.svg") no-repeat 96.25%;
       }
 
-      html[lang=ar] & {
-        background: url('../imgs/icons/ic-arrow-left.svg?1234') no-repeat;
+      html[lang="ar"] & {
+        background: url("../imgs/icons/ic-arrow-left.svg?1234") no-repeat;
         background-position: 0 center;
         margin-left: 1.5rem;
 
@@ -51,7 +53,7 @@
       margin: 0;
 
       &::after {
-        content: '';
+        content: "";
       }
     }
   }
@@ -90,7 +92,7 @@
 
     .stores-finder {
       &::before {
-        content: '';
+        content: "";
         padding: 0;
       }
     }

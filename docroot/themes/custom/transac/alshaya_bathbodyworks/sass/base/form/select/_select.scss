@@ -13,7 +13,7 @@
   &::after {
     color: $plp_facet_dropdown_icon;
 
-    @include breakpoint ($desktop) {
+    @include breakpoint($desktop) {
       display: none;
     }
   }
@@ -37,7 +37,7 @@
     padding-#{$left}: 0.625rem;
     color: $plp_tile_product_title;
 
-    html[lang=ar] & {
+    html[lang="ar"] & {
       height: 2.5rem;
       line-height: 3.2;
     }

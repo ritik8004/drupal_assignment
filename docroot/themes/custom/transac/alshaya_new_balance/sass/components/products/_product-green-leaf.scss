@@ -8,8 +8,10 @@
     padding-#{$left}: rem(18);
 
     &::before {
-      content: '';
-      background: url(#{$nb_theme_img_directory_path}/icons/green-leaf.svg) no-repeat;
+      content: "";
+      background:
+        url("#{$nb_theme_img_directory_path}/icons/green-leaf.svg")
+        no-repeat;
       height: rem(24);
       width: rem(14);
       display: inline-block;

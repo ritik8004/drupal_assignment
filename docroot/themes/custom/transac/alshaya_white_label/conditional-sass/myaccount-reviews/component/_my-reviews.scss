@@ -186,10 +186,10 @@
     }
 
     .thumbnail-img {
-      @include bv-photo-upload-container ;
+      @include bv-photo-upload-container;
 
       img {
-        @include bv-photo-upload-image ;
+        @include bv-photo-upload-image;
       }
     }
 

@@ -208,13 +208,17 @@ const Teaser = ({
       : hit.attr_green_leaf;
   }
 
+  let dataVmode = null;
+  if (pageType === 'search') {
+    dataVmode = { 'data-vmode': 'search_result' };
+  }
   return (
     <div className={teaserClass}>
       <article
         className="node--view-mode-search-result"
         onClick={(event) => storeClickedItem(event, pageType)}
         data-sku={sku}
-        data-vmode="search_result"
+        {...dataVmode}
         data-insights-object-id={hit.objectID}
         /* Dangling variable _state is coming from an external library here. */
         // eslint-disable-next-line no-underscore-dangle
@@ -358,6 +362,7 @@ const Teaser = ({
             ) : null}
             {/* Render color swatches based on article/sku id */}
             {hasValue(attribute.article_swatches)
+              && drupalSettings.reactTeaserView.swatches.showArticleSwatches
               ? (
                 <ArticleSwatches
                   sku={sku}

@@ -102,8 +102,8 @@ body {
 
         &::after {
           @include breakpoint($tablet) {
-            content: '';
-            background: url('../../../imgs/icons/forward-arrow.svg') no-repeat center;
+            content: "";
+            background: url("../../../imgs/icons/forward-arrow.svg") no-repeat center;
             width: 1.5rem;
             height: 1.5rem;
             display: inline-block;
@@ -112,7 +112,7 @@ body {
             bottom: -0.25rem;
             #{$right}: 0;
 
-            html[lang=ar] & {
+            html[lang="ar"] & {
               transform: rotate(180deg);
             }
           }
@@ -176,8 +176,8 @@ body {
       }
 
       &::after {
-        content: '';
-        background: url('../../../imgs/icons/forward-arrow-dark.svg') no-repeat center;
+        content: "";
+        background: url("../../../imgs/icons/forward-arrow-dark.svg") no-repeat center;
         width: 1.5rem;
         height: 1.5rem;
         display: inline-block;
@@ -186,7 +186,7 @@ body {
         bottom: 0.25rem;
         #{$right}: 0;
 
-        html[lang=ar] & {
+        html[lang="ar"] & {
           transform: rotate(180deg);
         }
       }

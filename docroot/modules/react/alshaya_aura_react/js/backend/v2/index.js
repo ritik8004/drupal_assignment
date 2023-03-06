@@ -19,8 +19,7 @@ import { formatDate } from '../../utilities/reward_activity_helper';
 import { getPaymentMethodSetOnCart } from '../../../../alshaya_spc/js/backend/v2/checkout.payment';
 import { prepareRedeemPointsData, redeemPoints } from './redemption_helper';
 import { isUnsupportedPaymentMethod } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
-import { getAuraConfig } from '../../utilities/helper';
-import { getPriceToPoint } from '../../utilities/aura_utils';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 
 /**
  * Global object to help perform Aura activities for V2.
@@ -717,50 +716,24 @@ window.auraBackend.getRewardActivity = async (fromDate = '', toDate = '', maxRes
  * @returns {Object}
  *   Return aura points to earn.
  */
-window.auraBackend.getAuraPointsToEarn = async (items, cardNumber) => {
-  const { isoCurrencyCode } = getAuraConfig();
-
-  if (!hasValue(items)) {
-    logger.warning('Error while trying to get aura points to earn. Product details is required.');
-
-    return getErrorResponse('Product details is required.', 404);
+window.auraBackend.getAuraPointsToEarn = async (cardNumber) => {
+  const cartId = window.commerceBackend.getCartId();
+  if (!hasValue(cartId)) {
+    logger.error('Error while trying to set loyalty card in cart. Cart id not available.');
+    return getErrorResponse('Cart id not available.', 404);
   }
 
-  // If card number is empty, assuming user is not signed up in Aura so
-  // calculate points to earn using dictionary API ratio.
-  if (!hasValue(cardNumber)) {
-    let totalPrice = 0;
-    Object.entries(items).forEach(([, item]) => {
-      totalPrice += (item.qty * item.finalPrice);
-    });
-
-    return {
-      data:
-      {
-        status: true,
-        data: { apc_points: getPriceToPoint(totalPrice) },
-      },
-    };
+  let endpoint = '/V1/apc/guest/simulate/sales';
+  if (hasValue(cardNumber)) {
+    endpoint = isUserAuthenticated()
+      ? `/V1/apc/${cardNumber}/simulate/sales`
+      : `/V1/apc/${cardNumber}/guest/simulate/sales`;
   }
-
-  const endpoint = `/V1/apc/${cardNumber}/sales`;
 
   // Prepare request data.
-  const products = [];
-
-  Object.entries(items).forEach(([, item]) => {
-    const itemDetails = {
-      code: item.sku,
-      quantity: item.qty,
-      amount: item.qty * item.finalPrice,
-    };
-    products.push(itemDetails);
-  });
-
   const requestData = {
     sales: {
-      currencyCode: isoCurrencyCode,
-      products,
+      quote_id: cartId,
     },
   };
 

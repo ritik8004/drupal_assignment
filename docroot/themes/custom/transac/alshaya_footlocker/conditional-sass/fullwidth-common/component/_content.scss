@@ -1,0 +1,15 @@
+.region__pre-content {
+  .block-alshaya-main-menu {
+    // Adjusting padding as menu links has own padding.
+    @include breakpoint($desktop) {
+      max-width: none;
+      padding-#{$left}: 0;
+      padding-#{$right}: $full_width_padding_desktop;
+    }
+    // Adjusting padding as menu links has own padding.
+    @include breakpoint($desktop-wide-1680) {
+      padding-#{$left}: rem(16);
+      padding-#{$right}: $full_width_padding_desktop_wide;
+    }
+  }
+}

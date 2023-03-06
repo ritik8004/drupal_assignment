@@ -5,8 +5,10 @@
 
   #alshaya-algolia-autocomplete {
     .react-autosuggest__container::after {
-      content: '';
-      background: $primary_search_btn_icon url('../../../imgs/icons/search.svg') 0 0 no-repeat !important;
+      content: "";
+      background:
+        $primary_search_btn_icon url("../../../imgs/icons/search.svg")
+        0 0 no-repeat !important;
       background-position: center;
       background-size: 2.1rem 2.1rem;
       width: 2.125rem;
@@ -28,7 +30,7 @@
 
   &::before {
     @include breakpoint($only-mobile) {
-      html[lang='ar'] & {
+      html[lang="ar"] & {
         top: rem(2);
         bottom: rem(-1);
       }
@@ -71,7 +73,7 @@ body {
     @include breakpoint($only-mobile) {
       margin-top: 7.125rem + 1.875rem; //super-category menu height added.
 
-      html[lang=ar] & {
+      html[lang="ar"] & {
         margin-top: 7.6367rem + 1.875rem;
       }
     }

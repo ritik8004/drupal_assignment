@@ -37,7 +37,7 @@
       color: $spc-cart-item-alert;
     }
 
-    &[data-filled=true] {
+    &[data-filled="true"] {
       border: none;
       background: $spc-cart-item-alert;
       color: $spc-cart-item-filled-text;
