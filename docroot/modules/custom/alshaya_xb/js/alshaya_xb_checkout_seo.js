@@ -12,16 +12,29 @@
    * @param {integer} step.
    *   The step number.
    */
-  Drupal.alshayaXbCheckoutGaPush = function (geData, step) {
+  Drupal.alshayaXbCheckoutGaPush = function (geData, step, extraInfo = {}) {
     try {
-      if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
-        // Populate drupal settings with details from GE data.
-        drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
-      }
-      Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
-      const purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
-      if (purchaseSuccessData) {
-        dataLayer.push(purchaseSuccessData);
+      switch (step) {
+        case 2:
+          if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
+            // Populate drupal settings with details from GE data.
+            drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
+          }
+          Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
+          break;
+
+        case 3:
+          var geCheckoutData = Drupal.mapGlobaleCheckoutData(geData);
+          geCheckoutData.xbDeliveryInfo = extraInfo;
+          Drupal.alshayaSeoSpc.checkoutEvent(geCheckoutData, step, '', true);
+          break;
+
+        case 4:
+          const purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
+          if (purchaseSuccessData) {
+            dataLayer.push(purchaseSuccessData);
+          }
+          break;
       }
     }
     catch (error) {
@@ -59,11 +72,13 @@
 
     // Loop the Discounts array and calculate the discount amount.
     let discountAmount = 0;
-    geData.details.Discounts.forEach((item) => {
-      if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
-        discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
-      }
-    });
+    if (Drupal.hasValue(geData.details.Discounts)) {
+      geData.details.Discounts.forEach((item) => {
+        if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
+          discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
+        }
+      });
+    }
 
     return {
       "cart_id": window.commerceBackend.getCartId(),

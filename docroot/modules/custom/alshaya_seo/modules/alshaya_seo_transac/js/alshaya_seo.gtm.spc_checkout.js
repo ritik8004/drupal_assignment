@@ -61,6 +61,12 @@
   };
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function (cart) {
+    if (Drupal.hasValue(cart.xbDeliveryInfo)) {
+      // For XB checkout the geData in cart has deliveryInfo
+      // return the same to apply deliveryInfo.
+      return cart.xbDeliveryInfo;
+    }
+
     if (cart.shipping.type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
       return;
     }
@@ -163,7 +169,7 @@
       if (stepData.ecommerce.checkout.actionField.step === 3) {
         var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
 
-        stepData.with_delivery_schedule = Drupal.hasValue(rawCartData.cart.extension_attributes.hfd_hold_confirmation_number)
+        stepData.with_delivery_schedule = Drupal.hasValue(rawCartData) && Drupal.hasValue(rawCartData.cart.extension_attributes.hfd_hold_confirmation_number)
         ? 'yes'
         : 'no';
       }
