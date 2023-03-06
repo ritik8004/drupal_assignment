@@ -113,6 +113,7 @@ insights_query_pdpV3:
 plp_group_by_subcategory:
   js:
     assets/alshaya_algolia_subcategory_scroll.js: {}
-    assets/alshaya_algolia_plp_groupby_subcategory.js: {}
+    assets/alshaya_algolia_plp_group_by_subcategory.js: {}
   dependencies:
     - core/drupal
+    - alshaya_master/common_functions

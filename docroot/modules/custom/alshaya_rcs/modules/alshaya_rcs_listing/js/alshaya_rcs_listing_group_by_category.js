@@ -1,4 +1,3 @@
-Drupal = window.Drupal;
 window.commerceBackend = window.commerceBackend || {};
 
 /**
@@ -9,7 +8,7 @@ window.commerceBackend = window.commerceBackend || {};
  * @returns
  *  {string} Formatted or cleaned rule context.
  */
-const formatCleanRuleContext = function (context) {
+let formatCleanRuleContext = function (context) {
   context = context.trim().toLowerCase();
   // Remove special characters.
   context = context.replace(/[^a-zA-Z0-9 ]/g, "");
@@ -32,12 +31,12 @@ const formatCleanRuleContext = function (context) {
  * @returns
  *  {object} Formatted grouped subcategory response.
  */
-const prepareSubCategoryData = function (data, languageCheck = true) {
+let prepareSubCategoryData = function (data, languageCheck = true) {
   let subCategoryData = {};
   if (data.length > 0) {
     data = data[0];
     if (data.children.length > 1) {
-      data.children.forEach((singleCategory, index) => {
+      data.children.forEach(function(singleCategory, index) {
         // Check if data is valid.
         if (!Drupal.hasValue(singleCategory.plp_group_category_title)
           || !Drupal.hasValue(singleCategory.plp_group_category_img)
@@ -63,10 +62,10 @@ const prepareSubCategoryData = function (data, languageCheck = true) {
           // So no further processing needed for AR data, hence return.
           return;
         }
-        const hierarchy = data.filter_value[index];
+        let hierarchy = data.filter_value[index];
         let context_list = [];
         let contexts = [];
-        hierarchy.split(' > ').forEach((item) => {
+        hierarchy.split(' > ').forEach(function(item) {
           context_list.push(formatCleanRuleContext(item));
           contexts.push(context_list.join('__'));
         });
@@ -85,7 +84,7 @@ const prepareSubCategoryData = function (data, languageCheck = true) {
         let dataEn = globalThis.rcsPhCommerceBackend.getDataSynchronous('grouped_subcategories', {langcode: 'en'});
         // Recursive call to same function for preparing EN data.
         let filteredDataEn = prepareSubCategoryData(dataEn, false);
-        for (const index in subCategoryData) {
+        for (let index in subCategoryData) {
           if (Object.keys(filteredDataEn).includes(index)) {
             // Merge EN data inside AR subcategory data.
             subCategoryData[index].category = filteredDataEn[index].category;
