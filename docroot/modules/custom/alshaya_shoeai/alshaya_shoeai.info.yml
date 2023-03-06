@@ -4,5 +4,5 @@ description: 'Contains Alshaya sepcific implementation for Shoeai.'
 package: Alshaya
 core_version_requirement: ^9 || ^10
 dependencies:
-  - core/jquery
-  - core/drupal
+  - "drupal:core/jquery"
+  - "drupal:core/drupal"
