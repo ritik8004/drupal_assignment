@@ -102,7 +102,7 @@ const prepareSubCategoryData = function (data, languageCheck = true) {
 
 
 /**
- * Calls Graphql for Grouped Subcategories response.
+ * Call Graphql for Grouped Subcategories response.
  *
  * @returns {object}
  *   Filtered graphql response for rendering.
