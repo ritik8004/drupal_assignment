@@ -126,6 +126,14 @@
         font-size: 1rem;
       }
     }
+
+    .aura-app-download-wrapper {
+      a {
+        @include appStoreLink;
+
+        text-decoration: none;
+      }
+    }
   }
 
   &.aura-level-Tier2 {
