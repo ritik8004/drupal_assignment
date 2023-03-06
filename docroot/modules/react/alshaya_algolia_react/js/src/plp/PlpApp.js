@@ -108,7 +108,7 @@ const PlpApp = ({
     }
     // Get subcategories data.
     subCategories = window.commerceBackend.getSubcategoryData();
-    if (Object.keys(subCategories).length > 0) {
+    if (hasValue(subCategories)) {
       filterOperator = ' OR ';
       groupEnabled = true;
       // Set all the filters selected in sub category.

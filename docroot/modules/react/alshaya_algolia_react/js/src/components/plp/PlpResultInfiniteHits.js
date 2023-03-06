@@ -4,6 +4,7 @@ import Teaser from '../teaser';
 import { removeLoader } from '../../utils';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 import ConditionalView from '../../../common/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const PlpResultInfiniteHits = connectInfiniteHits(({
   hits, hasMore, refineNext, children = null, gtmContainer, pageType, indexName, subCategories,
@@ -31,7 +32,7 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
   let groupEnabled = false;
   const results = [];
   const items = [];
-  if (Object.keys(subCategories).length > 0) {
+  if (hasValue(subCategories)) {
     groupEnabled = true;
     const langcode = 'en';
     Object.keys(subCategories).forEach((key) => {
