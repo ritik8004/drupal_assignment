@@ -31,9 +31,9 @@ export default class Rating extends React.Component {
   /**
    * Get Average Overall ratings and total reviews count.
    */
-  componentDidMount = async () => {
+  componentDidMount() {
     showFullScreenLoader();
-    const bazaarVoiceConfig = await getbazaarVoiceSettings();
+    const bazaarVoiceConfig = getbazaarVoiceSettings();
 
     this.setState({
       bazaarVoiceSettings: bazaarVoiceConfig,

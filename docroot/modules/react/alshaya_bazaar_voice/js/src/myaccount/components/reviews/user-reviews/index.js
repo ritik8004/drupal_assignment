@@ -31,8 +31,8 @@ export default class UserReviews extends React.Component {
   /**
    * Get Review results and product statistical data.
    */
-  componentDidMount = async () => {
-    bazaarVoiceSettings = await getUserBazaarVoiceSettings();
+  componentDidMount() {
+    bazaarVoiceSettings = getUserBazaarVoiceSettings();
 
     if (!Drupal.hasValue(bazaarVoiceSettings)) {
       return;

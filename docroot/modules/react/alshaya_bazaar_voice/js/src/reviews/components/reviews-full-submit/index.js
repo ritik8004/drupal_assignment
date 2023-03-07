@@ -26,8 +26,8 @@ export default class WriteReviewButton extends React.Component {
     };
   }
 
-  componentDidMount = async () => {
-    const bazaarVoiceConfig = await getbazaarVoiceSettings();
+  componentDidMount() {
+    const bazaarVoiceConfig = getbazaarVoiceSettings();
 
     this.setState({
       bazaarVoiceSettings: bazaarVoiceConfig,

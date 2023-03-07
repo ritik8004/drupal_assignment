@@ -16,7 +16,7 @@
    *   The product review data.
    */
   window.alshayaBazaarVoice.getProductReviewForCurrrentUser = async function getProductReviewForCurrrentUser(productIdentifier) {
-    const bazaarVoiceSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
+    const bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
     if (!Drupal.hasValue(bazaarVoiceSettings)) {
       return;
     }
@@ -102,10 +102,16 @@
    * @returns {Object|null}
    *   Bazaar voice settings object or null.
    */
-  window.alshayaBazaarVoice.getbazaarVoiceSettings = async function getbazaarVoiceSettings(productIdParam) {
+  window.alshayaBazaarVoice.getbazaarVoiceSettings = function getbazaarVoiceSettings(productIdParam) {
     var settings = {};
     var productId = productIdParam || '';
-    if (Drupal.hasValue(staticStorage.bvSettings[productId])) {
+
+    if (!Drupal.hasValue(productId)
+      && Drupal.hasValue(staticStorage.bvSettings)) {
+      return staticStorage.bvSettings[Object.keys(staticStorage.bvSettings)[0]];
+    }
+    if (Drupal.hasValue(productId)
+      && Drupal.hasValue(staticStorage.bvSettings[productId])) {
       return staticStorage.bvSettings[productId];
     }
 
@@ -115,8 +121,7 @@
       var ids = Object.keys(productInfo);
       productId = Drupal.hasValue(ids) ? ids[0] : productId;
     }
-
-    if (Drupal.hasValue(productId)) {
+    else {
       // Get bv product details with field assets_teaser.
       var response = globalThis.rcsPhCommerceBackend.getDataSynchronous('bv_product', {sku: productId});
       if (response.data.products.total_count) {
@@ -145,7 +150,7 @@
       : Object.assign(settings, drupalSettings.userInfo);
 
     // Call commerceBackend for Bazaar voice configurations.
-    var bazaarVoiceConfig = await window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
+    var bazaarVoiceConfig = window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
 
     if (bazaarVoiceConfig === null) {
       return null;
@@ -161,14 +166,20 @@
       }
     });
 
-    staticStorage.bvSettings[productId] = {
-      productid: productId,
-      reviews: settings,
-    };
-
-    // Return Bazaar voice config from commerceBackend with product Id
-    // using static variable.
-    return staticStorage.bvSettings[productId];
+    if (!Drupal.hasValue(productId)) {
+      staticStorage.bvSettings.defaultProduct = {
+        productid: productId,
+        reviews: settings,
+      };
+      return staticStorage.bvSettings.defaultProduct;
+    }
+    else {
+      staticStorage.bvSettings[productId] = {
+        productid: productId,
+        reviews: settings,
+      };
+      return staticStorage.bvSettings[productId];
+    }
   };
 
   /**
@@ -177,13 +188,13 @@
    * @returns {Promise<*[]>}
    *   Bazaar voice user settings.
    */
-  window.alshayaBazaarVoice.getUserBazaarVoiceSettings = async function getUserBazaarSettings() {
+  window.alshayaBazaarVoice.getUserBazaarVoiceSettings = function getUserBazaarSettings() {
     var settings = {};
     if (drupalSettings.userInfo) {
       settings.reviews = drupalSettings.userInfo;
     }
 
-    var bazaarVoiceCommonSettings = await window.alshayaBazaarVoice.getbazaarVoiceSettings();
+    var bazaarVoiceCommonSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings();
 
     Object.assign(settings.reviews, bazaarVoiceCommonSettings.reviews);
 
