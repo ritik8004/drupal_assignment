@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardDetails from '../../../return-confirmation/components/card-details';
 import EgiftCardDetails from '../egift-card-details';
@@ -10,6 +10,11 @@ const ReturnRefundMethod = ({
     return null;
   }
 
+  const [selectedOption, setSelectedOption] = useState();
+  const onOptionChange = (e) => {
+    setSelectedOption(e.target.value);
+  };
+
   return (
     <>
       <div className="refund-method-wrapper">
@@ -18,10 +23,21 @@ const ReturnRefundMethod = ({
         </div>
         {cardList
           ? (
-            <div className="refund-method-listing">
-              <EgiftCardDetails cardList={cardList} />
-              <input type="radio" value="CardDetails" name="CardPaymentDetails" />
-              <CardDetails paymentDetails={paymentDetails} showCardIcon />
+            <div className="refund-method-listing" onClick={onOptionChange}>
+              <EgiftCardDetails cardList={cardList} selectedOption={selectedOption} />
+              <div className="method-list-wrapper">
+                <div className="method-wrapper">
+                  <input
+                    type="radio"
+                    value="CardDetails"
+                    name="CardPaymentDetails"
+                    checked={selectedOption === 'CardDetails'}
+                  />
+                  <label className="radio-sim radio-label">
+                    <CardDetails paymentDetails={paymentDetails} showCardIcon />
+                  </label>
+                </div>
+              </div>
               <div className="refund-message">
                 { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
               </div>

@@ -15,7 +15,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/
 import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
-import { isEgiftRefundEnabled } from '../../../../../js/utilities/util';
+import { getBnplPaymentMethods, isEgiftRefundEnabled } from '../../../../../js/utilities/util';
 
 class ReturnRefundDetails extends React.Component {
   constructor(props) {
@@ -32,9 +32,8 @@ class ReturnRefundDetails extends React.Component {
   componentDidMount = () => {
     document.addEventListener('updateRefundAccordionState', this.updateRefundAccordionState, false);
     // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
-    if (isUserAuthenticated() && isEgiftRefundEnabled()) {
+    if (isUserAuthenticated() && !isEgiftRefundEnabled()) {
       const { paymentInfo } = this.state;
-      const bnplPaymentMethods = ['tabby', 'postpay', 'tamara'];
       if (!hasValue(paymentInfo.aura)) {
         // Call to get customer linked eGift card details.
         const result = callEgiftApi('eGiftCardList', 'GET', {});
@@ -52,6 +51,8 @@ class ReturnRefundDetails extends React.Component {
           paymentInfo: { aura: paymentInfo.aura },
         });
       } else {
+        // Defining the BNPL payment methods array.
+        const bnplPaymentMethods = getBnplPaymentMethods();
         bnplPaymentMethods.forEach((method) => {
           // Set state for the BNPL payment method.
           if (hasValue(paymentInfo[method])) {
