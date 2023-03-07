@@ -70,6 +70,7 @@ class CartDyPageTypeEventSubscriber implements EventSubscriberInterface {
     if ($this->routeMatch->getRouteName() == 'acq_cart.cart') {
       $event->setDyContext('CART');
       $event->setDyContextData([]);
+      $event->setEmptyData(TRUE);
     }
   }
 
