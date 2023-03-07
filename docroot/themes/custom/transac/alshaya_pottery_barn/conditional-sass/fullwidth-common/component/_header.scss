@@ -1,0 +1,18 @@
+header.c-header {
+  .block-alshaya-react-mini-cart,
+  .block-cart-mini-block {
+    .cart-link {
+      margin-#{$right}: rem(-4);
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: rem(2);
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    .c-header__region {
+      padding-#{$left}: $full_width_padding_tablet;
+    }
+  }
+}
