@@ -32,12 +32,6 @@ export default class Rating extends React.Component {
    */
   componentDidMount() {
     showFullScreenLoader();
-    const bazaarVoiceConfig = getbazaarVoiceSettings();
-
-    this.setState({
-      bazaarVoiceSettings: bazaarVoiceConfig,
-    });
-
     const { bazaarVoiceSettings } = this.state;
 
     // Check reviews setting exist.
