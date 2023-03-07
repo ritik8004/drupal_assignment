@@ -4,7 +4,7 @@ import CardDetails from '../../../return-confirmation/components/card-details';
 import EgiftCardDetails from '../egift-card-details';
 
 const ReturnRefundMethod = ({
-  paymentDetails, cardList,
+  paymentDetails, cardList, egiftCardType,
 }) => {
   if (!hasValue(paymentDetails)) {
     return null;
@@ -24,7 +24,11 @@ const ReturnRefundMethod = ({
         {cardList
           ? (
             <div className="refund-method-listing" onClick={onOptionChange}>
-              <EgiftCardDetails cardList={cardList} selectedOption={selectedOption} />
+              <EgiftCardDetails
+                cardList={cardList}
+                selectedOption={selectedOption}
+                egiftCardType={egiftCardType}
+              />
               <div className="method-list-wrapper">
                 <div className="method-wrapper">
                   <input
