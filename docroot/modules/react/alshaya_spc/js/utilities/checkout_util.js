@@ -224,7 +224,7 @@ export const placeOrder = (paymentMethod) => {
           errorResponse = JSON.parse(response.data.error_message);
           errorResponse = errorResponse.payment_error_message;
         } catch (e) {
-          Drupal.logJavascriptError('Could not able to parse the error message.', e);
+          Drupal.logJavascriptError('Unable to parse the error message.', e);
         }
         Drupal.logJavascriptError(`place-order | ${paymentMethodsInfo.[paymentMethod]} | Decline Reason: ${errorResponse}`, `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();

@@ -239,7 +239,7 @@ export default class Checkout extends React.Component {
         errorResponse = JSON.parse(statusContent);
         statusContent = errorResponse.system_error;
       } catch (e) {
-        Drupal.logJavascriptError('Could not able to parse the error message.', e);
+        Drupal.logJavascriptError('Unable to parse the error message.', e);
       }
     }
 
