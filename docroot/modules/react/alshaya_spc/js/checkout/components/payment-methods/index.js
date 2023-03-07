@@ -99,7 +99,7 @@ export default class PaymentMethods extends React.Component {
 
       // Push error to GA.
       Drupal.logJavascriptError(
-        `payment-error | ${paymentMethodsInfo.[paymentErrorInfo.payment_method]}`,
+        `payment-error | ${paymentMethodsInfo.[paymentErrorInfo.payment_method]} | Decline Reason: ${paymentErrorInfo.status}`,
         paymentErrorInfo,
         GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
       );
