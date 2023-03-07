@@ -8,7 +8,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class Site link Search Config Form.
+ * Class ShoeAI settings form.
  */
 class AlshayaShoeaiSettingsForm extends ConfigFormBase {
 
