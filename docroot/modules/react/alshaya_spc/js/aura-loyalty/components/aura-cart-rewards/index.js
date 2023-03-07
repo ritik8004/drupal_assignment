@@ -111,7 +111,7 @@ class AuraCartRewards extends React.Component {
   // Event listener callback for redeem points API event to
   // trigger an event to update totals in cart.
   handleRedeemPointsEvent = (data) => {
-    const { stateValues, action } = data.detail;
+    const { stateValues, action, cardNumber } = data.detail;
 
     if (Object.keys(stateValues).length === 0 || stateValues.error) {
       return;
@@ -134,6 +134,9 @@ class AuraCartRewards extends React.Component {
     }
     // Dispatch an event to update totals in cart object.
     dispatchCustomEvent('updateTotalsInCart', { totals: cartTotals });
+
+    // Update aura earn points as per current cart total after appying redemption.
+    getAuraPointsToEarn(cardNumber);
   };
 
   // Event listener callback to remove redeemed points for

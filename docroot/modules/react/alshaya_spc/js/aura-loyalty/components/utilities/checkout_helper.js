@@ -159,7 +159,7 @@ function redeemAuraPoints(data, context = 'aura') {
       } else {
         stateValues = result.data || { error: true };
       }
-      dispatchCustomEvent('auraRedeemPointsApiInvoked', { stateValues, action: data.action });
+      dispatchCustomEvent('auraRedeemPointsApiInvoked', { stateValues, action: data.action, cardNumber: data.cardNumber });
     });
   }
 }
