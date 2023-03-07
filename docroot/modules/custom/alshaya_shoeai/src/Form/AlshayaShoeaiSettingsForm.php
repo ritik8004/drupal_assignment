@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class Site link Search Config Form.
  */
-class AlshayaShoeaiConfigForm extends ConfigFormBase {
+class AlshayaShoeaiSettingsForm extends ConfigFormBase {
 
   /**
    * The module handler.
@@ -42,14 +42,14 @@ class AlshayaShoeaiConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'alshaya_shoeai_config';
+    return 'alshaya_shoeai.settings';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return ['alshaya_shoeai.config_form'];
+    return ['alshaya_shoeai.settings'];
   }
 
   /**
@@ -57,7 +57,7 @@ class AlshayaShoeaiConfigForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
-    $config = $this->config('alshaya_shoeai.config_form');
+    $config = $this->config('alshaya_shoeai.settings');
     $form['enable_shoeai'] = [
       '#type' => 'select',
       '#title' => $this->t('Module status'),
@@ -73,7 +73,7 @@ class AlshayaShoeaiConfigForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this
         ->t('Shop Id'),
-      '#default_value' => $config->get('enable_shoeai') ?: $this->t('Disabled'),
+      '#default_value' => $config->get('shop_id') ?: '',
       '#size' => 60,
       '#maxlength' => 128,
       '#required' => TRUE,
@@ -85,7 +85,7 @@ class AlshayaShoeaiConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_shoeai.config_form');
+    $config = $this->config('alshaya_shoeai.settings');
     $config->set('enable_shoeai', $form_state->getValue('enable_shoeai'));
     $config->set('shop_id', $form_state->getValue('shop_id'));
     $config->save();
