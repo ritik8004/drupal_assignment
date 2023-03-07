@@ -14,7 +14,7 @@ function alshaya_shoeai_page_attachments_alter(array &$page) {
   $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
   if (is_object($alshaya_shoeai_settings)) {
-    if (is_shoe_ai_feature_enabled() == TRUE) {
+    if (is_shoe_ai_feature_enabled() == TRUE && (is_pdp_page() == TRUE || is_plp_page() == TRUE)) {
       $page['#attached']['drupalSettings']['shoeai']['status'] = 'enabled';
       $page['#attached']['drupalSettings']['shoeai']['shopId'] = $alshaya_shoeai_settings->get('shop_id');
       $page['#attached']['drupalSettings']['shoeai']['scale'] = 'eu';
@@ -34,12 +34,35 @@ function alshaya_shoeai_page_attachments_alter(array &$page) {
  * Function to check if shoeAi is enabled.
  */
 function is_shoe_ai_feature_enabled() {
+  $shoe_ai_enabled = FALSE;
   $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
   $state = $alshaya_shoeai_settings->get('enable_shoeai');
   if ($state == '1') {
-    return (TRUE);
+    $shoe_ai_enabled = TRUE;
   }
-  else {
-    return (FALSE);
+  return $shoe_ai_enabled;
+}
+
+/**
+ * Function for checking if PDP.
+ */
+function is_pdp_page() {
+  $isProduct = FALSE;
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if (is_object($node) && $node->bundle() == 'acq_product') {
+    $isProduct = TRUE;
   }
+  return $isProduct;
+}
+
+/**
+ * Function for checking if PLP.
+ */
+function is_plp_page() {
+  $isListingPage = FALSE;
+  $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+  if (is_object($term) && $term->bundle() == 'acq_product_category') {
+    $isListingPage = TRUE;
+  }
+  return $isListingPage;
 }
