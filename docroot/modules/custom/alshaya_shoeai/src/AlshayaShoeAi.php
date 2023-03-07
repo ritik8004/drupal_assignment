@@ -1,0 +1,58 @@
+<?php
+
+namespace Drupal\alshaya_shoeai;
+
+use Drupal\Core\Config\ConfigFactoryInterface;
+
+/**
+ * Helper class for getting shoeai config.
+ *
+ * @package Drupal\alshaya_shoeai
+ */
+class AlshayaShoeAi {
+  /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * AlshayaA Constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory) {
+    $this->configFactory = $config_factory;
+  }
+
+  /**
+   * Check if shoeAI is enabled or not.
+   */
+  public function isShoeAiFeatureEnabled() {
+    $shoe_ai_enabled = FALSE;
+    $alshaya_shoeai_settings = $this->configFactory->get('alshaya_shoeai.settings');
+    $state = $alshaya_shoeai_settings->get('enable_shoeai');
+    if ($state) {
+      $shoe_ai_enabled = TRUE;
+    }
+    return $shoe_ai_enabled;
+  }
+
+  /**
+   * Function for returning config values.
+   *
+   * @param string $field
+   *   Field.
+   */
+  public function get($field = '') {
+    $value = '';
+    $alshaya_shoeai_settings = $this->configFactory->get('alshaya_shoeai.settings');
+    if ($field != '' && $alshaya_shoeai_settings->get($field) != NULL) {
+      $value = $alshaya_shoeai_settings->get($field);
+    }
+    return $value;
+  }
+
+}

@@ -1,0 +1,5 @@
+services:
+  alshaya_shoeai.settings:
+    class: Drupal\alshaya_shoeai\AlshayaShoeAi
+    arguments:
+     - '@config.factory'
