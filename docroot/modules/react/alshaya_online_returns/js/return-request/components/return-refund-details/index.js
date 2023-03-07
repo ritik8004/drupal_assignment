@@ -46,6 +46,10 @@ class ReturnRefundDetails extends React.Component {
             }
           });
         }
+      } else if (paymentInfo.egift && hasValue(paymentInfo.egift)) {
+        this.setState({
+          paymentInfo: { egift: paymentInfo.egift },
+        });
       } else if (paymentInfo.aura && hasValue(paymentInfo.aura)) {
         this.setState({
           paymentInfo: { aura: paymentInfo.aura },
