@@ -166,7 +166,7 @@ function getBazaarVoiceSettingsFromMdc() {
     data,
     parseInt(drupalSettings.alshaya_bazaar_voice.bazaar_voice.bazaarvoice_settings_expiry, 10),
   );
-  // Magento passes required config object inside an array.
+
   return data;
 }
 
