@@ -219,8 +219,14 @@ export const placeOrder = (paymentMethod) => {
 
         // Push error to GTM.
         // Fetching the error response message.
-        const errorResponse = JSON.parse(response.data.error_message);
-        Drupal.logJavascriptError(`place-order | ${paymentMethodsInfo.[paymentMethod]} | Decline Reason: ${errorResponse.payment_error_message}`, `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        let errorResponse = response.data.error_message;
+        try {
+          errorResponse = JSON.parse(response.data.error_message);
+          errorResponse = errorResponse.payment_error_message;
+        } catch (e) {
+          Drupal.logJavascriptError('Unable to parse the error message.', e);
+        }
+        Drupal.logJavascriptError(`place-order | ${paymentMethodsInfo.[paymentMethod]} | Decline Reason: ${errorResponse}`, `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
         controlPlaceOrderCTA('enable');
 
