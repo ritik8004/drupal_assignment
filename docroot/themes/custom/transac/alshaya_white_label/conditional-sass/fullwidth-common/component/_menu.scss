@@ -70,7 +70,7 @@ body {
                     @include fullWidthSideSpaces(
                       $is_desktop: true,
                       $is_desktop_wide: true,
-                      $side: $left,
+                      $side: $left
                     );
                   }
                 }
@@ -80,5 +80,16 @@ body {
         }
       }
     }
+  }
+}
+
+.back--link,
+.c-menu-secondary li {
+  @include breakpoint($only-mobile) {
+    @include sideSpaces($full_width_padding_mobile, $type: "margin");
+  }
+
+  @include breakpoint($only-tablet) {
+    @include sideSpaces($full_width_padding_tablet, $type: "margin");
   }
 }

@@ -1,0 +1,20 @@
+.block-alshaya-main-menu li.menu--one__list-item .menu--one__link.has-bg-color {
+  @include fullWidthSideSpaces($is_mobile: true, $is_tablet: true);
+}
+
+.main--menu .secondary--main--menu {
+  @include fullWidthSideSpaces(
+    $is_mobile: true,
+    $is_tablet: true,
+    $type: "margin"
+  );
+}
+
+.language-switcher-language-url {
+  @include fullWidthSideSpaces(
+    $is_desktop: true,
+    $is_desktop_wide: true,
+    $type: "margin",
+    $side: $right
+  );
+}
