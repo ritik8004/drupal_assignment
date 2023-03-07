@@ -9,7 +9,7 @@
     script.src = 'https://shoesize.me/assets/plugin/loader.js';
     script.type = 'text/javascript';
     script.async = true;  
-    script.text = '{shopID:"' + shoeAi.shopId + '", locale: "' + shoeAi.locale + '", scale: "eu", zeroHash: "' + shoeAi.zeroHash + '"}';
+    script.text = '{shopID:"' + shoeAi.shopId + '", locale: "' + drupalSettings.path.currentLanguage + '", scale: "eu", zeroHash: "' + shoeAi.zeroHash + '"}';
     document.head.appendChild(script);
   }
 })(drupalSettings);

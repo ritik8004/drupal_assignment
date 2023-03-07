@@ -24,7 +24,6 @@ function alshaya_shoeai_page_attachments_alter(array &$page) {
       if ($current_user->isAuthenticated()) {
         $page['#attached']['drupalSettings']['shoeai']['zeroHash'] = md5($current_user->getEmail());
       }
-      $page['#attached']['drupalSettings']['shoeai']['locale'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
       $page['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
     }
   }
