@@ -187,6 +187,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
 
     $libraries = [
       'alshaya_algolia_react/plp',
+      'alshaya_algolia_react/plp_group_by_subcategory',
       'alshaya_white_label/slick_css',
     ];
 
