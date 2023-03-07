@@ -26,8 +26,11 @@ glegem("OnClientEvent", function (source, data) {
   // is fired for either of the option i.e same as billing or shipping address
   // alternative.
   if (source === 'ShippingAddressCompleted') {
+    // Delivery info in ge data.
+    geData.xbDeliveryInfo = deliveryGaData;
+
     // Collect geData and push to GA for step 3.
-    Drupal.alshayaXbCheckoutGaPush(geData, 3, deliveryGaData);
+    Drupal.alshayaXbCheckoutGaPush(geData, 3);
   }
 
 });

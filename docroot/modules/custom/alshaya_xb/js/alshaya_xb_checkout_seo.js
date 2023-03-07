@@ -12,7 +12,7 @@
    * @param {integer} step.
    *   The step number.
    */
-  Drupal.alshayaXbCheckoutGaPush = function (geData, step, extraInfo = {}) {
+  Drupal.alshayaXbCheckoutGaPush = function (geData, step) {
     try {
       switch (step) {
         case 2:
@@ -25,8 +25,9 @@
 
         case 3:
           var geCheckoutData = Drupal.mapGlobaleCheckoutData(geData);
-          geCheckoutData.xbDeliveryInfo = extraInfo;
-          Drupal.alshayaSeoSpc.checkoutEvent(geCheckoutData, step, '', true);
+          // Set XB delivery info.
+          geCheckoutData.xbDeliveryInfo = geData.xbDeliveryInfo;
+          Drupal.alshayaSeoSpc.checkoutEvent(geCheckoutData, step);
           break;
 
         case 4:
@@ -73,7 +74,7 @@
     // Loop the Discounts array and calculate the discount amount.
     let discountAmount = 0;
     if (Drupal.hasValue(geData.details.Discounts)) {
-      geData.details.Discounts.forEach((item) => {
+      geData.details.Discounts.forEach(function (item) {
         if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
           discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
         }

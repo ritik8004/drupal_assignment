@@ -62,8 +62,8 @@
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function (cart) {
     if (Drupal.hasValue(cart.xbDeliveryInfo)) {
-      // For XB checkout the geData in cart has deliveryInfo
-      // return the same to apply deliveryInfo.
+      // This is a workaround for XB checkout. The geData in cart has
+      // delivery info return the same to apply delivery data.
       return cart.xbDeliveryInfo;
     }
 
