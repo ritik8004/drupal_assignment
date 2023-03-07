@@ -2,7 +2,7 @@
 
 /**
  * @file
- * File for shoe AI configuration.
+ * File for shoe AI Implementation.
  */
 
 use Drupal\Core\Cache\Cache;
@@ -11,13 +11,17 @@ use Drupal\Core\Cache\Cache;
  * Implements hook_page_attachments_alter().
  */
 function alshaya_shoeai_page_attachments_alter(array &$page) {
+  $shop_id = NULL;
   $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
   $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
   $shoeAi = \Drupal::service('alshaya_shoeai.settings');
   if (is_object($shoeAi)) {
     if ($shoeAi->isShoeAiFeatureEnabled() == TRUE && (is_pdp_page() == TRUE || is_plp_page() == TRUE)) {
       $page['#attached']['drupalSettings']['shoeai']['status'] = 'enabled';
-      $page['#attached']['drupalSettings']['shoeai']['shopId'] = $shoeAi->get('shop_id');
+      $hop_id = $shoeAi->get('shop_id');
+      if ($shop_id != '') {
+        $page['#attached']['drupalSettings']['shoeai']['shopId'] = $shop_id;
+      }
       $page['#attached']['drupalSettings']['shoeai']['scale'] = 'eu';
       $current_user = \Drupal::currentUser();
       // If user is anonymous.

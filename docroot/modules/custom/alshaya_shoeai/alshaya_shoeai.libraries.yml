@@ -1,7 +1,7 @@
 shoeai_js:
   version: 1.0.0
   js:
-    js/alshaya_shoeai.js: {}
+    js/alshaya_shoeai.js: {async: true}
   dependencies:
     - core/drupalSettings
     - core/jquery

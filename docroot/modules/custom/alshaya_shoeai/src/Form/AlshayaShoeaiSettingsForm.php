@@ -4,39 +4,11 @@ namespace Drupal\alshaya_shoeai\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ShoeAI settings form.
  */
 class AlshayaShoeaiSettingsForm extends ConfigFormBase {
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * Constructs a EntityManager object.
-   *
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
-   */
-  public function __construct(ModuleHandlerInterface $module_handler) {
-    $this->moduleHandler = $module_handler;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('module_handler')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -64,16 +36,16 @@ class AlshayaShoeaiSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#options' => [
         '1' => $this->t('Enabled'),
-        '2' => $this->t('Disabled'),
+        '0' => $this->t('Disabled'),
       ],
-      '#default_value' => $config->get('enable_shoeai') ?: $this->t('Disabled'),
+      '#default_value' => $config->get('enable_shoeai') ?: 0,
       '#description' => $this->t('This setting is used for checking if module configs are enabled or disabled.'),
     ];
     $form['shop_id'] = [
       '#type' => 'textfield',
       '#title' => $this
         ->t('Shop Id'),
-      '#default_value' => $config->get('shop_id') ?: '',
+      '#default_value' => $config->get('shop_id') ?: '54545596',
       '#size' => 60,
       '#maxlength' => 128,
       '#required' => TRUE,
