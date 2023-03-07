@@ -62,8 +62,8 @@
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function (cart) {
     if (Drupal.hasValue(cart.xbDeliveryInfo)) {
-      // This is a workaround for XB checkout. The geData in cart has
-      // delivery info return the same to apply delivery data.
+      // This is a workaround for Cross Border sites. The geData in cart has
+      // delivery info, return the same to apply delivery info in datalayer.
       return cart.xbDeliveryInfo;
     }
 
