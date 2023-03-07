@@ -2,24 +2,23 @@ var glegem = glegem || function () {
   (window["glegem"].q = window["glegem"].q || []).push(arguments);
 };
 
-// Initial variable to collect ge data from
-// checkout step 2.
+// Global variable to store the GE checkout data to be used in step 2.
 var geData = {};
 
 glegem("OnClientEvent", function (source, data) {
-  // Initialize delivery info for ga.
+  // Initialize delivery info.
   geData.xbDeliveryInfo = {
     'deliveryOption': 'Home Delivery',
     'deliveryCity': '',
   };
 
   if (source === 'ComboChanged' && data.id === 'BillingCity') {
-    // Set delivery city in ge data.
+    // Set delivery city.
     geData.xbDeliveryInfo.deliveryCity = data.value;
   }
 
   if (source === 'ComboChanged' && data.id === 'ShippingCity') {
-    // Update delivery city if user choose alternate shipping address.
+    // Update delivery city if user chooses alternate shipping address.
     geData.xbDeliveryInfo.deliveryCity = data.value;
   }
 
@@ -36,7 +35,7 @@ glegem("OnClientEvent", function (source, data) {
 glegem("OnCheckoutStepLoaded", function (data) {
   switch (data.StepId) {
     case data.Steps.LOADED:
-      // Set ge data to use in step 3.
+      // Store GE data into the global variable that will be used in step 3.
       geData = data;
       // Push data to datalayer.
       Drupal.alshayaXbCheckoutGaPush(data, 2);

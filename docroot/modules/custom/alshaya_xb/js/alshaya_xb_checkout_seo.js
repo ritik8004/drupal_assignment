@@ -24,10 +24,10 @@
           break;
 
         case 3:
-          var geCheckoutData = Drupal.mapGlobaleCheckoutData(geData);
+          var cartData = Drupal.mapGlobaleCheckoutData(geData);
           // Set XB delivery info.
-          geCheckoutData.xbDeliveryInfo = geData.xbDeliveryInfo;
-          Drupal.alshayaSeoSpc.checkoutEvent(geCheckoutData, step);
+          cartData.xbDeliveryInfo = geData.xbDeliveryInfo;
+          Drupal.alshayaSeoSpc.checkoutEvent(cartData, step);
           break;
 
         case 4:
