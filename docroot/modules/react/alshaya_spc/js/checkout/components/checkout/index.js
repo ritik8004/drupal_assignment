@@ -232,10 +232,15 @@ export default class Checkout extends React.Component {
   updateCheckoutMessage = (type, message) => {
     let statusContent = message || '';
     const statusType = type || '';
+    let errorResponse = '';
 
     if (statusType === 'error') {
-      const errorResponse = JSON.parse(statusContent);
-      statusContent = errorResponse.system_error;
+      try {
+        errorResponse = JSON.parse(statusContent);
+        statusContent = errorResponse.system_error;
+      } catch (e) {
+        Drupal.logJavascriptError('Could not able to parse the status content', e);
+      }
     }
 
     this.setState({ messageType: statusType, errorSuccessMessage: statusContent });

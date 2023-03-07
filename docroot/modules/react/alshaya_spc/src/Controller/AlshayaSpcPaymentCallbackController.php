@@ -217,7 +217,6 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
           'result_code' => $request->query->get('knet_result', ''),
           'transaction_date' => date("d M Y", strtotime($request->query->get('requested_on', ''))),
           'transaction_time' => date("h:i:s A", strtotime($request->query->get('requested_on', ''))),
-          'knet_result' => $request->query->get('knet_result', ''),
         ];
         break;
 
