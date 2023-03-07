@@ -30,7 +30,7 @@ function getUserBazaarVoiceSettings() {
   return window.alshayaBazaarVoice.getUserBazaarVoiceSettings();
 }
 
-async function fetchAPIData(apiUri, params, context = '') {
+function fetchAPIData(apiUri, params, context = '') {
   const bazaarVoiceSettings = context === 'user'
     ? getUserBazaarVoiceSettings()
     : getbazaarVoiceSettings();
