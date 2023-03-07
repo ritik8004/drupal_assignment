@@ -8,27 +8,25 @@ var geData = {};
 
 glegem("OnClientEvent", function (source, data) {
   // Initialize delivery info for ga.
-  var deliveryGaData = {
+  geData.xbDeliveryInfo = {
     'deliveryOption': 'Home Delivery',
     'deliveryCity': '',
   };
 
   if (source === 'ComboChanged' && data.id === 'BillingCity') {
-    deliveryGaData.deliveryCity = data.value;
+    // Set delivery city in ge data.
+    geData.xbDeliveryInfo.deliveryCity = data.value;
   }
 
   if (source === 'ComboChanged' && data.id === 'ShippingCity') {
-    // Update delivery city if user adds alternate shipping address.
-    deliveryGaData.deliveryCity = data.value;
+    // Update delivery city if user choose alternate shipping address.
+    geData.xbDeliveryInfo.deliveryCity = data.value;
   }
 
   // BillingAddressCompleted is fired first then ShippingAddressCompleted
   // is fired for either of the option i.e same as billing or shipping address
   // alternative.
   if (source === 'ShippingAddressCompleted') {
-    // Delivery info in ge data.
-    geData.xbDeliveryInfo = deliveryGaData;
-
     // Collect geData and push to GA for step 3.
     Drupal.alshayaXbCheckoutGaPush(geData, 3);
   }
