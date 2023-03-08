@@ -17,7 +17,6 @@ import {
   showFullScreenLoader,
 } from '../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../js/utilities/strings';
-import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Helper function to handle signup from header.
@@ -30,9 +29,7 @@ function handleSignUp(auraUserDetails) {
 
   if (getUserDetails().id) {
     auraUserData.loyaltyStatus = auraStatus;
-    auraUserData.cardNumber = hasValue(auraUserDetails.data.apc_identifier_number)
-      ? auraUserDetails.data.apc_identifier_number
-      : '';
+    auraUserData.cardNumber = auraUserDetails.data.apc_identifier_number || '';
   } else if (auraUserDetails) {
     // For anonymous users, store aura data in local storage and update state.
     auraUserData = {
