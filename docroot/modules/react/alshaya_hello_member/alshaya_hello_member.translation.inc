@@ -101,10 +101,6 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'يرجى إدخال رمز الـ OTP المرسل  إلى',
         'context' => 'hello_member',
       ],
-      'Not recieved the code?' => [
-        'ar' => 'لم يصلك الرمز؟',
-        'context' => 'hello_member',
-      ],
       'Resend Code' => [
         'ar' => 'إرسال الرمز مرة أخرى',
         'context' => 'hello_member',
@@ -497,6 +493,12 @@ function _alshaya_hello_member_react_translations() {
       ],
       'Select Gender' => [
         'ar' => 'حدد الجنس',
+        'context' => 'hello_member',
+      ],
+    ],
+    'v5' => [
+      'Not received the code?' => [
+        'ar' => 'لم يصلك الرمز؟',
         'context' => 'hello_member',
       ],
     ],

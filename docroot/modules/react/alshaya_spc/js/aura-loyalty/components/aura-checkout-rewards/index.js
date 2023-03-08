@@ -91,9 +91,13 @@ class AuraCheckoutRewards extends React.Component {
     this.setState({
       ...states,
     });
-    // Dispatches Checkout step 3 GTM event.
+    // Dispatches Checkout step 3 GTM event if
+    // payment method is selected.
     const { cart } = this.props;
-    dispatchCustomEvent('auraDataReceivedForGtmCheckoutStep3', { cart });
+    if (hasValue(cart.cart.payment)
+      && hasValue(cart.cart.payment.method)) {
+      dispatchCustomEvent('auraDataReceivedForGtmCheckoutStep3', { cart });
+    }
   };
 
   // Event listener callback to update states.
@@ -102,10 +106,6 @@ class AuraCheckoutRewards extends React.Component {
 
     // Attach aura card to cart.
     this.attachCardInCart();
-
-    this.setState({
-      ...states,
-    });
 
     // This will push aura common details in checkout page
     // as component only renders in checkout page.
@@ -119,8 +119,12 @@ class AuraCheckoutRewards extends React.Component {
       Drupal.alshayaSeoGtmPushAuraCommonData({ nonAura: true });
     }
 
-    // Get the aura points to earn from sales API.
-    this.getAuraPoints();
+    this.setState({
+      ...states,
+    }, () => {
+      // Get the aura points to earn from sales API.
+      this.getAuraPoints();
+    });
   };
 
   attachCardInCart = () => {

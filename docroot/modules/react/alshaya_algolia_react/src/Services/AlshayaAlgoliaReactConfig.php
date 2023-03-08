@@ -257,6 +257,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showThumbnails' => ($display_settings->get('gallery_show_hover_image') === TRUE) ? FALSE : $display_settings->get('image_thumb_gallery'),
         'defaultImage' => $default_image ?? FALSE,
         'plp_slider' => $display_settings->get('plp_slider'),
+        'image_slide_timing' => $display_settings->get('image_slide_timing'),
       ],
       'swatches' => [
         'showColorImages' => $display_settings->get('show_color_images_on_filter'),

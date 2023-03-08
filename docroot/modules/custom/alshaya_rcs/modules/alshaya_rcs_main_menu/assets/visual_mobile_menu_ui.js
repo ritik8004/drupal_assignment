@@ -13,14 +13,18 @@
       // When we click on a L2 menu, we hide all L2 menus and show respective
       // L3 menu only.
       $('.visual-mobile-level-two__link').once('visual-mobile-l2-click').click(function (event) {
-        event.preventDefault();
-        var target = $(this).attr('href');
-        // Show L3 menu.
-        $(target).show();
-        // hide L3 menus.
-        $('.visual-mobile-level-two__link').hide();
-        // hide Aura block when we are in L3
-        $('#aura-mobile-header-shop').hide();
+        // If L2 is last child and doesn't have any L3, open L2 link directly.
+        // Else show/hide L3 items.
+        if (Drupal.hasValue($(this).attr('data-children'))) {
+          event.preventDefault();
+          var target = $(this).attr('href');
+          // Show L3 menu.
+          $(target).show();
+          // hide L3 menus.
+          $('.visual-mobile-level-two__link').hide();
+          // hide Aura block when we are in L3
+          $('#aura-mobile-header-shop').hide();
+        }
       });
 
       // When we click the back link, we show the L2 menus again.

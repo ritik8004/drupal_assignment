@@ -2,6 +2,12 @@ aside.c-sidebar-first {
   .block-alshaya-my-account-links {
     .my-account-my-aura {
       color: $aura-my-account-aura-nav-link !important;
+
+      @include breakpoint($only-mobile) {
+        &::after {
+          color: $user_nav_mobile_link;
+        }
+      }
     }
   }
 }

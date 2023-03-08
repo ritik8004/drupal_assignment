@@ -877,7 +877,7 @@
         && Object.keys(listValues).length
         && typeof listValues[productData.id] !== 'undefined') {
         // For SRP, use list value 'Search Result Page'.
-        if (listValues[productData.id] === 'Search Results Page' || !$('body').is('[gtm-list-name]')) {
+        if (listValues[productData.id] === 'Search Results Page' || !$('body').is('[gtm-list-name]') || listValues[productData.id].indexOf('match back') > -1) {
           productData.list = listValues[productData.id];
         }
       }
@@ -916,7 +916,9 @@
           }
 
           // IF listName contains placeholder remove it.
-          productData.list = listName.replace('PDP-placeholder', referrerData.pageType);
+          if (productData.list.indexOf('match back') === '-1') {
+            productData.list = listName.replace('PDP-placeholder', referrerData.pageType);
+          }
         }
       }
     }

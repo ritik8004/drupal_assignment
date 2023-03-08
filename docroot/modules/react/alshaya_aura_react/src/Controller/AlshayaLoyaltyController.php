@@ -105,7 +105,6 @@ class AlshayaLoyaltyController extends ControllerBase {
       $container->get('alshaya_aura_react.aura_api_helper'),
       $container->get('language_manager'),
       $container->get('token'),
-      $container->get('path_alias.manager'),
     );
   }
 
@@ -135,6 +134,29 @@ class AlshayaLoyaltyController extends ControllerBase {
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());
     $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
 
+    // Add the required meta tags for the page.
+    $meta = [
+      'description' => $this->t('Download AURA now to get personalized offers and rewards for each purchase you make from [alshaya_seo:brand_name] online or instore in [alshaya_seo:cities] and all of [alshaya_seo:country]', [], [
+        'context' => 'aura',
+      ]),
+      'title' => $this->t('Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]', [], [
+        'context' => 'aura',
+      ]),
+    ];
+
+    $html_head = [];
+    // Loop through the meta array.
+    foreach ($meta as $tag_name => $tag_value) {
+      $meta_tag = [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => $tag_name,
+          'content' => $this->token->replace($tag_value),
+        ],
+      ];
+      $html_head[] = [$meta_tag, $tag_name];
+    }
+
     return [
       '#theme' => 'my_loyalty_club',
       '#strings' => _alshaya_aura_static_strings(),
@@ -146,6 +168,7 @@ class AlshayaLoyaltyController extends ControllerBase {
         'drupalSettings' => [
           'aura' => $settings,
         ],
+        'html_head' => $html_head,
       ],
       '#cache' => [
         'tags' => $cache_tags,
