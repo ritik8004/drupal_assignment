@@ -134,7 +134,6 @@ class AuraCartRewards extends React.Component {
     }
     // Dispatch an event to update totals in cart object.
     dispatchCustomEvent('updateTotalsInCart', { totals: cartTotals });
-
     // Update aura earn points as per current cart total after appying redemption.
     getAuraPointsToEarn(cardNumber);
   };
