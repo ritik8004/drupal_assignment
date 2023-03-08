@@ -169,4 +169,10 @@ function alshaya_nb_transac_install() {
   \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
     ->set('hide_grid_toggle', TRUE)
     ->save();
+
+  // Use color family facets on PLP instead of color facet.
+  $facet = Facet::load('color');
+  if (isset($facet)) {
+    $facet->delete();
+  }
 }
