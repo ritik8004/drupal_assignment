@@ -29,6 +29,7 @@ function handleSignUp(auraUserDetails) {
 
   if (getUserDetails().id) {
     auraUserData.loyaltyStatus = auraStatus;
+    auraUserData.cardNumber = auraUserDetails.data.apc_identifier_number || '';
   } else if (auraUserDetails) {
     // For anonymous users, store aura data in local storage and update state.
     auraUserData = {
