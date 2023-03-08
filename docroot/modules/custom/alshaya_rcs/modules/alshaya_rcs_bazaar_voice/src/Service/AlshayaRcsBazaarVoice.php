@@ -39,8 +39,6 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
       'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
       'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),
       'customer_id' => alshaya_acm_customer_is_customer($this->currentUser, TRUE),
-      // @todo Add category overrides. Check getProductBazaarVoiceDetails().
-      'hide_fields_write_review' => [],
       'myaccount_reviews_limit' => $config->get('myaccount_reviews_limit'),
     ];
     $settings['bazaar_voice'] = array_merge($settings['bazaar_voice'], $basic_configs);
@@ -102,6 +100,9 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
             'styles',
           ],
         ],
+        'categories' => [
+          'write_review_form_fields',
+        ],
         '... on ConfigurableProduct' => [
           'variants' => [
             'product' => [
@@ -144,6 +145,15 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
         ->get('alshaya_rcs_bazaarvoice_settings_expiry');
     }
     return $basic_configs;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getWriteReviewFieldsConfig() {
+    // For V3 we return an empty array since we get the configs from the
+    // MDC graphql API call.
+    return [];
   }
 
 }

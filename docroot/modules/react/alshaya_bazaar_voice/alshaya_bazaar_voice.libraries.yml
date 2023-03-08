@@ -80,3 +80,4 @@ utility:
   dependencies:
     - core/drupalSettings
     - alshaya_acm_product/product_utility
+    - core/jquery

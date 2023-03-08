@@ -63,6 +63,10 @@ export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
  *   True is settings is available or else false.
  */
 export const bazaarVoiceSettingsAvailable = (settings) => {
+  if (!hasValue(settings)) {
+    return false;
+  }
+
   const { reviews } = settings;
   if (hasValue(reviews)) {
     return true;
