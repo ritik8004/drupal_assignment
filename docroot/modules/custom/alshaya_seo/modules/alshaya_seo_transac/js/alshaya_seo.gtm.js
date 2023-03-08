@@ -1245,6 +1245,7 @@
         eventAction: eventData.eventAction,
         eventLabel: eventData.eventLabel,
         eventLabel2: Drupal.hasValue(eventData.eventLabel2) ? eventData.eventLabel2 : '',
+        product_view_type: eventData.product_view_type
       };
       dataLayer.push(data);
     }
