@@ -93,6 +93,7 @@ function alshaya_rcs_bazaar_voice_library_info_alter(&$libraries, $extension) {
       $libraries['utility']['dependencies'] = [
         'core/drupalSettings',
         'core/drupal',
+        'core/jquery',
       ];
     }
   }

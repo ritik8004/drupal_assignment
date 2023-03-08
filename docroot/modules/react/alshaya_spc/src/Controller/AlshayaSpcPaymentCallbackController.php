@@ -204,7 +204,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
 
     $payment_data = [
-      'status' => self::PAYMENT_DECLINED_VALUE,
+      'status' => $request->query->get('status') ?? self::PAYMENT_DECLINED_VALUE,
       'payment_method' => $method,
       'message' => $request->query->get('message'),
     ];

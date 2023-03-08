@@ -1,9 +1,10 @@
-(function (drupalSettings, Drupal) {
+(function (jQuery, drupalSettings, Drupal) {
     // Initialize the global object.
   window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
 
   var staticStorage = {
     bvSettings: {},
+    writeReviewFormHiddenFields: [],
   };
 
   /**
@@ -85,11 +86,26 @@
    */
   function processProduct(product) {
     window.commerceBackend.setMediaData(product);
+    var hide_fields_write_review = [];
+
+    product.categories.forEach(function eachCategory(category) {
+      if (Drupal.hasValue(category.rating_review)) {
+        var hidden_fields_for_category = category.rating_review.split(',');
+        if (Drupal.hasValue(hidden_fields_for_category)) {
+          hidden_fields_for_category.forEach(function eachCat(hiddenCat) {
+            if (!hide_fields_write_review.includes(hiddenCat)) {
+              hide_fields_write_review.push(hiddenCat);
+            }
+          });
+        }
+      }
+    });
 
     return {
       url: Drupal.url(product.url_key + '.html'),
       title: product.name,
       image_url: window.commerceBackend.getTeaserImage(product),
+      hide_fields_write_review: hide_fields_write_review,
     }
   }
 
@@ -151,6 +167,15 @@
 
     // Call commerceBackend for Bazaar voice configurations.
     var bazaarVoiceConfig = window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend();
+    // If ratings_reviews is set to 1, we do not show the write review form as
+    // the same logic is implemented in the back-end.
+    if (Drupal.hasValue(bazaarVoiceConfig.basic.pdp_rating_reviews)) {
+      return null;
+    }
+
+    if (Drupal.hasValue(product)) {
+      bazaarVoiceConfig.basic.hide_fields_write_review = settings.product.hide_fields_write_review;
+    }
 
     if (bazaarVoiceConfig === null) {
       return null;
@@ -200,4 +225,51 @@
 
     return settings;
   };
-})(drupalSettings, Drupal);
+
+  /**
+   * Gets the write review form configurations.
+   *
+   * @returns {Promise}
+   *   Promise of the response object of the API call to fetch form configs.
+   */
+  window.commerceBackend.getWriteReviewFieldsConfigs = function getWriteReviewFieldsConfigs(productId) {
+    return jQuery.ajax({
+      url: drupalSettings.cart.url + '/V1/bv/config/write-review/' + productId,
+      type: 'GET',
+      dataType: 'json',
+    }).then(function getData(response, status, xhr) {
+      staticStorage.writeReviewFormHiddenFields = response[0].hide_fields_write_review;
+      response = response[0].write_review_form;
+      var data = {
+        data: Object.values(response),
+        status: xhr.status,
+      };
+      var event = new CustomEvent('showMessage', {
+        bubbles: true,
+        detail: { data },
+      });
+      document.dispatchEvent(event);
+      return data;
+    }).catch(function (error) {
+      var event = new CustomEvent('showMessage', {
+        bubbles: true,
+        detail: { data: error },
+      });
+      document.dispatchEvent(event);
+    });
+  }
+
+  /**
+   * Get the names of field
+      document.dispatchEvent(event);s to hide in write review form.
+   *
+   * @param {string} productId
+   *   Product sku value.
+   *
+   * @returns {Array}
+   *   Array of hidden fields.
+   */
+  window.commerceBackend.getHiddenWriteReviewFields = function getHiddenWriteReviewFields(productId) {
+    return staticStorage.writeReviewFormHiddenFields;
+  }
+})(jQuery, drupalSettings, Drupal);

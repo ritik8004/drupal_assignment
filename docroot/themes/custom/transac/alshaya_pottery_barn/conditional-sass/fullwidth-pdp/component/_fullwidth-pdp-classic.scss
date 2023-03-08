@@ -1,0 +1,29 @@
+body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+  .page-standard.c-pdp {
+    @include breakpoint($desktop) {
+      @include sideSpaces(rem(96));
+
+      .acq-content-product {
+        max-width: rem(1360);
+
+        .content__main {
+          max-width: rem(810);
+        }
+      }
+    }
+
+    @include breakpoint($desktop-wide-1680) {
+      @include sideSpaces(rem(115));
+    }
+  }
+}
+
+.content__main .gallery-wrapper {
+  @include breakpoint($desktop) {
+    margin-#{$right}: rem(80);
+  }
+
+  @include breakpoint($desktop-wide-1680) {
+    margin-#{$right}: rem(90);
+  }
+}

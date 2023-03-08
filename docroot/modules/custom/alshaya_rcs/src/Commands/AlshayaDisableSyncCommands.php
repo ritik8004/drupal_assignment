@@ -29,6 +29,7 @@ class AlshayaDisableSyncCommands extends DrushCommands {
     'alshaya_api:sanity-check-status',
     'alshaya_api:sanity-check-stock',
     'alshaya_api:sanity-check-visibility',
+    'alshaya_bazaar_voice:export-review-fields-config',
   ];
 
   /**
