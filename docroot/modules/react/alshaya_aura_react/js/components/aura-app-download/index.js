@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { getAuraConfig } from '../../utilities/helper';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 const AuraAppDownload = () => {
   const {
@@ -8,11 +9,15 @@ const AuraAppDownload = () => {
     googlePlayLink: googlePlayStoreLink,
   } = getAuraConfig();
 
-  return (
-    <div className="aura-app-download-wrapper">
-      { parse(Drupal.t('To spend your points online, please download Aura Mena app available both on <a href="@appStoreLink">App Store</a> and <a href="@googlePlayLink">Play Store</a>.', { '@appStoreLink': (appleAppStoreLink), '@googlePlayLink': googlePlayStoreLink }, { context: 'aura' })) }
-    </div>
-  );
+  if (hasValue(appleAppStoreLink) && hasValue(googlePlayStoreLink)) {
+    return (
+      <div className="aura-app-download-wrapper">
+        { parse(Drupal.t('To spend your points online, please download Aura Mena app available both on <a href="@appStoreLink">App Store</a> and <a href="@googlePlayLink">Play Store</a>.', { '@appStoreLink': (appleAppStoreLink), '@googlePlayLink': googlePlayStoreLink }, { context: 'aura' })) }
+      </div>
+    );
+  }
+
+  return null;
 };
 
 export default AuraAppDownload;
