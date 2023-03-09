@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
-import { callMagentoApi } from '../../../../../js/utilities/requestHelper';
+import { callMagentoApiSynchronous } from '../../../../../js/utilities/requestHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import logger from '../../../../../js/utilities/logger';
 
@@ -30,10 +30,10 @@ function getUserBazaarVoiceSettings() {
   return window.alshayaBazaarVoice.getUserBazaarVoiceSettings();
 }
 
-async function fetchAPIData(apiUri, params, context = '') {
+function fetchAPIData(apiUri, params, context = '') {
   const bazaarVoiceSettings = context === 'user'
-    ? await getUserBazaarVoiceSettings()
-    : await getbazaarVoiceSettings();
+    ? getUserBazaarVoiceSettings()
+    : getbazaarVoiceSettings();
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(
     bazaarVoiceSettings,
   )}${getPassKey(bazaarVoiceSettings)}${getLocale(
@@ -151,32 +151,23 @@ function getBazaarVoiceSettingsFromMdc() {
 
   const url = '/V1/bv/configs';
 
-  return callMagentoApi(url).then((response) => {
-    let config = null;
-    if (hasValue(response.data.error)) {
-      logger.notice('Error while trying to get bazaar voice common settings. Url: @url Message: @message', {
-        '@url': url,
-        '@message': response.data.error_message,
-      });
-      return config;
-    }
+  const response = callMagentoApiSynchronous(url);
+  if (hasValue(response.responseText)) {
+    logger.notice('Error while trying to get bazaar voice common settings. Url: @url Message: @message', {
+      '@url': url,
+      '@message': response.responseText,
+    });
+    return null;
+  }
 
-    Drupal.addItemInLocalStorage(
-      'bazaarVoiceSettings',
-      response.data[0],
-      parseInt(drupalSettings.alshaya_bazaar_voice.bazaar_voice.bazaarvoice_settings_expiry, 10),
-    );
+  const data = response[0];
+  Drupal.addItemInLocalStorage(
+    'bazaarVoiceSettings',
+    data,
+    parseInt(drupalSettings.alshaya_bazaar_voice.bazaar_voice.bazaarvoice_settings_expiry, 10),
+  );
 
-    const { data } = response;
-    if (data.length) {
-      // Response data has object inside array.
-      const [item] = data;
-      config = item;
-    }
-
-    // Magento passes required config object inside an array.
-    return config;
-  });
+  return data;
 }
 
 window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend = getBazaarVoiceSettingsFromMdc;
@@ -190,5 +181,4 @@ export {
   postAPIPhoto,
   getbazaarVoiceSettings,
   getUserBazaarVoiceSettings,
-  getBazaarVoiceSettingsFromMdc,
 };

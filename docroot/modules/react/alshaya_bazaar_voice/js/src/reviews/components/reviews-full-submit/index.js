@@ -11,7 +11,6 @@ import ConditionalView from '../../../common/components/conditional-view';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 import PostReviewMessage from './post-review-message';
 import { trackFeaturedAnalytics } from '../../../utilities/analytics';
-import { bazaarVoiceSettingsAvailable } from '../../../../../../js/utilities/helper';
 
 export default class WriteReviewButton extends React.Component {
   constructor(props) {
@@ -26,8 +25,8 @@ export default class WriteReviewButton extends React.Component {
     };
   }
 
-  componentDidMount = async () => {
-    const bazaarVoiceConfig = await getbazaarVoiceSettings();
+  componentDidMount() {
+    const bazaarVoiceConfig = getbazaarVoiceSettings();
 
     this.setState({
       bazaarVoiceSettings: bazaarVoiceConfig,
@@ -138,11 +137,6 @@ export default class WriteReviewButton extends React.Component {
       isWriteReview,
       isInline,
     } = this.props;
-
-    // Return null if reviews settings unavailable.
-    if (!bazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
-      return null;
-    }
 
     if (userDetails && Object.keys(userDetails).length !== 0) {
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);

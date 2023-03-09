@@ -14,7 +14,6 @@ import { getProductReviewStats } from '../../../utilities/user_util';
 import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
 import { hasValue }
   from '../../../../../../js/utilities/conditionsUtility';
-import { bazaarVoiceSettingsAvailable } from '../../../../../../js/utilities/helper';
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -31,14 +30,8 @@ export default class Rating extends React.Component {
   /**
    * Get Average Overall ratings and total reviews count.
    */
-  componentDidMount = async () => {
+  componentDidMount() {
     showFullScreenLoader();
-    const bazaarVoiceConfig = await getbazaarVoiceSettings();
-
-    this.setState({
-      bazaarVoiceSettings: bazaarVoiceConfig,
-    });
-
     const { bazaarVoiceSettings } = this.state;
 
     // Check reviews setting exist.
@@ -71,11 +64,6 @@ export default class Rating extends React.Component {
 
   render() {
     const { reviewsData, bazaarVoiceSettings, userDetails } = this.state;
-
-    // Return null if reviews settings unavailable.
-    if (!bazaarVoiceSettingsAvailable(bazaarVoiceSettings)) {
-      return null;
-    }
 
     const {
       childClickHandler,
