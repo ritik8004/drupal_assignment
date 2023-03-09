@@ -19,14 +19,14 @@ const AuraAppDownload = () => {
         </div>
       );
     }
-  }
-  else {
+  } else {
     return (
       <div className="aura-app-download-wrapper">
         {Drupal.t('To spend your points online, please download Aura Mena app available both on App Store and Play Store.', {}, { context: 'aura' })}
       </div>
-    )
+    );
   }
+  return null;
 };
 
 export default AuraAppDownload;
