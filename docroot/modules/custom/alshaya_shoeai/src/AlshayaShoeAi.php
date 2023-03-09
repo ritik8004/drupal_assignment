@@ -39,20 +39,4 @@ class AlshayaShoeAi {
     }
     return $shoe_ai_enabled;
   }
-
-  /**
-   * Function for returning config values.
-   *
-   * @param string $field
-   *   Field.
-   */
-  public function get($field = '') {
-    $value = '';
-    $alshaya_shoeai_settings = $this->configFactory->get('alshaya_shoeai.settings');
-    if ($field != '' && $alshaya_shoeai_settings->get($field) != NULL) {
-      $value = $alshaya_shoeai_settings->get($field);
-    }
-    return $value;
-  }
-
 }
