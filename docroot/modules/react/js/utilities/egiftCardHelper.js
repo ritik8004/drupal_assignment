@@ -119,7 +119,11 @@ export const getApiEndpoint = (action) => {
       break;
 
     case 'eGiftCardList':
-      endpoint = '/V1/egiftcard/mine/associated-with-email'; // endpoint to get the list of egift cards linked with a user.
+      endpoint = '/V1/customers/hpsCustomerData'; // endpoint to get the list of linked egift card of a user.
+      break;
+
+    case 'unlinkedEiftCardList':
+      endpoint = '/V1/egiftcard/mine/associated-with-email'; // endpoint to get the list of unlinked egift cards of a user.
       break;
 
     default:

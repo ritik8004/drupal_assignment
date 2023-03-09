@@ -26,33 +26,44 @@ class ReturnRefundDetails extends React.Component {
       paymentInfo: getPaymentDetails(orderDetails),
       open: false,
       cardList: null, // eGift cards linked to a User.
+      egiftCardType: false, // To check new eGift card or existing.
     };
   }
 
   componentDidMount = () => {
     document.addEventListener('updateRefundAccordionState', this.updateRefundAccordionState, false);
     // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
-    if (isUserAuthenticated() && !isEgiftRefundEnabled()) {
+    if (isUserAuthenticated() && isEgiftRefundEnabled()) {
       const { paymentInfo } = this.state;
       if (!hasValue(paymentInfo.aura)) {
         // Call to get customer linked eGift card details.
         const result = callEgiftApi('eGiftCardList', 'GET', {});
         if (result instanceof Promise) {
           result.then((response) => {
-            if (response.data.card_list && hasValue(response.data.card_list)) {
+            if (response.data && hasValue(response.data)) {
               this.setState({
-                cardList: response.data.card_list ? response.data.card_list : null,
+                cardList: response.data ? response.data : null,
+              });
+            } else {
+              // Call to get un-linked eGift card details.
+              const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
+              unlinkedResult.then((unlinkresponse) => {
+                if (!unlinkresponse.data.card_list && !hasValue(unlinkresponse.data.card_list)) {
+                  this.setState({
+                    egiftCardType: 'new',
+                  });
+                }
               });
             }
           });
         }
-      } else if (paymentInfo.egift && hasValue(paymentInfo.egift)) {
-        this.setState({
-          paymentInfo: { egift: paymentInfo.egift },
-        });
       } else if (paymentInfo.aura && hasValue(paymentInfo.aura)) {
         this.setState({
           paymentInfo: { aura: paymentInfo.aura },
+        });
+      } else if (paymentInfo.egift && hasValue(paymentInfo.egift)) {
+        this.setState({
+          paymentInfo: { egift: paymentInfo.egift },
         });
       } else {
         // Defining the BNPL payment methods array.
@@ -93,6 +104,7 @@ class ReturnRefundDetails extends React.Component {
    */
   createReturnRequest = async () => {
     const { itemsSelected, handleErrorMessage, orderDetails } = this.props;
+    const { egiftCardType, cardList } = this.state;
 
     showFullScreenLoader();
 
@@ -104,12 +116,18 @@ class ReturnRefundDetails extends React.Component {
       return;
     }
 
-    const returnRequest = await createReturnRequest(itemsSelected);
+    const returnRequest = await createReturnRequest(itemsSelected, egiftCardType);
     removeFullScreenLoader();
 
     if (hasValue(returnRequest.error)) {
       handleErrorMessage(returnRequest.error_message);
       return;
+    }
+
+    // Adding the selected eGift card number in local storage
+    // to get the same in the return confirmation page.
+    if (hasValue(cardList.card_number)) {
+      Drupal.addItemInLocalStorage('egift_card_details', cardList);
     }
 
     if (hasValue(returnRequest.data) && hasValue(returnRequest.data.increment_id)) {
@@ -143,7 +161,7 @@ class ReturnRefundDetails extends React.Component {
 
   render() {
     const {
-      paymentInfo, address, open, cardList,
+      paymentInfo, address, open, cardList, egiftCardType,
     } = this.state;
     return (
       <div className="refund-details-wrapper">
@@ -152,7 +170,11 @@ class ReturnRefundDetails extends React.Component {
           info from MDC API, then we are passing the cardList variable and listing that info. */}
           {cardList
             ? (
-              <ReturnRefundMethod paymentDetails={paymentInfo} cardList={cardList} />
+              <ReturnRefundMethod
+                paymentDetails={paymentInfo}
+                cardList={cardList}
+                egiftCardType={egiftCardType}
+              />
             ) : <ReturnRefundMethod paymentDetails={paymentInfo} />}
           <ReturnAmountWrapper />
           <ReturnCollectionDetails />
