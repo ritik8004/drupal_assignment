@@ -60,8 +60,7 @@ class MyMembership extends React.Component {
     }
 
     if (hasValue(errorMessage)) {
-      displayErrorMessage(errorMessage);
-      return true;
+      return displayErrorMessage(errorMessage);
     }
 
     const memberId = getFormatedMemberId(myMembershipData.apc_identifier_number);
