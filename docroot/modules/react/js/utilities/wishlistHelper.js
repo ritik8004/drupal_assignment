@@ -619,6 +619,9 @@ export const pushWishlistSeoGtmData = (productData, action = 'add') => {
 
     // Set the product quantity.
     product.quantity = 1;
+    // Only for configurable products.
+    // Triggered on configurable-drawer.
+    product.product_view_type = 'quickview';
 
     // Set product variant to the selected variant.
     if (product.dimension2 !== 'simple' && (typeof productData.variant !== 'undefined' || typeof productData.sku !== 'undefined')) {
