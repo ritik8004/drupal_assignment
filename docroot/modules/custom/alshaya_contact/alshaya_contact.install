@@ -13,7 +13,12 @@ use Drupal\lightning_core\ConfigHelper;
  * Update arabic translation config for contact webform.
  */
 function alshaya_contact_update_9401() {
-  \Drupal::service('alshaya_config.manager')->updateConfigs(['webform.webform.alshaya_contact'], 'alshaya_contact');
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    [
+      'webform.webform.alshaya_contact',
+    ],
+    'alshaya_contact'
+  );
 }
 
 /**
