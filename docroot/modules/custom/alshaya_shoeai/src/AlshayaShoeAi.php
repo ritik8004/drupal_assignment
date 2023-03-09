@@ -39,4 +39,5 @@ class AlshayaShoeAi {
     }
     return $shoe_ai_enabled;
   }
+
 }
