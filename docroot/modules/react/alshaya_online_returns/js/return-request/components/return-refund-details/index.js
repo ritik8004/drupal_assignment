@@ -40,7 +40,7 @@ class ReturnRefundDetails extends React.Component {
         const result = callEgiftApi('eGiftCardList', 'GET', {});
         if (result instanceof Promise) {
           result.then((response) => {
-            if (response.data && hasValue(response.data)) {
+            if (hasValue(response.data) && hasValue(response.data.card_number)) {
               this.setState({
                 cardList: response.data ? response.data : null,
               });
@@ -50,7 +50,7 @@ class ReturnRefundDetails extends React.Component {
               unlinkedResult.then((unlinkresponse) => {
                 if (!unlinkresponse.data.card_list && !hasValue(unlinkresponse.data.card_list)) {
                   this.setState({
-                    egiftCardType: 'new',
+                    egiftCardType: true,
                   });
                 }
               });
