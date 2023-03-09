@@ -15,7 +15,6 @@
       a.menu--one__link,
       div.menu__link.menu--one__link {
         font-size: 0.75rem;
-        letter-spacing: 1px;
         height: 2.4rem;
         border-bottom: none;
         border-top: none;
@@ -121,7 +120,6 @@
       div.menu-two__link {
         @include breakpoint($desktop) {
           font-size: 0.875rem;
-          letter-spacing: 1px;
         }
 
         @include breakpoint($upto-desktop) {
