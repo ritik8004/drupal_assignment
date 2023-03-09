@@ -26,7 +26,7 @@ function alshaya_shoeai_page_attachments_alter(array &$page) {
       $current_user = \Drupal::currentUser();
       // If user is anonymous.
       $page['#attached']['drupalSettings']['shoeai']['zeroHash'] = '';
-      if ($current_user->isAuthenticated()) {
+      if ($current_user->isAuthenticated() && $current_user->getEmail()) {
         $page['#attached']['drupalSettings']['shoeai']['zeroHash'] = md5($current_user->getEmail());
       }
       $page['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
