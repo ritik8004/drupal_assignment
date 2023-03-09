@@ -71,7 +71,17 @@
 
       .c-menu-primary {
         .mobile--search {
+          @include breakpoint($only-mobile) {
+            position: absolute;
+          }
+
           top: rem(30);
+        }
+
+        .mobile--menu {
+          @include breakpoint($only-mobile) {
+            position: absolute;
+          }
         }
       }
 

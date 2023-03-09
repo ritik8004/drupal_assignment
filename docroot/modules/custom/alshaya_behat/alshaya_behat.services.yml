@@ -18,3 +18,4 @@ services:
       - { name: event_subscriber }
     arguments:
       - '@request_stack'
+      - '@settings'

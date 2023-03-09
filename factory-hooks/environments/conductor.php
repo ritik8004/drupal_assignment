@@ -831,6 +831,12 @@ $conductors = [
   'vsqa_prod' => [
     'site_id' => 381,
   ],
+  // VictoriaSecret XB.
+  'vsxb_dev3' => [
+    'hmac_id' => '7d5de94cfc6e452b8e6b9d071a522444',
+    'hmac_secret' => 'ZWZjMmUwMzktYzBkMS00',
+    'site_id' => 657,
+  ],
   // FootLocker KW.
   'flkw_dev' => [
     'hmac_id' => '582a73e8a0534b77970fa38e525f62a1',
@@ -1110,37 +1116,7 @@ $conductors = [
   'weqa_prod' => [
     'site_id' => 362,
   ],
-  // American Eagle Outfitters.
-  'aeokw_dev2' => [
-    'hmac_id' => 'cdd7fe54d06941b682fe52636036d8cc',
-    'hmac_secret' => 'NTlmNDJlNTQtMmZiOS00',
-    'site_id' => 298,
-  ],
-  'aeokw_training_dev2' => [
-    'hmac_id' => '19ca57995e874f5ca12d4c7d2903b146',
-    'hmac_secret' => 'OTk1MDI2NWEtNmEzMC00',
-    'site_id' => 339,
-  ],
-  'aeoxb_dev3' => [
-    'hmac_id' => '880da77391f0495db0fde6c5ba223ed4',
-    'hmac_secret' => 'YzI3YzlmOTgtMDA2OC00',
-    'site_id' => 574,
-  ],
-  'aeoxb_pprod' => [
-    'hmac_id' => '5eeea48df9a4446c8ca94f932b49d610',
-    'hmac_secret' => 'YjQxY2FiODYtZDE2ZC00',
-    'site_id' => 621,
-  ],
-  'aeosa_dev2' => [
-    'hmac_id' => '2ecf6e3ec6584060a042ae52c473ad75',
-    'hmac_secret' => 'NTJiNGQxNGUtNjU4Yi00',
-    'site_id' => 299,
-  ],
-  'aeosa_training_dev2' => [
-    'hmac_id' => '3a70375559eb421cbe12e432ae400f39',
-    'hmac_secret' => 'N2Y5Yjk5NmUtM2Y4Zi00',
-    'site_id' => 340,
-  ],
+  // American Eagle Outfitters AE.
   'aeoae_dev2' => [
     'hmac_id' => 'ead40d01c41f40beb52d8a7f76d516f3',
     'hmac_secret' => 'ODNiY2UyZTAtZDNiYy00',
@@ -1151,46 +1127,20 @@ $conductors = [
     'hmac_secret' => 'MDdjZjI5OTUtYTgwZC00',
     'site_id' => 341,
   ],
-  'aeoeg_dev2' => [
-    'hmac_id' => '2c884817dc954e7194165a06f54144ae',
-    'hmac_secret' => 'YWY2MDBmNjEtZGE2OS00',
-    'site_id' => 301,
-  ],
-  'aeoeg_training_dev2' => [
-    'hmac_id' => 'cc9a92e6ca6d43fa9e9bf5dc4dd1563d',
-    'hmac_secret' => 'YTNkZTc0Y2UtNDVmNS00',
-    'site_id' => 342,
-  ],
-  'aeoeg_dev3' => [
-    'hmac_id' => '9d3f00920f3e444caf422fe41b90dd7f',
-    'hmac_secret' => 'M2JjOGYwOWMtZjdlMi00',
-    'site_id' => 474,
-  ],
-  'aeokw_qa' => [
-    'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
-    'hmac_secret' => 'OGU4Yjg1ZDMtNWI5NS00',
-    'site_id' => 174,
-  ],
-  'aeosa_qa' => [
-    'hmac_id' => 'e6b1671eda3b442f9119045676199d93',
-    'hmac_secret' => 'NTg3N2Q3NWItMjJhOC00',
-    'site_id' => 175,
-  ],
   'aeoae_qa' => [
     'hmac_id' => '89e42750b2764506b5533ed781d49e87',
     'hmac_secret' => 'MmYxZGQ0NDYtYTQ5MC00',
     'site_id' => 176,
   ],
-  'aeoxb_test' => [
-    'hmac_id' => '1529e8ec8e2b4cb0a2813d88208ce033',
-    'hmac_secret' => 'ZjA4NTc0MWUtYTNiNi00',
-    'site_id' => 575,
+  'aeoae_uat' => [
+    'hmac_id' => '05168cbe2e664f4c9d9b676a96d185a4',
+    'hmac_secret' => 'YmJmZTAxNzgtMTdhNy00',
+    'site_id' => 193,
   ],
-  'aeoeg_qa' => [
-    'hmac_id' => '5e49e396d2ec416f9216a3a287f738fc',
-    'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
-    'site_id' => 177,
+  'aeoae_prod' => [
+    'site_id' => 207,
   ],
+  // American Eagle Outfitters BH.
   'aeobh_dev2' => [
     'hmac_id' => 'dc1c3020114540378b51112f70780d19',
     'hmac_secret' => 'YjY5NDcwOTctZjU3Ny00',
@@ -1211,11 +1161,92 @@ $conductors = [
     'hmac_secret' => 'NjllNDg4NmItMzUyNi00',
     'site_id' => 343,
   ],
-  'aeoqa_dev2' => [
-    'hmac_id' => '05fc397d271048bfa482c12a54d20d98',
-    'hmac_secret' => 'MDFlYTlhYzUtNGVmMy00',
-    'site_id' => 370,
+  'aeobh_uat' => [
+    'hmac_id' => 'a53bf12f73ca4a05b0e8d0ad33399237',
+    'hmac_secret' => 'NDNlYmI2Y2ItMmI2Mi00',
+    'site_id' => 302,
   ],
+  'aeobh_prod' => [
+    'site_id' => 293,
+  ],
+  // American Eagle Outfitters EQ.
+  'aeoeg_dev2' => [
+    'hmac_id' => '2c884817dc954e7194165a06f54144ae',
+    'hmac_secret' => 'YWY2MDBmNjEtZGE2OS00',
+    'site_id' => 301,
+  ],
+  'aeoeg_training_dev2' => [
+    'hmac_id' => 'cc9a92e6ca6d43fa9e9bf5dc4dd1563d',
+    'hmac_secret' => 'YTNkZTc0Y2UtNDVmNS00',
+    'site_id' => 342,
+  ],
+  'aeoeg_dev3' => [
+    'hmac_id' => '9d3f00920f3e444caf422fe41b90dd7f',
+    'hmac_secret' => 'M2JjOGYwOWMtZjdlMi00',
+    'site_id' => 474,
+  ],
+  'aeoeg_qa' => [
+    'hmac_id' => '5e49e396d2ec416f9216a3a287f738fc',
+    'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
+    'site_id' => 177,
+  ],
+  'aeoeg_uat' => [
+    'hmac_id' => 'a37e371caae3434ea9372ea053607857',
+    'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
+    'site_id' => 194,
+  ],
+  'aeoeg_prod' => [
+    'site_id' => 208,
+  ],
+  // American Eagle Outfitters JO.
+  'aeojo_dev2' => [
+    'hmac_id' => '76d58cceeb4b4682a2b0d624f83d799c',
+    'hmac_secret' => 'ZDRkODYzOTItM2QzMy00',
+    'site_id' => 559,
+  ],
+  'aeojo_training_dev2' => [
+    'hmac_id' => 'b83950c1bbdf4c0ba17e23365bacfbd7',
+    'hmac_secret' => 'NGFkODI4NTctNDE3Mi00',
+    'site_id' => 487,
+  ],
+  'aeojo_qa' => [
+    'hmac_id' => '788a0f0311c64f0e9196d4fdea5a1c71',
+    'hmac_secret' => 'OTVjMzhlNjUtN2VlYy00',
+    'site_id' => 425,
+  ],
+  'aeojo_uat' => [
+    'hmac_id' => '3f2842c61c4e464180340b8e3bdc277b',
+    'hmac_secret' => 'YjNjMjNhY2YtMGM3MC00',
+    'site_id' => 427,
+  ],
+  'aeojo_prod' => [
+    'site_id' => 428,
+  ],
+  // American Eagle Outfitters KW.
+  'aeokw_dev2' => [
+    'hmac_id' => 'cdd7fe54d06941b682fe52636036d8cc',
+    'hmac_secret' => 'NTlmNDJlNTQtMmZiOS00',
+    'site_id' => 298,
+  ],
+  'aeokw_training_dev2' => [
+    'hmac_id' => '19ca57995e874f5ca12d4c7d2903b146',
+    'hmac_secret' => 'OTk1MDI2NWEtNmEzMC00',
+    'site_id' => 339,
+  ],
+  'aeokw_qa' => [
+    'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
+    'hmac_secret' => 'OGU4Yjg1ZDMtNWI5NS00',
+    'site_id' => 174,
+  ],
+  'aeokw_uat' => [
+    'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
+    'hmac_secret' => 'MjU1NmIzMjYtNDc1My00',
+    'site_id' => 191,
+  ],
+  'aeokw_prod' => [
+    'site_id' => 205,
+  ],
+  // American Eagle Outfitters QA.
   'aeoqa_dev3' => [
     'hmac_id' => 'ecd62d5ab65a4a4aa1f11321460445b3',
     'hmac_secret' => 'ODNkNDA0MjctZTkyYy00',
@@ -1231,84 +1262,66 @@ $conductors = [
     'hmac_secret' => 'NzM4YjQ1NDctMDU0Yy00',
     'site_id' => 344,
   ],
-  'aeojo_training_dev2' => [
-    'hmac_id' => 'b83950c1bbdf4c0ba17e23365bacfbd7',
-    'hmac_secret' => 'NGFkODI4NTctNDE3Mi00',
-    'site_id' => 487,
-  ],
-  'aeojo_dev2' => [
-    'hmac_id' => '76d58cceeb4b4682a2b0d624f83d799c',
-    'hmac_secret' => 'ZDRkODYzOTItM2QzMy00',
-    'site_id' => 559,
-  ],
-  'aeojo_qa' => [
-    'hmac_id' => '788a0f0311c64f0e9196d4fdea5a1c71',
-    'hmac_secret' => 'OTVjMzhlNjUtN2VlYy00',
-    'site_id' => 425,
-  ],
-  'aeokw_uat' => [
-    'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
-    'hmac_secret' => 'MjU1NmIzMjYtNDc1My00',
-    'site_id' => 191,
-  ],
-  'aeosa_uat' => [
-    'hmac_id' => '8d9331c4d4aa4a529ed05055b3ca5e67',
-    'hmac_secret' => 'ZGJmMWFiYTktY2JiNS00',
-    'site_id' => 192,
-  ],
-  'aeoae_uat' => [
-    'hmac_id' => '05168cbe2e664f4c9d9b676a96d185a4',
-    'hmac_secret' => 'YmJmZTAxNzgtMTdhNy00',
-    'site_id' => 193,
-  ],
-  'aeoeg_uat' => [
-    'hmac_id' => 'a37e371caae3434ea9372ea053607857',
-    'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
-    'site_id' => 194,
-  ],
-  'aeobh_uat' => [
-    'hmac_id' => 'a53bf12f73ca4a05b0e8d0ad33399237',
-    'hmac_secret' => 'NDNlYmI2Y2ItMmI2Mi00',
-    'site_id' => 302,
+  'aeoqa_dev2' => [
+    'hmac_id' => '05fc397d271048bfa482c12a54d20d98',
+    'hmac_secret' => 'MDFlYTlhYzUtNGVmMy00',
+    'site_id' => 370,
   ],
   'aeoqa_uat' => [
     'hmac_id' => '713844a9cc5c4b00b4fe0a21c32362ba',
     'hmac_secret' => 'MTY3MjFjN2EtY2UwOS00',
     'site_id' => 303,
   ],
-  'aeojo_uat' => [
-    'hmac_id' => '3f2842c61c4e464180340b8e3bdc277b',
-    'hmac_secret' => 'YjNjMjNhY2YtMGM3MC00',
-    'site_id' => 427,
+  'aeoqa_prod' => [
+    'site_id' => 294,
+  ],
+  // American Eagle Outfitters SA.
+  'aeosa_dev2' => [
+    'hmac_id' => '2ecf6e3ec6584060a042ae52c473ad75',
+    'hmac_secret' => 'NTJiNGQxNGUtNjU4Yi00',
+    'site_id' => 299,
+  ],
+  'aeosa_training_dev2' => [
+    'hmac_id' => '3a70375559eb421cbe12e432ae400f39',
+    'hmac_secret' => 'N2Y5Yjk5NmUtM2Y4Zi00',
+    'site_id' => 340,
+  ],
+  'aeosa_qa' => [
+    'hmac_id' => 'e6b1671eda3b442f9119045676199d93',
+    'hmac_secret' => 'NTg3N2Q3NWItMjJhOC00',
+    'site_id' => 175,
+  ],
+  'aeosa_uat' => [
+    'hmac_id' => '8d9331c4d4aa4a529ed05055b3ca5e67',
+    'hmac_secret' => 'ZGJmMWFiYTktY2JiNS00',
+    'site_id' => 192,
+  ],
+  'aeosa_prod' => [
+    'site_id' => 206,
+  ],
+  // American Eagle Outfitters XB.
+  'aeoxb_dev3' => [
+    'hmac_id' => '880da77391f0495db0fde6c5ba223ed4',
+    'hmac_secret' => 'YzI3YzlmOTgtMDA2OC00',
+    'site_id' => 574,
+  ],
+  'aeoxb_test' => [
+    'hmac_id' => '1529e8ec8e2b4cb0a2813d88208ce033',
+    'hmac_secret' => 'ZjA4NTc0MWUtYTNiNi00',
+    'site_id' => 575,
   ],
   'aeoxb_uat' => [
     'hmac_id' => 'ad8b871b3ea747978b4d16bde2abf3ae',
     'hmac_secret' => 'NzJlNzVkOWUtYmQwZi00',
     'site_id' => 617,
   ],
-  'aeokw_prod' => [
-    'site_id' => 205,
-  ],
-  'aeosa_prod' => [
-    'site_id' => 206,
-  ],
-  'aeoae_prod' => [
-    'site_id' => 207,
+  'aeoxb_pprod' => [
+    'hmac_id' => '5eeea48df9a4446c8ca94f932b49d610',
+    'hmac_secret' => 'YjQxY2FiODYtZDE2ZC00',
+    'site_id' => 621,
   ],
   'aeoxb_prod' => [
     'site_id' => 620,
-  ],
-  'aeoeg_prod' => [
-    'site_id' => 208,
-  ],
-  'aeobh_prod' => [
-    'site_id' => 293,
-  ],
-  'aeoqa_prod' => [
-    'site_id' => 294,
-  ],
-  'aeojo_prod' => [
-    'site_id' => 428,
   ],
   // Muji
   'muae_dev' => [

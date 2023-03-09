@@ -1,12 +1,13 @@
 import React from 'react';
 import AuraMyAccountOldCardFound from './card-not-linked-data';
-import AuraMyAccountPendingFullEnrollment from './pending-full-enrollment';
 import AuraMyAccountNoLinkedCard from './card-not-linked-no-data';
 import AuraVerifiedUser from './linked-verified';
 import { getAllAuraStatus } from '../../../utilities/helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { getAuraLocalStorageKey } from '../../../utilities/aura_utils';
+import MyAuraPendingFullEnrollmentGuest from './pending-full-enrollment-guest';
+import MyAuraPendingFullEnrollmentRegistered from './pending-full-enrollment-registered';
 
 const LoyaltyClubBlock = (props) => {
   const allAuraStatus = getAllAuraStatus();
@@ -38,12 +39,17 @@ const LoyaltyClubBlock = (props) => {
   const localStorageValues = Drupal.getItemFromLocalStorage(getAuraLocalStorageKey());
 
   if (loyaltyStatusInt !== '') {
-    // Guest user and pending enrollment or when user has a card but enrollment
-    // is pending.
-    if ((localStorageValues !== null && !isUserAuthenticated())
-      || loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
+    // Guest user and pending enrollment.
+    if (localStorageValues !== null && !isUserAuthenticated()) {
       return (
-        <AuraMyAccountPendingFullEnrollment
+        <MyAuraPendingFullEnrollmentGuest />
+      );
+    }
+    // Logged in user and pending enrollment.
+    if (isUserAuthenticated()
+      && loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
+      return (
+        <MyAuraPendingFullEnrollmentRegistered
           cardNumber={cardNumber}
           tier={tier}
           points={points}

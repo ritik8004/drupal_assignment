@@ -14,14 +14,28 @@
    */
   Drupal.alshayaXbCheckoutGaPush = function (geData, step) {
     try {
-      if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
-        // Populate drupal settings with details from GE data.
-        drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
-      }
-      Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
-      const purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
-      if (purchaseSuccessData) {
-        dataLayer.push(purchaseSuccessData);
+      switch (step) {
+        case 2:
+          if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
+            // Populate drupal settings with details from GE data.
+            drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
+          }
+          Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
+          break;
+
+        case 3:
+          var cartData = Drupal.mapGlobaleCheckoutData(geData);
+          // Set XB delivery info.
+          cartData.xbDeliveryInfo = geData.xbDeliveryInfo;
+          Drupal.alshayaSeoSpc.checkoutEvent(cartData, step);
+          break;
+
+        case 4:
+          const purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
+          if (purchaseSuccessData) {
+            dataLayer.push(purchaseSuccessData);
+          }
+          break;
       }
     }
     catch (error) {
@@ -59,11 +73,13 @@
 
     // Loop the Discounts array and calculate the discount amount.
     let discountAmount = 0;
-    geData.details.Discounts.forEach((item) => {
-      if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
-        discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
-      }
-    });
+    if (Drupal.hasValue(geData.details.Discounts)) {
+      geData.details.Discounts.forEach(function (item) {
+        if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
+          discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
+        }
+      });
+    }
 
     return {
       "cart_id": window.commerceBackend.getCartId(),

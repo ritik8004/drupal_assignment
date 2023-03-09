@@ -91,17 +91,17 @@
       promotionData.id = promotionId;
       // Add page type in 'name' field.
       promotionData.name = gtmPageType;
-      // Prepare data for creative field.
+      // Prepare data for 'creative' field.
       var bannerId = bannerElement.attr('id');
       var bannerClass = Drupal.hasValue(bannerElement.attr('class'))
-      ? bannerElement.attr('class').split(' ')[0]
-      : '';
+        ? bannerElement.attr('class').split(' ')[0]
+        : '';
       // Creative field requires the id and first class of the
       // selector separated by pipe symbol - 'id|class'
       // Eg: 'dybanner_1234_en|dy-tb-box'.
       var creative = Drupal.hasValue(bannerClass)
-      ? `${bannerId}|${bannerClass}`
-      : bannerId;
+        ? `${bannerId}|${bannerClass}`
+        : bannerId;
       promotionData.creative = creative;
       promotionData.position = dyPromotionCounter;
       promotionData.bannerId = bannerId;
@@ -127,9 +127,10 @@
     var promotionImpressions = [];
     promotions.forEach(promotion => {
       // If promotion impression is not tracked for this banner
-      //  and banner is visible to user.
+      // and banner is visible to user.
+      var bannerWrapper = $('#' + promotion.bannerId).closest('.dy_unit');
       if (!promotion.impressionProcessed
-        && $('#' + promotion.bannerId).isElementInViewPort(0,0)) {
+        && bannerWrapper.isElementInViewPort(0,0)) {
           var promotionImpression = {
             id : promotion.id,
             name: promotion.name,
@@ -157,7 +158,7 @@
    *   Promotion impression/click data for GTM.
    */
   Drupal.alshayaSeoGtmPushDyPromotionEvents = function (eventName, promotions) {
-    if (!promotions.length > 0) {
+    if (promotions.length == 0) {
       return;
     }
     if (eventName == 'promotionClick') {

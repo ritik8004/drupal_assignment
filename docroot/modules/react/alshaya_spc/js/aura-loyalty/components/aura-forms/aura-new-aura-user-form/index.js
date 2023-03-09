@@ -119,7 +119,7 @@ class AuraFormNewAuraUserModal extends React.Component {
                 // Update localstorage with the latest aura details before pushing success event.
                 Drupal.alshayaSeoGtmPushAuraCommonData(
                   {
-                    tier: result.data.data.tier_info || '',
+                    tier: result.data.data.tier_code || '',
                     points: result.data.data.apc_points || 0,
                   },
                   parseInt(result.data.data.apc_link || '0', 10),

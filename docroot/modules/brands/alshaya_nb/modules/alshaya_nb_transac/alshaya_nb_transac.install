@@ -5,6 +5,21 @@
  * Install, uninstall, update function for alshaya_nb.
  */
 
+use Drupal\facets\Entity\Facet;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove color facet from PLP.
+ */
+function alshaya_nb_transac_update_9406() {
+  // Use color family facets on PLP instead of color facet.
+  $facet = Facet::load('color');
+  if (isset($facet)) {
+    $facet->delete();
+  }
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -154,4 +169,10 @@ function alshaya_nb_transac_install() {
   \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings')
     ->set('hide_grid_toggle', TRUE)
     ->save();
+
+  // Use color family facets on PLP instead of color facet.
+  $facet = Facet::load('color');
+  if (isset($facet)) {
+    $facet->delete();
+  }
 }

@@ -1,0 +1,7 @@
+@include breakpoint($only-mobile) {
+  .sticky-filter-wrapper {
+    #alshaya-algolia-search & {
+      border-top: none;
+    }
+  }
+}

@@ -70,6 +70,7 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
             'name',
             'level',
             'url_path',
+            'group_by_sub_categories',
             'description',
             'meta_title',
             'meta_keyword',
@@ -144,6 +145,41 @@ function alshaya_rcs_listing_rcs_placeholders_graphql_query() {
     ],
   ];
 
+  // Grouped subcategory graphql request like Panty Guide in VS.
+  if (\Drupal::config('alshaya_rcs_listing.settings')->get('enable_group_by_sub_category')) {
+    $query_fields['grouped_subcategories'] = [
+      'query' => [
+        'query($urlKey: [String])' => [
+          'categories(filters: { url_path: { in: $urlKey }})' => [
+            'items' => [
+              'id',
+              'name',
+              'level',
+              'url_path',
+              'group_by_sub_categories',
+              'select_sub_categories_plp',
+              'filter_field',
+              'filter_value',
+              'children' => [
+                'id',
+                'name',
+                'level',
+                'url_path',
+                'plp_group_category_title',
+                'plp_group_category_desc',
+                'plp_group_category_img',
+                'filter_field',
+              ],
+            ],
+          ],
+        ],
+      ],
+      'variables' => [
+        'urlKey' => $url_key,
+      ],
+    ];
+  }
+
   return $query_fields;
 }
 
@@ -164,9 +200,22 @@ function alshaya_rcs_listing_field_widget_entity_reference_paragraphs_form_alter
  * Implements hook_library_info_alter().
  */
 function alshaya_rcs_listing_library_info_alter(&$libraries, $extension) {
-  if ($extension === 'alshaya_algolia_react' && isset($libraries['product_category_carousel_rcs'])) {
-    $libraries['product_category_carousel_rcs']['dependencies'][] = 'alshaya_rcs_listing/product_carousel_utility';
-    $libraries['product_category_carousel_rcs']['dependencies'][] = 'rcs_magento_placeholders/rcs_magento_placeholders';
+  if ($extension === 'alshaya_algolia_react') {
+    if (isset($libraries['product_category_carousel_rcs'])) {
+      $libraries['product_category_carousel_rcs']['dependencies'][] = 'alshaya_rcs_listing/product_carousel_utility';
+      $libraries['product_category_carousel_rcs']['dependencies'][] = 'rcs_magento_placeholders/rcs_magento_placeholders';
+    }
+
+    // For grouped subcategory like Panty Guide in VS,
+    // alter subcategory react library to use rcs library for graphql calls.
+    if (\Drupal::config('alshaya_rcs_listing.settings')->get('enable_group_by_sub_category')) {
+      $extension_path_resolver = \Drupal::service('extension.path.resolver');
+      $self_module_path = $extension_path_resolver->getPath('module', 'alshaya_rcs_listing');
+      $options = $libraries['plp_group_by_subcategory']['js']['assets/alshaya_algolia_plp_group_by_subcategory.js'];
+      unset($libraries['plp_group_by_subcategory']['js']['assets/alshaya_algolia_plp_group_by_subcategory.js']);
+      $libraries['plp_group_by_subcategory']['js']["/$self_module_path/js/alshaya_rcs_listing_group_by_category.js"] = $options;
+      $libraries['plp_group_by_subcategory']['dependencies'][] = 'rcs_placeholders/helpers';
+    }
   }
 }
 

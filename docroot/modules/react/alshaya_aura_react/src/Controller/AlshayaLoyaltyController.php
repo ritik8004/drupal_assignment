@@ -105,7 +105,6 @@ class AlshayaLoyaltyController extends ControllerBase {
       $container->get('alshaya_aura_react.aura_api_helper'),
       $container->get('language_manager'),
       $container->get('token'),
-      $container->get('path_alias.manager'),
     );
   }
 
