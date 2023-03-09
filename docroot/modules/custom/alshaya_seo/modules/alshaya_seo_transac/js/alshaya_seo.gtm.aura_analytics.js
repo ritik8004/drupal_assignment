@@ -164,17 +164,12 @@
   */
   Drupal.alshayaSeoGtmPushAuraEventData = function (data) {
     try {
-      var auraGTMData = {};
-      if (data.action !== undefined || data.label !== undefined) {
-        auraGTMData['event'] = GTM_AURA_VALUES.AURA_EVENT_NAME;
-        auraGTMData['eventCategory'] = GTM_AURA_VALUES.AURA_EVENT_CATEGORY;
-        auraGTMData['eventAction'] = data.action !== undefined && GTM_AURA_VALUES[data.action] !== undefined ? GTM_AURA_VALUES[data.action] : null;
-        auraGTMData['eventLabel'] = data.label !== undefined ? data.label : null;
-      }
-
-      if (dataLayer && Object.keys(auraGTMData).length !== 0) {
-        dataLayer.push(auraGTMData);
-      }
+      window.dataLayer.push({
+        event: GTM_AURA_VALUES.AURA_EVENT_NAME,
+        eventCategory: GTM_AURA_VALUES.AURA_EVENT_CATEGORY,
+        eventAction: data.action !== undefined && GTM_AURA_VALUES[data.action] !== undefined ? GTM_AURA_VALUES[data.action] : null,
+        eventLabel: data.label !== undefined ? data.label : null,
+      });
     }
     catch (e) {
       Drupal.logJavascriptError('error-push-aura-events', e);
