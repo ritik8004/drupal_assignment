@@ -22,7 +22,10 @@
 
       // Tracking dy banners promotion impression on scroll.
       $(window).once('alshaya-seo-dy-banners-promotion-impression').on('scroll', debounce(function (event) {
-        if (dyBannersPromotions.length) {
+        // Track impressions if dy banners are present and
+        // current page is not SRP.
+        if (dyBannersPromotions.length
+          && !$('#alshaya-algolia-search').is(':visible')) {
           Drupal.alshayaSeoGtmPushDyPromotionEvents('promotionImpression', Drupal.fetchDyBannersPromotionsImpression(dyBannersPromotions));
         }
       }, 500));
@@ -30,7 +33,12 @@
       /**
        * Tracking dy banners promotion clicks.
        */
-      dyBanners.once('alshaya-seo-dy-banners-promotion-click').on('click', function () {
+      dyBanners.once('alshaya-seo-dy-banners-promotion-click').on('click', function (e) {
+        // Return if the clicked element is not <a> tag or child of
+        // <a> to avoid tracking of un-linked elements.
+        if(!$(e.target).closest('a').length){
+          return;
+        }
         // Get the clicked dy banner id.
         var bannerId = $(this).find('div[id^="dybanner_"]').attr('id');
         var promotions = [];
@@ -130,7 +138,8 @@
       // and banner is visible to user.
       var bannerWrapper = $('#' + promotion.bannerId).closest('.dy_unit');
       if (!promotion.impressionProcessed
-        && bannerWrapper.isElementInViewPort(0,0)) {
+        && (bannerWrapper.isElementInViewPort(0,10)
+        || $('#' + promotion.bannerId).isElementInViewPort(0,10))) {
           var promotionImpression = {
             id : promotion.id,
             name: promotion.name,
@@ -158,7 +167,7 @@
    *   Promotion impression/click data for GTM.
    */
   Drupal.alshayaSeoGtmPushDyPromotionEvents = function (eventName, promotions) {
-    if (promotions.length == 0) {
+    if (promotions.length === 0) {
       return;
     }
     if (eventName == 'promotionClick') {
