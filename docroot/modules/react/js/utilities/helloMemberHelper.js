@@ -335,7 +335,4 @@ export const setHelloMemberLoyaltyCard = async (identifierNo, quoteId) => {
 /**
  * Helper function to display an error message to the customer during CLM downtime.
  */
-export const displayErrorMessage = (message) => {
-  const errorMessage = message;
-  return <div className="hello-member-points-wrapper"><div className="hello-member-downtime-message">{ errorMessage }</div></div>;
-};
+export const displayErrorMessage = (message) => <div className="hello-member-points-wrapper"><div className="hello-member-downtime-message">{ message }</div></div>;

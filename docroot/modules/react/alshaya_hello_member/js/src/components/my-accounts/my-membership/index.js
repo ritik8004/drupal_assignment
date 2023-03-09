@@ -30,6 +30,7 @@ class MyMembership extends React.Component {
           dispatchCustomEvent('helloMemberPointsLoaded', response.data.extension_attributes);
         } else if (hasValue(response.error)) {
           this.setState({
+            wait: false,
             errorMessage: response.error_message,
           });
           logger.error('Error while trying to get hello member customer data. Data: @data.', {
@@ -60,6 +61,7 @@ class MyMembership extends React.Component {
 
     if (hasValue(errorMessage)) {
       displayErrorMessage(errorMessage);
+      return true;
     }
 
     const memberId = getFormatedMemberId(myMembershipData.apc_identifier_number);
