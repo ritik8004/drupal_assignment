@@ -1,3 +1,4 @@
 logo:
   path: 'themes/custom/transac/alshaya_cos_stores/site-logo.svg'
   use_default: false
+show_full_width: false
