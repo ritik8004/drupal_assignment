@@ -81,6 +81,7 @@ class MyBenefits extends React.Component {
     if (myBenefitsList === null) {
       // Hide Block title.
       document.querySelector('#my-accounts-hello-member').closest('.block').classList.add('no-benefits');
+      document.querySelector('#block-myaccountshellomemberblock').previousElementSibling.classList.add('hide-benefits-title');
       return null;
     }
 
