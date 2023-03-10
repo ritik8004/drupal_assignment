@@ -230,6 +230,11 @@
           else {
             window.commerceBackend.updateGallery(node, productData.layout, variantInfo.gallery, sku, variantInfo.sku);
           }
+          // Enable add to cart button if show pre selected variant is
+          // set to false.
+          if (!Drupal.hasValue(drupalSettings.showPreSelectedVariantOnPdp)) {
+            $(this).find('.add-to-cart-button').prop('disabled', false);
+          }
           // On variant change, disable/enable Add to bag, quantity dropdown
           // and show message based on value in drupalSettings.
           Drupal.disableLimitExceededProducts(sku, selected);
@@ -262,9 +267,11 @@
         var preSelectVariant = true;
         // Pre select a variant only if it is allowed to show pre
         // selected variant or there is exactly one variant available.
+        // Enable only for full mode.
         if (!Drupal.hasValue(drupalSettings.showPreSelectedVariantOnPdp)
           && Drupal.hasValue(productData.variants)
-          && Object.keys(productData.variants).length > 1) {
+          && Object.keys(productData.variants).length > 1
+          && viewMode == 'full') {
           preSelectVariant = false;
         }
         // Proceed to get variant and trigger variant change event only if
@@ -308,7 +315,7 @@
         // Disable add to cart button if it is disabled to show pre selected
         // variant on PDP page load.
         if (!preSelectVariant) {
-          $('.add-to-cart-button').prop('disabled', true);
+          $(this).find('.add-to-cart-button').prop('disabled', true);
         }
 
         // Trigger an event on SKU base form load.
