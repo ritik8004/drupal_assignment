@@ -1,7 +1,0 @@
-alshaya_shoeai.config_form:
-  path: '/admin/config/services/shoeai'
-  defaults:
-    _form: '\Drupal\alshaya_shoeai\Form\AlshayaShoeaiConfigForm'
-    _title: 'Shoe AI'
-  requirements:
-    _permission: 'administer site configurations'

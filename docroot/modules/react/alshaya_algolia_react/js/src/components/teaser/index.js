@@ -47,6 +47,8 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
+  const activateShoeAI = (drupalSettings.shoeai && drupalSettings.shoeai.status
+    && drupalSettings.shoeai.status === 'enabled');
 
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
@@ -424,6 +426,14 @@ const Teaser = ({
           />
         </ConditionalView>
       </article>
+      {pageType === 'plp' && activateShoeAI === true ? (
+        <div
+          className="ShoeSizeMe ssm_plp"
+          data-shoeid={sku}
+          data-availability={attribute.attr_size_shoe_eu}
+          data-sizerun={attribute.attr_size_shoe_eu}
+        />
+      ) : null}
     </div>
   );
 };

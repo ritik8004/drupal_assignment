@@ -1,6 +1,0 @@
-shoeai_js:
-  version: 1.0.0
-  js:
-    js/alshaya_shoeai.js: {}
-  dependencies:
-    - core/drupalSettings
