@@ -81,8 +81,7 @@ class MyPointsHistory extends React.Component {
     }
 
     if (hasValue(errorMessage)) {
-      displayErrorMessage(errorMessage);
-      return true;
+      return displayErrorMessage(errorMessage);
     }
 
     return (
