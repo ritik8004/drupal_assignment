@@ -233,7 +233,7 @@ export default class Checkout extends React.Component {
     let statusContent = message || '';
     const statusType = type || '';
 
-    if (statusType === 'error') {
+    if (typeof statusContent === 'object' && statusType === 'error') {
       const errorResponse = JSON.parse(statusContent);
       statusContent = errorResponse.system_error;
     }
