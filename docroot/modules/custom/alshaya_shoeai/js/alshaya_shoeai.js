@@ -12,6 +12,6 @@
     script.async = true;  
     script.text = '{shopID:"' + shoeAi.shopId + '", locale: "' +
      language + '", scale: "eu", zeroHash: "' + shoeAi.zeroHash + '"}';
-    document.head.appendChild(script);
+    document.body.appendChild(script);
   }
 })(drupalSettings);

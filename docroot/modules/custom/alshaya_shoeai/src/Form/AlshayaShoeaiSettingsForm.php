@@ -49,6 +49,7 @@ class AlshayaShoeaiSettingsForm extends ConfigFormBase {
       '#size' => 60,
       '#maxlength' => 128,
       '#required' => TRUE,
+      '#description' => $this->t('shopID config provided by ShoeAI for this site.'),
     ];
     return $form;
   }
