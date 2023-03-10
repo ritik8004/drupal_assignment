@@ -5,7 +5,7 @@ import CardTypeSVG from '../../../../../alshaya_spc/js/svg-component/card-type-s
 const EgiftCardDetails = ({
   cardList, selectedOption, egiftCardType,
 }) => {
-  let selected = cardList.card_number;
+  let selected = cardList ? cardList.card_number : 'newegift';
   if (hasValue(selectedOption)) {
     selected = selectedOption;
   }
@@ -20,11 +20,22 @@ const EgiftCardDetails = ({
     )
     : <></>);
 
+  const NewEgiftCard = ({ cardType }) => (cardType && (isReturnConfPage === -1)
+    ? (
+      <input
+        type="radio"
+        value="newegift"
+        name="newegift"
+        checked={selected === 'newegift'}
+      />
+    )
+    : <></>);
+
   return (
     <>
       <div className="method-list-wrapper">
-        <div className="method-wrapper" key={`${cardList.card_number}`}>
-          {hasValue(selected) && (isReturnConfPage === -1)
+        <div className="method-wrapper" key={selected}>
+          {hasValue(selected) && (isReturnConfPage === -1) && !egiftCardType
             ? (
               <input
                 type="radio"
@@ -34,10 +45,10 @@ const EgiftCardDetails = ({
               />
             )
             : (
-              <></>
+              <NewEgiftCard egiftCardType={egiftCardType} />
             )}
           <div className="card-icon">
-            <CardTypeSVG type="egift" class={`${cardList.card_number} is-active`} />
+            <CardTypeSVG type="egift" class={`${selected} is-active`} />
           </div>
           <div className="egift-card-detail">
             <span>
@@ -48,9 +59,14 @@ const EgiftCardDetails = ({
       </div>
       {egiftCardType && (isReturnConfPage === -1)
         ? (
-          <div className="refund-message">
-            {Drupal.t('Details of your eGift Card will be sent to your email address "@email"', { '@email': drupalSettings.userDetails.userEmailID }, { context: 'online_returns' })}
-          </div>
+          <>
+            <div className="refund-method-listing">
+              {Drupal.t('Details of your eGift Card will be sent to your email address "@email"', { '@email': drupalSettings.userDetails.userEmailID }, { context: 'online_returns' })}
+            </div>
+            <div className="refund-message">
+              {Drupal.t('Your refund will be credited immediately after the item is returned to warehouse', {}, { context: 'online_returns' })}
+            </div>
+          </>
         )
         : <RefundMessage data={isReturnConfPage} />}
     </>

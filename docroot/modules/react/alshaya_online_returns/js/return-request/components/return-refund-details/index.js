@@ -48,7 +48,7 @@ class ReturnRefundDetails extends React.Component {
               // Call to get un-linked eGift card details.
               const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
               unlinkedResult.then((unlinkresponse) => {
-                if (!unlinkresponse.data.card_list && !hasValue(unlinkresponse.data.card_list)) {
+                if (!hasValue(unlinkresponse.data.card_list)) {
                   this.setState({
                     egiftCardType: true,
                   });
@@ -126,8 +126,12 @@ class ReturnRefundDetails extends React.Component {
 
     // Adding the selected eGift card number in local storage
     // to get the same in the return confirmation page.
-    if (hasValue(cardList.card_number)) {
+    if (hasValue(cardList) && hasValue(cardList.card_number)) {
       Drupal.addItemInLocalStorage('egift_card_details', cardList);
+    }
+    // Adding eGift card type i.e. new card or not in local storage.
+    if (egiftCardType) {
+      Drupal.addItemInLocalStorage('egift_card_type', egiftCardType);
     }
 
     if (hasValue(returnRequest.data) && hasValue(returnRequest.data.increment_id)) {
@@ -168,7 +172,7 @@ class ReturnRefundDetails extends React.Component {
         <Collapsible trigger={this.refundDetailsHeader()} open={open} triggerDisabled={!open}>
           {/* If the eGift card refund feature is enabled, and we are getting the eGift cards
           info from MDC API, then we are passing the cardList variable and listing that info. */}
-          {cardList
+          {cardList || egiftCardType
             ? (
               <ReturnRefundMethod
                 paymentDetails={paymentInfo}
