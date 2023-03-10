@@ -1,3 +1,4 @@
+import React from 'react';
 import { hasValue } from '../../../js/utilities/conditionsUtility';
 import { getErrorResponse } from '../../../js/utilities/error';
 import { callHelloMemberApi } from '../../../js/utilities/helloMemberHelper';
@@ -114,8 +115,11 @@ const helloMemberCustomerPhoneSearch = async (phoneNumber) => {
     });
 };
 
+const displayErrorMessage = (message) => <div className="hello-member-points-history-wrapper"><div className="hello-member-downtime-message">{ message }</div></div>;
+
 export {
   getHelloMemberTierProgressData,
   getHelloMemberPointsHistory,
   helloMemberCustomerPhoneSearch,
+  displayErrorMessage,
 };
