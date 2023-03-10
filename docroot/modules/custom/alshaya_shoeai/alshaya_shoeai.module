@@ -19,14 +19,12 @@ function alshaya_shoeai_page_attachments_alter(array &$page) {
     if ($shoeAi->isShoeAiFeatureEnabled() && (is_pdp_page() || is_plp_page())) {
       $page['#attached']['drupalSettings']['shoeai']['status'] = 'enabled';
       $shop_id = $alshaya_shoeai_settings->get('shop_id') ?: '';
-      if ($shop_id != '') {
-        $page['#attached']['drupalSettings']['shoeai']['shopId'] = $shop_id;
-      }
+      $page['#attached']['drupalSettings']['shoeai']['shopId'] = $shop_id;
       $page['#attached']['drupalSettings']['shoeai']['scale'] = 'eu';
       $current_user = \Drupal::currentUser();
       // If user is anonymous.
       $page['#attached']['drupalSettings']['shoeai']['zeroHash'] = '';
-      if ($current_user->isAuthenticated() && $current_user->getEmail()) {
+      if ($current_user->isAuthenticated() && !empty($current_user->getEmail())) {
         $page['#attached']['drupalSettings']['shoeai']['zeroHash'] = md5($current_user->getEmail());
       }
       $page['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
