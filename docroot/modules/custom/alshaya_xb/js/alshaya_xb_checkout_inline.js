@@ -9,7 +9,6 @@ glegem("OnClientEvent", function (source, data) {
   // Initialize delivery info.
   geData.xbDeliveryInfo = {
     'deliveryOption': 'Home Delivery',
-    'deliveryCity': '',
   };
 
   if (source === 'ComboChanged' && data.id === 'BillingCity') {
