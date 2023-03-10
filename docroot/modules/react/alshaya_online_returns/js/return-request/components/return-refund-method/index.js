@@ -21,7 +21,7 @@ const ReturnRefundMethod = ({
         <div className="refund-method-title">
           { Drupal.t('Refund Method', {}, { context: 'online_returns' }) }
         </div>
-        {cardList
+        {cardList || egiftCardType
           ? (
             <div className="refund-method-listing" onClick={onOptionChange}>
               <EgiftCardDetails
@@ -29,25 +29,27 @@ const ReturnRefundMethod = ({
                 selectedOption={selectedOption}
                 egiftCardType={egiftCardType}
               />
-              <div className="method-list-wrapper">
-                {!hasValue(paymentDetails.cashondelivery)
-                  ? (
-                    <div className="method-wrapper">
-                      <input
-                        type="radio"
-                        value="CardDetails"
-                        name="CardPaymentDetails"
-                        checked={selectedOption === 'CardDetails'}
-                      />
-                      <label className="radio-sim radio-label">
-                        <CardDetails paymentDetails={paymentDetails} showCardIcon />
-                      </label>
+              {!hasValue(paymentDetails.cashondelivery)
+                ? (
+                  <>
+                    <div className="method-list-wrapper">
+                      <div className="method-wrapper">
+                        <input
+                          type="radio"
+                          value="CardDetails"
+                          name="CardPaymentDetails"
+                          checked={selectedOption === 'CardDetails'}
+                        />
+                        <label className="radio-sim radio-label">
+                          <CardDetails paymentDetails={paymentDetails} showCardIcon />
+                        </label>
+                      </div>
                     </div>
-                  ) : (<> </>)}
-              </div>
-              <div className="refund-message">
-                { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
-              </div>
+                    <div className="refund-message">
+                      { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
+                    </div>
+                  </>
+                ) : (<> </>)}
             </div>
           )
           : (
