@@ -1,53 +1,49 @@
-header {
-  &.c-header {
-    .c-header__region {
-      .block-alshaya-main-menu {
-        @include breakpoint($desktop-wide-1680) {
-          width: 67%;
-        }
+.block-alshaya-react-mini-cart,
+.block-cart-mini-block,
+.static-minicart-wrapper,
+#block-cartminiblock {
+  .cart-link {
+    background-position: center;
+    #{$left}: rem(2);
+
+    @include breakpoint($only-mobile) {
+      html[lang="ar"] & {
+        right: rem(2);
       }
+    }
 
-      .block-alshayawishlistheaderblock {
-        @include breakpoint($desktop-wide-1680) {
-          flex-grow: 0;
-        }
-      }
+    @include breakpoint($tablet) {
+      #{$left}: rem(-18);
+    }
 
-      #block-cartminiblock,
-      .block-alshaya-react-mini-cart,
-      .static-minicart-wrapper {
-        .cart-link {
-          @include breakpoint($only-mobile) {
-            #{$left}: rem(4);
+    @include breakpoint($desktop) {
+      #{$left}: rem(20);
+    }
+  }
 
-            html[lang="ar"] & {
-              right: rem(1);
-            }
-          }
-        }
-
-        .quantity {
-          @include breakpoint($only-mobile) {
-            #{$left}: rem(-18);
-          }
-
-          @include breakpoint($desktop) {
-            #{$left}: rem(-17);
-          }
-
-          html[lang="ar"] & {
-            @include breakpoint($desktop) {
-              #{$left}: rem(-14);
-            }
-          }
-        }
-      }
+  @include breakpoint($desktop) {
+    .quantity {
+      #{$left}: rem(-22);
     }
   }
 }
 
-body.wishlist-enabled {
-  .wishlist-header {
-    padding-#{$right}: rem(2);
+@include breakpoint($desktop) {
+  body.wishlist-enabled header .region__header .block-alshaya-wishlist {
+    flex-grow: unset;
+  }
+
+  .region__header {
+    .block-alshaya-algolia-react-autocomplete {
+      flex-grow: 1;
+      display: flex;
+      justify-content: flex-end;
+
+      #alshaya-algolia-autocomplete {
+        margin-#{$right}: rem(12);
+        top: 0;
+        #{$left}: 0;
+      }
+    }
   }
 }
