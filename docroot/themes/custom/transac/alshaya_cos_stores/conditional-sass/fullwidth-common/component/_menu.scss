@@ -22,3 +22,9 @@
     @include sideSpaces(0);
   }
 }
+
+@include breakpoint($only-mobile) {
+  .logged-in .c-menu-primary .hamburger--menu {
+    #{$left}: 0;
+  }
+}
