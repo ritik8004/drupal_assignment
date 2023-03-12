@@ -7,7 +7,7 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import TierProgress from './tier-progress';
 import logger from '../../../../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
-import { getHelloMemberCustomerData } from '../../../../../../js/utilities/helloMemberHelper';
+import { getHelloMemberCustomerData, displayErrorMessage } from '../../../../../../js/utilities/helloMemberHelper';
 
 class MyMembership extends React.Component {
   constructor(props) {
@@ -15,6 +15,7 @@ class MyMembership extends React.Component {
     this.state = {
       wait: true,
       myMembershipData: null,
+      errorMessage: '',
     };
   }
 
@@ -28,6 +29,10 @@ class MyMembership extends React.Component {
           // Dispatch event when hello member points are loaded on my account points block.
           dispatchCustomEvent('helloMemberPointsLoaded', response.data.extension_attributes);
         } else if (hasValue(response.error)) {
+          this.setState({
+            wait: false,
+            errorMessage: response.error_message,
+          });
           logger.error('Error while trying to get hello member customer data. Data: @data.', {
             '@data': JSON.stringify(response),
           });
@@ -41,7 +46,7 @@ class MyMembership extends React.Component {
   }
 
   render() {
-    const { wait, myMembershipData } = this.state;
+    const { wait, myMembershipData, errorMessage } = this.state;
     if (wait) {
       return (
         <div className="membership-summary-wrapper" style={{ animationDelay: '0.4s' }}>
@@ -52,6 +57,10 @@ class MyMembership extends React.Component {
 
     if (myMembershipData === null) {
       return null;
+    }
+
+    if (hasValue(errorMessage)) {
+      return displayErrorMessage(errorMessage);
     }
 
     const memberId = getFormatedMemberId(myMembershipData.apc_identifier_number);
