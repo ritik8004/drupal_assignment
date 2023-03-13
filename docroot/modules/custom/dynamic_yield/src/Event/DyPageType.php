@@ -27,6 +27,13 @@ class DyPageType extends Event {
   protected $dyContextData;
 
   /**
+   * Dynamic yield Empty Data.
+   *
+   * @var bool
+   */
+  protected $renderEmptyData = FALSE;
+
+  /**
    * Set Dynamic yield page context.
    *
    * @param string $context
@@ -65,6 +72,26 @@ class DyPageType extends Event {
    */
   public function setDyContextData(array $data) {
     $this->dyContextData = $data;
+  }
+
+  /**
+   * Set Dynamic yield Empty Data.
+   *
+   * @param bool $render_empty
+   *   Dynamic yield Empty data.
+   */
+  public function setEmptyData(bool $render_empty) {
+    $this->renderEmptyData = $render_empty;
+  }
+
+  /**
+   * Get Dynamic yield Empty Data.
+   *
+   * @return bool
+   *   Dynamic yield Empty data.
+   */
+  public function getEmptyData() {
+    return $this->renderEmptyData;
   }
 
 }
