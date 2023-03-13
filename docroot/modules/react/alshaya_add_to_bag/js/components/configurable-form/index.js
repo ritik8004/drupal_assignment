@@ -138,6 +138,7 @@ export default class ConfigurableForm extends React.Component {
       eventAction: 'plp size click',
       eventLabel: hasValue(optionLabel) ? optionLabel : '',
       eventLabel2: 'plp_quickview',
+      product_view_type: 'quick_view',
     });
   };
 
