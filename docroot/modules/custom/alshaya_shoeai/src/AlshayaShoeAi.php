@@ -10,6 +10,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  * @package Drupal\alshaya_shoeai
  */
 class AlshayaShoeAi {
+
   /**
    * Config Factory.
    *
