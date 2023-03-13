@@ -47,10 +47,8 @@ class MembershipPopup extends React.Component {
   contactUsClick = () => {
     window.dataLayer.push({
       event: 'pop-up',
-      eventProps: {
-        category: 'pop-up',
-        action: 'hmAutoEnroll-click-contact_us',
-      },
+      eventAction: 'hmAutoEnroll-click-contact_us',
+      eventCategory: 'pop-up',
     });
   };
 
