@@ -18,8 +18,7 @@ class AlshayaShoeAi {
   protected $configFactory;
 
   /**
-   * AlshayaA Constructor.
-   *
+   * Alshaya Constructor.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
    */
