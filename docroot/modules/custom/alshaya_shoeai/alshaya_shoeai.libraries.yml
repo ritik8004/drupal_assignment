@@ -4,5 +4,3 @@ shoeai_js:
     js/alshaya_shoeai.js: {async: true}
   dependencies:
     - core/drupalSettings
-    - core/jquery
-    - core/drupal
