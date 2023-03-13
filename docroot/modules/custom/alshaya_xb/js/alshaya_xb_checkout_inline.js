@@ -6,19 +6,12 @@ var glegem = glegem || function () {
 var geData = {};
 
 glegem("OnClientEvent", function (source, data) {
-  // Initialize delivery info.
-  geData.xbDeliveryInfo = {
-    'deliveryOption': 'Home Delivery',
-  };
-
-  if (source === 'ComboChanged' && data.id === 'BillingCity') {
+  if (source === 'ComboChanged' && (data.id === 'BillingCity' || data.id === 'ShippingCity')) {
     // Set delivery city.
-    geData.xbDeliveryInfo.deliveryCity = data.value;
-  }
-
-  if (source === 'ComboChanged' && data.id === 'ShippingCity') {
-    // Update delivery city if user chooses alternate shipping address.
-    geData.xbDeliveryInfo.deliveryCity = data.value;
+    geData.xbDeliveryInfo = {
+      deliveryOption: 'Home Delivery',
+      deliveryCity: data.value,
+    };
   }
 
   // BillingAddressCompleted is fired first then ShippingAddressCompleted
