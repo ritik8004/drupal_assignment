@@ -6,16 +6,7 @@ var glegem = glegem || function () {
 var geData = {};
 
 glegem("OnClientEvent", function (source, data) {
-  if (source === 'ComboChanged' && data.id === 'BillingCity') {
-    // Set delivery city.
-    geData.xbDeliveryInfo = {
-      deliveryOption: 'Home Delivery',
-      deliveryCity: data.value,
-    };
-  }
-
-  if (source === 'ComboChanged' && data.id === 'ShippingCity') {
-    // Update delivery city if user chooses alternate shipping address.
+  if (source === 'ComboChanged' && (data.id === 'BillingCity' || data.id === 'ShippingCity')) {
     // Set delivery city.
     geData.xbDeliveryInfo = {
       deliveryOption: 'Home Delivery',
