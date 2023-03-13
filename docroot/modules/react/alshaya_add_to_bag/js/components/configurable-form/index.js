@@ -117,6 +117,7 @@ export default class ConfigurableForm extends React.Component {
       eventAction: 'plp color click',
       eventLabel: hasValue(swatchLabel) ? swatchLabel : '',
       eventLabel2: 'plp_quickview',
+      product_view_type: 'quick_view',
     });
   }
 
