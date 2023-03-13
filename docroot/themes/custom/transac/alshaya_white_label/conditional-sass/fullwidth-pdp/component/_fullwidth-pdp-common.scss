@@ -1,3 +1,9 @@
+@include breakpoint($only-mobile) {
+  #aura-pdp-mobile {
+    @include sideSpaces($full_width_padding_mobile);
+  }
+}
+
 body.nodetype--acq_product {
   .page-standard.c-pdp {
     @include breakpoint($desktop) {
