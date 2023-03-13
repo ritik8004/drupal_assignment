@@ -2,7 +2,7 @@ import React from 'react';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import logger from '../../../../../../js/utilities/logger';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getHelloMemberPointsHistory, displayErrorMessage } from '../../../hello_member_api_helper';
+import { getHelloMemberPointsHistory } from '../../../hello_member_api_helper';
 import { formatDate, getPointstHistoryPageSize } from '../../../utilities';
 import MemberPointsSummary from './member-points-summary';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
@@ -81,7 +81,7 @@ class MyPointsHistory extends React.Component {
     }
 
     if (hasValue(errorMessage)) {
-      return displayErrorMessage(errorMessage);
+      return <div className="hello-member-points-history-wrapper"><div className="hello-member-downtime-message">{ errorMessage }</div></div>;
     }
 
     return (
