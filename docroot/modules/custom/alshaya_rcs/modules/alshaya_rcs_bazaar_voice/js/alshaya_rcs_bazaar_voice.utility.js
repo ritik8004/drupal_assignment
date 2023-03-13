@@ -17,14 +17,14 @@
    *   The product review data.
    */
   window.alshayaBazaarVoice.getProductReviewForCurrrentUser = async function getProductReviewForCurrrentUser(productIdentifier) {
-    const bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
+    var bazaarVoiceSettings = window.alshayaBazaarVoice.getbazaarVoiceSettings(productIdentifier);
     if (!Drupal.hasValue(bazaarVoiceSettings)) {
       return;
     }
-    const productId = productIdentifier || bazaarVoiceSettings.productid;
-    const userId = bazaarVoiceSettings.reviews.customer_id;
-    const staticStorageKey = `${userId}_${productId}`;
-    let productReviewData = Drupal.hasValue(staticStorage[staticStorageKey])
+    var productId = productIdentifier || bazaarVoiceSettings.productid;
+    var userId = bazaarVoiceSettings.reviews.customer_id;
+    var staticStorageKey = `${userId}_${productId}`;
+    var productReviewData = Drupal.hasValue(staticStorage[staticStorageKey])
       ? staticStorage[staticStorageKey]
       : null;
 
@@ -39,13 +39,13 @@
     }
 
     // Get review data from BazaarVoice based on available parameters.
-    const apiUri = '/data/reviews.json';
-    const params = `&include=Authors,Products&filter=authorid:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
-    const response = window.alshayaBazaarVoice.fetchAPIData(apiUri, params).then((result) => {
+    var apiUri = '/data/reviews.json';
+    var params = `&include=Authors,Products&filter=authorid:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
+    var response = window.alshayaBazaarVoice.fetchAPIData(apiUri, params).then(function fetchData(result) {
       if (!Drupal.hasValue(result.error) && Drupal.hasValue(result.data)) {
         if (result.data.Results.length > 0) {
-          const products = result.data.Results;
-          Object.keys(products).forEach((i) => {
+          var products = result.data.Results;
+          Object.keys(products).forEach(function eachProduct(i) {
             if (products[i].ProductId === productId) {
               productReviewData = {
                 review_data: products[i],
@@ -59,7 +59,7 @@
       // differentiate between empty storage and 0 reviews.
       // When we fetch from static storage later, we convert 0 back to NULL and
       // return.
-      const staticData = !productReviewData ? 0 : JSON.stringify(productReviewData);
+      var staticData = !productReviewData ? 0 : JSON.stringify(productReviewData);
       // Store the value statically so that it can be reused.
       staticStorage[staticStorageKey] = staticData;
       // Return the product review data.
@@ -181,7 +181,7 @@
       return null;
     }
 
-    Object.entries(bazaarVoiceConfig).forEach((item) => {
+    Object.entries(bazaarVoiceConfig).forEach(function eachConfig(item) {
       if (item[0] === 'basic') {
         // Merge drupalSettings and basic configurations from commerceBackend.
         Object.assign(settings.bazaar_voice, item[1]);
