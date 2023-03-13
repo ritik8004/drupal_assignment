@@ -12,3 +12,5 @@ default_col_grid: 'small'
 default_col_grid_mobile: 'small'
 # This config shows article swatches in product teasers in PLP and SRP.
 show_article_swatches: false
+# To remove hitsPerPage key from algolia requests.
+remove_hits_per_page: 1

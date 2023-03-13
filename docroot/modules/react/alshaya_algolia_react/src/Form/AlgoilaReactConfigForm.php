@@ -76,6 +76,12 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('hide_grid_toggle'),
     ];
 
+    $form['remove_hits_per_page'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Remove hits per page key from all calls.'),
+      '#default_value' => $config->get('remove_hits_per_page') ?: 1,
+    ];
+
     $form['default_col_grid'] = [
       '#type' => 'radios',
       '#title' => $this->t('Default col grid for desktop'),
@@ -108,6 +114,7 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       ->set('hide_grid_toggle', $form_state->getValue('hide_grid_toggle'))
       ->set('default_col_grid', $form_state->getValue('default_col_grid'))
       ->set('default_col_grid_mobile', $form_state->getValue('default_col_grid_mobile'))
+      ->set('remove_hits_per_page', $form_state->getValue('remove_hits_per_page'))
       ->save();
 
     parent::submitForm($form, $form_state);
