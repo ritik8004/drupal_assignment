@@ -23,6 +23,7 @@
         line-height: 1.5;
         text-transform: uppercase;
         font-family: $we-bold;
+
         html[lang="en"] & {
           letter-spacing: 1px;
         }
@@ -123,6 +124,7 @@
       div.menu-two__link {
         @include breakpoint($desktop) {
           font-size: 0.875rem;
+
           html[lang="en"] & {
             letter-spacing: 1px;
           }
