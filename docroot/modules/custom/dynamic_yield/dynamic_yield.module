@@ -65,7 +65,7 @@ function dynamic_yield_page_attachments(array &$page) {
         'type' => $event->getDyContext(),
         'lng' => 'en_US',
       ];
-      if ((!empty($event->getDyContextData())) || $event->getEmptyData()) {
+      if (!empty($event->getDyContextData()) || $event->getEmptyData()) {
         $context['data'] = $event->getDyContextData();
       }
     }
