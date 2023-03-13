@@ -47,14 +47,14 @@ const EgiftCardDetails = ({
             : (
               <NewEgiftCard egiftCardType={egiftCardType} />
             )}
-          <div className="card-icon">
-            <CardTypeSVG type="egift" class={`${selected} is-active`} />
-          </div>
-          <div className="egift-card-detail">
-            <span>
-              {Drupal.t('eGift Card', {}, { context: 'online_returns' })}
-            </span>
-          </div>
+          <label className="radio-sim radio-label">
+            <CardTypeSVG type="egift-refund" class={`${selected} is-active`} />
+            <div className="egift-card-detail">
+              <span>
+                {Drupal.t('eGift Card', {}, { context: 'online_returns' })}
+              </span>
+            </div>
+          </label>
         </div>
       </div>
       {egiftCardType && (isReturnConfPage === -1)
