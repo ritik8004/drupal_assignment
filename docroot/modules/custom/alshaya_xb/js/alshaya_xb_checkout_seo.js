@@ -59,11 +59,13 @@
 
     // Loop the Discounts array and calculate the discount amount.
     let discountAmount = 0;
-    geData.details.Discounts.forEach((item) => {
-      if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
-        discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
-      }
-    });
+    if (Drupal.hasValue(geData.details.Discounts)) {
+      geData.details.Discounts.forEach((item) => {
+        if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
+          discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
+        }
+      });
+    }
 
     return {
       "cart_id": window.commerceBackend.getCartId(),
