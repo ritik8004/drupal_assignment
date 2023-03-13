@@ -12,6 +12,7 @@ use Drupal\Core\Session\AccountProxyInterface;
  */
 class AlshayaShoeAi {
 
+  protected const SCALE = 'eu';
   /**
    * Config Factory.
    *
@@ -74,8 +75,7 @@ class AlshayaShoeAi {
    *   Return shoe AI scale.
    */
   public function getShoeAiScale() {
-    $scale = 'eu';
-    return $scale;
+    return self::SCALE;
   }
 
   /**
