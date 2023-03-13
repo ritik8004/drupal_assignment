@@ -18,26 +18,4 @@
     return drupalSettings.userDetails.userID.toString();
   };
 
-  /**
-   * Push insights to Algolia when product added to the cart.
-   * @param queryId
-   *   Unique search identifier.
-   * @param objectId
-   *   Sku value of the product.
-   */
-  Drupal.pushAlshayaAlgoliaInsightsAddToCart = function (queryId, objectId, indexName) {
-    try {
-      window.aa('convertedObjectIDsAfterSearch', {
-        userToken: Drupal.getAlgoliaUserToken(),
-        eventName: 'Add to cart',
-        index: indexName,
-        queryID: queryId,
-        objectIDs: [objectId],
-      });
-    }
-    catch (e) {
-      console.error(e);
-    }
-  };
-
 })(jQuery, Drupal, drupalSettings);

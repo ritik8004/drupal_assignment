@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_cos_transac_update_9403() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_cos_stores.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.19.0] Add field for new attribute 'season_code' and
  * enable 'alshaya_product_lpn'.
  */

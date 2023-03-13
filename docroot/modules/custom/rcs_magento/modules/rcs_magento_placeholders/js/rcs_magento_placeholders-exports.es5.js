@@ -124,6 +124,7 @@ exports.getEntity = async function getEntity(langcode) {
       if (response && response.data.categories.total_count) {
         result = response.data.categories.items[0];
         var currentPath = window.location.href;
+        window.has_grouped_subcategories = result.group_by_sub_categories;
         // The condition "currentPath.indexOf('/view-all')" is to ensure that
         // this should execute only for view all page,
         // "result.display_view_all !== 1" this one is to check whether we have
@@ -437,7 +438,7 @@ exports.getData = async function getData(
       }
   }
 
-  if ((result && result !== null)) {
+  if (result) {
     // Display loader.
     if (loaderOnUpdates) {
       RcsEventManager.fire('startLoader');
@@ -465,7 +466,7 @@ exports.getData = async function getData(
   return result;
 };
 
-exports.getDataSynchronous = function getDataSynchronous(placeholder, params, entity, langcode) {
+exports.getDataSynchronous = function getDataSynchronous(placeholder, params = {}, entity, langcode) {
   const request = {
     uri: '/graphql',
     method: 'GET',
@@ -537,6 +538,22 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params, en
       bvProductDataVariables.sku = params.sku;
       request.data = prepareQuery(rcsPhGraphqlQuery.bv_product.query, bvProductDataVariables);
       result = rcsCommerceBackend.invokeApiSynchronous(request);
+      break;
+
+    case 'grouped_subcategories':
+      // Grouped subcategory graphql request like Panty Guide in VS.
+      request.data = prepareQuery(rcsPhGraphqlQuery.grouped_subcategories.query, rcsPhGraphqlQuery.grouped_subcategories.variables);
+      // Force fetch EN data in AR language,
+      // if params.langcode strictly specifies to fetch EN data.
+      if (drupalSettings.path.currentLanguage !== 'en' && params.langcode === 'en') {
+        request.headers.forEach((element, index) => {
+          if (element.includes('Store')) {
+            request.headers[index] = ['Store', drupalSettings.rcs.commerceBackend.store_en];
+          }
+        })
+      }
+      result = rcsCommerceBackend.invokeApiSynchronous(request);
+      result = result.data.categories.items;
       break;
 
     default:

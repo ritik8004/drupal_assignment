@@ -237,5 +237,49 @@
         font-size: rem(16);
       }
     }
+
+    .aura-app-download-wrapper {
+      a {
+        @include appStoreLink;
+
+        text-decoration: none;
+      }
+    }
+  }
+
+  &.aura-level-Tier2 {
+    &::before {
+      background: $aura-myaccount-star-mobile;
+
+      html[lang="ar"] & {
+        background: $aura-myaccount-star-mobile-ar;
+      }
+
+      @include breakpoint($desktop) {
+        background-image: $aura-myaccount-star-full-enrolled;
+
+        html[lang="ar"] & {
+          background-image: $aura-myaccount-star-full-enrolled-ar;
+        }
+      }
+    }
+  }
+
+  &.aura-level-Tier3 {
+    &::before {
+      background: $aura-myaccount-vip-mobile;
+
+      html[lang="ar"] & {
+        background: $aura-myaccount-vip-mobile-ar;
+      }
+
+      @include breakpoint($desktop) {
+        background-image: $aura-myaccount-vip-full-enrolled;
+
+        html[lang="ar"] & {
+          background-image: $aura-myaccount-vip-full-enrolled-ar;
+        }
+      }
+    }
   }
 }
