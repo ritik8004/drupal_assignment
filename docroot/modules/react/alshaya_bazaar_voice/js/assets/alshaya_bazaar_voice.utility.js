@@ -41,7 +41,7 @@
       settings.reviews = productInfo.alshaya_bazaar_voice;
     } else {
       productInfo = window.commerceBackend.getProductData(null, 'productInfo');
-      Object.entries(productInfo).forEach(([key]) => {
+      Object.entries(productInfo).forEach(function eachInfo([key]) {
         settings.productid = key;
         settings.reviews = productInfo[key].alshaya_bazaar_voice;
       });

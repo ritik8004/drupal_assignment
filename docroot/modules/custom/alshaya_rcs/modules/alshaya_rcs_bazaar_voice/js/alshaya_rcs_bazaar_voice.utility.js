@@ -41,11 +41,11 @@
     // Get review data from BazaarVoice based on available parameters.
     var apiUri = '/data/reviews.json';
     var params = `&include=Authors,Products&filter=authorid:${userId}&filter=productid:${productId}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
-    var response = window.alshayaBazaarVoice.fetchAPIData(apiUri, params).then((result) => {
+    var response = window.alshayaBazaarVoice.fetchAPIData(apiUri, params).then(function fetchData(result) {
       if (!Drupal.hasValue(result.error) && Drupal.hasValue(result.data)) {
         if (result.data.Results.length > 0) {
           var products = result.data.Results;
-          Object.keys(products).forEach((i) => {
+          Object.keys(products).forEach(function eachProduct(i) {
             if (products[i].ProductId === productId) {
               productReviewData = {
                 review_data: products[i],
@@ -181,7 +181,7 @@
       return null;
     }
 
-    Object.entries(bazaarVoiceConfig).forEach((item) => {
+    Object.entries(bazaarVoiceConfig).forEach(function eachConfig(item) {
       if (item[0] === 'basic') {
         // Merge drupalSettings and basic configurations from commerceBackend.
         Object.assign(settings.bazaar_voice, item[1]);
