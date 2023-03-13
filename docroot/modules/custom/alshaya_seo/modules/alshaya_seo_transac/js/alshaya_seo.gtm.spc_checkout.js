@@ -164,7 +164,16 @@
     if (((cartData.payment.method && step === 2) || step === 3 || step === 4) && pushAboveStep2) {
       // Make a clone of the object.
       var stepData = JSON.parse(JSON.stringify(data));
-      stepData.ecommerce.checkout.actionField.step = (step === 4) ? 4 : 3;
+      // Add additional data for checkout step 3 and 4.
+      // Since, the product data is updated inside a callback function after
+      // being pushed to datalayer and the products data is not updated for
+      // step 3 & 4 (when product data is not available in local storage).
+      // So, we need to assign stepdata using the same callback function
+      // we used for step 2 data.
+      var additionalStepData = Drupal.alshayaSeoSpc.cartGtm(cartData, (step === 4) ? 4 : 3);
+      Object.assign(stepData.ecommerce.checkout, additionalStepData.checkout);
+      delete additionalStepData.checkout;
+      Object.assign(stepData, additionalStepData);
 
       if (stepData.ecommerce.checkout.actionField.step === 3) {
         var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
