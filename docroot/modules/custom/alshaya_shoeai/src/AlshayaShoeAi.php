@@ -29,6 +29,8 @@ class AlshayaShoeAi {
 
   /**
    * Check if shoeAI is enabled or not.
+   * @return bool
+   * Return true when shoeai is enabled.
    */
   public function isShoeAiFeatureEnabled() {
     $shoe_ai_enabled = FALSE;
