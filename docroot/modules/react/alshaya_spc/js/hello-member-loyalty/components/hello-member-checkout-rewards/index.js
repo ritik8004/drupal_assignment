@@ -16,6 +16,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
       wait: true,
       hmPoints: null,
       identifierNo: null,
+      errorResponse: false,
     };
   }
 
@@ -42,6 +43,10 @@ class HelloMemberLoyaltyOptions extends React.Component {
           // we get hello member points which can be earned by customer.
           identifierNo = response.data.apc_identifier_number;
         } else if (hasValue(response.error)) {
+          // set errorResponse to true when CLM is down for registered users.
+          this.setState({
+            errorResponse: true,
+          });
           logger.error('Error while trying to get hello member customer data. Data: @data.', {
             '@data': JSON.stringify(response),
           });
@@ -73,6 +78,10 @@ class HelloMemberLoyaltyOptions extends React.Component {
         hmPoints = response.data.hm_points;
       }
     } else if (hasValue(response.error)) {
+      // set errorResponse to true when CLM is down for guest users.
+      this.setState({
+        errorResponse: true,
+      });
       logger.error('Error while trying to get hello member points data. Data: @data.', {
         '@data': JSON.stringify(response),
       });
@@ -84,7 +93,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
   }
 
   render() {
-    const { wait, hmPoints, identifierNo } = this.state;
+    const { wait, hmPoints, identifierNo, errorResponse } = this.state;
     const { animationDelay, cart, refreshCart } = this.props;
 
     if (wait) {
@@ -93,6 +102,10 @@ class HelloMemberLoyaltyOptions extends React.Component {
           <Loading />
         </div>
       );
+    }
+
+    if (errorResponse) {
+      return null;
     }
 
     return (
