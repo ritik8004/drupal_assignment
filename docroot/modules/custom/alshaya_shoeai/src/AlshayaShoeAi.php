@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_shoeai;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Session\AccountProxyInterface;
 
 /**
  * Helper class for getting shoeai config.
@@ -22,20 +22,20 @@ class AlshayaShoeAi {
   /**
    * The current user service object.
    *
-   * @var \Drupal\Core\Session\AccountProxy
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
-  public $currentUser;
+  protected $currentUser;
 
   /**
    * Alshaya Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
-   * @param \Drupal\Core\Session\AccountProxy $current_user
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current account object.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
-                              AccountProxy $current_user) {
+                              AccountProxyInterface $current_user) {
     $this->configFactory = $config_factory;
     $this->currentUser = $current_user;
   }
@@ -64,8 +64,7 @@ class AlshayaShoeAi {
    */
   public function getShoeAiShopId() {
     $alshaya_shoeai_settings = $this->configFactory->get('alshaya_shoeai.settings');
-    $shop_id = $alshaya_shoeai_settings->get('shop_id') ?: '';
-    return $shop_id;
+    return $alshaya_shoeai_settings->get('shop_id') ?: '';
   }
 
   /**

@@ -15,9 +15,9 @@ use Drupal\Core\Entity\EntityInterface;
 function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
     $shoeAi = \Drupal::service('alshaya_shoeai.helper');
+    $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
     if ($shoeAi->isShoeAiFeatureEnabled()) {
-      $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
-      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
       $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
       $build['#attached']['drupalSettings']['shoeai']['status'] = TRUE;
       $build['#attached']['drupalSettings']['shoeai']['shopId'] = $shoeAi->getShoeAiShopId();
@@ -33,9 +33,9 @@ function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, Entity
 function alshaya_shoeai_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product_category' && $view_mode == 'full') {
     $shoeAi = \Drupal::service('alshaya_shoeai.helper');
+    $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
     if ($shoeAi->isShoeAiFeatureEnabled()) {
-      $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
-      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
       $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
       $build['#attached']['drupalSettings']['shoeai']['status'] = TRUE;
       $build['#attached']['drupalSettings']['shoeai']['shopId'] = $shoeAi->getShoeAiShopId();
