@@ -47,8 +47,7 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
-  const activateShoeAI = (drupalSettings.shoeai && drupalSettings.shoeai.status
-    && drupalSettings.shoeai.status === 'enabled');
+  const activateShoeAI = (hasValue(drupalSettings.shoeai) && drupalSettings.shoeai.status === true);
 
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
