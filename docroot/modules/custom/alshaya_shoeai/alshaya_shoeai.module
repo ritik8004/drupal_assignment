@@ -6,50 +6,41 @@
  */
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Implements hook_page_attachments_alter().
+ * Implements hook_node_view().
  */
-function alshaya_shoeai_page_attachments_alter(array &$page) {
-  $shop_id = NULL;
-  $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
-  $shoeAi = \Drupal::service('alshaya_shoeai.helper');
-  if ($shoeAi->isShoeAiFeatureEnabled() && (is_pdp_page() || is_plp_page())) {
-    $page['#attached']['drupalSettings']['shoeai']['status'] = 'enabled';
-    $shop_id = $alshaya_shoeai_settings->get('shop_id') ?: '';
-    $page['#attached']['drupalSettings']['shoeai']['shopId'] = $shop_id;
-    $page['#attached']['drupalSettings']['shoeai']['scale'] = 'eu';
-    $current_user = \Drupal::currentUser();
-    // If user is anonymous.
-    $page['#attached']['drupalSettings']['shoeai']['zeroHash'] = '';
-    if ($current_user->isAuthenticated() && !empty($current_user->getEmail())) {
-      $page['#attached']['drupalSettings']['shoeai']['zeroHash'] = md5($current_user->getEmail());
+function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
+    $shoeAi = \Drupal::service('alshaya_shoeai.helper');
+    if ($shoeAi->isShoeAiFeatureEnabled()) {
+      $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
+      $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
+      $build['#attached']['drupalSettings']['shoeai']['status'] = TRUE;
+      $build['#attached']['drupalSettings']['shoeai']['shopId'] = $shoeAi->getShoeAiShopId();
+      $build['#attached']['drupalSettings']['shoeai']['scale'] = $shoeAi->getShoeAiScale();
+      $build['#attached']['drupalSettings']['shoeai']['zeroHash'] = $shoeAi->getShoeAiZeroHash();
     }
-    $page['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
   }
 }
 
 /**
- * Function for checking if PDP.
+ * Implements hook_taxonomy_term_view().
  */
-function is_pdp_page() {
-  $isProduct = FALSE;
-  $node = \Drupal::routeMatch()->getParameter('node');
-  if (is_object($node) && $node->bundle() == 'acq_product') {
-    $isProduct = TRUE;
+function alshaya_shoeai_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product_category' && $view_mode == 'full') {
+    $shoeAi = \Drupal::service('alshaya_shoeai.helper');
+    if ($shoeAi->isShoeAiFeatureEnabled()) {
+      $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
+      $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
+      $build['#attached']['drupalSettings']['shoeai']['status'] = TRUE;
+      $build['#attached']['drupalSettings']['shoeai']['shopId'] = $shoeAi->getShoeAiShopId();
+      $build['#attached']['drupalSettings']['shoeai']['scale'] = $shoeAi->getShoeAiScale();
+      $build['#attached']['drupalSettings']['shoeai']['zeroHash'] = $shoeAi->getShoeAiZeroHash();
+    }
   }
-  return $isProduct;
-}
-
-/**
- * Function for checking if PLP.
- */
-function is_plp_page() {
-  $isListingPage = FALSE;
-  $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
-  if (is_object($term) && $term->bundle() == 'acq_product_category') {
-    $isListingPage = TRUE;
-  }
-  return $isListingPage;
 }
