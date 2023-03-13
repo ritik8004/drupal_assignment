@@ -12,6 +12,23 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Deletes field field_agent_store.
+ */
+function alshaya_checkout_by_agent_update_9402() {
+  \Drupal::configFactory()->getEditable('core.entity_form_display.user.user.default')->save();
+  $field = FieldConfig::loadByName('user', 'user', 'field_agent_store');
+  if (!empty($field)) {
+    $field->delete();
+  }
+  $field_storage = FieldStorageConfig::loadByName('user', 'field_agent_store');
+  if (!empty($field_storage)) {
+    $field_storage->delete();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Create field field_agent_store_id.
  * Migrate store locator ids into agent store ids.
  */
@@ -100,15 +117,6 @@ function alshaya_checkout_by_agent_uninstall() {
     ->delete();
   \Drupal::configFactory()->getEditable('rest.resource.share_cart')->delete();
   Role::load('smartagent')->delete();
-
-  $field = FieldConfig::loadByName('user', 'user', 'field_agent_store');
-  if (!empty($field)) {
-    $field->delete();
-  }
-  $field_storage = FieldStorageConfig::loadByName('user', 'field_agent_store');
-  if (!empty($field_storage)) {
-    $field_storage->delete();
-  }
 
   $field = FieldConfig::loadByName('user', 'user', 'field_agent_store_id');
   if (!empty($field)) {

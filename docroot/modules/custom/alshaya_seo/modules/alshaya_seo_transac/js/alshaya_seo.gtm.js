@@ -1245,7 +1245,13 @@
         eventAction: eventData.eventAction,
         eventLabel: eventData.eventLabel,
         eventLabel2: Drupal.hasValue(eventData.eventLabel2) ? eventData.eventLabel2 : '',
+       
       };
+
+      // Add @var product_view_type in quick view.
+      if(Drupal.hasValue(eventData.product_view_type)) {
+        data.product_view_type = eventData.product_view_type
+      }
       dataLayer.push(data);
     }
   };

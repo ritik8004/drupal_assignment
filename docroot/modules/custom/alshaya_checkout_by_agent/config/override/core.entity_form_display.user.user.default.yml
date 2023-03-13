@@ -1,10 +1,4 @@
 content:
-  field_agent_store:
-    weight: 9
-    settings: {  }
-    third_party_settings: {  }
-    type: options_select
-    region: content
   field_agent_store_id:
     type: string_textfield
     weight: 9
