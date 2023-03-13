@@ -1,4 +1,8 @@
 body.nodetype--acq_product {
+  &.magazine-layout {
+    @include fullwidthClassicPdp;
+  }
+
   .magazine-layout-node {
     @include breakpoint($only-mobile) {
       .content__title_wrapper.fixed {
