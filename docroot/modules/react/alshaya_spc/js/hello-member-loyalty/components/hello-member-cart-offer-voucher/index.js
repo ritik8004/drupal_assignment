@@ -86,13 +86,13 @@ class HelloMemberCartOffersVouchers extends React.Component {
           Offers.push(coupon);
         }
       });
-    } else {
+    } else if (hasValue(couponResponse.data.error_message)) {
       // If coupons API is returning Error.
       logger.error('Error while calling the coupons Api  @message', {
-        '@message': couponResponse.data.message,
+        '@message': couponResponse.data.error_message,
       });
       this.setState({
-        errorMessage: couponResponse.data.message,
+        errorMessage: couponResponse.data.error_message,
       });
     }
 
@@ -100,13 +100,13 @@ class HelloMemberCartOffersVouchers extends React.Component {
     const offerResponse = await callHelloMemberApi('helloMemberOffersList', 'GET');
     if (hasValue(offerResponse.data) && !hasValue(offerResponse.data.error)) {
       Offers.push(...offerResponse.data.offers);
-    } else {
+    } else if (hasValue(offerResponse.data.error_message)) {
       // If offers API is returning Error.
       logger.error('Error while calling the offers Api @message', {
-        '@message': offerResponse.data.message,
+        '@message': offerResponse.data.error_message,
       });
       this.setState({
-        errorMessage: offerResponse.data.message,
+        errorMessage: offerResponse.data.error_message,
       });
     }
     this.setState({
