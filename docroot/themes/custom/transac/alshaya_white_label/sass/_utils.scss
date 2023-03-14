@@ -804,11 +804,11 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
   }
 }
 
-// Hello Member CLM down Error Massage
-// with background color, eg: @include clmDownMassage(true,$hello-member-points-block-bg)
-// without background color, eg: @include clmDownMassage();
+// Hello Member CLM down Error Message
+// with background color, eg: @include clmDownMessage(true,$hello-member-points-block-bg)
+// without background color, eg: @include clmDownMessage();
 
-@mixin clmDownMassage($bg:false, $value: false) {
+@mixin clmDownMessage($bg:false, $value: false) {
   .hello-member-points-wrapper {
     @if $bg {
       background: $value;
