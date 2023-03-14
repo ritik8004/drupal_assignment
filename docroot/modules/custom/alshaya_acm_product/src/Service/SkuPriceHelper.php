@@ -173,6 +173,19 @@ class SkuPriceHelper {
       }
     }
 
+    // This is a workaround for Cross border sites.
+    if (!empty($data_attribute_special_price)) {
+      // If Sku has special_price value in fixed_price attribute for any
+      // currency, then render price with discount by setting final_price if not
+      // set from backend.
+      $final_price = ($final_price && ($price > $final_price)) ? $final_price : 0.01;
+    }
+    elseif (!empty($data_attribute_price) && !empty($prices['fixed_price'])) {
+      // If Sku has fixed_price attribute and does not contain special price
+      // value then render only price amount and not the discounted price.
+      $final_price = 0;
+    }
+
     if ($price) {
       $this->build['#price'] = [
         '#theme' => 'acq_commerce_price',
