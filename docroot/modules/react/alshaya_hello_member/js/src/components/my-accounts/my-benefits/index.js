@@ -82,7 +82,10 @@ class MyBenefits extends React.Component {
       // Hide Block title.
       document.querySelector('#my-accounts-hello-member').closest('.block').classList.add('no-benefits');
       // Hide 'Benefits' title block when CLM return null.
-      document.querySelector('#block-myaccountshellomemberblock').previousElementSibling.classList.add('hide-benefits-title');
+      document.querySelector('#block-myaccountshellomemberblock').previousElementSibling.classList.add('visually-hidden');
+      // Make Recent order as page title
+      const pageTitle = document.querySelector('#block-myaccountshellomemberblock').nextElementSibling;
+      pageTitle.querySelector('h2').classList.add('c-page-title');
       return null;
     }
 
