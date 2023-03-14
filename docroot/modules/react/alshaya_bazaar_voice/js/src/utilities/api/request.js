@@ -1,5 +1,8 @@
 import Axios from 'axios';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
+import { callMagentoApiSynchronous } from '../../../../../js/utilities/requestHelper';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import logger from '../../../../../js/utilities/logger';
 
 window.alshayaBazaarVoice = window.alshayaBazaarVoice || {};
 
@@ -24,11 +27,7 @@ function getbazaarVoiceSettings(productId = undefined) {
 }
 
 function getUserBazaarVoiceSettings() {
-  const settings = [];
-  if (drupalSettings.userInfo) {
-    settings.reviews = drupalSettings.userInfo;
-  }
-  return settings;
+  return window.alshayaBazaarVoice.getUserBazaarVoiceSettings();
 }
 
 function fetchAPIData(apiUri, params, context = '') {
@@ -138,6 +137,40 @@ function postRequest(url, data) {
       return error;
     });
 }
+
+/**
+ * Get Bazaarvoice config from MDC.
+ *
+ * @returns {array|null}
+ *   Bazaarvoice object or null.
+ */
+function getBazaarVoiceSettingsFromMdc() {
+  if (Drupal.getItemFromLocalStorage('bazaarVoiceSettings')) {
+    return Drupal.getItemFromLocalStorage('bazaarVoiceSettings');
+  }
+
+  const url = '/V1/bv/configs';
+
+  const response = callMagentoApiSynchronous(url);
+  if (hasValue(response.responseText)) {
+    logger.notice('Error while trying to get bazaar voice common settings. Url: @url Message: @message', {
+      '@url': url,
+      '@message': response.responseText,
+    });
+    return null;
+  }
+
+  const data = response[0];
+  Drupal.addItemInLocalStorage(
+    'bazaarVoiceSettings',
+    data,
+    parseInt(drupalSettings.alshaya_bazaar_voice.bazaar_voice.bazaarvoice_settings_expiry, 10),
+  );
+
+  return data;
+}
+
+window.alshayaBazaarVoice.getBazaarVoiceSettingsFromCommerceBackend = getBazaarVoiceSettingsFromMdc;
 
 export {
   getLanguageCode,
