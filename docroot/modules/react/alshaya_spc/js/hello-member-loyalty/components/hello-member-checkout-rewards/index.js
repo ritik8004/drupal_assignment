@@ -93,7 +93,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
 
   render() {
     const {
-      wait, hmPoints, identifierNo, errorResponse,
+      wait, hmPoints, identifierNo, error,
     } = this.state;
     const { animationDelay, cart, refreshCart } = this.props;
 
@@ -105,7 +105,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
       );
     }
 
-    if (hasValue(errorResponse)) {
+    if (error) {
       return null;
     }
 
