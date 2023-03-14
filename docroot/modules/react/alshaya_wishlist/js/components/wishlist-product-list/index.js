@@ -207,6 +207,7 @@ class WishlistProductList extends React.Component {
 
     // Add the drawer markup for add to bag feature.
     createConfigurableDrawer(true);
+    const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
 
     return (
       <>
@@ -219,9 +220,13 @@ class WishlistProductList extends React.Component {
         <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
           <Configure
             // To test the pagination we can hardcode this to static number.
-            hitsPerPage={itemsPerPage}
             filters={filters}
           />
+          {enableHitsPerPage !== 0 ? (
+            <Configure
+              hitsPerPage={itemsPerPage}
+            />
+          ) : null}
           <div id="plp-hits" className="c-products-list product-small view-algolia-plp">
             <ProductInfiniteHits
               gtmContainer="wishlist page"

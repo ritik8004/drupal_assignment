@@ -26,6 +26,7 @@ const ProductCategoryCarousel = ({
     search,
   } = drupalSettings.algoliaSearch;
 
+  const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
   let finalFilter = '';
 
   // Do not show out of stock products.
@@ -48,10 +49,14 @@ const ProductCategoryCarousel = ({
       <Configure
         userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
-        hitsPerPage={itemsPerPage}
         filters={finalFilter}
         ruleContexts={ruleContext}
       />
+      {enableHitsPerPage !== 0 ? (
+        <Configure
+          hitsPerPage={itemsPerPage}
+        />
+      ) : null}
       {/* Section title for the product category carousel. */}
       <h3 className="subtitle crossell-title"><a href={sectionTitle.url}>{sectionTitle.title}</a></h3>
       <div className="views-element-container">

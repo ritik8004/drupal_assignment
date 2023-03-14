@@ -170,6 +170,8 @@ const PlpApp = ({
   }
 
   const defaultpageRender = getBackToPlpPage(pageType);
+  const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
+
 
   finalFilter = `${finalFilter}(${filters.join(filterOperator)})`;
 
@@ -184,11 +186,15 @@ const PlpApp = ({
       <Configure
         userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
-        hitsPerPage={groupEnabled ? 1000 : itemsPerPage}
         filters={finalFilter}
         ruleContexts={context}
         optionalFilters={optionalFilter}
       />
+      {enableHitsPerPage !== 0 ? (
+        <Configure
+          hitsPerPage={groupEnabled ? 1000 : itemsPerPage}
+        />
+      ) : null}
       <PlpStickyFilter
         pageType={pageType}
       >

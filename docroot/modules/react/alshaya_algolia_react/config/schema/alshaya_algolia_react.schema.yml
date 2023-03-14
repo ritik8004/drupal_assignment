@@ -44,7 +44,7 @@ alshaya_algolia_react.settings:
     show_article_swatches:
       type: boolean
       label: 'Enable article swatches on PLP and SRP product teasers.'
-    remove_hits_per_page:
+    hits_per_page:
       type: boolean
       label: 'Enable/Disable htsPerPage key from configuration.'  
 

@@ -100,14 +100,19 @@ class SearchApp extends React.PureComponent {
     const optionalFilter = getSuperCategoryOptionalFilter();
 
     const { indexName } = drupalSettings.algoliaSearch.search;
+    const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
 
     return (
       <div>
         <InstantSearch indexName={`${indexName}_query`} searchClient={algoliaSearchClient}>
           <Configure
-            hitsPerPage={drupalSettings.autocomplete.hits}
             userToken={Drupal.getAlgoliaUserToken()}
           />
+          {enableHitsPerPage !== 0 ? (
+            <Configure
+              hitsPerPage={drupalSettings.autocomplete.hits}
+            />
+          ) : null}
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
             onSuggestionCleared={this.onSuggestionCleared}
@@ -131,10 +136,14 @@ class SearchApp extends React.PureComponent {
                 />
               ) : null}
               <Configure
-                hitsPerPage={drupalSettings.autocomplete.hits}
                 userToken={Drupal.getAlgoliaUserToken()}
                 query={query}
               />
+              {enableHitsPerPage !== 0 ? (
+                <Configure
+                  hitsPerPage={drupalSettings.autocomplete.hits}
+                />
+              ) : null}
               <Hits hitComponent={Teaser} />
             </InstantSearch>
           </Portal>

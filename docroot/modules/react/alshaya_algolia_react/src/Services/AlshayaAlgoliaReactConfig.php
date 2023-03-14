@@ -202,7 +202,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     }
 
     $response = [];
-    dump($alshaya_algolia_react_setting_values->get('remove_hits_per_page'));
     $response['commonAlgoliaSearch'] = [
       'application_id' => $alshaya_algolia_react_setting_values->get('application_id'),
       'api_key' => $alshaya_algolia_react_setting_values->get('search_api_key'),
@@ -221,7 +220,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'topFacetsLimit' => $alshaya_algolia_react_setting_values->get('top_facets_limit'),
       'defaultColgrid' => $alshaya_algolia_react_setting_values->get('default_col_grid'),
       'defaultColGridMobile' => $alshaya_algolia_react_setting_values->get('default_col_grid_mobile'),
-      'removeHitsPerPage' => $alshaya_algolia_react_setting_values->get('remove_hits_per_page') ?? 0,
+      'hitsPerPage' => $alshaya_algolia_react_setting_values->get('hits_per_page') == TRUE ? 1 : 0,
     ];
 
     // Set product elements alignment to true only
