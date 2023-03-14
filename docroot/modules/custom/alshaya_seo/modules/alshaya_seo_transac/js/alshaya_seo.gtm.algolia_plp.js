@@ -59,8 +59,31 @@
         eventName = 'filter';
       }
       else {
-        selectedText = $(this).find('a.facet-item__value').html();
+        var selectedOptionValue = $(this).attr('data-sort');
+        if (Drupal.hasValue(selectedOptionValue)) {
+          // Split values based on EN/AR text and get the text for the selected
+          // value, we receive the sort values in 'data-sort' attr.
+          // Eg for these values is '01live_bbwkw_product_list_ar_title_asc' and
+          // we push 'title_asc' in GTM sort event as facet title.
+          var langPattern = `_${drupalSettings.gtm.language}_`;
+          selectedText = selectedOptionValue.split(langPattern)[1];
+          // When default option is selected we don't get any value after
+          // underscore and lang code.
+          if (!Drupal.hasValue(selectedText)) {
+            langPattern = langPattern.slice(0,-1);
+            selectedText = selectedOptionValue.endsWith(langPattern)
+              ? 'default'
+              : '';
+          }
+        }
+        // If selectedText is still empty it means either 'data-sort' attr
+        // is missing or contains invalid data so we use the sort option text
+        // with Arabic text for AR and English text for EN version.
+        if (!Drupal.hasValue(selectedText)) {
+          selectedText = $(this).find('a.facet-item__value').html();
+        }
         eventName = 'sort';
+        facetTitle = 'Sort By';
       }
 
       var data = {
