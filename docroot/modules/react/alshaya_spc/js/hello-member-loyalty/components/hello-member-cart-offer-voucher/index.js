@@ -27,6 +27,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
       Offers: [],
       isAnonymous: true,
       isVoucherRemoved: false,
+      offerVoucherError: false,
+      errorMessage: '',
     };
   }
 
@@ -76,7 +78,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
 
     // Get coupons list.
     const couponResponse = await callHelloMemberApi('helloMemberCouponsList', 'GET');
-
     if (hasValue(couponResponse.data) && !hasValue(couponResponse.data.error)) {
       couponResponse.data.coupons.forEach((coupon) => {
         if (coupon.promotion_type === 'voucher') {
@@ -90,6 +91,9 @@ class HelloMemberCartOffersVouchers extends React.Component {
       logger.error('Error while calling the coupons Api  @message', {
         '@message': couponResponse.data.message,
       });
+      this.setState({
+        errorMessage: couponResponse.data.message,
+      });
     }
 
     // Get offers list.
@@ -101,11 +105,20 @@ class HelloMemberCartOffersVouchers extends React.Component {
       logger.error('Error while calling the offers Api @message', {
         '@message': offerResponse.data.message,
       });
+      this.setState({
+        errorMessage: offerResponse.data.message,
+      });
     }
     this.setState({
       vouchers,
       Offers,
     });
+
+    if (hasValue(couponResponse.data.error) || hasValue(offerResponse.data.error)) {
+      this.setState({
+        offerVoucherError: true,
+      });
+    }
   }
 
   // On click link call offer and voucher api and open popup.
@@ -185,6 +198,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
       vouchers,
       Offers,
       isAnonymous,
+      offerVoucherError,
+      errorMessage,
     } = this.state;
     const { totals } = this.props;
     const forceRenderTabPanel = true;
@@ -267,32 +282,39 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 && (
                   <span>
                     <div className="hello-member-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
-                    <div className="hello-member-promo-modal-content">
-                      <div className={`error-info-section ${additionalClasses}`}>
-                        {appliedOffers}
-                        {appliedVouchers}
+                    {offerVoucherError
+                    && (
+                      <div className="hello-member-offer-voucher-error-message">{ errorMessage }</div>
+                    )}
+                    {!offerVoucherError
+                    && (
+                      <div className="hello-member-promo-modal-content">
+                        <div className={`error-info-section ${additionalClasses}`}>
+                          {appliedOffers}
+                          {appliedVouchers}
+                        </div>
+                        <Tabs forceRenderTabPanel={forceRenderTabPanel}>
+                          <TabList>
+                            <Tab>{Drupal.t('Bonus Vouchers', {}, { context: 'hello_member' })}</Tab>
+                            <Tab>{Drupal.t('Member Offers', {}, { context: 'hello_member' })}</Tab>
+                          </TabList>
+                          <TabPanel>
+                            <HelloMemberCartPopupBonusVouchersList
+                              vouchers={vouchers}
+                              totals={totals}
+                              promotionType={this.removeAppliedPromotions}
+                            />
+                          </TabPanel>
+                          <TabPanel>
+                            <HelloMemberCartPopupMemberOfferList
+                              offers={Offers}
+                              totals={totals}
+                              promotionType={this.removeAppliedPromotions}
+                            />
+                          </TabPanel>
+                        </Tabs>
                       </div>
-                      <Tabs forceRenderTabPanel={forceRenderTabPanel}>
-                        <TabList>
-                          <Tab>{Drupal.t('Bonus Vouchers', {}, { context: 'hello_member' })}</Tab>
-                          <Tab>{Drupal.t('Member Offers', {}, { context: 'hello_member' })}</Tab>
-                        </TabList>
-                        <TabPanel>
-                          <HelloMemberCartPopupBonusVouchersList
-                            vouchers={vouchers}
-                            totals={totals}
-                            promotionType={this.removeAppliedPromotions}
-                          />
-                        </TabPanel>
-                        <TabPanel>
-                          <HelloMemberCartPopupMemberOfferList
-                            offers={Offers}
-                            totals={totals}
-                            promotionType={this.removeAppliedPromotions}
-                          />
-                        </TabPanel>
-                      </Tabs>
-                    </div>
+                    )}
                   </span>
                 )}
               </Popup>
