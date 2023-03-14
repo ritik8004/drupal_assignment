@@ -826,6 +826,10 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
       font-size: rem(12);
       letter-spacing: rem(0.6);
 
+      html[lang="ar"] & {
+        line-height: rem(20);
+      }
+
       @include breakpoint($desktop) {
         font-size: rem(13);
       }
