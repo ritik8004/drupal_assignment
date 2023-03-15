@@ -12,7 +12,9 @@ use Drupal\Core\Session\AccountProxyInterface;
  */
 class AlshayaShoeAi {
 
+  // Contact for scale in shoeAi settings.
   protected const SCALE = 'eu';
+
   /**
    * Config Factory.
    *
