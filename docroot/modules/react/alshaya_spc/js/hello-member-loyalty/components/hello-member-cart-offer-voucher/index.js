@@ -6,7 +6,7 @@ import {
   TabList,
   TabPanel,
 } from 'react-tabs';
-import { callHelloMemberApi } from '../../../../../js/utilities/helloMemberHelper';
+import { callHelloMemberApi, displayErrorMessage } from '../../../../../js/utilities/helloMemberHelper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import logger from '../../../../../js/utilities/logger';
 import HelloMemberCartPopupBonusVouchersList from './hello-member-cart-popup-bonus-voucher-list';
@@ -27,7 +27,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
       Offers: [],
       isAnonymous: true,
       isVoucherRemoved: false,
-      error: false,
       errorMessage: '',
     };
   }
@@ -75,8 +74,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
    */
   getCustomerOffersAndVouchers = async () => {
     const { vouchers, Offers } = this.state;
-    let error = false;
-    let errorMessage;
+    let errorMessage = '';
 
     // Get coupons list.
     const couponResponse = await callHelloMemberApi('helloMemberCouponsList', 'GET');
@@ -90,7 +88,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
       });
     } else if (hasValue(couponResponse.data.error)) {
       // If coupons API is returning Error.
-      error = couponResponse.data.error;
       errorMessage = couponResponse.data.error_message;
       logger.error('Error while calling the coupons Api  @message', {
         '@message': couponResponse.data.error_message,
@@ -103,7 +100,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
       Offers.push(...offerResponse.data.offers);
     } else if (hasValue(offerResponse.data.error)) {
       // If offers API is returning Error.
-      error = offerResponse.data.error;
       errorMessage = offerResponse.data.error_message;
       logger.error('Error while calling the offers Api @message', {
         '@message': offerResponse.data.error_message,
@@ -113,7 +109,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
     this.setState({
       vouchers,
       Offers,
-      error,
       errorMessage,
     });
   }
@@ -195,7 +190,6 @@ class HelloMemberCartOffersVouchers extends React.Component {
       vouchers,
       Offers,
       isAnonymous,
-      error,
       errorMessage,
     } = this.state;
     const { totals } = this.props;
@@ -279,12 +273,9 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 && (
                   <span>
                     <div className="hello-member-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
-                    {error
-                    && (
-                      <div className="hello-member-offer-voucher-error-message">{ errorMessage }</div>
-                    )}
-                    {!error
-                    && (
+                    {errorMessage !== '' ? (
+                      displayErrorMessage(errorMessage)
+                    ) : (
                       <div className="hello-member-promo-modal-content">
                         <div className={`error-info-section ${additionalClasses}`}>
                           {appliedOffers}
