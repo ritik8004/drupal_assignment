@@ -6,8 +6,7 @@
     .c-products-list {
       &.view-search,
       &.view-algolia-plp {
-        padding-left: 0;
-        padding-right: 0;
+        @include sideSpaces(0);
       }
     }
   }

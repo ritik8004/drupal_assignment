@@ -5,3 +5,12 @@
     $side: $right,
   );
 }
+
+@include breakpoint($desktop) {
+  .block-alshaya-algolia-react-autocomplete {
+    #alshaya-algolia-autocomplete {
+      // Center aligning the search block.
+      margin: 0 auto;
+    }
+  }
+}
