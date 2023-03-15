@@ -210,6 +210,30 @@ const getStaticHtmlOfAuraLanding = async () => {
   return false;
 };
 
+/**
+ * Utility function to get the static HTML of AURA landing page.
+ *
+ * @returns {object|boolean}
+ *   The aura landing page content.
+ */
+const getLoyaltyPageContent = async () => {
+  let staticPageUrl = '';
+  if (hasValue(drupalSettings.aura)
+    && hasValue(drupalSettings.aura.loyaltyStaticPageUrl)) {
+    staticPageUrl = drupalSettings.aura.loyaltyStaticPageUrl;
+  }
+  // Call API only if the static page url is available.
+  if (staticPageUrl) {
+    const response = await callDrupalApi(`/rest/v1/page/simple?url=${staticPageUrl}`, 'GET');
+    if (hasValue(response)
+      && hasValue(response.data)) {
+      return response.data;
+    }
+  }
+
+  return false;
+};
+
 export {
   getElementValue,
   showError,
@@ -228,4 +252,5 @@ export {
   getTooltipPointsOnHoldMsg,
   isMyAuraContext,
   getStaticHtmlOfAuraLanding,
+  getLoyaltyPageContent,
 };

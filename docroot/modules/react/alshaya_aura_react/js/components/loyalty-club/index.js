@@ -3,10 +3,8 @@ import LoyaltyClubBlock from './loyalty-club-block';
 import LoyaltyClubTabs from './loyalty-club-tabs';
 import { getAllAuraStatus } from '../../utilities/helper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
-import { getAuraDetailsDefaultState, getStaticHtmlOfAuraLanding, isMyAuraContext } from '../../utilities/aura_utils';
+import { getAuraDetailsDefaultState } from '../../utilities/aura_utils';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
-import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import LoyaltyPageContent from './loyalty-page-content';
 
 class LoyaltyClub extends React.Component {
   constructor(props) {
@@ -16,7 +14,6 @@ class LoyaltyClub extends React.Component {
       ...getAuraDetailsDefaultState(),
       notYouFailed: false,
       linkCardFailed: false,
-      htmlContent: null,
     };
   }
 
@@ -38,18 +35,6 @@ class LoyaltyClub extends React.Component {
     if (!isUserAuthenticated() && loyaltyStatus === 0) {
       this.setState({
         wait: false,
-      });
-    }
-
-    const auraInfo = getStaticHtmlOfAuraLanding();
-    if (auraInfo instanceof Promise) {
-      auraInfo.then((response) => {
-        // Update state only if html value is available.
-        if (hasValue(response) && hasValue(response.html)) {
-          this.setState({
-            htmlContent: response.html,
-          });
-        }
       });
     }
   }
@@ -94,7 +79,6 @@ class LoyaltyClub extends React.Component {
       lastName,
       notYouFailed,
       linkCardFailed,
-      htmlContent,
     } = this.state;
 
     return (
@@ -116,11 +100,6 @@ class LoyaltyClub extends React.Component {
           updateLoyaltyStatus={this.updateLoyaltyStatus}
         />
 
-        {isMyAuraContext() && (
-          <LoyaltyPageContent
-            htmlContent={htmlContent}
-          />
-        )}
         <LoyaltyClubTabs loyaltyStatus={loyaltyStatus} />
       </>
     );
