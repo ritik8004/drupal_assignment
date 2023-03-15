@@ -27,7 +27,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       Offers: [],
       isAnonymous: true,
       isVoucherRemoved: false,
-      errorMessage: '',
+      errorMessage: null,
     };
   }
 
@@ -74,7 +74,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
    */
   getCustomerOffersAndVouchers = async () => {
     const { vouchers, Offers } = this.state;
-    let errorMessage = '';
+    let errorMessage = null;
 
     // Get coupons list.
     const couponResponse = await callHelloMemberApi('helloMemberCouponsList', 'GET');
@@ -273,7 +273,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 && (
                   <span>
                     <div className="hello-member-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
-                    {errorMessage !== '' ? (
+                    {hasValue(errorMessage) ? (
                       displayErrorMessage(errorMessage)
                     ) : (
                       <div className="hello-member-promo-modal-content">
