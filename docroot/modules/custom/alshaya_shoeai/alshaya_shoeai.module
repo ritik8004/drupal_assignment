@@ -17,10 +17,11 @@ function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, Entity
   if (in_array($entity->bundle(), $bundle) && $view_mode == 'full') {
     $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
-    $shoeAi = get_shoe_ai_settings();
-    if (!empty($shoeAi)) {
+    $shoeAi = \Drupal::service('alshaya_shoeai.helper');
+    $shoeAiSettings = $shoeAi->getShoeAiSettings();
+    if (!empty($shoeAiSettings)) {
       $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
-      $build['#attached']['drupalSettings']['shoeai'] = $shoeAi;
+      $build['#attached']['drupalSettings']['shoeai'] = $shoeAiSettings;
     }
   }
 }
@@ -33,29 +34,11 @@ function alshaya_shoeai_taxonomy_term_view(array &$build, EntityInterface $entit
   if (in_array($entity->bundle(), $vocabularies) && $view_mode == 'full') {
     $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
-    $shoeAi = get_shoe_ai_settings();
-    if (!empty($shoeAi)) {
+    $shoeAi = \Drupal::service('alshaya_shoeai.helper');
+    $shoeAiSettings = $shoeAi->getShoeAiSettings();
+    if (!empty($shoeAiSettings)) {
       $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
-      $build['#attached']['drupalSettings']['shoeai'] = $shoeAi;
+      $build['#attached']['drupalSettings']['shoeai'] = $shoeAiSettings;
     }
   }
-}
-
-/**
- * Helper function for creating shoeAi settings.
- *
- * @return array
- *   Return array of settings when shoeai is enabled.
- */
-function get_shoe_ai_settings() {
-  $shoeAiSettings = [];
-  $shoeAi = \Drupal::service('alshaya_shoeai.helper');
-  $status = $shoeAi->getShoeAiStatus();
-  if ($status != 0) {
-    $shoeAiSettings['status'] = $status;
-    $shoeAiSettings['shopId'] = $shoeAi->getShoeAiShopId();
-    $shoeAiSettings['scale'] = $shoeAi->getShoeAiScale();
-    $shoeAiSettings['zeroHash'] = $shoeAi->getShoeAiZeroHash();
-  }
-  return $shoeAiSettings;
 }

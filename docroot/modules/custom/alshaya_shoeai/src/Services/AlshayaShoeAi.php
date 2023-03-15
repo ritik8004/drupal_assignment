@@ -44,10 +44,6 @@ class AlshayaShoeAi {
   }
 
   /**
-   * Return status of shoeAI.
-   */
-
-  /**
    * Returns 0 - disabled/shopId empty, 1 - enabled and 2 - experimental(TO DO).
    *
    * @return int
@@ -56,11 +52,10 @@ class AlshayaShoeAi {
   public function getShoeAiStatus() {
     $state = 0;
     $alshaya_shoeai_settings = $this->configFactory->get('alshaya_shoeai.settings');
-    if ($alshaya_shoeai_settings->get('shop_id') == '') {
+    if (!empty($alshaya_shoeai_settings->get('shop_id'))) {
       return $state;
     }
-    $state = $alshaya_shoeai_settings->get('enable_shoeai');
-    return $state;
+    return $alshaya_shoeai_settings->get('enable_shoeai');
   }
 
   /**
@@ -98,6 +93,25 @@ class AlshayaShoeAi {
       $zeroHash = md5($this->currentUser->getEmail());
     }
     return $zeroHash;
+  }
+
+  /**
+   * Helper function for creating shoeAi settings.
+   *
+   * @return array
+   *   Return array of settings when shoeai is enabled.
+   */
+  public function getShoeAiSettings() {
+
+    $shoeAiSettings = [];
+    $status = $this->getShoeAiStatus();
+    if ($status != 0) {
+      $shoeAiSettings['status'] = $status;
+      $shoeAiSettings['shopId'] = $this->getShoeAiShopId();
+      $shoeAiSettings['scale'] = $this->getShoeAiScale();
+      $shoeAiSettings['zeroHash'] = $this->getShoeAiZeroHash();
+    }
+    return $shoeAiSettings;
   }
 
 }
