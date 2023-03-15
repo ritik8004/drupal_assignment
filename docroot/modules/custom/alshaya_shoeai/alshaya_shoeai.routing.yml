@@ -4,4 +4,4 @@ alshaya_shoeai.settings:
     _form: '\Drupal\alshaya_shoeai\Form\AlshayaShoeaiSettingsForm'
     _title: 'Shoe AI'
   requirements:
-    _permission: 'administer site configurations'
+    _permission: 'administer site configuration'
