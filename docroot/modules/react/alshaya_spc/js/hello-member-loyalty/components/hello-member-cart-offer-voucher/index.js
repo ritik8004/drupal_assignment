@@ -27,7 +27,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       Offers: [],
       isAnonymous: true,
       isVoucherRemoved: false,
-      offerVoucherError: false,
+      error: false,
       errorMessage: '',
     };
   }
@@ -75,7 +75,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
    */
   getCustomerOffersAndVouchers = async () => {
     const { vouchers, Offers } = this.state;
-    let errorResponse = '';
+    let error = false;
+    let errorMessage;
 
     // Get coupons list.
     const couponResponse = await callHelloMemberApi('helloMemberCouponsList', 'GET');
@@ -89,10 +90,11 @@ class HelloMemberCartOffersVouchers extends React.Component {
       });
     } else if (hasValue(couponResponse.data.error)) {
       // If coupons API is returning Error.
+      error = couponResponse.data.error;
+      errorMessage = couponResponse.data.error_message;
       logger.error('Error while calling the coupons Api  @message', {
         '@message': couponResponse.data.error_message,
       });
-      errorResponse = couponResponse.data.error_message;
     }
 
     // Get offers list.
@@ -101,22 +103,18 @@ class HelloMemberCartOffersVouchers extends React.Component {
       Offers.push(...offerResponse.data.offers);
     } else if (hasValue(offerResponse.data.error)) {
       // If offers API is returning Error.
+      error = offerResponse.data.error;
+      errorMessage = offerResponse.data.error_message;
       logger.error('Error while calling the offers Api @message', {
         '@message': offerResponse.data.error_message,
-      });
-      errorResponse = offerResponse.data.error_message;
-    }
-
-    if (hasValue(couponResponse.data.error) || hasValue(offerResponse.data.error)) {
-      this.setState({
-        offerVoucherError: true,
-        errorMessage: errorResponse,
       });
     }
 
     this.setState({
       vouchers,
       Offers,
+      error,
+      errorMessage,
     });
   }
 
@@ -197,7 +195,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       vouchers,
       Offers,
       isAnonymous,
-      offerVoucherError,
+      error,
       errorMessage,
     } = this.state;
     const { totals } = this.props;
@@ -281,11 +279,11 @@ class HelloMemberCartOffersVouchers extends React.Component {
                 && (
                   <span>
                     <div className="hello-member-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
-                    {offerVoucherError
+                    {error
                     && (
                       <div className="hello-member-offer-voucher-error-message">{ errorMessage }</div>
                     )}
-                    {!offerVoucherError
+                    {!error
                     && (
                       <div className="hello-member-promo-modal-content">
                         <div className={`error-info-section ${additionalClasses}`}>
