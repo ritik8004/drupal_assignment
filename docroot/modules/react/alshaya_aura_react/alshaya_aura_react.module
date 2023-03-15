@@ -156,6 +156,45 @@ function alshaya_aura_react_preprocess_html(&$variables) {
   }
   // Aura Enabled class.
   $variables['attributes']['class'][] = Html::cleanCssIdentifier('aura-enabled');
+  // Add 'my-aura-page-title-block' to My aura page title block,
+  // To remove text transform property,
+  // So that "My Aura"/"About Aura" should not have any text transform.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name === 'alshaya_aura_react.my_loyalty_club') {
+    $variables['#cache']['tags'] = array_merge($variables['#cache']['tags']
+    ?? [], \Drupal::config('alshaya_aura_react.loyalty_benefits')->getCacheTags());
+    $auraDyNodeId = \Drupal::config('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node');
+    if (empty($auraDyNodeId)) {
+      return;
+    }
+    // Get the node object.
+    $node = \Drupal::entityTypeManager()->getStorage('node')->load($auraDyNodeId);
+    // If somehow not getting node object.
+    if (!$node) {
+      return;
+    }
+    // Get CSS and JS.
+    $css = $node->get('field_css')->getString();
+    $js = $node->get('field_javascript')->getString();
+    // Add CSS in head.
+    $variables['inline_css'] = [
+      '#type' => 'inline_template',
+      '#template' => '{{ inline_css | raw }}',
+      '#context' => [
+        'inline_css' => $css,
+      ],
+    ];
+    // Add JS in head.
+    $variables['inline_js'] = [
+      '#type' => 'inline_template',
+      '#template' => '{{ inline_js | raw }}',
+      '#context' => [
+        'inline_js' => $js,
+      ],
+    ];
+    // Attach jquery library.
+    $variables['#attached']['library'][] = 'core/jquery';
+  }
 }
 
 /**
