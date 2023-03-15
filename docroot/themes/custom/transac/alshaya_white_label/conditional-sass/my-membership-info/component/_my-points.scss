@@ -78,4 +78,27 @@
   }
 }
 
-@include clmDownMessage(true,$hello-member-points-block-bg);
+@include clmDownMessage($hello-member-points-block-bg);
+
+.my-accounts-points-history {
+  @include breakpoint($desktop) {
+    text-align: center;
+  }
+
+  .hello-member-points-wrapper {
+    margin: 0;
+    background: none;
+
+    @include breakpoint($only-mobile) {
+      padding: 0;
+    }
+
+    .hello-member-downtime-message {
+      @include breakpoint($desktop) {
+        font-size: rem(16);
+        font-family: $alshaya-bold;
+        letter-spacing: normal;
+      }
+    }
+  }
+}
