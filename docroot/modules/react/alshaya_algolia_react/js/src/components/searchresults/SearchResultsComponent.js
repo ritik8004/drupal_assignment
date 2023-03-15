@@ -91,6 +91,7 @@ const SearchResultsComponent = ({
   // Add the drawer markup for add to bag feature.
   createConfigurableDrawer();
 
+  // For enabling/disabling hitsPerPage key in algolia calls.
   const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
 
   return (
@@ -104,14 +105,10 @@ const SearchResultsComponent = ({
       <Configure
         userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
+        {...(enableHitsPerPage && { hitsPerPage: drupalSettings.algoliaSearch.itemsPerPage })}
         filters={stockFilter}
         query={query}
       />
-      {enableHitsPerPage !== 0 ? (
-        <Configure
-          hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage}
-        />
-      ) : null}
       {optionalFilter ? (
         <Configure
           optionalFilters={optionalFilter}

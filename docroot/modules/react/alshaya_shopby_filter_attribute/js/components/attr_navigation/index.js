@@ -35,6 +35,8 @@ const AttrNavigation = (props) => {
 
   // Prepare ruleContexts.
   const ruleContexts = [];
+
+  // For enabling/disabling hitsPerPage key in algolia calls.
   const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
 
   if (typeof element.dataset.ruleContext !== 'undefined'
@@ -50,14 +52,10 @@ const AttrNavigation = (props) => {
       <Configure
         // As we don't need any results/records from algolia, we keep this 0. We
         // only need facets to display the available options.
+        {...(enableHitsPerPage && { hitsPerPage: '0' })}
         filters={filters}
         ruleContexts={ruleContexts}
       />
-      {enableHitsPerPage !== 0 ? (
-        <Configure
-          hitsPerPage="0"
-        />
-      ) : null}
       <Menu
         attributeAlias={attr}
         // Prepare the attribute as per the Algolia facet data.

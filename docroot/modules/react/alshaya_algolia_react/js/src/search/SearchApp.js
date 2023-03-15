@@ -100,19 +100,16 @@ class SearchApp extends React.PureComponent {
     const optionalFilter = getSuperCategoryOptionalFilter();
 
     const { indexName } = drupalSettings.algoliaSearch.search;
+    // For enabling/disabling hitsPerPage key in algolia calls.
     const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
 
     return (
       <div>
         <InstantSearch indexName={`${indexName}_query`} searchClient={algoliaSearchClient}>
           <Configure
+            {...(enableHitsPerPage && { hitsPerPage: drupalSettings.autocomplete.hits })}
             userToken={Drupal.getAlgoliaUserToken()}
           />
-          {enableHitsPerPage !== 0 ? (
-            <Configure
-              hitsPerPage={drupalSettings.autocomplete.hits}
-            />
-          ) : null}
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
             onSuggestionCleared={this.onSuggestionCleared}
@@ -136,14 +133,10 @@ class SearchApp extends React.PureComponent {
                 />
               ) : null}
               <Configure
+                {...(enableHitsPerPage && { hitsPerPage: drupalSettings.autocomplete.hits })}
                 userToken={Drupal.getAlgoliaUserToken()}
                 query={query}
               />
-              {enableHitsPerPage !== 0 ? (
-                <Configure
-                  hitsPerPage={drupalSettings.autocomplete.hits}
-                />
-              ) : null}
               <Hits hitComponent={Teaser} />
             </InstantSearch>
           </Portal>

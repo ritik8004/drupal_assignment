@@ -76,10 +76,11 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('hide_grid_toggle'),
     ];
 
-    $form['hits_per_page'] = [
+    $form['enable_hits_per_page'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable hits per page value for algolia calls.'),
-      '#default_value' => $config->get('hits_per_page') ?: 0,
+      '#default_value' => $config->get('enable_hits_per_page') ?: FALSE,
+      '#description' => $this->t('Checkbox to enable or disable hitsPerPage key in algolia call.'),
     ];
 
     $form['default_col_grid'] = [
@@ -114,7 +115,7 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       ->set('hide_grid_toggle', $form_state->getValue('hide_grid_toggle'))
       ->set('default_col_grid', $form_state->getValue('default_col_grid'))
       ->set('default_col_grid_mobile', $form_state->getValue('default_col_grid_mobile'))
-      ->set('hits_per_page', $form_state->getValue('hits_per_page'))
+      ->set('enable_hits_per_page', $form_state->getValue('enable_hits_per_page'))
       ->save();
 
     parent::submitForm($form, $form_state);

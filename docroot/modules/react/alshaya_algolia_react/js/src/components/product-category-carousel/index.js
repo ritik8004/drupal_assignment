@@ -26,6 +26,7 @@ const ProductCategoryCarousel = ({
     search,
   } = drupalSettings.algoliaSearch;
 
+  // For enabling/disabling hitsPerPage key in algolia calls.
   const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
   let finalFilter = '';
 
@@ -49,14 +50,10 @@ const ProductCategoryCarousel = ({
       <Configure
         userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
+        {...(enableHitsPerPage && { hitsPerPage: itemsPerPage })}
         filters={finalFilter}
         ruleContexts={ruleContext}
       />
-      {enableHitsPerPage !== 0 ? (
-        <Configure
-          hitsPerPage={itemsPerPage}
-        />
-      ) : null}
       {/* Section title for the product category carousel. */}
       <h3 className="subtitle crossell-title"><a href={sectionTitle.url}>{sectionTitle.title}</a></h3>
       <div className="views-element-container">
