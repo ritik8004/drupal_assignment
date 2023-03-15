@@ -131,12 +131,12 @@ class AlshayaWebFormOptionsListResource extends ResourceBase {
       $field_elements = Yaml::parse($config->get('elements'));
 
       foreach ($field_elements as $key => $value) {
-        if (!empty($field_elements[$key]['#options'])) {
+        if (!empty($value['#options'])) {
           if (in_array($key, ['reason1', 'reason2', 'reason3', 'reason4'])) {
-            $data['reasons'][$key] = $field_elements[$key]['#options'];
+            $data['reasons'][$key] = $value['#options'];
           }
           else {
-            $data[$key] = $field_elements[$key]['#options'];
+            $data[$key] = $value['#options'];
           }
         }
       }

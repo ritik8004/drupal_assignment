@@ -69,3 +69,13 @@
     padding: rem(20);
   }
 }
+
+@include breakpoint($desktop) {
+  #block-userrecentorders {
+    h2.subtitle.c-page-title {
+      margin-top: rem(8);
+    }
+  }
+}
+
+@include clmDownMessage(true,$hello-member-points-block-bg);

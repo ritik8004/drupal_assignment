@@ -40,24 +40,6 @@ header {
         }
       }
     }
-
-    .c-secondary-header__region {
-      .secondary-main-menu-wrapper {
-        .megamenu-dynamic-layout {
-          @include sideSpaces(0, $type: "margin");
-          @include fullWidthSideSpaces(
-            $is_desktop: true,
-            $is_desktop_wide: true,
-          );
-
-          .menu--one__list {
-            @include breakpoint($desktop) {
-              @include sideSpaces(0);
-            }
-          }
-        }
-      }
-    }
   }
 }
 

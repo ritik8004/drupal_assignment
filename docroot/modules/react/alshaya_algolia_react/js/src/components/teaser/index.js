@@ -48,7 +48,6 @@ const Teaser = ({
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
   const activateShoeAI = (hasValue(drupalSettings.shoeai) && drupalSettings.shoeai.status === 1);
-
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
