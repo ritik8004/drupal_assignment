@@ -75,6 +75,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
    */
   getCustomerOffersAndVouchers = async () => {
     const { vouchers, Offers } = this.state;
+    let errorResponse = '';
 
     // Get coupons list.
     const couponResponse = await callHelloMemberApi('helloMemberCouponsList', 'GET');
@@ -91,9 +92,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
       logger.error('Error while calling the coupons Api  @message', {
         '@message': couponResponse.data.error_message,
       });
-      this.setState({
-        errorMessage: couponResponse.data.error_message,
-      });
+      errorResponse = couponResponse.data.error_message;
     }
 
     // Get offers list.
@@ -105,20 +104,20 @@ class HelloMemberCartOffersVouchers extends React.Component {
       logger.error('Error while calling the offers Api @message', {
         '@message': offerResponse.data.error_message,
       });
-      this.setState({
-        errorMessage: offerResponse.data.error_message,
-      });
+      errorResponse = offerResponse.data.error_message;
     }
-    this.setState({
-      vouchers,
-      Offers,
-    });
 
     if (hasValue(couponResponse.data.error) || hasValue(offerResponse.data.error)) {
       this.setState({
         offerVoucherError: true,
+        errorMessage: errorResponse,
       });
     }
+
+    this.setState({
+      vouchers,
+      Offers,
+    });
   }
 
   // On click link call offer and voucher api and open popup.
