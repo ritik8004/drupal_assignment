@@ -219,7 +219,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'topFacetsLimit' => $alshaya_algolia_react_setting_values->get('top_facets_limit'),
       'defaultColgrid' => $alshaya_algolia_react_setting_values->get('default_col_grid'),
       'defaultColGridMobile' => $alshaya_algolia_react_setting_values->get('default_col_grid_mobile'),
-      'hitsPerPage' => $alshaya_algolia_react_setting_values->get('enable_hits_per_page') == TRUE ?? FALSE,
+      'hitsPerPage' => $alshaya_algolia_react_setting_values->get('enable_hits_per_page'),
     ];
 
     // Set product elements alignment to true only
