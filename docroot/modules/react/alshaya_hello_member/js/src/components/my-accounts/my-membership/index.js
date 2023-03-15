@@ -55,12 +55,12 @@ class MyMembership extends React.Component {
       );
     }
 
-    if (myMembershipData === null) {
-      return null;
-    }
-
     if (hasValue(errorMessage)) {
       return displayErrorMessage(errorMessage);
+    }
+
+    if (myMembershipData === null) {
+      return null;
     }
 
     const memberId = getFormatedMemberId(myMembershipData.apc_identifier_number);
