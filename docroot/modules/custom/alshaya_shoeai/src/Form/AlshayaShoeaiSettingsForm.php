@@ -32,14 +32,14 @@ class AlshayaShoeaiSettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_shoeai.settings');
     $form['enable_shoeai'] = [
       '#type' => 'select',
-      '#title' => $this->t('Module status'),
+      '#title' => $this->t('Shoe AI feature status'),
       '#required' => TRUE,
       '#options' => [
         '1' => $this->t('Enabled'),
         '0' => $this->t('Disabled'),
       ],
       '#default_value' => $config->get('enable_shoeai') ?: 0,
-      '#description' => $this->t('This setting is used for checking if module configs are enabled or disabled.'),
+      '#description' => $this->t('This setting is used for checking if shoeAi feature is enabled or disabled.'),
     ];
     $form['shop_id'] = [
       '#type' => 'textfield',
