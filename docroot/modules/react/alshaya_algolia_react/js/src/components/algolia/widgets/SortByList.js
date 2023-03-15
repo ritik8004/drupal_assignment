@@ -15,6 +15,7 @@ const SortByList = ({ items, refine, name }) => (
           refine(item.value);
         }}
         data-sort={item.value}
+        gtm-key={item.gtm_key}
       >
         <a
           href="#"
