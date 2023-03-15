@@ -42,13 +42,14 @@ class AlshayaShoeAi {
   }
 
   /**
-   * Return status of shoeAI 
-   * 0 => disabled
-   * 1 => enabled
-   * 2 => experimental(TO DO)
-   * if shopId is empty than also returns 0.
-   * @return integer
-   * Return 0 or 1 or 2.
+   * Return status of shoeAI.
+   */
+
+  /**
+   * Returns 0 - disabled/shopId empty, 1 - enabled and 2 - experimental(TO DO).
+   *
+   * @return int
+   *   Returns status.
    */
   public function getShoeAiStatus() {
     $state = 0;
