@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_shoeai;
+namespace Drupal\alshaya_shoeai\Services;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -28,7 +28,7 @@ class AlshayaShoeAi {
   protected $currentUser;
 
   /**
-   * Alshaya Constructor.
+   * ShoeAi Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
@@ -42,19 +42,22 @@ class AlshayaShoeAi {
   }
 
   /**
-   * Check if shoeAI is enabled or not.
-   *
-   * @return bool
-   *   Return true when shoeai is enabled.
+   * Return status of shoeAI 
+   * 0 => disabled
+   * 1 => enabled
+   * 2 => experimental(TO DO)
+   * if shopId is empty than also returns 0.
+   * @return integer
+   * Return 0 or 1 or 2.
    */
-  public function isShoeAiFeatureEnabled() {
-    $shoe_ai_enabled = FALSE;
+  public function getShoeAiStatus() {
+    $state = 0;
     $alshaya_shoeai_settings = $this->configFactory->get('alshaya_shoeai.settings');
-    $state = $alshaya_shoeai_settings->get('enable_shoeai');
-    if ($state) {
-      $shoe_ai_enabled = TRUE;
+    if ($alshaya_shoeai_settings->get('shop_id') == '') {
+      return $state;
     }
-    return $shoe_ai_enabled;
+    $state = $alshaya_shoeai_settings->get('enable_shoeai');
+    return $state;
   }
 
   /**

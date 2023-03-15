@@ -3,7 +3,7 @@ alshaya_shoeai.settings:
   label: 'Shoe AI settings'
   mapping:
     enable_shoeai:
-      type: string
+      type: integer
       label: 'Shoe AI status'
     shop_id:
       type: text

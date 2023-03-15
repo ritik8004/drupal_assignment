@@ -4,7 +4,7 @@
  */
 (function (drupalSettings) {  
   let shoeAi = drupalSettings.shoeai;
-  if (shoeAi.status != null && shoeAi.status == true) {
+  if (shoeAi.status != null && shoeAi.status == 1) {
     let language = drupalSettings.path.currentLanguage;
     let script = document.createElement('script');
     script.src = 'https://shoesize.me/assets/plugin/loader.js';
