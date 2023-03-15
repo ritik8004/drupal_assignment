@@ -58,7 +58,6 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
 
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
     $build['#cache']['contexts'][] = 'url.query_args:bv_authtoken';
-
     $build['#attached']['drupalSettings']['productInfo'][$sanitized_sku]['alshaya_bazaar_voice'] = $settings;
   }
 }
