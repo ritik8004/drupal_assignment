@@ -36,7 +36,9 @@ class BnplMethods {
    */
   public function getBnplPaymentMethods() {
 
-    return explode(',', $this->configFactory->get('acq_payment.bnpl_payment_config')->get('bnpl_payment_methods'));
+    return $this->configFactory->get('acq_payment.bnpl_payment_config')->get('bnpl_payment_methods')
+      ? explode(',', $this->configFactory->get('acq_payment.bnpl_payment_config')->get('bnpl_payment_methods'))
+      : [];
   }
 
 }
