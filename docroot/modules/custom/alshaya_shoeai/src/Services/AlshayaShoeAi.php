@@ -12,9 +12,9 @@ use Drupal\Core\Session\AccountProxyInterface;
  */
 class AlshayaShoeAi {
 
- /**
-  * Constant for scale.
-  */
+  /**
+   * Constant for scale.
+   */
   protected const SCALE = 'eu';
 
   /**
