@@ -135,14 +135,18 @@ class AlshayaProductListDrushCommands extends DrushCommands {
     $values = [];
     foreach ($set_attribute_values as $attribute_value) {
       try {
-        $properties = [
-          'field_attribute_name' => $attribute,
-          'field_attribute_value' => $attribute_value,
-          'type' => 'product_list',
-        ];
-        $entities = \Drupal::entityTypeManager()->getStorage('node')
-          ->loadByProperties($properties);
-        $node = array_shift($entities);
+        // Changed to entity query for exact match.
+        $node = NULL;
+        $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+        $nids = $node_storage->getQuery()
+          ->condition('type', 'product_list')
+          ->condition('field_attribute_name', $attribute)
+          ->condition('field_attribute_value', $attribute_value, '= BINARY')
+          ->execute();
+        if (!empty($nids)) {
+          $nid = array_shift($nids);
+          $node = $node_storage->load($nid);
+        }
         // If node exists, we create or we skip.
         if (!($node instanceof Node)) {
           $node = Node::create([

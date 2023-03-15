@@ -215,15 +215,19 @@ function alshaya_product_list_taxonomy_term_presave(TermInterface $term) {
       $node = NULL;
       // Check if node exists with attribute value or its translation.
       foreach ($term->getTranslationLanguages() as $language) {
+        $node = NULL;
         $term_translation = $term->getTranslation($language->getId());
-        $properties = [
-          'field_attribute_name' => $attribute,
-          'field_attribute_value' => $term_translation->getName(),
-          'type' => 'product_list',
-        ];
-        $entities = \Drupal::entityTypeManager()->getStorage('node')
-          ->loadByProperties($properties);
-        $node = !empty($entities) ? array_shift($entities) : NULL;
+        // Changed to entity query for exact match.
+        $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+        $nids = $node_storage->getQuery()
+          ->condition('type', 'product_list')
+          ->condition('field_attribute_name', $attribute)
+          ->condition('field_attribute_value', $term_translation->getName(), '= BINARY')
+          ->execute();
+        if (!empty($nids)) {
+          $nid = array_shift($nids);
+          $node = $node_storage->load($nid);
+        }
         if ($node instanceof Node) {
           break;
         }
