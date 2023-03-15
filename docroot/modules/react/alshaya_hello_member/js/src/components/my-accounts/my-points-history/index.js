@@ -15,6 +15,7 @@ class MyPointsHistory extends React.Component {
       pageSize: getPointstHistoryPageSize(),
       firstPage: 1,
       totalCount: 0,
+      errorMessage: '',
     };
   }
 
@@ -58,6 +59,9 @@ class MyPointsHistory extends React.Component {
             });
           }
         } else if (hasValue(response.error)) {
+          this.setState({
+            errorMessage: response.error_message,
+          });
           logger.error('Error while trying to get hello member points history data. Data: @data.', {
             '@data': JSON.stringify(response),
           });
@@ -69,11 +73,15 @@ class MyPointsHistory extends React.Component {
 
   render() {
     const {
-      pointsHistoryData, totalCount, pageSize,
+      pointsHistoryData, totalCount, pageSize, errorMessage,
     } = this.state;
 
     if (pointsHistoryData === null) {
       return null;
+    }
+
+    if (hasValue(errorMessage)) {
+      return <div className="hello-member-points-history-wrapper"><div className="hello-member-downtime-message">{ errorMessage }</div></div>;
     }
 
     return (

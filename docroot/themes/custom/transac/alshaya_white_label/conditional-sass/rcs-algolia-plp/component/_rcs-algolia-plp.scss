@@ -1,3 +1,13 @@
-#block-alshaya-algolia-listing-v2 #alshaya-algolia-plp:empty {
-  @include text-block-loader;
+#block-alshaya-algolia-listing-v2 {
+  #alshaya-algolia-plp:empty {
+    @include text-block-loader;
+  }
+
+  .c-products-list {
+    .grouping-enabled {
+      .term-desc {
+        margin-bottom: rem(30);
+      }
+    }
+  }
 }

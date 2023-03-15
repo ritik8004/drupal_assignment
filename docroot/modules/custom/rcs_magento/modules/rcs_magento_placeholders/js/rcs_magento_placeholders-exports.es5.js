@@ -51,6 +51,8 @@ async function handleNoItemsInResponse(request, urlKey) {
  *
  * @param {string} data
  *   The string to prepare.
+ * @param {object} variables
+ *   Variables for the request.
  *
  * @returns {string}
  *   The compressed and URL safe string.
