@@ -1,0 +1,8 @@
+@include breakpoint($only-mobile) {
+  #reviews-rating .rating-wrapper .button-wrapper {
+    @include sideSpaces(
+      $value: $full_width_padding_mobile,
+      $side: $left
+    );
+  }
+}

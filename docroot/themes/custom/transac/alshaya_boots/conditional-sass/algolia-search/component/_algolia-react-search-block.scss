@@ -71,6 +71,11 @@
       padding-#{$right}: 0;
     }
 
+    @include breakpoint($desktop) {
+      // Aligning the search block center horizontally.
+      margin: 0 auto;
+    }
+
     .react-autosuggest__container {
       &::before {
         height: auto;

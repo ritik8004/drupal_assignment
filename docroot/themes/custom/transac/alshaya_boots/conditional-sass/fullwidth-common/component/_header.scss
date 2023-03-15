@@ -1,0 +1,7 @@
+.block-alshaya-options-list-menu .options-page-menu-list a {
+  @include fullWidthSideSpaces(
+    $is_desktop: true,
+    $is_desktop_wide: true,
+    $side: $right,
+  );
+}
