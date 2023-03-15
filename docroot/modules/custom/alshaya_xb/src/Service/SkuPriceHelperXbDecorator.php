@@ -89,6 +89,7 @@ class SkuPriceHelperXbDecorator extends SkuPriceHelper {
     // Get config overrides by domain.
     $config = $this->domainConfig->getConfigByDomain();
 
+    // When fixed price (Catalog price) exist, we override the MDC prices.
     if (!empty($data_attribute_special_price) && array_key_exists($config['code'], $data_attribute_special_price)) {
       // If Sku has special_price value in fixed_price attribute for site's
       // currency, then render price with discount by setting final_price to
