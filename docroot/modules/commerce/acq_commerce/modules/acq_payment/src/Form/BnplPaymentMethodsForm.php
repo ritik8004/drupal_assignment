@@ -42,7 +42,7 @@ class BnplPaymentMethodsForm extends ConfigFormBase {
     $bnpl_config = $this->config('acq_payment.bnpl_payment_config');
 
     $form['bnpl_payment_methods'] = [
-      '#type' => 'textarea',
+      '#type' => 'textfield',
       '#title' => $this->t('BNPL Payment Methods'),
       '#description' => $this->t('A comma-separated list of the names of the payment methods.'),
       '#default_value' => $bnpl_config->get('bnpl_payment_methods'),
