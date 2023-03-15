@@ -72,7 +72,7 @@
     }
 
     @include breakpoint($desktop) {
-      // Aligning the search block center horizontally.
+      // Center aligning the search block.
       margin: 0 auto;
     }
 
