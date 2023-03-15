@@ -16,7 +16,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
       wait: true,
       hmPoints: null,
       identifierNo: null,
-      errorResponse: null,
+      error: false,
     };
   }
 
@@ -33,7 +33,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
     // For registered user, we get hello member points earned from the api.
     // Skip get customer data api if identifier number already available in cart.
     let identifierNo = null;
-    let errorResponse = null;
+    let error = false;
     if (isUserAuthenticated()) {
       if (hasValue(loyaltyType) && hasValue(loyaltyCard) && loyaltyType === 'hello_member') {
         identifierNo = loyaltyCard;
@@ -44,7 +44,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
           // we get hello member points which can be earned by customer.
           identifierNo = response.data.apc_identifier_number;
         } else if (hasValue(response.error)) {
-          errorResponse = response.error;
+          error = true;
           logger.error('Error while trying to get hello member customer data. Data: @data.', {
             '@data': JSON.stringify(response),
           });
@@ -56,7 +56,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
     this.updateHelloMemberPoints(identifierNo);
     this.setState({
       identifierNo,
-      errorResponse,
+      error,
     });
   }
 
@@ -71,7 +71,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
       cart: { cart: { items } },
     } = this.props;
     let hmPoints = null;
-    let errorResponse = null;
+    let error = false;
     const response = await getHelloMemberPointsToEarn(items, identifierNo);
     if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
       if (hasValue(response.data.hm_points)) {
@@ -79,7 +79,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
       }
     } else if (hasValue(response.error)) {
       // set response.error data to errorResponse when CLM is down.
-      errorResponse = response.error;
+      error = true;
       logger.error('Error while trying to get hello member points data. Data: @data.', {
         '@data': JSON.stringify(response),
       });
@@ -87,13 +87,13 @@ class HelloMemberLoyaltyOptions extends React.Component {
     this.setState({
       hmPoints,
       wait: false,
-      errorResponse,
+      error,
     });
   }
 
   render() {
     const {
-      wait, hmPoints, identifierNo, errorResponse,
+      wait, hmPoints, identifierNo, error,
     } = this.state;
     const { animationDelay, cart, refreshCart } = this.props;
 
@@ -105,7 +105,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
       );
     }
 
-    if (hasValue(errorResponse)) {
+    if (error) {
       return null;
     }
 
