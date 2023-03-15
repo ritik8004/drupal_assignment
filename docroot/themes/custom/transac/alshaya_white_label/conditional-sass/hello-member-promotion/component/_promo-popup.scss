@@ -150,3 +150,11 @@
     }
   }
 }
+
+.clm-down-error-message {
+  text-align: center;
+  padding: rem(40);
+  padding-top: rem(24);
+
+  @include clmDownMessage($hello-member-points-block-bg);
+}

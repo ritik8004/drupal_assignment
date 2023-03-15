@@ -803,3 +803,27 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
     }
   }
 }
+
+// Hello Member CLM down Error Message
+// eg: @include clmDownMessage($hello-member-points-block-bg)
+@mixin clmDownMessage($value) {
+  .hello-member-points-wrapper {
+    background: $value;
+    padding: rem(16) rem(14);
+    margin: rem(32) 0 rem(45);
+    @include breakpoint($only-tablet) {
+      padding: rem(16) rem(4);
+      margin-top: rem(36);
+    }
+    .hello-member-downtime-message {
+      font-size: rem(12);
+      letter-spacing: rem(0.6);
+      html[lang="ar"] & {
+        line-height: rem(20);
+      }
+      @include breakpoint($desktop) {
+        font-size: rem(13);
+      }
+    }
+  }
+}

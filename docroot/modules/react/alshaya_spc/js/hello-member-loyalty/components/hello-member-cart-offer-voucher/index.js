@@ -86,7 +86,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
           Offers.push(coupon);
         }
       });
-    } else if (hasValue(couponResponse.data.error)) {
+    } else {
       // If coupons API is returning Error.
       errorMessage = couponResponse.data.error_message;
       logger.error('Error while calling the coupons Api  @message', {
@@ -98,7 +98,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
     const offerResponse = await callHelloMemberApi('helloMemberOffersList', 'GET');
     if (hasValue(offerResponse.data) && !hasValue(offerResponse.data.error)) {
       Offers.push(...offerResponse.data.offers);
-    } else if (hasValue(offerResponse.data.error)) {
+    } else {
       // If offers API is returning Error.
       errorMessage = offerResponse.data.error_message;
       logger.error('Error while calling the offers Api @message', {
@@ -274,7 +274,7 @@ class HelloMemberCartOffersVouchers extends React.Component {
                   <span>
                     <div className="hello-member-promo-modal-title">{Drupal.t('Discount', {}, { context: 'hello_member' })}</div>
                     {hasValue(errorMessage) ? (
-                      displayErrorMessage(errorMessage)
+                      <div className="clm-down-error-message">{displayErrorMessage(errorMessage)}</div>
                     ) : (
                       <div className="hello-member-promo-modal-content">
                         <div className={`error-info-section ${additionalClasses}`}>
