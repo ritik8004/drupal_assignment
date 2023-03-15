@@ -1,3 +1,5 @@
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
+
 const formatPrice = (price) => {
   const priceParts = [
     drupalSettings.reactTeaserView.price.currency.toUpperCase(),
@@ -52,26 +54,26 @@ const calculateDiscount = (price, finalPrice) => {
  *   Country code and its fixed or special price.
  */
 const getDataAttributePrices = (data, field) => {
+  if (!hasValue(data) || !hasValue(field)) {
+    return '';
+  }
+
   if (typeof data !== 'string') {
     return '';
   }
 
-  if (!data || !field) {
-    return '';
-  }
-
-  let fixedPrice = {};
+  let fixedPriceAttributeData = {};
 
   try {
     // Get json object from string.
-    fixedPrice = JSON.parse(data);
+    fixedPriceAttributeData = JSON.parse(data);
   } catch (e) {
     // Return empty string if json parse has error.
     return '';
   }
 
   const prices = {};
-  Object.entries(fixedPrice).forEach(([key, value]) => {
+  Object.entries(fixedPriceAttributeData).forEach(([key, value]) => {
     // Get prices for the given field for each currency from fixed_price field.
     prices[key] = value[field];
   });

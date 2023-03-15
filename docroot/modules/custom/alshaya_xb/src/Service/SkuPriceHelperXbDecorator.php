@@ -65,14 +65,7 @@ class SkuPriceHelperXbDecorator extends SkuPriceHelper {
   }
 
   /**
-   * Update build array to display price in simple mode.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Product sku for which we want the price block.
-   * @param string $color
-   *   Color value for limiting scope of variants.
-   * @param string $langcode
-   *   Language code used.
+   * {@inheritDoc}
    */
   protected function buildPriceBlockSimple(SKU $sku, string $color = '', string $langcode = '') {
     $prices = $this->skuManager->getMinPrices($sku, $color);
@@ -85,7 +78,7 @@ class SkuPriceHelperXbDecorator extends SkuPriceHelper {
       foreach (json_decode($prices['fixed_price'], TRUE) as $key => $value) {
         $key = strtolower($key);
         if (!empty($value['price'])) {
-          $data_attribute_price[] = $value['price'];
+          $data_attribute_price[$key] = $value['price'];
         }
         if (!empty($value['special_price'])) {
           $data_attribute_special_price[$key] = $value['special_price'];
@@ -93,13 +86,13 @@ class SkuPriceHelperXbDecorator extends SkuPriceHelper {
       }
     }
 
-    // This is a workaround for Cross border sites.
+    // Get config overrides by domain.
     $config = $this->domainConfig->getConfigByDomain();
 
     if (!empty($data_attribute_special_price) && array_key_exists($config['code'], $data_attribute_special_price)) {
-      // If Sku has special_price value in fixed_price attribute for any
-      // currency, then render price with discount by setting final_price if not
-      // set from backend.
+      // If Sku has special_price value in fixed_price attribute for site's
+      // currency, then render price with discount by setting final_price to
+      // 0.01 if not set from commerce backend.
       $final_price = ($final_price && ($price > $final_price)) ? $final_price : 0.01;
     }
 

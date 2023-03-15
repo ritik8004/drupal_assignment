@@ -85,6 +85,14 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
     '#value' => Markup::create($js),
   ];
 
+  $css = '.price-wrapper .price { display: none; }';
+
+  $page_bottom['alshaya_xb_cross_border_css'] = [
+    '#type'  => 'html_tag',
+    '#tag'   => 'style',
+    '#value' => Markup::create($css),
+  ];
+
   // Inline JS added for the checkout page. This is required because the scripts
   // need to be on the page before the page loads. Also note that Global-e
   // scripts are added directly to the header.
