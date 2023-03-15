@@ -3,11 +3,17 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardTypeSVG from '../../../../../alshaya_spc/js/svg-component/card-type-svg';
 
 const EgiftCardDetails = ({
-  cardList, selectedOption, egiftCardType,
+  cardList, selectedOption, egiftCardType, paymentDetails,
 }) => {
   let selected = cardList ? cardList.card_number : 'newegift';
   if (hasValue(selectedOption)) {
     selected = selectedOption;
+  }
+  // Conditions to check whether radio buttons
+  // are needed or not for the payment methods in return form.
+  let radioButton = true;
+  if (hasValue(paymentDetails.cashondelivery) || hasValue(paymentDetails.egift)) {
+    radioButton = false;
   }
   // Defining variable to check whether current page is return confirmation or not.
   const isReturnConfPage = window.location.href.indexOf('return-confirmation');
@@ -20,32 +26,34 @@ const EgiftCardDetails = ({
     )
     : <></>);
 
-  const NewEgiftCard = ({ cardType }) => (cardType && (isReturnConfPage === -1)
-    ? (
-      <input
-        type="radio"
-        value="newegift"
-        name="newegift"
-        checked={selected === 'newegift'}
-      />
-    )
-    : <></>);
+  // Assigning the radio button values for linked and new eGift card.
+  let value = '';
+  let name = '';
+  if (hasValue(selected) && !egiftCardType) {
+    // For existing linked eGift card.
+    value = cardList.card_number;
+    name = cardList.card_number;
+  } else if (egiftCardType) {
+    // For new eGift card.
+    value = 'newegift';
+    name = 'newegift';
+  }
 
   return (
     <>
       <div className="method-list-wrapper">
         <div className="method-wrapper" key={selected}>
-          {hasValue(selected) && (isReturnConfPage === -1) && !egiftCardType
+          {isReturnConfPage === -1 && radioButton
             ? (
               <input
                 type="radio"
-                value={`${cardList.card_number}`}
-                name={`${cardList.card_number}`}
-                checked={selected === `${cardList.card_number}`}
+                value={value}
+                name={name}
+                checked={selected === value}
               />
             )
             : (
-              <NewEgiftCard egiftCardType={egiftCardType} />
+              <></>
             )}
           <label className="radio-sim radio-label">
             <CardTypeSVG type="egift-refund" class={`${selected} is-active`} />

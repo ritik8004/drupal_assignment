@@ -32,6 +32,7 @@ const RefundMethods = ({
               cardList={egiftInStorage}
               selectedOption={null}
               egiftCardType={egiftCardType}
+              paymentDetails={paymentInfo}
             />
           )
           : (

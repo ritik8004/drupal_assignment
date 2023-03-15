@@ -10,6 +10,19 @@
  *
  * Add translations.
  */
+function alshaya_online_returns_update_9402() {
+  module_load_include('inc', 'alshaya_online_returns', 'alshaya_online_returns.translations');
+  $translations = _alshaya_online_returns_get_translations('v3');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add translations.
+ */
 function alshaya_online_returns_update_9401() {
   module_load_include('inc', 'alshaya_online_returns', 'alshaya_online_returns.translations');
   $translations = _alshaya_online_returns_get_translations('v2');
