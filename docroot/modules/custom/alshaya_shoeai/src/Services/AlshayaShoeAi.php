@@ -12,7 +12,9 @@ use Drupal\Core\Session\AccountProxyInterface;
  */
 class AlshayaShoeAi {
 
-  // Contact for scale in shoeAi settings.
+ /**
+  * Constant for scale.
+  */
   protected const SCALE = 'eu';
 
   /**
@@ -50,10 +52,9 @@ class AlshayaShoeAi {
    *   Returns status.
    */
   public function getShoeAiStatus() {
-    $state = 0;
     $alshaya_shoeai_settings = $this->configFactory->get('alshaya_shoeai.settings');
     if (!empty($alshaya_shoeai_settings->get('shop_id'))) {
-      return $state;
+      return 0;
     }
     return $alshaya_shoeai_settings->get('enable_shoeai');
   }
@@ -102,7 +103,6 @@ class AlshayaShoeAi {
    *   Return array of settings when shoeai is enabled.
    */
   public function getShoeAiSettings() {
-
     $shoeAiSettings = [];
     $status = $this->getShoeAiStatus();
     if ($status != 0) {
