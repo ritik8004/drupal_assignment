@@ -61,6 +61,7 @@ const getDataAttributePrices = (data, field) => {
   }
 
   let fixedPrice = {};
+
   try {
     // Get json object from string.
     fixedPrice = JSON.parse(data);

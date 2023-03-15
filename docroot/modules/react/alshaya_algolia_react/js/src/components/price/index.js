@@ -19,25 +19,21 @@ const PriceBlock = ({
 };
 
 const Price = ({ price, finalPrice, fixedPrice = '' }) => {
+  // Set finalPrice from sku.
+  let finalPriceValue = finalPrice;
+
   // Get cross border fixed price string for data-fp attribute on price div.
   const fixedPriceJsonString = getDataAttributePrices(fixedPrice, 'price');
 
   // Get cross border special price string for data-fp attribute on price div.
   const specialPriceJsonString = getDataAttributePrices(fixedPrice, 'special_price');
 
-  // Set finalPrice from sku.
-  let finalPriceValue = finalPrice;
-
   // This is work around for cross border.
   if (specialPriceJsonString) {
     // If Sku has special price value in fixed_price attribute for any
     // currency, then render price with discount by setting final_price if not
     // set from backend.
-    finalPriceValue = (!finalPriceValue && price > finalPriceValue) ? finalPriceValue : '0.01';
-  } else if (fixedPriceJsonString && !specialPriceJsonString) {
-    // If Sku has fixed_price attribute and does not contain special price
-    // value then render only price amount and not the discounted price.
-    finalPriceValue = '';
+    finalPriceValue = (finalPriceValue && price > finalPriceValue) ? finalPriceValue : 0.01;
   }
 
   if (price > 0 && finalPrice > 0 && finalPrice < price) {
