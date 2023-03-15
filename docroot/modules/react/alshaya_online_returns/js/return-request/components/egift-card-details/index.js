@@ -6,6 +6,7 @@ const EgiftCardDetails = ({
   cardList, selectedOption, egiftCardType,
 }) => {
   let selected = cardList ? cardList.card_number : 'newegift';
+  // Assigning the variable with the current selected element value.
   if (hasValue(selectedOption)) {
     selected = selectedOption;
   }
