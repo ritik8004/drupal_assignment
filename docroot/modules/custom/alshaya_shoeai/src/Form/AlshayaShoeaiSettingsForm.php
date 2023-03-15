@@ -14,7 +14,7 @@ class AlshayaShoeaiSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'alshaya_shoeai.settings';
+    return 'alshaya_shoeai_settings_form';
   }
 
   /**
