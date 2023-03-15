@@ -127,7 +127,7 @@ const OrderSummary = (props) => {
 
   // Customer name on shipping.
   const customerShippingName = drupalSettings.order_details.delivery_type_info.customerNameShipping;
-  const clmDecoupleModeMessage = drupalSettings.order_details.totals.clmDecoupleModeMessage;
+  const { clmDecoupleModeMessage } = drupalSettings.order_details.totals;
 
   const {
     accruedPoints, redeemedPoints, hmAccuredPoints,
@@ -281,7 +281,7 @@ const OrderSummary = (props) => {
               <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
             </ConditionalView>
           </ConditionalView>
-          {isHelloMemberEnabled() && isUserAuthenticated() && hasValue(hmAccuredPoints) 
+          {isHelloMemberEnabled() && isUserAuthenticated() && hasValue(hmAccuredPoints)
             && !hasValue(clmDecoupleModeMessage)
             && (
             <OrderSummaryItem
