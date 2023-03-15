@@ -15,7 +15,7 @@ import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import EgiftOrderSummaryItem from '../../../egift-card/components/egift-order-summary-item';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import isHelloMemberEnabled, { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
+import isHelloMemberEnabled, { isAuraIntegrationEnabled, displayErrorMessage } from '../../../../../js/utilities/helloMemberHelper';
 
 const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -127,6 +127,7 @@ const OrderSummary = (props) => {
 
   // Customer name on shipping.
   const customerShippingName = drupalSettings.order_details.delivery_type_info.customerNameShipping;
+  const clmDecoupleModeMessage = drupalSettings.order_details.totals.clmDecoupleModeMessage;
 
   const {
     accruedPoints, redeemedPoints, hmAccuredPoints,
@@ -280,7 +281,8 @@ const OrderSummary = (props) => {
               <OrderSummaryItem context={context} label={etaLabel} value={expectedDelivery} />
             </ConditionalView>
           </ConditionalView>
-          {isHelloMemberEnabled() && isUserAuthenticated() && hasValue(hmAccuredPoints)
+          {isHelloMemberEnabled() && isUserAuthenticated() && hasValue(hmAccuredPoints) 
+            && !hasValue(clmDecoupleModeMessage)
             && (
             <OrderSummaryItem
               context={context}
@@ -290,6 +292,10 @@ const OrderSummary = (props) => {
             />
             )}
           <OrderSummaryItem context={context} label={Drupal.t('number of items')} value={itemsCount} />
+          {hasValue(clmDecoupleModeMessage)
+          && (
+            displayErrorMessage(clmDecoupleModeMessage)
+          )}
         </div>
       </div>
       <ConditionalView condition={isAuraEnabled() || isAuraIntegrationEnabled()}>
