@@ -9,8 +9,6 @@ use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_alter().
- *
- * Alter alshaya_fit_calculator block config form.
  */
 function alshaya_rcs_fit_calculator_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id === 'block_form' && $form['settings']['provider']['#value'] === 'alshaya_fit_calculator') {
@@ -21,8 +19,6 @@ function alshaya_rcs_fit_calculator_form_alter(&$form, FormStateInterface $form_
 
 /**
  * Implements hook_field_widget_WIDGET_TYPE_form_alter().
- *
- * Alter alshaya_fit_calculator block form in paragraph block reference.
  */
 function alshaya_rcs_fit_calculator_field_widget_entity_reference_paragraphs_form_alter(&$element, &$form_state, $context) {
   if ($element['#paragraph_type'] == 'block_reference'
