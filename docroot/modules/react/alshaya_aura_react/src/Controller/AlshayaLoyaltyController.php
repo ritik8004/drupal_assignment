@@ -148,6 +148,29 @@ class AlshayaLoyaltyController extends ControllerBase {
     if ($static_page_nid) {
       $node = $this->entityTypeManager()->getStorage('node')->load($static_page_nid);
       if ($node instanceof NodeInterface) {
+        $loyaltyAsset = [];
+        // Get CSS from the node field.
+        $css = $node->get('field_css')->getString();
+        // Validate if CSS data is available.
+        if (!empty($css)) {
+          $loyaltyAsset[] = [[
+            '#tag' => 'style',
+            '#value' => $css,
+          ],
+            'cpath',
+          ];
+        }
+        // Get JS from the node field.
+        $js = $node->get('field_javascript')->getString();
+        // Validate if JS data is available.
+        if (!empty($js)) {
+          $loyaltyAsset[] = [[
+            '#tag' => 'script',
+            '#value' => $js,
+          ],
+            'spath',
+          ];
+        }
         $path = $this->aliasManager->getAliasByPath('/node/' . $node->id());
         // If path is valid then update the settings.
         if ($path) {
@@ -182,6 +205,11 @@ class AlshayaLoyaltyController extends ControllerBase {
         ],
       ];
       $html_head[] = [$meta_tag, $tag_name];
+    }
+
+    // Merge loyaltyAsset array into If assets are available in Node.
+    if (!empty($loyaltyAsset)) {
+      $html_head = array_merge($html_head, $loyaltyAsset);
     }
 
     return [
