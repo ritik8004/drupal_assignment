@@ -233,7 +233,7 @@
       return productInfo;
     }
     // Shorthand variable to store free gift info from graphQl response.
-    var freeGiftGraphQlData = productInfo[skuItemCode].freeGiftPromotion[0];
+    var freeGiftApiData = productInfo[skuItemCode].freeGiftPromotion[0];
     // Variable to store processed free gift information.
     var processedData = {};
 
@@ -241,7 +241,7 @@
     var freeGiftImageAlt = '';
     var giftItemStyleCode = '';
     // Free gift SKU details.
-    var giftItemProductInfo = window.commerceBackend.getProductData(freeGiftGraphQlData.gifts[0].sku, null, false);
+    var giftItemProductInfo = window.commerceBackend.getProductData(freeGiftApiData.gifts[0].sku, null, false);
     if (giftItemProductInfo) {
       // Get the first image.
       var skuImage = window.commerceBackend.getFirstImage(giftItemProductInfo);
@@ -251,31 +251,31 @@
       freeGiftImageAlt = Drupal.t('Free Gift');
       if (Drupal.hasValue(skuImage)) {
         freeGiftImageUrl = skuImage.url;
-        freeGiftImageAlt = freeGiftGraphQlData.gifts[0].name;
+        freeGiftImageAlt = freeGiftApiData.gifts[0].name;
       }
     }
 
     // Building processedData for react.
-    processedData['#promo_type'] = freeGiftGraphQlData.rule_type;
-    processedData['#promo_code'] = Drupal.hasValue(freeGiftGraphQlData.coupon_code) ? [{ value: freeGiftGraphQlData.coupon_code }] : [];
+    processedData['#promo_type'] = freeGiftApiData.rule_type;
+    processedData['#promo_code'] = Drupal.hasValue(freeGiftApiData.coupon_code) ? [{ value: freeGiftApiData.coupon_code }] : [];
 
     var data = {
-      url: Drupal.url(freeGiftGraphQlData.rule_web_url),
-      freeGiftSku: freeGiftGraphQlData.gifts.map(function(gift) {return gift.sku;}).join(','),
+      url: Drupal.url(freeGiftApiData.rule_web_url),
+      freeGiftSku: freeGiftApiData.gifts.map(function(gift) {return gift.sku;}).join(','),
       styleCode: giftItemStyleCode,
-      promoTitle: freeGiftGraphQlData.rule_name,
+      promoTitle: freeGiftApiData.rule_name,
       title: freeGiftImageAlt,
     };
     // Free gift title markup to be passed to react for rendering.
     var skuTitleMarkup = handlebarsRenderer.render('product.promotion_free_gift_item', data);
 
-    if (freeGiftGraphQlData.rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+    if (freeGiftApiData.rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
       processedData['#image'] = [];
       processedData['#image']['#url'] = freeGiftImageUrl;
       processedData['#image']['#alt'] = freeGiftImageAlt;
       processedData['#image']['#title'] = freeGiftImageAlt;
-      processedData.promo_title = freeGiftGraphQlData.rule_name;
-      processedData['#promo_web_url'] = freeGiftGraphQlData.rule_web_url;
+      processedData.promo_title = freeGiftApiData.rule_name;
+      processedData['#promo_web_url'] = freeGiftApiData.rule_web_url;
       processedData['#message'] = [];
       processedData['#message']['#markup'] = skuTitleMarkup;
     } else {
