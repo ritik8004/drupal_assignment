@@ -156,14 +156,13 @@ function alshaya_aura_react_preprocess_html(&$variables) {
   }
   // Aura Enabled class.
   $variables['attributes']['class'][] = Html::cleanCssIdentifier('aura-enabled');
-  // Add 'my-aura-page-title-block' to My aura page title block,
-  // To remove text transform property,
-  // So that "My Aura"/"About Aura" should not have any text transform.
+  // Add CSS/JS assets and Attach library to 'My Aura'/'About Aura' page.
   $route_name = \Drupal::routeMatch()->getRouteName();
   if ($route_name === 'alshaya_aura_react.my_loyalty_club') {
     $variables['#cache']['tags'] = array_merge($variables['#cache']['tags']
     ?? [], \Drupal::config('alshaya_aura_react.loyalty_benefits')->getCacheTags());
     $auraDyNodeId = \Drupal::config('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node');
+
     if (empty($auraDyNodeId)) {
       return;
     }
