@@ -382,6 +382,7 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
   ) {
     $settings['order_details']['totals']['hmAppliedVoucherCodes'] = $order['extension']['applied_hm_voucher_codes'];
     $settings['order_details']['totals']['hmVoucherDiscount'] = $order['extension']['hm_voucher_discount'];
+    $settings['order_details']['totals']['clmDecoupleModeMessage'] = $order['extension']['clm_decouple_mode_message'];
   }
 
   if (isset($order['extension']['applied_hm_offer_code'])) {
