@@ -1277,6 +1277,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 37, 'ar' => 34],
     ],
+    'xb' => [
+      'store_id' => ['en' => 47, 'ar' => 44],
+    ],
   ],
   'vs_prod' => [
     'url' => 'https://vs.store.alshaya.com',
