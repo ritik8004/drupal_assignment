@@ -831,6 +831,11 @@ $conductors = [
   'vsqa_prod' => [
     'site_id' => 381,
   ],
+  'vsxb_uat' => [
+    'hmac_id' => 'bec1f01c7f914a4d8ab56bc46a8fac49',
+    'hmac_secret' => 'N2RjZjM1NDUtYzYxYS00',
+    'site_id' => 653,
+  ],
   // FootLocker KW.
   'flkw_dev' => [
     'hmac_id' => '582a73e8a0534b77970fa38e525f62a1',
