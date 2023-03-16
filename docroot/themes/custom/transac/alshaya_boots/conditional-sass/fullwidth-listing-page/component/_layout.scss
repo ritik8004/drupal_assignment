@@ -1,0 +1,13 @@
+@include breakpoint($only-mobile) {
+  #alshaya-algolia-search,
+  #alshaya-algolia-plp,
+  #top-results,
+  #my-wishlist {
+    .c-products-list {
+      &.view-search,
+      &.view-algolia-plp {
+        @include sideSpaces(0);
+      }
+    }
+  }
+}
