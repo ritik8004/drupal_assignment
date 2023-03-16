@@ -1,0 +1,6 @@
+services:
+  alshaya_shoeai.helper:
+    class: Drupal\alshaya_shoeai\Services\AlshayaShoeAi
+    arguments:
+     - '@config.factory'
+     - '@current_user'
