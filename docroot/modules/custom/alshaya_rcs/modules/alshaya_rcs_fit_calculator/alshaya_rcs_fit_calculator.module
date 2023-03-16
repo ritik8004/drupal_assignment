@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks for alshaya_rcs_fit_calculator.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Alter alshaya_fit_calculator block config form.
+ */
+function alshaya_rcs_fit_calculator_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'block_form' && $form['settings']['provider']['#value'] === 'alshaya_fit_calculator') {
+    // Override field target bundle from acq_product_category to rcs_category.
+    $form['settings']['plp_page']['#selection_settings']['target_bundles'] = ['rcs_category'];
+  }
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ *
+ * Alter alshaya_fit_calculator block form in paragraph block reference.
+ */
+function alshaya_rcs_fit_calculator_field_widget_entity_reference_paragraphs_form_alter(&$element, &$form_state, $context) {
+  if ($element['#paragraph_type'] == 'block_reference'
+    && $element['subform']['field_block_reference']['widget'][0]['plugin_id']['#default_value'] == 'alshaya_fit_calculator') {
+    // Override field target bundle from acq_product_category to rcs_category.
+    $element['subform']['field_block_reference']['widget'][0]['settings']['plp_page']['#selection_settings']['target_bundles'] = ['rcs_category'];
+  }
+}
