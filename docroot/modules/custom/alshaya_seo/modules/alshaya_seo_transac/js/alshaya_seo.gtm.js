@@ -894,8 +894,10 @@
         }
       });
       document.dispatchEvent(gtmListNameEvent);
-      productData.list = gtmListNameEvent.detail.listName;
-
+      // To make sure list is not changed for match back products. 
+      if ((productData.list.indexOf('PLP') == -1)) {
+        productData.list = gtmListNameEvent.detail.listName;
+      }
       // Fetch referrerPageType from localstorage.
       const referrerData = Drupal.getItemFromLocalStorage('referrerData');
       if(referrerData !== null) {
