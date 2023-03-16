@@ -14,7 +14,8 @@
     "matchMedia": true,
     "Backbone": true,
     "Modernizr": true,
-    "CKEDITOR": true
+    "CKEDITOR": true,
+    "once": true
   },
   "rules": {
     "array-bracket-spacing": [2, "never"],
