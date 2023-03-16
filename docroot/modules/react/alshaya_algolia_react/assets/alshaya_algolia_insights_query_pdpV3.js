@@ -9,7 +9,7 @@
       RcsEventManager.addListener('alshayaPageEntityLoaded', function (e) {
         var mainProduct = e.detail.entity;
         if (Drupal.hasValue(mainProduct.sku)) {
-          const insightsClickDataV3 = Drupal.fetchSkuAlgoliaInsightsClickData(mainProduct.sku);
+          var insightsClickDataV3 = Drupal.fetchSkuAlgoliaInsightsClickData(mainProduct.sku);
           if (insightsClickDataV3 && Drupal.hasValue(insightsClickDataV3.queryId)) {
              $('body').find('.data-insights-query-class').attr('data-insights-query-id', insightsClickDataV3.queryId);
            }
