@@ -126,6 +126,7 @@ function _alshaya_rcs_get_modules_mapping() {
     'alshaya_olapic' => 'alshaya_rcs_olapic',
     'alshaya_dynamic_yield' => 'alshaya_rcs_dynamic_yield',
     'alshaya_mobile_app' => 'alshaya_rcs_mobile_app',
+    'alshaya_fit_calculator' => 'alshaya_rcs_fit_calculator',
   ];
 }
 
