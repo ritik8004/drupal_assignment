@@ -549,6 +549,14 @@ header {
   .block-system-menublock {
     li {
       position: static;
+
+      @include breakpoint($only-mobile) {
+        &.search-active {
+          .mobile--search {
+            z-index: 11;
+          }
+        }
+      }
     }
   }
 
@@ -1117,5 +1125,17 @@ body {
 .static-minicart-wrapper {
   .cart-link {
     height: rem(24);
+  }
+}
+
+@include breakpoint($only-mobile) {
+  body {
+    &.search-enabled {
+      .c-menu-primary {
+        .mobile--menu {
+          z-index: 11;
+        }
+      }
+    }
   }
 }
