@@ -247,12 +247,11 @@
       var skuImage = window.commerceBackend.getFirstImage(giftItemProductInfo);
       giftItemStyleCode = giftItemProductInfo.style_code;
       // Building free gift image details.
+      freeGiftImageUrl = drupalSettings.alshayaRcs.default_meta_image;
+      freeGiftImageAlt = Drupal.t('Free Gift');
       if (Drupal.hasValue(skuImage)) {
         freeGiftImageUrl = skuImage.url;
         freeGiftImageAlt = freeGiftGraphQlData.gifts[0].name;
-      } else {
-        freeGiftImageUrl = drupalSettings.alshayaRcs.default_meta_image;
-        freeGiftImageAlt = Drupal.t('Free Gift');
       }
     }
 
@@ -261,7 +260,7 @@
     processedData['#promo_code'] = Drupal.hasValue(freeGiftGraphQlData.coupon_code) ? [{ value: freeGiftGraphQlData.coupon_code }] : [];
 
     var data = {
-      url: '/' + drupalSettings.path.pathPrefix + freeGiftGraphQlData.rule_web_url,
+      url: Drupal.url(freeGiftGraphQlData.rule_web_url),
       freeGiftSku: freeGiftGraphQlData.gifts.map(function(gift) {return gift.sku;}).join(','),
       styleCode: giftItemStyleCode,
       promoTitle: freeGiftGraphQlData.rule_name,
