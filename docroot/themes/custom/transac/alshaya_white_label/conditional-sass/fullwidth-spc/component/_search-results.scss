@@ -1,0 +1,32 @@
+body.alias--cart {
+  .page-standard.l-two--sf.l-container {
+    .show-algolia-result {
+      max-width: unset;
+    }
+
+    @include breakpoint($only-tablet) {
+      .ais-InstantSearch__root {
+        @include sideSpaces(0);
+      }
+    }
+  }
+
+  .l-one--w.lhn-without-sidebar #alshaya-algolia-search .c-content__region {
+    @include breakpoint($tablet) {
+      width: 100%;
+      max-width: unset;
+    }
+
+    @include fullWidthSideSpaces($is_desktop: true, $is_desktop_wide: true);
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .alias--cart,
+  .alias--checkout,
+  .alias--checkout-confirmation {
+    .page-standard.c-plp:not(.l-two--sf) {
+      @include sideSpaces("#{$full_width_padding_tablet} !important");
+    }
+  }
+}
