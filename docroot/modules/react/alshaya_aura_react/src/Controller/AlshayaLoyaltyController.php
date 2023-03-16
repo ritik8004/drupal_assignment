@@ -167,7 +167,7 @@ class AlshayaLoyaltyController extends ControllerBase {
           $loyaltyAsset[] = [[
             '#tag' => 'script',
             '#value' => $js,
-            ],
+          ],
             'spath',
           ];
         }
@@ -207,7 +207,7 @@ class AlshayaLoyaltyController extends ControllerBase {
       $html_head[] = [$meta_tag, $tag_name];
     }
 
-    // Merge loyaltyAsset array into If assets are available in Node
+    // Merge loyaltyAsset array into If assets are available in Node.
     if (!empty($loyaltyAsset)) {
       $html_head = array_merge($html_head, $loyaltyAsset);
     }
