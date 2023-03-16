@@ -42,8 +42,8 @@
 
     // If free gift is enabled, alter product data to support magv2 pdp free gifts.
     // Check <PdpFreeGift> react component.
-    if (Drupal.hasValue(Drupal.alshayaRcs.processFreeGiftDataMagV2)) {
-      processedProduct = await Drupal.alshayaRcs.processFreeGiftDataMagV2(processedProduct);
+    if (Drupal.hasValue(window.commerceBackend.processFreeGiftDataMagV2)) {
+      processedProduct = await window.commerceBackend.processFreeGiftDataMagV2(processedProduct);
     }
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);

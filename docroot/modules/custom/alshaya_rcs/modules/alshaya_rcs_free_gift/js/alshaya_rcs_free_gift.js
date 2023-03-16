@@ -9,7 +9,6 @@
   var collectionDialog = '';
   var collectionItemDialog = '';
   window.commerceBackend = window.commerceBackend || {};
-  Drupal.alshayaRcs = Drupal.alshayaRcs || {};
 
   /**
  * Renders free gift for the given product.
@@ -121,6 +120,7 @@
               data.items.push({
                 title: freeGiftItem.name,
                 freeGiftImage: Drupal.hasValue(freeGiftImage.url) ? freeGiftImage.url : '',
+                freeGiftImageTitle: freeGiftItem.name,
                 freeGiftSku,
                 backToCollection: true,
               });
@@ -135,7 +135,7 @@
           // Open modal.
           collectionDialog = Drupal.dialog(elm, {
             dialogClass: 'pdp-modal-box',
-            autoResize: true,
+            autoResize: false,
             closeOnEscape: true,
             width: 'auto',
             close: function close() {
@@ -192,7 +192,7 @@
     // Show the modal.
     collectionItemDialog = Drupal.dialog(elm, {
       dialogClass: 'pdp-modal-box',
-      autoResize: true,
+      autoResize: false,
       closeOnEscape: true,
       width: 'auto',
       close: function close() {
@@ -226,8 +226,8 @@
    * @param {boolean} checkForVariants
    *   Flag to check for product variants in case of configurable products.
    */
-  Drupal.alshayaRcs.processFreeGiftDataMagV2 = function (productInfo, checkForVariants = true) {
-    var [skuItemCode] = Object.keys(productInfo);
+  window.commerceBackend.processFreeGiftDataMagV2 = function (productInfo, checkForVariants = true) {
+    var skuItemCode = Object.keys(productInfo)[0];
     // If product does not have any free gifts associated, then return.
     if (!Drupal.hasValue(productInfo[skuItemCode].freeGiftPromotion)) {
       return productInfo;
@@ -260,11 +260,15 @@
     processedData['#promo_type'] = freeGiftGraphQlData.rule_type;
     processedData['#promo_code'] = Drupal.hasValue(freeGiftGraphQlData.coupon_code) ? [{ value: freeGiftGraphQlData.coupon_code }] : [];
 
-    var promoUrl = '/' + drupalSettings.path.pathPrefix + freeGiftGraphQlData.rule_web_url;
-    // Free gift markup to be passed to react for rendering.
-    var freeGiftMarkup = "<a href='" + promoUrl + "' data-sku='" + freeGiftGraphQlData.gifts.map(gift => gift.sku).join(',') + "' data-promotion-title='" + freeGiftGraphQlData.rule_name + "' data-style-code='" + giftItemStyleCode + "' class='free-gift-modal' data-dialog-type='modal' data-dialog-options='{&quot;width&quot;:&quot;auto&quot;}'> [[replace_text]] </a>";
+    var data = {
+      url: '/' + drupalSettings.path.pathPrefix + freeGiftGraphQlData.rule_web_url,
+      freeGiftSku: freeGiftGraphQlData.gifts.map(function(gift) {return gift.sku;}).join(','),
+      styleCode: giftItemStyleCode,
+      promoTitle: freeGiftGraphQlData.rule_name,
+      title: freeGiftImageAlt,
+    };
     // Free gift title markup to be passed to react for rendering.
-    var skuTitleMarkup = freeGiftMarkup.replace('[[replace_text]]', freeGiftImageAlt);
+    var skuTitleMarkup = handlebarsRenderer.render('product.promotion_free_gift_item', data);
 
     if (freeGiftGraphQlData.rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
       processedData['#image'] = [];
@@ -276,8 +280,11 @@
       processedData['#message'] = [];
       processedData['#message']['#markup'] = skuTitleMarkup;
     } else {
+      delete data.title;
+      data.freeGiftImage = freeGiftImageUrl;
+      data.freeGiftImageTitle = freeGiftImageAlt;
       // Free gift image markup to be passed to react for rendering.
-      processedData['#sku_image'] = freeGiftMarkup.replace('[[replace_text]]', "<img src='" + freeGiftImageUrl + "' title='" + freeGiftImageAlt + "' alt='" + freeGiftImageAlt + "' typeof='foaf:Image' loading='lazy' />");
+      processedData['#sku_image'] = handlebarsRenderer.render('product.promotion_free_gift_item', data);
       processedData['#free_sku_title'] = skuTitleMarkup;
     }
     // Updating free gift promotion response from graphQl with react processable data.
@@ -296,7 +303,7 @@
         if (Drupal.hasValue(variants[variantSku].freeGiftPromotion)) {
           variants[variantSku].skuItemCode = variantSku;
           // Recursive call to same function to process free gift data for variants in exactly same fashion.
-          var variantData = Drupal.alshayaRcs.processFreeGiftDataMagV2(
+          var variantData = window.commerceBackend.processFreeGiftDataMagV2(
             {
               [variantSku]: variants[variantSku],
               skuItemCode: variantSku,
