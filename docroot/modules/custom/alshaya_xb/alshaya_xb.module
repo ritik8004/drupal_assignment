@@ -85,6 +85,18 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
     '#value' => Markup::create($js),
   ];
 
+  // AED prices are hidden for cross border sites as global-e
+  // applies the conversion after the DOM loads.
+  $css = '.price .price-amount, .price .price-currency {
+    display: none;
+  }';
+
+  $page_bottom['alshaya_xb_cross_border_css'] = [
+    '#type'  => 'html_tag',
+    '#tag'   => 'style',
+    '#value' => Markup::create($css),
+  ];
+
   // Inline JS added for the checkout page. This is required because the scripts
   // need to be on the page before the page loads. Also note that Global-e
   // scripts are added directly to the header.
