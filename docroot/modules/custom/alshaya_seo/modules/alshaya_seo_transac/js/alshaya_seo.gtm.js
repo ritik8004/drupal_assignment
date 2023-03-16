@@ -1532,9 +1532,8 @@
         }
       }
     };
-    
     // Push to productDetailView event if quick-view class exits.
-    if(productContext.classList.contains('quick-view')) {
+    if(productContext.classList != undefined && productContext.classList.contains('quick-view')) {
       data.product_view_type = 'quick_view';
     }
 
