@@ -195,3 +195,13 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css
+
+  alshaya_white_label/fullwidth-common:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/fullwidth-common/fullwidth-common.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/fullwidth-common/fullwidth-common.ltr.css
+
+  alshaya_white_label/fullwidth-pdp:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css

@@ -97,9 +97,17 @@ export default class PaymentMethods extends React.Component {
         }
       }
 
+      // Prepare the decline reason message.
+      let declineMessage = paymentErrorInfo.status;
+      // For KNET we will be using knet_result attribute.
+      if (paymentErrorInfo.payment_method === 'checkout_com_upapi_knet'
+        && hasValue(paymentErrorInfo.data.result_code)) {
+        declineMessage = paymentErrorInfo.data.result_code;
+      }
+
       // Push error to GA.
       Drupal.logJavascriptError(
-        `payment-error | ${paymentMethodsInfo.[paymentErrorInfo.payment_method]}`,
+        `payment-error | ${paymentMethodsInfo.[paymentErrorInfo.payment_method]} | Decline Reason: ${declineMessage}`,
         paymentErrorInfo,
         GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
       );

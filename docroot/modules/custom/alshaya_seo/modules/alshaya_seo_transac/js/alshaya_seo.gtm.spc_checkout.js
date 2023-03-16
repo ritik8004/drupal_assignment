@@ -61,6 +61,12 @@
   };
 
   Drupal.alshayaSeoSpc.pushHomeDeliveryData = function (cart) {
+    if (Drupal.hasValue(cart.xbDeliveryInfo)) {
+      // This is a workaround for Cross Border sites. The geData in cart has
+      // delivery info, return the same to apply delivery info in datalayer.
+      return cart.xbDeliveryInfo;
+    }
+
     if (cart.shipping.type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
       return;
     }
@@ -158,12 +164,21 @@
     if (((cartData.payment.method && step === 2) || step === 3 || step === 4) && pushAboveStep2) {
       // Make a clone of the object.
       var stepData = JSON.parse(JSON.stringify(data));
-      stepData.ecommerce.checkout.actionField.step = (step === 4) ? 4 : 3;
+      // Add additional data for checkout step 3 and 4.
+      // Since, the product data is updated inside a callback function after
+      // being pushed to datalayer and the products data is not updated for
+      // step 3 & 4 (when product data is not available in local storage).
+      // So, we need to assign stepdata using the same callback function
+      // we used for step 2 data.
+      var additionalStepData = Drupal.alshayaSeoSpc.cartGtm(cartData, (step === 4) ? 4 : 3);
+      Object.assign(stepData.ecommerce.checkout, additionalStepData.checkout);
+      delete additionalStepData.checkout;
+      Object.assign(stepData, additionalStepData);
 
       if (stepData.ecommerce.checkout.actionField.step === 3) {
         var rawCartData = window.commerceBackend.getRawCartDataFromStorage();
 
-        stepData.with_delivery_schedule = Drupal.hasValue(rawCartData.cart.extension_attributes.hfd_hold_confirmation_number)
+        stepData.with_delivery_schedule = Drupal.hasValue(rawCartData) && Drupal.hasValue(rawCartData.cart.extension_attributes.hfd_hold_confirmation_number)
         ? 'yes'
         : 'no';
       }

@@ -7,6 +7,15 @@ export const searchClient = algoliasearch(
 export const algoliaSearchClient = {
   search(requests) {
     const searchRequest = requests;
+    // Remove tagFilters from all search queries if empty.
+    searchRequest.forEach((request) => {
+      delete request.params.tagFilters;
+      // Remove maxValuesPerFacet from all search quesries.
+      if ('maxValuesPerFacet' in request.params) {
+        delete request.params.maxValuesPerFacet;
+      }
+    });
+
     let referrerData = Drupal.getItemFromLocalStorage('referrerData');
     const isSearchActivated = Drupal.getItemFromLocalStorage('isSearchActivated');
 

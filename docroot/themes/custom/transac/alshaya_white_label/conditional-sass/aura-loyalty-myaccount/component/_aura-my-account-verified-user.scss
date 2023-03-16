@@ -317,6 +317,10 @@
           width: rem(470);
           margin: rem(40) 0 0;
         }
+
+        a {
+          @include appStoreLink;
+        }
       }
     }
   }

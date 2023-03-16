@@ -1,0 +1,6 @@
+alshaya_rcs_bazaar_voice.settings:
+  type: config_object
+  mapping:
+    alshaya_rcs_bazaarvoice_settings_expiry:
+      type: integer
+      label: 'Expiry in seconds for localstorage of settings.'

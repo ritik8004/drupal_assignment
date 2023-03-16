@@ -10,6 +10,35 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Update Aura loyalty benefits config.
+ */
+function alshaya_aura_react_update_9405() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_aura_react.loyalty_benefits'],
+    'alshaya_aura_react',
+    'install',
+    AlshayaConfigManager::USE_FROM_REPLACE,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Aura translation strings.
+ */
+function alshaya_aura_react_update_9404() {
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  $translations = _alshaya_aura_react_get_translations('v10');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update Aura translation strings.
  */
 function alshaya_aura_react_update_9403() {

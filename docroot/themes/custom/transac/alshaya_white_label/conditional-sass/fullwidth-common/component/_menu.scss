@@ -52,3 +52,44 @@ body.aura-enabled {
     }
   }
 }
+
+body {
+  &.supermenu {
+    &:not(.mobile--overlay) {
+      .header--wrapper {
+        .c-menu-secondary {
+          .menu--super-menu {
+            ul {
+              li {
+                &:first-child {
+                  @include breakpoint($only-tablet) {
+                    padding-#{$left}: $full_width_padding_tablet;
+                  }
+
+                  a {
+                    @include fullWidthSideSpaces(
+                      $is_desktop: true,
+                      $is_desktop_wide: true,
+                      $side: $left
+                    );
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.back--link,
+.c-menu-secondary li {
+  @include breakpoint($only-mobile) {
+    @include sideSpaces($full_width_padding_mobile, $type: "margin");
+  }
+
+  @include breakpoint($only-tablet) {
+    @include sideSpaces($full_width_padding_tablet, $type: "margin");
+  }
+}

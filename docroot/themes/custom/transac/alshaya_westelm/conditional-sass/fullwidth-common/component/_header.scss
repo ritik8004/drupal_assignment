@@ -1,0 +1,52 @@
+header {
+  &.c-header {
+    .c-header__region {
+      @include fullWidthSideSpaces(
+        $is_mobile: true,
+        $is_tablet: true,
+        $is_desktop: true,
+        $is_desktop_wide: true
+      );
+
+      .site-brand-home {
+        a.logo {
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: rem(19);
+          }
+        }
+      }
+    }
+
+    // Adjusting cart icon to keep it on edge.
+    .block-alshaya-react-mini-cart,
+    .block-cart-mini-block {
+      @include breakpoint($only-tablet) {
+        #{$right}: rem(-3);
+      }
+
+      .cart-link {
+        @include breakpoint($upto-tablet) {
+          width: rem(32);
+
+          html[lang="ar"] & {
+            width: rem(32);
+          }
+        }
+      }
+
+      .quantity {
+        @include breakpoint($only-mobile) {
+          #{$left}: rem(22);
+        }
+      }
+    }
+  }
+}
+
+body.wishlist-enabled {
+  #wishlist-header-wrapper {
+    @include breakpoint($only-mobile) {
+      #{$right}: rem(45);
+    }
+  }
+}
