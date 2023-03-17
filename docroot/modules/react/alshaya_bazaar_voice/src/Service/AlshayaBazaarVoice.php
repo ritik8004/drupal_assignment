@@ -816,9 +816,9 @@ class AlshayaBazaarVoice {
       'bazaar_voice' => [
         'stats' => 'Reviews',
         'sorting_options' => $sorting_options,
-        'filter_options' => $filter_options,
+        'pdp_filter_options' => $filter_options,
         'country_code' => $country_code,
-        'error_messages' => $bv_error_messages,
+        'bv_error_messages' => $bv_error_messages,
       ],
       'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
       'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),

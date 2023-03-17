@@ -10,6 +10,20 @@ use Drupal\lightning_core\ConfigHelper;
 /**
  * Implements hook_update_N().
  *
+ * Update arabic translation config for contact webform.
+ */
+function alshaya_contact_update_9401() {
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    [
+      'webform.webform.alshaya_contact',
+    ],
+    'alshaya_contact'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Request_from field should be display on wenform submission page.
  */
 function alshaya_contact_update_8004() {

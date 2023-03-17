@@ -1251,6 +1251,11 @@
         eventLabel: eventData.eventLabel,
         eventLabel2: Drupal.hasValue(eventData.eventLabel2) ? eventData.eventLabel2 : '',
       };
+
+      // Add @var product_view_type in quick view.
+      if (Drupal.hasValue(eventData.product_view_type)) {
+        data.product_view_type = eventData.product_view_type;
+      }
       dataLayer.push(data);
     }
   };
@@ -1527,6 +1532,10 @@
         }
       }
     };
+    // Push to productDetailView event if quick-view class exits.
+    if(productContext.classList != undefined && productContext.classList.contains('quick-view')) {
+      data.product_view_type = 'quick_view';
+    }
 
     dataLayer.push(data);
   }

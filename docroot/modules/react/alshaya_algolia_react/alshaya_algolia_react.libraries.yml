@@ -34,7 +34,6 @@ search_insights_detail:
 
 search_insights:
   js:
-    js/algolia/search-insights.js: { scope: footer }
     assets/search-insights.common.js: {}
   dependencies:
     - core/drupalSettings
@@ -45,12 +44,12 @@ plp:
   js:
     dist/plp.js: {}
     assets/alshaya_algolia_plp.js: {}
-    assets/alshaya_algolia_subcategory_scroll.js: {}
   dependencies:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common
     - core/jquery.once
     - alshaya_algolia_react/search_insights
+    - alshaya_algolia_react/plp_group_by_subcategory
 
 plpv2:
   js:
@@ -60,6 +59,7 @@ plpv2:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common
     - alshaya_algolia_react/search_insights
+    - alshaya_algolia_react/plp_group_by_subcategory
 
 product_category_carousel:
   js:
@@ -108,3 +108,12 @@ insights_query_pdpV3:
   dependencies:
     - alshaya_algolia_react/search_insights_detail
     - rcs_placeholders/helpers
+
+# PLP subcategory grouping libraries
+plp_group_by_subcategory:
+  js:
+    assets/alshaya_algolia_subcategory_scroll.js: {}
+    assets/alshaya_algolia_plp_group_by_subcategory.js: {}
+  dependencies:
+    - core/drupal
+    - alshaya_master/common_functions

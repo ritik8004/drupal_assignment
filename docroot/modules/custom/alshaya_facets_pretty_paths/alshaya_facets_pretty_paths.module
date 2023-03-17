@@ -166,7 +166,7 @@ function alshaya_facets_pretty_paths_page_attachments_alter(array &$page) {
 
     // If we have more than two filters, add robots meta.
     // Add one to default count as summary also has clear all link.
-    if (count($summary) > Settings::get('nonindexable_plp_filter_count') + 1) {
+    if ((is_countable($summary) ? count($summary) : 0) > Settings::get('nonindexable_plp_filter_count') + 1) {
       // Add robots meta tag to page.
       $page['#attached']['html_head']['robots'] = [
         [
@@ -389,5 +389,17 @@ function alshaya_facets_pretty_paths_taxonomy_term_delete(TermInterface $term) {
         ->condition('language', $langcode, '=')
         ->execute();
     }
+  }
+}
+
+/**
+ * Implements hook_acq_sku_sync_product_options_alter().
+ */
+function alshaya_facets_pretty_paths_acq_sku_sync_product_options_alter(TermInterface $term, bool &$save_term, array $option_data) {
+  // Fetch facet aliases for specific attribute/language.
+  $facet_pretty_aliases = \Drupal::service('alshaya_facets_pretty_paths.pretty_aliases')->getAliasesForFacet($option_data['attribute_code'], $option_data['langcode']);
+  if (!array_key_exists($option_data['option_value'], $facet_pretty_aliases)) {
+    $term->setName($option_data['option_value']);
+    $save_term = TRUE;
   }
 }

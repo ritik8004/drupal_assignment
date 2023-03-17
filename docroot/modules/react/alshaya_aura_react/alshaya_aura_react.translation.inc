@@ -640,6 +640,12 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
     ],
+    'v10' => [
+      'To spend your points online, please download Aura Mena app available both on <a href="@appStoreLink">App Store</a> and <a href="@googlePlayLink">Play Store</a>.' => [
+        'ar' => 'للاستفادة من نقاطك أونلاين، يرجى تحميل تطبيق أورا مينا المتوفر عبر <a href="@appStoreLink">آب ستور</a> و<a href="@googlePlayLink">بلاي ستور</a>.',
+        'context' => 'aura',
+      ],
+    ],
   ];
 }
 

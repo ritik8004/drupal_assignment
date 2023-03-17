@@ -1,0 +1,30 @@
+.c-menu-primary .mobile--menu {
+  margin-#{$left}: rem(-5);
+
+  html[lang="ar"] & {
+    right: rem(2);
+  }
+}
+
+.menu__back {
+  margin-#{$left}: 0;
+}
+
+.menu__list-item,
+.back--link,
+.c-menu-secondary li,
+.menu--two__list-item > .menu-two__link-wrapper .menu-two__link {
+  @include sideSpaces(0);
+}
+
+@include breakpoint($upto-desktop) {
+  .c-menu-secondary a {
+    @include sideSpaces(0);
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .logged-in .c-menu-primary .hamburger--menu {
+    #{$left}: 0;
+  }
+}

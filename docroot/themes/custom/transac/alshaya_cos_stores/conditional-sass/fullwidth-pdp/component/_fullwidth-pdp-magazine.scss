@@ -1,0 +1,54 @@
+body.nodetype--acq_product {
+  &.magazine-layout {
+    @include fullwidthClassicPdp;
+  }
+
+  .magazine-layout-node {
+    @include breakpoint($only-mobile) {
+      .content__title_wrapper.fixed {
+        margin: 0;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .cloudzoom .cloudzoom__herocontainer {
+        margin-#{$right}: 0;
+        width: auto;
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    &:not(.magazine-layout-v2) {
+      .basic-details-wrapper {
+        .field--name-field-skus {
+          .sku-base-form {
+            button[type="submit"] {
+              width: 100%;
+              max-width: calc(100% - #{rem(64)});
+              min-width: unset;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .wishlist-enabled {
+    .magazine-layout-node {
+      .basic-details-wrapper {
+        .wishlist-button-wrapper {
+          max-width: calc(100% - #{rem(64)});
+          min-width: unset;
+        }
+
+        .modal-share-this .share-icon {
+          #{$left}: unset;
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+}

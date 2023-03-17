@@ -47,6 +47,7 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
+  const activateShoeAI = (hasValue(drupalSettings.shoeai) && drupalSettings.shoeai.status === true);
 
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
@@ -215,7 +216,7 @@ const Teaser = ({
   return (
     <div className={teaserClass}>
       <article
-        className="node--view-mode-search-result"
+        className="node--view-mode-search-result quick-view"
         onClick={(event) => storeClickedItem(event, pageType)}
         data-sku={sku}
         {...dataVmode}
@@ -424,6 +425,14 @@ const Teaser = ({
           />
         </ConditionalView>
       </article>
+      {pageType === 'plp' && activateShoeAI === true ? (
+        <div
+          className="ShoeSizeMe ssm_plp"
+          data-shoeid={sku}
+          data-availability={attribute.attr_size_shoe_eu}
+          data-sizerun={attribute.attr_size_shoe_eu}
+        />
+      ) : null}
     </div>
   );
 };

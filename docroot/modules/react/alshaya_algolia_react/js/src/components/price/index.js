@@ -35,7 +35,7 @@ const Price = ({ price, finalPrice, fixedPrice = '' }) => {
       <PriceBlock>
         <div className="special-price-block">
           <div className="has--special--price">
-            <PriceElement amount={price} fixedPrice={getDataAttributePrices(fixedPrice, 'special_price')} />
+            <PriceElement amount={price} fixedPrice={getDataAttributePrices(fixedPrice, 'price')} />
           </div>
           <div className="special--price">
             <PriceElement amount={finalPrice} fixedPrice={getDataAttributePrices(fixedPrice, 'special_price')} />

@@ -5,6 +5,8 @@
  * Bazaarvoice.module for hook implementations.
  */
 
+use Drupal\Core\Asset\AttachedAssetsInterface;
+
 /**
  * Implements hook_module_implements_alter().
  */
@@ -50,20 +52,56 @@ function bazaar_voice_local_tasks_alter(&$local_tasks) {
 function bazaar_voice_library_info_build() {
   /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
   $bazaar_voice = \Drupal::service('bazaar_voice.api_helper');
-  $bazaar_voice_url = $bazaar_voice->getBvDynamicScriptCode();
   $libraries = [];
 
-  if (!empty($bazaar_voice_url)) {
-    $libraries['bazaar_voice'] = [
-      'js' => [
-        $bazaar_voice_url => [
-          'type' => 'external',
-          'attributes' => [
-            'defer' => TRUE,
-          ],
+  /** @var \Drupal\Core\Language\LanguageManagerInterface $language_manager */
+  $language_manager = \Drupal::service('language_manager');
+  $original_language = $language_manager->getConfigOverrideLanguage();
+
+  // Both EN and AR locale libraries are added as dependency because this hook
+  // is cached and we cannot change this library based on active language.
+  // We unset the library based on language in hook_js_alter().
+  foreach ($language_manager->getLanguages() as $language) {
+    $language_manager->setConfigOverrideLanguage($language);
+    $bazaar_voice_url = $bazaar_voice->getBvDynamicScriptCode();
+
+    if (!empty($bazaar_voice_url)) {
+      $libraries['bazaar_voice']['js'][$bazaar_voice_url] = [
+        'type' => 'external',
+        'attributes' => [
+          'defer' => TRUE,
         ],
-      ],
-    ];
+      ];
+    }
   }
+
+  // Restore the language manager to it's original language.
+  $language_manager->setConfigOverrideLanguage($original_language);
   return $libraries;
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function bazaar_voice_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
+  $bazaar_voice = \Drupal::service('bazaar_voice.api_helper');
+  $bazaar_voice_url = $bazaar_voice->getBvDynamicScriptCode();
+
+  if ($bazaar_voice->isCurrentRouteInBvList() && !empty($bazaar_voice_url)) {
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $updated_bazaar_voice_url = '';
+
+    // If the active language is EN, then unset the AR library, else visa-versa.
+    if ($langcode === 'en') {
+      $updated_bazaar_voice_url = str_replace("/en_", "/ar_", $bazaar_voice_url);
+    }
+    elseif ($langcode === 'ar') {
+      $updated_bazaar_voice_url = str_replace("/ar_", "/en_", $bazaar_voice_url);
+    }
+
+    if (isset($javascript[$updated_bazaar_voice_url])) {
+      unset($javascript[$updated_bazaar_voice_url]);
+    }
+  }
 }

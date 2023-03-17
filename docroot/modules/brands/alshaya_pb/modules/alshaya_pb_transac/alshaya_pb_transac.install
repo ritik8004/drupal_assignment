@@ -12,6 +12,17 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_pb_transac_update_9402() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_pottery_barn.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  *  Remove `frame` attribute from pb transac brand module.
  */
 function alshaya_pb_transac_update_9401() {

@@ -1,0 +1,8 @@
+@include breakpoint($only-mobile) {
+  .path--wishlist {
+    #block-page-title,
+    #my-wishlist .login-message {
+      margin: 0;
+    }
+  }
+}

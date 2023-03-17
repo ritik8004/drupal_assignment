@@ -1,0 +1,79 @@
+@include breakpoint($only-mobile) {
+  .super-category-enabled {
+    .c-menu-primary {
+      .region__menu-primary {
+        .block-alshaya-super-category-menu {
+          .menu--one__list {
+            .menu--one__link {
+              @include fullWidthSideSpaces(
+                $is_mobile: true
+              );
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    max-width: none;
+  }
+
+  body:not(.super-category-enabled) {
+    .block-alshaya-algolia-react-autocomplete {
+      #alshaya-algolia-autocomplete {
+        margin: 0 auto;
+      }
+    }
+  }
+
+  body.sub-brand-logo {
+    .block-system-branding-block,
+    .site-brand-wrapper {
+      .site-brand-home {
+        .logo:first-child {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+  }
+}
+
+.super-category-enabled {
+  &.frontpage,
+  &:not(.frontpage) {
+    header.c-header {
+      #block-alshayareactcartminicartblock {
+        @include breakpoint($upto-desktop) {
+          #{$right}: rem(6);
+        }
+
+        @include breakpoint($only-tablet) {
+          html[lang="ar"] & {
+            #{$right}: $full_width_padding_tablet;
+          }
+        }
+      }
+    }
+  }
+}
+
+body.wishlist-enabled {
+  .page-wrapper {
+    .filter-fixed-top {
+      .sticky-filter-wrapper {
+        .wishlist-minicart-sticky-wrapper {
+          @include breakpoint($tablet) {
+            #{$right}: rem(8);
+          }
+
+          @include breakpoint($desktop) {
+            #{$right}: rem(16);
+          }
+        }
+      }
+    }
+  }
+}

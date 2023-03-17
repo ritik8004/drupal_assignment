@@ -1,0 +1,16 @@
+@include breakpoint($only-mobile) {
+  .alshaya-newsletter-subscribe {
+    max-width: unset;
+  }
+
+  .alshaya-newsletter-subscribe,
+  .c-social-links {
+    @include sideSpaces($full_width_padding_mobile, $type: "margin");
+  }
+}
+
+@include breakpoint($tablet) {
+  .c-footer-primary {
+    @include sideSpaces($full_width_padding_tablet);
+  }
+}

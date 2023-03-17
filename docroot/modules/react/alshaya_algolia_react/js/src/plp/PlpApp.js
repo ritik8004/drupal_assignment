@@ -5,7 +5,7 @@ import {
   Stats,
 } from 'react-instantsearch-dom';
 
-import { searchClient } from '../config/SearchClient';
+import { algoliaSearchClient } from '../../../../js/utilities/algoliaHelper';
 
 import { productListIndexStatus } from '../utils/indexUtils';
 import { getSuperCategoryOptionalFilter } from '../utils';
@@ -55,6 +55,7 @@ const PlpApp = ({
   categoryField,
   promotionNodeId,
 }) => {
+  let subCategories = {};
   useEffect(() => {
     getExpressDeliveryStatus().then((status) => {
       window.sddEdStatus = status;
@@ -70,7 +71,6 @@ const PlpApp = ({
     pageSubType,
     hierarchy_lhn: lhnCategoryFilter,
     max_category_tree_depth: categoryDepth,
-    subCategories,
     categoryFacetEnabled,
     defaultColgrid: defaultColGridDesktop,
     defaultColGridMobile,
@@ -106,7 +106,9 @@ const PlpApp = ({
     if (productListIndexStatus()) {
       currentLanguage = 'en';
     }
-    if (typeof subCategories !== 'undefined' && Object.keys(subCategories).length > 0) {
+    // Get subcategories data.
+    subCategories = window.commerceBackend.getSubcategoryData();
+    if (hasValue(subCategories)) {
       filterOperator = ' OR ';
       groupEnabled = true;
       // Set all the filters selected in sub category.
@@ -169,11 +171,17 @@ const PlpApp = ({
 
   const defaultpageRender = getBackToPlpPage(pageType);
 
+  // For enabling/disabling hitsPerPage key in algolia calls.
+  const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
+
+  // hitsPerPage key value.
+  const hits = groupEnabled ? 1000 : itemsPerPage;
+
   finalFilter = `${finalFilter}(${filters.join(filterOperator)})`;
 
   return (
     <InstantSearch
-      searchClient={searchClient}
+      searchClient={algoliaSearchClient}
       indexName={indexName}
       searchState={searchState}
       createURL={createURL}
@@ -182,7 +190,7 @@ const PlpApp = ({
       <Configure
         userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
-        hitsPerPage={groupEnabled ? 1000 : itemsPerPage}
+        {...(enableHitsPerPage && { hitsPerPage: { hits } })}
         filters={finalFilter}
         ruleContexts={context}
         optionalFilters={optionalFilter}
@@ -272,6 +280,7 @@ const PlpApp = ({
           gtmContainer="product listing page"
           pageType={pageType}
           pageNumber={searchState.page || 1}
+          subCategories={subCategories}
         >
           {(paginationArgs) => (
             <PlpPagination {...paginationArgs}>
