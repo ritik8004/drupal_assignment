@@ -1,0 +1,18 @@
+body.wishlist-enabled.super-category-enabled {
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .wishlist-header.header-wrapper,
+      .wishlist-header.sticky-wrapper {
+        &:last-child {
+          @include breakpoint($tablet) {
+            padding-#{$right}: rem(8);
+          }
+
+          @include breakpoint($desktop-wide-1680) {
+            padding-#{$right}: rem(22);
+          }
+        }
+      }
+    }
+  }
+}
