@@ -121,4 +121,12 @@ body.magazine-layout-v2 {
       $is_desktop_wide: true,
     );
   }
+
+  .magv2-header {
+    @include breakpoint($only-mobile) {
+      @include fullWidthSideSpaces(
+        $is_mobile: true,
+      );
+    }
+  }
 }
