@@ -3,7 +3,7 @@ import {
   Configure,
   InstantSearch,
 } from 'react-instantsearch-dom';
-import { searchClient } from '../../../../js/utilities/algoliaHelper';
+import { algoliaSearchClient } from '../../../../js/utilities/algoliaHelper';
 import LoginMessage from '../../../../js/utilities/components/login-message';
 import ProductInfiniteHits from './ProductInfiniteHits';
 import WishlistPagination from './WishlistPagination';
@@ -219,7 +219,10 @@ class WishlistProductList extends React.Component {
           />
         </ConditionalView>
         <NotificationMessage />
-        <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
+        <InstantSearch
+          indexName={drupalSettings.wishlist.indexName}
+          searchClient={algoliaSearchClient}
+        >
           <Configure
             // To test the pagination we can hardcode this to static number.
             {...(enableHitsPerPage && { hitsPerPage: { itemsPerPage } })}
