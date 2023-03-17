@@ -68,6 +68,7 @@ class AlshayaAlgoliaSortHelper {
 
       $index_sort_key = $sort_key_mapping[$sort_key] ?? $sort_key;
 
+      $gtm_sort_key = 'default';
       if ($index_sort_key == 'search_api_relevance') {
         $sort_index_key = $index_name;
       }
@@ -82,12 +83,14 @@ class AlshayaAlgoliaSortHelper {
             . $index_sort_key . '_'
             . strtolower($sort_order);
         }
+        $gtm_sort_key = $index_sort_key . '_' . strtolower($sort_order);
       }
 
       if (!empty($sort_index_key)) {
         $sort_items[] = [
           'value' => $sort_index_key,
           'label' => $label_value,
+          'gtm_key' => $gtm_sort_key,
         ];
       }
 
