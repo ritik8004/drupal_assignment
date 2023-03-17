@@ -345,6 +345,7 @@ export default class ConfigurableForm extends React.Component {
         prevQty: 0,
         element: this.formRef.current,
         variant: selectedVariant,
+        product_view_type: 'quick_view',
       });
 
       // Full screen loader is stopped in success case in
