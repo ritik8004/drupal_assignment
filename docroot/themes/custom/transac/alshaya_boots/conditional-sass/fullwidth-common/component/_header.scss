@@ -13,4 +13,10 @@
       margin: 0 auto;
     }
   }
+
+  .block-system-branding-block .site-brand-home img {
+    html[lang="ar"] & {
+      margin-right: 0;
+    }
+  }
 }
