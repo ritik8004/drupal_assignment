@@ -35,3 +35,6 @@ services:
       - '@alshaya_acm_product.category_helper'
     calls:
       - [setStoreFinderUtility, ['@?alshaya_stores_finder_transac.utility']]
+
+  alshaya_rcs_seo.metatag_helper:
+    class: Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagHelper

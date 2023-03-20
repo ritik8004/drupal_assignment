@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\user\UserInterface;
 use Drupal\Core\Url;
 
 /**
@@ -92,23 +93,17 @@ function alshaya_hello_member_theme() {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_alter().
  */
-function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function alshaya_hello_member_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
   $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
-  // Only add if hello member enabled.
+  // Do not proceed if hello member is not enabled.
   if (!$helloMemberHelper->isHelloMemberEnabled()) {
-    // For user registration form if we have the field, we remove it.
-    if (isset($form['field_birth_date'])) {
-      $form['field_birth_date']['#access'] = FALSE;
-    }
-    if (isset($form['field_gender'])) {
-      $form['field_gender']['#access'] = FALSE;
-    }
     return;
   }
-  if (\Drupal::currentUser()->isAnonymous()) {
+
+  if ($form_id === 'user_register_form') {
     $form['#title'] = t('Become a Member', [], ['context' => 'hello_member']);
     $form['hello_member_sub_title'] = [
       '#weight' => -12,
@@ -120,6 +115,34 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
       '#open' => FALSE,
       '#weight' => 8,
     ];
+    $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
+  }
+  if ($form_id === 'user_form') {
+    $form['#title'] = t('My Details', [], ['context' => 'hello_member']);
+    $form['hello_member'] = [
+      '#type' => 'details',
+      '#title' => '<div class="hello-member-add-more">' . t('Add More & Get More', [], ['context' => 'hello_member']) . '</div>',
+      '#open' => FALSE,
+      '#weight' => '5',
+    ];
+    $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
+  }
+
+  if ($form_id === 'user_register_form' || $form_id === 'user_form') {
+    // Only add if hello member enabled.
+    if (!$helloMemberHelper->isHelloMemberEnabled()) {
+      // For user registration form if we have the field, we remove it.
+      if (isset($form['field_birth_date'])) {
+        $form['field_birth_date']['#access'] = FALSE;
+      }
+      if (isset($form['field_gender'])) {
+        $form['field_gender']['#access'] = FALSE;
+      }
+      if (isset($form['field_mobile_number'])) {
+        $form['field_mobile_number']['#access'] = FALSE;
+      }
+      return;
+    }
     $form['hello_member']['teasing'] = [
       '#type' => 'markup',
       '#markup' => t('Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?', [], ['context' => 'hello_member']),
@@ -129,6 +152,10 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['hello_member']['field_birth_date'] = $form['field_birth_date'];
     $form['hello_member']['field_birth_date']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
     $form['hello_member']['field_birth_date']['#weight'] = 10;
+    // Disallow user to edit date of birth on edit profile form.
+    if ($form['field_birth_date']['widget'][0]['value']['#default_value']) {
+      $form['hello_member']['field_birth_date']['#disabled'] = TRUE;
+    }
     unset($form['field_birth_date']);
     $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
     unset($form['field_gender']['widget']['#options']['_none']);
@@ -136,12 +163,22 @@ function alshaya_hello_member_form_user_register_form_alter(&$form, FormStateInt
     $form['hello_member']['field_gender']['#prefix'] = '<div class="hello-member-gender">';
     $form['hello_member']['field_gender']['#suffix'] = '</div>';
     $form['hello_member']['field_gender']['#weight'] = 11;
+    $form['hello_member']['field_mobile_number'] = $form['field_mobile_number'];
+    $form['hello_member']['field_mobile_number']['#prefix'] = '<div class="mobile-otp-wrapper">';
+    $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div></div>';
+    $form['hello_member']['field_mobile_number']['#weight'] = 12;
+    // Virtual input to temporary maintain otp verified status.
+    $form['otp_verified'] = [
+      '#type' => 'hidden',
+    ];
     unset($form['field_gender']);
     $form['field_subscribe_newsletter']['widget']['value']['#title'] = t('Yes, email me offers, style updates, and special invites to sales and events.', [], ['context' => 'hello_member']);
-
-    $form['actions']['submit']['#value'] = t('Become a Member', [], ['context' => 'hello_member']);
+    unset($form['field_mobile_number']);
     $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
     $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
+    $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_send_otp';
+    $form['#attached']['library'][] = 'alshaya_white_label/hello-member-otp';
+    $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_profile_info';
   }
 }
 
@@ -213,68 +250,6 @@ function alshaya_hello_member_datetime_set_startdate($element) {
     $element['date']['#max_error'] = t('The value in Date has to be less than', [], ['context' => 'hello_member']) . ' ' . $element['date']['#attributes']['max'];
   }
   return $element;
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function alshaya_hello_member_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Do nothing if it is not Edit profile form.
-  if ($form_id !== 'user_form') {
-    return;
-  }
-
-  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
-  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
-
-  // Only add if hello member enabled.
-  if (!$helloMemberHelper->isHelloMemberEnabled()) {
-    return;
-  }
-
-  $form['#title'] = t('My Details', [], ['context' => 'hello_member']);
-  $form['hello_member'] = [
-    '#type' => 'details',
-    '#title' => '<div class="hello-member-add-more">' . t('Add More & Get More', [], ['context' => 'hello_member']) . '</div>',
-    '#open' => FALSE,
-    '#weight' => '5',
-  ];
-  $form['hello_member']['teasing'] = [
-    '#type' => 'markup',
-    '#markup' => t('Did you know that if you add some more information below you will earn more points and get a more personalised experience? How great is that?', [], ['context' => 'hello_member']),
-    '#prefix' => '<div class="hello-member-accordion-wrapper">',
-  ];
-  $form['hello_member']['field_birth_date'] = $form['field_birth_date'];
-  $form['hello_member']['field_birth_date']['#suffix'] = '<div class="hello-member-gift-info">' . t('H&M wants to give you special treat on your birthday', [], ['context' => 'hello_member']) . '</div>';
-  $form['hello_member']['field_birth_date']['#weight'] = 10;
-  // Disallow user to edit date of birth on edit profile form.
-  if ($form['field_birth_date']['widget'][0]['value']['#default_value']) {
-    $form['hello_member']['field_birth_date']['#disabled'] = TRUE;
-  }
-  unset($form['field_birth_date']);
-  $form['field_gender']['widget']['#empty_option'] = t('Select Gender', [], ['context' => 'hello_member']);
-  unset($form['field_gender']['widget']['#options']['_none']);
-  $form['hello_member']['field_gender'] = $form['field_gender'];
-  $form['hello_member']['field_gender']['#prefix'] = '<div class="hello-member-gender">';
-  $form['hello_member']['field_gender']['#suffix'] = '</div></div>';
-  $form['hello_member']['field_gender']['#weight'] = 11;
-  $form['hello_member']['field_mobile_number'] = $form['field_mobile_number'];
-  $form['hello_member']['field_mobile_number']['#prefix'] = '<div class="mobile-otp-wrapper">';
-  $form['hello_member']['field_mobile_number']['#suffix'] = '<div id="hello-member-send-otp"></div></div>';
-  $form['hello_member']['field_mobile_number']['#weight'] = 12;
-  // Virtual input to temporary maintain otp verified status.
-  $form['otp_verified'] = [
-    '#type' => 'hidden',
-  ];
-  $form['actions']['submit']['#submit'][] = 'alshaya_hello_member_user_form_submit_function';
-
-  unset($form['field_gender']);
-  unset($form['field_mobile_number']);
-  $form['#attached']['library'][] = 'alshaya_white_label/hello-member-registration';
-  $form['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
-  $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_send_otp';
-  $form['#attached']['library'][] = 'alshaya_white_label/hello-member-otp';
-  $form['#attached']['library'][] = 'alshaya_hello_member/alshaya_hello_member_profile_info';
 }
 
 /**
@@ -440,11 +415,10 @@ function alshaya_hello_member_alshaya_spc_order_details_settings_alter(&$setting
  * User Form Submit handler to set temp setting for otp verified.
  */
 function alshaya_hello_member_user_form_submit_function(&$form, FormStateInterface $form_state) {
-  // If Otp is successfully verified store temp varialble.
-  if ($form_state->getValue('otp_verified')) {
-    $temp_store = \Drupal::service('tempstore.private')->get('alshaya_hello_member');
-    // Set the key/value pair.
-    $temp_store->set('otpVerifiedPhone', $form_state->getValue('field_mobile_number')[0]['mobile']);
+  $user = user_load_by_mail(\Drupal::currentUser()->getEmail());
+  // Proceed only if we have a valid user object.
+  if ($user instanceof userInterface) {
+    \Drupal::service('alshaya_hello_member.hello_member_helper')->storeMobileVerificationStatus($user, $form_state);
   }
 }
 
@@ -590,4 +564,21 @@ function alshaya_hello_member_alshaya_acm_customer_update_account_alter($user, $
   if (isset($customer['extension_attributes']['customer_gender'])) {
     $user->get('field_gender')->setValue($customer['extension_attributes']['customer_gender']);
   }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function alshaya_hello_member_user_insert(UserInterface $user) {
+  /** @var \Drupal\alshaya_hello_member\Helper\HelloMemberHelper */
+  $helloMemberHelper = \Drupal::service('alshaya_hello_member.hello_member_helper');
+  // Do not proceed if hello member is not enabled.
+  if (!$helloMemberHelper->isHelloMemberEnabled()) {
+    return;
+  }
+
+  // If user is getting created that means the user OTP verification was
+  // successful. So check if the user is having value in mobile number field and
+  // proceed with updating the flag value in shared temp store.
+  $helloMemberHelper->storeMobileVerificationStatus($user);
 }

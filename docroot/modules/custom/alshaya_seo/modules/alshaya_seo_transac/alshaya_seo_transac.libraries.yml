@@ -147,3 +147,12 @@ gtm_aura:
   dependencies:
     - core/drupal
     - alshaya_spc/static_storage
+
+# Library to integrate GTM with DY.
+gtm_dy:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.dy.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal.debounce

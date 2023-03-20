@@ -847,7 +847,8 @@
         product_style_code: product.attr('gtm-product-style-code'),
         dimension2: product.attr('gtm-sku-type'),
         dimension3: product.attr('gtm-dimension3'),
-        dimension4: mediaCount
+        dimension4: mediaCount,
+        data_vmode: product.attr('data-vmode')
       };
 
       if (product.attr('gtm-brand')) {
@@ -869,7 +870,6 @@
         // Except in PDP, to define full path from PLP.
         productData.list = $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
       }
-
       // If list variable is set in local storage, retrieve it.
       var listValues = Drupal.getItemFromLocalStorage(productListStorageKey);
       if (listValues
@@ -877,7 +877,7 @@
         && Object.keys(listValues).length
         && typeof listValues[productData.id] !== 'undefined') {
         // For SRP, use list value 'Search Result Page'.
-        if (listValues[productData.id] === 'Search Results Page' || !$('body').is('[gtm-list-name]')) {
+        if (listValues[productData.id] === 'Search Results Page' || !$('body').is('[gtm-list-name]') || listValues[productData.id].indexOf('match back') > -1) {
           productData.list = listValues[productData.id];
         }
       }
@@ -886,6 +886,7 @@
       // the list name from the gtm attribute for the page. But for sections
       // like matchback, we need "match back" prefix to be added instead of
       // PDP/PLP, so this event will help us there.
+      if (productData.data_vmode === 'matchback') {
       var gtmListNameEvent = new CustomEvent('getGtmListNameForProduct', {
         detail: {
           listName: productData.list,
@@ -895,10 +896,14 @@
       });
       document.dispatchEvent(gtmListNameEvent);
       productData.list = gtmListNameEvent.detail.listName;
-
-      // Fetch referrerPageType from localstorage.
+      // match back products should have all events with match back.
+      if (productData.list.indexOf('match back') === -1) {
+        productData.list = $('body').attr('gtm-list-name').replace('PDP-placeholder', 'match back');
+      }
+    }
+      // Fetch referrerPageType from localstorage stop in case product is matchback product.
       const referrerData = Drupal.getItemFromLocalStorage('referrerData');
-      if(referrerData !== null) {
+      if(referrerData !== null && productData.data_vmode !== 'matchback') {
         if (referrerData.pageType === 'Search Results Page') {
           // For SRP, use list value 'Search Result Page'
           productData.list = referrerData.pageType;
@@ -916,7 +921,9 @@
           }
 
           // IF listName contains placeholder remove it.
-          productData.list = listName.replace('PDP-placeholder', referrerData.pageType);
+          if (productData.list.indexOf('match back') == -1) {
+            productData.list = listName.replace('PDP-placeholder', referrerData.pageType);
+          }
         }
       }
     }
