@@ -75,40 +75,6 @@
         padding: 0.75rem 1.25rem;
       }
     }
-
-    article {
-      .ShoeSizeMe {
-        position: absolute;
-        #{$right}: rem(13);
-        z-index: 1;
-        top: rem(16);
-
-        .shoesize-icon {
-          width: rem(16);
-          height: rem(20);
-        }
-
-        html[lang="ar"] & {
-          left: rem(15);
-        }
-
-        @include breakpoint($tablet) {
-          #{$right}: rem(13);
-
-          html[lang="ar"] & {
-            left: rem(14);
-          }
-        }
-      }
-
-      .wishlist-button-wrapper + .ShoeSizeMe {
-        top: rem(38);
-
-        @include breakpoint($tablet) {
-          top: rem(39);
-        }
-      }
-    }
   }
 
   .region__content {

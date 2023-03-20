@@ -48,8 +48,6 @@ const Teaser = ({
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
   const activateShoeAI = (hasValue(drupalSettings.shoeai) && drupalSettings.shoeai.status === 1);
-  const basePath = '/themes/custom/transac/alshaya_white_label/';
-
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -284,9 +282,7 @@ const Teaser = ({
               data-shoeid={sku}
               data-availability={attribute.attr_size_shoe_eu}
               data-sizerun={attribute.attr_size_shoe_eu}
-            >
-              <img className="shoesize-icon" src={`${basePath}imgs/icons/shoe-ai.svg`} />
-            </div>
+            />
           ) : null}
           {isAddToBagHoverEnabled()
             && (
