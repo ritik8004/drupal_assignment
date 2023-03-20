@@ -53,7 +53,7 @@ class AlshayaShoeAi {
    */
   public function getShoeAiStatus() {
     $alshaya_shoeai_settings = $this->configFactory->get('alshaya_shoeai.settings');
-    if (!empty($alshaya_shoeai_settings->get('shop_id'))) {
+    if (empty($alshaya_shoeai_settings->get('shop_id'))) {
       return 0;
     }
     return $alshaya_shoeai_settings->get('enable_shoeai');

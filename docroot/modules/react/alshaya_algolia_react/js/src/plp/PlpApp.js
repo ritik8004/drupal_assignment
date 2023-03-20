@@ -5,7 +5,7 @@ import {
   Stats,
 } from 'react-instantsearch-dom';
 
-import { searchClient } from '../config/SearchClient';
+import { algoliaSearchClient } from '../../../../js/utilities/algoliaHelper';
 
 import { productListIndexStatus } from '../utils/indexUtils';
 import { getSuperCategoryOptionalFilter } from '../utils';
@@ -181,7 +181,7 @@ const PlpApp = ({
 
   return (
     <InstantSearch
-      searchClient={searchClient}
+      searchClient={algoliaSearchClient}
       indexName={indexName}
       searchState={searchState}
       createURL={createURL}
