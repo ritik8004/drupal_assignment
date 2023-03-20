@@ -263,5 +263,33 @@ window.commerceBackend = window.commerceBackend || {};
     }
 
     return getProcessedStyleProducts(product, styleProducts);
-  }
+  };
+
+  /**
+   * Synchronously fetches and processes style products data.
+   *
+   * This is used only for PDP.
+   *
+   * @param {object} product
+   *   Raw product object.
+   * @param {string} loadStyles
+   *   Load styled products.
+   *
+   * @returns {void}
+   */
+  window.commerceBackend.getProductsInStyleSynchronus = function getProductsInStyleSynchronus(product, loadStyles = true) {
+    // Return if result is empty.
+    if (!Drupal.hasValue(product)
+      || !Drupal.hasValue(product.style_code)) {
+      return product;
+    }
+
+    var styleProducts = [];
+    if (loadStyles) {
+      // Get the products with the same style.
+      styleProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('products-in-style', { styleCode: product.style_code });
+    }
+
+    return getProcessedStyleProducts(product, styleProducts);
+  };
 })(Drupal, drupalSettings);
