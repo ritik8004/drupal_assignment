@@ -135,6 +135,10 @@ function _alshaya_hello_member_static_strings() {
       'key' => 'offer_added_to_bag',
       'value' => t('This offer has been added to your bag', [], ['context' => 'hello_member']),
     ],
+    [
+      'key' => 'membership_renew_message',
+      'value' => t('Your membership will be renewed on @expiry_date and points will be reset every year.', [], ['context' => 'hello_member']),
+    ],
   ];
 }
 
