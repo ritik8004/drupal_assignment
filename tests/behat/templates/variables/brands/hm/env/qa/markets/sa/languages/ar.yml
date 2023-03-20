@@ -1,8 +1,0 @@
-variables:
-  url_base_uri: 'https://hmsa2-test.factory.alshaya.com/ar'
-  language_cc_mada_payment_type: 'Credit / Debit Card'
-  cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
-  order_detail: 'تفاصيل الطلبية'
-  delivery_type_text: 'التوصيل متوقع خلال:'
-  payment_type_text: 'طريقة الدفع:'
-  governorate: ''

@@ -1,8 +1,0 @@
-variables:
-  url_base_uri: 'http://bbwsa-test.factory.alshaya.com/en'
-  cc_mada_payment_type: 'Credit / Debit Card'
-  language_cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
-  language_order_detail: 'تفاصيل الطلبية'
-  language_delivery_type_text: 'التوصيل متوقع خلال:'
-  language_payment_type_text: 'طريقة الدفع:'
-  governorate: ''

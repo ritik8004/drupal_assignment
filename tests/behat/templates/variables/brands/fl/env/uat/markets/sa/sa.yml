@@ -1,7 +1,0 @@
-variables:
-  url_product_page: '/buy-nike-3-pack-quarter-socks-white-white.html/'
-  new_checkout_enabled: TRUE
-  np_plp_product_page: '/buy-nike-3-pack-quarter-socks-white-white.html/'
-  np_plp_page: '/shop-womens/'
-  spc_plp_add_to_cart: '/shop-womens/'
-  spc_egift_page: '/egift/'
