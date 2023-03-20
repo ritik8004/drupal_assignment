@@ -131,7 +131,7 @@
         const productGtmData = {
           "name": product.ProductName,
           "id": product.CartItemId,
-          "price": product.ProductPrices.MerchantTransaction.TotalPrice,
+          "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency,
           "brand": product.Brand,
           "category": null, // @todo We need to ask Global-e to get this information.
           "variant": product.ProductGroupCode,
@@ -201,7 +201,7 @@
           "actionField": {
             "id": geData.OrderId,
             "affiliation": "Online Store",
-            "revenue": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
+            "revenue": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
             "tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerDutiesAndTaxesInMerchantCurrency,
             "shipping": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerShippingPriceInMerchantCurrency,
             "coupon": geData.details.Discounts[0].coupon,
