@@ -15,10 +15,12 @@ use Drupal\Core\Url;
 function alshaya_fit_calculator_update_9001() {
   /** @var \Drupal\block\Entity\Block $block */
   $block = \Drupal::entityTypeManager()->getStorage('block')->load('alshayafitcalculator');
-
+  if (empty($block)) {
+    return;
+  }
   // Get block settings.
   $settings = $block->get('settings');
-  if (isset($settings['plp_page']) && !empty($settings['plp_page'])) {
+  if (!empty($settings['plp_page'])) {
     // As the field is updated entity autocomplete to textfield. We get url from
     // term id and set it back in block settings.
     $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $settings['plp_page']]);
