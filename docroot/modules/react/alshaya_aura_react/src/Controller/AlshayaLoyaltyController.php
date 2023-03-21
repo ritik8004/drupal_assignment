@@ -199,7 +199,7 @@ class AlshayaLoyaltyController extends ControllerBase {
       'description',
     ];
     // Add <title> tag for the Aura landing page.
-    $html_head[]= [
+    $html_head[] = [
       [
         '#tag' => 'title',
         '#value' => $this->token->replace($this->t('Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]', [], [
