@@ -1,7 +1,0 @@
-name: Alshaya RCS Fit Calculator
-type: module
-description: 'Provides RCS integration with Alshaya fit calculator.'
-package: 'Alshaya'
-core_version_requirement: ^9 || ^10
-dependencies:
-  - alshaya_fit_calculator:alshaya_fit_calculator
