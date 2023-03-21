@@ -45,6 +45,9 @@ function storeClickedItem(event, pageType) {
 
   const articleNode = event.target.closest('.node--view-mode-search-result');
 
+  // Product list container, use this to determine the selected grid view.
+  const productList = document.querySelector('.c-products-list');
+
   // This happens when we display the Add To Bag configurable drawer. The drawer
   // component is outside it's parent article in the DOM so we get an error.
   if (articleNode === null) {
@@ -56,7 +59,7 @@ function storeClickedItem(event, pageType) {
 
   const storageDetails = {
     sku: articleNode.getAttribute('data-sku'),
-    grid_type: articleNode.classList.contains('product-large') ? 'large' : 'small',
+    grid_type: productList.classList.contains('product-large') ? 'large' : 'small',
     page: Drupal.algoliaGetActualPageNumber(),
     sort: sortByIndex,
   };
