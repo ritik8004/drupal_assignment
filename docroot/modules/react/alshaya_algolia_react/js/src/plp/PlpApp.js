@@ -5,7 +5,7 @@ import {
   Stats,
 } from 'react-instantsearch-dom';
 
-import { searchClient } from '../config/SearchClient';
+import { algoliaSearchClient } from '../../../../js/utilities/algoliaHelper';
 
 import { productListIndexStatus } from '../utils/indexUtils';
 import { getSuperCategoryOptionalFilter } from '../utils';
@@ -171,11 +171,17 @@ const PlpApp = ({
 
   const defaultpageRender = getBackToPlpPage(pageType);
 
+  // For enabling/disabling hitsPerPage key in algolia calls.
+  const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
+
+  // hitsPerPage key value.
+  const hits = groupEnabled ? 1000 : itemsPerPage;
+
   finalFilter = `${finalFilter}(${filters.join(filterOperator)})`;
 
   return (
     <InstantSearch
-      searchClient={searchClient}
+      searchClient={algoliaSearchClient}
       indexName={indexName}
       searchState={searchState}
       createURL={createURL}
@@ -184,7 +190,7 @@ const PlpApp = ({
       <Configure
         userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
-        hitsPerPage={groupEnabled ? 1000 : itemsPerPage}
+        {...(enableHitsPerPage && { hitsPerPage: { hits } })}
         filters={finalFilter}
         ruleContexts={context}
         optionalFilters={optionalFilter}

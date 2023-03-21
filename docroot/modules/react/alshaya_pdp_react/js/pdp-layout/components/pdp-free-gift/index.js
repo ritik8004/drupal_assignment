@@ -1,6 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import ConditionalView from '../../../common/components/conditional-view';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const PdpFreeGift = ({
   freeGiftImage,
@@ -14,7 +15,7 @@ const PdpFreeGift = ({
       <>
         <div className="free-gift-promotions free-gift-promotions-full-view-mode">
           <div className="free-gift-promo-wrapper free-gift-promo-list">
-            <ConditionalView condition={freeGiftImage.length > 0}>
+            <ConditionalView condition={hasValue(freeGiftImage)}>
               <div className="free-gift-image">
                 <img
                   src={freeGiftImage['#url']}
@@ -31,7 +32,7 @@ const PdpFreeGift = ({
               <div className="free-gift-message">
                 {parse(freeGiftMessage)}
               </div>
-              <ConditionalView condition={freeGiftPromoCode.length > 0}>
+              <ConditionalView condition={hasValue(freeGiftPromoCode)}>
                 <div className="free-gift-coupon-code">
                   {Drupal.t('Use code ')}
                   <span className="coupon-code">{freeGiftPromoCode}</span>
@@ -67,7 +68,7 @@ const PdpFreeGift = ({
               {' '}
               {Drupal.t('with this product')}
             </div>
-            <ConditionalView condition={freeGiftPromoCode.length > 0}>
+            <ConditionalView condition={hasValue(freeGiftPromoCode)}>
               <div className="free-gift-coupon-code">
                 {Drupal.t('Use code')}
                 {freeGiftPromoCode.map((code, i) => (

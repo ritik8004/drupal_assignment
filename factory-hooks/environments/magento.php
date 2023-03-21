@@ -1142,8 +1142,8 @@ $magentos = [
     'magento_secrets' => [
       'consumer_key' => 'bw7krzf0k6rskjqf6ogay6jc9sghd0uw',
       'consumer_secret' => 'jerjz5fjkx00bddc5evimnqvqapzi06l',
-      'access_token' => 'wpae2yyddmknylfk590z40eon5qkq0zh',
-      'access_token_secret' => 'sw29c87f5njwbgkilyrluu5dmhkpsio3',
+      'access_token' => '4n5wgcjls9rvfwze3cdyyv1l1c80h53u',
+      'access_token_secret' => 'tf4p7sxqj2lq6moo6pfpg62zlev81cyi',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 16],
@@ -1287,6 +1287,9 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 37, 'ar' => 34],
+    ],
+    'xb' => [
+      'store_id' => ['en' => 47, 'ar' => 44],
     ],
   ],
   'vs_prod' => [

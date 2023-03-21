@@ -25,7 +25,7 @@ class ReturnRefundDetails extends React.Component {
       address: getDeliveryAddress(orderDetails),
       paymentInfo: getPaymentDetails(orderDetails),
       open: false,
-      cardList: null, // eGift cards linked to a User.
+      cardList: null, // eGift cards linked to a user email.
       egiftCardType: false, // To check new eGift card or existing.
     };
   }

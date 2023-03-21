@@ -26,6 +26,8 @@ const ProductCategoryCarousel = ({
     search,
   } = drupalSettings.algoliaSearch;
 
+  // For enabling/disabling hitsPerPage key in algolia calls.
+  const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
   let finalFilter = '';
 
   // Do not show out of stock products.
@@ -48,7 +50,7 @@ const ProductCategoryCarousel = ({
       <Configure
         userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
-        hitsPerPage={itemsPerPage}
+        {...(enableHitsPerPage && { hitsPerPage: itemsPerPage })}
         filters={finalFilter}
         ruleContexts={ruleContext}
       />

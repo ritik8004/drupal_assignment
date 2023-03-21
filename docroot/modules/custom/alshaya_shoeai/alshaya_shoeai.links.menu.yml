@@ -1,0 +1,4 @@
+alshaya_shoeai.settings:
+  title: 'Shoe AI Settings'
+  route_name: alshaya_shoeai.settings
+  parent: system.admin_config_services

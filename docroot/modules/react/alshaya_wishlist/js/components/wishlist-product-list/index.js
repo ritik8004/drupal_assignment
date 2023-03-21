@@ -3,7 +3,7 @@ import {
   Configure,
   InstantSearch,
 } from 'react-instantsearch-dom';
-import { searchClient } from '../../../../js/utilities/algoliaHelper';
+import { algoliaSearchClient } from '../../../../js/utilities/algoliaHelper';
 import LoginMessage from '../../../../js/utilities/components/login-message';
 import ProductInfiniteHits from './ProductInfiniteHits';
 import WishlistPagination from './WishlistPagination';
@@ -208,6 +208,9 @@ class WishlistProductList extends React.Component {
     // Add the drawer markup for add to bag feature.
     createConfigurableDrawer(true);
 
+    // For enabling/disabling hitsPerPage key in algolia calls.
+    const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
+
     return (
       <>
         <ConditionalView condition={isAnonymousUser() && !isShareWishlistPage()}>
@@ -216,10 +219,13 @@ class WishlistProductList extends React.Component {
           />
         </ConditionalView>
         <NotificationMessage />
-        <InstantSearch indexName={drupalSettings.wishlist.indexName} searchClient={searchClient}>
+        <InstantSearch
+          indexName={drupalSettings.wishlist.indexName}
+          searchClient={algoliaSearchClient}
+        >
           <Configure
             // To test the pagination we can hardcode this to static number.
-            hitsPerPage={itemsPerPage}
+            {...(enableHitsPerPage && { hitsPerPage: { itemsPerPage } })}
             filters={filters}
           />
           <div id="plp-hits" className="c-products-list product-small view-algolia-plp">

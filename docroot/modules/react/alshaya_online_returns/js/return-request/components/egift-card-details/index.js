@@ -6,6 +6,7 @@ const EgiftCardDetails = ({
   cardList, selectedOption, egiftCardType, paymentDetails,
 }) => {
   let selected = cardList ? cardList.card_number : 'newegift';
+  // Assigning the variable with the current selected element value.
   if (hasValue(selectedOption)) {
     selected = selectedOption;
   }
@@ -27,16 +28,13 @@ const EgiftCardDetails = ({
     : <></>);
 
   // Assigning the radio button values for linked and new eGift card.
-  let value = '';
-  let name = '';
+  let egiftRefundName = '';
   if (hasValue(selected) && !egiftCardType) {
     // For existing linked eGift card.
-    value = cardList.card_number;
-    name = cardList.card_number;
+    egiftRefundName = cardList.card_number;
   } else if (egiftCardType) {
     // For new eGift card.
-    value = 'newegift';
-    name = 'newegift';
+    egiftRefundName = 'newegift';
   }
 
   return (
@@ -47,9 +45,9 @@ const EgiftCardDetails = ({
             ? (
               <input
                 type="radio"
-                value={value}
-                name={name}
-                checked={selected === value}
+                value={egiftRefundName}
+                name={egiftRefundName}
+                checked={selected === egiftRefundName}
               />
             )
             : (

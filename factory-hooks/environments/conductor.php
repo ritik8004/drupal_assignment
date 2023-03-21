@@ -832,6 +832,11 @@ $conductors = [
     'site_id' => 381,
   ],
   // VictoriaSecret XB.
+  'vsxb_uat' => [
+    'hmac_id' => 'bec1f01c7f914a4d8ab56bc46a8fac49',
+    'hmac_secret' => 'N2RjZjM1NDUtYzYxYS00',
+    'site_id' => 653,
+  ],
   'vsxb_dev3' => [
     'hmac_id' => '7d5de94cfc6e452b8e6b9d071a522444',
     'hmac_secret' => 'ZWZjMmUwMzktYzBkMS00',

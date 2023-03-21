@@ -117,33 +117,33 @@
       }
     }
   }
-}
 
-.notification-container {
-  font-size: 0.8125rem;
-  font-family: $alshaya-bold;
-  background: $my-wishlist-message-bg;
-  padding: 1rem 1.25rem;
-  padding-#{$left}: 0.5rem;
-  color: $my-wishlist-message-txt;
+  .notification-container {
+    font-size: rem(13);
+    font-family: $alshaya-bold;
+    background: $my-wishlist-message-bg;
+    padding: rem(16) rem(20);
+    padding-#{$left}: rem(8);
+    color: $my-wishlist-message-txt;
 
-  .notification-message {
-    display: flex;
-    align-items: center;
+    .notification-message {
+      display: flex;
+      align-items: center;
 
-    @include icon(warning, before) {
-      font-size: 2rem;
-      margin-#{$right}: 0.5rem;
+      @include icon(warning, before) {
+        font-size: rem(32);
+        margin-#{$right}: rem(8);
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: rem(20) rem(8);
     }
   }
 
-  @include breakpoint($only-mobile) {
-    margin: 1.25rem 0.5rem;
+  .login-message + .notification-container {
+    margin-top: rem(20);
   }
-}
-
-.login-message + .notification-container {
-  margin-top: 1.25rem;
 }
 
 #wishlist-share {
