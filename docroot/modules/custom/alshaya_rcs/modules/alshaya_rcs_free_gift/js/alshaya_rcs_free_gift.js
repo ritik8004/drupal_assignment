@@ -44,19 +44,7 @@
         // If this is a configurable product having style code, store its variants in local storage as well.
         if (freeGiftProduct.type_id === 'configurable' && Drupal.hasValue(freeGiftProduct.style_code)) {
           // Fetch the in style product.
-          var freeGiftProductStyled = await window.commerceBackend.getProductsInStyle({ sku: freeGiftProduct.sku, style_code: freeGiftProduct.style_code });
-          if (Drupal.hasValue(freeGiftProduct.variants)) {
-            freeGiftProduct.allVariantskus = [];
-            freeGiftProduct.variants.forEach(function(freeGiftProductVariant) {
-              // Storing each styled variants in local storage.
-              window.commerceBackend.setRcsProductToStorage(freeGiftProductStyled, 'free_gift', freeGiftProductVariant.product.sku);
-              // If sku is a parent sku, lets mark it for easier processing further.
-              if (freeGiftProduct.sku === freeGiftProductVariant.product.parent_sku) {
-                freeGiftProduct.isParent = 1;
-                freeGiftProduct.allVariantskus.push(freeGiftProductVariant.product.sku);
-              }
-            });
-          }
+          freeGiftProduct = await window.commerceBackend.getProductsInStyle({ sku: freeGiftProduct.sku, style_code: freeGiftProduct.style_code });
         }
         freeGiftProduct.sku = giftItemSku;
         window.commerceBackend.setRcsProductToStorage(freeGiftProduct, 'free_gift', giftItemSku);
@@ -100,8 +88,6 @@
           // Load the product data based on sku.
           var freeGiftProduct = globalThis.RcsPhStaticStorage.get('product_data_' + skus[0]);
           showItemModalView(freeGiftProduct, skus[0], backToCollection);
-          // Remove the loader from the screen.
-          Drupal.cartNotification.spinner_stop();
         } else if (skus.length > 1) {
           // Get the free gift promotion title.
           var promotionTitle = $(this).data('promotion-title');
@@ -110,43 +96,18 @@
             title: promotionTitle,
             items: [],
           };
-          // In free gift promotion api response, we receive both parent and variant skus of same product.
-          // Since those are just duplicate products having different variants only, lets mark them as pushed,
-          // inside this variable and NOT push in free gift list modal if anyone variant is pushed already.
-          var variantsAlreadyPushed = [];
           // Store the response in static storage.
           skus.forEach((freeGiftSku) => {
-            // Return if the variant is already pushed.
-            // We don't have to bother about simple products as they would have individual skus.
-            if (variantsAlreadyPushed.includes(freeGiftSku)) {
-              return;
-            }
             // On Page load, some free gift data is already cached.
             var freeGiftItem = globalThis.RcsPhStaticStorage.get('product_data_' + freeGiftSku);
-            var freeGiftItemVariantSku = null;
-            if (Drupal.hasValue(freeGiftItem)) {
-              // Elemenating variants by pushing to variantsAlreadyPushed.
-              variantsAlreadyPushed = Drupal.hasValue(freeGiftItem.allVariantskus) ? variantsAlreadyPushed.concat(freeGiftItem.allVariantskus) : variantsAlreadyPushed;
-              if (freeGiftItem.isParent === 1) {
-                freeGiftItemVariantSku = freeGiftItem.allVariantskus[0];
-                freeGiftItem = globalThis.RcsPhStaticStorage.get('product_data_' + freeGiftItemVariantSku);
-                freeGiftItem.sku = freeGiftItemVariantSku;
-              }
-            }
             // For uncached data, do api calls.
-            else {
+            if (!Drupal.hasValue(freeGiftItem)) {
               // Synchronous call to get product by skus.
               freeGiftItem = globalThis.rcsPhCommerceBackend.getDataSynchronous('product_by_sku', { sku: freeGiftSku });
               if (Drupal.hasValue(freeGiftItem) && Drupal.hasValue(freeGiftItem.sku)) {
                 if (freeGiftItem.type_id === 'configurable' && Drupal.hasValue(freeGiftItem.style_code)) {
                   // Again for configurable products having style code, we will take the in style product.
                   freeGiftItem = window.commerceBackend.getProductsInStyleSynchronus({ sku: freeGiftItem.sku, style_code: freeGiftItem.style_code });
-                  // Lets store the variants again in variantsAlreadyPushed to eliminate duplicates.
-                  if (Drupal.hasValue(freeGiftItem.variants)) {
-                    freeGiftItem.variants.forEach(function(freeGiftProductVariant) {
-                      variantsAlreadyPushed = variantsAlreadyPushed.concat([freeGiftProductVariant.product.sku]);
-                    });
-                  }
                 }
                 freeGiftItem.sku = freeGiftSku;
                 // Store it in local storage for further usage on different pages.
@@ -160,19 +121,11 @@
                 title: freeGiftItem.name,
                 freeGiftImage: Drupal.hasValue(freeGiftImage) ? freeGiftImage.url : drupalSettings.alshayaRcs.default_meta_image,
                 freeGiftImageTitle: freeGiftItem.name,
-                freeGiftSku: freeGiftItemVariantSku ? freeGiftItemVariantSku : freeGiftSku,
+                freeGiftSku,
                 backToCollection: true,
-                freeGiftItem: freeGiftItem,
               });
             }
           });
-
-          if (data.items.length === 1) {
-            showItemModalView(data.items[0].freeGiftItem, data.items[0].freeGiftSku);
-            // Remove the loader from the screen.
-            Drupal.cartNotification.spinner_stop();
-            return;
-          }
 
           // Collection of item modal.
           elm.innerHTML = handlebarsRenderer.render('product.promotion_free_gift_items', data);
@@ -193,9 +146,9 @@
           var modalContext = $('.pdp-modal-box');
           modalContext.find('.ui-widget-content').attr('id', 'drupal-modal');
           globalThis.rcsPhApplyDrupalJs(modalContext);
-          // Remove the loader from the screen.
-          Drupal.cartNotification.spinner_stop();
         }
+        // Remove the loader from the screen.
+        Drupal.cartNotification.spinner_stop();
       });
 
       // Open the collection list on click of back to collection.
@@ -248,27 +201,30 @@
     });
     collectionItemDialog.show();
 
+    var modalContext = $('.pdp-modal-box');
+    modalContext.find('.ui-widget-content').attr('id', 'drupal-modal');
+
     // For configurable products, show sku base form.
     if (freeGiftProduct.type_id === 'configurable') {
+      // Make sure we are rendering add to cart product for current sku.
+      freeGiftProduct.sku = sku;
       window.commerceBackend.renderAddToCartForm(freeGiftProduct);
       // Removing style guide modal link inside free gift modal.
-      if ($('.pdp-modal-box .size-guide-form-and-link-wrapper').length > 0) {
+      if (modalContext.find('.size-guide-form-and-link-wrapper').length) {
         $('.pdp-modal-box .size-guide-link').remove();
       }
       // Removing quantity dropdown modal link inside free gift modal.
-      if ($('.pdp-modal-box .form-item-quantity').length > 0) {
+      if (modalContext.find('.form-item-quantity').length > 0) {
         $('.pdp-modal-box .form-item-quantity').remove();
       }
       // As we don't need the add to cart button, so removing it.
-      $('.pdp-modal-box button.add-to-cart-button').remove();
+      modalContext.find('button.add-to-cart-button').remove();
     } else {
       // For simple products, just remove the add to cart skeletal.
-      $('.pdp-modal-box .add_to_cart_form').addClass('rcs-loaded');
+      modalContext.find('.add_to_cart_form').addClass('rcs-loaded');
     }
 
     // Call behaviours with modal context.
-    var modalContext = $('.pdp-modal-box');
-    modalContext.find('.ui-widget-content').attr('id', 'drupal-modal');
     globalThis.rcsPhApplyDrupalJs(modalContext);
   }
 
