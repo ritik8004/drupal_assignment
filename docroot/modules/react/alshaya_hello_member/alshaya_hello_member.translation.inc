@@ -548,6 +548,12 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
     ],
+    'v7' => [
+      'Points History' => [
+        'ar' => 'سجّل النقاط',
+        'context' => 'hello_member',
+      ],
+    ],
   ];
 }
 
