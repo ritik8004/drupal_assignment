@@ -186,18 +186,20 @@ class AlshayaLoyaltyController extends ControllerBase {
 
     $html_head = [];
     // Add the description meta data for the Aura landing page.
-    $description = [
-      '#tag' => 'meta',
-      '#attributes' => [
-        'name' => 'description',
-        'content' => $this->token->replace($this->t('Download AURA now to get personalized offers and rewards for each purchase you make from [alshaya_seo:brand_name] online or instore in [alshaya_seo:cities] and all of [alshaya_seo:country]', [], [
-          'context' => 'aura',
-        ])),
+    $html_head[] = [
+      [
+        '#tag' => 'meta',
+        '#attributes' => [
+          'name' => 'description',
+          'content' => $this->token->replace($this->t('Download AURA now to get personalized offers and rewards for each purchase you make from [alshaya_seo:brand_name] online or instore in [alshaya_seo:cities] and all of [alshaya_seo:country]', [], [
+            'context' => 'aura',
+          ])),
+        ],
       ],
+      'description',
     ];
-    $html_head[] = [$description, 'description'];
     // Add <title> tag for the Aura landing page.
-    $title = [
+    $html_head[]= [
       [
         '#tag' => 'title',
         '#value' => $this->token->replace($this->t('Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]', [], [
@@ -206,8 +208,6 @@ class AlshayaLoyaltyController extends ControllerBase {
       ],
       'title',
     ];
-    $html_head[] = $title;
-
     // Merge loyalty_asset array into If assets are available in Node.
     if (!empty($loyalty_asset)) {
       $html_head = array_merge($html_head, $loyalty_asset);
