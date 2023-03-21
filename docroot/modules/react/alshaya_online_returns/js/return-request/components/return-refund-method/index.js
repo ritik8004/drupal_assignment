@@ -28,8 +28,9 @@ const ReturnRefundMethod = ({
                 cardList={cardList}
                 selectedOption={selectedOption}
                 egiftCardType={egiftCardType}
+                paymentDetails={paymentDetails}
               />
-              {!hasValue(paymentDetails.cashondelivery)
+              {!hasValue(paymentDetails.cashondelivery) && !hasValue(paymentDetails.egift)
                 ? (
                   <>
                     <div className="method-list-wrapper">

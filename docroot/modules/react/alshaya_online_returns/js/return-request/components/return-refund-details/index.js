@@ -48,7 +48,9 @@ class ReturnRefundDetails extends React.Component {
               // Call to get un-linked eGift card details.
               const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
               unlinkedResult.then((unlinkresponse) => {
-                if (!hasValue(unlinkresponse.data.card_list)) {
+                if (!hasValue(unlinkresponse.data.card_list)
+                  || (hasValue(paymentInfo.cashondelivery.payment_type)
+                  && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
                   this.setState({
                     egiftCardType: true,
                   });
@@ -60,10 +62,6 @@ class ReturnRefundDetails extends React.Component {
       } else if (paymentInfo.aura && hasValue(paymentInfo.aura)) {
         this.setState({
           paymentInfo: { aura: paymentInfo.aura },
-        });
-      } else if (paymentInfo.egift && hasValue(paymentInfo.egift)) {
-        this.setState({
-          paymentInfo: { egift: paymentInfo.egift },
         });
       } else {
         // Defining the BNPL payment methods array.

@@ -82,7 +82,7 @@ class EgiftCardHelper {
    *   TRUE/FALSE
    */
   public function isEgiftRefundEnabled(): bool {
-    return $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_refund_enabled');
+    return $this->configFactory->get('alshaya_egift_card.settings') ? $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_refund_enabled') : false;
   }
 
 
