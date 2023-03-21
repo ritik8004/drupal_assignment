@@ -59,10 +59,17 @@ function storeClickedItem(event, pageType) {
 
   const storageDetails = {
     sku: articleNode.getAttribute('data-sku'),
-    grid_type: productList.classList.contains('product-large') ? 'large' : 'small',
     page: Drupal.algoliaGetActualPageNumber(),
     sort: sortByIndex,
   };
+
+  // Add grid type property only if productList is available
+  // so that default column grid can be used when grid_type
+  // is 'undefined'.
+  if (productList !== null) {
+    storageDetails.grid_type = productList.classList.contains('product-large')
+      ? 'large' : 'small';
+  }
 
   if (pageType === 'plp') {
     Drupal.addItemInLocalStorage(
