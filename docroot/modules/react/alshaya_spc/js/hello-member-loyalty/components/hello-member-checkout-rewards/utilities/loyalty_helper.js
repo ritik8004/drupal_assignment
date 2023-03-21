@@ -115,7 +115,7 @@ function applyHelloMemberLoyalty(cartId) {
 
 function getLoyaltySelectText(optionName, helloMemberPoints) {
   if (optionName === 'hello_member') {
-    return parse(parse(Drupal.t('@hm_icon Member earns @points points', {
+    return parse(parse(Drupal.t('@hm_icon You’re earning @points points as an H&M member', {
       '@hm_icon': `<span class="hello-member-svg">${renderToString(<HelloMemberSvg />)}</span>`,
       '@points': helloMemberPoints,
     }, { context: 'hello_member' })));
