@@ -16,6 +16,6 @@ exclude_payment_methods:
   checkout_com_applepay: checkout_com_applepay
   aura_payment: aura_payment
   cybersource: cybersource
-  globale: globale
+  globale: '0'
   hps_payment: hps_payment
   tamara: tamara
