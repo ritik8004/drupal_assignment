@@ -209,9 +209,9 @@ const Teaser = ({
   }
 
   // Add the fixedPrice in extraInfo object.
-  let fixedPrice = {};
+  const extraInfoObj = { ...extraInfo };
   if (hasValue(attribute.fixed_price)) {
-    fixedPrice = attribute.fixed_price;
+    extraInfoObj.fixedPrice = attribute.fixed_price;
   }
 
   let dataVmode = null;
@@ -300,7 +300,7 @@ const Teaser = ({
                 productData={attribute.atb_product_data}
                 isBuyable={attribute.is_buyable}
                 // Pass extra information to the component for update the behaviour.
-                extraInfo={{ ...extraInfo, fixedPrice }}
+                extraInfo={extraInfoObj}
                 wishListButtonRef={ref}
                 styleCode={hit.attr_style_code ? hit.attr_style_code : null}
               />
@@ -415,7 +415,7 @@ const Teaser = ({
             productData={attribute.atb_product_data}
             isBuyable={attribute.is_buyable}
             // Pass extra information to the component for update the behaviour.
-            extraInfo={{ ...extraInfo, fixedPrice }}
+            extraInfo={extraInfoObj}
             wishListButtonRef={ref}
             styleCode={hit.attr_style_code ? hit.attr_style_code : null}
           />
