@@ -104,6 +104,15 @@ class ConfigurableProductDrawer extends React.Component {
     const vatText = getVatText();
     const parentSku = productData.catalogRestructured ? selectedVariantData.parent_sku : sku;
 
+    // Check if we have fixedPrice then update the final value price.
+    // @see Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator::buildPriceBlockSimple().
+    let endPrice = finalPrice;
+    if (hasValue(extraInfo.fixedPrice)
+      && hasValue(finalPrice)
+      && finalPrice <= originalPrice) {
+      endPrice = '0.01';
+    }
+
     return (
       <ProductDrawer
         status={status}
@@ -138,7 +147,11 @@ class ConfigurableProductDrawer extends React.Component {
           </div>
           <div className="product-details-wrapper">
             <div className="product-title">{productData.title}</div>
-            <Price price={originalPrice} finalPrice={finalPrice} />
+            <Price
+              price={originalPrice}
+              finalPrice={endPrice}
+              fixedPrice={hasValue(extraInfo.fixedPrice) ? extraInfo.fixedPrice : ''}
+            />
             <ConditionalView condition={vatText !== ''}>
               <div className="vat-text">{vatText}</div>
             </ConditionalView>
