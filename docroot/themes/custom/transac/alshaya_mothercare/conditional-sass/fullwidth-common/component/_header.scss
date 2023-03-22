@@ -12,7 +12,7 @@
 .static-minicart-wrapper {
   .quantity {
     @include breakpoint($desktop) {
-      #{$left}: rem(8);
+      #{$left}: rem(-8);
       top: rem(24);
     }
   }
