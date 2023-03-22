@@ -2,8 +2,6 @@ var glegem = glegem || function () {
   (window["glegem"].q = window["glegem"].q || []).push(arguments);
 };
 
-// Global variable to store the GE checkout data to be used in step 2.
-var geData = {};
 
 glegem("OnClientEvent", function (source, data) {
   if (source === 'ComboChanged' && (data.id === 'BillingCity' || data.id === 'ShippingCity')) {
@@ -31,6 +29,11 @@ glegem("OnCheckoutStepLoaded", function (data) {
       geData = data;
       // Push data to datalayer.
       Drupal.alshayaXbCheckoutGaPush(data, 2);
+      // Trigger step 3 if address already entered by customer.
+      if (Drupal.isXbAddressAvailable(data)) {
+        Drupal.alshayaXbCheckoutGaPush(data, 3);
+      }
+
       break;
 
     case data.Steps.CONFIRMATION:
