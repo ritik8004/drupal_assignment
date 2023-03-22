@@ -2,6 +2,8 @@ var glegem = glegem || function () {
   (window["glegem"].q = window["glegem"].q || []).push(arguments);
 };
 
+// Global variable to store the GE checkout data to be used in step 2.
+var geData = {};
 
 glegem("OnClientEvent", function (source, data) {
   if (source === 'ComboChanged' && (data.id === 'BillingCity' || data.id === 'ShippingCity')) {
