@@ -3,7 +3,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardTypeSVG from '../../../../../alshaya_spc/js/svg-component/card-type-svg';
 
 const EgiftCardDetails = ({
-  cardList, selectedOption, egiftCardType, paymentDetails,
+  cardList, selectedOption, egiftCardType, paymentDetails, isHybridPayment,
 }) => {
   let selected = cardList ? cardList.card_number : 'newegift';
   // Assigning the variable with the current selected element value.
@@ -41,7 +41,7 @@ const EgiftCardDetails = ({
     <>
       <div className="method-list-wrapper">
         <div className="method-wrapper" key={selected}>
-          {isReturnConfPage === -1 && radioButton
+          {isReturnConfPage === -1 && radioButton && !isHybridPayment
             ? (
               <input
                 type="radio"

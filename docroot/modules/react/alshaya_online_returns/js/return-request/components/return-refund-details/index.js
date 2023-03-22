@@ -15,7 +15,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/
 import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
-import { getBnplPaymentMethods, isEgiftRefundEnabled } from '../../../../../js/utilities/util';
+import { getBnplPaymentMethods, isEgiftRefundEnabled, isHybridPayment } from '../../../../../js/utilities/util';
 
 class ReturnRefundDetails extends React.Component {
   constructor(props) {
@@ -27,6 +27,7 @@ class ReturnRefundDetails extends React.Component {
       open: false,
       cardList: null, // eGift cards linked to a user email.
       egiftCardType: false, // To check new eGift card or existing.
+      isHybrid: false, // To check if the order payment is hybrid or not.
     };
   }
 
@@ -35,6 +36,18 @@ class ReturnRefundDetails extends React.Component {
     // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
     if (isUserAuthenticated() && isEgiftRefundEnabled()) {
       const { paymentInfo } = this.state;
+      // Setting the state value by checking whether multiple
+      // payment methods i.e. hybrid payment has been used or not for the order.
+      if (isHybridPayment(paymentInfo)) {
+        this.setState({
+          isHybrid: isHybridPayment(paymentInfo),
+        });
+      }
+      // Deleting the eGift value from the payment object
+      // if it is hybrid, as we are already showing the new eGift option here.
+      if (isHybridPayment(paymentInfo) && hasValue(paymentInfo.egift)) {
+        delete paymentInfo.egift;
+      }
       if (!hasValue(paymentInfo.aura)) {
         // Call to get customer linked eGift card details.
         const result = callEgiftApi('eGiftCardList', 'GET', {});
@@ -44,22 +57,17 @@ class ReturnRefundDetails extends React.Component {
               this.setState({
                 cardList: response.data ? response.data : null,
               });
-            } else {
-              // Call to get un-linked eGift card details.
-              const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
-              unlinkedResult.then((unlinkresponse) => {
-                if (!hasValue(unlinkresponse.data.card_list)
-                  || (hasValue(paymentInfo.cashondelivery.payment_type)
-                  && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
-                  this.setState({
-                    egiftCardType: true,
-                  });
-                }
+            } else if (!hasValue(response.data.card_number)
+              || (hasValue(paymentInfo.cashondelivery.payment_type)
+              && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
+              // Setting the flag to true based on the conditions for new eGift card.
+              this.setState({
+                egiftCardType: true,
               });
             }
           });
         }
-      } else if (paymentInfo.aura && hasValue(paymentInfo.aura)) {
+      } else if (paymentInfo.aura && hasValue(paymentInfo.aura) && !isHybridPayment(paymentInfo)) {
         this.setState({
           paymentInfo: { aura: paymentInfo.aura },
         });
@@ -102,7 +110,7 @@ class ReturnRefundDetails extends React.Component {
    */
   createReturnRequest = async () => {
     const { itemsSelected, handleErrorMessage, orderDetails } = this.props;
-    const { egiftCardType, cardList } = this.state;
+    const { egiftCardType } = this.state;
 
     showFullScreenLoader();
 
@@ -120,16 +128,6 @@ class ReturnRefundDetails extends React.Component {
     if (hasValue(returnRequest.error)) {
       handleErrorMessage(returnRequest.error_message);
       return;
-    }
-
-    // Adding the selected eGift card number in local storage
-    // to get the same in the return confirmation page.
-    if (hasValue(cardList) && hasValue(cardList.card_number)) {
-      Drupal.addItemInLocalStorage('egift_card_details', cardList);
-    }
-    // Adding eGift card type i.e. new card or not in local storage.
-    if (egiftCardType) {
-      Drupal.addItemInLocalStorage('egift_card_type', egiftCardType);
     }
 
     if (hasValue(returnRequest.data) && hasValue(returnRequest.data.increment_id)) {
@@ -163,7 +161,7 @@ class ReturnRefundDetails extends React.Component {
 
   render() {
     const {
-      paymentInfo, address, open, cardList, egiftCardType,
+      paymentInfo, address, open, cardList, egiftCardType, isHybrid,
     } = this.state;
     return (
       <div className="refund-details-wrapper">
@@ -176,6 +174,7 @@ class ReturnRefundDetails extends React.Component {
                 paymentDetails={paymentInfo}
                 cardList={cardList}
                 egiftCardType={egiftCardType}
+                isHybrid={isHybrid}
               />
             ) : <ReturnRefundMethod paymentDetails={paymentInfo} />}
           <ReturnAmountWrapper />
