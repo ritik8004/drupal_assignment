@@ -42,7 +42,7 @@
 
       if (Drupal.hasValue(freeGiftProduct) && Drupal.hasValue(freeGiftProduct.sku)) {
         // If this is a configurable product having style code, store its variants in local storage as well.
-        if (freeGiftProduct.type_id === 'configurable' && Drupal.hasValue(freeGiftProduct.style_code)) {
+        if (freeGiftProduct.type_id === 'configurable' && Drupal.hasValue(freeGiftProduct.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
           // Fetch the in style product.
           freeGiftProduct = await window.commerceBackend.getProductsInStyle({ sku: freeGiftProduct.sku, style_code: freeGiftProduct.style_code });
         }
@@ -97,7 +97,7 @@
             items: [],
           };
           // Store the response in static storage.
-          skus.forEach((freeGiftSku) => {
+          skus.forEach(function processMultipleFreeGiftSkus(freeGiftSku) {
             // On Page load, some free gift data is already cached.
             var freeGiftItem = globalThis.RcsPhStaticStorage.get('product_data_' + freeGiftSku);
             // For uncached data, do api calls.
@@ -105,7 +105,7 @@
               // Synchronous call to get product by skus.
               freeGiftItem = globalThis.rcsPhCommerceBackend.getDataSynchronous('product_by_sku', { sku: freeGiftSku });
               if (Drupal.hasValue(freeGiftItem) && Drupal.hasValue(freeGiftItem.sku)) {
-                if (freeGiftItem.type_id === 'configurable' && Drupal.hasValue(freeGiftItem.style_code)) {
+                if (freeGiftItem.type_id === 'configurable' && Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyleSynchronus)) {
                   // Again for configurable products having style code, we will take the in style product.
                   freeGiftItem = window.commerceBackend.getProductsInStyleSynchronus({ sku: freeGiftItem.sku, style_code: freeGiftItem.style_code });
                 }
