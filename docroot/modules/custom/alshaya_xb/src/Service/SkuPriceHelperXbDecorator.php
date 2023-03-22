@@ -4,7 +4,6 @@ namespace Drupal\alshaya_xb\Service;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
-use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Class Sku Price Helper XB decorator.
@@ -19,23 +18,6 @@ class SkuPriceHelperXbDecorator extends SkuPriceHelper {
    * @var \Drupal\alshaya_xb\Service\DomainConfigOverrides
    */
   protected $domainConfig;
-
-  /**
-   * SKU Manager.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuManager
-   */
-  private $skuManager;
-
-  /**
-   * Set Sku manager service.
-   *
-   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
-   *   The Sku manager.
-   */
-  public function setSkuManager(SkuManager $sku_manager) {
-    $this->skuManager = $sku_manager;
-  }
 
   /**
    * Set domain config overrides service.

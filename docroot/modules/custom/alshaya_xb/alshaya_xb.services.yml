@@ -32,5 +32,4 @@ services:
     decorates: alshaya_acm_product.price_helper
     parent: 'alshaya_acm_product.price_helper'
     calls:
-      - [ setSkuManager, [ '@alshaya_acm_product.skumanager' ]]
       - [ setDomainConfigOverrides, [ '@alshaya_xb.domain_config_overrides' ] ]
