@@ -5,8 +5,6 @@ namespace Drupal\alshaya_xb\Service;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Render\RendererInterface;
 
 /**
  * Class Sku Price Helper XB decorator.
@@ -14,12 +12,6 @@ use Drupal\Core\Render\RendererInterface;
  * @package Drupal\alshaya_xb\Service
  */
 class SkuPriceHelperXbDecorator extends SkuPriceHelper {
-  /**
-   * Inner service SkuImagesHelper.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuImagesHelper
-   */
-  protected $innerService;
 
   /**
    * Domain config overrides.
@@ -36,32 +28,23 @@ class SkuPriceHelperXbDecorator extends SkuPriceHelper {
   private $skuManager;
 
   /**
-   * SkuPriceHelper constructor.
+   * Set Sku manager service.
    *
-   * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $sku_price_helper
-   *   SKU price helper inner service.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
-   *   SKU Manager.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config Factory.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   Renderer.
-   * @param \Drupal\alshaya_xb\Service\DomainConfigOverrides $domain_config
-   *   Domain configs.
+   *   The Sku manager.
    */
-  public function __construct(SkuPriceHelper $sku_price_helper,
-                              SkuManager $sku_manager,
-                              ConfigFactoryInterface $config_factory,
-                              RendererInterface $renderer,
-                              DomainConfigOverrides $domain_config) {
-    $this->innerService = $sku_price_helper;
+  public function setSkuManager(SkuManager $sku_manager) {
     $this->skuManager = $sku_manager;
+  }
+
+  /**
+   * Set domain config overrides service.
+   *
+   * @param \Drupal\alshaya_xb\Service\DomainConfigOverrides $domain_config
+   *   Domain config overrides.
+   */
+  public function setDomainConfigOverrides(DomainConfigOverrides $domain_config) {
     $this->domainConfig = $domain_config;
-    parent::__construct(
-      $sku_manager,
-      $config_factory,
-      $renderer
-    );
   }
 
   /**
