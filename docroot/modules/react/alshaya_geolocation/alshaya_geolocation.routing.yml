@@ -5,6 +5,7 @@ alshaya_geolocation.store_finder:
     _title: 'Find Stores'
   requirements:
     _permission: 'access content'
+    _custom_access: '\Drupal\alshaya_geolocation\Controller\AccessCheckController::accessCheck'
 
 alshaya_geolocation.store_finder_list:
   path: '/store-finder/list'
@@ -13,3 +14,12 @@ alshaya_geolocation.store_finder_list:
     _title: 'Find Stores'
   requirements:
     _permission: 'access content'
+    _custom_access: '\Drupal\alshaya_geolocation\Controller\AccessCheckController::accessCheck'
+
+alshaya_geolocation.geolocation_config:
+  path: '/admin/config/alshaya/geolocation'
+  defaults:
+    _form: '\Drupal\alshaya_geolocation\Form\AlshayaGeolocationSettingsForm'
+    _title: 'Alshaya Geolocation Configurations'
+  requirements:
+    _permission: 'administer site configuration'
