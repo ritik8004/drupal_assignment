@@ -44,6 +44,7 @@
       if (Drupal.hasValue(freeGiftItem) && Drupal.hasValue(freeGiftItem.sku)) {
         if (freeGiftItem.type_id === 'configurable' && Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyleSynchronus)) {
           // For configurable SKUs, we only expect sku of parent free gift as freeGiftSku in api response.
+          // If thats not the case, mark the sku as invalid and return empty data.
           if (freeGiftItem.sku !== freeGiftSku) {
             return null;
           }
@@ -78,8 +79,12 @@
           // To save PDP render time.
           break;
         } else {
-          // If its not a valid free gift, delete it from response.
+          // If its not a valid free gift sku, delete it from response.
           // And continue looking for next valid free gift sku.
+          // As, if we keep the invalid sku, it will render in data-sku attribute
+          // in html and when we open free gift modal, it will try to fetch data
+          // for that invalid free gift sku.
+          // Check fetchValidatedFreeGift() for more details on invalid sku.
           delete giftItemList[i];
         }
       }
