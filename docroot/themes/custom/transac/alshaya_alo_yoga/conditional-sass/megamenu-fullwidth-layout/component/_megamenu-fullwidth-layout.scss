@@ -1,0 +1,58 @@
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu.megamenu-fullwidth-layout {
+    ul.menu--one__list {
+      padding-#{$left}: rem(48);
+
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          #{$left}: rem(-89);
+          width: 100vw;
+          min-width: unset;
+          justify-content: flex-start;
+          padding-top: rem(18);
+
+          .menu__links__wrapper {
+            width: auto;
+            max-width: 100vw;
+            padding-top: rem(32);
+
+            .column {
+              .menu--two__list-item {
+                padding-#{$left}: rem(40);
+              }
+
+              &:not(:last-child) {
+                margin-#{$right}: rem(50);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .term-image__wrapper {
+      width: 100%;
+
+      .highlights {
+        display: flex;
+
+        .highlighted {
+          margin-#{$left}: rem(50);
+          flex-grow: 1;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop-wide-1680) {
+  .block-alshaya-main-menu.megamenu-fullwidth-layout {
+    ul.menu--one__list {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          #{$left}: rem(-105);
+        }
+      }
+    }
+  }
+}
