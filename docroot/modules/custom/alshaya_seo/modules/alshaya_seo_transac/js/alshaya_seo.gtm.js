@@ -805,6 +805,18 @@
     }
   });
 
+  // Push to GTM when add to bag product drawer is opened.
+  document.addEventListener('drawerOpenEvent', function onDrawerOpen(e) {
+    var $element = e.detail.triggerButtonElement.closest('article.node--view-mode-search-result');
+    // Select the proper selector in case of matchback products.
+    if (e.detail.elementViewMode == 'matchback' || e.detail.elementViewMode == 'matchback_mobile') {
+      var $element = e.detail.triggerButtonElement.closest('article.entity--type-node');
+    }
+    if ($element) {
+      Drupal.alshayaSeoGtmPushProductDetailView($element);
+    }
+  });
+
   /**
    * Function to provide product data object.
    *
