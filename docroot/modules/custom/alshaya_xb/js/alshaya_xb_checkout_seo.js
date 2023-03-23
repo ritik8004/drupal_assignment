@@ -283,8 +283,9 @@
         cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
         discountAmount = product.ProductPrices.MerchantTransaction.DiscountedPrice;
         if (firstTimeTransaction === null) {
-          firstTimeTransaction = Drupal.getProductMetadata(product, 'firstTimeTransaction')
-          ? Drupal.getProductMetadata(product, 'firstTimeTransaction')
+          let firstTransactionValue = Drupal.getProductMetadata(product, 'firstTimeTransaction');
+          firstTimeTransaction = firstTransactionValue
+          ? firstTransactionValue
           : true;
         }
       });
