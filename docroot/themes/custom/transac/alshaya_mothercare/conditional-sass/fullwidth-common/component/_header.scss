@@ -17,3 +17,15 @@
     }
   }
 }
+
+.c-menu-secondary {
+  .language-switcher-language-url {
+    .language-link {
+      @include fullWidthSideSpaces(
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $side: $right,
+      );
+    }
+  }
+}
