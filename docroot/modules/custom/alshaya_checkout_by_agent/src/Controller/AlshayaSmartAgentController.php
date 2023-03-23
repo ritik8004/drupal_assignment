@@ -58,17 +58,15 @@ class AlshayaSmartAgentController extends ControllerBase {
     $redirect = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString(), 302);
     $redirect->setMaxAge(0);
     $redirect->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
-    //get channel query params and set header
+    // Get channel query params and set header.
     $channel = $request->query->get('channel');
-    if($channel) { 
-      $redirect->headers->set('Alshaya-Channel', $channel); 
+    if ($channel) {
+      $redirect->headers->set('Alshaya-Channel', $channel);
     }
-    
     $content = $request->query->get('data');
     if (empty($content)) {
       return $redirect;
     }
-
     // Decrypt the data.
     $data = $this->apiWrapper->getDecryptedSmartAgentData($content);
 
