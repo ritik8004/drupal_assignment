@@ -261,6 +261,7 @@
     let productSku = [];
     let productStyleCode = [];
     let discountAmount = 0;
+    let firstTimeTransaction = null;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         var product = productItem[1];
@@ -281,6 +282,11 @@
         productStyleCode.push(product.ProductGroupCode);
         cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
         discountAmount = product.ProductPrices.MerchantTransaction.DiscountedPrice;
+        if (firstTimeTransaction === null) {
+          firstTimeTransaction = Drupal.getProductMetadata(product, 'firstTimeTransaction')
+          ? Drupal.getProductMetadata(product, 'firstTimeTransaction')
+          : true;
+        }
       });
     }
 
@@ -297,7 +303,7 @@
       "discountAmount": discountAmount,
       "transactionId": geData.OrderId,
       "globaleId": geData.OrderId,
-      "firstTimeTransaction": null, // @todo We need to expose this via drupalSettings.
+      "firstTimeTransaction": firstTimeTransaction,
       "privilegesCardNumber": null, // @todo We need to ask Global-e to get this information.
       "loyaltyType": null, // @todo We need to ask Global-e to get this information.
       "rewardType": null, // @todo We need to ask Global-e to get this information.
