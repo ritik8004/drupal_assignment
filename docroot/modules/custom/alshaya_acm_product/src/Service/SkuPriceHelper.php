@@ -26,7 +26,7 @@ class SkuPriceHelper {
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
    */
-  private $skuManager;
+  protected $skuManager;
 
   /**
    * Renderer.
