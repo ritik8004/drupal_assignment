@@ -44,7 +44,7 @@
    *   Returns attribute value.
    */
   Drupal.getProductMetadata = function (product, key) {
-    for (let i =0; i < product.MetaData.length; i++) {
+    for (let i = 0; i < product.MetaData.length; i++) {
       if (product.MetaData[i].AttributeKey === key) {
         return product.MetaData[i].AttributeValue;
       }
@@ -82,7 +82,7 @@
           var cartData = Drupal.mapGlobaleStep4Data(geData);
           dataLayer.push(cartData);
 
-          const purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
+          var purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
           if (purchaseSuccessData) {
             dataLayer.push(purchaseSuccessData);
           }
@@ -113,8 +113,8 @@
     let cartItemsFlocktory = [];
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
-        const product = productItem[1];
-        const productGtmData = {
+        var product = productItem[1];
+        var productGtmData = {
           "quantity" : product.Quantity,
           "name" : product.ProductName,
           "id" : product.ProductGroupCode,
@@ -193,8 +193,8 @@
     let cartItemsCount = 0;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
-        const product = productItem[1];
-        const productGtmData = {
+        var product = productItem[1];
+        var productGtmData = {
           "item_id": product.CartItemId,
           "sku": product.SKU,
           "qty": product.Quantity,
@@ -263,8 +263,8 @@
     let discountAmount = 0;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
-        const product = productItem[1];
-        const productGtmData = {
+        var product = productItem[1];
+        var productGtmData = {
           "name": product.ProductName,
           "id": product.CartItemId,
           "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency,
