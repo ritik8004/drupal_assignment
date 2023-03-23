@@ -61,3 +61,14 @@ alshaya_algolia_react.product_frames:
     product_title_trim:
       type: boolean
       label: 'Display trimmed product title on all listing pages'
+
+alshaya_algolia_react.color_swatches:
+  type: config_object
+  label: 'Alshaya color swatches configurations'
+  mapping:
+    enable_plp_color_swatch_slider:
+      type: boolean
+      label: 'This would be the main config to enable this with color swatch improvement.'
+    swatch_type:
+      type: string
+      label: 'Display the swatch type circle, square'
