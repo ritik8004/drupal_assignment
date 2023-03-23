@@ -451,6 +451,20 @@ header {
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
+    &:hover {
+      li.menu--one__list-item {
+        .menu--one__link {
+          color: $mm_l1_link_inactive_hover;
+        }
+
+        &:hover {
+          .menu--one__link {
+            color: $mm_l1_link_hover;
+          }
+        }
+      }
+    }
+
     li.menu--one__list-item {
       height: auto;
 
