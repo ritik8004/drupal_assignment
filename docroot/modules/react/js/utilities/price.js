@@ -1,3 +1,5 @@
+import { hasValue } from './conditionsUtility';
+
 /**
  * Calculates discount value from original and final price.
  *
@@ -46,4 +48,48 @@ const isFreeGiftProduct = (price) => {
   return false;
 };
 
-export { calculateDiscount, getVatText, isFreeGiftProduct };
+/**
+ * Gets data attribute for fixed price.
+ *
+ * @param {string} data
+ *   Fixed prices object with country code and prices.
+ * @param {string} field
+ *   Price or special price to retrieve from data json.
+ *
+ * @returns {string}
+ *   Country code and its fixed or special price.
+ */
+const getDataAttributePrices = (data, field) => {
+  if (!hasValue(data) || !hasValue(field)) {
+    return '';
+  }
+
+  if (typeof data !== 'string') {
+    return '';
+  }
+
+  let fixedPriceAttributeData = {};
+
+  try {
+    // Get json object from string.
+    fixedPriceAttributeData = JSON.parse(data);
+  } catch (e) {
+    // Return empty string if json parse has error.
+    return '';
+  }
+
+  const prices = {};
+  Object.entries(fixedPriceAttributeData).forEach(([key, value]) => {
+    // Get prices for the given field for each currency from fixed_price field.
+    prices[key] = value[field];
+  });
+
+  return JSON.stringify(prices);
+};
+
+export {
+  calculateDiscount,
+  getVatText,
+  isFreeGiftProduct,
+  getDataAttributePrices,
+};
