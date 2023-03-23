@@ -1,0 +1,5 @@
+alshaya_geolocation.geolocation_config:
+  route_name: alshaya_geolocation.geolocation_config
+  title: 'Alshaya Geolocation settings'
+  description: 'Configure Alshaya geolocation settings.'
+  parent: alshaya_master.alshaya_admin

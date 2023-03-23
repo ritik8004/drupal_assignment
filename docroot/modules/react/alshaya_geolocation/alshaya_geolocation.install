@@ -5,6 +5,24 @@
  * Install file for alshaya_geolocation.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * New config alshaya_geolocation.settings.
+ */
+function alshaya_geolocation_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_geolocation.settings'],
+    'alshaya_geolocation',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+}
+
 /**
  * Implements hook_update_N().
  *
