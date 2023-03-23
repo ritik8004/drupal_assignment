@@ -104,6 +104,17 @@ class ConfigurableProductDrawer extends React.Component {
     const vatText = getVatText();
     const parentSku = productData.catalogRestructured ? selectedVariantData.parent_sku : sku;
 
+    // If a product is having fixedPrice (Which contains the special price of
+    // the product), then change the finalPrice of the product to 0.01 to apply
+    // discount. This case is only applicable for XB sites as of now.
+    let endPrice = finalPrice;
+    if (hasValue(extraInfo.fixedPrice)
+      && hasValue(finalPrice)
+      && finalPrice <= originalPrice) {
+      // @see Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator::buildPriceBlockSimple().
+      endPrice = '0.01';
+    }
+
     return (
       <ProductDrawer
         status={status}
@@ -138,7 +149,11 @@ class ConfigurableProductDrawer extends React.Component {
           </div>
           <div className="product-details-wrapper">
             <div className="product-title">{productData.title}</div>
-            <Price price={originalPrice} finalPrice={finalPrice} />
+            <Price
+              price={originalPrice}
+              finalPrice={endPrice}
+              fixedPrice={hasValue(extraInfo.fixedPrice) ? extraInfo.fixedPrice : ''}
+            />
             <ConditionalView condition={vatText !== ''}>
               <div className="vat-text">{vatText}</div>
             </ConditionalView>
