@@ -1,9 +1,0 @@
-variables:
-  url_product_page: 'buy-alive-womens-50-premium-60-gummies.html'
-  spc_promotion_listing_page: '/buy-alive-womens-50-premium-60-gummies.html/'
-  spc_single_product_detail_page_coupon: 'buy-alive-womens-50-premium-60-gummies.html/'
-  spc_multiple_product_detail_page_coupon: '/buy-alive-womens-50-premium-60-gummies.html/'
-  spc_single_product_detail_page_no_coupon: '/buy-alive-womens-50-premium-60-gummies.html/'
-  spc_plp_add_to_cart_single: '/shop-bestsellers-skincare/'
-
-

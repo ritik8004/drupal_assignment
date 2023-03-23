@@ -1,10 +1,10 @@
 import React from 'react';
 import PriceElement from './price-element';
-import { calculateDiscount } from '../../price';
+import { calculateDiscount, getDataAttributePrices } from '../../price';
 import ConditionalView from '../conditional-view';
 import PriceBlock from './price-block';
 
-const Price = ({ price, finalPrice }) => {
+const Price = ({ price, finalPrice, fixedPrice = '' }) => {
   const initalPrice = parseFloat(price.replace(',', ''));
   const endPrice = parseFloat(finalPrice.replace(',', ''));
   const hasDiscount = initalPrice > 0 && endPrice > 0 && endPrice < initalPrice;
@@ -15,10 +15,10 @@ const Price = ({ price, finalPrice }) => {
       <ConditionalView condition={hasDiscount}>
         <PriceBlock>
           <div className="has--special--price">
-            <PriceElement amount={initalPrice} />
+            <PriceElement amount={initalPrice} fixedPrice={getDataAttributePrices(fixedPrice, 'price')} />
           </div>
           <div className="special--price">
-            <PriceElement amount={endPrice} />
+            <PriceElement amount={endPrice} fixedPrice={getDataAttributePrices(fixedPrice, 'special_price')} />
           </div>
           <ConditionalView condition={discount > 0}>
             <div className="price--discount">
@@ -31,11 +31,11 @@ const Price = ({ price, finalPrice }) => {
       </ConditionalView>
 
       <ConditionalView condition={!hasDiscount && endPrice}>
-        <PriceBlock amount={endPrice} />
+        <PriceBlock amount={endPrice} fixedPrice={getDataAttributePrices(fixedPrice, 'price')} />
       </ConditionalView>
 
       <ConditionalView condition={!hasDiscount && !endPrice}>
-        <PriceBlock amount={initalPrice} />
+        <PriceBlock amount={initalPrice} fixedPrice={getDataAttributePrices(fixedPrice, 'price')} />
       </ConditionalView>
     </>
   );

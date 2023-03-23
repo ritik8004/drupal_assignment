@@ -1,6 +1,0 @@
-variables:
-  url_product_page: 'buy-champion-mens-t-shirt-grey.html'
-  np_plp_product_page: '/shop-womens/shoes/slides/'
-  np_plp_page: '/shop-mens/accessories/underwear/'
-  new_pdp_enabled: TRUE
-  spc_egift_page: '/egift/'

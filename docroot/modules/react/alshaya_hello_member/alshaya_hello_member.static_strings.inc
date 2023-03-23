@@ -56,7 +56,7 @@ function _alshaya_hello_member_static_strings() {
     ],
     [
       'key' => 'membership_renew_message',
-      'value' => t('Your memership will be renewed on @expiry_date and points will be reset every year.', [], ['context' => 'hello_member']),
+      'value' => t('Your membership will be renewed on @expiry_date and points will be reset every year.', [], ['context' => 'hello_member']),
     ],
     [
       'key' => 'earned_points',

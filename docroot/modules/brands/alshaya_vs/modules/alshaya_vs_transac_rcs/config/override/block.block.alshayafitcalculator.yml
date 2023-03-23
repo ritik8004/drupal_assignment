@@ -1,0 +1,4 @@
+visibility:
+  'entity_bundle:node':
+    bundles:
+      rcs_product: rcs_product

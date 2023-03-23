@@ -208,6 +208,12 @@ const Teaser = ({
       : hit.attr_green_leaf;
   }
 
+  // Add the fixedPrice in extraInfo object.
+  const extraInfoObj = { ...extraInfo };
+  if (hasValue(attribute.fixed_price)) {
+    extraInfoObj.fixedPrice = attribute.fixed_price;
+  }
+
   let dataVmode = null;
   if (pageType === 'search') {
     dataVmode = { 'data-vmode': 'search_result' };
@@ -276,6 +282,14 @@ const Teaser = ({
               setWishListButtonRef={ref}
             />
           </ConditionalView>
+          {pageType === 'plp' && activateShoeAI === true ? (
+            <div
+              className="ShoeSizeMe ssm_plp"
+              data-shoeid={sku}
+              data-availability={attribute.attr_size_shoe_eu}
+              data-sizerun={attribute.attr_size_shoe_eu}
+            />
+          ) : null}
           {isAddToBagHoverEnabled()
             && (
             <div className="quick-add">
@@ -286,7 +300,7 @@ const Teaser = ({
                 productData={attribute.atb_product_data}
                 isBuyable={attribute.is_buyable}
                 // Pass extra information to the component for update the behaviour.
-                extraInfo={extraInfo}
+                extraInfo={extraInfoObj}
                 wishListButtonRef={ref}
                 styleCode={hit.attr_style_code ? hit.attr_style_code : null}
               />
@@ -401,7 +415,7 @@ const Teaser = ({
             productData={attribute.atb_product_data}
             isBuyable={attribute.is_buyable}
             // Pass extra information to the component for update the behaviour.
-            extraInfo={extraInfo}
+            extraInfo={extraInfoObj}
             wishListButtonRef={ref}
             styleCode={hit.attr_style_code ? hit.attr_style_code : null}
           />
@@ -424,14 +438,6 @@ const Teaser = ({
           />
         </ConditionalView>
       </article>
-      {pageType === 'plp' && activateShoeAI === true ? (
-        <div
-          className="ShoeSizeMe ssm_plp"
-          data-shoeid={sku}
-          data-availability={attribute.attr_size_shoe_eu}
-          data-sizerun={attribute.attr_size_shoe_eu}
-        />
-      ) : null}
     </div>
   );
 };

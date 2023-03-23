@@ -353,7 +353,13 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
 
       // Get the first child from variants of selected parent.
       $selected_parent_child_skus = Configurable::getChildSkus($product_tree['parent']);
-      $sorted_child_skus = array_values(array_values($combinations['attribute_sku'])[0]);
+      $sorted_child_skus = [];
+      if (!empty($combinations['attribute_sku']) && is_array($combinations['attribute_sku'])) {
+        $attr_sku_combination = array_values($combinations['attribute_sku']);
+        if (!empty($attr_sku_combination[0]) && is_array($attr_sku_combination[0])) {
+          $sorted_child_skus = array_values($attr_sku_combination[0]);
+        }
+      }
       foreach ($sorted_child_skus ?? [] as $child_sku) {
         if (in_array($child_sku[0], $selected_parent_child_skus) && isset($product_tree['products'][$child_sku[0]])) {
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['firstChild'] = $child_sku[0];
