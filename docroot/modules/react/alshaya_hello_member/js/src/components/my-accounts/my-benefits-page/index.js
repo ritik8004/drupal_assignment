@@ -8,7 +8,6 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import Loading from '../../../../../../js/utilities/loading';
 import AddBenefitsToCart from './add-benefits-to-cart';
 import { formatDate } from '../../../utilities';
-import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 
 class MyBenefitsPage extends React.Component {
   constructor(props) {
@@ -114,25 +113,29 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          <ConditionalView condition={(myBenefit.tag === 'O' && myBenefit.tagName === 'Omni') || (myBenefit.tag === 'S' && myBenefit.tagName === 'Store')}>
-            <QrCodeDisplay
-              benefitName={myBenefit.description}
-              benefitType={promotionType}
-              memberId={myBenefit.member_identifier}
-              qrCodeTitle={qrCodeTitle}
-              codeId={couponId || codeId}
-              width={79}
-              memberTitle={getStringMessage('redeem_in_store')}
-            />
-          </ConditionalView>
-          <ConditionalView condition={(myBenefit.tag === 'O' && myBenefit.tagName === 'Omni') || (myBenefit.tag === 'E' && myBenefit.tagName === 'Online')}>
-            <AddBenefitsToCart
-              title={myBenefit.description}
-              codeId={codeId}
-              offerType={offerType}
-              promotionType={promotionType}
-            />
-          </ConditionalView>
+          {((myBenefit.tag === 'O' && myBenefit.tagName === 'Omni') || (myBenefit.tag === 'S' && myBenefit.tagName === 'Store'))
+            ? (
+              <QrCodeDisplay
+                benefitName={myBenefit.description}
+                benefitType={promotionType}
+                memberId={myBenefit.member_identifier}
+                qrCodeTitle={qrCodeTitle}
+                codeId={couponId || codeId}
+                width={79}
+                memberTitle={getStringMessage('redeem_in_store')}
+              />
+            )
+            : null}
+          {((myBenefit.tag === 'O' && myBenefit.tagName === 'Omni') || (myBenefit.tag === 'E' && myBenefit.tagName === 'Online'))
+            ? (
+              <AddBenefitsToCart
+                title={myBenefit.description}
+                codeId={codeId}
+                offerType={offerType}
+                promotionType={promotionType}
+              />
+            )
+            : null}
         </div>
         <div className="benefit-description">
           {(hasValue(myBenefit.applied_conditions)) ? HTMLReactParser(myBenefit.applied_conditions) : ''}
