@@ -616,7 +616,6 @@ header {
     .mobile--menu {
       margin-#{$left}: 0.25rem;
       top: 0.9375rem;
-      position: fixed;
     }
 
     .store {
@@ -654,7 +653,6 @@ header {
     @include breakpoint($only-mobile) {
       top: 0.75rem;
       #{$left}: 11.5%;
-      position: fixed;
     }
   }
 
@@ -1136,6 +1134,40 @@ body {
           z-index: 11;
         }
       }
+    }
+
+    &.header-sticky-filter {
+      .c-menu-primary {
+        .mobile--menu,
+        .mobile--search {
+          position: fixed;
+        }
+      }
+
+      &.menu--open {
+        .c-menu-primary {
+          .mobile--menu,
+          .mobile--search {
+            position: inherit;
+          }
+        }
+      }
+
+      &.hide-header {
+        .c-menu-primary {
+          .mobile--menu {
+            position: inherit;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  body {
+    &.mobile--overlay {
+      margin-top: rem(108);
     }
   }
 }
