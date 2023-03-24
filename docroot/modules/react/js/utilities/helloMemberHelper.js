@@ -336,3 +336,42 @@ export const setHelloMemberLoyaltyCard = async (identifierNo, quoteId) => {
  * Helper function to display an error message to the customer during CLM downtime.
  */
 export const displayErrorMessage = (message) => <div className="hello-member-points-wrapper"><div className="hello-member-downtime-message">{ message }</div></div>;
+
+/**
+ * Helper function to check benefits channel is Omni.
+ */
+export const benefitChannelOmni = (responseData) => {
+  if (hasValue(responseData.tag) && hasValue(responseData.tagName)) {
+    if (responseData.tag === 'O' && responseData.tagName === 'Omni') {
+      return true;
+    }
+    return false;
+  }
+  return false;
+};
+
+/**
+ * Helper function to check benefits channel is Store.
+ */
+export const benefitChannelStore = (responseData) => {
+  if (hasValue(responseData.tag) && hasValue(responseData.tagName)) {
+    if (responseData.tag === 'S' && responseData.tagName === 'Store') {
+      return true;
+    }
+    return false;
+  }
+  return false;
+};
+
+/**
+ * Helper function to check benefits channel is Online.
+ */
+export const benefitChannelOnline = (responseData) => {
+  if (hasValue(responseData.tag) && hasValue(responseData.tagName)) {
+    if (responseData.tag === 'E' && responseData.tagName === 'Online') {
+      return true;
+    }
+    return false;
+  }
+  return false;
+};

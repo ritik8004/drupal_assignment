@@ -1,7 +1,13 @@
 import HTMLReactParser from 'html-react-parser';
 import React from 'react';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
-import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
+import {
+  callHelloMemberApi,
+  getHelloMemberCustomerInfo,
+  benefitChannelOmni,
+  benefitChannelStore,
+  benefitChannelOnline,
+} from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
@@ -113,7 +119,7 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          {((myBenefit.tag === 'O' && myBenefit.tagName === 'Omni') || (myBenefit.tag === 'S' && myBenefit.tagName === 'Store'))
+          {(benefitChannelOmni(myBenefit) || benefitChannelStore(myBenefit))
             ? (
               <QrCodeDisplay
                 benefitName={myBenefit.description}
@@ -126,7 +132,7 @@ class MyBenefitsPage extends React.Component {
               />
             )
             : null}
-          {((myBenefit.tag === 'O' && myBenefit.tagName === 'Omni') || (myBenefit.tag === 'E' && myBenefit.tagName === 'Online'))
+          {((benefitChannelOmni(myBenefit) || benefitChannelOnline(myBenefit)))
             ? (
               <AddBenefitsToCart
                 title={myBenefit.description}
