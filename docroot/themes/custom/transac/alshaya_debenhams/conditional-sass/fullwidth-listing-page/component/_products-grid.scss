@@ -1,0 +1,20 @@
+.c-plp {
+  .alshaya_search_mainimage {
+    aspect-ratio: 2/3;
+    object-fit: contain;
+  }
+
+  @include breakpoint($only-mobile) {
+    .c-products-list {
+      &.view-algolia-plp,
+      &.view-search {
+        @include sideSpaces(0);
+      }
+
+      .qty-text,
+      .addtobag-button {
+        white-space: nowrap;
+      }
+    }
+  }
+}
