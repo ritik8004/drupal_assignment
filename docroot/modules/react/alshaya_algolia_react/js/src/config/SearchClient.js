@@ -1,8 +1,11 @@
 import algoliasearch from 'algoliasearch/lite';
 
+// Adding _useRequestCache parameter to avoid duplicate requests on Facet filters and sort orders.
 export const searchClient = algoliasearch(
   drupalSettings.algoliaSearch.application_id,
-  drupalSettings.algoliaSearch.api_key,
+  drupalSettings.algoliaSearch.api_key, {
+    _useRequestCache: true,
+  },
 );
 export const algoliaSearchClient = {
   search(requests) {
@@ -44,6 +47,11 @@ export const algoliaSearchClient = {
       referrerData.list = referrerData.previousList;
       referrerData.previousList = '';
       Drupal.addItemInLocalStorage('referrerData', referrerData);
+    }
+
+    // Added Extra condition for facet.length to avoid duplicate requests.
+    if (searchRequest[0].params.query.length > 0 && searchRequest[0].params.facets.length === 0) {
+      return null;
     }
 
     if (window.algoliaSearchActivityStarted || searchRequest[0].params.query.length > 0) {
