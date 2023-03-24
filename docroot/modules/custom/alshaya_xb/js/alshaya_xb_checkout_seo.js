@@ -282,12 +282,7 @@
         productStyleCode.push(product.ProductGroupCode);
         cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
         discountAmount = product.ProductPrices.MerchantTransaction.DiscountedPrice;
-        if (firstTimeTransaction === null) {
-          let firstTransactionValue = Drupal.getProductMetadata(product, 'firstTimeTransaction');
-          firstTimeTransaction = firstTransactionValue
-          ? firstTransactionValue
-          : true;
-        }
+        firstTimeTransaction = Drupal.getProductMetadata(product, 'firstTimeTransaction');
       });
     }
 
@@ -304,7 +299,7 @@
       "discountAmount": discountAmount,
       "transactionId": geData.OrderId,
       "globaleId": geData.OrderId,
-      "firstTimeTransaction": firstTimeTransaction,
+      "firstTimeTransaction": firstTimeTransaction || true,
       "privilegesCardNumber": null, // @todo We need to ask Global-e to get this information.
       "loyaltyType": null, // @todo We need to ask Global-e to get this information.
       "rewardType": null, // @todo We need to ask Global-e to get this information.
