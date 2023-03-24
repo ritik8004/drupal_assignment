@@ -11,6 +11,25 @@
           max-width: rem(192);
         }
       }
+
+      // Adding a separator line to all columns except the first one.
+      .column:not(:nth-child(2)),
+      .highlights {
+        position: relative;
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          height: calc(100% - #{rem(40)});
+          width: rem(1);
+          background-color: $primary_border;
+        }
+      }
+
+      .highlights::before {
+        #{$left}: rem(10);
+      }
     }
 
     .menu--three__list-item {
@@ -31,9 +50,19 @@
       margin-top: rem(6);
     }
 
-    .highlighted a:hover {
-      .hightlight__title {
-        text-decoration: underline;
+    .highlighted {
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: flex-end;
+
+      a:hover {
+        .hightlight__title {
+          text-decoration: underline;
+        }
+      }
+
+      .title {
+        line-height: rem(20);
       }
     }
   }
