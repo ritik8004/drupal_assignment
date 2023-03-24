@@ -26,6 +26,33 @@
   }
 
   /**
+   * MDC response for product_by_sku contains details for parent configurable sku
+   * and all of its variants. This helper function reduces the response to only
+   * requested sku info.
+   *
+   * @param {string} freeGiftSku
+   *   Free gift sku.
+   * @param {object} freeGiftItem
+   *   Free gift sku response from MDC.
+   *
+   * @return {object}
+   *   Free gift data containing details about request sku only.
+   */
+  function removeRedundantVariantInfo (freeGiftSku, freeGiftItem) {
+    var requestedVariant = null;
+    for (var $i = 0; $i < freeGiftItem.variants.length; $i++) {
+      if (freeGiftItem.variants[$i].product.sku === freeGiftSku) {
+        requestedVariant = freeGiftItem.variants[$i];
+      }
+    }
+    if (requestedVariant) {
+      freeGiftItem.sku = freeGiftSku;
+      freeGiftItem.variants = [requestedVariant];
+    }
+    return freeGiftItem;
+  }
+
+  /**
    * Validates and fetches free gift data from MDC.
    *
    * @param {string} freeGiftSku
@@ -42,14 +69,23 @@
       // Synchronous call to get product by skus.
       freeGiftItem = globalThis.rcsPhCommerceBackend.getDataSynchronous('product_by_sku', { sku: freeGiftSku });
       if (Drupal.hasValue(freeGiftItem) && Drupal.hasValue(freeGiftItem.sku)) {
-        if (freeGiftItem.type_id === 'configurable' && Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyleSynchronus)) {
-          // For configurable SKUs, we only expect sku of parent free gift as freeGiftSku in api response.
-          // If thats not the case, mark the sku as invalid and return empty data.
+        if (freeGiftItem.type_id === 'configurable') {
           if (freeGiftItem.sku !== freeGiftSku) {
-            return null;
+            // This condition means freeGiftSku product is actually simple
+            // but MDC returns the configurable parent product of a simple sku
+            // when product_by_sku api is called.
+            // Then we need to alter the response to remove other variants
+            // except the requested variant.
+            freeGiftItem = removeRedundantVariantInfo(freeGiftSku, freeGiftItem);
+          } else {
+            // For configurable products having style code, we will take all styled variants.
+            if (Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyleSynchronous)) {
+              freeGiftItem = window.commerceBackend.getProductsInStyleSynchronous({
+                sku: freeGiftItem.sku,
+                style_code: freeGiftItem.style_code
+              });
+            }
           }
-          // Again for configurable products having style code, we will take the in style product.
-          freeGiftItem = window.commerceBackend.getProductsInStyleSynchronus({ sku: freeGiftItem.sku, style_code: freeGiftItem.style_code });
         }
         // Store it in local storage for further usage on different pages.
         window.commerceBackend.setRcsProductToStorage(freeGiftItem, 'free_gift', freeGiftSku);
