@@ -117,15 +117,20 @@ class AlshayaTabbyWidgetHelper {
     // from the Checkout page.
     $config = $this->configFactory->get('alshaya_acm_checkout.settings');
     $excludedPaymentMethods = $config->get('exclude_payment_methods');
+    $tabby_config = $this->configFactory->get('alshaya_tabby.settings');
 
     CacheableMetadata::createFromRenderArray($build)
       ->addCacheableDependency($config)
+      ->addCacheableDependency($tabby_config)
       ->applyTo($build);
 
-    if (in_array('tabby', array_filter($excludedPaymentMethods))) {
+    if (in_array('tabby', array_filter($excludedPaymentMethods))
+    || ($tabby_config && !$tabby_config->get('show_tabby_widget'))) {
       return;
     }
+
     $tabbyApiConfig = $this->tabbyApiHelper->getTabbyApiConfig();
+    $tabbyApiConfig['merchant_code'] = 'HMSA';
     // No need to integrate the widget if the API does not have merchant code.
     if (empty($tabbyApiConfig['merchant_code'])) {
       $this->logger->error('Merchant code is missing in Tabby config, @response', [
@@ -143,7 +148,6 @@ class AlshayaTabbyWidgetHelper {
         $build['tabby'] = $this->getTabbyWidgetMarkup('cart');
         $build['#attached']['library'][] = 'alshaya_tabby/tabby_cart';
         $build['#attached']['library'][] = 'alshaya_white_label/tabby';
-        $tabby_config = $this->configFactory->get('alshaya_tabby.settings');
         $build['#attached']['drupalSettings']['tabby']['cart_widget_limit'] = $tabby_config->get('cart_widget_limit');
         $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $tabby_config->getCacheTags());
         break;
