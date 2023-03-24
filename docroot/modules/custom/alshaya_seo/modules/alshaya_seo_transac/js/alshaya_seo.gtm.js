@@ -783,7 +783,7 @@
     const lastUrl = location.href;
     const url = e.detail.data()[2];
 
-    if (product !== null && !lastUrl.includes(url)) {
+    if (product !== null  && product.length > 0 && !lastUrl.,includes(url)) {
       var productObj = Drupal.alshaya_seo_gtm_get_product_values(product);
       // Dispatch a custom event to alter the product detail view object.
       document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => productObj } }));
