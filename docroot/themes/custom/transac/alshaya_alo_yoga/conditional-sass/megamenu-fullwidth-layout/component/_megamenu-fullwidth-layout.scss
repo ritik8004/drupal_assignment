@@ -5,6 +5,7 @@
 
       li.menu--one__list-item {
         ul.menu--two__list {
+          // Aliging the menu so that it covers the entire viewport.
           #{$left}: rem(-89);
           width: 100vw;
           min-width: unset;
@@ -19,6 +20,13 @@
             .column {
               .menu--two__list-item {
                 padding-#{$left}: rem(40);
+              }
+
+              &:nth-child(2) {
+                .menu--two__list-item {
+                  // Giving megamenu the same side spacing as the site.
+                  padding-#{$left}: $full_width_padding_desktop;
+                }
               }
 
               &:not(:last-child) {
@@ -50,7 +58,17 @@
     ul.menu--one__list {
       li.menu--one__list-item {
         ul.menu--two__list {
+          // Aliging the menu so that it covers the entire viewport.
           #{$left}: rem(-105);
+
+          .menu__links__wrapper {
+            .column:nth-child(2) {
+              .menu--two__list-item {
+                // Giving megamenu the same side spacing as the site.
+                padding-#{$left}: $full_width_padding_desktop_wide;
+              }
+            }
+          }
         }
       }
     }
