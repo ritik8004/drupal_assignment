@@ -130,7 +130,6 @@ class AlshayaTabbyWidgetHelper {
     }
 
     $tabbyApiConfig = $this->tabbyApiHelper->getTabbyApiConfig();
-    $tabbyApiConfig['merchant_code'] = 'HMSA';
     // No need to integrate the widget if the API does not have merchant code.
     if (empty($tabbyApiConfig['merchant_code'])) {
       $this->logger->error('Merchant code is missing in Tabby config, @response', [
