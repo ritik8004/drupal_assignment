@@ -941,7 +941,8 @@ function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter
  */
 function alshaya_seo_transac_block_view_alter(array &$build, BlockPluginInterface $block) {
   if ($block->getPluginId() == 'alshaya_algolia_react_plp'
-    || $block->getPluginId() == 'alshaya_algolia_listing_v2') {
+    || $block->getPluginId() == 'alshaya_algolia_listing_v2'
+    || $block->getPluginId() == 'alshaya_algolia_react_product_list') {
     $build['#pre_render'][] = function (array $build) {
       if (!_alshaya_seo_process_gtm()) {
         return $build;

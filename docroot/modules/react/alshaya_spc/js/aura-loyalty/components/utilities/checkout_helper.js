@@ -153,13 +153,15 @@ function redeemAuraPoints(data, context = 'aura') {
             // in egift.
             // Doing this because while removing AURA points, we remove the Balance
             // Payable attribute from cart total.
-            totalBalancePayable: result.data.data.totalBalancePayable,
+            // Initially, data.totalBalancePayable can be empty.
+            totalBalancePayable: result.data.data.totalBalancePayable
+              || result.data.data.balancePayable,
           };
         }
       } else {
         stateValues = result.data || { error: true };
       }
-      dispatchCustomEvent('auraRedeemPointsApiInvoked', { stateValues, action: data.action });
+      dispatchCustomEvent('auraRedeemPointsApiInvoked', { stateValues, action: data.action, cardNumber: data.cardNumber });
     });
   }
 }

@@ -35,6 +35,7 @@ const AttrNavigation = (props) => {
 
   // Prepare ruleContexts.
   const ruleContexts = [];
+
   if (typeof element.dataset.ruleContext !== 'undefined'
     && element.dataset.ruleContext !== '') {
     ruleContexts.push(element.dataset.ruleContext);

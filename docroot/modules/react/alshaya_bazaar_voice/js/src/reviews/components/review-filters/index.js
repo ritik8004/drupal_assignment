@@ -42,7 +42,7 @@ export default class ReviewFilters extends React.Component {
       filterOptions,
     } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const pdpFilterOptions = bazaarVoiceSettings.reviews.bazaar_voice.filter_options;
+    const pdpFilterOptions = bazaarVoiceSettings.reviews.bazaar_voice.pdp_filter_options;
     const availableFilters = [];
     if (filterOptions !== undefined && filterOptions !== null) {
       Object.entries(filterOptions).forEach(([index]) => {

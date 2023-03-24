@@ -1,0 +1,22 @@
+.c-menu-secondary {
+  .language-switcher-language-url {
+    .language-link {
+      @include fullWidthSideSpaces(
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $side: $right,
+      );
+    }
+  }
+}
+
+// Adjusting hamburger icon to keep it on edge.
+.c-menu-primary {
+  .mobile--menu {
+    &::before {
+      @include breakpoint($upto-desktop) {
+        margin-#{$left}: rem(-10);
+      }
+    }
+  }
+}

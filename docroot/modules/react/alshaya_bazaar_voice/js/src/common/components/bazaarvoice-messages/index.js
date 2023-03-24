@@ -96,7 +96,7 @@ export default class BazaarVoiceMessages extends React.Component {
         <div className="exception-error">
           <ul className="exception-field-error-list">
             {errorList.map((error) => (
-              <li key={`error-${error.Field}`}>{bazaarVoiceSettings.reviews.bazaar_voice.error_messages[error.Code]}</li>
+              <li key={`error-${error.Field}`}>{bazaarVoiceSettings.reviews.bazaar_voice.bv_error_messages[error.Code]}</li>
             ))}
           </ul>
         </div>

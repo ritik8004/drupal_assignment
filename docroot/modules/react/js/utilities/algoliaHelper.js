@@ -7,14 +7,14 @@ export const searchClient = algoliasearch(
 export const algoliaSearchClient = {
   search(requests) {
     const searchRequest = requests;
-    if (window.algoliaSearchActivityStarted || searchRequest[0].params.query.length > 0) {
-      searchRequest[0].params.analyticsTags = drupalSettings.user.isCustomer
-        ? ['customer']
-        : ['notCustomer'];
-
-      return searchClient.search(searchRequest);
+    // removing tagFilters for PLP pages and whishlist Pages
+    if ('tagFilters' in searchRequest[0].params) {
+      delete searchRequest[0].params.tagFilters;
     }
-
-    return null;
+    // Remove maxValuesPerFacet from all search quesries for PLP and whislist.
+    if ('maxValuesPerFacet' in searchRequest[0].params) {
+      delete searchRequest[0].params.maxValuesPerFacet;
+    }
+    return searchClient.search(searchRequest);
   },
 };

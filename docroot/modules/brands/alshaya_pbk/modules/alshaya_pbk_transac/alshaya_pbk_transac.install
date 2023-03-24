@@ -10,6 +10,17 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_pbk_transac_update_9401() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_pottery_barn_kids.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.4.0] Mark size, color, fabric and material fields to be indexed in Algolia
  * Remove size_lhn and color_lhn as facets.
  * Add the missing sitemap configurations.

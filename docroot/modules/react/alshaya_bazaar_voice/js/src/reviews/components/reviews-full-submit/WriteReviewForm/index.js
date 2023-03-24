@@ -7,7 +7,7 @@ import { removeFullScreenLoader, showFullScreenLoader }
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import FormLinks from '../DynamicFormField/Fields/FormLinks';
 import {
-  getLanguageCode, doRequest, getbazaarVoiceSettings, getUserDetails, postAPIData,
+  getbazaarVoiceSettings, getUserDetails, postAPIData,
 } from '../../../../utilities/api/request';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
@@ -53,28 +53,25 @@ export default class WriteReviewForm extends React.Component {
       }
       this.setState({ userDetails });
     });
-    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-    const apiUri = `/${getLanguageCode()}/get-write-review-fields-configs`;
-    const apiData = doRequest(apiUri);
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.status === 200) {
-          removeFullScreenLoader();
-          let fieldsData = result.data;
-          // Hide fields on write a review form based on category configurations.
-          if (bazaarVoiceSettings.reviews.hide_fields_write_review.length > 0) {
-            const hideFields = bazaarVoiceSettings.reviews.hide_fields_write_review;
-            fieldsData = this.getProcessedFields(fieldsData, hideFields);
-          }
-          this.setState({
-            fieldsConfig: fieldsData,
-          });
-        } else {
-          removeFullScreenLoader();
-          Drupal.logJavascriptError('review-write-review-form', result.error);
+
+    const apiData = window.commerceBackend.getWriteReviewFieldsConfigs(productId);
+    apiData.then((result) => {
+      if (result.status === 200) {
+        removeFullScreenLoader();
+        let fieldsData = result.data;
+        // Hide fields on write a review form based on category configurations.
+        const hiddenFields = window.commerceBackend.getHiddenWriteReviewFields(productId);
+        if (hiddenFields.length > 0) {
+          fieldsData = this.getProcessedFields(fieldsData, hiddenFields);
         }
-      });
-    }
+        this.setState({
+          fieldsConfig: fieldsData,
+        });
+      } else {
+        removeFullScreenLoader();
+        Drupal.logJavascriptError('review-write-review-form', result.error);
+      }
+    });
   }
 
   componentWillUnmount() {

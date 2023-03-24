@@ -28,4 +28,9 @@ function alshaya_rcs_magento_placeholders_page_attachments_alter(array &$attachm
     ->getCurrentLanguage()
     ->getId();
   $attachments['#attached']['drupalSettings']['rcs']['commerceBackend']['store'] = $api_settings->get('magento_lang_prefix')[$current_language];
+  // Fetch EN store name in case we need to call graphql for EN language,
+  // when current language is other than EN.
+  if ($current_language !== 'en') {
+    $attachments['#attached']['drupalSettings']['rcs']['commerceBackend']['store_en'] = $api_settings->get('magento_lang_prefix')['en'];
+  }
 }

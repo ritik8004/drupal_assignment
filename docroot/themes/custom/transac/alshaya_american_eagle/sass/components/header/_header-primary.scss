@@ -10,6 +10,20 @@
       text-align: center;
     }
 
+    @include breakpoint($desktop) {
+      display: flex;
+      margin: 0 auto;
+      max-width: rem(350);
+    }
+
+    picture {
+      display: flex;
+    }
+
+    img {
+      height: rem(20);
+    }
+
     html[lang="ar"] & {
       width: auto;
 
@@ -21,8 +35,11 @@
         width: 10rem;
 
         @include breakpoint($desktop) {
-          margin-#{$left}: 0.9375rem;
-          margin-top: 0;
+          max-width: rem(300);
+          margin: auto;
+          text-align: center;
+          width: auto;
+          height: auto;
         }
 
         @include breakpoint($only-tablet) {
@@ -33,6 +50,7 @@
 
         @include breakpoint($only-mobile) {
           width: 7.5rem;
+          height: auto;
         }
       }
     }
@@ -40,6 +58,16 @@
     a {
       max-width: 10.9375rem;
       margin: auto 0;
+
+      @include breakpoint($desktop) {
+        align-items: center;
+        display: inline-flex;
+        height: rem(28);
+        margin: auto;
+        max-width: none;
+        text-align: center;
+        min-width: rem(74);
+      }
 
       html[lang="ar"] & {
         @include breakpoint($tablet) {
@@ -57,10 +85,11 @@
 
       @include breakpoint($only-mobile) {
         max-width: 11rem;
+        margin-top: 0;
 
         html[lang="ar"] & {
           max-width: 7.5rem;
-          margin-top: 0.625rem;
+          margin-top: rem(8);
         }
       }
     }
@@ -339,7 +368,7 @@ header.c-header {
       margin: 0;
 
       html[lang="ar"] & {
-        height: 3rem;
+        height: rem(64);
       }
     }
 
@@ -433,11 +462,7 @@ header {
   .c-header__region {
     @include breakpoint($desktop) {
       padding-top: 1.625rem;
-      padding-bottom: 1.125rem;
-
-      html[lang="ar"] & {
-        padding-bottom: 1.5rem;
-      }
+      padding-bottom: rem(43);
     }
   }
 
@@ -508,6 +533,8 @@ header {
 }
 
 .c-menu-primary {
+  height: auto;
+
   .mobile--menu {
     @include icon_img("#{$aeo_theme_img_directory_path}/icons/mobile-menu.svg", 2.125rem, 2.125rem);
 
@@ -522,6 +549,14 @@ header {
   .block-system-menublock {
     li {
       position: static;
+
+      @include breakpoint($only-mobile) {
+        &.search-active {
+          .mobile--search {
+            z-index: 11;
+          }
+        }
+      }
     }
   }
 
@@ -581,6 +616,7 @@ header {
     .mobile--menu {
       margin-#{$left}: 0.25rem;
       top: 0.9375rem;
+      position: fixed;
     }
 
     .store {
@@ -618,6 +654,7 @@ header {
     @include breakpoint($only-mobile) {
       top: 0.75rem;
       #{$left}: 11.5%;
+      position: fixed;
     }
   }
 
@@ -1088,5 +1125,17 @@ body {
 .static-minicart-wrapper {
   .cart-link {
     height: rem(24);
+  }
+}
+
+@include breakpoint($only-mobile) {
+  body {
+    &.search-enabled {
+      .c-menu-primary {
+        .mobile--menu {
+          z-index: 11;
+        }
+      }
+    }
   }
 }

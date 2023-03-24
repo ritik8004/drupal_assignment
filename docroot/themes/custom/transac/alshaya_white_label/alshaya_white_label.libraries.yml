@@ -904,29 +904,30 @@ visual-mobile-menu:
     theme:
       css/conditional-sass/visual-mobile-menu/visual-mobile-menu.ltr.css: {}
 
+# Increase the weigth of fullwidth libraries so that it loads as the last.
 fullwidth-common:
   css:
     theme:
-      css/conditional-sass/fullwidth-common/fullwidth-common.ltr.css: {}
+      css/conditional-sass/fullwidth-common/fullwidth-common.ltr.css: { weight: 1 }
 
 fullwidth-advanced-page:
   css:
     theme:
-      css/conditional-sass/fullwidth-advanced-page/fullwidth-advanced-page.ltr.css: {}
+      css/conditional-sass/fullwidth-advanced-page/fullwidth-advanced-page.ltr.css: { weight: 1 }
   dependencies:
     - alshaya_white_label/fullwidth-common
 
 fullwidth-listing-page:
   css:
     theme:
-      css/conditional-sass/fullwidth-listing-page/fullwidth-listing-page.ltr.css: {}
+      css/conditional-sass/fullwidth-listing-page/fullwidth-listing-page.ltr.css: { weight: 1 }
   dependencies:
     - alshaya_white_label/fullwidth-common
 
 fullwidth-myaccount:
   css:
     theme:
-      css/conditional-sass/fullwidth-myaccount/fullwidth-myaccount.ltr.css: {}
+      css/conditional-sass/fullwidth-myaccount/fullwidth-myaccount.ltr.css: { weight: 1 }
   dependencies:
     - alshaya_white_label/fullwidth-common
     - alshaya_white_label/fullwidth-layouts
@@ -934,14 +935,14 @@ fullwidth-myaccount:
 fullwidth-pdp:
   css:
     theme:
-      css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: {}
+      css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: { weight: 1 }
   dependencies:
     - alshaya_white_label/fullwidth-common
 
 fullwidth-spc:
   css:
     theme:
-      css/conditional-sass/fullwidth-spc/fullwidth-spc.ltr.css: {}
+      css/conditional-sass/fullwidth-spc/fullwidth-spc.ltr.css: { weight: 1 }
   dependencies:
     - alshaya_white_label/fullwidth-common
     - alshaya_white_label/fullwidth-layouts
@@ -949,14 +950,14 @@ fullwidth-spc:
 fullwidth-static:
   css:
     theme:
-      css/conditional-sass/fullwidth-static/fullwidth-static.ltr.css: {}
+      css/conditional-sass/fullwidth-static/fullwidth-static.ltr.css: { weight: 1 }
   dependencies:
     - alshaya_white_label/fullwidth-common
 
 fullwidth-layouts:
   css:
     theme:
-      css/conditional-sass/fullwidth-layouts/fullwidth-layouts.ltr.css: {}
+      css/conditional-sass/fullwidth-layouts/fullwidth-layouts.ltr.css: { weight: 1 }
   dependencies:
     - alshaya_white_label/fullwidth-common
 

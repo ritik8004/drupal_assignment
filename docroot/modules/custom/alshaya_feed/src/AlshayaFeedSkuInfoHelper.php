@@ -271,7 +271,11 @@ class AlshayaFeedSkuInfoHelper {
         $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
         $parentProduct['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
-
+      if ($sku->hasField('attr_product_brand') && $sku->get('attr_product_brand')->getString() != NULL) {
+        $extra_row['key'] = 'brand';
+        $extra_row['value'] = $sku->get('attr_product_brand')->getString();
+        $parentProduct['attributes'][] = $extra_row;
+      }
       if ($sku->bundle() == 'simple') {
         $parentProduct['sku'] = $parentProduct['group_id'];
         $parentProduct['sanitized_sku'] = $this->skuManager->getSanitizedSku($parentProduct['sku']);
@@ -292,6 +296,7 @@ class AlshayaFeedSkuInfoHelper {
         unset($product[$lang][0]['group_id']);
         $product[$lang][0]['sku'] = $parentProduct['group_id'];
         $product[$lang][0]['sanitized_sku'] = $this->skuManager->getSanitizedSku($parentProduct['group_id']);
+        $variations = [];
         foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
           $child = SKU::loadFromSku($child_sku, $lang);
           if (!$child instanceof SKUInterface) {
@@ -322,9 +327,16 @@ class AlshayaFeedSkuInfoHelper {
           // Allow other modules to add/alter variant info.
           $this->moduleHandler->alter('alshaya_feed_variant_info', $variant, $child);
 
-          $product[$lang][] = array_merge($parentProduct, $variant);
+          $variations[] = array_merge($parentProduct, $variant);
         }
-
+        if (!empty($variations)) {
+          // Sorting the variations in ascending order based on price.
+          usort($variations, fn($item1, $item2) => $item1['final_price'] <=> $item2['final_price']);
+          array_push($product[$lang], ...$variations);
+          // Change parent product price to the lowest.
+          $product[$lang][0]['original_price'] = $variations[0]['original_price'];
+          $product[$lang][0]['final_price'] = $variations[0]['final_price'];
+        }
       }
     }
 

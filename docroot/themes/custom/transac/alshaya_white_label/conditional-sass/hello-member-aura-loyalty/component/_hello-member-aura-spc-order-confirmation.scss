@@ -30,3 +30,15 @@
 .spc-order-summary .spc-aura-pending-enrollment-message {
   margin-top: rem(5);
 }
+
+.spc-detail-content {
+  @include clmDownMessage($hello-member-points-block-bg);
+
+  .hello-member-points-wrapper {
+    margin: rem(8) 0;
+
+    @include breakpoint($desktop) {
+      margin: rem(16) 0;
+    }
+  }
+}

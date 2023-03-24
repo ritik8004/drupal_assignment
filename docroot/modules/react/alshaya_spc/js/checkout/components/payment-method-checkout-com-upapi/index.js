@@ -16,6 +16,7 @@ import { handleValidationMessage } from '../../../utilities/form_item_helper';
 import WithModal from '../with-modal';
 import { CheckoutComUpapiContext } from '../../../context/CheckoutComUpapi';
 import { allowSavedCcForTopUp } from '../../../utilities/egift_util';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 class PaymentMethodCheckoutComUpapi extends React.Component {
   static contextType = CheckoutComUpapiContext;
@@ -79,6 +80,7 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
       cvvValid,
       selectedCard,
       tokenizedCard,
+      cardType,
     } = this.context;
 
     if (selectedCard === 'new' && !(numberValid && expiryValid && cvvValid)) {
@@ -117,6 +119,15 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
             type: 'error',
             message: Drupal.t('Transaction Failed: Invalid CVV'),
           });
+          // Log the invalid CVV response.
+          if (hasValue(error.response.data)
+            && hasValue(error.response.data.error_codes)) {
+            Drupal.logJavascriptError(
+              `payment-error | ${cardType} | Decline Reason: ${JSON.stringify(error.response.data.error_codes)}`,
+              { ...error.response.data, is_system_error: false },
+              GTM_CONSTANTS.PAYMENT_ERRORS,
+            );
+          }
         }
         removeFullScreenLoader();
         Drupal.logJavascriptError('Checkout.com UPAPI Token', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);

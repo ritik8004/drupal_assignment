@@ -446,6 +446,25 @@ class SKUFieldsManager {
           ]);
         }
         break;
+
+      case 'string_long':
+        $fieldDefinition = BaseFieldDefinition::create('string_long');
+
+        if ($field_info['visible_view']) {
+          $fieldDefinition->setDisplayOptions('view', [
+            'label' => 'hidden',
+            'type' => 'basic_string',
+            'weight' => $weight,
+          ]);
+        }
+
+        if ($field_info['visible_form']) {
+          $fieldDefinition->setDisplayOptions('form', [
+            'type' => 'string_textarea',
+            'weight' => $weight,
+          ]);
+        }
+        break;
     }
 
     // Check if we don't have the field type defined yet.

@@ -9,6 +9,15 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_rcs_main_menu\Service\AlshayaRcsCategoryDataMigration;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add settings for Group by Subcategory.
+ */
+function alshaya_rcs_listing_update_9402() {
+  \Drupal::service('alshaya_config.manager')->updateConfigs(['alshaya_rcs_listing.settings'], 'alshaya_rcs_listing');
+}
+
+/**
  * Implements hook_update_n().
  *
  * Update meta tag for rcs category canonical url.

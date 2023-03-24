@@ -1,0 +1,25 @@
+@include breakpoint($only-mobile) {
+  .region__footer-secondary,
+  .footer_primary-right-block {
+    @include sideSpaces(0);
+  }
+
+  .alshaya-newsletter-subscribe {
+    @include sideSpaces($full_width_padding_mobile, "margin");
+  }
+}
+
+.c-footer-primary,
+.c-footer-secondary {
+  @include fullWidthSideSpaces(
+    $is_tablet: true,
+    $is_desktop: true,
+    $is_desktop_wide: true
+  );
+}
+
+.language--switcher {
+  @include fullWidthSideSpaces(
+    $is_mobile: true
+  );
+}

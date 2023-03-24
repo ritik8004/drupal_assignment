@@ -233,14 +233,7 @@ export default createConnector({
     const addKey = operator === 'and' ? 'addFacet' : 'addDisjunctiveFacet';
     const addRefinementKey = `${addKey}Refinement`;
 
-    let finalSearchParameters = searchParameters.setQueryParameters({
-      maxValuesPerFacet: Math.max(
-        searchParameters.maxValuesPerFacet || 0,
-        getLimit(props),
-      ),
-    });
-
-    finalSearchParameters = finalSearchParameters[addKey](attribute);
+    const finalSearchParameters = searchParameters[addKey](attribute);
 
     return getCurrentRefinement(props, searchState, this.context).reduce(
       (res, val) => res[addRefinementKey](attribute, val),
