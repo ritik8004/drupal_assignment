@@ -340,12 +340,9 @@ export const displayErrorMessage = (message) => <div className="hello-member-poi
 /**
  * Helper function to check benefits channel is Omni.
  */
-export const benefitChannelOmni = (responseData) => {
-  if (hasValue(responseData.tag) && hasValue(responseData.tagName)) {
-    if (responseData.tag === 'O' && responseData.tagName === 'Omni') {
-      return true;
-    }
-    return false;
+export const isBenefitChannelOmni = (responseData) => {
+  if (hasValue(responseData.tag) && hasValue(responseData.tagName) && responseData.tag === 'O' && responseData.tagName === 'Omni') {
+    return true;
   }
   return false;
 };
@@ -353,12 +350,9 @@ export const benefitChannelOmni = (responseData) => {
 /**
  * Helper function to check benefits channel is Store.
  */
-export const benefitChannelStore = (responseData) => {
-  if (hasValue(responseData.tag) && hasValue(responseData.tagName)) {
-    if (responseData.tag === 'S' && responseData.tagName === 'Store') {
-      return true;
-    }
-    return false;
+export const isBenefitChannelStore = (responseData) => {
+  if (hasValue(responseData.tag) && hasValue(responseData.tagName) && responseData.tag === 'S' && responseData.tagName === 'Store') {
+    return true;
   }
   return false;
 };
@@ -366,12 +360,9 @@ export const benefitChannelStore = (responseData) => {
 /**
  * Helper function to check benefits channel is Online.
  */
-export const benefitChannelOnline = (responseData) => {
-  if (hasValue(responseData.tag) && hasValue(responseData.tagName)) {
-    if (responseData.tag === 'E' && responseData.tagName === 'Online') {
-      return true;
-    }
-    return false;
+export const isBenefitChannelOnline = (responseData) => {
+  if (hasValue(responseData.tag) && hasValue(responseData.tagName) && responseData.tag === 'E' && responseData.tagName === 'Online') {
+    return true;
   }
   return false;
 };
