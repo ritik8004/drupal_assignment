@@ -10,6 +10,23 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Update algolia react with default disable of hitsPerPage config.
+ */
+function alshaya_algolia_react_update_9406() {
+  // Ensure new configurations are added and defaults set.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.settings'],
+    'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update algolia react with article swatch display config.
  */
 function alshaya_algolia_react_update_9405() {
