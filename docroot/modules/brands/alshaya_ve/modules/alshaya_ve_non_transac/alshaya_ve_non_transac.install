@@ -11,7 +11,7 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Enable AJAX for the search view.
+ * Enable pagination for the search view.
  */
 function alshaya_ve_non_transac_update_9401() {
   $manager = \Drupal::service('alshaya_config.manager');

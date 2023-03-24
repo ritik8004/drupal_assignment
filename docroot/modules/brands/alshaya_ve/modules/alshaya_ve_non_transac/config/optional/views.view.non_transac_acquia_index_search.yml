@@ -8,7 +8,6 @@ dependencies:
     - better_exposed_filters
     - search_api
     - text
-    - views_infinite_scroll
 id: non_transac_acquia_index_search
 label: 'Non Transac Acquia index search'
 module: views
@@ -303,16 +302,17 @@ display:
           multi_type: separator
           multi_separator: ', '
       pager:
-        type: infinite_scroll
+        type: full
         options:
           offset: 0
           items_per_page: 10
           total_pages: null
           id: 0
-          query_type: POST
           tags:
-            next: ››
-            previous: ‹‹
+            next: 'Next ›'
+            previous: '‹ Previous'
+            first: '« First'
+            last: 'Last »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -321,9 +321,7 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          views_infinite_scroll:
-            button_text: 'Load More'
-            automatically_load_content: true
+          quantity: 9
       exposed_form:
         type: bef
         options:
@@ -525,7 +523,7 @@ display:
           skip_access: false
           preserve_facet_query_args: false
       relationships: {  }
-      use_ajax: true
+      use_ajax: false
       header: {  }
       footer: {  }
       display_extenders: {  }
