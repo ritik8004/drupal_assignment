@@ -17,40 +17,66 @@
    *   The main product object.
    */
   function renderFreeGift(product) {
-    var freeGiftWrapper = jQuery('.free-gift-promotions');
     var freeGiftHtml = globalThis.rcsPhRenderingEngine.computePhFilters(product, 'promotion_free_gift');
-    // Render the HTML in the free gift wrapper.
-    freeGiftWrapper.html(freeGiftHtml);
-    freeGiftWrapper.addClass('rcs-loaded');
-    globalThis.rcsPhApplyDrupalJs(document);
+    // Registering a MutationObserver to wait for freeGiftWrapper
+    // to become available in document.
+    const observer = new MutationObserver((mutations, obs) => {
+      var freeGiftWrapper = jQuery('.free-gift-promotions');
+      if (freeGiftWrapper.length) {
+        // Render the HTML in the free gift wrapper when available.
+        freeGiftWrapper.html(freeGiftHtml);
+        freeGiftWrapper.addClass('rcs-loaded');
+        globalThis.rcsPhApplyDrupalJs(document);
+        // Disconnect and stop observation as free gift is rendered now.
+        obs.disconnect();
+      }
+    });
+    // Start observing document object to render free gift on PDP
+    // when freeGiftWrapper becomes available in DOM.
+    observer.observe(document, {
+      childList: true,
+      subtree: true
+    });
   }
 
   /**
-   * MDC response for product_by_sku contains details for parent configurable sku
-   * and all of its variants. This helper function reduces the response to only
-   * requested sku info.
+   * Use this Cautiously!!!
    *
-   * @param {string} freeGiftSku
-   *   Free gift sku.
-   * @param {object} freeGiftItem
-   *   Free gift sku response from MDC.
+   * MDC response for product_by_sku when accessed using simple variant sku
+   * of a configurable product, we get the data of parent product sku. Even
+   * though we requested product details for variant simple sku.
+   * This is a wrapper function which mocks the parent sku response as
+   * it was requested for simple sku.
+   *
+   * @param {string} variantSku
+   *   Requested variant sku of a configurable product.
+   * @param {object} parentProduct
+   *   Configurable product response data received from MDC.
    *
    * @return {object}
-   *   Free gift data containing details about request sku only.
+   *   Mock simple sku response.
    */
-  function removeRedundantVariantInfo (freeGiftSku, freeGiftItem) {
+  window.commerceBackend.updateParentAttributes = function updateParentAttributes(variantSku, parentProduct) {
     var requestedVariant = null;
-    for (var $i = 0; $i < freeGiftItem.variants.length; $i++) {
-      if (freeGiftItem.variants[$i].product.sku === freeGiftSku) {
-        requestedVariant = freeGiftItem.variants[$i];
+    // Loop through variants to fetch the requested variant sku.
+    for (var $i = 0; $i < parentProduct.variants.length; $i++) {
+      if (parentProduct.variants[$i].product.sku === variantSku) {
+        requestedVariant = parentProduct.variants[$i];
+        break;
       }
     }
     if (requestedVariant) {
-      freeGiftItem.sku = freeGiftSku;
-      freeGiftItem.variants = [requestedVariant];
+      // Update parent product keys from variant data.
+      Object.keys(requestedVariant.product).forEach(function updateParentData(key) {
+        if (key in parentProduct) {
+          parentProduct[key] = requestedVariant.product[key];
+        }
+      });
+      // Manually setting product type to simple.
+      parentProduct.type_id = 'simple';
     }
-    return freeGiftItem;
-  }
+    return parentProduct;
+  };
 
   /**
    * Validates and fetches free gift data from MDC.
@@ -70,21 +96,20 @@
       freeGiftItem = globalThis.rcsPhCommerceBackend.getDataSynchronous('product_by_sku', { sku: freeGiftSku });
       if (Drupal.hasValue(freeGiftItem) && Drupal.hasValue(freeGiftItem.sku)) {
         if (freeGiftItem.type_id === 'configurable') {
+          // For configurable products having style code, we will take all styled variants.
+          if (Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyleSynchronous)) {
+            freeGiftItem = window.commerceBackend.getProductsInStyleSynchronous({
+              sku: freeGiftItem.sku,
+              style_code: freeGiftItem.style_code,
+              context: 'free_gift'
+            });
+          }
           if (freeGiftItem.sku !== freeGiftSku) {
             // This condition means freeGiftSku product is actually simple
             // but MDC returns the configurable parent product of a simple sku
             // when product_by_sku api is called.
-            // Then we need to alter the response to remove other variants
-            // except the requested variant.
-            freeGiftItem = removeRedundantVariantInfo(freeGiftSku, freeGiftItem);
-          } else {
-            // For configurable products having style code, we will take all styled variants.
-            if (Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyleSynchronous)) {
-              freeGiftItem = window.commerceBackend.getProductsInStyleSynchronous({
-                sku: freeGiftItem.sku,
-                style_code: freeGiftItem.style_code
-              });
-            }
+            // Then we need to alter the response to get simple sku data.
+            freeGiftItem = window.commerceBackend.updateParentAttributes(freeGiftSku, freeGiftItem);
           }
         }
         // Store it in local storage for further usage on different pages.
@@ -149,7 +174,7 @@
       // 2. Collection of item modal ( List of free gift items )
 
       // Modal view for the free gift.
-      $('.free-gift-promotions .free-gift-wrapper .free-gift-message a, a.free-gift-modal').once('free-gift-processed').on('click', async function (e) {
+      $('.free-gift-promotions .free-gift-wrapper .free-gift-message a, a.free-gift-modal').once('free-gift-processed').on('click', function (e) {
         e.preventDefault();
 
         // Display loader.
@@ -160,14 +185,14 @@
           Drupal.cartNotification.spinner_start();
         }
 
+        $('body').addClass('free-gifts-modal-overlay');
+
         // Try to get sku from the element clicked.
         var skus = $(this).data('sku').split(',');
         if (skus.length === 1) {
           var backToCollection = $(this).data('back-to-collection');
-          // Load the product data based on sku.
-          var freeGiftProduct = globalThis.RcsPhStaticStorage.get('product_data_' + skus[0]);
           // Displaying single free gift item modal.
-          showItemModalView(freeGiftProduct, skus[0], backToCollection);
+          showItemModalView(skus[0], backToCollection);
         } else if (skus.length > 1) {
           // Get the free gift promotion title.
           var promotionTitle = $(this).data('promotion-title');
@@ -188,7 +213,6 @@
                 freeGiftImageTitle: freeGiftItem.name,
                 freeGiftSku,
                 backToCollection: true,
-                freeGiftItem,
               });
             }
           });
@@ -196,7 +220,7 @@
           // If valid sku count is only one after processing, do not render free gift list modal.
           if (data.items.length === 1) {
             // Displaying single free gift item modal.
-            showItemModalView(data.items[0].freeGiftItem, data.items[0].freeGiftSku);
+            showItemModalView(data.items[0].freeGiftSku);
             Drupal.cartNotification.spinner_stop();
             return;
           }
@@ -218,6 +242,8 @@
 
           // Call behaviours with modal context.
           var modalContext = $('.pdp-modal-box');
+          // Remove any modal if previously opened.
+          $('#drupal-modal').remove();
           modalContext.find('.ui-widget-content').attr('id', 'drupal-modal');
           globalThis.rcsPhApplyDrupalJs(modalContext);
         }
@@ -240,14 +266,14 @@
   /**
    * Utility function to show free gift item in dialog box.
    *
-   * @param {object} freeGiftProduct
-   *   The free gift product object.
    * @param {string} sku
-   *   The product sku.
+   *   The free gift product sku.
    * @param {boolean} backToCollection
    *   Boolean flag to show the back to collection link.
    */
-  function showItemModalView(freeGiftProduct, sku, backToCollection = false) {
+  function showItemModalView(sku, backToCollection = false) {
+    // Load the product data based on sku.
+    var freeGiftProduct = globalThis.RcsPhStaticStorage.get('product_data_' + sku);
     if (!Drupal.hasValue(freeGiftProduct)) {
       return;
     }
@@ -276,18 +302,23 @@
     collectionItemDialog.show();
 
     var modalContext = $('.pdp-modal-box');
+    // Remove any modal if previously opened.
+    $('#drupal-modal').remove();
     modalContext.find('.ui-widget-content').attr('id', 'drupal-modal');
 
     // For configurable products, show sku base form.
     if (freeGiftProduct.type_id === 'configurable') {
       window.commerceBackend.renderAddToCartForm(freeGiftProduct);
+      if (modalContext.find('.sku-base-form').length > 0) {
+        modalContext.find('.sku-base-form').removeClass('visually-hidden');
+      }
       // Removing style guide modal link inside free gift modal.
       if (modalContext.find('.size-guide-form-and-link-wrapper').length) {
-        $('.pdp-modal-box .size-guide-link').remove();
+        modalContext.find('.size-guide-link').remove();
       }
       // Removing quantity dropdown modal link inside free gift modal.
       if (modalContext.find('.form-item-quantity').length > 0) {
-        $('.pdp-modal-box .form-item-quantity').remove();
+        modalContext.find('.form-item-quantity').remove();
       }
       // As we don't need the add to cart button, so removing it.
       modalContext.find('button.add-to-cart-button').remove();

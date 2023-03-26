@@ -28,5 +28,6 @@ function alshaya_rcs_free_gift_rcs_handlebars_templates(EntityInterface $entity)
 function alshaya_rcs_free_gift_preprocess_node(&$variables) {
   if ($variables['node']->bundle() === 'rcs_product') {
     $variables['free_gift_status'] = TRUE;
+    $variables['#attached']['drupalSettings']['rcsFreeGiftEnabled'] = TRUE;
   }
 }
