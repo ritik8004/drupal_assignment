@@ -21,8 +21,9 @@
     delete product.position;
 
     // Remove product_view_type from product if view type is quickview.
-    if (typeof product.product_view_type != undefined && product.product_view_type === 'quickview') {
-      var enable_quickview = true;
+    var enable_quickview = '';
+    if (typeof product.product_view_type != undefined) {
+      enable_quickview = product.product_view_type;
       delete product.product_view_type;
     }
     // Calculate metric 1 value.
@@ -39,8 +40,8 @@
       },
     };
     // Add product_view_type outside ecommerce.
-    if (enable_quickview === true) {
-      productData.product_view_type = 'quick_view';
+    if (enable_quickview) {
+      productData.product_view_type = enable_quickview;
     }
     dataLayer.push(productData);
 
