@@ -6,7 +6,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
- * Geo location controller to prepare data for return pages.
+ * Checks access for displaying geolocation pages.
  */
 class AccessCheckController extends ControllerBase {
 
