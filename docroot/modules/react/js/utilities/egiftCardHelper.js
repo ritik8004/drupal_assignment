@@ -118,6 +118,14 @@ export const getApiEndpoint = (action) => {
       endpoint = '/V1/egiftcard/topup'; // endpoint to topup a egift card.
       break;
 
+    case 'eGiftCardList':
+      endpoint = '/V1/customers/hpsCustomerData'; // endpoint to get the list of linked egift card of a user.
+      break;
+
+    case 'unlinkedEiftCardList':
+      endpoint = '/V1/egiftcard/mine/associated-with-email'; // endpoint to get the list of unlinked egift cards of a user.
+      break;
+
     default:
       logger.critical('Endpoint does not exist for action: @action.', {
         '@action': action,

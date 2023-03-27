@@ -226,6 +226,23 @@ const CardTypeSVG = (props) => {
       </span>
     );
   }
+  if (type === 'egift-refund') {
+    return (
+      <svg width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M38.0498 23.6095C38.0498 23.825 37.8764 24 37.6634 24L1.38646 24C1.17344 24 1.00007 23.825 1.00007 23.6095V1.38976C1.00007 1.17419 1.17344 1.00001 1.38646 1.00001L37.6634 1.00001C37.8764 0.999229 38.0498 1.17341 38.0498 1.38976V23.6095Z" fill="white" stroke="black" stroke-width="0.679245"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M1 10.7459H38.0497Z" fill="white"/>
+        <path d="M1 10.7459H38.0497" stroke="black" stroke-width="0.679245"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.3323 1V24Z" fill="white"/>
+        <path d="M12.3323 1V24" stroke="black" stroke-width="0.679245"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.6973 10.7458C12.6973 10.7458 14.4566 0.473845 18.5601 4.74914C22.6637 9.02444 12.6973 10.7458 12.6973 10.7458Z" fill="white" stroke="black" stroke-width="0.679245"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.3457 10.7458C12.3457 10.7458 10.5864 0.473845 6.48286 4.74914C2.37931 9.02444 12.3457 10.7458 12.3457 10.7458Z" fill="white" stroke="black" stroke-width="0.679245"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.3325 10.7458C12.3325 10.7458 13.9464 18.0006 16.7354 18.0006C17.6216 18.0006 18.7771 16.8293 18.7771 16.8293" fill="white"/>
+        <path d="M12.3325 10.7458C12.3325 10.7458 13.9464 18.0006 16.7354 18.0006C17.6216 18.0006 18.7771 16.8293 18.7771 16.8293" stroke="black" stroke-width="0.679245" stroke-linecap="round"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2925 10.7458C12.2925 10.7458 10.6786 18.0006 7.88958 18.0006C7.00337 18.0006 5.84787 16.8293 5.84787 16.8293" fill="white"/>
+        <path d="M12.2925 10.7458C12.2925 10.7458 10.6786 18.0006 7.88958 18.0006C7.00337 18.0006 5.84787 16.8293 5.84787 16.8293" stroke="black" stroke-width="0.679245" stroke-linecap="round"/>
+      </svg>
+    );
+  }
   if (type === 'qpay') {
     return (
       <span className={`spc-card-type ${classValue}`}>

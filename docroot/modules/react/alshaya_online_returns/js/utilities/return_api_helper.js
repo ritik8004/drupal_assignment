@@ -57,7 +57,7 @@ const prepareReturnRequestData = async (data) => {
   return processedData;
 };
 
-const createReturnRequest = async (itemsSelected) => {
+const createReturnRequest = async (itemsSelected, egiftCardType) => {
   const data = await prepareReturnRequestData(itemsSelected);
 
   if (hasValue(data.error)) {
@@ -78,6 +78,14 @@ const createReturnRequest = async (itemsSelected) => {
       '@customer_id': customerId,
     });
     return getErrorResponse('No user available in session', 403);
+  }
+
+  if (egiftCardType) {
+    data.rmaDataObject.extension_attributes = {
+      refund_mode: 'hps_payment',
+      egift_card_type: 'new',
+      link_egift_card: 1,
+    };
   }
 
   data.rmaDataObject.customer_id = customerId;
