@@ -1080,14 +1080,13 @@ class AlshayaGtmManager {
       $points_earned = $order['extension']['apc_accrued_points'];
     }
 
-    $bal_redumption = '';
-    if (isset($order['extension'], $order['extension']['aura_payment_value'])) {
-      if ($order['extension']['aura_payment_value'] > 0) {
-        $bal_redumption = 'redeemed';
-      }
-      else {
-        $bal_redumption = 'not redeemed';
-      }
+    $bal_redemption = '';
+    if (isset($order['extension'], $order['extension']['aura_payment_value'])
+      && $order['extension']['aura_payment_value'] > 0) {
+      $bal_redemption = 'redeemed';
+    }
+    else {
+      $bal_redemption = 'not redeemed';
     }
 
     $loyalty_type = '';
@@ -1161,7 +1160,7 @@ class AlshayaGtmManager {
       'userType' => $is_customer ? 'Logged in User' : 'Guest User',
       'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
       'platformType' => $this->getUserDeviceType(),
-      'aura_balRedemption' => $bal_redumption,
+      'aura_balRedemption' => $bal_redemption,
       'aura_pointsUsed' => abs($points_used),
       'aura_pointsEarned' => $points_earned,
     ];
