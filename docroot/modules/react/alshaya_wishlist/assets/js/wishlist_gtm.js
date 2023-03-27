@@ -21,7 +21,7 @@
     delete product.position;
 
     // Remove product_view_type from product if view type is quickview.
-    if (typeof product.product_view_type != undefined && product.product_view_type === 'quick_view') {
+    if (typeof product.product_view_type != undefined && product.product_view_type === 'quickview') {
       var enable_quickview = true;
       delete product.product_view_type;
     }
