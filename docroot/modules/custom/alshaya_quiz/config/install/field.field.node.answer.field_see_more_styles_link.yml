@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_see_more_styles_link
+    - node.type.answer
+id: node.answer.field_see_more_styles_link
+field_name: field_see_more_styles_link
+entity_type: node
+bundle: answer
+label: 'See more styles link'
+description: 'Add url path for link to see more styles eg: victorias-secret/shop-bras/all-bras/'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
+skip_translation_check: 1

@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_quiz.
+ */
+
+use Drupal\Core\Entity\EntityStorageException;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new field see more styles link to answer CT and migrate
+ * data from references field.
+ */
+function alshaya_quiz_update_9001() {
+  $config = [
+    'field.storage.node.field_see_more_styles_link',
+    'field.field.node.answer.field_see_more_styles_link.yml',
+  ];
+
+  alshaya_config_install_configs($config, 'alshaya_quiz');
+
+  alshaya_config_install_configs([
+    'core.entity_form_display.node.answer.default.yml',
+    'core.entity_view_display.node.answer.default.yml',
+    'core.entity_view_display.node.answer.teaser.yml',
+  ], 'alshaya_quiz');
+
+  $nids = \Drupal::entityQuery('node')->condition('type', 'answer')->execute();
+  $nodes = !empty($nids) ? Node::loadMultiple($nids) : [];
+  $migrate_complete = FALSE;
+  foreach ($nodes as $node) {
+    $term_id = !empty($node->field_references->target_id) ? $node->field_references->target_id : NULL;
+    $url = !empty($term_id) ? \Drupal::service('path_alias.manager')->getAliasByPath('/taxonomy/term/' . $term_id) : '';
+    $node->set('field_see_more_styles_link', $url)->save();
+    $migrate_complete = TRUE;
+  }
+
+  if ($migrate_complete) {
+    $field = FieldConfig::loadByName('node', 'answer', 'field_references');
+    if (!empty($field)) {
+      $field->delete();
+    }
+    try {
+      $field_storage = FieldStorageConfig::loadByName('node', 'field_references');
+      if (!empty($field_storage)) {
+        $field_storage->delete();
+      }
+    }
+    catch (EntityStorageException $error) {
+      \Drupal::logger('alshaya_quiz')->error('Error while removing field references @message', [
+        '@message' => $error->getMessage(),
+      ]);
+    }
+  }
+}
