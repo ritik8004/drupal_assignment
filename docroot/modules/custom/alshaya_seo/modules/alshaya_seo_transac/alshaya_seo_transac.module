@@ -987,15 +987,3 @@ function alshaya_seo_transac_alshaya_mobile_app_skus_product_list_data_alter(arr
     alshaya_seo_transac_alshaya_acm_product_light_product_data_alter($sku, $data, 'full');
   }
 }
-
-/**
- * Implements hook_update_N().
- *
- * Remove 404 from the list of excluded status in GTM.
- */
-function alshaya_seo_transac_update_9410() {
-  $config_factory = \Drupal::configFactory();
-  $config = $config_factory->getEditable('google_tag.container.primary');
-  $config->set('status_list', '403');
-  $config->save(TRUE);
-}
