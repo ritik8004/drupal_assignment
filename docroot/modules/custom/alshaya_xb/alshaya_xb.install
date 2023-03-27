@@ -91,7 +91,7 @@ function _alshaya_xb_disable_payment_methods() {
   $data = $config->get('exclude_payment_methods');
 
   // Disable all the available payment methods except globale.
-  foreach ($data as $key) {
+  foreach ($data as $key => $value) {
     if ($key !== 'globale') {
       $data[$key] = $key;
     }
