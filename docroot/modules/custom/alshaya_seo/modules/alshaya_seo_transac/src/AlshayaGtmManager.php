@@ -1070,6 +1070,26 @@ class AlshayaGtmManager {
       $loyalty_card = $order['extension']['loyalty_card'];
     }
 
+    $points_used = '';
+    if (isset($order['extension'], $order['extension']['apc_redeemed_points'])) {
+      $points_used = $order['extension']['apc_redeemed_points'];
+    }
+
+    $points_earned = '';
+    if (isset($order['extension'], $order['extension']['apc_accrued_points'])) {
+      $points_earned = $order['extension']['apc_accrued_points'];
+    }
+
+    $bal_redumption = '';
+    if (isset($order['extension'], $order['extension']['aura_payment_value'])) {
+      if ($order['extension']['aura_payment_value'] > 0) {
+        $bal_redumption = 'redeemed';
+      }
+      else {
+        $bal_redumption = 'not redeemed';
+      }
+    }
+
     $loyalty_type = '';
     if (isset($order['extension'], $order['extension']['loyalty_type'])) {
       $loyalty_type = $order['extension']['loyalty_type'];
@@ -1141,6 +1161,9 @@ class AlshayaGtmManager {
       'userType' => $is_customer ? 'Logged in User' : 'Guest User',
       'customerType' => ($orders_count > 1) ? 'Repeat Customer' : 'New Customer',
       'platformType' => $this->getUserDeviceType(),
+      'aura_balRedemption' => $bal_redumption,
+      'aura_pointsUsed' => abs($points_used),
+      'aura_pointsEarned' => $points_earned,
     ];
 
     // Add transaction & payment details.
