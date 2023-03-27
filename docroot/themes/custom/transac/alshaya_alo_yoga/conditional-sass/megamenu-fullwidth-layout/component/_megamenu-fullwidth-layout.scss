@@ -64,12 +64,6 @@
           justify-content: flex-end;
           flex-grow: 1;
 
-          a:hover {
-            .hightlight__title {
-              text-decoration: underline;
-            }
-          }
-
           .title {
             line-height: rem(20);
           }
