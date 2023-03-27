@@ -846,7 +846,7 @@
 
 .delivery-options-wrapper {
   &.field--name-field-promo-block-accordion-delivery-options {
-    border-top: 1px solid $pdp_title_section_border;
+    border-top: rem(1) solid $pdp_title_section_border;
   }
 
   .ui-accordion-header-active {
