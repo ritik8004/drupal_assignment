@@ -623,7 +623,7 @@ export const pushWishlistSeoGtmData = (productData, action = 'add') => {
     // Triggered on configurable-drawer.
     if (typeof productData.context !== 'undefined'
       && productData.context === 'productDrawer') {
-      product.product_view_type = 'quickview';
+      product.product_view_type = 'quick_view';
     }
 
     // Set product variant to the selected variant.
