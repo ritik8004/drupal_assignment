@@ -10,8 +10,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Add the following new fields to the config:
- *  - enable_plp_color_swatch_slider.
+ * Add the new alshaya_algolia_react.color_swatches config.
  */
 function alshaya_algolia_react_update_9407() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
