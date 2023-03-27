@@ -6,7 +6,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
- * Store finder controller to prepare data for return pages.
+ * Checks access for displaying store finder pages..
  */
 class AccessCheckController extends ControllerBase {
 
