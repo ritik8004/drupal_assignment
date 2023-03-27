@@ -104,12 +104,16 @@ body {
 }
 
 .branding__menu {
-  @include breakpoint($upto-desktop) {
+  @include breakpoint($desktop) {
     height: auto;
   }
 
   @include breakpoint($only-tablet) {
     height: rem(58);
+  }
+
+  @include breakpoint($only-mobile) {
+    height: rem(59);
   }
 }
 
