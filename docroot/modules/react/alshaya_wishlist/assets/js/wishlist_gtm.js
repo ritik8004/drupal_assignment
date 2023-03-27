@@ -20,9 +20,15 @@
     // Remove product position: Not needed while adding to cart.
     delete product.position;
 
+    // Remove product_view_type from product if view type is quickview.
+    var enable_quickview = '';
+    if (typeof product.product_view_type !== 'undefined') {
+      enable_quickview = product.product_view_type;
+      delete product.product_view_type;
+    }
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
-    const productData = {
+    var productData = {
       event: 'addToWishlist',
       ecommerce: {
         currencyCode: drupalSettings.gtm.currency,
@@ -33,6 +39,10 @@
         },
       },
     };
+    // Add product_view_type outside ecommerce.
+    if (enable_quickview) {
+      productData.product_view_type = enable_quickview;
+    }
     dataLayer.push(productData);
 
     const cart = (typeof Drupal.alshayaSpc !== 'undefined') ? Drupal.alshayaSpc.getCartData() : null;
