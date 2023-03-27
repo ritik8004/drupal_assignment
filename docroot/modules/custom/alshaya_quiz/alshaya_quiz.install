@@ -19,15 +19,15 @@ use Drupal\node\Entity\Node;
 function alshaya_quiz_update_9001() {
   $config = [
     'field.storage.node.field_see_more_styles_link',
-    'field.field.node.answer.field_see_more_styles_link.yml',
+    'field.field.node.answer.field_see_more_styles_link',
   ];
 
   alshaya_config_install_configs($config, 'alshaya_quiz');
 
   alshaya_config_install_configs([
-    'core.entity_form_display.node.answer.default.yml',
-    'core.entity_view_display.node.answer.default.yml',
-    'core.entity_view_display.node.answer.teaser.yml',
+    'core.entity_form_display.node.answer.default',
+    'core.entity_view_display.node.answer.default',
+    'core.entity_view_display.node.answer.teaser',
   ], 'alshaya_quiz');
 
   $nids = \Drupal::entityQuery('node')->condition('type', 'answer')->execute();
