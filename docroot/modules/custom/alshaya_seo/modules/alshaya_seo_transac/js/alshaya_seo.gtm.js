@@ -1557,8 +1557,8 @@
     // Remove product_view_type from product if view type is set.
     var enable_quickview = '';
     if (typeof product.product_view_type !== 'undefined') {
-        enable_quickview = product.product_view_type;
-        delete product.product_view_type;
+      enable_quickview = product.product_view_type;
+      delete product.product_view_type;
     }
     var productData = {
       event: 'addToCart'
