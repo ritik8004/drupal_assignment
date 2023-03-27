@@ -22,6 +22,7 @@
           position: absolute;
           top: 0;
           #{$left}: rem(-16);
+          // Matching the height of the line with the tallest column in the menu.
           height: calc(100% - #{rem(40)});
           width: rem(1);
           background-color: $primary_border;
