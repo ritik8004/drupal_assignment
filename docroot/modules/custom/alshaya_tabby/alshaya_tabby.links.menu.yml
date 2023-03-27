@@ -1,0 +1,5 @@
+alshaya_tabby.configuration:
+  route_name: alshaya_tabby.tabby_config
+  title: 'Alshaya Tabby configuration'
+  description: 'Configure Tabby settings.'
+  parent: alshaya_master.alshaya_admin
