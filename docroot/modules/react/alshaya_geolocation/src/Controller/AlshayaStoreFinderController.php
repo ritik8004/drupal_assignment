@@ -5,6 +5,7 @@ namespace Drupal\alshaya_geolocation\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_geolocation\AlshayaStoreUtility;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Alshaya Top Up Controller.
@@ -73,7 +74,7 @@ class AlshayaStoreFinderController extends ControllerBase {
         ],
       ],
       '#cache' => [
-        'tags' => $cacheTags,
+        'tags' => Cache::mergeTags($cacheTags, $this->config('alshaya_geolocation.settings')->getCacheTags()),
       ],
     ];
   }
@@ -103,7 +104,7 @@ class AlshayaStoreFinderController extends ControllerBase {
         ],
       ],
       '#cache' => [
-        'tags' => $cacheTags,
+        'tags' => Cache::mergeTags($cacheTags, $this->config('alshaya_geolocation.settings')->getCacheTags()),
       ],
     ];
   }
