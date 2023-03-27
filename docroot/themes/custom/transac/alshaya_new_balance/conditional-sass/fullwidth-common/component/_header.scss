@@ -1,0 +1,33 @@
+@include breakpoint($only-mobile) {
+  .logged-in {
+    .c-menu-primary {
+      .hamburger--menu {
+        html[lang="ar"] & {
+          padding-right: 0;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  #mini-cart-wrapper {
+    padding-#{$right}: 0;
+  }
+
+  body.wishlist-enabled {
+    header {
+      .region__header {
+        .block-alshaya-react-mini-cart {
+          margin-#{$left}: rem(28);
+        }
+      }
+    }
+  }
+
+  .block-alshaya-react-mini-cart {
+    .quantity {
+      #{$left}: rem(9);
+    }
+  }
+}
