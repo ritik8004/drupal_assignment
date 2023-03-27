@@ -5,6 +5,7 @@
  * Install, uninstall, update function for alshaya_quiz.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -24,11 +25,17 @@ function alshaya_quiz_update_9001() {
 
   alshaya_config_install_configs($config, 'alshaya_quiz');
 
-  alshaya_config_install_configs([
-    'core.entity_form_display.node.answer.default',
-    'core.entity_view_display.node.answer.default',
-    'core.entity_view_display.node.answer.teaser',
-  ], 'alshaya_quiz');
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'core.entity_form_display.node.answer.default',
+        'core.entity_view_display.node.answer.default',
+        'core.entity_view_display.node.answer.teaser',
+      ],
+      'alshaya_quiz',
+      'install',
+      AlshayaConfigManager::MODE_MERGE
+    );
 
   $nids = \Drupal::entityQuery('node')->condition('type', 'answer')->execute();
   $nodes = !empty($nids) ? Node::loadMultiple($nids) : [];
