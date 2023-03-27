@@ -489,9 +489,8 @@ function alshaya_hello_member_alshaya_spc_checkout_build_alter(array &$build) {
     return;
   }
 
-  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
   // Attach the library for Aura backend based on the commerce backend version.
-  $build['#attached']['library'][] = 'alshaya_aura_react/aura_backend.v' . $backend_version;
+  $build['#attached']['library'][] = 'alshaya_aura_react/aura_backend';
 
   // Preaparing aura settings required for hello member integration.
   $settings['config'] = \Drupal::service('alshaya_aura_react.aura_helper')->getAuraConfig();

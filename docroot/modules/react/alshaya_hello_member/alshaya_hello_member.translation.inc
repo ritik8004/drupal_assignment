@@ -547,6 +547,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'سيتم تجديد عضويتك بنسبة @expiry_date وستتم إعادة تعيين النقاط كل عام.',
         'context' => 'hello_member',
       ],
+      'Points History' => [
+        'ar' => 'سجّل النقاط',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
