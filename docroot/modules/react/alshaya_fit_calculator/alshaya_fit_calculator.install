@@ -5,8 +5,6 @@
  * Install file.
  */
 
-use Drupal\Core\Url;
-
 /**
  * Implements hook_update_N().
  *
@@ -21,10 +19,9 @@ function alshaya_fit_calculator_update_9001() {
   // Get block settings.
   $settings = $block->get('settings');
   if (!empty($settings['plp_page'])) {
-    // As the field is updated entity autocomplete to textfield. We get url from
-    // term id and set it back in block settings.
-    $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $settings['plp_page']]);
-    $plp_page = $url->toString();
+    // As the field is updated from entity autocomplete to textfield.
+    // We get url alias from term id and set it back in block settings.
+    $plp_page = \Drupal::service('path_alias.manager')->getAliasByPath('/taxonomy/term/' . $settings['plp_page']);
     $settings['plp_page'] = $plp_page;
     $block->set('settings', $settings);
     $block->save();
