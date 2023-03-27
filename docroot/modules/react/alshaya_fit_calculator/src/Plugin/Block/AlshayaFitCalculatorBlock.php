@@ -153,8 +153,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
     }
     $plp_page = '';
     if ($config['plp_page']) {
-      $url = Url::fromUri('internal:/' . trim($config['plp_page'], '/') . '/');
-      $plp_page = ltrim($url->toString(), '/');
+      $plp_page = trim($config['plp_page'], '/') . '/';
     }
 
     if (strstr($this->requestStack->getCurrentRequest()->getRequestUri(), 'modal-link-views')) {
