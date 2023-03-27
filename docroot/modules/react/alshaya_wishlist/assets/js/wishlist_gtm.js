@@ -40,7 +40,7 @@
     };
     // Add product_view_type outside ecommerce.
     if (enable_quickview === true) {
-      productData.product_view_type = 'quickview';
+      productData.product_view_type = 'quick_view';
     }
     dataLayer.push(productData);
 
