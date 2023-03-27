@@ -1554,6 +1554,12 @@
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
+    // Remove product_view_type from product if view type is set.
+    var enable_quickview = '';
+    if (typeof product.product_view_type !== 'undefined') {
+      enable_quickview = product.product_view_type;
+      delete product.product_view_type;
+    }
     var productData = {
       event: 'addToCart'
     };
@@ -1580,6 +1586,10 @@
       }
     };
 
+    // Add product_view_type outside ecommerce.
+    if (enable_quickview) {
+      productData.product_view_type = enable_quickview;
+    }
     dataLayer.push(productData);
   }
 
