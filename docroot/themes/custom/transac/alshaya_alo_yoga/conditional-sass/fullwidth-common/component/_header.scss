@@ -1,0 +1,27 @@
+.super-category-enabled .c-menu-primary .mobile--menu {
+  left: 0;
+}
+
+@include breakpoint($only-mobile) {
+  header {
+    .c-header__region {
+      @include sideSpaces(0);
+    }
+
+    .region__header {
+      @include sideSpaces($full_width_padding_mobile);
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  header {
+    .c-header__region {
+      @include sideSpaces(0);
+    }
+  }
+
+  .c-menu-primary .region__menu-primary #block-mobilenavigation ul li a.mobile--menu {
+    margin-#{$left}: 0;
+  }
+}

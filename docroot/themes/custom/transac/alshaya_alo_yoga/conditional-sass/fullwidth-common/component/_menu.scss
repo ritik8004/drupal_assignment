@@ -1,0 +1,7 @@
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    ul.menu--one__list {
+      padding-#{$left}: rem(48);
+    }
+  }
+}
