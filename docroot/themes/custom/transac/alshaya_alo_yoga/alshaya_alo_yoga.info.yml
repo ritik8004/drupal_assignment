@@ -178,3 +178,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/online-returns/online-returns.ltr.css: css/conditional-sass/online-returns/online-returns.ltr.css
+
+  alshaya_white_label/megamenu-fullwidth-layout:
+    css:
+      theme:
+        css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css: css/conditional-sass/megamenu-fullwidth-layout/megamenu-fullwidth-layout.ltr.css
