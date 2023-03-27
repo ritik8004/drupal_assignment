@@ -29,6 +29,13 @@
                 }
               }
 
+              // Aligning the vertical separtor line for fullwidth megamenu.
+              &:not(:nth-child(2)) {
+                &::before {
+                  #{$left}: 0;
+                }
+              }
+
               &:not(:last-child) {
                 margin-#{$right}: rem(50);
               }
@@ -44,9 +51,28 @@
       .highlights {
         display: flex;
 
+        // Aligning the vertical separtor line for fullwidth megamenu.
+        &::before {
+          #{$left}: rem(10);
+        }
+
         .highlighted {
           margin-#{$left}: rem(50);
+          // Reversing the order of image and title.
+          display: flex;
+          flex-direction: column-reverse;
+          justify-content: flex-end;
           flex-grow: 1;
+
+          a:hover {
+            .hightlight__title {
+              text-decoration: underline;
+            }
+          }
+
+          .title {
+            line-height: rem(20);
+          }
         }
       }
     }

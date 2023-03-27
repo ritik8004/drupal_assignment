@@ -21,6 +21,7 @@
           content: "";
           position: absolute;
           top: 0;
+          #{$left}: rem(-16);
           height: calc(100% - #{rem(40)});
           width: rem(1);
           background-color: $primary_border;
@@ -28,7 +29,7 @@
       }
 
       .highlights::before {
-        #{$left}: rem(10);
+        #{$left}: rem(-28);
       }
     }
 
@@ -50,19 +51,9 @@
       margin-top: rem(6);
     }
 
-    .highlighted {
-      display: flex;
-      flex-direction: column-reverse;
-      justify-content: flex-end;
-
-      a:hover {
-        .hightlight__title {
-          text-decoration: underline;
-        }
-      }
-
-      .title {
-        line-height: rem(20);
+    .highlighted a:hover {
+      .hightlight__title {
+        text-decoration: underline;
       }
     }
   }
