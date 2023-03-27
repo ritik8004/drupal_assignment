@@ -184,8 +184,7 @@ class AlshayaLoyaltyController extends ControllerBase {
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());
     $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
 
-    $html_head = [];
-    // Add the description meta data for the Aura landing page.
+    // Add the description meta data and title tag for the Aura landing page.
     $html_head = [
       [
         [
