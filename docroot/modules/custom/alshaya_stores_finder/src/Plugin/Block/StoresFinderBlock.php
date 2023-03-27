@@ -123,12 +123,6 @@ class StoresFinderBlock extends BlockBase implements ContainerFactoryPluginInter
             'class' => ['stores-finder', $is_active],
           ],
       ])->toString(),
-      '#cache' => [
-        'tags' => Cache::mergeTags(
-          $this->configFactory->get('alshaya_stores_finder.settings')->getCacheTags(),
-          $this->configFactory->get('alshaya_geolocation.settings')->getCacheTags(),
-        ),
-      ],
     ];
   }
 
@@ -137,6 +131,17 @@ class StoresFinderBlock extends BlockBase implements ContainerFactoryPluginInter
    */
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(
+      parent::getCacheTags(),
+      $this->configFactory->get('alshaya_stores_finder.settings')->getCacheTags(),
+      $this->configFactory->get('alshaya_geolocation.settings')->getCacheTags(),
+    );
   }
 
   /**
