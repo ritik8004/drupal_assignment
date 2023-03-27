@@ -1,4 +1,4 @@
-enable_plp_color_swatch_slider: false
+enable_plp_color_swatch_slider: 0
 swatch_type: 'circle'
-no_of_swatches_plp: 3
-no_of_swatches_plp_mobile: 3
+no_of_swatches_plp: 6
+no_of_swatches_plp_mobile: 4

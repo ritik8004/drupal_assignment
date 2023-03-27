@@ -34,13 +34,13 @@ class AlgoilaColorSwatchesForm extends ConfigFormBase {
 
     $form['plp_swatch_config'] = [
       '#type' => 'details',
-      '#title' => $this->t('PLP Swatch config settings'),
+      '#title' => $this->t('PLP/SLP Swatch config settings'),
       '#tree' => FALSE,
       '#open' => TRUE,
     ];
     $form['plp_swatch_config']['enable_plp_color_swatch_slider'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Enabled, Disabled Swatch Slider'),
+      '#title' => $this->t('Enable / Disable Swatch Slider'),
       '#options' => [1 => $this->t('Enabled'), 0 => $this->t('Disabled')],
       '#default_value' => $config->get('enable_plp_color_swatch_slider') === FALSE ? 0 : 1,
     ];

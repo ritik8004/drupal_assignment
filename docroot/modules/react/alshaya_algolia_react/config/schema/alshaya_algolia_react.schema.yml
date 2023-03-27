@@ -68,7 +68,7 @@ alshaya_algolia_react.color_swatches:
   mapping:
     enable_plp_color_swatch_slider:
       type: boolean
-      label: 'This would be the main config to enable this with color swatch improvement.'
+      label: 'Enable / Disable this color swatch with slider on listing pages.'
     swatch_type:
       type: string
       label: 'Display the swatch type circle, square'

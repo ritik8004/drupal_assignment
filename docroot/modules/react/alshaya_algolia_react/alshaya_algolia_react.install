@@ -13,7 +13,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Add the following new fields to the config:
  *  - plp_color_swatch_slider.
  */
-function alshaya_algolia_react_update_9406() {
+function alshaya_algolia_react_update_9407() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
@@ -22,6 +22,22 @@ function alshaya_algolia_react_update_9406() {
     'alshaya_algolia_react',
     'install',
     AlshayaConfigManager::MODE_MERGE,
+  );
+}
+
+/**
+ * Update algolia react with default disable of hitsPerPage config.
+ */
+function alshaya_algolia_react_update_9406() {
+  // Ensure new configurations are added and defaults set.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.settings'],
+    'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+
   );
 }
 
