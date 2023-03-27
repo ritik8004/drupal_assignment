@@ -130,7 +130,18 @@ class StoresFinderBlock extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route'], $this->configFactory->get('alshaya_stores_finder.settings')->getCacheContexts());
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(
+      parent::getCacheTags(),
+      $this->configFactory->get('alshaya_stores_finder.settings')->getCacheTags(),
+      $this->configFactory->get('alshaya_geolocation.settings')->getCacheTags(),
+    );
   }
 
   /**
