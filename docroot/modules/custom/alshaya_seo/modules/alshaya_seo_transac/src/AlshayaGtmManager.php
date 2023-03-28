@@ -1070,23 +1070,20 @@ class AlshayaGtmManager {
       $loyalty_card = $order['extension']['loyalty_card'];
     }
 
-    $points_used = '';
+    $points_used = 0;
     if (isset($order['extension'], $order['extension']['apc_redeemed_points'])) {
       $points_used = $order['extension']['apc_redeemed_points'];
     }
 
-    $points_earned = '';
+    $points_earned = 0;
     if (isset($order['extension'], $order['extension']['apc_accrued_points'])) {
       $points_earned = $order['extension']['apc_accrued_points'];
     }
 
-    $bal_redemption = '';
+    $bal_redemption = 'not redeemed';
     if (isset($order['extension'], $order['extension']['aura_payment_value'])
       && $order['extension']['aura_payment_value'] > 0) {
       $bal_redemption = 'redeemed';
-    }
-    else {
-      $bal_redemption = 'not redeemed';
     }
 
     $loyalty_type = '';
