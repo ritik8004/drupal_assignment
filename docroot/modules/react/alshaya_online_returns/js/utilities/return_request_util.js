@@ -98,11 +98,6 @@ function getReturnResolutions() {
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.returnInfo)
     && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig)
-    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig.resolutions)) {
-    resolutions = drupalSettings.onlineReturns.returnInfo.returnConfig.resolutions;
-  } else if (hasValue(drupalSettings.onlineReturns)
-    && hasValue(drupalSettings.onlineReturns.returnInfo)
-    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig)
     && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig[langcode].resolutions)) {
     resolutions = drupalSettings.onlineReturns.returnInfo.returnConfig[langcode].resolutions;
   }
