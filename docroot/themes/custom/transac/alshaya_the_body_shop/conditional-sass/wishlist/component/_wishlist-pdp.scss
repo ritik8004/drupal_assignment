@@ -1,0 +1,9 @@
+.wishlist-enabled {
+  &.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+    .wishlist-pdp-full {
+      @include breakpoint($desktop) {
+        #{$right}: rem(48);
+      }
+    }
+  }
+}
