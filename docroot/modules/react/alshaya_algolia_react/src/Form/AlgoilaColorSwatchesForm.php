@@ -38,10 +38,9 @@ class AlgoilaColorSwatchesForm extends ConfigFormBase {
       '#open' => TRUE,
     ];
     $form['plp_swatch_config']['enable_listing_page_color_swatch_slider'] = [
-      '#type' => 'radios',
+      '#type' => 'checkbox',
       '#title' => $this->t('Enable / Disable Swatch Slider'),
-      '#options' => [TRUE => $this->t('Enabled'), FALSE => $this->t('Disabled')],
-      '#default_value' => $config->get('enable_listing_page_color_swatch_slider') === FALSE ? 0 : 1,
+      '#default_value' => $config->get('enable_listing_page_color_swatch_slider'),
     ];
     $form['plp_swatch_config']['swatch_type'] = [
       '#type' => 'select',
