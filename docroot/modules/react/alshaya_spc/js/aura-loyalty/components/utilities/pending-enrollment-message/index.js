@@ -5,13 +5,11 @@ import { isMobile } from '../../../../../../js/utilities/display';
 import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 
 const PendingEnrollmentMessage = () => {
-  let message = null;
   const device = isMobile();
-  if (device) {
-    message = Drupal.t('To use your points online, please download the Aura MENA app and provide us with a few more details.', {}, { context: 'aura' });
-  } else {
-    message = parse(Drupal.t('To use your points online, please download the Aura MENA app available both on <strong>App Store</strong> and <strong>Play Store</strong>.', {}, { context: 'aura' }));
-  }
+  let message = null;
+
+  message = (device) ? Drupal.t('To use your points online, please download the Aura MENA app and provide us with a few more details.', {}, { context: 'aura' }) : parse(Drupal.t('To use your points online, please download the Aura MENA app available both on <strong>App Store</strong> and <strong>Play Store</strong>.', {}, { context: 'aura' }));
+
   return (
     <div className="spc-aura-pending-enrollment-message-wrapper">
       <div className="spc-aura-pending-enrollment-message">
