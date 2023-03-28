@@ -72,7 +72,7 @@
     attach: function (context, settings) {
       // Modal view for the free gift on PDP.
       $('.free-gift-promotions .free-gift-wrapper .free-gift-message a, a.free-gift-modal')
-        .once('free-gift-processed')
+        .once('free-gift-processed-pdp')
         .on('click',
           function openModalHandler(e) {
             // Stop redirection.

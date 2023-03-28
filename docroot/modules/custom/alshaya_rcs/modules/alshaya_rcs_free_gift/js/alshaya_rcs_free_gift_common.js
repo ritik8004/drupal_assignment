@@ -281,110 +281,115 @@
    *   Flag to check for product variants in case of configurable products.
    */
   window.commerceBackend.processFreeGiftDataReactRender = async function processFreeGiftDataReactRender (productInfo, checkForVariants = true) {
-    var skuItemCode = Object.keys(productInfo)[0];
-    // If product does not have any free gifts associated, then return.
-    if (!Drupal.hasValue(productInfo[skuItemCode].freeGiftPromotion)) {
-      return productInfo;
-    }
-    // Free gift info from API response.
-    var freeGiftApiData = productInfo[skuItemCode].freeGiftPromotion[0];
-    var promoUrl = Drupal.url(freeGiftApiData.rule_web_url);
-    var processedFreeGiftData = {};
-    var giftItemProductInfo = window.commerceBackend.fetchValidatedFreeGift(freeGiftApiData.gifts[0].sku);
-    var skuImage = window.commerceBackend.getFirstImage(giftItemProductInfo);
-    var skuImageUrl = Drupal.hasValue(skuImage) ? skuImage.url : drupalSettings.alshayaRcs.default_meta_image;
-    if (freeGiftApiData.total_items > 1
-      && freeGiftApiData.rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
-      // Load all the free gift items.
-      var freeGiftSkus = [];
-      freeGiftApiData.gifts.forEach((item) => {
-        freeGiftSkus.push(item.sku);
-      });
-      var data = {
-        freeGiftPromoUrl: promoUrl,
-        freeGiftSku: freeGiftSkus,
-        freeGiftPromotionTitle: freeGiftApiData.rule_name,
-        styleCode: giftItemProductInfo.style_code,
-      };
-      processedFreeGiftData['#theme'] = 'free_gift_promotion_list';
-      processedFreeGiftData['#message'] = [];
-      processedFreeGiftData['#message']['#type'] = 'markup';
-      processedFreeGiftData['#message']['#markup'] = handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_one_sku', data);
-      processedFreeGiftData['#title'] = [];
-      processedFreeGiftData['#title']['#type'] = 'markup';
-      processedFreeGiftData['#title']['#markup'] = freeGiftApiData.rule_name;
-      processedFreeGiftData['#promo_code'] = freeGiftApiData.coupon_code;
-      processedFreeGiftData['#free_sku_code'] = freeGiftSkus.toString();
-      processedFreeGiftData['#free_sku_type'] = 'simple';
-      processedFreeGiftData['#image'] = [];
-      processedFreeGiftData['#image']['#theme'] = 'image';
-      processedFreeGiftData['#image']['#uri'] = skuImageUrl;
-      processedFreeGiftData['#image']['#url'] = skuImageUrl;
-      processedFreeGiftData['#image']['#attributes'] = [];
-      processedFreeGiftData['#image']['#attributes'].src = skuImageUrl;
-      processedFreeGiftData['#image']['#attributes'].title = freeGiftApiData.gifts[0].name;
-      processedFreeGiftData['#image']['#attributes'].alt = freeGiftApiData.gifts[0].name;
-      processedFreeGiftData['#promo_type'] = freeGiftApiData.rule_type;
-      processedFreeGiftData['#coupon'] = [];
-      processedFreeGiftData['#coupon']['#type'] = 'markup';
-      processedFreeGiftData['#coupon']['#markup'] = handlebarsRenderer.render('product.promotion_free_gift_message_coupon_code', { freeGiftCoupon: freeGiftApiData.coupon_code });
-      processedFreeGiftData.coupon = freeGiftApiData.coupon_code;
-      processedFreeGiftData.promo_title = freeGiftApiData.rule_name;
-      processedFreeGiftData.promo_web_url = promoUrl;
-    } else if (freeGiftApiData.total_items > 0) {
-      processedFreeGiftData['#theme'] = 'free_gift_promotions';
-      processedFreeGiftData['#free_sku_entity_id'] = freeGiftApiData.gifts[0].id;
-      processedFreeGiftData['#free_sku_code'] = freeGiftApiData.gifts[0].sku;
-      processedFreeGiftData['#free_sku_type'] = 'simple';
-      processedFreeGiftData['#free_sku_title'] = handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_all_sku', {
-        freeGiftPromoUrl: promoUrl,
-        freeGiftSku: freeGiftApiData.gifts[0].sku,
-        freeGiftTitle: freeGiftApiData.gifts[0].name
-      });
-      processedFreeGiftData['#free_sku_title_raw'] = freeGiftApiData.gifts[0].name;
-      processedFreeGiftData['#promo_title'] = freeGiftApiData.rule_name;
-      processedFreeGiftData['#promo_code'] = [{value: freeGiftApiData.coupon_code}];
-      processedFreeGiftData['#promo_type'] = freeGiftApiData.rule_type;
-      processedFreeGiftData['#sku_image'] = handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_all_sku', {
-        freeGiftPromoUrl: promoUrl,
-        freeGiftSku: freeGiftApiData.gifts[0].sku,
-        freeGiftTitle: freeGiftApiData.gifts[0].name,
-        freeGiftImage: skuImageUrl
-      });
-      processedFreeGiftData.coupon = freeGiftApiData.coupon_code;
-      processedFreeGiftData.promo_title = freeGiftApiData.rule_name;
-      processedFreeGiftData.promo_web_url = promoUrl;
-    }
-    // Updating free gift promotion response from graphQl with react processable data.
-    productInfo[skuItemCode].freeGiftPromotion = processedFreeGiftData;
+    try {
+      var skuItemCode = Object.keys(productInfo)[0];
+      // If product does not have any free gifts associated, then return.
+      if (!Drupal.hasValue(productInfo[skuItemCode].freeGiftPromotion)) {
+        return productInfo;
+      }
+      // Free gift info from API response.
+      var freeGiftApiData = productInfo[skuItemCode].freeGiftPromotion[0];
+      var promoUrl = Drupal.url(freeGiftApiData.rule_web_url);
+      var processedFreeGiftData = {};
+      var giftItemProductInfo = window.commerceBackend.fetchValidatedFreeGift(freeGiftApiData.gifts[0].sku);
+      var skuImage = window.commerceBackend.getFirstImage(giftItemProductInfo);
+      var skuImageUrl = Drupal.hasValue(skuImage) ? skuImage.url : drupalSettings.alshayaRcs.default_meta_image;
+      if (freeGiftApiData.total_items > 1
+        && freeGiftApiData.rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+        // Load all the free gift items.
+        var freeGiftSkus = [];
+        freeGiftApiData.gifts.forEach((item) => {
+          freeGiftSkus.push(item.sku);
+        });
+        var data = {
+          freeGiftPromoUrl: promoUrl,
+          freeGiftSku: freeGiftSkus,
+          freeGiftPromotionTitle: freeGiftApiData.rule_name,
+          styleCode: giftItemProductInfo.style_code,
+        };
+        processedFreeGiftData['#theme'] = 'free_gift_promotion_list';
+        processedFreeGiftData['#message'] = [];
+        processedFreeGiftData['#message']['#type'] = 'markup';
+        processedFreeGiftData['#message']['#markup'] = handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_one_sku', data);
+        processedFreeGiftData['#title'] = [];
+        processedFreeGiftData['#title']['#type'] = 'markup';
+        processedFreeGiftData['#title']['#markup'] = freeGiftApiData.rule_name;
+        processedFreeGiftData['#promo_code'] = freeGiftApiData.coupon_code;
+        processedFreeGiftData['#free_sku_code'] = freeGiftSkus.toString();
+        processedFreeGiftData['#free_sku_type'] = 'simple';
+        processedFreeGiftData['#image'] = [];
+        processedFreeGiftData['#image']['#theme'] = 'image';
+        processedFreeGiftData['#image']['#uri'] = skuImageUrl;
+        processedFreeGiftData['#image']['#url'] = skuImageUrl;
+        processedFreeGiftData['#image']['#attributes'] = [];
+        processedFreeGiftData['#image']['#attributes'].src = skuImageUrl;
+        processedFreeGiftData['#image']['#attributes'].title = freeGiftApiData.gifts[0].name;
+        processedFreeGiftData['#image']['#attributes'].alt = freeGiftApiData.gifts[0].name;
+        processedFreeGiftData['#promo_type'] = freeGiftApiData.rule_type;
+        processedFreeGiftData['#coupon'] = [];
+        processedFreeGiftData['#coupon']['#type'] = 'markup';
+        processedFreeGiftData['#coupon']['#markup'] = handlebarsRenderer.render('product.promotion_free_gift_message_coupon_code', {freeGiftCoupon: freeGiftApiData.coupon_code});
+        processedFreeGiftData.coupon = freeGiftApiData.coupon_code;
+        processedFreeGiftData.promo_title = freeGiftApiData.rule_name;
+        processedFreeGiftData.promo_web_url = promoUrl;
+      } else if (freeGiftApiData.total_items > 0) {
+        processedFreeGiftData['#theme'] = 'free_gift_promotions';
+        processedFreeGiftData['#free_sku_entity_id'] = freeGiftApiData.gifts[0].id;
+        processedFreeGiftData['#free_sku_code'] = freeGiftApiData.gifts[0].sku;
+        processedFreeGiftData['#free_sku_type'] = 'simple';
+        processedFreeGiftData['#free_sku_title'] = handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_all_sku', {
+          freeGiftPromoUrl: promoUrl,
+          freeGiftSku: freeGiftApiData.gifts[0].sku,
+          freeGiftTitle: freeGiftApiData.gifts[0].name
+        });
+        processedFreeGiftData['#free_sku_title_raw'] = freeGiftApiData.gifts[0].name;
+        processedFreeGiftData['#promo_title'] = freeGiftApiData.rule_name;
+        processedFreeGiftData['#promo_code'] = [{value: freeGiftApiData.coupon_code}];
+        processedFreeGiftData['#promo_type'] = freeGiftApiData.rule_type;
+        processedFreeGiftData['#sku_image'] = handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_all_sku', {
+          freeGiftPromoUrl: promoUrl,
+          freeGiftSku: freeGiftApiData.gifts[0].sku,
+          freeGiftTitle: freeGiftApiData.gifts[0].name,
+          freeGiftImage: skuImageUrl
+        });
+        processedFreeGiftData.coupon = freeGiftApiData.coupon_code;
+        processedFreeGiftData.promo_title = freeGiftApiData.rule_name;
+        processedFreeGiftData.promo_web_url = promoUrl;
+      }
+      // Updating free gift promotion response from graphQl with react processable data.
+      productInfo[skuItemCode].freeGiftPromotion = processedFreeGiftData;
 
-    // For configurable products, also need to update all variant data with processed free gift data.
-    if (checkForVariants
-      && productInfo[skuItemCode].type === 'configurable'
-      && Drupal.hasValue(productInfo[skuItemCode].variants)
-    ) {
-      // Shorthand variable to process variants.
-      var variants = productInfo[skuItemCode].variants;
-      // Loop through each variant.
-      for (const variantSku of Object.keys(variants)) {
-        // Skip if variant does not have free gift.
-        if (Drupal.hasValue(variants[variantSku].freeGiftPromotion)) {
-          variants[variantSku].skuItemCode = variantSku;
-          // Recursive call to same function to process free gift data for variants in exactly same fashion.
-          var variantData = await window.commerceBackend.processFreeGiftDataReactRender(
-            {
-              [variantSku]: variants[variantSku],
-              skuItemCode: variantSku,
-            },
-            false
-          );
-          // Updating free gift promotion response from graphQl with react processable data for variants.
-          productInfo[skuItemCode].variants[variantSku] = variantData[variantSku];
+      // For configurable products, also need to update all variant data with processed free gift data.
+      if (checkForVariants
+        && productInfo[skuItemCode].type === 'configurable'
+        && Drupal.hasValue(productInfo[skuItemCode].variants)
+      ) {
+        // Shorthand variable to process variants.
+        var variants = productInfo[skuItemCode].variants;
+        // Loop through each variant.
+        for (const variantSku of Object.keys(variants)) {
+          // Skip if variant does not have free gift.
+          if (Drupal.hasValue(variants[variantSku].freeGiftPromotion)) {
+            variants[variantSku].skuItemCode = variantSku;
+            // Recursive call to same function to process free gift data for variants in exactly same fashion.
+            var variantData = await window.commerceBackend.processFreeGiftDataReactRender(
+              {
+                [variantSku]: variants[variantSku],
+                skuItemCode: variantSku,
+              },
+              false
+            );
+            // Updating free gift promotion response from graphQl with react processable data for variants.
+            productInfo[skuItemCode].variants[variantSku] = variantData[variantSku];
+          }
         }
       }
-    }
 
-    return productInfo;
+      return productInfo;
+    } catch (e) {
+      Drupal.logJavascriptError('free-gift-api-response-processing-error', e);
+      return productInfo;
+    }
   };
 
 })(jQuery, Drupal, drupalSettings);
