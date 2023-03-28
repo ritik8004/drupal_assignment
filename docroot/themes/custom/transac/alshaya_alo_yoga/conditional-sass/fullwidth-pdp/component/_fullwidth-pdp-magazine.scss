@@ -1,0 +1,21 @@
+body.magazine-layout-v2 {
+  .magv2-sidebar {
+    padding-#{$right}: 0;
+
+    @include breakpoint($only-mobile) {
+      @include sideSpaces(0);
+    }
+
+    &.sticky-element {
+      @include breakpoint($desktop-HiDPI) {
+        #{$right}: $full_width_padding_desktop;
+        max-width: calc((100% - #{$full_width_padding_desktop} * 2) * 0.28); // PDP sidebar width is 28%.
+      }
+
+      @include breakpoint($desktop-wide-1680) {
+        #{$right}: $full_width_padding_desktop_wide;
+        max-width: calc((100% - #{$full_width_padding_desktop_wide} * 2) * 0.28); // PDP sidebar width is 28%.
+      }
+    }
+  }
+}

@@ -1,5 +1,13 @@
-.super-category-enabled .c-menu-primary .mobile--menu {
-  left: 0;
+.block-alshaya-algolia-react-autocomplete #alshaya-algolia-autocomplete .react-autosuggest__input {
+  @include fullWidthSideSpaces(
+    $is_mobile: true,
+    $is_tablet: true,
+    $side: $left
+  );
+}
+
+.static-minicart-wrapper .quantity {
+  #{$left}: 0;
 }
 
 @include breakpoint($only-mobile) {

@@ -1,3 +1,33 @@
+.super-category-enabled .c-menu-primary .mobile--menu,
+.super-category-enabled .menu--active .mobile--close,
+.mobile--close {
+  #{$left}: 0;
+  padding-#{$left}: rem(4);
+}
+
+.c-menu-primary .mobile--menu {
+  padding-#{$left}: rem(4);
+}
+
+.visual-mobile-menu--one__list {
+  padding-#{$left}: $full_width_padding_mobile !important;
+}
+
+@include breakpoint($tablet) {
+  .super-category-enabled .c-menu-primary .mobile--menu,
+  .super-category-enabled .menu--active .mobile--close {
+    padding-#{$left}: rem(8);
+  }
+
+  .visual-mobile-menu--one__list {
+    padding-#{$left}: $full_width_padding_tablet !important;
+  }
+
+  .visual-mobile-level-two__link {
+    margin-#{$left}: $full_width_padding_tablet;
+  }
+}
+
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     ul.menu--one__list {
