@@ -5,7 +5,25 @@
  * Install, update and uninstall hooks for the Lightning Extender subprofile.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\File\FileSystemInterface;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update basic block content form display config.
+ */
+function alshaya_update_9403() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'core.entity_form_display.block_content.basic.default',
+      ],
+      'alshaya',
+      'install',
+      AlshayaConfigManager::MODE_MERGE
+    );
+}
 
 /**
  * Implements hook_update_n().
