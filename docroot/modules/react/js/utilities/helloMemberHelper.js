@@ -340,15 +340,9 @@ export const displayErrorMessage = (message) => <div className="hello-member-poi
 /**
  * Helper function to check benefits channel.
  */
-export const benefitChannel = (responseData) => {
-  switch (responseData.tag) {
-    case 'O':
-      return 'Omni';
-    case 'S':
-      return 'Store';
-    case 'E':
-      return 'Online';
-    default:
-      return null;
+export const getBenefitTag = (responseData) => {
+  if (hasValue(responseData) && hasValue(responseData.tag)) {
+    return responseData.tag;
   }
+  return null;
 };
