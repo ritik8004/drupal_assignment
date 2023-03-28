@@ -340,6 +340,7 @@ export default class CartItem extends React.Component {
         price,
         maxSaleQty,
         parentSKU,
+        extraInfo,
       },
     } = this.state;
     const cartImage = {
@@ -385,6 +386,17 @@ export default class CartItem extends React.Component {
       });
     }
 
+    // If a product is having fixedPrice (Which contains the special price of
+    // the product), then change the finalPrice of the product to 0.01 to apply
+    // discount. This case is only applicable for XB sites as of now.
+    let endPrice = finalPrice;
+    if (hasValue(extraInfo.fixedPrice)
+      && hasValue(finalPrice)
+      && finalPrice <= price) {
+      // @see Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator::buildPriceBlockSimple().
+      endPrice = '0.01';
+    }
+
     return (
       <div
         className={`spc-cart-item fadeInUp ${qtyLimitClass}`}
@@ -408,9 +420,10 @@ export default class CartItem extends React.Component {
                 <SpecialPrice
                   price={price}
                   freeItem={freeItem}
+                  fixedPrice={hasValue(extraInfo.fixedPrice) ? extraInfo.fixedPrice : ''}
                   /* If the exclusive promo/coupon is applied no other discount will
                   get applied and the original price value will be assigned as the final price. */
-                  finalPrice={hasExclusiveCoupon !== true ? finalPrice : price}
+                  finalPrice={hasExclusiveCoupon !== true ? endPrice : price}
                 />
               </div>
             </div>

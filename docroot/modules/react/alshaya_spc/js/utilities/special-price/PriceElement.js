@@ -2,7 +2,12 @@ import React from 'react';
 import { getAmountWithCurrency } from '../checkout_util';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
-const PriceElement = ({ amount: priceAmount, format, showZeroValue }) => {
+const PriceElement = ({
+  amount: priceAmount,
+  format,
+  showZeroValue,
+  fixedPrice = '',
+}) => {
   // If `showZeroValue` is true then we want to display 0 value
   // so skipping this condition which returns null for 0 value.
   if ((showZeroValue === undefined || showZeroValue === false)
@@ -27,11 +32,11 @@ const PriceElement = ({ amount: priceAmount, format, showZeroValue }) => {
   priceParts.currency = (<span key="currency" style={{ display: 'inline-block' }} className="price-currency suffix">{priceParts.currency}</span>);
 
   return (
-    <span className="price-wrapper">
-      <div className="price" dir="ltr">
+    <div className="price" dir="ltr" data-fp={fixedPrice}>
+      <span className="price-wrapper">
         {Object.values(priceParts)}
-      </div>
-    </span>
+      </span>
+    </div>
   );
 };
 
