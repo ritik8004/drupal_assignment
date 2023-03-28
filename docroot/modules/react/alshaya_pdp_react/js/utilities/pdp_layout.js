@@ -272,8 +272,7 @@ export const getProductValues = (productInfo, configurableCombinations,
         ? productInfo[skuItemCode].brandLogo.title : null;
     }
     // free gift promotion variable from parent sku.
-    if (productInfo[skuItemCode].freeGiftPromotion.length !== 0
-    ) {
+    if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
       freeGiftPromoType = productInfo[skuItemCode].freeGiftPromotion['#promo_type'];
       if (freeGiftPromoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
         freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#image'] || null;
@@ -327,8 +326,7 @@ export const getProductValues = (productInfo, configurableCombinations,
           expressDeliveryClass = variantInfo.expressDeliveryClass;
           eligibleForReturn = variantInfo.eligibleForReturn;
           // free gift promotion variable from variant sku.
-          if (productInfo[skuItemCode].freeGiftPromotion.length !== 0
-          ) {
+          if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
             freeGiftPromoType = variantInfo.freeGiftPromotion['#promo_type'];
             if (freeGiftPromoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
               freeGiftImage = variantInfo.freeGiftPromotion['#image']
