@@ -1,0 +1,6 @@
+@include breakpoint($only-mobile) {
+  .region__footer-secondary,
+  .footer_primary-right-block {
+    @include sideSpaces(0);
+  }
+}
