@@ -1,0 +1,15 @@
+display:
+  default:
+    display_options:
+      pager:
+        options:
+          tags:
+            next: 'التالي  ›'
+            previous: '‹ سابق'
+            first: '« أولاً'
+            last: 'آخر »'
+      empty:
+        area:
+          content:
+            value: "<p>لا يوجد نتائج لبحثك</p>\r\n"
+            format: full_text
