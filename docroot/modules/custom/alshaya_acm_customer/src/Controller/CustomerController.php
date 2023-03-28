@@ -506,6 +506,7 @@ class CustomerController extends ControllerBase {
         'Invoice_' . $time_format . '.pdf'
       );
       $response->headers->set('Content-Disposition', $disposition);
+      $response->headers->set('Content-type', 'application/pdf');
       return $response;
     }
 
