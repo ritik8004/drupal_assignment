@@ -1534,10 +1534,11 @@
     };
 
     // Push to productDetailView event if quick-view class exits.
-    if (productContext.classList !== undefined && productContext.classList.contains('quick-view')) {
+    // Check if productContext is Array.
+    let elementContext = productContext[0] ? productContext[0] : productContext;
+    if (elementContext.classList !== undefined && elementContext.classList.contains('quick-view')) {
       data.product_view_type = 'quick_view';
     }
-
     dataLayer.push(data);
   }
 
