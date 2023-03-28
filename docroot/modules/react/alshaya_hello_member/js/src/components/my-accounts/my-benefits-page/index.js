@@ -97,8 +97,6 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
-    myBenefit.tag = 'S';
-
     const benefitTag = getBenefitTag(myBenefit);
 
     return (
