@@ -40,6 +40,11 @@
         await window.commerceBackend.getProductLabels(mainProduct.sku));
     }
 
+    // If free gift is enabled, alter product data to support magv2 pdp free gifts.
+    // Check <PdpFreeGift> react component.
+    if (Drupal.hasValue(window.commerceBackend.processFreeGiftDataReactRender)) {
+      processedProduct = await window.commerceBackend.processFreeGiftDataReactRender(processedProduct);
+    }
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
   });

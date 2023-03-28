@@ -30,6 +30,8 @@ exports.computePhFilters = function (input, filter) {
           }
           // Set the first free gift title.
           data.freeGiftTitle = giftItems[0].name;
+        } else {
+          break;
         }
 
         // Do processing of free gift items.
@@ -46,7 +48,7 @@ exports.computePhFilters = function (input, filter) {
 
           // Render handlebars plugin.
           value = handlebarsRenderer.render(`product.${filter}_list`, data);
-        } else if (freeGiftPromotion.total_items > 0) {
+        } else {
           const freeGift = giftItems[0];
           data.freeGiftSku = freeGift.sku;
 

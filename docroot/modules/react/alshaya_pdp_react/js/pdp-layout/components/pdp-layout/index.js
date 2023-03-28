@@ -271,13 +271,6 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
-          {/* In V3, For PDP, Free gift will be rendered from alshaya_rcs_free_gift module.
-           Keeping empty free gift div to be filled up with handlebar html */ }
-          <ConditionalView condition={hasValue(drupalSettings.alshayaRcs)
-            && drupalSettings.rcsFreeGiftEnabled}
-          >
-            <div className="free-gift-promotions free-gift-promotions-full-view-mode" />
-          </ConditionalView>
           <ConditionalView condition={isExpressDeliveryEnabled()}>
             {/* Show PDP delivery labels for magazineV2 */}
             <div className="express-delivery active">
