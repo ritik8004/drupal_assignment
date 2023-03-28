@@ -31,7 +31,6 @@ class AlgoilaColorSwatchesForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_algolia_react.color_swatches');
-
     $form['plp_swatch_config'] = [
       '#type' => 'details',
       '#title' => $this->t('PLP/SLP Swatch config settings'),
@@ -71,9 +70,6 @@ class AlgoilaColorSwatchesForm extends ConfigFormBase {
       '#default_value' => $config->get('no_of_swatches_mobile'),
       '#description' => $this->t('Max number swatches to display upfront in PLP on mobile view followed by carousel.'),
     ];
-
-
-    dump($form['plp_swatch_config']['enable_listing_page_color_swatch_slider']);
 
     return parent::buildForm($form, $form_state);
   }
