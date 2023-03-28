@@ -29,13 +29,13 @@ const UnorderedList = (props) => {
       : option.label;
 
     // Get selected size label for GTM size click event.
-    // Set size in '{size_label}: {size_value}' format.
-    // Eg for VS brand, 'Band Size: 32', 'Cup Size: D'.
+    // Set size in '{size_attribute_name}: {size_value}'
+    // format eg for VS brand, 'band_size: 32', 'cup_size: D'.
     // If size goup is available we need to push the size
-    // group also eg for FL brand, 'Size: US,12'.
+    // group also eg for FL brand 'size_shoe_eu: UK, 8.5'.
     const selectedOptionLabel = isGroup
-      ? `${label}: ${groupData.defaultGroup}, ${optionLabel}`
-      : `${label}: ${optionLabel}`;
+      ? `${attributeName}: ${groupData.defaultGroup}, ${optionLabel}`
+      : `${attributeName}: ${optionLabel}`;
 
     if (allowedValues.length > 0
       && !allowedValues.includes(option.value)

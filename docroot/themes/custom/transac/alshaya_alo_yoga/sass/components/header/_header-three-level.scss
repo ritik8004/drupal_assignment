@@ -11,6 +11,27 @@
           max-width: rem(192);
         }
       }
+
+      // Adding a separator line to all columns except the first one.
+      .column:not(:nth-child(2)),
+      .highlights {
+        position: relative;
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          #{$left}: rem(-16);
+          // Matching the height of the line with the tallest column in the menu.
+          height: calc(100% - #{rem(40)});
+          width: rem(1);
+          background-color: $primary_border;
+        }
+      }
+
+      .highlights::before {
+        #{$left}: rem(-28);
+      }
     }
 
     .menu--three__list-item {

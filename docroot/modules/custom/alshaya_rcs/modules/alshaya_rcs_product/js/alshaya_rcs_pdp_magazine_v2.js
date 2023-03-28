@@ -45,6 +45,7 @@
     if (Drupal.hasValue(window.commerceBackend.processFreeGiftDataReactRender)) {
       processedProduct = await window.commerceBackend.processFreeGiftDataReactRender(processedProduct);
     }
+
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
   });

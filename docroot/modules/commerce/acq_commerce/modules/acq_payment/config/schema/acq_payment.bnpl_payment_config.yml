@@ -1,0 +1,7 @@
+alshaya_acm.cart_config:
+  type: config_object
+  label: 'Alshaya BNPL Method Config'
+  mapping:
+    bnpl_payment_methods:
+      type: string
+      label: 'BNPL method names'

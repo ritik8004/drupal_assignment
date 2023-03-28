@@ -18,3 +18,8 @@ services:
     public: false
     class: Drupal\alshaya_master\Decorator\AlshayaFormAjaxResponseBuilder
     arguments: ['@main_content_renderer.ajax', '@current_route_match']
+
+  alshaya_master.data_export_subscriber:
+    class: Drupal\alshaya_master\EventSubscriber\DataExportResponseEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }

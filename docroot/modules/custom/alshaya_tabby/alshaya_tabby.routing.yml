@@ -1,0 +1,7 @@
+alshaya_tabby.tabby_config:
+  path: '/admin/config/alshaya/tabby'
+  defaults:
+    _form: '\Drupal\alshaya_tabby\Form\AlshayaTabbySettingsForm'
+    _title: 'Alshaya Tabby Configurations'
+  requirements:
+    _permission: 'administer site configuration'
