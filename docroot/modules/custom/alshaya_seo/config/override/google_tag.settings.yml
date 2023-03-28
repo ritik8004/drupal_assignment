@@ -11,7 +11,7 @@ role_list:
   reviewer: '0'
   seo_admin: '0'
 status_toggle: 'exclude listed'
-status_list: "403"
+status_list: "403\n404"
 compact_snippet: true
 debug_output: false
 data_layer: dataLayer
