@@ -4,9 +4,7 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import {
   callHelloMemberApi,
   getHelloMemberCustomerInfo,
-  isBenefitChannelOmni,
-  isBenefitChannelStore,
-  isBenefitChannelOnline,
+  benefitChannel,
 } from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import QrCodeDisplay from '../my-membership/qr-code-display';
@@ -119,7 +117,7 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          {(isBenefitChannelOmni(myBenefit) || isBenefitChannelStore(myBenefit))
+          {(benefitChannel(myBenefit) === 'Omni' || benefitChannel(myBenefit) === 'Store')
             ? (
               <QrCodeDisplay
                 benefitName={myBenefit.description}
@@ -132,7 +130,7 @@ class MyBenefitsPage extends React.Component {
               />
             )
             : null}
-          {((isBenefitChannelOmni(myBenefit) || isBenefitChannelOnline(myBenefit)))
+          {(benefitChannel(myBenefit) === 'Omni' || benefitChannel(myBenefit) === 'Online')
             ? (
               <AddBenefitsToCart
                 title={myBenefit.description}

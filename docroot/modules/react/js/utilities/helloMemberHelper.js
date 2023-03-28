@@ -338,34 +338,17 @@ export const setHelloMemberLoyaltyCard = async (identifierNo, quoteId) => {
 export const displayErrorMessage = (message) => <div className="hello-member-points-wrapper"><div className="hello-member-downtime-message">{ message }</div></div>;
 
 /**
- * Helper function to check benefits channel is Omni.
+ * Helper function to check benefits channel.
  */
-export const isBenefitChannelOmni = (responseData) => {
-  if (hasValue(responseData.tag) && hasValue(responseData.tagName)
-    && responseData.tag === 'O' && responseData.tagName === 'Omni') {
-    return true;
+export const benefitChannel = (responseData) => {
+  switch (responseData.tag) {
+    case 'O':
+      return 'Omni';
+    case 'S':
+      return 'Store';
+    case 'E':
+      return 'Online';
+    default:
+      return null;
   }
-  return false;
-};
-
-/**
- * Helper function to check benefits channel is Store.
- */
-export const isBenefitChannelStore = (responseData) => {
-  if (hasValue(responseData.tag) && hasValue(responseData.tagName)
-    && responseData.tag === 'S' && responseData.tagName === 'Store') {
-    return true;
-  }
-  return false;
-};
-
-/**
- * Helper function to check benefits channel is Online.
- */
-export const isBenefitChannelOnline = (responseData) => {
-  if (hasValue(responseData.tag) && hasValue(responseData.tagName)
-    && responseData.tag === 'E' && responseData.tagName === 'Online') {
-    return true;
-  }
-  return false;
 };
