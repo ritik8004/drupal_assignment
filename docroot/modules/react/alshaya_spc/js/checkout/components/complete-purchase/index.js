@@ -114,8 +114,9 @@ export default class CompletePurchase extends React.Component {
     // Validate the booking is expired and show error accordingly.
     if (hasValue(cart.cart.hfd_hold_confirmation_number)) {
       // Check if the hold appointment for user is valid.
-      const bookingDetails = await
-      getBookingDetailByConfirmationNumber(cart.cart.hfd_hold_confirmation_number);
+      const bookingDetails = getBookingDetailByConfirmationNumber(
+        cart.cart.hfd_hold_confirmation_number,
+      );
       // Check if success return false,
       if (!hasValue(bookingDetails.status) && bookingDetails.error_code === 0) {
         dispatchCustomEvent('validateOnlineBookingPurchase', {
