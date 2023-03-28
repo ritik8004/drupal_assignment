@@ -1,7 +1,11 @@
 import HTMLReactParser from 'html-react-parser';
 import React from 'react';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
-import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
+import {
+  callHelloMemberApi,
+  getHelloMemberCustomerInfo,
+  getBenefitTag,
+} from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
@@ -93,6 +97,8 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
+    const benefitTag = getBenefitTag(myBenefit);
+
     return (
       <div className="my-benefit-page-wrapper">
         <div className="image-container">
@@ -113,21 +119,27 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          <QrCodeDisplay
-            benefitName={myBenefit.description}
-            benefitType={promotionType}
-            memberId={myBenefit.member_identifier}
-            qrCodeTitle={qrCodeTitle}
-            codeId={couponId || codeId}
-            width={79}
-            memberTitle={getStringMessage('redeem_in_store')}
-          />
-          <AddBenefitsToCart
-            title={myBenefit.description}
-            codeId={codeId}
-            offerType={offerType}
-            promotionType={promotionType}
-          />
+          {hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')
+            && (
+              <QrCodeDisplay
+                benefitName={myBenefit.description}
+                benefitType={promotionType}
+                memberId={myBenefit.member_identifier}
+                qrCodeTitle={qrCodeTitle}
+                codeId={couponId || codeId}
+                width={79}
+                memberTitle={getStringMessage('redeem_in_store')}
+              />
+            )}
+          {hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'E')
+            && (
+              <AddBenefitsToCart
+                title={myBenefit.description}
+                codeId={codeId}
+                offerType={offerType}
+                promotionType={promotionType}
+              />
+            )}
         </div>
         <div className="benefit-description">
           {(hasValue(myBenefit.applied_conditions)) ? HTMLReactParser(myBenefit.applied_conditions) : ''}
