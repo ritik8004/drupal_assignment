@@ -41,7 +41,7 @@ class AlgoilaColorSwatchesForm extends ConfigFormBase {
     $form['plp_swatch_config']['enable_listing_page_color_swatch_slider'] = [
       '#type' => 'radios',
       '#title' => $this->t('Enable / Disable Swatch Slider'),
-      '#options' => [1 => $this->t('Enabled'), 0 => $this->t('Disabled')],
+      '#options' => [TRUE => $this->t('Enabled'), FALSE => $this->t('Disabled')],
       '#default_value' => $config->get('enable_listing_page_color_swatch_slider') === FALSE ? 0 : 1,
     ];
     $form['plp_swatch_config']['swatch_type'] = [
@@ -71,6 +71,9 @@ class AlgoilaColorSwatchesForm extends ConfigFormBase {
       '#default_value' => $config->get('no_of_swatches_mobile'),
       '#description' => $this->t('Max number swatches to display upfront in PLP on mobile view followed by carousel.'),
     ];
+
+
+    dump($form['plp_swatch_config']['enable_listing_page_color_swatch_slider']);
 
     return parent::buildForm($form, $form_state);
   }
