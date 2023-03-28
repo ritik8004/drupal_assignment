@@ -97,6 +97,8 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
+    const benefitTag = getBenefitTag(myBenefit);
+
     return (
       <div className="my-benefit-page-wrapper">
         <div className="image-container">
@@ -117,7 +119,7 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          {(getBenefitTag(myBenefit) === 'O' || getBenefitTag(myBenefit) === 'S')
+          {hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')
             ? (
               <QrCodeDisplay
                 benefitName={myBenefit.description}
@@ -130,7 +132,7 @@ class MyBenefitsPage extends React.Component {
               />
             )
             : null}
-          {(getBenefitTag(myBenefit) === 'O' || getBenefitTag(myBenefit) === 'E')
+          {hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'E')
             ? (
               <AddBenefitsToCart
                 title={myBenefit.description}
