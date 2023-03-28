@@ -13,6 +13,14 @@
   padding-#{$left}: $full_width_padding_mobile !important;
 }
 
+#aura-mobile-header-shop:not(:empty) .aura-header-popup-wrapper.sign-up-complete,
+#aura-mobile-header-signin-register:not(:empty) .aura-header-popup-wrapper.sign-up-complete {
+  @include fullWidthSideSpaces(
+    $is_mobile: true,
+    $is_tablet: true,
+  );
+}
+
 @include breakpoint($tablet) {
   .super-category-enabled .c-menu-primary .mobile--menu,
   .super-category-enabled .menu--active .mobile--close {
@@ -24,7 +32,10 @@
   }
 
   .visual-mobile-level-two__link {
-    margin-#{$left}: $full_width_padding_tablet;
+    @include sideSpaces(
+      $value: $full_width_padding_tablet,
+      $type: "margin"
+    );
   }
 }
 
