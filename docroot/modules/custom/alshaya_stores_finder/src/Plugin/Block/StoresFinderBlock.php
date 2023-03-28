@@ -9,6 +9,9 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides stores finder block.
@@ -28,6 +31,13 @@ class StoresFinderBlock extends BlockBase implements ContainerFactoryPluginInter
   protected $routeMatch;
 
   /**
+   * Stores the configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -38,13 +48,17 @@ class StoresFinderBlock extends BlockBase implements ContainerFactoryPluginInter
    *   The plugin implementation definition.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              RouteMatchInterface $route_match) {
+                              RouteMatchInterface $route_match,
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -55,7 +69,8 @@ class StoresFinderBlock extends BlockBase implements ContainerFactoryPluginInter
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('config.factory')
     );
   }
 
@@ -116,6 +131,24 @@ class StoresFinderBlock extends BlockBase implements ContainerFactoryPluginInter
    */
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(
+      parent::getCacheTags(),
+      $this->configFactory->get('alshaya_stores_finder.settings')->getCacheTags(),
+      $this->configFactory->get('alshaya_geolocation.settings')->getCacheTags(),
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function blockAccess(AccountInterface $account) {
+    return AccessResult::allowedIf($this->configFactory->get('alshaya_stores_finder.settings')->get('stores_finder_page_status'));
   }
 
 }

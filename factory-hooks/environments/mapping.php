@@ -31,18 +31,14 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
   if (isset($env_keys['conductor']) && isset($conductors[$env_keys['conductor']])) {
     $settings['acq_commerce.conductor'] = $conductors[$env_keys['conductor']];
   }
+  // Add default magento settings.
+  $settings += $magentos['default'][$country_code];
+  // Add site specific magento settings.
   if (isset($env_keys['magento']) && isset($magentos[$env_keys['magento']])) {
-    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']]['url'];
-
     // Use the Magento ENV key by default but allow overriding it.
     // @todo make it a configuration instead of Setting.
     $settings['algolia_env'] = $magentos[$env_keys['magento']]['algolia_env'] ?? $env_keys['magento'];
 
-    if (isset($magentos[$env_keys['magento']]['magento_secrets'])) {
-      $settings['alshaya_api.settings'] += $magentos[$env_keys['magento']]['magento_secrets'];
-    }
-
-    $settings += $magentos['default'][$country_code];
     if (isset($magentos[$env_keys['magento']][$country_code])) {
       $settings = array_replace_recursive($settings, $magentos[$env_keys['magento']][$country_code]);
     }

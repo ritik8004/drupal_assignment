@@ -47,7 +47,13 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
   }
 
   /**
-   * {@inheritDoc}
+   * Get product reviews URL.
+   *
+   * @param string $product_id
+   *   Product ID.
+   *
+   * @return array|null
+   *   Product reviews URL.
    */
   public function getProductReviewSchema(string $product_id) {
     static $response = [];

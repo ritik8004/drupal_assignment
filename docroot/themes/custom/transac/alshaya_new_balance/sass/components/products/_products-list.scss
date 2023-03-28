@@ -28,10 +28,6 @@
         position: absolute;
         z-index: 1;
 
-        &.top-left {
-          width: rem(51);
-        }
-
         &.bottom-right {
           #{$right}: rem(13);
           bottom: rem(13);
@@ -155,10 +151,6 @@
         }
 
         .labels-container {
-          &.top-left {
-            width: rem(78);
-          }
-
           &.bottom-right {
             #{$right}: rem(24);
             bottom: rem(24);

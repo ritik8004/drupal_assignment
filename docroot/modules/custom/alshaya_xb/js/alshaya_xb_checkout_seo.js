@@ -4,6 +4,53 @@
  */
 
 (function (Drupal, dataLayer) {
+
+  /**
+   * Checks if all mandatory address fields are filled.
+   *
+   * @param {object} geData
+   *   The Global-e data.
+   *
+   * @return {boolean}
+   *   Returns true if all mandatory address are filled.
+   */
+  Drupal.isXbAddressAvailable = function (geData) {
+    var shippingAddress = geData.details.CustomerDetails.ShippingAddress;
+    var mandatoryAddressFields = [
+      'ShippingFirstName',
+      'ShippingLastName',
+      'ShippingAddress1',
+      'ShippingCity',
+      'ShippingZipCode',
+      'ShippingPhoneNumber'
+    ];
+    for (let i =0; i < mandatoryAddressFields.length; i++) {
+      if (!Drupal.hasValue(shippingAddress[mandatoryAddressFields[i]])) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  /**
+   * Returns product attribute.
+   *
+   * @param {object} product
+   *  GE product object.
+   * @param {string} key
+   *  Product attribute key.
+   *
+   * @return {string}
+   *   Returns attribute value.
+   */
+  Drupal.getProductMetadata = function (product, key) {
+    for (let i = 0; i < product.MetaData.length; i++) {
+      if (product.MetaData[i].AttributeKey === key) {
+        return product.MetaData[i].AttributeValue;
+      }
+    }
+  };
+
   /**
    * Pushes Global-e data to Datalayer.
    *
@@ -31,7 +78,11 @@
           break;
 
         case 4:
-          const purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
+          // Push step 4 checkout data to data layer.
+          var cartData = Drupal.mapGlobaleStep4Data(geData);
+          dataLayer.push(cartData);
+
+          var purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
           if (purchaseSuccessData) {
             dataLayer.push(purchaseSuccessData);
           }
@@ -42,6 +93,91 @@
       Drupal.logJavascriptError("Alshaya XB Checkout", error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
   };
+
+  /**
+   * Helper function to map the Global-e checkout data to step 4 gtm data.
+   *
+   * @param {object} geData
+   *   Global-e checkout data.
+   *
+   * @return {object}
+   *   The cart data object.
+   */
+  Drupal.mapGlobaleStep4Data = function (geData) {
+
+    // Process product data.
+    let productSku = [];
+    let productStyleCode = [];
+    let cartItemsCount = 0;
+    let productGtm = [];
+    let cartItemsFlocktory = [];
+    if (geData.details.ProductInformation) {
+      Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
+        var product = productItem[1];
+        var productGtmData = {
+          "quantity" : product.Quantity,
+          "name" : product.ProductName,
+          "id" : product.ProductGroupCode,
+          "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice,
+          "brand" : product.Brand,
+          "category" : Drupal.getProductMetadata(product, 'category'),
+          "variant" : product.SKU,
+          "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
+          "dimension3" : (product.ProductPrices.MerchantTransaction.TotalPrice !== product.ProductPrices.MerchantTransaction.DiscountedPrice) ? 'Discounted Product' : 'Regular Product',
+          "dimension4" : Drupal.getProductMetadata(product, 'dimension4'),
+          "productOldPrice" : product.ProductPrices.MerchantTransaction.ListPrice,
+        };
+        productGtm.push(productGtmData);
+        productSku.push(product.SKU);
+        productStyleCode.push(product.ProductGroupCode);
+        cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
+        let cartItem = {
+          "id" : product.ProductGroupCode,
+          "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice,
+          "count" : product.Quantity,
+          "title" : product.ProductName,
+          "image" : '', // @todo get product media from global-e.
+        };
+        cartItemsFlocktory.push(cartItem);
+      });
+    }
+
+    return {
+      "language": drupalSettings.gtm.language,
+      "country": drupalSettings.gtm.country,
+      "currency": drupalSettings.gtm.currency,
+      "pageType": drupalSettings.gtm.pageType,
+      "event": 'checkout',
+      "ecommerce": {
+        "currencyCode" : drupalSettings.gtm.currency,
+        "checkout": {
+          "currencyCode": geData.details.MerchantCurrencyCode,
+          "purchase": {
+            "actionField": {
+              "step": geData.StepId,
+              "action": "checkout",
+            },
+            "products": [
+              productGtm
+            ]
+          }
+        },
+      },
+      // Click and collect is not available on XB sites.
+      "deliveryOption" : 'Home Delivery',
+      "deliveryType" : geData.details.ShippingMethodType,
+      "deliveryCity" : geData.details.CustomerDetails.ShippingAddress.ShippingCity,
+      "deliveryArea" : geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion,
+      "privilegeCustomer": drupalSettings.userDetails.privilegeCustomer ? 'Privilege Customer' : 'Regular Customer',
+      "privilegesCardNumber": null, // @todo We need to ask Global-e to get this information.
+      "productSKU" : productSku,
+      "productStyleCode" : productStyleCode,
+      "cartTotalValue" : geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency,
+      "cartItemsCount" : cartItemsCount,
+      "cartItemsFlocktory" : cartItemsFlocktory,
+      "paymentOption" : geData.details.PaymentMethods[0].PaymentMethodTypeName,
+    };
+  }
 
   /**
    * Helper function to map the Global-e checkout data to cart data.
@@ -57,8 +193,8 @@
     let cartItemsCount = 0;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
-        const product = productItem[1];
-        const productGtmData = {
+        var product = productItem[1];
+        var productGtmData = {
           "item_id": product.CartItemId,
           "sku": product.SKU,
           "qty": product.Quantity,
@@ -125,18 +261,19 @@
     let productSku = [];
     let productStyleCode = [];
     let discountAmount = 0;
+    let firstTimeTransaction = null;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
-        const product = productItem[1];
-        const productGtmData = {
+        var product = productItem[1];
+        var productGtmData = {
           "name": product.ProductName,
           "id": product.CartItemId,
           "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency,
           "brand": product.Brand,
-          "category": null, // @todo We need to ask Global-e to get this information.
+          "category": Drupal.getProductMetadata(product, 'category'),
           "variant": product.ProductGroupCode,
-          "dimension2": null, // @todo This is not directly coming from global-e. We need to find a way to get this value.
-          "dimension4": null, // @todo This is not directly coming from global-e. We need to find a way to get this value.
+          "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
+          "dimension4" : Drupal.getProductMetadata(product, 'dimension4'),
           "dimension3": (product.ProductPrices.MerchantTransaction.TotalPrice !== product.ProductPrices.MerchantTransaction.DiscountedPrice) ? 'Discounted Product' : 'Regular Product',
           "quantity": product.Quantity
         };
@@ -145,6 +282,7 @@
         productStyleCode.push(product.ProductGroupCode);
         cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
         discountAmount = product.ProductPrices.MerchantTransaction.DiscountedPrice;
+        firstTimeTransaction = Drupal.getProductMetadata(product, 'firstTimeTransaction');
       });
     }
 
@@ -161,7 +299,7 @@
       "discountAmount": discountAmount,
       "transactionId": geData.OrderId,
       "globaleId": geData.OrderId,
-      "firstTimeTransaction": null, // @todo We need to expose this via drupalSettings.
+      "firstTimeTransaction": firstTimeTransaction || true,
       "privilegesCardNumber": null, // @todo We need to ask Global-e to get this information.
       "loyaltyType": null, // @todo We need to ask Global-e to get this information.
       "rewardType": null, // @todo We need to ask Global-e to get this information.
