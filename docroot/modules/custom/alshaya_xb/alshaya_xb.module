@@ -278,3 +278,11 @@ function alshaya_xb_sku_product_info_alter(array &$product_info, SKUInterface $s
     $product_info['extraInfo']['fixedPrice'] = $sku->get('attr_fixed_price')->getString();
   }
 }
+
+/**
+ * Implements hook_dynamic_yield_context_alter().
+ */
+function alshaya_xb_dynamic_yield_context_alter(&$lng) {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $lng = $langcode . '_XB';
+}
