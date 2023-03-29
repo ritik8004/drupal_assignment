@@ -551,6 +551,10 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'سجّل النقاط',
         'context' => 'hello_member',
       ],
+      'Enter now' => [
+        'ar' => 'أدخل الأن',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }
