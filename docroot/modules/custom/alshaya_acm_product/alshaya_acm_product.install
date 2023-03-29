@@ -27,8 +27,6 @@ function alshaya_acm_product_update_9405() {
     AlshayaConfigManager::MODE_MERGE
   );
   \Drupal::service('acq_sku.fields_manager')->addFields();
-  // Re-indexing all the products.
-  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
