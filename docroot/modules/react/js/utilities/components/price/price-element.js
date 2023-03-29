@@ -19,11 +19,11 @@ const PriceElement = ({
   ];
 
   return (
-    <span className="price-wrapper">
-      <div className="price" data-fp={fixedPrice}>
+    <div className="price" data-fp={fixedPrice}>
+      <span className="price-wrapper">
         {drupalSettings.reactTeaserView.price.currencyPosition === 'before' ? priceParts : priceParts.reverse()}
-      </div>
-    </span>
+      </span>
+    </div>
   );
 };
 
