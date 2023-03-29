@@ -1,20 +1,25 @@
 import algoliasearch from 'algoliasearch/lite';
 
+// Adding _useRequestCache parameter to avoid duplicate requests on Facet filters and sort orders.
 export const searchClient = algoliasearch(
   drupalSettings.algoliaSearch.application_id,
-  drupalSettings.algoliaSearch.api_key,
+  drupalSettings.algoliaSearch.api_key, {
+    _useRequestCache: true,
+  },
 );
 export const algoliaSearchClient = {
   search(requests) {
     const searchRequest = requests;
-    // removing tagFilters for PLP pages and whishlist Pages
-    if ('tagFilters' in searchRequest[0].params) {
-      delete searchRequest[0].params.tagFilters;
-    }
-    // Remove maxValuesPerFacet from all search quesries for PLP and whislist.
-    if ('maxValuesPerFacet' in searchRequest[0].params) {
-      delete searchRequest[0].params.maxValuesPerFacet;
-    }
+    searchRequest.forEach((request) => {
+      // Remove tagFilters from all search queries.
+      if ('tagFilters' in request.params) {
+        delete request.params.tagFilters;
+      }
+      // Remove maxValuesPerFacet from all search quesries.
+      if ('maxValuesPerFacet' in request.params) {
+        delete request.params.maxValuesPerFacet;
+      }
+    });
     return searchClient.search(searchRequest);
   },
 };
