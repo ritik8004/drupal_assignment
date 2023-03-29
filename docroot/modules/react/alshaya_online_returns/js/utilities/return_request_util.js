@@ -101,6 +101,11 @@ function getReturnResolutions() {
     && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig[langcode])
     && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig[langcode].resolutions)) {
     resolutions = drupalSettings.onlineReturns.returnInfo.returnConfig[langcode].resolutions;
+  } else if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.return_config)
+    && hasValue(drupalSettings.onlineReturns.return_config[langcode])
+    && hasValue(drupalSettings.onlineReturns.return_config[langcode].resolutions)) {
+    resolutions = drupalSettings.onlineReturns.return_config[langcode].resolutions;
   }
 
   return resolutions;
