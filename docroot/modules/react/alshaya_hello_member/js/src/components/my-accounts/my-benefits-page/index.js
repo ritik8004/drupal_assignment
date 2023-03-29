@@ -97,6 +97,9 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
+    myBenefit.tag = 'C';
+    myBenefit.benefit_url = 'https://hmkw.alshaya.lndo.site';
+
     const benefitTag = getBenefitTag(myBenefit);
 
     return (
@@ -144,11 +147,7 @@ class MyBenefitsPage extends React.Component {
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
             && (
               <a href={`${myBenefit.benefit_url}?email="${drupalSettings.userDetails.userEmailID}"`}>
-                {Drupal.t(
-                  'Enter now',
-                  {},
-                  { context: 'hello_member' },
-                )}
+                {Drupal.t('Enter now', {}, { context: 'hello_member' })}
               </a>
             )}
         </div>
