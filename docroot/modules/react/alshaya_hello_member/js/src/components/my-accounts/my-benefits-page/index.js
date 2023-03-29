@@ -140,6 +140,16 @@ class MyBenefitsPage extends React.Component {
                 promotionType={promotionType}
               />
             )}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
+            && (
+              <a href={myBenefit.benefit_url}>
+                {Drupal.t(
+                  'Learn more',
+                  {},
+                  { context: 'aura' },
+                )}
+              </a>
+            )}
         </div>
         <div className="benefit-description">
           {(hasValue(myBenefit.applied_conditions)) ? HTMLReactParser(myBenefit.applied_conditions) : ''}
