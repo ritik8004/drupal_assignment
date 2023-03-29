@@ -18,7 +18,8 @@ class AccessCheckController extends ControllerBase {
    */
   public function accessCheck() {
     // Allow access to the routes only if the store finder status is set.
-    return AccessResult::allowedIf($this->config('alshaya_geolocation.settings')->get('geolocation_enabled'));
+    return AccessResult::allowedIf($this->config('alshaya_geolocation.settings')->get('geolocation_enabled'))
+      ->addCacheableDependency($this->config('alshaya_geolocation.settings'));
   }
 
 }
