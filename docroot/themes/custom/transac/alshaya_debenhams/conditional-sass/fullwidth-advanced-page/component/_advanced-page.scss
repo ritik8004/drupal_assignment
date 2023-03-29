@@ -1,0 +1,5 @@
+@include breakpoint($tablet) {
+  .nodetype--advanced_page .l-one--w .term-description-mobile-only {
+    @include sideSpaces(0);
+  }
+}
