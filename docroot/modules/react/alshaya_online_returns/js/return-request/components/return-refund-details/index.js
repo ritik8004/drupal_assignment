@@ -49,7 +49,8 @@ class ReturnRefundDetails extends React.Component {
               const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
               unlinkedResult.then((unlinkresponse) => {
                 if (!hasValue(unlinkresponse.data.card_list)
-                  || (hasValue(paymentInfo.cashondelivery.payment_type)
+                  || (typeof paymentInfo.cashondelivery !== 'undefined'
+                  && hasValue(paymentInfo.cashondelivery.payment_type)
                   && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
                   this.setState({
                     egiftCardType: true,
