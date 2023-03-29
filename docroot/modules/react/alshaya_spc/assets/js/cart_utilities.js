@@ -320,6 +320,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       'isNonRefundable': data.isNonRefundable,
       'stock': data.stock,
       'cncEnabled': data.cncEnabled,
+      'extraInfo': Drupal.hasValue(data.extraInfo) ? data.extraInfo : null,
     };
 
     // Add product data in local storage with expiration time.

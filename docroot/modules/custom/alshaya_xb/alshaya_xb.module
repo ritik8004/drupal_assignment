@@ -8,6 +8,7 @@
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\TypedData\Exception\ReadOnlyException;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_page_attachments().
@@ -264,4 +265,22 @@ function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$orde
     // Update refund total for product.
     $item['total'] = alshaya_acm_price_format($item['refund_amount'], [], '', $order['order_currency_code']);
   }
+}
+
+/**
+ * Implements hook_sku_product_info_alter().
+ */
+function alshaya_xb_sku_product_info_alter(array &$product_info, SKUInterface $sku) {
+  // Get the fixed price info from the SKU.
+  if ($sku->hasField('attr_fixed_price')) {
+    $product_info['extraInfo']['fixedPrice'] = $sku->get('attr_fixed_price')->getString();
+  }
+}
+
+/**
+ * Implements hook_dynamic_yield_context_alter().
+ */
+function alshaya_xb_dynamic_yield_context_alter(&$lng) {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $lng = $langcode . '_XB';
 }

@@ -108,7 +108,8 @@ class ConfigurableProductDrawer extends React.Component {
     // the product), then change the finalPrice of the product to 0.01 to apply
     // discount. This case is only applicable for XB sites as of now.
     let endPrice = finalPrice;
-    if (hasValue(extraInfo.fixedPrice)
+    if (hasValue(extraInfo)
+      && hasValue(extraInfo.fixedPrice)
       && hasValue(finalPrice)
       && finalPrice <= originalPrice) {
       // @see Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator::buildPriceBlockSimple().
@@ -152,7 +153,7 @@ class ConfigurableProductDrawer extends React.Component {
             <Price
               price={originalPrice}
               finalPrice={endPrice}
-              fixedPrice={hasValue(extraInfo.fixedPrice) ? extraInfo.fixedPrice : ''}
+              fixedPrice={(hasValue(extraInfo) && hasValue(extraInfo.fixedPrice)) ? extraInfo.fixedPrice : ''}
             />
             <ConditionalView condition={vatText !== ''}>
               <div className="vat-text">{vatText}</div>
