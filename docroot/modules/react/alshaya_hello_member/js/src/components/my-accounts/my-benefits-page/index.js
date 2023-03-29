@@ -140,6 +140,7 @@ class MyBenefitsPage extends React.Component {
                 promotionType={promotionType}
               />
             )}
+          {/* CTA for competition benefits. */}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
             && (
               <a href={`${myBenefit.benefit_url}?email="${drupalSettings.userDetails.userEmailID}"`}>
