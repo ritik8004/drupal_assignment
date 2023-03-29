@@ -97,9 +97,6 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
-    myBenefit.tag = 'C';
-    myBenefit.benefit_url = 'https://hmkw.alshaya.lndo.site';
-
     const benefitTag = getBenefitTag(myBenefit);
 
     return (
