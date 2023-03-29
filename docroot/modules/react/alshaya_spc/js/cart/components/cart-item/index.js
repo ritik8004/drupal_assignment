@@ -27,7 +27,7 @@ import WishlistContainer from '../../../../../js/utilities/components/wishlist-c
 import WishlistPopupBlock from '../../../wishlist/components/popup-block';
 import { getDeliveryAreaStorage } from '../../../utilities/delivery_area_util';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
-import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
+import { getSiteWiseFixedPrice, isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
@@ -386,16 +386,18 @@ export default class CartItem extends React.Component {
       });
     }
 
+    let siteWiseFixedPrice = '';
+    if (hasValue(extraInfo.fixedPrice)) {
+      siteWiseFixedPrice = getSiteWiseFixedPrice(extraInfo.fixedPrice);
+    }
     // If a product is having fixedPrice (Which contains the special price of
     // the product), then change the finalPrice of the product to 0.01 to apply
     // discount. This case is only applicable for XB sites as of now.
     let endPrice = finalPrice;
-    if (hasValue(extraInfo)
-      && hasValue(extraInfo.fixedPrice)
-      && hasValue(finalPrice)
-      && finalPrice <= price) {
+    if (hasValue(siteWiseFixedPrice)
+      && hasValue(siteWiseFixedPrice.special_price)) {
       // @see Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator::buildPriceBlockSimple().
-      endPrice = '0.01';
+      endPrice = (hasValue(finalPrice) && (price > finalPrice)) ? finalPrice : '0.01';
     }
 
     return (

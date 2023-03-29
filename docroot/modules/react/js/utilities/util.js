@@ -115,4 +115,47 @@ export const getShoeAiStatus = () => {
     return true;
   }
   return false;
+}
+
+/**
+ * Checks if the given string is a JSON string or not.
+ *
+ * @param {string} str
+ *   The string
+ *
+ * @return {boolean}
+ *   Returns True if the given string is JSON else False.
+ */
+export const isJsonString = (str) => {
+  try {
+    return (JSON.parse(str) && !!str);
+  } catch (e) {
+    return false;
+  }
+};
+
+/**
+ * Utility function to get the special price from JSON string.
+ *
+ * @param {string} fixedPrice
+ *   A JSON string which contains price items.
+ *
+ * @returns {object}
+ *   Returns an object containing the fixedPrices.
+ */
+export const getSiteWiseFixedPrice = (fixedPrice) => {
+  // Check if the fixedPrice contains the special price.
+  let siteWiseFixedPrice = '';
+  if (isJsonString(fixedPrice) && hasValue(drupalSettings.xb)) {
+    // Extracting the special price and checking if the config is available
+    // for the current domain.
+    const parsedFixedPrice = JSON.parse(fixedPrice);
+    const siteCode = drupalSettings.xb.site_code;
+    if (hasValue(siteCode)
+      && hasValue(parsedFixedPrice[siteCode])) {
+      siteWiseFixedPrice = parsedFixedPrice[siteCode];
+    }
+  }
+
+  return siteWiseFixedPrice;
 };

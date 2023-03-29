@@ -14,6 +14,7 @@ import { isWishlistPage, getFirstChildWithWishlistData } from '../../../../js/ut
 import LoginMessage from '../../../../js/utilities/components/login-message';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { getSiteWiseFixedPrice } from '../../../../js/utilities/util';
 
 class ConfigurableProductDrawer extends React.Component {
   constructor(props) {
@@ -100,20 +101,24 @@ class ConfigurableProductDrawer extends React.Component {
 
     // Gallery images.
     const { images } = selectedVariantData.media;
-    const { original_price: originalPrice, final_price: finalPrice } = selectedVariantData;
+    const {
+      original_price: originalPrice,
+      final_price: finalPrice,
+      fixed_price: fixedPrice,
+    } = selectedVariantData;
+
     const vatText = getVatText();
     const parentSku = productData.catalogRestructured ? selectedVariantData.parent_sku : sku;
 
+    const siteWiseFixedPrice = getSiteWiseFixedPrice(fixedPrice);
     // If a product is having fixedPrice (Which contains the special price of
     // the product), then change the finalPrice of the product to 0.01 to apply
     // discount. This case is only applicable for XB sites as of now.
     let endPrice = finalPrice;
-    if (hasValue(extraInfo)
-      && hasValue(extraInfo.fixedPrice)
-      && hasValue(finalPrice)
-      && finalPrice <= originalPrice) {
+    if (hasValue(siteWiseFixedPrice)
+      && hasValue(siteWiseFixedPrice.special_price)) {
       // @see Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator::buildPriceBlockSimple().
-      endPrice = '0.01';
+      endPrice = (hasValue(finalPrice) && (originalPrice > finalPrice)) ? finalPrice : '0.01';
     }
 
     return (
@@ -153,7 +158,7 @@ class ConfigurableProductDrawer extends React.Component {
             <Price
               price={originalPrice}
               finalPrice={endPrice}
-              fixedPrice={(hasValue(extraInfo) && hasValue(extraInfo.fixedPrice)) ? extraInfo.fixedPrice : ''}
+              fixedPrice={fixedPrice}
             />
             <ConditionalView condition={vatText !== ''}>
               <div className="vat-text">{vatText}</div>
