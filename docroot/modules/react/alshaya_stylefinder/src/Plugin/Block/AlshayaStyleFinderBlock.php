@@ -5,7 +5,6 @@ namespace Drupal\alshaya_stylefinder\Plugin\Block;
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
