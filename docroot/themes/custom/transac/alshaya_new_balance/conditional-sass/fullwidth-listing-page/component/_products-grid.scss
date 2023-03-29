@@ -21,3 +21,13 @@
     }
   }
 }
+
+@include breakpoint($desktop) {
+  body.hide-srp-sidebar {
+    #alshaya-algolia-search {
+      .c-page-title {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+}
