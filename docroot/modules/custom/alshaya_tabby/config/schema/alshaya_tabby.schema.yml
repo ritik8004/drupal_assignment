@@ -5,3 +5,6 @@ alshaya_tabby.settings:
     cart_widget_limit:
       type: string
       label: 'Tabby cart threshold widget limit.'
+    show_tabby_widget:
+      type: boolean
+      label: 'Config to show/hide the tabby widget.'
