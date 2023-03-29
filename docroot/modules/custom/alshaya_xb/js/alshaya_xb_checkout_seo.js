@@ -71,15 +71,13 @@
           break;
 
         case 3:
-          var cartData = Drupal.mapGlobaleCheckoutData(geData);
-          // Set XB delivery info.
-          cartData.xbDeliveryInfo = geData.xbDeliveryInfo;
-          Drupal.alshayaSeoSpc.checkoutEvent(cartData, step);
+          var cartData = Drupal.mapGlobaleStepData(geData, 3);
+          dataLayer.push(cartData);
           break;
 
         case 4:
           // Push step 4 checkout data to data layer.
-          var cartData = Drupal.mapGlobaleStep4Data(geData);
+          var cartData = Drupal.mapGlobaleStepData(geData, 4);
           dataLayer.push(cartData);
 
           var purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
@@ -99,11 +97,13 @@
    *
    * @param {object} geData
    *   Global-e checkout data.
+   * @param {string} step
+   *   Checkout step.
    *
    * @return {object}
    *   The cart data object.
    */
-  Drupal.mapGlobaleStep4Data = function (geData) {
+  Drupal.mapGlobaleStepData = function (geData, step) {
 
     // Process product data.
     let productSku = [];
@@ -142,7 +142,7 @@
       });
     }
 
-    return {
+    var cartData =  {
       "language": drupalSettings.gtm.language,
       "country": drupalSettings.gtm.country,
       "currency": drupalSettings.gtm.currency,
@@ -151,16 +151,10 @@
       "ecommerce": {
         "currencyCode" : drupalSettings.gtm.currency,
         "checkout": {
-          "currencyCode": geData.details.MerchantCurrencyCode,
-          "purchase": {
-            "actionField": {
-              "step": geData.StepId,
-              "action": "checkout",
-            },
-            "products": [
-              productGtm
-            ]
-          }
+          "actionField": {
+            "step": step,
+          },
+          "products": productGtm
         },
       },
       // Click and collect is not available on XB sites.
@@ -172,11 +166,19 @@
       "privilegesCardNumber": null, // @todo We need to ask Global-e to get this information.
       "productSKU" : productSku,
       "productStyleCode" : productStyleCode,
-      "cartTotalValue" : geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency,
       "cartItemsCount" : cartItemsCount,
       "cartItemsFlocktory" : cartItemsFlocktory,
-      "paymentOption" : geData.details.PaymentMethods[0].PaymentMethodTypeName,
     };
+
+    if (step == 3) {
+      cartData.xbDeliveryInfo = geData.xbDeliveryInfo;
+      cartData.cartTotalValue = geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency;
+    }
+    else if (step == 4) {
+      cartData.paymentOption = geData.details.PaymentMethods[0].PaymentMethodTypeName;
+      cartData.cartTotalValue = geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency;
+    }
+    return cartData;
   }
 
   /**
