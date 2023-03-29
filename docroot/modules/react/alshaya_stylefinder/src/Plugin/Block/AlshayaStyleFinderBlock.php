@@ -5,6 +5,7 @@ namespace Drupal\alshaya_stylefinder\Plugin\Block;
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -267,9 +268,8 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
         }
       }
 
-      $answer_details['see_more_reference'] = $answer_node->field_see_more_styles_link->value
-        ? ltrim($answer_node->field_see_more_styles_link->value, '/')
-        : NULL;
+      $uri = $answer_node->field_quiz_see_more_url->uri;
+      $answer_details['see_more_reference'] = $uri ? str_replace('internal:/', '', $uri) : '';
 
       $answer_details['title'] = $answer_node->title->value;
       $answer_details['description'] = strip_tags($answer_node->field_answer_summary->value) ?? NULL;

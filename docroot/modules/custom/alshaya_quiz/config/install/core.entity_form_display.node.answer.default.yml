@@ -10,12 +10,13 @@ dependencies:
     - field.field.node.answer.field_choice_4
     - field.field.node.answer.field_next_question
     - field.field.node.answer.field_product_image
-    - field.field.node.answer.field_see_more_styles_link
+    - field.field.node.answer.field_quiz_see_more_url
     - node.type.answer
   module:
     - content_moderation
     - entity_browser
     - inline_entity_form
+    - link
     - text
 id: node.answer.default
 targetEntityType: node
@@ -89,13 +90,13 @@ content:
       view_mode: default
       preview_image_style: thumbnail
     third_party_settings: {  }
-  field_see_more_styles_link:
-    type: string_textfield
-    weight: 12
+  field_quiz_see_more_url:
+    type: link_default
+    weight: 26
     region: content
     settings:
-      size: 60
-      placeholder: ''
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default

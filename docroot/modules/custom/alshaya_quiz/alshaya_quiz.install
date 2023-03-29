@@ -17,10 +17,10 @@ use Drupal\node\Entity\Node;
  * Add new field see more styles link to answer CT and migrate
  * data from references field.
  */
-function alshaya_quiz_update_9001() {
+function alshaya_quiz_update_9401() {
   $config = [
-    'field.storage.node.field_see_more_styles_link',
-    'field.field.node.answer.field_see_more_styles_link',
+    'field.storage.node.field_quiz_see_more_url',
+    'field.field.node.answer.field_quiz_see_more_url',
   ];
 
   alshaya_config_install_configs($config, 'alshaya_quiz');
@@ -42,8 +42,10 @@ function alshaya_quiz_update_9001() {
   $migrate_complete = FALSE;
   foreach ($nodes as $node) {
     $term_id = !empty($node->field_references->target_id) ? $node->field_references->target_id : NULL;
-    $url = !empty($term_id) ? \Drupal::service('path_alias.manager')->getAliasByPath('/taxonomy/term/' . $term_id) : '';
-    $node->set('field_see_more_styles_link', $url)->save();
+    $uri = !empty($term_id) ? \Drupal::service('path_alias.manager')->getAliasByPath('/taxonomy/term/' . $term_id) : '';
+    if ($uri) {
+      $node->set('field_quiz_see_more_url', ['uri' => 'internal:' . $uri])->save();
+    }
     $migrate_complete = TRUE;
   }
 

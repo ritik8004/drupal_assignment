@@ -2,16 +2,14 @@ langcode: en
 status: true
 dependencies:
   module:
+    - link
     - node
-id: node.field_see_more_styles_link
-field_name: field_see_more_styles_link
+id: node.field_quiz_see_more_url
+field_name: field_quiz_see_more_url
 entity_type: node
-type: string
-settings:
-  max_length: 512
-  case_sensitive: false
-  is_ascii: false
-module: core
+type: link
+settings: {  }
+module: link
 locked: false
 cardinality: 1
 translatable: true
