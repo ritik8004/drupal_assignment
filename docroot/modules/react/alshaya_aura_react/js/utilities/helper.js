@@ -115,6 +115,21 @@ function getRecognitionAccrualRatio() {
   return recognitionAccrualRatio;
 }
 
+/**
+ * Helper function to check if string length greater than drupal config value.
+ *
+ * @param {string} fullLength
+ *   Full length of the string.
+ * @param {string} configLength
+ *   Config length of the string.
+ * @returns {boolean}
+ *   returns boolean value.
+ */
+function checkStringLength(fullLength, configLength) {
+  const checkLength = fullLength.length;
+  return checkLength > configLength;
+}
+
 export {
   getAllAuraStatus,
   getAllAuraTier,
@@ -125,4 +140,5 @@ export {
   getPointToPriceRatio,
   getPriceToPointRatio,
   getRecognitionAccrualRatio,
+  checkStringLength,
 };

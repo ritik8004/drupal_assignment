@@ -1,9 +1,16 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import { getAllAuraStatus, getAllAuraTier, getUserProfileInfo } from '../../../../utilities/helper';
+import {
+  getAllAuraStatus,
+  getAllAuraTier,
+  getUserProfileInfo,
+  checkStringLength,
+  getAuraConfig,
+} from '../../../../utilities/helper';
 import { getTooltipPointsOnHoldMsg } from '../../../../utilities/aura_utils';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import AuraAppDownload from '../../../aura-app-download';
+import { isDesktop } from '../../../../../../js/utilities/display';
 
 const MyAuraBanner = (props) => {
   const {
@@ -23,13 +30,19 @@ const MyAuraBanner = (props) => {
   const tierClass = currentTierLevel || 'no-tier';
   const allAuraStatus = getAllAuraStatus();
   const auraUserClass = loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED ? 'aura-not-verified' : 'aura-verified';
+  const { bannerUsernameMaxLength } = getAuraConfig();
+
+  let trimName = null;
+  if (isDesktop()) {
+    trimName = checkStringLength(profileInfo.profileName, bannerUsernameMaxLength);
+  }
 
   return (
     <div className={`aura-card-linked-verified-wrapper fadeInUp aura-level-${tierClass} ${auraUserClass}`}>
       <div className="aura-card-linked-verified-wrapper-content">
         <div className="aura-logo">
           <div className="aura-user-avatar">{profileInfo.avatar}</div>
-          <div className="aura-user-name">
+          <div title={trimName ? profileInfo.profileName : ''} className={`aura-user-name ${trimName ? 'trim-user-name' : ''}`}>
             {profileInfo.profileName}
             <div className="aura-card-number">
               <span>{Drupal.t('Aura membership number', {}, { context: 'aura' })}</span>
