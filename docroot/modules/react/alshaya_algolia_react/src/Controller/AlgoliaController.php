@@ -117,6 +117,11 @@ class AlgoliaController extends ControllerBase {
 
     $config = $this->configHelper->getAlgoliaReactCommonConfig($page_type, $page_sub_type);
 
+    // Remmove 'gtm_key' value from sort items array.
+    foreach ($config[$page_type]['filters']['sort_by']['widget']['items'] as $index => $data) {
+      unset($config[$page_type]['filters']['sort_by']['widget']['items'][$index]['gtm_key']);
+    }
+
     if (isset($config['search']['filters']['attr_delivery_ways'])) {
       if (!$this->deliveryOptionsHelper->getExpressDeliveryStatus()) {
         unset($config['search']['filters']['attr_delivery_ways']['facet_values']['express_day_delivery_available']);
