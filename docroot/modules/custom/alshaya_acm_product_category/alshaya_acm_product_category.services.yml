@@ -46,6 +46,7 @@ services:
       - '@alshaya_acm_product_category.product_category_tree'
       - '@entity_type.manager'
       - '@entity.repository'
+      - '@current_route_match'
     tags:
       - { name: 'event_subscriber' }
 
