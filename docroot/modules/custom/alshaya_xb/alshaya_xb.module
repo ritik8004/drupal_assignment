@@ -253,7 +253,7 @@ function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$orde
   }
 
   // Set duties taxes.
-  if (!empty($order['extension']['globale']['totals']['shipping']['value'])) {
+  if (!empty($order['extension']['globale']['totals']['duties']['value'])) {
     $build['#order_details']['duties_taxes'] = $order['extension']['globale']['totals']['duties']['value'];
   }
 
