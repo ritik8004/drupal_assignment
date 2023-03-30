@@ -18,8 +18,6 @@ function alshaya_product_update_8033() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
   $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
   $alshayaConfigManager->updateConfigs(['search_api.index.product'], 'alshaya_product', 'install', AlshayaConfigManager::MODE_MERGE);
-  $index = Index::load('product');
-  $index->save();
 }
 
 /**
