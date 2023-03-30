@@ -2,15 +2,14 @@ langcode: en
 status: true
 dependencies:
   module:
+    - link
     - node
-    - taxonomy
-id: node.field_references
-field_name: field_references
+id: node.field_quiz_see_more_url
+field_name: field_quiz_see_more_url
 entity_type: node
-type: entity_reference
-settings:
-  target_type: taxonomy_term
-module: core
+type: link
+settings: {  }
+module: link
 locked: false
 cardinality: 1
 translatable: true
