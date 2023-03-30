@@ -63,21 +63,14 @@
     try {
       switch (step) {
         case 2:
-          if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
-            // Populate drupal settings with details from GE data.
-            drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
-          }
-          Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
-          break;
-
         case 3:
-          var cartData = Drupal.mapGlobaleStepData(geData, 3);
+          var cartData = Drupal.mapGlobaleStepData(geData, step);
           dataLayer.push(cartData);
           break;
 
         case 4:
           // Push step 4 checkout data to data layer.
-          var cartData = Drupal.mapGlobaleStepData(geData, 4);
+          var cartData = Drupal.mapGlobaleStepData(geData, step);
           dataLayer.push(cartData);
 
           var purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
@@ -93,7 +86,7 @@
   };
 
   /**
-   * Helper function to map the Global-e checkout data to step 4 gtm data.
+   * Helper function to map the Global-e checkout data to gtm step data.
    *
    * @param {object} geData
    *   Global-e checkout data.
@@ -157,13 +150,6 @@
           "products": productGtm
         },
       },
-      // Click and collect is not available on XB sites.
-      "deliveryOption" : 'Home Delivery',
-      "deliveryType" : geData.details.ShippingMethodType,
-      "deliveryCity" : geData.details.CustomerDetails.ShippingAddress.ShippingCity,
-      "deliveryArea" : geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion,
-      "privilegeCustomer": drupalSettings.userDetails.privilegeCustomer ? 'Privilege Customer' : 'Regular Customer',
-      "privilegesCardNumber": null, // @todo We need to ask Global-e to get this information.
       "productSKU" : productSku,
       "productStyleCode" : productStyleCode,
       "cartItemsCount" : cartItemsCount,
@@ -172,6 +158,15 @@
 
     if (step == 3) {
       cartData.xbDeliveryInfo = geData.xbDeliveryInfo;
+    }
+    if (step == 3 || step == 4) {
+      // Click and collect is not available on XB sites.
+      cartData.deliveryOption = 'Home Delivery';
+      cartData.deliveryType = geData.details.ShippingMethodType;
+      cartData.deliveryCity = geData.details.CustomerDetails.ShippingAddress.ShippingCity;
+      cartData.deliveryArea = geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion;
+    }
+    if (step == 3 || step == 2) {
       cartData.cartTotalValue = geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency;
     }
     else if (step == 4) {
@@ -179,73 +174,6 @@
       cartData.cartTotalValue = geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency;
     }
     return cartData;
-  }
-
-  /**
-   * Helper function to map the Global-e checkout data to cart data.
-   *
-   * @param {object} geData
-   *   Global-e checkout data.
-   *
-   * @return {object}
-   *   The cart data object.
-   */
-  Drupal.mapGlobaleCheckoutData = function (geData) {
-    let productGtm = [];
-    let cartItemsCount = 0;
-    if (geData.details.ProductInformation) {
-      Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
-        var product = productItem[1];
-        var productGtmData = {
-          "item_id": product.CartItemId,
-          "sku": product.SKU,
-          "qty": product.Quantity,
-          "name": product.ProductName,
-          "price": product.ProductPrices.MerchantTransaction.DiscountedPrice,
-          "finalPrice": product.ProductPrices.MerchantTransaction.DiscountedPrice,
-        };
-        cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
-        productGtm.push(productGtmData);
-      });
-    }
-
-    // Loop the Discounts array and calculate the discount amount.
-    let discountAmount = 0;
-    if (Drupal.hasValue(geData.details.Discounts)) {
-      geData.details.Discounts.forEach(function (item) {
-        if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
-          discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
-        }
-      });
-    }
-
-    return {
-      "cart_id": window.commerceBackend.getCartId(),
-      "uid": drupalSettings.user.uid,
-      "items_qty": cartItemsCount,
-      "cart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
-      "minicart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
-      "surcharge": {
-        "amount": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency,
-        "is_applied": (geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency > 0) ? true : false
-      },
-      "shipping": {
-        "type": geData.details.ShippingMethodType,
-        "methods": geData.details.ShippingMethodName,
-      },
-      "payment": {
-        "method": geData.OrderPaymentMethods
-      },
-      "totals": {
-        "subtotal_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
-        "base_grand_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
-        "base_grand_total_without_surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
-        "discount_amount": discountAmount,
-        "surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency,
-        "shipping_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerShippingPriceInMerchantCurrency + geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerVATInMerchantCurrency
-      },
-      "items": productGtm,
-    };
   };
 
   /**
