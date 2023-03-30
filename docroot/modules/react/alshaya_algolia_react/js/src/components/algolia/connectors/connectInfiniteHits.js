@@ -84,8 +84,9 @@ export default createConnector({
 
     const { hits, hitsPerPage, index: indexName } = results;
     // Adding hitsPerPage in localStorage to support Back to Listing.
+    // This is default if drupalSettings.algolia.hitsPerPage == false.
     if (results.page !== 0) {
-      localStorage.setItem('hitsPerPage', hitsPerPage);
+      localStorage.setItem('defaultHitsPerPage', hitsPerPage);
     }
 
     let { nbPages } = results;
@@ -172,22 +173,12 @@ export default createConnector({
   getSearchParameters: function getSearchParameters(searchParameters, props, searchState) {
     // Custom work done here to support loading multiple pages first time.
     // This is to support Back to PLP feature.
-    const localHitsPerPage = localStorage.getItem('hitsPerPage') !== null ? localStorage.getItem('hitsPerPage') : parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
-    let { defaultpageRender } = props;
-    // Adding extra code for search Pages Back to Search
-    if (drupalSettings.path.currentPath === 'search') {
-      const pageType = 'search';
-      const localSearchStorage = Drupal.getItemFromLocalStorage(`${pageType}:${window.location.hash}`);
-      if (localSearchStorage) {
-        defaultpageRender = localSearchStorage.page;
-      }
-    }
-
+    const localHitsPerPage = localStorage.getItem('defaultHitsPerPage') !== null ? localStorage.getItem('defaultHitsPerPage') : parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
     return searchParameters.setQueryParameters({
       page: (typeof props.defaultpageRender === 'number' && props.defaultpageRender > 1)
         ? 0
         : getCurrentRefinement(props, searchState, this.context) - 1,
-      hitsPerPage: (typeof defaultpageRender === 'number' && props.defaultpageRender > 1)
+      hitsPerPage: (typeof props.defaultpageRender === 'number' && props.defaultpageRender > 1)
         ? localHitsPerPage * props.defaultpageRender
         : searchParameters.hitsPerPage,
     });
