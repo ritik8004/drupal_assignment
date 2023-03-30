@@ -1,0 +1,47 @@
+.site-brand-home {
+  a {
+    @include breakpoint($upto-desktop) {
+      margin-#{$left}: rem(48);
+    }
+  }
+}
+
+.c-menu-primary {
+  .mobile--menu {
+    @include breakpoint($only-mobile) {
+      top: rem(13.6);
+    }
+
+    @include breakpoint($tablet) {
+      top: rem(20);
+    }
+  }
+
+  li .mobile--search {
+    &::before {
+      @include breakpoint($only-mobile) {
+        top: rem(-5);
+        #{$left}: rem(-5);
+      }
+    }
+
+    @include breakpoint($tablet) {
+      top: rem(10);
+      #{$right}: rem(96);
+    }
+  }
+}
+
+#block-cartminiblock,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  .quantity {
+    @include breakpoint($tablet) {
+      #{$left}: rem(-5);
+    }
+
+    @include breakpoint($desktop) {
+      #{$left}: 0;
+    }
+  }
+}
