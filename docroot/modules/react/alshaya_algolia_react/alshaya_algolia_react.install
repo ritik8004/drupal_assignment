@@ -19,8 +19,6 @@ function alshaya_algolia_react_update_9407() {
     'alshaya_algolia_react.color_swatches',
   ],
     'alshaya_algolia_react',
-    'install',
-    AlshayaConfigManager::MODE_MERGE,
   );
 }
 
