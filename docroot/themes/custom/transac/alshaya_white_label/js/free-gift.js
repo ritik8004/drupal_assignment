@@ -103,30 +103,28 @@
         });
       }
 
-      if (!drupalSettings.rcsFreeGiftEnabled) {
-        $('.sku-base-form').on('variant-selected', function (event, variant) {
-          // We do not want to attach this event for variant change of PDP
-          // product.
-          if (!$(this).parents('#drupal-modal')) {
-            return;
-          }
-          var sku = $(this).attr('data-sku');
-          var selected = $('[name="selected_variant_sku"]', $(this)).val();
-          var productKey = 'productInfo';
-          var variantInfo = Drupal.hasValue(drupalSettings[productKey]) ? drupalSettings[productKey][sku]['variants'][variant] : null;
+      $('.sku-base-form').on('variant-selected', function (event, variant) {
+        // We do not want to attach this event for variant change of PDP
+        // product.
+        if (!$(this).parents('#drupal-modal')) {
+          return;
+        }
+        var sku = $(this).attr('data-sku');
+        var selected = $('[name="selected_variant_sku"]', $(this)).val();
+        var productKey = 'productInfo';
+        var variantInfo = Drupal.hasValue(drupalSettings[productKey]) ? drupalSettings[productKey][sku]['variants'][variant] : null;
 
-          if (typeof variantInfo === 'undefined' || variantInfo === null) {
-            return;
-          }
+        if (typeof variantInfo === 'undefined' || variantInfo === null) {
+          return;
+        }
 
-          var freeGiftWrapper = $(this).closest('article');
-          if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
-            window.commerceBackend.updateGallery(freeGiftWrapper, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery, sku, variantInfo.sku);
-          } else {
-            window.commerceBackend.updateGallery(freeGiftWrapper, variantInfo.layout, variantInfo.gallery, sku, variantInfo.sku);
-          }
-        });
-      }
+        var freeGiftWrapper = $(this).closest('article');
+        if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
+          window.commerceBackend.updateGallery(freeGiftWrapper, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery, sku, variantInfo.sku);
+        } else {
+          window.commerceBackend.updateGallery(freeGiftWrapper, variantInfo.layout, variantInfo.gallery, sku, variantInfo.sku);
+        }
+      });
     }
   };
 

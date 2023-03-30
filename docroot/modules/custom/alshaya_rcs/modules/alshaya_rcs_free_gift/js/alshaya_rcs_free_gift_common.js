@@ -3,12 +3,13 @@
  * RCS Free gift js common file.
  */
 
-(function ($, Drupal, drupalSettings) {
+window.commerceBackend = window.commerceBackend || {};
+
+(function alshayaRcsFreeGiftCommon($, Drupal, drupalSettings) {
   // Variables to have collection and collection item dialog globally, so that
   // we can control the modal from all the functions.
   var collectionDialog = '';
   var collectionItemDialog = '';
-  window.commerceBackend = window.commerceBackend || {};
 
   /**
    * Use this Cautiously!!!
@@ -41,6 +42,8 @@
       }
     }
     if (requestedVariant) {
+      // Storing the parent sku data for further usage if needed.
+      productData.parent_sku = productData.sku;
       // Update product keys from variant data.
       Object.keys(requestedVariant.product).forEach(function updateVariantInfo(key) {
         if (key in productData) {
@@ -76,7 +79,7 @@
             freeGiftItem = window.commerceBackend.getProductsInStyleSynchronous({
               sku: freeGiftItem.sku,
               style_code: freeGiftItem.style_code,
-              context: 'free_gift'
+              context: 'modal'
             });
           }
           if (freeGiftItem.sku !== freeGiftSku) {
@@ -184,7 +187,6 @@
     // We have two type of modals for free gift.
     // 1. The single item modal ( Where we display a individual free gift )
     // 2. Collection of item modal ( List of free gift items )
-
     if (skus.length === 1) {
       // Displaying single free gift item modal.
       window.commerceBackend.showItemModalView(skus[0], backToCollection);
@@ -250,15 +252,7 @@
    * Common free gift modal behaviour.
    */
   Drupal.behaviors.rcsFreeGiftsCommon = {
-    attach: function (context, settings) {
-      // On dialog close remove the free gift overlay related classes.
-      $('.free-gifts-modal-overlay #free-gift-drupal-modal').once().on('dialogclose', function () {
-        if ($('body').hasClass('free-gift-promo-list-overlay')) {
-          $('body').removeClass('free-gift-promo-list-overlay');
-        }
-        $('body').removeClass('free-gifts-modal-overlay');
-      });
-
+    attach: function rcsFreeGiftsCommon(context, settings) {
       // Open the collection list on click of back to collection.
       $(".free-gift-back-to-collection").once('back-to-collection-processed').on('click', function (e) {
         e.preventDefault();
@@ -280,7 +274,7 @@
    * @param {boolean} checkForVariants
    *   Flag to check for product variants in case of configurable products.
    */
-  window.commerceBackend.processFreeGiftDataReactRender = async function processFreeGiftDataReactRender (productInfo, checkForVariants = true) {
+  window.commerceBackend.processFreeGiftDataReactRender = function processFreeGiftDataReactRender (productInfo, checkForVariants = true) {
     try {
       var skuItemCode = Object.keys(productInfo)[0];
       // If product does not have any free gifts associated, then return.
@@ -298,7 +292,7 @@
         && freeGiftApiData.rule_type === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
         // Load all the free gift items.
         var freeGiftSkus = [];
-        freeGiftApiData.gifts.forEach((item) => {
+        freeGiftApiData.gifts.forEach(function listFreeGiftSkus(item) {
           freeGiftSkus.push(item.sku);
         });
         var data = {
@@ -372,10 +366,9 @@
           if (Drupal.hasValue(variants[variantSku].freeGiftPromotion)) {
             variants[variantSku].skuItemCode = variantSku;
             // Recursive call to same function to process free gift data for variants in exactly same fashion.
-            var variantData = await window.commerceBackend.processFreeGiftDataReactRender(
+            var variantData = window.commerceBackend.processFreeGiftDataReactRender(
               {
                 [variantSku]: variants[variantSku],
-                skuItemCode: variantSku,
               },
               false
             );

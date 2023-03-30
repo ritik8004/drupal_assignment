@@ -6,7 +6,6 @@
 function alshaya_rcs_free_gift_preprocess_node(&$variables) {
   if ($variables['node']->bundle() === 'rcs_product') {
     $variables['free_gift_status'] = TRUE;
-    $variables['#attached']['drupalSettings']['rcsFreeGiftEnabled'] = TRUE;
     $variables['#attached']['library'][] = 'alshaya_rcs_free_gift/rcs_free_gift_pdp';
   }
 }

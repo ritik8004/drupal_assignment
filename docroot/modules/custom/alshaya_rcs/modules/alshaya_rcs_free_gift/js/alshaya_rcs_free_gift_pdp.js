@@ -3,8 +3,9 @@
  * RCS Free gift PDP js file.
  */
 
-(function ($, Drupal, drupalSettings, RcsEventManager) {
-  window.commerceBackend = window.commerceBackend || {};
+window.commerceBackend = window.commerceBackend || {};
+
+(function alshayaRcsFreeGiftPdp($, Drupal, drupalSettings, RcsEventManager) {
 
   /**
    * Renders free gift for the given product.
@@ -34,7 +35,7 @@
     // Get the list of all the available Free gifts.
     var freeGiftPromotion = mainProduct.free_gift_promotion;
     // We support displaying only one free gift promotion for now.
-    if (freeGiftPromotion.length > 0 && freeGiftPromotion[0].total_items > 0) {
+    if (freeGiftPromotion.length && freeGiftPromotion[0].total_items) {
       var giftItemList = freeGiftPromotion[0].gifts;
       var freeGiftProduct = null;
       for (var i = 0; i < giftItemList.length; i++) {
@@ -69,7 +70,7 @@
    * Drupal behaviour to attach for opening free gift modal on PDP.
    */
   Drupal.behaviors.rcsFreeGiftsPdp = {
-    attach: function (context, settings) {
+    attach: function rcsFreeGiftsPdp(context, settings) {
       // Modal view for the free gift on PDP.
       $('.free-gift-promotions .free-gift-wrapper .free-gift-message a, a.free-gift-modal')
         .once('free-gift-processed-pdp')
