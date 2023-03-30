@@ -45,10 +45,6 @@ export const algoliaSearchClient = {
       referrerData.previousList = '';
       Drupal.addItemInLocalStorage('referrerData', referrerData);
     }
-     // Eliminating extra hits on backtoSearch.
-    if(window.location.hash !== '' && searchRequest[0].params.hitsPerPage === undefined && searchRequest[0].params.page < 1){
-       return null; 
-    }
 
     if (window.algoliaSearchActivityStarted || searchRequest[0].params.query.length > 0) {
       searchRequest[0].params.analyticsTags = drupalSettings.user.isCustomer
