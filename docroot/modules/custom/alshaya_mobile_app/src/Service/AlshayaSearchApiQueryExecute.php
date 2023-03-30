@@ -823,6 +823,10 @@ class AlshayaSearchApiQueryExecute {
     if ($alshaya_algolia_index || $algolia_product_list_index) {
       $index_name = AlshayaAlgoliaSortHelper::getAlgoliaIndexName($lang, $page_type);
       $sort_data = AlshayaAlgoliaSortHelper::getSortByOptions($index_name, $page_type);
+      // Remmove 'gtm_key' value from sort options array.
+      foreach ($sort_data as $index => $data) {
+        unset($sort_data[$index]['gtm_key']);
+      }
       return $sort_data;
     }
 
