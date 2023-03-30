@@ -20,7 +20,7 @@ class AlshayaAuraLoyaltyBenefitsForm extends ConfigFormBase {
   protected $entityManager;
 
   /**
-   * Constructs a EntityManager object.
+   * AlshayaAuraLoyaltyBenefitsForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   A list of entity definition objects.

@@ -147,7 +147,7 @@ class AlshayaLoyaltyController extends ControllerBase {
     $static_page_nid = $this->configFactory->getEditable('alshaya_aura_react.loyalty_benefits')->get('loyalty_static_content_node');
     if ($static_page_nid) {
       $node = $this->entityTypeManager()->getStorage('node')->load($static_page_nid);
-      if ($node instanceof NodeInterface) {
+      if ($node instanceof NodeInterface && $node->bundle() === 'static_html') {
         $loyalty_asset = [];
         // Get CSS from the node field.
         $css = $node->get('field_css')->getString();
