@@ -1,5 +1,6 @@
 import { hasValue } from './conditionsUtility';
 import isAuraEnabled from './helper';
+import logger from './logger';
 
 /**
  * Provides the current currency code.
@@ -130,12 +131,21 @@ export const isJsonString = (str) => {
   try {
     return (JSON.parse(str) && !!str);
   } catch (e) {
+    logger.error('Error while trying to parse the given string. Not a valid JSON string.');
     return false;
   }
 };
 
 /**
  * Utility function to get the special price from JSON string.
+ *
+ * For Cross boarder sites, we have a field called `FixedPrice` which contains
+ * the updated price of SKUs and it's stored as JSON string. Now to get the
+ * proper value from that field, we use this utility function which provides us
+ * a valid object which contains the required data.
+ *
+ * Example: {\"OM\":{\"price\":\"150.00\",\"special_price\":\"110.00\"}}
+ * This is the expected in fixedPrice variable.
  *
  * @param {string} fixedPrice
  *   A JSON string which contains price items.
