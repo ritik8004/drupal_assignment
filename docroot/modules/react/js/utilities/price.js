@@ -61,11 +61,11 @@ const isFreeGiftProduct = (price) => {
  */
 const getDataAttributePricesObj = (data, field) => {
   if (!hasValue(data) || !hasValue(field)) {
-    return '';
+    return {};
   }
 
   if (typeof data !== 'string') {
-    return '';
+    return {};
   }
 
   let fixedPriceAttributeData = {};
@@ -74,8 +74,8 @@ const getDataAttributePricesObj = (data, field) => {
     // Get json object from string.
     fixedPriceAttributeData = JSON.parse(data);
   } catch (e) {
-    // Return empty string if json parse has error.
-    return '';
+    // Return empty object if json parse has error.
+    return {};
   }
 
   const prices = {};
@@ -98,15 +98,10 @@ const getDataAttributePricesObj = (data, field) => {
  * @returns {string}
  *   Country code and its fixed or special price.
  */
-const getDataAttributePrices = (data, field) => {
-  const prices = getDataAttributePricesObj(data, field);
-
-  if (!hasValue(prices)) {
-    return prices;
-  }
-
-  return JSON.stringify(prices);
-};
+const getDataAttributePrices = (data, field) => JSON.stringify(getDataAttributePricesObj(
+  data,
+  field,
+));
 
 export {
   calculateDiscount,
