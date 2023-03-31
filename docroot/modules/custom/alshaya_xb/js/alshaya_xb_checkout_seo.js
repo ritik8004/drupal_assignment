@@ -24,7 +24,7 @@
       'ShippingZipCode',
       'ShippingPhoneNumber'
     ];
-    for (let i =0; i < mandatoryAddressFields.length; i++) {
+    for (var i =0; i < mandatoryAddressFields.length; i++) {
       if (!Drupal.hasValue(shippingAddress[mandatoryAddressFields[i]])) {
         return false;
       }
@@ -44,7 +44,7 @@
    *   Returns attribute value.
    */
   Drupal.getProductMetadata = function (product, key) {
-    for (let i = 0; i < product.MetaData.length; i++) {
+    for (var i = 0; i < product.MetaData.length; i++) {
       if (product.MetaData[i].AttributeKey === key) {
         return product.MetaData[i].AttributeValue;
       }
@@ -264,7 +264,7 @@
         "administrative_area": null, // @todo We need to ask Global-e top get this information.
         "area_parent": null, // @todo We need to ask Global-e top get this information.
         "area_parent_display": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
-        "administrative_area_display": geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion,
+        "administrative_area_display": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
       },
       "delivery_city": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
       "privilegeOrder": drupalSettings.userDetails.privilegeCustomer ? 'order with privilege club' : 'order without privilege club',
