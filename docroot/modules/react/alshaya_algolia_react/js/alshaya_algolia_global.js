@@ -99,9 +99,9 @@
   }
  // Adding to use global.
   Drupal.algoliaGetActualPageNumber = function () {
-    const resultsCount = $('.node--view-mode-search-result:visible').length;
+    var resultsCount = $('.node--view-mode-search-result:visible').length;
     // Set to itemsPerPage by default.
-    let perPage = parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
+    var perPage = parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
     // If hitsPerPage is disabled check if value exists in localStorage.
     if (drupalSettings.algoliaSearch.hitsPerPage === false) {
       // Pick from localStorage if available.
