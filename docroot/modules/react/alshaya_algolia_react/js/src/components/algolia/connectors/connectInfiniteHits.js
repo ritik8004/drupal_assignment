@@ -175,8 +175,8 @@ export default createConnector({
     // This is to support Back to PLP feature.
     // check if hitsPerPage set in searchparams and make it default.
     let localHitsPerPage = searchParameters.hitsPerPage;
-    if (searchParameters.hitsPerPage === undefined) {
-      // If hitsPerPage is undefined set it based on algolia configuration.
+    if (localHitsPerPage === undefined) {
+      // If hitsPerPage to send in algolia request feature is enabled.
       if (drupalSettings.algoliaSearch.hitsPerPage === true) {
         localHitsPerPage = parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
       } else {
