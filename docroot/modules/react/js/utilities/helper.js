@@ -56,11 +56,11 @@ export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
 /**
  * Helper function to get user's email id.
  */
-export const getUserEmailID = () => {
-  let userEmailID = '';
-  if (hasValue(drupalSettings.userDetails)
-    && hasValue(drupalSettings.userDetails.userEmailID)) {
-    userEmailID = drupalSettings.userDetails.userEmailID;
+export const getUserDetails = () => {
+  let userDetails = '';
+  if (hasValue(drupalSettings)
+    && hasValue(drupalSettings.userDetails)) {
+    userDetails = drupalSettings.userDetails;
   }
-  return userEmailID;
+  return userDetails;
 };
