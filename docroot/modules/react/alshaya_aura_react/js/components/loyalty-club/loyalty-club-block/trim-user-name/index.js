@@ -15,12 +15,12 @@ const TrimUserName = (props) => {
     <>
       {isDesktop()
         && (
-        <div
-          title={trimName ? userName : ''}
-          className={trimName ? 'trim-user-name' : ''}
-        >
+          <div
+            title={trimName ? userName : ''}
+            className={trimName ? 'trim-user-name' : ''}
+          >
             {userName}
-        </div>
+          </div>
         )}
       {isMobile()
         && (
