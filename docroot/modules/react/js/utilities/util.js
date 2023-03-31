@@ -82,3 +82,37 @@ export const isFullPaymentDoneByPseudoPaymentMedthods = (cart) => {
 
   return false;
 };
+
+/*
+ * Creates required array of shoe sizes.
+ *
+ * @param {object} configurables
+ *   The configurables object.
+ *
+ * @return {array}
+ *   Returns array of shoe sizes ex."36.5,37.5,38,38.5,39,39.5,40" or an empty array.
+ */
+export const getShoeSize = (configurables) => {
+  let shoeSizes = [];
+  (shoeSizes) = configurables.map((el) => Object.values(Object.fromEntries(
+    Object.entries(el).map(([k, v]) => [k, Object.values(v)[0]]),
+  )).toString());
+  return shoeSizes;
+};
+
+/*
+ * Helper function for check status of shoeai.
+ *
+ * @param array shoeai
+ *   The array of shoeai drupalSettings.
+ *
+ * @return boolean
+ *   Returns true or false.
+ */
+export const getShoeAiStatus = () => {
+  const shoeAi = drupalSettings.shoeai;
+  if (shoeAi.status !== null && shoeAi.status === 1) {
+    return true;
+  }
+  return false;
+};
