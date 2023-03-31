@@ -55,11 +55,11 @@ class AlshayaAuraSettingsForm extends ConfigFormBase {
         '#description' => $this->t('Terms and Conditions link to be added in AURA Sign up popup. This should be an internal link. For eg. `aura/terms-and-conditions`'),
         '#default_value' => $aura_config->get('aura_signup_terms_and_conditions_link'),
       ],
-      'aura_banner_username_max_length' => [
+      'aura_username_character_length' => [
         '#type' => 'textfield',
         '#title' => $this->t('AURA banner user name max length'),
         '#description' => $this->t('AURA banner my account user name max length'),
-        '#default_value' => $aura_config->get('aura_banner_username_max_length'),
+        '#default_value' => $aura_config->get('aura_username_character_length'),
       ],
     ];
 
@@ -75,7 +75,7 @@ class AlshayaAuraSettingsForm extends ConfigFormBase {
       ->set('aura_app_store_link', $form_state->getValue('aura_app_store_link'))
       ->set('aura_google_play_link', $form_state->getValue('aura_google_play_link'))
       ->set('aura_signup_terms_and_conditions_link', $form_state->getValue('aura_signup_terms_and_conditions_link'))
-      ->set('aura_banner_username_max_length', $form_state->getValue('aura_banner_username_max_length'))
+      ->set('aura_username_character_length', $form_state->getValue('aura_username_character_length'))
       ->save();
 
     parent::submitForm($form, $form_state);

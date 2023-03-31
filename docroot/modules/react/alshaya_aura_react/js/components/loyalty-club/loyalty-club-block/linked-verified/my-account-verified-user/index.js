@@ -1,11 +1,11 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import { getAllAuraTier, getUserProfileInfo } from '../../../../../utilities/helper';
+import EllipsisText from "react-ellipsis-text";
+import { getAllAuraTier, getUserProfileInfo, getAuraConfig } from '../../../../../utilities/helper';
 import { getTooltipPointsOnHoldMsg } from '../../../../../utilities/aura_utils';
 import PointsExpiryMessage from '../../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import ToolTip from '../../../../../../../alshaya_spc/js/utilities/tooltip';
 import { isDesktop, isMobile } from '../../../../../../../js/utilities/display';
-import TrimUserName from '../../trim-user-name';
 
 const MyAccountVerifiedUser = (props) => {
   const {
@@ -19,6 +19,7 @@ const MyAccountVerifiedUser = (props) => {
     expiryDate,
   } = props;
 
+  const { auraUsernameCharacterLength } = getAuraConfig();
   const profileInfo = getUserProfileInfo(firstName, lastName);
 
   // Current User tier class so we can change gradient for progress bar.
@@ -31,7 +32,16 @@ const MyAccountVerifiedUser = (props) => {
         <div className="aura-card-linked-verified-wrapper-content">
           <div className="aura-logo">
             <div className="aura-user-name">
-              <TrimUserName userName={profileInfo.profileName} />
+              {isDesktop()
+                && (
+                  <EllipsisText text={profileInfo.profileName} length={parseInt(auraUsernameCharacterLength)} />
+                )
+              }
+              {isMobile()
+                && (
+                  <>{profileInfo.profileName}</>
+                )
+              }
               <div className="aura-card-number">
                 <span>{Drupal.t('Aura membership number', {}, { context: 'aura' })}</span>
                 <span>

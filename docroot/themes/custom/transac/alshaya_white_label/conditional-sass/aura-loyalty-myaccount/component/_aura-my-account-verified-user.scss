@@ -261,13 +261,6 @@
 
       @include breakpoint($desktop) {
         padding-#{$left}: 1.875rem;
-
-        .trim-user-name {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          width: rem(220);
-          white-space: nowrap;
-        }
       }
 
       .aura-card-number {
