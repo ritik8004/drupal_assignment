@@ -111,7 +111,7 @@ export const getShoeSize = (configurables) => {
  */
 export const getShoeAiStatus = () => {
   const shoeAi = drupalSettings.shoeai;
-  if (shoeAi.status !== null && shoeAi.status === 1) {
+  if (shoeAi && shoeAi.status !== null && shoeAi.status === 1) {
     return true;
   }
   return false;

@@ -17,7 +17,7 @@
 })(drupalSettings);
 
 function shoeAiStatus(shoeAi) {
-  if (shoeAi.status != null && shoeAi.status == 1) {
+  if (shoeAi && shoeAi.status != null && shoeAi.status == 1) {
     return true;
   } else {
     return false;
