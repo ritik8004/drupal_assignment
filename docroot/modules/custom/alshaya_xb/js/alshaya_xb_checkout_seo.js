@@ -49,6 +49,7 @@
         return product.MetaData[i].AttributeValue;
       }
     }
+    return '';
   };
 
   /**
@@ -134,7 +135,7 @@
           "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice,
           "count" : product.Quantity,
           "title" : product.ProductName,
-          "image" : '', // @todo get product media from global-e.
+          "image" : Drupal.getProductMetadata(product, 'image'),
         };
         cartItemsFlocktory.push(cartItem);
       });
@@ -169,7 +170,7 @@
       cartData.deliveryOption = 'Home Delivery';
       cartData.deliveryType = geData.details.ShippingMethodType;
       cartData.deliveryCity = geData.details.CustomerDetails.ShippingAddress.ShippingCity;
-      cartData.deliveryArea = geData.details.CustomerDetails.ShippingAddress.ShippingAddress2;
+      cartData.deliveryArea = geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion;
     }
     if (step == 3 || step == 2) {
       cartData.cartTotalValue = geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency;
@@ -263,7 +264,7 @@
         "administrative_area": null, // @todo We need to ask Global-e top get this information.
         "area_parent": null, // @todo We need to ask Global-e top get this information.
         "area_parent_display": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
-        "administrative_area_display": geData.details.CustomerDetails.ShippingAddress.ShippingAddress2,
+        "administrative_area_display": geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion,
       },
       "delivery_city": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
       "privilegeOrder": drupalSettings.userDetails.privilegeCustomer ? 'order with privilege club' : 'order without privilege club',
@@ -290,7 +291,7 @@
       "productStyleCode": productStyleCode,
       "cartTotalValue": parseFloat(geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency.toFixed(2)),
       "cartItemsCount": cartItemsCount,
-      "deliveryArea": geData.details.CustomerDetails.ShippingAddress.ShippingAddress2,
+      "deliveryArea": geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion,
       "deliveryCity": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
     };
   };
