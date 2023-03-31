@@ -16,6 +16,22 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Add the article_swatches.
+ */
+function alshaya_acm_product_update_9405() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set image_slide_timing default value.
  */
 function alshaya_acm_product_update_9404() {
