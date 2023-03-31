@@ -96,6 +96,14 @@ function alshaya_xb_install($is_syncing) {
   // Disable all the payment methods except GE as the checkout journey of the
   // user is controlled by GE script.
   _alshaya_xb_disable_payment_methods();
+
+  // Add string translations.
+  $strings = [
+    'Duties and Taxes' => [
+      'ar' => 'الرسوم والضرائب',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
