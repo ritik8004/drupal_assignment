@@ -99,8 +99,15 @@
   }
  // Adding to use global.
   Drupal.algoliaGetActualPageNumber = function () {
-    var resultsCount = $('.node--view-mode-search-result:visible').length;
-    return Math.ceil(resultsCount / drupalSettings.algoliaSearch.itemsPerPage);
+    const resultsCount = $('.node--view-mode-search-result:visible').length;
+    // Set to itemsPerPage by default.
+    let perPage = parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
+    // If hitsPerPage is disabled check if value exists in localStorage.
+    if (drupalSettings.algoliaSearch.hitsPerPage === false) {
+      // Pick from localStorage if available.
+      perPage = localStorage.getItem('defaultHitsPerPage') !== null ? parseInt(localStorage.getItem('defaultHitsPerPage'), 10) : parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
+    }
+    return Math.ceil(resultsCount / perPage);
   }
 
   // Set global variable to flag express delivery label display on teaser.
