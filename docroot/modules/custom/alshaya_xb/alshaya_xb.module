@@ -161,6 +161,8 @@ function alshaya_xb_page_attachments_alter(array &$page) {
 
   // Set gtm country to config overrides.
   $page['#attached']['drupalSettings']['gtm']['country'] = $configOverrides['country'];
+  // Set the domain mapping config.
+  $page['#attached']['drupalSettings']['xb']['country_code'] = $configOverrides['code'] ?? '';
 
 }
 
