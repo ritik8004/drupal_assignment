@@ -1,6 +1,6 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import EllipsisText from "react-ellipsis-text";
+import EllipsisText from 'react-ellipsis-text';
 import { getAllAuraTier, getUserProfileInfo, getAuraConfig } from '../../../../../utilities/helper';
 import { getTooltipPointsOnHoldMsg } from '../../../../../utilities/aura_utils';
 import PointsExpiryMessage from '../../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
@@ -34,14 +34,15 @@ const MyAccountVerifiedUser = (props) => {
             <div className="aura-user-name">
               {isDesktop()
                 && (
-                  <EllipsisText text={profileInfo.profileName} length={parseInt(auraUsernameCharacterLength)} />
-                )
-              }
+                  <EllipsisText
+                    text={profileInfo.profileName}
+                    length={parseInt(auraUsernameCharacterLength, 10)}
+                  />
+                )}
               {isMobile()
                 && (
                   <>{profileInfo.profileName}</>
-                )
-              }
+                )}
               <div className="aura-card-number">
                 <span>{Drupal.t('Aura membership number', {}, { context: 'aura' })}</span>
                 <span>

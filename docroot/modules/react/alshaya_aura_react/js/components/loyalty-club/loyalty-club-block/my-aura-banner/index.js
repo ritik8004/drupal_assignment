@@ -1,7 +1,9 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import EllipsisText from "react-ellipsis-text";
-import { getAllAuraStatus, getAllAuraTier, getUserProfileInfo, getAuraConfig } from '../../../../utilities/helper';
+import EllipsisText from 'react-ellipsis-text';
+import {
+  getAllAuraStatus, getAllAuraTier, getUserProfileInfo, getAuraConfig,
+} from '../../../../utilities/helper';
 import { getTooltipPointsOnHoldMsg } from '../../../../utilities/aura_utils';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import AuraAppDownload from '../../../aura-app-download';
@@ -35,14 +37,15 @@ const MyAuraBanner = (props) => {
           <div className="aura-user-name">
             {isDesktop()
               && (
-                <EllipsisText text={profileInfo.profileName} length={parseInt(auraUsernameCharacterLength)} />
-              )
-            }
+                <EllipsisText
+                  text={profileInfo.profileName}
+                  length={parseInt(auraUsernameCharacterLength, 10)}
+                />
+              )}
             {isMobile()
               && (
                 <>{profileInfo.profileName}</>
-              )
-            }
+              )}
             <div className="aura-card-number">
               <span>{Drupal.t('Aura membership number', {}, { context: 'aura' })}</span>
               <span>
