@@ -250,7 +250,7 @@
         geData.details.OrderPaymentMethods[0].PaymentMethodTypeName,
       ],
       "deliveryInfo": {
-        "country_code": geData.details.CustomerDetails.ShippingAddress.country_code,
+        "country_code": geData.details.CustomerDetails.ShippingAddress.ShippingCountryCode,
         "given_name": geData.details.CustomerDetails.ShippingAddress.ShippingFirstName,
         "family_name": geData.details.CustomerDetails.ShippingAddress.ShippingLastName,
         "mobile_number": {
