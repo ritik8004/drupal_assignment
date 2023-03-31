@@ -100,13 +100,13 @@
   Drupal.mapGlobaleStepData = function (geData, step) {
 
     // Process product data.
-    let productSku = [];
-    let productStyleCode = [];
-    let cartItemsCount = 0;
-    let productGtm = [];
-    let cartItemsFlocktory = [];
-    let referrerData = Drupal.getItemFromLocalStorage('referrerData');
-    let list = Drupal.hasValue(referrerData)
+    var productSku = [];
+    var productStyleCode = [];
+    var cartItemsCount = 0;
+    var productGtm = [];
+    var cartItemsFlocktory = [];
+    var referrerData = Drupal.getItemFromLocalStorage('referrerData');
+    var list = Drupal.hasValue(referrerData)
       ? referrerData.pageType
       : '';
     if (geData.details.ProductInformation) {
@@ -130,7 +130,7 @@
         productSku.push(product.SKU);
         productStyleCode.push(product.ProductGroupCode);
         cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
-        let cartItem = {
+        var cartItem = {
           "id" : product.ProductGroupCode,
           "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice,
           "count" : product.Quantity,
@@ -193,12 +193,12 @@
    *   The purchase success data object.
    */
   Drupal.mapGlobalePurchaseSuccessData = function (geData) {
-    let productGtm = [];
-    let cartItemsCount = 0;
-    let productSku = [];
-    let productStyleCode = [];
-    let discountAmount = 0;
-    let firstTimeTransaction = null;
+    var productGtm = [];
+    var cartItemsCount = 0;
+    var productSku = [];
+    var productStyleCode = [];
+    var discountAmount = 0;
+    var firstTimeTransaction = null;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         var product = productItem[1];
