@@ -18,7 +18,7 @@ use Drupal\facets\Entity\Facet;
  *
  * Remove swatch_plp_limit_mobile_view configuration for mobile view.
  */
-function alshaya_acm_product_update_9405() {
+function alshaya_acm_product_update_9406() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
@@ -30,6 +30,7 @@ function alshaya_acm_product_update_9405() {
   );
 }
 
+/**
  * Add the article_swatches.
  */
 function alshaya_acm_product_update_9405() {
