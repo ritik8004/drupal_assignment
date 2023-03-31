@@ -54,7 +54,7 @@ export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
   && hasValue(drupalSettings.checkoutTracker.enabled);
 
 /**
- * Helper function to get user email id.
+ * Helper function to get user's email id.
  */
 export const getUserEmailID = () => {
   let userEmailID = '';
