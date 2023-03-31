@@ -104,6 +104,10 @@
     let cartItemsCount = 0;
     let productGtm = [];
     let cartItemsFlocktory = [];
+    let referrerData = Drupal.getItemFromLocalStorage('referrerData');
+    let list = Drupal.hasValue(referrerData)
+      ? referrerData.pageType
+      : '';
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         var product = productItem[1];
@@ -111,14 +115,15 @@
           "quantity" : product.Quantity,
           "name" : product.ProductName,
           "id" : product.ProductGroupCode,
-          "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice,
+          "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice.toString(),
           "brand" : product.Brand,
           "category" : Drupal.getProductMetadata(product, 'category'),
           "variant" : product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
           "dimension3" : (product.ProductPrices.MerchantTransaction.TotalPrice !== product.ProductPrices.MerchantTransaction.DiscountedPrice) ? 'Discounted Product' : 'Regular Product',
           "dimension4" : Drupal.getProductMetadata(product, 'dimension4'),
-          "productOldPrice" : product.ProductPrices.MerchantTransaction.ListPrice,
+          "productOldPrice" : product.ProductPrices.MerchantTransaction.ListPrice.toString(),
+          "list" : list,
         };
         productGtm.push(productGtmData);
         productSku.push(product.SKU);
@@ -164,14 +169,15 @@
       cartData.deliveryOption = 'Home Delivery';
       cartData.deliveryType = geData.details.ShippingMethodType;
       cartData.deliveryCity = geData.details.CustomerDetails.ShippingAddress.ShippingCity;
-      cartData.deliveryArea = geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion;
+      cartData.deliveryArea = geData.details.CustomerDetails.ShippingAddress.ShippingAddress2;
     }
     if (step == 3 || step == 2) {
       cartData.cartTotalValue = geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency;
     }
     else if (step == 4) {
       cartData.paymentOption = geData.details.PaymentMethods[0].PaymentMethodTypeName;
-      cartData.cartTotalValue = geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency;
+      cartData.cartTotalValue = parseFloat(geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency.toFixed(2));
+      cartData.ecommerce.checkout.actionField.action = 'checkout';
     }
     return cartData;
   };
@@ -197,11 +203,11 @@
         var product = productItem[1];
         var productGtmData = {
           "name": product.ProductName,
-          "id": product.CartItemId,
-          "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency,
+          "id": product.ProductGroupCode,
+          "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency.toString(),
           "brand": product.Brand,
           "category": Drupal.getProductMetadata(product, 'category'),
-          "variant": product.ProductGroupCode,
+          "variant": product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
           "dimension4" : Drupal.getProductMetadata(product, 'dimension4'),
           "dimension3": (product.ProductPrices.MerchantTransaction.TotalPrice !== product.ProductPrices.MerchantTransaction.DiscountedPrice) ? 'Discounted Product' : 'Regular Product',
@@ -256,8 +262,8 @@
         "dependent_locality": geData.details.CustomerDetails.ShippingAddress.ShippingZipCode,
         "administrative_area": null, // @todo We need to ask Global-e top get this information.
         "area_parent": null, // @todo We need to ask Global-e top get this information.
-        "area_parent_display": null, // @todo We need to ask Global-e top get this information.
-        "administrative_area_display": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
+        "area_parent_display": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
+        "administrative_area_display": geData.details.CustomerDetails.ShippingAddress.ShippingAddress2,
       },
       "delivery_city": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
       "privilegeOrder": drupalSettings.userDetails.privilegeCustomer ? 'order with privilege club' : 'order without privilege club',
@@ -275,18 +281,16 @@
             "coupon": Drupal.hasValue(geData.details.Discounts) ? geData.details.Discounts[0].coupon : '',
             "action": "purchase"
           },
-          "products": [
-            productGtm
-          ]
+          "products": productGtm
         }
       },
       "isEgiftCard": geData.details.OrderPaymentMethods[0].IsGiftCard ? "yes" : "no",
-      "pageType": drupalSettings.gtm.pageType,
+      "pageType": "purchase confirmation page", // Always will be purchase confirmation page.
       "productSKU": productSku,
       "productStyleCode": productStyleCode,
-      "cartTotalValue": geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency,
+      "cartTotalValue": parseFloat(geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency.toFixed(2)),
       "cartItemsCount": cartItemsCount,
-      "deliveryArea": geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion,
+      "deliveryArea": geData.details.CustomerDetails.ShippingAddress.ShippingAddress2,
       "deliveryCity": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
     };
   };
