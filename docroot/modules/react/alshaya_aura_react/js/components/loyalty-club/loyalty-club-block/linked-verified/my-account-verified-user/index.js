@@ -19,6 +19,7 @@ const MyAccountVerifiedUser = (props) => {
     expiryDate,
   } = props;
 
+  // Character length of username to be shown in AURA banner.
   const { auraUsernameCharacterLength } = getAuraConfig();
   const profileInfo = getUserProfileInfo(firstName, lastName);
 
