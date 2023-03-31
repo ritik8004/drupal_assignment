@@ -5,7 +5,7 @@ import ProductDrawer from '../product-drawer';
 import ConfigurableForm from '../configurable-form';
 import Price from '../../../../js/utilities/components/price';
 import Promotions from '../promotions';
-import { getVatText } from '../../../../js/utilities/price';
+import { getDataAttributePrices, getVatText } from '../../../../js/utilities/price';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import Lozenges
   from '../../../../alshaya_algolia_react/js/common/components/lozenges';
@@ -14,7 +14,6 @@ import { isWishlistPage, getFirstChildWithWishlistData } from '../../../../js/ut
 import LoginMessage from '../../../../js/utilities/components/login-message';
 import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
-import { getSiteWiseFixedPrice } from '../../../../js/utilities/util';
 
 class ConfigurableProductDrawer extends React.Component {
   constructor(props) {
@@ -105,18 +104,21 @@ class ConfigurableProductDrawer extends React.Component {
       original_price: originalPrice,
       final_price: finalPrice,
       fixed_price: fixedPrice,
+      sku: variantSku,
     } = selectedVariantData;
 
     const vatText = getVatText();
     const parentSku = productData.catalogRestructured ? selectedVariantData.parent_sku : sku;
 
-    const siteWiseFixedPrice = getSiteWiseFixedPrice(fixedPrice);
+    const specialPrice = getDataAttributePrices(fixedPrice, 'special_price', true);
     // If a product is having fixedPrice (Which contains the special price of
     // the product), then change the finalPrice of the product to 0.01 to apply
     // discount. This case is only applicable for XB sites as of now.
     let endPrice = finalPrice;
-    if (hasValue(siteWiseFixedPrice)
-      && hasValue(siteWiseFixedPrice.special_price)) {
+    if (hasValue(drupalSettings.xb)
+      && hasValue(drupalSettings.xb.country_code)
+      && hasValue(specialPrice)
+      && hasValue(specialPrice[drupalSettings.xb.country_code])) {
       // @see Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator::buildPriceBlockSimple().
       endPrice = (hasValue(finalPrice) && (originalPrice > finalPrice)) ? finalPrice : '0.01';
     }
@@ -156,6 +158,7 @@ class ConfigurableProductDrawer extends React.Component {
           <div className="product-details-wrapper">
             <div className="product-title">{productData.title}</div>
             <Price
+              sku={variantSku}
               price={originalPrice}
               finalPrice={endPrice}
               fixedPrice={fixedPrice}

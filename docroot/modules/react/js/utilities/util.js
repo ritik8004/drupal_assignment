@@ -1,6 +1,5 @@
 import { hasValue } from './conditionsUtility';
 import isAuraEnabled from './helper';
-import logger from './logger';
 
 /**
  * Provides the current currency code.
@@ -82,90 +81,4 @@ export const isFullPaymentDoneByPseudoPaymentMedthods = (cart) => {
   }
 
   return false;
-};
-
-/*
- * Creates required array of shoe sizes.
- *
- * @param {object} configurables
- *   The configurables object.
- *
- * @return {array}
- *   Returns array of shoe sizes ex."36.5,37.5,38,38.5,39,39.5,40" or an empty array.
- */
-export const getShoeSize = (configurables) => {
-  let shoeSizes = [];
-  (shoeSizes) = configurables.map((el) => Object.values(Object.fromEntries(
-    Object.entries(el).map(([k, v]) => [k, Object.values(v)[0]]),
-  )).toString());
-  return shoeSizes;
-};
-
-/*
- * Helper function for check status of shoeai.
- *
- * @param array shoeai
- *   The array of shoeai drupalSettings.
- *
- * @return boolean
- *   Returns true or false.
- */
-export const getShoeAiStatus = () => {
-  const shoeAi = drupalSettings.shoeai;
-  if (shoeAi.status !== null && shoeAi.status === 1) {
-    return true;
-  }
-  return false;
-}
-
-/**
- * Checks if the given string is a JSON string or not.
- *
- * @param {string} str
- *   The string
- *
- * @return {boolean}
- *   Returns True if the given string is JSON else False.
- */
-export const isJsonString = (str) => {
-  try {
-    return (JSON.parse(str) && !!str);
-  } catch (e) {
-    logger.error('Error while trying to parse the given string. Not a valid JSON string.');
-    return false;
-  }
-};
-
-/**
- * Utility function to get the special price from JSON string.
- *
- * For Cross boarder sites, we have a field called `FixedPrice` which contains
- * the updated price of SKUs and it's stored as JSON string. Now to get the
- * proper value from that field, we use this utility function which provides us
- * a valid object which contains the required data.
- *
- * Example: {\"OM\":{\"price\":\"150.00\",\"special_price\":\"110.00\"}}
- * This is the expected in fixedPrice variable.
- *
- * @param {string} fixedPrice
- *   A JSON string which contains price items.
- *
- * @returns {object}
- *   Returns an object containing the fixedPrices.
- */
-export const getSiteWiseFixedPrice = (fixedPrice) => {
-  // Check if the fixedPrice contains the special price.
-  let siteWiseFixedPrice = '';
-  if (isJsonString(fixedPrice) && hasValue(drupalSettings.xb)) {
-    // Extracting the special price and checking if the config is available
-    // for the current domain.
-    const parsedFixedPrice = JSON.parse(fixedPrice);
-    const siteCode = drupalSettings.xb.site_code;
-    if (hasValue(siteCode)
-      && hasValue(parsedFixedPrice[siteCode])) {
-      siteWiseFixedPrice = parsedFixedPrice[siteCode];
-    }
-  }
-
-  return siteWiseFixedPrice;
 };

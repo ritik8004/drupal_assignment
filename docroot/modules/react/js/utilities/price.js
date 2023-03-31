@@ -55,11 +55,13 @@ const isFreeGiftProduct = (price) => {
  *   Fixed prices object with country code and prices.
  * @param {string} field
  *   Price or special price to retrieve from data json.
+ * @param {boolean} object
+ *   The type of response.
  *
- * @returns {string}
+ * @returns {string|object}
  *   Country code and its fixed or special price.
  */
-const getDataAttributePrices = (data, field) => {
+const getDataAttributePrices = (data, field, object = false) => {
   if (!hasValue(data) || !hasValue(field)) {
     return '';
   }
@@ -84,7 +86,11 @@ const getDataAttributePrices = (data, field) => {
     prices[key] = value[field];
   });
 
-  return JSON.stringify(prices);
+  if (!object) {
+    return JSON.stringify(prices);
+  }
+
+  return prices;
 };
 
 export {
