@@ -388,7 +388,7 @@ export default class CartItem extends React.Component {
     }
 
     let specialPrice = '';
-    if (hasValue(extraInfo.fixedPrice)) {
+    if (hasValue(extraInfo) && hasValue(extraInfo.fixedPrice)) {
       specialPrice = getDataAttributePricesObj(extraInfo.fixedPrice, 'special_price');
     }
     // If a product is having fixedPrice (Which contains the special price of
