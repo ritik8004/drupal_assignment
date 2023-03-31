@@ -52,3 +52,14 @@ export const checkBazaarVoiceAvailableForPdp = () => {
  */
 export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
   && hasValue(drupalSettings.checkoutTracker.enabled);
+
+/**
+ * Helper function to get user email id.
+ */
+export const getUserEmailID = () => {
+  let userEmailID = '';
+  if (hasValue(drupalSettings.userDetails.userEmailID)) {
+    userEmailID = drupalSettings.userDetails.userEmailID;
+  }
+  return userEmailID;
+};
