@@ -125,13 +125,7 @@ class AlshayaRcsBazaarVoice extends AlshayaBazaarVoice {
   }
 
   /**
-   * Get basic configurations defined for bazaar voice.
-   *
-   * @param string $context
-   *   Context.
-   *
-   * @return array
-   *   BazaarVoice basic configurations.
+   * {@inheritDoc}
    */
   public function getBasicConfigurations($context = 'web') {
     $basic_configs = [];

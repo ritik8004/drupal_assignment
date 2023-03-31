@@ -1,0 +1,20 @@
+@include breakpoint($only-mobile) {
+  #alshaya-algolia-search {
+    .sticky-filter-wrapper {
+      border-top: none;
+    }
+  }
+
+  .show-all-filters-algolia,
+  .show-all-filters {
+    &::before {
+      #{$right}: rem(11);
+    }
+  }
+
+  .container-without-product {
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+    );
+  }
+}

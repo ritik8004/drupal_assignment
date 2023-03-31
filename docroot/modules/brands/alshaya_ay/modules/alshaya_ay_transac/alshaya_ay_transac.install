@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_ay_transac_update_9402() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_alo_yoga.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Reset sharethis services settings.
  */
 function alshaya_ay_transac_update_9401() {

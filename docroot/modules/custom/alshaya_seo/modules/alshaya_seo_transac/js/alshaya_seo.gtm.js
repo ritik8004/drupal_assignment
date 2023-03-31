@@ -279,6 +279,12 @@
           dataLayer.push(userDetails);
         }
       });
+      // Push for 404 Pages.
+      if(gtmPageType === 'page not found'){
+        dataLayer.push({
+          event: '404_error'
+        });
+      }
 
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === 'not defined') {
@@ -783,7 +789,7 @@
     const lastUrl = location.href;
     const url = e.detail.data()[2];
 
-    if (product !== null && !lastUrl.includes(url)) {
+    if (product !== null && product.length > 0 && !lastUrl.includes(url)) {
       var productObj = Drupal.alshaya_seo_gtm_get_product_values(product);
       // Dispatch a custom event to alter the product detail view object.
       document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => productObj } }));
@@ -1546,10 +1552,11 @@
     };
 
     // Push to productDetailView event if quick-view class exits.
-    if (productContext.classList !== undefined && productContext.classList.contains('quick-view')) {
+    // Check if productContext is Array.
+    let elementContext = productContext[0] ? productContext[0] : productContext;
+    if (elementContext.classList !== undefined && elementContext.classList.contains('quick-view')) {
       data.product_view_type = 'quick_view';
     }
-
     dataLayer.push(data);
   }
 
@@ -1566,6 +1573,12 @@
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
+    // Remove product_view_type from product if view type is set.
+    var enable_quickview = '';
+    if (typeof product.product_view_type !== 'undefined') {
+      enable_quickview = product.product_view_type;
+      delete product.product_view_type;
+    }
     var productData = {
       event: 'addToCart'
     };
@@ -1592,6 +1605,10 @@
       }
     };
 
+    // Add product_view_type outside ecommerce.
+    if (enable_quickview) {
+      productData.product_view_type = enable_quickview;
+    }
     dataLayer.push(productData);
   }
 

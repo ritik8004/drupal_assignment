@@ -29,6 +29,30 @@ export const isEgiftCardEnabled = () => {
   return egiftCardStatus;
 };
 
+/**
+ * Helper function to check if egift card refund is enabled.
+ */
+export const isEgiftRefundEnabled = () => {
+  if (hasValue(drupalSettings.egiftCardRefund)
+    && hasValue(drupalSettings.egiftCardRefund.enabled)) {
+    return drupalSettings.egiftCardRefund.enabled;
+  }
+
+  return false;
+};
+
+/**
+ * Helper function to get the bnpl payment methods.
+ */
+export const getBnplPaymentMethods = () => {
+  if (hasValue(drupalSettings.egiftCardRefund)
+    && hasValue(drupalSettings.egiftCardRefund.bnplmethods)) {
+    return drupalSettings.egiftCardRefund.bnplmethods;
+  }
+
+  return [];
+};
+
 /*
  * Checks if full payment is done by egift and Aura.
  *

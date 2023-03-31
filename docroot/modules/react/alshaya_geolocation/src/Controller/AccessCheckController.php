@@ -6,7 +6,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
- * Geo location controller to prepare data for return pages.
+ * Checks access for displaying geolocation pages.
  */
 class AccessCheckController extends ControllerBase {
 
@@ -18,7 +18,8 @@ class AccessCheckController extends ControllerBase {
    */
   public function accessCheck() {
     // Allow access to the routes only if the store finder status is set.
-    return AccessResult::allowedIf($this->config('alshaya_geolocation.settings')->get('geolocation_enabled'));
+    return AccessResult::allowedIf($this->config('alshaya_geolocation.settings')->get('geolocation_enabled'))
+      ->addCacheableDependency($this->config('alshaya_geolocation.settings'));
   }
 
 }

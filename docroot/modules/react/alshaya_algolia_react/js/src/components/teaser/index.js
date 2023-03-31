@@ -210,7 +210,7 @@ const Teaser = ({
 
   // Add the fixedPrice in extraInfo object.
   const extraInfoObj = { ...extraInfo };
-  if (hasValue(attribute.fixed_price)) {
+  if (hasValue(attribute) && hasValue(attribute.fixed_price)) {
     extraInfoObj.fixedPrice = attribute.fixed_price;
   }
 
