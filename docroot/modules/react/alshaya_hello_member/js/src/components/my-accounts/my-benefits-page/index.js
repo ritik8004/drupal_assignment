@@ -7,7 +7,6 @@ import {
   getBenefitTag,
 } from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
-import { getUserDetails } from '../../../../../../js/utilities/helper';
 import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import Loading from '../../../../../../js/utilities/loading';
@@ -98,12 +97,11 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
-    const currentUserDetails = getUserDetails();
     let userEmail = '';
 
-    if (hasValue(currentUserDetails)
-      && hasValue(currentUserDetails.userEmailID)) {
-      userEmail = `?email="${currentUserDetails.userEmailID}"`;
+    if (hasValue(drupalSettings.userDetails)
+      && hasValue(drupalSettings.userDetails.userEmailID)) {
+      userEmail = `?email="${drupalSettings.userDetails.userEmailID}"`;
     }
 
     const benefitTag = getBenefitTag(myBenefit);

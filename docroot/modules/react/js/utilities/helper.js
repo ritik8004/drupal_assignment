@@ -52,15 +52,3 @@ export const checkBazaarVoiceAvailableForPdp = () => {
  */
 export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
   && hasValue(drupalSettings.checkoutTracker.enabled);
-
-/**
- * Helper function to get current user details.
- */
-export const getUserDetails = () => {
-  let userDetails = '';
-  if (hasValue(drupalSettings)
-    && hasValue(drupalSettings.userDetails)) {
-    userDetails = drupalSettings.userDetails;
-  }
-  return userDetails;
-};
