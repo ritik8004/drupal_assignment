@@ -173,7 +173,17 @@ export default createConnector({
   getSearchParameters: function getSearchParameters(searchParameters, props, searchState) {
     // Custom work done here to support loading multiple pages first time.
     // This is to support Back to PLP feature.
-    const localHitsPerPage = localStorage.getItem('defaultHitsPerPage') !== null ? localStorage.getItem('defaultHitsPerPage') : parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
+    // check if hitsPerPage set in searchparams and make it default.
+    let localHitsPerPage = searchParameters.hitsPerPage;
+    if (searchParameters.hitsPerPage === undefined) {
+      // If hitsPerPage is undefined set it based on algolia configuration.
+      if (drupalSettings.algoliaSearch.hitsPerPage === true) {
+        localHitsPerPage = parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
+      } else {
+        // Pick from localStorage if available.
+        localHitsPerPage = localStorage.getItem('defaultHitsPerPage') !== null ? localStorage.getItem('defaultHitsPerPage') : parseInt(drupalSettings.algoliaSearch.itemsPerPage, 10);
+      }
+    }
     return searchParameters.setQueryParameters({
       page: (typeof props.defaultpageRender === 'number' && props.defaultpageRender > 1)
         ? 0
