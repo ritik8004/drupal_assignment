@@ -241,7 +241,6 @@ function alshaya_xb_alshaya_get_currency_code_alter(&$currency) {
  * Implements hook_alshaya_acm_customer_orders_details_build_alter().
  */
 function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
-
   // Set delivery method for XB order.
   if (!empty($order['extension']['globale']['shipping_method'])) {
     $build['#order_details']['delivery_method'] = $order['extension']['globale']['shipping_method'];
@@ -267,7 +266,7 @@ function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$orde
     $build['#order_details']['sub_total'] = $order['extension']['globale']['totals']['subtotal']['value'];
   }
 
-  // Set grand.
+  // Set order total.
   if (!empty($order['extension']['globale']['totals']['grand_total']['value'])) {
     $build['#order_details']['order_total'] = $order['extension']['globale']['totals']['grand_total']['value'];
   }
