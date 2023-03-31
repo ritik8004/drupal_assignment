@@ -5,7 +5,7 @@ import ProductDrawer from '../product-drawer';
 import ConfigurableForm from '../configurable-form';
 import Price from '../../../../js/utilities/components/price';
 import Promotions from '../promotions';
-import { getDataAttributePrices, getVatText } from '../../../../js/utilities/price';
+import { getDataAttributePricesObj, getVatText } from '../../../../js/utilities/price';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import Lozenges
   from '../../../../alshaya_algolia_react/js/common/components/lozenges';
@@ -110,7 +110,7 @@ class ConfigurableProductDrawer extends React.Component {
     const vatText = getVatText();
     const parentSku = productData.catalogRestructured ? selectedVariantData.parent_sku : sku;
 
-    const specialPrice = getDataAttributePrices(fixedPrice, 'special_price', true);
+    const specialPrice = getDataAttributePricesObj(fixedPrice, 'special_price');
     // If a product is having fixedPrice (Which contains the special price of
     // the product), then change the finalPrice of the product to 0.01 to apply
     // discount. This case is only applicable for XB sites as of now.

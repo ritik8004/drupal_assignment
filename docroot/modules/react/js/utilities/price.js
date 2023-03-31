@@ -49,19 +49,17 @@ const isFreeGiftProduct = (price) => {
 };
 
 /**
- * Gets data attribute for fixed price.
+ * Gets data attribute for fixed price as object.
  *
  * @param {string} data
  *   Fixed prices object with country code and prices.
  * @param {string} field
  *   Price or special price to retrieve from data json.
- * @param {boolean} object
- *   The type of response.
  *
- * @returns {string|object}
+ * @returns {object}
  *   Country code and its fixed or special price.
  */
-const getDataAttributePrices = (data, field, object = false) => {
+const getDataAttributePricesObj = (data, field) => {
   if (!hasValue(data) || !hasValue(field)) {
     return '';
   }
@@ -86,11 +84,28 @@ const getDataAttributePrices = (data, field, object = false) => {
     prices[key] = value[field];
   });
 
-  if (!object) {
-    return JSON.stringify(prices);
+  return prices;
+};
+
+/**
+ * Gets data attribute for fixed price as json string.
+ *
+ * @param {string} data
+ *   Fixed prices object with country code and prices.
+ * @param {string} field
+ *   Price or special price to retrieve from data json.
+ *
+ * @returns {string}
+ *   Country code and its fixed or special price.
+ */
+const getDataAttributePrices = (data, field) => {
+  const prices = getDataAttributePricesObj(data, field);
+
+  if (!hasValue(prices)) {
+    return prices;
   }
 
-  return prices;
+  return JSON.stringify(prices);
 };
 
 export {
@@ -98,4 +113,5 @@ export {
   getVatText,
   isFreeGiftProduct,
   getDataAttributePrices,
+  getDataAttributePricesObj,
 };

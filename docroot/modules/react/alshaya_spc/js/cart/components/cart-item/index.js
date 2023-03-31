@@ -30,7 +30,7 @@ import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDel
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
-import { getDataAttributePrices } from '../../../../../js/utilities/price';
+import { getDataAttributePricesObj } from '../../../../../js/utilities/price';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -389,7 +389,7 @@ export default class CartItem extends React.Component {
 
     let specialPrice = '';
     if (hasValue(extraInfo.fixedPrice)) {
-      specialPrice = getDataAttributePrices(extraInfo.fixedPrice, 'special_price', true);
+      specialPrice = getDataAttributePricesObj(extraInfo.fixedPrice, 'special_price');
     }
     // If a product is having fixedPrice (Which contains the special price of
     // the product), then change the finalPrice of the product to 0.01 to apply
