@@ -262,7 +262,7 @@
       @include breakpoint($desktop) {
         padding-#{$left}: 1.875rem;
 
-        &.trim-user-name {
+        .trim-user-name {
           overflow: hidden;
           text-overflow: ellipsis;
           width: rem(220);
