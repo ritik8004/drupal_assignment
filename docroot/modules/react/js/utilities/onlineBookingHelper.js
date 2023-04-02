@@ -1,6 +1,6 @@
 import { isUserAuthenticated } from './helper';
 import logger from './logger';
-import { callMagentoApi } from './requestHelper';
+import { callMagentoApi, callMagentoApiSynchronous } from './requestHelper';
 import { hasValue } from './conditionsUtility';
 import getStringMessage from './strings';
 
@@ -79,6 +79,41 @@ export const getBookingDetailByConfirmationNumber = async (confirmationNumber) =
     });
   }
   return response.data;
+};
+
+/**
+ * Gets online booking details using confirmation number with synchronous call
+ * to Magento API.
+ *
+ * @returns {object}
+ *   Returns the object.
+ */
+export const getBookingDetailByConfirmationNumberSynchronous = (confirmationNumber) => {
+  const response = callMagentoApiSynchronous(getOnlineBookingApiEndpoint('checkBookingStatus'), 'POST', JSON.stringify({
+    confirmationNumber,
+  }));
+
+  // Handle the error response from API in case of internal error.
+  if (!hasValue(response)
+    || (hasValue(response.error) && response.error)) {
+    logger.warning('Online Booking: Error occurred while fetching booking details from confirmation number @confirmationNumber, API Response: @response.', {
+      '@confirmationNumber': confirmationNumber,
+      '@response': JSON.stringify(response),
+    });
+    return {
+      status: false,
+      error_message: response.error_message,
+    };
+  }
+
+  // If booking is successful add confirmation number in result.
+  if (!hasValue(response.status)) {
+    logger.warning('Online Booking: Api returns success false while fetching booking details from confirmation number @confirmationNumber, API Response: @response', {
+      '@confirmationNumber': confirmationNumber,
+      '@response': JSON.stringify(response),
+    });
+  }
+  return response;
 };
 
 /**
