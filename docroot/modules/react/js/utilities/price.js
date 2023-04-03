@@ -49,7 +49,46 @@ const isFreeGiftProduct = (price) => {
 };
 
 /**
- * Gets data attribute for fixed price.
+ * Gets data attribute for fixed price as object.
+ *
+ * @param {string} data
+ *   Fixed prices object with country code and prices.
+ * @param {string} field
+ *   Price or special price to retrieve from data json.
+ *
+ * @returns {object}
+ *   Country code and its fixed or special price.
+ */
+const getDataAttributePricesObj = (data, field) => {
+  if (!hasValue(data) || !hasValue(field)) {
+    return {};
+  }
+
+  if (typeof data !== 'string') {
+    return {};
+  }
+
+  let fixedPriceAttributeData = {};
+
+  try {
+    // Get json object from string.
+    fixedPriceAttributeData = JSON.parse(data);
+  } catch (e) {
+    // Return empty object if json parse has error.
+    return {};
+  }
+
+  const prices = {};
+  Object.entries(fixedPriceAttributeData).forEach(([key, value]) => {
+    // Get prices for the given field for each currency from fixed_price field.
+    prices[key] = value[field];
+  });
+
+  return prices;
+};
+
+/**
+ * Gets data attribute for fixed price as json string.
  *
  * @param {string} data
  *   Fixed prices object with country code and prices.
@@ -59,37 +98,15 @@ const isFreeGiftProduct = (price) => {
  * @returns {string}
  *   Country code and its fixed or special price.
  */
-const getDataAttributePrices = (data, field) => {
-  if (!hasValue(data) || !hasValue(field)) {
-    return '';
-  }
-
-  if (typeof data !== 'string') {
-    return '';
-  }
-
-  let fixedPriceAttributeData = {};
-
-  try {
-    // Get json object from string.
-    fixedPriceAttributeData = JSON.parse(data);
-  } catch (e) {
-    // Return empty string if json parse has error.
-    return '';
-  }
-
-  const prices = {};
-  Object.entries(fixedPriceAttributeData).forEach(([key, value]) => {
-    // Get prices for the given field for each currency from fixed_price field.
-    prices[key] = value[field];
-  });
-
-  return JSON.stringify(prices);
-};
+const getDataAttributePrices = (data, field) => JSON.stringify(getDataAttributePricesObj(
+  data,
+  field,
+));
 
 export {
   calculateDiscount,
   getVatText,
   isFreeGiftProduct,
   getDataAttributePrices,
+  getDataAttributePricesObj,
 };

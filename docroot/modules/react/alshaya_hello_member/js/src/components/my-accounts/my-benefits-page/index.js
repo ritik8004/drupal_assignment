@@ -97,7 +97,20 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
+    let userEmail = '';
+
+    if (hasValue(drupalSettings.userDetails)
+      && hasValue(drupalSettings.userDetails.userEmailID)) {
+      userEmail = `?email="${drupalSettings.userDetails.userEmailID}"`;
+    }
+
     const benefitTag = getBenefitTag(myBenefit);
+    // Show QRCodeButton, either if response has no benefit tag or has a value '0' or 'S'.
+    const showQRButton = !!(!hasValue(benefitTag)
+    || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')));
+    // Show CartButton, either if response has no benefit tag or has a value '0' or 'E'.
+    const showCartButton = !!(!hasValue(benefitTag)
+    || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'E')));
 
     return (
       <div className="my-benefit-page-wrapper">
@@ -119,7 +132,7 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          {hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')
+          {showQRButton
             && (
               <QrCodeDisplay
                 benefitName={myBenefit.description}
@@ -131,7 +144,7 @@ class MyBenefitsPage extends React.Component {
                 memberTitle={getStringMessage('redeem_in_store')}
               />
             )}
-          {hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'E')
+          {showCartButton
             && (
               <AddBenefitsToCart
                 title={myBenefit.description}
@@ -143,7 +156,7 @@ class MyBenefitsPage extends React.Component {
           {/* CTA for competition benefits. */}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
             && (
-              <a href={`${myBenefit.benefit_url}?email="${drupalSettings.userDetails.userEmailID}"`}>
+              <a href={myBenefit.benefit_url + userEmail}>
                 {Drupal.t('Enter now', {}, { context: 'hello_member' })}
               </a>
             )}

@@ -161,6 +161,8 @@ function alshaya_xb_page_attachments_alter(array &$page) {
 
   // Set gtm country to config overrides.
   $page['#attached']['drupalSettings']['gtm']['country'] = $configOverrides['country'];
+  // Set the domain mapping config.
+  $page['#attached']['drupalSettings']['xb']['country_code'] = $configOverrides['code'] ?? '';
 
 }
 
@@ -249,6 +251,26 @@ function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$orde
   // Set billing method for XB order.
   if (!empty($order['extension']['globale']['billing_method'])) {
     $build['#order_details']['payment_method'] = $order['extension']['globale']['billing_method'];
+  }
+
+  // Set duties taxes.
+  if (!empty($order['extension']['globale']['totals']['duties']['value'])) {
+    $build['#order_details']['duties_taxes'] = alshaya_acm_price_format($order['extension']['globale']['totals']['duties']['value'], [], '', $order['order_currency_code']);
+  }
+
+  // Set delivery charges.
+  if (!empty($order['extension']['globale']['totals']['shipping']['value'])) {
+    $build['#order_details']['delivery_charge'] = alshaya_acm_price_format($order['extension']['globale']['totals']['shipping']['value'], [], '', $order['order_currency_code']);
+  }
+
+  // Set Sub total.
+  if (!empty($order['extension']['globale']['totals']['subtotal']['value'])) {
+    $build['#order_details']['sub_total'] = alshaya_acm_price_format($order['extension']['globale']['totals']['subtotal']['value'], [], '', $order['order_currency_code']);
+  }
+
+  // Set order total.
+  if (!empty($order['extension']['globale']['totals']['grand_total']['value'])) {
+    $build['#order_details']['order_total'] = alshaya_acm_price_format($order['extension']['globale']['totals']['grand_total']['value'], [], '', $order['order_currency_code']);
   }
 
   if (empty($build["#cancelled_products"])) {
