@@ -3,7 +3,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardTypeSVG from '../../../../../alshaya_spc/js/svg-component/card-type-svg';
 
 const EgiftCardDetails = ({
-  cardList, selectedOption, egiftCardType, paymentDetails,
+  cardList, selectedOption, egiftCardType, paymentDetails, setSelectedOption,
 }) => {
   let selected = cardList ? cardList.card_number : 'newegift';
   // Assigning the variable with the current selected element value.
@@ -37,9 +37,15 @@ const EgiftCardDetails = ({
     egiftRefundName = 'newegift';
   }
 
+  const onOptionChange = () => {
+    // For egift card details component radio button.
+    const el = document.querySelector('.egift-card input').value;
+    setSelectedOption(el);
+  };
+
   return (
     <>
-      <div className="method-list-wrapper">
+      <div className="method-wrapper egift-card" key={selected} onClick={() => onOptionChange('egift')}>
         <div className="method-wrapper" key={selected}>
           {isReturnConfPage === -1 && radioButton
             ? (
@@ -48,6 +54,7 @@ const EgiftCardDetails = ({
                 value={egiftRefundName}
                 name={egiftRefundName}
                 checked={selected === egiftRefundName}
+                className={selected === egiftRefundName}
               />
             )
             : (

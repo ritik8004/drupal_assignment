@@ -4,7 +4,7 @@
  */
 (function (drupalSettings) {  
   let shoeAi = drupalSettings.shoeai;
-  if (shoeAi.status != null && shoeAi.status == 1) {
+  if (shoeAiStatus(shoeAi)) {
     let language = drupalSettings.path.currentLanguage;
     let script = document.createElement('script');
     script.src = 'https://shoesize.me/assets/plugin/loader.js';
@@ -15,3 +15,11 @@
     document.body.appendChild(script);
   }
 })(drupalSettings);
+
+function shoeAiStatus(shoeAi) {
+  if (shoeAi && shoeAi.status != null && shoeAi.status == 1) {
+    return true;
+  } else {
+    return false;
+  }
+}
