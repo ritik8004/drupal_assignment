@@ -279,6 +279,12 @@
           dataLayer.push(userDetails);
         }
       });
+      // Push for 404 Pages.
+      if(gtmPageType === 'page not found'){
+        dataLayer.push({
+          event: '404_error'
+        });
+      }
 
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === 'not defined') {

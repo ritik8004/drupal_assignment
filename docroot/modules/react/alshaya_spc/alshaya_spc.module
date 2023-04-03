@@ -132,7 +132,7 @@ function alshaya_spc_block_access(Block $block, $operation, AccountInterface $ac
 function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
   unset($form['add_to_cart']['#ajax']);
   $form['#attached']['library'][] = 'alshaya_spc/add_to_cart';
-  $form['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v2';
+  $form['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart';
 }
 
 /**
@@ -445,7 +445,7 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   // New PDP will directly call delivery options component.
   $build['#attached']['library'][] = $product_pdp_layout !== 'magazine_v2'
     ? 'alshaya_spc/express_delivery'
-    : 'alshaya_spc/commerce_backend.cart.v2';
+    : 'alshaya_spc/commerce_backend.cart';
 
   // Attaching library for react component to show PDP express delivery labels.
   $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';

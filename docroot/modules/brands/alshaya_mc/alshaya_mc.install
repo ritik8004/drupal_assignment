@@ -13,6 +13,17 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_mc_update_9403() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_mothercare.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add arabic configurations for bazaar voice write review form.
  */
 function alshaya_mc_update_9402() {

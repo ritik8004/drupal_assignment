@@ -551,6 +551,22 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'سجّل النقاط',
         'context' => 'hello_member',
       ],
+      'Enter now' => [
+        'ar' => 'أدخل الأن',
+        'context' => 'hello_member',
+      ],
+      'Redeem Now' => [
+        'ar' => 'استرد الآن',
+        'context' => 'hello_member',
+      ],
+      'Shop Now' => [
+        'ar' => 'تسوق الآن',
+        'context' => 'hello_member',
+      ],
+      'Book Now' => [
+        'ar' => 'احجز الآن',
+        'context' => 'hello_member',
+      ],
     ],
   ];
 }

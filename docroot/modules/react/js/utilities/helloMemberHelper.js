@@ -336,3 +336,36 @@ export const setHelloMemberLoyaltyCard = async (identifierNo, quoteId) => {
  * Helper function to display an error message to the customer during CLM downtime.
  */
 export const displayErrorMessage = (message) => <div className="hello-member-points-wrapper"><div className="hello-member-downtime-message">{ message }</div></div>;
+
+/**
+ * Helper function to check benefits channel.
+ */
+export const getBenefitTag = (responseData) => {
+  if (hasValue(responseData) && hasValue(responseData.tag)) {
+    return responseData.tag;
+  }
+  return null;
+};
+
+/**
+ * Helper function to return button name for external benefits.
+ */
+export const getExternalBenefitText = (responseData) => {
+  let benefitText = null;
+  if (hasValue(responseData) && hasValue(responseData.tag)) {
+    switch (responseData.tag) {
+      case 'ER':
+        benefitText = Drupal.t('Redeem Now', {}, { context: 'hello_member' });
+        break;
+      case 'ES':
+        benefitText = Drupal.t('Shop Now', {}, { context: 'hello_member' });
+        break;
+      case 'EB':
+        benefitText = Drupal.t('Book Now', {}, { context: 'hello_member' });
+        break;
+      default:
+        break;
+    }
+  }
+  return benefitText;
+};

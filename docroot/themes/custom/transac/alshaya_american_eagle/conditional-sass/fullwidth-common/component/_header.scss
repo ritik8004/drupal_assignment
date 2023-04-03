@@ -41,6 +41,14 @@
   }
 }
 
+@include breakpoint($desktop-wide-1680) {
+  .c-menu-secondary {
+    .region__menu-secondary {
+      padding-#{$right}: rem(17);
+    }
+  }
+}
+
 .super-category-enabled {
   &.frontpage,
   &:not(.frontpage) {
