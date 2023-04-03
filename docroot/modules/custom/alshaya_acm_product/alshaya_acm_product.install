@@ -20,12 +20,12 @@ use Drupal\facets\Entity\Facet;
  */
 function alshaya_acm_product_update_9406() {
 
-  // Get Old Value swatch_plp_limit_mobile_view.
   $config_factory = \Drupal::configFactory();
+  // Get Old Value swatch_plp_limit_mobile_view.
   $display_settings = $config_factory->get('alshaya_acm_product.display_settings');
 
   // Update value  no_of_swatches_mobile from swatch_plp_limit_mobile_view.
-  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.color_swatches');
+  $config = $config_factory->getEditable('alshaya_algolia_react.color_swatches');
   $config->set('no_of_swatches_mobile', $display_settings->get('swatch_plp_limit_mobile_view'));
   $config->save();
 
