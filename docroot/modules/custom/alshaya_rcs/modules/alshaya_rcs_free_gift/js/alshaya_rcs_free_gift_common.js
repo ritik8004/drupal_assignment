@@ -74,21 +74,33 @@ window.commerceBackend = window.commerceBackend || {};
       freeGiftItem = globalThis.rcsPhCommerceBackend.getDataSynchronous('product_by_sku', { sku: freeGiftSku });
       if (Drupal.hasValue(freeGiftItem) && Drupal.hasValue(freeGiftItem.sku)) {
         if (freeGiftItem.type_id === 'configurable') {
-          // For configurable products having style code, we will take all styled variants.
-          if (Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyleSynchronous)) {
-            freeGiftItem = window.commerceBackend.getProductsInStyleSynchronous({
-              sku: freeGiftItem.sku,
-              style_code: freeGiftItem.style_code,
-              context: 'modal'
-            });
-          }
           if (freeGiftItem.sku !== freeGiftSku) {
             // This condition means freeGiftSku product is actually simple
             // but MDC returns the configurable parent product of a simple sku
             // when product_by_sku api is called.
             // Then we need to alter the response to get simple sku data.
             freeGiftItem = window.commerceBackend.processProductResponse(freeGiftSku, freeGiftItem);
+            // Process free gift media.
+            window.commerceBackend.setMediaData(freeGiftItem);
           }
+          else {
+            // For configurable products having style code, we will take all styled variants.
+            if (Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyleSynchronous)) {
+              freeGiftItem = window.commerceBackend.getProductsInStyleSynchronous({
+                sku: freeGiftItem.sku,
+                style_code: freeGiftItem.style_code,
+                context: 'modal'
+              });
+            }
+            else {
+              // Process free gift media.
+              window.commerceBackend.setMediaData(freeGiftItem);
+            }
+          }
+        }
+        else {
+          // Process free gift media.
+          window.commerceBackend.setMediaData(freeGiftItem);
         }
         // Store it in local storage for further usage on different pages.
         window.commerceBackend.setRcsProductToStorage(freeGiftItem, 'free_gift', freeGiftSku);
@@ -106,12 +118,9 @@ window.commerceBackend = window.commerceBackend || {};
    * @param {boolean} backToCollection
    *   Boolean flag to show the back to collection link.
    */
-  window.commerceBackend.showItemModalView = function showItemModalView(sku, backToCollection = false) {
+  window.commerceBackend.showItemModalView = function showItemModalView(sku, backToCollection = false, couponCode = null, promoRuleId = null) {
     // Load the product data based on sku.
-    var freeGiftProduct = globalThis.RcsPhStaticStorage.get('product_data_' + sku);
-    if (!Drupal.hasValue(freeGiftProduct)) {
-      return;
-    }
+    var freeGiftProduct = window.commerceBackend.fetchValidatedFreeGift(sku);
 
     var elm = document.createElement('div');
     var data = {
@@ -169,7 +178,7 @@ window.commerceBackend = window.commerceBackend || {};
   /**
    * Utility function to start free gift modal processing and show.
    */
-  window.commerceBackend.startFreeGiftModalProcess = function startFreeGiftModalProcess (skus, backToCollection = false) {
+  window.commerceBackend.startFreeGiftModalProcess = function startFreeGiftModalProcess (skus, backToCollection = false, couponCode = '') {
     // Do not process if skus are not defined.
     if (!Drupal.hasValue(skus)) {
       return;
@@ -181,18 +190,24 @@ window.commerceBackend = window.commerceBackend || {};
       });
       Drupal.cartNotification.spinner_start();
     }
-
     $('body').addClass('free-gifts-modal-overlay');
+    var promotionTitle; var promoRuleId;
+
+    if (drupalSettings.path.currentPath === 'cart') {
+      promotionTitle = $('.free-gift-title').text();
+      promoRuleId = $('.free-gift-promo .gift-message a').data('promo-rule-id');
+    }
+    else {
+      promotionTitle = $('.free-gift-message a.free-gift-modal').data('promotion-title');
+    }
 
     // We have two type of modals for free gift.
     // 1. The single item modal ( Where we display a individual free gift )
     // 2. Collection of item modal ( List of free gift items )
     if (skus.length === 1) {
       // Displaying single free gift item modal.
-      window.commerceBackend.showItemModalView(skus[0], backToCollection);
+      window.commerceBackend.showItemModalView(skus[0], backToCollection, couponCode, promoRuleId);
     } else if (skus.length > 1) {
-      // Get the free gift promotion title.
-      var promotionTitle = $(this).data('promotion-title');
       var elm = document.createElement('div');
       var data = {
         title: promotionTitle,
@@ -210,6 +225,10 @@ window.commerceBackend = window.commerceBackend || {};
             freeGiftImageTitle: freeGiftItem.name,
             freeGiftSku,
             backToCollection: true,
+            freeGiftItem,
+            couponCode,
+            promoRuleId,
+            selectLink: drupalSettings.path.currentPath === 'cart'
           });
         }
       });
@@ -217,7 +236,7 @@ window.commerceBackend = window.commerceBackend || {};
       // If valid sku count is only one after processing, do not render free gift list modal.
       if (data.items.length === 1) {
         // Displaying single free gift item modal.
-        window.commerceBackend.showItemModalView(data.items[0].freeGiftSku);
+        window.commerceBackend.showItemModalView(data.items[0].freeGiftSku, couponCode, promoRuleId);
         Drupal.cartNotification.spinner_stop();
         return;
       }
@@ -254,13 +273,18 @@ window.commerceBackend = window.commerceBackend || {};
   Drupal.behaviors.rcsFreeGiftsCommon = {
     attach: function rcsFreeGiftsCommon(context, settings) {
       // Open the collection list on click of back to collection.
-      $(".free-gift-back-to-collection").once('back-to-collection-processed').on('click', function (e) {
+      $('.free-gift-back-to-collection').once('back-to-collection-processed').on('click', function (e) {
         e.preventDefault();
         // Close the item dialog box.
         if (collectionItemDialog) {
           collectionItemDialog.close();
         }
-        $(".free-gift-message a").click();
+        // Opening free gift list modal on clicking back to collection.
+        if (drupalSettings.path.currentPath === 'cart') {
+          $('.spc-promotions .coupon-code').click();
+        } else {
+          $('.free-gift-message a').click();
+        }
       });
     }
   };
@@ -286,6 +310,10 @@ window.commerceBackend = window.commerceBackend || {};
       var promoUrl = Drupal.url(freeGiftApiData.rule_web_url);
       var processedFreeGiftData = {};
       var giftItemProductInfo = window.commerceBackend.fetchValidatedFreeGift(freeGiftApiData.gifts[0].sku);
+      if (!Drupal.hasValue(giftItemProductInfo)) {
+        productInfo[skuItemCode].freeGiftPromotion = [];
+        return productInfo;
+      }
       var skuImage = window.commerceBackend.getFirstImage(giftItemProductInfo);
       var skuImageUrl = Drupal.hasValue(skuImage) ? skuImage.url : drupalSettings.alshayaRcs.default_meta_image;
       if (freeGiftApiData.total_items > 1
@@ -350,6 +378,7 @@ window.commerceBackend = window.commerceBackend || {};
         processedFreeGiftData.promo_title = freeGiftApiData.rule_name;
         processedFreeGiftData.promo_web_url = promoUrl;
       }
+      processedFreeGiftData.promoRuleId = freeGiftApiData.rule_id;
       // Updating free gift promotion response from graphQl with react processable data.
       productInfo[skuItemCode].freeGiftPromotion = processedFreeGiftData;
 

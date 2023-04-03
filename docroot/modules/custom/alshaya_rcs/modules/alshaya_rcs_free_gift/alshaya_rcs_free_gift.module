@@ -7,5 +7,8 @@ function alshaya_rcs_free_gift_preprocess_node(&$variables) {
   if ($variables['node']->bundle() === 'rcs_product') {
     $variables['free_gift_status'] = TRUE;
     $variables['#attached']['library'][] = 'alshaya_rcs_free_gift/rcs_free_gift_pdp';
+    if (\Drupal::config('alshaya_acm_product.settings')->get('pdp_layout') !== 'magazine_v2') {
+      $variables['#attached']['library'][] = 'alshaya_rcs_free_gift/rcs_free_gift_pdp_classic_and_magazine_layout';
+    }
   }
 }

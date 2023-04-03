@@ -64,6 +64,10 @@ rcs_free_gift_common:
     - core/jquery
     - core/drupal
     - core/drupalSettings
+    - alshaya_acm_cart_notification/cart_notification_js
+    - alshaya_acm_product/product_detail
+    - alshaya_rcs_product/rcs_product_info
+    - alshaya_rcs_free_gift/free_gift_main
     - alshaya_rcs_free_gift/product.promotion_free_gift
     - alshaya_rcs_free_gift/product.promotion_free_gift_list
     - alshaya_rcs_free_gift/product.promotion_free_gift_modal
@@ -78,8 +82,12 @@ rcs_free_gift_pdp:
   js:
     js/alshaya_rcs_free_gift_pdp.js: {}
   dependencies:
+    - alshaya_rcs_free_gift/rcs_free_gift_common
+
+rcs_free_gift_pdp_classic_and_magazine_layout:
+  version: 1.x
+  js:
+    js/alshaya_rcs_free_gift_pdp_classic_and_magazine_layout.js: {}
+  dependencies:
     - alshaya_spc/add_to_cart
-    - alshaya_acm_cart_notification/cart_notification_js
-    - alshaya_rcs_product/rcs_product_info
-    - alshaya_rcs_free_gift/free_gift_main
     - alshaya_rcs_free_gift/rcs_free_gift_common
