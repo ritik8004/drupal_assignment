@@ -31,6 +31,11 @@ glegem("OnCheckoutStepLoaded", function (data) {
       geData = data;
       // Push data to datalayer.
       Drupal.alshayaXbCheckoutGaPush(data, 2);
+      // Trigger step 3 if address already entered by customer.
+      if (Drupal.isXbAddressAvailable(data)) {
+        Drupal.alshayaXbCheckoutGaPush(data, 3);
+      }
+
       break;
 
     case data.Steps.CONFIRMATION:

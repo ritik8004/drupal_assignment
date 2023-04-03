@@ -1,0 +1,7 @@
+acq_payment.bnpl:
+  path: '/admin/commerce/config/bnpl-payment-methods'
+  defaults:
+    _form: '\Drupal\acq_payment\Form\BnplPaymentMethodsForm'
+    _title: 'Configure BNPL Payment Methods'
+  requirements:
+    _permission: 'access commerce administration pages'

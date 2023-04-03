@@ -14,6 +14,17 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_bp_transac_update_9402() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_boots.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add arabic configurations for bazaar voice write review form.
  */
 function alshaya_bp_transac_update_9401() {

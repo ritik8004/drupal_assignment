@@ -13,6 +13,9 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { getReturnConfirmationUrl, getOrderDetails, isReturnWindowClosed } from '../../../utilities/online_returns_util';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
+import { getBnplPaymentMethods, isEgiftRefundEnabled } from '../../../../../js/utilities/util';
 
 class ReturnRefundDetails extends React.Component {
   constructor(props) {
@@ -22,11 +25,58 @@ class ReturnRefundDetails extends React.Component {
       address: getDeliveryAddress(orderDetails),
       paymentInfo: getPaymentDetails(orderDetails),
       open: false,
+      cardList: null, // eGift cards linked to a user email.
+      egiftCardType: false, // To check new eGift card or existing.
     };
   }
 
   componentDidMount = () => {
     document.addEventListener('updateRefundAccordionState', this.updateRefundAccordionState, false);
+    // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
+    if (isUserAuthenticated() && isEgiftRefundEnabled()) {
+      const { paymentInfo } = this.state;
+      if (!hasValue(paymentInfo.aura)) {
+        // Call to get customer linked eGift card details.
+        const result = callEgiftApi('eGiftCardList', 'GET', {});
+        if (result instanceof Promise) {
+          result.then((response) => {
+            if (hasValue(response.data) && hasValue(response.data.card_number)) {
+              this.setState({
+                cardList: response.data ? response.data : null,
+              });
+            } else {
+              // Call to get un-linked eGift card details.
+              const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
+              unlinkedResult.then((unlinkresponse) => {
+                if (!hasValue(unlinkresponse.data.card_list)
+                  || (typeof paymentInfo.cashondelivery !== 'undefined'
+                  && hasValue(paymentInfo.cashondelivery.payment_type)
+                  && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
+                  this.setState({
+                    egiftCardType: true,
+                  });
+                }
+              });
+            }
+          });
+        }
+      } else if (paymentInfo.aura && hasValue(paymentInfo.aura)) {
+        this.setState({
+          paymentInfo: { aura: paymentInfo.aura },
+        });
+      } else {
+        // Defining the BNPL payment methods array.
+        const bnplPaymentMethods = getBnplPaymentMethods();
+        bnplPaymentMethods.forEach((method) => {
+          // Set state for the BNPL payment method.
+          if (hasValue(paymentInfo[method])) {
+            this.setState({
+              paymentInfo: { method: paymentInfo[method] },
+            });
+          }
+        });
+      }
+    }
   };
 
   /**
@@ -53,6 +103,7 @@ class ReturnRefundDetails extends React.Component {
    */
   createReturnRequest = async () => {
     const { itemsSelected, handleErrorMessage, orderDetails } = this.props;
+    const { egiftCardType, cardList } = this.state;
 
     showFullScreenLoader();
 
@@ -64,12 +115,22 @@ class ReturnRefundDetails extends React.Component {
       return;
     }
 
-    const returnRequest = await createReturnRequest(itemsSelected);
+    const returnRequest = await createReturnRequest(itemsSelected, egiftCardType);
     removeFullScreenLoader();
 
     if (hasValue(returnRequest.error)) {
       handleErrorMessage(returnRequest.error_message);
       return;
+    }
+
+    // Adding the selected eGift card number in local storage
+    // to get the same in the return confirmation page.
+    if (hasValue(cardList) && hasValue(cardList.card_number)) {
+      Drupal.addItemInLocalStorage('egift_card_details', cardList);
+    }
+    // Adding eGift card type i.e. new card or not in local storage.
+    if (egiftCardType) {
+      Drupal.addItemInLocalStorage('egift_card_type', egiftCardType);
     }
 
     if (hasValue(returnRequest.data) && hasValue(returnRequest.data.increment_id)) {
@@ -102,11 +163,22 @@ class ReturnRefundDetails extends React.Component {
   }
 
   render() {
-    const { paymentInfo, address, open } = this.state;
+    const {
+      paymentInfo, address, open, cardList, egiftCardType,
+    } = this.state;
     return (
       <div className="refund-details-wrapper">
         <Collapsible trigger={this.refundDetailsHeader()} open={open} triggerDisabled={!open}>
-          <ReturnRefundMethod paymentDetails={paymentInfo} />
+          {/* If the eGift card refund feature is enabled, and we are getting the eGift cards
+          info from MDC API, then we are passing the cardList variable and listing that info. */}
+          {cardList || egiftCardType
+            ? (
+              <ReturnRefundMethod
+                paymentDetails={paymentInfo}
+                cardList={cardList}
+                egiftCardType={egiftCardType}
+              />
+            ) : <ReturnRefundMethod paymentDetails={paymentInfo} />}
           <ReturnAmountWrapper />
           <ReturnCollectionDetails />
           <ReturnCollectionAddress shippingAddress={address} />

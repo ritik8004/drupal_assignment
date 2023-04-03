@@ -1,0 +1,7 @@
+@include breakpoint($only-mobile) {
+  .nodetype--acq_product {
+    .content__title_wrapper {
+      @include sideSpaces(0, $type: "margin");
+    }
+  }
+}

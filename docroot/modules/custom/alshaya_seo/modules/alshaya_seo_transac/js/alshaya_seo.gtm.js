@@ -279,6 +279,12 @@
           dataLayer.push(userDetails);
         }
       });
+      // Push for 404 Pages.
+      if(gtmPageType === 'page not found'){
+        dataLayer.push({
+          event: '404_error'
+        });
+      }
 
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === 'not defined') {
@@ -783,7 +789,7 @@
     const lastUrl = location.href;
     const url = e.detail.data()[2];
 
-    if (product !== null && !lastUrl.includes(url)) {
+    if (product !== null && product.length > 0 && !lastUrl.includes(url)) {
       var productObj = Drupal.alshaya_seo_gtm_get_product_values(product);
       // Dispatch a custom event to alter the product detail view object.
       document.dispatchEvent(new CustomEvent('onProductDetailView', { detail: { data: () => productObj } }));
@@ -802,6 +808,18 @@
 
       // Push into datalayer.
       dataLayer.push(data);
+    }
+  });
+
+  // Push to GTM when add to bag product drawer is opened.
+  document.addEventListener('drawerOpenEvent', function onDrawerOpen(e) {
+    var $element = e.detail.triggerButtonElement.closest('article.node--view-mode-search-result');
+    // Select the proper selector in case of matchback products.
+    if (e.detail.elementViewMode == 'matchback' || e.detail.elementViewMode == 'matchback_mobile') {
+      var $element = e.detail.triggerButtonElement.closest('article.entity--type-node');
+    }
+    if ($element) {
+      Drupal.alshayaSeoGtmPushProductDetailView($element);
     }
   });
 

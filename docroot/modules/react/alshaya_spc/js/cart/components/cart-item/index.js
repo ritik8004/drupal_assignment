@@ -30,6 +30,7 @@ import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDel
 import { isEgiftCardEnabled } from '../../../../../js/utilities/util';
 import { cartItemIsVirtual } from '../../../utilities/egift_util';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { getDataAttributePricesObj } from '../../../../../js/utilities/price';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -340,6 +341,7 @@ export default class CartItem extends React.Component {
         price,
         maxSaleQty,
         parentSKU,
+        extraInfo,
       },
     } = this.state;
     const cartImage = {
@@ -385,6 +387,22 @@ export default class CartItem extends React.Component {
       });
     }
 
+    let specialPrice = '';
+    if (hasValue(extraInfo) && hasValue(extraInfo.fixedPrice)) {
+      specialPrice = getDataAttributePricesObj(extraInfo.fixedPrice, 'special_price');
+    }
+    // If a product is having fixedPrice (Which contains the special price of
+    // the product), then change the finalPrice of the product to 0.01 to apply
+    // discount. This case is only applicable for XB sites as of now.
+    let endPrice = finalPrice;
+    if (hasValue(drupalSettings.xb)
+      && hasValue(drupalSettings.xb.country_code)
+      && hasValue(specialPrice)
+      && hasValue(specialPrice[drupalSettings.xb.country_code])) {
+      // @see Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator::buildPriceBlockSimple().
+      endPrice = (hasValue(finalPrice) && (price > finalPrice)) ? finalPrice : '0.01';
+    }
+
     return (
       <div
         className={`spc-cart-item fadeInUp ${qtyLimitClass}`}
@@ -408,9 +426,10 @@ export default class CartItem extends React.Component {
                 <SpecialPrice
                   price={price}
                   freeItem={freeItem}
+                  fixedPrice={(hasValue(extraInfo) && hasValue(extraInfo.fixedPrice)) ? extraInfo.fixedPrice : ''}
                   /* If the exclusive promo/coupon is applied no other discount will
                   get applied and the original price value will be assigned as the final price. */
-                  finalPrice={hasExclusiveCoupon !== true ? finalPrice : price}
+                  finalPrice={hasExclusiveCoupon !== true ? endPrice : price}
                 />
               </div>
             </div>

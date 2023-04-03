@@ -4,6 +4,54 @@
  */
 
 (function (Drupal, dataLayer) {
+
+  /**
+   * Checks if all mandatory address fields are filled.
+   *
+   * @param {object} geData
+   *   The Global-e data.
+   *
+   * @return {boolean}
+   *   Returns true if all mandatory address are filled.
+   */
+  Drupal.isXbAddressAvailable = function (geData) {
+    var shippingAddress = geData.details.CustomerDetails.ShippingAddress;
+    var mandatoryAddressFields = [
+      'ShippingFirstName',
+      'ShippingLastName',
+      'ShippingAddress1',
+      'ShippingCity',
+      'ShippingZipCode',
+      'ShippingPhoneNumber'
+    ];
+    for (var i =0; i < mandatoryAddressFields.length; i++) {
+      if (!Drupal.hasValue(shippingAddress[mandatoryAddressFields[i]])) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  /**
+   * Returns product attribute.
+   *
+   * @param {object} product
+   *  GE product object.
+   * @param {string} key
+   *  Product attribute key.
+   *
+   * @return {string}
+   *   Returns attribute value.
+   */
+  Drupal.getProductMetadata = function (product, key) {
+    for (var i = 0; i < product.MetaData.length; i++) {
+      if (product.MetaData[i].AttributeKey === key) {
+        return product.MetaData[i].AttributeValue;
+      }
+    }
+    return '';
+  };
+
   /**
    * Pushes Global-e data to Datalayer.
    *
@@ -16,22 +64,17 @@
     try {
       switch (step) {
         case 2:
-          if (Drupal.hasValue(geData.details.PaymentMethods) && geData.details.PaymentMethods.length > 0) {
-            // Populate drupal settings with details from GE data.
-            drupalSettings.payment_methods['global-e'] = geData.details.PaymentMethods[0].PaymentMethodTypeName;
-          }
-          Drupal.alshayaSeoSpc.checkoutEvent(Drupal.mapGlobaleCheckoutData(geData), step);
-          break;
-
         case 3:
-          var cartData = Drupal.mapGlobaleCheckoutData(geData);
-          // Set XB delivery info.
-          cartData.xbDeliveryInfo = geData.xbDeliveryInfo;
-          Drupal.alshayaSeoSpc.checkoutEvent(cartData, step);
+          var cartData = Drupal.mapGlobaleStepData(geData, step);
+          dataLayer.push(cartData);
           break;
 
         case 4:
-          const purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
+          // Push step 4 checkout data to data layer.
+          var cartData = Drupal.mapGlobaleStepData(geData, step);
+          dataLayer.push(cartData);
+
+          var purchaseSuccessData = Drupal.mapGlobalePurchaseSuccessData(geData);
           if (purchaseSuccessData) {
             dataLayer.push(purchaseSuccessData);
           }
@@ -44,70 +87,100 @@
   };
 
   /**
-   * Helper function to map the Global-e checkout data to cart data.
+   * Helper function to map the Global-e checkout data to gtm step data.
    *
    * @param {object} geData
    *   Global-e checkout data.
+   * @param {string} step
+   *   Checkout step.
    *
    * @return {object}
    *   The cart data object.
    */
-  Drupal.mapGlobaleCheckoutData = function (geData) {
-    let productGtm = [];
-    let cartItemsCount = 0;
+  Drupal.mapGlobaleStepData = function (geData, step) {
+
+    // Process product data.
+    var productSku = [];
+    var productStyleCode = [];
+    var cartItemsCount = 0;
+    var productGtm = [];
+    var cartItemsFlocktory = [];
+    var referrerData = Drupal.getItemFromLocalStorage('referrerData');
+    var list = Drupal.hasValue(referrerData)
+      ? referrerData.pageType
+      : '';
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
-        const product = productItem[1];
-        const productGtmData = {
-          "item_id": product.CartItemId,
-          "sku": product.SKU,
-          "qty": product.Quantity,
-          "name": product.ProductName,
-          "price": product.ProductPrices.MerchantTransaction.DiscountedPrice,
-          "finalPrice": product.ProductPrices.MerchantTransaction.DiscountedPrice,
+        var product = productItem[1];
+        var productGtmData = {
+          "quantity" : product.Quantity,
+          "name" : product.ProductName,
+          "id" : product.ProductGroupCode,
+          "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice.toString(),
+          "brand" : product.Brand,
+          "category" : Drupal.getProductMetadata(product, 'category'),
+          "variant" : product.SKU,
+          "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
+          "dimension3" : (product.ProductPrices.MerchantTransaction.TotalPrice !== product.ProductPrices.MerchantTransaction.DiscountedPrice) ? 'Discounted Product' : 'Regular Product',
+          "dimension4" : Drupal.getProductMetadata(product, 'dimension4'),
+          "productOldPrice" : product.ProductPrices.MerchantTransaction.ListPrice.toString(),
+          "list" : list,
         };
-        cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
         productGtm.push(productGtmData);
+        productSku.push(product.SKU);
+        productStyleCode.push(product.ProductGroupCode);
+        cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
+        var cartItem = {
+          "id" : product.ProductGroupCode,
+          "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice,
+          "count" : product.Quantity,
+          "title" : product.ProductName,
+          "image" : Drupal.getProductMetadata(product, 'image'),
+        };
+        cartItemsFlocktory.push(cartItem);
       });
     }
 
-    // Loop the Discounts array and calculate the discount amount.
-    let discountAmount = 0;
-    if (Drupal.hasValue(geData.details.Discounts)) {
-      geData.details.Discounts.forEach(function (item) {
-        if (Drupal.hasValue(item.DiscountTypeId) && item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency && item.DiscountTypeId == 1) {
-          discountAmount += item.DiscountPrices.CustomerTransactionInMerchantCurrency.CustomerPriceInMerchantCurrency;
-        }
-      });
-    }
-
-    return {
-      "cart_id": window.commerceBackend.getCartId(),
-      "uid": drupalSettings.user.uid,
-      "items_qty": cartItemsCount,
-      "cart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
-      "minicart_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency,
-      "surcharge": {
-        "amount": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency,
-        "is_applied": (geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency > 0) ? true : false
+    var cartData =  {
+      "language": drupalSettings.gtm.language,
+      "country": drupalSettings.gtm.country,
+      "currency": drupalSettings.gtm.currency,
+      "pageType": drupalSettings.gtm.pageType,
+      "event": 'checkout',
+      "ecommerce": {
+        "currencyCode" : drupalSettings.gtm.currency,
+        "checkout": {
+          "actionField": {
+            "step": step,
+          },
+          "products": productGtm
+        },
       },
-      "shipping": {
-        "type": geData.details.ShippingMethodType,
-        "methods": geData.details.ShippingMethodName,
-      },
-      "payment": {
-        "method": geData.OrderPaymentMethods
-      },
-      "totals": {
-        "subtotal_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
-        "base_grand_total": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
-        "base_grand_total_without_surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
-        "discount_amount": discountAmount,
-        "surcharge": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.Fees.CustomerRemoteAreaSurchargeFeeInMerchantCurrency,
-        "shipping_incl_tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerShippingPriceInMerchantCurrency + geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerVATInMerchantCurrency
-      },
-      "items": productGtm,
+      "productSKU" : productSku,
+      "productStyleCode" : productStyleCode,
+      "cartItemsCount" : cartItemsCount,
+      "cartItemsFlocktory" : cartItemsFlocktory,
     };
+
+    if (step == 3) {
+      cartData.xbDeliveryInfo = geData.xbDeliveryInfo;
+    }
+    if (step == 3 || step == 4) {
+      // Click and collect is not available on XB sites.
+      cartData.deliveryOption = 'Home Delivery';
+      cartData.deliveryType = geData.details.ShippingMethodType;
+      cartData.deliveryCity = geData.details.CustomerDetails.ShippingAddress.ShippingCity;
+      cartData.deliveryArea = geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion;
+    }
+    if (step == 3 || step == 2) {
+      cartData.cartTotalValue = geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency;
+    }
+    else if (step == 4) {
+      cartData.paymentOption = geData.details.PaymentMethods[0].PaymentMethodTypeName;
+      cartData.cartTotalValue = parseFloat(geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency.toFixed(2));
+      cartData.ecommerce.checkout.actionField.action = 'checkout';
+    }
+    return cartData;
   };
 
   /**
@@ -120,23 +193,24 @@
    *   The purchase success data object.
    */
   Drupal.mapGlobalePurchaseSuccessData = function (geData) {
-    let productGtm = [];
-    let cartItemsCount = 0;
-    let productSku = [];
-    let productStyleCode = [];
-    let discountAmount = 0;
+    var productGtm = [];
+    var cartItemsCount = 0;
+    var productSku = [];
+    var productStyleCode = [];
+    var discountAmount = 0;
+    var firstTimeTransaction = null;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
-        const product = productItem[1];
-        const productGtmData = {
+        var product = productItem[1];
+        var productGtmData = {
           "name": product.ProductName,
-          "id": product.CartItemId,
-          "price": product.ProductPrices.MerchantTransaction.TotalPrice,
+          "id": product.ProductGroupCode,
+          "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency.toString(),
           "brand": product.Brand,
-          "category": null, // @todo We need to ask Global-e to get this information.
-          "variant": product.ProductGroupCode,
-          "dimension2": null, // @todo This is not directly coming from global-e. We need to find a way to get this value.
-          "dimension4": null, // @todo This is not directly coming from global-e. We need to find a way to get this value.
+          "category": Drupal.getProductMetadata(product, 'category'),
+          "variant": product.SKU,
+          "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
+          "dimension4" : Drupal.getProductMetadata(product, 'dimension4'),
           "dimension3": (product.ProductPrices.MerchantTransaction.TotalPrice !== product.ProductPrices.MerchantTransaction.DiscountedPrice) ? 'Discounted Product' : 'Regular Product',
           "quantity": product.Quantity
         };
@@ -145,6 +219,7 @@
         productStyleCode.push(product.ProductGroupCode);
         cartItemsCount = parseInt(product.Quantity) + cartItemsCount;
         discountAmount = product.ProductPrices.MerchantTransaction.DiscountedPrice;
+        firstTimeTransaction = Drupal.getProductMetadata(product, 'firstTimeTransaction');
       });
     }
 
@@ -161,7 +236,7 @@
       "discountAmount": discountAmount,
       "transactionId": geData.OrderId,
       "globaleId": geData.OrderId,
-      "firstTimeTransaction": null, // @todo We need to expose this via drupalSettings.
+      "firstTimeTransaction": firstTimeTransaction || true,
       "privilegesCardNumber": null, // @todo We need to ask Global-e to get this information.
       "loyaltyType": null, // @todo We need to ask Global-e to get this information.
       "rewardType": null, // @todo We need to ask Global-e to get this information.
@@ -176,7 +251,7 @@
         geData.details.OrderPaymentMethods[0].PaymentMethodTypeName,
       ],
       "deliveryInfo": {
-        "country_code": geData.details.CustomerDetails.ShippingAddress.country_code,
+        "country_code": geData.details.CustomerDetails.ShippingAddress.ShippingCountryCode,
         "given_name": geData.details.CustomerDetails.ShippingAddress.ShippingFirstName,
         "family_name": geData.details.CustomerDetails.ShippingAddress.ShippingLastName,
         "mobile_number": {
@@ -188,7 +263,7 @@
         "dependent_locality": geData.details.CustomerDetails.ShippingAddress.ShippingZipCode,
         "administrative_area": null, // @todo We need to ask Global-e top get this information.
         "area_parent": null, // @todo We need to ask Global-e top get this information.
-        "area_parent_display": null, // @todo We need to ask Global-e top get this information.
+        "area_parent_display": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
         "administrative_area_display": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
       },
       "delivery_city": geData.details.CustomerDetails.ShippingAddress.ShippingCity,
@@ -201,22 +276,20 @@
           "actionField": {
             "id": geData.OrderId,
             "affiliation": "Online Store",
-            "revenue": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
+            "revenue": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
             "tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerDutiesAndTaxesInMerchantCurrency,
             "shipping": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerShippingPriceInMerchantCurrency,
             "coupon": Drupal.hasValue(geData.details.Discounts) ? geData.details.Discounts[0].coupon : '',
             "action": "purchase"
           },
-          "products": [
-            productGtm
-          ]
+          "products": productGtm
         }
       },
       "isEgiftCard": geData.details.OrderPaymentMethods[0].IsGiftCard ? "yes" : "no",
-      "pageType": drupalSettings.gtm.pageType,
+      "pageType": "purchase confirmation page", // Always will be purchase confirmation page.
       "productSKU": productSku,
       "productStyleCode": productStyleCode,
-      "cartTotalValue": geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency,
+      "cartTotalValue": parseFloat(geData.details.OrderPaymentMethods[0].PaidAmountInMerchantCurrency.toFixed(2)),
       "cartItemsCount": cartItemsCount,
       "deliveryArea": geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion,
       "deliveryCity": geData.details.CustomerDetails.ShippingAddress.ShippingCity,

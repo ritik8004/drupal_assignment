@@ -1,0 +1,15 @@
+@include breakpoint($only-mobile) {
+  .alshaya-newsletter-subscribe {
+    @include sideSpaces($full_width_padding_mobile);
+  }
+}
+
+@include breakpoint($tablet) {
+  .c-footer-primary {
+    @include sideSpaces($full_width_padding_tablet);
+  }
+
+  .c-footer__logos {
+    padding-#{$right}: 0;
+  }
+}
