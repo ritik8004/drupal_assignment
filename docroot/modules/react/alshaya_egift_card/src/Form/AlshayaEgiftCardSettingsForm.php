@@ -67,11 +67,6 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('egift_card_enabled'),
       '#title' => $this->t('Enable Egift card on site.'),
     ];
-    $form['egift_card_configuration']['enable_disable_egift_card_refund'] = [
-      '#type' => 'checkbox',
-      '#default_value' => $config->get('egift_card_refund_enabled'),
-      '#title' => $this->t('Enable Egift card refund on site.'),
-    ];
     $form['egift_card_configuration']['link_card_for_topup'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Link card for faster payment for Top-up'),
@@ -129,6 +124,7 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
       ->set('egift_card_refund_enabled', $form_state->getValue('enable_disable_egift_card_refund'))
       ->set('link_card_for_topup', $form_state->getValue('link_card_for_topup'))
       ->set('payment_methods_not_supported', $form_state->getValue('payment_methods_not_supported'))
+      ->set('not_supported_refund_payment_methods', $form_state->getValue('not_supported_refund_payment_methods'))
       ->set('topup_terms_conditions_text', $form_state->getValue('topup_terms_conditions_text'))
       ->set('textarea_maxlength', $form_state->getValue('textarea_maxlength'))
       ->set('allow_saved_credit_cards_for_topup', $form_state->getValue('allow_saved_credit_cards_for_topup'))

@@ -76,17 +76,6 @@ class EgiftCardHelper {
   }
 
   /**
-   * Helper to check if EgiftCard refund is enabled.
-   *
-   * @return bool
-   *   TRUE/FALSE
-   */
-  public function isEgiftRefundEnabled(): bool {
-    return $this->configFactory->get('alshaya_egift_card.settings')->get('egift_card_refund_enabled') ?: false;
-  }
-
-
-  /**
    * Helper to check if link card for faster payment option for top-up is enabled.
    *
    * @return bool
