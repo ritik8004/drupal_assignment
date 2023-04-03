@@ -15,7 +15,7 @@ use Drupal\facets\Entity\FacetSource;
  *
  * Add Attr Article Swatches.
  */
-function alshaya_search_update_8035() {
+function alshaya_search_update_9401() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
   $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
   $alshayaConfigManager->updateConfigs(
