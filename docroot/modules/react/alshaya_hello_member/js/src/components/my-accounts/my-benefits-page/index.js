@@ -105,6 +105,12 @@ class MyBenefitsPage extends React.Component {
     }
 
     const benefitTag = getBenefitTag(myBenefit);
+    // Show QRCodeButton, either if response has no benefit tag or has a value '0' or 'S'.
+    const showQRButton = !!(!hasValue(benefitTag)
+    || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')));
+    // Show CartButton, either if response has no benefit tag or has a value '0' or 'E'.
+    const showCartButton = !!(!hasValue(benefitTag)
+    || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'E')));
 
     return (
       <div className="my-benefit-page-wrapper">
@@ -126,7 +132,7 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          {hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')
+          {showQRButton
             && (
               <QrCodeDisplay
                 benefitName={myBenefit.description}
@@ -138,7 +144,7 @@ class MyBenefitsPage extends React.Component {
                 memberTitle={getStringMessage('redeem_in_store')}
               />
             )}
-          {hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'E')
+          {showCartButton
             && (
               <AddBenefitsToCart
                 title={myBenefit.description}
