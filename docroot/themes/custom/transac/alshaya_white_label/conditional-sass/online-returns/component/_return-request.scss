@@ -282,6 +282,7 @@
       font-size: 0.875rem;
       padding: 1.5625rem;
       padding-bottom: 0.3125rem;
+      padding-#{$left}: 0;
 
       @include breakpoint($tablet) {
         display: grid;
@@ -321,10 +322,52 @@
         margin-bottom: 1.5625rem;
       }
 
+      .refund-method-listing {
+        @include breakpoint($only-mobile) {
+          padding-top: rem(12);
+        }
+
+        .hybrid-method-payment-msg {
+          padding-bottom: rem(16);
+        }
+
+        .hybrid-method-list-msg {
+          font-size: rem(12);
+          padding-bottom: rem(20);
+        }
+
+        .method-list-wrapper {
+          .radio-label {
+            .egift-card-detail {
+              padding-top: rem(3);
+              padding-#{$left}: rem(6);
+            }
+
+            display: flex;
+          }
+
+          .refund-message {
+            padding-top: rem(6);
+          }
+        }
+      }
+
+      .method-wrapper {
+        margin-bottom: rem(28);
+      }
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: rem(10);
+      }
+
       .method-wrapper {
         display: flex;
         align-items: center;
-        margin-bottom: rem(24);
+        margin-bottom: rem(0);
 
         &:last-child {
           margin-bottom: 0;
@@ -341,19 +384,21 @@
         }
 
         .card-detail {
-          margin-#{$left}: 1rem;
+          margin-#{$left}: rem(8);
+          font-size: rem(14);
+
+          .bold-text {
+            font-family: $alshaya-thin;
+          }
         }
       }
 
       .refund-message {
         font-size: 0.75rem;
         line-height: 1.25rem;
-        margin-top: 1.5rem;
+        margin-top: rem(5);
+        margin-bottom: rem(28);
         color: $online-return-refund-grey-txt;
-
-        @include breakpoint($tablet) {
-          margin-top: 0.75rem;
-        }
       }
     }
 
@@ -498,6 +543,48 @@
 
       &::before {
         top: rem(14);
+      }
+    }
+  }
+}
+
+// radio button for Returns and Refunds
+.method-wrapper {
+  position: relative;
+
+  input[type="radio"] {
+    display: none;
+
+    ~ .radio-sim::before {
+      content: "";
+      position: absolute;
+      #{$left}: rem(-50);
+      text-align: center;
+      font-size: rem(60);
+    }
+
+    ~ .radio-sim {
+      @include icon(radio-empty, before) {
+        color: $online-return-radio-bg;
+      }
+    }
+
+    &:checked {
+      ~ .radio-sim {
+        @include icon(radio-filled, before) {
+          color: $online-return-checked-radio-bg;
+        }
+      }
+    }
+
+    ~ .radio-label {
+      display: inline-flex;
+      align-items: center;
+
+      .egift-card-detail {
+        padding-left: rem(6);
+        padding-bottom: rem(4);
+        padding-top: rem(4);
       }
     }
   }
