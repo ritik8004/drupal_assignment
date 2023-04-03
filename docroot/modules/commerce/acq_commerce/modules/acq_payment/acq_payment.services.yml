@@ -2,6 +2,3 @@ services:
   plugin.manager.acq_payment_method:
     class: Drupal\acq_payment\PaymentMethodManager
     parent: default_plugin_manager
-  acq_payment.bnpl_payment_methods:
-    class: Drupal\acq_payment\BnplMethods
-    arguments: ['@config.factory']
