@@ -20,7 +20,7 @@ const MyAuraBanner = (props) => {
     loyaltyStatusInt,
   } = props;
 
-  // Character length of username to be shown in AURA banner.
+  // Character length of user name to be shown in AURA banner.
   const { auraUsernameCharacterLength } = getAuraConfig();
   const profileInfo = getUserProfileInfo(firstName, lastName);
 
