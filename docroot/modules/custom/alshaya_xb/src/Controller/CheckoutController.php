@@ -23,7 +23,7 @@ class CheckoutController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_react/react',
-          'alshaya_spc/commerce_backend.cart.v2',
+          'alshaya_spc/commerce_backend.cart',
           'alshaya_xb/alshaya_xb_checkout_seo',
         ],
         // Set empty payment methods in settings.

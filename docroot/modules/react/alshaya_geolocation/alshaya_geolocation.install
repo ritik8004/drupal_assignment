@@ -8,6 +8,21 @@
 /**
  * Implements hook_update_N().
  *
+ * New config alshaya_geolocation.settings.
+ */
+function alshaya_geolocation_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_geolocation.settings'],
+    'alshaya_geolocation',
+    'install',
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Disables geolocation_google_maps module.
  */
 function alshaya_geolocation_update_8001() {

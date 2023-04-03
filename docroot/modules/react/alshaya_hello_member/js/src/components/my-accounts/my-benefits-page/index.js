@@ -1,7 +1,11 @@
 import HTMLReactParser from 'html-react-parser';
 import React from 'react';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
-import { callHelloMemberApi, getHelloMemberCustomerInfo } from '../../../../../../js/utilities/helloMemberHelper';
+import {
+  callHelloMemberApi,
+  getHelloMemberCustomerInfo,
+  getBenefitTag,
+} from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import QrCodeDisplay from '../my-membership/qr-code-display';
 import getStringMessage from '../../../../../../js/utilities/strings';
@@ -93,6 +97,21 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
+    let userEmail = '';
+
+    if (hasValue(drupalSettings.userDetails)
+      && hasValue(drupalSettings.userDetails.userEmailID)) {
+      userEmail = `?email="${drupalSettings.userDetails.userEmailID}"`;
+    }
+
+    const benefitTag = getBenefitTag(myBenefit);
+    // Show QRCodeButton, either if response has no benefit tag or has a value '0' or 'S'.
+    const showQRButton = !!(!hasValue(benefitTag)
+    || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')));
+    // Show CartButton, either if response has no benefit tag or has a value '0' or 'E'.
+    const showCartButton = !!(!hasValue(benefitTag)
+    || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'E')));
+
     return (
       <div className="my-benefit-page-wrapper">
         <div className="image-container">
@@ -113,21 +132,44 @@ class MyBenefitsPage extends React.Component {
           </div>
         </div>
         <div className="btn-wrapper">
-          <QrCodeDisplay
-            benefitName={myBenefit.description}
-            benefitType={promotionType}
-            memberId={myBenefit.member_identifier}
-            qrCodeTitle={qrCodeTitle}
-            codeId={couponId || codeId}
-            width={79}
-            memberTitle={getStringMessage('redeem_in_store')}
-          />
-          <AddBenefitsToCart
-            title={myBenefit.description}
-            codeId={codeId}
-            offerType={offerType}
-            promotionType={promotionType}
-          />
+          {showQRButton
+            && (
+              <QrCodeDisplay
+                benefitName={myBenefit.description}
+                benefitType={promotionType}
+                memberId={myBenefit.member_identifier}
+                qrCodeTitle={qrCodeTitle}
+                codeId={couponId || codeId}
+                width={79}
+                memberTitle={getStringMessage('redeem_in_store')}
+              />
+            )}
+          {showCartButton
+            && (
+              <AddBenefitsToCart
+                title={myBenefit.description}
+                codeId={codeId}
+                offerType={offerType}
+                promotionType={promotionType}
+              />
+            )}
+          {/* CTA for competition benefits. */}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
+            && (
+              <a href={myBenefit.benefit_url + userEmail}>
+                {Drupal.t('Enter now', {}, { context: 'hello_member' })}
+              </a>
+            )}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
+            && (
+              <a href={myBenefit.benefit_url}>
+                {Drupal.t(
+                  'Learn more',
+                  {},
+                  { context: 'aura' },
+                )}
+              </a>
+            )}
         </div>
         <div className="benefit-description">
           {(hasValue(myBenefit.applied_conditions)) ? HTMLReactParser(myBenefit.applied_conditions) : ''}

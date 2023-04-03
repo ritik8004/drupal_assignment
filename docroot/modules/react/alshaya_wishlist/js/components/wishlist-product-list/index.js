@@ -225,7 +225,7 @@ class WishlistProductList extends React.Component {
         >
           <Configure
             // To test the pagination we can hardcode this to static number.
-            {...(enableHitsPerPage && { hitsPerPage: { itemsPerPage } })}
+            {...(enableHitsPerPage && { hitsPerPage: itemsPerPage })}
             filters={filters}
           />
           <div id="plp-hits" className="c-products-list product-small view-algolia-plp">

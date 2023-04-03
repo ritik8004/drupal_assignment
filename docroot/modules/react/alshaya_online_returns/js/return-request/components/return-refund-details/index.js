@@ -15,7 +15,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/
 import { getPreparedOrderGtm, getProductGtmInfo } from '../../../utilities/online_returns_gtm_util';
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import { callEgiftApi } from '../../../../../js/utilities/egiftCardHelper';
-import { getBnplPaymentMethods, isEgiftRefundEnabled, isHybridPayment } from '../../../../../js/utilities/util';
+import { getNotSupportedEgiftMethodsForOnlineReturns, isEgiftRefundEnabled, isHybridPayment } from '../../../../../js/utilities/util';
 
 class ReturnRefundDetails extends React.Component {
   constructor(props) {
@@ -57,10 +57,10 @@ class ReturnRefundDetails extends React.Component {
               this.setState({
                 cardList: response.data ? response.data : null,
               });
-            } else if (!hasValue(response.data.card_number)
-              || (hasValue(paymentInfo.cashondelivery.payment_type)
+            } else if (typeof response.data === 'undefined' || !hasValue(response.data.card_number)
+              || (typeof paymentInfo.cashondelivery !== 'undefined'
+              && hasValue(paymentInfo.cashondelivery.payment_type)
               && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
-              // Setting the flag to true based on the conditions for new eGift card.
               this.setState({
                 egiftCardType: true,
               });
@@ -72,10 +72,10 @@ class ReturnRefundDetails extends React.Component {
           paymentInfo: { aura: paymentInfo.aura },
         });
       } else {
-        // Defining the BNPL payment methods array.
-        const bnplPaymentMethods = getBnplPaymentMethods();
-        bnplPaymentMethods.forEach((method) => {
-          // Set state for the BNPL payment method.
+        // Defining the list of not supported payment methods for eGift card refund.
+        const notSupportedEgiftRefundPaymentMethods = getNotSupportedEgiftMethodsForOnlineReturns();
+        notSupportedEgiftRefundPaymentMethods.forEach((method) => {
+          // Set state for the not supported payment method.
           if (hasValue(paymentInfo[method])) {
             this.setState({
               paymentInfo: { method: paymentInfo[method] },

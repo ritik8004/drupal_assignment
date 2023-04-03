@@ -62,7 +62,8 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#min' => '0',
       '#max' => '2',
       '#step' => '0.1',
-      '#title' => $this->t('Auto scroll timer(in sec) for auto scrolling the product images on listing pages.'),
+      '#title' => $this->t('Auto scroll for the Product Image'),
+      '#description' => $this->t('Auto scroll timer(in sec) for auto scrolling the product images on listing pages.'),
       '#default_value' => $config->get('image_slide_timing') ?? 2,
     ];
 

@@ -238,12 +238,21 @@
       type: 'GET',
       dataType: 'json',
     }).then(function getData(response, status, xhr) {
-      staticStorage.writeReviewFormHiddenFields = response[0].hide_fields_write_review;
-      response = response[0].write_review_form;
+      staticStorage.writeReviewFormHiddenFields = [];
       var data = {
-        data: Object.values(response),
+        data: [],
         status: xhr.status,
       };
+
+      if (Drupal.hasValue(response) && Drupal.hasValue(response[0])) {
+        staticStorage.writeReviewFormHiddenFields = Array.isArray(response[0].hide_fields_write_review)
+          ? response[0].hide_fields_write_review
+          : [];
+        data.data = typeof response[0].write_review_form === "object"
+          ? Object.values(response[0].write_review_form)
+          : [];
+      }
+
       var event = new CustomEvent('showMessage', {
         bubbles: true,
         detail: { data },

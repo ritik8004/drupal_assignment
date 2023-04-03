@@ -11,8 +11,10 @@ const ReturnRefundMethod = ({
   }
 
   const [selectedOption, setSelectedOption] = useState();
-  const onOptionChange = (e) => {
-    setSelectedOption(e.target.value);
+  const onOptionChange = () => {
+    // For card details component radio button.
+    const el = document.querySelector('.card-details input').value;
+    setSelectedOption(el);
   };
 
   return (
@@ -23,12 +25,17 @@ const ReturnRefundMethod = ({
         </div>
         {cardList || egiftCardType
           ? (
-            <div className="refund-method-listing" onClick={onOptionChange}>
+            <div className="refund-method-listing">
               {isHybrid
                 ? (
-                  <div className="hybrid-method-list-msg">
-                    { Drupal.t('Original Multiple payment methods used', {}, { context: 'online_returns' }) }
-                  </div>
+                  <>
+                    <div className="hybrid-method-payment-msg">
+                      { Drupal.t('Original Multiple payment methods used', {}, { context: 'online_returns' }) }
+                    </div>
+                    <div className="hybrid-method-list-msg">
+                      { Drupal.t('Your refund will be credited back to the following payment methods.', {}, { context: 'online_returns' }) }
+                    </div>
+                  </>
                 ) : (
                   <> </>
                 )}
@@ -38,19 +45,21 @@ const ReturnRefundMethod = ({
                 egiftCardType={egiftCardType}
                 paymentDetails={paymentDetails}
                 isHybridPayment={isHybrid}
+                setSelectedOption={setSelectedOption}
               />
               {!hasValue(paymentDetails.cashondelivery)
-              && !hasValue(paymentDetails.egift)
-              && !isHybrid
+                && !hasValue(paymentDetails.egift)
+                && !isHybrid
                 ? (
                   <>
-                    <div className="method-list-wrapper">
+                    <div className="method-wrapper card-details" onClick={() => onOptionChange('card-details')}>
                       <div className="method-wrapper">
                         <input
                           type="radio"
                           value="CardDetails"
                           name="CardPaymentDetails"
                           checked={selectedOption === 'CardDetails'}
+                          className={selectedOption === 'CardDetails'}
                         />
                         <label className="radio-sim radio-label">
                           <CardDetails paymentDetails={paymentDetails} showCardIcon />

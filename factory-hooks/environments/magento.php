@@ -387,12 +387,12 @@ $magentos = [
   ],
   // The body shop.
   'tbs_qa' => [
-    'url' => 'https://tbs-uat.store.alshaya.com',
+    'url' => 'https://tbs-qa.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
-      'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
-      'access_token' => 'oiy66ouu8mpeorbu47cke2xsdhfku3jg',
-      'access_token_secret' => '2ovq0ccau2cd60a2xfterr2y2fi711w4',
+      'consumer_key' => '6mlyj45c1wqbmc3mfhrmbwzgs1ifyq9d',
+      'consumer_secret' => 'x3pe7b7faqeamzhxe4zl8kl88y2d0bbr',
+      'access_token' => '4ur6haq9ds4b2e96lleao9c5zxef16te',
+      'access_token_secret' => 'jv7o1n4gljcimp6jant55h5slhelcw4c',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 2],
@@ -478,12 +478,12 @@ $magentos = [
     ],
   ],
   'tbs_uat' => [
-    'url' => 'https://ri-uat.store.alshaya.com',
+    'url' => 'https://tbs-uat.store.alshaya.com',
     'magento_secrets' => [
-      'consumer_key' => 'k7354eyo76v0novunidn99wu7o9mafjm',
-      'consumer_secret' => 'enwl857ymegc2bptwg1cjddcfccr1rga',
-      'access_token' => 'e4wdjveiqgwg78zd5ip2nirm51abo0k1',
-      'access_token_secret' => '5pim4yvsqa3h4wkttznsonma6qgoo9xl',
+      'consumer_key' => 'dfl8714cnh7hrkv5u7vt7nkjbfob9wne',
+      'consumer_secret' => '5eod8qtsdbxvgkpxq5ag6uvf86xkb8mu',
+      'access_token' => 'ehld383ki6s6vtchy5t6bwpbo3drfkbo',
+      'access_token_secret' => 'ls6zdmnbpsul7hny74mlqic7syzy4m8f',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 15],
@@ -508,7 +508,7 @@ $magentos = [
     ],
   ],
   'tbs_prod' => [
-    'url' => 'https://ri.store.alshaya.com',
+    'url' => 'https://tbs.store.alshaya.com',
     'magento_secrets' => [],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 15],

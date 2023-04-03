@@ -10,6 +10,17 @@ use Drupal\acq_sku\SKUFieldsManager;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_tbs_transac_update_9402() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_the_body_shop.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the translation store list link label if not present.
  */
 function alshaya_tbs_transac_update_9401() {

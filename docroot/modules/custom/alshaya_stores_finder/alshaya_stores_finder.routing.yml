@@ -4,24 +4,32 @@ alshaya_stores_finder.glossary:
     _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::updateGlossaryView'
   requirements:
     _permission: 'access content'
+    _custom_access: '\Drupal\alshaya_stores_finder\Controller\AccessCheckController::accessCheck'
+
 alshaya_stores_finder.view_toggle:
   path: '/view-toggle/{view_type}'
   defaults:
     _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::toggleView'
   requirements:
     _permission: 'access content'
+    _custom_access: '\Drupal\alshaya_stores_finder\Controller\AccessCheckController::accessCheck'
+
 alshaya_stores_finder.store_detail:
   path: '/store-detail/{node}/{type}'
   defaults:
     _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::storeDetail'
   requirements:
     _permission: 'access content'
+    _custom_access: '\Drupal\alshaya_stores_finder\Controller\AccessCheckController::accessCheck'
+
 alshaya_stores_finder.glossary_back:
   path: '/store-glossay/back'
   defaults:
     _controller: '\Drupal\alshaya_stores_finder\Controller\StoresFinderController::glossaryBack'
   requirements:
     _permission: 'access content'
+    _custom_access: '\Drupal\alshaya_stores_finder\Controller\AccessCheckController::accessCheck'
+
 alshaya_stores_finder.configuration:
   path: '/admin/config/alshaya/store-finder'
   defaults:
@@ -29,11 +37,11 @@ alshaya_stores_finder.configuration:
     _title: 'Store finder configuration'
   requirements:
     _permission: 'administer site configuration'
+
 alshaya_stores_finder.stores:
   path: '/alshaya-locations/stores-list'
   defaults:
     _controller: '\Drupal\alshaya_stores_finder\Controller\AlshayaLocationsNonTransac::stores'
     _title: 'Store Locations'
   requirements:
-    # All user should able to access search page.
-    _access: 'TRUE'
+    _custom_access: '\Drupal\alshaya_stores_finder\Controller\AccessCheckController::accessCheck'

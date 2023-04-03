@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_spc\Plugin\Block;
 
-use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -28,13 +27,6 @@ class AlshayaReactMiniCartBlock extends BlockBase implements ContainerFactoryPlu
   protected $configFactory;
 
   /**
-   * SPC helper.
-   *
-   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
-   */
-  protected $spcHelper;
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container,
@@ -45,7 +37,6 @@ class AlshayaReactMiniCartBlock extends BlockBase implements ContainerFactoryPlu
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('alshaya_spc.helper')
     );
   }
 
@@ -60,17 +51,13 @@ class AlshayaReactMiniCartBlock extends BlockBase implements ContainerFactoryPlu
    *   The plugin implementation definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
-   *   Spc helper service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              ConfigFactoryInterface $config_factory,
-                              AlshayaSpcHelper $spc_helper) {
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
-    $this->spcHelper = $spc_helper;
   }
 
   /**
@@ -102,7 +89,6 @@ class AlshayaReactMiniCartBlock extends BlockBase implements ContainerFactoryPlu
       '#markup' => '<div id="mini-cart-wrapper"></div><div id="cart_notification"></div>',
       '#attached' => [
         'library' => [
-          'alshaya_spc/commerce_backend.cart.v' . $this->spcHelper->getCommerceBackendVersion(),
           'alshaya_spc/mini_cart',
         ],
         'drupalSettings' => $settings,

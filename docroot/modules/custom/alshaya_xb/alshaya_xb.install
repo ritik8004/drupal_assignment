@@ -10,6 +10,23 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Disable all the payment methods except GE & added arabic string translation.
+ */
+function alshaya_xb_update_9401() {
+  _alshaya_xb_disable_payment_methods();
+
+  // Add string translations.
+  $strings = [
+    'Duties and Taxes' => [
+      'ar' => 'الرسوم والضرائب',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update fixed_price attribute field type in Sku entity.
  */
 function alshaya_xb_update_9002() {
@@ -68,4 +85,33 @@ function alshaya_xb_update_9001() {
 function alshaya_xb_install($is_syncing) {
   // Add fixed price attribute to SKU entity.
   \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Disable all the payment methods except GE as the checkout journey of the
+  // user is controlled by GE script.
+  _alshaya_xb_disable_payment_methods();
+
+  // Add string translations.
+  $strings = [
+    'Duties and Taxes' => [
+      'ar' => 'الرسوم والضرائب',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Helper function to disable all the payment methods except GE.
+ */
+function _alshaya_xb_disable_payment_methods() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $data = $config->get('exclude_payment_methods');
+
+  // Disable all the available payment methods except globale.
+  foreach ($data as $key => $value) {
+    if ($key !== 'globale') {
+      $data[$key] = $key;
+    }
+  }
+  $config->set('exclude_payment_methods', $data);
+  $config->save();
 }

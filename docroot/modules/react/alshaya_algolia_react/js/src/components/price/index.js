@@ -1,7 +1,7 @@
 import React from 'react';
 import PriceElement from './PriceElement';
 import { calculateDiscount } from '../../utils';
-import { getDataAttributePrices } from '../../utils/PriceHelper';
+import { getDataAttributePrices } from '../../../../../js/utilities/price';
 
 const PriceBlock = ({
   children, ...props

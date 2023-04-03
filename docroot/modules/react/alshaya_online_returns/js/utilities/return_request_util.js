@@ -94,11 +94,18 @@ function addCheckboxToReturnItem(item) {
  */
 function getReturnResolutions() {
   let resolutions = [];
+  const langcode = drupalSettings.path.currentLanguage;
   if (hasValue(drupalSettings.onlineReturns)
     && hasValue(drupalSettings.onlineReturns.returnInfo)
     && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig)
-    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig.resolutions)) {
-    resolutions = drupalSettings.onlineReturns.returnInfo.returnConfig.resolutions;
+    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig[langcode])
+    && hasValue(drupalSettings.onlineReturns.returnInfo.returnConfig[langcode].resolutions)) {
+    resolutions = drupalSettings.onlineReturns.returnInfo.returnConfig[langcode].resolutions;
+  } else if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.return_config)
+    && hasValue(drupalSettings.onlineReturns.return_config[langcode])
+    && hasValue(drupalSettings.onlineReturns.return_config[langcode].resolutions)) {
+    resolutions = drupalSettings.onlineReturns.return_config[langcode].resolutions;
   }
 
   return resolutions;

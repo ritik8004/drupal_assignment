@@ -388,7 +388,6 @@ header {
   .block-system-branding-block {
     @include breakpoint($upto-desktop) {
       position: absolute;
-      bottom: rem(10);
       #{$left}: 50%;
       transform: translateX(-50%);
 
@@ -397,7 +396,13 @@ header {
       }
     }
 
+    @include breakpoint($only-mobile) {
+      bottom: rem(10);
+    }
+
     @include breakpoint($only-tablet) {
+      bottom: rem(16);
+
       .site-brand-home {
         img {
           html[lang="ar"] & {
@@ -451,6 +456,20 @@ header {
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
+    &:hover {
+      li.menu--one__list-item {
+        .menu--one__link {
+          color: $mm_l1_link_inactive_hover;
+        }
+
+        &:hover {
+          .menu--one__link {
+            color: $mm_l1_link_hover;
+          }
+        }
+      }
+    }
+
     li.menu--one__list-item {
       height: auto;
 

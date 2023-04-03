@@ -190,7 +190,7 @@ const PlpApp = ({
       <Configure
         userToken={Drupal.getAlgoliaUserToken()}
         clickAnalytics
-        {...(enableHitsPerPage && { hitsPerPage: { hits } })}
+        {...(enableHitsPerPage && { hitsPerPage: hits })}
         filters={finalFilter}
         ruleContexts={context}
         optionalFilters={optionalFilter}
