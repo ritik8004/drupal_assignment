@@ -96,6 +96,11 @@ const Teaser = ({
   };
 
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
+  // Delete 'data-insights-query-id' key from overridenGtm object
+  // as it is coming from algolia.
+  if (typeof overridenGtm['data-insights-query-id'] !== 'undefined') {
+    delete overridenGtm['data-insights-query-id'];
+  }
   const attribute = [];
   Object.entries(hit).forEach(([key, value]) => {
     if (pageType === 'plp'
