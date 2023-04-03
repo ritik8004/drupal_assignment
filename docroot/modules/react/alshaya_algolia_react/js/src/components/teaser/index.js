@@ -26,6 +26,7 @@ import PriceRangeElement from '../price/PriceRangeElement';
 import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelper';
 import ArticleSwatches from '../article_swatch';
 import SliderSwatch from '../slider-swatch';
+import { getShoeAiStatus } from '../../../../../js/utilities/util';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -47,7 +48,7 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
-  const activateShoeAI = (hasValue(drupalSettings.shoeai) && drupalSettings.shoeai.status === 1);
+  const activateShoeAI = getShoeAiStatus();
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -95,6 +96,11 @@ const Teaser = ({
   };
 
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
+  // Delete 'data-insights-query-id' key from overridenGtm object
+  // as it is coming from algolia.
+  if (typeof overridenGtm['data-insights-query-id'] !== 'undefined') {
+    delete overridenGtm['data-insights-query-id'];
+  }
   const attribute = [];
   Object.entries(hit).forEach(([key, value]) => {
     if (pageType === 'plp'
@@ -208,12 +214,6 @@ const Teaser = ({
       : hit.attr_green_leaf;
   }
 
-  // Add the fixedPrice in extraInfo object.
-  const extraInfoObj = { ...extraInfo };
-  if (hasValue(attribute) && hasValue(attribute.fixed_price)) {
-    extraInfoObj.fixedPrice = attribute.fixed_price;
-  }
-
   let dataVmode = null;
   if (pageType === 'search') {
     dataVmode = { 'data-vmode': 'search_result' };
@@ -300,7 +300,7 @@ const Teaser = ({
                 productData={attribute.atb_product_data}
                 isBuyable={attribute.is_buyable}
                 // Pass extra information to the component for update the behaviour.
-                extraInfo={extraInfoObj}
+                extraInfo={extraInfo}
                 wishListButtonRef={ref}
                 styleCode={hit.attr_style_code ? hit.attr_style_code : null}
               />
@@ -415,7 +415,7 @@ const Teaser = ({
             productData={attribute.atb_product_data}
             isBuyable={attribute.is_buyable}
             // Pass extra information to the component for update the behaviour.
-            extraInfo={extraInfoObj}
+            extraInfo={extraInfo}
             wishListButtonRef={ref}
             styleCode={hit.attr_style_code ? hit.attr_style_code : null}
           />

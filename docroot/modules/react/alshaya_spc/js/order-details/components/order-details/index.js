@@ -155,6 +155,18 @@ class OrderDetails extends React.Component {
             </div>
           )}
 
+          { hasValue(order.order_details.duties_taxes) && (
+            <div className="duties-taxes-row">
+              <div className="desktop-only">&nbsp;</div>
+              <div className="above-mobile">&nbsp;</div>
+              <div className="right--align">{ Drupal.t('Duties and Taxes') }</div>
+              <div className="blend">
+                {parse(order.order_details.duties_taxes)}
+              </div>
+              <div className="above-mobile empty--cell">&nbsp;</div>
+            </div>
+          )}
+
           { hasValue(order.order_details.surcharge)
           && hasValue(order.order_details.surcharge_label) && (
             <div className="surcharge-row collapse-row">
