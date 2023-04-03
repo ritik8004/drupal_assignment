@@ -11,8 +11,10 @@ const ReturnRefundMethod = ({
   }
 
   const [selectedOption, setSelectedOption] = useState();
-  const onOptionChange = (e) => {
-    setSelectedOption(e.target.value);
+  const onOptionChange = () => {
+    // For card details component radio button.
+    const el = document.querySelector('.card-details input').value;
+    setSelectedOption(el);
   };
 
   return (
@@ -23,23 +25,25 @@ const ReturnRefundMethod = ({
         </div>
         {cardList || egiftCardType
           ? (
-            <div className="refund-method-listing" onClick={onOptionChange}>
+            <div className="refund-method-listing">
               <EgiftCardDetails
                 cardList={cardList}
                 selectedOption={selectedOption}
                 egiftCardType={egiftCardType}
                 paymentDetails={paymentDetails}
+                setSelectedOption={setSelectedOption}
               />
               {!hasValue(paymentDetails.cashondelivery) && !hasValue(paymentDetails.egift)
                 ? (
                   <>
-                    <div className="method-list-wrapper">
+                    <div className="method-wrapper card-details" onClick={() => onOptionChange('card-details')}>
                       <div className="method-wrapper">
                         <input
                           type="radio"
                           value="CardDetails"
                           name="CardPaymentDetails"
                           checked={selectedOption === 'CardDetails'}
+                          className={selectedOption === 'CardDetails'}
                         />
                         <label className="radio-sim radio-label">
                           <CardDetails paymentDetails={paymentDetails} showCardIcon />
