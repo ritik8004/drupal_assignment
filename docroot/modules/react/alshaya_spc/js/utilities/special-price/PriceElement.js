@@ -27,12 +27,13 @@ const PriceElement = ({
   if (format === 'string') {
     return (`${priceParts.currency} ${priceParts.amount}`);
   }
+  const { currency } = priceParts;
 
   priceParts.amount = (<span key="amount" style={{ display: 'inline-block' }} className="price-amount">{ parseFloat(priceParts.amount).toLocaleString(undefined, { minimumFractionDigits: currencyConfig.decimal_points, maximumFractionDigits: currencyConfig.decimal_points }) }</span>);
   priceParts.currency = (<span key="currency" style={{ display: 'inline-block' }} className="price-currency suffix">{priceParts.currency}</span>);
 
   return (
-    <div className="price" dir="ltr" data-fp={fixedPrice}>
+    <div className={`price ${currency.toLowerCase()}`} dir="ltr" data-fp={fixedPrice}>
       <span className="price-wrapper">
         {Object.values(priceParts)}
       </span>
