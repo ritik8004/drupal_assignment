@@ -11,6 +11,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update arabic string translation for Secure Payment Methods.
+ */
+function alshaya_master_update_9404() {
+  // Add string translations.
+  $strings = [
+    'Secure Payment Methods' => [
+      'ar' => 'وسائل دفع آمنة',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove duplicate occurrences of 'You may also like' and 'Search' string
  * in Algolia context.
  */
