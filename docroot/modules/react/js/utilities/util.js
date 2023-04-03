@@ -42,12 +42,12 @@ export const isEgiftRefundEnabled = () => {
 };
 
 /**
- * Helper function to get the bnpl payment methods.
+ * Helper function to get list of not supported payment methods for eGift card refund.
  */
-export const getBnplPaymentMethods = () => {
+export const getNotSupportedEgiftMethodsForOnlineReturns = () => {
   if (hasValue(drupalSettings.egiftCardRefund)
-    && hasValue(drupalSettings.egiftCardRefund.bnplmethods)) {
-    return drupalSettings.egiftCardRefund.bnplmethods;
+    && hasValue(drupalSettings.egiftCardRefund.notSupportedEgiftRefundPaymentMethods)) {
+    return drupalSettings.egiftCardRefund.notSupportedEgiftRefundPaymentMethods;
   }
 
   return [];
