@@ -51,6 +51,14 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
     // Attach the theming library.
     $page['#attached']['library'][] = 'alshaya_white_label/online-returns';
   }
+
+  // Add egift card refund settings in drupalSettings.
+  $page['#attached']['drupalSettings']['egiftCardRefund']['enabled'] = $onlineReturnsHelper->isEgiftRefundEnabled();
+  // Add the not supported payment methods for eGift refund in drupalSettings.
+  $page['#attached']['drupalSettings']['egiftCardRefund']['notSupportedEgiftRefundPaymentMethods'] =
+    $onlineReturnsHelper->getNotSupportedEgiftMethodsForOnlineReturns()
+      ? array_keys(array_filter($onlineReturnsHelper->getNotSupportedEgiftMethodsForOnlineReturns(), fn($method) => $method !== '0'))
+      : [];
 }
 
 /**
