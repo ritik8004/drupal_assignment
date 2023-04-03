@@ -10,9 +10,11 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Update arabic string translation for Duties and Taxes.
+ * Disable all the payment methods except GE & added arabic string translation.
  */
-function alshaya_xb_update_9402() {
+function alshaya_xb_update_9401() {
+  _alshaya_xb_disable_payment_methods();
+
   // Add string translations.
   $strings = [
     'Duties and Taxes' => [
@@ -20,15 +22,6 @@ function alshaya_xb_update_9402() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Implements hook_update_N().
- *
- * Disable all the payment methods except GE.
- */
-function alshaya_xb_update_9401() {
-  _alshaya_xb_disable_payment_methods();
 }
 
 /**
