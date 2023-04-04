@@ -33,7 +33,7 @@ const PriceElement = ({
   priceParts.currency = (<span key="currency" style={{ display: 'inline-block' }} className="price-currency suffix">{priceParts.currency}</span>);
 
   return (
-    <div className={`price ${currency.toLowerCase()}`} dir="ltr" data-fp={fixedPrice}>
+    <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} dir="ltr" data-fp={fixedPrice}>
       <span className="price-wrapper">
         {Object.values(priceParts)}
       </span>

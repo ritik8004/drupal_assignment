@@ -1,4 +1,5 @@
 import React from 'react';
+import { hasValue } from '../../conditionsUtility';
 
 const PriceElement = ({
   amount,
@@ -20,7 +21,7 @@ const PriceElement = ({
   ];
 
   return (
-    <div className={`price ${currency.toLowerCase()}`} data-fp={fixedPrice}>
+    <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} data-fp={fixedPrice}>
       <span className="price-wrapper">
         {drupalSettings.reactTeaserView.price.currencyPosition === 'before' ? priceParts : priceParts.reverse()}
       </span>
