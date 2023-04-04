@@ -5,9 +5,6 @@ alshaya_egift_card.settings:
     egift_card_enabled:
       type: boolean
       label: 'Config to enable/disable egift card'
-    egift_card_refund_enabled:
-      type: boolean
-      label: 'Config to enable/disable egift card during refund'
     link_card_for_topup:
       type: boolean
       label: 'Link card for faster payment for Top-up'

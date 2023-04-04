@@ -239,7 +239,8 @@ class ConfigurableProductForm extends React.Component {
     const { byAttribute } = configurableCombinations[skuCode];
     const activateShoeAI = getShoeAiStatus();
     let shoeSize = [];
-    if (configurables.size_shoe_eu.values) {
+    // value of shoe_size_eu only used for shoeai.
+    if (activateShoeAI && configurables.size_shoe_eu && configurables.size_shoe_eu.values) {
       shoeSize = getShoeSize(configurables.size_shoe_eu.values);
     }
 

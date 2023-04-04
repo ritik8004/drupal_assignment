@@ -1,0 +1,11 @@
+@include breakpoint($desktop) {
+  .c-menu-secondary {
+    .region__menu-secondary {
+      @include fullWidthSideSpaces(
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $side: $right,
+      );
+    }
+  }
+}
