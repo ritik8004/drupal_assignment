@@ -28,16 +28,9 @@ function alshaya_acm_product_update_9406() {
     $config = $config_factory->getEditable('alshaya_algolia_react.color_swatches');
     $config->set('no_of_swatches_mobile', $display_settings->get('swatch_plp_limit_mobile_view'));
     $config->save();
+    // Delete swatch_plp_limit_mobile_view Key.
+    $config_factory->getEditable('alshaya_acm_product.display_settings')->clear('swatch_plp_limit_mobile_view')->save();
   }
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs([
-    'alshaya_acm_product.display_settings',
-  ],
-    'alshaya_acm_product',
-    'install',
-    AlshayaConfigManager::MODE_MERGE,
-  );
 }
 
 /**
