@@ -19,7 +19,6 @@
 function shoeAiStatus(shoeAi) {
   if (shoeAi && shoeAi.status != null && shoeAi.status == 1) {
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
