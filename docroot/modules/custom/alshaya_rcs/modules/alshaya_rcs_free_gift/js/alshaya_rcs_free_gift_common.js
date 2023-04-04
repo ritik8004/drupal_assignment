@@ -65,7 +65,7 @@ window.commerceBackend = window.commerceBackend || {};
    * @return {object}
    *   Valid free gift data from MDC.
    */
-  window.commerceBackend.fetchValidatedFreeGift = function fetchValidatedFreeGift(freeGiftSku) {
+  window.commerceBackend.fetchValidFreeGift = function fetchValidFreeGift(freeGiftSku) {
     // On Page load, some free gift data is already cached.
     var freeGiftItem = globalThis.RcsPhStaticStorage.get('product_data_' + freeGiftSku);
     // For uncached data, do api calls.
@@ -120,7 +120,7 @@ window.commerceBackend = window.commerceBackend || {};
    */
   window.commerceBackend.showItemModalView = function showItemModalView(sku, backToCollection = false, couponCode = null, promoRuleId = null) {
     // Load the product data based on sku.
-    var freeGiftProduct = window.commerceBackend.fetchValidatedFreeGift(sku);
+    var freeGiftProduct = window.commerceBackend.fetchValidFreeGift(sku);
 
     var elm = document.createElement('div');
     var data = {
@@ -215,7 +215,7 @@ window.commerceBackend = window.commerceBackend || {};
       };
       skus.forEach(function processMultipleFreeGiftSkus(freeGiftSku) {
         // Fetch free gift data from MDC.
-        var freeGiftItem = window.commerceBackend.fetchValidatedFreeGift(freeGiftSku);
+        var freeGiftItem = window.commerceBackend.fetchValidFreeGift(freeGiftSku);
         // Prepare the data items.
         if (freeGiftItem) {
           var freeGiftImage = window.commerceBackend.getFirstImage(freeGiftItem);
@@ -309,7 +309,7 @@ window.commerceBackend = window.commerceBackend || {};
       var freeGiftApiData = productInfo[skuItemCode].freeGiftPromotion[0];
       var promoUrl = Drupal.url(freeGiftApiData.rule_web_url);
       var processedFreeGiftData = {};
-      var giftItemProductInfo = window.commerceBackend.fetchValidatedFreeGift(freeGiftApiData.gifts[0].sku);
+      var giftItemProductInfo = window.commerceBackend.fetchValidFreeGift(freeGiftApiData.gifts[0].sku);
       if (!Drupal.hasValue(giftItemProductInfo)) {
         productInfo[skuItemCode].freeGiftPromotion = [];
         return productInfo;

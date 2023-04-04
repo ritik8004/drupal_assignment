@@ -35,7 +35,7 @@ window.commerceBackend = window.commerceBackend || {};
       var freeGiftProduct = null;
       for (var i = 0; i < giftItemList.length; i++) {
         // Fetch first valid free gift data.
-        freeGiftProduct = window.commerceBackend.fetchValidatedFreeGift(giftItemList[i].sku);
+        freeGiftProduct = window.commerceBackend.fetchValidFreeGift(giftItemList[i].sku);
         if (Drupal.hasValue(freeGiftProduct)) {
           // If a valid free gift found, break. AS we will only cache 1 free gift data.
           // For multiple free gifts, we will load the free gift product info during modal view.
@@ -47,7 +47,7 @@ window.commerceBackend = window.commerceBackend || {};
           // As, if we keep the invalid sku, it will render in data-sku attribute
           // in html and when we open free gift modal, it will try to fetch data
           // for that invalid free gift sku.
-          // Check fetchValidatedFreeGift() for more details on invalid sku.
+          // Check fetchValidFreeGift() for more details on invalid sku.
           delete giftItemList[i];
         }
       }
