@@ -1,0 +1,17 @@
+<a
+  href="{{ freeGiftPromoUrl }}"
+  data-sku="{{ freeGiftSku }}"
+  class="free-gift-modal"
+  data-dialog-type="modal"
+  data-dialog-options='{"width":"auto"}'
+>
+
+  {{#if freeGiftImage }}
+    <div class="free-gift-image">
+      <img src="{{ freeGiftImage }}" title="{{ freeGiftTitle }}" alt="{{ freeGiftTitle }}" typeof="foaf:Image"
+           loading="lazy">
+    </div>
+  {{else}}
+    {{ freeGiftTitle }}
+  {{/if}}
+</a>

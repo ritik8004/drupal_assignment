@@ -141,7 +141,11 @@
             ]
           );
           // Dispatching event on variant change to listen in react.
-          if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled && viewMode !== 'matchback' && viewMode !== 'matchback_mobile') {
+          if (drupalSettings.aura !== undefined
+            && drupalSettings.aura.enabled
+            && viewMode !== 'matchback'
+            && viewMode !== 'matchback_mobile'
+            && Drupal.hasValue(Drupal.dispatchAuraProductUpdateEvent)) {
             Drupal.dispatchAuraProductUpdateEvent($(this));
           }
         }

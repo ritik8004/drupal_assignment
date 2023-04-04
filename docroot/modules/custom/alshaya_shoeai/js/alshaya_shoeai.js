@@ -21,12 +21,17 @@
   }
 })(drupalSettings);
 
+/**
+* Helper function for returning
+* the status enabled/disabled of shoeai.
+* Returns true/false boolean.
+*/
 function shoeAiStatus(shoeAi) {
   if (shoeAi && shoeAi.status != null && shoeAi.status == 1) {
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 // Helper function for getting recommended shoesize from shoeai and select the size in PDP if available.
