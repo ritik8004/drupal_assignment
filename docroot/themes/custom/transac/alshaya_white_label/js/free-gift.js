@@ -5,7 +5,7 @@
 
 /* global isRTL */
 
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
 
   function applyRtl(ocObject, options) {
     if (isRTL()) {
@@ -103,7 +103,7 @@
         });
       }
 
-      $('.sku-base-form').on('variant-selected', function (event, variant, code) {
+      $('.sku-base-form').on('variant-selected', function (event, variant) {
         // We do not want to attach this event for variant change of PDP
         // product.
         if (!$(this).parents('#drupal-modal')) {
@@ -129,4 +129,4 @@
     }
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
