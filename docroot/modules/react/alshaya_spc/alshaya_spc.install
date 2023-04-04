@@ -15,6 +15,20 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add translations for Secure Payment Methods.
+ */
+function alshaya_spc_update_9408() {
+  // Add translations.
+  \Drupal::moduleHandler()->loadInclude('alshaya_spc', 'inc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v19');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable settings for Layered Navigation for PLP/SRP pages.
  */
 function alshaya_spc_update_9407() {
