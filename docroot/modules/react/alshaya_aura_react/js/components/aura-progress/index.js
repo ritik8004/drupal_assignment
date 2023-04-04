@@ -116,25 +116,24 @@ class AuraProgressWrapper extends React.Component {
       <div className="aura-progressbar-wrapper">
         {showProgressBar
         && (
-          <AuraProgressBar
-            showDotClass={showDotClass}
-            tierClass={tierClass}
-            currentTierLevel={currentTierLevel}
-            nextTierLevel={nextTierLevel}
-            progress={progress}
-            progressRatio={progressRatio}
-            getDotPosition={this.getDotPosition}
-          />
-        )}
-        {showProgressBar
-        && (
-          <AuraProgressString
-            userPoints={userPoints}
-            nextTierThreshold={nextTierThreshold}
-            showDotClass={showDotClass}
-            nextTierLabel={getAllAuraTier('shortValue')[nextTierLevel]}
-            progressRatio={progressRatio}
-          />
+          <>
+            <AuraProgressBar
+              showDotClass={showDotClass}
+              tierClass={tierClass}
+              currentTierLevel={currentTierLevel}
+              nextTierLevel={nextTierLevel}
+              progress={progress}
+              progressRatio={progressRatio}
+              getDotPosition={this.getDotPosition}
+            />
+            <AuraProgressString
+              userPoints={userPoints}
+              nextTierThreshold={nextTierThreshold}
+              showDotClass={showDotClass}
+              nextTierLabel={getAllAuraTier('shortValue')[nextTierLevel]}
+              progressRatio={progressRatio}
+            />
+          </>
         )}
         <PointsExpiryMessage
           points={expiringPoints}
