@@ -329,56 +329,61 @@ window.commerceBackend = window.commerceBackend || {};
           freeGiftPromotionTitle: freeGiftApiData.rule_name,
           styleCode: giftItemProductInfo.style_code,
         };
-        processedFreeGiftData['#theme'] = 'free_gift_promotion_list';
-        processedFreeGiftData['#message'] = [];
-        processedFreeGiftData['#message']['#type'] = 'markup';
-        processedFreeGiftData['#message']['#markup'] = handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_one_sku', data);
-        processedFreeGiftData['#title'] = [];
-        processedFreeGiftData['#title']['#type'] = 'markup';
-        processedFreeGiftData['#title']['#markup'] = freeGiftApiData.rule_name;
-        processedFreeGiftData['#promo_code'] = freeGiftApiData.coupon_code;
-        processedFreeGiftData['#free_sku_code'] = freeGiftSkus.toString();
-        processedFreeGiftData['#free_sku_type'] = 'simple';
-        processedFreeGiftData['#image'] = [];
-        processedFreeGiftData['#image']['#theme'] = 'image';
-        processedFreeGiftData['#image']['#uri'] = skuImageUrl;
-        processedFreeGiftData['#image']['#url'] = skuImageUrl;
-        processedFreeGiftData['#image']['#attributes'] = [];
-        processedFreeGiftData['#image']['#attributes'].src = skuImageUrl;
-        processedFreeGiftData['#image']['#attributes'].title = freeGiftApiData.gifts[0].name;
-        processedFreeGiftData['#image']['#attributes'].alt = freeGiftApiData.gifts[0].name;
-        processedFreeGiftData['#promo_type'] = freeGiftApiData.rule_type;
-        processedFreeGiftData['#coupon'] = [];
-        processedFreeGiftData['#coupon']['#type'] = 'markup';
-        processedFreeGiftData['#coupon']['#markup'] = handlebarsRenderer.render('product.promotion_free_gift_message_coupon_code', {freeGiftCoupon: freeGiftApiData.coupon_code});
-        processedFreeGiftData.coupon = freeGiftApiData.coupon_code;
-        processedFreeGiftData.promo_title = freeGiftApiData.rule_name;
-        processedFreeGiftData.promo_web_url = promoUrl;
+        processedFreeGiftData = {
+          '#theme': 'free_gift_promotion_list',
+          '#message': {
+            '#type': 'markup',
+            '#markup': handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_one_sku', data),
+          },
+          '#title': {
+            '#type': 'markup',
+            '#markup': freeGiftApiData.rule_name,
+          },
+          '#promo_code': freeGiftApiData.coupon_code,
+          '#free_sku_code': freeGiftSkus.toString(),
+          '#image': {
+            '#theme': 'image',
+            '#uri': skuImageUrl,
+            '#url': skuImageUrl,
+            '#attributes': {
+              src: skuImageUrl,
+              title: freeGiftApiData.gifts[0].name,
+              alt: freeGiftApiData.gifts[0].name,
+            },
+          },
+          '#coupon': {
+            '#type': 'markup',
+            '#markup': handlebarsRenderer.render('product.promotion_free_gift_message_coupon_code', {freeGiftCoupon: freeGiftApiData.coupon_code})
+          },
+        };
       } else if (freeGiftApiData.total_items > 0) {
-        processedFreeGiftData['#theme'] = 'free_gift_promotions';
-        processedFreeGiftData['#free_sku_entity_id'] = freeGiftApiData.gifts[0].id;
-        processedFreeGiftData['#free_sku_code'] = freeGiftApiData.gifts[0].sku;
-        processedFreeGiftData['#free_sku_type'] = 'simple';
-        processedFreeGiftData['#free_sku_title'] = handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_all_sku', {
-          freeGiftPromoUrl: promoUrl,
-          freeGiftSku: freeGiftApiData.gifts[0].sku,
-          freeGiftTitle: freeGiftApiData.gifts[0].name
-        });
-        processedFreeGiftData['#free_sku_title_raw'] = freeGiftApiData.gifts[0].name;
-        processedFreeGiftData['#promo_title'] = freeGiftApiData.rule_name;
-        processedFreeGiftData['#promo_code'] = [{value: freeGiftApiData.coupon_code}];
-        processedFreeGiftData['#promo_type'] = freeGiftApiData.rule_type;
-        processedFreeGiftData['#sku_image'] = handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_all_sku', {
-          freeGiftPromoUrl: promoUrl,
-          freeGiftSku: freeGiftApiData.gifts[0].sku,
-          freeGiftTitle: freeGiftApiData.gifts[0].name,
-          freeGiftImage: skuImageUrl
-        });
-        processedFreeGiftData.coupon = freeGiftApiData.coupon_code;
-        processedFreeGiftData.promo_title = freeGiftApiData.rule_name;
-        processedFreeGiftData.promo_web_url = promoUrl;
+        processedFreeGiftData = {
+          '#theme': 'free_gift_promotions',
+          '#free_sku_entity_id': freeGiftApiData.gifts[0].id,
+          '#free_sku_code': freeGiftApiData.gifts[0].sku,
+          '#free_sku_title': handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_all_sku', {
+            freeGiftPromoUrl: promoUrl,
+            freeGiftSku: freeGiftApiData.gifts[0].sku,
+            freeGiftTitle: freeGiftApiData.gifts[0].name
+          }),
+          '#free_sku_title_raw': freeGiftApiData.gifts[0].name,
+          '#promo_title': freeGiftApiData.rule_name,
+          '#promo_code': [{value: freeGiftApiData.coupon_code}],
+          '#sku_image': handlebarsRenderer.render('product.promotion_free_gift_message_sub_type_all_sku', {
+            freeGiftPromoUrl: promoUrl,
+            freeGiftSku: freeGiftApiData.gifts[0].sku,
+            freeGiftTitle: freeGiftApiData.gifts[0].name,
+            freeGiftImage: skuImageUrl
+          }),
+        };
       }
+      processedFreeGiftData.coupon = freeGiftApiData.coupon_code;
+      processedFreeGiftData.promo_title = freeGiftApiData.rule_name;
       processedFreeGiftData.promoRuleId = freeGiftApiData.rule_id;
+      processedFreeGiftData.promo_web_url = promoUrl;
+      processedFreeGiftData['#free_sku_type'] = giftItemProductInfo.type_id;
+      processedFreeGiftData['#promo_type'] = freeGiftApiData.rule_type;
+
       // Updating free gift promotion response from graphQl with react processable data.
       productInfo[skuItemCode].freeGiftPromotion = processedFreeGiftData;
 
