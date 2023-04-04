@@ -33,3 +33,11 @@ header.c-header {
     }
   }
 }
+
+@include breakpoint($desktop-wide-1680) {
+  .c-menu-secondary {
+    .region__menu-secondary {
+      padding-#{$right}: rem(27);
+    }
+  }
+}
