@@ -73,7 +73,7 @@ const EgiftCardDetails = ({
       {egiftCardType && (isReturnConfPage === -1)
         ? (
           <>
-            <div className="refund-method-listing">
+            <div className="refund-method-listing email-text">
               {Drupal.t('Details of your eGift Card will be sent to your email address "@email"', { '@email': drupalSettings.userDetails.userEmailID }, { context: 'online_returns' })}
             </div>
             <div className="refund-message">
