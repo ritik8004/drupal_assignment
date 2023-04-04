@@ -16,10 +16,15 @@
   }
 })(drupalSettings);
 
+/**
+* Helper function for returning
+* the status enabled/disabled of shoeai.
+* Returns true/false boolean.
+*/
 function shoeAiStatus(shoeAi) {
   if (shoeAi && shoeAi.status != null && shoeAi.status == 1) {
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
