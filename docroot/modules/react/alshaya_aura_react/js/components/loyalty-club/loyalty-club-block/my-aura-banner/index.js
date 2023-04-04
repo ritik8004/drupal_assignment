@@ -21,7 +21,7 @@ const MyAuraBanner = (props) => {
   } = props;
 
   // Character length of user name to be shown in AURA banner.
-  const { auraUsernameCharacterLength } = getAuraConfig();
+  const { auraUsernameCharacterLimit } = getAuraConfig();
   const profileInfo = getUserProfileInfo(firstName, lastName);
 
   // Current User tier class so we can change gradient for progress bar.
@@ -38,10 +38,12 @@ const MyAuraBanner = (props) => {
           <div className="aura-user-name">
             {isDesktop()
               && (
-                <EllipsisText
-                  text={profileInfo.profileName}
-                  length={parseInt(auraUsernameCharacterLength, 10)}
-                />
+                <div title={profileInfo.profileName}>
+                  <EllipsisText
+                    text={profileInfo.profileName}
+                    length={parseInt(auraUsernameCharacterLimit, 10)}
+                  />
+                </div>
               )}
             {isMobile()
               && (
