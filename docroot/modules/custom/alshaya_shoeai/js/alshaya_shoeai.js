@@ -21,5 +21,6 @@ function shoeAiStatus(shoeAi) {
   if (shoeAi && shoeAi.status != null && shoeAi.status == 1) {
     return true;
   }
+  
   return false;
 }
