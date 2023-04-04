@@ -16,6 +16,7 @@
   }
 })(drupalSettings);
 
+//Helper function for returning the status enabled/disabled of shoeai.
 function shoeAiStatus(shoeAi) {
   if (shoeAi && shoeAi.status != null && shoeAi.status == 1) {
     return true;
