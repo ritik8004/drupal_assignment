@@ -175,6 +175,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     // Get Algolia settings for lhn menu.
     $alshaya_algolia_react_setting_values = $this->configFactory->get('alshaya_algolia_react.settings');
 
+    // Get Algolia color swatches settings.
+    $algolia_color_swatches_settings = $this->configFactory->get('alshaya_algolia_react.color_swatches');
+
     // Get listing page frames settings.
     $product_frame_settings = $this->configFactory->get('alshaya_algolia_react.product_frames');
 
@@ -266,7 +269,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showSwatches' => $display_settings->get('color_swatches'),
         'showSliderSwatch' => $display_settings->get('show_variants_thumbnail_plp_gallery2'),
         'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
-        'swatchPlpLimitMobileView' => $this->configFactory->get('alshaya_algolia_react.color_swatches')->get('no_of_swatches_mobile'),
+        'swatchPlpLimitMobileView' => $algolia_color_swatches_settings->get('no_of_swatches_mobile'),
         'showArticleSwatches' => $alshaya_algolia_react_setting_values->get('show_article_swatches'),
       ],
       'showBrandName' => $display_settings->get('show_brand_name_plp'),
