@@ -175,6 +175,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     // Get Algolia settings for lhn menu.
     $alshaya_algolia_react_setting_values = $this->configFactory->get('alshaya_algolia_react.settings');
 
+    // Get Algolia color swatches settings.
+    $algolia_color_swatches_settings = $this->configFactory->get('alshaya_algolia_react.color_swatches');
+
     // Get listing page frames settings.
     $product_frame_settings = $this->configFactory->get('alshaya_algolia_react.product_frames');
 
