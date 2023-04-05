@@ -109,6 +109,9 @@
     var list = Drupal.hasValue(referrerData)
       ? referrerData.pageType
       : '';
+    var siteName = Drupal.hasValue(drupalSettings.dataLayerContent.siteName)
+      ? drupalSettings.dataLayerContent.siteName
+      : '';
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         var product = productItem[1];
@@ -117,7 +120,7 @@
           "name" : product.ProductName,
           "id" : product.ProductGroupCode,
           "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice.toString(),
-          "brand" : product.Brand,
+          "brand" : Drupal.hasValue(product.Brand) ? product.Brand : siteName,
           "category" : Drupal.getProductMetadata(product, 'category'),
           "variant" : product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
@@ -196,6 +199,9 @@
     var productStyleCode = [];
     var discountAmount = 0;
     var firstTimeTransaction = null;
+    var siteName = Drupal.hasValue(drupalSettings.dataLayerContent.siteName)
+      ? drupalSettings.dataLayerContent.siteName
+      : '';
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         var product = productItem[1];
@@ -203,7 +209,7 @@
           "name": product.ProductName,
           "id": product.ProductGroupCode,
           "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency.toString(),
-          "brand": product.Brand,
+          "brand": Drupal.hasValue(product.Brand) ? product.Brand : siteName,
           "category": Drupal.getProductMetadata(product, 'category'),
           "variant": product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
