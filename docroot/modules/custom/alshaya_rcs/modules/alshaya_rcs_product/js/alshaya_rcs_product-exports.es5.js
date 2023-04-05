@@ -368,6 +368,7 @@ exports.render = function render(
 
       const data = {
         description: entity.description,
+        context: entity.context,
         mainImage: {
           zoomurl: mediaCollection.thumbnails[0].zoomurl,
           mediumurl: mediaCollection.thumbnails[0].mediumurl,

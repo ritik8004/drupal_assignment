@@ -27,10 +27,19 @@
       .address-title {
         font-size: rem(12);
         line-height: 1.33;
+        padding-bottom: rem(5);
       }
 
       .return-confirmation-address {
         margin-bottom: rem(8);
+      }
+
+      .refund-method-wrapper {
+        .method-wrapper {
+          .radio-sim {
+            display: flex;
+          }
+        }
       }
     }
   }

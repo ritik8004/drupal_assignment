@@ -2,10 +2,10 @@
 {% if final_price %}
   <div class="has--special--price">
 {% else %}
-  <div class="price" data-fp="{{ fixed_price }}">
+  <div class="price {{ currency_format|lower }}" data-fp="{{ fixed_price }}">
 {% endif %}
   <span class="price-wrapper">
-    <div class="price" data-fp="{{ fixed_price }}">
+    <div class="price {{ currency_format|lower }}" data-fp="{{ fixed_price }}">
       {% if currency_code_position == 'before' %}
         <span class="price-currency suffix">{{ currency_format }}</span>
       {% endif %}
@@ -23,7 +23,7 @@
 {% if final_price %}
   <div class="special--price">
     <span class="price-wrapper">
-      <div class="price" data-fp="{{ fixed_price }}">
+      <div class="price {{ currency_format|lower }}" data-fp="{{ fixed_price }}">
         {% if currency_code_position == 'before' %}
           <span class="price-currency suffix">{{ currency_format }}</span>
         {% endif %}

@@ -88,7 +88,7 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
 
   // AED prices are hidden for cross border sites as global-e
   // applies the conversion after the DOM loads.
-  $css = '.price .price-amount, .price .price-currency {
+  $css = '.price.aed .price-amount, .price.aed .price-currency {
     display: none;
   }';
 

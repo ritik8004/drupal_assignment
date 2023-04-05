@@ -122,7 +122,12 @@
   }
 
   .refund-details-wrapper {
-    .refund-method-wrapper {
+    .refund-method-wrapper,
+    .refund-amount-wrapper,
+    .return-collection-wrapper,
+    .return-address-wrapper {
+      padding-top: rem(20);
+
       .refund-method-listing {
         @include breakpoint($only-mobile) {
           padding-#{$left}: rem(31);
@@ -130,7 +135,11 @@
       }
 
       .method-wrapper {
-        margin-bottom: rem(17);
+        margin-bottom: rem(0);
+
+        .card-detail {
+          margin-#{$left}: rem(11);
+        }
       }
 
       @include breakpoint($desktop) {
@@ -142,7 +151,7 @@
       }
 
       .refund-method-title {
-        font-size: rem(18);
+        font-size: rem(16);
         line-height: 1.22;
         font-weight: normal;
         margin-bottom: rem(15);
@@ -164,26 +173,33 @@
 
       .refund-message {
         margin-top: rem(2);
-        margin-bottom: rem(15);
+        margin-bottom: rem(18);
       }
 
       .refund-amount-title {
-        font-size: rem(18);
         line-height: 1.22;
       }
     }
 
     .return-collection-wrapper {
       .return-collection-title {
-        font-size: rem(18);
         line-height: 1.22;
         margin-bottom: rem(15);
       }
     }
 
+    div[class$="-title"] {
+      margin-bottom: rem(15);
+    }
+
+    .Collapsible__contentInner {
+      > div:first-child {
+        padding-bottom: rem(0);
+      }
+    }
+
     .return-address-wrapper {
       .return-address-title {
-        font-size: rem(18);
         line-height: 1.22;
       }
 
@@ -257,8 +273,6 @@
       content: "";
       position: absolute;
       #{$left}: rem(-50);
-      top: 42%;
-      transform: translateY(-50%);
       text-align: center;
       font-size: rem(60);
     }
@@ -282,7 +296,7 @@
       align-items: center;
 
       .egift-card-detail {
-        padding-left: rem(6);
+        padding-#{$left}: rem(6);
         padding-bottom: rem(4);
       }
     }
