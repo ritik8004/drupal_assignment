@@ -50,6 +50,7 @@ checkout:
     - alshaya_spc/cart_utilities
     - alshaya_spc/dynamic_promotion_label
     - alshaya_spc/react_datepicker_css
+    - alshaya_spc/commerce_backend.cart
 
 order_details:
   version: 1.x
