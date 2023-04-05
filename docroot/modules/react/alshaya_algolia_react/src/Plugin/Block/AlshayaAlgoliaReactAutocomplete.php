@@ -187,6 +187,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
     return Cache::mergeTags(parent::getCacheTags(), [
       'config:alshaya_search.settings',
       'config:alshaya_spc.express_delivery',
+      'config:alshaya_algolia_react.color_swatches',
     ]);
   }
 
