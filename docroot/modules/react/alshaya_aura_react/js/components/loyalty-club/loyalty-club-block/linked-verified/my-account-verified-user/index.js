@@ -1,11 +1,11 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import EllipsisText from 'react-ellipsis-text';
 import { getAllAuraTier, getUserProfileInfo, getAuraConfig } from '../../../../../utilities/helper';
 import { getTooltipPointsOnHoldMsg } from '../../../../../utilities/aura_utils';
 import PointsExpiryMessage from '../../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import ToolTip from '../../../../../../../alshaya_spc/js/utilities/tooltip';
 import { isDesktop, isMobile } from '../../../../../../../js/utilities/display';
+import TrimUserName from '../../trim-user-name';
 
 const MyAccountVerifiedUser = (props) => {
   const {
@@ -33,19 +33,10 @@ const MyAccountVerifiedUser = (props) => {
         <div className="aura-card-linked-verified-wrapper-content">
           <div className="aura-logo">
             <div className="aura-user-name">
-              {isDesktop()
-                && (
-                  <div title={profileInfo.profileName}>
-                    <EllipsisText
-                      text={profileInfo.profileName}
-                      length={parseInt(auraUsernameCharacterLimit, 10)}
-                    />
-                  </div>
-                )}
-              {isMobile()
-                && (
-                  <>{profileInfo.profileName}</>
-                )}
+              <TrimUserName
+                userName={profileInfo.profileName}
+                characterLimit={auraUsernameCharacterLimit}
+              />
               <div className="aura-card-number">
                 <span>{Drupal.t('Aura membership number', {}, { context: 'aura' })}</span>
                 <span>

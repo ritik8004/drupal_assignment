@@ -1,13 +1,12 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import EllipsisText from 'react-ellipsis-text';
 import {
   getAllAuraStatus, getAllAuraTier, getUserProfileInfo, getAuraConfig,
 } from '../../../../utilities/helper';
 import { getTooltipPointsOnHoldMsg } from '../../../../utilities/aura_utils';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import AuraAppDownload from '../../../aura-app-download';
-import { isDesktop, isMobile } from '../../../../../../js/utilities/display';
+import TrimUserName from '../trim-user-name';
 
 const MyAuraBanner = (props) => {
   const {
@@ -36,19 +35,10 @@ const MyAuraBanner = (props) => {
         <div className="aura-logo">
           <div className="aura-user-avatar">{profileInfo.avatar}</div>
           <div className="aura-user-name">
-            {isDesktop()
-              && (
-                <div title={profileInfo.profileName}>
-                  <EllipsisText
-                    text={profileInfo.profileName}
-                    length={parseInt(auraUsernameCharacterLimit, 10)}
-                  />
-                </div>
-              )}
-            {isMobile()
-              && (
-                <>{profileInfo.profileName}</>
-              )}
+            <TrimUserName
+              userName={profileInfo.profileName}
+              characterLimit={auraUsernameCharacterLimit}
+            />
             <div className="aura-card-number">
               <span>{Drupal.t('Aura membership number', {}, { context: 'aura' })}</span>
               <span>
