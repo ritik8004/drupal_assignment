@@ -33,7 +33,7 @@ class AlgoliaColorSwatchesForm extends ConfigFormBase {
     $config = $this->config('alshaya_algolia_react.color_swatches');
     $form['plp_swatch_config'] = [
       '#type' => 'details',
-      '#title' => $this->t('SRP/PLP Swatch config settings'),
+      '#title' => $this->t('SLP/PLP Swatch config settings'),
       '#tree' => FALSE,
       '#open' => TRUE,
     ];
