@@ -74,7 +74,7 @@ alshaya_algolia_react.color_swatches:
       label: 'Display the swatch type circle, square'
     no_of_swatches_desktop:
       type: integer
-      label: 'Set the swatch limit for PLP on desktop view'
+      label: 'Set the swatch limit for SRP/PLP on desktop view'
     no_of_swatches_mobile:
       type: integer
-      label: 'Set the swatch limit for PLP on mobile view'
+      label: 'Set the swatch limit for SRP/PLP on mobile view'
