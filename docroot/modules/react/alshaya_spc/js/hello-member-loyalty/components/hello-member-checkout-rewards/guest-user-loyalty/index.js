@@ -84,7 +84,7 @@ export default class GuestUserLoyalty extends React.Component {
           )}
         {open && (
         <div className="aura-earned-points">
-          <AuraPointsToEarn cart={cart} />
+          <AuraPointsToEarn />
         </div>
         )}
       </div>
