@@ -16,3 +16,13 @@
     }
   }
 }
+
+.my-accounts-points-history {
+  .hello-member-points-wrapper {
+    .hello-member-downtime-message {
+      @include breakpoint($desktop) {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}

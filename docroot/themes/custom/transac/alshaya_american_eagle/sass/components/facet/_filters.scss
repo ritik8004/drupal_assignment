@@ -49,3 +49,19 @@ body {
     }
   }
 }
+
+.filter-fixed-top {
+  .sticky-filter-wrapper {
+    .site-brand-home {
+      a {
+        @include breakpoint($desktop) {
+          width: rem(160);
+        }
+      }
+
+      picture {
+        display: inline-flex;
+      }
+    }
+  }
+}

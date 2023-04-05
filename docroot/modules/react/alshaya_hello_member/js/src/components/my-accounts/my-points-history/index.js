@@ -6,6 +6,7 @@ import { getHelloMemberPointsHistory } from '../../../hello_member_api_helper';
 import { formatDate, getPointstHistoryPageSize } from '../../../utilities';
 import MemberPointsSummary from './member-points-summary';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import { displayErrorMessage } from '../../../../../../js/utilities/helloMemberHelper';
 
 class MyPointsHistory extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class MyPointsHistory extends React.Component {
       pageSize: getPointstHistoryPageSize(),
       firstPage: 1,
       totalCount: 0,
+      errorMessage: '',
     };
   }
 
@@ -58,6 +60,9 @@ class MyPointsHistory extends React.Component {
             });
           }
         } else if (hasValue(response.error)) {
+          this.setState({
+            errorMessage: response.error_message,
+          });
           logger.error('Error while trying to get hello member points history data. Data: @data.', {
             '@data': JSON.stringify(response),
           });
@@ -69,11 +74,15 @@ class MyPointsHistory extends React.Component {
 
   render() {
     const {
-      pointsHistoryData, totalCount, pageSize,
+      pointsHistoryData, totalCount, pageSize, errorMessage,
     } = this.state;
 
     if (pointsHistoryData === null) {
       return null;
+    }
+
+    if (hasValue(errorMessage)) {
+      return displayErrorMessage(errorMessage);
     }
 
     return (

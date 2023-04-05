@@ -16,6 +16,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
       wait: true,
       hmPoints: null,
       identifierNo: null,
+      error: false,
     };
   }
 
@@ -32,6 +33,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
     // For registered user, we get hello member points earned from the api.
     // Skip get customer data api if identifier number already available in cart.
     let identifierNo = null;
+    let error = false;
     if (isUserAuthenticated()) {
       if (hasValue(loyaltyType) && hasValue(loyaltyCard) && loyaltyType === 'hello_member') {
         identifierNo = loyaltyCard;
@@ -42,6 +44,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
           // we get hello member points which can be earned by customer.
           identifierNo = response.data.apc_identifier_number;
         } else if (hasValue(response.error)) {
+          error = response.error;
           logger.error('Error while trying to get hello member customer data. Data: @data.', {
             '@data': JSON.stringify(response),
           });
@@ -53,6 +56,7 @@ class HelloMemberLoyaltyOptions extends React.Component {
     this.updateHelloMemberPoints(identifierNo);
     this.setState({
       identifierNo,
+      error,
     });
   }
 
@@ -67,12 +71,15 @@ class HelloMemberLoyaltyOptions extends React.Component {
       cart: { cart: { items } },
     } = this.props;
     let hmPoints = null;
+    let error = false;
     const response = await getHelloMemberPointsToEarn(items, identifierNo);
     if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
       if (hasValue(response.data.hm_points)) {
         hmPoints = response.data.hm_points;
       }
     } else if (hasValue(response.error)) {
+      // set response.error data to errorResponse when CLM is down.
+      error = response.error;
       logger.error('Error while trying to get hello member points data. Data: @data.', {
         '@data': JSON.stringify(response),
       });
@@ -80,11 +87,14 @@ class HelloMemberLoyaltyOptions extends React.Component {
     this.setState({
       hmPoints,
       wait: false,
+      error,
     });
   }
 
   render() {
-    const { wait, hmPoints, identifierNo } = this.state;
+    const {
+      wait, hmPoints, identifierNo, error,
+    } = this.state;
     const { animationDelay, cart, refreshCart } = this.props;
 
     if (wait) {
@@ -93,6 +103,10 @@ class HelloMemberLoyaltyOptions extends React.Component {
           <Loading />
         </div>
       );
+    }
+
+    if (error) {
+      return null;
     }
 
     return (

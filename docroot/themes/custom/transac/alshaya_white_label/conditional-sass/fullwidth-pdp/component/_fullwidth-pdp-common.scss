@@ -1,5 +1,15 @@
+@include breakpoint($only-mobile) {
+  #aura-pdp-mobile {
+    @include sideSpaces($full_width_padding_mobile);
+  }
+}
+
 body.nodetype--acq_product {
   .page-standard.c-pdp {
+    @include breakpoint($desktop) {
+      max-width: none;
+    }
+
     @include fullWidthSideSpaces(
       $is_mobile: true,
       $is_tablet: true,
@@ -14,9 +24,21 @@ body.nodetype--acq_product {
     }
   }
 
-  @include breakpoint($desktop) {
-    .page-standard.c-pdp {
-      max-width: none;
+  &:not(.magazine-layout-v2) {
+    .acq-content-product,
+    .magv2-sidebar {
+      .express-delivery-text {
+        @include breakpoint($desktop) {
+          margin-#{$right}: rem(20);
+        }
+
+        &:nth-child(2) {
+          @include breakpoint($desktop) {
+            margin-top: 0;
+            margin-#{$right}: 0;
+          }
+        }
+      }
     }
   }
 }

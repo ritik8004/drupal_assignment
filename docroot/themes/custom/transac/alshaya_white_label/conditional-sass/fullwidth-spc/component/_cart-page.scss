@@ -18,7 +18,6 @@
   #spc-cart .spc-free-delivery-container,
   .spc-empty-container {
     @include fullWidthSideSpaces(
-      $is_mobile: true,
       $is_tablet: true,
       $is_desktop: true,
       $is_desktop_wide: true
@@ -27,11 +26,5 @@
     @include breakpoint($tablet) {
       max-width: unset;
     }
-  }
-
-  .spc-pre-content-sticky {
-    @include fullWidthSideSpaces(
-      $is_mobile: true
-    );
   }
 }

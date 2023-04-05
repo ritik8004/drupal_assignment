@@ -72,8 +72,15 @@
           eventName = 'filter';
         }
         else {
-          selectedText = $(this).find('a.facet-item__value').html();
+          var selectedText = $(this).attr('gtm-key');
+          // If selectedText is still empty it means either 'gtm-key' attr
+          // is missing or is emppty so we use the sort option text
+          // with Arabic text for AR and English text for EN version.
+          if (!Drupal.hasValue(selectedText)) {
+            selectedText = $(this).find('a.facet-item__value').html();
+          }
           eventName = 'sort';
+          facetTitle = 'Sort By';
         }
         dataLayer.push({
           event: eventName,

@@ -1,0 +1,7 @@
+alshaya_geolocation.settings:
+  type: config_object
+  label: 'Alshaya geolocation settings'
+  mapping:
+    geolocation_enabled:
+      type: boolean
+      label: 'Config to enable/disable geolocation'

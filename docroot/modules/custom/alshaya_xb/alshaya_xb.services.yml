@@ -25,3 +25,11 @@ services:
     parent: 'alshaya_api.api'
     calls:
       - [ setDomainConfigOverrides, [ '@alshaya_xb.domain_config_overrides' ] ]
+
+  alshaya_xb.price_helper:
+    public: false
+    class: Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator
+    decorates: alshaya_acm_product.price_helper
+    parent: 'alshaya_acm_product.price_helper'
+    calls:
+      - [ setDomainConfigOverrides, [ '@alshaya_xb.domain_config_overrides' ] ]

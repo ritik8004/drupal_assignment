@@ -8,7 +8,7 @@ import {
   removeError,
 } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
-import { redeemAuraPoints, isUnsupportedPaymentMethod } from '../../utilities/checkout_helper';
+import { redeemAuraPoints, isUnsupportedPaymentMethod, getAuraPointsToEarn } from '../../utilities/checkout_helper';
 import {
   getUserDetails,
   getPointToPriceRatio,
@@ -97,7 +97,7 @@ class AuraFormRedeemPoints extends React.Component {
   }
 
   handleRedeemPointsEvent = (data) => {
-    const { stateValues, action } = data.detail;
+    const { stateValues, action, cardNumber } = data.detail;
     const { cart } = this.props;
     let dispatchCheckoutStep3GTM = false;
 
@@ -171,6 +171,8 @@ class AuraFormRedeemPoints extends React.Component {
     if (dispatchCheckoutStep3GTM) {
       dispatchCustomEvent('auraDataReceivedForGtmCheckoutStep3', { cart });
     }
+    // Update aura earn points as per current cart total after appying redemption.
+    getAuraPointsToEarn(cardNumber);
   };
 
   convertPointsToMoney = (e) => {

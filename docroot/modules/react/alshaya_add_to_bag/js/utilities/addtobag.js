@@ -431,7 +431,11 @@ export const pushSeoGtmData = (productData) => {
     } else {
       product.variant = product.id;
     }
-
+    // Add new data layer variable in Add To Cart,
+    // Event on Quick View.
+    if (Drupal.hasValue(productData.product_view_type)) {
+      product.product_view_type = 'quick_view';
+    }
     if (diffQty < 0) {
       // Trigger removeFromCart.
       Drupal.alshayaSeoGtmPushRemoveFromCart(product);

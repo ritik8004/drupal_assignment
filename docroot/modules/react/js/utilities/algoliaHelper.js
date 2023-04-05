@@ -7,14 +7,16 @@ export const searchClient = algoliasearch(
 export const algoliaSearchClient = {
   search(requests) {
     const searchRequest = requests;
-    if (window.algoliaSearchActivityStarted || searchRequest[0].params.query.length > 0) {
-      searchRequest[0].params.analyticsTags = drupalSettings.user.isCustomer
-        ? ['customer']
-        : ['notCustomer'];
-
-      return searchClient.search(searchRequest);
-    }
-
-    return null;
+    searchRequest.forEach((request) => {
+      // Remove tagFilters from all search queries.
+      if ('tagFilters' in request.params) {
+        delete request.params.tagFilters;
+      }
+      // Remove maxValuesPerFacet from all search quesries.
+      if ('maxValuesPerFacet' in request.params) {
+        delete request.params.maxValuesPerFacet;
+      }
+    });
+    return searchClient.search(searchRequest);
   },
 };

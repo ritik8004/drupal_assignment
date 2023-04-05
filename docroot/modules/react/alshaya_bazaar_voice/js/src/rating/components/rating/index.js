@@ -4,7 +4,10 @@ import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/bv-auth-confirmation';
-import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
+import {
+  getbazaarVoiceSettings,
+  getUserDetails,
+} from '../../../utilities/api/request';
 import ConditionalView from '../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getProductReviewStats } from '../../../utilities/user_util';
@@ -30,8 +33,9 @@ export default class Rating extends React.Component {
   componentDidMount() {
     showFullScreenLoader();
     const { bazaarVoiceSettings } = this.state;
+
     // Check reviews setting exist.
-    if (bazaarVoiceSettings.reviews !== undefined) {
+    if (Drupal.hasValue(bazaarVoiceSettings)) {
       getProductReviewStats(bazaarVoiceSettings.productid).then((result) => {
         removeFullScreenLoader();
         if (result !== null) {
@@ -40,6 +44,8 @@ export default class Rating extends React.Component {
           });
         }
       });
+    } else {
+      removeFullScreenLoader();
     }
 
     getUserDetails().then((userDetails) => {
@@ -59,10 +65,6 @@ export default class Rating extends React.Component {
   render() {
     const { reviewsData, bazaarVoiceSettings, userDetails } = this.state;
 
-    // Return empty if reviews settings unavailable.
-    if (bazaarVoiceSettings.reviews === undefined) {
-      return null;
-    }
     const {
       childClickHandler,
       renderLinkDirectly,

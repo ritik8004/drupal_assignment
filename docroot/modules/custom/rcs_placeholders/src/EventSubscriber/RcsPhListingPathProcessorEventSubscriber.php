@@ -60,6 +60,7 @@ class RcsPhListingPathProcessorEventSubscriber extends RcsPhPathProcessorEventSu
       'entityFullPath' => $full_path,
       'processedPaths' => $processed_paths,
       'entityData' => $entityData,
+      'path' => $processed_paths,
     ]);
 
     $event->stopPropagation();

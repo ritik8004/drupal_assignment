@@ -117,6 +117,7 @@ export default class ConfigurableForm extends React.Component {
       eventAction: 'plp color click',
       eventLabel: hasValue(swatchLabel) ? swatchLabel : '',
       eventLabel2: 'plp_quickview',
+      product_view_type: 'quick_view',
     });
   }
 
@@ -138,6 +139,7 @@ export default class ConfigurableForm extends React.Component {
       eventAction: 'plp size click',
       eventLabel: hasValue(optionLabel) ? optionLabel : '',
       eventLabel2: 'plp_quickview',
+      product_view_type: 'quick_view',
     });
   };
 
@@ -343,6 +345,7 @@ export default class ConfigurableForm extends React.Component {
         prevQty: 0,
         element: this.formRef.current,
         variant: selectedVariant,
+        product_view_type: 'quick_view',
       });
 
       // Full screen loader is stopped in success case in
@@ -356,17 +359,6 @@ export default class ConfigurableForm extends React.Component {
 
       // Dispatch add to cart event for product drawer components.
       dispatchCustomEvent('product-add-to-cart-success', { sku: parentSku });
-      // Trigger Algolia Insight event for add to cart on success.
-      const insightsClickData = Drupal.fetchSkuAlgoliaInsightsClickData(sku);
-      if (Drupal.hasValue(insightsClickData)
-        && insightsClickData.queryId
-        && insightsClickData.objectId) {
-        Drupal.pushAlshayaAlgoliaInsightsAddToCart(
-          insightsClickData.queryId,
-          insightsClickData.objectId,
-          insightsClickData.indexName,
-        );
-      }
     });
   }
 

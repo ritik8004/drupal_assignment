@@ -26,7 +26,7 @@ class SkuPriceHelper {
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
    */
-  private $skuManager;
+  protected $skuManager;
 
   /**
    * Renderer.
@@ -61,7 +61,7 @@ class SkuPriceHelper {
    *
    * @var array
    */
-  private $build;
+  protected $build;
 
   /**
    * Cache tags from config to add to $build.
@@ -155,29 +155,15 @@ class SkuPriceHelper {
    * @param string $langcode
    *   Language code used.
    */
-  private function buildPriceBlockSimple(SKU $sku, string $color = '', string $langcode = '') {
+  protected function buildPriceBlockSimple(SKU $sku, string $color = '', string $langcode = '') {
     $prices = $this->skuManager->getMinPrices($sku, $color);
     $price = $prices['price'];
     $final_price = $prices['final_price'];
-
-    $data_attribute_price = [];
-    $data_attribute_special_price = [];
-    if (!empty($prices['fixed_price'])) {
-      foreach (json_decode($prices['fixed_price'], TRUE) as $key => $value) {
-        if (!empty($value['price'])) {
-          $data_attribute_price[$key] = $value['price'];
-        }
-        if (!empty($value['special_price'])) {
-          $data_attribute_special_price[$key] = $value['special_price'];
-        }
-      }
-    }
 
     if ($price) {
       $this->build['#price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $price,
-        '#fixed_price' => json_encode($data_attribute_price),
       ];
 
       // Get the discounted price.
@@ -190,7 +176,6 @@ class SkuPriceHelper {
         $this->build['#final_price'] = [
           '#theme' => 'acq_commerce_price',
           '#price' => $final_price,
-          '#fixed_price' => json_encode($data_attribute_special_price),
         ];
 
         // Get discount if discounted price available.
@@ -203,7 +188,6 @@ class SkuPriceHelper {
       $this->build['#price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $final_price,
-        '#fixed_price' => json_encode($data_attribute_price),
       ];
     }
   }

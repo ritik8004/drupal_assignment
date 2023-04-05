@@ -1251,6 +1251,11 @@
         eventLabel: eventData.eventLabel,
         eventLabel2: Drupal.hasValue(eventData.eventLabel2) ? eventData.eventLabel2 : '',
       };
+
+      // Add @var product_view_type in quick view.
+      if (Drupal.hasValue(eventData.product_view_type)) {
+        data.product_view_type = eventData.product_view_type;
+      }
       dataLayer.push(data);
     }
   };
@@ -1528,6 +1533,12 @@
       }
     };
 
+    // Push to productDetailView event if quick-view class exits.
+    // Check if productContext is Array.
+    let elementContext = productContext[0] ? productContext[0] : productContext;
+    if (elementContext.classList !== undefined && elementContext.classList.contains('quick-view')) {
+      data.product_view_type = 'quick_view';
+    }
     dataLayer.push(data);
   }
 
@@ -1544,6 +1555,12 @@
     // Calculate metric 1 value.
     product.metric2 = product.price * product.quantity;
 
+    // Remove product_view_type from product if view type is set.
+    var enable_quickview = '';
+    if (typeof product.product_view_type !== 'undefined') {
+      enable_quickview = product.product_view_type;
+      delete product.product_view_type;
+    }
     var productData = {
       event: 'addToCart'
     };
@@ -1570,6 +1587,10 @@
       }
     };
 
+    // Add product_view_type outside ecommerce.
+    if (enable_quickview) {
+      productData.product_view_type = enable_quickview;
+    }
     dataLayer.push(productData);
   }
 
