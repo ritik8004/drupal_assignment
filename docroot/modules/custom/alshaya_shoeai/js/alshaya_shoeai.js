@@ -40,7 +40,7 @@ function shoeAiStatus(shoeAi) {
 
 // Helper function for adding shoe in cart from add to cart button in shoeai widget.
 window.shoe_size_add_to_cart = (recommendation) => {
-  if(ecommendation.size) {
+  if(recommendation.size) {
     const recommendedSize = recommendation.size['eu'] ? recommendation.size['eu'].replace('.0','') : null;
     // work only if recommendedSize is not null.
     if (recommendedSize) {
