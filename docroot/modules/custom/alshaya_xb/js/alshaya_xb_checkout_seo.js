@@ -162,9 +162,6 @@
       "cartItemsFlocktory" : cartItemsFlocktory,
     };
 
-    if (step == 3) {
-      cartData.xbDeliveryInfo = geData.xbDeliveryInfo;
-    }
     if (step == 3 || step == 4) {
       // Click and collect is not available on XB sites.
       cartData.deliveryOption = 'Home Delivery';
